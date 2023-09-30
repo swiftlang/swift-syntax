@@ -152,7 +152,19 @@ public protocol EffectSpecifiersSyntax: SyntaxProtocol {
     set
   }
   
-  var unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? {
+  var unexpectedBetweenThrowsSpecifierAndThrownError: UnexpectedNodesSyntax? {
+    get
+    set
+  }
+  
+  /// The specific thrown error type.
+  @_spi(ExperimentalLanguageFeatures)
+  var thrownError: ThrownTypeClauseSyntax? {
+    get
+    set
+  }
+  
+  var unexpectedAfterThrownError: UnexpectedNodesSyntax? {
     get
     set
   }
@@ -790,6 +802,8 @@ extension SwitchCaseItemSyntax: WithTrailingCommaSyntax {}
 extension SwitchCaseSyntax: WithStatementsSyntax {}
 
 extension SwitchExprSyntax: BracedSyntax {}
+
+extension ThrownTypeClauseSyntax: ParenthesizedSyntax {}
 
 extension TupleExprSyntax: ParenthesizedSyntax {}
 

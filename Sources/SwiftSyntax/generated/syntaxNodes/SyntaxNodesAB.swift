@@ -525,6 +525,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
 /// 
 ///  - `asyncSpecifier`: `async`?
 ///  - `throwsSpecifier`: `throws`?
+///  - `thrownError`: ``ThrownTypeClauseSyntax``?
 ///
 /// ### Contained in
 /// 
@@ -543,6 +544,7 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - asyncSpecifier: The `async` keyword.
   ///   - throwsSpecifier: The `throws` keyword.
+  ///   - thrownError: The specific error type thrown by this accessor.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -550,7 +552,9 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
       asyncSpecifier: TokenSyntax? = nil,
       _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil,
       throwsSpecifier: TokenSyntax? = nil,
-      _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenThrowsSpecifierAndThrownError: UnexpectedNodesSyntax? = nil,
+      thrownError: ThrownTypeClauseSyntax? = nil,
+      _ unexpectedAfterThrownError: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -561,14 +565,18 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
             asyncSpecifier, 
             unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
             throwsSpecifier, 
-            unexpectedAfterThrowsSpecifier
+            unexpectedBetweenThrowsSpecifierAndThrownError, 
+            thrownError, 
+            unexpectedAfterThrownError
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAsyncSpecifier?.raw, 
           asyncSpecifier?.raw, 
           unexpectedBetweenAsyncSpecifierAndThrowsSpecifier?.raw, 
           throwsSpecifier?.raw, 
-          unexpectedAfterThrowsSpecifier?.raw
+          unexpectedBetweenThrowsSpecifierAndThrownError?.raw, 
+          thrownError?.raw, 
+          unexpectedAfterThrownError?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.accessorEffectSpecifiers,
@@ -628,12 +636,32 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
     }
   }
   
-  public var unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenThrowsSpecifierAndThrownError: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(AccessorEffectSpecifiersSyntax.self)
+    }
+  }
+  
+  /// The specific error type thrown by this accessor.
+  @_spi(ExperimentalLanguageFeatures)
+  public var thrownError: ThrownTypeClauseSyntax? {
+    get {
+      return Syntax(self).child(at: 5)?.cast(ThrownTypeClauseSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(AccessorEffectSpecifiersSyntax.self)
+    }
+  }
+  
+  public var unexpectedAfterThrownError: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(AccessorEffectSpecifiersSyntax.self)
     }
   }
   
@@ -643,7 +671,9 @@ public struct AccessorEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
           \Self.asyncSpecifier, 
           \Self.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
           \Self.throwsSpecifier, 
-          \Self.unexpectedAfterThrowsSpecifier
+          \Self.unexpectedBetweenThrowsSpecifierAndThrownError, 
+          \Self.thrownError, 
+          \Self.unexpectedAfterThrownError
         ])
   }
 }

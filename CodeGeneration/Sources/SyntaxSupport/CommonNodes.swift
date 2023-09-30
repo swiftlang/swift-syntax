@@ -80,6 +80,34 @@ public let COMMON_NODES: [Node] = [
   ),
 
   Node(
+    kind: .thrownTypeClause,
+    base: .syntax,
+    nameForDiagnostics: "thrown type clause",
+    documentation: "The specific error type that a function can throw.",
+    traits: [
+      "Parenthesized"
+    ],
+    children: [
+      Child(
+        name: "leftParen",
+        kind: .token(choices: [.token(.leftParen)]),
+        documentation: "The '(' to open the thrown type clause."
+      ),
+      Child(
+        name: "type",
+        kind: .node(kind: .type),
+        nameForDiagnostics: "thrown type",
+        documentation: "The thrown error type."
+      ),
+      Child(
+        name: "rightParen",
+        kind: .token(choices: [.token(.rightParen)]),
+        documentation: "The ')' to closure the thrown type clause."
+      ),
+    ]
+  ),
+
+  Node(
     kind: .accessorEffectSpecifiers,
     base: .syntax,
     nameForDiagnostics: "accessor specifiers",
@@ -97,6 +125,13 @@ public let COMMON_NODES: [Node] = [
         name: "throwsSpecifier",
         kind: .token(choices: [.keyword(.throws)]),
         documentation: "The `throws` keyword.",
+        isOptional: true
+      ),
+      Child(
+        name: "thrownError",
+        kind: .node(kind: .thrownTypeClause),
+        experimentalFeature: .typedThrows,
+        documentation: "The specific error type thrown by this accessor.",
         isOptional: true
       ),
     ]
@@ -120,6 +155,13 @@ public let COMMON_NODES: [Node] = [
         name: "throwsSpecifier",
         kind: .token(choices: [.keyword(.throws), .keyword(.rethrows)]),
         documentation: "The `throws` or `rethrows` keyword.",
+        isOptional: true
+      ),
+      Child(
+        name: "thrownError",
+        kind: .node(kind: .thrownTypeClause),
+        experimentalFeature: .typedThrows,
+        documentation: "The specific error type thrown by this function.",
         isOptional: true
       ),
     ]
@@ -322,6 +364,13 @@ public let COMMON_NODES: [Node] = [
       Child(
         name: "throwsSpecifier",
         kind: .token(choices: [.keyword(.throws)]),
+        isOptional: true
+      ),
+      Child(
+        name: "thrownError",
+        kind: .node(kind: .thrownTypeClause),
+        experimentalFeature: .typedThrows,
+        documentation: "The specific error type thrown by this function type.",
         isOptional: true
       ),
     ]

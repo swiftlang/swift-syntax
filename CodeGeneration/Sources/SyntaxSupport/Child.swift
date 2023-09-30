@@ -82,6 +82,10 @@ public class Child {
   /// Whether this child is optional and can be `nil`.
   public let isOptional: Bool
 
+  /// The experimental feature the child represents, or `nil` if this isn't
+  /// for an experimental feature.
+  public let experimentalFeature: ExperimentalFeature?
+
   /// A name of this child that can be shown in diagnostics.
   ///
   /// This is used to e.g. describe the child if all of its tokens are missing in the source file.
@@ -109,6 +113,10 @@ public class Child {
 
   /// The first line of the child's documentation
   public let documentationAbstract: String
+
+  /// If `true`, this is for an experimental language feature, and any public
+  /// API generated should be SPI.
+  public var isExperimental: Bool { experimentalFeature != nil }
 
   public var syntaxNodeKind: SyntaxNodeKind {
     switch kind {
@@ -218,6 +226,15 @@ public class Child {
     }
   }
 
+  /// The attributes that should be printed on any API for the this child.
+  ///
+  /// This is typically used to mark APIs as SPI when the keyword is part of
+  /// an experimental language feature.
+  public var apiAttributes: AttributeListSyntax {
+    guard isExperimental else { return "" }
+    return AttributeListSyntax("@_spi(ExperimentalLanguageFeatures)").with(\.trailingTrivia, .newline)
+  }
+
   /// If a classification is passed, it specifies the color identifiers in
   /// that subtree should inherit for syntax coloring. Must be a member of
   /// ``SyntaxClassification``.
@@ -227,6 +244,7 @@ public class Child {
     name: String,
     deprecatedName: String? = nil,
     kind: ChildKind,
+    experimentalFeature: ExperimentalFeature? = nil,
     nameForDiagnostics: String? = nil,
     documentation: String? = nil,
     isOptional: Bool = false
@@ -236,6 +254,7 @@ public class Child {
     self.name = name
     self.deprecatedName = deprecatedName
     self.kind = kind
+    self.experimentalFeature = experimentalFeature
     self.nameForDiagnostics = nameForDiagnostics
     self.documentationSummary = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.documentationAbstract = String(documentation?.split(whereSeparator: \.isNewline).first ?? "")

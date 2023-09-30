@@ -15,6 +15,7 @@ import SwiftSyntax
 public enum ExperimentalFeature: String, CaseIterable {
   case referenceBindings
   case thenStatements
+  case typedThrows
 
   /// The name of the feature, which is used in the doc comment.
   public var featureName: String {
@@ -23,6 +24,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "reference bindings"
     case .thenStatements:
       return "'then' statements"
+    case .typedThrows:
+      return "typed throws"
     }
   }
 

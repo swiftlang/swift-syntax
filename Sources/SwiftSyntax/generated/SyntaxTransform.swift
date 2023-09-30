@@ -1240,6 +1240,11 @@ public protocol SyntaxTransformVisitor {
   ///   - Returns: the sum of whatever the child visitors return.
   func visit(_ node: ThrowStmtSyntax) -> ResultType
   
+  /// Visiting ``ThrownTypeClauseSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: the sum of whatever the child visitors return.
+  func visit(_ node: ThrownTypeClauseSyntax) -> ResultType
+  
   /// Visiting ``TryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: the sum of whatever the child visitors return.
@@ -3119,6 +3124,13 @@ extension SyntaxTransformVisitor {
     visitAny(Syntax(node))
   }
   
+  /// Visiting ``ThrownTypeClauseSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: nil by default.
+  public func visit(_ node: ThrownTypeClauseSyntax) -> ResultType {
+    visitAny(Syntax(node))
+  }
+  
   /// Visiting ``TryExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: nil by default.
@@ -3829,6 +3841,8 @@ extension SyntaxTransformVisitor {
     case .thenStmt(let derived):
       return visit(derived)
     case .throwStmt(let derived):
+      return visit(derived)
+    case .thrownTypeClause(let derived):
       return visit(derived)
     case .tryExpr(let derived):
       return visit(derived)

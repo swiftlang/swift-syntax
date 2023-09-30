@@ -800,9 +800,16 @@ extension Parser.Lookahead {
       return true
     }
 
-    if self.at(anyIn: EffectSpecifier.self) != nil {
+    if let effect = self.at(anyIn: EffectSpecifier.self) {
       if self.peek().rawTokenKind == .arrow {
         return true
+      }
+
+      if effect.spec.isThrowsSpecifier && self.peek().rawTokenKind == .leftParen {
+        var backtrack = self.lookahead()
+        backtrack.consumeAnyToken()
+        backtrack.skipSingle()
+        return backtrack.atFunctionTypeArrow()
       }
 
       if peek(isAtAnyIn: EffectSpecifier.self) != nil {

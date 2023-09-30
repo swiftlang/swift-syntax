@@ -29,4 +29,7 @@ extension Parser.ExperimentalFeatures {
   
   /// Whether to enable the parsing of 'then' statements.
   public static let thenStatements = Self(rawValue: 1 << 1)
+  
+  /// Whether to enable the parsing of typed throws.
+  public static let typedThrows = Self(rawValue: 1 << 2)
 }

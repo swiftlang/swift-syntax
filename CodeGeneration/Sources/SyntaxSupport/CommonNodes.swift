@@ -85,7 +85,7 @@ public let COMMON_NODES: [Node] = [
     nameForDiagnostics: "thrown type clause",
     documentation: "The specific error type that a function can throw.",
     traits: [
-      "Parenthesized",
+      "Parenthesized"
     ],
     children: [
       Child(

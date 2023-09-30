@@ -58,7 +58,7 @@ public let TRAITS: [Trait] = [
       Child(name: "throwsSpecifier", kind: .token(choices: [.keyword(.throws), .keyword(.rethrows)]), isOptional: true),
       Child(name: "unexpectedBetweenThrowsSpecifierAndThrownType", kind: .node(kind: .unexpectedNodes), isOptional: true),
       Child(
-        name: "thrownType",
+        name: "thrownError",
         kind: .node(kind: .thrownTypeClause),
         experimentalFeature: .typedThrows,
         documentation: "The specific thrown error type.",

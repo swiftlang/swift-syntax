@@ -84,6 +84,9 @@ public let COMMON_NODES: [Node] = [
     base: .syntax,
     nameForDiagnostics: "thrown type clause",
     documentation: "The specific error type that a function can throw.",
+    traits: [
+      "Parenthesized",
+    ],
     children: [
       Child(
         name: "leftParen",
@@ -125,7 +128,7 @@ public let COMMON_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "thrownType",
+        name: "thrownError",
         kind: .node(kind: .thrownTypeClause),
         experimentalFeature: .typedThrows,
         documentation: "The specific error type thrown by this accessor.",
@@ -155,7 +158,7 @@ public let COMMON_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "thrownType",
+        name: "thrownError",
         kind: .node(kind: .thrownTypeClause),
         experimentalFeature: .typedThrows,
         documentation: "The specific error type thrown by this function.",
@@ -364,7 +367,7 @@ public let COMMON_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "thrownType",
+        name: "thrownError",
         kind: .node(kind: .thrownTypeClause),
         experimentalFeature: .typedThrows,
         documentation: "The specific error type thrown by this function type.",

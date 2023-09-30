@@ -152,7 +152,7 @@ public protocol EffectSpecifiersSyntax: SyntaxProtocol {
     set
   }
   
-  var unexpectedBetweenThrowsSpecifierAndThrownError: UnexpectedNodesSyntax? {
+  var unexpectedBetweenThrowsSpecifierAndThrownType: UnexpectedNodesSyntax? {
     get
     set
   }
@@ -164,7 +164,7 @@ public protocol EffectSpecifiersSyntax: SyntaxProtocol {
     set
   }
   
-  var unexpectedAfterThrownError: UnexpectedNodesSyntax? {
+  var unexpectedAfterThrownType: UnexpectedNodesSyntax? {
     get
     set
   }

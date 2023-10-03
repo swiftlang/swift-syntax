@@ -1497,17 +1497,38 @@ extension Parser {
     var elements = [RawSyntax]()
     do {
       var collectionProgress = LoopProgressCondition()
-      COLLECTION_LOOP: while self.hasProgressed(&collectionProgress) {
+      var keepGoing: RawTokenSyntax?
+      COLLECTION_LOOP: repeat {
         elementKind = self.parseCollectionElement(elementKind)
 
+        /// Whether expression of an array element or the value of a dictionary
+        /// element is missing. If this is the case, we shouldn't recover from
+        /// a missing comma since most likely the closing `]` is missing.
+        var elementIsMissingExpression: Bool {
+          switch elementKind! {
+          case .dictionary(_, _, _, let value):
+            return value.is(RawMissingExprSyntax.self)
+          case .array(let rawExprSyntax):
+            return rawExprSyntax.is(RawMissingExprSyntax.self)
+          }
+        }
+
         // Parse the ',' if exists.
-        let comma = self.consume(if: .comma)
+        if let token = self.consume(if: .comma) {
+          keepGoing = token
+        } else if !self.at(.rightSquare, .endOfFile) && !self.atStartOfLine && !elementIsMissingExpression && !self.atStartOfDeclaration()
+          && !self.atStartOfStatement(preferExpr: false)
+        {
+          keepGoing = missingToken(.comma)
+        } else {
+          keepGoing = nil
+        }
 
         switch elementKind! {
         case .array(let el):
           let element = RawArrayElementSyntax(
             expression: el,
-            trailingComma: comma,
+            trailingComma: keepGoing,
             arena: self.arena
           )
           if element.isEmpty {
@@ -1521,7 +1542,7 @@ extension Parser {
             unexpectedBeforeColon,
             colon: colon,
             value: value,
-            trailingComma: comma,
+            trailingComma: keepGoing,
             arena: self.arena
           )
           if element.isEmpty {
@@ -1530,29 +1551,7 @@ extension Parser {
             elements.append(RawSyntax(element))
           }
         }
-
-        // If we saw a comma, that's a strong indicator we have more elements
-        // to process. If that's not the case, we have to do some legwork to
-        // determine if we should bail out.
-        guard comma == nil || self.at(.rightSquare, .endOfFile) else {
-          continue
-        }
-
-        // If we found EOF or the closing square bracket, bailout.
-        if self.at(.rightSquare, .endOfFile) {
-          break
-        }
-
-        // If the next token is at the beginning of a new line and can never start
-        // an element, break.
-        if self.atStartOfLine
-          && (self.at(.rightBrace, .poundEndif)
-            || self.atStartOfDeclaration()
-            || self.atStartOfStatement(preferExpr: false))
-        {
-          break
-        }
-      }
+      } while keepGoing != nil && self.hasProgressed(&collectionProgress)
     }
 
     let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquare)

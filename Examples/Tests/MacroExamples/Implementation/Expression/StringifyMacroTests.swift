@@ -33,12 +33,12 @@ final class StringifyMacroTests: XCTestCase {
 
   func testExpansionWithStringInterpolation() {
     assertMacroExpansion(
-      """
+      #"""
       let b = #stringify("Hello, \(name)")
-      """,
-      expandedSource: """
+      """#,
+      expandedSource: #"""
         let b = ("Hello, \(name)", #""Hello, \(name)""#)
-        """,
+        """#,
       macros: macros,
       indentationWidth: .spaces(2)
     )

@@ -2742,4 +2742,65 @@ final class StatementExpressionTests: ParserTestCase {
       """
     )
   }
+
+  func testArrayExprWithNoCommas() {
+    assertParse("[() ()]")
+
+    assertParse(
+      "[1 1️⃣2]",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ',' in array element",
+          fixIts: ["insert ','"]
+        )
+      ],
+      fixedSource: "[1, 2]"
+    )
+
+    assertParse(
+      #"["hello" 1️⃣"world"]"#,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ',' in array element",
+          fixIts: ["insert ','"]
+        )
+      ],
+      fixedSource: #"["hello", "world"]"#
+    )
+  }
+
+  func testDictionaryExprWithNoCommas() {
+    assertParse(
+      "[1: () 1️⃣2: ()]",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ',' in dictionary element",
+          fixIts: ["insert ','"]
+        )
+      ],
+      fixedSource: #"[1: (), 2: ()]"#
+    )
+
+    assertParse(
+      #"["foo": 1 1️⃣"bar": 2]"#,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ',' in dictionary element",
+          fixIts: ["insert ','"]
+        )
+      ],
+      fixedSource: #"["foo": 1, "bar": 2]"#
+    )
+
+    assertParse(
+      #"[1: "hello" 1️⃣2: "world"]"#,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ',' in dictionary element",
+          fixIts: ["insert ','"]
+        )
+      ],
+      fixedSource: #"[1: "hello", 2: "world"]"#
+    )
+  }
 }

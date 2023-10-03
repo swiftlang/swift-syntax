@@ -18,13 +18,14 @@ final class ObjectLiteralsTests: ParserTestCase {
   func testObjectLiterals1a() {
     assertParse(
       """
-      let _ = [#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)#1️⃣]
+      let _ = [#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)1️⃣#2️⃣]
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"])
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' in array element", fixIts: ["insert ','"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
       ],
       fixedSource: """
-        let _ = [#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)#<#identifier#>]
+        let _ = [#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha), #<#identifier#>]
         """
     )
   }
@@ -32,13 +33,14 @@ final class ObjectLiteralsTests: ParserTestCase {
   func testObjectLiterals1b() {
     assertParse(
       """
-      let _ = [#Image(imageLiteral: localResourceNameAsString)#1️⃣]
+      let _ = [#Image(imageLiteral: localResourceNameAsString)1️⃣#2️⃣]
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"])
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' in array element", fixIts: ["insert ','"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
       ],
       fixedSource: """
-        let _ = [#Image(imageLiteral: localResourceNameAsString)#<#identifier#>]
+        let _ = [#Image(imageLiteral: localResourceNameAsString), #<#identifier#>]
         """
     )
   }
@@ -46,13 +48,14 @@ final class ObjectLiteralsTests: ParserTestCase {
   func testObjectLiterals1c() {
     assertParse(
       """
-      let _ = [#FileReference(fileReferenceLiteral: localResourceNameAsString)#1️⃣]
+      let _ = [#FileReference(fileReferenceLiteral: localResourceNameAsString)1️⃣#2️⃣]
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"])
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' in array element", fixIts: ["insert ','"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
       ],
       fixedSource: """
-        let _ = [#FileReference(fileReferenceLiteral: localResourceNameAsString)#<#identifier#>]
+        let _ = [#FileReference(fileReferenceLiteral: localResourceNameAsString), #<#identifier#>]
         """
     )
   }
@@ -112,10 +115,11 @@ final class ObjectLiteralsTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' in array element", fixIts: ["insert ','"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
       ],
       fixedSource: """
-        let _ = [#<#identifier#> #<#identifier#>]
+        let _ = [#<#identifier#>, #<#identifier#>]
         """
     )
   }
@@ -123,11 +127,10 @@ final class ObjectLiteralsTests: ParserTestCase {
   func testObjectLiterals5() {
     assertParse(
       """
-      let _ = ℹ️[#Color(_: 1, green: 1, 2)2️⃣
+      let _ = ℹ️[#Color(_: 1, green: 1, 2)1️⃣
       """,
       diagnostics: [
         DiagnosticSpec(
-          locationMarker: "2️⃣",
           message: "expected ']' to end array",
           notes: [NoteSpec(message: "to match this opening '['")],
           fixIts: ["insert ']'"]
@@ -142,23 +145,28 @@ final class ObjectLiteralsTests: ParserTestCase {
   func testObjectLiterals6() {
     assertParse(
       """
-      let _ = ℹ️[1️⃣#Color(red: 1, green: 1, blue: 1)#2️⃣3️⃣
+      let _ = ℹ️[#Color(red: 1, green: 1, blue: 1)1️⃣#2️⃣
       """,
       diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected ',' in array element",
+          fixIts: ["insert ','"]
+        ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "expected identifier in macro expansion",
           fixIts: ["insert identifier"]
         ),
         DiagnosticSpec(
-          locationMarker: "3️⃣",
+          locationMarker: "2️⃣",
           message: "expected ']' to end array",
           notes: [NoteSpec(message: "to match this opening '['")],
           fixIts: ["insert ']'"]
         ),
       ],
       fixedSource: """
-        let _ = [#Color(red: 1, green: 1, blue: 1)#<#identifier#>]
+        let _ = [#Color(red: 1, green: 1, blue: 1), #<#identifier#>]
         """
     )
   }
@@ -166,13 +174,14 @@ final class ObjectLiteralsTests: ParserTestCase {
   func testObjectLiterals7() {
     assertParse(
       """
-      let _ = [#Color(withRed: 1, green: 1, whatever: 2)#1️⃣]
+      let _ = [#Color(withRed: 1, green: 1, whatever: 2)1️⃣#2️⃣]
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"])
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' in array element", fixIts: ["insert ','"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
       ],
       fixedSource: """
-        let _ = [#Color(withRed: 1, green: 1, whatever: 2)#<#identifier#>]
+        let _ = [#Color(withRed: 1, green: 1, whatever: 2), #<#identifier#>]
         """
     )
   }

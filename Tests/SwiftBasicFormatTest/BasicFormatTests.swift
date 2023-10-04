@@ -504,4 +504,11 @@ final class BasicFormatTest: XCTestCase {
       )
     }
   }
+
+  func testRightAnglePeriodNotFormatted() {
+    assertFormatted(
+      tree: ExprSyntax("Foo<T>.bar"),
+      expected: "Foo<T>.bar"
+    )
+  }
 }

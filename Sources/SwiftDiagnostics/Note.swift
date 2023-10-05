@@ -20,7 +20,14 @@ public protocol NoteMessage {
   var message: String { get }
 
   /// See ``MessageID``.
-  var fixItID: MessageID { get }
+  var noteID: MessageID { get }
+}
+
+extension NoteMessage {
+  @available(*, deprecated, message: "Use noteID instead.", renamed: "noteID")
+  public var fixItID: MessageID {
+    return noteID
+  }
 }
 
 /// A note that points to another node that's relevant for a Diagnostic.

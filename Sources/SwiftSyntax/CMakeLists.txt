@@ -63,7 +63,6 @@ add_swift_syntax_library(SwiftSyntax
   generated/SyntaxKind.swift
   generated/SyntaxRewriter.swift
   generated/SyntaxTraits.swift
-  generated/SyntaxTransform.swift
   generated/SyntaxVisitor.swift
   generated/TokenKind.swift
   generated/Tokens.swift

@@ -2435,6 +2435,11 @@ final class RecoveryTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "5️⃣",
+          message: "expected ',' in array element",
+          fixIts: ["insert ','"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
           message: "expected ']' to end array",
           notes: [NoteSpec(locationMarker: "3️⃣", message: "to match this opening '['")],
           fixIts: ["insert ']'"]
@@ -2449,7 +2454,7 @@ final class RecoveryTests: ParserTestCase {
         struct Foo19605164 {
         func a(s: S)
         }[{{g) -> Int {}
-        }}]}
+        }},]}
         #endif
         """
     )

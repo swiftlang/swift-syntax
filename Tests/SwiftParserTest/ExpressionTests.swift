@@ -2762,11 +2762,15 @@ final class StatementExpressionTests: ParserTestCase {
       experimentalFeatures: .typedThrows
     )
     assertParse(
-      "[() try(MyError) async -> Void]()",
+      "[() 1️⃣try(MyError) async -> Void]()",
+      diagnostics: [DiagnosticSpec(message: "expected ',' in array element", fixIts: ["insert ','"])],
+      fixedSource: "[(), try(MyError) async -> Void]()",
       experimentalFeatures: .typedThrows
     )
     assertParse(
-      "[() try async(MyError) -> Void]()",
+      "[() 1️⃣try async(MyError) -> Void]()",
+      diagnostics: [DiagnosticSpec(message: "expected ',' in array element", fixIts: ["insert ','"])],
+      fixedSource: "[(), try async(MyError) -> Void]()",
       experimentalFeatures: .typedThrows
     )
     assertParse(
@@ -2787,30 +2791,49 @@ final class StatementExpressionTests: ParserTestCase {
       experimentalFeatures: .typedThrows
     )
     assertParse(
-      "[() try(MyError) await 1️⃣-> Void]()",
+      "[() 1️⃣try(MyError) 2️⃣await 3️⃣-> Void]()",
       diagnostics: [
         DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected ',' in array element",
+          fixIts: ["insert ','"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ',' in array element",
+          fixIts: ["insert ','"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
           message: "expected expression in 'await' expression",
           fixIts: ["insert expression"]
-        )
+        ),
       ],
-      fixedSource: "[() try(MyError) await <#expression#> -> Void]()",
+      fixedSource: "[(), try(MyError), await <#expression#> -> Void]()",
       experimentalFeatures: .typedThrows
     )
     assertParse(
-      "[() try await(MyError) -> Void]()",
+      "[() 1️⃣try await(MyError) -> Void]()",
+      diagnostics: [DiagnosticSpec(message: "expected ',' in array element", fixIts: ["insert ','"])],
+      fixedSource: "[(), try await(MyError) -> Void]()",
       experimentalFeatures: .typedThrows
     )
     assertParse(
-      "[() async(MyError) -> Void]()",
+      "[() 1️⃣async(MyError) -> Void]()",
+      diagnostics: [DiagnosticSpec(message: "expected ',' in array element", fixIts: ["insert ','"])],
+      fixedSource: "[(), async(MyError) -> Void]()",
       experimentalFeatures: .typedThrows
     )
     assertParse(
-      "[() await(MyError) -> Void]()",
+      "[() 1️⃣await(MyError) -> Void]()",
+      diagnostics: [DiagnosticSpec(message: "expected ',' in array element", fixIts: ["insert ','"])],
+      fixedSource: "[(), await(MyError) -> Void]()",
       experimentalFeatures: .typedThrows
     )
     assertParse(
-      "[() try(MyError) -> Void]()",
+      "[() 1️⃣try(MyError) -> Void]()",
+      diagnostics: [DiagnosticSpec(message: "expected ',' in array element", fixIts: ["insert ','"])],
+      fixedSource: "[(), try(MyError) -> Void]()",
       experimentalFeatures: .typedThrows
     )
     assertParse(
@@ -2824,6 +2847,67 @@ final class StatementExpressionTests: ParserTestCase {
     assertParse(
       "X<() async throws(MyError) -> Int>()",
       experimentalFeatures: .typedThrows
+    )
+  }
+
+  func testArrayExprWithNoCommas() {
+    assertParse("[() ()]")
+
+    assertParse(
+      "[1 1️⃣2]",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ',' in array element",
+          fixIts: ["insert ','"]
+        )
+      ],
+      fixedSource: "[1, 2]"
+    )
+
+    assertParse(
+      #"["hello" 1️⃣"world"]"#,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ',' in array element",
+          fixIts: ["insert ','"]
+        )
+      ],
+      fixedSource: #"["hello", "world"]"#
+    )
+  }
+
+  func testDictionaryExprWithNoCommas() {
+    assertParse(
+      "[1: () 1️⃣2: ()]",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ',' in dictionary element",
+          fixIts: ["insert ','"]
+        )
+      ],
+      fixedSource: #"[1: (), 2: ()]"#
+    )
+
+    assertParse(
+      #"["foo": 1 1️⃣"bar": 2]"#,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ',' in dictionary element",
+          fixIts: ["insert ','"]
+        )
+      ],
+      fixedSource: #"["foo": 1, "bar": 2]"#
+    )
+
+    assertParse(
+      #"[1: "hello" 1️⃣2: "world"]"#,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ',' in dictionary element",
+          fixIts: ["insert ','"]
+        )
+      ],
+      fixedSource: #"[1: "hello", 2: "world"]"#
     )
   }
 }

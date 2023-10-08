@@ -6,9 +6,9 @@ Guide to provide steps for filing actionable bug reports for `BasicFormat` failu
 
 Reducing a failure requires the `swift-parser-cli` utility that you can build by checking out `swift-syntax` and running 
 ```
-swift build --product swift-parser-cli
+swift build --package-path SwiftParserCLI
 ```
-or building the `swift-parser-cli` target in Xcode.
+or openning `SwiftParserCLI` package and building the `swift-parser-cli` target in Xcode.
 
 1. After you have built `swift-parse-cli`, you can format a single source file using BasicFormat by running the following command. If you are only experiencing the issue while formatting a single node, e.g. while creating an `AccessorDeclSyntax` inside a macro, you can additionally pass the type of the node as `--node-type AccessorDeclSyntax` 
 ```

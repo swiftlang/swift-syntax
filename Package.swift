@@ -292,16 +292,6 @@ let package = Package(
       dependencies: ["_SwiftSyntaxTestSupport", "SwiftRefactor"]
     ),
 
-    // MARK: - Executable targets
-
-    .executableTarget(
-      name: "swift-parser-cli",
-      dependencies: [
-        "_InstructionCounter", "SwiftBasicFormat", "SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftParserDiagnostics", "SwiftSyntax",
-        .product(name: "ArgumentParser", package: "swift-argument-parser"),
-      ]
-    ),
-
     // MARK: - Deprecated targets
 
     // MARK: PerformanceTest
@@ -330,14 +320,3 @@ package.targets.append(
     }
   )
 )
-
-if useLocalDependencies {
-  package.dependencies += [
-    .package(path: "../swift-argument-parser")
-  ]
-} else {
-  // Building standalone.
-  package.dependencies += [
-    .package(url: "https://github.com/apple/swift-argument-parser.git", from: "1.2.2")
-  ]
-}

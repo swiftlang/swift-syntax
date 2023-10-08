@@ -12,12 +12,12 @@
 
 import ArgumentParser
 import Foundation
+import InstructionCounter
 import SwiftDiagnostics
 import SwiftOperators
 import SwiftParser
 import SwiftParserDiagnostics
 import SwiftSyntax
-import _InstructionCounter
 
 #if os(Windows)
 import WinSDK

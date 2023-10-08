@@ -16,13 +16,13 @@ let package = Package(
   ],
   targets: [
     .target(
-      name: "_InstructionCounter"
+      name: "InstructionCounter"
     ),
 
     .executableTarget(
       name: "swift-parser-cli",
       dependencies: [
-        "_InstructionCounter",
+        "InstructionCounter",
         .product(name: "SwiftBasicFormat", package: "swift-syntax"),
         .product(name: "SwiftDiagnostics", package: "swift-syntax"),
         .product(name: "SwiftOperators", package: "swift-syntax"),

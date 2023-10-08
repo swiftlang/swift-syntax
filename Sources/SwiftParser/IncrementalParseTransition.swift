@@ -48,9 +48,8 @@ public typealias ReusedNodeCallback = (_ node: Syntax) -> ()
 /// Keeps track of a previously parsed syntax tree and the source edits that
 /// occurred since it was created.
 public final class IncrementalParseTransition {
-  fileprivate let previousTree: SourceFileSyntax
+  fileprivate let previousIncrementalParseResult: IncrementalParseResult
   fileprivate let edits: ConcurrentEdits
-  fileprivate let lookaheadRanges: LookaheadRanges
   fileprivate let reusedNodeCallback: ReusedNodeCallback?
 
   /// - Parameters:
@@ -58,15 +57,30 @@ public final class IncrementalParseTransition {
   ///   - edits: The edits that have occurred since the last parse that resulted
   ///            in the new source that is about to be parsed.
   ///   - reusedNodeCallback: Optional closure to accept information about the re-used node. For each node that gets re-used `reusedNodeCallback` is called.
+  @available(*, deprecated, message: "Use initializer taking `IncrementalParseResult` instead")
   public init(
     previousTree: SourceFileSyntax,
     edits: ConcurrentEdits,
     lookaheadRanges: LookaheadRanges,
     reusedNodeCallback: ReusedNodeCallback? = nil
   ) {
-    self.previousTree = previousTree
+    self.previousIncrementalParseResult = IncrementalParseResult(tree: previousTree, lookaheadRanges: lookaheadRanges)
     self.edits = edits
-    self.lookaheadRanges = lookaheadRanges
+    self.reusedNodeCallback = reusedNodeCallback
+  }
+
+  /// - Parameters:
+  ///   - previousIncrementalParseResult: The previous incremental parse result to do lookups on.
+  ///   - edits: The edits that have occurred since the last parse that resulted
+  ///            in the new source that is about to be parsed.
+  ///   - reusedNodeCallback: Optional closure to accept information about the re-used node. For each node that gets re-used `reusedNodeCallback` is called.
+  public init(
+    previousIncrementalParseResult: IncrementalParseResult,
+    edits: ConcurrentEdits,
+    reusedNodeCallback: ReusedNodeCallback? = nil
+  ) {
+    self.previousIncrementalParseResult = previousIncrementalParseResult
+    self.edits = edits
     self.reusedNodeCallback = reusedNodeCallback
   }
 }
@@ -81,7 +95,7 @@ struct IncrementalParseLookup {
   /// given ``IncrementalParseTransition``.
   public init(transition: IncrementalParseTransition) {
     self.transition = transition
-    self.cursor = .init(root: Syntax(transition.previousTree))
+    self.cursor = .init(root: Syntax(transition.previousIncrementalParseResult.tree))
   }
 
   fileprivate var edits: ConcurrentEdits {
@@ -148,7 +162,7 @@ struct IncrementalParseLookup {
       return true
     }
 
-    guard let nodeAffectRangeLength = transition.lookaheadRanges.lookaheadRanges[node.raw.id] else {
+    guard let nodeAffectRangeLength = transition.previousIncrementalParseResult.lookaheadRanges.lookaheadRanges[node.raw.id] else {
       return false
     }
 

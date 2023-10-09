@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(BumpPtrAllocator) import SwiftSyntax
 
 extension StringLiteralExprSyntax {
 

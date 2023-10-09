@@ -668,6 +668,16 @@ open class SyntaxRewriter {
     return StmtSyntax(visitChildren(node))
   }
   
+  /// Visit a ``DoExprSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  open func visit(_ node: DoExprSyntax) -> ExprSyntax {
+    return ExprSyntax(visitChildren(node))
+  }
+  
   /// Visit a ``DoStmtSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2442,6 +2452,10 @@ open class SyntaxRewriter {
       return {
         self.visitImpl($0, DiscardStmtSyntax.self, self.visit)
       }
+    case .doExpr:
+      return {
+        self.visitImpl($0, DoExprSyntax.self, self.visit)
+      }
     case .doStmt:
       return {
         self.visitImpl($0, DoStmtSyntax.self, self.visit)
@@ -3392,6 +3406,8 @@ open class SyntaxRewriter {
       return visitImpl(node, DiscardAssignmentExprSyntax.self, visit)
     case .discardStmt:
       return visitImpl(node, DiscardStmtSyntax.self, visit)
+    case .doExpr:
+      return visitImpl(node, DoExprSyntax.self, visit)
     case .doStmt:
       return visitImpl(node, DoStmtSyntax.self, visit)
     case .documentationAttributeArgumentList:

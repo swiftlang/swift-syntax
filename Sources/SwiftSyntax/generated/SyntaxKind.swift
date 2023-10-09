@@ -99,6 +99,10 @@ public enum SyntaxKind: CaseIterable {
   case differentiableAttributeArguments
   case discardAssignmentExpr
   case discardStmt
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case doExpr
   case doStmt
   case documentationAttributeArgumentList
   case documentationAttributeArgument
@@ -592,6 +596,8 @@ public enum SyntaxKind: CaseIterable {
       return DiscardAssignmentExprSyntax.self
     case .discardStmt:
       return DiscardStmtSyntax.self
+    case .doExpr:
+      return DoExprSyntax.self
     case .doStmt:
       return DoStmtSyntax.self
     case .documentationAttributeArgumentList:

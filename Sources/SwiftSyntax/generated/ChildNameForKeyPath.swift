@@ -1015,6 +1015,20 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "expression"
   case \DiscardStmtSyntax.unexpectedAfterExpression:
     return "unexpectedAfterExpression"
+  case \DoExprSyntax.unexpectedBeforeDoKeyword:
+    return "unexpectedBeforeDoKeyword"
+  case \DoExprSyntax.doKeyword:
+    return "doKeyword"
+  case \DoExprSyntax.unexpectedBetweenDoKeywordAndBody:
+    return "unexpectedBetweenDoKeywordAndBody"
+  case \DoExprSyntax.body:
+    return "body"
+  case \DoExprSyntax.unexpectedBetweenBodyAndCatchClauses:
+    return "unexpectedBetweenBodyAndCatchClauses"
+  case \DoExprSyntax.catchClauses:
+    return "catchClauses"
+  case \DoExprSyntax.unexpectedAfterCatchClauses:
+    return "unexpectedAfterCatchClauses"
   case \DoStmtSyntax.unexpectedBeforeDoKeyword:
     return "unexpectedBeforeDoKeyword"
   case \DoStmtSyntax.doKeyword:

@@ -131,6 +131,8 @@ extension SyntaxKind {
       return "'@differentiable' arguments"
     case .discardStmt:
       return "'discard' statement"
+    case .doExpr:
+      return "'do' block"
     case .doStmt:
       return "'do' statement"
     case .documentationAttributeArgumentList:

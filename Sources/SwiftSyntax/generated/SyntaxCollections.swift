@@ -229,6 +229,7 @@ public struct AvailabilityArgumentListSyntax: SyntaxCollection, SyntaxHashable {
 ///
 /// ### Contained in
 /// 
+///  - ``DoExprSyntax``.``DoExprSyntax/catchClauses``
 ///  - ``DoStmtSyntax``.``DoStmtSyntax/catchClauses``
 public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = CatchClauseSyntax

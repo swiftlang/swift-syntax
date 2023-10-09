@@ -1042,6 +1042,24 @@ open class SyntaxVisitor {
   open func visitPost(_ node: DiscardStmtSyntax) {
   }
   
+  /// Visiting ``DoExprSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  open func visit(_ node: DoExprSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``DoExprSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  open func visitPost(_ node: DoExprSyntax) {
+  }
+  
   /// Visiting ``DoStmtSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3762,6 +3780,10 @@ open class SyntaxVisitor {
       return {
         self.visitImpl($0, DiscardStmtSyntax.self, self.visit, self.visitPost)
       }
+    case .doExpr:
+      return {
+        self.visitImpl($0, DoExprSyntax.self, self.visit, self.visitPost)
+      }
     case .doStmt:
       return {
         self.visitImpl($0, DoStmtSyntax.self, self.visit, self.visitPost)
@@ -4715,6 +4737,8 @@ open class SyntaxVisitor {
       visitImpl(node, DiscardAssignmentExprSyntax.self, visit, visitPost)
     case .discardStmt:
       visitImpl(node, DiscardStmtSyntax.self, visit, visitPost)
+    case .doExpr:
+      visitImpl(node, DoExprSyntax.self, visit, visitPost)
     case .doStmt:
       visitImpl(node, DoStmtSyntax.self, visit, visitPost)
     case .documentationAttributeArgumentList:

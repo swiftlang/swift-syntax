@@ -77,6 +77,19 @@ extension Parser {
     case (.repeat, let handle)?:
       return label(self.parseRepeatStatement(repeatHandle: handle), with: optLabel)
 
+    case (.do, let handle)?:
+      // If we have 'do' expressions enabled, we parse a DoExprSyntax, and wrap
+      // it in an ExpressionStmtSyntax.
+      if self.experimentalFeatures.contains(.doExpressions) {
+        let doExpr = self.parseDoExpression(doHandle: handle)
+        let doStmt = RawExpressionStmtSyntax(
+          expression: RawExprSyntax(doExpr),
+          arena: self.arena
+        )
+        return label(doStmt, with: optLabel)
+      }
+      // Otherwise parse a regular DoStmtSyntax.
+      return label(self.parseDoStatement(doHandle: handle), with: optLabel)
     case (.if, let handle)?:
       let ifExpr = self.parseIfExpression(ifHandle: handle)
       let ifStmt = RawExpressionStmtSyntax(
@@ -107,8 +120,6 @@ extension Parser {
       return label(self.parseThrowStatement(throwHandle: handle), with: optLabel)
     case (.defer, let handle)?:
       return label(self.parseDeferStatement(deferHandle: handle), with: optLabel)
-    case (.do, let handle)?:
-      return label(self.parseDoStatement(doHandle: handle), with: optLabel)
     case (.yield, let handle)?:
       return label(self.parseYieldStatement(yieldHandle: handle), with: optLabel)
     case (.then, let handle)? where experimentalFeatures.contains(.thenStatements):
@@ -634,8 +645,8 @@ extension Parser {
     if self.at(anyIn: NotReturnExprStart.self) != nil {
       return false
     }
-    // Allowed for if/switch expressions.
-    if self.at(anyIn: IfOrSwitch.self) != nil {
+    // Allowed for single value statement expressions, e.g do/if/switch.
+    if self.at(anyIn: SingleValueStatementExpression.self) != nil {
       return true
     }
     if self.atStartOfStatement(preferExpr: true) || self.atStartOfDeclaration() {

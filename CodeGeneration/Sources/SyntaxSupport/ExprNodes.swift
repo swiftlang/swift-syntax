@@ -741,6 +741,54 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
+    kind: .doExpr,
+    base: .expr,
+    experimentalFeature: .doExpressions,
+    nameForDiagnostics: "'do' block",
+    documentation: """
+      A `do` block with one of more optional `catch` clauses.
+
+      This represents do blocks in both expression and statement postitions
+      (where the latter are wrapped in ExpressionStmtSyntax).
+
+      ### Examples
+
+      ```swift
+      do {
+        let x = 0
+        print(x)
+      }
+      ```
+
+      ```swift
+      let x = do {
+        try someThrowingFn()
+      } catch {
+        defaultValue
+      }
+      ```
+      """,
+    traits: [
+      "WithCodeBlock"
+    ],
+    children: [
+      Child(
+        name: "doKeyword",
+        kind: .token(choices: [.keyword(.do)])
+      ),
+      Child(
+        name: "body",
+        kind: .node(kind: .codeBlock),
+        nameForDiagnostics: "body"
+      ),
+      Child(
+        name: "catchClauses",
+        kind: .collection(kind: .catchClauseList, collectionElementName: "CatchClause", defaultsToEmpty: true)
+      ),
+    ]
+  ),
+
+  Node(
     kind: .editorPlaceholderExpr,
     base: .expr,
     nameForDiagnostics: "editor placeholder",

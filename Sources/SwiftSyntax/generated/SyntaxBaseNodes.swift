@@ -770,7 +770,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .editorPlaceholderPattern, .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
+    case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern, .wildcardPattern:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -795,7 +795,6 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   
   public static var structure: SyntaxNodeStructure {
     return .choices([
-          .node(EditorPlaceholderPatternSyntax.self),
           .node(ExpressionPatternSyntax.self),
           .node(IdentifierPatternSyntax.self),
           .node(IsTypePatternSyntax.self),
@@ -1299,7 +1298,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .editorPlaceholderType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
+    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -1329,7 +1328,6 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
           .node(ClassRestrictionTypeSyntax.self),
           .node(CompositionTypeSyntax.self),
           .node(DictionaryTypeSyntax.self),
-          .node(EditorPlaceholderTypeSyntax.self),
           .node(FunctionTypeSyntax.self),
           .node(IdentifierTypeSyntax.self),
           .node(ImplicitlyUnwrappedOptionalTypeSyntax.self),
@@ -1488,8 +1486,6 @@ extension Syntax {
           .node(DynamicReplacementAttributeArgumentsSyntax.self),
           .node(EditorPlaceholderDeclSyntax.self),
           .node(EditorPlaceholderExprSyntax.self),
-          .node(EditorPlaceholderPatternSyntax.self),
-          .node(EditorPlaceholderTypeSyntax.self),
           .node(EffectsAttributeArgumentListSyntax.self),
           .node(EnumCaseDeclSyntax.self),
           .node(EnumCaseElementListSyntax.self),

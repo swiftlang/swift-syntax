@@ -10,144 +10,131 @@
 //
 //===----------------------------------------------------------------------===//
 
-//==========================================================================//
-// IMPORTANT: The macros defined in this file are intended to test the      //
-// behavior of MacroSystem. Many of them do not serve as good examples of   //
-// how macros should be written. In particular, they often lack error       //
-// handling because it is not needed in the few test cases in which these   //
-// macros are invoked.                                                      //
-//==========================================================================//
-
-import SwiftDiagnostics
+import SwiftParser
 import SwiftSyntax
-import SwiftSyntaxMacroExpansion
-import SwiftSyntaxMacros
-import SwiftSyntaxMacrosTestSupport
+@_spi(Testing) import SwiftSyntaxMacroExpansion
 import XCTest
+import _SwiftSyntaxTestSupport
 
-fileprivate struct NoOpPeerMacro: PeerMacro {
-  static func expansion(
-    of node: AttributeSyntax,
-    providingPeersOf declaration: some DeclSyntaxProtocol,
-    in context: some MacroExpansionContext
-  ) throws -> [DeclSyntax] {
-    return []
-  }
+fileprivate func assertSyntaxRemovingTestAttributes(
+  _ originalSource: String,
+  reduction expectedReducedSource: String,
+  file: StaticString = #filePath,
+  line: UInt = #line
+) {
+  let attributeToRemove = AttributeSyntax(stringLiteral: "@Test")
+
+  let reducedSource = AttributeRemover(
+    removingWhere: { $0.trimmedDescription == attributeToRemove.trimmedDescription }
+  )
+  .rewrite(
+    Parser.parse(source: originalSource)
+  )
+
+  assertStringsEqualWithDiff(
+    reducedSource.description,
+    expectedReducedSource,
+    "Attribute removal did not produce the expected reduced source",
+    additionalInfo: """
+      Actual reduced source:
+      \(reducedSource)
+      """,
+    file: file,
+    line: line
+  )
 }
 
 final class AttributeRemoverTests: XCTestCase {
   func testEmptyOnSameLineAsVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       "@Test var x: Int",
-      expandedSource: "var x: Int",
-      macros: [
-        "Test": NoOpPeerMacro.self
-      ]
+      reduction: "var x: Int"
     )
   }
 
   func testEmptyTwiceOnSameLineAsVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       "@Test @Test var x: Int",
-      expandedSource: "var x: Int",
-      macros: [
-        "Test": NoOpPeerMacro.self
-      ]
+      reduction: "var x: Int"
     )
   }
 
+  // FIXME: `AttributeRemover` should not leave a leading newline.
   func testEmptyOnOwnLineBeforeVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       @Test
       var x: Int
       """,
-      expandedSource: "var x: Int",
-      macros: [
-        "Test": NoOpPeerMacro.self
-      ]
+      reduction: "\nvar x: Int"
     )
   }
 
+  // FIXME: `AttributeRemover` should not leave a leading newline.
   func testEmptyTwiceOnOwnLineBeforeVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       @Test @Test
       var x: Int
       """,
-      expandedSource: "var x: Int",
-      macros: [
-        "Test": NoOpPeerMacro.self
-      ]
+      reduction: "\nvar x: Int"
     )
   }
 
   func testEmptyAndAttributeOnOwnLineBeforeVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       @Test @State
       var x: Int
       """,
-      expandedSource: """
+      reduction: """
         @State
         var x: Int
-        """,
-      macros: [
-        "Test": NoOpPeerMacro.self
-      ]
+        """
     )
   }
 
   func testAttributeAndEmptyOnOwnLineBeforeVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       @State @Test
       var x: Int
       """,
-      expandedSource: """
+      reduction: """
         @State
         var x: Int
-        """,
-      macros: [
-        "Test": NoOpPeerMacro.self
-      ]
+        """
     )
   }
 
   func testAttributeAndEmptyAndCommentOnOwnLineBeforeVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       @State @Test// comment
       var x: Int
       """,
-      expandedSource: """
+      reduction: """
         @State // comment
         var x: Int
-        """,
-      macros: [
-        "Test": NoOpPeerMacro.self
-      ]
+        """
     )
   }
 
   func testAttributeAndEmptyAndCommentOnOwnLineBeforeVariable2() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       @State @Test // comment
       var x: Int
       """,
-      expandedSource: """
+      reduction: """
         @State // comment
         var x: Int
-        """,
-      macros: [
-        "Test": NoOpPeerMacro.self
-      ]
+        """
     )
   }
 
   func testCommentsAroundEmpty() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       struct S {
         /// Some doc comment
@@ -155,360 +142,332 @@ final class AttributeRemoverTests: XCTestCase {
         var value: Int
       }
       """,
-      expandedSource: """
+      reduction: """
         struct S {
           /// Some doc comment
           /* trailing */
           var value: Int
         }
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testBlockCommentNewlineEmpty() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       /* comment */
       @Test
       var value: Int
       """,
-      expandedSource: """
+      reduction: """
         /* comment */
         var value: Int
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
-  func testEmpyNewlineBlockComment() {
-    assertMacroExpansion(
+  // FIXME: `AttributeRemover` should not leave a leading newline.
+  func testEmptyNewlineBlockComment() {
+    assertSyntaxRemovingTestAttributes(
       """
       @Test
       /* comment */
       var value: Int
       """,
-      expandedSource: """
-        /* comment */
+      reduction: """
+        \n/* comment */
         var value: Int
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testAttributeNewlineBlockCommentEmpty() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       @State
       /*doc comment*/@Test
       var x: Int
       """,
-      expandedSource: """
+      reduction: """
         @State
         /*doc comment*/
         var x: Int
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testEmptyBlockCommentEmpty() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       @Test /* comment */ @Test var value: Int
       """,
-      expandedSource: """
+      reduction: """
         /* comment */ var value: Int
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testEmptyBlockCommentEmptyNewline() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       @Test /* comment */ @Test
       var value: Int
       """,
-      expandedSource: """
+      reduction: """
         /* comment */
         var value: Int
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testEmptyBlockCommentEmptyBlockComment() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       @Test /* comment1 */ @Test /* comment2 */ var value: Int
       """,
-      expandedSource: """
+      reduction: """
         /* comment1 */ /* comment2 */ var value: Int
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testEmptyWithLeadingSpace_SpacePreserved() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       \u{0020}@Test var value: Int
       """,
-      expandedSource: """
+      reduction: """
         \u{0020}var value: Int
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testEmptyWithLeadingSpaceOnMember_SpacePreserved() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       struct Foo {
         \u{0020}@Test var x: Int
       }
       """,
-      expandedSource: """
+      reduction: """
         struct Foo {
           \u{0020}var x: Int
         }
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testEmptyAndAttributeMashedTogether() {
     // NB: In Swift, attributes can validly cozy up without whitespace.
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       struct Foo {
         @Test@State var x: Int
       }
       """,
-      expandedSource: """
+      reduction: """
         struct Foo {
           @State var x: Int
         }
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testAttributeAndEmptyMashedTogether() {
     // NB: In Swift, attributes can validly cozy up without whitespace.
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       struct Foo {
         @State@Test var x: Int
       }
       """,
-      expandedSource: """
+      reduction: """
         struct Foo {
           @State var x: Int
         }
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testEmptyAndAttributeMashedTogether_VariableNextLine() {
     // NB: In Swift, attributes can validly cozy up without whitespace.
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       struct Foo {
         @Test@State
         var x: Int
       }
       """,
-      expandedSource: """
+      reduction: """
         struct Foo {
           @State
           var x: Int
         }
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testAttributeAndEmptyMashedTogether_VariableNextLine() {
     // NB: In Swift, attributes can validly cozy up without whitespace.
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       struct Foo {
         @State@Test
         var x: Int
       }
       """,
-      expandedSource: """
+      reduction: """
         struct Foo {
           @State
           var x: Int
         }
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testAttributeAndEmptyOnOwnLinesBeforeVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       @State
       @Test
       var x: Int
       """,
-      expandedSource: """
+      reduction: """
         @State
         var x: Int
-        """,
-      macros: [
-        "Test": NoOpPeerMacro.self
-      ]
+        """
     )
   }
 
+  // FIXME: `AttributeRemover` should not leave a leading newline.
   func testEmptyAndAttributeOnOwnLinesBeforeVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       @Test
       @State
       var x: Int
       """,
-      expandedSource: """
-        @State
+      reduction: """
+        \n@State
         var x: Int
-        """,
-      macros: [
-        "Test": NoOpPeerMacro.self
-      ]
+        """
     )
   }
 
   func testAttributeOnOwnLineThenEmptyBeforeVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       @State
       @Test var x: Int
       """,
-      expandedSource: """
+      reduction: """
         @State
         var x: Int
-        """,
-      macros: [
-        "Test": NoOpPeerMacro.self
-      ]
+        """
     )
   }
 
+  // FIXME: `AttributeRemover` should not leave a leading newline.
   func testEmptyOnOwnLineThenEmptyBeforeVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       @Test
       @Test var x: Int
       """,
-      expandedSource: "var x: Int",
-      macros: [
-        "Test": NoOpPeerMacro.self
-      ]
+      reduction: "\nvar x: Int"
     )
   }
 
   func testEmptyOnMemberVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       struct Foo {
         @Test var x: Int
       }
       """,
-      expandedSource: """
+      reduction: """
         struct Foo {
           var x: Int
         }
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testEmptyBeforeAttributeOnSameLineAsMemberVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       struct Foo {
         @Test @State var x: Int
       }
       """,
-      expandedSource: """
+      reduction: """
         struct Foo {
           @State var x: Int
         }
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testEmptyAfterAttributeOnSameLineAsMemberVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       struct Foo {
         @State @Test var x: Int
       }
       """,
-      expandedSource: """
+      reduction: """
         struct Foo {
           @State var x: Int
         }
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testEmptyAfterAttributeOnSameLineAsMemberVariable_AwkwardWhitespace() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       struct Foo {
         @State \t  @Test \t  var x: Int
       }
       """,
-      expandedSource: """
+      reduction: """
         struct Foo {
           @State \t  var x: Int
         }
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testEmptyOnOwnLineThenAttributedMemberVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       struct Foo {
         @Test
         @State var x: Int
       }
       """,
-      expandedSource: """
+      reduction: """
         struct Foo {
           @State var x: Int
         }
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 
   func testAttributeOnOwnLineThenEmptyOnMemberVariable() {
-    assertMacroExpansion(
+    assertSyntaxRemovingTestAttributes(
       """
       struct Foo {
         @State
         @Test var x: Int
       }
       """,
-      expandedSource: """
+      reduction: """
         struct Foo {
           @State
           var x: Int
         }
-        """,
-      macros: ["Test": NoOpPeerMacro.self]
+        """
     )
   }
 }

@@ -474,7 +474,6 @@ public extension Syntax {
 /// - ``DeclReferenceExprSyntax``
 /// - ``DictionaryExprSyntax``
 /// - ``DiscardAssignmentExprSyntax``
-/// - ``DoExprSyntax``
 /// - ``EditorPlaceholderExprSyntax``
 /// - ``FloatLiteralExprSyntax``
 /// - ``ForceUnwrapExprSyntax``
@@ -1099,7 +1098,6 @@ public extension Syntax {
 /// - ``MissingStmtSyntax``
 /// - ``RepeatStmtSyntax``
 /// - ``ReturnStmtSyntax``
-/// - ``ThenStmtSyntax``
 /// - ``ThrowStmtSyntax``
 /// - ``WhileStmtSyntax``
 /// - ``YieldStmtSyntax``

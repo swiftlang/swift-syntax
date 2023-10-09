@@ -16,7 +16,7 @@ import SyntaxSupport
 import Utils
 
 let buildableNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax("import SwiftSyntax")
+  DeclSyntax("@_spi(ExperimentalLanguageFeatures) import SwiftSyntax")
 
   for node in SYNTAX_NODES.compactMap(\.layoutNode) {
     let type = node.type

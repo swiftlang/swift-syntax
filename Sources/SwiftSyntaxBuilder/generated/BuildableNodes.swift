@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 
 extension AccessorDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders

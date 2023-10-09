@@ -16,7 +16,7 @@ import SyntaxSupport
 import Utils
 
 let childNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax("import SwiftSyntax")
+  DeclSyntax("@_spi(ExperimentalLanguageFeatures) import SwiftSyntax")
 
   try! FunctionDeclSyntax(
     "private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String?"

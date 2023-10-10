@@ -199,7 +199,7 @@ public class Node {
       return []
     }
     var childIn: [(node: SyntaxNodeKind, child: Child?)] = []
-    for node in SYNTAX_NODES {
+    for node in SYNTAX_NODES where !node.isExperimental {
       if let layout = node.layoutNode {
         for child in layout.children {
           if child.kinds.contains(self.kind) {
@@ -248,7 +248,7 @@ public class Node {
 
     let list =
       SYNTAX_NODES
-      .filter { $0.base == self.kind }
+      .filter { $0.base == self.kind && !$0.isExperimental }
       .map { "- ``\($0.kind.syntaxType)``" }
       .joined(separator: "\n")
 

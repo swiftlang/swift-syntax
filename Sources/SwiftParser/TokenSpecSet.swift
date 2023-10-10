@@ -754,12 +754,14 @@ enum ExpressionModifierKeyword: TokenSpecSet {
   }
 }
 
-enum IfOrSwitch: TokenSpecSet {
+enum SingleValueStatementExpression: TokenSpecSet {
+  case `do`
   case `if`
   case `switch`
 
   init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
+    case TokenSpec(.do) where experimentalFeatures.contains(.doExpressions): self = .do
     case TokenSpec(.if): self = .if
     case TokenSpec(.switch): self = .switch
     default: return nil
@@ -768,6 +770,7 @@ enum IfOrSwitch: TokenSpecSet {
 
   var spec: TokenSpec {
     switch self {
+    case .do: return .keyword(.do)
     case .if: return .keyword(.if)
     case .switch: return .keyword(.switch)
     }
@@ -947,7 +950,7 @@ enum ExpressionStart: TokenSpecSet {
   case awaitTryMove(ExpressionModifierKeyword)
   case expressionPrefixOperator(ExpressionPrefixOperator)
   case primaryExpressionStart(PrimaryExpressionStart)
-  case ifOrSwitch(IfOrSwitch)
+  case singleValueStatement(SingleValueStatementExpression)
 
   init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     if let subset = ExpressionModifierKeyword(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
@@ -956,8 +959,8 @@ enum ExpressionStart: TokenSpecSet {
       self = .expressionPrefixOperator(subset)
     } else if let subset = PrimaryExpressionStart(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
       self = .primaryExpressionStart(subset)
-    } else if let subset = IfOrSwitch(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
-      self = .ifOrSwitch(subset)
+    } else if let subset = SingleValueStatementExpression(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
+      self = .singleValueStatement(subset)
     } else {
       return nil
     }
@@ -967,7 +970,7 @@ enum ExpressionStart: TokenSpecSet {
     return ExpressionModifierKeyword.allCases.map(Self.awaitTryMove)
       + ExpressionPrefixOperator.allCases.map(Self.expressionPrefixOperator)
       + PrimaryExpressionStart.allCases.map(Self.primaryExpressionStart)
-      + IfOrSwitch.allCases.map(Self.ifOrSwitch)
+      + SingleValueStatementExpression.allCases.map(Self.singleValueStatement)
   }
 
   var spec: TokenSpec {
@@ -975,7 +978,7 @@ enum ExpressionStart: TokenSpecSet {
     case .awaitTryMove(let underlyingKind): return underlyingKind.spec
     case .expressionPrefixOperator(let underlyingKind): return underlyingKind.spec
     case .primaryExpressionStart(let underlyingKind): return underlyingKind.spec
-    case .ifOrSwitch(let underlyingKind): return underlyingKind.spec
+    case .singleValueStatement(let underlyingKind): return underlyingKind.spec
     }
   }
 }

@@ -107,6 +107,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case discardStmt
   case documentationAttributeArgument
   case documentationAttributeArgumentList
+  case doExpr
   case doStmt
   case dynamicReplacementAttributeArguments
   case editorPlaceholderDecl

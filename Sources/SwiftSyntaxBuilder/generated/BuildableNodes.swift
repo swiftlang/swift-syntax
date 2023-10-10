@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 
 extension AccessorDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
@@ -343,6 +343,33 @@ extension DeinitializerDeclSyntax {
           CodeBlockSyntax(statements: $0)
         }, 
         unexpectedAfterBody, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
+extension DoExprSyntax {
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+      leadingTrivia: Trivia? = nil, 
+      unexpectedBeforeDoKeyword: UnexpectedNodesSyntax? = nil, 
+      doKeyword: TokenSyntax = .keyword(.do), 
+      unexpectedBetweenDoKeywordAndBody: UnexpectedNodesSyntax? = nil, 
+      unexpectedBetweenBodyAndCatchClauses: UnexpectedNodesSyntax? = nil, 
+      catchClauses: CatchClauseListSyntax = [], 
+      unexpectedAfterCatchClauses: UnexpectedNodesSyntax? = nil, 
+      @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax, 
+      trailingTrivia: Trivia? = nil
+    ) rethrows {
+    try self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeDoKeyword, 
+        doKeyword: doKeyword, 
+        unexpectedBetweenDoKeywordAndBody, 
+        body: CodeBlockSyntax(statements: bodyBuilder()), 
+        unexpectedBetweenBodyAndCatchClauses, 
+        catchClauses: catchClauses, 
+        unexpectedAfterCatchClauses, 
         trailingTrivia: trailingTrivia
       )
   }

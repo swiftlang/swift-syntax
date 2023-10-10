@@ -99,6 +99,10 @@ public enum SyntaxEnum {
   case differentiableAttributeArguments(DifferentiableAttributeArgumentsSyntax)
   case discardAssignmentExpr(DiscardAssignmentExprSyntax)
   case discardStmt(DiscardStmtSyntax)
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case doExpr(DoExprSyntax)
   case doStmt(DoStmtSyntax)
   case documentationAttributeArgumentList(DocumentationAttributeArgumentListSyntax)
   case documentationAttributeArgument(DocumentationAttributeArgumentSyntax)
@@ -471,6 +475,8 @@ public extension Syntax {
       return .discardAssignmentExpr(DiscardAssignmentExprSyntax(self)!)
     case .discardStmt:
       return .discardStmt(DiscardStmtSyntax(self)!)
+    case .doExpr:
+      return .doExpr(DoExprSyntax(self)!)
     case .doStmt:
       return .doStmt(DoStmtSyntax(self)!)
     case .documentationAttributeArgumentList:

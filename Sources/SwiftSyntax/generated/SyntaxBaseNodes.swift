@@ -546,7 +546,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .simpleStringLiteralExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
+    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .doExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .simpleStringLiteralExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -587,6 +587,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           .node(DeclReferenceExprSyntax.self),
           .node(DictionaryExprSyntax.self),
           .node(DiscardAssignmentExprSyntax.self),
+          .node(DoExprSyntax.self),
           .node(EditorPlaceholderExprSyntax.self),
           .node(FloatLiteralExprSyntax.self),
           .node(ForceUnwrapExprSyntax.self),
@@ -1097,7 +1098,6 @@ public extension Syntax {
 /// - ``MissingStmtSyntax``
 /// - ``RepeatStmtSyntax``
 /// - ``ReturnStmtSyntax``
-/// - ``ThenStmtSyntax``
 /// - ``ThrowStmtSyntax``
 /// - ``WhileStmtSyntax``
 /// - ``YieldStmtSyntax``
@@ -1608,6 +1608,7 @@ extension Syntax {
           .node(DifferentiableAttributeArgumentsSyntax.self),
           .node(DiscardAssignmentExprSyntax.self),
           .node(DiscardStmtSyntax.self),
+          .node(DoExprSyntax.self),
           .node(DoStmtSyntax.self),
           .node(DocumentationAttributeArgumentListSyntax.self),
           .node(DocumentationAttributeArgumentSyntax.self),

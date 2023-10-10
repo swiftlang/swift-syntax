@@ -186,7 +186,7 @@ extension Parser {
     if at(.keyword(.as)),
       let expr = stmt.as(RawExpressionStmtSyntax.self)?.expression
     {
-      if expr.is(RawIfExprSyntax.self) || expr.is(RawSwitchExprSyntax.self) {
+      if expr.is(RawDoExprSyntax.self) || expr.is(RawIfExprSyntax.self) || expr.is(RawSwitchExprSyntax.self) {
         let (op, rhs) = parseUnresolvedAsExpr(
           handle: .init(spec: .keyword(.as))
         )

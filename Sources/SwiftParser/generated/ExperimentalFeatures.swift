@@ -32,4 +32,7 @@ extension Parser.ExperimentalFeatures {
   
   /// Whether to enable the parsing of typed throws.
   public static let typedThrows = Self(rawValue: 1 << 2)
+  
+  /// Whether to enable the parsing of 'do' expressions.
+  public static let doExpressions = Self(rawValue: 1 << 3)
 }

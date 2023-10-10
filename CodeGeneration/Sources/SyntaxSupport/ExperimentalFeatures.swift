@@ -16,6 +16,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case referenceBindings
   case thenStatements
   case typedThrows
+  case doExpressions
 
   /// The name of the feature, which is used in the doc comment.
   public var featureName: String {
@@ -26,6 +27,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "'then' statements"
     case .typedThrows:
       return "typed throws"
+    case .doExpressions:
+      return "'do' expressions"
     }
   }
 

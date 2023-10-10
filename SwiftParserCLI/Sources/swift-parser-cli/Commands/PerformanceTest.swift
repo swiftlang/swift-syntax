@@ -10,9 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-import InstructionCounter
 import ArgumentParser
 import Foundation
+import InstructionCounter
 import SwiftParser
 import SwiftSyntax
 

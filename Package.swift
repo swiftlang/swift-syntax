@@ -124,6 +124,14 @@ let package = Package(
       dependencies: ["_SwiftSyntaxTestSupport", "SwiftIDEUtils", "SwiftParser", "SwiftSyntax"]
     ),
 
+    // MARK: SwiftLibraryPluginProvider
+
+    .target(
+      name: "SwiftLibraryPluginProvider",
+      dependencies: ["SwiftSyntaxMacros", "SwiftCompilerPluginMessageHandling"],
+      exclude: ["CMakeLists.txt"]
+    ),
+
     // MARK: SwiftSyntax
 
     .target(

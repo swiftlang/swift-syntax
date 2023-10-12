@@ -924,7 +924,8 @@ extension Parser {
 
   mutating func parseTypeAttribute() -> RawAttributeListSyntax.Element {
     switch peek(isAtAnyIn: TypeAttribute.self) {
-    case ._local, ._noMetadata, .async, .escaping, .noDerivative, .noescape, .Sendable, .unchecked, .autoclosure:
+    case ._local, ._noMetadata, .async, .escaping, .noDerivative, .noescape,
+      .retroactive, .Sendable, .unchecked, .autoclosure:
       // Known type attribute that doesn't take any arguments
       return parseAttributeWithoutArguments()
     case .differentiable:

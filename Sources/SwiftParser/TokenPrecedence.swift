@@ -248,6 +248,7 @@ enum TokenPrecedence: Comparable {
       .noDerivative,
       .noescape,
       .Sendable,
+      .retroactive,
       .unchecked:
       self = .exprKeyword
 

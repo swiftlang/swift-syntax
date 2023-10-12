@@ -182,6 +182,7 @@ public enum Keyword: UInt8, Hashable {
   case `repeat`
   case required
   case `rethrows`
+  case retroactive
   case `return`
   case reverse
   case right
@@ -620,6 +621,8 @@ public enum Keyword: UInt8, Hashable {
         self = .nonisolated
       case "nonmutating":
         self = .nonmutating
+      case "retroactive":
+        self = .retroactive
       case "unavailable":
         self = .unavailable
       default:
@@ -940,6 +943,7 @@ public enum Keyword: UInt8, Hashable {
       "repeat", 
       "required", 
       "rethrows", 
+      "retroactive", 
       "return", 
       "reverse", 
       "right", 

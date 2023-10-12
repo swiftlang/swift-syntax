@@ -705,6 +705,14 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testParseRetroactiveExtension() {
+    assertParse(
+      """
+      extension Int: @retroactive Identifiable {}
+      """
+    )
+  }
+
   func testParseDynamicReplacement() {
     assertParse(
       """

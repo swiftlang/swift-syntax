@@ -48,11 +48,11 @@ public struct WrapStoredPropertiesMacro: MemberAttributeMacro {
 
     return [
       AttributeSyntax(
+        leadingTrivia: [.newlines(1), .spaces(2)],
         attributeName: IdentifierTypeSyntax(
           name: .identifier(wrapperName.content.text)
         )
       )
-      .with(\.leadingTrivia, [.newlines(1), .spaces(2)])
     ]
   }
 }

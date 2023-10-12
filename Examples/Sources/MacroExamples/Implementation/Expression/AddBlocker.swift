@@ -27,7 +27,7 @@ public struct AddBlocker: ExpressionMacro {
       _ node: InfixOperatorExprSyntax
     ) -> ExprSyntax {
       // Identify any infix operator + in the tree.
-      if let binOp = node.operator.as(BinaryOperatorExprSyntax.self) {
+      if var binOp = node.operator.as(BinaryOperatorExprSyntax.self) {
         if binOp.operator.text == "+" {
           // Form the warning
           let messageID = MessageID(domain: "silly", id: "addblock")
@@ -72,17 +72,9 @@ public struct AddBlocker: ExpressionMacro {
             )
           )
 
-          return ExprSyntax(
-            node.with(
-              \.operator,
-              ExprSyntax(
-                binOp.with(
-                  \.operator,
-                  binOp.operator.with(\.tokenKind, .binaryOperator("-"))
-                )
-              )
-            )
-          )
+          binOp.operator.tokenKind = .binaryOperator("-")
+
+          return ExprSyntax(node.with(\.operator, ExprSyntax(binOp)))
         }
       }
 

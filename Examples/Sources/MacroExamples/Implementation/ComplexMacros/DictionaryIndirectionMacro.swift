@@ -21,10 +21,7 @@ extension DictionaryStorageMacro: MemberMacro {
     providingMembersOf declaration: some DeclGroupSyntax,
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
-    let storage: DeclSyntax = "var _storage: [String: Any] = [:]"
-    return [
-      storage.with(\.leadingTrivia, [.newlines(1), .spaces(2)])
-    ]
+    return ["\n  var _storage: [String: Any] = [:]"]
   }
 }
 
@@ -43,11 +40,11 @@ extension DictionaryStorageMacro: MemberAttributeMacro {
 
     return [
       AttributeSyntax(
+        leadingTrivia: [.newlines(1), .spaces(2)],
         attributeName: IdentifierTypeSyntax(
           name: .identifier("DictionaryStorageProperty")
         )
       )
-      .with(\.leadingTrivia, [.newlines(1), .spaces(2)])
     ]
   }
 }

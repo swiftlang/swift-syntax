@@ -35,14 +35,12 @@ private func replaceFirstLabel(
   of tuple: LabeledExprListSyntax,
   with newLabel: String
 ) -> LabeledExprListSyntax {
-  guard let firstElement = tuple.first else {
+  if tuple.isEmpty {
     return tuple
   }
 
   var tuple = tuple
-  tuple[tuple.startIndex] =
-    firstElement
-    .with(\.label, .identifier(newLabel))
-    .with(\.colon, .colonToken())
+  tuple[tuple.startIndex].label = .identifier(newLabel)
+  tuple[tuple.startIndex].colon = .colonToken()
   return tuple
 }

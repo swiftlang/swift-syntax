@@ -54,7 +54,7 @@ func runPeerMacrosPlayground() {
     var value = 0
   }
 
-  let counter = Counter()
+  _ = Counter()
 
   //  print("Peer value with suffix name for \(Counter.self): \(String(describing: Counter_peer))")
 }

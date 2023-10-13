@@ -51,10 +51,6 @@ let package = Package(
   ]
 )
 
-// The following targets are added only if the OS is macOS. This is because Swift macros are currently
-// not available on other platforms. As a result, we're guarding these targets with `#if os(macOS)`
-// to ensure that they are only included in the package when building on a macOS system.
-#if os(macOS)
 package.targets.append(
   contentsOf: [
     .target(
@@ -73,7 +69,6 @@ package.targets.append(
     ),
   ]
 )
-#endif
 
 // This is a fake target that depends on all targets in the package.
 // We need to define it manually because the `Examples-Package` target doesn't exist for `swift build`.

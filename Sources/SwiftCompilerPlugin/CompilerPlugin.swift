@@ -63,7 +63,8 @@ public protocol CompilerPlugin {
 }
 
 extension CompilerPlugin {
-  func resolveMacro(moduleName: String, typeName: String) throws -> Macro.Type {
+  @_spi(Testing)
+  public func resolveMacro(moduleName: String, typeName: String) throws -> Macro.Type {
     let qualifedName = "\(moduleName).\(typeName)"
 
     for type in providingMacros {
@@ -77,11 +78,6 @@ extension CompilerPlugin {
 
     let pluginPath = CommandLine.arguments.first ?? Bundle.main.executablePath ?? ProcessInfo.processInfo.processName
     throw CompilerPluginError(message: "macro implementation type '\(moduleName).\(typeName)' could not be found in executable plugin '\(pluginPath)'")
-  }
-
-  // @testable
-  public func _resolveMacro(moduleName: String, typeName: String) -> Macro.Type? {
-    try? resolveMacro(moduleName: moduleName, typeName: typeName)
   }
 }
 

@@ -54,7 +54,15 @@ function(add_swift_host_library name)
       -emit-module-path;${module_file};
       -emit-module-source-info-path;${module_sourceinfo_file};
       -emit-module-interface-path;${module_interface_file}
+    >)
+  if(SWIFT_MODULE_ABI_NAME_PREFIX)
+    # ABI name prefix. this can be used to avoid name conflicts.
+    target_compile_options("${name}" PRIVATE
+      $<$<COMPILE_LANGUAGE:Swift>:
+        "SHELL:-Xfrontend -module-abi-name"
+        "SHELL:-Xfrontend ${SWIFT_MODULE_ABI_NAME_PREFIX}${name}"
       >)
+  endif()
 
   # NOTE: workaround for CMake not setting up include flags yet
   set_target_properties(${name} PROPERTIES

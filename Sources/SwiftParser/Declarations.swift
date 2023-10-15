@@ -808,6 +808,14 @@ extension Parser {
         let unexpectedPeriod = self.consume(if: .period)
         let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
 
+        let unexpectedGenericParameters: RawUnexpectedNodesSyntax?
+        if self.at(prefix: "<") {
+          let genericParameters = self.parseGenericParameters()
+          unexpectedGenericParameters = RawUnexpectedNodesSyntax([genericParameters], arena: self.arena)
+        } else {
+          unexpectedGenericParameters = nil
+        }
+
         let parameterClause: RawEnumCaseParameterClauseSyntax?
         if self.at(TokenSpec(.leftParen)) {
           parameterClause = self.parseParameterClause(RawEnumCaseParameterClauseSyntax.self) { parser in
@@ -836,6 +844,7 @@ extension Parser {
           RawEnumCaseElementSyntax(
             RawUnexpectedNodesSyntax(combining: unexpectedPeriod, unexpectedBeforeName, arena: self.arena),
             name: name,
+            unexpectedGenericParameters,
             parameterClause: parameterClause,
             rawValue: rawValue,
             trailingComma: keepGoing,

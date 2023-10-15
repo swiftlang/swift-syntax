@@ -2946,4 +2946,117 @@ final class DeclarationTests: ParserTestCase {
       ]
     )
   }
+
+  // https://github.com/apple/swift-syntax/issues/2273
+  func testEnumCaseWithGenericParameter() {
+    assertParse(
+      """
+      enum Foo {
+        case foo1️⃣<T>(T)
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "generic signature cannot be declared in enum 'case'"
+        )
+      ]
+    )
+
+    assertParse(
+      """
+      enum Foo {
+        case bar1️⃣<T>(param: T)
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "generic signature cannot be declared in enum 'case'"
+        )
+      ]
+    )
+
+    assertParse(
+      """
+      enum Foo {
+        case baz1️⃣<T>
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "generic signature cannot be declared in enum 'case'"
+        )
+      ]
+    )
+
+    assertParse(
+      """
+      enum Foo {
+        case one, two1️⃣<T>
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "generic signature cannot be declared in enum 'case'"
+        )
+      ]
+    )
+
+    assertParse(
+      """
+      enum Foo {
+        case three1️⃣<T>, four
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "generic signature cannot be declared in enum 'case'"
+        )
+      ]
+    )
+
+    assertParse(
+      """
+      enum Foo {
+        case five1️⃣<T>(param: T), six
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "generic signature cannot be declared in enum 'case'"
+        )
+      ]
+    )
+
+    assertParse(
+      """
+      enum Foo {
+        case seven1️⃣<T>, eight2️⃣<U>
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "generic signature cannot be declared in enum 'case'"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "generic signature cannot be declared in enum 'case'"
+        ),
+      ]
+    )
+
+    assertParse(
+      """
+      enum Foo<T> {
+        case five(param: T), six
+      }
+      """
+    )
+  }
 }

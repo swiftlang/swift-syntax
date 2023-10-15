@@ -36,16 +36,21 @@ public extension ParserError {
 }
 
 public protocol ParserNote: NoteMessage {
-  var fixItID: MessageID { get }
+  var noteID: MessageID { get }
 }
 
 public extension ParserNote {
+  @available(*, deprecated, message: "Use noteID instead.", renamed: "noteID")
   static var fixItID: MessageID {
+    return Self.noteID
+  }
+
+  static var noteID: MessageID {
     return MessageID(domain: diagnosticDomain, id: "\(self)")
   }
 
-  var fixItID: MessageID {
-    return Self.fixItID
+  var noteID: MessageID {
+    return Self.noteID
   }
 }
 
@@ -594,7 +599,7 @@ public struct StaticParserNote: NoteMessage {
     self.messageID = messageID
   }
 
-  public var fixItID: MessageID {
+  public var noteID: MessageID {
     MessageID(domain: diagnosticDomain, id: "\(type(of: self)).\(messageID)")
   }
 }

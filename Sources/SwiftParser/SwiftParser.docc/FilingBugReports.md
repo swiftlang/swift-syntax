@@ -2,7 +2,7 @@
 
 Guide to provide steps for filing actionable bug reports for parser failures.
 
-Reducing a test case requires the `swift-parser-cli` utility that you can build by checking out `swift-syntax` and running `swift build --product swift-parser-cli` or building the `swift-parser-cli` target in Xcode.
+Reducing a test case requires the `swift-parser-cli` utility that you can build by checking out `swift-syntax` and running `swift build --package-path SwiftParserCLI` or openning the `SwiftParserCLI` package and building the `swift-parser-cli` target in Xcode.
 
 ## Round-Trip Failure or Parser Crash
 

@@ -346,7 +346,7 @@ extension LabeledExprSyntax {
   public init(label: String? = nil, expression: some ExprSyntaxProtocol) {
     self.init(
       label: label.map { .identifier($0) },
-      colon: label == nil ? nil : .colonToken(),
+      colon: label == nil ? nil : .colonToken(trailingTrivia: .space),
       expression: expression
     )
   }

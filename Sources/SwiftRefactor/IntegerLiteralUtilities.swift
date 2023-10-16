@@ -13,7 +13,7 @@
 import SwiftSyntax
 
 extension IntegerLiteralExprSyntax {
-  public enum Radix: CaseIterable {
+  public enum Radix {
     case binary
     case octal
     case decimal

@@ -22,6 +22,8 @@ if(CMAKE_VERSION VERSION_LESS 3.21)
   endif()
 endif()
 
+set(SWIFT_MODULE_ABI_NAME_PREFIX CACHE STRING "ABI name prefix to avoid name conflicts")
+
 # The subdirectory into which host libraries will be installed.
 set(SWIFT_HOST_LIBRARIES_SUBDIRECTORY "swift/host")
 

@@ -183,6 +183,8 @@ extension AttributedTypeSyntax {
     case _const
     case borrowing
     case consuming
+    @_spi(ExperimentalLanguageFeatures)
+    case _resultDependsOn
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -200,6 +202,8 @@ extension AttributedTypeSyntax {
         self = .borrowing
       case TokenSpec(.consuming):
         self = .consuming
+      case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonEscapableTypes):
+        self = ._resultDependsOn
       default:
         return nil
       }
@@ -221,6 +225,8 @@ extension AttributedTypeSyntax {
         return .keyword(.borrowing)
       case .consuming:
         return .keyword(.consuming)
+      case ._resultDependsOn:
+        return .keyword(._resultDependsOn)
       }
     }
     
@@ -244,6 +250,8 @@ extension AttributedTypeSyntax {
         return .keyword(.borrowing)
       case .consuming:
         return .keyword(.consuming)
+      case ._resultDependsOn:
+        return .keyword(._resultDependsOn)
       }
     }
   }

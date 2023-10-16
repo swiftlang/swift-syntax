@@ -23,7 +23,8 @@ func assertBuildResult<T: SyntaxProtocol>(
   file: StaticString = #file,
   line: UInt = #line
 ) {
-  var buildableDescription = format
+  var buildableDescription =
+    format
     ? buildable.formatted().description
     : buildable.description
   var expectedResult = expectedResult

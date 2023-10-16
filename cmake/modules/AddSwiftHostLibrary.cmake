@@ -77,7 +77,14 @@ function(add_swift_syntax_library name)
       -emit-module-path;${module_file};
       -emit-module-source-info-path;${module_sourceinfo_file};
       -emit-module-interface-path;${module_interface_file}
+    >)
+  if(SWIFT_MODULE_ABI_NAME_PREFIX)
+    target_compile_options("${name}" PRIVATE
+      $<$<COMPILE_LANGUAGE:Swift>:
+        "SHELL:-Xfrontend -module-abi-name"
+        "SHELL:-Xfrontend ${SWIFT_MODULE_ABI_NAME_PREFIX}${name}"
       >)
+  endif()
 
   if(CMAKE_VERSION VERSION_LESS 3.26.0 AND SWIFT_SYNTAX_ENABLE_WMO_PRE_3_26)
     target_compile_options(${name} PRIVATE

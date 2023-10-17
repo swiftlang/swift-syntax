@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftCompilerPlugin
+@_spi(Testing) import SwiftCompilerPlugin
 import SwiftSyntax
 import SwiftSyntaxMacros
 import XCTest
@@ -51,7 +51,7 @@ public class CompilerPluginTests: XCTestCase {
   func testResolveMacro() {
     let plugin = MyPlugin()
 
-    let registeredMacro = plugin._resolveMacro(
+    let registeredMacro = try? plugin.resolveMacro(
       moduleName: "SwiftCompilerPluginTest",
       typeName: "RegisteredMacro"
     )
@@ -59,12 +59,12 @@ public class CompilerPluginTests: XCTestCase {
     XCTAssertTrue(registeredMacro == RegisteredMacro.self)
 
     /// Test the plugin doesn't provide unregistered macros.
-    let dummyMacro = plugin._resolveMacro(
-      moduleName: "SwiftCompilerPluginTest",
-      typeName: "DummyMacro"
+    XCTAssertThrowsError(
+      try plugin.resolveMacro(
+        moduleName: "SwiftCompilerPluginTest",
+        typeName: "DummyMacro"
+      )
     )
-    XCTAssertNil(dummyMacro)
-    XCTAssertFalse(dummyMacro == DummyMacro.self)
 
   }
 }

@@ -19,8 +19,8 @@ import SwiftSyntaxMacros
 
 extension CompilerPluginMessageHandler {
   /// Get concrete macro type from a pair of module name and type name.
-  private func resolveMacro(_ ref: PluginMessage.MacroReference) -> Macro.Type? {
-    provider.resolveMacro(moduleName: ref.moduleName, typeName: ref.typeName)
+  private func resolveMacro(_ ref: PluginMessage.MacroReference) throws -> Macro.Type {
+    try provider.resolveMacro(moduleName: ref.moduleName, typeName: ref.typeName)
   }
 
   /// Expand `@freestainding(XXX)` macros.
@@ -43,10 +43,7 @@ extension CompilerPluginMessageHandler {
       guard let macroSyntax = syntax.asProtocol(FreestandingMacroExpansionSyntax.self) else {
         throw MacroExpansionError.freestandingMacroSyntaxIsNotMacro
       }
-      guard let macroDefinition = resolveMacro(macro) else {
-        throw MacroExpansionError.macroTypeNotFound(macro)
-      }
-
+      let macroDefinition = try resolveMacro(macro)
       let macroRole: MacroRole
       if let pluginMacroRole {
         macroRole = MacroRole(messageMacroRole: pluginMacroRole)
@@ -113,9 +110,7 @@ extension CompilerPluginMessageHandler {
     // TODO: Make this a 'String?' and remove non-'hasExpandMacroResult' branches.
     let expandedSources: [String]?
     do {
-      guard let macroDefinition = resolveMacro(macro) else {
-        throw MacroExpansionError.macroTypeNotFound(macro)
-      }
+      let macroDefinition = try resolveMacro(macro)
       let role = MacroRole(messageMacroRole: macroRole)
 
       let expansions = SwiftSyntaxMacroExpansion.expandAttachedMacroWithoutCollapsing(

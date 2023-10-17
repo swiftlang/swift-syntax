@@ -48,6 +48,7 @@ extension FixIt {
 
 extension FixIt.MultiNodeChange {
   /// Replaced a present token with a missing node.
+  ///
   /// If `transferTrivia` is `true`, the leading and trailing trivia of the
   /// removed node will be transferred to the trailing trivia of the previous token.
   static func makeMissing(_ token: TokenSyntax, transferTrivia: Bool = true) -> Self {
@@ -55,21 +56,13 @@ extension FixIt.MultiNodeChange {
   }
 
   /// Replace present tokens with missing tokens.
-  /// If `transferTrivia` is `true`, the leading and trailing trivia of the
-  /// removed node will be transferred to the trailing trivia of the previous token.
+  ///
+  /// If `transferTrivia` is `true`, the leading trivia of the first token and
+  /// the trailing trivia of the last token will be transferred to their adjecent
+  /// tokens.
   static func makeMissing(_ tokens: [TokenSyntax], transferTrivia: Bool = true) -> Self {
-    precondition(!tokens.isEmpty)
-    precondition(tokens.allSatisfy({ $0.isPresent }))
-    var changes = tokens.map {
-      FixIt.Change.replace(
-        oldNode: Syntax($0),
-        newNode: Syntax($0.with(\.presence, .missing))
-      )
-    }
-    if transferTrivia {
-      changes += FixIt.MultiNodeChange.transferTriviaAtSides(from: tokens).primitiveChanges
-    }
-    return FixIt.MultiNodeChange(primitiveChanges: changes)
+    precondition(tokens.allSatisfy(\.isPresent))
+    return .makeMissing(tokens.map(Syntax.init), transferTrivia: transferTrivia)
   }
 
   /// If `transferTrivia` is `true`, the leading and trailing trivia of the
@@ -103,6 +96,25 @@ extension FixIt.MultiNodeChange {
     } else {
       return FixIt.MultiNodeChange()
     }
+  }
+
+  /// Replace present nodes with their missing equivalents.
+  ///
+  /// If `transferTrivia` is `true`, the leading trivia of the first node and
+  /// the trailing trivia of the last node will be transferred to their adjecent
+  /// tokens.
+  static func makeMissing(_ nodes: [Syntax], transferTrivia: Bool = true) -> Self {
+    precondition(!nodes.isEmpty)
+    var changes = nodes.map {
+      FixIt.Change.replace(
+        oldNode: $0,
+        newNode: MissingMaker().rewrite($0, detach: true)
+      )
+    }
+    if transferTrivia {
+      changes += FixIt.MultiNodeChange.transferTriviaAtSides(from: nodes).primitiveChanges
+    }
+    return FixIt.MultiNodeChange(primitiveChanges: changes)
   }
 }
 

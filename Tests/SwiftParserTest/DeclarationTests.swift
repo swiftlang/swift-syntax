@@ -922,6 +922,7 @@ final class DeclarationTests: ParserTestCase {
       fixedSource: "func test() async throws(MyError) {}",
       experimentalFeatures: [.typedThrows]
     )
+
     assertParse(
       "func test() throws 1️⃣async2️⃣(MyError) {}",
       diagnostics: [
@@ -931,6 +932,7 @@ final class DeclarationTests: ParserTestCase {
       fixedSource: "func test() async throws (MyError) {}",
       experimentalFeatures: [.typedThrows]
     )
+
     assertParse(
       "func test() 1️⃣try2️⃣(MyError) async {}",
       diagnostics: [
@@ -940,6 +942,7 @@ final class DeclarationTests: ParserTestCase {
       fixedSource: "func test() throws (MyError) async {}",
       experimentalFeatures: [.typedThrows]
     )
+
     assertParse(
       "func test() 1️⃣try 2️⃣async3️⃣(MyError) {}",
       diagnostics: [
@@ -950,6 +953,7 @@ final class DeclarationTests: ParserTestCase {
       fixedSource: "func test() async throws (MyError) {}",
       experimentalFeatures: [.typedThrows]
     )
+
     assertParse(
       "func test() throws(MyError) 1️⃣await {}",
       diagnostics: [
@@ -958,6 +962,7 @@ final class DeclarationTests: ParserTestCase {
       fixedSource: "func test() async throws(MyError) {}",
       experimentalFeatures: [.typedThrows]
     )
+
     assertParse(
       "func test() throws 1️⃣await2️⃣(MyError) {}",
       diagnostics: [
@@ -967,6 +972,7 @@ final class DeclarationTests: ParserTestCase {
       fixedSource: "func test() async throws (MyError) {}",
       experimentalFeatures: [.typedThrows]
     )
+
     assertParse(
       "func test() 1️⃣try2️⃣(MyError) await {}",
       diagnostics: [
@@ -976,6 +982,7 @@ final class DeclarationTests: ParserTestCase {
       fixedSource: "func test() throws (MyError) await {}",
       experimentalFeatures: [.typedThrows]
     )
+
     assertParse(
       "func test() 1️⃣try await2️⃣(MyError) {}",
       diagnostics: [
@@ -985,6 +992,7 @@ final class DeclarationTests: ParserTestCase {
       fixedSource: "func test() awaitthrows (MyError) {}",  // FIXME: spacing
       experimentalFeatures: [.typedThrows]
     )
+
     assertParse(
       "func test() async1️⃣(MyError) {}",
       diagnostics: [
@@ -992,6 +1000,7 @@ final class DeclarationTests: ParserTestCase {
       ],
       experimentalFeatures: [.typedThrows]
     )
+
     assertParse(
       "func test() 1️⃣await2️⃣(MyError) {}",
       diagnostics: [
@@ -1001,6 +1010,7 @@ final class DeclarationTests: ParserTestCase {
       fixedSource: "func test() async (MyError) {}",
       experimentalFeatures: [.typedThrows]
     )
+
     assertParse(
       "func test() 1️⃣try2️⃣(MyError) {}",
       diagnostics: [
@@ -1010,10 +1020,12 @@ final class DeclarationTests: ParserTestCase {
       fixedSource: "func test() throws (MyError) {}",
       experimentalFeatures: [.typedThrows]
     )
+
     assertParse(
       "func test() throws(MyError) {}",
       experimentalFeatures: [.typedThrows]
     )
+
     assertParse(
       "func test() throws(MyError)1️⃣async {}",  // no space between closing parenthesis and `async`
       diagnostics: [

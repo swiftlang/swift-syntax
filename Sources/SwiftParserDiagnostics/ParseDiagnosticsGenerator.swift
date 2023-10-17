@@ -182,7 +182,6 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       correctToken.isMissing
     {
       // We are exchanging two adjacent tokens, transfer the trivia from the incorrect token to the corrected token.
-      changes += misplacedTokens.map { FixIt.MultiNodeChange.makeMissing($0, transferTrivia: false) }
       changes.append(
         FixIt.MultiNodeChange.makePresent(
           correctToken,
@@ -191,6 +190,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           trailingTrivia: misplacedToken.trailingTrivia.isEmpty ? nil : misplacedToken.trailingTrivia
         )
       )
+      changes.append(FixIt.MultiNodeChange.makeMissing(misplacedTokens, transferTrivia: false))
     } else {
       changes += misplacedTokens.map { FixIt.MultiNodeChange.makeMissing($0) }
       changes += correctAndMissingTokens.map { FixIt.MultiNodeChange.makePresent($0) }
@@ -236,7 +236,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     exchangeTokens(
       unexpected: misplacedSpecifiers,
       unexpectedTokenCondition: { EffectSpecifier(token: $0) != nil },
-      correctTokens: [effectSpecifiers?.throwsSpecifier, effectSpecifiers?.asyncSpecifier],
+      correctTokens: [effectSpecifiers?.asyncSpecifier, effectSpecifiers?.throwsSpecifier],
       message: { EffectsSpecifierAfterArrow(effectsSpecifiersAfterArrow: $0) },
       moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) },
       removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
@@ -764,10 +764,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if let unexpected = node.unexpectedBetweenRequirementAndTrailingComma,
       let token = unexpected.presentTokens(satisfying: { $0.tokenKind == .binaryOperator("&&") }).first,
       let trailingComma = node.trailingComma,
-      trailingComma.isMissing,
-      let previous = node.unexpectedBetweenRequirementAndTrailingComma?.previousToken(viewMode: .sourceAccurate)
+      trailingComma.isMissing
     {
-
       addDiagnostic(
         unexpected,
         .expectedCommaInWhereClause,
@@ -775,9 +773,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           FixIt(
             message: ReplaceTokensFixIt(replaceTokens: [token], replacements: [.commaToken()]),
             changes: [
-              .makeMissing(token),
-              .makePresent(trailingComma),
-              FixIt.MultiNodeChange(.replaceTrailingTrivia(token: previous, newTrivia: [])),
+              .makeMissing(token, transferTrivia: false),
+              .makePresent(trailingComma, leadingTrivia: token.leadingTrivia, trailingTrivia: token.trailingTrivia),
             ]
           )
         ],
@@ -818,7 +815,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         fixIts: [
           FixIt(
             message: RemoveNodesFixIt(nodes),
-            changes: nodes.map { .makeMissing($0) }
+            changes: .makeMissing(nodes)
           )
         ],
         handledNodes: nodes.map { $0.id }
@@ -1542,7 +1539,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         fixIts: [
           FixIt(
             message: RemoveNodesFixIt(rawDelimiters),
-            changes: rawDelimiters.map { .makeMissing($0) }
+            changes: .makeMissing(rawDelimiters)
           )
         ],
         handledNodes: rawDelimiters.map { $0.id }
@@ -1862,8 +1859,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
               replacements: [node.colon]
             ),
             changes: [
-              FixIt.MultiNodeChange.makeMissing(equalToken),
-              FixIt.MultiNodeChange.makePresent(node.colon),
+              .makeMissing(equalToken, transferTrivia: false),
+              .makePresent(node.colon, leadingTrivia: equalToken.leadingTrivia, trailingTrivia: equalToken.trailingTrivia),
             ]
           )
         ],
@@ -1971,8 +1968,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
             FixIt(
               message: fixItMessage,
               changes: [
-                FixIt.MultiNodeChange.makePresent(detail.detail)
-              ] + unexpectedTokens.map { FixIt.MultiNodeChange.makeMissing($0) }
+                .makePresent(detail.detail),
+                .makeMissing(unexpectedTokens),
+              ]
             )
           ],
           handledNodes: [detail.id] + unexpectedTokens.map(\.id)

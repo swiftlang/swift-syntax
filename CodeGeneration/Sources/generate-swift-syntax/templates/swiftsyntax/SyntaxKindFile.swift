@@ -19,7 +19,7 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! EnumDeclSyntax(
     """
     /// Enumerates the known kinds of Syntax represented in the Syntax tree.
-    public enum SyntaxKind: CaseIterable
+    public enum SyntaxKind
     """
   ) {
     DeclSyntax("case token")

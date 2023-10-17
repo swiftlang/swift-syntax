@@ -47,8 +47,15 @@ struct BasicFormat: ParsableCommand, ParseCommand {
   var nodeType: String = "SourceFileSyntax"
 
   func run() throws {
-    let parsableMetatypes = SyntaxKind.allCases.compactMap {
-      $0.syntaxNodeType as? SyntaxParseable.Type
+    guard case .choices(let choices) = Syntax.structure else {
+      fatalError("Expected `Syntax.structure` to be the `choices` case")
+    }
+
+    let parsableMetatypes = choices.compactMap { (choice) -> SyntaxParseable.Type? in
+      guard case .node(let nodeType) = choice else {
+        return nil
+      }
+      return nodeType as? SyntaxParseable.Type
     }
     let parsableMetatypesByName = Dictionary(
       parsableMetatypes.map {

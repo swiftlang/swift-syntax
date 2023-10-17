@@ -44,35 +44,35 @@ public func assertIncrementalParse(
   let originalString = String(originalSource)
   let editedString = String(editedSource)
 
-  let (originalTree, lookaheadRanges) = Parser.parseIncrementally(source: originalString, parseTransition: nil)
+  let originalResult: Parser.IncrementalParseResult = Parser.parseIncrementally(source: originalString, parseTransition: nil)
 
   var reusedNodes: [Syntax] = []
   let transition = IncrementalParseTransition(
-    previousTree: originalTree,
+    previousTree: originalResult.tree,
     edits: concurrentEdits,
-    lookaheadRanges: lookaheadRanges,
+    lookaheadRanges: originalResult.lookaheadRanges,
     reusedNodeCallback: { reusedNodes.append($0) }
   )
 
   let newTree = Parser.parse(source: editedString)
-  let (incrementallyParsedNewTree, _) = Parser.parseIncrementally(source: editedString, parseTransition: transition)
+  let incrementalParseResult: Parser.IncrementalParseResult = Parser.parseIncrementally(source: editedString, parseTransition: transition)
 
   // Round-trip
   assertStringsEqualWithDiff(
     editedString,
-    "\(incrementallyParsedNewTree)",
+    "\(incrementalParseResult.tree)",
     additionalInfo: """
       Source failed to round-trip when parsing incrementally
 
       Actual syntax tree:
-      \(incrementallyParsedNewTree.debugDescription)
+      \(incrementalParseResult.tree.debugDescription)
       """,
     file: file,
     line: line
   )
 
   // Substructure
-  let subtreeMatcher = SubtreeMatcher(incrementallyParsedNewTree, markers: [:])
+  let subtreeMatcher = SubtreeMatcher(incrementalParseResult.tree, markers: [:])
   do {
     try subtreeMatcher.assertSameStructure(newTree, includeTrivia: true, file: file, line: line)
   } catch {

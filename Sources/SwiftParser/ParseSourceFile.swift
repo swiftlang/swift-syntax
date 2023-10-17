@@ -13,6 +13,14 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
+  public struct IncrementalParseResult {
+    /// The parsed tree.
+    public let tree: SourceFileSyntax
+    /// ``LookaheadRanges`` that describe how far the parser looked ahead while parsing a node,
+    /// which is necessary to construct an ``IncrementalParseTransition`` for a subsequent incremental parse.
+    public let lookaheadRanges: LookaheadRanges
+  }
+
   /// Parse the source code in the given string as Swift source file. See
   /// `Parser.init` for more details.
   public static func parse(
@@ -62,12 +70,42 @@ extension Parser {
   ///            how far the parser looked ahead while parsing a node, which is
   ///            necessary to construct an ``IncrementalParseTransition`` for a
   ///            subsequent incremental parse
+  @available(*, deprecated, message: "Use the new version that returns a struct instead.")
   public static func parseIncrementally(
     source: String,
     parseTransition: IncrementalParseTransition?
   ) -> (tree: SourceFileSyntax, lookaheadRanges: LookaheadRanges) {
+    let result: IncrementalParseResult = parseIncrementally(source: source, parseTransition: parseTransition)
+    return (result.tree, result.lookaheadRanges)
+  }
+
+  /// Parse the source code in the given string as Swift source file with support
+  /// for incremental parsing.
+  ///
+  /// When parsing a source file for the first time, invoke `parseIncrementally`
+  /// with `parseTransition: nil`. This returns the initial tree as well as
+  /// ``LookaheadRanges``. If an edit is made to the source file, an
+  /// ``IncrementalParseTransition`` can be constructed from the initial tree
+  /// and its ``LookaheadRanges``. When invoking `parseIncrementally` again with
+  /// the post-edit source and that parse transition, the parser will re-use
+  /// nodes that haven’t changed.
+  ///
+  /// - Parameters:
+  ///   - source: The source code to parse
+  ///   - parseTransition: If a similar source file has already been parsed, the
+  ///     ``IncrementalParseTransition`` that contains the previous tree as well
+  ///     as the edits that were performed to it.
+  /// - Returns: The ``IncrementalParseResult``.
+  public static func parseIncrementally(
+    source: String,
+    parseTransition: IncrementalParseTransition?
+  ) -> IncrementalParseResult {
     var parser = Parser(source, parseTransition: parseTransition)
-    return (SourceFileSyntax.parse(from: &parser), parser.lookaheadRanges)
+
+    return IncrementalParseResult(
+      tree: SourceFileSyntax.parse(from: &parser),
+      lookaheadRanges: parser.lookaheadRanges
+    )
   }
 
   /// Parse the source code in the given buffer as Swift source file with support

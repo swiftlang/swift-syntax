@@ -32,6 +32,8 @@ runExpressionMacrosPlayground()
 
 // MARK: - Extension Macros
 
+runDefaultFatalErrorImplementationMacroPlayground()
+
 runEquatableExtensionMacroPlayground()
 
 // MARK: - Member Attribute Macros

@@ -254,13 +254,18 @@ func assertDiagnostic(
 ///   - macros: The macros that should be expanded, provided as a dictionary
 ///     mapping macro names (e.g., `"stringify"`) to implementation types
 ///     (e.g., `StringifyMacro.self`).
+///   - applyFixIts: If specified, filters the Fix-Its that are applied to generate `fixedSource` to only those whose message occurs in this array. If `nil`, all Fix-Its from the diagnostics are applied.
+///   - fixedSource: If specified, asserts that the source code after applying Fix-Its matches this string.
 ///   - testModuleName: The name of the test module to use.
 ///   - testFileName: The name of the test file name to use.
+///   - indentationWidth: The indentation width used in the expansion.
 public func assertMacroExpansion(
   _ originalSource: String,
   expandedSource expectedExpandedSource: String,
   diagnostics: [DiagnosticSpec] = [],
   macros: [String: Macro.Type],
+  applyFixIts: [String]? = nil,
+  fixedSource expectedFixedSource: String? = nil,
   testModuleName: String = "TestModule",
   testFileName: String = "test.swift",
   indentationWidth: Trivia = .spaces(4),
@@ -316,5 +321,17 @@ public func assertMacroExpansion(
     for (actualDiag, expectedDiag) in zip(context.diagnostics, diagnostics) {
       assertDiagnostic(actualDiag, in: context, expected: expectedDiag)
     }
+  }
+
+  // Applying Fix-Its
+  if let expectedFixedSource = expectedFixedSource {
+    let fixedTree = FixItApplier.applyFixes(from: context.diagnostics, filterByMessages: applyFixIts, to: origSourceFile)
+    let fixedTreeDescription = fixedTree.description
+    assertStringsEqualWithDiff(
+      fixedTreeDescription.trimmingTrailingWhitespace(),
+      expectedFixedSource.trimmingTrailingWhitespace(),
+      file: file,
+      line: line
+    )
   }
 }

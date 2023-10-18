@@ -167,6 +167,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var forbiddenInterpolatedString: Self {
     return .init("argument cannot be an interpolated string literal")
   }
+  public static var genericParamCantBeUsedInEnumCaseDecl: Self {
+    return .init("generic signature cannot be declared in enum 'case'")
+  }
   public static var initializerInPattern: Self {
     .init("unexpected initializer in pattern; did you mean to use '='?")
   }

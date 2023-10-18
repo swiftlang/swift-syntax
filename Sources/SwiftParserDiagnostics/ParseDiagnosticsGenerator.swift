@@ -1074,6 +1074,24 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: EnumCaseElementSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if let unexpectedBetweenNameAndParameterClause = node.unexpectedBetweenNameAndParameterClause,
+      let genericParameter = unexpectedBetweenNameAndParameterClause.compactMap({ $0.as(GenericParameterClauseSyntax.self) }).only
+    {
+      addDiagnostic(
+        genericParameter,
+        .genericParamCantBeUsedInEnumCaseDecl,
+        handledNodes: [unexpectedBetweenNameAndParameterClause.id]
+      )
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: IfConfigClauseSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

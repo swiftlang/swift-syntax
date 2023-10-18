@@ -429,10 +429,15 @@ final class RecoveryTests: ParserTestCase {
       } while { true }()
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: missing condition in 'while' statement
-        // TODO: Old parser expected error on line 2: consecutive statements on a line must be separated by ';', Fix-It replacements: 10 - 10 = ';'
-        // TODO: Old parser expected warning on line 2: result of call to closure returning 'Bool' is unused
-      ]
+        DiagnosticSpec(message: "missing condition in 'while' statement"),
+        DiagnosticSpec(message: "consecutive statements on a line must be separated by newline or ';'",
+        fixIts: ["insert newline", "insert ';'"]),
+        DiagnosticSpec(message: "result of call to closure returning 'Bool' is unused", severity: .warning)
+      ],
+      fixedSource: """
+        repeat {
+        } while <#expression#>
+        """
     )
   }
 

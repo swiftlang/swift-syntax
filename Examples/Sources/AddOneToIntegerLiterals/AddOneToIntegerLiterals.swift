@@ -31,7 +31,8 @@ private class AddOneToIntegerLiterals: SyntaxRewriter {
     let int = Int(integerText)!
 
     // Create a new integer literal token with `int + 1` as its text.
-    let newIntegerLiteralToken = token.with(\.tokenKind, .integerLiteral("\(int + 1)"))
+    var newIntegerLiteralToken = token
+    newIntegerLiteralToken.tokenKind = .integerLiteral("\(int + 1)")
 
     // Return the new integer literal.
     return newIntegerLiteralToken

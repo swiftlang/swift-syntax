@@ -25,20 +25,22 @@ public struct AddCompletionHandlerMacro: PeerMacro {
   ) throws -> [DeclSyntax] {
     // Only on functions at the moment. We could handle initializers as well
     // with a bit of work.
-    guard let funcDecl = declaration.as(FunctionDeclSyntax.self) else {
+    guard var funcDecl = declaration.as(FunctionDeclSyntax.self) else {
       throw CustomError.message("@addCompletionHandler only works on functions")
     }
 
     // This only makes sense for async functions.
     if funcDecl.signature.effectSpecifiers?.asyncSpecifier == nil {
-      let newEffects: FunctionEffectSpecifiersSyntax
+      var newEffects: FunctionEffectSpecifiersSyntax
       if let existingEffects = funcDecl.signature.effectSpecifiers {
-        newEffects = existingEffects.with(\.asyncSpecifier, .keyword(.async))
+        newEffects = existingEffects
+        newEffects.asyncSpecifier = .keyword(.async)
       } else {
         newEffects = FunctionEffectSpecifiersSyntax(asyncSpecifier: .keyword(.async))
       }
 
-      let newSignature = funcDecl.signature.with(\.effectSpecifiers, newEffects)
+      var newSignature = funcDecl.signature
+      newSignature.effectSpecifiers = newEffects
       let messageID = MessageID(domain: "MacroExamples", id: "MissingAsync")
 
       let diag = Diagnostic(
@@ -73,7 +75,9 @@ public struct AddCompletionHandlerMacro: PeerMacro {
     }
 
     // Form the completion handler parameter.
-    let resultType: TypeSyntax? = funcDecl.signature.returnClause?.type.with(\.leadingTrivia, []).with(\.trailingTrivia, [])
+    var resultType = funcDecl.signature.returnClause?.type
+    resultType?.leadingTrivia = []
+    resultType?.trailingTrivia = []
 
     let completionHandlerParam =
       FunctionParameterSyntax(
@@ -85,14 +89,12 @@ public struct AddCompletionHandlerMacro: PeerMacro {
     // Add the completion handler parameter to the parameter list.
     let parameterList = funcDecl.signature.parameterClause.parameters
     var newParameterList = parameterList
-    if let lastParam = parameterList.last {
+    if var lastParam = parameterList.last {
       // We need to add a trailing comma to the preceding list.
       newParameterList.removeLast()
+      lastParam.trailingComma = .commaToken(trailingTrivia: .space)
       newParameterList += [
-        lastParam.with(
-          \.trailingComma,
-          .commaToken(trailingTrivia: .space)
-        ),
+        lastParam,
         completionHandlerParam,
       ]
     } else {
@@ -136,35 +138,28 @@ public struct AddCompletionHandlerMacro: PeerMacro {
       return attributeType.name.text != nodeType.name.text
     }
 
-    let newFunc =
-      funcDecl
-      .with(
-        \.signature,
-        funcDecl.signature
-          .with(
-            \.effectSpecifiers,
-            funcDecl.signature.effectSpecifiers?.with(\.asyncSpecifier, nil)  // drop async
-          )
-          .with(\.returnClause, nil)  // drop result type
-          .with(
-            \.parameterClause,  // add completion handler parameter
-            funcDecl.signature.parameterClause.with(\.parameters, newParameterList)
-              .with(\.trailingTrivia, [])
-          )
-      )
-      .with(
-        \.body,
-        CodeBlockSyntax(
-          leftBrace: .leftBraceToken(leadingTrivia: .space),
-          statements: CodeBlockItemListSyntax(
-            [CodeBlockItemSyntax(item: .expr(newBody))]
-          ),
-          rightBrace: .rightBraceToken(leadingTrivia: .newline)
-        )
-      )
-      .with(\.attributes, newAttributeList)
-      .with(\.leadingTrivia, .newlines(2))
+    // drop async
+    funcDecl.signature.effectSpecifiers?.asyncSpecifier = nil
 
-    return [DeclSyntax(newFunc)]
+    // drop result type
+    funcDecl.signature.returnClause = nil
+
+    // add completion handler parameter
+    funcDecl.signature.parameterClause.parameters = newParameterList
+    funcDecl.signature.parameterClause.trailingTrivia = []
+
+    funcDecl.body = CodeBlockSyntax(
+      leftBrace: .leftBraceToken(leadingTrivia: .space),
+      statements: CodeBlockItemListSyntax(
+        [CodeBlockItemSyntax(item: .expr(newBody))]
+      ),
+      rightBrace: .rightBraceToken(leadingTrivia: .newline)
+    )
+
+    funcDecl.attributes = newAttributeList
+
+    funcDecl.leadingTrivia = .newlines(2)
+
+    return [DeclSyntax(funcDecl)]
   }
 }

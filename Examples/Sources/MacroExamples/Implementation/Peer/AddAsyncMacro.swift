@@ -30,7 +30,7 @@ public struct AddAsyncMacro: PeerMacro {
   ) throws -> [DeclSyntax] {
 
     // Only on functions at the moment.
-    guard let funcDecl = declaration.as(FunctionDeclSyntax.self) else {
+    guard var funcDecl = declaration.as(FunctionDeclSyntax.self) else {
       throw CustomError.message("@addAsync only works on functions")
     }
 
@@ -42,7 +42,7 @@ public struct AddAsyncMacro: PeerMacro {
     }
 
     // This only makes sense void functions
-    if funcDecl.signature.returnClause?.type.with(\.leadingTrivia, []).with(\.trailingTrivia, []).description != "Void" {
+    if funcDecl.signature.returnClause?.type.as(IdentifierTypeSyntax.self)?.name.text != "Void" {
       throw CustomError.message(
         "@addAsync requires an function that returns void"
       )
@@ -58,7 +58,7 @@ public struct AddAsyncMacro: PeerMacro {
     }
 
     // Completion handler needs to return Void
-    if completionHandlerParameter.returnClause.type.with(\.leadingTrivia, []).with(\.trailingTrivia, []).description != "Void" {
+    if completionHandlerParameter.returnClause.type.as(IdentifierTypeSyntax.self)?.name.text != "Void" {
       throw CustomError.message(
         "@addAsync requires an function that has a completion handler that returns Void"
       )
@@ -72,9 +72,11 @@ public struct AddAsyncMacro: PeerMacro {
     // Remove completionHandler and comma from the previous parameter
     var newParameterList = funcDecl.signature.parameterClause.parameters
     newParameterList.removeLast()
-    let newParameterListLastParameter = newParameterList.last!
+    var newParameterListLastParameter = newParameterList.last!
     newParameterList.removeLast()
-    newParameterList.append(newParameterListLastParameter.with(\.trailingTrivia, []).with(\.trailingComma, nil))
+    newParameterListLastParameter.trailingTrivia = []
+    newParameterListLastParameter.trailingComma = nil
+    newParameterList.append(newParameterListLastParameter)
 
     // Drop the @addAsync attribute from the new declaration.
     let newAttributeList = funcDecl.attributes.filter {
@@ -121,42 +123,36 @@ public struct AddAsyncMacro: PeerMacro {
 
       """
 
-    let newFunc =
-      funcDecl
-      .with(
-        \.signature,
-        funcDecl.signature
-          .with(
-            \.effectSpecifiers,
-            FunctionEffectSpecifiersSyntax(
-              leadingTrivia: .space,
-              asyncSpecifier: .keyword(.async),
-              throwsSpecifier: isResultReturn ? .keyword(.throws) : nil
-            )  // add async
-          )
-          .with(
-            \.returnClause,
-            successReturnType != nil ? ReturnClauseSyntax(leadingTrivia: .space, type: successReturnType!.with(\.leadingTrivia, .space)) : nil
-          )  // add result type
-          .with(
-            \.parameterClause,
-            funcDecl.signature.parameterClause.with(\.parameters, newParameterList)  // drop completion handler
-              .with(\.trailingTrivia, [])
-          )
-      )
-      .with(
-        \.body,
-        CodeBlockSyntax(
-          leftBrace: .leftBraceToken(leadingTrivia: .space),
-          statements: CodeBlockItemListSyntax(
-            [CodeBlockItemSyntax(item: .expr(newBody))]
-          ),
-          rightBrace: .rightBraceToken(leadingTrivia: .newline)
-        )
-      )
-      .with(\.attributes, newAttributeList)
-      .with(\.leadingTrivia, .newlines(2))
+    // add async
+    funcDecl.signature.effectSpecifiers = FunctionEffectSpecifiersSyntax(
+      leadingTrivia: .space,
+      asyncSpecifier: .keyword(.async),
+      throwsSpecifier: isResultReturn ? .keyword(.throws) : nil
+    )
 
-    return [DeclSyntax(newFunc)]
+    // add result type
+    if let successReturnType {
+      funcDecl.signature.returnClause = ReturnClauseSyntax(leadingTrivia: .space, type: successReturnType.with(\.leadingTrivia, .space))
+    } else {
+      funcDecl.signature.returnClause = nil
+    }
+
+    // drop completion handler
+    funcDecl.signature.parameterClause.parameters = newParameterList
+    funcDecl.signature.parameterClause.trailingTrivia = []
+
+    funcDecl.body = CodeBlockSyntax(
+      leftBrace: .leftBraceToken(leadingTrivia: .space),
+      statements: CodeBlockItemListSyntax(
+        [CodeBlockItemSyntax(item: .expr(newBody))]
+      ),
+      rightBrace: .rightBraceToken(leadingTrivia: .newline)
+    )
+
+    funcDecl.attributes = newAttributeList
+
+    funcDecl.leadingTrivia = .newlines(2)
+
+    return [DeclSyntax(funcDecl)]
   }
 }

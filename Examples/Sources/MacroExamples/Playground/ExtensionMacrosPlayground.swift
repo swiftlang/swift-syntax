@@ -12,6 +12,22 @@
 
 import MacroExamplesInterface
 
+// MARK: - Default Fatal Error Implementation
+
+@defaultFatalErrorImplementation
+protocol API {
+  func getItems() -> [String]
+  func removeItem(id: String)
+}
+
+struct MyAPI: API {}
+
+func runDefaultFatalErrorImplementationMacroPlayground() {
+  let myAPI = MyAPI()
+
+  print("Implementation of `API` protocol with default implementation: \(myAPI)")
+}
+
 // MARK: - Equatable Extension
 
 @equatable

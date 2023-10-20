@@ -23,6 +23,7 @@ struct MyPlugin: CompilerPlugin {
     CaseDetectionMacro.self,
     CodableKey.self,
     CustomCodable.self,
+    DefaultFatalErrorImplementationMacro.self,
     DictionaryStorageMacro.self,
     DictionaryStoragePropertyMacro.self,
     EquatableExtensionMacro.self,

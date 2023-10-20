@@ -44,18 +44,17 @@ public func assertIncrementalParse(
   let originalString = String(originalSource)
   let editedString = String(editedSource)
 
-  let (originalTree, lookaheadRanges) = Parser.parseIncrementally(source: originalString, parseTransition: nil)
+  let parseResult = Parser.parseIncrementally(source: originalString, parseTransition: nil)
 
   var reusedNodes: [Syntax] = []
   let transition = IncrementalParseTransition(
-    previousTree: originalTree,
+    previousIncrementalParseResult: parseResult,
     edits: concurrentEdits,
-    lookaheadRanges: lookaheadRanges,
     reusedNodeCallback: { reusedNodes.append($0) }
   )
 
   let newTree = Parser.parse(source: editedString)
-  let (incrementallyParsedNewTree, _) = Parser.parseIncrementally(source: editedString, parseTransition: transition)
+  let incrementallyParsedNewTree = Parser.parseIncrementally(source: editedString, parseTransition: transition).tree
 
   // Round-trip
   assertStringsEqualWithDiff(

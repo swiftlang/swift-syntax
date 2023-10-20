@@ -47,15 +47,14 @@ struct PerformanceTest: ParsableCommand {
       /// The initial parse for incremental parsing
       for file in files {
         file.withUnsafeBytes { buf in
-          let (tree, lookaheadRanges) = Parser.parseIncrementally(
+          let parseResult = Parser.parseIncrementally(
             source: buf.bindMemory(to: UInt8.self),
             parseTransition: nil
           )
 
           fileTransition[file] = IncrementalParseTransition(
-            previousTree: tree,
-            edits: ConcurrentEdits(fromSequential: []),
-            lookaheadRanges: lookaheadRanges
+            previousIncrementalParseResult: parseResult,
+            edits: ConcurrentEdits(fromSequential: [])
           )
         }
       }

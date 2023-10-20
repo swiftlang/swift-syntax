@@ -60,6 +60,8 @@ extension Parser {
         }
       case (.declarationModifier(.unowned), let handle)?:
         elements.append(self.parseUnownedModifier(handle))
+      case (.declarationModifier(.nonisolated), let handle)?:
+        elements.append(parseNonisolatedModifier(handle))
       case (.declarationModifier(.final), let handle)?,
         (.declarationModifier(.required), let handle)?,
         (.declarationModifier(.optional), let handle)?,
@@ -79,7 +81,6 @@ extension Parser {
         (.declarationModifier(.indirect), let handle)?,
         (.declarationModifier(.isolated), let handle)?,
         (.declarationModifier(.async), let handle)?,
-        (.declarationModifier(.nonisolated), let handle)?,
         (.declarationModifier(.distributed), let handle)?,
         (.declarationModifier(._const), let handle)?,
         (.declarationModifier(._local), let handle)?,
@@ -98,9 +99,9 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseModifierDetail() -> RawDeclModifierDetailSyntax {
+  mutating func parseModifierDetail(_ keyword: Keyword) -> RawDeclModifierDetailSyntax {
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let (unexpectedBeforeDetailToken, detailToken) = self.expect(.identifier, TokenSpec(.set, remapping: .identifier), default: .identifier)
+    let (unexpectedBeforeDetailToken, detailToken) = self.expect(.identifier, TokenSpec(keyword, remapping: .identifier), default: .identifier)
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawDeclModifierDetailSyntax(
       unexpectedBeforeLeftParen,
@@ -118,7 +119,7 @@ extension Parser {
 
     let detail: RawDeclModifierDetailSyntax?
     if self.at(.leftParen) {
-      detail = self.parseModifierDetail()
+      detail = self.parseModifierDetail(.set)
     } else {
       detail = nil
     }
@@ -214,6 +215,24 @@ extension Parser {
       detail: detail,
       unexpectedBeforeRightParen,
       rightParen: rightParen,
+      arena: self.arena
+    )
+  }
+
+  mutating func parseNonisolatedModifier(_ handle: RecoveryConsumptionHandle) -> RawDeclModifierSyntax {
+    let (unexpectedBeforeKeyword, keyword) = self.eat(handle)
+
+    let detail: RawDeclModifierDetailSyntax?
+    if self.at(.leftParen) {
+      detail = self.parseModifierDetail(.unsafe)
+    } else {
+      detail = nil
+    }
+
+    return RawDeclModifierSyntax(
+      unexpectedBeforeKeyword,
+      name: keyword,
+      detail: detail,
       arena: self.arena
     )
   }

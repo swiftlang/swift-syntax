@@ -18,7 +18,7 @@ import SwiftParserDiagnostics
 struct PrintDiags: ParsableCommand, ParseCommand {
   static var configuration = CommandConfiguration(
     commandName: "print-diags",
-    abstract: "Print the diagnostics produced by parsing a soruce file"
+    abstract: "Print the diagnostics produced by parsing a source file"
   )
 
   @OptionGroup

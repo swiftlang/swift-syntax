@@ -12,43 +12,6 @@
 
 import SwiftSyntax
 
-extension Sequence where Element == Range<Int> {
-  /// Given a set of ranges that are sorted in order of nondecreasing lower
-  /// bound, merge any overlapping ranges to produce a sequence of
-  /// nonoverlapping ranges.
-  fileprivate func mergingOverlappingRanges() -> [Range<Int>] {
-    var result: [Range<Int>] = []
-
-    var prior: Range<Int>? = nil
-    for range in self {
-      // If this is the first range we've seen, note it as the prior and
-      // continue.
-      guard let priorRange = prior else {
-        prior = range
-        continue
-      }
-
-      // If the ranges overlap, expand the prior range.
-      precondition(priorRange.lowerBound <= range.lowerBound)
-      if priorRange.overlaps(range) {
-        let lower = priorRange.lowerBound
-        let upper = Swift.max(priorRange.upperBound, range.upperBound)
-        prior = lower..<upper
-        continue
-      }
-
-      // Append the prior range, then take this new range as the prior
-      result.append(priorRange)
-      prior = range
-    }
-
-    if let priorRange = prior {
-      result.append(priorRange)
-    }
-    return result
-  }
-}
-
 public struct DiagnosticsFormatter {
 
   /// A wrapper struct for a source line, its diagnostics, and any
@@ -102,50 +65,12 @@ public struct DiagnosticsFormatter {
       return annotatedLine.sourceString
     }
 
-    // Compute the set of highlight ranges that land on this line. These
-    // are column ranges, sorted in order of increasing starting column, and
-    // with overlapping ranges merged.
-    let highlightRanges: [Range<Int>] = annotatedLine.diagnostics.map {
-      $0.highlights
-    }.joined().compactMap { (highlight) -> Range<Int>? in
-      if highlight.root != Syntax(tree) {
-        return nil
-      }
-
-      let startLoc = highlight.startLocation(converter: slc, afterLeadingTrivia: true)
-      let startLine = startLoc.line
-
-      // Find the starting column.
-      let startColumn: Int
-      if startLine < lineNumber {
-        startColumn = 1
-      } else if startLine == lineNumber {
-        startColumn = startLoc.column
-      } else {
-        return nil
-      }
-
-      // Find the ending column.
-      let endLoc = highlight.endLocation(converter: slc, afterTrailingTrivia: false)
-      let endLine = endLoc.line
-
-      let endColumn: Int
-      if endLine > lineNumber {
-        endColumn = annotatedLine.sourceString.count
-      } else if endLine == lineNumber {
-        endColumn = endLoc.column
-      } else {
-        return nil
-      }
-
-      if startColumn == endColumn {
-        return nil
-      }
-
-      return startColumn..<endColumn
-    }.sorted { (lhs, rhs) in
-      lhs.lowerBound < rhs.lowerBound
-    }.mergingOverlappingRanges()
+    let highlightRanges = SyntaxHighlightRangeCalculator.computeHighlightRanges(
+      forLine: (highlights: annotatedLine.diagnostics.flatMap(\.highlights), sourceString: annotatedLine.sourceString),
+      at: lineNumber,
+      fromTree: tree,
+      usingSourceLocationConverter: slc
+    )
 
     // Map the column ranges into index ranges within the source string itself.
     let sourceStringUTF8 = annotatedLine.sourceString.utf8

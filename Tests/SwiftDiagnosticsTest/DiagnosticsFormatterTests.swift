@@ -127,7 +127,7 @@ final class DiagnosticsFormatterTests: XCTestCase {
       """
 
     let expectedOutput = """
-      \u{001B}[0;36m1 │\u{001B}[0;0m for \u{001B}[4;39m(i\u{001B}[0;0m \u{001B}[4;39m= 🐮; i != 👩‍👩‍👦‍👦; i += 1)\u{001B}[0;0m { }
+      \u{001B}[0;36m1 │\u{001B}[0;0m for \u{001B}[4;39m(i \u{001B}[0;0m\u{001B}[4;39m= 🐮; i != 👩‍👩‍👦‍👦; i += 1)\u{001B}[0;0m { }
         \u{001B}[0;36m│\u{001B}[0;0m │      ╰─ \u{001B}[1;31merror: \u{001B}[1;39mexpected ')' to end tuple pattern\u{001B}[0;0m
         \u{001B}[0;36m│\u{001B}[0;0m ╰─ \u{001B}[1;31merror: \u{001B}[1;39mC-style for statement has been removed in Swift 3\u{001B}[0;0m
 

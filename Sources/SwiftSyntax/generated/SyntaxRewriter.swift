@@ -1644,6 +1644,13 @@ open class SyntaxRewriter {
     return visitChildren(node)
   }
   
+  /// Visit a ``SkippedDeclSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: SkippedDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(visitChildren(node))
+  }
+  
   /// Visit a ``SomeOrAnyTypeSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3008,6 +3015,10 @@ open class SyntaxRewriter {
       return {
         self.visitImpl($0, SimpleStringLiteralSegmentListSyntax.self, self.visit)
       }
+    case .skippedDecl:
+      return {
+        self.visitImpl($0, SkippedDeclSyntax.self, self.visit)
+      }
     case .someOrAnyType:
       return {
         self.visitImpl($0, SomeOrAnyTypeSyntax.self, self.visit)
@@ -3684,6 +3695,8 @@ open class SyntaxRewriter {
       return visitImpl(node, SimpleStringLiteralExprSyntax.self, visit)
     case .simpleStringLiteralSegmentList:
       return visitImpl(node, SimpleStringLiteralSegmentListSyntax.self, visit)
+    case .skippedDecl:
+      return visitImpl(node, SkippedDeclSyntax.self, visit)
     case .someOrAnyType:
       return visitImpl(node, SomeOrAnyTypeSyntax.self, visit)
     case .sourceFile:

@@ -2716,6 +2716,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: SimpleStringLiteralSegmentListSyntax) {
   }
   
+  /// Visiting ``SkippedDeclSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SkippedDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``SkippedDeclSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SkippedDeclSyntax) {
+  }
+  
   /// Visiting ``SomeOrAnyTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4336,6 +4348,10 @@ open class SyntaxVisitor {
       return {
         self.visitImpl($0, SimpleStringLiteralSegmentListSyntax.self, self.visit, self.visitPost)
       }
+    case .skippedDecl:
+      return {
+        self.visitImpl($0, SkippedDeclSyntax.self, self.visit, self.visitPost)
+      }
     case .someOrAnyType:
       return {
         self.visitImpl($0, SomeOrAnyTypeSyntax.self, self.visit, self.visitPost)
@@ -5015,6 +5031,8 @@ open class SyntaxVisitor {
       visitImpl(node, SimpleStringLiteralExprSyntax.self, visit, visitPost)
     case .simpleStringLiteralSegmentList:
       visitImpl(node, SimpleStringLiteralSegmentListSyntax.self, visit, visitPost)
+    case .skippedDecl:
+      visitImpl(node, SkippedDeclSyntax.self, visit, visitPost)
     case .someOrAnyType:
       visitImpl(node, SomeOrAnyTypeSyntax.self, visit, visitPost)
     case .sourceFile:

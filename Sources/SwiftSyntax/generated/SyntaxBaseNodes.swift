@@ -176,6 +176,7 @@ public extension Syntax {
 /// - ``PoundSourceLocationSyntax``
 /// - ``PrecedenceGroupDeclSyntax``
 /// - ``ProtocolDeclSyntax``
+/// - ``SkippedDeclSyntax``
 /// - ``StructDeclSyntax``
 /// - ``SubscriptDeclSyntax``
 /// - ``TypeAliasDeclSyntax``
@@ -216,7 +217,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .variableDecl:
+    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .skippedDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .variableDecl:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -261,6 +262,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
           .node(PoundSourceLocationSyntax.self),
           .node(PrecedenceGroupDeclSyntax.self),
           .node(ProtocolDeclSyntax.self),
+          .node(SkippedDeclSyntax.self),
           .node(StructDeclSyntax.self),
           .node(SubscriptDeclSyntax.self),
           .node(TypeAliasDeclSyntax.self),
@@ -1747,6 +1749,7 @@ extension Syntax {
           .node(SequenceExprSyntax.self),
           .node(SimpleStringLiteralExprSyntax.self),
           .node(SimpleStringLiteralSegmentListSyntax.self),
+          .node(SkippedDeclSyntax.self),
           .node(SomeOrAnyTypeSyntax.self),
           .node(SourceFileSyntax.self),
           .node(SpecializeAttributeArgumentListSyntax.self),

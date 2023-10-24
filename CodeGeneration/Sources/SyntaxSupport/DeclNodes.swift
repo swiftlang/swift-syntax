@@ -2270,4 +2270,21 @@ public let DECL_NODES: [Node] = [
       ),
     ]
   ),
+
+  Node(
+    kind: .skippedDecl,
+    base: .decl,
+    nameForDiagnostics: "skipped body",
+    documentation: """
+      Represent skipped portion of the source.
+      """,
+    traits: [],
+    children: [
+      Child(
+        name: "text",
+        kind: .token(choices: [.token(.unknown)]),
+        nameForDiagnostics: "text"
+      ),
+    ]
+  ),
 ]

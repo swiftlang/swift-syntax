@@ -2791,6 +2791,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "closingQuote"
   case \SimpleStringLiteralExprSyntax.unexpectedAfterClosingQuote:
     return "unexpectedAfterClosingQuote"
+  case \SkippedDeclSyntax.unexpectedBeforeText:
+    return "unexpectedBeforeText"
+  case \SkippedDeclSyntax.text:
+    return "text"
+  case \SkippedDeclSyntax.unexpectedAfterText:
+    return "unexpectedAfterText"
   case \SomeOrAnyTypeSyntax.unexpectedBeforeSomeOrAnySpecifier:
     return "unexpectedBeforeSomeOrAnySpecifier"
   case \SomeOrAnyTypeSyntax.someOrAnySpecifier:

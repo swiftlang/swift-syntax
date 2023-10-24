@@ -96,7 +96,7 @@ extension Parser {
     guard self.at(.leftBrace) || self.canRecoverTo(TokenSpec(.leftBrace, allowAtStartOfLine: false)) != nil else {
       return nil
     }
-    return self.parseCodeBlock(allowInitDecl: allowInitDecl)
+    return self.parseCodeBlock(allowInitDecl: allowInitDecl, allowSkip: true)
   }
 
   /// Parse a code block.
@@ -104,9 +104,17 @@ extension Parser {
   /// `introducer` is the `while`, `if`, ... keyword that is the cause that the code block is being parsed.
   /// If the left brace is missing, its indentation will be used to judge whether a following `}` was
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
-  mutating func parseCodeBlock(introducer: RawTokenSyntax? = nil, allowInitDecl: Bool = true) -> RawCodeBlockSyntax {
+  mutating func parseCodeBlock(introducer: RawTokenSyntax? = nil, allowInitDecl: Bool = true, allowSkip: Bool = false) -> RawCodeBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
-    let itemList = parseCodeBlockItemList(allowInitDecl: allowInitDecl, until: { $0.at(.rightBrace) })
+
+    let itemList: RawCodeBlockItemListSyntax
+    if allowSkip, let skipped = self.skippedBraceBody(unless: [.hasNestedTypeDeclarations]) {
+      let item = RawCodeBlockItemSyntax(item: .decl(.init(skipped)), semicolon: nil, arena: self.arena)
+      itemList = RawCodeBlockItemListSyntax(elements: [item], arena: self.arena)
+    } else {
+      itemList = parseCodeBlockItemList(allowInitDecl: allowInitDecl, until: { $0.at(.rightBrace) })
+    }
+
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
 
     return .init(

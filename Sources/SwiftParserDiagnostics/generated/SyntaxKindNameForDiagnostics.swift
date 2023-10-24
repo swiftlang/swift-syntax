@@ -333,6 +333,8 @@ extension SyntaxKind {
       return "same type requirement"
     case .simpleStringLiteralExpr:
       return "simple string literal"
+    case .skippedDecl:
+      return "skipped body"
     case .someOrAnyType:
       return "type"
     case .sourceFile:

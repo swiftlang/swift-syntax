@@ -254,7 +254,7 @@ extension Parser {
       whereClause = nil
     }
 
-    let memberBlock = self.parseMemberBlock(introducer: introducerKeyword)
+    let memberBlock = self.parseMemberBlock(introducer: introducerKeyword, allowSkip: true)
     return T.init(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,

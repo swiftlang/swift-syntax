@@ -241,6 +241,7 @@ public enum SyntaxEnum {
   case sequenceExpr(SequenceExprSyntax)
   case simpleStringLiteralExpr(SimpleStringLiteralExprSyntax)
   case simpleStringLiteralSegmentList(SimpleStringLiteralSegmentListSyntax)
+  case skippedDecl(SkippedDeclSyntax)
   case someOrAnyType(SomeOrAnyTypeSyntax)
   case sourceFile(SourceFileSyntax)
   case specializeAttributeArgumentList(SpecializeAttributeArgumentListSyntax)
@@ -753,6 +754,8 @@ public extension Syntax {
       return .simpleStringLiteralExpr(SimpleStringLiteralExprSyntax(self)!)
     case .simpleStringLiteralSegmentList:
       return .simpleStringLiteralSegmentList(SimpleStringLiteralSegmentListSyntax(self)!)
+    case .skippedDecl:
+      return .skippedDecl(SkippedDeclSyntax(self)!)
     case .someOrAnyType:
       return .someOrAnyType(SomeOrAnyTypeSyntax(self)!)
     case .sourceFile:

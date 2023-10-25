@@ -108,7 +108,9 @@ extension Parser {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
 
     let itemList: RawCodeBlockItemListSyntax
-    if allowSkip, let skipped = self.skippedBraceBody(unless: [.hasNestedTypeDeclarations]) {
+    if allowSkip,
+       options.contains(.bodySkipping),
+       let skipped = self.skippedBraceBody(unless: [.hasNestedTypeDeclarations]) {
       let item = RawCodeBlockItemSyntax(item: .decl(.init(skipped)), semicolon: nil, arena: self.arena)
       itemList = RawCodeBlockItemListSyntax(elements: [item], arena: self.arena)
     } else {

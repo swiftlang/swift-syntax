@@ -1236,10 +1236,8 @@ extension Lexer.Cursor {
 
         fallthrough
       default:
-        if let peekedScalar = start.peekScalar(), peekedScalar.isValidIdentifierStartCodePoint {
-          break
-        }
-        if let peekedScalar = start.peekScalar(), peekedScalar.isOperatorStartCodePoint {
+        if let peekedScalar = start.peekScalar(),
+           peekedScalar.isValidIdentifierStartCodePoint || peekedScalar.isOperatorStartCodePoint {
           break
         }
 

@@ -16,9 +16,10 @@ extension Parser {
   /// Parse the source code in the given string as Swift source file. See
   /// `Parser.init` for more details.
   public static func parse(
-    source: String
+    source: String,
+    options: ParsingOptions = []
   ) -> SourceFileSyntax {
-    var parser = Parser(source)
+    var parser = Parser(source, options: options)
     return SourceFileSyntax.parse(from: &parser)
   }
 
@@ -26,9 +27,10 @@ extension Parser {
   @_spi(ExperimentalLanguageFeatures)
   public static func parse(
     source: UnsafeBufferPointer<UInt8>,
-    experimentalFeatures: ExperimentalFeatures
+    experimentalFeatures: ExperimentalFeatures,
+    options: ParsingOptions = []
   ) -> SourceFileSyntax {
-    var parser = Parser(source, experimentalFeatures: experimentalFeatures)
+    var parser = Parser(source, experimentalFeatures: experimentalFeatures, options: options)
     return SourceFileSyntax.parse(from: &parser)
   }
 
@@ -36,9 +38,10 @@ extension Parser {
   /// `Parser.init` for more details.
   public static func parse(
     source: UnsafeBufferPointer<UInt8>,
-    maximumNestingLevel: Int? = nil
+    maximumNestingLevel: Int? = nil,
+    options: ParsingOptions = []
   ) -> SourceFileSyntax {
-    var parser = Parser(source, maximumNestingLevel: maximumNestingLevel)
+    var parser = Parser(source, maximumNestingLevel: maximumNestingLevel, options: options)
     return SourceFileSyntax.parse(from: &parser)
   }
 

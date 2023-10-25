@@ -17,16 +17,6 @@ import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 
-struct SimpleDiagnosticMessage: DiagnosticMessage {
-  let message: String
-  let diagnosticID: MessageID
-  let severity: DiagnosticSeverity
-}
-
-extension SimpleDiagnosticMessage: FixItMessage {
-  var fixItID: MessageID { diagnosticID }
-}
-
 extension GroupedDiagnostics {
   /// Add a new test file to the group, starting with marked source and using
   /// the markers to add any suggested extra diagnostics at the marker
@@ -35,34 +25,30 @@ extension GroupedDiagnostics {
     _ markedSource: String,
     displayName: String,
     parent: (SourceFileID, AbsolutePosition)? = nil,
-    extraDiagnostics: [String: (String, DiagnosticSeverity)] = [:]
+    diagnosticDescriptors: [DiagnosticDescriptor],
+    file: StaticString = #file,
+    line: UInt = #line
   ) -> (SourceFileID, [String: AbsolutePosition]) {
-    // Parse the source file and produce parser diagnostics.
     let (markers, source) = extractMarkers(markedSource)
     let tree = Parser.parse(source: source)
-    var diagnostics = ParseDiagnosticsGenerator.diagnostics(for: tree)
 
-    // Add on any extra diagnostics provided, at their marker locations.
-    for (marker, (message, severity)) in extraDiagnostics {
-      let pos = AbsolutePosition(utf8Offset: markers[marker]!)
-      let node = tree.token(at: pos)!.parent!
+    let parserDiagnostics = ParseDiagnosticsGenerator.diagnostics(for: tree)
 
-      let diag = Diagnostic(
-        node: node,
-        message: SimpleDiagnosticMessage(
-          message: message,
-          diagnosticID: MessageID(domain: "test", id: "conjured"),
-          severity: severity
-        )
-      )
-      diagnostics.append(diag)
+    var additionalDiagnostics: [Diagnostic] = []
+
+    do {
+      additionalDiagnostics = try diagnosticDescriptors.map {
+        try $0.createDiagnostic(inSyntaxTree: tree, usingLocationMarkers: markers)
+      }
+    } catch {
+      XCTFail(error.localizedDescription, file: file, line: line)
     }
 
     let id = addSourceFile(
       tree: tree,
       displayName: displayName,
       parent: parent,
-      diagnostics: diagnostics
+      diagnostics: parserDiagnostics + additionalDiagnostics
     )
 
     let markersWithAbsPositions = markers.map { (marker, pos) in
@@ -88,7 +74,13 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       print("hello"
       """,
       displayName: "main.swift",
-      extraDiagnostics: ["1️⃣": ("in expansion of macro 'myAssert' here", .note)]
+      diagnosticDescriptors: [
+        DiagnosticDescriptor(
+          locationMarker: "1️⃣",
+          message: "in expansion of macro 'myAssert' here",
+          severity: .note
+        )
+      ]
     )
     let inExpansionNotePos = mainSourceMarkers["1️⃣"]!
 
@@ -103,8 +95,12 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       """,
       displayName: "#myAssert",
       parent: (mainSourceID, inExpansionNotePos),
-      extraDiagnostics: [
-        "1️⃣": ("no matching operator '==' for types 'Double' and 'Int'", .error)
+      diagnosticDescriptors: [
+        DiagnosticDescriptor(
+          locationMarker: "1️⃣",
+          message: "no matching operator '==' for types 'Double' and 'Int'",
+          severity: .error
+        )
       ]
     )
 
@@ -143,7 +139,9 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       print("hello")
       """,
       displayName: "main.swift",
-      extraDiagnostics: ["1️⃣": ("in expansion of macro 'myAssert' here", .note)]
+      diagnosticDescriptors: [
+        DiagnosticDescriptor(locationMarker: "1️⃣", message: "in expansion of macro 'myAssert' here", severity: .note)
+      ]
     )
     let inExpansionNotePos = mainSourceMarkers["1️⃣"]!
 
@@ -158,8 +156,8 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       """,
       displayName: "#myAssert",
       parent: (mainSourceID, inExpansionNotePos),
-      extraDiagnostics: [
-        "1️⃣": ("in expansion of macro 'invertedEqualityCheck' here", .note)
+      diagnosticDescriptors: [
+        DiagnosticDescriptor(locationMarker: "1️⃣", message: "in expansion of macro 'invertedEqualityCheck' here", severity: .note)
       ]
     )
     let inInnerExpansionNotePos = outerExpansionSourceMarkers["1️⃣"]!
@@ -171,8 +169,8 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       """,
       displayName: "#invertedEqualityCheck",
       parent: (outerExpansionSourceID, inInnerExpansionNotePos),
-      extraDiagnostics: [
-        "1️⃣": ("no matching operator '==' for types 'Double' and 'Int'", .error)
+      diagnosticDescriptors: [
+        DiagnosticDescriptor(locationMarker: "1️⃣", message: "no matching operator '==' for types 'Double' and 'Int'", severity: .error)
       ]
     )
 

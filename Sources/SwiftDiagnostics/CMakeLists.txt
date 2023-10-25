@@ -7,6 +7,10 @@
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
 add_swift_syntax_library(SwiftDiagnostics
+  DiagnosticDecorators/ANSIDiagnosticDecorator.swift
+  DiagnosticDecorators/BasicDiagnosticDecorator.swift
+  DiagnosticDecorators/DiagnosticDecorator.swift
+
   Convenience.swift
   Diagnostic.swift
   DiagnosticsFormatter.swift

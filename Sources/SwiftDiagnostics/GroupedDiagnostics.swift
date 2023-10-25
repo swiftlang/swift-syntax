@@ -171,8 +171,7 @@ extension GroupedDiagnostics {
       fileName: sourceFile.displayName,
       tree: sourceFile.tree
     )
-
-    let colorizeBufferOutline = formatter.colorizeBufferOutline
+    let diagnosticDecorator = formatter.diagnosticDecorator
 
     let childPadding = String(slc.sourceLines.count + 1).count + 1;
 
@@ -200,7 +199,8 @@ extension GroupedDiagnostics {
         let location = primaryDiag.location(converter: primaryDiagSLC)
 
         // Display file/line/column and diagnostic text for the primary diagnostic.
-        prefixString = "\(location.file):\(location.line):\(location.column): \(formatter.colorizeIfRequested(primaryDiag.diagMessage))\n"
+        prefixString =
+          "\(location.file):\(location.line):\(location.column): \(diagnosticDecorator.decorateDiagnosticMessage(primaryDiag.diagMessage))\n"
 
         // If the primary diagnostic source file is not the same as the root source file, we're pointing into a generated buffer.
         // Provide a link back to the original source file where this generated buffer occurred, so it's easy to find if
@@ -216,8 +216,8 @@ extension GroupedDiagnostics {
 
           if rootSourceID == sourceFileID {
             let bufferLoc = slc.location(for: rootPosition)
-            let coloredMessage = formatter.colorizeIfRequested(severity: .note, message: "expanded code originates here")
-            prefixString += "╰─ \(bufferLoc.file):\(bufferLoc.line):\(bufferLoc.column): \(coloredMessage)\n"
+            let decoratedMessage = diagnosticDecorator.decorateMessage("expanded code originates here", basedOnSeverity: .note)
+            prefixString += "╰─ \(bufferLoc.file):\(bufferLoc.line):\(bufferLoc.column): \(decoratedMessage)\n"
           }
         }
       } else {
@@ -234,13 +234,14 @@ extension GroupedDiagnostics {
       let extraLengthNeeded = targetLineLength - padding.count - sourceFile.displayName.count - 6
       let boxSuffix: String
       if extraLengthNeeded > 0 {
-        boxSuffix = colorizeBufferOutline(String(repeating: "─", count: extraLengthNeeded))
+        boxSuffix = diagnosticDecorator.decorateBufferOutline(String(repeating: "─", count: extraLengthNeeded))
       } else {
         boxSuffix = ""
       }
 
-      prefixString = colorizeBufferOutline(padding + "╭─── ") + sourceFile.displayName + " " + boxSuffix + "\n"
-      suffixString = colorizeBufferOutline(padding + "╰───" + String(repeating: "─", count: sourceFile.displayName.count + 2)) + boxSuffix + "\n"
+      prefixString = diagnosticDecorator.decorateBufferOutline(padding + "╭─── ") + sourceFile.displayName + " " + boxSuffix + "\n"
+      suffixString =
+        diagnosticDecorator.decorateBufferOutline(padding + "╰───" + String(repeating: "─", count: sourceFile.displayName.count + 2)) + boxSuffix + "\n"
     }
 
     // Render the buffer.
@@ -248,7 +249,7 @@ extension GroupedDiagnostics {
       + formatter.annotatedSource(
         tree: sourceFile.tree,
         diags: sourceFile.diagnostics,
-        indentString: colorizeBufferOutline(indentString),
+        indentString: diagnosticDecorator.decorateBufferOutline(indentString),
         suffixTexts: childSources,
         sourceLocationConverter: slc
       ) + suffixString

@@ -1463,12 +1463,86 @@ final class ExpressionTests: ParserTestCase {
     )
   }
 
-  func testNulCharacterInSourceFile() {
+  func testLiteralWithTrailingClosure() {
+    let expectedDiagnostics = [
+      DiagnosticSpec(
+        message: "consecutive statements on a line must be separated by newline or ';'",
+        fixIts: ["insert newline", "insert ';'"]
+      )
+    ]
+
     assertParse(
-      "let a = 1️⃣\u{0}1",
-      diagnostics: [
-        DiagnosticSpec(message: "nul character embedded in middle of file", severity: .warning)
-      ]
+      "_ = true1️⃣ { return true }",
+      diagnostics: expectedDiagnostics,
+      fixedSource: """
+        _ = true
+        { return true }
+        """
+    )
+    assertParse(
+      "_ = nil1️⃣ { return nil }",
+      diagnostics: expectedDiagnostics,
+      fixedSource: """
+        _ = nil
+        { return nil }
+        """
+    )
+    assertParse(
+      "_ = 11️⃣ { return 1 }",
+      diagnostics: expectedDiagnostics,
+      fixedSource: """
+        _ = 1
+        { return 1 }
+        """
+    )
+    assertParse(
+      "_ = 1.01️⃣ { return 1.0 }",
+      diagnostics: expectedDiagnostics,
+      fixedSource: """
+        _ = 1.0
+        { return 1.0 }
+        """
+    )
+    assertParse(
+      #"_ = "foo"1️⃣ { return "foo" }"#,
+      diagnostics: expectedDiagnostics,
+      fixedSource: """
+        _ = "foo"
+        { return "foo" }
+        """
+    )
+    assertParse(
+      "_ = /foo/1️⃣ { return /foo/ }",
+      diagnostics: expectedDiagnostics,
+      fixedSource: """
+        _ = /foo/
+        { return /foo/ }
+        """
+    )
+    assertParse(
+      "_ = [1]1️⃣ { return [1] }",
+      diagnostics: expectedDiagnostics,
+      fixedSource: """
+        _ = [1]
+        { return [1] }
+        """
+    )
+    assertParse(
+      "_ = [1: 1]1️⃣ { return [1: 1] }",
+      diagnostics: expectedDiagnostics,
+      fixedSource: """
+        _ = [1: 1]
+        { return [1: 1] }
+        """
+    )
+
+    assertParse(
+      "_ = 1 + 11️⃣ { return 1 }",
+      diagnostics: expectedDiagnostics,
+      fixedSource: """
+        _ = 1 + 1
+        { return 1 }
+        """
     )
   }
 }

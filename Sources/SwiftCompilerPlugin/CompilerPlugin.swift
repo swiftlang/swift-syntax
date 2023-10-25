@@ -200,7 +200,7 @@ internal struct PluginHostConnection: MessageConnection {
 
     // Decode the count.
     let count = header.withUnsafeBytes {
-      UInt64(littleEndian: $0.load(as: UInt64.self))
+      UInt64(littleEndian: $0.loadUnaligned(as: UInt64.self))
     }
     guard count >= 2 else {
       throw PluginMessageError.invalidPayloadSize

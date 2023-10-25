@@ -19,52 +19,58 @@ extension Unicode.Scalar {
     // N1518: Recommendations for extended identifier characters for C and C++
     // Proposed Annex X.1: Ranges of characters allowed
     let c = self.value
-    return c == 0x00A8 || c == 0x00AA || c == 0x00AD || c == 0x00AF
-      || (c >= 0x00B2 && c <= 0x00B5) || (c >= 0x00B7 && c <= 0x00BA)
-      || (c >= 0x00BC && c <= 0x00BE) || (c >= 0x00C0 && c <= 0x00D6)
-      || (c >= 0x00D8 && c <= 0x00F6) || (c >= 0x00F8 && c <= 0x00FF)
+    return (c == 0x00A8) as Bool
+      || (c == 0x00AA) as Bool
+      || (c == 0x00AD) as Bool
+      || (c == 0x00AF) as Bool
+      || (c >= 0x00B2 && c <= 0x00B5) as Bool
+      || (c >= 0x00B7 && c <= 0x00BA) as Bool
+      || (c >= 0x00BC && c <= 0x00BE) as Bool
+      || (c >= 0x00C0 && c <= 0x00D6) as Bool
+      || (c >= 0x00D8 && c <= 0x00F6) as Bool
+      || (c >= 0x00F8 && c <= 0x00FF) as Bool
 
-      || (c >= 0x0100 && c <= 0x167F)
-      || (c >= 0x1681 && c <= 0x180D)
-      || (c >= 0x180F && c <= 0x1FFF)
+      || (c >= 0x0100 && c <= 0x167F) as Bool
+      || (c >= 0x1681 && c <= 0x180D) as Bool
+      || (c >= 0x180F && c <= 0x1FFF) as Bool
 
-      || (c >= 0x200B && c <= 0x200D)
-      || (c >= 0x202A && c <= 0x202E)
-      || (c >= 0x203F && c <= 0x2040)
-      || c == 0x2054
-      || (c >= 0x2060 && c <= 0x206F)
+      || (c >= 0x200B && c <= 0x200D) as Bool
+      || (c >= 0x202A && c <= 0x202E) as Bool
+      || (c >= 0x203F && c <= 0x2040) as Bool
+      || (c == 0x2054) as Bool
+      || (c >= 0x2060 && c <= 0x206F) as Bool
 
-      || (c >= 0x2070 && c <= 0x218F)
-      || (c >= 0x2460 && c <= 0x24FF)
-      || (c >= 0x2776 && c <= 0x2793)
-      || (c >= 0x2C00 && c <= 0x2DFF)
-      || (c >= 0x2E80 && c <= 0x2FFF)
+      || (c >= 0x2070 && c <= 0x218F) as Bool
+      || (c >= 0x2460 && c <= 0x24FF) as Bool
+      || (c >= 0x2776 && c <= 0x2793) as Bool
+      || (c >= 0x2C00 && c <= 0x2DFF) as Bool
+      || (c >= 0x2E80 && c <= 0x2FFF) as Bool
 
-      || (c >= 0x3004 && c <= 0x3007)
-      || (c >= 0x3021 && c <= 0x302F)
-      || (c >= 0x3031 && c <= 0x303F)
+      || (c >= 0x3004 && c <= 0x3007) as Bool
+      || (c >= 0x3021 && c <= 0x302F) as Bool
+      || (c >= 0x3031 && c <= 0x303F) as Bool
 
-      || (c >= 0x3040 && c <= 0xD7FF)
+      || (c >= 0x3040 && c <= 0xD7FF) as Bool
 
-      || (c >= 0xF900 && c <= 0xFD3D)
-      || (c >= 0xFD40 && c <= 0xFDCF)
-      || (c >= 0xFDF0 && c <= 0xFE44)
-      || (c >= 0xFE47 && c <= 0xFFF8)
+      || (c >= 0xF900 && c <= 0xFD3D) as Bool
+      || (c >= 0xFD40 && c <= 0xFDCF) as Bool
+      || (c >= 0xFDF0 && c <= 0xFE44) as Bool
+      || (c >= 0xFE47 && c <= 0xFFF8) as Bool
 
-      || (c >= 0x10000 && c <= 0x1FFFD)
-      || (c >= 0x20000 && c <= 0x2FFFD)
-      || (c >= 0x30000 && c <= 0x3FFFD)
-      || (c >= 0x40000 && c <= 0x4FFFD)
-      || (c >= 0x50000 && c <= 0x5FFFD)
-      || (c >= 0x60000 && c <= 0x6FFFD)
-      || (c >= 0x70000 && c <= 0x7FFFD)
-      || (c >= 0x80000 && c <= 0x8FFFD)
-      || (c >= 0x90000 && c <= 0x9FFFD)
-      || (c >= 0xA0000 && c <= 0xAFFFD)
-      || (c >= 0xB0000 && c <= 0xBFFFD)
-      || (c >= 0xC0000 && c <= 0xCFFFD)
-      || (c >= 0xD0000 && c <= 0xDFFFD)
-      || (c >= 0xE0000 && c <= 0xEFFFD)
+      || (c >= 0x10000 && c <= 0x1FFFD) as Bool
+      || (c >= 0x20000 && c <= 0x2FFFD) as Bool
+      || (c >= 0x30000 && c <= 0x3FFFD) as Bool
+      || (c >= 0x40000 && c <= 0x4FFFD) as Bool
+      || (c >= 0x50000 && c <= 0x5FFFD) as Bool
+      || (c >= 0x60000 && c <= 0x6FFFD) as Bool
+      || (c >= 0x70000 && c <= 0x7FFFD) as Bool
+      || (c >= 0x80000 && c <= 0x8FFFD) as Bool
+      || (c >= 0x90000 && c <= 0x9FFFD) as Bool
+      || (c >= 0xA0000 && c <= 0xAFFFD) as Bool
+      || (c >= 0xB0000 && c <= 0xBFFFD) as Bool
+      || (c >= 0xC0000 && c <= 0xCFFFD) as Bool
+      || (c >= 0xD0000 && c <= 0xDFFFD) as Bool
+      || (c >= 0xE0000 && c <= 0xEFFFD) as Bool
   }
 
   var isValidIdentifierStartCodePoint: Bool {

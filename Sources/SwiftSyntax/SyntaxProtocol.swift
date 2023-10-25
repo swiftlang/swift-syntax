@@ -89,7 +89,7 @@ public extension SyntaxProtocol {
     return S.init(self)
   }
 
-  /// Attempts to upcast the current syntax node to ``Syntax`` node..
+  /// Attempts to upcast the current syntax node to ``Syntax`` node.
   ///
   /// - Returns: The ``Syntax`` node created from the current syntax node, as the node can always be upcast to ``Syntax`` node.
   ///

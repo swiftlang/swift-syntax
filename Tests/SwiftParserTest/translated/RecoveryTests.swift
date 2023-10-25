@@ -1810,14 +1810,14 @@ final class RecoveryTests: ParserTestCase {
     assertParse(
       """
       struct ErrorInFunctionSignatureResultArrayType2 1️⃣{
-        func foo() -> Int2️⃣[0 {
+        func foo() -> Int2️⃣[0 3️⃣{
           return [0]
-        }3️⃣
-      4️⃣}
+        }4️⃣
+      5️⃣}
       """,
       diagnostics: [
-        // TODO: Old parser expected error on line 2: expected ']' in array type
-        // TODO: Old parser expected note on line 2: to match this opening '['
+        // TODO: Old parser expected error to add `]` on line 2, but we should just recover to
+        //       `{` with `[0` becoming unexpected.
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "expected '}' to end struct",
@@ -1826,19 +1826,24 @@ final class RecoveryTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
+          message: "expected ',' in array element",
+          fixIts: ["insert ','"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
           message: "expected ']' to end array",
           notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '['")],
           fixIts: ["insert ']'"]
         ),
         DiagnosticSpec(
-          locationMarker: "4️⃣",
+          locationMarker: "5️⃣",
           message: "extraneous brace at top level"
         ),
       ],
       fixedSource: """
         struct ErrorInFunctionSignatureResultArrayType2 {
           func foo() -> Int
-        }[0 {
+        }[0, {
             return [0]
           }]
         }
@@ -1895,11 +1900,12 @@ final class RecoveryTests: ParserTestCase {
     assertParse(
       """
       struct ErrorInFunctionSignatureResultArrayType11 ℹ️{
-        func foo() -> Int1️⃣[(a){a++}] {
+        func foo() -> Int1️⃣[(a){a++}]2️⃣ {
         }
-      2️⃣}
+      3️⃣}
       """,
       diagnostics: [
+        // TODO: We should just recover to `{` with `[(a){a++}]` becoming unexpected.
         DiagnosticSpec(
           locationMarker: "1️⃣",
           message: "expected '}' to end struct",
@@ -1908,13 +1914,19 @@ final class RecoveryTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
           message: "extraneous brace at top level"
         ),
       ],
       fixedSource: """
         struct ErrorInFunctionSignatureResultArrayType11 {
           func foo() -> Int
-        }[(a){a++}] {
+        }[(a){a++}]
+          {
           }
         }
         """

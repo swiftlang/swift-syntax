@@ -17,11 +17,11 @@ extension DeclarationModifier {
     switch self {
     case .__consuming, .__setter_access, ._const, ._local, .async,
       .borrowing, .class, .consuming, .convenience, .distributed, .dynamic,
-      .final, .indirect, .infix, .isolated, .lazy, .mutating, .nonisolated,
-      .nonmutating, .optional, .override, .postfix, .prefix, .reasync,
-      .required, .rethrows, .static, .weak:
+      .final, .indirect, .infix, .isolated, .lazy, .mutating, .nonmutating,
+      .optional, .override, .postfix, .prefix, .reasync, .required,
+      .rethrows, .static, .weak:
       return false
-    case .fileprivate, .internal, .package, .open, .private,
+    case .fileprivate, .internal, .nonisolated, .package, .open, .private,
       .public, .unowned:
       return true
     }

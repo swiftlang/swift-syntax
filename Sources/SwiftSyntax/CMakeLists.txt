@@ -16,6 +16,7 @@ add_swift_syntax_library(SwiftSyntax
   Convenience.swift
   MemoryLayout.swift
   MissingNodeInitializers.swift
+  SourceEdit.swift
   SourceLength.swift
   SourceLocation.swift
   SourcePresence.swift

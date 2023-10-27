@@ -14,20 +14,6 @@ import SwiftDiagnostics
 import SwiftSyntax
 
 public enum FixItApplier {
-  struct Edit: Equatable {
-    var startUtf8Offset: Int
-    var endUtf8Offset: Int
-    let replacement: String
-
-    var replacementLength: Int {
-      return replacement.utf8.count
-    }
-
-    var replacementRange: Range<Int> {
-      return startUtf8Offset..<endUtf8Offset
-    }
-  }
-
   /// Applies selected or all Fix-Its from the provided diagnostics to a given syntax tree.
   ///
   /// - Parameters:
@@ -44,13 +30,12 @@ public enum FixItApplier {
   ) -> String {
     let messages = messages ?? diagnostics.compactMap { $0.fixIts.first?.message.message }
 
-    let changes =
+    var edits =
       diagnostics
       .flatMap(\.fixIts)
       .filter { messages.contains($0.message.message) }
-      .flatMap(\.changes)
+      .flatMap(\.edits)
 
-    var edits: [Edit] = changes.map(\.edit)
     var source = tree.description
 
     while let edit = edits.first {
@@ -61,9 +46,7 @@ public enum FixItApplier {
 
       source.replaceSubrange(startIndex..<endIndex, with: edit.replacement)
 
-      edits = edits.compactMap { remainingEdit -> FixItApplier.Edit? in
-        var remainingEdit = remainingEdit
-
+      edits = edits.compactMap { remainingEdit -> SourceEdit? in
         if remainingEdit.replacementRange.overlaps(edit.replacementRange) {
           // The edit overlaps with the previous edit. We can't apply both
           // without conflicts. Apply the one that's listed first and drop the
@@ -74,8 +57,9 @@ public enum FixItApplier {
         // If the remaining edit starts after or at the end of the edit that we just applied,
         // shift it by the current edit's difference in length.
         if edit.endUtf8Offset <= remainingEdit.startUtf8Offset {
-          remainingEdit.startUtf8Offset = remainingEdit.startUtf8Offset - edit.replacementRange.count + edit.replacementLength
-          remainingEdit.endUtf8Offset = remainingEdit.endUtf8Offset - edit.replacementRange.count + edit.replacementLength
+          let startPosition = AbsolutePosition(utf8Offset: remainingEdit.startUtf8Offset - edit.replacementRange.count + edit.replacementLength)
+          let endPosition = AbsolutePosition(utf8Offset: remainingEdit.endUtf8Offset - edit.replacementRange.count + edit.replacementLength)
+          return SourceEdit(range: startPosition..<endPosition, replacement: remainingEdit.replacement)
         }
 
         return remainingEdit
@@ -86,29 +70,20 @@ public enum FixItApplier {
   }
 }
 
-fileprivate extension FixIt.Change {
-  var edit: FixItApplier.Edit {
-    switch self {
-    case .replace(let oldNode, let newNode):
-      return FixItApplier.Edit(
-        startUtf8Offset: oldNode.position.utf8Offset,
-        endUtf8Offset: oldNode.endPosition.utf8Offset,
-        replacement: newNode.description
-      )
+private extension SourceEdit {
+  var startUtf8Offset: Int {
+    return range.lowerBound.utf8Offset
+  }
 
-    case .replaceLeadingTrivia(let token, let newTrivia):
-      return FixItApplier.Edit(
-        startUtf8Offset: token.position.utf8Offset,
-        endUtf8Offset: token.positionAfterSkippingLeadingTrivia.utf8Offset,
-        replacement: newTrivia.description
-      )
+  var endUtf8Offset: Int {
+    return range.upperBound.utf8Offset
+  }
 
-    case .replaceTrailingTrivia(let token, let newTrivia):
-      return FixItApplier.Edit(
-        startUtf8Offset: token.endPositionBeforeTrailingTrivia.utf8Offset,
-        endUtf8Offset: token.endPosition.utf8Offset,
-        replacement: newTrivia.description
-      )
-    }
+  var replacementLength: Int {
+    return replacement.utf8.count
+  }
+
+  var replacementRange: Range<Int> {
+    return startUtf8Offset..<endUtf8Offset
   }
 }

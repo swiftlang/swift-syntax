@@ -3072,4 +3072,11 @@ final class DeclarationTests: ParserTestCase {
       """
     )
   }
+
+  func testLiteralInitializerWithTrailingClosure() {
+    assertParse(
+      "let foo = 1 { return 1 }",
+      substructure: AccessorBlockSyntax(accessors: .getter([CodeBlockItemSyntax("return 1")]))
+    )
+  }
 }

@@ -790,7 +790,7 @@ extension Parser {
       }
 
       // Check for a trailing closure, if allowed.
-      if self.at(.leftBrace) && self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) }) {
+      if self.at(.leftBrace) && !leadingExpr.raw.kind.isLiteral && self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) }) {
         // FIXME: if Result has a trailing closure, break out.
         // Add dummy blank argument list to the call expression syntax.
         let list = RawLabeledExprListSyntax(elements: [], arena: self.arena)
@@ -2540,6 +2540,17 @@ extension Parser.Lookahead {
       return false
     default:
       return true
+    }
+  }
+}
+
+extension SyntaxKind {
+  fileprivate var isLiteral: Bool {
+    switch self {
+    case .arrayExpr, .booleanLiteralExpr, .dictionaryExpr, .floatLiteralExpr, .integerLiteralExpr, .nilLiteralExpr, .regexLiteralExpr, .stringLiteralExpr:
+      return true
+    default:
+      return false
     }
   }
 }

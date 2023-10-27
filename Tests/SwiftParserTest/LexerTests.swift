@@ -1495,4 +1495,13 @@ public class LexerTests: ParserTestCase {
       ]
     )
   }
+
+  func testNulCharacterInSourceFile() {
+    assertParse(
+      "let a = 1️⃣\u{0}1",
+      diagnostics: [
+        DiagnosticSpec(message: "nul character embedded in middle of file", severity: .warning)
+      ]
+    )
+  }
 }

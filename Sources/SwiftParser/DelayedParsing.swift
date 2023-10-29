@@ -13,13 +13,23 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
-  mutating func skippedBraceBody(unless: Lookahead.SkipBodyResult) -> RawSkippedDeclSyntax? {
+  struct SkipBodyCondition: OptionSet {
+    let rawValue: UInt8
+
+    static let hasPoundDirective = Self(rawValue: 1 << 0)
+    static let hasOperatorDeclarations = Self(rawValue: 1 << 1)
+    static let hasNestedClassDeclarations = Self(rawValue: 1 << 2)
+    static let hasNestedTypeDeclarations = Self(rawValue: 1 << 3)
+    static let hasPotentialRegexLiteral = Self(rawValue: 1 << 4)
+  }
+
+  mutating func skippedBraceBody(unless: SkipBodyCondition) -> RawSkippedDeclSyntax? {
     return self.withLookahead { lookahead in
-      let result = lookahead.advanceUntilMatchingRightBrace()
-      guard result.isDisjoint(with: unless) else {
+      guard lookahead.advanceUntilMatchingRightBrace(until: unless) == .skipped else {
         return nil
       }
 
+      // Skipped region as a single SyntaxText.
       let wholeText = SyntaxText(
         baseAddress: self.currentToken.start,
         count: self.currentToken.start.distance(to: lookahead.currentToken.start)
@@ -43,74 +53,67 @@ extension Parser {
   }
 }
 
-extension Parser.Lookahead {
-  struct SkipBodyResult: OptionSet {
-    let rawValue: UInt8
-
-    static let hasPoundDirective = Self(rawValue: 1 << 0)
-    static let hasOperatorDeclarations = Self(rawValue: 1 << 1)
-    static let hasNestedClassDeclarations = Self(rawValue: 1 << 2)
-    static let hasNestedTypeDeclarations = Self(rawValue: 1 << 3)
-    static let hasPotentialRegexLiteral = Self(rawValue: 1 << 4)
+fileprivate extension Parser.Lookahead {
+  enum SkipBodyResult {
+    case untilConditionMet
+    case skipped
   }
 
-  mutating func advanceUntilMatchingRightBrace() -> SkipBodyResult {
-    var openBraces = 0
+  mutating func advanceUntilMatchingRightBrace(until: Parser.SkipBodyCondition) -> SkipBodyResult {
+    var openBraces = 1
 
     var lastTokenWasFunc = false
 
-    var result = SkipBodyResult()
-
     while self.currentToken.rawTokenKind != .endOfFile {
-      let token = self.currentToken
-      if !result.contains(.hasPoundDirective) && (
-        token.rawTokenKind == .poundIf ||
-        token.rawTokenKind == .poundElseif ||
-        token.rawTokenKind == .poundElse ||
-        token.rawTokenKind == .poundEndif ||
-        token.rawTokenKind == .poundSourceLocation
+      let tokenKind = currentToken.rawTokenKind
+      let tokenText = currentToken.tokenText
+
+      if until.contains(.hasPoundDirective) && (
+        tokenKind == .poundIf ||
+        tokenKind == .poundSourceLocation
       ) {
-        result.insert(.hasPoundDirective)
+        return .untilConditionMet
       }
 
-      if lastTokenWasFunc && !result.contains(.hasOperatorDeclarations) && (
-        token.rawTokenKind == .binaryOperator ||
-        token.rawTokenKind == .prefixOperator ||
-        token.rawTokenKind == .postfixOperator
+      if until.contains(.hasNestedClassDeclarations) && (
+        tokenKind == .keyword && tokenText == "class"
       ) {
-        result.insert(.hasOperatorDeclarations)
-      }
-      lastTokenWasFunc = token.rawTokenKind == .keyword && token.tokenText == "func"
-
-      if !result.contains(.hasNestedClassDeclarations) && (
-        token.rawTokenKind == .keyword &&
-        token.tokenText == "class"
-      ) {
-        result.insert(.hasNestedClassDeclarations)
+        return .untilConditionMet
       }
 
-      if !result.contains(.hasNestedClassDeclarations) && (
-        token.rawTokenKind == .keyword && (
-          token.tokenText == "class" ||
-          token.tokenText == "enum" ||
-          token.tokenText == "struct" ||
-          token.tokenText == "actor"
+      if until.contains(.hasNestedClassDeclarations) && (
+        tokenKind == .keyword && (
+          tokenText == "enum" ||
+          tokenText == "struct" ||
+          tokenText == "class" ||
+          tokenText == "actor"
         )
       ) {
-        result.insert(.hasNestedTypeDeclarations)
+        return .untilConditionMet
       }
 
-      if token.rawTokenKind == .leftBrace {
+      if until.contains(.hasOperatorDeclarations) {
+        if lastTokenWasFunc && (
+          tokenKind == .binaryOperator ||
+          tokenKind == .prefixOperator ||
+          tokenKind == .postfixOperator
+        ) {
+          return .untilConditionMet
+        }
+        lastTokenWasFunc = tokenKind == .keyword && tokenText == "func"
+      }
+
+      if currentToken.rawTokenKind == .leftBrace {
         openBraces += 1
-      } else if token.rawTokenKind == .rightBrace {
+      } else if currentToken.rawTokenKind == .rightBrace {
+        openBraces -= 1
         if openBraces == 0 {
           break
-        } else {
-          openBraces -= 1
         }
       }
       self.consumeAnyToken()
     }
-    return result
+
+    return .skipped
   }
 }

@@ -13,19 +13,50 @@
 @_spi(RawSyntax) import SwiftSyntax
 
 extension Parser {
-  struct SkipBodyCondition: OptionSet {
-    let rawValue: UInt8
-
-    static let hasPoundDirective = Self(rawValue: 1 << 0)
-    static let hasOperatorDeclarations = Self(rawValue: 1 << 1)
-    static let hasNestedClassDeclarations = Self(rawValue: 1 << 2)
-    static let hasNestedTypeDeclarations = Self(rawValue: 1 << 3)
-    static let hasPotentialRegexLiteral = Self(rawValue: 1 << 4)
+  mutating func skippedFunctionBody() -> RawSkippedDeclSyntax? {
+    return self.skippedBraceBody(while: { tokenKind, tokenText in
+      // If the function body contains a type decl, don't skip.
+      if tokenKind == .keyword && (
+        tokenText == "enum" ||
+        tokenText == "struct" ||
+        tokenText == "class" ||
+        tokenText == "actor"
+      ) {
+        return false
+      }
+      return true
+    })
   }
 
-  mutating func skippedBraceBody(unless: SkipBodyCondition) -> RawSkippedDeclSyntax? {
+  mutating func skippedMemberBody() -> RawSkippedDeclSyntax? {
+    var lastTokenWasFunc: Bool = false
+    return self.skippedBraceBody(while: { tokenKind, tokenText in
+
+      // '#' directives.
+      if tokenKind == .poundIf || tokenKind == .poundSourceLocation {
+        return false
+      }
+
+      // Nested class. Because?
+      if tokenKind == .keyword && tokenText == "class" {
+        return false
+      }
+
+      // Operator functions. Because they're visible from top-level.
+      if lastTokenWasFunc && (
+        tokenKind == .binaryOperator || tokenKind == .prefixOperator || tokenKind == .postfixOperator
+      ) {
+        return false
+      }
+      lastTokenWasFunc = tokenKind == .keyword && tokenText == "func"
+
+      return true
+    })
+  }
+
+  fileprivate mutating func skippedBraceBody(while condition: (_ tokenKind: RawTokenKind, _ tokenText: SyntaxText) -> Bool) -> RawSkippedDeclSyntax? {
     return self.withLookahead { lookahead in
-      guard lookahead.advanceUntilMatchingRightBrace(until: unless) == .skipped else {
+      guard lookahead.advanceUntilMatchingRightBrace(while: condition) == .reachedToEnd else {
         return nil
       }
 
@@ -55,57 +86,24 @@ extension Parser {
 
 fileprivate extension Parser.Lookahead {
   enum SkipBodyResult {
-    case untilConditionMet
-    case skipped
+    case aborted
+    case reachedToEnd
   }
 
-  mutating func advanceUntilMatchingRightBrace(until: Parser.SkipBodyCondition) -> SkipBodyResult {
+  mutating func advanceUntilMatchingRightBrace(while condition: (_ tokenKind: RawTokenKind, _ tokenText: SyntaxText) -> Bool) -> SkipBodyResult {
     var openBraces = 1
-
-    var lastTokenWasFunc = false
 
     while self.currentToken.rawTokenKind != .endOfFile {
       let tokenKind = currentToken.rawTokenKind
       let tokenText = currentToken.tokenText
 
-      if until.contains(.hasPoundDirective) && (
-        tokenKind == .poundIf ||
-        tokenKind == .poundSourceLocation
-      ) {
-        return .untilConditionMet
+      guard condition(tokenKind, tokenText) else {
+        return .aborted
       }
 
-      if until.contains(.hasNestedClassDeclarations) && (
-        tokenKind == .keyword && tokenText == "class"
-      ) {
-        return .untilConditionMet
-      }
-
-      if until.contains(.hasNestedClassDeclarations) && (
-        tokenKind == .keyword && (
-          tokenText == "enum" ||
-          tokenText == "struct" ||
-          tokenText == "class" ||
-          tokenText == "actor"
-        )
-      ) {
-        return .untilConditionMet
-      }
-
-      if until.contains(.hasOperatorDeclarations) {
-        if lastTokenWasFunc && (
-          tokenKind == .binaryOperator ||
-          tokenKind == .prefixOperator ||
-          tokenKind == .postfixOperator
-        ) {
-          return .untilConditionMet
-        }
-        lastTokenWasFunc = tokenKind == .keyword && tokenText == "func"
-      }
-
-      if currentToken.rawTokenKind == .leftBrace {
+      if tokenKind == .leftBrace {
         openBraces += 1
-      } else if currentToken.rawTokenKind == .rightBrace {
+      } else if tokenKind == .rightBrace {
         openBraces -= 1
         if openBraces == 0 {
           break
@@ -114,6 +112,6 @@ fileprivate extension Parser.Lookahead {
       self.consumeAnyToken()
     }
 
-    return .skipped
+    return .reachedToEnd
   }
 }

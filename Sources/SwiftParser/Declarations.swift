@@ -783,9 +783,7 @@ extension Parser {
     let members: RawMemberBlockItemListSyntax
     if allowSkip,
        self.options.contains(.bodySkipping),
-       let skipped = self.skippedBraceBody(
-      unless: [.hasNestedClassDeclarations, .hasOperatorDeclarations, .hasPoundDirective]
-    ) {
+       let skipped = self.skippedMemberBody() {
       let member = RawMemberBlockItemSyntax(decl: .init(skipped), semicolon: nil, arena: self.arena)
       members = RawMemberBlockItemListSyntax(elements: [member], arena: self.arena)
     } else {

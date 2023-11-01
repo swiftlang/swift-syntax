@@ -36,16 +36,12 @@ struct VerifySourceCode: ParsableCommand, SourceCodeGeneratorCommand {
 
     logSection("Verifing code generated files")
 
-    guard let diffExec = Paths.diffExec else {
-      throw ScriptExectutionError(message: "Didn't find a diff execution path")
-    }
-
     for module in modules {
       let selfGeneratedDir = tempDir.appendingPathComponent(module).appendingPathComponent("generated")
       let userGeneratedDir = Paths.sourcesDir.appendingPathComponent(module).appendingPathComponent("generated")
 
       let process = ProcessRunner(
-        executableURL: diffExec,
+        executableURL: try Paths.diffExec,
         arguments: [
           "--recursive",
           "--exclude",

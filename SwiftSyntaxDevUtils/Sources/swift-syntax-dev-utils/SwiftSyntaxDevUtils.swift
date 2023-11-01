@@ -26,6 +26,7 @@ struct SwiftSyntaxDevUtils: ParsableCommand {
       """,
     subcommands: [
       Build.self,
+      Format.self,
       GenerateSourceCode.self,
       Test.self,
       VerifySourceCode.self,

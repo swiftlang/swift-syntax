@@ -86,16 +86,8 @@ extension BuildCommand {
   @discardableResult
   func invokeXcodeBuild(projectPath: URL, scheme: String) throws -> ProcessResult {
     return try withTemporaryDirectory { tempDir in
-      guard let xcodebuildExec = Paths.xcodebuildExec else {
-        throw ScriptExectutionError(
-          message: """
-            Error: Could not find xcodebuild.
-            Looking at '\(Paths.xcodebuildExec?.path ?? "N/A")'.
-            """
-        )
-      }
       let processRunner = ProcessRunner(
-        executableURL: xcodebuildExec,
+        executableURL: try Paths.xcodebuildExec,
         arguments: [
           "-project", projectPath.path,
           "-scheme", scheme,

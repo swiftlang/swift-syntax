@@ -66,16 +66,40 @@ enum Paths {
       .appendingPathComponent("lit.py")
   }
 
-  static var python3Exec: URL? {
-    return lookupExecutable(for: "python3")
+  static var python3Exec: URL {
+    get throws {
+      return try lookupExecutable(for: "python3")
+    }
   }
 
-  static var diffExec: URL? {
-    return lookupExecutable(for: "diff")
+  static var diffExec: URL {
+    get throws {
+      return try lookupExecutable(for: "diff")
+    }
   }
 
-  static var xcodebuildExec: URL? {
-    return lookupExecutable(for: "xcodebuild")
+  static var gitExec: URL {
+    get throws {
+      try lookupExecutable(for: "git")
+    }
+  }
+
+  static var swiftExec: URL {
+    get throws {
+      try lookupExecutable(for: "swift")
+    }
+  }
+
+  /// The directory in which swift-format should be built.
+  static var swiftFormatBuildDir: URL {
+    packageDir
+      .appendingPathComponent(".swift-format-build")
+  }
+
+  static var xcodebuildExec: URL {
+    get throws {
+      return try lookupExecutable(for: "xcodebuild")
+    }
   }
 
   private static var envSearchPaths: [URL] {
@@ -103,13 +127,28 @@ enum Paths {
     return ProcessInfo.processInfo.environment[pathArg]
   }
 
-  private static func lookupExecutable(for filename: String) -> URL? {
-    return envSearchPaths.map { $0.appendingPathComponent(filename) }
+  enum ExecutableLookupError: Error, CustomStringConvertible {
+    case notFound(executableName: String)
+
+    var description: String {
+      switch self {
+      case .notFound(executableName: let executableName):
+        return "Executable \(executableName) not found in PATH"
+      }
+    }
+  }
+
+  private static func lookupExecutable(for filename: String) throws -> URL {
+    let executable = envSearchPaths.map { $0.appendingPathComponent(filename) }
       .first(where: { $0.isExecutableFile })
+    guard let executable else {
+      throw ExecutableLookupError.notFound(executableName: filename)
+    }
+    return executable
   }
 }
 
-fileprivate extension URL {
+extension URL {
   var isExecutableFile: Bool {
     return (self.isFile(path) || self.isSymlink(path)) && FileManager.default.isExecutableFile(atPath: path)
   }

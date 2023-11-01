@@ -26,3 +26,6 @@ Package.resolved
 *.pyc
 
 Tests/PerformanceTest/baselines.json
+
+# The local build of swift-format to format swift-syntax
+.swift-format-build

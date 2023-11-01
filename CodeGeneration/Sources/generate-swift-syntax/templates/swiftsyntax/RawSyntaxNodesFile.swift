@@ -218,9 +218,9 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
               let list = ExprListSyntax {
                 ExprSyntax("layout.initialize(repeating: nil)")
                 for (index, child) in node.children.enumerated() {
-                  let optionalMark = child.isOptional ? TokenSyntax.postfixQuestionMarkToken() : nil
+                  let optionalMark = child.isOptional ? "?" : ""
 
-                  ExprSyntax("layout[\(raw: index)] = \(child.varOrCaseName.backtickedIfNeeded)\(optionalMark).raw")
+                  ExprSyntax("layout[\(raw: index)] = \(child.varOrCaseName.backtickedIfNeeded)\(raw: optionalMark).raw")
                     .with(\.leadingTrivia, .newline)
                 }
               }
@@ -241,12 +241,12 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
           for (index, child) in node.children.enumerated() {
             try VariableDeclSyntax("public var \(child.varOrCaseName.backtickedIfNeeded): Raw\(child.buildableType.buildable)") {
-              let exclamationMark = child.isOptional ? nil : TokenSyntax.exclamationMarkToken()
+              let exclamationMark = child.isOptional ? "" : "!"
 
               if child.syntaxNodeKind == .syntax {
-                ExprSyntax("layoutView.children[\(raw: index)]\(exclamationMark)")
+                ExprSyntax("layoutView.children[\(raw: index)]\(raw: exclamationMark)")
               } else {
-                ExprSyntax("layoutView.children[\(raw: index)].map(\(child.syntaxNodeKind.rawType).init(raw:))\(exclamationMark)")
+                ExprSyntax("layoutView.children[\(raw: index)].map(\(child.syntaxNodeKind.rawType).init(raw:))\(raw: exclamationMark)")
               }
             }
           }

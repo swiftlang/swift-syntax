@@ -44,12 +44,15 @@ public class ProcessRunner {
   public init(
     executableURL: URL,
     arguments: [String],
-    additionalEnvironment: [String: String] = [:]
+    additionalEnvironment: [String: String?] = [:]
   ) {
     process = Process()
     process.executableURL = executableURL
     process.arguments = arguments
-    process.environment = additionalEnvironment.merging(ProcessInfo.processInfo.environment) { (additional, _) in additional }
+    process.environment = ProcessInfo.processInfo.environment
+    for (key, value) in additionalEnvironment {
+      process.environment![key] = value
+    }
   }
 
   @discardableResult

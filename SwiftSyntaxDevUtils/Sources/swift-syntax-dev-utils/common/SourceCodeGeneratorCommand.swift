@@ -35,6 +35,7 @@ extension SourceCodeGeneratorCommand {
     let additionalEnvironment = [
       "SWIFT_BUILD_SCRIPT_ENVIRONMENT": "1",
       "SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION": "1",
+      "SWIFTCI_USE_LOCAL_DEPS": nil,
     ]
 
     let process = ProcessRunner(

@@ -26,12 +26,12 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     ) {
       for child in trait.children {
-        let questionMark = child.isOptional ? TokenSyntax.postfixQuestionMarkToken() : nil
+        let questionMark = child.isOptional ? "?" : ""
 
         DeclSyntax(
           """
           \(child.documentation)
-          \(child.apiAttributes)var \(child.varOrCaseName): \(child.syntaxNodeKind.syntaxType)\(questionMark) { get set }
+          \(child.apiAttributes)var \(child.varOrCaseName): \(child.syntaxNodeKind.syntaxType)\(raw: questionMark) { get set }
           """
         )
       }

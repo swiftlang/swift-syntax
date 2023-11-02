@@ -124,22 +124,20 @@ function(add_swift_syntax_library name)
     endif()
   endif()
 
-  if(PROJECT_IS_TOP_LEVEL)
-    # Install this target
-    install(TARGETS ${name}
-      EXPORT SwiftSyntaxTargets
-      ARCHIVE DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
-      LIBRARY DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
-      RUNTIME DESTINATION bin
-    )
+  # Install this target
+  install(TARGETS ${name}
+    EXPORT SwiftSyntaxTargets
+    ARCHIVE DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
+    LIBRARY DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
+    RUNTIME DESTINATION bin
+  )
 
-    # Install the module files.
-    install(
-      DIRECTORY ${module_base}
-      DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
-      FILES_MATCHING PATTERN "*.swiftinterface"
-    )
-  else()
+  # Install the module files.
+  install(DIRECTORY ${module_base}
+          DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
+          FILES_MATCHING PATTERN "*.swiftinterface")
+
+  if(NOT PROJECT_IS_TOP_LEVEL)
     set_property(GLOBAL APPEND PROPERTY SWIFT_EXPORTS ${name})
   endif()
 endfunction()

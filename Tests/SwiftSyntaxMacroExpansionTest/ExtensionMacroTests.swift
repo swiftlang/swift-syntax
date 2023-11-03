@@ -168,6 +168,87 @@ final class ExtensionMacroTests: XCTestCase {
       ]
     )
   }
+
+  func testConditionalExtensionExpansion() {
+    struct CodableExtensionMacro: ExtensionMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        attachedTo: some DeclGroupSyntax,
+        providingExtensionsOf type: some TypeSyntaxProtocol,
+        conformingTo protocols: [TypeSyntax],
+        in context: some MacroExpansionContext
+      ) throws -> [ExtensionDeclSyntax] {
+        let extensions: [ExtensionDeclSyntax] = protocols.compactMap { `protocol` in
+          let decl = """
+            extension \(type.trimmed): \(`protocol`) {}
+            """ as DeclSyntax
+          return decl.as(ExtensionDeclSyntax.self)
+        }
+
+        return extensions
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @AddCodableExtensions
+      struct MyType {
+      }
+      """,
+      expandedSource: """
+
+        struct MyType {
+        }
+
+        extension MyType: Decodable {
+        }
+
+        extension MyType: Encodable {
+        }
+        """,
+      macroSpecs: ["AddCodableExtensions": MacroSpec(type: CodableExtensionMacro.self, conformances: ["Decodable", "Encodable"])],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      struct Wrapper {
+        @AddCodableExtensions
+        struct MyType {
+        }
+      }
+      """,
+      expandedSource: """
+        struct Wrapper {
+          struct MyType {
+          }
+        }
+
+        extension Wrapper.MyType: Encodable {
+        }
+        """,
+      macroSpecs: ["AddCodableExtensions": MacroSpec(type: CodableExtensionMacro.self, conformances: ["Encodable"])],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      struct Wrapper {
+        @AddCodableExtensions
+        struct MyType {
+        }
+      }
+      """,
+      expandedSource: """
+        struct Wrapper {
+          struct MyType {
+          }
+        }
+        """,
+      macros: ["AddCodableExtensions": CodableExtensionMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
 }
 
 fileprivate struct SendableExtensionMacro: ExtensionMacro {

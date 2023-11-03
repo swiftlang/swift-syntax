@@ -5,6 +5,7 @@ add_swift_syntax_library(SwiftSyntaxMacroExpansion
   MacroExpansion.swift
   MacroExpansionDiagnosticMessages.swift
   MacroReplacement.swift
+  MacroSpec.swift
   MacroSystem.swift
 )
 

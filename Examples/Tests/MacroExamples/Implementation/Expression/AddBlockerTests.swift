@@ -39,6 +39,33 @@ final class AddBlockerTests: XCTestCase {
     )
   }
 
+  func testExpansionWithSubtractionAppliesFixIt() {
+    assertMacroExpansion(
+      """
+      #addBlocker(x * y + z)
+      """,
+      expandedSource: """
+        x * y - z
+        """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "blocked an add; did you mean to subtract?",
+          line: 1,
+          column: 19,
+          severity: .warning,
+          fixIts: [FixItSpec(message: "use '-'")]
+        )
+      ],
+      macros: macros,
+      applyFixIts: ["use '-'"],
+      fixedSource:
+        """
+        #addBlocker(x * y - z)
+        """,
+      indentationWidth: .spaces(2)
+    )
+  }
+
   func testExpansionPreservesSubtraction() {
     assertMacroExpansion(
       """

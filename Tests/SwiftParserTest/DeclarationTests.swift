@@ -2313,7 +2313,7 @@ final class DeclarationTests: ParserTestCase {
         1️⃣<#code#>
       }
       """,
-      substructure: MemberBlockItemSyntax(decl: EditorPlaceholderDeclSyntax(placeholder: .identifier("<#code#>"))),
+      substructure: MemberBlockItemSyntax(decl: MissingDeclSyntax(placeholder: .identifier("<#code#>"))),
       diagnostics: [
         DiagnosticSpec(message: "editor placeholder in source file")
       ]
@@ -2847,8 +2847,8 @@ final class DeclarationTests: ParserTestCase {
             CodeBlockItemSyntax(
               item: .expr(
                 ExprSyntax(
-                  EditorPlaceholderExprSyntax(
-                    placeholder: .identifier("<#function body#>")
+                  DeclReferenceExprSyntax(
+                    baseName: .identifier("<#function body#>")
                   )
                 )
               )
@@ -2892,8 +2892,8 @@ final class DeclarationTests: ParserTestCase {
             CodeBlockItemSyntax(
               item: .expr(
                 ExprSyntax(
-                  EditorPlaceholderExprSyntax(
-                    placeholder: .identifier("<#function body#>")
+                  DeclReferenceExprSyntax(
+                    baseName: .identifier("<#function body#>")
                   )
                 )
               )

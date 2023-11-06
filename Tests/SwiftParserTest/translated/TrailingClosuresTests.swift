@@ -185,7 +185,7 @@ final class TrailingClosuresTests: ParserTestCase {
           leftBrace: .leftBraceToken(presence: .missing),
           statements: CodeBlockItemListSyntax([
             CodeBlockItemSyntax(
-              item: .init(EditorPlaceholderExprSyntax(placeholder: .identifier("<#T##() -> Void#>")))
+              item: .init(DeclReferenceExprSyntax(baseName: .identifier("<#T##() -> Void#>")))
             )
           ]),
           rightBrace: .rightBraceToken(presence: .missing)

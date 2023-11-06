@@ -1241,14 +1241,6 @@ extension Parser {
   mutating func parseIdentifierExpression() -> RawExprSyntax {
     let declName = self.parseDeclReferenceExpr(.compoundNames)
     guard self.withLookahead({ $0.canParseAsGenericArgumentList() }) else {
-      if declName.baseName.tokenText.isEditorPlaceholder && declName.argumentNames == nil {
-        return RawExprSyntax(
-          RawEditorPlaceholderExprSyntax(
-            placeholder: declName.baseName,
-            arena: self.arena
-          )
-        )
-      }
       return RawExprSyntax(declName)
     }
 

@@ -112,7 +112,7 @@ fileprivate func assertRefactorPlaceholderCall(
   var parser = Parser(expr)
   let call = try XCTUnwrap(ExprSyntax.parse(from: &parser).as(FunctionCallExprSyntax.self), file: file, line: line)
   let arg = call.arguments[call.arguments.index(at: placeholder)]
-  let token: TokenSyntax = try XCTUnwrap(arg.expression.as(EditorPlaceholderExprSyntax.self), file: file, line: line).placeholder
+  let token: TokenSyntax = try XCTUnwrap(arg.expression.as(DeclReferenceExprSyntax.self), file: file, line: line).baseName
 
   try assertRefactor(token, context: (), provider: ExpandEditorPlaceholders.self, expected: [SourceEdit.replace(call, with: expected)], file: file, line: line)
 }
@@ -127,7 +127,7 @@ fileprivate func assertRefactorPlaceholderToken(
   var parser = Parser(expr)
   let call = try XCTUnwrap(ExprSyntax.parse(from: &parser).as(FunctionCallExprSyntax.self), file: file, line: line)
   let arg = call.arguments[call.arguments.index(at: placeholder)]
-  let token: TokenSyntax = try XCTUnwrap(arg.expression.as(EditorPlaceholderExprSyntax.self), file: file, line: line).placeholder
+  let token: TokenSyntax = try XCTUnwrap(arg.expression.as(DeclReferenceExprSyntax.self), file: file, line: line).baseName
 
   try assertRefactor(token, context: (), provider: ExpandEditorPlaceholders.self, expected: [SourceEdit.replace(token, with: expected)], file: file, line: line)
 }

@@ -381,7 +381,18 @@ extension ParseDiagnosticsGenerator {
 
     // Walk all upcoming sibling to see if they are also missing to handle them in this diagnostic.
     // If this is the case, handle all of them in this diagnostic.
-    var missingNodes = [Syntax(node)]
+    var missingNodes: [Syntax] = [Syntax(node)]
+
+    // If the node is an `MissingDeclSyntax` and the placeholder is an editor placeholder
+    // we should not add a diagnostic that it's missing.
+    // Instead, we should emit a diagnostic about the fact that there is an editor placeholder in the source file.
+    if let missing = missingNodes.first?.as(MissingDeclSyntax.self),
+      missing.placeholder.isEditorPlaceholder,
+      !missing.placeholder.isMissing
+    {
+      return .visitChildren
+    }
+
     if let parentWithTokens = ancestorWithMoreTokens, let index {
       let siblings = parentWithTokens.children(viewMode: .all)
       let siblingsAfter = siblings[siblings.index(after: index)...]

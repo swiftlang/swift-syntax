@@ -275,9 +275,9 @@ extension Parser {
       }
 
       if self.currentToken.isEditorPlaceholder {
-        let placeholder = self.consumeAnyToken()
+        let placeholder = self.parseAnyIdentifier()
         return RawDeclSyntax(
-          RawEditorPlaceholderDeclSyntax(
+          RawMissingDeclSyntax(
             attributes: attrs.attributes,
             modifiers: attrs.modifiers,
             placeholder: placeholder,

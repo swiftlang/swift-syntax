@@ -38,6 +38,9 @@ struct SwiftPMBuilder {
   /// no round-trip or assertion failures.
   let enableTestFuzzing: Bool
 
+  /// A flag indicating whether to use local dependencies during the build process.
+  let useLocalDeps: Bool
+
   /// Treat all warnings as errors.
   let warningsAsErrors: Bool
 
@@ -51,6 +54,7 @@ struct SwiftPMBuilder {
     release: Bool = false,
     enableRawSyntaxValidation: Bool = false,
     enableTestFuzzing: Bool = false,
+    useLocalDeps: Bool = true,
     warningsAsErrors: Bool = false,
     verbose: Bool = false
   ) {
@@ -60,6 +64,7 @@ struct SwiftPMBuilder {
     self.release = release
     self.enableRawSyntaxValidation = enableRawSyntaxValidation
     self.enableTestFuzzing = enableTestFuzzing
+    self.useLocalDeps = useLocalDeps
     self.warningsAsErrors = warningsAsErrors
     self.verbose = verbose
   }
@@ -139,8 +144,10 @@ struct SwiftPMBuilder {
       additionalEnvironment["SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION"] = "1"
     }
 
-    // Tell other projects in the unified build to use local dependencies
-    additionalEnvironment["SWIFTCI_USE_LOCAL_DEPS"] = "1"
+    if useLocalDeps {
+      // Tell other projects in the unified build to use local dependencies
+      additionalEnvironment["SWIFTCI_USE_LOCAL_DEPS"] = "1"
+    }
 
     return additionalEnvironment
   }

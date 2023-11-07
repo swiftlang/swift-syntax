@@ -99,9 +99,9 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseModifierDetail(_ keyword: Keyword) -> RawDeclModifierDetailSyntax {
+  mutating func parseModifierDetail() -> RawDeclModifierDetailSyntax {
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let (unexpectedBeforeDetailToken, detailToken) = self.expect(.identifier, TokenSpec(keyword, remapping: .identifier), default: .identifier)
+    let (unexpectedBeforeDetailToken, detailToken) = self.expect(.identifier, TokenSpec(.set, remapping: .identifier), default: .identifier)
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawDeclModifierDetailSyntax(
       unexpectedBeforeLeftParen,
@@ -119,7 +119,7 @@ extension Parser {
 
     let detail: RawDeclModifierDetailSyntax?
     if self.at(.leftParen) {
-      detail = self.parseModifierDetail(.set)
+      detail = self.parseModifierDetail()
     } else {
       detail = nil
     }
@@ -224,7 +224,18 @@ extension Parser {
 
     let detail: RawDeclModifierDetailSyntax?
     if self.at(.leftParen) {
-      detail = self.parseModifierDetail(.unsafe)
+      let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+      let (unexpectedBeforeDetailToken, detailToken) = self.expect(TokenSpec(.unsafe, remapping: .identifier))
+      let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+      detail = RawDeclModifierDetailSyntax(
+        unexpectedBeforeLeftParen,
+        leftParen: leftParen,
+        unexpectedBeforeDetailToken,
+        detail: detailToken,
+        unexpectedBeforeRightParen,
+        rightParen: rightParen,
+        arena: self.arena
+      )
     } else {
       detail = nil
     }

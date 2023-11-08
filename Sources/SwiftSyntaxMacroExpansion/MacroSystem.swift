@@ -307,7 +307,7 @@ private func expandAccessorMacroWithExistingAccessors(
     return nil
   }
 
-  // Separate the accessor from any existing accessors by two spaces
+  // Separate the accessor from any existing accessors by an empty line
   let indentedSource = "\n" + expanded.indented(by: attachedTo.indentationOfFirstLine + indentationWidth)
   return "\(raw: indentedSource)"
 }
@@ -702,13 +702,26 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       context.addDiagnostics(from: MacroApplicationError.accessorMacroOnVariableWithMultipleBindings, node: node)
       return DeclSyntax(node)
     }
-    node.bindings[node.bindings.startIndex].accessorBlock = expandAccessors(of: node, existingAccessors: binding.accessorBlock)
+
+    let expansion = expandAccessors(of: node, existingAccessors: binding.accessorBlock)
+    if expansion.accessors != binding.accessorBlock {
+      if binding.initializer != nil, expansion.expandsGetSet {
+        // The accessor block will have a leading space, but there will already be a
+        // space between the variable and the to-be-removed initializer. Remove the
+        // leading trivia on the accessor block so we don't double up.
+        node.bindings[node.bindings.startIndex].accessorBlock = expansion.accessors?.with(\.leadingTrivia, [])
+        node.bindings[node.bindings.startIndex].initializer = nil
+      } else {
+        node.bindings[node.bindings.startIndex].accessorBlock = expansion.accessors
+      }
+    }
+
     return DeclSyntax(node)
   }
 
   override func visit(_ node: SubscriptDeclSyntax) -> DeclSyntax {
     var node = super.visit(node).cast(SubscriptDeclSyntax.self)
-    node.accessorBlock = expandAccessors(of: node, existingAccessors: node.accessorBlock)
+    node.accessorBlock = expandAccessors(of: node, existingAccessors: node.accessorBlock).accessors
     return DeclSyntax(node)
   }
 }
@@ -869,14 +882,23 @@ extension MacroApplication {
     }
   }
 
-  /// Expand all 'accessor' macros attached to `storage` and return the `storage`
-  /// node.
+  /// Expand all 'accessor' macros attached to `storage`.
   ///
-  /// - Returns: The storage node with all macro-synthesized accessors applied.
-  private func expandAccessors(of storage: some DeclSyntaxProtocol, existingAccessors: AccessorBlockSyntax?) -> AccessorBlockSyntax? {
+  /// - Returns: The final accessors block that includes both the existing
+  ///   and expanded accessors, as well as whether any `get`/`set` were
+  ///   expanded (in which case any initializer on `storage` should be
+  ///   removed).
+  private func expandAccessors(of storage: some DeclSyntaxProtocol, existingAccessors: AccessorBlockSyntax?) -> (
+    accessors: AccessorBlockSyntax?, expandsGetSet: Bool
+  ) {
     let accessorMacros = macroAttributes(attachedTo: DeclSyntax(storage), ofType: AccessorMacro.Type.self)
 
     var newAccessorsBlock = existingAccessors
+    var expandsGetSet = false
+    func checkExpansions(_ accessors: AccessorDeclListSyntax?) {
+      guard let accessors else { return }
+      expandsGetSet = expandsGetSet || accessors.contains(where: \.isGetOrSet)
+    }
 
     for macro in accessorMacros {
       do {
@@ -894,6 +916,8 @@ extension MacroApplication {
             in: context,
             indentationWidth: indentationWidth
           ) {
+            checkExpansions(newAccessors)
+
             // If existingAccessors is not `nil`, then we also set
             // `newAccessorBlock` above to a a non-nil value, so
             // `newAccessorsBlock` also isn’t `nil`.
@@ -902,31 +926,33 @@ extension MacroApplication {
               indentationWidth: self.indentationWidth
             )
           }
-        } else {
-          let newAccessors = try expandAccessorMacroWithoutExistingAccessors(
-            definition: macro.definition,
-            attributeNode: macro.attributeNode,
-            attachedTo: DeclSyntax(storage),
-            in: context,
-            indentationWidth: indentationWidth
-          )
-          if newAccessorsBlock == nil {
-            newAccessorsBlock = newAccessors
-          } else if let newAccessors = newAccessors {
-            guard case .accessors(let accessorList) = newAccessors.accessors else {
-              throw MacroApplicationError.malformedAccessor
-            }
-            newAccessorsBlock = newAccessorsBlock!.addingAccessors(
+        } else if let newAccessors = try expandAccessorMacroWithoutExistingAccessors(
+          definition: macro.definition,
+          attributeNode: macro.attributeNode,
+          attachedTo: DeclSyntax(storage),
+          in: context,
+          indentationWidth: indentationWidth
+        ) {
+          guard case .accessors(let accessorList) = newAccessors.accessors else {
+            throw MacroApplicationError.malformedAccessor
+          }
+
+          checkExpansions(accessorList)
+
+          if let oldBlock = newAccessorsBlock {
+            newAccessorsBlock = oldBlock.addingAccessors(
               from: accessorList,
               indentationWidth: self.indentationWidth
             )
+          } else {
+            newAccessorsBlock = newAccessors
           }
         }
       } catch {
         context.addDiagnostics(from: error, node: macro.attributeNode)
       }
     }
-    return newAccessorsBlock
+    return (newAccessorsBlock, expandsGetSet)
   }
 }
 
@@ -1128,5 +1154,11 @@ private extension AttributeSyntax {
     foldingWith operatorTable: OperatorTable?
   ) -> Self {
     return (detach(in: context, foldingWith: operatorTable) as Syntax).cast(Self.self)
+  }
+}
+
+private extension AccessorDeclSyntax {
+  var isGetOrSet: Bool {
+    return accessorSpecifier.tokenKind == .keyword(.get) || accessorSpecifier.tokenKind == .keyword(.set)
   }
 }

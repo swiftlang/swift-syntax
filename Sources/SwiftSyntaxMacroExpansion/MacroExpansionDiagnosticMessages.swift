@@ -10,59 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftDiagnostics
+import SwiftSyntaxMacros
 
-/// An error during macro expansion that is described by its message.
-///
-/// This type allows macro authors to quickly generate error messages based on a
-/// string. For any non-trivial error messages, it is encouraged to define a
-/// custom type that conforms to `DiagnosticMessage`.
-public struct MacroExpansionErrorMessage: Error, DiagnosticMessage {
-  public let message: String
+@available(*, deprecated, message: "MacroExpansionErrorMessage has been moved to the SwiftSyntaxMacros module")
+public typealias MacroExpansionErrorMessage = SwiftSyntaxMacros.MacroExpansionErrorMessage
 
-  public var severity: SwiftDiagnostics.DiagnosticSeverity { .error }
+@available(*, deprecated, message: "MacroExpansionWarningMessage has been moved to the SwiftSyntaxMacros module")
+public typealias MacroExpansionWarningMessage = SwiftSyntaxMacros.MacroExpansionWarningMessage
 
-  public var diagnosticID: SwiftDiagnostics.MessageID {
-    .init(domain: diagnosticDomain, id: "\(Self.self)")
-  }
-
-  public init(_ message: String) {
-    self.message = message
-  }
-}
-
-/// An warning during macro expansion that is described by its message.
-///
-/// This type allows macro authors to quickly generate warning messages based on
-/// a string. For any non-trivial warning messages, it is encouraged to define a
-/// custom type that conforms to `DiagnosticMessage`.
-public struct MacroExpansionWarningMessage: DiagnosticMessage {
-  public let message: String
-
-  public var severity: SwiftDiagnostics.DiagnosticSeverity { .warning }
-
-  public var diagnosticID: SwiftDiagnostics.MessageID {
-    .init(domain: diagnosticDomain, id: "\(Self.self)")
-  }
-
-  public init(_ message: String) {
-    self.message = message
-  }
-}
-
-/// The message of a Fix-It that is specified by a string literal
-///
-/// This type allows macro authors to quickly generate Fix-It messages based on
-/// a string. For any non-trivial Fix-It messages, it is encouraged to define a
-/// custom type that conforms to `FixItMessage`.
-public struct MacroExpansionFixItMessage: FixItMessage {
-  public var message: String
-
-  public var fixItID: SwiftDiagnostics.MessageID {
-    .init(domain: diagnosticDomain, id: "\(Self.self)")
-  }
-
-  public init(_ message: String) {
-    self.message = message
-  }
-}
+@available(*, deprecated, message: "MacroExpansionFixItMessage has been moved to the SwiftSyntaxMacros module")
+public typealias MacroExpansionFixItMessage = SwiftSyntaxMacros.MacroExpansionFixItMessage

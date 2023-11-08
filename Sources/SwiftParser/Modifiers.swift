@@ -61,7 +61,12 @@ extension Parser {
       case (.declarationModifier(.unowned), let handle)?:
         elements.append(self.parseUnownedModifier(handle))
       case (.declarationModifier(.nonisolated), let handle)?:
-        elements.append(parseNonisolatedModifier(handle))
+        if experimentalFeatures.contains(.globalConcurrency) {
+          elements.append(parseNonisolatedModifier(handle))
+        } else {
+          let (unexpectedBeforeKeyword, keyword) = self.eat(handle)
+          elements.append(RawDeclModifierSyntax(unexpectedBeforeKeyword, name: keyword, detail: nil, arena: self.arena))
+        }
       case (.declarationModifier(.final), let handle)?,
         (.declarationModifier(.required), let handle)?,
         (.declarationModifier(.optional), let handle)?,

@@ -210,7 +210,8 @@ final class DeclarationTests: ParserTestCase {
           nonisolated(unsafe) var c: Int { 0 }
           nonisolated(unsafe) let d = 0
         }
-        """
+        """,
+      experimentalFeatures: [.globalConcurrency]
     )
   }
 

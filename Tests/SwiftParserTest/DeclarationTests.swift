@@ -248,8 +248,24 @@ final class DeclarationTests: ParserTestCase {
       struct A {
         nonisolated(unsafe) let b = 0
         nonisolated(unsafe) var c: Int { 0 }
+        nonisolated(1️⃣safe) let d = 0
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected 'unsafe' in modifier",
+          fixIts: ["replace 'safe' with 'unsafe'"]
+        )
+      ],
+      fixedSource: """
+        nonisolated(unsafe) let a = 0
+
+        struct A {
+          nonisolated(unsafe) let b = 0
+          nonisolated(unsafe) var c: Int { 0 }
+          nonisolated(unsafe) let d = 0
+        }
+        """
     )
   }
 

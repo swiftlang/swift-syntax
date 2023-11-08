@@ -325,7 +325,16 @@ public func assertMacroExpansion(
 
   // Applying Fix-Its
   if let expectedFixedSource = expectedFixedSource {
-    let fixedTree = FixItApplier.applyFixes(from: context.diagnostics, filterByMessages: applyFixIts, to: origSourceFile)
+    let messages = applyFixIts ?? context.diagnostics.compactMap { $0.fixIts.first?.message.message }
+
+    let edits =
+      context.diagnostics
+      .flatMap(\.fixIts)
+      .filter { messages.contains($0.message.message) }
+      .flatMap { $0.changes }
+      .map { $0.edit(in: context) }
+
+    let fixedTree = FixItApplier.apply(edits: edits, to: origSourceFile)
     let fixedTreeDescription = fixedTree.description
     assertStringsEqualWithDiff(
       fixedTreeDescription.trimmingTrailingWhitespace(),
@@ -333,5 +342,52 @@ public func assertMacroExpansion(
       file: file,
       line: line
     )
+  }
+}
+
+fileprivate extension FixIt.Change {
+  /// Returns the edit for this change, translating positions from detached nodes
+  /// to the corresponding locations in the original source file based on
+  /// `expansionContext`.
+  ///
+  /// - SeeAlso: `FixIt.Change.edit`
+  func edit(in expansionContext: BasicMacroExpansionContext) -> SourceEdit {
+    switch self {
+    case .replace(let oldNode, let newNode):
+      let start = expansionContext.position(of: oldNode.position, anchoredAt: oldNode)
+      let end = expansionContext.position(of: oldNode.endPosition, anchoredAt: oldNode)
+      return SourceEdit(
+        range: start..<end,
+        replacement: newNode.description
+      )
+
+    case .replaceLeadingTrivia(let token, let newTrivia):
+      let start = expansionContext.position(of: token.position, anchoredAt: token)
+      let end = expansionContext.position(of: token.positionAfterSkippingLeadingTrivia, anchoredAt: token)
+      return SourceEdit(
+        range: start..<end,
+        replacement: newTrivia.description
+      )
+
+    case .replaceTrailingTrivia(let token, let newTrivia):
+      let start = expansionContext.position(of: token.endPositionBeforeTrailingTrivia, anchoredAt: token)
+      let end = expansionContext.position(of: token.endPosition, anchoredAt: token)
+      return SourceEdit(
+        range: start..<end,
+        replacement: newTrivia.description
+      )
+    }
+  }
+}
+
+fileprivate extension BasicMacroExpansionContext {
+  /// Translates a position from a detached node to the corresponding position
+  /// in the original source file.
+  func position(
+    of position: AbsolutePosition,
+    anchoredAt node: some SyntaxProtocol
+  ) -> AbsolutePosition {
+    let location = self.location(for: position, anchoredAt: Syntax(node), fileName: "")
+    return AbsolutePosition(utf8Offset: location.offset)
   }
 }

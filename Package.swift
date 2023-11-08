@@ -93,7 +93,7 @@ let package = Package(
 
     .target(
       name: "_SwiftSyntaxTestSupport",
-      dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftSyntaxBuilder"]
+      dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftSyntaxBuilder", "SwiftSyntaxMacroExpansion"]
     ),
 
     .testTarget(

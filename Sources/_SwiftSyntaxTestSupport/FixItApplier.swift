@@ -12,6 +12,7 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
+import SwiftSyntaxMacroExpansion
 
 public enum FixItApplier {
   /// Applies selected or all Fix-Its from the provided diagnostics to a given syntax tree.
@@ -22,7 +23,7 @@ public enum FixItApplier {
   ///     If `nil`, the first Fix-It from each diagnostic is applied.
   ///   - tree: The syntax tree to which the Fix-Its will be applied.
   ///
-  /// - Returns: A ``String`` representation of the modified syntax tree after applying the Fix-Its.
+  /// - Returns: A `String` representation of the modified syntax tree after applying the Fix-Its.
   public static func applyFixes(
     from diagnostics: [Diagnostic],
     filterByMessages messages: [String]?,
@@ -30,12 +31,26 @@ public enum FixItApplier {
   ) -> String {
     let messages = messages ?? diagnostics.compactMap { $0.fixIts.first?.message.message }
 
-    var edits =
+    let edits =
       diagnostics
       .flatMap(\.fixIts)
       .filter { messages.contains($0.message.message) }
       .flatMap(\.edits)
 
+    return self.apply(edits: edits, to: tree)
+  }
+
+  /// Apply the given edits to the syntax tree.
+  ///
+  /// - Parameters:
+  ///   - edits: The edits to apply to the syntax tree
+  ///   - tree: he syntax tree to which the edits should be applied.
+  /// - Returns: A `String` representation of the modified syntax tree after applying the edits.
+  public static func apply(
+    edits: [SourceEdit],
+    to tree: any SyntaxProtocol
+  ) -> String {
+    var edits = edits
     var source = tree.description
 
     while let edit = edits.first {

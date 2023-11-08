@@ -247,4 +247,38 @@ final class PeerMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testAdjustFixItLocationsWhenComputingFixedSource() {
+    // Test that we adjust the locations of the Fix-Its to the original source
+    // before computing the `fixedSource` if the macro doesn't start at the
+    // start of the file.
+    assertMacroExpansion(
+      """
+      func other() {}
+
+      @addCompletionHandler
+      func f(a: Int, for b: String, _ value: Double) -> String { }
+      """,
+      expandedSource: """
+        func other() {}
+        func f(a: Int, for b: String, _ value: Double) -> String { }
+        """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "can only add a completion-handler variant to an 'async' function",
+          line: 4,
+          column: 1,
+          fixIts: [FixItSpec(message: "add 'async'")]
+        )
+      ],
+      macros: ["addCompletionHandler": AddCompletionHandler.self],
+      fixedSource: """
+        func other() {}
+
+        @addCompletionHandler
+        func f(a: Int, for b: String, _ value: Double) async-> String { }
+        """,
+      indentationWidth: indentationWidth
+    )
+  }
 }

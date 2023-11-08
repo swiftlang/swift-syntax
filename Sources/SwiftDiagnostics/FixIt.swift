@@ -46,3 +46,45 @@ public struct FixIt {
     self.changes = changes
   }
 }
+
+extension FixIt {
+  /// The edits represent the non-overlapping textual edits that need to be performed when the Fix-It is applied.
+  public var edits: [SourceEdit] {
+    var existingEdits = [SourceEdit]()
+    for change in changes {
+      let edit = change.edit
+      let isOverlapping = existingEdits.contains { edit.range.overlaps($0.range) }
+      if !isOverlapping {
+        // The edit overlaps with the previous edit. We can't apply both
+        // without conflicts. Apply the one that's listed first and drop the
+        // later edit.
+        existingEdits.append(edit)
+      }
+    }
+    return existingEdits
+  }
+}
+
+private extension FixIt.Change {
+  var edit: SourceEdit {
+    switch self {
+    case .replace(let oldNode, let newNode):
+      return SourceEdit(
+        range: oldNode.position..<oldNode.endPosition,
+        replacement: newNode.description
+      )
+
+    case .replaceLeadingTrivia(let token, let newTrivia):
+      return SourceEdit(
+        range: token.position..<token.positionAfterSkippingLeadingTrivia,
+        replacement: newTrivia.description
+      )
+
+    case .replaceTrailingTrivia(let token, let newTrivia):
+      return SourceEdit(
+        range: token.endPositionBeforeTrailingTrivia..<token.endPosition,
+        replacement: newTrivia.description
+      )
+    }
+  }
+}

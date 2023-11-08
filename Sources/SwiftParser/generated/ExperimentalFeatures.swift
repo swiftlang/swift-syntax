@@ -35,4 +35,7 @@ extension Parser.ExperimentalFeatures {
   
   /// Whether to enable the parsing of 'do' expressions.
   public static let doExpressions = Self (rawValue: 1 << 3)
+  
+  /// Whether to enable the parsing of NonEscableTypes.
+  public static let nonEscapableTypes = Self (rawValue: 1 << 4)
 }

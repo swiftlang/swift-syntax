@@ -804,6 +804,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
             .keyword("private"), 
             .keyword("public"), 
             .keyword("reasync"), 
+            .keyword("_resultDependsOnSelf"), 
             .keyword("required"), 
             .keyword("static"), 
             .keyword("unowned"), 

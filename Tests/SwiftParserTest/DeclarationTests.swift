@@ -3095,4 +3095,28 @@ final class DeclarationTests: ParserTestCase {
       substructure: AccessorBlockSyntax(accessors: .getter([CodeBlockItemSyntax("return 1")]))
     )
   }
+
+  func testResultDependsOnSelf() {
+    assertParse(
+      """
+      class MethodModifiers {
+         _resultDependsOnSelf func getDependentResult() -> Builtin.NativeObject {
+           return Builtin.unsafeCastToNativeObject(self)
+         }
+       }
+      """,
+      experimentalFeatures: .nonEscapableTypes
+    )
+
+    assertParse(
+      """
+        class MethodModifiers {
+           _resultDependsOnSelf func _resultDependsOnSelf() -> Builtin.NativeObject {
+             return Builtin.unsafeCastToNativeObject(self)
+           }
+         }
+      """,
+      experimentalFeatures: .nonEscapableTypes
+    )
+  }
 }

@@ -503,4 +503,32 @@ final class BasicFormatTest: XCTestCase {
       )
     }
   }
+
+  func testPeriodAfterStringLiteral() {
+    let source = """
+      "test".lowercased()
+      """
+    assertFormatted(source: source, expected: source)
+  }
+
+  func testPeriodAfterRawStringLiteral() {
+    let source = """
+      #"test"#.lowercased()
+      """
+    assertFormatted(source: source, expected: source)
+  }
+
+  func testPeriodAfterRegexLiteral() {
+    let source = """
+      /test/.something
+      """
+    assertFormatted(source: source, expected: source)
+  }
+
+  func testPeriodAfterRawRegexLiteral() {
+    let source = """
+      /test/.something
+      """
+    assertFormatted(source: source, expected: source)
+  }
 }

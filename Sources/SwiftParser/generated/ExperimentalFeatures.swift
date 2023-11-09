@@ -25,14 +25,17 @@ extension Parser {
 
 extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of reference bindings.
-  public static let referenceBindings = Self(rawValue: 1 << 0)
+  public static let referenceBindings = Self (rawValue: 1 << 0)
   
   /// Whether to enable the parsing of 'then' statements.
-  public static let thenStatements = Self(rawValue: 1 << 1)
+  public static let thenStatements = Self (rawValue: 1 << 1)
   
   /// Whether to enable the parsing of typed throws.
-  public static let typedThrows = Self(rawValue: 1 << 2)
+  public static let typedThrows = Self (rawValue: 1 << 2)
   
   /// Whether to enable the parsing of 'do' expressions.
-  public static let doExpressions = Self(rawValue: 1 << 3)
+  public static let doExpressions = Self (rawValue: 1 << 3)
+  
+  /// Whether to enable the parsing of NonEscableTypes.
+  public static let nonEscapableTypes = Self (rawValue: 1 << 4)
 }

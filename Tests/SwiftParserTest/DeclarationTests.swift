@@ -248,8 +248,24 @@ final class DeclarationTests: ParserTestCase {
       struct A {
         nonisolated(unsafe) let b = 0
         nonisolated(unsafe) var c: Int { 0 }
+        nonisolated(1️⃣safe) let d = 0
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected 'unsafe' in modifier",
+          fixIts: ["replace 'safe' with 'unsafe'"]
+        )
+      ],
+      fixedSource: """
+        nonisolated(unsafe) let a = 0
+
+        struct A {
+          nonisolated(unsafe) let b = 0
+          nonisolated(unsafe) var c: Int { 0 }
+          nonisolated(unsafe) let d = 0
+        }
+        """
     )
   }
 
@@ -3077,6 +3093,30 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "let foo = 1 { return 1 }",
       substructure: AccessorBlockSyntax(accessors: .getter([CodeBlockItemSyntax("return 1")]))
+    )
+  }
+
+  func testResultDependsOnSelf() {
+    assertParse(
+      """
+      class MethodModifiers {
+         _resultDependsOnSelf func getDependentResult() -> Builtin.NativeObject {
+           return Builtin.unsafeCastToNativeObject(self)
+         }
+       }
+      """,
+      experimentalFeatures: .nonEscapableTypes
+    )
+
+    assertParse(
+      """
+        class MethodModifiers {
+           _resultDependsOnSelf func _resultDependsOnSelf() -> Builtin.NativeObject {
+             return Builtin.unsafeCastToNativeObject(self)
+           }
+         }
+      """,
+      experimentalFeatures: .nonEscapableTypes
     )
   }
 }

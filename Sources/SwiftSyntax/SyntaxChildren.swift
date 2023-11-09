@@ -14,7 +14,7 @@
 
 /// The data for an index in a syntax children collection that is not the end
 /// index. See ``SyntaxChildrenIndex`` for the representation of the end index.
-struct SyntaxChildrenIndexData: Hashable, Comparable {
+struct SyntaxChildrenIndexData: Hashable, Comparable, Sendable {
   /// The UTF-8 offset of the item at this index in the source file
   /// See `AbsoluteSyntaxPosition.offset`
   let offset: UInt32
@@ -50,7 +50,7 @@ struct SyntaxChildrenIndexData: Hashable, Comparable {
 }
 
 /// An index in a syntax children collection.
-public struct SyntaxChildrenIndex: Hashable, Comparable, ExpressibleByNilLiteral {
+public struct SyntaxChildrenIndex: Hashable, Comparable, ExpressibleByNilLiteral, Sendable {
   /// Construct the `endIndex` of a ``SyntaxChildren`` collection.
   public init(nilLiteral: ()) {
     self.data = nil

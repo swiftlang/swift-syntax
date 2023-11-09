@@ -169,7 +169,7 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
 
 /// ### Children
 /// 
-///  - `name`: (`__consuming` | `__setter_access` | `_const` | `_local` | `actor` | `async` | `borrowing` | `class` | `consuming` | `convenience` | `distributed` | `dynamic` | `fileprivate` | `final` | `indirect` | `infix` | `internal` | `isolated` | `lazy` | `mutating` | `nonisolated` | `nonmutating` | `open` | `optional` | `override` | `package` | `postfix` | `prefix` | `private` | `public` | `reasync` | `required` | `static` | `unowned` | `weak`)
+///  - `name`: (`__consuming` | `__setter_access` | `_const` | `_local` | `actor` | `async` | `borrowing` | `class` | `consuming` | `convenience` | `distributed` | `dynamic` | `fileprivate` | `final` | `indirect` | `infix` | `internal` | `isolated` | `lazy` | `mutating` | `nonisolated` | `nonmutating` | `open` | `optional` | `override` | `package` | `postfix` | `prefix` | `private` | `public` | `reasync` | `_resultDependsOnSelf` | `required` | `static` | `unowned` | `weak`)
 ///  - `detail`: ``DeclModifierDetailSyntax``?
 ///
 /// ### Contained in
@@ -270,6 +270,7 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
   ///  - `private`
   ///  - `public`
   ///  - `reasync`
+  ///  - `_resultDependsOnSelf`
   ///  - `required`
   ///  - `static`
   ///  - `unowned`

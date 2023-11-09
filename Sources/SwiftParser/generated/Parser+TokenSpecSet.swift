@@ -714,6 +714,8 @@ extension DeclModifierSyntax {
     case `private`
     case `public`
     case reasync
+    @_spi(ExperimentalLanguageFeatures)
+    case _resultDependsOnSelf
     case required
     case `static`
     case unowned
@@ -783,6 +785,8 @@ extension DeclModifierSyntax {
         self = .public
       case TokenSpec(.reasync):
         self = .reasync
+      case TokenSpec(._resultDependsOnSelf) where experimentalFeatures.contains(.nonEscapableTypes):
+        self = ._resultDependsOnSelf
       case TokenSpec(.required):
         self = .required
       case TokenSpec(.static):
@@ -860,6 +864,8 @@ extension DeclModifierSyntax {
         return .keyword(.public)
       case .reasync:
         return .keyword(.reasync)
+      case ._resultDependsOnSelf:
+        return .keyword(._resultDependsOnSelf)
       case .required:
         return .keyword(.required)
       case .static:
@@ -939,6 +945,8 @@ extension DeclModifierSyntax {
         return .keyword(.public)
       case .reasync:
         return .keyword(.reasync)
+      case ._resultDependsOnSelf:
+        return .keyword(._resultDependsOnSelf)
       case .required:
         return .keyword(.required)
       case .static:

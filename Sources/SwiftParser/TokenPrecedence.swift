@@ -230,7 +230,7 @@ enum TokenPrecedence: Comparable {
       // Declaration Modifiers
       .__consuming, .final, .required, .optional, .lazy, .dynamic, .infix, .postfix, .prefix, .mutating, .nonmutating, .convenience, .override, .package, .open,
       .__setter_access, .indirect, .isolated, .nonisolated, .distributed, ._local,
-      .inout, ._mutating, ._borrow, ._borrowing, .borrowing, ._consuming, .consuming, .consume,
+      .inout, ._mutating, ._borrow, ._borrowing, .borrowing, ._consuming, .consuming, .consume, ._resultDependsOnSelf,
       // Accessors
       .get, .set, .didSet, .willSet, .unsafeAddress, .addressWithOwner, .addressWithNativeOwner, .unsafeMutableAddress,
       .mutableAddressWithOwner, .mutableAddressWithNativeOwner, ._read, ._modify,

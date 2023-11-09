@@ -12,7 +12,7 @@
 
 /// Represents a unique value for a node within its own tree.
 @_spi(RawSyntax)
-public struct SyntaxIndexInTree: Comparable, Hashable {
+public struct SyntaxIndexInTree: Comparable, Hashable, Sendable {
   let indexInTree: UInt32
 
   static var zero: SyntaxIndexInTree = SyntaxIndexInTree(indexInTree: 0)

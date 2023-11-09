@@ -181,6 +181,8 @@ public enum Keyword: UInt8, Hashable {
   case renamed
   case `repeat`
   case required
+  @_spi(ExperimentalLanguageFeatures)
+  case _resultDependsOnSelf
   case `rethrows`
   case retroactive
   case `return`
@@ -722,6 +724,8 @@ public enum Keyword: UInt8, Hashable {
         self = ._compilerInitialized
       case "_originallyDefinedIn":
         self = ._originallyDefinedIn
+      case "_resultDependsOnSelf":
+        self = ._resultDependsOnSelf
       case "unsafeMutableAddress":
         self = .unsafeMutableAddress
       default:
@@ -942,6 +946,7 @@ public enum Keyword: UInt8, Hashable {
       "renamed", 
       "repeat", 
       "required", 
+      "_resultDependsOnSelf", 
       "rethrows", 
       "retroactive", 
       "return", 

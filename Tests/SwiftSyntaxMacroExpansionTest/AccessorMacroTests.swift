@@ -320,4 +320,95 @@ final class AccessorMacroTests: XCTestCase {
       macros: ["Test": TestMacro.self]
     )
   }
+
+  func testInitializerRemovedForGetSet() {
+    assertMacroExpansion(
+      """
+      @constantOne
+      var x: Int = 1
+      """,
+      expandedSource: """
+        var x: Int {
+          get {
+            return 1
+          }
+        }
+        """,
+      macros: ["constantOne": ConstantOneGetter.self],
+      indentationWidth: indentationWidth
+    )
+
+    // Bit of an odd case, compiler has the type but we don't know it in `MacroSystem`
+    assertMacroExpansion(
+      """
+      @constantOne
+      var x = 1
+      """,
+      expandedSource: """
+        var x {
+          get {
+            return 1
+          }
+        }
+        """,
+      macros: ["constantOne": ConstantOneGetter.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testInitializerRemainsForObserver() {
+    struct DidSetAdder: AccessorMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AccessorDeclSyntax] {
+        return [
+          """
+          didSet {
+          }
+          """
+        ]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @addDidSet
+      var x = 1
+      """,
+      expandedSource: """
+        var x = 1 {
+          didSet {
+          }
+        }
+        """,
+      macros: ["addDidSet": DidSetAdder.self],
+      indentationWidth: indentationWidth
+    )
+
+    // Invalid semantically, but we shouldn't remove the initializer as the
+    // macro did not produce a getter/setter
+    assertMacroExpansion(
+      """
+      @addDidSet
+      var x = 1 {
+        get {
+          return 1
+        }
+      }
+      """,
+      expandedSource: """
+        var x = 1 {
+          get {
+            return 1
+          }
+          didSet {
+          }
+        }
+        """,
+      macros: ["addDidSet": DidSetAdder.self],
+      indentationWidth: indentationWidth
+    )
+  }
 }

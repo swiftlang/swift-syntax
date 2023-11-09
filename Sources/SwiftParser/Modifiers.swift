@@ -85,7 +85,8 @@ extension Parser {
         (.declarationModifier(._const), let handle)?,
         (.declarationModifier(._local), let handle)?,
         (.declarationModifier(.__setter_access), let handle)?,
-        (.declarationModifier(.reasync), let handle)?:
+        (.declarationModifier(.reasync), let handle)?,
+        (.declarationModifier(._resultDependsOnSelf), let handle)? where experimentalFeatures.contains(.nonEscapableTypes):
         let (unexpectedBeforeKeyword, keyword) = self.eat(handle)
         elements.append(RawDeclModifierSyntax(unexpectedBeforeKeyword, name: keyword, detail: nil, arena: self.arena))
       case (.declarationModifier(.rethrows), _)?:

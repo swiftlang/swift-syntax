@@ -376,6 +376,7 @@ enum DeclarationModifier: TokenSpecSet {
   case `static`
   case unowned
   case weak
+  case _resultDependsOnSelf
 
   init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
@@ -414,6 +415,7 @@ enum DeclarationModifier: TokenSpecSet {
     case TokenSpec(.static): self = .static
     case TokenSpec(.unowned): self = .unowned
     case TokenSpec(.weak): self = .weak
+    case TokenSpec(._resultDependsOnSelf) where experimentalFeatures.contains(.nonEscapableTypes): self = ._resultDependsOnSelf
     default: return nil
     }
   }
@@ -455,6 +457,7 @@ enum DeclarationModifier: TokenSpecSet {
     case .static: return .keyword(.static)
     case .unowned: return TokenSpec(.unowned, recoveryPrecedence: .declKeyword)
     case .weak: return TokenSpec(.weak, recoveryPrecedence: .declKeyword)
+    case ._resultDependsOnSelf: return TokenSpec(._resultDependsOnSelf, recoveryPrecedence: .declKeyword)
     }
   }
 }

@@ -505,10 +505,31 @@ final class BasicFormatTest: XCTestCase {
     }
   }
 
-  func testRightAnglePeriodNotFormatted() {
-    assertFormatted(
-      tree: ExprSyntax("Foo<T>.bar"),
-      expected: "Foo<T>.bar"
-    )
+  func testPeriodAfterStringLiteral() {
+    let source = """
+      "test".lowercased()
+      """
+    assertFormatted(source: source, expected: source)
+  }
+
+  func testPeriodAfterRawStringLiteral() {
+    let source = """
+      #"test"#.lowercased()
+      """
+    assertFormatted(source: source, expected: source)
+  }
+
+  func testPeriodAfterRegexLiteral() {
+    let source = """
+      /test/.something
+      """
+    assertFormatted(source: source, expected: source)
+  }
+
+  func testPeriodAfterRawRegexLiteral() {
+    let source = """
+      /test/.something
+      """
+    assertFormatted(source: source, expected: source)
   }
 }

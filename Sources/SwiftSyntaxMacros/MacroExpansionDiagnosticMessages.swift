@@ -77,7 +77,7 @@ public struct MacroExpansionFixItMessage: FixItMessage {
 public struct MacroExpansionNoteMessage: NoteMessage {
   public var message: String
 
-  public var fixItID: SwiftDiagnostics.MessageID {
+  public var noteID: SwiftDiagnostics.MessageID {
     .init(domain: diagnosticDomain, id: "\(Self.self)")
   }
 

@@ -14,11 +14,9 @@ import ArgumentParser
 import Foundation
 
 struct Build: ParsableCommand, BuildCommand {
-  static var configuration: CommandConfiguration {
-    return CommandConfiguration(
-      abstract: "Build swift-syntax."
-    )
-  }
+  static let configuration = CommandConfiguration(
+    abstract: "Build swift-syntax."
+  )
 
   @OptionGroup
   var arguments: BuildArguments

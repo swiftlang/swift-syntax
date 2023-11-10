@@ -15,7 +15,7 @@ import ArgumentParser
 @main
 struct SwiftSyntaxDevUtils: ParsableCommand {
 
-  static var configuration: CommandConfiguration = CommandConfiguration(
+  static let configuration = CommandConfiguration(
     abstract: """
       Build and test script for SwiftSyntax.
 

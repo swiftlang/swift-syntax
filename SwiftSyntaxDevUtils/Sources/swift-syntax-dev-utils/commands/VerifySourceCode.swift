@@ -18,11 +18,9 @@ fileprivate var modules: [String] {
 }
 
 struct VerifySourceCode: ParsableCommand, SourceCodeGeneratorCommand {
-  static var configuration: CommandConfiguration {
-    return CommandConfiguration(
-      abstract: "Verify that the generated sources match the ones checked into the repository."
-    )
-  }
+  static let configuration = CommandConfiguration(
+    abstract: "Verify that the generated sources match the ones checked into the repository."
+  )
 
   @OptionGroup
   var arguments: SourceCodeGeneratorArguments

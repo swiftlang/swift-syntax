@@ -24,17 +24,15 @@ fileprivate let directoriesToExclude = [
 ]
 
 struct Format: ParsableCommand {
-  static var configuration: CommandConfiguration {
-    return CommandConfiguration(
-      abstract: "Format files in SwiftSyntax using swift-format.",
-      discussion: """
-        This command automatically builds the '\(Self.swiftFormatBranch)' branch \
-        of swift-format in the '\(Paths.swiftFormatBuildDir.lastPathComponent)' \
-        directory of this repository and uses the build to format the swift-syntax \
-        sources.
-        """
-    )
-  }
+  static let configuration = CommandConfiguration(
+    abstract: "Format files in SwiftSyntax using swift-format.",
+    discussion: """
+      This command automatically builds the '\(Self.swiftFormatBranch)' branch \
+      of swift-format in the '\(Paths.swiftFormatBuildDir.lastPathComponent)' \
+      directory of this repository and uses the build to format the swift-syntax \
+      sources.
+      """
+  )
 
   @Flag(help: "Update the sources of swift-format and rebuild swift-format")
   var update: Bool = false

@@ -14,11 +14,9 @@ import ArgumentParser
 import Foundation
 
 struct GenerateSourceCode: ParsableCommand, SourceCodeGeneratorCommand {
-  static var configuration: CommandConfiguration {
-    return CommandConfiguration(
-      abstract: "Generate swift-syntax sources."
-    )
-  }
+  static let configuration = CommandConfiguration(
+    abstract: "Generate swift-syntax sources."
+  )
 
   @OptionGroup
   var arguments: SourceCodeGeneratorArguments

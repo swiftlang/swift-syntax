@@ -327,8 +327,11 @@ open class BasicFormat: SyntaxRewriter {
       (.rawStringPoundDelimiter, .multilineStringQuote),  // opening raw string delimiter should never be separate by a space
       (.rawStringPoundDelimiter, .singleQuote),  // opening raw string delimiter should never be separate by a space
       (.rawStringPoundDelimiter, .stringQuote),  // opening raw string delimiter should never be separate by a space
+      (.rawStringPoundDelimiter, .period),  // opening raw string delimiter should never be separate by a space
       (.regexLiteralPattern, _),
+      (.regexPoundDelimiter, .period),  // #/myRegex/#.someMember
       (.regexSlash, .regexPoundDelimiter),  // closing extended regex delimiter should never be separate by a space
+      (.regexSlash, .period),  // /myRegex/.someMember
       (.rightAngle, .leftParen),  // func foo<T>(x: T)
       (.rightBrace, .leftParen),  // { return 1 }()
       (.rightParen, .leftParen),  // returnsClosure()()
@@ -336,6 +339,7 @@ open class BasicFormat: SyntaxRewriter {
       (.rightSquare, .period),  // myArray[1].someProperty
       (.singleQuote, .rawStringPoundDelimiter),  // closing raw string delimiter should never be separate by a space
       (.stringQuote, .rawStringPoundDelimiter),  // closing raw string delimiter should never be separate by a space
+      (.stringQuote, .period),  // "test".lowercased
       (.stringSegment, _),
       (_, .comma),
       (_, .ellipsis),

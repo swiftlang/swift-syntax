@@ -13,7 +13,7 @@
 import ArgumentParser
 import Foundation
 
-struct Build: ParsableCommand, BuildCommand {
+struct Build: ParsableCommand {
   static let configuration = CommandConfiguration(
     abstract: "Build swift-syntax."
   )
@@ -22,9 +22,33 @@ struct Build: ParsableCommand, BuildCommand {
   var arguments: BuildArguments
 
   func run() throws {
-    try buildTarget(packageDir: Paths.packageDir, targetName: "SwiftSyntax-all")
-    try buildTarget(packageDir: Paths.examplesDir, targetName: "Examples-all")
-    try buildTarget(packageDir: Paths.swiftParserCliDir, targetName: "swift-parser-cli")
+    let executor = BuildExecutor(
+      swiftPMBuilder: SwiftPMBuilder(
+        toolchain: arguments.toolchain,
+        buildDir: arguments.buildDir,
+        multirootDataFile: arguments.multirootDataFile,
+        release: arguments.release,
+        enableRawSyntaxValidation: arguments.enableRawSyntaxValidation,
+        enableTestFuzzing: arguments.enableTestFuzzing,
+        warningsAsErrors: arguments.warningsAsErrors,
+        verbose: arguments.verbose
+      )
+    )
+    try executor.run()
+  }
+}
+
+struct BuildExecutor {
+  private let swiftPMBuilder: SwiftPMBuilder
+
+  init(swiftPMBuilder: SwiftPMBuilder) {
+    self.swiftPMBuilder = swiftPMBuilder
+  }
+
+  func run() throws {
+    try swiftPMBuilder.buildTarget(packageDir: Paths.packageDir, targetName: "SwiftSyntax-all")
+    try swiftPMBuilder.buildTarget(packageDir: Paths.examplesDir, targetName: "Examples-all")
+    try swiftPMBuilder.buildTarget(packageDir: Paths.swiftParserCliDir, targetName: "swift-parser-cli")
     try buildEditorExtension()
   }
 
@@ -33,5 +57,24 @@ struct Build: ParsableCommand, BuildCommand {
     logSection("Building Editor Extension")
     try invokeXcodeBuild(projectPath: Paths.editorExtensionProjectPath, scheme: "SwiftRefactorExtension")
     #endif
+  }
+
+  @discardableResult
+  private func invokeXcodeBuild(projectPath: URL, scheme: String) throws -> ProcessResult {
+    try withTemporaryDirectory { tempDir in
+      let processRunner = ProcessRunner(
+        executableURL: try Paths.xcodebuildExec,
+        arguments: [
+          "-project", projectPath.path,
+          "-scheme", scheme,
+          "-derivedDataPath", tempDir.path,
+        ],
+        additionalEnvironment: [:]
+      )
+
+      let result = try processRunner.run(verbose: swiftPMBuilder.verbose)
+
+      return result
+    }
   }
 }

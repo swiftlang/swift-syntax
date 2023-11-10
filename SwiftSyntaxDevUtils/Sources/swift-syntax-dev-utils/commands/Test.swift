@@ -98,11 +98,4 @@ struct TestExecutor {
       additionalEnvironment: [:]
     ).stdout
   }
-
-  /// This returns a path to the build examples folder.
-  /// Example: '<workingDir>/swift-syntax/Examples/.build/arm64-apple-macosx/debug
-  private func findExamplesBinPath() throws -> URL {
-    let stdOut = try findSwiftpmBinPath(packageDir: Paths.examplesDir)
-    return URL(fileURLWithPath: stdOut.trimmingCharacters(in: .whitespacesAndNewlines))
-  }
 }

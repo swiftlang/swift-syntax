@@ -64,11 +64,6 @@ struct SwiftPMBuilder {
     self.verbose = verbose
   }
 
-  func buildProduct(productName: String) throws {
-    logSection("Building product " + productName)
-    try build(packageDir: Paths.packageDir, name: productName, isProduct: true)
-  }
-
   func buildTarget(packageDir: URL, targetName: String) throws {
     logSection("Building target " + targetName)
     try build(packageDir: packageDir, name: targetName, isProduct: false)

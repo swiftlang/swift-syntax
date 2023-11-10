@@ -37,8 +37,6 @@ class SigIntListener {
 
 /// Provides convenience APIs for launching and gathering output from a subprocess
 public class ProcessRunner {
-  private static let serialQueue = DispatchQueue(label: "\(ProcessRunner.self)")
-
   private let process: Process
 
   public init(

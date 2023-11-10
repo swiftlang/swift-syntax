@@ -48,30 +48,6 @@ enum Paths {
       .appendingPathComponent("SwiftRefactorExtension.xcodeproj")
   }
 
-  static var workspaceDir: URL {
-    packageDir
-      .deletingLastPathComponent()
-  }
-
-  static var llvmDir: URL {
-    workspaceDir
-      .appendingPathComponent("llvm-project")
-      .appendingPathComponent("llvm")
-  }
-
-  static var litExec: URL {
-    llvmDir
-      .appendingPathComponent("utils")
-      .appendingPathComponent("lit")
-      .appendingPathComponent("lit.py")
-  }
-
-  static var python3Exec: URL {
-    get throws {
-      return try lookupExecutable(for: "python3")
-    }
-  }
-
   static var diffExec: URL {
     get throws {
       return try lookupExecutable(for: "diff")

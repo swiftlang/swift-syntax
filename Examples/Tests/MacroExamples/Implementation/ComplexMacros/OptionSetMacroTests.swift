@@ -140,13 +140,6 @@ final class OptionSetMacroTests: XCTestCase {
           line: 1,
           column: 1
         ),
-        /// The diagnostic is duplicated because it's generated first by `ExtensionMacro` and then by `MemberMacro`.
-        /// Consider refactoring this in the future.
-        DiagnosticSpec(
-          message: "'OptionSet' macro can only be applied to a struct",
-          line: 1,
-          column: 1
-        ),
       ],
       macros: macros,
       indentationWidth: .spaces(2)
@@ -169,13 +162,6 @@ final class OptionSetMacroTests: XCTestCase {
         }
         """,
       diagnostics: [
-        DiagnosticSpec(
-          message: "'OptionSet' macro requires nested options enum 'Options'",
-          line: 1,
-          column: 1
-        ),
-        /// The diagnostic is duplicated because it's generated first by `ExtensionMacro` and then by `MemberMacro`.
-        /// Consider refactoring this in the future.
         DiagnosticSpec(
           message: "'OptionSet' macro requires nested options enum 'Options'",
           line: 1,
@@ -205,13 +191,6 @@ final class OptionSetMacroTests: XCTestCase {
         }
         """,
       diagnostics: [
-        DiagnosticSpec(
-          message: "'OptionSet' macro requires a raw type",
-          line: 1,
-          column: 1
-        ),
-        /// The diagnostic is duplicated because it's generated first by `ExtensionMacro` and then by `MemberMacro`.
-        /// Consider refactoring this in the future.
         DiagnosticSpec(
           message: "'OptionSet' macro requires a raw type",
           line: 1,

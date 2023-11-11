@@ -57,4 +57,50 @@ let syntaxEnumFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       }
     }
   }
+
+  for base in SYNTAX_NODES where base.kind.isBase {
+    let baseKind = base.kind
+    let baseName = baseKind.rawValue.withFirstCharacterUppercased;
+    let enumType: TypeSyntax = "\(raw: baseName)SyntaxEnum"
+
+    try! EnumDeclSyntax(
+      """
+      /// Enum to exhaustively switch over all different \(raw: baseName) syntax nodes.
+      public enum \(enumType)
+      """
+    ) {
+      for node in NON_BASE_SYNTAX_NODES where node.base == baseKind {
+        DeclSyntax(
+          """
+          \(node.apiAttributes())\
+          case \(node.varOrCaseName)(\(node.kind.syntaxType))
+          """
+        )
+      }
+    }
+
+    try! ExtensionDeclSyntax(
+      """
+      public extension \(baseKind.syntaxType)
+      """
+    ) {
+      try FunctionDeclSyntax(
+        """
+        /// Get an enum that can be used to exhaustively switch over all \(raw: baseName) syntax nodes.
+        func `as`(_: \(enumType).Type) -> \(enumType)
+        """
+      ) {
+        try SwitchExprSyntax("switch raw.kind") {
+          for node in NON_BASE_SYNTAX_NODES where node.base == baseKind {
+            SwitchCaseSyntax("case .\(node.varOrCaseName):") {
+              StmtSyntax("return .\(node.varOrCaseName)(\(node.kind.syntaxType)(self)!)")
+            }
+          }
+          SwitchCaseSyntax("default:") {
+            ExprSyntax(#"preconditionFailure("unknown \#(raw: baseName) syntax kind")"#)
+          }
+        }
+      }
+    }
+  }
 }

@@ -678,7 +678,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if node.statements.only?.item.is(EditorPlaceholderExprSyntax.self) == true {
+    if let item = node.statements.only?.item.as(DeclReferenceExprSyntax.self), item.baseName.isEditorPlaceholder {
       // Only emit a single diagnostic about the editor placeholder and none for the missing '{' and '}'.
       addDiagnostic(node, .editorPlaceholderInSourceFile, handledNodes: [node.id])
       return .skipChildren

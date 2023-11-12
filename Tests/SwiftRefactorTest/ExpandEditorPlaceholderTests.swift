@@ -103,7 +103,7 @@ fileprivate func assertRefactorPlaceholder(
   } else {
     var parser = Parser(placeholder)
     let expr = ExprSyntax.parse(from: &parser)
-    token = try XCTUnwrap(expr.as(EditorPlaceholderExprSyntax.self)?.placeholder, file: file, line: line)
+    token = try XCTUnwrap(expr.as(DeclReferenceExprSyntax.self)?.baseName, file: file, line: line)
   }
 
   try assertRefactor(token, context: (), provider: ExpandEditorPlaceholder.self, expected: [SourceEdit.replace(token, with: expected)], file: file, line: line)

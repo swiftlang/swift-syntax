@@ -180,8 +180,8 @@ final class PatternTests: ParserTestCase {
               identifier: .identifier("<#name#>")
             ),
             initializer: InitializerClauseSyntax(
-              value: EditorPlaceholderExprSyntax(
-                placeholder: .identifier("<#value#>")
+              value: DeclReferenceExprSyntax(
+                baseName: .identifier("<#value#>")
               )
             )
           )

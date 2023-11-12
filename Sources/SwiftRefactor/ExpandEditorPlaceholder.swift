@@ -135,7 +135,8 @@ public struct ExpandEditorPlaceholder: EditRefactoringProvider {
 /// Expansion on `closure1` and `normalArg` is the same as `ExpandEditorPlaceholder`.
 public struct ExpandEditorPlaceholders: EditRefactoringProvider {
   public static func textRefactor(syntax token: TokenSyntax, in context: Void) -> [SourceEdit] {
-    guard let placeholder = token.parent?.as(EditorPlaceholderExprSyntax.self),
+    guard let placeholder = token.parent?.as(DeclReferenceExprSyntax.self),
+      placeholder.baseName.isEditorPlaceholder,
       let arg = placeholder.parent?.as(LabeledExprSyntax.self),
       let argList = arg.parent?.as(LabeledExprListSyntax.self),
       let call = argList.parent?.as(FunctionCallExprSyntax.self)
@@ -190,8 +191,8 @@ extension FunctionTypeSyntax {
       placeholder = ExpandEditorPlaceholder.wrapInTypePlaceholder(ret, type: ret)
     }
 
-    let statementPlaceholder = EditorPlaceholderExprSyntax(
-      placeholder: .identifier(placeholder)
+    let statementPlaceholder = DeclReferenceExprSyntax(
+      baseName: .identifier(placeholder)
     )
     let closureStatement = CodeBlockItemSyntax(
       item: .expr(ExprSyntax(statementPlaceholder))
@@ -234,8 +235,9 @@ extension FunctionCallExprSyntax {
     var includedArg = false
     var argsToExpand = 0
     for arg in arguments.reversed() {
-      guard let expr = arg.expression.as(EditorPlaceholderExprSyntax.self),
-        let data = EditorPlaceholderData(token: expr.placeholder),
+      guard let expr = arg.expression.as(DeclReferenceExprSyntax.self),
+        expr.baseName.isEditorPlaceholder,
+        let data = EditorPlaceholderData(token: expr.baseName),
         case let .typed(_, type) = data,
         type.is(FunctionTypeSyntax.self)
       else {
@@ -253,7 +255,7 @@ extension FunctionCallExprSyntax {
 
     var expandedArgs = [LabeledExprSyntax]()
     for arg in arguments.suffix(argsToExpand) {
-      let edits = ExpandEditorPlaceholder.textRefactor(syntax: arg.expression.cast(EditorPlaceholderExprSyntax.self).placeholder)
+      let edits = ExpandEditorPlaceholder.textRefactor(syntax: arg.expression.cast(DeclReferenceExprSyntax.self).baseName)
       guard edits.count == 1, let edit = edits.first, !edit.replacement.isEmpty else {
         return nil
       }

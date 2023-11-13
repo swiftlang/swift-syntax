@@ -68,3 +68,20 @@ public struct MacroExpansionFixItMessage: FixItMessage {
     self.message = message
   }
 }
+
+/// The message of a note that is specified by a string literal
+///
+/// This type allows macro authors to quickly generate note messages based on
+/// a string. For any non-trivial note messages, it is encouraged to define a
+/// custom type that conforms to `NoteMessage`.
+public struct MacroExpansionNoteMessage: NoteMessage {
+  public var message: String
+
+  public var noteID: SwiftDiagnostics.MessageID {
+    .init(domain: diagnosticDomain, id: "\(Self.self)")
+  }
+
+  public init(_ message: String) {
+    self.message = message
+  }
+}

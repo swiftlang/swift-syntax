@@ -256,6 +256,7 @@ func assertDiagnostic(
 ///     (e.g., `StringifyMacro.self`).
 ///   - applyFixIts: If specified, filters the Fix-Its that are applied to generate `fixedSource` to only those whose message occurs in this array. If `nil`, all Fix-Its from the diagnostics are applied.
 ///   - fixedSource: If specified, asserts that the source code after applying Fix-Its matches this string.
+///   - expectedExpandedFixedSource: If specified, asserts against the expanded fixed source.
 ///   - testModuleName: The name of the test module to use.
 ///   - testFileName: The name of the test file name to use.
 ///   - indentationWidth: The indentation width used in the expansion.
@@ -266,21 +267,106 @@ public func assertMacroExpansion(
   macros: [String: Macro.Type],
   applyFixIts: [String]? = nil,
   fixedSource expectedFixedSource: String? = nil,
+  expandedFixedSource expectedExpandedFixedSource: String? = nil,
   testModuleName: String = "TestModule",
   testFileName: String = "test.swift",
   indentationWidth: Trivia = .spaces(4),
   file: StaticString = #file,
   line: UInt = #line
 ) {
-  // Parse the original source file.
-  let origSourceFile = Parser.parse(source: originalSource)
-
-  // Expand all macros in the source.
-  let context = BasicMacroExpansionContext(
-    sourceFiles: [origSourceFile: .init(moduleName: testModuleName, fullFilePath: testFileName)]
+  // Performs the macro expansion test and retrieves the original source file and context.
+  let (originalSourceFile, context) = performMacroExpansionTest(
+    originalSource,
+    expandedSource: expectedExpandedSource,
+    macros: macros,
+    testModuleName: testModuleName,
+    testFileName: testFileName,
+    indentationWidth: indentationWidth,
+    file: file,
+    line: line
   )
 
-  let expandedSourceFile = origSourceFile.expand(macros: macros, in: context, indentationWidth: indentationWidth)
+  // Asserts that the number of diagnostics produced matches the expected count.
+  if context.diagnostics.count != diagnostics.count {
+    XCTFail(
+      """
+      Expected \(diagnostics.count) diagnostics but received \(context.diagnostics.count):
+      \(context.diagnostics.map(\.debugDescription).joined(separator: "\n"))
+      """,
+      file: file,
+      line: line
+    )
+  } else {
+    // Compares each actual diagnostic with its expected counterpart.
+    for (actualDiag, expectedDiag) in zip(context.diagnostics, diagnostics) {
+      assertDiagnostic(actualDiag, in: context, expected: expectedDiag)
+    }
+  }
+
+  // Applies Fix-Its if necessary, based on the provided expected arguments.
+  if expectedFixedSource != nil || expectedExpandedFixedSource != nil {
+    let messages = applyFixIts ?? context.diagnostics.compactMap { $0.fixIts.first?.message.message }
+
+    // Collects edits from diagnostics and applies them to the original source file.
+    let edits =
+      context.diagnostics
+      .flatMap(\.fixIts)
+      .filter { messages.contains($0.message.message) }
+      .flatMap { $0.changes }
+      .map { $0.edit(in: context) }
+
+    let fixedTree = FixItApplier.apply(edits: edits, to: originalSourceFile)
+    let fixedTreeDescription = fixedTree.description.trimmingTrailingWhitespace()
+
+    // Asserts that the fixed source matches the expected fixed source.
+    if let expectedFixedSource {
+      assertStringsEqualWithDiff(
+        fixedTreeDescription,
+        expectedFixedSource.trimmingTrailingWhitespace(),
+        file: file,
+        line: line
+      )
+    }
+
+    // Performs macro expansion test on the fixed source if an expected expanded fixed source is provided.
+    if let expectedExpandedFixedSource {
+      performMacroExpansionTest(
+        fixedTreeDescription,
+        expandedSource: expectedExpandedFixedSource.trimmingTrailingWhitespace(),
+        macros: macros,
+        testModuleName: testModuleName,
+        testFileName: testFileName,
+        indentationWidth: indentationWidth,
+        file: file,
+        line: line
+      )
+    }
+  }
+}
+
+@discardableResult
+private func performMacroExpansionTest(
+  _ originalSource: String,
+  expandedSource expectedExpandedSource: String,
+  macros: [String: Macro.Type],
+  testModuleName: String,
+  testFileName: String,
+  indentationWidth: Trivia,
+  file: StaticString,
+  line: UInt
+) -> (originalSourceFile: SourceFileSyntax, context: BasicMacroExpansionContext) {
+  // Parses the original source file from the provided string.
+  let originalSourceFile = Parser.parse(source: originalSource)
+
+  // Creates a context for macro expansion with the original source file.
+  let context = BasicMacroExpansionContext(
+    sourceFiles: [originalSourceFile: .init(moduleName: testModuleName, fullFilePath: testFileName)]
+  )
+
+  // Performs macro expansion on the original source file.
+  let expandedSourceFile = originalSourceFile.expand(macros: macros, in: context, indentationWidth: indentationWidth)
+
+  // Generates and checks for any syntax errors in the expanded source.
   let diags = ParseDiagnosticsGenerator.diagnostics(for: expandedSourceFile)
   if !diags.isEmpty {
     XCTFail(
@@ -296,6 +382,7 @@ public func assertMacroExpansion(
     )
   }
 
+  // Asserts that the expanded source matches the expected expanded source.
   assertStringsEqualWithDiff(
     expandedSourceFile.description.trimmingCharacters(in: .newlines),
     expectedExpandedSource.trimmingCharacters(in: .newlines),
@@ -308,41 +395,7 @@ public func assertMacroExpansion(
     line: line
   )
 
-  if context.diagnostics.count != diagnostics.count {
-    XCTFail(
-      """
-      Expected \(diagnostics.count) diagnostics but received \(context.diagnostics.count):
-      \(context.diagnostics.map(\.debugDescription).joined(separator: "\n"))
-      """,
-      file: file,
-      line: line
-    )
-  } else {
-    for (actualDiag, expectedDiag) in zip(context.diagnostics, diagnostics) {
-      assertDiagnostic(actualDiag, in: context, expected: expectedDiag)
-    }
-  }
-
-  // Applying Fix-Its
-  if let expectedFixedSource = expectedFixedSource {
-    let messages = applyFixIts ?? context.diagnostics.compactMap { $0.fixIts.first?.message.message }
-
-    let edits =
-      context.diagnostics
-      .flatMap(\.fixIts)
-      .filter { messages.contains($0.message.message) }
-      .flatMap { $0.changes }
-      .map { $0.edit(in: context) }
-
-    let fixedTree = FixItApplier.apply(edits: edits, to: origSourceFile)
-    let fixedTreeDescription = fixedTree.description
-    assertStringsEqualWithDiff(
-      fixedTreeDescription.trimmingTrailingWhitespace(),
-      expectedFixedSource.trimmingTrailingWhitespace(),
-      file: file,
-      line: line
-    )
-  }
+  return (originalSourceFile, context)
 }
 
 fileprivate extension FixIt.Change {

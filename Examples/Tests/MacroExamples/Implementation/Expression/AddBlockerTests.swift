@@ -58,9 +58,11 @@ final class AddBlockerTests: XCTestCase {
       ],
       macros: macros,
       applyFixIts: ["use '-'"],
-      fixedSource:
-        """
+      fixedSource: """
         #addBlocker(x * y - z)
+        """,
+      expandedFixedSource: """
+        x * y - z
         """,
       indentationWidth: .spaces(2)
     )

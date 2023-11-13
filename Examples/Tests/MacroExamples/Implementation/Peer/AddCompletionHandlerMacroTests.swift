@@ -135,6 +135,19 @@ final class AddCompletionHandlerMacroTests: XCTestCase {
           }
         }
         """,
+      expandedFixedSource: """
+        struct Test {
+          func fetchData() async -> String {
+            return "Hello, World!"
+          }
+
+          func fetchData(completionHandler: @escaping (String) -> Void) {
+            Task {
+              completionHandler(await fetchData())
+            }
+          }
+        }
+        """,
       indentationWidth: .spaces(2)
     )
   }

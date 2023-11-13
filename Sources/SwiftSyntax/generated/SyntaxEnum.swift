@@ -866,3 +866,436 @@ public extension Syntax {
     }
   }
 }
+
+/// Enum to exhaustively switch over all different Decl syntax nodes.
+public enum DeclSyntaxEnum {
+  case accessorDecl(AccessorDeclSyntax)
+  case actorDecl(ActorDeclSyntax)
+  case associatedTypeDecl(AssociatedTypeDeclSyntax)
+  case classDecl(ClassDeclSyntax)
+  case deinitializerDecl(DeinitializerDeclSyntax)
+  case editorPlaceholderDecl(EditorPlaceholderDeclSyntax)
+  case enumCaseDecl(EnumCaseDeclSyntax)
+  case enumDecl(EnumDeclSyntax)
+  case extensionDecl(ExtensionDeclSyntax)
+  case functionDecl(FunctionDeclSyntax)
+  case ifConfigDecl(IfConfigDeclSyntax)
+  case importDecl(ImportDeclSyntax)
+  case initializerDecl(InitializerDeclSyntax)
+  case macroDecl(MacroDeclSyntax)
+  case macroExpansionDecl(MacroExpansionDeclSyntax)
+  case missingDecl(MissingDeclSyntax)
+  case operatorDecl(OperatorDeclSyntax)
+  case poundSourceLocation(PoundSourceLocationSyntax)
+  case precedenceGroupDecl(PrecedenceGroupDeclSyntax)
+  case protocolDecl(ProtocolDeclSyntax)
+  case structDecl(StructDeclSyntax)
+  case subscriptDecl(SubscriptDeclSyntax)
+  case typeAliasDecl(TypeAliasDeclSyntax)
+  case variableDecl(VariableDeclSyntax)
+}
+
+public extension DeclSyntax {
+  /// Get an enum that can be used to exhaustively switch over all Decl syntax nodes.
+  func `as`(_: DeclSyntaxEnum.Type) -> DeclSyntaxEnum {
+    switch raw.kind {
+    case .accessorDecl:
+      return .accessorDecl(AccessorDeclSyntax(self)!)
+    case .actorDecl:
+      return .actorDecl(ActorDeclSyntax(self)!)
+    case .associatedTypeDecl:
+      return .associatedTypeDecl(AssociatedTypeDeclSyntax(self)!)
+    case .classDecl:
+      return .classDecl(ClassDeclSyntax(self)!)
+    case .deinitializerDecl:
+      return .deinitializerDecl(DeinitializerDeclSyntax(self)!)
+    case .editorPlaceholderDecl:
+      return .editorPlaceholderDecl(EditorPlaceholderDeclSyntax(self)!)
+    case .enumCaseDecl:
+      return .enumCaseDecl(EnumCaseDeclSyntax(self)!)
+    case .enumDecl:
+      return .enumDecl(EnumDeclSyntax(self)!)
+    case .extensionDecl:
+      return .extensionDecl(ExtensionDeclSyntax(self)!)
+    case .functionDecl:
+      return .functionDecl(FunctionDeclSyntax(self)!)
+    case .ifConfigDecl:
+      return .ifConfigDecl(IfConfigDeclSyntax(self)!)
+    case .importDecl:
+      return .importDecl(ImportDeclSyntax(self)!)
+    case .initializerDecl:
+      return .initializerDecl(InitializerDeclSyntax(self)!)
+    case .macroDecl:
+      return .macroDecl(MacroDeclSyntax(self)!)
+    case .macroExpansionDecl:
+      return .macroExpansionDecl(MacroExpansionDeclSyntax(self)!)
+    case .missingDecl:
+      return .missingDecl(MissingDeclSyntax(self)!)
+    case .operatorDecl:
+      return .operatorDecl(OperatorDeclSyntax(self)!)
+    case .poundSourceLocation:
+      return .poundSourceLocation(PoundSourceLocationSyntax(self)!)
+    case .precedenceGroupDecl:
+      return .precedenceGroupDecl(PrecedenceGroupDeclSyntax(self)!)
+    case .protocolDecl:
+      return .protocolDecl(ProtocolDeclSyntax(self)!)
+    case .structDecl:
+      return .structDecl(StructDeclSyntax(self)!)
+    case .subscriptDecl:
+      return .subscriptDecl(SubscriptDeclSyntax(self)!)
+    case .typeAliasDecl:
+      return .typeAliasDecl(TypeAliasDeclSyntax(self)!)
+    case .variableDecl:
+      return .variableDecl(VariableDeclSyntax(self)!)
+    default:
+      preconditionFailure("unknown Decl syntax kind")
+    }
+  }
+}
+
+/// Enum to exhaustively switch over all different Expr syntax nodes.
+public enum ExprSyntaxEnum {
+  case arrayExpr(ArrayExprSyntax)
+  case arrowExpr(ArrowExprSyntax)
+  case asExpr(AsExprSyntax)
+  case assignmentExpr(AssignmentExprSyntax)
+  case awaitExpr(AwaitExprSyntax)
+  case binaryOperatorExpr(BinaryOperatorExprSyntax)
+  case booleanLiteralExpr(BooleanLiteralExprSyntax)
+  case borrowExpr(BorrowExprSyntax)
+  case canImportExpr(CanImportExprSyntax)
+  case canImportVersionInfo(CanImportVersionInfoSyntax)
+  case closureExpr(ClosureExprSyntax)
+  case consumeExpr(ConsumeExprSyntax)
+  case copyExpr(CopyExprSyntax)
+  case declReferenceExpr(DeclReferenceExprSyntax)
+  case dictionaryExpr(DictionaryExprSyntax)
+  case discardAssignmentExpr(DiscardAssignmentExprSyntax)
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case doExpr(DoExprSyntax)
+  case editorPlaceholderExpr(EditorPlaceholderExprSyntax)
+  case floatLiteralExpr(FloatLiteralExprSyntax)
+  case forceUnwrapExpr(ForceUnwrapExprSyntax)
+  case functionCallExpr(FunctionCallExprSyntax)
+  case genericSpecializationExpr(GenericSpecializationExprSyntax)
+  case ifExpr(IfExprSyntax)
+  case inOutExpr(InOutExprSyntax)
+  case infixOperatorExpr(InfixOperatorExprSyntax)
+  case integerLiteralExpr(IntegerLiteralExprSyntax)
+  case isExpr(IsExprSyntax)
+  case keyPathExpr(KeyPathExprSyntax)
+  case macroExpansionExpr(MacroExpansionExprSyntax)
+  case memberAccessExpr(MemberAccessExprSyntax)
+  case missingExpr(MissingExprSyntax)
+  case nilLiteralExpr(NilLiteralExprSyntax)
+  case optionalChainingExpr(OptionalChainingExprSyntax)
+  case packElementExpr(PackElementExprSyntax)
+  case packExpansionExpr(PackExpansionExprSyntax)
+  case patternExpr(PatternExprSyntax)
+  case postfixIfConfigExpr(PostfixIfConfigExprSyntax)
+  case postfixOperatorExpr(PostfixOperatorExprSyntax)
+  case prefixOperatorExpr(PrefixOperatorExprSyntax)
+  case regexLiteralExpr(RegexLiteralExprSyntax)
+  case sequenceExpr(SequenceExprSyntax)
+  case simpleStringLiteralExpr(SimpleStringLiteralExprSyntax)
+  case stringLiteralExpr(StringLiteralExprSyntax)
+  case subscriptCallExpr(SubscriptCallExprSyntax)
+  case superExpr(SuperExprSyntax)
+  case switchExpr(SwitchExprSyntax)
+  case ternaryExpr(TernaryExprSyntax)
+  case tryExpr(TryExprSyntax)
+  case tupleExpr(TupleExprSyntax)
+  case typeExpr(TypeExprSyntax)
+  case unresolvedAsExpr(UnresolvedAsExprSyntax)
+  case unresolvedIsExpr(UnresolvedIsExprSyntax)
+  case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
+}
+
+public extension ExprSyntax {
+  /// Get an enum that can be used to exhaustively switch over all Expr syntax nodes.
+  func `as`(_: ExprSyntaxEnum.Type) -> ExprSyntaxEnum {
+    switch raw.kind {
+    case .arrayExpr:
+      return .arrayExpr(ArrayExprSyntax(self)!)
+    case .arrowExpr:
+      return .arrowExpr(ArrowExprSyntax(self)!)
+    case .asExpr:
+      return .asExpr(AsExprSyntax(self)!)
+    case .assignmentExpr:
+      return .assignmentExpr(AssignmentExprSyntax(self)!)
+    case .awaitExpr:
+      return .awaitExpr(AwaitExprSyntax(self)!)
+    case .binaryOperatorExpr:
+      return .binaryOperatorExpr(BinaryOperatorExprSyntax(self)!)
+    case .booleanLiteralExpr:
+      return .booleanLiteralExpr(BooleanLiteralExprSyntax(self)!)
+    case .borrowExpr:
+      return .borrowExpr(BorrowExprSyntax(self)!)
+    case .canImportExpr:
+      return .canImportExpr(CanImportExprSyntax(self)!)
+    case .canImportVersionInfo:
+      return .canImportVersionInfo(CanImportVersionInfoSyntax(self)!)
+    case .closureExpr:
+      return .closureExpr(ClosureExprSyntax(self)!)
+    case .consumeExpr:
+      return .consumeExpr(ConsumeExprSyntax(self)!)
+    case .copyExpr:
+      return .copyExpr(CopyExprSyntax(self)!)
+    case .declReferenceExpr:
+      return .declReferenceExpr(DeclReferenceExprSyntax(self)!)
+    case .dictionaryExpr:
+      return .dictionaryExpr(DictionaryExprSyntax(self)!)
+    case .discardAssignmentExpr:
+      return .discardAssignmentExpr(DiscardAssignmentExprSyntax(self)!)
+    case .doExpr:
+      return .doExpr(DoExprSyntax(self)!)
+    case .editorPlaceholderExpr:
+      return .editorPlaceholderExpr(EditorPlaceholderExprSyntax(self)!)
+    case .floatLiteralExpr:
+      return .floatLiteralExpr(FloatLiteralExprSyntax(self)!)
+    case .forceUnwrapExpr:
+      return .forceUnwrapExpr(ForceUnwrapExprSyntax(self)!)
+    case .functionCallExpr:
+      return .functionCallExpr(FunctionCallExprSyntax(self)!)
+    case .genericSpecializationExpr:
+      return .genericSpecializationExpr(GenericSpecializationExprSyntax(self)!)
+    case .ifExpr:
+      return .ifExpr(IfExprSyntax(self)!)
+    case .inOutExpr:
+      return .inOutExpr(InOutExprSyntax(self)!)
+    case .infixOperatorExpr:
+      return .infixOperatorExpr(InfixOperatorExprSyntax(self)!)
+    case .integerLiteralExpr:
+      return .integerLiteralExpr(IntegerLiteralExprSyntax(self)!)
+    case .isExpr:
+      return .isExpr(IsExprSyntax(self)!)
+    case .keyPathExpr:
+      return .keyPathExpr(KeyPathExprSyntax(self)!)
+    case .macroExpansionExpr:
+      return .macroExpansionExpr(MacroExpansionExprSyntax(self)!)
+    case .memberAccessExpr:
+      return .memberAccessExpr(MemberAccessExprSyntax(self)!)
+    case .missingExpr:
+      return .missingExpr(MissingExprSyntax(self)!)
+    case .nilLiteralExpr:
+      return .nilLiteralExpr(NilLiteralExprSyntax(self)!)
+    case .optionalChainingExpr:
+      return .optionalChainingExpr(OptionalChainingExprSyntax(self)!)
+    case .packElementExpr:
+      return .packElementExpr(PackElementExprSyntax(self)!)
+    case .packExpansionExpr:
+      return .packExpansionExpr(PackExpansionExprSyntax(self)!)
+    case .patternExpr:
+      return .patternExpr(PatternExprSyntax(self)!)
+    case .postfixIfConfigExpr:
+      return .postfixIfConfigExpr(PostfixIfConfigExprSyntax(self)!)
+    case .postfixOperatorExpr:
+      return .postfixOperatorExpr(PostfixOperatorExprSyntax(self)!)
+    case .prefixOperatorExpr:
+      return .prefixOperatorExpr(PrefixOperatorExprSyntax(self)!)
+    case .regexLiteralExpr:
+      return .regexLiteralExpr(RegexLiteralExprSyntax(self)!)
+    case .sequenceExpr:
+      return .sequenceExpr(SequenceExprSyntax(self)!)
+    case .simpleStringLiteralExpr:
+      return .simpleStringLiteralExpr(SimpleStringLiteralExprSyntax(self)!)
+    case .stringLiteralExpr:
+      return .stringLiteralExpr(StringLiteralExprSyntax(self)!)
+    case .subscriptCallExpr:
+      return .subscriptCallExpr(SubscriptCallExprSyntax(self)!)
+    case .superExpr:
+      return .superExpr(SuperExprSyntax(self)!)
+    case .switchExpr:
+      return .switchExpr(SwitchExprSyntax(self)!)
+    case .ternaryExpr:
+      return .ternaryExpr(TernaryExprSyntax(self)!)
+    case .tryExpr:
+      return .tryExpr(TryExprSyntax(self)!)
+    case .tupleExpr:
+      return .tupleExpr(TupleExprSyntax(self)!)
+    case .typeExpr:
+      return .typeExpr(TypeExprSyntax(self)!)
+    case .unresolvedAsExpr:
+      return .unresolvedAsExpr(UnresolvedAsExprSyntax(self)!)
+    case .unresolvedIsExpr:
+      return .unresolvedIsExpr(UnresolvedIsExprSyntax(self)!)
+    case .unresolvedTernaryExpr:
+      return .unresolvedTernaryExpr(UnresolvedTernaryExprSyntax(self)!)
+    default:
+      preconditionFailure("unknown Expr syntax kind")
+    }
+  }
+}
+
+/// Enum to exhaustively switch over all different Pattern syntax nodes.
+public enum PatternSyntaxEnum {
+  case expressionPattern(ExpressionPatternSyntax)
+  case identifierPattern(IdentifierPatternSyntax)
+  case isTypePattern(IsTypePatternSyntax)
+  case missingPattern(MissingPatternSyntax)
+  case tuplePattern(TuplePatternSyntax)
+  case valueBindingPattern(ValueBindingPatternSyntax)
+  case wildcardPattern(WildcardPatternSyntax)
+}
+
+public extension PatternSyntax {
+  /// Get an enum that can be used to exhaustively switch over all Pattern syntax nodes.
+  func `as`(_: PatternSyntaxEnum.Type) -> PatternSyntaxEnum {
+    switch raw.kind {
+    case .expressionPattern:
+      return .expressionPattern(ExpressionPatternSyntax(self)!)
+    case .identifierPattern:
+      return .identifierPattern(IdentifierPatternSyntax(self)!)
+    case .isTypePattern:
+      return .isTypePattern(IsTypePatternSyntax(self)!)
+    case .missingPattern:
+      return .missingPattern(MissingPatternSyntax(self)!)
+    case .tuplePattern:
+      return .tuplePattern(TuplePatternSyntax(self)!)
+    case .valueBindingPattern:
+      return .valueBindingPattern(ValueBindingPatternSyntax(self)!)
+    case .wildcardPattern:
+      return .wildcardPattern(WildcardPatternSyntax(self)!)
+    default:
+      preconditionFailure("unknown Pattern syntax kind")
+    }
+  }
+}
+
+/// Enum to exhaustively switch over all different Stmt syntax nodes.
+public enum StmtSyntaxEnum {
+  case breakStmt(BreakStmtSyntax)
+  case continueStmt(ContinueStmtSyntax)
+  case deferStmt(DeferStmtSyntax)
+  case discardStmt(DiscardStmtSyntax)
+  case doStmt(DoStmtSyntax)
+  case expressionStmt(ExpressionStmtSyntax)
+  case fallThroughStmt(FallThroughStmtSyntax)
+  case forStmt(ForStmtSyntax)
+  case guardStmt(GuardStmtSyntax)
+  case labeledStmt(LabeledStmtSyntax)
+  case missingStmt(MissingStmtSyntax)
+  case repeatStmt(RepeatStmtSyntax)
+  case returnStmt(ReturnStmtSyntax)
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case thenStmt(ThenStmtSyntax)
+  case throwStmt(ThrowStmtSyntax)
+  case whileStmt(WhileStmtSyntax)
+  case yieldStmt(YieldStmtSyntax)
+}
+
+public extension StmtSyntax {
+  /// Get an enum that can be used to exhaustively switch over all Stmt syntax nodes.
+  func `as`(_: StmtSyntaxEnum.Type) -> StmtSyntaxEnum {
+    switch raw.kind {
+    case .breakStmt:
+      return .breakStmt(BreakStmtSyntax(self)!)
+    case .continueStmt:
+      return .continueStmt(ContinueStmtSyntax(self)!)
+    case .deferStmt:
+      return .deferStmt(DeferStmtSyntax(self)!)
+    case .discardStmt:
+      return .discardStmt(DiscardStmtSyntax(self)!)
+    case .doStmt:
+      return .doStmt(DoStmtSyntax(self)!)
+    case .expressionStmt:
+      return .expressionStmt(ExpressionStmtSyntax(self)!)
+    case .fallThroughStmt:
+      return .fallThroughStmt(FallThroughStmtSyntax(self)!)
+    case .forStmt:
+      return .forStmt(ForStmtSyntax(self)!)
+    case .guardStmt:
+      return .guardStmt(GuardStmtSyntax(self)!)
+    case .labeledStmt:
+      return .labeledStmt(LabeledStmtSyntax(self)!)
+    case .missingStmt:
+      return .missingStmt(MissingStmtSyntax(self)!)
+    case .repeatStmt:
+      return .repeatStmt(RepeatStmtSyntax(self)!)
+    case .returnStmt:
+      return .returnStmt(ReturnStmtSyntax(self)!)
+    case .thenStmt:
+      return .thenStmt(ThenStmtSyntax(self)!)
+    case .throwStmt:
+      return .throwStmt(ThrowStmtSyntax(self)!)
+    case .whileStmt:
+      return .whileStmt(WhileStmtSyntax(self)!)
+    case .yieldStmt:
+      return .yieldStmt(YieldStmtSyntax(self)!)
+    default:
+      preconditionFailure("unknown Stmt syntax kind")
+    }
+  }
+}
+
+/// Enum to exhaustively switch over all different Type syntax nodes.
+public enum TypeSyntaxEnum {
+  case arrayType(ArrayTypeSyntax)
+  case attributedType(AttributedTypeSyntax)
+  case classRestrictionType(ClassRestrictionTypeSyntax)
+  case compositionType(CompositionTypeSyntax)
+  case dictionaryType(DictionaryTypeSyntax)
+  case functionType(FunctionTypeSyntax)
+  case identifierType(IdentifierTypeSyntax)
+  case implicitlyUnwrappedOptionalType(ImplicitlyUnwrappedOptionalTypeSyntax)
+  case memberType(MemberTypeSyntax)
+  case metatypeType(MetatypeTypeSyntax)
+  case missingType(MissingTypeSyntax)
+  case namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax)
+  case optionalType(OptionalTypeSyntax)
+  case packElementType(PackElementTypeSyntax)
+  case packExpansionType(PackExpansionTypeSyntax)
+  case someOrAnyType(SomeOrAnyTypeSyntax)
+  case suppressedType(SuppressedTypeSyntax)
+  case tupleType(TupleTypeSyntax)
+}
+
+public extension TypeSyntax {
+  /// Get an enum that can be used to exhaustively switch over all Type syntax nodes.
+  func `as`(_: TypeSyntaxEnum.Type) -> TypeSyntaxEnum {
+    switch raw.kind {
+    case .arrayType:
+      return .arrayType(ArrayTypeSyntax(self)!)
+    case .attributedType:
+      return .attributedType(AttributedTypeSyntax(self)!)
+    case .classRestrictionType:
+      return .classRestrictionType(ClassRestrictionTypeSyntax(self)!)
+    case .compositionType:
+      return .compositionType(CompositionTypeSyntax(self)!)
+    case .dictionaryType:
+      return .dictionaryType(DictionaryTypeSyntax(self)!)
+    case .functionType:
+      return .functionType(FunctionTypeSyntax(self)!)
+    case .identifierType:
+      return .identifierType(IdentifierTypeSyntax(self)!)
+    case .implicitlyUnwrappedOptionalType:
+      return .implicitlyUnwrappedOptionalType(ImplicitlyUnwrappedOptionalTypeSyntax(self)!)
+    case .memberType:
+      return .memberType(MemberTypeSyntax(self)!)
+    case .metatypeType:
+      return .metatypeType(MetatypeTypeSyntax(self)!)
+    case .missingType:
+      return .missingType(MissingTypeSyntax(self)!)
+    case .namedOpaqueReturnType:
+      return .namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax(self)!)
+    case .optionalType:
+      return .optionalType(OptionalTypeSyntax(self)!)
+    case .packElementType:
+      return .packElementType(PackElementTypeSyntax(self)!)
+    case .packExpansionType:
+      return .packExpansionType(PackExpansionTypeSyntax(self)!)
+    case .someOrAnyType:
+      return .someOrAnyType(SomeOrAnyTypeSyntax(self)!)
+    case .suppressedType:
+      return .suppressedType(SuppressedTypeSyntax(self)!)
+    case .tupleType:
+      return .tupleType(TupleTypeSyntax(self)!)
+    default:
+      preconditionFailure("unknown Type syntax kind")
+    }
+  }
+}

@@ -18,7 +18,9 @@
 // macros are invoked.                                                      //
 //==========================================================================//
 
+import SwiftDiagnostics
 import SwiftSyntax
+import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
@@ -258,6 +260,154 @@ final class AccessorMacroTests: XCTestCase {
         }
         """,
       macros: ["constantOne": ConstantOneGetter.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testEmpty() {
+    struct TestMacro: AccessorMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AccessorDeclSyntax] {
+        return []
+      }
+    }
+
+    // The compiler will reject this with
+    // 'Expansion of macro 'Test()' did not produce a non-observing accessor'
+    // We consider this a semantic error because swift-syntax doesn't have
+    // knowledge about which accessors are observing and which ones aren't.
+    assertMacroExpansion(
+      "@Test var x: Int",
+      expandedSource: "var x: Int",
+      macros: ["Test": TestMacro.self]
+    )
+
+    assertMacroExpansion(
+      "@Test var x: Int { 1 }",
+      expandedSource: "var x: Int { 1 }",
+      macros: ["Test": TestMacro.self]
+    )
+  }
+
+  func testEmitErrorFromMacro() {
+    struct TestMacro: AccessorMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AccessorDeclSyntax] {
+        context.diagnose(Diagnostic(node: node, message: MacroExpansionErrorMessage("test")))
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      "@Test var x: Int",
+      expandedSource: "var x: Int",
+      diagnostics: [
+        DiagnosticSpec(message: "test", line: 1, column: 1)
+      ],
+      macros: ["Test": TestMacro.self]
+    )
+
+    assertMacroExpansion(
+      "@Test var x: Int { 1 }",
+      expandedSource: "var x: Int { 1 }",
+      diagnostics: [DiagnosticSpec(message: "test", line: 1, column: 1)],
+      macros: ["Test": TestMacro.self]
+    )
+  }
+
+  func testInitializerRemovedForGetSet() {
+    assertMacroExpansion(
+      """
+      @constantOne
+      var x: Int = 1
+      """,
+      expandedSource: """
+        var x: Int {
+          get {
+            return 1
+          }
+        }
+        """,
+      macros: ["constantOne": ConstantOneGetter.self],
+      indentationWidth: indentationWidth
+    )
+
+    // Bit of an odd case, compiler has the type but we don't know it in `MacroSystem`
+    assertMacroExpansion(
+      """
+      @constantOne
+      var x = 1
+      """,
+      expandedSource: """
+        var x {
+          get {
+            return 1
+          }
+        }
+        """,
+      macros: ["constantOne": ConstantOneGetter.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testInitializerRemainsForObserver() {
+    struct DidSetAdder: AccessorMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AccessorDeclSyntax] {
+        return [
+          """
+          didSet {
+          }
+          """
+        ]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @addDidSet
+      var x = 1
+      """,
+      expandedSource: """
+        var x = 1 {
+          didSet {
+          }
+        }
+        """,
+      macros: ["addDidSet": DidSetAdder.self],
+      indentationWidth: indentationWidth
+    )
+
+    // Invalid semantically, but we shouldn't remove the initializer as the
+    // macro did not produce a getter/setter
+    assertMacroExpansion(
+      """
+      @addDidSet
+      var x = 1 {
+        get {
+          return 1
+        }
+      }
+      """,
+      expandedSource: """
+        var x = 1 {
+          get {
+            return 1
+          }
+          didSet {
+          }
+        }
+        """,
+      macros: ["addDidSet": DidSetAdder.self],
       indentationWidth: indentationWidth
     )
   }

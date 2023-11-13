@@ -255,4 +255,48 @@ final class MemberMacroTests: XCTestCase {
     )
   }
 
+  func testEmpty() {
+    struct TestMacro: MemberMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingMembersOf declaration: some DeclGroupSyntax,
+        conformingTo protocols: [TypeSyntax],
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+        var x: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          var x: Int
+        }
+        """,
+      macros: [
+        "Test": TestMacro.self
+      ]
+    )
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+        }
+        """,
+      macros: [
+        "Test": TestMacro.self
+      ]
+    )
+  }
 }

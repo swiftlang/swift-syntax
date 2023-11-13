@@ -354,4 +354,48 @@ final class MemberAttributeMacroTests: XCTestCase {
     )
   }
 
+  func testEmpty() {
+    struct TestMacro: MemberAttributeMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        attachedTo declaration: some DeclGroupSyntax,
+        providingAttributesFor member: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AttributeSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+        var x: Int
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          var x: Int
+        }
+        """,
+      macros: [
+        "Test": TestMacro.self
+      ]
+    )
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+        }
+        """,
+      macros: [
+        "Test": TestMacro.self
+      ]
+    )
+  }
 }

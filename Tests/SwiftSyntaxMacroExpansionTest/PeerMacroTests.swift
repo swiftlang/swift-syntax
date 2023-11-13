@@ -173,4 +173,24 @@ final class PeerMacroTests: XCTestCase {
       macros: ["Test": TestMacro.self]
     )
   }
+
+  func testEmpty() {
+    struct TestMacro: PeerMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingPeersOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      "@Test var x: Int",
+      expandedSource: "var x: Int",
+      macros: [
+        "Test": TestMacro.self
+      ]
+    )
+  }
 }

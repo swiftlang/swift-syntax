@@ -79,7 +79,8 @@ public struct OptionSetMacro {
   static func decodeExpansion(
     of attribute: AttributeSyntax,
     attachedTo decl: some DeclGroupSyntax,
-    in context: some MacroExpansionContext
+    in context: some MacroExpansionContext,
+    emitDiagnostics: Bool
   ) -> (StructDeclSyntax, EnumDeclSyntax, TypeSyntax)? {
     // Determine the name of the options enum.
     let optionsEnumName: String
@@ -91,7 +92,9 @@ public struct OptionSetMacro {
         stringLiteral.segments.count == 1,
         case let .stringSegment(optionsEnumNameString)? = stringLiteral.segments.first
       else {
-        context.diagnose(OptionSetMacroDiagnostic.requiresStringLiteral(optionsEnumNameArgumentLabel).diagnose(at: optionEnumNameArg.expression))
+        if emitDiagnostics {
+          context.diagnose(OptionSetMacroDiagnostic.requiresStringLiteral(optionsEnumNameArgumentLabel).diagnose(at: optionEnumNameArg.expression))
+        }
         return nil
       }
 
@@ -102,7 +105,9 @@ public struct OptionSetMacro {
 
     // Only apply to structs.
     guard let structDecl = decl.as(StructDeclSyntax.self) else {
-      context.diagnose(OptionSetMacroDiagnostic.requiresStruct.diagnose(at: decl))
+      if emitDiagnostics {
+        context.diagnose(OptionSetMacroDiagnostic.requiresStruct.diagnose(at: decl))
+      }
       return nil
     }
 
@@ -118,7 +123,9 @@ public struct OptionSetMacro {
         return nil
       }).first
     else {
-      context.diagnose(OptionSetMacroDiagnostic.requiresOptionsEnum(optionsEnumName).diagnose(at: decl))
+      if emitDiagnostics {
+        context.diagnose(OptionSetMacroDiagnostic.requiresOptionsEnum(optionsEnumName).diagnose(at: decl))
+      }
       return nil
     }
 
@@ -126,7 +133,9 @@ public struct OptionSetMacro {
     guard let genericArgs = attribute.attributeName.as(IdentifierTypeSyntax.self)?.genericArgumentClause,
       let rawType = genericArgs.arguments.first?.argument
     else {
-      context.diagnose(OptionSetMacroDiagnostic.requiresOptionsEnumRawType.diagnose(at: attribute))
+      if emitDiagnostics {
+        context.diagnose(OptionSetMacroDiagnostic.requiresOptionsEnumRawType.diagnose(at: attribute))
+      }
       return nil
     }
 
@@ -143,7 +152,7 @@ extension OptionSetMacro: ExtensionMacro {
     in context: some MacroExpansionContext
   ) throws -> [ExtensionDeclSyntax] {
     // Decode the expansion arguments.
-    guard let (structDecl, _, _) = decodeExpansion(of: node, attachedTo: declaration, in: context) else {
+    guard let (structDecl, _, _) = decodeExpansion(of: node, attachedTo: declaration, in: context, emitDiagnostics: false) else {
       return []
     }
 
@@ -165,7 +174,7 @@ extension OptionSetMacro: MemberMacro {
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
     // Decode the expansion arguments.
-    guard let (_, optionsEnum, rawType) = decodeExpansion(of: attribute, attachedTo: decl, in: context) else {
+    guard let (_, optionsEnum, rawType) = decodeExpansion(of: attribute, attachedTo: decl, in: context, emitDiagnostics: true) else {
       return []
     }
 

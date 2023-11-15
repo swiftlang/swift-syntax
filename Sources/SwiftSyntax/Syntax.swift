@@ -309,7 +309,7 @@ extension Syntax {
 public struct SyntaxNode {}
 
 /// See `SyntaxMemoryLayout`.
-var SyntaxMemoryLayouts: [String: SyntaxMemoryLayout.Value] = [
+let SyntaxMemoryLayouts: [String: SyntaxMemoryLayout.Value] = [
   "Syntax": .init(Syntax.self),
   "Syntax.Info": .init(Syntax.Info.self),
   "Syntax.Info.Root": .init(Syntax.Info.Root.self),

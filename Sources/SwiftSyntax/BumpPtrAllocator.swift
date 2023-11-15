@@ -17,8 +17,8 @@
 public class BumpPtrAllocator {
   typealias Slab = UnsafeMutableRawBufferPointer
 
-  static private var GROWTH_DELAY: Int = 128
-  static private var SLAB_ALIGNMENT: Int = 8
+  static private let GROWTH_DELAY: Int = 128
+  static private let SLAB_ALIGNMENT: Int = 8
 
   /// Initial slab size.
   private var slabSize: Int

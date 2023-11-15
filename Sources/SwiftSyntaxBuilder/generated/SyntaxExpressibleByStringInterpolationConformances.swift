@@ -26,6 +26,8 @@ extension ClosureParameterSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension CodeBlockItemSyntax: SyntaxExpressibleByStringInterpolation {}
 
+extension CodeBlockSyntax: SyntaxExpressibleByStringInterpolation {}
+
 extension DeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
 extension EnumCaseParameterSyntax: SyntaxExpressibleByStringInterpolation {}

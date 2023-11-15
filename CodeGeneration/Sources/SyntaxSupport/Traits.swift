@@ -152,6 +152,12 @@ public let TRAITS: [Trait] = [
     ]
   ),
   Trait(
+    traitName: "WithOptionalCodeBlock",
+    children: [
+      Child(name: "body", kind: .node(kind: .codeBlock), isOptional: true)
+    ]
+  ),
+  Trait(
     traitName: "WithStatements",
     children: [
       Child(name: "statements", kind: .node(kind: .codeBlockItemList))

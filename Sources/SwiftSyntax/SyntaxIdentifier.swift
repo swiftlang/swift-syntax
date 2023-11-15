@@ -15,7 +15,7 @@
 public struct SyntaxIndexInTree: Comparable, Hashable, Sendable {
   let indexInTree: UInt32
 
-  static var zero: SyntaxIndexInTree = SyntaxIndexInTree(indexInTree: 0)
+  static let zero: SyntaxIndexInTree = SyntaxIndexInTree(indexInTree: 0)
 
   /// Assuming that this index points to the start of ``Raw``, so that it points
   /// to the next sibling of ``Raw``.

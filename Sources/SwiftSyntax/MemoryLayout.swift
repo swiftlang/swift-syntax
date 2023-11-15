@@ -12,7 +12,7 @@
 
 // See `MemoryLayoutTest.swift`.
 @_spi(Testing) public enum SyntaxMemoryLayout {
-  public struct Value: Equatable {
+  public struct Value: Equatable, Sendable {
     var size: Int
     var stride: Int
     var alignment: Int

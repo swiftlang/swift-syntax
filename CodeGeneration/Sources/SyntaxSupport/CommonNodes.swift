@@ -56,6 +56,7 @@ public let COMMON_NODES: [Node] = [
     kind: .codeBlock,
     base: .syntax,
     nameForDiagnostics: "code block",
+    parserFunction: "parseCodeBlock",
     traits: [
       "Braced",
       "WithStatements",

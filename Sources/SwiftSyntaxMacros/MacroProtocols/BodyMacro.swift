@@ -11,6 +11,7 @@ import SwiftSyntax
 
 /// Describes a macro that can create the body for a function that does not
 /// have one.
+@_spi(ExperimentalLanguageFeature)
 public protocol BodyMacro: AttachedMacro {
   /// Expand a macro described by the given custom attribute and
   /// attached to the given declaration and evaluated within a

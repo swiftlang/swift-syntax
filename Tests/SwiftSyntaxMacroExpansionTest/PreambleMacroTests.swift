@@ -21,7 +21,7 @@
 import SwiftDiagnostics
 import SwiftSyntax
 @_spi(Testing) import SwiftSyntaxMacroExpansion
-import SwiftSyntaxMacros
+@_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
@@ -39,17 +39,13 @@ struct TracedPreambleMacro: PreambleMacro {
 
     let funcBaseName = funcDecl.name
     let paramNames = funcDecl.signature.parameterClause.parameters.map { param in
-      if let name = param.parameterName {
-        return name.text
-      } else {
-        return "_"
-      }
+      param.parameterName?.text ?? "_"
     }
 
     let passedArgs = paramNames.map { "\($0): \\(\($0))" }.joined(separator: ", ")
 
     let entry: CodeBlockItemSyntax = """
-      log("Entering \(raw: funcBaseName)(\(raw: passedArgs))")
+      log("Entering \(funcBaseName)(\(raw: passedArgs))")
       """
 
     let argLabels = paramNames.map { "\($0):" }.joined()

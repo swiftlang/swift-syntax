@@ -124,8 +124,8 @@ public enum PluginMessage {
     case conformance
     case codeItem
     case `extension`
-    case preamble
-    case body
+    @_spi(ExperimentalLanguageFeature) case preamble
+    @_spi(ExperimentalLanguageFeature) case body
   }
 
   public struct SourceLocation: Codable {

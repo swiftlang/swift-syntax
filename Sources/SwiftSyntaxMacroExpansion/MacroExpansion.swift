@@ -12,7 +12,7 @@
 
 import SwiftBasicFormat
 import SwiftSyntax
-@_spi(MacroExpansion) import SwiftSyntaxMacros
+@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
 
 public enum MacroRole {
   case expression
@@ -24,8 +24,8 @@ public enum MacroRole {
   case conformance
   case codeItem
   case `extension`
-  case preamble
-  case body
+  @_spi(ExperimentalLanguageFeature) case preamble
+  @_spi(ExperimentalLanguageFeature) case body
 }
 
 extension MacroRole {
@@ -55,7 +55,7 @@ enum MacroExpansionError: Error, CustomStringConvertible {
   case declarationHasNoBody
   case noExtendedTypeSyntax
   case noFreestandingMacroRoles(Macro.Type)
-  case tooManyBodyMacros
+  case moreThanOneBodyMacro
   case preambleWithoutBody
 
   var description: String {
@@ -81,7 +81,7 @@ enum MacroExpansionError: Error, CustomStringConvertible {
     case .noFreestandingMacroRoles(let type):
       return "macro implementation type '\(type)' does not conform to any freestanding macro protocol"
 
-    case .tooManyBodyMacros:
+    case .moreThanOneBodyMacro:
       return "function can not have more than one body macro applied to it"
 
     case .preambleWithoutBody:

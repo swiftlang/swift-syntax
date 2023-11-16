@@ -11,6 +11,7 @@ import SwiftSyntax
 
 /// Describes a macro that can introduce "preamble" code into an existing
 /// function body.
+@_spi(ExperimentalLanguageFeature)
 public protocol PreambleMacro: AttachedMacro {
   /// Expand a macro described by the given custom attribute and
   /// attached to the given declaration and evaluated within a

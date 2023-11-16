@@ -21,7 +21,7 @@
 import SwiftDiagnostics
 import SwiftSyntax
 @_spi(Testing) import SwiftSyntaxMacroExpansion
-import SwiftSyntaxMacros
+@_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
@@ -39,11 +39,7 @@ struct RemoteBodyMacro: BodyMacro {
 
     let funcBaseName = funcDecl.name.text
     let paramNames = funcDecl.signature.parameterClause.parameters.map { param in
-      if let name = param.parameterName {
-        return name
-      } else {
-        return TokenSyntax(.wildcard, presence: .present)
-      }
+      param.parameterName ?? TokenSyntax(.wildcard, presence: .present)
     }
 
     let passedArgs = DictionaryExprSyntax(
@@ -109,6 +105,24 @@ final class BodyMacroTests: XCTestCase {
       macros: ["Remote": RemoteBodyMacro.self],
       indentationWidth: indentationWidth
     )
+  }
 
+  func testBodyExpansionReplacement() {
+    assertMacroExpansion(
+      """
+      @Remote
+      func f(a: Int, b: String) async throws -> String {
+        this; code; is; unused
+      }
+      """,
+      expandedSource: """
+
+        func f(a: Int, b: String) async throws -> String {
+          return try await remoteCall(function: "f", arguments: ["a": a, "b": b])
+        }
+        """,
+      macros: ["Remote": RemoteBodyMacro.self],
+      indentationWidth: indentationWidth
+    )
   }
 }

@@ -15,7 +15,7 @@ import SwiftOperators
 @_spi(MacroExpansion) import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxBuilder
-@_spi(MacroExpansion) import SwiftSyntaxMacros
+@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
 
 // MARK: - Public entry function
 
@@ -379,7 +379,7 @@ private func expandPreambleMacro(
   // Match the indentation of the statements if we can, and put newlines around
   // the preamble to separate it from the rest of the body.
   let indentation = decl.body?.statements.indentationOfFirstLine ?? (decl.indentationOfFirstLine + indentationWidth)
-  let indentedSource = "\n" + expanded.indented(by: indentation) + "\n\n\n"
+  let indentedSource = "\n" + expanded.indented(by: indentation) + "\n\n"
   return "\(raw: indentedSource)"
 }
 
@@ -410,7 +410,8 @@ private func expandBodyMacro(
   }
 
   // Wrap the body in braces.
-  let indentedSource = " {\n" + expanded.indented(by: decl.indentationOfFirstLine + indentationWidth) + "\n}\n"
+  let beforeBody = decl.body == nil ? " " : "";
+  let indentedSource = beforeBody + "{\n" + expanded.indented(by: decl.indentationOfFirstLine + indentationWidth) + "\n}\n"
   return "\(raw: indentedSource)" as CodeBlockSyntax
 }
 
@@ -704,7 +705,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       body = expandedBodies[0]
 
     default:
-      context.addDiagnostics(from: MacroExpansionError.tooManyBodyMacros, node: node)
+      context.addDiagnostics(from: MacroExpansionError.moreThanOneBodyMacro, node: node)
       body = expandedBodies[0]
     }
 
@@ -713,9 +714,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       return node.with(\.body, body)
     }
 
-    var statements = body.statements
-    statements.insert(contentsOf: preamble, at: statements.startIndex)
-    return node.with(\.body, body.with(\.statements, statements))
+    return node.with(\.body, body.with(\.statements, preamble + body.statements))
   }
 
   override func visit(_ node: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {

@@ -34,9 +34,9 @@ public struct AddCompletionHandlerMacro: PeerMacro {
       var newEffects: FunctionEffectSpecifiersSyntax
       if let existingEffects = funcDecl.signature.effectSpecifiers {
         newEffects = existingEffects
-        newEffects.asyncSpecifier = .keyword(.async)
+        newEffects.asyncSpecifier = .keyword(.async, trailingTrivia: .space)
       } else {
-        newEffects = FunctionEffectSpecifiersSyntax(asyncSpecifier: .keyword(.async))
+        newEffects = FunctionEffectSpecifiersSyntax(asyncSpecifier: .keyword(.async, trailingTrivia: .space))
       }
 
       var newSignature = funcDecl.signature

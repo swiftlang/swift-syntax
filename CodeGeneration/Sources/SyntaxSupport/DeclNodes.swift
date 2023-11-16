@@ -82,7 +82,10 @@ public let DECL_NODES: [Node] = [
     base: .decl,
     nameForDiagnostics: "accessor",
     parserFunction: "parseAccessorDecl",
-    traits: ["WithAttributes"],
+    traits: [
+      "WithOptionalCodeBlock",
+      "WithAttributes",
+    ],
     children: [
       Child(
         name: "attributes",
@@ -493,6 +496,7 @@ public let DECL_NODES: [Node] = [
     traits: [
       "WithAttributes",
       "WithModifiers",
+      "WithOptionalCodeBlock",
     ],
     children: [
       Child(
@@ -879,6 +883,7 @@ public let DECL_NODES: [Node] = [
       "WithAttributes",
       "WithGenericParameters",
       "WithModifiers",
+      "WithOptionalCodeBlock",
     ],
     children: [
       Child(
@@ -1217,6 +1222,7 @@ public let DECL_NODES: [Node] = [
       "WithAttributes",
       "WithGenericParameters",
       "WithModifiers",
+      "WithOptionalCodeBlock",
     ],
     children: [
       Child(

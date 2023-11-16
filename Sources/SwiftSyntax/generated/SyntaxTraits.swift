@@ -570,6 +570,43 @@ public extension SyntaxProtocol {
   }
 }
 
+// MARK: - WithOptionalCodeBlockSyntax
+
+
+public protocol WithOptionalCodeBlockSyntax: SyntaxProtocol {
+  var body: CodeBlockSyntax? {
+    get
+    set
+  }
+}
+
+public extension WithOptionalCodeBlockSyntax {
+  /// Without this function, the `with` function defined on `SyntaxProtocol`
+  /// does not work on existentials of this protocol type.
+  @_disfavoredOverload
+  func with<T>(_ keyPath: WritableKeyPath<WithOptionalCodeBlockSyntax, T>, _ newChild: T) -> WithOptionalCodeBlockSyntax {
+    var copy: WithOptionalCodeBlockSyntax = self
+    copy[keyPath: keyPath] = newChild
+    return copy
+  }
+}
+
+public extension SyntaxProtocol {
+  /// Check whether the non-type erased version of this syntax node conforms to
+  /// `WithOptionalCodeBlockSyntax`.
+  /// Note that this will incur an existential conversion.
+  func isProtocol(_: WithOptionalCodeBlockSyntax.Protocol) -> Bool {
+    return self.asProtocol(WithOptionalCodeBlockSyntax.self) != nil
+  }
+  
+  /// Return the non-type erased version of this syntax node if it conforms to
+  /// `WithOptionalCodeBlockSyntax`. Otherwise return `nil`.
+  /// Note that this will incur an existential conversion.
+  func asProtocol(_: WithOptionalCodeBlockSyntax.Protocol) -> WithOptionalCodeBlockSyntax? {
+    return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithOptionalCodeBlockSyntax
+  }
+}
+
 // MARK: - WithStatementsSyntax
 
 
@@ -649,7 +686,7 @@ public extension SyntaxProtocol {
 
 extension AccessorBlockSyntax: BracedSyntax {}
 
-extension AccessorDeclSyntax: WithAttributesSyntax {}
+extension AccessorDeclSyntax: WithOptionalCodeBlockSyntax, WithAttributesSyntax {}
 
 extension AccessorEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
 
@@ -693,7 +730,7 @@ extension DeclNameArgumentsSyntax: ParenthesizedSyntax {}
 
 extension DeferStmtSyntax: WithCodeBlockSyntax {}
 
-extension DeinitializerDeclSyntax: WithAttributesSyntax, WithModifiersSyntax {}
+extension DeinitializerDeclSyntax: WithAttributesSyntax, WithModifiersSyntax, WithOptionalCodeBlockSyntax {}
 
 extension DictionaryElementSyntax: WithTrailingCommaSyntax {}
 
@@ -723,7 +760,7 @@ extension ExtensionDeclSyntax: DeclGroupSyntax, WithAttributesSyntax, WithModifi
 
 extension ForStmtSyntax: WithCodeBlockSyntax {}
 
-extension FunctionDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
+extension FunctionDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax, WithOptionalCodeBlockSyntax {}
 
 extension FunctionEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
 
@@ -747,7 +784,7 @@ extension ImportDeclSyntax: WithAttributesSyntax, WithModifiersSyntax {}
 
 extension InheritedTypeSyntax: WithTrailingCommaSyntax {}
 
-extension InitializerDeclSyntax: WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax {}
+extension InitializerDeclSyntax: WithAttributesSyntax, WithGenericParametersSyntax, WithModifiersSyntax, WithOptionalCodeBlockSyntax {}
 
 extension LabeledExprSyntax: WithTrailingCommaSyntax {}
 

@@ -40,11 +40,9 @@ extension SyntaxStringInterpolation {
   }
 }
 
-// MARK: - HasCodeBlock
+// MARK: - HasTrailingCodeBlock
 
-public protocol HasTrailingCodeBlock {
-  var body: CodeBlockSyntax { get set }
-
+public protocol HasTrailingCodeBlock: WithCodeBlockSyntax {
   /// Constructs a syntax node where `header` builds the text of the node before the body in braces and `bodyBuilder` is used to build the node’s body.
   ///
   /// For example, you can construct
@@ -90,11 +88,9 @@ extension ForStmtSyntax: HasTrailingCodeBlock {}
 extension GuardStmtSyntax: HasTrailingCodeBlock {}
 extension WhileStmtSyntax: HasTrailingCodeBlock {}
 
-// MARK: - HasOptionalCodeBlock
+// MARK: - WithOptionalCodeBlockSyntax
 
-public protocol HasTrailingOptionalCodeBlock {
-  var body: CodeBlockSyntax? { get set }
-
+public extension WithOptionalCodeBlockSyntax where Self: DeclSyntaxProtocol {
   /// Constructs a syntax node where `header` builds the text of the node before the body in braces and `bodyBuilder` is used to build the node’s body.
   ///
   /// For example, you can construct
@@ -114,10 +110,6 @@ public protocol HasTrailingOptionalCodeBlock {
   /// ```
   ///
   /// Throws an error if `header` defines a different node type than the type the initializer is called on. E.g. if calling `try FunctionDeclSyntax("init") {}`
-  init(_ header: SyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) throws
-}
-
-public extension HasTrailingOptionalCodeBlock where Self: DeclSyntaxProtocol {
   init(_ header: SyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) throws {
     let decl = DeclSyntax("\(header) {}")
     guard let castedDecl = decl.as(Self.self) else {
@@ -127,11 +119,6 @@ public extension HasTrailingOptionalCodeBlock where Self: DeclSyntaxProtocol {
     self.body = try CodeBlockSyntax(statements: bodyBuilder())
   }
 }
-
-extension AccessorDeclSyntax: HasTrailingOptionalCodeBlock {}
-extension DeinitializerDeclSyntax: HasTrailingOptionalCodeBlock {}
-extension FunctionDeclSyntax: HasTrailingOptionalCodeBlock {}
-extension InitializerDeclSyntax: HasTrailingOptionalCodeBlock {}
 
 // MARK: HasTrailingMemberDeclBlock
 

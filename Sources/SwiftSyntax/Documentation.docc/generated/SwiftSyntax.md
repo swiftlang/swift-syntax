@@ -401,6 +401,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/WithCodeBlockSyntax>
 - <doc:SwiftSyntax/WithGenericParametersSyntax>
 - <doc:SwiftSyntax/WithModifiersSyntax>
+- <doc:SwiftSyntax/WithOptionalCodeBlockSyntax>
 - <doc:SwiftSyntax/WithStatementsSyntax>
 - <doc:SwiftSyntax/WithTrailingCommaSyntax>
 

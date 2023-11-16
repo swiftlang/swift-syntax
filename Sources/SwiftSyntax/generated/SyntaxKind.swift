@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Enumerates the known kinds of Syntax represented in the Syntax tree.
-public enum SyntaxKind {
+public enum SyntaxKind: UInt16, CaseIterable {
   case token
   case accessorBlock
   case accessorDeclList

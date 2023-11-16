@@ -98,4 +98,44 @@ final class AddCompletionHandlerMacroTests: XCTestCase {
       indentationWidth: .spaces(2)
     )
   }
+
+  func testExpansionOnNonAsyncFunctionAppliesFixIt() {
+    assertMacroExpansion(
+      """
+      struct Test {
+        @AddCompletionHandler
+        func fetchData() -> String {
+          return "Hello, World!"
+        }
+      }
+      """,
+      expandedSource: """
+        struct Test {
+          func fetchData() -> String {
+            return "Hello, World!"
+          }
+        }
+        """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "can only add a completion-handler variant to an 'async' function",
+          line: 3,
+          column: 3,
+          severity: .error,
+          fixIts: [FixItSpec(message: "add 'async'")]
+        )
+      ],
+      macros: macros,
+      applyFixIts: ["add 'async'"],
+      fixedSource: """
+        struct Test {
+          @AddCompletionHandler
+          func fetchData() async -> String {
+            return "Hello, World!"
+          }
+        }
+        """,
+      indentationWidth: .spaces(2)
+    )
+  }
 }

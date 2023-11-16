@@ -159,7 +159,7 @@ let package = Package(
 
     .target(
       name: "SwiftIDEUtils",
-      dependencies: ["SwiftSyntax"],
+      dependencies: ["SwiftSyntax", "SwiftParser"],
       exclude: ["CMakeLists.txt"]
     ),
 

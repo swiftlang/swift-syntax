@@ -52,7 +52,7 @@
     
     @Steps {
        @Step {
-        Configure your package. Continue to select the Package.swift file.
+        Open the `Package.swift` file created in the previous section.
             
         @Code(name: "Package.swift", file: Package.step2.swift)
       }

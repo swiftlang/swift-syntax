@@ -63,7 +63,7 @@ public extension SyntaxProtocol {
 // MARK: - DeclGroupSyntax
 
 
-public protocol DeclGroupSyntax: SyntaxProtocol {
+public protocol DeclGroupSyntax: SyntaxProtocol, DeclSyntaxProtocol {
   var attributes: AttributeListSyntax {
     get
     set

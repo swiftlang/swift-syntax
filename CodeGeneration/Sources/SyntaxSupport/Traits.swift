@@ -14,12 +14,14 @@ import SwiftSyntax
 
 public class Trait {
   public let traitName: String
+  public let syntaxBaseName: TokenSyntax?
   public let protocolName: TokenSyntax
   public let documentation: SwiftSyntax.Trivia
   public let children: [Child]
 
-  init(traitName: String, documentation: String? = nil, children: [Child]) {
+  init(traitName: String, syntaxBaseName: String?, documentation: String? = nil, children: [Child]) {
     self.traitName = traitName
+    self.syntaxBaseName = syntaxBaseName.map { .identifier("\($0)Protocol") }
     self.protocolName = .identifier("\(traitName)Syntax")
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.children = children
@@ -29,6 +31,7 @@ public class Trait {
 public let TRAITS: [Trait] = [
   Trait(
     traitName: "Braced",
+    syntaxBaseName: nil,
     children: [
       Child(name: "leftBrace", kind: .token(choices: [.token(.leftBrace)])),
       Child(name: "rightBrace", kind: .token(choices: [.token(.rightBrace)])),
@@ -36,6 +39,7 @@ public let TRAITS: [Trait] = [
   ),
   Trait(
     traitName: "DeclGroup",
+    syntaxBaseName: "DeclSyntax",
     children: [
       Child(name: "attributes", kind: .node(kind: .attributeList)),
       Child(name: "modifiers", kind: .node(kind: .declModifierList)),
@@ -51,6 +55,7 @@ public let TRAITS: [Trait] = [
   ),
   Trait(
     traitName: "EffectSpecifiers",
+    syntaxBaseName: nil,
     children: [
       Child(name: "unexpectedBeforeAsyncSpecifier", kind: .node(kind: .unexpectedNodes), isOptional: true),
       Child(name: "asyncSpecifier", kind: .token(choices: [.keyword(.async), .keyword(.reasync)]), isOptional: true),
@@ -69,6 +74,7 @@ public let TRAITS: [Trait] = [
   ),
   Trait(
     traitName: "FreestandingMacroExpansion",
+    syntaxBaseName: nil,
     children: [
       Child(name: "pound", deprecatedName: "poundToken", kind: .token(choices: [.token(.pound)])),
       Child(name: "macroName", deprecatedName: "macro", kind: .token(choices: [.token(.identifier)])),
@@ -82,12 +88,14 @@ public let TRAITS: [Trait] = [
   ),
   Trait(
     traitName: "NamedDecl",
+    syntaxBaseName: nil,
     children: [
       Child(name: "name", kind: .token(choices: [.token(.identifier)]))
     ]
   ),
   Trait(
     traitName: "MissingNode",
+    syntaxBaseName: nil,
     documentation: """
       Represents a layout node that is missing in the source file.
 
@@ -105,6 +113,7 @@ public let TRAITS: [Trait] = [
   ),
   Trait(
     traitName: "Parenthesized",
+    syntaxBaseName: nil,
     children: [
       Child(name: "leftParen", kind: .token(choices: [.token(.leftParen)])),
       Child(name: "rightParen", kind: .token(choices: [.token(.rightParen)])),
@@ -112,18 +121,21 @@ public let TRAITS: [Trait] = [
   ),
   Trait(
     traitName: "WithAttributes",
+    syntaxBaseName: nil,
     children: [
       Child(name: "attributes", kind: .node(kind: .attributeList))
     ]
   ),
   Trait(
     traitName: "WithCodeBlock",
+    syntaxBaseName: nil,
     children: [
       Child(name: "body", kind: .node(kind: .codeBlock))
     ]
   ),
   Trait(
     traitName: "WithGenericParameters",
+    syntaxBaseName: nil,
     documentation: """
       Syntax nodes that have generic parameters.
 
@@ -147,6 +159,7 @@ public let TRAITS: [Trait] = [
   ),
   Trait(
     traitName: "WithModifiers",
+    syntaxBaseName: nil,
     children: [
       Child(name: "modifiers", kind: .node(kind: .declModifierList))
     ]
@@ -159,12 +172,14 @@ public let TRAITS: [Trait] = [
   ),
   Trait(
     traitName: "WithStatements",
+    syntaxBaseName: nil,
     children: [
       Child(name: "statements", kind: .node(kind: .codeBlockItemList))
     ]
   ),
   Trait(
     traitName: "WithTrailingComma",
+    syntaxBaseName: nil,
     children: [
       Child(name: "trailingComma", kind: .token(choices: [.token(.comma)]), isOptional: true)
     ]

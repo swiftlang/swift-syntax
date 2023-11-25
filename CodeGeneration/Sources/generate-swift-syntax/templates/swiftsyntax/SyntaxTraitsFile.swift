@@ -23,8 +23,8 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       \(trait.documentation)
       public protocol \(trait.protocolName): SyntaxProtocol\(raw:
-        trait.syntaxBaseName != nil
-          ? ", \(trait.syntaxBaseName!)"
+        trait.baseKind != nil
+          ? ", \(trait.baseKind!.protocolType)"
           : ""
       )
       """

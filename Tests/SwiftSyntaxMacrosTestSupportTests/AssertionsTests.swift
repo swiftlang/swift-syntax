@@ -56,7 +56,7 @@ final class AssertionsTests: XCTestCase {
             message: OnlyStruct(),
             highlights: [
               Syntax(structDecl.structKeyword),
-              Syntax(structDecl.name)
+              Syntax(structDecl.name),
             ]
           )
         )

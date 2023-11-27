@@ -12,14 +12,56 @@
 
 import Foundation
 
-protocol BuildCommand {
-  var arguments: BuildArguments { get }
-}
+/// Wrapper around `swift build` and `swift test` to build and test SwiftPM packages.
+struct SwiftPMBuilder {
+  /// The path to the toolchain that shall be used to build SwiftSyntax.
+  let toolchain: URL
 
-extension BuildCommand {
-  func buildProduct(productName: String) throws {
-    logSection("Building product " + productName)
-    try build(packageDir: Paths.packageDir, name: productName, isProduct: true)
+  /// The directory in which build products shall be put.
+  ///
+  /// If omitted a directory named ".build" will be put in the swift-syntax directory.
+  let buildDir: URL?
+
+  /// Path to an Xcode workspace to create a unified build of SwiftSyntax with other projects.
+  let multirootDataFile: URL?
+
+  /// Build in release mode.
+  let release: Bool
+
+  /// When constructing RawSyntax nodes validate that their layout matches that
+  /// defined in `CodeGeneration` and that TokenSyntax nodes have a `tokenKind`
+  /// matching the ones specified in `CodeGeneration`.
+  let enableRawSyntaxValidation: Bool
+
+  /// For each `assertParse` test, perform mutations of the test case based on
+  /// alternate token choices that the parser checks, validating that there are
+  /// no round-trip or assertion failures.
+  let enableTestFuzzing: Bool
+
+  /// Treat all warnings as errors.
+  let warningsAsErrors: Bool
+
+  /// Enable verbose logging.
+  let verbose: Bool
+
+  init(
+    toolchain: URL,
+    buildDir: URL? = nil,
+    multirootDataFile: URL? = nil,
+    release: Bool = false,
+    enableRawSyntaxValidation: Bool = false,
+    enableTestFuzzing: Bool = false,
+    warningsAsErrors: Bool = false,
+    verbose: Bool = false
+  ) {
+    self.toolchain = toolchain
+    self.buildDir = buildDir
+    self.multirootDataFile = multirootDataFile
+    self.release = release
+    self.enableRawSyntaxValidation = enableRawSyntaxValidation
+    self.enableTestFuzzing = enableTestFuzzing
+    self.warningsAsErrors = warningsAsErrors
+    self.verbose = verbose
   }
 
   func buildTarget(packageDir: URL, targetName: String) throws {
@@ -42,11 +84,11 @@ extension BuildCommand {
     }
     args += ["--package-path", packageDir.path]
 
-    if let buildDir = arguments.buildDir?.path {
+    if let buildDir = buildDir?.path {
       args += ["--scratch-path", buildDir]
     }
 
-    if self.arguments.warningsAsErrors {
+    if self.warningsAsErrors {
       args += ["-Xswiftc", "-warnings-as-errors"]
     }
 
@@ -54,22 +96,22 @@ extension BuildCommand {
     args += ["--enable-test-discovery"]
     #endif
 
-    if arguments.release {
+    if release {
       args += ["--configuration", "release"]
     }
 
-    if let multirootDataFile = arguments.multirootDataFile?.path {
+    if let multirootDataFile = multirootDataFile?.path {
       args += ["--multiroot-data-file", multirootDataFile]
     }
 
-    if arguments.verbose {
+    if verbose {
       args += ["--verbose"]
     }
 
     args += additionalArguments
 
     let processRunner = ProcessRunner(
-      executableURL: arguments.toolchain.appendingPathComponent("bin").appendingPathComponent("swift"),
+      executableURL: toolchain.appendingPathComponent("bin").appendingPathComponent("swift"),
       arguments: args,
       additionalEnvironment: additionalEnvironment
     )
@@ -77,29 +119,10 @@ extension BuildCommand {
     let result = try processRunner.run(
       captureStdout: captureStdout,
       captureStderr: captureStderr,
-      verbose: arguments.verbose
+      verbose: verbose
     )
 
     return result
-  }
-
-  @discardableResult
-  func invokeXcodeBuild(projectPath: URL, scheme: String) throws -> ProcessResult {
-    return try withTemporaryDirectory { tempDir in
-      let processRunner = ProcessRunner(
-        executableURL: try Paths.xcodebuildExec,
-        arguments: [
-          "-project", projectPath.path,
-          "-scheme", scheme,
-          "-derivedDataPath", tempDir.path,
-        ],
-        additionalEnvironment: [:]
-      )
-
-      let result = try processRunner.run(verbose: arguments.verbose)
-
-      return result
-    }
   }
 
   /// Environment variables that should be set when invoking `swift build` or
@@ -108,11 +131,11 @@ extension BuildCommand {
     var additionalEnvironment: [String: String] = [:]
     additionalEnvironment["SWIFT_BUILD_SCRIPT_ENVIRONMENT"] = "1"
 
-    if arguments.enableRawSyntaxValidation {
+    if enableRawSyntaxValidation {
       additionalEnvironment["SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"] = "1"
     }
 
-    if arguments.enableTestFuzzing {
+    if enableTestFuzzing {
       additionalEnvironment["SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION"] = "1"
     }
 

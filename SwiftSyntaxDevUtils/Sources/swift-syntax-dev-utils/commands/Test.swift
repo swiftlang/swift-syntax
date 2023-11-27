@@ -13,15 +13,37 @@
 import ArgumentParser
 import Foundation
 
-struct Test: ParsableCommand, BuildCommand {
-  static var configuration: CommandConfiguration {
-    return CommandConfiguration(
-      abstract: "Run swift-syntax tests."
-    )
-  }
+struct Test: ParsableCommand {
+  static let configuration = CommandConfiguration(
+    abstract: "Run swift-syntax tests."
+  )
 
   @OptionGroup
   var arguments: BuildArguments
+
+  func run() throws {
+    let executor = TestExecutor(
+      swiftPMBuilder: SwiftPMBuilder(
+        toolchain: arguments.toolchain,
+        buildDir: arguments.buildDir,
+        multirootDataFile: arguments.multirootDataFile,
+        release: arguments.release,
+        enableRawSyntaxValidation: arguments.enableRawSyntaxValidation,
+        enableTestFuzzing: arguments.enableTestFuzzing,
+        warningsAsErrors: arguments.warningsAsErrors,
+        verbose: arguments.verbose
+      )
+    )
+    try executor.run()
+  }
+}
+
+struct TestExecutor {
+  private let swiftPMBuilder: SwiftPMBuilder
+
+  init(swiftPMBuilder: SwiftPMBuilder) {
+    self.swiftPMBuilder = swiftPMBuilder
+  }
 
   func run() throws {
     try runTests()
@@ -34,11 +56,11 @@ struct Test: ParsableCommand, BuildCommand {
   private func runTests() throws {
     logSection("Running SwiftSyntax Tests")
 
-    try invokeSwiftPM(
+    try swiftPMBuilder.invokeSwiftPM(
       action: "test",
       packageDir: Paths.packageDir,
       additionalArguments: ["--test-product", "swift-syntaxPackageTests"],
-      additionalEnvironment: swiftPMEnvironmentVariables,
+      additionalEnvironment: swiftPMBuilder.swiftPMEnvironmentVariables,
       captureStdout: false,
       captureStderr: false
     )
@@ -46,11 +68,11 @@ struct Test: ParsableCommand, BuildCommand {
 
   private func runCodeGenerationTests() throws {
     logSection("Running CodeGeneration Tests")
-    try invokeSwiftPM(
+    try swiftPMBuilder.invokeSwiftPM(
       action: "test",
       packageDir: Paths.codeGenerationDir,
       additionalArguments: ["--test-product", "CodeGenerationPackageTests"],
-      additionalEnvironment: swiftPMEnvironmentVariables,
+      additionalEnvironment: swiftPMBuilder.swiftPMEnvironmentVariables,
       captureStdout: false,
       captureStderr: false
     )
@@ -58,29 +80,22 @@ struct Test: ParsableCommand, BuildCommand {
 
   private func runExamplesTests() throws {
     logSection("Running Examples Tests")
-    try invokeSwiftPM(
+    try swiftPMBuilder.invokeSwiftPM(
       action: "test",
       packageDir: Paths.examplesDir,
       additionalArguments: ["--test-product", "ExamplesPackageTests"],
-      additionalEnvironment: swiftPMEnvironmentVariables,
+      additionalEnvironment: swiftPMBuilder.swiftPMEnvironmentVariables,
       captureStdout: false,
       captureStderr: false
     )
   }
 
   private func findSwiftpmBinPath(packageDir: URL) throws -> String {
-    return try invokeSwiftPM(
+    return try swiftPMBuilder.invokeSwiftPM(
       action: "build",
       packageDir: packageDir,
       additionalArguments: ["--show-bin-path"],
       additionalEnvironment: [:]
     ).stdout
-  }
-
-  /// This returns a path to the build examples folder.
-  /// Example: '<workingDir>/swift-syntax/Examples/.build/arm64-apple-macosx/debug
-  private func findExamplesBinPath() throws -> URL {
-    let stdOut = try findSwiftpmBinPath(packageDir: Paths.examplesDir)
-    return URL(fileURLWithPath: stdOut.trimmingCharacters(in: .whitespacesAndNewlines))
   }
 }

@@ -13,26 +13,58 @@
 import ArgumentParser
 import Foundation
 
-fileprivate var modules: [String] {
-  ["SwiftParser", "SwiftParserDiagnostics", "SwiftSyntax", "SwiftSyntaxBuilder"]
-}
+fileprivate let modules: [String] = [
+  "SwiftParser",
+  "SwiftParserDiagnostics",
+  "SwiftSyntax",
+  "SwiftSyntaxBuilder",
+]
 
-struct VerifySourceCode: ParsableCommand, SourceCodeGeneratorCommand {
-  static var configuration: CommandConfiguration {
-    return CommandConfiguration(
-      abstract: "Verify that the generated sources match the ones checked into the repository."
-    )
-  }
+struct VerifySourceCode: ParsableCommand {
+  static let configuration = CommandConfiguration(
+    abstract: "Verify that the generated sources match the ones checked into the repository."
+  )
 
   @OptionGroup
   var arguments: SourceCodeGeneratorArguments
+
+  func run() throws {
+    let executor = VerifySourceCodeExecutor(
+      toolchain: arguments.toolchain,
+      verbose: arguments.verbose
+    )
+    try executor.run()
+  }
+}
+
+struct VerifySourceCodeExecutor {
+  /// The path to the toolchain that shall be used to build SwiftSyntax.
+  private let toolchain: URL
+
+  /// Enable verbose logging.
+  private let verbose: Bool
+
+  private let generateSourceCodeExecutor: GenerateSourceCodeExecutor
+
+  /// Creates an executor
+  /// - Parameters:
+  ///   - toolchain: The path to the toolchain that shall be used to build SwiftSyntax.
+  ///   - verbose: Enable verbose logging.
+  init(toolchain: URL, verbose: Bool = false) {
+    self.toolchain = toolchain
+    self.verbose = verbose
+    self.generateSourceCodeExecutor = GenerateSourceCodeExecutor(
+      toolchain: toolchain,
+      verbose: verbose
+    )
+  }
 
   func run() throws {
     try withTemporaryDirectory(verifyCodeGeneratedFiles(tempDir:))
   }
 
   private func verifyCodeGeneratedFiles(tempDir: URL) throws {
-    try self.runCodeGeneration(sourceDir: tempDir)
+    try generateSourceCodeExecutor.run(sourceDir: tempDir)
 
     logSection("Verifing code generated files")
 
@@ -52,7 +84,7 @@ struct VerifySourceCode: ParsableCommand, SourceCodeGeneratorCommand {
         ]
       )
 
-      let result = try process.run(verbose: arguments.verbose)
+      let result = try process.run(verbose: verbose)
 
       if !result.stderr.isEmpty {
         throw ScriptExectutionError(

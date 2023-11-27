@@ -36,12 +36,10 @@ class SigIntListener {
 }
 
 /// Provides convenience APIs for launching and gathering output from a subprocess
-public class ProcessRunner {
-  private static let serialQueue = DispatchQueue(label: "\(ProcessRunner.self)")
-
+class ProcessRunner {
   private let process: Process
 
-  public init(
+  init(
     executableURL: URL,
     arguments: [String],
     additionalEnvironment: [String: String?] = [:]
@@ -56,7 +54,7 @@ public class ProcessRunner {
   }
 
   @discardableResult
-  public func run(
+  func run(
     captureStdout: Bool = true,
     captureStderr: Bool = true,
     verbose: Bool
@@ -133,9 +131,9 @@ public class ProcessRunner {
 
 /// The exit code and output (if redirected) from a subprocess that has
 /// terminated
-public struct ProcessResult {
-  public let stdout: String
-  public let stderr: String
+struct ProcessResult {
+  let stdout: String
+  let stderr: String
 }
 
 /// Error thrown if a process terminates with a non-zero exit code.

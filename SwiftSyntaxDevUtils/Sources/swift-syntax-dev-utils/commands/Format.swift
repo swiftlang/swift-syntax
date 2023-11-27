@@ -24,22 +24,25 @@ fileprivate let directoriesToExclude = [
 ]
 
 struct Format: ParsableCommand {
-  static var configuration: CommandConfiguration {
-    return CommandConfiguration(
-      abstract: "Format files in SwiftSyntax using swift-format.",
-      discussion: """
-        This command automatically builds the '\(Self.swiftFormatBranch)' branch \
-        of swift-format in the '\(Paths.swiftFormatBuildDir.lastPathComponent)' \
-        directory of this repository and uses the build to format the swift-syntax \
-        sources.
-        """
-    )
-  }
+  static let configuration = CommandConfiguration(
+    abstract: "Format files in SwiftSyntax using swift-format.",
+    discussion: """
+      This command automatically builds the '\(FormatExecutor.swiftFormatBranch)' branch \
+      of swift-format in the '\(Paths.swiftFormatBuildDir.lastPathComponent)' \
+      directory of this repository and uses the build to format the swift-syntax \
+      sources.
+      """
+  )
 
   @Flag(help: "Update the sources of swift-format and rebuild swift-format")
   var update: Bool = false
 
-  @Flag(help: "Instead of formatting in-place, verify that the files are correctly formatted. Exit with 1 if files are not correctly formatted.")
+  @Flag(
+    help: """
+      Instead of formatting in-place, verify that the files are correctly formatted. \
+      Exit with 1 if files are not correctly formatted.
+      """
+  )
   var lint: Bool = false
 
   @Option(
@@ -53,12 +56,18 @@ struct Format: ParsableCommand {
   @Flag(help: "Enable verbose logging.")
   var verbose: Bool = false
 
-  /// The configuration to build swift-format in.
-  private static let swiftFormatBuildConfiguration: String = "release"
+  func run() throws {
+    let executor = FormatExecutor(
+      update: update,
+      lint: lint,
+      swiftFormat: swiftFormat,
+      verbose: verbose
+    )
+    try executor.run()
+  }
+}
 
-  /// The branch of swift-format to build.
-  private static let swiftFormatBranch: String = "main"
-
+struct FormatExecutor {
   private enum Error: Swift.Error, CustomStringConvertible {
     case swiftFormatNotFound
     case lintFailed
@@ -85,6 +94,46 @@ struct Format: ParsableCommand {
           """
       }
     }
+  }
+
+  /// Update the sources of swift-format and rebuild swift-format
+  private let update: Bool
+
+  /// Instead of formatting in-place, verify that the files are correctly formatted.
+  ///
+  /// Exit with 1 if files are not correctly formatted.
+  private let lint: Bool
+
+  /// Instead of building a local swift-format, use this swift-format executable.
+  ///
+  /// Should primarily be used for CI, which has already built swift-format.
+  private let swiftFormat: String?
+
+  /// Enable verbose logging.
+  private let verbose: Bool
+
+  /// The branch of swift-format to build.
+  static let swiftFormatBranch: String = "main"
+
+  /// The configuration to build swift-format in.
+  private static let swiftFormatBuildConfiguration: String = "release"
+
+  /// Creates an Executor
+  /// - Parameters:
+  ///   - update: Update the sources of swift-format and rebuild swift-format
+  ///   - lint: Instead of formatting in-place, verify that the files are correctly formatted.
+  ///   - swiftFormat: Instead of building a local swift-format, use this swift-format executable.
+  ///   - verbose: Enable verbose logging.
+  init(
+    update: Bool,
+    lint: Bool = false,
+    swiftFormat: String? = nil,
+    verbose: Bool = false
+  ) {
+    self.update = update
+    self.lint = lint
+    self.swiftFormat = swiftFormat
+    self.verbose = verbose
   }
 
   /// Run `git` in the .swift-format-build directory with the provided arguments.
@@ -219,12 +268,12 @@ struct Format: ParsableCommand {
     print("💡 You are building running the format script with Swift 5.9 or lower. Running it with SwiftPM 5.10 is about 10s faster.")
     #endif
 
-    try run(updateAndBuild: self.update)
+    try run(updateAndBuild: update)
   }
 
   /// - Parameter updateAndBuild: Whether to update the locally checked out
   ///   swift-format sources and rebuild swift-format.
-  func run(updateAndBuild: Bool) throws {
+  private func run(updateAndBuild: Bool) throws {
     if updateAndBuild {
       try cloneOrUpdateSwiftFormat()
       try buildSwiftFormat()

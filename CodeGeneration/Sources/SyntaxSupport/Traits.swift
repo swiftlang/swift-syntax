@@ -14,12 +14,19 @@ import SwiftSyntax
 
 public class Trait {
   public let traitName: String
+  /// The kind of syntax the trait refines.
+  ///
+  /// Base kind _must_ be a base syntax node, e.g. `.decl`, `.expr` , or
+  /// others. See ``SyntaxNodeKind/isBase`` for more details.
+  public let baseKind: SyntaxNodeKind?
   public let protocolName: TokenSyntax
   public let documentation: SwiftSyntax.Trivia
   public let children: [Child]
 
-  init(traitName: String, documentation: String? = nil, children: [Child]) {
+  init(traitName: String, baseKind: SyntaxNodeKind? = nil, documentation: String? = nil, children: [Child]) {
+    precondition(baseKind?.isBase != false, "`baseKind` must be a base syntax node kind")
     self.traitName = traitName
+    self.baseKind = baseKind
     self.protocolName = .identifier("\(traitName)Syntax")
     self.documentation = docCommentTrivia(from: documentation)
     self.children = children
@@ -36,6 +43,7 @@ public let TRAITS: [Trait] = [
   ),
   Trait(
     traitName: "DeclGroup",
+    baseKind: .decl,
     children: [
       Child(name: "attributes", kind: .node(kind: .attributeList)),
       Child(name: "modifiers", kind: .node(kind: .declModifierList)),

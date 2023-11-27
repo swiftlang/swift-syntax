@@ -51,6 +51,12 @@
     }
     
     @Steps {
+       @Step {
+        Open the `Package.swift` file created in the previous section.
+            
+        @Code(name: "Package.swift", file: Package.step2.swift)
+      }
+        
       @Step {
         Add the `swift-syntax` package to the dependencies section of your 
         `Package.swift` file.

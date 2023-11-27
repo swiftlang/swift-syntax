@@ -22,7 +22,11 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       // MARK: - \(trait.protocolName)
 
       \(trait.documentation)
-      public protocol \(trait.protocolName): SyntaxProtocol
+      public protocol \(trait.protocolName): SyntaxProtocol\(raw:
+        trait.baseKind != nil
+          ? ", \(trait.baseKind!.protocolType)"
+          : ""
+      )
       """
     ) {
       for child in trait.children {

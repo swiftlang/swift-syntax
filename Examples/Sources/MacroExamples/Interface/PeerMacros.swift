@@ -18,7 +18,7 @@ public macro AddAsync() = #externalMacro(module: "MacroExamplesImplementation", 
 // MARK: - Add Completion Handler
 
 /// Adds a "completionHandler" variant of an async function, which creates a new
-/// task , calls thh original async function, and delivers its result to the completion
+/// task , calls the original async function, and delivers its result to the completion
 /// handler.
 @attached(peer, names: overloaded)
 public macro AddCompletionHandler() = #externalMacro(module: "MacroExamplesImplementation", type: "AddCompletionHandlerMacro")

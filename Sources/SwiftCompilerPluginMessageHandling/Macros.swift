@@ -14,8 +14,8 @@ import SwiftBasicFormat
 import SwiftDiagnostics
 import SwiftOperators
 import SwiftSyntax
-import SwiftSyntaxMacroExpansion
-import SwiftSyntaxMacros
+@_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacroExpansion
+@_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
 
 extension CompilerPluginMessageHandler {
   /// Get concrete macro type from a pair of module name and type name.
@@ -166,6 +166,8 @@ private extension MacroRole {
     case .conformance: self = .extension
     case .codeItem: self = .codeItem
     case .extension: self = .extension
+    case .preamble: self = .preamble
+    case .body: self = .body
     }
   }
 }

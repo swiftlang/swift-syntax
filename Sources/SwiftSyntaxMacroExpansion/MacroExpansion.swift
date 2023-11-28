@@ -12,7 +12,7 @@
 
 import SwiftBasicFormat
 import SwiftSyntax
-@_spi(MacroExpansion) import SwiftSyntaxMacros
+@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
 
 public enum MacroRole {
   case expression
@@ -24,6 +24,8 @@ public enum MacroRole {
   case conformance
   case codeItem
   case `extension`
+  @_spi(ExperimentalLanguageFeature) case preamble
+  @_spi(ExperimentalLanguageFeature) case body
 }
 
 extension MacroRole {
@@ -38,18 +40,23 @@ extension MacroRole {
     case .conformance: return "ConformanceMacro"
     case .codeItem: return "CodeItemMacro"
     case .extension: return "ExtensionMacro"
+    case .preamble: return "PreambleMacro"
+    case .body: return "BodyMacro"
     }
   }
 }
 
 /// Simple diagnostic message
-private enum MacroExpansionError: Error, CustomStringConvertible {
+enum MacroExpansionError: Error, CustomStringConvertible {
   case unmatchedMacroRole(Macro.Type, MacroRole)
   case parentDeclGroupNil
   case declarationNotDeclGroup
   case declarationNotIdentified
+  case declarationHasNoBody
   case noExtendedTypeSyntax
   case noFreestandingMacroRoles(Macro.Type)
+  case moreThanOneBodyMacro
+  case preambleWithoutBody
 
   var description: String {
     switch self {
@@ -65,12 +72,20 @@ private enum MacroExpansionError: Error, CustomStringConvertible {
     case .declarationNotIdentified:
       return "declaration is not a 'Identified' syntax"
 
+    case .declarationHasNoBody:
+      return "declaration is not a type with an optional code block"
+
     case .noExtendedTypeSyntax:
       return "no extended type for extension macro"
 
     case .noFreestandingMacroRoles(let type):
       return "macro implementation type '\(type)' does not conform to any freestanding macro protocol"
 
+    case .moreThanOneBodyMacro:
+      return "function can not have more than one body macro applied to it"
+
+    case .preambleWithoutBody:
+      return "preamble macro cannot be applied to a function with no body"
     }
   }
 }
@@ -125,7 +140,7 @@ public func expandFreestandingMacro(
       expandedSyntax = Syntax(CodeBlockItemListSyntax(rewritten))
 
     case (.accessor, _), (.memberAttribute, _), (.member, _), (.peer, _), (.conformance, _), (.extension, _), (.expression, _), (.declaration, _),
-      (.codeItem, _):
+      (.codeItem, _), (.preamble, _), (.body, _):
       throw MacroExpansionError.unmatchedMacroRole(definition, macroRole)
     }
     return expandedSyntax.formattedExpansion(definition.formatMode, indentationWidth: indentationWidth)
@@ -285,6 +300,38 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
 
       // Form a buffer of peer declarations to return to the caller.
       return extensions.map {
+        $0.formattedExpansion(definition.formatMode, indentationWidth: indentationWidth)
+      }
+
+    case (let attachedMacro as PreambleMacro.Type, .preamble):
+      guard let declToPass = Syntax(declarationNode).asProtocol(SyntaxProtocol.self) as? (DeclSyntaxProtocol & WithOptionalCodeBlockSyntax)
+      else {
+        // Compiler error: declaration must have a body.
+        throw MacroExpansionError.declarationHasNoBody
+      }
+
+      let preamble = try attachedMacro.expansion(
+        of: attributeNode,
+        providingPreambleFor: declToPass,
+        in: context
+      )
+      return preamble.map {
+        $0.formattedExpansion(definition.formatMode, indentationWidth: indentationWidth)
+      }
+
+    case (let attachedMacro as BodyMacro.Type, .body):
+      guard let declToPass = Syntax(declarationNode).asProtocol(SyntaxProtocol.self) as? (DeclSyntaxProtocol & WithOptionalCodeBlockSyntax)
+      else {
+        // Compiler error: declaration must have a body.
+        throw MacroExpansionError.declarationHasNoBody
+      }
+
+      let body = try attachedMacro.expansion(
+        of: attributeNode,
+        providingBodyFor: declToPass,
+        in: context
+      )
+      return body.map {
         $0.formattedExpansion(definition.formatMode, indentationWidth: indentationWidth)
       }
 

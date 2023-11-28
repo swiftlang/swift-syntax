@@ -35,6 +35,7 @@ final class AddCompletionHandlerMacroTests: XCTestCase {
           Task {
             completionHandler(await f(a: a, for: b, value))
           }
+
         }
         """,
       macros: macros,

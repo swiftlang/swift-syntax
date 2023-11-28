@@ -43,6 +43,7 @@ final class AddAsyncMacroTests: XCTestCase {
               }
             }
           }
+
         }
         """#,
       macros: macros,
@@ -70,6 +71,7 @@ final class AddAsyncMacroTests: XCTestCase {
               continuation.resume(returning: returnValue)
             }
           }
+
         }
         """,
       macros: macros,

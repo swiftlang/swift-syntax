@@ -152,8 +152,9 @@ extension Parser {
     }
 
     let remainingTokens = self.consumeRemainingTokens()
+
     if remainingTokens.isEmpty {
-      return into
+      return R.init(transferTrailingTrivaFromEndOfFileIfPresent(raw: into.raw))!
     }
 
     let existingUnexpected: [RawSyntax]
@@ -166,6 +167,33 @@ extension Parser {
     let unexpected = RawUnexpectedNodesSyntax(elements: existingUnexpected + remainingTokens, arena: self.arena)
 
     let withUnexpected = layout.replacingChild(at: layout.children.count - 1, with: unexpected.raw, arena: self.arena)
-    return R.init(withUnexpected)!
+
+    return R.init(transferTrailingTrivaFromEndOfFileIfPresent(raw: withUnexpected))!
+  }
+
+  /// Parses the end-of-file token and appends its leading trivia to the provided `RawSyntax`.
+  /// - Parameter raw: The raw syntax node to which the leading trivia of the end-of-file token will be appended.
+  /// - Returns: A new `RawSyntax` instance with trailing trivia transferred from the end-of-file token if present, otherwise it will return the raw parameter..
+  private mutating func transferTrailingTrivaFromEndOfFileIfPresent(raw: RawSyntax) -> RawSyntax {
+    guard let endOfFileToken = self.consume(if: .endOfFile),
+      !endOfFileToken.leadingTriviaPieces.isEmpty,
+      let raw = raw.withTrailingTrivia(
+        Trivia(
+          rawPieces: (raw.trailingTriviaPieces ?? []) + endOfFileToken.leadingTriviaPieces
+        ),
+        arena: self.arena
+      )
+    else {
+      return raw
+    }
+
+    return raw
+  }
+}
+
+private extension Trivia {
+  init(rawPieces: [RawTriviaPiece]) {
+    let pieces = rawPieces.map(TriviaPiece.init(raw:))
+    self.init(pieces: pieces)
   }
 }

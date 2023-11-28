@@ -588,6 +588,7 @@ final class BasicFormatTest: XCTestCase {
         func test() {
             Task {
             }
+
         }
         """
     )

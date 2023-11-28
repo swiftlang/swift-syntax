@@ -62,6 +62,7 @@ extension Parser {
     case exclusivity
     case inline
     case objc
+    case Sendable
     case transpose
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
@@ -97,6 +98,7 @@ extension Parser {
       case TokenSpec(.exclusivity): self = .exclusivity
       case TokenSpec(.inline): self = .inline
       case TokenSpec(.objc): self = .objc
+      case TokenSpec(.Sendable): self = .Sendable
       case TokenSpec(.transpose): self = .transpose
       default:
         return nil
@@ -136,6 +138,7 @@ extension Parser {
       case .exclusivity: return .keyword(.exclusivity)
       case .inline: return .keyword(.inline)
       case .objc: return .keyword(.objc)
+      case .Sendable: return .keyword(.Sendable)
       case .transpose: return .keyword(.transpose)
       }
     }
@@ -163,6 +166,7 @@ extension Parser {
     case required
     case customAttribute
     case optional
+    case noArgument
   }
 
   mutating func parseAttribute(
@@ -179,6 +183,8 @@ extension Parser {
       shouldParseArgument = self.withLookahead { $0.atCustomAttributeArgument() } && self.at(TokenSpec(.leftParen, allowAtStartOfLine: false))
     case .optional:
       shouldParseArgument = self.at(.leftParen)
+    case .noArgument:
+      shouldParseArgument = false
     }
     if shouldParseArgument {
       let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
@@ -336,6 +342,10 @@ extension Parser {
           arena: self.arena
         )
       )
+    case .Sendable:
+      return parseAttribute(argumentMode: .noArgument) { parser in
+        preconditionFailure("Sendable has no argument")
+      }
     case nil:
       return parseAttribute(argumentMode: .customAttribute) { parser in
         let arguments = parser.parseArgumentListElements(pattern: .none)

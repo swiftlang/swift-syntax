@@ -47,6 +47,8 @@ public enum SyntaxClassification {
   case stringLiteral
   /// An identifier referring to a type.
   case type
+  /// The label of a function parameter or a function call argument.
+  case argumentLabel
 }
 
 extension SyntaxClassification {
@@ -83,6 +85,10 @@ extension SyntaxClassification {
       return (.keyword, false)
     case \SimpleTypeIdentifierSyntax.name:
       return (.type, false)
+    case \FunctionParameterSyntax.firstName:
+      return (.argumentLabel, false)
+    case \LabeledExprSyntax.label:
+      return (.argumentLabel, false)
     default:
       return nil
     }

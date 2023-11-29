@@ -2984,4 +2984,11 @@ final class StatementExpressionTests: ParserTestCase {
       fixedSource: #"[1: "hello", 2: "world"]"#
     )
   }
+
+  func testSendableAttributeInClosure() {
+    assertParse(
+      "f { @Sendable (e: Int) in }",
+      substructure: AttributeSyntax(attributeName: TypeSyntax("Sendable"))
+    )
+  }
 }

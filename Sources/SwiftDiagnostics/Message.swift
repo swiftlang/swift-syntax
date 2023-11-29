@@ -16,7 +16,7 @@
 /// Two diagnostics with the same ID don’t need to necessarily have the exact
 /// same wording. Eg. it’s possible that the message contains more context when
 /// available.
-public struct MessageID: Hashable {
+public struct MessageID: Hashable, Sendable {
   private let domain: String
   private let id: String
 
@@ -26,7 +26,7 @@ public struct MessageID: Hashable {
   }
 }
 
-public enum DiagnosticSeverity {
+public enum DiagnosticSeverity: Sendable {
   case error
   case warning
   case note

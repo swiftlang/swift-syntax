@@ -19,10 +19,14 @@ func assertBuildResult<T: SyntaxProtocol>(
   _ buildable: T,
   _ expectedResult: String,
   trimTrailingWhitespace: Bool = true,
+  format: Bool = true,
   file: StaticString = #file,
   line: UInt = #line
 ) {
-  var buildableDescription = buildable.formatted().description
+  var buildableDescription =
+    format
+    ? buildable.formatted().description
+    : buildable.description
   var expectedResult = expectedResult
   if trimTrailingWhitespace {
     buildableDescription = buildableDescription.trimmingTrailingWhitespace()

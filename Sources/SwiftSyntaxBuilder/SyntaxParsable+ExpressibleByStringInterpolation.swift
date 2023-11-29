@@ -48,10 +48,14 @@ extension SyntaxParseable {
     {
       let diagnostics = ParseDiagnosticsGenerator.diagnostics(for: self)
       let formattedDiagnostics = DiagnosticsFormatter().annotatedSource(tree: self, diags: diagnostics)
-      Logger(subsystem: "SwiftSyntax", category: "ParseError").fault(
+      Logger(subsystem: "org.swift.swift-syntax", category: "ParseError").fault(
         """
         Parsing a `\(Self.self)` node from string interpolation produced the following parsing errors.
         Set a breakpoint in `SyntaxParseable.logStringInterpolationParsingError()` to debug the failure.
+
+        To explicitly support parsing of invalid source code, import SwiftParser and invoke the parser as follows
+          var parser = Parser(source)
+          \(Self.self).parse(from: &parser)
         \(formattedDiagnostics, privacy: .private)
         """
       )
@@ -61,7 +65,7 @@ extension SyntaxParseable {
 
   /// Initialize the syntax node from a string interpolation.
   ///
-  /// - Important: This asssumes that the string interpolation produces a valid
+  /// - Important: This assumes that the string interpolation produces a valid
   ///              syntax tree. If the syntax tree is not valid, a fault will
   ///              be logged using OSLog on Darwin platforms.
   public init(stringInterpolation: SyntaxStringInterpolation) {

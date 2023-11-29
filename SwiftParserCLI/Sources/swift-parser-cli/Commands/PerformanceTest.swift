@@ -12,9 +12,9 @@
 
 import ArgumentParser
 import Foundation
+import InstructionCounter
 import SwiftParser
 import SwiftSyntax
-import _InstructionCounter
 
 struct PerformanceTest: ParsableCommand {
   static var configuration = CommandConfiguration(

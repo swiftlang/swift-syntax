@@ -23,7 +23,9 @@ public protocol MemberMacro: AttachedMacro {
   ///
   /// - Returns: the set of member declarations introduced by this macro, which
   /// are nested inside the `attachedTo` declaration.
-  @available(*, deprecated, message: "Use expansion(of:providingMembersOf:conformingTo:in:")
+  ///
+  /// - Warning: This is the legacy `expansion` function of `MemberMacro` that is provided for backwards-compatiblity.
+  ///   Use ``expansion(of:providingMembersOf:conformingTo:in:)-1sxoe`` instead.
   static func expansion(
     of node: AttributeSyntax,
     providingMembersOf declaration: some DeclGroupSyntax,
@@ -54,6 +56,16 @@ public protocol MemberMacro: AttachedMacro {
   ) throws -> [DeclSyntax]
 }
 
+private struct UnimplementedExpansionMethodError: Error, CustomStringConvertible {
+  var description: String {
+    """
+    Types conforming to `MemberMacro` must implement either \
+    expansion(of:providingMembersOf:in:) or \
+    expansion(of:providingMembersOf:conformingTo:in:)
+    """
+  }
+}
+
 public extension MemberMacro {
   /// Default implementation supplies no conformances.
   static func expansion(
@@ -61,7 +73,7 @@ public extension MemberMacro {
     providingMembersOf declaration: some DeclGroupSyntax,
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
-    return try expansion(of: node, providingMembersOf: declaration, conformingTo: [], in: context)
+    throw UnimplementedExpansionMethodError()
   }
 
   /// Default implementation that ignores the unhandled conformances.

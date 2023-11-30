@@ -82,15 +82,15 @@ struct FormatExecutor {
 
           Run the following command to format swift-syntax
 
-            swift run --package-path SwiftSyntaxDevUtils/ swift-syntax-dev-utils format
+            ./swift-syntax-dev-utils format
 
           If the issue persists, try updating swift-format by running
 
-            swift run --package-path SwiftSyntaxDevUtils/ swift-syntax-dev-utils format --update
+            ./swift-syntax-dev-utils format --update
 
           Should that still fail, fix any remaining issues manually and verify they match the swift-format style using
 
-            swift run --package-path SwiftSyntaxDevUtils/ swift-syntax-dev-utils format --lint
+            ./swift-syntax-dev-utils format --lint
           """
       }
     }

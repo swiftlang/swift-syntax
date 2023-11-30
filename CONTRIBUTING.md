@@ -23,7 +23,7 @@ swift-syntax is formatted using [swift-format](http://github.com/apple/swift-for
 
 To format your changes run the formatter using the following command
 ```bash
-swift run --package-path SwiftSyntaxDevUtils/ swift-syntax-dev-utils format
+./swift-syntax-dev-utils format
 ```
 It will build a local copy of swift-format from the `main` branch and format the repository. Since it is building a release version of `swift-format`, the first run will take few minutes. Subsequent runs take less than 2 seconds.
 
@@ -36,7 +36,7 @@ Generated source code is not formatted to make it easier to spot changes when re
 > #!/usr/bin/env bash
 > set -e
 > SOURCE_DIR=$(realpath "$(dirname $0)/../..")
-> swift run --package-path "$SOURCE_DIR/SwiftSyntaxDevUtils" swift-syntax-dev-utils format --lint
+> swift "$SOURCE_DIR/swift-syntax-dev-utils" format --lint
 > ```
 > 2. Mark the file as executable: `chmod a+x swift-syntax/.git/hooks/pre-commit`
 > 3. If you have global git hooks installed, be sure to call them at the end of the script with `path/to/global/hooks/pre-commit "$@"` 

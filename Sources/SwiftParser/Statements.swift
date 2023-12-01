@@ -389,6 +389,15 @@ extension Parser {
   /// Parse a do statement.
   mutating func parseDoStatement(doHandle: RecoveryConsumptionHandle) -> RawDoStmtSyntax {
     let (unexpectedBeforeDoKeyword, doKeyword) = self.eat(doHandle)
+
+    // Parse the optional throws clause.
+    let throwsClause: RawThrowsClauseSyntax?
+    if let throwsSpecifier = self.consume(if: .keyword(.throws)) {
+      throwsClause = parseThrowsClause(after: throwsSpecifier)
+    } else {
+      throwsClause = nil
+    }
+
     let body = self.parseCodeBlock(introducer: doKeyword)
 
     // If the next token is 'catch', this is a 'do'/'catch' statement.
@@ -402,6 +411,7 @@ extension Parser {
     return RawDoStmtSyntax(
       unexpectedBeforeDoKeyword,
       doKeyword: doKeyword,
+      throwsClause: throwsClause,
       body: body,
       catchClauses: RawCatchClauseListSyntax(elements: elements, arena: self.arena),
       arena: self.arena

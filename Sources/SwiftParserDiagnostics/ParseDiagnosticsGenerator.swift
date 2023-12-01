@@ -282,13 +282,13 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       }
     }
 
-    if let throwsSpecifier = node.throwsSpecifier {
+    if let throwsClause = node.throwsClause {
       exchangeTokens(
         unexpected: node.unexpectedAfterThrowsClause,
         unexpectedTokenCondition: { AsyncEffectSpecifier(token: $0) != nil },
         correctTokens: [node.asyncSpecifier],
-        message: { AsyncMustPrecedeThrows(asyncKeywords: $0, throwsKeyword: throwsSpecifier) },
-        moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: throwsSpecifier.tokenKind) },
+        message: { AsyncMustPrecedeThrows(asyncKeywords: $0, throwsKeyword: throwsClause.throwsSpecifier) },
+        moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: throwsClause.throwsSpecifier.tokenKind) },
         removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
       )
     }

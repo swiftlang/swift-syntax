@@ -735,10 +735,3 @@ public extension SyntaxChildChoices {
     return self.as(S.self)!
   }
 }
-
-public extension EffectSpecifiersSyntax {
-  /// Retrieve the throws specifier, ignoring any thrown error type.
-  var throwsSpecifier: TokenSyntax? {
-    throwsClause?.throwsSpecifier
-  }
-}

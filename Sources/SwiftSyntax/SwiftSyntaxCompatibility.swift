@@ -50,6 +50,32 @@ public extension DeclGroupSyntax {
   }
 }
 
+
+public extension EffectSpecifiersSyntax {
+  @available(*, deprecated, message: "use throwsClause.throwsSpecifier")
+  var throwsSpecifier: TokenSyntax? {
+    throwsClause?.throwsSpecifier
+  }
+}
+
+
+public extension FunctionEffectSpecifiersSyntax {
+  @available(*, deprecated, message: "use throwsClause instead of throwsSpecifier")
+  init(
+      leadingTrivia: Trivia? = nil,
+      asyncSpecifier: TokenSyntax? = nil,
+      throwsSpecifier: TokenSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      asyncSpecifier: asyncSpecifier,
+      throwsClause: throwsSpecifier.map { ThrowsClauseSyntax(throwsSpecifier: $0) },
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
 public extension FreestandingMacroExpansionSyntax {
   @available(*, deprecated, renamed: "pound")
   var poundToken: TokenSyntax {

@@ -267,7 +267,7 @@ public enum SyntaxKind {
   #endif
   case thenStmt
   case throwStmt
-  case thrownTypeClause
+  case throwsClause
   case tryExpr
   case tupleExpr
   case tuplePatternElementList
@@ -920,8 +920,8 @@ public enum SyntaxKind {
       return ThenStmtSyntax.self
     case .throwStmt:
       return ThrowStmtSyntax.self
-    case .thrownTypeClause:
-      return ThrownTypeClauseSyntax.self
+    case .throwsClause:
+      return ThrowsClauseSyntax.self
     case .tryExpr:
       return TryExprSyntax.self
     case .tupleExpr:

@@ -380,7 +380,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/SourceFileSyntax>
 - <doc:SwiftSyntax/SwitchCaseLabelSyntax>
 - <doc:SwiftSyntax/SwitchDefaultLabelSyntax>
-- <doc:SwiftSyntax/ThrownTypeClauseSyntax>
+- <doc:SwiftSyntax/ThrowsClauseSyntax>
 - <doc:SwiftSyntax/TypeAnnotationSyntax>
 - <doc:SwiftSyntax/TypeEffectSpecifiersSyntax>
 - <doc:SwiftSyntax/TypeInitializerClauseSyntax>

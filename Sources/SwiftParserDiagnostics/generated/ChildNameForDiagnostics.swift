@@ -334,7 +334,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "first choice"
   case \TernaryExprSyntax.elseExpression:
     return "second choice"
-  case \ThrownTypeClauseSyntax.type:
+  case \ThrowsClauseSyntax.type:
     return "thrown type"
   case \TuplePatternElementSyntax.label:
     return "label"

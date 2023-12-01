@@ -2036,11 +2036,11 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
-  override open func visit(_ node: ThrownTypeClauseSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: ThrowsClauseSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
-  override open func visitPost(_ node: ThrownTypeClauseSyntax) {
+  override open func visitPost(_ node: ThrowsClauseSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   

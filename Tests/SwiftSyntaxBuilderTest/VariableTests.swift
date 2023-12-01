@@ -302,7 +302,7 @@ final class VariableTests: XCTestCase {
         accessorSpecifier: .keyword(.get),
         effectSpecifiers: AccessorEffectSpecifiersSyntax(
           asyncSpecifier: .keyword(.async),
-          throwsSpecifier: .keyword(.throws)
+          throwsClause: ThrowsClauseSyntax(throwsSpecifier: .keyword(.throws))
         )
       ) {}
     }

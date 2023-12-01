@@ -736,12 +736,9 @@ public extension SyntaxChildChoices {
   }
 }
 
-extension EffectSpecifiersSyntax {
-  // Default implementation for the experimental thrownError child, which must
-  // be provided due to the use of @_spi.
-  @_spi(ExperimentalLanguageFeatures)
-  public var thrownError: ThrownTypeClauseSyntax? {
-    get { return nil }
-    set {}
+public extension EffectSpecifiersSyntax {
+  /// Retrieve the throws specifier, ignoring any thrown error type.
+  var throwsSpecifier: TokenSyntax? {
+    throwsClause?.throwsSpecifier
   }
 }

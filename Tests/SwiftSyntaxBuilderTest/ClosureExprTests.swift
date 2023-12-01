@@ -44,7 +44,7 @@ final class ClosureExprTests: XCTestCase {
         ),
         effectSpecifiers: TypeEffectSpecifiersSyntax(
           asyncSpecifier: .keyword(.async),
-          throwsSpecifier: .keyword(.throws)
+          throwsClause: ThrowsClauseSyntax(throwsSpecifier: .keyword(.throws))
         )
       )
     ) {}

@@ -669,9 +669,11 @@ extension Parser {
     }
 
     // If needed, form a throws clause from just the throws keyword.
-    throwsClause = throwsClause ?? throwsKeyword.map {
-      RawThrowsClauseSyntax(throwsSpecifier: $0, leftParen: nil, type: nil, rightParen: nil, arena: self.arena)
-    }
+    throwsClause =
+      throwsClause
+      ?? throwsKeyword.map {
+        RawThrowsClauseSyntax(throwsSpecifier: $0, leftParen: nil, type: nil, rightParen: nil, arena: self.arena)
+      }
 
     return S(
       RawUnexpectedNodesSyntax(unexpectedBeforeAsync, arena: self.arena),

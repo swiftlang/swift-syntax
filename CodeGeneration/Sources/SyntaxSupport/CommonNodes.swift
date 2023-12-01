@@ -172,7 +172,7 @@ public let COMMON_NODES: [Node] = [
         kind: .token(choices: [.keyword(.async)]),
         documentation: "The `async` keyword.",
         isOptional: true
-      ),
+      )
     ]
   ),
 

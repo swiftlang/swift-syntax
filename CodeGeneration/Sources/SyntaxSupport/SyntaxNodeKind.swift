@@ -269,7 +269,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case switchExpr
   case ternaryExpr
   case thenStmt
-  case thrownTypeClause
+  case throwsClause
   case throwStmt
   case tryExpr
   case tupleExpr

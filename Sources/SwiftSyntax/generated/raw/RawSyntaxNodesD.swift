@@ -2025,7 +2025,9 @@ public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol {
   public init(
       _ unexpectedBeforeDoKeyword: RawUnexpectedNodesSyntax? = nil, 
       doKeyword: RawTokenSyntax, 
-      _ unexpectedBetweenDoKeywordAndBody: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenDoKeywordAndThrowsClause: RawUnexpectedNodesSyntax? = nil, 
+      throwsClause: RawThrowsClauseSyntax?, 
+      _ unexpectedBetweenThrowsClauseAndBody: RawUnexpectedNodesSyntax? = nil, 
       body: RawCodeBlockSyntax, 
       _ unexpectedBetweenBodyAndCatchClauses: RawUnexpectedNodesSyntax? = nil, 
       catchClauses: RawCatchClauseListSyntax, 
@@ -2033,15 +2035,17 @@ public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .doStmt, uninitializedCount: 7, arena: arena) { layout in
+      kind: .doStmt, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeDoKeyword?.raw
       layout[1] = doKeyword.raw
-      layout[2] = unexpectedBetweenDoKeywordAndBody?.raw
-      layout[3] = body.raw
-      layout[4] = unexpectedBetweenBodyAndCatchClauses?.raw
-      layout[5] = catchClauses.raw
-      layout[6] = unexpectedAfterCatchClauses?.raw
+      layout[2] = unexpectedBetweenDoKeywordAndThrowsClause?.raw
+      layout[3] = throwsClause?.raw
+      layout[4] = unexpectedBetweenThrowsClauseAndBody?.raw
+      layout[5] = body.raw
+      layout[6] = unexpectedBetweenBodyAndCatchClauses?.raw
+      layout[7] = catchClauses.raw
+      layout[8] = unexpectedAfterCatchClauses?.raw
     }
     self.init(unchecked: raw)
   }
@@ -2054,24 +2058,32 @@ public struct RawDoStmtSyntax: RawStmtSyntaxNodeProtocol {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenDoKeywordAndBody: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenDoKeywordAndThrowsClause: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var body: RawCodeBlockSyntax {
-    layoutView.children[3].map(RawCodeBlockSyntax.init(raw:))!
+  public var throwsClause: RawThrowsClauseSyntax? {
+    layoutView.children[3].map(RawThrowsClauseSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenBodyAndCatchClauses: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenThrowsClauseAndBody: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
+  public var body: RawCodeBlockSyntax {
+    layoutView.children[5].map(RawCodeBlockSyntax.init(raw:))!
+  }
+  
+  public var unexpectedBetweenBodyAndCatchClauses: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+  
   public var catchClauses: RawCatchClauseListSyntax {
-    layoutView.children[5].map(RawCatchClauseListSyntax.init(raw:))!
+    layoutView.children[7].map(RawCatchClauseListSyntax.init(raw:))!
   }
   
   public var unexpectedAfterCatchClauses: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

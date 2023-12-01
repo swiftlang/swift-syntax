@@ -3415,6 +3415,7 @@ public struct DoExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
 /// ### Children
 /// 
 ///  - `doKeyword`: `do`
+///  - `throwsClause`: ``ThrowsClauseSyntax``?
 ///  - `body`: ``CodeBlockSyntax``
 ///  - `catchClauses`: ``CatchClauseListSyntax``
 public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
@@ -3429,12 +3430,15 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - throwsClause: The clause specifying the type of errors thrown from the 'do' block.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeDoKeyword: UnexpectedNodesSyntax? = nil,
       doKeyword: TokenSyntax = .keyword(.do),
-      _ unexpectedBetweenDoKeywordAndBody: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenDoKeywordAndThrowsClause: UnexpectedNodesSyntax? = nil,
+      throwsClause: ThrowsClauseSyntax? = nil,
+      _ unexpectedBetweenThrowsClauseAndBody: UnexpectedNodesSyntax? = nil,
       body: CodeBlockSyntax,
       _ unexpectedBetweenBodyAndCatchClauses: UnexpectedNodesSyntax? = nil,
       catchClauses: CatchClauseListSyntax = [],
@@ -3447,7 +3451,9 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
     self = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeDoKeyword, 
             doKeyword, 
-            unexpectedBetweenDoKeywordAndBody, 
+            unexpectedBetweenDoKeywordAndThrowsClause, 
+            throwsClause, 
+            unexpectedBetweenThrowsClauseAndBody, 
             body, 
             unexpectedBetweenBodyAndCatchClauses, 
             catchClauses, 
@@ -3456,7 +3462,9 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
       let layout: [RawSyntax?] = [
           unexpectedBeforeDoKeyword?.raw, 
           doKeyword.raw, 
-          unexpectedBetweenDoKeywordAndBody?.raw, 
+          unexpectedBetweenDoKeywordAndThrowsClause?.raw, 
+          throwsClause?.raw, 
+          unexpectedBetweenThrowsClauseAndBody?.raw, 
           body.raw, 
           unexpectedBetweenBodyAndCatchClauses?.raw, 
           catchClauses.raw, 
@@ -3495,7 +3503,7 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
     }
   }
   
-  public var unexpectedBetweenDoKeywordAndBody: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenDoKeywordAndThrowsClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -3504,16 +3512,18 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
     }
   }
   
-  public var body: CodeBlockSyntax {
+  /// The clause specifying the type of errors thrown from the 'do' block.
+  @_spi(ExperimentalLanguageFeatures)
+  public var throwsClause: ThrowsClauseSyntax? {
     get {
-      return Syntax(self).child(at: 3)!.cast(CodeBlockSyntax.self)
+      return Syntax(self).child(at: 3)?.cast(ThrowsClauseSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(DoStmtSyntax.self)
     }
   }
   
-  public var unexpectedBetweenBodyAndCatchClauses: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenThrowsClauseAndBody: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -3522,12 +3532,30 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
     }
   }
   
-  public var catchClauses: CatchClauseListSyntax {
+  public var body: CodeBlockSyntax {
     get {
-      return Syntax(self).child(at: 5)!.cast(CatchClauseListSyntax.self)
+      return Syntax(self).child(at: 5)!.cast(CodeBlockSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(DoStmtSyntax.self)
+    }
+  }
+  
+  public var unexpectedBetweenBodyAndCatchClauses: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(DoStmtSyntax.self)
+    }
+  }
+  
+  public var catchClauses: CatchClauseListSyntax {
+    get {
+      return Syntax(self).child(at: 7)!.cast(CatchClauseListSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(DoStmtSyntax.self)
     }
   }
   
@@ -3542,7 +3570,7 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
   public func addCatchClause(_ element: CatchClauseSyntax) -> DoStmtSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[5] {
+    if let col = raw.layoutView!.children[7] {
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList,
@@ -3550,7 +3578,7 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
     }
     return Syntax(self)
       .replacingChild(
-        at: 5, 
+        at: 7, 
         with: collection, 
         rawNodeArena: arena, 
         allocationArena: arena
@@ -3560,10 +3588,10 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
   
   public var unexpectedAfterCatchClauses: UnexpectedNodesSyntax? {
     get {
-      return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
+      return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(DoStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(DoStmtSyntax.self)
     }
   }
   
@@ -3571,7 +3599,9 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
     return .layout([
           \Self.unexpectedBeforeDoKeyword, 
           \Self.doKeyword, 
-          \Self.unexpectedBetweenDoKeywordAndBody, 
+          \Self.unexpectedBetweenDoKeywordAndThrowsClause, 
+          \Self.throwsClause, 
+          \Self.unexpectedBetweenThrowsClauseAndBody, 
           \Self.body, 
           \Self.unexpectedBetweenBodyAndCatchClauses, 
           \Self.catchClauses, 

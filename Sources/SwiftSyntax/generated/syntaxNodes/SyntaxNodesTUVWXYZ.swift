@@ -480,6 +480,7 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 /// ### Contained in
 /// 
 ///  - ``AccessorEffectSpecifiersSyntax``.``AccessorEffectSpecifiersSyntax/throwsClause``
+///  - ``DoStmtSyntax``.``DoStmtSyntax/throwsClause``
 ///  - ``FunctionEffectSpecifiersSyntax``.``FunctionEffectSpecifiersSyntax/throwsClause``
 ///  - ``TypeEffectSpecifiersSyntax``.``TypeEffectSpecifiersSyntax/throwsClause``
 public struct ThrowsClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {

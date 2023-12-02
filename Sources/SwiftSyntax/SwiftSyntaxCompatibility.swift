@@ -53,7 +53,20 @@ public extension DeclGroupSyntax {
 public extension EffectSpecifiersSyntax {
   @available(*, deprecated, message: "use throwsClause.throwsSpecifier")
   var throwsSpecifier: TokenSyntax? {
-    throwsClause?.throwsSpecifier
+    get { throwsClause?.throwsSpecifier }
+
+    set {
+      guard let newSpecifier = newValue else {
+        throwsClause = nil
+        return
+      }
+
+      if let throwsClause {
+        self.throwsClause = throwsClause.with(\.throwsSpecifier, newSpecifier)
+      } else {
+        self.throwsClause = ThrowsClauseSyntax(throwsSpecifier: newSpecifier)
+      }
+    }
   }
 }
 

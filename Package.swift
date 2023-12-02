@@ -213,6 +213,11 @@ let package = Package(
       dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftParser", "SwiftSyntaxMacros", "SwiftSyntaxMacroExpansion"]
     ),
 
+    .testTarget(
+      name: "SwiftSyntaxMacrosTestSupportTests",
+      dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftSyntaxMacros", "SwiftSyntaxMacrosTestSupport"]
+    ),
+
     // MARK: SwiftParser
 
     .target(

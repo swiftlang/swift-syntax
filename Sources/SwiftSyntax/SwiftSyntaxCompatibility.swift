@@ -50,7 +50,6 @@ public extension DeclGroupSyntax {
   }
 }
 
-
 public extension EffectSpecifiersSyntax {
   @available(*, deprecated, message: "use throwsClause.throwsSpecifier")
   var throwsSpecifier: TokenSyntax? {
@@ -58,14 +57,13 @@ public extension EffectSpecifiersSyntax {
   }
 }
 
-
 public extension FunctionEffectSpecifiersSyntax {
   @available(*, deprecated, message: "use throwsClause instead of throwsSpecifier")
   init(
-      leadingTrivia: Trivia? = nil,
-      asyncSpecifier: TokenSyntax? = nil,
-      throwsSpecifier: TokenSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    asyncSpecifier: TokenSyntax? = nil,
+    throwsSpecifier: TokenSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,

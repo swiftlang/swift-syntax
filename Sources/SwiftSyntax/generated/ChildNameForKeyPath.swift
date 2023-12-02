@@ -1029,8 +1029,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeDoKeyword"
   case \DoStmtSyntax.doKeyword:
     return "doKeyword"
-  case \DoStmtSyntax.unexpectedBetweenDoKeywordAndBody:
-    return "unexpectedBetweenDoKeywordAndBody"
+  case \DoStmtSyntax.unexpectedBetweenDoKeywordAndThrowsClause:
+    return "unexpectedBetweenDoKeywordAndThrowsClause"
+  case \DoStmtSyntax.throwsClause:
+    return "throwsClause"
+  case \DoStmtSyntax.unexpectedBetweenThrowsClauseAndBody:
+    return "unexpectedBetweenThrowsClauseAndBody"
   case \DoStmtSyntax.body:
     return "body"
   case \DoStmtSyntax.unexpectedBetweenBodyAndCatchClauses:

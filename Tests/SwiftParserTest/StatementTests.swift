@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) import SwiftParser
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
 import XCTest
 
@@ -893,6 +893,35 @@ final class StatementTests: ParserTestCase {
           x
         } else {}
         """
+    )
+  }
+
+  func testTypedThrows() {
+    assertParse(
+      """
+      do throws(any Error) {
+        throw myError
+      }
+      """,
+      experimentalFeatures: [.typedThrows]
+    )
+
+    assertParse(
+      """
+      do throws(MyError) {
+        throw myError
+      }
+      """,
+      experimentalFeatures: [.typedThrows]
+    )
+
+    assertParse(
+      """
+      do throws {
+        throw myError
+      }
+      """,
+      experimentalFeatures: [.typedThrows]
     )
   }
 }

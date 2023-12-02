@@ -217,6 +217,13 @@ public let STMT_NODES: [Node] = [
         kind: .token(choices: [.keyword(.do)])
       ),
       Child(
+        name: "throwsClause",
+        kind: .node(kind: .throwsClause),
+        experimentalFeature: .typedThrows,
+        documentation: "The clause specifying the type of errors thrown from the 'do' block.",
+        isOptional: true
+      ),
+      Child(
         name: "body",
         kind: .node(kind: .codeBlock),
         nameForDiagnostics: "body"

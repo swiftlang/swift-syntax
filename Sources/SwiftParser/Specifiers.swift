@@ -582,7 +582,18 @@ extension TokenConsumer {
 // MARK: - Parsing effect specifiers
 
 extension Parser {
+  /// Parse a throws clause after we've already parsed the 'throws' keyword to introduce it.
   private mutating func parseThrowsClause(after throwsKeyword: RawTokenSyntax) -> RawThrowsClauseSyntax {
+    guard self.at(.leftParen) && experimentalFeatures.contains(.typedThrows) else {
+      return RawThrowsClauseSyntax(
+        throwsSpecifier: throwsKeyword,
+        leftParen: nil,
+        type: nil,
+        rightParen: nil,
+        arena: self.arena
+      )
+    }
+
     let (unexpectedBetweenThrowsSpecifierAndLeftParen, leftParen) = self.expect(.leftParen)
     let type = self.parseType()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
@@ -601,7 +612,6 @@ extension Parser {
     var unexpectedBeforeAsync: [RawSyntax] = []
     var asyncKeyword: RawTokenSyntax? = nil
     var unexpectedBeforeThrows: [RawSyntax] = []
-    var throwsKeyword: RawTokenSyntax?
     var throwsClause: RawThrowsClauseSyntax?
     var unexpectedAfterThrowsClause: [RawSyntax] = []
 
@@ -625,10 +635,10 @@ extension Parser {
         unexpectedBeforeThrows.append(RawSyntax(misspelledAsync))
       } else if let misspelledThrows = self.consume(ifAnyIn: S.MisspelledThrowsTokenKinds.self) {
         unexpectedBeforeThrows.append(RawSyntax(misspelledThrows))
-        if throwsKeyword == nil {
+        if throwsClause == nil {
           // Let's synthesize a missing 'throws'. If we find a real throws specifier
           // later, we will replace the missing token by the present token.
-          throwsKeyword = missingToken(.keyword(.throws))
+          throwsClause = RawThrowsClauseSyntax(throwsSpecifier: missingToken(.keyword(.throws)), leftParen: nil, type: nil, rightParen: nil, arena: self.arena)
         }
       } else {
         break
@@ -638,11 +648,8 @@ extension Parser {
     if let (_, handle) = self.canRecoverTo(anyIn: S.CorrectThrowsTokenKinds.self) {
       let (unexpected, throwsKw) = self.eat(handle)
       unexpectedBeforeThrows.append(contentsOf: unexpected?.elements ?? [])
-      throwsKeyword = throwsKw
 
-      if self.at(.leftParen) && experimentalFeatures.contains(.typedThrows) {
-        throwsClause = parseThrowsClause(after: throwsKw)
-      }
+      throwsClause = parseThrowsClause(after: throwsKw)
     }
 
     var unexpectedAfterThrownErrorLoopProgress = LoopProgressCondition()
@@ -662,18 +669,11 @@ extension Parser {
       }
     }
 
-    if unexpectedBeforeAsync.isEmpty && asyncKeyword == nil && unexpectedBeforeThrows.isEmpty && throwsKeyword == nil && throwsClause == nil
+    if unexpectedBeforeAsync.isEmpty && asyncKeyword == nil && unexpectedBeforeThrows.isEmpty && throwsClause == nil
       && unexpectedAfterThrowsClause.isEmpty
     {
       return nil
     }
-
-    // If needed, form a throws clause from just the throws keyword.
-    throwsClause =
-      throwsClause
-      ?? throwsKeyword.map {
-        RawThrowsClauseSyntax(throwsSpecifier: $0, leftParen: nil, type: nil, rightParen: nil, arena: self.arena)
-      }
 
     return S(
       RawUnexpectedNodesSyntax(unexpectedBeforeAsync, arena: self.arena),

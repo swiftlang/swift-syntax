@@ -517,7 +517,6 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(node: .editorPlaceholderExpr, message: "could conform to trait 'MissingNode' but does not"),
         ValidationFailure(node: .enumCaseElement, message: "could conform to trait 'NamedDecl' but does not"),
         ValidationFailure(node: .genericParameter, message: "could conform to trait 'NamedDecl' but does not"),
-        ValidationFailure(node: .precedenceGroupDecl, message: "could conform to trait 'Braced' but does not"),
         ValidationFailure(node: .precedenceGroupName, message: "could conform to trait 'NamedDecl' but does not"),
         ValidationFailure(node: .primaryAssociatedType, message: "could conform to trait 'NamedDecl' but does not"),
         ValidationFailure(node: .yieldedExpressionsClause, message: "could conform to trait 'Parenthesized' but does not"),

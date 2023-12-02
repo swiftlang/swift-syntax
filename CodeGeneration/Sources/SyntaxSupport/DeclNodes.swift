@@ -1746,6 +1746,7 @@ public let DECL_NODES: [Node] = [
     nameForDiagnostics: "precedencegroup",
     documentation: "A Swift `precedencegroup` declaration.",
     traits: [
+      "Braced",
       "NamedDecl",
       "WithAttributes",
       "WithModifiers",

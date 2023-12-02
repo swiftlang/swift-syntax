@@ -61,16 +61,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeAsyncSpecifier"
   case \AccessorEffectSpecifiersSyntax.asyncSpecifier:
     return "asyncSpecifier"
-  case \AccessorEffectSpecifiersSyntax.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier:
-    return "unexpectedBetweenAsyncSpecifierAndThrowsSpecifier"
-  case \AccessorEffectSpecifiersSyntax.throwsSpecifier:
-    return "throwsSpecifier"
-  case \AccessorEffectSpecifiersSyntax.unexpectedBetweenThrowsSpecifierAndThrownError:
-    return "unexpectedBetweenThrowsSpecifierAndThrownError"
-  case \AccessorEffectSpecifiersSyntax.thrownError:
-    return "thrownError"
-  case \AccessorEffectSpecifiersSyntax.unexpectedAfterThrownError:
-    return "unexpectedAfterThrownError"
+  case \AccessorEffectSpecifiersSyntax.unexpectedBetweenAsyncSpecifierAndThrowsClause:
+    return "unexpectedBetweenAsyncSpecifierAndThrowsClause"
+  case \AccessorEffectSpecifiersSyntax.throwsClause:
+    return "throwsClause"
+  case \AccessorEffectSpecifiersSyntax.unexpectedAfterThrowsClause:
+    return "unexpectedAfterThrowsClause"
   case \AccessorParametersSyntax.unexpectedBeforeLeftParen:
     return "unexpectedBeforeLeftParen"
   case \AccessorParametersSyntax.leftParen:
@@ -1415,16 +1411,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeAsyncSpecifier"
   case \FunctionEffectSpecifiersSyntax.asyncSpecifier:
     return "asyncSpecifier"
-  case \FunctionEffectSpecifiersSyntax.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier:
-    return "unexpectedBetweenAsyncSpecifierAndThrowsSpecifier"
-  case \FunctionEffectSpecifiersSyntax.throwsSpecifier:
-    return "throwsSpecifier"
-  case \FunctionEffectSpecifiersSyntax.unexpectedBetweenThrowsSpecifierAndThrownError:
-    return "unexpectedBetweenThrowsSpecifierAndThrownError"
-  case \FunctionEffectSpecifiersSyntax.thrownError:
-    return "thrownError"
-  case \FunctionEffectSpecifiersSyntax.unexpectedAfterThrownError:
-    return "unexpectedAfterThrownError"
+  case \FunctionEffectSpecifiersSyntax.unexpectedBetweenAsyncSpecifierAndThrowsClause:
+    return "unexpectedBetweenAsyncSpecifierAndThrowsClause"
+  case \FunctionEffectSpecifiersSyntax.throwsClause:
+    return "throwsClause"
+  case \FunctionEffectSpecifiersSyntax.unexpectedAfterThrowsClause:
+    return "unexpectedAfterThrowsClause"
   case \FunctionParameterClauseSyntax.unexpectedBeforeLeftParen:
     return "unexpectedBeforeLeftParen"
   case \FunctionParameterClauseSyntax.leftParen:
@@ -3105,19 +3097,23 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "expression"
   case \ThrowStmtSyntax.unexpectedAfterExpression:
     return "unexpectedAfterExpression"
-  case \ThrownTypeClauseSyntax.unexpectedBeforeLeftParen:
-    return "unexpectedBeforeLeftParen"
-  case \ThrownTypeClauseSyntax.leftParen:
+  case \ThrowsClauseSyntax.unexpectedBeforeThrowsSpecifier:
+    return "unexpectedBeforeThrowsSpecifier"
+  case \ThrowsClauseSyntax.throwsSpecifier:
+    return "throwsSpecifier"
+  case \ThrowsClauseSyntax.unexpectedBetweenThrowsSpecifierAndLeftParen:
+    return "unexpectedBetweenThrowsSpecifierAndLeftParen"
+  case \ThrowsClauseSyntax.leftParen:
     return "leftParen"
-  case \ThrownTypeClauseSyntax.unexpectedBetweenLeftParenAndType:
+  case \ThrowsClauseSyntax.unexpectedBetweenLeftParenAndType:
     return "unexpectedBetweenLeftParenAndType"
-  case \ThrownTypeClauseSyntax.type:
+  case \ThrowsClauseSyntax.type:
     return "type"
-  case \ThrownTypeClauseSyntax.unexpectedBetweenTypeAndRightParen:
+  case \ThrowsClauseSyntax.unexpectedBetweenTypeAndRightParen:
     return "unexpectedBetweenTypeAndRightParen"
-  case \ThrownTypeClauseSyntax.rightParen:
+  case \ThrowsClauseSyntax.rightParen:
     return "rightParen"
-  case \ThrownTypeClauseSyntax.unexpectedAfterRightParen:
+  case \ThrowsClauseSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
   case \TryExprSyntax.unexpectedBeforeTryKeyword:
     return "unexpectedBeforeTryKeyword"
@@ -3267,16 +3263,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeAsyncSpecifier"
   case \TypeEffectSpecifiersSyntax.asyncSpecifier:
     return "asyncSpecifier"
-  case \TypeEffectSpecifiersSyntax.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier:
-    return "unexpectedBetweenAsyncSpecifierAndThrowsSpecifier"
-  case \TypeEffectSpecifiersSyntax.throwsSpecifier:
-    return "throwsSpecifier"
-  case \TypeEffectSpecifiersSyntax.unexpectedBetweenThrowsSpecifierAndThrownError:
-    return "unexpectedBetweenThrowsSpecifierAndThrownError"
-  case \TypeEffectSpecifiersSyntax.thrownError:
-    return "thrownError"
-  case \TypeEffectSpecifiersSyntax.unexpectedAfterThrownError:
-    return "unexpectedAfterThrownError"
+  case \TypeEffectSpecifiersSyntax.unexpectedBetweenAsyncSpecifierAndThrowsClause:
+    return "unexpectedBetweenAsyncSpecifierAndThrowsClause"
+  case \TypeEffectSpecifiersSyntax.throwsClause:
+    return "throwsClause"
+  case \TypeEffectSpecifiersSyntax.unexpectedAfterThrowsClause:
+    return "unexpectedAfterThrowsClause"
   case \TypeExprSyntax.unexpectedBeforeType:
     return "unexpectedBeforeType"
   case \TypeExprSyntax.type:

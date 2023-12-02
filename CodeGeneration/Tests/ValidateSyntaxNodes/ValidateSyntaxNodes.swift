@@ -226,11 +226,6 @@ class ValidateSyntaxNodes: XCTestCase {
             // To be consistent with AsyncSpecifier properties that can be both 'async' and 'reasync'
         ),
         ValidationFailure(
-          node: .accessorEffectSpecifiers,
-          message: "child 'throwsSpecifier' has a single keyword as its only token choice and should thus be named 'throwsKeyword'"
-            // To be consistent with AsyncSpecifier properties that can be both 'async' and 'reasync'
-        ),
-        ValidationFailure(
           node: .deinitializerEffectSpecifiers,
           message: "child 'asyncSpecifier' has a single keyword as its only token choice and should thus be named 'asyncKeyword'"
             // To be consistent with AsyncSpecifier properties that can be both 'async' and 'reasync'
@@ -238,11 +233,6 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(
           node: .typeEffectSpecifiers,
           message: "child 'asyncSpecifier' has a single keyword as its only token choice and should thus be named 'asyncKeyword'"
-            // To be consistent with AsyncSpecifier properties that can be both 'async' and 'reasync'
-        ),
-        ValidationFailure(
-          node: .typeEffectSpecifiers,
-          message: "child 'throwsSpecifier' has a single keyword as its only token choice and should thus be named 'throwsKeyword'"
             // To be consistent with AsyncSpecifier properties that can be both 'async' and 'reasync'
         ),
 

@@ -81,29 +81,36 @@ public let COMMON_NODES: [Node] = [
   ),
 
   Node(
-    kind: .thrownTypeClause,
+    kind: .throwsClause,
     base: .syntax,
-    nameForDiagnostics: "thrown type clause",
-    documentation: "The specific error type that a function can throw.",
-    traits: [
-      "Parenthesized"
-    ],
+    nameForDiagnostics: "throws clause",
     children: [
+      Child(
+        name: "throwsSpecifier",
+        kind: .token(choices: [.keyword(.throws), .keyword(.rethrows)]),
+        documentation: "The `throws` keyword."
+      ),
       Child(
         name: "leftParen",
         kind: .token(choices: [.token(.leftParen)]),
-        documentation: "The '(' to open the thrown type clause."
+        experimentalFeature: .typedThrows,
+        documentation: "The '(' to open the thrown error type specification.",
+        isOptional: true
       ),
       Child(
         name: "type",
         kind: .node(kind: .type),
+        experimentalFeature: .typedThrows,
         nameForDiagnostics: "thrown type",
-        documentation: "The thrown error type."
+        documentation: "The thrown error type.",
+        isOptional: true
       ),
       Child(
         name: "rightParen",
         kind: .token(choices: [.token(.rightParen)]),
-        documentation: "The ')' to closure the thrown type clause."
+        experimentalFeature: .typedThrows,
+        documentation: "The ')' to close the thrown error type specification.",
+        isOptional: true
       ),
     ]
   ),
@@ -123,16 +130,9 @@ public let COMMON_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "throwsSpecifier",
-        kind: .token(choices: [.keyword(.throws)]),
-        documentation: "The `throws` keyword.",
-        isOptional: true
-      ),
-      Child(
-        name: "thrownError",
-        kind: .node(kind: .thrownTypeClause),
-        experimentalFeature: .typedThrows,
-        documentation: "The specific error type thrown by this accessor.",
+        name: "throwsClause",
+        kind: .node(kind: .throwsClause),
+        documentation: "The clause specifying thrown errors",
         isOptional: true
       ),
     ]
@@ -153,16 +153,9 @@ public let COMMON_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "throwsSpecifier",
-        kind: .token(choices: [.keyword(.throws), .keyword(.rethrows)]),
-        documentation: "The `throws` or `rethrows` keyword.",
-        isOptional: true
-      ),
-      Child(
-        name: "thrownError",
-        kind: .node(kind: .thrownTypeClause),
-        experimentalFeature: .typedThrows,
-        documentation: "The specific error type thrown by this function.",
+        name: "throwsClause",
+        kind: .node(kind: .throwsClause),
+        documentation: "The clause specifying thrown errors",
         isOptional: true
       ),
     ]
@@ -363,15 +356,9 @@ public let COMMON_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "throwsSpecifier",
-        kind: .token(choices: [.keyword(.throws)]),
-        isOptional: true
-      ),
-      Child(
-        name: "thrownError",
-        kind: .node(kind: .thrownTypeClause),
-        experimentalFeature: .typedThrows,
-        documentation: "The specific error type thrown by this function type.",
+        name: "throwsClause",
+        kind: .node(kind: .throwsClause),
+        documentation: "The clause specifying thrown errors",
         isOptional: true
       ),
     ]

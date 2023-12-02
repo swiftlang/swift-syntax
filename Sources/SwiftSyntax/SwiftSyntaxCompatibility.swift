@@ -13,6 +13,23 @@
 // This file provides compatibility aliases to keep dependents of SwiftSyntax building.
 // All users of the declarations in this file should transition away from them ASAP.
 
+public extension AccessorEffectSpecifiersSyntax {
+  @available(*, deprecated, message: "use throwsClause instead of throwsSpecifier")
+  init(
+    leadingTrivia: Trivia? = nil,
+    asyncSpecifier: TokenSyntax? = nil,
+    throwsSpecifier: TokenSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      asyncSpecifier: asyncSpecifier,
+      throwsClause: throwsSpecifier.map { ThrowsClauseSyntax(throwsSpecifier: $0) },
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
 extension AttributeSyntax {
   @available(*, deprecated, renamed: "Arguments")
   public typealias Argument = Arguments
@@ -47,6 +64,43 @@ public extension DeclGroupSyntax {
     set(value) {
       memberBlock = value
     }
+  }
+}
+
+public extension EffectSpecifiersSyntax {
+  @available(*, deprecated, message: "use throwsClause.throwsSpecifier")
+  var throwsSpecifier: TokenSyntax? {
+    get { throwsClause?.throwsSpecifier }
+
+    set {
+      guard let newSpecifier = newValue else {
+        throwsClause = nil
+        return
+      }
+
+      if let throwsClause {
+        self.throwsClause = throwsClause.with(\.throwsSpecifier, newSpecifier)
+      } else {
+        self.throwsClause = ThrowsClauseSyntax(throwsSpecifier: newSpecifier)
+      }
+    }
+  }
+}
+
+public extension FunctionEffectSpecifiersSyntax {
+  @available(*, deprecated, message: "use throwsClause instead of throwsSpecifier")
+  init(
+    leadingTrivia: Trivia? = nil,
+    asyncSpecifier: TokenSyntax? = nil,
+    throwsSpecifier: TokenSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      asyncSpecifier: asyncSpecifier,
+      throwsClause: throwsSpecifier.map { ThrowsClauseSyntax(throwsSpecifier: $0) },
+      trailingTrivia: trailingTrivia
+    )
   }
 }
 
@@ -434,6 +488,23 @@ public extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
+    )
+  }
+}
+
+public extension TypeEffectSpecifiersSyntax {
+  @available(*, deprecated, message: "use throwsClause instead of throwsSpecifier")
+  init(
+    leadingTrivia: Trivia? = nil,
+    asyncSpecifier: TokenSyntax? = nil,
+    throwsSpecifier: TokenSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      asyncSpecifier: asyncSpecifier,
+      throwsClause: throwsSpecifier.map { ThrowsClauseSyntax(throwsSpecifier: $0) },
+      trailingTrivia: trailingTrivia
     )
   }
 }

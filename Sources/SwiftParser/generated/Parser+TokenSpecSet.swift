@@ -1392,47 +1392,6 @@ extension FunctionEffectSpecifiersSyntax {
   }
 }
 
-extension FunctionEffectSpecifiersSyntax {
-  @_spi(Diagnostics)
-  public enum ThrowsSpecifierOptions: TokenSpecSet {
-    case `throws`
-    case `rethrows`
-    
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.throws):
-        self = .throws
-      case TokenSpec(.rethrows):
-        self = .rethrows
-      default:
-        return nil
-      }
-    }
-    
-    var spec: TokenSpec {
-      switch self {
-      case .throws:
-        return .keyword(.throws)
-      case .rethrows:
-        return .keyword(.rethrows)
-      }
-    }
-    
-    /// Returns a token that satisfies the `TokenSpec` of this case.
-    ///
-    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
-    @_spi(Diagnostics)
-    public var tokenSyntax: TokenSyntax {
-      switch self {
-      case .throws:
-        return .keyword(.throws)
-      case .rethrows:
-        return .keyword(.rethrows)
-      }
-    }
-  }
-}
-
 extension FunctionParameterSyntax {
   @_spi(Diagnostics)
   public enum FirstNameOptions: TokenSpecSet {
@@ -2769,6 +2728,47 @@ extension StringLiteralExprSyntax {
         return .multilineStringQuoteToken()
       case .singleQuote:
         return .singleQuoteToken()
+      }
+    }
+  }
+}
+
+extension ThrowsClauseSyntax {
+  @_spi(Diagnostics)
+  public enum ThrowsSpecifierOptions: TokenSpecSet {
+    case `throws`
+    case `rethrows`
+    
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.throws):
+        self = .throws
+      case TokenSpec(.rethrows):
+        self = .rethrows
+      default:
+        return nil
+      }
+    }
+    
+    var spec: TokenSpec {
+      switch self {
+      case .throws:
+        return .keyword(.throws)
+      case .rethrows:
+        return .keyword(.rethrows)
+      }
+    }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .throws:
+        return .keyword(.throws)
+      case .rethrows:
+        return .keyword(.rethrows)
       }
     }
   }

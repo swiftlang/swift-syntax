@@ -16,7 +16,7 @@ import XCTest
 
 final class FunctionTypeSyntaxTests: XCTestCase {
   func testFunctionEffectSpecifiersSyntax() throws {
-    let typeEffects = TypeEffectSpecifiersSyntax(asyncSpecifier: .keyword(.async), throwsSpecifier: .keyword(.throws))
+    let typeEffects = TypeEffectSpecifiersSyntax(asyncSpecifier: .keyword(.async), throwsClause: ThrowsClauseSyntax(throwsSpecifier: .keyword(.throws)))
     let buildable = FunctionTypeSyntax(
       parameters: [],
       effectSpecifiers: typeEffects,

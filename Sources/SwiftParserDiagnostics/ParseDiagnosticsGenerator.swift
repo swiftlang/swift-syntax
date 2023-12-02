@@ -236,7 +236,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     exchangeTokens(
       unexpected: misplacedSpecifiers,
       unexpectedTokenCondition: { EffectSpecifier(token: $0) != nil },
-      correctTokens: [effectSpecifiers?.asyncSpecifier, effectSpecifiers?.throwsSpecifier],
+      correctTokens: [effectSpecifiers?.asyncSpecifier, effectSpecifiers?.throwsClause?.throwsSpecifier],
       message: { EffectsSpecifierAfterArrow(effectsSpecifiersAfterArrow: $0) },
       moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) },
       removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
@@ -255,12 +255,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
 
     let specifierInfo = [
       (node.asyncSpecifier, { AsyncEffectSpecifier(token: $0) != nil }, StaticParserError.misspelledAsync),
-      (node.throwsSpecifier, { ThrowsEffectSpecifier(token: $0) != nil }, StaticParserError.misspelledThrows),
+      (node.throwsClause?.throwsSpecifier, { ThrowsEffectSpecifier(token: $0) != nil }, StaticParserError.misspelledThrows),
     ]
 
     let unexpectedNodes = [
-      node.unexpectedBeforeAsyncSpecifier, node.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, node.unexpectedBetweenThrowsSpecifierAndThrownError,
-      node.unexpectedAfterThrownError,
+      node.unexpectedBeforeAsyncSpecifier, node.unexpectedBetweenAsyncSpecifierAndThrowsClause,
+      node.unexpectedAfterThrowsClause,
     ]
 
     // Diagnostics that are emitted later silence previous diagnostics, so check
@@ -284,7 +284,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
 
     if let throwsSpecifier = node.throwsSpecifier {
       exchangeTokens(
-        unexpected: node.unexpectedAfterThrownError,
+        unexpected: node.unexpectedAfterThrowsClause,
         unexpectedTokenCondition: { AsyncEffectSpecifier(token: $0) != nil },
         correctTokens: [node.asyncSpecifier],
         message: { AsyncMustPrecedeThrows(asyncKeywords: $0, throwsKeyword: throwsSpecifier) },

@@ -16,7 +16,10 @@ import XCTest
 
 final class FunctionSignatureSyntaxTests: XCTestCase {
   func testFunctionEffectSpecifiersSyntax() throws {
-    let functionEffects = FunctionEffectSpecifiersSyntax(asyncSpecifier: .keyword(.async), throwsSpecifier: .keyword(.rethrows))
+    let functionEffects = FunctionEffectSpecifiersSyntax(
+      asyncSpecifier: .keyword(.async),
+      throwsClause: ThrowsClauseSyntax(throwsSpecifier: .keyword(.rethrows))
+    )
     let buildable = FunctionSignatureSyntax(
       parameterClause: .init(parameters: []),
       effectSpecifiers: functionEffects,

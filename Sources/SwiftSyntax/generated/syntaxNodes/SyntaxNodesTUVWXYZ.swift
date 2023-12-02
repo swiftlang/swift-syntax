@@ -468,26 +468,25 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
   }
 }
 
-// MARK: - ThrownTypeClauseSyntax
+// MARK: - ThrowsClauseSyntax
 
-/// The specific error type that a function can throw.
-///
 /// ### Children
 /// 
-///  - `leftParen`: `(`
-///  - `type`: ``TypeSyntax``
-///  - `rightParen`: `)`
+///  - `throwsSpecifier`: (`throws` | `rethrows`)
+///  - `leftParen`: `(`?
+///  - `type`: ``TypeSyntax``?
+///  - `rightParen`: `)`?
 ///
 /// ### Contained in
 /// 
-///  - ``AccessorEffectSpecifiersSyntax``.``AccessorEffectSpecifiersSyntax/thrownError``
-///  - ``FunctionEffectSpecifiersSyntax``.``FunctionEffectSpecifiersSyntax/thrownError``
-///  - ``TypeEffectSpecifiersSyntax``.``TypeEffectSpecifiersSyntax/thrownError``
-public struct ThrownTypeClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+///  - ``AccessorEffectSpecifiersSyntax``.``AccessorEffectSpecifiersSyntax/throwsClause``
+///  - ``FunctionEffectSpecifiersSyntax``.``FunctionEffectSpecifiersSyntax/throwsClause``
+///  - ``TypeEffectSpecifiersSyntax``.``TypeEffectSpecifiersSyntax/throwsClause``
+public struct ThrowsClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
   public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .thrownTypeClause else {
+    guard node.raw.kind == .throwsClause else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -495,18 +494,21 @@ public struct ThrownTypeClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - leftParen: The '(' to open the thrown type clause.
+  ///   - throwsSpecifier: The `throws` keyword.
+  ///   - leftParen: The '(' to open the thrown error type specification.
   ///   - type: The thrown error type.
-  ///   - rightParen: The ')' to closure the thrown type clause.
+  ///   - rightParen: The ')' to close the thrown error type specification.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
-      leftParen: TokenSyntax = .leftParenToken(),
+      _ unexpectedBeforeThrowsSpecifier: UnexpectedNodesSyntax? = nil,
+      throwsSpecifier: TokenSyntax,
+      _ unexpectedBetweenThrowsSpecifierAndLeftParen: UnexpectedNodesSyntax? = nil,
+      leftParen: TokenSyntax? = nil,
       _ unexpectedBetweenLeftParenAndType: UnexpectedNodesSyntax? = nil,
-      type: some TypeSyntaxProtocol,
+      type: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
       _ unexpectedBetweenTypeAndRightParen: UnexpectedNodesSyntax? = nil,
-      rightParen: TokenSyntax = .rightParenToken(),
+      rightParen: TokenSyntax? = nil,
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
@@ -514,7 +516,9 @@ public struct ThrownTypeClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLeftParen, 
+            unexpectedBeforeThrowsSpecifier, 
+            throwsSpecifier, 
+            unexpectedBetweenThrowsSpecifierAndLeftParen, 
             leftParen, 
             unexpectedBetweenLeftParenAndType, 
             type, 
@@ -523,16 +527,18 @@ public struct ThrownTypeClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
             unexpectedAfterRightParen
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeLeftParen?.raw, 
-          leftParen.raw, 
+          unexpectedBeforeThrowsSpecifier?.raw, 
+          throwsSpecifier.raw, 
+          unexpectedBetweenThrowsSpecifierAndLeftParen?.raw, 
+          leftParen?.raw, 
           unexpectedBetweenLeftParenAndType?.raw, 
-          type.raw, 
+          type?.raw, 
           unexpectedBetweenTypeAndRightParen?.raw, 
-          rightParen.raw, 
+          rightParen?.raw, 
           unexpectedAfterRightParen?.raw
         ]
       let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.thrownTypeClause,
+        kind: SyntaxKind.throwsClause,
         from: layout,
         arena: arena,
         leadingTrivia: leadingTrivia,
@@ -543,83 +549,113 @@ public struct ThrownTypeClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
   }
   
-  public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeThrowsSpecifier: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ThrownTypeClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ThrowsClauseSyntax.self)
     }
   }
   
-  /// The '(' to open the thrown type clause.
+  /// The `throws` keyword.
   ///
   /// ### Tokens
   /// 
-  /// For syntax trees generated by the parser, this is guaranteed to be `(`.
-  public var leftParen: TokenSyntax {
+  /// For syntax trees generated by the parser, this is guaranteed to be one of the following kinds:
+  ///  - `throws`
+  ///  - `rethrows`
+  public var throwsSpecifier: TokenSyntax {
     get {
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ThrownTypeClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ThrowsClauseSyntax.self)
+    }
+  }
+  
+  public var unexpectedBetweenThrowsSpecifierAndLeftParen: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ThrowsClauseSyntax.self)
+    }
+  }
+  
+  /// The '(' to open the thrown error type specification.
+  ///
+  /// ### Tokens
+  /// 
+  /// For syntax trees generated by the parser, this is guaranteed to be `(`.
+  @_spi(ExperimentalLanguageFeatures)
+  public var leftParen: TokenSyntax? {
+    get {
+      return Syntax(self).child(at: 3)?.cast(TokenSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ThrowsClauseSyntax.self)
     }
   }
   
   public var unexpectedBetweenLeftParenAndType: UnexpectedNodesSyntax? {
     get {
-      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+      return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ThrownTypeClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ThrowsClauseSyntax.self)
     }
   }
   
   /// The thrown error type.
-  public var type: TypeSyntax {
+  @_spi(ExperimentalLanguageFeatures)
+  public var type: TypeSyntax? {
     get {
-      return Syntax(self).child(at: 3)!.cast(TypeSyntax.self)
+      return Syntax(self).child(at: 5)?.cast(TypeSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ThrownTypeClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ThrowsClauseSyntax.self)
     }
   }
   
   public var unexpectedBetweenTypeAndRightParen: UnexpectedNodesSyntax? {
     get {
-      return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
+      return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ThrownTypeClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ThrowsClauseSyntax.self)
     }
   }
   
-  /// The ')' to closure the thrown type clause.
+  /// The ')' to close the thrown error type specification.
   ///
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `)`.
-  public var rightParen: TokenSyntax {
+  @_spi(ExperimentalLanguageFeatures)
+  public var rightParen: TokenSyntax? {
     get {
-      return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
+      return Syntax(self).child(at: 7)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ThrownTypeClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(ThrowsClauseSyntax.self)
     }
   }
   
   public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
     get {
-      return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
+      return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ThrownTypeClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(ThrowsClauseSyntax.self)
     }
   }
   
   public static var structure: SyntaxNodeStructure {
     return .layout([
-          \Self.unexpectedBeforeLeftParen, 
+          \Self.unexpectedBeforeThrowsSpecifier, 
+          \Self.throwsSpecifier, 
+          \Self.unexpectedBetweenThrowsSpecifierAndLeftParen, 
           \Self.leftParen, 
           \Self.unexpectedBetweenLeftParenAndType, 
           \Self.type, 
@@ -2241,8 +2277,7 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
 /// ### Children
 /// 
 ///  - `asyncSpecifier`: `async`?
-///  - `throwsSpecifier`: `throws`?
-///  - `thrownError`: ``ThrownTypeClauseSyntax``?
+///  - `throwsClause`: ``ThrowsClauseSyntax``?
 ///
 /// ### Contained in
 /// 
@@ -2261,17 +2296,15 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - thrownError: The specific error type thrown by this function type.
+  ///   - throwsClause: The clause specifying thrown errors
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil,
       asyncSpecifier: TokenSyntax? = nil,
-      _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil,
-      throwsSpecifier: TokenSyntax? = nil,
-      _ unexpectedBetweenThrowsSpecifierAndThrownError: UnexpectedNodesSyntax? = nil,
-      thrownError: ThrownTypeClauseSyntax? = nil,
-      _ unexpectedAfterThrownError: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenAsyncSpecifierAndThrowsClause: UnexpectedNodesSyntax? = nil,
+      throwsClause: ThrowsClauseSyntax? = nil,
+      _ unexpectedAfterThrowsClause: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
@@ -2280,20 +2313,16 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
     self = withExtendedLifetime((SyntaxArena(), (
             unexpectedBeforeAsyncSpecifier, 
             asyncSpecifier, 
-            unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
-            throwsSpecifier, 
-            unexpectedBetweenThrowsSpecifierAndThrownError, 
-            thrownError, 
-            unexpectedAfterThrownError
+            unexpectedBetweenAsyncSpecifierAndThrowsClause, 
+            throwsClause, 
+            unexpectedAfterThrowsClause
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAsyncSpecifier?.raw, 
           asyncSpecifier?.raw, 
-          unexpectedBetweenAsyncSpecifierAndThrowsSpecifier?.raw, 
-          throwsSpecifier?.raw, 
-          unexpectedBetweenThrowsSpecifierAndThrownError?.raw, 
-          thrownError?.raw, 
-          unexpectedAfterThrownError?.raw
+          unexpectedBetweenAsyncSpecifierAndThrowsClause?.raw, 
+          throwsClause?.raw, 
+          unexpectedAfterThrowsClause?.raw
         ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.typeEffectSpecifiers,
@@ -2328,7 +2357,7 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
     }
   }
   
-  public var unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenAsyncSpecifierAndThrowsClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -2337,19 +2366,17 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
     }
   }
   
-  /// ### Tokens
-  /// 
-  /// For syntax trees generated by the parser, this is guaranteed to be `throws`.
-  public var throwsSpecifier: TokenSyntax? {
+  /// The clause specifying thrown errors
+  public var throwsClause: ThrowsClauseSyntax? {
     get {
-      return Syntax(self).child(at: 3)?.cast(TokenSyntax.self)
+      return Syntax(self).child(at: 3)?.cast(ThrowsClauseSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(TypeEffectSpecifiersSyntax.self)
     }
   }
   
-  public var unexpectedBetweenThrowsSpecifierAndThrownError: UnexpectedNodesSyntax? {
+  public var unexpectedAfterThrowsClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -2358,35 +2385,13 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
     }
   }
   
-  /// The specific error type thrown by this function type.
-  @_spi(ExperimentalLanguageFeatures)
-  public var thrownError: ThrownTypeClauseSyntax? {
-    get {
-      return Syntax(self).child(at: 5)?.cast(ThrownTypeClauseSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(TypeEffectSpecifiersSyntax.self)
-    }
-  }
-  
-  public var unexpectedAfterThrownError: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(TypeEffectSpecifiersSyntax.self)
-    }
-  }
-  
   public static var structure: SyntaxNodeStructure {
     return .layout([
           \Self.unexpectedBeforeAsyncSpecifier, 
           \Self.asyncSpecifier, 
-          \Self.unexpectedBetweenAsyncSpecifierAndThrowsSpecifier, 
-          \Self.throwsSpecifier, 
-          \Self.unexpectedBetweenThrowsSpecifierAndThrownError, 
-          \Self.thrownError, 
-          \Self.unexpectedAfterThrownError
+          \Self.unexpectedBetweenAsyncSpecifierAndThrowsClause, 
+          \Self.throwsClause, 
+          \Self.unexpectedAfterThrowsClause
         ])
   }
 }

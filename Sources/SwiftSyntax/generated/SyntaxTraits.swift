@@ -801,7 +801,7 @@ extension PlatformVersionItemSyntax: WithTrailingCommaSyntax {}
 
 extension PoundSourceLocationSyntax: ParenthesizedSyntax {}
 
-extension PrecedenceGroupDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
+extension PrecedenceGroupDeclSyntax: BracedSyntax, NamedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
 extension PrecedenceGroupNameSyntax: WithTrailingCommaSyntax {}
 

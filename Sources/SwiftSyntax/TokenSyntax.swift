@@ -75,6 +75,11 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     return tokenKind.text
   }
 
+  @_spi(RawSyntax)
+  public var rawText: SyntaxText {
+    return tokenView.rawText
+  }
+
   /// The leading trivia (spaces, newlines, etc.) associated with this token.
   public var leadingTrivia: Trivia {
     get {

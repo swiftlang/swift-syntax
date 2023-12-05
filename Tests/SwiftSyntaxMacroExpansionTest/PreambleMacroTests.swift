@@ -80,7 +80,6 @@ final class PreambleMacroTests: XCTestCase {
 
         func doSomethingDangerous(operation: String) {
           log("Entering doSomethingDangerous(operation: \\(operation))")
-
           defer {
             log("Exiting doSomethingDangerous(operation:)")
           }
@@ -104,12 +103,10 @@ final class PreambleMacroTests: XCTestCase {
 
         func doSomethingDangerous(operation: String) {
           log("Entering doSomethingDangerous(operation: \\(operation))")
-
           defer {
             log("Exiting doSomethingDangerous(operation:)")
           }
           log("Entering doSomethingDangerous(operation: \\(operation))")
-
           defer {
             log("Exiting doSomethingDangerous(operation:)")
           }
@@ -131,7 +128,6 @@ final class PreambleMacroTests: XCTestCase {
 
         func f(a: Int, b: String) async throws -> String {
           log("Entering f(a: \\(a), b: \\(b))")
-
           defer {
             log("Exiting f(a:b:)")
           }

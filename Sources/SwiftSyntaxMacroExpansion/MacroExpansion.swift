@@ -453,6 +453,17 @@ public func collapse<Node: SyntaxProtocol>(
   var expansions = expansions
   var separator = "\n\n"
 
+  // Wrap the expansions in a set of braces.
+  func wrapInBraces() {
+    // Default to 4 spaces if no indentation was passed.
+    // In the future, we could consider inferring the indentation width from
+    // the expansions to collapse.
+    expansions = expansions.map({ $0.indented(by: indentationWidth ?? .spaces(4)) })
+    expansions[0] = "{\n" + expansions[0]
+    expansions[expansions.count - 1] += "\n}"
+    separator = "\n"
+  }
+
   switch role {
   case .accessor:
     let onDeclarationWithoutAccessor: Bool
@@ -469,16 +480,18 @@ public func collapse<Node: SyntaxProtocol>(
       onDeclarationWithoutAccessor = false
     }
     if onDeclarationWithoutAccessor {
-      // Default to 4 spaces if no indentation was passed.
-      // In the future, we could consider inferring the indentation width from
-      // the expansions to collapse.
-      expansions = expansions.map({ $0.indented(by: indentationWidth ?? .spaces(4)) })
-      expansions[0] = "{\n" + expansions[0]
-      expansions[expansions.count - 1] += "\n}"
-      separator = "\n"
+      wrapInBraces()
     }
   case .memberAttribute:
     separator = " "
+
+  case .body:
+    wrapInBraces()
+
+  case .preamble:
+    // Only place a single newline between statements.
+    separator = "\n"
+
   default:
     break
   }

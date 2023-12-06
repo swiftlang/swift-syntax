@@ -379,7 +379,7 @@ private func expandPreambleMacro(
   // Match the indentation of the statements if we can, and put newlines around
   // the preamble to separate it from the rest of the body.
   let indentation = decl.body?.statements.indentationOfFirstLine ?? (decl.indentationOfFirstLine + indentationWidth)
-  let indentedSource = "\n" + expanded.indented(by: indentation) + "\n\n"
+  let indentedSource = "\n" + expanded.indented(by: indentation) + "\n"
   return "\(raw: indentedSource)"
 }
 
@@ -409,10 +409,13 @@ private func expandBodyMacro(
     return nil
   }
 
-  // Wrap the body in braces.
-  let beforeBody = decl.body == nil ? " " : "";
-  let indentedSource = beforeBody + "{\n" + expanded.indented(by: decl.indentationOfFirstLine + indentationWidth) + "\n}\n"
-  return "\(raw: indentedSource)" as CodeBlockSyntax
+  // `expandAttachedMacro` adds the `{` and `}` to wrap the accessor block and
+  // then indents it.
+  // Remove any indentaiton from the first line using `drop(while:)` and then
+  // prepend a space to separate it from the variable declaration
+  let leadingWhitespace = decl.body == nil ? " " : ""
+  let indentedSource = leadingWhitespace + expanded.indented(by: decl.indentationOfFirstLine).drop(while: { $0.isWhitespace })
+  return "\(raw: indentedSource)"
 }
 
 // MARK: - MacroSystem

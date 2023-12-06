@@ -275,7 +275,7 @@ private func expandAccessorMacroWithoutExistingAccessors(
 
   // `expandAttachedMacro` adds the `{` and `}` to wrap the accessor block and
   // then indents it.
-  // Remove any indentaiton from the first line using `drop(while:)` and then
+  // Remove any indentation from the first line using `drop(while:)` and then
   // prepend a space to separate it from the variable declaration
   let indentedSource = " " + expanded.indented(by: attachedTo.indentationOfFirstLine).drop(while: { $0.isWhitespace })
   return "\(raw: indentedSource)"
@@ -409,10 +409,11 @@ private func expandBodyMacro(
     return nil
   }
 
-  // `expandAttachedMacro` adds the `{` and `}` to wrap the accessor block and
-  // then indents it.
-  // Remove any indentaiton from the first line using `drop(while:)` and then
-  // prepend a space to separate it from the variable declaration
+  // `expandAttachedMacro` adds the `{` and `}` to wrap the body and then
+  // indents it.
+  // Remove any indentation from the first line using `drop(while:)` and then
+  // prepend a space when it's being introduced on a declaration that has no
+  // body yet.
   let leadingWhitespace = decl.body == nil ? " " : ""
   let indentedSource = leadingWhitespace + expanded.indented(by: decl.indentationOfFirstLine).drop(while: { $0.isWhitespace })
   return "\(raw: indentedSource)"

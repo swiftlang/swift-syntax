@@ -130,9 +130,9 @@ public class ClassificationTests: XCTestCase {
       expected: [
         ClassificationSpec(source: "func", kind: .keyword),
         ClassificationSpec(source: "foo", kind: .identifier),
-        ClassificationSpec(source: "x", kind: .identifier),
+        ClassificationSpec(source: "x", kind: .argumentLabel),
         ClassificationSpec(source: "Int", kind: .type),
-        ClassificationSpec(source: "y", kind: .identifier),
+        ClassificationSpec(source: "y", kind: .argumentLabel),
         ClassificationSpec(source: "Int", kind: .type),
         ClassificationSpec(source: "Int", kind: .type),
         ClassificationSpec(source: "return", kind: .keyword),
@@ -283,13 +283,13 @@ public class ClassificationTests: XCTestCase {
       "#colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)",
       expected: [
         ClassificationSpec(source: "colorLiteral", kind: .identifier),
-        ClassificationSpec(source: "red", kind: .identifier),
+        ClassificationSpec(source: "red", kind: .argumentLabel),
         ClassificationSpec(source: "0", kind: .integerLiteral),
-        ClassificationSpec(source: "green", kind: .identifier),
+        ClassificationSpec(source: "green", kind: .argumentLabel),
         ClassificationSpec(source: "0", kind: .integerLiteral),
-        ClassificationSpec(source: "blue", kind: .identifier),
+        ClassificationSpec(source: "blue", kind: .argumentLabel),
         ClassificationSpec(source: "0", kind: .integerLiteral),
-        ClassificationSpec(source: "alpha", kind: .identifier),
+        ClassificationSpec(source: "alpha", kind: .argumentLabel),
         ClassificationSpec(source: "1", kind: .integerLiteral),
       ]
     )
@@ -300,7 +300,7 @@ public class ClassificationTests: XCTestCase {
       "#imageLiteral(resourceName: \"cloud.png\")",
       expected: [
         ClassificationSpec(source: "imageLiteral", kind: .identifier),
-        ClassificationSpec(source: "resourceName", kind: .identifier),
+        ClassificationSpec(source: "resourceName", kind: .argumentLabel),
         ClassificationSpec(source: "\"cloud.png\"", kind: .stringLiteral),
       ]
     )
@@ -311,7 +311,7 @@ public class ClassificationTests: XCTestCase {
       "#fileLiteral(resourceName: \"cloud.png\")",
       expected: [
         ClassificationSpec(source: "fileLiteral", kind: .identifier),
-        ClassificationSpec(source: "resourceName", kind: .identifier),
+        ClassificationSpec(source: "resourceName", kind: .argumentLabel),
         ClassificationSpec(source: "\"cloud.png\"", kind: .stringLiteral),
       ]
     )
@@ -530,10 +530,10 @@ public class ClassificationTests: XCTestCase {
         ClassificationSpec(source: "keywordInCaseAndLocalArgLabel", kind: .identifier),
         ClassificationSpec(source: "for", kind: .identifier),
         ClassificationSpec(source: "Int", kind: .type),
-        ClassificationSpec(source: "for", kind: .identifier),
+        ClassificationSpec(source: "for", kind: .argumentLabel),
         ClassificationSpec(source: "in", kind: .identifier),
         ClassificationSpec(source: "Int", kind: .type),
-        ClassificationSpec(source: "class", kind: .identifier),
+        ClassificationSpec(source: "class", kind: .argumentLabel),
         ClassificationSpec(source: "Int", kind: .type),
       ]
     )
@@ -574,6 +574,31 @@ public class ClassificationTests: XCTestCase {
         ClassificationSpec(source: "// some comment", kind: .lineComment),
         ClassificationSpec(source: "func", kind: .keyword),
         ClassificationSpec(source: "foo", kind: .identifier),
+      ]
+    )
+  }
+
+  public func testargumentLabel() {
+    assertClassification(
+      """
+      func foo(arg: Int) {}
+      """,
+      expected: [
+        ClassificationSpec(source: "func", kind: .keyword),
+        ClassificationSpec(source: "foo", kind: .identifier),
+        ClassificationSpec(source: "arg", kind: .argumentLabel),
+        ClassificationSpec(source: "Int", kind: .type),
+      ]
+    )
+
+    assertClassification(
+      """
+      foo(arg: 1)
+      """,
+      expected: [
+        ClassificationSpec(source: "foo", kind: .identifier),
+        ClassificationSpec(source: "arg", kind: .argumentLabel),
+        ClassificationSpec(source: "1", kind: .integerLiteral),
       ]
     )
   }

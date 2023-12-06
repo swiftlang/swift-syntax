@@ -115,6 +115,11 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
 
+  @_spi(RawSyntax)
+  public var rawTokenKind: RawTokenKind {
+    return tokenView.rawKind
+  }
+
   /// The length this node takes up spelled out in the source, excluding its
   /// leading or trailing trivia.
   public var trimmedLength: SourceLength {

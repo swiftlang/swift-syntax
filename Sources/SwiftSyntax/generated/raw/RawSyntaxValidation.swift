@@ -1699,7 +1699,9 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
             .keyword("_RefCountedObject"), 
             .keyword("_NativeRefCountedObject"), 
             .keyword("_Class"), 
-            .keyword("_NativeClass")
+            .keyword("_NativeClass"), 
+            .keyword("_BridgeObject"), 
+            .keyword("_TrivialStride")
           ]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.leftParen)]))

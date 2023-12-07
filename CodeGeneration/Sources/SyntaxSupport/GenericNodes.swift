@@ -205,6 +205,8 @@ public let GENERIC_NODES: [Node] = [
           .keyword(._NativeRefCountedObject),
           .keyword(._Class),
           .keyword(._NativeClass),
+          .keyword(._BridgeObject),
+          .keyword(._TrivialStride),
         ])
       ),
       Child(

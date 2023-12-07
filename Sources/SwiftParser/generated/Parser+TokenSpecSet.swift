@@ -1979,6 +1979,8 @@ extension LayoutRequirementSyntax {
     case _NativeRefCountedObject
     case _Class
     case _NativeClass
+    case _BridgeObject
+    case _TrivialStride
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -1996,6 +1998,10 @@ extension LayoutRequirementSyntax {
         self = ._Class
       case TokenSpec(._NativeClass):
         self = ._NativeClass
+      case TokenSpec(._BridgeObject):
+        self = ._BridgeObject
+      case TokenSpec(._TrivialStride):
+        self = ._TrivialStride
       default:
         return nil
       }
@@ -2017,6 +2023,10 @@ extension LayoutRequirementSyntax {
         return .keyword(._Class)
       case ._NativeClass:
         return .keyword(._NativeClass)
+      case ._BridgeObject:
+        return .keyword(._BridgeObject)
+      case ._TrivialStride:
+        return .keyword(._TrivialStride)
       }
     }
     
@@ -2040,6 +2050,10 @@ extension LayoutRequirementSyntax {
         return .keyword(._Class)
       case ._NativeClass:
         return .keyword(._NativeClass)
+      case ._BridgeObject:
+        return .keyword(._BridgeObject)
+      case ._TrivialStride:
+        return .keyword(._TrivialStride)
       }
     }
   }

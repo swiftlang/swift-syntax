@@ -579,14 +579,16 @@ extension Parser {
             var hasArguments: Bool {
               switch layoutSpecifier {
               case ._Trivial,
-                ._TrivialAtMost:
+                ._TrivialAtMost,
+                ._TrivialStride:
                 return true
 
               case ._UnknownLayout,
                 ._RefCountedObject,
                 ._NativeRefCountedObject,
                 ._Class,
-                ._NativeClass:
+                ._NativeClass,
+                ._BridgeObject:
                 return false
               }
             }

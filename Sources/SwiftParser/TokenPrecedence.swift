@@ -288,6 +288,7 @@ enum TokenPrecedence: Comparable {
     case  // Treat all other keywords as expression keywords in the absence of any better information.
     .__owned,
       .__shared,
+      ._BridgeObject,
       ._Class,
       ._compilerInitialized,
       ._const,
@@ -300,6 +301,7 @@ enum TokenPrecedence: Comparable {
       ._RefCountedObject,
       ._Trivial,
       ._TrivialAtMost,
+      ._TrivialStride,
       ._underlyingVersion,
       ._UnknownLayout,
       ._version,

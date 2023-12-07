@@ -182,6 +182,8 @@ public enum Keyword: UInt8, Hashable {
   case `repeat`
   case required
   @_spi(ExperimentalLanguageFeatures)
+  case _resultDependsOn
+  @_spi(ExperimentalLanguageFeatures)
   case _resultDependsOnSelf
   case `rethrows`
   case retroactive
@@ -688,6 +690,8 @@ public enum Keyword: UInt8, Hashable {
         self = ._objcRuntimeName
       case "addressWithOwner":
         self = .addressWithOwner
+      case "_resultDependsOn":
+        self = ._resultDependsOn
       default:
         return nil
       }
@@ -946,6 +950,7 @@ public enum Keyword: UInt8, Hashable {
       "renamed", 
       "repeat", 
       "required", 
+      "_resultDependsOn", 
       "_resultDependsOnSelf", 
       "rethrows", 
       "retroactive", 

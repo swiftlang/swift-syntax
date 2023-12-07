@@ -3120,4 +3120,26 @@ final class DeclarationTests: ParserTestCase {
       experimentalFeatures: .nonEscapableTypes
     )
   }
+
+  func testResultDependsOn() {
+    assertParse(
+      """
+        class Klass {}
+        func testTypeSpecifier(x : _resultDependsOn Klass) -> Builtin.NativeObject {
+          return Builtin.unsafeCastToNativeObject(x)
+        }
+      """,
+      experimentalFeatures: .nonEscapableTypes
+    )
+
+    assertParse(
+      """
+        class Klass {}
+        func testMultipleTypeSpecifier(x : _resultDependsOn Klass, y : _resultDependsOn Klass) -> (Builtin.NativeObject, Builtin.NativeObject) {
+          return (Builtin.unsafeCastToNativeObject(x), Builtin.unsafeCastToNativeObject(x))
+        }
+      """,
+      experimentalFeatures: .nonEscapableTypes
+    )
+  }
 }

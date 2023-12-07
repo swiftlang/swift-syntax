@@ -354,6 +354,7 @@ extension Parser.Lookahead {
         && !self.at(.keyword(.__owned))
         && !self.at(.keyword(.borrowing))
         && !self.at(.keyword(.consuming))
+        && !(experimentalFeatures.contains(.nonEscapableTypes) && self.at(.keyword(._resultDependsOn)))
       {
         return true
       }

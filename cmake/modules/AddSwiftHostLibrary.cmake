@@ -92,6 +92,10 @@ function(add_swift_syntax_library name)
         $<$<COMPILE_LANGUAGE:Swift>:-wmo>)
   endif()
 
+  target_compile_options(${name} PRIVATE
+    $<$<COMPILE_LANGUAGE:Swift>:-color-diagnostics>
+  )
+
   if(LLVM_USE_LINKER)
     target_link_options(${name} PRIVATE
       "-use-ld=${LLVM_USE_LINKER}"

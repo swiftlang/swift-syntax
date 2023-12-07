@@ -299,4 +299,129 @@ final class MemberMacroTests: XCTestCase {
       ]
     )
   }
+
+  func testAddMemberToEmptyDeclaration() {
+    struct TestMacro: MemberMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingMembersOf declaration: some DeclGroupSyntax,
+        conformingTo protocols: [TypeSyntax],
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        return [DeclSyntax("var x = 0")]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {}
+      """,
+      expandedSource: """
+        struct Foo {
+
+          var x = 0
+        }
+        """,
+      macros: [
+        "Test": TestMacro.self
+      ],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testAddTwoMembersToEmptyDeclaration() {
+    struct TestMacro: MemberMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingMembersOf declaration: some DeclGroupSyntax,
+        conformingTo protocols: [TypeSyntax],
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        return [DeclSyntax("var x = 0"), DeclSyntax("var x = 0")]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {}
+      """,
+      expandedSource: """
+        struct Foo {
+
+          var x = 0
+
+          var x = 0
+        }
+        """,
+      macros: [
+        "Test": TestMacro.self
+      ],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testAddMemberToEmptyDeclarationWithEndingNewline() {
+    struct TestMacro: MemberMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingMembersOf declaration: some DeclGroupSyntax,
+        conformingTo protocols: [TypeSyntax],
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        return [DeclSyntax("var x = 0\n")]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {}
+      """,
+      expandedSource: """
+        struct Foo {
+
+          var x = 0
+        }
+        """,
+      macros: [
+        "Test": TestMacro.self
+      ],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testAddMemberToDeclarationWithASingleVariable() {
+    struct TestMacro: MemberMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingMembersOf declaration: some DeclGroupSyntax,
+        conformingTo protocols: [TypeSyntax],
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        return [DeclSyntax("var x = 0\n")]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @Test
+      struct Foo {
+        var y = 0
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          var y = 0
+
+          var x = 0
+        }
+        """,
+      macros: [
+        "Test": TestMacro.self
+      ],
+      indentationWidth: indentationWidth
+    )
+  }
 }

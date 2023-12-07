@@ -82,8 +82,7 @@ function(add_swift_syntax_library name)
     # ABI name prefix. this can be used to avoid name conflicts.
     target_compile_options("${name}" PRIVATE
       $<$<COMPILE_LANGUAGE:Swift>:
-        "SHELL:-Xfrontend -module-abi-name"
-        "SHELL:-Xfrontend ${SWIFT_MODULE_ABI_NAME_PREFIX}${name}"
+        "SHELL:-Xfrontend -module-abi-name -Xfrontend ${SWIFT_MODULE_ABI_NAME_PREFIX}${name}"
       >)
   endif()
 

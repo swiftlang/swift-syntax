@@ -75,13 +75,15 @@ final class AttributeTests: ParserTestCase {
       """
       @_specialize(where @_noMetdata T : _BridgeObject)
       func foo(_ t: T) {}
-      """)
+      """
+    )
 
     assertParse(
       """
       @_specialize(where @_noMetdata T : _TrivialStride(64))
       func foo(_ t: T) {}
-      """)
+      """
+    )
   }
 
   func testMissingClosingParenToAttribute() {

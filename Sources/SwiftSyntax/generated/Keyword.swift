@@ -22,6 +22,7 @@ public enum Keyword: UInt8, Hashable {
   case _borrow
   @_spi(ExperimentalLanguageFeatures)
   case _borrowing
+  case _BridgeObject
   case _cdecl
   case _Class
   case _compilerInitialized
@@ -61,6 +62,7 @@ public enum Keyword: UInt8, Hashable {
   case _swift_native_objc_runtime_base
   case _Trivial
   case _TrivialAtMost
+  case _TrivialStride
   case _typeEraser
   case _unavailableFromAsync
   case _underlyingVersion
@@ -649,6 +651,8 @@ public enum Keyword: UInt8, Hashable {
       }
     case 13:
       switch text {
+      case "_BridgeObject":
+        self = ._BridgeObject
       case "associativity":
         self = .associativity
       case "unsafeAddress":
@@ -664,6 +668,8 @@ public enum Keyword: UInt8, Hashable {
         self = ._spi_available
       case "_TrivialAtMost":
         self = ._TrivialAtMost
+      case "_TrivialStride":
+        self = ._TrivialStride
       case "_UnknownLayout":
         self = ._UnknownLayout
       case "associatedtype":
@@ -793,6 +799,7 @@ public enum Keyword: UInt8, Hashable {
       "_backDeploy", 
       "_borrow", 
       "_borrowing", 
+      "_BridgeObject", 
       "_cdecl", 
       "_Class", 
       "_compilerInitialized", 
@@ -830,6 +837,7 @@ public enum Keyword: UInt8, Hashable {
       "_swift_native_objc_runtime_base", 
       "_Trivial", 
       "_TrivialAtMost", 
+      "_TrivialStride", 
       "_typeEraser", 
       "_unavailableFromAsync", 
       "_underlyingVersion", 

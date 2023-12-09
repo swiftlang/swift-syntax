@@ -1350,7 +1350,7 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSy
 /// 
 ///  - `type`: ``TypeSyntax``
 ///  - `colon`: `:`
-///  - `layoutSpecifier`: (`_Trivial` | `_TrivialAtMost` | `_UnknownLayout` | `_RefCountedObject` | `_NativeRefCountedObject` | `_Class` | `_NativeClass`)
+///  - `layoutSpecifier`: (`_Trivial` | `_TrivialAtMost` | `_UnknownLayout` | `_RefCountedObject` | `_NativeRefCountedObject` | `_Class` | `_NativeClass` | `_BridgeObject` | `_TrivialStride`)
 ///  - `leftParen`: `(`?
 ///  - `size`: `<integerLiteral>`?
 ///  - `comma`: `,`?
@@ -1505,6 +1505,8 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
   ///  - `_NativeRefCountedObject`
   ///  - `_Class`
   ///  - `_NativeClass`
+  ///  - `_BridgeObject`
+  ///  - `_TrivialStride`
   public var layoutSpecifier: TokenSyntax {
     get {
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)

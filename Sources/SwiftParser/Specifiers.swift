@@ -584,7 +584,7 @@ extension TokenConsumer {
 extension Parser {
   /// Parse a throws clause after we've already parsed the 'throws' keyword to introduce it.
   mutating func parseThrowsClause(after throwsKeyword: RawTokenSyntax) -> RawThrowsClauseSyntax {
-    guard self.at(.leftParen) && experimentalFeatures.contains(.typedThrows) else {
+    guard experimentalFeatures.contains(.typedThrows), let leftParen = self.consume(if: .leftParen) else {
       return RawThrowsClauseSyntax(
         throwsSpecifier: throwsKeyword,
         leftParen: nil,
@@ -594,12 +594,10 @@ extension Parser {
       )
     }
 
-    let (unexpectedBetweenThrowsSpecifierAndLeftParen, leftParen) = self.expect(.leftParen)
     let type = self.parseType()
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawThrowsClauseSyntax(
       throwsSpecifier: throwsKeyword,
-      unexpectedBetweenThrowsSpecifierAndLeftParen,
       leftParen: leftParen,
       type: type,
       unexpectedBeforeRightParen,

@@ -14,17 +14,24 @@
 // All users of the declarations in this file should transition away from them ASAP.
 
 public extension AccessorEffectSpecifiersSyntax {
+  @_disfavoredOverload
   @available(*, deprecated, message: "use throwsClause instead of throwsSpecifier")
   init(
     leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil,
     asyncSpecifier: TokenSyntax? = nil,
+    _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil,
     throwsSpecifier: TokenSyntax? = nil,
+    _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      unexpectedBeforeAsyncSpecifier,
       asyncSpecifier: asyncSpecifier,
+      unexpectedBetweenAsyncSpecifierAndThrowsSpecifier,
       throwsClause: throwsSpecifier.map { ThrowsClauseSyntax(throwsSpecifier: $0) },
+      unexpectedAfterThrowsSpecifier,
       trailingTrivia: trailingTrivia
     )
   }
@@ -68,6 +75,12 @@ public extension DeclGroupSyntax {
 }
 
 public extension EffectSpecifiersSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenAsyncSpecifierAndThrowsClause")
+  var unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? {
+    get { unexpectedBetweenAsyncSpecifierAndThrowsClause }
+    set { unexpectedBetweenAsyncSpecifierAndThrowsClause = newValue }
+  }
+
   @available(*, deprecated, message: "use throwsClause.throwsSpecifier")
   var throwsSpecifier: TokenSyntax? {
     get { throwsClause?.throwsSpecifier }
@@ -85,20 +98,33 @@ public extension EffectSpecifiersSyntax {
       }
     }
   }
+
+  @available(*, deprecated, renamed: "unexpectedAfterThrowsClause")
+  var unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? {
+    get { unexpectedAfterThrowsClause }
+    set { unexpectedAfterThrowsClause = newValue }
+  }
 }
 
 public extension FunctionEffectSpecifiersSyntax {
+  @_disfavoredOverload
   @available(*, deprecated, message: "use throwsClause instead of throwsSpecifier")
   init(
     leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil,
     asyncSpecifier: TokenSyntax? = nil,
+    _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil,
     throwsSpecifier: TokenSyntax? = nil,
+    _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      unexpectedBeforeAsyncSpecifier,
       asyncSpecifier: asyncSpecifier,
+      unexpectedBetweenAsyncSpecifierAndThrowsSpecifier,
       throwsClause: throwsSpecifier.map { ThrowsClauseSyntax(throwsSpecifier: $0) },
+      unexpectedAfterThrowsSpecifier,
       trailingTrivia: trailingTrivia
     )
   }
@@ -496,14 +522,20 @@ public extension TypeEffectSpecifiersSyntax {
   @available(*, deprecated, message: "use throwsClause instead of throwsSpecifier")
   init(
     leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil,
     asyncSpecifier: TokenSyntax? = nil,
+    _ unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? = nil,
     throwsSpecifier: TokenSyntax? = nil,
+    _ unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
+      unexpectedBeforeAsyncSpecifier,
       asyncSpecifier: asyncSpecifier,
+      unexpectedBetweenAsyncSpecifierAndThrowsSpecifier,
       throwsClause: throwsSpecifier.map { ThrowsClauseSyntax(throwsSpecifier: $0) },
+      unexpectedAfterThrowsSpecifier,
       trailingTrivia: trailingTrivia
     )
   }

@@ -1,6 +1,3 @@
-@_spi(Testing) import SwiftOperators
-import SwiftParser
-import SwiftSyntax
 //===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
@@ -12,6 +9,10 @@ import SwiftSyntax
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
+
+@_spi(Testing) import SwiftOperators
+import SwiftParser
+import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 

@@ -39,7 +39,7 @@ fileprivate extension Node {
 }
 
 func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
-  return SourceFileSyntax {
+  return SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for node in SYNTAX_NODES where node.kind.isBase && nodesStartingWith.contains(node.kind.syntaxType.description.first!) {
       DeclSyntax(
         """

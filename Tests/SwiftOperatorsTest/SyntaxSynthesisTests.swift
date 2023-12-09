@@ -1,5 +1,3 @@
-import SwiftOperators
-import SwiftSyntax
 //===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
@@ -11,6 +9,9 @@ import SwiftSyntax
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
+
+import SwiftOperators
+import SwiftSyntax
 import XCTest
 
 public class SyntaxSynthesisTests: XCTestCase {

@@ -2298,19 +2298,15 @@ public struct RawWildcardPatternSyntax: RawPatternSyntaxNodeProtocol {
   public init(
       _ unexpectedBeforeWildcard: RawUnexpectedNodesSyntax? = nil, 
       wildcard: RawTokenSyntax, 
-      _ unexpectedBetweenWildcardAndTypeAnnotation: RawUnexpectedNodesSyntax? = nil, 
-      typeAnnotation: RawTypeAnnotationSyntax?, 
-      _ unexpectedAfterTypeAnnotation: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedAfterWildcard: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .wildcardPattern, uninitializedCount: 5, arena: arena) { layout in
+      kind: .wildcardPattern, uninitializedCount: 3, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeWildcard?.raw
       layout[1] = wildcard.raw
-      layout[2] = unexpectedBetweenWildcardAndTypeAnnotation?.raw
-      layout[3] = typeAnnotation?.raw
-      layout[4] = unexpectedAfterTypeAnnotation?.raw
+      layout[2] = unexpectedAfterWildcard?.raw
     }
     self.init(unchecked: raw)
   }
@@ -2323,16 +2319,8 @@ public struct RawWildcardPatternSyntax: RawPatternSyntaxNodeProtocol {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenWildcardAndTypeAnnotation: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterWildcard: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  
-  public var typeAnnotation: RawTypeAnnotationSyntax? {
-    layoutView.children[3].map(RawTypeAnnotationSyntax.init(raw:))
-  }
-  
-  public var unexpectedAfterTypeAnnotation: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

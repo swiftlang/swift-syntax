@@ -3387,12 +3387,8 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeWildcard"
   case \WildcardPatternSyntax.wildcard:
     return "wildcard"
-  case \WildcardPatternSyntax.unexpectedBetweenWildcardAndTypeAnnotation:
-    return "unexpectedBetweenWildcardAndTypeAnnotation"
-  case \WildcardPatternSyntax.typeAnnotation:
-    return "typeAnnotation"
-  case \WildcardPatternSyntax.unexpectedAfterTypeAnnotation:
-    return "unexpectedAfterTypeAnnotation"
+  case \WildcardPatternSyntax.unexpectedAfterWildcard:
+    return "unexpectedAfterWildcard"
   case \YieldStmtSyntax.unexpectedBeforeYieldKeyword:
     return "unexpectedBeforeYieldKeyword"
   case \YieldStmtSyntax.yieldKeyword:

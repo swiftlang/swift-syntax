@@ -64,7 +64,6 @@ extension Parser {
       return RawPatternSyntax(
         RawWildcardPatternSyntax(
           wildcard: wildcard,
-          typeAnnotation: nil,
           arena: self.arena
         )
       )

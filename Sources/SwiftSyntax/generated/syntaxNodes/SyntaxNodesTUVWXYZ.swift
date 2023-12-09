@@ -1204,7 +1204,7 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 /// ### Examples
 /// 
 /// ``TuplePatternSyntax`` can be used in more complex variable declarations.
-/// For example `(x, y)` in the exmaple:
+/// For example `(x, y)` in the example:
 /// 
 /// ```swift
 /// let (x, y) = (1, 2)
@@ -2159,7 +2159,6 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
 ///  - ``MatchingPatternConditionSyntax``.``MatchingPatternConditionSyntax/typeAnnotation``
 ///  - ``OptionalBindingConditionSyntax``.``OptionalBindingConditionSyntax/typeAnnotation``
 ///  - ``PatternBindingSyntax``.``PatternBindingSyntax/typeAnnotation``
-///  - ``WildcardPatternSyntax``.``WildcardPatternSyntax/typeAnnotation``
 public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
@@ -4242,17 +4241,18 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 /// 
 /// ### Examples
 /// 
-/// ``TuplePatternSyntax`` can be used in a simple variable declarations.
-/// For example `_` in the exmaple:
+/// ``WildcardPattern`` matches and ignores any value.
+/// For example `_` in the example:
 /// 
 /// ```swift
-/// let _: Int = (1, 2)
+/// for _ in 1...3 {
+///   // ...
+/// }
 /// ```
 ///
 /// ### Children
 /// 
 ///  - `wildcard`: `_`
-///  - `typeAnnotation`: ``TypeAnnotationSyntax``?
 public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
@@ -4265,34 +4265,19 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _Lea
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - typeAnnotation: The type of the pattern.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeWildcard: UnexpectedNodesSyntax? = nil,
       wildcard: TokenSyntax = .wildcardToken(),
-      _ unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
-      typeAnnotation: TypeAnnotationSyntax? = nil,
-      _ unexpectedAfterTypeAnnotation: UnexpectedNodesSyntax? = nil,
+      _ unexpectedAfterWildcard: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
     
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeWildcard, 
-            wildcard, 
-            unexpectedBetweenWildcardAndTypeAnnotation, 
-            typeAnnotation, 
-            unexpectedAfterTypeAnnotation
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeWildcard?.raw, 
-          wildcard.raw, 
-          unexpectedBetweenWildcardAndTypeAnnotation?.raw, 
-          typeAnnotation?.raw, 
-          unexpectedAfterTypeAnnotation?.raw
-        ]
+    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeWildcard, wildcard, unexpectedAfterWildcard))) { (arena, _) in
+      let layout: [RawSyntax?] = [unexpectedBeforeWildcard?.raw, wildcard.raw, unexpectedAfterWildcard?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.wildcardPattern,
         from: layout,
@@ -4326,7 +4311,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _Lea
     }
   }
   
-  public var unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? {
+  public var unexpectedAfterWildcard: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -4335,33 +4320,8 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _Lea
     }
   }
   
-  /// The type of the pattern.
-  public var typeAnnotation: TypeAnnotationSyntax? {
-    get {
-      return Syntax(self).child(at: 3)?.cast(TypeAnnotationSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(WildcardPatternSyntax.self)
-    }
-  }
-  
-  public var unexpectedAfterTypeAnnotation: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(WildcardPatternSyntax.self)
-    }
-  }
-  
   public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeWildcard, 
-          \Self.wildcard, 
-          \Self.unexpectedBetweenWildcardAndTypeAnnotation, 
-          \Self.typeAnnotation, 
-          \Self.unexpectedAfterTypeAnnotation
-        ])
+    return .layout([\Self.unexpectedBeforeWildcard, \Self.wildcard, \Self.unexpectedAfterWildcard])
   }
 }
 

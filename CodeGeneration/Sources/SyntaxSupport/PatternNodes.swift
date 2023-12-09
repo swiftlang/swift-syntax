@@ -138,7 +138,7 @@ public let PATTERN_NODES: [Node] = [
       ### Examples
 
       ``TuplePatternSyntax`` can be used in more complex variable declarations.
-      For example `(x, y)` in the exmaple:
+      For example `(x, y)` in the example:
 
       ```swift
       let (x, y) = (1, 2)
@@ -212,24 +212,20 @@ public let PATTERN_NODES: [Node] = [
 
       ### Examples
 
-      ``TuplePatternSyntax`` can be used in a simple variable declarations.
-      For example `_` in the exmaple:
+      ``WildcardPattern`` matches and ignores any value.
+      For example `_` in the example:
 
       ```swift
-      let _: Int = (1, 2)
+      for _ in 1...3 {
+        // ...
+      }
       ```
       """,
     children: [
       Child(
         name: "wildcard",
         kind: .token(choices: [.token(.wildcard)])
-      ),
-      Child(
-        name: "typeAnnotation",
-        kind: .node(kind: .typeAnnotation),
-        documentation: "The type of the pattern.",
-        isOptional: true
-      ),
+      )
     ]
   ),
 

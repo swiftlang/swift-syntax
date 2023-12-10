@@ -48,11 +48,6 @@ let package = Package(
       ],
       path: "Tests/MacroExamples/Implementation"
     ),
-  ]
-)
-
-package.targets.append(
-  contentsOf: [
     .target(
       name: "MacroExamplesInterface",
       dependencies: [

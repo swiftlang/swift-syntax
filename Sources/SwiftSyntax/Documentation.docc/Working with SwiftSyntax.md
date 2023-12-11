@@ -185,7 +185,7 @@ at build time. For these cases, the SwiftSyntax library provides a method
 for transparently interpreting string literals containing source code as syntax
 trees when the `SwiftSyntaxBuilder` module is also imported:
 
-```
+```swift
 import SwiftSyntax
 import SwiftParser
 import SwiftSyntaxBuilder
@@ -202,7 +202,7 @@ String processing is not limited to string literals. Further interior string
 interpolations can be used to parameterize the code in syntax generating 
 functions.
 
-```
+```swift
 import SwiftSyntax
 import SwiftParser
 

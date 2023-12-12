@@ -13,6 +13,7 @@ add_swift_syntax_library(SwiftIDEUtils
   Syntax+Classifications.swift
   SyntaxClassification.swift
   SyntaxClassifier.swift
+  Utils.swift
 )
 
 target_link_swift_syntax_libraries(SwiftIDEUtils PUBLIC

@@ -26,11 +26,17 @@ public struct DeclNameLocation: Equatable {
     /// ## Examples
     /// - `a` in `func foo(a: Int) {}`
     /// - `a` and `b` in `func foo(a b: Int) {}`
+    /// - `additionalTrailingClosure:` in `foo {} additionalTrailingClosure: {}`
+    ///   - We cannot use `labeledCall` here because when changing the parameter label to `_`, we need to change the
+    ///     call to `foo {} _: {}`. If we used `labeledCall`, the label would be removed, leaving us with `foo {} {}`.
     case labeled(firstName: Range<AbsolutePosition>, secondName: Range<AbsolutePosition>?)
 
     /// The argument of a call.
     ///
-    /// The range of the label does not include trivia. The range of the colon *does* include trivia.
+    /// The range of the label does not include trivia.
+    ///
+    /// The range of the colon *does* include trivia. This is so we can remove the colon including the space after it
+    /// when changing a labeled parameter to an unlabeled parameter.
     ///
     /// ## Examples
     /// - `a` and `:` in `foo(a: 1)`
@@ -46,10 +52,6 @@ public struct DeclNameLocation: Equatable {
     }
 
     static func labeledCall(label: TokenSyntax, colon: TokenSyntax) -> Argument {
-      // FIXME: (NameMatcher) The `labeledCall` case is problematic for two reasons
-      // 1. The fact that `colon` includes trivia is inconsistent with the associated values in `label` and `labeledCall`
-      // 2. If `colon` didn't need to contain trivia, we wouldn't need the `labeledCall` case at all.
-      // See if we can unify `labeledCall` and `labeled`.
       return .labeledCall(label: label.rangeWithoutTrivia, colon: colon.position..<colon.endPosition)
     }
 
@@ -66,6 +68,18 @@ public struct DeclNameLocation: Equatable {
         return label.lowerBound..<colon.upperBound
       case .unlabeled(argumentPosition: let argumentPosition):
         return argumentPosition..<argumentPosition
+      }
+    }
+
+    /// Shift the ranges `utf8Offset` bytes to the right, ie. add `utf8Offset` to the upper and lower bound.
+    func advanced(by utf8Offset: Int) -> DeclNameLocation.Argument {
+      switch self {
+      case .labeled(firstName: let firstName, secondName: let secondName):
+        return .labeled(firstName: firstName.advanced(by: utf8Offset), secondName: secondName?.advanced(by: utf8Offset))
+      case .labeledCall(label: let label, colon: let colon):
+        return .labeledCall(label: label.advanced(by: utf8Offset), colon: colon.advanced(by: utf8Offset))
+      case .unlabeled(argumentPosition: let argumentPosition):
+        return .unlabeled(argumentPosition: argumentPosition.advanced(by: utf8Offset))
       }
     }
   }
@@ -92,6 +106,22 @@ public struct DeclNameLocation: Equatable {
 
     /// The argument label to disambiguate multiple functions with the same base name, like `foo(a:)`.
     case selector([Argument])
+
+    /// Shift the ranges `utf8Offset` bytes to the right, ie. add `utf8Offset` to the upper and lower bound.
+    func advanced(by utf8Offset: Int) -> DeclNameLocation.Arguments {
+      switch self {
+      case .noArguments:
+        return .noArguments
+      case .call(let arguments, firstTrailingClosureIndex: let firstTrailingClosureIndex):
+        return .call(arguments.map { $0.advanced(by: utf8Offset) }, firstTrailingClosureIndex: firstTrailingClosureIndex)
+      case .parameters(let parameters):
+        return .parameters(parameters.map { $0.advanced(by: utf8Offset) })
+      case .noncollapsibleParameters(let parameters):
+        return .noncollapsibleParameters(parameters.map { $0.advanced(by: utf8Offset) })
+      case .selector(let arguments):
+        return .selector(arguments.map { $0.advanced(by: utf8Offset) })
+      }
+    }
   }
 
   public enum Context {

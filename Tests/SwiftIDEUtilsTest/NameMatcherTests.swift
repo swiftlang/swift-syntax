@@ -46,14 +46,14 @@ private func assertNameMatcherResult(
     }
     XCTAssertEqual(actualBaseName, expected.baseName, file: file, line: expected.originatorLine)
 
-    let argumentLabels: [DeclNameLocation.Argument] =
-      switch actual.arguments {
-      case .noArguments: []
-      case .call(let labels, _): labels
-      case .parameters(let labels): labels
-      case .noncollapsibleParameters(let labels): labels
-      case .selector(let labels): labels
-      }
+    let argumentLabels: [DeclNameLocation.Argument]
+    switch actual.arguments {
+    case .noArguments: argumentLabels = []
+    case .call(let labels, _): argumentLabels = labels
+    case .parameters(let labels): argumentLabels = labels
+    case .noncollapsibleParameters(let labels): argumentLabels = labels
+    case .selector(let labels): argumentLabels = labels
+    }
 
     let actualArgumentLabels = argumentLabels.map { input[$0.range] }
     XCTAssertEqual(actualArgumentLabels, expected.arguments, file: file, line: expected.originatorLine)

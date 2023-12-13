@@ -541,6 +541,45 @@ public extension TypeEffectSpecifiersSyntax {
   }
 }
 
+public extension WildcardPatternSyntax {
+  @available(*, deprecated, message: "remove 'typeAnnotation'")
+  init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeWildcard: UnexpectedNodesSyntax? = nil,
+    wildcard: TokenSyntax = .wildcardToken(),
+    _ unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? = nil,
+    typeAnnotation: TypeAnnotationSyntax? = nil,
+    _ unexpectedAfterTypeAnnotation: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeWildcard,
+      wildcard: wildcard,
+      unexpectedAfterTypeAnnotation,
+      trailingTrivia: trailingTrivia
+    );
+  }
+
+  @available(*, deprecated, message: "'unexpectedBetweenWildcardAndTypeAnnotation' was removed")
+  var unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? {
+    get { nil }
+    set {}
+  }
+
+  @available(*, deprecated, message: "'typeAnnotation' was removed")
+  var typeAnnotation: TypeAnnotationSyntax? {
+    get { nil }
+    set {}
+  }
+
+  @available(*, deprecated, renamed: "unexpectedAfterWildcard")
+  var unexpectedAfterTypeAnnotation: UnexpectedNodesSyntax? {
+    get { unexpectedAfterWildcard }
+    set { unexpectedAfterWildcard = newValue }
+  }
+}
+
 //==========================================================================//
 // IMPORTANT: If you are tempted to add a compatibility layer code here     //
 // please insert it in alphabetical order above                             //

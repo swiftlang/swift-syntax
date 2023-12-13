@@ -38,7 +38,4 @@ extension Parser.ExperimentalFeatures {
   
   /// Whether to enable the parsing of NonEscableTypes.
   public static let nonEscapableTypes = Self (rawValue: 1 << 4)
-  
-  /// Whether to enable the parsing of strict concurrency for globals.
-  public static let globalConcurrency = Self (rawValue: 1 << 5)
 }

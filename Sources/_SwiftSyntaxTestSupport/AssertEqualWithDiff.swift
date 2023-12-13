@@ -88,6 +88,16 @@ public func failStringsEqualWithDiff(
   file: StaticString = #file,
   line: UInt = #line
 ) {
+  let fullMessage = describeDifferenceBetweenStrings(actual, expected, message, additionalInfo: additionalInfo())
+  XCTFail(fullMessage, file: file, line: line)
+}
+
+public func describeDifferenceBetweenStrings(
+  _ actual: String,
+  _ expected: String,
+  _ message: String = "",
+  additionalInfo: @autoclosure () -> String? = nil
+) -> String {
   let stringComparison: String
 
   // Use `CollectionDifference` on supported platforms to get `diff`-like line-based output. On
@@ -151,5 +161,5 @@ public func failStringsEqualWithDiff(
       \(additional)
       """
   }
-  XCTFail(fullMessage, file: file, line: line)
+  return fullMessage
 }

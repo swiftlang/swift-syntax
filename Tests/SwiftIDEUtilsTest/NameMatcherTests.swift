@@ -171,8 +171,32 @@ public class NameMatcherTests: XCTestCase {
       */
       """,
       expected: [
-        DeclNameLocationSpec(baseName: "foo", context: .comment),
-        DeclNameLocationSpec(baseName: "foo", context: .comment),
+        DeclNameLocationSpec(baseName: "foo", argumentLabels: [], type: .call, context: .comment),
+        DeclNameLocationSpec(baseName: "foo", argumentLabels: ["first"], type: .selector, context: .comment),
+      ]
+    )
+  }
+
+  func testResolveArgumentLabelsInComments() {
+    assertNameMatcherResult(
+      "// 1️⃣fn(x:)",
+      expected: [
+        DeclNameLocationSpec(baseName: "fn", argumentLabels: ["x"], type: .selector, context: .comment)
+      ]
+    )
+
+    assertNameMatcherResult(
+      "// 1️⃣fn(x:) 2️⃣foo(other:)",
+      expected: [
+        DeclNameLocationSpec(baseName: "fn", argumentLabels: ["x"], type: .selector, context: .comment),
+        DeclNameLocationSpec(baseName: "foo", argumentLabels: ["other"], type: .selector, context: .comment),
+      ]
+    )
+
+    assertNameMatcherResult(
+      "// 1️⃣fn(x: 1)",
+      expected: [
+        DeclNameLocationSpec(baseName: "fn", argumentLabels: ["x: "], type: .call, context: .comment)
       ]
     )
   }

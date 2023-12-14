@@ -55,9 +55,9 @@ public class NameMatcher: SyntaxAnyVisitor {
 
   // MARK: - Public entry
 
-  public static func resolve(baseNamePositions: some Sequence<AbsolutePosition>, in sourceFile: SourceFileSyntax) -> [DeclNameLocation] {
+  public static func resolve(baseNamePositions: some Sequence<AbsolutePosition>, in tree: some SyntaxProtocol) -> [DeclNameLocation] {
     let matcher = NameMatcher(baseNamePositions: baseNamePositions)
-    matcher.walk(sourceFile)
+    matcher.walk(tree)
     return matcher.resolvedLocs
   }
 
@@ -161,7 +161,9 @@ public class NameMatcher: SyntaxAnyVisitor {
     }
     if let additionalTrailingClosures {
       argumentLabels += additionalTrailingClosures.map { (additionalTrailingClosure) -> DeclNameLocation.Argument in
-        // FIXME: (NameMatcher) This really should be callLabel but the old NameMatcher also reported this as labeled
+        // We need to report additional trailing closure labels in the same way that we report function parameters
+        // because changing the argument label to `_` should result in an additional trailing closure label `_:` instead
+        // of removing the label, which is what `labeledCall` does
         return .labeled(firstName: additionalTrailingClosure.label, secondName: nil)
       }
     }
@@ -193,16 +195,29 @@ public class NameMatcher: SyntaxAnyVisitor {
 
   public override func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
     while let baseNamePosition = firstPositionToResolve(in: token.leadingTriviaRange) ?? firstPositionToResolve(in: token.trailingTriviaRange) {
+      // Parse the comment from the position that we want to resolve. This should parse any function calls or compound decl names, the rest of
+      // the comment will probably be parsed as garbage but that's OK because we don't actually care about it.
       let positionOffsetInToken = baseNamePosition.utf8Offset - token.position.utf8Offset
-      guard let tokenLength = getFirstTokenLength(in: token.syntaxTextBytes[positionOffsetInToken...]) else {
-        continue
+      let commentTree = token.syntaxTextBytes[positionOffsetInToken...].withUnsafeBufferPointer { (buffer) -> ExprSyntax in
+        var parser = Parser(buffer)
+        return ExprSyntax.parse(from: &parser)
       }
-      // FIXME: (NameMatcher) We could also resolve argument labels inside comments if we are parsing anyway.
-      addResolvedLocIfRequested(
-        baseNameRange: baseNamePosition..<baseNamePosition.advanced(by: tokenLength.utf8Length),
-        argumentLabels: .noArguments,
-        context: .comment
-      )
+      // Run a new `NameMatcher`. Since the input of that name matcher is the text after the position to resolve, we
+      // want to resolve the position at offset 0.
+      let resolvedInComment = NameMatcher.resolve(baseNamePositions: [AbsolutePosition(utf8Offset: 0)], in: commentTree)
+
+      let positionRemoved = removePositionToResolveIfExists(at: baseNamePosition)
+      precondition(positionRemoved, "Found a position with `firstPositionToResolve but didn't find it again to remove it?")
+
+      // Adjust the positions to point back to the original tree, set the context as `comment` and record them.
+      resolvedLocs += resolvedInComment.map { locationInComment in
+        DeclNameLocation(
+          baseNameRange: locationInComment.baseNameRange.advanced(by: baseNamePosition.utf8Offset),
+          arguments: locationInComment.arguments.advanced(by: baseNamePosition.utf8Offset),
+          context: .comment,
+          isActive: isActiveStack.last!
+        )
+      }
     }
 
     if case .stringSegment = token.tokenKind {

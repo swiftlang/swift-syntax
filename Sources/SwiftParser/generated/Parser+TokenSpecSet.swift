@@ -202,7 +202,7 @@ extension AttributedTypeSyntax {
         self = .borrowing
       case TokenSpec(.consuming):
         self = .consuming
-      case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonEscapableTypes):
+      case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonescapableTypes):
         self = ._resultDependsOn
       default:
         return nil
@@ -793,7 +793,7 @@ extension DeclModifierSyntax {
         self = .public
       case TokenSpec(.reasync):
         self = .reasync
-      case TokenSpec(._resultDependsOnSelf) where experimentalFeatures.contains(.nonEscapableTypes):
+      case TokenSpec(._resultDependsOnSelf) where experimentalFeatures.contains(.nonescapableTypes):
         self = ._resultDependsOnSelf
       case TokenSpec(.required):
         self = .required

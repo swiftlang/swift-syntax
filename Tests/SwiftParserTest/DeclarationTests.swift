@@ -3105,7 +3105,7 @@ final class DeclarationTests: ParserTestCase {
          }
        }
       """,
-      experimentalFeatures: .nonEscapableTypes
+      experimentalFeatures: .nonescapableTypes
     )
 
     assertParse(
@@ -3116,7 +3116,7 @@ final class DeclarationTests: ParserTestCase {
            }
          }
       """,
-      experimentalFeatures: .nonEscapableTypes
+      experimentalFeatures: .nonescapableTypes
     )
   }
 
@@ -3128,7 +3128,7 @@ final class DeclarationTests: ParserTestCase {
           return Builtin.unsafeCastToNativeObject(x)
         }
       """,
-      experimentalFeatures: .nonEscapableTypes
+      experimentalFeatures: .nonescapableTypes
     )
 
     assertParse(
@@ -3138,7 +3138,7 @@ final class DeclarationTests: ParserTestCase {
           return (Builtin.unsafeCastToNativeObject(x), Builtin.unsafeCastToNativeObject(x))
         }
       """,
-      experimentalFeatures: .nonEscapableTypes
+      experimentalFeatures: .nonescapableTypes
     )
   }
 }

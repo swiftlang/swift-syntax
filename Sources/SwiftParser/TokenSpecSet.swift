@@ -416,8 +416,8 @@ enum DeclarationModifier: TokenSpecSet {
     case TokenSpec(.static): self = .static
     case TokenSpec(.unowned): self = .unowned
     case TokenSpec(.weak): self = .weak
-    case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonEscapableTypes): self = ._resultDependsOn
-    case TokenSpec(._resultDependsOnSelf) where experimentalFeatures.contains(.nonEscapableTypes): self = ._resultDependsOnSelf
+    case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonescapableTypes): self = ._resultDependsOn
+    case TokenSpec(._resultDependsOnSelf) where experimentalFeatures.contains(.nonescapableTypes): self = ._resultDependsOnSelf
     default: return nil
     }
   }

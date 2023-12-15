@@ -619,9 +619,9 @@ public enum Keyword: CaseIterable {
     case .required:
       return KeywordSpec("required")
     case ._resultDependsOn:
-      return KeywordSpec("_resultDependsOn", experimentalFeature: .nonEscapableTypes)
+      return KeywordSpec("_resultDependsOn", experimentalFeature: .nonescapableTypes)
     case ._resultDependsOnSelf:
-      return KeywordSpec("_resultDependsOnSelf", experimentalFeature: .nonEscapableTypes)
+      return KeywordSpec("_resultDependsOnSelf", experimentalFeature: .nonescapableTypes)
     case .rethrows:
       return KeywordSpec("rethrows", isLexerClassified: true)
     case .retroactive:

@@ -17,7 +17,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case thenStatements
   case typedThrows
   case doExpressions
-  case nonEscapableTypes
+  case nonescapableTypes
 
   /// The name of the feature, which is used in the doc comment.
   public var featureName: String {
@@ -30,7 +30,7 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "typed throws"
     case .doExpressions:
       return "'do' expressions"
-    case .nonEscapableTypes:
+    case .nonescapableTypes:
       return "NonEscableTypes"
     }
   }

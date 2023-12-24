@@ -467,6 +467,7 @@ public let DECL_NODES: [Node] = [
           .keyword(._resultDependsOnSelf),
           .keyword(.required),
           .keyword(.static),
+          .keyword(.transferring),
           .keyword(.unowned),
           .keyword(.weak),
         ])

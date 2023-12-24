@@ -184,6 +184,8 @@ extension AttributedTypeSyntax {
     case borrowing
     case consuming
     @_spi(ExperimentalLanguageFeatures)
+    case transferring
+    @_spi(ExperimentalLanguageFeatures)
     case _resultDependsOn
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
@@ -202,6 +204,8 @@ extension AttributedTypeSyntax {
         self = .borrowing
       case TokenSpec(.consuming):
         self = .consuming
+      case TokenSpec(.transferring) where experimentalFeatures.contains(.transferringArgsAndResults):
+        self = .transferring
       case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonescapableTypes):
         self = ._resultDependsOn
       default:
@@ -225,6 +229,8 @@ extension AttributedTypeSyntax {
         return .keyword(.borrowing)
       case .consuming:
         return .keyword(.consuming)
+      case .transferring:
+        return .keyword(.transferring)
       case ._resultDependsOn:
         return .keyword(._resultDependsOn)
       }
@@ -250,6 +256,8 @@ extension AttributedTypeSyntax {
         return .keyword(.borrowing)
       case .consuming:
         return .keyword(.consuming)
+      case .transferring:
+        return .keyword(.transferring)
       case ._resultDependsOn:
         return .keyword(._resultDependsOn)
       }
@@ -726,6 +734,8 @@ extension DeclModifierSyntax {
     case _resultDependsOnSelf
     case required
     case `static`
+    @_spi(ExperimentalLanguageFeatures)
+    case transferring
     case unowned
     case weak
     
@@ -799,6 +809,8 @@ extension DeclModifierSyntax {
         self = .required
       case TokenSpec(.static):
         self = .static
+      case TokenSpec(.transferring) where experimentalFeatures.contains(.transferringArgsAndResults):
+        self = .transferring
       case TokenSpec(.unowned):
         self = .unowned
       case TokenSpec(.weak):
@@ -878,6 +890,8 @@ extension DeclModifierSyntax {
         return .keyword(.required)
       case .static:
         return .keyword(.static)
+      case .transferring:
+        return .keyword(.transferring)
       case .unowned:
         return .keyword(.unowned)
       case .weak:
@@ -959,6 +973,8 @@ extension DeclModifierSyntax {
         return .keyword(.required)
       case .static:
         return .keyword(.static)
+      case .transferring:
+        return .keyword(.transferring)
       case .unowned:
         return .keyword(.unowned)
       case .weak:

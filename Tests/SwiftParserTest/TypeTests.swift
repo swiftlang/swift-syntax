@@ -309,18 +309,15 @@ final class TypeTests: ParserTestCase {
     assertParse(
       """
       { () throws(PosixError) -> Void in }
-      """,
-      experimentalFeatures: [.typedThrows]
+      """
     )
 
     assertParse(
-      "typealias T = () throws(PosixError) -> Void",
-      experimentalFeatures: [.typedThrows]
+      "typealias T = () throws(PosixError) -> Void"
     )
 
     assertParse(
-      "[() throws(PosixError) -> Void]()",
-      experimentalFeatures: [.typedThrows]
+      "[() throws(PosixError) -> Void]()"
     )
   }
 }

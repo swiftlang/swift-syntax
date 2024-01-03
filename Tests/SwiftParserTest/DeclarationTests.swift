@@ -930,8 +930,7 @@ final class DeclarationTests: ParserTestCase {
 
   func testTypedThrows() {
     assertParse(
-      "func test() throws(any Error) -> Int { }",
-      experimentalFeatures: [.typedThrows]
+      "func test() throws(any Error) -> Int { }"
     )
 
     assertParse(
@@ -939,8 +938,7 @@ final class DeclarationTests: ParserTestCase {
       struct X {
         init() throws(any Error) { }
       }
-      """,
-      experimentalFeatures: [.typedThrows]
+      """
     )
 
     assertParse(
@@ -948,8 +946,7 @@ final class DeclarationTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"])
       ],
-      fixedSource: "func test() async throws(MyError) {}",
-      experimentalFeatures: [.typedThrows]
+      fixedSource: "func test() async throws(MyError) {}"
     )
 
     assertParse(
@@ -958,8 +955,7 @@ final class DeclarationTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in function"),
       ],
-      fixedSource: "func test() async throws (MyError) {}",
-      experimentalFeatures: [.typedThrows]
+      fixedSource: "func test() async throws (MyError) {}"
     )
 
     assertParse(
@@ -968,8 +964,7 @@ final class DeclarationTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError) async' in function"),
       ],
-      fixedSource: "func test() throws (MyError) async {}",
-      experimentalFeatures: [.typedThrows]
+      fixedSource: "func test() throws (MyError) async {}"
     )
 
     assertParse(
@@ -979,8 +974,7 @@ final class DeclarationTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '(MyError)' in function"),
       ],
-      fixedSource: "func test() async throws (MyError) {}",
-      experimentalFeatures: [.typedThrows]
+      fixedSource: "func test() async throws (MyError) {}"
     )
 
     assertParse(
@@ -988,8 +982,7 @@ final class DeclarationTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "'await' must precede 'throws'", fixIts: ["move 'await' in front of 'throws'"])
       ],
-      fixedSource: "func test() async throws(MyError) {}",
-      experimentalFeatures: [.typedThrows]
+      fixedSource: "func test() async throws(MyError) {}"
     )
 
     assertParse(
@@ -998,8 +991,7 @@ final class DeclarationTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "'await' must precede 'throws'", fixIts: ["move 'await' in front of 'throws'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in function"),
       ],
-      fixedSource: "func test() async throws (MyError) {}",
-      experimentalFeatures: [.typedThrows]
+      fixedSource: "func test() async throws (MyError) {}"
     )
 
     assertParse(
@@ -1008,8 +1000,7 @@ final class DeclarationTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError) await' in function"),
       ],
-      fixedSource: "func test() throws (MyError) await {}",
-      experimentalFeatures: [.typedThrows]
+      fixedSource: "func test() throws (MyError) await {}"
     )
 
     assertParse(
@@ -1018,16 +1009,14 @@ final class DeclarationTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in function"),
       ],
-      fixedSource: "func test() awaitthrows (MyError) {}",  // FIXME: spacing
-      experimentalFeatures: [.typedThrows]
+      fixedSource: "func test() awaitthrows (MyError) {}"  // FIXME: spacing
     )
 
     assertParse(
       "func test() async1️⃣(MyError) {}",
       diagnostics: [
         DiagnosticSpec(message: "unexpected code '(MyError)' in function")
-      ],
-      experimentalFeatures: [.typedThrows]
+      ]
     )
 
     assertParse(
@@ -1036,8 +1025,7 @@ final class DeclarationTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'await' with 'async'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in function"),
       ],
-      fixedSource: "func test() async (MyError) {}",
-      experimentalFeatures: [.typedThrows]
+      fixedSource: "func test() async (MyError) {}"
     )
 
     assertParse(
@@ -1046,13 +1034,11 @@ final class DeclarationTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in function"),
       ],
-      fixedSource: "func test() throws (MyError) {}",
-      experimentalFeatures: [.typedThrows]
+      fixedSource: "func test() throws (MyError) {}"
     )
 
     assertParse(
-      "func test() throws(MyError) {}",
-      experimentalFeatures: [.typedThrows]
+      "func test() throws(MyError) {}"
     )
 
     assertParse(
@@ -1060,8 +1046,7 @@ final class DeclarationTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"])
       ],
-      fixedSource: "func test() async throws(MyError){}",
-      experimentalFeatures: [.typedThrows]
+      fixedSource: "func test() async throws(MyError){}"
     )
   }
 

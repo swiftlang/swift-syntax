@@ -902,8 +902,7 @@ final class StatementTests: ParserTestCase {
       do throws(any Error) {
         throw myError
       }
-      """,
-      experimentalFeatures: [.typedThrows]
+      """
     )
 
     assertParse(
@@ -911,8 +910,7 @@ final class StatementTests: ParserTestCase {
       do throws(MyError) {
         throw myError
       }
-      """,
-      experimentalFeatures: [.typedThrows]
+      """
     )
 
     assertParse(
@@ -920,8 +918,7 @@ final class StatementTests: ParserTestCase {
       do throws {
         throw myError
       }
-      """,
-      experimentalFeatures: [.typedThrows]
+      """
     )
   }
 }

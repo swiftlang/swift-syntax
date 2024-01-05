@@ -30,15 +30,12 @@ extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of 'then' statements.
   public static let thenStatements = Self (rawValue: 1 << 1)
   
-  /// Whether to enable the parsing of typed throws.
-  public static let typedThrows = Self (rawValue: 1 << 2)
-  
   /// Whether to enable the parsing of 'do' expressions.
-  public static let doExpressions = Self (rawValue: 1 << 3)
+  public static let doExpressions = Self (rawValue: 1 << 2)
   
   /// Whether to enable the parsing of NonEscableTypes.
-  public static let nonescapableTypes = Self (rawValue: 1 << 4)
+  public static let nonescapableTypes = Self (rawValue: 1 << 3)
   
   /// Whether to enable the parsing of TransferringArgsAndResults.
-  public static let transferringArgsAndResults = Self (rawValue: 1 << 5)
+  public static let transferringArgsAndResults = Self (rawValue: 1 << 4)
 }

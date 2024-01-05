@@ -219,7 +219,6 @@ public let STMT_NODES: [Node] = [
       Child(
         name: "throwsClause",
         kind: .node(kind: .throwsClause),
-        experimentalFeature: .typedThrows,
         documentation: "The clause specifying the type of errors thrown from the 'do' block.",
         isOptional: true
       ),

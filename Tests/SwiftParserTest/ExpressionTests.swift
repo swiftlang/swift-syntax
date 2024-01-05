@@ -2823,8 +2823,7 @@ final class StatementExpressionTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"])
       ],
-      fixedSource: "[() async throws(MyError) -> Void]()",
-      experimentalFeatures: .typedThrows
+      fixedSource: "[() async throws(MyError) -> Void]()"
     )
     assertParse(
       "[() throws 1️⃣async2️⃣(MyError) -> Void]()",
@@ -2832,28 +2831,24 @@ final class StatementExpressionTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in array element"),
       ],
-      fixedSource: "[() async throws (MyError) -> Void]()",
-      experimentalFeatures: .typedThrows
+      fixedSource: "[() async throws (MyError) -> Void]()"
     )
     assertParse(
       "[() 1️⃣try(MyError) async -> Void]()",
       diagnostics: [DiagnosticSpec(message: "expected ',' in array element", fixIts: ["insert ','"])],
-      fixedSource: "[(), try(MyError) async -> Void]()",
-      experimentalFeatures: .typedThrows
+      fixedSource: "[(), try(MyError) async -> Void]()"
     )
     assertParse(
       "[() 1️⃣try async(MyError) -> Void]()",
       diagnostics: [DiagnosticSpec(message: "expected ',' in array element", fixIts: ["insert ','"])],
-      fixedSource: "[(), try async(MyError) -> Void]()",
-      experimentalFeatures: .typedThrows
+      fixedSource: "[(), try async(MyError) -> Void]()"
     )
     assertParse(
       "[() throws(MyError) 1️⃣await -> Void]()",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "'await' must precede 'throws'", fixIts: ["move 'await' in front of 'throws'"])
       ],
-      fixedSource: "[() async throws(MyError) -> Void]()",
-      experimentalFeatures: .typedThrows
+      fixedSource: "[() async throws(MyError) -> Void]()"
     )
     assertParse(
       "[() throws 1️⃣await2️⃣(MyError) -> Void]()",
@@ -2861,8 +2856,7 @@ final class StatementExpressionTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "'await' must precede 'throws'", fixIts: ["move 'await' in front of 'throws'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in array element"),
       ],
-      fixedSource: "[() async throws (MyError) -> Void]()",
-      experimentalFeatures: .typedThrows
+      fixedSource: "[() async throws (MyError) -> Void]()"
     )
     assertParse(
       "[() 1️⃣try(MyError) 2️⃣await 3️⃣-> Void]()",
@@ -2883,44 +2877,36 @@ final class StatementExpressionTests: ParserTestCase {
           fixIts: ["insert expression"]
         ),
       ],
-      fixedSource: "[(), try(MyError), await <#expression#> -> Void]()",
-      experimentalFeatures: .typedThrows
+      fixedSource: "[(), try(MyError), await <#expression#> -> Void]()"
     )
     assertParse(
       "[() 1️⃣try await(MyError) -> Void]()",
       diagnostics: [DiagnosticSpec(message: "expected ',' in array element", fixIts: ["insert ','"])],
-      fixedSource: "[(), try await(MyError) -> Void]()",
-      experimentalFeatures: .typedThrows
+      fixedSource: "[(), try await(MyError) -> Void]()"
     )
     assertParse(
       "[() 1️⃣async(MyError) -> Void]()",
       diagnostics: [DiagnosticSpec(message: "expected ',' in array element", fixIts: ["insert ','"])],
-      fixedSource: "[(), async(MyError) -> Void]()",
-      experimentalFeatures: .typedThrows
+      fixedSource: "[(), async(MyError) -> Void]()"
     )
     assertParse(
       "[() 1️⃣await(MyError) -> Void]()",
       diagnostics: [DiagnosticSpec(message: "expected ',' in array element", fixIts: ["insert ','"])],
-      fixedSource: "[(), await(MyError) -> Void]()",
-      experimentalFeatures: .typedThrows
+      fixedSource: "[(), await(MyError) -> Void]()"
     )
     assertParse(
       "[() 1️⃣try(MyError) -> Void]()",
       diagnostics: [DiagnosticSpec(message: "expected ',' in array element", fixIts: ["insert ','"])],
-      fixedSource: "[(), try(MyError) -> Void]()",
-      experimentalFeatures: .typedThrows
+      fixedSource: "[(), try(MyError) -> Void]()"
     )
     assertParse(
-      "[() throws(MyError) -> Void]()",
-      experimentalFeatures: .typedThrows
+      "[() throws(MyError) -> Void]()"
     )
     assertParse(
-      "X<() throws(MyError) -> Int>()",
-      experimentalFeatures: .typedThrows
+      "X<() throws(MyError) -> Int>()"
     )
     assertParse(
-      "X<() async throws(MyError) -> Int>()",
-      experimentalFeatures: .typedThrows
+      "X<() async throws(MyError) -> Int>()"
     )
   }
 

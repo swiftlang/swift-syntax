@@ -3513,7 +3513,6 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
   }
   
   /// The clause specifying the type of errors thrown from the 'do' block.
-  @_spi(ExperimentalLanguageFeatures)
   public var throwsClause: ThrowsClauseSyntax? {
     get {
       return Syntax(self).child(at: 3)?.cast(ThrowsClauseSyntax.self)

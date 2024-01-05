@@ -93,14 +93,12 @@ public let COMMON_NODES: [Node] = [
       Child(
         name: "leftParen",
         kind: .token(choices: [.token(.leftParen)]),
-        experimentalFeature: .typedThrows,
         documentation: "The '(' to open the thrown error type specification.",
         isOptional: true
       ),
       Child(
         name: "type",
         kind: .node(kind: .type),
-        experimentalFeature: .typedThrows,
         nameForDiagnostics: "thrown type",
         documentation: "The thrown error type.",
         isOptional: true
@@ -108,7 +106,6 @@ public let COMMON_NODES: [Node] = [
       Child(
         name: "rightParen",
         kind: .token(choices: [.token(.rightParen)]),
-        experimentalFeature: .typedThrows,
         documentation: "The ')' to close the thrown error type specification.",
         isOptional: true
       ),

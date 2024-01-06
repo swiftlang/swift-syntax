@@ -1048,6 +1048,15 @@ final class DeclarationTests: ParserTestCase {
       ],
       fixedSource: "func test() async throws(MyError){}"
     )
+
+    assertParse(
+      """
+      struct S<Element, Failure: Error> {
+        init(produce: @escaping () async throws(Failure) -> Element?) {
+        }
+      }
+      """
+    )
   }
 
   func testExtraneousRightBraceRecovery() {

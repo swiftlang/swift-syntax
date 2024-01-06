@@ -815,7 +815,6 @@ extension Parser.Lookahead {
       if peek(isAtAnyIn: EffectSpecifier.self) != nil {
         var backtrack = self.lookahead()
         backtrack.consumeAnyToken()
-        backtrack.consumeAnyToken()
         return backtrack.atFunctionTypeArrow()
       }
 

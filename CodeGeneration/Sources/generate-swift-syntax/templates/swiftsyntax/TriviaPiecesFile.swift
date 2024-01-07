@@ -26,7 +26,7 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     ///
     /// In general, you should deal with the actual Trivia collection instead
     /// of individual pieces whenever possible.
-    public enum TriviaPiece
+    public enum TriviaPiece: Sendable
     """
   ) {
     for trivia in TRIVIAS {
@@ -176,7 +176,7 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     /// In contrast to ``TriviaPiece``, a ``RawTriviaPiece`` does not own the source
     /// text of the trivia.
     @_spi(RawSyntax)
-    public enum RawTriviaPiece: Equatable
+    public enum RawTriviaPiece: Equatable, Sendable
     """
   ) {
     for trivia in TRIVIAS {

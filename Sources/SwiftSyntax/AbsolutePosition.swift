@@ -12,7 +12,7 @@
 
 /// An absolute position in a source file as text - the absolute utf8Offset from
 /// the start of the file.
-public struct AbsolutePosition: Comparable, Hashable {
+public struct AbsolutePosition: Comparable, Hashable, Sendable {
   public let utf8Offset: Int
 
   static let startOfFile = AbsolutePosition(utf8Offset: 0)

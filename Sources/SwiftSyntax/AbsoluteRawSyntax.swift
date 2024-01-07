@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-struct AbsoluteRawSyntax {
+struct AbsoluteRawSyntax: Sendable {
   let raw: RawSyntax
   let info: AbsoluteSyntaxInfo
 

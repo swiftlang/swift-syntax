@@ -26,7 +26,7 @@ extension RawSyntax {
 
 /// A view into ``RawSyntax`` that exposes functionality that only applies to tokens.
 @_spi(RawSyntax)
-public struct RawSyntaxTokenView {
+public struct RawSyntaxTokenView: Sendable {
   let raw: RawSyntax
 
   fileprivate init(raw: RawSyntax) {

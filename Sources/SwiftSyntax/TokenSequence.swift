@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Sequence of tokens that are part of the provided Syntax node.
-public struct TokenSequence: Sequence {
+public struct TokenSequence: Sequence, Sendable {
   /// Iterates over a ``TokenSequence``.
   public struct Iterator: IteratorProtocol {
     var nextToken: TokenSyntax?
@@ -68,7 +68,7 @@ extension TokenSequence: CustomReflectable {
 }
 
 /// Reverse sequence of tokens that are part of the provided Syntax node.
-public struct ReversedTokenSequence: Sequence {
+public struct ReversedTokenSequence: Sequence, Sendable {
   /// Iterates over a ``ReversedTokenSequence``.
   public struct Iterator: IteratorProtocol {
     var nextToken: TokenSyntax?

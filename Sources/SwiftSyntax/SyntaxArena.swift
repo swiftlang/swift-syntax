@@ -264,7 +264,7 @@ public class ParsingSyntaxArena: SyntaxArena {
 /// `RawSyntaxData` holds its ``SyntaxArena`` in this form to prevent their cyclic
 /// strong references. Also, passing around ``SyntaxArena`` in this form doesn't
 /// cause any ref-counting traffic.
-struct SyntaxArenaRef: Hashable {
+struct SyntaxArenaRef: Hashable, @unchecked Sendable {
   private let _value: Unmanaged<SyntaxArena>
 
   init(_ value: __shared SyntaxArena) {

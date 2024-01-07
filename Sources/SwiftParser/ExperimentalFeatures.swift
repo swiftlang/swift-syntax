@@ -26,7 +26,4 @@ extension Parser.ExperimentalFeatures {
 
   /// Whether to enable the parsing of 'then' statements.
   public static let thenStatements = Self(rawValue: 1 << 1)
-
-  /// Whether to enable the parsing of strict concurrency for globals.
-  public static let globalConcurrency = Self(rawValue: 1 << 2)
 }

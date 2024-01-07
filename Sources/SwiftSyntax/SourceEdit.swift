@@ -12,7 +12,7 @@
 
 /// A textual edit to the original source represented by a range and a
 /// replacement.
-public struct SourceEdit: Equatable {
+public struct SourceEdit: Equatable, Sendable {
   /// The half-open range that this edit applies to.
   public let range: Range<AbsolutePosition>
   /// The text to replace the original range with. Empty for a deletion.

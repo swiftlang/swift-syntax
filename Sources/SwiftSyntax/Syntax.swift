@@ -14,17 +14,23 @@
 /// Each node has accessors for its known children, and allows efficient
 /// iteration over the children through its `children` property.
 public struct Syntax: SyntaxProtocol, SyntaxHashable {
-  fileprivate enum Info {
+  fileprivate enum Info: Sendable {
     case root(Root)
     indirect case nonRoot(NonRoot)
 
     // For root node.
-    struct Root {
-      var arena: SyntaxArena
+    struct Root: @unchecked Sendable {
+      // Unchecked conformance to sendable is fine because `arena` is not
+      // accessible. It is just used to keep the arena alive.
+      private var arena: SyntaxArena
+
+      init(arena: SyntaxArena) {
+        self.arena = arena
+      }
     }
 
     // For non-root nodes.
-    struct NonRoot {
+    struct NonRoot: Sendable {
       var parent: Syntax
       var absoluteInfo: AbsoluteSyntaxInfo
     }

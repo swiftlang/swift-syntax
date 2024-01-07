@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-public enum Keyword: UInt8, Hashable {
+public enum Keyword: UInt8, Hashable, Sendable {
   case __consuming
   case __owned
   case __setter_access

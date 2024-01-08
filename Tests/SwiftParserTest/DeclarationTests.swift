@@ -742,6 +742,20 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testParsePreconcurrency() {
+    assertParse(
+      """
+      struct MyValue: @preconcurrency P {}
+      """
+    )
+
+    assertParse(
+      """
+      extension MyValue: @preconcurrency P {}
+      """
+    )
+  }
+
   func testParseDynamicReplacement() {
     assertParse(
       """

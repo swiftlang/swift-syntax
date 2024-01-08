@@ -174,6 +174,7 @@ public enum Keyword: UInt8, Hashable {
   case package
   case postfix
   case `precedencegroup`
+  case preconcurrency
   case prefix
   case `private`
   case `Protocol`
@@ -676,6 +677,8 @@ public enum Keyword: UInt8, Hashable {
         self = .associatedtype
       case "differentiable":
         self = .differentiable
+      case "preconcurrency":
+        self = .preconcurrency
       case "witness_method":
         self = .witness_method
       default:
@@ -949,6 +952,7 @@ public enum Keyword: UInt8, Hashable {
       "package", 
       "postfix", 
       "precedencegroup", 
+      "preconcurrency", 
       "prefix", 
       "private", 
       "Protocol", 

@@ -1004,7 +1004,7 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
 ///
 /// ### Children
 /// 
-///  - `label`: (`target` | `availability` | `exported` | `kind` | `spi` | `spiModule` | `available`)
+///  - `label`: (`target` | `availability` | `exported` | `kind` | `spi` | `spiModule`)
 ///  - `colon`: `:`
 ///  - `value`: ``TokenSyntax``
 ///  - `trailingComma`: `,`?
@@ -1099,7 +1099,6 @@ public struct LabeledSpecializeArgumentSyntax: SyntaxProtocol, SyntaxHashable, _
   ///  - `kind`
   ///  - `spi`
   ///  - `spiModule`
-  ///  - `available`
   public var label: TokenSyntax {
     get {
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)

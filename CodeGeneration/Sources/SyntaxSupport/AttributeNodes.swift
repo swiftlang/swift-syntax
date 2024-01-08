@@ -629,7 +629,6 @@ public let ATTRIBUTE_NODES: [Node] = [
           .keyword(.kind),
           .keyword(.spi),
           .keyword(.spiModule),
-          .keyword(.available),
         ]),
         nameForDiagnostics: "label",
         documentation: "The label of the argument"

@@ -689,25 +689,6 @@ extension Parser {
             )
           )
         )
-      case (.available, let handle)?:
-        let label = self.eat(handle)
-        let (unexpectedBeforeColon, colon) = self.expect(.colon)
-        // FIXME: I have no idea what this is supposed to be, but the Syntax
-        // tree only allows us to insert a token so we'll take anything.
-        let available = self.consumeAnyToken()
-        let comma = self.consume(if: .comma)
-        elements.append(
-          .labeledSpecializeArgument(
-            RawLabeledSpecializeArgumentSyntax(
-              label: label,
-              unexpectedBeforeColon,
-              colon: colon,
-              value: available,
-              trailingComma: comma,
-              arena: self.arena
-            )
-          )
-        )
       case (.exported, let handle)?:
         let label = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)

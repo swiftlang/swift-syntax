@@ -268,7 +268,6 @@ extension String: ExpressibleByLiteralSyntax {
 
 extension ExpressibleByLiteralSyntax where Self: BinaryInteger {
   public func makeLiteralSyntax() -> IntegerLiteralExprSyntax {
-    // TODO: Radix selection? Thousands separators?
     let digits = String(self, radix: 10)
     return IntegerLiteralExprSyntax(literal: .integerLiteral(digits))
   }
@@ -305,7 +304,6 @@ extension ExpressibleByLiteralSyntax where Self: FloatingPoint, Self: LosslessSt
       )
 
     case .negativeNormal, .negativeSubnormal, .positiveZero, .positiveSubnormal, .positiveNormal:
-      // TODO: Thousands separators?
       let digits = String(self)
       return ExprSyntax(FloatLiteralExprSyntax(literal: .floatLiteral(digits)))
     }

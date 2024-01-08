@@ -153,9 +153,9 @@ struct RawSyntaxChildren: BidirectionalCollection {
 
   /// The rootId of the tree the child nodes belong to
   private let rootId: UInt
+
   /// The number of children in `parent`. Cached to avoid reaching into `parent` for every index
   /// advancement
-  // FIXME: Do we need this cached?
   private let numberOfChildren: Int
 
   let startIndex: SyntaxChildrenIndex

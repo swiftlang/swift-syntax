@@ -12,6 +12,7 @@
 
 // This test file has been translated from swift/test/Parse/recovery.swift
 
+import SwiftSyntax
 import XCTest
 
 final class RecoveryTests: ParserTestCase {
@@ -290,10 +291,6 @@ final class RecoveryTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "missing condition in 'if' statement")
-        // TODO: Old parser expected error on line 3: consecutive statements on a line must be separated by ';', Fix-It replacements: 14 - 14 = ';'
-        // TODO: Old parser expected error on line 3: closure expression is unused
-        // TODO: Old parser expected note on line 3: did you mean to use a 'do' statement?, Fix-It replacements: 15 - 15 = 'do '
-        // TODO: Old parser expected warning on line 3: boolean literal is unused
       ]
     )
   }
@@ -318,8 +315,6 @@ final class RecoveryTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "missing condition in 'if' statement")
-        // TODO: Old parser expected error on line 2: closure expression is unused
-        // TODO: Old parser expected note on line 2: did you mean to use a 'do' statement?, Fix-It replacements: 8 - 8 = 'do '
       ]
     )
   }
@@ -374,10 +369,6 @@ final class RecoveryTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "missing condition in 'while' statement")
-        // TODO: Old parser expected error on line 3: consecutive statements on a line must be separated by ';', Fix-It replacements: 17 - 17 = ';'
-        // TODO: Old parser expected error on line 3: closure expression is unused
-        // TODO: Old parser expected note on line 3: did you mean to use a 'do' statement?, Fix-It replacements: 18 - 18 = 'do '
-        // TODO: Old parser expected warning on line 3: boolean literal is unused
       ]
     )
   }
@@ -402,8 +393,6 @@ final class RecoveryTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "missing condition in 'while' statement")
-        // TODO: Old parser expected error on line 2: closure expression is unused
-        // TODO: Old parser expected note on line 2: did you mean to use a 'do' statement?, Fix-It replacements: 11 - 11 = 'do '
       ]
     )
   }
@@ -814,7 +803,6 @@ final class RecoveryTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement")
-        // TODO: Old parser expected error on line 2: 'is' keyword required to pattern match against type name, Fix-It replacements: 10 - 10 = 'is '
       ]
     )
   }
@@ -2871,9 +2859,23 @@ final class RecoveryTests: ParserTestCase {
           &(Int:x)
       }
       """,
-      diagnostics: [
-        // TODO: Old parser expected error on line 4: '&' may only be used to pass an argument to inout parameter
-      ]
+      substructure: InOutExprSyntax(
+        ampersand: .prefixAmpersandToken(),
+        expression: ExprSyntax(
+          TupleExprSyntax(
+            leftParen: .leftParenToken(),
+            elements: LabeledExprListSyntax([
+              LabeledExprSyntax(
+                label: .identifier("Int"),
+                colon: .colonToken(),
+                expression: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("x")))
+              )
+            ]),
+            rightParen: .rightParenToken()
+          )
+        )
+      )
+
     )
   }
 

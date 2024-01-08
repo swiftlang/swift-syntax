@@ -188,13 +188,13 @@ final class DollarIdentifierTests: ParserTestCase {
     assertParse(
       """
       func escapedDollarAnd() {
-        // FIXME: Bad diagnostics.
         1️⃣`$0` = 1
         `$$` = 2
         `$abc` = 3
       }
       """,
       diagnostics: [
+        // FIXME: Bad diagnostic
         DiagnosticSpec(message: "unexpected code in function")
       ]
     )

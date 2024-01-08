@@ -43,7 +43,6 @@ final class TypeExprTests: ParserTestCase {
       protocol Zim {
         associatedtype Zang
         init()
-        // TODO class var prop: Int { get }
         static func meth() {}
         func instMeth() {}
       }
@@ -224,7 +223,6 @@ final class TypeExprTests: ParserTestCase {
       func archetype<T: Zim>(_: T) {
         _ = T.self
         _ = T()
-        // TODO let prop = T.prop
         _ = T.meth
         let _ : () = T.meth()
         _ = T
@@ -239,7 +237,6 @@ final class TypeExprTests: ParserTestCase {
       func assocType<T: Zim>(_: T) where T.Zang: Zim {
         _ = T.Zang.self
         _ = T.Zang()
-        // TODO _ = T.Zang.prop
         _ = T.Zang.meth
         let _ : () = T.Zang.meth()
         _ = T.Zang

@@ -164,7 +164,6 @@ final class StringLiteralEofTests: ParserTestCase {
             \(<#expression#>)
         """
         """##
-      // FIXME: The closing delimiter should be put on the new line
     )
   }
 

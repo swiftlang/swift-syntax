@@ -500,7 +500,6 @@ final class IfconfigExprTests: ParserTestCase {
     )
   }
 
-  // FIXME: Diagnostics could be better.
   func testIfConfigExpr34() {
     assertParse(
       """

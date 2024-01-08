@@ -509,8 +509,6 @@ final class MatchingPatternsTests: ParserTestCase {
   func testMatchingPatterns31() {
     assertParse(
       #"""
-      // FIXME: We don't currently allow subpatterns for "isa" patterns that
-      // require interesting conditional downcasts.
       class Base { }
       class Derived : Base { }
       """#

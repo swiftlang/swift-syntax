@@ -145,8 +145,6 @@ extension Parser {
       case (.unavailable, let handle)?,
         (.noasync, let handle)?:
         let argument = self.eat(handle)
-        // FIXME: Can we model this in SwiftSyntax by making the
-        // 'labeled' argument part optional?
         entry = .token(argument)
       case (.star, _)?:
         entry = self.parseAvailabilitySpec()
@@ -177,8 +175,6 @@ extension Parser {
   /// Parse an availability argument.
   mutating func parseAvailabilitySpec() -> RawAvailabilityArgumentSyntax.Argument {
     if let star = self.consumeIfContextualPunctuator("*") {
-      // FIXME: Use makeAvailabilityVersionRestriction here - but swift-format
-      // doesn't expect it.
       return .token(star)
     }
 

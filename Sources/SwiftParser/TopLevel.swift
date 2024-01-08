@@ -150,8 +150,6 @@ extension Parser {
       )
     }
 
-    // FIXME: It is unfortunate that the Swift book refers to these as
-    // "statements" and not "items".
     let item = self.parseItem(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl)
     let semi = self.consume(if: .semicolon)
     var trailingSemis: [RawTokenSyntax] = []

@@ -270,9 +270,6 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     trailingTriviaPieces: [RawTriviaPiece] = [],
     arena: __shared SyntaxArena
   ) {
-    // FIXME: Allow creating a `RawSyntax.parsedToken()` with a string literal
-    // for text. Currently it asserts that the string buffer is not contained
-    // within the `arena`.
     self.init(
       materialized: kind,
       text: text ?? kind.defaultText ?? "",

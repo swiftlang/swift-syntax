@@ -92,7 +92,6 @@ final class SuperTests: ParserTestCase {
           super.foo.bar
           super.bar
           super.bar()
-          // FIXME: should also say "'super.init' cannot be referenced outside of an initializer"
           super.init
           super.init()
           super.init(0)

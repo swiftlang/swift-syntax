@@ -380,7 +380,6 @@ extension Parser {
   /// Parse a type placeholder.
   mutating func parsePlaceholderType() -> RawIdentifierTypeSyntax {
     let (unexpectedBeforeName, name) = self.expect(.wildcard)
-    // FIXME: Need a better syntax node than this
     return RawIdentifierTypeSyntax(
       unexpectedBeforeName,
       name: name,

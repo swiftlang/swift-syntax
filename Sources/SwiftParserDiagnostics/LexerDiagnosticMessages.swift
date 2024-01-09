@@ -86,7 +86,7 @@ public enum StaticTokenWarning: String, DiagnosticMessage {
 }
 
 public struct InvalidFloatingPointExponentDigit: TokenError {
-  public enum Kind {
+  public enum Kind: Sendable {
     case digit(Unicode.Scalar)
     case character(Unicode.Scalar)
   }
@@ -103,7 +103,7 @@ public struct InvalidFloatingPointExponentDigit: TokenError {
 }
 
 public struct InvalidDigitInIntegerLiteral: TokenError {
-  public enum Kind {
+  public enum Kind: Sendable {
     case binary(Unicode.Scalar)
     case octal(Unicode.Scalar)
     case decimal(Unicode.Scalar)

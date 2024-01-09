@@ -35,7 +35,7 @@ public enum DiagnosticSeverity: Sendable {
 
 /// Types conforming to this protocol represent diagnostic messages that can be
 /// shown to the client.
-public protocol DiagnosticMessage {
+public protocol DiagnosticMessage: Sendable {
   /// The diagnostic message that should be displayed in the client.
   var message: String { get }
 

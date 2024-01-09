@@ -19,7 +19,7 @@ import SwiftSyntax
 /// semantic representation, validating the correctness of those declarations,
 /// and "folding" sequence expression syntax into a structured expression
 /// syntax tree.
-public struct OperatorTable {
+public struct OperatorTable: Sendable {
   var precedenceGraph: PrecedenceGraph = .init()
   var infixOperators: [OperatorName: Operator] = [:]
   var prefixOperators: [OperatorName: Operator] = [:]

@@ -85,7 +85,7 @@ fileprivate struct TokenKindAndText {
 }
 
 /// Represents a source range that is associated with a syntax classification.
-public struct SyntaxClassifiedRange: Equatable {
+public struct SyntaxClassifiedRange: Equatable, Sendable {
   public var kind: SyntaxClassification
   public var range: ByteSourceRange
 
@@ -264,7 +264,7 @@ private struct ClassificationVisitor {
 }
 
 /// Provides a sequence of ``SyntaxClassifiedRange``s for a syntax node.
-public struct SyntaxClassifications: Sequence {
+public struct SyntaxClassifications: Sequence, Sendable {
   public typealias Iterator = Array<SyntaxClassifiedRange>.Iterator
 
   var classifications: [SyntaxClassifiedRange]

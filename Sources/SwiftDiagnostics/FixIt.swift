@@ -15,7 +15,7 @@ import SwiftSyntax
 /// Types conforming to this protocol represent Fix-It messages that can be
 /// shown to the client.
 /// The messages should describe the change that the Fix-It will perform
-public protocol FixItMessage {
+public protocol FixItMessage: Sendable {
   /// The Fix-It message that should be displayed in the client.
   var message: String { get }
 
@@ -24,8 +24,8 @@ public protocol FixItMessage {
 }
 
 /// A Fix-It that can be applied to resolve a diagnostic.
-public struct FixIt {
-  public enum Change {
+public struct FixIt: Sendable {
+  public enum Change: Sendable {
     /// Replace `oldNode` by `newNode`.
     case replace(oldNode: Syntax, newNode: Syntax)
     /// Replace the leading trivia on the given token

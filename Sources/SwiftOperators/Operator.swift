@@ -19,7 +19,7 @@ import SwiftSyntax
 public typealias OperatorName = String
 
 /// Describes the kind of an operator.
-public enum OperatorKind: String {
+public enum OperatorKind: String, Sendable {
   /// Infix operator such as the + in a + b.
   case infix
 
@@ -31,7 +31,7 @@ public enum OperatorKind: String {
 }
 
 /// Describes an operator.
-public struct Operator {
+public struct Operator: Sendable {
   public let kind: OperatorKind
   public let name: OperatorName
   public let precedenceGroup: PrecedenceGroupName?

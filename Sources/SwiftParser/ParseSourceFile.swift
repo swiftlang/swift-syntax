@@ -117,7 +117,7 @@ extension Parser {
   /// Parse the source code in the given buffer as Swift source file with support
   /// for incremental parsing.
   ///
-  /// See doc comments in ``Parser/parseIncrementally(source:parseTransition:)-4kn2k``
+  /// See doc comments in ``Parser/parseIncrementally(source:parseTransition:)-dj0z``
   public static func parseIncrementally(
     source: UnsafeBufferPointer<UInt8>,
     maximumNestingLevel: Int? = nil,

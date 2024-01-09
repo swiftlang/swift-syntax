@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
   name: "swift-syntax-dev-utils",
   platforms: [
-    .macOS(.v10_15)
+    .macOS(.v13)
   ],
   products: [
     .executable(name: "swift-syntax-dev-utils", targets: ["swift-syntax-dev-utils"])

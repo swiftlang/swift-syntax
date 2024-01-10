@@ -1910,7 +1910,6 @@ extension LabeledSpecializeArgumentSyntax {
     case kind
     case spi
     case spiModule
-    case available
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -1926,8 +1925,6 @@ extension LabeledSpecializeArgumentSyntax {
         self = .spi
       case TokenSpec(.spiModule):
         self = .spiModule
-      case TokenSpec(.available):
-        self = .available
       default:
         return nil
       }
@@ -1947,8 +1944,6 @@ extension LabeledSpecializeArgumentSyntax {
         return .keyword(.spi)
       case .spiModule:
         return .keyword(.spiModule)
-      case .available:
-        return .keyword(.available)
       }
     }
     
@@ -1970,8 +1965,6 @@ extension LabeledSpecializeArgumentSyntax {
         return .keyword(.spi)
       case .spiModule:
         return .keyword(.spiModule)
-      case .available:
-        return .keyword(.available)
       }
     }
   }

@@ -1667,8 +1667,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
             .keyword("exported"), 
             .keyword("kind"), 
             .keyword("spi"), 
-            .keyword("spiModule"), 
-            .keyword("available")
+            .keyword("spiModule")
           ]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.colon)]))

@@ -12,6 +12,7 @@
 
 import ArgumentParser
 import Foundation
+import RegexBuilder
 
 fileprivate let modules: [String] = [
   "SwiftParser",
@@ -29,11 +30,12 @@ struct VerifySourceCode: ParsableCommand {
   var arguments: SourceCodeGeneratorArguments
 
   func run() throws {
-    let executor = VerifySourceCodeExecutor(
+    try VerifySpiYmlExecutor().run()
+
+    try VerifySourceCodeExecutor(
       toolchain: arguments.toolchain,
       verbose: arguments.verbose
-    )
-    try executor.run()
+    ).run()
   }
 }
 
@@ -98,6 +100,77 @@ struct VerifySourceCodeExecutor {
             """
         )
       }
+    }
+  }
+}
+
+struct VerifySpiYmlExecutor {
+  static let configuration = CommandConfiguration(
+    abstract: "Verify that the .spi.yml file contains all libraries from Package.swift"
+  )
+
+  /// Returns all libraries declared in `Package.swift`.
+  ///
+  /// Note: It would be nice if we could compile Package.swift with this file and reallly
+  /// inspect the package targets instead of doing regex scraping, but this is good enough
+  /// for now.
+  private func librariesInPackageManifest() throws -> [String] {
+    let extractNameRegex = Regex {
+      #/^.*/#
+      #".library(name: ""#
+      Capture(ZeroOrMore(.word))
+      #"""#
+      #/.*$/#
+    }
+    let packageFile = Paths.packageDir.appendingPathComponent("Package.swift")
+    let packageFileContents = try String(contentsOf: packageFile)
+    return
+      packageFileContents
+      .components(separatedBy: "\n")
+      .filter({ !$0.matches(of: extractNameRegex).isEmpty })
+      .map { $0.replacing(extractNameRegex) { $0.1 } }
+      .sorted()
+  }
+  /// Returns all targets listed in `.spi.yml`.
+  ///
+  /// Note: It would be nice to actually parse the .yml file but then we would need to add
+  /// a dependency from this script on a YAML parser and that just doesn’t seem worth it.
+  private func targetsInSwiftPackageIndexManifest() throws -> [String] {
+    let extractTargetRegex = Regex {
+      #/^      - /#
+      Capture(ZeroOrMore(.word))
+      #/$/#
+    }
+    let spiYmlFile = Paths.packageDir.appendingPathComponent(".spi.yml")
+    let spiYmlFileContents = try String(contentsOf: spiYmlFile)
+    return
+      spiYmlFileContents
+      .components(separatedBy: "\n")
+      .filter({ !$0.matches(of: extractTargetRegex).isEmpty })
+      .map { $0.replacing(extractTargetRegex) { $0.1 } }
+      .sorted()
+  }
+
+  func run() throws {
+    logSection("Verifing that .spi.yml is up-to-date")
+
+    let difference = try targetsInSwiftPackageIndexManifest().difference(from: librariesInPackageManifest())
+
+    if !difference.isEmpty {
+      let differenceDescription = difference.map { change in
+        switch change {
+        case .insert(_, let element, _):
+          return " - Unexpected in .spi.yml: \(element)"
+        case .remove(_, let element, _):
+          return " - Missing in .spi.yml: \(element)"
+        }
+      }.joined(separator: "\n")
+      throw ScriptExectutionError(
+        message: """
+          .spi.yml did not contain the same libraries as Package.swift:
+          \(differenceDescription)
+          """
+      )
     }
   }
 }

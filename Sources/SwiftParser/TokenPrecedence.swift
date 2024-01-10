@@ -247,6 +247,7 @@ enum TokenPrecedence: Comparable {
       .escaping,
       .noDerivative,
       .noescape,
+      .preconcurrency,
       .Sendable,
       .retroactive,
       .unchecked:

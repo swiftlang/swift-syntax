@@ -636,6 +636,7 @@ enum TypeAttribute: TokenSpecSet {
   case escaping
   case noDerivative
   case noescape
+  case preconcurrency
   case retroactive
   case Sendable
   case unchecked
@@ -652,6 +653,7 @@ enum TypeAttribute: TokenSpecSet {
     case TokenSpec(.escaping): self = .escaping
     case TokenSpec(.noDerivative): self = .noDerivative
     case TokenSpec(.noescape): self = .noescape
+    case TokenSpec(.preconcurrency): self = .preconcurrency
     case TokenSpec(.Sendable): self = .Sendable
     case TokenSpec(.retroactive): self = .retroactive
     case TokenSpec(.unchecked): self = .unchecked
@@ -671,6 +673,7 @@ enum TypeAttribute: TokenSpecSet {
     case .escaping: return .keyword(.escaping)
     case .noDerivative: return .keyword(.noDerivative)
     case .noescape: return .keyword(.noescape)
+    case .preconcurrency: return .keyword(.preconcurrency)
     case .retroactive: return .keyword(.retroactive)
     case .Sendable: return .keyword(.Sendable)
     case .unchecked: return .keyword(.unchecked)

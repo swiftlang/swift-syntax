@@ -232,6 +232,7 @@ public enum Keyword: CaseIterable {
   case package
   case postfix
   case `precedencegroup`
+  case preconcurrency
   case prefix
   case `private`
   case `Protocol`
@@ -684,6 +685,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("unavailable")
     case .unchecked:
       return KeywordSpec("unchecked")
+    case .preconcurrency:
+      return KeywordSpec("preconcurrency")
     case .unowned:
       return KeywordSpec("unowned")
     case .unsafe:

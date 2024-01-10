@@ -135,8 +135,6 @@ extension TokenConsumer {
       }
 
       // Otherwise, parse it as an expression.
-      // FIXME: C++ parser returns true if this is a top-level non-"script" files.
-      // But we don't have "is library" flag.
       return false
     case .some(_):
       // All other decl start keywords unconditionally start a decl.
@@ -1670,8 +1668,10 @@ extension Parser {
       let (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
       var types = [RawDesignatedTypeSyntax]()
       while let comma = self.consume(if: .comma) {
-        // FIXME: The compiler accepts... anything here. This is a bug.
-        // let (unexpectedBeforeDesignatedType, designatedType) = self.expectIdentifier()
+        // Technically, we should only accept identifiers for the designated
+        // types but the C++ parser accepted anything, which we mimick.
+        // It's not worth fixing since designated types are no longer allowed
+        // anyway.
         let designatedType = self.consumeAnyToken()
         types.append(
           RawDesignatedTypeSyntax(

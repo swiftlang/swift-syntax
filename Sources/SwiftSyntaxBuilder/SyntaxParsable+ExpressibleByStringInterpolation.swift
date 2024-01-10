@@ -71,8 +71,6 @@ extension SyntaxParseable {
   public init(stringInterpolation: SyntaxStringInterpolation) {
     self = stringInterpolation.sourceText.withUnsafeBufferPointer { buffer in
       var parser = Parser(buffer)
-      // FIXME: When the parser supports incremental parsing, put the
-      // interpolatedSyntaxNodes in so we don't have to parse them again.
       let result = Self.parse(from: &parser)
       return result
     }

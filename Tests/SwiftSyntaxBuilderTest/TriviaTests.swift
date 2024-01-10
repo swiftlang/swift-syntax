@@ -26,11 +26,6 @@ final class TriviaTests: XCTestCase {
       bindingSpecifier: .keyword(.var)
     ) {
       PatternBindingSyntax(
-        // TODO: This is meant to be `Pattern`, but it's ambiguous with XCTest
-        // Really we should just remove that method in favor of the regular
-        // syntax `init`, though that will mean callers have to wrap in
-        // `PatternSyntax`. Changing those inits to be generic would be
-        // possible, but then still fails here for the same reason.
         pattern: PatternSyntax("test"),
         typeAnnotation: TypeAnnotationSyntax(type: TypeSyntax("String"))
       )

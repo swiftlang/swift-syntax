@@ -791,7 +791,6 @@ extension Parser {
 
       // Check for a trailing closure, if allowed.
       if self.at(.leftBrace) && !leadingExpr.raw.kind.isLiteral && self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) }) {
-        // FIXME: if Result has a trailing closure, break out.
         // Add dummy blank argument list to the call expression syntax.
         let list = RawLabeledExprListSyntax(elements: [], arena: self.arena)
         let (first, rest) = self.parseTrailingClosures(flavor: flavor)
@@ -1472,7 +1471,6 @@ extension Parser {
     }
 
     if let (colon, rsquare) = self.consume(if: .colon, followedBy: .rightSquare) {
-      // FIXME: We probably want a separate node for the empty case.
       return RawExprSyntax(
         RawDictionaryExprSyntax(
           unexpectedBeforeLSquare,

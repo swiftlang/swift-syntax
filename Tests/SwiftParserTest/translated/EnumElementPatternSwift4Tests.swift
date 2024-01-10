@@ -15,16 +15,6 @@
 import XCTest
 
 final class EnumElementPatternSwift4Tests: ParserTestCase {
-  func testEnumElementPatternSwift41() {
-    assertParse(
-      """
-      // https://github.com/apple/swift/issues/46040
-      // See test/Compatibility/enum_element_pattern.swift for Swift3 behavior.
-      // As for FIXME cases: see https://github.com/apple/swift/issues/46054
-      """
-    )
-  }
-
   func testEnumElementPatternSwift42() {
     assertParse(
       """

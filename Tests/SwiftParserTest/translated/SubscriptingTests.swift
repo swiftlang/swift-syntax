@@ -176,7 +176,6 @@ final class SubscriptingTests: ParserTestCase {
   func testSubscripting11() {
     assertParse(
       """
-      // FIXME: This test case does not belong in Parse/
       let y2 = Y2()
       _ = y2[0]
       """

@@ -213,11 +213,14 @@ final class GenericDisambiguationTests: ParserTestCase {
   }
 
   func testGenericDisambiguation15() {
-    // TODO: parse empty <> list
     assertParse(
       """
       A<>.c()
-      """
+      """,
+      substructure: PostfixOperatorExprSyntax(
+        expression: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("A"))),
+        operator: .postfixOperator("<>")
+      )
     )
   }
 

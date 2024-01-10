@@ -49,8 +49,6 @@ extension ParseDiagnosticsGenerator {
   private func handleInvalidIdentifier(invalidToken: TokenSyntax, missingToken: TokenSyntax, invalidTokenContainer: UnexpectedNodesSyntax) -> Bool {
     let fixIts: [FixIt]
     if invalidToken.tokenKind.isLexerClassifiedKeyword || invalidToken.tokenKind.isDollarIdentifier {
-      // TODO: Should the parser add the text with backticks to the missing
-      // node? Then this could just make missing/present.
       fixIts = [
         FixIt(
           message: .wrapInBackticks,

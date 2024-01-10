@@ -351,8 +351,6 @@ final class OperatorDeclTests: ParserTestCase {
   }
 
   func testOperatorDecl13() {
-    // FIXME: Ideally, we shouldn't emit the «consistent whitespace» diagnostic
-    // where = cannot possibly mean an assignment.
     assertParse(
       """
       infix operator =1️⃣#=
@@ -528,7 +526,6 @@ final class OperatorDeclTests: ParserTestCase {
   }
 
   func testOperatorDecl21() {
-    // TODO: We should not allow specification of multiple precedence groups
     assertParse(
       """
       protocol Proto {}

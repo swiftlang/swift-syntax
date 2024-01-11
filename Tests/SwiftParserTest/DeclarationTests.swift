@@ -486,12 +486,10 @@ final class DeclarationTests: ParserTestCase {
       ) var a = 0
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'set)' to end modifier", fixIts: ["insert 'set)'"]),
-        // FIXME: It should print `+` as detail of text.
-        DiagnosticSpec(message: "unexpected code in variable"),
+        DiagnosticSpec(message: "expected 'set' in modifier", fixIts: ["remove '+'"])
       ],
       fixedSource: """
-        private(set) +
+        private(
           set
         ) var a = 0
         """
@@ -1477,18 +1475,12 @@ final class DeclarationTests: ParserTestCase {
           fixIts: ["insert ':'"]
         ),
         DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "expected ')' to end parameter clause",
-          notes: [NoteSpec(message: "to match this opening '('")],
-          fixIts: ["insert ')'"]
-        ),
-        DiagnosticSpec(
           locationMarker: "3️⃣",
-          message: "extraneous code ': Int) {}' at top level"
+          message: "unexpected code ': Int' in parameter clause"
         ),
       ],
       fixedSource: """
-        func foo(first second: third)
+        func foo(first second: third
         : Int) {}
         """
     )

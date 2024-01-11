@@ -234,6 +234,22 @@ public class ParsingSyntaxArena: SyntaxArena {
   }
 }
 
+/// An opaque wrapper around `SyntaxArena` that keeps the arena alive.
+@_spi(RawSyntax)
+public struct RetainedSyntaxArena: @unchecked Sendable {
+  // Unchecked conformance to sendable is fine because `arena` is not
+  // accessible. It is just used to keep the arena alive.
+  private let arena: SyntaxArena
+
+  init(_ arena: SyntaxArena) {
+    self.arena = arena
+  }
+
+  fileprivate func arenaRef() -> SyntaxArenaRef {
+    return SyntaxArenaRef(arena)
+  }
+}
+
 /// Unsafely unowned reference to ``SyntaxArena``. The user is responsible to
 /// maintain the lifetime of the ``SyntaxArena``.
 ///
@@ -267,6 +283,11 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
     self._value.release()
   }
 
+  /// Get an opaque wrapper that keeps the syntax arena alive.
+  var retained: RetainedSyntaxArena {
+    return RetainedSyntaxArena(_value.takeUnretainedValue())
+  }
+
   func hash(into hasher: inout Hasher) {
     hasher.combine(_value.toOpaque())
   }
@@ -280,6 +301,14 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
   }
 
   static func == (lhs: __shared SyntaxArena, rhs: SyntaxArenaRef) -> Bool {
+    return rhs == lhs
+  }
+
+  static func == (lhs: SyntaxArenaRef, rhs: RetainedSyntaxArena) -> Bool {
+    return lhs == rhs.arenaRef()
+  }
+
+  static func == (lhs: RetainedSyntaxArena, rhs: SyntaxArenaRef) -> Bool {
     return rhs == lhs
   }
 }

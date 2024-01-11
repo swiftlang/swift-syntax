@@ -50,7 +50,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
 
         return withExtendedLifetime(rewritten) {
-          return Syntax(node).replacingSelf(rewritten.raw, rawNodeArena: rewritten.raw.arena, allocationArena: SyntaxArena())
+          return Syntax(node).replacingSelf(rewritten.raw, rawNodeArena: rewritten.raw.arenaReference.retained, allocationArena: SyntaxArena())
         }
       }
       """

@@ -57,7 +57,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
       tokenDiagnostic: nil,
       arena: arena
     )
-    self = Syntax.forRoot(raw, rawNodeArena: arena).cast(TokenSyntax.self)
+    self = Syntax.forRoot(raw, rawNodeArena: RetainedSyntaxArena(arena)).cast(TokenSyntax.self)
   }
 
   /// Whether the token is present or missing.
@@ -111,7 +111,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
       }
       let arena = SyntaxArena()
       let newRaw = tokenView.withKind(newValue, arena: arena)
-      self = Syntax(self).replacingSelf(newRaw, rawNodeArena: arena, allocationArena: arena).cast(TokenSyntax.self)
+      self = Syntax(self).replacingSelf(newRaw, rawNodeArena: RetainedSyntaxArena(arena), allocationArena: arena).cast(TokenSyntax.self)
     }
   }
 

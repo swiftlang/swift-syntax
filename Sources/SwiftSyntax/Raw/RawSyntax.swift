@@ -39,6 +39,8 @@ struct RecursiveRawSyntaxFlags: OptionSet, Sendable {
 /// Node data for RawSyntax tree. Tagged union plus common data.
 internal struct RawSyntaxData: Sendable {
   internal enum Payload: Sendable {
+    /// - Important: A raw syntax node for a parsed token must always be allocated in a `ParsingSyntaxArena` so we can
+    ///   parse the trivia in the token.
     case parsedToken(ParsedToken)
     case materializedToken(MaterializedToken)
     case layout(Layout)

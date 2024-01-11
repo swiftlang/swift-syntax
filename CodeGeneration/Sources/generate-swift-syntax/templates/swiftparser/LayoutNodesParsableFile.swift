@@ -41,7 +41,7 @@ let layoutNodesParsableFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             defer { withExtendedLifetime(parser) {} }
             let node = parser.\(parserFunction)()
             let raw = RawSyntax(parser.parseRemainder(into: node))
-            return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+            return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
           }
         }
         """

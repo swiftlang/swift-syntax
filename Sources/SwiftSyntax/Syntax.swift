@@ -126,7 +126,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   ///     make sure the arena doesn’t get de-allocated before the ``Syntax``
   ///     has a chance to retain it.
   static func forRoot(_ raw: RawSyntax, rawNodeArena: SyntaxArena) -> Syntax {
-    precondition(rawNodeArena === raw.arena)
+    precondition(rawNodeArena == raw.arenaReference)
     return Syntax(raw, info: .root(.init(arena: rawNodeArena)))
   }
 
@@ -158,7 +158,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   /// - Returns: A syntax tree with all parents where this node has been
   ///            replaced by `newRaw`
   func replacingSelf(_ newRaw: RawSyntax, rawNodeArena: SyntaxArena, allocationArena: SyntaxArena) -> Syntax {
-    precondition(newRaw.arena === rawNodeArena)
+    precondition(newRaw.arenaReference == rawNodeArena)
     // If we have a parent already, then ask our current parent to copy itself
     // recursively up to the root.
     if let parent {
@@ -183,7 +183,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   ///            syntax data.
   /// - SeeAlso: replacingSelf(_:)
   func replacingChild(at index: Int, with newChild: RawSyntax?, rawNodeArena: SyntaxArena?, allocationArena: SyntaxArena) -> Syntax {
-    precondition(newChild?.arena === rawNodeArena || newChild == nil)
+    precondition(newChild == nil || (rawNodeArena != nil && newChild!.arenaReference == rawNodeArena!))
     // After newRaw has been allocated in `allocationArena`, `rawNodeArena` will
     // be a child arena of `allocationArena` and thus, `allocationArena` will
     // keep `newChild` alive.

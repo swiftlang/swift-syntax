@@ -178,7 +178,9 @@ public class ParsingSyntaxArena: SyntaxArena {
   private var sourceBuffer: UnsafeBufferPointer<UInt8>
 
   /// Function to parse trivia.
-  private var parseTriviaFunction: ParseTriviaFunction
+  ///
+  /// - Important: Must never be changed to a mutable value. See `SyntaxArenaRef.parseTrivia`.
+  private let parseTriviaFunction: ParseTriviaFunction
 
   @_spi(RawSyntax)
   public init(parseTriviaFunction: @escaping ParseTriviaFunction) {
@@ -227,6 +229,7 @@ public class ParsingSyntaxArena: SyntaxArena {
   /// Parse `source` into a list of ``RawTriviaPiece`` using `parseTriviaFunction`.
   @_spi(RawSyntax)
   public func parseTrivia(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
+    // Must never access mutable state. See `SyntaxArenaRef.parseTrivia`.
     return self.parseTriviaFunction(source, position)
   }
 }
@@ -249,6 +252,13 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
     get { self._value.takeUnretainedValue() }
   }
 
+  /// Assuming that this references a `ParsingSyntaxArena`,
+  func parseTrivia(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
+    // It is safe to access `_value` here because `parseTrivia` only accesses
+    // `parseTriviaFunction`, which is a constant.
+    (_value.takeUnretainedValue() as! ParsingSyntaxArena).parseTrivia(source: source, position: position)
+  }
+
   func retain() {
     _ = self._value.retain()
   }
@@ -263,5 +273,13 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
 
   static func == (lhs: SyntaxArenaRef, rhs: SyntaxArenaRef) -> Bool {
     return lhs._value.toOpaque() == rhs._value.toOpaque()
+  }
+
+  static func == (lhs: SyntaxArenaRef, rhs: __shared SyntaxArena) -> Bool {
+    return lhs == SyntaxArenaRef(rhs)
+  }
+
+  static func == (lhs: __shared SyntaxArena, rhs: SyntaxArenaRef) -> Bool {
+    return rhs == lhs
   }
 }

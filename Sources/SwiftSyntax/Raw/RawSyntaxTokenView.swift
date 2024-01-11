@@ -95,8 +95,7 @@ public struct RawSyntaxTokenView: Sendable {
   public var leadingRawTriviaPieces: [RawTriviaPiece] {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
-      let arena = raw.arena as! ParsingSyntaxArena
-      return arena.parseTrivia(source: dat.leadingTriviaText, position: .leading)
+      return raw.arenaReference.parseTrivia(source: dat.leadingTriviaText, position: .leading)
     case .materializedToken(let dat):
       return Array(dat.leadingTrivia)
     case .layout(_):
@@ -108,8 +107,7 @@ public struct RawSyntaxTokenView: Sendable {
   public var trailingRawTriviaPieces: [RawTriviaPiece] {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
-      let arena = raw.arena as! ParsingSyntaxArena
-      return arena.parseTrivia(source: dat.trailingTriviaText, position: .trailing)
+      return raw.arenaReference.parseTrivia(source: dat.trailingTriviaText, position: .trailing)
     case .materializedToken(let dat):
       return Array(dat.trailingTrivia)
     case .layout(_):
@@ -204,7 +202,7 @@ public struct RawSyntaxTokenView: Sendable {
     arena.addChild(self.raw.arenaReference)
     switch raw.rawData.payload {
     case .parsedToken(var payload):
-      if arena === self.raw.arena {
+      if arena == self.raw.arenaReference {
         payload.presence = newValue
         return RawSyntax(arena: arena, payload: .parsedToken(payload))
       }
@@ -287,7 +285,7 @@ public struct RawSyntaxTokenView: Sendable {
     arena.addChild(self.raw.arenaReference)
     switch raw.rawData.payload {
     case .parsedToken(var dat):
-      if arena === self.raw.arena {
+      if arena == self.raw.arenaReference {
         dat.tokenDiagnostic = tokenDiagnostic
         return RawSyntax(arena: arena, payload: .parsedToken(dat))
       }

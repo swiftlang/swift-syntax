@@ -19,12 +19,10 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     indirect case nonRoot(NonRoot)
 
     // For root node.
-    struct Root: @unchecked Sendable {
-      // Unchecked conformance to sendable is fine because `arena` is not
-      // accessible. It is just used to keep the arena alive.
-      private var arena: SyntaxArena
+    struct Root: Sendable {
+      private var arena: RetainedSyntaxArena
 
-      init(arena: SyntaxArena) {
+      init(arena: RetainedSyntaxArena) {
         self.arena = arena
       }
     }
@@ -125,9 +123,14 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   ///   - rawNodeArena: The arena in which `raw` is allocated. It is passed to
   ///     make sure the arena doesn’t get de-allocated before the ``Syntax``
   ///     has a chance to retain it.
-  static func forRoot(_ raw: RawSyntax, rawNodeArena: SyntaxArena) -> Syntax {
+  static func forRoot(_ raw: RawSyntax, rawNodeArena: RetainedSyntaxArena) -> Syntax {
     precondition(rawNodeArena == raw.arenaReference)
     return Syntax(raw, info: .root(.init(arena: rawNodeArena)))
+  }
+
+  static func forRoot(_ raw: RawSyntax, rawNodeArena: SyntaxArena) -> Syntax {
+    precondition(rawNodeArena == raw.arenaReference)
+    return Syntax(raw, info: .root(.init(arena: RetainedSyntaxArena(rawNodeArena))))
   }
 
   /// Returns the child data at the provided index in this data's layout.
@@ -157,7 +160,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   ///   - allocationArena: The arena in which  new nodes should be allocated
   /// - Returns: A syntax tree with all parents where this node has been
   ///            replaced by `newRaw`
-  func replacingSelf(_ newRaw: RawSyntax, rawNodeArena: SyntaxArena, allocationArena: SyntaxArena) -> Syntax {
+  func replacingSelf(_ newRaw: RawSyntax, rawNodeArena: RetainedSyntaxArena, allocationArena: SyntaxArena) -> Syntax {
     precondition(newRaw.arenaReference == rawNodeArena)
     // If we have a parent already, then ask our current parent to copy itself
     // recursively up to the root.
@@ -182,7 +185,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   /// - Returns: The new root node created by this operation, and the new child
   ///            syntax data.
   /// - SeeAlso: replacingSelf(_:)
-  func replacingChild(at index: Int, with newChild: RawSyntax?, rawNodeArena: SyntaxArena?, allocationArena: SyntaxArena) -> Syntax {
+  func replacingChild(at index: Int, with newChild: RawSyntax?, rawNodeArena: RetainedSyntaxArena?, allocationArena: SyntaxArena) -> Syntax {
     precondition(newChild == nil || (rawNodeArena != nil && newChild!.arenaReference == rawNodeArena!))
     // After newRaw has been allocated in `allocationArena`, `rawNodeArena` will
     // be a child arena of `allocationArena` and thus, `allocationArena` will
@@ -190,7 +193,12 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     let newRaw = withExtendedLifetime(rawNodeArena) {
       raw.layoutView!.replacingChild(at: index, with: newChild, arena: allocationArena)
     }
-    return replacingSelf(newRaw, rawNodeArena: allocationArena, allocationArena: allocationArena)
+    return replacingSelf(newRaw, rawNodeArena: RetainedSyntaxArena(allocationArena), allocationArena: allocationArena)
+  }
+
+  /// Same as `replacingChild(at:with:rawNodeArena:allocationArena:)` but takes a `__SyntaxArena` instead of a `RetainedSyntaxArena`.
+  func replacingChild(at index: Int, with newChild: RawSyntax?, rawNodeArena: SyntaxArena?, allocationArena: SyntaxArena) -> Syntax {
+    return self.replacingChild(at: index, with: newChild, rawNodeArena: rawNodeArena.map(RetainedSyntaxArena.init), allocationArena: allocationArena)
   }
 
   /// Identical to `replacingChild(at: Int, with: RawSyntax?, arena: SyntaxArena)`
@@ -198,13 +206,13 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   /// `newChild` has been addded to the result.
   func replacingChild(at index: Int, with newChild: Syntax?, arena: SyntaxArena) -> Syntax {
     return withExtendedLifetime(newChild) {
-      return replacingChild(at: index, with: newChild?.raw, rawNodeArena: newChild?.raw.arena, allocationArena: arena)
+      return replacingChild(at: index, with: newChild?.raw, rawNodeArena: newChild?.raw.arenaReference.retained, allocationArena: arena)
     }
   }
 
   func withLeadingTrivia(_ leadingTrivia: Trivia, arena: SyntaxArena) -> Syntax {
     if let raw = raw.withLeadingTrivia(leadingTrivia, arena: arena) {
-      return replacingSelf(raw, rawNodeArena: arena, allocationArena: arena)
+      return replacingSelf(raw, rawNodeArena: RetainedSyntaxArena(arena), allocationArena: arena)
     } else {
       return self
     }
@@ -212,7 +220,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
 
   func withTrailingTrivia(_ trailingTrivia: Trivia, arena: SyntaxArena) -> Syntax {
     if let raw = raw.withTrailingTrivia(trailingTrivia, arena: arena) {
-      return replacingSelf(raw, rawNodeArena: arena, allocationArena: arena)
+      return replacingSelf(raw, rawNodeArena: RetainedSyntaxArena(arena), allocationArena: arena)
     } else {
       return self
     }
@@ -220,7 +228,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
 
   func withPresence(_ presence: SourcePresence, arena: SyntaxArena) -> Syntax {
     if let raw = raw.tokenView?.withPresence(presence, arena: arena) {
-      return replacingSelf(raw, rawNodeArena: arena, allocationArena: arena)
+      return replacingSelf(raw, rawNodeArena: RetainedSyntaxArena(arena), allocationArena: arena)
     } else {
       return self
     }
@@ -234,8 +242,13 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   }
 
   @_spi(RawSyntax)
-  public init(raw: RawSyntax, rawNodeArena: __shared SyntaxArena) {
+  public init(raw: RawSyntax, rawNodeArena: __shared RetainedSyntaxArena) {
     self = .forRoot(raw, rawNodeArena: rawNodeArena)
+  }
+
+  @_spi(RawSyntax)
+  public init(raw: RawSyntax, rawNodeArena: __shared SyntaxArena) {
+    self = .forRoot(raw, rawNodeArena: RetainedSyntaxArena(rawNodeArena))
   }
 
   /// Create a ``Syntax`` node from a specialized syntax node.

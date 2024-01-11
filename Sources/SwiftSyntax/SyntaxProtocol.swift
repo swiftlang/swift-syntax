@@ -159,7 +159,7 @@ public extension SyntaxProtocol {
     // Make sure `self` (and thus the arena of `self.raw`) can’t get deallocated
     // before the detached node can be created.
     return withExtendedLifetime(self) {
-      return Syntax(raw: self.raw, rawNodeArena: self.raw.arena).cast(Self.self)
+      return Syntax(raw: self.raw, rawNodeArena: self.raw.arenaReference.retained).cast(Self.self)
     }
   }
 }

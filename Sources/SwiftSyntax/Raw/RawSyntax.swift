@@ -216,11 +216,6 @@ public struct RawSyntax: Sendable {
     rawData.arenaReference
   }
 
-  @_spi(RawSyntax)
-  public var arena: SyntaxArena {
-    rawData.arenaReference.value
-  }
-
   internal var payload: RawSyntaxData.Payload {
     get { rawData.payload }
   }

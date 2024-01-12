@@ -1504,4 +1504,23 @@ public class LexerTests: ParserTestCase {
       ]
     )
   }
+
+  func testUnicodeContainTheEdgeContinuationByte() {
+    // A continuation byte must be in the range greater than or
+    // equal to 0x80 and less than or equal to 0xBF
+
+    // À(0xC3 0x80), 㗀(0xE3 0x97 0x80), 🀀(0xF0 0x9F 0x80 0x80),
+    // ÿ(0xC3 0xBF), 俿(0xE4 0xBF 0xBF), 𐐿(0xF0 0x90 0x90 0xBF)
+    assertLexemes(
+      "À 㗀 🀀 ÿ 俿 𐐿",
+      lexemes: [
+        LexemeSpec(.identifier, text: "À", trailing: " "),
+        LexemeSpec(.identifier, text: "㗀", trailing: " "),
+        LexemeSpec(.identifier, text: "🀀", trailing: " "),
+        LexemeSpec(.identifier, text: "ÿ", trailing: " "),
+        LexemeSpec(.identifier, text: "俿", trailing: " "),
+        LexemeSpec(.identifier, text: "𐐿"),
+      ]
+    )
+  }
 }

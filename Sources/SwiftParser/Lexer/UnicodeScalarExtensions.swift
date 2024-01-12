@@ -156,12 +156,6 @@ extension Unicode.Scalar {
     // including and above the DEL character U+7F.
     return self.value >= 0x20 && self.value < 0x7F
   }
-
-  var isStartOfUTF8Character: Bool {
-    // RFC 2279: The octet values FE and FF never appear.
-    // RFC 3629: The octet values C0, C1, F5 to FF never appear.
-    return self.value <= 0x80 || (self.value >= 0xC2 && self.value < 0xF5)
-  }
 }
 
 extension Unicode.Scalar {
@@ -179,19 +173,24 @@ extension Unicode.Scalar {
       return Unicode.Scalar(curByte)
     }
 
-    // Read the number of high bits set, which indicates the number of bytes in
-    // the character.
-    let encodedBytes = (~(UInt32(curByte) << 24)).leadingZeroBitCount
-
-    // If this is 0b10XXXXXX, then it is a continuation character.
-    if encodedBytes == 1 || !Unicode.Scalar(curByte).isStartOfUTF8Character {
+    // If this is not the start of a UTF8 character,
+    // then it is either a continuation byte or an invalid UTF8 code point.
+    if !curByte.isStartOfUTF8Character {
       // Skip until we get the start of another character.  This is guaranteed to
       // at least stop at the nul at the end of the buffer.
-      while let peeked = peek(), !Unicode.Scalar(peeked).isStartOfUTF8Character {
+      while let peeked = peek(), !peeked.isStartOfUTF8Character {
         _ = advance()
       }
       return nil
     }
+
+    // Read the number of high bits set, which indicates the number of bytes in
+    // the character.
+    let encodedBytes = (~curByte).leadingZeroBitCount
+    // We have a multi-byte UTF-8 scalar.
+    // Single-byte UTF-8 scalars are handled at the start of the function by checking `curByte < 0x80`.
+    // `isStartOfUTF8Character` guaranteed that the `curByte` has 2 to 4 leading ones.
+    precondition(encodedBytes >= 2 && encodedBytes <= 4)
 
     // Drop the high bits indicating the # bytes of the result.
     var charValue = UInt32(curByte << encodedBytes) >> encodedBytes
@@ -250,5 +249,13 @@ extension Unicode.Scalar {
     }
 
     return self.lexing(advance: advance, peek: peek)
+  }
+}
+
+extension UInt8 {
+  var isStartOfUTF8Character: Bool {
+    // RFC 2279: The octet values FE and FF never appear.
+    // RFC 3629: The octet values C0, C1, F5 to FF never appear.
+    return self < 0x80 || (self >= 0xC2 && self < 0xF5)
   }
 }

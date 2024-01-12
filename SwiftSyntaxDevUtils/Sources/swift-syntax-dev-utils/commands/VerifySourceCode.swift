@@ -33,7 +33,7 @@ struct VerifySourceCode: ParsableCommand {
     try VerifySpiYmlExecutor().run()
 
     try VerifySourceCodeExecutor(
-      toolchain: arguments.toolchain,
+      toolchain: try arguments.toolchain,
       verbose: arguments.verbose
     ).run()
   }

@@ -78,6 +78,12 @@ enum Paths {
     }
   }
 
+  static var xcrunExec: URL {
+    get throws {
+      return try lookupExecutable(for: "xcrun")
+    }
+  }
+
   private static var envSearchPaths: [URL] {
     // Compute search paths from PATH variable.
     #if os(Windows)

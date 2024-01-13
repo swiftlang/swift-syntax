@@ -594,8 +594,19 @@ open class BasicFormat: SyntaxRewriter {
       trailingTriviaIndentation = anchorPointIndentation
     }
 
-    leadingTrivia = leadingTrivia.indented(indentation: leadingTriviaIndentation, isOnNewline: previousTokenIsStringLiteralEndingInNewline)
-    trailingTrivia = trailingTrivia.indented(indentation: trailingTriviaIndentation, isOnNewline: false)
+    leadingTrivia = leadingTrivia.indented(
+      indentation: leadingTriviaIndentation,
+      isOnNewline: previousTokenIsStringLiteralEndingInNewline || previousTokenWillEndWithNewline
+    )
+    trailingTrivia = trailingTrivia.indented(
+      indentation: trailingTriviaIndentation,
+      isOnNewline: false,
+      // Don't add indentation to the last newline.
+      // Its indentation will be added to the next token's leading trivia, which
+      // might have a different indentation scope than this token (in particular
+      // if this token is a closing brace).
+      addIndentationAfterLastNewline: false
+    )
 
     leadingTrivia = leadingTrivia.trimmingTrailingWhitespaceBeforeNewline(isBeforeNewline: leadingTriviaIsFollowedByNewline)
     trailingTrivia = trailingTrivia.trimmingTrailingWhitespaceBeforeNewline(isBeforeNewline: nextTokenWillStartWithNewline)

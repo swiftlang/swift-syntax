@@ -62,7 +62,20 @@ extension Trivia {
   }
 
   /// Adds `indentation` after every newline in this trivia.
-  func indented(indentation: Trivia, isOnNewline: Bool) -> Trivia {
+  ///
+  /// - Parameters:
+  ///   - indentation: The amount of indentation to add.
+  ///   - isOnNewline: Whether this token starts on a new line.
+  ///     This causes the indentation to get added at the start of the trivia.
+  ///   - addIndentationAfterLastNewline: Whether to add indentation after newline
+  ///     if the newline is the last piece of trivia. Not doing this makes sense
+  ///     if the indentation will get added to the next token's leading trivia
+  ///     via `isOnNewline`.
+  func indented(
+    indentation: Trivia,
+    isOnNewline: Bool,
+    addIndentationAfterLastNewline: Bool = true
+  ) -> Trivia {
     guard !isEmpty else {
       if isOnNewline {
         return indentation
@@ -72,13 +85,13 @@ extension Trivia {
 
     var indentedPieces: [TriviaPiece] = []
     if isOnNewline {
-      indentedPieces.append(contentsOf: indentation)
+      indentedPieces += indentation
     }
 
-    for piece in pieces {
+    for (index, piece) in pieces.enumerated() {
       indentedPieces.append(piece)
-      if piece.isNewline {
-        indentedPieces.append(contentsOf: indentation)
+      if piece.isNewline && !(index == pieces.count - 1 && !addIndentationAfterLastNewline) {
+        indentedPieces += indentation
       }
     }
 

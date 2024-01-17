@@ -15,10 +15,20 @@ import Foundation
 
 struct BuildArguments: ParsableArguments {
   @Option(
+    name: .customLong("toolchain"),
     help: "The path to the toolchain that shall be used to build SwiftSyntax.",
     transform: URL.init(fileURLWithPath:)
   )
-  var toolchain: URL
+  var _toolchain: URL? = defaultToolchain()
+
+  var toolchain: URL {
+    get throws {
+      guard let toolchain = self._toolchain else {
+        throw ScriptExectutionError(message: "Toolchain could not be inferred. Specify toolchain using --toolchain")
+      }
+      return toolchain
+    }
+  }
 
   @Option(
     help: """

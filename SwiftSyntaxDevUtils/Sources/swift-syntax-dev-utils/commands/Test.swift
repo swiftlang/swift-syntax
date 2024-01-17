@@ -24,7 +24,7 @@ struct Test: ParsableCommand {
   func run() throws {
     let executor = TestExecutor(
       swiftPMBuilder: SwiftPMBuilder(
-        toolchain: arguments.toolchain,
+        toolchain: try arguments.toolchain,
         buildDir: arguments.buildDir,
         multirootDataFile: arguments.multirootDataFile,
         release: arguments.release,

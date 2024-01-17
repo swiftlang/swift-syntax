@@ -23,7 +23,7 @@ struct GenerateSourceCode: ParsableCommand {
 
   func run() throws {
     let executor = GenerateSourceCodeExecutor(
-      toolchain: arguments.toolchain,
+      toolchain: try arguments.toolchain,
       verbose: arguments.verbose
     )
     try executor.run(sourceDir: Paths.sourcesDir)

@@ -22,3 +22,25 @@ func withTemporaryDirectory<T>(_ body: (URL) throws -> T) throws -> T {
   }
   return try body(tempDirURL)
 }
+
+/// Infer the default toolchain using `xcrun`.
+///
+/// Returns `nil` on all platforms except for macOS.
+func defaultToolchain() -> URL? {
+  #if os(macOS)
+  do {
+    let swiftcPath = try ProcessRunner(executableURL: try Paths.xcrunExec, arguments: ["--find", "swiftc"]).run(verbose: false).stdout.trimmingCharacters(
+      in: .whitespacesAndNewlines
+    )
+    if swiftcPath.isEmpty {
+      return nil
+    }
+    return URL(fileURLWithPath: swiftcPath).deletingLastPathComponent().deletingLastPathComponent()
+  } catch {
+    return nil
+  }
+  #else
+  // Toolchain lookup not implemented without xcrun yet
+  return nil
+  #endif
+}

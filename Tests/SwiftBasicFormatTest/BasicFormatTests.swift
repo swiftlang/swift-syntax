@@ -566,4 +566,47 @@ final class BasicFormatTest: XCTestCase {
       """
     assertFormatted(source: source, expected: source)
   }
+
+  func testNewlineInTrailingTriviaAtEndOfIndentationScope() throws {
+    assertFormatted(
+      tree: try FunctionDeclSyntax("func test()") {
+        CodeBlockItemSyntax("Task {\n}\n")
+      },
+      expected: """
+        func test() {
+            Task {
+            }
+        }
+        """
+    )
+
+    assertFormatted(
+      tree: try FunctionDeclSyntax("func test()") {
+        CodeBlockItemSyntax("Task {\n}\n\n")
+      },
+      expected: """
+        func test() {
+            Task {
+            }
+        }
+        """
+    )
+
+    assertFormatted(
+      tree: try FunctionDeclSyntax("func bar()") {
+        try FunctionDeclSyntax("func test()") {
+          CodeBlockItemSyntax("Task {\n}\n")
+        }
+      },
+      expected: """
+        func bar() {
+            func test() {
+                Task {
+                }
+            }
+        }
+        """
+    )
+  }
+
 }

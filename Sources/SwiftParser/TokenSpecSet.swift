@@ -374,6 +374,7 @@ enum DeclarationModifier: TokenSpecSet {
   case required
   case `rethrows`
   case `static`
+  case transferring
   case unowned
   case weak
   case _resultDependsOn
@@ -414,6 +415,7 @@ enum DeclarationModifier: TokenSpecSet {
     case TokenSpec(.required): self = .required
     case TokenSpec(.rethrows): self = .rethrows
     case TokenSpec(.static): self = .static
+    case TokenSpec(.transferring): self = .transferring
     case TokenSpec(.unowned): self = .unowned
     case TokenSpec(.weak): self = .weak
     case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonescapableTypes): self = ._resultDependsOn
@@ -457,6 +459,7 @@ enum DeclarationModifier: TokenSpecSet {
     case .required: return .keyword(.required)
     case .rethrows: return TokenSpec(.rethrows, recoveryPrecedence: .declKeyword)
     case .static: return .keyword(.static)
+    case .transferring: return .keyword(.transferring)
     case .unowned: return TokenSpec(.unowned, recoveryPrecedence: .declKeyword)
     case .weak: return TokenSpec(.weak, recoveryPrecedence: .declKeyword)
     case ._resultDependsOn: return TokenSpec(._resultDependsOn, recoveryPrecedence: .declKeyword)
@@ -688,6 +691,7 @@ public enum TypeSpecifier: TokenSpecSet {
   case shared
   case borrowing
   case consuming
+  case transferring
 
   init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
@@ -696,6 +700,7 @@ public enum TypeSpecifier: TokenSpecSet {
     case TokenSpec(.__shared): self = .shared
     case TokenSpec(.consuming): self = .consuming
     case TokenSpec(.borrowing): self = .borrowing
+    case TokenSpec(.transferring): self = .transferring
     default: return nil
     }
   }
@@ -708,6 +713,7 @@ public enum TypeSpecifier: TokenSpecSet {
     case TokenSpec(.__shared): self = .shared
     case TokenSpec(.consuming): self = .shared
     case TokenSpec(.borrowing): self = .shared
+    case TokenSpec(.transferring): self = .transferring
     default: return nil
     }
   }
@@ -719,6 +725,7 @@ public enum TypeSpecifier: TokenSpecSet {
     case .shared: return .keyword(.__shared)
     case .borrowing: return .keyword(.borrowing)
     case .consuming: return .keyword(.consuming)
+    case .transferring: return .keyword(.transferring)
     }
   }
 }

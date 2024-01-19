@@ -3257,7 +3257,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
 
 /// ### Children
 /// 
-///  - `specifier`: (`inout` | `__shared` | `__owned` | `isolated` | `_const` | `borrowing` | `consuming` | `_resultDependsOn`)?
+///  - `specifier`: (`inout` | `__shared` | `__owned` | `isolated` | `_const` | `borrowing` | `consuming` | `transferring` | `_resultDependsOn`)?
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `baseType`: ``TypeSyntax``
 public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
@@ -3336,6 +3336,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
   ///  - `_const`
   ///  - `borrowing`
   ///  - `consuming`
+  ///  - `transferring`
   ///  - `_resultDependsOn`
   public var specifier: TokenSyntax? {
     get {

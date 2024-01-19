@@ -762,10 +762,8 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     return CodeBlockItemListSyntax(newItems)
   }
 
-  override func visit(_ node: MemberBlockItemListSyntax) -> MemberBlockItemListSyntax {
+  override func visit(_ node: MemberBlockSyntax) -> MemberBlockSyntax {
     let parentDeclGroup = node
-      .parent?
-      .as(MemberBlockSyntax.self)?
       .parent?
       .as(DeclSyntax.self)
     var newItems: [MemberBlockItemSyntax] = []
@@ -792,7 +790,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       extensions += expandExtensions(of: node.decl)
     }
 
-    for var item in node {
+    for var item in node.members {
       // Expand member attribute members attached to the declaration context.
       // Note that MemberAttribute macros are _not_ applied to generated members
       if let parentDeclGroup, let decl = item.decl.asProtocol(WithAttributesSyntax.self) {
@@ -825,7 +823,29 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       }
     }
 
-    return .init(newItems)
+    /// Returns an leading trivia for the member blocks closing brace.
+    /// It will add a leading newline, if there is none.
+    var leadingTriviaForClosingBrace: Trivia {
+      if newItems.isEmpty {
+        return node.rightBrace.leadingTrivia
+      }
+
+      if node.rightBrace.leadingTrivia.contains(where: { $0.isNewline }) {
+        return node.rightBrace.leadingTrivia
+      }
+
+      if newItems.last?.trailingTrivia.pieces.last?.isNewline ?? false {
+        return node.rightBrace.leadingTrivia
+      } else {
+        return .newline + node.rightBrace.leadingTrivia
+      }
+    }
+
+    return MemberBlockSyntax(
+      leftBrace: node.leftBrace,
+      members: MemberBlockItemListSyntax(newItems),
+      rightBrace: node.rightBrace.with(\.leadingTrivia, leadingTriviaForClosingBrace)
+    )
   }
 
   override func visit(_ node: VariableDeclSyntax) -> DeclSyntax {

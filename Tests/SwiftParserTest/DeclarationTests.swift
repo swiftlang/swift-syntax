@@ -3141,4 +3141,17 @@ final class DeclarationTests: ParserTestCase {
       experimentalFeatures: .nonescapableTypes
     )
   }
+
+  func testDeclarationEndingWithNewline() {
+    let inputs: [UInt: String] = [
+      #line: "var x = 0\n",
+      #line: "var x = 0 garbage\n",
+      #line: "var x = 0 \n",
+    ]
+
+    for (line, input) in inputs {
+      let decl = DeclSyntax(stringLiteral: input)
+      XCTAssertEqual(decl.description, input, line: line)
+    }
+  }
 }

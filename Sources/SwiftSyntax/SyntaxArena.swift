@@ -49,7 +49,10 @@ public class SyntaxArena {
   #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
   /// Whether or not this arena has been added to other arenas as a child.
   /// Used to make sure we don’t introduce retain cycles between arenas.
-  private var hasParent: Bool
+  ///
+  /// - Important: This is only intended to be used for assertions to catch
+  ///   retain cycles in syntax arenas.
+  var hasParent: Bool
   #endif
 
   /// Construct a new ``SyntaxArena`` in which syntax nodes can be allocated.
@@ -146,17 +149,8 @@ public class SyntaxArena {
     if childRefs.insert(otherRef).inserted {
       otherRef.retain()
       #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
-      // FIXME: This may trigger a data race warning in Thread Sanitizer.
-      // Can we use atomic bool here?
-      otherRef.value.hasParent = true
+      otherRef.setHasParent(true)
       #endif
-    }
-  }
-
-  /// Recursively checks if this arena contains given `arenaRef` as a descendant.
-  func contains(arenaRef: SyntaxArenaRef) -> Bool {
-    childRefs.contains { childRef in
-      childRef == arenaRef || childRef.value.contains(arenaRef: arenaRef)
     }
   }
 
@@ -264,7 +258,7 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
   }
 
   /// Returns the ``SyntaxArena``
-  var value: SyntaxArena {
+  private var value: SyntaxArena {
     get { self._value.takeUnretainedValue() }
   }
 
@@ -272,7 +266,7 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
   func parseTrivia(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
     // It is safe to access `_value` here because `parseTrivia` only accesses
     // `parseTriviaFunction`, which is a constant.
-    (_value.takeUnretainedValue() as! ParsingSyntaxArena).parseTrivia(source: source, position: position)
+    (value as! ParsingSyntaxArena).parseTrivia(source: source, position: position)
   }
 
   func retain() {
@@ -285,8 +279,24 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
 
   /// Get an opaque wrapper that keeps the syntax arena alive.
   var retained: RetainedSyntaxArena {
-    return RetainedSyntaxArena(_value.takeUnretainedValue())
+    return RetainedSyntaxArena(value)
   }
+
+  #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
+  /// Accessor for ther underlying's `SyntaxArena.hasParent`
+  var hasParent: Bool {
+    // FIXME: This accesses mutable state across actor boundaries and is thus not concurrency-safe.
+    // We should use an atomic for `hasParent` to make it concurrency safe.
+    value.hasParent
+  }
+
+  /// Sets the `SyntaxArena.hasParent` on the referenced arena.
+  func setHasParent(_ newValue: Bool) {
+    // FIXME: This modifies mutable state across actor boundaries and is thus not concurrency-safe.
+    // We should use an atomic for `hasParent` to make it concurrency safe.
+    value.hasParent = newValue
+  }
+  #endif
 
   func hash(into hasher: inout Hasher) {
     hasher.combine(_value.toOpaque())

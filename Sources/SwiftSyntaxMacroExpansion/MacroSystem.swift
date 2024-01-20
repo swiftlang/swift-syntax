@@ -319,12 +319,11 @@ private func expandExtensionMacro(
   in context: some MacroExpansionContext,
   indentationWidth: Trivia
 ) throws -> CodeBlockItemListSyntax? {
-  let extendedType: TypeSyntax
-  if let identified = attachedTo.asProtocol(NamedDeclSyntax.self) {
-    extendedType = "\(identified.name.trimmed)"
-  } else if let ext = attachedTo.as(ExtensionDeclSyntax.self) {
-    extendedType = "\(ext.extendedType.trimmed)"
-  } else {
+  guard attachedTo.isProtocol(DeclGroupSyntax.self) else {
+    return nil
+  }
+
+  guard let extendedType = attachedTo.syntacticQualifiedTypeContext else {
     return nil
   }
 
@@ -1317,5 +1316,27 @@ private extension AttributeSyntax {
 private extension AccessorDeclSyntax {
   var isGetOrSet: Bool {
     return accessorSpecifier.tokenKind == .keyword(.get) || accessorSpecifier.tokenKind == .keyword(.set)
+  }
+}
+
+private extension SyntaxProtocol {
+  /// Retrieve the qualified type for the nearest extension or name decl.
+  ///
+  /// For example, for `struct Foo { struct Bar {} }`, calling this on the
+  /// inner struct (`Bar`) will return `Foo.Bar`.
+  var syntacticQualifiedTypeContext: TypeSyntax? {
+    if let ext = self.as(ExtensionDeclSyntax.self) {
+      // Don't handle nested 'extension' cases - they are invalid anyway.
+      return ext.extendedType.trimmed
+    }
+
+    let base = self.parent?.syntacticQualifiedTypeContext
+    if let named = self.asProtocol(NamedDeclSyntax.self) {
+      if let base = base {
+        return TypeSyntax(MemberTypeSyntax(baseType: base, name: named.name.trimmed))
+      }
+      return TypeSyntax(IdentifierTypeSyntax(name: named.name.trimmed))
+    }
+    return base
   }
 }

@@ -25,58 +25,17 @@ import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
-fileprivate struct DeclsFromStringsMacro: DeclarationMacro {
-  static func expansion(
-    of node: some FreestandingMacroExpansionSyntax,
-    in context: some MacroExpansionContext
-  ) throws -> [DeclSyntax] {
-    var strings: [String] = []
-    for arg in node.arguments {
-      guard let value = arg.expression.as(StringLiteralExprSyntax.self)?.representedLiteralValue else {
-        continue
-      }
-      strings.append(value)
-    }
-
-    return strings.map { "\(raw: $0)" }
-  }
-}
-
 final class ExtensionMacroTests: XCTestCase {
   private let indentationWidth: Trivia = .spaces(2)
 
-  func testExtensionExpansion() {
-    struct SendableExtensionMacro: ExtensionMacro {
-      static func expansion(
-        of node: AttributeSyntax,
-        attachedTo: some DeclGroupSyntax,
-        providingExtensionsOf type: some TypeSyntaxProtocol,
-        conformingTo protocols: [TypeSyntax],
-        in context: some MacroExpansionContext
-      ) throws -> [ExtensionDeclSyntax] {
-        let sendableExtension: DeclSyntax =
-          """
-          extension \(type.trimmed): Sendable {}
-          """
-
-        guard let extensionDecl = sendableExtension.as(ExtensionDeclSyntax.self) else {
-          return []
-        }
-
-        return [extensionDecl]
-      }
-    }
-
+  func testSimpleExpansion() {
     assertMacroExpansion(
       """
       @AddSendableExtension
-      struct MyType {
-      }
+      struct MyType {}
       """,
       expandedSource: """
-
-        struct MyType {
-        }
+        struct MyType {}
 
         extension MyType: Sendable {
         }
@@ -84,22 +43,22 @@ final class ExtensionMacroTests: XCTestCase {
       macros: ["AddSendableExtension": SendableExtensionMacro.self],
       indentationWidth: indentationWidth
     )
+  }
 
+  func testNestedExpansion() {
     assertMacroExpansion(
       """
       struct Wrapper {
         @AddSendableExtension
-        struct MyType {
-        }
+        struct MyType {}
       }
       """,
       expandedSource: """
         struct Wrapper {
-          struct MyType {
-          }
+          struct MyType {}
         }
 
-        extension MyType: Sendable {
+        extension Wrapper.MyType: Sendable {
         }
         """,
       macros: ["AddSendableExtension": SendableExtensionMacro.self],
@@ -107,8 +66,89 @@ final class ExtensionMacroTests: XCTestCase {
     )
   }
 
+  func testNestedInExtensionExpansion() {
+    assertMacroExpansion(
+      """
+      struct Wrapper {
+        struct AnotherWrapper {}
+      }
+      extension Wrapper.AnotherWrapper {
+        @AddSendableExtension
+        struct MyType {}
+      }
+      """,
+      expandedSource: """
+        struct Wrapper {
+          struct AnotherWrapper {}
+        }
+        extension Wrapper.AnotherWrapper {
+          struct MyType {}
+        }
+
+        extension Wrapper.AnotherWrapper.MyType: Sendable {
+        }
+        """,
+      macros: ["AddSendableExtension": SendableExtensionMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testComplexNestedExpansion() {
+    assertMacroExpansion(
+      """
+      struct Wrapper {}
+      extension Wrapper {
+        struct AnotherWrapper {
+          @AddSendableExtension
+          struct MyType {}
+        }
+      }
+      """,
+      expandedSource: """
+        struct Wrapper {}
+        extension Wrapper {
+          struct AnotherWrapper {
+            struct MyType {}
+          }
+        }
+
+        extension Wrapper.AnotherWrapper.MyType: Sendable {
+        }
+        """,
+      macros: ["AddSendableExtension": SendableExtensionMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testAttachedToInvalid() {
+    assertMacroExpansion(
+      "@AddSendableExtension var foo: Int",
+      expandedSource: "var foo: Int",
+      macros: [
+        "AddSendableExtension": SendableExtensionMacro.self
+      ]
+    )
+
+    assertMacroExpansion(
+      """
+      struct Foo {
+        @AddSendableExtension var foo: Int
+      }
+      """,
+      expandedSource:
+        """
+        struct Foo {
+          var foo: Int
+        }
+        """,
+      macros: [
+        "AddSendableExtension": SendableExtensionMacro.self
+      ]
+    )
+  }
+
   func testEmpty() {
-    struct TestMacro: ExtensionMacro {
+    struct EmptyExtensionMacro: ExtensionMacro {
       static func expansion(
         of node: AttributeSyntax,
         attachedTo declaration: some DeclGroupSyntax,
@@ -121,11 +161,32 @@ final class ExtensionMacroTests: XCTestCase {
     }
 
     assertMacroExpansion(
-      "@Test struct Foo {}",
+      "@Empty struct Foo {}",
       expandedSource: "struct Foo {}",
       macros: [
-        "Test": TestMacro.self
+        "Empty": EmptyExtensionMacro.self
       ]
     )
+  }
+}
+
+fileprivate struct SendableExtensionMacro: ExtensionMacro {
+  static func expansion(
+    of node: AttributeSyntax,
+    attachedTo: some DeclGroupSyntax,
+    providingExtensionsOf type: some TypeSyntaxProtocol,
+    conformingTo protocols: [TypeSyntax],
+    in context: some MacroExpansionContext
+  ) throws -> [ExtensionDeclSyntax] {
+    let sendableExtension: DeclSyntax =
+      """
+      extension \(type.trimmed): Sendable {}
+      """
+
+    guard let extensionDecl = sendableExtension.as(ExtensionDeclSyntax.self) else {
+      return []
+    }
+
+    return [extensionDecl]
   }
 }

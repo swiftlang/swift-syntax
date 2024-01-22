@@ -198,9 +198,7 @@ public struct Parser {
       self.arena = arena
       precondition(arena.contains(text: SyntaxText(baseAddress: input.baseAddress, count: input.count)))
     } else {
-      self.arena = ParsingSyntaxArena(
-        parseTriviaFunction: TriviaParser.parseTrivia(_:position:)
-      )
+      self.arena = ParsingSyntaxArena()
       input = self.arena.internSourceBuffer(input)
     }
 
@@ -710,7 +708,7 @@ extension Parser {
     }
 
     // We can recover to a '}'. Decide whether we want to eat it based on its indentation.
-    let rightBraceTrivia = self.arena.parseTrivia(source: lookahead.currentToken.leadingTriviaText, position: .leading)
+    let rightBraceTrivia = TriviaParser.parseTrivia(lookahead.currentToken.leadingTriviaText, position: .leading)
     switch (indentation(introducer.leadingTriviaPieces), indentation(rightBraceTrivia)) {
     // Catch cases where the brace has known indentation that is less than that of `introducer`, in which case we don't want to consume it.
     case (.spaces(let introducerSpaces), .spaces(let rightBraceSpaces)) where rightBraceSpaces < introducerSpaces:

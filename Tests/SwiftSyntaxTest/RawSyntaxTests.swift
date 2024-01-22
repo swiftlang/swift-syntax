@@ -124,7 +124,7 @@ final class RawSyntaxTests: XCTestCase {
       return [.unexpectedText(source)]
     }
 
-    withExtendedLifetime(ParsingSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
+    withExtendedLifetime(SyntaxArena()) { arena in
       let ident = RawTokenSyntax(
         kind: .identifier,
         wholeText: arena.intern("\nfoo "),
@@ -137,8 +137,8 @@ final class RawSyntaxTests: XCTestCase {
       XCTAssertEqual(ident.tokenKind, .identifier)
       XCTAssertEqual(ident.tokenText, "foo")
       XCTAssertEqual(ident.presence, .present)
-      XCTAssertEqual(ident.leadingTriviaPieces, [.unexpectedText("\n")])
-      XCTAssertEqual(ident.trailingTriviaPieces, [.unexpectedText(" ")])
+      XCTAssertEqual(ident.leadingTriviaPieces, [.newlines(1)])
+      XCTAssertEqual(ident.trailingTriviaPieces, [.spaces(1)])
       XCTAssertEqual(ident.description, "\nfoo ")
 
       let identSyntax = Syntax(raw: ident.raw, rawNodeArena: arena).as(TokenSyntax.self)!
@@ -147,8 +147,8 @@ final class RawSyntaxTests: XCTestCase {
 
       XCTAssertEqual(barIdent.tokenKind, .keyword)
       XCTAssertEqual(barIdent.tokenText, "open")
-      XCTAssertEqual(barIdent.leadingTriviaPieces, [.unexpectedText("\n")])
-      XCTAssertEqual(barIdent.trailingTriviaPieces, [.unexpectedText(" ")])
+      XCTAssertEqual(barIdent.leadingTriviaPieces, [.newlines(1)])
+      XCTAssertEqual(barIdent.trailingTriviaPieces, [.spaces(1)])
       XCTAssertEqual(barIdent.description, "\nopen ")
     }
   }

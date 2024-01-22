@@ -71,33 +71,6 @@ public class SyntaxArena {
     }
   }
 
-  /// If this arena or any of its child arenas is a ``ParsingSyntaxArena``
-  /// return one of these arenas, otherwise return `nil`.
-  ///
-  /// If the arena has multiple child nodes that are ``ParsingSyntaxArena``s, it
-  /// is undefined which one will be returned.
-  ///
-  /// The use case for this is to get the trivia parsing function of the arena.
-  /// Parsed tokens created by `SwiftParser` automatically reside in a
-  /// ``ParsingSyntaxArena`` but if they are modified (e.g. using the `with`
-  /// functions), they might reside in a new arena. But we still want to be able
-  /// to retrieve trivia from those modified tokens, which requires calling into
-  /// the `parseTrivia` function of the ``ParsingSyntaxArena`` that created the
-  /// token. Since the modified syntax arena needs to keep the original
-  /// ``ParsingSyntaxArena`` alive, we can search this arena’s `childRefs` for
-  /// the ``ParsingSyntaxArena`` that created the token.
-  var parsingArena: ParsingSyntaxArena? {
-    if let parsingArena = self as? ParsingSyntaxArena {
-      return parsingArena
-    }
-    for child in childRefs {
-      if let parsingArena = child.value.parsingArena {
-        return parsingArena
-      }
-    }
-    return nil
-  }
-
   /// Allocates a buffer of `RawSyntax?` with the given count, then returns the
   /// uninitialized memory range as a `UnsafeMutableBufferPointer<RawSyntax?>`.
   func allocateRawSyntaxBuffer(count: Int) -> UnsafeMutableBufferPointer<RawSyntax?> {
@@ -198,19 +171,12 @@ public class SyntaxArena {
 
 /// SyntaxArena for parsing.
 public class ParsingSyntaxArena: SyntaxArena {
-  @_spi(RawSyntax)
-  public typealias ParseTriviaFunction = (_ source: SyntaxText, _ position: TriviaPosition) -> [RawTriviaPiece]
-
   /// Source file buffer the Syntax tree represents.
   private var sourceBuffer: UnsafeBufferPointer<UInt8>
 
-  /// Function to parse trivia.
-  private var parseTriviaFunction: ParseTriviaFunction
-
   @_spi(RawSyntax)
-  public init(parseTriviaFunction: @escaping ParseTriviaFunction) {
+  public init() {
     self.sourceBuffer = .init(start: nil, count: 0)
-    self.parseTriviaFunction = parseTriviaFunction
     super.init(slabSize: 4096)
   }
 
@@ -249,12 +215,6 @@ public class ParsingSyntaxArena: SyntaxArena {
   func sourceBufferContains(_ address: UnsafePointer<UInt8>) -> Bool {
     guard let sourceStart = sourceBuffer.baseAddress else { return false }
     return sourceStart <= address && address < sourceStart.advanced(by: sourceBuffer.count)
-  }
-
-  /// Parse `source` into a list of ``RawTriviaPiece`` using `parseTriviaFunction`.
-  @_spi(RawSyntax)
-  public func parseTrivia(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
-    return self.parseTriviaFunction(source, position)
   }
 }
 

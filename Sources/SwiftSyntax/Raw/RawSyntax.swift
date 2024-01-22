@@ -563,10 +563,6 @@ extension RawSyntax {
       arena.contains(text: wholeText),
       "token text must be managed by the arena"
     )
-    assert(
-      arena is ParsingSyntaxArena || textRange == wholeText.indices,
-      "arena must be able to parse trivia"
-    )
     let payload = RawSyntaxData.ParsedToken(
       tokenKind: kind,
       wholeText: wholeText,

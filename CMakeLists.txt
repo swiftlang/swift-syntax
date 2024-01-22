@@ -88,5 +88,9 @@ if (SWIFTSYNTAX_ENABLE_ASSERTIONS)
   )
 endif()
 
+add_compile_definitions(
+  $<$<COMPILE_LANGUAGE:Swift>:SWIFT_SYNTAX_BUILD_USING_CMAKE>
+)
+
 add_subdirectory(Sources)
 add_subdirectory(cmake/modules)

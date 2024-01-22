@@ -10,6 +10,23 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if SWIFT_SYNTAX_BUILD_USING_CMAKE
+// The CMake bulid of swift-syntax does not build the _AtomicBool module because swift-syntax's CMake build is
+// Swift-only. Fake an `AtomicBool` type that is not actually atomic. This should be acceptable for the following
+// reasons:
+//  - `AtomicBool` is only used for the `hasParent` assertion, so release compilers don't rely on it
+//  - The compiler is single-threaded so it it is safe from race conditions on `AtomicBool`.
+fileprivate struct AtomicBool {
+  var value: Bool
+
+  init(initialValue: Bool) {
+    self.value = initialValue
+  }
+}
+#else
+import _AtomicBool
+#endif
+
 /// A syntax arena owns the memory for all syntax nodes within it.
 ///
 /// The following is only relevant if you are accessing the raw syntax tree using
@@ -52,7 +69,7 @@ public class SyntaxArena {
   ///
   /// - Important: This is only intended to be used for assertions to catch
   ///   retain cycles in syntax arenas.
-  var hasParent: Bool
+  fileprivate var hasParent: AtomicBool
   #endif
 
   /// Construct a new ``SyntaxArena`` in which syntax nodes can be allocated.
@@ -64,7 +81,7 @@ public class SyntaxArena {
     self.allocator = BumpPtrAllocator(slabSize: slabSize)
     self.childRefs = []
     #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
-    self.hasParent = false
+    self.hasParent = AtomicBool(initialValue: false)
     #endif
   }
 
@@ -141,7 +158,7 @@ public class SyntaxArena {
 
     #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
     precondition(
-      !self.hasParent,
+      !self.hasParent.value,
       "an arena can't have a new child once it's owned by other arenas"
     )
     #endif
@@ -285,16 +302,12 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
   #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
   /// Accessor for ther underlying's `SyntaxArena.hasParent`
   var hasParent: Bool {
-    // FIXME: This accesses mutable state across actor boundaries and is thus not concurrency-safe.
-    // We should use an atomic for `hasParent` to make it concurrency safe.
-    value.hasParent
+    value.hasParent.value
   }
 
   /// Sets the `SyntaxArena.hasParent` on the referenced arena.
   func setHasParent(_ newValue: Bool) {
-    // FIXME: This modifies mutable state across actor boundaries and is thus not concurrency-safe.
-    // We should use an atomic for `hasParent` to make it concurrency safe.
-    value.hasParent = newValue
+    value.hasParent.value = newValue
   }
   #endif
 

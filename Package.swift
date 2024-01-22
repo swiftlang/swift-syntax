@@ -88,6 +88,10 @@ let package = Package(
     // MARK: - Internal helper targets
 
     .target(
+      name: "_AtomicBool"
+    ),
+
+    .target(
       name: "_InstructionCounter"
     ),
 
@@ -172,7 +176,7 @@ let package = Package(
 
     .target(
       name: "SwiftSyntax",
-      dependencies: ["SwiftSyntax509", "SwiftSyntax510", "SwiftSyntax511"],
+      dependencies: ["_AtomicBool", "SwiftSyntax509", "SwiftSyntax510", "SwiftSyntax511"],
       exclude: ["CMakeLists.txt"],
       swiftSettings: swiftSyntaxSwiftSettings
     ),

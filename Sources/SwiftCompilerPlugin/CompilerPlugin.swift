@@ -12,12 +12,22 @@
 // NOTE: This basic plugin mechanism is mostly copied from
 // https://github.com/apple/swift-package-manager/blob/main/Sources/PackagePlugin/Plugin.swift
 
-@_implementationOnly import Foundation
-@_implementationOnly import SwiftCompilerPluginMessageHandling
 import SwiftSyntaxMacros
 
+#if swift(>=5.11)
+private import Foundation
+private import SwiftCompilerPluginMessageHandling
+#else
+import Foundation
+import SwiftCompilerPluginMessageHandling
+#endif
+
 #if os(Windows)
-@_implementationOnly import ucrt
+#if swift(>=5.11)
+private import ucrt
+#else
+import ucrt
+#endif
 #endif
 
 //
@@ -167,8 +177,8 @@ extension CompilerPlugin {
 }
 
 internal struct PluginHostConnection: MessageConnection {
-  let inputStream: FileHandle
-  let outputStream: FileHandle
+  fileprivate let inputStream: FileHandle
+  fileprivate let outputStream: FileHandle
 
   func sendMessage<TX: Encodable>(_ message: TX) throws {
     // Encode the message as JSON.

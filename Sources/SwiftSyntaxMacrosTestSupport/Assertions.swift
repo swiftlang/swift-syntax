@@ -17,8 +17,13 @@ import SwiftParserDiagnostics
 import SwiftSyntax
 import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
-import XCTest
 import _SwiftSyntaxTestSupport
+
+#if swift(>=5.11)
+private import XCTest
+#else
+import XCTest
+#endif
 
 // MARK: - Note
 

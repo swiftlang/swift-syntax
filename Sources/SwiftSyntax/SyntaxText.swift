@@ -10,12 +10,22 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=5.11)
 #if canImport(Darwin)
-@_implementationOnly import Darwin
+private import Darwin
 #elseif canImport(Glibc)
-@_implementationOnly import Glibc
+private import Glibc
 #elseif canImport(Musl)
-@_implementationOnly import Musl
+private import Musl
+#endif
+#else
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(Musl)
+import Musl
+#endif
 #endif
 
 /// Represent a string.

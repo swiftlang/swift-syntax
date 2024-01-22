@@ -285,6 +285,8 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case typeEffectSpecifiers
   case typeExpr
   case typeInitializerClause
+  case typeSpecifier
+  case typeSpecifierList
   case unavailableFromAsyncAttributeArguments
   case underscorePrivateAttributeArguments
   case unexpectedNodes

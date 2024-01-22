@@ -177,98 +177,6 @@ extension AsExprSyntax {
   }
 }
 
-extension AttributedTypeSyntax {
-  @_spi(Diagnostics)
-  public enum SpecifierOptions: TokenSpecSet {
-    case `inout`
-    case __shared
-    case __owned
-    case isolated
-    case _const
-    case borrowing
-    case consuming
-    @_spi(ExperimentalLanguageFeatures)
-    case transferring
-    @_spi(ExperimentalLanguageFeatures)
-    case _resultDependsOn
-    
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.inout):
-        self = .inout
-      case TokenSpec(.__shared):
-        self = .__shared
-      case TokenSpec(.__owned):
-        self = .__owned
-      case TokenSpec(.isolated):
-        self = .isolated
-      case TokenSpec(._const):
-        self = ._const
-      case TokenSpec(.borrowing):
-        self = .borrowing
-      case TokenSpec(.consuming):
-        self = .consuming
-      case TokenSpec(.transferring) where experimentalFeatures.contains(.transferringArgsAndResults):
-        self = .transferring
-      case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonescapableTypes):
-        self = ._resultDependsOn
-      default:
-        return nil
-      }
-    }
-    
-    var spec: TokenSpec {
-      switch self {
-      case .inout:
-        return .keyword(.inout)
-      case .__shared:
-        return .keyword(.__shared)
-      case .__owned:
-        return .keyword(.__owned)
-      case .isolated:
-        return .keyword(.isolated)
-      case ._const:
-        return .keyword(._const)
-      case .borrowing:
-        return .keyword(.borrowing)
-      case .consuming:
-        return .keyword(.consuming)
-      case .transferring:
-        return .keyword(.transferring)
-      case ._resultDependsOn:
-        return .keyword(._resultDependsOn)
-      }
-    }
-    
-    /// Returns a token that satisfies the `TokenSpec` of this case.
-    ///
-    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
-    @_spi(Diagnostics)
-    public var tokenSyntax: TokenSyntax {
-      switch self {
-      case .inout:
-        return .keyword(.inout)
-      case .__shared:
-        return .keyword(.__shared)
-      case .__owned:
-        return .keyword(.__owned)
-      case .isolated:
-        return .keyword(.isolated)
-      case ._const:
-        return .keyword(._const)
-      case .borrowing:
-        return .keyword(.borrowing)
-      case .consuming:
-        return .keyword(.consuming)
-      case .transferring:
-        return .keyword(.transferring)
-      case ._resultDependsOn:
-        return .keyword(._resultDependsOn)
-      }
-    }
-  }
-}
-
 extension AvailabilityConditionSyntax {
   @_spi(Diagnostics)
   public enum AvailabilityKeywordOptions: TokenSpecSet {
@@ -2955,6 +2863,98 @@ extension TupleTypeElementSyntax {
         return .identifier("")
       case .wildcard:
         return .wildcardToken()
+      }
+    }
+  }
+}
+
+extension TypeSpecifierSyntax {
+  @_spi(Diagnostics)
+  public enum SpecifierOptions: TokenSpecSet {
+    case `inout`
+    case __shared
+    case __owned
+    case isolated
+    case _const
+    case borrowing
+    case consuming
+    @_spi(ExperimentalLanguageFeatures)
+    case transferring
+    @_spi(ExperimentalLanguageFeatures)
+    case _resultDependsOn
+    
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.inout):
+        self = .inout
+      case TokenSpec(.__shared):
+        self = .__shared
+      case TokenSpec(.__owned):
+        self = .__owned
+      case TokenSpec(.isolated):
+        self = .isolated
+      case TokenSpec(._const):
+        self = ._const
+      case TokenSpec(.borrowing):
+        self = .borrowing
+      case TokenSpec(.consuming):
+        self = .consuming
+      case TokenSpec(.transferring) where experimentalFeatures.contains(.transferringArgsAndResults):
+        self = .transferring
+      case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonescapableTypes):
+        self = ._resultDependsOn
+      default:
+        return nil
+      }
+    }
+    
+    var spec: TokenSpec {
+      switch self {
+      case .inout:
+        return .keyword(.inout)
+      case .__shared:
+        return .keyword(.__shared)
+      case .__owned:
+        return .keyword(.__owned)
+      case .isolated:
+        return .keyword(.isolated)
+      case ._const:
+        return .keyword(._const)
+      case .borrowing:
+        return .keyword(.borrowing)
+      case .consuming:
+        return .keyword(.consuming)
+      case .transferring:
+        return .keyword(.transferring)
+      case ._resultDependsOn:
+        return .keyword(._resultDependsOn)
+      }
+    }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .inout:
+        return .keyword(.inout)
+      case .__shared:
+        return .keyword(.__shared)
+      case .__owned:
+        return .keyword(.__owned)
+      case .isolated:
+        return .keyword(.isolated)
+      case ._const:
+        return .keyword(._const)
+      case .borrowing:
+        return .keyword(.borrowing)
+      case .consuming:
+        return .keyword(.consuming)
+      case .transferring:
+        return .keyword(.transferring)
+      case ._resultDependsOn:
+        return .keyword(._resultDependsOn)
       }
     }
   }

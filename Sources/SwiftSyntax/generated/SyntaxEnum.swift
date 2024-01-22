@@ -281,6 +281,8 @@ public enum SyntaxEnum: Sendable {
   case typeEffectSpecifiers(TypeEffectSpecifiersSyntax)
   case typeExpr(TypeExprSyntax)
   case typeInitializerClause(TypeInitializerClauseSyntax)
+  case typeSpecifierList(TypeSpecifierListSyntax)
+  case typeSpecifier(TypeSpecifierSyntax)
   case unavailableFromAsyncAttributeArguments(UnavailableFromAsyncAttributeArgumentsSyntax)
   case underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax)
   case unexpectedNodes(UnexpectedNodesSyntax)
@@ -827,6 +829,10 @@ public extension Syntax {
       return .typeExpr(TypeExprSyntax(self)!)
     case .typeInitializerClause:
       return .typeInitializerClause(TypeInitializerClauseSyntax(self)!)
+    case .typeSpecifierList:
+      return .typeSpecifierList(TypeSpecifierListSyntax(self)!)
+    case .typeSpecifier:
+      return .typeSpecifier(TypeSpecifierSyntax(self)!)
     case .unavailableFromAsyncAttributeArguments:
       return .unavailableFromAsyncAttributeArguments(UnavailableFromAsyncAttributeArgumentsSyntax(self)!)
     case .underscorePrivateAttributeArguments:

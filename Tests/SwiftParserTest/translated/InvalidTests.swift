@@ -359,15 +359,10 @@ final class InvalidTests: ParserTestCase {
   }
 
   func testInvalid16a() {
-    // https://github.com/apple/swift/issues/43591
-    // Two inout crash compiler
     assertParse(
       """
       func f1_43591(a : inout 1️⃣inout Int) {}
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "unexpected 'inout' keyword in type")
-      ]
+      """
     )
   }
 
@@ -379,7 +374,7 @@ final class InvalidTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(message: "'inout inout' before a parameter name is not allowed", fixIts: ["move 'inout inout' in front of type"])
       ],
-      fixedSource: "func f2_43591(b: inout Int) {}"
+      fixedSource: "func f2_43591(b: inout inout Int) {}"
     )
   }
 
@@ -400,10 +395,10 @@ final class InvalidTests: ParserTestCase {
       func f4_43591(1️⃣inout x: inout String) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["remove redundant 'inout'"])
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
       ],
       fixedSource: """
-        func f4_43591(x: inout String) {}
+        func f4_43591(x: inout inout String) {}
         """
     )
   }
@@ -414,10 +409,10 @@ final class InvalidTests: ParserTestCase {
       func f5_43591(1️⃣inout i: inout Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["remove redundant 'inout'"])
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
       ],
       fixedSource: """
-        func f5_43591(i: inout Int) {}
+        func f5_43591(i: inout inout Int) {}
         """
     )
   }
@@ -456,10 +451,10 @@ final class InvalidTests: ParserTestCase {
       func f4_43591(1️⃣inout x: inout String) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["remove redundant 'inout'"])
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
       ],
       fixedSource: """
-        func f4_43591(x: inout String) {}
+        func f4_43591(x: inout inout String) {}
         """
     )
   }
@@ -470,9 +465,9 @@ final class InvalidTests: ParserTestCase {
       func f5_43591(1️⃣inout i: inout Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["remove redundant 'inout'"])
+        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
       ],
-      fixedSource: "func f5_43591(i: inout Int) {}"
+      fixedSource: "func f5_43591(i: inout inout Int) {}"
     )
   }
 

@@ -320,4 +320,9 @@ final class TypeTests: ParserTestCase {
       "[() throws(PosixError) -> Void]()"
     )
   }
+
+  func testMultipleTypeSpecifiers() {
+    assertParse("func foo1(_ a: _const borrowing String) {}")
+    assertParse("func foo2(_ a: borrowing _const String) {}")
+  }
 }

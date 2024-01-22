@@ -1594,9 +1594,9 @@ public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
   
   public init(
-      _ unexpectedBeforeSpecifier: RawUnexpectedNodesSyntax? = nil, 
-      specifier: RawTokenSyntax?, 
-      _ unexpectedBetweenSpecifierAndAttributes: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeSpecifiers: RawUnexpectedNodesSyntax? = nil, 
+      specifiers: RawTypeSpecifierListSyntax, 
+      _ unexpectedBetweenSpecifiersAndAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax, 
       _ unexpectedBetweenAttributesAndBaseType: RawUnexpectedNodesSyntax? = nil, 
       baseType: RawTypeSyntax, 
@@ -1606,9 +1606,9 @@ public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol {
     let raw = RawSyntax.makeLayout(
       kind: .attributedType, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeSpecifier?.raw
-      layout[1] = specifier?.raw
-      layout[2] = unexpectedBetweenSpecifierAndAttributes?.raw
+      layout[0] = unexpectedBeforeSpecifiers?.raw
+      layout[1] = specifiers.raw
+      layout[2] = unexpectedBetweenSpecifiersAndAttributes?.raw
       layout[3] = attributes.raw
       layout[4] = unexpectedBetweenAttributesAndBaseType?.raw
       layout[5] = baseType.raw
@@ -1617,15 +1617,15 @@ public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol {
     self.init(unchecked: raw)
   }
   
-  public var unexpectedBeforeSpecifier: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeSpecifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var specifier: RawTokenSyntax? {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))
+  public var specifiers: RawTypeSpecifierListSyntax {
+    layoutView.children[1].map(RawTypeSpecifierListSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenSpecifierAndAttributes: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenSpecifiersAndAttributes: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   

@@ -35,12 +35,10 @@ public let TYPE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .attributedType,
-    base: .type,
-    nameForDiagnostics: "type",
-    traits: [
-      "WithAttributes"
-    ],
+    kind: .typeSpecifier,
+    base: .syntax,
+    nameForDiagnostics: nil,
+    documentation: "A specifier that can be attached to a type to eg. mark a parameter as `inout` or `consuming`",
     children: [
       Child(
         name: "specifier",
@@ -54,8 +52,29 @@ public let TYPE_NODES: [Node] = [
           .keyword(.consuming),
           .keyword(.transferring),
           .keyword(._resultDependsOn),
-        ]),
-        isOptional: true
+        ])
+      )
+    ]
+  ),
+
+  Node(
+    kind: .typeSpecifierList,
+    base: .syntaxCollection,
+    nameForDiagnostics: nil,
+    elementChoices: [.typeSpecifier]
+  ),
+
+  Node(
+    kind: .attributedType,
+    base: .type,
+    nameForDiagnostics: "type",
+    traits: [
+      "WithAttributes"
+    ],
+    children: [
+      Child(
+        name: "specifiers",
+        kind: .collection(kind: .typeSpecifierList, collectionElementName: "Specifier", defaultsToEmpty: true)
       ),
       Child(
         name: "attributes",

@@ -668,6 +668,19 @@ public extension TupleTypeElementListSyntax {
   }
 }
 
+// MARK: - TypeSpecifierListBuilder
+
+@resultBuilder
+public struct TypeSpecifierListBuilder: ListBuilder {
+  public typealias FinalResult = TypeSpecifierListSyntax
+}
+
+public extension TypeSpecifierListSyntax {
+  init(@TypeSpecifierListBuilder itemsBuilder: () throws -> TypeSpecifierListSyntax) rethrows {
+    self = try itemsBuilder()
+  }
+}
+
 // MARK: - UnexpectedNodesBuilder
 
 @resultBuilder

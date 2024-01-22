@@ -1906,6 +1906,20 @@ open class SyntaxRewriter {
     return visitChildren(node)
   }
   
+  /// Visit a ``TypeSpecifierListSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: TypeSpecifierListSyntax) -> TypeSpecifierListSyntax {
+    return visitChildren(node)
+  }
+  
+  /// Visit a ``TypeSpecifierSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: TypeSpecifierSyntax) -> TypeSpecifierSyntax {
+    return visitChildren(node)
+  }
+  
   /// Visit a ``UnavailableFromAsyncAttributeArgumentsSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3156,6 +3170,14 @@ open class SyntaxRewriter {
       return {
         self.visitImpl($0, TypeInitializerClauseSyntax.self, self.visit)
       }
+    case .typeSpecifierList:
+      return {
+        self.visitImpl($0, TypeSpecifierListSyntax.self, self.visit)
+      }
+    case .typeSpecifier:
+      return {
+        self.visitImpl($0, TypeSpecifierSyntax.self, self.visit)
+      }
     case .unavailableFromAsyncAttributeArguments:
       return {
         self.visitImpl($0, UnavailableFromAsyncAttributeArgumentsSyntax.self, self.visit)
@@ -3758,6 +3780,10 @@ open class SyntaxRewriter {
       return visitImpl(node, TypeExprSyntax.self, visit)
     case .typeInitializerClause:
       return visitImpl(node, TypeInitializerClauseSyntax.self, visit)
+    case .typeSpecifierList:
+      return visitImpl(node, TypeSpecifierListSyntax.self, visit)
+    case .typeSpecifier:
+      return visitImpl(node, TypeSpecifierSyntax.self, visit)
     case .unavailableFromAsyncAttributeArguments:
       return visitImpl(node, UnavailableFromAsyncAttributeArgumentsSyntax.self, visit)
     case .underscorePrivateAttributeArguments:

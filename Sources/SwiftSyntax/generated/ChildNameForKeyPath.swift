@@ -239,12 +239,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightParen"
   case \AttributeSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
-  case \AttributedTypeSyntax.unexpectedBeforeSpecifier:
-    return "unexpectedBeforeSpecifier"
-  case \AttributedTypeSyntax.specifier:
-    return "specifier"
-  case \AttributedTypeSyntax.unexpectedBetweenSpecifierAndAttributes:
-    return "unexpectedBetweenSpecifierAndAttributes"
+  case \AttributedTypeSyntax.unexpectedBeforeSpecifiers:
+    return "unexpectedBeforeSpecifiers"
+  case \AttributedTypeSyntax.specifiers:
+    return "specifiers"
+  case \AttributedTypeSyntax.unexpectedBetweenSpecifiersAndAttributes:
+    return "unexpectedBetweenSpecifiersAndAttributes"
   case \AttributedTypeSyntax.attributes:
     return "attributes"
   case \AttributedTypeSyntax.unexpectedBetweenAttributesAndBaseType:
@@ -3289,6 +3289,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "value"
   case \TypeInitializerClauseSyntax.unexpectedAfterValue:
     return "unexpectedAfterValue"
+  case \TypeSpecifierSyntax.unexpectedBeforeSpecifier:
+    return "unexpectedBeforeSpecifier"
+  case \TypeSpecifierSyntax.specifier:
+    return "specifier"
+  case \TypeSpecifierSyntax.unexpectedAfterSpecifier:
+    return "unexpectedAfterSpecifier"
   case \UnavailableFromAsyncAttributeArgumentsSyntax.unexpectedBeforeMessageLabel:
     return "unexpectedBeforeMessageLabel"
   case \UnavailableFromAsyncAttributeArgumentsSyntax.messageLabel:

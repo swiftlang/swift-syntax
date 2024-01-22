@@ -1650,6 +1650,28 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.tupleTypeElementList
 }
 
+/// ### Children
+/// 
+/// ``TypeSpecifierSyntax`` `*`
+///
+/// ### Contained in
+/// 
+///  - ``AttributedTypeSyntax``.``AttributedTypeSyntax/specifiers``
+public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
+  public typealias Element = TypeSpecifierSyntax
+  
+  public let _syntaxNode: Syntax
+  
+  public init?(_ node: some SyntaxProtocol) {
+    guard node.raw.kind == .typeSpecifierList else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+  
+  public static let syntaxKind = SyntaxKind.typeSpecifierList
+}
+
 /// A collection of syntax nodes that occurred in the source code but could not be used to form a valid syntax tree.
 ///
 /// ### Children

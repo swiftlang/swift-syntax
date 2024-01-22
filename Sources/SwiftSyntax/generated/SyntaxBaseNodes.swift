@@ -1779,6 +1779,8 @@ extension Syntax {
           .node(TypeEffectSpecifiersSyntax.self),
           .node(TypeExprSyntax.self),
           .node(TypeInitializerClauseSyntax.self),
+          .node(TypeSpecifierListSyntax.self),
+          .node(TypeSpecifierSyntax.self),
           .node(UnavailableFromAsyncAttributeArgumentsSyntax.self),
           .node(UnderscorePrivateAttributeArgumentsSyntax.self),
           .node(UnexpectedNodesSyntax.self),

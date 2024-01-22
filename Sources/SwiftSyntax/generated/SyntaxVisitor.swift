@@ -3166,6 +3166,30 @@ open class SyntaxVisitor {
   open func visitPost(_ node: TypeInitializerClauseSyntax) {
   }
   
+  /// Visiting ``TypeSpecifierListSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: TypeSpecifierListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``TypeSpecifierListSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: TypeSpecifierListSyntax) {
+  }
+  
+  /// Visiting ``TypeSpecifierSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: TypeSpecifierSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+  
+  /// The function called after visiting ``TypeSpecifierSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: TypeSpecifierSyntax) {
+  }
+  
   /// Visiting ``UnavailableFromAsyncAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4484,6 +4508,14 @@ open class SyntaxVisitor {
       return {
         self.visitImpl($0, TypeInitializerClauseSyntax.self, self.visit, self.visitPost)
       }
+    case .typeSpecifierList:
+      return {
+        self.visitImpl($0, TypeSpecifierListSyntax.self, self.visit, self.visitPost)
+      }
+    case .typeSpecifier:
+      return {
+        self.visitImpl($0, TypeSpecifierSyntax.self, self.visit, self.visitPost)
+      }
     case .unavailableFromAsyncAttributeArguments:
       return {
         self.visitImpl($0, UnavailableFromAsyncAttributeArgumentsSyntax.self, self.visit, self.visitPost)
@@ -5089,6 +5121,10 @@ open class SyntaxVisitor {
       visitImpl(node, TypeExprSyntax.self, visit, visitPost)
     case .typeInitializerClause:
       visitImpl(node, TypeInitializerClauseSyntax.self, visit, visitPost)
+    case .typeSpecifierList:
+      visitImpl(node, TypeSpecifierListSyntax.self, visit, visitPost)
+    case .typeSpecifier:
+      visitImpl(node, TypeSpecifierSyntax.self, visit, visitPost)
     case .unavailableFromAsyncAttributeArguments:
       visitImpl(node, UnavailableFromAsyncAttributeArgumentsSyntax.self, visit, visitPost)
     case .underscorePrivateAttributeArguments:

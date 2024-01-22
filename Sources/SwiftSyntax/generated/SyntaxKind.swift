@@ -281,6 +281,8 @@ public enum SyntaxKind: Sendable {
   case typeEffectSpecifiers
   case typeExpr
   case typeInitializerClause
+  case typeSpecifierList
+  case typeSpecifier
   case unavailableFromAsyncAttributeArguments
   case underscorePrivateAttributeArguments
   case unexpectedNodes
@@ -393,6 +395,8 @@ public enum SyntaxKind: Sendable {
     case .tuplePatternElementList:
       return true
     case .tupleTypeElementList:
+      return true
+    case .typeSpecifierList:
       return true
     case .unexpectedNodes:
       return true
@@ -948,6 +952,10 @@ public enum SyntaxKind: Sendable {
       return TypeExprSyntax.self
     case .typeInitializerClause:
       return TypeInitializerClauseSyntax.self
+    case .typeSpecifierList:
+      return TypeSpecifierListSyntax.self
+    case .typeSpecifier:
+      return TypeSpecifierSyntax.self
     case .unavailableFromAsyncAttributeArguments:
       return UnavailableFromAsyncAttributeArgumentsSyntax.self
     case .underscorePrivateAttributeArguments:

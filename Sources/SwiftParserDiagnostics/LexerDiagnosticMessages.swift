@@ -11,8 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-@_spi(Diagnostics) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(Diagnostics) import SwiftSyntax
 
 fileprivate let diagnosticDomain: String = "SwiftLexer"
 

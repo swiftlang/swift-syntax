@@ -11,9 +11,8 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-@_spi(Testing) @_spi(RawSyntax) @_spi(AlternateTokenIntrospection) @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(RawSyntax) import SwiftParserDiagnostics
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(Testing) @_spi(RawSyntax) @_spi(AlternateTokenIntrospection) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 

@@ -34,7 +34,6 @@ let useLocalDependencies = hasEnvironmentVariable("SWIFTCI_USE_LOCAL_DEPS")
 // These build settings apply to the target and the corresponding test target.
 var swiftSyntaxSwiftSettings: [SwiftSetting] = []
 var swiftSyntaxBuilderSwiftSettings: [SwiftSetting] = []
-var swiftParserSwiftSettings: [SwiftSetting] = []
 
 if buildScriptEnvironment {
   swiftSyntaxSwiftSettings += [
@@ -52,7 +51,7 @@ if rawSyntaxValidation {
 }
 
 if alternateTokenIntrospection {
-  swiftParserSwiftSettings += [
+  swiftSyntaxSwiftSettings += [
     .define("SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION")
   ]
 }
@@ -138,7 +137,7 @@ let package = Package(
 
     .target(
       name: "SwiftCompilerPluginMessageHandling",
-      dependencies: ["SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntax", "SwiftSyntaxMacros", "SwiftSyntaxMacroExpansion"],
+      dependencies: ["SwiftDiagnostics", "SwiftOperators", "SwiftSyntax", "SwiftSyntaxMacros", "SwiftSyntaxMacroExpansion"],
       exclude: ["CMakeLists.txt"]
     ),
 
@@ -152,20 +151,20 @@ let package = Package(
 
     .testTarget(
       name: "SwiftDiagnosticsTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftParser", "SwiftParserDiagnostics"]
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftParserDiagnostics"]
     ),
 
     // MARK: SwiftIDEUtils
 
     .target(
       name: "SwiftIDEUtils",
-      dependencies: ["SwiftSyntax", "SwiftParser"],
+      dependencies: ["SwiftSyntax"],
       exclude: ["CMakeLists.txt"]
     ),
 
     .testTarget(
       name: "SwiftIDEUtilsTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftIDEUtils", "SwiftParser", "SwiftSyntax"]
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftIDEUtils", "SwiftSyntax"]
     ),
 
     // MARK: SwiftSyntax
@@ -204,7 +203,7 @@ let package = Package(
 
     .target(
       name: "SwiftSyntaxBuilder",
-      dependencies: ["SwiftBasicFormat", "SwiftParser", "SwiftDiagnostics", "SwiftParserDiagnostics", "SwiftSyntax"],
+      dependencies: ["SwiftBasicFormat", "SwiftDiagnostics", "SwiftParserDiagnostics", "SwiftSyntax"],
       exclude: ["CMakeLists.txt"],
       swiftSettings: swiftSyntaxBuilderSwiftSettings
     ),
@@ -219,7 +218,7 @@ let package = Package(
 
     .target(
       name: "SwiftSyntaxMacros",
-      dependencies: ["SwiftDiagnostics", "SwiftParser", "SwiftSyntax", "SwiftSyntaxBuilder"],
+      dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftSyntaxBuilder"],
       exclude: ["CMakeLists.txt"]
     ),
 
@@ -234,7 +233,7 @@ let package = Package(
     .testTarget(
       name: "SwiftSyntaxMacroExpansionTest",
       dependencies: [
-        "SwiftSyntax", "_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntaxBuilder", "SwiftSyntaxMacros",
+        "SwiftSyntax", "_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftOperators", "SwiftSyntaxBuilder", "SwiftSyntaxMacros",
         "SwiftSyntaxMacroExpansion", "SwiftSyntaxMacrosTestSupport",
       ]
     ),
@@ -243,7 +242,7 @@ let package = Package(
 
     .target(
       name: "SwiftSyntaxMacrosTestSupport",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftParser", "SwiftSyntaxMacros", "SwiftSyntaxMacroExpansion"]
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftSyntaxMacros", "SwiftSyntaxMacroExpansion"]
     ),
 
     .testTarget(
@@ -256,22 +255,20 @@ let package = Package(
     .target(
       name: "SwiftParser",
       dependencies: ["SwiftSyntax"],
-      exclude: ["CMakeLists.txt", "README.md"],
-      swiftSettings: swiftParserSwiftSettings
-
+      exclude: ["CMakeLists.txt", "README.md"]
     ),
 
     .testTarget(
       name: "SwiftParserTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntaxBuilder"],
-      swiftSettings: swiftParserSwiftSettings
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftOperators", "SwiftSyntaxBuilder"],
+      swiftSettings: swiftSyntaxSwiftSettings
     ),
 
     // MARK: SwiftParserDiagnostics
 
     .target(
       name: "SwiftParserDiagnostics",
-      dependencies: ["SwiftBasicFormat", "SwiftDiagnostics", "SwiftParser", "SwiftSyntax"],
+      dependencies: ["SwiftBasicFormat", "SwiftDiagnostics", "SwiftSyntax"],
       exclude: ["CMakeLists.txt"]
     ),
 
@@ -284,7 +281,7 @@ let package = Package(
 
     .target(
       name: "SwiftOperators",
-      dependencies: ["SwiftDiagnostics", "SwiftParser", "SwiftSyntax"],
+      dependencies: ["SwiftDiagnostics", "SwiftSyntax"],
       exclude: [
         "CMakeLists.txt"
       ]
@@ -292,14 +289,14 @@ let package = Package(
 
     .testTarget(
       name: "SwiftOperatorsTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftOperators", "SwiftParser"]
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftOperators"]
     ),
 
     // MARK: SwiftRefactor
 
     .target(
       name: "SwiftRefactor",
-      dependencies: ["SwiftBasicFormat", "SwiftParser", "SwiftSyntax", "SwiftSyntaxBuilder"]
+      dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftSyntaxBuilder"]
     ),
 
     .testTarget(
@@ -310,11 +307,11 @@ let package = Package(
     // MARK: - Deprecated targets
 
     // MARK: PerformanceTest
-    // TODO: Should be included in SwiftParserTest/SwiftSyntaxTest
+    // TODO: Should be included in SwiftSyntaxTest
 
     .testTarget(
       name: "PerformanceTest",
-      dependencies: ["_InstructionCounter", "_SwiftSyntaxTestSupport", "SwiftIDEUtils", "SwiftParser", "SwiftSyntax"],
+      dependencies: ["_InstructionCounter", "_SwiftSyntaxTestSupport", "SwiftIDEUtils", "SwiftSyntax"],
       exclude: ["Inputs"]
     ),
   ]

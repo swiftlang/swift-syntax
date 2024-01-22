@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(Testing) import SwiftParser
+@_spi(Testing) import SwiftSyntax
 
 func withParser<T>(source: String, _ body: (inout Parser) throws -> T) rethrows -> T {
   var source = source

@@ -16,8 +16,6 @@ import SyntaxSupport
 import Utils
 
 let layoutNodesParsableFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax("@_spi(RawSyntax) import SwiftSyntax")
-
   DeclSyntax(
     """
     public protocol SyntaxParseable: SyntaxProtocol {

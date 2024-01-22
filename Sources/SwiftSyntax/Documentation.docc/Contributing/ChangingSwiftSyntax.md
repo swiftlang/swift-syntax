@@ -64,7 +64,7 @@ Node(
 ## Committing Changes
 
 Added syntactic elements will require corresponding changes to the included 
-SwiftParser library. For an introduction on parsing Swift nodes, see 
+SwiftSyntax library. For an introduction on parsing Swift nodes, see 
 [the article on Parsing Basics][ParserBasics].
 
 When updating nodes, certain clients of SwiftSyntax that are relying upon those
@@ -75,7 +75,7 @@ without a paired change to that repository.
 
 [SyntaxSupport]: https://github.com/apple/swift-syntax/tree/main/CodeGeneration/Sources/SyntaxSupport
 [swift-stress-tester]: https://github.com/apple/swift-stress-tester
-[ParserBasics]: https://github.com/apple/swift-syntax/tree/main/Sources/SwiftParser/SwiftParser.docc/ParsingBasics.md
+[ParserBasics]: https://github.com/apple/swift-syntax/tree/main/Sources/SwiftSyntax/Documentation.docc/Contributing/ParsingBasics.md
 
 @Comment {
   When docc resolves https://github.com/apple/swift-docc/issues/255, `ParserBasic` should be an inter-target link.

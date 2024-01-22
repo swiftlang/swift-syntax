@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftParser
 import SwiftSyntax
 
 /// Given a set of positions in a source file, resolve the names of the

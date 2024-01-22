@@ -25,8 +25,7 @@ let package = Package(
     .executableTarget(
       name: "importformatter",
       dependencies: [
-        .product(name: "SwiftSyntax", package: "swift-syntax"),
-        .product(name: "SwiftParser", package: "swift-syntax"),
+        .product(name: "SwiftSyntax", package: "swift-syntax")
       ]
     ),
     .testTarget(

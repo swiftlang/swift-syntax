@@ -17,5 +17,4 @@ add_swift_syntax_library(SwiftIDEUtils
 )
 
 target_link_swift_syntax_libraries(SwiftIDEUtils PUBLIC
-  SwiftParser
   SwiftSyntax)

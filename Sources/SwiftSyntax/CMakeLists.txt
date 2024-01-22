@@ -37,10 +37,54 @@ add_swift_syntax_library(SwiftSyntax
   Trivia.swift
   Utils.swift
 
+  Lexer/Cursor.swift
+  Lexer/Lexeme.swift
+  Lexer/LexemeSequence.swift
+  Lexer/Lexer.swift
+  Lexer/RegexLiteralLexer.swift
+  Lexer/UnicodeScalarExtensions.swift
+
+  Parser/Attributes.swift
+  Parser/Availability.swift
+  Parser/CharacterInfo.swift
+  Parser/CollectionNodes+Parsable.swift
+  Parser/Declarations.swift
+  Parser/Directives.swift
+  Parser/Expressions.swift
+  Parser/IncrementalParseTransition.swift
+  Parser/Lookahead.swift
+  Parser/LoopProgressCondition.swift
+  Parser/Modifiers.swift
+  Parser/Names.swift
+  Parser/Nominals.swift
+  Parser/Parameters.swift
+  Parser/Parser.swift
+  Parser/ParseSourceFile.swift
+  Parser/Patterns.swift
+  Parser/TokenSpec.swift
+  Parser/TokenSpecSet.swift
+  Parser/Recovery.swift
+  Parser/Specifiers.swift
+  Parser/Statements.swift
+  Parser/StringLiterals.swift
+  Parser/StringLiteralRepresentedLiteralValue.swift
+  Parser/SyntaxUtils.swift
+  Parser/TokenConsumer.swift
+  Parser/TokenPrecedence.swift
+  Parser/TopLevel.swift
+  Parser/TriviaParser.swift
+  Parser/Types.swift
+
   Raw/RawSyntax.swift
   Raw/RawSyntaxLayoutView.swift
   Raw/RawSyntaxNodeProtocol.swift
   Raw/RawSyntaxTokenView.swift
+
+  generated/Parser/ExperimentalFeatures.swift
+  generated/Parser/IsLexerClassified.swift
+  generated/Parser/LayoutNodes+Parsable.swift
+  generated/Parser/Parser+TokenSpecSet.swift
+  generated/Parser/TokenSpecStaticMembers.swift
 
   generated/raw/RawSyntaxNodesAB.swift
   generated/raw/RawSyntaxNodesC.swift

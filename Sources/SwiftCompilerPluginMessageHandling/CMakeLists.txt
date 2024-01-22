@@ -19,7 +19,6 @@ target_link_swift_syntax_libraries(SwiftCompilerPluginMessageHandling PUBLIC
   SwiftSyntax
   SwiftBasicFormat
   SwiftDiagnostics
-  SwiftParser
   SwiftSyntaxMacros
   SwiftSyntaxMacroExpansion
   SwiftOperators)

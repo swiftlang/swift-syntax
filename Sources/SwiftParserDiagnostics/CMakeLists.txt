@@ -26,5 +26,4 @@ add_swift_syntax_library(SwiftParserDiagnostics
 target_link_swift_syntax_libraries(SwiftParserDiagnostics PUBLIC
   SwiftBasicFormat
   SwiftDiagnostics
-  SwiftParser
   SwiftSyntax)

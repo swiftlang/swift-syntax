@@ -11,8 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftBasicFormat
-@_spi(Testing) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(Testing) @_spi(RawSyntax) import SwiftSyntax
 import SwiftSyntaxBuilder
 
 private class InitializerExprFormat: BasicFormat {

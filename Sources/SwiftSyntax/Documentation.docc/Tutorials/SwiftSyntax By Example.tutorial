@@ -65,8 +65,8 @@
       }
       
       @Step {
-        Add the `SwiftSyntax` and `SwiftParser` products as dependencies of 
-        the `importformatter` executable target.
+        Add the `SwiftSyntax` product as dependencies of the `importformatter` 
+        executable target.
         
         @Code(name: "Package.swift", file: Package.step4.swift)
       }
@@ -103,8 +103,7 @@
       }
       
       @Step {
-        Add an import of the `SwiftSyntax` and `SwiftParser` libraries in
-        `importformatter.swift`
+        Add an import of the `SwiftSyntax` library in `importformatter.swift`
         
         @Code(name: "importformatter.swift", file: Formatter.step3.swift)
       }
@@ -209,9 +208,8 @@
         set of bugs. Run the tool on the `importformatter.swift` file itself
         and observe its output carefully.
         
-        The imports of `SwiftParser` and `SwiftSyntax` are jammed together with
-        no whitespace between them. The import of `Foundation` has an extra 
-        leading newline.
+        The import of `Foundation` has an extra leading newline that separates 
+        it from the import of `SwiftSyntax`.
 
         @Code(name: "importformatter.swift", file: Formatter.step10.swift)   
       }

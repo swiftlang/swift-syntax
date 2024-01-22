@@ -11,8 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-@_spi(Diagnostics) import SwiftParser
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+@_spi(Diagnostics) @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 
 fileprivate func getTokens(between first: TokenSyntax, and second: TokenSyntax) -> [TokenSyntax] {
   var first = first

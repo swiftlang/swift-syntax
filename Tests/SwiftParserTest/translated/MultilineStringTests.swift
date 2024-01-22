@@ -513,7 +513,7 @@ final class MultilineStringTests: ParserTestCase {
   func testEscapeLastNewlineInRawString() {
     // We really shouldn't be allow the last newline in the multi-line string
     // literal to be escaped in a multi-line string literal. But since the C++
-    // parser accepts this, so does SwiftParser.
+    // parser accepts this, so does the Swift parser.
     assertParse(
       ##"""
       #"""

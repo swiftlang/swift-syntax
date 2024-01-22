@@ -11,8 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftBasicFormat
-@_spi(Testing) @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(Testing) @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 import SwiftSyntaxBuilder
 import XCTest
 

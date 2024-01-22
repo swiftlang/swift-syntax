@@ -12,7 +12,6 @@
 
 import SwiftBasicFormat
 import SwiftDiagnostics
-import SwiftParser
 import SwiftParserDiagnostics
 import SwiftSyntax
 import SwiftSyntaxMacroExpansion

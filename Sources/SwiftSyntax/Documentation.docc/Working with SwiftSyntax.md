@@ -177,7 +177,7 @@ a new ``ClassDeclSyntax`` value.
 
 ## Building Syntax Trees
 
-The swift-syntax package provides the `SwiftParser` module to parse arbitrary
+The swift-syntax package provides a parser to parse arbitrary
 source text into syntax trees. The Swift parser is appropriate for situations
 where code is provided by a user, or cannot otherwise by predicted ahead of
 time. However, there are often times when the structure of source code is known
@@ -187,7 +187,6 @@ trees when the `SwiftSyntaxBuilder` module is also imported:
 
 ```swift
 import SwiftSyntax
-import SwiftParser
 import SwiftSyntaxBuilder
 
 // `file` is a source file syntax node containing the parsed value of the
@@ -204,7 +203,6 @@ functions.
 
 ```swift
 import SwiftSyntax
-import SwiftParser
 
 func createClass(named name: String) -> ClassDeclSyntax {
   return """

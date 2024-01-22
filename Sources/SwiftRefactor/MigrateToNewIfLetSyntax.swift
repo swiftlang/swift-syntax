@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftParser
 import SwiftSyntax
 
 /// ``MigrateToNewIfLetSyntax`` will visit each if expression in the Syntax tree, and

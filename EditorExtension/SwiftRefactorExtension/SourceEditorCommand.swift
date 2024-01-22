@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import SwiftParser
 import SwiftRefactor
 import SwiftSyntax
 import XcodeKit

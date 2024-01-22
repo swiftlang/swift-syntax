@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(Compiler) import SwiftIDEUtils
-import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import XCTest

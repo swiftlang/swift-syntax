@@ -30,8 +30,14 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 
 - <doc:ChangingSwiftSyntax>
 - <doc:Existentials>
+- <doc:FilingBugReports>
+- <doc:FixingBugs>
+- <doc:ParserDesign>
+- <doc:ParserRecovery>
+- <doc:ParsingBasics>
 - <doc:SPI>
 - <doc:Swift-Version>
+- <doc:SwiftParser>
 
 ### Syntax
 

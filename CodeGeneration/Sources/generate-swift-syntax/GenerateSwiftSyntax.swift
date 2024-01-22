@@ -20,9 +20,6 @@ import Utils
 
 private let generatedDirName = "generated"
 
-private let swiftBasicFormatGeneratedDir = ["SwiftBasicFormat", generatedDirName]
-private let swiftideUtilsGeneratedDir = ["SwiftIDEUtils", generatedDirName]
-private let swiftParserGeneratedDir = ["SwiftParser", generatedDirName]
 private let swiftParserDiagnosticsGeneratedDir = ["SwiftParserDiagnostics", generatedDirName]
 private let swiftSyntaxGeneratedDir = ["SwiftSyntax", generatedDirName]
 private let swiftSyntaxBuilderGeneratedDir = ["SwiftSyntaxBuilder", generatedDirName]
@@ -87,13 +84,6 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
     let destination = URL(fileURLWithPath: self.destination).standardizedFileURL
 
     var fileSpecs: [GeneratedFileSpec] = [
-      // SwiftParser
-      GeneratedFileSpec(swiftParserGeneratedDir + ["ExperimentalFeatures.swift"], experimentalFeaturesFile),
-      GeneratedFileSpec(swiftParserGeneratedDir + ["IsLexerClassified.swift"], isLexerClassifiedFile),
-      GeneratedFileSpec(swiftParserGeneratedDir + ["LayoutNodes+Parsable.swift"], layoutNodesParsableFile),
-      GeneratedFileSpec(swiftParserGeneratedDir + ["Parser+TokenSpecSet.swift"], parserTokenSpecSetFile),
-      GeneratedFileSpec(swiftParserGeneratedDir + ["TokenSpecStaticMembers.swift"], tokenSpecStaticMembersFile),
-
       // SwiftParserDiagnostics
       GeneratedFileSpec(swiftParserDiagnosticsGeneratedDir + ["ChildNameForDiagnostics.swift"], childNameForDiagnosticFile),
       GeneratedFileSpec(swiftParserDiagnosticsGeneratedDir + ["SyntaxKindNameForDiagnostics.swift"], syntaxKindNameForDiagnosticFile),
@@ -117,6 +107,13 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Tokens.swift"], tokensFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["TriviaPieces.swift"], triviaPiecesFile),
       GeneratedFileSpec(["SwiftSyntax", "Documentation.docc", "generated", "SwiftSyntax.md"], swiftSyntaxDoccIndex),
+
+      // SwiftSyntax/Parser
+      GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Parser", "ExperimentalFeatures.swift"], experimentalFeaturesFile),
+      GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Parser", "IsLexerClassified.swift"], isLexerClassifiedFile),
+      GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Parser", "LayoutNodes+Parsable.swift"], layoutNodesParsableFile),
+      GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Parser", "Parser+TokenSpecSet.swift"], parserTokenSpecSetFile),
+      GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Parser", "TokenSpecStaticMembers.swift"], tokenSpecStaticMembersFile),
 
       // SwiftSyntaxBuilder
       GeneratedFileSpec(swiftSyntaxBuilderGeneratedDir + ["BuildableNodes.swift"], buildableNodesFile),

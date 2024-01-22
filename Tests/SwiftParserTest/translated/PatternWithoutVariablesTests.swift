@@ -12,7 +12,7 @@
 
 // This test file has been translated from swift/test/Parse/pattern_without_variables.swift
 
-@_spi(ExperimentalLanguageFeatures) import SwiftParser
+@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 import XCTest
 
 final class PatternWithoutVariablesTests: ParserTestCase {

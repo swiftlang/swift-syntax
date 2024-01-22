@@ -32,7 +32,6 @@ target_compile_options(SwiftSyntaxBuilder PRIVATE
 
 target_link_swift_syntax_libraries(SwiftSyntaxBuilder PUBLIC
   SwiftBasicFormat
-  SwiftParser
   SwiftParserDiagnostics
   SwiftSyntax
   )

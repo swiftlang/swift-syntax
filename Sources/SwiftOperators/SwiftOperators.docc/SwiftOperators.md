@@ -41,7 +41,6 @@ The `SwiftOperators` library is typically used to take a raw parse of Swift code
 
 ```swift
 import SwiftSyntax
-import SwiftParser
 import SwiftOperators
 
 var opPrecedence = OperatorTable.standardOperators // Use the Swift standard library operators

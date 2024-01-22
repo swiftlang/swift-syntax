@@ -16,8 +16,6 @@ import SyntaxSupport
 import Utils
 
 let isLexerClassifiedFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax("import SwiftSyntax")
-
   try! ExtensionDeclSyntax(
     """
     extension Keyword

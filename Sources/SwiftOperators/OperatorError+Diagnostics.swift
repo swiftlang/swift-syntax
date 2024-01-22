@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-import SwiftParser
 import SwiftSyntax
 
 extension OperatorError: DiagnosticMessage {

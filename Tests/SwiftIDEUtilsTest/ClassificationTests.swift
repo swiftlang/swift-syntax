@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftIDEUtils
-import SwiftParser
 import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport

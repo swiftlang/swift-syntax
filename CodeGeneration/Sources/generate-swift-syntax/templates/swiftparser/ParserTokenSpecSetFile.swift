@@ -24,8 +24,6 @@ func tokenCaseMatch(_ caseName: TokenSyntax, experimentalFeature: ExperimentalFe
 }
 
 let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax("@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax")
-
   for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode) {
     for child in layoutNode.children {
       if case let .token(choices, _, _) = child.kind, choices.count > 1 {

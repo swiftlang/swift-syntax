@@ -13,7 +13,7 @@ swift-syntax is a SwiftPM package, so you can build and test it using anything t
 > - On the command line: Set the `SKIP_LONG_TESTS` environment variable to `1` when running tests, e.g by running `SKIP_LONG_TESTS=1 swift test`
 
 > [!NOTE]
-> If you are only modifying the `SwiftParser` module, you can run only the parser tests by selecting the `SwiftParserTest` target. 
+> If you are only modifying the parser, you can run only the parser tests by selecting the `SwiftParserTest` target. 
 > - In Xcode: Select the `SwiftParserTest` scheme. If you can’t find it in your Schemes, you need to manually add it using Product -> Scheme -> New Scheme…
 > - On the command line: Run `swift test --test-product SwiftParserTests`
 
@@ -83,7 +83,7 @@ If this validation hits an assertion failure that a token is not accepted at a c
 
 ### Test Case Mutation
 
-When the `SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION` environment variable is set while building swift-syntax, SwiftParser records alternative tokens that the parser was looking for at specific offsets in the source file, e.g. whether it also checked for a `struct` keyword when the source code contained a `class` keyword. It will then use that information to mutate the test case by e.g. substituting `class` with `struct`.
+When the `SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION` environment variable is set while building swift-syntax, the parser records alternative tokens that the parser was looking for at specific offsets in the source file, e.g. whether it also checked for a `struct` keyword when the source code contained a `class` keyword. It will then use that information to mutate the test case by e.g. substituting `class` with `struct`.
 
 When testing finds one of these failures, it will show you the syntax tree that produced the failure. Create a new test case with the source code the failure gives you and fix the failure.
 

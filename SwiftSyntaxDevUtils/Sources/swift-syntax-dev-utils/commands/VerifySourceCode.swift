@@ -15,7 +15,6 @@ import Foundation
 import RegexBuilder
 
 fileprivate let modules: [String] = [
-  "SwiftParser",
   "SwiftParserDiagnostics",
   "SwiftSyntax",
   "SwiftSyntaxBuilder",
@@ -129,6 +128,8 @@ struct VerifySpiYmlExecutor {
       .components(separatedBy: "\n")
       .filter({ !$0.matches(of: extractNameRegex).isEmpty })
       .map { $0.replacing(extractNameRegex) { $0.1 } }
+      // SwiftParser module is empty and only exists for compatibility reasons
+      .filter { $0 != "SwiftParser" }
       .sorted()
   }
   /// Returns all targets listed in `.spi.yml`.

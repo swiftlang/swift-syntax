@@ -10,8 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) @_spi(Testing) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(Testing) import SwiftSyntax
 import XCTest
 
 final class TriviaParserTests: ParserTestCase {

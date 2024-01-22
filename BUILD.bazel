@@ -34,7 +34,6 @@ swift_syntax_library(
     deps = [
         ":SwiftDiagnostics",
         ":SwiftOperators",
-        ":SwiftParser",
         ":SwiftSyntaxMacroExpansion",
         ":SwiftSyntaxMacros",
     ],
@@ -60,18 +59,8 @@ swift_syntax_library(
     name = "SwiftSyntaxMacros",
     deps = [
         ":SwiftDiagnostics",
-        ":SwiftParser",
         ":SwiftSyntax",
         ":SwiftSyntaxBuilder",
-    ],
-)
-
-swift_syntax_library(
-    name = "SwiftParser",
-    deps = [
-        ":SwiftBasicFormat",
-        ":SwiftDiagnostics",
-        ":SwiftSyntax",
     ],
 )
 
@@ -80,7 +69,6 @@ swift_syntax_library(
     deps = [
         ":SwiftBasicFormat",
         ":SwiftDiagnostics",
-        ":SwiftParser",
         ":SwiftSyntax",
     ],
 )
@@ -89,7 +77,6 @@ swift_syntax_library(
     name = "SwiftSyntaxBuilder",
     deps = [
         ":SwiftBasicFormat",
-        ":SwiftParser",
         ":SwiftParserDiagnostics",
         ":SwiftSyntax",
     ],
@@ -99,7 +86,6 @@ swift_syntax_library(
     name = "SwiftOperators",
     deps = [
         ":SwiftDiagnostics",
-        ":SwiftParser",
         ":SwiftSyntax",
     ],
 )
@@ -107,7 +93,6 @@ swift_syntax_library(
 swift_syntax_library(
     name = "SwiftRefactor",
     deps = [
-        ":SwiftParser",
         ":SwiftSyntax",
         ":SwiftSyntaxBuilder",
     ],
@@ -118,7 +103,6 @@ swift_syntax_library(
     testonly = True,
     deps = [
         ":SwiftDiagnostics",
-        ":SwiftParser",
         ":SwiftSyntaxMacroExpansion",
         ":SwiftSyntaxMacros",
         ":_SwiftSyntaxTestSupport",

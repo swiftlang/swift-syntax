@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 import XCTest
 

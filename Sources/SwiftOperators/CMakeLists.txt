@@ -21,5 +21,4 @@ add_swift_syntax_library(SwiftOperators
 
 target_link_swift_syntax_libraries(SwiftOperators PUBLIC
   SwiftSyntax
-  SwiftDiagnostics
-  SwiftParser)
+  SwiftDiagnostics)

@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-import SwiftParser
 import SwiftParserDiagnostics
 import SwiftSyntax
 
@@ -53,7 +52,7 @@ extension SyntaxParseable {
         Parsing a `\(Self.self)` node from string interpolation produced the following parsing errors.
         Set a breakpoint in `SyntaxParseable.logStringInterpolationParsingError()` to debug the failure.
 
-        To explicitly support parsing of invalid source code, import SwiftParser and invoke the parser as follows
+        To explicitly support parsing of invalid source code, invoke the parser as follows
           var parser = Parser(source)
           \(Self.self).parse(from: &parser)
         \(formattedDiagnostics, privacy: .private)

@@ -3272,6 +3272,9 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - specifiers: A list of specifiers that can be attached to the type, such as `inout`, `isolated`, or `consuming`.
+  ///   - attributes: A list of attributes that can be attached to the type, such as `@escaping`.
+  ///   - baseType: The type to with the specifiers and attributes are applied.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -3326,6 +3329,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     }
   }
   
+  /// A list of specifiers that can be attached to the type, such as `inout`, `isolated`, or `consuming`.
   public var specifiers: TypeSpecifierListSyntax {
     get {
       return Syntax(self).child(at: 1)!.cast(TypeSpecifierListSyntax.self)
@@ -3371,6 +3375,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     }
   }
   
+  /// A list of attributes that can be attached to the type, such as `@escaping`.
   public var attributes: AttributeListSyntax {
     get {
       return Syntax(self).child(at: 3)!.cast(AttributeListSyntax.self)
@@ -3416,6 +3421,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     }
   }
   
+  /// The type to with the specifiers and attributes are applied.
   public var baseType: TypeSyntax {
     get {
       return Syntax(self).child(at: 5)!.cast(TypeSyntax.self)

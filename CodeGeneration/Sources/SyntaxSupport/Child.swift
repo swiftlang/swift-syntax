@@ -24,6 +24,15 @@ public enum TokenChoice: Equatable {
     case .token: return false
     }
   }
+
+  public var varOrCaseName: TokenSyntax {
+    switch self {
+    case .keyword(let keyword):
+      return keyword.spec.varOrCaseName
+    case .token(let token):
+      return token.spec.varOrCaseName
+    }
+  }
 }
 
 public enum ChildKind {

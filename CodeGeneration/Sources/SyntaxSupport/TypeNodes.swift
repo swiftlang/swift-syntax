@@ -35,36 +35,6 @@ public let TYPE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .typeSpecifier,
-    base: .syntax,
-    nameForDiagnostics: nil,
-    documentation: "A specifier that can be attached to a type to eg. mark a parameter as `inout` or `consuming`",
-    children: [
-      Child(
-        name: "specifier",
-        kind: .token(choices: [
-          .keyword(.inout),
-          .keyword(.__shared),
-          .keyword(.__owned),
-          .keyword(.isolated),
-          .keyword(._const),
-          .keyword(.borrowing),
-          .keyword(.consuming),
-          .keyword(.transferring),
-          .keyword(._resultDependsOn),
-        ])
-      )
-    ]
-  ),
-
-  Node(
-    kind: .typeSpecifierList,
-    base: .syntaxCollection,
-    nameForDiagnostics: nil,
-    elementChoices: [.typeSpecifier]
-  ),
-
-  Node(
     kind: .attributedType,
     base: .type,
     nameForDiagnostics: "type",
@@ -74,15 +44,18 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "specifiers",
-        kind: .collection(kind: .typeSpecifierList, collectionElementName: "Specifier", defaultsToEmpty: true)
+        kind: .collection(kind: .typeSpecifierList, collectionElementName: "Specifier", defaultsToEmpty: true),
+        documentation: "A list of specifiers that can be attached to the type, such as `inout`, `isolated`, or `consuming`."
       ),
       Child(
         name: "attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true)
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        documentation: "A list of attributes that can be attached to the type, such as `@escaping`."
       ),
       Child(
         name: "baseType",
-        kind: .node(kind: .type)
+        kind: .node(kind: .type),
+        documentation: "The type to with the specifiers and attributes are applied."
       ),
     ]
   ),
@@ -522,4 +495,34 @@ public let TYPE_NODES: [Node] = [
     ]
   ),
 
+  Node(
+    kind: .typeSpecifier,
+    base: .syntax,
+    nameForDiagnostics: nil,
+    documentation: "A specifier that can be attached to a type to eg. mark a parameter as `inout` or `consuming`",
+    children: [
+      Child(
+        name: "specifier",
+        kind: .token(choices: [
+          .keyword(.inout),
+          .keyword(.__shared),
+          .keyword(.__owned),
+          .keyword(.isolated),
+          .keyword(._const),
+          .keyword(.borrowing),
+          .keyword(.consuming),
+          .keyword(.transferring),
+          .keyword(._resultDependsOn),
+        ]),
+        documentation: "The specifier token that's attached to the type."
+      )
+    ]
+  ),
+
+  Node(
+    kind: .typeSpecifierList,
+    base: .syntaxCollection,
+    nameForDiagnostics: nil,
+    elementChoices: [.typeSpecifier]
+  ),
 ]

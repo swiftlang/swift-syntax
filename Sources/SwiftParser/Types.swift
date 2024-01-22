@@ -468,7 +468,7 @@ extension Parser {
         var misplacedSpecifiers: [RawTokenSyntax] = []
         if self.withLookahead({ $0.startsParameterName(isClosure: false, allowMisplacedSpecifierRecovery: true) }) {
           while canHaveParameterSpecifier,
-            let specifier = self.consume(ifAnyIn: TypeSpecifier.self)
+            let specifier = self.consume(ifAnyIn: TypeSpecifierSyntax.SpecifierOptions.self)
           {
             misplacedSpecifiers.append(specifier)
           }
@@ -623,7 +623,7 @@ extension Parser.Lookahead {
     var specifierProgress = LoopProgressCondition()
     // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
     while canHaveParameterSpecifier,
-      self.at(anyIn: TypeSpecifier.self) != nil || self.at(.keyword(.isolated)) || self.at(.keyword(._const)),
+      self.at(anyIn: TypeSpecifierSyntax.SpecifierOptions.self) != nil || self.at(.keyword(.isolated)) || self.at(.keyword(._const)),
       self.hasProgressed(&specifierProgress)
     {
       self.consumeAnyToken()

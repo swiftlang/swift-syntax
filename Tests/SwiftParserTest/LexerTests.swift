@@ -1083,6 +1083,41 @@ public class LexerTests: ParserTestCase {
     }
   }
 
+  func testUTF16Surrogates1() {
+    // U+D800 <= (UTF16 surrogates code point) <= U+DFFF
+    let sourceBytes: [UInt8] = [0xED, 0xA0, 0x80]  // The bytes represent the code point U+D800
+
+    lex(sourceBytes) { lexemes in
+      guard lexemes.count == 1 else {
+        return XCTFail("Expected 1 lexemes, got \(lexemes.count)")
+      }
+      assertRawBytesLexeme(
+        lexemes[0],
+        kind: .endOfFile,
+        leadingTrivia: [0xED, 0xA0, 0x80],
+        text: [],
+        error: TokenDiagnostic(.invalidUtf8, byteOffset: 0)
+      )
+    }
+  }
+
+  func testUTF16Surrogates2() {
+    let sourceBytes: [UInt8] = [0xED, 0xBF, 0xBF]  // The bytes represent the code point U+DFFF
+
+    lex(sourceBytes) { lexemes in
+      guard lexemes.count == 1 else {
+        return XCTFail("Expected 1 lexemes, got \(lexemes.count)")
+      }
+      assertRawBytesLexeme(
+        lexemes[0],
+        kind: .endOfFile,
+        leadingTrivia: [0xED, 0xBF, 0xBF],
+        text: [],
+        error: TokenDiagnostic(.invalidUtf8, byteOffset: 0)
+      )
+    }
+  }
+
   func testInvalidUTF8RegexLiteral() {
     let slashByte = UInt8(UnicodeScalar("/").value)
     let sourceBytes: [UInt8] = [slashByte, 0xfd, slashByte]

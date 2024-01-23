@@ -212,11 +212,6 @@ extension Unicode.Scalar {
       _ = advance()
     }
 
-    // UTF-16 surrogate pair values are not valid code points.
-    if (charValue >= 0xD800 && charValue <= 0xDFFF) {
-      return nil
-    }
-
     // If we got here, we read the appropriate number of accumulated bytes.
     // Verify that the encoding was actually minimal.
     // Number of bits in the value, ignoring leading zeros.

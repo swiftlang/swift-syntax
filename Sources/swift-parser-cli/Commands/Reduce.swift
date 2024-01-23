@@ -66,7 +66,7 @@ struct Reduce: ParsableCommand {
   /// Invoke `swift-parser-cli verify-round-trip` with the same arguments as this `reduce` subcommand.
   /// Returns the exit code of the invocation.
   private func runVerifyRoundTripInSeparateProcess(source: [UInt8]) throws -> ProcessExit {
-    #if os(iOS) || os(tvOS) || os(watchOS)
+    #if os(iOS) || os(tvOS) || os(watchOS) || os(visionOS)
     // We cannot launch a new process on iOS-like platforms.
     // Default to running verification in-process.
     // Honestly, this isn't very important because you can't launch swift-parser-cli

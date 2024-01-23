@@ -3382,6 +3382,3620 @@ open class SyntaxVisitor {
   open func visitPost(_ node: YieldedExpressionsClauseSyntax) {
   }
   
+  /// The function forwards call to self.visit(_ node: ``AccessorBlockSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAccessorBlockSyntax(_ node: AccessorBlockSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AccessorBlockSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAccessorBlockSyntax(_ node: AccessorBlockSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``AccessorDeclListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAccessorDeclListSyntax(_ node: AccessorDeclListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AccessorDeclListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAccessorDeclListSyntax(_ node: AccessorDeclListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``AccessorDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAccessorDeclSyntax(_ node: AccessorDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AccessorDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAccessorDeclSyntax(_ node: AccessorDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``AccessorEffectSpecifiersSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAccessorEffectSpecifiersSyntax(_ node: AccessorEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AccessorEffectSpecifiersSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAccessorEffectSpecifiersSyntax(_ node: AccessorEffectSpecifiersSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``AccessorParametersSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAccessorParametersSyntax(_ node: AccessorParametersSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AccessorParametersSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAccessorParametersSyntax(_ node: AccessorParametersSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ActorDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitActorDeclSyntax(_ node: ActorDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ActorDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostActorDeclSyntax(_ node: ActorDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ArrayElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitArrayElementListSyntax(_ node: ArrayElementListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ArrayElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostArrayElementListSyntax(_ node: ArrayElementListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ArrayElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitArrayElementSyntax(_ node: ArrayElementSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ArrayElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostArrayElementSyntax(_ node: ArrayElementSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ArrayExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitArrayExprSyntax(_ node: ArrayExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ArrayExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostArrayExprSyntax(_ node: ArrayExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ArrayTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitArrayTypeSyntax(_ node: ArrayTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ArrayTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostArrayTypeSyntax(_ node: ArrayTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ArrowExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitArrowExprSyntax(_ node: ArrowExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ArrowExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostArrowExprSyntax(_ node: ArrowExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``AsExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAsExprSyntax(_ node: AsExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AsExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAsExprSyntax(_ node: AsExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``AssignmentExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAssignmentExprSyntax(_ node: AssignmentExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AssignmentExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAssignmentExprSyntax(_ node: AssignmentExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``AssociatedTypeDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAssociatedTypeDeclSyntax(_ node: AssociatedTypeDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AssociatedTypeDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAssociatedTypeDeclSyntax(_ node: AssociatedTypeDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``AttributeListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAttributeListSyntax(_ node: AttributeListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AttributeListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAttributeListSyntax(_ node: AttributeListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``AttributeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAttributeSyntax(_ node: AttributeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AttributeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAttributeSyntax(_ node: AttributeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``AttributedTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAttributedTypeSyntax(_ node: AttributedTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AttributedTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAttributedTypeSyntax(_ node: AttributedTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``AvailabilityArgumentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAvailabilityArgumentListSyntax(_ node: AvailabilityArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AvailabilityArgumentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAvailabilityArgumentListSyntax(_ node: AvailabilityArgumentListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``AvailabilityArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAvailabilityArgumentSyntax(_ node: AvailabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AvailabilityArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAvailabilityArgumentSyntax(_ node: AvailabilityArgumentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``AvailabilityConditionSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAvailabilityConditionSyntax(_ node: AvailabilityConditionSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AvailabilityConditionSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAvailabilityConditionSyntax(_ node: AvailabilityConditionSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``AvailabilityLabeledArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAvailabilityLabeledArgumentSyntax(_ node: AvailabilityLabeledArgumentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AvailabilityLabeledArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAvailabilityLabeledArgumentSyntax(_ node: AvailabilityLabeledArgumentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``AwaitExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitAwaitExprSyntax(_ node: AwaitExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``AwaitExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostAwaitExprSyntax(_ node: AwaitExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``BackDeployedAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitBackDeployedAttributeArgumentsSyntax(_ node: BackDeployedAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``BackDeployedAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostBackDeployedAttributeArgumentsSyntax(_ node: BackDeployedAttributeArgumentsSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``BinaryOperatorExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitBinaryOperatorExprSyntax(_ node: BinaryOperatorExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``BinaryOperatorExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostBinaryOperatorExprSyntax(_ node: BinaryOperatorExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``BooleanLiteralExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitBooleanLiteralExprSyntax(_ node: BooleanLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``BooleanLiteralExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostBooleanLiteralExprSyntax(_ node: BooleanLiteralExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``BorrowExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitBorrowExprSyntax(_ node: BorrowExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``BorrowExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostBorrowExprSyntax(_ node: BorrowExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``BreakStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitBreakStmtSyntax(_ node: BreakStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``BreakStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostBreakStmtSyntax(_ node: BreakStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``CanImportExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitCanImportExprSyntax(_ node: CanImportExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``CanImportExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostCanImportExprSyntax(_ node: CanImportExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``CanImportVersionInfoSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitCanImportVersionInfoSyntax(_ node: CanImportVersionInfoSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``CanImportVersionInfoSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostCanImportVersionInfoSyntax(_ node: CanImportVersionInfoSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``CatchClauseListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitCatchClauseListSyntax(_ node: CatchClauseListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``CatchClauseListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostCatchClauseListSyntax(_ node: CatchClauseListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``CatchClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitCatchClauseSyntax(_ node: CatchClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``CatchClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostCatchClauseSyntax(_ node: CatchClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``CatchItemListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitCatchItemListSyntax(_ node: CatchItemListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``CatchItemListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostCatchItemListSyntax(_ node: CatchItemListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``CatchItemSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitCatchItemSyntax(_ node: CatchItemSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``CatchItemSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostCatchItemSyntax(_ node: CatchItemSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ClassDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitClassDeclSyntax(_ node: ClassDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ClassDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostClassDeclSyntax(_ node: ClassDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ClassRestrictionTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitClassRestrictionTypeSyntax(_ node: ClassRestrictionTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ClassRestrictionTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostClassRestrictionTypeSyntax(_ node: ClassRestrictionTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ClosureCaptureClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitClosureCaptureClauseSyntax(_ node: ClosureCaptureClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ClosureCaptureClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostClosureCaptureClauseSyntax(_ node: ClosureCaptureClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ClosureCaptureListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitClosureCaptureListSyntax(_ node: ClosureCaptureListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ClosureCaptureListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostClosureCaptureListSyntax(_ node: ClosureCaptureListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ClosureCaptureSpecifierSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitClosureCaptureSpecifierSyntax(_ node: ClosureCaptureSpecifierSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ClosureCaptureSpecifierSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostClosureCaptureSpecifierSyntax(_ node: ClosureCaptureSpecifierSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ClosureCaptureSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitClosureCaptureSyntax(_ node: ClosureCaptureSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ClosureCaptureSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostClosureCaptureSyntax(_ node: ClosureCaptureSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ClosureExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitClosureExprSyntax(_ node: ClosureExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ClosureExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostClosureExprSyntax(_ node: ClosureExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ClosureParameterClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitClosureParameterClauseSyntax(_ node: ClosureParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ClosureParameterClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostClosureParameterClauseSyntax(_ node: ClosureParameterClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ClosureParameterListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitClosureParameterListSyntax(_ node: ClosureParameterListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ClosureParameterListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostClosureParameterListSyntax(_ node: ClosureParameterListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ClosureParameterSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitClosureParameterSyntax(_ node: ClosureParameterSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ClosureParameterSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostClosureParameterSyntax(_ node: ClosureParameterSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ClosureShorthandParameterListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitClosureShorthandParameterListSyntax(_ node: ClosureShorthandParameterListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ClosureShorthandParameterListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostClosureShorthandParameterListSyntax(_ node: ClosureShorthandParameterListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ClosureShorthandParameterSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitClosureShorthandParameterSyntax(_ node: ClosureShorthandParameterSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ClosureShorthandParameterSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostClosureShorthandParameterSyntax(_ node: ClosureShorthandParameterSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ClosureSignatureSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitClosureSignatureSyntax(_ node: ClosureSignatureSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ClosureSignatureSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostClosureSignatureSyntax(_ node: ClosureSignatureSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``CodeBlockItemListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitCodeBlockItemListSyntax(_ node: CodeBlockItemListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``CodeBlockItemListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostCodeBlockItemListSyntax(_ node: CodeBlockItemListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``CodeBlockItemSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitCodeBlockItemSyntax(_ node: CodeBlockItemSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``CodeBlockItemSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostCodeBlockItemSyntax(_ node: CodeBlockItemSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``CodeBlockSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitCodeBlockSyntax(_ node: CodeBlockSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``CodeBlockSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostCodeBlockSyntax(_ node: CodeBlockSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``CompositionTypeElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitCompositionTypeElementListSyntax(_ node: CompositionTypeElementListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``CompositionTypeElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostCompositionTypeElementListSyntax(_ node: CompositionTypeElementListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``CompositionTypeElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitCompositionTypeElementSyntax(_ node: CompositionTypeElementSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``CompositionTypeElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostCompositionTypeElementSyntax(_ node: CompositionTypeElementSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``CompositionTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitCompositionTypeSyntax(_ node: CompositionTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``CompositionTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostCompositionTypeSyntax(_ node: CompositionTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ConditionElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitConditionElementListSyntax(_ node: ConditionElementListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ConditionElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostConditionElementListSyntax(_ node: ConditionElementListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ConditionElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitConditionElementSyntax(_ node: ConditionElementSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ConditionElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostConditionElementSyntax(_ node: ConditionElementSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ConformanceRequirementSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitConformanceRequirementSyntax(_ node: ConformanceRequirementSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ConformanceRequirementSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostConformanceRequirementSyntax(_ node: ConformanceRequirementSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ConsumeExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitConsumeExprSyntax(_ node: ConsumeExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ConsumeExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostConsumeExprSyntax(_ node: ConsumeExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ContinueStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitContinueStmtSyntax(_ node: ContinueStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ContinueStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostContinueStmtSyntax(_ node: ContinueStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ConventionAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitConventionAttributeArgumentsSyntax(_ node: ConventionAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ConventionAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostConventionAttributeArgumentsSyntax(_ node: ConventionAttributeArgumentsSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ConventionWitnessMethodAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitConventionWitnessMethodAttributeArgumentsSyntax(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ConventionWitnessMethodAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostConventionWitnessMethodAttributeArgumentsSyntax(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``CopyExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitCopyExprSyntax(_ node: CopyExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``CopyExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostCopyExprSyntax(_ node: CopyExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DeclModifierDetailSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDeclModifierDetailSyntax(_ node: DeclModifierDetailSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DeclModifierDetailSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDeclModifierDetailSyntax(_ node: DeclModifierDetailSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DeclModifierListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDeclModifierListSyntax(_ node: DeclModifierListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DeclModifierListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDeclModifierListSyntax(_ node: DeclModifierListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DeclModifierSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDeclModifierSyntax(_ node: DeclModifierSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DeclModifierSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDeclModifierSyntax(_ node: DeclModifierSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DeclNameArgumentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDeclNameArgumentListSyntax(_ node: DeclNameArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DeclNameArgumentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDeclNameArgumentListSyntax(_ node: DeclNameArgumentListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DeclNameArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDeclNameArgumentSyntax(_ node: DeclNameArgumentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DeclNameArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDeclNameArgumentSyntax(_ node: DeclNameArgumentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DeclNameArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDeclNameArgumentsSyntax(_ node: DeclNameArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DeclNameArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDeclNameArgumentsSyntax(_ node: DeclNameArgumentsSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DeclReferenceExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDeclReferenceExprSyntax(_ node: DeclReferenceExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DeclReferenceExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDeclReferenceExprSyntax(_ node: DeclReferenceExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DeferStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDeferStmtSyntax(_ node: DeferStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DeferStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDeferStmtSyntax(_ node: DeferStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DeinitializerDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDeinitializerDeclSyntax(_ node: DeinitializerDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DeinitializerDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDeinitializerDeclSyntax(_ node: DeinitializerDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DeinitializerEffectSpecifiersSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDeinitializerEffectSpecifiersSyntax(_ node: DeinitializerEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DeinitializerEffectSpecifiersSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDeinitializerEffectSpecifiersSyntax(_ node: DeinitializerEffectSpecifiersSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DerivativeAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDerivativeAttributeArgumentsSyntax(_ node: DerivativeAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DerivativeAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDerivativeAttributeArgumentsSyntax(_ node: DerivativeAttributeArgumentsSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DesignatedTypeListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDesignatedTypeListSyntax(_ node: DesignatedTypeListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DesignatedTypeListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDesignatedTypeListSyntax(_ node: DesignatedTypeListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DesignatedTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDesignatedTypeSyntax(_ node: DesignatedTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DesignatedTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDesignatedTypeSyntax(_ node: DesignatedTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DictionaryElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDictionaryElementListSyntax(_ node: DictionaryElementListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DictionaryElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDictionaryElementListSyntax(_ node: DictionaryElementListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DictionaryElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDictionaryElementSyntax(_ node: DictionaryElementSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DictionaryElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDictionaryElementSyntax(_ node: DictionaryElementSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DictionaryExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDictionaryExprSyntax(_ node: DictionaryExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DictionaryExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDictionaryExprSyntax(_ node: DictionaryExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DictionaryTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDictionaryTypeSyntax(_ node: DictionaryTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DictionaryTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDictionaryTypeSyntax(_ node: DictionaryTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DifferentiabilityArgumentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDifferentiabilityArgumentListSyntax(_ node: DifferentiabilityArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DifferentiabilityArgumentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDifferentiabilityArgumentListSyntax(_ node: DifferentiabilityArgumentListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DifferentiabilityArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDifferentiabilityArgumentSyntax(_ node: DifferentiabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DifferentiabilityArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDifferentiabilityArgumentSyntax(_ node: DifferentiabilityArgumentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DifferentiabilityArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDifferentiabilityArgumentsSyntax(_ node: DifferentiabilityArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DifferentiabilityArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDifferentiabilityArgumentsSyntax(_ node: DifferentiabilityArgumentsSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DifferentiabilityWithRespectToArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDifferentiabilityWithRespectToArgumentSyntax(_ node: DifferentiabilityWithRespectToArgumentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DifferentiabilityWithRespectToArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDifferentiabilityWithRespectToArgumentSyntax(_ node: DifferentiabilityWithRespectToArgumentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DifferentiableAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDifferentiableAttributeArgumentsSyntax(_ node: DifferentiableAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DifferentiableAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDifferentiableAttributeArgumentsSyntax(_ node: DifferentiableAttributeArgumentsSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DiscardAssignmentExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDiscardAssignmentExprSyntax(_ node: DiscardAssignmentExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DiscardAssignmentExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDiscardAssignmentExprSyntax(_ node: DiscardAssignmentExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DiscardStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDiscardStmtSyntax(_ node: DiscardStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DiscardStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDiscardStmtSyntax(_ node: DiscardStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DoExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDoExprSyntax(_ node: DoExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DoExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDoExprSyntax(_ node: DoExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DoStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDoStmtSyntax(_ node: DoStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DoStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDoStmtSyntax(_ node: DoStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DocumentationAttributeArgumentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDocumentationAttributeArgumentListSyntax(_ node: DocumentationAttributeArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DocumentationAttributeArgumentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDocumentationAttributeArgumentListSyntax(_ node: DocumentationAttributeArgumentListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DocumentationAttributeArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDocumentationAttributeArgumentSyntax(_ node: DocumentationAttributeArgumentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DocumentationAttributeArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDocumentationAttributeArgumentSyntax(_ node: DocumentationAttributeArgumentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``DynamicReplacementAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitDynamicReplacementAttributeArgumentsSyntax(_ node: DynamicReplacementAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``DynamicReplacementAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostDynamicReplacementAttributeArgumentsSyntax(_ node: DynamicReplacementAttributeArgumentsSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``EditorPlaceholderDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitEditorPlaceholderDeclSyntax(_ node: EditorPlaceholderDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``EditorPlaceholderDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostEditorPlaceholderDeclSyntax(_ node: EditorPlaceholderDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``EditorPlaceholderExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitEditorPlaceholderExprSyntax(_ node: EditorPlaceholderExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``EditorPlaceholderExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostEditorPlaceholderExprSyntax(_ node: EditorPlaceholderExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``EffectsAttributeArgumentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitEffectsAttributeArgumentListSyntax(_ node: EffectsAttributeArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``EffectsAttributeArgumentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostEffectsAttributeArgumentListSyntax(_ node: EffectsAttributeArgumentListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``EnumCaseDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitEnumCaseDeclSyntax(_ node: EnumCaseDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``EnumCaseDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostEnumCaseDeclSyntax(_ node: EnumCaseDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``EnumCaseElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitEnumCaseElementListSyntax(_ node: EnumCaseElementListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``EnumCaseElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostEnumCaseElementListSyntax(_ node: EnumCaseElementListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``EnumCaseElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitEnumCaseElementSyntax(_ node: EnumCaseElementSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``EnumCaseElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostEnumCaseElementSyntax(_ node: EnumCaseElementSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``EnumCaseParameterClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitEnumCaseParameterClauseSyntax(_ node: EnumCaseParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``EnumCaseParameterClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostEnumCaseParameterClauseSyntax(_ node: EnumCaseParameterClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``EnumCaseParameterListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitEnumCaseParameterListSyntax(_ node: EnumCaseParameterListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``EnumCaseParameterListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostEnumCaseParameterListSyntax(_ node: EnumCaseParameterListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``EnumCaseParameterSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitEnumCaseParameterSyntax(_ node: EnumCaseParameterSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``EnumCaseParameterSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostEnumCaseParameterSyntax(_ node: EnumCaseParameterSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``EnumDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitEnumDeclSyntax(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``EnumDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostEnumDeclSyntax(_ node: EnumDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ExposeAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitExposeAttributeArgumentsSyntax(_ node: ExposeAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ExposeAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostExposeAttributeArgumentsSyntax(_ node: ExposeAttributeArgumentsSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ExprListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitExprListSyntax(_ node: ExprListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ExprListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostExprListSyntax(_ node: ExprListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ExpressionPatternSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitExpressionPatternSyntax(_ node: ExpressionPatternSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ExpressionPatternSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostExpressionPatternSyntax(_ node: ExpressionPatternSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ExpressionSegmentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitExpressionSegmentSyntax(_ node: ExpressionSegmentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ExpressionSegmentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostExpressionSegmentSyntax(_ node: ExpressionSegmentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ExpressionStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitExpressionStmtSyntax(_ node: ExpressionStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ExpressionStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostExpressionStmtSyntax(_ node: ExpressionStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ExtensionDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitExtensionDeclSyntax(_ node: ExtensionDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ExtensionDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostExtensionDeclSyntax(_ node: ExtensionDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``FallThroughStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitFallThroughStmtSyntax(_ node: FallThroughStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``FallThroughStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostFallThroughStmtSyntax(_ node: FallThroughStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``FloatLiteralExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitFloatLiteralExprSyntax(_ node: FloatLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``FloatLiteralExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostFloatLiteralExprSyntax(_ node: FloatLiteralExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ForStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitForStmtSyntax(_ node: ForStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ForStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostForStmtSyntax(_ node: ForStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ForceUnwrapExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitForceUnwrapExprSyntax(_ node: ForceUnwrapExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ForceUnwrapExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostForceUnwrapExprSyntax(_ node: ForceUnwrapExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``FunctionCallExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitFunctionCallExprSyntax(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``FunctionCallExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostFunctionCallExprSyntax(_ node: FunctionCallExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``FunctionDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitFunctionDeclSyntax(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``FunctionDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostFunctionDeclSyntax(_ node: FunctionDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``FunctionEffectSpecifiersSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitFunctionEffectSpecifiersSyntax(_ node: FunctionEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``FunctionEffectSpecifiersSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostFunctionEffectSpecifiersSyntax(_ node: FunctionEffectSpecifiersSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``FunctionParameterClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitFunctionParameterClauseSyntax(_ node: FunctionParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``FunctionParameterClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostFunctionParameterClauseSyntax(_ node: FunctionParameterClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``FunctionParameterListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitFunctionParameterListSyntax(_ node: FunctionParameterListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``FunctionParameterListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostFunctionParameterListSyntax(_ node: FunctionParameterListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``FunctionParameterSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitFunctionParameterSyntax(_ node: FunctionParameterSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``FunctionParameterSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostFunctionParameterSyntax(_ node: FunctionParameterSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``FunctionSignatureSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitFunctionSignatureSyntax(_ node: FunctionSignatureSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``FunctionSignatureSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostFunctionSignatureSyntax(_ node: FunctionSignatureSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``FunctionTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitFunctionTypeSyntax(_ node: FunctionTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``FunctionTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostFunctionTypeSyntax(_ node: FunctionTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``GenericArgumentClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitGenericArgumentClauseSyntax(_ node: GenericArgumentClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``GenericArgumentClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostGenericArgumentClauseSyntax(_ node: GenericArgumentClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``GenericArgumentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitGenericArgumentListSyntax(_ node: GenericArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``GenericArgumentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostGenericArgumentListSyntax(_ node: GenericArgumentListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``GenericArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitGenericArgumentSyntax(_ node: GenericArgumentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``GenericArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostGenericArgumentSyntax(_ node: GenericArgumentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``GenericParameterClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitGenericParameterClauseSyntax(_ node: GenericParameterClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``GenericParameterClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostGenericParameterClauseSyntax(_ node: GenericParameterClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``GenericParameterListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitGenericParameterListSyntax(_ node: GenericParameterListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``GenericParameterListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostGenericParameterListSyntax(_ node: GenericParameterListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``GenericParameterSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitGenericParameterSyntax(_ node: GenericParameterSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``GenericParameterSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostGenericParameterSyntax(_ node: GenericParameterSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``GenericRequirementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitGenericRequirementListSyntax(_ node: GenericRequirementListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``GenericRequirementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostGenericRequirementListSyntax(_ node: GenericRequirementListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``GenericRequirementSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitGenericRequirementSyntax(_ node: GenericRequirementSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``GenericRequirementSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostGenericRequirementSyntax(_ node: GenericRequirementSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``GenericSpecializationExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitGenericSpecializationExprSyntax(_ node: GenericSpecializationExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``GenericSpecializationExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostGenericSpecializationExprSyntax(_ node: GenericSpecializationExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``GenericWhereClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitGenericWhereClauseSyntax(_ node: GenericWhereClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``GenericWhereClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostGenericWhereClauseSyntax(_ node: GenericWhereClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``GuardStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitGuardStmtSyntax(_ node: GuardStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``GuardStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostGuardStmtSyntax(_ node: GuardStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``IdentifierPatternSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitIdentifierPatternSyntax(_ node: IdentifierPatternSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``IdentifierPatternSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostIdentifierPatternSyntax(_ node: IdentifierPatternSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``IdentifierTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitIdentifierTypeSyntax(_ node: IdentifierTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``IdentifierTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostIdentifierTypeSyntax(_ node: IdentifierTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``IfConfigClauseListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitIfConfigClauseListSyntax(_ node: IfConfigClauseListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``IfConfigClauseListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostIfConfigClauseListSyntax(_ node: IfConfigClauseListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``IfConfigClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitIfConfigClauseSyntax(_ node: IfConfigClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``IfConfigClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostIfConfigClauseSyntax(_ node: IfConfigClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``IfConfigDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitIfConfigDeclSyntax(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``IfConfigDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostIfConfigDeclSyntax(_ node: IfConfigDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``IfExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitIfExprSyntax(_ node: IfExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``IfExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostIfExprSyntax(_ node: IfExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ImplementsAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitImplementsAttributeArgumentsSyntax(_ node: ImplementsAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ImplementsAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostImplementsAttributeArgumentsSyntax(_ node: ImplementsAttributeArgumentsSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ImplicitlyUnwrappedOptionalTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitImplicitlyUnwrappedOptionalTypeSyntax(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ImplicitlyUnwrappedOptionalTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostImplicitlyUnwrappedOptionalTypeSyntax(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ImportDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitImportDeclSyntax(_ node: ImportDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ImportDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostImportDeclSyntax(_ node: ImportDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ImportPathComponentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitImportPathComponentListSyntax(_ node: ImportPathComponentListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ImportPathComponentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostImportPathComponentListSyntax(_ node: ImportPathComponentListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ImportPathComponentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitImportPathComponentSyntax(_ node: ImportPathComponentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ImportPathComponentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostImportPathComponentSyntax(_ node: ImportPathComponentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``InOutExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitInOutExprSyntax(_ node: InOutExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``InOutExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostInOutExprSyntax(_ node: InOutExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``InfixOperatorExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitInfixOperatorExprSyntax(_ node: InfixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``InfixOperatorExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostInfixOperatorExprSyntax(_ node: InfixOperatorExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``InheritanceClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitInheritanceClauseSyntax(_ node: InheritanceClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``InheritanceClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostInheritanceClauseSyntax(_ node: InheritanceClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``InheritedTypeListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitInheritedTypeListSyntax(_ node: InheritedTypeListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``InheritedTypeListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostInheritedTypeListSyntax(_ node: InheritedTypeListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``InheritedTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitInheritedTypeSyntax(_ node: InheritedTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``InheritedTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostInheritedTypeSyntax(_ node: InheritedTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``InitializerClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitInitializerClauseSyntax(_ node: InitializerClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``InitializerClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostInitializerClauseSyntax(_ node: InitializerClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``InitializerDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitInitializerDeclSyntax(_ node: InitializerDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``InitializerDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostInitializerDeclSyntax(_ node: InitializerDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``IntegerLiteralExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitIntegerLiteralExprSyntax(_ node: IntegerLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``IntegerLiteralExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostIntegerLiteralExprSyntax(_ node: IntegerLiteralExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``IsExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitIsExprSyntax(_ node: IsExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``IsExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostIsExprSyntax(_ node: IsExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``IsTypePatternSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitIsTypePatternSyntax(_ node: IsTypePatternSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``IsTypePatternSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostIsTypePatternSyntax(_ node: IsTypePatternSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``KeyPathComponentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitKeyPathComponentListSyntax(_ node: KeyPathComponentListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``KeyPathComponentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostKeyPathComponentListSyntax(_ node: KeyPathComponentListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``KeyPathComponentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitKeyPathComponentSyntax(_ node: KeyPathComponentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``KeyPathComponentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostKeyPathComponentSyntax(_ node: KeyPathComponentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``KeyPathExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitKeyPathExprSyntax(_ node: KeyPathExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``KeyPathExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostKeyPathExprSyntax(_ node: KeyPathExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``KeyPathOptionalComponentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitKeyPathOptionalComponentSyntax(_ node: KeyPathOptionalComponentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``KeyPathOptionalComponentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostKeyPathOptionalComponentSyntax(_ node: KeyPathOptionalComponentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``KeyPathPropertyComponentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitKeyPathPropertyComponentSyntax(_ node: KeyPathPropertyComponentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``KeyPathPropertyComponentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostKeyPathPropertyComponentSyntax(_ node: KeyPathPropertyComponentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``KeyPathSubscriptComponentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitKeyPathSubscriptComponentSyntax(_ node: KeyPathSubscriptComponentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``KeyPathSubscriptComponentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostKeyPathSubscriptComponentSyntax(_ node: KeyPathSubscriptComponentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``LabeledExprListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitLabeledExprListSyntax(_ node: LabeledExprListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``LabeledExprListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostLabeledExprListSyntax(_ node: LabeledExprListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``LabeledExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitLabeledExprSyntax(_ node: LabeledExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``LabeledExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostLabeledExprSyntax(_ node: LabeledExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``LabeledSpecializeArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitLabeledSpecializeArgumentSyntax(_ node: LabeledSpecializeArgumentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``LabeledSpecializeArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostLabeledSpecializeArgumentSyntax(_ node: LabeledSpecializeArgumentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``LabeledStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitLabeledStmtSyntax(_ node: LabeledStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``LabeledStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostLabeledStmtSyntax(_ node: LabeledStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``LayoutRequirementSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitLayoutRequirementSyntax(_ node: LayoutRequirementSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``LayoutRequirementSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostLayoutRequirementSyntax(_ node: LayoutRequirementSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MacroDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMacroDeclSyntax(_ node: MacroDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MacroDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMacroDeclSyntax(_ node: MacroDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MacroExpansionDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMacroExpansionDeclSyntax(_ node: MacroExpansionDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MacroExpansionDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMacroExpansionDeclSyntax(_ node: MacroExpansionDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MacroExpansionExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMacroExpansionExprSyntax(_ node: MacroExpansionExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MacroExpansionExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMacroExpansionExprSyntax(_ node: MacroExpansionExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MatchingPatternConditionSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMatchingPatternConditionSyntax(_ node: MatchingPatternConditionSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MatchingPatternConditionSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMatchingPatternConditionSyntax(_ node: MatchingPatternConditionSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MemberAccessExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMemberAccessExprSyntax(_ node: MemberAccessExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MemberAccessExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMemberAccessExprSyntax(_ node: MemberAccessExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MemberBlockItemListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMemberBlockItemListSyntax(_ node: MemberBlockItemListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MemberBlockItemListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMemberBlockItemListSyntax(_ node: MemberBlockItemListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MemberBlockItemSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMemberBlockItemSyntax(_ node: MemberBlockItemSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MemberBlockItemSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMemberBlockItemSyntax(_ node: MemberBlockItemSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MemberBlockSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMemberBlockSyntax(_ node: MemberBlockSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MemberBlockSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMemberBlockSyntax(_ node: MemberBlockSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MemberTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMemberTypeSyntax(_ node: MemberTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MemberTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMemberTypeSyntax(_ node: MemberTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MetatypeTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMetatypeTypeSyntax(_ node: MetatypeTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MetatypeTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMetatypeTypeSyntax(_ node: MetatypeTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MissingDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMissingDeclSyntax(_ node: MissingDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MissingDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMissingDeclSyntax(_ node: MissingDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MissingExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMissingExprSyntax(_ node: MissingExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MissingExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMissingExprSyntax(_ node: MissingExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MissingPatternSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMissingPatternSyntax(_ node: MissingPatternSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MissingPatternSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMissingPatternSyntax(_ node: MissingPatternSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MissingStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMissingStmtSyntax(_ node: MissingStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MissingStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMissingStmtSyntax(_ node: MissingStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MissingSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMissingSyntax(_ node: MissingSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MissingSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMissingSyntax(_ node: MissingSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MissingTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMissingTypeSyntax(_ node: MissingTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MissingTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMissingTypeSyntax(_ node: MissingTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MultipleTrailingClosureElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMultipleTrailingClosureElementListSyntax(_ node: MultipleTrailingClosureElementListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MultipleTrailingClosureElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMultipleTrailingClosureElementListSyntax(_ node: MultipleTrailingClosureElementListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``MultipleTrailingClosureElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitMultipleTrailingClosureElementSyntax(_ node: MultipleTrailingClosureElementSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``MultipleTrailingClosureElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostMultipleTrailingClosureElementSyntax(_ node: MultipleTrailingClosureElementSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``NamedOpaqueReturnTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitNamedOpaqueReturnTypeSyntax(_ node: NamedOpaqueReturnTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``NamedOpaqueReturnTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostNamedOpaqueReturnTypeSyntax(_ node: NamedOpaqueReturnTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``NilLiteralExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitNilLiteralExprSyntax(_ node: NilLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``NilLiteralExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostNilLiteralExprSyntax(_ node: NilLiteralExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ObjCSelectorPieceListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitObjCSelectorPieceListSyntax(_ node: ObjCSelectorPieceListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ObjCSelectorPieceListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostObjCSelectorPieceListSyntax(_ node: ObjCSelectorPieceListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ObjCSelectorPieceSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitObjCSelectorPieceSyntax(_ node: ObjCSelectorPieceSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ObjCSelectorPieceSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostObjCSelectorPieceSyntax(_ node: ObjCSelectorPieceSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``OpaqueReturnTypeOfAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitOpaqueReturnTypeOfAttributeArgumentsSyntax(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``OpaqueReturnTypeOfAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostOpaqueReturnTypeOfAttributeArgumentsSyntax(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``OperatorDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitOperatorDeclSyntax(_ node: OperatorDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``OperatorDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostOperatorDeclSyntax(_ node: OperatorDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``OperatorPrecedenceAndTypesSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitOperatorPrecedenceAndTypesSyntax(_ node: OperatorPrecedenceAndTypesSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``OperatorPrecedenceAndTypesSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostOperatorPrecedenceAndTypesSyntax(_ node: OperatorPrecedenceAndTypesSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``OptionalBindingConditionSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitOptionalBindingConditionSyntax(_ node: OptionalBindingConditionSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``OptionalBindingConditionSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostOptionalBindingConditionSyntax(_ node: OptionalBindingConditionSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``OptionalChainingExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitOptionalChainingExprSyntax(_ node: OptionalChainingExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``OptionalChainingExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostOptionalChainingExprSyntax(_ node: OptionalChainingExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``OptionalTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitOptionalTypeSyntax(_ node: OptionalTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``OptionalTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostOptionalTypeSyntax(_ node: OptionalTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``OriginallyDefinedInAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitOriginallyDefinedInAttributeArgumentsSyntax(_ node: OriginallyDefinedInAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``OriginallyDefinedInAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostOriginallyDefinedInAttributeArgumentsSyntax(_ node: OriginallyDefinedInAttributeArgumentsSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PackElementExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPackElementExprSyntax(_ node: PackElementExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PackElementExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPackElementExprSyntax(_ node: PackElementExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PackElementTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPackElementTypeSyntax(_ node: PackElementTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PackElementTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPackElementTypeSyntax(_ node: PackElementTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PackExpansionExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPackExpansionExprSyntax(_ node: PackExpansionExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PackExpansionExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPackExpansionExprSyntax(_ node: PackExpansionExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PackExpansionTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPackExpansionTypeSyntax(_ node: PackExpansionTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PackExpansionTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPackExpansionTypeSyntax(_ node: PackExpansionTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PatternBindingListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPatternBindingListSyntax(_ node: PatternBindingListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PatternBindingListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPatternBindingListSyntax(_ node: PatternBindingListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PatternBindingSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPatternBindingSyntax(_ node: PatternBindingSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PatternBindingSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPatternBindingSyntax(_ node: PatternBindingSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PatternExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPatternExprSyntax(_ node: PatternExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PatternExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPatternExprSyntax(_ node: PatternExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PlatformVersionItemListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPlatformVersionItemListSyntax(_ node: PlatformVersionItemListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PlatformVersionItemListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPlatformVersionItemListSyntax(_ node: PlatformVersionItemListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PlatformVersionItemSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPlatformVersionItemSyntax(_ node: PlatformVersionItemSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PlatformVersionItemSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPlatformVersionItemSyntax(_ node: PlatformVersionItemSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PlatformVersionSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPlatformVersionSyntax(_ node: PlatformVersionSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PlatformVersionSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPlatformVersionSyntax(_ node: PlatformVersionSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PostfixIfConfigExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPostfixIfConfigExprSyntax(_ node: PostfixIfConfigExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PostfixIfConfigExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPostfixIfConfigExprSyntax(_ node: PostfixIfConfigExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PostfixOperatorExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPostfixOperatorExprSyntax(_ node: PostfixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PostfixOperatorExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPostfixOperatorExprSyntax(_ node: PostfixOperatorExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PoundSourceLocationArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPoundSourceLocationArgumentsSyntax(_ node: PoundSourceLocationArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PoundSourceLocationArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPoundSourceLocationArgumentsSyntax(_ node: PoundSourceLocationArgumentsSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PoundSourceLocationSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPoundSourceLocationSyntax(_ node: PoundSourceLocationSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PoundSourceLocationSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPoundSourceLocationSyntax(_ node: PoundSourceLocationSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PrecedenceGroupAssignmentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPrecedenceGroupAssignmentSyntax(_ node: PrecedenceGroupAssignmentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PrecedenceGroupAssignmentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPrecedenceGroupAssignmentSyntax(_ node: PrecedenceGroupAssignmentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PrecedenceGroupAssociativitySyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPrecedenceGroupAssociativitySyntax(_ node: PrecedenceGroupAssociativitySyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PrecedenceGroupAssociativitySyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPrecedenceGroupAssociativitySyntax(_ node: PrecedenceGroupAssociativitySyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PrecedenceGroupAttributeListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPrecedenceGroupAttributeListSyntax(_ node: PrecedenceGroupAttributeListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PrecedenceGroupAttributeListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPrecedenceGroupAttributeListSyntax(_ node: PrecedenceGroupAttributeListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PrecedenceGroupDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPrecedenceGroupDeclSyntax(_ node: PrecedenceGroupDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PrecedenceGroupDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPrecedenceGroupDeclSyntax(_ node: PrecedenceGroupDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PrecedenceGroupNameListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPrecedenceGroupNameListSyntax(_ node: PrecedenceGroupNameListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PrecedenceGroupNameListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPrecedenceGroupNameListSyntax(_ node: PrecedenceGroupNameListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PrecedenceGroupNameSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPrecedenceGroupNameSyntax(_ node: PrecedenceGroupNameSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PrecedenceGroupNameSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPrecedenceGroupNameSyntax(_ node: PrecedenceGroupNameSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PrecedenceGroupRelationSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPrecedenceGroupRelationSyntax(_ node: PrecedenceGroupRelationSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PrecedenceGroupRelationSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPrecedenceGroupRelationSyntax(_ node: PrecedenceGroupRelationSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PrefixOperatorExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPrefixOperatorExprSyntax(_ node: PrefixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PrefixOperatorExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPrefixOperatorExprSyntax(_ node: PrefixOperatorExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PrimaryAssociatedTypeClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPrimaryAssociatedTypeClauseSyntax(_ node: PrimaryAssociatedTypeClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PrimaryAssociatedTypeClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPrimaryAssociatedTypeClauseSyntax(_ node: PrimaryAssociatedTypeClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PrimaryAssociatedTypeListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPrimaryAssociatedTypeListSyntax(_ node: PrimaryAssociatedTypeListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PrimaryAssociatedTypeListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPrimaryAssociatedTypeListSyntax(_ node: PrimaryAssociatedTypeListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``PrimaryAssociatedTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitPrimaryAssociatedTypeSyntax(_ node: PrimaryAssociatedTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``PrimaryAssociatedTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostPrimaryAssociatedTypeSyntax(_ node: PrimaryAssociatedTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ProtocolDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitProtocolDeclSyntax(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ProtocolDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostProtocolDeclSyntax(_ node: ProtocolDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``RegexLiteralExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitRegexLiteralExprSyntax(_ node: RegexLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``RegexLiteralExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostRegexLiteralExprSyntax(_ node: RegexLiteralExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``RepeatStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitRepeatStmtSyntax(_ node: RepeatStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``RepeatStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostRepeatStmtSyntax(_ node: RepeatStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ReturnClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitReturnClauseSyntax(_ node: ReturnClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ReturnClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostReturnClauseSyntax(_ node: ReturnClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ReturnStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitReturnStmtSyntax(_ node: ReturnStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ReturnStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostReturnStmtSyntax(_ node: ReturnStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SameTypeRequirementSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSameTypeRequirementSyntax(_ node: SameTypeRequirementSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SameTypeRequirementSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSameTypeRequirementSyntax(_ node: SameTypeRequirementSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SequenceExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSequenceExprSyntax(_ node: SequenceExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SequenceExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSequenceExprSyntax(_ node: SequenceExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SimpleStringLiteralExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSimpleStringLiteralExprSyntax(_ node: SimpleStringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SimpleStringLiteralExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSimpleStringLiteralExprSyntax(_ node: SimpleStringLiteralExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SimpleStringLiteralSegmentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSimpleStringLiteralSegmentListSyntax(_ node: SimpleStringLiteralSegmentListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SimpleStringLiteralSegmentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSimpleStringLiteralSegmentListSyntax(_ node: SimpleStringLiteralSegmentListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SomeOrAnyTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSomeOrAnyTypeSyntax(_ node: SomeOrAnyTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SomeOrAnyTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSomeOrAnyTypeSyntax(_ node: SomeOrAnyTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SourceFileSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSourceFileSyntax(_ node: SourceFileSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SourceFileSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSourceFileSyntax(_ node: SourceFileSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SpecializeAttributeArgumentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSpecializeAttributeArgumentListSyntax(_ node: SpecializeAttributeArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SpecializeAttributeArgumentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSpecializeAttributeArgumentListSyntax(_ node: SpecializeAttributeArgumentListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SpecializeAvailabilityArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSpecializeAvailabilityArgumentSyntax(_ node: SpecializeAvailabilityArgumentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SpecializeAvailabilityArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSpecializeAvailabilityArgumentSyntax(_ node: SpecializeAvailabilityArgumentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SpecializeTargetFunctionArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSpecializeTargetFunctionArgumentSyntax(_ node: SpecializeTargetFunctionArgumentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SpecializeTargetFunctionArgumentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSpecializeTargetFunctionArgumentSyntax(_ node: SpecializeTargetFunctionArgumentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``StringLiteralExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitStringLiteralExprSyntax(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``StringLiteralExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostStringLiteralExprSyntax(_ node: StringLiteralExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``StringLiteralSegmentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitStringLiteralSegmentListSyntax(_ node: StringLiteralSegmentListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``StringLiteralSegmentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostStringLiteralSegmentListSyntax(_ node: StringLiteralSegmentListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``StringSegmentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitStringSegmentSyntax(_ node: StringSegmentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``StringSegmentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostStringSegmentSyntax(_ node: StringSegmentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``StructDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitStructDeclSyntax(_ node: StructDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``StructDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostStructDeclSyntax(_ node: StructDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SubscriptCallExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSubscriptCallExprSyntax(_ node: SubscriptCallExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SubscriptCallExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSubscriptCallExprSyntax(_ node: SubscriptCallExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SubscriptDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSubscriptDeclSyntax(_ node: SubscriptDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SubscriptDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSubscriptDeclSyntax(_ node: SubscriptDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SuperExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSuperExprSyntax(_ node: SuperExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SuperExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSuperExprSyntax(_ node: SuperExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SuppressedTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSuppressedTypeSyntax(_ node: SuppressedTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SuppressedTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSuppressedTypeSyntax(_ node: SuppressedTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SwitchCaseItemListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSwitchCaseItemListSyntax(_ node: SwitchCaseItemListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SwitchCaseItemListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSwitchCaseItemListSyntax(_ node: SwitchCaseItemListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SwitchCaseItemSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSwitchCaseItemSyntax(_ node: SwitchCaseItemSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SwitchCaseItemSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSwitchCaseItemSyntax(_ node: SwitchCaseItemSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SwitchCaseLabelSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSwitchCaseLabelSyntax(_ node: SwitchCaseLabelSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SwitchCaseLabelSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSwitchCaseLabelSyntax(_ node: SwitchCaseLabelSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SwitchCaseListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSwitchCaseListSyntax(_ node: SwitchCaseListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SwitchCaseListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSwitchCaseListSyntax(_ node: SwitchCaseListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SwitchCaseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSwitchCaseSyntax(_ node: SwitchCaseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SwitchCaseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSwitchCaseSyntax(_ node: SwitchCaseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SwitchDefaultLabelSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSwitchDefaultLabelSyntax(_ node: SwitchDefaultLabelSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SwitchDefaultLabelSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSwitchDefaultLabelSyntax(_ node: SwitchDefaultLabelSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``SwitchExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitSwitchExprSyntax(_ node: SwitchExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``SwitchExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostSwitchExprSyntax(_ node: SwitchExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``TernaryExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitTernaryExprSyntax(_ node: TernaryExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``TernaryExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostTernaryExprSyntax(_ node: TernaryExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ThenStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitThenStmtSyntax(_ node: ThenStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ThenStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostThenStmtSyntax(_ node: ThenStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ThrowStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitThrowStmtSyntax(_ node: ThrowStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ThrowStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostThrowStmtSyntax(_ node: ThrowStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ThrowsClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitThrowsClauseSyntax(_ node: ThrowsClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ThrowsClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostThrowsClauseSyntax(_ node: ThrowsClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``TryExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitTryExprSyntax(_ node: TryExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``TryExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostTryExprSyntax(_ node: TryExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``TupleExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitTupleExprSyntax(_ node: TupleExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``TupleExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostTupleExprSyntax(_ node: TupleExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``TuplePatternElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitTuplePatternElementListSyntax(_ node: TuplePatternElementListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``TuplePatternElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostTuplePatternElementListSyntax(_ node: TuplePatternElementListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``TuplePatternElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitTuplePatternElementSyntax(_ node: TuplePatternElementSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``TuplePatternElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostTuplePatternElementSyntax(_ node: TuplePatternElementSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``TuplePatternSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitTuplePatternSyntax(_ node: TuplePatternSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``TuplePatternSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostTuplePatternSyntax(_ node: TuplePatternSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``TupleTypeElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitTupleTypeElementListSyntax(_ node: TupleTypeElementListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``TupleTypeElementListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostTupleTypeElementListSyntax(_ node: TupleTypeElementListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``TupleTypeElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitTupleTypeElementSyntax(_ node: TupleTypeElementSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``TupleTypeElementSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostTupleTypeElementSyntax(_ node: TupleTypeElementSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``TupleTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitTupleTypeSyntax(_ node: TupleTypeSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``TupleTypeSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostTupleTypeSyntax(_ node: TupleTypeSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``TypeAliasDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitTypeAliasDeclSyntax(_ node: TypeAliasDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``TypeAliasDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostTypeAliasDeclSyntax(_ node: TypeAliasDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``TypeAnnotationSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitTypeAnnotationSyntax(_ node: TypeAnnotationSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``TypeAnnotationSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostTypeAnnotationSyntax(_ node: TypeAnnotationSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``TypeEffectSpecifiersSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitTypeEffectSpecifiersSyntax(_ node: TypeEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``TypeEffectSpecifiersSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostTypeEffectSpecifiersSyntax(_ node: TypeEffectSpecifiersSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``TypeExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitTypeExprSyntax(_ node: TypeExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``TypeExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostTypeExprSyntax(_ node: TypeExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``TypeInitializerClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitTypeInitializerClauseSyntax(_ node: TypeInitializerClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``TypeInitializerClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostTypeInitializerClauseSyntax(_ node: TypeInitializerClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``UnavailableFromAsyncAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitUnavailableFromAsyncAttributeArgumentsSyntax(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``UnavailableFromAsyncAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostUnavailableFromAsyncAttributeArgumentsSyntax(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``UnderscorePrivateAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitUnderscorePrivateAttributeArgumentsSyntax(_ node: UnderscorePrivateAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``UnderscorePrivateAttributeArgumentsSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostUnderscorePrivateAttributeArgumentsSyntax(_ node: UnderscorePrivateAttributeArgumentsSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``UnexpectedNodesSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitUnexpectedNodesSyntax(_ node: UnexpectedNodesSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``UnexpectedNodesSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostUnexpectedNodesSyntax(_ node: UnexpectedNodesSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``UnresolvedAsExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitUnresolvedAsExprSyntax(_ node: UnresolvedAsExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``UnresolvedAsExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostUnresolvedAsExprSyntax(_ node: UnresolvedAsExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``UnresolvedIsExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitUnresolvedIsExprSyntax(_ node: UnresolvedIsExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``UnresolvedIsExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostUnresolvedIsExprSyntax(_ node: UnresolvedIsExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``UnresolvedTernaryExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitUnresolvedTernaryExprSyntax(_ node: UnresolvedTernaryExprSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``UnresolvedTernaryExprSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostUnresolvedTernaryExprSyntax(_ node: UnresolvedTernaryExprSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``ValueBindingPatternSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitValueBindingPatternSyntax(_ node: ValueBindingPatternSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``ValueBindingPatternSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostValueBindingPatternSyntax(_ node: ValueBindingPatternSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``VariableDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitVariableDeclSyntax(_ node: VariableDeclSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``VariableDeclSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostVariableDeclSyntax(_ node: VariableDeclSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``VersionComponentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitVersionComponentListSyntax(_ node: VersionComponentListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``VersionComponentListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostVersionComponentListSyntax(_ node: VersionComponentListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``VersionComponentSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitVersionComponentSyntax(_ node: VersionComponentSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``VersionComponentSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostVersionComponentSyntax(_ node: VersionComponentSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``VersionTupleSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitVersionTupleSyntax(_ node: VersionTupleSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``VersionTupleSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostVersionTupleSyntax(_ node: VersionTupleSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``WhereClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitWhereClauseSyntax(_ node: WhereClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``WhereClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostWhereClauseSyntax(_ node: WhereClauseSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``WhileStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitWhileStmtSyntax(_ node: WhileStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``WhileStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostWhileStmtSyntax(_ node: WhileStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``WildcardPatternSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitWildcardPatternSyntax(_ node: WildcardPatternSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``WildcardPatternSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostWildcardPatternSyntax(_ node: WildcardPatternSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``YieldStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitYieldStmtSyntax(_ node: YieldStmtSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``YieldStmtSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostYieldStmtSyntax(_ node: YieldStmtSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``YieldedExpressionListSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitYieldedExpressionListSyntax(_ node: YieldedExpressionListSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``YieldedExpressionListSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostYieldedExpressionListSyntax(_ node: YieldedExpressionListSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``YieldedExpressionSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitYieldedExpressionSyntax(_ node: YieldedExpressionSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``YieldedExpressionSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostYieldedExpressionSyntax(_ node: YieldedExpressionSyntax) {
+    visitPost(node)
+  }
+  
+  /// The function forwards call to self.visit(_ node: ``YieldedExpressionsClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  ///   - Returns: how should we continue visiting.
+  private func visitYieldedExpressionsClauseSyntax(_ node: YieldedExpressionsClauseSyntax) -> SyntaxVisitorContinueKind {
+    visit(node)
+  }
+  
+  /// The function forwards call to self.visitPost(_ node: ``YieldedExpressionsClauseSyntax``).
+  ///   - node: the node we just finished visiting.
+  private func visitPostYieldedExpressionsClauseSyntax(_ node: YieldedExpressionsClauseSyntax) {
+    visitPost(node)
+  }
+  
   /// Visiting ``TokenSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3446,1115 +7060,1115 @@ open class SyntaxVisitor {
       }
     case .accessorBlock:
       return {
-        self.visitImpl($0, AccessorBlockSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AccessorBlockSyntax.self, self.visitAccessorBlockSyntax, self.visitPostAccessorBlockSyntax)
       }
     case .accessorDeclList:
       return {
-        self.visitImpl($0, AccessorDeclListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AccessorDeclListSyntax.self, self.visitAccessorDeclListSyntax, self.visitPostAccessorDeclListSyntax)
       }
     case .accessorDecl:
       return {
-        self.visitImpl($0, AccessorDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AccessorDeclSyntax.self, self.visitAccessorDeclSyntax, self.visitPostAccessorDeclSyntax)
       }
     case .accessorEffectSpecifiers:
       return {
-        self.visitImpl($0, AccessorEffectSpecifiersSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AccessorEffectSpecifiersSyntax.self, self.visitAccessorEffectSpecifiersSyntax, self.visitPostAccessorEffectSpecifiersSyntax)
       }
     case .accessorParameters:
       return {
-        self.visitImpl($0, AccessorParametersSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AccessorParametersSyntax.self, self.visitAccessorParametersSyntax, self.visitPostAccessorParametersSyntax)
       }
     case .actorDecl:
       return {
-        self.visitImpl($0, ActorDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ActorDeclSyntax.self, self.visitActorDeclSyntax, self.visitPostActorDeclSyntax)
       }
     case .arrayElementList:
       return {
-        self.visitImpl($0, ArrayElementListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ArrayElementListSyntax.self, self.visitArrayElementListSyntax, self.visitPostArrayElementListSyntax)
       }
     case .arrayElement:
       return {
-        self.visitImpl($0, ArrayElementSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ArrayElementSyntax.self, self.visitArrayElementSyntax, self.visitPostArrayElementSyntax)
       }
     case .arrayExpr:
       return {
-        self.visitImpl($0, ArrayExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ArrayExprSyntax.self, self.visitArrayExprSyntax, self.visitPostArrayExprSyntax)
       }
     case .arrayType:
       return {
-        self.visitImpl($0, ArrayTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ArrayTypeSyntax.self, self.visitArrayTypeSyntax, self.visitPostArrayTypeSyntax)
       }
     case .arrowExpr:
       return {
-        self.visitImpl($0, ArrowExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ArrowExprSyntax.self, self.visitArrowExprSyntax, self.visitPostArrowExprSyntax)
       }
     case .asExpr:
       return {
-        self.visitImpl($0, AsExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AsExprSyntax.self, self.visitAsExprSyntax, self.visitPostAsExprSyntax)
       }
     case .assignmentExpr:
       return {
-        self.visitImpl($0, AssignmentExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AssignmentExprSyntax.self, self.visitAssignmentExprSyntax, self.visitPostAssignmentExprSyntax)
       }
     case .associatedTypeDecl:
       return {
-        self.visitImpl($0, AssociatedTypeDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AssociatedTypeDeclSyntax.self, self.visitAssociatedTypeDeclSyntax, self.visitPostAssociatedTypeDeclSyntax)
       }
     case .attributeList:
       return {
-        self.visitImpl($0, AttributeListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AttributeListSyntax.self, self.visitAttributeListSyntax, self.visitPostAttributeListSyntax)
       }
     case .attribute:
       return {
-        self.visitImpl($0, AttributeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AttributeSyntax.self, self.visitAttributeSyntax, self.visitPostAttributeSyntax)
       }
     case .attributedType:
       return {
-        self.visitImpl($0, AttributedTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AttributedTypeSyntax.self, self.visitAttributedTypeSyntax, self.visitPostAttributedTypeSyntax)
       }
     case .availabilityArgumentList:
       return {
-        self.visitImpl($0, AvailabilityArgumentListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AvailabilityArgumentListSyntax.self, self.visitAvailabilityArgumentListSyntax, self.visitPostAvailabilityArgumentListSyntax)
       }
     case .availabilityArgument:
       return {
-        self.visitImpl($0, AvailabilityArgumentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AvailabilityArgumentSyntax.self, self.visitAvailabilityArgumentSyntax, self.visitPostAvailabilityArgumentSyntax)
       }
     case .availabilityCondition:
       return {
-        self.visitImpl($0, AvailabilityConditionSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AvailabilityConditionSyntax.self, self.visitAvailabilityConditionSyntax, self.visitPostAvailabilityConditionSyntax)
       }
     case .availabilityLabeledArgument:
       return {
-        self.visitImpl($0, AvailabilityLabeledArgumentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AvailabilityLabeledArgumentSyntax.self, self.visitAvailabilityLabeledArgumentSyntax, self.visitPostAvailabilityLabeledArgumentSyntax)
       }
     case .awaitExpr:
       return {
-        self.visitImpl($0, AwaitExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, AwaitExprSyntax.self, self.visitAwaitExprSyntax, self.visitPostAwaitExprSyntax)
       }
     case .backDeployedAttributeArguments:
       return {
-        self.visitImpl($0, BackDeployedAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, BackDeployedAttributeArgumentsSyntax.self, self.visitBackDeployedAttributeArgumentsSyntax, self.visitPostBackDeployedAttributeArgumentsSyntax)
       }
     case .binaryOperatorExpr:
       return {
-        self.visitImpl($0, BinaryOperatorExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, BinaryOperatorExprSyntax.self, self.visitBinaryOperatorExprSyntax, self.visitPostBinaryOperatorExprSyntax)
       }
     case .booleanLiteralExpr:
       return {
-        self.visitImpl($0, BooleanLiteralExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, BooleanLiteralExprSyntax.self, self.visitBooleanLiteralExprSyntax, self.visitPostBooleanLiteralExprSyntax)
       }
     case .borrowExpr:
       return {
-        self.visitImpl($0, BorrowExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, BorrowExprSyntax.self, self.visitBorrowExprSyntax, self.visitPostBorrowExprSyntax)
       }
     case .breakStmt:
       return {
-        self.visitImpl($0, BreakStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, BreakStmtSyntax.self, self.visitBreakStmtSyntax, self.visitPostBreakStmtSyntax)
       }
     case .canImportExpr:
       return {
-        self.visitImpl($0, CanImportExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, CanImportExprSyntax.self, self.visitCanImportExprSyntax, self.visitPostCanImportExprSyntax)
       }
     case .canImportVersionInfo:
       return {
-        self.visitImpl($0, CanImportVersionInfoSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, CanImportVersionInfoSyntax.self, self.visitCanImportVersionInfoSyntax, self.visitPostCanImportVersionInfoSyntax)
       }
     case .catchClauseList:
       return {
-        self.visitImpl($0, CatchClauseListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, CatchClauseListSyntax.self, self.visitCatchClauseListSyntax, self.visitPostCatchClauseListSyntax)
       }
     case .catchClause:
       return {
-        self.visitImpl($0, CatchClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, CatchClauseSyntax.self, self.visitCatchClauseSyntax, self.visitPostCatchClauseSyntax)
       }
     case .catchItemList:
       return {
-        self.visitImpl($0, CatchItemListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, CatchItemListSyntax.self, self.visitCatchItemListSyntax, self.visitPostCatchItemListSyntax)
       }
     case .catchItem:
       return {
-        self.visitImpl($0, CatchItemSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, CatchItemSyntax.self, self.visitCatchItemSyntax, self.visitPostCatchItemSyntax)
       }
     case .classDecl:
       return {
-        self.visitImpl($0, ClassDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ClassDeclSyntax.self, self.visitClassDeclSyntax, self.visitPostClassDeclSyntax)
       }
     case .classRestrictionType:
       return {
-        self.visitImpl($0, ClassRestrictionTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ClassRestrictionTypeSyntax.self, self.visitClassRestrictionTypeSyntax, self.visitPostClassRestrictionTypeSyntax)
       }
     case .closureCaptureClause:
       return {
-        self.visitImpl($0, ClosureCaptureClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ClosureCaptureClauseSyntax.self, self.visitClosureCaptureClauseSyntax, self.visitPostClosureCaptureClauseSyntax)
       }
     case .closureCaptureList:
       return {
-        self.visitImpl($0, ClosureCaptureListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ClosureCaptureListSyntax.self, self.visitClosureCaptureListSyntax, self.visitPostClosureCaptureListSyntax)
       }
     case .closureCaptureSpecifier:
       return {
-        self.visitImpl($0, ClosureCaptureSpecifierSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ClosureCaptureSpecifierSyntax.self, self.visitClosureCaptureSpecifierSyntax, self.visitPostClosureCaptureSpecifierSyntax)
       }
     case .closureCapture:
       return {
-        self.visitImpl($0, ClosureCaptureSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ClosureCaptureSyntax.self, self.visitClosureCaptureSyntax, self.visitPostClosureCaptureSyntax)
       }
     case .closureExpr:
       return {
-        self.visitImpl($0, ClosureExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ClosureExprSyntax.self, self.visitClosureExprSyntax, self.visitPostClosureExprSyntax)
       }
     case .closureParameterClause:
       return {
-        self.visitImpl($0, ClosureParameterClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ClosureParameterClauseSyntax.self, self.visitClosureParameterClauseSyntax, self.visitPostClosureParameterClauseSyntax)
       }
     case .closureParameterList:
       return {
-        self.visitImpl($0, ClosureParameterListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ClosureParameterListSyntax.self, self.visitClosureParameterListSyntax, self.visitPostClosureParameterListSyntax)
       }
     case .closureParameter:
       return {
-        self.visitImpl($0, ClosureParameterSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ClosureParameterSyntax.self, self.visitClosureParameterSyntax, self.visitPostClosureParameterSyntax)
       }
     case .closureShorthandParameterList:
       return {
-        self.visitImpl($0, ClosureShorthandParameterListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ClosureShorthandParameterListSyntax.self, self.visitClosureShorthandParameterListSyntax, self.visitPostClosureShorthandParameterListSyntax)
       }
     case .closureShorthandParameter:
       return {
-        self.visitImpl($0, ClosureShorthandParameterSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ClosureShorthandParameterSyntax.self, self.visitClosureShorthandParameterSyntax, self.visitPostClosureShorthandParameterSyntax)
       }
     case .closureSignature:
       return {
-        self.visitImpl($0, ClosureSignatureSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ClosureSignatureSyntax.self, self.visitClosureSignatureSyntax, self.visitPostClosureSignatureSyntax)
       }
     case .codeBlockItemList:
       return {
-        self.visitImpl($0, CodeBlockItemListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, CodeBlockItemListSyntax.self, self.visitCodeBlockItemListSyntax, self.visitPostCodeBlockItemListSyntax)
       }
     case .codeBlockItem:
       return {
-        self.visitImpl($0, CodeBlockItemSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, CodeBlockItemSyntax.self, self.visitCodeBlockItemSyntax, self.visitPostCodeBlockItemSyntax)
       }
     case .codeBlock:
       return {
-        self.visitImpl($0, CodeBlockSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, CodeBlockSyntax.self, self.visitCodeBlockSyntax, self.visitPostCodeBlockSyntax)
       }
     case .compositionTypeElementList:
       return {
-        self.visitImpl($0, CompositionTypeElementListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, CompositionTypeElementListSyntax.self, self.visitCompositionTypeElementListSyntax, self.visitPostCompositionTypeElementListSyntax)
       }
     case .compositionTypeElement:
       return {
-        self.visitImpl($0, CompositionTypeElementSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, CompositionTypeElementSyntax.self, self.visitCompositionTypeElementSyntax, self.visitPostCompositionTypeElementSyntax)
       }
     case .compositionType:
       return {
-        self.visitImpl($0, CompositionTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, CompositionTypeSyntax.self, self.visitCompositionTypeSyntax, self.visitPostCompositionTypeSyntax)
       }
     case .conditionElementList:
       return {
-        self.visitImpl($0, ConditionElementListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ConditionElementListSyntax.self, self.visitConditionElementListSyntax, self.visitPostConditionElementListSyntax)
       }
     case .conditionElement:
       return {
-        self.visitImpl($0, ConditionElementSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ConditionElementSyntax.self, self.visitConditionElementSyntax, self.visitPostConditionElementSyntax)
       }
     case .conformanceRequirement:
       return {
-        self.visitImpl($0, ConformanceRequirementSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ConformanceRequirementSyntax.self, self.visitConformanceRequirementSyntax, self.visitPostConformanceRequirementSyntax)
       }
     case .consumeExpr:
       return {
-        self.visitImpl($0, ConsumeExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ConsumeExprSyntax.self, self.visitConsumeExprSyntax, self.visitPostConsumeExprSyntax)
       }
     case .continueStmt:
       return {
-        self.visitImpl($0, ContinueStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ContinueStmtSyntax.self, self.visitContinueStmtSyntax, self.visitPostContinueStmtSyntax)
       }
     case .conventionAttributeArguments:
       return {
-        self.visitImpl($0, ConventionAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ConventionAttributeArgumentsSyntax.self, self.visitConventionAttributeArgumentsSyntax, self.visitPostConventionAttributeArgumentsSyntax)
       }
     case .conventionWitnessMethodAttributeArguments:
       return {
-        self.visitImpl($0, ConventionWitnessMethodAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ConventionWitnessMethodAttributeArgumentsSyntax.self, self.visitConventionWitnessMethodAttributeArgumentsSyntax, self.visitPostConventionWitnessMethodAttributeArgumentsSyntax)
       }
     case .copyExpr:
       return {
-        self.visitImpl($0, CopyExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, CopyExprSyntax.self, self.visitCopyExprSyntax, self.visitPostCopyExprSyntax)
       }
     case .declModifierDetail:
       return {
-        self.visitImpl($0, DeclModifierDetailSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DeclModifierDetailSyntax.self, self.visitDeclModifierDetailSyntax, self.visitPostDeclModifierDetailSyntax)
       }
     case .declModifierList:
       return {
-        self.visitImpl($0, DeclModifierListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DeclModifierListSyntax.self, self.visitDeclModifierListSyntax, self.visitPostDeclModifierListSyntax)
       }
     case .declModifier:
       return {
-        self.visitImpl($0, DeclModifierSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DeclModifierSyntax.self, self.visitDeclModifierSyntax, self.visitPostDeclModifierSyntax)
       }
     case .declNameArgumentList:
       return {
-        self.visitImpl($0, DeclNameArgumentListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DeclNameArgumentListSyntax.self, self.visitDeclNameArgumentListSyntax, self.visitPostDeclNameArgumentListSyntax)
       }
     case .declNameArgument:
       return {
-        self.visitImpl($0, DeclNameArgumentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DeclNameArgumentSyntax.self, self.visitDeclNameArgumentSyntax, self.visitPostDeclNameArgumentSyntax)
       }
     case .declNameArguments:
       return {
-        self.visitImpl($0, DeclNameArgumentsSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DeclNameArgumentsSyntax.self, self.visitDeclNameArgumentsSyntax, self.visitPostDeclNameArgumentsSyntax)
       }
     case .declReferenceExpr:
       return {
-        self.visitImpl($0, DeclReferenceExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DeclReferenceExprSyntax.self, self.visitDeclReferenceExprSyntax, self.visitPostDeclReferenceExprSyntax)
       }
     case .deferStmt:
       return {
-        self.visitImpl($0, DeferStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DeferStmtSyntax.self, self.visitDeferStmtSyntax, self.visitPostDeferStmtSyntax)
       }
     case .deinitializerDecl:
       return {
-        self.visitImpl($0, DeinitializerDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DeinitializerDeclSyntax.self, self.visitDeinitializerDeclSyntax, self.visitPostDeinitializerDeclSyntax)
       }
     case .deinitializerEffectSpecifiers:
       return {
-        self.visitImpl($0, DeinitializerEffectSpecifiersSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DeinitializerEffectSpecifiersSyntax.self, self.visitDeinitializerEffectSpecifiersSyntax, self.visitPostDeinitializerEffectSpecifiersSyntax)
       }
     case .derivativeAttributeArguments:
       return {
-        self.visitImpl($0, DerivativeAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DerivativeAttributeArgumentsSyntax.self, self.visitDerivativeAttributeArgumentsSyntax, self.visitPostDerivativeAttributeArgumentsSyntax)
       }
     case .designatedTypeList:
       return {
-        self.visitImpl($0, DesignatedTypeListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DesignatedTypeListSyntax.self, self.visitDesignatedTypeListSyntax, self.visitPostDesignatedTypeListSyntax)
       }
     case .designatedType:
       return {
-        self.visitImpl($0, DesignatedTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DesignatedTypeSyntax.self, self.visitDesignatedTypeSyntax, self.visitPostDesignatedTypeSyntax)
       }
     case .dictionaryElementList:
       return {
-        self.visitImpl($0, DictionaryElementListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DictionaryElementListSyntax.self, self.visitDictionaryElementListSyntax, self.visitPostDictionaryElementListSyntax)
       }
     case .dictionaryElement:
       return {
-        self.visitImpl($0, DictionaryElementSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DictionaryElementSyntax.self, self.visitDictionaryElementSyntax, self.visitPostDictionaryElementSyntax)
       }
     case .dictionaryExpr:
       return {
-        self.visitImpl($0, DictionaryExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DictionaryExprSyntax.self, self.visitDictionaryExprSyntax, self.visitPostDictionaryExprSyntax)
       }
     case .dictionaryType:
       return {
-        self.visitImpl($0, DictionaryTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DictionaryTypeSyntax.self, self.visitDictionaryTypeSyntax, self.visitPostDictionaryTypeSyntax)
       }
     case .differentiabilityArgumentList:
       return {
-        self.visitImpl($0, DifferentiabilityArgumentListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DifferentiabilityArgumentListSyntax.self, self.visitDifferentiabilityArgumentListSyntax, self.visitPostDifferentiabilityArgumentListSyntax)
       }
     case .differentiabilityArgument:
       return {
-        self.visitImpl($0, DifferentiabilityArgumentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DifferentiabilityArgumentSyntax.self, self.visitDifferentiabilityArgumentSyntax, self.visitPostDifferentiabilityArgumentSyntax)
       }
     case .differentiabilityArguments:
       return {
-        self.visitImpl($0, DifferentiabilityArgumentsSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DifferentiabilityArgumentsSyntax.self, self.visitDifferentiabilityArgumentsSyntax, self.visitPostDifferentiabilityArgumentsSyntax)
       }
     case .differentiabilityWithRespectToArgument:
       return {
-        self.visitImpl($0, DifferentiabilityWithRespectToArgumentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DifferentiabilityWithRespectToArgumentSyntax.self, self.visitDifferentiabilityWithRespectToArgumentSyntax, self.visitPostDifferentiabilityWithRespectToArgumentSyntax)
       }
     case .differentiableAttributeArguments:
       return {
-        self.visitImpl($0, DifferentiableAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DifferentiableAttributeArgumentsSyntax.self, self.visitDifferentiableAttributeArgumentsSyntax, self.visitPostDifferentiableAttributeArgumentsSyntax)
       }
     case .discardAssignmentExpr:
       return {
-        self.visitImpl($0, DiscardAssignmentExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DiscardAssignmentExprSyntax.self, self.visitDiscardAssignmentExprSyntax, self.visitPostDiscardAssignmentExprSyntax)
       }
     case .discardStmt:
       return {
-        self.visitImpl($0, DiscardStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DiscardStmtSyntax.self, self.visitDiscardStmtSyntax, self.visitPostDiscardStmtSyntax)
       }
     case .doExpr:
       return {
-        self.visitImpl($0, DoExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DoExprSyntax.self, self.visitDoExprSyntax, self.visitPostDoExprSyntax)
       }
     case .doStmt:
       return {
-        self.visitImpl($0, DoStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DoStmtSyntax.self, self.visitDoStmtSyntax, self.visitPostDoStmtSyntax)
       }
     case .documentationAttributeArgumentList:
       return {
-        self.visitImpl($0, DocumentationAttributeArgumentListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DocumentationAttributeArgumentListSyntax.self, self.visitDocumentationAttributeArgumentListSyntax, self.visitPostDocumentationAttributeArgumentListSyntax)
       }
     case .documentationAttributeArgument:
       return {
-        self.visitImpl($0, DocumentationAttributeArgumentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DocumentationAttributeArgumentSyntax.self, self.visitDocumentationAttributeArgumentSyntax, self.visitPostDocumentationAttributeArgumentSyntax)
       }
     case .dynamicReplacementAttributeArguments:
       return {
-        self.visitImpl($0, DynamicReplacementAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, DynamicReplacementAttributeArgumentsSyntax.self, self.visitDynamicReplacementAttributeArgumentsSyntax, self.visitPostDynamicReplacementAttributeArgumentsSyntax)
       }
     case .editorPlaceholderDecl:
       return {
-        self.visitImpl($0, EditorPlaceholderDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, EditorPlaceholderDeclSyntax.self, self.visitEditorPlaceholderDeclSyntax, self.visitPostEditorPlaceholderDeclSyntax)
       }
     case .editorPlaceholderExpr:
       return {
-        self.visitImpl($0, EditorPlaceholderExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, EditorPlaceholderExprSyntax.self, self.visitEditorPlaceholderExprSyntax, self.visitPostEditorPlaceholderExprSyntax)
       }
     case .effectsAttributeArgumentList:
       return {
-        self.visitImpl($0, EffectsAttributeArgumentListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, EffectsAttributeArgumentListSyntax.self, self.visitEffectsAttributeArgumentListSyntax, self.visitPostEffectsAttributeArgumentListSyntax)
       }
     case .enumCaseDecl:
       return {
-        self.visitImpl($0, EnumCaseDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, EnumCaseDeclSyntax.self, self.visitEnumCaseDeclSyntax, self.visitPostEnumCaseDeclSyntax)
       }
     case .enumCaseElementList:
       return {
-        self.visitImpl($0, EnumCaseElementListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, EnumCaseElementListSyntax.self, self.visitEnumCaseElementListSyntax, self.visitPostEnumCaseElementListSyntax)
       }
     case .enumCaseElement:
       return {
-        self.visitImpl($0, EnumCaseElementSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, EnumCaseElementSyntax.self, self.visitEnumCaseElementSyntax, self.visitPostEnumCaseElementSyntax)
       }
     case .enumCaseParameterClause:
       return {
-        self.visitImpl($0, EnumCaseParameterClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, EnumCaseParameterClauseSyntax.self, self.visitEnumCaseParameterClauseSyntax, self.visitPostEnumCaseParameterClauseSyntax)
       }
     case .enumCaseParameterList:
       return {
-        self.visitImpl($0, EnumCaseParameterListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, EnumCaseParameterListSyntax.self, self.visitEnumCaseParameterListSyntax, self.visitPostEnumCaseParameterListSyntax)
       }
     case .enumCaseParameter:
       return {
-        self.visitImpl($0, EnumCaseParameterSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, EnumCaseParameterSyntax.self, self.visitEnumCaseParameterSyntax, self.visitPostEnumCaseParameterSyntax)
       }
     case .enumDecl:
       return {
-        self.visitImpl($0, EnumDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, EnumDeclSyntax.self, self.visitEnumDeclSyntax, self.visitPostEnumDeclSyntax)
       }
     case .exposeAttributeArguments:
       return {
-        self.visitImpl($0, ExposeAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ExposeAttributeArgumentsSyntax.self, self.visitExposeAttributeArgumentsSyntax, self.visitPostExposeAttributeArgumentsSyntax)
       }
     case .exprList:
       return {
-        self.visitImpl($0, ExprListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ExprListSyntax.self, self.visitExprListSyntax, self.visitPostExprListSyntax)
       }
     case .expressionPattern:
       return {
-        self.visitImpl($0, ExpressionPatternSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ExpressionPatternSyntax.self, self.visitExpressionPatternSyntax, self.visitPostExpressionPatternSyntax)
       }
     case .expressionSegment:
       return {
-        self.visitImpl($0, ExpressionSegmentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ExpressionSegmentSyntax.self, self.visitExpressionSegmentSyntax, self.visitPostExpressionSegmentSyntax)
       }
     case .expressionStmt:
       return {
-        self.visitImpl($0, ExpressionStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ExpressionStmtSyntax.self, self.visitExpressionStmtSyntax, self.visitPostExpressionStmtSyntax)
       }
     case .extensionDecl:
       return {
-        self.visitImpl($0, ExtensionDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ExtensionDeclSyntax.self, self.visitExtensionDeclSyntax, self.visitPostExtensionDeclSyntax)
       }
     case .fallThroughStmt:
       return {
-        self.visitImpl($0, FallThroughStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, FallThroughStmtSyntax.self, self.visitFallThroughStmtSyntax, self.visitPostFallThroughStmtSyntax)
       }
     case .floatLiteralExpr:
       return {
-        self.visitImpl($0, FloatLiteralExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, FloatLiteralExprSyntax.self, self.visitFloatLiteralExprSyntax, self.visitPostFloatLiteralExprSyntax)
       }
     case .forStmt:
       return {
-        self.visitImpl($0, ForStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ForStmtSyntax.self, self.visitForStmtSyntax, self.visitPostForStmtSyntax)
       }
     case .forceUnwrapExpr:
       return {
-        self.visitImpl($0, ForceUnwrapExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ForceUnwrapExprSyntax.self, self.visitForceUnwrapExprSyntax, self.visitPostForceUnwrapExprSyntax)
       }
     case .functionCallExpr:
       return {
-        self.visitImpl($0, FunctionCallExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, FunctionCallExprSyntax.self, self.visitFunctionCallExprSyntax, self.visitPostFunctionCallExprSyntax)
       }
     case .functionDecl:
       return {
-        self.visitImpl($0, FunctionDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, FunctionDeclSyntax.self, self.visitFunctionDeclSyntax, self.visitPostFunctionDeclSyntax)
       }
     case .functionEffectSpecifiers:
       return {
-        self.visitImpl($0, FunctionEffectSpecifiersSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, FunctionEffectSpecifiersSyntax.self, self.visitFunctionEffectSpecifiersSyntax, self.visitPostFunctionEffectSpecifiersSyntax)
       }
     case .functionParameterClause:
       return {
-        self.visitImpl($0, FunctionParameterClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, FunctionParameterClauseSyntax.self, self.visitFunctionParameterClauseSyntax, self.visitPostFunctionParameterClauseSyntax)
       }
     case .functionParameterList:
       return {
-        self.visitImpl($0, FunctionParameterListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, FunctionParameterListSyntax.self, self.visitFunctionParameterListSyntax, self.visitPostFunctionParameterListSyntax)
       }
     case .functionParameter:
       return {
-        self.visitImpl($0, FunctionParameterSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, FunctionParameterSyntax.self, self.visitFunctionParameterSyntax, self.visitPostFunctionParameterSyntax)
       }
     case .functionSignature:
       return {
-        self.visitImpl($0, FunctionSignatureSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, FunctionSignatureSyntax.self, self.visitFunctionSignatureSyntax, self.visitPostFunctionSignatureSyntax)
       }
     case .functionType:
       return {
-        self.visitImpl($0, FunctionTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, FunctionTypeSyntax.self, self.visitFunctionTypeSyntax, self.visitPostFunctionTypeSyntax)
       }
     case .genericArgumentClause:
       return {
-        self.visitImpl($0, GenericArgumentClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, GenericArgumentClauseSyntax.self, self.visitGenericArgumentClauseSyntax, self.visitPostGenericArgumentClauseSyntax)
       }
     case .genericArgumentList:
       return {
-        self.visitImpl($0, GenericArgumentListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, GenericArgumentListSyntax.self, self.visitGenericArgumentListSyntax, self.visitPostGenericArgumentListSyntax)
       }
     case .genericArgument:
       return {
-        self.visitImpl($0, GenericArgumentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, GenericArgumentSyntax.self, self.visitGenericArgumentSyntax, self.visitPostGenericArgumentSyntax)
       }
     case .genericParameterClause:
       return {
-        self.visitImpl($0, GenericParameterClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, GenericParameterClauseSyntax.self, self.visitGenericParameterClauseSyntax, self.visitPostGenericParameterClauseSyntax)
       }
     case .genericParameterList:
       return {
-        self.visitImpl($0, GenericParameterListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, GenericParameterListSyntax.self, self.visitGenericParameterListSyntax, self.visitPostGenericParameterListSyntax)
       }
     case .genericParameter:
       return {
-        self.visitImpl($0, GenericParameterSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, GenericParameterSyntax.self, self.visitGenericParameterSyntax, self.visitPostGenericParameterSyntax)
       }
     case .genericRequirementList:
       return {
-        self.visitImpl($0, GenericRequirementListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, GenericRequirementListSyntax.self, self.visitGenericRequirementListSyntax, self.visitPostGenericRequirementListSyntax)
       }
     case .genericRequirement:
       return {
-        self.visitImpl($0, GenericRequirementSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, GenericRequirementSyntax.self, self.visitGenericRequirementSyntax, self.visitPostGenericRequirementSyntax)
       }
     case .genericSpecializationExpr:
       return {
-        self.visitImpl($0, GenericSpecializationExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, GenericSpecializationExprSyntax.self, self.visitGenericSpecializationExprSyntax, self.visitPostGenericSpecializationExprSyntax)
       }
     case .genericWhereClause:
       return {
-        self.visitImpl($0, GenericWhereClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, GenericWhereClauseSyntax.self, self.visitGenericWhereClauseSyntax, self.visitPostGenericWhereClauseSyntax)
       }
     case .guardStmt:
       return {
-        self.visitImpl($0, GuardStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, GuardStmtSyntax.self, self.visitGuardStmtSyntax, self.visitPostGuardStmtSyntax)
       }
     case .identifierPattern:
       return {
-        self.visitImpl($0, IdentifierPatternSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, IdentifierPatternSyntax.self, self.visitIdentifierPatternSyntax, self.visitPostIdentifierPatternSyntax)
       }
     case .identifierType:
       return {
-        self.visitImpl($0, IdentifierTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, IdentifierTypeSyntax.self, self.visitIdentifierTypeSyntax, self.visitPostIdentifierTypeSyntax)
       }
     case .ifConfigClauseList:
       return {
-        self.visitImpl($0, IfConfigClauseListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, IfConfigClauseListSyntax.self, self.visitIfConfigClauseListSyntax, self.visitPostIfConfigClauseListSyntax)
       }
     case .ifConfigClause:
       return {
-        self.visitImpl($0, IfConfigClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, IfConfigClauseSyntax.self, self.visitIfConfigClauseSyntax, self.visitPostIfConfigClauseSyntax)
       }
     case .ifConfigDecl:
       return {
-        self.visitImpl($0, IfConfigDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, IfConfigDeclSyntax.self, self.visitIfConfigDeclSyntax, self.visitPostIfConfigDeclSyntax)
       }
     case .ifExpr:
       return {
-        self.visitImpl($0, IfExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, IfExprSyntax.self, self.visitIfExprSyntax, self.visitPostIfExprSyntax)
       }
     case .implementsAttributeArguments:
       return {
-        self.visitImpl($0, ImplementsAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ImplementsAttributeArgumentsSyntax.self, self.visitImplementsAttributeArgumentsSyntax, self.visitPostImplementsAttributeArgumentsSyntax)
       }
     case .implicitlyUnwrappedOptionalType:
       return {
-        self.visitImpl($0, ImplicitlyUnwrappedOptionalTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ImplicitlyUnwrappedOptionalTypeSyntax.self, self.visitImplicitlyUnwrappedOptionalTypeSyntax, self.visitPostImplicitlyUnwrappedOptionalTypeSyntax)
       }
     case .importDecl:
       return {
-        self.visitImpl($0, ImportDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ImportDeclSyntax.self, self.visitImportDeclSyntax, self.visitPostImportDeclSyntax)
       }
     case .importPathComponentList:
       return {
-        self.visitImpl($0, ImportPathComponentListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ImportPathComponentListSyntax.self, self.visitImportPathComponentListSyntax, self.visitPostImportPathComponentListSyntax)
       }
     case .importPathComponent:
       return {
-        self.visitImpl($0, ImportPathComponentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ImportPathComponentSyntax.self, self.visitImportPathComponentSyntax, self.visitPostImportPathComponentSyntax)
       }
     case .inOutExpr:
       return {
-        self.visitImpl($0, InOutExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, InOutExprSyntax.self, self.visitInOutExprSyntax, self.visitPostInOutExprSyntax)
       }
     case .infixOperatorExpr:
       return {
-        self.visitImpl($0, InfixOperatorExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, InfixOperatorExprSyntax.self, self.visitInfixOperatorExprSyntax, self.visitPostInfixOperatorExprSyntax)
       }
     case .inheritanceClause:
       return {
-        self.visitImpl($0, InheritanceClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, InheritanceClauseSyntax.self, self.visitInheritanceClauseSyntax, self.visitPostInheritanceClauseSyntax)
       }
     case .inheritedTypeList:
       return {
-        self.visitImpl($0, InheritedTypeListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, InheritedTypeListSyntax.self, self.visitInheritedTypeListSyntax, self.visitPostInheritedTypeListSyntax)
       }
     case .inheritedType:
       return {
-        self.visitImpl($0, InheritedTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, InheritedTypeSyntax.self, self.visitInheritedTypeSyntax, self.visitPostInheritedTypeSyntax)
       }
     case .initializerClause:
       return {
-        self.visitImpl($0, InitializerClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, InitializerClauseSyntax.self, self.visitInitializerClauseSyntax, self.visitPostInitializerClauseSyntax)
       }
     case .initializerDecl:
       return {
-        self.visitImpl($0, InitializerDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, InitializerDeclSyntax.self, self.visitInitializerDeclSyntax, self.visitPostInitializerDeclSyntax)
       }
     case .integerLiteralExpr:
       return {
-        self.visitImpl($0, IntegerLiteralExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, IntegerLiteralExprSyntax.self, self.visitIntegerLiteralExprSyntax, self.visitPostIntegerLiteralExprSyntax)
       }
     case .isExpr:
       return {
-        self.visitImpl($0, IsExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, IsExprSyntax.self, self.visitIsExprSyntax, self.visitPostIsExprSyntax)
       }
     case .isTypePattern:
       return {
-        self.visitImpl($0, IsTypePatternSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, IsTypePatternSyntax.self, self.visitIsTypePatternSyntax, self.visitPostIsTypePatternSyntax)
       }
     case .keyPathComponentList:
       return {
-        self.visitImpl($0, KeyPathComponentListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, KeyPathComponentListSyntax.self, self.visitKeyPathComponentListSyntax, self.visitPostKeyPathComponentListSyntax)
       }
     case .keyPathComponent:
       return {
-        self.visitImpl($0, KeyPathComponentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, KeyPathComponentSyntax.self, self.visitKeyPathComponentSyntax, self.visitPostKeyPathComponentSyntax)
       }
     case .keyPathExpr:
       return {
-        self.visitImpl($0, KeyPathExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, KeyPathExprSyntax.self, self.visitKeyPathExprSyntax, self.visitPostKeyPathExprSyntax)
       }
     case .keyPathOptionalComponent:
       return {
-        self.visitImpl($0, KeyPathOptionalComponentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, KeyPathOptionalComponentSyntax.self, self.visitKeyPathOptionalComponentSyntax, self.visitPostKeyPathOptionalComponentSyntax)
       }
     case .keyPathPropertyComponent:
       return {
-        self.visitImpl($0, KeyPathPropertyComponentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, KeyPathPropertyComponentSyntax.self, self.visitKeyPathPropertyComponentSyntax, self.visitPostKeyPathPropertyComponentSyntax)
       }
     case .keyPathSubscriptComponent:
       return {
-        self.visitImpl($0, KeyPathSubscriptComponentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, KeyPathSubscriptComponentSyntax.self, self.visitKeyPathSubscriptComponentSyntax, self.visitPostKeyPathSubscriptComponentSyntax)
       }
     case .labeledExprList:
       return {
-        self.visitImpl($0, LabeledExprListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, LabeledExprListSyntax.self, self.visitLabeledExprListSyntax, self.visitPostLabeledExprListSyntax)
       }
     case .labeledExpr:
       return {
-        self.visitImpl($0, LabeledExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, LabeledExprSyntax.self, self.visitLabeledExprSyntax, self.visitPostLabeledExprSyntax)
       }
     case .labeledSpecializeArgument:
       return {
-        self.visitImpl($0, LabeledSpecializeArgumentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, LabeledSpecializeArgumentSyntax.self, self.visitLabeledSpecializeArgumentSyntax, self.visitPostLabeledSpecializeArgumentSyntax)
       }
     case .labeledStmt:
       return {
-        self.visitImpl($0, LabeledStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, LabeledStmtSyntax.self, self.visitLabeledStmtSyntax, self.visitPostLabeledStmtSyntax)
       }
     case .layoutRequirement:
       return {
-        self.visitImpl($0, LayoutRequirementSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, LayoutRequirementSyntax.self, self.visitLayoutRequirementSyntax, self.visitPostLayoutRequirementSyntax)
       }
     case .macroDecl:
       return {
-        self.visitImpl($0, MacroDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MacroDeclSyntax.self, self.visitMacroDeclSyntax, self.visitPostMacroDeclSyntax)
       }
     case .macroExpansionDecl:
       return {
-        self.visitImpl($0, MacroExpansionDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MacroExpansionDeclSyntax.self, self.visitMacroExpansionDeclSyntax, self.visitPostMacroExpansionDeclSyntax)
       }
     case .macroExpansionExpr:
       return {
-        self.visitImpl($0, MacroExpansionExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MacroExpansionExprSyntax.self, self.visitMacroExpansionExprSyntax, self.visitPostMacroExpansionExprSyntax)
       }
     case .matchingPatternCondition:
       return {
-        self.visitImpl($0, MatchingPatternConditionSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MatchingPatternConditionSyntax.self, self.visitMatchingPatternConditionSyntax, self.visitPostMatchingPatternConditionSyntax)
       }
     case .memberAccessExpr:
       return {
-        self.visitImpl($0, MemberAccessExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MemberAccessExprSyntax.self, self.visitMemberAccessExprSyntax, self.visitPostMemberAccessExprSyntax)
       }
     case .memberBlockItemList:
       return {
-        self.visitImpl($0, MemberBlockItemListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MemberBlockItemListSyntax.self, self.visitMemberBlockItemListSyntax, self.visitPostMemberBlockItemListSyntax)
       }
     case .memberBlockItem:
       return {
-        self.visitImpl($0, MemberBlockItemSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MemberBlockItemSyntax.self, self.visitMemberBlockItemSyntax, self.visitPostMemberBlockItemSyntax)
       }
     case .memberBlock:
       return {
-        self.visitImpl($0, MemberBlockSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MemberBlockSyntax.self, self.visitMemberBlockSyntax, self.visitPostMemberBlockSyntax)
       }
     case .memberType:
       return {
-        self.visitImpl($0, MemberTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MemberTypeSyntax.self, self.visitMemberTypeSyntax, self.visitPostMemberTypeSyntax)
       }
     case .metatypeType:
       return {
-        self.visitImpl($0, MetatypeTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MetatypeTypeSyntax.self, self.visitMetatypeTypeSyntax, self.visitPostMetatypeTypeSyntax)
       }
     case .missingDecl:
       return {
-        self.visitImpl($0, MissingDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MissingDeclSyntax.self, self.visitMissingDeclSyntax, self.visitPostMissingDeclSyntax)
       }
     case .missingExpr:
       return {
-        self.visitImpl($0, MissingExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MissingExprSyntax.self, self.visitMissingExprSyntax, self.visitPostMissingExprSyntax)
       }
     case .missingPattern:
       return {
-        self.visitImpl($0, MissingPatternSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MissingPatternSyntax.self, self.visitMissingPatternSyntax, self.visitPostMissingPatternSyntax)
       }
     case .missingStmt:
       return {
-        self.visitImpl($0, MissingStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MissingStmtSyntax.self, self.visitMissingStmtSyntax, self.visitPostMissingStmtSyntax)
       }
     case .missing:
       return {
-        self.visitImpl($0, MissingSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MissingSyntax.self, self.visitMissingSyntax, self.visitPostMissingSyntax)
       }
     case .missingType:
       return {
-        self.visitImpl($0, MissingTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MissingTypeSyntax.self, self.visitMissingTypeSyntax, self.visitPostMissingTypeSyntax)
       }
     case .multipleTrailingClosureElementList:
       return {
-        self.visitImpl($0, MultipleTrailingClosureElementListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MultipleTrailingClosureElementListSyntax.self, self.visitMultipleTrailingClosureElementListSyntax, self.visitPostMultipleTrailingClosureElementListSyntax)
       }
     case .multipleTrailingClosureElement:
       return {
-        self.visitImpl($0, MultipleTrailingClosureElementSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, MultipleTrailingClosureElementSyntax.self, self.visitMultipleTrailingClosureElementSyntax, self.visitPostMultipleTrailingClosureElementSyntax)
       }
     case .namedOpaqueReturnType:
       return {
-        self.visitImpl($0, NamedOpaqueReturnTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, NamedOpaqueReturnTypeSyntax.self, self.visitNamedOpaqueReturnTypeSyntax, self.visitPostNamedOpaqueReturnTypeSyntax)
       }
     case .nilLiteralExpr:
       return {
-        self.visitImpl($0, NilLiteralExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, NilLiteralExprSyntax.self, self.visitNilLiteralExprSyntax, self.visitPostNilLiteralExprSyntax)
       }
     case .objCSelectorPieceList:
       return {
-        self.visitImpl($0, ObjCSelectorPieceListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ObjCSelectorPieceListSyntax.self, self.visitObjCSelectorPieceListSyntax, self.visitPostObjCSelectorPieceListSyntax)
       }
     case .objCSelectorPiece:
       return {
-        self.visitImpl($0, ObjCSelectorPieceSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ObjCSelectorPieceSyntax.self, self.visitObjCSelectorPieceSyntax, self.visitPostObjCSelectorPieceSyntax)
       }
     case .opaqueReturnTypeOfAttributeArguments:
       return {
-        self.visitImpl($0, OpaqueReturnTypeOfAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, OpaqueReturnTypeOfAttributeArgumentsSyntax.self, self.visitOpaqueReturnTypeOfAttributeArgumentsSyntax, self.visitPostOpaqueReturnTypeOfAttributeArgumentsSyntax)
       }
     case .operatorDecl:
       return {
-        self.visitImpl($0, OperatorDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, OperatorDeclSyntax.self, self.visitOperatorDeclSyntax, self.visitPostOperatorDeclSyntax)
       }
     case .operatorPrecedenceAndTypes:
       return {
-        self.visitImpl($0, OperatorPrecedenceAndTypesSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, OperatorPrecedenceAndTypesSyntax.self, self.visitOperatorPrecedenceAndTypesSyntax, self.visitPostOperatorPrecedenceAndTypesSyntax)
       }
     case .optionalBindingCondition:
       return {
-        self.visitImpl($0, OptionalBindingConditionSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, OptionalBindingConditionSyntax.self, self.visitOptionalBindingConditionSyntax, self.visitPostOptionalBindingConditionSyntax)
       }
     case .optionalChainingExpr:
       return {
-        self.visitImpl($0, OptionalChainingExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, OptionalChainingExprSyntax.self, self.visitOptionalChainingExprSyntax, self.visitPostOptionalChainingExprSyntax)
       }
     case .optionalType:
       return {
-        self.visitImpl($0, OptionalTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, OptionalTypeSyntax.self, self.visitOptionalTypeSyntax, self.visitPostOptionalTypeSyntax)
       }
     case .originallyDefinedInAttributeArguments:
       return {
-        self.visitImpl($0, OriginallyDefinedInAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, OriginallyDefinedInAttributeArgumentsSyntax.self, self.visitOriginallyDefinedInAttributeArgumentsSyntax, self.visitPostOriginallyDefinedInAttributeArgumentsSyntax)
       }
     case .packElementExpr:
       return {
-        self.visitImpl($0, PackElementExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PackElementExprSyntax.self, self.visitPackElementExprSyntax, self.visitPostPackElementExprSyntax)
       }
     case .packElementType:
       return {
-        self.visitImpl($0, PackElementTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PackElementTypeSyntax.self, self.visitPackElementTypeSyntax, self.visitPostPackElementTypeSyntax)
       }
     case .packExpansionExpr:
       return {
-        self.visitImpl($0, PackExpansionExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PackExpansionExprSyntax.self, self.visitPackExpansionExprSyntax, self.visitPostPackExpansionExprSyntax)
       }
     case .packExpansionType:
       return {
-        self.visitImpl($0, PackExpansionTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PackExpansionTypeSyntax.self, self.visitPackExpansionTypeSyntax, self.visitPostPackExpansionTypeSyntax)
       }
     case .patternBindingList:
       return {
-        self.visitImpl($0, PatternBindingListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PatternBindingListSyntax.self, self.visitPatternBindingListSyntax, self.visitPostPatternBindingListSyntax)
       }
     case .patternBinding:
       return {
-        self.visitImpl($0, PatternBindingSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PatternBindingSyntax.self, self.visitPatternBindingSyntax, self.visitPostPatternBindingSyntax)
       }
     case .patternExpr:
       return {
-        self.visitImpl($0, PatternExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PatternExprSyntax.self, self.visitPatternExprSyntax, self.visitPostPatternExprSyntax)
       }
     case .platformVersionItemList:
       return {
-        self.visitImpl($0, PlatformVersionItemListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PlatformVersionItemListSyntax.self, self.visitPlatformVersionItemListSyntax, self.visitPostPlatformVersionItemListSyntax)
       }
     case .platformVersionItem:
       return {
-        self.visitImpl($0, PlatformVersionItemSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PlatformVersionItemSyntax.self, self.visitPlatformVersionItemSyntax, self.visitPostPlatformVersionItemSyntax)
       }
     case .platformVersion:
       return {
-        self.visitImpl($0, PlatformVersionSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PlatformVersionSyntax.self, self.visitPlatformVersionSyntax, self.visitPostPlatformVersionSyntax)
       }
     case .postfixIfConfigExpr:
       return {
-        self.visitImpl($0, PostfixIfConfigExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PostfixIfConfigExprSyntax.self, self.visitPostfixIfConfigExprSyntax, self.visitPostPostfixIfConfigExprSyntax)
       }
     case .postfixOperatorExpr:
       return {
-        self.visitImpl($0, PostfixOperatorExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PostfixOperatorExprSyntax.self, self.visitPostfixOperatorExprSyntax, self.visitPostPostfixOperatorExprSyntax)
       }
     case .poundSourceLocationArguments:
       return {
-        self.visitImpl($0, PoundSourceLocationArgumentsSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PoundSourceLocationArgumentsSyntax.self, self.visitPoundSourceLocationArgumentsSyntax, self.visitPostPoundSourceLocationArgumentsSyntax)
       }
     case .poundSourceLocation:
       return {
-        self.visitImpl($0, PoundSourceLocationSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PoundSourceLocationSyntax.self, self.visitPoundSourceLocationSyntax, self.visitPostPoundSourceLocationSyntax)
       }
     case .precedenceGroupAssignment:
       return {
-        self.visitImpl($0, PrecedenceGroupAssignmentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PrecedenceGroupAssignmentSyntax.self, self.visitPrecedenceGroupAssignmentSyntax, self.visitPostPrecedenceGroupAssignmentSyntax)
       }
     case .precedenceGroupAssociativity:
       return {
-        self.visitImpl($0, PrecedenceGroupAssociativitySyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PrecedenceGroupAssociativitySyntax.self, self.visitPrecedenceGroupAssociativitySyntax, self.visitPostPrecedenceGroupAssociativitySyntax)
       }
     case .precedenceGroupAttributeList:
       return {
-        self.visitImpl($0, PrecedenceGroupAttributeListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PrecedenceGroupAttributeListSyntax.self, self.visitPrecedenceGroupAttributeListSyntax, self.visitPostPrecedenceGroupAttributeListSyntax)
       }
     case .precedenceGroupDecl:
       return {
-        self.visitImpl($0, PrecedenceGroupDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PrecedenceGroupDeclSyntax.self, self.visitPrecedenceGroupDeclSyntax, self.visitPostPrecedenceGroupDeclSyntax)
       }
     case .precedenceGroupNameList:
       return {
-        self.visitImpl($0, PrecedenceGroupNameListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PrecedenceGroupNameListSyntax.self, self.visitPrecedenceGroupNameListSyntax, self.visitPostPrecedenceGroupNameListSyntax)
       }
     case .precedenceGroupName:
       return {
-        self.visitImpl($0, PrecedenceGroupNameSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PrecedenceGroupNameSyntax.self, self.visitPrecedenceGroupNameSyntax, self.visitPostPrecedenceGroupNameSyntax)
       }
     case .precedenceGroupRelation:
       return {
-        self.visitImpl($0, PrecedenceGroupRelationSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PrecedenceGroupRelationSyntax.self, self.visitPrecedenceGroupRelationSyntax, self.visitPostPrecedenceGroupRelationSyntax)
       }
     case .prefixOperatorExpr:
       return {
-        self.visitImpl($0, PrefixOperatorExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PrefixOperatorExprSyntax.self, self.visitPrefixOperatorExprSyntax, self.visitPostPrefixOperatorExprSyntax)
       }
     case .primaryAssociatedTypeClause:
       return {
-        self.visitImpl($0, PrimaryAssociatedTypeClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PrimaryAssociatedTypeClauseSyntax.self, self.visitPrimaryAssociatedTypeClauseSyntax, self.visitPostPrimaryAssociatedTypeClauseSyntax)
       }
     case .primaryAssociatedTypeList:
       return {
-        self.visitImpl($0, PrimaryAssociatedTypeListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PrimaryAssociatedTypeListSyntax.self, self.visitPrimaryAssociatedTypeListSyntax, self.visitPostPrimaryAssociatedTypeListSyntax)
       }
     case .primaryAssociatedType:
       return {
-        self.visitImpl($0, PrimaryAssociatedTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, PrimaryAssociatedTypeSyntax.self, self.visitPrimaryAssociatedTypeSyntax, self.visitPostPrimaryAssociatedTypeSyntax)
       }
     case .protocolDecl:
       return {
-        self.visitImpl($0, ProtocolDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ProtocolDeclSyntax.self, self.visitProtocolDeclSyntax, self.visitPostProtocolDeclSyntax)
       }
     case .regexLiteralExpr:
       return {
-        self.visitImpl($0, RegexLiteralExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, RegexLiteralExprSyntax.self, self.visitRegexLiteralExprSyntax, self.visitPostRegexLiteralExprSyntax)
       }
     case .repeatStmt:
       return {
-        self.visitImpl($0, RepeatStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, RepeatStmtSyntax.self, self.visitRepeatStmtSyntax, self.visitPostRepeatStmtSyntax)
       }
     case .returnClause:
       return {
-        self.visitImpl($0, ReturnClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ReturnClauseSyntax.self, self.visitReturnClauseSyntax, self.visitPostReturnClauseSyntax)
       }
     case .returnStmt:
       return {
-        self.visitImpl($0, ReturnStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ReturnStmtSyntax.self, self.visitReturnStmtSyntax, self.visitPostReturnStmtSyntax)
       }
     case .sameTypeRequirement:
       return {
-        self.visitImpl($0, SameTypeRequirementSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SameTypeRequirementSyntax.self, self.visitSameTypeRequirementSyntax, self.visitPostSameTypeRequirementSyntax)
       }
     case .sequenceExpr:
       return {
-        self.visitImpl($0, SequenceExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SequenceExprSyntax.self, self.visitSequenceExprSyntax, self.visitPostSequenceExprSyntax)
       }
     case .simpleStringLiteralExpr:
       return {
-        self.visitImpl($0, SimpleStringLiteralExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SimpleStringLiteralExprSyntax.self, self.visitSimpleStringLiteralExprSyntax, self.visitPostSimpleStringLiteralExprSyntax)
       }
     case .simpleStringLiteralSegmentList:
       return {
-        self.visitImpl($0, SimpleStringLiteralSegmentListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SimpleStringLiteralSegmentListSyntax.self, self.visitSimpleStringLiteralSegmentListSyntax, self.visitPostSimpleStringLiteralSegmentListSyntax)
       }
     case .someOrAnyType:
       return {
-        self.visitImpl($0, SomeOrAnyTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SomeOrAnyTypeSyntax.self, self.visitSomeOrAnyTypeSyntax, self.visitPostSomeOrAnyTypeSyntax)
       }
     case .sourceFile:
       return {
-        self.visitImpl($0, SourceFileSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SourceFileSyntax.self, self.visitSourceFileSyntax, self.visitPostSourceFileSyntax)
       }
     case .specializeAttributeArgumentList:
       return {
-        self.visitImpl($0, SpecializeAttributeArgumentListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SpecializeAttributeArgumentListSyntax.self, self.visitSpecializeAttributeArgumentListSyntax, self.visitPostSpecializeAttributeArgumentListSyntax)
       }
     case .specializeAvailabilityArgument:
       return {
-        self.visitImpl($0, SpecializeAvailabilityArgumentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SpecializeAvailabilityArgumentSyntax.self, self.visitSpecializeAvailabilityArgumentSyntax, self.visitPostSpecializeAvailabilityArgumentSyntax)
       }
     case .specializeTargetFunctionArgument:
       return {
-        self.visitImpl($0, SpecializeTargetFunctionArgumentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SpecializeTargetFunctionArgumentSyntax.self, self.visitSpecializeTargetFunctionArgumentSyntax, self.visitPostSpecializeTargetFunctionArgumentSyntax)
       }
     case .stringLiteralExpr:
       return {
-        self.visitImpl($0, StringLiteralExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, StringLiteralExprSyntax.self, self.visitStringLiteralExprSyntax, self.visitPostStringLiteralExprSyntax)
       }
     case .stringLiteralSegmentList:
       return {
-        self.visitImpl($0, StringLiteralSegmentListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, StringLiteralSegmentListSyntax.self, self.visitStringLiteralSegmentListSyntax, self.visitPostStringLiteralSegmentListSyntax)
       }
     case .stringSegment:
       return {
-        self.visitImpl($0, StringSegmentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, StringSegmentSyntax.self, self.visitStringSegmentSyntax, self.visitPostStringSegmentSyntax)
       }
     case .structDecl:
       return {
-        self.visitImpl($0, StructDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, StructDeclSyntax.self, self.visitStructDeclSyntax, self.visitPostStructDeclSyntax)
       }
     case .subscriptCallExpr:
       return {
-        self.visitImpl($0, SubscriptCallExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SubscriptCallExprSyntax.self, self.visitSubscriptCallExprSyntax, self.visitPostSubscriptCallExprSyntax)
       }
     case .subscriptDecl:
       return {
-        self.visitImpl($0, SubscriptDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SubscriptDeclSyntax.self, self.visitSubscriptDeclSyntax, self.visitPostSubscriptDeclSyntax)
       }
     case .superExpr:
       return {
-        self.visitImpl($0, SuperExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SuperExprSyntax.self, self.visitSuperExprSyntax, self.visitPostSuperExprSyntax)
       }
     case .suppressedType:
       return {
-        self.visitImpl($0, SuppressedTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SuppressedTypeSyntax.self, self.visitSuppressedTypeSyntax, self.visitPostSuppressedTypeSyntax)
       }
     case .switchCaseItemList:
       return {
-        self.visitImpl($0, SwitchCaseItemListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SwitchCaseItemListSyntax.self, self.visitSwitchCaseItemListSyntax, self.visitPostSwitchCaseItemListSyntax)
       }
     case .switchCaseItem:
       return {
-        self.visitImpl($0, SwitchCaseItemSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SwitchCaseItemSyntax.self, self.visitSwitchCaseItemSyntax, self.visitPostSwitchCaseItemSyntax)
       }
     case .switchCaseLabel:
       return {
-        self.visitImpl($0, SwitchCaseLabelSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SwitchCaseLabelSyntax.self, self.visitSwitchCaseLabelSyntax, self.visitPostSwitchCaseLabelSyntax)
       }
     case .switchCaseList:
       return {
-        self.visitImpl($0, SwitchCaseListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SwitchCaseListSyntax.self, self.visitSwitchCaseListSyntax, self.visitPostSwitchCaseListSyntax)
       }
     case .switchCase:
       return {
-        self.visitImpl($0, SwitchCaseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SwitchCaseSyntax.self, self.visitSwitchCaseSyntax, self.visitPostSwitchCaseSyntax)
       }
     case .switchDefaultLabel:
       return {
-        self.visitImpl($0, SwitchDefaultLabelSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SwitchDefaultLabelSyntax.self, self.visitSwitchDefaultLabelSyntax, self.visitPostSwitchDefaultLabelSyntax)
       }
     case .switchExpr:
       return {
-        self.visitImpl($0, SwitchExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, SwitchExprSyntax.self, self.visitSwitchExprSyntax, self.visitPostSwitchExprSyntax)
       }
     case .ternaryExpr:
       return {
-        self.visitImpl($0, TernaryExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, TernaryExprSyntax.self, self.visitTernaryExprSyntax, self.visitPostTernaryExprSyntax)
       }
     case .thenStmt:
       return {
-        self.visitImpl($0, ThenStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ThenStmtSyntax.self, self.visitThenStmtSyntax, self.visitPostThenStmtSyntax)
       }
     case .throwStmt:
       return {
-        self.visitImpl($0, ThrowStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ThrowStmtSyntax.self, self.visitThrowStmtSyntax, self.visitPostThrowStmtSyntax)
       }
     case .throwsClause:
       return {
-        self.visitImpl($0, ThrowsClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ThrowsClauseSyntax.self, self.visitThrowsClauseSyntax, self.visitPostThrowsClauseSyntax)
       }
     case .tryExpr:
       return {
-        self.visitImpl($0, TryExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, TryExprSyntax.self, self.visitTryExprSyntax, self.visitPostTryExprSyntax)
       }
     case .tupleExpr:
       return {
-        self.visitImpl($0, TupleExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, TupleExprSyntax.self, self.visitTupleExprSyntax, self.visitPostTupleExprSyntax)
       }
     case .tuplePatternElementList:
       return {
-        self.visitImpl($0, TuplePatternElementListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, TuplePatternElementListSyntax.self, self.visitTuplePatternElementListSyntax, self.visitPostTuplePatternElementListSyntax)
       }
     case .tuplePatternElement:
       return {
-        self.visitImpl($0, TuplePatternElementSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, TuplePatternElementSyntax.self, self.visitTuplePatternElementSyntax, self.visitPostTuplePatternElementSyntax)
       }
     case .tuplePattern:
       return {
-        self.visitImpl($0, TuplePatternSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, TuplePatternSyntax.self, self.visitTuplePatternSyntax, self.visitPostTuplePatternSyntax)
       }
     case .tupleTypeElementList:
       return {
-        self.visitImpl($0, TupleTypeElementListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, TupleTypeElementListSyntax.self, self.visitTupleTypeElementListSyntax, self.visitPostTupleTypeElementListSyntax)
       }
     case .tupleTypeElement:
       return {
-        self.visitImpl($0, TupleTypeElementSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, TupleTypeElementSyntax.self, self.visitTupleTypeElementSyntax, self.visitPostTupleTypeElementSyntax)
       }
     case .tupleType:
       return {
-        self.visitImpl($0, TupleTypeSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, TupleTypeSyntax.self, self.visitTupleTypeSyntax, self.visitPostTupleTypeSyntax)
       }
     case .typeAliasDecl:
       return {
-        self.visitImpl($0, TypeAliasDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, TypeAliasDeclSyntax.self, self.visitTypeAliasDeclSyntax, self.visitPostTypeAliasDeclSyntax)
       }
     case .typeAnnotation:
       return {
-        self.visitImpl($0, TypeAnnotationSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, TypeAnnotationSyntax.self, self.visitTypeAnnotationSyntax, self.visitPostTypeAnnotationSyntax)
       }
     case .typeEffectSpecifiers:
       return {
-        self.visitImpl($0, TypeEffectSpecifiersSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, TypeEffectSpecifiersSyntax.self, self.visitTypeEffectSpecifiersSyntax, self.visitPostTypeEffectSpecifiersSyntax)
       }
     case .typeExpr:
       return {
-        self.visitImpl($0, TypeExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, TypeExprSyntax.self, self.visitTypeExprSyntax, self.visitPostTypeExprSyntax)
       }
     case .typeInitializerClause:
       return {
-        self.visitImpl($0, TypeInitializerClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, TypeInitializerClauseSyntax.self, self.visitTypeInitializerClauseSyntax, self.visitPostTypeInitializerClauseSyntax)
       }
     case .unavailableFromAsyncAttributeArguments:
       return {
-        self.visitImpl($0, UnavailableFromAsyncAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, UnavailableFromAsyncAttributeArgumentsSyntax.self, self.visitUnavailableFromAsyncAttributeArgumentsSyntax, self.visitPostUnavailableFromAsyncAttributeArgumentsSyntax)
       }
     case .underscorePrivateAttributeArguments:
       return {
-        self.visitImpl($0, UnderscorePrivateAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, UnderscorePrivateAttributeArgumentsSyntax.self, self.visitUnderscorePrivateAttributeArgumentsSyntax, self.visitPostUnderscorePrivateAttributeArgumentsSyntax)
       }
     case .unexpectedNodes:
       return {
-        self.visitImpl($0, UnexpectedNodesSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, UnexpectedNodesSyntax.self, self.visitUnexpectedNodesSyntax, self.visitPostUnexpectedNodesSyntax)
       }
     case .unresolvedAsExpr:
       return {
-        self.visitImpl($0, UnresolvedAsExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, UnresolvedAsExprSyntax.self, self.visitUnresolvedAsExprSyntax, self.visitPostUnresolvedAsExprSyntax)
       }
     case .unresolvedIsExpr:
       return {
-        self.visitImpl($0, UnresolvedIsExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, UnresolvedIsExprSyntax.self, self.visitUnresolvedIsExprSyntax, self.visitPostUnresolvedIsExprSyntax)
       }
     case .unresolvedTernaryExpr:
       return {
-        self.visitImpl($0, UnresolvedTernaryExprSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, UnresolvedTernaryExprSyntax.self, self.visitUnresolvedTernaryExprSyntax, self.visitPostUnresolvedTernaryExprSyntax)
       }
     case .valueBindingPattern:
       return {
-        self.visitImpl($0, ValueBindingPatternSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, ValueBindingPatternSyntax.self, self.visitValueBindingPatternSyntax, self.visitPostValueBindingPatternSyntax)
       }
     case .variableDecl:
       return {
-        self.visitImpl($0, VariableDeclSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, VariableDeclSyntax.self, self.visitVariableDeclSyntax, self.visitPostVariableDeclSyntax)
       }
     case .versionComponentList:
       return {
-        self.visitImpl($0, VersionComponentListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, VersionComponentListSyntax.self, self.visitVersionComponentListSyntax, self.visitPostVersionComponentListSyntax)
       }
     case .versionComponent:
       return {
-        self.visitImpl($0, VersionComponentSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, VersionComponentSyntax.self, self.visitVersionComponentSyntax, self.visitPostVersionComponentSyntax)
       }
     case .versionTuple:
       return {
-        self.visitImpl($0, VersionTupleSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, VersionTupleSyntax.self, self.visitVersionTupleSyntax, self.visitPostVersionTupleSyntax)
       }
     case .whereClause:
       return {
-        self.visitImpl($0, WhereClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, WhereClauseSyntax.self, self.visitWhereClauseSyntax, self.visitPostWhereClauseSyntax)
       }
     case .whileStmt:
       return {
-        self.visitImpl($0, WhileStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, WhileStmtSyntax.self, self.visitWhileStmtSyntax, self.visitPostWhileStmtSyntax)
       }
     case .wildcardPattern:
       return {
-        self.visitImpl($0, WildcardPatternSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, WildcardPatternSyntax.self, self.visitWildcardPatternSyntax, self.visitPostWildcardPatternSyntax)
       }
     case .yieldStmt:
       return {
-        self.visitImpl($0, YieldStmtSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, YieldStmtSyntax.self, self.visitYieldStmtSyntax, self.visitPostYieldStmtSyntax)
       }
     case .yieldedExpressionList:
       return {
-        self.visitImpl($0, YieldedExpressionListSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, YieldedExpressionListSyntax.self, self.visitYieldedExpressionListSyntax, self.visitPostYieldedExpressionListSyntax)
       }
     case .yieldedExpression:
       return {
-        self.visitImpl($0, YieldedExpressionSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, YieldedExpressionSyntax.self, self.visitYieldedExpressionSyntax, self.visitPostYieldedExpressionSyntax)
       }
     case .yieldedExpressionsClause:
       return {
-        self.visitImpl($0, YieldedExpressionsClauseSyntax.self, self.visit, self.visitPost)
+        self.visitImpl($0, YieldedExpressionsClauseSyntax.self, self.visitYieldedExpressionsClauseSyntax, self.visitPostYieldedExpressionsClauseSyntax)
       }
     }
   }
@@ -4570,561 +8184,561 @@ open class SyntaxVisitor {
       // No children to visit.
       visitPost(node)
     case .accessorBlock:
-      visitImpl(node, AccessorBlockSyntax.self, visit, visitPost)
+      visitImpl(node, AccessorBlockSyntax.self, visitAccessorBlockSyntax, visitPostAccessorBlockSyntax)
     case .accessorDeclList:
-      visitImpl(node, AccessorDeclListSyntax.self, visit, visitPost)
+      visitImpl(node, AccessorDeclListSyntax.self, visitAccessorDeclListSyntax, visitPostAccessorDeclListSyntax)
     case .accessorDecl:
-      visitImpl(node, AccessorDeclSyntax.self, visit, visitPost)
+      visitImpl(node, AccessorDeclSyntax.self, visitAccessorDeclSyntax, visitPostAccessorDeclSyntax)
     case .accessorEffectSpecifiers:
-      visitImpl(node, AccessorEffectSpecifiersSyntax.self, visit, visitPost)
+      visitImpl(node, AccessorEffectSpecifiersSyntax.self, visitAccessorEffectSpecifiersSyntax, visitPostAccessorEffectSpecifiersSyntax)
     case .accessorParameters:
-      visitImpl(node, AccessorParametersSyntax.self, visit, visitPost)
+      visitImpl(node, AccessorParametersSyntax.self, visitAccessorParametersSyntax, visitPostAccessorParametersSyntax)
     case .actorDecl:
-      visitImpl(node, ActorDeclSyntax.self, visit, visitPost)
+      visitImpl(node, ActorDeclSyntax.self, visitActorDeclSyntax, visitPostActorDeclSyntax)
     case .arrayElementList:
-      visitImpl(node, ArrayElementListSyntax.self, visit, visitPost)
+      visitImpl(node, ArrayElementListSyntax.self, visitArrayElementListSyntax, visitPostArrayElementListSyntax)
     case .arrayElement:
-      visitImpl(node, ArrayElementSyntax.self, visit, visitPost)
+      visitImpl(node, ArrayElementSyntax.self, visitArrayElementSyntax, visitPostArrayElementSyntax)
     case .arrayExpr:
-      visitImpl(node, ArrayExprSyntax.self, visit, visitPost)
+      visitImpl(node, ArrayExprSyntax.self, visitArrayExprSyntax, visitPostArrayExprSyntax)
     case .arrayType:
-      visitImpl(node, ArrayTypeSyntax.self, visit, visitPost)
+      visitImpl(node, ArrayTypeSyntax.self, visitArrayTypeSyntax, visitPostArrayTypeSyntax)
     case .arrowExpr:
-      visitImpl(node, ArrowExprSyntax.self, visit, visitPost)
+      visitImpl(node, ArrowExprSyntax.self, visitArrowExprSyntax, visitPostArrowExprSyntax)
     case .asExpr:
-      visitImpl(node, AsExprSyntax.self, visit, visitPost)
+      visitImpl(node, AsExprSyntax.self, visitAsExprSyntax, visitPostAsExprSyntax)
     case .assignmentExpr:
-      visitImpl(node, AssignmentExprSyntax.self, visit, visitPost)
+      visitImpl(node, AssignmentExprSyntax.self, visitAssignmentExprSyntax, visitPostAssignmentExprSyntax)
     case .associatedTypeDecl:
-      visitImpl(node, AssociatedTypeDeclSyntax.self, visit, visitPost)
+      visitImpl(node, AssociatedTypeDeclSyntax.self, visitAssociatedTypeDeclSyntax, visitPostAssociatedTypeDeclSyntax)
     case .attributeList:
-      visitImpl(node, AttributeListSyntax.self, visit, visitPost)
+      visitImpl(node, AttributeListSyntax.self, visitAttributeListSyntax, visitPostAttributeListSyntax)
     case .attribute:
-      visitImpl(node, AttributeSyntax.self, visit, visitPost)
+      visitImpl(node, AttributeSyntax.self, visitAttributeSyntax, visitPostAttributeSyntax)
     case .attributedType:
-      visitImpl(node, AttributedTypeSyntax.self, visit, visitPost)
+      visitImpl(node, AttributedTypeSyntax.self, visitAttributedTypeSyntax, visitPostAttributedTypeSyntax)
     case .availabilityArgumentList:
-      visitImpl(node, AvailabilityArgumentListSyntax.self, visit, visitPost)
+      visitImpl(node, AvailabilityArgumentListSyntax.self, visitAvailabilityArgumentListSyntax, visitPostAvailabilityArgumentListSyntax)
     case .availabilityArgument:
-      visitImpl(node, AvailabilityArgumentSyntax.self, visit, visitPost)
+      visitImpl(node, AvailabilityArgumentSyntax.self, visitAvailabilityArgumentSyntax, visitPostAvailabilityArgumentSyntax)
     case .availabilityCondition:
-      visitImpl(node, AvailabilityConditionSyntax.self, visit, visitPost)
+      visitImpl(node, AvailabilityConditionSyntax.self, visitAvailabilityConditionSyntax, visitPostAvailabilityConditionSyntax)
     case .availabilityLabeledArgument:
-      visitImpl(node, AvailabilityLabeledArgumentSyntax.self, visit, visitPost)
+      visitImpl(node, AvailabilityLabeledArgumentSyntax.self, visitAvailabilityLabeledArgumentSyntax, visitPostAvailabilityLabeledArgumentSyntax)
     case .awaitExpr:
-      visitImpl(node, AwaitExprSyntax.self, visit, visitPost)
+      visitImpl(node, AwaitExprSyntax.self, visitAwaitExprSyntax, visitPostAwaitExprSyntax)
     case .backDeployedAttributeArguments:
-      visitImpl(node, BackDeployedAttributeArgumentsSyntax.self, visit, visitPost)
+      visitImpl(node, BackDeployedAttributeArgumentsSyntax.self, visitBackDeployedAttributeArgumentsSyntax, visitPostBackDeployedAttributeArgumentsSyntax)
     case .binaryOperatorExpr:
-      visitImpl(node, BinaryOperatorExprSyntax.self, visit, visitPost)
+      visitImpl(node, BinaryOperatorExprSyntax.self, visitBinaryOperatorExprSyntax, visitPostBinaryOperatorExprSyntax)
     case .booleanLiteralExpr:
-      visitImpl(node, BooleanLiteralExprSyntax.self, visit, visitPost)
+      visitImpl(node, BooleanLiteralExprSyntax.self, visitBooleanLiteralExprSyntax, visitPostBooleanLiteralExprSyntax)
     case .borrowExpr:
-      visitImpl(node, BorrowExprSyntax.self, visit, visitPost)
+      visitImpl(node, BorrowExprSyntax.self, visitBorrowExprSyntax, visitPostBorrowExprSyntax)
     case .breakStmt:
-      visitImpl(node, BreakStmtSyntax.self, visit, visitPost)
+      visitImpl(node, BreakStmtSyntax.self, visitBreakStmtSyntax, visitPostBreakStmtSyntax)
     case .canImportExpr:
-      visitImpl(node, CanImportExprSyntax.self, visit, visitPost)
+      visitImpl(node, CanImportExprSyntax.self, visitCanImportExprSyntax, visitPostCanImportExprSyntax)
     case .canImportVersionInfo:
-      visitImpl(node, CanImportVersionInfoSyntax.self, visit, visitPost)
+      visitImpl(node, CanImportVersionInfoSyntax.self, visitCanImportVersionInfoSyntax, visitPostCanImportVersionInfoSyntax)
     case .catchClauseList:
-      visitImpl(node, CatchClauseListSyntax.self, visit, visitPost)
+      visitImpl(node, CatchClauseListSyntax.self, visitCatchClauseListSyntax, visitPostCatchClauseListSyntax)
     case .catchClause:
-      visitImpl(node, CatchClauseSyntax.self, visit, visitPost)
+      visitImpl(node, CatchClauseSyntax.self, visitCatchClauseSyntax, visitPostCatchClauseSyntax)
     case .catchItemList:
-      visitImpl(node, CatchItemListSyntax.self, visit, visitPost)
+      visitImpl(node, CatchItemListSyntax.self, visitCatchItemListSyntax, visitPostCatchItemListSyntax)
     case .catchItem:
-      visitImpl(node, CatchItemSyntax.self, visit, visitPost)
+      visitImpl(node, CatchItemSyntax.self, visitCatchItemSyntax, visitPostCatchItemSyntax)
     case .classDecl:
-      visitImpl(node, ClassDeclSyntax.self, visit, visitPost)
+      visitImpl(node, ClassDeclSyntax.self, visitClassDeclSyntax, visitPostClassDeclSyntax)
     case .classRestrictionType:
-      visitImpl(node, ClassRestrictionTypeSyntax.self, visit, visitPost)
+      visitImpl(node, ClassRestrictionTypeSyntax.self, visitClassRestrictionTypeSyntax, visitPostClassRestrictionTypeSyntax)
     case .closureCaptureClause:
-      visitImpl(node, ClosureCaptureClauseSyntax.self, visit, visitPost)
+      visitImpl(node, ClosureCaptureClauseSyntax.self, visitClosureCaptureClauseSyntax, visitPostClosureCaptureClauseSyntax)
     case .closureCaptureList:
-      visitImpl(node, ClosureCaptureListSyntax.self, visit, visitPost)
+      visitImpl(node, ClosureCaptureListSyntax.self, visitClosureCaptureListSyntax, visitPostClosureCaptureListSyntax)
     case .closureCaptureSpecifier:
-      visitImpl(node, ClosureCaptureSpecifierSyntax.self, visit, visitPost)
+      visitImpl(node, ClosureCaptureSpecifierSyntax.self, visitClosureCaptureSpecifierSyntax, visitPostClosureCaptureSpecifierSyntax)
     case .closureCapture:
-      visitImpl(node, ClosureCaptureSyntax.self, visit, visitPost)
+      visitImpl(node, ClosureCaptureSyntax.self, visitClosureCaptureSyntax, visitPostClosureCaptureSyntax)
     case .closureExpr:
-      visitImpl(node, ClosureExprSyntax.self, visit, visitPost)
+      visitImpl(node, ClosureExprSyntax.self, visitClosureExprSyntax, visitPostClosureExprSyntax)
     case .closureParameterClause:
-      visitImpl(node, ClosureParameterClauseSyntax.self, visit, visitPost)
+      visitImpl(node, ClosureParameterClauseSyntax.self, visitClosureParameterClauseSyntax, visitPostClosureParameterClauseSyntax)
     case .closureParameterList:
-      visitImpl(node, ClosureParameterListSyntax.self, visit, visitPost)
+      visitImpl(node, ClosureParameterListSyntax.self, visitClosureParameterListSyntax, visitPostClosureParameterListSyntax)
     case .closureParameter:
-      visitImpl(node, ClosureParameterSyntax.self, visit, visitPost)
+      visitImpl(node, ClosureParameterSyntax.self, visitClosureParameterSyntax, visitPostClosureParameterSyntax)
     case .closureShorthandParameterList:
-      visitImpl(node, ClosureShorthandParameterListSyntax.self, visit, visitPost)
+      visitImpl(node, ClosureShorthandParameterListSyntax.self, visitClosureShorthandParameterListSyntax, visitPostClosureShorthandParameterListSyntax)
     case .closureShorthandParameter:
-      visitImpl(node, ClosureShorthandParameterSyntax.self, visit, visitPost)
+      visitImpl(node, ClosureShorthandParameterSyntax.self, visitClosureShorthandParameterSyntax, visitPostClosureShorthandParameterSyntax)
     case .closureSignature:
-      visitImpl(node, ClosureSignatureSyntax.self, visit, visitPost)
+      visitImpl(node, ClosureSignatureSyntax.self, visitClosureSignatureSyntax, visitPostClosureSignatureSyntax)
     case .codeBlockItemList:
-      visitImpl(node, CodeBlockItemListSyntax.self, visit, visitPost)
+      visitImpl(node, CodeBlockItemListSyntax.self, visitCodeBlockItemListSyntax, visitPostCodeBlockItemListSyntax)
     case .codeBlockItem:
-      visitImpl(node, CodeBlockItemSyntax.self, visit, visitPost)
+      visitImpl(node, CodeBlockItemSyntax.self, visitCodeBlockItemSyntax, visitPostCodeBlockItemSyntax)
     case .codeBlock:
-      visitImpl(node, CodeBlockSyntax.self, visit, visitPost)
+      visitImpl(node, CodeBlockSyntax.self, visitCodeBlockSyntax, visitPostCodeBlockSyntax)
     case .compositionTypeElementList:
-      visitImpl(node, CompositionTypeElementListSyntax.self, visit, visitPost)
+      visitImpl(node, CompositionTypeElementListSyntax.self, visitCompositionTypeElementListSyntax, visitPostCompositionTypeElementListSyntax)
     case .compositionTypeElement:
-      visitImpl(node, CompositionTypeElementSyntax.self, visit, visitPost)
+      visitImpl(node, CompositionTypeElementSyntax.self, visitCompositionTypeElementSyntax, visitPostCompositionTypeElementSyntax)
     case .compositionType:
-      visitImpl(node, CompositionTypeSyntax.self, visit, visitPost)
+      visitImpl(node, CompositionTypeSyntax.self, visitCompositionTypeSyntax, visitPostCompositionTypeSyntax)
     case .conditionElementList:
-      visitImpl(node, ConditionElementListSyntax.self, visit, visitPost)
+      visitImpl(node, ConditionElementListSyntax.self, visitConditionElementListSyntax, visitPostConditionElementListSyntax)
     case .conditionElement:
-      visitImpl(node, ConditionElementSyntax.self, visit, visitPost)
+      visitImpl(node, ConditionElementSyntax.self, visitConditionElementSyntax, visitPostConditionElementSyntax)
     case .conformanceRequirement:
-      visitImpl(node, ConformanceRequirementSyntax.self, visit, visitPost)
+      visitImpl(node, ConformanceRequirementSyntax.self, visitConformanceRequirementSyntax, visitPostConformanceRequirementSyntax)
     case .consumeExpr:
-      visitImpl(node, ConsumeExprSyntax.self, visit, visitPost)
+      visitImpl(node, ConsumeExprSyntax.self, visitConsumeExprSyntax, visitPostConsumeExprSyntax)
     case .continueStmt:
-      visitImpl(node, ContinueStmtSyntax.self, visit, visitPost)
+      visitImpl(node, ContinueStmtSyntax.self, visitContinueStmtSyntax, visitPostContinueStmtSyntax)
     case .conventionAttributeArguments:
-      visitImpl(node, ConventionAttributeArgumentsSyntax.self, visit, visitPost)
+      visitImpl(node, ConventionAttributeArgumentsSyntax.self, visitConventionAttributeArgumentsSyntax, visitPostConventionAttributeArgumentsSyntax)
     case .conventionWitnessMethodAttributeArguments:
-      visitImpl(node, ConventionWitnessMethodAttributeArgumentsSyntax.self, visit, visitPost)
+      visitImpl(node, ConventionWitnessMethodAttributeArgumentsSyntax.self, visitConventionWitnessMethodAttributeArgumentsSyntax, visitPostConventionWitnessMethodAttributeArgumentsSyntax)
     case .copyExpr:
-      visitImpl(node, CopyExprSyntax.self, visit, visitPost)
+      visitImpl(node, CopyExprSyntax.self, visitCopyExprSyntax, visitPostCopyExprSyntax)
     case .declModifierDetail:
-      visitImpl(node, DeclModifierDetailSyntax.self, visit, visitPost)
+      visitImpl(node, DeclModifierDetailSyntax.self, visitDeclModifierDetailSyntax, visitPostDeclModifierDetailSyntax)
     case .declModifierList:
-      visitImpl(node, DeclModifierListSyntax.self, visit, visitPost)
+      visitImpl(node, DeclModifierListSyntax.self, visitDeclModifierListSyntax, visitPostDeclModifierListSyntax)
     case .declModifier:
-      visitImpl(node, DeclModifierSyntax.self, visit, visitPost)
+      visitImpl(node, DeclModifierSyntax.self, visitDeclModifierSyntax, visitPostDeclModifierSyntax)
     case .declNameArgumentList:
-      visitImpl(node, DeclNameArgumentListSyntax.self, visit, visitPost)
+      visitImpl(node, DeclNameArgumentListSyntax.self, visitDeclNameArgumentListSyntax, visitPostDeclNameArgumentListSyntax)
     case .declNameArgument:
-      visitImpl(node, DeclNameArgumentSyntax.self, visit, visitPost)
+      visitImpl(node, DeclNameArgumentSyntax.self, visitDeclNameArgumentSyntax, visitPostDeclNameArgumentSyntax)
     case .declNameArguments:
-      visitImpl(node, DeclNameArgumentsSyntax.self, visit, visitPost)
+      visitImpl(node, DeclNameArgumentsSyntax.self, visitDeclNameArgumentsSyntax, visitPostDeclNameArgumentsSyntax)
     case .declReferenceExpr:
-      visitImpl(node, DeclReferenceExprSyntax.self, visit, visitPost)
+      visitImpl(node, DeclReferenceExprSyntax.self, visitDeclReferenceExprSyntax, visitPostDeclReferenceExprSyntax)
     case .deferStmt:
-      visitImpl(node, DeferStmtSyntax.self, visit, visitPost)
+      visitImpl(node, DeferStmtSyntax.self, visitDeferStmtSyntax, visitPostDeferStmtSyntax)
     case .deinitializerDecl:
-      visitImpl(node, DeinitializerDeclSyntax.self, visit, visitPost)
+      visitImpl(node, DeinitializerDeclSyntax.self, visitDeinitializerDeclSyntax, visitPostDeinitializerDeclSyntax)
     case .deinitializerEffectSpecifiers:
-      visitImpl(node, DeinitializerEffectSpecifiersSyntax.self, visit, visitPost)
+      visitImpl(node, DeinitializerEffectSpecifiersSyntax.self, visitDeinitializerEffectSpecifiersSyntax, visitPostDeinitializerEffectSpecifiersSyntax)
     case .derivativeAttributeArguments:
-      visitImpl(node, DerivativeAttributeArgumentsSyntax.self, visit, visitPost)
+      visitImpl(node, DerivativeAttributeArgumentsSyntax.self, visitDerivativeAttributeArgumentsSyntax, visitPostDerivativeAttributeArgumentsSyntax)
     case .designatedTypeList:
-      visitImpl(node, DesignatedTypeListSyntax.self, visit, visitPost)
+      visitImpl(node, DesignatedTypeListSyntax.self, visitDesignatedTypeListSyntax, visitPostDesignatedTypeListSyntax)
     case .designatedType:
-      visitImpl(node, DesignatedTypeSyntax.self, visit, visitPost)
+      visitImpl(node, DesignatedTypeSyntax.self, visitDesignatedTypeSyntax, visitPostDesignatedTypeSyntax)
     case .dictionaryElementList:
-      visitImpl(node, DictionaryElementListSyntax.self, visit, visitPost)
+      visitImpl(node, DictionaryElementListSyntax.self, visitDictionaryElementListSyntax, visitPostDictionaryElementListSyntax)
     case .dictionaryElement:
-      visitImpl(node, DictionaryElementSyntax.self, visit, visitPost)
+      visitImpl(node, DictionaryElementSyntax.self, visitDictionaryElementSyntax, visitPostDictionaryElementSyntax)
     case .dictionaryExpr:
-      visitImpl(node, DictionaryExprSyntax.self, visit, visitPost)
+      visitImpl(node, DictionaryExprSyntax.self, visitDictionaryExprSyntax, visitPostDictionaryExprSyntax)
     case .dictionaryType:
-      visitImpl(node, DictionaryTypeSyntax.self, visit, visitPost)
+      visitImpl(node, DictionaryTypeSyntax.self, visitDictionaryTypeSyntax, visitPostDictionaryTypeSyntax)
     case .differentiabilityArgumentList:
-      visitImpl(node, DifferentiabilityArgumentListSyntax.self, visit, visitPost)
+      visitImpl(node, DifferentiabilityArgumentListSyntax.self, visitDifferentiabilityArgumentListSyntax, visitPostDifferentiabilityArgumentListSyntax)
     case .differentiabilityArgument:
-      visitImpl(node, DifferentiabilityArgumentSyntax.self, visit, visitPost)
+      visitImpl(node, DifferentiabilityArgumentSyntax.self, visitDifferentiabilityArgumentSyntax, visitPostDifferentiabilityArgumentSyntax)
     case .differentiabilityArguments:
-      visitImpl(node, DifferentiabilityArgumentsSyntax.self, visit, visitPost)
+      visitImpl(node, DifferentiabilityArgumentsSyntax.self, visitDifferentiabilityArgumentsSyntax, visitPostDifferentiabilityArgumentsSyntax)
     case .differentiabilityWithRespectToArgument:
-      visitImpl(node, DifferentiabilityWithRespectToArgumentSyntax.self, visit, visitPost)
+      visitImpl(node, DifferentiabilityWithRespectToArgumentSyntax.self, visitDifferentiabilityWithRespectToArgumentSyntax, visitPostDifferentiabilityWithRespectToArgumentSyntax)
     case .differentiableAttributeArguments:
-      visitImpl(node, DifferentiableAttributeArgumentsSyntax.self, visit, visitPost)
+      visitImpl(node, DifferentiableAttributeArgumentsSyntax.self, visitDifferentiableAttributeArgumentsSyntax, visitPostDifferentiableAttributeArgumentsSyntax)
     case .discardAssignmentExpr:
-      visitImpl(node, DiscardAssignmentExprSyntax.self, visit, visitPost)
+      visitImpl(node, DiscardAssignmentExprSyntax.self, visitDiscardAssignmentExprSyntax, visitPostDiscardAssignmentExprSyntax)
     case .discardStmt:
-      visitImpl(node, DiscardStmtSyntax.self, visit, visitPost)
+      visitImpl(node, DiscardStmtSyntax.self, visitDiscardStmtSyntax, visitPostDiscardStmtSyntax)
     case .doExpr:
-      visitImpl(node, DoExprSyntax.self, visit, visitPost)
+      visitImpl(node, DoExprSyntax.self, visitDoExprSyntax, visitPostDoExprSyntax)
     case .doStmt:
-      visitImpl(node, DoStmtSyntax.self, visit, visitPost)
+      visitImpl(node, DoStmtSyntax.self, visitDoStmtSyntax, visitPostDoStmtSyntax)
     case .documentationAttributeArgumentList:
-      visitImpl(node, DocumentationAttributeArgumentListSyntax.self, visit, visitPost)
+      visitImpl(node, DocumentationAttributeArgumentListSyntax.self, visitDocumentationAttributeArgumentListSyntax, visitPostDocumentationAttributeArgumentListSyntax)
     case .documentationAttributeArgument:
-      visitImpl(node, DocumentationAttributeArgumentSyntax.self, visit, visitPost)
+      visitImpl(node, DocumentationAttributeArgumentSyntax.self, visitDocumentationAttributeArgumentSyntax, visitPostDocumentationAttributeArgumentSyntax)
     case .dynamicReplacementAttributeArguments:
-      visitImpl(node, DynamicReplacementAttributeArgumentsSyntax.self, visit, visitPost)
+      visitImpl(node, DynamicReplacementAttributeArgumentsSyntax.self, visitDynamicReplacementAttributeArgumentsSyntax, visitPostDynamicReplacementAttributeArgumentsSyntax)
     case .editorPlaceholderDecl:
-      visitImpl(node, EditorPlaceholderDeclSyntax.self, visit, visitPost)
+      visitImpl(node, EditorPlaceholderDeclSyntax.self, visitEditorPlaceholderDeclSyntax, visitPostEditorPlaceholderDeclSyntax)
     case .editorPlaceholderExpr:
-      visitImpl(node, EditorPlaceholderExprSyntax.self, visit, visitPost)
+      visitImpl(node, EditorPlaceholderExprSyntax.self, visitEditorPlaceholderExprSyntax, visitPostEditorPlaceholderExprSyntax)
     case .effectsAttributeArgumentList:
-      visitImpl(node, EffectsAttributeArgumentListSyntax.self, visit, visitPost)
+      visitImpl(node, EffectsAttributeArgumentListSyntax.self, visitEffectsAttributeArgumentListSyntax, visitPostEffectsAttributeArgumentListSyntax)
     case .enumCaseDecl:
-      visitImpl(node, EnumCaseDeclSyntax.self, visit, visitPost)
+      visitImpl(node, EnumCaseDeclSyntax.self, visitEnumCaseDeclSyntax, visitPostEnumCaseDeclSyntax)
     case .enumCaseElementList:
-      visitImpl(node, EnumCaseElementListSyntax.self, visit, visitPost)
+      visitImpl(node, EnumCaseElementListSyntax.self, visitEnumCaseElementListSyntax, visitPostEnumCaseElementListSyntax)
     case .enumCaseElement:
-      visitImpl(node, EnumCaseElementSyntax.self, visit, visitPost)
+      visitImpl(node, EnumCaseElementSyntax.self, visitEnumCaseElementSyntax, visitPostEnumCaseElementSyntax)
     case .enumCaseParameterClause:
-      visitImpl(node, EnumCaseParameterClauseSyntax.self, visit, visitPost)
+      visitImpl(node, EnumCaseParameterClauseSyntax.self, visitEnumCaseParameterClauseSyntax, visitPostEnumCaseParameterClauseSyntax)
     case .enumCaseParameterList:
-      visitImpl(node, EnumCaseParameterListSyntax.self, visit, visitPost)
+      visitImpl(node, EnumCaseParameterListSyntax.self, visitEnumCaseParameterListSyntax, visitPostEnumCaseParameterListSyntax)
     case .enumCaseParameter:
-      visitImpl(node, EnumCaseParameterSyntax.self, visit, visitPost)
+      visitImpl(node, EnumCaseParameterSyntax.self, visitEnumCaseParameterSyntax, visitPostEnumCaseParameterSyntax)
     case .enumDecl:
-      visitImpl(node, EnumDeclSyntax.self, visit, visitPost)
+      visitImpl(node, EnumDeclSyntax.self, visitEnumDeclSyntax, visitPostEnumDeclSyntax)
     case .exposeAttributeArguments:
-      visitImpl(node, ExposeAttributeArgumentsSyntax.self, visit, visitPost)
+      visitImpl(node, ExposeAttributeArgumentsSyntax.self, visitExposeAttributeArgumentsSyntax, visitPostExposeAttributeArgumentsSyntax)
     case .exprList:
-      visitImpl(node, ExprListSyntax.self, visit, visitPost)
+      visitImpl(node, ExprListSyntax.self, visitExprListSyntax, visitPostExprListSyntax)
     case .expressionPattern:
-      visitImpl(node, ExpressionPatternSyntax.self, visit, visitPost)
+      visitImpl(node, ExpressionPatternSyntax.self, visitExpressionPatternSyntax, visitPostExpressionPatternSyntax)
     case .expressionSegment:
-      visitImpl(node, ExpressionSegmentSyntax.self, visit, visitPost)
+      visitImpl(node, ExpressionSegmentSyntax.self, visitExpressionSegmentSyntax, visitPostExpressionSegmentSyntax)
     case .expressionStmt:
-      visitImpl(node, ExpressionStmtSyntax.self, visit, visitPost)
+      visitImpl(node, ExpressionStmtSyntax.self, visitExpressionStmtSyntax, visitPostExpressionStmtSyntax)
     case .extensionDecl:
-      visitImpl(node, ExtensionDeclSyntax.self, visit, visitPost)
+      visitImpl(node, ExtensionDeclSyntax.self, visitExtensionDeclSyntax, visitPostExtensionDeclSyntax)
     case .fallThroughStmt:
-      visitImpl(node, FallThroughStmtSyntax.self, visit, visitPost)
+      visitImpl(node, FallThroughStmtSyntax.self, visitFallThroughStmtSyntax, visitPostFallThroughStmtSyntax)
     case .floatLiteralExpr:
-      visitImpl(node, FloatLiteralExprSyntax.self, visit, visitPost)
+      visitImpl(node, FloatLiteralExprSyntax.self, visitFloatLiteralExprSyntax, visitPostFloatLiteralExprSyntax)
     case .forStmt:
-      visitImpl(node, ForStmtSyntax.self, visit, visitPost)
+      visitImpl(node, ForStmtSyntax.self, visitForStmtSyntax, visitPostForStmtSyntax)
     case .forceUnwrapExpr:
-      visitImpl(node, ForceUnwrapExprSyntax.self, visit, visitPost)
+      visitImpl(node, ForceUnwrapExprSyntax.self, visitForceUnwrapExprSyntax, visitPostForceUnwrapExprSyntax)
     case .functionCallExpr:
-      visitImpl(node, FunctionCallExprSyntax.self, visit, visitPost)
+      visitImpl(node, FunctionCallExprSyntax.self, visitFunctionCallExprSyntax, visitPostFunctionCallExprSyntax)
     case .functionDecl:
-      visitImpl(node, FunctionDeclSyntax.self, visit, visitPost)
+      visitImpl(node, FunctionDeclSyntax.self, visitFunctionDeclSyntax, visitPostFunctionDeclSyntax)
     case .functionEffectSpecifiers:
-      visitImpl(node, FunctionEffectSpecifiersSyntax.self, visit, visitPost)
+      visitImpl(node, FunctionEffectSpecifiersSyntax.self, visitFunctionEffectSpecifiersSyntax, visitPostFunctionEffectSpecifiersSyntax)
     case .functionParameterClause:
-      visitImpl(node, FunctionParameterClauseSyntax.self, visit, visitPost)
+      visitImpl(node, FunctionParameterClauseSyntax.self, visitFunctionParameterClauseSyntax, visitPostFunctionParameterClauseSyntax)
     case .functionParameterList:
-      visitImpl(node, FunctionParameterListSyntax.self, visit, visitPost)
+      visitImpl(node, FunctionParameterListSyntax.self, visitFunctionParameterListSyntax, visitPostFunctionParameterListSyntax)
     case .functionParameter:
-      visitImpl(node, FunctionParameterSyntax.self, visit, visitPost)
+      visitImpl(node, FunctionParameterSyntax.self, visitFunctionParameterSyntax, visitPostFunctionParameterSyntax)
     case .functionSignature:
-      visitImpl(node, FunctionSignatureSyntax.self, visit, visitPost)
+      visitImpl(node, FunctionSignatureSyntax.self, visitFunctionSignatureSyntax, visitPostFunctionSignatureSyntax)
     case .functionType:
-      visitImpl(node, FunctionTypeSyntax.self, visit, visitPost)
+      visitImpl(node, FunctionTypeSyntax.self, visitFunctionTypeSyntax, visitPostFunctionTypeSyntax)
     case .genericArgumentClause:
-      visitImpl(node, GenericArgumentClauseSyntax.self, visit, visitPost)
+      visitImpl(node, GenericArgumentClauseSyntax.self, visitGenericArgumentClauseSyntax, visitPostGenericArgumentClauseSyntax)
     case .genericArgumentList:
-      visitImpl(node, GenericArgumentListSyntax.self, visit, visitPost)
+      visitImpl(node, GenericArgumentListSyntax.self, visitGenericArgumentListSyntax, visitPostGenericArgumentListSyntax)
     case .genericArgument:
-      visitImpl(node, GenericArgumentSyntax.self, visit, visitPost)
+      visitImpl(node, GenericArgumentSyntax.self, visitGenericArgumentSyntax, visitPostGenericArgumentSyntax)
     case .genericParameterClause:
-      visitImpl(node, GenericParameterClauseSyntax.self, visit, visitPost)
+      visitImpl(node, GenericParameterClauseSyntax.self, visitGenericParameterClauseSyntax, visitPostGenericParameterClauseSyntax)
     case .genericParameterList:
-      visitImpl(node, GenericParameterListSyntax.self, visit, visitPost)
+      visitImpl(node, GenericParameterListSyntax.self, visitGenericParameterListSyntax, visitPostGenericParameterListSyntax)
     case .genericParameter:
-      visitImpl(node, GenericParameterSyntax.self, visit, visitPost)
+      visitImpl(node, GenericParameterSyntax.self, visitGenericParameterSyntax, visitPostGenericParameterSyntax)
     case .genericRequirementList:
-      visitImpl(node, GenericRequirementListSyntax.self, visit, visitPost)
+      visitImpl(node, GenericRequirementListSyntax.self, visitGenericRequirementListSyntax, visitPostGenericRequirementListSyntax)
     case .genericRequirement:
-      visitImpl(node, GenericRequirementSyntax.self, visit, visitPost)
+      visitImpl(node, GenericRequirementSyntax.self, visitGenericRequirementSyntax, visitPostGenericRequirementSyntax)
     case .genericSpecializationExpr:
-      visitImpl(node, GenericSpecializationExprSyntax.self, visit, visitPost)
+      visitImpl(node, GenericSpecializationExprSyntax.self, visitGenericSpecializationExprSyntax, visitPostGenericSpecializationExprSyntax)
     case .genericWhereClause:
-      visitImpl(node, GenericWhereClauseSyntax.self, visit, visitPost)
+      visitImpl(node, GenericWhereClauseSyntax.self, visitGenericWhereClauseSyntax, visitPostGenericWhereClauseSyntax)
     case .guardStmt:
-      visitImpl(node, GuardStmtSyntax.self, visit, visitPost)
+      visitImpl(node, GuardStmtSyntax.self, visitGuardStmtSyntax, visitPostGuardStmtSyntax)
     case .identifierPattern:
-      visitImpl(node, IdentifierPatternSyntax.self, visit, visitPost)
+      visitImpl(node, IdentifierPatternSyntax.self, visitIdentifierPatternSyntax, visitPostIdentifierPatternSyntax)
     case .identifierType:
-      visitImpl(node, IdentifierTypeSyntax.self, visit, visitPost)
+      visitImpl(node, IdentifierTypeSyntax.self, visitIdentifierTypeSyntax, visitPostIdentifierTypeSyntax)
     case .ifConfigClauseList:
-      visitImpl(node, IfConfigClauseListSyntax.self, visit, visitPost)
+      visitImpl(node, IfConfigClauseListSyntax.self, visitIfConfigClauseListSyntax, visitPostIfConfigClauseListSyntax)
     case .ifConfigClause:
-      visitImpl(node, IfConfigClauseSyntax.self, visit, visitPost)
+      visitImpl(node, IfConfigClauseSyntax.self, visitIfConfigClauseSyntax, visitPostIfConfigClauseSyntax)
     case .ifConfigDecl:
-      visitImpl(node, IfConfigDeclSyntax.self, visit, visitPost)
+      visitImpl(node, IfConfigDeclSyntax.self, visitIfConfigDeclSyntax, visitPostIfConfigDeclSyntax)
     case .ifExpr:
-      visitImpl(node, IfExprSyntax.self, visit, visitPost)
+      visitImpl(node, IfExprSyntax.self, visitIfExprSyntax, visitPostIfExprSyntax)
     case .implementsAttributeArguments:
-      visitImpl(node, ImplementsAttributeArgumentsSyntax.self, visit, visitPost)
+      visitImpl(node, ImplementsAttributeArgumentsSyntax.self, visitImplementsAttributeArgumentsSyntax, visitPostImplementsAttributeArgumentsSyntax)
     case .implicitlyUnwrappedOptionalType:
-      visitImpl(node, ImplicitlyUnwrappedOptionalTypeSyntax.self, visit, visitPost)
+      visitImpl(node, ImplicitlyUnwrappedOptionalTypeSyntax.self, visitImplicitlyUnwrappedOptionalTypeSyntax, visitPostImplicitlyUnwrappedOptionalTypeSyntax)
     case .importDecl:
-      visitImpl(node, ImportDeclSyntax.self, visit, visitPost)
+      visitImpl(node, ImportDeclSyntax.self, visitImportDeclSyntax, visitPostImportDeclSyntax)
     case .importPathComponentList:
-      visitImpl(node, ImportPathComponentListSyntax.self, visit, visitPost)
+      visitImpl(node, ImportPathComponentListSyntax.self, visitImportPathComponentListSyntax, visitPostImportPathComponentListSyntax)
     case .importPathComponent:
-      visitImpl(node, ImportPathComponentSyntax.self, visit, visitPost)
+      visitImpl(node, ImportPathComponentSyntax.self, visitImportPathComponentSyntax, visitPostImportPathComponentSyntax)
     case .inOutExpr:
-      visitImpl(node, InOutExprSyntax.self, visit, visitPost)
+      visitImpl(node, InOutExprSyntax.self, visitInOutExprSyntax, visitPostInOutExprSyntax)
     case .infixOperatorExpr:
-      visitImpl(node, InfixOperatorExprSyntax.self, visit, visitPost)
+      visitImpl(node, InfixOperatorExprSyntax.self, visitInfixOperatorExprSyntax, visitPostInfixOperatorExprSyntax)
     case .inheritanceClause:
-      visitImpl(node, InheritanceClauseSyntax.self, visit, visitPost)
+      visitImpl(node, InheritanceClauseSyntax.self, visitInheritanceClauseSyntax, visitPostInheritanceClauseSyntax)
     case .inheritedTypeList:
-      visitImpl(node, InheritedTypeListSyntax.self, visit, visitPost)
+      visitImpl(node, InheritedTypeListSyntax.self, visitInheritedTypeListSyntax, visitPostInheritedTypeListSyntax)
     case .inheritedType:
-      visitImpl(node, InheritedTypeSyntax.self, visit, visitPost)
+      visitImpl(node, InheritedTypeSyntax.self, visitInheritedTypeSyntax, visitPostInheritedTypeSyntax)
     case .initializerClause:
-      visitImpl(node, InitializerClauseSyntax.self, visit, visitPost)
+      visitImpl(node, InitializerClauseSyntax.self, visitInitializerClauseSyntax, visitPostInitializerClauseSyntax)
     case .initializerDecl:
-      visitImpl(node, InitializerDeclSyntax.self, visit, visitPost)
+      visitImpl(node, InitializerDeclSyntax.self, visitInitializerDeclSyntax, visitPostInitializerDeclSyntax)
     case .integerLiteralExpr:
-      visitImpl(node, IntegerLiteralExprSyntax.self, visit, visitPost)
+      visitImpl(node, IntegerLiteralExprSyntax.self, visitIntegerLiteralExprSyntax, visitPostIntegerLiteralExprSyntax)
     case .isExpr:
-      visitImpl(node, IsExprSyntax.self, visit, visitPost)
+      visitImpl(node, IsExprSyntax.self, visitIsExprSyntax, visitPostIsExprSyntax)
     case .isTypePattern:
-      visitImpl(node, IsTypePatternSyntax.self, visit, visitPost)
+      visitImpl(node, IsTypePatternSyntax.self, visitIsTypePatternSyntax, visitPostIsTypePatternSyntax)
     case .keyPathComponentList:
-      visitImpl(node, KeyPathComponentListSyntax.self, visit, visitPost)
+      visitImpl(node, KeyPathComponentListSyntax.self, visitKeyPathComponentListSyntax, visitPostKeyPathComponentListSyntax)
     case .keyPathComponent:
-      visitImpl(node, KeyPathComponentSyntax.self, visit, visitPost)
+      visitImpl(node, KeyPathComponentSyntax.self, visitKeyPathComponentSyntax, visitPostKeyPathComponentSyntax)
     case .keyPathExpr:
-      visitImpl(node, KeyPathExprSyntax.self, visit, visitPost)
+      visitImpl(node, KeyPathExprSyntax.self, visitKeyPathExprSyntax, visitPostKeyPathExprSyntax)
     case .keyPathOptionalComponent:
-      visitImpl(node, KeyPathOptionalComponentSyntax.self, visit, visitPost)
+      visitImpl(node, KeyPathOptionalComponentSyntax.self, visitKeyPathOptionalComponentSyntax, visitPostKeyPathOptionalComponentSyntax)
     case .keyPathPropertyComponent:
-      visitImpl(node, KeyPathPropertyComponentSyntax.self, visit, visitPost)
+      visitImpl(node, KeyPathPropertyComponentSyntax.self, visitKeyPathPropertyComponentSyntax, visitPostKeyPathPropertyComponentSyntax)
     case .keyPathSubscriptComponent:
-      visitImpl(node, KeyPathSubscriptComponentSyntax.self, visit, visitPost)
+      visitImpl(node, KeyPathSubscriptComponentSyntax.self, visitKeyPathSubscriptComponentSyntax, visitPostKeyPathSubscriptComponentSyntax)
     case .labeledExprList:
-      visitImpl(node, LabeledExprListSyntax.self, visit, visitPost)
+      visitImpl(node, LabeledExprListSyntax.self, visitLabeledExprListSyntax, visitPostLabeledExprListSyntax)
     case .labeledExpr:
-      visitImpl(node, LabeledExprSyntax.self, visit, visitPost)
+      visitImpl(node, LabeledExprSyntax.self, visitLabeledExprSyntax, visitPostLabeledExprSyntax)
     case .labeledSpecializeArgument:
-      visitImpl(node, LabeledSpecializeArgumentSyntax.self, visit, visitPost)
+      visitImpl(node, LabeledSpecializeArgumentSyntax.self, visitLabeledSpecializeArgumentSyntax, visitPostLabeledSpecializeArgumentSyntax)
     case .labeledStmt:
-      visitImpl(node, LabeledStmtSyntax.self, visit, visitPost)
+      visitImpl(node, LabeledStmtSyntax.self, visitLabeledStmtSyntax, visitPostLabeledStmtSyntax)
     case .layoutRequirement:
-      visitImpl(node, LayoutRequirementSyntax.self, visit, visitPost)
+      visitImpl(node, LayoutRequirementSyntax.self, visitLayoutRequirementSyntax, visitPostLayoutRequirementSyntax)
     case .macroDecl:
-      visitImpl(node, MacroDeclSyntax.self, visit, visitPost)
+      visitImpl(node, MacroDeclSyntax.self, visitMacroDeclSyntax, visitPostMacroDeclSyntax)
     case .macroExpansionDecl:
-      visitImpl(node, MacroExpansionDeclSyntax.self, visit, visitPost)
+      visitImpl(node, MacroExpansionDeclSyntax.self, visitMacroExpansionDeclSyntax, visitPostMacroExpansionDeclSyntax)
     case .macroExpansionExpr:
-      visitImpl(node, MacroExpansionExprSyntax.self, visit, visitPost)
+      visitImpl(node, MacroExpansionExprSyntax.self, visitMacroExpansionExprSyntax, visitPostMacroExpansionExprSyntax)
     case .matchingPatternCondition:
-      visitImpl(node, MatchingPatternConditionSyntax.self, visit, visitPost)
+      visitImpl(node, MatchingPatternConditionSyntax.self, visitMatchingPatternConditionSyntax, visitPostMatchingPatternConditionSyntax)
     case .memberAccessExpr:
-      visitImpl(node, MemberAccessExprSyntax.self, visit, visitPost)
+      visitImpl(node, MemberAccessExprSyntax.self, visitMemberAccessExprSyntax, visitPostMemberAccessExprSyntax)
     case .memberBlockItemList:
-      visitImpl(node, MemberBlockItemListSyntax.self, visit, visitPost)
+      visitImpl(node, MemberBlockItemListSyntax.self, visitMemberBlockItemListSyntax, visitPostMemberBlockItemListSyntax)
     case .memberBlockItem:
-      visitImpl(node, MemberBlockItemSyntax.self, visit, visitPost)
+      visitImpl(node, MemberBlockItemSyntax.self, visitMemberBlockItemSyntax, visitPostMemberBlockItemSyntax)
     case .memberBlock:
-      visitImpl(node, MemberBlockSyntax.self, visit, visitPost)
+      visitImpl(node, MemberBlockSyntax.self, visitMemberBlockSyntax, visitPostMemberBlockSyntax)
     case .memberType:
-      visitImpl(node, MemberTypeSyntax.self, visit, visitPost)
+      visitImpl(node, MemberTypeSyntax.self, visitMemberTypeSyntax, visitPostMemberTypeSyntax)
     case .metatypeType:
-      visitImpl(node, MetatypeTypeSyntax.self, visit, visitPost)
+      visitImpl(node, MetatypeTypeSyntax.self, visitMetatypeTypeSyntax, visitPostMetatypeTypeSyntax)
     case .missingDecl:
-      visitImpl(node, MissingDeclSyntax.self, visit, visitPost)
+      visitImpl(node, MissingDeclSyntax.self, visitMissingDeclSyntax, visitPostMissingDeclSyntax)
     case .missingExpr:
-      visitImpl(node, MissingExprSyntax.self, visit, visitPost)
+      visitImpl(node, MissingExprSyntax.self, visitMissingExprSyntax, visitPostMissingExprSyntax)
     case .missingPattern:
-      visitImpl(node, MissingPatternSyntax.self, visit, visitPost)
+      visitImpl(node, MissingPatternSyntax.self, visitMissingPatternSyntax, visitPostMissingPatternSyntax)
     case .missingStmt:
-      visitImpl(node, MissingStmtSyntax.self, visit, visitPost)
+      visitImpl(node, MissingStmtSyntax.self, visitMissingStmtSyntax, visitPostMissingStmtSyntax)
     case .missing:
-      visitImpl(node, MissingSyntax.self, visit, visitPost)
+      visitImpl(node, MissingSyntax.self, visitMissingSyntax, visitPostMissingSyntax)
     case .missingType:
-      visitImpl(node, MissingTypeSyntax.self, visit, visitPost)
+      visitImpl(node, MissingTypeSyntax.self, visitMissingTypeSyntax, visitPostMissingTypeSyntax)
     case .multipleTrailingClosureElementList:
-      visitImpl(node, MultipleTrailingClosureElementListSyntax.self, visit, visitPost)
+      visitImpl(node, MultipleTrailingClosureElementListSyntax.self, visitMultipleTrailingClosureElementListSyntax, visitPostMultipleTrailingClosureElementListSyntax)
     case .multipleTrailingClosureElement:
-      visitImpl(node, MultipleTrailingClosureElementSyntax.self, visit, visitPost)
+      visitImpl(node, MultipleTrailingClosureElementSyntax.self, visitMultipleTrailingClosureElementSyntax, visitPostMultipleTrailingClosureElementSyntax)
     case .namedOpaqueReturnType:
-      visitImpl(node, NamedOpaqueReturnTypeSyntax.self, visit, visitPost)
+      visitImpl(node, NamedOpaqueReturnTypeSyntax.self, visitNamedOpaqueReturnTypeSyntax, visitPostNamedOpaqueReturnTypeSyntax)
     case .nilLiteralExpr:
-      visitImpl(node, NilLiteralExprSyntax.self, visit, visitPost)
+      visitImpl(node, NilLiteralExprSyntax.self, visitNilLiteralExprSyntax, visitPostNilLiteralExprSyntax)
     case .objCSelectorPieceList:
-      visitImpl(node, ObjCSelectorPieceListSyntax.self, visit, visitPost)
+      visitImpl(node, ObjCSelectorPieceListSyntax.self, visitObjCSelectorPieceListSyntax, visitPostObjCSelectorPieceListSyntax)
     case .objCSelectorPiece:
-      visitImpl(node, ObjCSelectorPieceSyntax.self, visit, visitPost)
+      visitImpl(node, ObjCSelectorPieceSyntax.self, visitObjCSelectorPieceSyntax, visitPostObjCSelectorPieceSyntax)
     case .opaqueReturnTypeOfAttributeArguments:
-      visitImpl(node, OpaqueReturnTypeOfAttributeArgumentsSyntax.self, visit, visitPost)
+      visitImpl(node, OpaqueReturnTypeOfAttributeArgumentsSyntax.self, visitOpaqueReturnTypeOfAttributeArgumentsSyntax, visitPostOpaqueReturnTypeOfAttributeArgumentsSyntax)
     case .operatorDecl:
-      visitImpl(node, OperatorDeclSyntax.self, visit, visitPost)
+      visitImpl(node, OperatorDeclSyntax.self, visitOperatorDeclSyntax, visitPostOperatorDeclSyntax)
     case .operatorPrecedenceAndTypes:
-      visitImpl(node, OperatorPrecedenceAndTypesSyntax.self, visit, visitPost)
+      visitImpl(node, OperatorPrecedenceAndTypesSyntax.self, visitOperatorPrecedenceAndTypesSyntax, visitPostOperatorPrecedenceAndTypesSyntax)
     case .optionalBindingCondition:
-      visitImpl(node, OptionalBindingConditionSyntax.self, visit, visitPost)
+      visitImpl(node, OptionalBindingConditionSyntax.self, visitOptionalBindingConditionSyntax, visitPostOptionalBindingConditionSyntax)
     case .optionalChainingExpr:
-      visitImpl(node, OptionalChainingExprSyntax.self, visit, visitPost)
+      visitImpl(node, OptionalChainingExprSyntax.self, visitOptionalChainingExprSyntax, visitPostOptionalChainingExprSyntax)
     case .optionalType:
-      visitImpl(node, OptionalTypeSyntax.self, visit, visitPost)
+      visitImpl(node, OptionalTypeSyntax.self, visitOptionalTypeSyntax, visitPostOptionalTypeSyntax)
     case .originallyDefinedInAttributeArguments:
-      visitImpl(node, OriginallyDefinedInAttributeArgumentsSyntax.self, visit, visitPost)
+      visitImpl(node, OriginallyDefinedInAttributeArgumentsSyntax.self, visitOriginallyDefinedInAttributeArgumentsSyntax, visitPostOriginallyDefinedInAttributeArgumentsSyntax)
     case .packElementExpr:
-      visitImpl(node, PackElementExprSyntax.self, visit, visitPost)
+      visitImpl(node, PackElementExprSyntax.self, visitPackElementExprSyntax, visitPostPackElementExprSyntax)
     case .packElementType:
-      visitImpl(node, PackElementTypeSyntax.self, visit, visitPost)
+      visitImpl(node, PackElementTypeSyntax.self, visitPackElementTypeSyntax, visitPostPackElementTypeSyntax)
     case .packExpansionExpr:
-      visitImpl(node, PackExpansionExprSyntax.self, visit, visitPost)
+      visitImpl(node, PackExpansionExprSyntax.self, visitPackExpansionExprSyntax, visitPostPackExpansionExprSyntax)
     case .packExpansionType:
-      visitImpl(node, PackExpansionTypeSyntax.self, visit, visitPost)
+      visitImpl(node, PackExpansionTypeSyntax.self, visitPackExpansionTypeSyntax, visitPostPackExpansionTypeSyntax)
     case .patternBindingList:
-      visitImpl(node, PatternBindingListSyntax.self, visit, visitPost)
+      visitImpl(node, PatternBindingListSyntax.self, visitPatternBindingListSyntax, visitPostPatternBindingListSyntax)
     case .patternBinding:
-      visitImpl(node, PatternBindingSyntax.self, visit, visitPost)
+      visitImpl(node, PatternBindingSyntax.self, visitPatternBindingSyntax, visitPostPatternBindingSyntax)
     case .patternExpr:
-      visitImpl(node, PatternExprSyntax.self, visit, visitPost)
+      visitImpl(node, PatternExprSyntax.self, visitPatternExprSyntax, visitPostPatternExprSyntax)
     case .platformVersionItemList:
-      visitImpl(node, PlatformVersionItemListSyntax.self, visit, visitPost)
+      visitImpl(node, PlatformVersionItemListSyntax.self, visitPlatformVersionItemListSyntax, visitPostPlatformVersionItemListSyntax)
     case .platformVersionItem:
-      visitImpl(node, PlatformVersionItemSyntax.self, visit, visitPost)
+      visitImpl(node, PlatformVersionItemSyntax.self, visitPlatformVersionItemSyntax, visitPostPlatformVersionItemSyntax)
     case .platformVersion:
-      visitImpl(node, PlatformVersionSyntax.self, visit, visitPost)
+      visitImpl(node, PlatformVersionSyntax.self, visitPlatformVersionSyntax, visitPostPlatformVersionSyntax)
     case .postfixIfConfigExpr:
-      visitImpl(node, PostfixIfConfigExprSyntax.self, visit, visitPost)
+      visitImpl(node, PostfixIfConfigExprSyntax.self, visitPostfixIfConfigExprSyntax, visitPostPostfixIfConfigExprSyntax)
     case .postfixOperatorExpr:
-      visitImpl(node, PostfixOperatorExprSyntax.self, visit, visitPost)
+      visitImpl(node, PostfixOperatorExprSyntax.self, visitPostfixOperatorExprSyntax, visitPostPostfixOperatorExprSyntax)
     case .poundSourceLocationArguments:
-      visitImpl(node, PoundSourceLocationArgumentsSyntax.self, visit, visitPost)
+      visitImpl(node, PoundSourceLocationArgumentsSyntax.self, visitPoundSourceLocationArgumentsSyntax, visitPostPoundSourceLocationArgumentsSyntax)
     case .poundSourceLocation:
-      visitImpl(node, PoundSourceLocationSyntax.self, visit, visitPost)
+      visitImpl(node, PoundSourceLocationSyntax.self, visitPoundSourceLocationSyntax, visitPostPoundSourceLocationSyntax)
     case .precedenceGroupAssignment:
-      visitImpl(node, PrecedenceGroupAssignmentSyntax.self, visit, visitPost)
+      visitImpl(node, PrecedenceGroupAssignmentSyntax.self, visitPrecedenceGroupAssignmentSyntax, visitPostPrecedenceGroupAssignmentSyntax)
     case .precedenceGroupAssociativity:
-      visitImpl(node, PrecedenceGroupAssociativitySyntax.self, visit, visitPost)
+      visitImpl(node, PrecedenceGroupAssociativitySyntax.self, visitPrecedenceGroupAssociativitySyntax, visitPostPrecedenceGroupAssociativitySyntax)
     case .precedenceGroupAttributeList:
-      visitImpl(node, PrecedenceGroupAttributeListSyntax.self, visit, visitPost)
+      visitImpl(node, PrecedenceGroupAttributeListSyntax.self, visitPrecedenceGroupAttributeListSyntax, visitPostPrecedenceGroupAttributeListSyntax)
     case .precedenceGroupDecl:
-      visitImpl(node, PrecedenceGroupDeclSyntax.self, visit, visitPost)
+      visitImpl(node, PrecedenceGroupDeclSyntax.self, visitPrecedenceGroupDeclSyntax, visitPostPrecedenceGroupDeclSyntax)
     case .precedenceGroupNameList:
-      visitImpl(node, PrecedenceGroupNameListSyntax.self, visit, visitPost)
+      visitImpl(node, PrecedenceGroupNameListSyntax.self, visitPrecedenceGroupNameListSyntax, visitPostPrecedenceGroupNameListSyntax)
     case .precedenceGroupName:
-      visitImpl(node, PrecedenceGroupNameSyntax.self, visit, visitPost)
+      visitImpl(node, PrecedenceGroupNameSyntax.self, visitPrecedenceGroupNameSyntax, visitPostPrecedenceGroupNameSyntax)
     case .precedenceGroupRelation:
-      visitImpl(node, PrecedenceGroupRelationSyntax.self, visit, visitPost)
+      visitImpl(node, PrecedenceGroupRelationSyntax.self, visitPrecedenceGroupRelationSyntax, visitPostPrecedenceGroupRelationSyntax)
     case .prefixOperatorExpr:
-      visitImpl(node, PrefixOperatorExprSyntax.self, visit, visitPost)
+      visitImpl(node, PrefixOperatorExprSyntax.self, visitPrefixOperatorExprSyntax, visitPostPrefixOperatorExprSyntax)
     case .primaryAssociatedTypeClause:
-      visitImpl(node, PrimaryAssociatedTypeClauseSyntax.self, visit, visitPost)
+      visitImpl(node, PrimaryAssociatedTypeClauseSyntax.self, visitPrimaryAssociatedTypeClauseSyntax, visitPostPrimaryAssociatedTypeClauseSyntax)
     case .primaryAssociatedTypeList:
-      visitImpl(node, PrimaryAssociatedTypeListSyntax.self, visit, visitPost)
+      visitImpl(node, PrimaryAssociatedTypeListSyntax.self, visitPrimaryAssociatedTypeListSyntax, visitPostPrimaryAssociatedTypeListSyntax)
     case .primaryAssociatedType:
-      visitImpl(node, PrimaryAssociatedTypeSyntax.self, visit, visitPost)
+      visitImpl(node, PrimaryAssociatedTypeSyntax.self, visitPrimaryAssociatedTypeSyntax, visitPostPrimaryAssociatedTypeSyntax)
     case .protocolDecl:
-      visitImpl(node, ProtocolDeclSyntax.self, visit, visitPost)
+      visitImpl(node, ProtocolDeclSyntax.self, visitProtocolDeclSyntax, visitPostProtocolDeclSyntax)
     case .regexLiteralExpr:
-      visitImpl(node, RegexLiteralExprSyntax.self, visit, visitPost)
+      visitImpl(node, RegexLiteralExprSyntax.self, visitRegexLiteralExprSyntax, visitPostRegexLiteralExprSyntax)
     case .repeatStmt:
-      visitImpl(node, RepeatStmtSyntax.self, visit, visitPost)
+      visitImpl(node, RepeatStmtSyntax.self, visitRepeatStmtSyntax, visitPostRepeatStmtSyntax)
     case .returnClause:
-      visitImpl(node, ReturnClauseSyntax.self, visit, visitPost)
+      visitImpl(node, ReturnClauseSyntax.self, visitReturnClauseSyntax, visitPostReturnClauseSyntax)
     case .returnStmt:
-      visitImpl(node, ReturnStmtSyntax.self, visit, visitPost)
+      visitImpl(node, ReturnStmtSyntax.self, visitReturnStmtSyntax, visitPostReturnStmtSyntax)
     case .sameTypeRequirement:
-      visitImpl(node, SameTypeRequirementSyntax.self, visit, visitPost)
+      visitImpl(node, SameTypeRequirementSyntax.self, visitSameTypeRequirementSyntax, visitPostSameTypeRequirementSyntax)
     case .sequenceExpr:
-      visitImpl(node, SequenceExprSyntax.self, visit, visitPost)
+      visitImpl(node, SequenceExprSyntax.self, visitSequenceExprSyntax, visitPostSequenceExprSyntax)
     case .simpleStringLiteralExpr:
-      visitImpl(node, SimpleStringLiteralExprSyntax.self, visit, visitPost)
+      visitImpl(node, SimpleStringLiteralExprSyntax.self, visitSimpleStringLiteralExprSyntax, visitPostSimpleStringLiteralExprSyntax)
     case .simpleStringLiteralSegmentList:
-      visitImpl(node, SimpleStringLiteralSegmentListSyntax.self, visit, visitPost)
+      visitImpl(node, SimpleStringLiteralSegmentListSyntax.self, visitSimpleStringLiteralSegmentListSyntax, visitPostSimpleStringLiteralSegmentListSyntax)
     case .someOrAnyType:
-      visitImpl(node, SomeOrAnyTypeSyntax.self, visit, visitPost)
+      visitImpl(node, SomeOrAnyTypeSyntax.self, visitSomeOrAnyTypeSyntax, visitPostSomeOrAnyTypeSyntax)
     case .sourceFile:
-      visitImpl(node, SourceFileSyntax.self, visit, visitPost)
+      visitImpl(node, SourceFileSyntax.self, visitSourceFileSyntax, visitPostSourceFileSyntax)
     case .specializeAttributeArgumentList:
-      visitImpl(node, SpecializeAttributeArgumentListSyntax.self, visit, visitPost)
+      visitImpl(node, SpecializeAttributeArgumentListSyntax.self, visitSpecializeAttributeArgumentListSyntax, visitPostSpecializeAttributeArgumentListSyntax)
     case .specializeAvailabilityArgument:
-      visitImpl(node, SpecializeAvailabilityArgumentSyntax.self, visit, visitPost)
+      visitImpl(node, SpecializeAvailabilityArgumentSyntax.self, visitSpecializeAvailabilityArgumentSyntax, visitPostSpecializeAvailabilityArgumentSyntax)
     case .specializeTargetFunctionArgument:
-      visitImpl(node, SpecializeTargetFunctionArgumentSyntax.self, visit, visitPost)
+      visitImpl(node, SpecializeTargetFunctionArgumentSyntax.self, visitSpecializeTargetFunctionArgumentSyntax, visitPostSpecializeTargetFunctionArgumentSyntax)
     case .stringLiteralExpr:
-      visitImpl(node, StringLiteralExprSyntax.self, visit, visitPost)
+      visitImpl(node, StringLiteralExprSyntax.self, visitStringLiteralExprSyntax, visitPostStringLiteralExprSyntax)
     case .stringLiteralSegmentList:
-      visitImpl(node, StringLiteralSegmentListSyntax.self, visit, visitPost)
+      visitImpl(node, StringLiteralSegmentListSyntax.self, visitStringLiteralSegmentListSyntax, visitPostStringLiteralSegmentListSyntax)
     case .stringSegment:
-      visitImpl(node, StringSegmentSyntax.self, visit, visitPost)
+      visitImpl(node, StringSegmentSyntax.self, visitStringSegmentSyntax, visitPostStringSegmentSyntax)
     case .structDecl:
-      visitImpl(node, StructDeclSyntax.self, visit, visitPost)
+      visitImpl(node, StructDeclSyntax.self, visitStructDeclSyntax, visitPostStructDeclSyntax)
     case .subscriptCallExpr:
-      visitImpl(node, SubscriptCallExprSyntax.self, visit, visitPost)
+      visitImpl(node, SubscriptCallExprSyntax.self, visitSubscriptCallExprSyntax, visitPostSubscriptCallExprSyntax)
     case .subscriptDecl:
-      visitImpl(node, SubscriptDeclSyntax.self, visit, visitPost)
+      visitImpl(node, SubscriptDeclSyntax.self, visitSubscriptDeclSyntax, visitPostSubscriptDeclSyntax)
     case .superExpr:
-      visitImpl(node, SuperExprSyntax.self, visit, visitPost)
+      visitImpl(node, SuperExprSyntax.self, visitSuperExprSyntax, visitPostSuperExprSyntax)
     case .suppressedType:
-      visitImpl(node, SuppressedTypeSyntax.self, visit, visitPost)
+      visitImpl(node, SuppressedTypeSyntax.self, visitSuppressedTypeSyntax, visitPostSuppressedTypeSyntax)
     case .switchCaseItemList:
-      visitImpl(node, SwitchCaseItemListSyntax.self, visit, visitPost)
+      visitImpl(node, SwitchCaseItemListSyntax.self, visitSwitchCaseItemListSyntax, visitPostSwitchCaseItemListSyntax)
     case .switchCaseItem:
-      visitImpl(node, SwitchCaseItemSyntax.self, visit, visitPost)
+      visitImpl(node, SwitchCaseItemSyntax.self, visitSwitchCaseItemSyntax, visitPostSwitchCaseItemSyntax)
     case .switchCaseLabel:
-      visitImpl(node, SwitchCaseLabelSyntax.self, visit, visitPost)
+      visitImpl(node, SwitchCaseLabelSyntax.self, visitSwitchCaseLabelSyntax, visitPostSwitchCaseLabelSyntax)
     case .switchCaseList:
-      visitImpl(node, SwitchCaseListSyntax.self, visit, visitPost)
+      visitImpl(node, SwitchCaseListSyntax.self, visitSwitchCaseListSyntax, visitPostSwitchCaseListSyntax)
     case .switchCase:
-      visitImpl(node, SwitchCaseSyntax.self, visit, visitPost)
+      visitImpl(node, SwitchCaseSyntax.self, visitSwitchCaseSyntax, visitPostSwitchCaseSyntax)
     case .switchDefaultLabel:
-      visitImpl(node, SwitchDefaultLabelSyntax.self, visit, visitPost)
+      visitImpl(node, SwitchDefaultLabelSyntax.self, visitSwitchDefaultLabelSyntax, visitPostSwitchDefaultLabelSyntax)
     case .switchExpr:
-      visitImpl(node, SwitchExprSyntax.self, visit, visitPost)
+      visitImpl(node, SwitchExprSyntax.self, visitSwitchExprSyntax, visitPostSwitchExprSyntax)
     case .ternaryExpr:
-      visitImpl(node, TernaryExprSyntax.self, visit, visitPost)
+      visitImpl(node, TernaryExprSyntax.self, visitTernaryExprSyntax, visitPostTernaryExprSyntax)
     case .thenStmt:
-      visitImpl(node, ThenStmtSyntax.self, visit, visitPost)
+      visitImpl(node, ThenStmtSyntax.self, visitThenStmtSyntax, visitPostThenStmtSyntax)
     case .throwStmt:
-      visitImpl(node, ThrowStmtSyntax.self, visit, visitPost)
+      visitImpl(node, ThrowStmtSyntax.self, visitThrowStmtSyntax, visitPostThrowStmtSyntax)
     case .throwsClause:
-      visitImpl(node, ThrowsClauseSyntax.self, visit, visitPost)
+      visitImpl(node, ThrowsClauseSyntax.self, visitThrowsClauseSyntax, visitPostThrowsClauseSyntax)
     case .tryExpr:
-      visitImpl(node, TryExprSyntax.self, visit, visitPost)
+      visitImpl(node, TryExprSyntax.self, visitTryExprSyntax, visitPostTryExprSyntax)
     case .tupleExpr:
-      visitImpl(node, TupleExprSyntax.self, visit, visitPost)
+      visitImpl(node, TupleExprSyntax.self, visitTupleExprSyntax, visitPostTupleExprSyntax)
     case .tuplePatternElementList:
-      visitImpl(node, TuplePatternElementListSyntax.self, visit, visitPost)
+      visitImpl(node, TuplePatternElementListSyntax.self, visitTuplePatternElementListSyntax, visitPostTuplePatternElementListSyntax)
     case .tuplePatternElement:
-      visitImpl(node, TuplePatternElementSyntax.self, visit, visitPost)
+      visitImpl(node, TuplePatternElementSyntax.self, visitTuplePatternElementSyntax, visitPostTuplePatternElementSyntax)
     case .tuplePattern:
-      visitImpl(node, TuplePatternSyntax.self, visit, visitPost)
+      visitImpl(node, TuplePatternSyntax.self, visitTuplePatternSyntax, visitPostTuplePatternSyntax)
     case .tupleTypeElementList:
-      visitImpl(node, TupleTypeElementListSyntax.self, visit, visitPost)
+      visitImpl(node, TupleTypeElementListSyntax.self, visitTupleTypeElementListSyntax, visitPostTupleTypeElementListSyntax)
     case .tupleTypeElement:
-      visitImpl(node, TupleTypeElementSyntax.self, visit, visitPost)
+      visitImpl(node, TupleTypeElementSyntax.self, visitTupleTypeElementSyntax, visitPostTupleTypeElementSyntax)
     case .tupleType:
-      visitImpl(node, TupleTypeSyntax.self, visit, visitPost)
+      visitImpl(node, TupleTypeSyntax.self, visitTupleTypeSyntax, visitPostTupleTypeSyntax)
     case .typeAliasDecl:
-      visitImpl(node, TypeAliasDeclSyntax.self, visit, visitPost)
+      visitImpl(node, TypeAliasDeclSyntax.self, visitTypeAliasDeclSyntax, visitPostTypeAliasDeclSyntax)
     case .typeAnnotation:
-      visitImpl(node, TypeAnnotationSyntax.self, visit, visitPost)
+      visitImpl(node, TypeAnnotationSyntax.self, visitTypeAnnotationSyntax, visitPostTypeAnnotationSyntax)
     case .typeEffectSpecifiers:
-      visitImpl(node, TypeEffectSpecifiersSyntax.self, visit, visitPost)
+      visitImpl(node, TypeEffectSpecifiersSyntax.self, visitTypeEffectSpecifiersSyntax, visitPostTypeEffectSpecifiersSyntax)
     case .typeExpr:
-      visitImpl(node, TypeExprSyntax.self, visit, visitPost)
+      visitImpl(node, TypeExprSyntax.self, visitTypeExprSyntax, visitPostTypeExprSyntax)
     case .typeInitializerClause:
-      visitImpl(node, TypeInitializerClauseSyntax.self, visit, visitPost)
+      visitImpl(node, TypeInitializerClauseSyntax.self, visitTypeInitializerClauseSyntax, visitPostTypeInitializerClauseSyntax)
     case .unavailableFromAsyncAttributeArguments:
-      visitImpl(node, UnavailableFromAsyncAttributeArgumentsSyntax.self, visit, visitPost)
+      visitImpl(node, UnavailableFromAsyncAttributeArgumentsSyntax.self, visitUnavailableFromAsyncAttributeArgumentsSyntax, visitPostUnavailableFromAsyncAttributeArgumentsSyntax)
     case .underscorePrivateAttributeArguments:
-      visitImpl(node, UnderscorePrivateAttributeArgumentsSyntax.self, visit, visitPost)
+      visitImpl(node, UnderscorePrivateAttributeArgumentsSyntax.self, visitUnderscorePrivateAttributeArgumentsSyntax, visitPostUnderscorePrivateAttributeArgumentsSyntax)
     case .unexpectedNodes:
-      visitImpl(node, UnexpectedNodesSyntax.self, visit, visitPost)
+      visitImpl(node, UnexpectedNodesSyntax.self, visitUnexpectedNodesSyntax, visitPostUnexpectedNodesSyntax)
     case .unresolvedAsExpr:
-      visitImpl(node, UnresolvedAsExprSyntax.self, visit, visitPost)
+      visitImpl(node, UnresolvedAsExprSyntax.self, visitUnresolvedAsExprSyntax, visitPostUnresolvedAsExprSyntax)
     case .unresolvedIsExpr:
-      visitImpl(node, UnresolvedIsExprSyntax.self, visit, visitPost)
+      visitImpl(node, UnresolvedIsExprSyntax.self, visitUnresolvedIsExprSyntax, visitPostUnresolvedIsExprSyntax)
     case .unresolvedTernaryExpr:
-      visitImpl(node, UnresolvedTernaryExprSyntax.self, visit, visitPost)
+      visitImpl(node, UnresolvedTernaryExprSyntax.self, visitUnresolvedTernaryExprSyntax, visitPostUnresolvedTernaryExprSyntax)
     case .valueBindingPattern:
-      visitImpl(node, ValueBindingPatternSyntax.self, visit, visitPost)
+      visitImpl(node, ValueBindingPatternSyntax.self, visitValueBindingPatternSyntax, visitPostValueBindingPatternSyntax)
     case .variableDecl:
-      visitImpl(node, VariableDeclSyntax.self, visit, visitPost)
+      visitImpl(node, VariableDeclSyntax.self, visitVariableDeclSyntax, visitPostVariableDeclSyntax)
     case .versionComponentList:
-      visitImpl(node, VersionComponentListSyntax.self, visit, visitPost)
+      visitImpl(node, VersionComponentListSyntax.self, visitVersionComponentListSyntax, visitPostVersionComponentListSyntax)
     case .versionComponent:
-      visitImpl(node, VersionComponentSyntax.self, visit, visitPost)
+      visitImpl(node, VersionComponentSyntax.self, visitVersionComponentSyntax, visitPostVersionComponentSyntax)
     case .versionTuple:
-      visitImpl(node, VersionTupleSyntax.self, visit, visitPost)
+      visitImpl(node, VersionTupleSyntax.self, visitVersionTupleSyntax, visitPostVersionTupleSyntax)
     case .whereClause:
-      visitImpl(node, WhereClauseSyntax.self, visit, visitPost)
+      visitImpl(node, WhereClauseSyntax.self, visitWhereClauseSyntax, visitPostWhereClauseSyntax)
     case .whileStmt:
-      visitImpl(node, WhileStmtSyntax.self, visit, visitPost)
+      visitImpl(node, WhileStmtSyntax.self, visitWhileStmtSyntax, visitPostWhileStmtSyntax)
     case .wildcardPattern:
-      visitImpl(node, WildcardPatternSyntax.self, visit, visitPost)
+      visitImpl(node, WildcardPatternSyntax.self, visitWildcardPatternSyntax, visitPostWildcardPatternSyntax)
     case .yieldStmt:
-      visitImpl(node, YieldStmtSyntax.self, visit, visitPost)
+      visitImpl(node, YieldStmtSyntax.self, visitYieldStmtSyntax, visitPostYieldStmtSyntax)
     case .yieldedExpressionList:
-      visitImpl(node, YieldedExpressionListSyntax.self, visit, visitPost)
+      visitImpl(node, YieldedExpressionListSyntax.self, visitYieldedExpressionListSyntax, visitPostYieldedExpressionListSyntax)
     case .yieldedExpression:
-      visitImpl(node, YieldedExpressionSyntax.self, visit, visitPost)
+      visitImpl(node, YieldedExpressionSyntax.self, visitYieldedExpressionSyntax, visitPostYieldedExpressionSyntax)
     case .yieldedExpressionsClause:
-      visitImpl(node, YieldedExpressionsClauseSyntax.self, visit, visitPost)
+      visitImpl(node, YieldedExpressionsClauseSyntax.self, visitYieldedExpressionsClauseSyntax, visitPostYieldedExpressionsClauseSyntax)
     }
   }
   #endif

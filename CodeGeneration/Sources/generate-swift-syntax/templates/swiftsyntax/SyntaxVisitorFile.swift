@@ -73,6 +73,29 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       )
     }
 
+    for node in SYNTAX_NODES where !node.kind.isBase {
+      DeclSyntax(
+        """
+        /// The function forwards call to self.visit(_ node: ``\(node.kind.syntaxType)``).
+        ///   - node: the node we just finished visiting.
+        ///   - Returns: how should we continue visiting.
+        private func visit\(node.kind.syntaxType)(_ node: \(node.kind.syntaxType)) -> SyntaxVisitorContinueKind {
+          visit(node)
+        }
+        """
+      )
+
+      DeclSyntax(
+        """
+        /// The function forwards call to self.visitPost(_ node: ``\(node.kind.syntaxType)``).
+        ///   - node: the node we just finished visiting.
+        private func visitPost\(node.kind.syntaxType)(_ node: \(node.kind.syntaxType)) {
+          visitPost(node)
+        }
+        """
+      )
+    }
+
     DeclSyntax(
       """
       /// Visiting ``TokenSyntax`` specifically.
@@ -168,7 +191,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
                   for node in NON_BASE_SYNTAX_NODES {
                     SwitchCaseSyntax("case .\(node.varOrCaseName):") {
-                      StmtSyntax("return { self.visitImpl($0, \(node.kind.syntaxType).self, self.visit, self.visitPost) }")
+                      StmtSyntax("return { self.visitImpl($0, \(node.kind.syntaxType).self, self.visit\(node.kind.syntaxType), self.visitPost\(node.kind.syntaxType)) }")
                     }
                   }
                 }
@@ -203,7 +226,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
                   for node in NON_BASE_SYNTAX_NODES {
                     SwitchCaseSyntax("case .\(node.varOrCaseName):") {
-                      ExprSyntax("visitImpl(node, \(node.kind.syntaxType).self, visit, visitPost)")
+                      ExprSyntax("visitImpl(node, \(node.kind.syntaxType).self, visit\(node.kind.syntaxType), visitPost\(node.kind.syntaxType))")
                     }
                   }
                 }

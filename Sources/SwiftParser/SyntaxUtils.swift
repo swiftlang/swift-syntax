@@ -93,7 +93,11 @@ extension RawUnexpectedNodesSyntax {
     _ syntax4: some UnexpectedNodesCombinable,
     arena: __shared SyntaxArena
   ) {
-    self.init(syntax1.elements + syntax2.elements + syntax3.elements + syntax4.elements, arena: arena)
+    var elements: [RawSyntax] = syntax1.elements
+    elements.append(contentsOf: syntax2.elements)
+    elements.append(contentsOf: syntax3.elements)
+    elements.append(contentsOf: syntax4.elements)
+    self.init(elements, arena: arena)
   }
 }
 

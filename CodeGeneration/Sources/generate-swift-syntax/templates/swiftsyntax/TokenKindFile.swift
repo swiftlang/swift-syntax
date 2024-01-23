@@ -204,6 +204,17 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     }
   }
 
+  try! ExtensionDeclSyntax("private extension RawTokenKind") {
+    try! VariableDeclSyntax(
+      """
+      var defaultTextString: String?
+      """
+    ) {
+      StmtSyntax("guard let defaultText else { return nil }")
+      StmtSyntax("return String(syntaxText: defaultText)")
+    }
+  }
+
   try! ExtensionDeclSyntax("extension TokenKind") {
     try! FunctionDeclSyntax(
       """
@@ -227,7 +238,7 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             }
           } else if tokenSpec.text != nil {
             SwitchCaseSyntax("case .\(tokenSpec.varOrCaseName):") {
-              ExprSyntax("precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)")
+              ExprSyntax("precondition(((text.isEmpty as Bool) || ((rawKind.defaultTextString == text) as Bool)) as Bool)")
               StmtSyntax("return .\(tokenSpec.varOrCaseName)")
             }
           } else {

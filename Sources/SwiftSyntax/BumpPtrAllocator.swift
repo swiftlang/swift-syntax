@@ -48,8 +48,6 @@ public class BumpPtrAllocator {
 
   deinit {
     /// Deallocate all memory.
-    _totalBytesAllocated = 0
-    current = nil
     while let slab = slabs.popLast() {
       slab.deallocate()
     }

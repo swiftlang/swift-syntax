@@ -30,7 +30,7 @@ extension Lexer {
     ///
     /// The memory footprint of not freeing past lexer states is negligible. It's
     /// usually less than 0.1% of the memory allocated by the syntax arena.
-    var lexerStateAllocator = BumpPtrAllocator(slabSize: 256)
+    var lexerStateAllocator = BumpPtrAllocator(initialSlabSize: 256)
 
     /// The offset of the trailing trivia end of `nextToken` relative to the source buffer’s start.
     var offsetToNextTokenEnd: Int {

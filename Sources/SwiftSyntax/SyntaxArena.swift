@@ -61,7 +61,7 @@ public class SyntaxArena {
   }
 
   fileprivate init(slabSize: Int) {
-    self.allocator = BumpPtrAllocator(slabSize: slabSize)
+    self.allocator = BumpPtrAllocator(initialSlabSize: slabSize)
     self.childRefs = []
     #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
     self.hasParent = false

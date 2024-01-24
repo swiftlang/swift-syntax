@@ -10,8 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) public typealias RawSyntaxBuffer = UnsafeBufferPointer<RawSyntax?>
-typealias RawTriviaPieceBuffer = UnsafeBufferPointer<RawTriviaPiece>
+@_spi(RawSyntax) public typealias RawSyntaxBuffer = SyntaxArenaAllocatedBufferPointer<RawSyntax?>
+
+typealias RawTriviaPieceBuffer = SyntaxArenaAllocatedBufferPointer<RawTriviaPiece>
 
 fileprivate extension SyntaxKind {
   /// Whether this node kind should be considered as `hasError` for purposes of `RecursiveRawSyntaxFlags`.
@@ -20,7 +21,7 @@ fileprivate extension SyntaxKind {
   }
 }
 
-struct RecursiveRawSyntaxFlags: OptionSet {
+struct RecursiveRawSyntaxFlags: OptionSet, Sendable {
   let rawValue: UInt8
 
   /// Whether the tree contained by this layout has any
@@ -36,8 +37,10 @@ struct RecursiveRawSyntaxFlags: OptionSet {
 }
 
 /// Node data for RawSyntax tree. Tagged union plus common data.
-internal struct RawSyntaxData {
-  internal enum Payload {
+internal struct RawSyntaxData: Sendable {
+  internal enum Payload: Sendable {
+    /// - Important: A raw syntax node for a parsed token must always be allocated in a `ParsingSyntaxArena` so we can
+    ///   parse the trivia in the token.
     case parsedToken(ParsedToken)
     case materializedToken(MaterializedToken)
     case layout(Layout)
@@ -47,7 +50,7 @@ internal struct RawSyntaxData {
   ///
   /// The RawSyntax's `arena` must have a valid trivia parsing function to
   /// lazily materialize the leading/trailing trivia pieces.
-  struct ParsedToken {
+  struct ParsedToken: Sendable {
     var tokenKind: RawTokenKind
 
     /// Whole text of this token including leading/trailing trivia.
@@ -97,7 +100,7 @@ internal struct RawSyntaxData {
   }
 
   /// Token typically created with `TokenSyntax.<someToken>`.
-  struct MaterializedToken {
+  struct MaterializedToken: Sendable {
     var tokenKind: RawTokenKind
     var tokenText: SyntaxText
     var triviaPieces: RawTriviaPieceBuffer
@@ -150,7 +153,7 @@ internal struct RawSyntaxData {
   }
 
   /// Layout node including collections.
-  struct Layout {
+  struct Layout: Sendable {
     var kind: SyntaxKind
     var layout: RawSyntaxBuffer
     var byteLength: Int
@@ -177,10 +180,10 @@ extension RawSyntaxData.ParsedToken {
 
 extension RawSyntaxData.MaterializedToken {
   var leadingTrivia: RawTriviaPieceBuffer {
-    RawTriviaPieceBuffer(rebasing: triviaPieces[..<Int(numLeadingTrivia)])
+    triviaPieces[..<Int(numLeadingTrivia)]
   }
   var trailingTrivia: RawTriviaPieceBuffer {
-    RawTriviaPieceBuffer(rebasing: triviaPieces[Int(numLeadingTrivia)...])
+    triviaPieces[Int(numLeadingTrivia)...]
   }
 }
 
@@ -188,30 +191,29 @@ extension RawSyntaxData.MaterializedToken {
 /// have no notion of identity and only provide structure to the tree. They
 /// are immutable and can be freely shared between syntax nodes.
 @_spi(RawSyntax)
-public struct RawSyntax {
+public struct RawSyntax: Sendable {
 
   /// Pointer to the actual data which resides in a SyntaxArena.
-  var pointer: UnsafePointer<RawSyntaxData>
-  init(pointer: UnsafePointer<RawSyntaxData>) {
+  var pointer: SyntaxArenaAllocatedPointer<RawSyntaxData>
+  init(pointer: SyntaxArenaAllocatedPointer<RawSyntaxData>) {
     self.pointer = pointer
   }
 
   init(arena: __shared SyntaxArena, payload: RawSyntaxData.Payload) {
     let arenaRef = SyntaxArenaRef(arena)
-    self.init(pointer: arena.intern(RawSyntaxData(payload: payload, arenaReference: arenaRef)))
+    let data = RawSyntaxData(
+      payload: payload,
+      arenaReference: arenaRef
+    )
+    self.init(pointer: SyntaxArenaAllocatedPointer(arena.intern(data)))
   }
 
   var rawData: RawSyntaxData {
-    unsafeAddress { pointer }
+    pointer.pointee
   }
 
   internal var arenaReference: SyntaxArenaRef {
     rawData.arenaReference
-  }
-
-  @_spi(RawSyntax)
-  public var arena: SyntaxArena {
-    rawData.arenaReference.value
   }
 
   internal var payload: RawSyntaxData.Payload {
@@ -349,18 +351,6 @@ extension RawSyntax {
       }
       return nil
     }
-  }
-}
-
-extension RawSyntax {
-  @_spi(RawSyntax)
-  public func toOpaque() -> UnsafeRawPointer {
-    UnsafeRawPointer(pointer)
-  }
-
-  @_spi(RawSyntax)
-  public static func fromOpaque(_ pointer: UnsafeRawPointer) -> RawSyntax {
-    Self(pointer: pointer.assumingMemoryBound(to: RawSyntaxData.self))
   }
 }
 
@@ -557,15 +547,11 @@ extension RawSyntax {
     textRange: Range<SyntaxText.Index>,
     presence: SourcePresence,
     tokenDiagnostic: TokenDiagnostic?,
-    arena: __shared SyntaxArena
+    arena: __shared ParsingSyntaxArena
   ) -> RawSyntax {
     assert(
       arena.contains(text: wholeText),
       "token text must be managed by the arena"
-    )
-    assert(
-      arena is ParsingSyntaxArena || textRange == wholeText.indices,
-      "arena must be able to parse trivia"
     )
     let payload = RawSyntaxData.ParsedToken(
       tokenKind: kind,
@@ -651,7 +637,7 @@ extension RawSyntax {
     return .materializedToken(
       kind: kind,
       text: text,
-      triviaPieces: RawTriviaPieceBuffer(triviaBuffer),
+      triviaPieces: RawTriviaPieceBuffer(UnsafeBufferPointer(triviaBuffer)),
       numLeadingTrivia: numericCast(leadingTriviaPieceCount),
       byteLength: numericCast(byteLength),
       presence: presence,
@@ -713,7 +699,7 @@ extension RawSyntax {
     return .materializedToken(
       kind: rawKind,
       text: rawKind.defaultText ?? "",
-      triviaPieces: .init(start: nil, count: 0),
+      triviaPieces: RawTriviaPieceBuffer(),
       numLeadingTrivia: 0,
       byteLength: 0,
       presence: .missing,
@@ -794,7 +780,7 @@ extension RawSyntax {
     }
     return .layout(
       kind: kind,
-      layout: RawSyntaxBuffer(layoutBuffer),
+      layout: RawSyntaxBuffer(UnsafeBufferPointer(layoutBuffer)),
       byteLength: byteLength,
       descendantCount: descendantCount,
       recursiveFlags: recursiveFlags,
@@ -812,7 +798,7 @@ extension RawSyntax {
     }
     return .layout(
       kind: kind,
-      layout: .init(start: nil, count: 0),
+      layout: RawSyntaxBuffer(),
       byteLength: 0,
       descendantCount: 0,
       recursiveFlags: recursiveFlags,
@@ -933,11 +919,11 @@ extension RawSyntax {
 }
 
 extension RawSyntax: Identifiable {
-  public struct ID: Hashable {
+  public struct ID: Hashable, @unchecked Sendable {
     /// The pointer to the start of the `RawSyntax` node.
     private var pointer: UnsafeRawPointer
     fileprivate init(_ raw: RawSyntax) {
-      self.pointer = UnsafeRawPointer(raw.pointer)
+      self.pointer = raw.pointer.unsafeRawPointer
     }
   }
 

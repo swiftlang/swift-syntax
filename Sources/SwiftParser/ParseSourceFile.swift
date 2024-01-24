@@ -132,7 +132,7 @@ extension Parser {
 ///
 /// This contains the parsed syntax tree and additional information on how far the parser looked ahead to parse each node.
 /// This information is required to perform an incremental parse of the tree after applying edits to it.
-public struct IncrementalParseResult {
+public struct IncrementalParseResult: Sendable {
   /// The syntax tree from parsing source
   public let tree: SourceFileSyntax
   /// The lookahead ranges for syntax nodes describe

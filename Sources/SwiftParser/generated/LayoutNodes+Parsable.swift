@@ -32,7 +32,7 @@ extension AccessorBlockSyntax: SyntaxParseable {
     }
     let node = parser.parseAccessorBlock()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -50,7 +50,7 @@ extension AccessorDeclSyntax: SyntaxParseable {
     }
     let node = parser.parseAccessorDecl()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -68,7 +68,7 @@ extension AttributeSyntax: SyntaxParseable {
     }
     let node = parser.parseAttribute()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -86,7 +86,7 @@ extension CatchClauseSyntax: SyntaxParseable {
     }
     let node = parser.parseCatchClause()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -104,7 +104,7 @@ extension ClosureParameterSyntax: SyntaxParseable {
     }
     let node = parser.parseClosureParameter()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -122,7 +122,7 @@ extension CodeBlockItemSyntax: SyntaxParseable {
     }
     let node = parser.parseNonOptionalCodeBlockItem()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -140,7 +140,7 @@ extension CodeBlockSyntax: SyntaxParseable {
     }
     let node = parser.parseCodeBlock()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -158,7 +158,7 @@ extension DeclSyntax: SyntaxParseable {
     }
     let node = parser.parseDeclaration()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -176,7 +176,7 @@ extension EnumCaseParameterSyntax: SyntaxParseable {
     }
     let node = parser.parseEnumCaseParameter()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -194,7 +194,7 @@ extension ExprSyntax: SyntaxParseable {
     }
     let node = parser.parseExpression()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -212,7 +212,7 @@ extension FunctionParameterSyntax: SyntaxParseable {
     }
     let node = parser.parseFunctionParameter()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -230,7 +230,7 @@ extension GenericParameterClauseSyntax: SyntaxParseable {
     }
     let node = parser.parseGenericParameters()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -248,7 +248,7 @@ extension MemberBlockSyntax: SyntaxParseable {
     }
     let node = parser.parseMemberBlock()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -266,7 +266,7 @@ extension PatternSyntax: SyntaxParseable {
     }
     let node = parser.parsePattern()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -284,7 +284,7 @@ extension SourceFileSyntax: SyntaxParseable {
     }
     let node = parser.parseSourceFile()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -302,7 +302,7 @@ extension StmtSyntax: SyntaxParseable {
     }
     let node = parser.parseStatement()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -320,7 +320,7 @@ extension SwitchCaseSyntax: SyntaxParseable {
     }
     let node = parser.parseSwitchCase()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 
@@ -338,7 +338,7 @@ extension TypeSyntax: SyntaxParseable {
     }
     let node = parser.parseType()
     let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
   }
 }
 

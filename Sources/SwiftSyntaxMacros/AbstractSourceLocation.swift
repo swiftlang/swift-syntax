@@ -14,7 +14,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 /// Abstractly represents a source location in the macro.
-public struct AbstractSourceLocation {
+public struct AbstractSourceLocation: Sendable {
   /// A primary expression that represents the file and is `ExpressibleByStringLiteral`.
   public let file: ExprSyntax
 

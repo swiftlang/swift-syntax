@@ -24,7 +24,7 @@ let lookupTable = ArrayExprSyntax(leftSquare: .leftSquareToken(trailingTrivia: .
 let keywordFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! EnumDeclSyntax(
     """
-    public enum Keyword: UInt8, Hashable
+    public enum Keyword: UInt8, Hashable, Sendable
     """
   ) {
     for keyword in Keyword.allCases {

@@ -10,14 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// An indicator of whether a Syntax node was found or written in the source.
-///
-/// A `missing` node does not mean, necessarily, that the source item is
-/// considered "implicit", but rather that it was not found in the source.
-public enum SourcePresence: Sendable {
-  /// The syntax was authored by a human and found, or was generated.
-  case present
+@_spi(RawSyntax) import SwiftSyntax
 
-  /// The syntax was expected or optional, but not found in the source.
-  case missing
+/// Dummy trivia parsing function.
+func dummyParseToken(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
+  // Emit a single `unexpectedText` trivia of the whole trivia text.
+  return [.unexpectedText(source)]
 }

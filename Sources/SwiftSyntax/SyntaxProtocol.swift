@@ -15,7 +15,7 @@
 ///
 /// - Important: Do not conform to this protocol yourself.
 public protocol SyntaxProtocol: CustomStringConvertible,
-  CustomDebugStringConvertible, TextOutputStreamable, CustomReflectable
+  CustomDebugStringConvertible, TextOutputStreamable, CustomReflectable, Sendable
 {
 
   /// Retrieve the generic syntax node that is represented by this node.
@@ -159,7 +159,7 @@ public extension SyntaxProtocol {
     // Make sure `self` (and thus the arena of `self.raw`) can’t get deallocated
     // before the detached node can be created.
     return withExtendedLifetime(self) {
-      return Syntax(raw: self.raw, rawNodeArena: self.raw.arena).cast(Self.self)
+      return Syntax(raw: self.raw, rawNodeArena: self.raw.arenaReference.retained).cast(Self.self)
     }
   }
 }

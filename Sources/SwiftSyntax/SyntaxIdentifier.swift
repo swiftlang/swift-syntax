@@ -57,7 +57,7 @@ public struct SyntaxIndexInTree: Comparable, Hashable, Sendable {
 /// different syntax tree. Modifying any node in the syntax tree a node is
 /// contained in generates a copy of that tree and thus changes the IDs of all
 /// nodes in the tree, not just the modified node's children.
-public struct SyntaxIdentifier: Hashable {
+public struct SyntaxIdentifier: Hashable, Sendable {
   /// Unique value for the root node.
   ///
   /// Multiple trees may have the same 'rootId' if their root RawSyntax is the
@@ -82,7 +82,7 @@ public struct SyntaxIdentifier: Hashable {
 
   static func forRoot(_ raw: RawSyntax) -> SyntaxIdentifier {
     return .init(
-      rootId: UInt(bitPattern: raw.pointer),
+      rootId: UInt(bitPattern: raw.pointer.unsafeRawPointer),
       indexInTree: .zero
     )
   }

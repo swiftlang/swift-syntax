@@ -13,7 +13,7 @@
 /// All typed raw syntax nodes conform to this protocol.
 /// `RawXXXSyntax` is a typed wrappeer of ``RawSyntax``.
 @_spi(RawSyntax)
-public protocol RawSyntaxNodeProtocol: CustomStringConvertible, TextOutputStreamable {
+public protocol RawSyntaxNodeProtocol: CustomStringConvertible, TextOutputStreamable, Sendable {
   /// Returns `true` if `raw` can be cast to this concrete raw syntax type.
   static func isKindOf(_ raw: RawSyntax) -> Bool
 
@@ -183,7 +183,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     textRange: Range<SyntaxText.Index>,
     presence: SourcePresence,
     tokenDiagnostic: TokenDiagnostic?,
-    arena: __shared SyntaxArena
+    arena: __shared ParsingSyntaxArena
   ) {
     let raw = RawSyntax.parsedToken(
       kind: kind,
@@ -205,7 +205,7 @@ public struct RawTokenSyntax: RawSyntaxNodeProtocol {
     trailingTriviaPieces: [RawTriviaPiece] = [],
     presence: SourcePresence,
     tokenDiagnostic: TokenDiagnostic? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared ParsingSyntaxArena
   ) {
     if leadingTriviaPieces.isEmpty && trailingTriviaPieces.isEmpty {
       // Create it via `RawSyntax.parsedToken()`.

@@ -921,4 +921,13 @@ final class StatementTests: ParserTestCase {
       """
     )
   }
+
+  func testForStatementWithUnexpectedTokenBeforeInKeyword() {
+    assertParse(
+      "for var elem1️⃣? in arr { }",
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code '?' in 'for' statement")
+      ]
+    )
+  }
 }

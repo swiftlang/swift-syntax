@@ -203,9 +203,7 @@ enum TokenPrecedence: Comparable {
       // Consider 'any' a prefix operator to a type and a type is expression-like.
       .Any,
       // 'where' can only occur in the signature of declarations. Consider the signature expression-like.
-      .where,
-      // 'in' occurs in closure input/output definitions and for loops. Consider both constructs expression-like.
-      .in:
+      .where:
       self = .exprKeyword
 
     case  // Control-flow constructs
@@ -213,7 +211,9 @@ enum TokenPrecedence: Comparable {
       // Secondary parts of control-flow constructs
       .case, .catch, .default, .else,
       // Return-like statements
-      .break, .continue, .fallthrough, .return, .throw, .then, .yield:
+      .break, .continue, .fallthrough, .return, .throw, .then, .yield,
+      // 'in' occurs in closure input/output definitions and for loops. Consider both constructs expression-like.
+      .in:
       self = .stmtKeyword
 
     // MARK: Decl keywords

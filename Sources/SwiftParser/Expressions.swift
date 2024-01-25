@@ -1861,6 +1861,10 @@ extension Parser {
       if self.atArgumentLabel(allowDollarIdentifier: true) && self.peek(isAt: .colon) {
         (unexpectedBeforeLabel, label) = parseArgumentLabel()
         colon = consumeAnyToken()
+      } else if let _colon = self.consume(if: .colon) {
+        unexpectedBeforeLabel = nil
+        label = RawTokenSyntax(missing: .identifier, arena: self.arena)
+        colon = _colon
       } else {
         unexpectedBeforeLabel = nil
         label = nil

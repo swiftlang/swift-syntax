@@ -2977,4 +2977,17 @@ final class StatementExpressionTests: ParserTestCase {
       substructure: AttributeSyntax(attributeName: TypeSyntax("Sendable"))
     )
   }
+
+  func testFunctionWithMissingLabel() {
+    assertParse(
+      "foo(1️⃣: 1)",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected label in function call",
+          fixIts: ["insert label"]
+        )
+      ],
+      fixedSource: "foo(<#identifier#>: 1)"
+    )
+  }
 }

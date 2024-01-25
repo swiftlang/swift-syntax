@@ -3,62 +3,6 @@
 import Foundation
 import PackageDescription
 
-// MARK: - Parse build arguments
-
-func hasEnvironmentVariable(_ name: String) -> Bool {
-  return ProcessInfo.processInfo.environment[name] != nil
-}
-
-/// Set when building swift-syntax using swift-syntax-dev-utils or in Swift CI in general.
-///
-/// Modifies the build in the following ways
-///  - Enables assertions even in release builds
-///  - Removes the dependency of swift-syntax on os_log
-let buildScriptEnvironment = hasEnvironmentVariable("SWIFT_BUILD_SCRIPT_ENVIRONMENT")
-
-/// Check that the layout of the syntax tree is correct.
-///
-/// See CONTRIBUTING.md for more information
-let rawSyntaxValidation = hasEnvironmentVariable("SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION")
-
-/// Mutate the input of `assertParse` test cases.
-///
-/// See CONTRIBUTING.md for more information
-let alternateTokenIntrospection = hasEnvironmentVariable("SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION")
-
-/// Assume that swift-argument-parser is checked out next to swift-syntax and use that instead of fetching a remote dependency.
-let useLocalDependencies = hasEnvironmentVariable("SWIFTCI_USE_LOCAL_DEPS")
-
-// MARK: - Compute custom build settings
-
-// These build settings apply to the target and the corresponding test target.
-var swiftSyntaxSwiftSettings: [SwiftSetting] = []
-var swiftSyntaxBuilderSwiftSettings: [SwiftSetting] = []
-var swiftParserSwiftSettings: [SwiftSetting] = []
-
-if buildScriptEnvironment {
-  swiftSyntaxSwiftSettings += [
-    .define("SWIFTSYNTAX_ENABLE_ASSERTIONS")
-  ]
-  swiftSyntaxBuilderSwiftSettings += [
-    .define("SWIFTSYNTAX_NO_OSLOG_DEPENDENCY")
-  ]
-}
-
-if rawSyntaxValidation {
-  swiftSyntaxSwiftSettings += [
-    .define("SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION")
-  ]
-}
-
-if alternateTokenIntrospection {
-  swiftParserSwiftSettings += [
-    .define("SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION")
-  ]
-}
-
-// MARK: - Build the package
-
 let package = Package(
   name: "swift-syntax",
   platforms: [
@@ -335,3 +279,57 @@ package.targets.append(
     }
   )
 )
+
+// MARK: - Parse build arguments
+
+func hasEnvironmentVariable(_ name: String) -> Bool {
+  return ProcessInfo.processInfo.environment[name] != nil
+}
+
+/// Set when building swift-syntax using swift-syntax-dev-utils or in Swift CI in general.
+///
+/// Modifies the build in the following ways
+///  - Enables assertions even in release builds
+///  - Removes the dependency of swift-syntax on os_log
+var buildScriptEnvironment: Bool { hasEnvironmentVariable("SWIFT_BUILD_SCRIPT_ENVIRONMENT") }
+
+/// Check that the layout of the syntax tree is correct.
+///
+/// See CONTRIBUTING.md for more information
+var rawSyntaxValidation: Bool { hasEnvironmentVariable("SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION") }
+
+/// Mutate the input of `assertParse` test cases.
+///
+/// See CONTRIBUTING.md for more information
+var alternateTokenIntrospection: Bool { hasEnvironmentVariable("SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION") }
+
+/// Assume that swift-argument-parser is checked out next to swift-syntax and use that instead of fetching a remote dependency.
+var useLocalDependencies: Bool { hasEnvironmentVariable("SWIFTCI_USE_LOCAL_DEPS") }
+
+// MARK: - Compute custom build settings
+
+// These build settings apply to the target and the corresponding test target.
+var swiftSyntaxSwiftSettings: [SwiftSetting] {
+  var settings: [SwiftSetting] = []
+  if buildScriptEnvironment {
+    settings.append(.define("SWIFTSYNTAX_ENABLE_ASSERTIONS"))
+  }
+  if rawSyntaxValidation {
+    settings.append(.define("SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION"))
+  }
+  return settings
+}
+var swiftSyntaxBuilderSwiftSettings: [SwiftSetting] {
+  if buildScriptEnvironment {
+    return [.define("SWIFTSYNTAX_NO_OSLOG_DEPENDENCY")]
+  } else {
+    return []
+  }
+}
+var swiftParserSwiftSettings: [SwiftSetting] {
+  if alternateTokenIntrospection {
+    return [.define("SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION")]
+  } else {
+    return []
+  }
+}

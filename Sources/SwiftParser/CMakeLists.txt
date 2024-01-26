@@ -15,6 +15,7 @@ add_swift_syntax_library(SwiftParser
   Directives.swift
   Expressions.swift
   IncrementalParseTransition.swift
+  IsValidIdentifier.swift
   Lookahead.swift
   LoopProgressCondition.swift
   Modifiers.swift

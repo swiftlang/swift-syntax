@@ -12,7 +12,7 @@
 
 /// Specifies how missing and unexpected nodes should be handled when traversing
 /// a syntax tree.
-public enum SyntaxTreeViewMode: Sendable {
+public enum SyntaxTreeViewMode {
   /// Visit the tree in a way that reproduces the original source code.
   /// Missing nodes will not be visited, unexpected nodes will be visited.
   /// This mode is useful for source code transformations like a formatter.

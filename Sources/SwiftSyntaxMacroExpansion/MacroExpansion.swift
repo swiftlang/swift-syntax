@@ -14,7 +14,7 @@ import SwiftBasicFormat
 import SwiftSyntax
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
 
-public enum MacroRole: Sendable {
+public enum MacroRole {
   case expression
   case declaration
   case accessor

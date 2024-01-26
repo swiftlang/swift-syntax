@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Enum to exhaustively switch over all different syntax nodes.
-public enum SyntaxEnum: Sendable {
+public enum SyntaxEnum {
   case token(TokenSyntax)
   case accessorBlock(AccessorBlockSyntax)
   case accessorDeclList(AccessorDeclListSyntax)

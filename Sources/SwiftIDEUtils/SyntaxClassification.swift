@@ -12,7 +12,7 @@
 
 @_spi(RawSyntax) import SwiftSyntax
 
-public enum SyntaxClassification: Sendable {
+public enum SyntaxClassification {
   /// An attribute starting with an `@`.
   case attribute
   /// A block comment starting with `/**` and ending with `*/.

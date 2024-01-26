@@ -119,7 +119,7 @@ fileprivate extension AbsoluteSyntaxInfo {
 
 /// Collection that contains the child nodes of a raw node (including missing
 /// nodes), along with their associated `AbsoluteSyntaxInfo`.
-struct RawSyntaxChildren: BidirectionalCollection, Sendable {
+struct RawSyntaxChildren: BidirectionalCollection {
   typealias Element = (raw: RawSyntax?, syntaxInfo: AbsoluteSyntaxInfo)
   typealias Index = SyntaxChildrenIndex
 
@@ -281,7 +281,7 @@ struct RawSyntaxChildren: BidirectionalCollection, Sendable {
 
 /// Collection that contains the `present` child nodes of an
 /// `AbsoluteRawSyntax` node.
-struct NonNilRawSyntaxChildren: BidirectionalCollection, Sendable {
+struct NonNilRawSyntaxChildren: BidirectionalCollection {
   typealias Element = AbsoluteRawSyntax
   typealias Index = SyntaxChildrenIndex
 
@@ -417,7 +417,7 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection, Sendable {
 }
 
 /// Collection that contains the present child ``Syntax`` nodes of the given node.
-public struct SyntaxChildren: BidirectionalCollection, Sendable {
+public struct SyntaxChildren: BidirectionalCollection {
   /// ``SyntaxChildren`` is indexed by ``SyntaxChildrenIndex``.
   public typealias Index = SyntaxChildrenIndex
 

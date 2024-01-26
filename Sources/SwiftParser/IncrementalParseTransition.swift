@@ -283,7 +283,7 @@ fileprivate struct SyntaxCursor {
 /// The raw `edits` of this struct are guaranteed to
 ///   1. not be overlapping.
 ///   2. be in increasing source offset order.
-public struct ConcurrentEdits: Sendable {
+public struct ConcurrentEdits {
   enum ConcurrentEditsError: Error, CustomStringConvertible {
     case editsNotConcurrent
 

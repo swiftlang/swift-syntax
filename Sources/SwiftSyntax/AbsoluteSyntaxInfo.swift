@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-struct AbsoluteSyntaxPosition: Sendable {
+struct AbsoluteSyntaxPosition {
   /// The UTF-8 offset of the syntax node in the source file
   let offset: UInt32
   let indexInParent: UInt32
@@ -32,7 +32,7 @@ struct AbsoluteSyntaxPosition: Sendable {
 
 /// `AbsoluteSyntaxInfo` represents the information that relates a `RawSyntax`
 /// to a source file tree, like its absolute source offset.
-struct AbsoluteSyntaxInfo: Sendable {
+struct AbsoluteSyntaxInfo {
   let position: AbsoluteSyntaxPosition
   let nodeId: SyntaxIdentifier
 

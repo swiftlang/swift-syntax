@@ -44,11 +44,11 @@ import Musl
 /// `Swift.String`, ill-formed UTF8 sequences are replaced with the Unicode
 /// replacement character (`\u{FFFD}`).
 @_spi(RawSyntax)
-public struct SyntaxText: Sendable {
-  var buffer: SyntaxArenaAllocatedBufferPointer<UInt8>
+public struct SyntaxText {
+  var buffer: UnsafeBufferPointer<UInt8>
 
   /// Construct a ``SyntaxText`` whose text is represented by the given `buffer`.
-  public init(buffer: SyntaxArenaAllocatedBufferPointer<UInt8>) {
+  public init(buffer: UnsafeBufferPointer<UInt8>) {
     self.buffer = buffer
   }
 
@@ -61,7 +61,7 @@ public struct SyntaxText: Sendable {
       count == 0 || baseAddress != nil,
       "If count is not zero, base address must be exist"
     )
-    buffer = .init(UnsafeBufferPointer(start: baseAddress, count: count))
+    buffer = .init(start: baseAddress, count: count)
   }
 
   /// Creates an empty ``SyntaxText``
@@ -203,7 +203,7 @@ extension SyntaxText: Hashable {
 
   /// Hash the contents of this ``SyntaxText`` into `hasher`.
   public func hash(into hasher: inout Hasher) {
-    hasher.combine(bytes: buffer.unsafeRawBufferPointer)
+    hasher.combine(bytes: .init(buffer))
   }
 }
 

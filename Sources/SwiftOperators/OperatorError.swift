@@ -12,7 +12,7 @@
 import SwiftSyntax
 
 /// Describes errors that can occur when working with user-defined operators.
-public enum OperatorError: Error, Sendable {
+public enum OperatorError: Error {
   /// Error produced when a given precedence group already exists in the
   /// precedence graph.
   case groupAlreadyExists(existing: PrecedenceGroup, new: PrecedenceGroup)

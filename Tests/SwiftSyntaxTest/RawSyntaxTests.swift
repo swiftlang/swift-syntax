@@ -13,7 +13,7 @@
 @_spi(RawSyntax) import SwiftSyntax
 import XCTest
 
-fileprivate func cannedStructDecl(arena: ParsingSyntaxArena) -> RawStructDeclSyntax {
+fileprivate func cannedStructDecl(arena: SyntaxArena) -> RawStructDeclSyntax {
   let structKW = RawTokenSyntax(
     kind: .keyword,
     text: arena.intern("struct"),
@@ -68,7 +68,7 @@ fileprivate func cannedStructDecl(arena: ParsingSyntaxArena) -> RawStructDeclSyn
 final class RawSyntaxTests: XCTestCase {
 
   func testFactory() {
-    withExtendedLifetime(ParsingSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
+    withExtendedLifetime(SyntaxArena()) { arena in
       let structDecl = cannedStructDecl(arena: arena)
       XCTAssertEqual(
         "\(structDecl.raw)",
@@ -81,7 +81,7 @@ final class RawSyntaxTests: XCTestCase {
   }
 
   func testAccessor() {
-    withExtendedLifetime(ParsingSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
+    withExtendedLifetime(SyntaxArena()) { arena in
       let structDecl = cannedStructDecl(arena: arena)
       XCTAssertEqual(structDecl.name.tokenKind, .identifier)
       XCTAssertEqual(structDecl.structKeyword.tokenText, "struct")
@@ -96,7 +96,7 @@ final class RawSyntaxTests: XCTestCase {
   }
 
   func testMaterializedToken() {
-    withExtendedLifetime(ParsingSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
+    withExtendedLifetime(SyntaxArena()) { arena in
       let ident = RawTokenSyntax(
         kind: .identifier,
         text: arena.intern("foo"),
@@ -118,6 +118,12 @@ final class RawSyntaxTests: XCTestCase {
   }
 
   func testParsedToken() {
+    // Dummy trivia parsing function.
+    func dummyParseToken(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
+      // Emit a single `unexpectedText` trivia of the whole trivia text.
+      return [.unexpectedText(source)]
+    }
+
     withExtendedLifetime(ParsingSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
       let ident = RawTokenSyntax(
         kind: .identifier,

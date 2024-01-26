@@ -23,7 +23,6 @@ add_swift_syntax_library(SwiftSyntax
   SwiftSyntaxCompatibility.swift
   Syntax.swift
   SyntaxArena.swift
-  SyntaxArenaAllocatedBuffer.swift
   SyntaxChildren.swift
   SyntaxCollection.swift
   SyntaxHashable.swift

@@ -13,14 +13,14 @@
 /// If the token has an error that's inherent to the token itself and not its
 /// surrounding structure, this defines the type of the error.
 /// `byteOffset` specifies at which offset the error occurred.
-public struct TokenDiagnostic: Hashable, Sendable {
-  public enum Severity: Comparable, Sendable {
+public struct TokenDiagnostic: Hashable {
+  public enum Severity: Comparable {
     case warning
     case error
   }
 
   /// Each diagnostic kind is uniquely represented by a value in this enum.
-  public enum Kind: Sendable {
+  public enum Kind {
     // Please order these alphabetically
 
     case editorPlaceholder

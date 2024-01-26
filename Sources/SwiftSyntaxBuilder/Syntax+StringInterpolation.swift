@@ -444,11 +444,7 @@ extension Optional: ExpressibleByLiteralSyntax where Wrapped: ExpressibleByLiter
 extension TokenSyntax: SyntaxExpressibleByStringInterpolation {
   public init(stringInterpolation: SyntaxStringInterpolation) {
     let string = stringInterpolation.sourceText.withUnsafeBufferPointer { buf in
-      // Technically, `buf` is not allocated in a `SyntaxArena` but it satisfies
-      // all the required properties: `buf` will always outlive any references
-      // to it.
-      let syntaxArenaBuf = SyntaxArenaAllocatedBufferPointer(buf)
-      return String(syntaxText: SyntaxText(buffer: syntaxArenaBuf))
+      return String(syntaxText: SyntaxText(buffer: buf))
     }
     self = .identifier(string)
   }
@@ -480,12 +476,8 @@ extension Trivia: ExpressibleByStringInterpolation {
   public init(stringInterpolation: String.StringInterpolation) {
     var text = String(stringInterpolation: stringInterpolation)
     let pieces = text.withUTF8 { (buf) -> [TriviaPiece] in
-      // Technically, `buf` is not allocated in a `SyntaxArena` but it satisfies
-      // all the required properties: `buf` will always outlive any references
-      // to it.
-      let syntaxArenaBuf = SyntaxArenaAllocatedBufferPointer(buf)
       // The leading trivia position is a little bit less restrictive (it allows a shebang), so let's use it.
-      let rawPieces = TriviaParser.parseTrivia(SyntaxText(buffer: syntaxArenaBuf), position: .leading)
+      let rawPieces = TriviaParser.parseTrivia(SyntaxText(buffer: buf), position: .leading)
       return rawPieces.map { TriviaPiece.init(raw: $0) }
     }
 

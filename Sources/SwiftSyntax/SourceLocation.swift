@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Represents a source location in a Swift file.
-public struct SourceLocation: Hashable, Codable, Sendable {
+public struct SourceLocation: Hashable, Codable {
 
   /// The line in the file where this location resides. 1-based.
   ///
@@ -82,7 +82,7 @@ public struct SourceLocation: Hashable, Codable, Sendable {
 }
 
 /// Represents a half-open range in a Swift file.
-public struct SourceRange: Hashable, Codable, Sendable {
+public struct SourceRange: Hashable, Codable {
 
   /// The beginning location of the source range.
   ///
@@ -235,11 +235,7 @@ public final class SourceLocationConverter {
     self.fileName = file
     self.source = Array(source.utf8)
     (self.lines, endOfFile) = self.source.withUnsafeBufferPointer { buf in
-      // Technically, `buf` is not allocated in a `SyntaxArena` but it satisfies
-      // all the required properties: `buf` will always outlive any references
-      // to it.
-      let syntaxArenaBuf = SyntaxArenaAllocatedBufferPointer(buf)
-      return computeLines(SyntaxText(buffer: syntaxArenaBuf))
+      return computeLines(SyntaxText(buffer: buf))
     }
     precondition(source.utf8.count == endOfFile.utf8Offset)
   }

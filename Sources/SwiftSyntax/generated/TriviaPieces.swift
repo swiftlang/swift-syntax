@@ -20,7 +20,7 @@
 ///
 /// In general, you should deal with the actual Trivia collection instead
 /// of individual pieces whenever possible.
-public enum TriviaPiece: Sendable {
+public enum TriviaPiece {
   /// A backslash that is at the end of a line in a multi-line string literal to escape the newline.
   case backslashes(Int)
   /// A developer block comment, starting with '/*' and ending with '*/'.
@@ -289,7 +289,7 @@ extension TriviaPiece {
 /// In contrast to ``TriviaPiece``, a ``RawTriviaPiece`` does not own the source
 /// text of the trivia.
 @_spi(RawSyntax)
-public enum RawTriviaPiece: Equatable, Sendable {
+public enum RawTriviaPiece: Equatable {
   case backslashes(Int)
   case blockComment(SyntaxText)
   case carriageReturns(Int)

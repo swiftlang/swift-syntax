@@ -11,14 +11,14 @@
 //===----------------------------------------------------------------------===//
 
 /// Describes the statically allowed structure of a syntax tree node.
-public enum SyntaxNodeStructure: Sendable {
-  public enum SyntaxChoice: Sendable {
+public enum SyntaxNodeStructure {
+  public enum SyntaxChoice {
     case node(SyntaxProtocol.Type)
     case token(TokenKind)
   }
 
   /// The node contains a fixed number of children which can be accessed by these key paths.
-  case layout([AnyKeyPath & Sendable])
+  case layout([AnyKeyPath])
 
   /// The node is a `SyntaxCollection` of the given type.
   case collection(SyntaxProtocol.Type)

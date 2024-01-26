@@ -14,7 +14,7 @@
 ///
 /// A `missing` node does not mean, necessarily, that the source item is
 /// considered "implicit", but rather that it was not found in the source.
-public enum SourcePresence: Sendable {
+public enum SourcePresence {
   /// The syntax was authored by a human and found, or was generated.
   case present
 

@@ -13,7 +13,7 @@
 import SwiftSyntax
 
 /// Describes the relative precedence of two groups.
-enum Precedence: Sendable {
+enum Precedence {
   case unrelated
   case higherThan
   case lowerThan
@@ -35,7 +35,7 @@ enum Precedence: Sendable {
 
 /// A graph formed from a set of precedence groups, which can be used to
 /// determine the relative precedence of two precedence groups.
-struct PrecedenceGraph: Sendable {
+struct PrecedenceGraph {
   /// The known set of precedence groups, found by name.
   var precedenceGroups: [PrecedenceGroupName: PrecedenceGroup] = [:]
 

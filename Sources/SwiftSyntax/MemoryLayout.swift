@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 // See `MemoryLayoutTest.swift`.
-@_spi(Testing) public enum SyntaxMemoryLayout: Sendable {
+@_spi(Testing) public enum SyntaxMemoryLayout {
   public struct Value: Equatable, Sendable {
     var size: Int
     var stride: Int

@@ -52,6 +52,17 @@ Alternatively, you can generate the files from the command line by running the f
 swift run --package-path CodeGeneration
 ```
 
+## Running Pre-PR Checks Script
+
+To ensure that your changes to the project are implemented correctly and do not introduce issues across the repository, a script has been provided to automate the necessary pre-PR checks. 
+
+```bash
+./swift-syntax-dev-utils local-pr-precheck
+```
+
+> [!NOTE]
+> Running the pre-PR checks script may take some time, so it's recommended to perform this final check before submitting a PR rather than after every change.
+
 ## Authoring commits
 
 Prefer to squash the commits of your PR (*pull request*) and avoid adding commits like “Address review comments”. This creates a clearer git history, which doesn’t need to record the history of how the PR evolved.

@@ -13,7 +13,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Enumerates the kinds of tokens in the Swift language.
-public enum TokenKind: Hashable {
+public enum TokenKind: Hashable, Sendable {
   case arrow
   case atSign
   case backslash

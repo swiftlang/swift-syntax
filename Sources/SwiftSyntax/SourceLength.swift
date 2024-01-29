@@ -12,7 +12,7 @@
 
 /// The length a syntax node spans in the source code. From any AbsolutePosition
 /// you reach a node's end location by adding its UTF-8 length.
-public struct SourceLength: Comparable {
+public struct SourceLength: Comparable, Sendable {
   /// The length in bytes when the text is represented as UTF-8.
   public let utf8Length: Int
 

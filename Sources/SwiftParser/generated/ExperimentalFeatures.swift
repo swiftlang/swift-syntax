@@ -14,7 +14,7 @@
 
 extension Parser {
   @_spi(ExperimentalLanguageFeatures)
-  public struct ExperimentalFeatures: OptionSet {
+  public struct ExperimentalFeatures: OptionSet, Sendable {
     public let rawValue: UInt
     
     public init(rawValue: UInt) {

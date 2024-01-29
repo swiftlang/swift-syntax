@@ -45,7 +45,7 @@ fileprivate extension SyntaxCollection {
     } else {
       // First unwrap: We know that children.last exists because children is not empty
       // Second unwrap: This is a collection and collections never have optional children. Thus the last child can’t be nil.
-      let lastWithRemainder = parser.parseRemainder(into: layoutView.children.last!!)
+      let lastWithRemainder = parser.parseRemainder(into: layoutView.children[layoutView.children.count - 1]!)
       let raw = layoutView.replacingChild(at: layoutView.children.count - 1, with: lastWithRemainder, arena: parser.arena)
       return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
     }

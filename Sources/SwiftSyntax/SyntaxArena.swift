@@ -49,7 +49,10 @@ public class SyntaxArena {
   #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
   /// Whether or not this arena has been added to other arenas as a child.
   /// Used to make sure we don’t introduce retain cycles between arenas.
-  private var hasParent: Bool
+  ///
+  /// - Important: This is only intended to be used for assertions to catch
+  ///   retain cycles in syntax arenas.
+  var hasParent: Bool
   #endif
 
   /// Construct a new ``SyntaxArena`` in which syntax nodes can be allocated.
@@ -69,33 +72,6 @@ public class SyntaxArena {
     for child in childRefs {
       child.release()
     }
-  }
-
-  /// If this arena or any of its child arenas is a ``ParsingSyntaxArena``
-  /// return one of these arenas, otherwise return `nil`.
-  ///
-  /// If the arena has multiple child nodes that are ``ParsingSyntaxArena``s, it
-  /// is undefined which one will be returned.
-  ///
-  /// The use case for this is to get the trivia parsing function of the arena.
-  /// Parsed tokens created by `SwiftParser` automatically reside in a
-  /// ``ParsingSyntaxArena`` but if they are modified (e.g. using the `with`
-  /// functions), they might reside in a new arena. But we still want to be able
-  /// to retrieve trivia from those modified tokens, which requires calling into
-  /// the `parseTrivia` function of the ``ParsingSyntaxArena`` that created the
-  /// token. Since the modified syntax arena needs to keep the original
-  /// ``ParsingSyntaxArena`` alive, we can search this arena’s `childRefs` for
-  /// the ``ParsingSyntaxArena`` that created the token.
-  var parsingArena: ParsingSyntaxArena? {
-    if let parsingArena = self as? ParsingSyntaxArena {
-      return parsingArena
-    }
-    for child in childRefs {
-      if let parsingArena = child.value.parsingArena {
-        return parsingArena
-      }
-    }
-    return nil
   }
 
   /// Allocates a buffer of `RawSyntax?` with the given count, then returns the
@@ -173,17 +149,8 @@ public class SyntaxArena {
     if childRefs.insert(otherRef).inserted {
       otherRef.retain()
       #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
-      // FIXME: This may trigger a data race warning in Thread Sanitizer.
-      // Can we use atomic bool here?
-      otherRef.value.hasParent = true
+      otherRef.setHasParent(true)
       #endif
-    }
-  }
-
-  /// Recursively checks if this arena contains given `arenaRef` as a descendant.
-  func contains(arenaRef: SyntaxArenaRef) -> Bool {
-    childRefs.contains { childRef in
-      childRef == arenaRef || childRef.value.contains(arenaRef: arenaRef)
     }
   }
 
@@ -205,7 +172,9 @@ public class ParsingSyntaxArena: SyntaxArena {
   private var sourceBuffer: UnsafeBufferPointer<UInt8>
 
   /// Function to parse trivia.
-  private var parseTriviaFunction: ParseTriviaFunction
+  ///
+  /// - Important: Must never be changed to a mutable value. See `SyntaxArenaRef.parseTrivia`.
+  private let parseTriviaFunction: ParseTriviaFunction
 
   @_spi(RawSyntax)
   public init(parseTriviaFunction: @escaping ParseTriviaFunction) {
@@ -254,7 +223,24 @@ public class ParsingSyntaxArena: SyntaxArena {
   /// Parse `source` into a list of ``RawTriviaPiece`` using `parseTriviaFunction`.
   @_spi(RawSyntax)
   public func parseTrivia(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
+    // Must never access mutable state. See `SyntaxArenaRef.parseTrivia`.
     return self.parseTriviaFunction(source, position)
+  }
+}
+
+/// An opaque wrapper around `SyntaxArena` that keeps the arena alive.
+@_spi(RawSyntax)
+public struct RetainedSyntaxArena: @unchecked Sendable {
+  // Unchecked conformance to sendable is fine because `arena` is not
+  // accessible. It is just used to keep the arena alive.
+  private let arena: SyntaxArena
+
+  init(_ arena: SyntaxArena) {
+    self.arena = arena
+  }
+
+  fileprivate func arenaRef() -> SyntaxArenaRef {
+    return SyntaxArenaRef(arena)
   }
 }
 
@@ -264,7 +250,7 @@ public class ParsingSyntaxArena: SyntaxArena {
 /// `RawSyntaxData` holds its ``SyntaxArena`` in this form to prevent their cyclic
 /// strong references. Also, passing around ``SyntaxArena`` in this form doesn't
 /// cause any ref-counting traffic.
-struct SyntaxArenaRef: Hashable {
+struct SyntaxArenaRef: Hashable, @unchecked Sendable {
   private let _value: Unmanaged<SyntaxArena>
 
   init(_ value: __shared SyntaxArena) {
@@ -272,8 +258,15 @@ struct SyntaxArenaRef: Hashable {
   }
 
   /// Returns the ``SyntaxArena``
-  var value: SyntaxArena {
+  private var value: SyntaxArena {
     get { self._value.takeUnretainedValue() }
+  }
+
+  /// Assuming that this references a `ParsingSyntaxArena`,
+  func parseTrivia(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
+    // It is safe to access `_value` here because `parseTrivia` only accesses
+    // `parseTriviaFunction`, which is a constant.
+    (value as! ParsingSyntaxArena).parseTrivia(source: source, position: position)
   }
 
   func retain() {
@@ -284,11 +277,48 @@ struct SyntaxArenaRef: Hashable {
     self._value.release()
   }
 
+  /// Get an opaque wrapper that keeps the syntax arena alive.
+  var retained: RetainedSyntaxArena {
+    return RetainedSyntaxArena(value)
+  }
+
+  #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
+  /// Accessor for ther underlying's `SyntaxArena.hasParent`
+  var hasParent: Bool {
+    // FIXME: This accesses mutable state across actor boundaries and is thus not concurrency-safe.
+    // We should use an atomic for `hasParent` to make it concurrency safe.
+    value.hasParent
+  }
+
+  /// Sets the `SyntaxArena.hasParent` on the referenced arena.
+  func setHasParent(_ newValue: Bool) {
+    // FIXME: This modifies mutable state across actor boundaries and is thus not concurrency-safe.
+    // We should use an atomic for `hasParent` to make it concurrency safe.
+    value.hasParent = newValue
+  }
+  #endif
+
   func hash(into hasher: inout Hasher) {
     hasher.combine(_value.toOpaque())
   }
 
   static func == (lhs: SyntaxArenaRef, rhs: SyntaxArenaRef) -> Bool {
     return lhs._value.toOpaque() == rhs._value.toOpaque()
+  }
+
+  static func == (lhs: SyntaxArenaRef, rhs: __shared SyntaxArena) -> Bool {
+    return lhs == SyntaxArenaRef(rhs)
+  }
+
+  static func == (lhs: __shared SyntaxArena, rhs: SyntaxArenaRef) -> Bool {
+    return rhs == lhs
+  }
+
+  static func == (lhs: SyntaxArenaRef, rhs: RetainedSyntaxArena) -> Bool {
+    return lhs == rhs.arenaRef()
+  }
+
+  static func == (lhs: RetainedSyntaxArena, rhs: SyntaxArenaRef) -> Bool {
+    return rhs == lhs
   }
 }

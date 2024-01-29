@@ -18,7 +18,7 @@ import SwiftSyntax
 public typealias PrecedenceGroupName = String
 
 /// The associativity of a precedence group.
-public enum Associativity: String {
+public enum Associativity: String, Sendable {
   /// The precedence group is nonassociative, meaning that one must
   /// parenthesize when there are multiple operators in a sequence, e.g.,
   /// if ^ was nonassociative, a ^ b ^ c would need to be disambiguated as
@@ -38,9 +38,9 @@ public enum Associativity: String {
 
 /// Describes the relationship of a precedence group to another precedence
 /// group.
-public struct PrecedenceRelation {
+public struct PrecedenceRelation: Sendable {
   /// Describes the kind of a precedence relation.
-  public enum Kind {
+  public enum Kind: Sendable {
     case higherThan
     case lowerThan
 
@@ -93,7 +93,7 @@ public struct PrecedenceRelation {
 /// precedence, e.g.,
 ///
 ///     infix operator *: MultiplicationPrecedence
-public struct PrecedenceGroup {
+public struct PrecedenceGroup: Sendable {
   /// The name of the group, which must be unique.
   public var name: PrecedenceGroupName
 

@@ -409,7 +409,7 @@ public struct InvalidIdentifierError: ParserError {
 }
 
 public struct InvalidIndentationInMultiLineStringLiteralError: ParserError {
-  public enum Kind {
+  public enum Kind: Sendable {
     case insufficientIndentation
     case unexpectedSpace
     case unexpectedTab

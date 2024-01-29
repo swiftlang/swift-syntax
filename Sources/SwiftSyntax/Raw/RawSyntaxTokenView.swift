@@ -26,7 +26,7 @@ extension RawSyntax {
 
 /// A view into ``RawSyntax`` that exposes functionality that only applies to tokens.
 @_spi(RawSyntax)
-public struct RawSyntaxTokenView {
+public struct RawSyntaxTokenView: Sendable {
   let raw: RawSyntax
 
   fileprivate init(raw: RawSyntax) {
@@ -95,8 +95,7 @@ public struct RawSyntaxTokenView {
   public var leadingRawTriviaPieces: [RawTriviaPiece] {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
-      let arena = raw.arena.parsingArena!
-      return arena.parseTrivia(source: dat.leadingTriviaText, position: .leading)
+      return raw.arenaReference.parseTrivia(source: dat.leadingTriviaText, position: .leading)
     case .materializedToken(let dat):
       return Array(dat.leadingTrivia)
     case .layout(_):
@@ -108,8 +107,7 @@ public struct RawSyntaxTokenView {
   public var trailingRawTriviaPieces: [RawTriviaPiece] {
     switch raw.rawData.payload {
     case .parsedToken(let dat):
-      let arena = raw.arena.parsingArena!
-      return arena.parseTrivia(source: dat.trailingTriviaText, position: .trailing)
+      return raw.arenaReference.parseTrivia(source: dat.trailingTriviaText, position: .trailing)
     case .materializedToken(let dat):
       return Array(dat.trailingTrivia)
     case .layout(_):
@@ -204,8 +202,21 @@ public struct RawSyntaxTokenView {
     arena.addChild(self.raw.arenaReference)
     switch raw.rawData.payload {
     case .parsedToken(var payload):
-      payload.presence = newValue
-      return RawSyntax(arena: arena, payload: .parsedToken(payload))
+      if arena == self.raw.arenaReference {
+        payload.presence = newValue
+        return RawSyntax(arena: arena, payload: .parsedToken(payload))
+      }
+      // If the modified token is allocated in a different arena, it might have
+      // a different or no `parseTrivia` function. We thus cannot use a
+      // `parsedToken` anymore.
+      return .makeMaterializedToken(
+        kind: formKind(),
+        leadingTrivia: formLeadingTrivia(),
+        trailingTrivia: formTrailingTrivia(),
+        presence: newValue,
+        tokenDiagnostic: tokenDiagnostic,
+        arena: arena
+      )
     case .materializedToken(var payload):
       payload.presence = newValue
       return RawSyntax(arena: arena, payload: .materializedToken(payload))
@@ -274,8 +285,21 @@ public struct RawSyntaxTokenView {
     arena.addChild(self.raw.arenaReference)
     switch raw.rawData.payload {
     case .parsedToken(var dat):
-      dat.tokenDiagnostic = tokenDiagnostic
-      return RawSyntax(arena: arena, payload: .parsedToken(dat))
+      if arena == self.raw.arenaReference {
+        dat.tokenDiagnostic = tokenDiagnostic
+        return RawSyntax(arena: arena, payload: .parsedToken(dat))
+      }
+      // If the modified token is allocated in a different arena, it might have
+      // a different or no `parseTrivia` function. We thus cannot use a
+      // `parsedToken` anymore.
+      return .makeMaterializedToken(
+        kind: formKind(),
+        leadingTrivia: formLeadingTrivia(),
+        trailingTrivia: formTrailingTrivia(),
+        presence: presence,
+        tokenDiagnostic: tokenDiagnostic,
+        arena: arena
+      )
     case .materializedToken(var dat):
       dat.tokenDiagnostic = tokenDiagnostic
       return RawSyntax(arena: arena, payload: .materializedToken(dat))

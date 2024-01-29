@@ -49,7 +49,7 @@ extension SyntaxCollection {
         arena: arena
       )
     }
-    self = Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    self = Syntax.forRoot(raw, rawNodeArena: RetainedSyntaxArena(arena)).cast(Self.self)
   }
 
   public init(arrayLiteral elements: Element...) {
@@ -70,7 +70,7 @@ extension SyntaxCollection {
   internal func replacingLayout(_ layout: [RawSyntax?]) -> Self {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
-    return Syntax(self).replacingSelf(newRaw, rawNodeArena: arena, allocationArena: arena).cast(Self.self)
+    return Syntax(self).replacingSelf(newRaw, rawNodeArena: RetainedSyntaxArena(arena), allocationArena: arena).cast(Self.self)
   }
 
   /// Return the index of `node` within this collection.

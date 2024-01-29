@@ -36,9 +36,9 @@ fileprivate func assertPresumedSourceLocation(
 
 final class SourceLocationConverterTests: XCTestCase {
   func testInvalidUtf8() {
-    let eofToken = withExtendedLifetime(SyntaxArena()) { arena in
+    let eofToken = withExtendedLifetime(ParsingSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
       let leadingTriviaText = [UInt8(0xfd)].withUnsafeBufferPointer { buf in
-        arena.intern(SyntaxText(buffer: buf))
+        arena.intern(SyntaxText(buffer: SyntaxArenaAllocatedBufferPointer(buf)))
       }
 
       let nodeWithInvalidUtf8 = RawTokenSyntax(

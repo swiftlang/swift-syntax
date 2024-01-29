@@ -850,7 +850,7 @@ class LookaheadTrackerOwner {
 }
 
 /// Record the lookahead ranges for syntax nodes.
-public struct LookaheadRanges {
+public struct LookaheadRanges: Sendable {
   /// For each node that is recorded for re-use, the number of UTF-8 bytes that the parser looked ahead to parse the node, measured from the start of the node’s leading trivia.
   ///
   /// This information can be used to determine whether a node can be reused in incremental parse. A node can only be re-used if no byte in its looked range has changed.

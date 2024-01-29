@@ -19,7 +19,7 @@ let syntaxEnumFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! EnumDeclSyntax(
     """
     /// Enum to exhaustively switch over all different syntax nodes.
-    public enum SyntaxEnum
+    public enum SyntaxEnum: Sendable
     """
   ) {
     DeclSyntax("case token(TokenSyntax)")

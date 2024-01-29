@@ -12,7 +12,7 @@
 
 import SwiftSyntax
 
-public struct Diagnostic: CustomDebugStringConvertible {
+public struct Diagnostic: CustomDebugStringConvertible, Sendable {
   /// The message that should be displayed to the user
   public let diagMessage: DiagnosticMessage
 
@@ -74,7 +74,7 @@ public struct Diagnostic: CustomDebugStringConvertible {
   }
 }
 
-public struct DiagnosticsError: Error {
+public struct DiagnosticsError: Error, Sendable {
   public var diagnostics: [Diagnostic]
 
   /// The diagnostics must contain at least one with severity == `.error`.

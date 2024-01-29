@@ -16,7 +16,7 @@ import XCTest
 final class BumpPtrAllocatorTests: XCTestCase {
 
   func testBasic() {
-    let allocator = BumpPtrAllocator(slabSize: 4096)
+    let allocator = BumpPtrAllocator(initialSlabSize: 4096)
 
     let byteBuffer = allocator.allocate(byteCount: 42, alignment: 4)
     XCTAssertNotNil(byteBuffer.baseAddress)

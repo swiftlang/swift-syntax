@@ -79,7 +79,7 @@ extension StringSegmentSyntax {
       // defensive as it's currently not used by `lexCharacterInStringLiteral`.
       let state = Lexer.Cursor.State.inStringLiteral(kind: stringLiteralKind, delimiterLength: delimiterLength)
       let transition = Lexer.StateTransition.push(newState: state)
-      cursor.perform(stateTransition: transition, stateAllocator: BumpPtrAllocator(slabSize: 256))
+      cursor.perform(stateTransition: transition, stateAllocator: BumpPtrAllocator(initialSlabSize: 256))
 
       while true {
         let lex = cursor.lexCharacterInStringLiteral(

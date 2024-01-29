@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// A ``BumpPtrAllocator`` that allocates `slabSize` at a time.
+/// `slabSize` initiates with `initialSlabSize` and doubles periodically as allocations occur.
 /// Once all memory in a slab has been used, it allocates a new slab and no
 /// memory allocations are necessary until that slab is completely filled up.
 @_spi(BumpPtrAllocator) @_spi(Testing)
@@ -20,8 +21,7 @@ public class BumpPtrAllocator {
   static private let GROWTH_DELAY: Int = 128
   static private let SLAB_ALIGNMENT: Int = 8
 
-  /// Initial slab size.
-  private var slabSize: Int
+  private let initialSlabSize: Int
 
   private var slabs: [Slab]
   /// Pair of pointers in the current slab.
@@ -38,8 +38,8 @@ public class BumpPtrAllocator {
   private var _totalBytesAllocated: Int
 
   /// Construct a new ``BumpPtrAllocator``.
-  public init(slabSize: Int) {
-    self.slabSize = slabSize
+  public init(initialSlabSize: Int) {
+    self.initialSlabSize = initialSlabSize
     slabs = []
     current = nil
     customSizeSlabs = []
@@ -48,8 +48,6 @@ public class BumpPtrAllocator {
 
   deinit {
     /// Deallocate all memory.
-    _totalBytesAllocated = 0
-    current = nil
     while let slab = slabs.popLast() {
       slab.deallocate()
     }
@@ -61,7 +59,7 @@ public class BumpPtrAllocator {
   /// Calculate the size of the slab at the index.
   private func slabSize(at index: Int) -> Int {
     // Double the slab size every 'GROWTH_DELAY' slabs.
-    return self.slabSize * (1 << min(30, index / Self.GROWTH_DELAY))
+    return self.initialSlabSize * (1 << min(30, index / Self.GROWTH_DELAY))
   }
 
   private func startNewSlab() {
@@ -114,7 +112,7 @@ public class BumpPtrAllocator {
     }
 
     // If the size is too big, allocate a dedicated slab for it.
-    if byteCount >= self.slabSize {
+    if byteCount >= self.initialSlabSize {
       let customSlab = Slab.allocate(
         byteCount: byteCount,
         alignment: alignment

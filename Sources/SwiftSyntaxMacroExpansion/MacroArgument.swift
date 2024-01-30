@@ -1,3 +1,15 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift.org open source project
+//
+// Copyright (c) 2014 - 2024 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
 import SwiftDiagnostics
 import SwiftSyntax
 
@@ -20,7 +32,9 @@ enum DeclReferenceError: DiagnosticMessage {
   }
 }
 
-class CheckDeclReferenceVisitor: SyntaxAnyVisitor {
+/// Check sub-expressions to ensure all expressions are literals, and call
+/// `diagnoseNonLiteral` for all other expressions.
+class OnlyLiteralExprChecker: SyntaxAnyVisitor {
   var diagnostics: [Diagnostic] = []
 
   init() {
@@ -127,8 +141,14 @@ class CheckDeclReferenceVisitor: SyntaxAnyVisitor {
 }
 
 extension MacroExpansionExprSyntax {
+  /// For compiler to check a macro expression used as default argument.
+  ///
+  /// Only literals are permitted as arguments to these expressions.
+  ///
+  /// If there are diagnostics, they will be wrapped into an error and thrown.
+  @_spi(Compiler)
   public func checkDefaultArgumentMacroExpression() throws {
-    let visitor = CheckDeclReferenceVisitor()
+    let visitor = OnlyLiteralExprChecker()
     visitor.walk(arguments)
 
     if !visitor.diagnostics.isEmpty {

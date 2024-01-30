@@ -93,7 +93,7 @@ extension MacroDefinition {
   }
 }
 
-fileprivate class ParameterReplacementVisitor: CheckDeclReferenceVisitor {
+fileprivate class ParameterReplacementVisitor: OnlyLiteralExprChecker {
   let macro: MacroDeclSyntax
   var replacements: [MacroDefinition.Replacement] = []
   var genericReplacements: [MacroDefinition.GenericArgumentReplacement] = []

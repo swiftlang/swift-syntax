@@ -13,7 +13,7 @@
 import SwiftDiagnostics
 import SwiftSyntax
 import SwiftSyntaxBuilder
-import SwiftSyntaxMacroExpansion
+@_spi(Compiler) import SwiftSyntaxMacroExpansion
 import XCTest
 import _SwiftSyntaxTestSupport
 
@@ -34,22 +34,21 @@ final class MacroArgumentTests: XCTestCase {
       #otherMacro(first: b, second: "\(false)", third: 1 + 2)
       """#
 
-    let diags: [Diagnostic]
-    do {
-      try macro.as(MacroExpansionExprSyntax.self)!
-        .checkDefaultArgumentMacroExpression()
-      XCTFail("should have failed with an error")
-      fatalError()
-    } catch let diagError as DiagnosticsError {
-      diags = diagError.diagnostics
-    }
+    XCTAssertThrowsError(try macro.as(MacroExpansionExprSyntax.self)!
+      .checkDefaultArgumentMacroExpression()) { error in
+        guard let diagError = error as? DiagnosticsError else {
+          XCTFail("should have failed with a diagnostics error")
+          return
+        }
+        let diags = diagError.diagnostics
 
-    XCTAssertEqual(diags.count, 3)
-    for diag in diags {
-      XCTAssertEqual(
-        diag.diagMessage.message,
-        "only literals are permitted"
-      )
-    }
+        XCTAssertEqual(diags.count, 3)
+        for diag in diags {
+          XCTAssertEqual(
+            diag.diagMessage.message,
+            "only literals are permitted"
+          )
+        }
+      }
   }
 }

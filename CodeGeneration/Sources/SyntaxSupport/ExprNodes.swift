@@ -932,6 +932,8 @@ public let EXPR_NODES: [Node] = [
           .keyword(.self),
           .keyword(.Self),
           .keyword(.`init`),
+          .keyword(.`deinit`),
+          .keyword(.`subscript`),
           .token(.dollarIdentifier),
           .token(.binaryOperator),
           .token(.integerLiteral),

@@ -689,6 +689,43 @@ final class AttributeTests: ParserTestCase {
     )
   }
 
+  func testAttachedNames() {
+    assertParse(
+      """
+      @attached(member, names: named(deinit))
+      macro m()
+      """
+    )
+
+    assertParse(
+      """
+      @attached(member, names: named(init))
+      macro m()
+      """
+    )
+
+    assertParse(
+      """
+      @attached(member, names: named(init(a:b:)))
+      macro m()
+      """
+    )
+
+    assertParse(
+      """
+      @attached(member, names: named(subscript))
+      macro m()
+      """
+    )
+
+    assertParse(
+      """
+      @attached(member, names: named(subscript(a:b:)))
+      macro m()
+      """
+    )
+  }
+
   func testAttachedExtensionAttribute() {
     assertParse(
       """

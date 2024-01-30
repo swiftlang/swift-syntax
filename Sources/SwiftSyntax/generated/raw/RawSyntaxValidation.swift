@@ -842,6 +842,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
             .keyword("self"), 
             .keyword("Self"), 
             .keyword("init"), 
+            .keyword("deinit"), 
+            .keyword("subscript"), 
             .tokenKind(.dollarIdentifier), 
             .tokenKind(.binaryOperator), 
             .tokenKind(.integerLiteral)

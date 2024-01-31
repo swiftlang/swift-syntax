@@ -1534,7 +1534,7 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 ///
 /// ### Children
 /// 
-///  - `identifier`: (`<identifier>` | `self` | `init`)
+///  - `identifier`: (`<identifier>` | `self` | `init` | `deinit` | `subscript`)
 public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
@@ -1587,6 +1587,8 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _L
   ///  - `<identifier>`
   ///  - `self`
   ///  - `init`
+  ///  - `deinit`
+  ///  - `subscript`
   public var identifier: TokenSyntax {
     get {
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)

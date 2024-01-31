@@ -869,6 +869,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
   case `Any`
   case atSign  // For recovery
   case `Self`
+  case `deinit`
   case dollarIdentifier
   case `false`
   case floatLiteral
@@ -886,6 +887,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
   case regexSlash
   case extendedRegexDelimiter
   case `self`
+  case `subscript`
   case `super`
   case `true`
   case wildcard
@@ -899,6 +901,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case TokenSpec(.Any): self = .Any
     case TokenSpec(.atSign): self = .atSign
     case TokenSpec(.Self): self = .Self
+    case TokenSpec(.deinit): self = .`deinit`
     case TokenSpec(.dollarIdentifier): self = .dollarIdentifier
     case TokenSpec(.false): self = .false
     case TokenSpec(.floatLiteral): self = .floatLiteral
@@ -916,6 +919,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case TokenSpec(.regexSlash): self = .regexSlash
     case TokenSpec(.regexPoundDelimiter): self = .extendedRegexDelimiter
     case TokenSpec(.self): self = .self
+    case TokenSpec(.subscript): self = .`subscript`
     case TokenSpec(.super): self = .super
     case TokenSpec(.true): self = .true
     case TokenSpec(.wildcard): self = .wildcard
@@ -932,6 +936,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case .Any: return .keyword(.Any)
     case .atSign: return .atSign
     case .Self: return .keyword(.Self)
+    case .`deinit`: return .keyword(.`deinit`)
     case .dollarIdentifier: return .dollarIdentifier
     case .false: return .keyword(.false)
     case .floatLiteral: return .floatLiteral
@@ -949,6 +954,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case .regexSlash: return .regexSlash
     case .extendedRegexDelimiter: return .regexPoundDelimiter
     case .self: return .keyword(.self)
+    case .`subscript`: return .keyword(.subscript)
     case .super: return .keyword(.super)
     case .true: return .keyword(.true)
     case .wildcard: return .wildcard

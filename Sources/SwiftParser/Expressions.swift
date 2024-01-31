@@ -1120,7 +1120,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.identifier, let handle)?, (.self, let handle)?, (.`init`, let handle)?:
+    case (.identifier, let handle)?, (.self, let handle)?, (.`init`, let handle)?, (.`deinit`, let handle)?, (.`subscript`, let handle)?:
       // If we have "case let x" followed by ".", "(", "[", or a generic
       // argument list, we parse x as a normal name, not a binding, because it
       // is the start of an enum or expr pattern.

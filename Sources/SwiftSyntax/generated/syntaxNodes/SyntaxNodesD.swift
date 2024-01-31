@@ -624,7 +624,7 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 
 /// ### Children
 /// 
-///  - `baseName`: (`<identifier>` | `self` | `Self` | `init` | `<dollarIdentifier>` | `<binaryOperator>` | `<integerLiteral>`)
+///  - `baseName`: (`<identifier>` | `self` | `Self` | `init` | `deinit` | `subscript` | `<dollarIdentifier>` | `<binaryOperator>` | `<integerLiteral>`)
 ///  - `argumentNames`: ``DeclNameArgumentsSyntax``?
 ///
 /// ### Contained in
@@ -701,6 +701,8 @@ public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
   ///  - `self`
   ///  - `Self`
   ///  - `init`
+  ///  - `deinit`
+  ///  - `subscript`
   ///  - `<dollarIdentifier>`
   ///  - `<binaryOperator>`
   ///  - `<integerLiteral>`

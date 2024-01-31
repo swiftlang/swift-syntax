@@ -842,6 +842,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
             .keyword("self"), 
             .keyword("Self"), 
             .keyword("init"), 
+            .keyword("deinit"), 
+            .keyword("subscript"), 
             .tokenKind(.dollarIdentifier), 
             .tokenKind(.binaryOperator), 
             .tokenKind(.integerLiteral)
@@ -1418,7 +1420,13 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   case .identifierPattern:
     assert(layout.count == 3)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier), .keyword("self"), .keyword("init")]))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [
+            .tokenKind(.identifier), 
+            .keyword("self"), 
+            .keyword("init"), 
+            .keyword("deinit"), 
+            .keyword("subscript")
+          ]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
   case .identifierType:
     assert(layout.count == 5)

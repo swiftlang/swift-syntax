@@ -991,6 +991,8 @@ extension DeclReferenceExprSyntax {
     case `self`
     case `Self`
     case `init`
+    case `deinit`
+    case `subscript`
     case dollarIdentifier
     case binaryOperator
     case integerLiteral
@@ -1005,6 +1007,10 @@ extension DeclReferenceExprSyntax {
         self = .Self
       case TokenSpec(.`init`):
         self = .`init`
+      case TokenSpec(.deinit):
+        self = .deinit
+      case TokenSpec(.subscript):
+        self = .subscript
       case TokenSpec(.dollarIdentifier):
         self = .dollarIdentifier
       case TokenSpec(.binaryOperator):
@@ -1026,6 +1032,10 @@ extension DeclReferenceExprSyntax {
         return .keyword(.Self)
       case .`init`:
         return .keyword(.`init`)
+      case .deinit:
+        return .keyword(.deinit)
+      case .subscript:
+        return .keyword(.subscript)
       case .dollarIdentifier:
         return .dollarIdentifier
       case .binaryOperator:
@@ -1049,6 +1059,10 @@ extension DeclReferenceExprSyntax {
         return .keyword(.Self)
       case .`init`:
         return .keyword(.`init`)
+      case .deinit:
+        return .keyword(.deinit)
+      case .subscript:
+        return .keyword(.subscript)
       case .dollarIdentifier:
         return .dollarIdentifier("")
       case .binaryOperator:
@@ -1504,6 +1518,8 @@ extension IdentifierPatternSyntax {
     case identifier
     case `self`
     case `init`
+    case `deinit`
+    case `subscript`
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -1513,6 +1529,10 @@ extension IdentifierPatternSyntax {
         self = .self
       case TokenSpec(.`init`):
         self = .`init`
+      case TokenSpec(.deinit):
+        self = .deinit
+      case TokenSpec(.subscript):
+        self = .subscript
       default:
         return nil
       }
@@ -1526,6 +1546,10 @@ extension IdentifierPatternSyntax {
         return .keyword(.self)
       case .`init`:
         return .keyword(.`init`)
+      case .deinit:
+        return .keyword(.deinit)
+      case .subscript:
+        return .keyword(.subscript)
       }
     }
     
@@ -1541,6 +1565,10 @@ extension IdentifierPatternSyntax {
         return .keyword(.self)
       case .`init`:
         return .keyword(.`init`)
+      case .deinit:
+        return .keyword(.deinit)
+      case .subscript:
+        return .keyword(.subscript)
       }
     }
   }

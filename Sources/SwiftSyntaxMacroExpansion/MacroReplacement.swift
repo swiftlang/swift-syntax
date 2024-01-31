@@ -58,7 +58,7 @@ public enum MacroDefinition {
   /// defining macro. These subtrees will need to be replaced with the text of
   /// the corresponding argument to the macro, which can be accomplished with
   /// `MacroDeclSyntax.expandDefinition`.
-  case expansion(MacroExpansionExprSyntax, replacements: [Replacement])
+  case expansion(MacroExpansionExprSyntax, replacements: [Replacement], genericReplacements: [GenericArgumentReplacement]) // FIXME: do we need to evolve this without breaking? I assume so?
 }
 
 extension MacroDefinition {
@@ -70,11 +70,21 @@ extension MacroDefinition {
     /// The index of the parameter in the defining macro.
     public let parameterIndex: Int
   }
+
+  /// A replacement that occurs as part of an expanded macro definition.
+  public struct GenericArgumentReplacement {
+    /// A reference to a parameter as it occurs in the macro expansion expression.
+    public let reference: GenericArgumentSyntax
+
+    /// The index of the parameter in the defining macro.
+    public let parameterIndex: Int
+  }
 }
 
 fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
   let macro: MacroDeclSyntax
   var replacements: [MacroDefinition.Replacement] = []
+  var genericReplacements: [MacroDefinition.GenericArgumentReplacement] = []
   var diagnostics: [Diagnostic] = []
 
   init(macro: MacroDeclSyntax) {
@@ -156,6 +166,45 @@ fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  override func visit(_ node: GenericArgumentClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  override func visit(_ node: GenericArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  override func visit(_ node: GenericArgumentSyntax) -> SyntaxVisitorContinueKind {
+    let baseName = "\(node)" // FIXME: where to get the name from properly
+    guard let genericParameterClause = macro.genericParameterClause else {
+      return .skipChildren
+    }
+
+    let matchedParameter = genericParameterClause.parameters.enumerated().first { (index, parameter) in
+//      guard let parameterName = parameter.parameterName else {
+//        return false
+//      }
+
+      return true; // FIXME: what do we need to match here
+    }
+
+    guard let (parameterIndex, _) = matchedParameter else {
+      // We have a reference to something that isn't a parameter of the macro.
+//      diagnostics.append(
+//        Diagnostic(
+//          node: Syntax(baseName), // FIXME: error should be about type argument
+//          message: MacroExpanderError.nonParameterReference(baseName)
+//        )
+//      )
+
+      return .visitChildren
+    }
+
+    genericReplacements.append(.init(reference: node, parameterIndex: parameterIndex))
+
+    return .visitChildren
+  }
+
   override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
     if let expr = node.as(ExprSyntax.self) {
       // We have an expression that is not one of the allowed forms, so
@@ -230,7 +279,7 @@ extension MacroDeclSyntax {
       throw DiagnosticsError(diagnostics: visitor.diagnostics)
     }
 
-    return .expansion(definition, replacements: visitor.replacements)
+    return .expansion(definition, replacements: visitor.replacements, genericReplacements: visitor.genericReplacements)
   }
 }
 

@@ -376,7 +376,7 @@ extension Parser {
       trailingComma: roleTrailingComma,
       arena: self.arena
     )
-    let additionalArgs = self.parseArgumentListElements(pattern: .none, flavor: .attributeArgument)
+    let additionalArgs = self.parseArgumentListElements(pattern: .none, flavor: .attributeArguments)
     return [roleElement] + additionalArgs
   }
 }

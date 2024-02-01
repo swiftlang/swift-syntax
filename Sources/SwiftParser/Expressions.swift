@@ -79,9 +79,9 @@ extension Parser {
     /// We don't allow allow newlines here.
     case poundIfDirective
 
-    /// Parsing an attribute argument, which can contain declaration references
-    /// like `subscript` or `deinit`.
-    case attributeArgument
+    /// Parsing an attribute's arguments, which can contain declaration
+    /// references like `subscript` or `deinit`.
+    case attributeArguments
   }
 
   enum PatternContext {
@@ -1245,7 +1245,7 @@ extension Parser {
     var options: DeclNameOptions = .compoundNames
     switch flavor {
     case .basic, .poundIfDirective, .stmtCondition: break
-    case .attributeArgument: options.insert(.keywords)
+    case .attributeArguments: options.insert(.keywordsUsingSpecialNames)
     }
 
     let declName = self.parseDeclReferenceExpr(options)
@@ -2565,7 +2565,7 @@ private extension Parser.ExprFlavor {
   var callArgumentFlavor: Parser.ExprFlavor {
     switch self {
     case .basic, .poundIfDirective, .stmtCondition: return .basic
-    case .attributeArgument: return .attributeArgument
+    case .attributeArguments: return .attributeArguments
     }
   }
 }

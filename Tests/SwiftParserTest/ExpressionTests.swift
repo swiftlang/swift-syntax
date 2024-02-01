@@ -3005,5 +3005,21 @@ final class StatementExpressionTests: ParserTestCase {
       """,
       substructure: DeclReferenceExprSyntax(baseName: .identifier("subscript"))
     )
+
+    assertParse(
+      """
+      x.1️⃣deinit
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("deinit")),
+      substructureAfterMarker: "1️⃣"
+    )
+
+    assertParse(
+      """
+      x.1️⃣subscript
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("subscript")),
+      substructureAfterMarker: "1️⃣"
+    )
   }
 }

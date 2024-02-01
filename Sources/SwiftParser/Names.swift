@@ -71,7 +71,8 @@ extension Parser {
     } else if flags.contains(.operators), let (_, _) = self.at(anyIn: Operator.self) {
       base = self.consumeAnyToken(remapping: .binaryOperator)
     } else if flags.contains(.keywordsUsingSpecialNames),
-              let special = self.consume(if: .keyword(.`deinit`), .keyword(.`subscript`)) {
+      let special = self.consume(if: .keyword(.`deinit`), .keyword(.`subscript`))
+    {
       base = special
     } else if flags.contains(.keywords) && self.currentToken.isLexerClassifiedKeyword {
       base = self.consumeAnyToken(remapping: .identifier)

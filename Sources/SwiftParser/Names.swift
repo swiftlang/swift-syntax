@@ -66,12 +66,13 @@ extension Parser {
   mutating func parseDeclReferenceExpr(_ flags: DeclNameOptions = []) -> RawDeclReferenceExprSyntax {
     // Consume the base name.
     let base: RawTokenSyntax
-    if let identOrSelf = self.consume(if: .identifier, .keyword(.self), .keyword(.Self)) ?? self.consume(if: .keyword(.`init`)) ?? self.consume(
-      if: .keyword(.`deinit`)
-    ) ?? self.consume(if: .keyword(.`subscript`)) {
+    if let identOrSelf = self.consume(if: .identifier, .keyword(.self), .keyword(.Self)) ?? self.consume(if: .keyword(.`init`)) {
       base = identOrSelf
     } else if flags.contains(.operators), let (_, _) = self.at(anyIn: Operator.self) {
       base = self.consumeAnyToken(remapping: .binaryOperator)
+    } else if flags.contains(.keywordsUsingSpecialNames),
+              let special = self.consume(if: .keyword(.`deinit`), .keyword(.`subscript`)) {
+      base = special
     } else if flags.contains(.keywords) && self.currentToken.isLexerClassifiedKeyword {
       base = self.consumeAnyToken(remapping: .identifier)
     } else {

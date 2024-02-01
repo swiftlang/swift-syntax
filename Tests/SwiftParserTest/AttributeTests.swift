@@ -689,7 +689,7 @@ final class AttributeTests: ParserTestCase {
     )
   }
 
-  func testAttachedNames() {
+  func testMacroRoleNames() {
     assertParse(
       """
       @attached(member, names: named(deinit))
@@ -720,7 +720,42 @@ final class AttributeTests: ParserTestCase {
 
     assertParse(
       """
-      @attached(member, names: named(subscript(a:b:)))
+      @attached(declaration, names: named(subscript(a:b:)))
+      macro m()
+      """
+    )
+
+    assertParse(
+      """
+      @freestanding(declaration, names: named(deinit))
+      macro m()
+      """
+    )
+
+    assertParse(
+      """
+      @freestanding(declaration, names: named(init))
+      macro m()
+      """
+    )
+
+    assertParse(
+      """
+      @freestanding(declaration, names: named(init(a:b:)))
+      macro m()
+      """
+    )
+
+    assertParse(
+      """
+      @freestanding(member, names: named(subscript))
+      macro m()
+      """
+    )
+
+    assertParse(
+      """
+      @freestanding(member, names: named(subscript(a:b:)))
       macro m()
       """
     )

@@ -185,6 +185,7 @@ public enum Keyword: CaseIterable {
   case discard
   case forward
   case `func`
+  case freestanding
   case get
   case `guard`
   case higherThan
@@ -508,6 +509,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("forward")
     case .func:
       return KeywordSpec("func", isLexerClassified: true)
+    case .freestanding:
+      return KeywordSpec("freestanding")
     case .get:
       return KeywordSpec("get")
     case .guard:

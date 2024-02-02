@@ -47,6 +47,21 @@ public protocol MacroExpansionContext: AnyObject {
     at position: PositionInSyntaxNode,
     filePathMode: SourceLocationFilePathMode
   ) -> AbstractSourceLocation?
+
+  /// Return an array of enclosing lexical contexts for the purpose of macros,
+  /// starting from the syntax node at which the macro expansion occurs
+  /// and containing all "context" nodes including functions, closures, types,
+  /// properties, subscripts, and extensions.
+  ///
+  /// Lexical contexts will have many of their details stripped out to prevent
+  /// macros from having visibility into unrelated code. For example, functions
+  /// and closures have their bodies removed, types and extensions have their
+  /// member lists emptied, and properties and subscripts have their accessor
+  /// blocks removed.
+  ///
+  /// The first entry in the array is the innermost context, which could be
+  /// the syntax node to which
+  var lexicalContext: [Syntax] { get }
 }
 
 extension MacroExpansionContext {

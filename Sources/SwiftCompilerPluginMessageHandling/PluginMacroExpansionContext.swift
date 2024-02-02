@@ -192,6 +192,9 @@ fileprivate extension Syntax {
 class PluginMacroExpansionContext {
   private var sourceManger: SourceManager
 
+  /// The lexical context of the macro expansion described by this context.
+  let lexicalContext: [Syntax]
+
   /// The macro expansion discriminator, which is used to form unique names
   /// when requested.
   ///
@@ -208,8 +211,9 @@ class PluginMacroExpansionContext {
   /// macro.
   internal private(set) var diagnostics: [Diagnostic] = []
 
-  init(sourceManager: SourceManager, expansionDiscriminator: String = "") {
+  init(sourceManager: SourceManager, lexicalContext: [Syntax], expansionDiscriminator: String = "") {
     self.sourceManger = sourceManager
+    self.lexicalContext = lexicalContext
     self.expansionDiscriminator = expansionDiscriminator
   }
 }

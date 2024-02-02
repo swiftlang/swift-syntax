@@ -322,10 +322,15 @@ public func assertMacroExpansion(
 
   // Expand all macros in the source.
   let context = BasicMacroExpansionContext(
+    lexicalContext: /*FIXME:*/ [],
     sourceFiles: [origSourceFile: .init(moduleName: testModuleName, fullFilePath: testFileName)]
   )
 
-  let expandedSourceFile = origSourceFile.expand(macros: macros, in: context, indentationWidth: indentationWidth)
+  func contextGenerator(_ syntax: Syntax) -> BasicMacroExpansionContext {
+    return BasicMacroExpansionContext(sharingWith: context, lexicalContext: syntax.allMacroLexicalContexts())
+  }
+
+  let expandedSourceFile = origSourceFile.expand(macros: macros, contextGenerator: contextGenerator, indentationWidth: indentationWidth)
   let diags = ParseDiagnosticsGenerator.diagnostics(for: expandedSourceFile)
   if !diags.isEmpty {
     XCTFail(

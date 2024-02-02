@@ -689,40 +689,185 @@ final class AttributeTests: ParserTestCase {
     )
   }
 
-  func testAttachedNames() {
+  func testMacroRoleNames() {
     assertParse(
       """
-      @attached(member, names: named(deinit))
+      @attached(member, names: named(1️⃣deinit))
       macro m()
-      """
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .keyword(.`deinit`)),
+      substructureAfterMarker: "1️⃣"
     )
 
     assertParse(
       """
-      @attached(member, names: named(init))
+      @attached(member, names: named(1️⃣init))
       macro m()
-      """
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .keyword(.`init`)),
+      substructureAfterMarker: "1️⃣"
     )
 
     assertParse(
       """
-      @attached(member, names: named(init(a:b:)))
+      @attached(member, names: named(1️⃣init(a:b:)))
       macro m()
-      """
+      """,
+      substructure: DeclReferenceExprSyntax(
+        baseName: .keyword(.`init`),
+        argumentNames: DeclNameArgumentsSyntax(
+          arguments: [
+            DeclNameArgumentSyntax(name: .identifier("a")),
+            DeclNameArgumentSyntax(name: .identifier("b")),
+          ]
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
     )
 
     assertParse(
       """
-      @attached(member, names: named(subscript))
+      @attached(member, names: named(1️⃣subscript))
       macro m()
-      """
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .keyword(.`subscript`)),
+      substructureAfterMarker: "1️⃣"
     )
 
     assertParse(
       """
-      @attached(member, names: named(subscript(a:b:)))
+      @attached(declaration, names: named(1️⃣subscript(a:b:)))
       macro m()
+      """,
+      substructure: DeclReferenceExprSyntax(
+        baseName: .keyword(.`subscript`),
+        argumentNames: DeclNameArgumentsSyntax(
+          arguments: [
+            DeclNameArgumentSyntax(name: .identifier("a")),
+            DeclNameArgumentSyntax(name: .identifier("b")),
+          ]
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
+
+    assertParse(
       """
+      @freestanding(declaration, names: named(1️⃣deinit))
+      macro m()
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .keyword(.`deinit`)),
+      substructureAfterMarker: "1️⃣"
+    )
+
+    assertParse(
+      """
+      @freestanding(declaration, names: named(1️⃣init))
+      macro m()
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .keyword(.`init`)),
+      substructureAfterMarker: "1️⃣"
+    )
+
+    assertParse(
+      """
+      @freestanding(declaration, names: named(1️⃣init(a:b:)))
+      macro m()
+      """,
+      substructure: DeclReferenceExprSyntax(
+        baseName: .keyword(.`init`),
+        argumentNames: DeclNameArgumentsSyntax(
+          arguments: [
+            DeclNameArgumentSyntax(name: .identifier("a")),
+            DeclNameArgumentSyntax(name: .identifier("b")),
+          ]
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
+
+    assertParse(
+      """
+      @freestanding(member, names: named(1️⃣subscript))
+      macro m()
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .keyword(.`subscript`)),
+      substructureAfterMarker: "1️⃣"
+    )
+
+    assertParse(
+      """
+      @freestanding(member, names: named(1️⃣subscript(a:b:)))
+      macro m()
+      """,
+      substructure: DeclReferenceExprSyntax(
+        baseName: .keyword(.`subscript`),
+        argumentNames: DeclNameArgumentsSyntax(
+          arguments: [
+            DeclNameArgumentSyntax(name: .identifier("a")),
+            DeclNameArgumentSyntax(name: .identifier("b")),
+          ]
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
+
+    assertParse(
+      """
+      @attached(member, names: named(1️⃣`class`))
+      macro m()
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("`class`")),
+      substructureAfterMarker: "1️⃣"
+    )
+
+    assertParse(
+      """
+      @attached4️⃣(member, names: named(1️⃣class2️⃣))
+      macro m()3️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected value and ')' to end function call",
+          fixIts: ["insert value and ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected ')' to end attribute",
+          notes: [
+            NoteSpec(
+              locationMarker: "4️⃣",
+              message: "to match this opening '('"
+            )
+          ],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected identifier in class",
+          fixIts: ["insert identifier"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '{' in class",
+          fixIts: ["insert '{'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "unexpected code '))' before macro"
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected '}' to end class",
+          fixIts: ["insert '}'"]
+        ),
+      ],
+      fixedSource: """
+        @attached(member, names: named(<#expression#>)) class <#identifier#> {))
+        macro m()
+        }
+        """
     )
   }
 

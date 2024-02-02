@@ -78,6 +78,10 @@ extension Parser {
     ///
     /// We don't allow allow newlines here.
     case poundIfDirective
+
+    /// Parsing an attribute's arguments, which can contain declaration
+    /// references like `subscript` or `deinit`.
+    case attributeArguments
   }
 
   enum PatternContext {
@@ -725,7 +729,7 @@ extension Parser {
 
       // If there is an expr-call-suffix, parse it and form a call.
       if let lparen = self.consume(if: TokenSpec(.leftParen, allowAtStartOfLine: false)) {
-        let args = self.parseArgumentListElements(pattern: pattern)
+        let args = self.parseArgumentListElements(pattern: pattern, flavor: flavor.callArgumentFlavor)
         let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
 
         // If we can parse trailing closures, do so.
@@ -1135,9 +1139,9 @@ extension Parser {
         return RawExprSyntax(RawPatternExprSyntax(pattern: pattern, arena: self.arena))
       }
 
-      return RawExprSyntax(self.parseIdentifierExpression())
+      return RawExprSyntax(self.parseIdentifierExpression(flavor: flavor))
     case (.Self, _)?:  // Self
-      return RawExprSyntax(self.parseIdentifierExpression())
+      return RawExprSyntax(self.parseIdentifierExpression(flavor: flavor))
     case (.Any, _)?:  // Any
       let anyType = RawTypeSyntax(self.parseAnyType())
       return RawExprSyntax(RawTypeExprSyntax(type: anyType, arena: self.arena))
@@ -1237,8 +1241,14 @@ extension Parser {
 
 extension Parser {
   /// Parse an identifier as an expression.
-  mutating func parseIdentifierExpression() -> RawExprSyntax {
-    let declName = self.parseDeclReferenceExpr(.compoundNames)
+  mutating func parseIdentifierExpression(flavor: ExprFlavor) -> RawExprSyntax {
+    var options: DeclNameOptions = .compoundNames
+    switch flavor {
+    case .basic, .poundIfDirective, .stmtCondition: break
+    case .attributeArguments: options.insert(.keywordsUsingSpecialNames)
+    }
+
+    let declName = self.parseDeclReferenceExpr(options)
     guard self.withLookahead({ $0.canParseAsGenericArgumentList() }) else {
       return RawExprSyntax(declName)
     }
@@ -1689,7 +1699,7 @@ extension Parser {
             name = nil
             unexpectedBeforeEqual = nil
             equal = nil
-            expression = RawExprSyntax(self.parseIdentifierExpression())
+            expression = RawExprSyntax(self.parseIdentifierExpression(flavor: .basic))
           }
 
           keepGoing = self.consume(if: .comma)
@@ -1833,7 +1843,7 @@ extension Parser {
   ///
   /// This is currently the same as parsing a tuple expression. In the future,
   /// this will be a dedicated argument list type.
-  mutating func parseArgumentListElements(pattern: PatternContext) -> [RawLabeledExprSyntax] {
+  mutating func parseArgumentListElements(pattern: PatternContext, flavor: ExprFlavor = .basic) -> [RawLabeledExprSyntax] {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return [
         RawLabeledExprSyntax(
@@ -1878,7 +1888,7 @@ extension Parser {
       if self.at(.binaryOperator) && self.peek(isAt: .comma, .rightParen, .rightSquare) {
         expr = RawExprSyntax(self.parseDeclReferenceExpr(.operators))
       } else {
-        expr = self.parseExpression(flavor: .basic, pattern: pattern)
+        expr = self.parseExpression(flavor: flavor, pattern: pattern)
       }
       keepGoing = self.consume(if: .comma)
       result.append(
@@ -2545,6 +2555,17 @@ extension SyntaxKind {
       return true
     default:
       return false
+    }
+  }
+}
+
+private extension Parser.ExprFlavor {
+  /// The expression flavor used for the argument of a call that occurs
+  /// within a particularly-flavored expression.
+  var callArgumentFlavor: Parser.ExprFlavor {
+    switch self {
+    case .basic, .poundIfDirective, .stmtCondition: return .basic
+    case .attributeArguments: return .attributeArguments
     }
   }
 }

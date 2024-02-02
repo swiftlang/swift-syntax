@@ -60,6 +60,7 @@ extension Parser {
     case derivative
     case differentiable
     case exclusivity
+    case freestanding
     case inline
     case objc
     case Sendable
@@ -96,6 +97,7 @@ extension Parser {
       case TokenSpec(.derivative): self = .derivative
       case TokenSpec(.differentiable): self = .differentiable
       case TokenSpec(.exclusivity): self = .exclusivity
+      case TokenSpec(.freestanding): self = .freestanding
       case TokenSpec(.inline): self = .inline
       case TokenSpec(.objc): self = .objc
       case TokenSpec(.Sendable): self = .Sendable
@@ -136,6 +138,7 @@ extension Parser {
       case .derivative: return .keyword(.derivative)
       case .differentiable: return .keyword(.differentiable)
       case .exclusivity: return .keyword(.exclusivity)
+      case .freestanding: return .keyword(.freestanding)
       case .inline: return .keyword(.inline)
       case .objc: return .keyword(.objc)
       case .Sendable: return .keyword(.Sendable)
@@ -322,9 +325,9 @@ extension Parser {
       return parseAttribute(argumentMode: .optional) { parser in
         return .unavailableFromAsyncArguments(parser.parseUnavailableFromAsyncAttributeArguments())
       }
-    case .attached:
+    case .attached, .freestanding:
       return parseAttribute(argumentMode: .customAttribute) { parser in
-        let arguments = parser.parseAttachedArguments()
+        let arguments = parser.parseMacroRoleArguments()
         return .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
       }
     case .rethrows:
@@ -356,7 +359,7 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseAttachedArguments() -> [RawLabeledExprSyntax] {
+  mutating func parseMacroRoleArguments() -> [RawLabeledExprSyntax] {
     let (unexpectedBeforeRole, role) = self.expect(.identifier, TokenSpec(.extension, remapping: .identifier), default: .identifier)
     let roleTrailingComma = self.consume(if: .comma)
     let roleElement = RawLabeledExprSyntax(
@@ -373,7 +376,7 @@ extension Parser {
       trailingComma: roleTrailingComma,
       arena: self.arena
     )
-    let additionalArgs = self.parseArgumentListElements(pattern: .none)
+    let additionalArgs = self.parseArgumentListElements(pattern: .none, flavor: .attributeArguments)
     return [roleElement] + additionalArgs
   }
 }

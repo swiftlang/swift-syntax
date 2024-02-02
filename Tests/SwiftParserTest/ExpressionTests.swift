@@ -2990,4 +2990,36 @@ final class StatementExpressionTests: ParserTestCase {
       fixedSource: "foo(<#identifier#>: 1)"
     )
   }
+
+  func testSubscriptDeinitMembers() {
+    assertParse(
+      """
+      .deinit
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("deinit"))
+    )
+
+    assertParse(
+      """
+      .subscript
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("subscript"))
+    )
+
+    assertParse(
+      """
+      x.1️⃣deinit
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("deinit")),
+      substructureAfterMarker: "1️⃣"
+    )
+
+    assertParse(
+      """
+      x.1️⃣subscript
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("subscript")),
+      substructureAfterMarker: "1️⃣"
+    )
+  }
 }

@@ -127,6 +127,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case discard
   case forward
   case `func`
+  case freestanding
   case get
   case `guard`
   case higherThan
@@ -647,6 +648,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .availability
       case "backDeployed":
         self = .backDeployed
+      case "freestanding":
+        self = .freestanding
       case "noDerivative":
         self = .noDerivative
       case "transferring":
@@ -909,6 +912,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
       "discard", 
       "forward", 
       "func", 
+      "freestanding", 
       "get", 
       "guard", 
       "higherThan", 

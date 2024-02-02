@@ -25,7 +25,7 @@ final class MacroReplacementTests: XCTestCase {
       """
 
     let definition = try macro.as(MacroDeclSyntax.self)!.checkDefinition()
-    guard case let .expansion(_, replacements) = definition else {
+    guard case let .expansion(_, replacements, _) = definition else {
       XCTFail("not an expansion definition")
       fatalError()
     }
@@ -96,7 +96,7 @@ final class MacroReplacementTests: XCTestCase {
 
     let macroDecl = macro.as(MacroDeclSyntax.self)!
     let definition = try macroDecl.checkDefinition()
-    guard case let .expansion(expansion, replacements) = definition else {
+    guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
       XCTFail("not a normal expansion")
       fatalError()
     }
@@ -104,12 +104,61 @@ final class MacroReplacementTests: XCTestCase {
     let expandedSyntax = macroDecl.expand(
       use.as(MacroExpansionExprSyntax.self)!,
       definition: expansion,
-      replacements: replacements
+      replacements: replacements,
+      genericReplacements: genericReplacements
     )
     assertStringsEqualWithDiff(
       expandedSyntax.description,
       """
       #otherMacro(first: 17, second: ["a": 5], third: [3.14159, 2.71828], fourth: 4)
+      """
+    )
+  }
+
+  func testMacroGenericArgumentExpansion() throws {
+    let macro: DeclSyntax =
+      """
+      macro gen<A, B>(a: A, b: B) = #otherMacro<A, B>(first: a, second: b)
+      """
+
+    let use: ExprSyntax =
+      """
+      #gen<Int, String>(a: 5, b: "Hello")
+      """
+
+    let macroDecl = macro.as(MacroDeclSyntax.self)!
+    let definition = try macroDecl.checkDefinition()
+    guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
+      XCTFail("not a normal expansion")
+      fatalError()
+    }
+
+    guard let replacementA = genericReplacements.first else {
+      XCTFail("Expected generic replacement for A")
+      fatalError()
+    }
+    guard let replacementB = genericReplacements.dropFirst().first else {
+      XCTFail("Expected generic replacement for A")
+      fatalError()
+    } 
+    XCTAssertEqual(genericReplacements.count, 2)
+
+    XCTAssertEqual(replacementA.parameterIndex, 0)
+    XCTAssertEqual("\(replacementA.reference.argument)", "A")
+
+    XCTAssertEqual(replacementB.parameterIndex, 1)
+    XCTAssertEqual("\(replacementB.reference.argument)", "B")
+
+    let expandedSyntax = macroDecl.expand(
+      use.as(MacroExpansionExprSyntax.self)!,
+      definition: expansion,
+      replacements: replacements,
+      genericReplacements: genericReplacements
+    )
+    assertStringsEqualWithDiff(
+      expandedSyntax.description,
+      """
+      #otherMacro<A, B>(first: 5, second: "Hello")
       """
     )
   }

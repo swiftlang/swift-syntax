@@ -314,47 +314,6 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
-  /// If `unexpectedBefore` only contains a single token with the same kind as `token`,
-  /// `unexpectedBefore` has trailing trivia and `token` is missing, emit a diagnostic
-  /// that `unexpectedBefore` must not be followed by whitespace.
-  /// The Fix-It of that diagnostic removes the trailing trivia from `unexpectedBefore`.
-  func handleExtraneousWhitespaceError(unexpectedBefore: UnexpectedNodesSyntax?, token: TokenSyntax) {
-    if let unexpected = unexpectedBefore?.onlyPresentToken(where: { $0.tokenKind == token.tokenKind }),
-      !unexpected.trailingTrivia.isEmpty,
-      token.isMissing
-    {
-      let changes: [FixIt.MultiNodeChange] = [
-        .makeMissing(unexpected, transferTrivia: false),  // don't transfer trivia because trivia is the issue here
-        .makePresent(token, leadingTrivia: unexpected.leadingTrivia),
-      ]
-      if let nextToken = token.nextToken(viewMode: .all),
-        nextToken.isMissing
-      {
-        // If the next token is missing, the problem here isn’t actually the
-        // space after token but that the missing token should be added after
-        // `token` without a space. Generate a diagnostic for that.
-        _ = handleMissingSyntax(
-          nextToken,
-          overridePosition: unexpected.endPositionBeforeTrailingTrivia,
-          additionalChanges: changes,
-          additionalHandledNodes: [unexpected.id, token.id]
-        )
-      } else {
-        let fixIt = FixIt(
-          message: .removeExtraneousWhitespace,
-          changes: changes
-        )
-        addDiagnostic(
-          token,
-          position: unexpected.endPositionBeforeTrailingTrivia,
-          ExtraneousWhitespace(tokenWithWhitespace: unexpected),
-          fixIts: [fixIt],
-          handledNodes: [token.id, unexpected.id]
-        )
-      }
-    }
-  }
-
   // MARK: - Generic diagnostic generation
 
   public override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
@@ -456,11 +415,27 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       handleMissingToken(token)
     } else {
       if let tokenDiagnostic = token.tokenDiagnostic {
+        switch tokenDiagnostic.kind {
+        case .extraneousLeadingWhitespaceError, .extraneousLeadingWhitespaceWarning:
+          if token.previousToken(viewMode: .fixedUp)?.isMissing ?? false {
+            // If the previous token is missing, it doesn't make sense to complain about extraneous whitespace between
+            // the previous token and this one.
+            return .skipChildren
+          }
+        case .extraneousTrailingWhitespaceError, .extraneousTrailingWhitespaceWarning:
+          if token.nextToken(viewMode: .fixedUp)?.isMissing ?? false {
+            // If the next token is missing, it doesn't make sense to complain about extraneous whitespace between
+            // this token and the next.
+            return .skipChildren
+          }
+        default:
+          break
+        }
         let message = tokenDiagnostic.diagnosticMessage(in: token)
         precondition(message.severity.matches(tokenDiagnostic.severity))
         self.addDiagnostic(
           token,
-          position: token.position.advanced(by: Int(tokenDiagnostic.byteOffset)),
+          position: tokenDiagnostic.position(in: token),
           message,
           fixIts: tokenDiagnostic.fixIts(in: token)
         )
@@ -1257,32 +1232,6 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         handledNodes: [unexpectedIdentifier.id, node.label.id]
       )
     }
-
-    return .visitChildren
-  }
-
-  public override func visit(_ node: MacroExpansionDeclSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-
-    handleExtraneousWhitespaceError(
-      unexpectedBefore: node.unexpectedBetweenModifiersAndPound,
-      token: node.pound
-    )
-
-    return .visitChildren
-  }
-
-  public override func visit(_ node: MacroExpansionExprSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-
-    handleExtraneousWhitespaceError(
-      unexpectedBefore: node.unexpectedBeforePound,
-      token: node.pound
-    )
 
     return .visitChildren
   }

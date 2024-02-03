@@ -117,6 +117,9 @@ public struct Parser {
   /// Parser should own a ``LookaheadTracker`` so that we can share one `furthestOffset` in a parse.
   let lookaheadTrackerOwner: LookaheadTrackerOwner
 
+  /// The Swift version as which this source file should be parsed.
+  let swiftVersion: SwiftVersion
+
   /// The experimental features that have been enabled.
   let experimentalFeatures: ExperimentalFeatures
 
@@ -128,6 +131,9 @@ public struct Parser {
   #else
   static let defaultMaximumNestingLevel = 256
   #endif
+
+  /// The Swift version as which source files should be parsed if no Swift version is explicitly specified in the parser.
+  static let defaultSwiftVersion: SwiftVersion = .v6
 
   var _emptyRawMultipleTrailingClosureElementListSyntax: RawMultipleTrailingClosureElementListSyntax?
 
@@ -187,12 +193,15 @@ public struct Parser {
   ///            arena is created automatically, and `input` copied into the
   ///            arena. If non-`nil`, `input` must be within its registered
   ///            source buffer or allocator.
+  ///  - swiftVersion: The version of Swift using which the file should be parsed.
+  ///                  Defaults to the latest version.
   ///  - experimentalFeatures: The experimental features enabled for the parser.
   private init(
     buffer input: UnsafeBufferPointer<UInt8>,
     maximumNestingLevel: Int?,
     parseTransition: IncrementalParseTransition?,
     arena: ParsingSyntaxArena?,
+    swiftVersion: SwiftVersion?,
     experimentalFeatures: ExperimentalFeatures
   ) {
     var input = input
@@ -200,13 +209,12 @@ public struct Parser {
       self.arena = arena
       precondition(arena.contains(text: SyntaxText(baseAddress: input.baseAddress, count: input.count)))
     } else {
-      self.arena = ParsingSyntaxArena(
-        parseTriviaFunction: TriviaParser.parseTrivia(_:position:)
-      )
+      self.arena = ParsingSyntaxArena(parseTriviaFunction: TriviaParser.parseTrivia)
       input = self.arena.internSourceBuffer(input)
     }
 
     self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
+    self.swiftVersion = swiftVersion ?? Self.defaultSwiftVersion
     self.experimentalFeatures = experimentalFeatures
     self.lookaheadTrackerOwner = LookaheadTrackerOwner()
 
@@ -224,6 +232,7 @@ public struct Parser {
     string input: String,
     maximumNestingLevel: Int?,
     parseTransition: IncrementalParseTransition?,
+    swiftVersion: SwiftVersion?,
     experimentalFeatures: ExperimentalFeatures
   ) {
     var input = input
@@ -234,6 +243,7 @@ public struct Parser {
         maximumNestingLevel: maximumNestingLevel,
         parseTransition: parseTransition,
         arena: nil,
+        swiftVersion: swiftVersion,
         experimentalFeatures: experimentalFeatures
       )
     }
@@ -243,13 +253,15 @@ public struct Parser {
   public init(
     _ input: String,
     maximumNestingLevel: Int? = nil,
-    parseTransition: IncrementalParseTransition? = nil
+    parseTransition: IncrementalParseTransition? = nil,
+    swiftVersion: SwiftVersion? = nil
   ) {
     // Chain to the private String initializer.
     self.init(
       string: input,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
+      swiftVersion: swiftVersion,
       experimentalFeatures: []
     )
   }
@@ -277,7 +289,8 @@ public struct Parser {
     _ input: UnsafeBufferPointer<UInt8>,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
-    arena: ParsingSyntaxArena? = nil
+    arena: ParsingSyntaxArena? = nil,
+    swiftVersion: SwiftVersion? = nil
   ) {
     // Chain to the private buffer initializer.
     self.init(
@@ -285,6 +298,7 @@ public struct Parser {
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
       arena: arena,
+      swiftVersion: swiftVersion,
       experimentalFeatures: []
     )
   }
@@ -296,6 +310,7 @@ public struct Parser {
     _ input: String,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
+    swiftVersion: SwiftVersion? = nil,
     experimentalFeatures: ExperimentalFeatures
   ) {
     // Chain to the private String initializer.
@@ -303,6 +318,7 @@ public struct Parser {
       string: input,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
+      swiftVersion: swiftVersion,
       experimentalFeatures: experimentalFeatures
     )
   }
@@ -315,6 +331,7 @@ public struct Parser {
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
     arena: ParsingSyntaxArena? = nil,
+    swiftVersion: SwiftVersion? = nil,
     experimentalFeatures: ExperimentalFeatures
   ) {
     // Chain to the private buffer initializer.
@@ -323,6 +340,7 @@ public struct Parser {
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
       arena: arena,
+      swiftVersion: swiftVersion,
       experimentalFeatures: experimentalFeatures
     )
   }

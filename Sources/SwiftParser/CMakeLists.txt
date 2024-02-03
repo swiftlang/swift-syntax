@@ -30,8 +30,9 @@ add_swift_syntax_library(SwiftParser
   Recovery.swift
   Specifiers.swift
   Statements.swift
-  StringLiterals.swift
   StringLiteralRepresentedLiteralValue.swift
+  StringLiterals.swift
+  SwiftVersion.swift
   SyntaxUtils.swift
   TokenConsumer.swift
   TokenPrecedence.swift

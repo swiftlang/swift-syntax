@@ -64,10 +64,11 @@ fileprivate class StringLiteralExpressionIndentationChecker {
       // error is fixed
       return nil
     }
-    return token.tokenView.withTokenDiagnostic(
+    let tokenWithDiagnostic = token.tokenView.withTokenDiagnostic(
       tokenDiagnostic: TokenDiagnostic(.insufficientIndentationInMultilineStringLiteral, byteOffset: 0),
       arena: arena
     )
+    return RawSyntax(tokenWithDiagnostic)
   }
 
   private func visitLayoutNode(node: RawSyntax) -> RawSyntax? {

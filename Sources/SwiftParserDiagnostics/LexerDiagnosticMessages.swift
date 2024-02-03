@@ -35,6 +35,25 @@ public extension TokenError {
   }
 }
 
+/// A warning diagnostic whose ID is determined by the diagnostic's type.
+public protocol TokenWarning: DiagnosticMessage {
+  var diagnosticID: MessageID { get }
+}
+
+public extension TokenWarning {
+  static var diagnosticID: MessageID {
+    return MessageID(domain: diagnosticDomain, id: "\(self)")
+  }
+
+  var diagnosticID: MessageID {
+    return Self.diagnosticID
+  }
+
+  var severity: DiagnosticSeverity {
+    return .warning
+  }
+}
+
 // MARK: - Errors (please sort alphabetically)
 
 /// Please order the cases in this enum alphabetically by case name.
@@ -85,6 +104,24 @@ public enum StaticTokenWarning: String, DiagnosticMessage {
   public var severity: DiagnosticSeverity { .warning }
 }
 
+@_spi(SyntaxText)
+public struct ExtraneousLeadingWhitespaceError: TokenError {
+  public let tokenText: SyntaxText
+
+  public var message: String {
+    return "extraneous whitespace before '\(tokenText)' is not permitted"
+  }
+}
+
+@_spi(SyntaxText)
+public struct ExtraneousTrailingWhitespaceError: TokenError {
+  public let tokenText: SyntaxText
+
+  public var message: String {
+    return "extraneous whitespace after '\(tokenText)' is not permitted"
+  }
+}
+
 public struct InvalidFloatingPointExponentDigit: TokenError {
   public enum Kind: Sendable {
     case digit(Unicode.Scalar)
@@ -126,17 +163,26 @@ public struct InvalidDigitInIntegerLiteral: TokenError {
   }
 }
 
+/// Downgrades a ``TokenError`` to a ``TokenWarning`` until Swift 6.
+public struct ErrorToWarningDowngrade: TokenWarning {
+  public let error: TokenError
+
+  public var message: String {
+    return "\(error.message); this is an error in Swift 6"
+  }
+}
+
 // MARK: - Convert TokenDiagnostic from SwiftSyntax to error messages
 
 public extension SwiftSyntax.TokenDiagnostic {
   /// `tokenText` is the entire text of the token in which the ``TokenDiagnostic``
   /// occurred, including trivia.
   @_spi(RawSyntax)
-  func diagnosticMessage(wholeTextBytes: [UInt8]) -> DiagnosticMessage {
+  func diagnosticMessage(in token: TokenSyntax) -> DiagnosticMessage {
     var scalarAtErrorOffset: UnicodeScalar {
       // Fall back to the Unicode replacement character U+FFFD in case we can't
       // lex the unicode character at `byteOffset`. It's the best we can do
-      Unicode.Scalar.lexing(from: wholeTextBytes[Int(self.byteOffset)...]) ?? UnicodeScalar("�")
+      Unicode.Scalar.lexing(from: token.syntaxTextBytes[Int(self.byteOffset)...]) ?? UnicodeScalar("�")
     }
 
     switch self.kind {
@@ -147,6 +193,10 @@ public extension SwiftSyntax.TokenDiagnostic {
     case .expectedDigitInFloatLiteral: return StaticTokenError.expectedDigitInFloatLiteral
     case .expectedHexCodeInUnicodeEscape: return StaticTokenError.expectedHexCodeInUnicodeEscape
     case .expectedHexDigitInHexLiteral: return StaticTokenError.expectedHexDigitInHexLiteral
+    case .extraneousLeadingWhitespaceError: return ExtraneousLeadingWhitespaceError(tokenText: token.rawText)
+    case .extraneousLeadingWhitespaceWarning: return ErrorToWarningDowngrade(error: ExtraneousLeadingWhitespaceError(tokenText: token.rawText))
+    case .extraneousTrailingWhitespaceError: return ExtraneousTrailingWhitespaceError(tokenText: token.rawText)
+    case .extraneousTrailingWhitespaceWarning: return ErrorToWarningDowngrade(error: ExtraneousTrailingWhitespaceError(tokenText: token.rawText))
     case .insufficientIndentationInMultilineStringLiteral:
       // This should be diagnosed when visiting the `StringLiteralExprSyntax`
       // inside `ParseDiagnosticsGenerator` but fall back to an error message
@@ -177,8 +227,16 @@ public extension SwiftSyntax.TokenDiagnostic {
     }
   }
 
-  func diagnosticMessage(in token: TokenSyntax) -> DiagnosticMessage {
-    return self.diagnosticMessage(wholeTextBytes: token.syntaxTextBytes)
+  func position(in token: TokenSyntax) -> AbsolutePosition {
+    switch kind {
+    case .extraneousLeadingWhitespaceError, .extraneousLeadingWhitespaceWarning:
+      if let previousToken = token.previousToken(viewMode: .all) {
+        return previousToken.endPositionBeforeTrailingTrivia
+      }
+    default:
+      break
+    }
+    return token.position.advanced(by: Int(byteOffset))
   }
 
   func fixIts(in token: TokenSyntax) -> [FixIt] {
@@ -232,6 +290,20 @@ public extension SwiftSyntax.TokenDiagnostic {
       return [
         FixIt(message: .insertWhitespace, changes: changes)
       ]
+    case .extraneousLeadingWhitespaceError, .extraneousLeadingWhitespaceWarning:
+      var changes: [FixIt.Change] = []
+      changes.append(.replaceLeadingTrivia(token: token, newTrivia: []))
+      if let previousToken = token.previousToken(viewMode: .sourceAccurate) {
+        changes.append(.replaceTrailingTrivia(token: previousToken, newTrivia: []))
+      }
+      return [FixIt(message: .removeExtraneousWhitespace, changes: changes)]
+    case .extraneousTrailingWhitespaceError, .extraneousTrailingWhitespaceWarning:
+      var changes: [FixIt.Change] = []
+      changes.append(.replaceTrailingTrivia(token: token, newTrivia: []))
+      if let nextToken = token.nextToken(viewMode: .sourceAccurate) {
+        changes.append(.replaceLeadingTrivia(token: nextToken, newTrivia: []))
+      }
+      return [FixIt(message: .removeExtraneousWhitespace, changes: changes)]
     default:
       return []
     }

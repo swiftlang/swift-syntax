@@ -947,4 +947,71 @@ final class AttributeTests: ParserTestCase {
       """
     )
   }
+
+  func testSpaceBetweenAtAndAttribute() {
+    assertParse(
+      "@1️⃣ custom func foo() {}",
+      diagnostics: [
+        DiagnosticSpec(message: "extraneous whitespace after '@' is not permitted", fixIts: ["remove whitespace"])
+      ],
+      fixedSource: "@custom func foo() {}"
+    )
+
+    assertParse(
+      "@1️⃣ custom func foo() {}",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extraneous whitespace after '@' is not permitted; this is an error in Swift 6",
+          severity: .warning,
+          fixIts: ["remove whitespace"]
+        )
+      ],
+      fixedSource: "@custom func foo() {}",
+      swiftVersion: .v5
+    )
+
+    assertParse(
+      """
+      @1️⃣
+      custom func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "extraneous whitespace after '@' is not permitted", fixIts: ["remove whitespace"])
+      ],
+      fixedSource: "@custom func foo() {}"
+    )
+  }
+
+  func testSpaceBetweenAttributeNameAndLeftParen() {
+    assertParse(
+      "@custom1️⃣ (1) func foo() {}",
+      diagnostics: [
+        DiagnosticSpec(message: "extraneous whitespace before '(' is not permitted", fixIts: ["remove whitespace"])
+      ],
+      fixedSource: "@custom(1) func foo() {}"
+    )
+
+    assertParse(
+      "@custom1️⃣ (1) func foo() {}",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extraneous whitespace before '(' is not permitted; this is an error in Swift 6",
+          severity: .warning,
+          fixIts: ["remove whitespace"]
+        )
+      ],
+      fixedSource: "@custom(1) func foo() {}",
+      swiftVersion: .v5
+    )
+
+    assertParse(
+      """
+      @custom
+      1️⃣(1) func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code '(1)' in function")
+      ]
+    )
+  }
 }

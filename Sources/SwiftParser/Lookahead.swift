@@ -27,6 +27,9 @@ extension Parser {
     /// i.e. how far it looked ahead.
     var tokensConsumed: Int = 0
 
+    /// The Swift version as which this source file should be parsed.
+    let swiftVersion: SwiftVersion
+
     /// The experimental features that have been enabled in the underlying
     /// parser.
     let experimentalFeatures: ExperimentalFeatures
@@ -34,10 +37,12 @@ extension Parser {
     private init(
       lexemes: Lexer.LexemeSequence,
       currentToken: Lexer.Lexeme,
+      swiftVersion: SwiftVersion,
       experimentalFeatures: ExperimentalFeatures
     ) {
       self.lexemes = lexemes
       self.currentToken = currentToken
+      self.swiftVersion = swiftVersion
       self.experimentalFeatures = experimentalFeatures
     }
 
@@ -45,6 +50,7 @@ extension Parser {
       self.init(
         lexemes: other.lexemes,
         currentToken: other.currentToken,
+        swiftVersion: other.swiftVersion,
         experimentalFeatures: other.experimentalFeatures
       )
     }
@@ -55,6 +61,7 @@ extension Parser {
       return Lookahead(
         lexemes: self.lexemes,
         currentToken: self.currentToken,
+        swiftVersion: self.swiftVersion,
         experimentalFeatures: self.experimentalFeatures
       )
     }

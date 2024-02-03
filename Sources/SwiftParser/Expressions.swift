@@ -1283,20 +1283,18 @@ extension Parser {
     flavor: ExprFlavor
   ) -> RawMacroExpansionExprSyntax {
     var (unexpectedBeforePound, pound) = self.expect(.pound)
-    if pound.trailingTriviaByteLength != 0 {
+    if pound.trailingTriviaByteLength > 0 || currentToken.leadingTriviaByteLength > 0 {
       // If there are whitespaces after '#' diagnose.
-      unexpectedBeforePound = RawUnexpectedNodesSyntax(combining: unexpectedBeforePound, pound, arena: self.arena)
-      pound = self.missingToken(.pound)
+      let diagnostic = TokenDiagnostic(
+        .extraneousTrailingWhitespaceError,
+        byteOffset: pound.leadingTriviaByteLength + pound.tokenText.count
+      )
+      pound = pound.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
     }
-    var unexpectedBeforeMacroName: RawUnexpectedNodesSyntax?
-    var macroName: RawTokenSyntax
+    let unexpectedBeforeMacroName: RawUnexpectedNodesSyntax?
+    let macroName: RawTokenSyntax
     if !self.atStartOfLine {
       (unexpectedBeforeMacroName, macroName) = self.expectIdentifier(allowKeywordsAsIdentifier: true)
-      if macroName.leadingTriviaByteLength != 0 {
-        // If there're whitespaces after '#' diagnose.
-        unexpectedBeforeMacroName = RawUnexpectedNodesSyntax(combining: unexpectedBeforeMacroName, macroName, arena: self.arena)
-        pound = self.missingToken(.identifier, text: macroName.tokenText)
-      }
     } else {
       unexpectedBeforeMacroName = nil
       macroName = self.missingToken(.identifier)

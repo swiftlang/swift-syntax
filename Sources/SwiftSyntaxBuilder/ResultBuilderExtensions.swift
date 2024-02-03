@@ -50,20 +50,14 @@ extension MemberBlockItemListBuilder {
   }
 }
 
-// MARK: Initializing collections from protocols
-// These initializers allow the creation of syntax collections that have a base
-// node as their element from the corresponding protocol type.
-// These are used by the result builders.
-// Since we only have two of these, it doesn’t make sense to generate them.
-
-extension ExprListSyntax {
-  init(_ elements: [ExprSyntaxProtocol]) {
-    self = ExprListSyntax(elements.map { ExprSyntax(fromProtocol: $0) } as [ExprSyntax])
+extension ExprListBuilder {
+  public static func buildExpression(_ expression: some ExprSyntaxProtocol) -> Component {
+    return buildExpression(ExprSyntax(fromProtocol: expression))
   }
 }
 
-extension UnexpectedNodesSyntax {
-  public init(_ elements: [SyntaxProtocol]) {
-    self = UnexpectedNodesSyntax(elements.map { Syntax(fromProtocol: $0) } as [Syntax])
+extension UnexpectedNodesBuilder {
+  public static func buildExpression(_ expression: some SyntaxProtocol) -> Component {
+    return buildExpression(Syntax(fromProtocol: expression))
   }
 }

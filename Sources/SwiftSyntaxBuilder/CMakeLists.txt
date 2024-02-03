@@ -10,6 +10,7 @@ add_swift_syntax_library(SwiftSyntaxBuilder
   ConvenienceInitializers.swift
   DeclSyntaxParseable.swift
   Indenter.swift
+  ListBuilder.swift
   ResultBuilderExtensions.swift
   SwiftSyntaxBuilderCompatibility.swift
   Syntax+StringInterpolation.swift

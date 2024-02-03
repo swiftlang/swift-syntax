@@ -1246,7 +1246,8 @@ final class DeclarationTests: ParserTestCase {
           ])
         ),
         UnexpectedNodesSyntax([
-          TokenSyntax.identifier("bogus"), TokenSyntax.keyword(.rethrows),
+          TokenSyntax.identifier("bogus"),
+          TokenSyntax.keyword(.rethrows),
           TokenSyntax.identifier("set"),
         ])
       ),
@@ -1352,7 +1353,10 @@ final class DeclarationTests: ParserTestCase {
       substructure: FunctionParameterSyntax(
         firstName: .identifier("first"),
         secondName: .identifier("second"),
-        UnexpectedNodesSyntax([TokenSyntax.identifier("third"), TokenSyntax.identifier("fourth")]),
+        UnexpectedNodesSyntax([
+          TokenSyntax.identifier("third"),
+          TokenSyntax.identifier("fourth"),
+        ]),
         colon: .colonToken(),
         type: IdentifierTypeSyntax(name: .identifier("Int"))
       ),
@@ -2879,9 +2883,7 @@ final class DeclarationTests: ParserTestCase {
       substructure: FunctionDeclSyntax(
         funcKeyword: .keyword(.func),
         name: .identifier("test"),
-        UnexpectedNodesSyntax([
-          TokenSyntax.identifier("<#name#>")
-        ]),
+        UnexpectedNodesSyntax([TokenSyntax.identifier("<#name#>")]),
         signature: FunctionSignatureSyntax(
           parameterClause: FunctionParameterClauseSyntax(
             parameters: FunctionParameterListSyntax([])

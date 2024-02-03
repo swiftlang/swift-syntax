@@ -146,10 +146,6 @@ public struct SyntaxBuildableType: Hashable {
     }
   }
 
-  public var parameterType: TypeSyntax {
-    return optionalWrapped(type: parameterBaseType)
-  }
-
   /// Assuming that this is a collection type, the non-optional type of the result builder
   /// that can be used to build the collection.
   public var resultBuilderType: TypeSyntax {
@@ -159,11 +155,6 @@ public struct SyntaxBuildableType: Hashable {
     case .token:
       preconditionFailure("Tokens cannot be constructed using result builders")
     }
-  }
-
-  /// Whether this type has the `WithTrailingComma` trait.
-  public var hasWithTrailingCommaTrait: Bool {
-    SYNTAX_NODES.compactMap(\.layoutNode).contains { $0.type == self && $0.traits.contains("WithTrailingComma") }
   }
 
   /// If this type is not a base kind, its base type (see `SyntaxBuildableNode.base_type()`),

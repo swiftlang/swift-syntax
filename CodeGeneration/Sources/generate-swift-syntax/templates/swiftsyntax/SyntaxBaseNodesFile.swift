@@ -173,7 +173,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     try! StructDeclSyntax(
       """
-      \(documentation)
+      \(documentation)\
       \(node.apiAttributes())\
       public struct \(node.kind.syntaxType): \(node.kind.protocolType), SyntaxHashable
       """

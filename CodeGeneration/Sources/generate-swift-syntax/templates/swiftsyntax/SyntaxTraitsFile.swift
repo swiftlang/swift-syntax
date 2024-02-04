@@ -21,11 +21,9 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
       // MARK: - \(trait.protocolName)
 
-      \(trait.documentation)
+      \(trait.documentation)\
       public protocol \(trait.protocolName): SyntaxProtocol\(raw:
-        trait.baseKind != nil
-          ? ", \(trait.baseKind!.protocolType)"
-          : ""
+        trait.baseKind == nil ? "" : ", \(trait.baseKind!.protocolType)"
       )
       """
     ) {
@@ -34,7 +32,7 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
         DeclSyntax(
           """
-          \(child.documentation)
+          \(child.documentation)\
           \(child.apiAttributes)var \(child.varOrCaseName): \(child.syntaxNodeKind.syntaxType)\(raw: questionMark) { get set }
           """
         )

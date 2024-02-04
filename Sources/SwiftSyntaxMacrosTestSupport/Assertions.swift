@@ -322,7 +322,6 @@ public func assertMacroExpansion(
 
   // Expand all macros in the source.
   let context = BasicMacroExpansionContext(
-    lexicalContext: /*FIXME:*/ [],
     sourceFiles: [origSourceFile: .init(moduleName: testModuleName, fullFilePath: testFileName)]
   )
 

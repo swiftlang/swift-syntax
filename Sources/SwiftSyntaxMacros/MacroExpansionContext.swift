@@ -59,8 +59,10 @@ public protocol MacroExpansionContext: AnyObject {
   /// member lists emptied, and properties and subscripts have their accessor
   /// blocks removed.
   ///
-  /// The first entry in the array is the innermost context, which could be
-  /// the syntax node to which
+  /// The first entry in the array is the innermost context. For attached
+  /// macros, this is often the declaration to which the macro is attached.
+  /// This array can be empty if there is no context, for example when a
+  /// freestanding macro is used at file scope.
   var lexicalContext: [Syntax] { get }
 }
 

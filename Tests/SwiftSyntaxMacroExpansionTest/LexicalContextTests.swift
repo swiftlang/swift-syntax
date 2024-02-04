@@ -65,8 +65,7 @@ extension SyntaxProtocol {
   /// Form a function name.
   private func formFunctionName(
     _ baseName: String,
-    _ parameters: FunctionParameterClauseSyntax?,
-    isSubscript: Bool = false
+    _ parameters: FunctionParameterClauseSyntax?
   ) -> String {
     let argumentNames: [String] =
       parameters?.parameters.map { param in
@@ -97,8 +96,7 @@ extension SyntaxProtocol {
     if let subscriptDecl = self.as(SubscriptDeclSyntax.self) {
       return formFunctionName(
         "subscript",
-        subscriptDecl.parameterClause,
-        isSubscript: true
+        subscriptDecl.parameterClause
       )
     }
 
@@ -193,14 +191,19 @@ final class LexicalContextTests: XCTestCase {
       func f(a: Int, _: Double, c: Int) {
         print(#function)
       }
-
-      struct X {
-        var computed: String {
-          get {
-            #function
-          }
+      """,
+      expandedSource: """
+        func f(a: Int, _: Double, c: Int) {
+          print(  "f(a:_:c:)")
         }
+        """,
+      macros: ["function": FunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
 
+    assertMacroExpansion(
+      """
+      struct X {
         init(from: String) {
           #function
         }
@@ -213,23 +216,9 @@ final class LexicalContextTests: XCTestCase {
           #function
         }
       }
-
-      extension A {
-        static var staticProp: String = #function
-      }
       """,
       expandedSource: """
-        func f(a: Int, _: Double, c: Int) {
-          print(  "f(a:_:c:)")
-        }
-
         struct X {
-          var computed: String {
-            get {
-              "computed"
-            }
-          }
-
           init(from: String) {
             "init(from:)"
           }
@@ -242,7 +231,37 @@ final class LexicalContextTests: XCTestCase {
             "subscript(a:)"
           }
         }
+        """,
+      macros: ["function": FunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
 
+    assertMacroExpansion(
+      """
+      var computed: String {
+        get {
+          #function
+        }
+      }
+      """,
+      expandedSource: """
+        var computed: String {
+          get {
+            "computed"
+          }
+        }
+        """,
+      macros: ["function": FunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      extension A {
+        static var staticProp: String = #function
+      }
+      """,
+      expandedSource: """
         extension A {
           static var staticProp: String =   "staticProp"
         }
@@ -294,5 +313,9 @@ final class LexicalContextTests: XCTestCase {
         """,
       macros: ["allLexicalContexts": AllLexicalContextsMacro.self]
     )
+
+    // Test closures separately, because they don't fit as declaration macros.
+    let closure: ExprSyntax = "{ (a, b) in print(a + b) }"
+    XCTAssertEqual(closure.asMacroLexicalContext()!.description, "{ (a, b) in }")
   }
 }

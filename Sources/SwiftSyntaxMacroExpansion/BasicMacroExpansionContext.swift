@@ -73,7 +73,7 @@ public class BasicMacroExpansionContext {
 
   /// Create a new macro evaluation context.
   public init(
-    lexicalContext: [Syntax],
+    lexicalContext: [Syntax] = [],
     expansionDiscriminator: String = "__macro_local_",
     sourceFiles: [SourceFileSyntax: KnownSourceFile] = [:]
   ) {

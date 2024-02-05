@@ -140,7 +140,7 @@ final class MacroReplacementTests: XCTestCase {
     guard let replacementB = genericReplacements.dropFirst().first else {
       XCTFail("Expected generic replacement for B")
       return
-    } 
+    }
     XCTAssertEqual(genericReplacements.count, 2)
 
     XCTAssertEqual(replacementA.parameterIndex, 0)

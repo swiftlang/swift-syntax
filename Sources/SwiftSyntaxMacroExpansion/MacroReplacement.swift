@@ -202,12 +202,12 @@ fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
 
     guard let (parameterIndex, _) = matchedParameter else {
       // We have a reference to something that isn't a parameter of the macro.
-     diagnostics.append(
-       Diagnostic(
-         node: Syntax(baseName),
-         message: MacroExpanderError.nonTypeReference(baseName)
-       )
-     )
+      diagnostics.append(
+        Diagnostic(
+          node: Syntax(baseName),
+          message: MacroExpanderError.nonTypeReference(baseName)
+        )
+      )
 
       return .visitChildren
     }
@@ -302,9 +302,11 @@ private final class MacroExpansionRewriter: SyntaxRewriter {
   let genericParameterReplacements: [DeclReferenceExprSyntax: Int]
   let arguments: [ExprSyntax]
 
-  init(parameterReplacements: [DeclReferenceExprSyntax: Int],
-       genericReplacements: [DeclReferenceExprSyntax: Int],
-       arguments: [ExprSyntax]) {
+  init(
+    parameterReplacements: [DeclReferenceExprSyntax: Int],
+    genericReplacements: [DeclReferenceExprSyntax: Int],
+    arguments: [ExprSyntax]
+  ) {
     self.parameterReplacements = parameterReplacements
     self.genericParameterReplacements = genericReplacements
     self.arguments = arguments

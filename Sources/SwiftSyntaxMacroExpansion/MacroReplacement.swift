@@ -331,6 +331,10 @@ private final class MacroExpansionRewriter: SyntaxRewriter {
       return super.visit(node)
     }
 
+    guard parameterIndex < genericArguments.count else {
+      return super.visit(node)
+    }
+
     // Swap in the argument for type parameter
     return GenericArgumentSyntax(
       leadingTrivia: node.leadingTrivia,
@@ -339,9 +343,9 @@ private final class MacroExpansionRewriter: SyntaxRewriter {
       node.unexpectedBetweenArgumentAndTrailingComma,
       trailingComma: node.trailingComma,
       node.unexpectedAfterTrailingComma
-      // TODO: seems we're getting spurious trailing " " here,
-      //  skipping trailing trivia for now
-      // trailingTrivia: node.trailingTrivia
+        // TODO: seems we're getting spurious trailing " " here,
+        //  skipping trailing trivia for now
+        // trailingTrivia: node.trailingTrivia
     )
   }
 }
@@ -359,15 +363,14 @@ extension MacroDeclSyntax {
     // FIXME: Do real call-argument matching between the argument list and the
     // macro parameter list, porting over from the compiler.
     let parameterReplacements = Dictionary(
-        uniqueKeysWithValues: replacements.map { replacement in
-          (replacement.reference, replacement.parameterIndex)
-        }
-      )
+      uniqueKeysWithValues: replacements.map { replacement in
+        (replacement.reference, replacement.parameterIndex)
+      }
+    )
     let arguments: [ExprSyntax] =
       argumentList?.map { element in
         element.expression
       } ?? []
-
 
     let genericReplacements = Dictionary(
       uniqueKeysWithValues: genericReplacements.map { replacement in
@@ -375,10 +378,9 @@ extension MacroDeclSyntax {
       }
     )
     let genericArguments: [TypeSyntax] =
-      genericArgumentList?.arguments.map { element in 
+      genericArgumentList?.arguments.map { element in
         element.argument
       } ?? []
-
 
     let rewriter: MacroExpansionRewriter = MacroExpansionRewriter(
       parameterReplacements: parameterReplacements,

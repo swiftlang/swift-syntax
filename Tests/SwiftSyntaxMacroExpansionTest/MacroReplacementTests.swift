@@ -132,7 +132,7 @@ final class MacroReplacementTests: XCTestCase {
       XCTFail("not a normal expansion")
       return
     }
-    
+
     let replacementA = try XCTUnwrap(genericReplacements.first)
     let replacementB = try XCTUnwrap(genericReplacements.dropFirst().first)
 
@@ -237,12 +237,12 @@ final class MacroReplacementTests: XCTestCase {
   func testMacroGenericArgumentExpansion_replaceInner() throws {
     let macro: DeclSyntax =
       """
-      macro gen<A>(a: Array<A>) = #otherMacro(first: a)
+      macro gen<A>(a: Array<A>) = #reduce<A>(first: a)
       """
 
     let use: ExprSyntax =
       """
-      #gen(a: [1, 2, 3])
+      #gen<Int>(a: [1, 2, 3])
       """
 
     let macroDecl = macro.as(MacroDeclSyntax.self)!
@@ -252,7 +252,7 @@ final class MacroReplacementTests: XCTestCase {
       return
     }
 
-    XCTAssertEqual(genericReplacements.count, 0)
+    XCTAssertEqual(genericReplacements.count, 1)
 
     let expandedSyntax = macroDecl.expand(
       use.as(MacroExpansionExprSyntax.self)!,
@@ -263,7 +263,7 @@ final class MacroReplacementTests: XCTestCase {
     assertStringsEqualWithDiff(
       expandedSyntax.description,
       """
-      #otherMacro(first: [1, 2, 3])
+      #reduce<Int>(first: [1, 2, 3])
       """
     )
   }

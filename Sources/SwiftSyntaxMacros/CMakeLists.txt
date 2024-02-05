@@ -25,6 +25,7 @@ add_swift_syntax_library(SwiftSyntaxMacros
   AbstractSourceLocation.swift
   MacroExpansionContext.swift
   MacroExpansionDiagnosticMessages.swift
+  Syntax+LexicalContext.swift
 )
 
 target_link_swift_syntax_libraries(SwiftSyntaxMacros PUBLIC

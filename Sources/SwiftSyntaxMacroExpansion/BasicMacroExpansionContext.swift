@@ -32,30 +32,37 @@ public class BasicMacroExpansionContext {
     }
   }
 
-  /// Create a new macro evaluation context.
-  public init(
-    expansionDiscriminator: String = "__macro_local_",
-    sourceFiles: [SourceFileSyntax: KnownSourceFile] = [:]
-  ) {
-    self.expansionDiscriminator = expansionDiscriminator
-    self.sourceFiles = sourceFiles
+  /// Describes state that is shared amongst all instances of the basic
+  /// macro expansion context.
+  private class SharedState {
+    /// The set of diagnostics that were emitted as part of expanding the
+    /// macro.
+    var diagnostics: [Diagnostic] = []
+
+    /// Mapping from the root source file syntax nodes to the known source-file
+    /// information about that source file.
+    var sourceFiles: [SourceFileSyntax: KnownSourceFile] = [:]
+
+    /// Mapping from intentionally-disconnected syntax nodes to the corresponding
+    /// nodes in the original source file.
+    ///
+    /// This is used to establish the link between a node that been intentionally
+    /// disconnected from a source file to hide information from the macro
+    /// implementation.
+    var detachedNodes: [Syntax: Syntax] = [:]
+
+    /// Counter for each of the uniqued names.
+    ///
+    /// Used in conjunction with `expansionDiscriminator`.
+    var uniqueNames: [String: Int] = [:]
   }
 
-  /// The set of diagnostics that were emitted as part of expanding the
-  /// macro.
-  public private(set) var diagnostics: [Diagnostic] = []
+  /// State shared by different instances of the macro expansion context,
+  /// which includes information about detached nodes and source file names.
+  private var sharedState: SharedState
 
-  /// Mapping from the root source file syntax nodes to the known source-file
-  /// information about that source file.
-  private var sourceFiles: [SourceFileSyntax: KnownSourceFile] = [:]
-
-  /// Mapping from intentionally-disconnected syntax nodes to the corresponding
-  /// nodes in the original source file.
-  ///
-  /// This is used to establish the link between a node that been intentionally
-  /// disconnected from a source file to hide information from the macro
-  /// implementation.
-  private var detachedNodes: [Syntax: Syntax] = [:]
+  /// The lexical context of the macro expansion described by this context.
+  public let lexicalContext: [Syntax]
 
   /// The macro expansion discriminator, which is used to form unique names
   /// when requested.
@@ -64,18 +71,41 @@ public class BasicMacroExpansionContext {
   /// to produce unique names.
   private var expansionDiscriminator: String = ""
 
-  /// Counter for each of the uniqued names.
-  ///
-  /// Used in conjunction with `expansionDiscriminator`.
-  private var uniqueNames: [String: Int] = [:]
+  /// Create a new macro evaluation context.
+  public init(
+    lexicalContext: [Syntax] = [],
+    expansionDiscriminator: String = "__macro_local_",
+    sourceFiles: [SourceFileSyntax: KnownSourceFile] = [:]
+  ) {
+    self.sharedState = SharedState()
+    self.lexicalContext = lexicalContext
+    self.expansionDiscriminator = expansionDiscriminator
+    self.sharedState.sourceFiles = sourceFiles
+  }
 
+  /// Create a new macro evaluation context that shares most of its global
+  /// state (detached nodes, diagnostics, etc.) with the given context.
+  public init(sharingWith context: BasicMacroExpansionContext, lexicalContext: [Syntax]) {
+    self.sharedState = context.sharedState
+    self.lexicalContext = lexicalContext
+    self.expansionDiscriminator = context.expansionDiscriminator
+  }
+}
+
+extension BasicMacroExpansionContext {
+  /// The set of diagnostics that were emitted as part of expanding the
+  /// macro.
+  public private(set) var diagnostics: [Diagnostic] {
+    get { sharedState.diagnostics }
+    set { sharedState.diagnostics = newValue }
+  }
 }
 
 extension BasicMacroExpansionContext {
   /// Detach the given node, and record where it came from.
   public func detach<Node: SyntaxProtocol>(_ node: Node) -> Node {
     let detached = node.detached
-    detachedNodes[Syntax(detached)] = Syntax(node)
+    sharedState.detachedNodes[Syntax(detached)] = Syntax(node)
     return detached
   }
 
@@ -88,7 +118,7 @@ extension BasicMacroExpansionContext {
     {
       // Folding operators doesn't change the source file and its associated locations
       // Record the `KnownSourceFile` information for the folded tree.
-      sourceFiles[newSourceFile] = sourceFiles[originalSourceFile]
+      sharedState.sourceFiles[newSourceFile] = sharedState.sourceFiles[originalSourceFile]
     }
     return folded
   }
@@ -113,8 +143,8 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
     let name = providedName.isEmpty ? "__local" : providedName
 
     // Grab a unique index value for this name.
-    let uniqueIndex = uniqueNames[name, default: 0]
-    uniqueNames[name] = uniqueIndex + 1
+    let uniqueIndex = sharedState.uniqueNames[name, default: 0]
+    sharedState.uniqueNames[name] = uniqueIndex + 1
 
     // Start with the expansion discriminator.
     var resultString = expansionDiscriminator
@@ -153,7 +183,7 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
     anchoredAt node: Syntax,
     fileName: String
   ) -> SourceLocation {
-    guard let nodeInOriginalTree = detachedNodes[node.root] else {
+    guard let nodeInOriginalTree = sharedState.detachedNodes[node.root] else {
       return SourceLocationConverter(fileName: fileName, tree: node.root).location(for: position)
     }
     let adjustedPosition = position + SourceLength(utf8Length: nodeInOriginalTree.position.utf8Offset)
@@ -173,7 +203,7 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
       // The syntax node came from the source file itself.
       rootSourceFile = directRootSourceFile
       offsetAdjustment = .zero
-    } else if let nodeInOriginalTree = detachedNodes[Syntax(node)] {
+    } else if let nodeInOriginalTree = sharedState.detachedNodes[Syntax(node)] {
       // The syntax node came from a disconnected root, so adjust for that.
       rootSourceFile = nodeInOriginalTree.root.as(SourceFileSyntax.self)
       offsetAdjustment = SourceLength(utf8Length: nodeInOriginalTree.position.utf8Offset)
@@ -181,7 +211,7 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
       return nil
     }
 
-    guard let rootSourceFile, let knownRoot = sourceFiles[rootSourceFile] else {
+    guard let rootSourceFile, let knownRoot = sharedState.sourceFiles[rootSourceFile] else {
       return nil
     }
 

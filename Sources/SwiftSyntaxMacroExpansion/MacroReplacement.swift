@@ -18,7 +18,7 @@ enum MacroExpanderError: DiagnosticMessage {
   case undefined
   case definitionNotMacroExpansion
   case nonParameterReference(TokenSyntax)
-  case nonTypeReference(TypeSyntax)
+  case nonTypeReference(TokenSyntax)
   case nonLiteralOrParameter(ExprSyntax)
 
   var message: String {
@@ -187,13 +187,17 @@ fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
   }
 
   override func visit(_ node: GenericArgumentSyntax) -> SyntaxVisitorContinueKind {
-    let baseName = node.argument
+    guard let baseName = node.argument.as(IdentifierTypeSyntax.self)?.name else {
+      // Handle error
+      return .visitChildren
+    }
+
     guard let genericParameterClause = macro.genericParameterClause else {
       return .skipChildren
     }
 
-    let parameterIndex = genericParameterClause.parameters.firstIndex { (index, parameter) in
-      return parameter.name.text == "\(baseName)"
+    let matchedParameter = genericParameterClause.parameters.enumerated().first { (index, parameter) in
+      return parameter.name.text == baseName.text
     }
 
     guard let (parameterIndex, _) = matchedParameter else {

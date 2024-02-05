@@ -67,6 +67,7 @@ public enum MacroDefinition {
 
 extension MacroDefinition {
   /// Best effort compatibility shim, the case has gained additional parameters.
+  @available(*, deprecated, message: "Use the expansion case with three associated values instead")
   public func expansion(_ node: MacroExpansionExprSyntax, replacements: [Replacement]) -> Self {
     .expansion(node, replacements: replacements, genericReplacements: [])
   }
@@ -191,7 +192,7 @@ fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
       return .skipChildren
     }
 
-    let matchedParameter = genericParameterClause.parameters.enumerated().first { (index, parameter) in
+    let parameterIndex = genericParameterClause.parameters.firstIndex { (index, parameter) in
       return parameter.name.text == "\(baseName)"
     }
 
@@ -371,7 +372,7 @@ extension MacroDeclSyntax {
     _ node: AttributeSyntax,
     definition: MacroExpansionExprSyntax,
     replacements: [MacroDefinition.Replacement],
-    genericReplacements: [MacroDefinition.GenericArgumentReplacement]
+    genericReplacements: [MacroDefinition.GenericArgumentReplacement] = []
   ) -> ExprSyntax {
     // Dig out the argument list.
     let argumentList: LabeledExprListSyntax?

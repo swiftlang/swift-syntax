@@ -133,10 +133,7 @@ final class MacroReplacementTests: XCTestCase {
       fatalError()
     }
 
-    guard let replacementA = genericReplacements.first else {
-      XCTFail("Expected generic replacement for A")
-      fatalError()
-    }
+    let replacementA = try XCTUnwrap(genericReplacements.first)
     guard let replacementB = genericReplacements.dropFirst().first else {
       XCTFail("Expected generic replacement for A")
       fatalError()

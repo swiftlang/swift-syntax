@@ -299,17 +299,21 @@ extension MacroDeclSyntax {
 /// uses of macro parameters with their corresponding arguments.
 private final class MacroExpansionRewriter: SyntaxRewriter {
   let parameterReplacements: [DeclReferenceExprSyntax: Int]
-  let genericParameterReplacements: [DeclReferenceExprSyntax: Int]
   let arguments: [ExprSyntax]
+  // let genericParameterReplacements: [DeclReferenceExprSyntax: Int]
+  let genericParameterReplacements: [GenericArgumentSyntax: Int]
+  let genericArguments: [TypeSyntax]
 
   init(
     parameterReplacements: [DeclReferenceExprSyntax: Int],
-    genericReplacements: [DeclReferenceExprSyntax: Int],
-    arguments: [ExprSyntax]
+    arguments: [ExprSyntax],
+    genericReplacements: [GenericArgumentSyntax: Int],
+    genericArguments: [TypeSyntax]
   ) {
     self.parameterReplacements = parameterReplacements
-    self.genericParameterReplacements = genericReplacements
     self.arguments = arguments
+    self.genericParameterReplacements = genericReplacements
+    self.genericArguments = genericArguments
     super.init(viewMode: .sourceAccurate)
   }
 
@@ -321,6 +325,25 @@ private final class MacroExpansionRewriter: SyntaxRewriter {
     // Swap in the argument for this parameter
     return arguments[parameterIndex].trimmed
   }
+
+  override func visit(_ node: GenericArgumentSyntax) -> GenericArgumentSyntax {
+    guard let parameterIndex = genericParameterReplacements[node] else {
+      return super.visit(node)
+    }
+
+    // Swap in the argument for type parameter
+    return GenericArgumentSyntax(
+      leadingTrivia: node.leadingTrivia,
+      node.unexpectedBeforeArgument,
+      argument: genericArguments[parameterIndex].trimmed,
+      node.unexpectedBetweenArgumentAndTrailingComma,
+      trailingComma: node.trailingComma,
+      node.unexpectedAfterTrailingComma
+      // TODO: seems we're getting spurious trailing " " here,
+      //  skipping trailing trivia for now
+      // trailingTrivia: node.trailingTrivia
+    )
+  }
 }
 
 extension MacroDeclSyntax {
@@ -328,30 +351,42 @@ extension MacroDeclSyntax {
   /// argument list.
   private func expand(
     argumentList: LabeledExprListSyntax?,
+    genericArgumentList: GenericArgumentClauseSyntax?,
     definition: MacroExpansionExprSyntax,
     replacements: [MacroDefinition.Replacement],
-    genericReplacements: [MacroDefinition.GenericArgumentReplacement]
+    genericReplacements: [MacroDefinition.GenericArgumentReplacement] = []
   ) -> ExprSyntax {
     // FIXME: Do real call-argument matching between the argument list and the
     // macro parameter list, porting over from the compiler.
+    let parameterReplacements = Dictionary(
+        uniqueKeysWithValues: replacements.map { replacement in
+          (replacement.reference, replacement.parameterIndex)
+        }
+      )
     let arguments: [ExprSyntax] =
       argumentList?.map { element in
         element.expression
       } ?? []
 
-    return MacroExpansionRewriter(
-      parameterReplacements: Dictionary(
-        uniqueKeysWithValues: replacements.map { replacement in
-          (replacement.reference, replacement.parameterIndex)
-        }
-      ),
-      genericReplacements: Dictionary(
-        uniqueKeysWithValues: replacements.map { replacement in
-          (replacement.reference, replacement.parameterIndex)
-        }
-      ),
-      arguments: arguments
-    ).visit(definition)
+
+    let genericReplacements = Dictionary(
+      uniqueKeysWithValues: genericReplacements.map { replacement in
+        (replacement.reference, replacement.parameterIndex)
+      }
+    )
+    let genericArguments: [TypeSyntax] =
+      genericArgumentList?.arguments.map { element in 
+        element.argument
+      } ?? []
+
+
+    let rewriter: MacroExpansionRewriter = MacroExpansionRewriter(
+      parameterReplacements: parameterReplacements,
+      arguments: arguments,
+      genericReplacements: genericReplacements,
+      genericArguments: genericArguments
+    )
+    return rewriter.visit(definition)
   }
 
   /// Given a freestanding macro expansion syntax node that references this
@@ -365,6 +400,7 @@ extension MacroDeclSyntax {
   ) -> ExprSyntax {
     return expand(
       argumentList: node.arguments,
+      genericArgumentList: node.genericArgumentClause,
       definition: definition,
       replacements: replacements,
       genericReplacements: genericReplacements
@@ -390,6 +426,7 @@ extension MacroDeclSyntax {
 
     return expand(
       argumentList: argumentList,
+      genericArgumentList: .init(arguments: []),
       definition: definition,
       replacements: replacements,
       genericReplacements: genericReplacements

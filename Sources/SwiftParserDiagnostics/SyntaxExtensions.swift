@@ -181,15 +181,6 @@ public extension TriviaPiece {
     default: return false
     }
   }
-
-  var isComment: Bool {
-    switch self {
-    case .blockComment, .docBlockComment, .docLineComment, .lineComment:
-      return true
-    default:
-      return false
-    }
-  }
 }
 
 extension TokenSyntax {

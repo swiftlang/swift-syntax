@@ -475,6 +475,16 @@ extension TriviaPiece {
       return false
     }
   }
+  
+  /// Returns `true` if this piece is a comment.
+  public var isComment: Bool {
+    switch self {
+    case .lineComment, .blockComment, .docLineComment, .docBlockComment:
+      return true
+    default:
+      return false
+    }
+  }
 }
 
 extension RawTriviaPiece {
@@ -505,6 +515,16 @@ extension RawTriviaPiece {
     case .spaces:
       return true
     case .tabs:
+      return true
+    default:
+      return false
+    }
+  }
+  
+  /// Returns `true` if this piece is a comment.
+  public var isComment: Bool {
+    switch self {
+    case .lineComment, .blockComment, .docLineComment, .docBlockComment:
       return true
     default:
       return false

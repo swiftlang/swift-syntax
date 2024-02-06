@@ -938,7 +938,9 @@ extension Parser {
       // Known type attribute that doesn't take any arguments
       return parseAttributeWithoutArguments()
     case .differentiable:
-      return .attribute(self.parseDifferentiableAttribute())
+      return parseAttribute(argumentMode: .required) { parser in
+        return .differentiableArguments(parser.parseDifferentiableAttributeArguments())
+      }
 
     case .convention:
       return parseAttribute(argumentMode: .required) { parser in

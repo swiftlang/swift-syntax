@@ -646,44 +646,31 @@ enum TypeAttribute: TokenSpecSet {
   case isolated
 
   init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(._local): self = ._local
-    case TokenSpec(._noMetadata): self = ._noMetadata
-    case TokenSpec(._opaqueReturnTypeOf): self = ._opaqueReturnTypeOf
-    case TokenSpec(.async): self = .async
-    case TokenSpec(.autoclosure): self = .autoclosure
-    case TokenSpec(.convention): self = .convention
-    case TokenSpec(.differentiable): self = .differentiable
-    case TokenSpec(.escaping): self = .escaping
-    case TokenSpec(.noDerivative): self = .noDerivative
-    case TokenSpec(.noescape): self = .noescape
-    case TokenSpec(.preconcurrency): self = .preconcurrency
-    case TokenSpec(.Sendable): self = .Sendable
-    case TokenSpec(.retroactive): self = .retroactive
-    case TokenSpec(.unchecked): self = .unchecked
-    case TokenSpec(.isolated): self = .isolated
+    guard lexeme.rawTokenKind == .identifier else {
+      return nil
+    }
+    switch lexeme.tokenText {
+    case "_local": self = ._local
+    case "_noMetadata": self = ._noMetadata
+    case "_opaqueReturnTypeOf": self = ._opaqueReturnTypeOf
+    case "async": self = .async
+    case "autoclosure": self = .autoclosure
+    case "convention": self = .convention
+    case "differentiable": self = .differentiable
+    case "escaping": self = .escaping
+    case "noDerivative": self = .noDerivative
+    case "noescape": self = .noescape
+    case "preconcurrency": self = .preconcurrency
+    case "Sendable": self = .Sendable
+    case "retroactive": self = .retroactive
+    case "unchecked": self = .unchecked
+    case "isolated": self = .isolated
     default: return nil
     }
   }
 
   var spec: TokenSpec {
-    switch self {
-    case ._local: return .keyword(._local)
-    case ._noMetadata: return .keyword(._noMetadata)
-    case ._opaqueReturnTypeOf: return .keyword(._opaqueReturnTypeOf)
-    case .async: return .keyword(.async)
-    case .autoclosure: return .keyword(.autoclosure)
-    case .convention: return .keyword(.convention)
-    case .differentiable: return .keyword(.differentiable)
-    case .escaping: return .keyword(.escaping)
-    case .noDerivative: return .keyword(.noDerivative)
-    case .noescape: return .keyword(.noescape)
-    case .preconcurrency: return .keyword(.preconcurrency)
-    case .retroactive: return .keyword(.retroactive)
-    case .Sendable: return .keyword(.Sendable)
-    case .unchecked: return .keyword(.unchecked)
-    case .isolated: return .keyword(.isolated)
-    }
+    return .identifier
   }
 }
 

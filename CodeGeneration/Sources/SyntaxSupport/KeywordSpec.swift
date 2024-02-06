@@ -78,22 +78,14 @@ public enum Keyword: CaseIterable {
   case __owned
   case __setter_access
   case __shared
-  case _alignment
-  case _backDeploy
   case _borrow
   case _borrowing
   case _BridgeObject
-  case _cdecl
   case _Class
   case _compilerInitialized
   case _const
   case _consuming
-  case _documentation
-  case _dynamicReplacement
-  case _effects
-  case _expose
   case _forward
-  case _implements
   case _linear
   case _local
   case _modify
@@ -101,28 +93,12 @@ public enum Keyword: CaseIterable {
   case _mutating
   case _NativeClass
   case _NativeRefCountedObject
-  case _noMetadata
-  case _nonSendable
-  case _objcImplementation
-  case _objcRuntimeName
-  case _opaqueReturnTypeOf
-  case _optimize
-  case _originallyDefinedIn
   case _PackageDescription
-  case _private
-  case _projectedValueProperty
   case _read
   case _RefCountedObject
-  case _semantics
-  case _specialize
-  case _spi
-  case _spi_available
-  case _swift_native_objc_runtime_base
   case _Trivial
   case _TrivialAtMost
   case _TrivialStride
-  case _typeEraser
-  case _unavailableFromAsync
   case _underlyingVersion
   case _UnknownLayout
   case _version
@@ -137,12 +113,8 @@ public enum Keyword: CaseIterable {
   case `associatedtype`
   case associativity
   case async
-  case attached
-  case autoclosure
   case availability
-  case available
   case await
-  case backDeployed
   case before
   case block
   case borrowing
@@ -157,23 +129,18 @@ public enum Keyword: CaseIterable {
   case consuming
   case `continue`
   case convenience
-  case convention
   case cType
   case `default`
   case `defer`
   case `deinit`
   case deprecated
-  case derivative
   case didSet
-  case differentiable
   case distributed
   case `do`
   case dynamic
   case each
   case `else`
   case `enum`
-  case escaping
-  case exclusivity
   case exported
   case `extension`
   case `fallthrough`
@@ -185,7 +152,6 @@ public enum Keyword: CaseIterable {
   case discard
   case forward
   case `func`
-  case freestanding
   case get
   case `guard`
   case higherThan
@@ -196,7 +162,6 @@ public enum Keyword: CaseIterable {
   case infix
   case `init`
   case initializes
-  case inline
   case `inout`
   case `internal`
   case introduced
@@ -218,12 +183,9 @@ public enum Keyword: CaseIterable {
   case mutating
   case `nil`
   case noasync
-  case noDerivative
-  case noescape
   case none
   case nonisolated
   case nonmutating
-  case objc
   case obsoleted
   case of
   case open
@@ -233,7 +195,6 @@ public enum Keyword: CaseIterable {
   case package
   case postfix
   case `precedencegroup`
-  case preconcurrency
   case prefix
   case `private`
   case `Protocol`
@@ -246,14 +207,12 @@ public enum Keyword: CaseIterable {
   case _resultDependsOn
   case _resultDependsOnSelf
   case `rethrows`
-  case retroactive
   case `return`
   case reverse
   case right
   case safe
   case `self`
   case `Self`
-  case Sendable
   case set
   case some
   case sourceFile
@@ -270,13 +229,11 @@ public enum Keyword: CaseIterable {
   case `throw`
   case `throws`
   case transferring
-  case transpose
   case `true`
   case `try`
   case `Type`
   case `typealias`
   case unavailable
-  case unchecked
   case unowned
   case unsafe
   case unsafeAddress
@@ -301,34 +258,18 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("__setter_access")
     case .__shared:
       return KeywordSpec("__shared")
-    case ._alignment:
-      return KeywordSpec("_alignment")
-    case ._backDeploy:
-      return KeywordSpec("_backDeploy")
     case ._borrow:
       return KeywordSpec("_borrow")
     case ._BridgeObject:
       return KeywordSpec("_BridgeObject")
-    case ._cdecl:
-      return KeywordSpec("_cdecl")
     case ._Class:
       return KeywordSpec("_Class")
     case ._compilerInitialized:
       return KeywordSpec("_compilerInitialized")
     case ._const:
       return KeywordSpec("_const")
-    case ._documentation:
-      return KeywordSpec("_documentation")
-    case ._dynamicReplacement:
-      return KeywordSpec("_dynamicReplacement")
-    case ._effects:
-      return KeywordSpec("_effects")
-    case ._expose:
-      return KeywordSpec("_expose")
     case ._forward:
       return KeywordSpec("_forward")
-    case ._implements:
-      return KeywordSpec("_implements")
     case ._linear:
       return KeywordSpec("_linear")
     case ._local:
@@ -341,50 +282,18 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("_NativeClass")
     case ._NativeRefCountedObject:
       return KeywordSpec("_NativeRefCountedObject")
-    case ._noMetadata:
-      return KeywordSpec("_noMetadata")
-    case ._nonSendable:
-      return KeywordSpec("_nonSendable")
-    case ._objcImplementation:
-      return KeywordSpec("_objcImplementation")
-    case ._objcRuntimeName:
-      return KeywordSpec("_objcRuntimeName")
-    case ._opaqueReturnTypeOf:
-      return KeywordSpec("_opaqueReturnTypeOf")
-    case ._optimize:
-      return KeywordSpec("_optimize")
-    case ._originallyDefinedIn:
-      return KeywordSpec("_originallyDefinedIn")
     case ._PackageDescription:
       return KeywordSpec("_PackageDescription")
-    case ._private:
-      return KeywordSpec("_private")
-    case ._projectedValueProperty:
-      return KeywordSpec("_projectedValueProperty")
     case ._read:
       return KeywordSpec("_read")
     case ._RefCountedObject:
       return KeywordSpec("_RefCountedObject")
-    case ._semantics:
-      return KeywordSpec("_semantics")
-    case ._specialize:
-      return KeywordSpec("_specialize")
-    case ._spi:
-      return KeywordSpec("_spi")
-    case ._spi_available:
-      return KeywordSpec("_spi_available")
-    case ._swift_native_objc_runtime_base:
-      return KeywordSpec("_swift_native_objc_runtime_base")
     case ._Trivial:
       return KeywordSpec("_Trivial")
     case ._TrivialAtMost:
       return KeywordSpec("_TrivialAtMost")
     case ._TrivialStride:
       return KeywordSpec("_TrivialStride")
-    case ._typeEraser:
-      return KeywordSpec("_typeEraser")
-    case ._unavailableFromAsync:
-      return KeywordSpec("_unavailableFromAsync")
     case ._underlyingVersion:
       return KeywordSpec("_underlyingVersion")
     case ._UnknownLayout:
@@ -413,18 +322,10 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("associativity")
     case .async:
       return KeywordSpec("async")
-    case .attached:
-      return KeywordSpec("attached")
-    case .autoclosure:
-      return KeywordSpec("autoclosure")
     case .availability:
       return KeywordSpec("availability")
-    case .available:
-      return KeywordSpec("available")
     case .await:
       return KeywordSpec("await")
-    case .backDeployed:
-      return KeywordSpec("backDeployed")
     case .before:
       return KeywordSpec("before")
     case .block:
@@ -453,8 +354,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("continue", isLexerClassified: true)
     case .convenience:
       return KeywordSpec("convenience")
-    case .convention:
-      return KeywordSpec("convention")
     case .cType:
       return KeywordSpec("cType")
     case .default:
@@ -465,12 +364,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("deinit", isLexerClassified: true)
     case .deprecated:
       return KeywordSpec("deprecated")
-    case .derivative:
-      return KeywordSpec("derivative")
     case .didSet:
       return KeywordSpec("didSet")
-    case .differentiable:
-      return KeywordSpec("differentiable")
     case .distributed:
       return KeywordSpec("distributed")
     case .do:
@@ -483,10 +378,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("else", isLexerClassified: true)
     case .enum:
       return KeywordSpec("enum", isLexerClassified: true)
-    case .escaping:
-      return KeywordSpec("escaping")
-    case .exclusivity:
-      return KeywordSpec("exclusivity")
     case .exported:
       return KeywordSpec("exported")
     case .extension:
@@ -509,8 +400,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("forward")
     case .func:
       return KeywordSpec("func", isLexerClassified: true)
-    case .freestanding:
-      return KeywordSpec("freestanding")
     case .get:
       return KeywordSpec("get")
     case .guard:
@@ -531,8 +420,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("init", isLexerClassified: true)
     case .initializes:
       return KeywordSpec("initializes")
-    case .inline:
-      return KeywordSpec("inline")
     case .inout:
       return KeywordSpec("inout", isLexerClassified: true)
     case .internal:
@@ -575,18 +462,12 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("nil", isLexerClassified: true)
     case .noasync:
       return KeywordSpec("noasync")
-    case .noDerivative:
-      return KeywordSpec("noDerivative")
-    case .noescape:
-      return KeywordSpec("noescape")
     case .none:
       return KeywordSpec("none")
     case .nonisolated:
       return KeywordSpec("nonisolated")
     case .nonmutating:
       return KeywordSpec("nonmutating")
-    case .objc:
-      return KeywordSpec("objc")
     case .obsoleted:
       return KeywordSpec("obsoleted")
     case .of:
@@ -629,8 +510,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("_resultDependsOnSelf", experimentalFeature: .nonescapableTypes)
     case .rethrows:
       return KeywordSpec("rethrows", isLexerClassified: true)
-    case .retroactive:
-      return KeywordSpec("retroactive")
     case .return:
       return KeywordSpec("return", isLexerClassified: true)
     case .reverse:
@@ -643,8 +522,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("self", isLexerClassified: true)
     case .Self:
       return KeywordSpec("Self", isLexerClassified: true)
-    case .Sendable:
-      return KeywordSpec("Sendable")
     case .set:
       return KeywordSpec("set")
     case .some:
@@ -680,8 +557,6 @@ public enum Keyword: CaseIterable {
         "transferring",
         experimentalFeature: .transferringArgsAndResults
       )
-    case .transpose:
-      return KeywordSpec("transpose")
     case .true:
       return KeywordSpec("true", isLexerClassified: true)
     case .try:
@@ -692,10 +567,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("typealias", isLexerClassified: true)
     case .unavailable:
       return KeywordSpec("unavailable")
-    case .unchecked:
-      return KeywordSpec("unchecked")
-    case .preconcurrency:
-      return KeywordSpec("preconcurrency")
     case .unowned:
       return KeywordSpec("unowned")
     case .unsafe:

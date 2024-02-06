@@ -23,7 +23,6 @@ let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     try! StructDeclSyntax(
       """
-
       // MARK: - \(type.resultBuilderType)
 
       @resultBuilder

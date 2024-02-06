@@ -14,7 +14,6 @@
 
 // MARK: - BracedSyntax
 
-
 public protocol BracedSyntax: SyntaxProtocol {
   /// ### Tokens
   /// 
@@ -61,7 +60,6 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - DeclGroupSyntax
-
 
 public protocol DeclGroupSyntax: SyntaxProtocol, DeclSyntaxProtocol {
   var attributes: AttributeListSyntax {
@@ -119,7 +117,6 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - EffectSpecifiersSyntax
-
 
 public protocol EffectSpecifiersSyntax: SyntaxProtocol {
   var unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? {
@@ -181,7 +178,6 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - FreestandingMacroExpansionSyntax
-
 
 public protocol FreestandingMacroExpansionSyntax: SyntaxProtocol {
   /// ### Tokens
@@ -266,7 +262,6 @@ public extension SyntaxProtocol {
 
 // MARK: - NamedDeclSyntax
 
-
 public protocol NamedDeclSyntax: SyntaxProtocol {
   /// ### Tokens
   /// 
@@ -350,7 +345,6 @@ public extension SyntaxProtocol {
 
 // MARK: - ParenthesizedSyntax
 
-
 public protocol ParenthesizedSyntax: SyntaxProtocol {
   /// ### Tokens
   /// 
@@ -398,7 +392,6 @@ public extension SyntaxProtocol {
 
 // MARK: - WithAttributesSyntax
 
-
 public protocol WithAttributesSyntax: SyntaxProtocol {
   var attributes: AttributeListSyntax {
     get
@@ -434,7 +427,6 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - WithCodeBlockSyntax
-
 
 public protocol WithCodeBlockSyntax: SyntaxProtocol {
   var body: CodeBlockSyntax {
@@ -518,7 +510,6 @@ public extension SyntaxProtocol {
 
 // MARK: - WithModifiersSyntax
 
-
 public protocol WithModifiersSyntax: SyntaxProtocol {
   var modifiers: DeclModifierListSyntax {
     get
@@ -554,7 +545,6 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - WithOptionalCodeBlockSyntax
-
 
 public protocol WithOptionalCodeBlockSyntax: SyntaxProtocol {
   var body: CodeBlockSyntax? {
@@ -592,7 +582,6 @@ public extension SyntaxProtocol {
 
 // MARK: - WithStatementsSyntax
 
-
 public protocol WithStatementsSyntax: SyntaxProtocol {
   var statements: CodeBlockItemListSyntax {
     get
@@ -628,7 +617,6 @@ public extension SyntaxProtocol {
 }
 
 // MARK: - WithTrailingCommaSyntax
-
 
 public protocol WithTrailingCommaSyntax: SyntaxProtocol {
   /// ### Tokens

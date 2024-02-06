@@ -102,7 +102,7 @@ public enum PluginMessage {
     }
   }
 
-  public struct MacroReference: Codable {
+  public struct MacroReference: Codable, Sendable {
     public var moduleName: String
     public var typeName: String
 
@@ -116,7 +116,7 @@ public enum PluginMessage {
     }
   }
 
-  public enum MacroRole: String, Codable {
+  public enum MacroRole: String, Codable, Sendable {
     case expression
     case declaration
     case accessor

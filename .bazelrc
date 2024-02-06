@@ -1,5 +1,6 @@
 common --enable_bzlmod
 common --incompatible_use_host_features
+common --lockfile_mode=off
 
 build --features=swift.use_explicit_swift_module_map
 build --host_features=swift.use_explicit_swift_module_map

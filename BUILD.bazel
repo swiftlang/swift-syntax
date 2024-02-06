@@ -2,16 +2,27 @@ load("//utils/bazel:swift_syntax_library.bzl", "swift_syntax_library")
 
 package(default_visibility = ["//visibility:public"])
 
+cc_library(
+    name = "_AtomicBool",
+    srcs = ["Sources/_AtomicBool/src/AtomicBool.c"],
+    hdrs = ["Sources/_AtomicBool/include/AtomicBool.h"],
+    includes = ["Sources/_AtomicBool/include"],
+    tags = ["swift_module=_AtomicBool"],
+)
+
 swift_syntax_library(
     name = "SwiftIDEUtils",
     deps = [
+        ":SwiftParser",
         ":SwiftSyntax",
     ],
 )
 
 swift_syntax_library(
     name = "SwiftSyntax",
-    deps = [],
+    deps = [
+        ":_AtomicBool",
+    ],
 )
 
 swift_syntax_library(
@@ -132,5 +143,6 @@ swift_syntax_library(
         ":SwiftBasicFormat",
         ":SwiftSyntax",
         ":SwiftSyntaxBuilder",
+        ":SwiftSyntaxMacroExpansion",
     ],
 )

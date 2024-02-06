@@ -267,4 +267,38 @@ final class MacroReplacementTests: XCTestCase {
       """
     )
   }
+
+  func testMacroGenericArgumentExpansion_array() throws {
+    let macro: DeclSyntax =
+      """
+      macro gen(a: Array<Int>) = #other<A>(first: a)
+      """
+
+    let use: ExprSyntax =
+      """
+      #otheren<Int>(a: [1, 2, 3])
+      """
+
+    let macroDecl = macro.as(MacroDeclSyntax.self)!
+    let definition = try macroDecl.checkDefinition()
+    guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
+      XCTFail("not a normal expansion")
+      return
+    }
+
+    XCTAssertEqual(genericReplacements.count, 0)
+
+    let expandedSyntax = macroDecl.expand(
+      use.as(MacroExpansionExprSyntax.self)!,
+      definition: expansion,
+      replacements: replacements,
+      genericReplacements: genericReplacements
+    )
+    assertStringsEqualWithDiff(
+      expandedSyntax.description,
+      """
+      #other<A>(first: [1, 2, 3])
+      """
+    )
+  }
 }

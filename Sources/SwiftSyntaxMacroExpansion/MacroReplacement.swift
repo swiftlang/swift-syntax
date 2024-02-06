@@ -398,7 +398,7 @@ extension MacroDeclSyntax {
     _ node: some FreestandingMacroExpansionSyntax,
     definition: MacroExpansionExprSyntax,
     replacements: [MacroDefinition.Replacement],
-    genericReplacements: [MacroDefinition.GenericArgumentReplacement]
+    genericReplacements: [MacroDefinition.GenericArgumentReplacement] = []
   ) -> ExprSyntax {
     return expand(
       argumentList: node.arguments,

@@ -18,6 +18,7 @@ enum MacroExpanderError: DiagnosticMessage {
   case undefined
   case definitionNotMacroExpansion
   case nonParameterReference(TokenSyntax)
+  case nonTypeReference(TokenSyntax)
   case nonLiteralOrParameter(ExprSyntax)
 
   var message: String {
@@ -30,6 +31,9 @@ enum MacroExpanderError: DiagnosticMessage {
 
     case .nonParameterReference(let name):
       return "reference to value '\(name.text)' that is not a macro parameter in expansion"
+
+    case .nonTypeReference(let name):
+      return "reference to type '\(name)' that is not a macro type parameter in expansion"
 
     case .nonLiteralOrParameter:
       return "only literals and macro parameters are permitted in expansion"
@@ -58,7 +62,15 @@ public enum MacroDefinition {
   /// defining macro. These subtrees will need to be replaced with the text of
   /// the corresponding argument to the macro, which can be accomplished with
   /// `MacroDeclSyntax.expandDefinition`.
-  case expansion(MacroExpansionExprSyntax, replacements: [Replacement])
+  case expansion(MacroExpansionExprSyntax, replacements: [Replacement], genericReplacements: [GenericArgumentReplacement])
+}
+
+extension MacroDefinition {
+  /// Best effort compatibility shim, the case has gained additional parameters.
+  @available(*, deprecated, message: "Use the expansion case with three associated values instead")
+  public func expansion(_ node: MacroExpansionExprSyntax, replacements: [Replacement]) -> Self {
+    .expansion(node, replacements: replacements, genericReplacements: [])
+  }
 }
 
 extension MacroDefinition {
@@ -70,11 +82,21 @@ extension MacroDefinition {
     /// The index of the parameter in the defining macro.
     public let parameterIndex: Int
   }
+
+  /// A replacement that occurs as part of an expanded macro definition.
+  public struct GenericArgumentReplacement {
+    /// A reference to a parameter as it occurs in the macro expansion expression.
+    public let reference: GenericArgumentSyntax
+
+    /// The index of the parameter in the defining macro.
+    public let parameterIndex: Int
+  }
 }
 
 fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
   let macro: MacroDeclSyntax
   var replacements: [MacroDefinition.Replacement] = []
+  var genericReplacements: [MacroDefinition.GenericArgumentReplacement] = []
   var diagnostics: [Diagnostic] = []
 
   init(macro: MacroDeclSyntax) {
@@ -156,6 +178,44 @@ fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  override func visit(_ node: GenericArgumentClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  override func visit(_ node: GenericArgumentListSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  override func visit(_ node: GenericArgumentSyntax) -> SyntaxVisitorContinueKind {
+    guard let baseName = node.argument.as(IdentifierTypeSyntax.self)?.name else {
+      return .skipChildren
+    }
+
+    guard let genericParameterClause = macro.genericParameterClause else {
+      return .skipChildren
+    }
+
+    let matchedParameter = genericParameterClause.parameters.enumerated().first { (index, parameter) in
+      return parameter.name.text == baseName.text
+    }
+
+    guard let (parameterIndex, _) = matchedParameter else {
+      // We have a reference to something that isn't a parameter of the macro.
+      diagnostics.append(
+        Diagnostic(
+          node: Syntax(baseName),
+          message: MacroExpanderError.nonTypeReference(baseName)
+        )
+      )
+
+      return .visitChildren
+    }
+
+    genericReplacements.append(.init(reference: node, parameterIndex: parameterIndex))
+
+    return .visitChildren
+  }
+
   override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
     if let expr = node.as(ExprSyntax.self) {
       // We have an expression that is not one of the allowed forms, so
@@ -230,7 +290,7 @@ extension MacroDeclSyntax {
       throw DiagnosticsError(diagnostics: visitor.diagnostics)
     }
 
-    return .expansion(definition, replacements: visitor.replacements)
+    return .expansion(definition, replacements: visitor.replacements, genericReplacements: visitor.genericReplacements)
   }
 }
 
@@ -239,10 +299,19 @@ extension MacroDeclSyntax {
 private final class MacroExpansionRewriter: SyntaxRewriter {
   let parameterReplacements: [DeclReferenceExprSyntax: Int]
   let arguments: [ExprSyntax]
+  let genericParameterReplacements: [GenericArgumentSyntax: Int]
+  let genericArguments: [TypeSyntax]
 
-  init(parameterReplacements: [DeclReferenceExprSyntax: Int], arguments: [ExprSyntax]) {
+  init(
+    parameterReplacements: [DeclReferenceExprSyntax: Int],
+    arguments: [ExprSyntax],
+    genericReplacements: [GenericArgumentSyntax: Int],
+    genericArguments: [TypeSyntax]
+  ) {
     self.parameterReplacements = parameterReplacements
     self.arguments = arguments
+    self.genericParameterReplacements = genericReplacements
+    self.genericArguments = genericArguments
     super.init(viewMode: .sourceAccurate)
   }
 
@@ -254,6 +323,21 @@ private final class MacroExpansionRewriter: SyntaxRewriter {
     // Swap in the argument for this parameter
     return arguments[parameterIndex].trimmed
   }
+
+  override func visit(_ node: GenericArgumentSyntax) -> GenericArgumentSyntax {
+    guard let parameterIndex = genericParameterReplacements[node] else {
+      return super.visit(node)
+    }
+
+    guard parameterIndex < genericArguments.count else {
+      return super.visit(node)
+    }
+
+    // Swap in the argument for type parameter
+    var node = node
+    node.argument = genericArguments[parameterIndex].trimmed
+    return node
+  }
 }
 
 extension MacroDeclSyntax {
@@ -261,24 +345,40 @@ extension MacroDeclSyntax {
   /// argument list.
   private func expand(
     argumentList: LabeledExprListSyntax?,
+    genericArgumentList: GenericArgumentClauseSyntax?,
     definition: MacroExpansionExprSyntax,
-    replacements: [MacroDefinition.Replacement]
+    replacements: [MacroDefinition.Replacement],
+    genericReplacements: [MacroDefinition.GenericArgumentReplacement] = []
   ) -> ExprSyntax {
     // FIXME: Do real call-argument matching between the argument list and the
     // macro parameter list, porting over from the compiler.
+    let parameterReplacements = Dictionary(
+      replacements.map { replacement in
+        (replacement.reference, replacement.parameterIndex)
+      },
+      uniquingKeysWith: { l, r in l }
+    )
     let arguments: [ExprSyntax] =
       argumentList?.map { element in
         element.expression
       } ?? []
 
-    return MacroExpansionRewriter(
-      parameterReplacements: Dictionary(
-        uniqueKeysWithValues: replacements.map { replacement in
-          (replacement.reference, replacement.parameterIndex)
-        }
-      ),
-      arguments: arguments
-    ).visit(definition)
+    let genericReplacements = Dictionary(
+      genericReplacements.map { replacement in
+        (replacement.reference, replacement.parameterIndex)
+      },
+      uniquingKeysWith: { l, r in l }
+    )
+    let genericArguments: [TypeSyntax] =
+      genericArgumentList?.arguments.map { $0.argument } ?? []
+
+    let rewriter = MacroExpansionRewriter(
+      parameterReplacements: parameterReplacements,
+      arguments: arguments,
+      genericReplacements: genericReplacements,
+      genericArguments: genericArguments
+    )
+    return rewriter.visit(definition)
   }
 
   /// Given a freestanding macro expansion syntax node that references this
@@ -287,12 +387,15 @@ extension MacroDeclSyntax {
   public func expand(
     _ node: some FreestandingMacroExpansionSyntax,
     definition: MacroExpansionExprSyntax,
-    replacements: [MacroDefinition.Replacement]
+    replacements: [MacroDefinition.Replacement],
+    genericReplacements: [MacroDefinition.GenericArgumentReplacement] = []
   ) -> ExprSyntax {
     return expand(
       argumentList: node.arguments,
+      genericArgumentList: node.genericArgumentClause,
       definition: definition,
-      replacements: replacements
+      replacements: replacements,
+      genericReplacements: genericReplacements
     )
   }
 
@@ -302,7 +405,8 @@ extension MacroDeclSyntax {
   public func expand(
     _ node: AttributeSyntax,
     definition: MacroExpansionExprSyntax,
-    replacements: [MacroDefinition.Replacement]
+    replacements: [MacroDefinition.Replacement],
+    genericReplacements: [MacroDefinition.GenericArgumentReplacement] = []
   ) -> ExprSyntax {
     // Dig out the argument list.
     let argumentList: LabeledExprListSyntax?
@@ -314,8 +418,10 @@ extension MacroDeclSyntax {
 
     return expand(
       argumentList: argumentList,
+      genericArgumentList: .init(arguments: []),
       definition: definition,
-      replacements: replacements
+      replacements: replacements,
+      genericReplacements: genericReplacements
     )
   }
 }

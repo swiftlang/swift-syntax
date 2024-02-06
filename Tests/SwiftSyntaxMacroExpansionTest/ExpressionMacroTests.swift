@@ -30,7 +30,7 @@ fileprivate struct StringifyMacro: ExpressionMacro {
     in context: some MacroExpansionContext
   ) throws -> ExprSyntax {
     guard let argument = macro.arguments.first?.expression else {
-      throw MacroExpansionErrorMessage("missing argument")
+      throw SwiftSyntaxMacros.MacroExpansionErrorMessage("missing argument")
     }
 
     return "(\(argument), \(StringLiteralExprSyntax(content: argument.description)))"
@@ -167,7 +167,7 @@ final class ExpressionMacroTests: XCTestCase {
         in context: some MacroExpansionContext
       ) throws -> ExprSyntax {
         guard let sourceLoc: AbstractSourceLocation = context.location(of: macro) else {
-          throw MacroExpansionErrorMessage("can't find location for macro")
+          throw SwiftSyntaxMacros.MacroExpansionErrorMessage("can't find location for macro")
         }
         return sourceLoc.column
       }
@@ -179,7 +179,7 @@ final class ExpressionMacroTests: XCTestCase {
         in context: some MacroExpansionContext
       ) throws -> ExprSyntax {
         guard let sourceLoc: AbstractSourceLocation = context.location(of: macro) else {
-          throw MacroExpansionErrorMessage("can't find location for macro")
+          throw SwiftSyntaxMacros.MacroExpansionErrorMessage("can't find location for macro")
         }
         return sourceLoc.file
       }

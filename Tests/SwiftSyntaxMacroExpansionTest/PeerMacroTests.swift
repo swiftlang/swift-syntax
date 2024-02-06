@@ -37,7 +37,7 @@ final class PeerMacroTests: XCTestCase {
       // Only on functions at the moment. We could handle initializers as well
       // with a bit of work.
       guard let funcDecl = declaration.as(FunctionDeclSyntax.self) else {
-        throw MacroExpansionErrorMessage("@addCompletionHandler only works on functions")
+        throw SwiftSyntaxMacros.MacroExpansionErrorMessage("@addCompletionHandler only works on functions")
       }
 
       // This only makes sense for async functions.
@@ -53,12 +53,12 @@ final class PeerMacroTests: XCTestCase {
 
         let diag = Diagnostic(
           node: Syntax(funcDecl.funcKeyword),
-          message: MacroExpansionErrorMessage(
+          message: SwiftSyntaxMacros.MacroExpansionErrorMessage(
             "can only add a completion-handler variant to an 'async' function"
           ),
           fixIts: [
             FixIt(
-              message: MacroExpansionFixItMessage(
+              message: SwiftSyntaxMacros.MacroExpansionFixItMessage(
                 "add 'async'"
               ),
               changes: [

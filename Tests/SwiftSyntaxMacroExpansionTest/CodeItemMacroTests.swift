@@ -52,12 +52,12 @@ final class CodeItemMacroTests: XCTestCase {
         in context: some MacroExpansionContext
       ) throws -> [CodeBlockItemSyntax] {
         guard !node.arguments.isEmpty else {
-          throw MacroExpansionErrorMessage("'#unwrap' requires arguments")
+          throw SwiftSyntaxMacros.MacroExpansionErrorMessage("'#unwrap' requires arguments")
         }
         let errorThrower = node.trailingClosure
         let identifiers = try node.arguments.map { argument in
           guard let declReferenceExpr = argument.expression.as(DeclReferenceExprSyntax.self) else {
-            throw MacroExpansionErrorMessage("Arguments must be identifiers")
+            throw SwiftSyntaxMacros.MacroExpansionErrorMessage("Arguments must be identifiers")
           }
           return declReferenceExpr.baseName
         }

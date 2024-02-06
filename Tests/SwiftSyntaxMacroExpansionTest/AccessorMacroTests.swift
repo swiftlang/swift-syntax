@@ -299,7 +299,7 @@ final class AccessorMacroTests: XCTestCase {
         providingAccessorsOf declaration: some DeclSyntaxProtocol,
         in context: some MacroExpansionContext
       ) throws -> [AccessorDeclSyntax] {
-        context.diagnose(Diagnostic(node: node, message: MacroExpansionErrorMessage("test")))
+        context.diagnose(Diagnostic(node: node, message: SwiftSyntaxMacros.MacroExpansionErrorMessage("test")))
         return []
       }
     }

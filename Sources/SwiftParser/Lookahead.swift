@@ -163,7 +163,7 @@ extension Parser.Lookahead {
       // Ok, it is a valid attribute, eat it, and then process it.
       self.eat(handle)
       switch attr {
-      case .convention:
+      case .convention, .isolated:
         self.skipSingle()
       default:
         break

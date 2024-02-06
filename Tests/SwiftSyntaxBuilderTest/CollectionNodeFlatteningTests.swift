@@ -18,13 +18,14 @@ final class CollectionNodeFlatteningTests: XCTestCase {
   func test_FlattenCodeBlockItemListWithBuilder() {
     @CodeBlockItemListBuilder
     func buildInnerCodeBlockItemList() -> CodeBlockItemListSyntax {
-      FunctionCallExprSyntax(callee: ExprSyntax("innerBuilder"))
+      [ExprSyntax("innerBuilder1"), ExprSyntax("innerBuilder2")].lazy.map {
+        FunctionCallExprSyntax(callee: $0)
+      }
     }
 
     @CodeBlockItemListBuilder
     func buildOuterCodeBlockItemList() -> CodeBlockItemListSyntax {
       FunctionCallExprSyntax(callee: ExprSyntax("outerBuilder"))
-
       buildInnerCodeBlockItemList()
     }
 
@@ -39,7 +40,8 @@ final class CollectionNodeFlatteningTests: XCTestCase {
       {
           outsideBuilder()
           outerBuilder()
-          innerBuilder()
+          innerBuilder1()
+          innerBuilder2()
       }
       """
     )
@@ -49,6 +51,20 @@ final class CollectionNodeFlatteningTests: XCTestCase {
     let buildable = CodeBlockItemListSyntax {
       "let one = object.methodOne()"
       "let two = object.methodTwo()"
+    }
+
+    assertBuildResult(
+      buildable,
+      """
+      let one = object.methodOne()
+      let two = object.methodTwo()
+      """
+    )
+  }
+
+  func test_FlattenCodeBlockItemListWithCodeBlockItemStringArray() {
+    let buildable = CodeBlockItemListSyntax {
+      ["let one = object.methodOne()", "let two = object.methodTwo()"]
     }
 
     assertBuildResult(

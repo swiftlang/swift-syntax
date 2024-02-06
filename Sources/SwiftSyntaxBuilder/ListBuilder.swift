@@ -32,6 +32,7 @@ public protocol ListBuilder {
   /// Provides contextual type information for statement
   /// expressions to translate them into partial results.
   static func buildExpression(_ expression: Expression) -> Component
+  static func buildExpression(_ expression: some Sequence<Expression>) -> Component
 
   /// Add all the elements of `expression` to this result builder, effectively flattening them.
   ///
@@ -66,39 +67,42 @@ public protocol ListBuilder {
   static func buildFinalResult(_ component: Component) -> FinalResult
 }
 
-public extension ListBuilder {
-  static func buildBlock(_ components: Component...) -> Component {
+extension ListBuilder {
+  public static func buildBlock(_ components: Component...) -> Component {
     components.flatMap { $0 }
   }
-  static func buildExpression(_ expression: Expression) -> Component {
+  public static func buildExpression(_ expression: Expression) -> Component {
     [expression]
   }
+  public static func buildExpression(_ expression: some Sequence<Expression>) -> Component {
+    .init(expression)
+  }
   @_disfavoredOverload
-  static func buildExpression(_ expression: FinalResult) -> Component {
+  public static func buildExpression(_ expression: FinalResult) -> Component {
     expression.map { $0 }
   }
-  static func buildOptional(_ component: Component?) -> Component {
+  public static func buildOptional(_ component: Component?) -> Component {
     component ?? []
   }
-  static func buildEither(first component: Component) -> Component {
+  public static func buildEither(first component: Component) -> Component {
     component
   }
-  static func buildEither(second component: Component) -> Component {
+  public static func buildEither(second component: Component) -> Component {
     component
   }
-  static func buildArray(_ components: [Component]) -> Component {
+  public static func buildArray(_ components: [Component]) -> Component {
     components.flatMap { $0 }
   }
-  static func buildLimitedAvailability(_ component: Component) -> Component {
+  public static func buildLimitedAvailability(_ component: Component) -> Component {
     component
   }
-  static func buildFinalResult(_ component: Component) -> FinalResult {
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
     .init(component)
   }
 }
 
-public extension ListBuilder where Expression: WithTrailingCommaSyntax {
-  static func buildFinalResult(_ component: Component) -> FinalResult {
+extension ListBuilder where Expression: WithTrailingCommaSyntax {
+  public static func buildFinalResult(_ component: Component) -> FinalResult {
     .init(
       component.enumerated().map { index, expression in
         index < component.endIndex - 1 ? expression.ensuringTrailingComma() : expression

@@ -18,6 +18,7 @@
 // macros are invoked.                                                      //
 //==========================================================================//
 
+import SwiftDiagnostics
 import SwiftSyntax
 import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
@@ -421,6 +422,85 @@ final class MemberMacroTests: XCTestCase {
       macros: [
         "Test": TestMacro.self
       ],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testRemoveAttributeFixIt() {
+    struct ActorOnlyMacro: MemberMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingMembersOf declaration: some DeclGroupSyntax,
+        conformingTo protocols: [TypeSyntax],
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        guard declaration.is(ActorDeclSyntax.self) else {
+          throw DiagnosticsError(diagnostics: [
+            Diagnostic(
+              node: node,
+              message: SwiftSyntaxMacros.MacroExpansionErrorMessage("'@ActorOnly' is only applicable to actors."),
+              fixIt: FixIt(
+                message: SwiftSyntaxMacros.MacroExpansionFixItMessage("Remove '@ActorOnly' attribute."),
+                changes: [
+                  // This doesn't account for other attributes that *could* be present in the
+                  // attribute list, but for this test it will be fine.
+                  .replace(
+                    oldNode: Syntax(declaration.attributes),
+                    newNode: Syntax(AttributeListSyntax())
+                  )
+                ]
+              )
+            )
+          ])
+        }
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      actor Foo {
+        var foo: Int
+      }
+      @ActorOnly
+      struct Bar {
+        var bar: Int
+      }
+      """,
+      expandedSource:
+        """
+        actor Foo {
+          var foo: Int
+        }
+        struct Bar {
+          var bar: Int
+        }
+        """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'@ActorOnly' is only applicable to actors.",
+          line: 4,
+          column: 1,
+          fixIts: [
+            FixItSpec(message: "Remove '@ActorOnly' attribute.")
+          ]
+        )
+      ],
+      macros: [
+        "ActorOnly": ActorOnlyMacro.self
+      ],
+      applyFixIts: [
+        "Remove '@ActorOnly' attribute."
+      ],
+      fixedSource:
+        """
+        actor Foo {
+          var foo: Int
+        }
+        struct Bar {
+          var bar: Int
+        }
+        """,
       indentationWidth: indentationWidth
     )
   }

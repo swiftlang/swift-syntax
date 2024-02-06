@@ -188,8 +188,7 @@ fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
 
   override func visit(_ node: GenericArgumentSyntax) -> SyntaxVisitorContinueKind {
     guard let baseName = node.argument.as(IdentifierTypeSyntax.self)?.name else {
-      // Handle error
-      return .visitChildren
+      return .skipChildren
     }
 
     guard let genericParameterClause = macro.genericParameterClause else {
@@ -300,7 +299,6 @@ extension MacroDeclSyntax {
 private final class MacroExpansionRewriter: SyntaxRewriter {
   let parameterReplacements: [DeclReferenceExprSyntax: Int]
   let arguments: [ExprSyntax]
-  // let genericParameterReplacements: [DeclReferenceExprSyntax: Int]
   let genericParameterReplacements: [GenericArgumentSyntax: Int]
   let genericArguments: [TypeSyntax]
 
@@ -336,17 +334,9 @@ private final class MacroExpansionRewriter: SyntaxRewriter {
     }
 
     // Swap in the argument for type parameter
-    return GenericArgumentSyntax(
-      leadingTrivia: node.leadingTrivia,
-      node.unexpectedBeforeArgument,
-      argument: genericArguments[parameterIndex].trimmed,
-      node.unexpectedBetweenArgumentAndTrailingComma,
-      trailingComma: node.trailingComma,
-      node.unexpectedAfterTrailingComma
-        // TODO: seems we're getting spurious trailing " " here,
-        //  skipping trailing trivia for now
-        // trailingTrivia: node.trailingTrivia
-    )
+    var node = node
+    node.argument = genericArguments[parameterIndex].trimmed
+    return node
   }
 }
 
@@ -380,11 +370,9 @@ extension MacroDeclSyntax {
       uniquingKeysWith: { l, r in l }
     )
     let genericArguments: [TypeSyntax] =
-      genericArgumentList?.arguments.map { element in
-        element.argument
-      } ?? []
+      genericArgumentList?.arguments.map { $0.argument } ?? []
 
-    let rewriter: MacroExpansionRewriter = MacroExpansionRewriter(
+    let rewriter = MacroExpansionRewriter(
       parameterReplacements: parameterReplacements,
       arguments: arguments,
       genericReplacements: genericReplacements,

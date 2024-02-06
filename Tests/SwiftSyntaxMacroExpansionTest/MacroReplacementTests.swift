@@ -24,7 +24,7 @@ final class MacroReplacementTests: XCTestCase {
       macro expand1(a: Int, b: Int) = #otherMacro(first: b, second: ["a": a], third: [3.14159, 2.71828], fourth: 4)
       """
 
-    let definition = try macro.as(MacroDeclSyntax.self)!.checkDefinition()
+    let definition = try macro.cast(MacroDeclSyntax.self).checkDefinition()
     guard case let .expansion(_, replacements, _) = definition else {
       XCTFail("not an expansion definition")
       fatalError()
@@ -43,7 +43,7 @@ final class MacroReplacementTests: XCTestCase {
 
     let diags: [Diagnostic]
     do {
-      _ = try macro.as(MacroDeclSyntax.self)!.checkDefinition()
+      _ = try macro.cast(MacroDeclSyntax.self).checkDefinition()
       XCTFail("should have failed with an error")
       fatalError()
     } catch let diagError as DiagnosticsError {
@@ -69,7 +69,7 @@ final class MacroReplacementTests: XCTestCase {
 
     let diags: [Diagnostic]
     do {
-      _ = try macro.as(MacroDeclSyntax.self)!.checkDefinition()
+      _ = try macro.cast(MacroDeclSyntax.self).checkDefinition()
       XCTFail("should have failed with an error")
       fatalError()
     } catch let diagError as DiagnosticsError {
@@ -94,7 +94,7 @@ final class MacroReplacementTests: XCTestCase {
       #expand1(a: 5, b: 17)
       """
 
-    let macroDecl = macro.as(MacroDeclSyntax.self)!
+    let macroDecl = macro.cast(MacroDeclSyntax.self)
     let definition = try macroDecl.checkDefinition()
     guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
       XCTFail("not a normal expansion")
@@ -115,7 +115,7 @@ final class MacroReplacementTests: XCTestCase {
     )
   }
 
-  func testMacroGenericArgumentExpansion_base() throws {
+  func testMacroGenericArgumentExpansionBase() throws {
     let macro: DeclSyntax =
       """
       macro gen<A, B>(a: A, b: B) = #otherMacro<A, B>(first: a, second: b)
@@ -126,7 +126,7 @@ final class MacroReplacementTests: XCTestCase {
       #gen<Int, String>(a: 5, b: "Hello")
       """
 
-    let macroDecl = macro.as(MacroDeclSyntax.self)!
+    let macroDecl = macro.cast(MacroDeclSyntax.self)
     let definition = try macroDecl.checkDefinition()
     guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
       XCTFail("not a normal expansion")
@@ -158,7 +158,7 @@ final class MacroReplacementTests: XCTestCase {
     )
   }
 
-  func testMacroGenericArgumentExpansion_ignoreTrivia() throws {
+  func testMacroGenericArgumentExpansionIgnoreTrivia() throws {
     let macro: DeclSyntax =
       """
       macro gen<A, B /* some comment */>(a: A, b: B) = #otherMacro<A, B>(first: a, second: b)
@@ -169,7 +169,7 @@ final class MacroReplacementTests: XCTestCase {
       #gen<Int, String>(a: 5, b: "Hello")
       """
 
-    let macroDecl = macro.as(MacroDeclSyntax.self)!
+    let macroDecl = macro.cast(MacroDeclSyntax.self)
     let definition = try macroDecl.checkDefinition()
     guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
       XCTFail("not a normal expansion")
@@ -200,7 +200,7 @@ final class MacroReplacementTests: XCTestCase {
     )
   }
 
-  func testMacroGenericArgumentExpansion_notVisitGenericParameterArguments() throws {
+  func testMacroGenericArgumentExpansionNotVisitGenericParameterArguments() throws {
     let macro: DeclSyntax =
       """
       macro gen(a: Array<Int>) = #otherMacro(first: a)
@@ -211,7 +211,7 @@ final class MacroReplacementTests: XCTestCase {
       #gen(a: [1, 2, 3])
       """
 
-    let macroDecl = macro.as(MacroDeclSyntax.self)!
+    let macroDecl = macro.cast(MacroDeclSyntax.self)
     let definition = try macroDecl.checkDefinition()
     guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
       XCTFail("not a normal expansion")
@@ -234,7 +234,7 @@ final class MacroReplacementTests: XCTestCase {
     )
   }
 
-  func testMacroGenericArgumentExpansion_replaceInner() throws {
+  func testMacroGenericArgumentExpansionReplaceInner() throws {
     let macro: DeclSyntax =
       """
       macro gen<A>(a: Array<A>) = #reduce<A>(first: a)
@@ -245,7 +245,7 @@ final class MacroReplacementTests: XCTestCase {
       #gen<Int>(a: [1, 2, 3])
       """
 
-    let macroDecl = macro.as(MacroDeclSyntax.self)!
+    let macroDecl = macro.cast(MacroDeclSyntax.self)
     let definition = try macroDecl.checkDefinition()
     guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
       XCTFail("not a normal expansion")
@@ -268,7 +268,7 @@ final class MacroReplacementTests: XCTestCase {
     )
   }
 
-  func testMacroGenericArgumentExpansion_array() throws {
+  func testMacroGenericArgumentExpansionArray() throws {
     let macro: DeclSyntax =
       """
       macro gen(a: Array<Int>) = #other<A>(first: a)
@@ -276,10 +276,10 @@ final class MacroReplacementTests: XCTestCase {
 
     let use: ExprSyntax =
       """
-      #otheren<Int>(a: [1, 2, 3])
+      #gen<Int>(a: [1, 2, 3])
       """
 
-    let macroDecl = macro.as(MacroDeclSyntax.self)!
+    let macroDecl = macro.cast(MacroDeclSyntax.self)
     let definition = try macroDecl.checkDefinition()
     guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
       XCTFail("not a normal expansion")
@@ -302,7 +302,7 @@ final class MacroReplacementTests: XCTestCase {
     )
   }
 
-  func testMacroExpansion_dontCrashOnDuplicates() throws {
+  func testMacroExpansionDontCrashOnDuplicates() throws {
     let macro: DeclSyntax =
       """
       macro gen(a: Array<Int>) = #other<A>(first: a)
@@ -310,10 +310,10 @@ final class MacroReplacementTests: XCTestCase {
 
     let use: ExprSyntax =
       """
-      #otheren<Int>(a: [1, 2, 3])
+      #gen<Int>(a: [1, 2, 3])
       """
 
-    let macroDecl = macro.as(MacroDeclSyntax.self)!
+    let macroDecl = macro.cast(MacroDeclSyntax.self)
     let definition = try macroDecl.checkDefinition()
     guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
       XCTFail("not a normal expansion")

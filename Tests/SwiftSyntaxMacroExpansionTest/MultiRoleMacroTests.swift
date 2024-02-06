@@ -28,7 +28,7 @@ final class MultiRoleMacroTests: XCTestCase {
   private let indentationWidth: Trivia = .spaces(2)
 
   func testContextUniqueLocalNames() {
-    let context = BasicMacroExpansionContext()
+    let context = BasicMacroExpansionContext(lexicalContext: [])
 
     let t1 = context.makeUniqueName("mine")
     let t2 = context.makeUniqueName("mine")

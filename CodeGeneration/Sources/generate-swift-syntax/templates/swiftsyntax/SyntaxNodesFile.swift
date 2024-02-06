@@ -27,7 +27,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
         """
         // MARK: - \(node.kind.syntaxType)
 
-        \(SwiftSyntax.Trivia(joining: [node.documentation, node.experimentalDocNote, node.grammar, node.containedIn]))
+        \(SwiftSyntax.Trivia(joining: [node.documentation, node.experimentalDocNote, node.grammar, node.containedIn]))\
         \(node.node.apiAttributes())\
         public struct \(node.kind.syntaxType): \(node.baseType.syntaxBaseName)Protocol, SyntaxHashable, \(node.base.leafProtocolType)
         """
@@ -55,7 +55,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
         try! InitializerDeclSyntax(
           """
-          \(node.generateInitializerDocComment())
+          \(node.generateInitializerDocComment())\
           \(node.generateInitializerDeclHeader())
           """
         ) {
@@ -137,7 +137,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
           try! VariableDeclSyntax(
             """
-            \(child.documentation)
+            \(child.documentation)\
             \(child.apiAttributes)public var \(child.varOrCaseName.backtickedIfNeeded): \(type)
             """
           ) {

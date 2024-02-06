@@ -23,18 +23,41 @@ extension CompilerPluginMessageHandler {
     try provider.resolveMacro(moduleName: ref.moduleName, typeName: ref.typeName)
   }
 
+  /// Resolve the lexical context
+  private static func resolveLexicalContext(
+    _ lexicalContext: [PluginMessage.Syntax]?,
+    sourceManager: SourceManager,
+    operatorTable: OperatorTable,
+    fallbackSyntax: some SyntaxProtocol
+  ) -> [Syntax] {
+    // If we weren't provided with a lexical context, retrieve it from the
+    // syntax node we were given. This is for dealing with older compilers.
+    guard let lexicalContext else {
+      return fallbackSyntax.allMacroLexicalContexts()
+    }
+
+    return lexicalContext.map { sourceManager.add($0, foldingWith: operatorTable) }
+  }
+
   /// Expand `@freestainding(XXX)` macros.
   func expandFreestandingMacro(
     macro: PluginMessage.MacroReference,
     macroRole pluginMacroRole: PluginMessage.MacroRole?,
     discriminator: String,
-    expandingSyntax: PluginMessage.Syntax
+    expandingSyntax: PluginMessage.Syntax,
+    lexicalContext: [PluginMessage.Syntax]?
   ) throws {
     let sourceManager = SourceManager()
     let syntax = sourceManager.add(expandingSyntax, foldingWith: .standardOperators)
 
     let context = PluginMacroExpansionContext(
       sourceManager: sourceManager,
+      lexicalContext: Self.resolveLexicalContext(
+        lexicalContext,
+        sourceManager: sourceManager,
+        operatorTable: .standardOperators,
+        fallbackSyntax: syntax
+      ),
       expansionDiscriminator: discriminator
     )
 
@@ -85,14 +108,10 @@ extension CompilerPluginMessageHandler {
     declSyntax: PluginMessage.Syntax,
     parentDeclSyntax: PluginMessage.Syntax?,
     extendedTypeSyntax: PluginMessage.Syntax?,
-    conformanceListSyntax: PluginMessage.Syntax?
+    conformanceListSyntax: PluginMessage.Syntax?,
+    lexicalContext: [PluginMessage.Syntax]?
   ) throws {
     let sourceManager = SourceManager()
-    let context = PluginMacroExpansionContext(
-      sourceManager: sourceManager,
-      expansionDiscriminator: discriminator
-    )
-
     let attributeNode = sourceManager.add(
       attributeSyntax,
       foldingWith: .standardOperators
@@ -106,6 +125,17 @@ extension CompilerPluginMessageHandler {
       let placeholderStruct = sourceManager.add($0).cast(StructDeclSyntax.self)
       return placeholderStruct.inheritanceClause!.inheritedTypes
     }
+
+    let context = PluginMacroExpansionContext(
+      sourceManager: sourceManager,
+      lexicalContext: Self.resolveLexicalContext(
+        lexicalContext,
+        sourceManager: sourceManager,
+        operatorTable: .standardOperators,
+        fallbackSyntax: declarationNode
+      ),
+      expansionDiscriminator: discriminator
+    )
 
     // TODO: Make this a 'String?' and remove non-'hasExpandMacroResult' branches.
     let expandedSources: [String]?

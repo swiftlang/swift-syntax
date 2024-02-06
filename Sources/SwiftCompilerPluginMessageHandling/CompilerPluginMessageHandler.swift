@@ -114,12 +114,19 @@ extension CompilerPluginMessageHandler {
       )
       try self.sendMessage(.getCapabilityResult(capability: capability))
 
-    case .expandFreestandingMacro(let macro, let macroRole, let discriminator, let expandingSyntax):
+    case .expandFreestandingMacro(
+      let macro,
+      let macroRole,
+      let discriminator,
+      let expandingSyntax,
+      let lexicalContext
+    ):
       try expandFreestandingMacro(
         macro: macro,
         macroRole: macroRole,
         discriminator: discriminator,
-        expandingSyntax: expandingSyntax
+        expandingSyntax: expandingSyntax,
+        lexicalContext: lexicalContext
       )
 
     case .expandAttachedMacro(
@@ -130,7 +137,8 @@ extension CompilerPluginMessageHandler {
       let declSyntax,
       let parentDeclSyntax,
       let extendedTypeSyntax,
-      let conformanceListSyntax
+      let conformanceListSyntax,
+      let lexicalContext
     ):
       try expandAttachedMacro(
         macro: macro,
@@ -140,7 +148,8 @@ extension CompilerPluginMessageHandler {
         declSyntax: declSyntax,
         parentDeclSyntax: parentDeclSyntax,
         extendedTypeSyntax: extendedTypeSyntax,
-        conformanceListSyntax: conformanceListSyntax
+        conformanceListSyntax: conformanceListSyntax,
+        lexicalContext: lexicalContext
       )
 
     case .loadPluginLibrary(let libraryPath, let moduleName):

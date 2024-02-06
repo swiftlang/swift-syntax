@@ -21,9 +21,23 @@ import SwiftSyntaxBuilder
 
 extension SyntaxProtocol {
   /// Expand all uses of the given set of macros within this syntax node.
+  @available(*, deprecated, message: "Use contextGenerator form to produce a specific context for each expansion node")
   public func expand(
     macros: [String: Macro.Type],
     in context: some MacroExpansionContext,
+    indentationWidth: Trivia? = nil
+  ) -> Syntax {
+    return expand(
+      macros: macros,
+      contextGenerator: { _ in context },
+      indentationWidth: indentationWidth
+    )
+  }
+
+  /// Expand all uses of the given set of macros within this syntax node.
+  public func expand<Context: MacroExpansionContext>(
+    macros: [String: Macro.Type],
+    contextGenerator: @escaping (Syntax) -> Context,
     indentationWidth: Trivia? = nil
   ) -> Syntax {
     // Build the macro system.
@@ -34,7 +48,7 @@ extension SyntaxProtocol {
 
     let applier = MacroApplication(
       macroSystem: system,
-      context: context,
+      contextGenerator: contextGenerator,
       indentationWidth: indentationWidth
     )
 
@@ -595,7 +609,7 @@ private enum MacroApplicationError: DiagnosticMessage, Error {
 /// Syntax rewriter that evaluates any macros encountered along the way.
 private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   let macroSystem: MacroSystem
-  var context: Context
+  var contextGenerator: (Syntax) -> Context
   var indentationWidth: Trivia
   /// Nodes that we are currently handling in `visitAny` and that should be
   /// visited using the node-specific handling function.
@@ -607,11 +621,12 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
 
   init(
     macroSystem: MacroSystem,
-    context: Context,
+    contextGenerator: @escaping (Syntax) -> Context,
     indentationWidth: Trivia?
   ) {
     self.macroSystem = macroSystem
-    self.context = context
+    self.contextGenerator = contextGenerator
+
     // Default to 4 spaces if no indentation was passed.
     // In the future, we could consider inferring the indentation width from the
     // source file in which we expand the macros.
@@ -670,7 +685,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
         definition: definition,
         attributeNode: attributeNode,
         attachedTo: node,
-        in: context,
+        in: contextGenerator(Syntax(node)),
         indentationWidth: indentationWidth
       )
     }
@@ -681,7 +696,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
         definition: definition,
         attributeNode: attributeNode,
         attachedTo: node,
-        in: context,
+        in: contextGenerator(Syntax(node)),
         indentationWidth: indentationWidth
       ).map { [$0] }
     }
@@ -697,7 +712,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       guard let existingBody = node.body else {
         // Any leftover preamble statements have nowhere to go, complain and
         // exit.
-        context.addDiagnostics(from: MacroExpansionError.preambleWithoutBody, node: node)
+        contextGenerator(Syntax(node)).addDiagnostics(from: MacroExpansionError.preambleWithoutBody, node: node)
 
         return node
       }
@@ -708,7 +723,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       body = expandedBodies[0]
 
     default:
-      context.addDiagnostics(from: MacroExpansionError.moreThanOneBodyMacro, node: node)
+      contextGenerator(Syntax(node)).addDiagnostics(from: MacroExpansionError.moreThanOneBodyMacro, node: node)
       body = expandedBodies[0]
     }
 
@@ -855,7 +870,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     }
 
     guard node.bindings.count == 1, let binding = node.bindings.first else {
-      context.addDiagnostics(from: MacroApplicationError.accessorMacroOnVariableWithMultipleBindings, node: node)
+      contextGenerator(Syntax(node)).addDiagnostics(from: MacroApplicationError.accessorMacroOnVariableWithMultipleBindings, node: node)
       return DeclSyntax(node)
     }
 
@@ -944,7 +959,7 @@ extension MacroApplication {
           result += expanded
         }
       } catch {
-        context.addDiagnostics(from: error, node: macroAttribute.attributeNode)
+        contextGenerator(Syntax(decl)).addDiagnostics(from: error, node: macroAttribute.attributeNode)
       }
     }
     return result
@@ -963,7 +978,7 @@ extension MacroApplication {
         definition: definition,
         attributeNode: attributeNode,
         attachedTo: decl,
-        in: context,
+        in: contextGenerator(Syntax(decl)),
         indentationWidth: indentationWidth
       )
     }
@@ -983,7 +998,7 @@ extension MacroApplication {
         definition: definition,
         attributeNode: attributeNode,
         attachedTo: decl,
-        in: context,
+        in: contextGenerator(Syntax(decl)),
         indentationWidth: indentationWidth
       )
     }
@@ -998,7 +1013,7 @@ extension MacroApplication {
         definition: definition,
         attributeNode: attributeNode,
         attachedTo: decl,
-        in: context,
+        in: contextGenerator(Syntax(decl)),
         indentationWidth: indentationWidth
       )
     }
@@ -1011,7 +1026,7 @@ extension MacroApplication {
         definition: definition,
         attributeNode: attributeNode,
         attachedTo: decl,
-        in: context,
+        in: contextGenerator(Syntax(decl)),
         indentationWidth: indentationWidth
       )
     }
@@ -1032,7 +1047,7 @@ extension MacroApplication {
         attributeNode: attributeNode,
         attachedTo: parentDecl,
         providingAttributeFor: decl,
-        in: context,
+        in: contextGenerator(Syntax(decl)),
         indentationWidth: indentationWidth
       )
     }
@@ -1069,7 +1084,7 @@ extension MacroApplication {
             definition: macro.definition,
             attributeNode: macro.attributeNode,
             attachedTo: DeclSyntax(storage),
-            in: context,
+            in: contextGenerator(Syntax(storage)),
             indentationWidth: indentationWidth
           ) {
             checkExpansions(newAccessors)
@@ -1086,7 +1101,7 @@ extension MacroApplication {
           definition: macro.definition,
           attributeNode: macro.attributeNode,
           attachedTo: DeclSyntax(storage),
-          in: context,
+          in: contextGenerator(Syntax(storage)),
           indentationWidth: indentationWidth
         ) {
           guard case .accessors(let accessorList) = newAccessors.accessors else {
@@ -1105,7 +1120,7 @@ extension MacroApplication {
           }
         }
       } catch {
-        context.addDiagnostics(from: error, node: macro.attributeNode)
+        contextGenerator(Syntax(storage)).addDiagnostics(from: error, node: macro.attributeNode)
       }
     }
     return (newAccessorsBlock, expandsGetSet)
@@ -1143,7 +1158,7 @@ extension MacroApplication {
         return .failure
       }
     } catch {
-      context.addDiagnostics(from: error, node: node)
+      contextGenerator(Syntax(node)).addDiagnostics(from: error, node: node)
       return .failure
     }
   }
@@ -1161,7 +1176,7 @@ extension MacroApplication {
       return try expandFreestandingCodeItemList(
         definition: macro,
         node: node,
-        in: context,
+        in: contextGenerator(Syntax(node)),
         indentationWidth: indentationWidth
       )
     }
@@ -1180,7 +1195,7 @@ extension MacroApplication {
       return try expandFreestandingMemberDeclList(
         definition: macro,
         node: node,
-        in: context,
+        in: contextGenerator(Syntax(node)),
         indentationWidth: indentationWidth
       )
     }
@@ -1198,7 +1213,7 @@ extension MacroApplication {
       return try expandFreestandingExpr(
         definition: macro,
         node: node,
-        in: context,
+        in: contextGenerator(Syntax(node)),
         indentationWidth: indentationWidth
       )
     }

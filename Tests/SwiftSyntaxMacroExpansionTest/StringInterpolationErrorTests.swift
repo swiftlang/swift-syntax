@@ -43,7 +43,7 @@ private struct DummyMacro: ExtensionMacro {
 final class StringInterpolationErrorTests: XCTestCase {
 
   func testMacroExpansionContextAddDiagnosticsAddsSwiftSyntaxInterpolationErrorsWithWrappingMessage() throws {
-    let context = BasicMacroExpansionContext()
+    let context = BasicMacroExpansionContext(lexicalContext: [])
     let error = SyntaxStringInterpolationInvalidNodeTypeError(expectedType: DeclSyntax.self, actualNode: ExprSyntax("test"))
 
     // Since we only care about the error switch inside of addDagnostics, we don't care about the particular node we're passing in
@@ -55,7 +55,7 @@ final class StringInterpolationErrorTests: XCTestCase {
 
   // Verify that any other error messages do not get "Internal macro error:" prefix.
   func testMacroExpansionContextAddDiagnosticsUsesErrorDescriptionForDiagMessage() throws {
-    let context = BasicMacroExpansionContext()
+    let context = BasicMacroExpansionContext(lexicalContext: [])
     let error = DummyError.diagnosticTestError
 
     context.addDiagnostics(from: error, node: ExprSyntax("1"))

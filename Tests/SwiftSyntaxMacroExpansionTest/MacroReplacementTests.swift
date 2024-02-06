@@ -301,4 +301,43 @@ final class MacroReplacementTests: XCTestCase {
       """
     )
   }
+
+  func testMacroExpansion_dontCrashOnDuplicates() throws {
+    let macro: DeclSyntax =
+      """
+      macro gen(a: Array<Int>) = #other<A>(first: a)
+      """
+
+    let use: ExprSyntax =
+      """
+      #otheren<Int>(a: [1, 2, 3])
+      """
+
+    let macroDecl = macro.as(MacroDeclSyntax.self)!
+    let definition = try macroDecl.checkDefinition()
+    guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
+      XCTFail("not a normal expansion")
+      return
+    }
+
+    var replacementsWithDupes = replacements
+    replacementsWithDupes.append(contentsOf: replacements)
+    var genericReplacementsWithDupes = genericReplacements
+    genericReplacementsWithDupes.append(contentsOf: genericReplacements)
+
+    XCTAssertEqual(genericReplacements.count, 0)
+
+    let expandedSyntax = macroDecl.expand(
+      use.as(MacroExpansionExprSyntax.self)!,
+      definition: expansion,
+      replacements: replacementsWithDupes,
+      genericReplacements: genericReplacementsWithDupes
+    )
+    assertStringsEqualWithDiff(
+      expandedSyntax.description,
+      """
+      #other<A>(first: [1, 2, 3])
+      """
+    )
+  }
 }

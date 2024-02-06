@@ -363,9 +363,10 @@ extension MacroDeclSyntax {
     // FIXME: Do real call-argument matching between the argument list and the
     // macro parameter list, porting over from the compiler.
     let parameterReplacements = Dictionary(
-      uniqueKeysWithValues: replacements.map { replacement in
+      replacements.map { replacement in
         (replacement.reference, replacement.parameterIndex)
-      }
+      },
+      uniquingKeysWith: { l, r in l }
     )
     let arguments: [ExprSyntax] =
       argumentList?.map { element in
@@ -373,9 +374,10 @@ extension MacroDeclSyntax {
       } ?? []
 
     let genericReplacements = Dictionary(
-      uniqueKeysWithValues: genericReplacements.map { replacement in
+      genericReplacements.map { replacement in
         (replacement.reference, replacement.parameterIndex)
-      }
+      },
+      uniquingKeysWith: { l, r in l }
     )
     let genericArguments: [TypeSyntax] =
       genericArgumentList?.arguments.map { element in

@@ -162,14 +162,11 @@ extension Parser.Lookahead {
     if let (attr, handle) = self.at(anyIn: TypeAttribute.self) {
       // Ok, it is a valid attribute, eat it, and then process it.
       self.eat(handle)
-      if case .convention = attr {
-        guard
-          self.consume(if: .leftParen) != nil,
-          self.consume(if: .identifier) != nil,
-          self.consume(if: .rightParen) != nil
-        else {
-          return
-        }
+      switch attr {
+      case .convention:
+        self.skipSingle()
+      default:
+        break
       }
       return
     }

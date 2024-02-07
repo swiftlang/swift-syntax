@@ -886,4 +886,25 @@ final class AttributeTests: ParserTestCase {
       """
     )
   }
+
+  func testConventionAttributeInArrayType() {
+    assertParse(
+      """
+      _ = [@convention(c, cType: "int (*)(int)") (Int32) -> Int32]()
+      """,
+      substructure: ConventionAttributeArgumentsSyntax(
+        conventionLabel: .identifier("c"),
+        comma: .commaToken(),
+        cTypeLabel: .keyword(.cType),
+        colon: .colonToken(),
+        cTypeString: StringLiteralExprSyntax(
+          openingQuote: .stringQuoteToken(),
+          segments: StringLiteralSegmentListSyntax([
+            StringLiteralSegmentListSyntax.Element(StringSegmentSyntax(content: .stringSegment("int (*)(int)")))
+          ]),
+          closingQuote: .stringQuoteToken()
+        )
+      )
+    )
+  }
 }

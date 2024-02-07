@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include "AtomicBool.h"
+#include "SwiftSyntaxAtomicBool.h"
 
 AtomicBool atomic_bool_create(bool initialValue) {
   AtomicBool atomic;

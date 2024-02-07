@@ -55,8 +55,8 @@ class OnlyLiteralExprChecker: SyntaxAnyVisitor {
   override func visit(_ node: PrefixOperatorExprSyntax) -> SyntaxVisitorContinueKind {
     switch node.operator.tokenKind {
     case .prefixOperator("-")
-      // only allow negation on numbers, not other literal types
-      where node.expression.is(IntegerLiteralExprSyntax.self)
+    // only allow negation on numbers, not other literal types
+    where node.expression.is(IntegerLiteralExprSyntax.self)
       || node.expression.is(FloatLiteralExprSyntax.self):
       return .visitChildren
     default:
@@ -82,7 +82,8 @@ class OnlyLiteralExprChecker: SyntaxAnyVisitor {
   // String interpolation
   override func visit(_ node: StringLiteralSegmentListSyntax) -> SyntaxVisitorContinueKind {
     guard node.count == 1,
-          case .stringSegment = node.first! else {
+      case .stringSegment = node.first!
+    else {
       return diagnoseNonLiteral(node)
     }
     return .visitChildren

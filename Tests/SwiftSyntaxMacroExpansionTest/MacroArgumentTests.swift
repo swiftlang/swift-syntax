@@ -24,8 +24,10 @@ final class MacroArgumentTests: XCTestCase {
       #otherMacro(first: (/foo/, 0x42), second: ["a": nil], third: [3.14159, -2.71828], fourth: true)
       """
 
-    XCTAssertNoThrow(try macro.as(MacroExpansionExprSyntax.self)!
-      .checkDefaultArgumentMacroExpression())
+    XCTAssertNoThrow(
+      try macro.as(MacroExpansionExprSyntax.self)!
+        .checkDefaultArgumentMacroExpression()
+    )
   }
 
   func testDefaultArgumentMacroExprNonLiteral() throws {
@@ -34,21 +36,23 @@ final class MacroArgumentTests: XCTestCase {
       #otherMacro(first: b, second: "\(false)", third: 1 + 2)
       """#
 
-    XCTAssertThrowsError(try macro.as(MacroExpansionExprSyntax.self)!
-      .checkDefaultArgumentMacroExpression()) { error in
-        guard let diagError = error as? DiagnosticsError else {
-          XCTFail("should have failed with a diagnostics error")
-          return
-        }
-        let diags = diagError.diagnostics
-
-        XCTAssertEqual(diags.count, 3)
-        for diag in diags {
-          XCTAssertEqual(
-            diag.diagMessage.message,
-            "only literals are permitted"
-          )
-        }
+    XCTAssertThrowsError(
+      try macro.as(MacroExpansionExprSyntax.self)!
+        .checkDefaultArgumentMacroExpression()
+    ) { error in
+      guard let diagError = error as? DiagnosticsError else {
+        XCTFail("should have failed with a diagnostics error")
+        return
       }
+      let diags = diagError.diagnostics
+
+      XCTAssertEqual(diags.count, 3)
+      for diag in diags {
+        XCTAssertEqual(
+          diag.diagMessage.message,
+          "only literals are permitted"
+        )
+      }
+    }
   }
 }

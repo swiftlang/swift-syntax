@@ -179,9 +179,15 @@ extension Parser {
     }
   }
 
+  /// Parse the subset of types that we allow in attribute names.
+  mutating func parseAttributeName() -> RawTypeSyntax {
+    return parseSimpleType(forAttributeName: true)
+  }
+
   /// Parse a "simple" type
   mutating func parseSimpleType(
-    stopAtFirstPeriod: Bool = false
+    stopAtFirstPeriod: Bool = false,
+    forAttributeName: Bool = false
   ) -> RawTypeSyntax {
     enum TypeBaseStart: TokenSpecSet {
       case `Self`
@@ -301,6 +307,11 @@ extension Parser {
           )
         }
         continue
+      }
+
+      // Do not allow ? or ! suffixes when parsing attribute names.
+      if forAttributeName {
+        break
       }
 
       if self.at(TokenSpec(.postfixQuestionMark, allowAtStartOfLine: false)) {
@@ -936,6 +947,10 @@ extension Parser {
     case ._opaqueReturnTypeOf:
       return parseAttribute(argumentMode: .required) { parser in
         return .opaqueReturnTypeOfAttributeArguments(parser.parseOpaqueReturnTypeOfAttributeArguments())
+      }
+    case .isolated:
+      return parseAttribute(argumentMode: .required) { parser in
+        return .argumentList(parser.parseIsolatedAttributeArguments())
       }
     case nil:  // Custom attribute
       return parseAttribute(argumentMode: .customAttribute) { parser in

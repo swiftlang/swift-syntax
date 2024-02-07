@@ -252,6 +252,7 @@ enum TokenPrecedence: Comparable {
       .Sendable,
       .retroactive,
       .unchecked:
+      // Note that .isolated is preferred as a decl keyword
       self = .exprKeyword
 
     case  // `DeclarationAttributeWithSpecialSyntax`

@@ -907,4 +907,44 @@ final class AttributeTests: ParserTestCase {
       )
     )
   }
+
+  func testIsolatedTypeAttribute() {
+    assertParse(
+      """
+      var fn: @isolated(any) () -> ()
+      """
+    )
+
+    // We don't validate the kind in the parser
+    assertParse(
+      """
+      var fn: @isolated(sdfhsdfi) () -> ()
+      """
+    )
+
+    // Check that this combines correctly with other attributs.
+    // This is not a valid combination, but we don't validate that here.
+    assertParse(
+      """
+      var fn: @isolated(any) @convention(swift) () -> ()
+      """
+    )
+    assertParse(
+      """
+      var fn: @convention(swift) @isolated(any) () -> ()
+      """
+    )
+
+    // Test that lookahead correctly skips the argument clause.
+    assertParse(
+      """
+      var array = [@isolated(any) @convention(swift) () -> ()]()
+      """
+    )
+    assertParse(
+      """
+      var array = [@convention(swift) @isolated(any) () -> ()]()
+      """
+    )
+  }
 }

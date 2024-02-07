@@ -177,7 +177,7 @@ extension Parser {
     parseArguments: (inout Parser) -> RawAttributeSyntax.Arguments
   ) -> RawAttributeListSyntax.Element {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let attributeName = self.parseType()
+    let attributeName = self.parseAttributeName()
     let shouldParseArgument: Bool
     switch argumentMode {
     case .required:
@@ -358,21 +358,40 @@ extension Parser {
   }
 }
 
-extension Parser {
-  mutating func parseMacroRoleArguments() -> [RawLabeledExprSyntax] {
-    let (unexpectedBeforeRole, role) = self.expect(.identifier, TokenSpec(.extension, remapping: .identifier), default: .identifier)
-    let roleTrailingComma = self.consume(if: .comma)
-    let roleElement = RawLabeledExprSyntax(
+extension RawLabeledExprSyntax {
+  fileprivate init(
+    _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? = nil,
+    identifier: RawTokenSyntax,
+    _ unexpectedBetweenIdentifierAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
+    trailingComma: RawTokenSyntax? = nil,
+    arena: __shared SyntaxArena
+  ) {
+    self.init(
       label: nil,
       colon: nil,
       expression: RawExprSyntax(
         RawDeclReferenceExprSyntax(
-          unexpectedBeforeRole,
-          baseName: role,
+          unexpectedBeforeIdentifier,
+          baseName: identifier,
           argumentNames: nil,
-          arena: self.arena
+          arena: arena
         )
       ),
+      unexpectedBetweenIdentifierAndTrailingComma,
+      trailingComma: trailingComma,
+      arena: arena
+    )
+  }
+}
+
+extension Parser {
+  mutating func parseMacroRoleArguments() -> [RawLabeledExprSyntax] {
+    let (unexpectedBeforeRole, role) = self.expect(.identifier, TokenSpec(.extension, remapping: .identifier), default: .identifier)
+    let roleTrailingComma = self.consume(if: .comma)
+
+    let roleElement = RawLabeledExprSyntax(
+      unexpectedBeforeRole,
+      identifier: role,
       trailingComma: roleTrailingComma,
       arena: self.arena
     )
@@ -845,6 +864,23 @@ extension Parser {
         )
       )
     }
+  }
+}
+
+extension Parser {
+  mutating func parseIsolatedAttributeArguments() -> RawLabeledExprListSyntax {
+    let (unexpectedBeforeIsolationKind, isolationKind) =
+      self.expectIdentifier(allowKeywordsAsIdentifier: true)
+    let isolationKindElement = RawLabeledExprSyntax(
+      unexpectedBeforeIsolationKind,
+      identifier: isolationKind,
+      arena: self.arena
+    )
+
+    return RawLabeledExprListSyntax(
+      elements: [isolationKindElement],
+      arena: self.arena
+    )
   }
 }
 

@@ -643,6 +643,7 @@ enum TypeAttribute: TokenSpecSet {
   case retroactive
   case Sendable
   case unchecked
+  case isolated
 
   init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
@@ -660,6 +661,7 @@ enum TypeAttribute: TokenSpecSet {
     case TokenSpec(.Sendable): self = .Sendable
     case TokenSpec(.retroactive): self = .retroactive
     case TokenSpec(.unchecked): self = .unchecked
+    case TokenSpec(.isolated): self = .isolated
     default: return nil
     }
   }
@@ -680,6 +682,7 @@ enum TypeAttribute: TokenSpecSet {
     case .retroactive: return .keyword(.retroactive)
     case .Sendable: return .keyword(.Sendable)
     case .unchecked: return .keyword(.unchecked)
+    case .isolated: return .keyword(.isolated)
     }
   }
 }

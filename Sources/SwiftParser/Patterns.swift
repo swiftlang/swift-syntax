@@ -67,7 +67,19 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.lhs(.identifier), let handle)?:
+    case (.rhs(let introducer), let handle)? where self.withLookahead { $0.shouldParsePatternBinding(introducer: introducer) }:
+      let bindingSpecifier = self.eat(handle)
+      let value = self.parsePattern()
+      return RawPatternSyntax(
+        RawValueBindingPatternSyntax(
+          bindingSpecifier: bindingSpecifier,
+          pattern: value,
+          arena: self.arena
+        )
+      )
+    case (.lhs(.identifier), let handle)?,
+      // If we shouldn't contextually parse a pattern binding introducer (because the previous pattern match guard failed), then parse it as an identifier.
+      (.rhs(_), let handle)?:
       let identifier = self.eat(handle)
       return RawPatternSyntax(
         RawIdentifierPatternSyntax(
@@ -82,16 +94,6 @@ extension Parser {
         RawIdentifierPatternSyntax(
           unexpectedBeforeIdentifier,
           identifier: missingToken(.identifier),
-          arena: self.arena
-        )
-      )
-    case (.rhs, let handle)?:
-      let bindingSpecifier = self.eat(handle)
-      let value = self.parsePattern()
-      return RawPatternSyntax(
-        RawValueBindingPatternSyntax(
-          bindingSpecifier: bindingSpecifier,
-          pattern: value,
           arena: self.arena
         )
       )
@@ -218,7 +220,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.rhs, let handle)?:
+    case (.rhs(let introducer), let handle)? where self.withLookahead { $0.shouldParsePatternBinding(introducer: introducer) }:
       let bindingSpecifier = self.eat(handle)
       let value = self.parseMatchingPattern(context: .bindingIntroducer)
       return RawPatternSyntax(
@@ -228,7 +230,8 @@ extension Parser {
           arena: self.arena
         )
       )
-    case nil:
+    case (.rhs(_), _)?,
+      nil:
       break
     }
 
@@ -253,6 +256,21 @@ extension Parser {
 // MARK: Lookahead
 
 extension Parser.Lookahead {
+  /// Returns true if we should parse a pattern binding specifier contextually
+  /// as one.
+  mutating func shouldParsePatternBinding(introducer: ValueBindingPatternSyntax.BindingSpecifierOptions) -> Bool {
+    switch introducer {
+    // TODO: the other ownership modifiers (borrowing/consuming/mutating) more
+    // than likely need to be made contextual as well before finalizing their
+    // grammar.
+    case ._borrowing where experimentalFeatures.contains(.borrowingSwitch):
+      return peek(isAt: TokenSpec(.identifier, allowAtStartOfLine: false))
+    default:
+      // Other keywords can be parsed unconditionally.
+      return true
+    }
+  }
+
   ///   pattern ::= identifier
   ///   pattern ::= '_'
   ///   pattern ::= pattern-tuple
@@ -288,15 +306,18 @@ extension Parser.Lookahead {
     >
 
     switch self.at(anyIn: PatternStartTokens.self) {
-    case (.lhs(.identifier), let handle)?,
-      (.lhs(.wildcard), let handle)?:
-      self.eat(handle)
-      return true
     case (.lhs(.leftParen), _)?:
       return self.canParsePatternTuple()
-    case (.rhs, let handle)?:
+    case (.rhs(let introducer), let handle)? where shouldParsePatternBinding(introducer: introducer):
+      // Parse as a binding introducer, like `let x`.
       self.eat(handle)
       return self.canParsePattern()
+    case (.lhs(.identifier), let handle)?,
+      (.lhs(.wildcard), let handle)?,
+      // If a binding introducer is not contextually introducing a binding, then parse like an identifier.
+      (.rhs(_), let handle)?:
+      self.eat(handle)
+      return true
     case nil:
       return false
     }

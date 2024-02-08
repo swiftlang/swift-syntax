@@ -13,6 +13,7 @@
 // This test file has been translated from swift/test/Parse/matching_patterns.swift
 
 @_spi(ExperimentalLanguageFeatures) import SwiftParser
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftSyntax
 import XCTest
 
 final class MatchingPatternsTests: ParserTestCase {
@@ -604,6 +605,133 @@ final class MatchingPatternsTests: ParserTestCase {
       guard case _borrowing z = y else {}
       """,
       experimentalFeatures: .referenceBindings
+    )
+  }
+
+  func testBorrowingContextualParsing() {
+    assertParse(
+      """
+      switch 42 {
+      case _borrowing .foo(): // parses as `_borrowing.foo()` as before
+        break
+      }
+      """,
+      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("_borrowing"))),
+      experimentalFeatures: .borrowingSwitch
+    )
+
+    assertParse(
+      """
+      switch 42 {
+      case _borrowing (): // parses as `_borrowing()` as before
+        break
+      }
+      """,
+      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("_borrowing"))),
+      experimentalFeatures: .borrowingSwitch
+    )
+
+    assertParse(
+      """
+      switch 42 {
+      case _borrowing x: // parses as binding
+        break
+      }
+      """,
+      substructure: PatternSyntax(
+        ValueBindingPatternSyntax(
+          bindingSpecifier: .keyword(._borrowing),
+          pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("x")))
+        )
+      ),
+      experimentalFeatures: .borrowingSwitch
+    )
+
+    assertParse(
+      """
+      switch bar {
+      case .payload(_borrowing x): // parses as binding
+        break
+      }
+      """,
+      substructure: PatternSyntax(
+        ValueBindingPatternSyntax(
+          bindingSpecifier: .keyword(._borrowing),
+          pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("x")))
+        )
+      ),
+      experimentalFeatures: .borrowingSwitch
+    )
+
+    assertParse(
+      """
+      switch bar {
+      case _borrowing x.member: // parses as var introducer surrounding postfix expression (which never is valid)
+        break
+      }
+      """,
+      substructure: PatternSyntax(
+        ValueBindingPatternSyntax(
+          bindingSpecifier: .keyword(._borrowing),
+          pattern: ExpressionPatternSyntax(
+            expression: MemberAccessExprSyntax(
+              base: DeclReferenceExprSyntax(baseName: .identifier("x")),
+              declName: DeclReferenceExprSyntax(baseName: .identifier("member"))
+            )
+          )
+        )
+      ),
+      experimentalFeatures: .borrowingSwitch
+    )
+    assertParse(
+      """
+      switch 42 {
+      case let _borrowing: // parses as let binding named '_borrowing'
+        break
+      }
+      """,
+      substructure: PatternSyntax(
+        ValueBindingPatternSyntax(
+          bindingSpecifier: .keyword(.let),
+          pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("_borrowing")))
+        )
+      ),
+      experimentalFeatures: .borrowingSwitch
+    )
+    assertParse(
+      """
+      switch 42 {
+      case _borrowing + _borrowing: // parses as expr pattern
+        break
+      }
+      """,
+      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("_borrowing"))),
+      experimentalFeatures: .borrowingSwitch
+    )
+    assertParse(
+      """
+      switch 42 {
+      case _borrowing(let _borrowing): // parses as let binding named '_borrowing' inside a case pattern named 'borrowing'
+        break
+      }
+      """,
+      substructure: PatternSyntax(
+        ValueBindingPatternSyntax(
+          bindingSpecifier: .keyword(.let),
+          pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("_borrowing")))
+        )
+      ),
+      experimentalFeatures: .borrowingSwitch
+    )
+    assertParse(
+      """
+      switch 42 {
+      case {}(_borrowing + _borrowing): // parses as expr pattern
+        break
+      }
+      """,
+      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("_borrowing"))),
+      experimentalFeatures: .borrowingSwitch
     )
   }
 }

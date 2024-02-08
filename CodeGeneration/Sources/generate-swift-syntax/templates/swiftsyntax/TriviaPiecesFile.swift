@@ -310,5 +310,19 @@ fileprivate func generateIsHelpers(for pieceName: TokenSyntax) throws -> Extensi
       }
       """
     )
+
+    DeclSyntax(
+      """
+      /// Returns `true` if this piece is a comment.
+      public var isComment: Bool {
+        switch self {
+        case .lineComment, .blockComment, .docLineComment, .docBlockComment:
+          return true
+        default:
+          return false
+        }
+      }
+      """
+    )
   }
 }

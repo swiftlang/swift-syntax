@@ -4,8 +4,8 @@ package(default_visibility = ["//visibility:public"])
 
 cc_library(
     name = "_AtomicBool",
-    srcs = ["Sources/_AtomicBool/src/AtomicBool.c"],
-    hdrs = ["Sources/_AtomicBool/include/AtomicBool.h"],
+    srcs = glob(["Sources/_AtomicBool/src/*.c"]),
+    hdrs = glob(["Sources/_AtomicBool/include/*.h"]),
     includes = ["Sources/_AtomicBool/include"],
     tags = ["swift_module=_AtomicBool"],
 )

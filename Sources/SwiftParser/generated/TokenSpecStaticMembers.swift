@@ -210,8 +210,4 @@ extension TokenSpec {
   static var wildcard: TokenSpec {
     return TokenSpec(.wildcard)
   }
-  
-  static func keyword(_ keyword: Keyword) -> TokenSpec {
-    return TokenSpec(keyword)
-  }
 }

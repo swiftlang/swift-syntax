@@ -67,52 +67,41 @@ extension Parser {
     case transpose
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch lexeme.rawTokenKind {
-      case .keyword:
-        switch Keyword(lexeme.tokenText) {
-        case .rethrows: self = .rethrows
-        default:
-          return nil
-        }
-      case .identifier:
-        switch lexeme.tokenText {
-        case "_alignment": self = ._alignment
-        case "_backDeploy": self = ._backDeploy
-        case "_cdecl": self = ._cdecl
-        case "_documentation": self = ._documentation
-        case "_dynamicReplacement": self = ._dynamicReplacement
-        case "_effects": self = ._effects
-        case "_expose": self = ._expose
-        case "_implements": self = ._implements
-        case "_nonSendable": self = ._nonSendable
-        case "_objcImplementation": self = ._objcImplementation
-        case "_objcRuntimeName": self = ._objcRuntimeName
-        case "_optimize": self = ._optimize
-        case "_originallyDefinedIn": self = ._originallyDefinedIn
-        case "_private": self = ._private
-        case "_projectedValueProperty": self = ._projectedValueProperty
-        case "_semantics": self = ._semantics
-        case "_specialize": self = ._specialize
-        case "_spi": self = ._spi
-        case "_spi_available": self = ._spi_available
-        case "_swift_native_objc_runtime_base": self = ._swift_native_objc_runtime_base
-        case "_typeEraser": self = ._typeEraser
-        case "_unavailableFromAsync": self = ._unavailableFromAsync
-        case "rethrows": self = .rethrows
-        case "attached": self = .attached
-        case "backDeployed": self = .backDeployed
-        case "derivative": self = .derivative
-        case "differentiable": self = .differentiable
-        case "exclusivity": self = .exclusivity
-        case "freestanding": self = .freestanding
-        case "inline": self = .inline
-        case "objc": self = .objc
-        case "available": self = .available
-        case "Sendable": self = .Sendable
-        case "transpose": self = .transpose
-        default:
-          return nil
-        }
+      switch lexeme {
+      case TokenSpec("_alignment"): self = ._alignment
+      case TokenSpec("_backDeploy"): self = ._backDeploy
+      case TokenSpec("_cdecl"): self = ._cdecl
+      case TokenSpec("_documentation"): self = ._documentation
+      case TokenSpec("_dynamicReplacement"): self = ._dynamicReplacement
+      case TokenSpec("_effects"): self = ._effects
+      case TokenSpec("_expose"): self = ._expose
+      case TokenSpec("_implements"): self = ._implements
+      case TokenSpec("_nonSendable"): self = ._nonSendable
+      case TokenSpec("_objcImplementation"): self = ._objcImplementation
+      case TokenSpec("_objcRuntimeName"): self = ._objcRuntimeName
+      case TokenSpec("_optimize"): self = ._optimize
+      case TokenSpec("_originallyDefinedIn"): self = ._originallyDefinedIn
+      case TokenSpec("_private"): self = ._private
+      case TokenSpec("_projectedValueProperty"): self = ._projectedValueProperty
+      case TokenSpec("_semantics"): self = ._semantics
+      case TokenSpec("_specialize"): self = ._specialize
+      case TokenSpec("_spi"): self = ._spi
+      case TokenSpec("_spi_available"): self = ._spi_available
+      case TokenSpec("_swift_native_objc_runtime_base"): self = ._swift_native_objc_runtime_base
+      case TokenSpec("_typeEraser"): self = ._typeEraser
+      case TokenSpec("_unavailableFromAsync"): self = ._unavailableFromAsync
+      case TokenSpec("rethrows"): self = .rethrows
+      case TokenSpec("attached"): self = .attached
+      case TokenSpec("available"): self = .available
+      case TokenSpec("backDeployed"): self = .backDeployed
+      case TokenSpec("derivative"): self = .derivative
+      case TokenSpec("differentiable"): self = .differentiable
+      case TokenSpec("exclusivity"): self = .exclusivity
+      case TokenSpec("freestanding"): self = .freestanding
+      case TokenSpec("inline"): self = .inline
+      case TokenSpec("objc"): self = .objc
+      case TokenSpec("Sendable"): self = .Sendable
+      case TokenSpec("transpose"): self = .transpose
       default:
         return nil
       }
@@ -120,8 +109,40 @@ extension Parser {
 
     var spec: TokenSpec {
       switch self {
-      case .rethrows: return .keyword(.rethrows)
-      default: return .identifier
+      case ._alignment: return TokenSpec("_alignment")
+      case ._backDeploy: return TokenSpec("_backDeploy")
+      case ._cdecl: return TokenSpec("_cdecl")
+      case ._documentation: return TokenSpec("_documentation")
+      case ._dynamicReplacement: return TokenSpec("_dynamicReplacement")
+      case ._effects: return TokenSpec("_effects")
+      case ._expose: return TokenSpec("_expose")
+      case ._implements: return TokenSpec("_implements")
+      case ._nonSendable: return TokenSpec("_nonSendable")
+      case ._objcImplementation: return TokenSpec("_objcImplementation")
+      case ._objcRuntimeName: return TokenSpec("_objcRuntimeName")
+      case ._optimize: return TokenSpec("_optimize")
+      case ._originallyDefinedIn: return TokenSpec("_originallyDefinedIn")
+      case ._private: return TokenSpec("_private")
+      case ._projectedValueProperty: return TokenSpec("_projectedValueProperty")
+      case ._semantics: return TokenSpec("_semantics")
+      case ._specialize: return TokenSpec("_specialize")
+      case ._spi: return TokenSpec("_spi")
+      case ._spi_available: return TokenSpec("_spi_available")
+      case ._swift_native_objc_runtime_base: return TokenSpec("_swift_native_objc_runtime_base")
+      case ._typeEraser: return TokenSpec("_typeEraser")
+      case ._unavailableFromAsync: return TokenSpec("_unavailableFromAsync")
+      case .rethrows: return TokenSpec("rethrows")
+      case .attached: return TokenSpec("attached")
+      case .available: return TokenSpec("available")
+      case .backDeployed: return TokenSpec("backDeployed")
+      case .derivative: return TokenSpec("derivative")
+      case .differentiable: return TokenSpec("differentiable")
+      case .exclusivity: return TokenSpec("exclusivity")
+      case .freestanding: return TokenSpec("freestanding")
+      case .inline: return TokenSpec("inline")
+      case .objc: return TokenSpec("objc")
+      case .Sendable: return TokenSpec("Sendable")
+      case .transpose: return TokenSpec("transpose")
       }
     }
   }

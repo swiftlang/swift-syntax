@@ -241,6 +241,7 @@ public enum SyntaxKind: Sendable {
   case sequenceExpr
   case simpleStringLiteralExpr
   case simpleStringLiteralSegmentList
+  case skippedDecl
   case someOrAnyType
   case sourceFile
   case specializeAttributeArgumentList
@@ -874,6 +875,8 @@ public enum SyntaxKind: Sendable {
       return SimpleStringLiteralExprSyntax.self
     case .simpleStringLiteralSegmentList:
       return SimpleStringLiteralSegmentListSyntax.self
+    case .skippedDecl:
+      return SkippedDeclSyntax.self
     case .someOrAnyType:
       return SomeOrAnyTypeSyntax.self
     case .sourceFile:

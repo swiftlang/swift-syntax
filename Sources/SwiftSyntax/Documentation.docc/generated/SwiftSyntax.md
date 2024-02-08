@@ -84,6 +84,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/PoundSourceLocationSyntax>
 - <doc:SwiftSyntax/PrecedenceGroupDeclSyntax>
 - <doc:SwiftSyntax/ProtocolDeclSyntax>
+- <doc:SwiftSyntax/SkippedDeclSyntax>
 - <doc:SwiftSyntax/StructDeclSyntax>
 - <doc:SwiftSyntax/SubscriptDeclSyntax>
 - <doc:SwiftSyntax/TypeAliasDeclSyntax>

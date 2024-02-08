@@ -87,6 +87,17 @@
 /// tokens as needed to disambiguate a parse. However, because lookahead
 /// operates on a copy of the lexical stream, no input tokens are lost..
 public struct Parser {
+  public struct ParsingOptions: OptionSet {
+    public let rawValue: UInt8
+    public init(rawValue: UInt8) {
+      self.rawValue = rawValue
+    }
+
+    public static let bodySkipping = Self(rawValue: 1 << 0)
+  }
+
+  var options: ParsingOptions
+
   var arena: ParsingSyntaxArena
 
   /// A view of the sequence of lexemes in the input.
@@ -168,7 +179,7 @@ public struct Parser {
     return _emptyRawAttributeListSyntax!
   }
 
-  /// The delegated initializer for the parser.
+  /// The designated initializer for the parser.
   ///
   /// - Parameters
   ///   - input: An input buffer containing Swift source text. If a non-`nil`
@@ -193,8 +204,10 @@ public struct Parser {
     maximumNestingLevel: Int?,
     parseTransition: IncrementalParseTransition?,
     arena: ParsingSyntaxArena?,
-    experimentalFeatures: ExperimentalFeatures
+    experimentalFeatures: ExperimentalFeatures,
+    options: ParsingOptions
   ) {
+    self.options = options
     var input = input
     if let arena {
       self.arena = arena
@@ -224,7 +237,8 @@ public struct Parser {
     string input: String,
     maximumNestingLevel: Int?,
     parseTransition: IncrementalParseTransition?,
-    experimentalFeatures: ExperimentalFeatures
+    experimentalFeatures: ExperimentalFeatures,
+    options: ParsingOptions
   ) {
     var input = input
     input.makeContiguousUTF8()
@@ -234,7 +248,8 @@ public struct Parser {
         maximumNestingLevel: maximumNestingLevel,
         parseTransition: parseTransition,
         arena: nil,
-        experimentalFeatures: experimentalFeatures
+        experimentalFeatures: experimentalFeatures,
+        options: options
       )
     }
   }
@@ -243,14 +258,16 @@ public struct Parser {
   public init(
     _ input: String,
     maximumNestingLevel: Int? = nil,
-    parseTransition: IncrementalParseTransition? = nil
+    parseTransition: IncrementalParseTransition? = nil,
+    options: ParsingOptions = []
   ) {
     // Chain to the private String initializer.
     self.init(
       string: input,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
-      experimentalFeatures: []
+      experimentalFeatures: [],
+      options: options
     )
   }
 
@@ -277,7 +294,8 @@ public struct Parser {
     _ input: UnsafeBufferPointer<UInt8>,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
-    arena: ParsingSyntaxArena? = nil
+    arena: ParsingSyntaxArena? = nil,
+    options: ParsingOptions = []
   ) {
     // Chain to the private buffer initializer.
     self.init(
@@ -285,7 +303,8 @@ public struct Parser {
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
       arena: arena,
-      experimentalFeatures: []
+      experimentalFeatures: [],
+      options: options
     )
   }
 
@@ -296,14 +315,16 @@ public struct Parser {
     _ input: String,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
-    experimentalFeatures: ExperimentalFeatures
+    experimentalFeatures: ExperimentalFeatures,
+    options: ParsingOptions = []
   ) {
     // Chain to the private String initializer.
     self.init(
       string: input,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
-      experimentalFeatures: experimentalFeatures
+      experimentalFeatures: experimentalFeatures,
+      options: options
     )
   }
 
@@ -315,7 +336,8 @@ public struct Parser {
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
     arena: ParsingSyntaxArena? = nil,
-    experimentalFeatures: ExperimentalFeatures
+    experimentalFeatures: ExperimentalFeatures,
+    options: ParsingOptions = []
   ) {
     // Chain to the private buffer initializer.
     self.init(
@@ -323,7 +345,8 @@ public struct Parser {
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
       arena: arena,
-      experimentalFeatures: experimentalFeatures
+      experimentalFeatures: experimentalFeatures,
+      options: options
     )
   }
 

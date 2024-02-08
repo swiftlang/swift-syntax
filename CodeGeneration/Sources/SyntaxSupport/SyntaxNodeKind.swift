@@ -252,6 +252,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case stmt
   case simpleStringLiteralExpr
   case simpleStringLiteralSegmentList
+  case skippedDecl
   case stringLiteralExpr
   case stringLiteralSegmentList
   case stringSegment

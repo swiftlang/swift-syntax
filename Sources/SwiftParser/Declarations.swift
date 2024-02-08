@@ -381,7 +381,7 @@ extension Parser {
     } else {
       whereClause = nil
     }
-    let memberBlock = self.parseMemberBlock(introducer: extensionKeyword)
+    let memberBlock = self.parseMemberBlock(introducer: extensionKeyword, allowSkip: true)
     return RawExtensionDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
@@ -777,9 +777,19 @@ extension Parser {
   /// `introducer` is the `struct`, `class`, ... keyword that is the cause that the member decl block is being parsed.
   /// If the left brace is missing, its indentation will be used to judge whether a following `}` was
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
-  mutating func parseMemberBlock(introducer: RawTokenSyntax? = nil) -> RawMemberBlockSyntax {
+  mutating func parseMemberBlock(introducer: RawTokenSyntax? = nil, allowSkip: Bool = false) -> RawMemberBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
-    let members = parseMemberDeclList()
+
+    let members: RawMemberBlockItemListSyntax
+    if allowSkip,
+       self.options.contains(.bodySkipping),
+       let skipped = self.skippedMemberBody() {
+      let member = RawMemberBlockItemSyntax(decl: .init(skipped), semicolon: nil, arena: self.arena)
+      members = RawMemberBlockItemListSyntax(elements: [member], arena: self.arena)
+    } else {
+      members = parseMemberDeclList()
+    }
+
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
 
     return RawMemberBlockSyntax(

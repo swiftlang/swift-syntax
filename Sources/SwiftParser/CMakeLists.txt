@@ -12,6 +12,7 @@ add_swift_syntax_library(SwiftParser
   CharacterInfo.swift
   CollectionNodes+Parsable.swift
   Declarations.swift
+  DelayedParsing.swift
   Directives.swift
   Expressions.swift
   IncrementalParseTransition.swift

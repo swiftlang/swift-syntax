@@ -14,7 +14,7 @@ import SwiftBasicFormat
 import SwiftDiagnostics
 import SwiftOperators
 import SwiftSyntax
-@_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacroExpansion
+@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacroExpansion
 @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
 
 extension CompilerPluginMessageHandler {

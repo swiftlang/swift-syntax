@@ -11,7 +11,8 @@
 //===----------------------------------------------------------------------===//
 
 /// Old compiler might send '.declaration' as "freeStandingDeclaration".
-@_spi(PluginMessage) public extension PluginMessage.MacroRole {
+@_spi(PluginMessage)
+public extension PluginMessage.MacroRole {
   init(from decoder: Decoder) throws {
     let stringValue = try decoder.singleValueContainer().decode(String.self)
     if let role = Self(rawValue: stringValue) {

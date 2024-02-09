@@ -17,11 +17,13 @@ import SwiftSyntaxMacros
 #endif
 
 /// Optional features.
+@_spi(PluginMessage)
 public enum PluginFeature: String {
   case loadPluginLibrary = "load-plugin-library"
 }
 
 /// A type that provides the actual plugin functions.
+@_spi(PluginMessage)
 public protocol PluginProvider {
   /// Resolve macro type by the module name and the type name.
   func resolveMacro(moduleName: String, typeName: String) throws -> Macro.Type
@@ -37,6 +39,7 @@ public protocol PluginProvider {
 
 /// Low level message connection to the plugin host.
 /// This encapsulates the connection and the message serialization.
+@_spi(PluginMessage)
 public protocol MessageConnection {
   /// Send a message to the peer.
   func sendMessage<TX: Encodable>(_ message: TX) throws
@@ -66,6 +69,7 @@ struct HostCapability {
 /// the response.
 ///
 /// The low level connection and the provider is injected by the client.
+@_spi(PluginMessage)
 public class CompilerPluginMessageHandler<Connection: MessageConnection, Provider: PluginProvider> {
   /// Message channel for bidirectional communication with the plugin host.
   let connection: Connection

@@ -18,7 +18,7 @@ final class TypeTests: ParserTestCase {
   func testMissingColonInType() {
     assertParse(
       """
-      var foo 1️⃣Bar = 1
+      var foo1️⃣ Bar = 1
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' in type annotation", fixIts: ["insert ':'"])

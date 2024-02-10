@@ -112,7 +112,7 @@ final class AvailabilityQueryUnavailabilityTests: ParserTestCase {
   func testAvailabilityQueryUnavailability4() {
     assertParse(
       """
-      if #unavailable 1️⃣{
+      if #unavailable1️⃣ {
       }
       """,
       diagnostics: [
@@ -131,7 +131,7 @@ final class AvailabilityQueryUnavailabilityTests: ParserTestCase {
   func testAvailabilityQueryUnavailability5() {
     assertParse(
       """
-      if #unavailable( 1️⃣{
+      if #unavailable(1️⃣ {
       }
       """,
       diagnostics: [
@@ -166,7 +166,7 @@ final class AvailabilityQueryUnavailabilityTests: ParserTestCase {
   func testAvailabilityQueryUnavailability7() {
     assertParse(
       """
-      if #unavailableℹ️(OSX 1️⃣{
+      if #unavailableℹ️(OSX1️⃣ {
       }
       """,
       diagnostics: [
@@ -197,7 +197,7 @@ final class AvailabilityQueryUnavailabilityTests: ParserTestCase {
   func testAvailabilityQueryUnavailability9() {
     assertParse(
       """
-      if #unavailableℹ️(OSX 10.51 1️⃣{
+      if #unavailableℹ️(OSX 10.511️⃣ {
       }
       """,
       diagnostics: [
@@ -322,7 +322,7 @@ final class AvailabilityQueryUnavailabilityTests: ParserTestCase {
   func testAvailabilityQueryUnavailability20() {
     assertParse(
       """
-      if #unavailableℹ️(OSX 10 1️⃣{
+      if #unavailableℹ️(OSX 101️⃣ {
       }
       """,
       diagnostics: [
@@ -397,7 +397,7 @@ final class AvailabilityQueryUnavailabilityTests: ParserTestCase {
   func testAvailabilityQueryUnavailability24() {
     assertParse(
       """
-      if #unavailableℹ️(OSX 10.51, iOS 1️⃣{
+      if #unavailableℹ️(OSX 10.51, iOS1️⃣ {
       }
       """,
       diagnostics: [

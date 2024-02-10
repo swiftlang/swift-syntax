@@ -445,6 +445,8 @@ extension ParseDiagnosticsGenerator {
       position = overridePosition
     } else if node.shouldBeInsertedAfterNextTokenTrivia, let nextToken = node.nextToken(viewMode: .sourceAccurate) {
       position = nextToken.positionAfterSkippingLeadingTrivia
+    } else if node.shouldBeInsertedBeforePreviousTokenTrivia, let previousToken = node.previousToken(viewMode: .sourceAccurate) {
+      position = previousToken.endPositionBeforeTrailingTrivia
     } else {
       position = node.endPosition
     }

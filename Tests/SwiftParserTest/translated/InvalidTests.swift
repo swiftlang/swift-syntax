@@ -114,7 +114,7 @@ final class InvalidTests: ParserTestCase {
     assertParse(
       """
       func test3() {
-        undeclared_func( 1️⃣
+        undeclared_func(1️⃣ 
       }
       """,
       diagnostics: [
@@ -274,7 +274,7 @@ final class InvalidTests: ParserTestCase {
     // rdar://problem/18507467
     assertParse(
       """
-      func dℹ️(_ b: 1️⃣String 2️⃣-> 3️⃣<T>() -> T4️⃣) {}
+      func dℹ️(_ b: 1️⃣String2️⃣ -> 3️⃣<T>() -> T4️⃣) {}
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type", fixIts: ["insert '('"]),
@@ -317,7 +317,7 @@ final class InvalidTests: ParserTestCase {
       do {
         class Starfish {}
         struct Salmon {}
-        func f(s 1️⃣Starfish,
+        func f(s1️⃣ Starfish,
                   _ ss: Salmon) -> [Int] {}
         func g() { f(Starfish(), Salmon()) }
       }
@@ -589,7 +589,7 @@ final class InvalidTests: ParserTestCase {
     assertParse(
       """
       func were1️⃣
-      wolf2️⃣() 3️⃣{}
+      wolf2️⃣()3️⃣ {}
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause", fixIts: ["insert '('"]),

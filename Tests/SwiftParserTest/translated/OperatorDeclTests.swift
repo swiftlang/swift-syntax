@@ -404,7 +404,7 @@ final class OperatorDeclTests: ParserTestCase {
     assertParse(
       """
       precedencegroup A {
-        associativity 1️⃣right
+        associativity1️⃣ right
       }
       """,
       diagnostics: [

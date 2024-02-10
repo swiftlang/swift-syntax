@@ -135,7 +135,7 @@ final class AvailabilityQueryTests: ParserTestCase {
   func testAvailabilityQuery8() {
     assertParse(
       """
-      if #available( 1️⃣{
+      if #available(1️⃣ {
       }
       """,
       diagnostics: [
@@ -167,7 +167,7 @@ final class AvailabilityQueryTests: ParserTestCase {
   func testAvailabilityQuery10() {
     assertParse(
       """
-      if #availableℹ️(OSX 1️⃣{
+      if #availableℹ️(OSX1️⃣ {
       }
       """,
       diagnostics: [
@@ -198,7 +198,7 @@ final class AvailabilityQueryTests: ParserTestCase {
   func testAvailabilityQuery12() {
     assertParse(
       """
-      if #availableℹ️(OSX 10.51 1️⃣{
+      if #availableℹ️(OSX 10.511️⃣ {
       }
       """,
       diagnostics: [
@@ -327,7 +327,7 @@ final class AvailabilityQueryTests: ParserTestCase {
   func testAvailabilityQuery25() {
     assertParse(
       """
-      if #availableℹ️(* 1️⃣{
+      if #availableℹ️(*1️⃣ {
       }
       """,
       diagnostics: [
@@ -399,7 +399,7 @@ final class AvailabilityQueryTests: ParserTestCase {
   func testAvailabilityQuery29() {
     assertParse(
       """
-      if #availableℹ️(OSX 10.51, iOS 1️⃣{
+      if #availableℹ️(OSX 10.51, iOS1️⃣ {
       }
       """,
       diagnostics: [

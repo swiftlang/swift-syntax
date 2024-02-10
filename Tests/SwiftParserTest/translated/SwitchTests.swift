@@ -118,7 +118,7 @@ final class SwitchTests: ParserTestCase {
       """
       func parseError5(x: Int) {
         switch x {
-        case let z 1️⃣
+        case let z1️⃣ 
         }
       }
       """,
@@ -140,7 +140,7 @@ final class SwitchTests: ParserTestCase {
       """
       func parseError6(x: Int) {
         switch x {
-        default 1️⃣
+        default1️⃣ 
         }
       }
       """,
@@ -1254,7 +1254,7 @@ final class SwitchTests: ParserTestCase {
         switch x {
         case 1:
           return
-        @unknown default 1️⃣
+        @unknown default1️⃣ 
         }
       }
       """,
@@ -1305,7 +1305,7 @@ final class SwitchTests: ParserTestCase {
       func testIncompleteArrayLiteral() {
         switch x {
         case 1:
-          _ = ℹ️[1 1️⃣
+          _ = ℹ️[11️⃣ 
         @unknown default:
           ()
         }

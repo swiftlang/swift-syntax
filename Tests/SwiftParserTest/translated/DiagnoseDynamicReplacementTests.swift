@@ -72,7 +72,7 @@ final class DiagnoseDynamicReplacementTests: ParserTestCase {
   func testDiagnoseDynamicReplacement4() {
     assertParse(
       """
-      @_dynamicReplacementℹ️(for: dynamically_replaceable() 1️⃣
+      @_dynamicReplacementℹ️(for: dynamically_replaceable()1️⃣ 
       func test_dynamic_replacement_for3() {
       }
       """,

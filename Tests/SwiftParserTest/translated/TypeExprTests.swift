@@ -699,7 +699,7 @@ final class TypeExprTests: ParserTestCase {
   func testTypeExpr28() {
     assertParse(
       """
-      func takesVoid(f: 1️⃣Void 2️⃣-> ()) {}
+      func takesVoid(f: 1️⃣Void2️⃣ -> ()) {}
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type", fixIts: ["insert '('"]),
@@ -734,6 +734,21 @@ final class TypeExprTests: ParserTestCase {
         _ = Swift.Int
       }
       """
+    )
+  }
+
+  func testTypeExpr31() {
+    assertParse(
+      """
+      let _: 1️⃣Float2️⃣       -> Int
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start function type", fixIts: ["insert '('"]),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' in function type", fixIts: ["insert ')'"]),
+      ],
+      fixedSource: """
+        let _: (Float) -> Int
+        """
     )
   }
 

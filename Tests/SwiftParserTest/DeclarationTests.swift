@@ -850,7 +850,7 @@ final class DeclarationTests: ParserTestCase {
 
   func testMissingColonInFunctionSignature() {
     assertParse(
-      "func test(first second 1️⃣Int)",
+      "func test(first second1️⃣ Int)",
       diagnostics: [
         DiagnosticSpec(message: "expected ':' in parameter", fixIts: ["insert ':'"])
       ],
@@ -887,7 +887,7 @@ final class DeclarationTests: ParserTestCase {
 
   func testMissingOpeningParenInFunctionSignature() {
     assertParse(
-      "func test 1️⃣first second: Int)",
+      "func test1️⃣ first second: Int)",
       diagnostics: [
         DiagnosticSpec(message: "expected '(' to start parameter clause", fixIts: ["insert '('"])
       ],
@@ -1368,7 +1368,7 @@ final class DeclarationTests: ParserTestCase {
 
   func testDontRecoverFromDeclKeyword() {
     assertParse(
-      "func fooℹ️(first second 1️⃣third 2️⃣struct3️⃣: Int4️⃣) {}",
+      "func fooℹ️(first second1️⃣ third2️⃣ struct3️⃣: Int4️⃣) {}",
       substructure: FunctionParameterSyntax(
         firstName: .identifier("first"),
         secondName: .identifier("second"),
@@ -1426,7 +1426,7 @@ final class DeclarationTests: ParserTestCase {
 
   func testDontRecoverFromUnbalancedParens() {
     assertParse(
-      "func foo(first second 1️⃣[third 2️⃣fourth: Int) {}",
+      "func foo(first second1️⃣ 2️⃣[third3️⃣ 4️⃣fourth: Int) {}",
       substructure: FunctionParameterSyntax(
         firstName: .identifier("first"),
         secondName: .identifier("second"),
@@ -1444,13 +1444,13 @@ final class DeclarationTests: ParserTestCase {
           fixIts: ["insert ':'"]
         ),
         DiagnosticSpec(
-          locationMarker: "2️⃣",
+          locationMarker: "3️⃣",
           message: "expected ']' to end array type",
-          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '['")],
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '['")],
           fixIts: ["insert ']'"]
         ),
         DiagnosticSpec(
-          locationMarker: "2️⃣",
+          locationMarker: "4️⃣",
           message: "unexpected code 'fourth: Int' in parameter clause"
         ),
       ],
@@ -1463,7 +1463,7 @@ final class DeclarationTests: ParserTestCase {
   func testDontRecoverIfNewlineIsBeforeColon() {
     assertParse(
       """
-      func fooℹ️(first second 1️⃣third2️⃣
+      func fooℹ️(first second1️⃣ third2️⃣
       3️⃣: Int) {}
       """,
       substructure: FunctionParameterSyntax(
@@ -2273,7 +2273,7 @@ final class DeclarationTests: ParserTestCase {
 
     assertParse(
       """
-      macro m1 1️⃣= A
+      macro m11️⃣ = A
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"])
@@ -2462,7 +2462,7 @@ final class DeclarationTests: ParserTestCase {
 
   func testMisplaceSpecifierInTupleTypeBody() {
     assertParse(
-      "func test(a: (1️⃣borrowing F 2️⃣o))",
+      "func test(a: (1️⃣borrowing F2️⃣ o))",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'borrowing' in tuple type"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ',' in tuple type", fixIts: ["insert ','"]),
@@ -2628,7 +2628,7 @@ final class DeclarationTests: ParserTestCase {
 
     assertParse(
       """
-      typealias T = 1️⃣~Int 2️⃣-> Bool
+      typealias T = 1️⃣~Int2️⃣ -> Bool
       """,
       diagnostics: [
         DiagnosticSpec(

@@ -82,7 +82,7 @@ final class PoundAssertTests: ParserTestCase {
     assertParse(
       """
       func unbalanced1() {
-        #assertℹ️(true 1️⃣
+        #assertℹ️(true1️⃣ 
       }
       """,
       diagnostics: [
@@ -106,7 +106,7 @@ final class PoundAssertTests: ParserTestCase {
     assertParse(
       #"""
       func unbalanced2() {
-        #assertℹ️(true, "hello world" 1️⃣
+        #assertℹ️(true, "hello world"1️⃣ 
       }
       """#,
       diagnostics: [

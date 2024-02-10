@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftBasicFormat
 @_spi(Diagnostics) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
 
@@ -128,6 +129,22 @@ extension SyntaxProtocol {
     if !self.raw.kind.isMissing,
       let memberDeclItem = self.ancestorOrSelf(mapping: { $0.as(MemberBlockItemSyntax.self) }),
       memberDeclItem.firstToken(viewMode: .all) == self.firstToken(viewMode: .all)
+    {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  /// Returns `true` if the previous token and this node don't need to be separated,
+  /// when it is switched from being missing to present.
+  var shouldBeInsertedBeforePreviousTokenTrivia: Bool {
+    if let previousToken = self.previousToken(viewMode: .fixedUp),
+      previousToken.isPresent,
+      let firstToken = self.firstToken(viewMode: .all),
+      previousToken.trailingTrivia.allSatisfy({ $0.isWhitespace }),
+      !BasicFormat().requiresWhitespace(between: previousToken, and: firstToken),
+      !BasicFormat().requiresNewline(between: previousToken, and: firstToken)
     {
       return true
     } else {

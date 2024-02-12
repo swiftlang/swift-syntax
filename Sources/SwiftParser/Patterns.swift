@@ -235,7 +235,6 @@ extension Parser {
       break
     }
 
-    // matching-pattern ::= expr
     // Fall back to expression parsing for ambiguous forms. Name lookup will
     // disambiguate.
     let patternSyntax = self.parseSequenceExpression(flavor: .stmtCondition, pattern: context)
@@ -271,12 +270,6 @@ extension Parser.Lookahead {
     }
   }
 
-  ///   pattern ::= identifier
-  ///   pattern ::= '_'
-  ///   pattern ::= pattern-tuple
-  ///   pattern ::= 'var' pattern
-  ///   pattern ::= 'let' pattern
-  ///   pattern ::= 'inout' pattern
   mutating func canParsePattern() -> Bool {
     enum PurePatternStartTokens: TokenSpecSet {
       case identifier

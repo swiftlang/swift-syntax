@@ -1226,16 +1226,6 @@ extension Lexer.Cursor {
 // MARK: - Literals
 
 extension Lexer.Cursor {
-  /// lexNumber:
-  ///   integer_literal  ::= [0-9][0-9_]*
-  ///   integer_literal  ::= 0x[0-9a-fA-F][0-9a-fA-F_]*
-  ///   integer_literal  ::= 0o[0-7][0-7_]*
-  ///   integer_literal  ::= 0b[01][01_]*
-  ///   floating_literal ::= [0-9][0-9]_*\.[0-9][0-9_]*
-  ///   floating_literal ::= [0-9][0-9]*\.[0-9][0-9_]*[eE][+-]?[0-9][0-9_]*
-  ///   floating_literal ::= [0-9][0-9_]*[eE][+-]?[0-9][0-9_]*
-  ///   floating_literal ::= 0x[0-9A-Fa-f][0-9A-Fa-f_]*
-  ///                          (\.[0-9A-Fa-f][0-9A-Fa-f_]*)?[pP][+-]?[0-9][0-9_]*
   mutating func lexNumber() -> Lexer.Result {
     precondition(self.peek().map(Unicode.Scalar.init)?.isDigit == true, "Unexpected start")
 

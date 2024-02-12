@@ -1407,8 +1407,6 @@ extension Parser {
   ) -> RawAccessorDeclSyntax {
     // 'set' and 'willSet' can have an optional name.  This isn't valid in a
     // protocol, but we parse and then reject it for better QoI.
-    //
-    //     set-name    ::= '(' identifier ')'
     let parameters: RawAccessorParametersSyntax?
     if [AccessorDeclSyntax.AccessorSpecifierOptions.set, .willSet, .didSet, .`init`].contains(introducer.kind), let lparen = self.consume(if: .leftParen) {
       let (unexpectedBeforeName, name) = self.expectIdentifier()

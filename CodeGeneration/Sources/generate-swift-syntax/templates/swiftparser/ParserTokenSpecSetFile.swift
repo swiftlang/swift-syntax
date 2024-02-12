@@ -15,11 +15,14 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-func tokenCaseMatch(_ caseName: TokenSyntax, experimentalFeature: ExperimentalFeature?) -> SwitchCaseSyntax {
-  let whereClause =
-    experimentalFeature.map {
-      "where experimentalFeatures.contains(.\($0.token))"
-    } ?? ""
+func tokenCaseMatch(_ caseName: TokenSyntax, experimentalFeature: ExperimentalFeature?, experimentalFeature2: ExperimentalFeature?) -> SwitchCaseSyntax {
+  var whereClause = ""
+  if let feature = experimentalFeature {
+    whereClause += "where experimentalFeatures.contains(.\(feature.token))"
+    if let feature2 = experimentalFeature2 {
+      whereClause += " || experimentalFeatures.contains(.\(feature2.token))"
+    }
+  }
   return "case TokenSpec(.\(caseName))\(raw: whereClause): self = .\(caseName)"
 }
 
@@ -57,12 +60,14 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                   case .keyword(let keyword):
                     tokenCaseMatch(
                       keyword.spec.varOrCaseName,
-                      experimentalFeature: keyword.spec.experimentalFeature
+                      experimentalFeature: keyword.spec.experimentalFeature,
+                      experimentalFeature2: keyword.spec.experimentalFeature2
                     )
                   case .token(let token):
                     tokenCaseMatch(
                       token.spec.varOrCaseName,
-                      experimentalFeature: token.spec.experimentalFeature
+                      experimentalFeature: token.spec.experimentalFeature,
+                      experimentalFeature2: nil
                     )
                   }
                 }

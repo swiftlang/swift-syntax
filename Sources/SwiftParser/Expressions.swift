@@ -122,9 +122,21 @@ extension Parser {
     //
     // Only do this if we're parsing a pattern, to improve QoI on malformed
     // expressions followed by (e.g.) let/var decls.
-    if pattern != .none, self.at(anyIn: MatchingPatternStart.self) != nil {
-      let pattern = self.parseMatchingPattern(context: .matching)
-      return RawExprSyntax(RawPatternExprSyntax(pattern: pattern, arena: self.arena))
+    if pattern != .none {
+      switch self.at(anyIn: MatchingPatternStart.self) {
+      case (spec: .rhs(let bindingIntroducer), handle: _)? where self.withLookahead { $0.shouldParsePatternBinding(introducer: bindingIntroducer) }:
+        fallthrough
+      case (spec: .lhs(_), handle: _)?:
+        let pattern = self.parseMatchingPattern(context: .matching)
+        return RawExprSyntax(RawPatternExprSyntax(pattern: pattern, arena: self.arena))
+
+      // If the token can't start a pattern, or contextually isn't parsed as a
+      // binding introducer, handle as the start of a normal expression.
+      case (spec: .rhs(_), handle: _)?,
+        nil:
+        // Not a pattern. Break out to parse as a normal expression below.
+        break
+      }
     }
     return RawExprSyntax(self.parseSequenceExpression(flavor: flavor, pattern: pattern))
   }

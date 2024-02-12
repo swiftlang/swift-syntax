@@ -2346,7 +2346,7 @@ extension OptionalBindingConditionSyntax {
         self = .inout
       case TokenSpec(._mutating) where experimentalFeatures.contains(.referenceBindings):
         self = ._mutating
-      case TokenSpec(._borrowing) where experimentalFeatures.contains(.referenceBindings):
+      case TokenSpec(._borrowing) where experimentalFeatures.contains(.referenceBindings) || experimentalFeatures.contains(.borrowingSwitch):
         self = ._borrowing
       case TokenSpec(._consuming) where experimentalFeatures.contains(.referenceBindings):
         self = ._consuming
@@ -3020,7 +3020,7 @@ extension ValueBindingPatternSyntax {
         self = .inout
       case TokenSpec(._mutating) where experimentalFeatures.contains(.referenceBindings):
         self = ._mutating
-      case TokenSpec(._borrowing) where experimentalFeatures.contains(.referenceBindings):
+      case TokenSpec(._borrowing) where experimentalFeatures.contains(.referenceBindings) || experimentalFeatures.contains(.borrowingSwitch):
         self = ._borrowing
       case TokenSpec(._consuming) where experimentalFeatures.contains(.referenceBindings):
         self = ._consuming
@@ -3092,7 +3092,7 @@ extension VariableDeclSyntax {
         self = .inout
       case TokenSpec(._mutating) where experimentalFeatures.contains(.referenceBindings):
         self = ._mutating
-      case TokenSpec(._borrowing) where experimentalFeatures.contains(.referenceBindings):
+      case TokenSpec(._borrowing) where experimentalFeatures.contains(.referenceBindings) || experimentalFeatures.contains(.borrowingSwitch):
         self = ._borrowing
       case TokenSpec(._consuming) where experimentalFeatures.contains(.referenceBindings):
         self = ._consuming

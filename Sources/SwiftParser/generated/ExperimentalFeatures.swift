@@ -38,4 +38,7 @@ extension Parser.ExperimentalFeatures {
   
   /// Whether to enable the parsing of TransferringArgsAndResults.
   public static let transferringArgsAndResults = Self (rawValue: 1 << 4)
+  
+  /// Whether to enable the parsing of borrowing pattern matching.
+  public static let borrowingSwitch = Self (rawValue: 1 << 5)
 }

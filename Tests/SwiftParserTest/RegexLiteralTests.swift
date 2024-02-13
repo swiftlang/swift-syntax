@@ -776,7 +776,7 @@ final class RegexLiteralTests: ParserTestCase {
     // FIXME: The diagnostic should be one character back
     assertParse(
       #"""
-      \ 1️⃣/^ x/
+      \1️⃣ /^ x/
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected root in key path", fixIts: ["insert root"])

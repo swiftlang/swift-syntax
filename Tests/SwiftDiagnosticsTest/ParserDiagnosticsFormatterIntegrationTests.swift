@@ -128,11 +128,26 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
 
     let expectedOutput = """
       \u{001B}[0;36m1 │\u{001B}[0;0m for \u{001B}[4;39m(i\u{001B}[0;0m \u{001B}[4;39m= 🐮; i != 👩‍👩‍👦‍👦; i += 1)\u{001B}[0;0m { }
-        \u{001B}[0;36m│\u{001B}[0;0m │      ╰─ \u{001B}[1;31merror: \u{001B}[1;39mexpected ')' to end tuple pattern\u{001B}[0;0m
+        \u{001B}[0;36m│\u{001B}[0;0m │     ╰─ \u{001B}[1;31merror: \u{001B}[1;39mexpected ')' to end tuple pattern\u{001B}[0;0m
         \u{001B}[0;36m│\u{001B}[0;0m ╰─ \u{001B}[1;31merror: \u{001B}[1;39mC-style for statement has been removed in Swift 3\u{001B}[0;0m
 
       """
 
     assertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
+  }
+
+  func testRighParenLocation() {
+    let source = """
+      let _ : Float  -> Int
+      """
+
+    let expectedOutput = """
+      1 │ let _ : Float  -> Int
+        │         │    ╰─ error: expected ')' in function type
+        │         ╰─ error: expected '(' to start function type
+
+      """
+
+    assertStringsEqualWithDiff(annotate(source: source), expectedOutput)
   }
 }

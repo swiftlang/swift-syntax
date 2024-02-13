@@ -20,7 +20,7 @@ final class InitDeinitTests: ParserTestCase {
     assertParse(
       """
       struct FooStructConstructorA {
-        init 1️⃣
+        init1️⃣ 
       }
       """,
       diagnostics: [
@@ -48,7 +48,7 @@ final class InitDeinitTests: ParserTestCase {
     assertParse(
       """
       struct FooStructConstructorC {
-        init 1️⃣{}
+        init1️⃣ {}
       }
       """,
       diagnostics: [
@@ -66,7 +66,7 @@ final class InitDeinitTests: ParserTestCase {
     assertParse(
       """
       struct FooStructConstructorC {
-        init<T> 1️⃣{}
+        init<T>1️⃣ {}
       }
       """,
       diagnostics: [
@@ -84,7 +84,7 @@ final class InitDeinitTests: ParserTestCase {
     assertParse(
       """
       struct FooStructConstructorC {
-        init? 1️⃣{ self.init() }
+        init?1️⃣ { self.init() }
       }
       """,
       diagnostics: [
@@ -234,7 +234,7 @@ final class InitDeinitTests: ParserTestCase {
   func testInitDeinit11() {
     assertParse(
       """
-      init 1️⃣{}
+      init1️⃣ {}
       init()
       init() {}
       """,

@@ -60,7 +60,7 @@ final class RecoveryTests: ParserTestCase {
     assertParse(
       """
       func useContainer() -> () {
-        var a : Containerℹ️<not 1️⃣2️⃣a type [skip 3️⃣this greater: >] >4️⃣, b : Int
+        var a : Containerℹ️<not1️⃣ 2️⃣a type [skip 3️⃣this greater: >] >4️⃣, b : Int
         b = 5 // no-warning
         a.exists()
       }
@@ -1103,7 +1103,7 @@ final class RecoveryTests: ParserTestCase {
       struct SS 1️⃣SS : Multi {
         private var a 2️⃣b : Int = ""
         func f() {
-          var c 3️⃣d = 5
+          var c3️⃣ d = 5
           let _ = 0
         }
       }
@@ -1140,7 +1140,7 @@ final class RecoveryTests: ParserTestCase {
   func testRecovery64a() {
     assertParse(
       """
-      let (efg 1️⃣hij, foobar) = (5, 6)
+      let (efg1️⃣ hij, foobar) = (5, 6)
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ',' in tuple pattern", fixIts: ["insert ','"])
@@ -1154,7 +1154,7 @@ final class RecoveryTests: ParserTestCase {
   func testRecovery64b() {
     assertParse(
       """
-      let (efg 1️⃣Hij, foobar) = (5, 6)
+      let (efg1️⃣ Hij, foobar) = (5, 6)
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' in tuple pattern", fixIts: ["insert ':'"])
@@ -1283,7 +1283,7 @@ final class RecoveryTests: ParserTestCase {
     assertParse(
       """
       struct ErrorTypeInVarDecl5 {
-        var v1 : Intℹ️<Int 1️⃣
+        var v1 : Intℹ️<Int1️⃣ 
         var v2 : Int
       }
       """,
@@ -1308,7 +1308,7 @@ final class RecoveryTests: ParserTestCase {
       """
       struct ErrorTypeInVarDecl6 {
         var v1 : Intℹ️<Int,
-                     Int 1️⃣
+                     Int1️⃣ 
         var v2 : Int
       }
       """,
@@ -1560,7 +1560,7 @@ final class RecoveryTests: ParserTestCase {
     // Note: Don't move braces to a different line here.
     assertParse(
       """
-      struct ErrorGenericParameterList5ℹ️<T 1️⃣
+      struct ErrorGenericParameterList5ℹ️<T1️⃣ 
       {
       }
       """,
@@ -1763,7 +1763,7 @@ final class RecoveryTests: ParserTestCase {
       struct ErrorInFunctionSignatureResultArrayType1 1️⃣{
         func foo() -> Int2️⃣[ {
           return [0]
-        }  3️⃣
+        }3️⃣  
         func bar() -> Int4️⃣] {
           return [0]
         }
@@ -1810,7 +1810,7 @@ final class RecoveryTests: ParserTestCase {
     assertParse(
       """
       struct ErrorInFunctionSignatureResultArrayType2 1️⃣{
-        func foo() -> Int2️⃣[0 3️⃣{
+        func foo() -> Int2️⃣[03️⃣ {
           return [0]
         }4️⃣
       5️⃣}
@@ -2476,7 +2476,7 @@ final class RecoveryTests: ParserTestCase {
     // rdar://19605567
     assertParse(
       """
-      func F() { init1️⃣<2️⃣( 3️⃣} 4️⃣)}
+      func F() { init1️⃣<2️⃣(3️⃣ } 4️⃣)}
       struct InitializerWithName {
         init 5️⃣x() {}
       }
@@ -2572,7 +2572,7 @@ final class RecoveryTests: ParserTestCase {
   func testRecovery148() {
     assertParse(
       """
-      init 1️⃣c d: Int 2️⃣{}
+      init1️⃣ c d: Int2️⃣ {}
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause", fixIts: ["insert '('"]),
@@ -3196,7 +3196,7 @@ final class RecoveryTests: ParserTestCase {
   func testRecovery183() {
     // Can be parsed and produces no diagnostics.
     assertParse(
-      "func f< 1️⃣>() {}",
+      "func f<1️⃣ >() {}",
       diagnostics: [
         DiagnosticSpec(
           message: "expected generic parameter in generic parameter clause",

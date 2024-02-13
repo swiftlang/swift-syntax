@@ -849,7 +849,7 @@ final class ForwardSlashRegexTests: ParserTestCase {
   func testForwardSlashRegex82() {
     assertParse(
       """
-      _ = 0 . 1️⃣/ 1 / 2
+      _ = 0 .1️⃣ / 1 / 2
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected name in member access", fixIts: ["insert name"])

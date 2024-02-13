@@ -55,7 +55,7 @@ final class VariadicGenericsTests: ParserTestCase {
   func testInvalidPackElement() {
     assertParse(
       """
-      func invalid<each T>() -> (each any 1️⃣T) {}
+      func invalid<each T>() -> (each any1️⃣ T) {}
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
@@ -564,7 +564,7 @@ final class TypeParameterPackTests: ParserTestCase {
 
     assertParse(
       """
-      var foo: (bar: Int 1️⃣bar2: Int)
+      var foo: (bar: Int1️⃣ bar2: Int)
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
@@ -576,7 +576,7 @@ final class TypeParameterPackTests: ParserTestCase {
 
     assertParse(
       """
-      var foo: (bar: Int 1️⃣Int)
+      var foo: (bar: Int1️⃣ Int)
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
@@ -588,7 +588,7 @@ final class TypeParameterPackTests: ParserTestCase {
 
     assertParse(
       """
-      var foo: (a 1️⃣Int)
+      var foo: (a1️⃣ Int)
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' in tuple type", fixIts: ["insert ':'"])
@@ -600,7 +600,7 @@ final class TypeParameterPackTests: ParserTestCase {
 
     assertParse(
       """
-      var foo: (A 1️⃣Int)
+      var foo: (A1️⃣ Int)
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
@@ -612,7 +612,7 @@ final class TypeParameterPackTests: ParserTestCase {
 
     assertParse(
       """
-      var foo: (_ 1️⃣a 2️⃣Int)
+      var foo: (_1️⃣ a2️⃣ Int)
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ':' in tuple type", fixIts: ["insert ':'"]),
@@ -625,7 +625,7 @@ final class TypeParameterPackTests: ParserTestCase {
 
     assertParse(
       """
-      var foo: (Array<Foo> 1️⃣Array<Bar>)
+      var foo: (Array<Foo>1️⃣ Array<Bar>)
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])
@@ -637,7 +637,7 @@ final class TypeParameterPackTests: ParserTestCase {
 
     assertParse(
       """
-      var foo: (a 1️⃣Array<Bar>)
+      var foo: (a1️⃣ Array<Bar>)
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' in tuple type", fixIts: ["insert ':'"])
@@ -649,7 +649,7 @@ final class TypeParameterPackTests: ParserTestCase {
 
     assertParse(
       """
-      var foo: (Array<Foo> 1️⃣a)
+      var foo: (Array<Foo>1️⃣ a)
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected ',' in tuple type", fixIts: ["insert ','"])

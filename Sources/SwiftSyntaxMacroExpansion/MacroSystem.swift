@@ -35,15 +35,30 @@ extension SyntaxProtocol {
   }
 
   /// Expand all uses of the given set of macros within this syntax node.
+  /// - SeeAlso: ``expand(macroSpecs:contextGenerator:indentationWidth:)``
+  ///   to also specify the list of conformances passed to the macro expansion.
   public func expand<Context: MacroExpansionContext>(
     macros: [String: Macro.Type],
     contextGenerator: @escaping (Syntax) -> Context,
     indentationWidth: Trivia? = nil
   ) -> Syntax {
+    return expand(
+      macroSpecs: macros.mapValues { MacroSpec(type: $0) },
+      contextGenerator: contextGenerator,
+      indentationWidth: indentationWidth
+    )
+  }
+
+  /// Expand all uses of the given set of macros with specifications within this syntax node.
+  public func expand<Context: MacroExpansionContext>(
+    macroSpecs: [String: MacroSpec],
+    contextGenerator: @escaping (Syntax) -> Context,
+    indentationWidth: Trivia? = nil
+  ) -> Syntax {
     // Build the macro system.
     var system = MacroSystem()
-    for (macroName, macroType) in macros {
-      try! system.add(macroType, name: macroName)
+    for (macroName, macroSpec) in macroSpecs {
+      try! system.add(macroSpec, name: macroName)
     }
 
     let applier = MacroApplication(
@@ -142,6 +157,7 @@ private func expandMemberMacro(
   definition: MemberMacro.Type,
   attributeNode: AttributeSyntax,
   attachedTo: DeclSyntax,
+  conformanceList: InheritedTypeListSyntax,
   in context: some MacroExpansionContext,
   indentationWidth: Trivia
 ) throws -> MemberBlockItemListSyntax? {
@@ -153,7 +169,7 @@ private func expandMemberMacro(
       declarationNode: attachedTo.detach(in: context),
       parentDeclNode: nil,
       extendedType: nil,
-      conformanceList: nil,
+      conformanceList: conformanceList,
       in: context,
       indentationWidth: indentationWidth
     )
@@ -330,6 +346,7 @@ private func expandExtensionMacro(
   definition: ExtensionMacro.Type,
   attributeNode: AttributeSyntax,
   attachedTo: DeclSyntax,
+  conformanceList: InheritedTypeListSyntax,
   in context: some MacroExpansionContext,
   indentationWidth: Trivia
 ) throws -> CodeBlockItemListSyntax? {
@@ -349,7 +366,7 @@ private func expandExtensionMacro(
       declarationNode: attachedTo.detach(in: context),
       parentDeclNode: nil,
       extendedType: extendedType.detach(in: context),
-      conformanceList: [],
+      conformanceList: conformanceList,
       in: context,
       indentationWidth: indentationWidth
     )
@@ -442,24 +459,24 @@ enum MacroSystemError: Error {
 
 /// A system of known macros that can be expanded syntactically
 struct MacroSystem {
-  var macros: [String: Macro.Type] = [:]
+  var macros: [String: MacroSpec] = [:]
 
   /// Create an empty macro system.
   init() {}
 
-  /// Add a macro to the system.
+  /// Add a macro specification to the system.
   ///
   /// Throws an error if there is already a macro with this name.
-  mutating func add(_ macro: Macro.Type, name: String) throws {
-    if let knownMacro = macros[name] {
-      throw MacroSystemError.alreadyDefined(new: macro, existing: knownMacro)
+  mutating func add(_ macroSpec: MacroSpec, name: String) throws {
+    if let knownMacroSpec = macros[name] {
+      throw MacroSystemError.alreadyDefined(new: macroSpec.type, existing: knownMacroSpec.type)
     }
 
-    macros[name] = macro
+    macros[name] = macroSpec
   }
 
-  /// Look for a macro with the given name.
-  func lookup(_ macroName: String) -> Macro.Type? {
+  /// Look for a macro specification with the given name.
+  func lookup(_ macroName: String) -> MacroSpec? {
     return macros[macroName]
   }
 }
@@ -680,7 +697,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     _ node: Node
   ) -> Node {
     // Expand preamble macros into a set of code items.
-    let preamble = expandMacros(attachedTo: DeclSyntax(node), ofType: PreambleMacro.Type.self) { attributeNode, definition in
+    let preamble = expandMacros(attachedTo: DeclSyntax(node), ofType: PreambleMacro.Type.self) { attributeNode, definition, _ in
       expandPreambleMacro(
         definition: definition,
         attributeNode: attributeNode,
@@ -691,7 +708,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     }
 
     // Expand body macro.
-    let expandedBodies = expandMacros(attachedTo: DeclSyntax(node), ofType: BodyMacro.Type.self) { attributeNode, definition in
+    let expandedBodies = expandMacros(attachedTo: DeclSyntax(node), ofType: BodyMacro.Type.self) { attributeNode, definition, _ in
       expandBodyMacro(
         definition: definition,
         attributeNode: attributeNode,
@@ -900,12 +917,12 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
 // MARK:  Attached macro expansions.
 
 extension MacroApplication {
-  /// Get pairs of a macro attribute and the macro definition attached to `decl`.
+  /// Get pairs of a macro attribute and the macro specification attached to `decl`.
   ///
   /// The macros must be registered in `macroSystem`.
   private func macroAttributes(
     attachedTo decl: DeclSyntax
-  ) -> [(attributeNode: AttributeSyntax, definition: Macro.Type)] {
+  ) -> [(attributeNode: AttributeSyntax, spec: MacroSpec)] {
     guard let attributedNode = decl.asProtocol(WithAttributesSyntax.self) else {
       return []
     }
@@ -913,27 +930,27 @@ extension MacroApplication {
     return attributedNode.attributes.compactMap {
       guard case let .attribute(attribute) = $0,
         let attributeName = attribute.attributeName.as(IdentifierTypeSyntax.self)?.name.text,
-        let macro = macroSystem.lookup(attributeName)
+        let macroSpec = macroSystem.lookup(attributeName)
       else {
         return nil
       }
 
-      return (attribute, macro)
+      return (attribute, macroSpec)
     }
   }
 
-  /// Get pairs of a macro attribute and the macro definition attached to `decl`
-  /// matching `ofType` macro type.
+  /// Get a list of the macro attribute, the macro definition and the conformance
+  /// protocols list attached to `decl` matching `ofType` macro type.
   ///
   /// The macros must be registered in `macroSystem`.
   private func macroAttributes<MacroType>(
     attachedTo decl: DeclSyntax,
     ofType: MacroType.Type
-  ) -> [(attributeNode: AttributeSyntax, definition: MacroType)] {
+  ) -> [(attributeNode: AttributeSyntax, definition: MacroType, conformanceList: InheritedTypeListSyntax)] {
     return macroAttributes(attachedTo: decl)
-      .compactMap { (attributeNode: AttributeSyntax, definition: Macro.Type) in
-        if let macroType = definition as? MacroType {
-          return (attributeNode, macroType)
+      .compactMap { (attributeNode: AttributeSyntax, spec: MacroSpec) in
+        if let macroType = spec.type as? MacroType {
+          return (attributeNode, macroType, spec.inheritedTypeList)
         } else {
           return nil
         }
@@ -949,13 +966,13 @@ extension MacroApplication {
   >(
     attachedTo decl: DeclSyntax,
     ofType: MacroType.Type,
-    expandMacro: (_ attributeNode: AttributeSyntax, _ definition: MacroType) throws -> ExpanedNodeCollection?
+    expandMacro: (_ attributeNode: AttributeSyntax, _ definition: MacroType, _ conformanceList: InheritedTypeListSyntax) throws -> ExpanedNodeCollection?
   ) -> [ExpandedNode] {
     var result: [ExpandedNode] = []
 
     for macroAttribute in macroAttributes(attachedTo: decl, ofType: ofType) {
       do {
-        if let expanded = try expandMacro(macroAttribute.attributeNode, macroAttribute.definition) {
+        if let expanded = try expandMacro(macroAttribute.attributeNode, macroAttribute.definition, macroAttribute.conformanceList) {
           result += expanded
         }
       } catch {
@@ -973,7 +990,7 @@ extension MacroApplication {
   ///
   /// - Returns: The macro-synthesized peers
   private func expandMemberDeclPeers(of decl: DeclSyntax) -> [MemberBlockItemSyntax] {
-    return expandMacros(attachedTo: decl, ofType: PeerMacro.Type.self) { attributeNode, definition in
+    return expandMacros(attachedTo: decl, ofType: PeerMacro.Type.self) { attributeNode, definition, conformanceList in
       return try expandPeerMacroMember(
         definition: definition,
         attributeNode: attributeNode,
@@ -993,7 +1010,7 @@ extension MacroApplication {
   ///
   /// - Returns: The macro-synthesized peers
   private func expandCodeBlockPeers(of decl: DeclSyntax) -> [CodeBlockItemSyntax] {
-    return expandMacros(attachedTo: decl, ofType: PeerMacro.Type.self) { attributeNode, definition in
+    return expandMacros(attachedTo: decl, ofType: PeerMacro.Type.self) { attributeNode, definition, conformanceList in
       return try expandPeerMacroCodeItem(
         definition: definition,
         attributeNode: attributeNode,
@@ -1008,11 +1025,12 @@ extension MacroApplication {
   ///
   /// - Returns: The macro-synthesized extensions
   private func expandExtensions(of decl: DeclSyntax) -> [CodeBlockItemSyntax] {
-    return expandMacros(attachedTo: decl, ofType: ExtensionMacro.Type.self) { attributeNode, definition in
+    return expandMacros(attachedTo: decl, ofType: ExtensionMacro.Type.self) { attributeNode, definition, conformanceList in
       return try expandExtensionMacro(
         definition: definition,
         attributeNode: attributeNode,
         attachedTo: decl,
+        conformanceList: conformanceList,
         in: contextGenerator(Syntax(decl)),
         indentationWidth: indentationWidth
       )
@@ -1021,11 +1039,12 @@ extension MacroApplication {
 
   /// Expand all 'member' macros attached to `decl`.
   private func expandMembers(of decl: DeclSyntax) -> [MemberBlockItemSyntax] {
-    return expandMacros(attachedTo: decl, ofType: MemberMacro.Type.self) { attributeNode, definition in
+    return expandMacros(attachedTo: decl, ofType: MemberMacro.Type.self) { attributeNode, definition, conformanceList in
       return try expandMemberMacro(
         definition: definition,
         attributeNode: attributeNode,
         attachedTo: decl,
+        conformanceList: conformanceList,
         in: contextGenerator(Syntax(decl)),
         indentationWidth: indentationWidth
       )
@@ -1041,7 +1060,7 @@ extension MacroApplication {
     of decl: DeclSyntax,
     parentDecl: DeclSyntax
   ) -> [AttributeListSyntax.Element] {
-    return expandMacros(attachedTo: parentDecl, ofType: MemberAttributeMacro.Type.self) { attributeNode, definition in
+    return expandMacros(attachedTo: parentDecl, ofType: MemberAttributeMacro.Type.self) { attributeNode, definition, conformanceList in
       return try expandMemberAttributeMacro(
         definition: definition,
         attributeNode: attributeNode,
@@ -1147,7 +1166,7 @@ extension MacroApplication {
     expandMacro: (_ macro: Macro.Type, _ node: any FreestandingMacroExpansionSyntax) throws -> ExpandedMacroType?
   ) -> MacroExpansionResult<ExpandedMacroType> {
     guard let node,
-      let macro = macroSystem.lookup(node.macroName.text)
+      let macro = macroSystem.lookup(node.macroName.text)?.type
     else {
       return .notAMacro
     }

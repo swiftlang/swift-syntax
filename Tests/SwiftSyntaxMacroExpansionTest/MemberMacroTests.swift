@@ -504,4 +504,82 @@ final class MemberMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testConditionalMemberExpansion() {
+    struct CodableExtensionMacro: MemberMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingMembersOf declaration: some DeclGroupSyntax,
+        conformingTo protocols: [TypeSyntax],
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        let decls: [DeclSyntax] = protocols.compactMap { `protocol` in
+          return """
+            func print(arg: some \(`protocol`)) { }
+            """ as DeclSyntax
+        }
+
+        return decls
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @AddCodableExtensions
+      class MyType {
+      }
+      """,
+      expandedSource: """
+        class MyType {
+
+          func print(arg: some Decodable) {
+          }
+
+          func print(arg: some Encodable) {
+          }
+        }
+        """,
+      macroSpecs: ["AddCodableExtensions": MacroSpec(type: CodableExtensionMacro.self, conformances: ["Decodable", "Encodable"])],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      class Wrapper {
+        @AddCodableExtensions
+        class MyType {
+        }
+      }
+      """,
+      expandedSource: """
+        class Wrapper {
+          class MyType {
+
+            func print(arg: some Encodable) {
+            }
+          }
+        }
+        """,
+      macroSpecs: ["AddCodableExtensions": MacroSpec(type: CodableExtensionMacro.self, conformances: ["Encodable"])],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      class Wrapper {
+        @AddCodableExtensions
+        class MyType {
+        }
+      }
+      """,
+      expandedSource: """
+        class Wrapper {
+          class MyType {
+          }
+        }
+        """,
+      macros: ["AddCodableExtensions": CodableExtensionMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
 }

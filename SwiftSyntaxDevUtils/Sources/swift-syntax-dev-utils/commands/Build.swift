@@ -30,9 +30,9 @@ struct Build: ParsableCommand {
         release: arguments.release,
         enableRawSyntaxValidation: arguments.enableRawSyntaxValidation,
         enableTestFuzzing: arguments.enableTestFuzzing,
-        warningsAsErrors: arguments.warningsAsErrors,
         verbose: arguments.verbose
-      )
+      ),
+      warningsAsErrors: arguments.warningsAsErrors
     )
     try executor.run()
   }
@@ -40,15 +40,18 @@ struct Build: ParsableCommand {
 
 struct BuildExecutor {
   private let swiftPMBuilder: SwiftPMBuilder
+  private let warningsAsErrors: Bool
 
-  init(swiftPMBuilder: SwiftPMBuilder) {
+  init(swiftPMBuilder: SwiftPMBuilder, warningsAsErrors: Bool = false) {
     self.swiftPMBuilder = swiftPMBuilder
+    self.warningsAsErrors = warningsAsErrors
   }
 
   func run() throws {
-    try swiftPMBuilder.buildTarget(packageDir: Paths.packageDir, targetName: "SwiftSyntax-all")
-    try swiftPMBuilder.buildTarget(packageDir: Paths.examplesDir, targetName: "Examples-all")
-    try swiftPMBuilder.buildTarget(packageDir: Paths.swiftParserCliDir, targetName: "swift-parser-cli")
+    try swiftPMBuilder.buildTarget(packageDir: Paths.packageDir, targetName: "SwiftSyntax-all", warningsAsErrors: self.warningsAsErrors)
+    // Never build examples with `warningsAsErrors`. Some of the macro examples are expected to generate warnings.
+    try swiftPMBuilder.buildTarget(packageDir: Paths.examplesDir, targetName: "Examples-all", warningsAsErrors: false)
+    try swiftPMBuilder.buildTarget(packageDir: Paths.swiftParserCliDir, targetName: "swift-parser-cli", warningsAsErrors: self.warningsAsErrors)
     try buildEditorExtension()
   }
 

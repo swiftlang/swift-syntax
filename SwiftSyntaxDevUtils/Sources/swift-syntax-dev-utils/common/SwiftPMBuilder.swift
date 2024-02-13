@@ -41,9 +41,6 @@ struct SwiftPMBuilder {
   /// A flag indicating whether to use local dependencies during the build process.
   let useLocalDeps: Bool
 
-  /// Treat all warnings as errors.
-  let warningsAsErrors: Bool
-
   /// Enable verbose logging.
   let verbose: Bool
 
@@ -55,7 +52,6 @@ struct SwiftPMBuilder {
     enableRawSyntaxValidation: Bool = false,
     enableTestFuzzing: Bool = false,
     useLocalDeps: Bool = true,
-    warningsAsErrors: Bool = false,
     verbose: Bool = false
   ) {
     self.toolchain = toolchain
@@ -65,11 +61,10 @@ struct SwiftPMBuilder {
     self.enableRawSyntaxValidation = enableRawSyntaxValidation
     self.enableTestFuzzing = enableTestFuzzing
     self.useLocalDeps = useLocalDeps
-    self.warningsAsErrors = warningsAsErrors
     self.verbose = verbose
   }
 
-  func buildTarget(packageDir: URL, targetName: String) throws {
+  func buildTarget(packageDir: URL, targetName: String, warningsAsErrors: Bool = false) throws {
     logSection("Building target " + targetName)
     try build(packageDir: packageDir, name: targetName, isProduct: false)
   }
@@ -78,6 +73,7 @@ struct SwiftPMBuilder {
   func invokeSwiftPM(
     action: String,
     packageDir: URL,
+    warningsAsErrors: Bool = false,
     additionalArguments: [String],
     additionalEnvironment: [String: String],
     captureStdout: Bool = true,
@@ -93,7 +89,7 @@ struct SwiftPMBuilder {
       args += ["--scratch-path", buildDir]
     }
 
-    if self.warningsAsErrors {
+    if warningsAsErrors {
       args += ["-Xswiftc", "-warnings-as-errors"]
     }
 
@@ -152,7 +148,7 @@ struct SwiftPMBuilder {
     return additionalEnvironment
   }
 
-  private func build(packageDir: URL, name: String, isProduct: Bool) throws {
+  private func build(packageDir: URL, name: String, isProduct: Bool, warningsAsErrors: Bool = false) throws {
     let args: [String]
 
     if isProduct {
@@ -164,6 +160,7 @@ struct SwiftPMBuilder {
     try invokeSwiftPM(
       action: "build",
       packageDir: packageDir,
+      warningsAsErrors: warningsAsErrors,
       additionalArguments: args,
       additionalEnvironment: swiftPMEnvironmentVariables,
       captureStdout: false,

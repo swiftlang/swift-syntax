@@ -12,6 +12,7 @@
 
 import SwiftBasicFormat
 import SwiftDiagnostics
+@_spi(FixItApplier) import SwiftIDEUtils
 import SwiftParser
 import SwiftParserDiagnostics
 import SwiftSyntax

@@ -12,8 +12,8 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
-import SwiftSyntaxMacroExpansion
 
+@_spi(FixItApplier)
 public enum FixItApplier {
   /// Applies selected or all Fix-Its from the provided diagnostics to a given syntax tree.
   ///

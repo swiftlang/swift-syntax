@@ -107,7 +107,7 @@ let package = Package(
 
     .target(
       name: "SwiftIDEUtils",
-      dependencies: ["SwiftSyntax", "SwiftParser"],
+      dependencies: ["SwiftSyntax", "SwiftDiagnostics", "SwiftParser"],
       exclude: ["CMakeLists.txt"]
     ),
 
@@ -191,7 +191,7 @@ let package = Package(
 
     .target(
       name: "SwiftSyntaxMacrosTestSupport",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftParser", "SwiftSyntaxMacros", "SwiftSyntaxMacroExpansion"]
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftIDEUtils", "SwiftParser", "SwiftSyntaxMacros", "SwiftSyntaxMacroExpansion"]
     ),
 
     .testTarget(
@@ -211,7 +211,7 @@ let package = Package(
 
     .testTarget(
       name: "SwiftParserTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntaxBuilder"],
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftIDEUtils", "SwiftOperators", "SwiftParser", "SwiftSyntaxBuilder"],
       swiftSettings: swiftParserSwiftSettings
     ),
 

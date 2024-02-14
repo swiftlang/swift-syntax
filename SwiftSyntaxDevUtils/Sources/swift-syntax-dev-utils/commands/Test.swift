@@ -30,9 +30,9 @@ struct Test: ParsableCommand {
         release: arguments.release,
         enableRawSyntaxValidation: arguments.enableRawSyntaxValidation,
         enableTestFuzzing: arguments.enableTestFuzzing,
-        warningsAsErrors: arguments.warningsAsErrors,
         verbose: arguments.verbose
-      )
+      ),
+      warningsAsErrors: arguments.warningsAsErrors
     )
     try executor.run()
   }
@@ -40,9 +40,11 @@ struct Test: ParsableCommand {
 
 struct TestExecutor {
   private let swiftPMBuilder: SwiftPMBuilder
+  private let warningsAsErrors: Bool
 
-  init(swiftPMBuilder: SwiftPMBuilder) {
+  init(swiftPMBuilder: SwiftPMBuilder, warningsAsErrors: Bool = false) {
     self.swiftPMBuilder = swiftPMBuilder
+    self.warningsAsErrors = warningsAsErrors
   }
 
   func run() throws {
@@ -59,6 +61,7 @@ struct TestExecutor {
     try swiftPMBuilder.invokeSwiftPM(
       action: "test",
       packageDir: Paths.packageDir,
+      warningsAsErrors: warningsAsErrors,
       additionalArguments: ["--test-product", "swift-syntaxPackageTests"],
       additionalEnvironment: swiftPMBuilder.swiftPMEnvironmentVariables,
       captureStdout: false,
@@ -71,6 +74,7 @@ struct TestExecutor {
     try swiftPMBuilder.invokeSwiftPM(
       action: "test",
       packageDir: Paths.codeGenerationDir,
+      warningsAsErrors: warningsAsErrors,
       additionalArguments: ["--test-product", "CodeGenerationPackageTests"],
       additionalEnvironment: swiftPMBuilder.swiftPMEnvironmentVariables,
       captureStdout: false,
@@ -83,6 +87,7 @@ struct TestExecutor {
     try swiftPMBuilder.invokeSwiftPM(
       action: "test",
       packageDir: Paths.examplesDir,
+      warningsAsErrors: warningsAsErrors,
       additionalArguments: ["--test-product", "ExamplesPackageTests"],
       additionalEnvironment: swiftPMBuilder.swiftPMEnvironmentVariables,
       captureStdout: false,
@@ -94,6 +99,7 @@ struct TestExecutor {
     return try swiftPMBuilder.invokeSwiftPM(
       action: "build",
       packageDir: packageDir,
+      warningsAsErrors: warningsAsErrors,
       additionalArguments: ["--show-bin-path"],
       additionalEnvironment: [:]
     ).stdout

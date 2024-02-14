@@ -137,12 +137,12 @@ private func adjustIndentationOfFreestandingMacro(expandedCode: String, node: so
   var indentedSource =
     expandedCode
     .indented(by: indentationOfFirstLine)
-    .wrappingInTrivia(from: node)
 
-  // if the experssion started in middle of the line, then remove indentation of the first line
-  if !node.leadingTrivia.contains(where: \.isNewline) {
+  if indentedSource.count >= indentationOfFirstLine.sourceLength.utf8Length {
     indentedSource.removeFirst(indentationOfFirstLine.sourceLength.utf8Length)
   }
+
+  indentedSource = indentedSource.wrappingInTrivia(from: node)
 
   return indentedSource
 }
@@ -1274,9 +1274,7 @@ private extension String {
   /// user should think about it as just replacing the `#...` expression without
   /// any trivia.
   func wrappingInTrivia(from node: some SyntaxProtocol) -> String {
-    // We need to remove the indentation from the last line because the macro
-    // expansion buffer already contains the indentation.
-    return node.leadingTrivia.removingIndentationOnLastLine.description
+    return node.leadingTrivia.description
       + self
       + node.trailingTrivia.description
   }

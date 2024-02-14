@@ -287,6 +287,40 @@ final class LexicalContextTests: XCTestCase {
       macros: ["function": FunctionMacro.self],
       indentationWidth: indentationWidth
     )
+
+    assertMacroExpansion(
+      """
+      func f(a: Int, _: Double, c: Int) {
+        print(/*comment*/#function)
+      }
+      """,
+      expandedSource: """
+        func f(a: Int, _: Double, c: Int) {
+          print(/*comment*/"f(a:_:c:)")
+        }
+        """,
+      macros: ["function": FunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      var computed: String {
+        get {
+          /*comment*/#function
+        }
+      }
+      """,
+      expandedSource: """
+        var computed: String {
+          get {
+            /*comment*/"computed"
+          }
+        }
+        """,
+      macros: ["function": FunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
   }
 
   func testPoundMultilineFunction() {
@@ -379,6 +413,44 @@ final class LexicalContextTests: XCTestCase {
         extension A {
           static var staticProp: String = {
             "staticProp"
+          }
+        }
+        """,
+      macros: ["function": MultilineFunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      func f(a: Int, _: Double, c: Int) {
+        print(/*comment*/#function)
+      }
+      """,
+      expandedSource: """
+        func f(a: Int, _: Double, c: Int) {
+          print(/*comment*/{
+            "f(a:_:c:)"
+          })
+        }
+        """,
+      macros: ["function": MultilineFunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      var computed: String {
+        get {
+          /*comment*/#function // another comment
+        }
+      }
+      """,
+      expandedSource: """
+        var computed: String {
+          get {
+            /*comment*/{
+              "computed"
+            } // another comment
           }
         }
         """,

@@ -25,6 +25,9 @@ public struct GroupedDiagnostics {
     /// The syntax tree for the source file.
     let tree: SourceFileSyntax
 
+    /// The source location converter for this source file.
+    let sourceLocationConverter: SourceLocationConverter
+
     /// The human-readable name to use to identify this source file.
     let displayName: String
 
@@ -64,17 +67,24 @@ public struct GroupedDiagnostics {
   @discardableResult
   public mutating func addSourceFile(
     tree: SourceFileSyntax,
+    sourceLocationConverter: SourceLocationConverter? = nil,
     displayName: String,
     parent: (SourceFileID, AbsolutePosition)? = nil,
     diagnostics: [Diagnostic] = []
   ) -> SourceFileID {
     // Determine the ID this source file will have.
     let id = SourceFileID(id: sourceFiles.count)
-
+    let slc =
+      sourceLocationConverter
+      ?? SourceLocationConverter(
+        fileName: displayName,
+        tree: tree
+      )
     sourceFiles.append(
       SourceFile(
         id: id,
         tree: tree,
+        sourceLocationConverter: slc,
         displayName: displayName,
         parent: parent,
         diagnostics: diagnostics
@@ -167,10 +177,7 @@ extension GroupedDiagnostics {
     indentString: String
   ) -> String {
     let sourceFile = sourceFiles[sourceFileID.id]
-    let slc = SourceLocationConverter(
-      fileName: sourceFile.displayName,
-      tree: sourceFile.tree
-    )
+    let slc = sourceFile.sourceLocationConverter
     let diagnosticDecorator = formatter.diagnosticDecorator
 
     let childPadding = String(slc.sourceLines.count + 1).count + 1;
@@ -195,7 +202,7 @@ extension GroupedDiagnostics {
     if isRoot {
       // If there's a primary diagnostic, print it first.
       if let (primaryDiagSourceFile, primaryDiag) = findPrimaryDiagnostic(in: sourceFile) {
-        let primaryDiagSLC = SourceLocationConverter(fileName: primaryDiagSourceFile.displayName, tree: primaryDiagSourceFile.tree)
+        let primaryDiagSLC = primaryDiagSourceFile.sourceLocationConverter
         let location = primaryDiag.location(converter: primaryDiagSLC)
 
         // Display file/line/column and diagnostic text for the primary diagnostic.

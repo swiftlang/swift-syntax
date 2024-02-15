@@ -816,16 +816,16 @@ extension Parser.Lookahead {
       }
 
       if effect.spec.isThrowsSpecifier && self.peek().rawTokenKind == .leftParen {
-        var backtrack = self.lookahead()
-        backtrack.consumeAnyToken()
-        backtrack.skipSingle()
-        return backtrack.atFunctionTypeArrow()
+        var lookahead = self.lookahead()
+        lookahead.consumeAnyToken()
+        lookahead.skipSingle()
+        return lookahead.atFunctionTypeArrow()
       }
 
       if peek(isAtAnyIn: EffectSpecifier.self) != nil {
-        var backtrack = self.lookahead()
-        backtrack.consumeAnyToken()
-        return backtrack.atFunctionTypeArrow()
+        var lookahead = self.lookahead()
+        lookahead.consumeAnyToken()
+        return lookahead.atFunctionTypeArrow()
       }
 
       return false

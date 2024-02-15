@@ -16,21 +16,21 @@ extension TokenConsumer {
   mutating func atStartOfExpression() -> Bool {
     switch self.at(anyIn: ExpressionStart.self) {
     case (.awaitTryMove, let handle)?:
-      var backtrack = self.lookahead()
-      backtrack.eat(handle)
+      var lookahead = self.lookahead()
+      lookahead.eat(handle)
 
       // These can be parsed as expressions with try/await.
-      if backtrack.at(anyIn: SingleValueStatementExpression.self) != nil {
+      if lookahead.at(anyIn: SingleValueStatementExpression.self) != nil {
         return true
       }
       // Note we currently pass `preferExpr: false` to prefer diagnosing `try then`
       // as needing to be `then try`, rather than parsing `then` as an expression.
-      if backtrack.atStartOfDeclaration() || backtrack.atStartOfStatement(preferExpr: false) {
+      if lookahead.atStartOfDeclaration() || lookahead.atStartOfStatement(preferExpr: false) {
         // If after the 'try' we are at a declaration or statement, it can't be a valid expression.
         // Decide how we want to consume the 'try':
         // If the declaration or statement starts at a new line, the user probably just forgot to write the expression after 'try' -> parse it as a TryExpr
         // If the declaration or statement starts at the same line, the user maybe tried to use 'try' as a modifier -> parse it as unexpected text in front of that decl or stmt.
-        return backtrack.atStartOfLine
+        return lookahead.atStartOfLine
       } else {
         return true
       }
@@ -42,8 +42,8 @@ extension TokenConsumer {
       break
     }
     if self.at(.atSign) || self.at(.keyword(.inout)) {
-      var backtrack = self.lookahead()
-      if backtrack.canParseType() {
+      var lookahead = self.lookahead()
+      if lookahead.canParseType() {
         return true
       }
     }
@@ -54,8 +54,8 @@ extension TokenConsumer {
       // expansion, but we need to do more lookahead to figure out
       // whether the '{' is the start of a closure expression or a
       // brace statement for 'repeat { ... } while'
-      let backtrack = self.lookahead()
-      return backtrack.peek().rawTokenKind != .leftBrace
+      let lookahead = self.lookahead()
+      return lookahead.peek().rawTokenKind != .leftBrace
     }
 
     return false
@@ -397,8 +397,8 @@ extension Parser {
   ) -> RawExprSyntax {
     // Try to parse '@' sign or 'inout' as an attributed typerepr.
     if self.at(.atSign, .keyword(.inout)) {
-      var backtrack = self.lookahead()
-      if backtrack.canParseType() {
+      var lookahead = self.lookahead()
+      if lookahead.canParseType() {
         let type = self.parseType()
         return RawExprSyntax(
           RawTypeExprSyntax(
@@ -1965,12 +1965,12 @@ extension Parser.Lookahead {
 
     // Do some tentative parsing to distinguish `label: { ... }` and
     // `label: switch x { ... }`.
-    var backtrack = self.lookahead()
-    backtrack.consumeAnyToken()
-    if backtrack.peek().rawTokenKind == .leftBrace {
+    var lookahead = self.lookahead()
+    lookahead.consumeAnyToken()
+    if lookahead.peek().rawTokenKind == .leftBrace {
       return true
     }
-    if backtrack.peek().isEditorPlaceholder {
+    if lookahead.peek().isEditorPlaceholder {
       // Editor placeholder can represent entire closures
       return true
     }
@@ -2022,21 +2022,21 @@ extension Parser.Lookahead {
     // Determine if the {} goes with the expression by eating it, and looking
     // to see if it is immediately followed by a token which indicates we should
     // consider it part of the preceding expression
-    var backtrack = self.lookahead()
-    backtrack.eat(.leftBrace)
+    var lookahead = self.lookahead()
+    lookahead.eat(.leftBrace)
     var loopProgress = LoopProgressCondition()
-    while !backtrack.at(.endOfFile, .rightBrace)
-      && !backtrack.at(.poundEndif, .poundElse, .poundElseif)
-      && backtrack.hasProgressed(&loopProgress)
+    while !lookahead.at(.endOfFile, .rightBrace)
+      && !lookahead.at(.poundEndif, .poundElse, .poundElseif)
+      && lookahead.hasProgressed(&loopProgress)
     {
-      backtrack.skipSingle()
+      lookahead.skipSingle()
     }
 
-    guard backtrack.consume(if: .rightBrace) != nil else {
+    guard lookahead.consume(if: .rightBrace) != nil else {
       return false
     }
 
-    switch backtrack.currentToken {
+    switch lookahead.currentToken {
     case TokenSpec(.leftBrace),
       TokenSpec(.where),
       TokenSpec(.comma):
@@ -2053,7 +2053,7 @@ extension Parser.Lookahead {
       TokenSpec(.equal),
       TokenSpec(.postfixOperator),
       TokenSpec(.binaryOperator):
-      return !backtrack.atStartOfLine
+      return !lookahead.atStartOfLine
     default:
       return false
     }

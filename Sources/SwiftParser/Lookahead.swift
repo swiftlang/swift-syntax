@@ -178,11 +178,11 @@ extension Parser.Lookahead {
       // Recover by eating @foo(...)
       self.eat(handle)
       if self.at(.leftParen) {
-        var backtrack = self.lookahead()
-        backtrack.skipSingle()
+        var lookahead = self.lookahead()
+        lookahead.skipSingle()
         // If we found '->', or 'throws' after paren, it's likely a parameter
         // of function type.
-        guard backtrack.at(.arrow) || backtrack.at(.keyword(.throws), .keyword(.rethrows), .keyword(.throw)) else {
+        guard lookahead.at(.arrow) || lookahead.at(.keyword(.throws), .keyword(.rethrows), .keyword(.throw)) else {
           self.skipSingle()
           return
         }

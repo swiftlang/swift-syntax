@@ -19,7 +19,7 @@ enum MacroExpanderError: DiagnosticMessage {
   case definitionNotMacroExpansion
   case nonParameterReference(TokenSyntax)
   case nonTypeReference(TokenSyntax)
-  case nonLiteralOrParameter(ExprSyntax)
+  case nonLiteralOrParameter
 
   var message: String {
     switch self {
@@ -93,55 +93,14 @@ extension MacroDefinition {
   }
 }
 
-fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
+fileprivate class ParameterReplacementVisitor: OnlyLiteralExprChecker {
   let macro: MacroDeclSyntax
   var replacements: [MacroDefinition.Replacement] = []
   var genericReplacements: [MacroDefinition.GenericArgumentReplacement] = []
-  var diagnostics: [Diagnostic] = []
 
   init(macro: MacroDeclSyntax) {
     self.macro = macro
-    super.init(viewMode: .fixedUp)
-  }
-
-  // Integer literals
-  override func visit(_ node: IntegerLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    .visitChildren
-  }
-
-  // Floating point literals
-  override func visit(_ node: FloatLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    .visitChildren
-  }
-
-  // nil literals
-  override func visit(_ node: NilLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    .visitChildren
-  }
-
-  // String literals
-  override func visit(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
-    .visitChildren
-  }
-
-  // Array literals
-  override func visit(_ node: ArrayExprSyntax) -> SyntaxVisitorContinueKind {
-    .visitChildren
-  }
-
-  // Dictionary literals
-  override func visit(_ node: DictionaryExprSyntax) -> SyntaxVisitorContinueKind {
-    .visitChildren
-  }
-
-  // Tuple literals
-  override func visit(_ node: TupleExprSyntax) -> SyntaxVisitorContinueKind {
-    .visitChildren
-  }
-
-  // Macro uses.
-  override func visit(_ node: MacroExpansionExprSyntax) -> SyntaxVisitorContinueKind {
-    .visitChildren
+    super.init()
   }
 
   // References to declarations. Only accept those that refer to a parameter
@@ -216,23 +175,16 @@ fileprivate class ParameterReplacementVisitor: SyntaxAnyVisitor {
     return .visitChildren
   }
 
-  override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
-    if let expr = node.as(ExprSyntax.self) {
-      // We have an expression that is not one of the allowed forms, so
-      // diagnose it.
-      diagnostics.append(
-        Diagnostic(
-          node: node,
-          message: MacroExpanderError.nonLiteralOrParameter(expr)
-        )
+  override func diagnoseNonLiteral(_ node: some SyntaxProtocol) -> SyntaxVisitorContinueKind {
+    diagnostics.append(
+      Diagnostic(
+        node: node,
+        message: MacroExpanderError.nonLiteralOrParameter
       )
+    )
 
-      return .skipChildren
-    }
-
-    return .visitChildren
+    return .skipChildren
   }
-
 }
 
 extension MacroDeclSyntax {

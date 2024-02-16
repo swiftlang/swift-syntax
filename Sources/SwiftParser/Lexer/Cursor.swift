@@ -1545,8 +1545,8 @@ extension Lexer.Cursor {
     case success(Unicode.Scalar)
 
     /// An escaped character, e.g. `\n` or `\u{1234}`. It has been validated that
-    /// this is a valid character
-    case validatedEscapeSequence(Character)
+    /// this is a valid unicode scalar.
+    case validatedEscapeSequence(Unicode.Scalar)
 
     /// The end of a string literal has been reached.
     case endOfString
@@ -1608,13 +1608,8 @@ extension Lexer.Cursor {
         return .success(Unicode.Scalar("\\"))
       }
       switch self.lexEscapedCharacter(isMultilineString: stringLiteralKind == .multiLine) {
-      case .success(let escapedCharacterCode):
-        // Check to see if the encoding is valid.
-        if let validatedScalar = Unicode.Scalar(escapedCharacterCode) {
-          return .validatedEscapeSequence(Character(validatedScalar))
-        } else {
-          return .error(.invalidEscapeSequenceInStringLiteral)
-        }
+      case .success(let codePoint):
+        return .validatedEscapeSequence(codePoint)
       case .error(let kind):
         return .error(kind)
       }
@@ -1635,7 +1630,7 @@ extension Lexer.Cursor {
   enum EscapedCharacterLex {
     // Successfully lexed an escape sequence that represents the Unicode character
     // at the given codepoint
-    case success(UInt32)
+    case success(Unicode.Scalar)
     case error(TokenDiagnostic.Kind)
   }
 
@@ -1649,13 +1644,13 @@ extension Lexer.Cursor {
     // Escape processing.  We already ate the "\".
     switch self.peek() {
     // Simple single-character escapes.
-    case "0": _ = self.advance(); return .success(UInt32(UInt8(ascii: "\0")))
-    case "n": _ = self.advance(); return .success(UInt32(UInt8(ascii: "\n")))
-    case "r": _ = self.advance(); return .success(UInt32(UInt8(ascii: "\r")))
-    case "t": _ = self.advance(); return .success(UInt32(UInt8(ascii: "\t")))
-    case #"""#: _ = self.advance(); return .success(UInt32(UInt8(ascii: #"""#)))
-    case "'": _ = self.advance(); return .success(UInt32(UInt8(ascii: "'")))
-    case "\\": _ = self.advance(); return .success(UInt32(UInt8(ascii: "\\")))
+    case "0": _ = self.advance(); return .success("\0")
+    case "n": _ = self.advance(); return .success("\n")
+    case "r": _ = self.advance(); return .success("\r")
+    case "t": _ = self.advance(); return .success("\t")
+    case #"""#: _ = self.advance(); return .success(#"""#)
+    case "'": _ = self.advance(); return .success("'")
+    case "\\": _ = self.advance(); return .success("\\")
 
     case "u":  // e.g. \u{1234}
       _ = self.advance()
@@ -1667,7 +1662,7 @@ extension Lexer.Cursor {
       return self.lexUnicodeEscape()
     case "\n", "\r":
       if isMultilineString && self.maybeConsumeNewlineEscape() {
-        return .success(UInt32(UInt8(ascii: "\n")))
+        return .success("\n")
       }
       return .error(.invalidEscapeSequenceInStringLiteral)
     case nil:
@@ -1692,24 +1687,30 @@ extension Lexer.Cursor {
     precondition(quoteConsumed)
 
     let digitStart = self
-    var numDigits = 0
-    while self.advance(if: { $0.isHexDigit }) {
-      numDigits += 1
-    }
+    self.advance(while: { $0.isHexDigit })
+
+    let digitText = SyntaxText(
+      baseAddress: digitStart.pointer,
+      count: digitStart.distance(to: self)
+    )
 
     guard self.advance(matching: "}") else {
       return .error(.expectedClosingBraceInUnicodeEscape)
     }
 
-    if numDigits == 0 || numDigits > 8 {
+    guard 1 <= digitText.count && digitText.count <= 8 else {
       return .error(.invalidNumberOfHexDigitsInUnicodeEscape)
     }
 
-    if let codePoint = UInt32(String(decoding: digitStart.input[0..<numDigits], as: UTF8.self), radix: 16) {
-      return .success(codePoint)
-    } else {
+    guard
+      // FIXME: Implement 'UInt32(_: SyntaxText, radix:)'.
+      let codePoint = UInt32(String(syntaxText: digitText), radix: 16),
+      let scalar = Unicode.Scalar.init(codePoint)
+    else {
       return .error(.invalidEscapeSequenceInStringLiteral)
     }
+
+    return .success(scalar)
   }
 
   private mutating func maybeConsumeNewlineEscape() -> Bool {

@@ -72,6 +72,11 @@ extension StringSegmentSyntax {
     precondition(!hasError, "appendUnescapedLiteralValue relies on properly parsed literals")
 
     let rawText = content.rawText
+    if !rawText.contains("\\") {
+      // Fast path. No escape sequence.
+      output.append(String(syntaxText: rawText))
+      return
+    }
 
     rawText.withBuffer { buffer in
       var cursor = Lexer.Cursor(input: buffer, previous: 0)

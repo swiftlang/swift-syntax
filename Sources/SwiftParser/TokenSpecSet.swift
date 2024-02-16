@@ -646,43 +646,43 @@ enum TypeAttribute: TokenSpecSet {
   case isolated
 
   init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(._local): self = ._local
-    case TokenSpec(._noMetadata): self = ._noMetadata
-    case TokenSpec(._opaqueReturnTypeOf): self = ._opaqueReturnTypeOf
-    case TokenSpec(.async): self = .async
-    case TokenSpec(.autoclosure): self = .autoclosure
-    case TokenSpec(.convention): self = .convention
-    case TokenSpec(.differentiable): self = .differentiable
-    case TokenSpec(.escaping): self = .escaping
-    case TokenSpec(.noDerivative): self = .noDerivative
-    case TokenSpec(.noescape): self = .noescape
-    case TokenSpec(.preconcurrency): self = .preconcurrency
-    case TokenSpec(.Sendable): self = .Sendable
-    case TokenSpec(.retroactive): self = .retroactive
-    case TokenSpec(.unchecked): self = .unchecked
-    case TokenSpec(.isolated): self = .isolated
+    switch lexeme {
+    case TokenSpec("_local"): self = ._local
+    case TokenSpec("_noMetadata"): self = ._noMetadata
+    case TokenSpec("_opaqueReturnTypeOf"): self = ._opaqueReturnTypeOf
+    case TokenSpec("async"): self = .async
+    case TokenSpec("autoclosure"): self = .autoclosure
+    case TokenSpec("convention"): self = .convention
+    case TokenSpec("differentiable"): self = .differentiable
+    case TokenSpec("escaping"): self = .escaping
+    case TokenSpec("noDerivative"): self = .noDerivative
+    case TokenSpec("noescape"): self = .noescape
+    case TokenSpec("preconcurrency"): self = .preconcurrency
+    case TokenSpec("Sendable"): self = .Sendable
+    case TokenSpec("retroactive"): self = .retroactive
+    case TokenSpec("unchecked"): self = .unchecked
+    case TokenSpec("isolated"): self = .isolated
     default: return nil
     }
   }
 
   var spec: TokenSpec {
     switch self {
-    case ._local: return .keyword(._local)
-    case ._noMetadata: return .keyword(._noMetadata)
-    case ._opaqueReturnTypeOf: return .keyword(._opaqueReturnTypeOf)
-    case .async: return .keyword(.async)
-    case .autoclosure: return .keyword(.autoclosure)
-    case .convention: return .keyword(.convention)
-    case .differentiable: return .keyword(.differentiable)
-    case .escaping: return .keyword(.escaping)
-    case .noDerivative: return .keyword(.noDerivative)
-    case .noescape: return .keyword(.noescape)
-    case .preconcurrency: return .keyword(.preconcurrency)
-    case .retroactive: return .keyword(.retroactive)
-    case .Sendable: return .keyword(.Sendable)
-    case .unchecked: return .keyword(.unchecked)
-    case .isolated: return .keyword(.isolated)
+    case ._local: return TokenSpec("_local")
+    case ._noMetadata: return TokenSpec("_noMetadata")
+    case ._opaqueReturnTypeOf: return TokenSpec("_opaqueReturnTypeOf")
+    case .async: return TokenSpec("async")
+    case .autoclosure: return TokenSpec("autoclosure")
+    case .convention: return TokenSpec("convention")
+    case .differentiable: return TokenSpec("differentiable")
+    case .escaping: return TokenSpec("escaping")
+    case .noDerivative: return TokenSpec("noDerivative")
+    case .noescape: return TokenSpec("noescape")
+    case .preconcurrency: return TokenSpec("preconcurrency")
+    case .Sendable: return TokenSpec("Sendable")
+    case .retroactive: return TokenSpec("retroactive")
+    case .unchecked: return TokenSpec("unchecked")
+    case .isolated: return TokenSpec("isolated")
     }
   }
 }

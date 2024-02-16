@@ -239,56 +239,6 @@ enum TokenPrecedence: Comparable {
       .import:
       self = .declKeyword
 
-    case  // `TypeAttribute`
-    ._noMetadata,
-      ._opaqueReturnTypeOf,
-      .autoclosure,
-      .convention,
-      .differentiable,
-      .escaping,
-      .noDerivative,
-      .noescape,
-      .preconcurrency,
-      .Sendable,
-      .retroactive,
-      .unchecked:
-      // Note that .isolated is preferred as a decl keyword
-      self = .exprKeyword
-
-    case  // `DeclarationAttributeWithSpecialSyntax`
-    ._alignment,
-      ._backDeploy,
-      ._cdecl,
-      ._documentation,
-      ._dynamicReplacement,
-      ._effects,
-      ._expose,
-      ._implements,
-      ._nonSendable,
-      ._objcImplementation,
-      ._objcRuntimeName,
-      ._optimize,
-      ._originallyDefinedIn,
-      ._private,
-      ._projectedValueProperty,
-      ._semantics,
-      ._specialize,
-      ._spi,
-      ._spi_available,
-      ._swift_native_objc_runtime_base,
-      ._typeEraser,
-      ._unavailableFromAsync,
-      .attached,
-      .available,
-      .backDeployed,
-      .derivative,
-      .exclusivity,
-      .freestanding,
-      .inline,
-      .objc,
-      .transpose:
-      self = .exprKeyword
-
     case  // Treat all other keywords as expression keywords in the absence of any better information.
     .__owned,
       .__shared,

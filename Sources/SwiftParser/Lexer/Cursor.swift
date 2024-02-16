@@ -493,7 +493,7 @@ struct CharacterByte: ExpressibleByUnicodeScalarLiteral, ExpressibleByIntegerLit
   let value: UInt8
 
   init(unicodeScalarLiteral value: Unicode.Scalar) {
-    self.value = UInt8(ascii: Unicode.Scalar(unicodeScalarLiteral: value))
+    self.value = UInt8(ascii: value)
   }
 
   init(integerLiteral value: UInt8) {
@@ -964,11 +964,11 @@ extension Lexer.Cursor {
       return Lexer.Result(.endOfFile)
     default:
       var tmp = self
-      if tmp.advance(if: { Unicode.Scalar($0).isValidIdentifierStartCodePoint }) {
+      if tmp.advance(if: { $0.isValidIdentifierStartCodePoint }) {
         return self.lexIdentifier()
       }
 
-      if tmp.advance(if: { Unicode.Scalar($0).isOperatorStartCodePoint }) {
+      if tmp.advance(if: { $0.isOperatorStartCodePoint }) {
         return self.lexOperatorIdentifier(
           sourceBufferStart: sourceBufferStart,
           preferRegexOverBinaryOperator: preferRegexOverBinaryOperator
@@ -1009,7 +1009,7 @@ extension Lexer.Cursor {
   private mutating func lexAfterClosingStringQuote() -> Lexer.Result {
     switch self.peek() {
     case "#":
-      self.advance(while: { $0 == Unicode.Scalar("#") })
+      self.advance(while: { $0 == "#" })
       return Lexer.Result(.rawStringPoundDelimiter, stateTransition: .pop)
     case nil:
       return Lexer.Result(.endOfFile)
@@ -1028,7 +1028,7 @@ extension Lexer.Cursor {
       /// number of '#' is correct because otherwise `isAtStringInterpolationAnchor`
       /// would have returned false in `lexInStringLiteral` and w we wouldn't have
       /// transitioned to the `afterBackslashOfStringInterpolation` state.
-      self.advance(while: { $0 == Unicode.Scalar("#") })
+      self.advance(while: { $0 == "#" })
       return Lexer.Result(.rawStringPoundDelimiter)
     case "(":
       _ = self.advance()
@@ -1248,9 +1248,7 @@ extension Lexer.Cursor {
         )
       }
 
-      self.advance(while: {
-        ($0 >= Unicode.Scalar("0") && $0 <= Unicode.Scalar("7")) || $0 == Unicode.Scalar("_")
-      })
+      self.advance(while: { ($0 >= "0" && $0 <= "7") || $0 == "_" })
 
       let tmp = self
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
@@ -1279,9 +1277,7 @@ extension Lexer.Cursor {
         )
       }
 
-      self.advance(while: {
-        $0 == Unicode.Scalar("0") || $0 == Unicode.Scalar("1") || $0 == Unicode.Scalar("_")
-      })
+      self.advance(while: { $0 == "0" || $0 == "1" || $0 == "_" })
 
       let tmp = self
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
@@ -1298,7 +1294,7 @@ extension Lexer.Cursor {
 
     // Handle a leading [0-9]+, lexing an integer or falling through if we have a
     // floating point value.
-    self.advance(while: { $0.isDigit || $0 == Unicode.Scalar("_") })
+    self.advance(while: { $0.isDigit || $0 == "_" })
 
     // TODO: This can probably be unified with lexHexNumber somehow
 
@@ -1333,7 +1329,7 @@ extension Lexer.Cursor {
     // Lex decimal point.
     if self.advance(matching: ".") {
       // Lex any digits after the decimal point.
-      self.advance(while: { $0.isDigit || $0 == Unicode.Scalar("_") })
+      self.advance(while: { $0.isDigit || $0 == "_" })
     }
 
     // Lex exponent.
@@ -1364,7 +1360,7 @@ extension Lexer.Cursor {
         )
       }
 
-      self.advance(while: { $0.isDigit || $0 == Unicode.Scalar("_") })
+      self.advance(while: { $0.isDigit || $0 == "_" })
 
       let tmp = self
       if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
@@ -1401,7 +1397,7 @@ extension Lexer.Cursor {
       }
     }
 
-    self.advance(while: { $0.isHexDigit || $0 == Unicode.Scalar("_") })
+    self.advance(while: { $0.isHexDigit || $0 == "_" })
 
     if self.isAtEndOfFile || self.is(notAt: ".", "p", "P") {
       let tmp = self
@@ -1429,7 +1425,7 @@ extension Lexer.Cursor {
         return Lexer.Result(.integerLiteral)
       }
 
-      self.advance(while: { $0.isHexDigit || $0 == Unicode.Scalar("_") })
+      self.advance(while: { $0.isHexDigit || $0 == "_" })
 
       if self.isAtEndOfFile || self.is(notAt: "p", "P") {
         if let peeked = self.peek(at: 1), !Unicode.Scalar(peeked).isDigit {
@@ -1486,7 +1482,7 @@ extension Lexer.Cursor {
       )
     }
 
-    self.advance(while: { $0.isDigit || $0 == Unicode.Scalar("_") })
+    self.advance(while: { $0.isDigit || $0 == "_" })
 
     let tmp = self
     if self.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
@@ -1605,7 +1601,7 @@ extension Lexer.Cursor {
     case "\\":  // Escapes.
       _ = self.advance()
       if !self.advanceIfStringDelimiter(delimiterLength: delimiterLength) {
-        return .success(Unicode.Scalar("\\"))
+        return .success("\\")
       }
       switch self.lexEscapedCharacter(isMultilineString: stringLiteralKind == .multiLine) {
       case .success(let codePoint):
@@ -1720,7 +1716,7 @@ extension Lexer.Cursor {
       case " ", "\t":
         continue
       case "\r":
-        _ = tmp.advance(if: { $0 == Unicode.Scalar("\n") })
+        _ = tmp.advance(if: { $0 == "\n" })
         fallthrough
       case "\n":
         self = tmp
@@ -1777,7 +1773,7 @@ extension Lexer.Cursor {
         // Scan ahead until the end of the line. Every time we see a closing
         // quote, check if it is followed by the correct number of closing delimiters.
         while isSingleLineString.is(notAt: "\r", "\n") {
-          if isSingleLineString.advance(if: { $0 == Unicode.Scalar((#"""#)) }) {
+          if isSingleLineString.advance(if: { $0 == #"""# }) {
             if isSingleLineString.advanceIfStringDelimiter(delimiterLength: leadingDelimiterLength) {
               return Lexer.Result(.stringQuote, stateTransition: stateTransitionAfterLexingStringQuote(kind: .singleLine))
             }
@@ -2239,7 +2235,7 @@ extension Lexer.Cursor {
       case .error:
         // If the character was incorrectly encoded, give up.
         return nil
-      case .endOfString, .success(Unicode.Scalar(0x201D)):
+      case .endOfString, .success("\u{201D}"):
         // If we found a closing quote, then we're done.  Just return the spot
         // to continue.
         return body
@@ -2263,10 +2259,10 @@ extension Lexer.Cursor {
     precondition(!(self.peekScalar()?.isValidIdentifierStartCodePoint ?? false) && !(self.peekScalar()?.isOperatorStartCodePoint ?? false))
     let start = self
     var tmp = self
-    if tmp.advance(if: { Unicode.Scalar($0).isValidIdentifierContinuationCodePoint }) {
+    if tmp.advance(if: { $0.isValidIdentifierContinuationCodePoint }) {
       // If this is a valid identifier continuation, but not a valid identifier
       // start, attempt to recover by eating more continuation characters.
-      tmp.advance(while: { Unicode.Scalar($0).isValidIdentifierContinuationCodePoint })
+      tmp.advance(while: { $0.isValidIdentifierContinuationCodePoint })
       self = tmp
       return .lexemeContents(Lexer.Result(.identifier, error: LexingDiagnostic(.invalidIdentifierStartCharacter, position: start)))
     }
@@ -2370,10 +2366,8 @@ extension Lexer.Cursor {
       previous: curPtr.input[markerKind.introducer.utf8.count - 1]
     )
     while !restOfBuffer.isAtEndOfFile {
-      let terminatorStart = markerKind.terminator.utf8.first!
-      restOfBuffer.advance(while: { byte in
-        byte != Unicode.Scalar(terminatorStart)
-      })
+      let terminatorStart = markerKind.terminator.unicodeScalars.first!
+      restOfBuffer.advance(while: { byte in byte != terminatorStart })
 
       guard restOfBuffer.starts(with: markerKind.terminator.utf8) else {
         _ = restOfBuffer.advance()

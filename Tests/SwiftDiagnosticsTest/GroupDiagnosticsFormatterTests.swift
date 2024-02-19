@@ -60,6 +60,31 @@ extension GroupedDiagnostics {
 }
 
 final class GroupedDiagnosticsFormatterTests: XCTestCase {
+  func testSourceLocations() {
+    var group = GroupedDiagnostics()
+
+    // Main source file.
+    _ = group.addTestFile(
+      """
+      #sourceLocation(file: "other.swift", line: 123)
+      let pi = 3.14159 x
+      """,
+      displayName: "main.swift",
+      diagnosticDescriptors: []
+    )
+    let annotated = DiagnosticsFormatter.annotateSources(in: group)
+    assertStringsEqualWithDiff(
+      annotated,
+      """
+      other.swift:123:17: error: consecutive statements on a line must be separated by newline or ';'
+      1 │ #sourceLocation(file: "other.swift", line: 123)
+      2 │ let pi = 3.14159 x
+        │                 ╰─ error: consecutive statements on a line must be separated by newline or ';'
+
+      """
+    )
+  }
+
   func testGroupingForMacroExpansion() {
     var group = GroupedDiagnostics()
 

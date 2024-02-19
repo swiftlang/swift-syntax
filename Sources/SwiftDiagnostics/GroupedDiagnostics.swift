@@ -207,7 +207,7 @@ extension GroupedDiagnostics {
 
         // Display file/line/column and diagnostic text for the primary diagnostic.
         prefixString =
-          "\(location.file):\(location.line):\(location.column): \(diagnosticDecorator.decorateDiagnosticMessage(primaryDiag.diagMessage))\n"
+          "\(location.presumedFile):\(location.presumedLine):\(location.column): \(diagnosticDecorator.decorateDiagnosticMessage(primaryDiag.diagMessage))\n"
 
         // If the primary diagnostic source file is not the same as the root source file, we're pointing into a generated buffer.
         // Provide a link back to the original source file where this generated buffer occurred, so it's easy to find if

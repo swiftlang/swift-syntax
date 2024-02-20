@@ -205,10 +205,10 @@ extension Parser {
     // If qualified name base type cannot be parsed from the current
     // point (i.e. the next type identifier is not followed by a '.'),
     // then the next identifier is the final declaration name component.
-    var backtrack = self.lookahead()
+    var lookahead = self.lookahead()
     guard
-      backtrack.consume(ifPrefix: ".", as: .period) != nil,
-      backtrack.canParseBaseTypeForQualifiedDeclName()
+      lookahead.consume(ifPrefix: ".", as: .period) != nil,
+      lookahead.canParseBaseTypeForQualifiedDeclName()
     else {
       return result
     }
@@ -237,10 +237,10 @@ extension Parser {
       // If qualified name base type cannot be parsed from the current
       // point (i.e. the next type identifier is not followed by a '.'),
       // then the next identifier is the final declaration name component.
-      var backtrack = self.lookahead()
+      var lookahead = self.lookahead()
       guard
-        backtrack.consume(ifPrefix: ".", as: .period) != nil,
-        backtrack.canParseBaseTypeForQualifiedDeclName()
+        lookahead.consume(ifPrefix: ".", as: .period) != nil,
+        lookahead.canParseBaseTypeForQualifiedDeclName()
       else {
         break
       }

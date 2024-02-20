@@ -208,8 +208,7 @@ extension Parser {
       // However, if this is the first clause, and we see "x = y", then this is
       // almost certainly a typo for '==' and definitely not a continuation of
       // another clause, so parse it as an expression.  This also avoids
-      // lookahead + backtracking on simple if conditions that are obviously
-      // boolean conditions.
+      // lookahead on simple if conditions that are obviously boolean conditions.
       return .expression(self.parseExpression(flavor: .stmtCondition, pattern: .none))
     }
 

@@ -132,21 +132,21 @@ private func expandFreestandingExpr(
 /// Adds the appropriate indentation on expanded code even if it's multi line.
 /// Makes sure original macro expression's trivia is maintained by adding it to expanded code.
 private func adjustIndentationOfFreestandingMacro(expandedCode: String, node: some FreestandingMacroExpansionSyntax) -> String {
-  
+
   if expandedCode.isEmpty {
     return expandedCode.wrappingInTrivia(from: node)
   }
-  
+
   let indentationOfFirstLine = node.indentationOfFirstLine
   let indentLength = indentationOfFirstLine.sourceLength.utf8Length
-  
+
   // we are doing 3 step adjustment here
   // step 1: add indentation to each line of expanded code
   // step 2: remove indentation from first line of expaned code
   // step 3: wrap the expanded code into macro expression's trivia. This trivia will contain appropriate existing
   // indentation. Note that if macro expression occurs in middle of the line then there will be no indentation or extra space.
   // Hence we are doing step 2
-  
+
   var indentedSource = expandedCode.indented(by: indentationOfFirstLine)
   indentedSource.removeFirst(indentLength)
   indentedSource = indentedSource.wrappingInTrivia(from: node)

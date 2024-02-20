@@ -93,10 +93,8 @@ private func expandFreestandingMemberDeclList(
     return nil
   }
 
-  let indentedSource =
-    expanded
-    .indented(by: node.indentationOfFirstLine)
-    .wrappingInTrivia(from: node)
+  let indentedSource = adjustIndentationOfFreestandingMacro(expandedCode: expanded, node: node)
+
   return "\(raw: indentedSource)"
 }
 
@@ -118,13 +116,8 @@ private func expandFreestandingCodeItemList(
     return nil
   }
 
-  // The macro expansion just provides an expansion for the content.
-  // We need to make sure that we aren’t dropping the trivia before and after
-  // the expansion.
-  let indentedSource =
-    expanded
-    .indented(by: node.indentationOfFirstLine)
-    .wrappingInTrivia(from: node)
+  let indentedSource = adjustIndentationOfFreestandingMacro(expandedCode: expanded, node: node)
+
   return "\(raw: indentedSource)"
 }
 
@@ -146,11 +139,34 @@ private func expandFreestandingExpr(
     return nil
   }
 
-  let indentedSource =
-    expanded
-    .indented(by: node.indentationOfFirstLine)
-    .wrappingInTrivia(from: node)
+  let indentedSource = adjustIndentationOfFreestandingMacro(expandedCode: expanded, node: node)
+
   return "\(raw: indentedSource)"
+}
+
+/// Adds the appropriate indentation on expanded code even if it's multi line.
+/// Makes sure original macro expression's trivia is maintained by adding it to expanded code.
+private func adjustIndentationOfFreestandingMacro(expandedCode: String, node: some FreestandingMacroExpansionSyntax) -> String {
+
+  if expandedCode.isEmpty {
+    return expandedCode.wrappingInTrivia(from: node)
+  }
+
+  let indentationOfFirstLine = node.indentationOfFirstLine
+  let indentLength = indentationOfFirstLine.sourceLength.utf8Length
+
+  // we are doing 3 step adjustment here
+  // step 1: add indentation to each line of expanded code
+  // step 2: remove indentation from first line of expaned code
+  // step 3: wrap the expanded code into macro expression's trivia. This trivia will contain appropriate existing
+  // indentation. Note that if macro expression occurs in middle of the line then there will be no indentation or extra space.
+  // Hence we are doing step 2
+
+  var indentedSource = expandedCode.indented(by: indentationOfFirstLine)
+  indentedSource.removeFirst(indentLength)
+  indentedSource = indentedSource.wrappingInTrivia(from: node)
+
+  return indentedSource
 }
 
 private func expandMemberMacro(
@@ -1284,9 +1300,7 @@ private extension String {
   /// user should think about it as just replacing the `#...` expression without
   /// any trivia.
   func wrappingInTrivia(from node: some SyntaxProtocol) -> String {
-    // We need to remove the indentation from the last line because the macro
-    // expansion buffer already contains the indentation.
-    return node.leadingTrivia.removingIndentationOnLastLine.description
+    return node.leadingTrivia.description
       + self
       + node.trailingTrivia.description
   }

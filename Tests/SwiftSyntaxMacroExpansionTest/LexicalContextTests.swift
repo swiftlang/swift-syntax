@@ -173,6 +173,24 @@ public struct FunctionMacro: ExpressionMacro {
   }
 }
 
+public struct MultilineFunctionMacro: ExpressionMacro {
+  public static func expansion<
+    Node: FreestandingMacroExpansionSyntax,
+    Context: MacroExpansionContext
+  >(
+    of node: Node,
+    in context: Context
+  ) -> ExprSyntax {
+    guard let lexicalContext = context.lexicalContext.first,
+      let name = lexicalContext.functionName(in: context)
+    else {
+      return #""<unknown>""#
+    }
+
+    return ExprSyntax("{\n\(literal: name)\n}")
+  }
+}
+
 public struct AllLexicalContextsMacro: DeclarationMacro {
   public static func expansion(
     of node: some FreestandingMacroExpansionSyntax,
@@ -194,7 +212,7 @@ final class LexicalContextTests: XCTestCase {
       """,
       expandedSource: """
         func f(a: Int, _: Double, c: Int) {
-          print(  "f(a:_:c:)")
+          print("f(a:_:c:)")
         }
         """,
       macros: ["function": FunctionMacro.self],
@@ -263,10 +281,180 @@ final class LexicalContextTests: XCTestCase {
       """,
       expandedSource: """
         extension A {
-          static var staticProp: String =   "staticProp"
+          static var staticProp: String = "staticProp"
         }
         """,
       macros: ["function": FunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      func f(a: Int, _: Double, c: Int) {
+        print(/*comment*/#function)
+      }
+      """,
+      expandedSource: """
+        func f(a: Int, _: Double, c: Int) {
+          print(/*comment*/"f(a:_:c:)")
+        }
+        """,
+      macros: ["function": FunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      var computed: String {
+        get {
+          /*comment*/#function
+        }
+      }
+      """,
+      expandedSource: """
+        var computed: String {
+          get {
+            /*comment*/"computed"
+          }
+        }
+        """,
+      macros: ["function": FunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testPoundMultilineFunction() {
+    assertMacroExpansion(
+      """
+      func f(a: Int, _: Double, c: Int) {
+        print(#function)
+      }
+      """,
+      expandedSource: """
+        func f(a: Int, _: Double, c: Int) {
+          print({
+            "f(a:_:c:)"
+          })
+        }
+        """,
+      macros: ["function": MultilineFunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      struct X {
+        init(from: String) {
+          #function
+        }
+
+        subscript(a: Int) -> String {
+          #function
+        }
+
+        subscript(a a: Int) -> String {
+          #function
+        }
+      }
+      """,
+      expandedSource: """
+        struct X {
+          init(from: String) {
+            {
+              "init(from:)"
+            }
+          }
+
+          subscript(a: Int) -> String {
+            {
+              "subscript(_:)"
+            }
+          }
+
+          subscript(a a: Int) -> String {
+            {
+              "subscript(a:)"
+            }
+          }
+        }
+        """,
+      macros: ["function": MultilineFunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      var computed: String {
+        get {
+          #function
+        }
+      }
+      """,
+      expandedSource: """
+        var computed: String {
+          get {
+            {
+              "computed"
+            }
+          }
+        }
+        """,
+      macros: ["function": MultilineFunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      extension A {
+        static var staticProp: String = #function
+      }
+      """,
+      expandedSource: """
+        extension A {
+          static var staticProp: String = {
+            "staticProp"
+          }
+        }
+        """,
+      macros: ["function": MultilineFunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      func f(a: Int, _: Double, c: Int) {
+        print(/*comment*/#function)
+      }
+      """,
+      expandedSource: """
+        func f(a: Int, _: Double, c: Int) {
+          print(/*comment*/{
+            "f(a:_:c:)"
+          })
+        }
+        """,
+      macros: ["function": MultilineFunctionMacro.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      var computed: String {
+        get {
+          /*comment*/#function // another comment
+        }
+      }
+      """,
+      expandedSource: """
+        var computed: String {
+          get {
+            /*comment*/{
+              "computed"
+            } // another comment
+          }
+        }
+        """,
+      macros: ["function": MultilineFunctionMacro.self],
       indentationWidth: indentationWidth
     )
   }

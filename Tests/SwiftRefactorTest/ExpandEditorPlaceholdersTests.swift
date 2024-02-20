@@ -52,6 +52,20 @@ final class ExpandEditorPlaceholdersTest: XCTestCase {
     try assertRefactorPlaceholderCall(baseline, expected: expected)
   }
 
+  func testPlaceholderWithoutExplicitText() throws {
+    let placeholder = ExpandEditorPlaceholder.wrapInPlaceholder("T##(Int) -> Void")
+    let baseline = "call(\(placeholder))"
+
+    let int = ExpandEditorPlaceholder.wrapInPlaceholder("Int")
+    let expected: String = """
+      call { \(int) in
+          \(voidPlaceholder)
+      }
+      """
+
+    try assertRefactorPlaceholderCall(baseline, expected: expected)
+  }
+
   func testMultipleClosureArgs() throws {
     let baseline = "call(arg1: \(closurePlaceholder), arg2: \(closurePlaceholder))"
 

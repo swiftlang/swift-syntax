@@ -309,8 +309,8 @@ fileprivate enum EditorPlaceholderData {
     var typeText: Substring
     (text, typeText) = split(text, separatedBy: "##")
     if typeText.isEmpty {
-      // No type information
-      self = .basic(text: text)
+      // Only type information present
+      self.init(typeText: text)
       return
     }
 

@@ -81,6 +81,12 @@ extension MacroExpansionContext {
   ) -> AbstractSourceLocation? {
     return location(of: node, at: .afterLeadingTrivia, filePathMode: .fileID)
   }
+
+  public var lexicalContext: [Syntax] {
+    fatalError(
+      "`MacroExpansionContext` conformance must implement `lexicalContext`"
+    )
+  }
 }
 
 /// Diagnostic message used for thrown errors.

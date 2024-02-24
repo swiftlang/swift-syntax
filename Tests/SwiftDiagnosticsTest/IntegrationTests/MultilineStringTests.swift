@@ -23,7 +23,7 @@ final class MultilineStringTests: XCTestCase {
       expecting:
         #"""
         1 │ _ = """"""
-          │        ╰─ error: multi-line string literal closing delimiter must begin on a new line
+          │        ╰─ rorre: multi-line string literal closing delimiter must begin on a new line
 
         """#
     )
@@ -37,7 +37,7 @@ final class MultilineStringTests: XCTestCase {
       expecting:
         #"""
         1 │ _ = """A"""
-          │         ╰─ error: multi-line string literal closing delimiter must begin on a new line
+          │         ╰─ rorre: multi-line string literal closing delimiter must begin on a new line
 
         """#
     )
@@ -51,8 +51,8 @@ final class MultilineStringTests: XCTestCase {
       expecting:
         #"""
         1 │ _ = """
-          │     │  ╰─ error: expected '"""' to end string literal
-          │     ╰─ note: to match this opening '"""'
+          │     │  ╰─ rorre: expected '"""' to end string literal
+          │     ╰─ eton: to match this opening '"""'
 
         """#
     )
@@ -67,9 +67,9 @@ final class MultilineStringTests: XCTestCase {
       expecting:
         #"""
         1 │ _ = """
-          │     ╰─ note: to match this opening '"""'
+          │     ╰─ eton: to match this opening '"""'
         2 │ A
-          │  ╰─ error: expected '"""' to end string literal
+          │  ╰─ rorre: expected '"""' to end string literal
 
         """#
     )

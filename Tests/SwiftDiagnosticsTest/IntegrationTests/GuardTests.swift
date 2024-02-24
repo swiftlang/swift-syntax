@@ -26,7 +26,7 @@ final class GuardTests: XCTestCase {
         """
         1 │ func noConditionNoElse() {
         2 │   guard {}
-          │           ╰─ error: expected 'else' and body in 'guard' statement
+          │           ╰─ rorre: expected 'else' and body in 'guard' statement
         3 │ }
 
         """
@@ -44,7 +44,7 @@ final class GuardTests: XCTestCase {
         """
         1 │ func noCondition() {
         2 │   guard else {}
-          │         ╰─ error: expected condition in 'guard' statement
+          │         ╰─ rorre: expected condition in 'guard' statement
         3 │ }
 
         """

@@ -26,9 +26,9 @@ final class SwitchIncompleteTests: XCTestCase {
       expecting:
         """
         1 │ switch 1 {
-          │          ╰─ note: to match this opening '{'
+          │          ╰─ eton: to match this opening '{'
         2 │ case 1:
-          │        ╰─ error: expected '}' to end 'switch' statement
+          │        ╰─ rorre: expected '}' to end 'switch' statement
 
         """
     )

@@ -24,7 +24,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
       expecting:
         #"""
         1 │ @available(*, unavailable, message: "\("message")")
-          │                                      ╰─ error: argument cannot be an interpolated string literal
+          │                                      ╰─ rorre: argument cannot be an interpolated string literal
         2 │ func interpolatedMessage() {}
 
         """#
@@ -40,7 +40,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
       expecting:
         #"""
         1 │ @available(*, unavailable, message: "\(someCall())")
-          │                                      ╰─ error: argument cannot be an interpolated string literal
+          │                                      ╰─ rorre: argument cannot be an interpolated string literal
         2 │ func interpolatedMessage() {}
 
         """#
@@ -58,7 +58,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
       expecting:
         ##"""
         1 │ @available(*, unavailable, message: #"""
-          │                                     ╰─ error: argument cannot be an extended escaping string literal
+          │                                     ╰─ rorre: argument cannot be an extended escaping string literal
         2 │   foobar message.
         3 │   """#)
 
@@ -75,7 +75,7 @@ final class DiagnoseAvailabilityTests: XCTestCase {
       expecting:
         ##"""
         1 │ @available(*, unavailable, renamed: #"available()"#)
-          │                                     ╰─ error: argument cannot be an extended escaping string literal
+          │                                     ╰─ rorre: argument cannot be an extended escaping string literal
         2 │ func extendedEscapedRenamed() {}
 
         """##

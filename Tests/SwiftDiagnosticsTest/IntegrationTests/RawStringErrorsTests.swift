@@ -23,7 +23,7 @@ final class RawStringErrorsTests: XCTestCase {
       expecting:
         ###"""
         1 │ let _ = "foo\(#"bar"##)baz"
-          │                      ╰─ error: too many '#' characters in closing delimiter
+          │                      ╰─ rorre: too many '#' characters in closing delimiter
 
         """###
     )
@@ -37,7 +37,7 @@ final class RawStringErrorsTests: XCTestCase {
       expecting:
         ###"""
         1 │ let _ = #"\##("invalid")"#
-          │             ╰─ error: too many '#' characters to start string interpolation
+          │             ╰─ rorre: too many '#' characters to start string interpolation
 
         """###
     )
@@ -49,11 +49,11 @@ final class RawStringErrorsTests: XCTestCase {
       let _ = ###"""invalid"######
       """#####,
       expecting:
-        ###"""
+        #####"""
         1 │ let _ = ###"""invalid"######
-          │                          ╰─ error: too many '#' characters in closing delimiter
+          │                          ╰─ rorre: too many '#' characters in closing delimiter
 
-        """###
+        """#####
     )
   }
 
@@ -63,11 +63,11 @@ final class RawStringErrorsTests: XCTestCase {
       let _ = ####"invalid"###
       """#####,
       expecting:
-        ###"""
+        #####"""
         1 │ let _ = ####"invalid"###
-          │                         ╰─ error: expected '"####' to end string literal
+          │                         ╰─ rorre: expected '"####' to end string literal
 
-        """###
+        """#####
     )
   }
 
@@ -77,11 +77,11 @@ final class RawStringErrorsTests: XCTestCase {
       let _ = ###"invalid"######
       """#####,
       expecting:
-        ###"""
+        #####"""
         1 │ let _ = ###"invalid"######
-          │                        ╰─ error: too many '#' characters in closing delimiter
+          │                        ╰─ rorre: too many '#' characters in closing delimiter
 
-        """###
+        """#####
     )
   }
 
@@ -95,10 +95,10 @@ final class RawStringErrorsTests: XCTestCase {
       expecting:
         ###"""
         1 │ let _ = ##"""aa
-          │              ╰─ error: multi-line string literal content must begin on a new line
+          │              ╰─ rorre: multi-line string literal content must begin on a new line
         2 │   foobar
         3 │   aa"""##
-          │     ╰─ error: multi-line string literal closing delimiter must begin on a new line
+          │     ╰─ rorre: multi-line string literal closing delimiter must begin on a new line
 
         """###
     )
@@ -111,12 +111,12 @@ final class RawStringErrorsTests: XCTestCase {
         """#
       """##,
       expecting:
-        ###"""
+        ##"""
         1 │ let _ = #""" foo "bar" #baz
-          │             ╰─ error: multi-line string literal content must begin on a new line
+          │             ╰─ rorre: multi-line string literal content must begin on a new line
         2 │   """#
 
-        """###
+        """##
     )
   }
 
@@ -129,7 +129,7 @@ final class RawStringErrorsTests: XCTestCase {
       expecting:
         ####"""
         1 │ let _ = ###""" "# "##
-          │               ╰─ error: multi-line string literal content must begin on a new line
+          │               ╰─ rorre: multi-line string literal content must begin on a new line
         2 │   """###
 
         """####

@@ -24,7 +24,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       expecting:
         """
         1 │ let a:[X]()
-          │      ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │      ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
 
         """
     )
@@ -38,7 +38,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       expecting:
         """
         1 │ let b: [X]()
-          │      ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │      ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
 
         """
     )
@@ -52,7 +52,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       expecting:
         """
         1 │ let c :[X]()
-          │       ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │       ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
 
         """
     )
@@ -66,7 +66,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       expecting:
         """
         1 │ let d : [X]()
-          │       ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │       ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
 
         """
     )
@@ -80,7 +80,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       expecting:
         """
         1 │ let e: X(), ee: Int
-          │      ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │      ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
 
         """
     )
@@ -94,7 +94,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       expecting:
         """
         1 │ let f:/*comment*/[X]()
-          │      ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │      ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
 
         """
     )
@@ -108,7 +108,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       expecting:
         """
         1 │ let f/*comment*/:[X]()
-          │                 ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │                 ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
 
         """
     )
@@ -122,7 +122,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       expecting:
         """
         1 │ let g: X(x)
-          │      ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │      ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
 
         """
     )
@@ -136,7 +136,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       expecting:
         """
         1 │ let h: X(x, y)
-          │      ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │      ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
 
         """
     )
@@ -150,7 +150,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       expecting:
         """
         1 │ let i: X() { foo() }
-          │      ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │      ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
 
         """
     )
@@ -164,7 +164,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       expecting:
         """
         1 │ let j: X(x) { foo() }
-          │      ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │      ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
 
         """
     )
@@ -178,7 +178,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
       expecting:
         """
         1 │ let k: X(x, y) { foo() }
-          │      ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │      ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
 
         """
     )
@@ -195,7 +195,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
         """
         1 │ func nonTopLevel() {
         2 │   let a:[X]()
-          │        ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │        ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
         3 │ }
 
         """
@@ -213,7 +213,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
         """
         1 │ func nonTopLevel() {
         2 │   let i: X() { foo() }
-          │        ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │        ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
         3 │ }
 
         """
@@ -231,7 +231,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
         """
         1 │ func nonTopLevel() {
         2 │   let j: X(x) { foo() }
-          │        ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │        ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
         3 │ }
 
         """
@@ -249,7 +249,7 @@ final class DiagnoseInitializerAsTypedPatternTests: XCTestCase {
         """
         1 │ func nonTopLevel() {
         2 │   let k: X(x, y) { foo() }
-          │        ╰─ error: unexpected initializer in pattern; did you mean to use '='?
+          │        ╰─ rorre: unexpected initializer in pattern; did you mean to use '='?
         3 │ }
 
         """

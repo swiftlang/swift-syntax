@@ -23,7 +23,7 @@ final class InvalidIfExprTests: XCTestCase {
       expecting:
         """
         1 │ (a ? b)
-          │       ╰─ error: expected ':' and expression after '? ...' in ternary expression
+          │       ╰─ rorre: expected ':' and expression after '? ...' in ternary expression
 
         """
     )
@@ -37,7 +37,7 @@ final class InvalidIfExprTests: XCTestCase {
       expecting:
         """
         1 │ (a ? b : c ? d)
-          │               ╰─ error: expected ':' and expression after '? ...' in ternary expression
+          │               ╰─ rorre: expected ':' and expression after '? ...' in ternary expression
 
         """
     )
@@ -51,9 +51,9 @@ final class InvalidIfExprTests: XCTestCase {
       expecting:
         """
         1 │ (a ? b ? c : d
-          │ │             ├─ error: expected ':' and expression after '? ...' in ternary expression
-          │ │             ╰─ error: expected ')' to end tuple
-          │ ╰─ note: to match this opening '('
+          │ │             ├─ rorre: expected ':' and expression after '? ...' in ternary expression
+          │ │             ╰─ rorre: expected ')' to end tuple
+          │ ╰─ eton: to match this opening '('
 
         """
     )
@@ -67,8 +67,8 @@ final class InvalidIfExprTests: XCTestCase {
       expecting:
         """
         1 │ (a ? b ? c)
-          │           ├─ error: expected ':' and expression after '? ...' in ternary expression
-          │           ╰─ error: expected ':' and expression after '? ...' in ternary expression
+          │           ├─ rorre: expected ':' and expression after '? ...' in ternary expression
+          │           ╰─ rorre: expected ':' and expression after '? ...' in ternary expression
 
         """
     )
@@ -82,7 +82,7 @@ final class InvalidIfExprTests: XCTestCase {
       expecting:
         """
         1 │ foo ? 1 2
-          │         ╰─ error: expected ':' after '? ...' in ternary expression
+          │         ╰─ rorre: expected ':' after '? ...' in ternary expression
 
         """
     )
@@ -96,7 +96,7 @@ final class InvalidIfExprTests: XCTestCase {
       expecting:
         """
         1 │ foo ? 1
-          │        ╰─ error: expected ':' and expression after '? ...' in ternary expression
+          │        ╰─ rorre: expected ':' and expression after '? ...' in ternary expression
 
         """
     )
@@ -111,7 +111,7 @@ final class InvalidIfExprTests: XCTestCase {
       expecting:
         """
         1 │ condition ? 1
-          │              ╰─ error: expected ':' and expression after '? ...' in ternary expression
+          │              ╰─ rorre: expected ':' and expression after '? ...' in ternary expression
         2 │ someOtherVariable
 
         """

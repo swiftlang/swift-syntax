@@ -25,7 +25,7 @@ final class EnumTests: XCTestCase {
         """
         1 │ // Cases are excluded from non-enums.
         2 │ case FloatingCase
-          │ ╰─ error: 'case' can only appear inside a 'switch' statement or 'enum' declaration
+          │ ╰─ rorre: 'case' can only appear inside a 'switch' statement or 'enum' declaration
 
         """
     )
@@ -43,7 +43,7 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum SwitchEnvy {
         2 │   case X:
-          │         ╰─ error: unexpected code ':' in enum
+          │         ╰─ rorre: unexpected code ':' in enum
         3 │ }
 
         """
@@ -61,7 +61,7 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum SwitchEnvy {
         2 │   case X(Y):
-          │            ╰─ error: unexpected code ':' in enum
+          │            ╰─ rorre: unexpected code ':' in enum
         3 │ }
 
         """
@@ -79,7 +79,7 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum SwitchEnvy {
         2 │   case X, Y:
-          │            ╰─ error: unexpected code ':' in enum
+          │            ╰─ rorre: unexpected code ':' in enum
         3 │ }
 
         """
@@ -97,7 +97,7 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum SwitchEnvy {
         2 │   case X where true:
-          │          ╰─ error: unexpected code 'where true:' in enum
+          │          ╰─ rorre: unexpected code 'where true:' in enum
         3 │ }
 
         """
@@ -115,7 +115,7 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum SwitchEnvy {
         2 │   case X(Y), Z(W):
-          │                  ╰─ error: unexpected code ':' in enum
+          │                  ╰─ rorre: unexpected code ':' in enum
         3 │ }
 
         """
@@ -133,7 +133,7 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum SwitchEnvy {
         2 │   case X(Y) where true:
-          │             ╰─ error: unexpected code 'where true:' in enum
+          │             ╰─ rorre: unexpected code 'where true:' in enum
         3 │ }
 
         """
@@ -151,8 +151,8 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum SwitchEnvy {
         2 │   case 0:
-          │        │╰─ error: unexpected code ':' in enum
-          │        ╰─ error: identifier can only start with a letter or underscore, not a number
+          │        │╰─ rorre: unexpected code ':' in enum
+          │        ╰─ rorre: identifier can only start with a letter or underscore, not a number
         3 │ }
 
         """
@@ -170,8 +170,8 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum SwitchEnvy {
         2 │   case _:
-          │        │╰─ error: unexpected code ':' in enum
-          │        ╰─ error: '_' cannot be used as an identifier here
+          │        │╰─ rorre: unexpected code ':' in enum
+          │        ╰─ rorre: '_' cannot be used as an identifier here
         3 │ }
 
         """
@@ -189,10 +189,10 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum SwitchEnvy {
         2 │   case (_, var x, 0):
-          │        │        │ │ ╰─ error: unexpected code ':' in enum
-          │        │        │ ╰─ error: unexpected code '0' in parameter clause
-          │        │        ╰─ error: expected ':' and type in parameter
-          │        ╰─ error: expected identifier in enum case
+          │        │        │ │ ╰─ rorre: unexpected code ':' in enum
+          │        │        │ ╰─ rorre: unexpected code '0' in parameter clause
+          │        │        ╰─ rorre: expected ':' and type in parameter
+          │        ╰─ rorre: expected identifier in enum case
         3 │ }
 
         """
@@ -213,7 +213,7 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum rdar14678675 {
         2 │   case U1,
-          │           ╰─ error: expected identifier in enum case
+          │           ╰─ rorre: expected identifier in enum case
         3 │   case U2
         4 │   case U3
 
@@ -232,8 +232,8 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum Recovery1 {
         2 │   case:
-          │       ├─ error: expected identifier in enum case
-          │       ╰─ error: unexpected code ':' in enum
+          │       ├─ rorre: expected identifier in enum case
+          │       ╰─ rorre: unexpected code ':' in enum
         3 │ }
 
         """
@@ -251,7 +251,7 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum Recovery2 {
         2 │   case UE1:
-          │           ╰─ error: unexpected code ':' in enum
+          │           ╰─ rorre: unexpected code ':' in enum
         3 │ }
 
         """
@@ -269,7 +269,7 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum Recovery3 {
         2 │   case UE2(Void):
-          │                 ╰─ error: unexpected code ':' in enum
+          │                 ╰─ rorre: unexpected code ':' in enum
         3 │ }
 
         """
@@ -287,8 +287,8 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum Recovery4 {
         2 │   case Self Self
-          │        │    ╰─ error: unexpected 'Self' keyword in enum
-          │        ╰─ error: keyword 'Self' cannot be used as an identifier here
+          │        │    ╰─ rorre: unexpected 'Self' keyword in enum
+          │        ╰─ rorre: keyword 'Self' cannot be used as an identifier here
         3 │ }
 
         """
@@ -307,10 +307,10 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum Recovery5 {
         2 │   case .UE3
-          │        ╰─ error: unexpected code '.' in enum case
+          │        ╰─ rorre: unexpected code '.' in enum case
         3 │   case .UE4, .UE5
-          │        │     ╰─ error: unexpected code '.' in enum case
-          │        ╰─ error: unexpected code '.' in enum case
+          │        │     ╰─ rorre: unexpected code '.' in enum case
+          │        ╰─ rorre: unexpected code '.' in enum case
         4 │ }
 
         """
@@ -330,11 +330,11 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum Recovery6 {
         2 │   case Snout, _;
-          │               ╰─ error: '_' cannot be used as an identifier here
+          │               ╰─ rorre: '_' cannot be used as an identifier here
         3 │   case _;
-          │        ╰─ error: '_' cannot be used as an identifier here
+          │        ╰─ rorre: '_' cannot be used as an identifier here
         4 │   case Tusk,
-          │             ╰─ error: expected identifier in enum case
+          │             ╰─ rorre: expected identifier in enum case
         5 │ }
 
         """
@@ -349,7 +349,7 @@ final class EnumTests: XCTestCase {
       expecting:
         """
         1 │ enum switch {}
-          │      ╰─ error: keyword 'switch' cannot be used as an identifier here
+          │      ╰─ rorre: keyword 'switch' cannot be used as an identifier here
 
         """
     )
@@ -369,7 +369,7 @@ final class EnumTests: XCTestCase {
         1 │ enum E_53662 {
         2 │   case identifier
         3 │   case operator
-          │        ╰─ error: keyword 'operator' cannot be used as an identifier here
+          │        ╰─ rorre: keyword 'operator' cannot be used as an identifier here
         4 │   case identifier2
         5 │ }
 
@@ -391,7 +391,7 @@ final class EnumTests: XCTestCase {
         1 │ enum E_53662_var {
         2 │   case identifier
         3 │   case var
-          │        ╰─ error: keyword 'var' cannot be used as an identifier here
+          │        ╰─ rorre: keyword 'var' cannot be used as an identifier here
         4 │   case identifier2
         5 │ }
 
@@ -413,7 +413,7 @@ final class EnumTests: XCTestCase {
         1 │ enum E_53662_underscore {
         2 │   case identifier
         3 │   case _
-          │        ╰─ error: '_' cannot be used as an identifier here
+          │        ╰─ rorre: '_' cannot be used as an identifier here
         4 │   case identifier2
         5 │ }
 
@@ -432,7 +432,7 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum E_53662_Comma {
         2 │   case a, b, c, func, d
-          │                 ╰─ error: keyword 'func' cannot be used as an identifier here
+          │                 ╰─ rorre: keyword 'func' cannot be used as an identifier here
         3 │ }
 
         """
@@ -454,7 +454,7 @@ final class EnumTests: XCTestCase {
         2 │   case identifier1
         3 │   case identifier2
         4 │   case
-          │       ╰─ error: expected identifier in enum case
+          │       ╰─ rorre: expected identifier in enum case
         5 │   case identifier
         6 │ }
 
@@ -474,7 +474,7 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum E_53662_Newline2 {
         2 │   case
-          │       ╰─ error: expected identifier in enum case
+          │       ╰─ rorre: expected identifier in enum case
         3 │   func foo() {}
         4 │ }
 
@@ -493,8 +493,8 @@ final class EnumTests: XCTestCase {
         """
         1 │ enum E_53662_PatternMatching {
         2 │   case let .foo(x, y):
-          │        │   ╰─ error: unexpected code '.foo(x, y):' in enum
-          │        ╰─ error: keyword 'let' cannot be used as an identifier here
+          │        │   ╰─ rorre: unexpected code '.foo(x, y):' in enum
+          │        ╰─ rorre: keyword 'let' cannot be used as an identifier here
         3 │ }
 
         """
@@ -510,15 +510,15 @@ final class EnumTests: XCTestCase {
       }
       """#,
       expecting:
-        """
+        #"""
         1 │ enum CasesWithMissingElement: Int {
         2 │   case a = "hello",
-          │                    ╰─ error: expected identifier in enum case
+          │                    ╰─ rorre: expected identifier in enum case
         3 │   case b = "hello",
-          │                    ╰─ error: expected identifier in enum case
+          │                    ╰─ rorre: expected identifier in enum case
         4 │ }
 
-        """
+        """#
     )
   }
 }

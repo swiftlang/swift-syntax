@@ -24,7 +24,7 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
       expecting:
         """
         1 │ var : Int
-          │     ╰─ error: expected pattern in variable
+          │     ╰─ rorre: expected pattern in variable
 
         """
     )
@@ -39,7 +39,7 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
       expecting:
         """
         1 │ func a() { / {}/ }
-          │             ╰─ error: bare slash regex literal may not start with space
+          │             ╰─ rorre: bare slash regex literal may not start with space
 
         """
     )
@@ -53,7 +53,7 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
       expecting:
         #"""
         1 │ func b() { / \{}/ }
-          │             ╰─ error: bare slash regex literal may not start with space
+          │             ╰─ rorre: bare slash regex literal may not start with space
 
         """#
     )
@@ -67,7 +67,7 @@ final class ForwardSlashRegexSkippingAllowedTests: XCTestCase {
       expecting:
         #"""
         1 │ func c() { / {"{"}/ }
-          │             ╰─ error: bare slash regex literal may not start with space
+          │             ╰─ rorre: bare slash regex literal may not start with space
 
         """#
     )

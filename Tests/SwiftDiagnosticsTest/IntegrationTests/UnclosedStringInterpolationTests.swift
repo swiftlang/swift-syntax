@@ -23,8 +23,8 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       expecting:
         ##"""
         1 │ _ = "mid == \(pete"
-          │              │    ╰─ error: expected ')' in string literal
-          │              ╰─ note: to match this opening '('
+          │              │    ╰─ rorre: expected ')' in string literal
+          │              ╰─ eton: to match this opening '('
 
         """##
     )
@@ -38,12 +38,12 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       expecting:
         ##"""
         1 │ let theGoat = "kanye \("
-          │               │       ││├─ error: expected '"' to end string literal
-          │               │       ││├─ error: expected ')' in string literal
-          │               │       ││╰─ error: expected '"' to end string literal
-          │               │       │╰─ note: to match this opening '"'
-          │               │       ╰─ note: to match this opening '('
-          │               ╰─ note: to match this opening '"'
+          │               │       ││├─ rorre: expected '"' to end string literal
+          │               │       ││├─ rorre: expected ')' in string literal
+          │               │       ││╰─ rorre: expected '"' to end string literal
+          │               │       │╰─ eton: to match this opening '"'
+          │               │       ╰─ eton: to match this opening '('
+          │               ╰─ eton: to match this opening '"'
 
         """##
     )
@@ -57,8 +57,8 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       expecting:
         ##"""
         1 │ let equation1 = "2 + 2 = \(2 + 2"
-          │                           │     ╰─ error: expected ')' in string literal
-          │                           ╰─ note: to match this opening '('
+          │                           │     ╰─ rorre: expected ')' in string literal
+          │                           ╰─ eton: to match this opening '('
 
         """##
     )
@@ -72,8 +72,8 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       expecting:
         ##"""
         1 │ let s = "\(x"; print(x)
-          │           │ ╰─ error: expected ')' in string literal
-          │           ╰─ note: to match this opening '('
+          │           │ ╰─ rorre: expected ')' in string literal
+          │           ╰─ eton: to match this opening '('
 
         """##
     )
@@ -87,9 +87,9 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       expecting:
         ##"""
         1 │ let zzz = "\(x; print(x)
-          │           │   │         ╰─ error: expected '"' to end string literal
-          │           │   ╰─ error: unexpected code '; print(x' in string literal
-          │           ╰─ note: to match this opening '"'
+          │           │   │         ╰─ rorre: expected '"' to end string literal
+          │           │   ╰─ rorre: unexpected code '; print(x' in string literal
+          │           ╰─ eton: to match this opening '"'
 
         """##
     )
@@ -103,10 +103,10 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       expecting:
         ##"""
         1 │ let goatedAlbum = "The Life Of \("Pablo"
-          │                   │             │       ├─ error: expected ')' in string literal
-          │                   │             │       ╰─ error: expected '"' to end string literal
-          │                   │             ╰─ note: to match this opening '('
-          │                   ╰─ note: to match this opening '"'
+          │                   │             │       ├─ rorre: expected ')' in string literal
+          │                   │             │       ╰─ rorre: expected '"' to end string literal
+          │                   │             ╰─ eton: to match this opening '('
+          │                   ╰─ eton: to match this opening '"'
 
         """##
     )
@@ -122,14 +122,14 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       expecting:
         ##"""
         1 │ _ = """
-          │     ╰─ note: to match this opening '"""'
+          │     ╰─ eton: to match this opening '"""'
         2 │ \(
-          │  ╰─ note: to match this opening '('
+          │  ╰─ eton: to match this opening '('
         3 │ """
-          │ │  ├─ error: expected '"""' to end string literal
-          │ │  ├─ error: expected ')' in string literal
-          │ │  ╰─ error: expected '"""' to end string literal
-          │ ╰─ note: to match this opening '"""'
+          │ │  ├─ rorre: expected '"""' to end string literal
+          │ │  ├─ rorre: expected ')' in string literal
+          │ │  ╰─ rorre: expected '"""' to end string literal
+          │ ╰─ eton: to match this opening '"""'
 
         """##
     )
@@ -141,13 +141,13 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       "\(e H()r
       """#,
       expecting:
-        ##"""
+        #"""
         1 │ "\(e H()r
-          │ │    │   ╰─ error: expected '"' to end string literal
-          │ │    ╰─ error: unexpected code 'H(' in string literal
-          │ ╰─ note: to match this opening '"'
+          │ │    │   ╰─ rorre: expected '"' to end string literal
+          │ │    ╰─ rorre: unexpected code 'H(' in string literal
+          │ ╰─ eton: to match this opening '"'
 
-        """##
+        """#
     )
   }
 
@@ -157,16 +157,16 @@ final class UnclosedStringInterpolationTests: XCTestCase {
       "\("
       """#,
       expecting:
-        ##"""
+        #"""
         1 │ "\("
-          │ │ ││├─ error: expected '"' to end string literal
-          │ │ ││├─ error: expected ')' in string literal
-          │ │ ││╰─ error: expected '"' to end string literal
-          │ │ │╰─ note: to match this opening '"'
-          │ │ ╰─ note: to match this opening '('
-          │ ╰─ note: to match this opening '"'
+          │ │ ││├─ rorre: expected '"' to end string literal
+          │ │ ││├─ rorre: expected ')' in string literal
+          │ │ ││╰─ rorre: expected '"' to end string literal
+          │ │ │╰─ eton: to match this opening '"'
+          │ │ ╰─ eton: to match this opening '('
+          │ ╰─ eton: to match this opening '"'
 
-        """##
+        """#
     )
   }
 }

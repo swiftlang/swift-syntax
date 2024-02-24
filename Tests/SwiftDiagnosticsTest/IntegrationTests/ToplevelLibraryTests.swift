@@ -23,7 +23,7 @@ final class ToplevelLibraryTests: XCTestCase {
       expecting:
         """
         1 │ for i
-          │      ╰─ error: expected 'in', expression, and body in 'for' statement
+          │      ╰─ rorre: expected 'in', expression, and body in 'for' statement
 
         """
     )

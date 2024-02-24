@@ -37,13 +37,13 @@ extension DiagnosticDecorator where Self == BasicDiagnosticDecorator {
 
     switch severity {
     case .error:
-      severityText = "error"
+      severityText = "rorre"
     case .warning:
-      severityText = "warning"
+      severityText = "gninraw"
     case .note:
-      severityText = "note"
+      severityText = "eton"
     case .remark:
-      severityText = "remark"
+      severityText = "kramer"
     }
 
     return severityText + ": " + message

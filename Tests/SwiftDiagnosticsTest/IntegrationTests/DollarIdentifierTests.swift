@@ -28,7 +28,7 @@ final class DollarIdentifierTests: XCTestCase {
         """
         1 │ func dollarVar() {
         2 │   var $ : Int = 42
-          │       ╰─ error: '$' is not a valid identifier
+          │       ╰─ rorre: '$' is not a valid identifier
         3 │   $ += 1
         4 │   print($)
 
@@ -48,7 +48,7 @@ final class DollarIdentifierTests: XCTestCase {
         """
         1 │ func dollarLet() {
         2 │   let $ = 42
-          │       ╰─ error: '$' is not a valid identifier
+          │       ╰─ rorre: '$' is not a valid identifier
         3 │   print($)
         4 │ }
 
@@ -67,7 +67,7 @@ final class DollarIdentifierTests: XCTestCase {
         """
         1 │ func dollarClass() {
         2 │   class $ {}
-          │         ╰─ error: '$' is not a valid identifier
+          │         ╰─ rorre: '$' is not a valid identifier
         3 │ }
 
         """
@@ -85,7 +85,7 @@ final class DollarIdentifierTests: XCTestCase {
         """
         1 │ func dollarEnum() {
         2 │   enum $ {}
-          │        ╰─ error: '$' is not a valid identifier
+          │        ╰─ rorre: '$' is not a valid identifier
         3 │ }
 
         """
@@ -103,7 +103,7 @@ final class DollarIdentifierTests: XCTestCase {
         """
         1 │ func dollarStruct() {
         2 │   struct $ {}
-          │          ╰─ error: '$' is not a valid identifier
+          │          ╰─ rorre: '$' is not a valid identifier
         3 │ }
 
         """
@@ -118,8 +118,8 @@ final class DollarIdentifierTests: XCTestCase {
       expecting:
         """
         1 │ func $($ dollarParam: Int) {}
-          │      │ ╰─ error: '$' is not a valid identifier
-          │      ╰─ error: '$' is not a valid identifier
+          │      │ ╰─ rorre: '$' is not a valid identifier
+          │      ╰─ rorre: '$' is not a valid identifier
 
         """
     )
@@ -133,7 +133,7 @@ final class DollarIdentifierTests: XCTestCase {
       expecting:
         """
         1 │ $($: 24)
-          │   ╰─ error: '$' is not a valid identifier
+          │   ╰─ rorre: '$' is not a valid identifier
 
         """
     )
@@ -152,7 +152,7 @@ final class DollarIdentifierTests: XCTestCase {
         """
         1 │ func escapedDollarAnd() {
         2 │   `$0` = 1
-          │   ╰─ error: unexpected code in function
+          │   ╰─ rorre: unexpected code in function
         3 │   `$$` = 2
         4 │   `$abc` = 3
 
@@ -169,7 +169,7 @@ final class DollarIdentifierTests: XCTestCase {
       expecting:
         """
         1 │ infix operator $
-          │                ╰─ error: '$' is not allowed in operator names
+          │                ╰─ rorre: '$' is not allowed in operator names
 
         """
     )
@@ -184,7 +184,7 @@ final class DollarIdentifierTests: XCTestCase {
       expecting:
         """
         1 │ infix operator `$`
-          │                ╰─ error: '`$`' is considered an identifier and must not appear within an operator name
+          │                ╰─ rorre: '`$`' is considered an identifier and must not appear within an operator name
 
         """
     )

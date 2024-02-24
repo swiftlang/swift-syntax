@@ -23,10 +23,10 @@ final class MultilinePoundDiagnosticArgRdar41154797Tests: XCTestCase {
       expecting:
         ##"""
         1 │ #error("""
-          │       ││  ├─ error: expected '"""' to end string literal
-          │       ││  ╰─ error: expected ')' to end macro expansion
-          │       │╰─ note: to match this opening '"""'
-          │       ╰─ note: to match this opening '('
+          │       ││  ├─ rorre: expected '"""' to end string literal
+          │       ││  ╰─ rorre: expected ')' to end macro expansion
+          │       │╰─ eton: to match this opening '"""'
+          │       ╰─ eton: to match this opening '('
 
         """##
     )

@@ -24,7 +24,7 @@ final class IdentifiersTests: XCTestCase {
       expecting:
         """
         1 │ ()
-          │ ╰─ error: invalid character in source file
+          │ ╰─ rorre: invalid character in source file
 
         """
     )
@@ -40,7 +40,7 @@ final class IdentifiersTests: XCTestCase {
         """
         1 │ // Placeholders are recognized as identifiers but with error.
         2 │ func <#some name#>() {}
-          │      ╰─ error: editor placeholder in source file
+          │      ╰─ rorre: editor placeholder in source file
 
         """
     )
@@ -56,7 +56,7 @@ final class IdentifiersTests: XCTestCase {
         """
         1 │ // Keywords as identifiers
         2 │ class switch {}
-          │       ╰─ error: keyword 'switch' cannot be used as an identifier here
+          │       ╰─ rorre: keyword 'switch' cannot be used as an identifier here
 
         """
     )
@@ -70,7 +70,7 @@ final class IdentifiersTests: XCTestCase {
       expecting:
         """
         1 │ struct Self {}
-          │        ╰─ error: keyword 'Self' cannot be used as an identifier here
+          │        ╰─ rorre: keyword 'Self' cannot be used as an identifier here
 
         """
     )
@@ -84,7 +84,7 @@ final class IdentifiersTests: XCTestCase {
       expecting:
         """
         1 │ struct Any {}
-          │        ╰─ error: keyword 'Any' cannot be used as an identifier here
+          │        ╰─ rorre: keyword 'Any' cannot be used as an identifier here
 
         """
     )
@@ -98,7 +98,7 @@ final class IdentifiersTests: XCTestCase {
       expecting:
         """
         1 │ protocol enum {}
-          │          ╰─ error: keyword 'enum' cannot be used as an identifier here
+          │          ╰─ rorre: keyword 'enum' cannot be used as an identifier here
 
         """
     )
@@ -116,10 +116,10 @@ final class IdentifiersTests: XCTestCase {
         """
         1 │ protocol test {
         2 │   associatedtype public
-          │                  ╰─ error: keyword 'public' cannot be used as an identifier here
+          │                  ╰─ rorre: keyword 'public' cannot be used as an identifier here
         3 │ }
         4 │ func _(_ x: Int) {}
-          │      ╰─ error: '_' cannot be used as an identifier here
+          │      ╰─ rorre: '_' cannot be used as an identifier here
 
         """
     )

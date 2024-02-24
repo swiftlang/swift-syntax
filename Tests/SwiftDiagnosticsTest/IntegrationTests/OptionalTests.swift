@@ -25,7 +25,7 @@ final class OptionalTests: XCTestCase {
         """
         1 │ var a : A?
         2 │ var b : A ?
-          │           ╰─ error: extraneous code '?' at top level
+          │           ╰─ rorre: extraneous code '?' at top level
 
         """
     )

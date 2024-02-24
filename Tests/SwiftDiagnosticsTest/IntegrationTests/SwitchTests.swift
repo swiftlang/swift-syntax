@@ -26,8 +26,8 @@ final class SwitchTests: XCTestCase {
         """
         1 │ func parseError1(x: Int) {
         2 │   switch func {}
-          │          │    ╰─ error: expected identifier and function signature in function
-          │          ╰─ error: expected expression and '{}' to end 'switch' statement
+          │          │    ╰─ rorre: expected identifier and function signature in function
+          │          ╰─ rorre: expected expression and '{}' to end 'switch' statement
         3 │ }
 
         """
@@ -45,7 +45,7 @@ final class SwitchTests: XCTestCase {
         """
         1 │ func parseError2(x: Int) {
         2 │   switch x
-          │           ╰─ error: expected '{}' in 'switch' statement
+          │           ╰─ rorre: expected '{}' in 'switch' statement
         3 │ }
 
         """
@@ -66,7 +66,7 @@ final class SwitchTests: XCTestCase {
         1 │ func parseError3(x: Int) {
         2 │   switch x {
         3 │     case
-          │         ╰─ error: expected expression and ':' in switch case
+          │         ╰─ rorre: expected expression and ':' in switch case
         4 │   }
         5 │ }
 
@@ -88,8 +88,8 @@ final class SwitchTests: XCTestCase {
         1 │ func parseError4(x: Int) {
         2 │   switch x {
         3 │   case var z where
-          │                   ├─ error: expected expression in 'where' clause
-          │                   ╰─ error: expected ':' in switch case
+          │                   ├─ rorre: expected expression in 'where' clause
+          │                   ╰─ rorre: expected ':' in switch case
         4 │   }
         5 │ }
 
@@ -111,7 +111,7 @@ final class SwitchTests: XCTestCase {
         1 │ func parseError5(x: Int) {
         2 │   switch x {
         3 │   case let z
-          │             ╰─ error: expected ':' in switch case
+          │             ╰─ rorre: expected ':' in switch case
         4 │   }
         5 │ }
 
@@ -133,7 +133,7 @@ final class SwitchTests: XCTestCase {
         1 │ func parseError6(x: Int) {
         2 │   switch x {
         3 │   default
-          │          ╰─ error: expected ':' in switch case
+          │          ╰─ rorre: expected ':' in switch case
         4 │   }
         5 │ }
 
@@ -156,7 +156,7 @@ final class SwitchTests: XCTestCase {
         1 │ switch x {
         2 │ case 0:
         3 │   ;
-          │   ╰─ error: standalone ';' statements are not allowed
+          │   ╰─ rorre: standalone ';' statements are not allowed
         4 │ case 1:
         5 │   x = 0
 
@@ -181,7 +181,7 @@ final class SwitchTests: XCTestCase {
         """
         1 │ switch x {
         2 │   x = 1
-          │   ╰─ error: all statements inside a switch must be covered by a 'case' or 'default' label
+          │   ╰─ rorre: all statements inside a switch must be covered by a 'case' or 'default' label
         3 │ default:
         4 │   x = 0
 
@@ -202,7 +202,7 @@ final class SwitchTests: XCTestCase {
         """
         1 │ switch x {
         2 │   let x = 1
-          │   ╰─ error: all statements inside a switch must be covered by a 'case' or 'default' label
+          │   ╰─ rorre: all statements inside a switch must be covered by a 'case' or 'default' label
         3 │ case 1:
         4 │   x = 0
 
@@ -221,7 +221,7 @@ final class SwitchTests: XCTestCase {
         """
         1 │ switch x {
         2 │   x = 1
-          │   ╰─ error: all statements inside a switch must be covered by a 'case' or 'default' label
+          │   ╰─ rorre: all statements inside a switch must be covered by a 'case' or 'default' label
         3 │ }
 
         """
@@ -240,7 +240,7 @@ final class SwitchTests: XCTestCase {
         """
         1 │ switch x {
         2 │   x = 1
-          │   ╰─ error: all statements inside a switch must be covered by a 'case' or 'default' label
+          │   ╰─ rorre: all statements inside a switch must be covered by a 'case' or 'default' label
         3 │   x = 2
         4 │ }
 
@@ -260,7 +260,7 @@ final class SwitchTests: XCTestCase {
         """
         1 │ switch x {
         2 │ default where x == 0:
-          │         ╰─ error: 'default' cannot be used with a 'where' guard expression
+          │         ╰─ rorre: 'default' cannot be used with a 'where' guard expression
         3 │   x = 0
         4 │ }
 
@@ -279,10 +279,10 @@ final class SwitchTests: XCTestCase {
       expecting:
         """
         1 │ case 0:
-          │ ╰─ error: 'case' can only appear inside a 'switch' statement or 'enum' declaration
+          │ ╰─ rorre: 'case' can only appear inside a 'switch' statement or 'enum' declaration
         2 │ var y = 0
         3 │ default:
-          │ ╰─ error: 'default' label can only appear inside a 'switch' statement
+          │ ╰─ rorre: 'default' label can only appear inside a 'switch' statement
         4 │ var z = 1
 
         """
@@ -301,7 +301,7 @@ final class SwitchTests: XCTestCase {
         """
         1 │ switch Whatever.Thing {
         2 │ @unknown default where x == 0:
-          │                  ╰─ error: 'default' cannot be used with a 'where' guard expression
+          │                  ╰─ rorre: 'default' cannot be used with a 'where' guard expression
         3 │   x = 0
         4 │ }
 
@@ -321,7 +321,7 @@ final class SwitchTests: XCTestCase {
         """
         1 │ switch Whatever.Thing {
         2 │ @unknown default where x == 0:
-          │                  ╰─ error: 'default' cannot be used with a 'where' guard expression
+          │                  ╰─ rorre: 'default' cannot be used with a 'where' guard expression
         3 │   break
         4 │ }
 
@@ -344,7 +344,7 @@ final class SwitchTests: XCTestCase {
         2 │ case 0:
         3 │   break
         4 │ @garbage @moreGarbage default:
-          │          ╰─ error: unexpected code '@moreGarbage' in switch case
+          │          ╰─ rorre: unexpected code '@moreGarbage' in switch case
         5 │   break
         6 │ }
 
@@ -380,20 +380,20 @@ final class SwitchTests: XCTestCase {
          2 │ case .Thing:
          3 │   break
          4 │ @unknown(garbage) case _:
-           │         ╰─ error: unexpected code '(garbage)' in switch case
+           │         ╰─ rorre: unexpected code '(garbage)' in switch case
          5 │   break
          6 │ }
            ┆
          9 │   break
         10 │ @unknown
         11 │ @unknown
-           │ ╰─ error: unexpected code '@unknown' in switch case
+           │ ╰─ rorre: unexpected code '@unknown' in switch case
         12 │ case _:
         13 │   break
         14 │ }
         15 │ switch Whatever.Thing {
         16 │ @unknown @garbage(foobar)
-           │          ╰─ error: unexpected code '@garbage(foobar)' in switch case
+           │          ╰─ rorre: unexpected code '@garbage(foobar)' in switch case
         17 │ case _:
         18 │   break
 
@@ -417,7 +417,7 @@ final class SwitchTests: XCTestCase {
         3 │   case 1:
         4 │     return
         5 │   @unknown default
-          │                   ╰─ error: expected ':' in switch case
+          │                   ╰─ rorre: expected ':' in switch case
         6 │   }
         7 │ }
 
@@ -441,7 +441,7 @@ final class SwitchTests: XCTestCase {
         3 │   case 1:
         4 │     return
         5 │   @unknown
-          │           ╰─ error: expected label in switch case
+          │           ╰─ rorre: expected label in switch case
         6 │   }
         7 │ }
 
@@ -466,8 +466,8 @@ final class SwitchTests: XCTestCase {
         2 │   switch x {
         3 │   case 1:
         4 │     _ = [1
-          │         │ ╰─ error: expected ']' to end array
-          │         ╰─ note: to match this opening '['
+          │         │ ╰─ rorre: expected ']' to end array
+          │         ╰─ eton: to match this opening '['
         5 │   @unknown default:
         6 │     ()
 

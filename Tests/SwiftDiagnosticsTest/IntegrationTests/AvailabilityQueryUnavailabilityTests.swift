@@ -30,11 +30,11 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
         2 │ if #unavailable(OSX 10.51, *) {}
         3 │ // Disallow use as an expression.
         4 │ if (#unavailable(OSX 10.51)) {}
-          │     ╰─ error: availability condition cannot be used in an expression, only as a condition of 'if' or 'guard'
+          │     ╰─ rorre: availability condition cannot be used in an expression, only as a condition of 'if' or 'guard'
         5 │ let x = #unavailable(OSX 10.51)
-          │         ╰─ error: availability condition cannot be used in an expression, only as a condition of 'if' or 'guard'
+          │         ╰─ rorre: availability condition cannot be used in an expression, only as a condition of 'if' or 'guard'
         6 │ (#unavailable(OSX 10.51) ? 1 : 0)
-          │  ╰─ error: availability condition cannot be used in an expression, only as a condition of 'if' or 'guard'
+          │  ╰─ rorre: availability condition cannot be used in an expression, only as a condition of 'if' or 'guard'
 
         """
     )
@@ -49,7 +49,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if !#unavailable(OSX 10.52) {
-          │     ╰─ error: availability condition cannot be used in an expression; did you mean '#available'?
+          │     ╰─ rorre: availability condition cannot be used in an expression; did you mean '#available'?
         2 │ }
 
         """
@@ -65,7 +65,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if let _ = Optional(5), !#unavailable(OSX 10.52) {
-          │                          ╰─ error: availability condition cannot be used in an expression; did you mean '#available'?
+          │                          ╰─ rorre: availability condition cannot be used in an expression; did you mean '#available'?
         2 │ }
 
         """
@@ -81,7 +81,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if #unavailable(OSX 10.51) && #unavailable(OSX 10.52) {
-          │                            ╰─ error: expected ',' joining parts of a multi-clause condition
+          │                            ╰─ rorre: expected ',' joining parts of a multi-clause condition
         2 │ }
 
         """
@@ -97,7 +97,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if #unavailable {
-          │                ╰─ error: expected '(', '@availability' arguments, and ')' in availability condition
+          │                ╰─ rorre: expected '(', '@availability' arguments, and ')' in availability condition
         2 │ }
 
         """
@@ -113,7 +113,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if #unavailable( {
-          │                 ╰─ error: expected platform and ')' to end availability condition
+          │                 ╰─ rorre: expected platform and ')' to end availability condition
         2 │ }
 
         """
@@ -129,7 +129,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if #unavailable() {
-          │                 ╰─ error: expected version restriction in availability argument
+          │                 ╰─ rorre: expected version restriction in availability argument
         2 │ }
 
         """
@@ -145,8 +145,8 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if #unavailable(OSX {
-          │                │   ╰─ error: expected ')' to end availability condition
-          │                ╰─ note: to match this opening '('
+          │                │   ╰─ rorre: expected ')' to end availability condition
+          │                ╰─ eton: to match this opening '('
         2 │ }
 
         """
@@ -162,8 +162,8 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if #unavailable(OSX 10.51 {
-          │                │         ╰─ error: expected ')' to end availability condition
-          │                ╰─ note: to match this opening '('
+          │                │         ╰─ rorre: expected ')' to end availability condition
+          │                ╰─ eton: to match this opening '('
         2 │ }
 
         """
@@ -181,7 +181,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
         """
         1 │ // Should this be a valid spelling since `#unvailable(*)` cannot be written?
         2 │ if #unavailable() {
-          │                 ╰─ error: expected version restriction in availability argument
+          │                 ╰─ rorre: expected version restriction in availability argument
         3 │ }
 
         """
@@ -197,8 +197,8 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if #unavailable(OSX 10 {
-          │                │      ╰─ error: expected ')' to end availability condition
-          │                ╰─ note: to match this opening '('
+          │                │      ╰─ rorre: expected ')' to end availability condition
+          │                ╰─ eton: to match this opening '('
         2 │ }
 
         """
@@ -214,9 +214,9 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if #unavailable(OSX 10.51, {
-          │                │           ├─ error: expected version restriction in availability argument
-          │                │           ╰─ error: expected ')' to end availability condition
-          │                ╰─ note: to match this opening '('
+          │                │           ├─ rorre: expected version restriction in availability argument
+          │                │           ╰─ rorre: expected ')' to end availability condition
+          │                ╰─ eton: to match this opening '('
         2 │ }
 
         """
@@ -232,7 +232,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if #unavailable(OSX 10.51,) {
-          │                           ╰─ error: expected version restriction in availability argument
+          │                           ╰─ rorre: expected version restriction in availability argument
         2 │ }
 
         """
@@ -248,8 +248,8 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if #unavailable(OSX 10.51, iOS {
-          │                │              ╰─ error: expected ')' to end availability condition
-          │                ╰─ note: to match this opening '('
+          │                │              ╰─ rorre: expected ')' to end availability condition
+          │                ╰─ eton: to match this opening '('
         2 │ }
 
         """
@@ -265,7 +265,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if #unavailable(OSX 10.51 || iOS 8.0) {
-          │                           ╰─ error: expected ',' joining platforms in availability condition
+          │                           ╰─ rorre: expected ',' joining platforms in availability condition
         2 │ }
 
         """
@@ -283,7 +283,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
         """
         1 │ // Emit Fix-It removing un-needed >=, for the moment.
         2 │ if #unavailable(OSX >= 10.51) {
-          │                     ╰─ error: version comparison not needed
+          │                     ╰─ rorre: version comparison not needed
         3 │ }
 
         """
@@ -299,7 +299,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if #available(*) == false {
-          │                  ╰─ error: #available cannot be used as an expression, did you mean to use '#unavailable'?
+          │                  ╰─ rorre: #available cannot be used as an expression, did you mean to use '#unavailable'?
         2 │ }
 
         """
@@ -315,8 +315,8 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if #available(*) == false && true {
-          │                  │        ╰─ error: expected ',' joining parts of a multi-clause condition
-          │                  ╰─ error: #available cannot be used as an expression, did you mean to use '#unavailable'?
+          │                  │        ╰─ rorre: expected ',' joining parts of a multi-clause condition
+          │                  ╰─ rorre: #available cannot be used as an expression, did you mean to use '#unavailable'?
         2 │ }
 
         """
@@ -332,7 +332,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if !#available(*) {
-          │     ╰─ error: availability condition cannot be used in an expression; did you mean '#unavailable'?
+          │     ╰─ rorre: availability condition cannot be used in an expression; did you mean '#unavailable'?
         2 │ }
 
         """
@@ -348,7 +348,7 @@ final class AvailabilityQueryUnavailabilityTests: XCTestCase {
       expecting:
         """
         1 │ if #available(*) == {
-          │                  ╰─ error: unexpected code '==' in 'if' statement
+          │                  ╰─ rorre: unexpected code '==' in 'if' statement
         2 │ }
 
         """

@@ -21,7 +21,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
       expecting:
         """
         1 │ let x = 2 let y = 3
-          │          ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │          ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
 
         """
     )
@@ -33,7 +33,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
       expecting:
         """
         1 │ let x = 2 let y = 3
-          │          ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │          ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
 
         """
     )
@@ -59,11 +59,11 @@ final class ConsecutiveStatementsTests: XCTestCase {
          5 │   if i != j { i = j }
          6 │   // Errors
          7 │   i = j j = i
-           │        ╰─ error: consecutive statements on a line must be separated by newline or ';'
+           │        ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
          8 │   let r : Int i = j
-           │               ╰─ error: expected '=' in variable
+           │               ╰─ rorre: expected '=' in variable
          9 │   let s : Int let t : Int
-           │              ╰─ error: consecutive statements on a line must be separated by newline or ';'
+           │              ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
         10 │   _ = r; _ = s; _ = t
         11 │ }
 
@@ -91,11 +91,11 @@ final class ConsecutiveStatementsTests: XCTestCase {
          5 │   if i != j { i = j }
          6 │   // Errors
          7 │   i = j j = i
-           │        ╰─ error: consecutive statements on a line must be separated by newline or ';'
+           │        ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
          8 │   let r : Int i = j
-           │               ╰─ error: expected '=' in variable
+           │               ╰─ rorre: expected '=' in variable
          9 │   let s : Int let t : Int
-           │              ╰─ error: consecutive statements on a line must be separated by newline or ';'
+           │              ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
         10 │   _ = r; _ = s; _ = t
         11 │ }
 
@@ -128,20 +128,20 @@ final class ConsecutiveStatementsTests: XCTestCase {
          1 │ struct X {
          2 │   // In a sequence of declarations.
          3 │   var a, b : Int func d() -> Int {}
-           │                 ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+           │                 ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
          4 │   var prop : Int { return 4
          5 │   } var other : Float
-           │    ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+           │    ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
          6 │   // Within property accessors
          7 │   subscript(i: Int) -> Float {
          8 │     get {
          9 │       var x = i x = i + x return Float(x)
-           │                │         ╰─ error: consecutive statements on a line must be separated by newline or ';'
-           │                ╰─ error: consecutive statements on a line must be separated by newline or ';'
+           │                │         ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
+           │                ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
         10 │     }
         11 │     set {
         12 │       var x = i x = i + 1
-           │                ╰─ error: consecutive statements on a line must be separated by newline or ';'
+           │                ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
         13 │       _ = x
         14 │     }
 
@@ -174,20 +174,20 @@ final class ConsecutiveStatementsTests: XCTestCase {
          1 │ struct X {
          2 │   // In a sequence of declarations.
          3 │   var a, b : Int func d() -> Int {}
-           │                 ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+           │                 ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
          4 │   var prop : Int { return 4
          5 │   } var other : Float
-           │    ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+           │    ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
          6 │   // Within property accessors
          7 │   subscript(i: Int) -> Float {
          8 │     get {
          9 │       var x = i x = i + x return Float(x)
-           │                │         ╰─ error: consecutive statements on a line must be separated by newline or ';'
-           │                ╰─ error: consecutive statements on a line must be separated by newline or ';'
+           │                │         ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
+           │                ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
         10 │     }
         11 │     set {
         12 │       var x = i x = i + 1
-           │                ╰─ error: consecutive statements on a line must be separated by newline or ';'
+           │                ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
         13 │       _ = x
         14 │     }
 
@@ -212,7 +212,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
         1 │ class C {
         2 │   // In a sequence of declarations.
         3 │   var a, b : Int func d() -> Int {}
-          │                 ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+          │                 ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
         4 │   init() {
         5 │     a = 0
 
@@ -237,7 +237,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
         1 │ class C {
         2 │   // In a sequence of declarations.
         3 │   var a, b : Int func d() -> Int {}
-          │                 ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+          │                 ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
         4 │   init() {
         5 │     a = 0
 
@@ -256,7 +256,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
         """
         1 │ protocol P {
         2 │   func a() func b()
-          │           ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+          │           ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
         3 │ }
 
         """
@@ -274,7 +274,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
         """
         1 │ protocol P {
         2 │   func a() func b()
-          │           ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+          │           ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
         3 │ }
 
         """
@@ -293,9 +293,9 @@ final class ConsecutiveStatementsTests: XCTestCase {
         """
         1 │ enum Color {
         2 │   case Red case Blue
-          │           ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+          │           ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
         3 │   func a() {} func b() {}
-          │              ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+          │              ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
         4 │ }
 
         """
@@ -314,9 +314,9 @@ final class ConsecutiveStatementsTests: XCTestCase {
         """
         1 │ enum Color {
         2 │   case Red case Blue
-          │           ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+          │           ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
         3 │   func a() {} func b() {}
-          │              ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+          │              ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
         4 │ }
 
         """
@@ -333,7 +333,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
         """
         1 │ // At the top level
         2 │ var i, j : Int i = j j = i
-          │                ╰─ error: expected '=' in variable
+          │                ╰─ rorre: expected '=' in variable
 
         """
     )
@@ -349,7 +349,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
         """
         1 │ // At the top level
         2 │ var i, j : Int i = j j = i
-          │                ╰─ error: expected '=' in variable
+          │                ╰─ rorre: expected '=' in variable
 
         """
     )
@@ -366,7 +366,7 @@ final class ConsecutiveStatementsTests: XCTestCase {
         """
         1 │ class Foo {
         2 │   func a() {}/* some comment */ func b() {}
-          │              ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+          │              ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
         3 │ }
 
         """

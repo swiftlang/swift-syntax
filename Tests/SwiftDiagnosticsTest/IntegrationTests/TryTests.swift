@@ -23,7 +23,7 @@ final class TryTests: XCTestCase {
       expecting:
         """
         1 │ try let singleLet = try foo()
-          │ ╰─ error: 'try' must be placed on the initial value expression
+          │ ╰─ rorre: 'try' must be placed on the initial value expression
 
         """
     )
@@ -37,7 +37,7 @@ final class TryTests: XCTestCase {
       expecting:
         """
         1 │ try let singleLet = foo()
-          │ ╰─ error: 'try' must be placed on the initial value expression
+          │ ╰─ rorre: 'try' must be placed on the initial value expression
 
         """
     )
@@ -51,7 +51,7 @@ final class TryTests: XCTestCase {
       expecting:
         """
         1 │ try var singleVar = foo()
-          │ ╰─ error: 'try' must be placed on the initial value expression
+          │ ╰─ rorre: 'try' must be placed on the initial value expression
 
         """
     )
@@ -65,7 +65,7 @@ final class TryTests: XCTestCase {
       expecting:
         """
         1 │ try let uninit: Int
-          │ ╰─ error: 'try' must be placed on the initial value expression
+          │ ╰─ rorre: 'try' must be placed on the initial value expression
 
         """
     )
@@ -79,7 +79,7 @@ final class TryTests: XCTestCase {
       expecting:
         """
         1 │ try let (destructure1, destructure2) = (foo(), bar())
-          │ ╰─ error: 'try' must be placed on the initial value expression
+          │ ╰─ rorre: 'try' must be placed on the initial value expression
 
         """
     )
@@ -93,7 +93,7 @@ final class TryTests: XCTestCase {
       expecting:
         """
         1 │ try let multi1 = foo(), multi2 = bar()
-          │ ╰─ error: 'try' must be placed on the initial value expression
+          │ ╰─ rorre: 'try' must be placed on the initial value expression
 
         """
     )
@@ -110,7 +110,7 @@ final class TryTests: XCTestCase {
         """
         1 │ class TryDecl {
         2 │   try let singleLet = foo()
-          │   ╰─ error: 'try' must be placed on the initial value expression
+          │   ╰─ rorre: 'try' must be placed on the initial value expression
         3 │ }
 
         """
@@ -128,7 +128,7 @@ final class TryTests: XCTestCase {
         """
         1 │ class TryDecl {
         2 │   try var singleVar = foo()
-          │   ╰─ error: 'try' must be placed on the initial value expression
+          │   ╰─ rorre: 'try' must be placed on the initial value expression
         3 │ }
 
         """
@@ -144,7 +144,7 @@ final class TryTests: XCTestCase {
       expecting:
         """
         1 │ try
-          │    ╰─ error: expected expression after 'try'
+          │    ╰─ rorre: expected expression after 'try'
         2 │ func method() {}
 
         """
@@ -159,7 +159,7 @@ final class TryTests: XCTestCase {
       expecting:
         """
         1 │ try func method() {}
-          │ ╰─ error: 'try' cannot be used with 'func'
+          │ ╰─ rorre: 'try' cannot be used with 'func'
 
         """
     )
@@ -175,9 +175,9 @@ final class TryTests: XCTestCase {
       expecting:
         """
         1 │ try while true {
-          │ ╰─ error: 'try' cannot be used with 'while'
+          │ ╰─ rorre: 'try' cannot be used with 'while'
         2 │   try break
-          │   ╰─ error: 'try' cannot be used with 'break'
+          │   ╰─ rorre: 'try' cannot be used with 'break'
         3 │ }
 
         """
@@ -192,8 +192,8 @@ final class TryTests: XCTestCase {
       expecting:
         """
         1 │ try throw
-          │ │        ╰─ error: expected expression after 'try'
-          │ ╰─ error: 'try' must be placed on the thrown expression
+          │ │        ╰─ rorre: expected expression after 'try'
+          │ ╰─ rorre: 'try' must be placed on the thrown expression
 
         """
     )
@@ -207,7 +207,7 @@ final class TryTests: XCTestCase {
       expecting:
         """
         1 │ try return
-          │ ╰─ error: 'try' cannot be used with 'return'
+          │ ╰─ rorre: 'try' cannot be used with 'return'
 
         """
     )
@@ -221,7 +221,7 @@ final class TryTests: XCTestCase {
       expecting:
         """
         1 │ try throw foo()
-          │ ╰─ error: 'try' must be placed on the thrown expression
+          │ ╰─ rorre: 'try' must be placed on the thrown expression
 
         """
     )
@@ -235,7 +235,7 @@ final class TryTests: XCTestCase {
       expecting:
         """
         1 │ try return foo()
-          │ ╰─ error: 'try' must be placed on the returned expression
+          │ ╰─ rorre: 'try' must be placed on the returned expression
 
         """
     )

@@ -26,7 +26,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ struct FooStructConstructorA {
         2 │   init
-          │       ╰─ error: expected parameter clause in function signature
+          │       ╰─ rorre: expected parameter clause in function signature
         3 │ }
 
         """
@@ -44,7 +44,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ struct FooStructConstructorC {
         2 │   init {}
-          │       ╰─ error: expected parameter clause in function signature
+          │       ╰─ rorre: expected parameter clause in function signature
         3 │ }
 
         """
@@ -62,7 +62,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ struct FooStructConstructorC {
         2 │   init<T> {}
-          │          ╰─ error: expected parameter clause in function signature
+          │          ╰─ rorre: expected parameter clause in function signature
         3 │ }
 
         """
@@ -80,7 +80,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ struct FooStructConstructorC {
         2 │   init? { self.init() }
-          │        ╰─ error: expected parameter clause in function signature
+          │        ╰─ rorre: expected parameter clause in function signature
         3 │ }
 
         """
@@ -98,7 +98,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ struct FooStructConstructorD {
         2 │   init() -> FooStructConstructorD { }
-          │          ╰─ error: initializers cannot have a result type
+          │          ╰─ rorre: initializers cannot have a result type
         3 │ }
 
         """
@@ -116,7 +116,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ struct FooStructDeinitializerA {
         2 │   deinit x
-          │          ╰─ error: deinitializers cannot have a name
+          │          ╰─ rorre: deinitializers cannot have a name
         3 │ }
 
         """
@@ -134,7 +134,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ struct FooStructDeinitializerA {
         2 │   deinit x()
-          │          ╰─ error: deinitializers cannot have a name and parameters
+          │          ╰─ rorre: deinitializers cannot have a name and parameters
         3 │ }
 
         """
@@ -152,7 +152,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit(a : Int) {}
-          │         ╰─ error: deinitializers cannot have parameters
+          │         ╰─ rorre: deinitializers cannot have parameters
         3 │ }
 
         """
@@ -170,7 +170,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerC {
         2 │   deinit x (a : Int) {}
-          │          ╰─ error: deinitializers cannot have a name and parameters
+          │          ╰─ rorre: deinitializers cannot have a name and parameters
         3 │ }
 
         """
@@ -187,7 +187,7 @@ final class InitDeinitTests: XCTestCase {
       expecting:
         """
         1 │ init {}
-          │     ╰─ error: expected parameter clause in function signature
+          │     ╰─ rorre: expected parameter clause in function signature
         2 │ init()
         3 │ init() {}
 
@@ -203,7 +203,7 @@ final class InitDeinitTests: XCTestCase {
       expecting:
         """
         1 │ init(_ foo: T) -> Int where T: Comparable {}
-          │                ╰─ error: initializers cannot have a result type
+          │                ╰─ rorre: initializers cannot have a result type
 
         """
     )
@@ -220,7 +220,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit await {}
-          │          ╰─ error: expected async specifier; did you mean 'async'?
+          │          ╰─ rorre: expected async specifier; did you mean 'async'?
         3 │ }
 
         """
@@ -238,7 +238,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit reasync {}
-          │          ╰─ error: expected async specifier; did you mean 'async'?
+          │          ╰─ rorre: expected async specifier; did you mean 'async'?
         3 │ }
 
         """
@@ -256,7 +256,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit throws {}
-          │          ╰─ error: deinitializers cannot throw
+          │          ╰─ rorre: deinitializers cannot throw
         3 │ }
 
         """
@@ -274,7 +274,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit rethrows {}
-          │          ╰─ error: deinitializers cannot throw
+          │          ╰─ rorre: deinitializers cannot throw
         3 │ }
 
         """
@@ -292,8 +292,8 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit async async {}
-          │          │     ╰─ error: 'async' has already been specified
-          │          ╰─ note: 'async' declared here
+          │          │     ╰─ rorre: 'async' has already been specified
+          │          ╰─ eton: 'async' declared here
         3 │ }
 
         """
@@ -311,8 +311,8 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit async await {}
-          │          │     ╰─ error: 'await' conflicts with 'async'
-          │          ╰─ note: 'async' declared here
+          │          │     ╰─ rorre: 'await' conflicts with 'async'
+          │          ╰─ eton: 'async' declared here
         3 │ }
 
         """
@@ -330,8 +330,8 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit await async {}
-          │          │     ╰─ note: 'async' declared here
-          │          ╰─ error: 'await' conflicts with 'async'
+          │          │     ╰─ eton: 'async' declared here
+          │          ╰─ rorre: 'await' conflicts with 'async'
         3 │ }
 
         """
@@ -349,7 +349,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit async throws {}
-          │                ╰─ error: deinitializers cannot throw
+          │                ╰─ rorre: deinitializers cannot throw
         3 │ }
 
         """
@@ -367,7 +367,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit throws async {}
-          │          ╰─ error: deinitializers cannot throw
+          │          ╰─ rorre: deinitializers cannot throw
         3 │ }
 
         """
@@ -385,7 +385,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit throws async rethrows {}
-          │          ╰─ error: deinitializers cannot throw
+          │          ╰─ rorre: deinitializers cannot throw
         3 │ }
 
         """
@@ -403,8 +403,8 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit reasync throws {}
-          │          │       ╰─ error: deinitializers cannot throw
-          │          ╰─ error: expected async specifier; did you mean 'async'?
+          │          │       ╰─ rorre: deinitializers cannot throw
+          │          ╰─ rorre: expected async specifier; did you mean 'async'?
         3 │ }
 
         """
@@ -422,8 +422,8 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit x await {}
-          │          │ ╰─ error: expected async specifier; did you mean 'async'?
-          │          ╰─ error: deinitializers cannot have a name
+          │          │ ╰─ rorre: expected async specifier; did you mean 'async'?
+          │          ╰─ rorre: deinitializers cannot have a name
         3 │ }
 
         """
@@ -441,9 +441,9 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit x async async {}
-          │          │ │     ╰─ error: 'async' has already been specified
-          │          │ ╰─ note: 'async' declared here
-          │          ╰─ error: deinitializers cannot have a name
+          │          │ │     ╰─ rorre: 'async' has already been specified
+          │          │ ╰─ eton: 'async' declared here
+          │          ╰─ rorre: deinitializers cannot have a name
         3 │ }
 
         """
@@ -461,8 +461,8 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit x async throws {}
-          │          │       ╰─ error: deinitializers cannot throw
-          │          ╰─ error: deinitializers cannot have a name
+          │          │       ╰─ rorre: deinitializers cannot throw
+          │          ╰─ rorre: deinitializers cannot have a name
         3 │ }
 
         """
@@ -480,8 +480,8 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit() async throws {}
-          │         │        ╰─ error: deinitializers cannot throw
-          │         ╰─ error: deinitializers cannot have parameters
+          │         │        ╰─ rorre: deinitializers cannot throw
+          │         ╰─ rorre: deinitializers cannot have parameters
         3 │ }
 
         """
@@ -499,8 +499,8 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit x() throws async {}
-          │          │   ╰─ error: deinitializers cannot throw
-          │          ╰─ error: deinitializers cannot have a name and parameters
+          │          │   ╰─ rorre: deinitializers cannot throw
+          │          ╰─ rorre: deinitializers cannot have a name and parameters
         3 │ }
 
         """
@@ -518,9 +518,9 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit x() await throws {}
-          │          │   │     ╰─ error: deinitializers cannot throw
-          │          │   ╰─ error: expected async specifier; did you mean 'async'?
-          │          ╰─ error: deinitializers cannot have a name and parameters
+          │          │   │     ╰─ rorre: deinitializers cannot throw
+          │          │   ╰─ rorre: expected async specifier; did you mean 'async'?
+          │          ╰─ rorre: deinitializers cannot have a name and parameters
         3 │ }
 
         """
@@ -538,7 +538,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit -> Void {}
-          │          ╰─ error: deinitializers cannot have a return clause
+          │          ╰─ rorre: deinitializers cannot have a return clause
         3 │ }
 
         """
@@ -556,7 +556,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit x -> Void {}
-          │          ╰─ error: deinitializers cannot have a name and return clause
+          │          ╰─ rorre: deinitializers cannot have a name and return clause
         3 │ }
 
         """
@@ -574,7 +574,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit() -> Void {}
-          │         ╰─ error: deinitializers cannot have parameters and return clause
+          │         ╰─ rorre: deinitializers cannot have parameters and return clause
         3 │ }
 
         """
@@ -592,7 +592,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit x() -> Void {}
-          │          ╰─ error: deinitializers cannot have a name, parameters, and return clause
+          │          ╰─ rorre: deinitializers cannot have a name, parameters, and return clause
         3 │ }
 
         """
@@ -610,8 +610,8 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit -> async Void {}
-          │          ├─ error: expected 'async' in effect specifiers
-          │          ╰─ error: deinitializers cannot have a return clause
+          │          ├─ rorre: expected 'async' in effect specifiers
+          │          ╰─ rorre: deinitializers cannot have a return clause
         3 │ }
 
         """
@@ -629,7 +629,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit async -> async Void {}
-          │                ╰─ error: deinitializers cannot have a return clause
+          │                ╰─ rorre: deinitializers cannot have a return clause
         3 │ }
 
         """
@@ -647,8 +647,8 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit await -> async Void {}
-          │          │     ╰─ error: deinitializers cannot have a return clause
-          │          ╰─ error: expected async specifier; did you mean 'async'?
+          │          │     ╰─ rorre: deinitializers cannot have a return clause
+          │          ╰─ rorre: expected async specifier; did you mean 'async'?
         3 │ }
 
         """
@@ -666,7 +666,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit async -> await Void {}
-          │                ╰─ error: deinitializers cannot have a return clause
+          │                ╰─ rorre: deinitializers cannot have a return clause
         3 │ }
 
         """
@@ -684,7 +684,7 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit -> throws Void {}
-          │          ╰─ error: deinitializers cannot have a return clause
+          │          ╰─ rorre: deinitializers cannot have a return clause
         3 │ }
 
         """
@@ -702,8 +702,8 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit throws -> throws Void {}
-          │          │      ╰─ error: deinitializers cannot have a return clause
-          │          ╰─ error: deinitializers cannot throw
+          │          │      ╰─ rorre: deinitializers cannot have a return clause
+          │          ╰─ rorre: deinitializers cannot throw
         3 │ }
 
         """
@@ -721,8 +721,8 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit -> async throws Void {}
-          │          ├─ error: expected 'async' in effect specifiers
-          │          ╰─ error: deinitializers cannot have a return clause
+          │          ├─ rorre: expected 'async' in effect specifiers
+          │          ╰─ rorre: deinitializers cannot have a return clause
         3 │ }
 
         """
@@ -740,8 +740,8 @@ final class InitDeinitTests: XCTestCase {
         """
         1 │ class FooClassDeinitializerA {
         2 │   deinit -> throws async Void {}
-          │          ├─ error: expected 'async' in effect specifiers
-          │          ╰─ error: deinitializers cannot have a return clause
+          │          ├─ rorre: expected 'async' in effect specifiers
+          │          ╰─ rorre: deinitializers cannot have a return clause
         3 │ }
 
         """

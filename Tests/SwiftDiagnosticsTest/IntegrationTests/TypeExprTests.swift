@@ -23,8 +23,8 @@ final class TypeExprTests: XCTestCase {
       expecting:
         """
         1 │ func takesVoid(f: Void -> ()) {}
-          │                   │   ╰─ error: expected ')' in function type
-          │                   ╰─ error: expected '(' to start function type
+          │                   │   ╰─ rorre: expected ')' in function type
+          │                   ╰─ rorre: expected '(' to start function type
 
         """
     )
@@ -38,8 +38,8 @@ final class TypeExprTests: XCTestCase {
       expecting:
         """
         1 │ let _: Float       -> Int
-          │        │    ╰─ error: expected ')' in function type
-          │        ╰─ error: expected '(' to start function type
+          │        │    ╰─ rorre: expected ')' in function type
+          │        ╰─ rorre: expected '(' to start function type
 
         """
     )

@@ -30,8 +30,8 @@ final class TrailingClosuresTests: XCTestCase {
         2 │   return fn() ?? d()
         3 │ }
         4 │ _ = produce { 0 } default: { 1 }
-          │                  │╰─ error: 'default' label can only appear inside a 'switch' statement
-          │                  ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │                  │╰─ rorre: 'default' label can only appear inside a 'switch' statement
+          │                  ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
         5 │ _ = produce { 2 } `default`: { 3 }
 
         """
@@ -53,8 +53,8 @@ final class TrailingClosuresTests: XCTestCase {
         2 │   return fn() ?? d()
         3 │ }
         4 │ _ = produce { 0 } default: { 1 }
-          │                  │╰─ error: 'default' label can only appear inside a 'switch' statement
-          │                  ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │                  │╰─ rorre: 'default' label can only appear inside a 'switch' statement
+          │                  ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
         5 │ _ = produce { 2 } `default`: { 3 }
 
         """

@@ -23,7 +23,7 @@ final class OperatorsTests: XCTestCase {
       expecting:
         """
         1 │ foo!!foo
-          │      ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │      ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
 
         """
     )
@@ -37,7 +37,7 @@ final class OperatorsTests: XCTestCase {
       expecting:
         """
         1 │ foo!!foo
-          │      ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │      ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
 
         """
     )
@@ -51,7 +51,7 @@ final class OperatorsTests: XCTestCase {
       expecting:
         """
         1 │ foo??bar
-          │      ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │      ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
 
         """
     )
@@ -65,7 +65,7 @@ final class OperatorsTests: XCTestCase {
       expecting:
         """
         1 │ foo??bar
-          │      ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │      ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
 
         """
     )

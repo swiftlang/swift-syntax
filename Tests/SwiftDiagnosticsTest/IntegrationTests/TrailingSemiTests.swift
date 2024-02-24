@@ -30,14 +30,14 @@ final class TrailingSemiTests: XCTestCase {
         """
         1 │ struct SpuriousSemi {
         2 │   ;
-          │   ╰─ error: unexpected ';' separator
+          │   ╰─ rorre: unexpected ';' separator
         3 │   var a : Int ; ;
-          │                 ╰─ error: unexpected ';' separator
+          │                 ╰─ rorre: unexpected ';' separator
         4 │   func b () {};
         5 │   ; static func c () {};
-          │   ╰─ error: unexpected ';' separator
+          │   ╰─ rorre: unexpected ';' separator
         6 │   ;;
-          │   ╰─ error: unexpected ';' separator
+          │   ╰─ rorre: unexpected ';' separator
         7 │ }
 
         """
@@ -64,16 +64,16 @@ final class TrailingSemiTests: XCTestCase {
         """
          1 │ class C {
          2 │   var a : Int = 10 func aa() {};
-           │                   ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+           │                   ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
          3 │ #if FLAG1
          4 │   var aaa: Int = 42 func aaaa() {};
-           │                    ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+           │                    ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
          5 │ #elseif FLAG2
          6 │   var aaa: Int = 42 func aaaa() {}
-           │                    ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+           │                    ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
          7 │ #else
          8 │   var aaa: Int = 42 func aaaa() {}
-           │                    ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+           │                    ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
          9 │ #endif
         10 │   func b () {};
 
@@ -101,16 +101,16 @@ final class TrailingSemiTests: XCTestCase {
         """
          1 │ class C {
          2 │   var a : Int = 10 func aa() {};
-           │                   ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+           │                   ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
          3 │ #if FLAG1
          4 │   var aaa: Int = 42 func aaaa() {};
-           │                    ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+           │                    ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
          5 │ #elseif FLAG2
          6 │   var aaa: Int = 42 func aaaa() {}
-           │                    ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+           │                    ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
          7 │ #else
          8 │   var aaa: Int = 42 func aaaa() {}
-           │                    ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+           │                    ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
          9 │ #endif
         10 │   func b () {};
 
@@ -133,7 +133,7 @@ final class TrailingSemiTests: XCTestCase {
         3 │   func bb () {};
         4 │   static func cc () {};
         5 │   func dd() {} subscript(i: Int) -> Int { return 1 }
-          │               ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+          │               ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
         6 │ }
 
         """
@@ -155,7 +155,7 @@ final class TrailingSemiTests: XCTestCase {
         3 │   func bb () {};
         4 │   static func cc () {};
         5 │   func dd() {} subscript(i: Int) -> Int { return 1 }
-          │               ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+          │               ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
         6 │ }
 
         """
@@ -170,7 +170,7 @@ final class TrailingSemiTests: XCTestCase {
       expecting:
         """
         1 │ let x = 5;;
-          │           ╰─ error: unexpected ';' separator
+          │           ╰─ rorre: unexpected ';' separator
 
         """
     )
@@ -184,7 +184,7 @@ final class TrailingSemiTests: XCTestCase {
       expecting:
         """
         1 │ let x = 5;;;
-          │           ╰─ error: unexpected ';' separator
+          │           ╰─ rorre: unexpected ';' separator
 
         """
     )
@@ -201,7 +201,7 @@ final class TrailingSemiTests: XCTestCase {
         """
         1 │ struct X {
         2 │   func foo() {};;;
-          │                 ╰─ error: unexpected ';' separator
+          │                 ╰─ rorre: unexpected ';' separator
         3 │ }
 
         """
@@ -222,7 +222,7 @@ final class TrailingSemiTests: XCTestCase {
         1 │ struct X {
         2 │ #if FLAG1
         3 │   func foo() {} func bar() {}
-          │                ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+          │                ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
         4 │ #endif
         5 │ }
 
@@ -244,7 +244,7 @@ final class TrailingSemiTests: XCTestCase {
         1 │ struct X {
         2 │ #if FLAG1
         3 │   func foo() {} func bar() {}
-          │                ╰─ error: consecutive declarations on a line must be separated by newline or ';'
+          │                ╰─ rorre: consecutive declarations on a line must be separated by newline or ';'
         4 │ #endif
         5 │ }
 
@@ -266,7 +266,7 @@ final class TrailingSemiTests: XCTestCase {
         1 │ func foo() {
         2 │ #if FLAG1
         3 │   let a = 1 let b = 2
-          │            ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │            ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
         4 │ #endif
         5 │ }
 
@@ -288,7 +288,7 @@ final class TrailingSemiTests: XCTestCase {
         1 │ func foo() {
         2 │ #if FLAG1
         3 │   let a = 1 let b = 2
-          │            ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │            ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
         4 │ #endif
         5 │ }
 

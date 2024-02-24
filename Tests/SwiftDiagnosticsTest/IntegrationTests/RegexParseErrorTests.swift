@@ -23,8 +23,8 @@ final class RegexParseErrorTests: XCTestCase {
       expecting:
         #"""
         1 │ _ = #/\\/''/
-          │     │       ╰─ error: expected '#' to end regex literal
-          │     ╰─ note: to match this opening '#'
+          │     │       ╰─ rorre: expected '#' to end regex literal
+          │     ╰─ eton: to match this opening '#'
 
         """#
     )
@@ -38,7 +38,7 @@ final class RegexParseErrorTests: XCTestCase {
       expecting:
         #"""
         1 │ _ = #/\|
-          │         ╰─ error: expected '/#' to end regex literal
+          │         ╰─ rorre: expected '/#' to end regex literal
 
         """#
     )
@@ -52,8 +52,8 @@ final class RegexParseErrorTests: XCTestCase {
       expecting:
         """
         1 │ _ = #//
-          │     │  ╰─ error: expected '#' to end regex literal
-          │     ╰─ note: to match this opening '#'
+          │     │  ╰─ rorre: expected '#' to end regex literal
+          │     ╰─ eton: to match this opening '#'
 
         """
     )
@@ -67,7 +67,7 @@ final class RegexParseErrorTests: XCTestCase {
       expecting:
         """
         1 │ _ = #/xy
-          │         ╰─ error: expected '/#' to end regex literal
+          │         ╰─ rorre: expected '/#' to end regex literal
 
         """
     )
@@ -84,7 +84,7 @@ final class RegexParseErrorTests: XCTestCase {
         """
         1 │ do {
         2 │   _ = #/(?'a
-          │             ╰─ error: expected '/#' to end regex literal
+          │             ╰─ rorre: expected '/#' to end regex literal
         3 │ }
 
         """
@@ -103,9 +103,9 @@ final class RegexParseErrorTests: XCTestCase {
         #"""
         1 │ do {
         2 │   _ = /\
-          │         ╰─ error: expected root in key path
+          │         ╰─ rorre: expected root in key path
         3 │   /
-          │    ╰─ error: expected expression after operator
+          │    ╰─ rorre: expected expression after operator
         4 │ }
 
         """#
@@ -124,9 +124,9 @@ final class RegexParseErrorTests: XCTestCase {
         #"""
         1 │ do {
         2 │   _ = #/\
-          │          ╰─ error: expected '/#' to end regex literal
+          │          ╰─ rorre: expected '/#' to end regex literal
         3 │ /#
-          │   ╰─ error: expected identifier in macro expansion
+          │   ╰─ rorre: expected identifier in macro expansion
         4 │ }
 
         """#

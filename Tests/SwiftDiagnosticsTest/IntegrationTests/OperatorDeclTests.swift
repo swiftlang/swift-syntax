@@ -23,7 +23,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ prefix operator +++ {}
-          │                     ╰─ error: operator should not be declared with body
+          │                     ╰─ rorre: operator should not be declared with body
 
         """
     )
@@ -37,7 +37,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ postfix operator +++ {}
-          │                      ╰─ error: operator should not be declared with body
+          │                      ╰─ rorre: operator should not be declared with body
 
         """
     )
@@ -51,7 +51,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ infix operator +++ {}
-          │                    ╰─ error: operator should not be declared with body
+          │                    ╰─ rorre: operator should not be declared with body
 
         """
     )
@@ -67,7 +67,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ infix operator +++* {
-          │                     ╰─ error: operator should not be declared with body
+          │                     ╰─ rorre: operator should not be declared with body
         2 │   associativity right
         3 │ }
 
@@ -83,7 +83,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ infix operator +++*+ : A { }
-          │                          ╰─ error: operator should not be declared with body
+          │                          ╰─ rorre: operator should not be declared with body
 
         """
     )
@@ -97,7 +97,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ prefix operator +++** : A { }
-          │                           ╰─ error: operator should not be declared with body
+          │                           ╰─ rorre: operator should not be declared with body
 
         """
     )
@@ -111,7 +111,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ postfix operator ++*+* : A { }
-          │                            ╰─ error: operator should not be declared with body
+          │                            ╰─ rorre: operator should not be declared with body
 
         """
     )
@@ -125,7 +125,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ operator ++*** : A
-          │ ╰─ error: operator must be declared as 'prefix', 'postfix', or 'infix'
+          │ ╰─ rorre: operator must be declared as 'prefix', 'postfix', or 'infix'
 
         """
     )
@@ -139,8 +139,8 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ operator +*+++ { }
-          │ │              ╰─ error: operator should not be declared with body
-          │ ╰─ error: operator must be declared as 'prefix', 'postfix', or 'infix'
+          │ │              ╰─ rorre: operator should not be declared with body
+          │ ╰─ rorre: operator must be declared as 'prefix', 'postfix', or 'infix'
 
         """
     )
@@ -154,8 +154,8 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ operator +*++* : A { }
-          │ │                  ╰─ error: operator should not be declared with body
-          │ ╰─ error: operator must be declared as 'prefix', 'postfix', or 'infix'
+          │ │                  ╰─ rorre: operator should not be declared with body
+          │ ╰─ rorre: operator must be declared as 'prefix', 'postfix', or 'infix'
 
         """
     )
@@ -169,7 +169,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ prefix operator
-          │                ╰─ error: expected binary operator in operator declaration
+          │                ╰─ rorre: expected binary operator in operator declaration
 
         """
     )
@@ -184,7 +184,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ ;
-          │ ╰─ error: unexpected ';' separator
+          │ ╰─ rorre: unexpected ';' separator
         2 │ prefix operator %%+
 
         """
@@ -199,7 +199,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ postfix operator ?$$
-          │                   ╰─ error: '$$' is considered an identifier and must not appear within an operator name
+          │                   ╰─ rorre: '$$' is considered an identifier and must not appear within an operator name
 
         """
     )
@@ -213,7 +213,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ infix operator --aa
-          │                  ╰─ error: 'aa' is considered an identifier and must not appear within an operator name
+          │                  ╰─ rorre: 'aa' is considered an identifier and must not appear within an operator name
 
         """
     )
@@ -227,7 +227,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ infix operator aa--: A
-          │                ╰─ error: 'aa' is considered an identifier and must not appear within an operator name
+          │                ╰─ rorre: 'aa' is considered an identifier and must not appear within an operator name
 
         """
     )
@@ -241,7 +241,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ infix operator <<$$@<
-          │                  ╰─ error: '$$@<' is not allowed in operator names
+          │                  ╰─ rorre: '$$@<' is not allowed in operator names
 
         """
     )
@@ -255,7 +255,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ infix operator !!@aa
-          │                  ╰─ error: '@aa' is not allowed in operator names
+          │                  ╰─ rorre: '@aa' is not allowed in operator names
 
         """
     )
@@ -269,7 +269,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ infix operator #++=
-          │                ╰─ error: '#' is not allowed in operator names
+          │                ╰─ rorre: '#' is not allowed in operator names
 
         """
     )
@@ -283,7 +283,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ infix operator ++=#
-          │                   ╰─ error: '#' is not allowed in operator names
+          │                   ╰─ rorre: '#' is not allowed in operator names
 
         """
     )
@@ -297,7 +297,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ infix operator ->#
-          │                  ╰─ error: '#' is not allowed in operator names
+          │                  ╰─ rorre: '#' is not allowed in operator names
 
         """
     )
@@ -311,7 +311,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ infix operator =#=
-          │                 ╰─ error: '#=' is not allowed in operator names
+          │                 ╰─ rorre: '#=' is not allowed in operator names
 
         """
     )
@@ -329,7 +329,7 @@ final class OperatorDeclTests: XCTestCase {
         1 │ infix operator +++=
         2 │ infix operator *** : A
         3 │ infix operator --- : ;
-          │                      ╰─ error: expected precedence group in operator declaration
+          │                      ╰─ rorre: expected precedence group in operator declaration
 
         """
     )
@@ -345,7 +345,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ precedencegroup {
-          │                 ╰─ error: expected identifier in precedencegroup
+          │                 ╰─ rorre: expected identifier in precedencegroup
         2 │   associativity: right
         3 │ }
 
@@ -364,7 +364,7 @@ final class OperatorDeclTests: XCTestCase {
         """
         1 │ precedencegroup A {
         2 │   associativity right
-          │                ╰─ error: expected ':' in 'associativity' property of precedencegroup
+          │                ╰─ rorre: expected ':' in 'associativity' property of precedencegroup
         3 │ }
 
         """
@@ -382,7 +382,7 @@ final class OperatorDeclTests: XCTestCase {
         """
         1 │ precedencegroup B {
         2 │   precedence 123
-          │   ╰─ error: unexpected code 'precedence 123' in precedencegroup
+          │   ╰─ rorre: unexpected code 'precedence 123' in precedencegroup
         3 │ }
 
         """
@@ -400,7 +400,7 @@ final class OperatorDeclTests: XCTestCase {
         """
         1 │ precedencegroup C {
         2 │   associativity: sinister
-          │                  ╰─ error: Expected 'none', 'left', or 'right' after 'associativity'
+          │                  ╰─ rorre: Expected 'none', 'left', or 'right' after 'associativity'
         3 │ }
 
         """
@@ -418,7 +418,7 @@ final class OperatorDeclTests: XCTestCase {
         """
         1 │ precedencegroup D {
         2 │   assignment: no
-          │               ╰─ error: expected 'true' or 'false' after 'assignment'
+          │               ╰─ rorre: expected 'true' or 'false' after 'assignment'
         3 │ }
 
         """
@@ -436,7 +436,7 @@ final class OperatorDeclTests: XCTestCase {
         """
         1 │ precedencegroup E {
         2 │   higherThan:
-          │              ╰─ error: expected name in 'relation' property of precedencegroup
+          │              ╰─ rorre: expected name in 'relation' property of precedencegroup
         3 │ }
 
         """
@@ -451,7 +451,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ postfix operator ++:
-          │                     ╰─ error: expected precedence group in operator declaration
+          │                     ╰─ rorre: expected precedence group in operator declaration
 
         """
     )
@@ -466,7 +466,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ @objc
-          │ ╰─ error: unexpected code '@objc' before operator declaration
+          │ ╰─ rorre: unexpected code '@objc' before operator declaration
         2 │ postfix operator ++: PrecedenceGroup
 
         """
@@ -481,7 +481,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ mutating postfix operator --: UndefinedPrecedenceGroup
-          │ ╰─ error: unexpected code 'mutating' before operator declaration
+          │ ╰─ rorre: unexpected code 'mutating' before operator declaration
 
         """
     )
@@ -495,7 +495,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ private(set) infix operator ~~~
-          │ ╰─ error: unexpected code 'private(set)' before operator declaration
+          │ ╰─ rorre: unexpected code 'private(set)' before operator declaration
 
         """
     )
@@ -509,8 +509,8 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ dynamic operator ~~~
-          │ │       ╰─ error: operator must be declared as 'prefix', 'postfix', or 'infix'
-          │ ╰─ error: unexpected code 'dynamic' before operator declaration
+          │ │       ╰─ rorre: operator must be declared as 'prefix', 'postfix', or 'infix'
+          │ ╰─ rorre: unexpected code 'dynamic' before operator declaration
 
         """
     )
@@ -524,7 +524,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ prefix infix operator &+&
-          │        ╰─ error: unexpected code 'infix' in operator declaration
+          │        ╰─ rorre: unexpected code 'infix' in operator declaration
 
         """
     )
@@ -536,7 +536,7 @@ final class OperatorDeclTests: XCTestCase {
       expecting:
         """
         1 │ postfix operator aa
-          │                  ╰─ error: 'aa' is considered an identifier and must not appear within an operator name
+          │                  ╰─ rorre: 'aa' is considered an identifier and must not appear within an operator name
 
         """
     )

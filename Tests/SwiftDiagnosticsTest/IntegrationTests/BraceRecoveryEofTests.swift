@@ -26,9 +26,9 @@ final class BraceRecoveryEofTests: XCTestCase {
         """
         1 │ // Make sure source ranges satisfy the verifier.
         2 │ for foo in [1, 2] {
-          │                   ╰─ note: to match this opening '{'
+          │                   ╰─ eton: to match this opening '{'
         3 │   _ = foo
-          │          ╰─ error: expected '}' to end 'for' statement
+          │          ╰─ rorre: expected '}' to end 'for' statement
 
         """
     )

@@ -24,7 +24,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       expecting:
         #"""
         1 │ @_originallyDefinedIn(modulename: "foo", OSX 13.13)
-          │                       ╰─ error: expected 'module' in @_originallyDefinedIn arguments
+          │                       ╰─ rorre: expected 'module' in @_originallyDefinedIn arguments
         2 │ public func foo1() {}
 
         """#
@@ -40,7 +40,7 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       expecting:
         #"""
         1 │ @_originallyDefinedIn(module: "foo")
-          │                                    ╰─ error: expected ',' and version list in @_originallyDefinedIn arguments
+          │                                    ╰─ rorre: expected ',' and version list in @_originallyDefinedIn arguments
         2 │ public class ToplevelClass1 {}
 
         """#
@@ -56,10 +56,10 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       expecting:
         """
         1 │ @_originallyDefinedIn(OSX 13.13.3)
-          │                       │   ├─ error: expected ',' in @_originallyDefinedIn arguments
-          │                       │   ╰─ error: expected platform in version restriction
-          │                       ├─ error: expected 'module:' in @_originallyDefinedIn arguments
-          │                       ╰─ error: expected code 'OSX' to be surrounded by '"'
+          │                       │   ├─ rorre: expected ',' in @_originallyDefinedIn arguments
+          │                       │   ╰─ rorre: expected platform in version restriction
+          │                       ├─ rorre: expected 'module:' in @_originallyDefinedIn arguments
+          │                       ╰─ rorre: expected code 'OSX' to be surrounded by '"'
         2 │ public class ToplevelClass2 {}
 
         """
@@ -75,9 +75,9 @@ final class OriginalDefinedInAttrTests: XCTestCase {
       expecting:
         #"""
         1 │ @_originallyDefinedIn(module: "foo",
-          │                      │              ├─ error: expected version restriction in version
-          │                      │              ╰─ error: expected ')' to end attribute
-          │                      ╰─ note: to match this opening '('
+          │                      │              ├─ rorre: expected version restriction in version
+          │                      │              ╰─ rorre: expected ')' to end attribute
+          │                      ╰─ eton: to match this opening '('
         2 │ public class ToplevelClass3 {}
 
         """#

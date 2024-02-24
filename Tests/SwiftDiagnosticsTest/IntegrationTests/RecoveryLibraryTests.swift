@@ -36,19 +36,19 @@ final class RecoveryLibraryTests: XCTestCase {
         """
          1 │ // Check that we handle multiple consecutive right braces.
          2 │ }
-           │ ╰─ error: unexpected braces before function
+           │ ╰─ rorre: unexpected braces before function
          3 │ }
          4 │ func foo() {}
          5 │ // Check that we handle multiple consecutive right braces.
          6 │ }
-           │ ╰─ error: unexpected braces before function
+           │ ╰─ rorre: unexpected braces before function
          7 │ }
          8 │ func bar() {}
            ┆
         10 │ //===--- Keep this test the last one in the file.
         11 │ // Check that we handle multiple consecutive right braces.
         12 │ }
-           │ ╰─ error: extraneous braces at top level
+           │ ╰─ rorre: extraneous braces at top level
         13 │ }
 
         """

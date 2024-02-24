@@ -28,7 +28,7 @@ final class ForwardSlashRegexTests: XCTestCase {
         """
         1 │ do {
         2 │   let z=/0/
-          │        ╰─ error: unexpected code '=/0/' in 'do' statement
+          │        ╰─ rorre: unexpected code '=/0/' in 'do' statement
         3 │ }
 
         """
@@ -43,7 +43,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         """
         1 │ _ = !/ /
-          │       ╰─ error: bare slash regex literal may not start with space
+          │       ╰─ rorre: bare slash regex literal may not start with space
 
         """
     )
@@ -57,7 +57,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         """
         1 │ _ = !!/ /
-          │        ╰─ error: bare slash regex literal may not start with space
+          │        ╰─ rorre: bare slash regex literal may not start with space
 
         """
     )
@@ -71,8 +71,8 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         """
         1 │ _ = /^)
-          │     │  ╰─ error: expected '/' to end regex literal
-          │     ╰─ note: to match this opening '/'
+          │     │  ╰─ rorre: expected '/' to end regex literal
+          │     ╰─ eton: to match this opening '/'
 
         """
     )
@@ -89,7 +89,7 @@ final class ForwardSlashRegexTests: XCTestCase {
         """
         1 │ do {
         2 │   _ = 0; /x /
-          │              ╰─ error: expected expression after operator
+          │              ╰─ rorre: expected expression after operator
         3 │ }
 
         """
@@ -109,8 +109,8 @@ final class ForwardSlashRegexTests: XCTestCase {
         1 │ _ = /x/ ? 0 : 1
         2 │ do {
         3 │   _ = /x / ? 0 : 1
-          │            ├─ error: expected expression after operator
-          │            ╰─ error: unexpected code '? 0 : 1' in 'do' statement
+          │            ├─ rorre: expected expression after operator
+          │            ╰─ rorre: unexpected code '? 0 : 1' in 'do' statement
         4 │ }
 
         """
@@ -130,8 +130,8 @@ final class ForwardSlashRegexTests: XCTestCase {
         1 │ _ = /x/ ?? /x/
         2 │ do {
         3 │   _ = /x / ?? /x /
-          │            ├─ error: expected expression after operator
-          │            ╰─ error: unexpected code '?? /x /' in 'do' statement
+          │            ├─ rorre: expected expression after operator
+          │            ╰─ rorre: unexpected code '?? /x /' in 'do' statement
         4 │ }
 
         """
@@ -150,9 +150,9 @@ final class ForwardSlashRegexTests: XCTestCase {
         """
         1 │ do {
         2 │   _ = /x /...
-          │         │ ├─ error: expected expression in operator
-          │         │ ╰─ error: unexpected code '...' in 'do' statement
-          │         ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │         │ ├─ rorre: expected expression in operator
+          │         │ ╰─ rorre: unexpected code '...' in 'do' statement
+          │         ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
         3 │ }
 
         """
@@ -171,9 +171,9 @@ final class ForwardSlashRegexTests: XCTestCase {
         """
         1 │ do {
         2 │   _ = /x /...
-          │         │ ├─ error: expected expression in operator
-          │         │ ╰─ error: unexpected code '...' in 'do' statement
-          │         ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │         │ ├─ rorre: expected expression in operator
+          │         │ ╰─ rorre: unexpected code '...' in 'do' statement
+          │         ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
         3 │ }
 
         """
@@ -191,7 +191,7 @@ final class ForwardSlashRegexTests: XCTestCase {
         """
         1 │ do {
         2 │   _ = true / false /;
-          │                     ╰─ error: expected expression after operator
+          │                     ╰─ rorre: expected expression after operator
         3 │ }
 
         """
@@ -206,7 +206,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         """
         1 │ foo(/abc/, y: /abc /)
-          │                     ╰─ error: expected expression after operator
+          │                     ╰─ rorre: expected expression after operator
 
         """
     )
@@ -226,7 +226,7 @@ final class ForwardSlashRegexTests: XCTestCase {
         1 │ func testSubscript(_ x: S) {
         2 │   x[/x/]
         3 │   x[/x /]
-          │         ╰─ error: expected expression after operator
+          │         ╰─ rorre: expected expression after operator
         4 │   _ = x[/] / 2
         5 │ }
 
@@ -249,7 +249,7 @@ final class ForwardSlashRegexTests: XCTestCase {
         3 │     return /x/
         4 │   }
         5 │   return /x /
-          │              ╰─ error: expected expression after operator
+          │              ╰─ rorre: expected expression after operator
         6 │ }
 
         """
@@ -267,7 +267,7 @@ final class ForwardSlashRegexTests: XCTestCase {
         """
         1 │ do {
         2 │   _ = [/abc/, /abc /]
-          │                     ╰─ error: expected expression after operator
+          │                     ╰─ rorre: expected expression after operator
         3 │ }
 
         """
@@ -285,8 +285,8 @@ final class ForwardSlashRegexTests: XCTestCase {
         """
         1 │ do {
         2 │   _ = [/abc /: /abc /]
-          │              │       ╰─ error: expected expression after operator
-          │              ╰─ error: expected expression after operator
+          │              │       ╰─ rorre: expected expression after operator
+          │              ╰─ rorre: expected expression after operator
         3 │ }
 
         """
@@ -304,7 +304,7 @@ final class ForwardSlashRegexTests: XCTestCase {
         """
         1 │ do {
         2 │   _ = ((/abc /))
-          │               ╰─ error: expected expression after operator
+          │               ╰─ rorre: expected expression after operator
         3 │ }
 
         """
@@ -321,7 +321,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         """
         1 │ _ = 0. / 1 / 2
-          │       ╰─ error: expected name in member access
+          │       ╰─ rorre: expected name in member access
 
         """
     )
@@ -335,7 +335,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         """
         1 │ _ = 0 . / 1 / 2
-          │        ╰─ error: expected name in member access
+          │        ╰─ rorre: expected name in member access
 
         """
     )
@@ -352,8 +352,8 @@ final class ForwardSlashRegexTests: XCTestCase {
         """
         1 │ do {
         2 │   let /x/
-          │       ├─ error: expected pattern in variable
-          │       ╰─ error: expected '=' in variable
+          │       ├─ rorre: expected pattern in variable
+          │       ╰─ rorre: expected '=' in variable
         3 │ }
 
         """
@@ -371,7 +371,7 @@ final class ForwardSlashRegexTests: XCTestCase {
         """
         1 │ do {
         2 │   _ = try /x/; _ = try /x /
-          │                            ╰─ error: expected expression after operator
+          │                            ╰─ rorre: expected expression after operator
         3 │ }
 
         """
@@ -389,7 +389,7 @@ final class ForwardSlashRegexTests: XCTestCase {
         """
         1 │ do {
         2 │   _ = try? /x/; _ = try? /x /
-          │                              ╰─ error: expected expression after operator
+          │                              ╰─ rorre: expected expression after operator
         3 │ }
 
         """
@@ -407,7 +407,7 @@ final class ForwardSlashRegexTests: XCTestCase {
         """
         1 │ do {
         2 │   _ = try! /x/; _ = try! /x /
-          │                              ╰─ error: expected expression after operator
+          │                              ╰─ rorre: expected expression after operator
         3 │ }
 
         """
@@ -424,15 +424,15 @@ final class ForwardSlashRegexTests: XCTestCase {
       }
       """#,
       expecting:
-        """
+        #"""
         2 │ do {
         3 │   _ = qux(/, "(") / 2
         4 │   _ = qux(/, "(")/2
-          │          │        ╰─ error: expected ')' to end function call
-          │          ╰─ note: to match this opening '('
+          │          │        ╰─ rorre: expected ')' to end function call
+          │          ╰─ eton: to match this opening '('
         5 │ }
 
-        """
+        """#
     )
   }
 
@@ -444,8 +444,8 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         """
         1 │ _ = /
-          │     │╰─ error: expected '/' to end regex literal
-          │     ╰─ note: to match this opening '/'
+          │     │╰─ rorre: expected '/' to end regex literal
+          │     ╰─ eton: to match this opening '/'
 
         """
     )
@@ -459,8 +459,8 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         """
         1 │ _ = /)
-          │     │ ╰─ error: expected '/' to end regex literal
-          │     ╰─ note: to match this opening '/'
+          │     │ ╰─ rorre: expected '/' to end regex literal
+          │     ╰─ eton: to match this opening '/'
 
         """
     )
@@ -474,7 +474,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         #"""
         1 │ _ = /\()/
-          │         ╰─ error: extraneous code '/' at top level
+          │         ╰─ rorre: extraneous code '/' at top level
 
         """#
     )
@@ -491,8 +491,8 @@ final class ForwardSlashRegexTests: XCTestCase {
         #"""
         1 │ do {
         2 │   let _: Regex = (/whatever\)/
-          │                  │            ╰─ error: expected ')' to end tuple
-          │                  ╰─ note: to match this opening '('
+          │                  │            ╰─ rorre: expected ')' to end tuple
+          │                  ╰─ eton: to match this opening '('
         3 │ }
 
         """#
@@ -510,7 +510,7 @@ final class ForwardSlashRegexTests: XCTestCase {
         """
         1 │ do {
         2 │   _ = /(()()))/
-          │              ╰─ error: unexpected code ')/' in 'do' statement
+          │              ╰─ rorre: unexpected code ')/' in 'do' statement
         3 │ }
 
         """
@@ -528,7 +528,7 @@ final class ForwardSlashRegexTests: XCTestCase {
         """
         1 │ do {
         2 │   _ = /[x])/
-          │           ╰─ error: unexpected code ')/' in 'do' statement
+          │           ╰─ rorre: unexpected code ')/' in 'do' statement
         3 │ }
 
         """
@@ -546,8 +546,8 @@ final class ForwardSlashRegexTests: XCTestCase {
         #"""
         1 │ do {
         2 │   _ = /[\]])/
-          │          │╰─ error: unexpected code '])/' in 'do' statement
-          │          ╰─ error: expected root in key path
+          │          │╰─ rorre: unexpected code '])/' in 'do' statement
+          │          ╰─ rorre: expected root in key path
         3 │ }
 
         """#
@@ -562,9 +562,9 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         #"""
         1 │ _ = ^/"/"
-          │         │╰─ error: expected '"' to end string literal
-          │         ├─ error: consecutive statements on a line must be separated by newline or ';'
-          │         ╰─ note: to match this opening '"'
+          │         │╰─ rorre: expected '"' to end string literal
+          │         ├─ rorre: consecutive statements on a line must be separated by newline or ';'
+          │         ╰─ eton: to match this opening '"'
 
         """#
     )
@@ -578,9 +578,9 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         #"""
         1 │ _ = ^/"/"
-          │         │╰─ error: expected '"' to end string literal
-          │         ├─ error: consecutive statements on a line must be separated by newline or ';'
-          │         ╰─ note: to match this opening '"'
+          │         │╰─ rorre: expected '"' to end string literal
+          │         ├─ rorre: consecutive statements on a line must be separated by newline or ';'
+          │         ╰─ eton: to match this opening '"'
 
         """#
     )
@@ -594,9 +594,9 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         #"""
         1 │ _ = ^/"[/"
-          │          │╰─ error: expected '"' to end string literal
-          │          ├─ error: consecutive statements on a line must be separated by newline or ';'
-          │          ╰─ note: to match this opening '"'
+          │          │╰─ rorre: expected '"' to end string literal
+          │          ├─ rorre: consecutive statements on a line must be separated by newline or ';'
+          │          ╰─ eton: to match this opening '"'
 
         """#
     )
@@ -610,9 +610,9 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         #"""
         1 │ _ = ^/"[/"
-          │          │╰─ error: expected '"' to end string literal
-          │          ├─ error: consecutive statements on a line must be separated by newline or ';'
-          │          ╰─ note: to match this opening '"'
+          │          │╰─ rorre: expected '"' to end string literal
+          │          ├─ rorre: consecutive statements on a line must be separated by newline or ';'
+          │          ╰─ eton: to match this opening '"'
 
         """#
     )
@@ -626,7 +626,7 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         """
         1 │ _ = / /
-          │      ╰─ error: bare slash regex literal may not start with space
+          │      ╰─ rorre: bare slash regex literal may not start with space
 
         """
     )
@@ -641,9 +641,9 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         """
         1 │ _ = /               
-          │     ││              ╰─ error: expected '/' to end regex literal
-          │     │╰─ error: bare slash regex literal may not start with space
-          │     ╰─ note: to match this opening '/'
+          │     ││              ╰─ rorre: expected '/' to end regex literal
+          │     │╰─ rorre: bare slash regex literal may not start with space
+          │     ╰─ eton: to match this opening '/'
 
         """
     )
@@ -658,8 +658,8 @@ final class ForwardSlashRegexTests: XCTestCase {
       expecting:
         """
         1 │ _ = /^                  
-          │     │                   ╰─ error: expected '/' to end regex literal
-          │     ╰─ note: to match this opening '/'
+          │     │                   ╰─ rorre: expected '/' to end regex literal
+          │     ╰─ eton: to match this opening '/'
 
         """
     )

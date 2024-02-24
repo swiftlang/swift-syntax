@@ -30,7 +30,7 @@ final class ErrorsTests: XCTestCase {
         2 │     do {
         3 │       _ = try genError()
         4 │     } catch MSV.CarriesInt(let i) where i == genError()) {
-          │                                                        ╰─ error: unexpected code ')' in 'catch' clause
+          │                                                        ╰─ rorre: unexpected code ')' in 'catch' clause
         5 │     }
         6 │ }
 
@@ -48,7 +48,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func postThrows() -> Int throws {
-          │                          ╰─ error: 'throws' must precede '->'
+          │                          ╰─ rorre: 'throws' must precede '->'
         2 │   return 5
         3 │ }
 
@@ -66,7 +66,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func postThrows2() -> throws Int {
-          │                       ╰─ error: 'throws' must precede '->'
+          │                       ╰─ rorre: 'throws' must precede '->'
         2 │   return try postThrows()
         3 │ }
 
@@ -84,7 +84,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func postRethrows(_ f: () throws -> Int) -> Int rethrows {
-          │                                                 ╰─ error: 'rethrows' must precede '->'
+          │                                                 ╰─ rorre: 'rethrows' must precede '->'
         2 │   return try f()
         3 │ }
 
@@ -102,7 +102,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func postRethrows2(_ f: () throws -> Int) -> rethrows Int {
-          │                                              ╰─ error: 'rethrows' must precede '->'
+          │                                              ╰─ rorre: 'rethrows' must precede '->'
         2 │   return try f()
         3 │ }
 
@@ -121,7 +121,7 @@ final class ErrorsTests: XCTestCase {
         """
         1 │ func postThrows3() {
         2 │   _ = { () -> Int throws in }
-          │                   ╰─ error: 'throws' must precede '->'
+          │                   ╰─ rorre: 'throws' must precede '->'
         3 │ }
 
         """
@@ -136,10 +136,10 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func dupThrows1() throws rethrows -> throws Int throw {}
-          │                   │      │           │          ╰─ error: 'throw' must precede '->'
-          │                   │      │           ╰─ error: 'throws' must precede '->'
-          │                   │      ╰─ error: 'rethrows' conflicts with 'throws'
-          │                   ╰─ note: 'throws' declared here
+          │                   │      │           │          ╰─ rorre: 'throw' must precede '->'
+          │                   │      │           ╰─ rorre: 'throws' must precede '->'
+          │                   │      ╰─ rorre: 'rethrows' conflicts with 'throws'
+          │                   ╰─ eton: 'throws' declared here
 
         """
     )
@@ -153,7 +153,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func dupThrows2(_ f: () throws -> rethrows Int) {}
-          │                                   ╰─ error: 'rethrows' must precede '->'
+          │                                   ╰─ rorre: 'rethrows' must precede '->'
 
         """
     )
@@ -167,8 +167,8 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ _ = { () try throws in }
-          │          │   ╰─ note: 'throws' declared here
-          │          ╰─ error: 'try' conflicts with 'throws'
+          │          │   ╰─ eton: 'throws' declared here
+          │          ╰─ rorre: 'try' conflicts with 'throws'
 
         """
     )
@@ -182,7 +182,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ _ = { () throws -> Int throws in }
-          │                        ╰─ error: 'throws' must precede '->'
+          │                        ╰─ rorre: 'throws' must precede '->'
 
         """
     )
@@ -197,7 +197,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func fixitThrow0() throw {}
-          │                    ╰─ error: expected throwing specifier; did you mean 'throws'?
+          │                    ╰─ rorre: expected throwing specifier; did you mean 'throws'?
 
         """
     )
@@ -211,7 +211,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func fixitThrow1() throw -> Int {}
-          │                    ╰─ error: expected throwing specifier; did you mean 'throws'?
+          │                    ╰─ rorre: expected throwing specifier; did you mean 'throws'?
 
         """
     )
@@ -231,7 +231,7 @@ final class ErrorsTests: XCTestCase {
         2 │   var _: (Int)
         3 │   throw MSV.Foo
         4 │   var _: (Int) throw -> Int
-          │                ╰─ error: expected throwing specifier; did you mean 'throws'?
+          │                ╰─ rorre: expected throwing specifier; did you mean 'throws'?
         5 │ }
 
         """
@@ -246,7 +246,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ let fn: () -> throws Void
-          │               ╰─ error: 'throws' must precede '->'
+          │               ╰─ rorre: 'throws' must precede '->'
 
         """
     )
@@ -260,7 +260,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func fixitTry0<T>(a: T) try where T:ExpressibleByStringLiteral {}
-          │                         ╰─ error: expected throwing specifier; did you mean 'throws'?
+          │                         ╰─ rorre: expected throwing specifier; did you mean 'throws'?
 
         """
     )
@@ -274,7 +274,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func fixitTry1<T>(a: T) try {}
-          │                         ╰─ error: expected throwing specifier; did you mean 'throws'?
+          │                         ╰─ rorre: expected throwing specifier; did you mean 'throws'?
 
         """
     )
@@ -288,7 +288,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func fixitTry2() try {}
-          │                  ╰─ error: expected throwing specifier; did you mean 'throws'?
+          │                  ╰─ rorre: expected throwing specifier; did you mean 'throws'?
 
         """
     )
@@ -302,7 +302,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ let fixitTry3 : () try -> Int
-          │                    ╰─ error: expected throwing specifier; did you mean 'throws'?
+          │                    ╰─ rorre: expected throwing specifier; did you mean 'throws'?
 
         """
     )
@@ -316,7 +316,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func fixitAwait0() await { }
-          │                    ╰─ error: expected async specifier; did you mean 'async'?
+          │                    ╰─ rorre: expected async specifier; did you mean 'async'?
 
         """
     )
@@ -330,7 +330,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func fixitAwait1() await -> Int { }
-          │                    ╰─ error: expected async specifier; did you mean 'async'?
+          │                    ╰─ rorre: expected async specifier; did you mean 'async'?
 
         """
     )
@@ -344,7 +344,7 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func fixitAwait2() throws await -> Int { }
-          │                           ╰─ error: 'await' must precede 'throws'
+          │                           ╰─ rorre: 'await' must precede 'throws'
 
         """
     )
@@ -362,7 +362,7 @@ final class ErrorsTests: XCTestCase {
         """
         1 │ do {
         2 │   true ? () : throw opaque_error()
-          │               ╰─ error: expected expression after ternary operator
+          │               ╰─ rorre: expected expression after ternary operator
         3 │ } catch _ {
         4 │ }
 
@@ -378,8 +378,8 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func fixitAwait2() async await throws -> Int { }
-          │                    │     ╰─ error: 'await' conflicts with 'async'
-          │                    ╰─ note: 'async' declared here
+          │                    │     ╰─ rorre: 'await' conflicts with 'async'
+          │                    ╰─ eton: 'async' declared here
 
         """
     )
@@ -393,8 +393,8 @@ final class ErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func fixitAwait2() async await -> Int { }
-          │                    │     ╰─ error: 'await' conflicts with 'async'
-          │                    ╰─ note: 'async' declared here
+          │                    │     ╰─ rorre: 'await' conflicts with 'async'
+          │                    ╰─ eton: 'async' declared here
 
         """
     )

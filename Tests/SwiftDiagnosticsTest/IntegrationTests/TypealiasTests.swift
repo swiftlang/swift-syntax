@@ -24,7 +24,7 @@ final class TypealiasTests: XCTestCase {
       expecting:
         """
         1 │ typealias Foo1 : Int
-          │                ╰─ error: expected '=' in typealias declaration
+          │                ╰─ rorre: expected '=' in typealias declaration
 
         """
     )
@@ -38,7 +38,7 @@ final class TypealiasTests: XCTestCase {
       expecting:
         """
         1 │ typealias Foo2: Int
-          │               ╰─ error: expected '=' in typealias declaration
+          │               ╰─ rorre: expected '=' in typealias declaration
 
         """
     )
@@ -52,7 +52,7 @@ final class TypealiasTests: XCTestCase {
       expecting:
         """
         1 │ typealias Foo3 :Int
-          │                ╰─ error: expected '=' in typealias declaration
+          │                ╰─ rorre: expected '=' in typealias declaration
 
         """
     )
@@ -66,7 +66,7 @@ final class TypealiasTests: XCTestCase {
       expecting:
         """
         1 │ typealias Foo4:/*comment*/Int
-          │               ╰─ error: expected '=' in typealias declaration
+          │               ╰─ rorre: expected '=' in typealias declaration
 
         """
     )
@@ -80,7 +80,7 @@ final class TypealiasTests: XCTestCase {
       expecting:
         """
         1 │ typealias Recovery1
-          │                    ╰─ error: expected '=' and type in typealias declaration
+          │                    ╰─ rorre: expected '=' and type in typealias declaration
 
         """
     )
@@ -94,8 +94,8 @@ final class TypealiasTests: XCTestCase {
       expecting:
         """
         1 │ typealias Recovery2 :
-          │                     │╰─ error: expected type in typealias declaration
-          │                     ╰─ error: expected '=' in typealias declaration
+          │                     │╰─ rorre: expected type in typealias declaration
+          │                     ╰─ rorre: expected '=' in typealias declaration
 
         """
     )
@@ -109,7 +109,7 @@ final class TypealiasTests: XCTestCase {
       expecting:
         """
         1 │ typealias Recovery3 =
-          │                      ╰─ error: expected type in typealias declaration
+          │                      ╰─ rorre: expected type in typealias declaration
 
         """
     )
@@ -123,7 +123,7 @@ final class TypealiasTests: XCTestCase {
       expecting:
         """
         1 │ typealias Recovery4 : Int
-          │                     ╰─ error: expected '=' in typealias declaration
+          │                     ╰─ rorre: expected '=' in typealias declaration
 
         """
     )
@@ -137,8 +137,8 @@ final class TypealiasTests: XCTestCase {
       expecting:
         """
         1 │ typealias Recovery5 : Int, Float
-          │                     │    ╰─ error: extraneous code ', Float' at top level
-          │                     ╰─ error: expected '=' in typealias declaration
+          │                     │    ╰─ rorre: extraneous code ', Float' at top level
+          │                     ╰─ rorre: expected '=' in typealias declaration
 
         """
     )
@@ -152,8 +152,8 @@ final class TypealiasTests: XCTestCase {
       expecting:
         """
         1 │ typealias Recovery6 = =
-          │                       ├─ error: expected type in typealias declaration
-          │                       ╰─ error: extraneous code '=' at top level
+          │                       ├─ rorre: expected type in typealias declaration
+          │                       ╰─ rorre: extraneous code '=' at top level
 
         """
     )
@@ -167,7 +167,7 @@ final class TypealiasTests: XCTestCase {
       expecting:
         """
         1 │ typealias switch = Int
-          │           ╰─ error: keyword 'switch' cannot be used as an identifier here
+          │           ╰─ rorre: keyword 'switch' cannot be used as an identifier here
 
         """
     )

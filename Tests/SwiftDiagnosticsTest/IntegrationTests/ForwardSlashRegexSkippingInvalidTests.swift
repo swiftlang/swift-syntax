@@ -25,7 +25,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       expecting:
         """
         1 │ func a() { _ = / x*/ }
-          │                 ╰─ error: bare slash regex literal may not start with space
+          │                 ╰─ rorre: bare slash regex literal may not start with space
 
         """
     )
@@ -40,7 +40,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       expecting:
         """
         1 │ func b() { _ = /x)*/ }
-          │                  ╰─ error: unexpected code ')*/' in function
+          │                  ╰─ rorre: unexpected code ')*/' in function
 
         """
     )
@@ -56,9 +56,9 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       expecting:
         """
         1 │ func c() { _ = / x}*/ }
-          │                 ╰─ error: bare slash regex literal may not start with space
+          │                 ╰─ rorre: bare slash regex literal may not start with space
         2 │ func d() { _ = / x{*/ }
-          │                 ╰─ error: bare slash regex literal may not start with space
+          │                 ╰─ rorre: bare slash regex literal may not start with space
 
         """
     )
@@ -76,9 +76,9 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
         """
         1 │ func e() {
         2 │   _ = /         }
-          │       ││         ╰─ error: expected '/' to end regex literal
-          │       │╰─ error: bare slash regex literal may not start with space
-          │       ╰─ note: to match this opening '/'
+          │       ││         ╰─ rorre: expected '/' to end regex literal
+          │       │╰─ rorre: bare slash regex literal may not start with space
+          │       ╰─ eton: to match this opening '/'
         3 │ }
 
         """
@@ -96,9 +96,9 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
         """
         1 │ func f() {
         2 │   _ = /         {
-          │       ││         ╰─ error: expected '/' to end regex literal
-          │       │╰─ error: bare slash regex literal may not start with space
-          │       ╰─ note: to match this opening '/'
+          │       ││         ╰─ rorre: expected '/' to end regex literal
+          │       │╰─ rorre: bare slash regex literal may not start with space
+          │       ╰─ eton: to match this opening '/'
         3 │ }
 
         """
@@ -117,7 +117,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
         1 │ func g() {
         2 │   _ = /x         }
         3 │ }
-          │ ╰─ error: extraneous brace at top level
+          │ ╰─ rorre: extraneous brace at top level
 
         """
     )
@@ -134,9 +134,9 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
         #"""
         1 │ func i() {
         2 │   _ = /x "[abc]     {
-          │         ││           ╰─ error: expected '"' to end string literal
-          │         │╰─ note: to match this opening '"'
-          │         ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │         ││           ╰─ rorre: expected '"' to end string literal
+          │         │╰─ eton: to match this opening '"'
+          │         ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
         3 │ }
 
         """#
@@ -154,9 +154,9 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
         #"""
         1 │ func i() {
         2 │   _ = /x "[abc]     {
-          │         ││           ╰─ error: expected '"' to end string literal
-          │         │╰─ note: to match this opening '"'
-          │         ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │         ││           ╰─ rorre: expected '"' to end string literal
+          │         │╰─ eton: to match this opening '"'
+          │         ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
         3 │ }
 
         """#
@@ -174,8 +174,8 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
         """
         1 │ func j() {
         2 │   _ = /^ [abc]     {
-          │       │             ╰─ error: expected '/' to end regex literal
-          │       ╰─ note: to match this opening '/'
+          │       │             ╰─ rorre: expected '/' to end regex literal
+          │       ╰─ eton: to match this opening '/'
         3 │ }
 
         """
@@ -193,8 +193,8 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
         #"""
         1 │ func k() {
         2 │   _ = /^ "[abc]     {
-          │       │              ╰─ error: expected '/' to end regex literal
-          │       ╰─ note: to match this opening '/'
+          │       │              ╰─ rorre: expected '/' to end regex literal
+          │       ╰─ eton: to match this opening '/'
         3 │ }
 
         """#
@@ -212,8 +212,8 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
         """
         1 │ func l() {
         2 │   _ = /^    } abc     {
-          │       │                ╰─ error: expected '/' to end regex literal
-          │       ╰─ note: to match this opening '/'
+          │       │                ╰─ rorre: expected '/' to end regex literal
+          │       ╰─ eton: to match this opening '/'
         3 │ }
 
         """
@@ -232,12 +232,12 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
         #"""
         1 │ func m() {
         2 │   _ = / "
-          │       ││ ╰─ error: expected '/' to end regex literal
-          │       │╰─ error: bare slash regex literal may not start with space
-          │       ╰─ note: to match this opening '/'
+          │       ││ ╰─ rorre: expected '/' to end regex literal
+          │       │╰─ rorre: bare slash regex literal may not start with space
+          │       ╰─ eton: to match this opening '/'
         3 │ }
         4 │ }
-          │ ╰─ error: extraneous brace at top level
+          │ ╰─ rorre: extraneous brace at top level
 
         """#
     )
@@ -252,7 +252,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       expecting:
         #"""
         1 │ func n() { / "{"}/ }
-          │             ╰─ error: bare slash regex literal may not start with space
+          │             ╰─ rorre: bare slash regex literal may not start with space
 
         """#
     )
@@ -274,7 +274,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
         2 │   _ = {
         3 │     0
         4 │     /x}}} /
-          │         ╰─ error: extraneous code at top level
+          │         ╰─ rorre: extraneous code at top level
         5 │     2
         6 │   }
 
@@ -296,7 +296,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
         1 │ func p() {
         2 │   _ = 2
         3 │   /x} /
-          │       ╰─ error: extraneous code at top level
+          │       ╰─ rorre: extraneous code at top level
         4 │   .bitWidth
         5 │ }
 
@@ -312,7 +312,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       expecting:
         """
         1 │ func err1() { _ = / 0xG}/ }
-          │                    ╰─ error: bare slash regex literal may not start with space
+          │                    ╰─ rorre: bare slash regex literal may not start with space
 
         """
     )
@@ -326,7 +326,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       expecting:
         """
         1 │ func err2() { _ = / 0oG}/ }
-          │                    ╰─ error: bare slash regex literal may not start with space
+          │                    ╰─ rorre: bare slash regex literal may not start with space
 
         """
     )
@@ -340,7 +340,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       expecting:
         """
         1 │ func err3() { _ = / {"/ }
-          │                    ╰─ error: bare slash regex literal may not start with space
+          │                    ╰─ rorre: bare slash regex literal may not start with space
 
         """
     )
@@ -354,7 +354,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       expecting:
         """
         1 │ func err4() { _ = / {'/ }
-          │                    ╰─ error: bare slash regex literal may not start with space
+          │                    ╰─ rorre: bare slash regex literal may not start with space
 
         """
     )
@@ -368,7 +368,7 @@ final class ForwardSlashRegexSkippingInvalidTests: XCTestCase {
       expecting:
         """
         1 │ func err5() { _ = / {<#placeholder#>/ }
-          │                    ╰─ error: bare slash regex literal may not start with space
+          │                    ╰─ rorre: bare slash regex literal may not start with space
 
         """
     )

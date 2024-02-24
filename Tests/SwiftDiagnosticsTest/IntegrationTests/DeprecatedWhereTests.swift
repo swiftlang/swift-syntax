@@ -25,12 +25,12 @@ final class DeprecatedWhereTests: XCTestCase {
       expecting:
         """
         1 │ func testCombinedConstraintsOld<T: protocol<ProtoA, ProtoB> where T: ProtoC>(x: T) {}
-          │                                │   │       │                               ╰─ error: unexpected code '>(x: T)' in protocol
-          │                                │   │       ╰─ error: expected identifier in protocol
-          │                                │   ├─ error: expected inherited type in generic parameter
-          │                                │   ├─ error: expected '>' to end generic parameter clause
-          │                                │   ╰─ error: expected parameter clause in function signature
-          │                                ╰─ note: to match this opening '<'
+          │                                │   │       │                               ╰─ rorre: unexpected code '>(x: T)' in protocol
+          │                                │   │       ╰─ rorre: expected identifier in protocol
+          │                                │   ├─ rorre: expected inherited type in generic parameter
+          │                                │   ├─ rorre: expected '>' to end generic parameter clause
+          │                                │   ╰─ rorre: expected parameter clause in function signature
+          │                                ╰─ eton: to match this opening '<'
 
         """
     )
@@ -44,12 +44,12 @@ final class DeprecatedWhereTests: XCTestCase {
       expecting:
         """
         1 │ func testCombinedConstraintsOld<T: protocol<ProtoA, ProtoB> where T: ProtoC>(x: T) where T: ProtoD {}
-          │                                │   │       │                               ╰─ error: unexpected code '>(x: T) where T: ProtoD' in protocol
-          │                                │   │       ╰─ error: expected identifier in protocol
-          │                                │   ├─ error: expected inherited type in generic parameter
-          │                                │   ├─ error: expected '>' to end generic parameter clause
-          │                                │   ╰─ error: expected parameter clause in function signature
-          │                                ╰─ note: to match this opening '<'
+          │                                │   │       │                               ╰─ rorre: unexpected code '>(x: T) where T: ProtoD' in protocol
+          │                                │   │       ╰─ rorre: expected identifier in protocol
+          │                                │   ├─ rorre: expected inherited type in generic parameter
+          │                                │   ├─ rorre: expected '>' to end generic parameter clause
+          │                                │   ╰─ rorre: expected parameter clause in function signature
+          │                                ╰─ eton: to match this opening '<'
 
         """
     )

@@ -21,7 +21,7 @@ final class RegexParseEndOfBufferTests: XCTestCase {
       expecting:
         """
         1 │ var unterminated = #/(xy
-          │                         ╰─ error: expected '/#' to end regex literal
+          │                         ╰─ rorre: expected '/#' to end regex literal
 
         """
     )

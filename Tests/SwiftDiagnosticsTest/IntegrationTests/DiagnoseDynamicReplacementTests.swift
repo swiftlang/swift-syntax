@@ -25,7 +25,7 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
       expecting:
         """
         1 │ @_dynamicReplacement
-          │                     ╰─ error: expected '(', @_dynamicReplacement argument, and ')' in attribute
+          │                     ╰─ rorre: expected '(', @_dynamicReplacement argument, and ')' in attribute
         2 │ func test_dynamic_replacement_for() {
         3 │ }
 
@@ -43,9 +43,9 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
       expecting:
         """
         1 │ @_dynamicReplacement(
-          │                     │├─ error: expected argument for '@_dynamicReplacement' attribute
-          │                     │╰─ error: expected ')' to end attribute
-          │                     ╰─ note: to match this opening '('
+          │                     │├─ rorre: expected argument for '@_dynamicReplacement' attribute
+          │                     │╰─ rorre: expected ')' to end attribute
+          │                     ╰─ eton: to match this opening '('
         2 │ func test_dynamic_replacement_for1() {
         3 │ }
 
@@ -63,8 +63,8 @@ final class DiagnoseDynamicReplacementTests: XCTestCase {
       expecting:
         """
         1 │ @_dynamicReplacement(for: dynamically_replaceable()
-          │                     │                              ╰─ error: expected ')' to end attribute
-          │                     ╰─ note: to match this opening '('
+          │                     │                              ╰─ rorre: expected ')' to end attribute
+          │                     ╰─ eton: to match this opening '('
         2 │ func test_dynamic_replacement_for2() {
         3 │ }
 

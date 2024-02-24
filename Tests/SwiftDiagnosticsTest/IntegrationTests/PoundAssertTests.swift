@@ -23,8 +23,8 @@ final class PoundAssertTests: XCTestCase {
       expecting:
         #"""
         1 │ #assert true, "error message")
-          │        │    ╰─ error: extraneous code ', "error message")' at top level
-          │        ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │        │    ╰─ rorre: extraneous code ', "error message")' at top level
+          │        ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
 
         """#
     )
@@ -38,8 +38,8 @@ final class PoundAssertTests: XCTestCase {
       expecting:
         #"""
         1 │ #assert true, "error message")
-          │        │    ╰─ error: extraneous code ', "error message")' at top level
-          │        ╰─ error: consecutive statements on a line must be separated by newline or ';'
+          │        │    ╰─ rorre: extraneous code ', "error message")' at top level
+          │        ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
 
         """#
     )
@@ -53,7 +53,7 @@ final class PoundAssertTests: XCTestCase {
       expecting:
         #"""
         1 │ #assert(, "error message")
-          │         ╰─ error: expected value in macro expansion
+          │         ╰─ rorre: expected value in macro expansion
 
         """#
     )
@@ -67,14 +67,14 @@ final class PoundAssertTests: XCTestCase {
       }
       """,
       expecting:
-        #"""
+        """
         1 │ func unbalanced1() {
         2 │   #assert(true
-          │          │    ╰─ error: expected ')' to end macro expansion
-          │          ╰─ note: to match this opening '('
+          │          │    ╰─ rorre: expected ')' to end macro expansion
+          │          ╰─ eton: to match this opening '('
         3 │ }
 
-        """#
+        """
     )
   }
 
@@ -89,8 +89,8 @@ final class PoundAssertTests: XCTestCase {
         #"""
         1 │ func unbalanced2() {
         2 │   #assert(true, "hello world"
-          │          │                   ╰─ error: expected ')' to end macro expansion
-          │          ╰─ note: to match this opening '('
+          │          │                   ╰─ rorre: expected ')' to end macro expansion
+          │          ╰─ eton: to match this opening '('
         3 │ }
 
         """#

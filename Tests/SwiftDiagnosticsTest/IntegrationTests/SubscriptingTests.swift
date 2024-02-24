@@ -35,13 +35,13 @@ final class SubscriptingTests: XCTestCase {
         """
          1 │ struct A0 {
          2 │   subscript
-           │            ╰─ error: expected '(' to start parameter clause
+           │            ╰─ rorre: expected '(' to start parameter clause
          3 │     i : Int
-           │         │  ╰─ error: expected ')' in function type
-           │         ╰─ error: expected '(' to start function type
+           │         │  ╰─ rorre: expected ')' in function type
+           │         ╰─ rorre: expected '(' to start function type
          4 │      -> Int {
-           │            │╰─ error: expected '->' and return type in subscript
-           │            ╰─ error: expected ')' to end parameter clause
+           │            │╰─ rorre: expected '->' and return type in subscript
+           │            ╰─ rorre: expected ')' to end parameter clause
          5 │     get {
          6 │       return stored
 
@@ -64,7 +64,7 @@ final class SubscriptingTests: XCTestCase {
         1 │ // Parsing errors
         2 │ struct A0 {
         3 │   subscript -> Int {
-          │            ╰─ error: expected parameter clause in subscript
+          │            ╰─ rorre: expected parameter clause in subscript
         4 │     return 1
         5 │   }
 
@@ -91,7 +91,7 @@ final class SubscriptingTests: XCTestCase {
         """
          1 │ struct A1 {
          2 │   subscript (i : Int)
-           │                      ╰─ error: expected '->' in subscript
+           │                      ╰─ rorre: expected '->' in subscript
          3 │      Int {
          4 │     get {
 
@@ -118,7 +118,7 @@ final class SubscriptingTests: XCTestCase {
         """
          1 │ struct A2 {
          2 │   subscript (i : Int) ->
-           │                         ╰─ error: expected return type in subscript
+           │                         ╰─ rorre: expected return type in subscript
          3 │      {
          4 │     get {
 
@@ -142,7 +142,7 @@ final class SubscriptingTests: XCTestCase {
         """
         1 │ struct A3 {
         2 │   subscript(i : Int)
-          │                     ╰─ error: expected '->' and return type in subscript
+          │                     ╰─ rorre: expected '->' and return type in subscript
         3 │   {
         4 │     get {
 
@@ -165,7 +165,7 @@ final class SubscriptingTests: XCTestCase {
         """
         1 │ struct A4 {
         2 │   subscript(i : Int) {
-          │                      ╰─ error: expected '->' and return type in subscript
+          │                      ╰─ rorre: expected '->' and return type in subscript
         3 │     get {
         4 │       return i
 
@@ -188,7 +188,7 @@ final class SubscriptingTests: XCTestCase {
         """
         1 │ struct A6 {
         2 │   subscript(i: Int)(j: Int) -> Int {
-          │                    ╰─ error: unexpected code '(j: Int)' in subscript
+          │                    ╰─ rorre: unexpected code '(j: Int)' in subscript
         3 │     get {
         4 │       return i + j
 
@@ -212,16 +212,16 @@ final class SubscriptingTests: XCTestCase {
       expecting:
         """
         1 │ struct A8 {
-          │           ╰─ note: to match this opening '{'
+          │           ╰─ eton: to match this opening '{'
         2 │   subscript(i : Int) -> Int
-          │                            ╰─ error: expected '{' in subscript
+          │                            ╰─ rorre: expected '{' in subscript
         3 │     get {
         4 │       return stored
           ┆
         7 │       stored = value
         8 │     }
         9 │   }
-          │    ╰─ error: expected '}' to end struct
+          │    ╰─ rorre: expected '}' to end struct
 
         """
     )
@@ -240,7 +240,7 @@ final class SubscriptingTests: XCTestCase {
         """
         1 │ struct A9 {
         2 │   subscript x() -> Int {
-          │             ╰─ error: subscripts cannot have a name
+          │             ╰─ rorre: subscripts cannot have a name
         3 │     return 0
         4 │   }
 
@@ -264,11 +264,11 @@ final class SubscriptingTests: XCTestCase {
         """
         1 │ struct A10 {
         2 │   subscript x(i: Int) -> Int {
-          │             ╰─ error: subscripts cannot have a name
+          │             ╰─ rorre: subscripts cannot have a name
         3 │     return 0
         4 │   }
         5 │   subscript x<T>(i: T) -> Int {
-          │             ╰─ error: subscripts cannot have a name
+          │             ╰─ rorre: subscripts cannot have a name
         6 │     return 0
         7 │   }
 
@@ -289,11 +289,11 @@ final class SubscriptingTests: XCTestCase {
         """
         1 │ struct A11 {
         2 │   subscript x y : Int -> Int {
-          │            │      │  │      │╰─ error: expected '->' and return type in subscript
-          │            │      │  │      ╰─ error: expected ')' to end parameter clause
-          │            │      │  ╰─ error: expected ')' in function type
-          │            │      ╰─ error: expected '(' to start function type
-          │            ╰─ error: expected '(' to start parameter clause
+          │            │      │  │      │╰─ rorre: expected '->' and return type in subscript
+          │            │      │  │      ╰─ rorre: expected ')' to end parameter clause
+          │            │      │  ╰─ rorre: expected ')' in function type
+          │            │      ╰─ rorre: expected '(' to start function type
+          │            ╰─ rorre: expected '(' to start parameter clause
         3 │     return 0
         4 │   }
 

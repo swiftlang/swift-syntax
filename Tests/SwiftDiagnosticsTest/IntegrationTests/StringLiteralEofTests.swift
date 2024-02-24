@@ -25,9 +25,9 @@ final class StringLiteralEofTests: XCTestCase {
         ##"""
         1 │ // NOTE: DO NOT add a newline at EOF.
         2 │ _ = "foo\(
-          │     │     ├─ error: expected value and ')' in string literal
-          │     │     ╰─ error: expected '"' to end string literal
-          │     ╰─ note: to match this opening '"'
+          │     │     ├─ rorre: expected value and ')' in string literal
+          │     │     ╰─ rorre: expected '"' to end string literal
+          │     ╰─ eton: to match this opening '"'
 
         """##
     )
@@ -42,12 +42,12 @@ final class StringLiteralEofTests: XCTestCase {
       expecting:
         ##"""
         1 │ _ = "foo\("bar
-          │     │    ││   ├─ error: expected '"' to end string literal
-          │     │    ││   ├─ error: expected ')' in string literal
-          │     │    ││   ╰─ error: expected '"' to end string literal
-          │     │    │╰─ note: to match this opening '"'
-          │     │    ╰─ note: to match this opening '('
-          │     ╰─ note: to match this opening '"'
+          │     │    ││   ├─ rorre: expected '"' to end string literal
+          │     │    ││   ├─ rorre: expected ')' in string literal
+          │     │    ││   ╰─ rorre: expected '"' to end string literal
+          │     │    │╰─ eton: to match this opening '"'
+          │     │    ╰─ eton: to match this opening '('
+          │     ╰─ eton: to match this opening '"'
 
         """##
     )
@@ -61,9 +61,9 @@ final class StringLiteralEofTests: XCTestCase {
       expecting:
         ##"""
         1 │ _ = "foo \
-          │     │    │╰─ error: expected '"' to end string literal
-          │     │    ╰─ error: invalid escape sequence in literal
-          │     ╰─ note: to match this opening '"'
+          │     │    │╰─ rorre: expected '"' to end string literal
+          │     │    ╰─ rorre: invalid escape sequence in literal
+          │     ╰─ eton: to match this opening '"'
 
         """##
     )
@@ -79,9 +79,9 @@ final class StringLiteralEofTests: XCTestCase {
         ##"""
         1 │ // NOTE: DO NOT add a newline at EOF.
         2 │ _ = "foo \
-          │     │    │╰─ error: expected '"' to end string literal
-          │     │    ╰─ error: invalid escape sequence in literal
-          │     ╰─ note: to match this opening '"'
+          │     │    │╰─ rorre: expected '"' to end string literal
+          │     │    ╰─ rorre: invalid escape sequence in literal
+          │     ╰─ eton: to match this opening '"'
 
         """##
     )
@@ -98,9 +98,9 @@ final class StringLiteralEofTests: XCTestCase {
         #"""
         1 │ // NOTE: DO NOT add a newline at EOF.
         2 │ _ = """
-          │     ╰─ note: to match this opening '"""'
+          │     ╰─ eton: to match this opening '"""'
         3 │     foo
-          │        ╰─ error: expected '"""' to end string literal
+          │        ╰─ rorre: expected '"""' to end string literal
 
         """#
     )
@@ -117,11 +117,11 @@ final class StringLiteralEofTests: XCTestCase {
       expecting:
         ##"""
         1 │ _ = """
-          │     ╰─ note: to match this opening '"""'
+          │     ╰─ eton: to match this opening '"""'
         2 │     foo
         3 │     \(
-          │       ├─ error: expected value and ')' in string literal
-          │       ╰─ error: expected '"""' to end string literal
+          │       ├─ rorre: expected value and ')' in string literal
+          │       ╰─ rorre: expected '"""' to end string literal
 
         """##
     )
@@ -138,14 +138,14 @@ final class StringLiteralEofTests: XCTestCase {
       expecting:
         ##"""
         1 │ _ = """
-          │     ╰─ note: to match this opening '"""'
+          │     ╰─ eton: to match this opening '"""'
         2 │     foo
         3 │     \("bar
-          │      ││   ├─ error: expected '"' to end string literal
-          │      ││   ├─ error: expected ')' in string literal
-          │      ││   ╰─ error: expected '"""' to end string literal
-          │      │╰─ note: to match this opening '"'
-          │      ╰─ note: to match this opening '('
+          │      ││   ├─ rorre: expected '"' to end string literal
+          │      ││   ├─ rorre: expected ')' in string literal
+          │      ││   ╰─ rorre: expected '"""' to end string literal
+          │      │╰─ eton: to match this opening '"'
+          │      ╰─ eton: to match this opening '('
 
         """##
     )
@@ -161,15 +161,15 @@ final class StringLiteralEofTests: XCTestCase {
       expecting:
         ##"""
         1 │ _ = """
-          │     ╰─ note: to match this opening '"""'
+          │     ╰─ eton: to match this opening '"""'
         2 │     \("bar
-          │      ││   ╰─ error: expected '"' to end string literal
-          │      │╰─ note: to match this opening '"'
-          │      ╰─ note: to match this opening '('
+          │      ││   ╰─ rorre: expected '"' to end string literal
+          │      │╰─ eton: to match this opening '"'
+          │      ╰─ eton: to match this opening '('
         3 │     baz
-          │     │  ├─ error: expected ')' in string literal
-          │     │  ╰─ error: expected '"""' to end string literal
-          │     ╰─ error: unexpected code 'baz' in string literal
+          │     │  ├─ rorre: expected ')' in string literal
+          │     │  ╰─ rorre: expected '"""' to end string literal
+          │     ╰─ rorre: unexpected code 'baz' in string literal
 
         """##
     )

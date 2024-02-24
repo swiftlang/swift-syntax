@@ -24,7 +24,7 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ func test1(inout var x : Int) {}
-          │            ╰─ error: 'inout' before a parameter name is not allowed
+          │            ╰─ rorre: 'inout' before a parameter name is not allowed
 
         """
     )
@@ -38,7 +38,7 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ func test2(inout let x : Int) {}
-          │            ╰─ error: 'inout' before a parameter name is not allowed
+          │            ╰─ rorre: 'inout' before a parameter name is not allowed
 
         """
     )
@@ -52,7 +52,7 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ func test3(f : (inout _ x : Int) -> Void) {}
-          │                 ╰─ error: 'inout' before a parameter name is not allowed
+          │                 ╰─ rorre: 'inout' before a parameter name is not allowed
 
         """
     )
@@ -64,11 +64,11 @@ final class InvalidTests: XCTestCase {
       func test1s(__shared var x : Int) {}
       """,
       expecting:
-        ##"""
+        """
         1 │ func test1s(__shared var x : Int) {}
-          │             ╰─ error: '__shared' before a parameter name is not allowed
+          │             ╰─ rorre: '__shared' before a parameter name is not allowed
 
-        """##
+        """
     )
   }
 
@@ -78,11 +78,11 @@ final class InvalidTests: XCTestCase {
       func test2s(__shared let x : Int) {}
       """,
       expecting:
-        ##"""
+        """
         1 │ func test2s(__shared let x : Int) {}
-          │             ╰─ error: '__shared' before a parameter name is not allowed
+          │             ╰─ rorre: '__shared' before a parameter name is not allowed
 
-        """##
+        """
     )
   }
 
@@ -92,11 +92,11 @@ final class InvalidTests: XCTestCase {
       func test1o(__owned var x : Int) {}
       """,
       expecting:
-        ##"""
+        """
         1 │ func test1o(__owned var x : Int) {}
-          │             ╰─ error: '__owned' before a parameter name is not allowed
+          │             ╰─ rorre: '__owned' before a parameter name is not allowed
 
-        """##
+        """
     )
   }
 
@@ -106,11 +106,11 @@ final class InvalidTests: XCTestCase {
       func test2o(__owned let x : Int) {}
       """,
       expecting:
-        ##"""
+        """
         1 │ func test2o(__owned let x : Int) {}
-          │             ╰─ error: '__owned' before a parameter name is not allowed
+          │             ╰─ rorre: '__owned' before a parameter name is not allowed
 
-        """##
+        """
     )
   }
 
@@ -125,7 +125,7 @@ final class InvalidTests: XCTestCase {
         """
         1 │ func test9() {
         2 │   undeclared_func(
-          │                   ╰─ error: expected value and ')' to end function call
+          │                   ╰─ rorre: expected value and ')' to end function call
         3 │ }
 
         """
@@ -145,8 +145,8 @@ final class InvalidTests: XCTestCase {
         """
         1 │ func foo() {
         2 │   runAction(SKAction.sequence()
-          │            │                   ╰─ error: expected ')' to end function call
-          │            ╰─ note: to match this opening '('
+          │            │                   ╰─ rorre: expected ')' to end function call
+          │            ╰─ eton: to match this opening '('
         3 │     skview!
         4 │ }
 
@@ -167,7 +167,7 @@ final class InvalidTests: XCTestCase {
         """
         1 │ switch state {
         2 │   let duration : Int = 0
-          │   ╰─ error: all statements inside a switch must be covered by a 'case' or 'default' label
+          │   ╰─ rorre: all statements inside a switch must be covered by a 'case' or 'default' label
         3 │   case 1:
         4 │     break
 
@@ -195,19 +195,19 @@ final class InvalidTests: XCTestCase {
       }
       """#,
       expecting:
-        """
+        #"""
          1 │ func testNotCoveredCase(x: Int) {
          2 │   switch x {
          3 │     let y = "foo"
-           │     ╰─ error: all statements inside a switch must be covered by a 'case' or 'default' label
+           │     ╰─ rorre: all statements inside a switch must be covered by a 'case' or 'default' label
          4 │     switch y {
          5 │       case "bar":
          6 │         blah blah // ignored
-           │             ╰─ error: consecutive statements on a line must be separated by newline or ';'
+           │             ╰─ rorre: consecutive statements on a line must be separated by newline or ';'
          7 │     }
          8 │   case "baz":
 
-        """
+        """#
     )
   }
 
@@ -222,11 +222,11 @@ final class InvalidTests: XCTestCase {
       expecting:
         #"""
         1 │ func test14() {
-          │               ╰─ note: to match this opening '{'
+          │               ╰─ eton: to match this opening '{'
         2 │   let abc = 123
         3 │   _ = " >> \( abc } ) << "
-          │                   │       ╰─ error: expected '}' to end function
-          │                   ╰─ error: unexpected brace in string literal
+          │                   │       ╰─ rorre: expected '}' to end function
+          │                   ╰─ rorre: unexpected brace in string literal
 
         """#
     )
@@ -241,12 +241,12 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ func d(_ b: String -> <T>() -> T) {}
-          │       │     │     │   ├─ error: expected return type in function type
-          │       │     │     │   ├─ error: expected ')' to end parameter clause
-          │       │     │     │   ╰─ error: unexpected code '<T>() -> T)' in function
-          │       │     │     ╰─ error: expected ')' in function type
-          │       │     ╰─ error: expected '(' to start function type
-          │       ╰─ note: to match this opening '('
+          │       │     │     │   ├─ rorre: expected return type in function type
+          │       │     │     │   ├─ rorre: expected ')' to end parameter clause
+          │       │     │     │   ╰─ rorre: unexpected code '<T>() -> T)' in function
+          │       │     │     ╰─ rorre: expected ')' in function type
+          │       │     ╰─ rorre: expected '(' to start function type
+          │       ╰─ eton: to match this opening '('
 
         """
     )
@@ -270,7 +270,7 @@ final class InvalidTests: XCTestCase {
         2 │   class Starfish {}
         3 │   struct Salmon {}
         4 │   func f(s Starfish,
-          │           ╰─ error: expected ':' in parameter
+          │           ╰─ rorre: expected ':' in parameter
         5 │             _ ss: Salmon) -> [Int] {}
         6 │   func g() { f(Starfish(), Salmon()) }
 
@@ -292,7 +292,7 @@ final class InvalidTests: XCTestCase {
         1 │ do {
         2 │   func f(_ a: Int, b: Int) {}
         3 │   f(1, b: 2,)
-          │             ╰─ error: expected value in function call
+          │             ╰─ rorre: expected value in function call
         4 │ }
 
         """
@@ -309,7 +309,7 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ func f1_43591(a : inout inout Int) {}
-          │                         ╰─ error: unexpected 'inout' keyword in type
+          │                         ╰─ rorre: unexpected 'inout' keyword in type
 
         """
     )
@@ -323,7 +323,7 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ func f2_43591(inout inout b: Int) {}
-          │               ╰─ error: 'inout inout' before a parameter name is not allowed
+          │               ╰─ rorre: 'inout inout' before a parameter name is not allowed
 
         """
     )
@@ -337,7 +337,7 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ func f3_43591(let let a: Int) {}
-          │                       ╰─ error: unexpected code 'a' in parameter
+          │                       ╰─ rorre: unexpected code 'a' in parameter
 
         """
     )
@@ -351,7 +351,7 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ func f4_43591(inout x: inout String) {}
-          │               ╰─ error: 'inout' before a parameter name is not allowed
+          │               ╰─ rorre: 'inout' before a parameter name is not allowed
 
         """
     )
@@ -365,7 +365,7 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ func f5_43591(inout i: inout Int) {}
-          │               ╰─ error: 'inout' before a parameter name is not allowed
+          │               ╰─ rorre: 'inout' before a parameter name is not allowed
 
         """
     )
@@ -379,7 +379,7 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ func repeat() {}
-          │      ╰─ error: keyword 'repeat' cannot be used as an identifier here
+          │      ╰─ rorre: keyword 'repeat' cannot be used as an identifier here
 
         """
     )
@@ -393,7 +393,7 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ let for = 2
-          │     ╰─ error: keyword 'for' cannot be used as an identifier here
+          │     ╰─ rorre: keyword 'for' cannot be used as an identifier here
 
         """
     )
@@ -407,7 +407,7 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ func f4_43591(inout x: inout String) {}
-          │               ╰─ error: 'inout' before a parameter name is not allowed
+          │               ╰─ rorre: 'inout' before a parameter name is not allowed
 
         """
     )
@@ -421,7 +421,7 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ func f5_43591(inout i: inout Int) {}
-          │               ╰─ error: 'inout' before a parameter name is not allowed
+          │               ╰─ rorre: 'inout' before a parameter name is not allowed
 
         """
     )
@@ -435,7 +435,7 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ func repeat() {}
-          │      ╰─ error: keyword 'repeat' cannot be used as an identifier here
+          │      ╰─ rorre: keyword 'repeat' cannot be used as an identifier here
 
         """
     )
@@ -449,7 +449,7 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ let for = 2
-          │     ╰─ error: keyword 'for' cannot be used as an identifier here
+          │     ╰─ rorre: keyword 'for' cannot be used as an identifier here
 
         """
     )
@@ -464,10 +464,10 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ func were
-          │          ╰─ error: expected '(' to start parameter clause
+          │          ╰─ rorre: expected '(' to start parameter clause
         2 │ wolf() {}
-          │     │ ╰─ error: expected ')' to end parameter clause
-          │     ╰─ error: expected ':' in parameter
+          │     │ ╰─ rorre: expected ')' to end parameter clause
+          │     ╰─ rorre: expected ':' in parameter
 
         """
     )
@@ -482,11 +482,11 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ func hammer
-          │            ╰─ error: expected '(' to start parameter clause
+          │            ╰─ rorre: expected '(' to start parameter clause
         2 │ leavings<T>(x: T) {}
-          │         ├─ error: expected ':' and type in parameter
-          │         ├─ error: expected ')' to end parameter clause
-          │         ╰─ error: unexpected code '<T>(x: T)' in function
+          │         ├─ rorre: expected ':' and type in parameter
+          │         ├─ rorre: expected ')' to end parameter clause
+          │         ╰─ rorre: unexpected code '<T>(x: T)' in function
 
         """
     )
@@ -502,7 +502,7 @@ final class InvalidTests: XCTestCase {
       expecting:
         """
         1 │ struct Weak<T: class> {
-          │                ╰─ error: 'class' constraint can only appear on protocol declarations
+          │                ╰─ rorre: 'class' constraint can only appear on protocol declarations
         2 │   weak let value: T
         3 │ }
 

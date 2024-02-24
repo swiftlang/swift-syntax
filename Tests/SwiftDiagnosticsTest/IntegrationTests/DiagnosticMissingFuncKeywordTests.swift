@@ -27,7 +27,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ protocol Brew {
         2 │   tripel() -> Int
-          │   ╰─ error: expected 'func' in function
+          │   ╰─ rorre: expected 'func' in function
         3 │ }
 
         """
@@ -46,7 +46,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ protocol Brew {
         2 │   quadrupel: Int { get }
-          │   ╰─ error: expected 'var' in variable
+          │   ╰─ rorre: expected 'var' in variable
         3 │ }
 
         """
@@ -65,7 +65,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ protocol Brew {
         2 │   static + (lhs: Self, rhs: Self) -> Self
-          │          ╰─ error: expected 'func' in function
+          │          ╰─ rorre: expected 'func' in function
         3 │ }
 
         """
@@ -84,7 +84,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ protocol Brew {
         2 │   * (lhs: Self, rhs: Self) -> Self
-          │   ╰─ error: expected 'func' in function
+          │   ╰─ rorre: expected 'func' in function
         3 │ }
 
         """
@@ -103,8 +103,8 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ protocol Brew {
         2 │   ipa: Int { get }; apa: Float { get }
-          │   │                 ╰─ error: expected 'var' in variable
-          │   ╰─ error: expected 'var' in variable
+          │   │                 ╰─ rorre: expected 'var' in variable
+          │   ╰─ rorre: expected 'var' in variable
         3 │ }
 
         """
@@ -123,8 +123,8 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ protocol Brew {
         2 │   stout: Int { get } porter: Float { get }
-          │   │                  ╰─ error: expected 'var' in variable
-          │   ╰─ error: expected 'var' in variable
+          │   │                  ╰─ rorre: expected 'var' in variable
+          │   ╰─ rorre: expected 'var' in variable
         3 │ }
 
         """
@@ -142,7 +142,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ struct Bar {
         2 │   fisr = 0x5F3759DF
-          │   ╰─ error: expected 'var' in variable
+          │   ╰─ rorre: expected 'var' in variable
         3 │ }
 
         """
@@ -162,7 +162,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ struct Bar {
         2 │   %%<T: Brew> (lhs: T, rhs: T) -> T {
-          │   ╰─ error: expected 'func' in function
+          │   ╰─ rorre: expected 'func' in function
         3 │     lhs + lhs + rhs + rhs
         4 │   }
 
@@ -181,7 +181,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ struct Bar {
         2 │   _: Int = 42
-          │   ╰─ error: expected 'var' in variable
+          │   ╰─ rorre: expected 'var' in variable
         3 │ }
 
         """
@@ -199,7 +199,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ struct Bar {
         2 │   (light, dark) = (100, 200)
-          │   ╰─ error: expected 'var' in variable
+          │   ╰─ rorre: expected 'var' in variable
         3 │ }
 
         """
@@ -217,7 +217,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ struct Bar {
         2 │   a, b: Int
-          │   ╰─ error: expected 'var' in variable
+          │   ╰─ rorre: expected 'var' in variable
         3 │ }
 
         """
@@ -235,7 +235,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ class Baz {
         2 │   instanceMethod() {}
-          │   ╰─ error: expected 'func' in function
+          │   ╰─ rorre: expected 'func' in function
         3 │ }
 
         """
@@ -253,7 +253,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ class Baz {
         2 │   static staticMethod() {}
-          │          ╰─ error: expected 'func' in function
+          │          ╰─ rorre: expected 'func' in function
         3 │ }
 
         """
@@ -271,7 +271,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ class Baz {
         2 │   instanceProperty: Int { 0 }
-          │   ╰─ error: expected 'var' in variable
+          │   ╰─ rorre: expected 'var' in variable
         3 │ }
 
         """
@@ -289,7 +289,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ class Baz {
         2 │   static staticProperty: Int { 0 }
-          │          ╰─ error: expected 'var' in variable
+          │          ╰─ rorre: expected 'var' in variable
         3 │ }
 
         """
@@ -307,7 +307,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ class C1 {
         2 │   class classMethod() {}
-          │                    ╰─ error: unexpected code '()' in class
+          │                    ╰─ rorre: unexpected code '()' in class
         3 │ }
 
         """
@@ -325,7 +325,7 @@ final class DiagnosticMissingFuncKeywordTests: XCTestCase {
         """
         1 │ class C2 {
         2 │   class classProperty: Int { 0 }
-          │                              ╰─ error: unexpected code '0' in class
+          │                              ╰─ rorre: unexpected code '0' in class
         3 │ }
 
         """

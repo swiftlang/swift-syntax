@@ -28,13 +28,13 @@ final class ImplicitGetterIncompleteTests: XCTestCase {
         #"""
         1 │ // Would trigger assertion when AST verifier checks source ranges ("child source range not contained within its parent")
         2 │ func test2() {
-          │              ╰─ note: to match this opening '{'
+          │              ╰─ eton: to match this opening '{'
         3 │   var a : Int {
-          │               ╰─ note: to match this opening '{'
+          │               ╰─ eton: to match this opening '{'
         4 │     switch i {
         5 │ }
-          │  ├─ error: expected '}' to end variable
-          │  ╰─ error: expected '}' to end function
+          │  ├─ rorre: expected '}' to end variable
+          │  ╰─ rorre: expected '}' to end function
 
         """#
     )

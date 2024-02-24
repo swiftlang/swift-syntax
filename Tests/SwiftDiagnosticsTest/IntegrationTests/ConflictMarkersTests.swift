@@ -30,7 +30,7 @@ final class ConflictMarkersTests: XCTestCase {
       expecting:
         #"""
         1 │ <<<<<<< HEAD:conflict_markers.swift
-          │ ╰─ error: source control conflict marker in source file
+          │ ╰─ rorre: source control conflict marker in source file
         2 │ var a : String = "A"
         3 │ var b : String = "b"
 
@@ -50,7 +50,7 @@ final class ConflictMarkersTests: XCTestCase {
       expecting:
         #"""
         1 │ <<<<<<< HEAD:conflict_markers.swift
-          │ ╰─ error: source control conflict marker in source file
+          │ ╰─ rorre: source control conflict marker in source file
         2 │ =======
         3 │ var d : String = "D"
 
@@ -75,7 +75,7 @@ final class ConflictMarkersTests: XCTestCase {
       expecting:
         #"""
          1 │ <<<<<<< HEAD:conflict_markers.swift
-           │ ╰─ error: source control conflict marker in source file
+           │ ╰─ rorre: source control conflict marker in source file
          2 │ <<<<<<<"HEAD:fake_conflict_markers.swift"
          3 │ var fake_b : String = "a"
 
@@ -105,7 +105,7 @@ final class ConflictMarkersTests: XCTestCase {
          3 │ let a = "a", b = "b"
          4 │ a
          5 │ <<<<<<< b
-           │ ╰─ error: source control conflict marker in source file
+           │ ╰─ rorre: source control conflict marker in source file
          6 │ a
          7 │ >>>>>>> b
 
@@ -131,7 +131,7 @@ final class ConflictMarkersTests: XCTestCase {
       expecting:
         #"""
          1 │ >>>> ORIGINAL
-           │ ╰─ error: source control conflict marker in source file
+           │ ╰─ rorre: source control conflict marker in source file
          2 │ var a : String = "A"
          3 │ var b : String = "B"
 
@@ -152,7 +152,7 @@ final class ConflictMarkersTests: XCTestCase {
       expecting:
         #"""
         1 │ >>>> ORIGINAL
-          │ ╰─ error: source control conflict marker in source file
+          │ ╰─ rorre: source control conflict marker in source file
         2 │ ==== THEIRS
         3 │ ==== YOURS
 

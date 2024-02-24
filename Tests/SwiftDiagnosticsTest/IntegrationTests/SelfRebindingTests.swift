@@ -30,7 +30,7 @@ final class SelfRebindingTests: XCTestCase {
         2 │     var mutable: Int = 0
         3 │     func f() {
         4 │         let self = self
-          │             ╰─ error: keyword 'self' cannot be used as an identifier here
+          │             ╰─ rorre: keyword 'self' cannot be used as an identifier here
         5 │     }
         6 │ }
 

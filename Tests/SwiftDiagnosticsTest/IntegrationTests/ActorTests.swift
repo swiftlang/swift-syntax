@@ -23,7 +23,7 @@ final class ActorTests: XCTestCase {
       expecting:
         """
         1 │ actor MyActor1
-          │               ╰─ error: expected member block in actor
+          │               ╰─ rorre: expected member block in actor
 
         """
     )
@@ -40,11 +40,11 @@ final class ActorTests: XCTestCase {
       expecting:
         """
         1 │ actor MyActor2 {
-          │                ╰─ note: to match this opening '{'
+          │                ╰─ eton: to match this opening '{'
         2 │     init() {
         3 │     }
         4 │ func hello() { }
-          │                 ╰─ error: expected '}' to end actor
+          │                 ╰─ rorre: expected '}' to end actor
 
         """
     )

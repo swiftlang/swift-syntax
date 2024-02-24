@@ -23,7 +23,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func 1() {}
-          │      ╰─ error: identifier can only start with a letter or underscore, not a number
+          │      ╰─ rorre: identifier can only start with a letter or underscore, not a number
 
         """
     )
@@ -37,7 +37,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func 2.0() {}
-          │      ╰─ error: identifier can only start with a letter or underscore, not a number
+          │      ╰─ rorre: identifier can only start with a letter or underscore, not a number
 
         """
     )
@@ -51,7 +51,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ func 3func() {}
-          │      ╰─ error: identifier can only start with a letter or underscore, not a number
+          │      ╰─ rorre: identifier can only start with a letter or underscore, not a number
 
         """
     )
@@ -67,9 +67,9 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ protocol 4 {
-          │          ╰─ error: identifier can only start with a letter or underscore, not a number
+          │          ╰─ rorre: identifier can only start with a letter or underscore, not a number
         2 │   associatedtype 5
-          │                  ╰─ error: identifier can only start with a letter or underscore, not a number
+          │                  ╰─ rorre: identifier can only start with a letter or underscore, not a number
         3 │ }
 
         """
@@ -86,9 +86,9 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ protocol 6.0 {
-          │          ╰─ error: identifier can only start with a letter or underscore, not a number
+          │          ╰─ rorre: identifier can only start with a letter or underscore, not a number
         2 │   associatedtype 7.0
-          │                  ╰─ error: identifier can only start with a letter or underscore, not a number
+          │                  ╰─ rorre: identifier can only start with a letter or underscore, not a number
         3 │ }
 
         """
@@ -105,9 +105,9 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ protocol 8protocol {
-          │          ╰─ error: identifier can only start with a letter or underscore, not a number
+          │          ╰─ rorre: identifier can only start with a letter or underscore, not a number
         2 │   associatedtype 9associatedtype
-          │                  ╰─ error: identifier can only start with a letter or underscore, not a number
+          │                  ╰─ rorre: identifier can only start with a letter or underscore, not a number
         3 │ }
 
         """
@@ -122,7 +122,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ typealias 10 = Int
-          │           ╰─ error: identifier can only start with a letter or underscore, not a number
+          │           ╰─ rorre: identifier can only start with a letter or underscore, not a number
 
         """
     )
@@ -136,7 +136,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ typealias 11.0 = Int
-          │           ╰─ error: identifier can only start with a letter or underscore, not a number
+          │           ╰─ rorre: identifier can only start with a letter or underscore, not a number
 
         """
     )
@@ -150,7 +150,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ typealias 12typealias = Int
-          │           ╰─ error: identifier can only start with a letter or underscore, not a number
+          │           ╰─ rorre: identifier can only start with a letter or underscore, not a number
 
         """
     )
@@ -164,7 +164,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ struct 13 {}
-          │        ╰─ error: identifier can only start with a letter or underscore, not a number
+          │        ╰─ rorre: identifier can only start with a letter or underscore, not a number
 
         """
     )
@@ -178,7 +178,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ struct 14.0 {}
-          │        ╰─ error: identifier can only start with a letter or underscore, not a number
+          │        ╰─ rorre: identifier can only start with a letter or underscore, not a number
 
         """
     )
@@ -192,7 +192,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ struct 15struct {}
-          │        ╰─ error: identifier can only start with a letter or underscore, not a number
+          │        ╰─ rorre: identifier can only start with a letter or underscore, not a number
 
         """
     )
@@ -206,7 +206,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ enum 16 {}
-          │      ╰─ error: identifier can only start with a letter or underscore, not a number
+          │      ╰─ rorre: identifier can only start with a letter or underscore, not a number
 
         """
     )
@@ -220,7 +220,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ enum 17.0 {}
-          │      ╰─ error: identifier can only start with a letter or underscore, not a number
+          │      ╰─ rorre: identifier can only start with a letter or underscore, not a number
 
         """
     )
@@ -234,7 +234,7 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ enum 18enum {}
-          │      ╰─ error: identifier can only start with a letter or underscore, not a number
+          │      ╰─ rorre: identifier can only start with a letter or underscore, not a number
 
         """
     )
@@ -250,9 +250,9 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ class 19 {
-          │       ╰─ error: identifier can only start with a letter or underscore, not a number
+          │       ╰─ rorre: identifier can only start with a letter or underscore, not a number
         2 │   func 20() {}
-          │        ╰─ error: identifier can only start with a letter or underscore, not a number
+          │        ╰─ rorre: identifier can only start with a letter or underscore, not a number
         3 │ }
 
         """
@@ -269,9 +269,9 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ class 21.0 {
-          │       ╰─ error: identifier can only start with a letter or underscore, not a number
+          │       ╰─ rorre: identifier can only start with a letter or underscore, not a number
         2 │   func 22.0() {}
-          │        ╰─ error: identifier can only start with a letter or underscore, not a number
+          │        ╰─ rorre: identifier can only start with a letter or underscore, not a number
         3 │ }
 
         """
@@ -288,9 +288,9 @@ final class NumberIdentifierErrorsTests: XCTestCase {
       expecting:
         """
         1 │ class 23class {
-          │       ╰─ error: identifier can only start with a letter or underscore, not a number
+          │       ╰─ rorre: identifier can only start with a letter or underscore, not a number
         2 │   func 24method() {}
-          │        ╰─ error: identifier can only start with a letter or underscore, not a number
+          │        ╰─ rorre: identifier can only start with a letter or underscore, not a number
         3 │ }
 
         """

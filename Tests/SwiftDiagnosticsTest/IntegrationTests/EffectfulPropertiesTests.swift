@@ -27,9 +27,9 @@ final class EffectfulPropertiesTests: XCTestCase {
         """
         1 │ var bad1 : Int {
         2 │   get rethrows { 0 }
-          │       ╰─ error: expected throwing specifier; did you mean 'throws'?
+          │       ╰─ rorre: expected throwing specifier; did you mean 'throws'?
         3 │   set rethrows { }
-          │       ╰─ error: expected throwing specifier; did you mean 'throws'?
+          │       ╰─ rorre: expected throwing specifier; did you mean 'throws'?
         4 │ }
 
         """
@@ -48,9 +48,9 @@ final class EffectfulPropertiesTests: XCTestCase {
         """
         1 │ var bad2 : Int {
         2 │   get reasync { 0 }
-          │       ╰─ error: expected async specifier; did you mean 'async'?
+          │       ╰─ rorre: expected async specifier; did you mean 'async'?
         3 │   set reasync { }
-          │       ╰─ error: expected async specifier; did you mean 'async'?
+          │       ╰─ rorre: expected async specifier; did you mean 'async'?
         4 │ }
 
         """
@@ -68,9 +68,9 @@ final class EffectfulPropertiesTests: XCTestCase {
         """
         1 │ var bad4 : Int = 0 {
         2 │   willSet(theValue) reasync rethrows async throws {}
-          │                     │       │              ╰─ note: 'throws' declared here
-          │                     │       ╰─ error: 'rethrows' conflicts with 'throws'
-          │                     ╰─ error: expected async specifier; did you mean 'async'?
+          │                     │       │              ╰─ eton: 'throws' declared here
+          │                     │       ╰─ rorre: 'rethrows' conflicts with 'throws'
+          │                     ╰─ rorre: expected async specifier; did you mean 'async'?
         3 │ }
 
         """
@@ -88,7 +88,7 @@ final class EffectfulPropertiesTests: XCTestCase {
         """
         1 │ var bad4 : Int = 0 {
         2 │   didSet throws bogus {}
-          │                 ╰─ error: unexpected code 'bogus' in accessor
+          │                 ╰─ rorre: unexpected code 'bogus' in accessor
         3 │ }
 
         """
@@ -106,7 +106,7 @@ final class EffectfulPropertiesTests: XCTestCase {
         """
         1 │ var bad5 : Int {
         2 │   get bogus rethrows {}
-          │       ╰─ error: unexpected code 'bogus rethrows' in accessor
+          │       ╰─ rorre: unexpected code 'bogus rethrows' in accessor
         3 │ }
 
         """
@@ -124,8 +124,8 @@ final class EffectfulPropertiesTests: XCTestCase {
         """
         1 │ var bad6 : Int {
         2 │   get rethrows -> Int { 0 }
-          │       │        ╰─ error: unexpected code '-> Int' in accessor
-          │       ╰─ error: expected throwing specifier; did you mean 'throws'?
+          │       │        ╰─ rorre: unexpected code '-> Int' in accessor
+          │       ╰─ rorre: expected throwing specifier; did you mean 'throws'?
         3 │ }
 
         """
@@ -143,7 +143,7 @@ final class EffectfulPropertiesTests: XCTestCase {
         """
         1 │ var bad7 : Double {
         2 │   get throws async { 3.14 }
-          │              ╰─ error: 'async' must precede 'throws'
+          │              ╰─ rorre: 'async' must precede 'throws'
         3 │ }
 
         """
@@ -163,7 +163,7 @@ final class EffectfulPropertiesTests: XCTestCase {
         1 │ var bad8 : Double {
         2 │   get {}
         3 │   _modify throws async { yield &bad8 }
-          │                  ╰─ error: 'async' must precede 'throws'
+          │                  ╰─ rorre: 'async' must precede 'throws'
         4 │ }
 
         """
@@ -184,15 +184,15 @@ final class EffectfulPropertiesTests: XCTestCase {
         """
         1 │ protocol BadP {
         2 │   var prop2 : Int { get bogus rethrows set }
-          │                         ╰─ error: unexpected code 'bogus rethrows set' in variable
+          │                         ╰─ rorre: unexpected code 'bogus rethrows set' in variable
         3 │   var prop3 : Int { get rethrows bogus set }
-          │                         │        ╰─ error: unexpected code 'bogus set' in variable
-          │                         ╰─ error: expected throwing specifier; did you mean 'throws'?
+          │                         │        ╰─ rorre: unexpected code 'bogus set' in variable
+          │                         ╰─ rorre: expected throwing specifier; did you mean 'throws'?
         4 │   var prop4 : Int { get reasync bogus set }
-          │                         │       ╰─ error: unexpected code 'bogus set' in variable
-          │                         ╰─ error: expected async specifier; did you mean 'async'?
+          │                         │       ╰─ rorre: unexpected code 'bogus set' in variable
+          │                         ╰─ rorre: expected async specifier; did you mean 'async'?
         5 │   var prop5 : Int { get throws async }
-          │                                ╰─ error: 'async' must precede 'throws'
+          │                                ╰─ rorre: 'async' must precede 'throws'
         6 │ }
 
         """

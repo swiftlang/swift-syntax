@@ -23,8 +23,8 @@ final class ObjectLiteralsTests: XCTestCase {
       expecting:
         """
         1 │ let _ = [#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha)#]
-          │                                                                              │╰─ error: expected identifier in macro expansion
-          │                                                                              ╰─ error: expected ',' in array element
+          │                                                                              │╰─ rorre: expected identifier in macro expansion
+          │                                                                              ╰─ rorre: expected ',' in array element
 
         """
     )
@@ -38,8 +38,8 @@ final class ObjectLiteralsTests: XCTestCase {
       expecting:
         """
         1 │ let _ = [#Image(imageLiteral: localResourceNameAsString)#]
-          │                                                         │╰─ error: expected identifier in macro expansion
-          │                                                         ╰─ error: expected ',' in array element
+          │                                                         │╰─ rorre: expected identifier in macro expansion
+          │                                                         ╰─ rorre: expected ',' in array element
 
         """
     )
@@ -53,8 +53,8 @@ final class ObjectLiteralsTests: XCTestCase {
       expecting:
         """
         1 │ let _ = [#FileReference(fileReferenceLiteral: localResourceNameAsString)#]
-          │                                                                         │╰─ error: expected identifier in macro expansion
-          │                                                                         ╰─ error: expected ',' in array element
+          │                                                                         │╰─ rorre: expected identifier in macro expansion
+          │                                                                         ╰─ rorre: expected ',' in array element
 
         """
     )
@@ -68,9 +68,9 @@ final class ObjectLiteralsTests: XCTestCase {
       expecting:
         """
         1 │ let _ = [# # ]
-          │           ││╰─ error: expected identifier in macro expansion
-          │           │╰─ error: expected ',' in array element
-          │           ╰─ error: expected identifier in macro expansion
+          │           ││╰─ rorre: expected identifier in macro expansion
+          │           │╰─ rorre: expected ',' in array element
+          │           ╰─ rorre: expected identifier in macro expansion
 
         """
     )
@@ -84,8 +84,8 @@ final class ObjectLiteralsTests: XCTestCase {
       expecting:
         """
         1 │ let _ = [#Color(_: 1, green: 1, 2)
-          │         │                         ╰─ error: expected ']' to end array
-          │         ╰─ note: to match this opening '['
+          │         │                         ╰─ rorre: expected ']' to end array
+          │         ╰─ eton: to match this opening '['
 
         """
     )
@@ -99,10 +99,10 @@ final class ObjectLiteralsTests: XCTestCase {
       expecting:
         """
         1 │ let _ = [#Color(red: 1, green: 1, blue: 1)#
-          │         │                                 │├─ error: expected identifier in macro expansion
-          │         │                                 │╰─ error: expected ']' to end array
-          │         │                                 ╰─ error: expected ',' in array element
-          │         ╰─ note: to match this opening '['
+          │         │                                 │├─ rorre: expected identifier in macro expansion
+          │         │                                 │╰─ rorre: expected ']' to end array
+          │         │                                 ╰─ rorre: expected ',' in array element
+          │         ╰─ eton: to match this opening '['
 
         """
     )
@@ -116,8 +116,8 @@ final class ObjectLiteralsTests: XCTestCase {
       expecting:
         """
         1 │ let _ = [#Color(withRed: 1, green: 1, whatever: 2)#]
-          │                                                   │╰─ error: expected identifier in macro expansion
-          │                                                   ╰─ error: expected ',' in array element
+          │                                                   │╰─ rorre: expected identifier in macro expansion
+          │                                                   ╰─ rorre: expected ',' in array element
 
         """
     )

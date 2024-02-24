@@ -23,7 +23,7 @@ final class ForwardSlashRegexSkippingTests: XCTestCase {
       expecting:
         """
         1 │ func a4() { _ = / / }
-          │                  ╰─ error: bare slash regex literal may not start with space
+          │                  ╰─ rorre: bare slash regex literal may not start with space
 
         """
     )

@@ -21,7 +21,7 @@ final class AsyncTests: XCTestCase {
       expecting:
         """
         1 │ func asyncGlobal3() throws async { }
-          │                            ╰─ error: 'async' must precede 'throws'
+          │                            ╰─ rorre: 'async' must precede 'throws'
 
         """
     )
@@ -33,7 +33,7 @@ final class AsyncTests: XCTestCase {
       expecting:
         """
         1 │ func asyncGlobal3(fn: () throws -> Int) rethrows async { }
-          │                                                  ╰─ error: 'async' must precede 'rethrows'
+          │                                                  ╰─ rorre: 'async' must precede 'rethrows'
 
         """
     )
@@ -45,7 +45,7 @@ final class AsyncTests: XCTestCase {
       expecting:
         """
         1 │ func asyncGlobal4() -> Int async { }
-          │                            ╰─ error: 'async' must precede '->'
+          │                            ╰─ rorre: 'async' must precede '->'
 
         """
     )
@@ -57,7 +57,7 @@ final class AsyncTests: XCTestCase {
       expecting:
         """
         1 │ func asyncGlobal5() -> Int async throws { }
-          │                            ╰─ error: 'async throws' must precede '->'
+          │                            ╰─ rorre: 'async throws' must precede '->'
 
         """
     )
@@ -69,7 +69,7 @@ final class AsyncTests: XCTestCase {
       expecting:
         """
         1 │ func asyncGlobal6() -> Int throws async { }
-          │                            ╰─ error: 'throws async' must precede '->'
+          │                            ╰─ rorre: 'throws async' must precede '->'
 
         """
     )
@@ -81,7 +81,7 @@ final class AsyncTests: XCTestCase {
       expecting:
         """
         1 │ func asyncGlobal7() throws -> Int async { }
-          │                                   ╰─ error: 'async' must precede '->'
+          │                                   ╰─ rorre: 'async' must precede '->'
 
         """
     )
@@ -95,10 +95,10 @@ final class AsyncTests: XCTestCase {
       expecting:
         """
         1 │ func asyncGlobal8() async throws async -> async Int async {}
-          │                     │            │        │         ╰─ error: 'async' must precede '->'
-          │                     │            │        ╰─ error: 'async' must precede '->'
-          │                     │            ╰─ error: 'async' has already been specified
-          │                     ╰─ note: 'async' declared here
+          │                     │            │        │         ╰─ rorre: 'async' must precede '->'
+          │                     │            │        ╰─ rorre: 'async' must precede '->'
+          │                     │            ╰─ rorre: 'async' has already been specified
+          │                     ╰─ eton: 'async' declared here
 
         """
     )
@@ -125,7 +125,7 @@ final class AsyncTests: XCTestCase {
          3 │   deinit async { }
          4 │   func f() async { }
          5 │   subscript(x: Int) async -> Int {
-           │                     ╰─ error: unexpected code 'async' in subscript
+           │                     ╰─ rorre: unexpected code 'async' in subscript
          6 │     get {
          7 │       return 0
 
@@ -139,7 +139,7 @@ final class AsyncTests: XCTestCase {
       expecting:
         """
         1 │ typealias AsyncFunc3 = () throws async -> ()
-          │                                  ╰─ error: 'async' must precede 'throws'
+          │                                  ╰─ rorre: 'async' must precede 'throws'
 
         """
     )
@@ -151,7 +151,7 @@ final class AsyncTests: XCTestCase {
       expecting:
         """
         1 │ let _ = [() throws async -> ()]()
-          │                    ╰─ error: 'async' must precede 'throws'
+          │                    ╰─ rorre: 'async' must precede 'throws'
 
         """
     )
@@ -165,7 +165,7 @@ final class AsyncTests: XCTestCase {
       expecting:
         """
         1 │ let _ = [() -> async ()]()
-          │                ╰─ error: 'async' must precede '->'
+          │                ╰─ rorre: 'async' must precede '->'
 
         """
     )

@@ -35,21 +35,21 @@ final class IfConfigExprTests: XCTestCase {
       }
       """#,
       expecting:
-        """
+        #"""
          6 │   baseExpr
          7 │ #if CONDITION_1
          8 │     + otherExpr
-           │     ╰─ error: unexpected code '+ otherExpr' in conditional compilation block
+           │     ╰─ rorre: unexpected code '+ otherExpr' in conditional compilation block
          9 │ #endif
         10 │   baseExpr
         11 │ #if CONDITION_1
         12 │     .methodOne()
         13 │   print("debug")
-           │   ╰─ error: unexpected code 'print("debug")' in conditional compilation block
+           │   ╰─ rorre: unexpected code 'print("debug")' in conditional compilation block
         14 │ #endif
         15 │ }
 
-        """
+        """#
     )
   }
 
@@ -76,7 +76,7 @@ final class IfConfigExprTests: XCTestCase {
         10 │   baseExpr
         11 │ #if CONDITION_1
         12 │   .methodOne() + 12
-           │                ╰─ error: unexpected code '+ 12' in conditional compilation block
+           │                ╰─ rorre: unexpected code '+ 12' in conditional compilation block
         13 │ #endif
         14 │ }
 
@@ -107,7 +107,7 @@ final class IfConfigExprTests: XCTestCase {
         10 │     .methodOne()
         11 │ #elseif CONDITION_2
         12 │   return
-           │   ╰─ error: unexpected 'return' keyword in conditional compilation block
+           │   ╰─ rorre: unexpected 'return' keyword in conditional compilation block
         13 │ #endif
         14 │ }
 
@@ -125,7 +125,7 @@ final class IfConfigExprTests: XCTestCase {
       expecting:
         """
         1 │ #if canImport(A, _version: 2.2.2.2.2)
-          │                                   ╰─ warning: trailing components of version 2.2.2.2 are ignored
+          │                                   ╰─ gninraw: trailing components of version 2.2.2.2 are ignored
         2 │   let a = 1
         3 │ #endif
 
@@ -143,7 +143,7 @@ final class IfConfigExprTests: XCTestCase {
       expecting:
         """
         1 │ #if canImport(A, unknown: 2.2)
-          │                  ╰─ error: 2nd parameter of canImport should be labeled as _version or _underlyingVersion
+          │                  ╰─ rorre: 2nd parameter of canImport should be labeled as _version or _underlyingVersion
         2 │   let a = 1
         3 │ #endif
 
@@ -161,7 +161,7 @@ final class IfConfigExprTests: XCTestCase {
       expecting:
         """
         1 │ #if canImport(A,)
-          │                 ╰─ error: 2nd parameter of canImport should be labeled as _version or _underlyingVersion
+          │                 ╰─ rorre: 2nd parameter of canImport should be labeled as _version or _underlyingVersion
         2 │   let a = 1
         3 │ #endif
 
@@ -179,7 +179,7 @@ final class IfConfigExprTests: XCTestCase {
       expecting:
         """
         1 │ #if canImport(A, 2.2)
-          │                  ╰─ error: 2nd parameter of canImport should be labeled as _version or _underlyingVersion
+          │                  ╰─ rorre: 2nd parameter of canImport should be labeled as _version or _underlyingVersion
         2 │   let a = 1
         3 │ #endif
 
@@ -197,8 +197,8 @@ final class IfConfigExprTests: XCTestCase {
       expecting:
         """
         1 │ #if canImport(A, 2.2, 1.1)
-          │                  │  ╰─ error: canImport can take only two parameters
-          │                  ╰─ error: 2nd parameter of canImport should be labeled as _version or _underlyingVersion
+          │                  │  ╰─ rorre: canImport can take only two parameters
+          │                  ╰─ rorre: 2nd parameter of canImport should be labeled as _version or _underlyingVersion
         2 │   let a = 1
         3 │ #endif
 
@@ -216,7 +216,7 @@ final class IfConfigExprTests: XCTestCase {
       expecting:
         """
         1 │ #if canImport(A, _version:)
-          │                           ╰─ error: expected version tuple in 'canImport' expression
+          │                           ╰─ rorre: expected version tuple in 'canImport' expression
         2 │   let a = 1
         3 │ #endif
 
@@ -232,13 +232,13 @@ final class IfConfigExprTests: XCTestCase {
       #endif
       """#,
       expecting:
-        """
+        #"""
         1 │ #if canImport(A, _version: "")
-          │                            ╰─ error: cannot parse version component code '""'
+          │                            ╰─ rorre: cannot parse version component code '""'
         2 │   let a = 1
         3 │ #endif
 
-        """
+        """#
     )
   }
 
@@ -252,7 +252,7 @@ final class IfConfigExprTests: XCTestCase {
       expecting:
         """
         1 │ #if canImport(A, _version: >=2.2)
-          │                            ╰─ error: cannot parse version component code '>=2.2'
+          │                            ╰─ rorre: cannot parse version component code '>=2.2'
         2 │   let a = 1
         3 │ #endif
 
@@ -270,7 +270,7 @@ final class IfConfigExprTests: XCTestCase {
       expecting:
         """
         1 │ #if canImport(A, _version: 20A301)
-          │                            ╰─ error: cannot parse version component code '20A301'
+          │                            ╰─ rorre: cannot parse version component code '20A301'
         2 │   let a = 1
         3 │ #endif
 
@@ -286,13 +286,13 @@ final class IfConfigExprTests: XCTestCase {
       #endif
       """#,
       expecting:
-        """
+        #"""
         1 │ #if canImport(A, _version: "20A301")
-          │                            ╰─ error: cannot parse version component code '"20A301"'
+          │                            ╰─ rorre: cannot parse version component code '"20A301"'
         2 │   let a = 1
         3 │ #endif
 
-        """
+        """#
     )
   }
 
@@ -312,7 +312,7 @@ final class IfConfigExprTests: XCTestCase {
         1 │ #if arch(x86_64)
         2 │   debugPrint("x86_64")
         3 │ #else if arch(arm64)
-          │ ╰─ error: unexpected 'if' keyword following '#else' conditional compilation directive; did you mean '#elseif'?
+          │ ╰─ rorre: unexpected 'if' keyword following '#else' conditional compilation directive; did you mean '#elseif'?
         4 │   debugPrint("arm64")
         5 │ #else
 
@@ -336,7 +336,7 @@ final class IfConfigExprTests: XCTestCase {
         1 │ #if arch(x86_64)
         2 │   debugPrint("x86_64")
         3 │ #elif arch(arm64)
-          │ ╰─ error: use of unknown directive '#elif'
+          │ ╰─ rorre: use of unknown directive '#elif'
         4 │   debugPrint("arm64")
         5 │ #else
 
@@ -356,7 +356,7 @@ final class IfConfigExprTests: XCTestCase {
         """
         1 │ #if MY_FLAG
         2 │ #
-          │  ╰─ error: expected identifier in macro expansion
+          │  ╰─ rorre: expected identifier in macro expansion
         3 │ elif
         4 │ #endif
 
@@ -375,7 +375,7 @@ final class IfConfigExprTests: XCTestCase {
         """
         1 │ #if MY_FLAG
         2 │ # elif
-          │  ╰─ error: extraneous whitespace after '#' is not permitted
+          │  ╰─ rorre: extraneous whitespace after '#' is not permitted
         3 │ #endif
 
         """
@@ -398,10 +398,10 @@ final class IfConfigExprTests: XCTestCase {
         """
         1 │ switch x {
         2 │   #()
-          │   ╰─ error: unexpected code '#()' before conditional compilation clause
+          │   ╰─ rorre: unexpected code '#()' before conditional compilation clause
         3 │ #if true
         4 │   bar()
-          │   ╰─ error: all statements inside a switch must be covered by a 'case' or 'default' label
+          │   ╰─ rorre: all statements inside a switch must be covered by a 'case' or 'default' label
         5 │ #endif
         6 │   case .A, .B:
 

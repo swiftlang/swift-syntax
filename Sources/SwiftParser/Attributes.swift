@@ -176,7 +176,14 @@ extension Parser {
     argumentMode: AttributeArgumentMode,
     parseArguments: (inout Parser) -> RawAttributeSyntax.Arguments
   ) -> RawAttributeListSyntax.Element {
-    let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
+    var (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
+    if atSign.trailingTriviaByteLength > 0 || self.currentToken.leadingTriviaByteLength > 0 {
+      let diagnostic = TokenDiagnostic(
+        self.swiftVersion < .v6 ? .extraneousTrailingWhitespaceWarning : .extraneousTrailingWhitespaceError,
+        byteOffset: atSign.leadingTriviaByteLength + atSign.tokenText.count
+      )
+      atSign = atSign.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
+    }
     let attributeName = self.parseAttributeName()
     let shouldParseArgument: Bool
     switch argumentMode {
@@ -190,7 +197,14 @@ extension Parser {
       shouldParseArgument = false
     }
     if shouldParseArgument {
-      let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+      var (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+      if unexpectedBeforeLeftParen == nil && (attributeName.raw.trailingTriviaByteLength > 0 || leftParen.leadingTriviaByteLength > 0) {
+        let diagnostic = TokenDiagnostic(
+          self.swiftVersion < .v6 ? .extraneousLeadingWhitespaceWarning : .extraneousLeadingWhitespaceError,
+          byteOffset: 0
+        )
+        leftParen = leftParen.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
+      }
       let argument = parseArguments(&self)
       let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
       return .attribute(

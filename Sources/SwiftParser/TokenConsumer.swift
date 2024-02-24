@@ -18,6 +18,8 @@ protocol TokenConsumer {
   /// The current token syntax being examined by the consumer
   var currentToken: Lexer.Lexeme { get }
 
+  var swiftVersion: Parser.SwiftVersion { get }
+
   /// The experimental features that have been enabled.
   var experimentalFeatures: Parser.ExperimentalFeatures { get }
 

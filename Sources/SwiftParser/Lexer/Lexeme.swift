@@ -102,7 +102,8 @@ extension Lexer {
       SyntaxText(baseAddress: start, count: byteLength)
     }
 
-    var textRange: Range<SyntaxText.Index> {
+    @_spi(Testing)
+    public var textRange: Range<SyntaxText.Index> {
       leadingTriviaByteLength..<leadingTriviaByteLength + textByteLength
     }
 

@@ -281,28 +281,28 @@ public struct RawSyntaxTokenView: Sendable {
   }
 
   @_spi(RawSyntax)
-  public func withTokenDiagnostic(tokenDiagnostic: TokenDiagnostic?, arena: SyntaxArena) -> RawSyntax {
+  public func withTokenDiagnostic(tokenDiagnostic: TokenDiagnostic?, arena: SyntaxArena) -> RawTokenSyntax {
     arena.addChild(self.raw.arenaReference)
     switch raw.rawData.payload {
     case .parsedToken(var dat):
       if arena == self.raw.arenaReference {
         dat.tokenDiagnostic = tokenDiagnostic
-        return RawSyntax(arena: arena, payload: .parsedToken(dat))
+        return RawSyntax(arena: arena, payload: .parsedToken(dat)).cast(RawTokenSyntax.self)
       }
       // If the modified token is allocated in a different arena, it might have
       // a different or no `parseTrivia` function. We thus cannot use a
       // `parsedToken` anymore.
-      return .makeMaterializedToken(
+      return RawSyntax.makeMaterializedToken(
         kind: formKind(),
         leadingTrivia: formLeadingTrivia(),
         trailingTrivia: formTrailingTrivia(),
         presence: presence,
         tokenDiagnostic: tokenDiagnostic,
         arena: arena
-      )
+      ).cast(RawTokenSyntax.self)
     case .materializedToken(var dat):
       dat.tokenDiagnostic = tokenDiagnostic
-      return RawSyntax(arena: arena, payload: .materializedToken(dat))
+      return RawSyntax(arena: arena, payload: .materializedToken(dat)).cast(RawTokenSyntax.self)
     default:
       preconditionFailure("'withTokenDiagnostic' is not available for non-token node")
     }

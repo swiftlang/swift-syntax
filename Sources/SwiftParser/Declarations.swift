@@ -1928,19 +1928,18 @@ extension Parser {
   ) -> RawMacroExpansionDeclSyntax {
 
     var (unexpectedBeforePound, pound) = self.eat(handle)
-    if pound.trailingTriviaByteLength != 0 {
-      // `#` and the macro name must not be separated by a newline.
-      unexpectedBeforePound = RawUnexpectedNodesSyntax(combining: unexpectedBeforePound, pound, arena: self.arena)
-      pound = RawTokenSyntax(missing: .pound, text: "#", leadingTriviaPieces: pound.leadingTriviaPieces, arena: self.arena)
+    if pound.trailingTriviaByteLength > 0 || currentToken.leadingTriviaByteLength > 0 {
+      // If there are whitespaces after '#' diagnose.
+      let diagnostic = TokenDiagnostic(
+        .extraneousTrailingWhitespaceError,
+        byteOffset: pound.leadingTriviaByteLength + pound.tokenText.count
+      )
+      pound = pound.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
     }
-    var unexpectedBeforeMacro: RawUnexpectedNodesSyntax?
-    var macro: RawTokenSyntax
+    let unexpectedBeforeMacro: RawUnexpectedNodesSyntax?
+    let macro: RawTokenSyntax
     if !self.atStartOfLine {
       (unexpectedBeforeMacro, macro) = self.expectIdentifier(allowKeywordsAsIdentifier: true)
-      if macro.leadingTriviaByteLength != 0 {
-        unexpectedBeforeMacro = RawUnexpectedNodesSyntax(combining: unexpectedBeforeMacro, macro, arena: self.arena)
-        pound = self.missingToken(.identifier, text: macro.tokenText)
-      }
     } else {
       unexpectedBeforeMacro = nil
       macro = self.missingToken(.identifier)

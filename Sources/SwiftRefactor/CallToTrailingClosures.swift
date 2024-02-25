@@ -69,7 +69,7 @@ extension FunctionCallExprSyntax {
       // Trailing comma won't exist any more, move its trivia to the end of
       // the closure instead
       if let comma = arg.trailingComma {
-        closure = closure.with(\.trailingTrivia, closure.trailingTrivia.merging(triviaOf: comma))
+        closure.trailingTrivia = closure.trailingTrivia.merging(triviaOf: comma)
       }
       closures.append((arg, closure))
     }
@@ -80,13 +80,10 @@ extension FunctionCallExprSyntax {
 
     // First trailing closure won't have label/colon. Transfer their trivia.
     var trailingClosure = closures.first!.closure
-      .with(
-        \.leadingTrivia,
-        Trivia()
-          .merging(triviaOf: closures.first!.original.label)
-          .merging(triviaOf: closures.first!.original.colon)
-          .merging(closures.first!.closure.leadingTrivia)
-      )
+    trailingClosure.leadingTrivia = Trivia()
+      .merging(triviaOf: closures.first!.original.label)
+      .merging(triviaOf: closures.first!.original.colon)
+      .merging(closures.first!.closure.leadingTrivia)
     let additionalTrailingClosures = closures.dropFirst().map {
       MultipleTrailingClosureElementSyntax(
         label: $0.original.label ?? .wildcardToken(),
@@ -101,47 +98,36 @@ extension FunctionCallExprSyntax {
     // last comma otherwise. Makes sure to keep the trivia of any removed node.
     var argList = Array(arguments.dropLast(closures.count))
     if argList.isEmpty {
-      converted =
-        converted
-        .with(\.leftParen, nil)
-        .with(\.rightParen, nil)
+      converted.leftParen = nil
+      converted.rightParen = nil
 
       // No left paren any more, right paren is handled below since it makes
       // sense to keep its trivia of the end of the call, regardless of whether
       // it was removed or not.
       if let leftParen = leftParen {
-        trailingClosure = trailingClosure.with(
-          \.leadingTrivia,
-          Trivia()
-            .merging(triviaOf: leftParen)
-            .merging(trailingClosure.leadingTrivia)
-        )
+        trailingClosure.leadingTrivia = Trivia()
+          .merging(triviaOf: leftParen)
+          .merging(trailingClosure.leadingTrivia)
       }
     } else {
       let last = argList.last!
       if let comma = last.trailingComma {
-        converted =
-          converted
-          .with(\.rightParen, TokenSyntax.rightParenToken(trailingTrivia: Trivia().merging(triviaOf: comma)))
+        converted.rightParen = TokenSyntax.rightParenToken(trailingTrivia: Trivia().merging(triviaOf: comma))
       }
-      argList[argList.count - 1] =
-        last
-        .with(\.trailingComma, nil)
+      argList[argList.count - 1] = last.with(\.trailingComma, nil)
     }
 
     // Update arguments and trailing closures
-    converted =
-      converted
-      .with(\.arguments, LabeledExprListSyntax(argList))
-      .with(\.trailingClosure, trailingClosure)
+    converted.arguments = LabeledExprListSyntax(argList)
+    converted.trailingClosure = trailingClosure
     if !additionalTrailingClosures.isEmpty {
-      converted = converted.with(\.additionalTrailingClosures, MultipleTrailingClosureElementListSyntax(additionalTrailingClosures))
+      converted.additionalTrailingClosures = MultipleTrailingClosureElementListSyntax(additionalTrailingClosures)
     }
 
     // The right paren either doesn't exist any more, or is before all the
     // trailing closures. Moves its trivia to the end of the converted call.
     if let rightParen = rightParen {
-      converted = converted.with(\.trailingTrivia, converted.trailingTrivia.merging(triviaOf: rightParen))
+      converted.trailingTrivia = converted.trailingTrivia.merging(triviaOf: rightParen)
     }
 
     return converted

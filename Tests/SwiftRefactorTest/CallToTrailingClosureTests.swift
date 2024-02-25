@@ -217,6 +217,36 @@ final class CallToTrailingClosuresTest: XCTestCase {
 
     try assertRefactorCall(baseline, expected: expected)
   }
+
+  func testClosureWithArgumentLabel() throws {
+    try assertRefactorCall(
+      """
+      foo(arg: 1, closure: { someInt in
+
+      })
+      """,
+      expected: """
+        foo(arg: 1) { someInt in
+
+        }
+        """
+    )
+  }
+
+  func testCallHasInitialIndentationIndentation() throws {
+    try assertRefactorCall(
+      """
+          foo(arg: 1, closure: { someInt in
+              "abc"
+          })
+      """,
+      expected: """
+            foo(arg: 1) { someInt in
+                "abc"
+            }
+        """
+    )
+  }
 }
 
 fileprivate func assertRefactorCall(

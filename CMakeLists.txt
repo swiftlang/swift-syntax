@@ -63,23 +63,12 @@ endif()
 
 # Determine the module triple.
 if("${SWIFT_HOST_MODULE_TRIPLE}" STREQUAL "")
-  # FIXME: This is a hack. It's all a hack. Windows isn't setting
-  # CMAKE_Swift_COMPILER_TARGET.
+  set(module_triple_command "${CMAKE_Swift_COMPILER}" -print-target-info)
   if(CMAKE_Swift_COMPILER_TARGET)
-    string(REGEX REPLACE "macosx[0-9]+([.][0-9]+)?" "macos" SWIFT_HOST_MODULE_TRIPLE
-      ${CMAKE_Swift_COMPILER_TARGET})
-  elseif("${CMAKE_SYSTEM_NAME}" STREQUAL "Windows")
-    if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64")
-      set(SWIFT_HOST_MODULE_TRIPLE "x86_64-unknown-windows-msvc")
-    elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|ARM64|arm64")
-      set(SWIFT_HOST_MODULE_TRIPLE "aarch64-unknown-windows-msvc")
-    else()
-      message(FATAL_ERROR "Unrecognized architecture for Windows host")
-    endif()
-  else()
-    execute_process(COMMAND ${CMAKE_Swift_COMPILER} -print-target-info OUTPUT_VARIABLE target_info)
-    string(JSON SWIFT_HOST_MODULE_TRIPLE GET ${target_info} target moduleTriple)
+    list(APPEND module_triple_command -target ${CMAKE_Swift_COMPILER_TARGET})
   endif()
+  execute_process(COMMAND ${module_triple_command} OUTPUT_VARIABLE target_info_json)
+  string(JSON SWIFT_HOST_MODULE_TRIPLE GET "${target_info_json}" "target" "moduleTriple")
 endif()
 message(STATUS "Module triple: ${SWIFT_HOST_MODULE_TRIPLE}")
 

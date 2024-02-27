@@ -8,6 +8,7 @@
 
 add_swift_syntax_library(SwiftBasicFormat
   BasicFormat.swift
+  InferIndentation.swift
   Syntax+Extensions.swift
   SyntaxProtocol+Formatted.swift
   Trivia+FormatExtensions.swift

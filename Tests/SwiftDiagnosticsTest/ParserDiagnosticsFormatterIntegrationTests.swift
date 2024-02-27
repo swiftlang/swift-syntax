@@ -150,4 +150,37 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
 
     assertStringsEqualWithDiff(annotate(source: source), expectedOutput)
   }
+
+  func testDontCrashIfFullLineHighlightContainsEmoji() {
+    let source = """
+      func o() {
+      }👨‍👩‍👧‍👦}
+      }
+      """
+
+    let expectedOutput = """
+      1 │ func o() {
+      2 │ }👨‍👩‍👧‍👦}
+        │  │╰─ error: extraneous braces at top level
+        │  ╰─ error: consecutive statements on a line must be separated by newline or ';'
+      3 │ }
+
+      """
+
+    assertStringsEqualWithDiff(annotate(source: source), expectedOutput)
+  }
+
+  func testEmojiInSourceCode() {
+    let source = """
+      let 👨‍👩‍👧‍👦 = ;
+      """
+
+    let expectedOutput = """
+      1 │ let 👨‍👩‍👧‍👦 = ;
+        │         ╰─ error: expected expression in variable
+
+      """
+
+    assertStringsEqualWithDiff(annotate(source: source), expectedOutput)
+  }
 }

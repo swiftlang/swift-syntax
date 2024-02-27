@@ -68,6 +68,22 @@ public struct DiagnosticsFormatter {
     var isFreeOfAnnotations: Bool {
       return diagnostics.isEmpty && suffixText.isEmpty
     }
+
+    /// Converts a UTF-8 column index into an index that considers each character as a single column, not each UTF-8
+    /// byte.
+    ///
+    /// For example the 👨‍👩‍👧‍👦 character is considered as a single character, not 25 bytes.
+    ///
+    /// Both the input and the output column are 1-based.
+    func characterColumn(ofUtf8Column utf8Column: Int) -> Int {
+      let index =
+        sourceString.utf8.index(
+          sourceString.utf8.startIndex,
+          offsetBy: utf8Column - 1,
+          limitedBy: sourceString.utf8.endIndex
+        ) ?? sourceString.utf8.endIndex
+      return sourceString.distance(from: sourceString.startIndex, to: index) + 1
+    }
   }
 
   /// Number of lines which should be printed before and after the diagnostic message
@@ -139,7 +155,7 @@ public struct DiagnosticsFormatter {
 
       let endColumn: Int
       if endLine > lineNumber {
-        endColumn = annotatedLine.sourceString.count
+        endColumn = annotatedLine.sourceString.utf8.count
       } else if endLine == lineNumber {
         endColumn = endLoc.column
       } else {
@@ -274,9 +290,13 @@ public struct DiagnosticsFormatter {
         annotatedSource.append("\n")
       }
 
-      let columnsWithDiagnostics = Set(annotatedLine.diagnostics.map { $0.location(converter: slc).column })
+      let columnsWithDiagnostics = Set(
+        annotatedLine.diagnostics.map {
+          annotatedLine.characterColumn(ofUtf8Column: $0.location(converter: slc).column)
+        }
+      )
       let diagsPerColumn = Dictionary(grouping: annotatedLine.diagnostics) { diag in
-        diag.location(converter: slc).column
+        annotatedLine.characterColumn(ofUtf8Column: diag.location(converter: slc).column)
       }.sorted { lhs, rhs in
         lhs.key > rhs.key
       }

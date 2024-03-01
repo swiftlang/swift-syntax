@@ -48,7 +48,8 @@ public struct CallToTrailingClosures: SyntaxRefactoringProvider {
   // TODO: Rather than returning nil, we should consider throwing errors with
   // appropriate messages instead.
   public static func refactor(syntax call: FunctionCallExprSyntax, in context: Context = Context()) -> FunctionCallExprSyntax? {
-    return call.convertToTrailingClosures(from: context.startAtArgument)?.formatted().as(FunctionCallExprSyntax.self)
+    let converted = call.convertToTrailingClosures(from: context.startAtArgument)
+    return converted?.formatted().as(FunctionCallExprSyntax.self)
   }
 }
 
@@ -69,7 +70,7 @@ extension FunctionCallExprSyntax {
       // Trailing comma won't exist any more, move its trivia to the end of
       // the closure instead
       if let comma = arg.trailingComma {
-        closure = closure.with(\.trailingTrivia, closure.trailingTrivia.merging(triviaOf: comma))
+        closure.trailingTrivia = closure.trailingTrivia.merging(triviaOf: comma)
       }
       closures.append((arg, closure))
     }
@@ -80,13 +81,12 @@ extension FunctionCallExprSyntax {
 
     // First trailing closure won't have label/colon. Transfer their trivia.
     var trailingClosure = closures.first!.closure
-      .with(
-        \.leadingTrivia,
-        Trivia()
-          .merging(triviaOf: closures.first!.original.label)
-          .merging(triviaOf: closures.first!.original.colon)
-          .merging(closures.first!.closure.leadingTrivia)
-      )
+    trailingClosure.leadingTrivia =
+      Trivia()
+      .merging(triviaOf: closures.first!.original.label)
+      .merging(triviaOf: closures.first!.original.colon)
+      .merging(closures.first!.closure.leadingTrivia)
+      .droppingLeadingWhitespace
     let additionalTrailingClosures = closures.dropFirst().map {
       MultipleTrailingClosureElementSyntax(
         label: $0.original.label ?? .wildcardToken(),
@@ -97,53 +97,61 @@ extension FunctionCallExprSyntax {
 
     var converted = self.detached
 
+    // Trivia that should be attached to the end of the converted call.
+    var additionalTriviaAtEndOfCall: Trivia? = nil
+
     // Remove parens if there's no non-closure arguments left and remove the
     // last comma otherwise. Makes sure to keep the trivia of any removed node.
     var argList = Array(arguments.dropLast(closures.count))
     if argList.isEmpty {
-      converted =
-        converted
-        .with(\.leftParen, nil)
-        .with(\.rightParen, nil)
+      converted.leftParen = nil
+      converted.rightParen = nil
 
       // No left paren any more, right paren is handled below since it makes
       // sense to keep its trivia of the end of the call, regardless of whether
       // it was removed or not.
       if let leftParen = leftParen {
-        trailingClosure = trailingClosure.with(
-          \.leadingTrivia,
-          Trivia()
-            .merging(triviaOf: leftParen)
-            .merging(trailingClosure.leadingTrivia)
-        )
+        trailingClosure.leadingTrivia = Trivia()
+          .merging(triviaOf: leftParen)
+          .merging(trailingClosure.leadingTrivia)
+      }
+      // No right paren anymore. Attach its trivia to the end of the call.
+      if let rightParen = rightParen {
+        additionalTriviaAtEndOfCall = Trivia().merging(triviaOf: rightParen)
       }
     } else {
       let last = argList.last!
-      if let comma = last.trailingComma {
-        converted =
-          converted
-          .with(\.rightParen, TokenSyntax.rightParenToken(trailingTrivia: Trivia().merging(triviaOf: comma)))
-      }
-      argList[argList.count - 1] =
-        last
-        .with(\.trailingComma, nil)
+      // Move the trailing trivia of the closing parenthesis to the end of the call after the last trailing, instead of
+      // keeping it in the middle of the call where the new closing parenthesis lives.
+      // Also ensure that we don't drop trivia from any comma we remove.
+      converted.rightParen?.trailingTrivia = Trivia().merging(triviaOf: last.trailingComma)
+      additionalTriviaAtEndOfCall = rightParen?.trailingTrivia
+      argList[argList.count - 1] = last.with(\.trailingComma, nil)
     }
 
     // Update arguments and trailing closures
-    converted =
-      converted
-      .with(\.arguments, LabeledExprListSyntax(argList))
-      .with(\.trailingClosure, trailingClosure)
+    converted.arguments = LabeledExprListSyntax(argList)
+    converted.trailingClosure = trailingClosure
     if !additionalTrailingClosures.isEmpty {
-      converted = converted.with(\.additionalTrailingClosures, MultipleTrailingClosureElementListSyntax(additionalTrailingClosures))
+      converted.additionalTrailingClosures = MultipleTrailingClosureElementListSyntax(additionalTrailingClosures)
     }
 
-    // The right paren either doesn't exist any more, or is before all the
-    // trailing closures. Moves its trivia to the end of the converted call.
-    if let rightParen = rightParen {
-      converted = converted.with(\.trailingTrivia, converted.trailingTrivia.merging(triviaOf: rightParen))
+    if let additionalTriviaAtEndOfCall {
+      converted.trailingTrivia = converted.trailingTrivia.merging(additionalTriviaAtEndOfCall.droppingLeadingWhitespace)
     }
 
     return converted
+  }
+}
+
+fileprivate extension Trivia {
+  var droppingLeadingWhitespace: Trivia {
+    return Trivia(pieces: self.drop(while: \.isWhitespace))
+  }
+}
+
+fileprivate extension Sequence {
+  func dropSuffix(while predicate: (Element) -> Bool) -> [Element] {
+    self.reversed().drop(while: predicate).reversed()
   }
 }

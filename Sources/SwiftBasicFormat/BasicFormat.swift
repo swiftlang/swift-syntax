@@ -69,6 +69,16 @@ open class BasicFormat: SyntaxRewriter {
     super.init(viewMode: viewMode)
   }
 
+  /// Clears all stateful data from this `BasicFormat`.
+  ///
+  /// This needs to be called between multiple `rewrite` calls to a syntax tree.
+  func reset() {
+    indentationStack = [indentationStack.first!]
+    anchorPoints = [:]
+    previousToken = nil
+    stringLiteralNestingLevel = 0
+  }
+
   // MARK: - Updating indentation level
 
   public func increaseIndentationLevel(to userDefinedIndentation: Trivia? = nil) {
@@ -145,7 +155,7 @@ open class BasicFormat: SyntaxRewriter {
 
   /// Find the indentation of the nearest ancestor whose first token is an
   /// anchor point (see `anchorPoints`).
-  private func anchorPointIndentation(for token: TokenSyntax) -> Trivia? {
+  private func anchorPointIndentation(for token: TokenSyntax) -> Trivia {
     var ancestor: Syntax = Syntax(token)
     while let parent = ancestor.parent {
       ancestor = parent
@@ -155,7 +165,7 @@ open class BasicFormat: SyntaxRewriter {
         return anchorPointIndentation
       }
     }
-    return nil
+    return Trivia()
   }
 
   // MARK: - Customization points
@@ -575,23 +585,24 @@ open class BasicFormat: SyntaxRewriter {
       trailingTrivia += .space
     }
 
-    var leadingTriviaIndentation = self.currentIndentationLevel
-    var trailingTriviaIndentation = self.currentIndentationLevel
+    let leadingTriviaIndentation: Trivia
+    let trailingTriviaIndentation: Trivia
 
     // If the trivia contains user-defined indentation, find their anchor point
     // and indent the token relative to that anchor point.
+    //
     // Always indent string literals relative to their anchor point because
     // their indentation has structural meaning and we just want to maintain
     // what the user wrote.
-    if leadingTrivia.containsIndentation(isOnNewline: previousTokenWillEndWithNewline) || isInsideStringLiteral,
-      let anchorPointIndentation = self.anchorPointIndentation(for: token)
-    {
-      leadingTriviaIndentation = anchorPointIndentation
+    if leadingTrivia.containsIndentation(isOnNewline: previousTokenWillEndWithNewline) || isInsideStringLiteral {
+      leadingTriviaIndentation = anchorPointIndentation(for: token)
+    } else {
+      leadingTriviaIndentation = currentIndentationLevel
     }
-    if combinedTrailingTrivia.containsIndentation(isOnNewline: previousTokenWillEndWithNewline) || isInsideStringLiteral,
-      let anchorPointIndentation = self.anchorPointIndentation(for: token)
-    {
-      trailingTriviaIndentation = anchorPointIndentation
+    if combinedTrailingTrivia.containsIndentation(isOnNewline: previousTokenWillEndWithNewline) {
+      trailingTriviaIndentation = anchorPointIndentation(for: token)
+    } else {
+      trailingTriviaIndentation = currentIndentationLevel
     }
 
     leadingTrivia = leadingTrivia.indented(

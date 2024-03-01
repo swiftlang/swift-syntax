@@ -610,4 +610,39 @@ final class BasicFormatTest: XCTestCase {
     )
   }
 
+  func testFormatClosureWithInitialIndentation() throws {
+    assertFormatted(
+      tree: ClosureExprSyntax(
+        statements: CodeBlockItemListSyntax([
+          CodeBlockItemSyntax(item: CodeBlockItemSyntax.Item(IntegerLiteralExprSyntax(integerLiteral: 2)))
+        ])
+      ),
+      expected: """
+            {
+                2
+            }
+        """,
+      using: BasicFormat(initialIndentation: .spaces(4))
+    )
+  }
+
+  func testIndentedStandaloneClosureRoundTrips() throws {
+    let source = """
+          foo {
+              "abc"
+          }
+      """
+    assertFormatted(source: source, expected: source)
+  }
+
+  func testIndentedStandaloneClosureRoundTrips2() throws {
+    let source = """
+          foo {
+              if true {
+                  print("test")
+              }
+          }
+      """
+    assertFormatted(source: source, expected: source)
+  }
 }

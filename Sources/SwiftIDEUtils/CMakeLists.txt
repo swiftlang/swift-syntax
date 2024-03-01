@@ -8,6 +8,7 @@
 
 add_swift_syntax_library(SwiftIDEUtils
   DeclNameLocation.swift
+  FixItApplier.swift
   NameMatcher.swift
   SwiftIDEUtilsCompatibility.swift
   Syntax+Classifications.swift

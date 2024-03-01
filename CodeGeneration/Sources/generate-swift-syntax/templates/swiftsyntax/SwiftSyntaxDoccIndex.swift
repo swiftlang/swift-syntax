@@ -53,7 +53,7 @@ let nodesSections: String = {
         }
         return [node.kind.syntaxType.description]
           + node.elementChoices
-          .filter { SYNTAX_NODE_MAP[$0] != nil }
+          .filter { SYNTAX_NODE_MAP[$0] != nil && !SYNTAX_NODE_MAP[$0]!.isExperimental }
           .map(\.syntaxType.description)
           .filter { !handledSyntaxTypes.contains($0) }
       })

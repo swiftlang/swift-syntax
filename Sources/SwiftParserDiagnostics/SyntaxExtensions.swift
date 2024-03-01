@@ -12,7 +12,7 @@
 
 import SwiftBasicFormat
 @_spi(Diagnostics) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 
 extension UnexpectedNodesSyntax {
   func presentTokens(satisfying isIncluded: (TokenSyntax) -> Bool) -> [TokenSyntax] {
@@ -207,5 +207,16 @@ extension TokenSyntax {
 
   var isPresent: Bool {
     return presence == .present
+  }
+}
+
+extension TypeSpecifierListSyntax {
+  var simpleSpecifiers: [TokenSyntax] {
+    return self.compactMap { specifier in
+      switch specifier {
+      case .simpleTypeSpecifier(let specifier): return specifier.specifier
+      case .lifetimeTypeSpecifier: return nil
+      }
+    }
   }
 }

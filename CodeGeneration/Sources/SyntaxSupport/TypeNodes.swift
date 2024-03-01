@@ -496,9 +496,108 @@ public let TYPE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .typeSpecifier,
+    kind: .lifetimeSpecifierArgument,
     base: .syntax,
+    experimentalFeature: .nonescapableTypes,
     nameForDiagnostics: nil,
+    documentation: """
+      A single argument that can be added to a lifetime specifier like `borrow`, `mutate`, `consume` or `copy`.
+
+      ### Example
+      `data` in `func foo(data: Array<Item>) -> borrow(data) ComplexReferenceType`
+      """,
+    traits: [
+      "WithTrailingComma"
+    ],
+    children: [
+      Child(
+        name: "parameter",
+        kind: .token(choices: [.token(.identifier), .keyword(.self), .token(.integerLiteral)]),
+        nameForDiagnostics: "parameter reference",
+        documentation: """
+          The parameter on which the lifetime of this type depends. 
+
+          This can be an identifier referring to an external parameter name, an integer literal to refer to an unnamed
+          parameter or `self` if the type's lifetime depends on the object the method is called on.
+          """
+      ),
+      Child(
+        name: "trailingComma",
+        kind: .token(choices: [.token(.comma)]),
+        isOptional: true
+      ),
+    ]
+  ),
+
+  Node(
+    kind: .lifetimeSpecifierArgumentList,
+    base: .syntaxCollection,
+    experimentalFeature: .nonescapableTypes,
+    nameForDiagnostics: nil,
+    elementChoices: [.lifetimeSpecifierArgument]
+  ),
+
+  Node(
+    kind: .lifetimeSpecifierArguments,
+    base: .syntax,
+    experimentalFeature: .nonescapableTypes,
+    nameForDiagnostics: nil,
+    documentation: """
+      An optional argument passed to a type parameter.
+
+      ### Example
+      `borrow(data)` in `func foo(data: Array<Item>) -> borrow(data) ComplexReferenceType`
+      """,
+    traits: [
+      "Parenthesized"
+    ],
+    children: [
+      Child(
+        name: "leftParen",
+        kind: .token(choices: [.token(.leftParen)])
+      ),
+      Child(
+        name: "arguments",
+        kind: .collection(kind: .lifetimeSpecifierArgumentList, collectionElementName: "Arguments"),
+        documentation: """
+          The function parameters that the lifetime of the annotated type depends on.
+          """
+      ),
+      Child(
+        name: "rightParen",
+        kind: .token(choices: [.token(.rightParen)])
+      ),
+    ]
+  ),
+
+  Node(
+    kind: .lifetimeTypeSpecifier,
+    base: .syntax,
+    experimentalFeature: .nonescapableTypes,
+    nameForDiagnostics: "lifetime specifier",
+    documentation: "A specifier that specifies function parameter on whose lifetime a type depends",
+    children: [
+      Child(
+        name: "specifier",
+        kind: .token(choices: [
+          .keyword(._copy),
+          .keyword(._consume),
+          .keyword(._borrow),
+          .keyword(._mutate),
+        ]),
+        documentation: "The specifier token that's attached to the type."
+      ),
+      Child(
+        name: "arguments",
+        kind: .node(kind: .lifetimeSpecifierArguments)
+      ),
+    ]
+  ),
+
+  Node(
+    kind: .simpleTypeSpecifier,
+    base: .syntax,
+    nameForDiagnostics: "type specifier",
     documentation: "A specifier that can be attached to a type to eg. mark a parameter as `inout` or `consuming`",
     children: [
       Child(
@@ -523,6 +622,6 @@ public let TYPE_NODES: [Node] = [
     kind: .typeSpecifierList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
-    elementChoices: [.typeSpecifier]
+    elementChoices: [.simpleTypeSpecifier, .lifetimeTypeSpecifier]
   ),
 ]

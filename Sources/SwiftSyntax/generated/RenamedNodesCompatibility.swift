@@ -192,6 +192,9 @@ public typealias TupleExprElementListSyntax = LabeledExprListSyntax
 @available(*, deprecated, renamed: "InheritanceClauseSyntax")
 public typealias TypeInheritanceClauseSyntax = InheritanceClauseSyntax
 
+@available(*, deprecated, renamed: "SimpleTypeSpecifierSyntax")
+public typealias TypeSpecifierSyntax = SimpleTypeSpecifierSyntax
+
 @available(*, deprecated, renamed: "TypeAliasDeclSyntax")
 public typealias TypealiasDeclSyntax = TypeAliasDeclSyntax
 
@@ -449,6 +452,10 @@ public extension SyntaxKind {
   
   static var typeInheritanceClause: Self {
     return .inheritanceClause
+  }
+  
+  static var typeSpecifier: Self {
+    return .simpleTypeSpecifier
   }
   
   static var typealiasDecl: Self {

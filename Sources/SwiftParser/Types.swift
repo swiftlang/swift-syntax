@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 
 extension Parser {
   /// Parse a type.
@@ -468,7 +468,7 @@ extension Parser {
         var misplacedSpecifiers: [RawTokenSyntax] = []
         if self.withLookahead({ $0.startsParameterName(isClosure: false, allowMisplacedSpecifierRecovery: true) }) {
           while canHaveParameterSpecifier,
-            let specifier = self.consume(ifAnyIn: TypeSpecifierSyntax.SpecifierOptions.self)
+            let specifier = self.consume(ifAnyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self)
           {
             misplacedSpecifiers.append(specifier)
           }
@@ -623,7 +623,7 @@ extension Parser.Lookahead {
     var specifierProgress = LoopProgressCondition()
     // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
     while canHaveParameterSpecifier,
-      self.at(anyIn: TypeSpecifierSyntax.SpecifierOptions.self) != nil || self.at(.keyword(.isolated)) || self.at(.keyword(._const)),
+      self.at(anyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) != nil || self.at(.keyword(.isolated)) || self.at(.keyword(._const)),
       self.hasProgressed(&specifierProgress)
     {
       self.consumeAnyToken()
@@ -890,20 +890,94 @@ extension Parser.Lookahead {
 }
 
 extension Parser {
+  private mutating func parseLifetimeTypeSpecifier(
+    specifierHandle: TokenConsumptionHandle
+  ) -> RawTypeSpecifierListSyntax.Element {
+    let specifier = self.eat(specifierHandle)
+
+    guard let leftParen = self.consume(if: .leftParen) else {
+      // If there is no left paren, add an entirely missing detail. Otherwise, we start to consume the following type
+      // name as a token inside the detail, which leads to confusing recovery results.
+      let arguments = RawLifetimeSpecifierArgumentsSyntax(
+        leftParen: missingToken(.leftParen),
+        arguments: RawLifetimeSpecifierArgumentListSyntax(
+          elements: [
+            RawLifetimeSpecifierArgumentSyntax(parameter: missingToken(.identifier), trailingComma: nil, arena: arena)
+          ],
+          arena: self.arena
+        ),
+        rightParen: missingToken(.rightParen),
+        arena: self.arena
+      )
+      let lifetimeSpecifier = RawLifetimeTypeSpecifierSyntax(specifier: specifier, arguments: arguments, arena: self.arena)
+      return .lifetimeTypeSpecifier(lifetimeSpecifier)
+    }
+
+    var keepGoing: RawTokenSyntax?
+    var arguments: [RawLifetimeSpecifierArgumentSyntax] = []
+    var loopProgress = LoopProgressCondition()
+    repeat {
+      let (unexpectedBeforeParameter, parameter) = self.expect(
+        anyIn: LifetimeSpecifierArgumentSyntax.ParameterOptions.self,
+        default: .identifier
+      )
+      keepGoing = self.consume(if: .comma)
+      arguments.append(
+        RawLifetimeSpecifierArgumentSyntax(
+          unexpectedBeforeParameter,
+          parameter: parameter,
+          trailingComma: keepGoing,
+          arena: arena
+        )
+      )
+    } while keepGoing != nil && self.hasProgressed(&loopProgress)
+    let lifetimeSpecifierArgumentList = RawLifetimeSpecifierArgumentListSyntax(elements: arguments, arena: self.arena)
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+    let argumentsSyntax = RawLifetimeSpecifierArgumentsSyntax(
+      leftParen: leftParen,
+      arguments: lifetimeSpecifierArgumentList,
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      arena: self.arena
+    )
+    let lifetimeSpecifier = RawLifetimeTypeSpecifierSyntax(specifier: specifier, arguments: argumentsSyntax, arena: self.arena)
+    return .lifetimeTypeSpecifier(lifetimeSpecifier)
+  }
+
+  private mutating func parseSimpleTypeSpecifier(
+    specifierHandle: TokenConsumptionHandle
+  ) -> RawTypeSpecifierListSyntax.Element {
+    let specifier = self.eat(specifierHandle)
+    let simpleSpecifier = RawSimpleTypeSpecifierSyntax(specifier: specifier, arena: arena)
+    return .simpleTypeSpecifier(simpleSpecifier)
+  }
+
   mutating func parseTypeAttributeList(
     misplacedSpecifiers: [RawTokenSyntax] = []
   ) -> (
     specifiers: RawTypeSpecifierListSyntax,
     attributes: RawAttributeListSyntax
   )? {
-    var specifiers: [RawTypeSpecifierSyntax] = []
-    while canHaveParameterSpecifier, let specifier = self.consume(ifAnyIn: TypeSpecifierSyntax.SpecifierOptions.self) {
-      specifiers.append(RawTypeSpecifierSyntax(specifier: specifier, arena: arena))
-    }
-    if !misplacedSpecifiers.isEmpty {
-      specifiers += misplacedSpecifiers.map {
-        RawTypeSpecifierSyntax(specifier: missingToken($0.tokenKind, text: $0.tokenText), arena: arena)
+    typealias SimpleOrLifetimeSpecifier = EitherTokenSpecSet<SimpleTypeSpecifierSyntax.SpecifierOptions, LifetimeTypeSpecifierSyntax.SpecifierOptions>
+    var specifiers: [RawTypeSpecifierListSyntax.Element] = []
+    SPECIFIER_PARSING: while canHaveParameterSpecifier, let (specifierSpec, specifierHandle) = self.at(anyIn: SimpleOrLifetimeSpecifier.self) {
+      switch specifierSpec {
+      case .lhs: specifiers.append(parseSimpleTypeSpecifier(specifierHandle: specifierHandle))
+      case .rhs:
+        if self.experimentalFeatures.contains(.nonescapableTypes) {
+          specifiers.append(parseLifetimeTypeSpecifier(specifierHandle: specifierHandle))
+        } else {
+          break SPECIFIER_PARSING
+        }
       }
+    }
+    specifiers += misplacedSpecifiers.map {
+      .simpleTypeSpecifier(
+        RawSimpleTypeSpecifierSyntax(
+          specifier: missingToken($0.tokenKind, text: $0.tokenText),
+          arena: arena
+        )
+      )
     }
 
     let attributes: RawAttributeListSyntax?

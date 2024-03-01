@@ -16,12 +16,14 @@ import SyntaxSupport
 
 @MemberBlockItemListBuilder
 func choiceNodeCastingMethods(for syntaxNodeKind: SyntaxNodeKind) -> MemberBlockItemListSyntax {
+  let apiAttributes = SYNTAX_NODE_MAP[syntaxNodeKind]?.apiAttributes() ?? []
   if syntaxNodeKind.isBase {
     DeclSyntax(
       """
       /// Checks if the current syntax node can be cast to the type conforming to the ``\(syntaxNodeKind.protocolType)`` protocol.
       ///
       /// - Returns: `true` if the node can be cast, `false` otherwise.
+      \(apiAttributes)\
       public func `is`<S: \(syntaxNodeKind.protocolType)>(_ syntaxType: S.Type) -> Bool {
         return self.as(syntaxType) != nil
       }
@@ -33,6 +35,7 @@ func choiceNodeCastingMethods(for syntaxNodeKind: SyntaxNodeKind) -> MemberBlock
       /// Attempts to cast the current syntax node to the type conforming to the ``\(syntaxNodeKind.protocolType)`` protocol.
       ///
       /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+      \(apiAttributes)\
       public func `as`<S: \(syntaxNodeKind.protocolType)>(_ syntaxType: S.Type) -> S? {
         return S.init(self)
       }
@@ -45,6 +48,7 @@ func choiceNodeCastingMethods(for syntaxNodeKind: SyntaxNodeKind) -> MemberBlock
       ///
       /// - Returns: An instance of the specialized type.
       /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+      \(apiAttributes)\
       public func cast<S: \(syntaxNodeKind.protocolType)>(_ syntaxType: S.Type) -> S {
         return self.as(S.self)!
       }
@@ -56,6 +60,7 @@ func choiceNodeCastingMethods(for syntaxNodeKind: SyntaxNodeKind) -> MemberBlock
       /// Checks if the current syntax node can be cast to ``\(syntaxNodeKind.syntaxType)``.
       ///
       /// - Returns: `true` if the node can be cast, `false` otherwise.
+      \(apiAttributes)\
       public func `is`(_ syntaxType: \(syntaxNodeKind.syntaxType).Type) -> Bool {
         return self.as(syntaxType) != nil
       }
@@ -67,6 +72,7 @@ func choiceNodeCastingMethods(for syntaxNodeKind: SyntaxNodeKind) -> MemberBlock
       /// Attempts to cast the current syntax node to ``\(syntaxNodeKind.syntaxType)``.
       ///
       /// - Returns: An instance of ``\(syntaxNodeKind.syntaxType)``, or `nil` if the cast fails.
+      \(apiAttributes)\
       public func `as`(_ syntaxType: \(syntaxNodeKind.syntaxType).Type) -> \(syntaxNodeKind.syntaxType)? {
         return \(syntaxNodeKind.syntaxType).init(self)
       }
@@ -79,6 +85,7 @@ func choiceNodeCastingMethods(for syntaxNodeKind: SyntaxNodeKind) -> MemberBlock
       ///
       /// - Returns: An instance of ``\(syntaxNodeKind.syntaxType)``.
       /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+      \(apiAttributes)\
       public func cast(_ syntaxType: \(syntaxNodeKind.syntaxType).Type) -> \(syntaxNodeKind.syntaxType) {
         return self.as(\(syntaxNodeKind.syntaxType).self)!
       }

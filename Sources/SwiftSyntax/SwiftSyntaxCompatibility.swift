@@ -52,7 +52,7 @@ extension AttributedTypeSyntax {
   ) {
     let specifiers: TypeSpecifierListSyntax
     if let specifier {
-      specifiers = [TypeSpecifierSyntax(specifier: specifier)]
+      specifiers = [.simpleTypeSpecifier(SimpleTypeSpecifierSyntax(specifier: specifier))]
     } else {
       specifiers = []
     }
@@ -82,11 +82,14 @@ extension AttributedTypeSyntax {
   @available(*, deprecated, message: "Access the specifiers list instead")
   public var specifier: TokenSyntax? {
     get {
-      specifiers.first?.specifier
+      if case .simpleTypeSpecifier(let simpleSpecifier) = specifiers.first {
+        return simpleSpecifier.specifier
+      }
+      return nil
     }
     set {
       if let newValue {
-        specifiers = [TypeSpecifierSyntax(specifier: newValue)]
+        specifiers = [.simpleTypeSpecifier(SimpleTypeSpecifierSyntax(specifier: newValue))]
       } else {
         specifiers = []
       }

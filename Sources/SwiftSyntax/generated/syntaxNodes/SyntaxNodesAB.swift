@@ -3347,7 +3347,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
   /// - returns: A copy of the receiver with the provided `Specifier`
   ///            appended to its `specifiers` collection.
   @available(*, deprecated, message: "Use node.specifiers.append(newElement) instead")
-  public func addSpecifier(_ element: TypeSpecifierSyntax) -> AttributedTypeSyntax {
+  public func addSpecifier(_ element: Syntax) -> AttributedTypeSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {

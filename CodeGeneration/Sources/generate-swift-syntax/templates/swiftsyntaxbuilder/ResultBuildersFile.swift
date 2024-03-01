@@ -19,9 +19,9 @@ let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax(
     """
     #if swift(>=6)
-    public import SwiftSyntax
+    @_spi(ExperimentalLanguageFeatures) public import SwiftSyntax
     #else
-    import SwiftSyntax
+    @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
     #endif
     """
   )
@@ -48,6 +48,7 @@ let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         for elementChoice in node.elementChoices {
           DeclSyntax(
             """
+            \(SYNTAX_NODE_MAP[elementChoice]?.apiAttributes() ?? [])\
             public static func buildExpression(_ expression: \(elementChoice.syntaxType)) -> Component {
               buildExpression(.init(expression))
             }

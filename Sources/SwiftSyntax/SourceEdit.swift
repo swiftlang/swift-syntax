@@ -21,7 +21,7 @@ public struct SourceEdit: Equatable, Sendable {
   /// Length of the original source range that this edit applies to. Zero if
   /// this is an addition.
   public var length: SourceLength {
-    return SourceLength(utf8Length: range.lowerBound.utf8Offset - range.upperBound.utf8Offset)
+    return SourceLength(utf8Length: range.upperBound.utf8Offset - range.lowerBound.utf8Offset)
   }
 
   /// Create an edit to replace `range` in the original source with

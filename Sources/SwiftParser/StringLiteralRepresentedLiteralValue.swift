@@ -71,8 +71,14 @@ extension StringSegmentSyntax {
   ) {
     precondition(!hasError, "appendUnescapedLiteralValue relies on properly parsed literals")
 
-    var text = content.text
-    text.withUTF8 { buffer in
+    let rawText = content.rawText
+    if !rawText.contains("\\") {
+      // Fast path. No escape sequence.
+      output.append(String(syntaxText: rawText))
+      return
+    }
+
+    rawText.withBuffer { buffer in
       var cursor = Lexer.Cursor(input: buffer, previous: 0)
 
       // Put the cursor in the string literal lexing state. This is just
@@ -88,10 +94,9 @@ extension StringSegmentSyntax {
         )
 
         switch lex {
-        case .success(let scalar):
+        case .success(let scalar),
+          .validatedEscapeSequence(let scalar):
           output.append(Character(scalar))
-        case .validatedEscapeSequence(let character):
-          output.append(character)
         case .endOfString, .error:
           // We get an error at the end of the string because
           // `lexCharacterInStringLiteral` expects the closing quote.

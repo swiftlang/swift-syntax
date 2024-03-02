@@ -364,16 +364,21 @@ extension FunctionCallExprSyntax {
 /// NOTE: It is required that '##' is not a valid substring of display-string
 /// or type-string. If this ends up not the case for some reason, we can consider
 /// adding escaping for '##'.
-fileprivate enum EditorPlaceholderData {
+@_spi(SourceKitLSP)
+public enum EditorPlaceholderData {
   case basic(text: Substring)
   case typed(text: Substring, type: TypeSyntax)
 
   init?(token: TokenSyntax) {
-    guard isPlaceholder(token.text) else {
+    self.init(text: token.text)
+  }
+
+  @_spi(SourceKitLSP)
+  public init?(text: String) {
+    guard isPlaceholder(text) else {
       return nil
     }
-
-    var text = token.text.dropFirst(2).dropLast(2)
+    var text = text.dropFirst(2).dropLast(2)
 
     if !text.hasPrefix("T##") {
       // No type information

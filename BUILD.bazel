@@ -284,6 +284,7 @@ cc_library(
     hdrs = glob(["Sources/_AtomicBool/include/*.h"]),
     includes = ["Sources/_AtomicBool/include"],
     tags = ["swift_module=_AtomicBool"],
+    visibility = ["//visibility:private"],
 )
 
 cc_library(
@@ -292,6 +293,7 @@ cc_library(
     hdrs = glob(["Sources/_InstructionCounter/include/*.h"]),
     includes = ["Sources/_InstructionCounter/include"],
     tags = ["swift_module=_InstructionCounter"],
+    visibility = ["//visibility:private"],
 )
 
 swift_syntax_library(

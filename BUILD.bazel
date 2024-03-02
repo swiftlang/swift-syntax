@@ -129,6 +129,7 @@ swift_syntax_library(
     testonly = True,
     deps = [
         ":SwiftDiagnostics",
+        ":SwiftIDEUtils",
         ":SwiftParser",
         ":SwiftSyntaxMacroExpansion",
         ":SwiftSyntaxMacros",

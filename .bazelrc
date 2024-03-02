@@ -5,4 +5,8 @@ common --lockfile_mode=off
 build --features=swift.use_explicit_swift_module_map
 build --host_features=swift.use_explicit_swift_module_map
 
+# Improved build performance
+build --host_swiftcopt=-whole-module-optimization
+build --swiftcopt=-whole-module-optimization
+
 test --test_output=errors

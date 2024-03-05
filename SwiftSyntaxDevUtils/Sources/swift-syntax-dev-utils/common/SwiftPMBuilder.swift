@@ -93,10 +93,6 @@ struct SwiftPMBuilder {
       args += ["-Xswiftc", "-warnings-as-errors"]
     }
 
-    #if !canImport(Darwin)
-    args += ["--enable-test-discovery"]
-    #endif
-
     if release {
       args += ["--configuration", "release"]
     }

@@ -32,7 +32,8 @@ extension SyntaxText {
   }
 }
 
-enum StringLiteralKind: Equatable {
+@_spi(Compiler)
+public enum StringLiteralKind: Equatable {
   /// A normal single-line string literal started by `"`.
   case singleLine
   /// A multi-line string literal started by `"""`.

@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=5.11)
+#if compiler(>=5.11)
 #if canImport(Darwin)
 private import Darwin
 #elseif canImport(Glibc)

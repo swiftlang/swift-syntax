@@ -20,7 +20,7 @@ import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
 import _SwiftSyntaxTestSupport
 
-#if swift(>=5.11)
+#if compiler(>=5.11)
 private import XCTest
 #else
 import XCTest

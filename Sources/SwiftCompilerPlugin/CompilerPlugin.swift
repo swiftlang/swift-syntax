@@ -14,7 +14,7 @@
 
 import SwiftSyntaxMacros
 
-#if swift(>=5.11)
+#if compiler(>=5.11)
 private import Foundation
 private import SwiftCompilerPluginMessageHandling
 #else
@@ -23,7 +23,7 @@ import SwiftCompilerPluginMessageHandling
 #endif
 
 #if os(Windows)
-#if swift(>=5.11)
+#if compiler(>=5.11)
 private import ucrt
 #else
 import ucrt

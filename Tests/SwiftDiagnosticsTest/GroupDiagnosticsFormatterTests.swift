@@ -26,7 +26,7 @@ extension GroupedDiagnostics {
     displayName: String,
     parent: (SourceFileID, AbsolutePosition)? = nil,
     diagnosticDescriptors: [DiagnosticDescriptor],
-    file: StaticString = #file,
+    file: StaticString = #filePath,
     line: UInt = #line
   ) -> (SourceFileID, [String: AbsolutePosition]) {
     let (markers, source) = extractMarkers(markedSource)

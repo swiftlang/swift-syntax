@@ -14,7 +14,7 @@ import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 
-public class AbsolutePositionTests: XCTestCase {
+class AbsolutePositionTests: XCTestCase {
   public func testRecursion() {
     var l = [CodeBlockItemSyntax]()
     let idx = 2000

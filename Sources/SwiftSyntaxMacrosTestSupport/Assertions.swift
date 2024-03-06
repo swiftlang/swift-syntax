@@ -10,6 +10,18 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6.0)
+import SwiftBasicFormat
+public import SwiftDiagnostics
+@_spi(FixItApplier) import SwiftIDEUtils
+import SwiftParser
+import SwiftParserDiagnostics
+public import SwiftSyntax
+public import SwiftSyntaxMacroExpansion
+public import SwiftSyntaxMacros
+import _SwiftSyntaxTestSupport
+private import XCTest
+#else
 import SwiftBasicFormat
 import SwiftDiagnostics
 @_spi(FixItApplier) import SwiftIDEUtils
@@ -19,10 +31,6 @@ import SwiftSyntax
 import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
 import _SwiftSyntaxTestSupport
-
-#if swift(>=5.11)
-private import XCTest
-#else
 import XCTest
 #endif
 
@@ -99,7 +107,7 @@ public struct FixItSpec {
   ///   - originatorLine: The line at which this ``NoteSpec`` was created, so that assertion failures can be reported at its location.
   public init(
     message: String,
-    originatorFile: StaticString = #file,
+    originatorFile: StaticString = #filePath,
     originatorLine: UInt = #line
   ) {
     self.message = message
@@ -169,7 +177,7 @@ public struct DiagnosticSpec {
     highlights: [String]? = nil,
     notes: [NoteSpec] = [],
     fixIts: [FixItSpec] = [],
-    originatorFile: StaticString = #file,
+    originatorFile: StaticString = #filePath,
     originatorLine: UInt = #line
   ) {
     self.id = id
@@ -205,7 +213,7 @@ extension DiagnosticSpec {
     highlight: String? = nil,
     notes: [NoteSpec] = [],
     fixIts: [FixItSpec] = [],
-    originatorFile: StaticString = #file,
+    originatorFile: StaticString = #filePath,
     originatorLine: UInt = #line
   ) {
     self.init(
@@ -316,7 +324,7 @@ public func assertMacroExpansion(
   testModuleName: String = "TestModule",
   testFileName: String = "test.swift",
   indentationWidth: Trivia = .spaces(4),
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   let specs = macros.mapValues { MacroSpec(type: $0) }
@@ -361,7 +369,7 @@ public func assertMacroExpansion(
   testModuleName: String = "TestModule",
   testFileName: String = "test.swift",
   indentationWidth: Trivia = .spaces(4),
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   // Parse the original source file.

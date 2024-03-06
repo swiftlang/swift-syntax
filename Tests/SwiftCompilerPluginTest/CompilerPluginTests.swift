@@ -46,7 +46,7 @@ struct MyPlugin: CompilerPlugin {
   ]
 }
 
-public class CompilerPluginTests: XCTestCase {
+class CompilerPluginTests: XCTestCase {
 
   func testResolveMacro() {
     let plugin = MyPlugin()

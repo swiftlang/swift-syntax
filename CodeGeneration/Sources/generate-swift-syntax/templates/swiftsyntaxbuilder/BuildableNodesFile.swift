@@ -16,7 +16,15 @@ import SyntaxSupport
 import Utils
 
 let buildableNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax("@_spi(ExperimentalLanguageFeatures) import SwiftSyntax")
+  DeclSyntax(
+    """
+    #if swift(>=6)
+    @_spi(ExperimentalLanguageFeatures) public import SwiftSyntax
+    #else
+    @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+    #endif
+    """
+  )
 
   for node in SYNTAX_NODES.compactMap(\.layoutNode) {
     let type = node.type

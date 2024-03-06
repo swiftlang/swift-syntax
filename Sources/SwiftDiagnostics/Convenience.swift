@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftSyntax
+#else
 import SwiftSyntax
+#endif
 
 extension Diagnostic {
   /// Construct a new diagnostic that has exactly one Fix-It.

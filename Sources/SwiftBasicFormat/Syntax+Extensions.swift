@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftSyntax
+#else
 import SwiftSyntax
+#endif
 
 extension TokenSyntax {
   /// The indentation of this token

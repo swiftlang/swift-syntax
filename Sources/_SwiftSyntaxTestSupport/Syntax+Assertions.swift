@@ -14,8 +14,13 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftSyntax
+private import XCTest
+#else
 import SwiftSyntax
 import XCTest
+#endif
 
 /// Verifies that there is a next item returned by the iterator and that it
 /// satisfies the given predicate.

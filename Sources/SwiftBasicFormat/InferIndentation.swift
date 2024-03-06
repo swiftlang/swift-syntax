@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftSyntax
+#else
 import SwiftSyntax
+#endif
 
 extension BasicFormat {
   /// Uses heuristics to infer the indentation width used in the given syntax tree.

@@ -12,7 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftSyntax
+#else
 import SwiftSyntax
+#endif
 
 extension Keyword {
   /// Whether the token kind is switched from being an identifier to being a keyword in the lexer.

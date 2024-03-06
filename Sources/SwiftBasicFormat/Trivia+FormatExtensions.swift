@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftSyntax
+#else
 import SwiftSyntax
+#endif
 
 extension Trivia {
   /// Removes all whitespaces that is trailing before a newline trivia,

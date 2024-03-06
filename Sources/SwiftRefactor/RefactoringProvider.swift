@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftSyntax
+#else
 import SwiftSyntax
+#endif
 
 /// A refactoring expressed as textual edits on the original syntax tree. In
 /// general clients should prefer `SyntaxRefactoringProvider` where possible.

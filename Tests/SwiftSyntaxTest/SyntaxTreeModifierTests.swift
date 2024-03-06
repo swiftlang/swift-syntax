@@ -30,7 +30,7 @@ fileprivate func cannedVarDecl() -> VariableDeclSyntax {
   )
 }
 
-public class SyntaxTreeModifierTests: XCTestCase {
+class SyntaxTreeModifierTests: XCTestCase {
 
   public func testAccessorAsModifier() {
     var VD = cannedVarDecl()

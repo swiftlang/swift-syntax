@@ -10,9 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftDiagnostics
+import SwiftParser
+import SwiftSyntax
+#else
 import SwiftDiagnostics
 import SwiftParser
 import SwiftSyntax
+#endif
 
 extension OperatorError: DiagnosticMessage {
   public var severity: DiagnosticSeverity {

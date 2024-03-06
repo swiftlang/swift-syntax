@@ -15,7 +15,7 @@ import SwiftSyntax
 import XCTest
 
 /// The base class for all parser test cases.
-public class ParserTestCase: XCTestCase {
+class ParserTestCase: XCTestCase {
   /// The default set of experimental features to test with.
   var experimentalFeatures: Parser.ExperimentalFeatures { [] }
 }

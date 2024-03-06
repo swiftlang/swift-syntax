@@ -86,7 +86,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   func verify<Node: RawSyntaxNodeProtocol>(
       _ raw: RawSyntax?, 
       as _: Node.Type, 
-      file: StaticString = #file, 
+      file: StaticString = #filePath, 
       line: UInt = #line
     ) -> ValidationError? {
     guard let raw = raw else {
@@ -105,7 +105,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   func verify<Node: RawSyntaxNodeProtocol>(
       _ raw: RawSyntax?, 
       as _: Node?.Type, 
-      file: StaticString = #file, 
+      file: StaticString = #filePath, 
       line: UInt = #line
     ) -> ValidationError? {
     if raw != nil {
@@ -122,7 +122,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       _ raw: RawSyntax?, 
       as _: RawTokenSyntax?.Type, 
       tokenChoices: [TokenChoice], 
-      file: StaticString = #file, 
+      file: StaticString = #filePath, 
       line: UInt = #line
     ) -> ValidationError? {
     // Validation of token choice is currently causing assertion failures where
@@ -144,7 +144,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       _ raw: RawSyntax?, 
       as _: RawTokenSyntax.Type, 
       tokenChoices: [TokenChoice], 
-      file: StaticString = #file, 
+      file: StaticString = #filePath, 
       line: UInt = #line
     ) -> ValidationError? {
     // Validation of token choice is currently causing assertion failures where

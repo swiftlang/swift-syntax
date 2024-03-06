@@ -14,7 +14,7 @@ import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 
-public class IncrementalParseUtilTest: XCTestCase {
+class IncrementalParseUtilTest: XCTestCase {
   public func testGetConcurrentEdits() {
     let source =
       """

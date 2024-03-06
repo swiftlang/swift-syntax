@@ -10,8 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+import SwiftParser
+public import SwiftSyntax
+#else
 import SwiftParser
 import SwiftSyntax
+#endif
 
 /// ``MigrateToNewIfLetSyntax`` will visit each if expression in the Syntax tree, and
 /// checks if there is an if condition which is of the pre Swift 5.7 "if-let-style"

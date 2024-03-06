@@ -10,8 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+import SwiftParser
+public import SwiftSyntax
+#else
 import SwiftParser
 import SwiftSyntax
+#endif
 
 /// Given a set of positions in a source file, resolve the names of the
 /// declarations that are referenced at these locations and, if they refer to

@@ -100,7 +100,7 @@ extension OperatorTable {
   }
 }
 
-public class OperatorPrecedenceTests: XCTestCase {
+class OperatorPrecedenceTests: XCTestCase {
   func testLogicalExprsSingle() throws {
     let opPrecedence = OperatorTable.logicalOperators
     let parsed = Parser.parse(source: "x && y || w && v || z")

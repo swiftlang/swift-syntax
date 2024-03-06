@@ -8,7 +8,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftSyntax
+#else
 import SwiftSyntax
+#endif
 
 /// Describes a macro that can create the body for a function that does not
 /// have one.

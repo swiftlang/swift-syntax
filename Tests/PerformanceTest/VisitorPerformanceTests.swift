@@ -15,7 +15,7 @@ import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 
-public class VisitorPerformanceTests: XCTestCase {
+class VisitorPerformanceTests: XCTestCase {
 
   var inputFile: URL {
     return URL(fileURLWithPath: #file)

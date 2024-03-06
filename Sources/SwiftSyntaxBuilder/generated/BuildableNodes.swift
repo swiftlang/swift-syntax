@@ -12,7 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(ExperimentalLanguageFeatures) public import SwiftSyntax
+#else
 @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+#endif
 
 extension AccessorDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders

@@ -155,8 +155,8 @@ extension SyntaxProtocol {
   }
 }
 
-public struct FunctionMacro: ExpressionMacro {
-  public static func expansion<
+struct FunctionMacro: ExpressionMacro {
+  static func expansion<
     Node: FreestandingMacroExpansionSyntax,
     Context: MacroExpansionContext
   >(
@@ -173,8 +173,8 @@ public struct FunctionMacro: ExpressionMacro {
   }
 }
 
-public struct MultilineFunctionMacro: ExpressionMacro {
-  public static func expansion<
+struct MultilineFunctionMacro: ExpressionMacro {
+  static func expansion<
     Node: FreestandingMacroExpansionSyntax,
     Context: MacroExpansionContext
   >(
@@ -191,8 +191,8 @@ public struct MultilineFunctionMacro: ExpressionMacro {
   }
 }
 
-public struct AllLexicalContextsMacro: DeclarationMacro {
-  public static func expansion(
+struct AllLexicalContextsMacro: DeclarationMacro {
+  static func expansion(
     of node: some FreestandingMacroExpansionSyntax,
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {

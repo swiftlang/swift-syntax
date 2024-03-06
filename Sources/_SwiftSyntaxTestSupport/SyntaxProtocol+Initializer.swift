@@ -10,10 +10,17 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+import SwiftBasicFormat
+@_spi(Testing) import SwiftParser
+@_spi(RawSyntax) public import SwiftSyntax
+import SwiftSyntaxBuilder
+#else
 import SwiftBasicFormat
 @_spi(Testing) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
 import SwiftSyntaxBuilder
+#endif
 
 private class InitializerExprFormat: BasicFormat {
   public init() {

@@ -326,7 +326,7 @@ fileprivate func assertRefactorPlaceholder(
   wrap: Bool = true,
   expected: String,
   indentationWidth: Trivia? = nil,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
   let token: TokenSyntax
@@ -353,7 +353,7 @@ fileprivate func assertRefactorPlaceholderCall(
   placeholder: Int = 0,
   expected: String,
   indentationWidth: Trivia? = nil,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
   var parser = Parser(expr)
@@ -376,7 +376,7 @@ fileprivate func assertRefactorPlaceholderToken(
   placeholder: Int = 0,
   expected: String,
   indentationWidth: Trivia? = nil,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
   var parser = Parser(expr)
@@ -398,7 +398,7 @@ fileprivate func assertExpandEditorPlaceholdersToTrailingClosures(
   _ expr: String,
   expected: String,
   indentationWidth: Trivia? = nil,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
   var parser = Parser(expr)

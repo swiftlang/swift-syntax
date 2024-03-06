@@ -14,7 +14,7 @@ import SwiftDiagnostics
 import SwiftParserDiagnostics
 import XCTest
 
-public class DiagnosticInfrastructureTests: XCTestCase {
+class DiagnosticInfrastructureTests: XCTestCase {
   public func testDiagnosticID() {
     struct TestDiagnostic: ParserError {
       let message: String = "My test diagnostic"

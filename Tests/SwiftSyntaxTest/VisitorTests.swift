@@ -13,7 +13,7 @@
 import SwiftSyntax
 import XCTest
 
-public class VisitorTests: XCTestCase {
+class VisitorTests: XCTestCase {
   public func testVisitMissingNodes() {
     let node = ReturnStmtSyntax(returnKeyword: .keyword(.return), expression: ExprSyntax(MissingExprSyntax()))
 

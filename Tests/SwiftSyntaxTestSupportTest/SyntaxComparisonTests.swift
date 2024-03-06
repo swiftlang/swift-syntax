@@ -19,7 +19,7 @@ private func parse(source: String) -> Syntax {
   return Syntax(Parser.parse(source: source))
 }
 
-public class SyntaxComparisonTests: XCTestCase {
+class SyntaxComparisonTests: XCTestCase {
   public func testSame() throws {
     let expected = Syntax(makeFunc(name: .identifier("f")))
 

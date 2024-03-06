@@ -18,7 +18,7 @@ import XCTest
 fileprivate func assertIndentation(
   of sourceFile: SourceFileSyntax,
   _ expected: Trivia?,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   let inferred = BasicFormat.inferIndentation(of: sourceFile)

@@ -10,10 +10,17 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+import SwiftDiagnostics
+public import SwiftParser
+import SwiftParserDiagnostics
+import SwiftSyntax
+#else
 import SwiftDiagnostics
 import SwiftParser
 import SwiftParserDiagnostics
 import SwiftSyntax
+#endif
 
 // Don't introduce a dependency on OSLog when building SwiftSyntax using CMake
 // for the compiler.
@@ -21,7 +28,13 @@ import SwiftSyntax
 import OSLog
 #endif
 
+/// Only set from `withStringInterpolationParsingErrorsSuppressed`, which is only intended for testing purposes that are
+/// single-threaded.
+#if swift(>=6)
+fileprivate nonisolated(unsafe) var suppressStringInterpolationParsingErrors = false
+#else
 fileprivate var suppressStringInterpolationParsingErrors = false
+#endif
 
 /// Run the body, disabling any runtime warnings about syntax error in string
 /// interpolation inside the body.

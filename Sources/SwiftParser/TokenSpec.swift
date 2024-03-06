@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(RawSyntax) public import SwiftSyntax
+#else
 @_spi(RawSyntax) import SwiftSyntax
+#endif
 
 /// Pre-computes the keyword a lexeme might represent. This makes matching
 /// a lexeme that has been converted into `PrepareForKeyword` match cheaper to

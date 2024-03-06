@@ -26,7 +26,7 @@ fileprivate func assertSyntaxCollectionManipulation(
   initialElements: [Int],
   transformation: (_ array: inout ArrayExprSyntax) -> Void,
   expectedElements: [Int],
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   var modifiedArray = ArrayExprSyntax {
@@ -56,7 +56,7 @@ fileprivate func assertSyntaxCollectionManipulation(
   }
 }
 
-public class SyntaxCollectionsTests: XCTestCase {
+class SyntaxCollectionsTests: XCTestCase {
   public func testAppendElement() {
     assertSyntaxCollectionManipulation(
       initialElements: [0],

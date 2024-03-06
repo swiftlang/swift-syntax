@@ -195,7 +195,7 @@ func assertAnnotated(
   markedSource: String,
   withDiagnostics diagnosticDescriptors: [DiagnosticDescriptor],
   matches expectedAnnotatedSource: String,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   let (markers, source) = extractMarkers(markedSource)

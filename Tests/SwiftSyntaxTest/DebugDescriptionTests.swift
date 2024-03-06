@@ -22,7 +22,7 @@ private extension String {
   }
 }
 
-public class DebugDescriptionTests: XCTestCase {
+class DebugDescriptionTests: XCTestCase {
   public func testDump() {
     struct TestCase {
       let syntax: Any

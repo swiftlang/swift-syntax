@@ -10,9 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftParser
+public import SwiftSyntax
+private import XCTest
+#else
 import SwiftParser
 import SwiftSyntax
 import XCTest
+#endif
 
 /// This function is used to verify the correctness of incremental parsing
 /// containing three parts:
@@ -36,7 +42,7 @@ import XCTest
 public func assertIncrementalParse(
   _ source: String,
   reusedNodes expectedReusedNodes: [ReusedNodeSpec] = [],
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   let (concurrentEdits, originalSource, editedSource) = extractEditsAndSources(from: source)
@@ -147,7 +153,7 @@ public struct ReusedNodeSpec {
   public init(
     _ source: String,
     kind: SyntaxKind,
-    file: StaticString = #file,
+    file: StaticString = #filePath,
     line: UInt = #line
   ) {
     self.source = source

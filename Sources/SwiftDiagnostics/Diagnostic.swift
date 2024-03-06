@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftSyntax
+#else
 import SwiftSyntax
+#endif
 
 public struct Diagnostic: CustomDebugStringConvertible, Sendable {
   /// The message that should be displayed to the user

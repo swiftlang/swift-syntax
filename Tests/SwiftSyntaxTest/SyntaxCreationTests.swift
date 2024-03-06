@@ -29,7 +29,7 @@ fileprivate func cannedStructDecl() -> StructDeclSyntax {
   )
 }
 
-public class SyntaxCreationTests: XCTestCase {
+class SyntaxCreationTests: XCTestCase {
 
   public func testGenerated() {
 

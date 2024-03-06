@@ -12,7 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(RawSyntax) public import SwiftSyntax
+#else
 @_spi(RawSyntax) import SwiftSyntax
+#endif
 
 public protocol SyntaxParseable: SyntaxProtocol {
   static func parse(from parser: inout Parser) -> Self

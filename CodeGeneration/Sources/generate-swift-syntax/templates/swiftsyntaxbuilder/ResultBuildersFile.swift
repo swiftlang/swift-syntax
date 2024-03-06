@@ -16,7 +16,15 @@ import SyntaxSupport
 import Utils
 
 let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax("import SwiftSyntax")
+  DeclSyntax(
+    """
+    #if swift(>=6)
+    public import SwiftSyntax
+    #else
+    import SwiftSyntax
+    #endif
+    """
+  )
 
   for node in SYNTAX_NODES.compactMap(\.collectionNode) {
     let type = SyntaxBuildableType(kind: .node(kind: node.kind))

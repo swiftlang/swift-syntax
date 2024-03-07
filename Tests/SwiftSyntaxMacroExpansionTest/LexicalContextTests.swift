@@ -200,6 +200,21 @@ public struct AllLexicalContextsMacro: DeclarationMacro {
   }
 }
 
+public struct LexicalContextDescriptionMacro: ExpressionMacro {
+  public static func expansion(
+    of node: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
+  ) throws -> ExprSyntax {
+    let descriptions = context.lexicalContext.reduce(into: "") { descriptions, syntax in
+      descriptions += "\(syntax.trimmed)\n"
+    }
+    return """
+      \"\"\"
+      \(raw: descriptions)\"\"\"
+      """
+  }
+}
+
 final class LexicalContextTests: XCTestCase {
   private let indentationWidth: Trivia = .spaces(2)
 
@@ -505,5 +520,49 @@ final class LexicalContextTests: XCTestCase {
     // Test closures separately, because they don't fit as declaration macros.
     let closure: ExprSyntax = "{ (a, b) in print(a + b) }"
     XCTAssertEqual(closure.asMacroLexicalContext()!.description, "{ (a, b) in }")
+
+    // Test freestanding macros separately, because since the context contains
+    // the full body of the macro, including each decl from the context as a new
+    // decl in the expansion results in a cycle. So we instead use a macro that
+    // generates a description of the lexical context.
+    assertMacroExpansion(
+      """
+      #M(a: 1, b: 2) { c in
+        struct S {
+          let arg: C
+          var contextDescription: String {
+            #lexicalContextDescription
+          }
+        }
+        return S(arg: c)
+      }
+      """,
+      expandedSource: #"""
+        #M(a: 1, b: 2) { c in
+          struct S {
+            let arg: C
+            var contextDescription: String {
+              """
+              contextDescription: String
+              struct S {}
+              { c in
+              }
+              #M(a: 1, b: 2) { c in
+                struct S {
+                  let arg: C
+                  var contextDescription: String {
+                    #lexicalContextDescription
+                  }
+                }
+                return S(arg: c)
+              }
+              """
+            }
+          }
+          return S(arg: c)
+        }
+        """#,
+      macros: ["lexicalContextDescription": LexicalContextDescriptionMacro.self]
+    )
   }
 }

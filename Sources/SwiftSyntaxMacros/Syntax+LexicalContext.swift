@@ -57,6 +57,11 @@ extension SyntaxProtocol {
       patternBinding.initializer = nil
       return Syntax(patternBinding)
 
+    // Freestanding macros are fine as-is because if any arguments change
+    // the whole macro would have to be re-evaluated.
+    case let freestandingMacro as FreestandingMacroExpansionSyntax:
+      return Syntax(freestandingMacro.detached) as Syntax
+
     default:
       return nil
     }

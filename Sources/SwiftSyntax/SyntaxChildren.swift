@@ -411,6 +411,8 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection {
     self.viewMode = viewMode
   }
 
+  /// - Note: Inline so we don't retain `Syntax.Info` when creating `NonNilRawSyntaxChildren` from a `Syntax`.
+  @inline(__always)
   init(_ node: Syntax, viewMode: SyntaxTreeViewMode) {
     self.init(node.absoluteRaw, viewMode: viewMode)
   }

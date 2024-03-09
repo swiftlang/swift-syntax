@@ -347,17 +347,22 @@ public struct ConcurrentEdits: Sendable {
         if existingEdit.replacementRange.intersectsOrTouches(editToAdd.range) {
           let intersectionLength =
             existingEdit.replacementRange.intersected(editToAdd.range).length
+          let replacement: [UInt8]
+          replacement =
+            existingEdit.replacement.prefix(max(0, editToAdd.offset - existingEdit.replacementRange.offset))
+            + editToAdd.replacement
+            + existingEdit.replacement.suffix(max(0, existingEdit.replacementRange.endOffset - editToAdd.endOffset))
           editToAdd = IncrementalEdit(
             offset: Swift.min(existingEdit.offset, editToAdd.offset),
             length: existingEdit.length + editToAdd.length - intersectionLength,
-            replacementLength: existingEdit.replacementLength + editToAdd.replacementLength - intersectionLength
+            replacement: replacement
           )
           editIndicesMergedWithNewEdit.append(index)
         } else if existingEdit.offset < editToAdd.endOffset {
           editToAdd = IncrementalEdit(
             offset: editToAdd.offset - existingEdit.replacementLength + existingEdit.length,
             length: editToAdd.length,
-            replacementLength: editToAdd.replacementLength
+            replacement: editToAdd.replacement
           )
         }
       }

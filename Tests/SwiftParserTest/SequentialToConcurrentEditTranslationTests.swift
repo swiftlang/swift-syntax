@@ -36,14 +36,24 @@ let longString = """
 func verifySequentialToConcurrentTranslation(
   _ sequential: [IncrementalEdit],
   _ expectedConcurrent: [IncrementalEdit],
-  testString: String = longString
+  testString: String = longString,
+  file: StaticString = #file,
+  line: UInt = #line
 ) {
   let concurrent = ConcurrentEdits(fromSequential: sequential)
-  XCTAssertEqual(concurrent.edits, expectedConcurrent)
+  XCTAssertEqual(concurrent.edits, expectedConcurrent, file: file, line: line)
   XCTAssertEqual(
     applyEdits(sequential, concurrent: false, to: testString),
-    applyEdits(concurrent.edits, concurrent: true, to: testString)
+    applyEdits(concurrent.edits, concurrent: true, to: testString),
+    file: file,
+    line: line
   )
+}
+
+fileprivate extension IncrementalEdit {
+  init(offset: Int, length: Int, replacement: String) {
+    self.init(offset: offset, length: length, replacement: Array(replacement.utf8))
+  }
 }
 
 final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
@@ -55,8 +65,8 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     XCTAssertThrowsError(
       try {
         try ConcurrentEdits(concurrent: [
-          IncrementalEdit(offset: 5, length: 1, replacementLength: 0),
-          IncrementalEdit(offset: 5, length: 1, replacementLength: 0),
+          IncrementalEdit(offset: 5, length: 1, replacement: ""),
+          IncrementalEdit(offset: 5, length: 1, replacement: ""),
         ])
       }()
     )
@@ -65,10 +75,10 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testSingleEdit1() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 1, replacementLength: 0)
+        IncrementalEdit(offset: 5, length: 1, replacement: "")
       ],
       [
-        IncrementalEdit(offset: 5, length: 1, replacementLength: 0)
+        IncrementalEdit(offset: 5, length: 1, replacement: "")
       ]
     )
   }
@@ -76,10 +86,10 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testSingleEdit2() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 0, replacementLength: 1)
+        IncrementalEdit(offset: 5, length: 0, replacement: "1")
       ],
       [
-        IncrementalEdit(offset: 5, length: 0, replacementLength: 1)
+        IncrementalEdit(offset: 5, length: 0, replacement: "1")
       ]
     )
   }
@@ -87,12 +97,12 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testTwoNonOverlappingDeletesInFrontToBackOrder() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 1, replacementLength: 0),
-        IncrementalEdit(offset: 10, length: 2, replacementLength: 0),
+        IncrementalEdit(offset: 5, length: 1, replacement: ""),
+        IncrementalEdit(offset: 10, length: 2, replacement: ""),
       ],
       [
-        IncrementalEdit(offset: 5, length: 1, replacementLength: 0),
-        IncrementalEdit(offset: 11, length: 2, replacementLength: 0),
+        IncrementalEdit(offset: 5, length: 1, replacement: ""),
+        IncrementalEdit(offset: 11, length: 2, replacement: ""),
       ]
     )
   }
@@ -100,12 +110,12 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testTwoNonOverlappingDeletesInBackToFrontOrder() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 10, length: 2, replacementLength: 0),
-        IncrementalEdit(offset: 5, length: 1, replacementLength: 0),
+        IncrementalEdit(offset: 10, length: 2, replacement: ""),
+        IncrementalEdit(offset: 5, length: 1, replacement: ""),
       ],
       [
-        IncrementalEdit(offset: 5, length: 1, replacementLength: 0),
-        IncrementalEdit(offset: 10, length: 2, replacementLength: 0),
+        IncrementalEdit(offset: 5, length: 1, replacement: ""),
+        IncrementalEdit(offset: 10, length: 2, replacement: ""),
       ]
     )
   }
@@ -113,12 +123,12 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testTwoNonOverlappingInsertionsInFrontToBackOrder() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 0, replacementLength: 2),
-        IncrementalEdit(offset: 10, length: 0, replacementLength: 3),
+        IncrementalEdit(offset: 5, length: 0, replacement: "12"),
+        IncrementalEdit(offset: 10, length: 0, replacement: "345"),
       ],
       [
-        IncrementalEdit(offset: 5, length: 0, replacementLength: 2),
-        IncrementalEdit(offset: 8, length: 0, replacementLength: 3),
+        IncrementalEdit(offset: 5, length: 0, replacement: "12"),
+        IncrementalEdit(offset: 8, length: 0, replacement: "345"),
       ]
     )
   }
@@ -126,12 +136,12 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testTwoNonOverlappingInsertionsInBackToFrontOrder() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 10, length: 0, replacementLength: 3),
-        IncrementalEdit(offset: 5, length: 0, replacementLength: 2),
+        IncrementalEdit(offset: 10, length: 0, replacement: "123"),
+        IncrementalEdit(offset: 5, length: 0, replacement: "45"),
       ],
       [
-        IncrementalEdit(offset: 5, length: 0, replacementLength: 2),
-        IncrementalEdit(offset: 10, length: 0, replacementLength: 3),
+        IncrementalEdit(offset: 5, length: 0, replacement: "45"),
+        IncrementalEdit(offset: 10, length: 0, replacement: "123"),
       ]
     )
   }
@@ -139,12 +149,12 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testTwoNonOverlappingReplacementsInFrontToBackOrder() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 4, replacementLength: 2),
-        IncrementalEdit(offset: 20, length: 5, replacementLength: 3),
+        IncrementalEdit(offset: 5, length: 4, replacement: "12"),
+        IncrementalEdit(offset: 20, length: 5, replacement: "345"),
       ],
       [
-        IncrementalEdit(offset: 5, length: 4, replacementLength: 2),
-        IncrementalEdit(offset: 22, length: 5, replacementLength: 3),
+        IncrementalEdit(offset: 5, length: 4, replacement: "12"),
+        IncrementalEdit(offset: 22, length: 5, replacement: "345"),
       ]
     )
   }
@@ -152,12 +162,12 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testTwoNonOverlappingReplacementsInBackToFrontOrder() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 20, length: 5, replacementLength: 3),
-        IncrementalEdit(offset: 5, length: 4, replacementLength: 2),
+        IncrementalEdit(offset: 20, length: 5, replacement: "123"),
+        IncrementalEdit(offset: 5, length: 4, replacement: "45"),
       ],
       [
-        IncrementalEdit(offset: 5, length: 4, replacementLength: 2),
-        IncrementalEdit(offset: 20, length: 5, replacementLength: 3),
+        IncrementalEdit(offset: 5, length: 4, replacement: "45"),
+        IncrementalEdit(offset: 20, length: 5, replacement: "123"),
       ]
     )
   }
@@ -165,16 +175,16 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testMultipleNonOverlappingEdits() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 0, length: 6, replacementLength: 0),
-        IncrementalEdit(offset: 15, length: 7, replacementLength: 9),
-        IncrementalEdit(offset: 10, length: 0, replacementLength: 3),
-        IncrementalEdit(offset: 30, length: 2, replacementLength: 2),
+        IncrementalEdit(offset: 0, length: 6, replacement: ""),
+        IncrementalEdit(offset: 15, length: 7, replacement: "123456789"),
+        IncrementalEdit(offset: 10, length: 0, replacement: "abc"),
+        IncrementalEdit(offset: 30, length: 2, replacement: "AB"),
       ],
       [
-        IncrementalEdit(offset: 0, length: 6, replacementLength: 0),
-        IncrementalEdit(offset: 16, length: 0, replacementLength: 3),
-        IncrementalEdit(offset: 21, length: 7, replacementLength: 9),
-        IncrementalEdit(offset: 31, length: 2, replacementLength: 2),
+        IncrementalEdit(offset: 0, length: 6, replacement: ""),
+        IncrementalEdit(offset: 16, length: 0, replacement: "abc"),
+        IncrementalEdit(offset: 21, length: 7, replacement: "123456789"),
+        IncrementalEdit(offset: 31, length: 2, replacement: "AB"),
       ]
     )
   }
@@ -184,11 +194,11 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     // [--- edit2 ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 10, length: 1, replacementLength: 3),
-        IncrementalEdit(offset: 5, length: 5, replacementLength: 1),
+        IncrementalEdit(offset: 10, length: 1, replacement: "xyz"),
+        IncrementalEdit(offset: 5, length: 5, replacement: "a"),
       ],
       [
-        IncrementalEdit(offset: 5, length: 6, replacementLength: 4)
+        IncrementalEdit(offset: 5, length: 6, replacement: "axyz")
       ]
     )
   }
@@ -198,11 +208,11 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     // [--- edit2 ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 10, length: 1, replacementLength: 3),
-        IncrementalEdit(offset: 5, length: 5, replacementLength: 0),
+        IncrementalEdit(offset: 10, length: 1, replacement: "xyz"),
+        IncrementalEdit(offset: 5, length: 5, replacement: ""),
       ],
       [
-        IncrementalEdit(offset: 5, length: 6, replacementLength: 3)
+        IncrementalEdit(offset: 5, length: 6, replacement: "xyz")
       ]
     )
   }
@@ -212,11 +222,11 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     // [--- edit2 ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 3, replacementLength: 1),
-        IncrementalEdit(offset: 4, length: 2, replacementLength: 2),
+        IncrementalEdit(offset: 5, length: 3, replacement: "a"),
+        IncrementalEdit(offset: 4, length: 2, replacement: "xy"),
       ],
       [
-        IncrementalEdit(offset: 4, length: 4, replacementLength: 2)
+        IncrementalEdit(offset: 4, length: 4, replacement: "xy")
       ]
     )
   }
@@ -226,11 +236,11 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     // [------- edit2 --------]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 3, replacementLength: 1),
-        IncrementalEdit(offset: 4, length: 4, replacementLength: 2),
+        IncrementalEdit(offset: 5, length: 3, replacement: "a"),
+        IncrementalEdit(offset: 4, length: 4, replacement: "xy"),
       ],
       [
-        IncrementalEdit(offset: 4, length: 6, replacementLength: 2)
+        IncrementalEdit(offset: 4, length: 6, replacement: "xy")
       ]
     )
   }
@@ -240,11 +250,11 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     // [--- edit2 (length 0) ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 0, replacementLength: 1),
-        IncrementalEdit(offset: 5, length: 0, replacementLength: 2),
+        IncrementalEdit(offset: 5, length: 0, replacement: "a"),
+        IncrementalEdit(offset: 5, length: 0, replacement: "xy"),
       ],
       [
-        IncrementalEdit(offset: 5, length: 0, replacementLength: 3)
+        IncrementalEdit(offset: 5, length: 0, replacement: "xya")
       ]
     )
   }
@@ -254,11 +264,11 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     // [--- edit2 ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 1, replacementLength: 2),
-        IncrementalEdit(offset: 5, length: 1, replacementLength: 3),
+        IncrementalEdit(offset: 5, length: 1, replacement: "ab"),
+        IncrementalEdit(offset: 5, length: 1, replacement: "xyz"),
       ],
       [
-        IncrementalEdit(offset: 5, length: 1, replacementLength: 4)
+        IncrementalEdit(offset: 5, length: 1, replacement: "xyzb")
       ]
     )
   }
@@ -268,11 +278,11 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     // [--- edit2 ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 2, replacementLength: 2),
-        IncrementalEdit(offset: 5, length: 1, replacementLength: 3),
+        IncrementalEdit(offset: 5, length: 2, replacement: "ab"),
+        IncrementalEdit(offset: 5, length: 1, replacement: "xyz"),
       ],
       [
-        IncrementalEdit(offset: 5, length: 2, replacementLength: 4)
+        IncrementalEdit(offset: 5, length: 2, replacement: "xyzb")
       ]
     )
   }
@@ -282,11 +292,11 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     //        [--- edit2 ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 5, replacementLength: 2),
-        IncrementalEdit(offset: 6, length: 1, replacementLength: 0),
+        IncrementalEdit(offset: 5, length: 5, replacement: "ab"),
+        IncrementalEdit(offset: 6, length: 1, replacement: ""),
       ],
       [
-        IncrementalEdit(offset: 5, length: 5, replacementLength: 1)
+        IncrementalEdit(offset: 5, length: 5, replacement: "a")
       ]
     )
   }
@@ -296,11 +306,11 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     //        [--- edit2 ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 3, length: 3, replacementLength: 2),
-        IncrementalEdit(offset: 4, length: 3, replacementLength: 2),
+        IncrementalEdit(offset: 3, length: 3, replacement: "ab"),
+        IncrementalEdit(offset: 4, length: 3, replacement: "xy"),
       ],
       [
-        IncrementalEdit(offset: 3, length: 5, replacementLength: 3)
+        IncrementalEdit(offset: 3, length: 5, replacement: "axy")
       ]
     )
   }
@@ -308,11 +318,11 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testTwoOverlappingInsertions() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 0, replacementLength: 3),
-        IncrementalEdit(offset: 6, length: 0, replacementLength: 2),
+        IncrementalEdit(offset: 5, length: 0, replacement: "abc"),
+        IncrementalEdit(offset: 6, length: 0, replacement: "xy"),
       ],
       [
-        IncrementalEdit(offset: 5, length: 0, replacementLength: 5)
+        IncrementalEdit(offset: 5, length: 0, replacement: "axybc")
       ]
     )
   }
@@ -326,11 +336,13 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
       var edits: [IncrementalEdit] = []
       let numEdits = Int.random(in: 1..<10)
       for _ in 0..<numEdits {
+        let replacementLength = Int.random(in: 0..<32)
+        let replacementBytes = (0..<replacementLength).map { _ in (UInt8(ascii: "a")..<UInt8(ascii: "z")).randomElement()! }
         edits.append(
           IncrementalEdit(
             offset: Int.random(in: 0..<32),
             length: Int.random(in: 0..<32),
-            replacementLength: Int.random(in: 0..<32)
+            replacement: replacementBytes
           )
         )
       }

@@ -32,17 +32,17 @@ public class IncrementalParseUtilTest: XCTestCase {
     XCTAssertEqual(
       concurrentEdits.edits,
       [
-        IncrementalEdit(offset: 0, length: 5, replacementLength: 6),
-        IncrementalEdit(offset: 27, length: 0, replacementLength: 12),
-        IncrementalEdit(offset: 35, length: 13, replacementLength: 0),
+        IncrementalEdit(offset: 0, length: 5, replacement: "struct"),
+        IncrementalEdit(offset: 27, length: 0, replacement: "let bar = 10"),
+        IncrementalEdit(offset: 35, length: 13, replacement: ""),
       ]
     )
 
     let expectedSource =
       """
-      ?????? foo {
+      struct foo {
         init() {
-          ????????????
+          let bar = 10
         }
 
         
@@ -64,7 +64,7 @@ public class IncrementalParseUtilTest: XCTestCase {
     XCTAssertEqual(
       concurrentEdits.edits,
       [
-        IncrementalEdit(offset: 0, length: 25, replacementLength: 4)
+        IncrementalEdit(offset: 0, length: 25, replacement: "🎉")
       ]
     )
   }
@@ -79,7 +79,7 @@ public class IncrementalParseUtilTest: XCTestCase {
     XCTAssertEqual(
       concurrentEdits.edits,
       [
-        IncrementalEdit(offset: 0, length: 1, replacementLength: 25)
+        IncrementalEdit(offset: 0, length: 1, replacement: "👨‍👩‍👧‍👦")
       ]
     )
   }

@@ -50,8 +50,12 @@ public struct ByteSourceRange: Equatable, Sendable {
 public struct IncrementalEdit: Equatable, Sendable {
   /// The byte range of the original source buffer that the edit applies to.
   public let range: ByteSourceRange
+
+  /// The UTF-8 bytes that should be inserted as part of the edit
+  public let replacement: [UInt8]
+
   /// The length of the edit replacement in UTF8 bytes.
-  public let replacementLength: Int
+  public var replacementLength: Int { replacement.count }
 
   public var offset: Int { return range.offset }
 
@@ -64,14 +68,25 @@ public struct IncrementalEdit: Equatable, Sendable {
     return ByteSourceRange(offset: offset, length: replacementLength)
   }
 
+  @available(*, deprecated, message: "Use IncrementalEdit(range:replacement:) instead")
   public init(range: ByteSourceRange, replacementLength: Int) {
     self.range = range
-    self.replacementLength = replacementLength
+    self.replacement = Array(repeating: UInt8(ascii: " "), count: replacementLength)
   }
 
+  @available(*, deprecated, message: "Use IncrementalEdit(offset:length:replacement:) instead")
   public init(offset: Int, length: Int, replacementLength: Int) {
     self.range = ByteSourceRange(offset: offset, length: length)
-    self.replacementLength = replacementLength
+    self.replacement = Array(repeating: UInt8(ascii: " "), count: replacementLength)
+  }
+
+  public init(offset: Int, length: Int, replacement: [UInt8]) {
+    self.range = ByteSourceRange(offset: offset, length: length)
+    self.replacement = replacement
+  }
+
+  public init(offset: Int, length: Int, replacement: String) {
+    self.init(offset: offset, length: length, replacement: Array(replacement.utf8))
   }
 
   public func intersectsOrTouchesRange(_ other: ByteSourceRange) -> Bool {

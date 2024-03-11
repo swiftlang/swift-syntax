@@ -45,7 +45,8 @@ extension StringLiteralExprSyntax {
     return result
   }
 
-  fileprivate var stringLiteralKind: StringLiteralKind? {
+  @_spi(Compiler)
+  public var stringLiteralKind: StringLiteralKind? {
     switch openingQuote.tokenKind {
     case .stringQuote:
       return .singleLine
@@ -58,13 +59,15 @@ extension StringLiteralExprSyntax {
     }
   }
 
-  fileprivate var delimiterLength: Int {
+  @_spi(Compiler)
+  public var delimiterLength: Int {
     openingPounds?.text.count ?? 0
   }
 }
 
 extension StringSegmentSyntax {
-  fileprivate func appendUnescapedLiteralValue(
+  @_spi(Compiler)
+  public func appendUnescapedLiteralValue(
     stringLiteralKind: StringLiteralKind,
     delimiterLength: Int,
     to output: inout String

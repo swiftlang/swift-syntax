@@ -10,10 +10,17 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftBasicFormat
+import SwiftDiagnostics
+@_spi(RawSyntax) @_spi(Testing) import SwiftParser
+@_spi(RawSyntax) public import SwiftSyntax
+#else
 import SwiftBasicFormat
 import SwiftDiagnostics
 @_spi(RawSyntax) @_spi(Testing) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
+#endif
 
 /// An individual interpolated syntax node.
 struct InterpolatedSyntaxNode {
@@ -454,6 +461,12 @@ extension TokenSyntax: SyntaxExpressibleByStringInterpolation {
   }
 }
 
+#if compiler(>=6)
+// Silence warning that TokenSyntax has a retroactive conformance to `ExpressibleByStringInterpolation` through
+// `SyntaxExpressibleByStringInterpolation`.
+extension TokenSyntax: @retroactive ExpressibleByStringInterpolation {}
+#endif
+
 // MARK: - Trivia expressible as string
 
 extension TriviaPiece {
@@ -476,7 +489,7 @@ struct UnexpectedTrivia: DiagnosticMessage {
 
 }
 
-extension Trivia: ExpressibleByStringInterpolation {
+extension Trivia {
   public init(stringInterpolation: String.StringInterpolation) {
     var text = String(stringInterpolation: stringInterpolation)
     let pieces = text.withUTF8 { (buf) -> [TriviaPiece] in
@@ -498,3 +511,9 @@ extension Trivia: ExpressibleByStringInterpolation {
     self.init(stringInterpolation: interpolation)
   }
 }
+
+#if compiler(>=6)
+extension Trivia: @retroactive ExpressibleByStringInterpolation {}
+#else
+extension Trivia: ExpressibleByStringInterpolation {}
+#endif

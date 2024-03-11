@@ -20,7 +20,7 @@ fileprivate func assertPresumedSourceLocation(
   inspectionItemFilter: (CodeBlockItemSyntax.Item) -> (some SyntaxProtocol)? = { $0.as(VariableDeclSyntax.self) },
   presumedFile: String,
   presumedLine: Int,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   let converter = SourceLocationConverter(fileName: "input.swift", tree: source)

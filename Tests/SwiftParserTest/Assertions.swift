@@ -41,7 +41,7 @@ struct LexemeSpec {
     errorLocationMarker: String = "1️⃣",
     diagnostic: String? = nil,
     flags: Lexer.Lexeme.Flags = [],
-    file: StaticString = #file,
+    file: StaticString = #filePath,
     line: UInt = #line
   ) {
     self.rawTokenKind = rawTokenKind
@@ -70,7 +70,7 @@ private func assertTokens(
   _ actual: [Lexer.Lexeme],
   _ expected: [LexemeSpec],
   markerLocations: [String: Int],
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   guard actual.count == expected.count else {
@@ -190,7 +190,7 @@ private func assertTokens(
 func assertLexemes(
   _ markedSource: String,
   lexemes expectedLexemes: [LexemeSpec],
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   var (markerLocations, source) = extractMarkers(markedSource)
@@ -233,7 +233,7 @@ struct NoteSpec {
   init(
     locationMarker: String = "ℹ️",
     message: String,
-    file: StaticString = #file,
+    file: StaticString = #filePath,
     line: UInt = #line
   ) {
     self.locationMarker = locationMarker
@@ -273,7 +273,7 @@ struct DiagnosticSpec {
     highlight: String? = nil,
     notes: [NoteSpec] = [],
     fixIts: [String] = [],
-    file: StaticString = #file,
+    file: StaticString = #filePath,
     line: UInt = #line
   ) {
     self.locationMarker = locationMarker
@@ -472,7 +472,7 @@ class TokenPresenceFlipper: SyntaxRewriter {
   }
 }
 
-public struct AssertParseOptions: OptionSet {
+public struct AssertParseOptions: OptionSet, Sendable {
   public var rawValue: UInt8
 
   public init(rawValue: UInt8) {
@@ -491,7 +491,7 @@ public struct AssertParseOptions: OptionSet {
 extension ParserTestCase {
   /// After a test case has been mutated, assert that the mutated source
   /// round-trips and doesn’t hit any assertion failures in the parser.
-  fileprivate func assertMutationRoundTrip<S: SyntaxProtocol>(
+  fileprivate static func assertMutationRoundTrip<S: SyntaxProtocol>(
     source: [UInt8],
     _ parse: (inout Parser) -> S,
     swiftVersion: Parser.SwiftVersion?,
@@ -567,7 +567,7 @@ extension ParserTestCase {
   ///     `nil` to enable the default set of features provided by the test case.
   func assertParse<S: SyntaxProtocol>(
     _ markedSource: String,
-    _ parse: (inout Parser) -> S = { SourceFileSyntax.parse(from: &$0) },
+    _ parse: @Sendable (inout Parser) -> S = { SourceFileSyntax.parse(from: &$0) },
     substructure expectedSubstructure: (some SyntaxProtocol)? = Optional<Syntax>.none,
     substructureAfterMarker: String = "START",
     diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
@@ -576,7 +576,7 @@ extension ParserTestCase {
     options: AssertParseOptions = [],
     swiftVersion: Parser.SwiftVersion? = nil,
     experimentalFeatures: Parser.ExperimentalFeatures? = nil,
-    file: StaticString = #file,
+    file: StaticString = #filePath,
     line: UInt = #line
   ) {
     let experimentalFeatures = experimentalFeatures ?? self.experimentalFeatures
@@ -672,7 +672,7 @@ extension ParserTestCase {
       DispatchQueue.concurrentPerform(iterations: Array(tree.tokens(viewMode: .all)).count) { tokenIndex in
         let flippedTokenTree = TokenPresenceFlipper(flipTokenAtIndex: tokenIndex).rewrite(Syntax(tree))
         _ = ParseDiagnosticsGenerator.diagnostics(for: flippedTokenTree)
-        assertMutationRoundTrip(
+        Self.assertMutationRoundTrip(
           source: flippedTokenTree.syntaxTextBytes,
           parse,
           swiftVersion: swiftVersion,
@@ -689,7 +689,14 @@ extension ParserTestCase {
       DispatchQueue.concurrentPerform(iterations: mutations.count) { index in
         let mutation = mutations[index]
         let alternateSource = MutatedTreePrinter.print(tree: Syntax(tree), mutations: [mutation.offset: mutation.replacement])
-        assertMutationRoundTrip(source: alternateSource, parse, swiftVersion: swiftVersion, experimentalFeatures: experimentalFeatures, file: file, line: line)
+        Self.assertMutationRoundTrip(
+          source: alternateSource,
+          parse,
+          swiftVersion: swiftVersion,
+          experimentalFeatures: experimentalFeatures,
+          file: file,
+          line: line
+        )
       }
       #endif
     }
@@ -729,7 +736,7 @@ func assertBasicFormat<S: SyntaxProtocol>(
   parse: (inout Parser) -> S,
   swiftVersion: Parser.SwiftVersion?,
   experimentalFeatures: Parser.ExperimentalFeatures,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   var parser = Parser(source, swiftVersion: swiftVersion, experimentalFeatures: experimentalFeatures)

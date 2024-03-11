@@ -21,7 +21,7 @@ fileprivate func assertFormatted<T: SyntaxProtocol>(
   tree: T,
   expected: String,
   using format: BasicFormat = BasicFormat(indentationWidth: .spaces(4)),
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   assertStringsEqualWithDiff(tree.formatted(using: format).description, expected, file: file, line: line)
@@ -31,7 +31,7 @@ fileprivate func assertFormatted(
   source: String,
   expected: String,
   using format: BasicFormat = BasicFormat(indentationWidth: .spaces(4)),
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   assertFormatted(

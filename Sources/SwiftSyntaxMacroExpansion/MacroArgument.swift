@@ -10,8 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+import SwiftDiagnostics
+public import SwiftSyntax
+#else
 import SwiftDiagnostics
 import SwiftSyntax
+#endif
 
 enum DeclReferenceError: DiagnosticMessage {
   case nonLiteral

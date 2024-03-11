@@ -44,7 +44,7 @@ fileprivate func assertRawBytesLexeme(
   text: [UInt8],
   trailingTrivia: [UInt8] = [],
   error: SwiftSyntax.TokenDiagnostic? = nil,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   XCTAssertEqual(lexeme.rawTokenKind, kind, file: file, line: line)
@@ -63,7 +63,7 @@ fileprivate func assertRawBytesLexeme(
   XCTAssertEqual(lexeme.diagnostic, error, file: file, line: line)
 }
 
-public class LexerTests: ParserTestCase {
+class LexerTests: ParserTestCase {
   func testIdentifiers() {
     assertLexemes(
       "Hello World",

@@ -16,7 +16,7 @@ import XCTest
 fileprivate func assertNoFailures(
   _ failures: [ValidationFailure],
   message: String,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   if failures.isEmpty {
@@ -37,7 +37,7 @@ fileprivate func assertNoFailures(
 fileprivate func assertFailuresMatchXFails(
   _ failures: [ValidationFailure],
   expectedFailures: [ValidationFailure],
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   let matchedXFails = expectedFailures.filter { failures.contains($0) }

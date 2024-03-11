@@ -12,7 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftSyntax
+#else
 import SwiftSyntax
+#endif
 
 extension AccessorDeclSyntax {
   @available(*, deprecated, message: "Use an initializer with accessorSpecifier, parameters argument(s).")

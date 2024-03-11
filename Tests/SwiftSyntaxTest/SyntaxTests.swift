@@ -13,7 +13,7 @@
 import SwiftSyntax
 import XCTest
 
-public class SyntaxTests: XCTestCase {
+class SyntaxTests: XCTestCase {
 
   public func testHasError() {
     XCTAssertTrue(TokenSyntax.keyword(.func, presence: .missing).hasError)

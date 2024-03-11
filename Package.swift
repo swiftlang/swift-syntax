@@ -74,7 +74,8 @@ let package = Package(
 
     .target(
       name: "SwiftCompilerPlugin",
-      dependencies: ["SwiftCompilerPluginMessageHandling", "SwiftSyntaxMacros"]
+      dependencies: ["SwiftCompilerPluginMessageHandling", "SwiftSyntaxMacros"],
+      exclude: ["CMakeLists.txt"]
     ),
 
     .testTarget(
@@ -206,7 +207,6 @@ let package = Package(
       dependencies: ["SwiftSyntax"],
       exclude: ["CMakeLists.txt", "README.md"],
       swiftSettings: swiftParserSwiftSettings
-
     ),
 
     .testTarget(
@@ -247,7 +247,8 @@ let package = Package(
 
     .target(
       name: "SwiftRefactor",
-      dependencies: ["SwiftBasicFormat", "SwiftParser", "SwiftSyntax", "SwiftSyntaxBuilder"]
+      dependencies: ["SwiftBasicFormat", "SwiftParser", "SwiftSyntax", "SwiftSyntaxBuilder"],
+      exclude: ["CMakeLists.txt"]
     ),
 
     .testTarget(

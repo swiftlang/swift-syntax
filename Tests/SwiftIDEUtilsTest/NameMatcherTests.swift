@@ -28,7 +28,7 @@ fileprivate extension String {
 private func assertNameMatcherResult(
   _ markedText: String,
   expected: [DeclNameLocationSpec],
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   let (markers, input) = extractMarkers(markedText)
@@ -122,7 +122,7 @@ private struct DeclNameLocationSpec {
   }
 }
 
-public class NameMatcherTests: XCTestCase {
+class NameMatcherTests: XCTestCase {
   func testMemberCall() {
     assertNameMatcherResult(
       "Foo.1️⃣first(associated: 1)",

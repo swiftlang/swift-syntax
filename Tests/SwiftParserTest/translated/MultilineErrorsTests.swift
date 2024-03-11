@@ -23,7 +23,7 @@ extension ParserTestCase {
     diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
     applyFixIts: [String]? = nil,
     fixedSource expectedFixedSource: String? = nil,
-    file: StaticString = #file,
+    file: StaticString = #filePath,
     line: UInt = #line
   ) {
     for newline in ["\n", "\r", "\r\n"] {

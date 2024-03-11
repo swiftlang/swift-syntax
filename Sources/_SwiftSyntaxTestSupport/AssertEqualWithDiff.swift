@@ -10,7 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import Foundation
+private import XCTest
+#else
+import Foundation
 import XCTest
+#endif
 
 /// Asserts that the two strings are equal, providing Unix `diff`-style output if they are not.
 ///
@@ -28,7 +34,7 @@ public func assertStringsEqualWithDiff(
   _ expected: String,
   _ message: String = "",
   additionalInfo: @autoclosure () -> String? = nil,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   if actual == expected {
@@ -60,7 +66,7 @@ public func assertDataEqualWithDiff(
   _ expected: Data,
   _ message: String = "",
   additionalInfo: @autoclosure () -> String? = nil,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   if actual == expected {
@@ -85,7 +91,7 @@ public func failStringsEqualWithDiff(
   _ expected: String,
   _ message: String = "",
   additionalInfo: @autoclosure () -> String? = nil,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   let stringComparison: String

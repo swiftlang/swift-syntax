@@ -27,7 +27,15 @@ func tokenCaseMatch(_ caseName: TokenSyntax, experimentalFeature: ExperimentalFe
 }
 
 let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax("@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax")
+  DeclSyntax(
+    """
+    #if swift(>=6)
+    @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) public import SwiftSyntax
+    #else
+    @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+    #endif
+    """
+  )
 
   for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode) {
     for child in layoutNode.children {

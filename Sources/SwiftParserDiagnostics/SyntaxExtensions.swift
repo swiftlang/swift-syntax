@@ -191,7 +191,7 @@ extension TokenKind {
   }
 }
 
-public extension TriviaPiece {
+extension TriviaPiece {
   var isBackslash: Bool {
     switch self {
     case .backslashes: return true

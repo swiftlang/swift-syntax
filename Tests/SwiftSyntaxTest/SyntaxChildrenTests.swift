@@ -14,7 +14,7 @@ import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 
-public class SyntaxChildrenTests: XCTestCase {
+class SyntaxChildrenTests: XCTestCase {
 
   public func testIterateWithAllPresent() throws {
     let returnStmt = ReturnStmtSyntax(

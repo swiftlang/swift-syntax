@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) public import SwiftSyntax
+#else
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+#endif
 
 /// A set of `TokenSpecs`. We expect to consume one of the sets specs in the
 /// parser.

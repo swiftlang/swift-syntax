@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import XCTest
 import _SwiftSyntaxTestSupport
 
-public class SyntaxVisitorTests: XCTestCase {
+class SyntaxVisitorTests: XCTestCase {
   /// The syntax tree of the following source file
   /// ```swift
   /// func foo() {

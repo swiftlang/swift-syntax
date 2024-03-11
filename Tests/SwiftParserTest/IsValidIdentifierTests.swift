@@ -31,7 +31,7 @@ private struct ValidIdentifierSpec: ExpressibleByBooleanLiteral {
 private func assertValidIdentifier(
   _ name: String,
   _ spec: ValidIdentifierSpec,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   XCTAssertEqual(name.isValidSwiftIdentifier(for: .variableName), spec.variableName, "Checking identifier for variableName context", file: file, line: line)

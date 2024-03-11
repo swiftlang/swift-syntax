@@ -10,9 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftDiagnostics
+public import SwiftSyntax
+import SwiftSyntaxBuilder
+#else
 import SwiftDiagnostics
 import SwiftSyntax
 import SwiftSyntaxBuilder
+#endif
 
 /// Interface to extract information about the context in which a given
 /// macro is expanded.

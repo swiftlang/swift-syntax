@@ -13,7 +13,7 @@
 import SwiftSyntax
 import XCTest
 
-public class TriviaTests: XCTestCase {
+class TriviaTests: XCTestCase {
 
   func testTriviaEquatable() {
     XCTAssertEqual([.spaces(2), .tabs(1)] as Trivia, [.spaces(2), .tabs(1)])

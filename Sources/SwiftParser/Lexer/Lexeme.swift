@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(RawSyntax) public import SwiftSyntax
+#else
 @_spi(RawSyntax) import SwiftSyntax
+#endif
 
 extension Lexer {
   /// A trivia-delimited region of source text.
@@ -21,7 +25,7 @@ extension Lexer {
   @_spi(Testing)
   public struct Lexeme: CustomDebugStringConvertible {
     @_spi(Testing)
-    public struct Flags: OptionSet, CustomDebugStringConvertible {
+    public struct Flags: OptionSet, CustomDebugStringConvertible, Sendable {
       @_spi(Testing)
       public var rawValue: UInt8
 

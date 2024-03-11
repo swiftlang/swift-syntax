@@ -253,7 +253,7 @@ fileprivate func assertRefactorCall(
   _ callExpr: ExprSyntax,
   startAtArgument: Int = 0,
   expected: ExprSyntax?,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
   try assertRefactor(

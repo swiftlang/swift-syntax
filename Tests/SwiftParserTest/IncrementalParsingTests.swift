@@ -15,7 +15,7 @@ import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 
-public class IncrementalParsingTests: ParserTestCase {
+class IncrementalParsingTests: ParserTestCase {
 
   public func testBrokenMemberFunction() {
     assertIncrementalParse(

@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftSyntaxMacros
+#else
 import SwiftSyntaxMacros
+#endif
 
 @available(*, deprecated, message: "MacroExpansionErrorMessage has been moved to the SwiftSyntaxMacros module")
 public typealias MacroExpansionErrorMessage = SwiftSyntaxMacros.MacroExpansionErrorMessage

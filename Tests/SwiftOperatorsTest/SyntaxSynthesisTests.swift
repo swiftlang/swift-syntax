@@ -14,7 +14,7 @@ import SwiftOperators
 import SwiftSyntax
 import XCTest
 
-public class SyntaxSynthesisTests: XCTestCase {
+class SyntaxSynthesisTests: XCTestCase {
   func testInfixOperator() {
     let plus = Operator(
       kind: .infix,

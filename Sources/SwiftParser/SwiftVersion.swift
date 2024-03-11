@@ -12,7 +12,7 @@
 
 extension Parser {
   /// A Swift language version.
-  public enum SwiftVersion: Comparable {
+  public enum SwiftVersion: Comparable, Sendable {
     case v4
     case v5
     case v6

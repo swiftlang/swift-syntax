@@ -22,7 +22,7 @@ func assertRefactor<R: EditRefactoringProvider>(
   context: R.Context,
   provider: R.Type,
   expected: [SourceEdit],
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
   let edits = R.textRefactor(syntax: input, in: context)
@@ -80,7 +80,7 @@ func assertRefactor<R: SyntaxRefactoringProvider>(
   context: R.Context,
   provider: R.Type,
   expected: R.Output?,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
   let refactored = R.refactor(syntax: input, in: context)
@@ -122,7 +122,7 @@ func assertRefactor<I: SyntaxProtocol, R: EditRefactoringProvider>(
   context: R.Context,
   provider: R.Type,
   expected: [SourceEdit],
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
   let castInput = try XCTUnwrap(input.as(R.Input.self))
@@ -134,7 +134,7 @@ func assertRefactor<I: SyntaxProtocol, R: SyntaxRefactoringProvider, E: SyntaxPr
   context: R.Context,
   provider: R.Type,
   expected: E?,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
   let castInput = try XCTUnwrap(input.as(R.Input.self))

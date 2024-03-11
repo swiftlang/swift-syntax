@@ -16,7 +16,7 @@ import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 
-public class ClassificationTests: XCTestCase {
+class ClassificationTests: XCTestCase {
 
   public func testClassification() {
     assertClassification(

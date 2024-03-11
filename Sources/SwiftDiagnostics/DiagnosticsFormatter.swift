@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+public import SwiftSyntax
+#else
 import SwiftSyntax
+#endif
 
 extension Sequence where Element == Range<Int> {
   /// Given a set of ranges that are sorted in order of nondecreasing lower

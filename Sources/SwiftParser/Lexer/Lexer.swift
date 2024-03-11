@@ -10,8 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) import SwiftSyntax
-
 /// A lexical analyzer for the Swift programming language.
 ///
 /// - Seealso: ``Lexer/Lexeme``

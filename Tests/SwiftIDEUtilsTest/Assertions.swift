@@ -27,7 +27,7 @@ func assertClassification(
   _ source: String,
   in range: ByteSourceRange? = nil,
   expected: [ClassificationSpec],
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   let tree = Parser.parse(source: source)
@@ -76,7 +76,7 @@ func assertClassification(
 }
 
 /// An abstract data structure to describe a source code snippet and its ``SyntaxClassification``.
-public struct ClassificationSpec {
+struct ClassificationSpec {
   /// Source code  without any ``Trivia``
   let source: String
   /// The ``SyntaxClassification`` of the source code,
@@ -85,10 +85,10 @@ public struct ClassificationSpec {
   let file: StaticString
   let line: UInt
 
-  public init(
+  init(
     source: String,
     kind: SyntaxClassification,
-    file: StaticString = #file,
+    file: StaticString = #filePath,
     line: UInt = #line
   ) {
     self.source = source

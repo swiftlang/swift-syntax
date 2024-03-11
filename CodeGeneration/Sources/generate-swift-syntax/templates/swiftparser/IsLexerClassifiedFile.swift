@@ -16,7 +16,15 @@ import SyntaxSupport
 import Utils
 
 let isLexerClassifiedFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax("import SwiftSyntax")
+  DeclSyntax(
+    """
+    #if swift(>=6)
+    public import SwiftSyntax
+    #else
+    import SwiftSyntax
+    #endif
+    """
+  )
 
   try! ExtensionDeclSyntax(
     """

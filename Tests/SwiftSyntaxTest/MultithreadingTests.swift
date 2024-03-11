@@ -20,7 +20,7 @@ extension SyntaxProtocol {
   }
 }
 
-public class MultithreadingTests: XCTestCase {
+class MultithreadingTests: XCTestCase {
 
   public func testPathological() {
     let tuple = TupleTypeSyntax(
@@ -61,35 +61,26 @@ public class MultithreadingTests: XCTestCase {
     }
   }
 
-  public func testTwoAccesses() {
+  public func testTwoAccesses() async {
     let tuple = TupleTypeSyntax(
       leftParen: .leftParenToken(),
       elements: TupleTypeElementListSyntax([]),
       rightParen: .rightParenToken()
     )
 
-    let queue1 = DispatchQueue(label: "queue1")
-    let queue2 = DispatchQueue(label: "queue2")
+    let concurrentParens = await withTaskGroup(of: TokenSyntax.self) { taskGroup in
+      taskGroup.addTask { tuple.leftParen }
+      taskGroup.addTask { tuple.leftParen }
 
-    var node1: TokenSyntax?
-    var node2: TokenSyntax?
-
-    let group = DispatchGroup()
-    queue1.async(group: group) {
-      node1 = tuple.leftParen
+      var parens: [TokenSyntax?] = []
+      for await paren in taskGroup {
+        parens.append(paren)
+      }
+      return parens
     }
-    queue2.async(group: group) {
-      node2 = tuple.leftParen
-    }
-    group.wait()
 
     let final = tuple.leftParen
 
-    XCTAssertNotNil(node1)
-    XCTAssertNotNil(node2)
-    XCTAssertEqual(node1, node2)
-    XCTAssertEqual(node1, final)
-    XCTAssertEqual(node2, final)
+    XCTAssertEqual(concurrentParens, [final, final])
   }
-
 }

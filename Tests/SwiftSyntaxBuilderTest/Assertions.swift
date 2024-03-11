@@ -20,7 +20,7 @@ func assertBuildResult<T: SyntaxProtocol>(
   _ expectedResult: String,
   trimTrailingWhitespace: Bool = true,
   format: Bool = true,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   var buildableDescription =

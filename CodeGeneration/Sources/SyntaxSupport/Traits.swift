@@ -47,6 +47,11 @@ public let TRAITS: [Trait] = [
     children: [
       Child(name: "attributes", kind: .node(kind: .attributeList)),
       Child(name: "modifiers", kind: .node(kind: .declModifierList)),
+      Child(
+        name: "introducer",
+        kind: .token(choices: [.keyword(.actor), .keyword(.class), .keyword(.enum), .keyword(.extension), .keyword(.protocol), .keyword(.struct)]),
+        documentation: "The token that introduces this declaration, eg. `class` for a class declaration."
+      ),
       Child(name: "inheritanceClause", kind: .node(kind: .inheritanceClause), isOptional: true),
       Child(
         name: "genericWhereClause",

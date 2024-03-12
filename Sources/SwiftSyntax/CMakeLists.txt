@@ -14,6 +14,7 @@ add_swift_syntax_library(SwiftSyntax
   BumpPtrAllocator.swift
   CommonAncestor.swift
   Convenience.swift
+  CustomTraits.swift
   MemoryLayout.swift
   MissingNodeInitializers.swift
   SourceEdit.swift

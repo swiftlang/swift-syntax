@@ -37,12 +37,12 @@ struct GrammarGenerator {
     let optionality = child.isOptional ? "?" : ""
     switch child.kind {
     case .node(let kind):
-      return "``\(kind.syntaxType)``\(optionality)"
+      return "\(kind.doccLink)\(optionality)"
     case .nodeChoices(let choices):
       let choicesDescriptions = choices.map { grammar(for: $0) }
       return "(\(choicesDescriptions.joined(separator: " | ")))\(optionality)"
     case .collection(kind: let kind, _, _, _):
-      return "``\(kind.syntaxType)``\(optionality)"
+      return "\(kind.doccLink)\(optionality)"
     case .token(let choices, _, _):
       if choices.count == 1 {
         return "\(grammar(for: choices.first!))\(optionality)"

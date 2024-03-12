@@ -1802,7 +1802,7 @@ public struct LifetimeSpecifierArgumentSyntax: SyntaxProtocol, SyntaxHashable, _
 /// ### Children
 /// 
 ///  - `leftParen`: `(`
-///  - `arguments`: ``LifetimeSpecifierArgumentListSyntax``
+///  - `arguments`: `LifetimeSpecifierArgumentListSyntax`
 ///  - `rightParen`: `)`
 #if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
@@ -1984,7 +1984,7 @@ public struct LifetimeSpecifierArgumentsSyntax: SyntaxProtocol, SyntaxHashable, 
 /// ### Children
 /// 
 ///  - `specifier`: (`_copy` | `_consume` | `_borrow` | `_mutate`)
-///  - `arguments`: ``LifetimeSpecifierArgumentsSyntax``
+///  - `arguments`: `LifetimeSpecifierArgumentsSyntax`
 ///
 /// ### Contained in
 /// 

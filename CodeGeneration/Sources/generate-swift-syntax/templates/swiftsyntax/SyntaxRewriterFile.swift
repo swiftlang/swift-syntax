@@ -122,7 +122,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       if (node.base == .syntax || node.base == .syntaxCollection) && node.kind != .missing {
         DeclSyntax(
           """
-          /// Visit a ``\(node.kind.syntaxType)``.
+          /// Visit a \(raw: node.kind.doccLink).
           ///   - Parameter node: the node that is being visited
           ///   - Returns: the rewritten node
           \(node.apiAttributes())\
@@ -134,7 +134,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       } else {
         DeclSyntax(
           """
-          /// Visit a ``\(node.kind.syntaxType)``.
+          /// Visit a \(raw: node.kind.doccLink).
           ///   - Parameter node: the node that is being visited
           ///   - Returns: the rewritten node
           \(node.apiAttributes())\

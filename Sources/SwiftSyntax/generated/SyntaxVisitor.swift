@@ -1042,7 +1042,7 @@ open class SyntaxVisitor {
   open func visitPost(_ node: DiscardStmtSyntax) {
   }
   
-  /// Visiting ``DoExprSyntax`` specifically.
+  /// Visiting `DoExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   #if compiler(>=5.8)
@@ -1052,7 +1052,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``DoExprSyntax`` and its descendants.
+  /// The function called after visiting `DoExprSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
   #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
@@ -1960,7 +1960,7 @@ open class SyntaxVisitor {
   open func visitPost(_ node: LayoutRequirementSyntax) {
   }
   
-  /// Visiting ``LifetimeSpecifierArgumentListSyntax`` specifically.
+  /// Visiting `LifetimeSpecifierArgumentListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   #if compiler(>=5.8)
@@ -1970,7 +1970,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``LifetimeSpecifierArgumentListSyntax`` and its descendants.
+  /// The function called after visiting `LifetimeSpecifierArgumentListSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
   #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
@@ -1978,7 +1978,7 @@ open class SyntaxVisitor {
   open func visitPost(_ node: LifetimeSpecifierArgumentListSyntax) {
   }
   
-  /// Visiting ``LifetimeSpecifierArgumentSyntax`` specifically.
+  /// Visiting `LifetimeSpecifierArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   #if compiler(>=5.8)
@@ -1988,7 +1988,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``LifetimeSpecifierArgumentSyntax`` and its descendants.
+  /// The function called after visiting `LifetimeSpecifierArgumentSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
   #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
@@ -1996,7 +1996,7 @@ open class SyntaxVisitor {
   open func visitPost(_ node: LifetimeSpecifierArgumentSyntax) {
   }
   
-  /// Visiting ``LifetimeSpecifierArgumentsSyntax`` specifically.
+  /// Visiting `LifetimeSpecifierArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   #if compiler(>=5.8)
@@ -2006,7 +2006,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``LifetimeSpecifierArgumentsSyntax`` and its descendants.
+  /// The function called after visiting `LifetimeSpecifierArgumentsSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
   #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
@@ -2014,7 +2014,7 @@ open class SyntaxVisitor {
   open func visitPost(_ node: LifetimeSpecifierArgumentsSyntax) {
   }
   
-  /// Visiting ``LifetimeTypeSpecifierSyntax`` specifically.
+  /// Visiting `LifetimeTypeSpecifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   #if compiler(>=5.8)
@@ -2024,7 +2024,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``LifetimeTypeSpecifierSyntax`` and its descendants.
+  /// The function called after visiting `LifetimeTypeSpecifierSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
   #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
@@ -3052,7 +3052,7 @@ open class SyntaxVisitor {
   open func visitPost(_ node: TernaryExprSyntax) {
   }
   
-  /// Visiting ``ThenStmtSyntax`` specifically.
+  /// Visiting `ThenStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   #if compiler(>=5.8)
@@ -3062,7 +3062,7 @@ open class SyntaxVisitor {
     return .visitChildren
   }
   
-  /// The function called after visiting ``ThenStmtSyntax`` and its descendants.
+  /// The function called after visiting `ThenStmtSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
   #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)

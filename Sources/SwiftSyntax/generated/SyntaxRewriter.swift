@@ -668,7 +668,7 @@ open class SyntaxRewriter {
     return StmtSyntax(visitChildren(node))
   }
   
-  /// Visit a ``DoExprSyntax``.
+  /// Visit a `DoExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   #if compiler(>=5.8)
@@ -1203,7 +1203,7 @@ open class SyntaxRewriter {
     return visitChildren(node)
   }
   
-  /// Visit a ``LifetimeSpecifierArgumentListSyntax``.
+  /// Visit a `LifetimeSpecifierArgumentListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   #if compiler(>=5.8)
@@ -1213,7 +1213,7 @@ open class SyntaxRewriter {
     return visitChildren(node)
   }
   
-  /// Visit a ``LifetimeSpecifierArgumentSyntax``.
+  /// Visit a `LifetimeSpecifierArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   #if compiler(>=5.8)
@@ -1223,7 +1223,7 @@ open class SyntaxRewriter {
     return visitChildren(node)
   }
   
-  /// Visit a ``LifetimeSpecifierArgumentsSyntax``.
+  /// Visit a `LifetimeSpecifierArgumentsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   #if compiler(>=5.8)
@@ -1233,7 +1233,7 @@ open class SyntaxRewriter {
     return visitChildren(node)
   }
   
-  /// Visit a ``LifetimeTypeSpecifierSyntax``.
+  /// Visit a `LifetimeTypeSpecifierSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   #if compiler(>=5.8)
@@ -1838,7 +1838,7 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
   
-  /// Visit a ``ThenStmtSyntax``.
+  /// Visit a `ThenStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   #if compiler(>=5.8)

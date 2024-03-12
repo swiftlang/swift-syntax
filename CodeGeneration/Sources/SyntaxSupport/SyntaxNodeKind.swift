@@ -355,6 +355,17 @@ public enum SyntaxNodeKind: String, CaseIterable {
     }
   }
 
+  /// If this node is non-experimental a docc link wrapped in two backticks.
+  ///
+  /// For experimental nodes, the node's type name in code font.
+  public var doccLink: String {
+    if let node = SYNTAX_NODE_MAP[self], node.isExperimental {
+      return "`\(syntaxType)`"
+    } else {
+      return "``\(syntaxType)``"
+    }
+  }
+
   /// For base nodes, the name of the corresponding protocol to which all the
   /// concrete nodes that have this base kind, conform.
   public var protocolType: TypeSyntax {

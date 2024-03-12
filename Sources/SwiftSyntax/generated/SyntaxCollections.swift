@@ -880,7 +880,7 @@ public struct LabeledExprListSyntax: SyntaxCollection, SyntaxHashable {
 ///
 /// ### Children
 /// 
-/// ``LifetimeSpecifierArgumentSyntax`` `*`
+/// `LifetimeSpecifierArgumentSyntax` `*`
 #if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
 #endif
@@ -1675,7 +1675,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 
 /// ### Children
 /// 
-/// (``SimpleTypeSpecifierSyntax`` | ``LifetimeTypeSpecifierSyntax``) `*`
+/// (``SimpleTypeSpecifierSyntax`` | `LifetimeTypeSpecifierSyntax`) `*`
 ///
 /// ### Contained in
 /// 
@@ -1748,7 +1748,7 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
       return self.as(SimpleTypeSpecifierSyntax.self)!
     }
     
-    /// Checks if the current syntax node can be cast to ``LifetimeTypeSpecifierSyntax``.
+    /// Checks if the current syntax node can be cast to `LifetimeTypeSpecifierSyntax`.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
     #if compiler(>=5.8)
@@ -1758,9 +1758,9 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
       return self.as(syntaxType) != nil
     }
     
-    /// Attempts to cast the current syntax node to ``LifetimeTypeSpecifierSyntax``.
+    /// Attempts to cast the current syntax node to `LifetimeTypeSpecifierSyntax`.
     ///
-    /// - Returns: An instance of ``LifetimeTypeSpecifierSyntax``, or `nil` if the cast fails.
+    /// - Returns: An instance of `LifetimeTypeSpecifierSyntax`, or `nil` if the cast fails.
     #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
     #endif
@@ -1768,9 +1768,9 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
       return LifetimeTypeSpecifierSyntax.init(self)
     }
     
-    /// Force-casts the current syntax node to ``LifetimeTypeSpecifierSyntax``.
+    /// Force-casts the current syntax node to `LifetimeTypeSpecifierSyntax`.
     ///
-    /// - Returns: An instance of ``LifetimeTypeSpecifierSyntax``.
+    /// - Returns: An instance of `LifetimeTypeSpecifierSyntax`.
     /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
     #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)

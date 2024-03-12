@@ -53,7 +53,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for node in SYNTAX_NODES where !node.kind.isBase {
       DeclSyntax(
         """
-        /// Visiting ``\(node.kind.syntaxType)`` specifically.
+        /// Visiting \(raw: node.kind.doccLink) specifically.
         ///   - Parameter node: the node we are visiting.
         ///   - Returns: how should we continue visiting.
         \(node.apiAttributes())\
@@ -65,7 +65,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// The function called after visiting ``\(node.kind.syntaxType)`` and its descendants.
+        /// The function called after visiting \(raw: node.kind.doccLink) and its descendants.
         ///   - node: the node we just finished visiting.
         \(node.apiAttributes())\
         open func visitPost(_ node: \(node.kind.syntaxType)) {}

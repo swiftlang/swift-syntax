@@ -14,7 +14,7 @@
 
 // MARK: - DeclSyntax
 
-/// Protocol to which all ``DeclSyntax`` nodes conform. 
+/// Protocol to which all ``DeclSyntax`` nodes conform.
 ///
 /// Extension point to add common methods to all ``DeclSyntax`` nodes.
 ///
@@ -315,7 +315,7 @@ public extension _LeafDeclSyntaxNodeProtocol {
 
 // MARK: - ExprSyntax
 
-/// Protocol to which all ``ExprSyntax`` nodes conform. 
+/// Protocol to which all ``ExprSyntax`` nodes conform.
 ///
 /// Extension point to add common methods to all ``ExprSyntax`` nodes.
 ///
@@ -673,7 +673,7 @@ public extension _LeafExprSyntaxNodeProtocol {
 
 // MARK: - PatternSyntax
 
-/// Protocol to which all ``PatternSyntax`` nodes conform. 
+/// Protocol to which all ``PatternSyntax`` nodes conform.
 ///
 /// Extension point to add common methods to all ``PatternSyntax`` nodes.
 ///
@@ -940,7 +940,7 @@ public extension _LeafPatternSyntaxNodeProtocol {
 
 // MARK: - StmtSyntax
 
-/// Protocol to which all ``StmtSyntax`` nodes conform. 
+/// Protocol to which all ``StmtSyntax`` nodes conform.
 ///
 /// Extension point to add common methods to all ``StmtSyntax`` nodes.
 ///
@@ -1226,7 +1226,7 @@ public extension _LeafStmtSyntaxNodeProtocol {
 
 // MARK: - TypeSyntax
 
-/// Protocol to which all ``TypeSyntax`` nodes conform. 
+/// Protocol to which all ``TypeSyntax`` nodes conform.
 ///
 /// Extension point to add common methods to all ``TypeSyntax`` nodes.
 ///

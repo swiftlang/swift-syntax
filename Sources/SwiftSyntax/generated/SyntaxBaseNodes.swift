@@ -14,7 +14,7 @@
 
 // MARK: - DeclSyntax
 
-/// Protocol to which all ``DeclSyntax`` nodes conform. 
+/// Protocol to which all ``DeclSyntax`` nodes conform.
 ///
 /// Extension point to add common methods to all ``DeclSyntax`` nodes.
 ///
@@ -315,7 +315,7 @@ public extension _LeafDeclSyntaxNodeProtocol {
 
 // MARK: - ExprSyntax
 
-/// Protocol to which all ``ExprSyntax`` nodes conform. 
+/// Protocol to which all ``ExprSyntax`` nodes conform.
 ///
 /// Extension point to add common methods to all ``ExprSyntax`` nodes.
 ///
@@ -673,7 +673,7 @@ public extension _LeafExprSyntaxNodeProtocol {
 
 // MARK: - PatternSyntax
 
-/// Protocol to which all ``PatternSyntax`` nodes conform. 
+/// Protocol to which all ``PatternSyntax`` nodes conform.
 ///
 /// Extension point to add common methods to all ``PatternSyntax`` nodes.
 ///
@@ -940,7 +940,7 @@ public extension _LeafPatternSyntaxNodeProtocol {
 
 // MARK: - StmtSyntax
 
-/// Protocol to which all ``StmtSyntax`` nodes conform. 
+/// Protocol to which all ``StmtSyntax`` nodes conform.
 ///
 /// Extension point to add common methods to all ``StmtSyntax`` nodes.
 ///
@@ -1226,7 +1226,7 @@ public extension _LeafStmtSyntaxNodeProtocol {
 
 // MARK: - TypeSyntax
 
-/// Protocol to which all ``TypeSyntax`` nodes conform. 
+/// Protocol to which all ``TypeSyntax`` nodes conform.
 ///
 /// Extension point to add common methods to all ``TypeSyntax`` nodes.
 ///
@@ -1679,6 +1679,10 @@ extension Syntax {
           .node(LabeledSpecializeArgumentSyntax.self),
           .node(LabeledStmtSyntax.self),
           .node(LayoutRequirementSyntax.self),
+          .node(LifetimeSpecifierArgumentListSyntax.self),
+          .node(LifetimeSpecifierArgumentSyntax.self),
+          .node(LifetimeSpecifierArgumentsSyntax.self),
+          .node(LifetimeTypeSpecifierSyntax.self),
           .node(MacroDeclSyntax.self),
           .node(MacroExpansionDeclSyntax.self),
           .node(MacroExpansionExprSyntax.self),
@@ -1742,6 +1746,7 @@ extension Syntax {
           .node(SequenceExprSyntax.self),
           .node(SimpleStringLiteralExprSyntax.self),
           .node(SimpleStringLiteralSegmentListSyntax.self),
+          .node(SimpleTypeSpecifierSyntax.self),
           .node(SomeOrAnyTypeSyntax.self),
           .node(SourceFileSyntax.self),
           .node(SpecializeAttributeArgumentListSyntax.self),
@@ -1779,6 +1784,7 @@ extension Syntax {
           .node(TypeEffectSpecifiersSyntax.self),
           .node(TypeExprSyntax.self),
           .node(TypeInitializerClauseSyntax.self),
+          .node(TypeSpecifierListSyntax.self),
           .node(UnavailableFromAsyncAttributeArgumentsSyntax.self),
           .node(UnderscorePrivateAttributeArgumentsSyntax.self),
           .node(UnexpectedNodesSyntax.self),

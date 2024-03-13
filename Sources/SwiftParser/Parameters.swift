@@ -261,7 +261,7 @@ extension Parser {
   mutating func parseMisplacedSpecifiers() -> [RawTokenSyntax] {
     var misplacedSpecifiers: [RawTokenSyntax] = []
     if self.withLookahead({ !$0.startsParameterName(isClosure: false, allowMisplacedSpecifierRecovery: false) }) {
-      while canHaveParameterSpecifier, let specifier = self.consume(ifAnyIn: TypeSpecifier.self) {
+      while canHaveParameterSpecifier, let specifier = self.consume(ifAnyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) {
         misplacedSpecifiers.append(specifier)
       }
     }

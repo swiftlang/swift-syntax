@@ -99,8 +99,8 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case dictionaryExpr
   case dictionaryType
   case differentiabilityArgument
-  case differentiabilityArguments
   case differentiabilityArgumentList
+  case differentiabilityArguments
   case differentiabilityWithRespectToArgument
   case differentiableAttributeArguments
   case discardAssignmentExpr
@@ -182,6 +182,9 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case labeledSpecializeArgument
   case labeledStmt
   case layoutRequirement
+  case lifetimeSpecifierArgument
+  case lifetimeSpecifierArgumentList
+  case lifetimeTypeSpecifier
   case macroDecl
   case macroExpansionDecl
   case macroExpansionExpr
@@ -244,14 +247,15 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case returnStmt
   case sameTypeRequirement
   case sequenceExpr
+  case simpleTypeSpecifier
+  case simpleStringLiteralExpr
+  case simpleStringLiteralSegmentList
   case someOrAnyType
   case sourceFile
   case specializeAttributeArgumentList
   case specializeAvailabilityArgument
   case specializeTargetFunctionArgument
   case stmt
-  case simpleStringLiteralExpr
-  case simpleStringLiteralSegmentList
   case stringLiteralExpr
   case stringLiteralSegmentList
   case stringSegment
@@ -285,6 +289,9 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case typeEffectSpecifiers
   case typeExpr
   case typeInitializerClause
+  case typeSpecifier
+  case lifetimeSpecifierArguments
+  case typeSpecifierList
   case unavailableFromAsyncAttributeArguments
   case underscorePrivateAttributeArguments
   case unexpectedNodes
@@ -299,10 +306,10 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case whereClause
   case whileStmt
   case wildcardPattern
-  case yieldStmt
   case yieldedExpression
-  case yieldedExpressionsClause
   case yieldedExpressionList
+  case yieldedExpressionsClause
+  case yieldStmt
 
   // Nodes that have special handling throughout the codebase
 
@@ -345,6 +352,17 @@ public enum SyntaxNodeKind: String, CaseIterable {
       return "SyntaxCollection"
     default:
       return "\(raw: rawValue.withFirstCharacterUppercased)Syntax"
+    }
+  }
+
+  /// If this node is non-experimental a docc link wrapped in two backticks.
+  ///
+  /// For experimental nodes, the node's type name in code font.
+  public var doccLink: String {
+    if let node = SYNTAX_NODE_MAP[self], node.isExperimental {
+      return "`\(syntaxType)`"
+    } else {
+      return "``\(syntaxType)``"
     }
   }
 
@@ -405,8 +423,8 @@ public enum SyntaxNodeKind: String, CaseIterable {
     case .derivativeAttributeArguments: return "derivativeRegistrationAttributeArguments"
     case .designatedType: return "designatedTypeElement"
     case .differentiabilityArgument: return "differentiabilityParam"
-    case .differentiabilityArguments: return "differentiabilityParams"
     case .differentiabilityArgumentList: return "differentiabilityParamList"
+    case .differentiabilityArguments: return "differentiabilityParams"
     case .differentiabilityWithRespectToArgument: return "differentiabilityParamsClause"
     case .documentationAttributeArgumentList: return "documentationAttributeArguments"
     case .dynamicReplacementAttributeArguments: return "dynamicReplacementArguments"
@@ -440,6 +458,7 @@ public enum SyntaxNodeKind: String, CaseIterable {
     case .precedenceGroupName: return "precedenceGroupNameElement"
     case .repeatStmt: return "repeatWhileStmt"
     case .someOrAnyType: return "constrainedSugarType"
+    case .simpleTypeSpecifier: return "typeSpecifier"
     case .specializeAttributeArgumentList: return "specializeAttributeSpecList"
     case .specializeAvailabilityArgument: return "availabilityEntry"
     case .specializeTargetFunctionArgument: return "targetFunctionEntry"
@@ -451,8 +470,8 @@ public enum SyntaxNodeKind: String, CaseIterable {
     case .typeAliasDecl: return "typealiasDecl"
     case .unavailableFromAsyncAttributeArguments: return "unavailableFromAsyncArguments"
     case .yieldedExpression: return "yieldExprListElement"
-    case .yieldedExpressionsClause: return "yieldList"
     case .yieldedExpressionList: return "yieldExprList"
+    case .yieldedExpressionsClause: return "yieldList"
     default: return nil
     }
   }

@@ -320,4 +320,99 @@ final class TypeTests: ParserTestCase {
       "[() throws(PosixError) -> Void]()"
     )
   }
+
+  func testMultipleTypeSpecifiers() {
+    assertParse("func foo1(_ a: _const borrowing String) {}")
+    assertParse("func foo2(_ a: borrowing _const String) {}")
+  }
+
+  func testLifetimeSpecifier() {
+    assertParse("func foo() -> _borrow(x) X", experimentalFeatures: [.nonescapableTypes])
+
+    assertParse("func foo() -> _borrow(x, y) X", experimentalFeatures: [.nonescapableTypes])
+
+    assertParse(
+      "func foo() -> _borrow(1️⃣) X",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter reference in lifetime specifier", fixIts: ["insert parameter reference"])
+      ],
+      fixedSource: "func foo() -> _borrow(<#identifier#>) X",
+      experimentalFeatures: [.nonescapableTypes]
+    )
+
+    assertParse(
+      "func foo() -> _borrow(x,1️⃣) X",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter reference in lifetime specifier", fixIts: ["insert parameter reference"])
+      ],
+      fixedSource: "func foo() -> _borrow(x, <#identifier#>) X",
+      experimentalFeatures: [.nonescapableTypes]
+    )
+
+    assertParse("func foo() -> _borrow(x) _borrow(y) X", experimentalFeatures: [.nonescapableTypes])
+
+    assertParse("func foo() -> _mutate(x) X", experimentalFeatures: [.nonescapableTypes])
+
+    assertParse("func foo() -> _copy(x) X", experimentalFeatures: [.nonescapableTypes])
+
+    assertParse("func foo() -> _consume(x) X", experimentalFeatures: [.nonescapableTypes])
+
+    assertParse(
+      "func foo() -> _borrow 1️⃣X",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '(', parameter reference, and ')' in lifetime specifier",
+          fixIts: ["insert '(', parameter reference, and ')'"]
+        )
+      ],
+      fixedSource: "func foo() -> _borrow (<#identifier#>) X",
+      experimentalFeatures: [.nonescapableTypes]
+    )
+
+    assertParse(
+      "func foo() -> _borrow(1️⃣*) X",
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter reference in lifetime specifier", fixIts: ["insert parameter reference"]),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '*' in lifetime specifier"),
+      ],
+      fixedSource: "func foo() -> _borrow(<#identifier#>*) X",
+      experimentalFeatures: [.nonescapableTypes]
+    )
+
+    assertParse("func foo() -> _borrow(0) X", diagnostics: [], experimentalFeatures: [.nonescapableTypes])
+
+    assertParse("func foo() -> _borrow(self) X", experimentalFeatures: [.nonescapableTypes])
+
+    assertParse(
+      "func foo() -> _borrow1️⃣(0)2️⃣ X",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
+      ],
+      fixedSource: """
+        func foo() -> _borrow
+        (0)
+        X
+        """
+    )
+
+    assertParse(
+      "func foo() -> _borrow(1️⃣-1) X",
+      diagnostics: [
+        DiagnosticSpec(message: "expected parameter reference in lifetime specifier", fixIts: ["insert parameter reference"]),
+        DiagnosticSpec(message: "unexpected code '-1' in lifetime specifier"),
+      ],
+      fixedSource: "func foo() -> _borrow(<#identifier#>-1) X",
+      experimentalFeatures: [.nonescapableTypes]
+    )
+  }
 }

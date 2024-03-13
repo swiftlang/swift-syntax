@@ -247,6 +247,8 @@ extension SyntaxKind {
       return "labeled statement"
     case .layoutRequirement:
       return "layout requirement"
+    case .lifetimeTypeSpecifier:
+      return "lifetime specifier"
     case .macroDecl:
       return "macro"
     case .macroExpansionDecl:
@@ -333,6 +335,8 @@ extension SyntaxKind {
       return "same type requirement"
     case .simpleStringLiteralExpr:
       return "simple string literal"
+    case .simpleTypeSpecifier:
+      return "type specifier"
     case .someOrAnyType:
       return "type"
     case .sourceFile:

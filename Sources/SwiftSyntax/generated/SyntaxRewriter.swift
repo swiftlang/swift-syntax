@@ -668,7 +668,7 @@ open class SyntaxRewriter {
     return StmtSyntax(visitChildren(node))
   }
   
-  /// Visit a ``DoExprSyntax``.
+  /// Visit a `DoExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   #if compiler(>=5.8)
@@ -1203,6 +1203,46 @@ open class SyntaxRewriter {
     return visitChildren(node)
   }
   
+  /// Visit a `LifetimeSpecifierArgumentListSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  open func visit(_ node: LifetimeSpecifierArgumentListSyntax) -> LifetimeSpecifierArgumentListSyntax {
+    return visitChildren(node)
+  }
+  
+  /// Visit a `LifetimeSpecifierArgumentSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  open func visit(_ node: LifetimeSpecifierArgumentSyntax) -> LifetimeSpecifierArgumentSyntax {
+    return visitChildren(node)
+  }
+  
+  /// Visit a `LifetimeSpecifierArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  open func visit(_ node: LifetimeSpecifierArgumentsSyntax) -> LifetimeSpecifierArgumentsSyntax {
+    return visitChildren(node)
+  }
+  
+  /// Visit a `LifetimeTypeSpecifierSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  open func visit(_ node: LifetimeTypeSpecifierSyntax) -> LifetimeTypeSpecifierSyntax {
+    return visitChildren(node)
+  }
+  
   /// Visit a ``MacroDeclSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1644,6 +1684,13 @@ open class SyntaxRewriter {
     return visitChildren(node)
   }
   
+  /// Visit a ``SimpleTypeSpecifierSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: SimpleTypeSpecifierSyntax) -> SimpleTypeSpecifierSyntax {
+    return visitChildren(node)
+  }
+  
   /// Visit a ``SomeOrAnyTypeSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1791,7 +1838,7 @@ open class SyntaxRewriter {
     return ExprSyntax(visitChildren(node))
   }
   
-  /// Visit a ``ThenStmtSyntax``.
+  /// Visit a `ThenStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   #if compiler(>=5.8)
@@ -1903,6 +1950,13 @@ open class SyntaxRewriter {
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: TypeInitializerClauseSyntax) -> TypeInitializerClauseSyntax {
+    return visitChildren(node)
+  }
+  
+  /// Visit a ``TypeSpecifierListSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: TypeSpecifierListSyntax) -> TypeSpecifierListSyntax {
     return visitChildren(node)
   }
   
@@ -2756,6 +2810,22 @@ open class SyntaxRewriter {
       return {
         self.visitImpl($0, LayoutRequirementSyntax.self, self.visit)
       }
+    case .lifetimeSpecifierArgumentList:
+      return {
+        self.visitImpl($0, LifetimeSpecifierArgumentListSyntax.self, self.visit)
+      }
+    case .lifetimeSpecifierArgument:
+      return {
+        self.visitImpl($0, LifetimeSpecifierArgumentSyntax.self, self.visit)
+      }
+    case .lifetimeSpecifierArguments:
+      return {
+        self.visitImpl($0, LifetimeSpecifierArgumentsSyntax.self, self.visit)
+      }
+    case .lifetimeTypeSpecifier:
+      return {
+        self.visitImpl($0, LifetimeTypeSpecifierSyntax.self, self.visit)
+      }
     case .macroDecl:
       return {
         self.visitImpl($0, MacroDeclSyntax.self, self.visit)
@@ -3008,6 +3078,10 @@ open class SyntaxRewriter {
       return {
         self.visitImpl($0, SimpleStringLiteralSegmentListSyntax.self, self.visit)
       }
+    case .simpleTypeSpecifier:
+      return {
+        self.visitImpl($0, SimpleTypeSpecifierSyntax.self, self.visit)
+      }
     case .someOrAnyType:
       return {
         self.visitImpl($0, SomeOrAnyTypeSyntax.self, self.visit)
@@ -3155,6 +3229,10 @@ open class SyntaxRewriter {
     case .typeInitializerClause:
       return {
         self.visitImpl($0, TypeInitializerClauseSyntax.self, self.visit)
+      }
+    case .typeSpecifierList:
+      return {
+        self.visitImpl($0, TypeSpecifierListSyntax.self, self.visit)
       }
     case .unavailableFromAsyncAttributeArguments:
       return {
@@ -3558,6 +3636,14 @@ open class SyntaxRewriter {
       return visitImpl(node, LabeledStmtSyntax.self, visit)
     case .layoutRequirement:
       return visitImpl(node, LayoutRequirementSyntax.self, visit)
+    case .lifetimeSpecifierArgumentList:
+      return visitImpl(node, LifetimeSpecifierArgumentListSyntax.self, visit)
+    case .lifetimeSpecifierArgument:
+      return visitImpl(node, LifetimeSpecifierArgumentSyntax.self, visit)
+    case .lifetimeSpecifierArguments:
+      return visitImpl(node, LifetimeSpecifierArgumentsSyntax.self, visit)
+    case .lifetimeTypeSpecifier:
+      return visitImpl(node, LifetimeTypeSpecifierSyntax.self, visit)
     case .macroDecl:
       return visitImpl(node, MacroDeclSyntax.self, visit)
     case .macroExpansionDecl:
@@ -3684,6 +3770,8 @@ open class SyntaxRewriter {
       return visitImpl(node, SimpleStringLiteralExprSyntax.self, visit)
     case .simpleStringLiteralSegmentList:
       return visitImpl(node, SimpleStringLiteralSegmentListSyntax.self, visit)
+    case .simpleTypeSpecifier:
+      return visitImpl(node, SimpleTypeSpecifierSyntax.self, visit)
     case .someOrAnyType:
       return visitImpl(node, SomeOrAnyTypeSyntax.self, visit)
     case .sourceFile:
@@ -3758,6 +3846,8 @@ open class SyntaxRewriter {
       return visitImpl(node, TypeExprSyntax.self, visit)
     case .typeInitializerClause:
       return visitImpl(node, TypeInitializerClauseSyntax.self, visit)
+    case .typeSpecifierList:
+      return visitImpl(node, TypeSpecifierListSyntax.self, visit)
     case .unavailableFromAsyncAttributeArguments:
       return visitImpl(node, UnavailableFromAsyncAttributeArgumentsSyntax.self, visit)
     case .underscorePrivateAttributeArguments:

@@ -224,9 +224,9 @@ public class Node {
           // This will repeat the syntax type before and after the dot, which is
           // a little unfortunate, but it's the only way I found to get docc to
           // generate a fully-qualified type + member.
-          return " - ``\($0.node.syntaxType)``.``\($0.node.syntaxType)/\(childName)``"
+          return " - \($0.node.doccLink).``\($0.node.syntaxType)/\(childName)``"
         } else {
-          return " - ``\($0.node.syntaxType)``"
+          return " - \($0.node.doccLink)"
         }
       }
       .joined(separator: "\n")
@@ -249,7 +249,7 @@ public class Node {
     let list =
       SYNTAX_NODES
       .filter { $0.base == self.kind && !$0.isExperimental }
-      .map { "- ``\($0.kind.syntaxType)``" }
+      .map { "- \($0.kind.doccLink)" }
       .joined(separator: "\n")
 
     guard !list.isEmpty else {
@@ -392,9 +392,9 @@ public struct CollectionNode {
   public var grammar: SwiftSyntax.Trivia {
     let grammar: String
     if let onlyElement = elementChoices.only {
-      grammar = "``\(onlyElement.syntaxType)`` `*`"
+      grammar = "\(onlyElement.doccLink) `*`"
     } else {
-      grammar = "(\(elementChoices.map { "``\($0.syntaxType)``" }.joined(separator: " | "))) `*`"
+      grammar = "(\(elementChoices.map { "\($0.doccLink)" }.joined(separator: " | "))) `*`"
     }
 
     return .docCommentTrivia(
@@ -420,8 +420,4 @@ fileprivate extension Child {
       return [.token]
     }
   }
-}
-
-fileprivate extension Node {
-
 }

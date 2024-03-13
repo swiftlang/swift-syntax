@@ -239,12 +239,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightParen"
   case \AttributeSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
-  case \AttributedTypeSyntax.unexpectedBeforeSpecifier:
-    return "unexpectedBeforeSpecifier"
-  case \AttributedTypeSyntax.specifier:
-    return "specifier"
-  case \AttributedTypeSyntax.unexpectedBetweenSpecifierAndAttributes:
-    return "unexpectedBetweenSpecifierAndAttributes"
+  case \AttributedTypeSyntax.unexpectedBeforeSpecifiers:
+    return "unexpectedBeforeSpecifiers"
+  case \AttributedTypeSyntax.specifiers:
+    return "specifiers"
+  case \AttributedTypeSyntax.unexpectedBetweenSpecifiersAndAttributes:
+    return "unexpectedBetweenSpecifiersAndAttributes"
   case \AttributedTypeSyntax.attributes:
     return "attributes"
   case \AttributedTypeSyntax.unexpectedBetweenAttributesAndBaseType:
@@ -1999,6 +1999,40 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightParen"
   case \LayoutRequirementSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
+  case \LifetimeSpecifierArgumentSyntax.unexpectedBeforeParameter:
+    return "unexpectedBeforeParameter"
+  case \LifetimeSpecifierArgumentSyntax.parameter:
+    return "parameter"
+  case \LifetimeSpecifierArgumentSyntax.unexpectedBetweenParameterAndTrailingComma:
+    return "unexpectedBetweenParameterAndTrailingComma"
+  case \LifetimeSpecifierArgumentSyntax.trailingComma:
+    return "trailingComma"
+  case \LifetimeSpecifierArgumentSyntax.unexpectedAfterTrailingComma:
+    return "unexpectedAfterTrailingComma"
+  case \LifetimeSpecifierArgumentsSyntax.unexpectedBeforeLeftParen:
+    return "unexpectedBeforeLeftParen"
+  case \LifetimeSpecifierArgumentsSyntax.leftParen:
+    return "leftParen"
+  case \LifetimeSpecifierArgumentsSyntax.unexpectedBetweenLeftParenAndArguments:
+    return "unexpectedBetweenLeftParenAndArguments"
+  case \LifetimeSpecifierArgumentsSyntax.arguments:
+    return "arguments"
+  case \LifetimeSpecifierArgumentsSyntax.unexpectedBetweenArgumentsAndRightParen:
+    return "unexpectedBetweenArgumentsAndRightParen"
+  case \LifetimeSpecifierArgumentsSyntax.rightParen:
+    return "rightParen"
+  case \LifetimeSpecifierArgumentsSyntax.unexpectedAfterRightParen:
+    return "unexpectedAfterRightParen"
+  case \LifetimeTypeSpecifierSyntax.unexpectedBeforeSpecifier:
+    return "unexpectedBeforeSpecifier"
+  case \LifetimeTypeSpecifierSyntax.specifier:
+    return "specifier"
+  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenSpecifierAndArguments:
+    return "unexpectedBetweenSpecifierAndArguments"
+  case \LifetimeTypeSpecifierSyntax.arguments:
+    return "arguments"
+  case \LifetimeTypeSpecifierSyntax.unexpectedAfterArguments:
+    return "unexpectedAfterArguments"
   case \MacroDeclSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
   case \MacroDeclSyntax.attributes:
@@ -2787,6 +2821,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "closingQuote"
   case \SimpleStringLiteralExprSyntax.unexpectedAfterClosingQuote:
     return "unexpectedAfterClosingQuote"
+  case \SimpleTypeSpecifierSyntax.unexpectedBeforeSpecifier:
+    return "unexpectedBeforeSpecifier"
+  case \SimpleTypeSpecifierSyntax.specifier:
+    return "specifier"
+  case \SimpleTypeSpecifierSyntax.unexpectedAfterSpecifier:
+    return "unexpectedAfterSpecifier"
   case \SomeOrAnyTypeSyntax.unexpectedBeforeSomeOrAnySpecifier:
     return "unexpectedBeforeSomeOrAnySpecifier"
   case \SomeOrAnyTypeSyntax.someOrAnySpecifier:

@@ -178,6 +178,22 @@ public enum SyntaxKind: Sendable {
   case labeledSpecializeArgument
   case labeledStmt
   case layoutRequirement
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case lifetimeSpecifierArgumentList
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case lifetimeSpecifierArgument
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case lifetimeSpecifierArguments
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case lifetimeTypeSpecifier
   case macroDecl
   case macroExpansionDecl
   case macroExpansionExpr
@@ -241,6 +257,7 @@ public enum SyntaxKind: Sendable {
   case sequenceExpr
   case simpleStringLiteralExpr
   case simpleStringLiteralSegmentList
+  case simpleTypeSpecifier
   case someOrAnyType
   case sourceFile
   case specializeAttributeArgumentList
@@ -281,6 +298,7 @@ public enum SyntaxKind: Sendable {
   case typeEffectSpecifiers
   case typeExpr
   case typeInitializerClause
+  case typeSpecifierList
   case unavailableFromAsyncAttributeArguments
   case underscorePrivateAttributeArguments
   case unexpectedNodes
@@ -364,6 +382,8 @@ public enum SyntaxKind: Sendable {
       return true
     case .labeledExprList:
       return true
+    case .lifetimeSpecifierArgumentList:
+      return true
     case .memberBlockItemList:
       return true
     case .multipleTrailingClosureElementList:
@@ -393,6 +413,8 @@ public enum SyntaxKind: Sendable {
     case .tuplePatternElementList:
       return true
     case .tupleTypeElementList:
+      return true
+    case .typeSpecifierList:
       return true
     case .unexpectedNodes:
       return true
@@ -748,6 +770,14 @@ public enum SyntaxKind: Sendable {
       return LabeledStmtSyntax.self
     case .layoutRequirement:
       return LayoutRequirementSyntax.self
+    case .lifetimeSpecifierArgumentList:
+      return LifetimeSpecifierArgumentListSyntax.self
+    case .lifetimeSpecifierArgument:
+      return LifetimeSpecifierArgumentSyntax.self
+    case .lifetimeSpecifierArguments:
+      return LifetimeSpecifierArgumentsSyntax.self
+    case .lifetimeTypeSpecifier:
+      return LifetimeTypeSpecifierSyntax.self
     case .macroDecl:
       return MacroDeclSyntax.self
     case .macroExpansionDecl:
@@ -874,6 +904,8 @@ public enum SyntaxKind: Sendable {
       return SimpleStringLiteralExprSyntax.self
     case .simpleStringLiteralSegmentList:
       return SimpleStringLiteralSegmentListSyntax.self
+    case .simpleTypeSpecifier:
+      return SimpleTypeSpecifierSyntax.self
     case .someOrAnyType:
       return SomeOrAnyTypeSyntax.self
     case .sourceFile:
@@ -948,6 +980,8 @@ public enum SyntaxKind: Sendable {
       return TypeExprSyntax.self
     case .typeInitializerClause:
       return TypeInitializerClauseSyntax.self
+    case .typeSpecifierList:
+      return TypeSpecifierListSyntax.self
     case .unavailableFromAsyncAttributeArguments:
       return UnavailableFromAsyncAttributeArgumentsSyntax.self
     case .underscorePrivateAttributeArguments:

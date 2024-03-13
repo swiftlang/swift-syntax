@@ -340,7 +340,7 @@ extension Parser.Lookahead {
   mutating func startsParameterName(isClosure: Bool, allowMisplacedSpecifierRecovery: Bool) -> Bool {
     if allowMisplacedSpecifierRecovery {
       while canHaveParameterSpecifier,
-        self.consume(ifAnyIn: TypeSpecifier.self) != nil
+        self.consume(ifAnyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) != nil
       {}
     }
 

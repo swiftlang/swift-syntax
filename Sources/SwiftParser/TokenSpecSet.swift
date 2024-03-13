@@ -691,52 +691,6 @@ enum TypeAttribute: TokenSpecSet {
   }
 }
 
-@_spi(Diagnostics)
-public enum TypeSpecifier: TokenSpecSet {
-  case `inout`
-  case owned
-  case shared
-  case borrowing
-  case consuming
-  case transferring
-
-  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.inout): self = .inout
-    case TokenSpec(.__owned): self = .owned
-    case TokenSpec(.__shared): self = .shared
-    case TokenSpec(.consuming): self = .consuming
-    case TokenSpec(.borrowing): self = .borrowing
-    case TokenSpec(.transferring): self = .transferring
-    default: return nil
-    }
-  }
-
-  @_spi(Diagnostics)
-  public init?(token: TokenSyntax) {
-    switch token {
-    case TokenSpec(.inout): self = .inout
-    case TokenSpec(.__owned): self = .owned
-    case TokenSpec(.__shared): self = .shared
-    case TokenSpec(.consuming): self = .shared
-    case TokenSpec(.borrowing): self = .shared
-    case TokenSpec(.transferring): self = .transferring
-    default: return nil
-    }
-  }
-
-  var spec: TokenSpec {
-    switch self {
-    case .inout: return .keyword(.inout)
-    case .owned: return .keyword(.__owned)
-    case .shared: return .keyword(.__shared)
-    case .borrowing: return .keyword(.borrowing)
-    case .consuming: return .keyword(.consuming)
-    case .transferring: return .keyword(.transferring)
-    }
-  }
-}
-
 // MARK: Expression start
 
 enum ExpressionModifierKeyword: TokenSpecSet {

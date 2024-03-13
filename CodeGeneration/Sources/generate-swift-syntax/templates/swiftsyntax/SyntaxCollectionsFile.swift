@@ -41,7 +41,12 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         ) {
           for choiceName in node.elementChoices {
             let choice = SYNTAX_NODE_MAP[choiceName]!
-            DeclSyntax("case `\(choice.varOrCaseName)`(\(choice.kind.syntaxType))")
+            DeclSyntax(
+              """
+              \(choice.apiAttributes())\
+              case `\(choice.varOrCaseName)`(\(choice.kind.syntaxType))
+              """
+            )
           }
 
           try VariableDeclSyntax("public var _syntaxNode: Syntax") {
@@ -60,6 +65,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             if choiceNode.kind.isBase {
               DeclSyntax(
                 """
+                \(choiceNode.apiAttributes())\
                 public init(_ node: some \(choiceNode.kind.protocolType)) {
                   self = .\(choiceNode.varOrCaseName)(\(choiceNode.kind.syntaxType)(node))
                 }
@@ -69,6 +75,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             } else {
               DeclSyntax(
                 """
+                \(choiceNode.apiAttributes())\
                 public init(_ node: \(choiceNode.kind.syntaxType)) {
                   self = .\(choiceNode.varOrCaseName)(node)
                 }

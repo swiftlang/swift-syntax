@@ -28,7 +28,11 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _compilerInitialized
   case _const
   @_spi(ExperimentalLanguageFeatures)
+  case _consume
+  @_spi(ExperimentalLanguageFeatures)
   case _consuming
+  @_spi(ExperimentalLanguageFeatures)
+  case _copy
   case _documentation
   case _dynamicReplacement
   case _effects
@@ -39,6 +43,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _local
   case _modify
   case _move
+  @_spi(ExperimentalLanguageFeatures)
+  case _mutate
   @_spi(ExperimentalLanguageFeatures)
   case _mutating
   case _NativeClass
@@ -337,6 +343,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
       }
     case 5:
       switch text {
+      case "_copy":
+        self = ._copy
       case "_move":
         self = ._move
       case "_read":
@@ -447,6 +455,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = ._linear
       case "_modify":
         self = ._modify
+      case "_mutate":
+        self = ._mutate
       case "consume":
         self = .consume
       case "default":
@@ -484,6 +494,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
       switch text {
       case "__shared":
         self = .__shared
+      case "_consume":
+        self = ._consume
       case "_effects":
         self = ._effects
       case "_forward":
@@ -814,7 +826,9 @@ public enum Keyword: UInt8, Hashable, Sendable {
       "_Class", 
       "_compilerInitialized", 
       "_const", 
+      "_consume", 
       "_consuming", 
+      "_copy", 
       "_documentation", 
       "_dynamicReplacement", 
       "_effects", 
@@ -825,6 +839,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
       "_local", 
       "_modify", 
       "_move", 
+      "_mutate", 
       "_mutating", 
       "_NativeClass", 
       "_NativeRefCountedObject", 

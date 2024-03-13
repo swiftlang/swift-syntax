@@ -25,9 +25,9 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
       // MARK: - \(node.kind.syntaxType)
 
-      /// Protocol to which all ``\(node.kind.syntaxType)`` nodes conform. 
+      /// Protocol to which all \(raw: node.kind.doccLink) nodes conform.
       ///
-      /// Extension point to add common methods to all ``\(node.kind.syntaxType)`` nodes.
+      /// Extension point to add common methods to all \(raw: node.kind.doccLink) nodes.
       ///
       ///  - Warning: Do not conform to this protocol yourself.
       \(node.apiAttributes())\
@@ -77,7 +77,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           return self.as(S.self)!
         }
 
-        /// Checks if the current syntax node can be upcast to its base node type (``\#(node.kind.syntaxType)``).
+        /// Checks if the current syntax node can be upcast to its base node type (\#(raw: node.kind.doccLink)).
         ///
         /// - Returns: `true` since the node can always be upcast to its base node.
         @available(*, deprecated, message: "This cast will always succeed")
@@ -85,7 +85,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           return true
         }
 
-        /// Attempts to upcast the current syntax node to its base node type (``\#(node.kind.syntaxType)``).
+        /// Attempts to upcast the current syntax node to its base node type (\#(raw: node.kind.doccLink)).
         ///
         /// - Returns: The base node created from the current syntax node, as the node can always be upcast to its base type.
         @available(*, deprecated, message: "Use `\#(node.kind.syntaxType).init` for upcasting")
@@ -93,7 +93,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           return \#(node.kind.syntaxType)(self)
         }
 
-        /// Force-upcast the current syntax node to its base node type (``\#(node.kind.syntaxType)``).
+        /// Force-upcast the current syntax node to its base node type (\#(raw: node.kind.doccLink)).
         ///
         /// - Returns: The base node created from the current syntax node, as the node can always be upcast to its base type.
         @available(*, deprecated, message: "Use `\#(node.kind.syntaxType).init` for upcasting")
@@ -182,7 +182,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Create a ``\(node.kind.syntaxType)`` node from a specialized syntax node.
+        /// Create a \(raw: node.kind.doccLink) node from a specialized syntax node.
         public init(_ syntax: some \(node.kind.protocolType)) {
           // We know this cast is going to succeed. Go through init(_: SyntaxData)
           // to do a sanity check and verify the kind matches in debug builds and get
@@ -194,7 +194,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Create a ``\(node.kind.syntaxType)`` node from a specialized optional syntax node.
+        /// Create a \(raw: node.kind.doccLink) node from a specialized optional syntax node.
         public init?(_ syntax: (some \(node.kind.protocolType))?) {
           guard let syntax = syntax else { return nil }
           self.init(syntax)
@@ -215,7 +215,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// Create a ``\(node.kind.syntaxType)`` node from a specialized optional syntax node.
+        /// Create a \(raw: node.kind.doccLink) node from a specialized optional syntax node.
         public init?(fromProtocol syntax: \(node.kind.protocolType)?) {
           guard let syntax = syntax else { return nil }
           self.init(fromProtocol: syntax)

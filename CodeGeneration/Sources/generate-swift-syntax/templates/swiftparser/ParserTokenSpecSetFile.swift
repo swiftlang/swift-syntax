@@ -83,6 +83,17 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               }
             }
 
+            try InitializerDeclSyntax("public init?(token: TokenSyntax)") {
+              try SwitchExprSyntax("switch token") {
+                for choice in choices {
+                  SwitchCaseSyntax(
+                    "case TokenSpec(.\(choice.varOrCaseName)): self = .\(choice.varOrCaseName)"
+                  )
+                }
+                SwitchCaseSyntax("default: return nil")
+              }
+            }
+
             try VariableDeclSyntax("var spec: TokenSpec") {
               try SwitchExprSyntax("switch self") {
                 for choice in choices {

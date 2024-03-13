@@ -37,6 +37,76 @@ public extension AccessorEffectSpecifiersSyntax {
   }
 }
 
+extension AttributedTypeSyntax {
+  @available(*, deprecated, message: "Use initializer that takes a list of specifiers instead")
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil,
+    specifier: TokenSyntax? = nil,
+    _ unexpectedBetweenSpecifierAndAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndBaseType: UnexpectedNodesSyntax? = nil,
+    baseType: some TypeSyntaxProtocol,
+    _ unexpectedAfterBaseType: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    let specifiers: TypeSpecifierListSyntax
+    if let specifier {
+      specifiers = [.simpleTypeSpecifier(SimpleTypeSpecifierSyntax(specifier: specifier))]
+    } else {
+      specifiers = []
+    }
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeSpecifier,
+      specifiers: specifiers,
+      unexpectedBetweenSpecifierAndAttributes,
+      attributes: attributes,
+      unexpectedBetweenAttributesAndBaseType,
+      baseType: baseType,
+      unexpectedAfterBaseType,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBeforeSpecifiers")
+  public var unexpectedBeforeSpecifier: UnexpectedNodesSyntax? {
+    get {
+      self.unexpectedBeforeSpecifiers
+    }
+    set {
+      self.unexpectedBeforeSpecifiers = newValue
+    }
+  }
+
+  @available(*, deprecated, message: "Access the specifiers list instead")
+  public var specifier: TokenSyntax? {
+    get {
+      if case .simpleTypeSpecifier(let simpleSpecifier) = specifiers.first {
+        return simpleSpecifier.specifier
+      }
+      return nil
+    }
+    set {
+      if let newValue {
+        specifiers = [.simpleTypeSpecifier(SimpleTypeSpecifierSyntax(specifier: newValue))]
+      } else {
+        specifiers = []
+      }
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenSpecifiersAndAttributes")
+  public var unexpectedBetweenSpecifierAndAttributes: UnexpectedNodesSyntax? {
+    get {
+      self.unexpectedBetweenSpecifiersAndAttributes
+    }
+    set {
+      self.unexpectedBetweenSpecifiersAndAttributes = newValue
+    }
+  }
+}
+
 extension AttributeSyntax {
   @available(*, deprecated, renamed: "Arguments")
   public typealias Argument = Arguments

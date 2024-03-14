@@ -3293,4 +3293,19 @@ final class DeclarationTests: ParserTestCase {
     // Not actually valid, needs to be diagnosed during type checking
     assertParse("public init() -> Int")
   }
+
+  func testTransferringTypeSpecifier() {
+    assertParse(
+      "func testVarDeclTupleElt() -> (transferring String, String) {}",
+      experimentalFeatures: .transferringArgsAndResults
+    )
+    assertParse(
+      "func testVarDeclTuple2(_ x: (transferring String)) {}",
+      experimentalFeatures: .transferringArgsAndResults
+    )
+    assertParse(
+      "func testVarDeclTuple2(_ x: (transferring String, String)) {}",
+      experimentalFeatures: .transferringArgsAndResults
+    )
+  }
 }

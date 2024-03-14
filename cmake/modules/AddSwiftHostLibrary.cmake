@@ -73,6 +73,7 @@ function(add_swift_syntax_library name)
   # Configure the emission of the Swift module files.
   target_compile_options("${name}" PRIVATE
     $<$<COMPILE_LANGUAGE:Swift>:
+      -DRESILIENT_LIBRARIES;
       -module-name;${name};
       -enable-library-evolution;
       -emit-module-path;${module_file};

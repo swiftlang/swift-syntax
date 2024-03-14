@@ -167,7 +167,10 @@ extension Parser {
     openQuoteHasTrailingNewline: Bool,
     middleSegments: inout [RawStringLiteralSegmentListSyntax.Element]
   ) -> Bool {
-    switch middleSegments.last {
+    guard let segment = middleSegments.last else {
+      return openQuoteHasTrailingNewline
+    }
+    switch segment {
     case .stringSegment(let lastMiddleSegment):
       if !lastMiddleSegment.content.trailingTriviaPieces.isEmpty {
         precondition(
@@ -218,8 +221,10 @@ extension Parser {
       }
     case .expressionSegment:
       return false
-    case nil:
-      return openQuoteHasTrailingNewline
+    #if RESILIENT_LIBRARIES
+    @unknown default:
+      fatalError()
+    #endif
     }
   }
 
@@ -282,6 +287,10 @@ extension Parser {
         if let rewrittenSegment = expressionIndentationChecker.checkIndentation(of: segment) {
           middleSegments[index] = .expressionSegment(rewrittenSegment)
         }
+      #if RESILIENT_LIBRARIES
+      @unknown default:
+        fatalError()
+      #endif
       }
     }
   }

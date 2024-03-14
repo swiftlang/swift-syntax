@@ -358,6 +358,10 @@ enum TokenPrecedence: Comparable {
       .wrt,
       .unsafe:
       self = .exprKeyword
+    #if RESILIENT_LIBRARIES
+    @unknown default:
+      fatalError()
+    #endif
     }
   }
 }

@@ -54,6 +54,9 @@ extension PluginMessage.Diagnostic.Severity {
     case .warning: self = .warning
     case .note: self = .note
     case .remark: self = .remark
+    #if RESILIENT_LIBRARIES
+    @unknown default: fatalError()
+    #endif
     }
   }
 }
@@ -122,6 +125,10 @@ extension PluginMessage.Diagnostic {
               to: .afterTrailingTrivia
             )
             text = newTrivia.description
+          #if RESILIENT_LIBRARIES
+          @unknown default:
+            fatalError()
+          #endif
           }
           guard let range = range else {
             return nil

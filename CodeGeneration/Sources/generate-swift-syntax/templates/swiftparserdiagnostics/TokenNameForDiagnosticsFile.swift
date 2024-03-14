@@ -29,6 +29,21 @@ let tokenNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightHeader
         SwitchCaseSyntax("case .keyword(let keyword):") {
           StmtSyntax("return String(syntaxText: keyword.defaultText)")
         }
+        IfConfigDeclSyntax(
+          clauses: IfConfigClauseListSyntax {
+            IfConfigClauseSyntax(
+              poundKeyword: .poundIfToken(),
+              condition: ExprSyntax("RESILIENT_LIBRARIES"),
+              elements: .switchCases(
+                SwitchCaseListSyntax {
+                  SwitchCaseSyntax("@unknown default:") {
+                    StmtSyntax("fatalError()")
+                  }
+                }
+              )
+            )
+          }
+        )
       }
     }
   }

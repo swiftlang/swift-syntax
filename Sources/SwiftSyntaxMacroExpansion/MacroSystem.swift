@@ -1296,6 +1296,10 @@ private extension AccessorBlockSyntax {
         )
       )
       result.accessors = .accessors(AccessorDeclListSyntax([getterAsAccessor] + Array(newAccessors)))
+    #if RESILIENT_LIBRARIES
+    @unknown default:
+      fatalError()
+    #endif
     }
     return result
   }

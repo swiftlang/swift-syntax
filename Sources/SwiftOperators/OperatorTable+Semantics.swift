@@ -62,6 +62,10 @@ extension PrecedenceGroup {
         default:
           break
         }
+      #if RESILIENT_LIBRARIES
+      @unknown default:
+        fatalError()
+      #endif
       }
     }
   }

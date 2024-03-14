@@ -117,6 +117,9 @@ extension TokenKind {
       return "wildcard"
     case .keyword(let keyword):
       return String(syntaxText: keyword.defaultText)
+    #if RESILIENT_LIBRARIES
+    @unknown default:fatalError()
+    #endif
     }
   }
 }

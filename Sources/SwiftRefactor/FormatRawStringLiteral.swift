@@ -47,6 +47,10 @@ public struct FormatRawStringLiteral: SyntaxRefactoringProvider {
       case .stringSegment(let string):
         // Find the longest run of # characters in the content of the literal.
         maximumHashes = max(maximumHashes, string.content.text.longestRun(of: "#"))
+      #if RESILIENT_LIBRARIES
+      @unknown default:
+        fatalError()
+      #endif
       }
     }
 

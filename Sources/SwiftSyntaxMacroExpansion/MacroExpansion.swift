@@ -402,6 +402,10 @@ fileprivate extension SyntaxProtocol {
       formatted = self.formatted(using: BasicFormat(indentationWidth: indentationWidth))
     case .disabled:
       formatted = Syntax(self)
+    #if RESILIENT_LIBRARIES
+    @unknown default:
+      fatalError()
+    #endif
     }
     return formatted.trimmedDescription(matching: { $0.isWhitespace })
   }

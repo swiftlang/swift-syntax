@@ -43,6 +43,10 @@ extension StringLiteralExprSyntax {
       case .expressionSegment:
         // Bail out if there are any interpolation segments.
         return nil
+      #if RESILIENT_LIBRARIES
+      @unknown default:
+        fatalError()
+      #endif
       }
     }
 

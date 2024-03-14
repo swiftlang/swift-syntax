@@ -153,6 +153,9 @@ class SourceManager {
     switch filePathMode {
     case .fileID: file = base.location.fileID
     case .filePath: file = base.location.fileName
+    #if RESILIENT_LIBRARIES
+    @unknown default: fatalError()
+    #endif
     }
 
     let localPosition = node.position(at: kind)
@@ -185,6 +188,10 @@ fileprivate extension Syntax {
       return self.endPositionBeforeTrailingTrivia
     case .afterTrailingTrivia:
       return self.endPosition
+    #if RESILIENT_LIBRARIES
+    @unknown default:
+      fatalError()
+    #endif
     }
   }
 }

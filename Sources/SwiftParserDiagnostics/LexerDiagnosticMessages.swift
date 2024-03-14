@@ -230,6 +230,10 @@ public extension SwiftSyntax.TokenDiagnostic {
     case .unicodeCurlyQuote: return StaticTokenError.unicodeCurlyQuote
     case .unprintableAsciiCharacter: return StaticTokenError.unprintableAsciiCharacter
     case .unterminatedBlockComment: return StaticTokenError.unterminatedBlockComment
+    #if RESILIENT_LIBRARIES
+    @unknown default:
+      fatalError()
+    #endif
     }
   }
 

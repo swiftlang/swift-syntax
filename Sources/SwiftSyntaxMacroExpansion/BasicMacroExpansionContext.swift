@@ -230,6 +230,11 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
 
     case .filePath:
       fileName = knownRoot.fullFilePath
+
+    #if RESILIENT_LIBRARIES
+    @unknown default:
+      fatalError()
+    #endif
     }
 
     // Find the node's offset relative to its root.
@@ -246,6 +251,11 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
 
     case .afterTrailingTrivia:
       rawPosition = node.endPosition
+
+    #if RESILIENT_LIBRARIES
+    @unknown default:
+      fatalError()
+    #endif
     }
 
     // Do the location lookup.

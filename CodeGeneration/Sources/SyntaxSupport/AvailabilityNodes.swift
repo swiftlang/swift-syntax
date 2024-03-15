@@ -158,6 +158,7 @@ public let AVAILABILITY_NODES: [Node] = [
     base: .syntax,
     nameForDiagnostics: "version tuple",
     documentation: "A version number like `1.2.0`. Only the first version component is required. There might be an arbitrary number of following components.",
+    parserFunction: "parseVersionTuple",
     children: [
       Child(
         name: "major",

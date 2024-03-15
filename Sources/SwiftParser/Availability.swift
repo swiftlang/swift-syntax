@@ -117,7 +117,7 @@ extension Parser {
         (.obsoleted, let handle)?:
         let argumentLabel = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
-        let version = self.parseVersionTuple(maxComponentCount: 3)
+        let version = self.parseVersionTuple()
         entry = .availabilityLabeledArgument(
           RawAvailabilityLabeledArgumentSyntax(
             label: argumentLabel,
@@ -130,7 +130,7 @@ extension Parser {
       case (.deprecated, let handle)?:
         let argumentLabel = self.eat(handle)
         if let colon = self.consume(if: .colon) {
-          let version = self.parseVersionTuple(maxComponentCount: 3)
+          let version = self.parseVersionTuple()
           entry = .availabilityLabeledArgument(
             RawAvailabilityLabeledArgumentSyntax(
               label: argumentLabel,
@@ -206,7 +206,7 @@ extension Parser {
 
     let version: RawVersionTupleSyntax?
     if self.at(.integerLiteral, .floatLiteral) {
-      version = self.parseVersionTuple(maxComponentCount: 3)
+      version = self.parseVersionTuple()
     } else {
       version = nil
     }
@@ -250,7 +250,7 @@ extension Parser {
   }
 
   /// Parse a dot-separated list of version numbers.
-  mutating func parseVersionTuple(maxComponentCount: Int) -> RawVersionTupleSyntax {
+  mutating func parseVersionTuple() -> RawVersionTupleSyntax {
     if self.at(.floatLiteral),
       let periodIndex = self.currentToken.tokenText.firstIndex(of: UInt8(ascii: ".")),
       self.currentToken.tokenText[0..<periodIndex].allSatisfy({ Unicode.Scalar($0).isDigit })
@@ -260,9 +260,9 @@ extension Parser {
       let major = self.consumePrefix(SyntaxText(rebasing: self.currentToken.tokenText[0..<periodIndex]), as: .integerLiteral)
 
       var components: [RawVersionComponentSyntax] = []
-      var trailingComponents: [RawVersionComponentSyntax] = []
 
-      for i in 1... {
+      var loopProgress = LoopProgressCondition()
+      while self.hasProgressed(&loopProgress) {
         guard let period = self.consume(if: .period) else {
           break
         }
@@ -270,23 +270,18 @@ extension Parser {
 
         let versionComponent = RawVersionComponentSyntax(period: period, number: version, arena: self.arena)
 
-        if i < maxComponentCount {
-          components.append(versionComponent)
-        } else {
-          trailingComponents.append(versionComponent)
-        }
+        components.append(versionComponent)
 
         if version.isMissing {
           break
         }
       }
 
-      let unexpectedTrailingComponents = RawUnexpectedNodesSyntax(trailingComponents, arena: self.arena)
       let unexpectedAfterComponents = self.parseUnexpectedVersionTokens()
       return RawVersionTupleSyntax(
         major: major,
         components: RawVersionComponentListSyntax(elements: components, arena: self.arena),
-        RawUnexpectedNodesSyntax(combining: unexpectedTrailingComponents, unexpectedAfterComponents, arena: self.arena),
+        unexpectedAfterComponents,
         arena: self.arena
       )
     } else {

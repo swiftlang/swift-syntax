@@ -272,18 +272,22 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
   
+  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
   override open func visit(_ node: CanImportExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
+  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
   override open func visitPost(_ node: CanImportExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
   
+  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
   override open func visit(_ node: CanImportVersionInfoSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
   
+  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
   override open func visitPost(_ node: CanImportVersionInfoSyntax) {
     visitAnyPost(node._syntaxNode)
   }

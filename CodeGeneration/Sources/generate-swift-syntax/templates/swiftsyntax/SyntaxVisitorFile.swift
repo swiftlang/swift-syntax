@@ -204,7 +204,9 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
                   for node in NON_BASE_SYNTAX_NODES {
                     SwitchCaseSyntax("case .\(node.varOrCaseName):") {
-                      StmtSyntax("return { self.visitImpl(&$0, \(node.kind.syntaxType).self, self.visit, self.visitPost) }")
+                      StmtSyntax(
+                        "return { self.visitImpl(&$0, \(node.kind.syntaxType).self, self.visit, self.visitPost) }"
+                      )
                     }
                   }
                 }

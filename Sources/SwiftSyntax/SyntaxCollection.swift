@@ -70,7 +70,9 @@ extension SyntaxCollection {
   internal func replacingLayout(_ layout: [RawSyntax?]) -> Self {
     let arena = SyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
-    return Syntax(self).replacingSelf(newRaw, rawNodeArena: RetainedSyntaxArena(arena), allocationArena: arena).cast(Self.self)
+    return Syntax(self)
+      .replacingSelf(newRaw, rawNodeArena: RetainedSyntaxArena(arena), allocationArena: arena)
+      .cast(Self.self)
   }
 
   /// Return the index of `node` within this collection.
@@ -124,6 +126,7 @@ extension SyntaxCollection {
   ///
   /// - Parameter syntax: The element to append.
   /// - Returns: A new collection with that element appended to the end.
+  // swift-format-ignore
   @available(*, deprecated, message: "Create a new array of elements and construct a new collection type from those elements")
   public func appending(_ syntax: Element) -> Self {
     var newLayout = layoutView.formLayoutArray()
@@ -137,6 +140,7 @@ extension SyntaxCollection {
   /// - Parameter syntax: The element to prepend.
   /// - Returns: A new collection with that element prepended to the
   ///            beginning.
+  // swift-format-ignore
   @available(*, deprecated, message: "Create a new array of elements and construct a new collection type from those elements")
   public func prepending(_ syntax: Element) -> Self {
     return inserting(syntax, at: 0)
@@ -150,6 +154,7 @@ extension SyntaxCollection {
   ///   - index: The index at which to insert the element in the collection.
   ///
   /// - Returns: A new collection with that element appended to the end.
+  // swift-format-ignore
   @available(*, deprecated, message: "Create a new array of elements and construct a new collection type from those elements")
   public func inserting(_ syntax: Element, at index: Int) -> Self {
     var newLayout = layoutView.formLayoutArray()
@@ -188,6 +193,7 @@ extension SyntaxCollection {
   /// - Parameter index: The index of the element to remove from the collection.
   /// - Returns: A new collection with the element at the provided index
   ///            removed.
+  // swift-format-ignore
   @available(*, deprecated, message: "Use filter to remove unwanted elements and construct a new collection type from the filtered elements")
   public func removing(childAt index: Int) -> Self {
     var newLayout = layoutView.formLayoutArray()

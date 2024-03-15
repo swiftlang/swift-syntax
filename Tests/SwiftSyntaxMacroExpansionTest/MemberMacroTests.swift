@@ -539,7 +539,9 @@ final class MemberMacroTests: XCTestCase {
           }
         }
         """,
-      macroSpecs: ["AddCodableExtensions": MacroSpec(type: CodableExtensionMacro.self, conformances: ["Decodable", "Encodable"])],
+      macroSpecs: [
+        "AddCodableExtensions": MacroSpec(type: CodableExtensionMacro.self, conformances: ["Decodable", "Encodable"])
+      ],
       indentationWidth: indentationWidth
     )
 

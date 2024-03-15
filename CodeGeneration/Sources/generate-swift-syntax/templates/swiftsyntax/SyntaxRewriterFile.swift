@@ -146,7 +146,8 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       }
     }
 
-    for baseNode in SYNTAX_NODES where baseNode.kind.isBase && baseNode.kind != .syntax && baseNode.kind != .syntaxCollection {
+    for baseNode in SYNTAX_NODES
+    where baseNode.kind.isBase && baseNode.kind != .syntax && baseNode.kind != .syntaxCollection {
       let baseKind = baseNode.kind
       DeclSyntax(
         """

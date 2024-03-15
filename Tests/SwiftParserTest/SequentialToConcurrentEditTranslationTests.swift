@@ -337,7 +337,9 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
       let numEdits = Int.random(in: 1..<10)
       for _ in 0..<numEdits {
         let replacementLength = Int.random(in: 0..<32)
-        let replacementBytes = (0..<replacementLength).map { _ in (UInt8(ascii: "a")..<UInt8(ascii: "z")).randomElement()! }
+        let replacementBytes = (0..<replacementLength).map { _ in
+          (UInt8(ascii: "a")..<UInt8(ascii: "z")).randomElement()!
+        }
         edits.append(
           IncrementalEdit(
             offset: Int.random(in: 0..<32),
@@ -348,7 +350,9 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
       }
       print(edits)
       let normalizedEdits = ConcurrentEdits(fromSequential: edits)
-      if applyEdits(edits, concurrent: false, to: longString) != applyEdits(normalizedEdits.edits, concurrent: true, to: longString) {
+      if applyEdits(edits, concurrent: false, to: longString)
+        != applyEdits(normalizedEdits.edits, concurrent: true, to: longString)
+      {
         print("failed \(i)")
         fatalError()
       } else {

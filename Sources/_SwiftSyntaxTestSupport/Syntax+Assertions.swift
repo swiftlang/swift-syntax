@@ -101,14 +101,28 @@ public struct SubtreeMatcher {
   /// Same as `Syntax.findFirstDifference(baseline:includeTrivia:)`, but
   /// matches against the first subtree from parsing `markedText` that is after
   /// `afterMarker` with the root matching the root type of `baseline`.
-  public func findFirstDifference(afterMarker: String? = nil, baseline: some SyntaxProtocol, includeTrivia: Bool = false) throws -> TreeDifference? {
+  public func findFirstDifference(
+    afterMarker: String? = nil,
+    baseline: some SyntaxProtocol,
+    includeTrivia: Bool = false
+  ) throws -> TreeDifference? {
     let afterMarker = afterMarker ?? markers.first!.key
     guard let subtreeStart = markers[afterMarker] else {
       throw SubtreeError.invalidMarker(name: afterMarker)
     }
 
-    guard let subtree = SyntaxTypeFinder.findFirstNode(in: actualTree, afterUTF8Offset: subtreeStart, ofType: baseline.syntaxNodeType) else {
-      throw SubtreeError.invalidSubtree(tree: actualTree, afterUTF8Offset: subtreeStart, type: String(describing: baseline.syntaxNodeType))
+    guard
+      let subtree = SyntaxTypeFinder.findFirstNode(
+        in: actualTree,
+        afterUTF8Offset: subtreeStart,
+        ofType: baseline.syntaxNodeType
+      )
+    else {
+      throw SubtreeError.invalidSubtree(
+        tree: actualTree,
+        afterUTF8Offset: subtreeStart,
+        type: String(describing: baseline.syntaxNodeType)
+      )
     }
 
     return subtree.findFirstDifference(baseline: baseline, includeTrivia: includeTrivia)
@@ -150,7 +164,8 @@ public enum SubtreeError: Error, CustomStringConvertible {
     case let .invalidMarker(name):
       return "Could not find marker with name '\(name)'"
     case let .invalidSubtree(tree, afterUTF8Offset, type):
-      return "Could not find subtree after UTF8 offset \(afterUTF8Offset) with type \(type) in:\n\(tree.debugDescription)"
+      return
+        "Could not find subtree after UTF8 offset \(afterUTF8Offset) with type \(type) in:\n\(tree.debugDescription)"
     }
   }
 }
@@ -180,7 +195,11 @@ fileprivate class SyntaxTypeFinder: SyntaxAnyVisitor {
     return .visitChildren
   }
 
-  public static func findFirstNode(in tree: Syntax, afterUTF8Offset offset: Int, ofType type: SyntaxProtocol.Type) -> Syntax? {
+  public static func findFirstNode(
+    in tree: Syntax,
+    afterUTF8Offset offset: Int,
+    ofType type: SyntaxProtocol.Type
+  ) -> Syntax? {
     let finder = SyntaxTypeFinder(offset: offset, type: type)
     finder.walk(tree)
     return finder.found

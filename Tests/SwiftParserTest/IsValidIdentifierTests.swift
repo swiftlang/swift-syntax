@@ -34,8 +34,20 @@ private func assertValidIdentifier(
   file: StaticString = #filePath,
   line: UInt = #line
 ) {
-  XCTAssertEqual(name.isValidSwiftIdentifier(for: .variableName), spec.variableName, "Checking identifier for variableName context", file: file, line: line)
-  XCTAssertEqual(name.isValidSwiftIdentifier(for: .memberAccess), spec.memberAccess, "Checking identifier for memberAccess context", file: file, line: line)
+  XCTAssertEqual(
+    name.isValidSwiftIdentifier(for: .variableName),
+    spec.variableName,
+    "Checking identifier for variableName context",
+    file: file,
+    line: line
+  )
+  XCTAssertEqual(
+    name.isValidSwiftIdentifier(for: .memberAccess),
+    spec.memberAccess,
+    "Checking identifier for memberAccess context",
+    file: file,
+    line: line
+  )
 }
 
 class IsValidIdentifierTests: XCTestCase {

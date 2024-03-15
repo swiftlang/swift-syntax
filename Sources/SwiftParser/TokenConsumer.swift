@@ -134,7 +134,9 @@ extension TokenConsumer {
   /// If this is the case, return the `Subset` case that the parser is positioned in
   /// as well as a handle to consume that token.
   @inline(__always)
-  mutating func at<SpecSet: TokenSpecSet>(anyIn specSet: SpecSet.Type) -> (spec: SpecSet, handle: TokenConsumptionHandle)? {
+  mutating func at<SpecSet: TokenSpecSet>(
+    anyIn specSet: SpecSet.Type
+  ) -> (spec: SpecSet, handle: TokenConsumptionHandle)? {
     #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
     if shouldRecordAlternativeTokenChoices {
       recordAlternativeTokenChoice(for: self.currentToken, choices: specSet.allCases.map(\.spec))

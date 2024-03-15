@@ -499,7 +499,9 @@ final class MultilineStringTests: ParserTestCase {
         openingQuote: .multilineStringQuoteToken(trailingTrivia: .newline),
         segments: StringLiteralSegmentListSyntax([
           .stringSegment(
-            StringSegmentSyntax(content: .stringSegment("Three ", trailingTrivia: [.backslashes(1), .pounds(1), .newlines(1)]))
+            StringSegmentSyntax(
+              content: .stringSegment("Three ", trailingTrivia: [.backslashes(1), .pounds(1), .newlines(1)])
+            )
           ),
           .stringSegment(StringSegmentSyntax(content: .stringSegment("Gamma", trailingTrivia: .newline))),
         ]),
@@ -526,9 +528,15 @@ final class MultilineStringTests: ParserTestCase {
         openingQuote: .multilineStringQuoteToken(trailingTrivia: .newline),
         segments: StringLiteralSegmentListSyntax([
           .stringSegment(
-            StringSegmentSyntax(content: .stringSegment("Three ", trailingTrivia: [.backslashes(1), .pounds(1), .newlines(1)]))
+            StringSegmentSyntax(
+              content: .stringSegment("Three ", trailingTrivia: [.backslashes(1), .pounds(1), .newlines(1)])
+            )
           ),
-          .stringSegment(StringSegmentSyntax(content: .stringSegment("Gamma ", trailingTrivia: [.backslashes(1), .pounds(1), .newlines(1)]))),
+          .stringSegment(
+            StringSegmentSyntax(
+              content: .stringSegment("Gamma ", trailingTrivia: [.backslashes(1), .pounds(1), .newlines(1)])
+            )
+          ),
         ]),
         closingQuote: .multilineStringQuoteToken(),
         closingPounds: .rawStringPoundDelimiter("#")

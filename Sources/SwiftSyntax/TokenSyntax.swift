@@ -111,7 +111,9 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
       }
       let arena = SyntaxArena()
       let newRaw = tokenView.withKind(newValue, arena: arena)
-      self = Syntax(self).replacingSelf(newRaw, rawNodeArena: RetainedSyntaxArena(arena), allocationArena: arena).cast(TokenSyntax.self)
+      self = Syntax(self)
+        .replacingSelf(newRaw, rawNodeArena: RetainedSyntaxArena(arena), allocationArena: arena)
+        .cast(TokenSyntax.self)
     }
   }
 

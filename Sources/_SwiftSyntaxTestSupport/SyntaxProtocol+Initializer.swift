@@ -27,7 +27,10 @@ private class InitializerExprFormat: BasicFormat {
     super.init(indentationWidth: .spaces(2))
   }
 
-  private func formatChildrenSeparatedByNewline<SyntaxType: SyntaxProtocol>(children: SyntaxChildren, elementType: SyntaxType.Type) -> [SyntaxType] {
+  private func formatChildrenSeparatedByNewline<SyntaxType: SyntaxProtocol>(
+    children: SyntaxChildren,
+    elementType: SyntaxType.Type
+  ) -> [SyntaxType] {
     increaseIndentationLevel()
     var formattedChildren = children.map {
       self.rewrite($0.cast(SyntaxType.self)).cast(SyntaxType.self)
@@ -41,7 +44,8 @@ private class InitializerExprFormat: BasicFormat {
     }
     decreaseIndentationLevel()
     if !formattedChildren.isEmpty {
-      formattedChildren[formattedChildren.count - 1] = formattedChildren[formattedChildren.count - 1].with(\.trailingTrivia, .newline + currentIndentationLevel)
+      formattedChildren[formattedChildren.count - 1] = formattedChildren[formattedChildren.count - 1]
+        .with(\.trailingTrivia, .newline + currentIndentationLevel)
     }
     return formattedChildren
   }
@@ -49,12 +53,16 @@ private class InitializerExprFormat: BasicFormat {
   override func visit(_ node: LabeledExprListSyntax) -> LabeledExprListSyntax {
     let children = node.children(viewMode: .all)
     // If the function only takes a single argument, display it on the same line
-    if let callee = node.parent?.as(FunctionCallExprSyntax.self)?.calledExpression.as(MemberAccessExprSyntax.self), callee.base == nil {
+    if let callee = node.parent?.as(FunctionCallExprSyntax.self)?.calledExpression.as(MemberAccessExprSyntax.self),
+      callee.base == nil
+    {
       // This is a constructor for tokens. Write them on a single line
       return super.visit(node)
     }
     if children.count > 1 {
-      return LabeledExprListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: LabeledExprSyntax.self))
+      return LabeledExprListSyntax(
+        formatChildrenSeparatedByNewline(children: children, elementType: LabeledExprSyntax.self)
+      )
     } else {
       return super.visit(node)
     }
@@ -64,7 +72,9 @@ private class InitializerExprFormat: BasicFormat {
     let children = node.children(viewMode: .all)
     // Short array literals are presented on one line, list each element on a different line.
     if node.description.count > 30 {
-      return ArrayElementListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: ArrayElementSyntax.self))
+      return ArrayElementListSyntax(
+        formatChildrenSeparatedByNewline(children: children, elementType: ArrayElementSyntax.self)
+      )
     } else {
       return super.visit(node)
     }
@@ -147,7 +157,9 @@ extension SyntaxProtocol {
           LabeledExprSyntax(
             expression: ArrayExprSyntax {
               for child in self.children(viewMode: .all) {
-                ArrayElementSyntax(expression: child.as(collectionElementType)!.debugInitCallExpr(includeTrivia: includeTrivia))
+                ArrayElementSyntax(
+                  expression: child.as(collectionElementType)!.debugInitCallExpr(includeTrivia: includeTrivia)
+                )
               }
             }
           )

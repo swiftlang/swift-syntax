@@ -51,7 +51,11 @@ public struct TokenSequence: Sequence, Sendable {
 
   /// Create an iterator that iterates over all the tokens in the sequence.
   public func makeIterator() -> Iterator {
-    return Iterator(node.firstToken(viewMode: viewMode), endToken: node.lastToken(viewMode: viewMode), viewMode: viewMode)
+    return Iterator(
+      node.firstToken(viewMode: viewMode),
+      endToken: node.lastToken(viewMode: viewMode),
+      viewMode: viewMode
+    )
   }
 
   /// Iterate the tokens in reverse order.

@@ -89,7 +89,11 @@ extension Parser {
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition?
   ) -> (tree: SourceFileSyntax, lookaheadRanges: LookaheadRanges) {
-    let parseResult = parseIncrementally(source: source, maximumNestingLevel: maximumNestingLevel, parseTransition: parseTransition)
+    let parseResult = parseIncrementally(
+      source: source,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: parseTransition
+    )
     return (parseResult.tree, parseResult.lookaheadRanges)
   }
 

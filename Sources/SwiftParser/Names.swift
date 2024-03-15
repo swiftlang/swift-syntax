@@ -66,7 +66,9 @@ extension Parser {
   mutating func parseDeclReferenceExpr(_ flags: DeclNameOptions = []) -> RawDeclReferenceExprSyntax {
     // Consume the base name.
     let base: RawTokenSyntax
-    if let identOrSelf = self.consume(if: .identifier, .keyword(.self), .keyword(.Self)) ?? self.consume(if: .keyword(.`init`)) {
+    if let identOrSelf = self.consume(if: .identifier, .keyword(.self), .keyword(.Self))
+      ?? self.consume(if: .keyword(.`init`))
+    {
       base = identOrSelf
     } else if flags.contains(.operators), let (_, _) = self.at(anyIn: Operator.self) {
       base = self.consumeAnyToken(remapping: .binaryOperator)
@@ -216,7 +218,12 @@ extension Parser {
     var keepGoing = self.consume(if: .period)
     var loopProgress = LoopProgressCondition()
     while keepGoing != nil && self.hasProgressed(&loopProgress) {
-      let (unexpectedBeforeName, name) = self.expect(.identifier, .keyword(.self), TokenSpec(.Self, remapping: .identifier), default: .identifier)
+      let (unexpectedBeforeName, name) = self.expect(
+        .identifier,
+        .keyword(.self),
+        TokenSpec(.Self, remapping: .identifier),
+        default: .identifier
+      )
       let generics: RawGenericArgumentClauseSyntax?
       if self.atContextualPunctuator("<") {
         generics = self.parseGenericArguments()

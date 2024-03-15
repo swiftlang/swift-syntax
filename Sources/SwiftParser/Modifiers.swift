@@ -86,7 +86,8 @@ extension Parser {
         (.declarationModifier(._local), let handle)?,
         (.declarationModifier(.__setter_access), let handle)?,
         (.declarationModifier(.reasync), let handle)?,
-        (.declarationModifier(._resultDependsOnSelf), let handle)? where experimentalFeatures.contains(.nonescapableTypes):
+        (.declarationModifier(._resultDependsOnSelf), let handle)?
+      where experimentalFeatures.contains(.nonescapableTypes):
         let (unexpectedBeforeKeyword, keyword) = self.eat(handle)
         elements.append(RawDeclModifierSyntax(unexpectedBeforeKeyword, name: keyword, detail: nil, arena: self.arena))
       case (.declarationModifier(.rethrows), _)?:
@@ -95,14 +96,20 @@ extension Parser {
         break MODIFIER_LOOP
       }
     }
-    return elements.isEmpty ? self.emptyCollection(RawDeclModifierListSyntax.self) : RawDeclModifierListSyntax(elements: elements, arena: arena)
+    return elements.isEmpty
+      ? self.emptyCollection(RawDeclModifierListSyntax.self)
+      : RawDeclModifierListSyntax(elements: elements, arena: arena)
   }
 }
 
 extension Parser {
   mutating func parseModifierDetail() -> RawDeclModifierDetailSyntax {
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-    let (unexpectedBeforeDetailToken, detailToken) = self.expect(.identifier, TokenSpec(.set, remapping: .identifier), default: .identifier)
+    let (unexpectedBeforeDetailToken, detailToken) = self.expect(
+      .identifier,
+      TokenSpec(.set, remapping: .identifier),
+      default: .identifier
+    )
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     return RawDeclModifierDetailSyntax(
       unexpectedBeforeLeftParen,

@@ -183,7 +183,10 @@ final class TrailingSemiTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+        DiagnosticSpec(
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
       ],
       applyFixIts: ["insert ';'"],
       fixedSource: """
@@ -208,7 +211,10 @@ final class TrailingSemiTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+        DiagnosticSpec(
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
       ],
       applyFixIts: ["insert newline"],
       fixedSource: """
@@ -287,7 +293,10 @@ final class TrailingSemiTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+        DiagnosticSpec(
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
       ],
       applyFixIts: ["insert ';'"],
       fixedSource: """
@@ -310,7 +319,10 @@ final class TrailingSemiTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+        DiagnosticSpec(
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
       ],
       applyFixIts: ["insert newline"],
       fixedSource: """

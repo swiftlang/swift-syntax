@@ -107,7 +107,8 @@ fileprivate enum NodesDescriptionPart {
           // Merge `tokensWithDefaultText` if they occur consecutively in the tree
           if let lastPrevious = previousTokens.last,
             let firstNew = newTokens.first,
-            originalTokens[lastPrevious, default: lastPrevious].nextToken(viewMode: .all) == originalTokens[firstNew, default: firstNew]
+            originalTokens[lastPrevious, default: lastPrevious].nextToken(viewMode: .all)
+              == originalTokens[firstNew, default: firstNew]
           {
             parts[parts.count - 1] = .tokensWithDefaultText(previousTokens + newTokens)
           } else {
@@ -138,7 +139,10 @@ func nodesDescription(_ nodes: [some SyntaxProtocol], format: Bool) -> String {
 }
 
 /// Same as `nodesDescription` but if a common ancestor was used to describe `missingNodes`, also return that `commonAncestor`
-func nodesDescriptionAndCommonParent(_ nodes: [some SyntaxProtocol], format: Bool) -> (commonAncestor: Syntax?, description: String) {
+func nodesDescriptionAndCommonParent(
+  _ nodes: [some SyntaxProtocol],
+  format: Bool
+) -> (commonAncestor: Syntax?, description: String) {
   let missingSyntaxNodes = nodes.map(Syntax.init)
 
   let isOnlyTokenWithNonMissingText: Bool
@@ -166,7 +170,9 @@ func nodesDescriptionAndCommonParent(_ nodes: [some SyntaxProtocol], format: Boo
     }
   }
 
-  let partDescriptions = NodesDescriptionPart.descriptionParts(for: missingSyntaxNodes).map({ $0.description(format: format) ?? "syntax" })
+  let partDescriptions = NodesDescriptionPart.descriptionParts(for: missingSyntaxNodes).map({
+    $0.description(format: format) ?? "syntax"
+  })
 
   return (nil, formatDescriptions(partDescriptions))
 }
@@ -334,7 +340,8 @@ public struct MissingNodesError: ParserError {
     var message = "expected \(description)"
     if let afterClause {
       message += " \(afterClause)"
-    } else if let parentContextClause = parentContextClause(anchor: anchor?.parent ?? findCommonAncestor(missingNodes)) {
+    } else if let parentContextClause = parentContextClause(anchor: anchor?.parent ?? findCommonAncestor(missingNodes))
+    {
       message += " \(parentContextClause)"
     }
     return message
@@ -451,7 +458,9 @@ extension ParseDiagnosticsGenerator {
       position = overridePosition
     } else if node.shouldBeInsertedAfterNextTokenTrivia, let nextToken = node.nextToken(viewMode: .sourceAccurate) {
       position = nextToken.positionAfterSkippingLeadingTrivia
-    } else if node.shouldBeInsertedBeforePreviousTokenTrivia, let previousToken = node.previousToken(viewMode: .sourceAccurate) {
+    } else if node.shouldBeInsertedBeforePreviousTokenTrivia,
+      let previousToken = node.previousToken(viewMode: .sourceAccurate)
+    {
       position = previousToken.endPositionBeforeTrailingTrivia
     } else {
       position = node.endPosition

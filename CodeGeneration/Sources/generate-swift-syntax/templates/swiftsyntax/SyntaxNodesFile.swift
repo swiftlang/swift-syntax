@@ -21,7 +21,8 @@ import Utils
 /// It then only emits those syntax nodes whose base kind are that specified kind.
 func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
   SourceFileSyntax(leadingTrivia: copyrightHeader) {
-    for node in SYNTAX_NODES.compactMap(\.layoutNode) where nodesStartingWith.contains(node.kind.syntaxType.description.first!) {
+    for node in SYNTAX_NODES.compactMap(\.layoutNode)
+    where nodesStartingWith.contains(node.kind.syntaxType.description.first!) {
       // We are actually handling this node now
       try! StructDeclSyntax(
         """
@@ -79,7 +80,9 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             for child in node.children {
               ArrayElementSyntax(
                 expression: MemberAccessExprSyntax(
-                  base: child.buildableType.optionalChained(expr: ExprSyntax("\(child.varOrCaseName.backtickedIfNeeded)")),
+                  base: child.buildableType.optionalChained(
+                    expr: ExprSyntax("\(child.varOrCaseName.backtickedIfNeeded)")
+                  ),
                   period: .periodToken(),
                   name: "raw"
                 )
@@ -132,7 +135,8 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           // Children properties
           // ===================
 
-          let childType: TypeSyntax = child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
+          let childType: TypeSyntax =
+            child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
           let type = child.isOptional ? TypeSyntax("\(childType)?") : TypeSyntax("\(childType)")
 
           try! VariableDeclSyntax(
@@ -142,7 +146,8 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             """
           ) {
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
-              let optionalityMarker: TokenSyntax = child.isOptional ? .infixQuestionMarkToken() : .exclamationMarkToken()
+              let optionalityMarker: TokenSyntax =
+                child.isOptional ? .infixQuestionMarkToken() : .exclamationMarkToken()
               StmtSyntax("return Syntax(self).child(at: \(raw: index))\(optionalityMarker).cast(\(childType).self)")
             }
 

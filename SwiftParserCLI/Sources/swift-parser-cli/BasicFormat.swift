@@ -91,7 +91,9 @@ struct BasicFormat: ParsableCommand, ParseCommand {
       )
     }
 
-    let formattedTree = resultTree.formatted(using: SwiftBasicFormat.BasicFormat(indentationWidth: .spaces(indentationWidth)))
+    let formattedTree = resultTree.formatted(
+      using: SwiftBasicFormat.BasicFormat(indentationWidth: .spaces(indentationWidth))
+    )
 
     print(formattedTree.description)
   }

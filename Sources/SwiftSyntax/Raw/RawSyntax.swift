@@ -89,7 +89,13 @@ internal struct RawSyntaxData: Sendable {
       }
     }
 
-    init(tokenKind: RawTokenKind, wholeText: SyntaxText, textRange: Range<SyntaxText.Index>, presence: SourcePresence, tokenDiagnostic: TokenDiagnostic?) {
+    init(
+      tokenKind: RawTokenKind,
+      wholeText: SyntaxText,
+      textRange: Range<SyntaxText.Index>,
+      presence: SourcePresence,
+      tokenDiagnostic: TokenDiagnostic?
+    ) {
       self.tokenKind = tokenKind
       self.wholeText = wholeText
       self.textRange = textRange
@@ -560,7 +566,10 @@ extension RawSyntax {
       presence: presence,
       tokenDiagnostic: tokenDiagnostic
     )
-    precondition(kind != .keyword || Keyword(payload.tokenText) != nil, "If kind is keyword, the text must be a known token kind")
+    precondition(
+      kind != .keyword || Keyword(payload.tokenText) != nil,
+      "If kind is keyword, the text must be a known token kind"
+    )
     return RawSyntax(arena: arena, payload: .parsedToken(payload))
   }
 
@@ -819,13 +828,19 @@ extension RawSyntax {
         // Find the index of the first non-empty node so we can attach the trivia to it.
         let idx = layout.firstIndex(where: { $0 != nil && ($0!.isToken || $0!.totalNodes > 1) })
       {
-        layout[idx] = layout[idx]!.withLeadingTrivia(leadingTrivia + (layout[idx]?.formLeadingTrivia() ?? []), arena: arena)
+        layout[idx] = layout[idx]!.withLeadingTrivia(
+          leadingTrivia + (layout[idx]?.formLeadingTrivia() ?? []),
+          arena: arena
+        )
       }
       if let trailingTrivia = trailingTrivia,
         // Find the index of the first non-empty node so we can attach the trivia to it.
         let idx = layout.lastIndex(where: { $0 != nil && ($0!.isToken || $0!.totalNodes > 1) })
       {
-        layout[idx] = layout[idx]!.withTrailingTrivia((layout[idx]?.formTrailingTrivia() ?? []) + trailingTrivia, arena: arena)
+        layout[idx] = layout[idx]!.withTrailingTrivia(
+          (layout[idx]?.formTrailingTrivia() ?? []) + trailingTrivia,
+          arena: arena
+        )
       }
       return .makeLayout(kind: kind, from: layout, arena: arena)
     }

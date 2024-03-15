@@ -318,7 +318,10 @@ extension Parser {
 
     // If it is a Python style inheritance clause, then consume a right paren if there is one.
     if isPythonStyleInheritanceClause, let rightParen = self.consume(if: .rightParen) {
-      unexpectedAfterInheritedTypeCollection = RawUnexpectedNodesSyntax(elements: [RawSyntax(rightParen)], arena: self.arena)
+      unexpectedAfterInheritedTypeCollection = RawUnexpectedNodesSyntax(
+        elements: [RawSyntax(rightParen)],
+        arena: self.arena
+      )
     } else {
       unexpectedAfterInheritedTypeCollection = nil
     }

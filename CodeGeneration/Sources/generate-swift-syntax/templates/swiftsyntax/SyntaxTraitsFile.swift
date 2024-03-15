@@ -80,6 +80,8 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   }
 
   for node in SYNTAX_NODES.compactMap(\.layoutNode) where !node.traits.isEmpty {
-    DeclSyntax("extension \(node.kind.syntaxType): \(raw: node.traits.map { $0 + "Syntax" }.joined(separator: ", ")) {}")
+    DeclSyntax(
+      "extension \(node.kind.syntaxType): \(raw: node.traits.map { $0 + "Syntax" }.joined(separator: ", ")) {}"
+    )
   }
 }

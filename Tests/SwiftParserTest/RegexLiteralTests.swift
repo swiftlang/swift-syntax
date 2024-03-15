@@ -41,7 +41,10 @@ final class RegexLiteralTests: ParserTestCase {
       #//#1️⃣#
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "too many '#' characters in closing delimiter", fixIts: ["remove extraneous delimiters"])
+        DiagnosticSpec(
+          message: "too many '#' characters in closing delimiter",
+          fixIts: ["remove extraneous delimiters"]
+        )
       ],
       fixedSource: "#//#"
     )
@@ -52,7 +55,10 @@ final class RegexLiteralTests: ParserTestCase {
       #/abc/#1️⃣#
       """,
       diagnostics: [
-        DiagnosticSpec(message: "too many '#' characters in closing delimiter", fixIts: ["remove extraneous delimiters"])
+        DiagnosticSpec(
+          message: "too many '#' characters in closing delimiter",
+          fixIts: ["remove extraneous delimiters"]
+        )
       ],
       fixedSource: "#/abc/#"
     )
@@ -206,7 +212,10 @@ final class RegexLiteralTests: ParserTestCase {
       ##/##/#1️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "expected additional '#' characters in closing delimiter", fixIts: ["insert additional closing '#' delimiters"])
+        DiagnosticSpec(
+          message: "expected additional '#' characters in closing delimiter",
+          fixIts: ["insert additional closing '#' delimiters"]
+        )
       ],
       fixedSource: "##/##/##"
     )
@@ -358,7 +367,11 @@ final class RegexLiteralTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
       ],
       fixedSource: """
         #/abc/#
@@ -375,7 +388,11 @@ final class RegexLiteralTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
       ],
       fixedSource: """
         #/abc/#

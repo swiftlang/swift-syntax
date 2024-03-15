@@ -145,7 +145,11 @@ class SourceManager {
 
   /// Get location of `node` in the known root nodes.
   /// The root node of `node` must be one of the returned value from `add(_:)`.
-  func location(of node: Syntax, at kind: PositionInSyntaxNode, filePathMode: SourceLocationFilePathMode) -> SourceLocation? {
+  func location(
+    of node: Syntax,
+    at kind: PositionInSyntaxNode,
+    filePathMode: SourceLocationFilePathMode
+  ) -> SourceLocation? {
     guard let base = self.knownSourceSyntax[node.root.id] else {
       return nil
     }

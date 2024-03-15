@@ -226,7 +226,14 @@ public enum PluginMessage {
     public var notes: [Note]
     public var fixIts: [FixIt]
 
-    internal init(message: String, severity: Severity, position: Position, highlights: [PositionRange], notes: [Note], fixIts: [FixIt]) {
+    internal init(
+      message: String,
+      severity: Severity,
+      position: Position,
+      highlights: [PositionRange],
+      notes: [Note],
+      fixIts: [FixIt]
+    ) {
       self.message = message
       self.severity = severity
       self.position = position

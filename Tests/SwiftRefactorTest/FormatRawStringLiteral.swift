@@ -26,14 +26,23 @@ final class FormatRawStringLiteralTest: XCTestCase {
       (#line, literal: #####" "####" "#####, expectation: #####" "####" "#####),
       (#line, literal: #####" #"####"# "#####, expectation: ######" #####"####"##### "######),
       (#line, literal: #####" #"\####(hello)"# "#####, expectation: ######" #####"\####(hello)"##### "######),
-      (#line, literal: #######" #"###### \####(hello) ##"# "#######, expectation: ########" #######"###### \####(hello) ##"####### "########),
+      (
+        #line, literal: #######" #"###### \####(hello) ##"# "#######,
+        expectation: ########" #######"###### \####(hello) ##"####### "########
+      ),
       (#line, literal: ########" #######"hello \(world) "####### "########, expectation: #" "hello \(world) " "#),
     ]
 
     for (line, literal, expectation) in tests {
       let literal = try XCTUnwrap(StringLiteralExprSyntax.parseWithoutDiagnostics(from: literal))
       let expectation = try XCTUnwrap(StringLiteralExprSyntax.parseWithoutDiagnostics(from: expectation))
-      try assertRefactor(literal, context: (), provider: FormatRawStringLiteral.self, expected: expectation, line: UInt(line))
+      try assertRefactor(
+        literal,
+        context: (),
+        provider: FormatRawStringLiteral.self,
+        expected: expectation,
+        line: UInt(line)
+      )
     }
   }
 }

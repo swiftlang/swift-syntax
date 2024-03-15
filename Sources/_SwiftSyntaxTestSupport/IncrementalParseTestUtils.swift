@@ -99,7 +99,8 @@ public func assertIncrementalParse(
 
   var lastRangeUpperBound = originalString.startIndex
   for expectedReusedNode in expectedReusedNodes {
-    guard let range = byteSourceRange(for: expectedReusedNode.source, in: originalString, after: lastRangeUpperBound) else {
+    guard let range = byteSourceRange(for: expectedReusedNode.source, in: originalString, after: lastRangeUpperBound)
+    else {
       XCTFail("Fail to find string in original source,", file: expectedReusedNode.file, line: expectedReusedNode.line)
       continue
     }
@@ -170,7 +171,9 @@ public struct ReusedNodeSpec {
 /// Contents between `⏩️` and `⏸️` are source text that before modification, contents
 /// betwwen `⏸️` and `⏪️` are source text that after modification
 /// i.e. `⏩️foo⏸️bar⏪️`, the original source is `foo` and the edited source is `bar`
-public func extractEditsAndSources(from source: String) -> (edits: ConcurrentEdits, orignialSource: Substring, editedSource: Substring) {
+public func extractEditsAndSources(
+  from source: String
+) -> (edits: ConcurrentEdits, originalSource: Substring, editedSource: Substring) {
   var editedSource = Substring()
   var originalSource = Substring()
   var concurrentEdits: [IncrementalEdit] = []
@@ -206,7 +209,9 @@ public func extractEditsAndSources(from source: String) -> (edits: ConcurrentEdi
     let edits = try ConcurrentEdits(concurrent: concurrentEdits)
     return (edits, originalSource, editedSource)
   } catch {
-    fatalError("ConcurrentEdits created by the test case do not satisfy ConcurrentEdits requirements, please check the test setup")
+    fatalError(
+      "ConcurrentEdits created by the test case do not satisfy ConcurrentEdits requirements, please check the test setup"
+    )
   }
 }
 

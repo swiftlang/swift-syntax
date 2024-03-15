@@ -116,7 +116,11 @@ final class TypealiasTests: ParserTestCase {
       typealias Recovery2 1️⃣:2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '=' in typealias declaration", fixIts: ["replace ':' with '='"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '=' in typealias declaration",
+          fixIts: ["replace ':' with '='"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in typealias declaration", fixIts: ["insert type"]),
       ],
       fixedSource: """
@@ -159,7 +163,11 @@ final class TypealiasTests: ParserTestCase {
       typealias Recovery5 1️⃣: Int2️⃣, Float
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '=' in typealias declaration", fixIts: ["replace ':' with '='"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '=' in typealias declaration",
+          fixIts: ["replace ':' with '='"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ', Float' at top level"),
       ],
       fixedSource: """
@@ -189,7 +197,10 @@ final class TypealiasTests: ParserTestCase {
       typealias 1️⃣switch = Int
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'switch' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "keyword 'switch' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: "typealias `switch` = Int"
     )

@@ -204,7 +204,12 @@ extension Parser {
         type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
       }
     } else {
-      names = ParameterNames(unexpectedBeforeFirstName: nil, firstName: nil, unexpectedBeforeSecondName: nil, secondName: nil)
+      names = ParameterNames(
+        unexpectedBeforeFirstName: nil,
+        firstName: nil,
+        unexpectedBeforeSecondName: nil,
+        secondName: nil
+      )
       unexpectedBeforeColon = nil
       colon = nil
       type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
@@ -245,7 +250,9 @@ extension Parser {
       switch self.at(anyIn: ParameterModifier.self) {
       case (._const, let handle)?:
         elements.append(RawDeclModifierSyntax(name: self.eat(handle), detail: nil, arena: self.arena))
-      case (.isolated, let handle)? where self.withLookahead({ !$0.startsParameterName(isClosure: isClosure, allowMisplacedSpecifierRecovery: false) }):
+      case (.isolated, let handle)?
+      where self.withLookahead({ !$0.startsParameterName(isClosure: isClosure, allowMisplacedSpecifierRecovery: false) }
+      ):
         elements.append(RawDeclModifierSyntax(name: self.eat(handle), detail: nil, arena: self.arena))
       default:
         break MODIFIER_LOOP
@@ -261,7 +268,9 @@ extension Parser {
   mutating func parseMisplacedSpecifiers() -> [RawTokenSyntax] {
     var misplacedSpecifiers: [RawTokenSyntax] = []
     if self.withLookahead({ !$0.startsParameterName(isClosure: false, allowMisplacedSpecifierRecovery: false) }) {
-      while canHaveParameterSpecifier, let specifier = self.consume(ifAnyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) {
+      while canHaveParameterSpecifier,
+        let specifier = self.consume(ifAnyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self)
+      {
         misplacedSpecifiers.append(specifier)
       }
     }

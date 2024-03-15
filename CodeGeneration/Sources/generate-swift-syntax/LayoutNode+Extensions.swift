@@ -126,9 +126,13 @@ extension LayoutNode {
         if child.buildableType.builderInitializableType != child.buildableType {
           let param = Node.from(type: child.buildableType).layoutNode!.singleNonDefaultedChild
           if child.isOptional {
-            produceExpr = ExprSyntax("\(childName)Builder().map { \(child.buildableType.syntaxBaseName)(\(param.varOrCaseName): $0) }")
+            produceExpr = ExprSyntax(
+              "\(childName)Builder().map { \(child.buildableType.syntaxBaseName)(\(param.varOrCaseName): $0) }"
+            )
           } else {
-            produceExpr = ExprSyntax("\(child.buildableType.syntaxBaseName)(\(param.varOrCaseName): \(childName)Builder())")
+            produceExpr = ExprSyntax(
+              "\(child.buildableType.syntaxBaseName)(\(param.varOrCaseName): \(childName)Builder())"
+            )
           }
         } else {
           produceExpr = ExprSyntax("\(childName)Builder()")
@@ -139,7 +143,10 @@ extension LayoutNode {
           )
         )
       } else {
-        produceExpr = convertFromSyntaxProtocolToSyntaxType(child: child, useDeprecatedChildName: useDeprecatedChildName)
+        produceExpr = convertFromSyntaxProtocolToSyntaxType(
+          child: child,
+          useDeprecatedChildName: useDeprecatedChildName
+        )
         normalParameters.append(
           FunctionParameterSyntax(
             firstName: childName,
@@ -187,7 +194,10 @@ extension LayoutNode {
   }
 }
 
-fileprivate func convertFromSyntaxProtocolToSyntaxType(child: Child, useDeprecatedChildName: Bool = false) -> ExprSyntax {
+fileprivate func convertFromSyntaxProtocolToSyntaxType(
+  child: Child,
+  useDeprecatedChildName: Bool = false
+) -> ExprSyntax {
   let childName: TokenSyntax
   if useDeprecatedChildName, let deprecatedVarName = child.deprecatedVarName {
     childName = deprecatedVarName

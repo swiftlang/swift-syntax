@@ -46,7 +46,10 @@ extension DiagnosticDecorator where Self == ANSIDiagnosticDecorator {
   /// ```bash
   /// printf "\e[1;31merror: \e[1;39mFile not found\e[0;0m\n"
   /// ```
-  @_spi(Testing) public func decorateMessage(_ message: String, basedOnSeverity severity: DiagnosticSeverity) -> String {
+  @_spi(Testing) public func decorateMessage(
+    _ message: String,
+    basedOnSeverity severity: DiagnosticSeverity
+  ) -> String {
     let severityText: String
     let severityAnnotation: ANSIAnnotation
 
@@ -68,7 +71,11 @@ extension DiagnosticDecorator where Self == ANSIDiagnosticDecorator {
       severityAnnotation = .remarkText
     }
 
-    let prefix = colorizeIfNotEmpty("\(severityText): ", usingAnnotation: severityAnnotation, resetAfterApplication: false)
+    let prefix = colorizeIfNotEmpty(
+      "\(severityText): ",
+      usingAnnotation: severityAnnotation,
+      resetAfterApplication: false
+    )
 
     return prefix + colorizeIfNotEmpty(message, usingAnnotation: .diagnosticText)
   }
@@ -102,8 +109,13 @@ extension DiagnosticDecorator where Self == ANSIDiagnosticDecorator {
   /// ```bash
   /// printf "\e[4;39mlet x = 10\e[0;0m\n"
   /// ```
-  @_spi(Testing) public func decorateHighlight(_ highlight: String) -> (highlightedSourceCode: String, additionalHighlightedLine: String?) {
-    (highlightedSourceCode: colorizeIfNotEmpty(highlight, usingAnnotation: .sourceHighlight), additionalHighlightedLine: nil)
+  @_spi(Testing) public func decorateHighlight(_ highlight: String) -> (
+    highlightedSourceCode: String, additionalHighlightedLine: String?
+  ) {
+    (
+      highlightedSourceCode: colorizeIfNotEmpty(highlight, usingAnnotation: .sourceHighlight),
+      additionalHighlightedLine: nil
+    )
   }
 
   /// Applies ANSI annotation to a given text segment, if the text is not empty.

@@ -68,7 +68,10 @@ final class DoStmtTests: XCTestCase {
   func testDoStmtWithExclamationMark() {
     let buildable = DoStmtSyntax(
       body: CodeBlockSyntax(statementsBuilder: {
-        TryExprSyntax(questionOrExclamationMark: .exclamationMarkToken(), expression: FunctionCallExprSyntax(callee: ExprSyntax("a.b")))
+        TryExprSyntax(
+          questionOrExclamationMark: .exclamationMarkToken(),
+          expression: FunctionCallExprSyntax(callee: ExprSyntax("a.b"))
+        )
       }),
       catchClauses: [
         CatchClauseSyntax(
@@ -118,7 +121,10 @@ final class DoStmtTests: XCTestCase {
   func testDoStmtWithPostfixQuestionMark() {
     let buildable = DoStmtSyntax(
       body: CodeBlockSyntax(statementsBuilder: {
-        TryExprSyntax(questionOrExclamationMark: .postfixQuestionMarkToken(), expression: FunctionCallExprSyntax(callee: ExprSyntax("a.b")))
+        TryExprSyntax(
+          questionOrExclamationMark: .postfixQuestionMarkToken(),
+          expression: FunctionCallExprSyntax(callee: ExprSyntax("a.b"))
+        )
       }),
       catchClauses: [
         CatchClauseSyntax(

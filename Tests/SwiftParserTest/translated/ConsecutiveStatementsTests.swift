@@ -19,7 +19,10 @@ final class ConsecutiveStatementsTests: ParserTestCase {
     assertParse(
       "let x = 21️⃣ let y = 3",
       diagnostics: [
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+        DiagnosticSpec(
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
       ],
       applyFixIts: ["insert newline"],
       fixedSource: """
@@ -33,7 +36,10 @@ final class ConsecutiveStatementsTests: ParserTestCase {
     assertParse(
       "let x = 21️⃣ let y = 3",
       diagnostics: [
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+        DiagnosticSpec(
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
       ],
       applyFixIts: ["insert ';'"],
       fixedSource: "let x = 2; let y = 3"
@@ -316,7 +322,10 @@ final class ConsecutiveStatementsTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+        DiagnosticSpec(
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
       ],
       applyFixIts: ["insert newline"],
       fixedSource: """
@@ -346,7 +355,10 @@ final class ConsecutiveStatementsTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+        DiagnosticSpec(
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
       ],
       applyFixIts: ["insert ';'"],
       fixedSource: """
@@ -370,7 +382,10 @@ final class ConsecutiveStatementsTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+        DiagnosticSpec(
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
       ],
       applyFixIts: ["insert newline"],
       fixedSource: """
@@ -390,7 +405,10 @@ final class ConsecutiveStatementsTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive declarations on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+        DiagnosticSpec(
+          message: "consecutive declarations on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
       ],
       applyFixIts: ["insert ';'"],
       fixedSource: """

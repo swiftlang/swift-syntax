@@ -46,14 +46,16 @@ public macro fontLiteral<T>(name: String, size: Int, weight: FontWeight) -> T =
 /// "Stringify" the provided value and produce a tuple that includes both the
 /// original value as well as the source code that generated it.
 @freestanding(expression)
-public macro stringify<T>(_ value: T) -> (T, String) = #externalMacro(module: "MacroExamplesImplementation", type: "StringifyMacro")
+public macro stringify<T>(_ value: T) -> (T, String) =
+  #externalMacro(module: "MacroExamplesImplementation", type: "StringifyMacro")
 
 // MARK: - URL
 
 /// Check if provided string literal is a valid URL and produce a non-optional
 /// URL value. Emit error otherwise.
 @freestanding(expression)
-public macro URL(_ stringLiteral: String) -> URL = #externalMacro(module: "MacroExamplesImplementation", type: "URLMacro")
+public macro URL(_ stringLiteral: String) -> URL =
+  #externalMacro(module: "MacroExamplesImplementation", type: "URLMacro")
 
 // MARK: - Warning
 

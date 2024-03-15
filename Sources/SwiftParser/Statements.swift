@@ -162,11 +162,17 @@ extension Parser {
     var keepGoing: RawTokenSyntax? = nil
     var loopProgress = LoopProgressCondition()
     repeat {
-      let condition = self.parseConditionElement(lastBindingKind: elements.last?.condition.as(RawOptionalBindingConditionSyntax.self)?.bindingSpecifier)
+      let condition = self.parseConditionElement(
+        lastBindingKind: elements.last?.condition.as(RawOptionalBindingConditionSyntax.self)?.bindingSpecifier
+      )
       var unexpectedBeforeKeepGoing: RawUnexpectedNodesSyntax? = nil
       keepGoing = self.consume(if: .comma)
       if keepGoing == nil, let token = self.consumeIfContextualPunctuator("&&") ?? self.consume(if: .keyword(.where)) {
-        unexpectedBeforeKeepGoing = RawUnexpectedNodesSyntax(combining: unexpectedBeforeKeepGoing, token, arena: self.arena)
+        unexpectedBeforeKeepGoing = RawUnexpectedNodesSyntax(
+          combining: unexpectedBeforeKeepGoing,
+          token,
+          arena: self.arena
+        )
         keepGoing = missingToken(.comma)
       }
       elements.append(
@@ -227,7 +233,11 @@ extension Parser {
       let letOrVar: RawTokenSyntax
 
       if self.at(.identifier), let lastBindingKind = lastBindingKind {
-        (unexpectedBeforeBindingKeyword, letOrVar) = self.expect(.keyword(.let), .keyword(.var), default: .keyword(Keyword(lastBindingKind.tokenText) ?? .let))
+        (unexpectedBeforeBindingKeyword, letOrVar) = self.expect(
+          .keyword(.let),
+          .keyword(.var),
+          default: .keyword(Keyword(lastBindingKind.tokenText) ?? .let)
+        )
       } else {
         letOrVar = self.consume(if: TokenSpec.keyword(.let), .keyword(.var)) ?? self.missingToken(.let)
         unexpectedBeforeBindingKeyword = nil
@@ -303,7 +313,10 @@ extension Parser {
     let arguments = self.parseAvailabilitySpecList()
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     let unexpectedAfterRParen: RawUnexpectedNodesSyntax?
-    if let (equalOperator, falseKeyword) = self.consume(if: { $0.isContextualPunctuator("==") }, followedBy: { TokenSpec.keyword(.false) ~= $0 }) {
+    if let (equalOperator, falseKeyword) = self.consume(
+      if: { $0.isContextualPunctuator("==") },
+      followedBy: { TokenSpec.keyword(.false) ~= $0 }
+    ) {
       unexpectedAfterRParen = RawUnexpectedNodesSyntax([equalOperator, falseKeyword], arena: self.arena)
     } else {
       unexpectedAfterRParen = nil
@@ -873,7 +886,9 @@ extension Parser.Lookahead {
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
   mutating func atStartOfStatement(allowRecovery: Bool = false, preferExpr: Bool) -> Bool {
-    if (self.at(anyIn: SwitchCaseStart.self) != nil || self.at(.atSign)) && withLookahead({ $0.atStartOfSwitchCaseItem() }) {
+    if (self.at(anyIn: SwitchCaseStart.self) != nil || self.at(.atSign))
+      && withLookahead({ $0.atStartOfSwitchCaseItem() })
+    {
       // We consider SwitchCaseItems statements so we don't parse the start of a new case item as trailing parts of an expression.
       return true
     }

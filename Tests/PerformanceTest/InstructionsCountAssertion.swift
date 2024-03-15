@@ -23,7 +23,12 @@ fileprivate var baselineURL: URL {
   }
 }
 
-func measureInstructions(_ baselineName: StaticString = #function, block: () -> Void, file: StaticString = #filePath, line: UInt = #line) throws {
+func measureInstructions(
+  _ baselineName: StaticString = #function,
+  block: () -> Void,
+  file: StaticString = #filePath,
+  line: UInt = #line
+) throws {
   let startInstructions = getInstructionsExecuted()
   block()
   let endInstructions = getInstructionsExecuted()

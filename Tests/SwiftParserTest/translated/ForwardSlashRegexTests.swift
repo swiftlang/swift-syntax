@@ -605,8 +605,16 @@ final class ForwardSlashRegexTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression after operator", fixIts: ["insert expression"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after operator", fixIts: ["insert expression"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected expression after operator",
+          fixIts: ["insert expression"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected expression after operator",
+          fixIts: ["insert expression"]
+        ),
       ],
       fixedSource: """
         do {
@@ -1048,7 +1056,10 @@ final class ForwardSlashRegexTests: ParserTestCase {
       """
       _ = /x// comment
       """,
-      substructure: PrefixOperatorExprSyntax(operator: .prefixOperator("/"), expression: DeclReferenceExprSyntax(baseName: "x"))
+      substructure: PrefixOperatorExprSyntax(
+        operator: .prefixOperator("/"),
+        expression: DeclReferenceExprSyntax(baseName: "x")
+      )
     )
   }
 
@@ -1057,7 +1068,10 @@ final class ForwardSlashRegexTests: ParserTestCase {
       """
       _ = /x // comment
       """,
-      substructure: PrefixOperatorExprSyntax(operator: .prefixOperator("/"), expression: DeclReferenceExprSyntax(baseName: "x"))
+      substructure: PrefixOperatorExprSyntax(
+        operator: .prefixOperator("/"),
+        expression: DeclReferenceExprSyntax(baseName: "x")
+      )
     )
   }
 
@@ -1066,7 +1080,10 @@ final class ForwardSlashRegexTests: ParserTestCase {
       """
       _ = /x/*comment*/
       """,
-      substructure: PrefixOperatorExprSyntax(operator: .prefixOperator("/"), expression: DeclReferenceExprSyntax(baseName: "x"))
+      substructure: PrefixOperatorExprSyntax(
+        operator: .prefixOperator("/"),
+        expression: DeclReferenceExprSyntax(baseName: "x")
+      )
     )
   }
 

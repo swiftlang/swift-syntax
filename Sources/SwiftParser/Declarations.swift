@@ -225,15 +225,23 @@ extension Parser {
     case (.lhs(.import), let handle)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs, handle))
     case (.lhs(.class), let handle)?:
-      return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawClassDeclSyntax.self, attrs: attrs, introucerHandle: handle))
+      return RawDeclSyntax(
+        self.parseNominalTypeDeclaration(for: RawClassDeclSyntax.self, attrs: attrs, introucerHandle: handle)
+      )
     case (.lhs(.enum), let handle)?:
-      return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawEnumDeclSyntax.self, attrs: attrs, introucerHandle: handle))
+      return RawDeclSyntax(
+        self.parseNominalTypeDeclaration(for: RawEnumDeclSyntax.self, attrs: attrs, introucerHandle: handle)
+      )
     case (.lhs(.case), let handle)?:
       return RawDeclSyntax(self.parseEnumCaseDeclaration(attrs, handle))
     case (.lhs(.struct), let handle)?:
-      return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawStructDeclSyntax.self, attrs: attrs, introucerHandle: handle))
+      return RawDeclSyntax(
+        self.parseNominalTypeDeclaration(for: RawStructDeclSyntax.self, attrs: attrs, introucerHandle: handle)
+      )
     case (.lhs(.protocol), let handle)?:
-      return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawProtocolDeclSyntax.self, attrs: attrs, introucerHandle: handle))
+      return RawDeclSyntax(
+        self.parseNominalTypeDeclaration(for: RawProtocolDeclSyntax.self, attrs: attrs, introucerHandle: handle)
+      )
     case (.lhs(.associatedtype), let handle)?:
       return RawDeclSyntax(self.parseAssociatedTypeDeclaration(attrs, handle))
     case (.lhs(.typealias), let handle)?:
@@ -253,7 +261,9 @@ extension Parser {
     case (.lhs(.precedencegroup), let handle)?:
       return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs, handle))
     case (.lhs(.actor), let handle)?:
-      return RawDeclSyntax(self.parseNominalTypeDeclaration(for: RawActorDeclSyntax.self, attrs: attrs, introucerHandle: handle))
+      return RawDeclSyntax(
+        self.parseNominalTypeDeclaration(for: RawActorDeclSyntax.self, attrs: attrs, introucerHandle: handle)
+      )
     case (.lhs(.macro), let handle)?:
       return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
     case (.lhs(.pound), let handle)?:
@@ -421,7 +431,9 @@ extension Parser {
         var each = self.consume(if: .keyword(.each))
 
         let (unexpectedBetweenEachAndName, name) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
-        if attributes.isEmpty && each == nil && unexpectedBetweenEachAndName == nil && name.isMissing && elements.isEmpty && !self.at(prefix: ">") {
+        if attributes.isEmpty && each == nil && unexpectedBetweenEachAndName == nil && name.isMissing
+          && elements.isEmpty && !self.at(prefix: ">")
+        {
           break
         }
 
@@ -952,7 +964,11 @@ extension Parser {
 
     // Parse the '!' or '?' for a failable initializer.
     let failable: RawTokenSyntax?
-    if let parsedFailable = self.consume(if: .exclamationMark, .postfixQuestionMark, TokenSpec(.infixQuestionMark, remapping: .postfixQuestionMark)) {
+    if let parsedFailable = self.consume(
+      if: .exclamationMark,
+      .postfixQuestionMark,
+      TokenSpec(.infixQuestionMark, remapping: .postfixQuestionMark)
+    ) {
       failable = parsedFailable
     } else if let parsedFailable = self.consumeIfContextualPunctuator("!", remapping: .exclamationMark) {
       failable = parsedFailable
@@ -1046,9 +1062,10 @@ extension Parser {
 
 extension Parser {
   /// If a `throws` keyword appears right in front of the `arrow`, it is returned as `misplacedThrowsKeyword` so it can be synthesized in front of the arrow.
-  mutating func parseFunctionReturnClause(effectSpecifiers: inout (some RawMisplacedEffectSpecifiersTrait)?, allowNamedOpaqueResultType: Bool)
-    -> RawReturnClauseSyntax
-  {
+  mutating func parseFunctionReturnClause(
+    effectSpecifiers: inout (some RawMisplacedEffectSpecifiersTrait)?,
+    allowNamedOpaqueResultType: Bool
+  ) -> RawReturnClauseSyntax {
     let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
     let unexpectedBeforeReturnType = self.parseMisplacedEffectSpecifiers(&effectSpecifiers)
     let type: RawTypeSyntax
@@ -1143,7 +1160,10 @@ extension Parser {
     /// Only allow recovery to the arrow with exprKeyword precedence so we only
     /// skip over misplaced identifiers and don't e.g. recover to an arrow in a 'where' clause.
     if self.canRecoverTo(TokenSpec(.arrow, recoveryPrecedence: .exprKeyword)) != nil {
-      returnClause = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: true)
+      returnClause = self.parseFunctionReturnClause(
+        effectSpecifiers: &effectSpecifiers,
+        allowNamedOpaqueResultType: true
+      )
     } else {
       returnClause = nil
     }
@@ -1193,7 +1213,10 @@ extension Parser {
     }
 
     var misplacedEffectSpecifiers: RawFunctionEffectSpecifiersSyntax?
-    let returnClause = self.parseFunctionReturnClause(effectSpecifiers: &misplacedEffectSpecifiers, allowNamedOpaqueResultType: true)
+    let returnClause = self.parseFunctionReturnClause(
+      effectSpecifiers: &misplacedEffectSpecifiers,
+      allowNamedOpaqueResultType: true
+    )
 
     // Parse a 'where' clause if present.
     let genericWhereClause: RawGenericWhereClauseSyntax?
@@ -1318,7 +1341,10 @@ extension Parser {
         }
 
         let accessors: RawAccessorBlockSyntax?
-        if self.at(.leftBrace) || (inMemberDeclList && self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil && !self.at(.keyword(.`init`))) {
+        if self.at(.leftBrace)
+          || (inMemberDeclList && self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil
+            && !self.at(.keyword(.`init`)))
+        {
           accessors = self.parseAccessorBlock()
         } else {
           accessors = nil
@@ -1408,7 +1434,9 @@ extension Parser {
     // 'set' and 'willSet' can have an optional name.  This isn't valid in a
     // protocol, but we parse and then reject it for better QoI.
     let parameters: RawAccessorParametersSyntax?
-    if [AccessorDeclSyntax.AccessorSpecifierOptions.set, .willSet, .didSet, .`init`].contains(introducer.kind), let lparen = self.consume(if: .leftParen) {
+    if [AccessorDeclSyntax.AccessorSpecifierOptions.set, .willSet, .didSet, .`init`].contains(introducer.kind),
+      let lparen = self.consume(if: .leftParen)
+    {
       let (unexpectedBeforeName, name) = self.expectIdentifier()
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
       parameters = RawAccessorParametersSyntax(
@@ -1567,7 +1595,10 @@ extension Parser {
   }
 
   /// Parse an operator declaration.
-  mutating func parseOperatorDeclIntroducer(_ attrs: DeclAttributes, _ handle: RecoveryConsumptionHandle) -> OperatorDeclIntroducer {
+  mutating func parseOperatorDeclIntroducer(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle
+  ) -> OperatorDeclIntroducer {
     func isFixity(_ modifier: RawDeclModifierSyntax) -> Bool {
       switch modifier.name {
       case .keyword(.prefix),
@@ -1614,7 +1645,11 @@ extension Parser {
 
     var (unexpectedBeforeOperatorKeyword, operatorKeyword) = self.expect(.keyword(.operator))
 
-    unexpectedBeforeOperatorKeyword = RawUnexpectedNodesSyntax(combining: unexpectedAfterFixity, unexpectedBeforeOperatorKeyword, arena: self.arena)
+    unexpectedBeforeOperatorKeyword = RawUnexpectedNodesSyntax(
+      combining: unexpectedAfterFixity,
+      unexpectedBeforeOperatorKeyword,
+      arena: self.arena
+    )
 
     return OperatorDeclIntroducer(
       unexpectedBeforeFixity: unexpectedBeforeFixity,
@@ -1636,7 +1671,10 @@ extension Parser {
     case (_, let handle)?:
       (unexpectedBeforeName, name) = self.eat(handle)
     default:
-      if let identifier = self.consume(if: TokenSpec(.identifier, allowAtStartOfLine: false), TokenSpec(.dollarIdentifier, allowAtStartOfLine: false)) {
+      if let identifier = self.consume(
+        if: TokenSpec(.identifier, allowAtStartOfLine: false),
+        TokenSpec(.dollarIdentifier, allowAtStartOfLine: false)
+      ) {
         // Recover if the developer tried to use an identifier as the operator name
         unexpectedBeforeName = RawUnexpectedNodesSyntax([identifier], arena: self.arena)
       } else {
@@ -1784,9 +1822,18 @@ extension Parser {
         case (.associativity, let handle)?:
           let associativity = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
-          var (unexpectedBeforeValue, value) = self.expect(.keyword(.left), .keyword(.right), .keyword(.none), default: .keyword(.none))
+          var (unexpectedBeforeValue, value) = self.expect(
+            .keyword(.left),
+            .keyword(.right),
+            .keyword(.none),
+            default: .keyword(.none)
+          )
           if value.isMissing, let identifier = self.consume(if: .identifier) {
-            unexpectedBeforeValue = RawUnexpectedNodesSyntax(combining: unexpectedBeforeValue, identifier, arena: self.arena)
+            unexpectedBeforeValue = RawUnexpectedNodesSyntax(
+              combining: unexpectedBeforeValue,
+              identifier,
+              arena: self.arena
+            )
           }
           elements.append(
             .precedenceGroupAssociativity(
@@ -1803,9 +1850,14 @@ extension Parser {
         case (.assignment, let handle)?:
           let assignmentKeyword = self.eat(handle)
           let (unexpectedBeforeColon, colon) = self.expect(.colon)
-          let (unexpectedBeforeValue, value) = self.expect(anyIn: PrecedenceGroupAssignmentSyntax.ValueOptions.self, default: .true)
+          let (unexpectedBeforeValue, value) = self.expect(
+            anyIn: PrecedenceGroupAssignmentSyntax.ValueOptions.self,
+            default: .true
+          )
           let unexpectedAfterFlag: RawUnexpectedNodesSyntax?
-          if value.isMissing, let unexpectedIdentifier = self.consume(if: TokenSpec(.identifier, allowAtStartOfLine: false)) {
+          if value.isMissing,
+            let unexpectedIdentifier = self.consume(if: TokenSpec(.identifier, allowAtStartOfLine: false))
+          {
             unexpectedAfterFlag = RawUnexpectedNodesSyntax([unexpectedIdentifier], arena: self.arena)
           } else {
             unexpectedAfterFlag = nil

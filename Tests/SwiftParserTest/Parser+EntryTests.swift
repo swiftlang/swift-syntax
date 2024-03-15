@@ -63,8 +63,15 @@ class EntryTests: ParserTestCase {
           message: "operator must be declared as 'prefix', 'postfix', or 'infix'",
           fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"]
         ),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "'test' is considered an identifier and must not appear within an operator name"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "operator should not be declared with body", fixIts: ["remove operator body"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "'test' is considered an identifier and must not appear within an operator name"
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "operator should not be declared with body",
+          fixIts: ["remove operator body"]
+        ),
       ],
       fixedSource: """
         prefix operator test

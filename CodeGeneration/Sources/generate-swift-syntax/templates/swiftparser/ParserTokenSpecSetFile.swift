@@ -15,7 +15,11 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-func tokenCaseMatch(_ caseName: TokenSyntax, experimentalFeature: ExperimentalFeature?, experimentalFeature2: ExperimentalFeature?) -> SwitchCaseSyntax {
+func tokenCaseMatch(
+  _ caseName: TokenSyntax,
+  experimentalFeature: ExperimentalFeature?,
+  experimentalFeature2: ExperimentalFeature?
+) -> SwitchCaseSyntax {
   var whereClause = ""
   if let feature = experimentalFeature {
     whereClause += "where experimentalFeatures.contains(.\(feature.token))"
@@ -61,7 +65,9 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               }
             }
 
-            try InitializerDeclSyntax("init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures)") {
+            try InitializerDeclSyntax(
+              "init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures)"
+            ) {
               try SwitchExprSyntax("switch PrepareForKeywordMatch(lexeme)") {
                 for choice in choices {
                   switch choice {

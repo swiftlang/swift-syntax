@@ -31,12 +31,16 @@ open class SyntaxVisitor {
   /// We can then re-use them to create new syntax nodes.
   ///
   /// The array's size should be a typical nesting depth of a Swift file. That way we can store all allocated syntax
-  /// nodes when unwinding the visitation stack. It shouldn't be much larger because that would mean that we need to
-  /// look through more memory to find a cache miss. 40 has been chosen empirically to strike a good balance here.
+  /// nodes when unwinding the visitation stack.
   ///
   /// The actual `info` stored in the `Syntax.Info` objects is garbage. It needs to be set when any of the `Syntax.Info`
   /// objects get re-used.
-  private var recyclableNodeInfos: ContiguousArray<Syntax.Info?> =  ContiguousArray(repeating: nil, count: 40)
+  private var recyclableNodeInfos: ContiguousArray<Syntax.Info?> =  ContiguousArray(repeating: nil, count: 64)
+  
+  /// A bit is set to 1 if the corresponding index in `recyclableNodeInfos` is occupied and ready to be reused.
+  ///
+  /// The last bit in this UInt64 corresponds to index 0 in `recyclableNodeInfos`.
+  private var recyclableNodeInfosUsageBitmap: UInt64 = 0
   
   public init(viewMode: SyntaxTreeViewMode) {
     self.viewMode = viewMode
@@ -5291,11 +5295,12 @@ open class SyntaxVisitor {
     for childRaw in NonNilRawSyntaxChildren(syntaxNode, viewMode: viewMode) {
       // syntaxNode gets retained here. That seems unnecessary but I don't know how to remove it.
       var childNode: Syntax
-      if let recycledInfoIndex = recyclableNodeInfos.firstIndex(where: { $0 != nil
-        }) {
+      if let recycledInfoIndex = recyclableNodeInfosUsageBitmap.indexOfRightmostOne {
         var recycledInfo: Syntax.Info? = nil
         // Use `swap` to extract the recyclable syntax node without incurring ref-counting.
         swap(&recycledInfo, &recyclableNodeInfos[recycledInfoIndex])
+        assert(recycledInfo != nil, "Slot indicated by the bitmap did not contain a value")
+        recyclableNodeInfosUsageBitmap.setBitToZero(at: recycledInfoIndex)
         // syntaxNode.info gets retained here. This is necessary because we build up the parent tree.
         recycledInfo!.info = .nonRoot(.init(parent: syntaxNode, absoluteInfo: childRaw.info))
         childNode = Syntax(childRaw.raw, info: recycledInfo!)
@@ -5307,12 +5312,39 @@ open class SyntaxVisitor {
         // The node didn't get stored by the subclass's visit method. We can re-use the memory of its `Syntax.Info`
         // for future syntax nodes.
         childNode.info.info = nil
-        if let emptySlot = recyclableNodeInfos.firstIndex(where: { $0 == nil
-          }) {
+        if let emptySlot = recyclableNodeInfosUsageBitmap.indexOfRightmostZero {
           // Use `swap` to store the recyclable syntax node without incurring ref-counting.
           swap(&recyclableNodeInfos[emptySlot], &childNode.info)
+          assert(childNode.info == nil, "Slot should not have contained a value")
+          recyclableNodeInfosUsageBitmap.setBitToOne(at: emptySlot)
         }
       }
     }
+  }
+}
+
+fileprivate extension UInt64 {
+  var indexOfRightmostZero: Int? {
+    return (~self).indexOfRightmostOne
+  }
+  
+
+  var indexOfRightmostOne: Int? {
+    let trailingZeroCount = self.trailingZeroBitCount
+    if trailingZeroCount == Self.bitWidth {
+      // All indicies are 0
+      return nil
+    }
+    return trailingZeroCount
+  }
+  
+
+  mutating func setBitToZero(at index: Int) {
+    self &= ~(1 << index)
+  }
+  
+
+  mutating func setBitToOne(at index: Int) {
+    self |= 1 << index
   }
 }

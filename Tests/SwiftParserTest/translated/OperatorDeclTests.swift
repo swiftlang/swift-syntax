@@ -158,7 +158,11 @@ final class OperatorDeclTests: ParserTestCase {
           message: "operator must be declared as 'prefix', 'postfix', or 'infix'",
           fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"]
         ),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "operator should not be declared with body", fixIts: ["remove operator body"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "operator should not be declared with body",
+          fixIts: ["remove operator body"]
+        ),
       ],
       fixedSource: """
         prefix operator +*+++
@@ -177,7 +181,11 @@ final class OperatorDeclTests: ParserTestCase {
           message: "operator must be declared as 'prefix', 'postfix', or 'infix'",
           fixIts: ["insert 'prefix'", "insert 'infix'", "insert 'postfix'"]
         ),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "operator should not be declared with body", fixIts: ["remove operator body"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "operator should not be declared with body",
+          fixIts: ["remove operator body"]
+        ),
       ],
       fixedSource: """
         prefix operator +*++* : A
@@ -254,7 +262,10 @@ final class OperatorDeclTests: ParserTestCase {
       postfix operator ?1️⃣$$
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$$' is considered an identifier and must not appear within an operator name", fixIts: ["remove '$$'"])
+        DiagnosticSpec(
+          message: "'$$' is considered an identifier and must not appear within an operator name",
+          fixIts: ["remove '$$'"]
+        )
       ],
       fixedSource: "postfix operator ?"
     )
@@ -266,7 +277,10 @@ final class OperatorDeclTests: ParserTestCase {
       infix operator --1️⃣aa
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'aa' is considered an identifier and must not appear within an operator name", fixIts: ["remove 'aa'"])
+        DiagnosticSpec(
+          message: "'aa' is considered an identifier and must not appear within an operator name",
+          fixIts: ["remove 'aa'"]
+        )
       ],
       fixedSource: "infix operator --"
     )
@@ -278,7 +292,11 @@ final class OperatorDeclTests: ParserTestCase {
       infix operator 1️⃣aa--: A
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'aa' is considered an identifier and must not appear within an operator name", highlight: "aa", fixIts: ["remove 'aa'"])
+        DiagnosticSpec(
+          message: "'aa' is considered an identifier and must not appear within an operator name",
+          highlight: "aa",
+          fixIts: ["remove 'aa'"]
+        )
       ],
       fixedSource: "infix operator --: A"
     )
@@ -372,7 +390,10 @@ final class OperatorDeclTests: ParserTestCase {
       infix operator --- : 1️⃣;
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected precedence group in operator declaration", fixIts: ["insert precedence group"])
+        DiagnosticSpec(
+          message: "expected precedence group in operator declaration",
+          fixIts: ["insert precedence group"]
+        )
       ],
       fixedSource: """
         infix operator +++=
@@ -548,7 +569,10 @@ final class OperatorDeclTests: ParserTestCase {
       postfix operator ++:1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected precedence group in operator declaration", fixIts: ["insert precedence group"])
+        DiagnosticSpec(
+          message: "expected precedence group in operator declaration",
+          fixIts: ["insert precedence group"]
+        )
       ],
       fixedSource: """
         postfix operator ++: <#identifier#>

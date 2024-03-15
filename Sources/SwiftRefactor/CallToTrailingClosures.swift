@@ -52,7 +52,10 @@ public struct CallToTrailingClosures: SyntaxRefactoringProvider {
 
   // TODO: Rather than returning nil, we should consider throwing errors with
   // appropriate messages instead.
-  public static func refactor(syntax call: FunctionCallExprSyntax, in context: Context = Context()) -> FunctionCallExprSyntax? {
+  public static func refactor(
+    syntax call: FunctionCallExprSyntax,
+    in context: Context = Context()
+  ) -> FunctionCallExprSyntax? {
     let converted = call.convertToTrailingClosures(from: context.startAtArgument)
     return converted?.formatted().as(FunctionCallExprSyntax.self)
   }

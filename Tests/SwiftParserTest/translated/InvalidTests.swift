@@ -22,7 +22,10 @@ final class InvalidTests: ParserTestCase {
       func test1(1️⃣inout var x : Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
+        DiagnosticSpec(
+          message: "'inout' before a parameter name is not allowed",
+          fixIts: ["move 'inout' in front of type"]
+        )
       ],
       fixedSource: "func test1(var x : inout Int) {}"
     )
@@ -34,7 +37,10 @@ final class InvalidTests: ParserTestCase {
       func test2(1️⃣inout let x : Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
+        DiagnosticSpec(
+          message: "'inout' before a parameter name is not allowed",
+          fixIts: ["move 'inout' in front of type"]
+        )
       ],
       fixedSource: """
         func test2(let x : inout Int) {}
@@ -48,7 +54,10 @@ final class InvalidTests: ParserTestCase {
       func test3(f : (1️⃣inout _ x : Int) -> Void) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
+        DiagnosticSpec(
+          message: "'inout' before a parameter name is not allowed",
+          fixIts: ["move 'inout' in front of type"]
+        )
       ],
       fixedSource: "func test3(f : (_ x : inout Int) -> Void) {}"
     )
@@ -60,7 +69,10 @@ final class InvalidTests: ParserTestCase {
       func test1s(1️⃣__shared var x : Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'__shared' before a parameter name is not allowed", fixIts: ["move '__shared' in front of type"])
+        DiagnosticSpec(
+          message: "'__shared' before a parameter name is not allowed",
+          fixIts: ["move '__shared' in front of type"]
+        )
       ],
       fixedSource: """
         func test1s(var x : __shared Int) {}
@@ -74,7 +86,10 @@ final class InvalidTests: ParserTestCase {
       func test2s(1️⃣__shared let x : Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'__shared' before a parameter name is not allowed", fixIts: ["move '__shared' in front of type"])
+        DiagnosticSpec(
+          message: "'__shared' before a parameter name is not allowed",
+          fixIts: ["move '__shared' in front of type"]
+        )
       ],
       fixedSource: """
         func test2s(let x : __shared Int) {}
@@ -88,7 +103,10 @@ final class InvalidTests: ParserTestCase {
       func test1o(1️⃣__owned var x : Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'__owned' before a parameter name is not allowed", fixIts: ["move '__owned' in front of type"])
+        DiagnosticSpec(
+          message: "'__owned' before a parameter name is not allowed",
+          fixIts: ["move '__owned' in front of type"]
+        )
       ],
       fixedSource: """
         func test1o(var x : __owned Int) {}
@@ -102,7 +120,10 @@ final class InvalidTests: ParserTestCase {
       func test2o(1️⃣__owned let x : Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'__owned' before a parameter name is not allowed", fixIts: ["move '__owned' in front of type"])
+        DiagnosticSpec(
+          message: "'__owned' before a parameter name is not allowed",
+          fixIts: ["move '__owned' in front of type"]
+        )
       ],
       fixedSource: """
         func test2o(let x : __owned Int) {}
@@ -179,7 +200,10 @@ final class InvalidTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"])
+        DiagnosticSpec(
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        )
       ],
       fixedSource: """
         switch state {
@@ -212,7 +236,11 @@ final class InvalidTests: ParserTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "consecutive statements on a line must be separated by newline or ';'",
@@ -283,7 +311,11 @@ final class InvalidTests: ParserTestCase {
           message: "expected ')' in function type",
           fixIts: ["insert ')'"]
         ),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected return type in function type", fixIts: ["insert return type"]),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected return type in function type",
+          fixIts: ["insert return type"]
+        ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
           message: "expected ')' to end parameter clause",
@@ -372,7 +404,10 @@ final class InvalidTests: ParserTestCase {
       func f2_43591(1️⃣inout inout b: Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout inout' before a parameter name is not allowed", fixIts: ["move 'inout inout' in front of type"])
+        DiagnosticSpec(
+          message: "'inout inout' before a parameter name is not allowed",
+          fixIts: ["move 'inout inout' in front of type"]
+        )
       ],
       fixedSource: "func f2_43591(b: inout inout Int) {}"
     )
@@ -395,7 +430,10 @@ final class InvalidTests: ParserTestCase {
       func f4_43591(1️⃣inout x: inout String) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
+        DiagnosticSpec(
+          message: "'inout' before a parameter name is not allowed",
+          fixIts: ["move 'inout' in front of type"]
+        )
       ],
       fixedSource: """
         func f4_43591(x: inout inout String) {}
@@ -409,7 +447,10 @@ final class InvalidTests: ParserTestCase {
       func f5_43591(1️⃣inout i: inout Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
+        DiagnosticSpec(
+          message: "'inout' before a parameter name is not allowed",
+          fixIts: ["move 'inout' in front of type"]
+        )
       ],
       fixedSource: """
         func f5_43591(i: inout inout Int) {}
@@ -423,7 +464,10 @@ final class InvalidTests: ParserTestCase {
       func 1️⃣repeat() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'repeat' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "keyword 'repeat' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: """
         func `repeat`() {}
@@ -437,7 +481,10 @@ final class InvalidTests: ParserTestCase {
       let 1️⃣for = 2
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "keyword 'for' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: """
         let `for` = 2
@@ -451,7 +498,10 @@ final class InvalidTests: ParserTestCase {
       func f4_43591(1️⃣inout x: inout String) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
+        DiagnosticSpec(
+          message: "'inout' before a parameter name is not allowed",
+          fixIts: ["move 'inout' in front of type"]
+        )
       ],
       fixedSource: """
         func f4_43591(x: inout inout String) {}
@@ -465,7 +515,10 @@ final class InvalidTests: ParserTestCase {
       func f5_43591(1️⃣inout i: inout Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'inout' before a parameter name is not allowed", fixIts: ["move 'inout' in front of type"])
+        DiagnosticSpec(
+          message: "'inout' before a parameter name is not allowed",
+          fixIts: ["move 'inout' in front of type"]
+        )
       ],
       fixedSource: "func f5_43591(i: inout inout Int) {}"
     )
@@ -477,7 +530,10 @@ final class InvalidTests: ParserTestCase {
       func 1️⃣repeat() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'repeat' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "keyword 'repeat' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: """
         func `repeat`() {}
@@ -491,7 +547,10 @@ final class InvalidTests: ParserTestCase {
       let 1️⃣for = 2
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'for' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "keyword 'for' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: """
         let `for` = 2
@@ -606,7 +665,11 @@ final class InvalidTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '(' to start parameter clause", fixIts: ["insert '('"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ':' and type in parameter",
+          fixIts: ["insert ':' and type"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '<T>(x: T)' in function"),
       ],
@@ -634,7 +697,10 @@ final class InvalidTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'class' constraint can only appear on protocol declarations", fixIts: ["replace 'class' with 'AnyObject'"])
+        DiagnosticSpec(
+          message: "'class' constraint can only appear on protocol declarations",
+          fixIts: ["replace 'class' with 'AnyObject'"]
+        )
       ],
       fixedSource: """
         struct Weak<T: AnyObject> {

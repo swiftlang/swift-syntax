@@ -214,7 +214,9 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
   }
 
   func testStringSegmentWithCode() {
-    let buildable = StringSegmentSyntax(content: .stringSegment(#"\(nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n"))"#))
+    let buildable = StringSegmentSyntax(
+      content: .stringSegment(#"\(nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n"))"#)
+    )
 
     assertBuildResult(
       buildable,
@@ -224,10 +226,18 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
 
   func testStringLiteralSegmentWithCode() {
     let buildable = StringLiteralSegmentListSyntax {
-      StringSegmentSyntax(content: .stringSegment(#"Error validating child at index \(index) of \(nodeKind):"#), trailingTrivia: .newline)
-      StringSegmentSyntax(content: .stringSegment(#"Node did not satisfy any node choice requirement."#), trailingTrivia: .newline)
+      StringSegmentSyntax(
+        content: .stringSegment(#"Error validating child at index \(index) of \(nodeKind):"#),
+        trailingTrivia: .newline
+      )
+      StringSegmentSyntax(
+        content: .stringSegment(#"Node did not satisfy any node choice requirement."#),
+        trailingTrivia: .newline
+      )
       StringSegmentSyntax(content: .stringSegment(#"Validation failures:"#), trailingTrivia: .newline)
-      StringSegmentSyntax(content: .stringSegment(#"\(nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n"))"#))
+      StringSegmentSyntax(
+        content: .stringSegment(#"\(nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n"))"#)
+      )
     }
 
     assertBuildResult(
@@ -245,12 +255,20 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
     let buildable = StringLiteralExprSyntax(
       openingQuote: .multilineStringQuoteToken(),
       segments: StringLiteralSegmentListSyntax {
-        StringSegmentSyntax(content: .stringSegment(#"Error validating child at index \(index) of \(nodeKind):"#), trailingTrivia: .newline)
-        StringSegmentSyntax(content: .stringSegment(#"Node did not satisfy any node choice requirement."#), trailingTrivia: .newline)
+        StringSegmentSyntax(
+          content: .stringSegment(#"Error validating child at index \(index) of \(nodeKind):"#),
+          trailingTrivia: .newline
+        )
+        StringSegmentSyntax(
+          content: .stringSegment(#"Node did not satisfy any node choice requirement."#),
+          trailingTrivia: .newline
+        )
         StringSegmentSyntax(content: .stringSegment(#"Validation failures:"#), trailingTrivia: .newline)
         ExpressionSegmentSyntax(
           expressions: LabeledExprListSyntax {
-            LabeledExprSyntax(expression: ExprSyntax(#"nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n")"#))
+            LabeledExprSyntax(
+              expression: ExprSyntax(#"nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n")"#)
+            )
           }
         )
       },
@@ -355,7 +373,11 @@ final class StringLiteralExprSyntaxTests: XCTestCase {
 
   func testMultiStringOpeningQuote() {
     assertBuildResult(
-      StringLiteralExprSyntax(openingQuote: .multilineStringQuoteToken(), content: "a", closingQuote: .multilineStringQuoteToken()),
+      StringLiteralExprSyntax(
+        openingQuote: .multilineStringQuoteToken(),
+        content: "a",
+        closingQuote: .multilineStringQuoteToken()
+      ),
       #"""
       """
       a

@@ -77,8 +77,12 @@ public enum FixItApplier {
         // If the remaining edit starts after or at the end of the edit that we just applied,
         // shift it by the current edit's difference in length.
         if edit.endUtf8Offset <= remainingEdit.startUtf8Offset {
-          let startPosition = AbsolutePosition(utf8Offset: remainingEdit.startUtf8Offset - edit.replacementRange.count + edit.replacementLength)
-          let endPosition = AbsolutePosition(utf8Offset: remainingEdit.endUtf8Offset - edit.replacementRange.count + edit.replacementLength)
+          let startPosition = AbsolutePosition(
+            utf8Offset: remainingEdit.startUtf8Offset - edit.replacementRange.count + edit.replacementLength
+          )
+          let endPosition = AbsolutePosition(
+            utf8Offset: remainingEdit.endUtf8Offset - edit.replacementRange.count + edit.replacementLength
+          )
           return SourceEdit(range: startPosition..<endPosition, replacement: remainingEdit.replacement)
         }
 

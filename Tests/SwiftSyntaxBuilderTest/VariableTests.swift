@@ -19,7 +19,10 @@ final class VariableTests: XCTestCase {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
     let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, bindingSpecifier: .keyword(.let)) {
-      PatternBindingSyntax(pattern: PatternSyntax("a"), typeAnnotation: TypeAnnotationSyntax(type: ArrayTypeSyntax(element: TypeSyntax("Int"))))
+      PatternBindingSyntax(
+        pattern: PatternSyntax("a"),
+        typeAnnotation: TypeAnnotationSyntax(type: ArrayTypeSyntax(element: TypeSyntax("Int")))
+      )
     }
 
     assertBuildResult(buildable, "␣let a: [Int]")
@@ -29,7 +32,10 @@ final class VariableTests: XCTestCase {
     let leadingTrivia = Trivia.unexpectedText("␣")
 
     let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, bindingSpecifier: .keyword(.inout)) {
-      PatternBindingSyntax(pattern: PatternSyntax("a"), typeAnnotation: TypeAnnotationSyntax(type: ArrayTypeSyntax(element: TypeSyntax("Int"))))
+      PatternBindingSyntax(
+        pattern: PatternSyntax("a"),
+        typeAnnotation: TypeAnnotationSyntax(type: ArrayTypeSyntax(element: TypeSyntax("Int")))
+      )
     }
 
     assertBuildResult(buildable, "␣inout a: [Int]")
@@ -161,7 +167,9 @@ final class VariableTests: XCTestCase {
     let buildable = VariableDeclSyntax(leadingTrivia: leadingTrivia, bindingSpecifier: .keyword(.var)) {
       PatternBindingSyntax(
         pattern: PatternSyntax("d"),
-        typeAnnotation: TypeAnnotationSyntax(type: DictionaryTypeSyntax(key: TypeSyntax("String"), value: TypeSyntax("Int"))),
+        typeAnnotation: TypeAnnotationSyntax(
+          type: DictionaryTypeSyntax(key: TypeSyntax("String"), value: TypeSyntax("Int"))
+        ),
         initializer: InitializerClauseSyntax(value: DictionaryExprSyntax())
       )
     }
@@ -213,13 +221,19 @@ final class VariableTests: XCTestCase {
         initializer: InitializerClauseSyntax(
           value: DictionaryExprSyntax {
             for i in 1...3 {
-              DictionaryElementSyntax(key: StringLiteralExprSyntax(content: "key\(i)"), value: IntegerLiteralExprSyntax(i))
+              DictionaryElementSyntax(
+                key: StringLiteralExprSyntax(content: "key\(i)"),
+                value: IntegerLiteralExprSyntax(i)
+              )
             }
           }
         )
       )
       PatternBindingSyntax(pattern: PatternSyntax("i"), typeAnnotation: TypeAnnotationSyntax(type: TypeSyntax("Int")))
-      PatternBindingSyntax(pattern: PatternSyntax("s"), typeAnnotation: TypeAnnotationSyntax(type: TypeSyntax("String")))
+      PatternBindingSyntax(
+        pattern: PatternSyntax("s"),
+        typeAnnotation: TypeAnnotationSyntax(type: TypeSyntax("String"))
+      )
     }
     assertBuildResult(buildable, #"let a = [1, 2, 3], d = ["key1": 1, "key2": 2, "key3": 3], i: Int, s: String"#)
   }

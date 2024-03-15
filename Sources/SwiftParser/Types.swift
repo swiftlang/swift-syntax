@@ -35,7 +35,10 @@ extension Parser {
     var base = RawTypeSyntax(self.parseSimpleOrCompositionType())
     if self.withLookahead({ $0.atFunctionTypeArrow() }) {
       var effectSpecifiers = self.parseTypeEffectSpecifiers()
-      let returnClause = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: false)
+      let returnClause = self.parseFunctionReturnClause(
+        effectSpecifiers: &effectSpecifiers,
+        allowNamedOpaqueResultType: false
+      )
 
       let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
       let leftParen: RawTokenSyntax
@@ -342,7 +345,9 @@ extension Parser {
   }
 
   /// Parse an optional type.
-  mutating func parseImplicitlyUnwrappedOptionalType(_ base: RawTypeSyntax) -> RawImplicitlyUnwrappedOptionalTypeSyntax {
+  mutating func parseImplicitlyUnwrappedOptionalType(
+    _ base: RawTypeSyntax
+  ) -> RawImplicitlyUnwrappedOptionalTypeSyntax {
     let (unexpectedBeforeMark, mark) = self.expect(.exclamationMark)
     return RawImplicitlyUnwrappedOptionalTypeSyntax(
       wrappedType: base,
@@ -623,7 +628,8 @@ extension Parser.Lookahead {
     var specifierProgress = LoopProgressCondition()
     // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
     while canHaveParameterSpecifier,
-      self.at(anyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) != nil || self.at(.keyword(.isolated)) || self.at(.keyword(._const)),
+      self.at(anyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) != nil || self.at(.keyword(.isolated))
+        || self.at(.keyword(._const)),
       self.hasProgressed(&specifierProgress)
     {
       self.consumeAnyToken()
@@ -734,7 +740,9 @@ extension Parser.Lookahead {
         return false
       }
 
-      if self.at(TokenSpec(.postfixQuestionMark, allowAtStartOfLine: false)) || self.at(TokenSpec(.exclamationMark, allowAtStartOfLine: false)) {
+      if self.at(TokenSpec(.postfixQuestionMark, allowAtStartOfLine: false))
+        || self.at(TokenSpec(.exclamationMark, allowAtStartOfLine: false))
+      {
         self.consumeAnyToken()
         continue
       }
@@ -840,7 +848,9 @@ extension Parser.Lookahead {
     }
 
     // Parse an identifier.
-    guard self.at(.identifier) || self.at(.keyword(.Self)) || (allowKeyword && self.currentToken.isLexerClassifiedKeyword) else {
+    guard
+      self.at(.identifier) || self.at(.keyword(.Self)) || (allowKeyword && self.currentToken.isLexerClassifiedKeyword)
+    else {
       return false
     }
     self.consumeAnyToken()
@@ -909,7 +919,11 @@ extension Parser {
         rightParen: missingToken(.rightParen),
         arena: self.arena
       )
-      let lifetimeSpecifier = RawLifetimeTypeSpecifierSyntax(specifier: specifier, arguments: arguments, arena: self.arena)
+      let lifetimeSpecifier = RawLifetimeTypeSpecifierSyntax(
+        specifier: specifier,
+        arguments: arguments,
+        arena: self.arena
+      )
       return .lifetimeTypeSpecifier(lifetimeSpecifier)
     }
 
@@ -940,7 +954,11 @@ extension Parser {
       rightParen: rightParen,
       arena: self.arena
     )
-    let lifetimeSpecifier = RawLifetimeTypeSpecifierSyntax(specifier: specifier, arguments: argumentsSyntax, arena: self.arena)
+    let lifetimeSpecifier = RawLifetimeTypeSpecifierSyntax(
+      specifier: specifier,
+      arguments: argumentsSyntax,
+      arena: self.arena
+    )
     return .lifetimeTypeSpecifier(lifetimeSpecifier)
   }
 
@@ -958,9 +976,12 @@ extension Parser {
     specifiers: RawTypeSpecifierListSyntax,
     attributes: RawAttributeListSyntax
   )? {
-    typealias SimpleOrLifetimeSpecifier = EitherTokenSpecSet<SimpleTypeSpecifierSyntax.SpecifierOptions, LifetimeTypeSpecifierSyntax.SpecifierOptions>
+    typealias SimpleOrLifetimeSpecifier =
+      EitherTokenSpecSet<SimpleTypeSpecifierSyntax.SpecifierOptions, LifetimeTypeSpecifierSyntax.SpecifierOptions>
     var specifiers: [RawTypeSpecifierListSyntax.Element] = []
-    SPECIFIER_PARSING: while canHaveParameterSpecifier, let (specifierSpec, specifierHandle) = self.at(anyIn: SimpleOrLifetimeSpecifier.self) {
+    SPECIFIER_PARSING: while canHaveParameterSpecifier,
+      let (specifierSpec, specifierHandle) = self.at(anyIn: SimpleOrLifetimeSpecifier.self)
+    {
       switch specifierSpec {
       case .lhs: specifiers.append(parseSimpleTypeSpecifier(specifierHandle: specifierHandle))
       case .rhs:

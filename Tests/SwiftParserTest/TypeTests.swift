@@ -55,7 +55,11 @@ final class TypeTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected type in function type", fixIts: ["insert type"]),
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '..' in function type"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected return type in function type", fixIts: ["insert return type"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected return type in function type",
+          fixIts: ["insert return type"]
+        ),
       ],
       fixedSource: """
         t as(<#type#>..)-> <#type#>
@@ -334,7 +338,11 @@ final class TypeTests: ParserTestCase {
     assertParse(
       "func foo() -> _borrow(1️⃣) X",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter reference in lifetime specifier", fixIts: ["insert parameter reference"])
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected parameter reference in lifetime specifier",
+          fixIts: ["insert parameter reference"]
+        )
       ],
       fixedSource: "func foo() -> _borrow(<#identifier#>) X",
       experimentalFeatures: [.nonescapableTypes]
@@ -343,7 +351,11 @@ final class TypeTests: ParserTestCase {
     assertParse(
       "func foo() -> _borrow(x,1️⃣) X",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter reference in lifetime specifier", fixIts: ["insert parameter reference"])
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected parameter reference in lifetime specifier",
+          fixIts: ["insert parameter reference"]
+        )
       ],
       fixedSource: "func foo() -> _borrow(x, <#identifier#>) X",
       experimentalFeatures: [.nonescapableTypes]
@@ -373,7 +385,11 @@ final class TypeTests: ParserTestCase {
     assertParse(
       "func foo() -> _borrow(1️⃣*) X",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter reference in lifetime specifier", fixIts: ["insert parameter reference"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected parameter reference in lifetime specifier",
+          fixIts: ["insert parameter reference"]
+        ),
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '*' in lifetime specifier"),
       ],
       fixedSource: "func foo() -> _borrow(<#identifier#>*) X",
@@ -408,7 +424,10 @@ final class TypeTests: ParserTestCase {
     assertParse(
       "func foo() -> _borrow(1️⃣-1) X",
       diagnostics: [
-        DiagnosticSpec(message: "expected parameter reference in lifetime specifier", fixIts: ["insert parameter reference"]),
+        DiagnosticSpec(
+          message: "expected parameter reference in lifetime specifier",
+          fixIts: ["insert parameter reference"]
+        ),
         DiagnosticSpec(message: "unexpected code '-1' in lifetime specifier"),
       ],
       fixedSource: "func foo() -> _borrow(<#identifier#>-1) X",

@@ -100,7 +100,9 @@ extension SyntaxProtocol {
       } else {
         return "braces"
       }
-    } else if let token = Syntax(self).as(UnexpectedNodesSyntax.self)?.onlyPresentTokens(satisfying: { $0.tokenKind.isLexerClassifiedKeyword })?.only {
+    } else if let token = Syntax(self).as(UnexpectedNodesSyntax.self)?.onlyPresentTokens(satisfying: {
+      $0.tokenKind.isLexerClassifiedKeyword
+    })?.only {
       return "'\(token.text)' keyword"
     } else if let token = Syntax(self).as(TokenSyntax.self) {
       return "'\(token.text)' keyword"

@@ -87,7 +87,10 @@ public extension Child {
   /// function parameter. Otherwise, return `nil`.
   var defaultInitialization: InitializerClauseSyntax? {
     if let defaultValue {
-      return InitializerClauseSyntax(equal: .equalToken(leadingTrivia: .space, trailingTrivia: .space), value: defaultValue)
+      return InitializerClauseSyntax(
+        equal: .equalToken(leadingTrivia: .space, trailingTrivia: .space),
+        value: defaultValue
+      )
     } else {
       return nil
     }
@@ -143,14 +146,19 @@ public extension Child {
       preconditionChoices.append(
         ExprSyntax(
           SequenceExprSyntax {
-            MemberAccessExprSyntax(base: buildableType.forceUnwrappedIfNeeded(expr: DeclReferenceExprSyntax(baseName: .identifier(varName))), name: "text")
+            MemberAccessExprSyntax(
+              base: buildableType.forceUnwrappedIfNeeded(expr: DeclReferenceExprSyntax(baseName: .identifier(varName))),
+              name: "text"
+            )
             BinaryOperatorExprSyntax(text: "==")
             StringLiteralExprSyntax(content: textChoice)
           }
         )
       )
     }
-    let disjunction = ExprListSyntax(preconditionChoices.flatMap { [$0, ExprSyntax(BinaryOperatorExprSyntax(text: "||"))] }.dropLast())
+    let disjunction = ExprListSyntax(
+      preconditionChoices.flatMap { [$0, ExprSyntax(BinaryOperatorExprSyntax(text: "||"))] }.dropLast()
+    )
     return FunctionCallExprSyntax(callee: ExprSyntax("precondition")) {
       LabeledExprSyntax(expression: SequenceExprSyntax(elements: disjunction))
     }

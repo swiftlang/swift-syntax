@@ -442,7 +442,10 @@ final class StringInterpolationTests: XCTestCase {
 
   func testInvalidTrivia() {
     let invalid = Trivia("/*comment*/ invalid /*comm*/")
-    XCTAssertEqual(invalid, [.blockComment("/*comment*/"), .spaces(1), .unexpectedText("invalid"), .spaces(1), .blockComment("/*comm*/")])
+    XCTAssertEqual(
+      invalid,
+      [.blockComment("/*comment*/"), .spaces(1), .unexpectedText("invalid"), .spaces(1), .blockComment("/*comm*/")]
+    )
 
     XCTAssertThrowsError(try Trivia(validating: "/*comment*/ invalid /*comm*/")) { error in
       assertStringsEqualWithDiff(

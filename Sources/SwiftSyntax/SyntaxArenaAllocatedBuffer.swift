@@ -46,7 +46,8 @@
 /// reference its contents, we know that the buffer's contents won't get
 /// deallocated while being accessed and thus we can add an unchecked `Sendable`
 /// conformance.
-@_spi(RawSyntax) public struct SyntaxArenaAllocatedBufferPointer<Element: Sendable>: RandomAccessCollection, @unchecked Sendable {
+@_spi(RawSyntax)
+public struct SyntaxArenaAllocatedBufferPointer<Element: Sendable>: RandomAccessCollection, @unchecked Sendable {
   private let buffer: UnsafeBufferPointer<Element>
 
   /// Create an empty buffer with no elements.
@@ -64,7 +65,10 @@
     self.buffer = buffer
   }
 
-  @_spi(RawSyntax) public subscript<RangeType: RangeExpression<Int>>(range: RangeType) -> SyntaxArenaAllocatedBufferPointer<Element> {
+  @_spi(RawSyntax)
+  public subscript<RangeType: RangeExpression<Int>>(
+    range: RangeType
+  ) -> SyntaxArenaAllocatedBufferPointer<Element> {
     return SyntaxArenaAllocatedBufferPointer(UnsafeBufferPointer(rebasing: self.buffer[range]))
   }
 

@@ -203,7 +203,11 @@ final class SubscriptingTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start function type", fixIts: ["insert '('"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' in function type", fixIts: ["insert ')'"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '->' and return type in subscript", fixIts: ["insert '->' and return type"]),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "expected '->' and return type in subscript",
+          fixIts: ["insert '->' and return type"]
+        ),
       ],
       fixedSource: """
         struct A0 {
@@ -529,7 +533,11 @@ final class SubscriptingTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start function type", fixIts: ["insert '('"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' in function type", fixIts: ["insert ')'"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '->' and return type in subscript", fixIts: ["insert '->' and return type"]),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "expected '->' and return type in subscript",
+          fixIts: ["insert '->' and return type"]
+        ),
       ],
       fixedSource: """
         struct A11 {

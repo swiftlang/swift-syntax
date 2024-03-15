@@ -206,7 +206,9 @@ final class ExtensionMacroTests: XCTestCase {
         extension MyType: Encodable {
         }
         """,
-      macroSpecs: ["AddCodableExtensions": MacroSpec(type: CodableExtensionMacro.self, conformances: ["Decodable", "Encodable"])],
+      macroSpecs: [
+        "AddCodableExtensions": MacroSpec(type: CodableExtensionMacro.self, conformances: ["Decodable", "Encodable"])
+      ],
       indentationWidth: indentationWidth
     )
 

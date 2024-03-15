@@ -106,7 +106,10 @@ final class IfconfigExprTests: ParserTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '+ otherExpr' in conditional compilation block"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code 'print("debug")' in conditional compilation block"#),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"unexpected code 'print("debug")' in conditional compilation block"#
+        ),
       ]
     )
   }
@@ -428,7 +431,8 @@ final class IfconfigExprTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "unexpected 'if' keyword following '#else' conditional compilation directive; did you mean '#elseif'?",
+          message:
+            "unexpected 'if' keyword following '#else' conditional compilation directive; did you mean '#elseif'?",
           fixIts: ["replace '#else if' with '#elseif'"]
         )
       ],

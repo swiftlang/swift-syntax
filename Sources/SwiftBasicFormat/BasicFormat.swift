@@ -288,8 +288,10 @@ open class BasicFormat: SyntaxRewriter {
     case (.multilineStringQuote, .backslash),  // string interpolation segment inside a multi-line string literal
       (.multilineStringQuote, .multilineStringQuote),  // empty multi-line string literal
       (.multilineStringQuote, .stringSegment),  // segment starting a multi-line string literal
-      (.stringSegment, .multilineStringQuote),  // ending a multi-line string literal that has a string interpolation segment at its end
-      (.rightParen, .multilineStringQuote),  // ending a multi-line string literal that has a string interpolation segment at its end
+      // ending a multi-line string literal that has a string interpolation segment at its end
+      (.stringSegment, .multilineStringQuote),
+      // ending a multi-line string literal that has a string interpolation segment at its end
+      (.rightParen, .multilineStringQuote),
       (.poundEndif, _),
       (_, .poundElse),
       (_, .poundElseif),
@@ -332,7 +334,8 @@ open class BasicFormat: SyntaxRewriter {
       (.leftBrace, .rightBrace),  // {}
       (.leftParen, _),
       (.leftSquare, _),
-      (.multilineStringQuote, .rawStringPoundDelimiter),  // closing raw string delimiter should never be separate by a space
+      // closing raw string delimiter should never be separate by a space
+      (.multilineStringQuote, .rawStringPoundDelimiter),
       (.period, _),
       (.postfixQuestionMark, .leftAngle),  // init?<T>()
       (.postfixQuestionMark, .leftParen),  // init?() or myOptionalClosure?()
@@ -342,7 +345,8 @@ open class BasicFormat: SyntaxRewriter {
       (.prefixAmpersand, _),
       (.prefixOperator, _),
       (.rawStringPoundDelimiter, .leftParen),  // opening raw string delimiter should never be separate by a space
-      (.rawStringPoundDelimiter, .multilineStringQuote),  // opening raw string delimiter should never be separate by a space
+      // opening raw string delimiter should never be separate by a space
+      (.rawStringPoundDelimiter, .multilineStringQuote),
       (.rawStringPoundDelimiter, .singleQuote),  // opening raw string delimiter should never be separate by a space
       (.rawStringPoundDelimiter, .stringQuote),  // opening raw string delimiter should never be separate by a space
       (.rawStringPoundDelimiter, .period),  // opening raw string delimiter should never be separate by a space
@@ -378,9 +382,11 @@ open class BasicFormat: SyntaxRewriter {
       {
         return false
       }
-    case (.leftAngle, _) where second?.tokenKind != .rightAngle:  // `<` and `>` need to be separated by a space because otherwise they become an operator
+    case (.leftAngle, _) where second?.tokenKind != .rightAngle:
+      // `<` and `>` need to be separated by a space because otherwise they become an operator
       return false
-    case (_, .rightAngle) where first?.tokenKind != .leftAngle:  // `<` and `>` need to be separated by a space because otherwise they become an operator
+    case (_, .rightAngle) where first?.tokenKind != .leftAngle:
+      // `<` and `>` need to be separated by a space because otherwise they become an operator
       return false
     default:
       break
@@ -533,7 +539,9 @@ open class BasicFormat: SyntaxRewriter {
         return true
       } else if token.text.first?.isNewline ?? false {
         return true
-      } else if (transformedTokenText ?? token.text).isEmpty && token.trailingTrivia.isEmpty && nextTokenWillStartWithNewline {
+      } else if (transformedTokenText ?? token.text).isEmpty && token.trailingTrivia.isEmpty
+        && nextTokenWillStartWithNewline
+      {
         return true
       } else {
         return false
@@ -559,7 +567,9 @@ open class BasicFormat: SyntaxRewriter {
       }
     }
 
-    if leadingTrivia.indentation(isOnNewline: isInitialToken || previousTokenWillEndWithNewline) == [] && !token.isStringSegment {
+    if leadingTrivia.indentation(isOnNewline: isInitialToken || previousTokenWillEndWithNewline) == []
+      && !token.isStringSegment
+    {
       // If the token starts on a new line and does not have indentation, this
       // is the last non-indented token. Store its indentation level.
       // But never consider string segments as anchor points since you can’t
@@ -623,8 +633,12 @@ open class BasicFormat: SyntaxRewriter {
       addIndentationAfterLastNewline: false
     )
 
-    leadingTrivia = leadingTrivia.trimmingTrailingWhitespaceBeforeNewline(isBeforeNewline: leadingTriviaIsFollowedByNewline)
-    trailingTrivia = trailingTrivia.trimmingTrailingWhitespaceBeforeNewline(isBeforeNewline: nextTokenWillStartWithNewline)
+    leadingTrivia = leadingTrivia.trimmingTrailingWhitespaceBeforeNewline(
+      isBeforeNewline: leadingTriviaIsFollowedByNewline
+    )
+    trailingTrivia = trailingTrivia.trimmingTrailingWhitespaceBeforeNewline(
+      isBeforeNewline: nextTokenWillStartWithNewline
+    )
 
     var result = token.detached
     if leadingTrivia != result.leadingTrivia {

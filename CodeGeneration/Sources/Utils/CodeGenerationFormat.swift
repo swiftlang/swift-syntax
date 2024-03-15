@@ -32,7 +32,9 @@ public class CodeGenerationFormat: BasicFormat {
     let children = node.children(viewMode: .all)
     // Short array literals are presented on one line, list each element on a different line.
     if children.count > maxElementsOnSameLine {
-      return ArrayElementListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: ArrayElementSyntax.self))
+      return ArrayElementListSyntax(
+        formatChildrenSeparatedByNewline(children: children, elementType: ArrayElementSyntax.self)
+      )
     } else {
       return super.visit(node)
     }
@@ -51,7 +53,9 @@ public class CodeGenerationFormat: BasicFormat {
     let children = node.children(viewMode: .all)
     // Short dictionary literals are presented on one line, list each element on a different line.
     if children.count > maxElementsOnSameLine {
-      return DictionaryElementListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: DictionaryElementSyntax.self))
+      return DictionaryElementListSyntax(
+        formatChildrenSeparatedByNewline(children: children, elementType: DictionaryElementSyntax.self)
+      )
     } else {
       return super.visit(node)
     }
@@ -61,7 +65,9 @@ public class CodeGenerationFormat: BasicFormat {
     let children = node.children(viewMode: .all)
     // Short function parameter literals are presented on one line, list each element on a different line.
     if children.count > maxElementsOnSameLine {
-      return FunctionParameterListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: FunctionParameterSyntax.self))
+      return FunctionParameterListSyntax(
+        formatChildrenSeparatedByNewline(children: children, elementType: FunctionParameterSyntax.self)
+      )
     } else {
       return super.visit(node)
     }
@@ -77,7 +83,9 @@ public class CodeGenerationFormat: BasicFormat {
 
   public override func visit(_ node: MemberBlockItemSyntax) -> MemberBlockItemSyntax {
     let formatted = super.visit(node)
-    if node != node.parent?.children(viewMode: .sourceAccurate).first?.as(MemberBlockItemSyntax.self) && !node.decl.is(EnumCaseDeclSyntax.self) {
+    if node != node.parent?.children(viewMode: .sourceAccurate).first?.as(MemberBlockItemSyntax.self)
+      && !node.decl.is(EnumCaseDeclSyntax.self)
+    {
       return ensuringTwoLeadingNewlines(node: formatted)
     } else {
       return formatted
@@ -88,7 +96,9 @@ public class CodeGenerationFormat: BasicFormat {
     let children = node.children(viewMode: .all)
     // Short tuple element list literals are presented on one line, list each element on a different line.
     if children.count > maxElementsOnSameLine {
-      return LabeledExprListSyntax(formatChildrenSeparatedByNewline(children: children, elementType: LabeledExprSyntax.self))
+      return LabeledExprListSyntax(
+        formatChildrenSeparatedByNewline(children: children, elementType: LabeledExprSyntax.self)
+      )
     } else {
       return super.visit(node)
     }
@@ -110,7 +120,10 @@ public class CodeGenerationFormat: BasicFormat {
     }
   }
 
-  private func formatChildrenSeparatedByNewline<SyntaxType: SyntaxProtocol>(children: SyntaxChildren, elementType: SyntaxType.Type) -> [SyntaxType] {
+  private func formatChildrenSeparatedByNewline<SyntaxType: SyntaxProtocol>(
+    children: SyntaxChildren,
+    elementType: SyntaxType.Type
+  ) -> [SyntaxType] {
     increaseIndentationLevel()
     var formattedChildren = children.map {
       self.rewrite($0.cast(SyntaxType.self)).cast(SyntaxType.self)
@@ -124,7 +137,10 @@ public class CodeGenerationFormat: BasicFormat {
     }
     decreaseIndentationLevel()
     if !formattedChildren.isEmpty {
-      formattedChildren[formattedChildren.count - 1] = formattedChildren[formattedChildren.count - 1].with(\.trailingTrivia, indentedNewline)
+      formattedChildren[formattedChildren.count - 1] = formattedChildren[formattedChildren.count - 1].with(
+        \.trailingTrivia,
+        indentedNewline
+      )
     }
     return formattedChildren
   }

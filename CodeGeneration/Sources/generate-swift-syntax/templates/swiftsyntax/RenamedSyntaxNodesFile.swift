@@ -28,7 +28,8 @@ let renamedSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   }
 
   try! ExtensionDeclSyntax("public extension SyntaxKind") {
-    for syntaxKind in SyntaxNodeKind.allCases.sorted(by: { $0.deprecatedRawValue ?? "" < $1.deprecatedRawValue ?? "" }) {
+    let syntaxKinds = SyntaxNodeKind.allCases.sorted(by: { $0.deprecatedRawValue ?? "" < $1.deprecatedRawValue ?? "" })
+    for syntaxKind in syntaxKinds {
       if let deprecatedName = syntaxKind.deprecatedRawValue {
         DeclSyntax(
           """

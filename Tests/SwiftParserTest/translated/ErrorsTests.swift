@@ -292,7 +292,9 @@ final class ErrorsTests: ParserTestCase {
                   bindings: PatternBindingListSyntax([
                     PatternBindingSyntax(
                       pattern: WildcardPatternSyntax(),
-                      typeAnnotation: TypeAnnotationSyntax(type: TupleTypeSyntax(elements: TupleTypeElementListSyntax([])))
+                      typeAnnotation: TypeAnnotationSyntax(
+                        type: TupleTypeSyntax(elements: TupleTypeElementListSyntax([]))
+                      )
                     )
                   ])
                 )
@@ -315,7 +317,10 @@ final class ErrorsTests: ParserTestCase {
       func fixitThrow0() 1️⃣throw {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'throw' with 'throws'"])
+        DiagnosticSpec(
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'throw' with 'throws'"]
+        )
       ],
       fixedSource: """
         func fixitThrow0() throws {}
@@ -329,7 +334,10 @@ final class ErrorsTests: ParserTestCase {
       func fixitThrow1() 1️⃣throw -> Int {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'throw' with 'throws'"])
+        DiagnosticSpec(
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'throw' with 'throws'"]
+        )
       ],
       fixedSource: """
         func fixitThrow1() throws -> Int {}
@@ -347,7 +355,10 @@ final class ErrorsTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'throw' with 'throws'"])
+        DiagnosticSpec(
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'throw' with 'throws'"]
+        )
       ],
       fixedSource: """
         func fixitThrow2() throws {
@@ -387,7 +398,10 @@ final class ErrorsTests: ParserTestCase {
       func fixitTry0<T>(a: T) 1️⃣try where T:ExpressibleByStringLiteral {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"])
+        DiagnosticSpec(
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'try' with 'throws'"]
+        )
       ],
       fixedSource: """
         func fixitTry0<T>(a: T) throws where T:ExpressibleByStringLiteral {}
@@ -401,7 +415,10 @@ final class ErrorsTests: ParserTestCase {
       func fixitTry1<T>(a: T) 1️⃣try {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"])
+        DiagnosticSpec(
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'try' with 'throws'"]
+        )
       ],
       fixedSource: """
         func fixitTry1<T>(a: T) throws {}
@@ -415,7 +432,10 @@ final class ErrorsTests: ParserTestCase {
       func fixitTry2() 1️⃣try {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"])
+        DiagnosticSpec(
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'try' with 'throws'"]
+        )
       ],
       fixedSource: """
         func fixitTry2() throws {}
@@ -429,7 +449,10 @@ final class ErrorsTests: ParserTestCase {
       let fixitTry3 : () 1️⃣try -> Int
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"])
+        DiagnosticSpec(
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'try' with 'throws'"]
+        )
       ],
       fixedSource: """
         let fixitTry3 : () throws -> Int
@@ -443,7 +466,10 @@ final class ErrorsTests: ParserTestCase {
       func fixitAwait0() 1️⃣await { }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'await' with 'async'"])
+        DiagnosticSpec(
+          message: "expected async specifier; did you mean 'async'?",
+          fixIts: ["replace 'await' with 'async'"]
+        )
       ],
       fixedSource: """
         func fixitAwait0() async { }
@@ -457,7 +483,10 @@ final class ErrorsTests: ParserTestCase {
       func fixitAwait1() 1️⃣await -> Int { }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'await' with 'async'"])
+        DiagnosticSpec(
+          message: "expected async specifier; did you mean 'async'?",
+          fixIts: ["replace 'await' with 'async'"]
+        )
       ],
       fixedSource: """
         func fixitAwait1() async -> Int { }

@@ -73,7 +73,11 @@ extension RawTokenSyntax: UnexpectedNodesCombinable {
 extension RawUnexpectedNodesSyntax: UnexpectedNodesCombinable {}
 
 extension RawUnexpectedNodesSyntax {
-  init?(combining syntax1: some UnexpectedNodesCombinable, _ syntax2: some UnexpectedNodesCombinable, arena: __shared SyntaxArena) {
+  init?(
+    combining syntax1: some UnexpectedNodesCombinable,
+    _ syntax2: some UnexpectedNodesCombinable,
+    arena: __shared SyntaxArena
+  ) {
     self.init(syntax1.elements + syntax2.elements, arena: arena)
   }
 

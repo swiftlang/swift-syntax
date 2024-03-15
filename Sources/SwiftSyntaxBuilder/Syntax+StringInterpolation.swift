@@ -372,7 +372,8 @@ extension Set: ExpressibleByLiteralSyntax where Element: ExpressibleByLiteralSyn
   }
 }
 
-extension KeyValuePairs: ExpressibleByLiteralSyntax where Key: ExpressibleByLiteralSyntax, Value: ExpressibleByLiteralSyntax {
+extension KeyValuePairs: ExpressibleByLiteralSyntax
+where Key: ExpressibleByLiteralSyntax, Value: ExpressibleByLiteralSyntax {
   public func makeLiteralSyntax() -> DictionaryExprSyntax {
     DictionaryExprSyntax(leftSquare: .leftSquareToken(), rightSquare: .rightSquareToken()) {
       for elem in self {
@@ -386,7 +387,8 @@ extension KeyValuePairs: ExpressibleByLiteralSyntax where Key: ExpressibleByLite
   }
 }
 
-extension Dictionary: ExpressibleByLiteralSyntax where Key: ExpressibleByLiteralSyntax, Value: ExpressibleByLiteralSyntax {
+extension Dictionary: ExpressibleByLiteralSyntax
+where Key: ExpressibleByLiteralSyntax, Value: ExpressibleByLiteralSyntax {
   public func makeLiteralSyntax() -> DictionaryExprSyntax {
     // Dictionaries are unordered. Sort the elements by their keys' source-code representation to emit them in a stable order.
     let elemSyntaxes = map {

@@ -68,7 +68,11 @@ public enum MacroDefinition {
   /// defining macro. These subtrees will need to be replaced with the text of
   /// the corresponding argument to the macro, which can be accomplished with
   /// `MacroDeclSyntax.expandDefinition`.
-  case expansion(MacroExpansionExprSyntax, replacements: [Replacement], genericReplacements: [GenericArgumentReplacement])
+  case expansion(
+    MacroExpansionExprSyntax,
+    replacements: [Replacement],
+    genericReplacements: [GenericArgumentReplacement]
+  )
 }
 
 extension MacroDefinition {

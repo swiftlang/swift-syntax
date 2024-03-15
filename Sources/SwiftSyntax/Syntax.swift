@@ -187,7 +187,12 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     // If we have a parent already, then ask our current parent to copy itself
     // recursively up to the root.
     if let parent {
-      let newParent = parent.replacingChild(at: indexInParent, with: newRaw, rawNodeArena: rawNodeArena, allocationArena: allocationArena)
+      let newParent = parent.replacingChild(
+        at: indexInParent,
+        with: newRaw,
+        rawNodeArena: rawNodeArena,
+        allocationArena: allocationArena
+      )
       return Syntax(absoluteRaw.replacingSelf(newRaw, newRootId: newParent.id.rootId), parent: newParent)
     } else {
       // Otherwise, we're already the root, so return the new root data.
@@ -207,7 +212,12 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   /// - Returns: The new root node created by this operation, and the new child
   ///            syntax data.
   /// - SeeAlso: replacingSelf(_:)
-  func replacingChild(at index: Int, with newChild: RawSyntax?, rawNodeArena: RetainedSyntaxArena?, allocationArena: SyntaxArena) -> Syntax {
+  func replacingChild(
+    at index: Int,
+    with newChild: RawSyntax?,
+    rawNodeArena: RetainedSyntaxArena?,
+    allocationArena: SyntaxArena
+  ) -> Syntax {
     precondition(newChild == nil || (rawNodeArena != nil && newChild!.arenaReference == rawNodeArena!))
     // After newRaw has been allocated in `allocationArena`, `rawNodeArena` will
     // be a child arena of `allocationArena` and thus, `allocationArena` will
@@ -219,8 +229,18 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// Same as `replacingChild(at:with:rawNodeArena:allocationArena:)` but takes a `__SyntaxArena` instead of a `RetainedSyntaxArena`.
-  func replacingChild(at index: Int, with newChild: RawSyntax?, rawNodeArena: SyntaxArena?, allocationArena: SyntaxArena) -> Syntax {
-    return self.replacingChild(at: index, with: newChild, rawNodeArena: rawNodeArena.map(RetainedSyntaxArena.init), allocationArena: allocationArena)
+  func replacingChild(
+    at index: Int,
+    with newChild: RawSyntax?,
+    rawNodeArena: SyntaxArena?,
+    allocationArena: SyntaxArena
+  ) -> Syntax {
+    return self.replacingChild(
+      at: index,
+      with: newChild,
+      rawNodeArena: rawNodeArena.map(RetainedSyntaxArena.init),
+      allocationArena: allocationArena
+    )
   }
 
   /// Identical to `replacingChild(at: Int, with: RawSyntax?, arena: SyntaxArena)`
@@ -228,7 +248,12 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   /// `newChild` has been addded to the result.
   func replacingChild(at index: Int, with newChild: Syntax?, arena: SyntaxArena) -> Syntax {
     return withExtendedLifetime(newChild) {
-      return replacingChild(at: index, with: newChild?.raw, rawNodeArena: newChild?.raw.arenaReference.retained, allocationArena: arena)
+      return replacingChild(
+        at: index,
+        with: newChild?.raw,
+        rawNodeArena: newChild?.raw.arenaReference.retained,
+        allocationArena: arena
+      )
     }
   }
 

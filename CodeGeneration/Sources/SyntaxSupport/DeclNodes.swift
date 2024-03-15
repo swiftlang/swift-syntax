@@ -219,7 +219,8 @@ public let DECL_NODES: [Node] = [
         name: "genericWhereClause",
         kind: .node(kind: .genericWhereClause),
         nameForDiagnostics: "generic where clause",
-        documentation: "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
+        documentation:
+          "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
         isOptional: true
       ),
       Child(
@@ -299,7 +300,8 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "initializer",
         kind: .node(kind: .typeInitializerClause),
-        documentation: "The type initializer clause for this associated type declaration which represents a default type assignment for the associated type.",
+        documentation:
+          "The type initializer clause for this associated type declaration which represents a default type assignment for the associated type.",
         isOptional: true
       ),
       Child(
@@ -571,12 +573,14 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "attributes",
         kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
-        documentation: "If there were attributes before the editor placeholder, the ``EditorPlaceholderDeclSyntax`` will contain these."
+        documentation:
+          "If there were attributes before the editor placeholder, the ``EditorPlaceholderDeclSyntax`` will contain these."
       ),
       Child(
         name: "modifiers",
         kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
-        documentation: "If there were modifiers before the editor placeholder, the `EditorPlaceholderDecl` will contain these."
+        documentation:
+          "If there were modifiers before the editor placeholder, the `EditorPlaceholderDecl` will contain these."
       ),
       Child(
         name: "placeholder",
@@ -679,7 +683,8 @@ public let DECL_NODES: [Node] = [
     kind: .enumCaseDecl,
     base: .decl,
     nameForDiagnostics: "enum case",
-    documentation: "A `case` declaration of a Swift `enum`. It can have 1 or more `EnumCaseElement`s inside, each declaring a different case of the enum.",
+    documentation:
+      "A `case` declaration of a Swift `enum`. It can have 1 or more `EnumCaseElement`s inside, each declaring a different case of the enum.",
     traits: [
       "WithAttributes",
       "WithModifiers",
@@ -723,7 +728,8 @@ public let DECL_NODES: [Node] = [
     kind: .enumCaseElement,
     base: .syntax,
     nameForDiagnostics: nil,
-    documentation: "An element of an enum case, containing the name of the case and, optionally, either associated values or an assignment to a raw value.",
+    documentation:
+      "An element of an enum case, containing the name of the case and, optionally, either associated values or an assignment to a raw value.",
     traits: [
       "WithTrailingComma"
     ],
@@ -791,7 +797,8 @@ public let DECL_NODES: [Node] = [
         name: "name",
         deprecatedName: "identifier",
         kind: .token(choices: [.token(.identifier)]),
-        documentation: "Declares the name of this enum. If the name matches a reserved keyword use backticks to escape it."
+        documentation:
+          "Declares the name of this enum. If the name matches a reserved keyword use backticks to escape it."
       ),
       Child(
         name: "genericParameterClause",
@@ -863,7 +870,8 @@ public let DECL_NODES: [Node] = [
         name: "genericWhereClause",
         kind: .node(kind: .genericWhereClause),
         nameForDiagnostics: "generic where clause",
-        documentation: "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
+        documentation:
+          "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
         isOptional: true
       ),
       Child(
@@ -929,7 +937,8 @@ public let DECL_NODES: [Node] = [
         name: "genericWhereClause",
         kind: .node(kind: .genericWhereClause),
         nameForDiagnostics: "generic where clause",
-        documentation: "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
+        documentation:
+          "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
         isOptional: true
       ),
       Child(
@@ -1122,7 +1131,8 @@ public let DECL_NODES: [Node] = [
         name: "modifiers",
         kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        documentation: "Modifiers that are attached to the import declaration. Currently, no modifiers are supported by Swift."
+        documentation:
+          "Modifiers that are attached to the import declaration. Currently, no modifiers are supported by Swift."
       ),
       Child(
         name: "importKeyword",
@@ -1263,7 +1273,8 @@ public let DECL_NODES: [Node] = [
         name: "signature",
         kind: .node(kind: .functionSignature),
         nameForDiagnostics: "function signature",
-        documentation: "The arguments of the initializer. While the function signature allows specifying a return clause, doing so is not semantically valid."
+        documentation:
+          "The arguments of the initializer. While the function signature allows specifying a return clause, doing so is not semantically valid."
       ),
       Child(
         name: "genericWhereClause",
@@ -1333,7 +1344,8 @@ public let DECL_NODES: [Node] = [
         name: "genericWhereClause",
         kind: .node(kind: .genericWhereClause),
         nameForDiagnostics: "generic where clause",
-        documentation: "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
+        documentation:
+          "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
         isOptional: true
       ),
     ]
@@ -1399,7 +1411,11 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "additionalTrailingClosures",
-        kind: .collection(kind: .multipleTrailingClosureElementList, collectionElementName: "AdditionalTrailingClosure", defaultsToEmpty: true)
+        kind: .collection(
+          kind: .multipleTrailingClosureElementList,
+          collectionElementName: "AdditionalTrailingClosure",
+          defaultsToEmpty: true
+        )
       ),
     ]
   ),
@@ -1498,7 +1514,8 @@ public let DECL_NODES: [Node] = [
     kind: .operatorPrecedenceAndTypes,
     base: .syntax,
     nameForDiagnostics: nil,
-    documentation: "A clause to specify precedence group in infix operator declarations, and designated types in any operator declaration.",
+    documentation:
+      "A clause to specify precedence group in infix operator declarations, and designated types in any operator declaration.",
     children: [
       Child(
         name: "colon",
@@ -1715,7 +1732,8 @@ public let DECL_NODES: [Node] = [
     kind: .precedenceGroupAssociativity,
     base: .syntax,
     nameForDiagnostics: "'associativity' property of precedencegroup",
-    documentation: "Specifies how a sequence of operators with the same precedence level are grouped together in the absence of grouping parentheses.",
+    documentation:
+      "Specifies how a sequence of operators with the same precedence level are grouped together in the absence of grouping parentheses.",
     children: [
       Child(
         name: "associativityLabel",
@@ -2051,7 +2069,8 @@ public let DECL_NODES: [Node] = [
         name: "name",
         deprecatedName: "identifier",
         kind: .token(choices: [.token(.identifier)]),
-        documentation: "Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it."
+        documentation:
+          "Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it."
       ),
       Child(
         name: "genericParameterClause",
@@ -2064,7 +2083,8 @@ public let DECL_NODES: [Node] = [
         name: "inheritanceClause",
         kind: .node(kind: .inheritanceClause),
         nameForDiagnostics: "inheritance clause",
-        documentation: "The struct declaration inheritance clause describing one or more conformances for this struct declaration.",
+        documentation:
+          "The struct declaration inheritance clause describing one or more conformances for this struct declaration.",
         isOptional: true
       ),
       Child(
@@ -2128,7 +2148,8 @@ public let DECL_NODES: [Node] = [
         name: "genericWhereClause",
         kind: .node(kind: .genericWhereClause),
         nameForDiagnostics: "generic where clause",
-        documentation: "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
+        documentation:
+          "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
         isOptional: true
       ),
       Child(
@@ -2219,7 +2240,8 @@ public let DECL_NODES: [Node] = [
         name: "genericWhereClause",
         kind: .node(kind: .genericWhereClause),
         nameForDiagnostics: "generic where clause",
-        documentation: "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
+        documentation:
+          "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
         isOptional: true
       ),
     ]

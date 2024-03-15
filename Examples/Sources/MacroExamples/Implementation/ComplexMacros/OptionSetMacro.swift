@@ -93,7 +93,11 @@ public struct OptionSetMacro {
         case let .stringSegment(optionsEnumNameString)? = stringLiteral.segments.first
       else {
         if emitDiagnostics {
-          context.diagnose(OptionSetMacroDiagnostic.requiresStringLiteral(optionsEnumNameArgumentLabel).diagnose(at: optionEnumNameArg.expression))
+          context.diagnose(
+            OptionSetMacroDiagnostic.requiresStringLiteral(optionsEnumNameArgumentLabel).diagnose(
+              at: optionEnumNameArg.expression
+            )
+          )
         }
         return nil
       }
@@ -152,7 +156,9 @@ extension OptionSetMacro: ExtensionMacro {
     in context: some MacroExpansionContext
   ) throws -> [ExtensionDeclSyntax] {
     // Decode the expansion arguments.
-    guard let (structDecl, _, _) = decodeExpansion(of: node, attachedTo: declaration, in: context, emitDiagnostics: false) else {
+    guard
+      let (structDecl, _, _) = decodeExpansion(of: node, attachedTo: declaration, in: context, emitDiagnostics: false)
+    else {
       return []
     }
 
@@ -174,7 +180,14 @@ extension OptionSetMacro: MemberMacro {
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
     // Decode the expansion arguments.
-    guard let (_, optionsEnum, rawType) = decodeExpansion(of: attribute, attachedTo: decl, in: context, emitDiagnostics: true) else {
+    guard
+      let (_, optionsEnum, rawType) = decodeExpansion(
+        of: attribute,
+        attachedTo: decl,
+        in: context,
+        emitDiagnostics: true
+      )
+    else {
       return []
     }
 

@@ -44,7 +44,10 @@ final class StringInterpolationErrorTests: XCTestCase {
 
   func testMacroExpansionContextAddDiagnosticsAddsSwiftSyntaxInterpolationErrorsWithWrappingMessage() throws {
     let context = BasicMacroExpansionContext(lexicalContext: [])
-    let error = SyntaxStringInterpolationInvalidNodeTypeError(expectedType: DeclSyntax.self, actualNode: ExprSyntax("test"))
+    let error = SyntaxStringInterpolationInvalidNodeTypeError(
+      expectedType: DeclSyntax.self,
+      actualNode: ExprSyntax("test")
+    )
 
     // Since we only care about the error switch inside of addDagnostics, we don't care about the particular node we're passing in
     context.addDiagnostics(from: error, node: ExprSyntax("1"))
@@ -66,7 +69,8 @@ final class StringInterpolationErrorTests: XCTestCase {
 
   func testMacroExpansionSyntaxInterpolationErrorGetsPrefixed() {
     let expectedDiagnostic = DiagnosticSpec(
-      message: "Internal macro error: Parsing the code snippet was expected to produce a ExtensionDeclSyntax but produced a DeclSyntax",
+      message:
+        "Internal macro error: Parsing the code snippet was expected to produce a ExtensionDeclSyntax but produced a DeclSyntax",
       line: 1,
       column: 1
     )

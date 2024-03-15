@@ -88,7 +88,11 @@ final class IfStmtTests: XCTestCase {
         """
       ),
       #line: (
-        try IfExprSyntax("if foo == x", bodyBuilder: { StmtSyntax("return foo") }, elseIf: IfExprSyntax("if foo == z") { StmtSyntax("return baz") }),
+        try IfExprSyntax(
+          "if foo == x",
+          bodyBuilder: { StmtSyntax("return foo") },
+          elseIf: IfExprSyntax("if foo == z") { StmtSyntax("return baz") }
+        ),
         """
         if foo == x {
             return foo

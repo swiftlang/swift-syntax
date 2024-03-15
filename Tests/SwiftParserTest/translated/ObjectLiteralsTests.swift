@@ -22,7 +22,11 @@ final class ObjectLiteralsTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' in array element", fixIts: ["insert ','"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
       ],
       fixedSource: """
         let _ = [#Color(colorLiteralRed: red, green: green, blue: blue, alpha: alpha), #<#identifier#>]
@@ -37,7 +41,11 @@ final class ObjectLiteralsTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' in array element", fixIts: ["insert ','"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
       ],
       fixedSource: """
         let _ = [#Image(imageLiteral: localResourceNameAsString), #<#identifier#>]
@@ -52,7 +60,11 @@ final class ObjectLiteralsTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' in array element", fixIts: ["insert ','"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
       ],
       fixedSource: """
         let _ = [#FileReference(fileReferenceLiteral: localResourceNameAsString), #<#identifier#>]
@@ -114,9 +126,17 @@ final class ObjectLiteralsTests: ParserTestCase {
       let _ = [#1️⃣#2️⃣]
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' in array element", fixIts: ["insert ','"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
       ],
       fixedSource: """
         let _ = [#<#identifier#>, #<#identifier#>]
@@ -178,7 +198,11 @@ final class ObjectLiteralsTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected ',' in array element", fixIts: ["insert ','"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
       ],
       fixedSource: """
         let _ = [#Color(withRed: 1, green: 1, whatever: 2), #<#identifier#>]

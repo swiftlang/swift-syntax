@@ -656,7 +656,8 @@ extension Lexer.Cursor {
       return true
 
     // Bits of string/regex grammar, we can't start lexing a regex literal here.
-    case .regexPoundDelimiter, .regexSlash, .regexLiteralPattern, .rawStringPoundDelimiter, .stringQuote, .stringSegment, .multilineStringQuote, .singleQuote:
+    case .regexPoundDelimiter, .regexSlash, .regexLiteralPattern, .rawStringPoundDelimiter, .stringQuote,
+      .stringSegment, .multilineStringQuote, .singleQuote:
       return false
 
     // Allow unknown for better recovery.

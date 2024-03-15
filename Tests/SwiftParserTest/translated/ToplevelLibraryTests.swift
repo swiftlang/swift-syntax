@@ -43,7 +43,10 @@ final class ToplevelLibraryTests: ParserTestCase {
       for i1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'in', expression, and body in 'for' statement", fixIts: ["insert 'in', expression, and body"])
+        DiagnosticSpec(
+          message: "expected 'in', expression, and body in 'for' statement",
+          fixIts: ["insert 'in', expression, and body"]
+        )
       ],
       fixedSource: """
         for i in <#expression#> {

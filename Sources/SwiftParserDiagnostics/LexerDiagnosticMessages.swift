@@ -193,16 +193,19 @@ public extension SwiftSyntax.TokenDiagnostic {
 
     switch self.kind {
     case .editorPlaceholder: return StaticTokenError.editorPlaceholder
-    case .equalMustHaveConsistentWhitespaceOnBothSides: return StaticTokenError.equalMustHaveConsistentWhitespaceOnBothSides
+    case .equalMustHaveConsistentWhitespaceOnBothSides:
+      return StaticTokenError.equalMustHaveConsistentWhitespaceOnBothSides
     case .expectedBinaryExponentInHexFloatLiteral: return StaticTokenError.expectedBinaryExponentInHexFloatLiteral
     case .expectedClosingBraceInUnicodeEscape: return StaticTokenError.expectedClosingBraceInUnicodeEscape
     case .expectedDigitInFloatLiteral: return StaticTokenError.expectedDigitInFloatLiteral
     case .expectedHexCodeInUnicodeEscape: return StaticTokenError.expectedHexCodeInUnicodeEscape
     case .expectedHexDigitInHexLiteral: return StaticTokenError.expectedHexDigitInHexLiteral
     case .extraneousLeadingWhitespaceError: return ExtraneousLeadingWhitespaceError(tokenText: token.rawText)
-    case .extraneousLeadingWhitespaceWarning: return ErrorToWarningDowngrade(error: ExtraneousLeadingWhitespaceError(tokenText: token.rawText))
+    case .extraneousLeadingWhitespaceWarning:
+      return ErrorToWarningDowngrade(error: ExtraneousLeadingWhitespaceError(tokenText: token.rawText))
     case .extraneousTrailingWhitespaceError: return ExtraneousTrailingWhitespaceError(tokenText: token.rawText)
-    case .extraneousTrailingWhitespaceWarning: return ErrorToWarningDowngrade(error: ExtraneousTrailingWhitespaceError(tokenText: token.rawText))
+    case .extraneousTrailingWhitespaceWarning:
+      return ErrorToWarningDowngrade(error: ExtraneousTrailingWhitespaceError(tokenText: token.rawText))
     case .insufficientIndentationInMultilineStringLiteral:
       // This should be diagnosed when visiting the `StringLiteralExprSyntax`
       // inside `ParseDiagnosticsGenerator` but fall back to an error message
@@ -212,7 +215,8 @@ public extension SwiftSyntax.TokenDiagnostic {
     case .invalidCharacter: return StaticTokenError.invalidCharacter
     case .invalidDecimalDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .decimal(scalarAtErrorOffset))
     case .invalidEscapeSequenceInStringLiteral: return StaticTokenError.invalidEscapeSequenceInStringLiteral
-    case .invalidFloatingPointExponentCharacter: return InvalidFloatingPointExponentDigit(kind: .character(scalarAtErrorOffset))
+    case .invalidFloatingPointExponentCharacter:
+      return InvalidFloatingPointExponentDigit(kind: .character(scalarAtErrorOffset))
     case .invalidFloatingPointExponentDigit: return InvalidFloatingPointExponentDigit(kind: .digit(scalarAtErrorOffset))
     case .invalidHexDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .hex(scalarAtErrorOffset))
     case .invalidIdentifierStartCharacter: return StaticTokenError.invalidIdentifierStartCharacter
@@ -264,7 +268,10 @@ public extension SwiftSyntax.TokenDiagnostic {
         .with(\.leadingTrivia, Trivia(pieces: token.leadingTrivia.map(replaceNonBreakingSpace)))
         .with(\.trailingTrivia, Trivia(pieces: token.trailingTrivia.map(replaceNonBreakingSpace)))
       return [
-        FixIt(message: .replaceNonBreakingSpaceBySpace, changes: [.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))])
+        FixIt(
+          message: .replaceNonBreakingSpaceBySpace,
+          changes: [.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))]
+        )
       ]
     case .unicodeCurlyQuote:
       let (rawKind, text) = token.tokenKind.decomposeToRaw()
@@ -278,10 +285,14 @@ public extension SwiftSyntax.TokenDiagnostic {
 
       let fixedToken = token.with(\.tokenKind, TokenKind.fromRaw(kind: rawKind, text: replacedText))
       return [
-        FixIt(message: .replaceCurlyQuoteByNormalQuote, changes: [.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))])
+        FixIt(
+          message: .replaceCurlyQuoteByNormalQuote,
+          changes: [.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))]
+        )
       ]
     case .equalMustHaveConsistentWhitespaceOnBothSides:
-      let hasLeadingSpace = token.previousToken(viewMode: .all)?.trailingTrivia.contains(where: { $0.isSpaceOrTab }) ?? false
+      let hasLeadingSpace =
+        token.previousToken(viewMode: .all)?.trailingTrivia.contains(where: { $0.isSpaceOrTab }) ?? false
       let hasTrailingSpace = token.trailingTrivia.contains { $0.isSpaceOrTab }
       var changes: [FixIt.Change] = []
 

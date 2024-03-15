@@ -626,7 +626,10 @@ final class ExpressionTests: ParserTestCase {
       """1️⃣"""
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "multi-line string literal closing delimiter must begin on a new line", fixIts: ["insert newline"])
+        DiagnosticSpec(
+          message: "multi-line string literal closing delimiter must begin on a new line",
+          fixIts: ["insert newline"]
+        )
       ],
       fixedSource: ##"""
         """
@@ -833,7 +836,10 @@ final class ExpressionTests: ParserTestCase {
     assertParse(
       "foo ? 11️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"])
+        DiagnosticSpec(
+          message: "expected ':' and expression after '? ...' in ternary expression",
+          fixIts: ["insert ':' and expression"]
+        )
       ],
       fixedSource: """
         foo ? 1 : <#expression#>
@@ -1011,7 +1017,11 @@ final class ExpressionTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected pattern in variable", fixIts: ["insert pattern"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected type in function type", fixIts: ["insert type"]),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '..' in function type"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected return type in function type", fixIts: ["insert return type"]),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected return type in function type",
+          fixIts: ["insert return type"]
+        ),
       ],
       fixedSource: """
         let <#pattern#>:(<#type#>..)-> <#type#>
@@ -1232,7 +1242,9 @@ final class ExpressionTests: ParserTestCase {
         openingQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
         segments: StringLiteralSegmentListSyntax([
           .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: .spaces(2)))),
-          .stringSegment(StringSegmentSyntax(content: .stringSegment("line 2", leadingTrivia: .spaces(2), trailingTrivia: .newline))),
+          .stringSegment(
+            StringSegmentSyntax(content: .stringSegment("line 2", leadingTrivia: .spaces(2), trailingTrivia: .newline))
+          ),
         ]),
         closingQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
 
@@ -1251,9 +1263,17 @@ final class ExpressionTests: ParserTestCase {
         openingQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2), trailingTrivia: .newline),
         segments: StringLiteralSegmentListSyntax([
           .stringSegment(
-            StringSegmentSyntax(content: .stringSegment("line 1 ", leadingTrivia: .spaces(2), trailingTrivia: [.backslashes(1), .newlines(1)]))
+            StringSegmentSyntax(
+              content: .stringSegment(
+                "line 1 ",
+                leadingTrivia: .spaces(2),
+                trailingTrivia: [.backslashes(1), .newlines(1)]
+              )
+            )
           ),
-          .stringSegment(StringSegmentSyntax(content: .stringSegment("line 2", leadingTrivia: .spaces(2), trailingTrivia: .newline))),
+          .stringSegment(
+            StringSegmentSyntax(content: .stringSegment("line 2", leadingTrivia: .spaces(2), trailingTrivia: .newline))
+          ),
         ]),
         closingQuote: .multilineStringQuoteToken(leadingTrivia: .spaces(2))
 
@@ -1274,8 +1294,15 @@ final class ExpressionTests: ParserTestCase {
           .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: .spaces(2)))),
           .stringSegment(
             StringSegmentSyntax(
-              UnexpectedNodesSyntax([Syntax(TokenSyntax.stringSegment("  line 2 ", trailingTrivia: [.backslashes(1), .newlines(1)]))]),
-              content: .stringSegment("line 2 ", leadingTrivia: .spaces(2), trailingTrivia: .newline, presence: .missing)
+              UnexpectedNodesSyntax([
+                Syntax(TokenSyntax.stringSegment("  line 2 ", trailingTrivia: [.backslashes(1), .newlines(1)]))
+              ]),
+              content: .stringSegment(
+                "line 2 ",
+                leadingTrivia: .spaces(2),
+                trailingTrivia: .newline,
+                presence: .missing
+              )
             )
           ),
         ]),
@@ -1283,7 +1310,10 @@ final class ExpressionTests: ParserTestCase {
 
       ),
       diagnostics: [
-        DiagnosticSpec(message: "escaped newline at the last line of a multi-line string literal is not allowed", fixIts: ["remove ''"])
+        DiagnosticSpec(
+          message: "escaped newline at the last line of a multi-line string literal is not allowed",
+          fixIts: ["remove ''"]
+        )
       ],
       fixedSource: #"""
           """
@@ -1321,7 +1351,11 @@ final class ExpressionTests: ParserTestCase {
         segments: StringLiteralSegmentListSyntax([
           .stringSegment(StringSegmentSyntax(content: .stringSegment("line 1\n", leadingTrivia: [.spaces(2)]))),
           .stringSegment(StringSegmentSyntax(content: .stringSegment("\n"))),
-          .stringSegment(StringSegmentSyntax(content: .stringSegment("line 2", leadingTrivia: [.spaces(2)], trailingTrivia: .newline))),
+          .stringSegment(
+            StringSegmentSyntax(
+              content: .stringSegment("line 2", leadingTrivia: [.spaces(2)], trailingTrivia: .newline)
+            )
+          ),
         ]),
         closingQuote: .multilineStringQuoteToken(leadingTrivia: [.spaces(2)]),
         closingPounds: nil
@@ -1974,8 +2008,16 @@ final class StatementExpressionTests: ParserTestCase {
       """
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "multi-line string literal content must begin on a new line", fixIts: ["insert newline"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected value and ')' to end tuple", fixIts: ["insert value and ')'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "multi-line string literal content must begin on a new line",
+          fixIts: ["insert newline"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected value and ')' to end tuple",
+          fixIts: ["insert value and ')'"]
+        ),
       ],
       fixedSource: #"""
         """
@@ -2281,13 +2323,21 @@ final class StatementExpressionTests: ParserTestCase {
       "abc"2️⃣#3️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "consecutive statements on a line must be separated by newline or ';'",
           fixIts: ["insert newline", "insert ';'"]
         ),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
       ],
       applyFixIts: ["insert identifier", "insert ';'"],
       fixedSource: #"""
@@ -2395,8 +2445,16 @@ final class StatementExpressionTests: ParserTestCase {
       #2️⃣
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: ##"expected '"#' to end string literal"##, fixIts: [##"insert '"#'"##]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: ##"expected '"#' to end string literal"##,
+          fixIts: [##"insert '"#'"##]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
       ],
       fixedSource: #"""
         #"abc""#
@@ -2828,7 +2886,11 @@ final class StatementExpressionTests: ParserTestCase {
     assertParse(
       "[() throws 1️⃣async2️⃣(MyError) -> Void]()",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'async' must precede 'throws'",
+          fixIts: ["move 'async' in front of 'throws'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in array element"),
       ],
       fixedSource: "[() async throws (MyError) -> Void]()"
@@ -2846,14 +2908,22 @@ final class StatementExpressionTests: ParserTestCase {
     assertParse(
       "[() throws(MyError) 1️⃣await -> Void]()",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'await' must precede 'throws'", fixIts: ["move 'await' in front of 'throws'"])
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'await' must precede 'throws'",
+          fixIts: ["move 'await' in front of 'throws'"]
+        )
       ],
       fixedSource: "[() async throws(MyError) -> Void]()"
     )
     assertParse(
       "[() throws 1️⃣await2️⃣(MyError) -> Void]()",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'await' must precede 'throws'", fixIts: ["move 'await' in front of 'throws'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'await' must precede 'throws'",
+          fixIts: ["move 'await' in front of 'throws'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in array element"),
       ],
       fixedSource: "[() async throws (MyError) -> Void]()"

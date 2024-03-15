@@ -26,7 +26,10 @@ final class RecoveryTests: ParserTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ') this line is invalid, but we will stop at the keyword below...' before 'return' statement")
+        DiagnosticSpec(
+          message:
+            "unexpected code ') this line is invalid, but we will stop at the keyword below...' before 'return' statement"
+        )
       ]
     )
   }
@@ -41,7 +44,9 @@ final class RecoveryTests: ParserTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code ') this line is invalid, but we will stop at the declaration...' before function")
+        DiagnosticSpec(
+          message: "unexpected code ') this line is invalid, but we will stop at the declaration...' before function"
+        )
       ]
     )
   }
@@ -234,7 +239,10 @@ final class RecoveryTests: ParserTestCase {
       if1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression and body in 'if' statement", fixIts: ["insert expression and body"])
+        DiagnosticSpec(
+          message: "expected expression and body in 'if' statement",
+          fixIts: ["insert expression and body"]
+        )
       ],
       fixedSource: """
         if <#expression#> {
@@ -325,7 +333,10 @@ final class RecoveryTests: ParserTestCase {
       while1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression and code block in 'while' statement", fixIts: ["insert expression and code block"])
+        DiagnosticSpec(
+          message: "expected expression and code block in 'while' statement",
+          fixIts: ["insert expression and code block"]
+        )
       ],
       fixedSource: """
         while <#expression#> {
@@ -445,7 +456,10 @@ final class RecoveryTests: ParserTestCase {
       }1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'while' and condition in 'repeat' statement", fixIts: ["insert 'while' and condition"])
+        DiagnosticSpec(
+          message: "expected 'while' and condition in 'repeat' statement",
+          fixIts: ["insert 'while' and condition"]
+        )
       ],
       fixedSource: """
         repeat {
@@ -461,7 +475,10 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected pattern, 'in', and expression in 'for' statement", fixIts: ["insert pattern, 'in', and expression"]),
+        DiagnosticSpec(
+          message: "expected pattern, 'in', and expression in 'for' statement",
+          fixIts: ["insert pattern, 'in', and expression"]
+        ),
         DiagnosticSpec(message: "unexpected ';' separator", fixIts: ["remove ';'"]),
       ],
       fixedSource: """
@@ -479,7 +496,10 @@ final class RecoveryTests: ParserTestCase {
         }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected pattern, 'in', and expression in 'for' statement", fixIts: ["insert pattern, 'in', and expression"]),
+        DiagnosticSpec(
+          message: "expected pattern, 'in', and expression in 'for' statement",
+          fixIts: ["insert pattern, 'in', and expression"]
+        ),
         DiagnosticSpec(message: "unexpected ';' separator", fixIts: ["remove ';'"]),
       ],
       fixedSource: """
@@ -497,7 +517,10 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected pattern, 'in', and expression in 'for' statement", fixIts: ["insert pattern, 'in', and expression"]),
+        DiagnosticSpec(
+          message: "expected pattern, 'in', and expression in 'for' statement",
+          fixIts: ["insert pattern, 'in', and expression"]
+        ),
         DiagnosticSpec(message: "unexpected code '; true' in 'for' statement"),
       ],
       fixedSource: """
@@ -515,7 +538,10 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'in' and expression in 'for' statement", fixIts: ["insert 'in' and expression"]),
+        DiagnosticSpec(
+          message: "expected 'in' and expression in 'for' statement",
+          fixIts: ["insert 'in' and expression"]
+        ),
         DiagnosticSpec(message: "unexpected code '= 0; true' in 'for' statement"),
       ],
       fixedSource: """
@@ -532,7 +558,10 @@ final class RecoveryTests: ParserTestCase {
       for1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected pattern, 'in', expression, and body in 'for' statement", fixIts: ["insert pattern, 'in', expression, and body"])
+        DiagnosticSpec(
+          message: "expected pattern, 'in', expression, and body in 'for' statement",
+          fixIts: ["insert pattern, 'in', expression, and body"]
+        )
       ],
       fixedSource: """
         for <#pattern#> in <#expression#> {
@@ -590,7 +619,11 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' and expression in 'for' statement", fixIts: ["insert 'in' and expression"])
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected 'in' and expression in 'for' statement",
+          fixIts: ["insert 'in' and expression"]
+        )
       ],
       fixedSource: """
         for i in <#expression#> {
@@ -606,7 +639,11 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'in' and expression in 'for' statement", fixIts: ["insert 'in' and expression"])
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected 'in' and expression in 'for' statement",
+          fixIts: ["insert 'in' and expression"]
+        )
       ],
       fixedSource: """
         for var i in <#expression#> {
@@ -627,7 +664,11 @@ final class RecoveryTests: ParserTestCase {
           message: "keyword 'in' cannot be used as an identifier here",
           fixIts: ["if this name is unavoidable, use backticks to escape it"]
         ),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected 'in' and expression in 'for' statement", fixIts: ["insert 'in' and expression"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected 'in' and expression in 'for' statement",
+          fixIts: ["insert 'in' and expression"]
+        ),
       ],
       fixedSource: """
         for `in` in <#expression#> {
@@ -664,7 +705,11 @@ final class RecoveryTests: ParserTestCase {
           message: "keyword 'for' cannot be used as an identifier here",
           fixIts: ["if this name is unavoidable, use backticks to escape it"]
         ),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected Sequence expression for for-each loop", fixIts: ["insert expression"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected Sequence expression for for-each loop",
+          fixIts: ["insert expression"]
+        ),
       ],
       fixedSource: """
         for `for` in <#expression#> {
@@ -722,7 +767,11 @@ final class RecoveryTests: ParserTestCase {
           fixIts: ["insert pattern, 'in', and expression"]
         ),
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in 'for' statement", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "standalone ';' statements are not allowed", fixIts: ["remove ';'"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "standalone ';' statements are not allowed",
+          fixIts: ["remove ';'"]
+        ),
       ],
       fixedSource: """
         for   <#pattern#> in <#expression#> {
@@ -737,7 +786,10 @@ final class RecoveryTests: ParserTestCase {
       switch1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression and '{}' to end 'switch' statement", fixIts: ["insert expression and '{}'"])
+        DiagnosticSpec(
+          message: "expected expression and '{}' to end 'switch' statement",
+          fixIts: ["insert expression and '{}'"]
+        )
       ],
       fixedSource: """
         switch <#expression#> {
@@ -753,7 +805,11 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement", fixIts: ["insert expression"])
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected expression in 'switch' statement",
+          fixIts: ["insert expression"]
+        )
       ],
       fixedSource: """
         switch <#expression#> {
@@ -770,7 +826,11 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement", fixIts: ["insert expression"])
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected expression in 'switch' statement",
+          fixIts: ["insert expression"]
+        )
       ],
       fixedSource: """
         switch <#expression#>
@@ -816,8 +876,15 @@ final class RecoveryTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'switch' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"
+        ),
       ],
       fixedSource: """
         switch {
@@ -935,7 +1002,11 @@ final class RecoveryTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '()' before protocol"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected '{' in protocol", fixIts: ["insert '{'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '()' before extension"),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected member block in extension", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected member block in extension",
+          fixIts: ["insert member block"]
+        ),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected '}' to end protocol", fixIts: ["insert '}'"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected '}' to end class", fixIts: ["insert '}'"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected '}' to end enum", fixIts: ["insert '}'"]),
@@ -967,7 +1038,11 @@ final class RecoveryTests: ParserTestCase {
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '{' in enum", fixIts: ["insert '{'"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected '{' in class", fixIts: ["insert '{'"]),
         DiagnosticSpec(locationMarker: "4️⃣", message: "expected '{' in protocol", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "expected member block in extension", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "expected member block in extension",
+          fixIts: ["insert member block"]
+        ),
         DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end protocol", fixIts: ["insert '}'"]),
         DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end class", fixIts: ["insert '}'"]),
         DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end enum", fixIts: ["insert '}'"]),
@@ -1641,7 +1716,11 @@ final class RecoveryTests: ParserTestCase {
       assertParse(
         testCase.testCase,
         diagnostics: [
-          DiagnosticSpec(message: "unexpected ']' in type; did you mean to write an array type?", fixIts: ["insert '['"], line: line)
+          DiagnosticSpec(
+            message: "unexpected ']' in type; did you mean to write an array type?",
+            fixIts: ["insert '['"],
+            line: line
+          )
         ],
         fixedSource: testCase.fixedSource,
         line: line
@@ -2090,7 +2169,10 @@ final class RecoveryTests: ParserTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function", fixIts: ["insert 'func'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code '"No one else was in the room where it happened"' in parameter clause"#),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"unexpected code '"No one else was in the room where it happened"' in parameter clause"#
+        ),
       ],
       fixedSource: #"""
         class С_43383 {
@@ -2109,7 +2191,10 @@ final class RecoveryTests: ParserTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'func' in function", fixIts: ["insert 'func'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code '"The room where it happened, the room where it happened"' in parameter clause"#),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: #"unexpected code '"The room where it happened, the room where it happened"' in parameter clause"#
+        ),
       ],
       fixedSource: #"""
         extension С_43383 {
@@ -2320,7 +2405,10 @@ final class RecoveryTests: ParserTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"]),
-        DiagnosticSpec(message: #"unexpected code '._core.count != 0, "Can't form a Character from an empty String"' in parameter clause"#),
+        DiagnosticSpec(
+          message:
+            #"unexpected code '._core.count != 0, "Can't form a Character from an empty String"' in parameter clause"#
+        ),
       ],
       fixedSource: #"""
         public enum TestA {
@@ -2341,7 +2429,10 @@ final class RecoveryTests: ParserTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"]),
-        DiagnosticSpec(message: #"unexpected code '._core.count ?= 0, "Can't form a Character from an empty String"' in parameter clause"#),
+        DiagnosticSpec(
+          message:
+            #"unexpected code '._core.count ?= 0, "Can't form a Character from an empty String"' in parameter clause"#
+        ),
       ],
       fixedSource: #"""
         public enum TestB {
@@ -2698,7 +2789,10 @@ final class RecoveryTests: ParserTestCase {
       let curlyQuotes1 = 1️⃣“hello world!”
       """,
       diagnostics: [
-        DiagnosticSpec(message: #"unicode curly quote found; use '"' instead"#, fixIts: [#"replace curly quotes with '"'"#])
+        DiagnosticSpec(
+          message: #"unicode curly quote found; use '"' instead"#,
+          fixIts: [#"replace curly quotes with '"'"#]
+        )
       ],
       fixedSource: """
         let curlyQuotes1 = "hello world!"
@@ -2712,7 +2806,10 @@ final class RecoveryTests: ParserTestCase {
       let curlyQuotes2 = 1️⃣“hello world!"
       """#,
       diagnostics: [
-        DiagnosticSpec(message: #"unicode curly quote found; use '"' instead"#, fixIts: [#"replace curly quotes with '"'"#])
+        DiagnosticSpec(
+          message: #"unicode curly quote found; use '"' instead"#,
+          fixIts: [#"replace curly quotes with '"'"#]
+        )
       ],
       fixedSource: #"""
         let curlyQuotes2 = "hello world!"
@@ -2771,8 +2868,16 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'=' must have consistent whitespace on both sides", fixIts: ["insert whitespace"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "'=' must have consistent whitespace on both sides", fixIts: ["insert whitespace"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'=' must have consistent whitespace on both sides",
+          fixIts: ["insert whitespace"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "'=' must have consistent whitespace on both sides",
+          fixIts: ["insert whitespace"]
+        ),
       ],
       fixedSource: """
         func r22387625() {
@@ -2793,8 +2898,16 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'=' must have consistent whitespace on both sides", fixIts: ["insert whitespace"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "'=' must have consistent whitespace on both sides", fixIts: ["insert whitespace"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'=' must have consistent whitespace on both sides",
+          fixIts: ["insert whitespace"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "'=' must have consistent whitespace on both sides",
+          fixIts: ["insert whitespace"]
+        ),
       ],
       fixedSource: """
         do {
@@ -3021,7 +3134,11 @@ final class RecoveryTests: ParserTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "extraneous whitespace after '.' is not permitted", fixIts: ["remove whitespace"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "extraneous whitespace after '.' is not permitted",
+          fixIts: ["remove whitespace"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected name in member access", fixIts: ["insert name"]),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected name in member access", fixIts: ["insert name"]),
       ],
@@ -3063,7 +3180,10 @@ final class RecoveryTests: ParserTestCase {
       func f_53396(a: Int 1️⃣== 0) {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected '=' instead of '==' to assign default value for parameter", fixIts: ["replace '==' with '='"])
+        DiagnosticSpec(
+          message: "expected '=' instead of '==' to assign default value for parameter",
+          fixIts: ["replace '==' with '='"]
+        )
       ],
       fixedSource: """
         func f_53396(a: Int = 0) {}
@@ -3078,7 +3198,10 @@ final class RecoveryTests: ParserTestCase {
       extension Collection where Element == Int 1️⃣&& Index == Int {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ',' to separate the requirements of this 'where' clause", fixIts: ["replace '&&' with ','"])
+        DiagnosticSpec(
+          message: "expected ',' to separate the requirements of this 'where' clause",
+          fixIts: ["replace '&&' with ','"]
+        )
       ],
       fixedSource: """
         extension Collection where Element == Int, Index == Int {}

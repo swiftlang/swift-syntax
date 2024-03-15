@@ -113,7 +113,14 @@ final class MetaEnumMacroTests: XCTestCase {
           let boolean: Bool
         }
         """,
-      diagnostics: [DiagnosticSpec(message: "'@MetaEnum' can only be attached to an enum, not a struct", line: 1, column: 1, severity: .error)],
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'@MetaEnum' can only be attached to an enum, not a struct",
+          line: 1,
+          column: 1,
+          severity: .error
+        )
+      ],
       macros: macros,
       indentationWidth: .spaces(2)
     )

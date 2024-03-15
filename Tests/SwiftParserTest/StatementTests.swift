@@ -52,7 +52,10 @@ final class StatementTests: ParserTestCase {
               OptionalBindingConditionSyntax(
                 bindingSpecifier: .keyword(.let),
                 pattern: IdentifierPatternSyntax(identifier: .keyword(.self)),
-                initializer: InitializerClauseSyntax(equal: .equalToken(), value: DeclReferenceExprSyntax(baseName: .keyword(.self)))
+                initializer: InitializerClauseSyntax(
+                  equal: .equalToken(),
+                  value: DeclReferenceExprSyntax(baseName: .keyword(.self))
+                )
               )
             )
           )
@@ -74,7 +77,10 @@ final class StatementTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression, '=', and expression in pattern matching", fixIts: ["insert expression, '=', and expression"]),
+        DiagnosticSpec(
+          message: "expected expression, '=', and expression in pattern matching",
+          fixIts: ["insert expression, '=', and expression"]
+        ),
         DiagnosticSpec(message: "unexpected code '* ! = x' in 'if' statement"),
       ],
       fixedSource: """
@@ -218,7 +224,10 @@ final class StatementTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "C-style for statement has been removed in Swift 3", highlight: "let x = 0; x < 10; x += 1, y += 1 ")
+        DiagnosticSpec(
+          message: "C-style for statement has been removed in Swift 3",
+          highlight: "let x = 0; x < 10; x += 1, y += 1 "
+        )
       ]
     )
   }
@@ -283,7 +292,11 @@ final class StatementTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code 'foo()' before conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        ),
       ],
       fixedSource: """
         switch x {
@@ -595,8 +608,15 @@ final class StatementTests: ParserTestCase {
       discard 1️⃣case
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression in 'discard' statement", fixIts: ["insert expression"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected expression in 'discard' statement",
+          fixIts: ["insert expression"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"
+        ),
       ],
       fixedSource: """
         discard <#expression#>case
@@ -739,7 +759,10 @@ final class StatementTests: ParserTestCase {
       }1️⃣ {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+        DiagnosticSpec(
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
       ],
       fixedSource: """
         if test {

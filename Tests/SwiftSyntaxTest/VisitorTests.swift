@@ -63,11 +63,16 @@ class VisitorTests: XCTestCase {
   public func testVisitUnexpected() {
     // This is just bunch of unexpected
     let unexpectedReturnStmt = ReturnStmtSyntax(
-      UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("starting")), Syntax(TokenSyntax.integerLiteral("unexpected"))]),
+      UnexpectedNodesSyntax([
+        Syntax(TokenSyntax.identifier("starting")), Syntax(TokenSyntax.integerLiteral("unexpected")),
+      ]),
       returnKeyword: .keyword(.return, trailingTrivia: [.spaces(1)]),
       UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("middle"))]),
       expression: ExprSyntax(
-        NilLiteralExprSyntax(UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("end"))]), nilKeyword: TokenSyntax.keyword(.nil, trailingTrivia: []))
+        NilLiteralExprSyntax(
+          UnexpectedNodesSyntax([Syntax(TokenSyntax.identifier("end"))]),
+          nilKeyword: TokenSyntax.keyword(.nil, trailingTrivia: [])
+        )
       )
     )
 
@@ -101,7 +106,10 @@ class VisitorTests: XCTestCase {
     }
 
     XCTAssertEqual(TreePrinter.print(unexpectedReturnStmt, viewMode: .fixedUp), "return nil")
-    XCTAssertEqual(TreePrinter.print(unexpectedReturnStmt, viewMode: .sourceAccurate), "startingunexpectedreturn middleendnil")
+    XCTAssertEqual(
+      TreePrinter.print(unexpectedReturnStmt, viewMode: .sourceAccurate),
+      "startingunexpectedreturn middleendnil"
+    )
 
     XCTAssertEqual(TreePrinter.print(misspelledNil, viewMode: .fixedUp), "return nil")
     XCTAssertEqual(TreePrinter.print(misspelledNil, viewMode: .sourceAccurate), "return null")
@@ -127,7 +135,10 @@ class VisitorTests: XCTestCase {
     }
 
     XCTAssertEqual(AnyTreePrinter.print(unexpectedReturnStmt, viewMode: .fixedUp), "return nil")
-    XCTAssertEqual(AnyTreePrinter.print(unexpectedReturnStmt, viewMode: .sourceAccurate), "startingunexpectedreturn middleendnil")
+    XCTAssertEqual(
+      AnyTreePrinter.print(unexpectedReturnStmt, viewMode: .sourceAccurate),
+      "startingunexpectedreturn middleendnil"
+    )
 
     XCTAssertEqual(AnyTreePrinter.print(misspelledNil, viewMode: .fixedUp), "return nil")
     XCTAssertEqual(AnyTreePrinter.print(misspelledNil, viewMode: .sourceAccurate), "return null")
@@ -151,7 +162,10 @@ class VisitorTests: XCTestCase {
     }
 
     XCTAssertEqual(RewritingTreePrinter.print(unexpectedReturnStmt, viewMode: .fixedUp), "return nil")
-    XCTAssertEqual(RewritingTreePrinter.print(unexpectedReturnStmt, viewMode: .sourceAccurate), "startingunexpectedreturn middleendnil")
+    XCTAssertEqual(
+      RewritingTreePrinter.print(unexpectedReturnStmt, viewMode: .sourceAccurate),
+      "startingunexpectedreturn middleendnil"
+    )
 
     XCTAssertEqual(RewritingTreePrinter.print(misspelledNil, viewMode: .fixedUp), "return nil")
     XCTAssertEqual(RewritingTreePrinter.print(misspelledNil, viewMode: .sourceAccurate), "return null")

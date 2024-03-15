@@ -110,7 +110,9 @@ class SyntaxCreationTests: XCTestCase {
   public func testFunctionCallSyntaxBuilder() {
     let string = StringLiteralExprSyntax(
       openingQuote: .stringQuoteToken(),
-      segments: StringLiteralSegmentListSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
+      segments: StringLiteralSegmentListSyntax([
+        .stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))
+      ]),
       closingQuote: .stringQuoteToken()
     )
     let printID = DeclReferenceExprSyntax(baseName: .identifier("print"))
@@ -154,7 +156,9 @@ class SyntaxCreationTests: XCTestCase {
     let string = StringLiteralExprSyntax(
       openingPounds: nil,
       openingQuote: .stringQuoteToken(),
-      segments: StringLiteralSegmentListSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
+      segments: StringLiteralSegmentListSyntax([
+        .stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))
+      ]),
       closingQuote: .stringQuoteToken(),
       closingPounds: nil
     )
@@ -184,7 +188,9 @@ class SyntaxCreationTests: XCTestCase {
   public func testMakeStringLiteralExpr() {
     let expr = StringLiteralExprSyntax(
       openingQuote: .stringQuoteToken(leadingTrivia: [.lineComment("// hello"), .newlines(1)]),
-      segments: StringLiteralSegmentListSyntax([.stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))]),
+      segments: StringLiteralSegmentListSyntax([
+        .stringSegment(StringSegmentSyntax(content: .stringSegment("Hello, world!")))
+      ]),
       closingQuote: .stringQuoteToken()
     )
     let expected = """

@@ -63,7 +63,10 @@ final class SelfRebindingTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'self' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "keyword 'self' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: """
         struct T {

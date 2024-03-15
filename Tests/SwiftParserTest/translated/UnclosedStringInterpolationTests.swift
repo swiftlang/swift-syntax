@@ -247,4 +247,38 @@ final class UnclosedStringInterpolationTests: ParserTestCase {
         """#
     )
   }
+
+  func testNestedUnterminatedStringInterpolation() {
+    assertParse(
+      #"""
+      1️⃣"\2️⃣(3️⃣"\(4️⃣
+
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected value and ')' in string literal", fixIts: ["insert value and ')'"]),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "3️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected ')' in string literal",
+          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"' to end string literal"#,
+          notes: [NoteSpec(locationMarker: "1️⃣", message: #"to match this opening '"'"#)],
+          fixIts: [#"insert '"'"#]
+        ),
+      ],
+      fixedSource: #"""
+        "\("\(<#expression#>)")"
+
+        """#
+    )
+  }
 }

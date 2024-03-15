@@ -29,14 +29,7 @@ struct LoopProgressCondition {
     guard let previousToken = self.currentToken else {
       return true
     }
-    // The loop has made progress if either
-    //  - the parser is now pointing at a different location in the source file
-    //  - the parser is still pointing at the same position in the source file
-    //     but now has a different token kind (and thus consumed a zero-length
-    //     token like an empty string interpolation
-    let hasMadeProgress =
-      previousToken.tokenText.baseAddress != currentToken.tokenText.baseAddress
-      || (previousToken.byteLength == 0 && previousToken.rawTokenKind != currentToken.rawTokenKind)
+    let hasMadeProgress = currentToken.cursor.hasProgressed(comparedTo: previousToken.cursor)
     assert(hasMadeProgress, "Loop should always make progress")
     return hasMadeProgress
   }

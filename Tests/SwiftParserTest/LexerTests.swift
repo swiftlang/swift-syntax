@@ -1561,4 +1561,26 @@ class LexerTests: ParserTestCase {
       ]
     )
   }
+
+  func testNestedUnterminatedStringInterpolations() {
+    assertLexemes(
+      #"""
+      "\("\(
+
+      """#,
+      lexemes: [
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: ""),
+        LexemeSpec(.backslash, text: #"\"#),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.stringQuote, text: #"""#),
+        LexemeSpec(.stringSegment, text: ""),
+        LexemeSpec(.backslash, text: #"\"#),
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.stringSegment, text: ""),
+        LexemeSpec(.stringSegment, text: ""),
+        LexemeSpec(.endOfFile, leading: "\n", text: "", flags: [.isAtStartOfLine]),
+      ]
+    )
+  }
 }

@@ -51,7 +51,7 @@ extension Lexer.Cursor {
   ///  - A string interpolation inside is entered
   ///  - A regex literal is being lexed
   ///  - A narrow case for 'try?' and 'try!' to ensure correct regex lexing
-  enum State {
+  enum State: Equatable {
     /// Normal top-level lexing mode
     case normal
 
@@ -202,6 +202,11 @@ extension Lexer.Cursor {
         }
       }
     }
+
+    /// See `Lexer.Cursor.hasProgressed(comparedTo:)`.
+    fileprivate func hasProgressed(comparedTo other: StateStack) -> Bool {
+      return currentState != other.currentState || stateStack?.count != other.stateStack?.count
+    }
   }
 
   /// An error that was discovered in a lexeme while lexing it.
@@ -254,6 +259,16 @@ extension Lexer {
 
     init(input: UnsafeBufferPointer<UInt8>, previous: UInt8) {
       self.position = Position(input: input, previous: previous)
+    }
+
+    /// Returns `true` if this cursor is sufficiently different to `other` in a way that indicates that the lexer has
+    /// made progress.
+    ///
+    /// This is the case if the lexer advanced its position in the source file or if it has performed a state
+    /// transition.
+    func hasProgressed(comparedTo other: Cursor) -> Bool {
+      return position.input.baseAddress != other.position.input.baseAddress
+        || stateStack.hasProgressed(comparedTo: other.stateStack)
     }
 
     var input: UnsafeBufferPointer<UInt8> { position.input }

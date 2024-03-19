@@ -272,6 +272,7 @@ open class SyntaxRewriter {
   /// Visit a ``CanImportExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
+  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
   open func visit(_ node: CanImportExprSyntax) -> ExprSyntax {
     return ExprSyntax(visitChildren(node))
   }
@@ -279,6 +280,7 @@ open class SyntaxRewriter {
   /// Visit a ``CanImportVersionInfoSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
+  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
   open func visit(_ node: CanImportVersionInfoSyntax) -> ExprSyntax {
     return ExprSyntax(visitChildren(node))
   }

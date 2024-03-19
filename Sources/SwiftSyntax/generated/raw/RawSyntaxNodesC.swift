@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax)
+@available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`") @_spi(RawSyntax)
 public struct RawCanImportExprSyntax: RawExprSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -118,7 +118,7 @@ public struct RawCanImportExprSyntax: RawExprSyntaxNodeProtocol {
   }
 }
 
-@_spi(RawSyntax)
+@available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`") @_spi(RawSyntax)
 public struct RawCanImportVersionInfoSyntax: RawExprSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {

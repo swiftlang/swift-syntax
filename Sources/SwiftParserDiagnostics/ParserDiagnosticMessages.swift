@@ -104,12 +104,6 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var associatedTypeCannotUsePack: Self {
     .init("associated types cannot be variadic")
   }
-  public static var canImportWrongSecondParameterLabel: Self {
-    .init("2nd parameter of canImport should be labeled as _version or _underlyingVersion")
-  }
-  public static var canImportWrongNumberOfParameter: Self {
-    .init("canImport can take only two parameters")
-  }
   public static var caseOutsideOfSwitchOrEnum: Self {
     .init("'case' can only appear inside a 'switch' statement or 'enum' declaration")
   }

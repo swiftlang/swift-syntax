@@ -595,50 +595,6 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
-  public override func visit(_ node: CanImportExprSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-
-    if let versionTuple = node.versionInfo?.version,
-      let unexpectedVersionTuple = node.unexpectedBetweenVersionInfoAndRightParen
-    {
-      if versionTuple.major.isMissing {
-        addDiagnostic(
-          versionTuple,
-          CannotParseVersionTuple(versionTuple: unexpectedVersionTuple),
-          handledNodes: [versionTuple.id, unexpectedVersionTuple.id]
-        )
-      } else {
-        addDiagnostic(
-          unexpectedVersionTuple,
-          .canImportWrongNumberOfParameter,
-          handledNodes: [unexpectedVersionTuple.id]
-        )
-      }
-    }
-
-    return .visitChildren
-  }
-
-  public override func visit(_ node: CanImportVersionInfoSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-
-    if node.label.isMissing {
-      addDiagnostic(
-        node.label,
-        .canImportWrongSecondParameterLabel,
-        handledNodes: [node.label.id]
-      )
-
-      handledNodes.append(contentsOf: [node.unexpectedBetweenLabelAndColon?.id, node.colon.id, node.version.id].compactMap { $0 })
-    }
-
-    return .visitChildren
-  }
-
   public override func visit(_ node: ConditionElementSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

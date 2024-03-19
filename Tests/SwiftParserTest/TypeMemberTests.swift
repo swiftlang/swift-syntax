@@ -18,7 +18,7 @@ final class TypeMemberTests: ParserTestCase {
   func testKeyword() {
     assertParse(
       "MyType.class",
-      TypeSyntax.parse,
+      { TypeSyntax.parse(from: &$0) },
       substructure: MemberTypeSyntax(
         baseType: IdentifierTypeSyntax(
           name: .identifier("MyType")
@@ -31,7 +31,7 @@ final class TypeMemberTests: ParserTestCase {
   func testMissing() {
     assertParse(
       "MyType.1️⃣",
-      TypeSyntax.parse,
+      { TypeSyntax.parse(from: &$0) },
       substructure: MemberTypeSyntax(
         baseType: IdentifierTypeSyntax(
           name: .identifier("MyType")
@@ -69,7 +69,7 @@ final class TypeMemberTests: ParserTestCase {
     for (line, source) in cases {
       assertParse(
         source,
-        TypeSyntax.parse,
+        { TypeSyntax.parse(from: &$0) },
         substructure: expected,
         line: line
       )
@@ -86,7 +86,7 @@ final class TypeMemberTests: ParserTestCase {
     for (line, source) in cases {
       assertParse(
         source,
-        TypeSyntax.parse,
+        { TypeSyntax.parse(from: &$0) },
         diagnostics: [DiagnosticSpec(message: "extraneous whitespace after '.' is not permitted", fixIts: ["remove whitespace"])],
         fixedSource: expected,
         line: line
@@ -136,14 +136,14 @@ final class TypeMemberTests: ParserTestCase {
 
       assertParse(
         "\(baseType).Z",
-        TypeSyntax.parse,
+        { TypeSyntax.parse(from: &$0) },
         substructure: expectedSyntax,
         line: line
       )
 
       assertParse(
         "\(baseType).Z<W>",
-        TypeSyntax.parse,
+        { TypeSyntax.parse(from: &$0) },
         substructure: expectedSyntax.with(
           \.genericArgumentClause,
           GenericArgumentClauseSyntax(

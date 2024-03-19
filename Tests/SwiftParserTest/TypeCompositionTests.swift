@@ -51,7 +51,7 @@ final class TypeCompositionTests: ParserTestCase {
 
       assertParse(
         "\(component) & \(component) & \(component)",
-        TypeSyntax.parse,
+        { TypeSyntax.parse(from: &$0) },
         substructure: CompositionTypeSyntax(
           elements: .init([
             CompositionTypeElementSyntax(type: componentSyntax, ampersand: .binaryOperator("&")),

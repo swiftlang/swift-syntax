@@ -74,7 +74,7 @@ final class ExpressionTypeTests: ParserTestCase {
     for (line, type) in cases {
       assertParse(
         "G<\(type)>.self",
-        ExprSyntax.parse,
+        { ExprSyntax.parse(from: &$0) },
         substructure: IdentifierTypeSyntax(name: .identifier("X")),
         substructureAfterMarker: "1️⃣",
         line: line
@@ -84,7 +84,7 @@ final class ExpressionTypeTests: ParserTestCase {
     // Void
     assertParse(
       "G<1️⃣()>.self",
-      ExprSyntax.parse,
+      { ExprSyntax.parse(from: &$0) },
       substructure: TupleTypeSyntax(elements: .init([])),
       substructureAfterMarker: "1️⃣"
     )
@@ -92,7 +92,7 @@ final class ExpressionTypeTests: ParserTestCase {
     // Any
     assertParse(
       "G<1️⃣Any>.self",
-      ExprSyntax.parse,
+      { ExprSyntax.parse(from: &$0) },
       substructure: IdentifierTypeSyntax(name: .keyword(.Any)),
       substructureAfterMarker: "1️⃣"
     )
@@ -100,7 +100,7 @@ final class ExpressionTypeTests: ParserTestCase {
     // Self
     assertParse(
       "G<1️⃣Self>.self",
-      ExprSyntax.parse,
+      { ExprSyntax.parse(from: &$0) },
       substructure: IdentifierTypeSyntax(name: .keyword(.Self)),
       substructureAfterMarker: "1️⃣"
     )

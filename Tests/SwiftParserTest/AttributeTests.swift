@@ -361,7 +361,7 @@ final class AttributeTests: ParserTestCase {
 
       assertParse(
         "@_implements(1️⃣\(baseType), f())",
-        AttributeSyntax.parse,
+        { AttributeSyntax.parse(from: &$0) },
         substructure: TypeSyntax.parse(from: &parser),
         substructureAfterMarker: "1️⃣",
         line: line

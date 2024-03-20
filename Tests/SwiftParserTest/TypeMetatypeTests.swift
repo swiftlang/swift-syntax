@@ -55,7 +55,7 @@ final class TypeMetatypeTests: ParserTestCase {
       for metaKind in [.`Type`, .`Protocol`] as [Keyword] {
         assertParse(
           "\(baseType).\(metaKind)",
-          TypeSyntax.parse,
+          { TypeSyntax.parse(from: &$0) },
           substructure: MetatypeTypeSyntax(
             baseType: baseTypeSyntax,
             metatypeSpecifier: .keyword(metaKind)

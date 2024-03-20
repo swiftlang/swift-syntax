@@ -271,7 +271,7 @@ final class ExpressionTests: ParserTestCase {
 
       assertParse(
         "\\\(rootType).y",
-        ExprSyntax.parse,
+        { ExprSyntax.parse(from: &$0) },
         substructure: KeyPathExprSyntax(
           root: TypeSyntax.parse(from: &parser),
           components: KeyPathComponentListSyntax([

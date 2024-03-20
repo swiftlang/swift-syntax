@@ -1168,14 +1168,6 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       )
     }
 
-    if let unexpectedOutput = node.signature.unexpectedAfterReturnClause {
-      addDiagnostic(
-        unexpectedOutput,
-        .initializerCannotHaveResultType,
-        handledNodes: [unexpectedOutput.id]
-      )
-    }
-
     return .visitChildren
   }
 

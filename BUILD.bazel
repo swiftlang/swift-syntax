@@ -37,6 +37,7 @@ swift_syntax_library(
     deps = [
         ":SwiftCompilerPluginMessageHandling",
         ":SwiftSyntaxMacros",
+        ":SwiftOperators",
     ],
 )
 

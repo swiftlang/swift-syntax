@@ -167,18 +167,21 @@ swift_syntax_library(
 
 swift_syntax_library(
     name = "SwiftSyntax509",
+    srcs = glob(["Sources/VersionMarkerModules/SwiftSyntax509/**/*.swift"]),
     deps = [
     ],
 )
 
 swift_syntax_library(
     name = "SwiftSyntax510",
+    srcs = glob(["Sources/VersionMarkerModules/SwiftSyntax510/**/*.swift"]),
     deps = [
     ],
 )
 
 swift_syntax_library(
     name = "SwiftSyntax600",
+    srcs = glob(["Sources/VersionMarkerModules/SwiftSyntax600/**/*.swift"]),
     deps = [
     ],
 )

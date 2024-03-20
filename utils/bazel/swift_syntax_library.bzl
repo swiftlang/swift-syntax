@@ -4,10 +4,10 @@ load("@build_bazel_rules_apple//apple:ios.bzl", "ios_unit_test")
 load("@build_bazel_rules_swift//swift:swift.bzl", "swift_library", "swift_test")
 load(":opt_wrapper.bzl", "opt_wrapper")
 
-def swift_syntax_library(name, deps, testonly = False):
+def swift_syntax_library(name, deps, srcs = None, testonly = False):
     swift_library(
         name = name,
-        srcs = native.glob(
+        srcs = srcs or native.glob(
             ["Sources/{}/**/*.swift".format(name)],
             exclude = ["**/*.docc/**"],
             allow_empty = False,

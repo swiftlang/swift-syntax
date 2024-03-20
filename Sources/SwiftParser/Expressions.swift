@@ -1092,10 +1092,6 @@ extension Parser {
     pattern: PatternContext,
     flavor: ExprFlavor
   ) -> RawExprSyntax {
-    if flavor == .poundIfDirective, let directiveExpr = self.parsePrimaryExprForDirective() {
-      return RawExprSyntax(directiveExpr)
-    }
-
     switch self.at(anyIn: PrimaryExpressionStart.self) {
     case (.integerLiteral, let handle)?:
       let literal = self.eat(handle)
@@ -1235,18 +1231,6 @@ extension Parser {
 
     case nil:
       return RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
-    }
-  }
-
-  // try to parse a primary expression for a directive
-  mutating func parsePrimaryExprForDirective() -> RawExprSyntax? {
-    switch self.at(anyIn: CompilationCondition.self) {
-    case (.canImport, let handle)?:
-      return RawExprSyntax(self.parseCanImportExpression(handle))
-
-    // TODO: add case `swift` and `compiler` here
-    default:
-      return nil
     }
   }
 }
@@ -2388,52 +2372,6 @@ extension Parser {
       whereClause = nil
     }
     return (pattern, whereClause)
-  }
-}
-
-// MARK: Platform Condition
-extension Parser {
-  mutating func parseCanImportExpression(_ handle: TokenConsumptionHandle) -> RawExprSyntax {
-    let canImportKeyword = self.eat(handle)
-
-    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-
-    let (unexpectedBeforeImportPath, importPath) = self.expect(.identifier)
-
-    var versionInfo: RawCanImportVersionInfoSyntax?
-
-    if let comma = self.consume(if: .comma) {
-      let (unexpectedBeforeLabel, label) = self.expect(anyIn: CanImportVersionInfoSyntax.LabelOptions.self, default: ._version)
-      let (unexpectedBeforeColon, colon) = self.expect(.colon)
-
-      let version = self.parseVersionTuple(maxComponentCount: 4)
-
-      versionInfo = RawCanImportVersionInfoSyntax(
-        comma: comma,
-        unexpectedBeforeLabel,
-        label: label,
-        unexpectedBeforeColon,
-        colon: colon,
-        version: version,
-        arena: self.arena
-      )
-    }
-
-    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-
-    return RawExprSyntax(
-      RawCanImportExprSyntax(
-        canImportKeyword: canImportKeyword,
-        unexpectedBeforeLeftParen,
-        leftParen: leftParen,
-        unexpectedBeforeImportPath,
-        importPath: importPath,
-        versionInfo: versionInfo,
-        unexpectedBeforeRightParen,
-        rightParen: rightParen,
-        arena: self.arena
-      )
-    )
   }
 }
 

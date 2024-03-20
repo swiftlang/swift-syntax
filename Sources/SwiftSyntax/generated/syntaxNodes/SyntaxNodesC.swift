@@ -21,6 +21,7 @@
 ///  - `importPath`: `<identifier>`
 ///  - `versionInfo`: ``CanImportVersionInfoSyntax``?
 ///  - `rightParen`: `)`
+@available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
 public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
@@ -230,6 +231,7 @@ public struct CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExpr
 /// ### Contained in
 /// 
 ///  - ``CanImportExprSyntax``.``CanImportExprSyntax/versionInfo``
+@available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
 public struct CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   

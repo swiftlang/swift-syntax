@@ -216,6 +216,7 @@ public let EXPR_NODES: [Node] = [
   Node(
     kind: .canImportExpr,
     base: .expr,
+    deprecationMessage: "'canImport' directives are now represented as a `FunctionCallExpr`",
     nameForDiagnostics: "'canImport' expression",
     children: [
       Child(
@@ -245,6 +246,7 @@ public let EXPR_NODES: [Node] = [
   Node(
     kind: .canImportVersionInfo,
     base: .expr,
+    deprecationMessage: "'canImport' directives are now represented as a `FunctionCallExpr`",
     nameForDiagnostics: nil,
     children: [
       Child(

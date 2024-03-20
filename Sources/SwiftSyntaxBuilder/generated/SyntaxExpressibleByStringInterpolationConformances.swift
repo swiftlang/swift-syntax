@@ -122,6 +122,12 @@ extension TypeSyntax: SyntaxExpressibleByStringInterpolation {}
 extension TypeSyntax: @retroactive ExpressibleByStringInterpolation {}
 #endif
 
+extension VersionTupleSyntax: SyntaxExpressibleByStringInterpolation {}
+
+#if compiler(>=6)
+extension VersionTupleSyntax: @retroactive ExpressibleByStringInterpolation {}
+#endif
+
 extension AccessorDeclListSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)

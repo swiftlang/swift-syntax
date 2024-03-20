@@ -361,24 +361,28 @@ open class SyntaxVisitor {
   /// Visiting ``CanImportExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
+  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
   open func visit(_ node: CanImportExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
   /// The function called after visiting ``CanImportExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
+  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
   open func visitPost(_ node: CanImportExprSyntax) {
   }
   
   /// Visiting ``CanImportVersionInfoSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
+  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
   open func visit(_ node: CanImportVersionInfoSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
   /// The function called after visiting ``CanImportVersionInfoSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
+  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
   open func visitPost(_ node: CanImportVersionInfoSyntax) {
   }
   

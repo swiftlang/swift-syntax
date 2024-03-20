@@ -346,6 +346,24 @@ extension TypeSyntax: SyntaxParseable {
   }
 }
 
+extension VersionTupleSyntax: SyntaxParseable {
+  public static func parse(from parser: inout Parser) -> Self {
+    // Keep the parser alive so that the arena in which `raw` is allocated
+    // doesn’t get deallocated before we have a chance to create a syntax node
+    // from it. We can’t use `parser.arena` as the parameter to
+    // `Syntax(raw:arena:)` because the node might have been re-used during an
+    // incremental parse and would then live in a different arena than
+    // `parser.arena`.
+    defer {
+      withExtendedLifetime(parser) {
+      }
+    }
+    let node = parser.parseVersionTuple()
+    let raw = RawSyntax(parser.parseRemainder(into: node))
+    return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
+  }
+}
+
 fileprivate extension Parser {
   mutating func parseNonOptionalCodeBlockItem() -> RawCodeBlockItemSyntax {
     guard let node = self.parseCodeBlockItem(isAtTopLevel: false, allowInitDecl: true) else {

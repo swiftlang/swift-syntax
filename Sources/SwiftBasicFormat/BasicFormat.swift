@@ -148,7 +148,7 @@ open class BasicFormat: SyntaxRewriter {
       return true
     case .ifConfigClauseList:
       return true
-    case .memberDeclList:
+    case .memberBlockItemList:
       return true
     case .switchCaseList:
       return true

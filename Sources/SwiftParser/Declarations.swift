@@ -711,7 +711,7 @@ extension Parser {
 extension Parser {
   mutating func parseMemberBlockItem() -> RawMemberBlockItemSyntax? {
     let startToken = self.currentToken
-    if let syntax = self.loadCurrentSyntaxNodeFromCache(for: .memberBlockItemList) {
+    if let syntax = self.loadCurrentSyntaxNodeFromCache(for: .memberBlockItem) {
       self.registerNodeForIncrementalParse(node: syntax.raw, startToken: startToken)
       return RawMemberBlockItemSyntax(syntax.raw)
     }

@@ -377,26 +377,26 @@ open class SyntaxVisitor {
   open func visitPost(_ node: BreakStmtSyntax) {
   }
   
-  /// Visiting ``_CanImportExprSyntax`` specifically.
+  /// Visiting `_CanImportExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: _CanImportExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``_CanImportExprSyntax`` and its descendants.
+  /// The function called after visiting `_CanImportExprSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: _CanImportExprSyntax) {
   }
   
-  /// Visiting ``_CanImportVersionInfoSyntax`` specifically.
+  /// Visiting `_CanImportVersionInfoSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ node: _CanImportVersionInfoSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
   
-  /// The function called after visiting ``_CanImportVersionInfoSyntax`` and its descendants.
+  /// The function called after visiting `_CanImportVersionInfoSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: _CanImportVersionInfoSyntax) {
   }

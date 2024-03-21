@@ -283,14 +283,14 @@ open class SyntaxRewriter {
     return StmtSyntax(visitChildren(node))
   }
   
-  /// Visit a ``_CanImportExprSyntax``.
+  /// Visit a `_CanImportExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: _CanImportExprSyntax) -> ExprSyntax {
     return ExprSyntax(visitChildren(node))
   }
   
-  /// Visit a ``_CanImportVersionInfoSyntax``.
+  /// Visit a `_CanImportVersionInfoSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   open func visit(_ node: _CanImportVersionInfoSyntax) -> ExprSyntax {

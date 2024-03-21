@@ -19,7 +19,7 @@
 ///  - `canImportKeyword`: `canImport`
 ///  - `leftParen`: `(`
 ///  - `importPath`: `<identifier>`
-///  - `versionInfo`: ``_CanImportVersionInfoSyntax``?
+///  - `versionInfo`: `_CanImportVersionInfoSyntax`?
 ///  - `rightParen`: `)`
 public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
@@ -229,7 +229,7 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
 ///
 /// ### Contained in
 /// 
-///  - ``_CanImportExprSyntax``.``_CanImportExprSyntax/versionInfo``
+///  - `_CanImportExprSyntax`.`_CanImportExprSyntax/versionInfo`
 public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   

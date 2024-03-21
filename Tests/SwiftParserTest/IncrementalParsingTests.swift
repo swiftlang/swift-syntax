@@ -23,7 +23,7 @@ class IncrementalParsingTests: ParserTestCase {
       struct A⏩️⏸️A⏪️ { func f() {
       """,
       reusedNodes: [
-        ReusedNodeSpec("func f() {", kind: .memberDeclListItem)
+        ReusedNodeSpec("func f() {", kind: .memberBlockItem)
       ]
     )
   }
@@ -191,10 +191,10 @@ class IncrementalParsingTests: ParserTestCase {
       }
       """,
       reusedNodes: [
-        ReusedNodeSpec("let a: Int", kind: .memberDeclListItem),
-        ReusedNodeSpec("let b: Int", kind: .memberDeclListItem),
-        ReusedNodeSpec("let c: Int", kind: .memberDeclListItem),
-        ReusedNodeSpec("let g: Int", kind: .memberDeclListItem),
+        ReusedNodeSpec("let a: Int", kind: .memberBlockItem),
+        ReusedNodeSpec("let b: Int", kind: .memberBlockItem),
+        ReusedNodeSpec("let c: Int", kind: .memberBlockItem),
+        ReusedNodeSpec("let g: Int", kind: .memberBlockItem),
       ]
     )
   }

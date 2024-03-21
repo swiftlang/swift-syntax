@@ -40,9 +40,6 @@ public class Node {
   /// The kind of node’s supertype. This kind must have `isBase == true`
   public let base: SyntaxNodeKind
 
-  /// If this syntax node has been deprecated, a message that describes the deprecation.
-  public let deprecationMessage: String?
-
   /// The experimental feature the node is part of, or `nil` if this isn't
   /// for an experimental feature.
   public let experimentalFeature: ExperimentalFeature?
@@ -109,9 +106,6 @@ public class Node {
           """
         experimentalSPI.with(\.trailingTrivia, .newline)
       }
-      if let deprecationMessage {
-        "@available(*, deprecated, message: \(literal: deprecationMessage))"
-      }
       if forRaw {
         "@_spi(RawSyntax)"
       }
@@ -133,7 +127,6 @@ public class Node {
   init(
     kind: SyntaxNodeKind,
     base: SyntaxNodeKind,
-    deprecationMessage: String? = nil,
     experimentalFeature: ExperimentalFeature? = nil,
     nameForDiagnostics: String?,
     documentation: String? = nil,
@@ -146,7 +139,6 @@ public class Node {
 
     self.kind = kind
     self.base = base
-    self.deprecationMessage = deprecationMessage
     self.experimentalFeature = experimentalFeature
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
@@ -265,7 +257,7 @@ public class Node {
 
     let list =
       SYNTAX_NODES
-      .filter { $0.base == self.kind && !$0.isExperimental }
+      .filter { $0.base == self.kind && !$0.isExperimental && !$0.kind.isDeprecated }
       .map { "- \($0.kind.doccLink)" }
       .joined(separator: "\n")
 
@@ -288,7 +280,6 @@ public class Node {
   init(
     kind: SyntaxNodeKind,
     base: SyntaxNodeKind,
-    deprecationMessage: String? = nil,
     experimentalFeature: ExperimentalFeature? = nil,
     nameForDiagnostics: String?,
     documentation: String? = nil,
@@ -298,7 +289,6 @@ public class Node {
     self.kind = kind
     precondition(base == .syntaxCollection)
     self.base = base
-    self.deprecationMessage = deprecationMessage
     self.experimentalFeature = experimentalFeature
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)

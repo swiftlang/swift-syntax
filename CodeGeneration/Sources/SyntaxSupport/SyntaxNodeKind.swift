@@ -20,6 +20,8 @@ import SwiftSyntaxBuilder
 public enum SyntaxNodeKind: String, CaseIterable {
   // Please keep this list sorted alphabetically
 
+  case _canImportExpr
+  case _canImportVersionInfo
   case accessorBlock
   case accessorDecl
   case accessorDeclList
@@ -47,8 +49,6 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case booleanLiteralExpr
   case borrowExpr
   case breakStmt
-  case canImportExpr
-  case canImportVersionInfo
   case catchClause
   case catchClauseList
   case catchItem
@@ -405,6 +405,8 @@ public enum SyntaxNodeKind: String, CaseIterable {
   /// deprecated.
   public var deprecatedRawValue: String? {
     switch self {
+    case ._canImportExpr: return "canImportExpr"
+    case ._canImportVersionInfo: return "canImportVersionInfo"
     case .accessorDeclList: return "accessorList"
     case .accessorParameters: return "accessorParameter"
     case .associatedTypeDecl: return "associatedtypeDecl"
@@ -473,6 +475,26 @@ public enum SyntaxNodeKind: String, CaseIterable {
     case .yieldedExpressionList: return "yieldExprList"
     case .yieldedExpressionsClause: return "yieldList"
     default: return nil
+    }
+  }
+
+  public var deprecationMessage: String? {
+    switch self {
+    case ._canImportExpr: return "'canImport' directives are now represented as a `FunctionCallExpr`"
+    case ._canImportVersionInfo: return "'canImport' directives are now represented as a `FunctionCallExpr`"
+    default: return nil
+    }
+  }
+
+  public var isDeprecated: Bool {
+    return rawValue.first == "_"
+  }
+
+  var deprecationAttribute: AttributeSyntax? {
+    if let deprecationMessage = deprecationMessage {
+      AttributeSyntax("@available(*, deprecated, message: \(literal: deprecationMessage)")
+    } else {
+      AttributeSyntax(#"@available(*, deprecated, renamed: "\#(syntaxType)")"#)
     }
   }
 }

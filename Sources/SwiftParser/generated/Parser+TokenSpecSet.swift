@@ -404,7 +404,7 @@ extension BooleanLiteralExprSyntax {
   }
 }
 
-extension CanImportVersionInfoSyntax {
+extension _CanImportVersionInfoSyntax {
   @_spi(Diagnostics)
   public enum LabelOptions: TokenSpecSet {
     case _version

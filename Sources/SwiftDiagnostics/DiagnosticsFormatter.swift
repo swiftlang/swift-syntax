@@ -194,7 +194,7 @@ public struct DiagnosticsFormatter {
 
       // Highlighted source text
       let highlightString = String(sourceString[highlightRange])
-      resultSourceString += diagnosticDecorator.decorateHighlight(highlightString).highlightedSourceCode
+      resultSourceString += diagnosticDecorator._decorateHighlight(highlightString).highlightedSourceCode
 
       sourceIndex = highlightRange.upperBound
     }

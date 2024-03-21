@@ -28,7 +28,7 @@
 /// The protocol is designed to be easily customizable. Developers can create their own entities that conform
 /// to `DiagnosticDecorator` to implement custom decorating logic. This allows for different visual representations,
 /// such as using ANSI colors, underscores, emoji-based or other markers, for diagnostics in source code.
-protocol DiagnosticDecorator {
+public protocol DiagnosticDecorator {
   /// Decorates a diagnostic message based on its severity level.
   ///
   /// Implementations are expected to prepend a severity-specific prefix (e.g., "error: ", "warning: ") to the diagnostic message.
@@ -59,7 +59,12 @@ protocol DiagnosticDecorator {
   /// - Note: The method returns a tuple to offer more flexibility in decorating highlights.
   ///         This allows for a variety of techniques to be used, such as ANSI codes for color
   ///         and additional lines for contextual emphasis, which will be combined during the rendering process.
-  func decorateHighlight(_ highlight: String) -> (highlightedSourceCode: String, additionalHighlightedLine: String?)
+  ///
+  /// - Warning: This method is currently experimental and subject to change. It is marked with an underscore `_`
+  ///            to indicate that it is not yet considered stable API. The interface, behavior, and existence
+  ///            of this method may change in future releases without warning as we refine its implementation.
+  ///            Please use with caution and avoid relying heavily on it in production code.
+  func _decorateHighlight(_ highlight: String) -> (highlightedSourceCode: String, additionalHighlightedLine: String?)
 }
 
 extension DiagnosticDecorator {
@@ -70,5 +75,9 @@ extension DiagnosticDecorator {
   /// - Returns: A decorated version of the diagnostic message, determined by its severity level.
   func decorateDiagnosticMessage(_ diagnosticMessage: DiagnosticMessage) -> String {
     decorateMessage(diagnosticMessage.message, basedOnSeverity: diagnosticMessage.severity)
+  }
+
+  func _decorateHighlight(_ highlight: String) -> (highlightedSourceCode: String, additionalHighlightedLine: String?) {
+    return (highlightedSourceCode: highlight, additionalHighlightedLine: nil)
   }
 }

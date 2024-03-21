@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(Testing) import SwiftDiagnostics
+import SwiftDiagnostics
 import XCTest
 import _SwiftSyntaxTestSupport
 
@@ -64,14 +64,14 @@ final class ANSIDiagnosticDecoratorTests: XCTestCase {
   func testDecorateHighlight() {
     let highlightedText = "let x = 10"
 
-    let decoratedHighlight = decorator.decorateHighlight(highlightedText)
+    let decoratedHighlight = decorator._decorateHighlight(highlightedText)
 
     assertStringsEqualWithDiff(decoratedHighlight.highlightedSourceCode, "\u{1B}[4;39mlet x = 10\u{1B}[0;0m")
     XCTAssertNil(decoratedHighlight.additionalHighlightedLine)
   }
 
   func testDecorateHighlightWithEmptyString() {
-    let decoratedHighlight = decorator.decorateHighlight("")
+    let decoratedHighlight = decorator._decorateHighlight("")
 
     assertStringsEqualWithDiff(decoratedHighlight.highlightedSourceCode, "")
     XCTAssertNil(decoratedHighlight.additionalHighlightedLine)

@@ -351,45 +351,45 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "label"
   case \BreakStmtSyntax.unexpectedAfterLabel:
     return "unexpectedAfterLabel"
-  case \CanImportExprSyntax.unexpectedBeforeCanImportKeyword:
+  case \_CanImportExprSyntax.unexpectedBeforeCanImportKeyword:
     return "unexpectedBeforeCanImportKeyword"
-  case \CanImportExprSyntax.canImportKeyword:
+  case \_CanImportExprSyntax.canImportKeyword:
     return "canImportKeyword"
-  case \CanImportExprSyntax.unexpectedBetweenCanImportKeywordAndLeftParen:
+  case \_CanImportExprSyntax.unexpectedBetweenCanImportKeywordAndLeftParen:
     return "unexpectedBetweenCanImportKeywordAndLeftParen"
-  case \CanImportExprSyntax.leftParen:
+  case \_CanImportExprSyntax.leftParen:
     return "leftParen"
-  case \CanImportExprSyntax.unexpectedBetweenLeftParenAndImportPath:
+  case \_CanImportExprSyntax.unexpectedBetweenLeftParenAndImportPath:
     return "unexpectedBetweenLeftParenAndImportPath"
-  case \CanImportExprSyntax.importPath:
+  case \_CanImportExprSyntax.importPath:
     return "importPath"
-  case \CanImportExprSyntax.unexpectedBetweenImportPathAndVersionInfo:
+  case \_CanImportExprSyntax.unexpectedBetweenImportPathAndVersionInfo:
     return "unexpectedBetweenImportPathAndVersionInfo"
-  case \CanImportExprSyntax.versionInfo:
+  case \_CanImportExprSyntax.versionInfo:
     return "versionInfo"
-  case \CanImportExprSyntax.unexpectedBetweenVersionInfoAndRightParen:
+  case \_CanImportExprSyntax.unexpectedBetweenVersionInfoAndRightParen:
     return "unexpectedBetweenVersionInfoAndRightParen"
-  case \CanImportExprSyntax.rightParen:
+  case \_CanImportExprSyntax.rightParen:
     return "rightParen"
-  case \CanImportExprSyntax.unexpectedAfterRightParen:
+  case \_CanImportExprSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
-  case \CanImportVersionInfoSyntax.unexpectedBeforeComma:
+  case \_CanImportVersionInfoSyntax.unexpectedBeforeComma:
     return "unexpectedBeforeComma"
-  case \CanImportVersionInfoSyntax.comma:
+  case \_CanImportVersionInfoSyntax.comma:
     return "comma"
-  case \CanImportVersionInfoSyntax.unexpectedBetweenCommaAndLabel:
+  case \_CanImportVersionInfoSyntax.unexpectedBetweenCommaAndLabel:
     return "unexpectedBetweenCommaAndLabel"
-  case \CanImportVersionInfoSyntax.label:
+  case \_CanImportVersionInfoSyntax.label:
     return "label"
-  case \CanImportVersionInfoSyntax.unexpectedBetweenLabelAndColon:
+  case \_CanImportVersionInfoSyntax.unexpectedBetweenLabelAndColon:
     return "unexpectedBetweenLabelAndColon"
-  case \CanImportVersionInfoSyntax.colon:
+  case \_CanImportVersionInfoSyntax.colon:
     return "colon"
-  case \CanImportVersionInfoSyntax.unexpectedBetweenColonAndVersion:
+  case \_CanImportVersionInfoSyntax.unexpectedBetweenColonAndVersion:
     return "unexpectedBetweenColonAndVersion"
-  case \CanImportVersionInfoSyntax.version:
+  case \_CanImportVersionInfoSyntax.version:
     return "version"
-  case \CanImportVersionInfoSyntax.unexpectedAfterVersion:
+  case \_CanImportVersionInfoSyntax.unexpectedAfterVersion:
     return "unexpectedAfterVersion"
   case \CatchClauseSyntax.unexpectedBeforeCatchKeyword:
     return "unexpectedBeforeCatchKeyword"

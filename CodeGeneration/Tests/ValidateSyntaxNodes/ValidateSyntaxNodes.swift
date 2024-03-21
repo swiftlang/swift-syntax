@@ -136,7 +136,7 @@ class ValidateSyntaxNodes: XCTestCase {
       failures,
       expectedFailures: [
         ValidationFailure(
-          node: .canImportVersionInfo,
+          node: ._canImportVersionInfo,
           message: "has base kind 'ExprSyntax' but type name doesn’t have 'ExprSyntax' suffix"
         ),
         ValidationFailure(
@@ -535,7 +535,7 @@ class ValidateSyntaxNodes: XCTestCase {
       expectedFailures: [
         ValidationFailure(node: .accessorParameters, message: "could conform to trait 'NamedDecl' but does not"),
         ValidationFailure(node: .availabilityCondition, message: "could conform to trait 'Parenthesized' but does not"),
-        ValidationFailure(node: .canImportExpr, message: "could conform to trait 'Parenthesized' but does not"),
+        ValidationFailure(node: ._canImportExpr, message: "could conform to trait 'Parenthesized' but does not"),
         ValidationFailure(
           node: .differentiabilityArguments,
           message: "could conform to trait 'Parenthesized' but does not"

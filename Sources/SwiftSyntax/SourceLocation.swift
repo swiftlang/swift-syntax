@@ -278,7 +278,9 @@ public final class SourceLocationConverter {
   /// start of file is returned.
   public func location(for position: AbsolutePosition) -> SourceLocation {
     let physicalLocation = physicalLocation(for: position)
-    if let lastSourceLocationDirective = sourceLocationDirectives.last(where: { $0.sourceLine < physicalLocation.line }),
+    if let lastSourceLocationDirective =
+      sourceLocationDirectives
+      .last(where: { $0.sourceLine < physicalLocation.line }),
       let arguments = lastSourceLocationDirective.arguments
     {
       let presumedLine = arguments.line + physicalLocation.line - lastSourceLocationDirective.sourceLine - 1

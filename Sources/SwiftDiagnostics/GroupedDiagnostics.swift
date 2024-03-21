@@ -228,7 +228,10 @@ extension GroupedDiagnostics {
 
           if rootSourceID == sourceFileID {
             let bufferLoc = slc.location(for: rootPosition)
-            let decoratedMessage = diagnosticDecorator.decorateMessage("expanded code originates here", basedOnSeverity: .note)
+            let decoratedMessage = diagnosticDecorator.decorateMessage(
+              "expanded code originates here",
+              basedOnSeverity: .note
+            )
             prefixString += "╰─ \(bufferLoc.file):\(bufferLoc.line):\(bufferLoc.column): \(decoratedMessage)\n"
           }
         }
@@ -251,9 +254,12 @@ extension GroupedDiagnostics {
         boxSuffix = ""
       }
 
-      prefixString = diagnosticDecorator.decorateBufferOutline(padding + "╭─── ") + sourceFile.displayName + " " + boxSuffix + "\n"
+      prefixString =
+        diagnosticDecorator.decorateBufferOutline(padding + "╭─── ") + sourceFile.displayName + " " + boxSuffix + "\n"
       suffixString =
-        diagnosticDecorator.decorateBufferOutline(padding + "╰───" + String(repeating: "─", count: sourceFile.displayName.count + 2)) + boxSuffix + "\n"
+        diagnosticDecorator.decorateBufferOutline(
+          padding + "╰───" + String(repeating: "─", count: sourceFile.displayName.count + 2)
+        ) + boxSuffix + "\n"
     }
 
     // Render the buffer.

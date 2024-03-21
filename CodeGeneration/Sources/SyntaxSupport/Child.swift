@@ -41,7 +41,12 @@ public enum ChildKind {
   /// The child always contains a node that matches one of the `choices`.
   case nodeChoices(choices: [Child])
   /// The child is a collection of `kind`.
-  case collection(kind: SyntaxNodeKind, collectionElementName: String, defaultsToEmpty: Bool = false, deprecatedCollectionElementName: String? = nil)
+  case collection(
+    kind: SyntaxNodeKind,
+    collectionElementName: String,
+    defaultsToEmpty: Bool = false,
+    deprecatedCollectionElementName: String? = nil
+  )
   /// The child is a token that matches one of the given `choices`.
   /// If `requiresLeadingSpace` or `requiresTrailingSpace` is not `nil`, it
   /// overrides the default leading/trailing space behavior of the token.
@@ -259,7 +264,10 @@ public class Child {
     isOptional: Bool = false
   ) {
     precondition(name.first?.isLowercase ?? true, "The first letter of a child’s name should be lowercase")
-    precondition(deprecatedName?.first?.isLowercase ?? true, "The first letter of a child’s deprecatedName should be lowercase")
+    precondition(
+      deprecatedName?.first?.isLowercase ?? true,
+      "The first letter of a child’s deprecatedName should be lowercase"
+    )
     self.name = name
     self.deprecatedName = deprecatedName
     self.kind = kind

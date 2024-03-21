@@ -45,8 +45,12 @@ struct LocalPrPrecheckExecutor {
   init(toolchain: URL, verbose: Bool = false) {
     self.formatExecutor = FormatExecutor(update: false, verbose: verbose)
     self.generateSourceCodeExecutor = GenerateSourceCodeExecutor(toolchain: toolchain, verbose: verbose)
-    self.buildExecutor = BuildExecutor(swiftPMBuilder: SwiftPMBuilder(toolchain: toolchain, useLocalDeps: false, verbose: verbose))
-    self.testExecutor = TestExecutor(swiftPMBuilder: SwiftPMBuilder(toolchain: toolchain, useLocalDeps: false, verbose: verbose))
+    self.buildExecutor = BuildExecutor(
+      swiftPMBuilder: SwiftPMBuilder(toolchain: toolchain, useLocalDeps: false, verbose: verbose)
+    )
+    self.testExecutor = TestExecutor(
+      swiftPMBuilder: SwiftPMBuilder(toolchain: toolchain, useLocalDeps: false, verbose: verbose)
+    )
   }
 
   func run() throws {

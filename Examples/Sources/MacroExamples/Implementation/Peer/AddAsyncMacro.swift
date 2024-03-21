@@ -49,9 +49,13 @@ public struct AddAsyncMacro: PeerMacro {
     }
 
     // Requires a completion handler block as last parameter
-    guard let completionHandlerParameterAttribute = funcDecl.signature.parameterClause.parameters.last?.type.as(AttributedTypeSyntax.self),
-      let completionHandlerParameter = completionHandlerParameterAttribute.baseType.as(FunctionTypeSyntax.self)
-    else {
+    let completionHandlerParameter = funcDecl
+      .signature
+      .parameterClause
+      .parameters.last?
+      .type.as(AttributedTypeSyntax.self)?
+      .baseType.as(FunctionTypeSyntax.self)
+    guard let completionHandlerParameter else {
       throw CustomError.message(
         "@addAsync requires an function that has a completion handler as last parameter"
       )
@@ -67,7 +71,12 @@ public struct AddAsyncMacro: PeerMacro {
     let returnType = completionHandlerParameter.parameters.first?.type
 
     let isResultReturn = returnType?.children(viewMode: .all).first?.description == "Result"
-    let successReturnType = isResultReturn ? returnType!.as(IdentifierTypeSyntax.self)!.genericArgumentClause?.arguments.first!.argument : returnType
+    let successReturnType =
+      if isResultReturn {
+        returnType!.as(IdentifierTypeSyntax.self)!.genericArgumentClause?.arguments.first!.argument
+      } else {
+        returnType
+      }
 
     // Remove completionHandler and comma from the previous parameter
     var newParameterList = funcDecl.signature.parameterClause.parameters
@@ -132,7 +141,10 @@ public struct AddAsyncMacro: PeerMacro {
 
     // add result type
     if let successReturnType {
-      funcDecl.signature.returnClause = ReturnClauseSyntax(leadingTrivia: .space, type: successReturnType.with(\.leadingTrivia, .space))
+      funcDecl.signature.returnClause = ReturnClauseSyntax(
+        leadingTrivia: .space,
+        type: successReturnType.with(\.leadingTrivia, .space)
+      )
     } else {
       funcDecl.signature.returnClause = nil
     }

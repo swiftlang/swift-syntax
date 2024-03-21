@@ -21,7 +21,10 @@ final class InvalidIfExprTests: ParserTestCase {
       (a ? b1️⃣)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"])
+        DiagnosticSpec(
+          message: "expected ':' and expression after '? ...' in ternary expression",
+          fixIts: ["insert ':' and expression"]
+        )
       ],
       fixedSource: "(a ? b : <#expression#>)"
     )
@@ -33,7 +36,10 @@ final class InvalidIfExprTests: ParserTestCase {
       (a ? b : c ? d1️⃣)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"])
+        DiagnosticSpec(
+          message: "expected ':' and expression after '? ...' in ternary expression",
+          fixIts: ["insert ':' and expression"]
+        )
       ],
       fixedSource: "(a ? b : c ? d : <#expression#>)"
     )
@@ -45,7 +51,10 @@ final class InvalidIfExprTests: ParserTestCase {
       ℹ️(a ? b ? c : d1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"]),
+        DiagnosticSpec(
+          message: "expected ':' and expression after '? ...' in ternary expression",
+          fixIts: ["insert ':' and expression"]
+        ),
         DiagnosticSpec(
           message: "expected ')' to end tuple",
           notes: [NoteSpec(message: "to match this opening '('")],
@@ -62,8 +71,14 @@ final class InvalidIfExprTests: ParserTestCase {
       (a ? b ? c1️⃣)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"]),
-        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"]),
+        DiagnosticSpec(
+          message: "expected ':' and expression after '? ...' in ternary expression",
+          fixIts: ["insert ':' and expression"]
+        ),
+        DiagnosticSpec(
+          message: "expected ':' and expression after '? ...' in ternary expression",
+          fixIts: ["insert ':' and expression"]
+        ),
       ],
       fixedSource: "(a ? b ? c : <#expression#> : <#expression#>)"
     )
@@ -87,7 +102,10 @@ final class InvalidIfExprTests: ParserTestCase {
       foo ? 1 1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"])
+        DiagnosticSpec(
+          message: "expected ':' and expression after '? ...' in ternary expression",
+          fixIts: ["insert ':' and expression"]
+        )
       ],
       fixedSource: "foo ? 1 : <#expression#>"
     )
@@ -100,7 +118,10 @@ final class InvalidIfExprTests: ParserTestCase {
       someOtherVariable
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"])
+        DiagnosticSpec(
+          message: "expected ':' and expression after '? ...' in ternary expression",
+          fixIts: ["insert ':' and expression"]
+        )
       ],
       fixedSource: """
         condition ? 1 : <#expression#>

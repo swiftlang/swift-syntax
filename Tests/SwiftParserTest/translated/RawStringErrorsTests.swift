@@ -21,7 +21,10 @@ final class RawStringErrorsTests: ParserTestCase {
       let _ = "foo\(#"bar"#1️⃣#)baz"
       """###,
       diagnostics: [
-        DiagnosticSpec(message: "too many '#' characters in closing delimiter", fixIts: ["remove extraneous delimiters"])
+        DiagnosticSpec(
+          message: "too many '#' characters in closing delimiter",
+          fixIts: ["remove extraneous delimiters"]
+        )
       ],
       fixedSource: ###"""
         let _ = "foo\(#"bar"#)baz"
@@ -35,7 +38,10 @@ final class RawStringErrorsTests: ParserTestCase {
       let _ = #"\#1️⃣#("invalid")"#
       """###,
       diagnostics: [
-        DiagnosticSpec(message: "too many '#' characters to start string interpolation", fixIts: ["remove extraneous delimiters"])
+        DiagnosticSpec(
+          message: "too many '#' characters to start string interpolation",
+          fixIts: ["remove extraneous delimiters"]
+        )
       ],
       fixedSource: ###"""
         let _ = #"\#("invalid")"#
@@ -49,7 +55,10 @@ final class RawStringErrorsTests: ParserTestCase {
       let _ = ###"""invalid"###1️⃣###
       """#####,
       diagnostics: [
-        DiagnosticSpec(message: "too many '#' characters in closing delimiter", fixIts: ["remove extraneous delimiters"])
+        DiagnosticSpec(
+          message: "too many '#' characters in closing delimiter",
+          fixIts: ["remove extraneous delimiters"]
+        )
       ],
       fixedSource: #####"""
         let _ = ###"""invalid"###
@@ -63,7 +72,10 @@ final class RawStringErrorsTests: ParserTestCase {
       let _ = ####"invalid"###1️⃣
       """#####,
       diagnostics: [
-        DiagnosticSpec(message: #####"expected '"####' to end string literal"#####, fixIts: [#####"insert '"####'"#####])
+        DiagnosticSpec(
+          message: #####"expected '"####' to end string literal"#####,
+          fixIts: [#####"insert '"####'"#####]
+        )
       ],
       fixedSource: #####"""
         let _ = ####"invalid"###"####
@@ -77,7 +89,11 @@ final class RawStringErrorsTests: ParserTestCase {
       let _ = ###"invalid"###1️⃣###
       """#####,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "too many '#' characters in closing delimiter", fixIts: ["remove extraneous delimiters"])
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "too many '#' characters in closing delimiter",
+          fixIts: ["remove extraneous delimiters"]
+        )
       ],
       fixedSource: #####"""
         let _ = ###"invalid"###
@@ -93,8 +109,16 @@ final class RawStringErrorsTests: ParserTestCase {
         aa2️⃣"""##
       """###,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "multi-line string literal content must begin on a new line", fixIts: ["insert newline"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "multi-line string literal closing delimiter must begin on a new line", fixIts: ["insert newline"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "multi-line string literal content must begin on a new line",
+          fixIts: ["insert newline"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "multi-line string literal closing delimiter must begin on a new line",
+          fixIts: ["insert newline"]
+        ),
       ],
       fixedSource: ###"""
         let _ = ##"""
@@ -113,7 +137,10 @@ final class RawStringErrorsTests: ParserTestCase {
         """#
       """##,
       diagnostics: [
-        DiagnosticSpec(message: "multi-line string literal content must begin on a new line", fixIts: ["insert newline"])
+        DiagnosticSpec(
+          message: "multi-line string literal content must begin on a new line",
+          fixIts: ["insert newline"]
+        )
       ],
       fixedSource: ##"""
         let _ = #"""
@@ -130,7 +157,10 @@ final class RawStringErrorsTests: ParserTestCase {
         """###
       """####,
       diagnostics: [
-        DiagnosticSpec(message: "multi-line string literal content must begin on a new line", fixIts: ["insert newline"])
+        DiagnosticSpec(
+          message: "multi-line string literal content must begin on a new line",
+          fixIts: ["insert newline"]
+        )
       ],
       fixedSource: ####"""
         let _ = ###"""

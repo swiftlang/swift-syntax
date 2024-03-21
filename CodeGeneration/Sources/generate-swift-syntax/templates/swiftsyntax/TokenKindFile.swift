@@ -130,7 +130,9 @@ let tokenKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               StmtSyntax("return true")
             }
           } else {
-            SwitchCaseSyntax("case (.\(tokenSpec.varOrCaseName)(let lhsText), .\(tokenSpec.varOrCaseName)(let rhsText)):") {
+            SwitchCaseSyntax(
+              "case (.\(tokenSpec.varOrCaseName)(let lhsText), .\(tokenSpec.varOrCaseName)(let rhsText)):"
+            ) {
               StmtSyntax("return lhsText == rhsText")
             }
           }

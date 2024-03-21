@@ -67,7 +67,8 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.rhs(let introducer), let handle)? where self.withLookahead { $0.shouldParsePatternBinding(introducer: introducer) }:
+    case (.rhs(let introducer), let handle)?
+    where self.withLookahead { $0.shouldParsePatternBinding(introducer: introducer) }:
       let bindingSpecifier = self.eat(handle)
       let value = self.parsePattern()
       return RawPatternSyntax(
@@ -116,7 +117,9 @@ extension Parser {
   }
 
   /// Parse a typed pattern.
-  mutating func parseTypedPattern(allowRecoveryFromMissingColon: Bool = true) -> (RawPatternSyntax, RawTypeAnnotationSyntax?) {
+  mutating func parseTypedPattern(
+    allowRecoveryFromMissingColon: Bool = true
+  ) -> (RawPatternSyntax, RawTypeAnnotationSyntax?) {
     let pattern = self.parsePattern()
 
     // Now parse an optional type annotation.
@@ -176,7 +179,9 @@ extension Parser {
 
         /// If we have something like `x SomeType`, use the indication that `SomeType` starts with a capital letter (and is thus probably a type name)
         /// as an indication that the user forgot to write the colon instead of forgetting to write the comma to separate two elements.
-        if label == nil, colon == nil, self.at(.identifier), peek(isAt: .identifier), peek().tokenText.isStartingWithUppercase {
+        if label == nil, colon == nil, self.at(.identifier), peek(isAt: .identifier),
+          peek().tokenText.isStartingWithUppercase
+        {
           label = consume(if: .identifier)
           colon = self.missingToken(.colon)
         }
@@ -220,7 +225,8 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.rhs(let introducer), let handle)? where self.withLookahead { $0.shouldParsePatternBinding(introducer: introducer) }:
+    case (.rhs(let introducer), let handle)?
+    where self.withLookahead { $0.shouldParsePatternBinding(introducer: introducer) }:
       let bindingSpecifier = self.eat(handle)
       let value = self.parseMatchingPattern(context: .bindingIntroducer)
       return RawPatternSyntax(

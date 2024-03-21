@@ -47,7 +47,11 @@ struct GeneratedFileSpec {
     self.contentsGenerator = contents
   }
 
-  init(_ pathComponents: [String], _ contents: @escaping @autoclosure () -> SourceFileSyntax, format: CodeGenerationFormat = CodeGenerationFormat()) {
+  init(
+    _ pathComponents: [String],
+    _ contents: @escaping @autoclosure () -> SourceFileSyntax,
+    format: CodeGenerationFormat = CodeGenerationFormat()
+  ) {
     self.init(pathComponents, "\(contents().formatted(using: format))\n")
   }
 }
@@ -69,7 +73,9 @@ struct TemplateSpec {
 
 @main
 struct GenerateSwiftSyntax: AsyncParsableCommand {
-  @Argument(help: "The path to the source directory (i.e. 'swift-syntax/Sources') where the source files are to be generated")
+  @Argument(
+    help: "The path to the source directory (i.e. 'swift-syntax/Sources') where the source files are to be generated"
+  )
   var destination: String = {
     let sourcesURL = URL(fileURLWithPath: #filePath)
       .deletingLastPathComponent()
@@ -95,15 +101,27 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
       GeneratedFileSpec(swiftParserGeneratedDir + ["TokenSpecStaticMembers.swift"], tokenSpecStaticMembersFile),
 
       // SwiftParserDiagnostics
-      GeneratedFileSpec(swiftParserDiagnosticsGeneratedDir + ["ChildNameForDiagnostics.swift"], childNameForDiagnosticFile),
-      GeneratedFileSpec(swiftParserDiagnosticsGeneratedDir + ["SyntaxKindNameForDiagnostics.swift"], syntaxKindNameForDiagnosticFile),
-      GeneratedFileSpec(swiftParserDiagnosticsGeneratedDir + ["TokenNameForDiagnostics.swift"], tokenNameForDiagnosticFile),
+      GeneratedFileSpec(
+        swiftParserDiagnosticsGeneratedDir + ["ChildNameForDiagnostics.swift"],
+        childNameForDiagnosticFile
+      ),
+      GeneratedFileSpec(
+        swiftParserDiagnosticsGeneratedDir + ["SyntaxKindNameForDiagnostics.swift"],
+        syntaxKindNameForDiagnosticFile
+      ),
+      GeneratedFileSpec(
+        swiftParserDiagnosticsGeneratedDir + ["TokenNameForDiagnostics.swift"],
+        tokenNameForDiagnosticFile
+      ),
 
       // SwiftSyntax
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["ChildNameForKeyPath.swift"], childNameForKeyPathFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Keyword.swift"], keywordFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["raw", "RawSyntaxValidation.swift"], rawSyntaxValidationFile),
-      GeneratedFileSpec(swiftSyntaxGeneratedDir + ["RenamedChildrenCompatibility.swift"], renamedChildrenCompatibilityFile),
+      GeneratedFileSpec(
+        swiftSyntaxGeneratedDir + ["RenamedChildrenCompatibility.swift"],
+        renamedChildrenCompatibilityFile
+      ),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["RenamedNodesCompatibility.swift"], renamedSyntaxNodesFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxAnyVisitor.swift"], syntaxAnyVisitorFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxBaseNodes.swift"], syntaxBaseNodesFile),
@@ -112,7 +130,11 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxKind.swift"], syntaxKindFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxRewriter.swift"], syntaxRewriterFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxTraits.swift"], syntaxTraitsFile),
-      GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxVisitor.swift"], syntaxVisitorFile, format: CodeGenerationFormat(maxElementsOnSameLine: 4)),
+      GeneratedFileSpec(
+        swiftSyntaxGeneratedDir + ["SyntaxVisitor.swift"],
+        syntaxVisitorFile,
+        format: CodeGenerationFormat(maxElementsOnSameLine: 4)
+      ),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["TokenKind.swift"], tokenKindFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["Tokens.swift"], tokensFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["TriviaPieces.swift"], triviaPiecesFile),
@@ -125,14 +147,24 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
         swiftSyntaxBuilderGeneratedDir + ["SyntaxExpressibleByStringInterpolationConformances.swift"],
         syntaxExpressibleByStringInterpolationConformancesFile
       ),
-      GeneratedFileSpec(swiftSyntaxBuilderGeneratedDir + ["RenamedChildrenBuilderCompatibility.swift"], renamedChildrenBuilderCompatibilityFile),
+      GeneratedFileSpec(
+        swiftSyntaxBuilderGeneratedDir + ["RenamedChildrenBuilderCompatibility.swift"],
+        renamedChildrenBuilderCompatibilityFile
+      ),
     ]
     // This split of letters produces files for the syntax nodes that have about equal size, which improves compile time
 
-    fileSpecs += ["AB", "C", "D", "EF", "GHI", "JKLMN", "OP", "QRS", "TUVWXYZ"].flatMap { (letters: String) -> [GeneratedFileSpec] in
+    fileSpecs += ["AB", "C", "D", "EF", "GHI", "JKLMN", "OP", "QRS", "TUVWXYZ"].flatMap {
+      (letters: String) -> [GeneratedFileSpec] in
       [
-        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["syntaxNodes", "SyntaxNodes\(letters).swift"], syntaxNode(nodesStartingWith: Array(letters))),
-        GeneratedFileSpec(swiftSyntaxGeneratedDir + ["raw", "RawSyntaxNodes\(letters).swift"], rawSyntaxNodesFile(nodesStartingWith: Array(letters))),
+        GeneratedFileSpec(
+          swiftSyntaxGeneratedDir + ["syntaxNodes", "SyntaxNodes\(letters).swift"],
+          syntaxNode(nodesStartingWith: Array(letters))
+        ),
+        GeneratedFileSpec(
+          swiftSyntaxGeneratedDir + ["raw", "RawSyntaxNodes\(letters).swift"],
+          rawSyntaxNodesFile(nodesStartingWith: Array(letters))
+        ),
       ]
     }
 

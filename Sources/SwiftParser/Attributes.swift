@@ -190,7 +190,9 @@ extension Parser {
     case .required:
       shouldParseArgument = true
     case .customAttribute:
-      shouldParseArgument = self.withLookahead { $0.atCustomAttributeArgument() } && self.at(TokenSpec(.leftParen, allowAtStartOfLine: false))
+      shouldParseArgument =
+        self.withLookahead { $0.atCustomAttributeArgument() }
+        && self.at(TokenSpec(.leftParen, allowAtStartOfLine: false))
     case .optional:
       shouldParseArgument = self.at(.leftParen)
     case .noArgument:
@@ -198,7 +200,9 @@ extension Parser {
     }
     if shouldParseArgument {
       var (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-      if unexpectedBeforeLeftParen == nil && (attributeName.raw.trailingTriviaByteLength > 0 || leftParen.leadingTriviaByteLength > 0) {
+      if unexpectedBeforeLeftParen == nil
+        && (attributeName.raw.trailingTriviaByteLength > 0 || leftParen.leadingTriviaByteLength > 0)
+      {
         let diagnostic = TokenDiagnostic(
           self.swiftVersion < .v6 ? .extraneousLeadingWhitespaceWarning : .extraneousLeadingWhitespaceError,
           byteOffset: 0
@@ -283,7 +287,8 @@ extension Parser {
       return parseAttribute(argumentMode: .required) { parser in
         return .documentationArguments(parser.parseDocumentationAttributeArguments())
       }
-    case ._spi, ._objcRuntimeName, ._projectedValueProperty, ._swift_native_objc_runtime_base, ._typeEraser, ._optimize, .exclusivity, .inline, ._alignment:
+    case ._spi, ._objcRuntimeName, ._projectedValueProperty, ._swift_native_objc_runtime_base, ._typeEraser, ._optimize,
+      .exclusivity, .inline, ._alignment:
       // Attributes that take a single token as argument. Some examples of these include:
       //  - Arbitrary identifiers (e.g. `@_spi(RawSyntax)`)
       //  - An integer literal (e.g. `@_alignment(4)`)
@@ -352,7 +357,9 @@ extension Parser {
           unexpectedBeforeAtSign,
           atSign: atSign,
           unexpectedBeforeAttributeName,
-          attributeName: RawTypeSyntax(RawIdentifierTypeSyntax(name: attributeName, genericArgumentClause: nil, arena: self.arena)),
+          attributeName: RawTypeSyntax(
+            RawIdentifierTypeSyntax(name: attributeName, genericArgumentClause: nil, arena: self.arena)
+          ),
           leftParen: nil,
           arguments: nil,
           rightParen: nil,
@@ -400,7 +407,11 @@ extension RawLabeledExprSyntax {
 
 extension Parser {
   mutating func parseMacroRoleArguments() -> [RawLabeledExprSyntax] {
-    let (unexpectedBeforeRole, role) = self.expect(.identifier, TokenSpec(.extension, remapping: .identifier), default: .identifier)
+    let (unexpectedBeforeRole, role) = self.expect(
+      .identifier,
+      TokenSpec(.extension, remapping: .identifier),
+      default: .identifier
+    )
     let roleTrailingComma = self.consume(if: .comma)
 
     let roleElement = RawLabeledExprSyntax(
@@ -417,7 +428,9 @@ extension Parser {
 extension Parser {
   mutating func parseDifferentiableAttribute() -> RawAttributeSyntax {
     let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
-    let (unexpectedBeforeDifferentiable, differentiable) = self.expect(TokenSpec(.differentiable, remapping: .identifier))
+    let (unexpectedBeforeDifferentiable, differentiable) = self.expect(
+      TokenSpec(.differentiable, remapping: .identifier)
+    )
     let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
 
     let argument = self.parseDifferentiableAttributeArguments()
@@ -427,7 +440,9 @@ extension Parser {
       unexpectedBeforeAtSign,
       atSign: atSign,
       unexpectedBeforeDifferentiable,
-      attributeName: RawTypeSyntax(RawIdentifierTypeSyntax(name: differentiable, genericArgumentClause: nil, arena: self.arena)),
+      attributeName: RawTypeSyntax(
+        RawIdentifierTypeSyntax(name: differentiable, genericArgumentClause: nil, arena: self.arena)
+      ),
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
       arguments: .differentiableArguments(argument),
@@ -569,7 +584,9 @@ extension Parser {
       unexpectedBeforeAtSign,
       atSign: atSign,
       unexpectedBeforeDerivative,
-      attributeName: RawTypeSyntax(RawIdentifierTypeSyntax(name: derivative, genericArgumentClause: nil, arena: self.arena)),
+      attributeName: RawTypeSyntax(
+        RawIdentifierTypeSyntax(name: derivative, genericArgumentClause: nil, arena: self.arena)
+      ),
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
       arguments: .derivativeRegistrationArguments(argument),
@@ -591,7 +608,9 @@ extension Parser {
       unexpectedBeforeAtSign,
       atSign: atSign,
       unexpectedBeforeTranspose,
-      attributeName: RawTypeSyntax(RawIdentifierTypeSyntax(name: transpose, genericArgumentClause: nil, arena: self.arena)),
+      attributeName: RawTypeSyntax(
+        RawIdentifierTypeSyntax(name: transpose, genericArgumentClause: nil, arena: self.arena)
+      ),
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
       arguments: .derivativeRegistrationArguments(argument),
@@ -1064,7 +1083,11 @@ extension Parser {
 
     var keepGoing: RawTokenSyntax? = nil
     repeat {
-      let (unexpectedBeforeLabel, label) = self.expect(.keyword(.visibility), .keyword(.metadata), default: .keyword(.visibility))
+      let (unexpectedBeforeLabel, label) = self.expect(
+        .keyword(.visibility),
+        .keyword(.metadata),
+        default: .keyword(.visibility)
+      )
       let (unexpectedBeforeColon, colon) = self.expect(.colon)
       let unexpectedBeforeValue: RawUnexpectedNodesSyntax?
       let value: RawDocumentationAttributeArgumentSyntax.Value
@@ -1168,7 +1191,9 @@ extension Parser.Lookahead {
       return false
     }
 
-    if self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) && self.withLookahead({ $0.atCustomAttributeArgument() }) {
+    if self.at(TokenSpec(.leftParen, allowAtStartOfLine: false))
+      && self.withLookahead({ $0.atCustomAttributeArgument() })
+    {
       self.skipSingle()
     }
 

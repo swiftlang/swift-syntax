@@ -367,7 +367,10 @@ struct NonNilRawSyntaxChildren: BidirectionalCollection, Sendable {
       }
       // Reversing any further would result in undefined behaviour of
       // index(before:)
-      precondition(reversedIndex != children.startIndex, "presentIndex(before:) must not be called if there is no " + "present index before the given one")
+      precondition(
+        reversedIndex != children.startIndex,
+        "presentIndex(before:) must not be called if there is no " + "present index before the given one"
+      )
       reversedIndex = children.index(before: reversedIndex)
     }
   }

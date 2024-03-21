@@ -232,7 +232,9 @@ public struct DiagnosticsFormatter {
         return nil
       }.joined()
 
-      annotatedSourceLines.append(AnnotatedSourceLine(diagnostics: diagsForLine, sourceString: sourceLine, suffixText: suffixText))
+      annotatedSourceLines.append(
+        AnnotatedSourceLine(diagnostics: diagsForLine, sourceString: sourceLine, suffixText: suffixText)
+      )
     }
 
     // Only lines with diagnostic messages should be printed, but including some context
@@ -270,7 +272,9 @@ public struct DiagnosticsFormatter {
 
       // If necessary, print a line that indicates that there was lines skipped in the source code
       if hasLineBeenSkipped && !annotatedSource.isEmpty {
-        let lineMissingInfoLine = indentString + String(repeating: " ", count: maxNumberOfDigits) + " \(diagnosticDecorator.decorateBufferOutline("┆"))"
+        let lineMissingInfoLine =
+          indentString + String(repeating: " ", count: maxNumberOfDigits)
+          + " \(diagnosticDecorator.decorateBufferOutline("┆"))"
         annotatedSource.append("\(lineMissingInfoLine)\n")
       }
       hasLineBeenSkipped = false
@@ -307,7 +311,9 @@ public struct DiagnosticsFormatter {
 
       for (column, diags) in diagsPerColumn {
         // compute the string that is shown before each message
-        var preMessage = indentString + String(repeating: " ", count: maxNumberOfDigits) + " " + diagnosticDecorator.decorateBufferOutline("│")
+        var preMessage =
+          indentString + String(repeating: " ", count: maxNumberOfDigits) + " "
+          + diagnosticDecorator.decorateBufferOutline("│")
         for c in 0..<column {
           if columnsWithDiagnostics.contains(c) {
             preMessage.append("│")
@@ -319,7 +325,9 @@ public struct DiagnosticsFormatter {
         for diag in diags.dropLast(1) {
           annotatedSource.append("\(preMessage)├─ \(diagnosticDecorator.decorateDiagnosticMessage(diag.diagMessage))\n")
         }
-        annotatedSource.append("\(preMessage)╰─ \(diagnosticDecorator.decorateDiagnosticMessage(diags.last!.diagMessage))\n")
+        annotatedSource.append(
+          "\(preMessage)╰─ \(diagnosticDecorator.decorateDiagnosticMessage(diags.last!.diagMessage))\n"
+        )
       }
 
       // Add suffix text.

@@ -250,7 +250,10 @@ final class EnumTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "identifier can only start with a letter or underscore, not a number"
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ':' in enum"),
       ]
     )
@@ -279,7 +282,11 @@ final class EnumTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in enum case", fixIts: ["insert identifier"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ':' and type in parameter",
+          fixIts: ["insert ':' and type"]
+        ),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '0' in parameter clause"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ':' in enum"),
       ],

@@ -29,7 +29,9 @@ final class MultiLineStringLiteralIndentationDiagnosticsGenerator: SyntaxVisitor
 
   // MARK: Entry
 
-  public static func diagnose(_ node: StringLiteralExprSyntax) -> [(diagnostic: Diagnostic, handledNodes: [SyntaxIdentifier])] {
+  public static func diagnose(
+    _ node: StringLiteralExprSyntax
+  ) -> [(diagnostic: Diagnostic, handledNodes: [SyntaxIdentifier])] {
     let visitor = MultiLineStringLiteralIndentationDiagnosticsGenerator(closeQuote: node.closingQuote)
     visitor.walk(node)
     visitor.finishInProgressDiagnostic()
@@ -58,12 +60,16 @@ final class MultiLineStringLiteralIndentationDiagnosticsGenerator: SyntaxVisitor
 
     let tokenLeadingTrivia = token.leadingTrivia
 
-    let indentationStartIndex = tokenLeadingTrivia.pieces.lastIndex(where: { $0.isNewline })?.advanced(by: 1) ?? tokenLeadingTrivia.startIndex
+    let indentationStartIndex =
+      tokenLeadingTrivia.pieces.lastIndex(where: { $0.isNewline })?.advanced(by: 1) ?? tokenLeadingTrivia.startIndex
     let preIndentationTrivia = Trivia(pieces: tokenLeadingTrivia[0..<indentationStartIndex])
     let indentationTrivia = Trivia(pieces: tokenLeadingTrivia[indentationStartIndex...])
     var positionOffset = preIndentationTrivia.sourceLength.utf8Length
 
-    for (invalidTriviaPiece, missingTriviaPiece) in zip(indentationTrivia.decomposed, closeQuote.leadingTrivia.decomposed) {
+    for (invalidTriviaPiece, missingTriviaPiece) in zip(
+      indentationTrivia.decomposed,
+      closeQuote.leadingTrivia.decomposed
+    ) {
       if invalidTriviaPiece == missingTriviaPiece {
         positionOffset += invalidTriviaPiece.sourceLength.utf8Length
         continue
@@ -84,7 +90,9 @@ final class MultiLineStringLiteralIndentationDiagnosticsGenerator: SyntaxVisitor
     }
 
     // Append the inProgressDiagnostic or create a new one.
-    let changes = [FixIt.Change.replaceLeadingTrivia(token: token, newTrivia: preIndentationTrivia + closeQuote.leadingTrivia)]
+    let changes = [
+      FixIt.Change.replaceLeadingTrivia(token: token, newTrivia: preIndentationTrivia + closeQuote.leadingTrivia)
+    ]
     let handledNodes = [token.id]
     if self.inProgressDiagnostic != nil {
       self.inProgressDiagnostic!.lines += 1
@@ -112,7 +120,10 @@ final class MultiLineStringLiteralIndentationDiagnosticsGenerator: SyntaxVisitor
     let diagnostic = Diagnostic(
       node: Syntax(currentDiagnostic.anchor),
       position: currentDiagnostic.position,
-      message: InvalidIndentationInMultiLineStringLiteralError(kind: currentDiagnostic.kind, lines: currentDiagnostic.lines),
+      message: InvalidIndentationInMultiLineStringLiteralError(
+        kind: currentDiagnostic.kind,
+        lines: currentDiagnostic.lines
+      ),
       highlights: [],
       notes: [Note(node: Syntax(closeQuote), message: .shouldMatchIndentationOfClosingQuote)],
       fixIts: [FixIt(message: .changeIndentationToMatchClosingDelimiter, changes: currentDiagnostic.changes)]

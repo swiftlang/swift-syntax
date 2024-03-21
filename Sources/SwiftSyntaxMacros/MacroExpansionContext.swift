@@ -116,7 +116,10 @@ extension MacroExpansionContext {
     } else if let message = error as? DiagnosticMessage {
       diagnostics = [Diagnostic(node: Syntax(node), message: message)]
     } else if let error = error as? SyntaxStringInterpolationInvalidNodeTypeError {
-      let diagnostic = Diagnostic(node: Syntax(node), message: ThrownErrorDiagnostic(message: "Internal macro error: \(error.description)"))
+      let diagnostic = Diagnostic(
+        node: Syntax(node),
+        message: ThrownErrorDiagnostic(message: "Internal macro error: \(error.description)")
+      )
       diagnostics = [diagnostic]
     } else {
       diagnostics = [Diagnostic(node: Syntax(node), message: ThrownErrorDiagnostic(message: String(describing: error)))]

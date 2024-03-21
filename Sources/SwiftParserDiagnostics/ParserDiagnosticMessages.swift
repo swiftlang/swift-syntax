@@ -272,7 +272,8 @@ public struct AsyncMustPrecedeThrows: ParserError {
   public let throwsKeyword: TokenSyntax
 
   public var message: String {
-    return "\(nodesDescription(asyncKeywords, format: false)) must precede \(nodesDescription([throwsKeyword], format: false))"
+    return
+      "\(nodesDescription(asyncKeywords, format: false)) must precede \(nodesDescription([throwsKeyword], format: false))"
   }
 }
 
@@ -289,7 +290,8 @@ public struct AvailabilityConditionInExpression: ParserError {
   public let availabilityCondition: AvailabilityConditionSyntax
 
   public var message: String {
-    return "\(nodesDescription([availabilityCondition], format: false)) cannot be used in an expression, only as a condition of 'if' or 'guard'"
+    return
+      "\(nodesDescription([availabilityCondition], format: false)) cannot be used in an expression, only as a condition of 'if' or 'guard'"
   }
 }
 
@@ -339,7 +341,8 @@ public struct DuplicateEffectSpecifiers: ParserError {
     if correctSpecifier.tokenKind == unexpectedSpecifier.tokenKind {
       return "\(nodesDescription([unexpectedSpecifier], format: false)) has already been specified"
     } else {
-      return "\(nodesDescription([unexpectedSpecifier], format: false)) conflicts with \(nodesDescription([correctSpecifier], format: false))"
+      return
+        "\(nodesDescription([unexpectedSpecifier], format: false)) conflicts with \(nodesDescription([correctSpecifier], format: false))"
     }
   }
 }
@@ -372,7 +375,8 @@ public struct IdentifierNotAllowedInOperatorName: ParserError {
   public let identifier: TokenSyntax
 
   public var message: String {
-    return "\(nodesDescription([identifier], format: false)) is considered an identifier and must not appear within an operator name"
+    return
+      "\(nodesDescription([identifier], format: false)) is considered an identifier and must not appear within an operator name"
   }
 }
 
@@ -380,7 +384,8 @@ public struct InvalidFloatLiteralMissingLeadingZero: ParserError {
   public let decimalDigits: TokenSyntax
 
   public var message: String {
-    return "'.\(decimalDigits.text)' is not a valid floating point literal; it must be written '0.\(decimalDigits.text)'"
+    return
+      "'.\(decimalDigits.text)' is not a valid floating point literal; it must be written '0.\(decimalDigits.text)'"
   }
 }
 
@@ -540,10 +545,13 @@ public struct UnexpectedNodesError: ParserError {
     var message = "unexpected \(unexpectedNodes.shortSingleLineContentDescription)"
     if let parent = unexpectedNodes.parent {
       if let parentTypeName = parent.nodeTypeNameForDiagnostics(allowBlockNames: false),
-        parent.children(viewMode: .sourceAccurate).first(where: { $0.totalLength.utf8Length > 0 })?.id == unexpectedNodes.id
+        parent.children(viewMode: .sourceAccurate).first(where: { $0.totalLength.utf8Length > 0 })?.id
+          == unexpectedNodes.id
       {
         message += " before \(parentTypeName)"
-      } else if let parentTypeName = parent.ancestorOrSelf(mapping: { $0.nodeTypeNameForDiagnostics(allowBlockNames: false) }) {
+      } else if let parentTypeName = parent.ancestorOrSelf(mapping: {
+        $0.nodeTypeNameForDiagnostics(allowBlockNames: false)
+      }) {
         message += " in \(parentTypeName)"
       }
     }
@@ -566,7 +574,9 @@ public struct UnknownParameterError: ParserError {
   public var message: String {
     var message = "unknown parameter '\(parameter.text)'"
 
-    if let parentTypeName = parameter.parent?.ancestorOrSelf(mapping: { $0.nodeTypeNameForDiagnostics(allowBlockNames: false) }) {
+    if let parentTypeName = parameter.parent?.ancestorOrSelf(mapping: {
+      $0.nodeTypeNameForDiagnostics(allowBlockNames: false)
+    }) {
       message += " in \(parentTypeName)"
     }
 

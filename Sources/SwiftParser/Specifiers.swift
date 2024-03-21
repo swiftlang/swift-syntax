@@ -171,7 +171,11 @@ protocol RawMisplacedEffectSpecifiersTrait {
     arena: __shared SyntaxArena
   )
 
-  func withMisplaced(async misplacedAsyncKeyword: RawTokenSyntax?, throws misplacedThrowsClause: RawThrowsClauseSyntax?, arena: __shared SyntaxArena) -> Self
+  func withMisplaced(
+    async misplacedAsyncKeyword: RawTokenSyntax?,
+    throws misplacedThrowsClause: RawThrowsClauseSyntax?,
+    arena: __shared SyntaxArena
+  ) -> Self
 }
 
 protocol RawEffectSpecifiersTrait: RawMisplacedEffectSpecifiersTrait {
@@ -204,7 +208,11 @@ extension RawEffectSpecifiersTrait {
     )
   }
 
-  func withMisplaced(async misplacedAsyncKeyword: RawTokenSyntax?, throws misplacedThrowsClause: RawThrowsClauseSyntax?, arena: __shared SyntaxArena) -> Self {
+  func withMisplaced(
+    async misplacedAsyncKeyword: RawTokenSyntax?,
+    throws misplacedThrowsClause: RawThrowsClauseSyntax?,
+    arena: __shared SyntaxArena
+  ) -> Self {
     return Self.init(
       self.unexpectedBeforeAsyncSpecifier,
       asyncSpecifier: self.asyncSpecifier ?? misplacedAsyncKeyword,
@@ -550,9 +558,11 @@ extension RawDeinitializerEffectSpecifiersSyntax: RawMisplacedEffectSpecifiersTr
     )
   }
 
-  func withMisplaced(async misplacedAsyncKeyword: RawTokenSyntax?, throws misplacedThrowsClause: RawThrowsClauseSyntax?, arena: SyntaxArena)
-    -> RawDeinitializerEffectSpecifiersSyntax
-  {
+  func withMisplaced(
+    async misplacedAsyncKeyword: RawTokenSyntax?,
+    throws misplacedThrowsClause: RawThrowsClauseSyntax?,
+    arena: SyntaxArena
+  ) -> RawDeinitializerEffectSpecifiersSyntax {
     // `throwsClause` should never be present because `parseMisplacedEffectSpecifiers()` only creates missing tokens
     // and `CorrectThrowsTokenKinds` is an empty `TokenSpecSet`.
     //
@@ -640,7 +650,13 @@ extension Parser {
         if throwsClause == nil {
           // Let's synthesize a missing 'throws'. If we find a real throws specifier
           // later, we will replace the missing token by the present token.
-          throwsClause = RawThrowsClauseSyntax(throwsSpecifier: missingToken(.keyword(.throws)), leftParen: nil, type: nil, rightParen: nil, arena: self.arena)
+          throwsClause = RawThrowsClauseSyntax(
+            throwsSpecifier: missingToken(.keyword(.throws)),
+            leftParen: nil,
+            type: nil,
+            rightParen: nil,
+            arena: self.arena
+          )
         }
       } else {
         break
@@ -663,7 +679,10 @@ extension Parser {
           // Handle `async` after `throws`
           asyncKeyword = missingToken(.keyword(.async))
         }
-      } else if let (_, handle, _) = self.at(anyIn: S.MisspelledThrowsTokenKinds.self, or: S.CorrectThrowsTokenKinds.self) {
+      } else if let (_, handle, _) = self.at(
+        anyIn: S.MisspelledThrowsTokenKinds.self,
+        or: S.CorrectThrowsTokenKinds.self
+      ) {
         let misspelledThrows = self.eat(handle)
         unexpectedAfterThrowsClause.append(RawSyntax(misspelledThrows))
       } else {
@@ -749,13 +768,18 @@ extension Parser {
   /// When a misplaced effect specifier is consumed and `effectSpecifiers`
   /// doesn't have an effect specifier of that kind, modify `effectSpecifiers`
   /// to have a missing specifier of that kind.
-  mutating func parseMisplacedEffectSpecifiers<S: RawMisplacedEffectSpecifiersTrait>(_ effectSpecifiers: inout S?) -> RawUnexpectedNodesSyntax? {
+  mutating func parseMisplacedEffectSpecifiers<S: RawMisplacedEffectSpecifiersTrait>(
+    _ effectSpecifiers: inout S?
+  ) -> RawUnexpectedNodesSyntax? {
     var synthesizedAsync: RawTokenSyntax? = nil
     var synthesizedThrows: RawTokenSyntax? = nil
     var unexpected: [RawTokenSyntax] = []
     var loopProgress = LoopProgressCondition()
     while self.hasProgressed(&loopProgress) {
-      if let (spec, handle, matchedSubset) = self.at(anyIn: S.MisspelledAsyncTokenKinds.self, or: S.CorrectAsyncTokenKinds.self) {
+      if let (spec, handle, matchedSubset) = self.at(
+        anyIn: S.MisspelledAsyncTokenKinds.self,
+        or: S.CorrectAsyncTokenKinds.self
+      ) {
         let misspelledAsync = self.eat(handle)
         unexpected.append(misspelledAsync)
         if effectSpecifiers?.asyncSpecifier == nil {
@@ -765,7 +789,10 @@ extension Parser {
             synthesizedAsync = missingToken(.async)
           }
         }
-      } else if let (spec, handle, matchedSubset) = self.at(anyIn: S.MisspelledThrowsTokenKinds.self, or: S.CorrectThrowsTokenKinds.self) {
+      } else if let (spec, handle, matchedSubset) = self.at(
+        anyIn: S.MisspelledThrowsTokenKinds.self,
+        or: S.CorrectThrowsTokenKinds.self
+      ) {
         let misspelledThrows = self.eat(handle)
         unexpected.append(misspelledThrows)
         if effectSpecifiers?.throwsClause == nil {
@@ -785,7 +812,11 @@ extension Parser {
       }
 
       if let specifiers = effectSpecifiers {
-        effectSpecifiers = specifiers.withMisplaced(async: synthesizedAsync, throws: synthesizedThrowsClause, arena: self.arena)
+        effectSpecifiers = specifiers.withMisplaced(
+          async: synthesizedAsync,
+          throws: synthesizedThrowsClause,
+          arena: self.arena
+        )
       } else {
         effectSpecifiers = S(
           asyncSpecifier: synthesizedAsync,

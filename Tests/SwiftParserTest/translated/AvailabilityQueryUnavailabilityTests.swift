@@ -135,7 +135,10 @@ final class AvailabilityQueryUnavailabilityTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected platform and ')' to end availability condition", fixIts: ["insert platform and ')'"])
+        DiagnosticSpec(
+          message: "expected platform and ')' to end availability condition",
+          fixIts: ["insert platform and ')'"]
+        )
       ],
       fixedSource: """
         if #unavailable(<#identifier#>) {

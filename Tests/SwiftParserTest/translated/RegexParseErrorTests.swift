@@ -179,7 +179,11 @@ final class RegexParseErrorTests: ParserTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected root in key path", fixIts: ["insert root"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after operator", fixIts: ["insert expression"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected expression after operator",
+          fixIts: ["insert expression"]
+        ),
       ],
       fixedSource: #"""
         do {
@@ -200,7 +204,11 @@ final class RegexParseErrorTests: ParserTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '/#' to end regex literal", fixIts: ["insert '/#'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
       ],
       fixedSource: #"""
         do {

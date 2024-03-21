@@ -87,7 +87,9 @@ final class TypeMemberTests: ParserTestCase {
       assertParse(
         source,
         { TypeSyntax.parse(from: &$0) },
-        diagnostics: [DiagnosticSpec(message: "extraneous whitespace after '.' is not permitted", fixIts: ["remove whitespace"])],
+        diagnostics: [
+          DiagnosticSpec(message: "extraneous whitespace after '.' is not permitted", fixIts: ["remove whitespace"])
+        ],
         fixedSource: expected,
         line: line
       )

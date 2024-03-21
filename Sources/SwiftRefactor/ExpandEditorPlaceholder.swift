@@ -115,7 +115,9 @@ struct ExpandSingleEditorPlaceholder: EditRefactoringProvider {
       }
     }
 
-    return [SourceEdit.replace(token, with: token.leadingTrivia.description + expanded + token.trailingTrivia.description)]
+    return [
+      SourceEdit.replace(token, with: token.leadingTrivia.description + expanded + token.trailingTrivia.description)
+    ]
   }
 }
 
@@ -207,7 +209,10 @@ public struct ExpandEditorPlaceholdersToTrailingClosures: SyntaxRefactoringProvi
     }
   }
 
-  public static func refactor(syntax call: FunctionCallExprSyntax, in context: Context = Context()) -> FunctionCallExprSyntax? {
+  public static func refactor(
+    syntax call: FunctionCallExprSyntax,
+    in context: Context = Context()
+  ) -> FunctionCallExprSyntax? {
     return Self.expandTrailingClosurePlaceholders(in: call, ifIncluded: nil, indentationWidth: context.indentationWidth)
   }
 
@@ -221,11 +226,14 @@ public struct ExpandEditorPlaceholdersToTrailingClosures: SyntaxRefactoringProvi
     ifIncluded arg: LabeledExprSyntax?,
     indentationWidth: Trivia?
   ) -> FunctionCallExprSyntax? {
-    guard let expanded = call.expandTrailingClosurePlaceholders(ifIncluded: arg, indentationWidth: indentationWidth) else {
+    guard let expanded = call.expandTrailingClosurePlaceholders(ifIncluded: arg, indentationWidth: indentationWidth)
+    else {
       return nil
     }
 
-    let callToTrailingContext = CallToTrailingClosures.Context(startAtArgument: call.arguments.count - expanded.numClosures)
+    let callToTrailingContext = CallToTrailingClosures.Context(
+      startAtArgument: call.arguments.count - expanded.numClosures
+    )
     guard let trailing = CallToTrailingClosures.refactor(syntax: expanded.expr, in: callToTrailingContext) else {
       return nil
     }
@@ -339,7 +347,10 @@ extension FunctionCallExprSyntax {
     for arg in arguments.suffix(argsToExpand) {
       let edits = ExpandSingleEditorPlaceholder.textRefactor(
         syntax: arg.expression.cast(DeclReferenceExprSyntax.self).baseName,
-        in: ExpandSingleEditorPlaceholder.Context(indentationWidth: indentationWidth, initialIndentation: lineIndentation)
+        in: ExpandSingleEditorPlaceholder.Context(
+          indentationWidth: indentationWidth,
+          initialIndentation: lineIndentation
+        )
       )
       guard edits.count == 1, let edit = edits.first, !edit.replacement.isEmpty else {
         return nil

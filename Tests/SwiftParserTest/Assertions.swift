@@ -661,11 +661,22 @@ extension ParserTestCase {
     }
 
     if expectedDiagnostics.allSatisfy({ $0.fixIts.isEmpty }) && expectedFixedSource != nil {
-      XCTFail("Fixed source was provided but the test case produces no diagnostics with Fix-Its", file: file, line: line)
+      XCTFail(
+        "Fixed source was provided but the test case produces no diagnostics with Fix-Its",
+        file: file,
+        line: line
+      )
     }
 
     if expectedDiagnostics.isEmpty && diags.isEmpty {
-      assertBasicFormat(source: source, parse: parse, swiftVersion: swiftVersion, experimentalFeatures: experimentalFeatures, file: file, line: line)
+      assertBasicFormat(
+        source: source,
+        parse: parse,
+        swiftVersion: swiftVersion,
+        experimentalFeatures: experimentalFeatures,
+        file: file,
+        line: line
+      )
     }
 
     if !longTestsDisabled {
@@ -683,12 +694,17 @@ extension ParserTestCase {
       }
 
       #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
-      let mutations: [(offset: Int, replacement: TokenSpec)] = parser.alternativeTokenChoices.flatMap { offset, replacements in
+      let mutations: [(offset: Int, replacement: TokenSpec)] = parser.alternativeTokenChoices.flatMap {
+        offset,
+        replacements in
         return replacements.map { (offset, $0) }
       }
       DispatchQueue.concurrentPerform(iterations: mutations.count) { index in
         let mutation = mutations[index]
-        let alternateSource = MutatedTreePrinter.print(tree: Syntax(tree), mutations: [mutation.offset: mutation.replacement])
+        let alternateSource = MutatedTreePrinter.print(
+          tree: Syntax(tree),
+          mutations: [mutation.offset: mutation.replacement]
+        )
         Self.assertMutationRoundTrip(
           source: alternateSource,
           parse,
@@ -744,7 +760,11 @@ func assertBasicFormat<S: SyntaxProtocol>(
   let withoutTrivia = TriviaRemover(viewMode: .sourceAccurate).rewrite(sourceTree)
   let formatted = withoutTrivia.formatted()
 
-  var formattedParser = Parser(formatted.description, swiftVersion: swiftVersion, experimentalFeatures: experimentalFeatures)
+  var formattedParser = Parser(
+    formatted.description,
+    swiftVersion: swiftVersion,
+    experimentalFeatures: experimentalFeatures
+  )
   let formattedReparsed = Syntax(parse(&formattedParser))
 
   do {

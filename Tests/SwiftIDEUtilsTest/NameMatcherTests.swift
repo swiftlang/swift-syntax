@@ -58,7 +58,12 @@ private func assertNameMatcherResult(
     let actualArgumentLabels = argumentLabels.map { input[$0.range] }
     XCTAssertEqual(actualArgumentLabels, expected.arguments, file: file, line: expected.originatorLine)
 
-    XCTAssertEqual(DeclNameLocationSpec.ArgumentsType(actual.arguments), expected.type, file: file, line: expected.originatorLine)
+    XCTAssertEqual(
+      DeclNameLocationSpec.ArgumentsType(actual.arguments),
+      expected.type,
+      file: file,
+      line: expected.originatorLine
+    )
     XCTAssertEqual(actual.isActive, expected.isActive, file: file, line: expected.originatorLine)
     XCTAssertEqual(actual.context, expected.context, file: file, line: expected.originatorLine)
   }

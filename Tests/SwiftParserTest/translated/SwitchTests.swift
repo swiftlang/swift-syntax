@@ -33,7 +33,11 @@ final class SwitchTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected expression and '{}' to end 'switch' statement", fixIts: ["insert expression and '{}'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected expression and '{}' to end 'switch' statement",
+          fixIts: ["insert expression and '{}'"]
+        ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "expected identifier and function signature in function",
@@ -294,7 +298,10 @@ final class SwitchTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"])
+        DiagnosticSpec(
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        )
       ],
       fixedSource: """
         switch x {
@@ -321,7 +328,10 @@ final class SwitchTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"])
+        DiagnosticSpec(
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        )
       ],
       fixedSource: """
         switch x {
@@ -355,7 +365,10 @@ final class SwitchTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"])
+        DiagnosticSpec(
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        )
       ],
       fixedSource: """
         switch x {
@@ -375,7 +388,10 @@ final class SwitchTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "all statements inside a switch must be covered by a 'case' or 'default' label", fixIts: ["insert label"])
+        DiagnosticSpec(
+          message: "all statements inside a switch must be covered by a 'case' or 'default' label",
+          fixIts: ["insert label"]
+        )
       ],
       fixedSource: """
         switch x {
@@ -468,7 +484,10 @@ final class SwitchTests: ParserTestCase {
       var z = 1
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "'default' label can only appear inside a 'switch' statement"),
       ]
     )

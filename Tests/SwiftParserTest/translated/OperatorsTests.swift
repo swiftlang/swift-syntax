@@ -337,7 +337,10 @@ final class OperatorsTests: ParserTestCase {
       foo!!1️⃣foo
       """,
       diagnostics: [
-        DiagnosticSpec(message: "consecutive statements on a line must be separated by newline or ';'", fixIts: ["insert newline", "insert ';'"])
+        DiagnosticSpec(
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
       ],
       applyFixIts: ["insert newline"],
       fixedSource: """

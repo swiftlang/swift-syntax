@@ -255,7 +255,11 @@ final class UnclosedStringInterpolationTests: ParserTestCase {
 
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected value and ')' in string literal", fixIts: ["insert value and ')'"]),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected value and ')' in string literal",
+          fixIts: ["insert value and ')'"]
+        ),
         DiagnosticSpec(
           locationMarker: "4️⃣",
           message: #"expected '"' to end string literal"#,

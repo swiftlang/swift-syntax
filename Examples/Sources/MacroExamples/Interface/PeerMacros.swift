@@ -21,9 +21,11 @@ public macro AddAsync() = #externalMacro(module: "MacroExamplesImplementation", 
 /// task , calls the original async function, and delivers its result to the completion
 /// handler.
 @attached(peer, names: overloaded)
-public macro AddCompletionHandler() = #externalMacro(module: "MacroExamplesImplementation", type: "AddCompletionHandlerMacro")
+public macro AddCompletionHandler() =
+  #externalMacro(module: "MacroExamplesImplementation", type: "AddCompletionHandlerMacro")
 
 // MARK: - Peer Value With Suffix Name
 
 @attached(peer, names: suffixed(_peer))
-public macro PeerValueWithSuffixName() = #externalMacro(module: "MacroExamplesImplementation", type: "PeerValueWithSuffixNameMacro")
+public macro PeerValueWithSuffixName() =
+  #externalMacro(module: "MacroExamplesImplementation", type: "PeerValueWithSuffixNameMacro")

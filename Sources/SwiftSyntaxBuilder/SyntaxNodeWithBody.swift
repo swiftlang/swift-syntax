@@ -81,7 +81,10 @@ public extension HasTrailingCodeBlock where Self: StmtSyntaxProtocol {
 }
 
 extension CatchClauseSyntax: HasTrailingCodeBlock {
-  public init(_ header: SyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) rethrows {
+  public init(
+    _ header: SyntaxNodeString,
+    @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax
+  ) rethrows {
     self = CatchClauseSyntax("\(header) {}")
     self.body = try CodeBlockSyntax(statements: bodyBuilder())
   }
@@ -150,11 +153,17 @@ public protocol HasTrailingMemberDeclBlock {
   /// ```
   ///
   /// Throws an error if `header` defines a different node type than the type the initializer is called on. E.g. if calling `try StructDeclSyntax("class MyClass") {}`
-  init(_ header: SyntaxNodeString, @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax) throws
+  init(
+    _ header: SyntaxNodeString,
+    @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax
+  ) throws
 }
 
 public extension HasTrailingMemberDeclBlock where Self: DeclSyntaxProtocol {
-  init(_ header: SyntaxNodeString, @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax) throws {
+  init(
+    _ header: SyntaxNodeString,
+    @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax
+  ) throws {
     let decl = DeclSyntax("\(header) {}")
     guard let castedDecl = decl.as(Self.self) else {
       throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: decl)
@@ -242,7 +251,11 @@ public extension IfExprSyntax {
   /// ```
   ///
   /// Throws an error if `header` does not start an `if` expression. E.g. if calling `try IfExprSyntax("while true", bodyBuilder: {}, elseIf: {})`
-  init(_ header: SyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax, elseIf: IfExprSyntax) throws {
+  init(
+    _ header: SyntaxNodeString,
+    @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax,
+    elseIf: IfExprSyntax
+  ) throws {
     let expr = ExprSyntax("\(header) {}")
     guard let ifExpr = expr.as(Self.self) else {
       throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: expr)
@@ -275,7 +288,10 @@ extension SwitchCaseSyntax {
   /// ```
   ///
   /// Throws an error if `header` does not start a switch case item. E.g. if calling `try SwitchCaseSyntax("func foo") {}`
-  public init(_ header: SyntaxNodeString, @CodeBlockItemListBuilder statementsBuilder: () throws -> CodeBlockItemListSyntax) rethrows {
+  public init(
+    _ header: SyntaxNodeString,
+    @CodeBlockItemListBuilder statementsBuilder: () throws -> CodeBlockItemListSyntax
+  ) rethrows {
     self = SwitchCaseSyntax("\(header)")
     self.statements = try statementsBuilder()
   }
@@ -309,7 +325,10 @@ public extension SwitchExprSyntax {
   /// ```
   ///
   /// Throws an error if `header` does not start a switch expression. E.g. if calling `try SwitchExprSyntax("if x < 42") {}`
-  init(_ header: SyntaxNodeString, @SwitchCaseListBuilder casesBuilder: () throws -> SwitchCaseListSyntax = { SwitchCaseListSyntax([]) }) throws {
+  init(
+    _ header: SyntaxNodeString,
+    @SwitchCaseListBuilder casesBuilder: () throws -> SwitchCaseListSyntax = { SwitchCaseListSyntax([]) }
+  ) throws {
     let expr = ExprSyntax("\(header) {}")
     guard let switchExpr = expr.as(Self.self) else {
       throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: expr)

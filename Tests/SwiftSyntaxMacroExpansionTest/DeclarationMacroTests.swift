@@ -91,8 +91,18 @@ final class DeclarationMacroTests: XCTestCase {
         }
         """,
       diagnostics: [
-        DiagnosticSpec(message: "please don't do that", line: 1, column: 1, highlights: [#"#myError("please don't do that")"#]),
-        DiagnosticSpec(message: "#error macro requires a string literal", line: 4, column: 3, highlights: [#"#myError(bad)"#]),
+        DiagnosticSpec(
+          message: "please don't do that",
+          line: 1,
+          column: 1,
+          highlights: [#"#myError("please don't do that")"#]
+        ),
+        DiagnosticSpec(
+          message: "#error macro requires a string literal",
+          line: 4,
+          column: 3,
+          highlights: [#"#myError(bad)"#]
+        ),
         DiagnosticSpec(message: "worse", line: 6, column: 5, highlights: [#"#myError("worse")"#]),
       ],
       macros: ["myError": ErrorMacro.self],

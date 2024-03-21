@@ -48,10 +48,18 @@ struct BuildExecutor {
   }
 
   func run() throws {
-    try swiftPMBuilder.buildTarget(packageDir: Paths.packageDir, targetName: "SwiftSyntax-all", warningsAsErrors: self.warningsAsErrors)
+    try swiftPMBuilder.buildTarget(
+      packageDir: Paths.packageDir,
+      targetName: "SwiftSyntax-all",
+      warningsAsErrors: self.warningsAsErrors
+    )
     // Never build examples with `warningsAsErrors`. Some of the macro examples are expected to generate warnings.
     try swiftPMBuilder.buildTarget(packageDir: Paths.examplesDir, targetName: "Examples-all", warningsAsErrors: false)
-    try swiftPMBuilder.buildTarget(packageDir: Paths.swiftParserCliDir, targetName: "swift-parser-cli", warningsAsErrors: self.warningsAsErrors)
+    try swiftPMBuilder.buildTarget(
+      packageDir: Paths.swiftParserCliDir,
+      targetName: "swift-parser-cli",
+      warningsAsErrors: self.warningsAsErrors
+    )
     try buildEditorExtension()
   }
 

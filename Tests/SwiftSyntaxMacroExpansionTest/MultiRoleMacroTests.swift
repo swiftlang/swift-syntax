@@ -208,15 +208,20 @@ final class MultiRoleMacroTests: XCTestCase {
 
   func testAttachedMacroOnFreestandingMacro() {
     struct DeclMacro: DeclarationMacro {
-      static func expansion(of node: some FreestandingMacroExpansionSyntax, in context: some MacroExpansionContext) throws -> [DeclSyntax] {
+      static func expansion(
+        of node: some FreestandingMacroExpansionSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
         return ["var x: Int"]
       }
     }
 
     struct MyPeerMacro: PeerMacro {
-      static func expansion(of node: AttributeSyntax, providingPeersOf declaration: some DeclSyntaxProtocol, in context: some MacroExpansionContext) throws
-        -> [DeclSyntax]
-      {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingPeersOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
         return ["var peer: Int"]
       }
     }

@@ -87,7 +87,10 @@ extension CompilerPlugin {
     }
 
     let pluginPath = CommandLine.arguments.first ?? Bundle.main.executablePath ?? ProcessInfo.processInfo.processName
-    throw CompilerPluginError(message: "macro implementation type '\(moduleName).\(typeName)' could not be found in executable plugin '\(pluginPath)'")
+    throw CompilerPluginError(
+      message:
+        "macro implementation type '\(moduleName).\(typeName)' could not be found in executable plugin '\(pluginPath)'"
+    )
   }
 }
 

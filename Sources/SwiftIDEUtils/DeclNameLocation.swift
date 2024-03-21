@@ -117,7 +117,10 @@ public struct DeclNameLocation: Equatable {
       case .noArguments:
         return .noArguments
       case .call(let arguments, firstTrailingClosureIndex: let firstTrailingClosureIndex):
-        return .call(arguments.map { $0.advanced(by: utf8Offset) }, firstTrailingClosureIndex: firstTrailingClosureIndex)
+        return .call(
+          arguments.map { $0.advanced(by: utf8Offset) },
+          firstTrailingClosureIndex: firstTrailingClosureIndex
+        )
       case .parameters(let parameters):
         return .parameters(parameters.map { $0.advanced(by: utf8Offset) })
       case .noncollapsibleParameters(let parameters):

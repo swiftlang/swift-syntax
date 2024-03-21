@@ -423,7 +423,8 @@ enum DeclarationModifier: TokenSpecSet {
     case TokenSpec(.unowned): self = .unowned
     case TokenSpec(.weak): self = .weak
     case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonescapableTypes): self = ._resultDependsOn
-    case TokenSpec(._resultDependsOnSelf) where experimentalFeatures.contains(.nonescapableTypes): self = ._resultDependsOnSelf
+    case TokenSpec(._resultDependsOnSelf) where experimentalFeatures.contains(.nonescapableTypes):
+      self = ._resultDependsOnSelf
     default: return nil
     }
   }
@@ -490,7 +491,8 @@ enum DeclarationStart: TokenSpecSet {
   }
 
   static var allCases: [DeclarationStart] {
-    return DeclarationModifier.allCases.map(Self.declarationModifier) + DeclarationKeyword.allCases.map(Self.declarationKeyword)
+    return DeclarationModifier.allCases.map(Self.declarationModifier)
+      + DeclarationKeyword.allCases.map(Self.declarationKeyword)
   }
 
   var spec: TokenSpec {
@@ -600,7 +602,8 @@ enum OperatorLike: TokenSpecSet {
   }
 
   static var allCases: [OperatorLike] {
-    [.prefixOperator] + BinaryOperatorLike.allCases.map(Self.binaryOperatorLike) + PostfixOperatorLike.allCases.map(Self.postfixOperatorLike)
+    [.prefixOperator] + BinaryOperatorLike.allCases.map(Self.binaryOperatorLike)
+      + PostfixOperatorLike.allCases.map(Self.postfixOperatorLike)
   }
 
   var spec: TokenSpec {

@@ -355,14 +355,25 @@ public enum SyntaxNodeKind: String, CaseIterable {
     }
   }
 
+  /// Whether the node is public API and not underscored/deprecated and can thus be referenced in docc links.
+  public var isAvailableInDocc: Bool {
+    if let node = SYNTAX_NODE_MAP[self], node.isExperimental {
+      return false
+    } else if isDeprecated {
+      return false
+    } else {
+      return true
+    }
+  }
+
   /// If this node is non-experimental a docc link wrapped in two backticks.
   ///
   /// For experimental nodes, the node's type name in code font.
   public var doccLink: String {
-    if let node = SYNTAX_NODE_MAP[self], node.isExperimental {
-      return "`\(syntaxType)`"
-    } else {
+    if isAvailableInDocc {
       return "``\(syntaxType)``"
+    } else {
+      return "`\(syntaxType)`"
     }
   }
 

@@ -233,7 +233,11 @@ public class Node {
           // This will repeat the syntax type before and after the dot, which is
           // a little unfortunate, but it's the only way I found to get docc to
           // generate a fully-qualified type + member.
-          return " - \($0.node.doccLink).``\($0.node.syntaxType)/\(childName)``"
+          if $0.node.isAvailableInDocc {
+            return " - \($0.node.doccLink).``\($0.node.syntaxType)/\(childName)``"
+          } else {
+            return " - \($0.node.doccLink).`\($0.node.syntaxType)/\(childName)`"
+          }
         } else {
           return " - \($0.node.doccLink)"
         }

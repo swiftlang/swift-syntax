@@ -24,7 +24,10 @@ public enum CustomCodable: MemberMacro {
     let cases = memberList.compactMap({ member -> String? in
       // is a property
       guard
-        let propertyName = member.decl.as(VariableDeclSyntax.self)?.bindings.first?.pattern.as(IdentifierPatternSyntax.self)?.identifier.text
+        let propertyName = member
+          .decl.as(VariableDeclSyntax.self)?
+          .bindings.first?
+          .pattern.as(IdentifierPatternSyntax.self)?.identifier.text
       else {
         return nil
       }
@@ -35,7 +38,10 @@ public enum CustomCodable: MemberMacro {
       }) {
 
         // Uses the value in the Macro
-        let customKeyValue = customKeyMacro.as(AttributeSyntax.self)!.arguments!.as(LabeledExprListSyntax.self)!.first!.expression
+        let customKeyValue = customKeyMacro.as(AttributeSyntax.self)!
+          .arguments!.as(LabeledExprListSyntax.self)!
+          .first!
+          .expression
 
         return "case \(propertyName) = \(customKeyValue)"
       } else {

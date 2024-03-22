@@ -29,9 +29,10 @@ func withTemporaryDirectory<T>(_ body: (URL) throws -> T) throws -> T {
 func defaultToolchain() -> URL? {
   #if os(macOS)
   do {
-    let swiftcPath = try ProcessRunner(executableURL: try Paths.xcrunExec, arguments: ["--find", "swiftc"]).run(verbose: false).stdout.trimmingCharacters(
-      in: .whitespacesAndNewlines
-    )
+    let swiftcPath = try ProcessRunner(executableURL: try Paths.xcrunExec, arguments: ["--find", "swiftc"])
+      .run(verbose: false)
+      .stdout
+      .trimmingCharacters(in: .whitespacesAndNewlines)
     if swiftcPath.isEmpty {
       return nil
     }

@@ -98,7 +98,10 @@ final class IdentifiersTests: ParserTestCase {
       class 1️⃣switch {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'switch' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "keyword 'switch' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: """
         // Keywords as identifiers
@@ -113,7 +116,10 @@ final class IdentifiersTests: ParserTestCase {
       struct 1️⃣Self {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'Self' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "keyword 'Self' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: """
         struct `Self` {}
@@ -135,7 +141,10 @@ final class IdentifiersTests: ParserTestCase {
       struct 1️⃣Any {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'Any' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "keyword 'Any' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: """
         struct `Any` {}
@@ -149,7 +158,10 @@ final class IdentifiersTests: ParserTestCase {
       protocol 1️⃣enum {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "keyword 'enum' cannot be used as an identifier here", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "keyword 'enum' cannot be used as an identifier here",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: """
         protocol `enum` {}

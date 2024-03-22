@@ -45,7 +45,8 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "specifiers",
         kind: .collection(kind: .typeSpecifierList, collectionElementName: "Specifier", defaultsToEmpty: true),
-        documentation: "A list of specifiers that can be attached to the type, such as `inout`, `isolated`, or `consuming`."
+        documentation:
+          "A list of specifiers that can be attached to the type, such as `inout`, `isolated`, or `consuming`."
       ),
       Child(
         name: "attributes",
@@ -174,7 +175,11 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "parameters",
         deprecatedName: "arguments",
-        kind: .collection(kind: .tupleTypeElementList, collectionElementName: "Parameter", deprecatedCollectionElementName: "Argument")
+        kind: .collection(
+          kind: .tupleTypeElementList,
+          collectionElementName: "Parameter",
+          deprecatedCollectionElementName: "Argument"
+        )
       ),
       Child(
         name: "rightParen",

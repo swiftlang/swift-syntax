@@ -114,7 +114,9 @@ extension DictionaryExprSyntax {
   public init(
     leftSquare: TokenSyntax = .leftSquareToken(),
     rightSquare: TokenSyntax = .rightSquareToken(),
-    @DictionaryElementListBuilder contentBuilder: () -> DictionaryElementListSyntax = { DictionaryElementListSyntax([]) }
+    @DictionaryElementListBuilder contentBuilder: () -> DictionaryElementListSyntax = {
+      DictionaryElementListSyntax([])
+    }
   ) {
     let elementList = contentBuilder()
     self.init(

@@ -25,7 +25,8 @@
 public macro DictionaryStorage() = #externalMacro(module: "MacroExamplesImplementation", type: "DictionaryStorageMacro")
 
 @attached(accessor)
-public macro DictionaryStorageProperty() = #externalMacro(module: "MacroExamplesImplementation", type: "DictionaryStoragePropertyMacro")
+public macro DictionaryStorageProperty() =
+  #externalMacro(module: "MacroExamplesImplementation", type: "DictionaryStoragePropertyMacro")
 
 // MARK: - Observable
 
@@ -63,13 +64,22 @@ public struct ObservationRegistrar<Subject: Observable> {
   }
 }
 
-@attached(member, names: named(Storage), named(_storage), named(_registrar), named(addObserver), named(removeObserver), named(withTransaction))
+@attached(
+  member,
+  names: named(Storage),
+  named(_storage),
+  named(_registrar),
+  named(addObserver),
+  named(removeObserver),
+  named(withTransaction)
+)
 @attached(memberAttribute)
 @attached(extension, conformances: Observable)
 public macro Observable() = #externalMacro(module: "MacroExamplesImplementation", type: "ObservableMacro")
 
 @attached(accessor)
-public macro ObservableProperty() = #externalMacro(module: "MacroExamplesImplementation", type: "ObservablePropertyMacro")
+public macro ObservableProperty() =
+  #externalMacro(module: "MacroExamplesImplementation", type: "ObservablePropertyMacro")
 
 // MARK: - Option Set
 

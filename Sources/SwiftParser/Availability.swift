@@ -257,7 +257,10 @@ extension Parser {
     {
       // The lexer generates a float literal '1.2' for the major and minor version.
       // Split it into two integers if possible
-      let major = self.consumePrefix(SyntaxText(rebasing: self.currentToken.tokenText[0..<periodIndex]), as: .integerLiteral)
+      let major = self.consumePrefix(
+        SyntaxText(rebasing: self.currentToken.tokenText[0..<periodIndex]),
+        as: .integerLiteral
+      )
 
       var components: [RawVersionComponentSyntax] = []
 

@@ -19,7 +19,9 @@ import XCTest
 import _SwiftSyntaxTestSupport
 
 fileprivate let closurePlaceholder = wrapInPlaceholder("T##closure##() -> Void")
-fileprivate let closureWithArgPlaceholder = wrapInPlaceholder("T##(Int) -> String##(Int) -> String##(_ someInt: Int) -> String")
+fileprivate let closureWithArgPlaceholder = wrapInPlaceholder(
+  "T##(Int) -> String##(Int) -> String##(_ someInt: Int) -> String"
+)
 fileprivate let voidPlaceholder = wrapInPlaceholder("T##code##Void")
 fileprivate let intPlaceholder = wrapInPlaceholder("T##Int##Int")
 fileprivate let stringPlaceholder = wrapInPlaceholder("T##String##String")
@@ -359,7 +361,8 @@ fileprivate func assertRefactorPlaceholderCall(
   var parser = Parser(expr)
   let call = try XCTUnwrap(ExprSyntax.parse(from: &parser).as(FunctionCallExprSyntax.self), file: file, line: line)
   let arg = call.arguments[call.arguments.index(at: placeholder)]
-  let token: TokenSyntax = try XCTUnwrap(arg.expression.as(DeclReferenceExprSyntax.self), file: file, line: line).baseName
+  let token: TokenSyntax = try XCTUnwrap(arg.expression.as(DeclReferenceExprSyntax.self), file: file, line: line)
+    .baseName
 
   try assertRefactor(
     token,
@@ -382,7 +385,8 @@ fileprivate func assertRefactorPlaceholderToken(
   var parser = Parser(expr)
   let call = try XCTUnwrap(ExprSyntax.parse(from: &parser).as(FunctionCallExprSyntax.self), file: file, line: line)
   let arg = call.arguments[call.arguments.index(at: placeholder)]
-  let token: TokenSyntax = try XCTUnwrap(arg.expression.as(DeclReferenceExprSyntax.self), file: file, line: line).baseName
+  let token: TokenSyntax = try XCTUnwrap(arg.expression.as(DeclReferenceExprSyntax.self), file: file, line: line)
+    .baseName
 
   try assertRefactor(
     token,

@@ -66,8 +66,14 @@ final class NumberIdentifierErrorsTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "identifier can only start with a letter or underscore, not a number"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "identifier can only start with a letter or underscore, not a number"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "identifier can only start with a letter or underscore, not a number"
+        ),
       ]
     )
   }
@@ -80,8 +86,14 @@ final class NumberIdentifierErrorsTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "identifier can only start with a letter or underscore, not a number"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "identifier can only start with a letter or underscore, not a number"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "identifier can only start with a letter or underscore, not a number"
+        ),
       ]
     )
   }
@@ -94,8 +106,14 @@ final class NumberIdentifierErrorsTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "identifier can only start with a letter or underscore, not a number"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "identifier can only start with a letter or underscore, not a number"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "identifier can only start with a letter or underscore, not a number"
+        ),
       ]
     )
   }
@@ -207,8 +225,14 @@ final class NumberIdentifierErrorsTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "identifier can only start with a letter or underscore, not a number"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "identifier can only start with a letter or underscore, not a number"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "identifier can only start with a letter or underscore, not a number"
+        ),
       ]
     )
   }
@@ -221,8 +245,14 @@ final class NumberIdentifierErrorsTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "identifier can only start with a letter or underscore, not a number"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "identifier can only start with a letter or underscore, not a number"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "identifier can only start with a letter or underscore, not a number"
+        ),
       ]
     )
   }
@@ -235,8 +265,14 @@ final class NumberIdentifierErrorsTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "identifier can only start with a letter or underscore, not a number"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "identifier can only start with a letter or underscore, not a number"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "identifier can only start with a letter or underscore, not a number"
+        ),
       ]
     )
   }

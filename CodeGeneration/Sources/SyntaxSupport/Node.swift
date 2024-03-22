@@ -155,7 +155,11 @@ public class Node {
     let childrenWithUnexpected: [Child]
     if children.isEmpty {
       childrenWithUnexpected = [
-        Child(name: "unexpected", kind: .collection(kind: .unexpectedNodes, collectionElementName: "Unexpected"), isOptional: true)
+        Child(
+          name: "unexpected",
+          kind: .collection(kind: .unexpectedNodes, collectionElementName: "Unexpected"),
+          isOptional: true
+        )
       ]
     } else {
       // Add implicitly generated UnexpectedNodes children between
@@ -173,9 +177,11 @@ public class Node {
           } else {
             unexpectedName = "unexpectedBetween\(children[i - 1].name.withFirstCharacterUppercased)And\(childName)"
             if let deprecatedName = children[i - 1].deprecatedName?.withFirstCharacterUppercased {
-              unexpectedDeprecatedName = "unexpectedBetween\(deprecatedName)And\(child.deprecatedName?.withFirstCharacterUppercased ?? childName)"
+              unexpectedDeprecatedName =
+                "unexpectedBetween\(deprecatedName)And\(child.deprecatedName?.withFirstCharacterUppercased ?? childName)"
             } else if let deprecatedName = child.deprecatedName?.withFirstCharacterUppercased {
-              unexpectedDeprecatedName = "unexpectedBetween\(children[i - 1].name.withFirstCharacterUppercased)And\(deprecatedName)"
+              unexpectedDeprecatedName =
+                "unexpectedBetween\(children[i - 1].name.withFirstCharacterUppercased)And\(deprecatedName)"
             } else {
               unexpectedDeprecatedName = nil
             }
@@ -191,7 +197,10 @@ public class Node {
           Child(
             name: "unexpectedAfter\(children.last!.name.withFirstCharacterUppercased)",
             deprecatedName: children.last!.deprecatedName.map { "unexpectedAfter\($0.withFirstCharacterUppercased)" },
-            kind: .collection(kind: .unexpectedNodes, collectionElementName: "UnexpectedAfter\(children.last!.name.withFirstCharacterUppercased)"),
+            kind: .collection(
+              kind: .unexpectedNodes,
+              collectionElementName: "UnexpectedAfter\(children.last!.name.withFirstCharacterUppercased)"
+            ),
             isOptional: true
           )
         ]

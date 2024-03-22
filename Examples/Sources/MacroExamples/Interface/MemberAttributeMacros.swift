@@ -21,4 +21,5 @@ public macro memberDeprecated() = #externalMacro(module: "MacroExamplesImplement
 /// type or member to which the macro is attached. The string can be
 /// any attribute (without the `@`).
 @attached(memberAttribute)
-public macro wrapStoredProperties(_ attributeName: String) = #externalMacro(module: "MacroExamplesImplementation", type: "WrapStoredPropertiesMacro")
+public macro wrapStoredProperties(_ attributeName: String) =
+  #externalMacro(module: "MacroExamplesImplementation", type: "WrapStoredPropertiesMacro")

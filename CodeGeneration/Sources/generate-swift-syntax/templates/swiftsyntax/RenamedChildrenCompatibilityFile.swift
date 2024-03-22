@@ -20,7 +20,8 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
     try ExtensionDeclSyntax("extension \(layoutNode.type.syntaxBaseName)") {
       for child in layoutNode.children {
         if let deprecatedVarName = child.deprecatedVarName {
-          let childType: TypeSyntax = child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
+          let childType: TypeSyntax =
+            child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
           let type = child.isOptional ? TypeSyntax("\(childType)?") : childType
 
           DeclSyntax(
@@ -38,8 +39,12 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
           )
           if let childNode = SYNTAX_NODE_MAP[child.syntaxNodeKind]?.collectionNode,
             !child.isUnexpectedNodes,
-            case .collection(_, collectionElementName: let collectionElementName, _, deprecatedCollectionElementName: let deprecatedCollectionElementName) =
-              child.kind,
+            case .collection(
+              kind: _,
+              collectionElementName: let collectionElementName,
+              defaultsToEmpty: _,
+              deprecatedCollectionElementName: let deprecatedCollectionElementName
+            ) = child.kind,
             let deprecatedCollectionElementName
           {
             let childEltType = childNode.collectionElementType.syntaxBaseName

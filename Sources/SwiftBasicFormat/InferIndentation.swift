@@ -56,8 +56,8 @@ private class IndentationInferrer: SyntaxVisitor {
     let triviaAtStartOfLine =
       (previousTokenTrailingTrivia + token.leadingTrivia)
       .drop(while: { !$0.isNewline })  // Ignore any trivia that's on the previous line
-      .split(omittingEmptySubsequences: false, whereSeparator: \.isNewline)  // Split trivia into the lines it occurs on
-      .dropFirst()  // Drop the first empty array; exists because we dropped non-newline prefix and newline is separator
+      .split(omittingEmptySubsequences: false, whereSeparator: \.isNewline)  // Split trivia into lines
+      .dropFirst()  // Drop the first empty array; because we dropped non-newline prefix and newline is separator
 
     LINE_TRIVIA_LOOP: for lineTrivia in triviaAtStartOfLine {
       switch lineTrivia.first {

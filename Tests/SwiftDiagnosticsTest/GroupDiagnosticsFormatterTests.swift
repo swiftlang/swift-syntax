@@ -182,7 +182,11 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       displayName: "#myAssert",
       parent: (mainSourceID, inExpansionNotePos),
       diagnosticDescriptors: [
-        DiagnosticDescriptor(locationMarker: "1️⃣", message: "in expansion of macro 'invertedEqualityCheck' here", severity: .note)
+        DiagnosticDescriptor(
+          locationMarker: "1️⃣",
+          message: "in expansion of macro 'invertedEqualityCheck' here",
+          severity: .note
+        )
       ]
     )
     let inInnerExpansionNotePos = outerExpansionSourceMarkers["1️⃣"]!
@@ -195,7 +199,11 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       displayName: "#invertedEqualityCheck",
       parent: (outerExpansionSourceID, inInnerExpansionNotePos),
       diagnosticDescriptors: [
-        DiagnosticDescriptor(locationMarker: "1️⃣", message: "no matching operator '==' for types 'Double' and 'Int'", severity: .error)
+        DiagnosticDescriptor(
+          locationMarker: "1️⃣",
+          message: "no matching operator '==' for types 'Double' and 'Int'",
+          severity: .error
+        )
       ]
     )
 

@@ -35,7 +35,10 @@ final class DollarIdentifierTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "'$' is not a valid identifier",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: """
         func dollarVar() {
@@ -56,7 +59,10 @@ final class DollarIdentifierTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "'$' is not a valid identifier",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: """
         func dollarLet() {
@@ -75,7 +81,10 @@ final class DollarIdentifierTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "'$' is not a valid identifier",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: """
         func dollarClass() {
@@ -93,7 +102,10 @@ final class DollarIdentifierTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "'$' is not a valid identifier",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: """
         func dollarEnum() {
@@ -111,7 +123,10 @@ final class DollarIdentifierTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "'$' is not a valid identifier",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: """
         func dollarStruct() {
@@ -127,8 +142,16 @@ final class DollarIdentifierTests: ParserTestCase {
       func 1️⃣$(2️⃣$ dollarParam: Int) {}
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'$' is not a valid identifier",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "'$' is not a valid identifier",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        ),
       ],
       fixedSource: "func `$`(`$` dollarParam: Int) {}"
     )
@@ -140,7 +163,10 @@ final class DollarIdentifierTests: ParserTestCase {
       $(1️⃣$: 24)
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'$' is not a valid identifier", fixIts: ["if this name is unavoidable, use backticks to escape it"])
+        DiagnosticSpec(
+          message: "'$' is not a valid identifier",
+          fixIts: ["if this name is unavoidable, use backticks to escape it"]
+        )
       ],
       fixedSource: """
         $(`$`: 24)

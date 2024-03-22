@@ -87,7 +87,14 @@ let package = Package(
 
     .target(
       name: "SwiftCompilerPluginMessageHandling",
-      dependencies: ["SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntax", "SwiftSyntaxMacros", "SwiftSyntaxMacroExpansion"],
+      dependencies: [
+        "SwiftDiagnostics",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftSyntax",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+      ],
       exclude: ["CMakeLists.txt"]
     ),
 
@@ -183,8 +190,15 @@ let package = Package(
     .testTarget(
       name: "SwiftSyntaxMacroExpansionTest",
       dependencies: [
-        "SwiftSyntax", "_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftOperators", "SwiftParser", "SwiftSyntaxBuilder", "SwiftSyntaxMacros",
-        "SwiftSyntaxMacroExpansion", "SwiftSyntaxMacrosTestSupport",
+        "SwiftSyntax",
+        "_SwiftSyntaxTestSupport",
+        "SwiftDiagnostics",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacrosTestSupport",
       ]
     ),
 
@@ -192,7 +206,14 @@ let package = Package(
 
     .target(
       name: "SwiftSyntaxMacrosTestSupport",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftIDEUtils", "SwiftParser", "SwiftSyntaxMacros", "SwiftSyntaxMacroExpansion"]
+      dependencies: [
+        "_SwiftSyntaxTestSupport",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftParser",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+      ]
     ),
 
     .testTarget(
@@ -211,7 +232,14 @@ let package = Package(
 
     .testTarget(
       name: "SwiftParserTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftDiagnostics", "SwiftIDEUtils", "SwiftOperators", "SwiftParser", "SwiftSyntaxBuilder"],
+      dependencies: [
+        "_SwiftSyntaxTestSupport",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftOperators",
+        "SwiftParser",
+        "SwiftSyntaxBuilder",
+      ],
       swiftSettings: swiftParserSwiftSettings
     ),
 

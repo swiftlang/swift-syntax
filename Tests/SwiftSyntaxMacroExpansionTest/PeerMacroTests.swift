@@ -90,7 +90,9 @@ final class PeerMacroTests: XCTestCase {
       var newParameterList = parameterList
       if !parameterList.isEmpty {
         // We need to add a trailing comma to the preceding list.
-        newParameterList[newParameterList.index(before: newParameterList.endIndex)].trailingComma = .commaToken(trailingTrivia: .space)
+        newParameterList[newParameterList.index(before: newParameterList.endIndex)].trailingComma = .commaToken(
+          trailingTrivia: .space
+        )
       }
       newParameterList.append(completionHandlerParam)
 

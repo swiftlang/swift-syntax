@@ -15,7 +15,8 @@ public let AVAILABILITY_NODES: [Node] = [
     kind: .availabilityArgument,
     base: .syntax,
     nameForDiagnostics: "availability argument",
-    documentation: "A single argument to an `@available` argument like `*`, `iOS 10.1`, or `message: \"This has been deprecated\"`.",
+    documentation:
+      "A single argument to an `@available` argument like `*`, `iOS 10.1`, or `message: \"This has been deprecated\"`.",
     traits: ["WithTrailingComma"],
     children: [
       Child(
@@ -54,7 +55,8 @@ public let AVAILABILITY_NODES: [Node] = [
     kind: .availabilityLabeledArgument,
     base: .syntax,
     nameForDiagnostics: "availability argument",
-    documentation: "An argument to an `@available` attribute that consists of a label and a value, e.g. `message: \"This has been deprecated\"`.",
+    documentation:
+      "An argument to an `@available` attribute that consists of a label and a value, e.g. `message: \"This has been deprecated\"`.",
     children: [
       Child(
         name: "label",
@@ -102,7 +104,8 @@ public let AVAILABILITY_NODES: [Node] = [
     kind: .platformVersion,
     base: .syntax,
     nameForDiagnostics: "version restriction",
-    documentation: "An argument to `@available` that restricts the availability on a certain platform to a version, e.g. `iOS 10` or `swift 3.4`.",
+    documentation:
+      "An argument to `@available` that restricts the availability on a certain platform to a version, e.g. `iOS 10` or `swift 3.4`.",
     children: [
       Child(
         name: "platform",
@@ -157,7 +160,8 @@ public let AVAILABILITY_NODES: [Node] = [
     kind: .versionTuple,
     base: .syntax,
     nameForDiagnostics: "version tuple",
-    documentation: "A version number like `1.2.0`. Only the first version component is required. There might be an arbitrary number of following components.",
+    documentation:
+      "A version number like `1.2.0`. Only the first version component is required. There might be an arbitrary number of following components.",
     parserFunction: "parseVersionTuple",
     children: [
       Child(
@@ -168,7 +172,8 @@ public let AVAILABILITY_NODES: [Node] = [
       Child(
         name: "components",
         kind: .collection(kind: .versionComponentList, collectionElementName: "VersionComponent"),
-        documentation: "Any version components that are not the major version . For example, for `1.2.0`, this will contain `.2.0`."
+        documentation:
+          "Any version components that are not the major version . For example, for `1.2.0`, this will contain `.2.0`."
       ),
     ]
   ),

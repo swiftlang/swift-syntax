@@ -54,7 +54,10 @@ final class AttributeTests: ParserTestCase {
           message: "expected ':' and arguments in '@differentiable' argument",
           fixIts: ["insert ':' and arguments"]
         ),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected ':' or '==' to indicate a conformance or same-type requirement"),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ':' or '==' to indicate a conformance or same-type requirement"
+        ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "expected ')' to end attribute",
@@ -581,7 +584,10 @@ final class AttributeTests: ParserTestCase {
       func foo() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected 'message' in @_unavailableFromAsync argument", fixIts: ["replace 'nope' with 'message'"])
+        DiagnosticSpec(
+          message: "expected 'message' in @_unavailableFromAsync argument",
+          fixIts: ["replace 'nope' with 'message'"]
+        )
       ],
       fixedSource: """
         @_unavailableFromAsync(message: "abc")
@@ -658,7 +664,9 @@ final class AttributeTests: ParserTestCase {
     assertParse("@_documentation(visibility: internal) @_exported import A")
     assertParse("@_documentation(metadata: cool_stuff) public class SomeClass {}")
     assertParse(#"@_documentation(metadata: "this is a longer string") public class OtherClass {}"#)
-    assertParse(#"@_documentation(visibility: internal, metadata: "this is a longer string") public class OtherClass {}"#)
+    assertParse(
+      #"@_documentation(visibility: internal, metadata: "this is a longer string") public class OtherClass {}"#
+    )
   }
 
   func testSendable() {

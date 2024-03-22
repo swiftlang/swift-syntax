@@ -182,7 +182,9 @@ final class FunctionTests: XCTestCase {
       #line: (
         DeclSyntax(
           FunctionDeclSyntax(
-            attributes: [.attribute(AttributeSyntax("@inline(__always)")), .attribute(AttributeSyntax("@discardableResult"))],
+            attributes: [
+              .attribute(AttributeSyntax("@inline(__always)")), .attribute(AttributeSyntax("@discardableResult")),
+            ],
             modifiers: [DeclModifierSyntax(name: .keyword(.public))],
             name: TokenSyntax.identifier("foo"),
             signature: FunctionSignatureSyntax(
@@ -212,8 +214,16 @@ final class FunctionTests: XCTestCase {
             signature: FunctionSignatureSyntax(
               parameterClause: FunctionParameterClauseSyntax(
                 parameters: FunctionParameterListSyntax {
-                  FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs"), colon: .colonToken(), type: TypeSyntax("String"))
-                  FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs"), colon: .colonToken(), type: TypeSyntax("String"))
+                  FunctionParameterSyntax(
+                    firstName: TokenSyntax.identifier("lhs"),
+                    colon: .colonToken(),
+                    type: TypeSyntax("String")
+                  )
+                  FunctionParameterSyntax(
+                    firstName: TokenSyntax.identifier("rhs"),
+                    colon: .colonToken(),
+                    type: TypeSyntax("String")
+                  )
                 }
               ),
               returnClause: ReturnClauseSyntax(
@@ -247,10 +257,26 @@ final class FunctionTests: XCTestCase {
             signature: FunctionSignatureSyntax(
               parameterClause: FunctionParameterClauseSyntax(
                 parameters: FunctionParameterListSyntax {
-                  FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs1"), colon: .colonToken(), type: TypeSyntax("String"))
-                  FunctionParameterSyntax(firstName: TokenSyntax.identifier("lhs2"), colon: .colonToken(), type: TypeSyntax("String"))
-                  FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs1"), colon: .colonToken(), type: TypeSyntax("String"))
-                  FunctionParameterSyntax(firstName: TokenSyntax.identifier("rhs2"), colon: .colonToken(), type: TypeSyntax("String"))
+                  FunctionParameterSyntax(
+                    firstName: TokenSyntax.identifier("lhs1"),
+                    colon: .colonToken(),
+                    type: TypeSyntax("String")
+                  )
+                  FunctionParameterSyntax(
+                    firstName: TokenSyntax.identifier("lhs2"),
+                    colon: .colonToken(),
+                    type: TypeSyntax("String")
+                  )
+                  FunctionParameterSyntax(
+                    firstName: TokenSyntax.identifier("rhs1"),
+                    colon: .colonToken(),
+                    type: TypeSyntax("String")
+                  )
+                  FunctionParameterSyntax(
+                    firstName: TokenSyntax.identifier("rhs2"),
+                    colon: .colonToken(),
+                    type: TypeSyntax("String")
+                  )
                 }
               ),
               returnClause: ReturnClauseSyntax(
@@ -287,7 +313,10 @@ final class FunctionTests: XCTestCase {
   func testArguments() {
     let buildable = FunctionCallExprSyntax(callee: ExprSyntax("test")) {
       for param in (1...5) {
-        LabeledExprSyntax(label: param.isMultiple(of: 2) ? "p\(param)" : nil, expression: ExprSyntax("value\(raw: param)"))
+        LabeledExprSyntax(
+          label: param.isMultiple(of: 2) ? "p\(param)" : nil,
+          expression: ExprSyntax("value\(raw: param)")
+        )
       }
     }
     assertBuildResult(buildable, "test(value1, p2: value2, value3, p4: value4, value5)")

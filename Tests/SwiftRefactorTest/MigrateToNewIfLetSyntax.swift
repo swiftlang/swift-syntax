@@ -99,6 +99,11 @@ final class MigrateToNewIfLetSyntaxTest: XCTestCase {
       """
 
     let exprStmt = try XCTUnwrap(baselineSyntax.as(ExpressionStmtSyntax.self))
-    try assertRefactor(exprStmt.expression, context: (), provider: MigrateToNewIfLetSyntax.self, expected: expectedSyntax)
+    try assertRefactor(
+      exprStmt.expression,
+      context: (),
+      provider: MigrateToNewIfLetSyntax.self,
+      expected: expectedSyntax
+    )
   }
 }

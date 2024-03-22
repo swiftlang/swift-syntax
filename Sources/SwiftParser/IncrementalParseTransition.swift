@@ -166,7 +166,9 @@ struct IncrementalParseLookup {
       return true
     }
 
-    guard let nodeAffectRangeLength = transition.previousIncrementalParseResult.lookaheadRanges.lookaheadRanges[node.raw.id] else {
+    guard
+      let nodeAffectRangeLength = transition.previousIncrementalParseResult.lookaheadRanges.lookaheadRanges[node.raw.id]
+    else {
       return false
     }
 
@@ -325,7 +327,9 @@ public struct ConcurrentEdits: Sendable {
     do {
       try self.init(concurrent: Self.translateSequentialEditsToConcurrentEdits(sequentialEdits))
     } catch {
-      fatalError("ConcurrentEdits created by translateSequentialEditsToConcurrentEdits do not satisfy ConcurrentEdits requirements")
+      fatalError(
+        "ConcurrentEdits created by translateSequentialEditsToConcurrentEdits do not satisfy ConcurrentEdits requirements"
+      )
     }
   }
 

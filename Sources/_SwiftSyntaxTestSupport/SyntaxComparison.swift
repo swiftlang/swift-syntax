@@ -129,7 +129,10 @@ public extension SyntaxProtocol {
         if token.tokenKind != baselineToken.tokenKind {
           return .token
         }
-        if includeTrivia && (token.leadingTrivia != baselineToken.leadingTrivia || token.trailingTrivia != baselineToken.trailingTrivia) {
+        if includeTrivia
+          && (token.leadingTrivia != baselineToken.leadingTrivia
+            || token.trailingTrivia != baselineToken.trailingTrivia)
+        {
           return .trivia
         }
       }

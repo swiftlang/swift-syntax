@@ -39,7 +39,8 @@ extension SourceEditorExtension {
         continue
       }
 
-      guard let typeMetadata = context.metadata(), let provider = typeMetadata as? any SyntaxRefactoringProvider.Type else {
+      guard let typeMetadata = context.metadata(), let provider = typeMetadata as? any SyntaxRefactoringProvider.Type
+      else {
         continue
       }
 
@@ -57,7 +58,9 @@ struct Conformance {
   var raw: UnsafeRawPointer
 
   var `protocol`: Context {
-    let maybeProtocol = RelativeIndirectablePointer<ContextDescriptor>(offset: self.raw.load(as: ConformanceDescriptor.self).protocol)
+    let maybeProtocol = RelativeIndirectablePointer<ContextDescriptor>(
+      offset: self.raw.load(as: ConformanceDescriptor.self).protocol
+    )
     return Context(raw: maybeProtocol.address(from: self.raw))
   }
 
@@ -95,7 +98,9 @@ struct Context: Hashable {
   var raw: UnsafeRawPointer
 
   var parent: Context? {
-    let parent = RelativeIndirectablePointer<ContextDescriptor>(offset: self.raw.load(as: ContextDescriptor.self).parent)
+    let parent = RelativeIndirectablePointer<ContextDescriptor>(
+      offset: self.raw.load(as: ContextDescriptor.self).parent
+    )
 
     guard parent.offset != 0 else {
       return nil

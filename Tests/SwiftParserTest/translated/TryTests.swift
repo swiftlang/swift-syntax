@@ -140,7 +140,10 @@ final class TryTests: ParserTestCase {
       1️⃣try let singleLet = try foo()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["remove redundant 'try'"])
+        DiagnosticSpec(
+          message: "'try' must be placed on the initial value expression",
+          fixIts: ["remove redundant 'try'"]
+        )
       ],
       fixedSource: "let singleLet = try foo()"
     )
@@ -152,7 +155,10 @@ final class TryTests: ParserTestCase {
       1️⃣try let singleLet = foo()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"])
+        DiagnosticSpec(
+          message: "'try' must be placed on the initial value expression",
+          fixIts: ["move 'try' after '='"]
+        )
       ],
       fixedSource: "let singleLet = try foo()"
     )
@@ -164,7 +170,10 @@ final class TryTests: ParserTestCase {
       1️⃣try var singleVar = foo()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"])
+        DiagnosticSpec(
+          message: "'try' must be placed on the initial value expression",
+          fixIts: ["move 'try' after '='"]
+        )
       ],
       fixedSource: "var singleVar = try foo()"
     )
@@ -187,7 +196,10 @@ final class TryTests: ParserTestCase {
       1️⃣try let (destructure1, destructure2) = (foo(), bar())
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"])
+        DiagnosticSpec(
+          message: "'try' must be placed on the initial value expression",
+          fixIts: ["move 'try' after '='"]
+        )
       ],
       fixedSource: "let (destructure1, destructure2) = try (foo(), bar())"
     )
@@ -199,7 +211,10 @@ final class TryTests: ParserTestCase {
       1️⃣try let multi1 = foo(), multi2 = bar()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"])
+        DiagnosticSpec(
+          message: "'try' must be placed on the initial value expression",
+          fixIts: ["move 'try' after '='"]
+        )
       ],
       fixedSource: "let multi1 = try foo(), multi2 = try bar()"
     )
@@ -213,7 +228,10 @@ final class TryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"])
+        DiagnosticSpec(
+          message: "'try' must be placed on the initial value expression",
+          fixIts: ["move 'try' after '='"]
+        )
       ],
       fixedSource: """
         class TryDecl {
@@ -231,7 +249,10 @@ final class TryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the initial value expression", fixIts: ["move 'try' after '='"])
+        DiagnosticSpec(
+          message: "'try' must be placed on the initial value expression",
+          fixIts: ["move 'try' after '='"]
+        )
       ],
       fixedSource: """
         class TryDecl {
@@ -288,7 +309,11 @@ final class TryTests: ParserTestCase {
       1️⃣try throw 2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'try' must be placed on the thrown expression", fixIts: ["move 'try' after 'throw'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'try' must be placed on the thrown expression",
+          fixIts: ["move 'try' after 'throw'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected expression after 'try'", fixIts: ["insert expression"]),
       ],
       fixedSource: "throw try <#expression#>"
@@ -324,7 +349,10 @@ final class TryTests: ParserTestCase {
       1️⃣try return foo()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "'try' must be placed on the returned expression", fixIts: ["move 'try' after 'return'"])
+        DiagnosticSpec(
+          message: "'try' must be placed on the returned expression",
+          fixIts: ["move 'try' after 'return'"]
+        )
       ],
       fixedSource: "return try foo()"
     )

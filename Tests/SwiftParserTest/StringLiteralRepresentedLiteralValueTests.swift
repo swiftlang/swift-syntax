@@ -252,7 +252,10 @@ class StringLiteralRepresentedLiteralValueTests: ParserTestCase {
   func testMissingQuoteStringLiteral() throws {
     var parser = Parser(#""a"#)
     let stringLiteral = StringLiteralExprSyntax(ExprSyntax.parse(from: &parser))!
-    XCTAssertNil(stringLiteral.representedLiteralValue, "only fully parsed string literals should produce a literal value")
+    XCTAssertNil(
+      stringLiteral.representedLiteralValue,
+      "only fully parsed string literals should produce a literal value"
+    )
   }
 
   func testInterpolatedStringLiteral() throws {
@@ -263,7 +266,10 @@ class StringLiteralRepresentedLiteralValueTests: ParserTestCase {
   func testMalformedMultiLineStringLiteral() throws {
     var parser = Parser(#""""a""""#)
     let stringLiteral = StringLiteralExprSyntax(ExprSyntax.parse(from: &parser))!
-    XCTAssertNil(stringLiteral.representedLiteralValue, "missing newline in multiline string literal cannot produce a literal value")
+    XCTAssertNil(
+      stringLiteral.representedLiteralValue,
+      "missing newline in multiline string literal cannot produce a literal value"
+    )
   }
 
   // MARK: supporting code

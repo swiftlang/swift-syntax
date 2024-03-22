@@ -60,7 +60,11 @@ final class DeclarationTests: ParserTestCase {
           fixIts: ["if this name is unavoidable, use backticks to escape it"]
         ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '(' to start parameter clause", fixIts: ["insert '('"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"]),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ':' and type in parameter",
+          fixIts: ["insert ':' and type"]
+        ),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected ')' to end parameter clause", fixIts: ["insert ')'"]),
       ],
       fixedSource: """
@@ -124,7 +128,11 @@ final class DeclarationTests: ParserTestCase {
           message: "expected 'func' in function",
           fixIts: ["insert 'func'"]
         ),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected parameter clause in function signature",
+          fixIts: ["insert parameter clause"]
+        ),
       ],
       fixedSource: """
         class MyClass {
@@ -337,7 +345,10 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "_ = foo/* */?.description1️⃣",
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' and expression after '? ...' in ternary expression", fixIts: ["insert ':' and expression"])
+        DiagnosticSpec(
+          message: "expected ':' and expression after '? ...' in ternary expression",
+          fixIts: ["insert ':' and expression"]
+        )
       ],
       fixedSource: """
         _ = foo/* */?.description : <#expression#>
@@ -964,7 +975,11 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "func test() throws 1️⃣async2️⃣(MyError) {}",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'async' must precede 'throws'",
+          fixIts: ["move 'async' in front of 'throws'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in function"),
       ],
       fixedSource: "func test() async throws (MyError) {}"
@@ -973,7 +988,11 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "func test() 1️⃣try2️⃣(MyError) async {}",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'try' with 'throws'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError) async' in function"),
       ],
       fixedSource: "func test() throws (MyError) async {}"
@@ -982,8 +1001,16 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "func test() 1️⃣try 2️⃣async3️⃣(MyError) {}",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "'async' must precede 'throws'", fixIts: ["move 'async' in front of 'throws'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'try' with 'throws'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "'async' must precede 'throws'",
+          fixIts: ["move 'async' in front of 'throws'"]
+        ),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '(MyError)' in function"),
       ],
       fixedSource: "func test() async throws (MyError) {}"
@@ -992,7 +1019,11 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "func test() throws(MyError) 1️⃣await {}",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'await' must precede 'throws'", fixIts: ["move 'await' in front of 'throws'"])
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'await' must precede 'throws'",
+          fixIts: ["move 'await' in front of 'throws'"]
+        )
       ],
       fixedSource: "func test() async throws(MyError) {}"
     )
@@ -1000,7 +1031,11 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "func test() throws 1️⃣await2️⃣(MyError) {}",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "'await' must precede 'throws'", fixIts: ["move 'await' in front of 'throws'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "'await' must precede 'throws'",
+          fixIts: ["move 'await' in front of 'throws'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in function"),
       ],
       fixedSource: "func test() async throws (MyError) {}"
@@ -1009,7 +1044,11 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "func test() 1️⃣try2️⃣(MyError) await {}",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'try' with 'throws'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError) await' in function"),
       ],
       fixedSource: "func test() throws (MyError) await {}"
@@ -1018,7 +1057,11 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "func test() 1️⃣try await2️⃣(MyError) {}",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'try' with 'throws'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in function"),
       ],
       fixedSource: "func test() awaitthrows (MyError) {}"  // FIXME: spacing
@@ -1034,7 +1077,11 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "func test() 1️⃣await2️⃣(MyError) {}",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'await' with 'async'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected async specifier; did you mean 'async'?",
+          fixIts: ["replace 'await' with 'async'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in function"),
       ],
       fixedSource: "func test() async (MyError) {}"
@@ -1043,7 +1090,11 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "func test() 1️⃣try2️⃣(MyError) {}",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected throwing specifier; did you mean 'throws'?", fixIts: ["replace 'try' with 'throws'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected throwing specifier; did you mean 'throws'?",
+          fixIts: ["replace 'try' with 'throws'"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '(MyError)' in function"),
       ],
       fixedSource: "func test() throws (MyError) {}"
@@ -1111,8 +1162,14 @@ final class DeclarationTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "identifier can only start with a letter or underscore, not a number"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "identifier can only start with a letter or underscore, not a number"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "identifier can only start with a letter or underscore, not a number"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "identifier can only start with a letter or underscore, not a number"
+        ),
       ]
     )
   }
@@ -1133,7 +1190,10 @@ final class DeclarationTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected async specifier; did you mean 'async'?", fixIts: ["replace 'reasync' with 'async'"])
+        DiagnosticSpec(
+          message: "expected async specifier; did you mean 'async'?",
+          fixIts: ["replace 'reasync' with 'async'"]
+        )
       ],
       fixedSource: """
         var bad2 : Int {
@@ -1499,10 +1559,22 @@ final class DeclarationTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in struct", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected condition in conditional compilation clause", fixIts: ["insert condition"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected condition in conditional compilation clause",
+          fixIts: ["insert condition"]
+        ),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected name in attribute", fixIts: ["insert name"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected declaration after attribute", fixIts: ["insert declaration"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '#endif' in conditional compilation block", fixIts: ["insert '#endif'"]),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected declaration after attribute",
+          fixIts: ["insert declaration"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected '#endif' in conditional compilation block",
+          fixIts: ["insert '#endif'"]
+        ),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
       ],
       fixedSource: """
@@ -1598,7 +1670,11 @@ final class DeclarationTests: ParserTestCase {
       "1️⃣}protocol C2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before protocol"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in protocol", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected member block in protocol",
+          fixIts: ["insert member block"]
+        ),
       ],
       fixedSource: """
         }protocol C {
@@ -1620,7 +1696,11 @@ final class DeclarationTests: ParserTestCase {
       "1️⃣}struct C2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before struct"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in struct", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected member block in struct",
+          fixIts: ["insert member block"]
+        ),
       ],
       fixedSource: """
         }struct C {
@@ -1631,7 +1711,11 @@ final class DeclarationTests: ParserTestCase {
       "1️⃣}func C2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected parameter clause in function signature",
+          fixIts: ["insert parameter clause"]
+        ),
       ],
       fixedSource: """
         }func C()
@@ -1641,7 +1725,11 @@ final class DeclarationTests: ParserTestCase {
       "1️⃣}init2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before initializer"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected parameter clause in function signature",
+          fixIts: ["insert parameter clause"]
+        ),
       ],
       fixedSource: """
         }init()
@@ -1651,8 +1739,16 @@ final class DeclarationTests: ParserTestCase {
       "1️⃣}subscript2️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before subscript"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in subscript", fixIts: ["insert parameter clause"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '->' and return type in subscript", fixIts: ["insert '->' and return type"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected parameter clause in subscript",
+          fixIts: ["insert parameter clause"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '->' and return type in subscript",
+          fixIts: ["insert '->' and return type"]
+        ),
       ],
       fixedSource: """
         }subscript() -> <#type#>
@@ -1795,7 +1891,10 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "func 1️⃣{}",
       diagnostics: [
-        DiagnosticSpec(message: "expected identifier and function signature in function", fixIts: ["insert identifier and function signature"])
+        DiagnosticSpec(
+          message: "expected identifier and function signature in function",
+          fixIts: ["insert identifier and function signature"]
+        )
       ],
       fixedSource: """
         func <#identifier#>() {}
@@ -2059,7 +2158,11 @@ final class DeclarationTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in macro expansion", fixIts: ["insert identifier"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected identifier in macro expansion",
+          fixIts: ["insert identifier"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'myMacroName' in struct"),
       ],
       fixedSource: """
@@ -2257,9 +2360,17 @@ final class DeclarationTests: ParserTestCase {
       macro m5<T: P>(_: T)
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected parameter clause in function signature",
+          fixIts: ["insert parameter clause"]
+        ),
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code ': Int = A.M1' before macro"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected parameter clause in function signature",
+          fixIts: ["insert parameter clause"]
+        ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ': T = A.M4 where T.Assoc: P' before macro"),
       ],
       fixedSource: """
@@ -2276,7 +2387,11 @@ final class DeclarationTests: ParserTestCase {
       macro m11️⃣ = A
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected parameter clause in function signature", fixIts: ["insert parameter clause"])
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected parameter clause in function signature",
+          fixIts: ["insert parameter clause"]
+        )
       ],
       fixedSource: """
         macro m1() = A
@@ -2289,9 +2404,17 @@ final class DeclarationTests: ParserTestCase {
       "protocol1️⃣<2️⃣:3️⃣",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected identifier in protocol", fixIts: ["insert identifier"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "expected name and '>' to end primary associated type clause", fixIts: ["insert name and '>'"]),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected name and '>' to end primary associated type clause",
+          fixIts: ["insert name and '>'"]
+        ),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected type in inherited type", fixIts: ["insert type"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected member block in protocol", fixIts: ["insert member block"]),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected member block in protocol",
+          fixIts: ["insert member block"]
+        ),
       ],
       fixedSource: """
         protocol <#identifier#><<#identifier#>>: <#type#> {
@@ -2863,7 +2986,11 @@ final class DeclarationTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "editor placeholder in source file"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "editor placeholder in source file"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected ':' and type in parameter", fixIts: ["insert ':' and type"]),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ':' and type in parameter",
+          fixIts: ["insert ':' and type"]
+        ),
         DiagnosticSpec(locationMarker: "4️⃣", message: "editor placeholder in source file"),
         DiagnosticSpec(locationMarker: "5️⃣", message: "editor placeholder in source file"),
       ],

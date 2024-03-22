@@ -30,7 +30,8 @@ fileprivate func withTemporaryFile<T>(contents: [UInt8], body: (URL) throws -> T
 struct Reduce: ParsableCommand {
   static var configuration = CommandConfiguration(
     commandName: "reduce",
-    abstract: "Reduce a test case that crashes the parser or fails to round-trip to a smaller test case that still reproduces the issue"
+    abstract:
+      "Reduce a test case that crashes the parser or fails to round-trip to a smaller test case that still reproduces the issue"
   )
 
   @Argument(help: "The test case that should be reduced; if omitted, use stdin")
@@ -154,7 +155,8 @@ struct Reduce: ParsableCommand {
     // Characters that stil need to be checked whether they can be removed.
     var remaining = source
     while !remaining.isEmpty {
-      let index = remaining.index(remaining.startIndex, offsetBy: chunkSize, limitedBy: remaining.endIndex) ?? remaining.endIndex
+      let index =
+        remaining.index(remaining.startIndex, offsetBy: chunkSize, limitedBy: remaining.endIndex) ?? remaining.endIndex
       let testChunk = [UInt8](remaining[..<index])
       remaining = [UInt8](remaining[index...])
       if try testPasses(reduced + remaining) {

@@ -104,10 +104,7 @@ final class InitDeinitTests: ParserTestCase {
       struct FooStructConstructorD {
         init() 1️⃣-> FooStructConstructorD { }
       }
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "initializers cannot have a result type")
-      ]
+      """
     )
   }
 
@@ -425,10 +422,7 @@ final class InitDeinitTests: ParserTestCase {
     assertParse(
       """
       init(_ foo: T) 1️⃣-> Int where T: Comparable {}
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "initializers cannot have a result type")
-      ]
+      """
     )
   }
 

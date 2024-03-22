@@ -984,7 +984,7 @@ extension Parser {
     }
 
     // Parse the signature.
-    let signature = self.parseFunctionSignature(allowOutput: false)
+    let signature = self.parseFunctionSignature()
 
     let whereClause: RawGenericWhereClauseSyntax?
     if self.at(.keyword(.where)) {
@@ -1148,7 +1148,7 @@ extension Parser {
     )
   }
 
-  mutating func parseFunctionSignature(allowOutput: Bool = true) -> RawFunctionSignatureSyntax {
+  mutating func parseFunctionSignature() -> RawFunctionSignatureSyntax {
     let parameterClause = self.parseParameterClause(RawFunctionParameterClauseSyntax.self) { parser in
       parser.parseFunctionParameter()
     }
@@ -1168,19 +1168,10 @@ extension Parser {
       returnClause = nil
     }
 
-    var unexpectedAfterReturnClause: RawUnexpectedNodesSyntax?
-    if !allowOutput,
-      let unexpectedOutput = returnClause
-    {
-      returnClause = nil
-      unexpectedAfterReturnClause = RawUnexpectedNodesSyntax([unexpectedOutput], arena: self.arena)
-    }
-
     return RawFunctionSignatureSyntax(
       parameterClause: parameterClause,
       effectSpecifiers: effectSpecifiers,
       returnClause: returnClause,
-      unexpectedAfterReturnClause,
       arena: self.arena
     )
   }

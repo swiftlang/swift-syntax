@@ -3283,4 +3283,14 @@ final class DeclarationTests: ParserTestCase {
       XCTAssertEqual(decl.description, input, line: line)
     }
   }
+
+  func testInitializerWithReturnType() {
+    assertParse(
+      "init(_ ptr: UnsafeRawBufferPointer, _ a: borrowing Array<Int>) -> _borrow(a) Self",
+      experimentalFeatures: .nonescapableTypes
+    )
+
+    // Not actually valid, needs to be diagnosed during type checking
+    assertParse("public init() -> Int")
+  }
 }

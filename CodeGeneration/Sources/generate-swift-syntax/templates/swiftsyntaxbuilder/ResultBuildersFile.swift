@@ -33,8 +33,8 @@ let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
       // MARK: - \(type.resultBuilderType)
 
-      @resultBuilder
       \(node.node.apiAttributes())\
+      @resultBuilder
       public struct \(type.resultBuilderType): ListBuilder
       """
     ) {

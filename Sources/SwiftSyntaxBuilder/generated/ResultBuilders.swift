@@ -431,10 +431,10 @@ public extension LabeledExprListSyntax {
 
 // MARK: - LifetimeSpecifierArgumentListBuilder
 
-@resultBuilder
 #if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
 #endif
+@resultBuilder
 public struct LifetimeSpecifierArgumentListBuilder: ListBuilder {
   public typealias FinalResult = LifetimeSpecifierArgumentListSyntax
 }

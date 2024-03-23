@@ -110,6 +110,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case `default`
   case `defer`
   case `deinit`
+  @_spi(ExperimentalLanguageFeatures)
+  case dependsOn
   case deprecated
   case derivative
   case didSet
@@ -201,6 +203,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case reverse
   case right
   case safe
+  @_spi(ExperimentalLanguageFeatures)
+  case scoped
   case `self`
   case `Self`
   case Sendable
@@ -428,6 +432,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .repeat
       case "return":
         self = .return
+      case "scoped":
+        self = .scoped
       case "static":
         self = .static
       case "struct":
@@ -563,6 +569,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .canImport
       case "consuming":
         self = .consuming
+      case "dependsOn":
+        self = .dependsOn
       case "extension":
         self = .extension
       case "lowerThan":
@@ -904,6 +912,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
       "default", 
       "defer", 
       "deinit", 
+      "dependsOn", 
       "deprecated", 
       "derivative", 
       "didSet", 
@@ -993,6 +1002,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
       "reverse", 
       "right", 
       "safe", 
+      "scoped", 
       "self", 
       "Self", 
       "Sendable", 

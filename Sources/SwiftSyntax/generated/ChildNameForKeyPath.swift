@@ -2009,30 +2009,34 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "trailingComma"
   case \LifetimeSpecifierArgumentSyntax.unexpectedAfterTrailingComma:
     return "unexpectedAfterTrailingComma"
-  case \LifetimeSpecifierArgumentsSyntax.unexpectedBeforeLeftParen:
-    return "unexpectedBeforeLeftParen"
-  case \LifetimeSpecifierArgumentsSyntax.leftParen:
-    return "leftParen"
-  case \LifetimeSpecifierArgumentsSyntax.unexpectedBetweenLeftParenAndArguments:
-    return "unexpectedBetweenLeftParenAndArguments"
+  case \LifetimeSpecifierArgumentsSyntax.unexpectedBeforeArguments:
+    return "unexpectedBeforeArguments"
   case \LifetimeSpecifierArgumentsSyntax.arguments:
     return "arguments"
-  case \LifetimeSpecifierArgumentsSyntax.unexpectedBetweenArgumentsAndRightParen:
-    return "unexpectedBetweenArgumentsAndRightParen"
-  case \LifetimeSpecifierArgumentsSyntax.rightParen:
-    return "rightParen"
-  case \LifetimeSpecifierArgumentsSyntax.unexpectedAfterRightParen:
-    return "unexpectedAfterRightParen"
+  case \LifetimeSpecifierArgumentsSyntax.unexpectedAfterArguments:
+    return "unexpectedAfterArguments"
   case \LifetimeTypeSpecifierSyntax.unexpectedBeforeSpecifier:
     return "unexpectedBeforeSpecifier"
   case \LifetimeTypeSpecifierSyntax.specifier:
     return "specifier"
-  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenSpecifierAndArguments:
-    return "unexpectedBetweenSpecifierAndArguments"
+  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenSpecifierAndLeftParen:
+    return "unexpectedBetweenSpecifierAndLeftParen"
+  case \LifetimeTypeSpecifierSyntax.leftParen:
+    return "leftParen"
+  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenLeftParenAndScoped:
+    return "unexpectedBetweenLeftParenAndScoped"
+  case \LifetimeTypeSpecifierSyntax.scoped:
+    return "scoped"
+  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenScopedAndArguments:
+    return "unexpectedBetweenScopedAndArguments"
   case \LifetimeTypeSpecifierSyntax.arguments:
     return "arguments"
-  case \LifetimeTypeSpecifierSyntax.unexpectedAfterArguments:
-    return "unexpectedAfterArguments"
+  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenArgumentsAndRightParen:
+    return "unexpectedBetweenArgumentsAndRightParen"
+  case \LifetimeTypeSpecifierSyntax.rightParen:
+    return "rightParen"
+  case \LifetimeTypeSpecifierSyntax.unexpectedAfterRightParen:
+    return "unexpectedAfterRightParen"
   case \MacroDeclSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
   case \MacroDeclSyntax.attributes:

@@ -14,6 +14,7 @@ import SwiftUI
 
 // MARK: - EnvironmentValue Accessor
 
+/// Adds getter / setter to an attached environment value with specified EnvironmentKey
 @attached(accessor)
 public macro EnvironmentValue(for key: any EnvironmentKey.Type) =
   #externalMacro(module: "MacroExamplesImplementation", type: "EnvironmentValueMacro")

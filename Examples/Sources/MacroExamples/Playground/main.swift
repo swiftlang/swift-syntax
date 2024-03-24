@@ -47,3 +47,7 @@ runMemberMacrosPlayground()
 // MARK: - Peer Macros
 
 runPeerMacrosPlayground()
+
+// MARKL - Accessor Macros
+
+runEnvironmentValueAccessorMacroPlayground()

@@ -1143,13 +1143,13 @@ public struct RawLifetimeTypeSpecifierSyntax: RawSyntaxNodeProtocol {
   }
   
   public init(
-      _ unexpectedBeforeSpecifier: RawUnexpectedNodesSyntax? = nil, 
-      specifier: RawTokenSyntax, 
-      _ unexpectedBetweenSpecifierAndLeftParen: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBeforeDependsOnKeyword: RawUnexpectedNodesSyntax? = nil, 
+      dependsOnKeyword: RawTokenSyntax, 
+      _ unexpectedBetweenDependsOnKeywordAndLeftParen: RawUnexpectedNodesSyntax? = nil, 
       leftParen: RawTokenSyntax, 
-      _ unexpectedBetweenLeftParenAndScoped: RawUnexpectedNodesSyntax? = nil, 
-      scoped: RawTokenSyntax?, 
-      _ unexpectedBetweenScopedAndArguments: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenLeftParenAndScopedKeyword: RawUnexpectedNodesSyntax? = nil, 
+      scopedKeyword: RawTokenSyntax?, 
+      _ unexpectedBetweenScopedKeywordAndArguments: RawUnexpectedNodesSyntax? = nil, 
       arguments: RawLifetimeSpecifierArgumentsSyntax, 
       _ unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? = nil, 
       rightParen: RawTokenSyntax, 
@@ -1159,13 +1159,13 @@ public struct RawLifetimeTypeSpecifierSyntax: RawSyntaxNodeProtocol {
     let raw = RawSyntax.makeLayout(
       kind: .lifetimeTypeSpecifier, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeSpecifier?.raw
-      layout[1] = specifier.raw
-      layout[2] = unexpectedBetweenSpecifierAndLeftParen?.raw
+      layout[0] = unexpectedBeforeDependsOnKeyword?.raw
+      layout[1] = dependsOnKeyword.raw
+      layout[2] = unexpectedBetweenDependsOnKeywordAndLeftParen?.raw
       layout[3] = leftParen.raw
-      layout[4] = unexpectedBetweenLeftParenAndScoped?.raw
-      layout[5] = scoped?.raw
-      layout[6] = unexpectedBetweenScopedAndArguments?.raw
+      layout[4] = unexpectedBetweenLeftParenAndScopedKeyword?.raw
+      layout[5] = scopedKeyword?.raw
+      layout[6] = unexpectedBetweenScopedKeywordAndArguments?.raw
       layout[7] = arguments.raw
       layout[8] = unexpectedBetweenArgumentsAndRightParen?.raw
       layout[9] = rightParen.raw
@@ -1174,15 +1174,15 @@ public struct RawLifetimeTypeSpecifierSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: raw)
   }
   
-  public var unexpectedBeforeSpecifier: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeDependsOnKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var specifier: RawTokenSyntax {
+  public var dependsOnKeyword: RawTokenSyntax {
     layoutView.children[1].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenSpecifierAndLeftParen: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenDependsOnKeywordAndLeftParen: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
@@ -1190,15 +1190,15 @@ public struct RawLifetimeTypeSpecifierSyntax: RawSyntaxNodeProtocol {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenLeftParenAndScoped: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenLeftParenAndScopedKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var scoped: RawTokenSyntax? {
+  public var scopedKeyword: RawTokenSyntax? {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenScopedAndArguments: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenScopedKeywordAndArguments: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   

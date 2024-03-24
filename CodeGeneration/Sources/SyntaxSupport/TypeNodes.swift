@@ -575,10 +575,8 @@ public let TYPE_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "specifier",
-        kind: .token(choices: [
-          .keyword(.dependsOn)
-        ]),
+        name: "dependsOnKeyword",
+        kind: .token(choices: [.keyword(.dependsOn)]),
         documentation: "The specifier token that's attached to the type."
       ),
       Child(
@@ -586,7 +584,7 @@ public let TYPE_NODES: [Node] = [
         kind: .token(choices: [.token(.leftParen)])
       ),
       Child(
-        name: "scoped",
+        name: "scopedKeyword",
         kind: .token(choices: [.keyword(.scoped)]),
         isOptional: true
       ),

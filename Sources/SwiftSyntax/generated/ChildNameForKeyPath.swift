@@ -2015,20 +2015,20 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "arguments"
   case \LifetimeSpecifierArgumentsSyntax.unexpectedAfterArguments:
     return "unexpectedAfterArguments"
-  case \LifetimeTypeSpecifierSyntax.unexpectedBeforeSpecifier:
-    return "unexpectedBeforeSpecifier"
-  case \LifetimeTypeSpecifierSyntax.specifier:
-    return "specifier"
-  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenSpecifierAndLeftParen:
-    return "unexpectedBetweenSpecifierAndLeftParen"
+  case \LifetimeTypeSpecifierSyntax.unexpectedBeforeDependsOnKeyword:
+    return "unexpectedBeforeDependsOnKeyword"
+  case \LifetimeTypeSpecifierSyntax.dependsOnKeyword:
+    return "dependsOnKeyword"
+  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenDependsOnKeywordAndLeftParen:
+    return "unexpectedBetweenDependsOnKeywordAndLeftParen"
   case \LifetimeTypeSpecifierSyntax.leftParen:
     return "leftParen"
-  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenLeftParenAndScoped:
-    return "unexpectedBetweenLeftParenAndScoped"
-  case \LifetimeTypeSpecifierSyntax.scoped:
-    return "scoped"
-  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenScopedAndArguments:
-    return "unexpectedBetweenScopedAndArguments"
+  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenLeftParenAndScopedKeyword:
+    return "unexpectedBetweenLeftParenAndScopedKeyword"
+  case \LifetimeTypeSpecifierSyntax.scopedKeyword:
+    return "scopedKeyword"
+  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenScopedKeywordAndArguments:
+    return "unexpectedBetweenScopedKeywordAndArguments"
   case \LifetimeTypeSpecifierSyntax.arguments:
     return "arguments"
   case \LifetimeTypeSpecifierSyntax.unexpectedBetweenArgumentsAndRightParen:

@@ -916,9 +916,9 @@ extension Parser {
         arena: self.arena
       )
       let lifetimeSpecifier = RawLifetimeTypeSpecifierSyntax(
-        specifier: specifier,
+        dependsOnKeyword: specifier,
         leftParen: missingToken(.leftParen),
-        scoped: nil,
+        scopedKeyword: nil,
         arguments: arguments,
         rightParen: missingToken(.rightParen),
         arena: self.arena
@@ -952,9 +952,9 @@ extension Parser {
       arena: self.arena
     )
     let lifetimeSpecifier = RawLifetimeTypeSpecifierSyntax(
-      specifier: specifier,
+      dependsOnKeyword: specifier,
       leftParen: leftParen,
-      scoped: scoped,
+      scopedKeyword: scoped,
       arguments: argumentsSyntax,
       unexpectedBeforeRightParen,
       rightParen: rightParen,

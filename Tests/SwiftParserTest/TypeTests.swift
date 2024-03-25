@@ -331,12 +331,12 @@ final class TypeTests: ParserTestCase {
   }
 
   func testLifetimeSpecifier() {
-    assertParse("func foo() -> _borrow(x) X", experimentalFeatures: [.nonescapableTypes])
+    assertParse("func foo() -> dependsOn(x) X", experimentalFeatures: [.nonescapableTypes])
 
-    assertParse("func foo() -> _borrow(x, y) X", experimentalFeatures: [.nonescapableTypes])
+    assertParse("func foo() -> dependsOn(x, y) X", experimentalFeatures: [.nonescapableTypes])
 
     assertParse(
-      "func foo() -> _borrow(1️⃣) X",
+      "func foo() -> dependsOn(1️⃣) X",
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
@@ -344,12 +344,12 @@ final class TypeTests: ParserTestCase {
           fixIts: ["insert parameter reference"]
         )
       ],
-      fixedSource: "func foo() -> _borrow(<#identifier#>) X",
+      fixedSource: "func foo() -> dependsOn(<#identifier#>) X",
       experimentalFeatures: [.nonescapableTypes]
     )
 
     assertParse(
-      "func foo() -> _borrow(x,1️⃣) X",
+      "func foo() -> dependsOn(x,1️⃣) X",
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
@@ -357,20 +357,16 @@ final class TypeTests: ParserTestCase {
           fixIts: ["insert parameter reference"]
         )
       ],
-      fixedSource: "func foo() -> _borrow(x, <#identifier#>) X",
+      fixedSource: "func foo() -> dependsOn(x, <#identifier#>) X",
       experimentalFeatures: [.nonescapableTypes]
     )
 
-    assertParse("func foo() -> _borrow(x) _borrow(y) X", experimentalFeatures: [.nonescapableTypes])
+    assertParse("func foo() -> dependsOn(x) dependsOn(scoped y) X", experimentalFeatures: [.nonescapableTypes])
 
-    assertParse("func foo() -> _mutate(x) X", experimentalFeatures: [.nonescapableTypes])
-
-    assertParse("func foo() -> _copy(x) X", experimentalFeatures: [.nonescapableTypes])
-
-    assertParse("func foo() -> _consume(x) X", experimentalFeatures: [.nonescapableTypes])
+    assertParse("func foo() -> dependsOn(scoped x) X", experimentalFeatures: [.nonescapableTypes])
 
     assertParse(
-      "func foo() -> _borrow 1️⃣X",
+      "func foo() -> dependsOn 1️⃣X",
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
@@ -378,12 +374,12 @@ final class TypeTests: ParserTestCase {
           fixIts: ["insert '(', parameter reference, and ')'"]
         )
       ],
-      fixedSource: "func foo() -> _borrow (<#identifier#>) X",
+      fixedSource: "func foo() -> dependsOn (<#identifier#>) X",
       experimentalFeatures: [.nonescapableTypes]
     )
 
     assertParse(
-      "func foo() -> _borrow(1️⃣*) X",
+      "func foo() -> dependsOn(1️⃣*) X",
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
@@ -392,16 +388,16 @@ final class TypeTests: ParserTestCase {
         ),
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '*' in lifetime specifier"),
       ],
-      fixedSource: "func foo() -> _borrow(<#identifier#>*) X",
+      fixedSource: "func foo() -> dependsOn(<#identifier#>*) X",
       experimentalFeatures: [.nonescapableTypes]
     )
 
-    assertParse("func foo() -> _borrow(0) X", diagnostics: [], experimentalFeatures: [.nonescapableTypes])
+    assertParse("func foo() -> dependsOn(0) X", diagnostics: [], experimentalFeatures: [.nonescapableTypes])
 
-    assertParse("func foo() -> _borrow(self) X", experimentalFeatures: [.nonescapableTypes])
+    assertParse("func foo() -> dependsOn(self) X", experimentalFeatures: [.nonescapableTypes])
 
     assertParse(
-      "func foo() -> _borrow1️⃣(0)2️⃣ X",
+      "func foo() -> dependsOn1️⃣(0)2️⃣ X",
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
@@ -415,14 +411,14 @@ final class TypeTests: ParserTestCase {
         ),
       ],
       fixedSource: """
-        func foo() -> _borrow
+        func foo() -> dependsOn
         (0)
         X
         """
     )
 
     assertParse(
-      "func foo() -> _borrow(1️⃣-1) X",
+      "func foo() -> dependsOn(1️⃣-1) X",
       diagnostics: [
         DiagnosticSpec(
           message: "expected parameter reference in lifetime specifier",
@@ -430,7 +426,7 @@ final class TypeTests: ParserTestCase {
         ),
         DiagnosticSpec(message: "unexpected code '-1' in lifetime specifier"),
       ],
-      fixedSource: "func foo() -> _borrow(<#identifier#>-1) X",
+      fixedSource: "func foo() -> dependsOn(<#identifier#>-1) X",
       experimentalFeatures: [.nonescapableTypes]
     )
   }

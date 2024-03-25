@@ -553,25 +553,14 @@ public let TYPE_NODES: [Node] = [
       ### Example
       `borrow(data)` in `func foo(data: Array<Item>) -> borrow(data) ComplexReferenceType`
       """,
-    traits: [
-      "Parenthesized"
-    ],
     children: [
-      Child(
-        name: "leftParen",
-        kind: .token(choices: [.token(.leftParen)])
-      ),
       Child(
         name: "arguments",
         kind: .collection(kind: .lifetimeSpecifierArgumentList, collectionElementName: "Arguments"),
         documentation: """
           The function parameters that the lifetime of the annotated type depends on.
           """
-      ),
-      Child(
-        name: "rightParen",
-        kind: .token(choices: [.token(.rightParen)])
-      ),
+      )
     ]
   ),
 
@@ -581,20 +570,31 @@ public let TYPE_NODES: [Node] = [
     experimentalFeature: .nonescapableTypes,
     nameForDiagnostics: "lifetime specifier",
     documentation: "A specifier that specifies function parameter on whose lifetime a type depends",
+    traits: [
+      "Parenthesized"
+    ],
     children: [
       Child(
-        name: "specifier",
-        kind: .token(choices: [
-          .keyword(._copy),
-          .keyword(._consume),
-          .keyword(._borrow),
-          .keyword(._mutate),
-        ]),
+        name: "dependsOnKeyword",
+        kind: .token(choices: [.keyword(.dependsOn)]),
         documentation: "The specifier token that's attached to the type."
+      ),
+      Child(
+        name: "leftParen",
+        kind: .token(choices: [.token(.leftParen)])
+      ),
+      Child(
+        name: "scopedKeyword",
+        kind: .token(choices: [.keyword(.scoped)]),
+        isOptional: true
       ),
       Child(
         name: "arguments",
         kind: .node(kind: .lifetimeSpecifierArguments)
+      ),
+      Child(
+        name: "rightParen",
+        kind: .token(choices: [.token(.rightParen)])
       ),
     ]
   ),

@@ -43,8 +43,17 @@ public struct KeywordSpec {
   ///
   /// This is typically used to mark APIs as SPI when the keyword is part of an experimental language feature.
   public var apiAttributes: AttributeListSyntax {
-    guard isExperimental else { return "" }
-    return AttributeListSyntax("@_spi(ExperimentalLanguageFeatures)").with(\.trailingTrivia, .newline)
+    let attrList = AttributeListSyntax {
+      if isExperimental {
+        let experimentalSPI: AttributeListSyntax = """
+          #if compiler(>=5.8)
+          @_spi(ExperimentalLanguageFeatures)
+          #endif
+          """
+        experimentalSPI.with(\.trailingTrivia, .newline)
+      }
+    }
+    return attrList.with(\.trailingTrivia, attrList.isEmpty ? [] : .newline)
   }
 
   /// Initializes a new `KeywordSpec` instance.

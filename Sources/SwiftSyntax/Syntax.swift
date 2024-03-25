@@ -16,7 +16,11 @@
 public struct Syntax: SyntaxProtocol, SyntaxHashable {
   /// We need a heap indirection to store a syntax node's parent. We could use an indirect enum here but explicitly
   /// modelling it using a class allows us to re-use these heap-allocated objects in `SyntaxVisitor`.
-  final class Info: Sendable {
+  ///
+  /// - Note: `@unchecked Sendable` because `info` is mutable. In Swift 6 and above the variable can be declared as
+  ///   `nonisolated(unsafe)` but that attribute doesn't exist in previous Swift versions and a checked Sendable
+  ///   conformance generates a warning.
+  final class Info: @unchecked Sendable {
     // For root node.
     struct Root: Sendable {
       private var arena: RetainedSyntaxArena

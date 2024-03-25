@@ -13,6 +13,9 @@
 // MARK: - EnvironmentValue Accessor
 
 import MacroExamplesInterface
+
+#if canImport(SwiftUI)
+
 import SwiftUI
 
 private struct MyEnvironmentKey: EnvironmentKey {
@@ -30,3 +33,5 @@ func runEnvironmentValueAccessorMacroPlayground() {
   environmentValues.myCustomValue = "New value"
   print("New myCustomValue: \(environmentValues.myCustomValue)")
 }
+
+#endif

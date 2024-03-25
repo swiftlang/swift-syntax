@@ -50,4 +50,8 @@ runPeerMacrosPlayground()
 
 // MARK: - Accessor Macros
 
+#if canImport(SwiftUI)
+
 runEnvironmentValueAccessorMacroPlayground()
+
+#endif

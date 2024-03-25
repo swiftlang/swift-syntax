@@ -10,6 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if canImport(SwiftUI)
+
 import SwiftUI
 
 // MARK: - EnvironmentValue Accessor
@@ -18,3 +20,5 @@ import SwiftUI
 @attached(accessor)
 public macro EnvironmentValue(for key: any EnvironmentKey.Type) =
   #externalMacro(module: "MacroExamplesImplementation", type: "EnvironmentValueMacro")
+
+#endif

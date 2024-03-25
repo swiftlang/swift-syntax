@@ -3286,7 +3286,7 @@ final class DeclarationTests: ParserTestCase {
 
   func testInitializerWithReturnType() {
     assertParse(
-      "init(_ ptr: UnsafeRawBufferPointer, _ a: borrowing Array<Int>) -> _borrow(a) Self",
+      "init(_ ptr: UnsafeRawBufferPointer, _ a: borrowing Array<Int>) -> dependsOn(a) Self",
       experimentalFeatures: .nonescapableTypes
     )
 

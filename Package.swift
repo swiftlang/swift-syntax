@@ -336,9 +336,6 @@ var rawSyntaxValidation: Bool { hasEnvironmentVariable("SWIFTSYNTAX_ENABLE_RAWSY
 /// See CONTRIBUTING.md for more information
 var alternateTokenIntrospection: Bool { hasEnvironmentVariable("SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION") }
 
-/// Assume that swift-argument-parser is checked out next to swift-syntax and use that instead of fetching a remote dependency.
-var useLocalDependencies: Bool { hasEnvironmentVariable("SWIFTCI_USE_LOCAL_DEPS") }
-
 // MARK: - Compute custom build settings
 
 // These build settings apply to the target and the corresponding test target.

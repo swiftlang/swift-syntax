@@ -21,20 +21,12 @@ final class EnvironmentValueMacroMacroTests: XCTestCase {
   func testEnvironmentValue() {
     assertMacroExpansion(
       """
-      private struct MyEnvironmentKey: EnvironmentKey {
-          static let defaultValue: String = "Default value"
-      }
-
       extension EnvironmentValues {
           @EnvironmentValue(for: MyEnvironmentKey.self)
           var myCustomValue: String
       }
       """,
       expandedSource: """
-        private struct MyEnvironmentKey: EnvironmentKey {
-            static let defaultValue: String = "Default value"
-        }
-
         extension EnvironmentValues {
             var myCustomValue: String {
                 get {

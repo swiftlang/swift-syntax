@@ -3308,4 +3308,21 @@ final class DeclarationTests: ParserTestCase {
       experimentalFeatures: .transferringArgsAndResults
     )
   }
+
+  func testMisplacedAttributeInVarDeclWithMultipleBindings() {
+    assertParse(
+      """
+      let a = "a", 1️⃣@foo b = "b"
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "misplaced attribute in variable declaration",
+          fixIts: ["move attributes in front of 'let'"]
+        )
+      ],
+      fixedSource: """
+        @foo let a = "a", b = "b"
+        """
+    )
+  }
 }

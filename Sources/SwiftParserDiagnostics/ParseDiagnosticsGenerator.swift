@@ -262,7 +262,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       unexpectedTokenCondition: { EffectSpecifier(token: $0) != nil },
       correctTokens: [effectSpecifiers?.asyncSpecifier, effectSpecifiers?.throwsClause?.throwsSpecifier],
       message: { EffectsSpecifierAfterArrow(effectsSpecifiersAfterArrow: $0) },
-      moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: .arrow) },
+      moveFixIt: { MoveNodesInFrontOfFixIt(movedNodes: $0, inFrontOf: .arrow) },
       removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
     )
   }
@@ -324,7 +324,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         unexpectedTokenCondition: { AsyncEffectSpecifier(token: $0) != nil },
         correctTokens: [node.asyncSpecifier],
         message: { AsyncMustPrecedeThrows(asyncKeywords: $0, throwsKeyword: throwsClause.throwsSpecifier) },
-        moveFixIt: { MoveTokensInFrontOfFixIt(movedTokens: $0, inFrontOf: throwsClause.throwsSpecifier.tokenKind) },
+        moveFixIt: { MoveNodesInFrontOfFixIt(movedNodes: $0, inFrontOf: throwsClause.throwsSpecifier.tokenKind) },
         removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
       )
     }
@@ -2052,6 +2052,27 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       moveFixIt: { MoveTokensAfterFixIt(movedTokens: $0, after: .equal) },
       removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
     )
+
+    if node.attributes.isMissingAllTokens,
+      let unexpected = node.bindings.compactMap({ $0.unexpectedBeforePattern }).first,
+      unexpected.only?.is(AttributeListSyntax.self) ?? false
+    {
+      let fixIt = FixIt(
+        message: MoveNodesInFrontOfFixIt(movedNodes: [unexpected], inFrontOf: node.bindingSpecifier.tokenKind),
+        changes: [
+          .makeMissing(unexpected),
+          .makePresent(node.attributes, trailingTrivia: .space),
+        ]
+      )
+
+      addDiagnostic(
+        unexpected,
+        .misplacedAttributeInVarDecl,
+        fixIts: [fixIt],
+        handledNodes: [node.attributes.id, unexpected.id]
+      )
+    }
+
     return .visitChildren
   }
 

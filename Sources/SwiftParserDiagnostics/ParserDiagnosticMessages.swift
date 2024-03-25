@@ -191,6 +191,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var maximumNestingLevelOverflow: Self {
     .init("parsing has exceeded the maximum nesting level")
   }
+  public static var misplacedAttributeInVarDecl: Self {
+    .init("misplaced attribute in variable declaration")
+  }
   public static var missingColonAndExprInTernaryExpr: Self {
     .init("expected ':' and expression after '? ...' in ternary expression")
   }
@@ -710,15 +713,15 @@ public struct MoveTokensAfterFixIt: ParserFixIt {
   }
 }
 
-public struct MoveTokensInFrontOfFixIt: ParserFixIt {
-  /// The token that should be moved
-  public let movedTokens: [TokenSyntax]
+public struct MoveNodesInFrontOfFixIt<Node: SyntaxProtocol>: ParserFixIt {
+  /// The nodes that should be moved
+  public let movedNodes: [Node]
 
-  /// The token before which 'movedTokens' should be moved
+  /// The token before which `movedNodes` should be moved
   public let inFrontOf: TokenKind
 
   public var message: String {
-    "move \(nodesDescription(movedTokens, format: false)) in front of '\(inFrontOf.nameForDiagnostics)'"
+    "move \(nodesDescription(movedNodes, format: false)) in front of '\(inFrontOf.nameForDiagnostics)'"
   }
 }
 

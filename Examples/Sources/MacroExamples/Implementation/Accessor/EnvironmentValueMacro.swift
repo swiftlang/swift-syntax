@@ -26,10 +26,10 @@ public struct EnvironmentValueMacro: AccessorMacro {
 
     return [
       """
-      get { self[\(raw: argument.expression)] }
+      get { self[\(argument.expression)] }
       """,
       """
-      set { self[\(raw: argument.expression)] = newValue }
+      set { self[\(argument.expression)] = newValue }
       """,
     ]
   }

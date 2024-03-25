@@ -1053,67 +1053,6 @@ public struct RawLifetimeSpecifierArgumentSyntax: RawSyntaxNodeProtocol {
 @_spi(ExperimentalLanguageFeatures)
 #endif
 @_spi(RawSyntax)
-public struct RawLifetimeSpecifierArgumentsSyntax: RawSyntaxNodeProtocol {
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
-    return raw.layoutView!
-  }
-  
-  public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .lifetimeSpecifierArguments
-  }
-  
-  public var raw: RawSyntax
-  
-  init(raw: RawSyntax) {
-    precondition(Self.isKindOf(raw))
-    self.raw = raw
-  }
-  
-  private init(unchecked raw: RawSyntax) {
-    self.raw = raw
-  }
-  
-  public init?(_ other: some RawSyntaxNodeProtocol) {
-    guard Self.isKindOf(other.raw) else {
-      return nil
-    }
-    self.init(unchecked: other.raw)
-  }
-  
-  public init(
-      _ unexpectedBeforeArguments: RawUnexpectedNodesSyntax? = nil, 
-      arguments: RawLifetimeSpecifierArgumentListSyntax, 
-      _ unexpectedAfterArguments: RawUnexpectedNodesSyntax? = nil, 
-      arena: __shared SyntaxArena
-    ) {
-    let raw = RawSyntax.makeLayout(
-      kind: .lifetimeSpecifierArguments, uninitializedCount: 3, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeArguments?.raw
-      layout[1] = arguments.raw
-      layout[2] = unexpectedAfterArguments?.raw
-    }
-    self.init(unchecked: raw)
-  }
-  
-  public var unexpectedBeforeArguments: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  
-  public var arguments: RawLifetimeSpecifierArgumentListSyntax {
-    layoutView.children[1].map(RawLifetimeSpecifierArgumentListSyntax.init(raw:))!
-  }
-  
-  public var unexpectedAfterArguments: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-}
-
-#if compiler(>=5.8)
-@_spi(ExperimentalLanguageFeatures)
-#endif
-@_spi(RawSyntax)
 public struct RawLifetimeTypeSpecifierSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
@@ -1150,7 +1089,7 @@ public struct RawLifetimeTypeSpecifierSyntax: RawSyntaxNodeProtocol {
       _ unexpectedBetweenLeftParenAndScopedKeyword: RawUnexpectedNodesSyntax? = nil, 
       scopedKeyword: RawTokenSyntax?, 
       _ unexpectedBetweenScopedKeywordAndArguments: RawUnexpectedNodesSyntax? = nil, 
-      arguments: RawLifetimeSpecifierArgumentsSyntax, 
+      arguments: RawLifetimeSpecifierArgumentListSyntax, 
       _ unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? = nil, 
       rightParen: RawTokenSyntax, 
       _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil, 
@@ -1202,8 +1141,8 @@ public struct RawLifetimeTypeSpecifierSyntax: RawSyntaxNodeProtocol {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var arguments: RawLifetimeSpecifierArgumentsSyntax {
-    layoutView.children[7].map(RawLifetimeSpecifierArgumentsSyntax.init(raw:))!
+  public var arguments: RawLifetimeSpecifierArgumentListSyntax {
+    layoutView.children[7].map(RawLifetimeSpecifierArgumentListSyntax.init(raw:))!
   }
   
   public var unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? {

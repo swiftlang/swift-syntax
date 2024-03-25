@@ -1790,119 +1790,6 @@ public struct LifetimeSpecifierArgumentSyntax: SyntaxProtocol, SyntaxHashable, _
   }
 }
 
-// MARK: - LifetimeSpecifierArgumentsSyntax
-
-/// An optional argument passed to a type parameter.
-/// 
-/// ### Example
-/// `borrow(data)` in `func foo(data: Array<Item>) -> borrow(data) ComplexReferenceType`
-///
-/// - Experiment: Requires experimental feature `nonescapableTypes`.
-///
-/// ### Children
-/// 
-///  - `arguments`: `LifetimeSpecifierArgumentListSyntax`
-#if compiler(>=5.8)
-@_spi(ExperimentalLanguageFeatures)
-#endif
-public struct LifetimeSpecifierArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
-  public let _syntaxNode: Syntax
-  
-  public init?(_ node: some SyntaxProtocol) {
-    guard node.raw.kind == .lifetimeSpecifierArguments else {
-      return nil
-    }
-    self._syntaxNode = node._syntaxNode
-  }
-  
-  /// - Parameters:
-  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - arguments: The function parameters that the lifetime of the annotated type depends on.
-  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeArguments: UnexpectedNodesSyntax? = nil,
-      arguments: LifetimeSpecifierArgumentListSyntax,
-      _ unexpectedAfterArguments: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
-    
-  ) {
-    // Extend the lifetime of all parameters so their arenas don't get destroyed
-    // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeArguments, arguments, unexpectedAfterArguments))) { (arena, _) in
-      let layout: [RawSyntax?] = [unexpectedBeforeArguments?.raw, arguments.raw, unexpectedAfterArguments?.raw]
-      let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.lifetimeSpecifierArguments,
-        from: layout,
-        arena: arena,
-        leadingTrivia: leadingTrivia,
-        trailingTrivia: trailingTrivia
-        
-      )
-      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
-    }
-  }
-  
-  public var unexpectedBeforeArguments: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(LifetimeSpecifierArgumentsSyntax.self)
-    }
-  }
-  
-  /// The function parameters that the lifetime of the annotated type depends on.
-  public var arguments: LifetimeSpecifierArgumentListSyntax {
-    get {
-      return Syntax(self).child(at: 1)!.cast(LifetimeSpecifierArgumentListSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(LifetimeSpecifierArgumentsSyntax.self)
-    }
-  }
-  
-  /// Adds the provided `element` to the node's `arguments`
-  /// collection.
-  ///
-  /// - param element: The new `Arguments` to add to the node's
-  ///                  `arguments` collection.
-  /// - returns: A copy of the receiver with the provided `Arguments`
-  ///            appended to its `arguments` collection.
-  @available(*, deprecated, message: "Use node.arguments.append(newElement) instead")
-  public func addArguments(_ element: LifetimeSpecifierArgumentSyntax) -> LifetimeSpecifierArgumentsSyntax {
-    var collection: RawSyntax
-    let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.lifetimeSpecifierArgumentList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 1, 
-        with: collection, 
-        rawNodeArena: arena, 
-        allocationArena: arena
-      )
-      .cast(LifetimeSpecifierArgumentsSyntax.self)
-  }
-  
-  public var unexpectedAfterArguments: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(LifetimeSpecifierArgumentsSyntax.self)
-    }
-  }
-  
-  public static var structure: SyntaxNodeStructure {
-    return .layout([\Self.unexpectedBeforeArguments, \Self.arguments, \Self.unexpectedAfterArguments])
-  }
-}
-
 // MARK: - LifetimeTypeSpecifierSyntax
 
 /// A specifier that specifies function parameter on whose lifetime a type depends
@@ -1914,7 +1801,7 @@ public struct LifetimeSpecifierArgumentsSyntax: SyntaxProtocol, SyntaxHashable, 
 ///  - `dependsOnKeyword`: `dependsOn`
 ///  - `leftParen`: `(`
 ///  - `scopedKeyword`: `scoped`?
-///  - `arguments`: `LifetimeSpecifierArgumentsSyntax`
+///  - `arguments`: `LifetimeSpecifierArgumentListSyntax`
 ///  - `rightParen`: `)`
 ///
 /// ### Contained in
@@ -1935,7 +1822,8 @@ public struct LifetimeTypeSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
   
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - dependsOnKeyword: The specifier token that's attached to the type.
+  ///   - dependsOnKeyword: lifetime dependence specifier on the return type
+  ///   - scopedKeyword: lifetime of return value is scoped to the lifetime of the original value
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
       leadingTrivia: Trivia? = nil,
@@ -1946,7 +1834,7 @@ public struct LifetimeTypeSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
       _ unexpectedBetweenLeftParenAndScopedKeyword: UnexpectedNodesSyntax? = nil,
       scopedKeyword: TokenSyntax? = nil,
       _ unexpectedBetweenScopedKeywordAndArguments: UnexpectedNodesSyntax? = nil,
-      arguments: LifetimeSpecifierArgumentsSyntax,
+      arguments: LifetimeSpecifierArgumentListSyntax,
       _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
@@ -2002,7 +1890,7 @@ public struct LifetimeTypeSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
   
-  /// The specifier token that's attached to the type.
+  /// lifetime dependence specifier on the return type
   ///
   /// ### Tokens
   /// 
@@ -2046,6 +1934,8 @@ public struct LifetimeTypeSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
   
+  /// lifetime of return value is scoped to the lifetime of the original value
+  ///
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `scoped`.
@@ -2067,13 +1957,40 @@ public struct LifetimeTypeSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
   
-  public var arguments: LifetimeSpecifierArgumentsSyntax {
+  public var arguments: LifetimeSpecifierArgumentListSyntax {
     get {
-      return Syntax(self).child(at: 7)!.cast(LifetimeSpecifierArgumentsSyntax.self)
+      return Syntax(self).child(at: 7)!.cast(LifetimeSpecifierArgumentListSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(LifetimeTypeSpecifierSyntax.self)
     }
+  }
+  
+  /// Adds the provided `element` to the node's `arguments`
+  /// collection.
+  ///
+  /// - param element: The new `Arguments` to add to the node's
+  ///                  `arguments` collection.
+  /// - returns: A copy of the receiver with the provided `Arguments`
+  ///            appended to its `arguments` collection.
+  @available(*, deprecated, message: "Use node.arguments.append(newElement) instead")
+  public func addArguments(_ element: LifetimeSpecifierArgumentSyntax) -> LifetimeTypeSpecifierSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[7] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.lifetimeSpecifierArgumentList,
+                                        from: [element.raw], arena: arena)
+    }
+    return Syntax(self)
+      .replacingChild(
+        at: 7, 
+        with: collection, 
+        rawNodeArena: arena, 
+        allocationArena: arena
+      )
+      .cast(LifetimeTypeSpecifierSyntax.self)
   }
   
   public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {

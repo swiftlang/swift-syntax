@@ -42,10 +42,8 @@ public enum SyntaxEnum: Sendable {
   case booleanLiteralExpr(BooleanLiteralExprSyntax)
   case borrowExpr(BorrowExprSyntax)
   case breakStmt(BreakStmtSyntax)
-  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
-  case canImportExpr(CanImportExprSyntax)
-  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
-  case canImportVersionInfo(CanImportVersionInfoSyntax)
+  case _canImportExpr(_CanImportExprSyntax)
+  case _canImportVersionInfo(_CanImportVersionInfoSyntax)
   case catchClauseList(CatchClauseListSyntax)
   case catchClause(CatchClauseSyntax)
   case catchItemList(CatchItemListSyntax)
@@ -377,10 +375,10 @@ public extension Syntax {
       return .borrowExpr(BorrowExprSyntax(self)!)
     case .breakStmt:
       return .breakStmt(BreakStmtSyntax(self)!)
-    case .canImportExpr:
-      return .canImportExpr(CanImportExprSyntax(self)!)
-    case .canImportVersionInfo:
-      return .canImportVersionInfo(CanImportVersionInfoSyntax(self)!)
+    case ._canImportExpr:
+      return ._canImportExpr(_CanImportExprSyntax(self)!)
+    case ._canImportVersionInfo:
+      return ._canImportVersionInfo(_CanImportVersionInfoSyntax(self)!)
     case .catchClauseList:
       return .catchClauseList(CatchClauseListSyntax(self)!)
     case .catchClause:
@@ -989,10 +987,8 @@ public enum ExprSyntaxEnum {
   case binaryOperatorExpr(BinaryOperatorExprSyntax)
   case booleanLiteralExpr(BooleanLiteralExprSyntax)
   case borrowExpr(BorrowExprSyntax)
-  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
-  case canImportExpr(CanImportExprSyntax)
-  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
-  case canImportVersionInfo(CanImportVersionInfoSyntax)
+  case _canImportExpr(_CanImportExprSyntax)
+  case _canImportVersionInfo(_CanImportVersionInfoSyntax)
   case closureExpr(ClosureExprSyntax)
   case consumeExpr(ConsumeExprSyntax)
   case copyExpr(CopyExprSyntax)
@@ -1061,10 +1057,10 @@ public extension ExprSyntax {
       return .booleanLiteralExpr(BooleanLiteralExprSyntax(self)!)
     case .borrowExpr:
       return .borrowExpr(BorrowExprSyntax(self)!)
-    case .canImportExpr:
-      return .canImportExpr(CanImportExprSyntax(self)!)
-    case .canImportVersionInfo:
-      return .canImportVersionInfo(CanImportVersionInfoSyntax(self)!)
+    case ._canImportExpr:
+      return ._canImportExpr(_CanImportExprSyntax(self)!)
+    case ._canImportVersionInfo:
+      return ._canImportVersionInfo(_CanImportVersionInfoSyntax(self)!)
     case .closureExpr:
       return .closureExpr(ClosureExprSyntax(self)!)
     case .consumeExpr:

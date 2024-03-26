@@ -46,7 +46,11 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     /// - Important: Must only be set to `nil` when `Syntax.Info` is used in a memory recycling pool
     ///    (eg. in `SyntaxVisitor`). In that case the `Syntax.Info` is considered garbage memory that can be re-used
     ///    later. `info` needs to be set to a real value when `Syntax.Info` is recycled from the memory recycling pool.
+    #if compiler(>=6.0)
+    nonisolated(unsafe) var info: InfoImpl!
+    #else
     var info: InfoImpl!
+    #endif
   }
 
   /// Reference to the node's parent or, if this node is the root of a tree, a reference to the `SyntaxArena` to keep

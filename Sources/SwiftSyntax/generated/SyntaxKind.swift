@@ -42,10 +42,8 @@ public enum SyntaxKind: Sendable {
   case booleanLiteralExpr
   case borrowExpr
   case breakStmt
-  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
-  case canImportExpr
-  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
-  case canImportVersionInfo
+  case _canImportExpr
+  case _canImportVersionInfo
   case catchClauseList
   case catchClause
   case catchItemList
@@ -502,10 +500,10 @@ public enum SyntaxKind: Sendable {
       return BorrowExprSyntax.self
     case .breakStmt:
       return BreakStmtSyntax.self
-    case .canImportExpr:
-      return CanImportExprSyntax.self
-    case .canImportVersionInfo:
-      return CanImportVersionInfoSyntax.self
+    case ._canImportExpr:
+      return _CanImportExprSyntax.self
+    case ._canImportVersionInfo:
+      return _CanImportVersionInfoSyntax.self
     case .catchClauseList:
       return CatchClauseListSyntax.self
     case .catchClause:

@@ -42,7 +42,10 @@ fileprivate extension Node {
 func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
   return SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for node in SYNTAX_NODES
-    where node.kind.isBase && nodesStartingWith.contains(node.kind.syntaxType.description.first!) {
+    where node.kind.isBase
+      && nodesStartingWith.contains(node.kind.syntaxType.description.droppingLeadingUnderscores.first!)
+      && !node.kind.isDeprecated
+    {
       DeclSyntax(
         """
         \(node.apiAttributes(forRaw: true))\
@@ -51,7 +54,8 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
       )
     }
 
-    for node in SYNTAX_NODES where nodesStartingWith.contains(node.kind.syntaxType.description.first!) {
+    for node in SYNTAX_NODES
+    where nodesStartingWith.contains(node.kind.syntaxType.description.droppingLeadingUnderscores.first!) {
       try! StructDeclSyntax(
         """
         \(node.apiAttributes(forRaw: true))\

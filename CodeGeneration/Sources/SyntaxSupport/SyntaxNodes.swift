@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-public let SYNTAX_NODES: [Node] =
-  (COMMON_NODES
+private let unsortedSyntaxNodes: [Node] =
+  COMMON_NODES
   + EXPR_NODES
   + DECL_NODES
   + ATTRIBUTE_NODES
@@ -19,7 +19,15 @@ public let SYNTAX_NODES: [Node] =
   + GENERIC_NODES
   + TYPE_NODES
   + PATTERN_NODES
-  + AVAILABILITY_NODES).sorted { $0.kind.syntaxType.description < $1.kind.syntaxType.description }
+  + AVAILABILITY_NODES
+
+public let SYNTAX_NODES: [Node] =
+  unsortedSyntaxNodes
+  .sorted { (lhs: Node, rhs: Node) -> Bool in
+    let lhsSortKey = lhs.kind.syntaxType.description.droppingLeadingUnderscores
+    let rhsSortKey = rhs.kind.syntaxType.description.droppingLeadingUnderscores
+    return lhsSortKey < rhsSortKey
+  }
 
 /// A lookup table of nodes indexed by their kind.
 public let SYNTAX_NODE_MAP: [SyntaxNodeKind: Node] = Dictionary(

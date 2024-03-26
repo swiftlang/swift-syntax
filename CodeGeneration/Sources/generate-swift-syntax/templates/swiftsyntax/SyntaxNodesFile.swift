@@ -22,7 +22,7 @@ import Utils
 func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
   SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for node in SYNTAX_NODES.compactMap(\.layoutNode)
-    where nodesStartingWith.contains(node.kind.syntaxType.description.first!) {
+    where nodesStartingWith.contains(node.kind.syntaxType.description.droppingLeadingUnderscores.first!) {
       // We are actually handling this node now
       try! StructDeclSyntax(
         """

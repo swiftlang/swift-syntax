@@ -464,8 +464,6 @@ public extension Syntax {
 /// - ``BinaryOperatorExprSyntax``
 /// - ``BooleanLiteralExprSyntax``
 /// - ``BorrowExprSyntax``
-/// - ``CanImportExprSyntax``
-/// - ``CanImportVersionInfoSyntax``
 /// - ``ClosureExprSyntax``
 /// - ``ConsumeExprSyntax``
 /// - ``CopyExprSyntax``
@@ -544,7 +542,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   
   public init?(_ node: some SyntaxProtocol) {
     switch node.raw.kind {
-    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .canImportExpr, .canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .doExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .simpleStringLiteralExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
+    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, ._canImportExpr, ._canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .doExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .simpleStringLiteralExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -577,8 +575,8 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
           .node(BinaryOperatorExprSyntax.self),
           .node(BooleanLiteralExprSyntax.self),
           .node(BorrowExprSyntax.self),
-          .node(CanImportExprSyntax.self),
-          .node(CanImportVersionInfoSyntax.self),
+          .node(_CanImportExprSyntax.self),
+          .node(_CanImportVersionInfoSyntax.self),
           .node(ClosureExprSyntax.self),
           .node(ConsumeExprSyntax.self),
           .node(CopyExprSyntax.self),
@@ -1546,8 +1544,8 @@ extension Syntax {
           .node(BooleanLiteralExprSyntax.self),
           .node(BorrowExprSyntax.self),
           .node(BreakStmtSyntax.self),
-          .node(CanImportExprSyntax.self),
-          .node(CanImportVersionInfoSyntax.self),
+          .node(_CanImportExprSyntax.self),
+          .node(_CanImportVersionInfoSyntax.self),
           .node(CatchClauseListSyntax.self),
           .node(CatchClauseSyntax.self),
           .node(CatchItemListSyntax.self),

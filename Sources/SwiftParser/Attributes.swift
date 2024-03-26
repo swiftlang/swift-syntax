@@ -61,6 +61,7 @@ extension Parser {
     case differentiable
     case exclusivity
     case freestanding
+    case implementation
     case inline
     case objc
     case Sendable
@@ -98,6 +99,7 @@ extension Parser {
       case TokenSpec(.differentiable): self = .differentiable
       case TokenSpec(.exclusivity): self = .exclusivity
       case TokenSpec(.freestanding): self = .freestanding
+      case TokenSpec(.implementation): self = .implementation
       case TokenSpec(.inline): self = .inline
       case TokenSpec(.objc): self = .objc
       case TokenSpec(.Sendable): self = .Sendable
@@ -139,6 +141,7 @@ extension Parser {
       case .differentiable: return .keyword(.differentiable)
       case .exclusivity: return .keyword(.exclusivity)
       case .freestanding: return .keyword(.freestanding)
+      case .implementation: return .keyword(.implementation)
       case .inline: return .keyword(.inline)
       case .objc: return .keyword(.objc)
       case .Sendable: return .keyword(.Sendable)
@@ -301,7 +304,7 @@ extension Parser {
           return .token(parser.missingToken(.identifier))
         }
       }
-    case ._objcImplementation, ._nonSendable:
+    case ._objcImplementation, ._nonSendable, .implementation:
       // Similar to the above but the argument is optional
       return parseAttribute(argumentMode: .optional) { parser in
         if !parser.at(.rightParen) {

@@ -142,6 +142,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case `guard`
   case higherThan
   case `if`
+  case implementation
   case `import`
   case `in`
   case indirect
@@ -708,6 +709,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .associatedtype
       case "differentiable":
         self = .differentiable
+      case "implementation":
+        self = .implementation
       case "preconcurrency":
         self = .preconcurrency
       case "witness_method":
@@ -942,6 +945,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
       "guard", 
       "higherThan", 
       "if", 
+      "implementation", 
       "import", 
       "in", 
       "indirect", 

@@ -286,6 +286,7 @@ enum TokenPrecedence: Comparable {
       .derivative,
       .exclusivity,
       .freestanding,
+      .implementation,
       .inline,
       .objc,
       .transpose:

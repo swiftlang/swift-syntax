@@ -221,6 +221,7 @@ public enum Keyword: CaseIterable {
   case `guard`
   case higherThan
   case `if`
+  case implementation
   case `import`
   case `in`
   case indirect
@@ -559,6 +560,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("higherThan")
     case .if:
       return KeywordSpec("if", isLexerClassified: true)
+    case .implementation:
+      return KeywordSpec("implementation")
     case .import:
       return KeywordSpec("import", isLexerClassified: true)
     case .in:

@@ -407,6 +407,12 @@ final class AttributeTests: ParserTestCase {
       @_objcImplementation(Category) extension MyClass {
         func fn2() {}
       }
+      @implementation extension MyClass {
+        func fn() {}
+      }
+      @implementation(Category) extension MyClass {
+        func fn2() {}
+      }
       """
     )
   }

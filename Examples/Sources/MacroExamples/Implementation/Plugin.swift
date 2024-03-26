@@ -26,6 +26,7 @@ struct MyPlugin: CompilerPlugin {
     DefaultFatalErrorImplementationMacro.self,
     DictionaryStorageMacro.self,
     DictionaryStoragePropertyMacro.self,
+    EnvironmentValueMacro.self,
     EquatableExtensionMacro.self,
     FontLiteralMacro.self,
     FuncUniqueMacro.self,

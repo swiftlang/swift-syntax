@@ -550,6 +550,7 @@ class ValidateSyntaxNodes: XCTestCase {
           node: .yieldedExpressionsClause,
           message: "could conform to trait 'Parenthesized' but does not"
         ),
+        ValidationFailure(node: .lifetimeTypeSpecifier, message: "could conform to trait 'Parenthesized' but does not"),
       ]
     )
   }

@@ -1239,16 +1239,6 @@ open class SyntaxRewriter {
     return visitChildren(node)
   }
   
-  /// Visit a `LifetimeSpecifierArgumentsSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  open func visit(_ node: LifetimeSpecifierArgumentsSyntax) -> LifetimeSpecifierArgumentsSyntax {
-    return visitChildren(node)
-  }
-  
   /// Visit a `LifetimeTypeSpecifierSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2834,10 +2824,6 @@ open class SyntaxRewriter {
       return {
         self.visitImpl($0, LifetimeSpecifierArgumentSyntax.self, self.visit)
       }
-    case .lifetimeSpecifierArguments:
-      return {
-        self.visitImpl($0, LifetimeSpecifierArgumentsSyntax.self, self.visit)
-      }
     case .lifetimeTypeSpecifier:
       return {
         self.visitImpl($0, LifetimeTypeSpecifierSyntax.self, self.visit)
@@ -3656,8 +3642,6 @@ open class SyntaxRewriter {
       return visitImpl(node, LifetimeSpecifierArgumentListSyntax.self, visit)
     case .lifetimeSpecifierArgument:
       return visitImpl(node, LifetimeSpecifierArgumentSyntax.self, visit)
-    case .lifetimeSpecifierArguments:
-      return visitImpl(node, LifetimeSpecifierArgumentsSyntax.self, visit)
     case .lifetimeTypeSpecifier:
       return visitImpl(node, LifetimeTypeSpecifierSyntax.self, visit)
     case .macroDecl:

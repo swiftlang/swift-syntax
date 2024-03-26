@@ -2009,12 +2009,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "trailingComma"
   case \LifetimeSpecifierArgumentSyntax.unexpectedAfterTrailingComma:
     return "unexpectedAfterTrailingComma"
-  case \LifetimeSpecifierArgumentsSyntax.unexpectedBeforeArguments:
-    return "unexpectedBeforeArguments"
-  case \LifetimeSpecifierArgumentsSyntax.arguments:
-    return "arguments"
-  case \LifetimeSpecifierArgumentsSyntax.unexpectedAfterArguments:
-    return "unexpectedAfterArguments"
   case \LifetimeTypeSpecifierSyntax.unexpectedBeforeDependsOnKeyword:
     return "unexpectedBeforeDependsOnKeyword"
   case \LifetimeTypeSpecifierSyntax.dependsOnKeyword:

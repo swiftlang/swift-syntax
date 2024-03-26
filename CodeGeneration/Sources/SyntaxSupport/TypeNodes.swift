@@ -543,41 +543,16 @@ public let TYPE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .lifetimeSpecifierArguments,
-    base: .syntax,
-    experimentalFeature: .nonescapableTypes,
-    nameForDiagnostics: nil,
-    documentation: """
-      An optional argument passed to a type parameter.
-
-      ### Example
-      `borrow(data)` in `func foo(data: Array<Item>) -> borrow(data) ComplexReferenceType`
-      """,
-    children: [
-      Child(
-        name: "arguments",
-        kind: .collection(kind: .lifetimeSpecifierArgumentList, collectionElementName: "Arguments"),
-        documentation: """
-          The function parameters that the lifetime of the annotated type depends on.
-          """
-      )
-    ]
-  ),
-
-  Node(
     kind: .lifetimeTypeSpecifier,
     base: .syntax,
     experimentalFeature: .nonescapableTypes,
     nameForDiagnostics: "lifetime specifier",
     documentation: "A specifier that specifies function parameter on whose lifetime a type depends",
-    traits: [
-      "Parenthesized"
-    ],
     children: [
       Child(
         name: "dependsOnKeyword",
         kind: .token(choices: [.keyword(.dependsOn)]),
-        documentation: "The specifier token that's attached to the type."
+        documentation: "lifetime dependence specifier on the return type"
       ),
       Child(
         name: "leftParen",
@@ -586,11 +561,12 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "scopedKeyword",
         kind: .token(choices: [.keyword(.scoped)]),
+        documentation: "lifetime of return value is scoped to the lifetime of the original value",
         isOptional: true
       ),
       Child(
         name: "arguments",
-        kind: .node(kind: .lifetimeSpecifierArguments)
+        kind: .collection(kind: .lifetimeSpecifierArgumentList, collectionElementName: "Arguments")
       ),
       Child(
         name: "rightParen",

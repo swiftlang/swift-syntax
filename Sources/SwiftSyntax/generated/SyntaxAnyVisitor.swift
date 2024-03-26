@@ -1377,20 +1377,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
   #endif
-  override open func visit(_ node: LifetimeSpecifierArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-  
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  override open func visitPost(_ node: LifetimeSpecifierArgumentsSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-  
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
   override open func visit(_ node: LifetimeTypeSpecifierSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

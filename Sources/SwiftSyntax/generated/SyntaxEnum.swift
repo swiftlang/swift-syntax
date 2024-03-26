@@ -191,10 +191,6 @@ public enum SyntaxEnum: Sendable {
   #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
   #endif
-  case lifetimeSpecifierArguments(LifetimeSpecifierArgumentsSyntax)
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
   case lifetimeTypeSpecifier(LifetimeTypeSpecifierSyntax)
   case macroDecl(MacroDeclSyntax)
   case macroExpansionDecl(MacroExpansionDeclSyntax)
@@ -651,8 +647,6 @@ public extension Syntax {
       return .lifetimeSpecifierArgumentList(LifetimeSpecifierArgumentListSyntax(self)!)
     case .lifetimeSpecifierArgument:
       return .lifetimeSpecifierArgument(LifetimeSpecifierArgumentSyntax(self)!)
-    case .lifetimeSpecifierArguments:
-      return .lifetimeSpecifierArguments(LifetimeSpecifierArgumentsSyntax(self)!)
     case .lifetimeTypeSpecifier:
       return .lifetimeTypeSpecifier(LifetimeTypeSpecifierSyntax(self)!)
     case .macroDecl:

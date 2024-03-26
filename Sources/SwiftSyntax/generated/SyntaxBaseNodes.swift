@@ -1681,7 +1681,6 @@ extension Syntax {
           .node(LayoutRequirementSyntax.self),
           .node(LifetimeSpecifierArgumentListSyntax.self),
           .node(LifetimeSpecifierArgumentSyntax.self),
-          .node(LifetimeSpecifierArgumentsSyntax.self),
           .node(LifetimeTypeSpecifierSyntax.self),
           .node(MacroDeclSyntax.self),
           .node(MacroExpansionDeclSyntax.self),

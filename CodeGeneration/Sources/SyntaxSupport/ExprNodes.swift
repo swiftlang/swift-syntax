@@ -152,6 +152,9 @@ public let EXPR_NODES: [Node] = [
     kind: .awaitExpr,
     base: .expr,
     nameForDiagnostics: "'await' expression",
+    traits: [
+      "EffectfulExpr"
+    ],
     children: [
       Child(
         name: "awaitKeyword",
@@ -1914,6 +1917,9 @@ public let EXPR_NODES: [Node] = [
       try! foo()
       ```
       """,
+    traits: [
+      "EffectfulExpr"
+    ],
     children: [
       Child(
         name: "tryKeyword",

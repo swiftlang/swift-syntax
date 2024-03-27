@@ -392,6 +392,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 
 - <doc:SwiftSyntax/BracedSyntax>
 - <doc:SwiftSyntax/DeclGroupSyntax>
+- <doc:SwiftSyntax/EffectfulExprSyntax>
 - <doc:SwiftSyntax/EffectSpecifiersSyntax>
 - <doc:SwiftSyntax/FreestandingMacroExpansionSyntax>
 - <doc:SwiftSyntax/NamedDeclSyntax>

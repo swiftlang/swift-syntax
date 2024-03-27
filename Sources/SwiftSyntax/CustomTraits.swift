@@ -21,6 +21,17 @@ extension ActorDeclSyntax {
   }
 }
 
+extension AwaitExprSyntax {
+  public var keyword: TokenSyntax {
+    get {
+      return awaitKeyword
+    }
+    set {
+      awaitKeyword = newValue
+    }
+  }
+}
+
 extension ClassDeclSyntax {
   public var introducer: TokenSyntax {
     get {
@@ -72,6 +83,17 @@ extension StructDeclSyntax {
     }
     set {
       structKeyword = newValue
+    }
+  }
+}
+
+extension TryExprSyntax {
+  public var keyword: TokenSyntax {
+    get {
+      return tryKeyword
+    }
+    set {
+      tryKeyword = newValue
     }
   }
 }

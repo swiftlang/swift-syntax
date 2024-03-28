@@ -24,4 +24,9 @@ class IdentifierTests: XCTestCase {
     let multiBacktickedToken = TokenSyntax(stringLiteral: "```backtickedtoken```")
     XCTAssertEqual(Identifier(multiBacktickedToken).name, "backtickedtoken")
   }
+
+  public func testTokenSyntaxIdentifier() {
+    let tokenSyntax = TokenSyntax(stringLiteral: "sometoken")
+    XCTAssertEqual(tokenSyntax.identifier, Identifier(tokenSyntax))
+  }
 }

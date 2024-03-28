@@ -153,6 +153,11 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
 
+  /// An identifier created from `self`.
+  public var identifier: Identifier {
+    Identifier(self)
+  }
+
   /// A token by itself has no structure, so we represent its structure by an
   /// empty layout node.
   ///

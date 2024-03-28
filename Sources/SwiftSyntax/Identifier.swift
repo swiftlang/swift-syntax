@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// An abstraction for sanitized values on a token.
-public struct Identifier {
+public struct Identifier: Equatable {
   /// The sanitized `text` of a token.
   public let name: String
 

@@ -900,33 +900,31 @@ extension Parser.Lookahead {
 }
 
 extension Parser {
-  private mutating func parseLifetimeTypeSpecifier(
-    specifierHandle: TokenConsumptionHandle
-  ) -> RawTypeSpecifierListSyntax.Element {
-    let specifier = self.eat(specifierHandle)
+  private mutating func parseLifetimeTypeSpecifier() -> RawTypeSpecifierListSyntax.Element {
+    let (unexpectedBeforeDependsOnKeyword, dependsOnKeyword) = self.expect(.keyword(.dependsOn))
 
     guard let leftParen = self.consume(if: .leftParen) else {
       // If there is no left paren, add an entirely missing detail. Otherwise, we start to consume the following type
       // name as a token inside the detail, which leads to confusing recovery results.
-      let arguments = RawLifetimeSpecifierArgumentsSyntax(
-        leftParen: missingToken(.leftParen),
-        arguments: RawLifetimeSpecifierArgumentListSyntax(
-          elements: [
-            RawLifetimeSpecifierArgumentSyntax(parameter: missingToken(.identifier), trailingComma: nil, arena: arena)
-          ],
-          arena: self.arena
-        ),
-        rightParen: missingToken(.rightParen),
+      let lifetimeSpecifierArgumentList = RawLifetimeSpecifierArgumentListSyntax(
+        elements: [
+          RawLifetimeSpecifierArgumentSyntax(parameter: missingToken(.identifier), trailingComma: nil, arena: arena)
+        ],
         arena: self.arena
       )
       let lifetimeSpecifier = RawLifetimeTypeSpecifierSyntax(
-        specifier: specifier,
-        arguments: arguments,
+        unexpectedBeforeDependsOnKeyword,
+        dependsOnKeyword: dependsOnKeyword,
+        leftParen: missingToken(.leftParen),
+        scopedKeyword: nil,
+        arguments: lifetimeSpecifierArgumentList,
+        rightParen: missingToken(.rightParen),
         arena: self.arena
       )
       return .lifetimeTypeSpecifier(lifetimeSpecifier)
     }
 
+    let scoped = self.consume(if: .keyword(.scoped))
     var keepGoing: RawTokenSyntax?
     var arguments: [RawLifetimeSpecifierArgumentSyntax] = []
     var loopProgress = LoopProgressCondition()
@@ -947,16 +945,14 @@ extension Parser {
     } while keepGoing != nil && self.hasProgressed(&loopProgress)
     let lifetimeSpecifierArgumentList = RawLifetimeSpecifierArgumentListSyntax(elements: arguments, arena: self.arena)
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-    let argumentsSyntax = RawLifetimeSpecifierArgumentsSyntax(
+    let lifetimeSpecifier = RawLifetimeTypeSpecifierSyntax(
+      unexpectedBeforeDependsOnKeyword,
+      dependsOnKeyword: dependsOnKeyword,
       leftParen: leftParen,
+      scopedKeyword: scoped,
       arguments: lifetimeSpecifierArgumentList,
       unexpectedBeforeRightParen,
       rightParen: rightParen,
-      arena: self.arena
-    )
-    let lifetimeSpecifier = RawLifetimeTypeSpecifierSyntax(
-      specifier: specifier,
-      arguments: argumentsSyntax,
       arena: self.arena
     )
     return .lifetimeTypeSpecifier(lifetimeSpecifier)
@@ -976,20 +972,18 @@ extension Parser {
     specifiers: RawTypeSpecifierListSyntax,
     attributes: RawAttributeListSyntax
   )? {
-    typealias SimpleOrLifetimeSpecifier =
-      EitherTokenSpecSet<SimpleTypeSpecifierSyntax.SpecifierOptions, LifetimeTypeSpecifierSyntax.SpecifierOptions>
     var specifiers: [RawTypeSpecifierListSyntax.Element] = []
-    SPECIFIER_PARSING: while canHaveParameterSpecifier,
-      let (specifierSpec, specifierHandle) = self.at(anyIn: SimpleOrLifetimeSpecifier.self)
-    {
-      switch specifierSpec {
-      case .lhs: specifiers.append(parseSimpleTypeSpecifier(specifierHandle: specifierHandle))
-      case .rhs:
+    SPECIFIER_PARSING: while canHaveParameterSpecifier {
+      if let (_, specifierHandle) = self.at(anyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) {
+        specifiers.append(parseSimpleTypeSpecifier(specifierHandle: specifierHandle))
+      } else if self.at(.keyword(.dependsOn)) {
         if self.experimentalFeatures.contains(.nonescapableTypes) {
-          specifiers.append(parseLifetimeTypeSpecifier(specifierHandle: specifierHandle))
+          specifiers.append(parseLifetimeTypeSpecifier())
         } else {
           break SPECIFIER_PARSING
         }
+      } else {
+        break SPECIFIER_PARSING
       }
     }
     specifiers += misplacedSpecifiers.map {

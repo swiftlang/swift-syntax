@@ -543,39 +543,6 @@ public let TYPE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .lifetimeSpecifierArguments,
-    base: .syntax,
-    experimentalFeature: .nonescapableTypes,
-    nameForDiagnostics: nil,
-    documentation: """
-      An optional argument passed to a type parameter.
-
-      ### Example
-      `borrow(data)` in `func foo(data: Array<Item>) -> borrow(data) ComplexReferenceType`
-      """,
-    traits: [
-      "Parenthesized"
-    ],
-    children: [
-      Child(
-        name: "leftParen",
-        kind: .token(choices: [.token(.leftParen)])
-      ),
-      Child(
-        name: "arguments",
-        kind: .collection(kind: .lifetimeSpecifierArgumentList, collectionElementName: "Arguments"),
-        documentation: """
-          The function parameters that the lifetime of the annotated type depends on.
-          """
-      ),
-      Child(
-        name: "rightParen",
-        kind: .token(choices: [.token(.rightParen)])
-      ),
-    ]
-  ),
-
-  Node(
     kind: .lifetimeTypeSpecifier,
     base: .syntax,
     experimentalFeature: .nonescapableTypes,
@@ -583,18 +550,27 @@ public let TYPE_NODES: [Node] = [
     documentation: "A specifier that specifies function parameter on whose lifetime a type depends",
     children: [
       Child(
-        name: "specifier",
-        kind: .token(choices: [
-          .keyword(._copy),
-          .keyword(._consume),
-          .keyword(._borrow),
-          .keyword(._mutate),
-        ]),
-        documentation: "The specifier token that's attached to the type."
+        name: "dependsOnKeyword",
+        kind: .token(choices: [.keyword(.dependsOn)]),
+        documentation: "lifetime dependence specifier on the return type"
+      ),
+      Child(
+        name: "leftParen",
+        kind: .token(choices: [.token(.leftParen)])
+      ),
+      Child(
+        name: "scopedKeyword",
+        kind: .token(choices: [.keyword(.scoped)]),
+        documentation: "lifetime of return value is scoped to the lifetime of the original value",
+        isOptional: true
       ),
       Child(
         name: "arguments",
-        kind: .node(kind: .lifetimeSpecifierArguments)
+        kind: .collection(kind: .lifetimeSpecifierArgumentList, collectionElementName: "Arguments")
+      ),
+      Child(
+        name: "rightParen",
+        kind: .token(choices: [.token(.rightParen)])
       ),
     ]
   ),

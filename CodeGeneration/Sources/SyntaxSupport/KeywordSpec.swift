@@ -108,9 +108,7 @@ public enum Keyword: CaseIterable {
   case _Class
   case _compilerInitialized
   case _const
-  case _consume
   case _consuming
-  case _copy
   case _documentation
   case _dynamicReplacement
   case _effects
@@ -121,7 +119,6 @@ public enum Keyword: CaseIterable {
   case _local
   case _modify
   case _move
-  case _mutate
   case _mutating
   case _NativeClass
   case _NativeRefCountedObject
@@ -186,6 +183,7 @@ public enum Keyword: CaseIterable {
   case `default`
   case `defer`
   case `deinit`
+  case dependsOn
   case deprecated
   case derivative
   case didSet
@@ -275,6 +273,7 @@ public enum Keyword: CaseIterable {
   case reverse
   case right
   case safe
+  case scoped
   case `self`
   case `Self`
   case Sendable
@@ -343,12 +342,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("_compilerInitialized")
     case ._const:
       return KeywordSpec("_const")
-    case ._consume:
-      return KeywordSpec("_consume", experimentalFeature: .nonescapableTypes)
     case ._consuming:
       return KeywordSpec("_consuming", experimentalFeature: .referenceBindings)
-    case ._copy:
-      return KeywordSpec("_copy", experimentalFeature: .nonescapableTypes)
     case ._documentation:
       return KeywordSpec("_documentation")
     case ._dynamicReplacement:
@@ -369,8 +364,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("_modify")
     case ._move:
       return KeywordSpec("_move")
-    case ._mutate:
-      return KeywordSpec("_mutate", experimentalFeature: .nonescapableTypes)
     case ._mutating:
       return KeywordSpec("_mutating", experimentalFeature: .referenceBindings)
     case ._NativeClass:
@@ -499,6 +492,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("defer", isLexerClassified: true)
     case .deinit:
       return KeywordSpec("deinit", isLexerClassified: true)
+    case .dependsOn:
+      return KeywordSpec("dependsOn", experimentalFeature: .nonescapableTypes)
     case .deprecated:
       return KeywordSpec("deprecated")
     case .derivative:
@@ -675,6 +670,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("right")
     case .safe:
       return KeywordSpec("safe")
+    case .scoped:
+      return KeywordSpec("scoped", experimentalFeature: .nonescapableTypes)
     case .self:
       return KeywordSpec("self", isLexerClassified: true)
     case .Self:

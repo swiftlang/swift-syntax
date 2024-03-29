@@ -16,17 +16,23 @@ import XCTest
 class IdentifierTests: XCTestCase {
   public func testInit() {
     let basicToken = TokenSyntax(stringLiteral: "sometoken")
-    XCTAssertEqual(Identifier(basicToken).name, "sometoken")
+    XCTAssertEqual(Identifier(basicToken)?.name, "sometoken")
 
     let backtickedToken = TokenSyntax(stringLiteral: "`backtickedtoken`")
-    XCTAssertEqual(Identifier(backtickedToken).name, "backtickedtoken")
+    XCTAssertEqual(Identifier(backtickedToken)?.name, "backtickedtoken")
 
     let multiBacktickedToken = TokenSyntax(stringLiteral: "```backtickedtoken```")
-    XCTAssertEqual(Identifier(multiBacktickedToken).name, "backtickedtoken")
+    XCTAssertEqual(Identifier(multiBacktickedToken)?.name, "backtickedtoken")
+
+    let nonIdentifierToken = DeclSyntax("let a = 1").firstToken(viewMode: .all)!
+    XCTAssertNil(Identifier(nonIdentifierToken))
   }
 
   public func testTokenSyntaxIdentifier() {
     let tokenSyntax = TokenSyntax(stringLiteral: "sometoken")
     XCTAssertEqual(tokenSyntax.identifier, Identifier(tokenSyntax))
+
+    let nonIdentifierToken = DeclSyntax("let a = 1").firstToken(viewMode: .all)!
+    XCTAssertNil(nonIdentifierToken.identifier)
   }
 }

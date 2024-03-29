@@ -15,8 +15,10 @@ public struct Identifier: Equatable, Hashable, Sendable {
   /// The sanitized `text` of a token.
   public let name: String
 
-  public init(_ token: TokenSyntax) {
-    let text = token.text
+  public init?(_ token: TokenSyntax) {
+    guard case .identifier(let text) = token.tokenKind else {
+      return nil
+    }
 
     self.name =
       if text.contains("`") {

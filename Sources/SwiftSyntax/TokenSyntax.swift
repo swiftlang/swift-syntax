@@ -154,7 +154,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// An identifier created from `self`.
-  public var identifier: Identifier {
+  public var identifier: Identifier? {
     Identifier(self)
   }
 

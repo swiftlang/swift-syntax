@@ -71,6 +71,14 @@ We prefer to not squash commits when merging a PR because, especially for larger
 - During review, the commits can be reviewed individually, making each review chunk smaller
 - In case this PR introduced a bug that is identified later, it is possible to check if it resulted from the refactoring or the actual change, thereby making it easier find the lines that introduce the issue. 
 
+## Opening a PR
+
+To submit a PR you don't need permissions on this repo, instead you can fork the repo and create a PR through your forked version.
+
+For more information and instructions, read the GitHub docs on [forking a repo](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/working-with-forks/fork-a-repo).
+
+Once you've pushed your branch, you should see an option on this repository's page to create a PR from a branch in your fork.
+
 ## Review and CI Testing
 
 After you opened your PR, a maintainer will review it and test your changes in CI (*Continuous Integration*) by adding a `@swift-ci Please test` comment on the pull request. Once your PR is approved and CI has passed, the maintainer will merge your pull request.

@@ -46,15 +46,10 @@ public struct Trivia: Sendable {
   ///
   /// Each element in the array is the trimmed contents of a line comment, or, in the case of a multi-line comment a trimmed, concatenated single string.
   public var commentValues: [String] {
-    pieces.compactMap {
-      switch $0 {
-      case .lineComment(let text), .docLineComment(let text):
-        sanitizingLineComment(text)
-
-      default:
-        nil
-      }
-    }
+    [
+      sanitizedLineCommentValues,
+      sanitizedBlockCommentValues,
+    ].flatMap { $0 }
   }
 
   /// The length of all the pieces in this ``Trivia``.
@@ -231,18 +226,53 @@ extension RawTriviaPiece: CustomDebugStringConvertible {
   }
 }
 
-private func sanitizingLineComment(_ text: String) -> String {
-  // TODO: adammcarter - can we import Foundation instead and use trimmingCharacters(in:)
+private extension Trivia {
+  var sanitizedLineCommentValues: [String] {
+    compactMap {
+      switch $0 {
+      case .lineComment(let text), .docLineComment(let text):
+        String(sanitizingLineComment(text))
 
-  var charactersToDrop = 0
-
-  for character in text {
-    if (character == "/" || character == " ") {
-      charactersToDrop += 1
-    } else {
-      break
+      default:
+        nil
+      }
     }
   }
 
-  return String(text.dropFirst(charactersToDrop))
+  func sanitizingLineComment(_ text: String) -> Substring {
+    text.trimmingPrefix("/ ")
+  }
+
+  var sanitizedBlockCommentValues: [String] {
+    var lines = [String]()
+    var substrings = [Substring]()
+    var foundTerminator = false
+
+    for piece in self {
+      switch piece {
+      case .blockComment(let text), .docBlockComment(let text):
+        let sanitized = text.trimmingCharacters(in: "/* ")
+
+        if substrings.isEmpty || sanitized.isEmpty == false {
+          substrings.append(sanitized)
+        }
+
+        foundTerminator = text.hasSuffix("*/")
+
+      default:
+        break
+      }
+
+      if foundTerminator, substrings.isEmpty == false {
+        lines.append(substrings.joined(separator: " "))
+        substrings.removeAll()
+      }
+    }
+
+    if substrings.isEmpty == false {
+      lines.append(substrings.joined(separator: " "))
+    }
+
+    return lines
+  }
 }

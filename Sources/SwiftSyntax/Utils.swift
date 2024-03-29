@@ -120,3 +120,45 @@ extension RawUnexpectedNodesSyntax {
     self.init(raw: raw)
   }
 }
+
+extension String {
+  func trimmingCharacters(in charactersToTrim: any BidirectionalCollection<Character>) -> Substring {
+    // TODO: adammcarter - this feels a bit dirty
+    self[startIndex...].trimmingPrefix(charactersToTrim).trimmingSuffix(charactersToTrim)
+  }
+
+  func trimmingPrefix(_ charactersToTrim: any BidirectionalCollection<Character>) -> Substring {
+    self[startIndex...].trimmingPrefix(charactersToTrim)
+  }
+
+  func trimmingSuffix(_ charactersToTrim: any BidirectionalCollection<Character>) -> Substring {
+    self[startIndex...].trimmingSuffix(charactersToTrim)
+  }
+}
+
+extension Substring {
+  func trimmingPrefix(_ charactersToTrim: any BidirectionalCollection<Character>) -> Self {
+    dropFirst(countOfSequentialCharacters(charactersToTrim, in: self))
+  }
+
+  func trimmingSuffix(_ charactersToTrim: any BidirectionalCollection<Character>) -> Self {
+    dropLast(countOfSequentialCharacters(charactersToTrim, in: reversed()))
+  }
+}
+
+private func countOfSequentialCharacters(
+  _ charactersToCount: any BidirectionalCollection<Character>,
+  in characters: any BidirectionalCollection<Character>
+) -> Int {
+  var count = 0
+
+  for character in characters {
+    if charactersToCount.contains(character) {
+      count += 1
+    } else {
+      break
+    }
+  }
+
+  return count
+}

@@ -46,10 +46,62 @@ public struct Trivia: Sendable {
   ///
   /// Each element in the array is the trimmed contents of a line comment, or, in the case of a multi-line comment a trimmed, concatenated single string.
   public var commentValues: [String] {
-    [
-      sanitizedLineCommentValues,
-      sanitizedBlockCommentValues,
-    ].flatMap { $0 }
+    var comments = [String]()
+    var partialComments = [String]()
+
+    var foundStartOfCodeBlock = false
+    var foundEndOfCodeBlock = false
+    var isInCodeBlock: Bool { foundStartOfCodeBlock && !foundEndOfCodeBlock }
+
+    for piece in pieces {
+      switch piece {
+      case .blockComment(let text), .docBlockComment(let text):
+        let text = text.trimmingCharacters(in: "\n")
+
+        foundStartOfCodeBlock = text.hasPrefix("/*")
+        foundEndOfCodeBlock = text.hasSuffix("*/")
+
+        let sanitized =
+          text
+          .split(separator: "\n")
+          .map { $0.trimmingAnyCharacters(in: "/*").trimmingAnyCharacters(in: " ") }
+          .filter { !$0.isEmpty }
+          .joined(separator: " ")
+
+        appendPartialCommentIfPossible(sanitized)
+
+      case .lineComment(let text), .docLineComment(let text):
+        if isInCodeBlock {
+          appendPartialCommentIfPossible(text)
+        } else {
+          comments.append(String(text.trimmingPrefix("/ ")))
+        }
+
+      default:
+        break
+      }
+
+      if foundEndOfCodeBlock, !partialComments.isEmpty {
+        appendSubstringsToLines()
+        partialComments.removeAll()
+      }
+    }
+
+    if !partialComments.isEmpty {
+      appendSubstringsToLines()
+    }
+
+    func appendPartialCommentIfPossible(_ text: String) {
+      guard partialComments.isEmpty || !text.isEmpty else { return }
+
+      partialComments.append(text)
+    }
+
+    func appendSubstringsToLines() {
+      comments.append(partialComments.joined(separator: " "))
+    }
+
+    return comments
   }
 
   /// The length of all the pieces in this ``Trivia``.
@@ -223,56 +275,5 @@ extension RawTriviaPiece: CustomDebugStringConvertible {
   /// Do not rely on this output being stable.
   public var debugDescription: String {
     TriviaPiece(raw: self).debugDescription
-  }
-}
-
-private extension Trivia {
-  var sanitizedLineCommentValues: [String] {
-    compactMap {
-      switch $0 {
-      case .lineComment(let text), .docLineComment(let text):
-        String(sanitizingLineComment(text))
-
-      default:
-        nil
-      }
-    }
-  }
-
-  func sanitizingLineComment(_ text: String) -> Substring {
-    text.trimmingPrefix("/ ")
-  }
-
-  var sanitizedBlockCommentValues: [String] {
-    var lines = [String]()
-    var substrings = [Substring]()
-    var foundTerminator = false
-
-    for piece in self {
-      switch piece {
-      case .blockComment(let text), .docBlockComment(let text):
-        let sanitized = text.trimmingCharacters(in: "/* ")
-
-        if substrings.isEmpty || sanitized.isEmpty == false {
-          substrings.append(sanitized)
-        }
-
-        foundTerminator = text.hasSuffix("*/")
-
-      default:
-        break
-      }
-
-      if foundTerminator, substrings.isEmpty == false {
-        lines.append(substrings.joined(separator: " "))
-        substrings.removeAll()
-      }
-    }
-
-    if substrings.isEmpty == false {
-      lines.append(substrings.joined(separator: " "))
-    }
-
-    return lines
   }
 }

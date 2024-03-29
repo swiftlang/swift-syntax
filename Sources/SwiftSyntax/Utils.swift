@@ -124,24 +124,28 @@ extension RawUnexpectedNodesSyntax {
 extension String {
   func trimmingCharacters(in charactersToTrim: any BidirectionalCollection<Character>) -> Substring {
     // TODO: adammcarter - this feels a bit dirty
-    self[startIndex...].trimmingPrefix(charactersToTrim).trimmingSuffix(charactersToTrim)
+    self[startIndex...].trimmingAnyCharacters(in: charactersToTrim)
   }
 
   func trimmingPrefix(_ charactersToTrim: any BidirectionalCollection<Character>) -> Substring {
-    self[startIndex...].trimmingPrefix(charactersToTrim)
+    self[startIndex...].trimmingAnyCharactersFromPrefix(in: charactersToTrim)
   }
 
   func trimmingSuffix(_ charactersToTrim: any BidirectionalCollection<Character>) -> Substring {
-    self[startIndex...].trimmingSuffix(charactersToTrim)
+    self[startIndex...].trimmingAnyCharactersFromSuffix(in: charactersToTrim)
   }
 }
 
 extension Substring {
-  func trimmingPrefix(_ charactersToTrim: any BidirectionalCollection<Character>) -> Self {
+  func trimmingAnyCharacters(in charactersToTrim: any BidirectionalCollection<Character>) -> Substring {
+    trimmingAnyCharactersFromPrefix(in: charactersToTrim).trimmingAnyCharactersFromSuffix(in: charactersToTrim)
+  }
+
+  func trimmingAnyCharactersFromPrefix(in charactersToTrim: any BidirectionalCollection<Character>) -> Self {
     dropFirst(countOfSequentialCharacters(charactersToTrim, in: self))
   }
 
-  func trimmingSuffix(_ charactersToTrim: any BidirectionalCollection<Character>) -> Self {
+  func trimmingAnyCharactersFromSuffix(in charactersToTrim: any BidirectionalCollection<Character>) -> Self {
     dropLast(countOfSequentialCharacters(charactersToTrim, in: reversed()))
   }
 }

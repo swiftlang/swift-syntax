@@ -214,6 +214,34 @@ class TriviaTests: XCTestCase {
       ]
     )
 
+    XCTAssertEqual(
+      Trivia(pieces: [
+        .blockComment(
+          """
+          /*
+          Some block comment
+          spread on many lines
+          */
+          """
+        )
+      ]).commentValues,
+      ["Some block comment spread on many lines"]
+    )
+
+    XCTAssertEqual(
+      Trivia(pieces: [
+        .blockComment(
+          """
+          /*
+          *  Some block comment
+          *  spread on many lines
+          */
+          """
+        )
+      ]).commentValues,
+      ["Some block comment spread on many lines"]
+    )
+
     // MARK: doc block comment
 
     XCTAssertEqual(
@@ -277,7 +305,89 @@ class TriviaTests: XCTestCase {
       ]
     )
 
-    // TODO: adammcarter - mixing trivia of lines and blocks
-    // TODO: adammcarter - newline chars in the prefix/suffix of code block too
+    XCTAssertEqual(
+      Trivia(pieces: [
+        .docBlockComment(
+          """
+          /**
+          Some doc block comment
+          spread on many lines
+          */
+          """
+        )
+      ]).commentValues,
+      ["Some doc block comment spread on many lines"]
+    )
+
+    XCTAssertEqual(
+      Trivia(pieces: [
+        .docBlockComment(
+          """
+          /**
+          *  Some doc block comment
+          *  spread on many lines
+          */
+          """
+        )
+      ]).commentValues,
+      ["Some doc block comment spread on many lines"]
+    )
+
+    // MARK: Mixing comment styles
+
+    XCTAssertEqual(
+      Trivia(pieces: [
+        .docBlockComment(
+          """
+          /**
+          *  Some doc block comment
+          *  // spread on many lines
+          *  with a line comment
+          */
+          """
+        )
+      ]).commentValues,
+      ["Some doc block comment // spread on many lines with a line comment"]
+    )
+
+    XCTAssertEqual(
+      Trivia(pieces: [
+        .docBlockComment("/** Some doc block comment"),
+        .docBlockComment("* spread on many lines */"),
+        .newlines(2),
+        .docLineComment("/// Some doc line comment"),
+        .docLineComment("// Some line comment"),
+        .newlines(2),
+        .spaces(4),
+        .blockComment("/* Some block comment"),
+        .blockComment("* spread on many lines */"),
+        .newlines(2),
+        .docBlockComment("/** Another doc block comment */"),
+      ]).commentValues,
+      [
+        "Some doc block comment spread on many lines",
+        "Some doc line comment",
+        "Some line comment",
+        "Some block comment spread on many lines",
+        "Another doc block comment",
+      ]
+    )
+
+    XCTAssertEqual(
+      Trivia(pieces: [
+        .docBlockComment("/* Some block comment"),
+        .docLineComment("// A line comment in a block"),
+        .docBlockComment("* spread on many lines */"),
+        .newlines(2),
+        .blockComment("/** Some doc block comment"),
+        .docLineComment("/// A doc line comment in a block"),
+        .blockComment("* spread on"),
+        .blockComment("* many lines */"),
+      ]).commentValues,
+      [
+        "Some block comment // A line comment in a block spread on many lines",
+        "Some doc block comment /// A doc line comment in a block spread on many lines",
+      ]
+    )
   }
 }

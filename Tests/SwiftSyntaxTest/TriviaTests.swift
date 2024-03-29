@@ -69,4 +69,86 @@ class TriviaTests: XCTestCase {
     XCTAssertNotEqual(TriviaPiece.unexpectedText("e"), .unexpectedText("f"))
     XCTAssertNotEqual(TriviaPiece.unexpectedText("e"), .lineComment("e"))
   }
+
+  func testTriviaCommentValues() {
+    XCTAssertTrue(Trivia(pieces: []).commentValues.isEmpty)
+
+    // MARK: line comment
+
+    XCTAssertEqual(
+      Trivia(pieces: [.lineComment("")]).commentValues,
+      [""]
+    )
+
+    XCTAssertEqual(
+      Trivia(pieces: [.lineComment("Some line comment")]).commentValues,
+      ["Some line comment"]
+    )
+
+    XCTAssertEqual(
+      Trivia(pieces: [.lineComment("// Some line comment")]).commentValues,
+      ["Some line comment"]
+    )
+
+    XCTAssertEqual(
+      Trivia(pieces: [
+        .lineComment("// Some line comment"),
+        .lineComment("// Another"),
+      ]).commentValues,
+      [
+        "Some line comment",
+        "Another",
+      ]
+    )
+
+    XCTAssertEqual(
+      Trivia(pieces: [
+        .lineComment("// Some line comment"),
+        .lineComment("Other"),
+      ]).commentValues,
+      [
+        "Some line comment",
+        "Other",
+      ]
+    )
+
+    // MARK: doc line comment
+
+    XCTAssertEqual(
+      Trivia(pieces: [.docLineComment("")]).commentValues,
+      [""]
+    )
+
+    XCTAssertEqual(
+      Trivia(pieces: [.docLineComment("Some doc line comment")]).commentValues,
+      ["Some doc line comment"]
+    )
+
+    XCTAssertEqual(
+      Trivia(pieces: [.docLineComment("/// Some doc line comment")]).commentValues,
+      ["Some doc line comment"]
+    )
+
+    XCTAssertEqual(
+      Trivia(pieces: [
+        .docLineComment("/// Some doc line comment"),
+        .docLineComment("/// Another"),
+      ]).commentValues,
+      [
+        "Some doc line comment",
+        "Another",
+      ]
+    )
+
+    XCTAssertEqual(
+      Trivia(pieces: [
+        .docLineComment("/// Some doc line comment"),
+        .docLineComment("Other"),
+      ]).commentValues,
+      [
+        "Some doc line comment",
+        "Other",
+      ]
+    )
+  }
 }

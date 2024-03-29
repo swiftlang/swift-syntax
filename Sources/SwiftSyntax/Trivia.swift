@@ -42,6 +42,21 @@ public struct Trivia: Sendable {
     pieces.isEmpty
   }
 
+  /// The string contents of all the comment pieces with any comments tokens trimmed.
+  ///
+  /// Each element in the array is the trimmed contents of a line comment, or, in the case of a multi-line comment a trimmed, concatenated single string.
+  public var commentValues: [String] {
+    pieces.compactMap {
+      switch $0 {
+      case .lineComment(let text), .docLineComment(let text):
+        sanitizingLineComment(text)
+
+      default:
+        nil
+      }
+    }
+  }
+
   /// The length of all the pieces in this ``Trivia``.
   public var sourceLength: SourceLength {
     return pieces.map({ $0.sourceLength }).reduce(.zero, +)
@@ -214,4 +229,20 @@ extension RawTriviaPiece: CustomDebugStringConvertible {
   public var debugDescription: String {
     TriviaPiece(raw: self).debugDescription
   }
+}
+
+private func sanitizingLineComment(_ text: String) -> String {
+  // TODO: adammcarter - can we import Foundation instead and use trimmingCharacters(in:)
+
+  var charactersToDrop = 0
+
+  for character in text {
+    if (character == "/" || character == " ") {
+      charactersToDrop += 1
+    } else {
+      break
+    }
+  }
+
+  return String(text.dropFirst(charactersToDrop))
 }

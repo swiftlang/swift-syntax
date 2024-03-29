@@ -12,15 +12,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-@available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`") @_spi(RawSyntax)
-public struct RawCanImportExprSyntax: RawExprSyntaxNodeProtocol {
+@_spi(RawSyntax)
+public struct Raw_CanImportExprSyntax: RawExprSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
     return raw.layoutView!
   }
   
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .canImportExpr
+    return raw.kind == ._canImportExpr
   }
   
   public var raw: RawSyntax
@@ -49,14 +49,14 @@ public struct RawCanImportExprSyntax: RawExprSyntaxNodeProtocol {
       _ unexpectedBetweenLeftParenAndImportPath: RawUnexpectedNodesSyntax? = nil, 
       importPath: RawTokenSyntax, 
       _ unexpectedBetweenImportPathAndVersionInfo: RawUnexpectedNodesSyntax? = nil, 
-      versionInfo: RawCanImportVersionInfoSyntax?, 
+      versionInfo: Raw_CanImportVersionInfoSyntax?, 
       _ unexpectedBetweenVersionInfoAndRightParen: RawUnexpectedNodesSyntax? = nil, 
       rightParen: RawTokenSyntax, 
       _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .canImportExpr, uninitializedCount: 11, arena: arena) { layout in
+      kind: ._canImportExpr, uninitializedCount: 11, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeCanImportKeyword?.raw
       layout[1] = canImportKeyword.raw
@@ -101,8 +101,8 @@ public struct RawCanImportExprSyntax: RawExprSyntaxNodeProtocol {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var versionInfo: RawCanImportVersionInfoSyntax? {
-    layoutView.children[7].map(RawCanImportVersionInfoSyntax.init(raw:))
+  public var versionInfo: Raw_CanImportVersionInfoSyntax? {
+    layoutView.children[7].map(Raw_CanImportVersionInfoSyntax.init(raw:))
   }
   
   public var unexpectedBetweenVersionInfoAndRightParen: RawUnexpectedNodesSyntax? {
@@ -118,15 +118,15 @@ public struct RawCanImportExprSyntax: RawExprSyntaxNodeProtocol {
   }
 }
 
-@available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`") @_spi(RawSyntax)
-public struct RawCanImportVersionInfoSyntax: RawExprSyntaxNodeProtocol {
+@_spi(RawSyntax)
+public struct Raw_CanImportVersionInfoSyntax: RawExprSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
     return raw.layoutView!
   }
   
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .canImportVersionInfo
+    return raw.kind == ._canImportVersionInfo
   }
   
   public var raw: RawSyntax
@@ -160,7 +160,7 @@ public struct RawCanImportVersionInfoSyntax: RawExprSyntaxNodeProtocol {
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .canImportVersionInfo, uninitializedCount: 9, arena: arena) { layout in
+      kind: ._canImportVersionInfo, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeComma?.raw
       layout[1] = comma.raw

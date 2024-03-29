@@ -15,12 +15,19 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
+func deprecationAttribute(for syntaxKind: SyntaxNodeKind) -> AttributeSyntax {
+  if let deprecationMessage = syntaxKind.deprecationMessage {
+    return AttributeSyntax("@available(*, deprecated, message: \(literal: deprecationMessage))")
+  }
+  return AttributeSyntax(#"@available(*, deprecated, renamed: "\#(syntaxKind.syntaxType)")"#)
+}
+
 let renamedSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   for syntaxKind in SyntaxNodeKind.allCases.sorted(by: { $0.deprecatedRawValue ?? "" < $1.deprecatedRawValue ?? "" }) {
     if let deprecatedName = syntaxKind.deprecatedRawValue {
       DeclSyntax(
         """
-        @available(*, deprecated, renamed: "\(syntaxKind.syntaxType)")
+        \(deprecationAttribute(for: syntaxKind))
         public typealias \(raw: deprecatedName.withFirstCharacterUppercased)Syntax = \(syntaxKind.syntaxType)
         """
       )
@@ -33,6 +40,7 @@ let renamedSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       if let deprecatedName = syntaxKind.deprecatedRawValue {
         DeclSyntax(
           """
+          \(deprecationAttribute(for: syntaxKind))
           static var \(raw: deprecatedName): Self {
             return .\(syntaxKind.varOrCaseName)
           }

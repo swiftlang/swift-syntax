@@ -20,6 +20,8 @@ import SwiftSyntaxBuilder
 public enum SyntaxNodeKind: String, CaseIterable {
   // Please keep this list sorted alphabetically
 
+  case _canImportExpr
+  case _canImportVersionInfo
   case accessorBlock
   case accessorDecl
   case accessorDeclList
@@ -47,8 +49,6 @@ public enum SyntaxNodeKind: String, CaseIterable {
   case booleanLiteralExpr
   case borrowExpr
   case breakStmt
-  case canImportExpr
-  case canImportVersionInfo
   case catchClause
   case catchClauseList
   case catchItem
@@ -355,14 +355,25 @@ public enum SyntaxNodeKind: String, CaseIterable {
     }
   }
 
+  /// Whether the node is public API and not underscored/deprecated and can thus be referenced in docc links.
+  public var isAvailableInDocc: Bool {
+    if let node = SYNTAX_NODE_MAP[self], node.isExperimental {
+      return false
+    } else if isDeprecated {
+      return false
+    } else {
+      return true
+    }
+  }
+
   /// If this node is non-experimental a docc link wrapped in two backticks.
   ///
   /// For experimental nodes, the node's type name in code font.
   public var doccLink: String {
-    if let node = SYNTAX_NODE_MAP[self], node.isExperimental {
-      return "`\(syntaxType)`"
-    } else {
+    if isAvailableInDocc {
       return "``\(syntaxType)``"
+    } else {
+      return "`\(syntaxType)`"
     }
   }
 
@@ -405,6 +416,8 @@ public enum SyntaxNodeKind: String, CaseIterable {
   /// deprecated.
   public var deprecatedRawValue: String? {
     switch self {
+    case ._canImportExpr: return "canImportExpr"
+    case ._canImportVersionInfo: return "canImportVersionInfo"
     case .accessorDeclList: return "accessorList"
     case .accessorParameters: return "accessorParameter"
     case .associatedTypeDecl: return "associatedtypeDecl"
@@ -473,6 +486,26 @@ public enum SyntaxNodeKind: String, CaseIterable {
     case .yieldedExpressionList: return "yieldExprList"
     case .yieldedExpressionsClause: return "yieldList"
     default: return nil
+    }
+  }
+
+  public var deprecationMessage: String? {
+    switch self {
+    case ._canImportExpr: return "'canImport' directives are now represented as a `FunctionCallExpr`"
+    case ._canImportVersionInfo: return "'canImport' directives are now represented as a `FunctionCallExpr`"
+    default: return nil
+    }
+  }
+
+  public var isDeprecated: Bool {
+    return rawValue.first == "_"
+  }
+
+  var deprecationAttribute: AttributeSyntax? {
+    if let deprecationMessage = deprecationMessage {
+      AttributeSyntax("@available(*, deprecated, message: \(literal: deprecationMessage)")
+    } else {
+      AttributeSyntax(#"@available(*, deprecated, renamed: "\#(syntaxType)")"#)
     }
   }
 }

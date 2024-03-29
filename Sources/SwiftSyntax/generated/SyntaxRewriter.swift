@@ -269,19 +269,17 @@ open class SyntaxRewriter {
     return StmtSyntax(visitChildren(node))
   }
   
-  /// Visit a ``CanImportExprSyntax``.
+  /// Visit a `_CanImportExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
-  open func visit(_ node: CanImportExprSyntax) -> ExprSyntax {
+  open func visit(_ node: _CanImportExprSyntax) -> ExprSyntax {
     return ExprSyntax(visitChildren(node))
   }
   
-  /// Visit a ``CanImportVersionInfoSyntax``.
+  /// Visit a `_CanImportVersionInfoSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  @available(*, deprecated, message: "'canImport' directives are now represented as a `FunctionCallExpr`")
-  open func visit(_ node: CanImportVersionInfoSyntax) -> ExprSyntax {
+  open func visit(_ node: _CanImportVersionInfoSyntax) -> ExprSyntax {
     return ExprSyntax(visitChildren(node))
   }
   
@@ -2270,13 +2268,13 @@ open class SyntaxRewriter {
       return {
         self.visitImpl($0, BreakStmtSyntax.self, self.visit)
       }
-    case .canImportExpr:
+    case ._canImportExpr:
       return {
-        self.visitImpl($0, CanImportExprSyntax.self, self.visit)
+        self.visitImpl($0, _CanImportExprSyntax.self, self.visit)
       }
-    case .canImportVersionInfo:
+    case ._canImportVersionInfo:
       return {
-        self.visitImpl($0, CanImportVersionInfoSyntax.self, self.visit)
+        self.visitImpl($0, _CanImportVersionInfoSyntax.self, self.visit)
       }
     case .catchClauseList:
       return {
@@ -3358,10 +3356,10 @@ open class SyntaxRewriter {
       return visitImpl(node, BorrowExprSyntax.self, visit)
     case .breakStmt:
       return visitImpl(node, BreakStmtSyntax.self, visit)
-    case .canImportExpr:
-      return visitImpl(node, CanImportExprSyntax.self, visit)
-    case .canImportVersionInfo:
-      return visitImpl(node, CanImportVersionInfoSyntax.self, visit)
+    case ._canImportExpr:
+      return visitImpl(node, _CanImportExprSyntax.self, visit)
+    case ._canImportVersionInfo:
+      return visitImpl(node, _CanImportVersionInfoSyntax.self, visit)
     case .catchClauseList:
       return visitImpl(node, CatchClauseListSyntax.self, visit)
     case .catchClause:

@@ -3796,7 +3796,7 @@ public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
 /// ### Contained in
 /// 
 ///  - ``AvailabilityLabeledArgumentSyntax``.``AvailabilityLabeledArgumentSyntax/value``
-///  - ``CanImportVersionInfoSyntax``.``CanImportVersionInfoSyntax/version``
+///  - `_CanImportVersionInfoSyntax`.`_CanImportVersionInfoSyntax/version`
 ///  - ``PlatformVersionSyntax``.``PlatformVersionSyntax/version``
 public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax

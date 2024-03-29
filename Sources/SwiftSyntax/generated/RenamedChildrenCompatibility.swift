@@ -1025,7 +1025,7 @@ extension BooleanLiteralExprSyntax {
   }
 }
 
-extension CanImportVersionInfoSyntax {
+extension _CanImportVersionInfoSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenColonAndVersion")
   public var unexpectedBetweenColonAndVersionTuple: UnexpectedNodesSyntax? {
     get {
@@ -1056,7 +1056,7 @@ extension CanImportVersionInfoSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "CanImportVersionInfoSyntax(leadingTrivia:_:comma:_:label:_:colon:_:version:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "_CanImportVersionInfoSyntax(leadingTrivia:_:comma:_:label:_:colon:_:version:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,

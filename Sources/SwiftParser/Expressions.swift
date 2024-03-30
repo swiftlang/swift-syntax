@@ -523,7 +523,7 @@ extension Parser {
       )
 
     case (.any, _)?:
-      if !atContextualExpressionModifier() {
+      if !atContextualExpressionModifier() && !self.peek().isContextualPunctuator("~") {
         break EXPR_PREFIX
       }
 

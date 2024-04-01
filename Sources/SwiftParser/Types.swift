@@ -694,6 +694,9 @@ extension Parser.Lookahead {
     switch self.currentToken {
     case TokenSpec(.Any):
       self.consumeAnyToken()
+    case TokenSpec(.prefixOperator) where self.currentToken.tokenText == "~":
+      self.consumeAnyToken();
+      fallthrough
     case TokenSpec(.Self), TokenSpec(.identifier):
       guard self.canParseTypeIdentifier() else {
         return false

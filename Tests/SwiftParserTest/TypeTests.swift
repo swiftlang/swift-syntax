@@ -309,6 +309,40 @@ final class TypeTests: ParserTestCase {
     )
   }
 
+  func testInverseTypes() {
+    assertParse(
+      "[~Copyable]()"
+    )
+
+    assertParse(
+      "[any ~Copyable]()"
+    )
+
+    assertParse(
+      "[any P & ~Copyable]()"
+    )
+
+    assertParse(
+      "[P & ~Copyable]()"
+    )
+
+    assertParse(
+      "X<~Copyable>()"
+    )
+
+    assertParse(
+      "X<any ~Copyable>()"
+    )
+
+    assertParse(
+      "X<P & ~Copyable>()"
+    )
+
+    assertParse(
+      "X<any P & ~Copyable>()"
+    )
+  }
+
   func testTypedThrows() {
     assertParse(
       """

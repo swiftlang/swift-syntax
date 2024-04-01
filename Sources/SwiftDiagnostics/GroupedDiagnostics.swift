@@ -193,7 +193,7 @@ extension GroupedDiagnostics {
       let childSource = annotateSource(
         childBufferID,
         formatter: formatter,
-        indentString: indentString + String(repeating: " ", count: childPadding) + "│"
+        indentString: indentString + String(repeating: " ", count: childPadding) + "|"
       )
 
       childSources[sourceFiles[childBufferID.id].parent!.1, default: ""].append(childSource)
@@ -232,7 +232,7 @@ extension GroupedDiagnostics {
               "expanded code originates here",
               basedOnSeverity: .note
             )
-            prefixString += "╰─ \(bufferLoc.file):\(bufferLoc.line):\(bufferLoc.column): \(decoratedMessage)\n"
+            prefixString += "`- \(bufferLoc.file):\(bufferLoc.line):\(bufferLoc.column): \(decoratedMessage)\n"
           }
         }
       } else {
@@ -249,16 +249,16 @@ extension GroupedDiagnostics {
       let extraLengthNeeded = targetLineLength - padding.count - sourceFile.displayName.count - 6
       let boxSuffix: String
       if extraLengthNeeded > 0 {
-        boxSuffix = diagnosticDecorator.decorateBufferOutline(String(repeating: "─", count: extraLengthNeeded))
+        boxSuffix = diagnosticDecorator.decorateBufferOutline(String(repeating: "-", count: extraLengthNeeded))
       } else {
         boxSuffix = ""
       }
 
       prefixString =
-        diagnosticDecorator.decorateBufferOutline(padding + "╭─── ") + sourceFile.displayName + " " + boxSuffix + "\n"
+        diagnosticDecorator.decorateBufferOutline(padding + "+--- ") + sourceFile.displayName + " " + boxSuffix + "\n"
       suffixString =
         diagnosticDecorator.decorateBufferOutline(
-          padding + "╰───" + String(repeating: "─", count: sourceFile.displayName.count + 2)
+          padding + "+---" + String(repeating: "-", count: sourceFile.displayName.count + 2)
         ) + boxSuffix + "\n"
     }
 

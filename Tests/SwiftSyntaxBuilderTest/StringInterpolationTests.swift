@@ -452,8 +452,8 @@ final class StringInterpolationTests: XCTestCase {
         String(describing: error),
         """
 
-        1 │ /*comment*/ invalid /*comm*/
-          │             ╰─ error: unexpected trivia 'invalid'
+        1 | /*comment*/ invalid /*comm*/
+          |             `- error: unexpected trivia 'invalid'
 
         """
       )
@@ -470,9 +470,9 @@ final class StringInterpolationTests: XCTestCase {
         String(describing: error),
         """
 
-        1 │ return 1
-          │ │       ╰─ error: expected declaration
-          │ ╰─ error: unexpected code 'return 1' before declaration
+        1 | return 1
+          | |       `- error: expected declaration
+          | `- error: unexpected code 'return 1' before declaration
 
         """
       )
@@ -489,9 +489,9 @@ final class StringInterpolationTests: XCTestCase {
         String(describing: error),
         """
 
-        1 │ struct Foo {}
-          │ │            ╰─ error: expected statement
-          │ ╰─ error: unexpected code 'struct Foo {}' before statement
+        1 | struct Foo {}
+          | |            `- error: expected statement
+          | `- error: unexpected code 'struct Foo {}' before statement
 
         """
       )
@@ -508,8 +508,8 @@ final class StringInterpolationTests: XCTestCase {
         String(describing: error),
         """
 
-        1 │ 
-          │ ╰─ error: expected declaration
+        1 | 
+          | `- error: expected declaration
 
         """
       )

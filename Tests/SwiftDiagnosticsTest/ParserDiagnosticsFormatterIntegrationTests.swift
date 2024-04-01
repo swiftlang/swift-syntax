@@ -29,8 +29,8 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
       var foo = bar +
       """
     let expectedOutput = """
-      1 │ var foo = bar +
-        │                ╰─ error: expected expression after operator
+      1 | var foo = bar +
+        |                `- error: expected expression after operator
 
       """
     assertStringsEqualWithDiff(annotate(source: source), expectedOutput)
@@ -41,10 +41,10 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
       foo.[].[].[]
       """
     let expectedOutput = """
-      1 │ foo.[].[].[]
-        │     │  │  ╰─ error: expected name in member access
-        │     │  ╰─ error: expected name in member access
-        │     ╰─ error: expected name in member access
+      1 | foo.[].[].[]
+        |     |  |  `- error: expected name in member access
+        |     |  `- error: expected name in member access
+        |     `- error: expected name in member access
 
       """
     assertStringsEqualWithDiff(annotate(source: source), expectedOutput)
@@ -65,17 +65,17 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
       i = bar(
       """
     let expectedOutput = """
-       2 │ i = 2
-       3 │ i = foo(
-       4 │ i = 4
-         │      ╰─ error: expected ')' to end function call
-       5 │ i = 5
-       6 │ i = 6
-         ┆
-       9 │ i = 9
-      10 │ i = 10
-      11 │ i = bar(
-         │         ╰─ error: expected value and ')' to end function call
+       2 | i = 2
+       3 | i = foo(
+       4 | i = 4
+         |      `- error: expected ')' to end function call
+       5 | i = 5
+       6 | i = 6
+         :
+       9 | i = 9
+      10 | i = 10
+      11 | i = bar(
+         |         `- error: expected value and ')' to end function call
 
       """
     assertStringsEqualWithDiff(annotate(source: source), expectedOutput)
@@ -85,9 +85,9 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
     let source = "t as (..)"
 
     let expectedOutput = """
-      1 │ t as (..)
-        │       ├─ error: expected type in tuple type
-        │       ╰─ error: unexpected code '..' in tuple type
+      1 | t as (..)
+        |       |- error: expected type in tuple type
+        |       `- error: unexpected code '..' in tuple type
 
       """
 
@@ -100,8 +100,8 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
       """
 
     let expectedOutput = """
-      \u{001B}[0;36m1 │\u{001B}[0;0m var foo = bar +
-        \u{001B}[0;36m│\u{001B}[0;0m                ╰─ \u{001B}[1;31merror: \u{001B}[1;39mexpected expression after operator\u{001B}[0;0m
+      \u{001B}[0;36m1 |\u{001B}[0;0m var foo = bar +
+        \u{001B}[0;36m|\u{001B}[0;0m                `- \u{001B}[1;31merror: \u{001B}[1;39mexpected expression after operator\u{001B}[0;0m
 
       """
     assertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
@@ -112,10 +112,10 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
       foo.[].[].[]
       """
     let expectedOutput = """
-      \u{001B}[0;36m1 │\u{001B}[0;0m foo.[].[].[]
-        \u{001B}[0;36m│\u{001B}[0;0m     │  │  ╰─ \u{001B}[1;31merror: \u{001B}[1;39mexpected name in member access\u{001B}[0;0m
-        \u{001B}[0;36m│\u{001B}[0;0m     │  ╰─ \u{001B}[1;31merror: \u{001B}[1;39mexpected name in member access\u{001B}[0;0m
-        \u{001B}[0;36m│\u{001B}[0;0m     ╰─ \u{001B}[1;31merror: \u{001B}[1;39mexpected name in member access\u{001B}[0;0m
+      \u{001B}[0;36m1 |\u{001B}[0;0m foo.[].[].[]
+        \u{001B}[0;36m|\u{001B}[0;0m     |  |  `- \u{001B}[1;31merror: \u{001B}[1;39mexpected name in member access\u{001B}[0;0m
+        \u{001B}[0;36m|\u{001B}[0;0m     |  `- \u{001B}[1;31merror: \u{001B}[1;39mexpected name in member access\u{001B}[0;0m
+        \u{001B}[0;36m|\u{001B}[0;0m     `- \u{001B}[1;31merror: \u{001B}[1;39mexpected name in member access\u{001B}[0;0m
 
       """
     assertStringsEqualWithDiff(annotate(source: source, colorize: true), expectedOutput)
@@ -127,9 +127,9 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
       """
 
     let expectedOutput = """
-      \u{001B}[0;36m1 │\u{001B}[0;0m for \u{001B}[4;39m(i\u{001B}[0;0m \u{001B}[4;39m= 🐮; i != 👩‍👩‍👦‍👦; i += 1)\u{001B}[0;0m { }
-        \u{001B}[0;36m│\u{001B}[0;0m │     ╰─ \u{001B}[1;31merror: \u{001B}[1;39mexpected ')' to end tuple pattern\u{001B}[0;0m
-        \u{001B}[0;36m│\u{001B}[0;0m ╰─ \u{001B}[1;31merror: \u{001B}[1;39mC-style for statement has been removed in Swift 3\u{001B}[0;0m
+      \u{001B}[0;36m1 |\u{001B}[0;0m for \u{001B}[4;39m(i\u{001B}[0;0m \u{001B}[4;39m= 🐮; i != 👩‍👩‍👦‍👦; i += 1)\u{001B}[0;0m { }
+        \u{001B}[0;36m|\u{001B}[0;0m |     `- \u{001B}[1;31merror: \u{001B}[1;39mexpected ')' to end tuple pattern\u{001B}[0;0m
+        \u{001B}[0;36m|\u{001B}[0;0m `- \u{001B}[1;31merror: \u{001B}[1;39mC-style for statement has been removed in Swift 3\u{001B}[0;0m
 
       """
 
@@ -142,9 +142,9 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
       """
 
     let expectedOutput = """
-      1 │ let _ : Float  -> Int
-        │         │    ╰─ error: expected ')' in function type
-        │         ╰─ error: expected '(' to start function type
+      1 | let _ : Float  -> Int
+        |         |    `- error: expected ')' in function type
+        |         `- error: expected '(' to start function type
 
       """
 
@@ -159,11 +159,11 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
       """
 
     let expectedOutput = """
-      1 │ func o() {
-      2 │ }👨‍👩‍👧‍👦}
-        │  │╰─ error: extraneous braces at top level
-        │  ╰─ error: consecutive statements on a line must be separated by newline or ';'
-      3 │ }
+      1 | func o() {
+      2 | }👨‍👩‍👧‍👦}
+        |  |`- error: extraneous braces at top level
+        |  `- error: consecutive statements on a line must be separated by newline or ';'
+      3 | }
 
       """
 
@@ -176,8 +176,8 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
       """
 
     let expectedOutput = """
-      1 │ let 👨‍👩‍👧‍👦 = ;
-        │         ╰─ error: expected expression in variable
+      1 | let 👨‍👩‍👧‍👦 = ;
+        |         `- error: expected expression in variable
 
       """
 

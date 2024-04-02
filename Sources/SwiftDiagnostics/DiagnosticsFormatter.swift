@@ -268,13 +268,13 @@ public struct DiagnosticsFormatter {
       // line numbers should be right aligned
       let lineNumberString = String(lineNumber)
       let leadingSpaces = String(repeating: " ", count: maxNumberOfDigits - lineNumberString.count)
-      let linePrefix = "\(leadingSpaces)\(diagnosticDecorator.decorateBufferOutline("\(lineNumberString) │")) "
+      let linePrefix = "\(leadingSpaces)\(diagnosticDecorator.decorateBufferOutline("\(lineNumberString) |")) "
 
       // If necessary, print a line that indicates that there was lines skipped in the source code
       if hasLineBeenSkipped && !annotatedSource.isEmpty {
         let lineMissingInfoLine =
           indentString + String(repeating: " ", count: maxNumberOfDigits)
-          + " \(diagnosticDecorator.decorateBufferOutline("┆"))"
+          + " \(diagnosticDecorator.decorateBufferOutline(":"))"
         annotatedSource.append("\(lineMissingInfoLine)\n")
       }
       hasLineBeenSkipped = false
@@ -313,20 +313,20 @@ public struct DiagnosticsFormatter {
         // compute the string that is shown before each message
         var preMessage =
           indentString + String(repeating: " ", count: maxNumberOfDigits) + " "
-          + diagnosticDecorator.decorateBufferOutline("│")
+          + diagnosticDecorator.decorateBufferOutline("|")
         for c in 0..<column {
           if columnsWithDiagnostics.contains(c) {
-            preMessage.append("│")
+            preMessage.append("|")
           } else {
             preMessage.append(" ")
           }
         }
 
         for diag in diags.dropLast(1) {
-          annotatedSource.append("\(preMessage)├─ \(diagnosticDecorator.decorateDiagnosticMessage(diag.diagMessage))\n")
+          annotatedSource.append("\(preMessage)|- \(diagnosticDecorator.decorateDiagnosticMessage(diag.diagMessage))\n")
         }
         annotatedSource.append(
-          "\(preMessage)╰─ \(diagnosticDecorator.decorateDiagnosticMessage(diags.last!.diagMessage))\n"
+          "\(preMessage)`- \(diagnosticDecorator.decorateDiagnosticMessage(diags.last!.diagMessage))\n"
         )
       }
 

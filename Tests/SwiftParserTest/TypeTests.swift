@@ -343,6 +343,75 @@ final class TypeTests: ParserTestCase {
     )
   }
 
+  func testInverseTypesAsExpr() {
+    assertParse(
+      "(~Copyable).self"
+    )
+
+    assertParse(
+      "~Copyable.self"
+    )
+
+    assertParse(
+      "(any ~Copyable).self"
+    )
+  }
+
+  func testInverseTypesInParameter() {
+    assertParse(
+      "func f(_: borrowing ~Copyable) {}"
+    )
+
+    assertParse(
+      "func f(_: consuming ~Copyable) {}"
+    )
+
+    assertParse(
+      "func f(_: borrowing any ~Copyable) {}"
+    )
+
+    assertParse(
+      "func f(_: consuming any ~Copyable) {}"
+    )
+
+    assertParse(
+      "func f(_: ~Copyable) {}"
+    )
+
+    assertParse(
+      "typealias T = (~Copyable) -> Void"
+    )
+
+    assertParse(
+      "typealias T = (_ x: ~Copyable) -> Void"
+    )
+
+    assertParse(
+      "typealias T = (borrowing ~Copyable) -> Void"
+    )
+
+    assertParse(
+      "typealias T = (_ x: borrowing ~Copyable) -> Void"
+    )
+
+    assertParse(
+      "typealias T = (borrowing any ~Copyable) -> Void"
+    )
+
+    assertParse(
+      "typealias T = (_ x: borrowing any ~Copyable) -> Void"
+    )
+
+    assertParse(
+      "func f(_: any borrowing 1️⃣~Copyable) {}",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "unexpected code '~Copyable' in parameter clause"
+        )
+      ]
+    )
+  }
+
   func testTypedThrows() {
     assertParse(
       """

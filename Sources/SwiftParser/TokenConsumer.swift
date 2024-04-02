@@ -374,6 +374,9 @@ extension TokenConsumer {
         return false
       }
 
+    case .prefixOperator where lexeme.isContextualPunctuator("~"):
+      return true
+
     default:
       return false
     }

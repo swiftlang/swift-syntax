@@ -322,6 +322,7 @@ open class BasicFormat: SyntaxRewriter {
       (.keyword(.Any), .period),  // Any.Type
       (.keyword(.`init`), .leftAngle),  // init<T>()
       (.keyword(.`init`), .leftParen),  // init()
+      (.keyword(.private), .leftParen),  // private(set)
       (.keyword(.self), .period),  // self.someProperty
       (.keyword(.self), .leftParen),  // self()
       (.keyword(.self), .leftSquare),  // self[]

@@ -185,7 +185,7 @@ extension GroupedDiagnostics {
     let slc = sourceFile.sourceLocationConverter
     let diagnosticDecorator = formatter.diagnosticDecorator
 
-    let childPadding = String(slc.sourceLines.count + 1).count + 1;
+    let childPadding = String(slc.sourceLines.count + 1).count + 1
 
     // Collect the child sources.
     var childSources: [AbsolutePosition: String] = [:]

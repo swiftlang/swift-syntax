@@ -628,7 +628,7 @@ public extension WildcardPatternSyntax {
       wildcard: wildcard,
       unexpectedAfterTypeAnnotation,
       trailingTrivia: trailingTrivia
-    );
+    )
   }
 
   @available(*, deprecated, message: "'unexpectedBetweenWildcardAndTypeAnnotation' was removed")

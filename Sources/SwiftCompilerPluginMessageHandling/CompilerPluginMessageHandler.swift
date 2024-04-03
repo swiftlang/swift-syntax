@@ -172,7 +172,7 @@ extension CompilerPluginMessageHandler {
           )
         )
       }
-      try self.sendMessage(.loadPluginLibraryResult(loaded: diags.isEmpty, diagnostics: diags));
+      try self.sendMessage(.loadPluginLibraryResult(loaded: diags.isEmpty, diagnostics: diags))
     }
   }
 }

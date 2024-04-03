@@ -645,4 +645,12 @@ final class BasicFormatTest: XCTestCase {
       """
     assertFormatted(source: source, expected: source)
   }
+
+  func testPrivateSetVar() {
+    let source = """
+      private(set) var x = 1
+      """
+
+    assertFormatted(source: source, expected: source)
+  }
 }

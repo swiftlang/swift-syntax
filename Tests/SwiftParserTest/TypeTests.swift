@@ -366,7 +366,7 @@ final class TypeTests: ParserTestCase {
     assertParse("func foo() -> dependsOn(scoped x) X", experimentalFeatures: [.nonescapableTypes])
 
     assertParse(
-      "func foo() -> dependsOn 1️⃣X",
+      "func foo() -> dependsOn1️⃣ X",
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
@@ -374,7 +374,7 @@ final class TypeTests: ParserTestCase {
           fixIts: ["insert '(', parameter reference, and ')'"]
         )
       ],
-      fixedSource: "func foo() -> dependsOn (<#identifier#>) X",
+      fixedSource: "func foo() -> dependsOn(<#identifier#>) X",
       experimentalFeatures: [.nonescapableTypes]
     )
 

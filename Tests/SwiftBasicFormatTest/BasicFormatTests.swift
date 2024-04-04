@@ -43,6 +43,15 @@ fileprivate func assertFormatted(
   )
 }
 
+fileprivate func assertFormattingRoundTrips(
+  _ source: String,
+  using format: BasicFormat = BasicFormat(indentationWidth: .spaces(4)),
+  file: StaticString = #filePath,
+  line: UInt = #line
+) {
+  assertFormatted(source: source, expected: source, using: format, file: file, line: line)
+}
+
 final class BasicFormatTest: XCTestCase {
   func testNotIndented() {
     assertFormatted(
@@ -100,26 +109,26 @@ final class BasicFormatTest: XCTestCase {
   }
 
   func testAlreadyIndented() {
-    let source = """
+    assertFormattingRoundTrips(
+      """
       func foo() {
         someFunc(a: 1,
                  b: 1)
       }
       """
-
-    assertFormatted(source: source, expected: source)
+    )
   }
 
   func testAlreadyIndentedWithComment() {
-    let source = """
+    assertFormattingRoundTrips(
+      """
       func foo() {
         // ABC
         someFunc(a: 1,
                  b: 1)
       }
       """
-
-    assertFormatted(source: source, expected: source)
+    )
   }
 
   func testAlreadyIndentedWithComment2() {
@@ -278,7 +287,8 @@ final class BasicFormatTest: XCTestCase {
   }
 
   func testMultilineStringLiteralWithBlankLines() {
-    let source = #"""
+    assertFormattingRoundTrips(
+      #"""
       assertionFailure("""
 
         First line
@@ -287,20 +297,22 @@ final class BasicFormatTest: XCTestCase {
 
         """)
       """#
-    assertFormatted(source: source, expected: source)
+    )
   }
 
   func testMultilineStringLiteralWithFirstLineBlank() {
-    let source = #"""
+    assertFormattingRoundTrips(
+      #"""
       assertionFailure("""
 
         """)
       """#
-    assertFormatted(source: source, expected: source)
+    )
   }
 
   func testNestedMultilineStringLiterals() {
-    let source = #"""
+    assertFormattingRoundTrips(
+      #"""
       assertionFailure("""
 
         \("""
@@ -308,8 +320,7 @@ final class BasicFormatTest: XCTestCase {
         """)
       """)
       """#
-
-    assertFormatted(source: source, expected: source)
+    )
   }
 
   func testIndentNestedMultilineStringLiterals() throws {
@@ -375,7 +386,8 @@ final class BasicFormatTest: XCTestCase {
   }
 
   func testClosureInStringInterpolation() {
-    let source = #"""
+    assertFormattingRoundTrips(
+      #"""
       """
       \(gen { (x) in
           return """
@@ -384,8 +396,7 @@ final class BasicFormatTest: XCTestCase {
       })
       """
       """#
-
-    assertFormatted(source: source, expected: source)
+    )
   }
 
   func testNestedUserDefinedIndentation() {
@@ -540,31 +551,27 @@ final class BasicFormatTest: XCTestCase {
   }
 
   func testPeriodAfterStringLiteral() {
-    let source = """
+    assertFormattingRoundTrips(
+      """
       "test".lowercased()
       """
-    assertFormatted(source: source, expected: source)
+    )
   }
 
   func testPeriodAfterRawStringLiteral() {
-    let source = """
+    assertFormattingRoundTrips(
+      """
       #"test"#.lowercased()
       """
-    assertFormatted(source: source, expected: source)
+    )
   }
 
   func testPeriodAfterRegexLiteral() {
-    let source = """
-      /test/.something
-      """
-    assertFormatted(source: source, expected: source)
+    assertFormattingRoundTrips("/test/.something")
   }
 
   func testPeriodAfterRawRegexLiteral() {
-    let source = """
-      /test/.something
-      """
-    assertFormatted(source: source, expected: source)
+    assertFormattingRoundTrips("/test/.something")
   }
 
   func testNewlineInTrailingTriviaAtEndOfIndentationScope() throws {
@@ -627,30 +634,65 @@ final class BasicFormatTest: XCTestCase {
   }
 
   func testIndentedStandaloneClosureRoundTrips() throws {
-    let source = """
+    assertFormattingRoundTrips(
+      """
           foo {
               "abc"
           }
       """
-    assertFormatted(source: source, expected: source)
+    )
   }
 
   func testIndentedStandaloneClosureRoundTrips2() throws {
-    let source = """
+    assertFormattingRoundTrips(
+      """
           foo {
               if true {
                   print("test")
               }
           }
       """
-    assertFormatted(source: source, expected: source)
+    )
   }
 
   func testPrivateSetVar() {
-    let source = """
-      private(set) var x = 1
-      """
+    assertFormattingRoundTrips("private(set) var x = 1")
 
-    assertFormatted(source: source, expected: source)
+    assertFormattingRoundTrips("internal(set) var x = 1")
+  }
+
+  func testSpiAttribute() {
+    assertFormattingRoundTrips(
+      """
+      @_spi(MySPI) struct Foo {
+      }
+      """
+    )
+  }
+
+  func testTypedThrows() {
+    assertFormattingRoundTrips(
+      """
+      func foo() throws(MyError) {
+      }
+      """
+    )
+  }
+
+  func testClosureParameterClause() {
+    assertFormatted(
+      source: "{(x: Int) in}",
+      expected: """
+        { (x: Int) in
+        }
+        """
+    )
+  }
+
+  func testFunctionType() {
+    assertFormatted(
+      source: "let x:(Int)->Void",
+      expected: "let x: (Int) -> Void"
+    )
   }
 }

@@ -146,4 +146,26 @@ class SyntaxTests: XCTestCase {
     let node = ClosureCaptureSyntax(name: "test", expression: ExprSyntax("123"))
     XCTAssertEqual(node.formatted().description, "test = 123")
   }
+
+  func testShareSyntaxIndexInTreeBetweenTrees() throws {
+    let source = "func foo() {}"
+
+    let tree1 = DeclSyntax(stringLiteral: source)
+    let tree2 = DeclSyntax(stringLiteral: source)
+
+    let funcKeywordInTree1 = try XCTUnwrap(tree1.firstToken(viewMode: .sourceAccurate))
+    XCTAssertEqual(funcKeywordInTree1.tokenKind, .keyword(.func))
+
+    let opaqueIndexInTree1 = funcKeywordInTree1.id.indexInTree.toOpaque()
+
+    let funcKeywordIdentifierInTree2 = try XCTUnwrap(
+      SyntaxIdentifier.fromIndexInTree(
+        SyntaxIdentifier.SyntaxIndexInTree(fromOpaque: opaqueIndexInTree1),
+        relativeToRoot: tree2
+      )
+    )
+    let funcKeywordInTree2 = tree2.node(at: funcKeywordIdentifierInTree2)
+    XCTAssertEqual(funcKeywordInTree2?.as(TokenSyntax.self)?.tokenKind, .keyword(.func))
+    XCTAssertNotEqual(funcKeywordInTree1.id, funcKeywordInTree2?.id)
+  }
 }

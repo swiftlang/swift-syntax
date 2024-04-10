@@ -352,6 +352,28 @@ public extension SyntaxProtocol {
 
     fatalError("Children of syntax node do not cover all positions in it")
   }
+
+  /// If the node with the given `syntaxIdentifier` is a (recursive) child of this node, return the node with that
+  /// identifier.
+  ///
+  /// If the identifier references a node from a different tree (ie. one that has a different root ID in the
+  /// ``SyntaxIdentifier``) or if no node with the given identifier is a child of this syntax node, returns `nil`.
+  func node(at syntaxIdentifier: SyntaxIdentifier) -> Syntax? {
+    guard self.id <= syntaxIdentifier && syntaxIdentifier < self.id.advancedBySibling(self.raw) else {
+      // The syntax identifier is not part of this tree.
+      return nil
+    }
+    if self.id == syntaxIdentifier {
+      return Syntax(self)
+    }
+    for child in children(viewMode: .all) {
+      if let node = child.node(at: syntaxIdentifier) {
+        return node
+      }
+    }
+
+    preconditionFailure("syntaxIdentifier is covered by this node but not any of its children?")
+  }
 }
 
 // MARK: Recursive flags

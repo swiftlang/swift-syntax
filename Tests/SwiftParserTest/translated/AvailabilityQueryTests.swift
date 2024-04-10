@@ -124,7 +124,7 @@ final class AvailabilityQueryTests: ParserTestCase {
   func testAvailabilityQuery7() {
     assertParse(
       """
-      if #available 1️⃣{
+      if #available1️⃣ {
       }
       """,
       diagnostics: [
@@ -135,7 +135,7 @@ final class AvailabilityQueryTests: ParserTestCase {
         )
       ],
       fixedSource: """
-        if #available (<#identifier#>) {
+        if #available(<#identifier#>) {
         }
         """
     )

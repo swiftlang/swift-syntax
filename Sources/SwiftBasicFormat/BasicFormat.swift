@@ -310,27 +310,18 @@ open class BasicFormat: SyntaxRewriter {
       (.backtick, _),
       (.dollarIdentifier, .period),  // a.b
       (.endOfFile, _),
-      (.exclamationMark, .leftParen),  // myOptionalClosure!()
       (.exclamationMark, .period),  // myOptionalBar!.foo()
-      (.regexPoundDelimiter, .leftParen),  // opening extended regex delimiter should never be separate by a space
       (.regexPoundDelimiter, .regexSlash),  // opening extended regex delimiter should never be separate by a space
       (.identifier, .leftAngle),  // MyType<Int>
-      (.identifier, .leftParen),  // foo()
       (.identifier, .leftSquare),  // myArray[1]
       (.identifier, .period),  // a.b
       (.integerLiteral, .period),  // macOS 11.2.1
       (.keyword(.Any), .period),  // Any.Type
       (.keyword(.`init`), .leftAngle),  // init<T>()
-      (.keyword(.`init`), .leftParen),  // init()
-      (.keyword(.private), .leftParen),  // private(set)
       (.keyword(.self), .period),  // self.someProperty
-      (.keyword(.self), .leftParen),  // self()
       (.keyword(.self), .leftSquare),  // self[]
       (.keyword(.Self), .period),  // Self.someProperty
-      (.keyword(.Self), .leftParen),  // Self()
       (.keyword(.Self), .leftSquare),  // Self[]
-      (.keyword(.set), .leftParen),  // var mVar: Int { set(value) {} }
-      (.keyword(.subscript), .leftParen),  // subscript(x: Int)
       (.keyword(.super), .period),  // super.someProperty
       (.leftBrace, .rightBrace),  // {}
       (.leftParen, _),
@@ -339,13 +330,10 @@ open class BasicFormat: SyntaxRewriter {
       (.multilineStringQuote, .rawStringPoundDelimiter),
       (.period, _),
       (.postfixQuestionMark, .leftAngle),  // init?<T>()
-      (.postfixQuestionMark, .leftParen),  // init?() or myOptionalClosure?()
       (.postfixQuestionMark, .period),  // someOptional?.someProperty
       (.pound, _),
-      (.poundUnavailable, .leftParen),  // #unavailable(...)
       (.prefixAmpersand, _),
       (.prefixOperator, _),
-      (.rawStringPoundDelimiter, .leftParen),  // opening raw string delimiter should never be separate by a space
       // opening raw string delimiter should never be separate by a space
       (.rawStringPoundDelimiter, .multilineStringQuote),
       (.rawStringPoundDelimiter, .singleQuote),  // opening raw string delimiter should never be separate by a space
@@ -355,10 +343,7 @@ open class BasicFormat: SyntaxRewriter {
       (.regexPoundDelimiter, .period),  // #/myRegex/#.someMember
       (.regexSlash, .regexPoundDelimiter),  // closing extended regex delimiter should never be separate by a space
       (.regexSlash, .period),  // /myRegex/.someMember
-      (.rightAngle, .leftParen),  // func foo<T>(x: T)
       (.rightAngle, .period),  // Foo<T>.bar
-      (.rightBrace, .leftParen),  // { return 1 }()
-      (.rightParen, .leftParen),  // returnsClosure()()
       (.rightParen, .period),  // foo().bar
       (.rightSquare, .period),  // myArray[1].someProperty
       (.singleQuote, .rawStringPoundDelimiter),  // closing raw string delimiter should never be separate by a space
@@ -378,9 +363,11 @@ open class BasicFormat: SyntaxRewriter {
       (nil, _):
       return false
     case (_, .colon):
-      if second?.keyPathInParent != \TernaryExprSyntax.colon
-        && second?.keyPathInParent != \UnresolvedTernaryExprSyntax.colon
-      {
+      switch second?.keyPathInParent {
+      case \TernaryExprSyntax.colon,
+        \UnresolvedTernaryExprSyntax.colon:
+        break
+      default:
         return false
       }
     case (.leftAngle, _) where second?.tokenKind != .rightAngle:
@@ -389,6 +376,18 @@ open class BasicFormat: SyntaxRewriter {
     case (_, .rightAngle) where first?.tokenKind != .leftAngle:
       // `<` and `>` need to be separated by a space because otherwise they become an operator
       return false
+    case (_, .leftParen):
+      switch second?.keyPathInParent {
+      case \ClosureParameterClauseSyntax.leftParen,
+        \FunctionTypeSyntax.leftParen,
+        \TupleExprSyntax.leftParen,
+        \TuplePatternSyntax.leftParen,
+        \TupleTypeSyntax.leftParen:
+        break
+      default:
+        return false
+      }
+
     default:
       break
     }

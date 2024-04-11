@@ -268,7 +268,8 @@ extension Parser.Lookahead {
     // TODO: the other ownership modifiers (borrowing/consuming/mutating) more
     // than likely need to be made contextual as well before finalizing their
     // grammar.
-    case ._borrowing where experimentalFeatures.contains(.borrowingSwitch):
+    case ._borrowing where experimentalFeatures.contains(.borrowingSwitch),
+      .borrowing where experimentalFeatures.contains(.borrowingSwitch):
       return peek(isAt: TokenSpec(.identifier, allowAtStartOfLine: false))
     default:
       // Other keywords can be parsed unconditionally.

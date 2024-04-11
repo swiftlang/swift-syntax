@@ -14,18 +14,22 @@
 
 #if swift(>=6.0)
 public import SwiftSyntaxMacros
-private import Foundation
 @_spi(PluginMessage) private import SwiftCompilerPluginMessageHandling
+#if canImport(Darwin)
+private import Darwin
+#elseif canImport(Glibc)
+private import Glibc
+#elseif canImport(ucrt)
+private import ucrt
+#endif
 #else
 import SwiftSyntaxMacros
-import Foundation
 @_spi(PluginMessage) import SwiftCompilerPluginMessageHandling
-#endif
-
-#if os(Windows)
-#if swift(>=6.0)
-private import ucrt
-#else
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(ucrt)
 import ucrt
 #endif
 #endif
@@ -86,7 +90,7 @@ extension CompilerPlugin {
       }
     }
 
-    let pluginPath = CommandLine.arguments.first ?? Bundle.main.executablePath ?? ProcessInfo.processInfo.processName
+    let pluginPath = CommandLine.arguments.first ?? "<unknown>"
     throw CompilerPluginError(
       message:
         "macro implementation type '\(moduleName).\(typeName)' could not be found in executable plugin '\(pluginPath)'"
@@ -149,8 +153,8 @@ extension CompilerPlugin {
 
     // Open a message channel for communicating with the plugin host.
     let connection = PluginHostConnection(
-      inputStream: FileHandle(fileDescriptor: inputFD),
-      outputStream: FileHandle(fileDescriptor: outputFD)
+      inputStream: inputFD,
+      outputStream: outputFD
     )
 
     // Handle messages from the host until the input stream is closed,
@@ -180,56 +184,40 @@ extension CompilerPlugin {
 }
 
 internal struct PluginHostConnection: MessageConnection {
-  fileprivate let inputStream: FileHandle
-  fileprivate let outputStream: FileHandle
+  fileprivate let inputStream: CInt
+  fileprivate let outputStream: CInt
 
   func sendMessage<TX: Encodable>(_ message: TX) throws {
     // Encode the message as JSON.
-    let payload = try PluginMessageJSON.encode(message).withUnsafeBufferPointer { buffer in
-      Data(buffer: buffer)
-    }
+    let payload = try PluginMessageJSON.encode(message)
 
     // Write the header (a 64-bit length field in little endian byte order).
-    var count = UInt64(payload.count).littleEndian
-    let header = Swift.withUnsafeBytes(of: &count) { Data($0) }
-    precondition(header.count == 8)
+    let count = payload.count
+    var header = UInt64(count).littleEndian
 
-    // Write the header and payload.
-    try outputStream._write(contentsOf: header)
-    try outputStream._write(contentsOf: payload)
+    try withUnsafeBytes(of: &header) { buffer in
+      precondition(buffer.count == 8)
+      try _write(outputStream, contentsOf: buffer)
+    }
+
+    try payload.withUnsafeBytes { buffer in
+      try _write(outputStream, contentsOf: buffer)
+    }
   }
 
   func waitForNextMessage<RX: Decodable>(_ ty: RX.Type) throws -> RX? {
     // Read the header (a 64-bit length field in little endian byte order).
-    guard
-      let header = try inputStream._read(upToCount: 8),
-      header.count != 0
-    else {
-      return nil
-    }
-    guard header.count == 8 else {
-      throw PluginMessageError.truncatedHeader
-    }
-
-    // Decode the count.
-    let count = header.withUnsafeBytes {
-      UInt64(littleEndian: $0.loadUnaligned(as: UInt64.self))
+    let count = try _reading(inputStream, count: 8) { buffer in
+      UInt64(littleEndian: buffer.loadUnaligned(as: UInt64.self))
     }
     guard count >= 2 else {
       throw PluginMessageError.invalidPayloadSize
     }
 
     // Read the JSON payload.
-    guard
-      let payload = try inputStream._read(upToCount: Int(count)),
-      payload.count == count
-    else {
-      throw PluginMessageError.truncatedPayload
-    }
-
-    // Decode and return the message.
-    return try payload.withUnsafeBytes { buffer in
-      return try PluginMessageJSON.decode(RX.self, from:  buffer.bindMemory(to: UInt8.self))
+    return try _reading(inputStream, count: Int(count)) { buffer in
+      // Decode and return the message.
+      try PluginMessageJSON.decode(RX.self, from: buffer.bindMemory(to: UInt8.self))
     }
   }
 
@@ -240,22 +228,45 @@ internal struct PluginHostConnection: MessageConnection {
   }
 }
 
-private extension FileHandle {
-  func _write(contentsOf data: Data) throws {
-    if #available(macOS 10.15.4, iOS 13.4, watchOS 6.2, tvOS 13.4, *) {
-      return try self.write(contentsOf: data)
-    } else {
-      return self.write(data)
+func _write(_ fd: CInt, contentsOf buffer: UnsafeRawBufferPointer) throws {
+  var ptr = buffer.baseAddress!
+  var remaining = buffer.count
+  while remaining > 0 {
+    switch write(fd, ptr, remaining) {
+    case 0:
+      throw CompilerPluginError(message: "write(2) closed")
+    case -1:
+      let err = String(cString: strerror(errno))
+      throw CompilerPluginError(message: "read(2) failed: \(err)")
+    case let result:
+      ptr += Int(result)
+      remaining -= Int(result)
     }
   }
+}
 
-  func _read(upToCount count: Int) throws -> Data? {
-    if #available(macOS 10.15.4, iOS 13.4, watchOS 6.2, tvOS 13.4, *) {
-      return try self.read(upToCount: count)
-    } else {
-      return self.readData(ofLength: 8)
+func _reading<T>(_ fd: CInt, count: Int, _ fn: (UnsafeRawBufferPointer) throws -> T) throws -> T {
+  guard count > 0 else {
+    return try fn(UnsafeRawBufferPointer(start: nil, count: 0))
+  }
+  let buffer = UnsafeMutableRawBufferPointer.allocate(byteCount: count, alignment: 1)
+  defer { buffer.deallocate() }
+
+  var ptr = buffer.baseAddress!
+  var remaining = buffer.count
+  while remaining > 0 {
+    switch read(fd, ptr, remaining) {
+    case 0:
+      throw CompilerPluginError(message: "read(2) closed")
+    case -1:
+      let err = String(cString: strerror(errno))
+      throw CompilerPluginError(message: "read(2) failed: \(err)")
+    case let result:
+      ptr += Int(result)
+      remaining -= Int(result)
     }
   }
+  return try fn(UnsafeRawBufferPointer(buffer))
 }
 
 struct CompilerPluginError: Error, CustomStringConvertible {

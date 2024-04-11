@@ -1,6 +1,23 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift open source project
+//
+// Copyright (c) 2024 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See http://swift.org/LICENSE.txt for license information
+// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
+
+func encodeToJSON(value: some Encodable) throws -> [UInt8] {
+  let encoder = JSONEncoding()
+  try value.encode(to: encoder)
+  return JSONWriter.serialize(encoder.reference ?? .null)
+}
 
 /// Intermediate representation for serializing JSON structure.
-class JSONReference {
+private class JSONReference {
   enum Backing {
     case null
     case trueKeyword
@@ -70,7 +87,8 @@ class JSONReference {
   }
 }
 
-struct JSONWriter {
+/// Serialize JSONReference to [UInt8] data.
+private struct JSONWriter {
   var data: [UInt8]
   init() {
     data = []
@@ -209,7 +227,7 @@ struct JSONWriter {
   }
 }
 
-class JSONEncoding {
+private class JSONEncoding {
   var reference: JSONReference?
   var codingPathNode: _CodingPathNode
 
@@ -256,13 +274,13 @@ extension JSONEncoding: Encoder {
   }
   var userInfo: [CodingUserInfoKey : Any] { [:] }
 
-  struct KeyedContainer<Key: CodingKey> {
+  fileprivate struct KeyedContainer<Key: CodingKey> {
     var encoder: JSONEncoding
     var reference: JSONReference
     var codingPathNode: _CodingPathNode
   }
 
-  struct UnkeyedContainer {
+  fileprivate struct UnkeyedContainer {
     var encoder: JSONEncoding
     var reference: JSONReference
     var codingPathNode: _CodingPathNode

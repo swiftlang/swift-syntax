@@ -185,7 +185,9 @@ internal struct PluginHostConnection: MessageConnection {
 
   func sendMessage<TX: Encodable>(_ message: TX) throws {
     // Encode the message as JSON.
-    let payload = try JSONEncoder().encode(message)
+    let payload = try PluginMessageJSON.encode(message).withUnsafeBufferPointer { buffer in
+      Data(buffer: buffer)
+    }
 
     // Write the header (a 64-bit length field in little endian byte order).
     var count = UInt64(payload.count).littleEndian
@@ -226,7 +228,9 @@ internal struct PluginHostConnection: MessageConnection {
     }
 
     // Decode and return the message.
-    return try JSONDecoder().decode(RX.self, from: payload)
+    return try payload.withUnsafeBytes { buffer in
+      return try PluginMessageJSON.decode(RX.self, from:  buffer.bindMemory(to: UInt8.self))
+    }
   }
 
   enum PluginMessageError: Swift.Error {

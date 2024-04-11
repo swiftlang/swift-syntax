@@ -20,9 +20,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _alignment
   case _backDeploy
   case _borrow
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
   case _borrowing
   case _BridgeObject
   case _cdecl

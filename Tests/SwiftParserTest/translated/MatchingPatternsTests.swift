@@ -616,8 +616,7 @@ final class MatchingPatternsTests: ParserTestCase {
         break
       }
       """,
-      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("borrowing"))),
-      experimentalFeatures: .borrowingSwitch
+      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("borrowing")))
     )
 
     assertParse(
@@ -627,8 +626,7 @@ final class MatchingPatternsTests: ParserTestCase {
         break
       }
       """,
-      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("borrowing"))),
-      experimentalFeatures: .borrowingSwitch
+      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("borrowing")))
     )
 
     assertParse(
@@ -692,8 +690,7 @@ final class MatchingPatternsTests: ParserTestCase {
           bindingSpecifier: .keyword(.let),
           pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("borrowing")))
         )
-      ),
-      experimentalFeatures: .borrowingSwitch
+      )
     )
     assertParse(
       """
@@ -702,8 +699,7 @@ final class MatchingPatternsTests: ParserTestCase {
         break
       }
       """,
-      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("borrowing"))),
-      experimentalFeatures: .borrowingSwitch
+      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("borrowing")))
     )
     assertParse(
       """
@@ -717,8 +713,7 @@ final class MatchingPatternsTests: ParserTestCase {
           bindingSpecifier: .keyword(.let),
           pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("borrowing")))
         )
-      ),
-      experimentalFeatures: .borrowingSwitch
+      )
     )
     assertParse(
       """
@@ -727,8 +722,7 @@ final class MatchingPatternsTests: ParserTestCase {
         break
       }
       """,
-      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("borrowing"))),
-      experimentalFeatures: .borrowingSwitch
+      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("borrowing")))
     )
   }
 }

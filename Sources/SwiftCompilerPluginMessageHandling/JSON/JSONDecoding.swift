@@ -1,7 +1,25 @@
+//===----------------------------------------------------------------------===//
+//
+// This source file is part of the Swift open source project
+//
+// Copyright (c) 2024 Apple Inc. and the Swift project authors
+// Licensed under Apache License v2.0 with Runtime Library Exception
+//
+// See http://swift.org/LICENSE.txt for license information
+// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+//
+//===----------------------------------------------------------------------===//
 
 import Darwin
 
-struct JSONMap {
+func decodeFromJSON<T: Decodable>(json: UnsafeBufferPointer<UInt8>) throws -> T {
+  try withExtendedLifetime(try JSONScanner.scan(buffer: json)) { map in
+    let decoder = JSONDecoding(value: map.value, codingPathNode: .root)
+    return try T.init(from: decoder)
+  }
+}
+
+private struct JSONMap {
   enum Descriptor: Int {
     case nullKeyword   // [desc]
     case trueKeyword   // [desc]
@@ -19,7 +37,7 @@ struct JSONMap {
   }
 }
 
-struct JSONMapValue {
+private struct JSONMapValue {
   typealias Map = Array<Int>.SubSequence
   typealias Index = Map.Index
   let map: Map
@@ -82,7 +100,7 @@ extension JSONMapValue {
 }
 
 // MARK: Scalar values
-enum _JSONStringDecoder {
+private enum _JSONStringDecoder {
   /// Trim '"' from string literal buffer.
   static func trimQuotes(source: UnsafeBufferPointer<UInt8>) -> UnsafeBufferPointer<UInt8> {
     assert(source.count >= 2)
@@ -142,7 +160,7 @@ enum _JSONStringDecoder {
   }
 }
 
-enum _JSONNumberDecoder {
+private enum _JSONNumberDecoder {
   static func parseInteger<Integer: FixedWidthInteger>(source: UnsafeBufferPointer<UInt8>) -> Integer? {
     var source = source[...]
     let isNegative = source.first == UInt8(ascii: "-")
@@ -272,7 +290,7 @@ extension JSONMapValue {
   }
 }
 
-struct JSONMapBuilder {
+private struct JSONMapBuilder {
   var mapData: [Int]
   init() {
     mapData = []
@@ -309,7 +327,7 @@ struct JSONMapBuilder {
   }
 }
 
-struct JSONScanner {
+private struct JSONScanner {
   typealias Cursor = UnsafePointer<UInt8>
 
   let endPtr: Cursor
@@ -496,7 +514,7 @@ struct JSONScanner {
   }
 }
 
-struct JSONDecoding {
+private struct JSONDecoding {
   var value: JSONMapValue
   var codingPathNode: _CodingPathNode
 }
@@ -538,12 +556,12 @@ extension JSONDecoding: Decoder {
   }
   var userInfo: [CodingUserInfoKey : Any] { [:] }
 
-  struct KeyedContainer<Key: CodingKey> {
+  fileprivate struct KeyedContainer<Key: CodingKey> {
     var codingPathNode: _CodingPathNode
     var mapping: [String: JSONMapValue]
   }
 
-  struct UnkeyedContainer {
+  fileprivate struct UnkeyedContainer {
     var codingPathNode: _CodingPathNode
     var array: JSONMapValue.JSONArray
     var currentIndex: JSONMapValue.JSONArray.Index

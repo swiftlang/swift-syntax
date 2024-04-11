@@ -189,7 +189,7 @@ internal struct PluginHostConnection: MessageConnection {
 
   func sendMessage<TX: Encodable>(_ message: TX) throws {
     // Encode the message as JSON.
-    let payload = try PluginMessageJSON.encode(message)
+    let payload = try JSON.encode(message)
 
     // Write the header (a 64-bit length field in little endian byte order).
     let count = payload.count
@@ -217,7 +217,7 @@ internal struct PluginHostConnection: MessageConnection {
     // Read the JSON payload.
     return try _reading(inputStream, count: Int(count)) { buffer in
       // Decode and return the message.
-      try PluginMessageJSON.decode(RX.self, from: buffer.bindMemory(to: UInt8.self))
+      try JSON.decode(RX.self, from: buffer.bindMemory(to: UInt8.self))
     }
   }
 

@@ -612,67 +612,65 @@ final class MatchingPatternsTests: ParserTestCase {
     assertParse(
       """
       switch 42 {
-      case _borrowing .foo(): // parses as `_borrowing.foo()` as before
+      case borrowing .foo(): // parses as `borrowing.foo()` as before
         break
       }
       """,
-      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("_borrowing"))),
+      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("borrowing"))),
       experimentalFeatures: .borrowingSwitch
     )
 
     assertParse(
       """
       switch 42 {
-      case _borrowing (): // parses as `_borrowing()` as before
+      case borrowing (): // parses as `borrowing()` as before
         break
       }
       """,
-      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("_borrowing"))),
+      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("borrowing"))),
       experimentalFeatures: .borrowingSwitch
     )
 
     assertParse(
       """
       switch 42 {
-      case _borrowing x: // parses as binding
+      case borrowing x: // parses as binding
         break
       }
       """,
       substructure: PatternSyntax(
         ValueBindingPatternSyntax(
-          bindingSpecifier: .keyword(._borrowing),
+          bindingSpecifier: .keyword(.borrowing),
           pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("x")))
         )
-      ),
-      experimentalFeatures: .borrowingSwitch
+      )
     )
 
     assertParse(
       """
       switch bar {
-      case .payload(_borrowing x): // parses as binding
+      case .payload(borrowing x): // parses as binding
         break
       }
       """,
       substructure: PatternSyntax(
         ValueBindingPatternSyntax(
-          bindingSpecifier: .keyword(._borrowing),
+          bindingSpecifier: .keyword(.borrowing),
           pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("x")))
         )
-      ),
-      experimentalFeatures: .borrowingSwitch
+      )
     )
 
     assertParse(
       """
       switch bar {
-      case _borrowing x.member: // parses as var introducer surrounding postfix expression (which never is valid)
+      case borrowing x.member: // parses as var introducer surrounding postfix expression (which never is valid)
         break
       }
       """,
       substructure: PatternSyntax(
         ValueBindingPatternSyntax(
-          bindingSpecifier: .keyword(._borrowing),
+          bindingSpecifier: .keyword(.borrowing),
           pattern: ExpressionPatternSyntax(
             expression: MemberAccessExprSyntax(
               base: DeclReferenceExprSyntax(baseName: .identifier("x")),
@@ -680,20 +678,19 @@ final class MatchingPatternsTests: ParserTestCase {
             )
           )
         )
-      ),
-      experimentalFeatures: .borrowingSwitch
+      )
     )
     assertParse(
       """
       switch 42 {
-      case let _borrowing: // parses as let binding named '_borrowing'
+      case let borrowing: // parses as let binding named 'borrowing'
         break
       }
       """,
       substructure: PatternSyntax(
         ValueBindingPatternSyntax(
           bindingSpecifier: .keyword(.let),
-          pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("_borrowing")))
+          pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("borrowing")))
         )
       ),
       experimentalFeatures: .borrowingSwitch
@@ -701,24 +698,24 @@ final class MatchingPatternsTests: ParserTestCase {
     assertParse(
       """
       switch 42 {
-      case _borrowing + _borrowing: // parses as expr pattern
+      case borrowing + borrowing: // parses as expr pattern
         break
       }
       """,
-      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("_borrowing"))),
+      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("borrowing"))),
       experimentalFeatures: .borrowingSwitch
     )
     assertParse(
       """
       switch 42 {
-      case _borrowing(let _borrowing): // parses as let binding named '_borrowing' inside a case pattern named 'borrowing'
+      case borrowing(let borrowing): // parses as let binding named 'borrowing' inside a case pattern named 'borrowing'
         break
       }
       """,
       substructure: PatternSyntax(
         ValueBindingPatternSyntax(
           bindingSpecifier: .keyword(.let),
-          pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("_borrowing")))
+          pattern: PatternSyntax(IdentifierPatternSyntax(identifier: .identifier("borrowing")))
         )
       ),
       experimentalFeatures: .borrowingSwitch
@@ -726,11 +723,11 @@ final class MatchingPatternsTests: ParserTestCase {
     assertParse(
       """
       switch 42 {
-      case {}(_borrowing + _borrowing): // parses as expr pattern
+      case {}(borrowing + borrowing): // parses as expr pattern
         break
       }
       """,
-      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("_borrowing"))),
+      substructure: ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("borrowing"))),
       experimentalFeatures: .borrowingSwitch
     )
   }

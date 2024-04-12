@@ -58,9 +58,9 @@ extension SwiftSyntax.Trivia {
   }
 }
 
-public extension Collection {
+extension Collection {
   /// If the collection contains a single element, return it, otherwise `nil`.
-  var only: Element? {
+  public var only: Element? {
     if !isEmpty && index(after: startIndex) == endIndex {
       return self.first!
     } else {
@@ -69,8 +69,8 @@ public extension Collection {
   }
 }
 
-public extension TokenSyntax {
-  var backtickedIfNeeded: TokenSyntax {
+extension TokenSyntax {
+  public var backtickedIfNeeded: TokenSyntax {
     if Keyword.allCases.map(\.spec).contains(where: {
       $0.name == self.description && ($0.isLexerClassified || $0.name == "Type" || $0.name == "Protocol")
     }) {

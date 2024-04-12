@@ -23,10 +23,10 @@ public enum SyntaxOrTokenNodeKind: Hashable {
 
 /// Extension to the ``Child`` type to provide functionality specific to
 /// SwiftSyntaxBuilder.
-public extension Child {
+extension Child {
   /// The type of this child, represented by a ``SyntaxBuildableType``, which can
   /// be used to create the corresponding `Buildable` and `ExpressibleAs` types.
-  var buildableType: SyntaxBuildableType {
+  public var buildableType: SyntaxBuildableType {
     let buildableKind: SyntaxOrTokenNodeKind
     switch kind {
     case .node(kind: let kind):
@@ -44,7 +44,7 @@ public extension Child {
     )
   }
 
-  var parameterBaseType: TypeSyntax {
+  public var parameterBaseType: TypeSyntax {
     switch kind {
     case .nodeChoices:
       return self.syntaxChoicesType
@@ -53,11 +53,11 @@ public extension Child {
     }
   }
 
-  var parameterType: TypeSyntax {
+  public var parameterType: TypeSyntax {
     return self.buildableType.optionalWrapped(type: parameterBaseType)
   }
 
-  var defaultValue: ExprSyntax? {
+  public var defaultValue: ExprSyntax? {
     if isOptional || isUnexpectedNodes {
       if buildableType.isBaseType && kind.isNodeChoicesEmpty {
         return ExprSyntax("\(buildableType.buildable).none")
@@ -85,7 +85,7 @@ public extension Child {
   /// If the child node has a default value, return an expression of the form
   /// ` = default_value` that can be used as the default value to for a
   /// function parameter. Otherwise, return `nil`.
-  var defaultInitialization: InitializerClauseSyntax? {
+  public var defaultInitialization: InitializerClauseSyntax? {
     if let defaultValue {
       return InitializerClauseSyntax(
         equal: .equalToken(leadingTrivia: .space, trailingTrivia: .space),
@@ -99,7 +99,7 @@ public extension Child {
   /// If this node is a token that can't contain arbitrary text, generate a Swift
   /// `precondition` statement that verifies the variable with name var_name and of type
   /// ``TokenSyntax`` contains one of the supported text options. Otherwise return `nil`.
-  func generateAssertStmtTextChoices(varName: String) -> FunctionCallExprSyntax? {
+  public func generateAssertStmtTextChoices(varName: String) -> FunctionCallExprSyntax? {
     guard case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _) = kind else {
       return nil
     }

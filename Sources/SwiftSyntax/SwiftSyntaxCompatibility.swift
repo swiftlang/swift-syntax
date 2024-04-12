@@ -13,10 +13,10 @@
 // This file provides compatibility aliases to keep dependents of SwiftSyntax building.
 // All users of the declarations in this file should transition away from them ASAP.
 
-public extension AccessorEffectSpecifiersSyntax {
+extension AccessorEffectSpecifiersSyntax {
   @_disfavoredOverload
   @available(*, deprecated, message: "use throwsClause instead of throwsSpecifier")
-  init(
+  public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil,
     asyncSpecifier: TokenSyntax? = nil,
@@ -132,9 +132,9 @@ extension ClosureSignatureSyntax.ParameterClause {
   }
 }
 
-public extension DeclGroupSyntax {
+extension DeclGroupSyntax {
   @available(*, deprecated, renamed: "memberBlock")
-  var members: MemberDeclBlockSyntax {
+  public var members: MemberDeclBlockSyntax {
     get {
       return memberBlock
     }
@@ -144,15 +144,15 @@ public extension DeclGroupSyntax {
   }
 }
 
-public extension EffectSpecifiersSyntax {
+extension EffectSpecifiersSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenAsyncSpecifierAndThrowsClause")
-  var unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? {
     get { unexpectedBetweenAsyncSpecifierAndThrowsClause }
     set { unexpectedBetweenAsyncSpecifierAndThrowsClause = newValue }
   }
 
   @available(*, deprecated, message: "use throwsClause.throwsSpecifier")
-  var throwsSpecifier: TokenSyntax? {
+  public var throwsSpecifier: TokenSyntax? {
     get { throwsClause?.throwsSpecifier }
 
     set {
@@ -170,16 +170,16 @@ public extension EffectSpecifiersSyntax {
   }
 
   @available(*, deprecated, renamed: "unexpectedAfterThrowsClause")
-  var unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? {
+  public var unexpectedAfterThrowsSpecifier: UnexpectedNodesSyntax? {
     get { unexpectedAfterThrowsClause }
     set { unexpectedAfterThrowsClause = newValue }
   }
 }
 
-public extension FunctionEffectSpecifiersSyntax {
+extension FunctionEffectSpecifiersSyntax {
   @_disfavoredOverload
   @available(*, deprecated, message: "use throwsClause instead of throwsSpecifier")
-  init(
+  public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil,
     asyncSpecifier: TokenSyntax? = nil,
@@ -200,9 +200,9 @@ public extension FunctionEffectSpecifiersSyntax {
   }
 }
 
-public extension FreestandingMacroExpansionSyntax {
+extension FreestandingMacroExpansionSyntax {
   @available(*, deprecated, renamed: "pound")
-  var poundToken: TokenSyntax {
+  public var poundToken: TokenSyntax {
     get {
       return pound
     }
@@ -212,7 +212,7 @@ public extension FreestandingMacroExpansionSyntax {
   }
 
   @available(*, deprecated, renamed: "macroName")
-  var macro: TokenSyntax {
+  public var macro: TokenSyntax {
     get {
       return macroName
     }
@@ -222,7 +222,7 @@ public extension FreestandingMacroExpansionSyntax {
   }
 
   @available(*, deprecated, renamed: "genericArgumentClause")
-  var genericArguments: GenericArgumentClauseSyntax? {
+  public var genericArguments: GenericArgumentClauseSyntax? {
     get {
       return genericArgumentClause
     }
@@ -232,7 +232,7 @@ public extension FreestandingMacroExpansionSyntax {
   }
 
   @available(*, deprecated, renamed: "arguments")
-  var argumentList: LabeledExprListSyntax {
+  public var argumentList: LabeledExprListSyntax {
     get {
       return arguments
     }
@@ -339,81 +339,81 @@ extension MemberAccessExprSyntax {
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   @available(*, deprecated, message: "Use detached computed property instead.")
-  func detach() -> Self {
+  public func detach() -> Self {
     return detached
   }
 }
 
-public extension TokenKind {
+extension TokenKind {
   @available(*, deprecated, renamed: "regexPoundDelimiter")
-  static func extendedRegexDelimiter(_ text: String) -> TokenKind {
+  public static func extendedRegexDelimiter(_ text: String) -> TokenKind {
     return .regexPoundDelimiter(text)
   }
 
   @available(*, deprecated, renamed: "floatLiteral")
-  static func floatingLiteral(_ text: String) -> TokenKind {
+  public static func floatingLiteral(_ text: String) -> TokenKind {
     return .floatLiteral(text)
   }
 
   @available(*, deprecated, renamed: "leftSquare")
-  static var leftSquareBracket: TokenKind {
+  public static var leftSquareBracket: TokenKind {
     return .leftSquare
   }
 
   @available(*, deprecated, renamed: "poundAvailable")
-  static var poundAvailableKeyword: TokenKind {
+  public static var poundAvailableKeyword: TokenKind {
     return .poundAvailable
   }
 
   @available(*, deprecated, renamed: "poundElse")
-  static var poundElseKeyword: TokenKind {
+  public static var poundElseKeyword: TokenKind {
     return .poundElse
   }
 
   @available(*, deprecated, renamed: "poundElseif")
-  static var poundElseifKeyword: TokenKind {
+  public static var poundElseifKeyword: TokenKind {
     return .poundElseif
   }
 
   @available(*, deprecated, renamed: "poundEndif")
-  static var poundEndifKeyword: TokenKind {
+  public static var poundEndifKeyword: TokenKind {
     return .poundEndif
   }
 
   @available(*, deprecated, renamed: "poundIf")
-  static var poundIfKeyword: TokenKind {
+  public static var poundIfKeyword: TokenKind {
     return .poundIf
   }
 
   @available(*, deprecated, renamed: "poundSourceLocation")
-  static var poundSourceLocationKeyword: TokenKind {
+  public static var poundSourceLocationKeyword: TokenKind {
     return .poundSourceLocation
   }
 
   @available(*, deprecated, renamed: "poundUnavailable")
-  static var poundUnavailableKeyword: TokenKind {
+  public static var poundUnavailableKeyword: TokenKind {
     return .poundUnavailable
   }
 
   @available(*, deprecated, renamed: "rawStringPoundDelimiter")
-  static func rawStringDelimiter(_ text: String) -> TokenKind {
+  public static func rawStringDelimiter(_ text: String) -> TokenKind {
     return .rawStringPoundDelimiter(text)
   }
 
   @available(*, deprecated, renamed: "rightSquare")
-  static var rightSquareBracket: TokenKind {
+  public static var rightSquareBracket: TokenKind {
     return .rightSquare
   }
 
   @available(*, deprecated, renamed: "endOfFile")
-  static var eof: TokenKind { .endOfFile }
+  public static var eof: TokenKind { .endOfFile }
 }
 
-public extension TokenSyntax {
+extension TokenSyntax {
   @available(*, deprecated, renamed: "regexPoundDelimiter")
-  static func extendedRegexDelimiter(
+  public static func extendedRegexDelimiter(
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -428,7 +428,7 @@ public extension TokenSyntax {
   }
 
   @available(*, deprecated, renamed: "floatLiteral")
-  static func floatingLiteral(
+  public static func floatingLiteral(
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -443,7 +443,7 @@ public extension TokenSyntax {
   }
 
   @available(*, deprecated, renamed: "leftSquareToken")
-  static func leftSquareBracketToken(
+  public static func leftSquareBracketToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
@@ -456,7 +456,7 @@ public extension TokenSyntax {
   }
 
   @available(*, deprecated, renamed: "poundAvailableToken")
-  static func poundAvailableKeyword(
+  public static func poundAvailableKeyword(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
@@ -469,7 +469,7 @@ public extension TokenSyntax {
   }
 
   @available(*, deprecated, renamed: "poundElseToken")
-  static func poundElseKeyword(
+  public static func poundElseKeyword(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
@@ -482,7 +482,7 @@ public extension TokenSyntax {
   }
 
   @available(*, deprecated, renamed: "poundElseifToken")
-  static func poundElseifKeyword(
+  public static func poundElseifKeyword(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
@@ -495,7 +495,7 @@ public extension TokenSyntax {
   }
 
   @available(*, deprecated, renamed: "poundEndifToken")
-  static func poundEndifKeyword(
+  public static func poundEndifKeyword(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
@@ -508,7 +508,7 @@ public extension TokenSyntax {
   }
 
   @available(*, deprecated, renamed: "poundIfToken")
-  static func poundIfKeyword(
+  public static func poundIfKeyword(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
@@ -521,7 +521,7 @@ public extension TokenSyntax {
   }
 
   @available(*, deprecated, renamed: "poundSourceLocationToken")
-  static func poundSourceLocationKeyword(
+  public static func poundSourceLocationKeyword(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
@@ -534,7 +534,7 @@ public extension TokenSyntax {
   }
 
   @available(*, deprecated, renamed: "poundUnavailableToken")
-  static func poundUnavailableKeyword(
+  public static func poundUnavailableKeyword(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
@@ -547,7 +547,7 @@ public extension TokenSyntax {
   }
 
   @available(*, deprecated, renamed: "rawStringPoundDelimiter")
-  static func rawStringDelimiter(
+  public static func rawStringDelimiter(
     _ text: String,
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -562,7 +562,7 @@ public extension TokenSyntax {
   }
 
   @available(*, deprecated, renamed: "rightSquareToken")
-  static func rightSquareBracketToken(
+  public static func rightSquareBracketToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
@@ -575,7 +575,7 @@ public extension TokenSyntax {
   }
 
   @available(*, deprecated, renamed: "endOfFileToken")
-  static func eof(
+  public static func eof(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
@@ -588,9 +588,9 @@ public extension TokenSyntax {
   }
 }
 
-public extension TypeEffectSpecifiersSyntax {
+extension TypeEffectSpecifiersSyntax {
   @available(*, deprecated, message: "use throwsClause instead of throwsSpecifier")
-  init(
+  public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? = nil,
     asyncSpecifier: TokenSyntax? = nil,
@@ -611,9 +611,9 @@ public extension TypeEffectSpecifiersSyntax {
   }
 }
 
-public extension WildcardPatternSyntax {
+extension WildcardPatternSyntax {
   @available(*, deprecated, message: "remove 'typeAnnotation'")
-  init(
+  public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeWildcard: UnexpectedNodesSyntax? = nil,
     wildcard: TokenSyntax = .wildcardToken(),
@@ -632,19 +632,19 @@ public extension WildcardPatternSyntax {
   }
 
   @available(*, deprecated, message: "'unexpectedBetweenWildcardAndTypeAnnotation' was removed")
-  var unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenWildcardAndTypeAnnotation: UnexpectedNodesSyntax? {
     get { nil }
     set {}
   }
 
   @available(*, deprecated, message: "'typeAnnotation' was removed")
-  var typeAnnotation: TypeAnnotationSyntax? {
+  public var typeAnnotation: TypeAnnotationSyntax? {
     get { nil }
     set {}
   }
 
   @available(*, deprecated, renamed: "unexpectedAfterWildcard")
-  var unexpectedAfterTypeAnnotation: UnexpectedNodesSyntax? {
+  public var unexpectedAfterTypeAnnotation: UnexpectedNodesSyntax? {
     get { unexpectedAfterWildcard }
     set { unexpectedAfterWildcard = newValue }
   }

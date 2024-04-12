@@ -70,9 +70,9 @@ private struct UnimplementedExpansionMethodError: Error, CustomStringConvertible
   }
 }
 
-public extension MemberMacro {
+extension MemberMacro {
   /// Default implementation supplies no conformances.
-  static func expansion(
+  public static func expansion(
     of node: AttributeSyntax,
     providingMembersOf declaration: some DeclGroupSyntax,
     in context: some MacroExpansionContext
@@ -81,7 +81,7 @@ public extension MemberMacro {
   }
 
   /// Default implementation that ignores the unhandled conformances.
-  static func expansion(
+  public static func expansion(
     of node: AttributeSyntax,
     providingMembersOf declaration: some DeclGroupSyntax,
     conformingTo protocols: [TypeSyntax],

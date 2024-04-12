@@ -31,7 +31,7 @@ public protocol DeclarationMacro: FreestandingMacro {
   static var propagateFreestandingMacroModifiers: Bool { get }
 }
 
-public extension DeclarationMacro {
-  static var propagateFreestandingMacroAttributes: Bool { true }
-  static var propagateFreestandingMacroModifiers: Bool { true }
+extension DeclarationMacro {
+  public static var propagateFreestandingMacroAttributes: Bool { true }
+  public static var propagateFreestandingMacroModifiers: Bool { true }
 }

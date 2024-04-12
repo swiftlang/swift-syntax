@@ -16,7 +16,7 @@ public import SwiftSyntax
 import SwiftSyntax
 #endif
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
 
   /// Sequence of ``SyntaxClassifiedRange``s for this syntax node.
   ///
@@ -24,7 +24,7 @@ public extension SyntaxProtocol {
   /// text of the node. The ranges may also span multiple tokens, if multiple
   /// consecutive tokens would have the same classification then a single classified
   /// range is provided for all of them.
-  var classifications: SyntaxClassifications {
+  public var classifications: SyntaxClassifications {
     let fullRange = ByteSourceRange(offset: 0, length: totalLength.utf8Length)
     return SyntaxClassifications(_syntaxNode, in: fullRange)
   }
@@ -43,7 +43,7 @@ public extension SyntaxProtocol {
   /// - Parameters:
   ///   - in: The relative byte range to pull ``SyntaxClassifiedRange``s from.
   /// - Returns: Sequence of ``SyntaxClassifiedRange``s.
-  func classifications(in range: ByteSourceRange) -> SyntaxClassifications {
+  public func classifications(in range: ByteSourceRange) -> SyntaxClassifications {
     return SyntaxClassifications(_syntaxNode, in: range)
   }
 
@@ -52,7 +52,7 @@ public extension SyntaxProtocol {
   ///   - at: The relative to the node byte offset.
   /// - Returns: The ``SyntaxClassifiedRange`` for the offset or nil if the source text
   ///   at the given offset is unclassified.
-  func classification(at offset: Int) -> SyntaxClassifiedRange? {
+  public func classification(at offset: Int) -> SyntaxClassifiedRange? {
     let classifications = SyntaxClassifications(_syntaxNode, in: ByteSourceRange(offset: offset, length: 1))
     var iterator = classifications.makeIterator()
     return iterator.next()
@@ -63,7 +63,7 @@ public extension SyntaxProtocol {
   ///   - at: The absolute position.
   /// - Returns: The ``SyntaxClassifiedRange`` for the position or nil if the source text
   ///   at the given position is unclassified.
-  func classification(at position: AbsolutePosition) -> SyntaxClassifiedRange? {
+  public func classification(at position: AbsolutePosition) -> SyntaxClassifiedRange? {
     let relativeOffset = position.utf8Offset - self.position.utf8Offset
     return self.classification(at: relativeOffset)
   }

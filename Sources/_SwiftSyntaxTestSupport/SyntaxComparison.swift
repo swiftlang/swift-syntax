@@ -90,10 +90,10 @@ extension TreeDifference: CustomDebugStringConvertible {
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Compares the current tree against a `baseline`, returning the first
   /// difference it finds.
-  func findFirstDifference(baseline: some SyntaxProtocol, includeTrivia: Bool = false) -> TreeDifference? {
+  public func findFirstDifference(baseline: some SyntaxProtocol, includeTrivia: Bool = false) -> TreeDifference? {
     if let reason = isDifferent(baseline: baseline, includeTrivia: includeTrivia) {
       return TreeDifference(node: self, baseline: baseline, reason: reason)
     }

@@ -223,16 +223,22 @@ struct FormatExecutor {
     return result
   }
 
+  private func formatConfigFile() -> URL {
+    Paths.packageDir.appendingPathComponent(".swift-format")
+  }
+
   /// Format all files in the repo using the locally-built swift-format.
   private func formatFilesInRepo() throws {
     let swiftFormatExecutable = try findSwiftFormatExecutable()
 
     let filesToFormat = self.filesToFormat()
+    let config = self.formatConfigFile()
 
     try ProcessRunner(
       executableURL: swiftFormatExecutable,
       arguments: [
         "format",
+        "--configuration=\(config.path)",
         "--in-place",
         "--parallel",
       ] + filesToFormat.map { $0.path }
@@ -249,12 +255,14 @@ struct FormatExecutor {
     let swiftFormatExecutable = try findSwiftFormatExecutable()
 
     let filesToFormat = self.filesToFormat()
+    let config = self.formatConfigFile()
 
     do {
       try ProcessRunner(
         executableURL: swiftFormatExecutable,
         arguments: [
           "lint",
+          "--configuration=\(config.path)",
           "--strict",
           "--parallel",
         ] + filesToFormat.map { $0.path }

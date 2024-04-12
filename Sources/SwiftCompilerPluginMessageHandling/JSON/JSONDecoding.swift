@@ -28,13 +28,57 @@ import ucrt
 #endif
 #endif
 
-
 func decodeFromJSON<T: Decodable>(json: UnsafeBufferPointer<UInt8>) throws -> T {
   try withExtendedLifetime(try JSONScanner.scan(buffer: json)) { map in
     let decoder = JSONDecoding(value: map.value, codingPathNode: .root)
     return try T.init(from: decoder)
   }
 }
+
+/*
+ JSONMap is inspired by swift-foundation's JSONMap.
+
+ For JSON payload such as:
+
+ ```
+ {"array": [-1.3, true], "number": 42}
+ ```
+
+ will be scanned by 'JSONScanner' into a map like:
+
+ ```
+ <OM> == Object Marker
+ <AM> == Array Marker
+ <SS> == Simple String (a variant of String that can has no escapes and can be passed directly to a UTF-8 parser)
+ <NM> == Number Marker
+ <TL> == NULL Marker
+ map: [
+   0: <OM>,      -- object marker
+   1: 15,        |  `- number of *map* elements in this collection
+   2: <SS>,      | --- key 1 '"array"'
+   3: <int_ptr>, | |   |- pointer in the payload
+   4: 7,         | |   `- length
+   5: <AM>,      | --- value1 array
+   6: 4,         | |   `- number of *map* elements in the array
+   7: <NM>,      | | -- arr elm 1 '-1.3'
+   8: <int_ptr>, | | |
+   9: 4,         | | |
+  10: <TL>,      | | -- arr elm 2 'true'
+  11: <SS>,      | --- key 2 '"number"'
+  12: <int_ptr>, | |
+  13: 8,         | |
+  14: <NM>       | --- value1: '42'
+  15: <int_ptr>, | |
+  16: 2,         | |
+ ]
+ ```
+ To decode '<root>.number' value:
+ 1. Index 0 indicates it's a object.
+ 2. Parse a key string at index 2, which is not a  match for "number"
+ 3. Skip the key's value by finding it's an array, then its 'index(afterValue:)' which is 11
+ 4. Parse a key string at index 11, matching "number"
+ 5. Parse a value number at the pointer of index 15, length at index 16
+*/
 
 private struct JSONMap {
   enum Descriptor: Int {
@@ -47,15 +91,18 @@ private struct JSONMap {
     case object  // [desc, count, (key, value)...]
     case array  // [desc, count, element...]
   }
+  typealias Data = [Int]
   let data: [Int]
 
+  /// Top-level value.
   var value: JSONMapValue {
     JSONMapValue(map: data[...])
   }
 }
 
+/// Slice of JSONMap representing a single value.
 private struct JSONMapValue {
-  typealias Map = Array<Int>.SubSequence
+  typealias Map = JSONMap.Data.SubSequence
   typealias Index = Map.Index
   let map: Map
 
@@ -255,7 +302,7 @@ extension JSONMapValue {
 extension JSONMapValue {
   struct JSONArray: Collection {
     typealias Index = JSONMapValue.Index
-    var map: JSONMapValue
+    let map: JSONMapValue
 
     var startIndex: Index { map.index(offset: 2) }
     var endIndex: Index { map.endIndex }
@@ -275,7 +322,7 @@ extension JSONMapValue {
   }
 
   struct ObjectIterator {
-    var map: JSONMapValue
+    let map: JSONMapValue
     var currIndex: Int
 
     init(map: JSONMapValue) {
@@ -289,8 +336,7 @@ extension JSONMapValue {
         return nil
       }
       let key = map.value(at: currIndex)
-      currIndex = key.endIndex
-      let val = map.value(at: currIndex)
+      let val = map.value(at: key.endIndex)
       currIndex = val.endIndex
       return (key, val)
     }

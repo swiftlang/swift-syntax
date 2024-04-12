@@ -167,11 +167,11 @@ private struct JSONWriter {
         case 0x0D:
           flush()
           write(string: "\\r")
-        case 0x0 ... 0xF:
+        case 0x0...0xF:
           flush()
           write(string: "\\u000")
           write(ascii: UInt8(ascii: "0") &+ cursor.pointee)
-        case 0x10 ... 0x1F:
+        case 0x10...0x1F:
           flush()
           write(string: "\\u001")
           write(ascii: UInt8(ascii: "0") &+ (cursor.pointee & 0xF))
@@ -251,7 +251,11 @@ extension JSONEncoding {
   func _encode(_ value: String) -> JSONReference {
     .string(value)
   }
-  func _encodeGeneric<T: Encodable>(_ value: T, codingPathNode: _CodingPathNode, _ additionalKey: (some CodingKey)?) throws -> JSONReference {
+  func _encodeGeneric<T: Encodable>(
+    _ value: T,
+    codingPathNode: _CodingPathNode,
+    _ additionalKey: (some CodingKey)?
+  ) throws -> JSONReference {
     // Temporarily reset the state and perform the encoding.
     let old = (self.reference, self.codingPathNode)
     defer { (self.reference, self.codingPathNode) = old }
@@ -261,10 +265,13 @@ extension JSONEncoding {
 
     try value.encode(to: self)
     guard let result = self.reference else {
-      throw EncodingError.invalidValue(T.self, .init(
-        codingPath: self.codingPathNode.path,
-        debugDescription: "nothing was encoded"
-      ))
+      throw EncodingError.invalidValue(
+        T.self,
+        .init(
+          codingPath: self.codingPathNode.path,
+          debugDescription: "nothing was encoded"
+        )
+      )
     }
     return result
   }
@@ -275,7 +282,7 @@ extension JSONEncoding: Encoder {
   var codingPath: [any CodingKey] {
     codingPathNode.path
   }
-  var userInfo: [CodingUserInfoKey : Any] { [:] }
+  var userInfo: [CodingUserInfoKey: Any] { [:] }
 
   fileprivate struct KeyedContainer<Key: CodingKey> {
     var encoder: JSONEncoding
@@ -291,11 +298,13 @@ extension JSONEncoding: Encoder {
 
   func container<Key: CodingKey>(keyedBy type: Key.Type) -> KeyedEncodingContainer<Key> {
     reference = .newObject()
-    return KeyedEncodingContainer(KeyedContainer<Key>(
-      encoder: self,
-      reference: reference!,
-      codingPathNode: codingPathNode
-    ))
+    return KeyedEncodingContainer(
+      KeyedContainer<Key>(
+        encoder: self,
+        reference: reference!,
+        codingPathNode: codingPathNode
+      )
+    )
   }
 
   func unkeyedContainer() -> any UnkeyedEncodingContainer {
@@ -451,14 +460,19 @@ extension JSONEncoding.KeyedContainer: KeyedEncodingContainerProtocol {
     _set(key: key, value: try encoder._encodeGeneric(value, codingPathNode: codingPathNode, key))
   }
 
-  mutating func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type, forKey key: Key) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
+  mutating func nestedContainer<NestedKey: CodingKey>(
+    keyedBy keyType: NestedKey.Type,
+    forKey key: Key
+  ) -> KeyedEncodingContainer<NestedKey> {
     let ref: JSONReference = .newObject()
     _set(key: key, value: ref)
-    return KeyedEncodingContainer(JSONEncoding.KeyedContainer<NestedKey>(
-      encoder: encoder,
-      reference: ref,
-      codingPathNode: codingPathNode.appending(key)
-    ))
+    return KeyedEncodingContainer(
+      JSONEncoding.KeyedContainer<NestedKey>(
+        encoder: encoder,
+        reference: ref,
+        codingPathNode: codingPathNode.appending(key)
+      )
+    )
   }
 
   mutating func nestedUnkeyedContainer(forKey key: Key) -> any UnkeyedEncodingContainer {
@@ -549,21 +563,25 @@ extension JSONEncoding.UnkeyedContainer: UnkeyedEncodingContainer {
     reference.append(encoder._encode(value))
   }
 
-  func encode<T>(_ value: T) throws where T : Encodable {
+  func encode<T>(_ value: T) throws where T: Encodable {
     let idx = reference.count
     let ref = try encoder._encodeGeneric(value, codingPathNode: codingPathNode, _CodingKey.index(idx))
     reference.append(ref)
   }
 
-  func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
+  func nestedContainer<NestedKey: CodingKey>(
+    keyedBy keyType: NestedKey.Type
+  ) -> KeyedEncodingContainer<NestedKey> {
     let ref: JSONReference = .newObject()
     let idx = count
     reference.append(ref)
-    return KeyedEncodingContainer(JSONEncoding.KeyedContainer<NestedKey>(
-      encoder: encoder,
-      reference: ref,
-      codingPathNode: codingPathNode.appending(index: idx)
-    ))
+    return KeyedEncodingContainer(
+      JSONEncoding.KeyedContainer<NestedKey>(
+        encoder: encoder,
+        reference: ref,
+        codingPathNode: codingPathNode.appending(index: idx)
+      )
+    )
   }
 
   func nestedUnkeyedContainer() -> any UnkeyedEncodingContainer {

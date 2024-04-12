@@ -21,14 +21,14 @@ func decodeFromJSON<T: Decodable>(json: UnsafeBufferPointer<UInt8>) throws -> T 
 
 private struct JSONMap {
   enum Descriptor: Int {
-    case nullKeyword   // [desc]
-    case trueKeyword   // [desc]
+    case nullKeyword  // [desc]
+    case trueKeyword  // [desc]
     case falseKeyword  // [desc]
-    case number        // [desc, pointer, length]
+    case number  // [desc, pointer, length]
     case simpleString  // [desc, pointer, length]
-    case string        // [desc, pointer, length]
-    case object        // [desc, count, (key, value)...]
-    case array         // [desc, count, element...]
+    case string  // [desc, pointer, length]
+    case object  // [desc, count, (key, value)...]
+    case array  // [desc, count, element...]
   }
   let data: [Int]
 
@@ -78,7 +78,7 @@ private struct JSONMapValue {
 
   @inline(__always)
   func value(at i: Index) -> JSONMapValue {
-    return .init(map: map[i ..< index(afterValue: i)])
+    return .init(map: map[i..<index(afterValue: i)])
   }
 }
 
@@ -137,11 +137,11 @@ private enum _JSONStringDecoder {
           case UInt8(ascii: "'"): string.append("'")
           case UInt8(ascii: "\\"): string.append("\\")
           case UInt8(ascii: "/"): string.append("/")
-          case UInt8(ascii: "b"): string.append("\u{08}") // \b
-          case UInt8(ascii: "f"): string.append("\u{0C}") // \f
-          case UInt8(ascii: "n"): string.append("\u{0A}") // \n
-          case UInt8(ascii: "r"): string.append("\u{0D}") // \r
-          case UInt8(ascii: "t"): string.append("\u{09}") // \t
+          case UInt8(ascii: "b"): string.append("\u{08}")  // \b
+          case UInt8(ascii: "f"): string.append("\u{0C}")  // \f
+          case UInt8(ascii: "n"): string.append("\u{0A}")  // \n
+          case UInt8(ascii: "r"): string.append("\u{0D}")  // \r
+          case UInt8(ascii: "t"): string.append("\u{09}")  // \t
           case UInt8(ascii: "u"):
             fatalError("unimplemented")
           default:
@@ -178,9 +178,10 @@ private enum _JSONNumberDecoder {
       guard !overflowed else {
         return nil
       }
-      (value, overflowed) = isNegative
-      ? value.subtractingReportingOverflow(digitValue)
-      : value.addingReportingOverflow(digitValue)
+      (value, overflowed) =
+        isNegative
+        ? value.subtractingReportingOverflow(digitValue)
+        : value.addingReportingOverflow(digitValue)
       guard !overflowed else {
         return nil
       }
@@ -312,14 +313,14 @@ private struct JSONMapBuilder {
   mutating func startCollection(_ descriptor: JSONMap.Descriptor) -> Int {
     let handle = mapData.count
     mapData.append(descriptor.rawValue)
-    mapData.append(0) // Count, this will be updated in closeCollection()
+    mapData.append(0)  // Count, this will be updated in closeCollection()
     return handle
   }
 
   mutating func closeCollection(handle: Int) {
     // 'handle': descriptor index.
     // 'handle+1': counter index.
-    mapData[handle+1] = mapData.count - handle - 2
+    mapData[handle + 1] = mapData.count - handle - 2
   }
 
   func finalize() -> JSONMap {
@@ -430,21 +431,21 @@ private struct JSONScanner {
       _ = try advance()
     }
     try expect("\"")
-    map.record(hasEscape ? .string : .simpleString, range: start ..< ptr)
+    map.record(hasEscape ? .string : .simpleString, range: start..<ptr)
   }
 
   mutating func scanNumber(start: Cursor) throws {
     ptr = start
     _ = advance(if: "-")
-    while advance(if: "0" ... "9") {}
+    while advance(if: "0"..."9") {}
     if advance(if: ".") {
-      while advance(if: "0" ... "9") {}
+      while advance(if: "0"..."9") {}
     }
     if advance(if: "e") || advance(if: "E") {
       _ = advance(if: "-") || advance(if: "+")
-      while advance(if: "0" ... "9") {}
+      while advance(if: "0"..."9") {}
     }
-    map.record(.number, range: start ..< ptr)
+    map.record(.number, range: start..<ptr)
   }
 
   mutating func scanObject() throws {
@@ -496,7 +497,7 @@ private struct JSONScanner {
       try scanFalse()
     case UInt8(ascii: "\""):
       try scanString(start: start)
-    case UInt8(ascii: "-"), UInt8(ascii: "0") ... UInt8(ascii: "9"):
+    case UInt8(ascii: "-"), UInt8(ascii: "0")...UInt8(ascii: "9"):
       try scanNumber(start: start)
     case UInt8(ascii: "{"):
       try scanObject()
@@ -526,33 +527,65 @@ private struct JSONDecoding {
 
 extension JSONDecoding {
   @inline(__always)
-  static func _unwrapOrThrow<T>(_ v: T?, codingPathNode: _CodingPathNode, _ additionalKey: (some CodingKey)?) throws -> T {
+  static func _unwrapOrThrow<T>(
+    _ v: T?,
+    codingPathNode: _CodingPathNode,
+    _ additionalKey: (some CodingKey)?
+  ) throws -> T {
     guard let v = v else {
-      throw DecodingError.typeMismatch(T.self, .init(
-        codingPath: codingPathNode.path(byAppending: additionalKey),
-        debugDescription: "type mismatch"
-      ))
+      throw DecodingError.typeMismatch(
+        T.self,
+        .init(
+          codingPath: codingPathNode.path(byAppending: additionalKey),
+          debugDescription: "type mismatch"
+        )
+      )
     }
     return v
   }
   @inline(__always)
-  static func _decode(_ value: JSONMapValue, as _: Bool.Type, codingPathNode: _CodingPathNode, _ additionalKey: (some CodingKey)?) throws -> Bool {
+  static func _decode(
+    _ value: JSONMapValue,
+    as _: Bool.Type,
+    codingPathNode: _CodingPathNode,
+    _ additionalKey: (some CodingKey)?
+  ) throws -> Bool {
     try _unwrapOrThrow(value.asBool, codingPathNode: codingPathNode, additionalKey)
   }
   @inline(__always)
-  static func _decode(_ value: JSONMapValue, as _: String.Type, codingPathNode: _CodingPathNode, _ additionalKey: (some CodingKey)?) throws -> String {
+  static func _decode(
+    _ value: JSONMapValue,
+    as _: String.Type,
+    codingPathNode: _CodingPathNode,
+    _ additionalKey: (some CodingKey)?
+  ) throws -> String {
     try _unwrapOrThrow(value.asString, codingPathNode: codingPathNode, additionalKey)
   }
   @inline(__always)
-  static func _decode<Integer: FixedWidthInteger>(_ value: JSONMapValue, as type: Integer.Type, codingPathNode: _CodingPathNode, _ additionalKey: (some CodingKey)?) throws -> Integer {
+  static func _decode<Integer: FixedWidthInteger>(
+    _ value: JSONMapValue,
+    as type: Integer.Type,
+    codingPathNode: _CodingPathNode,
+    _ additionalKey: (some CodingKey)?
+  ) throws -> Integer {
     try _unwrapOrThrow(value.asInteger(type), codingPathNode: codingPathNode, additionalKey)
   }
   @inline(__always)
-  static func _decode<Floating: BinaryFloatingPoint>(_ value: JSONMapValue, as type: Floating.Type, codingPathNode: _CodingPathNode, _ additionalKey: (some CodingKey)?) throws -> Floating {
+  static func _decode<Floating: BinaryFloatingPoint>(
+    _ value: JSONMapValue,
+    as type: Floating.Type,
+    codingPathNode: _CodingPathNode,
+    _ additionalKey: (some CodingKey)?
+  ) throws -> Floating {
     try _unwrapOrThrow(value.asFloatingPoint(type), codingPathNode: codingPathNode, additionalKey)
   }
 
-  static func _decodeGeneric<T: Decodable>(_ value: JSONMapValue, as type: T.Type, codingPathNode: _CodingPathNode, _ additionalKey: (some CodingKey)?) throws -> T {
+  static func _decodeGeneric<T: Decodable>(
+    _ value: JSONMapValue,
+    as type: T.Type,
+    codingPathNode: _CodingPathNode,
+    _ additionalKey: (some CodingKey)?
+  ) throws -> T {
     let decoder = Self(value: value, codingPathNode: codingPathNode.appending(additionalKey))
     return try T.init(from: decoder)
   }
@@ -562,7 +595,7 @@ extension JSONDecoding: Decoder {
   var codingPath: [any CodingKey] {
     codingPathNode.path
   }
-  var userInfo: [CodingUserInfoKey : Any] { [:] }
+  var userInfo: [CodingUserInfoKey: Any] { [:] }
 
   fileprivate struct KeyedContainer<Key: CodingKey> {
     var codingPathNode: _CodingPathNode
@@ -577,10 +610,12 @@ extension JSONDecoding: Decoder {
   }
 
   func container<Key: CodingKey>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> {
-    return try KeyedDecodingContainer(KeyedContainer<Key>(
-      value: value,
-      codingPathNode: codingPathNode
-    ))
+    return try KeyedDecodingContainer(
+      KeyedContainer<Key>(
+        value: value,
+        codingPathNode: codingPathNode
+      )
+    )
   }
 
   func unkeyedContainer() throws -> any UnkeyedDecodingContainer {
@@ -656,7 +691,7 @@ extension JSONDecoding: SingleValueDecodingContainer {
     try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 
-  func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
+  func decode<T>(_ type: T.Type) throws -> T where T: Decodable {
     try JSONDecoding._decodeGeneric(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 }
@@ -677,9 +712,13 @@ extension JSONDecoding.KeyedContainer: KeyedDecodingContainerProtocol {
   @inline(__always)
   func _getOrThrow(forKey key: Key) throws -> JSONMapValue {
     guard let value = mapping[key.stringValue] else {
-      throw DecodingError.keyNotFound(key, .init(
-        codingPath: codingPathNode.path,
-        debugDescription: "No value associated with key \(key) (\"\(key.stringValue)\")."))
+      throw DecodingError.keyNotFound(
+        key,
+        .init(
+          codingPath: codingPathNode.path,
+          debugDescription: "No value associated with key \(key) (\"\(key.stringValue)\")."
+        )
+      )
     }
     return value
   }
@@ -748,11 +787,16 @@ extension JSONDecoding.KeyedContainer: KeyedDecodingContainerProtocol {
     try JSONDecoding._decodeGeneric(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
-  func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type, forKey key: Key) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
-    return try KeyedDecodingContainer(JSONDecoding.KeyedContainer<NestedKey>(
-      value: try _getOrThrow(forKey: key),
-      codingPathNode: codingPathNode.appending(key)
-    ))
+  func nestedContainer<NestedKey: CodingKey>(
+    keyedBy keyType: NestedKey.Type,
+    forKey key: Key
+  ) throws -> KeyedDecodingContainer<NestedKey> {
+    return try KeyedDecodingContainer(
+      JSONDecoding.KeyedContainer<NestedKey>(
+        value: try _getOrThrow(forKey: key),
+        codingPathNode: codingPathNode.appending(key)
+      )
+    )
   }
 
   func nestedUnkeyedContainer(forKey key: Key) throws -> any UnkeyedDecodingContainer {
@@ -772,20 +816,26 @@ extension JSONDecoding.KeyedContainer: KeyedDecodingContainerProtocol {
 
   init(value: JSONMapValue, codingPathNode: _CodingPathNode) throws {
     guard value.isObject else {
-      throw DecodingError.typeMismatch([String: Any].self, .init(
-        codingPath: codingPathNode.path,
-        debugDescription: "not an array"
-      ))
+      throw DecodingError.typeMismatch(
+        [String: Any].self,
+        .init(
+          codingPath: codingPathNode.path,
+          debugDescription: "not an array"
+        )
+      )
     }
     self.codingPathNode = codingPathNode
     self.mapping = [:]
     var iter = value.makeObjectIterator()!
     while let elem = iter.next() {
       guard let keyStr = elem.key.asString else {
-        throw DecodingError.typeMismatch(String.self, .init(
-          codingPath: codingPathNode.path,
-          debugDescription: "expected a string as a key"
-        ))
+        throw DecodingError.typeMismatch(
+          String.self,
+          .init(
+            codingPath: codingPathNode.path,
+            debugDescription: "expected a string as a key"
+          )
+        )
       }
       self.mapping[keyStr] = elem.value
     }
@@ -815,10 +865,13 @@ extension JSONDecoding.UnkeyedContainer: UnkeyedDecodingContainer {
   mutating func _getOrThrow() throws -> (index: any CodingKey, value: JSONMapValue) {
     let idx = currentIndex
     guard !isAtEnd else {
-      throw DecodingError.valueNotFound(Any.self, .init(
-        codingPath: codingPathNode.path(byAppendingIndex: idx),
-        debugDescription: "Unkeyed container is at end"
-      ))
+      throw DecodingError.valueNotFound(
+        Any.self,
+        .init(
+          codingPath: codingPathNode.path(byAppendingIndex: idx),
+          debugDescription: "Unkeyed container is at end"
+        )
+      )
     }
     let value = array[_currMapIdx]
     advanceToNextValue()
@@ -904,17 +957,21 @@ extension JSONDecoding.UnkeyedContainer: UnkeyedDecodingContainer {
     try _decodeInteger(type)
   }
 
-  mutating func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
+  mutating func decode<T>(_ type: T.Type) throws -> T where T: Decodable {
     let (idx, value) = try _getOrThrow()
     return try JSONDecoding._decodeGeneric(value, as: type, codingPathNode: codingPathNode, idx)
   }
 
-  mutating func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
+  mutating func nestedContainer<NestedKey: CodingKey>(
+    keyedBy keyType: NestedKey.Type
+  ) throws -> KeyedDecodingContainer<NestedKey> {
     let (idx, value) = try _getOrThrow()
-    return try KeyedDecodingContainer(JSONDecoding.KeyedContainer<NestedKey>(
-      value: value,
-      codingPathNode: codingPathNode.appending(idx)
-    ))
+    return try KeyedDecodingContainer(
+      JSONDecoding.KeyedContainer<NestedKey>(
+        value: value,
+        codingPathNode: codingPathNode.appending(idx)
+      )
+    )
   }
 
   mutating func nestedUnkeyedContainer() throws -> any UnkeyedDecodingContainer {
@@ -931,10 +988,13 @@ extension JSONDecoding.UnkeyedContainer: UnkeyedDecodingContainer {
 
   init(value: JSONMapValue, codingPathNode: _CodingPathNode) throws {
     guard value.isArray else {
-      throw DecodingError.typeMismatch([Any].self, .init(
-        codingPath: codingPathNode.path,
-        debugDescription: "not an array"
-      ))
+      throw DecodingError.typeMismatch(
+        [Any].self,
+        .init(
+          codingPath: codingPathNode.path,
+          debugDescription: "not an array"
+        )
+      )
     }
     self.codingPathNode = codingPathNode
     self.currentIndex = 0

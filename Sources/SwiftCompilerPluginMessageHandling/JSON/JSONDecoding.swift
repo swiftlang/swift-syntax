@@ -10,7 +10,24 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6.0)
+#if canImport(Darwin)
+private import Darwin
+#elseif canImport(Glibc)
+private import Glibc
+#elseif canImport(ucrt)
+private import ucrt
+#endif
+#else
+#if canImport(Darwin)
 import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(ucrt)
+import ucrt
+#endif
+#endif
+
 
 func decodeFromJSON<T: Decodable>(json: UnsafeBufferPointer<UInt8>) throws -> T {
   try withExtendedLifetime(try JSONScanner.scan(buffer: json)) { map in

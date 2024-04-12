@@ -100,9 +100,3 @@ internal enum _CodingKey : CodingKey {
   }
 }
 
-struct JSONError: Error {
-  var message: String
-  init(message: String = "err") {
-    self.message = message
-  }
-}

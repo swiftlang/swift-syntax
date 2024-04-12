@@ -251,17 +251,20 @@ extension JSONEncoding {
   func _encode(_ value: String) -> JSONReference {
     .string(value)
   }
-  func _encodeGeneric(_ value: some Encodable, codingPathNode: _CodingPathNode) throws -> JSONReference {
+  func _encodeGeneric<T: Encodable>(_ value: T, codingPathNode: _CodingPathNode, _ additionalKey: (some CodingKey)?) throws -> JSONReference {
     // Temporarily reset the state and perform the encoding.
     let old = (self.reference, self.codingPathNode)
     defer { (self.reference, self.codingPathNode) = old }
 
     self.reference = nil
-    self.codingPathNode = codingPathNode
+    self.codingPathNode = codingPathNode.appending(additionalKey)
 
     try value.encode(to: self)
     guard let result = self.reference else {
-      throw JSONError()
+      throw EncodingError.invalidValue(T.self, .init(
+        codingPath: self.codingPathNode.path,
+        debugDescription: "nothing was encoded"
+      ))
     }
     return result
   }
@@ -370,8 +373,8 @@ extension JSONEncoding: SingleValueEncodingContainer {
     reference = _encode(value)
   }
 
-  func encode<T>(_ value: T) throws where T : Encodable {
-    try value.encode(to: self)
+  func encode<T: Encodable>(_ value: T) throws {
+    reference = try _encodeGeneric(value, codingPathNode: codingPathNode, (_CodingKey)?.none)
   }
 }
 
@@ -445,7 +448,7 @@ extension JSONEncoding.KeyedContainer: KeyedEncodingContainerProtocol {
   }
 
   mutating func encode<T: Encodable>(_ value: T, forKey key: Key) throws {
-    _set(key: key, value: try encoder._encodeGeneric(value, codingPathNode: codingPathNode))
+    _set(key: key, value: try encoder._encodeGeneric(value, codingPathNode: codingPathNode, key))
   }
 
   mutating func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type, forKey key: Key) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {
@@ -547,7 +550,9 @@ extension JSONEncoding.UnkeyedContainer: UnkeyedEncodingContainer {
   }
 
   func encode<T>(_ value: T) throws where T : Encodable {
-    reference.append(try encoder._encodeGeneric(value, codingPathNode: codingPathNode))
+    let idx = reference.count
+    let ref = try encoder._encodeGeneric(value, codingPathNode: codingPathNode, _CodingKey.index(idx))
+    reference.append(ref)
   }
 
   func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type) -> KeyedEncodingContainer<NestedKey> where NestedKey : CodingKey {

@@ -327,6 +327,11 @@ private struct JSONMapBuilder {
   }
 }
 
+enum JSONError: Error {
+  case unexpectedEndOfFile
+  case unexpectedCharacter(UInt8, context: String)
+}
+
 private struct JSONScanner {
   typealias Cursor = UnsafePointer<UInt8>
 
@@ -359,7 +364,7 @@ private struct JSONScanner {
   @inline(__always)
   mutating func advance() throws -> UInt8 {
     guard hasData else {
-      throw JSONError()
+      throw JSONError.unexpectedEndOfFile
     }
     let value = ptr.pointee
     ptr += 1
@@ -387,7 +392,7 @@ private struct JSONScanner {
   @inline(__always)
   mutating func expect(_ char: UnicodeScalar) throws {
     guard advance(if: char) else {
-      throw JSONError(message: "expected \(char)")
+      throw JSONError.unexpectedCharacter(ptr.pointee, context: "expected \(char)")
     }
   }
 
@@ -498,7 +503,7 @@ private struct JSONScanner {
     case UInt8(ascii: "["):
       try scanArray()
     case let chr:
-      throw JSONError(message: "invalid value start: \(chr)")
+      throw JSONError.unexpectedCharacter(chr, context: "value start")
     }
     skipWhilespace()
   }
@@ -507,7 +512,7 @@ private struct JSONScanner {
     var scanner = JSONScanner(buffer: buffer)
     try scanner.scanValue()
     if scanner.hasData {
-      throw JSONError()
+      throw JSONError.unexpectedCharacter(scanner.ptr.pointee, context: "after top-level value")
     }
 
     return scanner.map.finalize()
@@ -521,31 +526,34 @@ private struct JSONDecoding {
 
 extension JSONDecoding {
   @inline(__always)
-  static func _unwrapOrThrow<T>(_ v: T?, codingPathNode: _CodingPathNode) throws -> T {
+  static func _unwrapOrThrow<T>(_ v: T?, codingPathNode: _CodingPathNode, _ additionalKey: (some CodingKey)?) throws -> T {
     guard let v = v else {
-      throw JSONError(message: "type mismatch")
+      throw DecodingError.typeMismatch(T.self, .init(
+        codingPath: codingPathNode.path(byAppending: additionalKey),
+        debugDescription: "type mismatch"
+      ))
     }
     return v
   }
   @inline(__always)
-  static func _decode(_ value: JSONMapValue, as _: Bool.Type, codingPathNode: _CodingPathNode) throws -> Bool {
-    try _unwrapOrThrow(value.asBool, codingPathNode: codingPathNode)
+  static func _decode(_ value: JSONMapValue, as _: Bool.Type, codingPathNode: _CodingPathNode, _ additionalKey: (some CodingKey)?) throws -> Bool {
+    try _unwrapOrThrow(value.asBool, codingPathNode: codingPathNode, additionalKey)
   }
   @inline(__always)
-  static func _decode(_ value: JSONMapValue, as _: String.Type, codingPathNode: _CodingPathNode) throws -> String {
-    try _unwrapOrThrow(value.asString, codingPathNode: codingPathNode)
+  static func _decode(_ value: JSONMapValue, as _: String.Type, codingPathNode: _CodingPathNode, _ additionalKey: (some CodingKey)?) throws -> String {
+    try _unwrapOrThrow(value.asString, codingPathNode: codingPathNode, additionalKey)
   }
   @inline(__always)
-  static func _decode<Integer: FixedWidthInteger>(_ value: JSONMapValue, as type: Integer.Type, codingPathNode: _CodingPathNode) throws -> Integer {
-    try _unwrapOrThrow(value.asInteger(type), codingPathNode: codingPathNode)
+  static func _decode<Integer: FixedWidthInteger>(_ value: JSONMapValue, as type: Integer.Type, codingPathNode: _CodingPathNode, _ additionalKey: (some CodingKey)?) throws -> Integer {
+    try _unwrapOrThrow(value.asInteger(type), codingPathNode: codingPathNode, additionalKey)
   }
   @inline(__always)
-  static func _decode<Floating: BinaryFloatingPoint>(_ value: JSONMapValue, as type: Floating.Type, codingPathNode: _CodingPathNode) throws -> Floating {
-    try _unwrapOrThrow(value.asFloatingPoint(type), codingPathNode: codingPathNode)
+  static func _decode<Floating: BinaryFloatingPoint>(_ value: JSONMapValue, as type: Floating.Type, codingPathNode: _CodingPathNode, _ additionalKey: (some CodingKey)?) throws -> Floating {
+    try _unwrapOrThrow(value.asFloatingPoint(type), codingPathNode: codingPathNode, additionalKey)
   }
 
-  static func _decodeGeneric<T: Decodable>(_ value: JSONMapValue, as type: T.Type, codingPathNode: _CodingPathNode) throws -> T {
-    let decoder = Self(value: value, codingPathNode: codingPathNode)
+  static func _decodeGeneric<T: Decodable>(_ value: JSONMapValue, as type: T.Type, codingPathNode: _CodingPathNode, _ additionalKey: (some CodingKey)?) throws -> T {
+    let decoder = Self(value: value, codingPathNode: codingPathNode.appending(additionalKey))
     return try T.init(from: decoder)
   }
 }
@@ -563,9 +571,9 @@ extension JSONDecoding: Decoder {
 
   fileprivate struct UnkeyedContainer {
     var codingPathNode: _CodingPathNode
+    var currentIndex: Int
     var array: JSONMapValue.JSONArray
-    var currentIndex: JSONMapValue.JSONArray.Index
-    var currentNumber: Int
+    var _currMapIdx: JSONMapValue.JSONArray.Index
   }
 
   func container<Key: CodingKey>(keyedBy type: Key.Type) throws -> KeyedDecodingContainer<Key> {
@@ -588,76 +596,68 @@ extension JSONDecoding: Decoder {
 }
 
 extension JSONDecoding: SingleValueDecodingContainer {
-  @inline(__always)
-  func _unwrapOrThrow<T>(_ value: T?) throws -> T {
-    guard let value = value else {
-      throw JSONError()
-    }
-    return value
-  }
-
   func decodeNil() -> Bool {
     value.isNull
   }
 
   func decode(_ type: Bool.Type) throws -> Bool {
-    try _unwrapOrThrow(value.asBool)
+    try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 
   func decode(_ type: String.Type) throws -> String {
-    try _unwrapOrThrow(value.asString)
+    try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 
   func decode(_ type: Double.Type) throws -> Double {
-    try _unwrapOrThrow(value.asFloatingPoint(Double.self))
+    try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 
   func decode(_ type: Float.Type) throws -> Float {
-    try _unwrapOrThrow(value.asFloatingPoint(Float.self))
+    try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 
   func decode(_ type: Int.Type) throws -> Int {
-    try _unwrapOrThrow(value.asInteger(Int.self))
+    try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 
   func decode(_ type: Int8.Type) throws -> Int8 {
-    try _unwrapOrThrow(value.asInteger(Int8.self))
+    try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 
   func decode(_ type: Int16.Type) throws -> Int16 {
-    try _unwrapOrThrow(value.asInteger(Int16.self))
+    try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 
   func decode(_ type: Int32.Type) throws -> Int32 {
-    try _unwrapOrThrow(value.asInteger(Int32.self))
+    try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 
   func decode(_ type: Int64.Type) throws -> Int64 {
-    try _unwrapOrThrow(value.asInteger(Int64.self))
+    try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 
   func decode(_ type: UInt.Type) throws -> UInt {
-    try _unwrapOrThrow(value.asInteger(UInt.self))
+    try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 
   func decode(_ type: UInt8.Type) throws -> UInt8 {
-    try _unwrapOrThrow(value.asInteger(UInt8.self))
+    try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 
   func decode(_ type: UInt16.Type) throws -> UInt16 {
-    try _unwrapOrThrow(value.asInteger(UInt16.self))
+    try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 
   func decode(_ type: UInt32.Type) throws -> UInt32 {
-    try _unwrapOrThrow(value.asInteger(UInt32.self))
+    try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 
   func decode(_ type: UInt64.Type) throws -> UInt64 {
-    try _unwrapOrThrow(value.asInteger(UInt64.self))
+    try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 
   func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
-    return try T.init(from: self)
+    try JSONDecoding._decodeGeneric(value, as: type, codingPathNode: codingPathNode, _CodingKey?.none)
   }
 }
 
@@ -677,7 +677,9 @@ extension JSONDecoding.KeyedContainer: KeyedDecodingContainerProtocol {
   @inline(__always)
   func _getOrThrow(forKey key: Key) throws -> JSONMapValue {
     guard let value = mapping[key.stringValue] else {
-      throw JSONError(message: "missing key")
+      throw DecodingError.keyNotFound(key, .init(
+        codingPath: codingPathNode.path,
+        debugDescription: "No value associated with key \(key) (\"\(key.stringValue)\")."))
     }
     return value
   }
@@ -687,63 +689,63 @@ extension JSONDecoding.KeyedContainer: KeyedDecodingContainerProtocol {
   }
 
   func decode(_ type: Bool.Type, forKey key: Key) throws -> Bool {
-    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode)
+    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
   func decode(_ type: String.Type, forKey key: Key) throws -> String {
-    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode)
+    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
   func decode(_ type: Double.Type, forKey key: Key) throws -> Double {
-    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode)
+    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
   func decode(_ type: Float.Type, forKey key: Key) throws -> Float {
-    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode)
+    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
   func decode(_ type: Int.Type, forKey key: Key) throws -> Int {
-    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode)
+    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
   func decode(_ type: Int8.Type, forKey key: Key) throws -> Int8 {
-    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode)
+    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
   func decode(_ type: Int16.Type, forKey key: Key) throws -> Int16 {
-    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode)
+    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
   func decode(_ type: Int32.Type, forKey key: Key) throws -> Int32 {
-    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode)
+    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
   func decode(_ type: Int64.Type, forKey key: Key) throws -> Int64 {
-    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode)
+    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
   func decode(_ type: UInt.Type, forKey key: Key) throws -> UInt {
-    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode)
+    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
   func decode(_ type: UInt8.Type, forKey key: Key) throws -> UInt8 {
-    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode)
+    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
   func decode(_ type: UInt16.Type, forKey key: Key) throws -> UInt16 {
-    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode)
+    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
   func decode(_ type: UInt32.Type, forKey key: Key) throws -> UInt32 {
-    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode)
+    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
   func decode(_ type: UInt64.Type, forKey key: Key) throws -> UInt64 {
-    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode)
+    try JSONDecoding._decode(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
   func decode<T: Decodable>(_ type: T.Type, forKey key: Key) throws -> T {
-    try JSONDecoding._decodeGeneric(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode)
+    try JSONDecoding._decodeGeneric(_getOrThrow(forKey: key), as: type, codingPathNode: codingPathNode, key)
   }
 
   func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type, forKey key: Key) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
@@ -770,14 +772,20 @@ extension JSONDecoding.KeyedContainer: KeyedDecodingContainerProtocol {
 
   init(value: JSONMapValue, codingPathNode: _CodingPathNode) throws {
     guard value.isObject else {
-      throw JSONError(message: "not an object")
+      throw DecodingError.typeMismatch([String: Any].self, .init(
+        codingPath: codingPathNode.path,
+        debugDescription: "not an array"
+      ))
     }
     self.codingPathNode = codingPathNode
     self.mapping = [:]
     var iter = value.makeObjectIterator()!
     while let elem = iter.next() {
       guard let keyStr = elem.key.asString else {
-        throw JSONError()
+        throw DecodingError.typeMismatch(String.self, .init(
+          codingPath: codingPathNode.path,
+          debugDescription: "expected a string as a key"
+        ))
       }
       self.mapping[keyStr] = elem.value
     }
@@ -794,45 +802,58 @@ extension JSONDecoding.UnkeyedContainer: UnkeyedDecodingContainer {
   }
 
   var isAtEnd: Bool {
-    currentIndex == array.endIndex
+    _currMapIdx == array.endIndex
   }
 
   @inline(__always)
-  mutating func _getOrThrow() throws -> (index: Int, value: JSONMapValue) {
-    let idx = currentNumber
+  mutating func advanceToNextValue() {
+    _currMapIdx = array.index(after: _currMapIdx)
+    currentIndex += 1
+  }
+
+  @inline(__always)
+  mutating func _getOrThrow() throws -> (index: any CodingKey, value: JSONMapValue) {
+    let idx = currentIndex
     guard !isAtEnd else {
-      throw JSONError()
+      throw DecodingError.valueNotFound(Any.self, .init(
+        codingPath: codingPathNode.path(byAppendingIndex: idx),
+        debugDescription: "Unkeyed container is at end"
+      ))
     }
-    let value = array[currentIndex]
-    currentIndex = array.index(after: currentIndex)
-    currentNumber += 1
-    return (idx, value)
+    let value = array[_currMapIdx]
+    advanceToNextValue()
+    return (_CodingKey(index: idx), value)
   }
 
   @inline(__always)
   mutating func _decodeInteger<Integer: FixedWidthInteger>(_ type: Integer.Type) throws -> Integer {
     let (idx, value) = try _getOrThrow()
-    return try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode.appending(index: idx))
+    return try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, idx)
   }
 
   @inline(__always)
   mutating func _decodeFloating<Floating: BinaryFloatingPoint>(_ type: Floating.Type) throws -> Floating {
     let (idx, value) = try _getOrThrow()
-    return try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode.appending(index: idx))
+    return try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, idx)
+  }
+
+  mutating func decodeNil() throws -> Bool {
+    if !isAtEnd && array[_currMapIdx].isNull {
+      advanceToNextValue()
+    }
+    // The protocol states:
+    //   If the value is not null, does not increment currentIndex.
+    return false
   }
 
   mutating func decode(_ type: Bool.Type) throws -> Bool {
     let (idx, value) = try _getOrThrow()
-    return try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode.appending(index: idx))
-  }
-
-  mutating func decodeNil() throws -> Bool {
-    try _getOrThrow().value.isNull
+    return try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, idx)
   }
 
   mutating func decode(_ type: String.Type) throws -> String {
     let (idx, value) = try _getOrThrow()
-    return try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode.appending(index: idx))
+    return try JSONDecoding._decode(value, as: type, codingPathNode: codingPathNode, idx)
   }
 
   mutating func decode(_ type: Double.Type) throws -> Double {
@@ -885,14 +906,14 @@ extension JSONDecoding.UnkeyedContainer: UnkeyedDecodingContainer {
 
   mutating func decode<T>(_ type: T.Type) throws -> T where T : Decodable {
     let (idx, value) = try _getOrThrow()
-    return try JSONDecoding._decodeGeneric(value, as: type, codingPathNode: codingPathNode.appending(index: idx))
+    return try JSONDecoding._decodeGeneric(value, as: type, codingPathNode: codingPathNode, idx)
   }
 
   mutating func nestedContainer<NestedKey>(keyedBy keyType: NestedKey.Type) throws -> KeyedDecodingContainer<NestedKey> where NestedKey : CodingKey {
     let (idx, value) = try _getOrThrow()
     return try KeyedDecodingContainer(JSONDecoding.KeyedContainer<NestedKey>(
       value: value,
-      codingPathNode: codingPathNode.appending(index: idx)
+      codingPathNode: codingPathNode.appending(idx)
     ))
   }
 
@@ -900,7 +921,7 @@ extension JSONDecoding.UnkeyedContainer: UnkeyedDecodingContainer {
     let (idx, value) = try _getOrThrow()
     return try JSONDecoding.UnkeyedContainer(
       value: value,
-      codingPathNode: codingPathNode.appending(index: idx)
+      codingPathNode: codingPathNode.appending(idx)
     )
   }
 
@@ -910,11 +931,14 @@ extension JSONDecoding.UnkeyedContainer: UnkeyedDecodingContainer {
 
   init(value: JSONMapValue, codingPathNode: _CodingPathNode) throws {
     guard value.isArray else {
-      throw JSONError(message: "not an array")
+      throw DecodingError.typeMismatch([Any].self, .init(
+        codingPath: codingPathNode.path,
+        debugDescription: "not an array"
+      ))
     }
-    self.array = value.asArray()!
-    self.currentIndex = self.array.startIndex
-    self.currentNumber = 0
     self.codingPathNode = codingPathNode
+    self.currentIndex = 0
+    self.array = value.asArray()!
+    self._currMapIdx = self.array.startIndex
   }
 }

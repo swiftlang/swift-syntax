@@ -408,36 +408,61 @@ private enum _JSONStringParser {
     }
   }
 
-  static func decodeStringWithEscapes(source: UnsafeBufferPointer<UInt8>) -> String {
+  /// Helper iterator decoding UTF8 sequence to UnicodeScalar stream.
+  struct ScalarIterator<S: Sequence>: IteratorProtocol where S.Element == UInt8 {
+    var backing: S.Iterator
+    var decoder: UTF8
+    init(_ source: S) {
+      self.backing = source.makeIterator()
+      self.decoder = UTF8()
+    }
+    mutating func next() -> UnicodeScalar? {
+      switch decoder.decode(&backing) {
+      case .scalarValue(let scalar): return scalar
+      case .emptyInput: return nil
+      case .error: fatalError("invalid")
+      }
+    }
+  }
+
+  static func decodeStringWithEscapes(source: UnsafeBufferPointer<UInt8>) -> String? {
     var string: String = ""
-    var iter = source.makeIterator()
-    var utf8Decoder = UTF8()
-    DECODE: while true {
-      switch utf8Decoder.decode(&iter) {
-      case .scalarValue(let scalar):
-        if scalar == "\\" {
-          switch iter.next() {
-          case UInt8(ascii: "\""): string.append("\"")
-          case UInt8(ascii: "'"): string.append("'")
-          case UInt8(ascii: "\\"): string.append("\\")
-          case UInt8(ascii: "/"): string.append("/")
-          case UInt8(ascii: "b"): string.append("\u{08}")  // \b
-          case UInt8(ascii: "f"): string.append("\u{0C}")  // \f
-          case UInt8(ascii: "n"): string.append("\u{0A}")  // \n
-          case UInt8(ascii: "r"): string.append("\u{0D}")  // \r
-          case UInt8(ascii: "t"): string.append("\u{09}")  // \t
-          case UInt8(ascii: "u"):
-            fatalError("unimplemented")
-          default:
-            fatalError("invalid")
+    var iter = ScalarIterator(source)
+    while let scalar = iter.next() {
+      // NOTE: We don't report detailed errors because we only care well-formed
+      // payloads from the compiler.
+      if scalar == "\\" {
+        switch iter.next() {
+        case "\"": string.append("\"")
+        case "'": string.append("'")
+        case "\\": string.append("\\")
+        case "/": string.append("/")
+        case "b": string.append("\u{08}")
+        case "f": string.append("\u{0C}")
+        case "n": string.append("\u{0A}")
+        case "r": string.append("\u{0D}")
+        case "t": string.append("\u{09}")
+        case "u":
+          // We don't care performance of this because \uFFFF style escape is
+          // pretty rare. We only do it for control characters.
+          let buffer: [UInt8] = [iter.next(), iter.next(), iter.next(), iter.next()]
+            .compactMap { $0 }
+            .compactMap { UInt8(exactly: $0.value) }
+
+          guard
+            buffer.count == 4,
+            let result: UInt16 = buffer.withUnsafeBufferPointer(_JSONNumberParser.parseHexIntegerDigits(source:)),
+            let scalar = UnicodeScalar(result)
+          else {
+            return nil
           }
-        } else {
           string.append(Character(scalar))
+        default:
+          // invalid escape sequence
+          return nil
         }
-      case .emptyInput:
-        break DECODE
-      case .error:
-        fatalError("invalid")
+      } else {
+        string.append(Character(scalar))
       }
     }
     return string
@@ -485,6 +510,34 @@ private enum _JSONNumberParser {
     }
     guard endPtr! == source.baseAddress! + source.count else {
       return nil
+    }
+    return value
+  }
+
+  static func parseHexIntegerDigits<Integer: FixedWidthInteger>(source: UnsafeBufferPointer<UInt8>) -> Integer? {
+    var source = source[...]
+    var value: Integer = 0
+    var overflowed: Bool = false
+    while let digit = source.popFirst() {
+      let digitValue: Integer
+      switch digit {
+      case UInt8(ascii: "0")...UInt8(ascii: "9"):
+        digitValue = Integer(truncatingIfNeeded: digit &- UInt8(ascii: "0"))
+      case UInt8(ascii: "a")...UInt8(ascii: "f"):
+        digitValue = Integer(truncatingIfNeeded: digit &- UInt8(ascii: "a") &+ 10)
+      case UInt8(ascii: "A")...UInt8(ascii: "F"):
+        digitValue = Integer(truncatingIfNeeded: digit &- UInt8(ascii: "A") &+ 10)
+      default:
+        return nil
+      }
+      (value, overflowed) = value.multipliedReportingOverflow(by: 16)
+      guard !overflowed else {
+        return nil
+      }
+      (value, overflowed) = value.addingReportingOverflow(digitValue)
+      guard !overflowed else {
+        return nil
+      }
     }
     return value
   }

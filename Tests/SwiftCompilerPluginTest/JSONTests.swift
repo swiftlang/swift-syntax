@@ -82,6 +82,15 @@ final class JSONTests: XCTestCase {
     )
   }
 
+  func testUnicodeEscape() {
+    _testRoundTrip(
+      of: "\n\u{A9}\u{0}\u{07}\u{1B}",
+      expectedJSON: #"""
+        "\n©\u0000\u0007\u001B"
+        """#
+    )
+  }
+
   func testTypeCoercion() {
     _testRoundTripTypeCoercionFailure(of: [false, true], as: [Int].self)
     _testRoundTripTypeCoercionFailure(of: [false, true], as: [Int8].self)

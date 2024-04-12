@@ -10,42 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// Represents a unique value for a node within its own tree.
-@_spi(RawSyntax)
-public struct SyntaxIndexInTree: Comparable, Hashable, Sendable {
-  let indexInTree: UInt32
-
-  static let zero: SyntaxIndexInTree = SyntaxIndexInTree(indexInTree: 0)
-
-  /// Assuming that this index points to the start of ``Raw``, so that it points
-  /// to the next sibling of ``Raw``.
-  func advancedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
-    let newIndexInTree = self.indexInTree + UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
-    return .init(indexInTree: newIndexInTree)
-  }
-
-  /// Assuming that this index points to the next sibling of ``Raw``, reverse it
-  /// so that it points to the start of ``Raw``.
-  func reversedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
-    let newIndexInTree = self.indexInTree - UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
-    return .init(indexInTree: newIndexInTree)
-  }
-
-  func advancedToFirstChild() -> SyntaxIndexInTree {
-    let newIndexInTree = self.indexInTree + 1
-    return .init(indexInTree: newIndexInTree)
-  }
-
-  init(indexInTree: UInt32) {
-    self.indexInTree = indexInTree
-  }
-
-  /// Returns `true` if `lhs` occurs before `rhs` in the tree.
-  public static func < (lhs: SyntaxIndexInTree, rhs: SyntaxIndexInTree) -> Bool {
-    return lhs.indexInTree < rhs.indexInTree
-  }
-}
-
 /// Provides a stable and unique identity for ``Syntax`` nodes.
 ///
 /// Note that two nodes might have the same contents even if their IDs are
@@ -57,7 +21,53 @@ public struct SyntaxIndexInTree: Comparable, Hashable, Sendable {
 /// different syntax tree. Modifying any node in the syntax tree a node is
 /// contained in generates a copy of that tree and thus changes the IDs of all
 /// nodes in the tree, not just the modified node's children.
-public struct SyntaxIdentifier: Hashable, Sendable {
+public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
+  /// Represents a unique value for a node within its own tree.
+  ///
+  /// This is similar to ``SyntaxIdentifier`` but does not store the root ID of the tree.
+  /// It can thus be transferred across trees that are structurally equivalent, for example two copies of the same tree
+  /// that live in different processes.
+  public struct SyntaxIndexInTree: Hashable, Sendable {
+    /// When traversing the syntax tree using a depth-first traversal, the index at which the node will be visited.
+    let indexInTree: UInt32
+
+    /// Assuming that this index points to the start of `raw`, advance it so that it points to the next sibling of
+    /// `raw`.
+    func advancedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
+      let newIndexInTree = self.indexInTree + UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
+      return .init(indexInTree: newIndexInTree)
+    }
+
+    /// Assuming that this index points to the next sibling of `raw`, reverse it so that it points to the start of
+    /// `raw`.
+    func reversedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
+      let newIndexInTree = self.indexInTree - UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
+      return .init(indexInTree: newIndexInTree)
+    }
+
+    func advancedToFirstChild() -> SyntaxIndexInTree {
+      let newIndexInTree = self.indexInTree + 1
+      return .init(indexInTree: newIndexInTree)
+    }
+
+    init(indexInTree: UInt32) {
+      self.indexInTree = indexInTree
+    }
+
+    /// Converts the ``SyntaxIdentifier/SyntaxIndexInTree`` to an opaque value that can be serialized.
+    /// The opaque value can be restored to a ``SyntaxIdentifier/SyntaxIndexInTree`` using ``init(fromOpaque:)``.
+    ///
+    /// - Note: The contents of the opaque value are not specified and clients should not rely on them.
+    public func toOpaque() -> UInt64 {
+      return UInt64(indexInTree)
+    }
+
+    /// Creates a ``SyntaxIdentifier/SyntaxIndexInTree`` from an opaque value obtained using ``toOpaque()``.
+    public init(fromOpaque opaque: UInt64) {
+      self.indexInTree = UInt32(opaque)
+    }
+  }
+
   /// Unique value for the root node.
   ///
   /// Multiple trees may have the same 'rootId' if their root RawSyntax is the
@@ -67,23 +77,65 @@ public struct SyntaxIdentifier: Hashable, Sendable {
   let rootId: UInt
 
   /// Unique value for a node within its own tree.
-  @_spi(RawSyntax)
   public let indexInTree: SyntaxIndexInTree
+
+  /// Returns the `UInt` that is used as the root ID for the given raw syntax node.
+  private static func rootId(of raw: RawSyntax) -> UInt {
+    return UInt(bitPattern: raw.pointer.unsafeRawPointer)
+  }
 
   func advancedBySibling(_ raw: RawSyntax?) -> SyntaxIdentifier {
     let newIndexInTree = indexInTree.advancedBy(raw)
-    return .init(rootId: self.rootId, indexInTree: newIndexInTree)
+    return SyntaxIdentifier(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 
   func advancedToFirstChild() -> SyntaxIdentifier {
     let newIndexInTree = self.indexInTree.advancedToFirstChild()
-    return .init(rootId: self.rootId, indexInTree: newIndexInTree)
+    return SyntaxIdentifier(rootId: self.rootId, indexInTree: newIndexInTree)
   }
 
   static func forRoot(_ raw: RawSyntax) -> SyntaxIdentifier {
-    return .init(
-      rootId: UInt(bitPattern: raw.pointer.unsafeRawPointer),
-      indexInTree: .zero
+    return SyntaxIdentifier(
+      rootId: Self.rootId(of: raw),
+      indexInTree: SyntaxIndexInTree(indexInTree: 0)
     )
+  }
+
+  /// Forms a ``SyntaxIdentifier`` from an ``SyntaxIdentifier/SyntaxIndexInTree`` inside a ``Syntax`` node that
+  /// constitutes the tree's root.
+  ///
+  /// Returns `nil` if `root` is not the root of a syntax tree or if `indexInTree` points to a node that is not within
+  /// the tree spanned up by `root`.
+  ///
+  /// - Warning: ``SyntaxIdentifier/SyntaxIndexInTree`` is not stable with regard to insertion or deletions of nodes
+  ///   into a syntax tree. There are only two scenarios where it is valid to share ``SyntaxIndexInTree`` between syntax
+  ///   trees with different nodes:
+  ///   (1) If two trees are guaranteed to be exactly the same eg. because they were parsed using the same version of
+  ///       `SwiftParser` from the same source code.
+  ///   (2) If a tree was mutated by only replacing tokens with other tokens. No nodes must have been inserted or
+  ///       removed during the process, including tokens that are marked as ``SourcePresence/missing``.
+  public static func fromIndexInTree(
+    _ indexInTree: SyntaxIndexInTree,
+    relativeToRoot root: some SyntaxProtocol
+  ) -> SyntaxIdentifier? {
+    guard !root.hasParent else {
+      return nil
+    }
+    guard indexInTree.indexInTree < SyntaxIndexInTree(indexInTree: 0).advancedBy(root.raw).indexInTree else {
+      return nil
+    }
+
+    return SyntaxIdentifier(rootId: Self.rootId(of: root.raw), indexInTree: indexInTree)
+  }
+
+  /// A ``SyntaxIdentifier`` compares less than another ``SyntaxIdentifier`` if the node at that identifier occurs first
+  /// during a depth-first traversal of the tree. This implies that nodes with an earlier ``AbsolutePosition`` also
+  /// have a lower ``SyntaxIdentifier``.
+  public static func < (lhs: SyntaxIdentifier, rhs: SyntaxIdentifier) -> Bool {
+    guard lhs.rootId == rhs.rootId else {
+      // Nodes in different trees are not comparable.
+      return false
+    }
+    return lhs.indexInTree.indexInTree < rhs.indexInTree.indexInTree
   }
 }

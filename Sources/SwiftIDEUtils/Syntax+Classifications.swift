@@ -16,7 +16,7 @@ public import SwiftSyntax
 import SwiftSyntax
 #endif
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
 
   /// Sequence of ``SyntaxClassifiedRange``s for this syntax node.
   ///
@@ -24,7 +24,7 @@ public extension SyntaxProtocol {
   /// text of the node. The ranges may also span multiple tokens, if multiple
   /// consecutive tokens would have the same classification then a single classified
   /// range is provided for all of them.
-  var classifications: SyntaxClassifications {
+  public var classifications: SyntaxClassifications {
     return SyntaxClassifications(_syntaxNode, in: self.range)
   }
 
@@ -42,7 +42,7 @@ public extension SyntaxProtocol {
   /// - Parameters:
   ///   - in: The range to pull ``SyntaxClassifiedRange``s from.
   /// - Returns: Sequence of ``SyntaxClassifiedRange``s.
-  func classifications(in range: Range<AbsolutePosition>) -> SyntaxClassifications {
+  public func classifications(in range: Range<AbsolutePosition>) -> SyntaxClassifications {
     return SyntaxClassifications(_syntaxNode, in: range)
   }
 
@@ -52,7 +52,7 @@ public extension SyntaxProtocol {
   /// - Returns: The ``SyntaxClassifiedRange`` for the offset or nil if the source text
   ///   at the given offset is unclassified.
   @available(*, deprecated, message: "Use classification(at: AbsolutePosition) instead.")
-  func classification(at offset: Int) -> SyntaxClassifiedRange? {
+  public func classification(at offset: Int) -> SyntaxClassifiedRange? {
     return classification(at: AbsolutePosition(utf8Offset: offset + self.position.utf8Offset))
   }
 
@@ -61,7 +61,7 @@ public extension SyntaxProtocol {
   ///   - at: The absolute position.
   /// - Returns: The ``SyntaxClassifiedRange`` for the position or `nil`` if the source text
   ///   at the given position is unclassified.
-  func classification(at position: AbsolutePosition) -> SyntaxClassifiedRange? {
+  public func classification(at position: AbsolutePosition) -> SyntaxClassifiedRange? {
     let range = Range(position: position, length: SourceLength(utf8Length: 1))
     let classifications = SyntaxClassifications(_syntaxNode, in: range)
     var iterator = classifications.makeIterator()

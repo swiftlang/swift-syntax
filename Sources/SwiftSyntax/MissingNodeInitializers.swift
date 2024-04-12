@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-public extension MissingDeclSyntax {
-  init(
+extension MissingDeclSyntax {
+  public init(
     attributes: AttributeListSyntax,
     modifiers: DeclModifierListSyntax,
     arena: __shared SyntaxArena
@@ -24,40 +24,40 @@ public extension MissingDeclSyntax {
   }
 }
 
-public extension MissingExprSyntax {
-  init() {
+extension MissingExprSyntax {
+  public init() {
     self.init(
       placeholder: TokenSyntax.identifier("<#expression#>")
     )
   }
 }
 
-public extension MissingPatternSyntax {
-  init() {
+extension MissingPatternSyntax {
+  public init() {
     self.init(
       placeholder: TokenSyntax.identifier("<#pattern#>")
     )
   }
 }
 
-public extension MissingStmtSyntax {
-  init() {
+extension MissingStmtSyntax {
+  public init() {
     self.init(
       placeholder: TokenSyntax.identifier("<#statement#>")
     )
   }
 }
 
-public extension MissingTypeSyntax {
-  init() {
+extension MissingTypeSyntax {
+  public init() {
     self.init(
       placeholder: TokenSyntax.identifier("<#type#>")
     )
   }
 }
 
-public extension MissingSyntax {
-  init() {
+extension MissingSyntax {
+  public init() {
     self.init(
       placeholder: TokenSyntax.identifier("<#syntax#>")
     )
@@ -66,8 +66,8 @@ public extension MissingSyntax {
 
 // MARK: - Raw
 
-public extension RawMissingDeclSyntax {
-  init(
+extension RawMissingDeclSyntax {
+  public init(
     attributes: RawAttributeListSyntax,
     modifiers: RawDeclModifierListSyntax,
     arena: __shared SyntaxArena
@@ -81,8 +81,8 @@ public extension RawMissingDeclSyntax {
   }
 }
 
-public extension RawMissingExprSyntax {
-  init(arena: __shared SyntaxArena) {
+extension RawMissingExprSyntax {
+  public init(arena: __shared SyntaxArena) {
     self.init(
       placeholder: RawTokenSyntax(missing: .identifier, text: "<#expression#>", arena: arena),
       arena: arena
@@ -90,8 +90,8 @@ public extension RawMissingExprSyntax {
   }
 }
 
-public extension RawMissingPatternSyntax {
-  init(arena: __shared SyntaxArena) {
+extension RawMissingPatternSyntax {
+  public init(arena: __shared SyntaxArena) {
     self.init(
       placeholder: RawTokenSyntax(missing: .identifier, text: "<#pattern#>", arena: arena),
       arena: arena
@@ -99,8 +99,8 @@ public extension RawMissingPatternSyntax {
   }
 }
 
-public extension RawMissingStmtSyntax {
-  init(arena: __shared SyntaxArena) {
+extension RawMissingStmtSyntax {
+  public init(arena: __shared SyntaxArena) {
     self.init(
       placeholder: RawTokenSyntax(missing: .identifier, text: "<#statement#>", arena: arena),
       arena: arena
@@ -108,8 +108,8 @@ public extension RawMissingStmtSyntax {
   }
 }
 
-public extension RawMissingTypeSyntax {
-  init(arena: __shared SyntaxArena) {
+extension RawMissingTypeSyntax {
+  public init(arena: __shared SyntaxArena) {
     self.init(
       placeholder: RawTokenSyntax(missing: .identifier, text: "<#type#>", arena: arena),
       arena: arena
@@ -117,8 +117,8 @@ public extension RawMissingTypeSyntax {
   }
 }
 
-public extension RawMissingSyntax {
-  init(arena: __shared SyntaxArena) {
+extension RawMissingSyntax {
+  public init(arena: __shared SyntaxArena) {
     self.init(
       placeholder: RawTokenSyntax(missing: .identifier, text: "<#syntax#>", arena: arena),
       arena: arena

@@ -186,13 +186,13 @@ struct UnimplementedError: Error, CustomStringConvertible {
 }
 
 /// Default implementation of 'PluginProvider' requirements.
-public extension PluginProvider {
-  var features: [PluginFeature] {
+extension PluginProvider {
+  public var features: [PluginFeature] {
     // No optional features by default.
     return []
   }
 
-  func loadPluginLibrary(libraryPath: String, moduleName: String) throws {
+  public func loadPluginLibrary(libraryPath: String, moduleName: String) throws {
     // This should be unreachable. The host should not call 'loadPluginLibrary'
     // unless the feature is not declared.
     throw UnimplementedError()

@@ -27,16 +27,16 @@ public protocol ParserError: DiagnosticMessage {
   var diagnosticID: MessageID { get }
 }
 
-public extension ParserError {
-  static var diagnosticID: MessageID {
+extension ParserError {
+  public static var diagnosticID: MessageID {
     return MessageID(domain: diagnosticDomain, id: "\(self)")
   }
 
-  var diagnosticID: MessageID {
+  public var diagnosticID: MessageID {
     return Self.diagnosticID
   }
 
-  var severity: DiagnosticSeverity {
+  public var severity: DiagnosticSeverity {
     return .error
   }
 }
@@ -45,17 +45,17 @@ public protocol ParserNote: NoteMessage {
   var noteID: MessageID { get }
 }
 
-public extension ParserNote {
+extension ParserNote {
   @available(*, deprecated, message: "Use noteID instead.", renamed: "noteID")
-  static var fixItID: MessageID {
+  public static var fixItID: MessageID {
     return Self.noteID
   }
 
-  static var noteID: MessageID {
+  public static var noteID: MessageID {
     return MessageID(domain: diagnosticDomain, id: "\(self)")
   }
 
-  var noteID: MessageID {
+  public var noteID: MessageID {
     return Self.noteID
   }
 }
@@ -64,12 +64,12 @@ public protocol ParserFixIt: FixItMessage {
   var fixItID: MessageID { get }
 }
 
-public extension ParserFixIt {
-  static var fixItID: MessageID {
+extension ParserFixIt {
+  public static var fixItID: MessageID {
     return MessageID(domain: diagnosticDomain, id: "\(self)")
   }
 
-  var fixItID: MessageID {
+  public var fixItID: MessageID {
     return Self.fixItID
   }
 }

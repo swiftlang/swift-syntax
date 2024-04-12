@@ -10,9 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
-public extension String {
+extension String {
   // This implementation is really slow; to use it outside a test it should be optimized.
-  func trimmingTrailingWhitespace() -> String {
+  public func trimmingTrailingWhitespace() -> String {
     return
       self
       .replacingOccurrences(of: "[ ]+\\n", with: "\n", options: .regularExpression)

@@ -208,21 +208,27 @@ internal struct PluginHostConnection: MessageConnection {
   func waitForNextMessage<RX: Decodable>(_ ty: RX.Type) throws -> RX? {
     // Read the header (a 64-bit length field in little endian byte order).
     let count = try _reading(inputStream, count: 8) { buffer in
-      UInt64(littleEndian: buffer.loadUnaligned(as: UInt64.self))
+      return buffer.count == 8 ? UInt64(littleEndian: buffer.loadUnaligned(as: UInt64.self)) : 0
     }
     guard count >= 2 else {
+      if count == 0 {
+        // input stream is closed.
+        return nil
+      }
       throw PluginMessageError.invalidPayloadSize
     }
 
     // Read the JSON payload.
-    return try _reading(inputStream, count: Int(count)) { buffer in
+    return try _reading(inputStream, count: Int(count)) { buffer -> RX in
+      if buffer.count != Int(count) {
+        throw PluginMessageError.truncatedPayload
+      }
       // Decode and return the message.
-      try JSON.decode(RX.self, from: buffer.bindMemory(to: UInt8.self))
+      return try JSON.decode(RX.self, from: buffer.bindMemory(to: UInt8.self))
     }
   }
 
   enum PluginMessageError: Swift.Error {
-    case truncatedHeader
     case invalidPayloadSize
     case truncatedPayload
   }
@@ -257,7 +263,8 @@ func _reading<T>(_ fd: CInt, count: Int, _ fn: (UnsafeRawBufferPointer) throws -
   while remaining > 0 {
     switch read(fd, ptr, remaining) {
     case 0:
-      throw CompilerPluginError(message: "read(2) closed")
+      // Input is closed.
+      return try fn(UnsafeRawBufferPointer(start: nil, count: 0))
     case -1:
       let err = String(cString: strerror(errno))
       throw CompilerPluginError(message: "read(2) failed: \(err)")

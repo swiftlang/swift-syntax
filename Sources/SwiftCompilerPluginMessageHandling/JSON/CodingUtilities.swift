@@ -20,7 +20,7 @@ internal enum _CodingPathNode {
   indirect case node(CodingKey, _CodingPathNode)
   indirect case indexNode(Int, _CodingPathNode)
 
-  var path : [any CodingKey] {
+  var path: [any CodingKey] {
     switch self {
     case .root:
       return []
@@ -63,7 +63,7 @@ internal enum _CodingPathNode {
 // Shared Key Type
 //===----------------------------------------------------------------------===//
 
-internal enum _CodingKey : CodingKey {
+internal enum _CodingKey: CodingKey {
   case string(String)
   case int(Int)
   case index(Int)
@@ -99,4 +99,3 @@ internal enum _CodingKey : CodingKey {
     }
   }
 }
-

@@ -3256,7 +3256,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
 
 /// ### Children
 /// 
-///  - `bindingSpecifier`: (`let` | `var` | `inout` | `_mutating` | `_borrowing` | `_consuming`)
+///  - `bindingSpecifier`: (`let` | `var` | `inout` | `_mutating` | `_borrowing` | `_consuming` | `borrowing`)
 ///  - `pattern`: ``PatternSyntax``
 public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
@@ -3327,6 +3327,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, 
   ///  - `_mutating`
   ///  - `_borrowing`
   ///  - `_consuming`
+  ///  - `borrowing`
   public var bindingSpecifier: TokenSyntax {
     get {
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)

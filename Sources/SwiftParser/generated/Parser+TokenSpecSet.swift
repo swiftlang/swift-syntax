@@ -3905,6 +3905,7 @@ extension ValueBindingPatternSyntax {
     @_spi(ExperimentalLanguageFeatures)
     #endif
     case _consuming
+    case borrowing
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -3920,6 +3921,8 @@ extension ValueBindingPatternSyntax {
         self = ._borrowing
       case TokenSpec(._consuming) where experimentalFeatures.contains(.referenceBindings):
         self = ._consuming
+      case TokenSpec(.borrowing):
+        self = .borrowing
       default:
         return nil
       }
@@ -3939,6 +3942,8 @@ extension ValueBindingPatternSyntax {
         self = ._borrowing
       case TokenSpec(._consuming):
         self = ._consuming
+      case TokenSpec(.borrowing):
+        self = .borrowing
       default:
         return nil
       }
@@ -3958,6 +3963,8 @@ extension ValueBindingPatternSyntax {
         return .keyword(._borrowing)
       case ._consuming:
         return .keyword(._consuming)
+      case .borrowing:
+        return .keyword(.borrowing)
       }
     }
     
@@ -3979,6 +3986,8 @@ extension ValueBindingPatternSyntax {
         return .keyword(._borrowing)
       case ._consuming:
         return .keyword(._consuming)
+      case .borrowing:
+        return .keyword(.borrowing)
       }
     }
   }

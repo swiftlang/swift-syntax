@@ -2706,7 +2706,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
             .keyword("inout"), 
             .keyword("_mutating"), 
             .keyword("_borrowing"), 
-            .keyword("_consuming")
+            .keyword("_consuming"), 
+            .keyword("borrowing")
           ]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawPatternSyntax.self))

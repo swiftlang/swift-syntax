@@ -201,6 +201,7 @@ public let PATTERN_NODES: [Node] = [
         kind: .token(choices: [
           .keyword(.let), .keyword(.var), .keyword(.inout),
           .keyword(._mutating), .keyword(._borrowing), .keyword(._consuming),
+          .keyword(.borrowing),
         ])
       ),
       Child(

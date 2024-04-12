@@ -55,18 +55,18 @@ func decodeFromJSON<T: Decodable>(json: UnsafeBufferPointer<UInt8>) throws -> T 
  map: [
    0: <OM>,      -- object marker
    1: 15,        |  `- number of *map* elements in this collection
-   2: <SS>,      | --- key 1 '"array"'
+   2: <SS>,      | --- key 1 'array'
    3: <int_ptr>, | |   |- pointer in the payload
-   4: 7,         | |   `- length
+   4: 5,         | |   `- length
    5: <AM>,      | --- value1 array
    6: 4,         | |   `- number of *map* elements in the array
    7: <NM>,      | | -- arr elm 1 '-1.3'
    8: <int_ptr>, | | |
    9: 4,         | | |
   10: <TL>,      | | -- arr elm 2 'true'
-  11: <SS>,      | --- key 2 '"number"'
+  11: <SS>,      | --- key 2 'number'
   12: <int_ptr>, | |
-  13: 8,         | |
+  13: 6,         | |
   14: <NM>       | --- value1: '42'
   15: <int_ptr>, | |
   16: 2,         | |
@@ -97,260 +97,6 @@ private struct JSONMap {
   /// Top-level value.
   var value: JSONMapValue {
     JSONMapValue(map: data[...])
-  }
-}
-
-/// Slice of JSONMap representing a single value.
-private struct JSONMapValue {
-  typealias Map = JSONMap.Data.SubSequence
-  typealias Index = Map.Index
-  let map: Map
-
-  var startIndex: Index { map.startIndex }
-  var endIndex: Index { map.endIndex }
-
-  /// Index at offset from 'startIndex'.
-  func index(offset: Int) -> Index {
-    map.index(startIndex, offsetBy: offset)
-  }
-
-  /// Assuming 'valueIndex' is a valid descriptor index, returns the index of
-  /// the next value in a collection.
-  func index(afterValue valueIndex: Index) -> Index {
-    switch JSONMap.Descriptor(rawValue: map[valueIndex]) {
-    case .nullKeyword, .trueKeyword, .falseKeyword:
-      // [desc]
-      return map.index(valueIndex, offsetBy: 1)
-    case .number, .simpleString, .string:
-      // [desc, pointer, length]
-      return map.index(valueIndex, offsetBy: 3)
-    case .array, .object:
-      // [desc, count, element...]
-      // [desc, count, (key, value)...]
-      let count = map[map.index(valueIndex, offsetBy: 1)]
-      assert(count >= 0, "counter must be a positive number");
-      return map.index(valueIndex, offsetBy: 2 + count)
-    case nil:
-      fatalError("invalid value descriptor")
-    }
-  }
-
-  @inline(__always)
-  func `is`(_ kind: JSONMap.Descriptor) -> Bool {
-    return map.first == kind.rawValue
-  }
-
-  @inline(__always)
-  func value(at i: Index) -> JSONMapValue {
-    return .init(map: map[i..<index(afterValue: i)])
-  }
-}
-
-// MARK: Keyword primitives
-extension JSONMapValue {
-  var isNull: Bool {
-    return self.is(.nullKeyword)
-  }
-
-  var asBool: Bool? {
-    if self.is(.trueKeyword) {
-      return true
-    }
-    if self.is(.falseKeyword) {
-      return false
-    }
-    return nil
-  }
-}
-
-// MARK: Scalar values
-private enum _JSONStringDecoder {
-  /// Trim '"' from string literal buffer.
-  static func trimQuotes(source: UnsafeBufferPointer<UInt8>) -> UnsafeBufferPointer<UInt8> {
-    assert(source.count >= 2)
-    assert(source.first == UInt8(ascii: "\"") && source.last! == UInt8(ascii: "\""))
-    return .init(rebasing: source.dropFirst().dropLast())
-  }
-
-  /// Decode .simpleString value from the buffer.
-  static func decodeSimpleString(source: UnsafeBufferPointer<UInt8>) -> String {
-    let source = trimQuotes(source: source)
-    if source.count <= 0 {
-      return ""
-    }
-    if #available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *) {
-      return String(unsafeUninitializedCapacity: source.count) { buffer in
-        buffer.initialize(fromContentsOf: source)
-      }
-    } else {
-      return String(decoding: source, as: UTF8.self)
-    }
-  }
-
-  static func decodeStringWithEscapes(source: UnsafeBufferPointer<UInt8>) -> String {
-    let source = trimQuotes(source: source)
-    var string: String = ""
-    var iter = source.makeIterator()
-    var utf8Decoder = UTF8()
-    DECODE: while true {
-      switch utf8Decoder.decode(&iter) {
-      case .scalarValue(let scalar):
-        if scalar == "\\" {
-          switch iter.next() {
-          case UInt8(ascii: "\""): string.append("\"")
-          case UInt8(ascii: "'"): string.append("'")
-          case UInt8(ascii: "\\"): string.append("\\")
-          case UInt8(ascii: "/"): string.append("/")
-          case UInt8(ascii: "b"): string.append("\u{08}")  // \b
-          case UInt8(ascii: "f"): string.append("\u{0C}")  // \f
-          case UInt8(ascii: "n"): string.append("\u{0A}")  // \n
-          case UInt8(ascii: "r"): string.append("\u{0D}")  // \r
-          case UInt8(ascii: "t"): string.append("\u{09}")  // \t
-          case UInt8(ascii: "u"):
-            fatalError("unimplemented")
-          default:
-            fatalError("invalid")
-          }
-        } else {
-          string.append(Character(scalar))
-        }
-      case .emptyInput:
-        break DECODE
-      case .error:
-        fatalError("invalid")
-      }
-    }
-    return string
-  }
-}
-
-private enum _JSONNumberDecoder {
-  static func parseInteger<Integer: FixedWidthInteger>(source: UnsafeBufferPointer<UInt8>) -> Integer? {
-    var source = source[...]
-    let isNegative = source.first == UInt8(ascii: "-")
-    if isNegative {
-      source = source.dropFirst()
-    }
-    var value: Integer = 0
-    var overflowed: Bool = false
-    while let digit = source.popFirst() {
-      let digitValue = Integer(truncatingIfNeeded: digit &- UInt8(ascii: "0"))
-      guard (0...9).contains(digitValue) else {
-        return nil
-      }
-      (value, overflowed) = value.multipliedReportingOverflow(by: 10)
-      guard !overflowed else {
-        return nil
-      }
-      (value, overflowed) =
-        isNegative
-        ? value.subtractingReportingOverflow(digitValue)
-        : value.addingReportingOverflow(digitValue)
-      guard !overflowed else {
-        return nil
-      }
-    }
-    return value
-  }
-
-  static func parseFloatingPoint<Floating: BinaryFloatingPoint>(source: UnsafeBufferPointer<UInt8>) -> Floating? {
-    var endPtr: UnsafeMutablePointer<CChar>? = nil
-    let value: Floating?
-    if (Floating.self == Double.self) {
-      value = Floating(exactly: strtod(source.baseAddress!, &endPtr))
-    } else if (Floating.self == Float.self) {
-      value = Floating(exactly: strtof(source.baseAddress!, &endPtr))
-    } else {
-      fatalError("unsupported floating point type")
-    }
-    guard endPtr! == source.baseAddress! + source.count else {
-      return nil
-    }
-    return value
-  }
-}
-
-extension JSONMapValue {
-  /// Get value buffer for .number, .string, and .simpleString.
-  func valueBuffer() -> UnsafeBufferPointer<UInt8> {
-    UnsafeBufferPointer<UInt8>(
-      start: UnsafePointer(bitPattern: map[index(offset: 1)]),
-      count: map[index(offset: 2)]
-    )
-  }
-
-  var asString: String? {
-    if self.is(.simpleString) {
-      return _JSONStringDecoder.decodeSimpleString(source: valueBuffer())
-    }
-    if self.is(.string) {
-      return _JSONStringDecoder.decodeStringWithEscapes(source: valueBuffer())
-    }
-    return nil
-  }
-
-  func asFloatingPoint<Floating: BinaryFloatingPoint>(_: Floating.Type) -> Floating? {
-    return _JSONNumberDecoder.parseFloatingPoint(source: self.valueBuffer())
-  }
-
-  func asInteger<Integer: FixedWidthInteger>(_: Integer.Type) -> Integer? {
-    // FIXME: Support 42.0 as an integer.
-    return _JSONNumberDecoder.parseInteger(source: self.valueBuffer())
-  }
-}
-
-extension JSONMapValue {
-  struct JSONArray: Collection {
-    typealias Index = JSONMapValue.Index
-    let map: JSONMapValue
-
-    var startIndex: Index { map.index(offset: 2) }
-    var endIndex: Index { map.endIndex }
-    func index(after i: Index) -> Index { map.index(afterValue: i) }
-    subscript(index: Index) -> JSONMapValue { map.value(at: index) }
-  }
-
-  var isArray: Bool {
-    self.is(.array)
-  }
-
-  func asArray() -> JSONArray? {
-    guard isArray else {
-      return nil
-    }
-    return JSONArray(map: self)
-  }
-
-  struct ObjectIterator {
-    let map: JSONMapValue
-    var currIndex: Int
-
-    init(map: JSONMapValue) {
-      assert(map.is(.object))
-      self.map = map
-      self.currIndex = map.index(offset: 2)
-    }
-
-    mutating func next() -> (key: JSONMapValue, value: JSONMapValue)? {
-      guard currIndex != map.endIndex else {
-        return nil
-      }
-      let key = map.value(at: currIndex)
-      let val = map.value(at: key.endIndex)
-      currIndex = val.endIndex
-      return (key, val)
-    }
-  }
-
-  var isObject: Bool {
-    self.is(.object)
-  }
-
-  func makeObjectIterator() -> ObjectIterator? {
-    guard isObject else {
-      return nil
-    }
-    return ObjectIterator(map: self)
   }
 }
 
@@ -494,7 +240,7 @@ private struct JSONScanner {
       _ = try advance()
     }
     try expect("\"")
-    map.record(hasEscape ? .string : .simpleString, range: start..<ptr)
+    map.record(hasEscape ? .string : .simpleString, range: (start + 1)..<(ptr - 1))
   }
 
   mutating func scanNumber(start: Cursor) throws {
@@ -580,6 +326,252 @@ private struct JSONScanner {
     }
 
     return scanner.map.finalize()
+  }
+}
+
+/// Slice of JSONMap representing a single value.
+private struct JSONMapValue {
+  typealias Map = JSONMap.Data.SubSequence
+  typealias Index = Map.Index
+  let map: Map
+
+  var startIndex: Index { map.startIndex }
+  var endIndex: Index { map.endIndex }
+
+  /// Index at offset from 'startIndex'.
+  func index(offset: Int) -> Index {
+    map.index(startIndex, offsetBy: offset)
+  }
+
+  /// Assuming 'valueIndex' is a valid descriptor index, returns the index of
+  /// the next value in a collection.
+  func index(afterValue valueIndex: Index) -> Index {
+    switch JSONMap.Descriptor(rawValue: map[valueIndex]) {
+    case .nullKeyword, .trueKeyword, .falseKeyword:
+      // [desc]
+      return map.index(valueIndex, offsetBy: 1)
+    case .number, .simpleString, .string:
+      // [desc, pointer, length]
+      return map.index(valueIndex, offsetBy: 3)
+    case .array, .object:
+      // [desc, count, element...]
+      // [desc, count, (key, value)...]
+      let count = map[map.index(valueIndex, offsetBy: 1)]
+      assert(count >= 0, "counter must be a positive number");
+      return map.index(valueIndex, offsetBy: 2 + count)
+    case nil:
+      fatalError("invalid value descriptor")
+    }
+  }
+
+  @inline(__always)
+  func `is`(_ kind: JSONMap.Descriptor) -> Bool {
+    return map.first == kind.rawValue
+  }
+
+  @inline(__always)
+  func value(at i: Index) -> JSONMapValue {
+    return .init(map: map[i..<index(afterValue: i)])
+  }
+}
+
+// MARK: Keyword primitives
+extension JSONMapValue {
+  var isNull: Bool {
+    return self.is(.nullKeyword)
+  }
+
+  var asBool: Bool? {
+    if self.is(.trueKeyword) {
+      return true
+    }
+    if self.is(.falseKeyword) {
+      return false
+    }
+    return nil
+  }
+}
+
+// MARK: Scalar values
+private enum _JSONStringParser {
+  /// Decode .simpleString value from the buffer.
+  static func decodeSimpleString(source: UnsafeBufferPointer<UInt8>) -> String {
+    if source.count <= 0 {
+      return ""
+    }
+    if #available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *) {
+      return String(unsafeUninitializedCapacity: source.count) { buffer in
+        buffer.initialize(fromContentsOf: source)
+      }
+    } else {
+      return String(decoding: source, as: UTF8.self)
+    }
+  }
+
+  static func decodeStringWithEscapes(source: UnsafeBufferPointer<UInt8>) -> String {
+    var string: String = ""
+    var iter = source.makeIterator()
+    var utf8Decoder = UTF8()
+    DECODE: while true {
+      switch utf8Decoder.decode(&iter) {
+      case .scalarValue(let scalar):
+        if scalar == "\\" {
+          switch iter.next() {
+          case UInt8(ascii: "\""): string.append("\"")
+          case UInt8(ascii: "'"): string.append("'")
+          case UInt8(ascii: "\\"): string.append("\\")
+          case UInt8(ascii: "/"): string.append("/")
+          case UInt8(ascii: "b"): string.append("\u{08}")  // \b
+          case UInt8(ascii: "f"): string.append("\u{0C}")  // \f
+          case UInt8(ascii: "n"): string.append("\u{0A}")  // \n
+          case UInt8(ascii: "r"): string.append("\u{0D}")  // \r
+          case UInt8(ascii: "t"): string.append("\u{09}")  // \t
+          case UInt8(ascii: "u"):
+            fatalError("unimplemented")
+          default:
+            fatalError("invalid")
+          }
+        } else {
+          string.append(Character(scalar))
+        }
+      case .emptyInput:
+        break DECODE
+      case .error:
+        fatalError("invalid")
+      }
+    }
+    return string
+  }
+}
+
+private enum _JSONNumberParser {
+  static func parseInteger<Integer: FixedWidthInteger>(source: UnsafeBufferPointer<UInt8>) -> Integer? {
+    var source = source[...]
+    let isNegative = source.first == UInt8(ascii: "-")
+    if isNegative {
+      source = source.dropFirst()
+    }
+    var value: Integer = 0
+    var overflowed: Bool = false
+    while let digit = source.popFirst() {
+      let digitValue = Integer(truncatingIfNeeded: digit &- UInt8(ascii: "0"))
+      guard (0...9).contains(digitValue) else {
+        return nil
+      }
+      (value, overflowed) = value.multipliedReportingOverflow(by: 10)
+      guard !overflowed else {
+        return nil
+      }
+      (value, overflowed) =
+        isNegative
+        ? value.subtractingReportingOverflow(digitValue)
+        : value.addingReportingOverflow(digitValue)
+      guard !overflowed else {
+        return nil
+      }
+    }
+    return value
+  }
+
+  static func parseFloatingPoint<Floating: BinaryFloatingPoint>(source: UnsafeBufferPointer<UInt8>) -> Floating? {
+    var endPtr: UnsafeMutablePointer<CChar>? = nil
+    let value: Floating?
+    if (Floating.self == Double.self) {
+      value = Floating(exactly: strtod(source.baseAddress!, &endPtr))
+    } else if (Floating.self == Float.self) {
+      value = Floating(exactly: strtof(source.baseAddress!, &endPtr))
+    } else {
+      fatalError("unsupported floating point type")
+    }
+    guard endPtr! == source.baseAddress! + source.count else {
+      return nil
+    }
+    return value
+  }
+}
+
+extension JSONMapValue {
+  /// Get value buffer for .number, .string, and .simpleString.
+  func valueBuffer() -> UnsafeBufferPointer<UInt8> {
+    UnsafeBufferPointer<UInt8>(
+      start: UnsafePointer(bitPattern: map[index(offset: 1)]),
+      count: map[index(offset: 2)]
+    )
+  }
+
+  var asString: String? {
+    if self.is(.simpleString) {
+      return _JSONStringParser.decodeSimpleString(source: valueBuffer())
+    }
+    if self.is(.string) {
+      return _JSONStringParser.decodeStringWithEscapes(source: valueBuffer())
+    }
+    return nil
+  }
+
+  func asFloatingPoint<Floating: BinaryFloatingPoint>(_: Floating.Type) -> Floating? {
+    return _JSONNumberParser.parseFloatingPoint(source: self.valueBuffer())
+  }
+
+  func asInteger<Integer: FixedWidthInteger>(_: Integer.Type) -> Integer? {
+    // FIXME: Support 42.0 as an integer.
+    return _JSONNumberParser.parseInteger(source: self.valueBuffer())
+  }
+}
+
+// MARK: Collection values
+extension JSONMapValue {
+  struct JSONArray: Collection {
+    typealias Index = JSONMapValue.Index
+    let map: JSONMapValue
+
+    var startIndex: Index { map.index(offset: 2) }
+    var endIndex: Index { map.endIndex }
+    func index(after i: Index) -> Index { map.index(afterValue: i) }
+    subscript(index: Index) -> JSONMapValue { map.value(at: index) }
+  }
+
+  var isArray: Bool {
+    self.is(.array)
+  }
+
+  func asArray() -> JSONArray? {
+    guard isArray else {
+      return nil
+    }
+    return JSONArray(map: self)
+  }
+
+  struct ObjectIterator {
+    let map: JSONMapValue
+    var currIndex: Int
+
+    init(map: JSONMapValue) {
+      assert(map.is(.object))
+      self.map = map
+      self.currIndex = map.index(offset: 2)
+    }
+
+    mutating func next() -> (key: JSONMapValue, value: JSONMapValue)? {
+      guard currIndex != map.endIndex else {
+        return nil
+      }
+      let key = map.value(at: currIndex)
+      let val = map.value(at: key.endIndex)
+      currIndex = val.endIndex
+      return (key, val)
+    }
+  }
+
+  var isObject: Bool {
+    self.is(.object)
+  }
+
+  func makeObjectIterator() -> ObjectIterator? {
+    guard isObject else {
+      return nil
+    }
+    return ObjectIterator(map: self)
   }
 }
 

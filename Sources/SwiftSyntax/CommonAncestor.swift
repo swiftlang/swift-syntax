@@ -18,11 +18,11 @@ public func findCommonAncestorOrSelf(_ lhs: Syntax, _ rhs: Syntax) -> Syntax? {
     if lhs == rhs {
       return lhs
     }
-    if let lhsIndex = lhs?.indexInParent.data?.indexInTree, let rhsIndex = rhs?.indexInParent.data?.indexInTree {
-      if lhsIndex < rhsIndex {
-        rhs = rhs?.parent
+    if let lhsUnwrapped = lhs, let rhsUnwrapped = rhs {
+      if lhsUnwrapped.id < rhsUnwrapped.id {
+        rhs = rhsUnwrapped.parent
       } else {
-        lhs = lhs?.parent
+        lhs = lhsUnwrapped.parent
       }
     }
   }

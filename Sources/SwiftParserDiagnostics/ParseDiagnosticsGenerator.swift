@@ -13,11 +13,11 @@
 #if swift(>=6)
 public import SwiftDiagnostics
 @_spi(Diagnostics) import SwiftParser
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) public import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) public import SwiftSyntax
 #else
 import SwiftDiagnostics
 @_spi(Diagnostics) import SwiftParser
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 #endif
 
 fileprivate func getTokens(between first: TokenSyntax, and second: TokenSyntax) -> [TokenSyntax] {
@@ -119,7 +119,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         return false
       } else {
         // If multiple tokens are missing at the same location, emit diagnostics about nodes that occur earlier in the tree first.
-        return $0.node.id.indexInTree < $1.node.id.indexInTree
+        return $0.node.id < $1.node.id
       }
     }
     return diagProducer.diagnostics

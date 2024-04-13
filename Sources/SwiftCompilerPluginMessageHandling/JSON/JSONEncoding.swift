@@ -60,8 +60,8 @@ private class JSONReference {
   }
 
   static let null: JSONReference = .init(backing: .null)
-  static let `true`: JSONReference = .init(backing: .trueKeyword)
-  static let `false`: JSONReference = .init(backing: .falseKeyword)
+  static let trueKeyword: JSONReference = .init(backing: .trueKeyword)
+  static let falseKeyword: JSONReference = .init(backing: .falseKeyword)
 
   @inline(__always)
   static func newArray() -> JSONReference {
@@ -230,7 +230,9 @@ private struct JSONWriter {
 }
 
 private class JSONEncoding {
+  /// Storage of the encoded data.
   var reference: JSONReference?
+
   var codingPathNode: _CodingPathNode
 
   init(codingPathNode: _CodingPathNode = .root) {
@@ -242,7 +244,7 @@ private class JSONEncoding {
 // MARK: Pure encoding functions.
 extension JSONEncoding {
   func _encode(_ value: Bool) -> JSONReference {
-    value ? .true : .false
+    value ? .trueKeyword : .falseKeyword
   }
   func _encode(_ value: some BinaryFloatingPoint & CustomStringConvertible) -> JSONReference {
     .number(value)

@@ -29,8 +29,9 @@ import ucrt
 #endif
 
 func decodeFromJSON<T: Decodable>(json: UnsafeBufferPointer<UInt8>) throws -> T {
-  try withExtendedLifetime(try JSONScanner.scan(buffer: json)) { map in
-    let decoder = JSONDecoding(value: map.value, codingPathNode: .root)
+  let map = try JSONScanner.scan(buffer: json)
+  return try map.withValue { value in
+    let decoder = JSONDecoding(value: value, codingPathNode: .root)
     return try T.init(from: decoder)
   }
 }
@@ -91,20 +92,24 @@ private struct JSONMap {
     case object  // [desc, count, (key, value)...]
     case array  // [desc, count, element...]
   }
-  typealias Data = [Int]
   let data: [Int]
 
   /// Top-level value.
-  var value: JSONMapValue {
-    JSONMapValue(map: data[...])
+  func withValue<T>(_ fn: (JSONMapValue) throws -> T) rethrows -> T {
+    try withExtendedLifetime(data) {
+      try data.withUnsafeBufferPointer { buf in
+        try fn(JSONMapValue(data: buf.baseAddress!))
+      }
+    }
   }
 }
 
 private struct JSONMapBuilder {
   var mapData: [Int]
+
   init() {
     mapData = []
-    mapData.reserveCapacity(256)  // TODO: estimate optimal value.d
+    mapData.reserveCapacity(128) // 128 is good enough for most PluginMessage.
   }
 
   @inline(__always)
@@ -119,6 +124,7 @@ private struct JSONMapBuilder {
     mapData.append(range.count)
   }
 
+  @inline(__always)
   mutating func startCollection(_ descriptor: JSONMap.Descriptor) -> Int {
     let handle = mapData.count
     mapData.append(descriptor.rawValue)
@@ -126,6 +132,7 @@ private struct JSONMapBuilder {
     return handle
   }
 
+  @inline(__always)
   mutating func closeCollection(handle: Int) {
     // 'handle': descriptor index.
     // 'handle+1': counter index.
@@ -329,36 +336,27 @@ private struct JSONScanner {
   }
 }
 
-/// Slice of JSONMap representing a single value.
+/// Represents a single value in a JSONMap.
 private struct JSONMapValue {
-  typealias Map = JSONMap.Data.SubSequence
-  typealias Index = Map.Index
-  let map: Map
+  typealias Pointer = UnsafePointer<Int>
+  /// Pointer to an element descriptor in the map.
+  let data: Pointer
 
-  var startIndex: Index { map.startIndex }
-  var endIndex: Index { map.endIndex }
-
-  /// Index at offset from 'startIndex'.
-  func index(offset: Int) -> Index {
-    map.index(startIndex, offsetBy: offset)
+  @inline(__always)
+  var endPtr: Pointer {
+    data.advanced(by: mapSize)
   }
 
-  /// Assuming 'valueIndex' is a valid descriptor index, returns the index of
-  /// the next value in a collection.
-  func index(afterValue valueIndex: Index) -> Index {
-    switch JSONMap.Descriptor(rawValue: map[valueIndex]) {
+  /// The size of this value data in the map.
+  @inline(__always)
+  var mapSize: Int {
+    switch JSONMap.Descriptor(rawValue: data[0]) {
     case .nullKeyword, .trueKeyword, .falseKeyword:
-      // [desc]
-      return map.index(valueIndex, offsetBy: 1)
+      return 1
     case .number, .simpleString, .string:
-      // [desc, pointer, length]
-      return map.index(valueIndex, offsetBy: 3)
+      return 3
     case .array, .object:
-      // [desc, count, element...]
-      // [desc, count, (key, value)...]
-      let count = map[map.index(valueIndex, offsetBy: 1)]
-      assert(count >= 0, "counter must be a positive number");
-      return map.index(valueIndex, offsetBy: 2 + count)
+      return 2 &+ data[1]
     case nil:
       fatalError("invalid value descriptor")
     }
@@ -366,22 +364,19 @@ private struct JSONMapValue {
 
   @inline(__always)
   func `is`(_ kind: JSONMap.Descriptor) -> Bool {
-    return map.first == kind.rawValue
-  }
-
-  @inline(__always)
-  func value(at i: Index) -> JSONMapValue {
-    return .init(map: map[i..<index(afterValue: i)])
+    return data[0] == kind.rawValue
   }
 }
 
 // MARK: Keyword primitives
 extension JSONMapValue {
+  @inline(__always)
   var isNull: Bool {
     return self.is(.nullKeyword)
   }
 
-  var asBool: Bool? {
+  @inline(__always)
+  func asBool() -> Bool? {
     if self.is(.trueKeyword) {
       return true
     }
@@ -427,6 +422,7 @@ private enum _JSONStringParser {
 
   static func decodeStringWithEscapes(source: UnsafeBufferPointer<UInt8>) -> String? {
     var string: String = ""
+    string.reserveCapacity(source.count)
     var iter = ScalarIterator(source)
     while let scalar = iter.next() {
       // NOTE: We don't report detailed errors because we only care well-formed
@@ -545,14 +541,16 @@ private enum _JSONNumberParser {
 
 extension JSONMapValue {
   /// Get value buffer for .number, .string, and .simpleString.
+  @inline(__always)
   func valueBuffer() -> UnsafeBufferPointer<UInt8> {
     UnsafeBufferPointer<UInt8>(
-      start: UnsafePointer(bitPattern: map[index(offset: 1)]),
-      count: map[index(offset: 2)]
+      start: UnsafePointer(bitPattern: data[1]),
+      count: data[2]
     )
   }
 
-  var asString: String? {
+  @inline(__always)
+  func asString() ->  String? {
     if self.is(.simpleString) {
       return _JSONStringParser.decodeSimpleString(source: valueBuffer())
     }
@@ -562,10 +560,27 @@ extension JSONMapValue {
     return nil
   }
 
+  /// Returns true if this value represents a string, and it equals to 'str'.
+  ///
+  /// This is faster than 'value.asString() == str' because this doesn't
+  /// instantiate 'Swift.String' unless there are escaped characters.
+  func equals(to str: String) -> Bool {
+    if self.is(.simpleString) {
+      let buffer = valueBuffer()
+      var str = str
+      return str.withUTF8 { utf8 in
+        utf8.count == buffer.count && memcmp(utf8.baseAddress, buffer.baseAddress, utf8.count) == 0
+      }
+    }
+    return self.asString() == str
+  }
+
+  @inline(__always)
   func asFloatingPoint<Floating: BinaryFloatingPoint>(_: Floating.Type) -> Floating? {
     return _JSONNumberParser.parseFloatingPoint(source: self.valueBuffer())
   }
 
+  @inline(__always)
   func asInteger<Integer: FixedWidthInteger>(_: Integer.Type) -> Integer? {
     // FIXME: Support 42.0 as an integer.
     return _JSONNumberParser.parseInteger(source: self.valueBuffer())
@@ -575,56 +590,86 @@ extension JSONMapValue {
 // MARK: Collection values
 extension JSONMapValue {
   struct JSONArray: Collection {
-    typealias Index = JSONMapValue.Index
     let map: JSONMapValue
 
-    var startIndex: Index { map.index(offset: 2) }
-    var endIndex: Index { map.endIndex }
-    func index(after i: Index) -> Index { map.index(afterValue: i) }
-    subscript(index: Index) -> JSONMapValue { map.value(at: index) }
+    var startIndex: Pointer { map.data.advanced(by: 2) }
+    var endIndex: Pointer { map.endPtr }
+    func index(after pointer: Pointer) -> Pointer {
+      self[pointer].endPtr
+    }
+    subscript(pointer: Pointer) -> JSONMapValue {
+      JSONMapValue(data: pointer)
+    }
   }
 
-  var isArray: Bool {
-    self.is(.array)
-  }
-
+  @inline(__always)
   func asArray() -> JSONArray? {
-    guard isArray else {
+    guard self.is(.array) else {
       return nil
     }
     return JSONArray(map: self)
   }
 
-  struct ObjectIterator {
+  struct JSONObject {
     let map: JSONMapValue
-    var currIndex: Int
 
-    init(map: JSONMapValue) {
-      assert(map.is(.object))
-      self.map = map
-      self.currIndex = map.index(offset: 2)
-    }
+    struct Iterator: IteratorProtocol {
+      var currPtr: Pointer
+      let endPtr: Pointer
 
-    mutating func next() -> (key: JSONMapValue, value: JSONMapValue)? {
-      guard currIndex != map.endIndex else {
-        return nil
+      @inline(__always)
+      init(map: JSONMapValue) {
+        self.currPtr = map.data.advanced(by: 2)
+        self.endPtr = map.endPtr
       }
-      let key = map.value(at: currIndex)
-      let val = map.value(at: key.endIndex)
-      currIndex = val.endIndex
-      return (key, val)
+
+      mutating func next() -> (key: JSONMapValue, value: JSONMapValue)? {
+        guard currPtr != endPtr else {
+          return nil
+        }
+        let key = JSONMapValue(data: currPtr)
+        let val = JSONMapValue(data: key.endPtr)
+        currPtr = val.endPtr
+        return (key, val)
+      }
     }
-  }
 
-  var isObject: Bool {
-    self.is(.object)
-  }
+    @inline(__always)
+    func makeIterator() -> Iterator {
+      return Iterator(map: map)
+    }
 
-  func makeObjectIterator() -> ObjectIterator? {
-    guard isObject else {
+    @inline(__always)
+    func find(_ key: String) -> JSONMapValue? {
+      // Linear search because, unless there are many keys, creating dictionary
+      // costs more for preparation. I.e. key string allocation and  dictionary
+      // construction.
+      var iter = makeIterator()
+      while let elem = iter.next() {
+        if elem.key.equals(to: key) {
+          return elem.value
+        }
+      }
       return nil
     }
-    return ObjectIterator(map: self)
+
+    @inline(__always)
+    func contains(key: String) -> Bool {
+      return find(key) != nil
+    }
+
+    @inline(__always)
+    subscript(_ key: String) -> JSONMapValue? {
+      return find(key)
+    }
+  }
+
+  @inline(__always)
+  func asObject() -> JSONObject? {
+    guard self.is(.object) else {
+      return nil
+    }
+    return JSONObject(map: self)
   }
 }
 
@@ -633,6 +678,7 @@ private struct JSONDecoding {
   var codingPathNode: _CodingPathNode
 }
 
+// MARK: Pure decoding functions.
 extension JSONDecoding {
   @inline(__always)
   static func _unwrapOrThrow<T>(
@@ -658,7 +704,7 @@ extension JSONDecoding {
     codingPathNode: _CodingPathNode,
     _ additionalKey: (some CodingKey)?
   ) throws -> Bool {
-    try _unwrapOrThrow(value.asBool, codingPathNode: codingPathNode, additionalKey)
+    try _unwrapOrThrow(value.asBool(), codingPathNode: codingPathNode, additionalKey)
   }
   @inline(__always)
   static func _decode(
@@ -667,7 +713,7 @@ extension JSONDecoding {
     codingPathNode: _CodingPathNode,
     _ additionalKey: (some CodingKey)?
   ) throws -> String {
-    try _unwrapOrThrow(value.asString, codingPathNode: codingPathNode, additionalKey)
+    try _unwrapOrThrow(value.asString(), codingPathNode: codingPathNode, additionalKey)
   }
   @inline(__always)
   static func _decode<Integer: FixedWidthInteger>(
@@ -707,7 +753,7 @@ extension JSONDecoding: Decoder {
 
   fileprivate struct KeyedContainer<Key: CodingKey> {
     var codingPathNode: _CodingPathNode
-    var mapping: [String: JSONMapValue]
+    var mapping: JSONMapValue.JSONObject
   }
 
   fileprivate struct UnkeyedContainer {
@@ -810,25 +856,32 @@ extension JSONDecoding.KeyedContainer: KeyedDecodingContainerProtocol {
   }
 
   var allKeys: [Key] {
-    mapping.keys.compactMap(Key.init(stringValue:))
+    var iter = mapping.makeIterator()
+    var keys: [Key] = []
+    while let elem = iter.next() {
+      if let key = Key(stringValue: elem.key.asString()!) {
+        keys.append(key)
+      }
+    }
+    return keys
   }
 
   func contains(_ key: Key) -> Bool {
-    mapping.keys.contains(key.stringValue)
+    return mapping.contains(key: key.stringValue)
   }
 
   @inline(__always)
   func _getOrThrow(forKey key: Key) throws -> JSONMapValue {
-    guard let value = mapping[key.stringValue] else {
-      throw DecodingError.keyNotFound(
-        key,
-        .init(
-          codingPath: codingPathNode.path,
-          debugDescription: "No value associated with key \(key) (\"\(key.stringValue)\")."
-        )
-      )
+    if let value = mapping[key.stringValue] {
+      return value
     }
-    return value
+    throw DecodingError.keyNotFound(
+      key,
+      .init(
+        codingPath: codingPathNode.path,
+        debugDescription: "No value associated with key \(key) (\"\(key.stringValue)\")."
+      )
+    )
   }
 
   func decodeNil(forKey key: Key) throws -> Bool {
@@ -923,30 +976,17 @@ extension JSONDecoding.KeyedContainer: KeyedDecodingContainerProtocol {
   }
 
   init(value: JSONMapValue, codingPathNode: _CodingPathNode) throws {
-    guard value.isObject else {
+    guard let mapping = value.asObject() else {
       throw DecodingError.typeMismatch(
         [String: Any].self,
         .init(
           codingPath: codingPathNode.path,
-          debugDescription: "not an array"
+          debugDescription: "not an object"
         )
       )
     }
     self.codingPathNode = codingPathNode
-    self.mapping = [:]
-    var iter = value.makeObjectIterator()!
-    while let elem = iter.next() {
-      guard let keyStr = elem.key.asString else {
-        throw DecodingError.typeMismatch(
-          String.self,
-          .init(
-            codingPath: codingPathNode.path,
-            debugDescription: "expected a string as a key"
-          )
-        )
-      }
-      self.mapping[keyStr] = elem.value
-    }
+    self.mapping = mapping
   }
 }
 
@@ -1095,7 +1135,7 @@ extension JSONDecoding.UnkeyedContainer: UnkeyedDecodingContainer {
   }
 
   init(value: JSONMapValue, codingPathNode: _CodingPathNode) throws {
-    guard value.isArray else {
+    guard let array = value.asArray() else {
       throw DecodingError.typeMismatch(
         [Any].self,
         .init(
@@ -1106,7 +1146,7 @@ extension JSONDecoding.UnkeyedContainer: UnkeyedDecodingContainer {
     }
     self.codingPathNode = codingPathNode
     self.currentIndex = 0
-    self.array = value.asArray()!
-    self._currMapIdx = self.array.startIndex
+    self.array = array
+    self._currMapIdx = array.startIndex
   }
 }

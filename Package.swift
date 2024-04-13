@@ -30,6 +30,9 @@ let package = Package(
   ],
   targets: [
     // MARK: - Internal helper targets
+    .target(
+      name: "_CShims"
+    ),
 
     .target(
       name: "_AtomicBool"
@@ -74,7 +77,7 @@ let package = Package(
 
     .target(
       name: "SwiftCompilerPlugin",
-      dependencies: ["SwiftCompilerPluginMessageHandling", "SwiftSyntaxMacros"],
+      dependencies: ["SwiftCompilerPluginMessageHandling", "SwiftSyntaxMacros", "_CShims"],
       exclude: ["CMakeLists.txt"]
     ),
 

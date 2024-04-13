@@ -13,6 +13,7 @@
 // https://github.com/apple/swift-package-manager/blob/main/Sources/PackagePlugin/Plugin.swift
 
 #if swift(>=6.0)
+private import _CShims
 public import SwiftSyntaxMacros
 @_spi(PluginMessage) private import SwiftCompilerPluginMessageHandling
 #if canImport(Darwin)
@@ -23,6 +24,7 @@ private import Glibc
 private import ucrt
 #endif
 #else
+import _CShims
 import SwiftSyntaxMacros
 @_spi(PluginMessage) import SwiftCompilerPluginMessageHandling
 #if canImport(Darwin)
@@ -115,29 +117,29 @@ extension CompilerPlugin {
   public static func main() throws {
     // Duplicate the `stdin` file descriptor, which we will then use for
     // receiving messages from the plugin host.
-    let inputFD = dup(fileno(stdin))
+    let inputFD = dup(fileno(_ss_stdin()))
     guard inputFD >= 0 else {
-      internalError("Could not duplicate `stdin`: \(describe(errno: errno)).")
+      internalError("Could not duplicate `stdin`: \(describe(errno: _ss_errno())).")
     }
 
     // Having duplicated the original standard-input descriptor, we close
     // `stdin` so that attempts by the plugin to read console input (which
     // are usually a mistake) return errors instead of blocking.
-    guard close(fileno(stdin)) >= 0 else {
-      internalError("Could not close `stdin`: \(describe(errno: errno)).")
+    guard close(fileno(_ss_stdin())) >= 0 else {
+      internalError("Could not close `stdin`: \(describe(errno: _ss_errno())).")
     }
 
     // Duplicate the `stdout` file descriptor, which we will then use for
     // sending messages to the plugin host.
-    let outputFD = dup(fileno(stdout))
+    let outputFD = dup(fileno(_ss_stdout()))
     guard outputFD >= 0 else {
-      internalError("Could not dup `stdout`: \(describe(errno: errno)).")
+      internalError("Could not dup `stdout`: \(describe(errno: _ss_errno())).")
     }
 
     // Having duplicated the original standard-output descriptor, redirect
     // `stdout` to `stderr` so that all free-form text output goes there.
-    guard dup2(fileno(stderr), fileno(stdout)) >= 0 else {
-      internalError("Could not dup2 `stdout` to `stderr`: \(describe(errno: errno)).")
+    guard dup2(fileno(_ss_stderr()), fileno(_ss_stdout())) >= 0 else {
+      internalError("Could not dup2 `stdout` to `stderr`: \(describe(errno: _ss_errno())).")
     }
 
     // Turn off full buffering so printed text appears as soon as possible.
@@ -146,9 +148,9 @@ extension CompilerPlugin {
     // buffer.  As a result, on Windows, we completely disable all
     // buffering, which means that partial writes are possible.
     #if os(Windows)
-    setvbuf(stdout, nil, _IONBF, 0)
+    setvbuf(_ss_stdout(), nil, _IONBF, 0)
     #else
-    setvbuf(stdout, nil, _IOLBF, 0)
+    setvbuf(_ss_stdout(), nil, _IOLBF, 0)
     #endif
 
     // Open a message channel for communicating with the plugin host.
@@ -172,15 +174,10 @@ extension CompilerPlugin {
 
   // Private function to report internal errors and then exit.
   fileprivate static func internalError(_ message: String) -> Never {
-    fputs("Internal Error: \(message)\n", stderr)
+    fputs("Internal Error: \(message)\n", _ss_stderr())
     exit(1)
   }
 
-  // Private function to construct an error message from an `errno` code.
-  fileprivate static func describe(errno: Int32) -> String {
-    if let cStr = strerror(errno) { return String(cString: cStr) }
-    return String(describing: errno)
-  }
 }
 
 internal struct PluginHostConnection: MessageConnection {
@@ -234,16 +231,21 @@ internal struct PluginHostConnection: MessageConnection {
   }
 }
 
-func _write(_ fd: CInt, contentsOf buffer: UnsafeRawBufferPointer) throws {
+// Private function to construct an error message from an `errno` code.
+private func describe(errno: CInt) -> String {
+  if let cStr = strerror(errno) { return String(cString: cStr) }
+  return String(describing: errno)
+}
+
+private func _write(_ fd: CInt, contentsOf buffer: UnsafeRawBufferPointer) throws {
   var ptr = buffer.baseAddress!
   var remaining = buffer.count
   while remaining > 0 {
-    switch write(fd, ptr, remaining) {
+    switch write(fd, ptr, numericCast(remaining)) {
     case 0:
       throw CompilerPluginError(message: "write(2) closed")
     case -1:
-      let err = String(cString: strerror(errno))
-      throw CompilerPluginError(message: "read(2) failed: \(err)")
+      throw CompilerPluginError(message: "read(2) failed: \(describe(errno: _ss_errno()))")
     case let result:
       ptr += Int(result)
       remaining -= Int(result)
@@ -251,7 +253,7 @@ func _write(_ fd: CInt, contentsOf buffer: UnsafeRawBufferPointer) throws {
   }
 }
 
-func _reading<T>(_ fd: CInt, count: Int, _ fn: (UnsafeRawBufferPointer) throws -> T) throws -> T {
+private func _reading<T>(_ fd: CInt, count: Int, _ fn: (UnsafeRawBufferPointer) throws -> T) throws -> T {
   guard count > 0 else {
     return try fn(UnsafeRawBufferPointer(start: nil, count: 0))
   }
@@ -261,13 +263,12 @@ func _reading<T>(_ fd: CInt, count: Int, _ fn: (UnsafeRawBufferPointer) throws -
   var ptr = buffer.baseAddress!
   var remaining = buffer.count
   while remaining > 0 {
-    switch read(fd, ptr, remaining) {
+    switch read(fd, ptr, numericCast(remaining)) {
     case 0:
       // Input is closed.
       return try fn(UnsafeRawBufferPointer(start: nil, count: 0))
     case -1:
-      let err = String(cString: strerror(errno))
-      throw CompilerPluginError(message: "read(2) failed: \(err)")
+      throw CompilerPluginError(message: "read(2) failed: \(describe(errno: _ss_errno()))")
     case let result:
       ptr += Int(result)
       remaining -= Int(result)

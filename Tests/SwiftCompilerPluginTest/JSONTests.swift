@@ -61,8 +61,8 @@ final class JSONTests: XCTestCase {
   }
 
   func testComplexStruct() {
-    let empty = ComplexStruct(result: nil, diagnostics: [])
-    _testRoundTrip(of: empty, expectedJSON: #"{"diagnostics":[]}"#)
+    let empty = ComplexStruct(result: nil, diagnostics: [], elapsed: 0.0)
+    _testRoundTrip(of: empty, expectedJSON: #"{"diagnostics":[],"elapsed":0.0}"#)
 
     let value = ComplexStruct(
       result: "\tresult\nfoo",
@@ -72,12 +72,13 @@ final class JSONTests: XCTestCase {
           animal: .cat,
           data: [nil, 42]
         )
-      ]
+      ],
+      elapsed: 42.3
     )
     _testRoundTrip(
       of: value,
       expectedJSON: #"""
-        {"diagnostics":[{"animal":"cat","data":[null,42],"message":"error 🛑"}],"result":"\tresult\nfoo"}
+        {"diagnostics":[{"animal":"cat","data":[null,42],"message":"error 🛑"}],"elapsed":42.3,"result":"\tresult\nfoo"}
         """#
     )
   }
@@ -214,4 +215,5 @@ fileprivate struct ComplexStruct: Codable, Equatable {
 
   var result: String?
   var diagnostics: [Diagnostic]
+  var elapsed: Double
 }

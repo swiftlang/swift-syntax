@@ -55,19 +55,19 @@ func decodeFromJSON<T: Decodable>(json: UnsafeBufferPointer<UInt8>) throws -> T 
  map: [
    0: <OM>,      -- object marker
    1: 15,        |  `- number of *map* elements in this collection
-   2: <SS>,      | --- key 1 'array'
+   2: <SS>,      | --- key 1: 'array'
    3: <int_ptr>, | |   |- pointer in the payload
    4: 5,         | |   `- length
-   5: <AM>,      | --- value1 array
+   5: <AM>,      | --- value 1: array
    6: 4,         | |   `- number of *map* elements in the array
-   7: <NM>,      | | -- arr elm 1 '-1.3'
+   7: <NM>,      | | -- arr elm 1: '-1.3'
    8: <int_ptr>, | | |
    9: 4,         | | |
-  10: <TL>,      | | -- arr elm 2 'true'
-  11: <SS>,      | --- key 2 'number'
+  10: <TL>,      | | -- arr elm 2: 'true'
+  11: <SS>,      | --- key 2: 'number'
   12: <int_ptr>, | |
   13: 6,         | |
-  14: <NM>       | --- value1: '42'
+  14: <NM>       | --- value 2: '42'
   15: <int_ptr>, | |
   16: 2,         | |
  ]

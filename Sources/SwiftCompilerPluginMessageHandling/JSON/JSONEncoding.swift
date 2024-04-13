@@ -167,23 +167,15 @@ private struct JSONWriter {
         case 0x0D:
           flush()
           write(string: "\\r")
-        case 0x0...0xF:
+        case 0x00...0x1F:
           let c = cursor.pointee
           flush()
-          write(string: "\\u000")
-          if (c < 10) {
-            write(ascii: UInt8(ascii: "0") &+ c)
-          } else {
-            write(ascii: UInt8(ascii: "A") &+ (c &- 10))
-          }
-        case 0x10...0x1F:
-          let c = cursor.pointee & 0xF
-          flush()
-          write(string: "\\u001")
-          if (c < 10) {
-            write(ascii: UInt8(ascii: "0") &+ c)
-          } else {
-            write(ascii: UInt8(ascii: "A") &+ (c &- 10))
+          write(string: "\\u00")
+          let _0 = UInt8(ascii: "0")
+          let _A = UInt8(ascii: "A")
+          for shift in stride(from: 4, through: 0, by: -4) {
+            let d = (c >> shift) & 0xF
+            write(ascii: d < 10 ? (_0 + d) : (_A + d - 10))
           }
         default:
           // Accumulate this byte.

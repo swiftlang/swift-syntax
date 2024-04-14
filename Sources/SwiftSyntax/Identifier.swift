@@ -12,19 +12,45 @@
 
 /// An abstraction for sanitized values on a token.
 public struct Identifier: Equatable, Hashable, Sendable {
-  /// The sanitized `text` of a token.
-  public let name: String
-
-  public init?(_ token: TokenSyntax) {
-    guard case .identifier(let text) = token.tokenKind else {
-      return nil
+    /// The sanitized `text` of a token.
+    public var name: String {
+        String(syntaxText: rawIdentifier.name)
     }
+    
+    @_spi(RawSyntax)
+    public let rawIdentifier: RawIdentifier
+    
+    let arena: RetainedSyntaxArena
+    
+    public init?(_ token: TokenSyntax) {
+        guard case .identifier(let text) = token.tokenKind else {
+            return nil
+        }
+        
+        var rawText = text.contains("`") ? text.trimmingCharacters(in: "`") : Substring(text)
+        
+        let syntaxArena = SyntaxArena()
+        
+        let name = rawText.withUTF8 {
+            syntaxArena.intern(
+                SyntaxText(buffer: SyntaxArenaAllocatedBufferPointer<UInt8>($0))
+            )
+        }
+        
+        self.rawIdentifier = RawIdentifier(name: name)
+        self.arena = RetainedSyntaxArena(syntaxArena)
+    }
+    
+    public static func == (lhs: Identifier, rhs: Identifier) -> Bool {
+        lhs.rawIdentifier == rhs.rawIdentifier
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(rawIdentifier)
+    }
+}
 
-    self.name =
-      if text.contains("`") {
-        String(text.trimmingCharacters(in: "`"))
-      } else {
-        text
-      }
-  }
+@_spi(RawSyntax) 
+public struct RawIdentifier: Equatable, Hashable, Sendable {
+    public let name: SyntaxText
 }

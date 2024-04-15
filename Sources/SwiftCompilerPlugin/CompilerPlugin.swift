@@ -115,9 +115,13 @@ extension CompilerPlugin {
   /// Main entry point of the plugin — sets up a communication channel with
   /// the plugin host and runs the main message loop.
   public static func main() throws {
+    let _stdin = _ss_stdin()
+    let _stdout = _ss_stdout()
+    let _stderr = _ss_stderr()
+
     // Duplicate the `stdin` file descriptor, which we will then use for
     // receiving messages from the plugin host.
-    let inputFD = dup(fileno(_ss_stdin()))
+    let inputFD = dup(fileno(_stdin))
     guard inputFD >= 0 else {
       internalError("Could not duplicate `stdin`: \(describe(errno: _ss_errno())).")
     }
@@ -125,20 +129,20 @@ extension CompilerPlugin {
     // Having duplicated the original standard-input descriptor, we close
     // `stdin` so that attempts by the plugin to read console input (which
     // are usually a mistake) return errors instead of blocking.
-    guard close(fileno(_ss_stdin())) >= 0 else {
+    guard close(fileno(_stdin)) >= 0 else {
       internalError("Could not close `stdin`: \(describe(errno: _ss_errno())).")
     }
 
     // Duplicate the `stdout` file descriptor, which we will then use for
     // sending messages to the plugin host.
-    let outputFD = dup(fileno(_ss_stdout()))
+    let outputFD = dup(fileno(_stdout))
     guard outputFD >= 0 else {
       internalError("Could not dup `stdout`: \(describe(errno: _ss_errno())).")
     }
 
     // Having duplicated the original standard-output descriptor, redirect
     // `stdout` to `stderr` so that all free-form text output goes there.
-    guard dup2(fileno(_ss_stderr()), fileno(_ss_stdout())) >= 0 else {
+    guard dup2(fileno(_stderr), fileno(_stdout)) >= 0 else {
       internalError("Could not dup2 `stdout` to `stderr`: \(describe(errno: _ss_errno())).")
     }
 
@@ -148,9 +152,9 @@ extension CompilerPlugin {
     // buffer.  As a result, on Windows, we completely disable all
     // buffering, which means that partial writes are possible.
     #if os(Windows)
-    setvbuf(_ss_stdout(), nil, _IONBF, 0)
+    setvbuf(_stdout, nil, _IONBF, 0)
     #else
-    setvbuf(_ss_stdout(), nil, _IOLBF, 0)
+    setvbuf(_stdout, nil, _IOLBF, 0)
     #endif
 
     // Open a message channel for communicating with the plugin host.
@@ -242,7 +246,7 @@ private func describe(errno: CInt) -> String {
 private func _write(_ stream: _ss_ptr_FILE, contentsOf buffer: UnsafeRawBufferPointer) throws {
   let result = fwrite(buffer.baseAddress, 1, buffer.count, stream)
   if result < buffer.count {
-    throw CompilerPluginError(message: "write(3) failed: \(describe(errno: _ss_errno()))")
+    throw CompilerPluginError(message: "fwrite(3) failed: \(describe(errno: _ss_errno()))")
   }
 }
 
@@ -259,7 +263,7 @@ private func _reading<T>(_ stream: _ss_ptr_FILE, count: Int, _ fn: (UnsafeRawBuf
       // Input is closed.
       return try fn(UnsafeRawBufferPointer(start: nil, count: 0))
     } else {
-      throw CompilerPluginError(message: "read(2) failed: \(describe(errno: _ss_errno()))")
+      throw CompilerPluginError(message: "fread(3) failed: \(describe(errno: _ss_errno()))")
     }
   }
   return try fn(UnsafeRawBufferPointer(buffer))

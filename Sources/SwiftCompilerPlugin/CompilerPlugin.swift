@@ -155,8 +155,8 @@ extension CompilerPlugin {
 
     // Open a message channel for communicating with the plugin host.
     let connection = PluginHostConnection(
-      inputStream: inputFD,
-      outputStream: outputFD
+      inputStream: fdopen(inputFD, "r"),
+      outputStream: fdopen(outputFD, "w")
     )
 
     // Handle messages from the host until the input stream is closed,
@@ -181,8 +181,8 @@ extension CompilerPlugin {
 }
 
 internal struct PluginHostConnection: MessageConnection {
-  fileprivate let inputStream: CInt
-  fileprivate let outputStream: CInt
+  fileprivate let inputStream: _ss_ptr_FILE
+  fileprivate let outputStream: _ss_ptr_FILE
 
   func sendMessage<TX: Encodable>(_ message: TX) throws {
     // Encode the message as JSON.
@@ -200,6 +200,8 @@ internal struct PluginHostConnection: MessageConnection {
     try payload.withUnsafeBytes { buffer in
       try _write(outputStream, contentsOf: buffer)
     }
+
+    fflush(outputStream)
   }
 
   func waitForNextMessage<RX: Decodable>(_ ty: RX.Type) throws -> RX? {
@@ -237,41 +239,27 @@ private func describe(errno: CInt) -> String {
   return String(describing: errno)
 }
 
-private func _write(_ fd: CInt, contentsOf buffer: UnsafeRawBufferPointer) throws {
-  var ptr = buffer.baseAddress!
-  var remaining = buffer.count
-  while remaining > 0 {
-    switch write(fd, ptr, numericCast(remaining)) {
-    case 0:
-      throw CompilerPluginError(message: "write(2) closed")
-    case -1:
-      throw CompilerPluginError(message: "read(2) failed: \(describe(errno: _ss_errno()))")
-    case let result:
-      ptr += Int(result)
-      remaining -= Int(result)
-    }
+private func _write(_ stream: _ss_ptr_FILE, contentsOf buffer: UnsafeRawBufferPointer) throws {
+  let result = fwrite(buffer.baseAddress, 1, buffer.count, stream)
+  if result < buffer.count {
+    throw CompilerPluginError(message: "write(3) failed: \(describe(errno: _ss_errno()))")
   }
 }
 
-private func _reading<T>(_ fd: CInt, count: Int, _ fn: (UnsafeRawBufferPointer) throws -> T) throws -> T {
+private func _reading<T>(_ stream: _ss_ptr_FILE, count: Int, _ fn: (UnsafeRawBufferPointer) throws -> T) throws -> T {
   guard count > 0 else {
     return try fn(UnsafeRawBufferPointer(start: nil, count: 0))
   }
   let buffer = UnsafeMutableRawBufferPointer.allocate(byteCount: count, alignment: 1)
   defer { buffer.deallocate() }
 
-  var ptr = buffer.baseAddress!
-  var remaining = buffer.count
-  while remaining > 0 {
-    switch read(fd, ptr, numericCast(remaining)) {
-    case 0:
+  let result = fread(buffer.baseAddress, 1, count, stream)
+  if result < count {
+    if ferror(stream) == 0 {
       // Input is closed.
       return try fn(UnsafeRawBufferPointer(start: nil, count: 0))
-    case -1:
+    } else {
       throw CompilerPluginError(message: "read(2) failed: \(describe(errno: _ss_errno()))")
-    case let result:
-      ptr += Int(result)
-      remaining -= Int(result)
     }
   }
   return try fn(UnsafeRawBufferPointer(buffer))

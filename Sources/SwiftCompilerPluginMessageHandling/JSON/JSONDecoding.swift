@@ -109,7 +109,7 @@ private struct JSONMapBuilder {
 
   init() {
     mapData = []
-    mapData.reserveCapacity(128) // 128 is good enough for most PluginMessage.
+    mapData.reserveCapacity(128)  // 128 is good enough for most PluginMessage.
   }
 
   @inline(__always)
@@ -550,7 +550,7 @@ extension JSONMapValue {
   }
 
   @inline(__always)
-  func asString() ->  String? {
+  func asString() -> String? {
     if self.is(.simpleString) {
       return _JSONStringParser.decodeSimpleString(source: valueBuffer())
     }
@@ -681,21 +681,41 @@ private struct JSONDecoding {
 // MARK: Pure decoding functions.
 extension JSONDecoding {
   @inline(__always)
-  static func _unwrapOrThrow<T>(
-    _ v: T?,
-    codingPathNode: _CodingPathNode,
+  static func _checkNotNull<T>(
+    _ value: JSONMapValue,
+    expectedType: T.Type,
+    for codingPathNode: _CodingPathNode,
     _ additionalKey: (some CodingKey)?
-  ) throws -> T {
-    guard let v = v else {
-      throw DecodingError.typeMismatch(
-        T.self,
-        .init(
+  ) throws {
+    guard !value.isNull else {
+      throw DecodingError.valueNotFound(
+        expectedType,
+        DecodingError.Context(
           codingPath: codingPathNode.path(byAppending: additionalKey),
-          debugDescription: "type mismatch"
+          debugDescription: "Cannot get value of type \(expectedType) -- found null value instead"
         )
       )
     }
-    return v
+  }
+
+  @inline(__always)
+  static func _unwrapOrThrow<T>(
+    _ result: T?,
+    decoding value: JSONMapValue,
+    codingPathNode: _CodingPathNode,
+    _ additionalKey: (some CodingKey)?
+  ) throws -> T {
+    if let result = result {
+      return result
+    }
+    try _checkNotNull(value, expectedType: T.self, for: codingPathNode, additionalKey)
+    throw DecodingError.typeMismatch(
+      T.self,
+      .init(
+        codingPath: codingPathNode.path(byAppending: additionalKey),
+        debugDescription: "type mismatch"
+      )
+    )
   }
   @inline(__always)
   static func _decode(
@@ -704,7 +724,7 @@ extension JSONDecoding {
     codingPathNode: _CodingPathNode,
     _ additionalKey: (some CodingKey)?
   ) throws -> Bool {
-    try _unwrapOrThrow(value.asBool(), codingPathNode: codingPathNode, additionalKey)
+    try _unwrapOrThrow(value.asBool(), decoding: value, codingPathNode: codingPathNode, additionalKey)
   }
   @inline(__always)
   static func _decode(
@@ -713,7 +733,7 @@ extension JSONDecoding {
     codingPathNode: _CodingPathNode,
     _ additionalKey: (some CodingKey)?
   ) throws -> String {
-    try _unwrapOrThrow(value.asString(), codingPathNode: codingPathNode, additionalKey)
+    try _unwrapOrThrow(value.asString(), decoding: value, codingPathNode: codingPathNode, additionalKey)
   }
   @inline(__always)
   static func _decode<Integer: FixedWidthInteger>(
@@ -722,7 +742,7 @@ extension JSONDecoding {
     codingPathNode: _CodingPathNode,
     _ additionalKey: (some CodingKey)?
   ) throws -> Integer {
-    try _unwrapOrThrow(value.asInteger(type), codingPathNode: codingPathNode, additionalKey)
+    try _unwrapOrThrow(value.asInteger(type), decoding: value, codingPathNode: codingPathNode, additionalKey)
   }
   @inline(__always)
   static func _decode<Floating: BinaryFloatingPoint>(
@@ -731,7 +751,7 @@ extension JSONDecoding {
     codingPathNode: _CodingPathNode,
     _ additionalKey: (some CodingKey)?
   ) throws -> Floating {
-    try _unwrapOrThrow(value.asFloatingPoint(type), codingPathNode: codingPathNode, additionalKey)
+    try _unwrapOrThrow(value.asFloatingPoint(type), decoding: value, codingPathNode: codingPathNode, additionalKey)
   }
 
   static func _decodeGeneric<T: Decodable>(
@@ -740,6 +760,7 @@ extension JSONDecoding {
     codingPathNode: _CodingPathNode,
     _ additionalKey: (some CodingKey)?
   ) throws -> T {
+    try _checkNotNull(value, expectedType: type, for: codingPathNode, additionalKey)
     let decoder = Self(value: value, codingPathNode: codingPathNode.appending(additionalKey))
     return try T.init(from: decoder)
   }

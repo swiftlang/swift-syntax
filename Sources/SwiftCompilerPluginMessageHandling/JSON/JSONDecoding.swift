@@ -1041,6 +1041,7 @@ extension JSONDecoding.UnkeyedContainer: UnkeyedDecodingContainer {
   mutating func decodeNil() throws -> Bool {
     if !isAtEnd && array[_currMapIdx].isNull {
       advanceToNextValue()
+      return true
     }
     // The protocol states:
     //   If the value is not null, does not increment currentIndex.

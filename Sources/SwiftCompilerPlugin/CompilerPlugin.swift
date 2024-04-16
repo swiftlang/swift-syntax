@@ -15,11 +15,11 @@
 #if swift(>=6.0)
 public import SwiftSyntaxMacros
 private import Foundation
-private import SwiftCompilerPluginMessageHandling
+@_spi(PluginMessage) private import SwiftCompilerPluginMessageHandling
 #else
 import SwiftSyntaxMacros
 import Foundation
-import SwiftCompilerPluginMessageHandling
+@_spi(PluginMessage) import SwiftCompilerPluginMessageHandling
 #endif
 
 #if os(Windows)

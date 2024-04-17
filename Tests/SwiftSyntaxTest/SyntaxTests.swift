@@ -168,4 +168,34 @@ class SyntaxTests: XCTestCase {
     XCTAssertEqual(funcKeywordInTree2?.as(TokenSyntax.self)?.tokenKind, .keyword(.func))
     XCTAssertNotEqual(funcKeywordInTree1.id, funcKeywordInTree2?.id)
   }
+
+  func testIntegerLiteralExprSyntax() {
+    let testCases: [UInt: (String, Int?)] = [
+      #line: ("2", 2),
+      #line: ("02", 2),
+      #line: ("020", 20),
+      #line: ("-02", -2),
+      #line: ("2_00_0000", 2_00_0000),
+      #line: ("-2_00_0000", -2_00_0000),
+      #line: ("foo", nil),
+      #line: ("999999999999999999999999999999999999999999999999999999999999999999999999999999", nil),
+      #line: ("0b1010101", 85),
+      #line: ("0xFF", 255),
+      #line: ("0o777", 511),
+      #line: ("0b001100", 0b001100),
+      #line: ("4_2", 4_2),
+      #line: ("0o3434", 0o3434),
+      #line: ("0xba11aD", 0xba11aD),
+      #line: ("🐋", nil),
+      #line: ("-0xA", nil),
+      #line: ("-0o7", nil),
+      #line: ("-0b1", nil),
+    ]
+
+    for (line, testCase) in testCases {
+      let (value, expected) = testCase
+      let expr = IntegerLiteralExprSyntax(literal: .integerLiteral(value))
+      XCTAssertEqual(expr.representedLiteralValue, expected, line: line)
+    }
+  }
 }

@@ -31,7 +31,7 @@ public extension Range<AbsolutePosition> {
   ///
   /// If the intersection is empty, this returns a range starting at offset 0 and having length 0.
   func intersected(_ other: Range<AbsolutePosition>) -> Range<AbsolutePosition> {
-    return self.intersecting(other) ?? AbsolutePosition(utf8Offset: 0)..<AbsolutePosition(utf8Offset: 0)
+    return self.clamped(to: other)
   }
 }
 
@@ -43,13 +43,21 @@ extension Range<AbsolutePosition> {
     self = position..<(position + length)
   }
 
+  // Returns `true` if the intersection between this range and `other` is non-empty or if the two ranges are directly
+  /// adjacent to each other.
+  public func overlapsOrTouches(_ other: Range<AbsolutePosition>) -> Bool {
+    return self.upperBound >= other.lowerBound && self.lowerBound <= other.upperBound
+  }
+
   /// Returns `true` if the intersection between this range and `other` is non-empty or if the two ranges are directly
   /// adjacent to each other.
+  @available(*, deprecated, renamed: "overlapsOrTouches(_:)")
   public func intersectsOrTouches(_ other: Range<AbsolutePosition>) -> Bool {
     return self.upperBound >= other.lowerBound && self.lowerBound <= other.upperBound
   }
 
   /// Returns `true` if the intersection between this range and `other` is non-empty.
+  @available(*, deprecated, renamed: "overlaps(_:)")
   public func intersects(_ other: Range<AbsolutePosition>) -> Bool {
     return self.upperBound > other.lowerBound && self.lowerBound < other.upperBound
   }
@@ -57,6 +65,7 @@ extension Range<AbsolutePosition> {
   /// Returns the range for the overlapping region between two ranges.
   ///
   /// If the intersection is empty, this returns `nil`.
+  @available(*, deprecated, message: "Use clamped(to:) instead")
   public func intersecting(_ other: Range<AbsolutePosition>) -> Range<AbsolutePosition>? {
     let lowerBound = Swift.max(self.lowerBound, other.lowerBound)
     let upperBound = Swift.min(self.upperBound, other.upperBound)
@@ -114,11 +123,11 @@ public struct IncrementalEdit: Equatable, Sendable {
   }
 
   public func intersectsOrTouchesRange(_ other: Range<AbsolutePosition>) -> Bool {
-    return self.range.intersectsOrTouches(other)
+    return self.range.overlapsOrTouches(other)
   }
 
   public func intersectsRange(_ other: Range<AbsolutePosition>) -> Bool {
-    return self.range.intersects(other)
+    return self.range.overlaps(other)
   }
 }
 

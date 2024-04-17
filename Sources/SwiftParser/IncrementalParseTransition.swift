@@ -348,9 +348,9 @@ public struct ConcurrentEdits: Sendable {
       var editToAdd = editToAdd
       var editIndicesMergedWithNewEdit: [Int] = []
       for (index, existingEdit) in concurrentEdits.enumerated() {
-        if existingEdit.replacementRange.intersectsOrTouches(editToAdd.range) {
+        if existingEdit.replacementRange.overlapsOrTouches(editToAdd.range) {
           let intersectionLength =
-            existingEdit.replacementRange.intersecting(editToAdd.range)?.length ?? SourceLength(utf8Length: 0)
+            existingEdit.replacementRange.clamped(to: editToAdd.range).length
           let replacement: [UInt8]
           replacement =
             existingEdit.replacement.prefix(

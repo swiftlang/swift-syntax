@@ -208,9 +208,13 @@ private struct JSONScanner {
 
   @inline(__always)
   mutating func expect(_ char: UnicodeScalar) throws {
-    guard advance(if: char) else {
+    guard hasData else {
+      throw JSONError.unexpectedEndOfFile
+    }
+    guard ptr.pointee == UInt8(ascii: char) else {
       throw JSONError.unexpectedCharacter(ptr.pointee, context: "expected \(char)")
     }
+    ptr += 1
   }
 
   mutating func scanNull() throws {

@@ -100,6 +100,13 @@ extension CompilerPlugin {
   }
 }
 
+struct CompilerPluginError: Error, CustomStringConvertible {
+  var description: String
+  init(message: String) {
+    self.description = message
+  }
+}
+
 struct MacroProviderAdapter<Plugin: CompilerPlugin>: PluginProvider {
   let plugin: Plugin
   init(plugin: Plugin) {
@@ -110,18 +117,27 @@ struct MacroProviderAdapter<Plugin: CompilerPlugin>: PluginProvider {
   }
 }
 
+#if canImport(ucrt)
+private let dup = _dup(_:)
+private let fileno = _fileno(_:)
+private let dup2 = _dup2(_:_:)
+private let close = _close(_:)
+private let read = _read(_:_:_:)
+private let write = _write(_:_:_:)
+#endif
+
 extension CompilerPlugin {
 
   /// Main entry point of the plugin — sets up a communication channel with
   /// the plugin host and runs the main message loop.
   public static func main() throws {
-    let _stdin = _ss_stdin()
-    let _stdout = _ss_stdout()
-    let _stderr = _ss_stderr()
+    let stdin = _ss_stdin()
+    let stdout = _ss_stdout()
+    let stderr = _ss_stderr()
 
     // Duplicate the `stdin` file descriptor, which we will then use for
     // receiving messages from the plugin host.
-    let inputFD = dup(fileno(_stdin))
+    let inputFD = dup(fileno(stdin))
     guard inputFD >= 0 else {
       internalError("Could not duplicate `stdin`: \(describe(errno: _ss_errno())).")
     }
@@ -129,38 +145,33 @@ extension CompilerPlugin {
     // Having duplicated the original standard-input descriptor, we close
     // `stdin` so that attempts by the plugin to read console input (which
     // are usually a mistake) return errors instead of blocking.
-    guard close(fileno(_stdin)) >= 0 else {
+    guard close(fileno(stdin)) >= 0 else {
       internalError("Could not close `stdin`: \(describe(errno: _ss_errno())).")
     }
 
     // Duplicate the `stdout` file descriptor, which we will then use for
     // sending messages to the plugin host.
-    let outputFD = dup(fileno(_stdout))
+    let outputFD = dup(fileno(stdout))
     guard outputFD >= 0 else {
       internalError("Could not dup `stdout`: \(describe(errno: _ss_errno())).")
     }
 
     // Having duplicated the original standard-output descriptor, redirect
     // `stdout` to `stderr` so that all free-form text output goes there.
-    guard dup2(fileno(_stderr), fileno(_stdout)) >= 0 else {
+    guard dup2(fileno(stderr), fileno(stdout)) >= 0 else {
       internalError("Could not dup2 `stdout` to `stderr`: \(describe(errno: _ss_errno())).")
     }
 
-    // Turn off full buffering so printed text appears as soon as possible.
-    // Windows is much less forgiving than other platforms.  If line
-    // buffering is enabled, we must provide a buffer and the size of the
-    // buffer.  As a result, on Windows, we completely disable all
-    // buffering, which means that partial writes are possible.
-    #if os(Windows)
-    setvbuf(_stdout, nil, _IONBF, 0)
-    #else
-    setvbuf(_stdout, nil, _IOLBF, 0)
+    #if canImport(ucrt)
+    // Set I/O to binary mode. Avoid CRLF translation, and Ctrl+Z (0x1A) as EOF.
+    _ = _setmode(inputFD, _O_BINARY)
+    _ = _setmode(outputFD, _O_BINARY)
     #endif
 
     // Open a message channel for communicating with the plugin host.
     let connection = PluginHostConnection(
-      inputStream: fdopen(inputFD, "r"),
-      outputStream: fdopen(outputFD, "w")
+      inputStream: inputFD,
+      outputStream: outputFD
     )
 
     // Handle messages from the host until the input stream is closed,
@@ -181,12 +192,11 @@ extension CompilerPlugin {
     fputs("Internal Error: \(message)\n", _ss_stderr())
     exit(1)
   }
-
 }
 
 internal struct PluginHostConnection: MessageConnection {
-  fileprivate let inputStream: _ss_ptr_FILE
-  fileprivate let outputStream: _ss_ptr_FILE
+  fileprivate let inputStream: CInt
+  fileprivate let outputStream: CInt
 
   func sendMessage<TX: Encodable>(_ message: TX) throws {
     // Encode the message as JSON.
@@ -195,45 +205,71 @@ internal struct PluginHostConnection: MessageConnection {
     // Write the header (a 64-bit length field in little endian byte order).
     let count = payload.count
     var header = UInt64(count).littleEndian
+    try withUnsafeBytes(of: &header) { try _write(outputStream, contentsOf: $0) }
 
-    try withUnsafeBytes(of: &header) { buffer in
-      precondition(buffer.count == 8)
-      try _write(outputStream, contentsOf: buffer)
-    }
-
-    try payload.withUnsafeBytes { buffer in
-      try _write(outputStream, contentsOf: buffer)
-    }
-
-    fflush(outputStream)
+    // Write the JSON payload.
+    try payload.withUnsafeBytes { try _write(outputStream, contentsOf: $0) }
   }
 
   func waitForNextMessage<RX: Decodable>(_ ty: RX.Type) throws -> RX? {
     // Read the header (a 64-bit length field in little endian byte order).
-    let count = try _reading(inputStream, count: 8) { buffer in
-      return buffer.count == 8 ? UInt64(littleEndian: buffer.loadUnaligned(as: UInt64.self)) : 0
-    }
-    guard count >= 2 else {
-      if count == 0 {
-        // input stream is closed.
-        return nil
-      }
-      throw PluginMessageError.invalidPayloadSize
+    var header: UInt64 = 0
+    do {
+      try withUnsafeMutableBytes(of: &header) { try _read(inputStream, into: $0) }
+    } catch IOError.readReachedEndOfInput {
+      // Connection closed.
+      return nil
     }
 
     // Read the JSON payload.
-    return try _reading(inputStream, count: Int(count)) { buffer -> RX in
-      if buffer.count != Int(count) {
-        throw PluginMessageError.truncatedPayload
-      }
-      // Decode and return the message.
-      return try JSON.decode(RX.self, from: buffer.bindMemory(to: UInt8.self))
+    let count = Int(UInt64(littleEndian: header))
+    let data = UnsafeMutableRawBufferPointer.allocate(byteCount: count, alignment: 1)
+    defer { data.deallocate() }
+    try _read(inputStream, into: data)
+
+    // Decode and return the message.
+    return try JSON.decode(ty, from: UnsafeBufferPointer(data.bindMemory(to: UInt8.self)))
+  }
+}
+
+/// Write the buffer to the file descriptor. Throws an error on failure.
+private func _write(_ fd: CInt, contentsOf buffer: UnsafeRawBufferPointer) throws {
+  guard var ptr = buffer.baseAddress else { return }
+  let endPtr = ptr.advanced(by: buffer.count)
+  while ptr != endPtr {
+    switch write(fd, ptr, numericCast(endPtr - ptr)) {
+    case -1: throw IOError.writeFailed(_ss_errno())
+    case 0: throw IOError.writeFailed(0) /* unreachable */
+    case let n: ptr += Int(n)
     }
   }
+}
 
-  enum PluginMessageError: Swift.Error {
-    case invalidPayloadSize
-    case truncatedPayload
+/// Fill the buffer to the file descriptor. Throws an error on failure.
+/// If the file descriptor reached the end-of-file, throws IOError.readReachedEndOfInput
+private func _read(_ fd: CInt, into buffer: UnsafeMutableRawBufferPointer) throws {
+  guard var ptr = buffer.baseAddress else { return }
+  let endPtr = ptr.advanced(by: buffer.count)
+  while ptr != endPtr {
+    switch read(fd, ptr, numericCast(endPtr - ptr)) {
+    case -1: throw IOError.readFailed(_ss_errno())
+    case 0: throw IOError.readReachedEndOfInput
+    case let n: ptr += Int(n)
+    }
+  }
+}
+
+private enum IOError: Error, CustomStringConvertible {
+  case readReachedEndOfInput
+  case readFailed(CInt)
+  case writeFailed(CInt)
+
+  var description: String {
+    switch self {
+    case .readReachedEndOfInput: "read(2) reached end-of-file"
+    case .readFailed(let errno): "read(2) failed: \(describe(errno: errno))"
+    case .writeFailed(let errno): "write(2) failed: \(describe(errno: errno))"
+    }
   }
 }
 
@@ -241,37 +277,4 @@ internal struct PluginHostConnection: MessageConnection {
 private func describe(errno: CInt) -> String {
   if let cStr = strerror(errno) { return String(cString: cStr) }
   return String(describing: errno)
-}
-
-private func _write(_ stream: _ss_ptr_FILE, contentsOf buffer: UnsafeRawBufferPointer) throws {
-  let result = fwrite(buffer.baseAddress, 1, buffer.count, stream)
-  if result < buffer.count {
-    throw CompilerPluginError(message: "fwrite(3) failed: \(describe(errno: _ss_errno()))")
-  }
-}
-
-private func _reading<T>(_ stream: _ss_ptr_FILE, count: Int, _ fn: (UnsafeRawBufferPointer) throws -> T) throws -> T {
-  guard count > 0 else {
-    return try fn(UnsafeRawBufferPointer(start: nil, count: 0))
-  }
-  let buffer = UnsafeMutableRawBufferPointer.allocate(byteCount: count, alignment: 1)
-  defer { buffer.deallocate() }
-
-  let result = fread(buffer.baseAddress, 1, count, stream)
-  if result < count {
-    if ferror(stream) == 0 {
-      // Input is closed.
-      return try fn(UnsafeRawBufferPointer(start: nil, count: 0))
-    } else {
-      throw CompilerPluginError(message: "fread(3) failed: \(describe(errno: _ss_errno()))")
-    }
-  }
-  return try fn(UnsafeRawBufferPointer(buffer))
-}
-
-struct CompilerPluginError: Error, CustomStringConvertible {
-  var description: String
-  init(message: String) {
-    self.description = message
-  }
 }

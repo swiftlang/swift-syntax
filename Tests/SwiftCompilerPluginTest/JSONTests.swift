@@ -15,6 +15,17 @@ import XCTest
 
 final class JSONTests: XCTestCase {
 
+  func testPrimitive() {
+    _testRoundTrip(of: true, expectedJSON: "true")
+    _testRoundTrip(of: false, expectedJSON: "false")
+    _testRoundTrip(of: Bool?.none, expectedJSON: "null")
+    _testRoundTrip(of: "", expectedJSON: "\"\"")
+    _testRoundTrip(of: 0, expectedJSON: "0")
+    _testRoundTrip(of: 0 as Int8, expectedJSON: "0")
+    _testRoundTrip(of: 0.0 as Float, expectedJSON: "0.0")
+    _testRoundTrip(of: 0.0 as Double, expectedJSON: "0.0")
+  }
+
   func testEmptyStruct() {
     let value = EmptyStruct()
     _testRoundTrip(of: value, expectedJSON: "{}")
@@ -73,12 +84,12 @@ final class JSONTests: XCTestCase {
           data: [nil, 42]
         )
       ],
-      elapsed: 42.3
+      elapsed: 42.3e32
     )
     _testRoundTrip(
       of: value,
       expectedJSON: #"""
-        {"diagnostics":[{"animal":"cat","data":[null,42],"message":"error 🛑"}],"elapsed":42.3,"result":"\tresult\nfoo"}
+        {"diagnostics":[{"animal":"cat","data":[null,42],"message":"error 🛑"}],"elapsed":4.23e+33,"result":"\tresult\nfoo"}
         """#
     )
   }
@@ -89,6 +100,33 @@ final class JSONTests: XCTestCase {
       expectedJSON: #"""
         "\n©\u0000\u0007\u001B"
         """#
+    )
+  }
+
+  func testParseError() {
+    _assertParseError(
+      #"{"foo": 1"#,
+      message: "unexpected end of file"
+    )
+    _assertParseError(
+      #""foo"#,
+      message: "unexpected end of file"
+    )
+    _assertParseError(
+      "\n",
+      message: "unexpected end of file"
+    )
+    _assertParseError(
+      "trua",
+      message: "unexpected character 'a'; expected 'e'"
+    )
+    _assertParseError(
+      "[true, #foo]",
+      message: "unexpected character '#'; value start"
+    )
+    _assertParseError(
+      "{}true",
+      message: "unexpected character 't'; after top-level value"
     )
   }
 
@@ -150,7 +188,25 @@ final class JSONTests: XCTestCase {
       let data = try JSONEncoder().encode(value)
       let _ = try JSONDecoder().decode(U.self, from: data)
       XCTFail("Coercion from \(T.self) to \(U.self) was expected to fail.")
-    } catch {}
+    } catch DecodingError.typeMismatch(_, _) {
+      // Success
+    } catch {
+      XCTFail("unexpected error")
+    }
+  }
+
+  private func _assertParseError(_ json: String, message: String) {
+    do {
+      var json = json
+      _ = try json.withUTF8 { try JSON.decode(Bool.self, from: $0) }
+    } catch DecodingError.dataCorrupted(let context) {
+      XCTAssertEqual(
+        String(describing: try XCTUnwrap(context.underlyingError)),
+        message
+      )
+    } catch {
+      XCTFail("unexpected error")
+    }
   }
 }
 

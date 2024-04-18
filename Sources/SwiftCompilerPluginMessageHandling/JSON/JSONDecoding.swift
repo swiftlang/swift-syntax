@@ -29,7 +29,18 @@ import ucrt
 #endif
 
 func decodeFromJSON<T: Decodable>(json: UnsafeBufferPointer<UInt8>) throws -> T {
-  let map = try JSONScanner.scan(buffer: json)
+  let map: JSONMap
+  do {
+    map = try JSONScanner.scan(buffer: json)
+  } catch let err as JSONError {
+    throw DecodingError.dataCorrupted(
+      DecodingError.Context(
+        codingPath: [],
+        debugDescription: "Corrupted JSON",
+        underlyingError: err
+      )
+    )
+  }
   return try map.withValue { value in
     let decoder = JSONDecoding(value: value, codingPathNode: .root)
     return try T.init(from: decoder)
@@ -144,9 +155,19 @@ private struct JSONMapBuilder {
   }
 }
 
-enum JSONError: Error {
+enum JSONError: Error, CustomDebugStringConvertible {
   case unexpectedEndOfFile
   case unexpectedCharacter(UInt8, context: String)
+
+  var debugDescription: String {
+    switch self {
+    case .unexpectedEndOfFile:
+      return "unexpected end of file"
+    case .unexpectedCharacter(let c, let ctxt):
+      let char = c < 0x80 ? String(UnicodeScalar(c)) : "0x" + String(c, radix: 16, uppercase: true)
+      return "unexpected character '\(char)'; \(ctxt)"
+    }
+  }
 }
 
 private struct JSONScanner {
@@ -212,7 +233,7 @@ private struct JSONScanner {
       throw JSONError.unexpectedEndOfFile
     }
     guard ptr.pointee == UInt8(ascii: char) else {
-      throw JSONError.unexpectedCharacter(ptr.pointee, context: "expected \(char)")
+      throw JSONError.unexpectedCharacter(ptr.pointee, context: "expected '\(char)'")
     }
     ptr += 1
   }
@@ -764,7 +785,6 @@ extension JSONDecoding {
     codingPathNode: _CodingPathNode,
     _ additionalKey: (some CodingKey)?
   ) throws -> T {
-    try _checkNotNull(value, expectedType: type, for: codingPathNode, additionalKey)
     let decoder = Self(value: value, codingPathNode: codingPathNode.appending(additionalKey))
     return try T.init(from: decoder)
   }

@@ -53,7 +53,7 @@ func decodeFromJSON<T: Decodable>(json: UnsafeBufferPointer<UInt8>) throws -> T 
  For JSON payload such as:
 
  ```
- {"array": [-1.3, true], "number": 42}
+ {"foo": [-1.3, true], "barz": 42}
  ```
 
  will be scanned by 'JSONScanner' into a map like:
@@ -66,29 +66,29 @@ func decodeFromJSON<T: Decodable>(json: UnsafeBufferPointer<UInt8>) throws -> T 
  <TL> == NULL Marker
  map: [
    0: <OM>,      -- object marker
-   1: 15,        |  `- number of *map* elements in this collection
-   2: <SS>,      | --- key 1: 'array'
+   1: 17,        |  `- number of *map* elements this object occupies
+   2: <SS>,      | --- key 1: 'foo'
    3: <int_ptr>, | |   |- pointer in the payload
-   4: 5,         | |   `- length
+   4: 3,         | |   `- length
    5: <AM>,      | --- value 1: array
-   6: 4,         | |   `- number of *map* elements in the array
+   6: 6,         | |   `- number of *map* elements this array occupies
    7: <NM>,      | | -- arr elm 1: '-1.3'
    8: <int_ptr>, | | |
    9: 4,         | | |
   10: <TL>,      | | -- arr elm 2: 'true'
-  11: <SS>,      | --- key 2: 'number'
+  11: <SS>,      | --- key 2: 'barz'
   12: <int_ptr>, | |
-  13: 6,         | |
+  13: 4,         | |
   14: <NM>       | --- value 2: '42'
   15: <int_ptr>, | |
   16: 2,         | |
  ]
  ```
- To decode '<root>.number' value:
+ To decode '<root>.barz' value:
  1. Index 0 indicates it's a object.
- 2. Parse a key string at index 2, which is not a  match for "number"
- 3. Skip the key's value by finding it's an array, then its 'index(afterValue:)' which is 11
- 4. Parse a key string at index 11, matching "number"
+ 2. Parse a key string at index 2, which is "foo", not a match for "barz"
+ 3. Skip the key and the value by advancing the index by 'mapSize' of them, 3 and 6.
+ 4. Parse a key string at index 11, matching "barz"
  5. Parse a value number at the pointer of index 15, length at index 16
 */
 
@@ -147,7 +147,7 @@ private struct JSONMapBuilder {
   mutating func closeCollection(handle: Int) {
     // 'handle': descriptor index.
     // 'handle+1': counter index.
-    mapData[handle + 1] = mapData.count - handle - 2
+    mapData[handle + 1] = mapData.count - handle
   }
 
   func finalize() -> JSONMap {
@@ -381,7 +381,7 @@ private struct JSONMapValue {
     case .number, .simpleString, .string:
       return 3
     case .array, .object:
-      return 2 &+ data[1]
+      return data[1]
     case nil:
       fatalError("invalid value descriptor")
     }

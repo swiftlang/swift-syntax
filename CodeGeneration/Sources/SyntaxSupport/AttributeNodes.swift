@@ -203,7 +203,8 @@ public let ATTRIBUTE_NODES: [Node] = [
       Child(
         name: "platformVersion",
         deprecatedName: "availabilityVersionRestriction",
-        kind: .node(kind: .platformVersion)
+        kind: .node(kind: .platformVersion),
+        documentation: "The platform/version pair, e.g. `iOS 10.1`"
       ),
       Child(
         name: "trailingComma",
@@ -292,15 +293,19 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "witnessMethodLabel",
-        kind: .token(choices: [.keyword(.witness_method)])
+        kind: .token(choices: [.keyword(.witness_method)]),
+        documentation: #"The `witnessMethod` label."#
       ),
       Child(
         name: "colon",
-        kind: .token(choices: [.token(.colon)])
+        kind: .token(choices: [.token(.colon)]),
+        documentation: #"The colon separating the `witnessMethod` label and the original protocol name."#
+
       ),
       Child(
         name: "protocolName",
-        kind: .token(choices: [.token(.identifier)])
+        kind: .token(choices: [.token(.identifier)]),
+        documentation: "The original protocol name."
       ),
     ]
   ),
@@ -454,6 +459,7 @@ public let ATTRIBUTE_NODES: [Node] = [
         name: "kindSpecifier",
         deprecatedName: "diffKind",
         kind: .token(choices: [.keyword(._forward), .keyword(.reverse), .keyword(._linear)]),
+        documentation: "The differentiability kind, if it exists.",
         isOptional: true
       ),
       Child(
@@ -467,6 +473,7 @@ public let ATTRIBUTE_NODES: [Node] = [
         name: "arguments",
         deprecatedName: "diffParams",
         kind: .node(kind: .differentiabilityWithRespectToArgument),
+        documentation: "The differentiability arguments, if any exists.",
         isOptional: true
       ),
       Child(
@@ -675,11 +682,13 @@ public let ATTRIBUTE_NODES: [Node] = [
         name: "name",
         kind: .node(kind: .token),
         nameForDiagnostics: "name",
+        documentation: "The identifier name for a nullary selection, if it exists.",
         isOptional: true
       ),
       Child(
         name: "colon",
         kind: .token(choices: [.token(.colon)]),
+        documentation: "The colon separating the label and the value or a colon representing an unlabeled argument",
         isOptional: true
       ),
     ]

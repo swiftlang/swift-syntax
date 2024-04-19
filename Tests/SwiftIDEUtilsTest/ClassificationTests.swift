@@ -35,7 +35,7 @@ class ClassificationTests: XCTestCase {
 
     assertClassification(
       "x/*yo*/ ",
-      in: ByteSourceRange(offset: 1, length: 6),
+      in: Range(position: AbsolutePosition(utf8Offset: 1), length: SourceLength(utf8Length: 6)),
       expected: [
         ClassificationSpec(source: "x", kind: .identifier),
         ClassificationSpec(source: "/*yo*/", kind: .blockComment),
@@ -49,7 +49,7 @@ class ClassificationTests: XCTestCase {
       // blah.
       let x/*yo*/ = 0
       """,
-      in: ByteSourceRange(offset: 7, length: 8),
+      in: Range(position: AbsolutePosition(utf8Offset: 7), length: SourceLength(utf8Length: 8)),
       expected: [
         ClassificationSpec(source: "// blah.", kind: .lineComment),
         ClassificationSpec(source: "let", kind: .keyword),
@@ -65,21 +65,24 @@ class ClassificationTests: XCTestCase {
       // blah.
       let x/*yo*/ = 0
       """,
-      in: ByteSourceRange(offset: 21, length: 2),
+      in: Range(position: AbsolutePosition(utf8Offset: 21), length: SourceLength(utf8Length: 2)),
       expected: []
     )
   }
 
   public func testClassificationAt() throws {
-    let tree = Parser.parse(source: "func foo() {}")
-    let keyword = try XCTUnwrap(tree.classification(at: 3))
-    let identifier = try XCTUnwrap(tree.classification(at: AbsolutePosition(utf8Offset: 6)))
+    let tree = Parser.parse(source: "func foo /* a */() {}")
 
+    let keyword = try XCTUnwrap(tree.classification(at: AbsolutePosition(utf8Offset: 3)))
     XCTAssertEqual(keyword.kind, .keyword)
-    XCTAssertEqual(keyword.range, ByteSourceRange(offset: 0, length: 4))
+    XCTAssertEqual(keyword.range, Range(position: AbsolutePosition(utf8Offset: 0), length: SourceLength(utf8Length: 4)))
 
+    let identifier = try XCTUnwrap(tree.classification(at: AbsolutePosition(utf8Offset: 6)))
     XCTAssertEqual(identifier.kind, .identifier)
-    XCTAssertEqual(identifier.range, ByteSourceRange(offset: 5, length: 3))
+    XCTAssertEqual(
+      identifier.range,
+      Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 3))
+    )
   }
 
   public func testTokenClassification() {

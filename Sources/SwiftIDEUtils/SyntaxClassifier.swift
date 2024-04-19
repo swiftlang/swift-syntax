@@ -44,7 +44,7 @@ extension TokenSyntax {
 
 extension RawTriviaPiece {
   func classify(offset: Int) -> SyntaxClassifiedRange {
-    let range = ByteSourceRange(offset: offset, length: byteLength)
+    let range = AbsolutePosition(utf8Offset: offset)..<AbsolutePosition(utf8Offset: offset + byteLength)
     switch self {
     case .lineComment: return .init(kind: .lineComment, range: range)
     case .blockComment: return .init(kind: .blockComment, range: range)
@@ -63,7 +63,7 @@ fileprivate struct TokenKindAndText {
     offset: Int,
     contextualClassification: (SyntaxClassification, Bool)?
   ) -> SyntaxClassifiedRange {
-    let range = ByteSourceRange(offset: offset, length: text.count)
+    let range = AbsolutePosition(utf8Offset: offset)..<AbsolutePosition(utf8Offset: offset + text.count)
 
     if let contextualClassify = contextualClassification {
       let (classify, force) = contextualClassify
@@ -91,10 +91,15 @@ fileprivate struct TokenKindAndText {
 /// Represents a source range that is associated with a syntax classification.
 public struct SyntaxClassifiedRange: Equatable, Sendable {
   public var kind: SyntaxClassification
-  public var range: ByteSourceRange
+  public var range: Range<AbsolutePosition>
 
+  @available(*, deprecated, message: "Use range.lowerBound.utf8Offset instead")
   public var offset: Int { return range.offset }
-  public var length: Int { return range.length }
+
+  @available(*, deprecated, message: "Use range.utf8Length instead")
+  public var length: Int { return range.length.utf8Length }
+
+  @available(*, deprecated, message: "Use range.upperBound.utf8Offset instead")
   public var endOffset: Int { return range.endOffset }
 }
 
@@ -110,19 +115,14 @@ private struct ClassificationVisitor {
     var contextualClassification: (SyntaxClassification, Bool)?
   }
 
-  /// Only tokens within this absolute range will be classified. No
-  /// classifications will be reported for tokens out of this range.
-  private var targetRange: ByteSourceRange
+  /// Only tokens within this range will be classified.
+  /// No classifications will be reported for tokens out of this range.
+  private var targetRange: Range<AbsolutePosition>
 
   var classifications: [SyntaxClassifiedRange]
 
-  /// Only classify tokens in `relativeClassificationRange`, where the start
-  /// offset is relative to `node`.
-  init(node: Syntax, relativeClassificationRange: ByteSourceRange) {
-    let range = ByteSourceRange(
-      offset: node.position.utf8Offset + relativeClassificationRange.offset,
-      length: relativeClassificationRange.length
-    )
+  /// Only classify tokens in `range`.
+  init(node: Syntax, range: Range<AbsolutePosition>) {
     self.targetRange = range
     self.classifications = []
 
@@ -140,24 +140,22 @@ private struct ClassificationVisitor {
   }
 
   private mutating func report(range: SyntaxClassifiedRange) {
-    if range.kind == .none && range.length == 0 {
+    if range.kind == .none && range.range.isEmpty {
       return
     }
 
     // Merge consecutive classified ranges of the same kind.
     if let last = classifications.last,
       last.kind == range.kind,
-      last.endOffset == range.offset
+      last.range.upperBound == range.range.lowerBound
     {
-      classifications[classifications.count - 1].range = ByteSourceRange(
-        offset: last.offset,
-        length: last.length + range.length
-      )
+      classifications[classifications.count - 1].range =
+        last.range.lowerBound..<(last.range.upperBound + range.range.length)
       return
     }
 
-    guard range.offset <= targetRange.endOffset,
-      range.endOffset >= targetRange.offset
+    guard range.range.lowerBound <= targetRange.upperBound,
+      range.range.upperBound >= targetRange.lowerBound
     else {
       return
     }
@@ -219,10 +217,9 @@ private struct ClassificationVisitor {
         let layoutNodeTextLength = child.byteLength - child.leadingTriviaByteLength - child.trailingTriviaByteLength
         let range = SyntaxClassifiedRange(
           kind: classification.classification,
-          range: ByteSourceRange(
-            offset: byteOffset,
-            length: layoutNodeTextLength
-          )
+          range: AbsolutePosition(
+            utf8Offset: byteOffset
+          )..<AbsolutePosition(utf8Offset: byteOffset + layoutNodeTextLength)
         )
         report(range: range)
         byteOffset += layoutNodeTextLength
@@ -250,10 +247,10 @@ private struct ClassificationVisitor {
   }
 
   private mutating func visit(_ descriptor: ClassificationVisitor.Descriptor) -> VisitResult {
-    guard descriptor.byteOffset < targetRange.endOffset else {
+    guard descriptor.byteOffset < targetRange.upperBound.utf8Offset else {
       return .break
     }
-    guard descriptor.byteOffset + descriptor.node.byteLength > targetRange.offset else {
+    guard descriptor.byteOffset + descriptor.node.byteLength > targetRange.lowerBound.utf8Offset else {
       return .continue
     }
     guard SyntaxTreeViewMode.sourceAccurate.shouldTraverse(node: descriptor.node) else {
@@ -273,8 +270,8 @@ public struct SyntaxClassifications: Sequence, Sendable {
 
   var classifications: [SyntaxClassifiedRange]
 
-  public init(_ node: Syntax, in relRange: ByteSourceRange) {
-    let visitor = ClassificationVisitor(node: node, relativeClassificationRange: relRange)
+  public init(_ node: Syntax, in range: Range<AbsolutePosition>) {
+    let visitor = ClassificationVisitor(node: node, range: range)
     self.classifications = visitor.classifications
   }
 

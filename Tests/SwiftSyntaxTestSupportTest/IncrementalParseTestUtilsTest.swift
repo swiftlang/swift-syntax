@@ -32,9 +32,18 @@ class IncrementalParseUtilTest: XCTestCase {
     XCTAssertEqual(
       concurrentEdits.edits,
       [
-        IncrementalEdit(offset: 0, length: 5, replacement: "struct"),
-        IncrementalEdit(offset: 27, length: 0, replacement: "let bar = 10"),
-        IncrementalEdit(offset: 35, length: 13, replacement: ""),
+        IncrementalEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 0), length: SourceLength(utf8Length: 5)),
+          replacement: "struct"
+        ),
+        IncrementalEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 27), length: SourceLength(utf8Length: 0)),
+          replacement: "let bar = 10"
+        ),
+        IncrementalEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 35), length: SourceLength(utf8Length: 13)),
+          replacement: ""
+        ),
       ]
     )
 
@@ -64,7 +73,10 @@ class IncrementalParseUtilTest: XCTestCase {
     XCTAssertEqual(
       concurrentEdits.edits,
       [
-        IncrementalEdit(offset: 0, length: 25, replacement: "🎉")
+        IncrementalEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 0), length: SourceLength(utf8Length: 25)),
+          replacement: "🎉"
+        )
       ]
     )
   }
@@ -79,7 +91,10 @@ class IncrementalParseUtilTest: XCTestCase {
     XCTAssertEqual(
       concurrentEdits.edits,
       [
-        IncrementalEdit(offset: 0, length: 1, replacement: "👨‍👩‍👧‍👦")
+        IncrementalEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 0), length: SourceLength(utf8Length: 1)),
+          replacement: "👨‍👩‍👧‍👦"
+        )
       ]
     )
   }

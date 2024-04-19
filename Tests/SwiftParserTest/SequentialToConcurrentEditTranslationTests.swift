@@ -52,7 +52,10 @@ func verifySequentialToConcurrentTranslation(
 
 fileprivate extension IncrementalEdit {
   init(offset: Int, length: Int, replacement: String) {
-    self.init(offset: offset, length: length, replacement: Array(replacement.utf8))
+    self.init(
+      range: Range(position: AbsolutePosition(utf8Offset: offset), length: SourceLength(utf8Length: length)),
+      replacement: Array(replacement.utf8)
+    )
   }
 }
 
@@ -344,7 +347,7 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
           IncrementalEdit(
             offset: Int.random(in: 0..<32),
             length: Int.random(in: 0..<32),
-            replacement: replacementBytes
+            replacement: String(data: Data(replacementBytes), encoding: .ascii)!
           )
         )
       }

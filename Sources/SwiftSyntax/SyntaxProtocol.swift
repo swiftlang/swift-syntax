@@ -444,19 +444,34 @@ public extension SyntaxProtocol {
   }
 
   /// The byte source range of this node including leading and trailing trivia.
+  @available(*, deprecated, renamed: "range")
   var totalByteRange: ByteSourceRange {
     return ByteSourceRange(offset: position.utf8Offset, length: totalLength.utf8Length)
+  }
+
+  /// The range of this node including leading and trailing trivia.
+  var range: Range<AbsolutePosition> {
+    return position..<endPosition
   }
 
   /// The byte source range of this node excluding leading and trailing trivia.
   ///
   /// - Note: If this node consists of multiple tokens, only the first token’s
   ///   leading and the last token’s trailing trivia will be trimmed.
+  @available(*, deprecated, renamed: "trimmedRange")
   var trimmedByteRange: ByteSourceRange {
     return ByteSourceRange(
       offset: positionAfterSkippingLeadingTrivia.utf8Offset,
       length: trimmedLength.utf8Length
     )
+  }
+
+  /// The range of this node excluding leading and trailing trivia.
+  ///
+  /// - Note: If this node consists of multiple tokens, only the first token’s
+  ///   leading and the last token’s trailing trivia will be trimmed.
+  var trimmedRange: Range<AbsolutePosition> {
+    return positionAfterSkippingLeadingTrivia..<endPositionBeforeTrailingTrivia
   }
 
   @available(*, deprecated, renamed: "trimmedLength")

@@ -591,10 +591,17 @@ extension JSONMapValue {
   /// instantiate 'Swift.String' unless there are escaped characters.
   func equals(to str: String) -> Bool {
     if self.is(.simpleString) {
-      let buffer = valueBuffer()
+      let lhs = valueBuffer()
       var str = str
-      return str.withUTF8 { utf8 in
-        utf8.count == buffer.count && memcmp(utf8.baseAddress, buffer.baseAddress, utf8.count) == 0
+      return str.withUTF8 { rhs in
+        if lhs.count != rhs.count {
+          return false
+        }
+        guard let lBase = lhs.baseAddress, let rBase = rhs.baseAddress else {
+          // If either `baseAddress` is `nil`, both are empty so returns `true`.
+          return true
+        }
+        return memcmp(lBase, rBase, lhs.count) == 0
       }
     }
     return self.asString() == str

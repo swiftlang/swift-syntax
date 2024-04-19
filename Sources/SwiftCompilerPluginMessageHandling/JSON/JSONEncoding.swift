@@ -78,12 +78,12 @@ private class JSONReference {
     .init(backing: .string(str))
   }
   @inline(__always)
-  static func number(_ integer: some BinaryInteger & CustomStringConvertible) -> JSONReference {
-    .init(backing: .number(integer.description))
+  static func number(_ integer: some BinaryInteger & LosslessStringConvertible) -> JSONReference {
+    .init(backing: .number(String(integer)))
   }
   @inline(__always)
-  static func number(_ floating: some BinaryFloatingPoint & CustomStringConvertible) -> JSONReference {
-    .init(backing: .number(floating.description))
+  static func number(_ floating: some BinaryFloatingPoint & LosslessStringConvertible) -> JSONReference {
+    .init(backing: .number(String(floating)))
   }
 }
 
@@ -246,10 +246,10 @@ extension JSONEncoding {
   func _encode(_ value: Bool) -> JSONReference {
     value ? .trueKeyword : .falseKeyword
   }
-  func _encode(_ value: some BinaryFloatingPoint & CustomStringConvertible) -> JSONReference {
+  func _encode(_ value: some BinaryFloatingPoint & LosslessStringConvertible) -> JSONReference {
     .number(value)
   }
-  func _encode(_ value: some BinaryInteger & CustomStringConvertible) -> JSONReference {
+  func _encode(_ value: some BinaryInteger & LosslessStringConvertible) -> JSONReference {
     .number(value)
   }
   func _encode(_ value: String) -> JSONReference {

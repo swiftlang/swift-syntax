@@ -106,11 +106,9 @@ private struct JSONMap {
   let data: [Int]
 
   /// Top-level value.
-  func withValue<T>(_ fn: (JSONMapValue) throws -> T) rethrows -> T {
-    try withExtendedLifetime(data) {
-      try data.withUnsafeBufferPointer { buf in
-        try fn(JSONMapValue(data: buf.baseAddress!))
-      }
+  func withValue<T>(_ body: (JSONMapValue) throws -> T) rethrows -> T {
+    try data.withUnsafeBufferPointer { buf in
+      try body(JSONMapValue(data: buf.baseAddress!))
     }
   }
 }
@@ -188,7 +186,7 @@ private struct JSONScanner {
   }
 
   @inline(__always)
-  mutating func skipWhilespace() {
+  mutating func skipWhitespace() {
     while hasData {
       switch ptr.pointee {
       case UInt8(ascii: " "), UInt8(ascii: "\t"), UInt8(ascii: "\n"), UInt8(ascii: "\r"):
@@ -291,15 +289,15 @@ private struct JSONScanner {
 
   mutating func scanObject() throws {
     let handle = map.startCollection(.object)
-    skipWhilespace()
+    skipWhitespace()
     if !advance(if: "}") {
       while hasData {
         try scanString(start: ptr)
-        skipWhilespace()
+        skipWhitespace()
         try expect(":")
         try scanValue()
         if advance(if: ",") {
-          skipWhilespace()
+          skipWhitespace()
           continue
         }
         break
@@ -311,12 +309,12 @@ private struct JSONScanner {
 
   mutating func scanArray() throws {
     let handle = map.startCollection(.array)
-    skipWhilespace()
+    skipWhitespace()
     if !advance(if: "]") {
       while hasData {
         try scanValue()
         if advance(if: ",") {
-          skipWhilespace()
+          skipWhitespace()
           continue
         }
         break
@@ -327,7 +325,7 @@ private struct JSONScanner {
   }
 
   mutating func scanValue() throws {
-    skipWhilespace()
+    skipWhitespace()
     let start = ptr
     switch try advance() {
     case UInt8(ascii: "n"):
@@ -347,7 +345,7 @@ private struct JSONScanner {
     case let chr:
       throw JSONError.unexpectedCharacter(chr, context: "value start")
     }
-    skipWhilespace()
+    skipWhitespace()
   }
 
   static func scan(buffer: UnsafeBufferPointer<UInt8>) throws -> JSONMap {
@@ -689,11 +687,6 @@ extension JSONMapValue {
     func contains(key: String) -> Bool {
       return find(key) != nil
     }
-
-    @inline(__always)
-    subscript(_ key: String) -> JSONMapValue? {
-      return find(key)
-    }
   }
 
   @inline(__always)
@@ -924,7 +917,7 @@ extension JSONDecoding.KeyedContainer: KeyedDecodingContainerProtocol {
 
   @inline(__always)
   func _getOrThrow(forKey key: Key) throws -> JSONMapValue {
-    if let value = mapping[key.stringValue] {
+    if let value = mapping.find(key.stringValue) {
       return value
     }
     throw DecodingError.keyNotFound(

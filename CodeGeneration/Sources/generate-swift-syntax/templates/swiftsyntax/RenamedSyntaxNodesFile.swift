@@ -34,14 +34,14 @@ let renamedSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     }
   }
 
-  try! ExtensionDeclSyntax("public extension SyntaxKind") {
+  try! ExtensionDeclSyntax("extension SyntaxKind") {
     let syntaxKinds = SyntaxNodeKind.allCases.sorted(by: { $0.deprecatedRawValue ?? "" < $1.deprecatedRawValue ?? "" })
     for syntaxKind in syntaxKinds {
       if let deprecatedName = syntaxKind.deprecatedRawValue {
         DeclSyntax(
           """
           \(deprecationAttribute(for: syntaxKind))
-          static var \(raw: deprecatedName): Self {
+          public static var \(raw: deprecatedName): Self {
             return .\(syntaxKind.varOrCaseName)
           }
           """

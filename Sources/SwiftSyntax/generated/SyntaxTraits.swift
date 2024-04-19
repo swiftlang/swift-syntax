@@ -32,29 +32,29 @@ public protocol BracedSyntax: SyntaxProtocol {
   }
 }
 
-public extension BracedSyntax {
+extension BracedSyntax {
   /// Without this function, the `with` function defined on `SyntaxProtocol`
   /// does not work on existentials of this protocol type.
   @_disfavoredOverload
-  func with<T>(_ keyPath: WritableKeyPath<BracedSyntax, T>, _ newChild: T) -> BracedSyntax {
+  public func with<T>(_ keyPath: WritableKeyPath<BracedSyntax, T>, _ newChild: T) -> BracedSyntax {
     var copy: BracedSyntax = self
     copy[keyPath: keyPath] = newChild
     return copy
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `BracedSyntax`.
   /// Note that this will incur an existential conversion.
-  func isProtocol(_: BracedSyntax.Protocol) -> Bool {
+  public func isProtocol(_: BracedSyntax.Protocol) -> Bool {
     return self.asProtocol(BracedSyntax.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `BracedSyntax`. Otherwise return `nil`.
   /// Note that this will incur an existential conversion.
-  func asProtocol(_: BracedSyntax.Protocol) -> BracedSyntax? {
+  public func asProtocol(_: BracedSyntax.Protocol) -> BracedSyntax? {
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? BracedSyntax
   }
 }
@@ -105,29 +105,29 @@ public protocol DeclGroupSyntax: SyntaxProtocol, DeclSyntaxProtocol {
   }
 }
 
-public extension DeclGroupSyntax {
+extension DeclGroupSyntax {
   /// Without this function, the `with` function defined on `SyntaxProtocol`
   /// does not work on existentials of this protocol type.
   @_disfavoredOverload
-  func with<T>(_ keyPath: WritableKeyPath<DeclGroupSyntax, T>, _ newChild: T) -> DeclGroupSyntax {
+  public func with<T>(_ keyPath: WritableKeyPath<DeclGroupSyntax, T>, _ newChild: T) -> DeclGroupSyntax {
     var copy: DeclGroupSyntax = self
     copy[keyPath: keyPath] = newChild
     return copy
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `DeclGroupSyntax`.
   /// Note that this will incur an existential conversion.
-  func isProtocol(_: DeclGroupSyntax.Protocol) -> Bool {
+  public func isProtocol(_: DeclGroupSyntax.Protocol) -> Bool {
     return self.asProtocol(DeclGroupSyntax.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `DeclGroupSyntax`. Otherwise return `nil`.
   /// Note that this will incur an existential conversion.
-  func asProtocol(_: DeclGroupSyntax.Protocol) -> DeclGroupSyntax? {
+  public func asProtocol(_: DeclGroupSyntax.Protocol) -> DeclGroupSyntax? {
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? DeclGroupSyntax
   }
 }
@@ -166,29 +166,29 @@ public protocol EffectSpecifiersSyntax: SyntaxProtocol {
   }
 }
 
-public extension EffectSpecifiersSyntax {
+extension EffectSpecifiersSyntax {
   /// Without this function, the `with` function defined on `SyntaxProtocol`
   /// does not work on existentials of this protocol type.
   @_disfavoredOverload
-  func with<T>(_ keyPath: WritableKeyPath<EffectSpecifiersSyntax, T>, _ newChild: T) -> EffectSpecifiersSyntax {
+  public func with<T>(_ keyPath: WritableKeyPath<EffectSpecifiersSyntax, T>, _ newChild: T) -> EffectSpecifiersSyntax {
     var copy: EffectSpecifiersSyntax = self
     copy[keyPath: keyPath] = newChild
     return copy
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `EffectSpecifiersSyntax`.
   /// Note that this will incur an existential conversion.
-  func isProtocol(_: EffectSpecifiersSyntax.Protocol) -> Bool {
+  public func isProtocol(_: EffectSpecifiersSyntax.Protocol) -> Bool {
     return self.asProtocol(EffectSpecifiersSyntax.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `EffectSpecifiersSyntax`. Otherwise return `nil`.
   /// Note that this will incur an existential conversion.
-  func asProtocol(_: EffectSpecifiersSyntax.Protocol) -> EffectSpecifiersSyntax? {
+  public func asProtocol(_: EffectSpecifiersSyntax.Protocol) -> EffectSpecifiersSyntax? {
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? EffectSpecifiersSyntax
   }
 }
@@ -249,29 +249,29 @@ public protocol FreestandingMacroExpansionSyntax: SyntaxProtocol {
   }
 }
 
-public extension FreestandingMacroExpansionSyntax {
+extension FreestandingMacroExpansionSyntax {
   /// Without this function, the `with` function defined on `SyntaxProtocol`
   /// does not work on existentials of this protocol type.
   @_disfavoredOverload
-  func with<T>(_ keyPath: WritableKeyPath<FreestandingMacroExpansionSyntax, T>, _ newChild: T) -> FreestandingMacroExpansionSyntax {
+  public func with<T>(_ keyPath: WritableKeyPath<FreestandingMacroExpansionSyntax, T>, _ newChild: T) -> FreestandingMacroExpansionSyntax {
     var copy: FreestandingMacroExpansionSyntax = self
     copy[keyPath: keyPath] = newChild
     return copy
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `FreestandingMacroExpansionSyntax`.
   /// Note that this will incur an existential conversion.
-  func isProtocol(_: FreestandingMacroExpansionSyntax.Protocol) -> Bool {
+  public func isProtocol(_: FreestandingMacroExpansionSyntax.Protocol) -> Bool {
     return self.asProtocol(FreestandingMacroExpansionSyntax.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `FreestandingMacroExpansionSyntax`. Otherwise return `nil`.
   /// Note that this will incur an existential conversion.
-  func asProtocol(_: FreestandingMacroExpansionSyntax.Protocol) -> FreestandingMacroExpansionSyntax? {
+  public func asProtocol(_: FreestandingMacroExpansionSyntax.Protocol) -> FreestandingMacroExpansionSyntax? {
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? FreestandingMacroExpansionSyntax
   }
 }
@@ -288,29 +288,29 @@ public protocol NamedDeclSyntax: SyntaxProtocol {
   }
 }
 
-public extension NamedDeclSyntax {
+extension NamedDeclSyntax {
   /// Without this function, the `with` function defined on `SyntaxProtocol`
   /// does not work on existentials of this protocol type.
   @_disfavoredOverload
-  func with<T>(_ keyPath: WritableKeyPath<NamedDeclSyntax, T>, _ newChild: T) -> NamedDeclSyntax {
+  public func with<T>(_ keyPath: WritableKeyPath<NamedDeclSyntax, T>, _ newChild: T) -> NamedDeclSyntax {
     var copy: NamedDeclSyntax = self
     copy[keyPath: keyPath] = newChild
     return copy
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `NamedDeclSyntax`.
   /// Note that this will incur an existential conversion.
-  func isProtocol(_: NamedDeclSyntax.Protocol) -> Bool {
+  public func isProtocol(_: NamedDeclSyntax.Protocol) -> Bool {
     return self.asProtocol(NamedDeclSyntax.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `NamedDeclSyntax`. Otherwise return `nil`.
   /// Note that this will incur an existential conversion.
-  func asProtocol(_: NamedDeclSyntax.Protocol) -> NamedDeclSyntax? {
+  public func asProtocol(_: NamedDeclSyntax.Protocol) -> NamedDeclSyntax? {
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? NamedDeclSyntax
   }
 }
@@ -332,29 +332,29 @@ public protocol MissingNodeSyntax: SyntaxProtocol {
   }
 }
 
-public extension MissingNodeSyntax {
+extension MissingNodeSyntax {
   /// Without this function, the `with` function defined on `SyntaxProtocol`
   /// does not work on existentials of this protocol type.
   @_disfavoredOverload
-  func with<T>(_ keyPath: WritableKeyPath<MissingNodeSyntax, T>, _ newChild: T) -> MissingNodeSyntax {
+  public func with<T>(_ keyPath: WritableKeyPath<MissingNodeSyntax, T>, _ newChild: T) -> MissingNodeSyntax {
     var copy: MissingNodeSyntax = self
     copy[keyPath: keyPath] = newChild
     return copy
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `MissingNodeSyntax`.
   /// Note that this will incur an existential conversion.
-  func isProtocol(_: MissingNodeSyntax.Protocol) -> Bool {
+  public func isProtocol(_: MissingNodeSyntax.Protocol) -> Bool {
     return self.asProtocol(MissingNodeSyntax.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `MissingNodeSyntax`. Otherwise return `nil`.
   /// Note that this will incur an existential conversion.
-  func asProtocol(_: MissingNodeSyntax.Protocol) -> MissingNodeSyntax? {
+  public func asProtocol(_: MissingNodeSyntax.Protocol) -> MissingNodeSyntax? {
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? MissingNodeSyntax
   }
 }
@@ -379,29 +379,29 @@ public protocol ParenthesizedSyntax: SyntaxProtocol {
   }
 }
 
-public extension ParenthesizedSyntax {
+extension ParenthesizedSyntax {
   /// Without this function, the `with` function defined on `SyntaxProtocol`
   /// does not work on existentials of this protocol type.
   @_disfavoredOverload
-  func with<T>(_ keyPath: WritableKeyPath<ParenthesizedSyntax, T>, _ newChild: T) -> ParenthesizedSyntax {
+  public func with<T>(_ keyPath: WritableKeyPath<ParenthesizedSyntax, T>, _ newChild: T) -> ParenthesizedSyntax {
     var copy: ParenthesizedSyntax = self
     copy[keyPath: keyPath] = newChild
     return copy
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `ParenthesizedSyntax`.
   /// Note that this will incur an existential conversion.
-  func isProtocol(_: ParenthesizedSyntax.Protocol) -> Bool {
+  public func isProtocol(_: ParenthesizedSyntax.Protocol) -> Bool {
     return self.asProtocol(ParenthesizedSyntax.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `ParenthesizedSyntax`. Otherwise return `nil`.
   /// Note that this will incur an existential conversion.
-  func asProtocol(_: ParenthesizedSyntax.Protocol) -> ParenthesizedSyntax? {
+  public func asProtocol(_: ParenthesizedSyntax.Protocol) -> ParenthesizedSyntax? {
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? ParenthesizedSyntax
   }
 }
@@ -415,29 +415,29 @@ public protocol WithAttributesSyntax: SyntaxProtocol {
   }
 }
 
-public extension WithAttributesSyntax {
+extension WithAttributesSyntax {
   /// Without this function, the `with` function defined on `SyntaxProtocol`
   /// does not work on existentials of this protocol type.
   @_disfavoredOverload
-  func with<T>(_ keyPath: WritableKeyPath<WithAttributesSyntax, T>, _ newChild: T) -> WithAttributesSyntax {
+  public func with<T>(_ keyPath: WritableKeyPath<WithAttributesSyntax, T>, _ newChild: T) -> WithAttributesSyntax {
     var copy: WithAttributesSyntax = self
     copy[keyPath: keyPath] = newChild
     return copy
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `WithAttributesSyntax`.
   /// Note that this will incur an existential conversion.
-  func isProtocol(_: WithAttributesSyntax.Protocol) -> Bool {
+  public func isProtocol(_: WithAttributesSyntax.Protocol) -> Bool {
     return self.asProtocol(WithAttributesSyntax.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `WithAttributesSyntax`. Otherwise return `nil`.
   /// Note that this will incur an existential conversion.
-  func asProtocol(_: WithAttributesSyntax.Protocol) -> WithAttributesSyntax? {
+  public func asProtocol(_: WithAttributesSyntax.Protocol) -> WithAttributesSyntax? {
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithAttributesSyntax
   }
 }
@@ -451,29 +451,29 @@ public protocol WithCodeBlockSyntax: SyntaxProtocol {
   }
 }
 
-public extension WithCodeBlockSyntax {
+extension WithCodeBlockSyntax {
   /// Without this function, the `with` function defined on `SyntaxProtocol`
   /// does not work on existentials of this protocol type.
   @_disfavoredOverload
-  func with<T>(_ keyPath: WritableKeyPath<WithCodeBlockSyntax, T>, _ newChild: T) -> WithCodeBlockSyntax {
+  public func with<T>(_ keyPath: WritableKeyPath<WithCodeBlockSyntax, T>, _ newChild: T) -> WithCodeBlockSyntax {
     var copy: WithCodeBlockSyntax = self
     copy[keyPath: keyPath] = newChild
     return copy
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `WithCodeBlockSyntax`.
   /// Note that this will incur an existential conversion.
-  func isProtocol(_: WithCodeBlockSyntax.Protocol) -> Bool {
+  public func isProtocol(_: WithCodeBlockSyntax.Protocol) -> Bool {
     return self.asProtocol(WithCodeBlockSyntax.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `WithCodeBlockSyntax`. Otherwise return `nil`.
   /// Note that this will incur an existential conversion.
-  func asProtocol(_: WithCodeBlockSyntax.Protocol) -> WithCodeBlockSyntax? {
+  public func asProtocol(_: WithCodeBlockSyntax.Protocol) -> WithCodeBlockSyntax? {
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithCodeBlockSyntax
   }
 }
@@ -497,29 +497,29 @@ public protocol WithGenericParametersSyntax: SyntaxProtocol {
   }
 }
 
-public extension WithGenericParametersSyntax {
+extension WithGenericParametersSyntax {
   /// Without this function, the `with` function defined on `SyntaxProtocol`
   /// does not work on existentials of this protocol type.
   @_disfavoredOverload
-  func with<T>(_ keyPath: WritableKeyPath<WithGenericParametersSyntax, T>, _ newChild: T) -> WithGenericParametersSyntax {
+  public func with<T>(_ keyPath: WritableKeyPath<WithGenericParametersSyntax, T>, _ newChild: T) -> WithGenericParametersSyntax {
     var copy: WithGenericParametersSyntax = self
     copy[keyPath: keyPath] = newChild
     return copy
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `WithGenericParametersSyntax`.
   /// Note that this will incur an existential conversion.
-  func isProtocol(_: WithGenericParametersSyntax.Protocol) -> Bool {
+  public func isProtocol(_: WithGenericParametersSyntax.Protocol) -> Bool {
     return self.asProtocol(WithGenericParametersSyntax.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `WithGenericParametersSyntax`. Otherwise return `nil`.
   /// Note that this will incur an existential conversion.
-  func asProtocol(_: WithGenericParametersSyntax.Protocol) -> WithGenericParametersSyntax? {
+  public func asProtocol(_: WithGenericParametersSyntax.Protocol) -> WithGenericParametersSyntax? {
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithGenericParametersSyntax
   }
 }
@@ -533,29 +533,29 @@ public protocol WithModifiersSyntax: SyntaxProtocol {
   }
 }
 
-public extension WithModifiersSyntax {
+extension WithModifiersSyntax {
   /// Without this function, the `with` function defined on `SyntaxProtocol`
   /// does not work on existentials of this protocol type.
   @_disfavoredOverload
-  func with<T>(_ keyPath: WritableKeyPath<WithModifiersSyntax, T>, _ newChild: T) -> WithModifiersSyntax {
+  public func with<T>(_ keyPath: WritableKeyPath<WithModifiersSyntax, T>, _ newChild: T) -> WithModifiersSyntax {
     var copy: WithModifiersSyntax = self
     copy[keyPath: keyPath] = newChild
     return copy
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `WithModifiersSyntax`.
   /// Note that this will incur an existential conversion.
-  func isProtocol(_: WithModifiersSyntax.Protocol) -> Bool {
+  public func isProtocol(_: WithModifiersSyntax.Protocol) -> Bool {
     return self.asProtocol(WithModifiersSyntax.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `WithModifiersSyntax`. Otherwise return `nil`.
   /// Note that this will incur an existential conversion.
-  func asProtocol(_: WithModifiersSyntax.Protocol) -> WithModifiersSyntax? {
+  public func asProtocol(_: WithModifiersSyntax.Protocol) -> WithModifiersSyntax? {
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithModifiersSyntax
   }
 }
@@ -569,29 +569,29 @@ public protocol WithOptionalCodeBlockSyntax: SyntaxProtocol {
   }
 }
 
-public extension WithOptionalCodeBlockSyntax {
+extension WithOptionalCodeBlockSyntax {
   /// Without this function, the `with` function defined on `SyntaxProtocol`
   /// does not work on existentials of this protocol type.
   @_disfavoredOverload
-  func with<T>(_ keyPath: WritableKeyPath<WithOptionalCodeBlockSyntax, T>, _ newChild: T) -> WithOptionalCodeBlockSyntax {
+  public func with<T>(_ keyPath: WritableKeyPath<WithOptionalCodeBlockSyntax, T>, _ newChild: T) -> WithOptionalCodeBlockSyntax {
     var copy: WithOptionalCodeBlockSyntax = self
     copy[keyPath: keyPath] = newChild
     return copy
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `WithOptionalCodeBlockSyntax`.
   /// Note that this will incur an existential conversion.
-  func isProtocol(_: WithOptionalCodeBlockSyntax.Protocol) -> Bool {
+  public func isProtocol(_: WithOptionalCodeBlockSyntax.Protocol) -> Bool {
     return self.asProtocol(WithOptionalCodeBlockSyntax.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `WithOptionalCodeBlockSyntax`. Otherwise return `nil`.
   /// Note that this will incur an existential conversion.
-  func asProtocol(_: WithOptionalCodeBlockSyntax.Protocol) -> WithOptionalCodeBlockSyntax? {
+  public func asProtocol(_: WithOptionalCodeBlockSyntax.Protocol) -> WithOptionalCodeBlockSyntax? {
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithOptionalCodeBlockSyntax
   }
 }
@@ -605,29 +605,29 @@ public protocol WithStatementsSyntax: SyntaxProtocol {
   }
 }
 
-public extension WithStatementsSyntax {
+extension WithStatementsSyntax {
   /// Without this function, the `with` function defined on `SyntaxProtocol`
   /// does not work on existentials of this protocol type.
   @_disfavoredOverload
-  func with<T>(_ keyPath: WritableKeyPath<WithStatementsSyntax, T>, _ newChild: T) -> WithStatementsSyntax {
+  public func with<T>(_ keyPath: WritableKeyPath<WithStatementsSyntax, T>, _ newChild: T) -> WithStatementsSyntax {
     var copy: WithStatementsSyntax = self
     copy[keyPath: keyPath] = newChild
     return copy
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `WithStatementsSyntax`.
   /// Note that this will incur an existential conversion.
-  func isProtocol(_: WithStatementsSyntax.Protocol) -> Bool {
+  public func isProtocol(_: WithStatementsSyntax.Protocol) -> Bool {
     return self.asProtocol(WithStatementsSyntax.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `WithStatementsSyntax`. Otherwise return `nil`.
   /// Note that this will incur an existential conversion.
-  func asProtocol(_: WithStatementsSyntax.Protocol) -> WithStatementsSyntax? {
+  public func asProtocol(_: WithStatementsSyntax.Protocol) -> WithStatementsSyntax? {
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithStatementsSyntax
   }
 }
@@ -644,29 +644,29 @@ public protocol WithTrailingCommaSyntax: SyntaxProtocol {
   }
 }
 
-public extension WithTrailingCommaSyntax {
+extension WithTrailingCommaSyntax {
   /// Without this function, the `with` function defined on `SyntaxProtocol`
   /// does not work on existentials of this protocol type.
   @_disfavoredOverload
-  func with<T>(_ keyPath: WritableKeyPath<WithTrailingCommaSyntax, T>, _ newChild: T) -> WithTrailingCommaSyntax {
+  public func with<T>(_ keyPath: WritableKeyPath<WithTrailingCommaSyntax, T>, _ newChild: T) -> WithTrailingCommaSyntax {
     var copy: WithTrailingCommaSyntax = self
     copy[keyPath: keyPath] = newChild
     return copy
   }
 }
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// `WithTrailingCommaSyntax`.
   /// Note that this will incur an existential conversion.
-  func isProtocol(_: WithTrailingCommaSyntax.Protocol) -> Bool {
+  public func isProtocol(_: WithTrailingCommaSyntax.Protocol) -> Bool {
     return self.asProtocol(WithTrailingCommaSyntax.self) != nil
   }
   
   /// Return the non-type erased version of this syntax node if it conforms to
   /// `WithTrailingCommaSyntax`. Otherwise return `nil`.
   /// Note that this will incur an existential conversion.
-  func asProtocol(_: WithTrailingCommaSyntax.Protocol) -> WithTrailingCommaSyntax? {
+  public func asProtocol(_: WithTrailingCommaSyntax.Protocol) -> WithTrailingCommaSyntax? {
     return Syntax(self).asProtocol(SyntaxProtocol.self) as? WithTrailingCommaSyntax
   }
 }

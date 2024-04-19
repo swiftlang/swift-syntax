@@ -5,4 +5,12 @@ common --lockfile_mode=off
 build --features=swift.use_explicit_swift_module_map
 build --host_features=swift.use_explicit_swift_module_map
 
+# Improved build performance
+build --host_swiftcopt=-whole-module-optimization
+build --swiftcopt=-whole-module-optimization
+
+# Keep in sync with Package.swift
+build --host_macos_minimum_os=10.15
+build --macos_minimum_os=10.15
+
 test --test_output=errors

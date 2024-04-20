@@ -94,14 +94,33 @@ func decodeFromJSON<T: Decodable>(json: UnsafeBufferPointer<UInt8>) throws -> T 
 
 private struct JSONMap {
   enum Descriptor: Int {
-    case nullKeyword  // [desc]
-    case trueKeyword  // [desc]
-    case falseKeyword  // [desc]
-    case number  // [desc, pointer, length]
-    case simpleString  // [desc, pointer, length]
-    case string  // [desc, pointer, length]
-    case object  // [desc, count, (key, value)...]
-    case array  // [desc, count, element...]
+
+    // MARK: - Keywords; size:1 [desc]
+
+    /// 'null'
+    case nullKeyword
+    /// 'true' size:1
+    case trueKeyword
+    /// 'false' size:1
+    case falseKeyword
+
+    // MARK: - Scalar values; size:3 [desc, pointer, length]
+
+    /// Integer and floating number.
+    case number
+    /// ASCII non-escaped string.
+    case asciiSimpleString
+    /// Non escaped string.
+    case simpleString
+    /// String with escape sequences.
+    case string
+
+    // MARK: - Collections; size: 2 + variable [desc, size, element...]
+
+    /// Object '{ ... }'. Elements are (key, value)...
+    case object
+    /// Array '[ ... ]'.
+    case array
   }
   let data: [Int]
 
@@ -261,16 +280,31 @@ private struct JSONScanner {
   mutating func scanString(start: Cursor) throws {
     ptr = start
     try expect("\"")
+
     var hasEscape = false
+    var hasNonASCII = false
     while hasData && ptr.pointee != UInt8(ascii: "\"") {
+      // FIXME: Error for non-escaped control characters.
+      // FIXME: Error for invalid UTF8 sequences.
       if ptr.pointee == UInt8(ascii: "\\") {
         hasEscape = true
         _ = try advance()
+      } else if ptr.pointee >= 0x80 {
+        hasNonASCII = true
       }
       _ = try advance()
     }
     try expect("\"")
-    map.record(hasEscape ? .string : .simpleString, range: (start + 1)..<(ptr - 1))
+
+    let kind: JSONMap.Descriptor
+    if hasEscape {
+      kind = .string
+    } else if hasNonASCII {
+      kind = .simpleString
+    } else {
+      kind = .asciiSimpleString
+    }
+    map.record(kind, range: (start + 1)..<(ptr - 1))
   }
 
   mutating func scanNumber(start: Cursor) throws {
@@ -376,7 +410,7 @@ private struct JSONMapValue {
     switch JSONMap.Descriptor(rawValue: data[0]) {
     case .nullKeyword, .trueKeyword, .falseKeyword:
       return 1
-    case .number, .simpleString, .string:
+    case .number, .asciiSimpleString, .simpleString, .string:
       return 3
     case .array, .object:
       return data[1]
@@ -412,79 +446,133 @@ extension JSONMapValue {
 
 // MARK: Scalar values
 private enum _JSONStringParser {
-  /// Decode .simpleString value from the buffer.
+  /// Decode a non-escaped string value from the buffer.
+  @inline(__always)
   static func decodeSimpleString(source: UnsafeBufferPointer<UInt8>) -> String {
     if source.count <= 0 {
       return ""
     }
-    if #available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *) {
-      return String(unsafeUninitializedCapacity: source.count) { buffer in
-        buffer.initialize(fromContentsOf: source)
-      }
-    } else {
-      return String(decoding: source, as: UTF8.self)
+    return _makeString(unsafeUninitializedCapacity: source.count) { buffer in
+      buffer.initialize(fromContentsOf: source)
     }
   }
 
-  /// Helper iterator decoding UTF8 sequence to UnicodeScalar stream.
-  struct ScalarIterator<S: Sequence>: IteratorProtocol where S.Element == UInt8 {
-    var backing: S.Iterator
-    var decoder: UTF8
-    init(_ source: S) {
-      self.backing = source.makeIterator()
-      self.decoder = UTF8()
-    }
-    mutating func next() -> UnicodeScalar? {
-      switch decoder.decode(&backing) {
-      case .scalarValue(let scalar): return scalar
-      case .emptyInput: return nil
-      case .error: fatalError("invalid")
-      }
-    }
-  }
-
+  /// Decode a string value that includes escape sequences.
   static func decodeStringWithEscapes(source: UnsafeBufferPointer<UInt8>) -> String? {
-    var string: String = ""
-    string.reserveCapacity(source.count)
-    var iter = ScalarIterator(source)
-    while let scalar = iter.next() {
-      // NOTE: We don't report detailed errors because we only care well-formed
-      // payloads from the compiler.
-      if scalar == "\\" {
-        switch iter.next() {
-        case "\"": string.append("\"")
-        case "'": string.append("'")
-        case "\\": string.append("\\")
-        case "/": string.append("/")
-        case "b": string.append("\u{08}")
-        case "f": string.append("\u{0C}")
-        case "n": string.append("\u{0A}")
-        case "r": string.append("\u{0D}")
-        case "t": string.append("\u{09}")
-        case "u":
-          // We don't care performance of this because \uFFFF style escape is
-          // pretty rare. We only do it for control characters.
-          let buffer: [UInt8] = [iter.next(), iter.next(), iter.next(), iter.next()]
-            .compactMap { $0 }
-            .compactMap { UInt8(exactly: $0.value) }
+    // JSON string with escape sequences must be 2 bytes or longer.
+    assert(source.count > 0)
 
-          guard
-            buffer.count == 4,
-            let result: UInt16 = buffer.withUnsafeBufferPointer(_JSONNumberParser.parseHexIntegerDigits(source:)),
-            let scalar = UnicodeScalar(result)
-          else {
-            return nil
-          }
-          string.append(Character(scalar))
-        default:
-          // invalid escape sequence
-          return nil
-        }
-      } else {
-        string.append(Character(scalar))
+    // Decode 'source' UTF-8 JSON string literal into the uninitialized
+    // UTF-8 buffer. Upon error, return 0 and make an empty string.
+    let decoded = _makeString(unsafeUninitializedCapacity: source.count) { buffer in
+
+      var cursor = source.baseAddress!
+      let end = cursor + source.count
+      var mark = cursor
+
+      var dest = buffer.baseAddress!
+
+      @inline(__always) func flush() {
+        let count = mark.distance(to: cursor)
+        dest.initialize(from: mark, count: count)
+        dest += count
       }
+
+      while cursor != end {
+        if cursor.pointee != UInt8(ascii: "\\") {
+          cursor += 1
+          continue
+        }
+
+        // Found an escape sequence. Flush the skipped source into the buffer.
+        flush()
+
+        let hadError = decodeEscapeSequence(cursor: &cursor, end: end) {
+          dest.initialize(to: $0)
+          dest += 1
+        }
+        guard !hadError else { return 0 }
+
+        // Mark the position of the end of the escape sequence.
+        mark = cursor
+      }
+
+      // Flush the remaining non-escaped characters.
+      flush()
+
+      return buffer.baseAddress!.distance(to: dest)
     }
-    return string
+
+    // If any error is detected, empty string is created.
+    return decoded.isEmpty ? nil : decoded
+  }
+
+  /// Decode a JSON escape sequence, advance 'cursor' to end of the escape
+  /// sequence, and call 'processCodeUnit' with the decoded value.
+  /// Returns 'true' on error.
+  ///
+  /// NOTE: We don't report detailed errors for now because we only care
+  /// well-formed payloads from the compiler.
+  private static func decodeEscapeSequence(
+    cursor: inout UnsafePointer<UInt8>,
+    end: UnsafePointer<UInt8>,
+    into processCodeUnit: (UInt8) -> Void
+  ) -> Bool {
+    assert(cursor.pointee == UInt8(ascii: "\\"))
+    guard cursor.distance(to: end) >= 2 else { return true }
+
+    // Eat backslash and the next character.
+    cursor += 2
+    switch cursor[-1] {
+    case UInt8(ascii: "\""): processCodeUnit(UInt8(ascii: "\""))
+    case UInt8(ascii: "'"): processCodeUnit(UInt8(ascii: "'"))
+    case UInt8(ascii: "\\"): processCodeUnit(UInt8(ascii: "\\"))
+    case UInt8(ascii: "/"): processCodeUnit(UInt8(ascii: "/"))
+    case UInt8(ascii: "b"): processCodeUnit(0x08)
+    case UInt8(ascii: "f"): processCodeUnit(0x0C)
+    case UInt8(ascii: "n"): processCodeUnit(0x0A)
+    case UInt8(ascii: "r"): processCodeUnit(0x0D)
+    case UInt8(ascii: "t"): processCodeUnit(0x09)
+    case UInt8(ascii: "u"):
+      guard cursor.distance(to: end) >= 4 else { return true }
+
+      // Parse 4 hex digits into a UTF-16 code unit.
+      let result: UInt16? = _JSONNumberParser.parseHexIntegerDigits(
+        source: UnsafeBufferPointer(start: cursor, count: 4)
+      )
+      guard let result else { return true }
+
+      // Transcode UTF-16 code unit to UTF-8.
+      // FIXME: Support surrogate pairs.
+      let hadError = transcode(
+        CollectionOfOne(result).makeIterator(),
+        from: UTF16.self,
+        to: UTF8.self,
+        stoppingOnError: true,
+        into: processCodeUnit
+      )
+      guard !hadError else { return true }
+      cursor += 4
+    default:
+      // invalid escape sequence.
+      return true
+    }
+    return false
+  }
+
+  /// SwiftStdlib 5.3 compatibility shim for
+  /// 'String.init(unsafeUninitializedCapacity:initializingUTF8With:)'
+  private static func _makeString(
+    unsafeUninitializedCapacity capacity: Int,
+    initializingUTF8With initializer: (UnsafeMutableBufferPointer<UInt8>) throws -> Int
+  ) rethrows -> String {
+    if #available(macOS 11.0, iOS 14.0, watchOS 7.0, tvOS 14.0, *) {
+      return try String(unsafeUninitializedCapacity: capacity, initializingUTF8With: initializer)
+    } else {
+      let buffer = UnsafeMutableBufferPointer<UInt8>.allocate(capacity: capacity)
+      let count = try initializer(buffer)
+      return String(decoding: buffer[..<count], as: UTF8.self)
+    }
   }
 }
 
@@ -574,7 +662,7 @@ extension JSONMapValue {
 
   @inline(__always)
   func asString() -> String? {
-    if self.is(.simpleString) {
+    if self.is(.asciiSimpleString) || self.is(.simpleString) {
       return _JSONStringParser.decodeSimpleString(source: valueBuffer())
     }
     if self.is(.string) {
@@ -583,12 +671,12 @@ extension JSONMapValue {
     return nil
   }
 
-  /// Returns true if this value represents a string, and it equals to 'str'.
+  /// Returns true if this value represents a string and equals to 'str'.
   ///
   /// This is faster than 'value.asString() == str' because this doesn't
   /// instantiate 'Swift.String' unless there are escaped characters.
   func equals(to str: String) -> Bool {
-    if self.is(.simpleString) {
+    if self.is(.asciiSimpleString) {
       let lhs = valueBuffer()
       var str = str
       return str.withUTF8 { rhs in

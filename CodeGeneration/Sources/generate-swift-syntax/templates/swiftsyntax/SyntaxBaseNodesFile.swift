@@ -145,14 +145,14 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """#
     )
 
-    try! ExtensionDeclSyntax("public extension Syntax") {
+    try! ExtensionDeclSyntax("extension Syntax") {
       DeclSyntax(
         """
         /// Check whether the non-type erased version of this syntax node conforms to
         /// \(node.kind.protocolType).
         ///
         ///  - Note:  This will incur an existential conversion.
-        func isProtocol(_: \(node.kind.protocolType).Protocol) -> Bool {
+        public func isProtocol(_: \(node.kind.protocolType).Protocol) -> Bool {
           return self.asProtocol(\(node.kind.protocolType).self) != nil
         }
         """
@@ -164,7 +164,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         /// \(node.kind.protocolType). Otherwise return nil.
         ///
         ///  - Note:  This will incur an existential conversion.
-        func asProtocol(_: \(node.kind.protocolType).Protocol) -> \(node.kind.protocolType)? {
+        public func asProtocol(_: \(node.kind.protocolType).Protocol) -> \(node.kind.protocolType)? {
           return self.asProtocol(SyntaxProtocol.self) as? \(node.kind.protocolType)
         }
         """
@@ -337,7 +337,7 @@ private func leafProtocolDecl(type: TypeSyntax, inheritedType: TypeSyntax) -> De
 private func leafProtocolExtension(type: TypeSyntax, inheritedType: TypeSyntax) -> DeclSyntax {
   DeclSyntax(
     #"""
-    public extension \#(type) {
+    extension \#(type) {
       /// Checks if the current leaf syntax node can be cast to a different specified type.
       ///
       /// - Returns: `false` since the leaf node cannot be cast to a different specified type.
@@ -345,7 +345,7 @@ private func leafProtocolExtension(type: TypeSyntax, inheritedType: TypeSyntax) 
       /// - Note: This method overloads the general `is` method and is marked as deprecated to produce a warning,
       ///         informing the user that the cast will always fail.
       @available(*, deprecated, message: "This cast will always fail")
-      func `is`<S: \#(inheritedType)>(_ syntaxType: S.Type) -> Bool {
+      public func `is`<S: \#(inheritedType)>(_ syntaxType: S.Type) -> Bool {
         return false
       }
 
@@ -356,7 +356,7 @@ private func leafProtocolExtension(type: TypeSyntax, inheritedType: TypeSyntax) 
       /// - Note: This method overloads the general `as` method and is marked as deprecated to produce a warning,
       ///         informing the user that the cast will always fail.
       @available(*, deprecated, message: "This cast will always fail")
-      func `as`<S: \#(inheritedType)>(_ syntaxType: S.Type) -> S? {
+      public func `as`<S: \#(inheritedType)>(_ syntaxType: S.Type) -> S? {
         return nil
       }
 
@@ -368,7 +368,7 @@ private func leafProtocolExtension(type: TypeSyntax, inheritedType: TypeSyntax) 
       ///         informing the user that the cast will always fail.
       /// - Warning: Invoking this method will lead to a fatal error.
       @available(*, deprecated, message: "This cast will always fail")
-      func cast<S: \#(inheritedType)>(_ syntaxType: S.Type) -> S {
+      public func cast<S: \#(inheritedType)>(_ syntaxType: S.Type) -> S {
         fatalError("\(Self.self) cannot be cast to \(S.self)")
       }
     }

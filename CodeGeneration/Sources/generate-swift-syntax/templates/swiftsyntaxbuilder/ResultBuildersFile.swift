@@ -60,8 +60,8 @@ let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      public extension \(type.syntaxBaseName) {
-        init(@\(type.resultBuilderType) itemsBuilder: () throws -> \(type.syntaxBaseName)) rethrows {
+      extension \(type.syntaxBaseName) {
+        public init(@\(type.resultBuilderType) itemsBuilder: () throws -> \(type.syntaxBaseName)) rethrows {
           self = try itemsBuilder()
         }
       }

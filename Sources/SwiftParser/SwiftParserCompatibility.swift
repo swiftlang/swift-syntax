@@ -15,14 +15,14 @@ import SwiftSyntax
 // This file provides compatibility aliases to keep dependents of SwiftSyntax building.
 // All users of the declarations in this file should transition away from them ASAP.
 
-public extension TokenSpec {
+extension TokenSpec {
   @available(*, deprecated, renamed: "leftSquare")
-  static var leftSquareBracket: TokenSpec {
+  public static var leftSquareBracket: TokenSpec {
     return .leftSquare
   }
 
   @available(*, deprecated, renamed: "rightSquare")
-  static var rightSquareBracket: TokenSpec {
+  public static var rightSquareBracket: TokenSpec {
     return .rightSquare
   }
 }

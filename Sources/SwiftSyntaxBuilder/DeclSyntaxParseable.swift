@@ -22,7 +22,7 @@ import SwiftSyntax
 /// - Warning: This protocol is considered an implementation detail. Do not rely
 ///   on it, only the initializer that it adds.
 public protocol DeclSyntaxParseable: DeclSyntaxProtocol {}
-public extension DeclSyntaxParseable {
+extension DeclSyntaxParseable {
   /// Create a syntax node from the given string interpolation.
   ///
   /// This initializer throws if the syntax node was not able to be parsed as
@@ -30,7 +30,7 @@ public extension DeclSyntaxParseable {
   ///
   /// If there are syntax errors in the string, the initializer will return a
   /// node that contains errors without throwing.
-  init(_ stringInterpolation: SyntaxNodeString) throws {
+  public init(_ stringInterpolation: SyntaxNodeString) throws {
     let node: DeclSyntax = "\(stringInterpolation)"
     if let castedDecl = node.as(Self.self) {
       self = castedDecl

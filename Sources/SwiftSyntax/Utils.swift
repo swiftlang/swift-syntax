@@ -13,24 +13,24 @@
 @available(*, deprecated, message: "Use Range<AbsolutePosition> instead")
 public typealias ByteSourceRange = Range<AbsolutePosition>
 
-public extension Range<AbsolutePosition> {
+extension Range<AbsolutePosition> {
   @available(*, deprecated, message: "Use lowerBound.utf8Offset instead")
-  var offset: Int { lowerBound.utf8Offset }
+  public var offset: Int { lowerBound.utf8Offset }
 
   @available(*, deprecated, message: "Construct a Range<AbsolutePosition> instead")
-  init(offset: Int, length: Int) {
+  public init(offset: Int, length: Int) {
     self = AbsolutePosition(utf8Offset: offset)..<AbsolutePosition(utf8Offset: offset + length)
   }
 
   @available(*, deprecated, message: "Use upperBound.utf8Offset instead")
-  var endOffset: Int {
+  public var endOffset: Int {
     return upperBound.utf8Offset
   }
 
   /// Returns the range for the overlapping region between two ranges.
   ///
   /// If the intersection is empty, this returns a range starting at offset 0 and having length 0.
-  func intersected(_ other: Range<AbsolutePosition>) -> Range<AbsolutePosition> {
+  public func intersected(_ other: Range<AbsolutePosition>) -> Range<AbsolutePosition> {
     return self.clamped(to: other)
   }
 }

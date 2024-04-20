@@ -10,20 +10,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-public extension StringProtocol {
-  var withFirstCharacterLowercased: String {
+extension StringProtocol {
+  public var withFirstCharacterLowercased: String {
     guard first?.isLetter ?? false else {
       return String(first!) + dropFirst().withFirstCharacterLowercased
     }
     return prefix(1).lowercased() + dropFirst()
   }
-  var withFirstCharacterUppercased: String {
+  public var withFirstCharacterUppercased: String {
     guard first?.isLetter ?? false else {
       return String(first!) + dropFirst().withFirstCharacterUppercased
     }
     return prefix(1).uppercased() + dropFirst()
   }
-  var backtickedIfNeeded: String {
+  public var backtickedIfNeeded: String {
     if Keyword.allCases.map(\.spec).contains(where: {
       $0.name == self && ($0.isLexerClassified || $0.name == "Type" || $0.name == "Protocol")
     }) {

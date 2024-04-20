@@ -22,8 +22,8 @@ public enum FormatMode {
   case disabled
 }
 
-public extension Macro {
-  static var formatMode: FormatMode {
+extension Macro {
+  public static var formatMode: FormatMode {
     return .auto
   }
 }

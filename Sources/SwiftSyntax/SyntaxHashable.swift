@@ -15,12 +15,12 @@ public protocol SyntaxHashable: Hashable {
   var _syntaxNode: Syntax { get }
 }
 
-public extension SyntaxHashable {
-  func hash(into hasher: inout Hasher) {
+extension SyntaxHashable {
+  public func hash(into hasher: inout Hasher) {
     return _syntaxNode.id.hash(into: &hasher)
   }
 
-  static func == (lhs: Self, rhs: Self) -> Bool {
+  public static func == (lhs: Self, rhs: Self) -> Bool {
     return lhs._syntaxNode.id == rhs._syntaxNode.id
   }
 }

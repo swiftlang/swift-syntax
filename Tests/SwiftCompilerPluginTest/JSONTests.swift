@@ -94,11 +94,11 @@ final class JSONTests: XCTestCase {
     )
   }
 
-  func testUnicodeEscape() {
+  func testEscapedString() {
     _testRoundTrip(
-      of: "\n\u{A9}\u{0}\u{07}\u{1B}",
+      of: "\n\"\\\u{A9}\u{0}\u{07}\u{1B}",
       expectedJSON: #"""
-        "\n©\u0000\u0007\u001B"
+        "\n\"\\©\u0000\u0007\u001B"
         """#
     )
   }
@@ -128,6 +128,21 @@ final class JSONTests: XCTestCase {
       "{}true",
       message: "unexpected character 't'; after top-level value"
     )
+  }
+
+  func testInvalidStringDecoding() {
+    _assertInvalidStrng(#""foo\"#)  // EOF after '\'
+    _assertInvalidStrng(#""\x""#)  // Unknown character after '\'
+    _assertInvalidStrng(#""\u1""#)  // Missing 4 digits after '\u'
+    _assertInvalidStrng(#""\u12""#)
+    _assertInvalidStrng(#""\u123""#)
+    _assertInvalidStrng(#""\uEFGH""#)  // Invalid HEX characters.
+  }
+
+  func testStringSurrogatePairDecoding() {
+    // FIXME: Escaped surrogate pairs are not supported.
+    // Currently parsed as "invalid", but this should be valid '𐐷' (U+10437) character
+    _assertInvalidStrng(#"\uD801\uDC37"#)
   }
 
   func testTypeCoercion() {
@@ -195,10 +210,19 @@ final class JSONTests: XCTestCase {
     }
   }
 
+  private func _assertInvalidStrng(_ json: String) {
+    do {
+      var json = json
+      _ = try json.withUTF8 { try JSON.decode(String.self, from: $0) }
+      XCTFail("decoding should fail")
+    } catch {}
+  }
+
   private func _assertParseError(_ json: String, message: String) {
     do {
       var json = json
       _ = try json.withUTF8 { try JSON.decode(Bool.self, from: $0) }
+      XCTFail("decoding should fail")
     } catch DecodingError.dataCorrupted(let context) {
       XCTAssertEqual(
         String(describing: try XCTUnwrap(context.underlyingError)),

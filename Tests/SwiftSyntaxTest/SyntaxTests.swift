@@ -198,4 +198,25 @@ class SyntaxTests: XCTestCase {
       XCTAssertEqual(expr.representedLiteralValue, expected, line: line)
     }
   }
+
+  func testFloatLiteralExprSyntax() {
+    let testCases: [UInt: (String, Double?)] = [
+      #line: ("2", 2),
+      #line: ("2_00_00.001", 2_00_00.001),
+      #line: ("5.3_8", 5.3_8),
+      #line: ("12e3", 12000.0),
+      #line: ("32E1", 320.0),
+      #line: ("0xdEFACE.C0FFEEp+1", 0xdEFACE.C0FFEEp+1),
+      #line: ("0xaffab1e.e1fP-2", 0xaffab1e.e1fP-2),
+      #line: ("🥥", nil),
+      #line: ("12e+3", 12000.0),
+      #line: ("12e-3", 0.012),
+    ]
+
+    for (line, testCase) in testCases {
+      let (value, expected) = testCase
+      let expr = FloatLiteralExprSyntax(literal: .floatLiteral(value))
+      XCTAssertEqual(expr.representedLiteralValue, expected, line: line)
+    }
+  }
 }

@@ -68,6 +68,21 @@ extension EnumCaseParameterSyntax {
   }
 }
 
+extension FloatLiteralExprSyntax {
+  ///  A computed property representing the floating-point value parsed from the associated `literal.text` property.
+  ///
+  /// - Returns: A double value parsed from the associated`literal.text`, or `nil` if the text cannot be parsed as a double.
+  public var representedLiteralValue: Double? {
+    guard !hasError else { return nil }
+
+    let floatingDigitsWithoutUnderscores = literal.text.filter {
+      $0 != "_"
+    }
+
+    return Double(floatingDigitsWithoutUnderscores)
+  }
+}
+
 extension IntegerLiteralExprSyntax {
   public enum Radix {
     case binary

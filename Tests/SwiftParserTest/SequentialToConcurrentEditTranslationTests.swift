@@ -34,8 +34,8 @@ let longString = """
 ///  2. applying the `sequential` and concurrent edits to `testString` results
 ///     in the same post-edit string
 func verifySequentialToConcurrentTranslation(
-  _ sequential: [IncrementalEdit],
-  _ expectedConcurrent: [IncrementalEdit],
+  _ sequential: [SourceEdit],
+  _ expectedConcurrent: [SourceEdit],
   testString: String = longString,
   file: StaticString = #filePath,
   line: UInt = #line
@@ -50,15 +50,6 @@ func verifySequentialToConcurrentTranslation(
   )
 }
 
-fileprivate extension IncrementalEdit {
-  init(offset: Int, length: Int, replacement: String) {
-    self.init(
-      range: Range(position: AbsolutePosition(utf8Offset: offset), length: SourceLength(utf8Length: length)),
-      replacement: Array(replacement.utf8)
-    )
-  }
-}
-
 final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testEmpty() {
     verifySequentialToConcurrentTranslation([], [])
@@ -68,8 +59,14 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     XCTAssertThrowsError(
       try {
         try ConcurrentEdits(concurrent: [
-          IncrementalEdit(offset: 5, length: 1, replacement: ""),
-          IncrementalEdit(offset: 5, length: 1, replacement: ""),
+          SourceEdit(
+            range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 1)),
+            replacement: ""
+          ),
+          SourceEdit(
+            range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 1)),
+            replacement: ""
+          ),
         ])
       }()
     )
@@ -78,10 +75,16 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testSingleEdit1() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 1, replacement: "")
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 1)),
+          replacement: ""
+        )
       ],
       [
-        IncrementalEdit(offset: 5, length: 1, replacement: "")
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 1)),
+          replacement: ""
+        )
       ]
     )
   }
@@ -89,10 +92,16 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testSingleEdit2() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 0, replacement: "1")
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 1)),
+          replacement: "1"
+        )
       ],
       [
-        IncrementalEdit(offset: 5, length: 0, replacement: "1")
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 1)),
+          replacement: "1"
+        )
       ]
     )
   }
@@ -100,12 +109,24 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testTwoNonOverlappingDeletesInFrontToBackOrder() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 1, replacement: ""),
-        IncrementalEdit(offset: 10, length: 2, replacement: ""),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 1)),
+          replacement: ""
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 10), length: SourceLength(utf8Length: 2)),
+          replacement: ""
+        ),
       ],
       [
-        IncrementalEdit(offset: 5, length: 1, replacement: ""),
-        IncrementalEdit(offset: 11, length: 2, replacement: ""),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 1)),
+          replacement: ""
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 11), length: SourceLength(utf8Length: 2)),
+          replacement: ""
+        ),
       ]
     )
   }
@@ -113,12 +134,24 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testTwoNonOverlappingDeletesInBackToFrontOrder() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 10, length: 2, replacement: ""),
-        IncrementalEdit(offset: 5, length: 1, replacement: ""),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 10), length: SourceLength(utf8Length: 2)),
+          replacement: ""
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 1)),
+          replacement: ""
+        ),
       ],
       [
-        IncrementalEdit(offset: 5, length: 1, replacement: ""),
-        IncrementalEdit(offset: 10, length: 2, replacement: ""),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 1)),
+          replacement: ""
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 10), length: SourceLength(utf8Length: 2)),
+          replacement: ""
+        ),
       ]
     )
   }
@@ -126,12 +159,24 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testTwoNonOverlappingInsertionsInFrontToBackOrder() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 0, replacement: "12"),
-        IncrementalEdit(offset: 10, length: 0, replacement: "345"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 0)),
+          replacement: "12"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 10), length: SourceLength(utf8Length: 0)),
+          replacement: "345"
+        ),
       ],
       [
-        IncrementalEdit(offset: 5, length: 0, replacement: "12"),
-        IncrementalEdit(offset: 8, length: 0, replacement: "345"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 0)),
+          replacement: "12"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 8), length: SourceLength(utf8Length: 0)),
+          replacement: "345"
+        ),
       ]
     )
   }
@@ -139,12 +184,24 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testTwoNonOverlappingInsertionsInBackToFrontOrder() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 10, length: 0, replacement: "123"),
-        IncrementalEdit(offset: 5, length: 0, replacement: "45"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 10), length: SourceLength(utf8Length: 0)),
+          replacement: "123"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 0)),
+          replacement: "45"
+        ),
       ],
       [
-        IncrementalEdit(offset: 5, length: 0, replacement: "45"),
-        IncrementalEdit(offset: 10, length: 0, replacement: "123"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 0)),
+          replacement: "45"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 10), length: SourceLength(utf8Length: 0)),
+          replacement: "123"
+        ),
       ]
     )
   }
@@ -152,12 +209,24 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testTwoNonOverlappingReplacementsInFrontToBackOrder() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 4, replacement: "12"),
-        IncrementalEdit(offset: 20, length: 5, replacement: "345"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 4)),
+          replacement: "12"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 20), length: SourceLength(utf8Length: 5)),
+          replacement: "345"
+        ),
       ],
       [
-        IncrementalEdit(offset: 5, length: 4, replacement: "12"),
-        IncrementalEdit(offset: 22, length: 5, replacement: "345"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 4)),
+          replacement: "12"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 22), length: SourceLength(utf8Length: 5)),
+          replacement: "345"
+        ),
       ]
     )
   }
@@ -165,12 +234,24 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testTwoNonOverlappingReplacementsInBackToFrontOrder() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 20, length: 5, replacement: "123"),
-        IncrementalEdit(offset: 5, length: 4, replacement: "45"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 20), length: SourceLength(utf8Length: 5)),
+          replacement: "123"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 4)),
+          replacement: "45"
+        ),
       ],
       [
-        IncrementalEdit(offset: 5, length: 4, replacement: "45"),
-        IncrementalEdit(offset: 20, length: 5, replacement: "123"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 4)),
+          replacement: "45"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 20), length: SourceLength(utf8Length: 5)),
+          replacement: "123"
+        ),
       ]
     )
   }
@@ -178,16 +259,40 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testMultipleNonOverlappingEdits() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 0, length: 6, replacement: ""),
-        IncrementalEdit(offset: 15, length: 7, replacement: "123456789"),
-        IncrementalEdit(offset: 10, length: 0, replacement: "abc"),
-        IncrementalEdit(offset: 30, length: 2, replacement: "AB"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 0), length: SourceLength(utf8Length: 6)),
+          replacement: ""
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 15), length: SourceLength(utf8Length: 7)),
+          replacement: "123456789"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 10), length: SourceLength(utf8Length: 0)),
+          replacement: "abc"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 30), length: SourceLength(utf8Length: 2)),
+          replacement: "AB"
+        ),
       ],
       [
-        IncrementalEdit(offset: 0, length: 6, replacement: ""),
-        IncrementalEdit(offset: 16, length: 0, replacement: "abc"),
-        IncrementalEdit(offset: 21, length: 7, replacement: "123456789"),
-        IncrementalEdit(offset: 31, length: 2, replacement: "AB"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 0), length: SourceLength(utf8Length: 6)),
+          replacement: ""
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 16), length: SourceLength(utf8Length: 0)),
+          replacement: "abc"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 21), length: SourceLength(utf8Length: 7)),
+          replacement: "123456789"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 31), length: SourceLength(utf8Length: 2)),
+          replacement: "AB"
+        ),
       ]
     )
   }
@@ -197,11 +302,20 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     // [--- edit2 ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 10, length: 1, replacement: "xyz"),
-        IncrementalEdit(offset: 5, length: 5, replacement: "a"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 10), length: SourceLength(utf8Length: 1)),
+          replacement: "xyz"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 5)),
+          replacement: "a"
+        ),
       ],
       [
-        IncrementalEdit(offset: 5, length: 6, replacement: "axyz")
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 6)),
+          replacement: "axyz"
+        )
       ]
     )
   }
@@ -211,11 +325,20 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     // [--- edit2 ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 10, length: 1, replacement: "xyz"),
-        IncrementalEdit(offset: 5, length: 5, replacement: ""),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 10), length: SourceLength(utf8Length: 1)),
+          replacement: "xyz"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 5)),
+          replacement: ""
+        ),
       ],
       [
-        IncrementalEdit(offset: 5, length: 6, replacement: "xyz")
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 6)),
+          replacement: "xyz"
+        )
       ]
     )
   }
@@ -225,11 +348,20 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     // [--- edit2 ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 3, replacement: "a"),
-        IncrementalEdit(offset: 4, length: 2, replacement: "xy"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 3)),
+          replacement: "a"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 4), length: SourceLength(utf8Length: 2)),
+          replacement: "xy"
+        ),
       ],
       [
-        IncrementalEdit(offset: 4, length: 4, replacement: "xy")
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 4), length: SourceLength(utf8Length: 4)),
+          replacement: "xy"
+        )
       ]
     )
   }
@@ -239,11 +371,20 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     // [------- edit2 --------]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 3, replacement: "a"),
-        IncrementalEdit(offset: 4, length: 4, replacement: "xy"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 3)),
+          replacement: "a"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 4), length: SourceLength(utf8Length: 4)),
+          replacement: "xy"
+        ),
       ],
       [
-        IncrementalEdit(offset: 4, length: 6, replacement: "xy")
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 4), length: SourceLength(utf8Length: 6)),
+          replacement: "xy"
+        )
       ]
     )
   }
@@ -253,11 +394,20 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     // [--- edit2 (length 0) ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 0, replacement: "a"),
-        IncrementalEdit(offset: 5, length: 0, replacement: "xy"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 0)),
+          replacement: "a"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 0)),
+          replacement: "xy"
+        ),
       ],
       [
-        IncrementalEdit(offset: 5, length: 0, replacement: "xya")
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 0)),
+          replacement: "xya"
+        )
       ]
     )
   }
@@ -267,11 +417,20 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     // [--- edit2 ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 1, replacement: "ab"),
-        IncrementalEdit(offset: 5, length: 1, replacement: "xyz"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 1)),
+          replacement: "ab"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 1)),
+          replacement: "xyz"
+        ),
       ],
       [
-        IncrementalEdit(offset: 5, length: 1, replacement: "xyzb")
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 1)),
+          replacement: "xyzb"
+        )
       ]
     )
   }
@@ -281,11 +440,20 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     // [--- edit2 ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 2, replacement: "ab"),
-        IncrementalEdit(offset: 5, length: 1, replacement: "xyz"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 2)),
+          replacement: "ab"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 1)),
+          replacement: "xyz"
+        ),
       ],
       [
-        IncrementalEdit(offset: 5, length: 2, replacement: "xyzb")
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 2)),
+          replacement: "xyzb"
+        )
       ]
     )
   }
@@ -295,11 +463,20 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     //        [--- edit2 ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 5, replacement: "ab"),
-        IncrementalEdit(offset: 6, length: 1, replacement: ""),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 5)),
+          replacement: "ab"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 6), length: SourceLength(utf8Length: 1)),
+          replacement: ""
+        ),
       ],
       [
-        IncrementalEdit(offset: 5, length: 5, replacement: "a")
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 5)),
+          replacement: "a"
+        )
       ]
     )
   }
@@ -309,11 +486,20 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     //        [--- edit2 ----]
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 3, length: 3, replacement: "ab"),
-        IncrementalEdit(offset: 4, length: 3, replacement: "xy"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 3), length: SourceLength(utf8Length: 3)),
+          replacement: "ab"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 4), length: SourceLength(utf8Length: 3)),
+          replacement: "xy"
+        ),
       ],
       [
-        IncrementalEdit(offset: 3, length: 5, replacement: "axy")
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 3), length: SourceLength(utf8Length: 5)),
+          replacement: "axy"
+        )
       ]
     )
   }
@@ -321,11 +507,20 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
   func testTwoOverlappingInsertions() {
     verifySequentialToConcurrentTranslation(
       [
-        IncrementalEdit(offset: 5, length: 0, replacement: "abc"),
-        IncrementalEdit(offset: 6, length: 0, replacement: "xy"),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 0)),
+          replacement: "abc"
+        ),
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 6), length: SourceLength(utf8Length: 0)),
+          replacement: "xy"
+        ),
       ],
       [
-        IncrementalEdit(offset: 5, length: 0, replacement: "axybc")
+        SourceEdit(
+          range: Range(position: AbsolutePosition(utf8Offset: 5), length: SourceLength(utf8Length: 0)),
+          replacement: "axybc"
+        )
       ]
     )
   }
@@ -336,7 +531,7 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
     var i = 0
     while true {
       i += 1
-      var edits: [IncrementalEdit] = []
+      var edits: [SourceEdit] = []
       let numEdits = Int.random(in: 1..<10)
       for _ in 0..<numEdits {
         let replacementLength = Int.random(in: 0..<32)
@@ -344,9 +539,10 @@ final class TranslateSequentialToConcurrentEditsTests: ParserTestCase {
           (UInt8(ascii: "a")..<UInt8(ascii: "z")).randomElement()!
         }
         edits.append(
-          IncrementalEdit(
-            offset: Int.random(in: 0..<32),
-            length: Int.random(in: 0..<32),
+          SourceEdit(
+            range: AbsolutePosition(
+              utf8Offset: Int.random(in: 0..<32)
+            )..<AbsolutePosition(utf8Offset: Int.random(in: 0..<32)),
             replacement: String(data: Data(replacementBytes), encoding: .ascii)!
           )
         )

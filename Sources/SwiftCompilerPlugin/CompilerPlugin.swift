@@ -195,7 +195,9 @@ extension CompilerPlugin {
 }
 
 internal struct PluginHostConnection: MessageConnection {
+  // File descriptor for input from the host.
   fileprivate let inputStream: CInt
+  // File descriptor for output to the host.
   fileprivate let outputStream: CInt
 
   func sendMessage<TX: Encodable>(_ message: TX) throws {
@@ -238,21 +240,22 @@ private func _write(_ fd: CInt, contentsOf buffer: UnsafeRawBufferPointer) throw
   let endPtr = ptr.advanced(by: buffer.count)
   while ptr != endPtr {
     switch write(fd, ptr, numericCast(endPtr - ptr)) {
-    case -1: throw IOError.writeFailed(_ss_errno())
-    case 0: throw IOError.writeFailed(0) /* unreachable */
+    case -1: throw IOError.writeFailed(errno: _ss_errno())
+    case 0: throw IOError.writeFailed(errno: 0) /* unreachable */
     case let n: ptr += Int(n)
     }
   }
 }
 
-/// Fill the buffer to the file descriptor. Throws an error on failure.
-/// If the file descriptor reached the end-of-file, throws IOError.readReachedEndOfInput
+/// Fill the buffer from the file descriptor. Throws an error on failure.
+/// If the file descriptor reached the end-of-file before filling up the entire
+/// buffer, throws IOError.readReachedEndOfInput
 private func _read(_ fd: CInt, into buffer: UnsafeMutableRawBufferPointer) throws {
   guard var ptr = buffer.baseAddress else { return }
   let endPtr = ptr.advanced(by: buffer.count)
   while ptr != endPtr {
     switch read(fd, ptr, numericCast(endPtr - ptr)) {
-    case -1: throw IOError.readFailed(_ss_errno())
+    case -1: throw IOError.readFailed(errno: _ss_errno())
     case 0: throw IOError.readReachedEndOfInput
     case let n: ptr += Int(n)
     }
@@ -261,8 +264,8 @@ private func _read(_ fd: CInt, into buffer: UnsafeMutableRawBufferPointer) throw
 
 private enum IOError: Error, CustomStringConvertible {
   case readReachedEndOfInput
-  case readFailed(CInt)
-  case writeFailed(CInt)
+  case readFailed(errno: CInt)
+  case writeFailed(errno: CInt)
 
   var description: String {
     switch self {

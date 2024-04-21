@@ -172,6 +172,16 @@ final class JSONTests: XCTestCase {
     assertRoundTripTypeCoercionFailure(of: [0.0, 1.0] as [Double], as: [Bool].self)
   }
 
+  func testFloatingPointBufferBoundary() throws {
+    // Make sure floating point parsing does not read past the decoding JSON buffer.
+    var str = "0.199"
+    try str.withUTF8 { buf in
+      let truncated = UnsafeBufferPointer(rebasing: buf[0..<3])
+      XCTAssertEqual(try JSON.decode(Double.self, from: truncated), 0.1)
+      XCTAssertEqual(try JSON.decode(Float.self, from: truncated), 0.1)
+    }
+  }
+
   private func assertRoundTrip<T: Codable & Equatable>(
     of value: T,
     expectedJSON: String,

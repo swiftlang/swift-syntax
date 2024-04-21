@@ -622,19 +622,40 @@ private enum _JSONNumberParser {
   }
 
   static func parseFloatingPoint<Floating: BinaryFloatingPoint>(source: UnsafeBufferPointer<UInt8>) -> Floating? {
-    var endPtr: UnsafeMutablePointer<CChar>? = nil
-    let value: Floating?
-    if Floating.self == Double.self {
-      value = Floating(exactly: strtod(source.baseAddress!, &endPtr))
-    } else if Floating.self == Float.self {
-      value = Floating(exactly: strtof(source.baseAddress!, &endPtr))
+    // Since source is not NUL terminated, we need to make a temporary storage.
+    // Depending on the length of the source, prepare the buffer on stack or heap,
+    // then call 'impl(_:)' (defined below) for the actual operation.
+    if source.count + 1 <= MemoryLayout<UInt64>.size {
+      var stash: UInt64 = 0
+      return withUnsafeMutableBytes(of: &stash) {
+        $0.withMemoryRebound(to: UInt8.self, impl)
+      }
     } else {
-      fatalError("unsupported floating point type")
+      let stash = UnsafeMutableBufferPointer<UInt8>.allocate(capacity: source.count + 1)
+      defer { stash.deallocate() }
+      return impl(stash)
     }
-    guard endPtr! == source.baseAddress! + source.count else {
-      return nil
+
+    func impl(_ stash: UnsafeMutableBufferPointer<UInt8>) -> Floating? {
+      // Create a NUL terminated string in the stash.
+      assert(stash.count >= source.count + 1)
+      let end = stash.initialize(fromContentsOf: source)
+      stash.initializeElement(at: end, to: 0)
+
+      var endPtr: UnsafeMutablePointer<CChar>? = nil
+      let value: Floating?
+      if Floating.self == Double.self {
+        value = Floating(exactly: strtod(stash.baseAddress!, &endPtr))
+      } else if Floating.self == Float.self {
+        value = Floating(exactly: strtof(stash.baseAddress!, &endPtr))
+      } else {
+        preconditionFailure("unsupported floating point type")
+      }
+      guard let endPtr, endPtr == stash.baseAddress! + source.count else {
+        return nil
+      }
+      return value
     }
-    return value
   }
 
   static func parseHexIntegerDigits<Integer: FixedWidthInteger>(source: UnsafeBufferPointer<UInt8>) -> Integer? {

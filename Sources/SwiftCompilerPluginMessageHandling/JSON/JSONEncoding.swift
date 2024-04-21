@@ -29,6 +29,7 @@ private class JSONReference {
   }
 
   var backing: Backing
+
   init(backing: Backing) {
     self.backing = backing
   }
@@ -45,7 +46,7 @@ private class JSONReference {
     guard case .object(var dict) = backing else {
       preconditionFailure()
     }
-    backing = .null
+    backing = .null  // Ensure 'dict' uniquely referenced.
     dict[key] = value
     backing = .object(dict)
   }
@@ -54,7 +55,7 @@ private class JSONReference {
     guard case .array(var arr) = backing else {
       preconditionFailure()
     }
-    backing = .null
+    backing = .null  // Ensure 'err' uniquely referenced.
     arr.append(value)
     backing = .array(arr)
   }
@@ -77,12 +78,15 @@ private class JSONReference {
   static func string(_ str: String) -> JSONReference {
     .init(backing: .string(str))
   }
+
   @inline(__always)
   static func number(_ integer: some BinaryInteger & LosslessStringConvertible) -> JSONReference {
     .init(backing: .number(String(integer)))
   }
+
   @inline(__always)
   static func number(_ floating: some BinaryFloatingPoint & LosslessStringConvertible) -> JSONReference {
+    // FIXME: Error for NaN, Inf.
     .init(backing: .number(String(floating)))
   }
 }
@@ -94,17 +98,20 @@ private struct JSONWriter {
     data = []
   }
 
-  mutating func write(ascii: UInt8) {
+  mutating func write(_ ascii: UInt8) {
     data.append(ascii)
   }
-  mutating func write(scalar: UnicodeScalar) {
-    data.append(UInt8(ascii: scalar))
+
+  mutating func write(ascii: UnicodeScalar) {
+    data.append(UInt8(ascii: ascii))
   }
+
   mutating func write(string: StaticString) {
     string.withUTF8Buffer { buffer in
       data.append(contentsOf: buffer)
     }
   }
+
   mutating func write(utf8: some Collection<UInt8>) {
     data.append(contentsOf: utf8)
   }
@@ -132,7 +139,7 @@ private struct JSONWriter {
 
   mutating func serialize(string: String) {
     var string = string
-    write(scalar: "\"")
+    write(ascii: "\"")
     string.withUTF8 { utf8 in
       var cursor = utf8.baseAddress!
       let end = utf8.baseAddress! + utf8.count
@@ -175,12 +182,11 @@ private struct JSONWriter {
           let _A = UInt8(ascii: "A")
           for shift in stride(from: 4, through: 0, by: -4) {
             let d = (c >> shift) & 0xF
-            write(ascii: d < 10 ? (_0 + d) : (_A + d - 10))
+            write(d < 10 ? (_0 + d) : (_A + d - 10))
           }
         default:
           // Accumulate this byte.
           cursor += 1
-          continue
         }
       }
 
@@ -189,37 +195,37 @@ private struct JSONWriter {
         write(utf8: UnsafeBufferPointer(start: mark, count: cursor - mark))
       }
     }
-    write(scalar: "\"")
+    write(ascii: "\"")
   }
 
   mutating func serialize(array: [JSONReference]) {
-    write(scalar: "[")
+    write(ascii: "[")
     var first = true
     for elem in array {
       if first {
         first = false
       } else {
-        write(scalar: ",")
+        write(ascii: ",")
       }
       serialize(value: elem)
     }
-    write(scalar: "]")
+    write(ascii: "]")
   }
 
   mutating func serialize(object: [String: JSONReference]) {
-    write(scalar: "{")
+    write(ascii: "{")
     var first = true
     for key in object.keys.sorted() {
       if first {
         first = false
       } else {
-        write(scalar: ",")
+        write(ascii: ",")
       }
       serialize(string: key)
-      write(scalar: ":")
+      write(ascii: ":")
       serialize(value: object[key]!)
     }
-    write(scalar: "}")
+    write(ascii: "}")
   }
 
   static func serialize(_ value: JSONReference) -> [UInt8] {
@@ -246,15 +252,19 @@ extension JSONEncoding {
   func _encode(_ value: Bool) -> JSONReference {
     value ? .trueKeyword : .falseKeyword
   }
+
   func _encode(_ value: some BinaryFloatingPoint & LosslessStringConvertible) -> JSONReference {
     .number(value)
   }
+
   func _encode(_ value: some BinaryInteger & LosslessStringConvertible) -> JSONReference {
     .number(value)
   }
+
   func _encode(_ value: String) -> JSONReference {
     .string(value)
   }
+
   func _encodeGeneric<T: Encodable>(
     _ value: T,
     codingPathNode: _CodingPathNode,
@@ -286,6 +296,7 @@ extension JSONEncoding: Encoder {
   var codingPath: [any CodingKey] {
     codingPathNode.path
   }
+
   var userInfo: [CodingUserInfoKey: Any] { [:] }
 
   fileprivate struct KeyedContainer<Key: CodingKey> {

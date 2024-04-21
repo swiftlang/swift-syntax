@@ -95,7 +95,8 @@ func decodeFromJSON<T: Decodable>(json: UnsafeBufferPointer<UInt8>) throws -> T 
 private struct JSONMap {
   enum Descriptor: Int {
 
-    // MARK: - Keywords; size:1 [desc]
+    // MARK: - Keywords; mapSize:1 [desc]
+    //   desc: Descriptor.rawValue
 
     /// 'null'
     case nullKeyword
@@ -104,7 +105,10 @@ private struct JSONMap {
     /// 'false' size:1
     case falseKeyword
 
-    // MARK: - Scalar values; size:3 [desc, pointer, length]
+    // MARK: - Scalar values; mapSize:3 [desc, pointer, length]
+    //   desc: Descriptor.rawValue
+    //   pointer: pointer to the start of the value in the source UTF-8 JSON buffer.
+    //   length: the length of the value in the source UTF-8 JSON buffer.
 
     /// Integer and floating number.
     case number
@@ -115,7 +119,10 @@ private struct JSONMap {
     /// String with escape sequences.
     case string
 
-    // MARK: - Collections; size: 2 + variable [desc, size, element...]
+    // MARK: - Collections; mapSize: 2 + variable [desc, size, element...]
+    //   desc: Descriptor.rawValue
+    //   size: the map size this collection occupies.
+    //   element * n: JSON values in this collection. For collections, sequence of key/value pairs.
 
     /// Object '{ ... }'. Elements are (key, value)...
     case object
@@ -140,11 +147,13 @@ private struct JSONMapBuilder {
     mapData.reserveCapacity(128)  // 128 is good enough for most PluginMessage.
   }
 
+  /// Record .nullKeyword, .trueKeyword, or .falseKeyword.
   @inline(__always)
   mutating func record(_ descriptor: JSONMap.Descriptor) {
     mapData.append(descriptor.rawValue)
   }
 
+  /// Record literal values i.e. numbers and strings, with a range in the source buffer.
   @inline(__always)
   mutating func record(_ descriptor: JSONMap.Descriptor, range: Range<UnsafePointer<UInt8>>) {
     mapData.append(descriptor.rawValue)
@@ -152,6 +161,8 @@ private struct JSONMapBuilder {
     mapData.append(range.count)
   }
 
+  /// Record starting of a collection i.e. .array or .object. Must be paired with
+  /// closeCollection(handle:) call using the returned handle.
   @inline(__always)
   mutating func startCollection(_ descriptor: JSONMap.Descriptor) -> Int {
     let handle = mapData.count
@@ -160,6 +171,7 @@ private struct JSONMapBuilder {
     return handle
   }
 
+  /// Close the collection. Accepts a "handle" returned from startCollection(_:).
   @inline(__always)
   mutating func closeCollection(handle: Int) {
     // 'handle': descriptor index.
@@ -172,11 +184,11 @@ private struct JSONMapBuilder {
   }
 }
 
-enum JSONError: Error, CustomDebugStringConvertible {
+private enum JSONError: Error, CustomStringConvertible {
   case unexpectedEndOfFile
   case unexpectedCharacter(UInt8, context: String)
 
-  var debugDescription: String {
+  var description: String {
     switch self {
     case .unexpectedEndOfFile:
       return "unexpected end of file"
@@ -245,7 +257,7 @@ private struct JSONScanner {
   }
 
   @inline(__always)
-  mutating func expect(_ char: UnicodeScalar) throws {
+  mutating func expect(ascii char: UnicodeScalar) throws {
     guard hasData else {
       throw JSONError.unexpectedEndOfFile
     }
@@ -256,30 +268,30 @@ private struct JSONScanner {
   }
 
   mutating func scanNull() throws {
-    try expect("u")
-    try expect("l")
-    try expect("l")
+    try expect(ascii: "u")
+    try expect(ascii: "l")
+    try expect(ascii: "l")
     map.record(.nullKeyword)
   }
 
   mutating func scanTrue() throws {
-    try expect("r")
-    try expect("u")
-    try expect("e")
+    try expect(ascii: "r")
+    try expect(ascii: "u")
+    try expect(ascii: "e")
     map.record(.trueKeyword)
   }
 
   mutating func scanFalse() throws {
-    try expect("a")
-    try expect("l")
-    try expect("s")
-    try expect("e")
+    try expect(ascii: "a")
+    try expect(ascii: "l")
+    try expect(ascii: "s")
+    try expect(ascii: "e")
     map.record(.falseKeyword)
   }
 
   mutating func scanString(start: Cursor) throws {
     ptr = start
-    try expect("\"")
+    try expect(ascii: "\"")
 
     var hasEscape = false
     var hasNonASCII = false
@@ -288,13 +300,16 @@ private struct JSONScanner {
       // FIXME: Error for invalid UTF8 sequences.
       if ptr.pointee == UInt8(ascii: "\\") {
         hasEscape = true
+        // eat '\'. Rest of the escape sequence are all ASCII. We just skip them
+        // ignoring how many bytes are actually for the escape sequence. For
+        // decoding, they are revisited in _JSONStingDecoder.decodeStringWithEscapes()
         _ = try advance()
       } else if ptr.pointee >= 0x80 {
         hasNonASCII = true
       }
       _ = try advance()
     }
-    try expect("\"")
+    try expect(ascii: "\"")
 
     let kind: JSONMap.Descriptor
     if hasEscape {
@@ -308,6 +323,7 @@ private struct JSONScanner {
   }
 
   mutating func scanNumber(start: Cursor) throws {
+    // FIXME: Error for invalid literal e.g. 'e-', '.e+'
     ptr = start
     _ = advance(if: "-")
     while advance(if: "0"..."9") {}
@@ -328,7 +344,7 @@ private struct JSONScanner {
       while hasData {
         try scanString(start: ptr)
         skipWhitespace()
-        try expect(":")
+        try expect(ascii: ":")
         try scanValue()
         if advance(if: ",") {
           skipWhitespace()
@@ -336,7 +352,7 @@ private struct JSONScanner {
         }
         break
       }
-      try expect("}")
+      try expect(ascii: "}")
     }
     map.closeCollection(handle: handle)
   }
@@ -353,7 +369,7 @@ private struct JSONScanner {
         }
         break
       }
-      try expect("]")
+      try expect(ascii: "]")
     }
     map.closeCollection(handle: handle)
   }
@@ -459,8 +475,8 @@ private enum _JSONStringParser {
 
   /// Decode a string value that includes escape sequences.
   static func decodeStringWithEscapes(source: UnsafeBufferPointer<UInt8>) -> String? {
-    // JSON string with escape sequences must be 2 bytes or longer.
-    assert(source.count > 0)
+    // JSON string with escape sequences must be== 0 2 bytes or longer.
+    assert(!source.isEmpty)
 
     // Decode 'source' UTF-8 JSON string literal into the uninitialized
     // UTF-8 buffer. Upon error, return 0 and make an empty string.
@@ -511,8 +527,8 @@ private enum _JSONStringParser {
   /// sequence, and call 'processCodeUnit' with the decoded value.
   /// Returns 'true' on error.
   ///
-  /// NOTE: We don't report detailed errors for now because we only care
-  /// well-formed payloads from the compiler.
+  ///  - Note: We don't report detailed errors for now because we only care
+  ///          well-formed payloads from the compiler.
   private static func decodeEscapeSequence(
     cursor: inout UnsafePointer<UInt8>,
     end: UnsafePointer<UInt8>,
@@ -608,9 +624,9 @@ private enum _JSONNumberParser {
   static func parseFloatingPoint<Floating: BinaryFloatingPoint>(source: UnsafeBufferPointer<UInt8>) -> Floating? {
     var endPtr: UnsafeMutablePointer<CChar>? = nil
     let value: Floating?
-    if (Floating.self == Double.self) {
+    if Floating.self == Double.self {
       value = Floating(exactly: strtod(source.baseAddress!, &endPtr))
-    } else if (Floating.self == Float.self) {
+    } else if Floating.self == Float.self {
       value = Floating(exactly: strtof(source.baseAddress!, &endPtr))
     } else {
       fatalError("unsupported floating point type")
@@ -674,7 +690,8 @@ extension JSONMapValue {
   /// Returns true if this value represents a string and equals to 'str'.
   ///
   /// This is faster than 'value.asString() == str' because this doesn't
-  /// instantiate 'Swift.String' unless there are escaped characters.
+  /// instantiate 'Swift.String' unless there are escaped characters or
+  /// non-ASCII characters.
   func equals(to str: String) -> Bool {
     if self.is(.asciiSimpleString) {
       let lhs = valueBuffer()
@@ -794,7 +811,7 @@ private struct JSONDecoding {
 // MARK: Pure decoding functions.
 extension JSONDecoding {
   @inline(__always)
-  static func _checkNotNull<T>(
+  private static func _checkNotNull<T>(
     _ value: JSONMapValue,
     expectedType: T.Type,
     for codingPathNode: _CodingPathNode,
@@ -830,6 +847,7 @@ extension JSONDecoding {
       )
     )
   }
+
   @inline(__always)
   static func _decode(
     _ value: JSONMapValue,
@@ -839,6 +857,7 @@ extension JSONDecoding {
   ) throws -> Bool {
     try _unwrapOrThrow(value.asBool(), decoding: value, codingPathNode: codingPathNode, additionalKey)
   }
+
   @inline(__always)
   static func _decode(
     _ value: JSONMapValue,
@@ -848,6 +867,7 @@ extension JSONDecoding {
   ) throws -> String {
     try _unwrapOrThrow(value.asString(), decoding: value, codingPathNode: codingPathNode, additionalKey)
   }
+
   @inline(__always)
   static func _decode<Integer: FixedWidthInteger>(
     _ value: JSONMapValue,
@@ -857,6 +877,7 @@ extension JSONDecoding {
   ) throws -> Integer {
     try _unwrapOrThrow(value.asInteger(type), decoding: value, codingPathNode: codingPathNode, additionalKey)
   }
+
   @inline(__always)
   static func _decode<Floating: BinaryFloatingPoint>(
     _ value: JSONMapValue,

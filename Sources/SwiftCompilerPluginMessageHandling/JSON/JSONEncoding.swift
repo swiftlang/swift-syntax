@@ -141,17 +141,15 @@ private struct JSONWriter {
     var string = string
     write(ascii: "\"")
     string.withUTF8 { utf8 in
-      var cursor = utf8.baseAddress!
-      let end = utf8.baseAddress! + utf8.count
-      var mark = cursor
-      func flush() {
-        if cursor > mark {
+      let start = utf8.baseAddress!
+      let end = start + utf8.count
+      var mark = start
+
+      for cursor in start..<end {
+        @inline(__always) func flush() {
           write(utf8: UnsafeBufferPointer(start: mark, count: cursor - mark))
+          mark = cursor + 1
         }
-        cursor += 1
-        mark = cursor
-      }
-      while cursor != end {
         switch cursor.pointee {
         case UInt8(ascii: "\""):
           flush()
@@ -186,13 +184,13 @@ private struct JSONWriter {
           }
         default:
           // Accumulate this byte.
-          cursor += 1
+          break
         }
       }
 
       // Append accumulated bytes.
-      if cursor > mark {
-        write(utf8: UnsafeBufferPointer(start: mark, count: cursor - mark))
+      if end > mark {
+        write(utf8: UnsafeBufferPointer(start: mark, count: end - mark))
       }
     }
     write(ascii: "\"")

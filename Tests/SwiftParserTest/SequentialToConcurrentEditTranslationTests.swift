@@ -37,7 +37,7 @@ func verifySequentialToConcurrentTranslation(
   _ sequential: [IncrementalEdit],
   _ expectedConcurrent: [IncrementalEdit],
   testString: String = longString,
-  file: StaticString = #file,
+  file: StaticString = #filePath,
   line: UInt = #line
 ) {
   let concurrent = ConcurrentEdits(fromSequential: sequential)

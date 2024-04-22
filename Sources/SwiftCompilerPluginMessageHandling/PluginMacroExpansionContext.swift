@@ -10,11 +10,19 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+internal import SwiftDiagnostics
+internal import SwiftOperators
+internal import SwiftParser
+internal import SwiftSyntax
+internal import SwiftSyntaxMacros
+#else
 import SwiftDiagnostics
 import SwiftOperators
 import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxMacros
+#endif
 
 /// Manages known source code combined with their filename/fileID. This can be
 /// used to get line/column from a syntax node in the managed source code.

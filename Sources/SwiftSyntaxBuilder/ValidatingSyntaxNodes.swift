@@ -11,8 +11,8 @@
 //===----------------------------------------------------------------------===//
 
 #if swift(>=6)
-import SwiftDiagnostics
-import SwiftParserDiagnostics
+internal import SwiftDiagnostics
+internal import SwiftParserDiagnostics
 public import SwiftSyntax
 #else
 import SwiftDiagnostics

@@ -12,8 +12,8 @@
 
 #if swift(>=6)
 public import SwiftBasicFormat
-import SwiftDiagnostics
-@_spi(RawSyntax) @_spi(Testing) import SwiftParser
+internal import SwiftDiagnostics
+@_spi(RawSyntax) @_spi(Testing) internal import SwiftParser
 @_spi(RawSyntax) public import SwiftSyntax
 #else
 import SwiftBasicFormat

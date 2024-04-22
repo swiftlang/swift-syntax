@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+internal import SwiftSyntax
+#else
 import SwiftSyntax
+#endif
 
 extension Range<AbsolutePosition> {
   /// Shift the range `utf8Offset` bytes to the right, ie. add `utf8Offset` to the upper and lower bound.

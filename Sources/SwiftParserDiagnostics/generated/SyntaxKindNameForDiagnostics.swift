@@ -12,7 +12,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
+#else
 @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+#endif
 
 extension SyntaxKind {
   var nameForDiagnostics: String? {

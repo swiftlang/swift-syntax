@@ -1,0 +1,4 @@
+add_library(_SwiftSyntaxCShims INTERFACE)
+target_include_directories(_SwiftSyntaxCShims INTERFACE "include")
+set_property(GLOBAL APPEND PROPERTY SWIFT_EXPORTS _SwiftSyntaxCShims)
+install(TARGETS _SwiftSyntaxCShims EXPORT SwiftSyntaxTargets)

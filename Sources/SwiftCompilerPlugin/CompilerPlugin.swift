@@ -13,19 +13,25 @@
 // https://github.com/apple/swift-package-manager/blob/main/Sources/PackagePlugin/Plugin.swift
 
 #if swift(>=6.0)
+private import _SwiftSyntaxCShims
 public import SwiftSyntaxMacros
-private import Foundation
 @_spi(PluginMessage) private import SwiftCompilerPluginMessageHandling
-#else
-import SwiftSyntaxMacros
-import Foundation
-@_spi(PluginMessage) import SwiftCompilerPluginMessageHandling
-#endif
-
-#if os(Windows)
-#if swift(>=6.0)
+#if canImport(Darwin)
+private import Darwin
+#elseif canImport(Glibc)
+private import Glibc
+#elseif canImport(ucrt)
 private import ucrt
+#endif
 #else
+import _SwiftSyntaxCShims
+import SwiftSyntaxMacros
+@_spi(PluginMessage) import SwiftCompilerPluginMessageHandling
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(ucrt)
 import ucrt
 #endif
 #endif
@@ -86,11 +92,18 @@ extension CompilerPlugin {
       }
     }
 
-    let pluginPath = CommandLine.arguments.first ?? Bundle.main.executablePath ?? ProcessInfo.processInfo.processName
+    let pluginPath = CommandLine.arguments.first ?? "<unknown>"
     throw CompilerPluginError(
       message:
         "macro implementation type '\(moduleName).\(typeName)' could not be found in executable plugin '\(pluginPath)'"
     )
+  }
+}
+
+struct CompilerPluginError: Error, CustomStringConvertible {
+  var description: String
+  init(message: String) {
+    self.description = message
   }
 }
 
@@ -104,53 +117,61 @@ struct MacroProviderAdapter<Plugin: CompilerPlugin>: PluginProvider {
   }
 }
 
+#if canImport(ucrt)
+private let dup = _dup(_:)
+private let fileno = _fileno(_:)
+private let dup2 = _dup2(_:_:)
+private let close = _close(_:)
+private let read = _read(_:_:_:)
+private let write = _write(_:_:_:)
+#endif
+
 extension CompilerPlugin {
 
   /// Main entry point of the plugin — sets up a communication channel with
   /// the plugin host and runs the main message loop.
   public static func main() throws {
+    let stdin = _ss_stdin()
+    let stdout = _ss_stdout()
+    let stderr = _ss_stderr()
+
     // Duplicate the `stdin` file descriptor, which we will then use for
     // receiving messages from the plugin host.
     let inputFD = dup(fileno(stdin))
     guard inputFD >= 0 else {
-      internalError("Could not duplicate `stdin`: \(describe(errno: errno)).")
+      internalError("Could not duplicate `stdin`: \(describe(errno: _ss_errno())).")
     }
 
     // Having duplicated the original standard-input descriptor, we close
     // `stdin` so that attempts by the plugin to read console input (which
     // are usually a mistake) return errors instead of blocking.
     guard close(fileno(stdin)) >= 0 else {
-      internalError("Could not close `stdin`: \(describe(errno: errno)).")
+      internalError("Could not close `stdin`: \(describe(errno: _ss_errno())).")
     }
 
     // Duplicate the `stdout` file descriptor, which we will then use for
     // sending messages to the plugin host.
     let outputFD = dup(fileno(stdout))
     guard outputFD >= 0 else {
-      internalError("Could not dup `stdout`: \(describe(errno: errno)).")
+      internalError("Could not dup `stdout`: \(describe(errno: _ss_errno())).")
     }
 
     // Having duplicated the original standard-output descriptor, redirect
     // `stdout` to `stderr` so that all free-form text output goes there.
     guard dup2(fileno(stderr), fileno(stdout)) >= 0 else {
-      internalError("Could not dup2 `stdout` to `stderr`: \(describe(errno: errno)).")
+      internalError("Could not dup2 `stdout` to `stderr`: \(describe(errno: _ss_errno())).")
     }
 
-    // Turn off full buffering so printed text appears as soon as possible.
-    // Windows is much less forgiving than other platforms.  If line
-    // buffering is enabled, we must provide a buffer and the size of the
-    // buffer.  As a result, on Windows, we completely disable all
-    // buffering, which means that partial writes are possible.
-    #if os(Windows)
-    setvbuf(stdout, nil, _IONBF, 0)
-    #else
-    setvbuf(stdout, nil, _IOLBF, 0)
+    #if canImport(ucrt)
+    // Set I/O to binary mode. Avoid CRLF translation, and Ctrl+Z (0x1A) as EOF.
+    _ = _setmode(inputFD, _O_BINARY)
+    _ = _setmode(outputFD, _O_BINARY)
     #endif
 
     // Open a message channel for communicating with the plugin host.
     let connection = PluginHostConnection(
-      inputStream: FileHandle(fileDescriptor: inputFD),
-      outputStream: FileHandle(fileDescriptor: outputFD)
+      inputStream: inputFD,
+      outputStream: outputFD
     )
 
     // Handle messages from the host until the input stream is closed,
@@ -168,95 +189,95 @@ extension CompilerPlugin {
 
   // Private function to report internal errors and then exit.
   fileprivate static func internalError(_ message: String) -> Never {
-    fputs("Internal Error: \(message)\n", stderr)
+    fputs("Internal Error: \(message)\n", _ss_stderr())
     exit(1)
-  }
-
-  // Private function to construct an error message from an `errno` code.
-  fileprivate static func describe(errno: Int32) -> String {
-    if let cStr = strerror(errno) { return String(cString: cStr) }
-    return String(describing: errno)
   }
 }
 
 internal struct PluginHostConnection: MessageConnection {
-  fileprivate let inputStream: FileHandle
-  fileprivate let outputStream: FileHandle
+  // File descriptor for input from the host.
+  fileprivate let inputStream: CInt
+  // File descriptor for output to the host.
+  fileprivate let outputStream: CInt
 
   func sendMessage<TX: Encodable>(_ message: TX) throws {
     // Encode the message as JSON.
-    let payload = try JSONEncoder().encode(message)
+    let payload = try JSON.encode(message)
 
     // Write the header (a 64-bit length field in little endian byte order).
-    var count = UInt64(payload.count).littleEndian
-    let header = Swift.withUnsafeBytes(of: &count) { Data($0) }
-    precondition(header.count == 8)
+    let count = payload.count
+    var header = UInt64(count).littleEndian
+    try withUnsafeBytes(of: &header) { try _write(outputStream, contentsOf: $0) }
 
-    // Write the header and payload.
-    try outputStream._write(contentsOf: header)
-    try outputStream._write(contentsOf: payload)
+    // Write the JSON payload.
+    try payload.withUnsafeBytes { try _write(outputStream, contentsOf: $0) }
   }
 
   func waitForNextMessage<RX: Decodable>(_ ty: RX.Type) throws -> RX? {
     // Read the header (a 64-bit length field in little endian byte order).
-    guard
-      let header = try inputStream._read(upToCount: 8),
-      header.count != 0
-    else {
+    var header: UInt64 = 0
+    do {
+      try withUnsafeMutableBytes(of: &header) { try _read(inputStream, into: $0) }
+    } catch IOError.readReachedEndOfInput {
+      // Connection closed.
       return nil
-    }
-    guard header.count == 8 else {
-      throw PluginMessageError.truncatedHeader
-    }
-
-    // Decode the count.
-    let count = header.withUnsafeBytes {
-      UInt64(littleEndian: $0.loadUnaligned(as: UInt64.self))
-    }
-    guard count >= 2 else {
-      throw PluginMessageError.invalidPayloadSize
     }
 
     // Read the JSON payload.
-    guard
-      let payload = try inputStream._read(upToCount: Int(count)),
-      payload.count == count
-    else {
-      throw PluginMessageError.truncatedPayload
-    }
+    let count = Int(UInt64(littleEndian: header))
+    let data = UnsafeMutableRawBufferPointer.allocate(byteCount: count, alignment: 1)
+    defer { data.deallocate() }
+    try _read(inputStream, into: data)
 
     // Decode and return the message.
-    return try JSONDecoder().decode(RX.self, from: payload)
-  }
-
-  enum PluginMessageError: Swift.Error {
-    case truncatedHeader
-    case invalidPayloadSize
-    case truncatedPayload
+    return try JSON.decode(ty, from: UnsafeBufferPointer(data.bindMemory(to: UInt8.self)))
   }
 }
 
-private extension FileHandle {
-  func _write(contentsOf data: Data) throws {
-    if #available(macOS 10.15.4, iOS 13.4, watchOS 6.2, tvOS 13.4, *) {
-      return try self.write(contentsOf: data)
-    } else {
-      return self.write(data)
-    }
-  }
-
-  func _read(upToCount count: Int) throws -> Data? {
-    if #available(macOS 10.15.4, iOS 13.4, watchOS 6.2, tvOS 13.4, *) {
-      return try self.read(upToCount: count)
-    } else {
-      return self.readData(ofLength: 8)
+/// Write the buffer to the file descriptor. Throws an error on failure.
+private func _write(_ fd: CInt, contentsOf buffer: UnsafeRawBufferPointer) throws {
+  guard var ptr = buffer.baseAddress else { return }
+  let endPtr = ptr.advanced(by: buffer.count)
+  while ptr != endPtr {
+    switch write(fd, ptr, numericCast(endPtr - ptr)) {
+    case -1: throw IOError.writeFailed(errno: _ss_errno())
+    case 0: throw IOError.writeFailed(errno: 0) /* unreachable */
+    case let n: ptr += Int(n)
     }
   }
 }
 
-struct CompilerPluginError: Error, CustomStringConvertible {
-  var description: String
-  init(message: String) {
-    self.description = message
+/// Fill the buffer from the file descriptor. Throws an error on failure.
+/// If the file descriptor reached the end-of-file before filling up the entire
+/// buffer, throws IOError.readReachedEndOfInput
+private func _read(_ fd: CInt, into buffer: UnsafeMutableRawBufferPointer) throws {
+  guard var ptr = buffer.baseAddress else { return }
+  let endPtr = ptr.advanced(by: buffer.count)
+  while ptr != endPtr {
+    switch read(fd, ptr, numericCast(endPtr - ptr)) {
+    case -1: throw IOError.readFailed(errno: _ss_errno())
+    case 0: throw IOError.readReachedEndOfInput
+    case let n: ptr += Int(n)
+    }
   }
+}
+
+private enum IOError: Error, CustomStringConvertible {
+  case readReachedEndOfInput
+  case readFailed(errno: CInt)
+  case writeFailed(errno: CInt)
+
+  var description: String {
+    switch self {
+    case .readReachedEndOfInput: "read(2) reached end-of-file"
+    case .readFailed(let errno): "read(2) failed: \(describe(errno: errno))"
+    case .writeFailed(let errno): "write(2) failed: \(describe(errno: errno))"
+    }
+  }
+}
+
+// Private function to construct an error message from an `errno` code.
+private func describe(errno: CInt) -> String {
+  if let cStr = strerror(errno) { return String(cString: cStr) }
+  return String(describing: errno)
 }

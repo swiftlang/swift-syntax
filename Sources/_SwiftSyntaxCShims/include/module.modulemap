@@ -1,0 +1,4 @@
+module _SwiftSyntaxCShims {
+  header "_stdio.h"
+  export *
+}

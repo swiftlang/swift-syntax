@@ -13,6 +13,10 @@ add_swift_syntax_library(SwiftCompilerPluginMessageHandling
   PluginMacroExpansionContext.swift
   PluginMessageCompatibility.swift
   PluginMessages.swift
+  JSON/CodingUtilities.swift
+  JSON/JSON.swift
+  JSON/JSONDecoding.swift
+  JSON/JSONEncoding.swift
 )
 
 target_link_swift_syntax_libraries(SwiftCompilerPluginMessageHandling PUBLIC

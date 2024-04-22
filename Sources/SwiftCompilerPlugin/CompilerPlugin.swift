@@ -13,7 +13,7 @@
 // https://github.com/apple/swift-package-manager/blob/main/Sources/PackagePlugin/Plugin.swift
 
 #if swift(>=6.0)
-private import _CShims
+private import _SwiftSyntaxCShims
 public import SwiftSyntaxMacros
 @_spi(PluginMessage) private import SwiftCompilerPluginMessageHandling
 #if canImport(Darwin)
@@ -24,7 +24,7 @@ private import Glibc
 private import ucrt
 #endif
 #else
-import _CShims
+import _SwiftSyntaxCShims
 import SwiftSyntaxMacros
 @_spi(PluginMessage) import SwiftCompilerPluginMessageHandling
 #if canImport(Darwin)

@@ -14,5 +14,5 @@ add_swift_syntax_library(SwiftCompilerPlugin
 target_link_swift_syntax_libraries(SwiftCompilerPlugin PUBLIC
   SwiftSyntaxMacros
   SwiftCompilerPluginMessageHandling
-  SwiftSyntax_CShims
+  _SwiftSyntaxCShims
 )

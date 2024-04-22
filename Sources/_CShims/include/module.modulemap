@@ -1,4 +1,0 @@
-module _CShims {
-  header "_CShims.h"
-  export *
-}

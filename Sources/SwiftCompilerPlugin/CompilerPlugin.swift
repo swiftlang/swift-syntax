@@ -9,31 +9,13 @@
 // See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
-// NOTE: This basic plugin mechanism is mostly copied from
-// https://github.com/apple/swift-package-manager/blob/main/Sources/PackagePlugin/Plugin.swift
 
 #if swift(>=6.0)
-private import _SwiftSyntaxCShims
 public import SwiftSyntaxMacros
 @_spi(PluginMessage) private import SwiftCompilerPluginMessageHandling
-#if canImport(Darwin)
-private import Darwin
-#elseif canImport(Glibc)
-private import Glibc
-#elseif canImport(ucrt)
-private import ucrt
-#endif
 #else
-import _SwiftSyntaxCShims
 import SwiftSyntaxMacros
 @_spi(PluginMessage) import SwiftCompilerPluginMessageHandling
-#if canImport(Darwin)
-import Darwin
-#elseif canImport(Glibc)
-import Glibc
-#elseif canImport(ucrt)
-import ucrt
-#endif
 #endif
 
 //
@@ -122,61 +104,12 @@ struct MacroProviderAdapter<Plugin: CompilerPlugin>: PluginProvider {
   }
 }
 
-#if canImport(ucrt)
-private let dup = _dup(_:)
-private let fileno = _fileno(_:)
-private let dup2 = _dup2(_:_:)
-private let close = _close(_:)
-private let read = _read(_:_:_:)
-private let write = _write(_:_:_:)
-#endif
-
 extension CompilerPlugin {
 
-  /// Main entry point of the plugin — sets up a communication channel with
-  /// the plugin host and runs the main message loop.
+  /// Main entry point of the plugin — sets up a standard I/O communication
+  /// channel with the plugin host and runs the main message loop.
   public static func main() throws {
-    // Duplicate the `stdin` file descriptor, which we will then use for
-    // receiving messages from the plugin host.
-    let inputFD = dup(fileno(_stdin))
-    guard inputFD >= 0 else {
-      internalError("Could not duplicate `stdin`: \(describe(errno: _errno)).")
-    }
-
-    // Having duplicated the original standard-input descriptor, we close
-    // `stdin` so that attempts by the plugin to read console input (which
-    // are usually a mistake) return errors instead of blocking.
-    guard close(fileno(_stdin)) >= 0 else {
-      internalError("Could not close `stdin`: \(describe(errno: _errno)).")
-    }
-
-    // Duplicate the `stdout` file descriptor, which we will then use for
-    // sending messages to the plugin host.
-    let outputFD = dup(fileno(_stdout))
-    guard outputFD >= 0 else {
-      internalError("Could not dup `stdout`: \(describe(errno: _errno)).")
-    }
-
-    // Having duplicated the original standard-output descriptor, redirect
-    // `stdout` to `stderr` so that all free-form text output goes there.
-    guard dup2(fileno(_stderr), fileno(_stdout)) >= 0 else {
-      internalError("Could not dup2 `stdout` to `stderr`: \(describe(errno: _errno)).")
-    }
-
-    #if canImport(ucrt)
-    // Set I/O to binary mode. Avoid CRLF translation, and Ctrl+Z (0x1A) as EOF.
-    _ = _setmode(inputFD, _O_BINARY)
-    _ = _setmode(outputFD, _O_BINARY)
-    #endif
-
-    // Open a message channel for communicating with the plugin host.
-    let connection = PluginHostConnection(
-      inputStream: inputFD,
-      outputStream: outputFD
-    )
-
-    // Handle messages from the host until the input stream is closed,
-    // indicating that we're done.
+    let connection = try StandardIOMessageConnection()
     let provider = MacroProviderAdapter(plugin: Self())
     let impl = CompilerPluginMessageHandler(connection: connection, provider: provider)
     do {
@@ -184,101 +117,7 @@ extension CompilerPlugin {
     } catch {
       // Emit a diagnostic and indicate failure to the plugin host,
       // and exit with an error code.
-      internalError(String(describing: error))
+      fatalError("Internal Error: \(error)")
     }
   }
-
-  // Private function to report internal errors and then exit.
-  fileprivate static func internalError(_ message: String) -> Never {
-    fputs("Internal Error: \(message)\n", _stderr)
-    exit(1)
-  }
-}
-
-internal struct PluginHostConnection: MessageConnection {
-  // File descriptor for input from the host.
-  fileprivate let inputStream: CInt
-  // File descriptor for output to the host.
-  fileprivate let outputStream: CInt
-
-  func sendMessage<TX: Encodable>(_ message: TX) throws {
-    // Encode the message as JSON.
-    let payload = try JSON.encode(message)
-
-    // Write the header (a 64-bit length field in little endian byte order).
-    let count = payload.count
-    var header = UInt64(count).littleEndian
-    try withUnsafeBytes(of: &header) { try _write(outputStream, contentsOf: $0) }
-
-    // Write the JSON payload.
-    try payload.withUnsafeBytes { try _write(outputStream, contentsOf: $0) }
-  }
-
-  func waitForNextMessage<RX: Decodable>(_ ty: RX.Type) throws -> RX? {
-    // Read the header (a 64-bit length field in little endian byte order).
-    var header: UInt64 = 0
-    do {
-      try withUnsafeMutableBytes(of: &header) { try _read(inputStream, into: $0) }
-    } catch IOError.readReachedEndOfInput {
-      // Connection closed.
-      return nil
-    }
-
-    // Read the JSON payload.
-    let count = Int(UInt64(littleEndian: header))
-    let data = UnsafeMutableRawBufferPointer.allocate(byteCount: count, alignment: 1)
-    defer { data.deallocate() }
-    try _read(inputStream, into: data)
-
-    // Decode and return the message.
-    return try JSON.decode(ty, from: UnsafeBufferPointer(data.bindMemory(to: UInt8.self)))
-  }
-}
-
-/// Write the buffer to the file descriptor. Throws an error on failure.
-private func _write(_ fd: CInt, contentsOf buffer: UnsafeRawBufferPointer) throws {
-  guard var ptr = buffer.baseAddress else { return }
-  let endPtr = ptr.advanced(by: buffer.count)
-  while ptr != endPtr {
-    switch write(fd, ptr, numericCast(endPtr - ptr)) {
-    case -1: throw IOError.writeFailed(errno: _errno)
-    case 0: throw IOError.writeFailed(errno: 0) /* unreachable */
-    case let n: ptr += Int(n)
-    }
-  }
-}
-
-/// Fill the buffer from the file descriptor. Throws an error on failure.
-/// If the file descriptor reached the end-of-file before filling up the entire
-/// buffer, throws IOError.readReachedEndOfInput
-private func _read(_ fd: CInt, into buffer: UnsafeMutableRawBufferPointer) throws {
-  guard var ptr = buffer.baseAddress else { return }
-  let endPtr = ptr.advanced(by: buffer.count)
-  while ptr != endPtr {
-    switch read(fd, ptr, numericCast(endPtr - ptr)) {
-    case -1: throw IOError.readFailed(errno: _errno)
-    case 0: throw IOError.readReachedEndOfInput
-    case let n: ptr += Int(n)
-    }
-  }
-}
-
-private enum IOError: Error, CustomStringConvertible {
-  case readReachedEndOfInput
-  case readFailed(errno: CInt)
-  case writeFailed(errno: CInt)
-
-  var description: String {
-    switch self {
-    case .readReachedEndOfInput: "read(2) reached end-of-file"
-    case .readFailed(let errno): "read(2) failed: \(describe(errno: errno))"
-    case .writeFailed(let errno): "write(2) failed: \(describe(errno: errno))"
-    }
-  }
-}
-
-// Private function to construct an error message from an `errno` code.
-private func describe(errno: CInt) -> String {
-  if let cStr = strerror(errno) { return String(cString: cStr) }
-  return String(describing: errno)
 }

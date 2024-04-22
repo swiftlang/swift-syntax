@@ -17,9 +17,11 @@ add_swift_syntax_library(SwiftCompilerPluginMessageHandling
   JSON/JSON.swift
   JSON/JSONDecoding.swift
   JSON/JSONEncoding.swift
+  StandardIOMessageConnection.swift
 )
 
 target_link_swift_syntax_libraries(SwiftCompilerPluginMessageHandling PUBLIC
+  _SwiftSyntaxCShims
   SwiftSyntax
   SwiftBasicFormat
   SwiftDiagnostics

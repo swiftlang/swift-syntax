@@ -547,7 +547,7 @@ extension Parser {
         )
         let leftParen = self.expectWithoutRecoveryOrLeadingTrivia(.leftParen)
         let expressions = RawLabeledExprListSyntax(
-          elements: self.parseArgumentListElements(pattern: .none),
+          elements: self.parseArgumentListElements(pattern: .none, allowTrailingComma: false),
           arena: self.arena
         )
 

@@ -12,7 +12,7 @@
 
 #if swift(>=6)
 public import SwiftDiagnostics
-@_spi(Diagnostics) import SwiftParser
+@_spi(Diagnostics) internal import SwiftParser
 @_spi(ExperimentalLanguageFeatures) public import SwiftSyntax
 #else
 import SwiftDiagnostics

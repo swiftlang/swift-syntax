@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(RawSyntax) @_spi(BumpPtrAllocator) internal import SwiftSyntax
+#else
 @_spi(RawSyntax) @_spi(BumpPtrAllocator) import SwiftSyntax
+#endif
 
 extension Lexer {
   /// A sequence of ``Lexer/Lexeme`` tokens starting from a ``Lexer/Cursor``

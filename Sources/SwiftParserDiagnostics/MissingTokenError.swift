@@ -10,9 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+internal import SwiftDiagnostics
+@_spi(Diagnostics) internal import SwiftParser
+@_spi(RawSyntax) internal import SwiftSyntax
+#else
 import SwiftDiagnostics
 @_spi(Diagnostics) import SwiftParser
 @_spi(RawSyntax) import SwiftSyntax
+#endif
 
 extension ParseDiagnosticsGenerator {
   func handleMissingToken(_ missingToken: TokenSyntax) {

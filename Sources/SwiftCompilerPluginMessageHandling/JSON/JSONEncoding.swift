@@ -55,7 +55,7 @@ private class JSONReference {
     guard case .array(var arr) = backing else {
       preconditionFailure()
     }
-    backing = .null  // Ensure 'err' uniquely referenced.
+    backing = .null  // Ensure 'arr' uniquely referenced.
     arr.append(value)
     backing = .array(arr)
   }

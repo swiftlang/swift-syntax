@@ -35,10 +35,6 @@ let package = Package(
     ),
 
     .target(
-      name: "_AtomicBool"
-    ),
-
-    .target(
       name: "_InstructionCounter"
     ),
 
@@ -131,7 +127,7 @@ let package = Package(
 
     .target(
       name: "SwiftSyntax",
-      dependencies: ["_AtomicBool", "SwiftSyntax509", "SwiftSyntax510", "SwiftSyntax600"],
+      dependencies: ["_SwiftSyntaxCShims", "SwiftSyntax509", "SwiftSyntax510", "SwiftSyntax600"],
       exclude: ["CMakeLists.txt"],
       swiftSettings: swiftSyntaxSwiftSettings
     ),

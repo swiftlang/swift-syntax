@@ -24,7 +24,7 @@ fileprivate struct AtomicBool {
   }
 }
 #else
-import _AtomicBool
+import _SwiftSyntaxCShims
 #endif
 
 /// A syntax arena owns the memory for all syntax nodes within it.

@@ -136,35 +136,31 @@ extension CompilerPlugin {
   /// Main entry point of the plugin — sets up a communication channel with
   /// the plugin host and runs the main message loop.
   public static func main() throws {
-    let stdin = _ss_stdin()
-    let stdout = _ss_stdout()
-    let stderr = _ss_stderr()
-
     // Duplicate the `stdin` file descriptor, which we will then use for
     // receiving messages from the plugin host.
-    let inputFD = dup(fileno(stdin))
+    let inputFD = dup(fileno(_stdin))
     guard inputFD >= 0 else {
-      internalError("Could not duplicate `stdin`: \(describe(errno: _ss_errno())).")
+      internalError("Could not duplicate `stdin`: \(describe(errno: _errno)).")
     }
 
     // Having duplicated the original standard-input descriptor, we close
     // `stdin` so that attempts by the plugin to read console input (which
     // are usually a mistake) return errors instead of blocking.
-    guard close(fileno(stdin)) >= 0 else {
-      internalError("Could not close `stdin`: \(describe(errno: _ss_errno())).")
+    guard close(fileno(_stdin)) >= 0 else {
+      internalError("Could not close `stdin`: \(describe(errno: _errno)).")
     }
 
     // Duplicate the `stdout` file descriptor, which we will then use for
     // sending messages to the plugin host.
-    let outputFD = dup(fileno(stdout))
+    let outputFD = dup(fileno(_stdout))
     guard outputFD >= 0 else {
-      internalError("Could not dup `stdout`: \(describe(errno: _ss_errno())).")
+      internalError("Could not dup `stdout`: \(describe(errno: _errno)).")
     }
 
     // Having duplicated the original standard-output descriptor, redirect
     // `stdout` to `stderr` so that all free-form text output goes there.
-    guard dup2(fileno(stderr), fileno(stdout)) >= 0 else {
-      internalError("Could not dup2 `stdout` to `stderr`: \(describe(errno: _ss_errno())).")
+    guard dup2(fileno(_stderr), fileno(_stdout)) >= 0 else {
+      internalError("Could not dup2 `stdout` to `stderr`: \(describe(errno: _errno)).")
     }
 
     #if canImport(ucrt)
@@ -194,7 +190,7 @@ extension CompilerPlugin {
 
   // Private function to report internal errors and then exit.
   fileprivate static func internalError(_ message: String) -> Never {
-    fputs("Internal Error: \(message)\n", _ss_stderr())
+    fputs("Internal Error: \(message)\n", _stderr)
     exit(1)
   }
 }
@@ -245,7 +241,7 @@ private func _write(_ fd: CInt, contentsOf buffer: UnsafeRawBufferPointer) throw
   let endPtr = ptr.advanced(by: buffer.count)
   while ptr != endPtr {
     switch write(fd, ptr, numericCast(endPtr - ptr)) {
-    case -1: throw IOError.writeFailed(errno: _ss_errno())
+    case -1: throw IOError.writeFailed(errno: _errno)
     case 0: throw IOError.writeFailed(errno: 0) /* unreachable */
     case let n: ptr += Int(n)
     }
@@ -260,7 +256,7 @@ private func _read(_ fd: CInt, into buffer: UnsafeMutableRawBufferPointer) throw
   let endPtr = ptr.advanced(by: buffer.count)
   while ptr != endPtr {
     switch read(fd, ptr, numericCast(endPtr - ptr)) {
-    case -1: throw IOError.readFailed(errno: _ss_errno())
+    case -1: throw IOError.readFailed(errno: _errno)
     case 0: throw IOError.readReachedEndOfInput
     case let n: ptr += Int(n)
     }

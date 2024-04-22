@@ -42,11 +42,11 @@ extension SyntaxProtocol {
 // MARK: Casting
 
 // Casting functions to specialized syntax nodes.
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Initializes a new instance of the conforming type from a given specialized syntax node.
   ///
   /// Returns `nil` if the conversion isn't possible, or if the provided node is `nil`.
-  init?<S: SyntaxProtocol>(_ node: S?) {
+  public init?<S: SyntaxProtocol>(_ node: S?) {
     guard let node = node else {
       return nil
     }
@@ -56,7 +56,7 @@ public extension SyntaxProtocol {
   /// Checks if the current syntax node can be cast to a given specialized syntax type.
   ///
   /// - Returns: `true` if the node can be cast, `false` otherwise.
-  func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+  public func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return self.as(syntaxType) != nil
   }
 
@@ -67,7 +67,7 @@ public extension SyntaxProtocol {
   /// - Note: This method overloads the general `is` method and is marked deprecated to produce a warning
   ///         informing the user that the upcast will always succeed.
   @available(*, deprecated, message: "This cast will always succeed")
-  func `is`(_ syntaxType: Syntax.Type) -> Bool {
+  public func `is`(_ syntaxType: Syntax.Type) -> Bool {
     return true
   }
 
@@ -78,14 +78,14 @@ public extension SyntaxProtocol {
   /// - Note: This method overloads the general `is` method and is marked as deprecated to produce a warning,
   ///         informing the user that the cast will always succeed.
   @available(*, deprecated, message: "This cast will always succeed")
-  func `is`(_ syntaxType: Self.Type) -> Bool {
+  public func `is`(_ syntaxType: Self.Type) -> Bool {
     return true
   }
 
   /// Attempts to cast the current syntax node to a given specialized syntax type.
   ///
   /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
-  func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+  public func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return S.init(self)
   }
 
@@ -96,7 +96,7 @@ public extension SyntaxProtocol {
   /// - Note: This method overloads the general `as` method and is marked deprecated to produce a warning
   ///         informing the user the upcast should be performed using the base node's initializer.
   @available(*, deprecated, message: "Use `Syntax.init` for upcasting.")
-  func `as`(_ syntaxType: Syntax.Type) -> Syntax? {
+  public func `as`(_ syntaxType: Syntax.Type) -> Syntax? {
     return Syntax(self)
   }
 
@@ -107,7 +107,7 @@ public extension SyntaxProtocol {
   /// - Note: This method overloads the general `as` method and is marked as deprecated to produce a warning,
   ///         informing the user that the cast will always succeed.
   @available(*, deprecated, message: "This cast will always succeed")
-  func `as`(_ syntaxType: Self.Type) -> Self? {
+  public func `as`(_ syntaxType: Self.Type) -> Self? {
     return self
   }
 
@@ -115,7 +115,7 @@ public extension SyntaxProtocol {
   ///
   /// - Returns: An instance of the specialized type.
   /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
-  func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
+  public func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
     return self.as(S.self)!
   }
 
@@ -126,7 +126,7 @@ public extension SyntaxProtocol {
   /// - Note: This method overloads the general `as` method and is marked deprecated to produce a warning
   ///         informing the user the upcast should be performed using the base node's initializer.
   @available(*, deprecated, message: "Use `Syntax.init` for upcasting.")
-  func cast(_ syntaxType: Syntax.Type) -> Syntax {
+  public func cast(_ syntaxType: Syntax.Type) -> Syntax {
     return Syntax(self)
   }
 
@@ -137,17 +137,17 @@ public extension SyntaxProtocol {
   /// - Note: This method overloads the general `cast` method and is marked as deprecated to produce a warning,
   ///         informing the user that the cast will always succeed.
   @available(*, deprecated, message: "This cast will always succeed")
-  func cast(_ syntaxType: Self.Type) -> Self {
+  public func cast(_ syntaxType: Self.Type) -> Self {
     return self
   }
 }
 
 // MARK: Modifying
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Returns a new syntax node that has the child at `keyPath` replaced by
   /// `value`.
-  func with<T>(_ keyPath: WritableKeyPath<Self, T>, _ value: T) -> Self {
+  public func with<T>(_ keyPath: WritableKeyPath<Self, T>, _ value: T) -> Self {
     var copy = self
     copy[keyPath: keyPath] = value
     return copy
@@ -155,7 +155,7 @@ public extension SyntaxProtocol {
 
   /// Return this subtree with this node as the root, ie. detach this node
   /// from its parent.
-  var detached: Self {
+  public var detached: Self {
     // Make sure `self` (and thus the arena of `self.raw`) can’t get deallocated
     // before the detached node can be created.
     return withExtendedLifetime(self) {
@@ -188,15 +188,15 @@ extension SyntaxProtocol {
 
 // MARK: Children / parent
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// A sequence over the children of this node.
-  func children(viewMode: SyntaxTreeViewMode) -> SyntaxChildren {
+  public func children(viewMode: SyntaxTreeViewMode) -> SyntaxChildren {
     return SyntaxChildren(_syntaxNode, viewMode: viewMode)
   }
 
   /// The index of this node in a ``SyntaxChildren`` collection.
   @available(*, deprecated, message: "Use index(of:) on the collection that contains this node")
-  var index: SyntaxChildrenIndex {
+  public var index: SyntaxChildrenIndex {
     return indexInParent
   }
 
@@ -206,12 +206,12 @@ public extension SyntaxProtocol {
   }
 
   /// The parent of this syntax node, or `nil` if this node is the root.
-  var parent: Syntax? {
+  public var parent: Syntax? {
     return Syntax(self).parent
   }
 
   /// The root of the tree in which this node resides.
-  var root: Syntax {
+  public var root: Syntax {
     var this = _syntaxNode
     while let parent = this.parent {
       this = parent
@@ -220,11 +220,11 @@ public extension SyntaxProtocol {
   }
 
   /// Whether or not this node has a parent.
-  var hasParent: Bool {
+  public var hasParent: Bool {
     return parent != nil
   }
 
-  var keyPathInParent: AnyKeyPath? {
+  public var keyPathInParent: AnyKeyPath? {
     guard let parent = self.parent else {
       return nil
     }
@@ -235,17 +235,17 @@ public extension SyntaxProtocol {
   }
 
   @available(*, deprecated, message: "Use previousToken(viewMode:) instead")
-  var previousToken: TokenSyntax? {
+  public var previousToken: TokenSyntax? {
     return self.previousToken(viewMode: .sourceAccurate)
   }
 }
 
 // MARK: Accessing tokens
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Recursively walks through the tree to find the token semantically before
   /// this node.
-  func previousToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
+  public func previousToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
     guard let parent = self.parent else {
       return nil
     }
@@ -264,13 +264,13 @@ public extension SyntaxProtocol {
   }
 
   @available(*, deprecated, message: "Use nextToken(viewMode:) instead")
-  var nextToken: TokenSyntax? {
+  public var nextToken: TokenSyntax? {
     return self.nextToken(viewMode: .sourceAccurate)
   }
 
   /// Recursively walks through the tree to find the next token semantically
   /// after this node.
-  func nextToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
+  public func nextToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
     guard let parent = self.parent else {
       return nil
     }
@@ -286,12 +286,12 @@ public extension SyntaxProtocol {
   }
 
   @available(*, deprecated, message: "Use firstToken(viewMode: .sourceAccurate) instead")
-  var firstToken: TokenSyntax? {
+  public var firstToken: TokenSyntax? {
     return self.firstToken(viewMode: .sourceAccurate)
   }
 
   /// Returns the first token node that is part of this syntax node.
-  func firstToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
+  public func firstToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
     guard viewMode.shouldTraverse(node: raw) else { return nil }
     if let token = _syntaxNode.as(TokenSyntax.self) {
       return token
@@ -306,12 +306,12 @@ public extension SyntaxProtocol {
   }
 
   @available(*, deprecated, message: "Use lastToken(viewMode: .sourceAccurate) instead")
-  var lastToken: TokenSyntax? {
+  public var lastToken: TokenSyntax? {
     return self.lastToken(viewMode: .sourceAccurate)
   }
 
   /// Returns the last token node that is part of this syntax node.
-  func lastToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
+  public func lastToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
     guard viewMode.shouldTraverse(node: raw) else { return nil }
     if let token = _syntaxNode.as(TokenSyntax.self) {
       return token
@@ -326,13 +326,13 @@ public extension SyntaxProtocol {
   }
 
   /// Sequence of tokens that are part of this Syntax node.
-  func tokens(viewMode: SyntaxTreeViewMode) -> TokenSequence {
+  public func tokens(viewMode: SyntaxTreeViewMode) -> TokenSequence {
     return TokenSequence(_syntaxNode, viewMode: viewMode)
   }
 
   /// Find the syntax token at the given absolute position within this
   /// syntax node or any of its children.
-  func token(at position: AbsolutePosition) -> TokenSyntax? {
+  public func token(at position: AbsolutePosition) -> TokenSyntax? {
     // If the position isn't within this node at all, return early.
     guard position >= self.position && position < self.endPosition else {
       return nil
@@ -358,7 +358,7 @@ public extension SyntaxProtocol {
   ///
   /// If the identifier references a node from a different tree (ie. one that has a different root ID in the
   /// ``SyntaxIdentifier``) or if no node with the given identifier is a child of this syntax node, returns `nil`.
-  func node(at syntaxIdentifier: SyntaxIdentifier) -> Syntax? {
+  public func node(at syntaxIdentifier: SyntaxIdentifier) -> Syntax? {
     guard self.id <= syntaxIdentifier && syntaxIdentifier < self.id.advancedBySibling(self.raw) else {
       // The syntax identifier is not part of this tree.
       return nil
@@ -378,59 +378,59 @@ public extension SyntaxProtocol {
 
 // MARK: Recursive flags
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// Whether the tree contained by this layout has any
   ///  - missing nodes or
   ///  - unexpected nodes or
   ///  - tokens with a ``TokenDiagnostic`` of severity ``TokenDiagnostic/Severity-swift.enum/error``.
-  var hasError: Bool {
+  public var hasError: Bool {
     return raw.hasError
   }
 
   /// Whether the tree contained by this layout has any tokens with a
   /// ``TokenDiagnostic`` of severity `warning`.
-  var hasWarning: Bool {
+  public var hasWarning: Bool {
     return raw.recursiveFlags.contains(.hasWarning)
   }
 
   /// Whether this tree contains a missing token or unexpected node.
-  var hasSequenceExpr: Bool {
+  public var hasSequenceExpr: Bool {
     return raw.recursiveFlags.contains(.hasSequenceExpr)
   }
 
-  var hasMaximumNestingLevelOverflow: Bool {
+  public var hasMaximumNestingLevelOverflow: Bool {
     return raw.recursiveFlags.contains(.hasMaximumNestingLevelOverflow)
   }
 }
 
 // MARK: Position / length / range
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// The absolute position of the starting point of this node. If the first token
   /// is with leading trivia, the position points to the start of the leading
   /// trivia.
-  var position: AbsolutePosition {
+  public var position: AbsolutePosition {
     return Syntax(self).position
   }
 
   /// The absolute position of the starting point of this node, skipping any
   /// leading trivia attached to the first token syntax.
-  var positionAfterSkippingLeadingTrivia: AbsolutePosition {
+  public var positionAfterSkippingLeadingTrivia: AbsolutePosition {
     return Syntax(self).positionAfterSkippingLeadingTrivia
   }
 
   /// The end position of this node's content, before any trailing trivia.
-  var endPositionBeforeTrailingTrivia: AbsolutePosition {
+  public var endPositionBeforeTrailingTrivia: AbsolutePosition {
     return Syntax(self).endPositionBeforeTrailingTrivia
   }
 
   /// The end position of this node, including its trivia.
-  var endPosition: AbsolutePosition {
+  public var endPosition: AbsolutePosition {
     return Syntax(self).endPosition
   }
 
   /// The length of this node including all of its trivia.
-  var totalLength: SourceLength {
+  public var totalLength: SourceLength {
     return raw.totalLength
   }
 
@@ -439,12 +439,12 @@ public extension SyntaxProtocol {
   ///
   /// - Note: If this node consists of multiple tokens, only the first token’s
   ///   leading and the last token’s trailing trivia will be trimmed.
-  var trimmedLength: SourceLength {
+  public var trimmedLength: SourceLength {
     return raw.trimmedLength
   }
 
   /// The byte source range of this node including leading and trailing trivia.
-  var totalByteRange: ByteSourceRange {
+  public var totalByteRange: ByteSourceRange {
     return ByteSourceRange(offset: position.utf8Offset, length: totalLength.utf8Length)
   }
 
@@ -452,7 +452,7 @@ public extension SyntaxProtocol {
   ///
   /// - Note: If this node consists of multiple tokens, only the first token’s
   ///   leading and the last token’s trailing trivia will be trimmed.
-  var trimmedByteRange: ByteSourceRange {
+  public var trimmedByteRange: ByteSourceRange {
     return ByteSourceRange(
       offset: positionAfterSkippingLeadingTrivia.utf8Offset,
       length: trimmedLength.utf8Length
@@ -460,31 +460,31 @@ public extension SyntaxProtocol {
   }
 
   @available(*, deprecated, renamed: "trimmedLength")
-  var contentLength: SourceLength {
+  public var contentLength: SourceLength {
     return trimmedLength
   }
 
   @available(*, deprecated, renamed: "totalByteRange")
-  var byteRange: ByteSourceRange {
+  public var byteRange: ByteSourceRange {
     return ByteSourceRange(offset: position.utf8Offset, length: totalLength.utf8Length)
   }
 
   /// The textual byte length of this node including leading and trailing trivia.
   @available(*, deprecated, message: "Use totalLength.utf8Length")
-  var byteSize: Int {
+  public var byteSize: Int {
     return totalLength.utf8Length
   }
 
   /// The textual byte length of this node excluding leading and trailing trivia.
   @available(*, deprecated, message: "Use trimmedLength.utf8Length")
-  var byteSizeAfterTrimmingTrivia: Int {
+  public var byteSizeAfterTrimmingTrivia: Int {
     return trimmedLength.utf8Length
   }
 }
 
 // MARK: Trivia
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// The leading trivia of this syntax node.
   ///
   /// Trivia is always attached to tokens, not to layout nodes. This will return the leading trivia of the first token
@@ -495,7 +495,7 @@ public extension SyntaxProtocol {
   /// ```
   /// node.syntaxTextBytes.prefix(self.leadingTriviaLength.utf8Length)
   /// ```
-  var leadingTrivia: Trivia {
+  public var leadingTrivia: Trivia {
     get {
       return raw.formLeadingTrivia()
     }
@@ -514,7 +514,7 @@ public extension SyntaxProtocol {
   /// ```
   /// node.syntaxTextBytes[(node.byteSize - node.trailingTriviaLength.utf8Length)...]
   /// ```
-  var trailingTrivia: Trivia {
+  public var trailingTrivia: Trivia {
     get {
       return raw.formTrailingTrivia()
     }
@@ -524,12 +524,12 @@ public extension SyntaxProtocol {
   }
 
   /// The length this node's leading trivia takes up spelled out in source.
-  var leadingTriviaLength: SourceLength {
+  public var leadingTriviaLength: SourceLength {
     return raw.leadingTriviaLength
   }
 
   /// The length this node's trailing trivia takes up spelled out in source.
-  var trailingTriviaLength: SourceLength {
+  public var trailingTriviaLength: SourceLength {
     return raw.trailingTriviaLength
   }
 }
@@ -537,40 +537,40 @@ public extension SyntaxProtocol {
 // MARK: Content
 
 /// Provides the source-accurate text for a node
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// A source-accurate description of this node.
   ///
   /// Note that the resulting String cannot represent invalid UTF-8 that
   /// occurs within the syntax nodes. Use `syntaxTextBytes` for a
   /// byte-accurate representation of this node in the presence of
   /// invalid UTF-8.
-  var description: String {
+  public var description: String {
     return Syntax(self).raw.description
   }
 
   /// Retrieve the syntax text as an array of bytes that models the input
   /// source even in the presence of invalid UTF-8.
-  var syntaxTextBytes: [UInt8] {
+  public var syntaxTextBytes: [UInt8] {
     return Syntax(self).raw.syntaxTextBytes
   }
 
   /// Prints the raw value of this node to the provided stream.
   /// - Parameter stream: The stream to which to print the raw tree.
-  func write<Target>(to target: inout Target)
+  public func write<Target>(to target: inout Target)
   where Target: TextOutputStream {
     Syntax(self).raw.write(to: &target)
   }
 
   /// A copy of this node without the leading trivia of the first token in the
   /// node and the trailing trivia of the last token in the node.
-  var trimmed: Self {
+  public var trimmed: Self {
     // TODO: Should only need one new node here
     return self.with(\.leadingTrivia, []).with(\.trailingTrivia, [])
   }
 
   /// A copy of this node with pieces that match `matching` trimmed from the
   /// leading trivia of the first token and trailing trivia of the last token.
-  func trimmed(matching filter: (TriviaPiece) -> Bool) -> Self {
+  public func trimmed(matching filter: (TriviaPiece) -> Bool) -> Self {
     // TODO: Should only need one new node here
     return self.with(
       \.leadingTrivia,
@@ -583,7 +583,7 @@ public extension SyntaxProtocol {
 
   /// The description of this node with leading whitespace of the first token
   /// and trailing whitespace of the last token removed.
-  var trimmedDescription: String {
+  public var trimmedDescription: String {
     // TODO: We shouldn't need to create to copies just to get the trimmed
     // description.
     return self.trimmed.description
@@ -592,7 +592,7 @@ public extension SyntaxProtocol {
   /// The description of this node with pieces that match `matching` removed
   /// from the leading trivia of the first token and trailing trivia of the
   /// last token.
-  func trimmedDescription(matching filter: (TriviaPiece) -> Bool) -> String {
+  public func trimmedDescription(matching filter: (TriviaPiece) -> Bool) -> String {
     // TODO: We shouldn't need to create to copies just to get the trimmed
     // description.
     return self.trimmed(matching: filter).description
@@ -601,16 +601,16 @@ public extension SyntaxProtocol {
 
 // MARK: Miscellaneous
 
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// When isImplicit is true, the syntax node doesn't include any
   /// underlying tokens, e.g. an empty CodeBlockItemList.
   @available(*, deprecated, message: "Check children(viewMode: .all).isEmpty instead")
-  var isImplicit: Bool {
+  public var isImplicit: Bool {
     return raw.isEmpty
   }
 
   /// Returns a value representing the unique identity of the node.
-  var id: SyntaxIdentifier {
+  public var id: SyntaxIdentifier {
     return Syntax(self).id
   }
 }
@@ -618,13 +618,13 @@ public extension SyntaxProtocol {
 // MARK: Debug description
 
 /// Provides debug descriptions for a node
-public extension SyntaxProtocol {
+extension SyntaxProtocol {
   /// A simple description of this node (ie. its type).
-  var debugDescription: String {
+  public var debugDescription: String {
     debugDescription()
   }
 
-  var customMirror: Mirror {
+  public var customMirror: Mirror {
     // Suppress printing of children when doing `po node` in the debugger.
     // `debugDescription` already prints them in a nicer way.
     return Mirror(self, children: [:])
@@ -640,7 +640,7 @@ public extension SyntaxProtocol {
   ///   the dump.
   ///   - indentLevel: The starting indent level, 0 by default. Each level is 2
   ///   spaces.
-  func debugDescription(
+  public func debugDescription(
     includeTrivia: Bool = false,
     converter: SourceLocationConverter? = nil,
     mark: SyntaxProtocol? = nil,
@@ -723,7 +723,7 @@ public extension SyntaxProtocol {
 /// possible types a child node might have.
 public protocol SyntaxChildChoices: SyntaxProtocol {}
 
-public extension SyntaxChildChoices {
+extension SyntaxChildChoices {
 
   /// Checks if the current ``SyntaxChildChoices`` instance can be cast to a given specialized syntax type.
   ///
@@ -731,7 +731,7 @@ public extension SyntaxChildChoices {
   ///
   /// - Note: This method is marked as deprecated because it is advised not to use it for unrelated casts.
   @available(*, deprecated, message: "This cast will always fail")
-  func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+  public func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return self.as(syntaxType) != nil
   }
 
@@ -741,7 +741,7 @@ public extension SyntaxChildChoices {
   ///
   /// - Note: This method is marked as deprecated because it is advised not to use it for unrelated casts.
   @available(*, deprecated, message: "This cast will always fail")
-  func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+  public func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return S.init(self)
   }
 
@@ -753,7 +753,7 @@ public extension SyntaxChildChoices {
   ///
   /// - Note: This method is marked as deprecated because it is advised not to use it for unrelated casts.
   @available(*, deprecated, message: "This cast will always fail")
-  func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
+  public func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
     return self.as(S.self)!
   }
 }

@@ -13,35 +13,35 @@
 // This file provides compatiblity aliases to keep dependents of SwiftSyntax building.
 // All users of the declarations in this file should transition away from them ASAP.
 
-public extension SyntaxClassification {
+extension SyntaxClassification {
   /// A `#` keyword like `#warning`.
   @available(*, deprecated, renamed: "ifConfigDirective")
-  static var poundDirective: SyntaxClassification {
+  public static var poundDirective: SyntaxClassification {
     return .ifConfigDirective
   }
 
   @available(*, deprecated, renamed: "ifConfigDirective")
-  static var buildConfigId: SyntaxClassification {
+  public static var buildConfigId: SyntaxClassification {
     return .ifConfigDirective
   }
 
   @available(*, deprecated, message: "String interpolation anchors are now classified as .none")
-  static var stringInterpolationAnchor: SyntaxClassification {
+  public static var stringInterpolationAnchor: SyntaxClassification {
     return .none
   }
 
   @available(*, deprecated, renamed: "type")
-  static var typeIdentifier: SyntaxClassification {
+  public static var typeIdentifier: SyntaxClassification {
     return .type
   }
 
   @available(*, deprecated, renamed: "operator")
-  static var operatorIdentifier: SyntaxClassification {
+  public static var operatorIdentifier: SyntaxClassification {
     return .operator
   }
 
   @available(*, deprecated, renamed: "floatLiteral")
-  static var floatingLiteral: SyntaxClassification {
+  public static var floatingLiteral: SyntaxClassification {
     return .floatLiteral
   }
 }

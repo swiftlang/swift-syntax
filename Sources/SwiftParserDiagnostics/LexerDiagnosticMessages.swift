@@ -27,16 +27,16 @@ public protocol TokenError: DiagnosticMessage {
   var diagnosticID: MessageID { get }
 }
 
-public extension TokenError {
-  static var diagnosticID: MessageID {
+extension TokenError {
+  public static var diagnosticID: MessageID {
     return MessageID(domain: diagnosticDomain, id: "\(self)")
   }
 
-  var diagnosticID: MessageID {
+  public var diagnosticID: MessageID {
     return Self.diagnosticID
   }
 
-  var severity: DiagnosticSeverity {
+  public var severity: DiagnosticSeverity {
     return .error
   }
 }
@@ -46,16 +46,16 @@ public protocol TokenWarning: DiagnosticMessage {
   var diagnosticID: MessageID { get }
 }
 
-public extension TokenWarning {
-  static var diagnosticID: MessageID {
+extension TokenWarning {
+  public static var diagnosticID: MessageID {
     return MessageID(domain: diagnosticDomain, id: "\(self)")
   }
 
-  var diagnosticID: MessageID {
+  public var diagnosticID: MessageID {
     return Self.diagnosticID
   }
 
-  var severity: DiagnosticSeverity {
+  public var severity: DiagnosticSeverity {
     return .warning
   }
 }
@@ -180,11 +180,11 @@ public struct ErrorToWarningDowngrade: TokenWarning {
 
 // MARK: - Convert TokenDiagnostic from SwiftSyntax to error messages
 
-public extension SwiftSyntax.TokenDiagnostic {
+extension SwiftSyntax.TokenDiagnostic {
   /// `tokenText` is the entire text of the token in which the ``TokenDiagnostic``
   /// occurred, including trivia.
   @_spi(RawSyntax)
-  func diagnosticMessage(in token: TokenSyntax) -> DiagnosticMessage {
+  public func diagnosticMessage(in token: TokenSyntax) -> DiagnosticMessage {
     var scalarAtErrorOffset: UnicodeScalar {
       // Fall back to the Unicode replacement character U+FFFD in case we can't
       // lex the unicode character at `byteOffset`. It's the best we can do
@@ -241,7 +241,7 @@ public extension SwiftSyntax.TokenDiagnostic {
     }
   }
 
-  func position(in token: TokenSyntax) -> AbsolutePosition {
+  public func position(in token: TokenSyntax) -> AbsolutePosition {
     switch kind {
     case .extraneousLeadingWhitespaceError, .extraneousLeadingWhitespaceWarning:
       if let previousToken = token.previousToken(viewMode: .all) {
@@ -253,7 +253,7 @@ public extension SwiftSyntax.TokenDiagnostic {
     return token.position.advanced(by: Int(byteOffset))
   }
 
-  func fixIts(in token: TokenSyntax) -> [FixIt] {
+  public func fixIts(in token: TokenSyntax) -> [FixIt] {
     switch self.kind {
     case .nonBreakingSpace:
       let replaceNonBreakingSpace = { (piece: TriviaPiece) -> TriviaPiece in

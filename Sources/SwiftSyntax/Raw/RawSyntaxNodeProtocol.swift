@@ -24,30 +24,30 @@ public protocol RawSyntaxNodeProtocol: CustomStringConvertible, TextOutputStream
   init?(_ other: some RawSyntaxNodeProtocol)
 }
 
-public extension RawSyntaxNodeProtocol {
+extension RawSyntaxNodeProtocol {
   /// Cast to the specified raw syntax type if possible.
-  func `as`<Node: RawSyntaxNodeProtocol>(_: Node.Type) -> Node? {
+  public func `as`<Node: RawSyntaxNodeProtocol>(_: Node.Type) -> Node? {
     Node(self)
   }
 
   /// Check if this instance can be cast to the specified syntax type.
-  func `is`<Node: RawSyntaxNodeProtocol>(_: Node.Type) -> Bool {
+  public func `is`<Node: RawSyntaxNodeProtocol>(_: Node.Type) -> Bool {
     Node.isKindOf(self.raw)
   }
 
-  func cast<S: RawSyntaxNodeProtocol>(_ syntaxType: S.Type) -> S {
+  public func cast<S: RawSyntaxNodeProtocol>(_ syntaxType: S.Type) -> S {
     return self.as(S.self)!
   }
 
-  var description: String {
+  public var description: String {
     raw.description
   }
 
-  func write(to target: inout some TextOutputStream) {
+  public func write(to target: inout some TextOutputStream) {
     raw.write(to: &target)
   }
 
-  var isEmpty: Bool {
+  public var isEmpty: Bool {
     return raw.byteLength == 0
   }
 
@@ -55,7 +55,7 @@ public extension RawSyntaxNodeProtocol {
   ///  - missing nodes or
   ///  - unexpected nodes or
   ///  - tokens with a ``TokenDiagnostic`` of severity `error`
-  var hasError: Bool {
+  public var hasError: Bool {
     return raw.recursiveFlags.contains(.hasError)
   }
 }

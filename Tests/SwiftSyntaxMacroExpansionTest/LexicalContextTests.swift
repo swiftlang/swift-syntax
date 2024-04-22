@@ -200,8 +200,8 @@ struct AllLexicalContextsMacro: DeclarationMacro {
   }
 }
 
-public struct LexicalContextDescriptionMacro: ExpressionMacro {
-  public static func expansion(
+struct LexicalContextDescriptionMacro: ExpressionMacro {
+  static func expansion(
     of node: some FreestandingMacroExpansionSyntax,
     in context: some MacroExpansionContext
   ) throws -> ExprSyntax {

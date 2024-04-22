@@ -49,7 +49,7 @@ struct PrepareForKeywordMatch {
 /// matching against and is thus able to rule out one of the branches in
 /// `matches(rawTokenKind:text:)` based on the matched kind.
 @_spi(AlternateTokenIntrospection)
-public struct TokenSpec {
+public struct TokenSpec: Sendable {
   /// The kind we expect the token that we want to consume to have.
   /// This can be a keyword, in which case the ``TokenSpec`` will also match an
   /// identifier with the same text as the keyword and remap it to that keyword

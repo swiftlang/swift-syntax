@@ -17,6 +17,8 @@ private import Darwin
 private import Glibc
 #elseif canImport(Musl)
 private import Musl
+#elseif canImport(ucrt)
+private import ucrt
 #endif
 #else
 #if canImport(Darwin)
@@ -25,6 +27,8 @@ import Darwin
 import Glibc
 #elseif canImport(Musl)
 import Musl
+#elseif canImport(ucrt)
+import ucrt
 #endif
 #endif
 
@@ -131,7 +135,7 @@ public struct SyntaxText: Sendable {
     while start <= stop {
       // Force unwrappings are safe because we know 'self' and 'other' are both
       // not empty.
-      if compareMemory(self.baseAddress! + start, other.baseAddress!, other.count) {
+      if memcmp(self.baseAddress! + start, other.baseAddress!, numericCast(other.count)) == 0 {
         return start..<(start + other.count)
       } else {
         start += 1
@@ -194,11 +198,11 @@ extension SyntaxText: Hashable {
     // SwiftSyntax use cases, comparing the same SyntaxText instances is
     // extremely rare, and checking it causes extra branch.
     // The most common usage is comparing parsed text with a static text e.g.
-    // `token.text == "func"`. In such cases `compareMemory`(`memcmp`) is
-    // optimized to a `cmp` or similar opcode if either operand is a short static
-    // text. So the same-baseAddress shortcut doesn't give us a huge performance
-    // boost even if they actually refer the same memory.
-    return compareMemory(lBase, rBase, lhs.count)
+    // `token.text == "func"`. In such cases `memcmp` is optimized to a `cmp` or
+    // similar opcode if either operand is a short static text. So the
+    // same-baseAddress shortcut doesn't give us a huge performance boost even
+    // if they actually refer the same memory.
+    return memcmp(lBase, rBase, numericCast(lhs.count)) == 0
   }
 
   /// Hash the contents of this ``SyntaxText`` into `hasher`.
@@ -269,20 +273,4 @@ extension String {
       try body(SyntaxText(baseAddress: utf8.baseAddress, count: utf8.count))
     }
   }
-}
-
-private func compareMemory(
-  _ s1: UnsafePointer<UInt8>,
-  _ s2: UnsafePointer<UInt8>,
-  _ count: Int
-) -> Bool {
-  precondition(count >= 0)
-  #if canImport(Darwin)
-  return Darwin.memcmp(s1, s2, count) == 0
-  #elseif canImport(Glibc)
-  return Glibc.memcmp(s1, s2, count) == 0
-  #else
-  return UnsafeBufferPointer(start: s1, count: count)
-    .elementsEqual(UnsafeBufferPointer(start: s2, count: count))
-  #endif
 }

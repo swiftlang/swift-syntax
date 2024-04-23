@@ -63,7 +63,7 @@ public struct NoteSpec {
     message: String,
     line: Int,
     column: Int,
-    originatorFile: StaticString = #file,
+    originatorFile: StaticString = #filePath,
     originatorLine: UInt = #line
   ) {
     self.message = message

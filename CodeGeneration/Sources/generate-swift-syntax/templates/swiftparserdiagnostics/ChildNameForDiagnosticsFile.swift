@@ -16,7 +16,15 @@ import SyntaxSupport
 import Utils
 
 let childNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax("@_spi(ExperimentalLanguageFeatures) import SwiftSyntax")
+  DeclSyntax(
+    """
+    #if swift(>=6)
+    @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
+    #else
+    @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+    #endif
+    """
+  )
 
   try! FunctionDeclSyntax(
     "private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String?"

@@ -17,7 +17,7 @@ fileprivate var baselineURL: URL {
   if let baselineFile = ProcessInfo.processInfo.environment["BASELINE_FILE"] {
     return URL(fileURLWithPath: baselineFile)
   } else {
-    return URL(fileURLWithPath: #file)
+    return URL(fileURLWithPath: #filePath)
       .deletingLastPathComponent()
       .appendingPathComponent("baselines.json")
   }

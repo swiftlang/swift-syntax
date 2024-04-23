@@ -10,9 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+internal import SwiftBasicFormat
+@_spi(RawSyntax) internal import SwiftSyntax
+#else
 import SwiftBasicFormat
 @_spi(RawSyntax) import SwiftSyntax
-
+#endif
 /// Walks a tree and checks whether the tree contained any present tokens.
 class PresentNodeChecker: SyntaxAnyVisitor {
   var hasPresentToken: Bool = false

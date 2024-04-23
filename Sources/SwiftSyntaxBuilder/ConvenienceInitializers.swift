@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 #if swift(>=6)
-@_spi(RawSyntax) import SwiftParser
+@_spi(RawSyntax) internal import SwiftParser
 @_spi(RawSyntax) public import SwiftSyntax
 #else
 @_spi(RawSyntax) import SwiftParser

@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+internal import SwiftSyntax
+#else
 import SwiftSyntax
+#endif
 
 // MARK: SyntaxProtocol.indentationOfFirstLine
 

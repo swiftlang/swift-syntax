@@ -92,7 +92,12 @@ extension CompilerPlugin {
       }
     }
 
-    let pluginPath = CommandLine.arguments.first ?? "<unknown>"
+    let pluginPath: String
+    if CommandLine.argc > 0, let cPluginPath = CommandLine.unsafeArgv[0] {
+      pluginPath = String(cString: cPluginPath)
+    } else {
+      pluginPath = "<unknown>"
+    }
     throw CompilerPluginError(
       message:
         "macro implementation type '\(moduleName).\(typeName)' could not be found in executable plugin '\(pluginPath)'"

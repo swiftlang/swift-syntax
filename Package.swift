@@ -298,7 +298,7 @@ let package = Package(
       exclude: ["Inputs"]
     ),
   ],
-  swiftLanguageVersions: [.v5, .version("6")]
+  swiftLanguageVersions: [.v5]
 )
 
 // This is a fake target that depends on all targets in the package.

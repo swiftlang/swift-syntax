@@ -17,7 +17,7 @@ import SwiftSyntax
 #endif
 
 extension IntegerLiteralExprSyntax {
-  public enum Radix {
+  public enum Radix: CaseIterable {
     case binary
     case octal
     case decimal
@@ -29,6 +29,17 @@ extension IntegerLiteralExprSyntax {
       case .octal: return 8
       case .decimal: return 10
       case .hex: return 16
+      }
+    }
+
+    /// The prefix that is used to express an integer literal with this
+    /// radix in Swift source code, e.g., "0x" for hexadecimal.
+    public var literalPrefix: String {
+      switch self {
+      case .binary: "0b"
+      case .octal: "0o"
+      case .hex: "0x"
+      case .decimal: ""
       }
     }
   }
@@ -67,15 +78,8 @@ extension IntegerLiteralExprSyntax {
   /// ```
   public func split() -> (prefix: String, value: Substring) {
     let text = self.literal.text
-    switch self.radix {
-    case .binary:
-      return ("0b", text.dropFirst(2))
-    case .octal:
-      return ("0o", text.dropFirst(2))
-    case .decimal:
-      return ("", Substring(text))
-    case .hex:
-      return ("0x", text.dropFirst(2))
-    }
+    let radix = self.radix
+    let literalPrefix = radix.literalPrefix
+    return (literalPrefix, text.dropFirst(literalPrefix.count))
   }
 }

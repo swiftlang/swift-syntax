@@ -633,6 +633,7 @@ private enum MacroApplicationError: DiagnosticMessage, Error {
   case accessorMacroOnVariableWithMultipleBindings
   case peerMacroOnVariableWithMultipleBindings
   case malformedAccessor
+  case accessorMacroNotOnVariableOrSubscript
 
   var diagnosticID: MessageID {
     return MessageID(domain: diagnosticDomain, id: "\(self)")
@@ -650,6 +651,8 @@ private enum MacroApplicationError: DiagnosticMessage, Error {
       return """
         macro returned a malformed accessor. Accessors should start with an introducer like 'get' or 'set'.
         """
+    case .accessorMacroNotOnVariableOrSubscript:
+      return "accessor macro can only be applied to a variable or subscript"
     }
   }
 }
@@ -703,6 +706,14 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       let attributedNode = node.asProtocol(WithAttributesSyntax.self),
       !attributedNode.attributes.isEmpty
     {
+      if (!macroAttributes(attachedTo: declSyntax, ofType: AccessorMacro.Type.self).isEmpty
+        && !declSyntax.is(VariableDeclSyntax.self) && !declSyntax.is(SubscriptDeclSyntax.self))
+      {
+        contextGenerator(node).addDiagnostics(
+          from: MacroApplicationError.accessorMacroNotOnVariableOrSubscript,
+          node: declSyntax
+        )
+      }
       // Apply body and preamble macros.
       if let nodeWithBody = node.asProtocol(WithOptionalCodeBlockSyntax.self),
         let declNodeWithBody = nodeWithBody as? any DeclSyntaxProtocol & WithOptionalCodeBlockSyntax

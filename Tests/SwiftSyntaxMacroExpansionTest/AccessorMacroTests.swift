@@ -411,4 +411,25 @@ final class AccessorMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testAccessorOnStruct() {
+    struct TestMacro: AccessorMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AccessorDeclSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      "@Test struct Foo {}",
+      expandedSource: "struct Foo {}",
+      diagnostics: [
+        DiagnosticSpec(message: "accessor macro can only be applied to a variable or subscript", line: 1, column: 1)
+      ],
+      macros: ["Test": TestMacro.self]
+    )
+  }
 }

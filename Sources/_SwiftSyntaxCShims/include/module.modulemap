@@ -1,4 +1,5 @@
 module _SwiftSyntaxCShims {
+  header "swiftsyntax/_includes.h"
   header "swiftsyntax/AtomicBool.h"
   header "swiftsyntax/errno.h"
   header "swiftsyntax/stdio.h"

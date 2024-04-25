@@ -36,10 +36,10 @@ extension IntegerLiteralExprSyntax {
     /// radix in Swift source code, e.g., "0x" for hexadecimal.
     public var literalPrefix: String {
       switch self {
-      case .binary: "0b"
-      case .octal: "0o"
-      case .hex: "0x"
-      case .decimal: ""
+      case .binary: return "0b"
+      case .octal: return "0o"
+      case .hex: return "0x"
+      case .decimal: return ""
       }
     }
   }

@@ -41,21 +41,26 @@ private let write = _write(_:_:_:)
 
 /// Concrete 'MessageConnection' type using Standard I/O.
 ///
-/// When creating, `stdout` is redirected to `stderr` so that print statements
-/// from the plugin are treated as plain-text output, and `stdin` is closed so
-/// that any attempts by the plugin logic to read from console result in errors
-/// instead of blocking the process. The original `stdin` and `stdout` are
-/// duplicated for use as messaging pipes, and are not directly used by the
-/// plugin logic.
-///
 /// Each message is serialized to UTF-8 encoded JSON text, prefixed with a
 /// 8 byte header which is the byte size of the JSON payload serialized to a
 /// little-endian 64bit unsigned integer.
 @_spi(PluginMessage)
 public struct StandardIOMessageConnection: MessageConnection {
-  private var inputFileDescriptor: CInt
-  private var outputFileDescriptor: CInt
+  private let inputFileDescriptor: CInt
+  private let outputFileDescriptor: CInt
 
+  public init(inputFileDescriptor: CInt, outputFileDescriptor: CInt) {
+    self.inputFileDescriptor = inputFileDescriptor
+    self.outputFileDescriptor = outputFileDescriptor
+  }
+
+  /// Convenience initializer for normal executable plugins. Upon creation:
+  ///   - Redirect `stdout` to `stderr` so that print statements from the plugin
+  ///     are treated as plain-text output
+  ///   - Close `stdin` so that any attempts by the plugin logic to read from
+  ///     console result in errors  instead of blocking the process
+  ///   - Duplicate the original `stdin` and `stdout` for use as messaging
+  ///     pipes, and are not directly used by the plugin logic
   public init() throws {
     // Duplicate the `stdin` file descriptor, which we will then use for
     // receiving messages from the plugin host.
@@ -90,8 +95,7 @@ public struct StandardIOMessageConnection: MessageConnection {
     _ = _setmode(outputFD, _O_BINARY)
     #endif
 
-    self.inputFileDescriptor = inputFD
-    self.outputFileDescriptor = outputFD
+    self.init(inputFileDescriptor: inputFD, outputFileDescriptor: outputFD)
   }
 
   /// Write the buffer to the file descriptor. Throws an error on failure.

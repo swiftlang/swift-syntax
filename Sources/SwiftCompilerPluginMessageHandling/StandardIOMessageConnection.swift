@@ -12,22 +12,8 @@
 
 #if swift(>=6.0)
 private import _SwiftSyntaxCShims
-#if canImport(Darwin)
-private import Darwin
-#elseif canImport(Glibc)
-private import Glibc
-#elseif canImport(ucrt)
-private import ucrt
-#endif
 #else
-import _SwiftSyntaxCShims
-#if canImport(Darwin)
-import Darwin
-#elseif canImport(Glibc)
-import Glibc
-#elseif canImport(ucrt)
-import ucrt
-#endif
+@_implementationOnly import _SwiftSyntaxCShims
 #endif
 
 #if canImport(ucrt)

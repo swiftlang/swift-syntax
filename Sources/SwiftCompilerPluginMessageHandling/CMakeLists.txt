@@ -21,11 +21,15 @@ add_swift_syntax_library(SwiftCompilerPluginMessageHandling
 )
 
 target_link_swift_syntax_libraries(SwiftCompilerPluginMessageHandling PUBLIC
-  _SwiftSyntaxCShims
   SwiftSyntax
   SwiftBasicFormat
   SwiftDiagnostics
   SwiftParser
   SwiftSyntaxMacros
   SwiftSyntaxMacroExpansion
-  SwiftOperators)
+  SwiftOperators
+)
+
+target_link_swift_syntax_libraries(SwiftCompilerPluginMessageHandling PRIVATE
+  _SwiftSyntaxCShims
+)

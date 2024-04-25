@@ -182,7 +182,7 @@ extension CompilerPlugin {
     // Handle messages from the host until the input stream is closed,
     // indicating that we're done.
     let provider = MacroProviderAdapter(plugin: Self())
-    let impl = CompilerPluginMessageHandler(connection: connection, provider: provider)
+    let impl = CompilerPluginMessageListener(connection: connection, provider: provider)
     do {
       try impl.main()
     } catch {

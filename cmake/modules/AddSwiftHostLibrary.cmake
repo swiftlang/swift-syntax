@@ -130,7 +130,7 @@ function(add_swift_syntax_library name)
     endif()
   endif()
 
-  if(PROJECT_IS_TOP_LEVEL)
+  if(PROJECT_IS_TOP_LEVEL OR SWIFT_SYNTAX_INSTALL_TARGETS)
     # Install this target
     install(TARGETS ${name}
       EXPORT SwiftSyntaxTargets
@@ -148,4 +148,5 @@ function(add_swift_syntax_library name)
   else()
     set_property(GLOBAL APPEND PROPERTY SWIFT_EXPORTS ${name})
   endif()
+  add_library(SwiftSyntax::${name} ALIAS ${name})
 endfunction()

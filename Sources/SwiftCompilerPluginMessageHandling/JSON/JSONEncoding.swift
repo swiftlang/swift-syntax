@@ -17,7 +17,7 @@ func encodeToJSON(value: some Encodable) throws -> [UInt8] {
 }
 
 /// Intermediate representation for serializing JSON structure.
-private class JSONReference {
+private final class JSONReference {
   enum Backing {
     case null
     case trueKeyword
@@ -60,9 +60,17 @@ private class JSONReference {
     backing = .array(arr)
   }
 
+  #if swift(>=6)
+  // nonisolated(unsafe) is fine for these properties because they represent primitives
+  // that are never modified.
+  nonisolated(unsafe) static let null: JSONReference = .init(backing: .null)
+  nonisolated(unsafe) static let trueKeyword: JSONReference = .init(backing: .trueKeyword)
+  nonisolated(unsafe) static let falseKeyword: JSONReference = .init(backing: .falseKeyword)
+  #else
   static let null: JSONReference = .init(backing: .null)
   static let trueKeyword: JSONReference = .init(backing: .trueKeyword)
   static let falseKeyword: JSONReference = .init(backing: .falseKeyword)
+  #endif
 
   @inline(__always)
   static func newArray() -> JSONReference {

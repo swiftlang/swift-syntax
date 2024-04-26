@@ -11,10 +11,10 @@
 //===----------------------------------------------------------------------===//
 
 #if swift(>=6)
-import SwiftDiagnostics
+internal import SwiftDiagnostics
 public import SwiftParser
-import SwiftParserDiagnostics
-import SwiftSyntax
+internal import SwiftParserDiagnostics
+internal import SwiftSyntax
 #else
 import SwiftDiagnostics
 import SwiftParser

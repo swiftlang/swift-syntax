@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+internal import SwiftSyntax
+#else
 import SwiftSyntax
+#endif
 
 /// Describes the relative precedence of two groups.
 enum Precedence: Sendable {

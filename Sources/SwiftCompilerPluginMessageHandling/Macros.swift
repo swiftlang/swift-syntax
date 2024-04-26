@@ -10,12 +10,21 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+internal import SwiftBasicFormat
+internal import SwiftDiagnostics
+internal import SwiftOperators
+internal import SwiftSyntax
+@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) internal import SwiftSyntaxMacroExpansion
+@_spi(ExperimentalLanguageFeature) internal import SwiftSyntaxMacros
+#else
 import SwiftBasicFormat
 import SwiftDiagnostics
 import SwiftOperators
 import SwiftSyntax
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacroExpansion
 @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
+#endif
 
 extension CompilerPluginMessageHandler {
   /// Get concrete macro type from a pair of module name and type name.

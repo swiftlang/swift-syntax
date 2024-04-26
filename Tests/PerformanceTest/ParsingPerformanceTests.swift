@@ -18,7 +18,7 @@ import _SwiftSyntaxTestSupport
 class ParsingPerformanceTests: XCTestCase {
 
   var inputFile: URL {
-    return URL(fileURLWithPath: #file)
+    return URL(fileURLWithPath: #filePath)
       .deletingLastPathComponent()
       .appendingPathComponent("Inputs")
       .appendingPathComponent("MinimalCollections.swift.input")

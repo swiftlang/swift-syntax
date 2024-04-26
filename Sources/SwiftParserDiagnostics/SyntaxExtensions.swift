@@ -10,9 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+internal import SwiftBasicFormat
+@_spi(Diagnostics) internal import SwiftParser
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
+#else
 import SwiftBasicFormat
 @_spi(Diagnostics) import SwiftParser
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+#endif
 
 extension UnexpectedNodesSyntax {
   func presentTokens(satisfying isIncluded: (TokenSyntax) -> Bool) -> [TokenSyntax] {

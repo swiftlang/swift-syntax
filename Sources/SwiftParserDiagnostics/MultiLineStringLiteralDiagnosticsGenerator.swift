@@ -10,8 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+internal import SwiftDiagnostics
+@_spi(RawSyntax) internal import SwiftSyntax
+#else
 import SwiftDiagnostics
 @_spi(RawSyntax) import SwiftSyntax
+#endif
 
 /// A diagnostic that `MultiLineStringLiteralIndentationDiagnosticsGenerator` is building.
 /// As indentation errors are found on more lines, this diagnostic is modified

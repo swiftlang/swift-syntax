@@ -706,14 +706,6 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       let attributedNode = node.asProtocol(WithAttributesSyntax.self),
       !attributedNode.attributes.isEmpty
     {
-      if (!macroAttributes(attachedTo: declSyntax, ofType: AccessorMacro.Type.self).isEmpty
-        && !declSyntax.is(VariableDeclSyntax.self) && !declSyntax.is(SubscriptDeclSyntax.self))
-      {
-        contextGenerator(node).addDiagnostics(
-          from: MacroApplicationError.accessorMacroNotOnVariableOrSubscript,
-          node: declSyntax
-        )
-      }
       // Apply body and preamble macros.
       if let nodeWithBody = node.asProtocol(WithOptionalCodeBlockSyntax.self),
         let declNodeWithBody = nodeWithBody as? any DeclSyntaxProtocol & WithOptionalCodeBlockSyntax
@@ -726,9 +718,21 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       let visitedNode = self.visit(declSyntax)
       skipVisitAnyHandling.remove(Syntax(declSyntax))
 
-      let attributesToRemove = self.macroAttributes(attachedTo: visitedNode).map(\.attributeNode)
+      let attributesToRemove = self.macroAttributes(attachedTo: visitedNode)
+      attributesToRemove.forEach { (attribute, spec) in
+        if let _ = spec.type as? AccessorMacro.Type,
+          !declSyntax.is(VariableDeclSyntax.self) && !declSyntax.is(SubscriptDeclSyntax.self)
+        {
+          contextGenerator(node).addDiagnostics(
+            from: MacroApplicationError.accessorMacroNotOnVariableOrSubscript,
+            node: declSyntax
+          )
+        }
+      }
 
-      return AttributeRemover(removingWhere: { attributesToRemove.contains($0) }).rewrite(visitedNode)
+      return AttributeRemover(removingWhere: { attributesToRemove.map(\.attributeNode).contains($0) }).rewrite(
+        visitedNode
+      )
     }
 
     return nil

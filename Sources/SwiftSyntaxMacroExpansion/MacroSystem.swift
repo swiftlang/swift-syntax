@@ -669,6 +669,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   /// Store expanded extension while visiting member decls. This should be
   /// added to top-level 'CodeBlockItemList'.
   var extensions: [CodeBlockItemSyntax] = []
+  var expandedAttributes: [AttributeSyntax] = []
 
   init(
     macroSystem: MacroSystem,
@@ -720,16 +721,21 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
 
       let attributesToRemove = self.macroAttributes(attachedTo: visitedNode)
       attributesToRemove.forEach { (attribute, spec) in
-        if let _ = spec.type as? AccessorMacro.Type,
-          !declSyntax.is(VariableDeclSyntax.self) && !declSyntax.is(SubscriptDeclSyntax.self)
-        {
-          contextGenerator(node).addDiagnostics(
-            from: MacroApplicationError.accessorMacroNotOnVariableOrSubscript,
-            node: declSyntax
-          )
+        if let index = self.expandedAttributes.firstIndex(where: { expandedAttribute in
+            expandedAttribute.attributeName.as(IdentifierTypeSyntax.self)?.name.text == attribute.attributeName.as(IdentifierTypeSyntax.self)?.name.text
+        }) {
+          self.expandedAttributes.remove(at: index)
+        } else {
+          if let _ = spec.type as? AccessorMacro.Type,
+            !declSyntax.is(VariableDeclSyntax.self) && !declSyntax.is(SubscriptDeclSyntax.self)
+          {
+            contextGenerator(node).addDiagnostics(
+              from: MacroApplicationError.accessorMacroNotOnVariableOrSubscript,
+              node: declSyntax
+            )
+          }
         }
       }
-
       return AttributeRemover(removingWhere: { attributesToRemove.map(\.attributeNode).contains($0) }).rewrite(
         visitedNode
       )
@@ -1038,6 +1044,7 @@ extension MacroApplication {
           macroAttribute.conformanceList
         ) {
           result += expanded
+          self.expandedAttributes.append(macroAttribute.attributeNode)
         }
       } catch {
         contextGenerator(Syntax(decl)).addDiagnostics(from: error, node: macroAttribute.attributeNode)
@@ -1185,6 +1192,7 @@ extension MacroApplication {
               from: newAccessors,
               indentationWidth: self.indentationWidth
             )
+            self.expandedAttributes.append(macro.attributeNode)
           }
         } else if let newAccessors = try expandAccessorMacroWithoutExistingAccessors(
           definition: macro.definition,
@@ -1207,11 +1215,13 @@ extension MacroApplication {
           } else {
             newAccessorsBlock = newAccessors
           }
+          self.expandedAttributes.append(macro.attributeNode)
         }
       } catch {
         contextGenerator(Syntax(storage)).addDiagnostics(from: error, node: macro.attributeNode)
       }
     }
+
     return (newAccessorsBlock, expandsGetSet)
   }
 }

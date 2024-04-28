@@ -48,6 +48,11 @@ public struct StandardIOMessageConnection: MessageConnection {
   ///   - Duplicate the original `stdin` and `stdout` for use as messaging
   ///     pipes, and are not directly used by the plugin logic
   public init() throws {
+    #if os(WASI)
+    // Wasm doesn't support dup{,2} so we use the original file descriptors.
+    let inputFD = fileno(_stdin)
+    let outputFD = fileno(_stdout)
+    #else
     // Duplicate the `stdin` file descriptor, which we will then use for
     // receiving messages from the plugin host.
     let inputFD = dup(fileno(_stdin))
@@ -79,6 +84,7 @@ public struct StandardIOMessageConnection: MessageConnection {
     // Set I/O to binary mode. Avoid CRLF translation, and Ctrl+Z (0x1A) as EOF.
     _ = _setmode(inputFD, _O_BINARY)
     _ = _setmode(outputFD, _O_BINARY)
+    #endif
     #endif
 
     self.init(inputFileDescriptor: inputFD, outputFileDescriptor: outputFD)
@@ -145,6 +151,15 @@ public struct StandardIOMessageConnection: MessageConnection {
     return try JSON.decode(type, from: UnsafeBufferPointer(data.bindMemory(to: UInt8.self)))
   }
 }
+
+#if os(WASI)
+// fatalError writes to stdout, which is the message
+// output stream under WASI
+public func internalError(_ message: String) -> Never {
+  fputs("Internal Error: \(message)\n", _stderr)
+  exit(1)
+}
+#endif
 
 private enum IOError: Error, CustomStringConvertible {
   case readReachedEndOfInput

@@ -86,10 +86,20 @@ public class CompilerPluginMessageListener<Connection: MessageConnection, Provid
   /// Throws an error when it failed to send/receive the message, or failed
   /// to serialize/deserialize the message.
   public func main() throws {
-    while let message = try connection.waitForNextMessage(HostToPluginMessage.self) {
-      let result = handler.handleMessage(message)
-      try connection.sendMessage(result)
+    while try handleNextMessage() {}
+  }
+
+  /// Receives and handles a single message from the plugin host.
+  ///
+  /// - Returns: `true` if there was a message to read, `false`
+  /// if the end-of-file was reached.
+  public func handleNextMessage() throws -> Bool {
+    guard let message = try connection.waitForNextMessage(HostToPluginMessage.self) else {
+      return false
     }
+    let result = handler.handleMessage(message)
+    try connection.sendMessage(result)
+    return true
   }
 }
 

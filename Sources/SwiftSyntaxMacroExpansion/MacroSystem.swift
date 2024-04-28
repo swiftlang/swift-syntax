@@ -633,6 +633,7 @@ private enum MacroApplicationError: DiagnosticMessage, Error {
   case accessorMacroOnVariableWithMultipleBindings
   case peerMacroOnVariableWithMultipleBindings
   case malformedAccessor
+  case accessorMacroOnLetVariable
 
   var diagnosticID: MessageID {
     return MessageID(domain: diagnosticDomain, id: "\(self)")
@@ -650,6 +651,8 @@ private enum MacroApplicationError: DiagnosticMessage, Error {
       return """
         macro returned a malformed accessor. Accessors should start with an introducer like 'get' or 'set'.
         """
+    case .accessorMacroOnLetVariable:
+      return "accessor macro is not allowed to be applied to a 'let' variable"
     }
   }
 }
@@ -920,6 +923,11 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     var node = super.visit(node).cast(VariableDeclSyntax.self)
 
     guard !macroAttributes(attachedTo: DeclSyntax(node), ofType: AccessorMacro.Type.self).isEmpty else {
+      return DeclSyntax(node)
+    }
+
+    guard node.bindingSpecifier.tokenKind != .keyword(.let) else {
+      contextGenerator(Syntax(node)).addDiagnostics(from: MacroApplicationError.accessorMacroOnLetVariable, node: node)
       return DeclSyntax(node)
     }
 

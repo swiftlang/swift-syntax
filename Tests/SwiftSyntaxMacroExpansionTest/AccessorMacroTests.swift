@@ -411,4 +411,21 @@ final class AccessorMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testAccessorOnLetVariableDeclaration() {
+    assertMacroExpansion(
+      """
+      @constantOne
+      let x: Int = 1
+      """,
+      expandedSource: """
+        let x: Int = 1
+        """,
+      diagnostics: [
+        DiagnosticSpec(message: "accessor macro is not allowed to be applied to a 'let' variable", line: 1, column: 1)
+      ],
+      macros: ["constantOne": ConstantOneGetter.self],
+      indentationWidth: indentationWidth
+    )
+  }
 }

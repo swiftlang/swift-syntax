@@ -112,12 +112,6 @@ extension CompilerPlugin {
     let connection = try StandardIOMessageConnection()
     let provider = MacroProviderAdapter(plugin: Self())
     let impl = CompilerPluginMessageListener(connection: connection, provider: provider)
-    do {
-      try impl.main()
-    } catch {
-      // Emit a diagnostic and indicate failure to the plugin host,
-      // and exit with an error code.
-      fatalError("Internal Error: \(error)")
-    }
+    impl.main()
   }
 }

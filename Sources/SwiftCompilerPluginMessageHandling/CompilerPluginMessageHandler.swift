@@ -11,8 +11,10 @@
 //===----------------------------------------------------------------------===//
 
 #if swift(>=6)
+private import _SwiftSyntaxCShims
 public import SwiftSyntaxMacros
 #else
+@_implementationOnly import _SwiftSyntaxCShims
 import SwiftSyntaxMacros
 #endif
 
@@ -83,12 +85,20 @@ public class CompilerPluginMessageListener<Connection: MessageConnection, Provid
 
   /// Run the main message listener loop.
   /// Returns when the message connection was closed.
-  /// Throws an error when it failed to send/receive the message, or failed
-  /// to serialize/deserialize the message.
-  public func main() throws {
-    while let message = try connection.waitForNextMessage(HostToPluginMessage.self) {
-      let result = handler.handleMessage(message)
-      try connection.sendMessage(result)
+  ///
+  /// On internal errors, such as I/O errors or JSON serialization errors, print
+  /// an error message and `exit(1)`
+  public func main() {
+    do {
+      while let message = try connection.waitForNextMessage(HostToPluginMessage.self) {
+        let result = handler.handleMessage(message)
+        try connection.sendMessage(result)
+      }
+    } catch {
+      // Emit a diagnostic and indicate failure to the plugin host,
+      // and exit with an error code.
+      fputs("Internal Error: \(error)\n", _stderr)
+      exit(1)
     }
   }
 }

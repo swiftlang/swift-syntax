@@ -17,46 +17,6 @@ import SwiftSyntax
 #endif
 
 extension IntegerLiteralExprSyntax {
-  public enum Radix {
-    case binary
-    case octal
-    case decimal
-    case hex
-
-    public var size: Int {
-      switch self {
-      case .binary: return 2
-      case .octal: return 8
-      case .decimal: return 10
-      case .hex: return 16
-      }
-    }
-
-    /// The prefix that is used to express an integer literal with this
-    /// radix in Swift source code, e.g., "0x" for hexadecimal.
-    public var literalPrefix: String {
-      switch self {
-      case .binary: return "0b"
-      case .octal: return "0o"
-      case .hex: return "0x"
-      case .decimal: return ""
-      }
-    }
-  }
-
-  public var radix: Radix {
-    let text = self.literal.text
-    if text.starts(with: "0b") {
-      return .binary
-    } else if text.starts(with: "0o") {
-      return .octal
-    } else if text.starts(with: "0x") {
-      return .hex
-    } else {
-      return .decimal
-    }
-  }
-
   /// Returns an (arbitrarily) "ideal" number of digits that should constitute
   /// a separator-delimited "group" in an integer literal.
   var idealGroupSize: Int {

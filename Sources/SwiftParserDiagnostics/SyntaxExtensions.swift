@@ -85,7 +85,7 @@ extension Syntax {
 extension SyntaxProtocol {
   /// A name that can be used to describe this node's type in diagnostics or `nil` if there is no good name for this node.
   /// If `allowBlockNames` is `false`, ``CodeBlockSyntax`` and ``MemberDeclBlockSyntax`` are not considered to have a good name and will return `nil`.
-  func nodeTypeNameForDiagnostics(allowBlockNames: Bool) -> String? {
+  public func nodeTypeNameForDiagnostics(allowBlockNames: Bool) -> String? {
     let syntax = Syntax(self)
     if !allowBlockNames && (syntax.is(CodeBlockSyntax.self) || syntax.is(MemberBlockSyntax.self)) {
       return nil

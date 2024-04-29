@@ -16,6 +16,7 @@ internal import SwiftOperators
 @_spi(MacroExpansion) internal import SwiftParser
 public import SwiftSyntax
 internal import SwiftSyntaxBuilder
+internal import SwiftParserDiagnostics
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) public import SwiftSyntaxMacros
 #else
 import SwiftDiagnostics
@@ -24,6 +25,7 @@ import SwiftOperators
 import SwiftSyntax
 import SwiftSyntaxBuilder
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
+import SwiftParserDiagnostics
 #endif
 
 // MARK: - Public entry function
@@ -633,7 +635,7 @@ private enum MacroApplicationError: DiagnosticMessage, Error {
   case accessorMacroOnVariableWithMultipleBindings
   case peerMacroOnVariableWithMultipleBindings
   case malformedAccessor
-  case accessorMacroNotOnVariableOrSubscript
+  case macroAttachedToInvalidDecl(String, String)
 
   var diagnosticID: MessageID {
     return MessageID(domain: diagnosticDomain, id: "\(self)")
@@ -651,8 +653,8 @@ private enum MacroApplicationError: DiagnosticMessage, Error {
       return """
         macro returned a malformed accessor. Accessors should start with an introducer like 'get' or 'set'.
         """
-    case .accessorMacroNotOnVariableOrSubscript:
-      return "accessor macro can only be applied to a variable or subscript"
+    case let .macroAttachedToInvalidDecl(macroType, declType):
+      return "'\(macroType)' macro cannot be attached to \(declType)"
     }
   }
 }
@@ -722,18 +724,19 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       let attributesToRemove = self.macroAttributes(attachedTo: visitedNode)
       attributesToRemove.forEach { (attribute, spec) in
         if let index = self.expandedAttributes.firstIndex(where: { expandedAttribute in
-            expandedAttribute.attributeName.as(IdentifierTypeSyntax.self)?.name.text == attribute.attributeName.as(IdentifierTypeSyntax.self)?.name.text
+          expandedAttribute.position == attribute.position
         }) {
           self.expandedAttributes.remove(at: index)
         } else {
-          if let _ = spec.type as? AccessorMacro.Type,
-            !declSyntax.is(VariableDeclSyntax.self) && !declSyntax.is(SubscriptDeclSyntax.self)
-          {
-            contextGenerator(node).addDiagnostics(
-              from: MacroApplicationError.accessorMacroNotOnVariableOrSubscript,
-              node: declSyntax
-            )
-          }
+            if let macroRole = try? inferAttachedMacroRole(definition: spec.type), isInvalidAttachedMacro(macroRole: macroRole, attachedTo: declSyntax) {
+              contextGenerator(node).addDiagnostics(
+                from: MacroApplicationError.macroAttachedToInvalidDecl(
+                  macroRole.rawValue,
+                  declSyntax.nodeTypeNameForDiagnostics(allowBlockNames: true) ?? ""
+                ),
+                node: declSyntax
+              )
+            }
         }
       }
       return AttributeRemover(removingWhere: { attributesToRemove.map(\.attributeNode).contains($0) }).rewrite(
@@ -742,6 +745,20 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     }
 
     return nil
+  }
+
+  private func isInvalidAttachedMacro(macroRole: MacroRole, attachedTo: DeclSyntax) -> Bool {
+    switch macroRole {
+    case .accessor:
+      // Only var decls and subscripts have accessors
+      if (!attachedTo.is(VariableDeclSyntax.self) && !attachedTo.is(SubscriptDeclSyntax.self)) {
+        return true
+      }
+      break
+    default:
+      break
+    }
+    return false
   }
 
   /// Visit for both the body and preamble macros.

@@ -20,7 +20,7 @@ import SwiftSyntax
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
 #endif
 
-public enum MacroRole: Sendable {
+public enum MacroRole: String, Sendable {
   case expression
   case declaration
   case accessor
@@ -63,6 +63,7 @@ enum MacroExpansionError: Error, CustomStringConvertible {
   case noFreestandingMacroRoles(Macro.Type)
   case moreThanOneBodyMacro
   case preambleWithoutBody
+  case noAttachedMacroRoles(Macro.Type)
 
   var description: String {
     switch self {
@@ -92,6 +93,9 @@ enum MacroExpansionError: Error, CustomStringConvertible {
 
     case .preambleWithoutBody:
       return "preamble macro cannot be applied to a function with no body"
+
+    case .noAttachedMacroRoles(let type):
+      return "macro implementation type '\(type)' does not conform to any attached macro protocol"
     }
   }
 }
@@ -170,6 +174,19 @@ public func inferFreestandingMacroRole(definition: Macro.Type) throws -> MacroRo
 
   default:
     throw MacroExpansionError.noFreestandingMacroRoles(definition)
+  }
+}
+
+public func inferAttachedMacroRole(definition: Macro.Type) throws -> MacroRole {
+  switch definition {
+  case is AccessorMacro.Type: return .accessor
+  case is MemberAttributeMacro.Type: return .memberAttribute
+  case is MemberMacro.Type: return .member
+  case is PeerMacro.Type: return .peer
+  case is ExtensionMacro.Type: return .extension
+
+  default:
+    throw MacroExpansionError.noAttachedMacroRoles(definition)
   }
 }
 

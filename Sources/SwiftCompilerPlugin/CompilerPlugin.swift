@@ -114,13 +114,7 @@ extension CompilerPlugin {
     let impl = CompilerPluginMessageListener(connection: connection, provider: provider)
     #if os(WASI)
     // Rather than blocking on read(), let the host tell us when there's data.
-    readabilityHandler = {
-      do {
-        _ = try impl.handleNextMessage()
-      } catch {
-        internalError("\(error)")
-      }
-    }
+    readabilityHandler = { impl.handleNextMessage() }
     #else
     impl.main()
     #endif

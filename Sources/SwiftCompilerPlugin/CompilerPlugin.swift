@@ -122,13 +122,7 @@ extension CompilerPlugin {
       }
     }
     #else
-    do {
-      try impl.main()
-    } catch {
-      // Emit a diagnostic and indicate failure to the plugin host,
-      // and exit with an error code.
-      fatalError("Internal Error: \(error)")
-    }
+    impl.main()
     #endif
   }
 }

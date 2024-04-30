@@ -114,7 +114,7 @@ extension CompilerPlugin {
     let impl = CompilerPluginMessageListener(connection: connection, provider: provider)
     #if os(WASI)
     // Rather than blocking on read(), let the host tell us when there's data.
-    readabilityHandler = { impl.handleNextMessage() }
+    readabilityHandler = { _ = impl.handleNextMessage() }
     #else
     impl.main()
     #endif
@@ -127,7 +127,7 @@ extension CompilerPlugin {
 ///
 /// This is safe to access without serialization as Wasm plugins are single-threaded.
 nonisolated(unsafe) private var readabilityHandler: () -> Void = {
-  internalError("""
+  fatalError("""
   CompilerPlugin.main wasn't called. Did you annotate your plugin with '@main'?
   """)
 }

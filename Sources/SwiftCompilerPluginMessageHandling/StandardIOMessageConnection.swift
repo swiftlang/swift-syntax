@@ -152,15 +152,6 @@ public struct StandardIOMessageConnection: MessageConnection {
   }
 }
 
-#if os(WASI)
-// fatalError writes to stdout, which is the message
-// output stream under WASI
-public func internalError(_ message: String) -> Never {
-  fputs("Internal Error: \(message)\n", _stderr)
-  exit(1)
-}
-#endif
-
 private enum IOError: Error, CustomStringConvertible {
   case readReachedEndOfInput
   case systemError(function: String, errno: CInt)

@@ -97,6 +97,10 @@ public class CompilerPluginMessageListener<Connection: MessageConnection, Provid
     #endif
   }
 
+  /// Receives and handles a single message from the plugin host.
+  ///
+  /// - Returns: `true` if there was a message to read, `false`
+  /// if the end-of-file was reached.
   private func handleNextMessage() -> Bool {
     do {
       guard let message = try connection.waitForNextMessage(HostToPluginMessage.self) else {

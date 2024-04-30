@@ -112,33 +112,6 @@ extension CompilerPlugin {
     let connection = try StandardIOMessageConnection()
     let provider = MacroProviderAdapter(plugin: Self())
     let impl = CompilerPluginMessageListener(connection: connection, provider: provider)
-    #if os(WASI)
-    // Rather than blocking on read(), let the host tell us when there's data.
-    readabilityHandler = { _ = impl.handleNextMessage() }
-    #else
     impl.main()
-    #endif
   }
 }
-
-#if os(WASI)
-
-/// A callback invoked by the Wasm Host when new data is available on `stdin`.
-///
-/// This is safe to access without serialization as Wasm plugins are single-threaded.
-nonisolated(unsafe) private var readabilityHandler: () -> Void = {
-  fatalError("""
-  CompilerPlugin.main wasn't called. Did you annotate your plugin with '@main'?
-  """)
-}
-
-// We can use @_expose(wasm, ...) with compiler >= 6.0
-// but it causes build errors with older compilers.
-// Instead, we export from wasm_support.c and trampoline
-// to this method.
-@_cdecl("_swift_wasm_macro_pump")
-func wasmPump() {
-  readabilityHandler()
-}
-
-#endif

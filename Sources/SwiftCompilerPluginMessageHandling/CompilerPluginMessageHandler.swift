@@ -89,10 +89,15 @@ public class CompilerPluginMessageListener<Connection: MessageConnection, Provid
   /// On internal errors, such as I/O errors or JSON serialization errors, print
   /// an error message and `exit(1)`
   public func main() {
+    #if os(WASI)
+    // Rather than blocking on read(), let the host tell us when there's data.
+    readabilityHandler = { _ = self.handleNextMessage() }
+    #else
     while handleNextMessage() {}
+    #endif
   }
 
-  public func handleNextMessage() -> Bool {
+  private func handleNextMessage() -> Bool {
     do {
       guard let message = try connection.waitForNextMessage(HostToPluginMessage.self) else {
         return false
@@ -216,3 +221,25 @@ extension PluginProvider {
     throw UnimplementedError()
   }
 }
+
+#if os(WASI)
+
+/// A callback invoked by the Wasm Host when new data is available on `stdin`.
+///
+/// This is safe to access without serialization as Wasm plugins are single-threaded.
+nonisolated(unsafe) private var readabilityHandler: () -> Void = {
+  fatalError("""
+  CompilerPlugin.main wasn't called. Did you annotate your plugin with '@main'?
+  """)
+}
+
+// We can use @_expose(wasm, ...) with compiler >= 6.0
+// but it causes build errors with older compilers.
+// Instead, we export from wasm_support.c and trampoline
+// to this method.
+@_cdecl("_swift_wasm_macro_pump")
+func wasmPump() {
+  readabilityHandler()
+}
+
+#endif

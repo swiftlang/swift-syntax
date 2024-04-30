@@ -18,6 +18,9 @@
 #define _STR(X) #X
 #define STR(X) _STR(X)
 
+// Add a `swift_wasm_macro_abi` section to the generated Wasm file
+// to allow the runner to check our ABI version and act accordingly.
+//
 // LLVM has special-cased handling to map .custom_section.foo to
 // Wasm Custom Section "foo". this must be a metadata section rather
 // than a data section so we can't use __attribute__((section)) for it.

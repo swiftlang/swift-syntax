@@ -27,7 +27,7 @@
 // See: https://reviews.llvm.org/D43097
 __asm__("\t.section .custom_section.swift_wasm_macro_abi,\"\",@\n\t.4byte " STR(SWIFT_WASM_MACRO_ABI) "\n");
 
-// defined in CompilerPlugin.swift
+// defined in CompilerPluginMessageHandler.swift
 void _swift_wasm_macro_pump(void);
 
 __attribute__((export_name("swift_wasm_macro_pump")))

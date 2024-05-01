@@ -427,7 +427,12 @@ final class AccessorMacroTests: XCTestCase {
       "@Test struct Foo {}",
       expandedSource: "struct Foo {}",
       diagnostics: [
-        DiagnosticSpec(message: "'accessor' macro cannot be attached to struct", line: 1, column: 1)
+        DiagnosticSpec(
+          message: "'accessor' macro cannot be attached to struct",
+          line: 1,
+          column: 1,
+          fixIts: [FixItSpec(message: "Remove '@Test'")]
+        )
       ],
       macros: ["Test": TestMacro.self]
     )
@@ -437,7 +442,12 @@ final class AccessorMacroTests: XCTestCase {
       expandedSource: "func Foo() {}",
       diagnostics: [
         // The compiler will reject this with "'accessor' macro cannot be attached to global function"
-        DiagnosticSpec(message: "'accessor' macro cannot be attached to function", line: 1, column: 1)
+        DiagnosticSpec(
+          message: "'accessor' macro cannot be attached to function",
+          line: 1,
+          column: 1,
+          fixIts: [FixItSpec(message: "Remove '@Test'")]
+        )
       ],
       macros: ["Test": TestMacro.self]
     )
@@ -456,7 +466,12 @@ final class AccessorMacroTests: XCTestCase {
         """,
       diagnostics: [
         // The compiler will reject this with "'accessor' macro cannot be attached to instance method"
-        DiagnosticSpec(message: "'accessor' macro cannot be attached to function", line: 2, column: 3)
+        DiagnosticSpec(
+          message: "'accessor' macro cannot be attached to function",
+          line: 2,
+          column: 3,
+          fixIts: [FixItSpec(message: "Remove '@Test'")]
+        )
       ],
       macros: ["Test": TestMacro.self],
       indentationWidth: indentationWidth

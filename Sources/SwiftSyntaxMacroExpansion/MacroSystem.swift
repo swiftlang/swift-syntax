@@ -728,15 +728,25 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
         }) {
           self.expandedAttributes.remove(at: index)
         } else {
-            if let macroRole = try? inferAttachedMacroRole(definition: spec.type), isInvalidAttachedMacro(macroRole: macroRole, attachedTo: declSyntax) {
-              contextGenerator(node).addDiagnostics(
-                from: MacroApplicationError.macroAttachedToInvalidDecl(
-                  macroRole.rawValue,
-                  declSyntax.nodeTypeNameForDiagnostics(allowBlockNames: true) ?? ""
-                ),
-                node: declSyntax
-              )
-            }
+          if let macroRole = try? inferAttachedMacroRole(definition: spec.type),
+            isInvalidAttachedMacro(macroRole: macroRole, attachedTo: declSyntax)
+          {
+            contextGenerator(node).addDiagnostics(
+              from: MacroApplicationError.macroAttachedToInvalidDecl(
+                macroRole.rawValue,
+                declSyntax.nodeTypeNameForDiagnostics(allowBlockNames: true) ?? ""
+              ),
+              node: declSyntax,
+              fixIts: [
+                FixIt(
+                  message: SwiftSyntaxMacros.MacroExpansionFixItMessage(
+                    "Remove '\(attribute.trimmedDescription)'"
+                  ),
+                  changes: [.replace(oldNode: Syntax(attribute), newNode: Syntax(AttributeListSyntax()))]
+                )
+              ]
+            )
+          }
         }
       }
       return AttributeRemover(removingWhere: { attributesToRemove.map(\.attributeNode).contains($0) }).rewrite(

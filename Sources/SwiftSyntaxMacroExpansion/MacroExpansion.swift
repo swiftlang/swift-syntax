@@ -20,7 +20,7 @@ import SwiftSyntax
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
 #endif
 
-public enum MacroRole: String, Sendable {
+public enum MacroRole: Sendable {
   case expression
   case declaration
   case accessor
@@ -48,6 +48,22 @@ extension MacroRole {
     case .extension: return "ExtensionMacro"
     case .preamble: return "PreambleMacro"
     case .body: return "BodyMacro"
+    }
+  }
+
+  var description: String {
+    switch self {
+    case .expression: return "expression"
+    case .declaration: return "declaration"
+    case .accessor: return "accessor"
+    case .memberAttribute: return "memberAttribute"
+    case .member: return "member"
+    case .peer: return "peer"
+    case .conformance: return "conformance"
+    case .codeItem: return "codeItem"
+    case .extension: return "extension"
+    case .preamble: return "preamble"
+    case .body: return "body"
     }
   }
 }

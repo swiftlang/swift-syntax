@@ -722,7 +722,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       skipVisitAnyHandling.remove(Syntax(declSyntax))
 
       let attributesToRemove = self.macroAttributes(attachedTo: visitedNode)
-      attributesToRemove.forEach { (attribute, spec) in
+      for (attribute, spec) in attributesToRemove {
         if let index = self.expandedAttributes.firstIndex(where: { expandedAttribute in
           expandedAttribute.position == attribute.position
         }) {
@@ -733,8 +733,8 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
           {
             contextGenerator(node).addDiagnostics(
               from: MacroApplicationError.macroAttachedToInvalidDecl(
-                macroRole.rawValue,
-                declSyntax.nodeTypeNameForDiagnostics(allowBlockNames: true) ?? ""
+                macroRole.description,
+                declSyntax.kind.nameForDiagnostics ?? ""
               ),
               node: declSyntax,
               fixIts: [
@@ -1248,7 +1248,6 @@ extension MacroApplication {
         contextGenerator(Syntax(storage)).addDiagnostics(from: error, node: macro.attributeNode)
       }
     }
-
     return (newAccessorsBlock, expandsGetSet)
   }
 }

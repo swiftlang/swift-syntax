@@ -27,7 +27,7 @@ let syntaxKindNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightH
   )
 
   try! ExtensionDeclSyntax("extension SyntaxKind") {
-    try VariableDeclSyntax("var nameForDiagnostics: String?") {
+    try VariableDeclSyntax("public var nameForDiagnostics: String?") {
       try SwitchExprSyntax("switch self") {
         SwitchCaseSyntax("case .token:") {
           StmtSyntax(#"return "token""#)

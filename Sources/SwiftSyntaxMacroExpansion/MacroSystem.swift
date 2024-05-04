@@ -728,25 +728,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
         }) {
           self.expandedAttributes.remove(at: index)
         } else {
-          if let macroRole = try? inferAttachedMacroRole(definition: spec.type),
-            isInvalidAttachedMacro(macroRole: macroRole, attachedTo: declSyntax)
-          {
-            contextGenerator(node).addDiagnostics(
-              from: MacroApplicationError.macroAttachedToInvalidDecl(
-                macroRole.description,
-                declSyntax.kind.nameForDiagnostics ?? ""
-              ),
-              node: declSyntax,
-              fixIts: [
-                FixIt(
-                  message: SwiftSyntaxMacros.MacroExpansionFixItMessage(
-                    "Remove '\(attribute.trimmedDescription)'"
-                  ),
-                  changes: [.replace(oldNode: Syntax(attribute), newNode: Syntax(AttributeListSyntax()))]
-                )
-              ]
-            )
-          }
+          self.diagnosticForUnexpandedMacro(attribute: attribute, macroType: spec.type, attachedTo: declSyntax)
         }
       }
       return AttributeRemover(removingWhere: { attributesToRemove.map(\.attributeNode).contains($0) }).rewrite(
@@ -757,18 +739,35 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     return nil
   }
 
-  private func isInvalidAttachedMacro(macroRole: MacroRole, attachedTo: DeclSyntax) -> Bool {
-    switch macroRole {
-    case .accessor:
-      // Only var decls and subscripts have accessors
+  private func diagnosticForUnexpandedMacro(attribute: AttributeSyntax, macroType: Macro.Type, attachedTo: DeclSyntax) {
+    var diagnosticError: Error? = nil
+    var fixitMessage: FixItMessage? = nil
+    switch macroType {
+    case is AccessorMacro.Type:
       if (!attachedTo.is(VariableDeclSyntax.self) && !attachedTo.is(SubscriptDeclSyntax.self)) {
-        return true
+        diagnosticError = MacroApplicationError.macroAttachedToInvalidDecl(
+          MacroRole.accessor.description,
+          attachedTo.kind.nameForDiagnostics ?? ""
+        )
+        fixitMessage = SwiftSyntaxMacros.MacroExpansionFixItMessage(
+          "Remove '\(attribute.trimmedDescription)'"
+        )
       }
-      break
     default:
       break
     }
-    return false
+    if let diagnosticError, let fixitMessage {
+      contextGenerator(Syntax(attachedTo)).addDiagnostics(
+        from: diagnosticError,
+        node: attachedTo,
+        fixIts: [
+          FixIt(
+            message: fixitMessage,
+            changes: [.replace(oldNode: Syntax(attribute), newNode: Syntax(AttributeListSyntax()))]
+          )
+        ]
+      )
+    }
   }
 
   /// Visit for both the body and preamble macros.

@@ -193,19 +193,6 @@ public func inferFreestandingMacroRole(definition: Macro.Type) throws -> MacroRo
   }
 }
 
-public func inferAttachedMacroRole(definition: Macro.Type) throws -> MacroRole {
-  switch definition {
-  case is AccessorMacro.Type: return .accessor
-  case is MemberAttributeMacro.Type: return .memberAttribute
-  case is MemberMacro.Type: return .member
-  case is PeerMacro.Type: return .peer
-  case is ExtensionMacro.Type: return .extension
-
-  default:
-    throw MacroExpansionError.noAttachedMacroRoles(definition)
-  }
-}
-
 @available(*, deprecated, message: "pass a macro role, please!")
 public func expandFreestandingMacro(
   definition: Macro.Type,

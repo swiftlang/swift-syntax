@@ -16,7 +16,6 @@ internal import SwiftOperators
 @_spi(MacroExpansion) internal import SwiftParser
 public import SwiftSyntax
 internal import SwiftSyntaxBuilder
-internal import SwiftParserDiagnostics
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) public import SwiftSyntaxMacros
 #else
 import SwiftDiagnostics
@@ -25,7 +24,6 @@ import SwiftOperators
 import SwiftSyntax
 import SwiftSyntaxBuilder
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
-import SwiftParserDiagnostics
 #endif
 
 // MARK: - Public entry function

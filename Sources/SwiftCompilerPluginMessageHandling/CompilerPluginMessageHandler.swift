@@ -25,6 +25,8 @@ public enum PluginFeature: String {
 }
 
 /// A type that provides the actual plugin functions.
+///
+/// Note that it's an implementation's responsibility to cache the API results as needed.
 @_spi(PluginMessage)
 public protocol PluginProvider {
   /// Resolve macro type by the module name and the type name.

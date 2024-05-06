@@ -49,7 +49,7 @@ If you want to modify the generated files, open the [CodeGeneration](CodeGenerat
 Alternatively, you can generate the files from the command line by running the following command from the swift-syntax directory
 
 ```bash
-swift run --package-path CodeGeneration
+./swift-syntax-dev-utils generate-source-code
 ```
 
 ## Running Pre-PR Checks Script

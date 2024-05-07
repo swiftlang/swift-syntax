@@ -27,6 +27,10 @@ let package = Package(
     .library(name: "SwiftSyntaxMacros", targets: ["SwiftSyntaxMacros"]),
     .library(name: "SwiftSyntaxMacroExpansion", targets: ["SwiftSyntaxMacroExpansion"]),
     .library(name: "SwiftSyntaxMacrosTestSupport", targets: ["SwiftSyntaxMacrosTestSupport"]),
+    .library(
+      name: "SwiftSyntaxMacrosTestSupportFrameworkAgnostic",
+      targets: ["SwiftSyntaxMacrosTestSupportFrameworkAgnostic"]
+    ),
   ],
   targets: [
     // MARK: - Internal helper targets
@@ -223,6 +227,7 @@ let package = Package(
         "SwiftIDEUtils",
         "SwiftParser",
         "SwiftSyntaxMacros",
+        "SwiftSyntaxMacrosTestSupportFrameworkAgnostic",
         "SwiftSyntaxMacroExpansion",
       ]
     ),

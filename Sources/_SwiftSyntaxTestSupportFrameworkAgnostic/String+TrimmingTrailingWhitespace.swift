@@ -15,7 +15,14 @@ extension String {
   public func trimmingTrailingWhitespace() -> String {
     return
       self
-      .replacingOccurrences(of: "[ ]+\\n", with: "\n", options: .regularExpression)
-      .trimmingCharacters(in: [" "])
+      .split(separator: "\n", omittingEmptySubsequences: false)
+      .map { $0.dropLast(while: { $0 == " " }) }
+      .joined(separator: "\n")
+  }
+}
+
+fileprivate extension Substring {
+  func dropLast(while predicate: (Character) -> Bool) -> String {
+    return String(self.reversed().drop(while: predicate).reversed())
   }
 }

@@ -40,7 +40,18 @@ let package = Package(
 
     .target(
       name: "_SwiftSyntaxTestSupport",
-      dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftSyntaxBuilder", "SwiftSyntaxMacroExpansion"]
+      dependencies: [
+        "_SwiftSyntaxTestSupportFrameworkAgnostic",
+        "SwiftBasicFormat",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacroExpansion",
+      ]
+    ),
+
+    .target(
+      name: "_SwiftSyntaxTestSupportFrameworkAgnostic",
+      dependencies: []
     ),
 
     .testTarget(

@@ -227,6 +227,20 @@ let package = Package(
       ]
     ),
 
+    // MARK: SwiftSyntaxMacrosTestSupportFrameworkAgnostic
+
+    .target(
+      name: "SwiftSyntaxMacrosTestSupportFrameworkAgnostic",
+      dependencies: [
+        "_SwiftSyntaxTestSupportFrameworkAgnostic",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftParser",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacroExpansion",
+      ]
+    ),
+
     .testTarget(
       name: "SwiftSyntaxMacrosTestSupportTests",
       dependencies: ["SwiftDiagnostics", "SwiftSyntax", "SwiftSyntaxMacros", "SwiftSyntaxMacrosTestSupport"]

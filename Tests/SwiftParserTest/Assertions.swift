@@ -99,7 +99,7 @@ private func assertTokens(
     }
 
     if actualLexeme.leadingTriviaText != expectedLexeme.leadingTrivia {
-      failStringsEqualWithDiff(
+      assertStringsEqualWithDiff(
         String(syntaxText: actualLexeme.leadingTriviaText),
         String(syntaxText: expectedLexeme.leadingTrivia),
         "Leading trivia does not match",
@@ -109,7 +109,7 @@ private func assertTokens(
     }
 
     if actualLexeme.tokenText.debugDescription != expectedLexeme.tokenText.debugDescription {
-      failStringsEqualWithDiff(
+      assertStringsEqualWithDiff(
         actualLexeme.tokenText.debugDescription,
         expectedLexeme.tokenText.debugDescription,
         "Token text does not match",
@@ -119,7 +119,7 @@ private func assertTokens(
     }
 
     if actualLexeme.trailingTriviaText != expectedLexeme.trailingTrivia {
-      failStringsEqualWithDiff(
+      assertStringsEqualWithDiff(
         String(syntaxText: actualLexeme.trailingTriviaText),
         String(syntaxText: expectedLexeme.trailingTrivia),
         "Trailing trivia does not match",
@@ -402,7 +402,7 @@ func assertDiagnostic<T: SyntaxProtocol>(
       line: spec.line
     )
   } else if spec.fixIts != diag.fixIts.map(\.message.message) {
-    failStringsEqualWithDiff(
+    assertStringsEqualWithDiff(
       diag.fixIts.map(\.message.message).joined(separator: "\n"),
       spec.fixIts.joined(separator: "\n"),
       file: spec.file,

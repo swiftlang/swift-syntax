@@ -16,13 +16,13 @@ extension String {
     return
       self
       .split(separator: "\n", omittingEmptySubsequences: false)
-      .map { $0.dropLast(while: { $0 == " " }) }
+      .map { $0.droppingLast(while: \.isWhitespace) }
       .joined(separator: "\n")
   }
 }
 
-fileprivate extension Substring {
-  func dropLast(while predicate: (Character) -> Bool) -> String {
+public extension StringProtocol {
+  func droppingLast(while predicate: (Character) -> Bool) -> String {
     return String(self.reversed().drop(while: predicate).reversed())
   }
 }

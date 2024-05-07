@@ -68,7 +68,7 @@ extension BinaryOperatorExprSyntax {
 
 // MARK: - BooleanLiteralExpr
 
-extension BooleanLiteralExprSyntax: ExpressibleByBooleanLiteral {
+extension BooleanLiteralExprSyntax {
   public init(_ value: Bool) {
     self.init(literal: value ? .keyword(.true) : .keyword(.false))
   }
@@ -77,6 +77,11 @@ extension BooleanLiteralExprSyntax: ExpressibleByBooleanLiteral {
     self.init(value)
   }
 }
+#if compiler(>=6)
+extension BooleanLiteralExprSyntax: @retroactive ExpressibleByBooleanLiteral {}
+#else
+extension BooleanLiteralExprSyntax: ExpressibleByBooleanLiteral {}
+#endif
 
 // MARK: - CatchClause
 
@@ -153,7 +158,7 @@ extension ExprSyntax {
 
 // MARK: - FloatLiteralExprSyntax
 
-extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {
+extension FloatLiteralExprSyntax {
   public init(_ value: Float) {
     self.init(literal: .floatLiteral(String(value)))
   }
@@ -162,6 +167,12 @@ extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {
     self.init(value)
   }
 }
+
+#if compiler(>=6)
+extension FloatLiteralExprSyntax: @retroactive ExpressibleByFloatLiteral {}
+#else
+extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {}
+#endif
 
 // MARK: - FunctionCallExpr
 
@@ -190,7 +201,7 @@ extension FunctionCallExprSyntax {
 
 // MARK: - IntegerLiteralExpr
 
-extension IntegerLiteralExprSyntax: ExpressibleByIntegerLiteral {
+extension IntegerLiteralExprSyntax {
   public init(_ value: Int) {
     self.init(literal: .integerLiteral(String(value)))
   }
@@ -199,6 +210,12 @@ extension IntegerLiteralExprSyntax: ExpressibleByIntegerLiteral {
     self.init(value)
   }
 }
+
+#if compiler(>=6)
+extension IntegerLiteralExprSyntax: @retroactive ExpressibleByIntegerLiteral {}
+#else
+extension IntegerLiteralExprSyntax: ExpressibleByIntegerLiteral {}
+#endif
 
 // MARK: - StringLiteralExpr
 

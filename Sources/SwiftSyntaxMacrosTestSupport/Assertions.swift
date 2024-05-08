@@ -70,7 +70,9 @@ public func assertMacroExpansion(
     fixedSource: expectedFixedSource,
     testModuleName: testModuleName,
     testFileName: testFileName,
-    indentationWidth: indentationWidth
+    indentationWidth: indentationWidth,
+    file: file,
+    line: line
   )
 }
 

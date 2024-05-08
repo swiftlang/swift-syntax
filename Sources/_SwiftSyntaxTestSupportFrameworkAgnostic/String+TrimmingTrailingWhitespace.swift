@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 extension String {
-  // This implementation is really slow; to use it outside a test it should be optimized.
   public func trimmingTrailingWhitespace() -> String {
     return
       self

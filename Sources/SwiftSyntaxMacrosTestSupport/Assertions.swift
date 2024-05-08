@@ -14,20 +14,20 @@
 public import SwiftSyntax
 public import SwiftSyntaxMacroExpansion
 public import SwiftSyntaxMacros
-@_spi(XCTestFailureLocation) public import SwiftSyntaxMacrosTestSupportFrameworkAgnostic
+@_spi(XCTestFailureLocation) public import SwiftSyntaxMacrosGenericTestSupport
 private import XCTest
 #else
 import SwiftSyntax
 import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
-@_spi(XCTestFailureLocation) import SwiftSyntaxMacrosTestSupportFrameworkAgnostic
+@_spi(XCTestFailureLocation) import SwiftSyntaxMacrosGenericTestSupport
 import XCTest
 #endif
 
-// Re-export the spec types from `SwiftSyntaxMacrosTestSupportFrameworkAgnostic`.
-public typealias NoteSpec = SwiftSyntaxMacrosTestSupportFrameworkAgnostic.NoteSpec
-public typealias FixItSpec = SwiftSyntaxMacrosTestSupportFrameworkAgnostic.FixItSpec
-public typealias DiagnosticSpec = SwiftSyntaxMacrosTestSupportFrameworkAgnostic.DiagnosticSpec
+// Re-export the spec types from `SwiftSyntaxMacrosGenericTestSupport`.
+public typealias NoteSpec = SwiftSyntaxMacrosGenericTestSupport.NoteSpec
+public typealias FixItSpec = SwiftSyntaxMacrosGenericTestSupport.FixItSpec
+public typealias DiagnosticSpec = SwiftSyntaxMacrosGenericTestSupport.DiagnosticSpec
 
 /// Assert that expanding the given macros in the original source produces
 /// the given expanded source code.
@@ -107,7 +107,7 @@ public func assertMacroExpansion(
   file: StaticString = #filePath,
   line: UInt = #line
 ) {
-  SwiftSyntaxMacrosTestSupportFrameworkAgnostic.assertMacroExpansion(
+  SwiftSyntaxMacrosGenericTestSupport.assertMacroExpansion(
     originalSource,
     expandedSource: expectedExpandedSource,
     diagnostics: diagnostics,

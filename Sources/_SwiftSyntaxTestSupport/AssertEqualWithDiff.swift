@@ -13,11 +13,11 @@
 #if swift(>=6)
 public import Foundation
 private import XCTest
-private import _SwiftSyntaxTestSupportFrameworkAgnostic
+private import _SwiftSyntaxGenericTestSupport
 #else
 import Foundation
 import XCTest
-import _SwiftSyntaxTestSupportFrameworkAgnostic
+import _SwiftSyntaxGenericTestSupport
 #endif
 
 /// Asserts that the two strings are equal, providing Unix `diff`-style output if they are not.
@@ -45,7 +45,7 @@ public func assertStringsEqualWithDiff(
     line: line,
     column: 0  // Not used in the failure handler
   )
-  return _SwiftSyntaxTestSupportFrameworkAgnostic.assertStringsEqualWithDiff(
+  return _SwiftSyntaxGenericTestSupport.assertStringsEqualWithDiff(
     actual,
     expected,
     message,

@@ -14,13 +14,13 @@
 public import SwiftSyntax
 public import SwiftSyntaxMacroExpansion
 public import SwiftSyntaxMacros
-public import SwiftSyntaxMacrosTestSupportFrameworkAgnostic
+@_spi(XCTestFailureLocation) public import SwiftSyntaxMacrosTestSupportFrameworkAgnostic
 private import XCTest
 #else
 import SwiftSyntax
 import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
-import SwiftSyntaxMacrosTestSupportFrameworkAgnostic
+@_spi(XCTestFailureLocation) import SwiftSyntaxMacrosTestSupportFrameworkAgnostic
 import XCTest
 #endif
 
@@ -118,7 +118,7 @@ public func assertMacroExpansion(
     testFileName: testFileName,
     indentationWidth: indentationWidth,
     failureHandler: {
-      XCTFail($0.message, file: $0.location.filePath, line: $0.location.line)
+      XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
     },
     fileID: "",  // Not used in the failure handler
     filePath: file,

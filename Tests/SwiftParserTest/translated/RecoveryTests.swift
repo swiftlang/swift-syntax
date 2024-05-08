@@ -2454,7 +2454,7 @@ final class RecoveryTests: ParserTestCase {
         DiagnosticSpec(message: "unexpected code '!=baz' in parameter clause"),
       ],
       fixedSource: """
-         func foo1(bar: <#type#>!=baz) {}
+        func foo1(bar: <#type#>!=baz) {}
         """
     )
   }

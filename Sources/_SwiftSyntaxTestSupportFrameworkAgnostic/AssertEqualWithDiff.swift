@@ -31,7 +31,8 @@ public struct TestFailureLocation {
   }
 }
 
-/// Defines the details of a test failure, consisting of a message and the location at which the l
+/// Defines the details of a test failure, consisting of a message and the location at which the test failure should be
+/// shown.
 public struct TestFailureSpec {
   public let message: String
   public let location: TestFailureLocation

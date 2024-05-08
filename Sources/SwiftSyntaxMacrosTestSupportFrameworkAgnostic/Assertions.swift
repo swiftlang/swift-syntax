@@ -73,7 +73,8 @@ public struct TestFailureLocation {
   }
 }
 
-/// Defines the details of a test failure, consisting of a message and the location at which the l
+/// Defines the details of a test failure, consisting of a message and the location at which the test failure should be
+/// shown.
 public struct TestFailureSpec {
   public let message: String
   public let location: TestFailureLocation
@@ -502,8 +503,8 @@ public func assertMacroExpansion(
   }
 
   assertStringsEqualWithDiff(
-    expandedSourceFile.description.droppingLast(while: \.isNewline),
-    expectedExpandedSource.droppingLast(while: \.isNewline),
+    expandedSourceFile.description.drop(while: \.isNewline).droppingLast(while: \.isNewline),
+    expectedExpandedSource.drop(while: \.isNewline).droppingLast(while: \.isNewline),
     "Macro expansion did not produce the expected expanded source",
     additionalInfo: """
       Actual expanded source:

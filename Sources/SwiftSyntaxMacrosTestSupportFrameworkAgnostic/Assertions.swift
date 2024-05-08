@@ -35,10 +35,17 @@ import _SwiftSyntaxTestSupportFrameworkAgnostic
 /// Defines the location at which the a test failure should be anchored. This is typically the location where the
 /// assertion function is called.
 public struct TestFailureLocation {
-  public let fileID: StaticString
-  public let filePath: StaticString
-  public let line: UInt
-  public let column: UInt
+  @_spi(XCTestFailureLocation) public let staticFileID: StaticString
+  public var fileID: String { staticFileID.description }
+
+  @_spi(XCTestFailureLocation) public let staticFilePath: StaticString
+  public var filePath: String { staticFilePath.description }
+
+  @_spi(XCTestFailureLocation) public let unsignedLine: UInt
+  public var line: Int { Int(unsignedLine) }
+
+  @_spi(XCTestFailureLocation) public let unsignedColumn: UInt
+  public var column: Int { Int(unsignedColumn) }
 
   public init(
     fileID: StaticString,
@@ -46,10 +53,10 @@ public struct TestFailureLocation {
     line: UInt,
     column: UInt
   ) {
-    self.fileID = fileID
-    self.filePath = filePath
-    self.line = line
-    self.column = column
+    self.staticFileID = fileID
+    self.staticFilePath = filePath
+    self.unsignedLine = line
+    self.unsignedColumn = column
   }
 
   fileprivate init(underlying: _SwiftSyntaxTestSupportFrameworkAgnostic.TestFailureLocation) {
@@ -65,10 +72,10 @@ public struct TestFailureLocation {
   /// import `_SwiftSyntaxTestSupportFrameworkAgnostic` privately and don't expose its internal types.
   fileprivate var underlying: _SwiftSyntaxTestSupportFrameworkAgnostic.TestFailureLocation {
     _SwiftSyntaxTestSupportFrameworkAgnostic.TestFailureLocation(
-      fileID: self.fileID,
-      filePath: self.filePath,
-      line: self.line,
-      column: self.column
+      fileID: self.staticFileID,
+      filePath: self.staticFilePath,
+      line: self.unsignedLine,
+      column: self.unsignedColumn
     )
   }
 }

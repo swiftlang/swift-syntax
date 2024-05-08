@@ -19,7 +19,7 @@ import SwiftParserDiagnostics
 public import SwiftSyntax
 public import SwiftSyntaxMacroExpansion
 private import SwiftSyntaxMacros
-private import _SwiftSyntaxTestSupportFrameworkAgnostic
+private import _SwiftSyntaxGenericTestSupport
 #else
 import SwiftBasicFormat
 import SwiftDiagnostics
@@ -29,7 +29,7 @@ import SwiftParserDiagnostics
 import SwiftSyntax
 import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
-import _SwiftSyntaxTestSupportFrameworkAgnostic
+import _SwiftSyntaxGenericTestSupport
 #endif
 
 /// Defines the location at which the a test failure should be anchored. This is typically the location where the
@@ -59,7 +59,7 @@ public struct TestFailureLocation {
     self.unsignedColumn = column
   }
 
-  fileprivate init(underlying: _SwiftSyntaxTestSupportFrameworkAgnostic.TestFailureLocation) {
+  fileprivate init(underlying: _SwiftSyntaxGenericTestSupport.TestFailureLocation) {
     self.init(
       fileID: underlying.fileID,
       filePath: underlying.filePath,
@@ -68,10 +68,10 @@ public struct TestFailureLocation {
     )
   }
 
-  /// This type is intentionally different to `_SwiftSyntaxTestSupportFrameworkAgnostic.TestFailureLocation` so we can
-  /// import `_SwiftSyntaxTestSupportFrameworkAgnostic` privately and don't expose its internal types.
-  fileprivate var underlying: _SwiftSyntaxTestSupportFrameworkAgnostic.TestFailureLocation {
-    _SwiftSyntaxTestSupportFrameworkAgnostic.TestFailureLocation(
+  /// This type is intentionally different to `_SwiftSyntaxGenericTestSupport.TestFailureLocation` so we can
+  /// import `_SwiftSyntaxGenericTestSupport` privately and don't expose its internal types.
+  fileprivate var underlying: _SwiftSyntaxGenericTestSupport.TestFailureLocation {
+    _SwiftSyntaxGenericTestSupport.TestFailureLocation(
       fileID: self.staticFileID,
       filePath: self.staticFilePath,
       line: self.unsignedLine,
@@ -91,7 +91,7 @@ public struct TestFailureSpec {
     self.location = location
   }
 
-  fileprivate init(underlying: _SwiftSyntaxTestSupportFrameworkAgnostic.TestFailureSpec) {
+  fileprivate init(underlying: _SwiftSyntaxGenericTestSupport.TestFailureSpec) {
     self.init(
       message: underlying.message,
       location: TestFailureLocation(underlying: underlying.location)

@@ -36,6 +36,7 @@ swift_syntax_library(
         ":SwiftSyntax",
         ":SwiftSyntaxMacroExpansion",
         ":SwiftSyntaxMacros",
+        ":_SwiftSyntaxCShims",
     ],
 )
 
@@ -79,6 +80,14 @@ swift_syntax_test(
         ":SwiftParser",
         ":SwiftSyntax",
         ":_SwiftSyntaxTestSupport",
+    ],
+)
+
+swift_syntax_library(
+    name = "SwiftLibraryPluginProvider",
+    deps = [
+        ":SwiftCompilerPluginMessageHandling",
+        ":SwiftSyntaxMacros",
     ],
 )
 
@@ -161,7 +170,7 @@ swift_syntax_library(
         ":SwiftSyntax509",
         ":SwiftSyntax510",
         ":SwiftSyntax600",
-        ":_AtomicBool",
+        ":_SwiftSyntaxCShims",
     ],
 )
 
@@ -282,20 +291,19 @@ swift_syntax_test(
 )
 
 cc_library(
-    name = "_AtomicBool",
-    srcs = glob(["Sources/_AtomicBool/src/*.c"]),
-    hdrs = glob(["Sources/_AtomicBool/include/*.h"]),
-    includes = ["Sources/_AtomicBool/include"],
-    tags = ["swift_module=_AtomicBool"],
-    visibility = ["//visibility:private"],
-)
-
-cc_library(
     name = "_InstructionCounter",
     srcs = glob(["Sources/_InstructionCounter/src/*.c"]),
     hdrs = glob(["Sources/_InstructionCounter/include/*.h"]),
     includes = ["Sources/_InstructionCounter/include"],
     tags = ["swift_module=_InstructionCounter"],
+    visibility = ["//visibility:private"],
+)
+
+cc_library(
+    name = "_SwiftSyntaxCShims",
+    hdrs = glob(["Sources/_SwiftSyntaxCShims/include/*.h"]),
+    includes = ["Sources/_SwiftSyntaxCShims/include"],
+    tags = ["swift_module=_SwiftSyntaxCShims"],
     visibility = ["//visibility:private"],
 )
 

@@ -1,4 +1,5 @@
 common --enable_bzlmod
+common --incompatible_disallow_empty_glob
 common --incompatible_use_host_features
 common --lockfile_mode=off
 

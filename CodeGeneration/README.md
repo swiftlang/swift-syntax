@@ -4,14 +4,8 @@ This directory contains file to generate source code that is part of the SwiftSy
 
 Some source code inside SwiftSyntax is generated using [SwiftSyntaxBuilder](../Sources/SwiftSyntaxBuilder), a Swift library whose purpose is to generate Swift code using Swift itself. This kind of code generation is performed by the Swift package defined in this directory.
 
-To re-generate the files after changing `CodeGeneration` run the `generate-swift-syntax` 
-target of `CodeGeneration` and pass `path/to/swift-syntax/Sources` as the argument.
+To re-generate the files after changing `CodeGeneration` run the following command on the command line.
 
-On the command line, this would be
 ```bash
-swift run --package-path CodeGeneration generate-swift-syntax Sources
+path/to/swift-syntax/swift-syntax-dev-utils generate-source-code
 ```
-
-Or if you open the `CodeGeneration` package in Xcode, you can add the 
-`generate-swift syntax ../Sources` arguments using Product -> Scheme -> Edit Scheme…
-

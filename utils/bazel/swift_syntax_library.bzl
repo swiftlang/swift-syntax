@@ -26,6 +26,8 @@ def swift_syntax_library(name, deps, srcs = None, testonly = False):
 def swift_syntax_test(name, deps):
     srcs = native.glob(
         ["Tests/{}/**/*.swift".format(name)],
+        # These tests load source files they don't have access to in the iOS test bundle with bazel.
+        exclude = ["**/StringLiteralRepresentedLiteralValueTests.swift"],
         allow_empty = False,
     )
 
@@ -53,7 +55,5 @@ def swift_syntax_test(name, deps):
         # Keep in sync with Package.swift
         minimum_os_version = "13.0",
         tags = ["exclusive"],
-        # These tests load source files they don't have access to in the iOS test bundle with bazel.
-        test_filter = "-SwiftParserTest.StringLiteralRepresentedLiteralValueTests",
         runner = "//:ios_test_runner",
     )

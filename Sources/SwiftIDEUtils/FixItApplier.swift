@@ -78,10 +78,10 @@ public enum FixItApplier {
         // shift it by the current edit's difference in length.
         if edit.endUtf8Offset <= remainingEdit.startUtf8Offset {
           let startPosition = AbsolutePosition(
-            utf8Offset: remainingEdit.startUtf8Offset - edit.replacementRange.count + edit.replacementLength
+            utf8Offset: remainingEdit.startUtf8Offset - edit.replacementRange.count + edit.replacementLength.utf8Length
           )
           let endPosition = AbsolutePosition(
-            utf8Offset: remainingEdit.endUtf8Offset - edit.replacementRange.count + edit.replacementLength
+            utf8Offset: remainingEdit.endUtf8Offset - edit.replacementRange.count + edit.replacementLength.utf8Length
           )
           return SourceEdit(range: startPosition..<endPosition, replacement: remainingEdit.replacement)
         }
@@ -101,10 +101,6 @@ private extension SourceEdit {
 
   var endUtf8Offset: Int {
     return range.upperBound.utf8Offset
-  }
-
-  var replacementLength: Int {
-    return replacement.utf8.count
   }
 
   var replacementRange: Range<Int> {

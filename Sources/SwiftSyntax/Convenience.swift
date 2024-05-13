@@ -84,7 +84,7 @@ extension FloatLiteralExprSyntax {
 }
 
 extension IntegerLiteralExprSyntax {
-  public enum Radix {
+  public enum Radix: Sendable {
     case binary
     case octal
     case decimal

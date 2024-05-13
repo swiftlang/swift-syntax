@@ -222,13 +222,10 @@ let package = Package(
     .target(
       name: "SwiftSyntaxMacrosTestSupport",
       dependencies: [
-        "_SwiftSyntaxTestSupport",
-        "SwiftDiagnostics",
-        "SwiftIDEUtils",
-        "SwiftParser",
+        "SwiftSyntax",
+        "SwiftSyntaxMacroExpansion",
         "SwiftSyntaxMacros",
         "SwiftSyntaxMacrosGenericTestSupport",
-        "SwiftSyntaxMacroExpansion",
       ]
     ),
 

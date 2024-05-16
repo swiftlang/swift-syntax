@@ -27,6 +27,10 @@ let package = Package(
     .library(name: "SwiftSyntaxMacros", targets: ["SwiftSyntaxMacros"]),
     .library(name: "SwiftSyntaxMacroExpansion", targets: ["SwiftSyntaxMacroExpansion"]),
     .library(name: "SwiftSyntaxMacrosTestSupport", targets: ["SwiftSyntaxMacrosTestSupport"]),
+    .library(
+      name: "SwiftSyntaxMacrosGenericTestSupport",
+      targets: ["SwiftSyntaxMacrosGenericTestSupport"]
+    ),
   ],
   targets: [
     // MARK: - Internal helper targets
@@ -40,7 +44,18 @@ let package = Package(
 
     .target(
       name: "_SwiftSyntaxTestSupport",
-      dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftSyntaxBuilder", "SwiftSyntaxMacroExpansion"]
+      dependencies: [
+        "_SwiftSyntaxGenericTestSupport",
+        "SwiftBasicFormat",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacroExpansion",
+      ]
+    ),
+
+    .target(
+      name: "_SwiftSyntaxGenericTestSupport",
+      dependencies: []
     ),
 
     .testTarget(
@@ -215,7 +230,19 @@ let package = Package(
     .target(
       name: "SwiftSyntaxMacrosTestSupport",
       dependencies: [
-        "_SwiftSyntaxTestSupport",
+        "SwiftSyntax",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacrosGenericTestSupport",
+      ]
+    ),
+
+    // MARK: SwiftSyntaxMacrosGenericTestSupport
+
+    .target(
+      name: "SwiftSyntaxMacrosGenericTestSupport",
+      dependencies: [
+        "_SwiftSyntaxGenericTestSupport",
         "SwiftDiagnostics",
         "SwiftIDEUtils",
         "SwiftParser",

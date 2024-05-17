@@ -174,8 +174,9 @@ class SourceManager {
     let localLocation = base.locationConverter.location(for: localPosition)
 
     let positionOffset = base.location.offset
+    // NOTE '- 1' because base.location.{line|column} are 1-based.
     let lineOffset = base.location.line - 1
-    let columnOffset = localLocation.line == 1 ? base.location.column : 0
+    let columnOffset = localLocation.line == 1 ? (base.location.column - 1) : 0
 
     return SourceLocation(
       // NOTE: IUO because 'localLocation' is created by a location converter

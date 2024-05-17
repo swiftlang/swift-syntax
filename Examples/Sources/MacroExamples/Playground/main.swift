@@ -47,3 +47,7 @@ runMemberMacrosPlayground()
 // MARK: - Peer Macros
 
 runPeerMacrosPlayground()
+
+// MARK: - SourceLocationMacros
+
+runSourceLoctionMacrosPlayground()

@@ -19,6 +19,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case nonescapableTypes
   case transferringArgsAndResults
   case trailingComma
+  case sendingArgsAndResults
 
   /// The name of the feature, which is used in the doc comment.
   public var featureName: String {
@@ -35,6 +36,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "TransferringArgsAndResults"
     case .trailingComma:
       return "trailing comma"
+    case .sendingArgsAndResults:
+      return "SendingArgsAndResults"
     }
   }
 

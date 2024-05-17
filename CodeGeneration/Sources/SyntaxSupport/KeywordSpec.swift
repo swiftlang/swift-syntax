@@ -263,6 +263,7 @@ public enum Keyword: CaseIterable {
   case safe
   case scoped
   case `self`
+  case sending
   case `Self`
   case Sendable
   case set
@@ -700,6 +701,11 @@ public enum Keyword: CaseIterable {
       return KeywordSpec(
         "transferring",
         experimentalFeature: .transferringArgsAndResults
+      )
+    case .sending:
+      return KeywordSpec(
+        "sending",
+        experimentalFeature: .sendingArgsAndResults
       )
     case .transpose:
       return KeywordSpec("transpose")

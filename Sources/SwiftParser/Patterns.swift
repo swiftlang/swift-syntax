@@ -378,6 +378,7 @@ extension Parser.Lookahead {
         && !self.at(.keyword(.borrowing))
         && !self.at(.keyword(.consuming))
         && !(experimentalFeatures.contains(.transferringArgsAndResults) && self.at(.keyword(.transferring)))
+        && !(experimentalFeatures.contains(.sendingArgsAndResults) && self.at(.keyword(.sending)))
         && !(experimentalFeatures.contains(.nonescapableTypes) && self.at(.keyword(._resultDependsOn)))
       {
         return true

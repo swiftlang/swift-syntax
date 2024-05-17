@@ -19,6 +19,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case nonescapableTypes
   case transferringArgsAndResults
   case borrowingSwitch
+  case sendingArgsAndResults
 
   /// The name of the feature, which is used in the doc comment.
   public var featureName: String {
@@ -35,6 +36,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "TransferringArgsAndResults"
     case .borrowingSwitch:
       return "borrowing pattern matching"
+    case .sendingArgsAndResults:
+      return "SendingArgsAndResults"
     }
   }
 

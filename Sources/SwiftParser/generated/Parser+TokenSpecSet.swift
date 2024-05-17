@@ -814,6 +814,10 @@ extension DeclModifierSyntax {
     case transferring
     case unowned
     case weak
+    #if compiler(>=5.8)
+    @_spi(ExperimentalLanguageFeatures)
+    #endif
+    case sending
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -891,6 +895,8 @@ extension DeclModifierSyntax {
         self = .unowned
       case TokenSpec(.weak):
         self = .weak
+      case TokenSpec(.sending) where experimentalFeatures.contains(.sendingArgsAndResults):
+        self = .sending
       default:
         return nil
       }
@@ -972,6 +978,8 @@ extension DeclModifierSyntax {
         self = .unowned
       case TokenSpec(.weak):
         self = .weak
+      case TokenSpec(.sending):
+        self = .sending
       default:
         return nil
       }
@@ -1053,6 +1061,8 @@ extension DeclModifierSyntax {
         return .keyword(.unowned)
       case .weak:
         return .keyword(.weak)
+      case .sending:
+        return .keyword(.sending)
       }
     }
     
@@ -1136,6 +1146,8 @@ extension DeclModifierSyntax {
         return .keyword(.unowned)
       case .weak:
         return .keyword(.weak)
+      case .sending:
+        return .keyword(.sending)
       }
     }
   }
@@ -3347,6 +3359,10 @@ extension SimpleTypeSpecifierSyntax {
     @_spi(ExperimentalLanguageFeatures)
     #endif
     case _resultDependsOn
+    #if compiler(>=5.8)
+    @_spi(ExperimentalLanguageFeatures)
+    #endif
+    case sending
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -3368,6 +3384,8 @@ extension SimpleTypeSpecifierSyntax {
         self = .transferring
       case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonescapableTypes):
         self = ._resultDependsOn
+      case TokenSpec(.sending) where experimentalFeatures.contains(.sendingArgsAndResults):
+        self = .sending
       default:
         return nil
       }
@@ -3393,6 +3411,8 @@ extension SimpleTypeSpecifierSyntax {
         self = .transferring
       case TokenSpec(._resultDependsOn):
         self = ._resultDependsOn
+      case TokenSpec(.sending):
+        self = .sending
       default:
         return nil
       }
@@ -3418,6 +3438,8 @@ extension SimpleTypeSpecifierSyntax {
         return .keyword(.transferring)
       case ._resultDependsOn:
         return .keyword(._resultDependsOn)
+      case .sending:
+        return .keyword(.sending)
       }
     }
     
@@ -3445,6 +3467,8 @@ extension SimpleTypeSpecifierSyntax {
         return .keyword(.transferring)
       case ._resultDependsOn:
         return .keyword(._resultDependsOn)
+      case .sending:
+        return .keyword(.sending)
       }
     }
   }

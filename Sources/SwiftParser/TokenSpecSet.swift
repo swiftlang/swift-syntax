@@ -377,6 +377,7 @@ enum DeclarationModifier: TokenSpecSet {
   case reasync
   case required
   case `rethrows`
+  case sending
   case `static`
   case transferring
   case unowned
@@ -420,6 +421,7 @@ enum DeclarationModifier: TokenSpecSet {
     case TokenSpec(.rethrows): self = .rethrows
     case TokenSpec(.static): self = .static
     case TokenSpec(.transferring): self = .transferring
+    case TokenSpec(.sending): self = .sending
     case TokenSpec(.unowned): self = .unowned
     case TokenSpec(.weak): self = .weak
     case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonescapableTypes): self = ._resultDependsOn
@@ -465,6 +467,7 @@ enum DeclarationModifier: TokenSpecSet {
     case .rethrows: return TokenSpec(.rethrows, recoveryPrecedence: .declKeyword)
     case .static: return .keyword(.static)
     case .transferring: return .keyword(.transferring)
+    case .sending: return .keyword(.sending)
     case .unowned: return TokenSpec(.unowned, recoveryPrecedence: .declKeyword)
     case .weak: return TokenSpec(.weak, recoveryPrecedence: .declKeyword)
     case ._resultDependsOn: return TokenSpec(._resultDependsOn, recoveryPrecedence: .declKeyword)

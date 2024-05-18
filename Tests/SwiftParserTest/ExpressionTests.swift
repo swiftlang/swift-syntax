@@ -2973,10 +2973,29 @@ final class StatementExpressionTests: ParserTestCase {
       "[() throws(MyError) -> Void]()"
     )
     assertParse(
+      "[() throws(any Error) -> Void]()"
+    )
+    assertParse(
       "X<() throws(MyError) -> Int>()"
     )
     assertParse(
       "X<() async throws(MyError) -> Int>()"
+    )
+  }
+
+  func testTypedThrowsClosureParam() {
+    assertParse(
+      """
+      try foo { (a, b) throws(S) in 1 }
+      """
+    )
+  }
+
+  func testTypedThrowsShorthandClosureParams() {
+    assertParse(
+      """
+      try foo { a, b throws(S) in 1 }
+      """
     )
   }
 

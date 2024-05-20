@@ -799,7 +799,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
             .keyword("static"), 
             .keyword("transferring"), 
             .keyword("unowned"), 
-            .keyword("weak")
+            .keyword("weak"), 
+            .keyword("sending")
           ]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierDetailSyntax?.self))
@@ -2298,7 +2299,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
             .keyword("borrowing"), 
             .keyword("consuming"), 
             .keyword("transferring"), 
-            .keyword("_resultDependsOn")
+            .keyword("_resultDependsOn"), 
+            .keyword("sending")
           ]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
   case .someOrAnyType:

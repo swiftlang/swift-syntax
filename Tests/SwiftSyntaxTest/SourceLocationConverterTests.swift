@@ -174,6 +174,34 @@ final class SourceLocationConverterTests: XCTestCase {
     )
   }
 
+  func testMultiLineDirective() {
+    assertPresumedSourceLocation(
+      #"""
+      #sourceLocation(
+        file: "input.swift",
+        line: 10
+      )
+
+      let a = 2
+      """#,
+      presumedFile: "input.swift",
+      presumedLine: 11
+    )
+  }
+
+  func testDirectiveWithTrailingBlockComment() {
+    assertPresumedSourceLocation(
+      #"""
+      #sourceLocation(file: "input.swift", line: 10) /*
+        comment
+      */
+
+      let a = 2
+      """#,
+      presumedFile: "input.swift",
+      presumedLine: 13
+    )
+  }
   func testMultiLineStringLiteralAsFilename() {
     // FIXME: The current parser handles this fine but it’s a really bogus filename.
     // We ignore the directive because the multi-line string literal contains multiple segments.

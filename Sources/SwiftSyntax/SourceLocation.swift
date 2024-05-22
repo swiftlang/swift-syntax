@@ -645,7 +645,7 @@ fileprivate extension RawTriviaPiece {
   }
 }
 
-fileprivate extension Array where Element == RawTriviaPiece {
+fileprivate extension RawTriviaPieceBuffer {
   /// Walks and passes to `body` the ``SourceLength`` for every detected line,
   /// with the newline character included.
   /// - Returns: The leftover ``SourceLength`` at the end of the walk.
@@ -670,9 +670,16 @@ fileprivate extension TokenSyntax {
     body: (SourceLength) -> ()
   ) -> SourceLength {
     var curPrefix = prefix
-    curPrefix = self.tokenView.leadingRawTriviaPieces.forEachLineLength(prefix: curPrefix, body: body)
-    curPrefix = self.tokenView.rawText.forEachLineLength(prefix: curPrefix, body: body)
-    curPrefix = self.tokenView.trailingRawTriviaPieces.forEachLineLength(prefix: curPrefix, body: body)
+    switch self.raw.rawData.payload {
+    case .parsedToken(let dat):
+      curPrefix = dat.wholeText.forEachLineLength(prefix: curPrefix, body: body)
+    case .materializedToken(let dat):
+      curPrefix = dat.leadingTrivia.forEachLineLength(prefix: curPrefix, body: body)
+      curPrefix = dat.tokenText.forEachLineLength(prefix: curPrefix, body: body)
+      curPrefix = dat.trailingTrivia.forEachLineLength(prefix: curPrefix, body: body)
+    case .layout(_):
+      preconditionFailure("forEachLineLength is called non-token raw syntax")
+    }
     return curPrefix
   }
 }

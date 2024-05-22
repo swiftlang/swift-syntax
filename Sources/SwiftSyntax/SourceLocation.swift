@@ -512,20 +512,29 @@ extension SyntaxProtocol {
 fileprivate func computeLines(
   tree: Syntax
 ) -> ([AbsolutePosition], AbsolutePosition) {
-  var lines: [AbsolutePosition] = []
-  // First line starts from the beginning.
-  lines.append(.startOfFile)
-  var position: AbsolutePosition = .startOfFile
-  let addLine = { (lineLength: SourceLength) in
-    position += lineLength
-    lines.append(position)
+  class ComputeLineVisitor: SyntaxVisitor {
+    var lines: [AbsolutePosition] = [.startOfFile]
+    var position: AbsolutePosition = .startOfFile
+    var curPrefix: SourceLength = .zero
+
+    init() {
+      super.init(viewMode: .sourceAccurate)
+    }
+
+    private func addLine(_ lineLength: SourceLength) {
+      position += lineLength
+      lines.append(position)
+    }
+
+    override func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+      curPrefix = token.forEachLineLength(prefix: curPrefix, body: addLine)
+      return .skipChildren
+    }
   }
-  var curPrefix: SourceLength = .zero
-  for token in tree.tokens(viewMode: .sourceAccurate) {
-    curPrefix = token.forEachLineLength(prefix: curPrefix, body: addLine)
-  }
-  position += curPrefix
-  return (lines, position)
+
+  let visitor = ComputeLineVisitor()
+  visitor.walk(tree)
+  return (visitor.lines, visitor.position + visitor.curPrefix)
 }
 
 fileprivate func computeLines(_ source: SyntaxText) -> ([AbsolutePosition], AbsolutePosition) {

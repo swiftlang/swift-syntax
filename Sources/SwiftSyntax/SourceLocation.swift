@@ -512,29 +512,14 @@ extension SyntaxProtocol {
 fileprivate func computeLines(
   tree: Syntax
 ) -> ([AbsolutePosition], AbsolutePosition) {
-  class ComputeLineVisitor: SyntaxVisitor {
-    var lines: [AbsolutePosition] = [.startOfFile]
-    var position: AbsolutePosition = .startOfFile
-    var curPrefix: SourceLength = .zero
+  var lines: [AbsolutePosition] = [.startOfFile]
+  var position: AbsolutePosition = .startOfFile
 
-    init() {
-      super.init(viewMode: .sourceAccurate)
-    }
-
-    private func addLine(_ lineLength: SourceLength) {
-      position += lineLength
-      lines.append(position)
-    }
-
-    override func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
-      curPrefix = token.forEachLineLength(prefix: curPrefix, body: addLine)
-      return .skipChildren
-    }
+  let lastLineLength = tree.raw.forEachLineLength { lineLength in
+    position += lineLength
+    lines.append(position)
   }
-
-  let visitor = ComputeLineVisitor()
-  visitor.walk(tree)
-  return (visitor.lines, visitor.position + visitor.curPrefix)
+  return (lines, position + lastLineLength)
 }
 
 fileprivate func computeLines(_ source: SyntaxText) -> ([AbsolutePosition], AbsolutePosition) {
@@ -661,7 +646,7 @@ fileprivate extension RawTriviaPieceBuffer {
   }
 }
 
-fileprivate extension TokenSyntax {
+fileprivate extension RawSyntax {
   /// Walks and passes to `body` the ``SourceLength`` for every detected line,
   /// with the newline character included.
   /// - Returns: The leftover ``SourceLength`` at the end of the walk.
@@ -670,15 +655,17 @@ fileprivate extension TokenSyntax {
     body: (SourceLength) -> ()
   ) -> SourceLength {
     var curPrefix = prefix
-    switch self.raw.rawData.payload {
+    switch self.rawData.payload {
     case .parsedToken(let dat):
       curPrefix = dat.wholeText.forEachLineLength(prefix: curPrefix, body: body)
     case .materializedToken(let dat):
       curPrefix = dat.leadingTrivia.forEachLineLength(prefix: curPrefix, body: body)
       curPrefix = dat.tokenText.forEachLineLength(prefix: curPrefix, body: body)
       curPrefix = dat.trailingTrivia.forEachLineLength(prefix: curPrefix, body: body)
-    case .layout(_):
-      preconditionFailure("forEachLineLength is called non-token raw syntax")
+    case .layout(let dat):
+      for case let node? in dat.layout where SyntaxTreeViewMode.sourceAccurate.shouldTraverse(node: node) {
+        curPrefix = node.forEachLineLength(prefix: curPrefix, body: body)
+      }
     }
     return curPrefix
   }

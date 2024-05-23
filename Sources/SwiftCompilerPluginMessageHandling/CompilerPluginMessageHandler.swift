@@ -11,8 +11,10 @@
 //===----------------------------------------------------------------------===//
 
 #if swift(>=6)
+private import _SwiftSyntaxCShims
 public import SwiftSyntaxMacros
 #else
+@_implementationOnly import _SwiftSyntaxCShims
 import SwiftSyntaxMacros
 #endif
 
@@ -23,6 +25,8 @@ public enum PluginFeature: String {
 }
 
 /// A type that provides the actual plugin functions.
+///
+/// Note that it's an implementation's responsibility to cache the API results as needed.
 @_spi(PluginMessage)
 public protocol PluginProvider {
   /// Resolve macro type by the module name and the type name.
@@ -64,50 +68,60 @@ struct HostCapability {
   var hasExpandMacroResult: Bool { protocolVersion >= 5 }
 }
 
-/// 'CompilerPluginMessageHandler' is a type that listens to the message
-/// connection and dispatches them to the actual plugin provider, then send back
+/// 'CompilerPluginMessageListener' is a type that listens to the message
+/// connection, delegate them to the message handler, then send back
 /// the response.
 ///
 /// The low level connection and the provider is injected by the client.
 @_spi(PluginMessage)
-public class CompilerPluginMessageHandler<Connection: MessageConnection, Provider: PluginProvider> {
+public class CompilerPluginMessageListener<Connection: MessageConnection, Provider: PluginProvider> {
   /// Message channel for bidirectional communication with the plugin host.
   let connection: Connection
 
+  let handler: CompilerPluginMessageHandler<Provider>
+
+  public init(connection: Connection, provider: Provider) {
+    self.connection = connection
+    self.handler = CompilerPluginMessageHandler(provider: provider)
+  }
+
+  /// Run the main message listener loop.
+  /// Returns when the message connection was closed.
+  ///
+  /// On internal errors, such as I/O errors or JSON serialization errors, print
+  /// an error message and `exit(1)`
+  public func main() {
+    do {
+      while let message = try connection.waitForNextMessage(HostToPluginMessage.self) {
+        let result = handler.handleMessage(message)
+        try connection.sendMessage(result)
+      }
+    } catch {
+      // Emit a diagnostic and indicate failure to the plugin host,
+      // and exit with an error code.
+      fputs("Internal Error: \(error)\n", _stderr)
+      exit(1)
+    }
+  }
+}
+
+/// 'CompilerPluginMessageHandler' is a type that handle a message and do the
+/// corresponding operation.
+@_spi(PluginMessage)
+public class CompilerPluginMessageHandler<Provider: PluginProvider> {
   /// Object to provide actual plugin functions.
   let provider: Provider
 
   /// Plugin host capability
   var hostCapability: HostCapability
 
-  public init(connection: Connection, provider: Provider) {
-    self.connection = connection
+  public init(provider: Provider) {
     self.provider = provider
     self.hostCapability = HostCapability()
   }
-}
-
-extension CompilerPluginMessageHandler {
-  func sendMessage(_ message: PluginToHostMessage) throws {
-    try connection.sendMessage(message)
-  }
-
-  func waitForNextMessage() throws -> HostToPluginMessage? {
-    try connection.waitForNextMessage(HostToPluginMessage.self)
-  }
-
-  /// Run the main message listener loop.
-  /// Returns when the message connection was closed.
-  /// Throws an error when it failed to send/receive the message, or failed
-  /// to serialize/deserialize the message.
-  public func main() throws {
-    while let message = try self.waitForNextMessage() {
-      try handleMessage(message)
-    }
-  }
 
   /// Handles a single message received from the plugin host.
-  fileprivate func handleMessage(_ message: HostToPluginMessage) throws {
+  public func handleMessage(_ message: HostToPluginMessage) -> PluginToHostMessage {
     switch message {
     case .getCapability(let hostCapability):
       // Remember the peer capability if provided.
@@ -120,7 +134,7 @@ extension CompilerPluginMessageHandler {
         protocolVersion: PluginMessage.PROTOCOL_VERSION_NUMBER,
         features: provider.features.map({ $0.rawValue })
       )
-      try self.sendMessage(.getCapabilityResult(capability: capability))
+      return .getCapabilityResult(capability: capability)
 
     case .expandFreestandingMacro(
       let macro,
@@ -129,7 +143,7 @@ extension CompilerPluginMessageHandler {
       let expandingSyntax,
       let lexicalContext
     ):
-      try expandFreestandingMacro(
+      return expandFreestandingMacro(
         macro: macro,
         macroRole: macroRole,
         discriminator: discriminator,
@@ -148,7 +162,7 @@ extension CompilerPluginMessageHandler {
       let conformanceListSyntax,
       let lexicalContext
     ):
-      try expandAttachedMacro(
+      return expandAttachedMacro(
         macro: macro,
         macroRole: macroRole,
         discriminator: discriminator,
@@ -176,7 +190,7 @@ extension CompilerPluginMessageHandler {
           )
         )
       }
-      try self.sendMessage(.loadPluginLibraryResult(loaded: diags.isEmpty, diagnostics: diags));
+      return .loadPluginLibraryResult(loaded: diags.isEmpty, diagnostics: diags)
     }
   }
 }

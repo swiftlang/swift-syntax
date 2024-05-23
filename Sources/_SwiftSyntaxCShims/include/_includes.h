@@ -25,7 +25,11 @@
 //===----------------------------------------------------------------------===//
 
 #if defined(_WIN32)
+// NOTE: Do NOT include "WinSDK" headers here.
+// This is a part of compiler. If we use 'WinSDK' here, the compiler links with
+// swiftWinSDK.dll when (re)bulding it, and fails because it's used.
 #include <io.h>
+
 #elif defined(__unix__) || defined(__APPLE__)
 #include <unistd.h>
 #endif

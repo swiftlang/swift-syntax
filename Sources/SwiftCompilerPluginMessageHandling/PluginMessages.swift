@@ -229,7 +229,8 @@ public enum PluginMessage {
     public var notes: [Note]
     public var fixIts: [FixIt]
 
-    internal init(
+    @_spi(PluginMessage)
+    public init(
       message: String,
       severity: Severity,
       position: Position,

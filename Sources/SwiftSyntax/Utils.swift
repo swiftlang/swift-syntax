@@ -10,6 +10,9 @@
 //
 //===----------------------------------------------------------------------===//
 
+@available(*, deprecated, renamed: "SourceEdit")
+public typealias IncrementalEdit = SourceEdit
+
 @available(*, deprecated, message: "Use Range<AbsolutePosition> instead")
 public typealias ByteSourceRange = Range<AbsolutePosition>
 
@@ -74,60 +77,6 @@ extension Range<AbsolutePosition> {
     } else {
       return lowerBound..<upperBound
     }
-  }
-}
-
-public struct IncrementalEdit: Equatable, Sendable {
-  /// The byte range of the original source buffer that the edit applies to.
-  public let range: Range<AbsolutePosition>
-
-  /// The UTF-8 bytes that should be inserted as part of the edit
-  public let replacement: [UInt8]
-
-  /// The length of the edit replacement in UTF-8 bytes.
-  public var replacementLength: SourceLength { SourceLength(utf8Length: replacement.count) }
-
-  @available(*, deprecated, message: "Use range.lowerBound.utf8Offset instead")
-  public var offset: Int { return range.offset }
-
-  @available(*, deprecated, message: "Use range.utf8Length instead")
-  public var length: Int { return range.length.utf8Length }
-
-  @available(*, deprecated, message: "Use range.upperBound.utf8Offset instead")
-  public var endOffset: Int { return range.endOffset }
-
-  /// After the edit has been applied the range of the replacement text.
-  public var replacementRange: Range<AbsolutePosition> {
-    return Range(position: range.lowerBound, length: replacementLength)
-  }
-
-  @available(*, deprecated, message: "Use IncrementalEdit(range:replacement:) instead")
-  public init(range: ByteSourceRange, replacementLength: Int) {
-    self.range = range
-    self.replacement = Array(repeating: UInt8(ascii: " "), count: replacementLength)
-  }
-
-  @available(*, deprecated, message: "Use IncrementalEdit(range:replacement:) instead")
-  public init(offset: Int, length: Int, replacementLength: Int) {
-    self.range = ByteSourceRange(offset: offset, length: length)
-    self.replacement = Array(repeating: UInt8(ascii: " "), count: replacementLength)
-  }
-
-  public init(range: Range<AbsolutePosition>, replacement: [UInt8]) {
-    self.range = range
-    self.replacement = replacement
-  }
-
-  public init(range: Range<AbsolutePosition>, replacement: String) {
-    self.init(range: range, replacement: Array(replacement.utf8))
-  }
-
-  public func intersectsOrTouchesRange(_ other: Range<AbsolutePosition>) -> Bool {
-    return self.range.overlapsOrTouches(other)
-  }
-
-  public func intersectsRange(_ other: Range<AbsolutePosition>) -> Bool {
-    return self.range.overlaps(other)
   }
 }
 

@@ -2428,10 +2428,15 @@ extension Parser.Lookahead {
   // Consume 'async', 'throws', and 'rethrows', but in any order.
   mutating func consumeEffectsSpecifiers() {
     var loopProgress = LoopProgressCondition()
-    while let (_, handle) = self.at(anyIn: EffectSpecifier.self),
+    while let (spec, handle) = self.at(anyIn: EffectSpecifier.self),
       self.hasProgressed(&loopProgress)
     {
       self.eat(handle)
+
+      if spec.isThrowsSpecifier, self.consume(if: .leftParen) != nil {
+        _ = self.canParseSimpleOrCompositionType()
+        self.consume(if: .rightParen)
+      }
     }
   }
 

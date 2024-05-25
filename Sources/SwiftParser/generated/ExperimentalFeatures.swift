@@ -39,9 +39,9 @@ extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of TransferringArgsAndResults.
   public static let transferringArgsAndResults = Self (rawValue: 1 << 4)
   
-  /// Whether to enable the parsing of borrowing pattern matching.
-  public static let borrowingSwitch = Self (rawValue: 1 << 5)
-  
   /// Whether to enable the parsing of trailing comma.
-  public static let trailingComma = Self (rawValue: 1 << 6)
+  public static let trailingComma = Self (rawValue: 1 << 5)
+  
+  /// Whether to enable the parsing of SendingArgsAndResults.
+  public static let sendingArgsAndResults = Self (rawValue: 1 << 6)
 }

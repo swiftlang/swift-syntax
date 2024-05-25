@@ -299,11 +299,11 @@ public struct ConcurrentEdits: Sendable {
 
   /// The raw concurrent edits. Are guaranteed to satisfy the requirements
   /// stated above.
-  public let edits: [IncrementalEdit]
+  public let edits: [SourceEdit]
 
   /// Initialize this struct from edits that are already in a concurrent form
   /// and are guaranteed to satisfy the requirements posed above.
-  public init(concurrent: [IncrementalEdit]) throws {
+  public init(concurrent: [SourceEdit]) throws {
     if !Self.isValidConcurrentEditArray(concurrent) {
       throw ConcurrentEditsError.editsNotConcurrent
     }
@@ -319,7 +319,7 @@ public struct ConcurrentEdits: Sendable {
   ///  - insert 'z' at offset 2
   ///  to '012345' results in 'xyz012345'.
 
-  public init(fromSequential sequentialEdits: [IncrementalEdit]) {
+  public init(fromSequential sequentialEdits: [SourceEdit]) {
     do {
       try self.init(concurrent: Self.translateSequentialEditsToConcurrentEdits(sequentialEdits))
     } catch {
@@ -332,7 +332,7 @@ public struct ConcurrentEdits: Sendable {
   /// Construct a concurrent edits struct from a single edit. For a single edit,
   /// there is no differentiation between being it being applied concurrently
   /// or sequentially.
-  public init(_ single: IncrementalEdit) {
+  public init(_ single: SourceEdit) {
     do {
       try self.init(concurrent: [single])
     } catch {
@@ -341,9 +341,9 @@ public struct ConcurrentEdits: Sendable {
   }
 
   private static func translateSequentialEditsToConcurrentEdits(
-    _ edits: [IncrementalEdit]
-  ) -> [IncrementalEdit] {
-    var concurrentEdits: [IncrementalEdit] = []
+    _ edits: [SourceEdit]
+  ) -> [SourceEdit] {
+    var concurrentEdits: [SourceEdit] = []
     for editToAdd in edits {
       var editToAdd = editToAdd
       var editIndicesMergedWithNewEdit: [Int] = []
@@ -353,14 +353,14 @@ public struct ConcurrentEdits: Sendable {
             existingEdit.replacementRange.clamped(to: editToAdd.range).length
           let replacement: [UInt8]
           replacement =
-            existingEdit.replacement.prefix(
+            existingEdit.replacementBytes.prefix(
               max(0, editToAdd.range.lowerBound.utf8Offset - existingEdit.replacementRange.lowerBound.utf8Offset)
             )
-            + editToAdd.replacement
-            + existingEdit.replacement.suffix(
+            + editToAdd.replacementBytes
+            + existingEdit.replacementBytes.suffix(
               max(0, existingEdit.replacementRange.upperBound.utf8Offset - editToAdd.range.upperBound.utf8Offset)
             )
-          editToAdd = IncrementalEdit(
+          editToAdd = SourceEdit(
             range: Range(
               position: Swift.min(existingEdit.range.lowerBound, editToAdd.range.lowerBound),
               length: existingEdit.range.length + editToAdd.range.length - intersectionLength
@@ -369,7 +369,7 @@ public struct ConcurrentEdits: Sendable {
           )
           editIndicesMergedWithNewEdit.append(index)
         } else if existingEdit.range.lowerBound < editToAdd.range.upperBound {
-          editToAdd = IncrementalEdit(
+          editToAdd = SourceEdit(
             range: Range(
               position: editToAdd.range.lowerBound + existingEdit.range.length - existingEdit.replacementLength,
               length: editToAdd.range.length
@@ -392,7 +392,7 @@ public struct ConcurrentEdits: Sendable {
     return concurrentEdits
   }
 
-  private static func isValidConcurrentEditArray(_ edits: [IncrementalEdit]) -> Bool {
+  private static func isValidConcurrentEditArray(_ edits: [SourceEdit]) -> Bool {
     // Not quite sure if we should disallow creating an `IncrementalParseTransition`
     // object without edits but there doesn't seem to be much benefit if we do,
     // and there are 'lit' tests that want to test incremental re-parsing without edits.
@@ -412,7 +412,7 @@ public struct ConcurrentEdits: Sendable {
   }
 
   /// **Public for testing purposes only**
-  public static func _isValidConcurrentEditArray(_ edits: [IncrementalEdit]) -> Bool {
+  public static func _isValidConcurrentEditArray(_ edits: [SourceEdit]) -> Bool {
     return isValidConcurrentEditArray(edits)
   }
 }

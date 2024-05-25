@@ -27,6 +27,10 @@ let package = Package(
     .library(name: "SwiftSyntaxMacros", targets: ["SwiftSyntaxMacros"]),
     .library(name: "SwiftSyntaxMacroExpansion", targets: ["SwiftSyntaxMacroExpansion"]),
     .library(name: "SwiftSyntaxMacrosTestSupport", targets: ["SwiftSyntaxMacrosTestSupport"]),
+    .library(
+      name: "SwiftSyntaxMacrosGenericTestSupport",
+      targets: ["SwiftSyntaxMacrosGenericTestSupport"]
+    ),
   ],
   targets: [
     // MARK: - Internal helper targets
@@ -40,7 +44,18 @@ let package = Package(
 
     .target(
       name: "_SwiftSyntaxTestSupport",
-      dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftSyntaxBuilder", "SwiftSyntaxMacroExpansion"]
+      dependencies: [
+        "_SwiftSyntaxGenericTestSupport",
+        "SwiftBasicFormat",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacroExpansion",
+      ]
+    ),
+
+    .target(
+      name: "_SwiftSyntaxGenericTestSupport",
+      dependencies: []
     ),
 
     .testTarget(
@@ -215,7 +230,19 @@ let package = Package(
     .target(
       name: "SwiftSyntaxMacrosTestSupport",
       dependencies: [
-        "_SwiftSyntaxTestSupport",
+        "SwiftSyntax",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacrosGenericTestSupport",
+      ]
+    ),
+
+    // MARK: SwiftSyntaxMacrosGenericTestSupport
+
+    .target(
+      name: "SwiftSyntaxMacrosGenericTestSupport",
+      dependencies: [
+        "_SwiftSyntaxGenericTestSupport",
         "SwiftDiagnostics",
         "SwiftIDEUtils",
         "SwiftParser",
@@ -303,12 +330,7 @@ let package = Package(
       exclude: ["Inputs"]
     ),
   ],
-  // Disable Swift 6 mode when the `SWIFTSYNTAX_DISABLE_SWIFT_6_MODE` environment variable is set. This works around the following
-  // issue: The self-hosted SwiftPM job has Xcode 15.3 (Swift 5.10) installed and builds a Swift 6 SwiftPM from source.
-  // It then tries to build itself as a fat binary using the just-built Swift 6 SwiftPM, which uses xcbuild from Xcode
-  // as the build system. But the xcbuild in the installed Xcode is too old and doesn't know about Swift 6 mode, so it
-  // fails with: SWIFT_VERSION '6' is unsupported, supported versions are: 4.0, 4.2, 5.0 (rdar://126952308)
-  swiftLanguageVersions: hasEnvironmentVariable("SWIFTSYNTAX_DISABLE_SWIFT_6_MODE") ? [.v5] : [.v5, .version("6")]
+  swiftLanguageVersions: [.v5, .version("6")]
 )
 
 // This is a fake target that depends on all targets in the package.

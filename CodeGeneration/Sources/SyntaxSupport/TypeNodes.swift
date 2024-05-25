@@ -593,6 +593,7 @@ public let TYPE_NODES: [Node] = [
           .keyword(.consuming),
           .keyword(.transferring),
           .keyword(._resultDependsOn),
+          .keyword(.sending),
         ]),
         documentation: "The specifier token that's attached to the type."
       )

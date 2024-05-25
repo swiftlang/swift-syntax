@@ -472,6 +472,7 @@ public let DECL_NODES: [Node] = [
           .keyword(.transferring),
           .keyword(.unowned),
           .keyword(.weak),
+          .keyword(.sending),
         ])
       ),
       Child(

@@ -179,7 +179,7 @@ public func extractEditsAndSources(
 ) -> (edits: ConcurrentEdits, originalSource: Substring, editedSource: Substring) {
   var editedSource = Substring()
   var originalSource = Substring()
-  var concurrentEdits: [IncrementalEdit] = []
+  var concurrentEdits: [SourceEdit] = []
 
   var lastStartIndex = source.startIndex
   while let startIndex = source[lastStartIndex...].firstIndex(where: { $0 == "⏩️" }),
@@ -188,7 +188,7 @@ public func extractEditsAndSources(
   {
 
     originalSource += source[lastStartIndex..<startIndex]
-    let edit = IncrementalEdit(
+    let edit = SourceEdit(
       range: Range(
         position: AbsolutePosition(utf8Offset: originalSource.utf8.count),
         length: SourceLength(utf8Length: source.utf8.distance(from: source.index(after: startIndex), to: separateIndex))
@@ -221,7 +221,7 @@ public func extractEditsAndSources(
 /// `concurrent` specifies whether the edits should be interpreted as being
 /// applied sequentially or concurrently.
 public func applyEdits(
-  _ edits: [IncrementalEdit],
+  _ edits: [SourceEdit],
   concurrent: Bool,
   to testString: String
 ) -> String {
@@ -238,7 +238,7 @@ public func applyEdits(
   for edit in edits {
     assert(edit.range.upperBound.utf8Offset <= bytes.count)
     bytes.removeSubrange(edit.range.lowerBound.utf8Offset..<edit.range.upperBound.utf8Offset)
-    bytes.insert(contentsOf: edit.replacement, at: edit.range.lowerBound.utf8Offset)
+    bytes.insert(contentsOf: edit.replacementBytes, at: edit.range.lowerBound.utf8Offset)
   }
   return String(bytes: bytes, encoding: .utf8)!
 }

@@ -11,11 +11,17 @@
 //===----------------------------------------------------------------------===//
 
 extension String {
-  // This implementation is really slow; to use it outside a test it should be optimized.
   public func trimmingTrailingWhitespace() -> String {
     return
       self
-      .replacingOccurrences(of: "[ ]+\\n", with: "\n", options: .regularExpression)
-      .trimmingCharacters(in: [" "])
+      .split(separator: "\n", omittingEmptySubsequences: false)
+      .map { $0.droppingLast(while: \.isWhitespace) }
+      .joined(separator: "\n")
+  }
+}
+
+public extension StringProtocol {
+  func droppingLast(while predicate: (Character) -> Bool) -> String {
+    return String(self.reversed().drop(while: predicate).reversed())
   }
 }

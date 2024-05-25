@@ -103,22 +103,6 @@ public struct SourceRange: Hashable, Codable, Sendable {
   }
 }
 
-/// Collects all `PoundSourceLocationSyntax` directives in a file.
-fileprivate class SourceLocationCollector: SyntaxVisitor {
-  private var sourceLocationDirectives: [PoundSourceLocationSyntax] = []
-
-  override func visit(_ node: PoundSourceLocationSyntax) -> SyntaxVisitorContinueKind {
-    sourceLocationDirectives.append(node)
-    return .skipChildren
-  }
-
-  static func collectSourceLocations(in tree: some SyntaxProtocol) -> [PoundSourceLocationSyntax] {
-    let collector = SourceLocationCollector(viewMode: .sourceAccurate)
-    collector.walk(tree)
-    return collector.sourceLocationDirectives
-  }
-}
-
 fileprivate struct SourceLocationDirectiveArguments {
   enum Error: Swift.Error, CustomStringConvertible {
     case nonDecimalLineNumber(TokenSyntax)
@@ -169,8 +153,8 @@ public final class SourceLocationConverter {
   /// The information from all `#sourceLocation` directives in the file
   /// necessary to compute presumed locations.
   ///
-  /// - `sourceLine` is the line at which the `#sourceLocation` statement occurs
-  ///   within the current file.
+  /// - `sourceLine` is the physical line number of the end of the last token of
+  ///   `#sourceLocation(...)` directive within the current file.
   /// - `arguments` are the `file` and `line` arguments of the directive or `nil`
   ///   if spelled as `#sourceLocation()` to reset the source location directive.
   private var sourceLocationDirectives: [(sourceLine: Int, arguments: SourceLocationDirectiveArguments?)] = []
@@ -189,21 +173,7 @@ public final class SourceLocationConverter {
     precondition(tree.parent == nil, "SourceLocationConverter must be passed the root of the syntax tree")
     self.fileName = fileName
     self.source = tree.syntaxTextBytes
-    (self.lines, endOfFile) = computeLines(tree: Syntax(tree))
-    precondition(tree.totalLength.utf8Length == endOfFile.utf8Offset)
-
-    for directive in SourceLocationCollector.collectSourceLocations(in: tree) {
-      let location = self.physicalLocation(for: directive.positionAfterSkippingLeadingTrivia)
-      if let args = directive.arguments {
-        if let parsedArgs = try? SourceLocationDirectiveArguments(args) {
-          // Ignore any malformed `#sourceLocation` directives.
-          sourceLocationDirectives.append((sourceLine: location.line, arguments: parsedArgs))
-        }
-      } else {
-        // `#sourceLocation()` without any arguments resets the `#sourceLocation` directive.
-        sourceLocationDirectives.append((sourceLine: location.line, arguments: nil))
-      }
-    }
+    (self.lines, self.endOfFile, self.sourceLocationDirectives) = computeLines(tree: Syntax(tree))
   }
 
   /// Create a new ``SourceLocationConverter`` to convert between ``AbsolutePosition``
@@ -511,21 +481,21 @@ extension SyntaxProtocol {
 /// the end-of-file position.
 fileprivate func computeLines(
   tree: Syntax
-) -> ([AbsolutePosition], AbsolutePosition) {
-  var lines: [AbsolutePosition] = []
-  // First line starts from the beginning.
-  lines.append(.startOfFile)
+) -> (
+  lines: [AbsolutePosition],
+  endOfFile: AbsolutePosition,
+  sourceLocationDirectives: [(sourceLine: Int, arguments: SourceLocationDirectiveArguments?)]
+) {
+  var lines: [AbsolutePosition] = [.startOfFile]
   var position: AbsolutePosition = .startOfFile
-  let addLine = { (lineLength: SourceLength) in
+  var sourceLocationDirectives: [(sourceLine: Int, arguments: SourceLocationDirectiveArguments?)] = []
+  let lastLineLength = tree.raw.forEachLineLength { lineLength in
     position += lineLength
     lines.append(position)
+  } handleSourceLocationDirective: { lineOffset, args in
+    sourceLocationDirectives.append((sourceLine: lines.count + lineOffset, arguments: args))
   }
-  var curPrefix: SourceLength = .zero
-  for token in tree.tokens(viewMode: .sourceAccurate) {
-    curPrefix = token.forEachLineLength(prefix: curPrefix, body: addLine)
-  }
-  position += curPrefix
-  return (lines, position)
+  return (lines, position + lastLineLength, sourceLocationDirectives)
 }
 
 fileprivate func computeLines(_ source: SyntaxText) -> ([AbsolutePosition], AbsolutePosition) {
@@ -636,7 +606,7 @@ fileprivate extension RawTriviaPiece {
   }
 }
 
-fileprivate extension Array where Element == RawTriviaPiece {
+fileprivate extension RawTriviaPieceBuffer {
   /// Walks and passes to `body` the ``SourceLength`` for every detected line,
   /// with the newline character included.
   /// - Returns: The leftover ``SourceLength`` at the end of the walk.
@@ -652,18 +622,61 @@ fileprivate extension Array where Element == RawTriviaPiece {
   }
 }
 
-fileprivate extension TokenSyntax {
+fileprivate extension RawSyntax {
   /// Walks and passes to `body` the ``SourceLength`` for every detected line,
   /// with the newline character included.
   /// - Returns: The leftover ``SourceLength`` at the end of the walk.
   func forEachLineLength(
     prefix: SourceLength = .zero,
-    body: (SourceLength) -> ()
+    body: (SourceLength) -> (),
+    handleSourceLocationDirective: (_ lineOffset: Int, _ arguments: SourceLocationDirectiveArguments?) -> ()
   ) -> SourceLength {
     var curPrefix = prefix
-    curPrefix = self.tokenView.leadingRawTriviaPieces.forEachLineLength(prefix: curPrefix, body: body)
-    curPrefix = self.tokenView.rawText.forEachLineLength(prefix: curPrefix, body: body)
-    curPrefix = self.tokenView.trailingRawTriviaPieces.forEachLineLength(prefix: curPrefix, body: body)
+    switch self.rawData.payload {
+    case .parsedToken(let dat):
+      curPrefix = dat.wholeText.forEachLineLength(prefix: curPrefix, body: body)
+    case .materializedToken(let dat):
+      curPrefix = dat.leadingTrivia.forEachLineLength(prefix: curPrefix, body: body)
+      curPrefix = dat.tokenText.forEachLineLength(prefix: curPrefix, body: body)
+      curPrefix = dat.trailingTrivia.forEachLineLength(prefix: curPrefix, body: body)
+    case .layout(let dat):
+      for case let node? in dat.layout where SyntaxTreeViewMode.sourceAccurate.shouldTraverse(node: node) {
+        curPrefix = node.forEachLineLength(
+          prefix: curPrefix,
+          body: body,
+          handleSourceLocationDirective: handleSourceLocationDirective
+        )
+      }
+
+      // Handle '#sourceLocation' directive.
+      if dat.kind == .poundSourceLocation {
+        // Count newlines in the trailing trivia. The client want to get the
+        // line of the _end_ of '#sourceLocation()' directive.
+        var lineOffset = 0
+        if let lastTok = self.lastToken(viewMode: .sourceAccurate) {
+          switch lastTok.raw.rawData.payload {
+          case .parsedToken(let dat):
+            _ = dat.trailingTriviaText.forEachLineLength(body: { _ in lineOffset -= 1 })
+          case .materializedToken(let dat):
+            _ = dat.trailingTrivia.forEachLineLength(body: { _ in lineOffset -= 1 })
+          case .layout(_):
+            preconditionFailure("lastToken(viewMode:) returned non-token")
+          }
+        }
+
+        let directive = Syntax.forRoot(self, rawNodeArena: self.arenaReference.retained)
+          .cast(PoundSourceLocationSyntax.self)
+        if let args = directive.arguments {
+          if let parsedArgs = try? SourceLocationDirectiveArguments(args) {
+            // Ignore any malformed `#sourceLocation` directives.
+            handleSourceLocationDirective(lineOffset, parsedArgs)
+          }
+        } else {
+          // `#sourceLocation()` without any arguments resets the `#sourceLocation` directive.
+          handleSourceLocationDirective(lineOffset, nil)
+        }
+      }
+    }
     return curPrefix
   }
 }

@@ -74,15 +74,21 @@ struct HostCapability {
 ///
 /// The low level connection and the provider is injected by the client.
 @_spi(PluginMessage)
-public class CompilerPluginMessageListener<Connection: MessageConnection, Provider: PluginProvider> {
+public class CompilerPluginMessageListener<Connection: MessageConnection, Handler: PluginMessageHandler> {
   /// Message channel for bidirectional communication with the plugin host.
   let connection: Connection
 
-  let handler: CompilerPluginMessageHandler<Provider>
+  let handler: Handler
 
-  public init(connection: Connection, provider: Provider) {
+  public init(connection: Connection, messageHandler: Handler) {
     self.connection = connection
-    self.handler = CompilerPluginMessageHandler(provider: provider)
+    self.handler = messageHandler
+  }
+
+  public init<Provider: PluginProvider>(connection: Connection, provider: Provider) 
+    where Handler == PluginProviderMessageHandler<Provider> {
+    self.connection = connection
+    self.handler = PluginProviderMessageHandler(provider: provider)
   }
 
   /// Run the main message listener loop.
@@ -120,10 +126,18 @@ public class CompilerPluginMessageListener<Connection: MessageConnection, Provid
   }
 }
 
-/// 'CompilerPluginMessageHandler' is a type that handle a message and do the
-/// corresponding operation.
+/// A type that handles a plugin message and returns a response.
+///
+/// - SeeAlso: ``PluginProviderMessageHandler``
 @_spi(PluginMessage)
-public class CompilerPluginMessageHandler<Provider: PluginProvider> {
+public protocol PluginMessageHandler {
+  /// Handles a single message received from the plugin host.
+  func handleMessage(_ message: HostToPluginMessage) -> PluginToHostMessage
+}
+
+/// A `PluginMessageHandler` that uses a `PluginProvider`.
+@_spi(PluginMessage)
+public class PluginProviderMessageHandler<Provider: PluginProvider>: PluginMessageHandler {
   /// Object to provide actual plugin functions.
   let provider: Provider
 
@@ -209,6 +223,10 @@ public class CompilerPluginMessageHandler<Provider: PluginProvider> {
     }
   }
 }
+
+@_spi(PluginMessage)
+@available(*, deprecated, renamed: "PluginProviderMessageHandler")
+public typealias CompilerPluginMessageHandler<Provider: PluginProvider> = PluginProviderMessageHandler<Provider>
 
 struct UnimplementedError: Error, CustomStringConvertible {
   var description: String { "unimplemented" }

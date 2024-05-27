@@ -30,22 +30,22 @@ class IdentifierTests: XCTestCase {
     XCTAssertEqual(Identifier(backtickedToken)?.name, "backtickedToken")
 
     let multiBacktickedToken = TokenSyntax(stringLiteral: "```multiBacktickedToken```")
-    XCTAssertEqual(Identifier(multiBacktickedToken)?.name, "multiBacktickedToken")
+    XCTAssertEqual(Identifier(multiBacktickedToken)?.name, "``multiBacktickedToken``")
 
     let unicodeNormalizedToken = TokenSyntax(stringLiteral: "\u{e0}")  // "a`"
     XCTAssertEqual(Identifier(unicodeNormalizedToken)?.name, "\u{61}\u{300}")  // "à"
   }
 
   public func testRawIdentifier() {
-    let rawIdentifier = TokenSyntax(stringLiteral: "sometoken").identifier?.rawIdentifier
+    let rawIdentifier = TokenSyntax(stringLiteral: "sometoken").identifier?.raw
     XCTAssertEqual(rawIdentifier?.name, SyntaxText("sometoken"))
   }
 
-  public func testTokenSyntaxIdentifier() {
+  public func testTokenSyntaxIdentifier() throws {
     let tokenSyntax = TokenSyntax(stringLiteral: "sometoken")
     XCTAssertEqual(tokenSyntax.identifier, Identifier(tokenSyntax))
 
-    let nonIdentifierToken = DeclSyntax("let a = 1").firstToken(viewMode: .all)!
+    let nonIdentifierToken = try XCTUnwrap(DeclSyntax("let a = 1").firstToken(viewMode: .all))
     XCTAssertNil(nonIdentifierToken.identifier)
   }
 }

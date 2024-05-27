@@ -14,38 +14,38 @@
 import XCTest
 
 class IdentifierTests: XCTestCase {
-    public func testIdentifierInit() {
-        let someToken = TokenSyntax(stringLiteral: "someToken")
-        XCTAssertNotNil(Identifier(someToken))
-        
-        let nonIdentifierToken = DeclSyntax("let a = 1").firstToken(viewMode: .all)!
-        XCTAssertNil(Identifier(nonIdentifierToken))
-    }
-    
-    public func testName() {
-        let basicToken = TokenSyntax(stringLiteral: "basicToken")
-        XCTAssertEqual(Identifier(basicToken)?.name, "basicToken")
-        
-        let backtickedToken = TokenSyntax(stringLiteral: "`backtickedToken`")
-        XCTAssertEqual(Identifier(backtickedToken)?.name, "backtickedToken")
-        
-        let multiBacktickedToken = TokenSyntax(stringLiteral: "```multiBacktickedToken```")
-        XCTAssertEqual(Identifier(multiBacktickedToken)?.name, "multiBacktickedToken")
-        
-        let unicodeNormalizedToken = TokenSyntax(stringLiteral: "\u{e0}") // "a`"
-        XCTAssertEqual(Identifier(unicodeNormalizedToken)?.name, "\u{61}\u{300}") // "à"
-    }
-    
-    public func testRawIdentifier() {
-        let rawIdentifier = TokenSyntax(stringLiteral: "sometoken").identifier?.rawIdentifier
-        XCTAssertEqual(rawIdentifier?.name, SyntaxText("sometoken"))
-    }
-    
-    public func testTokenSyntaxIdentifier() {
-        let tokenSyntax = TokenSyntax(stringLiteral: "sometoken")
-        XCTAssertEqual(tokenSyntax.identifier, Identifier(tokenSyntax))
-        
-        let nonIdentifierToken = DeclSyntax("let a = 1").firstToken(viewMode: .all)!
-        XCTAssertNil(nonIdentifierToken.identifier)
-    }
+  public func testIdentifierInit() {
+    let someToken = TokenSyntax(stringLiteral: "someToken")
+    XCTAssertNotNil(Identifier(someToken))
+
+    let nonIdentifierToken = DeclSyntax("let a = 1").firstToken(viewMode: .all)!
+    XCTAssertNil(Identifier(nonIdentifierToken))
+  }
+
+  public func testName() {
+    let basicToken = TokenSyntax(stringLiteral: "basicToken")
+    XCTAssertEqual(Identifier(basicToken)?.name, "basicToken")
+
+    let backtickedToken = TokenSyntax(stringLiteral: "`backtickedToken`")
+    XCTAssertEqual(Identifier(backtickedToken)?.name, "backtickedToken")
+
+    let multiBacktickedToken = TokenSyntax(stringLiteral: "```multiBacktickedToken```")
+    XCTAssertEqual(Identifier(multiBacktickedToken)?.name, "multiBacktickedToken")
+
+    let unicodeNormalizedToken = TokenSyntax(stringLiteral: "\u{e0}")  // "a`"
+    XCTAssertEqual(Identifier(unicodeNormalizedToken)?.name, "\u{61}\u{300}")  // "à"
+  }
+
+  public func testRawIdentifier() {
+    let rawIdentifier = TokenSyntax(stringLiteral: "sometoken").identifier?.rawIdentifier
+    XCTAssertEqual(rawIdentifier?.name, SyntaxText("sometoken"))
+  }
+
+  public func testTokenSyntaxIdentifier() {
+    let tokenSyntax = TokenSyntax(stringLiteral: "sometoken")
+    XCTAssertEqual(tokenSyntax.identifier, Identifier(tokenSyntax))
+
+    let nonIdentifierToken = DeclSyntax("let a = 1").firstToken(viewMode: .all)!
+    XCTAssertNil(nonIdentifierToken.identifier)
+  }
 }

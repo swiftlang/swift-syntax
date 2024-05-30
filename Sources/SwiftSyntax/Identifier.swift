@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-/// An abstraction for sanitized values on a token.
+/// A canonicalized representation of an identifier that strips away backticks.
 public struct Identifier: Equatable, Hashable, Sendable {
   /// The sanitized `text` of a token.
   public var name: String {
@@ -37,17 +37,16 @@ public struct RawIdentifier: Equatable, Hashable, Sendable {
 
   @_spi(RawSyntax)
   fileprivate init(_ raw: RawSyntaxTokenView) {
-    let backtick = SyntaxText(StaticString(stringLiteral: "`"))
+    let backtick = SyntaxText("`")
     let arena = SyntaxArena()
     if raw.rawText.count > 2 && raw.rawText.hasPrefix(backtick) && raw.rawText.hasSuffix(backtick) {
       let startIndex = raw.rawText.index(after: raw.rawText.startIndex)
       let endIndex = raw.rawText.index(before: raw.rawText.endIndex)
-
-      self.name = arena.intern(SyntaxText(rebasing: raw.rawText[startIndex..<endIndex]))
+      self.name = SyntaxText(rebasing: raw.rawText[startIndex..<endIndex])
     } else {
-      self.name = arena.intern(raw.rawText)
+      self.name = raw.rawText
     }
-    self.arena = RetainedSyntaxArena(arena)
+    self.arena = raw.raw.arenaReference.retained
   }
 
   public static func == (lhs: RawIdentifier, rhs: RawIdentifier) -> Bool {

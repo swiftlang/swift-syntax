@@ -22,8 +22,8 @@ struct SyntaxChildrenIndexData: Hashable, Comparable, Sendable {
   /// See `AbsoluteSyntaxPosition.indexInParent`
   let indexInParent: UInt32
   /// Unique value for a node within its own tree.
-  /// See `SyntaxIdentifier.indexIntree`
-  let indexInTree: SyntaxIndexInTree
+  /// See ``SyntaxIdentifier/indexInTree``
+  let indexInTree: SyntaxIdentifier.SyntaxIndexInTree
 
   static func < (
     lhs: SyntaxChildrenIndexData,
@@ -35,7 +35,7 @@ struct SyntaxChildrenIndexData: Hashable, Comparable, Sendable {
   fileprivate init(
     offset: UInt32,
     indexInParent: UInt32,
-    indexInTree: SyntaxIndexInTree
+    indexInTree: SyntaxIdentifier.SyntaxIndexInTree
   ) {
     self.offset = offset
     self.indexInParent = indexInParent
@@ -72,7 +72,7 @@ public struct SyntaxChildrenIndex: Hashable, Comparable, ExpressibleByNilLiteral
   fileprivate init(
     offset: UInt32,
     indexInParent: UInt32,
-    indexInTree: SyntaxIndexInTree
+    indexInTree: SyntaxIdentifier.SyntaxIndexInTree
   ) {
     self.data = SyntaxChildrenIndexData(
       offset: offset,
@@ -222,7 +222,7 @@ struct RawSyntaxChildren: BidirectionalCollection, Sendable {
       let offset = startIndex.offset + UInt32(parent.totalLength.utf8Length)
       let indexInParent = startIndex.indexInParent + UInt32(parentLayoutView.children.count)
       let indexInTree = startIndex.indexInTree.indexInTree + UInt32(parent.totalNodes) - 1
-      let syntaxIndexInTree = SyntaxIndexInTree(indexInTree: indexInTree)
+      let syntaxIndexInTree = SyntaxIdentifier.SyntaxIndexInTree(indexInTree: indexInTree)
       let materialized = SyntaxChildrenIndex(
         offset: offset,
         indexInParent: indexInParent,

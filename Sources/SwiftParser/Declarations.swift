@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(RawSyntax) internal import SwiftSyntax
+#else
 @_spi(RawSyntax) import SwiftSyntax
+#endif
 
 extension DeclarationModifier {
   var canHaveParenthesizedArgument: Bool {
@@ -19,7 +23,7 @@ extension DeclarationModifier {
       .borrowing, .class, .consuming, .convenience, .distributed, .dynamic,
       .final, .indirect, .infix, .isolated, .lazy, .mutating, .nonmutating,
       .optional, .override, .postfix, .prefix, .reasync, ._resultDependsOn, ._resultDependsOnSelf, .required,
-      .rethrows, .static, .weak, .transferring:
+      .rethrows, .static, .weak, .transferring, .sending:
       return false
     case .fileprivate, .internal, .nonisolated, .package, .open, .private,
       .public, .unowned:
@@ -2025,7 +2029,7 @@ extension Parser {
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?
     if leftParen != nil {
-      args = parseArgumentListElements(pattern: .none)
+      args = parseArgumentListElements(pattern: .none, allowTrailingComma: false)
       (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     } else {
       args = []

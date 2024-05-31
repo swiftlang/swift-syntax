@@ -10,9 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+internal import SwiftBasicFormat
+internal import SwiftDiagnostics
+@_spi(RawSyntax) internal import SwiftSyntax
+#else
 import SwiftBasicFormat
 import SwiftDiagnostics
 @_spi(RawSyntax) import SwiftSyntax
+#endif
 
 extension FixIt {
   /// A more complex set of changes that affects multiple syntax nodes and thus

@@ -23,7 +23,7 @@ extension Parser {
     }
 
     let currentOffset = self.lexemes.offsetToStart(self.currentToken)
-    if let node = parseLookup!.lookUp(currentOffset, kind: kind) {
+    if let node = parseLookup!.lookUp(AbsolutePosition(utf8Offset: currentOffset), kind: kind) {
       self.lexemes.advance(by: node.totalLength.utf8Length, currentToken: &self.currentToken)
       return node
     }
@@ -117,16 +117,15 @@ struct IncrementalParseLookup {
   /// has invalidated the previous ``Syntax`` node.
   ///
   /// - Parameters:
-  ///   - offset: The byte offset of the source string that is currently parsed.
+  ///   - position: The position in the source string that is currently parsed.
   ///   - kind: The `CSyntaxKind` that the parser expects at this position.
   /// - Returns: A ``Syntax`` node from the previous parse invocation,
   ///            representing the contents of this region, if it is still valid
   ///            to re-use. `nil` otherwise.
-  fileprivate mutating func lookUp(_ newOffset: Int, kind: SyntaxKind) -> Syntax? {
-    guard let prevOffset = translateToPreEditOffset(newOffset) else {
+  fileprivate mutating func lookUp(_ newPosition: AbsolutePosition, kind: SyntaxKind) -> Syntax? {
+    guard let prevPosition = translateToPreEditPosition(newPosition) else {
       return nil
     }
-    let prevPosition = AbsolutePosition(utf8Offset: prevOffset)
     let node = cursorLookup(prevPosition: prevPosition, kind: kind)
     if let node {
       reusedCallback?(node)
@@ -162,7 +161,7 @@ struct IncrementalParseLookup {
 
     // Fast path check: if parser is past all the edits then any matching node
     // can be re-used.
-    if !edits.edits.isEmpty && edits.edits.last!.range.endOffset < node.position.utf8Offset {
+    if !edits.edits.isEmpty && edits.edits.last!.range.upperBound < node.position {
       return true
     }
 
@@ -172,15 +171,12 @@ struct IncrementalParseLookup {
       return false
     }
 
-    let nodeAffectRange = ByteSourceRange(
-      offset: node.position.utf8Offset,
-      length: nodeAffectRangeLength
-    )
+    let nodeAffectRange = node.position..<node.position.advanced(by: nodeAffectRangeLength)
 
     for edit in edits.edits {
       // Check if this node or the trivia of the next node has been edited. If
       // it has, we cannot reuse it.
-      if edit.range.offset > nodeAffectRange.endOffset {
+      if edit.range.lowerBound > nodeAffectRange.upperBound {
         // Remaining edits don't affect the node. (Edits are sorted)
         break
       }
@@ -192,19 +188,19 @@ struct IncrementalParseLookup {
     return true
   }
 
-  fileprivate func translateToPreEditOffset(_ postEditOffset: Int) -> Int? {
+  fileprivate func translateToPreEditPosition(_ postEditOffset: AbsolutePosition) -> AbsolutePosition? {
     var offset = postEditOffset
     for edit in edits.edits {
-      if edit.range.offset > offset {
+      if edit.range.lowerBound > offset {
         // Remaining edits doesn't affect the position. (Edits are sorted)
         break
       }
-      if edit.range.offset + edit.replacementLength > offset {
+      if edit.range.lowerBound + edit.replacementLength > offset {
         // This is a position inserted by the edit, and thus doesn't exist in
         // the pre-edit version of the file.
         return nil
       }
-      offset = offset - edit.replacementLength + edit.range.length
+      offset = offset + edit.range.length - edit.replacementLength
     }
     return offset
   }
@@ -303,11 +299,11 @@ public struct ConcurrentEdits: Sendable {
 
   /// The raw concurrent edits. Are guaranteed to satisfy the requirements
   /// stated above.
-  public let edits: [IncrementalEdit]
+  public let edits: [SourceEdit]
 
   /// Initialize this struct from edits that are already in a concurrent form
   /// and are guaranteed to satisfy the requirements posed above.
-  public init(concurrent: [IncrementalEdit]) throws {
+  public init(concurrent: [SourceEdit]) throws {
     if !Self.isValidConcurrentEditArray(concurrent) {
       throw ConcurrentEditsError.editsNotConcurrent
     }
@@ -323,7 +319,7 @@ public struct ConcurrentEdits: Sendable {
   ///  - insert 'z' at offset 2
   ///  to '012345' results in 'xyz012345'.
 
-  public init(fromSequential sequentialEdits: [IncrementalEdit]) {
+  public init(fromSequential sequentialEdits: [SourceEdit]) {
     do {
       try self.init(concurrent: Self.translateSequentialEditsToConcurrentEdits(sequentialEdits))
     } catch {
@@ -336,7 +332,7 @@ public struct ConcurrentEdits: Sendable {
   /// Construct a concurrent edits struct from a single edit. For a single edit,
   /// there is no differentiation between being it being applied concurrently
   /// or sequentially.
-  public init(_ single: IncrementalEdit) {
+  public init(_ single: SourceEdit) {
     do {
       try self.init(concurrent: [single])
     } catch {
@@ -345,31 +341,39 @@ public struct ConcurrentEdits: Sendable {
   }
 
   private static func translateSequentialEditsToConcurrentEdits(
-    _ edits: [IncrementalEdit]
-  ) -> [IncrementalEdit] {
-    var concurrentEdits: [IncrementalEdit] = []
+    _ edits: [SourceEdit]
+  ) -> [SourceEdit] {
+    var concurrentEdits: [SourceEdit] = []
     for editToAdd in edits {
       var editToAdd = editToAdd
       var editIndicesMergedWithNewEdit: [Int] = []
       for (index, existingEdit) in concurrentEdits.enumerated() {
-        if existingEdit.replacementRange.intersectsOrTouches(editToAdd.range) {
+        if existingEdit.replacementRange.overlapsOrTouches(editToAdd.range) {
           let intersectionLength =
-            existingEdit.replacementRange.intersected(editToAdd.range).length
+            existingEdit.replacementRange.clamped(to: editToAdd.range).length
           let replacement: [UInt8]
           replacement =
-            existingEdit.replacement.prefix(max(0, editToAdd.offset - existingEdit.replacementRange.offset))
-            + editToAdd.replacement
-            + existingEdit.replacement.suffix(max(0, existingEdit.replacementRange.endOffset - editToAdd.endOffset))
-          editToAdd = IncrementalEdit(
-            offset: Swift.min(existingEdit.offset, editToAdd.offset),
-            length: existingEdit.length + editToAdd.length - intersectionLength,
+            existingEdit.replacementBytes.prefix(
+              max(0, editToAdd.range.lowerBound.utf8Offset - existingEdit.replacementRange.lowerBound.utf8Offset)
+            )
+            + editToAdd.replacementBytes
+            + existingEdit.replacementBytes.suffix(
+              max(0, existingEdit.replacementRange.upperBound.utf8Offset - editToAdd.range.upperBound.utf8Offset)
+            )
+          editToAdd = SourceEdit(
+            range: Range(
+              position: Swift.min(existingEdit.range.lowerBound, editToAdd.range.lowerBound),
+              length: existingEdit.range.length + editToAdd.range.length - intersectionLength
+            ),
             replacement: replacement
           )
           editIndicesMergedWithNewEdit.append(index)
-        } else if existingEdit.offset < editToAdd.endOffset {
-          editToAdd = IncrementalEdit(
-            offset: editToAdd.offset - existingEdit.replacementLength + existingEdit.length,
-            length: editToAdd.length,
+        } else if existingEdit.range.lowerBound < editToAdd.range.upperBound {
+          editToAdd = SourceEdit(
+            range: Range(
+              position: editToAdd.range.lowerBound + existingEdit.range.length - existingEdit.replacementLength,
+              length: editToAdd.range.length
+            ),
             replacement: editToAdd.replacement
           )
         }
@@ -380,7 +384,7 @@ public struct ConcurrentEdits: Sendable {
       }
       let insertPos =
         concurrentEdits.firstIndex(where: { edit in
-          editToAdd.endOffset <= edit.offset
+          editToAdd.range.upperBound <= edit.range.lowerBound
         }) ?? concurrentEdits.count
       concurrentEdits.insert(editToAdd, at: insertPos)
       precondition(ConcurrentEdits.isValidConcurrentEditArray(concurrentEdits))
@@ -388,7 +392,7 @@ public struct ConcurrentEdits: Sendable {
     return concurrentEdits
   }
 
-  private static func isValidConcurrentEditArray(_ edits: [IncrementalEdit]) -> Bool {
+  private static func isValidConcurrentEditArray(_ edits: [SourceEdit]) -> Bool {
     // Not quite sure if we should disallow creating an `IncrementalParseTransition`
     // object without edits but there doesn't seem to be much benefit if we do,
     // and there are 'lit' tests that want to test incremental re-parsing without edits.
@@ -397,7 +401,7 @@ public struct ConcurrentEdits: Sendable {
     for i in 1..<edits.count {
       let prevEdit = edits[i - 1]
       let curEdit = edits[i]
-      if curEdit.range.offset < prevEdit.range.endOffset {
+      if curEdit.range.lowerBound < prevEdit.range.upperBound {
         return false
       }
       if curEdit.intersectsRange(prevEdit.range) {
@@ -408,7 +412,7 @@ public struct ConcurrentEdits: Sendable {
   }
 
   /// **Public for testing purposes only**
-  public static func _isValidConcurrentEditArray(_ edits: [IncrementalEdit]) -> Bool {
+  public static func _isValidConcurrentEditArray(_ edits: [SourceEdit]) -> Bool {
     return isValidConcurrentEditArray(edits)
   }
 }

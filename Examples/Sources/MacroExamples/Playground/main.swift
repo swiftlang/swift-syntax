@@ -55,3 +55,7 @@ runPeerMacrosPlayground()
 runEnvironmentValueAccessorMacroPlayground()
 
 #endif
+
+// MARK: - SourceLocationMacros
+
+runSourceLoctionMacrosPlayground()

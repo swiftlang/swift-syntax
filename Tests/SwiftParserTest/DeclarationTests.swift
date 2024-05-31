@@ -3309,6 +3309,21 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testSendingTypeSpecifier() {
+    assertParse(
+      "func testVarDeclTupleElt() -> (sending String, String) {}",
+      experimentalFeatures: .sendingArgsAndResults
+    )
+    assertParse(
+      "func testVarDeclTuple2(_ x: (sending String)) {}",
+      experimentalFeatures: .sendingArgsAndResults
+    )
+    assertParse(
+      "func testVarDeclTuple2(_ x: (sending String, String)) {}",
+      experimentalFeatures: .sendingArgsAndResults
+    )
+  }
+
   func testMisplacedAttributeInVarDeclWithMultipleBindings() {
     assertParse(
       """

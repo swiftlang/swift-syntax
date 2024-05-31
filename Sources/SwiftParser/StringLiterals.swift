@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(RawSyntax) internal import SwiftSyntax
+#else
 @_spi(RawSyntax) import SwiftSyntax
+#endif
 
 // MARK: - Check multiline string literal indentation
 
@@ -547,7 +551,7 @@ extension Parser {
         )
         let leftParen = self.expectWithoutRecoveryOrLeadingTrivia(.leftParen)
         let expressions = RawLabeledExprListSyntax(
-          elements: self.parseArgumentListElements(pattern: .none),
+          elements: self.parseArgumentListElements(pattern: .none, allowTrailingComma: false),
           arena: self.arena
         )
 

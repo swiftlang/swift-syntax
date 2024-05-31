@@ -11,10 +11,10 @@
 //===----------------------------------------------------------------------===//
 
 #if swift(>=6)
-import SwiftBasicFormat
-@_spi(Testing) import SwiftParser
+internal import SwiftBasicFormat
+@_spi(Testing) internal import SwiftParser
 @_spi(RawSyntax) public import SwiftSyntax
-import SwiftSyntaxBuilder
+internal import SwiftSyntaxBuilder
 #else
 import SwiftBasicFormat
 @_spi(Testing) import SwiftParser

@@ -20,9 +20,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _alignment
   case _backDeploy
   case _borrow
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
   case _borrowing
   case _BridgeObject
   case _cdecl
@@ -214,6 +211,10 @@ public enum Keyword: UInt8, Hashable, Sendable {
   #endif
   case scoped
   case `self`
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case sending
   case `Self`
   case Sendable
   case set
@@ -495,6 +496,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .renamed
       case "reverse":
         self = .reverse
+      case "sending":
+        self = .sending
       case "unowned":
         self = .unowned
       case "willSet":
@@ -1005,6 +1008,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
       "safe", 
       "scoped", 
       "self", 
+      "sending", 
       "Self", 
       "Sendable", 
       "set", 

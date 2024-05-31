@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(RawSyntax) internal import SwiftSyntax
+#else
 @_spi(RawSyntax) import SwiftSyntax
+#endif
 
 extension Parser {
   mutating func parseAttributeList() -> RawAttributeListSyntax {
@@ -372,7 +376,7 @@ extension Parser {
       }
     case nil:
       return parseAttribute(argumentMode: .customAttribute) { parser in
-        let arguments = parser.parseArgumentListElements(pattern: .none)
+        let arguments = parser.parseArgumentListElements(pattern: .none, allowTrailingComma: false)
         return .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
       }
     }
@@ -420,7 +424,11 @@ extension Parser {
       trailingComma: roleTrailingComma,
       arena: self.arena
     )
-    let additionalArgs = self.parseArgumentListElements(pattern: .none, flavor: .attributeArguments)
+    let additionalArgs = self.parseArgumentListElements(
+      pattern: .none,
+      flavor: .attributeArguments,
+      allowTrailingComma: false
+    )
     return [roleElement] + additionalArgs
   }
 }

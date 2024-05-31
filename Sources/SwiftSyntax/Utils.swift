@@ -10,91 +10,73 @@
 //
 //===----------------------------------------------------------------------===//
 
-public struct ByteSourceRange: Equatable, Sendable {
-  public var offset: Int
-  public var length: Int
+@available(*, deprecated, renamed: "SourceEdit")
+public typealias IncrementalEdit = SourceEdit
 
+@available(*, deprecated, message: "Use Range<AbsolutePosition> instead")
+public typealias ByteSourceRange = Range<AbsolutePosition>
+
+extension Range<AbsolutePosition> {
+  @available(*, deprecated, message: "Use lowerBound.utf8Offset instead")
+  public var offset: Int { lowerBound.utf8Offset }
+
+  @available(*, deprecated, message: "Construct a Range<AbsolutePosition> instead")
   public init(offset: Int, length: Int) {
-    self.offset = offset
-    self.length = length
+    self = AbsolutePosition(utf8Offset: offset)..<AbsolutePosition(utf8Offset: offset + length)
   }
 
+  @available(*, deprecated, message: "Use upperBound.utf8Offset instead")
   public var endOffset: Int {
-    return offset + length
+    return upperBound.utf8Offset
   }
 
-  public var isEmpty: Bool {
-    return length == 0
-  }
-
-  public func intersectsOrTouches(_ other: ByteSourceRange) -> Bool {
-    return self.endOffset >= other.offset && self.offset <= other.endOffset
-  }
-
-  public func intersects(_ other: ByteSourceRange) -> Bool {
-    return self.endOffset > other.offset && self.offset < other.endOffset
-  }
-
-  /// Returns the byte range for the overlapping region between two ranges.
-  public func intersected(_ other: ByteSourceRange) -> ByteSourceRange {
-    let start = max(self.offset, other.offset)
-    let end = min(self.endOffset, other.endOffset)
-    if start > end {
-      return ByteSourceRange(offset: 0, length: 0)
-    } else {
-      return ByteSourceRange(offset: start, length: end - start)
-    }
+  /// Returns the range for the overlapping region between two ranges.
+  ///
+  /// If the intersection is empty, this returns a range starting at offset 0 and having length 0.
+  public func intersected(_ other: Range<AbsolutePosition>) -> Range<AbsolutePosition> {
+    return self.clamped(to: other)
   }
 }
 
-public struct IncrementalEdit: Equatable, Sendable {
-  /// The byte range of the original source buffer that the edit applies to.
-  public let range: ByteSourceRange
+extension Range<AbsolutePosition> {
+  /// The number of bytes between the range's lower bound and its upper bound
+  public var length: SourceLength { return SourceLength(utf8Length: upperBound.utf8Offset - lowerBound.utf8Offset) }
 
-  /// The UTF-8 bytes that should be inserted as part of the edit
-  public let replacement: [UInt8]
-
-  /// The length of the edit replacement in UTF8 bytes.
-  public var replacementLength: Int { replacement.count }
-
-  public var offset: Int { return range.offset }
-
-  public var length: Int { return range.length }
-
-  public var endOffset: Int { return range.endOffset }
-
-  /// After the edit has been applied the range of the replacement text.
-  public var replacementRange: ByteSourceRange {
-    return ByteSourceRange(offset: offset, length: replacementLength)
+  public init(position: AbsolutePosition, length: SourceLength) {
+    self = position..<(position + length)
   }
 
-  @available(*, deprecated, message: "Use IncrementalEdit(range:replacement:) instead")
-  public init(range: ByteSourceRange, replacementLength: Int) {
-    self.range = range
-    self.replacement = Array(repeating: UInt8(ascii: " "), count: replacementLength)
+  // Returns `true` if the intersection between this range and `other` is non-empty or if the two ranges are directly
+  /// adjacent to each other.
+  public func overlapsOrTouches(_ other: Range<AbsolutePosition>) -> Bool {
+    return self.upperBound >= other.lowerBound && self.lowerBound <= other.upperBound
   }
 
-  @available(*, deprecated, message: "Use IncrementalEdit(offset:length:replacement:) instead")
-  public init(offset: Int, length: Int, replacementLength: Int) {
-    self.range = ByteSourceRange(offset: offset, length: length)
-    self.replacement = Array(repeating: UInt8(ascii: " "), count: replacementLength)
+  /// Returns `true` if the intersection between this range and `other` is non-empty or if the two ranges are directly
+  /// adjacent to each other.
+  @available(*, deprecated, renamed: "overlapsOrTouches(_:)")
+  public func intersectsOrTouches(_ other: Range<AbsolutePosition>) -> Bool {
+    return self.upperBound >= other.lowerBound && self.lowerBound <= other.upperBound
   }
 
-  public init(offset: Int, length: Int, replacement: [UInt8]) {
-    self.range = ByteSourceRange(offset: offset, length: length)
-    self.replacement = replacement
+  /// Returns `true` if the intersection between this range and `other` is non-empty.
+  @available(*, deprecated, renamed: "overlaps(_:)")
+  public func intersects(_ other: Range<AbsolutePosition>) -> Bool {
+    return self.upperBound > other.lowerBound && self.lowerBound < other.upperBound
   }
 
-  public init(offset: Int, length: Int, replacement: String) {
-    self.init(offset: offset, length: length, replacement: Array(replacement.utf8))
-  }
-
-  public func intersectsOrTouchesRange(_ other: ByteSourceRange) -> Bool {
-    return self.range.intersectsOrTouches(other)
-  }
-
-  public func intersectsRange(_ other: ByteSourceRange) -> Bool {
-    return self.range.intersects(other)
+  /// Returns the range for the overlapping region between two ranges.
+  ///
+  /// If the intersection is empty, this returns `nil`.
+  @available(*, deprecated, message: "Use clamped(to:) instead")
+  public func intersecting(_ other: Range<AbsolutePosition>) -> Range<AbsolutePosition>? {
+    let lowerBound = Swift.max(self.lowerBound, other.lowerBound)
+    let upperBound = Swift.min(self.upperBound, other.upperBound)
+    if lowerBound > upperBound {
+      return nil
+    } else {
+      return lowerBound..<upperBound
+    }
   }
 }
 

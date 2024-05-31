@@ -129,8 +129,8 @@ public struct TokenDiagnostic: Hashable, Sendable {
   /// expect to hit this case most of the time.
   public init(_ kind: Kind, byteOffset: Int) {
     precondition(byteOffset >= 0)
-    // `type(of: self.byteOffset).max` gets optimized to a constant
-    if byteOffset > type(of: self.byteOffset).max {
+    // `UInt16.max` gets optimized to a constant
+    if byteOffset > UInt16.max {
       self.kind = .tokenDiagnosticOffsetOverflow
       self.byteOffset = 0
     } else {

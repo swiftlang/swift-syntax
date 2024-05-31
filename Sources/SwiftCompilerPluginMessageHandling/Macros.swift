@@ -10,12 +10,21 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+internal import SwiftBasicFormat
+internal import SwiftDiagnostics
+internal import SwiftOperators
+internal import SwiftSyntax
+@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) internal import SwiftSyntaxMacroExpansion
+@_spi(ExperimentalLanguageFeature) internal import SwiftSyntaxMacros
+#else
 import SwiftBasicFormat
 import SwiftDiagnostics
 import SwiftOperators
 import SwiftSyntax
-@_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacroExpansion
+@_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacroExpansion
 @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
+#endif
 
 extension CompilerPluginMessageHandler {
   /// Get concrete macro type from a pair of module name and type name.
@@ -46,7 +55,7 @@ extension CompilerPluginMessageHandler {
     discriminator: String,
     expandingSyntax: PluginMessage.Syntax,
     lexicalContext: [PluginMessage.Syntax]?
-  ) throws {
+  ) -> PluginToHostMessage {
     let sourceManager = SourceManager()
     let syntax = sourceManager.add(expandingSyntax, foldingWith: .standardOperators)
 
@@ -96,7 +105,7 @@ extension CompilerPluginMessageHandler {
       // TODO: Remove this  when all compilers have 'hasExpandMacroResult'.
       response = .expandFreestandingMacroResult(expandedSource: expandedSource, diagnostics: diagnostics)
     }
-    try self.sendMessage(response)
+    return response
   }
 
   /// Expand `@attached(XXX)` macros.
@@ -110,7 +119,7 @@ extension CompilerPluginMessageHandler {
     extendedTypeSyntax: PluginMessage.Syntax?,
     conformanceListSyntax: PluginMessage.Syntax?,
     lexicalContext: [PluginMessage.Syntax]?
-  ) throws {
+  ) -> PluginToHostMessage {
     let sourceManager = SourceManager()
     let attributeNode = sourceManager.add(
       attributeSyntax,
@@ -180,7 +189,7 @@ extension CompilerPluginMessageHandler {
     } else {
       response = .expandAttachedMacroResult(expandedSources: expandedSources, diagnostics: diagnostics)
     }
-    try self.sendMessage(response)
+    return response
   }
 }
 

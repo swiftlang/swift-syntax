@@ -12,7 +12,7 @@
 
 #if swift(>=6)
 public import SwiftDiagnostics
-import SwiftOperators
+internal import SwiftOperators
 public import SwiftSyntax
 public import SwiftSyntaxMacros
 #else

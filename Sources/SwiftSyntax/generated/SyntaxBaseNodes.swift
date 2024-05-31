@@ -135,12 +135,12 @@ extension DeclSyntaxProtocol {
   }
 }
 
-public extension Syntax {
+extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// DeclSyntaxProtocol.
   ///
   ///  - Note:  This will incur an existential conversion.
-  func isProtocol(_: DeclSyntaxProtocol.Protocol) -> Bool {
+  public func isProtocol(_: DeclSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(DeclSyntaxProtocol.self) != nil
   }
   
@@ -148,7 +148,7 @@ public extension Syntax {
   /// DeclSyntaxProtocol. Otherwise return nil.
   ///
   ///  - Note:  This will incur an existential conversion.
-  func asProtocol(_: DeclSyntaxProtocol.Protocol) -> DeclSyntaxProtocol? {
+  public func asProtocol(_: DeclSyntaxProtocol.Protocol) -> DeclSyntaxProtocol? {
     return self.asProtocol(SyntaxProtocol.self) as? DeclSyntaxProtocol
   }
 }
@@ -275,7 +275,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 /// deprecated to prevent incorrect casting.
 public protocol _LeafDeclSyntaxNodeProtocol: DeclSyntaxProtocol {}
 
-public extension _LeafDeclSyntaxNodeProtocol {
+extension _LeafDeclSyntaxNodeProtocol {
   /// Checks if the current leaf syntax node can be cast to a different specified type.
   ///
   /// - Returns: `false` since the leaf node cannot be cast to a different specified type.
@@ -283,7 +283,7 @@ public extension _LeafDeclSyntaxNodeProtocol {
   /// - Note: This method overloads the general `is` method and is marked as deprecated to produce a warning,
   ///         informing the user that the cast will always fail.
   @available(*, deprecated, message: "This cast will always fail")
-  func `is`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+  public func `is`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return false
   }
   
@@ -295,7 +295,7 @@ public extension _LeafDeclSyntaxNodeProtocol {
   /// - Note: This method overloads the general `as` method and is marked as deprecated to produce a warning,
   ///         informing the user that the cast will always fail.
   @available(*, deprecated, message: "This cast will always fail")
-  func `as`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+  public func `as`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return nil
   }
   
@@ -308,7 +308,7 @@ public extension _LeafDeclSyntaxNodeProtocol {
   ///         informing the user that the cast will always fail.
   /// - Warning: Invoking this method will lead to a fatal error.
   @available(*, deprecated, message: "This cast will always fail")
-  func cast<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+  public func cast<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> S {
     fatalError("\(Self.self) cannot be cast to \(S.self)")
   }
 }
@@ -436,12 +436,12 @@ extension ExprSyntaxProtocol {
   }
 }
 
-public extension Syntax {
+extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// ExprSyntaxProtocol.
   ///
   ///  - Note:  This will incur an existential conversion.
-  func isProtocol(_: ExprSyntaxProtocol.Protocol) -> Bool {
+  public func isProtocol(_: ExprSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(ExprSyntaxProtocol.self) != nil
   }
   
@@ -449,7 +449,7 @@ public extension Syntax {
   /// ExprSyntaxProtocol. Otherwise return nil.
   ///
   ///  - Note:  This will incur an existential conversion.
-  func asProtocol(_: ExprSyntaxProtocol.Protocol) -> ExprSyntaxProtocol? {
+  public func asProtocol(_: ExprSyntaxProtocol.Protocol) -> ExprSyntaxProtocol? {
     return self.asProtocol(SyntaxProtocol.self) as? ExprSyntaxProtocol
   }
 }
@@ -631,7 +631,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 /// deprecated to prevent incorrect casting.
 public protocol _LeafExprSyntaxNodeProtocol: ExprSyntaxProtocol {}
 
-public extension _LeafExprSyntaxNodeProtocol {
+extension _LeafExprSyntaxNodeProtocol {
   /// Checks if the current leaf syntax node can be cast to a different specified type.
   ///
   /// - Returns: `false` since the leaf node cannot be cast to a different specified type.
@@ -639,7 +639,7 @@ public extension _LeafExprSyntaxNodeProtocol {
   /// - Note: This method overloads the general `is` method and is marked as deprecated to produce a warning,
   ///         informing the user that the cast will always fail.
   @available(*, deprecated, message: "This cast will always fail")
-  func `is`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+  public func `is`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return false
   }
   
@@ -651,7 +651,7 @@ public extension _LeafExprSyntaxNodeProtocol {
   /// - Note: This method overloads the general `as` method and is marked as deprecated to produce a warning,
   ///         informing the user that the cast will always fail.
   @available(*, deprecated, message: "This cast will always fail")
-  func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+  public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return nil
   }
   
@@ -664,7 +664,7 @@ public extension _LeafExprSyntaxNodeProtocol {
   ///         informing the user that the cast will always fail.
   /// - Warning: Invoking this method will lead to a fatal error.
   @available(*, deprecated, message: "This cast will always fail")
-  func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+  public func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
     fatalError("\(Self.self) cannot be cast to \(S.self)")
   }
 }
@@ -792,12 +792,12 @@ extension PatternSyntaxProtocol {
   }
 }
 
-public extension Syntax {
+extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// PatternSyntaxProtocol.
   ///
   ///  - Note:  This will incur an existential conversion.
-  func isProtocol(_: PatternSyntaxProtocol.Protocol) -> Bool {
+  public func isProtocol(_: PatternSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(PatternSyntaxProtocol.self) != nil
   }
   
@@ -805,7 +805,7 @@ public extension Syntax {
   /// PatternSyntaxProtocol. Otherwise return nil.
   ///
   ///  - Note:  This will incur an existential conversion.
-  func asProtocol(_: PatternSyntaxProtocol.Protocol) -> PatternSyntaxProtocol? {
+  public func asProtocol(_: PatternSyntaxProtocol.Protocol) -> PatternSyntaxProtocol? {
     return self.asProtocol(SyntaxProtocol.self) as? PatternSyntaxProtocol
   }
 }
@@ -898,7 +898,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 /// deprecated to prevent incorrect casting.
 public protocol _LeafPatternSyntaxNodeProtocol: PatternSyntaxProtocol {}
 
-public extension _LeafPatternSyntaxNodeProtocol {
+extension _LeafPatternSyntaxNodeProtocol {
   /// Checks if the current leaf syntax node can be cast to a different specified type.
   ///
   /// - Returns: `false` since the leaf node cannot be cast to a different specified type.
@@ -906,7 +906,7 @@ public extension _LeafPatternSyntaxNodeProtocol {
   /// - Note: This method overloads the general `is` method and is marked as deprecated to produce a warning,
   ///         informing the user that the cast will always fail.
   @available(*, deprecated, message: "This cast will always fail")
-  func `is`<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+  public func `is`<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return false
   }
   
@@ -918,7 +918,7 @@ public extension _LeafPatternSyntaxNodeProtocol {
   /// - Note: This method overloads the general `as` method and is marked as deprecated to produce a warning,
   ///         informing the user that the cast will always fail.
   @available(*, deprecated, message: "This cast will always fail")
-  func `as`<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+  public func `as`<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return nil
   }
   
@@ -931,7 +931,7 @@ public extension _LeafPatternSyntaxNodeProtocol {
   ///         informing the user that the cast will always fail.
   /// - Warning: Invoking this method will lead to a fatal error.
   @available(*, deprecated, message: "This cast will always fail")
-  func cast<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+  public func cast<S: PatternSyntaxProtocol>(_ syntaxType: S.Type) -> S {
     fatalError("\(Self.self) cannot be cast to \(S.self)")
   }
 }
@@ -1059,12 +1059,12 @@ extension StmtSyntaxProtocol {
   }
 }
 
-public extension Syntax {
+extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// StmtSyntaxProtocol.
   ///
   ///  - Note:  This will incur an existential conversion.
-  func isProtocol(_: StmtSyntaxProtocol.Protocol) -> Bool {
+  public func isProtocol(_: StmtSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(StmtSyntaxProtocol.self) != nil
   }
   
@@ -1072,7 +1072,7 @@ public extension Syntax {
   /// StmtSyntaxProtocol. Otherwise return nil.
   ///
   ///  - Note:  This will incur an existential conversion.
-  func asProtocol(_: StmtSyntaxProtocol.Protocol) -> StmtSyntaxProtocol? {
+  public func asProtocol(_: StmtSyntaxProtocol.Protocol) -> StmtSyntaxProtocol? {
     return self.asProtocol(SyntaxProtocol.self) as? StmtSyntaxProtocol
   }
 }
@@ -1184,7 +1184,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 /// deprecated to prevent incorrect casting.
 public protocol _LeafStmtSyntaxNodeProtocol: StmtSyntaxProtocol {}
 
-public extension _LeafStmtSyntaxNodeProtocol {
+extension _LeafStmtSyntaxNodeProtocol {
   /// Checks if the current leaf syntax node can be cast to a different specified type.
   ///
   /// - Returns: `false` since the leaf node cannot be cast to a different specified type.
@@ -1192,7 +1192,7 @@ public extension _LeafStmtSyntaxNodeProtocol {
   /// - Note: This method overloads the general `is` method and is marked as deprecated to produce a warning,
   ///         informing the user that the cast will always fail.
   @available(*, deprecated, message: "This cast will always fail")
-  func `is`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+  public func `is`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return false
   }
   
@@ -1204,7 +1204,7 @@ public extension _LeafStmtSyntaxNodeProtocol {
   /// - Note: This method overloads the general `as` method and is marked as deprecated to produce a warning,
   ///         informing the user that the cast will always fail.
   @available(*, deprecated, message: "This cast will always fail")
-  func `as`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+  public func `as`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return nil
   }
   
@@ -1217,7 +1217,7 @@ public extension _LeafStmtSyntaxNodeProtocol {
   ///         informing the user that the cast will always fail.
   /// - Warning: Invoking this method will lead to a fatal error.
   @available(*, deprecated, message: "This cast will always fail")
-  func cast<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+  public func cast<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> S {
     fatalError("\(Self.self) cannot be cast to \(S.self)")
   }
 }
@@ -1345,12 +1345,12 @@ extension TypeSyntaxProtocol {
   }
 }
 
-public extension Syntax {
+extension Syntax {
   /// Check whether the non-type erased version of this syntax node conforms to
   /// TypeSyntaxProtocol.
   ///
   ///  - Note:  This will incur an existential conversion.
-  func isProtocol(_: TypeSyntaxProtocol.Protocol) -> Bool {
+  public func isProtocol(_: TypeSyntaxProtocol.Protocol) -> Bool {
     return self.asProtocol(TypeSyntaxProtocol.self) != nil
   }
   
@@ -1358,7 +1358,7 @@ public extension Syntax {
   /// TypeSyntaxProtocol. Otherwise return nil.
   ///
   ///  - Note:  This will incur an existential conversion.
-  func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol? {
+  public func asProtocol(_: TypeSyntaxProtocol.Protocol) -> TypeSyntaxProtocol? {
     return self.asProtocol(SyntaxProtocol.self) as? TypeSyntaxProtocol
   }
 }
@@ -1473,7 +1473,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 /// deprecated to prevent incorrect casting.
 public protocol _LeafTypeSyntaxNodeProtocol: TypeSyntaxProtocol {}
 
-public extension _LeafTypeSyntaxNodeProtocol {
+extension _LeafTypeSyntaxNodeProtocol {
   /// Checks if the current leaf syntax node can be cast to a different specified type.
   ///
   /// - Returns: `false` since the leaf node cannot be cast to a different specified type.
@@ -1481,7 +1481,7 @@ public extension _LeafTypeSyntaxNodeProtocol {
   /// - Note: This method overloads the general `is` method and is marked as deprecated to produce a warning,
   ///         informing the user that the cast will always fail.
   @available(*, deprecated, message: "This cast will always fail")
-  func `is`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+  public func `is`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return false
   }
   
@@ -1493,7 +1493,7 @@ public extension _LeafTypeSyntaxNodeProtocol {
   /// - Note: This method overloads the general `as` method and is marked as deprecated to produce a warning,
   ///         informing the user that the cast will always fail.
   @available(*, deprecated, message: "This cast will always fail")
-  func `as`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+  public func `as`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return nil
   }
   
@@ -1506,7 +1506,7 @@ public extension _LeafTypeSyntaxNodeProtocol {
   ///         informing the user that the cast will always fail.
   /// - Warning: Invoking this method will lead to a fatal error.
   @available(*, deprecated, message: "This cast will always fail")
-  func cast<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+  public func cast<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S {
     fatalError("\(Self.self) cannot be cast to \(S.self)")
   }
 }
@@ -1811,7 +1811,7 @@ extension Syntax {
 /// deprecated to prevent incorrect casting.
 public protocol _LeafSyntaxNodeProtocol: SyntaxProtocol {}
 
-public extension _LeafSyntaxNodeProtocol {
+extension _LeafSyntaxNodeProtocol {
   /// Checks if the current leaf syntax node can be cast to a different specified type.
   ///
   /// - Returns: `false` since the leaf node cannot be cast to a different specified type.
@@ -1819,7 +1819,7 @@ public extension _LeafSyntaxNodeProtocol {
   /// - Note: This method overloads the general `is` method and is marked as deprecated to produce a warning,
   ///         informing the user that the cast will always fail.
   @available(*, deprecated, message: "This cast will always fail")
-  func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+  public func `is`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
     return false
   }
   
@@ -1831,7 +1831,7 @@ public extension _LeafSyntaxNodeProtocol {
   /// - Note: This method overloads the general `as` method and is marked as deprecated to produce a warning,
   ///         informing the user that the cast will always fail.
   @available(*, deprecated, message: "This cast will always fail")
-  func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+  public func `as`<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S? {
     return nil
   }
   
@@ -1844,7 +1844,7 @@ public extension _LeafSyntaxNodeProtocol {
   ///         informing the user that the cast will always fail.
   /// - Warning: Invoking this method will lead to a fatal error.
   @available(*, deprecated, message: "This cast will always fail")
-  func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
+  public func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
     fatalError("\(Self.self) cannot be cast to \(S.self)")
   }
 }

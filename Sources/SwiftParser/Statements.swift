@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
+#else
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+#endif
 
 extension TokenConsumer {
   /// Returns `true` if the current token represents the start of a statement
@@ -137,7 +141,7 @@ extension Parser {
   /// Parse a guard statement.
   mutating func parseGuardStatement(guardHandle: RecoveryConsumptionHandle) -> RawGuardStmtSyntax {
     let (unexpectedBeforeGuardKeyword, guardKeyword) = self.eat(guardHandle)
-    let conditions = self.parseConditionList()
+    let conditions = self.parseConditionList(isGuardStatement: true)
     let (unexpectedBeforeElseKeyword, elseKeyword) = self.expect(.keyword(.else))
     let body = self.parseCodeBlock(introducer: guardKeyword)
     return RawGuardStmtSyntax(
@@ -154,7 +158,7 @@ extension Parser {
 
 extension Parser {
   /// Parse a list of condition elements.
-  mutating func parseConditionList() -> RawConditionElementListSyntax {
+  mutating func parseConditionList(isGuardStatement: Bool) -> RawConditionElementListSyntax {
     // We have a simple comma separated list of clauses, but also need to handle
     // a variety of common errors situations (including migrating from Swift 2
     // syntax).
@@ -183,9 +187,23 @@ extension Parser {
           arena: self.arena
         )
       )
-    } while keepGoing != nil && self.hasProgressed(&loopProgress)
+    } while keepGoing != nil && !atConditionListTerminator(isGuardStatement: isGuardStatement)
+      && self.hasProgressed(&loopProgress)
 
     return RawConditionElementListSyntax(elements: elements, arena: self.arena)
+  }
+
+  mutating func atConditionListTerminator(isGuardStatement: Bool) -> Bool {
+    guard experimentalFeatures.contains(.trailingComma) else {
+      return false
+    }
+    // Condition terminator is `else` for `guard` statements.
+    if isGuardStatement, self.at(.keyword(.else)) {
+      return true
+    }
+    // Condition terminator is start of statement body for `if` or `while` statements.
+    // Missing `else` is a common mistake for `guard` statements so we fall back to lookahead for a body.
+    return self.at(.leftBrace) && withLookahead({ $0.atStartOfConditionalStatementBody() })
   }
 
   /// Parse a condition element.
@@ -498,7 +516,6 @@ extension Parser {
   mutating func parseWhileStatement(whileHandle: RecoveryConsumptionHandle) -> RawWhileStmtSyntax {
     let (unexpectedBeforeWhileKeyword, whileKeyword) = self.eat(whileHandle)
     let conditions: RawConditionElementListSyntax
-
     if self.at(.leftBrace) {
       conditions = RawConditionElementListSyntax(
         elements: [
@@ -511,9 +528,11 @@ extension Parser {
         arena: self.arena
       )
     } else {
-      conditions = self.parseConditionList()
+      conditions = self.parseConditionList(isGuardStatement: false)
     }
+
     let body = self.parseCodeBlock(introducer: whileKeyword)
+
     return RawWhileStmtSyntax(
       unexpectedBeforeWhileKeyword,
       whileKeyword: whileKeyword,
@@ -1053,4 +1072,54 @@ extension Parser.Lookahead {
     } while lookahead.at(.poundIf, .poundElseif, .poundElse) && lookahead.hasProgressed(&loopProgress)
     return lookahead.atStartOfSwitchCase()
   }
+
+  /// Returns `true` if the current token represents the start of an `if` or `while` statement body.
+  mutating func atStartOfConditionalStatementBody() -> Bool {
+    guard at(.leftBrace) else {
+      // Statement bodies always start with a '{'. If there is no '{', we can't be at the statement body.
+      return false
+    }
+    skipSingle()
+    if self.at(.endOfFile) {
+      // There's nothing else in the source file that could be the statement body, so this must be it.
+      return true
+    }
+    if self.at(.semicolon) {
+      // We can't have a semicolon between the condition and the statement body, so this must be the statement body.
+      return true
+    }
+    if self.at(.keyword(.else)) {
+      // If the current token is an `else` keyword, this must be the statement body of an `if` statement since conditions can't be followed by `else`.
+      return true
+    }
+    if self.at(.rightBrace, .rightParen) {
+      // A right brace or parenthesis cannot start a statement body, nor can the condition list continue afterwards. So, this must be the statement body.
+      // This covers cases like `if true, { if true, { } }` or `( if true, { print(0) } )`. While the latter is not valid code, it improves diagnostics.
+      return true
+    }
+    if self.atStartOfLine {
+      // If the current token is at the start of a line, it is most likely a statement body. The only exceptions are:
+      if self.at(.comma) {
+        // If newline begins with ',' it must be a condition trailing comma, so this can't be the statement body, e.g.
+        // if true, { true }
+        // , true { print("body") }
+        return false
+      }
+      if self.at(.binaryOperator) {
+        // If current token is a binary operator this can't be the statement body since an `if` expression can't be the left-hand side of an operator, e.g.
+        // if true, { true }
+        // != nil
+        // {
+        //   print("body")
+        // }
+        return false
+      }
+      // Excluded the above exceptions, this must be the statement body.
+      return true
+    } else {
+      // If the current token isn't at the start of a line and isn't `EOF`, `;`, `else`, `)` or `}` this can't be the statement body.
+      return false
+    }
+  }
+
 }

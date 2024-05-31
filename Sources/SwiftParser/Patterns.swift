@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
+#else
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+#endif
 
 extension Parser {
   /// Parse a pattern.
@@ -268,7 +272,7 @@ extension Parser.Lookahead {
     // TODO: the other ownership modifiers (borrowing/consuming/mutating) more
     // than likely need to be made contextual as well before finalizing their
     // grammar.
-    case ._borrowing where experimentalFeatures.contains(.borrowingSwitch):
+    case ._borrowing, .borrowing:
       return peek(isAt: TokenSpec(.identifier, allowAtStartOfLine: false))
     default:
       // Other keywords can be parsed unconditionally.
@@ -374,6 +378,7 @@ extension Parser.Lookahead {
         && !self.at(.keyword(.borrowing))
         && !self.at(.keyword(.consuming))
         && !(experimentalFeatures.contains(.transferringArgsAndResults) && self.at(.keyword(.transferring)))
+        && !(experimentalFeatures.contains(.sendingArgsAndResults) && self.at(.keyword(.sending)))
         && !(experimentalFeatures.contains(.nonescapableTypes) && self.at(.keyword(._resultDependsOn)))
       {
         return true

@@ -315,9 +315,9 @@ public enum SyntaxEnum: Sendable {
   case yieldedExpressionsClause(YieldedExpressionsClauseSyntax)
 }
 
-public extension Syntax {
+extension Syntax {
   /// Get an enum that can be used to exhaustively switch over all syntax nodes.
-  func `as`(_: SyntaxEnum.Type) -> SyntaxEnum {
+  public func `as`(_: SyntaxEnum.Type) -> SyntaxEnum {
     switch raw.kind {
     case .token:
       return .token(TokenSyntax(self)!)
@@ -919,9 +919,9 @@ public enum DeclSyntaxEnum {
   case variableDecl(VariableDeclSyntax)
 }
 
-public extension DeclSyntax {
+extension DeclSyntax {
   /// Get an enum that can be used to exhaustively switch over all Decl syntax nodes.
-  func `as`(_: DeclSyntaxEnum.Type) -> DeclSyntaxEnum {
+  public func `as`(_: DeclSyntaxEnum.Type) -> DeclSyntaxEnum {
     switch raw.kind {
     case .accessorDecl:
       return .accessorDecl(AccessorDeclSyntax(self)!)
@@ -1037,9 +1037,9 @@ public enum ExprSyntaxEnum {
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
 }
 
-public extension ExprSyntax {
+extension ExprSyntax {
   /// Get an enum that can be used to exhaustively switch over all Expr syntax nodes.
-  func `as`(_: ExprSyntaxEnum.Type) -> ExprSyntaxEnum {
+  public func `as`(_: ExprSyntaxEnum.Type) -> ExprSyntaxEnum {
     switch raw.kind {
     case .arrayExpr:
       return .arrayExpr(ArrayExprSyntax(self)!)
@@ -1164,9 +1164,9 @@ public enum PatternSyntaxEnum {
   case wildcardPattern(WildcardPatternSyntax)
 }
 
-public extension PatternSyntax {
+extension PatternSyntax {
   /// Get an enum that can be used to exhaustively switch over all Pattern syntax nodes.
-  func `as`(_: PatternSyntaxEnum.Type) -> PatternSyntaxEnum {
+  public func `as`(_: PatternSyntaxEnum.Type) -> PatternSyntaxEnum {
     switch raw.kind {
     case .expressionPattern:
       return .expressionPattern(ExpressionPatternSyntax(self)!)
@@ -1212,9 +1212,9 @@ public enum StmtSyntaxEnum {
   case yieldStmt(YieldStmtSyntax)
 }
 
-public extension StmtSyntax {
+extension StmtSyntax {
   /// Get an enum that can be used to exhaustively switch over all Stmt syntax nodes.
-  func `as`(_: StmtSyntaxEnum.Type) -> StmtSyntaxEnum {
+  public func `as`(_: StmtSyntaxEnum.Type) -> StmtSyntaxEnum {
     switch raw.kind {
     case .breakStmt:
       return .breakStmt(BreakStmtSyntax(self)!)
@@ -1278,9 +1278,9 @@ public enum TypeSyntaxEnum {
   case tupleType(TupleTypeSyntax)
 }
 
-public extension TypeSyntax {
+extension TypeSyntax {
   /// Get an enum that can be used to exhaustively switch over all Type syntax nodes.
-  func `as`(_: TypeSyntaxEnum.Type) -> TypeSyntaxEnum {
+  public func `as`(_: TypeSyntaxEnum.Type) -> TypeSyntaxEnum {
     switch raw.kind {
     case .arrayType:
       return .arrayType(ArrayTypeSyntax(self)!)

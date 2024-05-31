@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(RawSyntax) internal import SwiftSyntax
+#else
 @_spi(RawSyntax) import SwiftSyntax
+#endif
 
 /// A type that consumes  instances of ``TokenSyntax``.
 protocol TokenConsumer {
@@ -373,6 +377,9 @@ extension TokenConsumer {
       default:
         return false
       }
+
+    case .prefixOperator where lexeme.isContextualPunctuator("~"):
+      return true
 
     default:
       return false

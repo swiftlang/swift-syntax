@@ -35,13 +35,13 @@ let syntaxEnumFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
   try! ExtensionDeclSyntax(
     """
-    public extension Syntax
+    extension Syntax
     """
   ) {
     try FunctionDeclSyntax(
       """
       /// Get an enum that can be used to exhaustively switch over all syntax nodes.
-      func `as`(_: SyntaxEnum.Type) -> SyntaxEnum
+      public func `as`(_: SyntaxEnum.Type) -> SyntaxEnum
       """
     ) {
       try SwitchExprSyntax("switch raw.kind") {
@@ -60,7 +60,7 @@ let syntaxEnumFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
   for base in SYNTAX_NODES where base.kind.isBase {
     let baseKind = base.kind
-    let baseName = baseKind.rawValue.withFirstCharacterUppercased;
+    let baseName = baseKind.rawValue.withFirstCharacterUppercased
     let enumType: TypeSyntax = "\(raw: baseName)SyntaxEnum"
 
     try! EnumDeclSyntax(
@@ -81,13 +81,13 @@ let syntaxEnumFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     try! ExtensionDeclSyntax(
       """
-      public extension \(baseKind.syntaxType)
+      extension \(baseKind.syntaxType)
       """
     ) {
       try FunctionDeclSyntax(
         """
         /// Get an enum that can be used to exhaustively switch over all \(raw: baseName) syntax nodes.
-        func `as`(_: \(enumType).Type) -> \(enumType)
+        public func `as`(_: \(enumType).Type) -> \(enumType)
         """
       ) {
         try SwitchExprSyntax("switch raw.kind") {

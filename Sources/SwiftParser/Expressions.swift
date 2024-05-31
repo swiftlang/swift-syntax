@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(RawSyntax) internal import SwiftSyntax
+#else
 @_spi(RawSyntax) import SwiftSyntax
+#endif
 
 extension TokenConsumer {
   mutating func atStartOfExpression() -> Bool {
@@ -523,7 +527,7 @@ extension Parser {
       )
 
     case (.any, _)?:
-      if !atContextualExpressionModifier() {
+      if !atContextualExpressionModifier() && !self.peek().isContextualPunctuator("~") {
         break EXPR_PREFIX
       }
 
@@ -742,7 +746,11 @@ extension Parser {
 
       // If there is an expr-call-suffix, parse it and form a call.
       if let lparen = self.consume(if: TokenSpec(.leftParen, allowAtStartOfLine: false)) {
-        let args = self.parseArgumentListElements(pattern: pattern, flavor: flavor.callArgumentFlavor)
+        let args = self.parseArgumentListElements(
+          pattern: pattern,
+          flavor: flavor.callArgumentFlavor,
+          allowTrailingComma: experimentalFeatures.contains(.trailingComma)
+        )
         let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
 
         // If we can parse trailing closures, do so.
@@ -778,7 +786,7 @@ extension Parser {
         if self.at(.rightSquare) {
           args = []
         } else {
-          args = self.parseArgumentListElements(pattern: pattern)
+          args = self.parseArgumentListElements(pattern: pattern, allowTrailingComma: false)
         }
         let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquare)
 
@@ -1011,7 +1019,7 @@ extension Parser {
         if self.at(.rightSquare) {
           args = []
         } else {
-          args = self.parseArgumentListElements(pattern: pattern)
+          args = self.parseArgumentListElements(pattern: pattern, allowTrailingComma: false)
         }
         let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquare)
 
@@ -1306,7 +1314,7 @@ extension Parser {
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?
     if leftParen != nil {
-      args = parseArgumentListElements(pattern: pattern)
+      args = parseArgumentListElements(pattern: pattern, allowTrailingComma: false)
       (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     } else {
       args = []
@@ -1420,7 +1428,10 @@ extension Parser {
   /// Parse a tuple expression.
   mutating func parseTupleExpression(pattern: PatternContext) -> RawTupleExprSyntax {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
-    let elements = self.parseArgumentListElements(pattern: pattern)
+    let elements = self.parseArgumentListElements(
+      pattern: pattern,
+      allowTrailingComma: experimentalFeatures.contains(.trailingComma)
+    )
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     return RawTupleExprSyntax(
       unexpectedBeforeLParen,
@@ -1862,7 +1873,8 @@ extension Parser {
   /// this will be a dedicated argument list type.
   mutating func parseArgumentListElements(
     pattern: PatternContext,
-    flavor: ExprFlavor = .basic
+    flavor: ExprFlavor = .basic,
+    allowTrailingComma: Bool
   ) -> [RawLabeledExprSyntax] {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return [
@@ -1921,8 +1933,12 @@ extension Parser {
           arena: self.arena
         )
       )
-    } while keepGoing != nil && self.hasProgressed(&loopProgress)
+    } while keepGoing != nil && !atArgumentListTerminator(allowTrailingComma) && self.hasProgressed(&loopProgress)
     return result
+  }
+
+  mutating func atArgumentListTerminator(_ allowTrailingComma: Bool) -> Bool {
+    return allowTrailingComma && self.at(.rightParen)
   }
 }
 
@@ -2101,9 +2117,7 @@ extension Parser {
 
 extension Parser {
   /// Parse an if statement/expression.
-  mutating func parseIfExpression(
-    ifHandle: RecoveryConsumptionHandle
-  ) -> RawIfExprSyntax {
+  mutating func parseIfExpression(ifHandle: RecoveryConsumptionHandle) -> RawIfExprSyntax {
     let (unexpectedBeforeIfKeyword, ifKeyword) = self.eat(ifHandle)
 
     let conditions: RawConditionElementListSyntax
@@ -2120,7 +2134,7 @@ extension Parser {
         arena: self.arena
       )
     } else {
-      conditions = self.parseConditionList()
+      conditions = self.parseConditionList(isGuardStatement: false)
     }
 
     let body = self.parseCodeBlock(introducer: ifKeyword)
@@ -2414,10 +2428,15 @@ extension Parser.Lookahead {
   // Consume 'async', 'throws', and 'rethrows', but in any order.
   mutating func consumeEffectsSpecifiers() {
     var loopProgress = LoopProgressCondition()
-    while let (_, handle) = self.at(anyIn: EffectSpecifier.self),
+    while let (spec, handle) = self.at(anyIn: EffectSpecifier.self),
       self.hasProgressed(&loopProgress)
     {
       self.eat(handle)
+
+      if spec.isThrowsSpecifier, self.consume(if: .leftParen) != nil {
+        _ = self.canParseSimpleOrCompositionType()
+        self.consume(if: .rightParen)
+      }
     }
   }
 

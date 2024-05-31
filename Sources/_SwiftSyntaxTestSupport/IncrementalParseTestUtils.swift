@@ -99,17 +99,17 @@ public func assertIncrementalParse(
 
   var lastRangeUpperBound = originalString.startIndex
   for expectedReusedNode in expectedReusedNodes {
-    guard let range = byteSourceRange(for: expectedReusedNode.source, in: originalString, after: lastRangeUpperBound)
+    guard let range = positionRange(of: expectedReusedNode.source, in: originalString, after: lastRangeUpperBound)
     else {
       XCTFail("Fail to find string in original source,", file: expectedReusedNode.file, line: expectedReusedNode.line)
       continue
     }
 
-    guard let reusedNode = reusedNodes.first(where: { $0.trimmedByteRange == range }) else {
+    guard let reusedNode = reusedNodes.first(where: { $0.trimmedRange == range }) else {
       XCTFail(
         """
         Fail to match the range of \(expectedReusedNode.source) in:
-        \(reusedNodes.map({"\($0.trimmedByteRange): \($0.description)"}).joined(separator: "\n"))
+        \(reusedNodes.map({"\($0.trimmedRange): \($0.description)"}).joined(separator: "\n"))
         """,
         file: expectedReusedNode.file,
         line: expectedReusedNode.line
@@ -127,16 +127,19 @@ public func assertIncrementalParse(
       line: expectedReusedNode.line
     )
 
-    lastRangeUpperBound = originalString.index(originalString.startIndex, offsetBy: range.endOffset)
+    lastRangeUpperBound = originalString.utf8.index(originalString.startIndex, offsetBy: range.upperBound.utf8Offset)
   }
 }
 
-public func byteSourceRange(for substring: String, in sourceString: String, after: String.Index) -> ByteSourceRange? {
+public func positionRange(
+  of substring: String,
+  in sourceString: String,
+  after: String.Index
+) -> Range<AbsolutePosition>? {
   if let range = sourceString[after...].range(of: substring) {
-    return ByteSourceRange(
-      offset: sourceString.utf8.distance(from: sourceString.startIndex, to: range.lowerBound),
-      length: sourceString.utf8.distance(from: range.lowerBound, to: range.upperBound)
-    )
+    let lowerBound = sourceString.utf8.distance(from: sourceString.startIndex, to: range.lowerBound)
+    let upperBound = sourceString.utf8.distance(from: sourceString.startIndex, to: range.upperBound)
+    return AbsolutePosition(utf8Offset: lowerBound)..<AbsolutePosition(utf8Offset: upperBound)
   }
   return nil
 }
@@ -176,7 +179,7 @@ public func extractEditsAndSources(
 ) -> (edits: ConcurrentEdits, originalSource: Substring, editedSource: Substring) {
   var editedSource = Substring()
   var originalSource = Substring()
-  var concurrentEdits: [IncrementalEdit] = []
+  var concurrentEdits: [SourceEdit] = []
 
   var lastStartIndex = source.startIndex
   while let startIndex = source[lastStartIndex...].firstIndex(where: { $0 == "⏩️" }),
@@ -185,11 +188,10 @@ public func extractEditsAndSources(
   {
 
     originalSource += source[lastStartIndex..<startIndex]
-    let edit = IncrementalEdit(
-      offset: originalSource.utf8.count,
-      length: source.utf8.distance(
-        from: source.index(after: startIndex),
-        to: separateIndex
+    let edit = SourceEdit(
+      range: Range(
+        position: AbsolutePosition(utf8Offset: originalSource.utf8.count),
+        length: SourceLength(utf8Length: source.utf8.distance(from: source.index(after: startIndex), to: separateIndex))
       ),
       replacement: Array(source.utf8[source.index(after: separateIndex)..<endIndex])
     )
@@ -219,7 +221,7 @@ public func extractEditsAndSources(
 /// `concurrent` specifies whether the edits should be interpreted as being
 /// applied sequentially or concurrently.
 public func applyEdits(
-  _ edits: [IncrementalEdit],
+  _ edits: [SourceEdit],
   concurrent: Bool,
   to testString: String
 ) -> String {
@@ -234,9 +236,9 @@ public func applyEdits(
   }
   var bytes = Array(testString.utf8)
   for edit in edits {
-    assert(edit.endOffset <= bytes.count)
-    bytes.removeSubrange(edit.offset..<edit.endOffset)
-    bytes.insert(contentsOf: edit.replacement, at: edit.offset)
+    assert(edit.range.upperBound.utf8Offset <= bytes.count)
+    bytes.removeSubrange(edit.range.lowerBound.utf8Offset..<edit.range.upperBound.utf8Offset)
+    bytes.insert(contentsOf: edit.replacementBytes, at: edit.range.lowerBound.utf8Offset)
   }
   return String(bytes: bytes, encoding: .utf8)!
 }

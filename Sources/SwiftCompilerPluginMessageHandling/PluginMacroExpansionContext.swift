@@ -10,11 +10,19 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+internal import SwiftDiagnostics
+internal import SwiftOperators
+internal import SwiftParser
+internal import SwiftSyntax
+internal import SwiftSyntaxMacros
+#else
 import SwiftDiagnostics
 import SwiftOperators
 import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxMacros
+#endif
 
 /// Manages known source code combined with their filename/fileID. This can be
 /// used to get line/column from a syntax node in the managed source code.
@@ -166,8 +174,9 @@ class SourceManager {
     let localLocation = base.locationConverter.location(for: localPosition)
 
     let positionOffset = base.location.offset
+    // NOTE '- 1' because base.location.{line|column} are 1-based.
     let lineOffset = base.location.line - 1
-    let columnOffset = localLocation.line == 1 ? base.location.column : 0
+    let columnOffset = localLocation.line == 1 ? (base.location.column - 1) : 0
 
     return SourceLocation(
       // NOTE: IUO because 'localLocation' is created by a location converter

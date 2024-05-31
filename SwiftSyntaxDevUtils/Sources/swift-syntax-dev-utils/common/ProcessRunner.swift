@@ -120,7 +120,7 @@ class ProcessRunner {
       // Apparently using availableData can cause various issues
       let newData = fileHandle.readData(ofLength: Int.max)
       if newData.count == 0 {
-        pipe.fileHandleForReading.readabilityHandler = nil;
+        pipe.fileHandleForReading.readabilityHandler = nil
         group.leave()
       } else {
         addData(newData)

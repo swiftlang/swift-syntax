@@ -27,12 +27,15 @@ let package = Package(
     .library(name: "SwiftSyntaxMacros", targets: ["SwiftSyntaxMacros"]),
     .library(name: "SwiftSyntaxMacroExpansion", targets: ["SwiftSyntaxMacroExpansion"]),
     .library(name: "SwiftSyntaxMacrosTestSupport", targets: ["SwiftSyntaxMacrosTestSupport"]),
+    .library(
+      name: "SwiftSyntaxMacrosGenericTestSupport",
+      targets: ["SwiftSyntaxMacrosGenericTestSupport"]
+    ),
   ],
   targets: [
     // MARK: - Internal helper targets
-
     .target(
-      name: "_AtomicBool"
+      name: "_SwiftSyntaxCShims"
     ),
 
     .target(
@@ -41,7 +44,18 @@ let package = Package(
 
     .target(
       name: "_SwiftSyntaxTestSupport",
-      dependencies: ["SwiftBasicFormat", "SwiftSyntax", "SwiftSyntaxBuilder", "SwiftSyntaxMacroExpansion"]
+      dependencies: [
+        "_SwiftSyntaxGenericTestSupport",
+        "SwiftBasicFormat",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+        "SwiftSyntaxMacroExpansion",
+      ]
+    ),
+
+    .target(
+      name: "_SwiftSyntaxGenericTestSupport",
+      dependencies: []
     ),
 
     .testTarget(
@@ -88,6 +102,7 @@ let package = Package(
     .target(
       name: "SwiftCompilerPluginMessageHandling",
       dependencies: [
+        "_SwiftSyntaxCShims",
         "SwiftDiagnostics",
         "SwiftOperators",
         "SwiftParser",
@@ -124,11 +139,19 @@ let package = Package(
       dependencies: ["_SwiftSyntaxTestSupport", "SwiftIDEUtils", "SwiftParser", "SwiftSyntax"]
     ),
 
+    // MARK: SwiftLibraryPluginProvider
+
+    .target(
+      name: "SwiftLibraryPluginProvider",
+      dependencies: ["SwiftSyntaxMacros", "SwiftCompilerPluginMessageHandling"],
+      exclude: ["CMakeLists.txt"]
+    ),
+
     // MARK: SwiftSyntax
 
     .target(
       name: "SwiftSyntax",
-      dependencies: ["_AtomicBool", "SwiftSyntax509", "SwiftSyntax510", "SwiftSyntax600"],
+      dependencies: ["_SwiftSyntaxCShims", "SwiftSyntax509", "SwiftSyntax510", "SwiftSyntax600"],
       exclude: ["CMakeLists.txt"],
       swiftSettings: swiftSyntaxSwiftSettings
     ),
@@ -207,7 +230,19 @@ let package = Package(
     .target(
       name: "SwiftSyntaxMacrosTestSupport",
       dependencies: [
-        "_SwiftSyntaxTestSupport",
+        "SwiftSyntax",
+        "SwiftSyntaxMacroExpansion",
+        "SwiftSyntaxMacros",
+        "SwiftSyntaxMacrosGenericTestSupport",
+      ]
+    ),
+
+    // MARK: SwiftSyntaxMacrosGenericTestSupport
+
+    .target(
+      name: "SwiftSyntaxMacrosGenericTestSupport",
+      dependencies: [
+        "_SwiftSyntaxGenericTestSupport",
         "SwiftDiagnostics",
         "SwiftIDEUtils",
         "SwiftParser",
@@ -294,7 +329,8 @@ let package = Package(
       dependencies: ["_InstructionCounter", "_SwiftSyntaxTestSupport", "SwiftIDEUtils", "SwiftParser", "SwiftSyntax"],
       exclude: ["Inputs"]
     ),
-  ]
+  ],
+  swiftLanguageVersions: [.v5, .version("6")]
 )
 
 // This is a fake target that depends on all targets in the package.

@@ -25,7 +25,7 @@ import _SwiftSyntaxTestSupport
 ///   - expected: The element order should respect to the order of  `ClassificationSpec.source` in `source`.
 func assertClassification(
   _ source: String,
-  in range: ByteSourceRange? = nil,
+  in range: Range<AbsolutePosition>? = nil,
   expected: [ClassificationSpec],
   file: StaticString = #filePath,
   line: UInt = #line
@@ -41,12 +41,16 @@ func assertClassification(
   classifications = classifications.filter { $0.kind != .none }
 
   if expected.count != classifications.count {
-    XCTFail("Expected \(expected.count) re-used nodes but received \(classifications.count)", file: file, line: line)
+    XCTFail(
+      "Expected \(expected.count) classifications \(classifications.count): \(classifications)",
+      file: file,
+      line: line
+    )
   }
 
   var lastRangeUpperBound = source.startIndex
   for (classification, spec) in zip(classifications, expected) {
-    guard let range = byteSourceRange(for: spec.source, in: source, after: lastRangeUpperBound) else {
+    guard let range = positionRange(of: spec.source, in: source, after: lastRangeUpperBound) else {
       XCTFail("Fail to find string in original source,", file: spec.file, line: spec.line)
       continue
     }
@@ -71,7 +75,7 @@ func assertClassification(
       line: spec.line
     )
 
-    lastRangeUpperBound = source.utf8.index(source.utf8.startIndex, offsetBy: range.endOffset)
+    lastRangeUpperBound = source.utf8.index(source.utf8.startIndex, offsetBy: range.upperBound.utf8Offset)
   }
 }
 

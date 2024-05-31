@@ -19,7 +19,6 @@ public struct KeywordSpec {
   /// The experimental feature the keyword is part of, or `nil` if this isn't
   /// for an experimental feature.
   public let experimentalFeature: ExperimentalFeature?
-  public let experimentalFeature2: ExperimentalFeature?
 
   /// Indicates if the token kind is switched from being an identifier to a keyword in the lexer.
   public let isLexerClassified: Bool
@@ -69,26 +68,6 @@ public struct KeywordSpec {
   ) {
     self.name = name
     self.experimentalFeature = experimentalFeature
-    self.experimentalFeature2 = nil
-    self.isLexerClassified = isLexerClassified
-  }
-
-  /// Initializes a new `KeywordSpec` instance.
-  ///
-  /// - Parameters:
-  ///   - name: A name of the keyword.
-  ///   - experimentalFeature: The experimental feature the keyword is part of, or `nil` if this isn't for an experimental feature.
-  ///   - or: A second experimental feature the keyword is also part of, or `nil` if this isn't for an experimental feature.
-  ///   - isLexerClassified: Indicates if the token kind is switched from being an identifier to a keyword in the lexer.
-  init(
-    _ name: String,
-    experimentalFeature: ExperimentalFeature,
-    or experimentalFeature2: ExperimentalFeature,
-    isLexerClassified: Bool = false
-  ) {
-    self.name = name
-    self.experimentalFeature = experimentalFeature
-    self.experimentalFeature2 = experimentalFeature2
     self.isLexerClassified = isLexerClassified
   }
 }
@@ -284,6 +263,7 @@ public enum Keyword: CaseIterable {
   case safe
   case scoped
   case `self`
+  case sending
   case `Self`
   case Sendable
   case set
@@ -340,7 +320,7 @@ public enum Keyword: CaseIterable {
     case ._borrow:
       return KeywordSpec("_borrow")
     case ._borrowing:
-      return KeywordSpec("_borrowing", experimentalFeature: .referenceBindings, or: .borrowingSwitch)
+      return KeywordSpec("_borrowing")
     case ._BridgeObject:
       return KeywordSpec("_BridgeObject")
     case ._cdecl:
@@ -721,6 +701,11 @@ public enum Keyword: CaseIterable {
       return KeywordSpec(
         "transferring",
         experimentalFeature: .transferringArgsAndResults
+      )
+    case .sending:
+      return KeywordSpec(
+        "sending",
+        experimentalFeature: .sendingArgsAndResults
       )
     case .transpose:
       return KeywordSpec("transpose")

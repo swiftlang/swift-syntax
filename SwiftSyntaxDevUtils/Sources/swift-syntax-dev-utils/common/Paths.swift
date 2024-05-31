@@ -14,7 +14,7 @@ import Foundation
 
 enum Paths {
   static var packageDir: URL {
-    URL(fileURLWithPath: #file)
+    URL(fileURLWithPath: #filePath)
       .deletingLastPathComponent()
       .deletingLastPathComponent()
       .deletingLastPathComponent()

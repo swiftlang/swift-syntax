@@ -814,6 +814,10 @@ extension DeclModifierSyntax {
     case transferring
     case unowned
     case weak
+    #if compiler(>=5.8)
+    @_spi(ExperimentalLanguageFeatures)
+    #endif
+    case sending
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -891,6 +895,8 @@ extension DeclModifierSyntax {
         self = .unowned
       case TokenSpec(.weak):
         self = .weak
+      case TokenSpec(.sending) where experimentalFeatures.contains(.sendingArgsAndResults):
+        self = .sending
       default:
         return nil
       }
@@ -972,6 +978,8 @@ extension DeclModifierSyntax {
         self = .unowned
       case TokenSpec(.weak):
         self = .weak
+      case TokenSpec(.sending):
+        self = .sending
       default:
         return nil
       }
@@ -1053,6 +1061,8 @@ extension DeclModifierSyntax {
         return .keyword(.unowned)
       case .weak:
         return .keyword(.weak)
+      case .sending:
+        return .keyword(.sending)
       }
     }
     
@@ -1136,6 +1146,8 @@ extension DeclModifierSyntax {
         return .keyword(.unowned)
       case .weak:
         return .keyword(.weak)
+      case .sending:
+        return .keyword(.sending)
       }
     }
   }
@@ -2915,9 +2927,6 @@ extension OptionalBindingConditionSyntax {
     @_spi(ExperimentalLanguageFeatures)
     #endif
     case _mutating
-    #if compiler(>=5.8)
-    @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _borrowing
     #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
@@ -2934,7 +2943,7 @@ extension OptionalBindingConditionSyntax {
         self = .inout
       case TokenSpec(._mutating) where experimentalFeatures.contains(.referenceBindings):
         self = ._mutating
-      case TokenSpec(._borrowing) where experimentalFeatures.contains(.referenceBindings) || experimentalFeatures.contains(.borrowingSwitch):
+      case TokenSpec(._borrowing):
         self = ._borrowing
       case TokenSpec(._consuming) where experimentalFeatures.contains(.referenceBindings):
         self = ._consuming
@@ -3350,6 +3359,10 @@ extension SimpleTypeSpecifierSyntax {
     @_spi(ExperimentalLanguageFeatures)
     #endif
     case _resultDependsOn
+    #if compiler(>=5.8)
+    @_spi(ExperimentalLanguageFeatures)
+    #endif
+    case sending
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -3371,6 +3384,8 @@ extension SimpleTypeSpecifierSyntax {
         self = .transferring
       case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonescapableTypes):
         self = ._resultDependsOn
+      case TokenSpec(.sending) where experimentalFeatures.contains(.sendingArgsAndResults):
+        self = .sending
       default:
         return nil
       }
@@ -3396,6 +3411,8 @@ extension SimpleTypeSpecifierSyntax {
         self = .transferring
       case TokenSpec(._resultDependsOn):
         self = ._resultDependsOn
+      case TokenSpec(.sending):
+        self = .sending
       default:
         return nil
       }
@@ -3421,6 +3438,8 @@ extension SimpleTypeSpecifierSyntax {
         return .keyword(.transferring)
       case ._resultDependsOn:
         return .keyword(._resultDependsOn)
+      case .sending:
+        return .keyword(.sending)
       }
     }
     
@@ -3448,6 +3467,8 @@ extension SimpleTypeSpecifierSyntax {
         return .keyword(.transferring)
       case ._resultDependsOn:
         return .keyword(._resultDependsOn)
+      case .sending:
+        return .keyword(.sending)
       }
     }
   }
@@ -3897,14 +3918,12 @@ extension ValueBindingPatternSyntax {
     @_spi(ExperimentalLanguageFeatures)
     #endif
     case _mutating
-    #if compiler(>=5.8)
-    @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _borrowing
     #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
     #endif
     case _consuming
+    case borrowing
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -3916,10 +3935,12 @@ extension ValueBindingPatternSyntax {
         self = .inout
       case TokenSpec(._mutating) where experimentalFeatures.contains(.referenceBindings):
         self = ._mutating
-      case TokenSpec(._borrowing) where experimentalFeatures.contains(.referenceBindings) || experimentalFeatures.contains(.borrowingSwitch):
+      case TokenSpec(._borrowing):
         self = ._borrowing
       case TokenSpec(._consuming) where experimentalFeatures.contains(.referenceBindings):
         self = ._consuming
+      case TokenSpec(.borrowing):
+        self = .borrowing
       default:
         return nil
       }
@@ -3939,6 +3960,8 @@ extension ValueBindingPatternSyntax {
         self = ._borrowing
       case TokenSpec(._consuming):
         self = ._consuming
+      case TokenSpec(.borrowing):
+        self = .borrowing
       default:
         return nil
       }
@@ -3958,6 +3981,8 @@ extension ValueBindingPatternSyntax {
         return .keyword(._borrowing)
       case ._consuming:
         return .keyword(._consuming)
+      case .borrowing:
+        return .keyword(.borrowing)
       }
     }
     
@@ -3979,6 +4004,8 @@ extension ValueBindingPatternSyntax {
         return .keyword(._borrowing)
       case ._consuming:
         return .keyword(._consuming)
+      case .borrowing:
+        return .keyword(.borrowing)
       }
     }
   }
@@ -3994,9 +4021,6 @@ extension VariableDeclSyntax {
     @_spi(ExperimentalLanguageFeatures)
     #endif
     case _mutating
-    #if compiler(>=5.8)
-    @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _borrowing
     #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
@@ -4013,7 +4037,7 @@ extension VariableDeclSyntax {
         self = .inout
       case TokenSpec(._mutating) where experimentalFeatures.contains(.referenceBindings):
         self = ._mutating
-      case TokenSpec(._borrowing) where experimentalFeatures.contains(.referenceBindings) || experimentalFeatures.contains(.borrowingSwitch):
+      case TokenSpec(._borrowing):
         self = ._borrowing
       case TokenSpec(._consuming) where experimentalFeatures.contains(.referenceBindings):
         self = ._consuming

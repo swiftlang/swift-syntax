@@ -6,9 +6,11 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
+add_subdirectory(_SwiftSyntaxCShims)
 add_subdirectory(SwiftBasicFormat)
 add_subdirectory(SwiftSyntax)
 add_subdirectory(SwiftDiagnostics)
+add_subdirectory(SwiftLibraryPluginProvider)
 add_subdirectory(SwiftParser)
 add_subdirectory(SwiftParserDiagnostics)
 add_subdirectory(SwiftRefactor)
@@ -19,3 +21,4 @@ add_subdirectory(SwiftSyntaxMacroExpansion)
 add_subdirectory(SwiftCompilerPluginMessageHandling)
 add_subdirectory(SwiftIDEUtils)
 add_subdirectory(SwiftCompilerPlugin)
+add_subdirectory(VersionMarkerModules)

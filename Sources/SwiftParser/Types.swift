@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
+#else
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+#endif
 
 extension Parser {
   /// Parse a type.
@@ -33,7 +37,7 @@ extension Parser {
   mutating func parseTypeScalar(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
     let specifiersAndAttributes = self.parseTypeAttributeList(misplacedSpecifiers: misplacedSpecifiers)
     var base = RawTypeSyntax(self.parseSimpleOrCompositionType())
-    if self.withLookahead({ $0.atFunctionTypeArrow() }) {
+    if self.withLookahead({ $0.canParseFunctionTypeArrow() }) {
       var effectSpecifiers = self.parseTypeEffectSpecifiers()
       let returnClause = self.parseFunctionReturnClause(
         effectSpecifiers: &effectSpecifiers,
@@ -652,21 +656,9 @@ extension Parser.Lookahead {
       return false
     }
 
-    if self.atFunctionTypeArrow() {
-      // Handle type-function if we have an '->' with optional
-      // 'async' and/or 'throws'.
-      var loopProgress = LoopProgressCondition()
-      while let (_, handle) = self.at(anyIn: EffectSpecifier.self), self.hasProgressed(&loopProgress) {
-        self.eat(handle)
-      }
-
-      guard self.consume(if: .arrow) != nil else {
-        return false
-      }
-
+    if self.canParseFunctionTypeArrow() {
       return self.canParseType()
     }
-
     return true
   }
 
@@ -694,6 +686,9 @@ extension Parser.Lookahead {
     switch self.currentToken {
     case TokenSpec(.Any):
       self.consumeAnyToken()
+    case TokenSpec(.prefixOperator) where self.currentToken.tokenText == "~":
+      self.consumeAnyToken()
+      fallthrough
     case TokenSpec(.Self), TokenSpec(.identifier):
       guard self.canParseTypeIdentifier() else {
         return false
@@ -812,33 +807,12 @@ extension Parser.Lookahead {
     return self.consume(if: .rightParen) != nil
   }
 
-  mutating func atFunctionTypeArrow() -> Bool {
-    if self.at(.arrow) {
+  mutating func canParseFunctionTypeArrow() -> Bool {
+    if self.consume(if: .arrow) != nil {
       return true
     }
-
-    if let effect = self.at(anyIn: EffectSpecifier.self) {
-      if self.peek().rawTokenKind == .arrow {
-        return true
-      }
-
-      if effect.spec.isThrowsSpecifier && self.peek().rawTokenKind == .leftParen {
-        var lookahead = self.lookahead()
-        lookahead.consumeAnyToken()
-        lookahead.skipSingle()
-        return lookahead.atFunctionTypeArrow()
-      }
-
-      if peek(isAtAnyIn: EffectSpecifier.self) != nil {
-        var lookahead = self.lookahead()
-        lookahead.consumeAnyToken()
-        return lookahead.atFunctionTypeArrow()
-      }
-
-      return false
-    }
-
-    return false
+    self.consumeEffectsSpecifiers()
+    return self.consume(if: .arrow) != nil
   }
 
   mutating func canParseTypeIdentifier(allowKeyword: Bool = false) -> Bool {
@@ -1051,7 +1025,7 @@ extension Parser {
       }
     case nil:  // Custom attribute
       return parseAttribute(argumentMode: .customAttribute) { parser in
-        let arguments = parser.parseArgumentListElements(pattern: .none)
+        let arguments = parser.parseArgumentListElements(pattern: .none, allowTrailingComma: false)
         return .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
       }
 

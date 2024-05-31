@@ -17,35 +17,6 @@ import SwiftSyntax
 #endif
 
 extension IntegerLiteralExprSyntax {
-  public enum Radix {
-    case binary
-    case octal
-    case decimal
-    case hex
-
-    public var size: Int {
-      switch self {
-      case .binary: return 2
-      case .octal: return 8
-      case .decimal: return 10
-      case .hex: return 16
-      }
-    }
-  }
-
-  public var radix: Radix {
-    let text = self.literal.text
-    if text.starts(with: "0b") {
-      return .binary
-    } else if text.starts(with: "0o") {
-      return .octal
-    } else if text.starts(with: "0x") {
-      return .hex
-    } else {
-      return .decimal
-    }
-  }
-
   /// Returns an (arbitrarily) "ideal" number of digits that should constitute
   /// a separator-delimited "group" in an integer literal.
   var idealGroupSize: Int {
@@ -67,15 +38,8 @@ extension IntegerLiteralExprSyntax {
   /// ```
   public func split() -> (prefix: String, value: Substring) {
     let text = self.literal.text
-    switch self.radix {
-    case .binary:
-      return ("0b", text.dropFirst(2))
-    case .octal:
-      return ("0o", text.dropFirst(2))
-    case .decimal:
-      return ("", Substring(text))
-    case .hex:
-      return ("0x", text.dropFirst(2))
-    }
+    let radix = self.radix
+    let literalPrefix = radix.literalPrefix
+    return (literalPrefix, text.dropFirst(literalPrefix.count))
   }
 }

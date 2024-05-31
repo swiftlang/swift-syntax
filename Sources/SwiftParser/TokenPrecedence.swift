@@ -10,7 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if swift(>=6)
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
+#else
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+#endif
 
 /// Describes how distinctive a token is for parser recovery.
 ///
@@ -233,7 +237,7 @@ enum TokenPrecedence: Comparable {
       .__setter_access, .indirect, .isolated, .nonisolated, .distributed, ._local,
       .inout, ._mutating, ._borrow, ._borrowing, .borrowing, ._consuming, .consuming, .consume, ._resultDependsOnSelf,
       ._resultDependsOn,
-      .transferring, .dependsOn, .scoped,
+      .transferring, .dependsOn, .scoped, .sending,
       // Accessors
       .get, .set, .didSet, .willSet, .unsafeAddress, .addressWithOwner, .addressWithNativeOwner, .unsafeMutableAddress,
       .mutableAddressWithOwner, .mutableAddressWithNativeOwner, ._read, ._modify,

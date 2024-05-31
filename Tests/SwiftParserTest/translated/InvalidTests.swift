@@ -369,27 +369,6 @@ final class InvalidTests: ParserTestCase {
     )
   }
 
-  func testInvalid14() {
-    // https://github.com/apple/swift/issues/43313
-    assertParse(
-      """
-      do {
-        func f(_ a: Int, b: Int) {}
-        f(1, b: 2,1️⃣)
-      }
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "expected value in function call", fixIts: ["insert value"])
-      ],
-      fixedSource: """
-        do {
-          func f(_ a: Int, b: Int) {}
-          f(1, b: 2, <#expression#>)
-        }
-        """
-    )
-  }
-
   func testInvalid16a() {
     assertParse(
       """

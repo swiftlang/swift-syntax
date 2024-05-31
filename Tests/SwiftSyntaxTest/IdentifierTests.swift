@@ -36,9 +36,11 @@ class IdentifierTests: XCTestCase {
     XCTAssertEqual(Identifier(unicodeNormalizedToken)?.name, "\u{61}\u{300}")  // "à"
   }
 
-  public func testRawIdentifier() {
-    let rawIdentifier = TokenSyntax(stringLiteral: "sometoken").identifier?.raw
-    XCTAssertEqual(rawIdentifier?.name, SyntaxText("sometoken"))
+  public func testIdentifier() {
+    let token = TokenSyntax(stringLiteral: "sometoken")
+    withExtendedLifetime(token) { token in
+      XCTAssertEqual(token.identifier?.raw.name, SyntaxText("sometoken"))
+    }
   }
 
   public func testTokenSyntaxIdentifier() throws {

@@ -20,12 +20,15 @@ public struct Identifier: Equatable, Hashable, Sendable {
   @_spi(RawSyntax)
   public let raw: RawIdentifier
 
+  private let arena: SyntaxArenaRef
+
   public init?(_ token: TokenSyntax) {
     guard case .identifier = token.tokenKind else {
       return nil
     }
 
     self.raw = RawIdentifier(token.tokenView)
+    self.arena = token.tokenView.raw.arenaReference
   }
 }
 
@@ -33,12 +36,9 @@ public struct Identifier: Equatable, Hashable, Sendable {
 public struct RawIdentifier: Equatable, Hashable, Sendable {
   public let name: SyntaxText
 
-  private let arena: RetainedSyntaxArena
-
   @_spi(RawSyntax)
   fileprivate init(_ raw: RawSyntaxTokenView) {
     let backtick = SyntaxText("`")
-    let arena = SyntaxArena()
     if raw.rawText.count > 2 && raw.rawText.hasPrefix(backtick) && raw.rawText.hasSuffix(backtick) {
       let startIndex = raw.rawText.index(after: raw.rawText.startIndex)
       let endIndex = raw.rawText.index(before: raw.rawText.endIndex)
@@ -46,14 +46,5 @@ public struct RawIdentifier: Equatable, Hashable, Sendable {
     } else {
       self.name = raw.rawText
     }
-    self.arena = raw.raw.arenaReference.retained
-  }
-
-  public static func == (lhs: RawIdentifier, rhs: RawIdentifier) -> Bool {
-    lhs.name == rhs.name
-  }
-
-  public func hash(into hasher: inout Hasher) {
-    hasher.combine(name)
   }
 }

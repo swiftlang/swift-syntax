@@ -2361,17 +2361,28 @@ extension Parser {
     do {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
+      var unexpectedPrePatternCase: RawUnexpectedNodesSyntax? = nil
       repeat {
         let (pattern, whereClause) = self.parseGuardedCasePattern()
         keepGoing = self.consume(if: .comma)
         caseItems.append(
           RawSwitchCaseItemSyntax(
+            unexpectedPrePatternCase,
             pattern: pattern,
             whereClause: whereClause,
             trailingComma: keepGoing,
             arena: self.arena
           )
         )
+
+        if keepGoing != nil, let caseToken = self.consume(if: .keyword(.case)) {
+          unexpectedPrePatternCase = RawUnexpectedNodesSyntax(
+            elements: [RawSyntax(caseToken)],
+            arena: self.arena
+          )
+        } else {
+          unexpectedPrePatternCase = nil
+        }
       } while keepGoing != nil && self.hasProgressed(&loopProgress)
     }
     let (unexpectedBeforeColon, colon) = self.expect(.colon)

@@ -153,6 +153,16 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     }
   }
 
+  /// An identifier created from `self`.
+  public var identifier: Identifier? {
+    switch self.tokenKind {
+    case .identifier, .dollarIdentifier:
+      return Identifier(self)
+    default:
+      return nil
+    }
+  }
+
   /// A token by itself has no structure, so we represent its structure by an
   /// empty layout node.
   ///

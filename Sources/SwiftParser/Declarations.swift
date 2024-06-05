@@ -22,7 +22,7 @@ extension DeclarationModifier {
     case .__consuming, .__setter_access, ._const, ._local, .async,
       .borrowing, .class, .consuming, .convenience, .distributed, .dynamic,
       .final, .indirect, .infix, .isolated, .lazy, .mutating, .nonmutating,
-      .optional, .override, .postfix, .prefix, .reasync, ._resultDependsOn, ._resultDependsOnSelf, .required,
+      .optional, .override, .postfix, .prefix, .reasync, .required,
       .rethrows, .static, .weak, .transferring, .sending:
       return false
     case .fileprivate, .internal, .nonisolated, .package, .open, .private,

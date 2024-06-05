@@ -253,8 +253,6 @@ public enum Keyword: CaseIterable {
   case renamed
   case `repeat`
   case required
-  case _resultDependsOn
-  case _resultDependsOnSelf
   case `rethrows`
   case retroactive
   case `return`
@@ -643,10 +641,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("repeat", isLexerClassified: true)
     case .required:
       return KeywordSpec("required")
-    case ._resultDependsOn:
-      return KeywordSpec("_resultDependsOn", experimentalFeature: .nonescapableTypes)
-    case ._resultDependsOnSelf:
-      return KeywordSpec("_resultDependsOnSelf", experimentalFeature: .nonescapableTypes)
     case .rethrows:
       return KeywordSpec("rethrows", isLexerClassified: true)
     case .retroactive:

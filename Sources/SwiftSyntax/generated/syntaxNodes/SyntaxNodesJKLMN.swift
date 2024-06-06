@@ -1663,7 +1663,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 ///
 /// ### Children
 /// 
-///  - `parameter`: (`<identifier>` | `self` | `<integerLiteral>`)
+///  - `parameter`: (`<identifier>` | `self` | `<integerLiteral>` | `immortal`)
 ///  - `trailingComma`: `,`?
 #if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
@@ -1732,7 +1732,8 @@ public struct LifetimeSpecifierArgumentSyntax: SyntaxProtocol, SyntaxHashable, _
   /// The parameter on which the lifetime of this type depends. 
   /// 
   /// This can be an identifier referring to an external parameter name, an integer literal to refer to an unnamed
-  /// parameter or `self` if the type's lifetime depends on the object the method is called on.
+  /// parameter, `self` if the type's lifetime depends on the object the method is called on or `immortal` when there
+  /// is no source of lifetime dependence. 
   ///
   /// ### Tokens
   /// 
@@ -1740,6 +1741,7 @@ public struct LifetimeSpecifierArgumentSyntax: SyntaxProtocol, SyntaxHashable, _
   ///  - `<identifier>`
   ///  - `self`
   ///  - `<integerLiteral>`
+  ///  - `immortal`
   public var parameter: TokenSyntax {
     get {
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)

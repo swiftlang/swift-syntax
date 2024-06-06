@@ -517,13 +517,14 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "parameter",
-        kind: .token(choices: [.token(.identifier), .keyword(.self), .token(.integerLiteral)]),
+        kind: .token(choices: [.token(.identifier), .keyword(.self), .token(.integerLiteral), .keyword(.immortal)]),
         nameForDiagnostics: "parameter reference",
         documentation: """
           The parameter on which the lifetime of this type depends. 
 
           This can be an identifier referring to an external parameter name, an integer literal to refer to an unnamed
-          parameter or `self` if the type's lifetime depends on the object the method is called on.
+          parameter, `self` if the type's lifetime depends on the object the method is called on or `immortal` when there
+          is no source of lifetime dependence. 
           """
       ),
       Child(

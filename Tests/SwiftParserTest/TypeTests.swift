@@ -532,5 +532,7 @@ final class TypeTests: ParserTestCase {
       fixedSource: "func foo() -> dependsOn(<#identifier#>-1) X",
       experimentalFeatures: [.nonescapableTypes]
     )
+
+    assertParse("func foo() -> dependsOn(immortal) X", experimentalFeatures: [.nonescapableTypes])
   }
 }

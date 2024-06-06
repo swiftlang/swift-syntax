@@ -140,6 +140,10 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case higherThan
   case `if`
   case `import`
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case immortal
   case `in`
   case indirect
   case infix
@@ -523,6 +527,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .escaping
       case "exported":
         self = .exported
+      case "immortal":
+        self = .immortal
       case "indirect":
         self = .indirect
       case "internal":
@@ -934,6 +940,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
       "higherThan", 
       "if", 
       "import", 
+      "immortal", 
       "in", 
       "indirect", 
       "infix", 

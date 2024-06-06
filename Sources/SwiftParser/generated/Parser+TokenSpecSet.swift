@@ -2572,6 +2572,10 @@ extension LifetimeSpecifierArgumentSyntax {
     case identifier
     case `self`
     case integerLiteral
+    #if compiler(>=5.8)
+    @_spi(ExperimentalLanguageFeatures)
+    #endif
+    case immortal
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -2581,6 +2585,8 @@ extension LifetimeSpecifierArgumentSyntax {
         self = .self
       case TokenSpec(.integerLiteral):
         self = .integerLiteral
+      case TokenSpec(.immortal) where experimentalFeatures.contains(.nonescapableTypes):
+        self = .immortal
       default:
         return nil
       }
@@ -2594,6 +2600,8 @@ extension LifetimeSpecifierArgumentSyntax {
         self = .self
       case TokenSpec(.integerLiteral):
         self = .integerLiteral
+      case TokenSpec(.immortal):
+        self = .immortal
       default:
         return nil
       }
@@ -2607,6 +2615,8 @@ extension LifetimeSpecifierArgumentSyntax {
         return .keyword(.self)
       case .integerLiteral:
         return .integerLiteral
+      case .immortal:
+        return .keyword(.immortal)
       }
     }
     
@@ -2622,6 +2632,8 @@ extension LifetimeSpecifierArgumentSyntax {
         return .keyword(.self)
       case .integerLiteral:
         return .integerLiteral("")
+      case .immortal:
+        return .keyword(.immortal)
       }
     }
   }

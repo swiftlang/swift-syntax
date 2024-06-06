@@ -27,11 +27,11 @@ To add swift-syntax as a dependency of your Xcode project, go to the *Package De
 
 ## Reporting Issues
 
-If you should hit any issues while using SwiftSyntax, we appreciate bug reports on [GitHub Issue](https://github.com/apple/swift-syntax/issues).
+If you should hit any issues while using SwiftSyntax, we appreciate bug reports on [GitHub Issue](https://github.com/apple/swift-syntax).
 
 ## Contributing
 
-Start contributing to SwiftSyntax see [this guide](CONTRIBUTING.md) for more information.
+Start contributing to SwiftSyntax see](CONTRIBUTING.md) for more information.
 
 ## Bazel
 
@@ -42,8 +42,8 @@ into your `WORKSPACE` and depend on the libraries you need from the
 `Library_opt` target (such as `SwiftSyntax_opt`) which forces
 SwiftSyntax to always build with optimizations enabled. This may help
 local runtime performance at the cost of debuggability, and initial
-build time. Please tag any [issues](https://github.com/apple/swift-syntax/issues) related to the Bazel configuration with the label "Bazel".
+build time. Please tag any [issues](https://github.com/apple/swift-syntax related to the Bazel configuration with the label "Bazel".
 
 ## License
 
-Please see [LICENSE](LICENSE.txt) for more information.
+Please see(LICENSE.txt) for more information.

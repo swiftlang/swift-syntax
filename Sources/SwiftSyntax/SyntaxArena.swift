@@ -10,21 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if SWIFT_SYNTAX_BUILD_USING_CMAKE
-// The CMake bulid of swift-syntax does not build the _AtomicBool module because swift-syntax's CMake build is
-// Swift-only. Fake an `AtomicBool` type that is not actually atomic. This should be acceptable for the following
-// reasons:
-//  - `AtomicBool` is only used for the `hasParent` assertion, so release compilers don't rely on it
-//  - The compiler is single-threaded so it it is safe from race conditions on `AtomicBool`.
-fileprivate struct AtomicBool {
-  var value: Bool
-
-  init(initialValue: Bool) {
-    self.value = initialValue
-  }
-}
+#if swift(>=6.0)
+private import _SwiftSyntaxCShims
 #else
-import _SwiftSyntaxCShims
+@_implementationOnly import _SwiftSyntaxCShims
 #endif
 
 /// A syntax arena owns the memory for all syntax nodes within it.
@@ -69,7 +58,7 @@ public class SyntaxArena {
   ///
   /// - Important: This is only intended to be used for assertions to catch
   ///   retain cycles in syntax arenas.
-  fileprivate var hasParent: AtomicBool
+  fileprivate let hasParent: UnsafeMutablePointer<AtomicBool>
   #endif
 
   /// Construct a new ``SyntaxArena`` in which syntax nodes can be allocated.
@@ -81,7 +70,7 @@ public class SyntaxArena {
     self.allocator = BumpPtrAllocator(initialSlabSize: slabSize)
     self.childRefs = []
     #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
-    self.hasParent = AtomicBool(initialValue: false)
+    self.hasParent = swiftsyntax_atomic_bool_create(false)
     #endif
   }
 
@@ -89,6 +78,9 @@ public class SyntaxArena {
     for child in childRefs {
       child.release()
     }
+    #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
+    swiftsyntax_atomic_bool_destroy(self.hasParent)
+    #endif
   }
 
   /// Allocates a buffer of `RawSyntax?` with the given count, then returns the
@@ -158,7 +150,7 @@ public class SyntaxArena {
 
     #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
     precondition(
-      !self.hasParent.value,
+      !swiftsyntax_atomic_bool_get(self.hasParent),
       "an arena can't have a new child once it's owned by other arenas"
     )
     #endif
@@ -300,14 +292,14 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
   }
 
   #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
-  /// Accessor for ther underlying's `SyntaxArena.hasParent`
+  /// Accessor for the underlying's `SyntaxArena.hasParent`
   var hasParent: Bool {
-    value.hasParent.value
+    swiftsyntax_atomic_bool_get(value.hasParent)
   }
 
   /// Sets the `SyntaxArena.hasParent` on the referenced arena.
   func setHasParent(_ newValue: Bool) {
-    value.hasParent.value = newValue
+    swiftsyntax_atomic_bool_set(value.hasParent, newValue)
   }
   #endif
 

@@ -192,14 +192,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case renamed
   case `repeat`
   case required
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  case _resultDependsOn
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  case _resultDependsOnSelf
   case `rethrows`
   case retroactive
   case `return`
@@ -733,8 +725,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = ._objcRuntimeName
       case "addressWithOwner":
         self = .addressWithOwner
-      case "_resultDependsOn":
-        self = ._resultDependsOn
       default:
         return nil
       }
@@ -771,8 +761,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = ._compilerInitialized
       case "_originallyDefinedIn":
         self = ._originallyDefinedIn
-      case "_resultDependsOnSelf":
-        self = ._resultDependsOnSelf
       case "unsafeMutableAddress":
         self = .unsafeMutableAddress
       default:
@@ -998,8 +986,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
       "renamed", 
       "repeat", 
       "required", 
-      "_resultDependsOn", 
-      "_resultDependsOnSelf", 
       "rethrows", 
       "retroactive", 
       "return", 

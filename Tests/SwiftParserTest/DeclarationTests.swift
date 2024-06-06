@@ -3225,52 +3225,6 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
-  func testResultDependsOnSelf() {
-    assertParse(
-      """
-      class MethodModifiers {
-         _resultDependsOnSelf func getDependentResult() -> Builtin.NativeObject {
-           return Builtin.unsafeCastToNativeObject(self)
-         }
-       }
-      """,
-      experimentalFeatures: .nonescapableTypes
-    )
-
-    assertParse(
-      """
-        class MethodModifiers {
-           _resultDependsOnSelf func _resultDependsOnSelf() -> Builtin.NativeObject {
-             return Builtin.unsafeCastToNativeObject(self)
-           }
-         }
-      """,
-      experimentalFeatures: .nonescapableTypes
-    )
-  }
-
-  func testResultDependsOn() {
-    assertParse(
-      """
-        class Klass {}
-        func testTypeSpecifier(x : _resultDependsOn Klass) -> Builtin.NativeObject {
-          return Builtin.unsafeCastToNativeObject(x)
-        }
-      """,
-      experimentalFeatures: .nonescapableTypes
-    )
-
-    assertParse(
-      """
-        class Klass {}
-        func testMultipleTypeSpecifier(x : _resultDependsOn Klass, y : _resultDependsOn Klass) -> (Builtin.NativeObject, Builtin.NativeObject) {
-          return (Builtin.unsafeCastToNativeObject(x), Builtin.unsafeCastToNativeObject(x))
-        }
-      """,
-      experimentalFeatures: .nonescapableTypes
-    )
-  }
-
   func testDeclarationEndingWithNewline() {
     let inputs: [UInt: String] = [
       #line: "var x = 0\n",

@@ -802,10 +802,6 @@ extension DeclModifierSyntax {
     case `private`
     case `public`
     case reasync
-    #if compiler(>=5.8)
-    @_spi(ExperimentalLanguageFeatures)
-    #endif
-    case _resultDependsOnSelf
     case required
     case `static`
     #if compiler(>=5.8)
@@ -883,8 +879,6 @@ extension DeclModifierSyntax {
         self = .public
       case TokenSpec(.reasync):
         self = .reasync
-      case TokenSpec(._resultDependsOnSelf) where experimentalFeatures.contains(.nonescapableTypes):
-        self = ._resultDependsOnSelf
       case TokenSpec(.required):
         self = .required
       case TokenSpec(.static):
@@ -966,8 +960,6 @@ extension DeclModifierSyntax {
         self = .public
       case TokenSpec(.reasync):
         self = .reasync
-      case TokenSpec(._resultDependsOnSelf):
-        self = ._resultDependsOnSelf
       case TokenSpec(.required):
         self = .required
       case TokenSpec(.static):
@@ -1049,8 +1041,6 @@ extension DeclModifierSyntax {
         return .keyword(.public)
       case .reasync:
         return .keyword(.reasync)
-      case ._resultDependsOnSelf:
-        return .keyword(._resultDependsOnSelf)
       case .required:
         return .keyword(.required)
       case .static:
@@ -1134,8 +1124,6 @@ extension DeclModifierSyntax {
         return .keyword(.public)
       case .reasync:
         return .keyword(.reasync)
-      case ._resultDependsOnSelf:
-        return .keyword(._resultDependsOnSelf)
       case .required:
         return .keyword(.required)
       case .static:
@@ -3358,10 +3346,6 @@ extension SimpleTypeSpecifierSyntax {
     #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
     #endif
-    case _resultDependsOn
-    #if compiler(>=5.8)
-    @_spi(ExperimentalLanguageFeatures)
-    #endif
     case sending
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
@@ -3382,8 +3366,6 @@ extension SimpleTypeSpecifierSyntax {
         self = .consuming
       case TokenSpec(.transferring) where experimentalFeatures.contains(.transferringArgsAndResults):
         self = .transferring
-      case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonescapableTypes):
-        self = ._resultDependsOn
       case TokenSpec(.sending) where experimentalFeatures.contains(.sendingArgsAndResults):
         self = .sending
       default:
@@ -3409,8 +3391,6 @@ extension SimpleTypeSpecifierSyntax {
         self = .consuming
       case TokenSpec(.transferring):
         self = .transferring
-      case TokenSpec(._resultDependsOn):
-        self = ._resultDependsOn
       case TokenSpec(.sending):
         self = .sending
       default:
@@ -3436,8 +3416,6 @@ extension SimpleTypeSpecifierSyntax {
         return .keyword(.consuming)
       case .transferring:
         return .keyword(.transferring)
-      case ._resultDependsOn:
-        return .keyword(._resultDependsOn)
       case .sending:
         return .keyword(.sending)
       }
@@ -3465,8 +3443,6 @@ extension SimpleTypeSpecifierSyntax {
         return .keyword(.consuming)
       case .transferring:
         return .keyword(.transferring)
-      case ._resultDependsOn:
-        return .keyword(._resultDependsOn)
       case .sending:
         return .keyword(.sending)
       }

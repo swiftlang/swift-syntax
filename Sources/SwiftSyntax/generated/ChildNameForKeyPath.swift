@@ -1149,16 +1149,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeModifiers"
   case \EnumCaseParameterSyntax.modifiers:
     return "modifiers"
-  case \EnumCaseParameterSyntax.unexpectedBetweenModifiersAndFirstName:
-    return "unexpectedBetweenModifiersAndFirstName"
-  case \EnumCaseParameterSyntax.firstName:
-    return "firstName"
-  case \EnumCaseParameterSyntax.unexpectedBetweenFirstNameAndSecondName:
-    return "unexpectedBetweenFirstNameAndSecondName"
-  case \EnumCaseParameterSyntax.secondName:
-    return "secondName"
-  case \EnumCaseParameterSyntax.unexpectedBetweenSecondNameAndColon:
-    return "unexpectedBetweenSecondNameAndColon"
+  case \EnumCaseParameterSyntax.unexpectedBetweenModifiersAndName:
+    return "unexpectedBetweenModifiersAndName"
+  case \EnumCaseParameterSyntax.name:
+    return "name"
+  case \EnumCaseParameterSyntax.unexpectedBetweenNameAndColon:
+    return "unexpectedBetweenNameAndColon"
   case \EnumCaseParameterSyntax.colon:
     return "colon"
   case \EnumCaseParameterSyntax.unexpectedBetweenColonAndType:

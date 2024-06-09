@@ -191,13 +191,19 @@ extension Parser {
     let modifiers = parseParameterModifiers(isClosure: false)
     let misplacedSpecifiers = parseMisplacedSpecifiers()
 
-    let names: ParameterNames
+    let unexpectedBeforeName: RawUnexpectedNodesSyntax?
+    let name: RawTokenSyntax?
     let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
     let colon: RawTokenSyntax?
     let type: RawTypeSyntax
 
     if self.withLookahead({ $0.startsParameterName(isClosure: false, allowMisplacedSpecifierRecovery: false) }) {
-      names = self.parseParameterNames()
+      if self.atArgumentLabel(allowDollarIdentifier: true) {
+        (unexpectedBeforeName, name) = self.parseArgumentLabel()
+      } else {
+        unexpectedBeforeName = nil
+        name = nil
+      }
 
       (unexpectedBeforeColon, colon) = self.expect(.colon)
       if colon!.isMissing {
@@ -208,12 +214,8 @@ extension Parser {
         type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
       }
     } else {
-      names = ParameterNames(
-        unexpectedBeforeFirstName: nil,
-        firstName: nil,
-        unexpectedBeforeSecondName: nil,
-        secondName: nil
-      )
+      unexpectedBeforeName = nil
+      name = nil
       unexpectedBeforeColon = nil
       colon = nil
       type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
@@ -230,10 +232,8 @@ extension Parser {
 
     return RawEnumCaseParameterSyntax(
       modifiers: modifiers,
-      RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, names.unexpectedBeforeFirstName, arena: self.arena),
-      firstName: names.firstName,
-      names.unexpectedBeforeSecondName,
-      secondName: names.secondName,
+      RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, unexpectedBeforeName, arena: self.arena),
+      name: name,
       unexpectedBeforeColon,
       colon: colon,
       type: type,

@@ -292,10 +292,10 @@ public class NameMatcher: SyntaxAnyVisitor {
   public override func visit(_ node: EnumCaseElementSyntax) -> SyntaxVisitorContinueKind {
     if let parameterClause = node.parameterClause {
       let argumentLabels = parameterClause.parameters.map { (argument) -> DeclNameLocation.Argument in
-        if let firstName = argument.firstName {
-          return .labeled(firstName: firstName, secondName: argument.secondName)
+        if let name = argument.name {
+          return .labeled(firstName: name, secondName: nil)
         } else {
-          return .unlabeled(argument: Syntax(argument.secondName) ?? Syntax(argument.colon) ?? Syntax(argument.type))
+          return .unlabeled(argument: Syntax(argument.colon) ?? Syntax(argument.type))
         }
       }
       addResolvedLocIfRequested(baseName: node.name, argumentLabels: .parameters(argumentLabels))

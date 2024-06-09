@@ -106,7 +106,7 @@ extension SyntaxProtocol {
       }
 
       let argumentNames = associatedValue.parameters.map { param in
-        guard let firstName = param.firstName else {
+        guard let firstName = param.name else {
           return "_:"
         }
 

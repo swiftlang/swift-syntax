@@ -641,12 +641,8 @@ public let DECL_NODES: [Node] = [
         nameForDiagnostics: "modifiers"
       ),
       Child(
-        name: "firstName",
-        kind: .token(choices: [.token(.identifier), .token(.wildcard)]),
-        isOptional: true
-      ),
-      Child(
-        name: "secondName",
+        name: "name",
+        deprecatedName: "firstName",
         kind: .token(choices: [.token(.identifier), .token(.wildcard)]),
         isOptional: true
       ),
@@ -1155,7 +1151,7 @@ public let DECL_NODES: [Node] = [
           .keyword(.inout),
         ]),
         documentation: """
-          The kind of declaration being imported. 
+          The kind of declaration being imported.
 
           A struct can be imported from a specific module.
           """,

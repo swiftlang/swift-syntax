@@ -277,7 +277,7 @@ final class EnumTests: ParserTestCase {
     assertParse(
       """
       enum SwitchEnvy {
-        case 1️⃣(_, var x2️⃣, 3️⃣0)4️⃣:
+        case 1️⃣(_, var2️⃣ 3️⃣x, 0)4️⃣:
       }
       """,
       diagnostics: [
@@ -287,12 +287,12 @@ final class EnumTests: ParserTestCase {
           message: "expected ':' and type in parameter",
           fixIts: ["insert ':' and type"]
         ),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '0' in parameter clause"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'x, 0' in parameter clause"),
         DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code ':' in enum"),
       ],
       fixedSource: """
         enum SwitchEnvy {
-          case <#identifier#>(_, var x: <#type#>, 0):
+          case <#identifier#>(_, var: <#type#>x, 0):
         }
         """
     )
@@ -1454,6 +1454,19 @@ final class EnumTests: ParserTestCase {
           (Int)
       }
       """
+    )
+  }
+
+  func testEnumCaseWithSecondName() {
+    assertParse(
+      """
+      enum MyEnum {
+        case myCase(first 1️⃣second: Int)
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'second' in parameter")
+      ]
     )
   }
 }

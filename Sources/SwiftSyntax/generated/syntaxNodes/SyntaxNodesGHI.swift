@@ -2835,7 +2835,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
   ///   - attributes: Attributes attached to the import declaration, for example `@testable`.
   ///   - modifiers: Modifiers that are attached to the import declaration. Currently, no modifiers are supported by Swift.
   ///   - importKeyword: The `import` keyword for this declaration.
-  ///   - importKindSpecifier: The kind of declaration being imported. 
+  ///   - importKindSpecifier: The kind of declaration being imported.
   ///   - path: The path to the module, submodule or symbol being imported.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
@@ -3018,7 +3018,7 @@ public struct ImportDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
     }
   }
   
-  /// The kind of declaration being imported. 
+  /// The kind of declaration being imported.
   /// 
   /// A struct can be imported from a specific module.
   ///

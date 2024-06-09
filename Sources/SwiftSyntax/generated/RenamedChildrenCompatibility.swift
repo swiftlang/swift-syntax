@@ -2600,6 +2600,36 @@ extension EnumCaseParameterClauseSyntax {
 }
 
 extension EnumCaseParameterSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenModifiersAndName")
+  public var unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenModifiersAndName
+    }
+    set {
+      unexpectedBetweenModifiersAndName = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "name")
+  public var firstName: TokenSyntax? {
+    get {
+      return name
+    }
+    set {
+      name = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenNameAndColon")
+  public var unexpectedBetweenFirstNameAndColon: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenNameAndColon
+    }
+    set {
+      unexpectedBetweenNameAndColon = newValue
+    }
+  }
+  
   @available(*, deprecated, renamed: "unexpectedBetweenTypeAndDefaultValue")
   public var unexpectedBetweenTypeAndDefaultArgument: UnexpectedNodesSyntax? {
     get {
@@ -2630,7 +2660,7 @@ extension EnumCaseParameterSyntax {
     }
   }
   
-  @available(*, deprecated, renamed: "EnumCaseParameterSyntax(leadingTrivia:_:modifiers:_:firstName:_:secondName:_:colon:_:type:_:defaultValue:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "EnumCaseParameterSyntax(leadingTrivia:_:modifiers:_:name:_:colon:_:type:_:defaultValue:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
@@ -2638,9 +2668,7 @@ extension EnumCaseParameterSyntax {
       modifiers: DeclModifierListSyntax = [],
       _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
       firstName: TokenSyntax? = nil,
-      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
-      secondName: TokenSyntax? = nil,
-      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenFirstNameAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax? = nil,
       _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
       type: some TypeSyntaxProtocol,
@@ -2657,10 +2685,8 @@ extension EnumCaseParameterSyntax {
         unexpectedBeforeModifiers, 
         modifiers: modifiers, 
         unexpectedBetweenModifiersAndFirstName, 
-        firstName: firstName, 
-        unexpectedBetweenFirstNameAndSecondName, 
-        secondName: secondName, 
-        unexpectedBetweenSecondNameAndColon, 
+        name: firstName, 
+        unexpectedBetweenFirstNameAndColon, 
         colon: colon, 
         unexpectedBetweenColonAndType, 
         type: type, 

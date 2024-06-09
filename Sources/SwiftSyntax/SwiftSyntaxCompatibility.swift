@@ -176,6 +176,65 @@ extension EffectSpecifiersSyntax {
   }
 }
 
+extension EnumCaseParameterSyntax {
+  @available(*, deprecated, message: "secondName argument has been removed and firstName renamed to name")
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
+    firstName: TokenSyntax? = nil,
+    _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
+    secondName: TokenSyntax? = nil,
+    _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax? = nil,
+    _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
+    type: some TypeSyntaxProtocol,
+    _ unexpectedBetweenTypeAndDefaultValue: UnexpectedNodesSyntax? = nil,
+    defaultValue: InitializerClauseSyntax? = nil,
+    _ unexpectedBetweenDefaultValueAndTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingComma: TokenSyntax? = nil,
+    _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeModifiers,
+      modifiers: modifiers,
+      unexpectedBetweenModifiersAndFirstName,
+      name: firstName,
+      unexpectedBetweenSecondNameAndColon,
+      colon: colon,
+      unexpectedBetweenColonAndType,
+      type: type,
+      unexpectedBetweenTypeAndDefaultValue,
+      defaultValue: defaultValue,
+      unexpectedBetweenDefaultValueAndTrailingComma,
+      trailingComma: trailingComma,
+      unexpectedAfterTrailingComma,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @available(*, deprecated, message: "secondName has been removed")
+  public var unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? {
+    get { nil }
+    set {}
+  }
+
+  @available(*, deprecated, message: "secondName has been removed")
+  public var secondName: TokenSyntax? {
+    get { nil }
+    set {}
+  }
+
+  @available(*, deprecated, message: "secondName has been removed")
+  public var unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? {
+    get { unexpectedBetweenNameAndColon }
+    set { unexpectedBetweenNameAndColon = newValue }
+  }
+}
+
 extension FunctionEffectSpecifiersSyntax {
   @_disfavoredOverload
   @available(*, deprecated, message: "use throwsClause instead of throwsSpecifier")

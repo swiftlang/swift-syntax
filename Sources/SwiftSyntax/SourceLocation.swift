@@ -141,7 +141,7 @@ fileprivate struct SourceLocationDirectiveArguments {
 /// Converts ``AbsolutePosition``s of syntax nodes to ``SourceLocation``s, and
 /// vice-versa. The ``AbsolutePosition``s must be originating from nodes that are
 /// part of the same tree that was used to initialize this class.
-public final class SourceLocationConverter {
+public final class SourceLocationConverter: Sendable {
   private let fileName: String
   /// The source of the file, modeled as data so it can contain invalid UTF-8.
   private let source: [UInt8]
@@ -157,7 +157,7 @@ public final class SourceLocationConverter {
   ///   `#sourceLocation(...)` directive within the current file.
   /// - `arguments` are the `file` and `line` arguments of the directive or `nil`
   ///   if spelled as `#sourceLocation()` to reset the source location directive.
-  private var sourceLocationDirectives: [(sourceLine: Int, arguments: SourceLocationDirectiveArguments?)] = []
+  private let sourceLocationDirectives: [(sourceLine: Int, arguments: SourceLocationDirectiveArguments?)]
 
   /// Create a new ``SourceLocationConverter`` to convert between ``AbsolutePosition``
   /// and ``SourceLocation`` in a syntax tree.
@@ -212,6 +212,7 @@ public final class SourceLocationConverter {
       return computeLines(SyntaxText(buffer: syntaxArenaBuf))
     }
     precondition(source.utf8.count == endOfFile.utf8Offset)
+    self.sourceLocationDirectives = []
   }
 
   /// Execute the body with an array that contains each source line.

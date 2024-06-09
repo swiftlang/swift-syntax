@@ -21,7 +21,7 @@ import SwiftSyntaxMacros
 /// The information of a macro declaration, to be used with `assertMacroExpansion`.
 ///
 /// In addition to specifying the macro’s type, this allows the specification of conformances that will be passed to the macro’s `expansion` function.
-public struct MacroSpec {
+public struct MacroSpec: Sendable {
   /// The type of macro.
   let type: Macro.Type
   /// The list of types for which the macro needs to add conformances.

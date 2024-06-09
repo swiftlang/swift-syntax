@@ -298,7 +298,7 @@ public class NameMatcher: SyntaxAnyVisitor {
           return .unlabeled(argument: Syntax(argument.secondName) ?? Syntax(argument.colon) ?? Syntax(argument.type))
         }
       }
-      addResolvedLocIfRequested(baseName: node.name, argumentLabels: .parameters(argumentLabels))
+      addResolvedLocIfRequested(baseName: node.name, argumentLabels: .enumCaseParameters(argumentLabels))
     }
     return .visitChildren
   }

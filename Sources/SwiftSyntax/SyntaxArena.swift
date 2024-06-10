@@ -10,6 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+import LLOnDiskCAS
+
 #if SWIFT_SYNTAX_BUILD_USING_CMAKE
 // The CMake bulid of swift-syntax does not build the _AtomicBool module because swift-syntax's CMake build is
 // Swift-only. Fake an `AtomicBool` type that is not actually atomic. This should be acceptable for the following
@@ -58,6 +60,10 @@ public class SyntaxArena {
   /// Bump-pointer allocator for all "intern" methods.
   fileprivate let allocator: BumpPtrAllocator
 
+  fileprivate var buffer: UnsafeMutableRawBufferPointer
+
+  fileprivate let cas: LLOnDiskCAS
+
   /// If the syntax tree that’s allocated in this arena references nodes from
   /// other arenas, `childRefs` contains references to the arenas. Child arenas
   /// are retained in `addChild()` and are released in `deinit`.
@@ -79,6 +85,12 @@ public class SyntaxArena {
 
   fileprivate init(slabSize: Int) {
     self.allocator = BumpPtrAllocator(initialSlabSize: slabSize)
+    self.buffer = UnsafeMutableRawBufferPointer.allocate(byteCount: 10485760, alignment: 4096)
+    do {
+      self.cas = try LLOnDiskCAS(path: "/Users/Jan/Desktop/CAS.noindex")
+    } catch {
+      fatalError("LLOnDiskCAS.init() \(error)")
+    }
     self.childRefs = []
     #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
     self.hasParent = AtomicBool(initialValue: false)
@@ -89,6 +101,7 @@ public class SyntaxArena {
     for child in childRefs {
       child.release()
     }
+    buffer.deallocate()
   }
 
   /// Allocates a buffer of `RawSyntax?` with the given count, then returns the
@@ -310,6 +323,230 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
     value.hasParent.value = newValue
   }
   #endif
+
+  func appendToBuffer<T>(_ ptr: inout UnsafeMutableRawPointer, _ value: T) {
+    ptr = ptr.alignedUp(for: T.self)
+    ptr.storeBytes(of: value, as: T.self)
+    ptr = ptr.advanced(by: MemoryLayout<T>.size)
+  }
+
+  func appendSyntaxTextToBuffer(_ ptr: inout UnsafeMutableRawPointer, _ value: SyntaxText) {
+    appendToBuffer(&ptr, value.count)
+    if let baseAddress = value.baseAddress {
+      ptr.copyMemory(from: baseAddress, byteCount: value.count)
+      ptr = ptr.advanced(by: value.count)
+    } else {
+      assert(value.count == 0)
+    }
+  }
+
+  func readFromBuffer<T>(_ ptr: inout UnsafeRawPointer, _ type: T.Type) -> T {
+    ptr = ptr.alignedUp(for: T.self)
+    let value = ptr.load(as: T.self)
+    ptr = ptr.advanced(by: MemoryLayout<T>.size)
+    return value
+  }
+
+  func readSyntaxTextFromBuffer(_ ptr: inout UnsafeRawPointer) -> SyntaxText {
+    let count = readFromBuffer(&ptr, Int.self)
+    let buffer = ptr.bindMemory(to: UInt8.self, capacity: count)
+    let text = SyntaxText(baseAddress: buffer, count: count)
+    ptr = ptr.advanced(by: count)
+    return value.intern(text)
+  }
+
+  func serialize(_ payload: RawSyntaxData.Payload) -> ObjectID {
+    let begin = value.buffer.baseAddress!
+    var ptr = value.buffer.baseAddress!
+
+    switch payload {
+    case .parsedToken(let token):
+      appendToBuffer(&ptr, 0)
+      appendToBuffer(&ptr, token.tokenKind)
+      appendSyntaxTextToBuffer(&ptr, token.wholeText)
+      appendToBuffer(&ptr, token.textRange.lowerBound)
+      appendToBuffer(&ptr, token.textRange.upperBound)
+      appendToBuffer(&ptr, token.presence)
+      appendToBuffer(&ptr, token.tokenDiagnostic?.kind)
+      appendToBuffer(&ptr, token.tokenDiagnostic?.byteOffset)
+    case .materializedToken(let token):
+      appendToBuffer(&ptr, 1)
+      appendToBuffer(&ptr, token.tokenKind)
+      appendSyntaxTextToBuffer(&ptr, token.tokenText)
+      appendToBuffer(&ptr, token.triviaPieces.count)
+      for triviaPiece in token.triviaPieces {
+        switch triviaPiece {
+        case .backslashes(let count):
+          appendToBuffer(&ptr, 0)
+          appendToBuffer(&ptr, count)
+        case .blockComment(let text):
+          appendToBuffer(&ptr, 1)
+          appendSyntaxTextToBuffer(&ptr, text)
+        case .carriageReturns(let count):
+          appendToBuffer(&ptr, 2)
+          appendToBuffer(&ptr, count)
+        case .carriageReturnLineFeeds(let count):
+          appendToBuffer(&ptr, 3)
+          appendToBuffer(&ptr, count)
+        case .docBlockComment(let text):
+          appendToBuffer(&ptr, 4)
+          appendSyntaxTextToBuffer(&ptr, text)
+        case .docLineComment(let text):
+          appendToBuffer(&ptr, 5)
+          appendSyntaxTextToBuffer(&ptr, text)
+        case .formfeeds(let count):
+          appendToBuffer(&ptr, 6)
+          appendToBuffer(&ptr, count)
+        case .lineComment(let text):
+          appendToBuffer(&ptr, 7)
+          appendSyntaxTextToBuffer(&ptr, text)
+        case .newlines(let count):
+          appendToBuffer(&ptr, 8)
+          appendToBuffer(&ptr, count)
+        case .pounds(let count):
+          appendToBuffer(&ptr, 9)
+          appendToBuffer(&ptr, count)
+        case .spaces(let count):
+          appendToBuffer(&ptr, 10)
+          appendToBuffer(&ptr, count)
+        case .tabs(let count):
+          appendToBuffer(&ptr, 11)
+          appendToBuffer(&ptr, count)
+        case .unexpectedText(let text):
+          appendToBuffer(&ptr, 12)
+          appendSyntaxTextToBuffer(&ptr, text)
+        case .verticalTabs(let count):
+          appendToBuffer(&ptr, 13)
+          appendToBuffer(&ptr, count)
+        }
+      }
+      appendToBuffer(&ptr, token.numLeadingTrivia)
+      appendToBuffer(&ptr, token.byteLength)
+      appendToBuffer(&ptr, token.presence)
+      appendToBuffer(&ptr, token.tokenDiagnostic?.kind)
+      appendToBuffer(&ptr, token.tokenDiagnostic?.byteOffset)
+    case .layout(let layout):
+      appendToBuffer(&ptr, 2)
+      appendToBuffer(&ptr, layout.kind)
+      appendToBuffer(&ptr, layout.layout.count)
+      for child in layout.layout {
+        appendToBuffer(&ptr, child?.rawData.objectID.opaque)
+      }
+      appendToBuffer(&ptr, layout.byteLength)
+      appendToBuffer(&ptr, layout.descendantCount)
+      appendToBuffer(&ptr, layout.recursiveFlags.rawValue)
+    }
+
+    do {
+      return try value.cas.store(value.buffer[0..<(ptr - begin)])
+    } catch {
+      fatalError("SyntaxArena.serialize()")
+    }
+  }
+
+  func deserialize(_ objectID: ObjectID) -> RawSyntaxData.Payload {
+    do {
+      let loadedObject = try value.cas.loadObject(objectID)
+      return deserialize(loadedObject!.data)
+    } catch {
+      fatalError("SyntaxArenaRef.deserialize(ObjectID)")
+    }
+  }
+
+  func deserialize(_ buffer: UnsafeRawBufferPointer) -> RawSyntaxData.Payload {
+    var ptr = buffer.baseAddress!
+
+    switch readFromBuffer(&ptr, Int.self) {
+    case 0:
+      let tokenKind = readFromBuffer(&ptr, RawTokenKind.self)
+      let wholeText = readSyntaxTextFromBuffer(&ptr)
+      let textRangeLowerBound = readFromBuffer(&ptr, Int.self)
+      let textRangeUpperBound = readFromBuffer(&ptr, Int.self)
+      let textRange = Range(uncheckedBounds: (SyntaxText.Index(textRangeLowerBound), SyntaxText.Index(textRangeUpperBound)))
+      let presence = readFromBuffer(&ptr, SourcePresence.self)
+      let diagnosticKind = readFromBuffer(&ptr, TokenDiagnostic.Kind?.self)
+      let diagnosticOffset = readFromBuffer(&ptr, UInt16?.self)
+      let tokenDiagnostic: TokenDiagnostic? = if let kind = diagnosticKind, let offset = diagnosticOffset {
+        TokenDiagnostic(kind, byteOffset: offset)
+      } else {
+        nil
+      }
+      let parsedToken = RawSyntaxData.ParsedToken(tokenKind: tokenKind,
+                                                  wholeText: wholeText,
+                                                  textRange: textRange,
+                                                  presence: presence,
+                                                  tokenDiagnostic: tokenDiagnostic)
+      return RawSyntaxData.Payload.parsedToken(parsedToken)
+    case 1:
+      let tokenKind = readFromBuffer(&ptr, RawTokenKind.self)
+      let wholeText = readSyntaxTextFromBuffer(&ptr)
+      let triviaPiecesCount = readFromBuffer(&ptr, Int.self)
+      let triviaBuffer = value.allocateRawTriviaPieceBuffer(count: triviaPiecesCount)
+      for i in 0..<triviaPiecesCount {
+        triviaBuffer[i] = switch readFromBuffer(&ptr, Int.self) {
+          case 0: RawTriviaPiece.backslashes(readFromBuffer(&ptr, Int.self))
+          case 1: RawTriviaPiece.blockComment(readSyntaxTextFromBuffer(&ptr))
+          case 2: RawTriviaPiece.carriageReturns(readFromBuffer(&ptr, Int.self))
+          case 3: RawTriviaPiece.carriageReturnLineFeeds(readFromBuffer(&ptr, Int.self))
+          case 4: RawTriviaPiece.docBlockComment(readSyntaxTextFromBuffer(&ptr))
+          case 5: RawTriviaPiece.docLineComment(readSyntaxTextFromBuffer(&ptr))
+          case 6: RawTriviaPiece.formfeeds(readFromBuffer(&ptr, Int.self))
+          case 7: RawTriviaPiece.lineComment(readSyntaxTextFromBuffer(&ptr))
+          case 8: RawTriviaPiece.newlines(readFromBuffer(&ptr, Int.self))
+          case 9: RawTriviaPiece.pounds(readFromBuffer(&ptr, Int.self))
+          case 10: RawTriviaPiece.spaces(readFromBuffer(&ptr, Int.self))
+          case 11: RawTriviaPiece.tabs(readFromBuffer(&ptr, Int.self))
+          case 12: RawTriviaPiece.unexpectedText(readSyntaxTextFromBuffer(&ptr))
+          case 13: RawTriviaPiece.verticalTabs(readFromBuffer(&ptr, Int.self))
+          default: fatalError("SyntaxArena.deserialize")
+        }
+      }
+      let numLeadingTrivia = readFromBuffer(&ptr, UInt32.self)
+      let byteLength = readFromBuffer(&ptr, UInt32.self)
+      let presence = readFromBuffer(&ptr, SourcePresence.self)
+      let diagnosticKind = readFromBuffer(&ptr, TokenDiagnostic.Kind?.self)
+      let diagnosticOffset = readFromBuffer(&ptr, UInt16?.self)
+      let tokenDiagnostic: TokenDiagnostic? = if let kind = diagnosticKind, let offset = diagnosticOffset {
+        TokenDiagnostic(kind, byteOffset: offset)
+      } else {
+        nil
+      }
+      let materializedToken = RawSyntaxData.MaterializedToken(tokenKind: tokenKind,
+                                                              tokenText: wholeText,
+                                                              triviaPieces: RawTriviaPieceBuffer(UnsafeBufferPointer(triviaBuffer)),
+                                                              numLeadingTrivia: numLeadingTrivia,
+                                                              byteLength: byteLength,
+                                                              presence: presence,
+                                                              tokenDiagnostic: tokenDiagnostic)
+      return RawSyntaxData.Payload.materializedToken(materializedToken)
+    case 2:
+      let kind = readFromBuffer(&ptr, SyntaxKind.self)
+      let count = readFromBuffer(&ptr, Int.self)
+      let buffer = value.allocateRawSyntaxBuffer(count: count)
+      for i in 0..<count {
+        if let opaqueObjectID = readFromBuffer(&ptr, UInt64?.self) {
+          let deserializedPayload = deserialize(ObjectID(opaque: opaqueObjectID))
+          let data = value.intern(RawSyntaxData(payload: deserializedPayload,
+                                                objectID: ObjectID(opaque: opaqueObjectID),
+                                                arenaReference: self))
+          buffer[i] = RawSyntax(pointer: SyntaxArenaAllocatedPointer(data))
+        } else {
+          buffer[i] = nil
+        }
+      }
+      let byteLength = readFromBuffer(&ptr, Int.self)
+      let descendantCount = readFromBuffer(&ptr, Int.self)
+      let recursiveFlagsRawValue = readFromBuffer(&ptr, UInt8.self)
+      let layout = RawSyntaxData.Layout(kind: kind,
+                                        layout: RawSyntaxBuffer(UnsafeBufferPointer(buffer)),
+                                        byteLength: byteLength,
+                                        descendantCount: descendantCount,
+                                        recursiveFlags: RecursiveRawSyntaxFlags(rawValue: recursiveFlagsRawValue))
+      return RawSyntaxData.Payload.layout(layout)
+    default:
+      fatalError("SyntaxArena.deserialize(UnsafeRawBufferPointer)")
+    }
+  }
 
   func hash(into hasher: inout Hasher) {
     hasher.combine(_value.toOpaque())

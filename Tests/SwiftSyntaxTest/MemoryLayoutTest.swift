@@ -29,7 +29,7 @@ final class MemoryLayoutTest: XCTestCase {
       "RawSyntaxData.Layout": .init(size: 41, stride: 48, alignment: 8),
       "RawSyntaxData.ParsedToken": .init(size: 44, stride: 48, alignment: 8),
       "RawSyntaxData.MaterializedToken": .init(size: 52, stride: 56, alignment: 8),
-      "RawSyntaxData": .init(size: 64, stride: 64, alignment: 8),
+      "RawSyntaxData": .init(size: 72, stride: 72, alignment: 8),
       "RawSyntax?": .init(size: 8, stride: 8, alignment: 8),
 
       "Syntax": .init(size: 16, stride: 16, alignment: 8),

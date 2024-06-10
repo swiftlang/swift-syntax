@@ -29,6 +29,9 @@ let package = Package(
     .library(name: "SwiftSyntaxMacroExpansion", targets: ["SwiftSyntaxMacroExpansion"]),
     .library(name: "SwiftSyntaxMacrosTestSupport", targets: ["SwiftSyntaxMacrosTestSupport"]),
   ],
+  dependencies: [
+    .package(path: "../swift-llondiskcas"),
+  ],
   targets: [
     .executableTarget(
       name: "SwiftCASParse",
@@ -134,7 +137,7 @@ let package = Package(
 
     .target(
       name: "SwiftSyntax",
-      dependencies: ["_SwiftSyntaxCShims", "SwiftSyntax509", "SwiftSyntax510", "SwiftSyntax600"],
+      dependencies: ["_SwiftSyntaxCShims", "SwiftSyntax509", "SwiftSyntax510", "SwiftSyntax600", .product(name: "LLOnDiskCAS", package: "swift-llondiskcas")],
       exclude: ["CMakeLists.txt"],
       swiftSettings: swiftSyntaxSwiftSettings
     ),

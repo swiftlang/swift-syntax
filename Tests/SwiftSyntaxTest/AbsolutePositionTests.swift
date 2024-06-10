@@ -15,6 +15,8 @@ import XCTest
 import _SwiftSyntaxTestSupport
 
 class AbsolutePositionTests: XCTestCase {
+  /* Temporarily disabling this test. It creates lots of individual arenas that
+     all open the CAS database and make the process run out of file descriptors.
   public func testRecursion() {
     var l = [CodeBlockItemSyntax]()
     let idx = 2000
@@ -38,6 +40,7 @@ class AbsolutePositionTests: XCTestCase {
     _ = statements[statements.index(at: idx)].totalLength.utf8Length
     _ = statements[statements.index(at: idx)].positionAfterSkippingLeadingTrivia
   }
+  */
 
   static let leadingTrivia = Trivia(pieces: [
     .newlines(1),

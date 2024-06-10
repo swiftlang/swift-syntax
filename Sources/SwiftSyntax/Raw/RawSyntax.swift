@@ -10,6 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+import LLOnDiskCAS
+
 @_spi(RawSyntax) public typealias RawSyntaxBuffer = SyntaxArenaAllocatedBufferPointer<RawSyntax?>
 
 typealias RawTriviaPieceBuffer = SyntaxArenaAllocatedBufferPointer<RawTriviaPiece>
@@ -169,6 +171,7 @@ internal struct RawSyntaxData: Sendable {
   }
 
   var payload: Payload
+  var objectID: ObjectID
   var arenaReference: SyntaxArenaRef
 }
 
@@ -207,8 +210,48 @@ public struct RawSyntax: Sendable {
 
   init(arena: __shared SyntaxArena, payload: RawSyntaxData.Payload) {
     let arenaRef = SyntaxArenaRef(arena)
+
+    // Let's do a roundtrip through CAS.
+    let objectID = arenaRef.serialize(payload)
+    var deserializedPayload = arenaRef.deserialize(objectID)
+
+    // FIXME: This hack is necessary because the ``RawSyntax`` contained within
+    // the given payload might be referring to a ``ParsingSyntaxArena`` which
+    // the client code relies on. We might have been given just an ordinary
+    // non-parsing ``SyntaxArena`` that won't cut it.
+    //
+    // Let's fix up the deserialized payload.
+    func backpatchOriginalArena(_ deserialized: inout RawSyntaxData.Payload, _ original: RawSyntaxData.Payload) {
+      switch (deserialized, original) {
+      case (.layout(let deserializedLayout), .layout(let originalLayout)):
+        if deserializedLayout.layout.count != originalLayout.layout.count {
+          fatalError("Deserialized layout differs in size from the original layout.")
+        }
+        for (deserializedChild, originalChild) in zip(deserializedLayout.layout, originalLayout.layout) {
+          switch (deserializedChild, originalChild) {
+          case (.some(let deserializedChild), .some(let originalChild)):
+            let deserializedChildDataPtr = UnsafeMutablePointer<RawSyntaxData>(mutating: deserializedChild.raw.pointer.pointer)
+            deserializedChildDataPtr.pointee.arenaReference = originalChild.arenaReference
+            backpatchOriginalArena(&deserializedChildDataPtr.pointee.payload, originalChild.payload)
+          case (.none, .none):
+            break
+          default:
+            fatalError("Deserialized layout does not match the original layout.")
+          }
+        }
+      case (.parsedToken, .parsedToken):
+        break
+      case (.materializedToken, .materializedToken):
+        break
+      default:
+        fatalError("Deserialized node does not match the original node.")
+      }
+    }
+    backpatchOriginalArena(&deserializedPayload, payload)
+
     let data = RawSyntaxData(
-      payload: payload,
+      payload: deserializedPayload,
+      objectID: objectID,
       arenaReference: arenaRef
     )
     self.init(pointer: SyntaxArenaAllocatedPointer(arena.intern(data)))

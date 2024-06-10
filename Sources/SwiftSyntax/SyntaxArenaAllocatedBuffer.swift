@@ -18,7 +18,7 @@
 /// deallocated while being accessed and thus we can add an unchecked `Sendable`
 /// conformance.
 @_spi(RawSyntax) public struct SyntaxArenaAllocatedPointer<Element: Sendable>: @unchecked Sendable {
-  private let pointer: UnsafePointer<Element>
+  let pointer: UnsafePointer<Element>
 
   /// Create a pointer from an `UnsafePointer` that was allocated inside a
   /// ``SyntaxArena``.

@@ -20,6 +20,7 @@ fileprivate let directoriesToExclude = [
   "build",
   "Inputs",
   ".build",
+  ".index-build",
   ".swift-format-build",
 ]
 

@@ -246,7 +246,7 @@ extension PluginProvider {
   }
 }
 
-#if os(WASI)
+#if compiler(>=6) && os(WASI)
 
 /// A callback invoked by the Wasm Host when new data is available on `stdin`.
 ///
@@ -257,13 +257,16 @@ nonisolated(unsafe) private var readabilityHandler: () -> Void = {
   """)
 }
 
-// We can use @_expose(wasm, ...) with compiler >= 6.0
-// but it causes build errors with older compilers.
-// Instead, we export from wasm_support.c and trampoline
-// to this method.
-@_cdecl("_swift_wasm_macro_pump")
-func wasmPump() {
+@_expose(wasm, "swift_wasm_macro_v1_pump")
+func wasmPump() throws {
   readabilityHandler()
 }
+
+// we can't nest the whole #if-#else in '#if os(WASI)' due to a bug where
+// '#if compiler' directives have to be the top-level #if, otherwise
+// the compiler doesn't skip unknown syntax.
+#elseif os(WASI)
+
+#error("Building swift-syntax for WebAssembly requires compiler version 6.0 or higher.")
 
 #endif

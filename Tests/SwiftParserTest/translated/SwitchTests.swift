@@ -1351,4 +1351,17 @@ final class SwitchTests: ParserTestCase {
         """
     )
   }
+
+  func testSwitch84() {
+    assertParse(
+      """
+      switch x {
+      case 1, 1️⃣case 2, 3:
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected 'case' keyword in switch case")
+      ]
+    )
+  }
 }

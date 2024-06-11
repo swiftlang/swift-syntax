@@ -14,26 +14,28 @@
 #define SWIFTSYNTAX_ATOMICBOOL_H
 
 #include <stdbool.h>
+#include <stdlib.h>
 
 typedef struct {
   _Atomic(bool) value;
 } AtomicBool;
 
-__attribute__((swift_name("AtomicBool.init(initialValue:)")))
-static inline AtomicBool atomic_bool_create(bool initialValue) {
-  AtomicBool atomic;
-  atomic.value = initialValue;
+static inline AtomicBool *_Nonnull swiftsyntax_atomic_bool_create(bool initialValue) {
+  AtomicBool *atomic = malloc(sizeof(AtomicBool));
+  atomic->value = initialValue;
   return atomic;
 }
 
-__attribute__((swift_name("getter:AtomicBool.value(self:)")))
-static inline bool atomic_bool_get(AtomicBool *atomic) {
+static inline bool swiftsyntax_atomic_bool_get(AtomicBool *_Nonnull atomic) {
   return atomic->value;
 }
 
-__attribute__((swift_name("setter:AtomicBool.value(self:_:)")))
-static inline void atomic_bool_set(AtomicBool *atomic, bool newValue) {
+static inline void swiftsyntax_atomic_bool_set(AtomicBool *_Nonnull atomic, bool newValue) {
   atomic->value = newValue;
+}
+
+static inline void swiftsyntax_atomic_bool_destroy(AtomicBool *_Nonnull atomic) {
+  free(atomic);
 }
 
 #endif // SWIFTSYNTAX_ATOMICBOOL_H

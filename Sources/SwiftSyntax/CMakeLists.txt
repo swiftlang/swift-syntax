@@ -15,6 +15,7 @@ add_swift_syntax_library(SwiftSyntax
   CommonAncestor.swift
   Convenience.swift
   CustomTraits.swift
+  Identifier.swift
   MemoryLayout.swift
   MissingNodeInitializers.swift
   SourceEdit.swift
@@ -81,3 +82,6 @@ add_swift_syntax_library(SwiftSyntax
   generated/syntaxNodes/SyntaxNodesQRS.swift
   generated/syntaxNodes/SyntaxNodesTUVWXYZ.swift
 )
+
+target_link_swift_syntax_libraries(SwiftSyntax PRIVATE
+  _SwiftSyntaxCShims)

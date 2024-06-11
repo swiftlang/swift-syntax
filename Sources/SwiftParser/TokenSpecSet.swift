@@ -382,8 +382,6 @@ enum DeclarationModifier: TokenSpecSet {
   case transferring
   case unowned
   case weak
-  case _resultDependsOn
-  case _resultDependsOnSelf
 
   init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
@@ -424,9 +422,6 @@ enum DeclarationModifier: TokenSpecSet {
     case TokenSpec(.sending): self = .sending
     case TokenSpec(.unowned): self = .unowned
     case TokenSpec(.weak): self = .weak
-    case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonescapableTypes): self = ._resultDependsOn
-    case TokenSpec(._resultDependsOnSelf) where experimentalFeatures.contains(.nonescapableTypes):
-      self = ._resultDependsOnSelf
     default: return nil
     }
   }
@@ -470,8 +465,6 @@ enum DeclarationModifier: TokenSpecSet {
     case .sending: return .keyword(.sending)
     case .unowned: return TokenSpec(.unowned, recoveryPrecedence: .declKeyword)
     case .weak: return TokenSpec(.weak, recoveryPrecedence: .declKeyword)
-    case ._resultDependsOn: return TokenSpec(._resultDependsOn, recoveryPrecedence: .declKeyword)
-    case ._resultDependsOnSelf: return TokenSpec(._resultDependsOnSelf, recoveryPrecedence: .declKeyword)
     }
   }
 }

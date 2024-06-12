@@ -51,6 +51,7 @@ private func assertNameMatcherResult(
     case .noArguments: argumentLabels = []
     case .call(let labels, _): argumentLabels = labels
     case .parameters(let labels): argumentLabels = labels
+    case .enumCaseParameters(let labels): argumentLabels = labels
     case .noncollapsibleParameters(let labels): argumentLabels = labels
     case .selector(let labels): argumentLabels = labels
     }
@@ -75,6 +76,7 @@ private struct DeclNameLocationSpec {
     case noArguments
     case call
     case parameters
+    case enumCaseParameters
     case noncollapsibleParameters
     case selector
 
@@ -83,6 +85,7 @@ private struct DeclNameLocationSpec {
       case .noArguments: self = .noArguments
       case .call: self = .call
       case .parameters: self = .parameters
+      case .enumCaseParameters: self = .enumCaseParameters
       case .noncollapsibleParameters: self = .noncollapsibleParameters
       case .selector: self = .selector
       }
@@ -323,6 +326,58 @@ class NameMatcherTests: XCTestCase {
       "1️⃣fn(x:)(1)",
       expected: [
         DeclNameLocationSpec(baseName: "fn", argumentLabels: ["x"], type: .selector)
+      ]
+    )
+  }
+
+  func testEnumCaseParameterWithLabels() {
+    assertNameMatcherResult(
+      """
+      enum MyEnum {
+        case 1️⃣myCase(label: String)
+      }
+      """,
+      expected: [
+        DeclNameLocationSpec(baseName: "myCase", argumentLabels: ["label"], type: .enumCaseParameters)
+      ]
+    )
+  }
+
+  func testEnumCaseParameterWithoutLabels() {
+    assertNameMatcherResult(
+      """
+      enum MyEnum {
+        case 1️⃣myCase(String)
+      }
+      """,
+      expected: [
+        DeclNameLocationSpec(baseName: "myCase", argumentLabels: [""], type: .enumCaseParameters)
+      ]
+    )
+  }
+
+  func testEnumCaseParameterWithoutAssociatedValues() {
+    assertNameMatcherResult(
+      """
+      enum MyEnum {
+        case 1️⃣myCase
+      }
+      """,
+      expected: [
+        DeclNameLocationSpec(baseName: "myCase", argumentLabels: [], type: .noArguments)
+      ]
+    )
+  }
+
+  func testEnumCaseParameterWithoutWildcardAsExternalLabel() {
+    assertNameMatcherResult(
+      """
+      enum MyEnum {
+        case 1️⃣myCase(_ label: String)
+      }
+      """,
+      expected: [
+        DeclNameLocationSpec(baseName: "myCase", argumentLabels: ["_ label"], type: .enumCaseParameters)
       ]
     )
   }

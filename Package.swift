@@ -6,13 +6,14 @@ import PackageDescription
 let package = Package(
   name: "swift-syntax",
   platforms: [
-    .macOS(.v10_15),
+    .macOS(.v13),
     .iOS(.v13),
     .tvOS(.v13),
     .watchOS(.v6),
     .macCatalyst(.v13),
   ],
   products: [
+    .executable(name: "swift-cas-parse", targets: ["SwiftCASParse"]),
     .library(name: "SwiftBasicFormat", targets: ["SwiftBasicFormat"]),
     .library(name: "SwiftCompilerPlugin", targets: ["SwiftCompilerPlugin"]),
     .library(name: "SwiftCompilerPluginMessageHandling", targets: ["SwiftCompilerPluginMessageHandling"]),
@@ -29,6 +30,11 @@ let package = Package(
     .library(name: "SwiftSyntaxMacrosTestSupport", targets: ["SwiftSyntaxMacrosTestSupport"]),
   ],
   targets: [
+    .executableTarget(
+      name: "SwiftCASParse",
+      dependencies: ["SwiftParser"]
+    ),
+
     // MARK: - Internal helper targets
     .target(
       name: "_SwiftSyntaxCShims"

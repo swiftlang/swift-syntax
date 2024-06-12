@@ -254,7 +254,8 @@ nonisolated(unsafe) private var readabilityHandler: () -> Void = {
 }
 
 @_expose(wasm, "swift_wasm_macro_v1_pump")
-func wasmPump() throws {
+@_cdecl("swift_wasm_macro_v1_pump")
+func wasmPump() {
   readabilityHandler()
 }
 

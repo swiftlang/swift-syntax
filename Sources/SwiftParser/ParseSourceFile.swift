@@ -22,8 +22,20 @@ extension Parser {
   public static func parse(
     source: String
   ) -> SourceFileSyntax {
-    var parser = Parser(source)
-    return SourceFileSyntax.parse(from: &parser)
+    do {
+      var parser = Parser(source)
+      let arena = parser.arena
+      let sourceID = try arena.cas.store(source.utf8)
+      if let treeObjectID = try arena.cas.cacheGet(key: sourceID) {
+        return SyntaxArenaRef(arena).deserializeSyntax(treeObjectID)
+      } else {
+        let syntax = SourceFileSyntax.parse(from: &parser)
+        try arena.cas.cachePut(key: sourceID, value: syntax.objectID)
+        return syntax
+      }
+    } catch {
+      fatalError("Parser.parse()")
+    }
   }
 
   /// A compiler interface that allows the enabling of experimental features.

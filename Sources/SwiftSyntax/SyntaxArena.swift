@@ -62,7 +62,7 @@ public class SyntaxArena {
 
   fileprivate var buffer: UnsafeMutableRawBufferPointer
 
-  fileprivate let cas: LLOnDiskCAS
+  public let cas: LLOnDiskCAS
 
   /// If the syntax tree that’s allocated in this arena references nodes from
   /// other arenas, `childRefs` contains references to the arenas. Child arenas
@@ -280,10 +280,10 @@ public struct RetainedSyntaxArena: @unchecked Sendable {
 /// `RawSyntaxData` holds its ``SyntaxArena`` in this form to prevent their cyclic
 /// strong references. Also, passing around ``SyntaxArena`` in this form doesn't
 /// cause any ref-counting traffic.
-struct SyntaxArenaRef: Hashable, @unchecked Sendable {
+public struct SyntaxArenaRef: Hashable, @unchecked Sendable {
   private let _value: Unmanaged<SyntaxArena>
 
-  init(_ value: __shared SyntaxArena) {
+  public init(_ value: __shared SyntaxArena) {
     self._value = .passUnretained(value)
   }
 
@@ -444,6 +444,17 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
     }
   }
 
+  public func deserializeSyntax(_ objectID: ObjectID) -> SourceFileSyntax {
+    let payload = deserialize(objectID)
+    let data = RawSyntaxData(
+      payload: payload,
+      objectID: objectID,
+      arenaReference: self
+    )
+    let raw = RawSyntax(pointer: SyntaxArenaAllocatedPointer(value.intern(data)))
+    return Syntax(raw: raw, rawNodeArena: value).cast(SourceFileSyntax.self)
+  }
+
   func deserialize(_ objectID: ObjectID) -> RawSyntaxData.Payload {
     do {
       let loadedObject = try value.cas.loadObject(objectID)
@@ -548,19 +559,19 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
     }
   }
 
-  func hash(into hasher: inout Hasher) {
+  public func hash(into hasher: inout Hasher) {
     hasher.combine(_value.toOpaque())
   }
 
-  static func == (lhs: SyntaxArenaRef, rhs: SyntaxArenaRef) -> Bool {
+  public static func == (lhs: SyntaxArenaRef, rhs: SyntaxArenaRef) -> Bool {
     return lhs._value.toOpaque() == rhs._value.toOpaque()
   }
 
-  static func == (lhs: SyntaxArenaRef, rhs: __shared SyntaxArena) -> Bool {
+  public static func == (lhs: SyntaxArenaRef, rhs: __shared SyntaxArena) -> Bool {
     return lhs == SyntaxArenaRef(rhs)
   }
 
-  static func == (lhs: __shared SyntaxArena, rhs: SyntaxArenaRef) -> Bool {
+  public static func == (lhs: __shared SyntaxArena, rhs: SyntaxArenaRef) -> Bool {
     return rhs == lhs
   }
 

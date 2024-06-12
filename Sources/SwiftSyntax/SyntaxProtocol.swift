@@ -10,6 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+import LLOnDiskCAS
+
 /// Provide common functionality for specialized syntax nodes. Extend this
 /// protocol to provide common functionality for all syntax nodes.
 ///
@@ -36,6 +38,12 @@ extension SyntaxProtocol {
   @_spi(RawSyntax)
   public var raw: RawSyntax {
     return _syntaxNode.raw
+  }
+}
+
+extension SyntaxProtocol {
+  public var objectID: ObjectID {
+    raw.rawData.objectID
   }
 }
 

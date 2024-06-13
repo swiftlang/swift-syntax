@@ -120,7 +120,7 @@ public class CompilerPluginMessageHandler<Provider: PluginProvider> {
 
   public init(provider: Provider) {
     self.provider = provider
-    self.syntaxRegistry = ParsedSyntaxRegistry()
+    self.syntaxRegistry = ParsedSyntaxRegistry(cacheCapacity: 16)
     self.hostCapability = HostCapability()
   }
 

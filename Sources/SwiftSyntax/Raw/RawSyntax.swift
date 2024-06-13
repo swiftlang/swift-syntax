@@ -170,9 +170,19 @@ internal struct RawSyntaxData: Sendable {
     var recursiveFlags: RecursiveRawSyntaxFlags
   }
 
-  var payload: Payload
+  var maybePayload: Payload?
   var objectID: ObjectID
   var arenaReference: SyntaxArenaRef
+
+  var payload: Payload {
+    get {
+      if let payload = maybePayload {
+        return payload
+      } else {
+        return arenaReference.deserialize(objectID)
+      }
+    }
+  }
 }
 
 extension RawSyntaxData.ParsedToken {
@@ -212,7 +222,7 @@ public struct RawSyntax: Sendable {
     let arenaRef = SyntaxArenaRef(arena)
     let objectID = arenaRef.serialize(payload)
     let data = RawSyntaxData(
-      payload: payload,
+      maybePayload: payload,
       objectID: objectID,
       arenaReference: arenaRef
     )

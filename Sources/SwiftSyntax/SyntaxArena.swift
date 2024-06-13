@@ -447,7 +447,7 @@ public struct SyntaxArenaRef: Hashable, @unchecked Sendable {
   public func deserializeSyntax(_ objectID: ObjectID) -> SourceFileSyntax {
     let payload = deserialize(objectID)
     let data = RawSyntaxData(
-      payload: payload,
+      maybePayload: payload,
       objectID: objectID,
       arenaReference: self
     )
@@ -536,8 +536,7 @@ public struct SyntaxArenaRef: Hashable, @unchecked Sendable {
       let buffer = value.allocateRawSyntaxBuffer(count: count)
       for i in 0..<count {
         if let opaqueObjectID = readFromBuffer(&ptr, UInt64?.self) {
-          let deserializedPayload = deserialize(ObjectID(opaque: opaqueObjectID))
-          let data = value.intern(RawSyntaxData(payload: deserializedPayload,
+          let data = value.intern(RawSyntaxData(maybePayload: nil,
                                                 objectID: ObjectID(opaque: opaqueObjectID),
                                                 arenaReference: self))
           buffer[i] = RawSyntax(pointer: SyntaxArenaAllocatedPointer(data))

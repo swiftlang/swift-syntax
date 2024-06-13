@@ -85,8 +85,8 @@ public class CompilerPluginMessageListener<Connection: MessageConnection, Handle
     self.handler = messageHandler
   }
 
-  public init<Provider: PluginProvider>(connection: Connection, provider: Provider) 
-    where Handler == PluginProviderMessageHandler<Provider> {
+  public init<Provider: PluginProvider>(connection: Connection, provider: Provider)
+  where Handler == PluginProviderMessageHandler<Provider> {
     self.connection = connection
     self.handler = PluginProviderMessageHandler(provider: provider)
   }
@@ -248,12 +248,14 @@ extension PluginProvider {
 ///
 /// This is safe to access without serialization as Wasm plugins are single-threaded.
 nonisolated(unsafe) private var readabilityHandler: () -> Void = {
-  fatalError("""
-  CompilerPlugin.main wasn't called. Did you annotate your plugin with '@main'?
-  """)
+  fatalError(
+    """
+    CompilerPlugin.main wasn't called. Did you annotate your plugin with '@main'?
+    """
+  )
 }
 
-@_expose(wasm, "swift_wasm_macro_v1_pump")
+@_expose(wasm,"swift_wasm_macro_v1_pump")
 @_cdecl("swift_wasm_macro_v1_pump")
 func wasmPump() {
   readabilityHandler()

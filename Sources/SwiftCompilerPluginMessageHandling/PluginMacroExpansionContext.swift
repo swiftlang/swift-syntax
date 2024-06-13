@@ -31,7 +31,11 @@ class ParsedSyntaxRegistry {
     let kind: PluginMessage.Syntax.Kind
   }
 
-  private var storage: [Key: Syntax] = [:]
+  private var storage: LRUCache<Key, Syntax>
+
+  init(cacheCapacity: Int) {
+    self.storage = LRUCache(capacity: cacheCapacity)
+  }
 
   private func parse(source: String, kind: PluginMessage.Syntax.Kind) -> Syntax {
     var parser = Parser(source)
@@ -60,10 +64,6 @@ class ParsedSyntaxRegistry {
     let node = parse(source: source, kind: kind)
     storage[key] = node
     return node
-  }
-
-  func clear() {
-    storage = [:]
   }
 }
 

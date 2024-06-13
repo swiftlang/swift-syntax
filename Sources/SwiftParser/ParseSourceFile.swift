@@ -38,6 +38,58 @@ extension Parser {
     }
   }
 
+  public static func countSwitchExpressionsPerFunction(_ node: SourceFileSyntax) -> [Int] {
+    class StatementCountingVisitor : SyntaxVisitor {
+      var numSwitchExprs: Int = 0
+      var result: [Int] = []
+      let arena: ParsingSyntaxArena
+
+      public init(_ arena: ParsingSyntaxArena) {
+        self.arena = arena
+        super.init(viewMode: .all)
+      }
+
+      public override func visit(_ node: FunctionDeclSyntax) -> SyntaxVisitorContinueKind {
+        assert(numSwitchExprs == 0)
+        do {
+          if let countObjectID = try arena.cas.cacheGet(key: node.objectID) {
+            if let countObject = try arena.cas.loadObject(countObjectID) {
+              numSwitchExprs = countObject.data.load(as: Int.self)
+              return .skipChildren
+            } else {
+              fatalError("blah")
+            }
+          } else {
+            return .visitChildren
+          }
+        } catch {
+          fatalError("StatementCountingVisitor.visit()")
+        }
+      }
+
+      public override func visit(_ node: SwitchExprSyntax) -> SyntaxVisitorContinueKind {
+        numSwitchExprs += 1
+        return .visitChildren
+      }
+
+      public override func visitPost(_ node: FunctionDeclSyntax) {
+        let objectID = SyntaxArenaRef(arena).serializeInt(numSwitchExprs)
+        do {
+          try arena.cas.cachePut(key: node.objectID, value: objectID)
+        } catch {
+          fatalError("StatementCountingVisitor.visitPost()")
+        }
+        result.append(numSwitchExprs)
+        numSwitchExprs = 0
+      }
+    }
+
+    let arena = ParsingSyntaxArena(parseTriviaFunction: TriviaParser.parseTrivia)
+    let visitor = StatementCountingVisitor(arena)
+    visitor.walk(node)
+    return visitor.result
+  }
+
   /// A compiler interface that allows the enabling of experimental features.
   @_spi(ExperimentalLanguageFeatures)
   public static func parse(

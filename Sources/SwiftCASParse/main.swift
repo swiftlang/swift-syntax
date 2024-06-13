@@ -13,7 +13,8 @@ let source = try String(contentsOf: file)
 
 let clock = ContinuousClock()
 let elapsed = clock.measure {
-  let _ = Parser.parse(source: source)
+  let node = Parser.parse(source: source)
+  let _ = Parser.countSwitchExpressionsPerFunction(node)
 }
 
 print("Input file parsed in \(elapsed)")

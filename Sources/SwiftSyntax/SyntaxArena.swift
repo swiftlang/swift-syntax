@@ -355,6 +355,23 @@ public struct SyntaxArenaRef: Hashable, @unchecked Sendable {
     return value.intern(text)
   }
 
+  public func serializeInt(_ int: Int) -> ObjectID {
+    let begin = value.buffer.baseAddress!
+    var ptr = value.buffer.baseAddress!
+    appendToBuffer(&ptr, int)
+
+    do {
+      return try value.cas.store(value.buffer[0..<(ptr - begin)])
+    } catch {
+      fatalError("SyntaxArenaRef.serializeInt()")
+    }
+  }
+
+  public func deserializeInt(_ buffer: UnsafeRawBufferPointer) -> Int {
+    var ptr = buffer.baseAddress!
+    return readFromBuffer(&ptr, Int.self)
+  }
+
   func serialize(_ payload: RawSyntaxData.Payload) -> ObjectID {
     let begin = value.buffer.baseAddress!
     var ptr = value.buffer.baseAddress!

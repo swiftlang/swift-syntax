@@ -13,6 +13,7 @@ builder:
       - SwiftCompilerPluginMessageHandling
       - SwiftDiagnostics
       - SwiftIDEUtils
+      - SwiftLibraryPluginProvider
       - SwiftOperators
       - SwiftParser
       - SwiftParserDiagnostics

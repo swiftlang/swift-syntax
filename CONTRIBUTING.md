@@ -79,6 +79,9 @@ For more information and instructions, read the GitHub docs on [forking a repo](
 
 Once you've pushed your branch, you should see an option on this repository's page to create a PR from a branch in your fork.
 
+> [!TIP]
+> It's encouraged to submit a PR even if you're stuck on the issue.
+
 ## Opening a PR for Release Branch
 
 In order for a pull request to be considered for inclusion in a release branch (e.g. `release/6.0`) after it has been cut, it must meet the following requirements:

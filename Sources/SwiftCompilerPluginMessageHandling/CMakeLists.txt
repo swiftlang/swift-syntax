@@ -9,6 +9,7 @@
 add_swift_syntax_library(SwiftCompilerPluginMessageHandling
   CompilerPluginMessageHandler.swift
   Diagnostics.swift
+  LRUCache.swift
   Macros.swift
   PluginMacroExpansionContext.swift
   PluginMessageCompatibility.swift

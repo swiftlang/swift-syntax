@@ -24,6 +24,49 @@ import SwiftSyntax
 import SwiftSyntaxMacros
 #endif
 
+/// Caching parser for PluginMessage.Syntax
+class ParsedSyntaxRegistry {
+  struct Key: Hashable {
+    let source: String
+    let kind: PluginMessage.Syntax.Kind
+  }
+
+  private var storage: LRUCache<Key, Syntax>
+
+  init(cacheCapacity: Int) {
+    self.storage = LRUCache(capacity: cacheCapacity)
+  }
+
+  private func parse(source: String, kind: PluginMessage.Syntax.Kind) -> Syntax {
+    var parser = Parser(source)
+    switch kind {
+    case .declaration:
+      return Syntax(DeclSyntax.parse(from: &parser))
+    case .statement:
+      return Syntax(StmtSyntax.parse(from: &parser))
+    case .expression:
+      return Syntax(ExprSyntax.parse(from: &parser))
+    case .type:
+      return Syntax(TypeSyntax.parse(from: &parser))
+    case .pattern:
+      return Syntax(PatternSyntax.parse(from: &parser))
+    case .attribute:
+      return Syntax(AttributeSyntax.parse(from: &parser))
+    }
+  }
+
+  func get(source: String, kind: PluginMessage.Syntax.Kind) -> Syntax {
+    let key = Key(source: source, kind: kind)
+    if let cached = storage[key] {
+      return cached
+    }
+
+    let node = parse(source: source, kind: kind)
+    storage[key] = node
+    return node
+  }
+}
+
 /// Manages known source code combined with their filename/fileID. This can be
 /// used to get line/column from a syntax node in the managed source code.
 class SourceManager {
@@ -67,8 +110,15 @@ class SourceManager {
     var endUTF8Offset: Int
   }
 
+  /// Caching syntax parser.
+  private let syntaxRegistry: ParsedSyntaxRegistry
+
   /// Syntax added by `add(_:)` method. Keyed by the `id` of the node.
   private var knownSourceSyntax: [Syntax.ID: KnownSourceSyntax] = [:]
+
+  init(syntaxRegistry: ParsedSyntaxRegistry) {
+    self.syntaxRegistry = syntaxRegistry
+  }
 
   /// Convert syntax information to a ``Syntax`` node. The location informations
   /// are cached in the source manager to provide `location(of:)` et al.
@@ -77,22 +127,7 @@ class SourceManager {
     foldingWith operatorTable: OperatorTable? = nil
   ) -> Syntax {
 
-    var node: Syntax
-    var parser = Parser(syntaxInfo.source)
-    switch syntaxInfo.kind {
-    case .declaration:
-      node = Syntax(DeclSyntax.parse(from: &parser))
-    case .statement:
-      node = Syntax(StmtSyntax.parse(from: &parser))
-    case .expression:
-      node = Syntax(ExprSyntax.parse(from: &parser))
-    case .type:
-      node = Syntax(TypeSyntax.parse(from: &parser))
-    case .pattern:
-      node = Syntax(PatternSyntax.parse(from: &parser))
-    case .attribute:
-      node = Syntax(AttributeSyntax.parse(from: &parser))
-    }
+    var node = syntaxRegistry.get(source: syntaxInfo.source, kind: syntaxInfo.kind)
     if let operatorTable {
       node = operatorTable.foldAll(node, errorHandler: { _ in /*ignore*/ })
     }

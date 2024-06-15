@@ -112,11 +112,15 @@ public class CompilerPluginMessageHandler<Provider: PluginProvider> {
   /// Object to provide actual plugin functions.
   let provider: Provider
 
+  /// Syntax registry shared between multiple requests.
+  let syntaxRegistry: ParsedSyntaxRegistry
+
   /// Plugin host capability
   var hostCapability: HostCapability
 
   public init(provider: Provider) {
     self.provider = provider
+    self.syntaxRegistry = ParsedSyntaxRegistry(cacheCapacity: 16)
     self.hostCapability = HostCapability()
   }
 

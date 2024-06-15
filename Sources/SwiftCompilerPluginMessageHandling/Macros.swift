@@ -56,7 +56,7 @@ extension CompilerPluginMessageHandler {
     expandingSyntax: PluginMessage.Syntax,
     lexicalContext: [PluginMessage.Syntax]?
   ) -> PluginToHostMessage {
-    let sourceManager = SourceManager()
+    let sourceManager = SourceManager(syntaxRegistry: syntaxRegistry)
     let syntax = sourceManager.add(expandingSyntax, foldingWith: .standardOperators)
 
     let context = PluginMacroExpansionContext(
@@ -120,7 +120,7 @@ extension CompilerPluginMessageHandler {
     conformanceListSyntax: PluginMessage.Syntax?,
     lexicalContext: [PluginMessage.Syntax]?
   ) -> PluginToHostMessage {
-    let sourceManager = SourceManager()
+    let sourceManager = SourceManager(syntaxRegistry: syntaxRegistry)
     let attributeNode = sourceManager.add(
       attributeSyntax,
       foldingWith: .standardOperators

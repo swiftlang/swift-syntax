@@ -18,6 +18,7 @@ let package = Package(
     .library(name: "SwiftCompilerPluginMessageHandling", targets: ["SwiftCompilerPluginMessageHandling"]),
     .library(name: "SwiftDiagnostics", targets: ["SwiftDiagnostics"]),
     .library(name: "SwiftIDEUtils", targets: ["SwiftIDEUtils"]),
+    .library(name: "SwiftLibraryPluginProvider", targets: ["SwiftLibraryPluginProvider"]),
     .library(name: "SwiftOperators", targets: ["SwiftOperators"]),
     .library(name: "SwiftParser", targets: ["SwiftParser"]),
     .library(name: "SwiftParserDiagnostics", targets: ["SwiftParserDiagnostics"]),
@@ -143,7 +144,12 @@ let package = Package(
 
     .target(
       name: "SwiftLibraryPluginProvider",
-      dependencies: ["SwiftSyntaxMacros", "SwiftCompilerPluginMessageHandling"],
+      dependencies: ["SwiftSyntaxMacros", "SwiftCompilerPluginMessageHandling", "_SwiftLibraryPluginProviderCShims"],
+      exclude: ["CMakeLists.txt"]
+    ),
+
+    .target(
+      name: "_SwiftLibraryPluginProviderCShims",
       exclude: ["CMakeLists.txt"]
     ),
 

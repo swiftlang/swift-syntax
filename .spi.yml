@@ -10,10 +10,8 @@ builder:
       - SwiftSyntax
       - SwiftBasicFormat
       - SwiftCompilerPlugin
-      - SwiftCompilerPluginMessageHandling
       - SwiftDiagnostics
       - SwiftIDEUtils
-      - SwiftLibraryPluginProvider
       - SwiftOperators
       - SwiftParser
       - SwiftParserDiagnostics
@@ -21,5 +19,6 @@ builder:
       - SwiftSyntaxBuilder
       - SwiftSyntaxMacros
       - SwiftSyntaxMacroExpansion
+      - SwiftSyntaxMacrosGenericTestSupport
       - SwiftSyntaxMacrosTestSupport
       custom_documentation_parameters: [--experimental-skip-synthesized-symbols]

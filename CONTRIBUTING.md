@@ -80,7 +80,7 @@ For more information and instructions, read the GitHub docs on [forking a repo](
 Once you've pushed your branch, you should see an option on this repository's page to create a PR from a branch in your fork.
 
 > [!TIP]
-> It's encouraged to submit a PR even if you're stuck on the issue.
+> If you are stuck, it’s encouraged to submit a PR that describes the issue you’re having, e.g. if there are tests that are failing, build failures you can’t resolve, or if you have architectural questions. We’re happy to work with you to resolve those issue.
 
 ## Opening a PR for Release Branch
 

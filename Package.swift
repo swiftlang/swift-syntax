@@ -144,7 +144,12 @@ let package = Package(
 
     .target(
       name: "SwiftLibraryPluginProvider",
-      dependencies: ["SwiftSyntaxMacros", "SwiftCompilerPluginMessageHandling"],
+      dependencies: ["SwiftSyntaxMacros", "SwiftCompilerPluginMessageHandling", "_SwiftLibraryPluginProviderCShims"],
+      exclude: ["CMakeLists.txt"]
+    ),
+
+    .target(
+      name: "_SwiftLibraryPluginProviderCShims",
       exclude: ["CMakeLists.txt"]
     ),
 

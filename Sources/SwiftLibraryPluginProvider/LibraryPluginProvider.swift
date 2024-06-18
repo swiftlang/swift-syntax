@@ -13,6 +13,7 @@
 #if swift(>=6.0)
 public import SwiftSyntaxMacros
 @_spi(PluginMessage) public import SwiftCompilerPluginMessageHandling
+private import _SwiftLibraryPluginProviderCShims
 // NOTE: Do not use '_SwiftSyntaxCShims' for 'dlopen' and 'LoadLibraryW' (Windows)
 // because we don't want other modules depend on 'WinSDK'.
 #if canImport(Darwin)
@@ -21,20 +22,17 @@ private import Darwin
 private import Glibc
 #elseif canImport(Musl)
 private import Musl
-#elseif canImport(WinSDK)
-private import WinSDK
 #endif
 #else
 import SwiftSyntaxMacros
 @_spi(PluginMessage) import SwiftCompilerPluginMessageHandling
+@_implementationOnly import _SwiftLibraryPluginProviderCShims
 #if canImport(Darwin)
 @_implementationOnly import Darwin
 #elseif canImport(Glibc)
 @_implementationOnly import Glibc
 #elseif canImport(Musl)
 @_implementationOnly import Musl
-#elseif canImport(WinSDK)
-@_implementationOnly import WinSDK
 #endif
 #endif
 
@@ -130,9 +128,9 @@ private func _loadLibrary(_ path: String) throws -> UnsafeMutableRawPointer {
   let end = utf16Path.initialize(fromContentsOf: path.utf16)
   utf16Path.initializeElement(at: end, to: 0)
 
-  guard let dlHandle = LoadLibraryW(utf16Path.baseAddress) else {
+  guard let dlHandle = swiftlibrarypluginprovider_LoadLibraryW(utf16Path.baseAddress) else {
     // FIXME: Format the error code to string.
-    throw LibraryPluginError(message: "loader error: \(GetLastError())")
+    throw LibraryPluginError(message: "loader error: \(swiftlibrarypluginprovider_GetLastError())")
   }
   return UnsafeMutableRawPointer(dlHandle)
 }

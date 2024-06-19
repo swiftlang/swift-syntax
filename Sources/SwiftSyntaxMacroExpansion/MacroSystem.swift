@@ -633,7 +633,7 @@ private enum MacroApplicationError: DiagnosticMessage, Error {
   case accessorMacroOnVariableWithMultipleBindings
   case peerMacroOnVariableWithMultipleBindings
   case malformedAccessor
-  case macroAttachedToInvalidDecl(String, String)
+  case macroAttachedToInvalidDecl(macroRole: String, declType: String)
 
   var diagnosticID: MessageID {
     return MessageID(domain: diagnosticDomain, id: "\(self)")
@@ -669,7 +669,8 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   /// Store expanded extension while visiting member decls. This should be
   /// added to top-level 'CodeBlockItemList'.
   var extensions: [CodeBlockItemSyntax] = []
-  var expandedAttributes: [AttributeSyntax] = []
+  /// Attributes that we are expecting to expand from `visitAny`. As macros are expanded, they should be removed from this list. Any attributes that are still left in this array after a `visitAny` call will generate diagnostics.
+  var attributesToExpand: [(attributeNode: AttributeSyntax, spec: MacroSpec)] = []
 
   init(
     macroSystem: MacroSystem,
@@ -707,6 +708,11 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       let attributedNode = node.asProtocol(WithAttributesSyntax.self),
       !attributedNode.attributes.isEmpty
     {
+      let previousAttributesToExpand = attributesToExpand
+      defer {
+        attributesToExpand = previousAttributesToExpand
+      }
+      attributesToExpand = self.macroAttributes(attachedTo: declSyntax)
       // Apply body and preamble macros.
       if let nodeWithBody = node.asProtocol(WithOptionalCodeBlockSyntax.self),
         let declNodeWithBody = nodeWithBody as? any DeclSyntaxProtocol & WithOptionalCodeBlockSyntax
@@ -720,14 +726,12 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       skipVisitAnyHandling.remove(Syntax(declSyntax))
 
       let attributesToRemove = self.macroAttributes(attachedTo: visitedNode)
-      for (attribute, spec) in attributesToRemove {
-        if let index = self.expandedAttributes.firstIndex(where: { expandedAttribute in
-          expandedAttribute.position == attribute.position
-        }) {
-          self.expandedAttributes.remove(at: index)
-        } else {
-          self.diagnosticForUnexpandedMacro(attribute: attribute, macroType: spec.type, attachedTo: declSyntax)
-        }
+      for attribute in attributesToExpand {
+        self.diagnosticForUnexpandedMacro(
+          attribute: attribute.attributeNode,
+          macroType: attribute.spec.type,
+          attachedTo: declSyntax
+        )
       }
       return AttributeRemover(removingWhere: { attributesToRemove.map(\.attributeNode).contains($0) }).rewrite(
         visitedNode
@@ -738,22 +742,18 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   }
 
   private func diagnosticForUnexpandedMacro(attribute: AttributeSyntax, macroType: Macro.Type, attachedTo: DeclSyntax) {
+    guard let macroRole = MacroRole(macroType: macroType) else {
+      return
+    }
     var diagnosticError: Error? = nil
     var fixitMessage: FixItMessage? = nil
-    switch macroType {
-    case is AccessorMacro.Type:
-      if (!attachedTo.is(VariableDeclSyntax.self) && !attachedTo.is(SubscriptDeclSyntax.self)) {
-        diagnosticError = MacroApplicationError.macroAttachedToInvalidDecl(
-          MacroRole.accessor.description,
-          attachedTo.kind.nameForDiagnostics ?? ""
-        )
-        fixitMessage = SwiftSyntaxMacros.MacroExpansionFixItMessage(
-          "Remove '\(attribute.trimmedDescription)'"
-        )
-      }
-    default:
-      break
-    }
+    diagnosticError = MacroApplicationError.macroAttachedToInvalidDecl(
+      macroRole: macroRole.description,
+      declType: attachedTo.kind.nameForDiagnostics ?? ""
+    )
+    fixitMessage = SwiftSyntaxMacros.MacroExpansionFixItMessage(
+      "Remove '\(attribute.trimmedDescription)'"
+    )
     if let diagnosticError, let fixitMessage {
       contextGenerator(Syntax(attachedTo)).addDiagnostics(
         from: diagnosticError,
@@ -961,10 +961,10 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     )
   }
 
-  override func visit(_ node: VariableDeclSyntax) -> DeclSyntax {
-    var node = super.visit(node).cast(VariableDeclSyntax.self)
+  override func visit(_ originalNode: VariableDeclSyntax) -> DeclSyntax {
+    var node = super.visit(originalNode).cast(VariableDeclSyntax.self)
 
-    guard !macroAttributes(attachedTo: DeclSyntax(node), ofType: AccessorMacro.Type.self).isEmpty else {
+    guard !macroAttributes(attachedTo: DeclSyntax(originalNode), ofType: AccessorMacro.Type.self).isEmpty else {
       return DeclSyntax(node)
     }
 
@@ -976,7 +976,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       return DeclSyntax(node)
     }
 
-    let expansion = expandAccessors(of: node, existingAccessors: binding.accessorBlock)
+    let expansion = expandAccessors(of: originalNode, existingAccessors: binding.accessorBlock)
     if expansion.accessors != binding.accessorBlock {
       if binding.initializer != nil, expansion.expandsGetSet {
         // The accessor block will have a leading space, but there will already be a
@@ -992,9 +992,9 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     return DeclSyntax(node)
   }
 
-  override func visit(_ node: SubscriptDeclSyntax) -> DeclSyntax {
-    var node = super.visit(node).cast(SubscriptDeclSyntax.self)
-    node.accessorBlock = expandAccessors(of: node, existingAccessors: node.accessorBlock).accessors
+  override func visit(_ originalNode: SubscriptDeclSyntax) -> DeclSyntax {
+    var node = super.visit(originalNode).cast(SubscriptDeclSyntax.self)
+    node.accessorBlock = expandAccessors(of: originalNode, existingAccessors: node.accessorBlock).accessors
     return DeclSyntax(node)
   }
 }
@@ -1061,6 +1061,7 @@ extension MacroApplication {
     var result: [ExpandedNode] = []
 
     for macroAttribute in macroAttributes(attachedTo: decl, ofType: ofType) {
+      attributesToExpand = attributesToExpand.filter { $0.attributeNode != macroAttribute.attributeNode }
       do {
         if let expanded = try expandMacro(
           macroAttribute.attributeNode,
@@ -1068,7 +1069,6 @@ extension MacroApplication {
           macroAttribute.conformanceList
         ) {
           result += expanded
-          self.expandedAttributes.append(macroAttribute.attributeNode)
         }
       } catch {
         contextGenerator(Syntax(decl)).addDiagnostics(from: error, node: macroAttribute.attributeNode)
@@ -1216,7 +1216,7 @@ extension MacroApplication {
               from: newAccessors,
               indentationWidth: self.indentationWidth
             )
-            self.expandedAttributes.append(macro.attributeNode)
+            attributesToExpand = attributesToExpand.filter { $0.attributeNode != macro.attributeNode }
           }
         } else if let newAccessors = try expandAccessorMacroWithoutExistingAccessors(
           definition: macro.definition,
@@ -1239,7 +1239,7 @@ extension MacroApplication {
           } else {
             newAccessorsBlock = newAccessors
           }
-          self.expandedAttributes.append(macro.attributeNode)
+          attributesToExpand = attributesToExpand.filter { $0.attributeNode != macro.attributeNode }
         }
       } catch {
         contextGenerator(Syntax(storage)).addDiagnostics(from: error, node: macro.attributeNode)

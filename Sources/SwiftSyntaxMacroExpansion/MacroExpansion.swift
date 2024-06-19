@@ -32,6 +32,23 @@ public enum MacroRole: Sendable {
   case `extension`
   @_spi(ExperimentalLanguageFeature) case preamble
   @_spi(ExperimentalLanguageFeature) case body
+
+  init?(macroType: Macro.Type) {
+    switch macroType {
+    case is ExpressionMacro.Type: self = .expression
+    case is DeclarationMacro.Type: self = .declaration
+    case is AccessorMacro.Type: self = .accessor
+    case is MemberAttributeMacro.Type: self = .memberAttribute
+    case is MemberMacro.Type: self = .member
+    case is PeerMacro.Type: self = .peer
+    case is CodeItemMacro.Type: self = .codeItem
+    case is ExtensionMacro.Type: self = .extension
+    case is PreambleMacro.Type: self = .preamble
+    case is BodyMacro.Type: self = .body
+    default:
+      return nil
+    }
+  }
 }
 
 extension MacroRole {

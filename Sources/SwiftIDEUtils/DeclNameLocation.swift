@@ -102,6 +102,12 @@ public struct DeclNameLocation: Equatable {
     /// The parameter of a function declaration, like `func foo(a b: Int)`
     case parameters([Argument])
 
+    /// An enum case declaration like `case myCase(label: String)`.
+    ///
+    /// For enum case parameters the argument label is removed when set to empty instead of being changed to eg.
+    /// `myCase(_ label: String)`
+    case enumCaseParameters([Argument])
+
     /// Same as `param` but the parameters can't be collapsed if they are the same. This is the case for subscript
     /// declarations.
     ///
@@ -123,6 +129,8 @@ public struct DeclNameLocation: Equatable {
         )
       case .parameters(let parameters):
         return .parameters(parameters.map { $0.advanced(by: utf8Offset) })
+      case .enumCaseParameters(let parameters):
+        return .enumCaseParameters(parameters.map { $0.advanced(by: utf8Offset) })
       case .noncollapsibleParameters(let parameters):
         return .noncollapsibleParameters(parameters.map { $0.advanced(by: utf8Offset) })
       case .selector(let arguments):

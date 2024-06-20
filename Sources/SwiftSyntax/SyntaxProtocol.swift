@@ -578,9 +578,11 @@ extension SyntaxProtocol {
 
   /// A copy of this node without the leading trivia of the first token in the
   /// node and the trailing trivia of the last token in the node.
+  ///
+  /// The trimmed node is detached from its parent.
   public var trimmed: Self {
     // TODO: Should only need one new node here
-    return self.with(\.leadingTrivia, []).with(\.trailingTrivia, [])
+    return self.detached.with(\.leadingTrivia, []).with(\.trailingTrivia, [])
   }
 
   /// A copy of this node with pieces that match `matching` trimmed from the

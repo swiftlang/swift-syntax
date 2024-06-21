@@ -17,7 +17,6 @@ public enum ExperimentalFeature: String, CaseIterable {
   case thenStatements
   case doExpressions
   case nonescapableTypes
-  case transferringArgsAndResults
   case borrowingSwitch
   case sendingArgsAndResults
 
@@ -32,8 +31,6 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "'do' expressions"
     case .nonescapableTypes:
       return "NonEscableTypes"
-    case .transferringArgsAndResults:
-      return "TransferringArgsAndResults"
     case .borrowingSwitch:
       return "borrowing pattern matching"
     case .sendingArgsAndResults:

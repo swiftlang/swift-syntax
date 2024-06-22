@@ -88,6 +88,7 @@ swift_syntax_library(
     deps = [
         ":SwiftCompilerPluginMessageHandling",
         ":SwiftSyntaxMacros",
+        ":_SwiftLibraryPluginProviderCShims",
     ],
 )
 
@@ -251,7 +252,7 @@ swift_syntax_library(
 )
 
 swift_syntax_library(
-    name = "SwiftSyntaxMacrosTestSupport",
+    name = "SwiftSyntaxMacrosGenericTestSupport",
     testonly = True,
     deps = [
         ":SwiftDiagnostics",
@@ -259,7 +260,18 @@ swift_syntax_library(
         ":SwiftParser",
         ":SwiftSyntaxMacroExpansion",
         ":SwiftSyntaxMacros",
-        ":_SwiftSyntaxTestSupport",
+        ":_SwiftSyntaxGenericTestSupport",
+    ],
+)
+
+swift_syntax_library(
+    name = "SwiftSyntaxMacrosTestSupport",
+    testonly = True,
+    deps = [
+        ":SwiftSyntax",
+        ":SwiftSyntaxMacroExpansion",
+        ":SwiftSyntaxMacros",
+        ":SwiftSyntaxMacrosGenericTestSupport",
     ],
 )
 
@@ -300,11 +312,26 @@ cc_library(
 )
 
 cc_library(
+    name = "_SwiftLibraryPluginProviderCShims",
+    hdrs = glob(["Sources/_SwiftLibraryPluginProviderCShims/include/*.h"]),
+    includes = ["Sources/_SwiftLibraryPluginProviderCShims/include"],
+    tags = ["swift_module=_SwiftLibraryPluginProviderCShims"],
+    visibility = ["//visibility:private"],
+)
+
+cc_library(
     name = "_SwiftSyntaxCShims",
     hdrs = glob(["Sources/_SwiftSyntaxCShims/include/*.h"]),
     includes = ["Sources/_SwiftSyntaxCShims/include"],
     tags = ["swift_module=_SwiftSyntaxCShims"],
     visibility = ["//visibility:private"],
+)
+
+swift_syntax_library(
+    name = "_SwiftSyntaxGenericTestSupport",
+    testonly = True,
+    deps = [
+    ],
 )
 
 swift_syntax_library(
@@ -315,6 +342,7 @@ swift_syntax_library(
         ":SwiftSyntax",
         ":SwiftSyntaxBuilder",
         ":SwiftSyntaxMacroExpansion",
+        ":_SwiftSyntaxGenericTestSupport",
     ],
 )
 

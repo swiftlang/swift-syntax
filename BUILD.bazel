@@ -243,6 +243,19 @@ swift_syntax_library(
 )
 
 swift_syntax_library(
+    name = "SwiftSyntaxMacrosGenericTestSupport",
+    testonly = True,
+    deps = [
+        ":SwiftDiagnostics",
+        ":SwiftIDEUtils",
+        ":SwiftParser",
+        ":SwiftSyntaxMacroExpansion",
+        ":SwiftSyntaxMacros",
+        ":_SwiftSyntaxGenericTestSupport",
+    ],
+)
+
+swift_syntax_library(
     name = "SwiftSyntaxMacrosTestSupport",
     testonly = True,
     deps = [
@@ -251,6 +264,7 @@ swift_syntax_library(
         ":SwiftParser",
         ":SwiftSyntaxMacroExpansion",
         ":SwiftSyntaxMacros",
+        ":SwiftSyntaxMacrosGenericTestSupport",
         ":_SwiftSyntaxTestSupport",
     ],
 )
@@ -300,6 +314,13 @@ cc_library(
 )
 
 swift_syntax_library(
+    name = "_SwiftSyntaxGenericTestSupport",
+    testonly = True,
+    deps = [
+    ],
+)
+
+swift_syntax_library(
     name = "_SwiftSyntaxTestSupport",
     testonly = True,
     deps = [
@@ -307,6 +328,7 @@ swift_syntax_library(
         ":SwiftSyntax",
         ":SwiftSyntaxBuilder",
         ":SwiftSyntaxMacroExpansion",
+        ":_SwiftSyntaxGenericTestSupport",
     ],
 )
 

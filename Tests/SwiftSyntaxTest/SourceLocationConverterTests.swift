@@ -206,7 +206,7 @@ final class SourceLocationConverterTests: XCTestCase {
     // FIXME: The current parser handles this fine but it’s a really bogus filename.
     // We ignore the directive because the multi-line string literal contains multiple segments.
     // We should probably justs disallow multi-line string literals for the `file` argument.
-    // cf https://github.com/apple/swift-syntax/issues/1831
+    // cf https://github.com/swiftlang/swift-syntax/issues/1831
     assertPresumedSourceLocation(
       #"""
       #sourceLocation(file: """

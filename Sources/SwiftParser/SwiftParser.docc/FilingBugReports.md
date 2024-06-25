@@ -12,7 +12,7 @@ If you encounter a case where printing the parsed syntax tree does not reproduce
     ```
     swift-parser-cli reduce /pth/to/file/that/does/not/roundtrip.swift
     ```
-2. File a bug report on <https://github.com/apple/swift-syntax/issues/new/choose> with the reduced source code or fix the issue yourself by following the steps in <doc:FixingBugs>. 
+2. File a bug report on <https://github.com/swiftlang/swift-syntax/issues/new/choose> with the reduced source code or fix the issue yourself by following the steps in <doc:FixingBugs>. 
 
 ## Parse of Valid Source Failed or Bad Diagnostic Produced
 
@@ -23,7 +23,7 @@ If you have source code that is parsed correctly by the current Swift compiler (
     swift-parser-cli print-diags /path/to/file.swift
     ``` 
 2. Remove as much code as possible from your test file and check if it still produces the same diagnostic. 
-3. File a bug report on <https://github.com/apple/swift-syntax/issues/new/choose> with the reduced source code or fix the issue yourself by following the steps in <doc:FixingBugs>.
+3. File a bug report on <https://github.com/swiftlang/swift-syntax/issues/new/choose> with the reduced source code or fix the issue yourself by following the steps in <doc:FixingBugs>.
 
 ## Parse of Valid Source Code Produced an Invalid Syntax Tree
 
@@ -34,4 +34,4 @@ If you have valid source code that produced a syntax tree which doesn’t repres
     swift-parser-cli print-tree /path/to/file.swift
     ``` 
 2. Remove as much code as possible from your test file and check if it still produces the same invalid tree
-3. File a bug report on <https://github.com/apple/swift-syntax/issues/new/choose> with the reduced source code or fix the issue yourself by following the steps in <doc:FixingBugs>.
+3. File a bug report on <https://github.com/swiftlang/swift-syntax/issues/new/choose> with the reduced source code or fix the issue yourself by following the steps in <doc:FixingBugs>.

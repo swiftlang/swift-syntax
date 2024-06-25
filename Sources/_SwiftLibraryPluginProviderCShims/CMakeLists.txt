@@ -1,0 +1,6 @@
+add_library(_SwiftLibraryPluginProviderCShims STATIC
+  LoadLibrary.c
+)
+target_include_directories(_SwiftLibraryPluginProviderCShims PUBLIC "include")
+set_property(GLOBAL APPEND PROPERTY SWIFT_EXPORTS _SwiftLibraryPluginProviderCShims)
+install(TARGETS _SwiftLibraryPluginProviderCShims EXPORT SwiftSyntaxTargets)

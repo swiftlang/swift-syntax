@@ -9,7 +9,9 @@
 add_swift_syntax_library(SwiftLibraryPluginProvider
   LibraryPluginProvider.swift
 )
-
+target_link_libraries(SwiftLibraryPluginProvider PRIVATE
+  _SwiftLibraryPluginProviderCShims
+)
 target_link_swift_syntax_libraries(SwiftLibraryPluginProvider PUBLIC
   SwiftSyntaxMacros
   SwiftCompilerPluginMessageHandling

@@ -88,11 +88,18 @@ extension MacroExpansionContext {
     return location(of: node, at: .afterLeadingTrivia, filePathMode: .fileID)
   }
 
+  #if compiler(>=6.0)
+  @available(*, deprecated, message: "`MacroExpansionContext` conformance must implement `lexicalContext`")
+  public var lexicalContext: [Syntax] {
+    return []
+  }
+  #else
   public var lexicalContext: [Syntax] {
     fatalError(
       "`MacroExpansionContext` conformance must implement `lexicalContext`"
     )
   }
+  #endif
 }
 
 /// Diagnostic message used for thrown errors.

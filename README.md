@@ -4,7 +4,7 @@ The swift-syntax package is a set of libraries that work on a source-accurate tr
 
 ## Documentation
 
-You can read SwiftSyntax’s documentation on [swiftpackageindex.com](https://swiftpackageindex.com/apple/swift-syntax/documentation).
+You can read SwiftSyntax’s documentation on [swiftpackageindex.com](https://swiftpackageindex.com/swiftlang/swift-syntax/documentation).
 
 A great way to interactively explore the SwiftSyntax tree of a source file is https://swift-ast-explorer.com, developed by [@kishikawakatsumi](https://github.com/kishikawakatsumi).
 

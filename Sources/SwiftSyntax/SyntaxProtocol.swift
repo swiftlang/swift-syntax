@@ -186,7 +186,7 @@ extension SyntaxProtocol {
   }
 }
 
-// MARK: Children / parent
+// MARK: Children / parent / ancestor
 
 extension SyntaxProtocol {
   /// A sequence over the children of this node.
@@ -237,6 +237,18 @@ extension SyntaxProtocol {
   @available(*, deprecated, message: "Use previousToken(viewMode:) instead")
   public var previousToken: TokenSyntax? {
     return self.previousToken(viewMode: .sourceAccurate)
+  }
+
+  /// Returns this node or the first ancestor that satisfies `condition`.
+  public func ancestorOrSelf<T>(mapping map: (Syntax) -> T?) -> T? {
+    var walk: Syntax? = Syntax(self)
+    while let unwrappedParent = walk {
+      if let mapped = map(unwrappedParent) {
+        return mapped
+      }
+      walk = unwrappedParent.parent
+    }
+    return nil
   }
 }
 

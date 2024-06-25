@@ -13,22 +13,19 @@
 import Foundation
 import SwiftSyntax
 
-public struct LexicalScopes {
-
+public enum LexicalScopes {
   /// Given syntax node position, returns all available labeled statements.
-  public static func lookupLabeledStmts(at syntax: SyntaxProtocol)
-    -> [LabeledStmtSyntax]
-  {
+  public static func lookupLabeledStmts(at syntax: SyntaxProtocol) -> [LabeledStmtSyntax] {
     guard let scope = syntax.scope else { return [] }
     return scope.lookupLabeledStmts(at: syntax)
   }
 
   /// Given syntax node position, returns the current switch case and it's fallthrough destination.
-  public static func lookupFallthroughSourceAndDest(at syntax: SyntaxProtocol) -> (
-    SwitchCaseSyntax?, SwitchCaseSyntax?
-  ) {
+  public static func lookupFallthroughSourceAndDest(
+    at syntax: SyntaxProtocol
+  ) -> (source: SwitchCaseSyntax?, destination: SwitchCaseSyntax?) {
     guard let scope = syntax.scope else { return (nil, nil) }
-    return scope.lookupFallthroughSourceAndDest(at: syntax)
+    return scope.lookupFallthroughSourceAndDestination(at: syntax)
   }
 
   /// Given syntax node position, returns the closest ancestor catch node.

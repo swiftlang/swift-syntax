@@ -18,10 +18,6 @@ final class testSimpleQueries: XCTestCase {
   func testLabeledStmtLookupThreeNestedScopes() {
     assertLexicalScopeQuery(
       source: """
-        while true {
-          5️⃣break
-        }
-
         1️⃣one: for i in 1..<10 {
           while true {
             2️⃣two: do {
@@ -34,7 +30,21 @@ final class testSimpleQueries: XCTestCase {
       methodUnderTest: { argument in
         LexicalScopes.lookupLabeledStmts(at: argument)
       },
-      expected: ["3️⃣": ["2️⃣", "1️⃣"], "4️⃣": ["1️⃣"], "5️⃣": []]
+      expected: ["3️⃣": ["2️⃣", "1️⃣"], "4️⃣": ["1️⃣"]]
+    )
+  }
+
+  func testNoLabeledStatements() {
+    assertLexicalScopeQuery(
+      source: """
+        while true {
+          1️⃣break
+        }
+        """,
+      methodUnderTest: { argument in
+        LexicalScopes.lookupLabeledStmts(at: argument)
+      },
+      expected: ["1️⃣": []]
     )
   }
 
@@ -63,21 +73,21 @@ final class testSimpleQueries: XCTestCase {
     assertLexicalScopeQuery(
       source: """
         func foo() {
-            7️⃣print(0)
+          7️⃣print(0)
         }
 
         switch a {
         1️⃣case 1:
-            2️⃣print(1)
+          2️⃣print(1)
         3️⃣case 2:
-            4️⃣print(2)
+          4️⃣print(2)
         5️⃣default:
-            6️⃣print(3)
+          6️⃣print(3)
         }
         """,
       methodUnderTest: { argument in
         let result = LexicalScopes.lookupFallthroughSourceAndDest(at: argument)
-        return [result.0, result.1]
+        return [result.source, result.destination]
       },
       expected: ["2️⃣": ["1️⃣", "3️⃣"], "4️⃣": ["3️⃣", "5️⃣"], "6️⃣": ["5️⃣", nil], "7️⃣": [nil, nil]]
     )
@@ -112,9 +122,9 @@ final class testSimpleQueries: XCTestCase {
         1️⃣func foo() rethrows {
           2️⃣do {
             3️⃣do {
-                try 4️⃣f()
+              try 4️⃣f()
             } catch {
-                try 5️⃣f()
+              try 5️⃣f()
             }
           } catch {
             6️⃣try! 7️⃣f()

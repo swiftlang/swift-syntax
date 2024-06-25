@@ -15,7 +15,7 @@ For simplicity, this article assumes that 509 is the current swift-syntax versio
 Any given version macro can depend on multiple major swift-syntax versions at once. For example, if a macro supports both swift-syntax 509 and swift-syntax 510, it may declare its dependency on swift-syntax as 
 
 ```
-.package(url: "https://github.com/apple/swift-syntax.git", "509.0.0"..<"511.0.0"),
+.package(url: "https://github.com/swiftlang/swift-syntax.git", "509.0.0"..<"511.0.0"),
 ```
 
 In order to handle breaking API changes, clients can wrap uses of such APIs in conditional compilation clauses that check the version of swift-syntax it is building against. All versions of swift-syntax ≥ 509 will include an empty `SwiftSyntaxVersion509` module, swift-syntax ≥ 510 will include both a `SwiftSyntaxVersion510` and `SwiftSyntaxVersion509` module, and so on for any new releases. This allows clients to write

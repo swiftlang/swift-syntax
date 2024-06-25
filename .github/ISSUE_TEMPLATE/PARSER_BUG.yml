@@ -4,12 +4,12 @@ labels: [bug, SwiftParser]
 body:
  - type: markdown
    attributes:
-     value: Thanks for taking the time to fill out this bug report! We would really appreciate if you could take the time to reduce the issue as described in [Filing Parser Bug Reports](https://swiftpackageindex.com/apple/swift-syntax/main/documentation/swiftparser/filingbugreports).
+     value: Thanks for taking the time to fill out this bug report! We would really appreciate if you could take the time to reduce the issue as described in [Filing Parser Bug Reports](https://swiftpackageindex.com/swiftlang/swift-syntax/main/documentation/swiftparser/filingbugreports).
  - type: dropdown
    id: issue-type
    attributes:
      label: Issue Kind
-     description: What kind of issue is this? See [Filing Parser Bug Reports](https://swiftpackageindex.com/apple/swift-syntax/main/documentation/swiftparser/filingbugreports) for more details.
+     description: What kind of issue is this? See [Filing Parser Bug Reports](https://swiftpackageindex.com/swiftlang/swift-syntax/main/documentation/swiftparser/filingbugreports) for more details.
      options:
        - Round-Trip Failure
        - Parser Crash

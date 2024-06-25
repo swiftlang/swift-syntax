@@ -197,7 +197,7 @@ public class Child {
        The old string-based implementation returned "Token" to ensure that `tokenKind` is not nil
        and that `isToken` computed-property will return true, but the value "Token" had never been
        used in other cases. We should try to remove this computed property altogether in the issue:
-       https://github.com/apple/swift-syntax/issues/2010
+       https://github.com/swiftlang/swift-syntax/issues/2010
        */
         return .unknown
       }

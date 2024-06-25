@@ -23,8 +23,8 @@ Furthermore, SwiftSyntax uses [`SwiftSyntaxBuilder`](../Sources/SwiftSyntaxBuild
 
 [**Swift AST Explorer**](https://swift-ast-explorer.com/): A Swift AST visualizer.
 
-[**Swift Stress Tester**](https://github.com/apple/swift-stress-tester): A test driver for `sourcekitd` and Swift evolution.
+[**Swift Stress Tester**](https://github.com/swiftlang/swift-stress-tester): A test driver for `sourcekitd` and Swift evolution.
 
-[**swift-format**](https://github.com/apple/swift-format): Formatting technology for Swift source code.
+[**swift-format**](https://github.com/swiftlang/swift-format): Formatting technology for Swift source code.
 
 [**SwiftLint**](https://github.com/realm/SwiftLint): A tool to enforce Swift style and conventions.

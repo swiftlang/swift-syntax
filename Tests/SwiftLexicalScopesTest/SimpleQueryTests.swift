@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-import SwiftLexicalScopes
+@_spi(Testing) import SwiftLexicalScopes
 import XCTest
 
 final class testSimpleQueries: XCTestCase {

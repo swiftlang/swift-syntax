@@ -15,13 +15,13 @@ import SwiftSyntax
 
 public enum LexicalScopes {
   /// Given syntax node position, returns all available labeled statements.
-  public static func lookupLabeledStmts(at syntax: SyntaxProtocol) -> [LabeledStmtSyntax] {
+  @_spi(Compiler) @_spi(Testing) public static func lookupLabeledStmts(at syntax: SyntaxProtocol) -> [LabeledStmtSyntax] {
     guard let scope = syntax.scope else { return [] }
     return scope.lookupLabeledStmts(at: syntax)
   }
 
   /// Given syntax node position, returns the current switch case and it's fallthrough destination.
-  public static func lookupFallthroughSourceAndDest(
+  @_spi(Compiler) @_spi(Testing) public static func lookupFallthroughSourceAndDest(
     at syntax: SyntaxProtocol
   ) -> (source: SwitchCaseSyntax?, destination: SwitchCaseSyntax?) {
     guard let scope = syntax.scope else { return (nil, nil) }
@@ -29,13 +29,13 @@ public enum LexicalScopes {
   }
 
   /// Given syntax node position, returns the closest ancestor catch node.
-  public static func lookupCatchNode(at syntax: SyntaxProtocol) -> Syntax? {
+  @_spi(Compiler) @_spi(Testing) public static func lookupCatchNode(at syntax: SyntaxProtocol) -> Syntax? {
     guard let scope = syntax.scope else { return nil }
     return scope.lookupCatchNode(at: Syntax(syntax))
   }
 
   /// Given name and syntax node position, return referenced declaration.
-  public static func lookupDeclarationFor(name: String, at syntax: SyntaxProtocol) -> Syntax? {
+  @_spi(Compiler) @_spi(Testing) public static func lookupDeclarationFor(name: String, at syntax: SyntaxProtocol) -> Syntax? {
     guard let scope = syntax.scope else { return nil }
     return scope.getDeclarationFor(name: name, at: syntax)
   }

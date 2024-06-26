@@ -82,5 +82,9 @@ add_compile_definitions(
   $<$<COMPILE_LANGUAGE:Swift>:SWIFT_SYNTAX_BUILD_USING_CMAKE>
 )
 
+if(${SWIFTSYNTAX_EXCLUDE_FROM_ALL})
+  set_directory_properties(PROPERTIES EXCLUDE_FROM_ALL YES)
+endif()
+
 add_subdirectory(Sources)
 add_subdirectory(cmake/modules)

@@ -676,7 +676,7 @@ final class StatementTests: ParserTestCase {
   }
 
   func testSkippingOverEmptyStringLiteral() {
-    // https://github.com/apple/swift-syntax/issues/1247
+    // https://github.com/swiftlang/swift-syntax/issues/1247
     assertParse(
       """
       if pℹ️{""1️⃣

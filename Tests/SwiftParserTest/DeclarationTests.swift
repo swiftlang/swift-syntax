@@ -3105,7 +3105,7 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
-  // https://github.com/apple/swift-syntax/issues/2273
+  // https://github.com/swiftlang/swift-syntax/issues/2273
   func testEnumCaseWithGenericParameter() {
     assertParse(
       """

@@ -73,9 +73,9 @@ nodes will need to be changed in tandem. For example, the
 system will not allow changes to SwiftSyntax that break `swift-stress-tester`
 without a paired change to that repository.
 
-[SyntaxSupport]: https://github.com/apple/swift-syntax/tree/main/CodeGeneration/Sources/SyntaxSupport
-[swift-stress-tester]: https://github.com/apple/swift-stress-tester
-[ParserBasics]: https://github.com/apple/swift-syntax/tree/main/Sources/SwiftParser/SwiftParser.docc/ParsingBasics.md
+[SyntaxSupport]: https://github.com/swiftlang/swift-syntax/tree/main/CodeGeneration/Sources/SyntaxSupport
+[swift-stress-tester]: https://github.com/swiftlang/swift-stress-tester
+[ParserBasics]: https://github.com/swiftlang/swift-syntax/tree/main/Sources/SwiftParser/SwiftParser.docc/ParsingBasics.md
 
 @Comment {
   When docc resolves https://github.com/apple/swift-docc/issues/255, `ParserBasic` should be an inter-target link.

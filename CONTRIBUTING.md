@@ -19,7 +19,7 @@ swift-syntax is a SwiftPM package, so you can build and test it using anything t
 
 ## Formatting
 
-swift-syntax is formatted using [swift-format](http://github.com/apple/swift-format) to ensure a consistent style.
+swift-syntax is formatted using [swift-format](http://github.com/swiftlang/swift-format) to ensure a consistent style.
 
 To format your changes run the formatter using the following command
 ```bash

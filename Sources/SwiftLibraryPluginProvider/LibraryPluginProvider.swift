@@ -142,11 +142,11 @@ private func _loadLibrary(_ path: String) throws -> UnsafeMutableRawPointer {
 private func _loadLibrary(_ path: String) throws -> UnsafeMutableRawPointer {
   guard let dlHandle = dlopen(path, RTLD_LAZY | RTLD_LOCAL) else {
 #if canImport(Android)
-    let err = dlerror()!
+    let err = String(cString: dlerror()!)
 #else
-    let err = dlerror()
+    let err = String(cString: dlerror())
 #endif
-    throw LibraryPluginError(message: "loader error: \(String(cString: err))")
+    throw LibraryPluginError(message: "loader error: \(err)")
   }
   return dlHandle
 }

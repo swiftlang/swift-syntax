@@ -51,16 +51,16 @@ extension Scope {
 
   /// Given syntax node position, returns all available labeled statements.
   func lookupLabeledStmts(at syntax: SyntaxProtocol) -> [LabeledStmtSyntax] {
-    return lookupLabeledStmtsHelper(at: syntax.parent, accumulator: [])
+    return lookupLabeledStmtsHelper(at: syntax.parent)
   }
 
   /// Helper method to recursively collect labeled statements from the syntax node's parents.
-  private func lookupLabeledStmtsHelper(at syntax: Syntax?, accumulator: [LabeledStmtSyntax]) -> [LabeledStmtSyntax] {
-    guard let syntax, !syntax.is(MemberBlockSyntax.self) else { return accumulator }
+  private func lookupLabeledStmtsHelper(at syntax: Syntax?) -> [LabeledStmtSyntax] {
+    guard let syntax, !syntax.is(MemberBlockSyntax.self) else { return [] }
     if let labeledStmtSyntax = syntax.as(LabeledStmtSyntax.self) {
-      return lookupLabeledStmtsHelper(at: labeledStmtSyntax.parent, accumulator: accumulator + [labeledStmtSyntax])
+      return [labeledStmtSyntax] + lookupLabeledStmtsHelper(at: labeledStmtSyntax.parent)
     } else {
-      return lookupLabeledStmtsHelper(at: syntax.parent, accumulator: accumulator)
+      return lookupLabeledStmtsHelper(at: syntax.parent)
     }
   }
 

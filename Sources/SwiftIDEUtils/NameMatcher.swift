@@ -102,6 +102,21 @@ public class NameMatcher: SyntaxAnyVisitor {
     return nil
   }
 
+  /// Finds the first position to resolve that is in the leading or trailing trivia of this token.
+  ///
+  /// If one is found, also returns the range of the trivia in which the position was found.
+  private func firstPositionToResolve(
+    inTriviaOf token: TokenSyntax
+  ) -> (position: AbsolutePosition, triviaRange: Range<AbsolutePosition>)? {
+    if let position = firstPositionToResolve(in: token.leadingTriviaRange) {
+      return (position, token.leadingTriviaRange)
+    }
+    if let position = firstPositionToResolve(in: token.trailingTriviaRange) {
+      return (position, token.trailingTriviaRange)
+    }
+    return nil
+  }
+
   // MARK: - addResolvedLocIfRequested overloads
 
   /// If a position should be resolved at at the start of `baseNameRange`, create a new `DeclNameLocation` to
@@ -205,13 +220,12 @@ public class NameMatcher: SyntaxAnyVisitor {
   }
 
   public override func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
-    while let baseNamePosition = firstPositionToResolve(in: token.leadingTriviaRange)
-      ?? firstPositionToResolve(in: token.trailingTriviaRange)
-    {
+    while let (baseNamePosition, triviaRange) = firstPositionToResolve(inTriviaOf: token) {
       // Parse the comment from the position that we want to resolve. This should parse any function calls or compound decl names, the rest of
       // the comment will probably be parsed as garbage but that's OK because we don't actually care about it.
       let positionOffsetInToken = baseNamePosition.utf8Offset - token.position.utf8Offset
-      let commentTree = token.syntaxTextBytes[positionOffsetInToken...]
+      let triviaRangeEndOffsetInToken = triviaRange.upperBound.utf8Offset - token.position.utf8Offset
+      let commentTree = token.syntaxTextBytes[positionOffsetInToken..<triviaRangeEndOffsetInToken]
         .withUnsafeBufferPointer { (buffer) -> ExprSyntax in
           var parser = Parser(buffer)
           return ExprSyntax.parse(from: &parser)

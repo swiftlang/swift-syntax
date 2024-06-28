@@ -12,7 +12,7 @@
 
 extension DiagnosticDecorator where Self == ANSIDiagnosticDecorator {
   /// - SeeAlso: ``ANSIDiagnosticDecorator``
-  static var ANSI: Self {
+  public static var ANSI: Self {
     Self()
   }
 }
@@ -21,9 +21,9 @@ extension DiagnosticDecorator where Self == ANSIDiagnosticDecorator {
 /// buffer outlines, and code highlights—by applying severity-based prefixes and ANSI color codes.
 ///
 /// This decorator uses ANSI codes—control characters specialized for text formatting in terminals—to provide visual cues.
-@_spi(Testing) public struct ANSIDiagnosticDecorator: DiagnosticDecorator {
+public struct ANSIDiagnosticDecorator: DiagnosticDecorator {
 
-  @_spi(Testing) public init() {}
+  public init() {}
 
   /// Decorates a diagnostic message by appending a severity-based prefix and applying ANSI color codes.
   ///
@@ -46,7 +46,7 @@ extension DiagnosticDecorator where Self == ANSIDiagnosticDecorator {
   /// ```bash
   /// printf "\e[1;31merror: \e[1;39mFile not found\e[0;0m\n"
   /// ```
-  @_spi(Testing) public func decorateMessage(
+  public func decorateMessage(
     _ message: String,
     basedOnSeverity severity: DiagnosticSeverity
   ) -> String {
@@ -85,7 +85,7 @@ extension DiagnosticDecorator where Self == ANSIDiagnosticDecorator {
   /// - Parameter bufferOutline: The string representation of the source code buffer outline.
   ///
   /// - Returns: A string featuring ANSI cyan color codes applied to the source code buffer outline.
-  @_spi(Testing) public func decorateBufferOutline(_ bufferOutline: String) -> String {
+  public func decorateBufferOutline(_ bufferOutline: String) -> String {
     colorizeIfNotEmpty(bufferOutline, usingAnnotation: .bufferOutline)
   }
 
@@ -109,7 +109,7 @@ extension DiagnosticDecorator where Self == ANSIDiagnosticDecorator {
   /// ```bash
   /// printf "\e[4;39mlet x = 10\e[0;0m\n"
   /// ```
-  @_spi(Testing) public func decorateHighlight(_ highlight: String) -> (
+  public func _decorateHighlight(_ highlight: String) -> (
     highlightedSourceCode: String, additionalHighlightedLine: String?
   ) {
     (

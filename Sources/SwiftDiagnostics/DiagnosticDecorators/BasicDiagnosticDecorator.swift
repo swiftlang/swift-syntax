@@ -12,7 +12,7 @@
 
 extension DiagnosticDecorator where Self == BasicDiagnosticDecorator {
   /// - Seealso: ``BasicDiagnosticDecorator``
-  static var basic: Self {
+  public static var basic: Self {
     Self()
   }
 }
@@ -21,9 +21,9 @@ extension DiagnosticDecorator where Self == BasicDiagnosticDecorator {
 /// buffer outlines, and code highlights—by appending severity-based prefixes.
 ///
 /// Unlike `ANSIDiagnosticDecorator`, this decorator does not use ANSI color codes and solely relies on textual cues.
-@_spi(Testing) public struct BasicDiagnosticDecorator: DiagnosticDecorator {
+public struct BasicDiagnosticDecorator: DiagnosticDecorator {
 
-  @_spi(Testing) public init() {}
+  public init() {}
 
   /// Decorates a diagnostic message by appending a severity-based prefix.
   ///
@@ -32,7 +32,7 @@ extension DiagnosticDecorator where Self == BasicDiagnosticDecorator {
   ///   - severity: The severity level associated with the diagnostic message.
   ///
   /// - Returns: A string that combines the severity-specific prefix and the original diagnostic message.
-  @_spi(Testing) public func decorateMessage(
+  public func decorateMessage(
     _ message: String,
     basedOnSeverity severity: DiagnosticSeverity
   ) -> String {
@@ -57,7 +57,7 @@ extension DiagnosticDecorator where Self == BasicDiagnosticDecorator {
   /// - Parameter bufferOutline: The string representation of the source code buffer outline.
   ///
   /// - Returns: The original source code buffer outline.
-  @_spi(Testing) public func decorateBufferOutline(_ bufferOutline: String) -> String {
+  public func decorateBufferOutline(_ bufferOutline: String) -> String {
     return bufferOutline
   }
 
@@ -68,7 +68,7 @@ extension DiagnosticDecorator where Self == BasicDiagnosticDecorator {
   /// - Returns: A tuple containing:
   ///   - `highlightedSourceCode`: The original text segment.
   ///   - `additionalHighlightedLine`: Always nil.
-  @_spi(Testing) public func decorateHighlight(_ highlight: String) -> (
+  public func _decorateHighlight(_ highlight: String) -> (
     highlightedSourceCode: String, additionalHighlightedLine: String?
   ) {
     return (highlightedSourceCode: highlight, additionalHighlightedLine: nil)

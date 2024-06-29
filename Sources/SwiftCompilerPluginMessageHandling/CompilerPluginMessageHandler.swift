@@ -228,6 +228,10 @@ public class PluginProviderMessageHandler<Provider: PluginProvider>: PluginMessa
   }
 }
 
+@_spi(PluginMessage)
+@available(*, deprecated, renamed: "PluginProviderMessageHandler")
+public typealias CompilerPluginMessageHandler<Provider: PluginProvider> = PluginProviderMessageHandler<Provider>
+
 struct UnimplementedError: Error, CustomStringConvertible {
   var description: String { "unimplemented" }
 }

@@ -15,10 +15,8 @@ let package = Package(
   products: [
     .library(name: "SwiftBasicFormat", targets: ["SwiftBasicFormat"]),
     .library(name: "SwiftCompilerPlugin", targets: ["SwiftCompilerPlugin"]),
-    .library(name: "SwiftCompilerPluginMessageHandling", targets: ["SwiftCompilerPluginMessageHandling"]),
     .library(name: "SwiftDiagnostics", targets: ["SwiftDiagnostics"]),
     .library(name: "SwiftIDEUtils", targets: ["SwiftIDEUtils"]),
-    .library(name: "SwiftLibraryPluginProvider", targets: ["SwiftLibraryPluginProvider"]),
     .library(name: "SwiftOperators", targets: ["SwiftOperators"]),
     .library(name: "SwiftParser", targets: ["SwiftParser"]),
     .library(name: "SwiftParserDiagnostics", targets: ["SwiftParserDiagnostics"]),
@@ -28,10 +26,9 @@ let package = Package(
     .library(name: "SwiftSyntaxMacros", targets: ["SwiftSyntaxMacros"]),
     .library(name: "SwiftSyntaxMacroExpansion", targets: ["SwiftSyntaxMacroExpansion"]),
     .library(name: "SwiftSyntaxMacrosTestSupport", targets: ["SwiftSyntaxMacrosTestSupport"]),
-    .library(
-      name: "SwiftSyntaxMacrosGenericTestSupport",
-      targets: ["SwiftSyntaxMacrosGenericTestSupport"]
-    ),
+    .library(name: "SwiftSyntaxMacrosGenericTestSupport", targets: ["SwiftSyntaxMacrosGenericTestSupport"]),
+    .library(name: "_SwiftCompilerPluginMessageHandling", targets: ["SwiftCompilerPluginMessageHandling"]),
+    .library(name: "_SwiftLibraryPluginProvider", targets: ["SwiftLibraryPluginProvider"]),
   ],
   targets: [
     // MARK: - Internal helper targets

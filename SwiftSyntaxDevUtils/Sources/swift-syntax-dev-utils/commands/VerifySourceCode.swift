@@ -129,6 +129,7 @@ struct VerifySpiYmlExecutor {
       .components(separatedBy: "\n")
       .filter({ !$0.matches(of: extractNameRegex).isEmpty })
       .map { $0.replacing(extractNameRegex) { $0.1 } }
+      .filter({ !$0.hasPrefix("_") })
       .sorted()
   }
   /// Returns all targets listed in `.spi.yml`.

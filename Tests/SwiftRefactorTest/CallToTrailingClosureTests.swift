@@ -80,7 +80,7 @@ final class CallToTrailingClosuresTest: XCTestCase {
       """
 
     // TODO: The ident here is not great.
-    // https://github.com/apple/swift-syntax/issues/1473
+    // https://github.com/swiftlang/swift-syntax/issues/1473
     let expected: ExprSyntax = """
       foo({ label in
           return 1

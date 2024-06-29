@@ -381,4 +381,11 @@ class NameMatcherTests: XCTestCase {
       ]
     )
   }
+
+  func testPositionAtSpaceInFrontOfIdentifier() {
+    assertNameMatcherResult(
+      " 1️⃣ fn",
+      expected: []
+    )
+  }
 }

@@ -468,7 +468,6 @@ public let DECL_NODES: [Node] = [
           .keyword(.reasync),
           .keyword(.required),
           .keyword(.static),
-          .keyword(.transferring),
           .keyword(.unowned),
           .keyword(.weak),
           .keyword(.sending),

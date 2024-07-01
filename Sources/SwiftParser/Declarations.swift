@@ -23,7 +23,7 @@ extension DeclarationModifier {
       .borrowing, .class, .consuming, .convenience, .distributed, .dynamic,
       .final, .indirect, .infix, .isolated, .lazy, .mutating, .nonmutating,
       .optional, .override, .postfix, .prefix, .reasync, .required,
-      .rethrows, .static, .weak, .transferring, .sending:
+      .rethrows, .static, .weak, .sending:
       return false
     case .fileprivate, .internal, .nonisolated, .package, .open, .private,
       .public, .unowned:

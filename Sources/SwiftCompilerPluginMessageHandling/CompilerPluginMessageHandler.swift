@@ -74,15 +74,21 @@ struct HostCapability {
 ///
 /// The low level connection and the provider is injected by the client.
 @_spi(PluginMessage)
-public class CompilerPluginMessageListener<Connection: MessageConnection, Provider: PluginProvider> {
+public class CompilerPluginMessageListener<Connection: MessageConnection, Handler: PluginMessageHandler> {
   /// Message channel for bidirectional communication with the plugin host.
   let connection: Connection
 
-  let handler: CompilerPluginMessageHandler<Provider>
+  let handler: Handler
 
-  public init(connection: Connection, provider: Provider) {
+  public init(connection: Connection, messageHandler: Handler) {
     self.connection = connection
-    self.handler = CompilerPluginMessageHandler(provider: provider)
+    self.handler = messageHandler
+  }
+
+  public init<Provider: PluginProvider>(connection: Connection, provider: Provider)
+  where Handler == PluginProviderMessageHandler<Provider> {
+    self.connection = connection
+    self.handler = PluginProviderMessageHandler(provider: provider)
   }
 
   /// Run the main message listener loop.
@@ -91,11 +97,26 @@ public class CompilerPluginMessageListener<Connection: MessageConnection, Provid
   /// On internal errors, such as I/O errors or JSON serialization errors, print
   /// an error message and `exit(1)`
   public func main() {
+    #if os(WASI)
+    // Rather than blocking on read(), let the host tell us when there's data.
+    readabilityHandler = { _ = self.handleNextMessage() }
+    #else
+    while handleNextMessage() {}
+    #endif
+  }
+
+  /// Receives and handles a single message from the plugin host.
+  ///
+  /// - Returns: `true` if there was a message to read, `false`
+  /// if the end-of-file was reached.
+  private func handleNextMessage() -> Bool {
     do {
-      while let message = try connection.waitForNextMessage(HostToPluginMessage.self) {
-        let result = handler.handleMessage(message)
-        try connection.sendMessage(result)
+      guard let message = try connection.waitForNextMessage(HostToPluginMessage.self) else {
+        return false
       }
+      let result = handler.handleMessage(message)
+      try connection.sendMessage(result)
+      return true
     } catch {
       // Emit a diagnostic and indicate failure to the plugin host,
       // and exit with an error code.
@@ -105,10 +126,18 @@ public class CompilerPluginMessageListener<Connection: MessageConnection, Provid
   }
 }
 
-/// 'CompilerPluginMessageHandler' is a type that handle a message and do the
-/// corresponding operation.
+/// A type that handles a plugin message and returns a response.
+///
+/// - SeeAlso: ``PluginProviderMessageHandler``
 @_spi(PluginMessage)
-public class CompilerPluginMessageHandler<Provider: PluginProvider> {
+public protocol PluginMessageHandler {
+  /// Handles a single message received from the plugin host.
+  func handleMessage(_ message: HostToPluginMessage) -> PluginToHostMessage
+}
+
+/// A `PluginMessageHandler` that uses a `PluginProvider`.
+@_spi(PluginMessage)
+public class PluginProviderMessageHandler<Provider: PluginProvider>: PluginMessageHandler {
   /// Object to provide actual plugin functions.
   let provider: Provider
 
@@ -199,6 +228,10 @@ public class CompilerPluginMessageHandler<Provider: PluginProvider> {
   }
 }
 
+@_spi(PluginMessage)
+@available(*, deprecated, renamed: "PluginProviderMessageHandler")
+public typealias CompilerPluginMessageHandler<Provider: PluginProvider> = PluginProviderMessageHandler<Provider>
+
 struct UnimplementedError: Error, CustomStringConvertible {
   var description: String { "unimplemented" }
 }
@@ -216,3 +249,31 @@ extension PluginProvider {
     throw UnimplementedError()
   }
 }
+
+#if compiler(>=6) && os(WASI)
+
+/// A callback invoked by the Wasm Host when new data is available on `stdin`.
+///
+/// This is safe to access without serialization as Wasm plugins are single-threaded.
+nonisolated(unsafe) private var readabilityHandler: () -> Void = {
+  fatalError(
+    """
+    CompilerPlugin.main wasn't called. Did you annotate your plugin with '@main'?
+    """
+  )
+}
+
+@_expose(wasm, "swift_wasm_macro_v1_pump")
+@_cdecl("swift_wasm_macro_v1_pump")
+func wasmPump() {
+  readabilityHandler()
+}
+
+// we can't nest the whole #if-#else in '#if os(WASI)' due to a bug where
+// '#if compiler' directives have to be the top-level #if, otherwise
+// the compiler doesn't skip unknown syntax.
+#elseif os(WASI)
+
+#error("Building swift-syntax for WebAssembly requires compiler version 6.0 or higher.")
+
+#endif

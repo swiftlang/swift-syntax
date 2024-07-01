@@ -669,6 +669,17 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.exprList
 }
 
+/// A list of function parameters that are type annotated and a label.
+/// The function parameters are represented by `FunctionParameterListSyntax`.
+/// 
+/// ### Example
+/// 
+/// ```swift
+/// func foo(bar: Int, baz: Int) {
+/// 
+/// }
+/// ```
+///
 /// ### Children
 /// 
 /// ``FunctionParameterSyntax`` `*`

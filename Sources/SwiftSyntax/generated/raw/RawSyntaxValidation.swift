@@ -796,7 +796,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
             .keyword("reasync"), 
             .keyword("required"), 
             .keyword("static"), 
-            .keyword("transferring"), 
             .keyword("unowned"), 
             .keyword("weak"), 
             .keyword("sending")
@@ -2297,7 +2296,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
             .keyword("_const"), 
             .keyword("borrowing"), 
             .keyword("consuming"), 
-            .keyword("transferring"), 
             .keyword("sending")
           ]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))

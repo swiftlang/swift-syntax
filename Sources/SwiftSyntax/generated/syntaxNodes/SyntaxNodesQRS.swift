@@ -1095,7 +1095,7 @@ public struct SimpleStringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable,
 ///
 /// ### Children
 /// 
-///  - `specifier`: (`inout` | `__shared` | `__owned` | `isolated` | `_const` | `borrowing` | `consuming` | `transferring` | `sending`)
+///  - `specifier`: (`inout` | `__shared` | `__owned` | `isolated` | `_const` | `borrowing` | `consuming` | `sending`)
 ///
 /// ### Contained in
 /// 
@@ -1159,7 +1159,6 @@ public struct SimpleTypeSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
   ///  - `_const`
   ///  - `borrowing`
   ///  - `consuming`
-  ///  - `transferring`
   ///  - `sending`
   public var specifier: TokenSyntax {
     get {

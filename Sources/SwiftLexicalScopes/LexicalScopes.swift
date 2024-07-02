@@ -22,7 +22,8 @@ extension SyntaxProtocol {
 
   /// Given syntax node position, returns the current switch case and it's fallthrough destination.
   @_spi(Compiler) @_spi(Testing) public func lookupFallthroughSourceAndDest()
-  -> (source: SwitchCaseSyntax?, destination: SwitchCaseSyntax?) {
+    -> (source: SwitchCaseSyntax?, destination: SwitchCaseSyntax?)
+  {
     guard let scope else { return (nil, nil) }
     return scope.lookupFallthroughSourceAndDestination(at: self)
   }
@@ -31,11 +32,5 @@ extension SyntaxProtocol {
   @_spi(Compiler) @_spi(Testing) public func lookupCatchNode() -> Syntax? {
     guard let scope else { return nil }
     return scope.lookupCatchNode(at: Syntax(self))
-  }
-
-  /// Given name and syntax node position, return referenced declaration.
-  @_spi(Compiler) @_spi(Testing) public func lookupDeclarationsFor(name: String) -> [Syntax] {
-    guard let scope else { return [] }
-    return scope.getDeclarationsFor(name: name, at: self)
   }
 }

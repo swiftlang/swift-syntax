@@ -68,7 +68,7 @@ final class testSimpleQueries: XCTestCase {
       expected: ["3️⃣": ["2️⃣"], "4️⃣": ["1️⃣"]]
     )
   }
-  
+
   func testLabeledStmtLookupClosureNestedWithinLoop() {
     assertLexicalScopeQuery(
       source: """
@@ -87,7 +87,7 @@ final class testSimpleQueries: XCTestCase {
       expected: ["3️⃣": ["2️⃣"], "4️⃣": ["1️⃣"]]
     )
   }
-  
+
   func testLabeledStmtLookupFunctionNestedWithinLoop() {
     assertLexicalScopeQuery(
       source: """

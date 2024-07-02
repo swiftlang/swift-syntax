@@ -21,9 +21,4 @@ class FileScope: Scope {
   init(syntax: SyntaxProtocol) {
     self.sourceSyntax = syntax
   }
-
-  func getDeclarationsFor(name: String, at syntax: SyntaxProtocol) -> [Syntax] {
-    // TODO: Implement the method
-    return []
-  }
 }

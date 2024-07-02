@@ -13,30 +13,29 @@
 import Foundation
 import SwiftSyntax
 
-public enum LexicalScopes {
+extension SyntaxProtocol {
   /// Given syntax node position, returns all available labeled statements.
-  @_spi(Compiler) @_spi(Testing) public static func lookupLabeledStmts(at syntax: SyntaxProtocol) -> [LabeledStmtSyntax] {
-    guard let scope = syntax.scope else { return [] }
-    return scope.lookupLabeledStmts(at: syntax)
+  @_spi(Compiler) @_spi(Testing) public func lookupLabeledStmts() -> [LabeledStmtSyntax] {
+    guard let scope else { return [] }
+    return scope.lookupLabeledStmts(at: self)
   }
 
   /// Given syntax node position, returns the current switch case and it's fallthrough destination.
-  @_spi(Compiler) @_spi(Testing) public static func lookupFallthroughSourceAndDest(
-    at syntax: SyntaxProtocol
-  ) -> (source: SwitchCaseSyntax?, destination: SwitchCaseSyntax?) {
-    guard let scope = syntax.scope else { return (nil, nil) }
-    return scope.lookupFallthroughSourceAndDestination(at: syntax)
+  @_spi(Compiler) @_spi(Testing) public func lookupFallthroughSourceAndDest()
+  -> (source: SwitchCaseSyntax?, destination: SwitchCaseSyntax?) {
+    guard let scope else { return (nil, nil) }
+    return scope.lookupFallthroughSourceAndDestination(at: self)
   }
 
   /// Given syntax node position, returns the closest ancestor catch node.
-  @_spi(Compiler) @_spi(Testing) public static func lookupCatchNode(at syntax: SyntaxProtocol) -> Syntax? {
-    guard let scope = syntax.scope else { return nil }
-    return scope.lookupCatchNode(at: Syntax(syntax))
+  @_spi(Compiler) @_spi(Testing) public func lookupCatchNode() -> Syntax? {
+    guard let scope else { return nil }
+    return scope.lookupCatchNode(at: Syntax(self))
   }
 
   /// Given name and syntax node position, return referenced declaration.
-  @_spi(Compiler) @_spi(Testing) public static func lookupDeclarationFor(name: String, at syntax: SyntaxProtocol) -> Syntax? {
-    guard let scope = syntax.scope else { return nil }
-    return scope.getDeclarationFor(name: name, at: syntax)
+  @_spi(Compiler) @_spi(Testing) public func lookupDeclarationsFor(name: String) -> [Syntax] {
+    guard let scope else { return [] }
+    return scope.getDeclarationsFor(name: name, at: self)
   }
 }

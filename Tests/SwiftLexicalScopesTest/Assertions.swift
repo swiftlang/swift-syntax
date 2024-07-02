@@ -88,7 +88,7 @@ func assertLexicalScopeQuery(
 ///   - expected: A dictionary of markers with reference location as keys and expected declaration as values.
 func assertLexicalNameLookup(
   source: String,
-  references: [String: String?]
+  references: [String: [String]]
 ) {
   assertLexicalScopeQuery(
     source: source,
@@ -98,8 +98,8 @@ func assertLexicalNameLookup(
         XCTFail("Couldn't find a token at \(argument)")
         return []
       }
-      return [LexicalScopes.lookupDeclarationFor(name: name, at: argument)]
+      return argument.lookupDeclarationsFor(name: name)
     },
-    expected: references.mapValues({ [$0] })
+    expected: references
   )
 }

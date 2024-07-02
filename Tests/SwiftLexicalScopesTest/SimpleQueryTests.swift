@@ -28,7 +28,7 @@ final class testSimpleQueries: XCTestCase {
         }
         """,
       methodUnderTest: { argument in
-        LexicalScopes.lookupLabeledStmts(at: argument)
+        argument.lookupLabeledStmts()
       },
       expected: ["3️⃣": ["2️⃣", "1️⃣"], "4️⃣": ["1️⃣"]]
     )
@@ -42,7 +42,7 @@ final class testSimpleQueries: XCTestCase {
         }
         """,
       methodUnderTest: { argument in
-        LexicalScopes.lookupLabeledStmts(at: argument)
+        argument.lookupLabeledStmts()
       },
       expected: ["1️⃣": []]
     )
@@ -63,7 +63,45 @@ final class testSimpleQueries: XCTestCase {
         }
         """,
       methodUnderTest: { argument in
-        LexicalScopes.lookupLabeledStmts(at: argument)
+        argument.lookupLabeledStmts()
+      },
+      expected: ["3️⃣": ["2️⃣"], "4️⃣": ["1️⃣"]]
+    )
+  }
+  
+  func testLabeledStmtLookupClosureNestedWithinLoop() {
+    assertLexicalScopeQuery(
+      source: """
+        1️⃣one: while true {
+          var a = {
+            2️⃣two: while true {
+              3️⃣break
+            }
+          }
+          4️⃣break
+        }
+        """,
+      methodUnderTest: { argument in
+        argument.lookupLabeledStmts()
+      },
+      expected: ["3️⃣": ["2️⃣"], "4️⃣": ["1️⃣"]]
+    )
+  }
+  
+  func testLabeledStmtLookupFunctionNestedWithinLoop() {
+    assertLexicalScopeQuery(
+      source: """
+        1️⃣one: while true {
+          func foo() {
+            2️⃣two: while true {
+              3️⃣break
+            }
+          }
+          4️⃣break
+        }
+        """,
+      methodUnderTest: { argument in
+        argument.lookupLabeledStmts()
       },
       expected: ["3️⃣": ["2️⃣"], "4️⃣": ["1️⃣"]]
     )
@@ -86,7 +124,7 @@ final class testSimpleQueries: XCTestCase {
         }
         """,
       methodUnderTest: { argument in
-        let result = LexicalScopes.lookupFallthroughSourceAndDest(at: argument)
+        let result = argument.lookupFallthroughSourceAndDest()
         return [result.source, result.destination]
       },
       expected: ["2️⃣": ["1️⃣", "3️⃣"], "4️⃣": ["3️⃣", "5️⃣"], "6️⃣": ["5️⃣", nil], "7️⃣": [nil, nil]]
@@ -105,14 +143,14 @@ final class testSimpleQueries: XCTestCase {
           }
         }
 
-        func bar() {
+        8️⃣func bar() {
           throw 7️⃣f()
         }
         """,
       methodUnderTest: { argument in
-        [LexicalScopes.lookupCatchNode(at: argument)]
+        return [argument.lookupCatchNode()]
       },
-      expected: ["3️⃣": ["2️⃣"], "5️⃣": ["4️⃣"], "6️⃣": ["1️⃣"], "7️⃣": [nil]]
+      expected: ["3️⃣": ["2️⃣"], "5️⃣": ["4️⃣"], "6️⃣": ["1️⃣"], "7️⃣": ["8️⃣"]]
     )
   }
 
@@ -133,7 +171,7 @@ final class testSimpleQueries: XCTestCase {
         }
         """,
       methodUnderTest: { argument in
-        [LexicalScopes.lookupCatchNode(at: argument)]
+        [argument.lookupCatchNode()]
       },
       expected: ["4️⃣": ["3️⃣"], "5️⃣": ["2️⃣"], "7️⃣": ["6️⃣"], "8️⃣": ["1️⃣"]]
     )

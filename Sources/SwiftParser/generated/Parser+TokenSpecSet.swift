@@ -808,10 +808,6 @@ extension DeclModifierSyntax {
     case _resultDependsOnSelf
     case required
     case `static`
-    #if compiler(>=5.8)
-    @_spi(ExperimentalLanguageFeatures)
-    #endif
-    case transferring
     case unowned
     case weak
     #if compiler(>=5.8)
@@ -889,8 +885,6 @@ extension DeclModifierSyntax {
         self = .required
       case TokenSpec(.static):
         self = .static
-      case TokenSpec(.transferring) where experimentalFeatures.contains(.transferringArgsAndResults):
-        self = .transferring
       case TokenSpec(.unowned):
         self = .unowned
       case TokenSpec(.weak):
@@ -972,8 +966,6 @@ extension DeclModifierSyntax {
         self = .required
       case TokenSpec(.static):
         self = .static
-      case TokenSpec(.transferring):
-        self = .transferring
       case TokenSpec(.unowned):
         self = .unowned
       case TokenSpec(.weak):
@@ -1055,8 +1047,6 @@ extension DeclModifierSyntax {
         return .keyword(.required)
       case .static:
         return .keyword(.static)
-      case .transferring:
-        return .keyword(.transferring)
       case .unowned:
         return .keyword(.unowned)
       case .weak:
@@ -1140,8 +1130,6 @@ extension DeclModifierSyntax {
         return .keyword(.required)
       case .static:
         return .keyword(.static)
-      case .transferring:
-        return .keyword(.transferring)
       case .unowned:
         return .keyword(.unowned)
       case .weak:
@@ -3354,10 +3342,6 @@ extension SimpleTypeSpecifierSyntax {
     #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
     #endif
-    case transferring
-    #if compiler(>=5.8)
-    @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _resultDependsOn
     #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
@@ -3380,8 +3364,6 @@ extension SimpleTypeSpecifierSyntax {
         self = .borrowing
       case TokenSpec(.consuming):
         self = .consuming
-      case TokenSpec(.transferring) where experimentalFeatures.contains(.transferringArgsAndResults):
-        self = .transferring
       case TokenSpec(._resultDependsOn) where experimentalFeatures.contains(.nonescapableTypes):
         self = ._resultDependsOn
       case TokenSpec(.sending) where experimentalFeatures.contains(.sendingArgsAndResults):
@@ -3407,8 +3389,6 @@ extension SimpleTypeSpecifierSyntax {
         self = .borrowing
       case TokenSpec(.consuming):
         self = .consuming
-      case TokenSpec(.transferring):
-        self = .transferring
       case TokenSpec(._resultDependsOn):
         self = ._resultDependsOn
       case TokenSpec(.sending):
@@ -3434,8 +3414,6 @@ extension SimpleTypeSpecifierSyntax {
         return .keyword(.borrowing)
       case .consuming:
         return .keyword(.consuming)
-      case .transferring:
-        return .keyword(.transferring)
       case ._resultDependsOn:
         return .keyword(._resultDependsOn)
       case .sending:
@@ -3463,8 +3441,6 @@ extension SimpleTypeSpecifierSyntax {
         return .keyword(.borrowing)
       case .consuming:
         return .keyword(.consuming)
-      case .transferring:
-        return .keyword(.transferring)
       case ._resultDependsOn:
         return .keyword(._resultDependsOn)
       case .sending:

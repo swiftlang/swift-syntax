@@ -109,9 +109,9 @@ extension DiagnosticDecorator where Self == ANSIDiagnosticDecorator {
   /// ```bash
   /// printf "\e[4;39mlet x = 10\e[0;0m\n"
   /// ```
-  @_spi(Testing) public func decorateHighlight(_ highlight: String) -> (
-    highlightedSourceCode: String, additionalHighlightedLine: String?
-  ) {
+  @_spi(Testing) public func decorateHighlight(
+    _ highlight: String
+  ) -> (highlightedSourceCode: String, additionalHighlightedLine: String?) {
     (
       highlightedSourceCode: colorizeIfNotEmpty(highlight, usingAnnotation: .sourceHighlight),
       additionalHighlightedLine: nil

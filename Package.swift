@@ -28,7 +28,7 @@ let package = Package(
     .library(name: "SwiftSyntaxMacros", targets: ["SwiftSyntaxMacros"]),
     .library(name: "SwiftSyntaxMacroExpansion", targets: ["SwiftSyntaxMacroExpansion"]),
     .library(name: "SwiftSyntaxMacrosTestSupport", targets: ["SwiftSyntaxMacrosTestSupport"]),
-    .library(name: "SwiftLexicalScopes", targets: ["SwiftLexicalScopes"]),
+    .library(name: "SwiftLexicalLookup", targets: ["SwiftLexicalLookup"]),
     .library(
       name: "SwiftSyntaxMacrosGenericTestSupport",
       targets: ["SwiftSyntaxMacrosGenericTestSupport"]
@@ -244,16 +244,16 @@ let package = Package(
       ]
     ),
 
-    // MARK: SwiftLexicalScopes
+    // MARK: SwiftLexicalLookup
 
     .target(
-      name: "SwiftLexicalScopes",
+      name: "SwiftLexicalLookup",
       dependencies: ["SwiftSyntax"]
     ),
 
     .testTarget(
-      name: "SwiftLexicalScopesTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftLexicalScopes"]
+      name: "SwiftLexicalLookupTest",
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftLexicalLookup"]
     ),
 
     // MARK: SwiftSyntaxMacrosGenericTestSupport

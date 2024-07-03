@@ -11,11 +11,11 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-@_spi(Testing) import SwiftLexicalScopes
+@_spi(Testing) import SwiftLexicalLookup
 import XCTest
 
 final class testSimpleQueries: XCTestCase {
-  func testLabeledStmtLookupThreeNestedScopes() {
+  func testLabeledStmtLookupThreeNested() {
     assertLexicalScopeQuery(
       source: """
         1️⃣one: for i in 1..<10 {
@@ -174,6 +174,23 @@ final class testSimpleQueries: XCTestCase {
         [argument.lookupCatchNode()]
       },
       expected: ["4️⃣": ["3️⃣"], "5️⃣": ["2️⃣"], "7️⃣": ["6️⃣"], "8️⃣": ["1️⃣"]]
+    )
+  }
+
+  func testCatchBlockLookupFromWithinExpressionList() {
+    assertLexicalScopeQuery(
+      source: """
+        1️⃣do {
+          try 2️⃣x + 3️⃣y + 4️⃣z
+          5️⃣try! 6️⃣x + 7️⃣y + 8️⃣z
+        } catch {
+          print(error)
+        }
+        """,
+      methodUnderTest: { argument in
+        [argument.lookupCatchNode()]
+      },
+      expected: ["2️⃣": ["1️⃣"], "3️⃣": ["1️⃣"], "4️⃣": ["1️⃣"], "6️⃣": ["5️⃣"], "7️⃣": ["5️⃣"], "8️⃣": ["5️⃣"]]
     )
   }
 }

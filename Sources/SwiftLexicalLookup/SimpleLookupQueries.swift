@@ -14,40 +14,27 @@ import Foundation
 import SwiftSyntax
 
 extension SyntaxProtocol {
-  /// Scope at the syntax node. Could be inherited from parent or introduced at the node.
-  var scope: Scope? {
-    switch self.syntaxNodeType {
-    case is SourceFileSyntax.Type:
-      FileScope(syntax: self)
-    default:
-      parent?.scope
-    }
+  /// Given syntax node position, returns all available labeled statements.
+  @_spi(Compiler) @_spi(Testing) public func lookupLabeledStmts() -> [LabeledStmtSyntax] {
+    return lookupLabeledStmts(at: self)
   }
-}
 
-/// Provide common functionality for specialized scope implementatations.
-protocol Scope {
-  /// The parent of this scope.
-  var parent: Scope? { get }
+  /// Given syntax node position, returns the current switch case and it's fallthrough destination.
+  @_spi(Compiler) @_spi(Testing) public func lookupFallthroughSourceAndDest()
+    -> (source: SwitchCaseSyntax?, destination: SwitchCaseSyntax?)
+  {
+    return lookupFallthroughSourceAndDestination(at: self)
+  }
 
-  /// Syntax node that introduces this protocol.
-  var sourceSyntax: SyntaxProtocol { get }
-}
-
-extension Scope {
-  /// Recursively walks up syntax tree and finds the closest scope other than this scope.
-  func getParentScope(forSyntax syntax: SyntaxProtocol?) -> Scope? {
-    if let lookedUpScope = syntax?.scope, lookedUpScope.sourceSyntax.id == syntax?.id {
-      return getParentScope(forSyntax: sourceSyntax.parent)
-    } else {
-      return syntax?.scope
-    }
+  /// Given syntax node position, returns the closest ancestor catch node.
+  @_spi(Compiler) @_spi(Testing) public func lookupCatchNode() -> Syntax? {
+    return lookupCatchNodeHelper(at: Syntax(self), traversedCatchClause: false)
   }
 
   // MARK: - lookupLabeledStmts
 
   /// Given syntax node position, returns all available labeled statements.
-  func lookupLabeledStmts(at syntax: SyntaxProtocol) -> [LabeledStmtSyntax] {
+  private func lookupLabeledStmts(at syntax: SyntaxProtocol) -> [LabeledStmtSyntax] {
     return walkParentTreeUpToFunctionBoundary(
       at: syntax.parent,
       collect: LabeledStmtSyntax.self
@@ -57,7 +44,9 @@ extension Scope {
   // MARK: - lookupFallthroughSourceAndDest
 
   /// Given syntax node position, returns the current switch case and it's fallthrough destination.
-  func lookupFallthroughSourceAndDestination(at syntax: SyntaxProtocol) -> (SwitchCaseSyntax?, SwitchCaseSyntax?) {
+  private func lookupFallthroughSourceAndDestination(at syntax: SyntaxProtocol)
+    -> (SwitchCaseSyntax?, SwitchCaseSyntax?)
+  {
     guard
       let originalSwitchCase = walkParentTreeUpToFunctionBoundary(
         at: Syntax(syntax),
@@ -93,11 +82,6 @@ extension Scope {
 
   // MARK: - lookupCatchNode
 
-  /// Given syntax node position, returns the closest ancestor catch node.
-  func lookupCatchNode(at syntax: Syntax) -> Syntax? {
-    return lookupCatchNodeHelper(at: syntax, traversedCatchClause: false)
-  }
-
   /// Given syntax node location, finds where an error could be caught. If set to `true`, `traverseCatchClause`lookup will skip the next do statement.
   private func lookupCatchNodeHelper(at syntax: Syntax?, traversedCatchClause: Bool) -> Syntax? {
     guard let syntax else { return nil }
@@ -117,15 +101,22 @@ extension Scope {
       } else {
         return lookupCatchNodeHelper(at: syntax.parent, traversedCatchClause: traversedCatchClause)
       }
-    case .functionDecl, .accessorDecl, .initializerDecl:
+    case .functionDecl, .accessorDecl, .initializerDecl, .deinitializerDecl, .closureExpr:
       return syntax
+    case .exprList(let exprList):
+      if let tryExpr = exprList.first?.as(TryExprSyntax.self), tryExpr.questionOrExclamationMark != nil {
+        return Syntax(tryExpr)
+      }
+      return lookupCatchNodeHelper(at: syntax.parent, traversedCatchClause: traversedCatchClause)
     default:
       return lookupCatchNodeHelper(at: syntax.parent, traversedCatchClause: traversedCatchClause)
     }
   }
 
+  // MARK: - walkParentTree helper methods
+
   /// Callect the first syntax node matching the collection type up to a function boundary.
-  func walkParentTreeUpToFunctionBoundary<T: SyntaxProtocol>(
+  private func walkParentTreeUpToFunctionBoundary<T: SyntaxProtocol>(
     at syntax: Syntax?,
     collect: T.Type
   ) -> T? {
@@ -133,7 +124,7 @@ extension Scope {
   }
 
   /// Callect syntax nodes matching the collection type up to a function boundary.
-  func walkParentTreeUpToFunctionBoundary<T: SyntaxProtocol>(
+  private func walkParentTreeUpToFunctionBoundary<T: SyntaxProtocol>(
     at syntax: Syntax?,
     collect: T.Type,
     stopWithFirstMatch: Bool = false
@@ -154,7 +145,7 @@ extension Scope {
   }
 
   /// Callect syntax nodes matching the collection type up until encountering one of the specified syntax nodes.
-  func walkParentTree<T: SyntaxProtocol>(
+  private func walkParentTree<T: SyntaxProtocol>(
     upTo stopAt: [SyntaxProtocol.Type],
     at syntax: Syntax?,
     collect: T.Type,

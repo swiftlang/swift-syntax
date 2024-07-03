@@ -70,7 +70,8 @@ class ParserTests: ParserTestCase {
           || $0.pathExtension == "sil"
           || $0.pathExtension == "swiftinterface"
       }
-    #if swift(>=6.0)
+    #if swift(>=6.0) && !canImport(Darwin)
+    // URL is not marked as Sendable in corelibs-foundation
     nonisolated(unsafe) let fileURLs = _fileURLs
     #else
     let fileURLs = _fileURLs

@@ -185,7 +185,7 @@ final class JSONTests: XCTestCase {
   private func assertRoundTrip<T: Codable & Equatable>(
     of value: T,
     expectedJSON: String,
-    file: StaticString = #file,
+    file: StaticString = #filePath,
     line: UInt = #line
   ) {
     let payload: [UInt8]
@@ -214,7 +214,7 @@ final class JSONTests: XCTestCase {
   private func assertRoundTripTypeCoercionFailure<T: Codable, U: Codable>(
     of value: T,
     as type: U.Type,
-    file: StaticString = #file,
+    file: StaticString = #filePath,
     line: UInt = #line
   ) {
     do {
@@ -228,7 +228,7 @@ final class JSONTests: XCTestCase {
     }
   }
 
-  private func assertInvalidStrng(_ json: String, file: StaticString = #file, line: UInt = #line) {
+  private func assertInvalidStrng(_ json: String, file: StaticString = #filePath, line: UInt = #line) {
     do {
       var json = json
       _ = try json.withUTF8 { try JSON.decode(String.self, from: $0) }
@@ -236,7 +236,7 @@ final class JSONTests: XCTestCase {
     } catch {}
   }
 
-  private func assertParseError(_ json: String, message: String, file: StaticString = #file, line: UInt = #line) {
+  private func assertParseError(_ json: String, message: String, file: StaticString = #filePath, line: UInt = #line) {
     do {
       var json = json
       _ = try json.withUTF8 { try JSON.decode(Bool.self, from: $0) }

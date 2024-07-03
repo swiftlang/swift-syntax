@@ -11,7 +11,8 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-@_spi(Testing) import SwiftLexicalLookup
+@_spi(Experimental) import SwiftLexicalLookup
+import SwiftSyntax
 import XCTest
 
 final class testSimpleQueries: XCTestCase {
@@ -111,20 +112,23 @@ final class testSimpleQueries: XCTestCase {
     assertLexicalScopeQuery(
       source: """
         func foo() {
-          7️⃣print(0)
+          7️⃣fallthrough
         }
 
         switch a {
         1️⃣case 1:
-          2️⃣print(1)
+          2️⃣fallthrough
         3️⃣case 2:
-          4️⃣print(2)
+          4️⃣fallthrough
         5️⃣default:
-          6️⃣print(3)
+          6️⃣fallthrough
         }
         """,
       methodUnderTest: { argument in
-        let result = argument.lookupFallthroughSourceAndDest()
+        guard let fallthroughStmt = argument.ancestorOrSelf(mapping: { $0.as(FallThroughStmtSyntax.self) }) else {
+          return []
+        }
+        let result = fallthroughStmt.lookupFallthroughSourceAndDest()
         return [result.source, result.destination]
       },
       expected: ["2️⃣": ["1️⃣", "3️⃣"], "4️⃣": ["3️⃣", "5️⃣"], "6️⃣": ["5️⃣", nil], "7️⃣": [nil, nil]]

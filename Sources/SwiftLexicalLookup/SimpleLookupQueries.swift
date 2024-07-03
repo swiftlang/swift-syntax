@@ -187,7 +187,9 @@ extension FallThroughStmtSyntax {
   // MARK: - lookupFallthroughSourceAndDest
 
   /// Given syntax node position, returns the current switch case and it's fallthrough destination.
-  private func lookupFallthroughSourceAndDestination(at syntax: SyntaxProtocol)
+  private func lookupFallthroughSourceAndDestination(
+    at syntax: SyntaxProtocol
+  )
     -> (SwitchCaseSyntax?, SwitchCaseSyntax?)
   {
     guard

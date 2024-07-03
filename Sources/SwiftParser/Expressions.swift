@@ -613,7 +613,9 @@ extension Parser {
     )
   }
 
-  mutating func parseDottedExpressionSuffix(previousNode: (some RawSyntaxNodeProtocol)?) -> (
+  mutating func parseDottedExpressionSuffix(
+    previousNode: (some RawSyntaxNodeProtocol)?
+  ) -> (
     unexpectedPeriod: RawUnexpectedNodesSyntax?,
     period: RawTokenSyntax,
     declName: RawDeclReferenceExprSyntax,

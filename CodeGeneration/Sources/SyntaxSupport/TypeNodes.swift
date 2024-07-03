@@ -591,7 +591,6 @@ public let TYPE_NODES: [Node] = [
           .keyword(._const),
           .keyword(.borrowing),
           .keyword(.consuming),
-          .keyword(.transferring),
           .keyword(.sending),
         ]),
         documentation: "The specifier token that's attached to the type."

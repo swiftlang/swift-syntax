@@ -15,4 +15,4 @@ or openning `SwiftParserCLI` package and building the `swift-parser-cli` target 
 swift-parser-cli basic-format /path/to/file/that/formats/incorrectly.swift
 ```
 2. Remove as much code from your source file while still experiencing the formatting issue.
-3. File a bug report on <https://github.com/apple/swift-syntax/issues/new/choose> with the reduced source code.
+3. File a bug report on <https://github.com/swiftlang/swift-syntax/issues/new/choose> with the reduced source code.

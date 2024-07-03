@@ -40,6 +40,16 @@ public struct StandardIOMessageConnection: MessageConnection {
     self.outputFileDescriptor = outputFileDescriptor
   }
 
+  #if os(WASI)
+  /// Convenience initializer for Wasm executable plugins. Connects
+  /// directly to `stdin` and `stdout` as WASI doesn't support
+  /// `dup{,2}`.
+  public init() throws {
+    let inputFD = fileno(_stdin)
+    let outputFD = fileno(_stdout)
+    self.init(inputFileDescriptor: inputFD, outputFileDescriptor: outputFD)
+  }
+  #else
   /// Convenience initializer for normal executable plugins. Upon creation:
   ///   - Redirect `stdout` to `stderr` so that print statements from the plugin
   ///     are treated as plain-text output
@@ -83,6 +93,7 @@ public struct StandardIOMessageConnection: MessageConnection {
 
     self.init(inputFileDescriptor: inputFD, outputFileDescriptor: outputFD)
   }
+  #endif
 
   /// Write the buffer to the file descriptor. Throws an error on failure.
   private func _write(contentsOf buffer: UnsafeRawBufferPointer) throws {

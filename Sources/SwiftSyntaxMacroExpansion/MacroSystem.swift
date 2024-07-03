@@ -1133,9 +1133,10 @@ extension MacroApplication {
   ///   and expanded accessors, as well as whether any `get`/`set` were
   ///   expanded (in which case any initializer on `storage` should be
   ///   removed).
-  private func expandAccessors(of storage: some DeclSyntaxProtocol, existingAccessors: AccessorBlockSyntax?) -> (
-    accessors: AccessorBlockSyntax?, expandsGetSet: Bool
-  ) {
+  private func expandAccessors(
+    of storage: some DeclSyntaxProtocol,
+    existingAccessors: AccessorBlockSyntax?
+  ) -> (accessors: AccessorBlockSyntax?, expandsGetSet: Bool) {
     let accessorMacros = macroAttributes(attachedTo: DeclSyntax(storage), ofType: AccessorMacro.Type.self)
 
     var newAccessorsBlock = existingAccessors

@@ -4,7 +4,7 @@ labels: [bug, BasicFormat]
 body:
  - type: markdown
    attributes:
-     value: Thanks for taking the time to fill out this bug report! We would really appreciate if you could take the time to reduce the issue as described in [Filing BasicFormat Bug Reports](https://swiftpackageindex.com/apple/swift-syntax/main/documentation/swiftbasicformat/filingbugreports).
+     value: Thanks for taking the time to fill out this bug report! We would really appreciate if you could take the time to reduce the issue as described in [Filing BasicFormat Bug Reports](https://swiftpackageindex.com/swiftlang/swift-syntax/main/documentation/swiftbasicformat/filingbugreports).
  - type: textarea
    id: source
    attributes:

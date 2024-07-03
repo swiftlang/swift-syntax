@@ -26,7 +26,7 @@ import SwiftSyntax
 @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
 #endif
 
-extension CompilerPluginMessageHandler {
+extension PluginProviderMessageHandler {
   /// Get concrete macro type from a pair of module name and type name.
   private func resolveMacro(_ ref: PluginMessage.MacroReference) throws -> Macro.Type {
     try provider.resolveMacro(moduleName: ref.moduleName, typeName: ref.typeName)

@@ -468,7 +468,6 @@ public let DECL_NODES: [Node] = [
           .keyword(.reasync),
           .keyword(.required),
           .keyword(.static),
-          .keyword(.transferring),
           .keyword(.unowned),
           .keyword(.weak),
           .keyword(.sending),
@@ -835,6 +834,19 @@ public let DECL_NODES: [Node] = [
     kind: .extensionDecl,
     base: .decl,
     nameForDiagnostics: "extension",
+    documentation: """
+        An `extension` declaration.
+
+       ### Example
+
+        ```swift
+        extension String {
+          var url: URL? {
+            URL(string: self)
+          }
+        }
+        ```
+      """,
     traits: [
       "DeclGroup",
       "WithAttributes",
@@ -844,7 +856,18 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "attributes",
         kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
-        nameForDiagnostics: "attributes"
+        nameForDiagnostics: "attributes",
+        documentation: """
+          Attributes that are attached to the extension declaration.
+
+          ### Example
+
+          `@MainActor` in
+
+          ```swift
+          @MainActor extension SomeType {}
+          ```
+          """
       ),
       Child(
         name: "modifiers",
@@ -854,16 +877,19 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "extensionKeyword",
-        kind: .token(choices: [.keyword(.extension)])
+        kind: .token(choices: [.keyword(.extension)]),
+        documentation: "The `extension` keyword."
       ),
       Child(
         name: "extendedType",
-        kind: .node(kind: .type)
+        kind: .node(kind: .type),
+        documentation: "The extended `type` for which the extension is added."
       ),
       Child(
         name: "inheritanceClause",
         kind: .node(kind: .inheritanceClause),
         nameForDiagnostics: "inheritance clause",
+        documentation: "The inheritance clause describing one or more conformances for this extension declaration.",
         isOptional: true
       ),
       Child(
@@ -887,6 +913,27 @@ public let DECL_NODES: [Node] = [
     kind: .functionDecl,
     base: .decl,
     nameForDiagnostics: "function",
+    documentation: """
+        A Swift `func` declaration.
+        
+        ### Example
+        
+        A func declaration may be declared without any parameter.
+        
+        ```swift
+        func foo() {
+        
+        }
+        ```
+        
+        A func declaration with multiple parameters.
+        
+        ```swift
+        func bar(_ arg1: Int, _ arg2: Int) {
+        
+        }
+        ```
+      """,
     traits: [
       "NamedDecl",
       "WithAttributes",
@@ -898,7 +945,8 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "attributes",
         kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
-        nameForDiagnostics: "attributes"
+        nameForDiagnostics: "attributes",
+        documentation: "Attributes that are attached to the function declaration."
       ),
       Child(
         name: "modifiers",
@@ -908,7 +956,8 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "funcKeyword",
-        kind: .token(choices: [.keyword(.func)])
+        kind: .token(choices: [.keyword(.func)]),
+        documentation: "The `func` keyword."
       ),
       Child(
         name: "name",
@@ -931,7 +980,10 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "signature",
         kind: .node(kind: .functionSignature),
-        nameForDiagnostics: "function signature"
+        nameForDiagnostics: "function signature",
+        documentation: """
+          A function signature that defines the interface of the function.
+          """
       ),
       Child(
         name: "genericWhereClause",
@@ -944,6 +996,7 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "body",
         kind: .node(kind: .codeBlock),
+        documentation: "The function's body.",
         isOptional: true
       ),
     ]
@@ -953,6 +1006,18 @@ public let DECL_NODES: [Node] = [
     kind: .functionParameterList,
     base: .syntaxCollection,
     nameForDiagnostics: "parameter list",
+    documentation: """
+      A list of function parameters that are type annotated and a label.
+      The function parameters are represented by `FunctionParameterListSyntax`.
+
+      ### Example
+
+      ```swift
+      func foo(bar: Int, baz: Int) {
+
+      }
+      ```
+      """,
     elementChoices: [.functionParameter]
   ),
 
@@ -960,41 +1025,50 @@ public let DECL_NODES: [Node] = [
     kind: .functionParameter,
     base: .syntax,
     nameForDiagnostics: "parameter",
+    documentation: "A function parameter",
     parserFunction: "parseFunctionParameter",
     traits: ["WithTrailingComma", "WithAttributes", "WithModifiers"],
     children: [
       Child(
         name: "attributes",
         kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
-        nameForDiagnostics: "attributes"
+        nameForDiagnostics: "attributes",
+        documentation: "Attributes that are attached to the parameter."
       ),
       Child(
         name: "modifiers",
         kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
-        nameForDiagnostics: "modifiers"
+        nameForDiagnostics: "modifiers",
+        documentation: "Modifiers that are attached to the parameter."
       ),
       Child(
         name: "firstName",
-        kind: .token(choices: [.token(.identifier), .token(.wildcard)])
+        kind: .token(choices: [.token(.identifier), .token(.wildcard)]),
+        documentation: "The label of this parameter that will be used when the function is called."
       ),
       Child(
         name: "secondName",
         kind: .token(choices: [.token(.identifier), .token(.wildcard)], requiresLeadingSpace: true),
         nameForDiagnostics: "internal name",
+        documentation:
+          "If this is specified, it is the name by which the parameter can be referenced inside the function body.",
         isOptional: true
       ),
       Child(
         name: "colon",
-        kind: .token(choices: [.token(.colon)])
+        kind: .token(choices: [.token(.colon)]),
+        documentation: "The colon separating the label from the type."
       ),
       Child(
         name: "type",
         kind: .node(kind: .type),
-        nameForDiagnostics: "type"
+        nameForDiagnostics: "type",
+        documentation: "The parameter's type."
       ),
       Child(
         name: "ellipsis",
         kind: .token(choices: [.token(.ellipsis)]),
+        documentation: "If the parameter is variadic, `...` to indicate that.",
         isOptional: true
       ),
       Child(
@@ -1002,11 +1076,13 @@ public let DECL_NODES: [Node] = [
         deprecatedName: "defaultArgument",
         kind: .node(kind: .initializerClause),
         nameForDiagnostics: "default value",
+        documentation: "If the parameter has a default value, the expression describing the default value.",
         isOptional: true
       ),
       Child(
         name: "trailingComma",
         kind: .token(choices: [.token(.comma)]),
+        documentation: "If the parameter is followed by another parameter, the comma separating them.",
         isOptional: true
       ),
     ]
@@ -1016,21 +1092,25 @@ public let DECL_NODES: [Node] = [
     kind: .functionSignature,
     base: .syntax,
     nameForDiagnostics: "function signature",
+    documentation: "A function signature that defines the interface of the function.",
     children: [
       Child(
         name: "parameterClause",
         deprecatedName: "input",
-        kind: .node(kind: .functionParameterClause)
+        kind: .node(kind: .functionParameterClause),
+        documentation: "The parameters of the function."
       ),
       Child(
         name: "effectSpecifiers",
         kind: .node(kind: .functionEffectSpecifiers),
+        documentation: "The effect indicators of the function, like `async` or `throws`",
         isOptional: true
       ),
       Child(
         name: "returnClause",
         deprecatedName: "output",
         kind: .node(kind: .returnClause),
+        documentation: "The return type of the function.",
         isOptional: true
       ),
     ]
@@ -1941,13 +2021,15 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "arrow",
-        kind: .token(choices: [.token(.arrow)])
+        kind: .token(choices: [.token(.arrow)]),
+        documentation: "If return type is presented, the arrow introducing the return type."
       ),
       Child(
         name: "type",
         deprecatedName: "returnType",
         kind: .node(kind: .type),
-        nameForDiagnostics: "return type"
+        nameForDiagnostics: "return type",
+        documentation: "The `return` type."
       ),
     ]
   ),

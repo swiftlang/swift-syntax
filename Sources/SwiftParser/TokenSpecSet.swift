@@ -379,7 +379,6 @@ enum DeclarationModifier: TokenSpecSet {
   case `rethrows`
   case sending
   case `static`
-  case transferring
   case unowned
   case weak
 
@@ -418,7 +417,6 @@ enum DeclarationModifier: TokenSpecSet {
     case TokenSpec(.required): self = .required
     case TokenSpec(.rethrows): self = .rethrows
     case TokenSpec(.static): self = .static
-    case TokenSpec(.transferring): self = .transferring
     case TokenSpec(.sending): self = .sending
     case TokenSpec(.unowned): self = .unowned
     case TokenSpec(.weak): self = .weak
@@ -461,7 +459,6 @@ enum DeclarationModifier: TokenSpecSet {
     case .required: return .keyword(.required)
     case .rethrows: return TokenSpec(.rethrows, recoveryPrecedence: .declKeyword)
     case .static: return .keyword(.static)
-    case .transferring: return .keyword(.transferring)
     case .sending: return .keyword(.sending)
     case .unowned: return TokenSpec(.unowned, recoveryPrecedence: .declKeyword)
     case .weak: return TokenSpec(.weak, recoveryPrecedence: .declKeyword)

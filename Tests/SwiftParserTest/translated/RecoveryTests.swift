@@ -3315,7 +3315,7 @@ final class RecoveryTests: ParserTestCase {
     )
   }
 
-  // https://github.com/apple/swift-syntax/issues/1483
+  // https://github.com/swiftlang/swift-syntax/issues/1483
   func testRecovery183() {
     // Can be parsed and produces no diagnostics.
     assertParse(
@@ -3346,7 +3346,7 @@ final class RecoveryTests: ParserTestCase {
     )
   }
 
-  // https://github.com/apple/swift-syntax/pull/1484/files#r1176740738
+  // https://github.com/swiftlang/swift-syntax/pull/1484/files#r1176740738
   func testRecovery184() {
     assertParse(
       "func foo() -> Int1️⃣:",

@@ -168,7 +168,7 @@ struct FormatExecutor {
       try runGitCommand("pull")
     } else {
       try FileManager.default.createDirectory(atPath: Paths.swiftFormatBuildDir.path, withIntermediateDirectories: true)
-      try runGitCommand("clone", "https://github.com/apple/swift-format.git", ".")
+      try runGitCommand("clone", "https://github.com/swiftlang/swift-format.git", ".")
       try runGitCommand("checkout", Self.swiftFormatBranch)
     }
     try runSwiftCommand("package", "update")

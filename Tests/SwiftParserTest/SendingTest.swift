@@ -13,24 +13,24 @@
 @_spi(ExperimentalLanguageFeatures) import SwiftParser
 import XCTest
 
-final class TransferringTests: ParserTestCase {
-  func testTransferingArg1() {
+final class SendingTests: ParserTestCase {
+  func testSendingArg1() {
     assertParse(
       """
       class Klass {}
-      func transferMain(_ x: transferring Klass) -> ()
+      func transferMain(_ x: sending Klass) -> ()
       """,
-      experimentalFeatures: .transferringArgsAndResults
+      experimentalFeatures: .sendingArgsAndResults
     )
   }
 
-  func testTransferingArgMiddle() {
+  func testSendingArgMiddle() {
     assertParse(
       """
       class Klass {}
-      func transferMain(_ y: Klass, _ x: transferring Klass, _ z: Klass) -> ()
+      func transferMain(_ y: Klass, _ x: sending Klass, _ z: Klass) -> ()
       """,
-      experimentalFeatures: .transferringArgsAndResults
+      experimentalFeatures: .sendingArgsAndResults
     )
   }
 }

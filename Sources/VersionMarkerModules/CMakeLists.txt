@@ -8,9 +8,9 @@
 
 # Version Marker Modules.
 # See the 'Macro Versioning.md' document for more details.
-add_library(SwiftSyntax509 STATIC
+add_library(${SWIFTSYNTAX_TARGET_NAMESPACE}SwiftSyntax509 STATIC
   SwiftSyntax509/Empty.swift)
-add_library(SwiftSyntax510 STATIC
+add_library(${SWIFTSYNTAX_TARGET_NAMESPACE}SwiftSyntax510 STATIC
   SwiftSyntax509/Empty.swift)
-add_library(SwiftSyntax600 STATIC
+add_library(${SWIFTSYNTAX_TARGET_NAMESPACE}SwiftSyntax600 STATIC
   SwiftSyntax509/Empty.swift)

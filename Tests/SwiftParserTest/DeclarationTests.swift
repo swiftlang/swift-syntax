@@ -3294,21 +3294,6 @@ final class DeclarationTests: ParserTestCase {
     assertParse("public init() -> Int")
   }
 
-  func testTransferringTypeSpecifier() {
-    assertParse(
-      "func testVarDeclTupleElt() -> (transferring String, String) {}",
-      experimentalFeatures: .transferringArgsAndResults
-    )
-    assertParse(
-      "func testVarDeclTuple2(_ x: (transferring String)) {}",
-      experimentalFeatures: .transferringArgsAndResults
-    )
-    assertParse(
-      "func testVarDeclTuple2(_ x: (transferring String, String)) {}",
-      experimentalFeatures: .transferringArgsAndResults
-    )
-  }
-
   func testSendingTypeSpecifier() {
     assertParse(
       "func testVarDeclTupleElt() -> (sending String, String) {}",

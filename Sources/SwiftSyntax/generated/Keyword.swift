@@ -232,10 +232,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case then
   case `throw`
   case `throws`
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  case transferring
   case transpose
   case `true`
   case `try`
@@ -679,8 +675,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .freestanding
       case "noDerivative":
         self = .noDerivative
-      case "transferring":
-        self = .transferring
       default:
         return nil
       }
@@ -1026,7 +1020,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
       "then", 
       "throw", 
       "throws", 
-      "transferring", 
       "transpose", 
       "true", 
       "try", 

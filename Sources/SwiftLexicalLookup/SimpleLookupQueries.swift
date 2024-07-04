@@ -16,7 +16,8 @@ import SwiftSyntax
 extension SyntaxProtocol {
   /// Returns all labeled statements available at a particular syntax node.
   ///
-  /// - Returns: Available labeled statements at a particular syntax node in the exact order they appear in the source code, starting with the innermost statement.
+  /// - Returns: Available labeled statements at a particular syntax node
+  /// in the exact order they appear in the source code, starting with the innermost statement.
   ///
   /// Example usage:
   /// ```swift
@@ -32,15 +33,19 @@ extension SyntaxProtocol {
   ///   break // 3
   /// }
   /// ```
-  /// When calling this function at the first `break`, it returns `three` and `two` in this exact order. For the second `break`, it returns only `two`. The results don't include `one`, which is unavailable at both locations due to the encapsulating function body. For `break` numbered 3, the result is `one`, as it's outside the function body and within the labeled statement. The function returns an empty array when there are no available labeled statements.
-  ///
+  /// When calling this function at the first `break`, it returns `three` and `two` in this exact order.
+  /// For the second `break`, it returns only `two`.
+  /// The results don't include `one`, which is unavailable at both locations due to the encapsulating function body.
+  /// For `break` numbered 3, the result is `one`, as it's outside the function body and within the labeled statement.
+  /// The function returns an empty array when there are no available labeled statements.
   @_spi(Experimental) public func lookupLabeledStmts() -> [LabeledStmtSyntax] {
-    return lookupLabeledStmts(at: self)
+    collectNodesOfTypeUpToFunctionBoundary(LabeledStmtSyntax.self)
   }
 
   /// Returns the catch node responsible for handling an error thrown at a particular syntax node.
   ///
-  /// - Returns: The catch node responsible for handling an error thrown at the lookup source node. This could be a `do` statement, `try?`, `try!`, `init`, `deinit`, accessors, closures, or function declarations.
+  /// - Returns: The catch node responsible for handling an error thrown at the lookup source node.
+  /// This could be a `do` statement, `try?`, `try!`, `init`, `deinit`, accessors, closures, or function declarations.
   ///
   /// Example usage:
   /// ```swift
@@ -53,72 +58,63 @@ extension SyntaxProtocol {
   ///   }
   /// }
   /// ```
-  /// When calling this function on `foo`, it returns the `do` statement. Calling the function on `bar` results in `try?`. When used on `error`, the function returns the function declaration `x`. The function returns `nil` when there's no available catch node.
-  ///
+  /// When calling this function on `foo`, it returns the `do` statement.
+  /// Calling the function on `bar` results in `try?`.
+  /// When used on `error`, the function returns the function declaration `x`.
+  /// The function returns `nil` when there's no available catch node.
   @_spi(Experimental) public func lookupCatchNode() -> Syntax? {
-    return lookupCatchNodeHelper(at: Syntax(self), traversedCatchClause: false)
-  }
-
-  // MARK: - lookupLabeledStmts
-
-  /// Given syntax node position, returns all available labeled statements.
-  private func lookupLabeledStmts(at syntax: SyntaxProtocol) -> [LabeledStmtSyntax] {
-    return walkParentTreeUpToFunctionBoundary(
-      at: syntax.parent,
-      collect: LabeledStmtSyntax.self
-    )
+    lookupCatchNodeHelper(traversedCatchClause: false)
   }
 
   // MARK: - lookupCatchNode
 
-  /// Given syntax node location, finds where an error could be caught. If set to `true`, `traverseCatchClause`lookup will skip the next do statement.
-  private func lookupCatchNodeHelper(at syntax: Syntax?, traversedCatchClause: Bool) -> Syntax? {
-    guard let syntax else { return nil }
+  /// Given syntax node location, finds where an error could be caught. If `traverseCatchClause` is set to `true` lookup will skip the next do statement.
+  private func lookupCatchNodeHelper(traversedCatchClause: Bool) -> Syntax? {
+    guard let parent else { return nil }
 
-    switch syntax.as(SyntaxEnum.self) {
+    switch parent.as(SyntaxEnum.self) {
     case .doStmt:
       if traversedCatchClause {
-        return lookupCatchNodeHelper(at: syntax.parent, traversedCatchClause: false)
+        return parent.lookupCatchNodeHelper(traversedCatchClause: false)
       } else {
-        return syntax
+        return parent
       }
     case .catchClause:
-      return lookupCatchNodeHelper(at: syntax.parent, traversedCatchClause: true)
+      return parent.lookupCatchNodeHelper(traversedCatchClause: true)
     case .tryExpr(let tryExpr):
       if tryExpr.questionOrExclamationMark != nil {
-        return syntax
+        return parent
       } else {
-        return lookupCatchNodeHelper(at: syntax.parent, traversedCatchClause: traversedCatchClause)
+        return parent.lookupCatchNodeHelper(traversedCatchClause: traversedCatchClause)
       }
     case .functionDecl, .accessorDecl, .initializerDecl, .deinitializerDecl, .closureExpr:
-      return syntax
+      return parent
     case .exprList(let exprList):
       if let tryExpr = exprList.first?.as(TryExprSyntax.self), tryExpr.questionOrExclamationMark != nil {
         return Syntax(tryExpr)
       }
-      return lookupCatchNodeHelper(at: syntax.parent, traversedCatchClause: traversedCatchClause)
+      return parent.lookupCatchNodeHelper(traversedCatchClause: traversedCatchClause)
     default:
-      return lookupCatchNodeHelper(at: syntax.parent, traversedCatchClause: traversedCatchClause)
+      return parent.lookupCatchNodeHelper(traversedCatchClause: traversedCatchClause)
     }
   }
 
   // MARK: - walkParentTree helper methods
 
-  /// Callect the first syntax node matching the collection type up to a function boundary.
-  fileprivate func walkParentTreeUpToFunctionBoundary<T: SyntaxProtocol>(
-    at syntax: Syntax?,
-    collect: T.Type
+  /// Returns the innermost node of the specified type up to a function boundary.
+  fileprivate func innermostNodeOfTypeUpToFunctionBoundary<T: SyntaxProtocol>(
+    _ type: T.Type
   ) -> T? {
-    walkParentTreeUpToFunctionBoundary(at: syntax, collect: collect, stopWithFirstMatch: true).first
+    collectNodesOfTypeUpToFunctionBoundary(type, stopWithFirstMatch: true).first
   }
 
-  /// Callect syntax nodes matching the collection type up to a function boundary.
-  fileprivate func walkParentTreeUpToFunctionBoundary<T: SyntaxProtocol>(
-    at syntax: Syntax?,
-    collect: T.Type,
+  /// Collect syntax nodes matching the collection type up until encountering one of the specified syntax nodes. The nodes in the array are inside out, with the innermost node being the first.
+  fileprivate func collectNodesOfTypeUpToFunctionBoundary<T: SyntaxProtocol>(
+    _ type: T.Type,
     stopWithFirstMatch: Bool = false
   ) -> [T] {
-    walkParentTree(
+    collectNodes(
+      ofType: type,
       upTo: [
         MemberBlockSyntax.self,
         FunctionDeclSyntax.self,
@@ -126,16 +122,16 @@ extension SyntaxProtocol {
         DeinitializerDeclSyntax.self,
         AccessorDeclSyntax.self,
         ClosureExprSyntax.self,
+        SubscriptDeclSyntax.self,
       ],
-      collect: collect,
       stopWithFirstMatch: stopWithFirstMatch
     )
   }
 
   /// Callect syntax nodes matching the collection type up until encountering one of the specified syntax nodes.
-  private func walkParentTree<T: SyntaxProtocol>(
+  private func collectNodes<T: SyntaxProtocol>(
+    ofType type: T.Type,
     upTo stopAt: [SyntaxProtocol.Type],
-    collect: T.Type,
     stopWithFirstMatch: Bool = false
   ) -> [T] {
     var matches: [T] = []
@@ -162,7 +158,8 @@ extension SyntaxProtocol {
 extension FallThroughStmtSyntax {
   /// Returns the source and destination of a `fallthrough`.
   ///
-  /// - Returns: `source` as the switch case that encapsulates the `fallthrough` keyword and `destination` as the switch case that the `fallthrough` directs to.
+  /// - Returns: `source` as the switch case that encapsulates the `fallthrough` keyword and
+  /// `destination` as the switch case that the `fallthrough` directs to.
   ///
   /// Example usage:
   /// ```swift
@@ -176,26 +173,15 @@ extension FallThroughStmtSyntax {
   ///   break
   /// }
   /// ```
-  /// When calling this function at the `fallthrough`, it returns `case 2` and `case 1` in this exact order. The `nil` results handle ill-formed code: there's no `source` if the `fallthrough` is outside of a case. There's no `destination` if there is no case or `default` after the source case.
-  ///
-  @_spi(Experimental) public func lookupFallthroughSourceAndDest()
+  /// When calling this function at the `fallthrough`, it returns `case 2` and `case 1` in this exact order.
+  /// The `nil` results handle ill-formed code: there's no `source` if the `fallthrough` is outside of a case.
+  /// There's no `destination` if there is no case or `default` after the source case.
+  @_spi(Experimental) public func lookupFallthroughSourceAndDestintation()
     -> (source: SwitchCaseSyntax?, destination: SwitchCaseSyntax?)
   {
-    return lookupFallthroughSourceAndDestination(at: self)
-  }
-
-  // MARK: - lookupFallthroughSourceAndDest
-
-  /// Given syntax node position, returns the current switch case and it's fallthrough destination.
-  private func lookupFallthroughSourceAndDestination(
-    at syntax: SyntaxProtocol
-  )
-    -> (SwitchCaseSyntax?, SwitchCaseSyntax?)
-  {
     guard
-      let originalSwitchCase = walkParentTreeUpToFunctionBoundary(
-        at: Syntax(syntax),
-        collect: SwitchCaseSyntax.self
+      let originalSwitchCase = innermostNodeOfTypeUpToFunctionBoundary(
+        SwitchCaseSyntax.self
       )
     else {
       return (nil, nil)

@@ -17,16 +17,10 @@ import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 
-/// Parse `source` and check if the method passed as `methodUnderTest` produces the same results as indicated in `expected`.
-///
-/// The `methodUnderTest` provides test inputs taken from the `expected` dictionary. The closure should return result produced by the tested method as an array with the same ordering.
-///
-/// - Parameters:
-///   - methodUnderTest: Closure with the tested method. Provides test argument from `expected` to the tested function. Should return method result as an array.
-///   - expected: A dictionary with parameter markers as keys and expected results as marker arrays ordered as returned by the test method.
+/// `methodUnderTest` is called with the token at every position marker in the keys of `expected`. It then asserts that the positions of the syntax nodes returned by `methodUnderTest` are the values in `expected`.
 func assertLexicalScopeQuery(
   source: String,
-  methodUnderTest: (SyntaxProtocol) -> ([SyntaxProtocol?]),
+  methodUnderTest: (TokenSyntax) -> ([SyntaxProtocol?]),
   expected: [String: [String?]]
 ) {
   // Extract markers
@@ -50,17 +44,16 @@ func assertLexicalScopeQuery(
     let result = methodUnderTest(testArgument)
 
     // Extract the expected results for the test argument
-    let expectedValues: [SyntaxProtocol?] = expectedMarkers.map { expectedMarker in
+    let expectedValues: [AbsolutePosition?] = expectedMarkers.map { expectedMarker in
       guard let expectedMarker else { return nil }
 
-      guard let expectedPosition = markerDict[expectedMarker],
-        let expectedToken = sourceFileSyntax.token(at: AbsolutePosition(utf8Offset: expectedPosition))
+      guard let expectedPosition = markerDict[expectedMarker]
       else {
         XCTFail("Could not find token at location \(marker)")
         return nil
       }
 
-      return expectedToken
+      return AbsolutePosition(utf8Offset: expectedPosition)
     }
 
     // Compare number of actual results to the number of expected results
@@ -74,9 +67,16 @@ func assertLexicalScopeQuery(
     for (actual, expected) in zip(result, expectedValues) {
       if actual == nil && expected == nil { continue }
 
+      guard let actual, let expected else {
+        XCTFail(
+          "For marker \(marker), actual result: \(actual?.description ?? "nil"), expected position: \(expected.debugDescription)"
+        )
+        continue
+      }
+
       XCTAssert(
-        actual?.firstToken(viewMode: .sourceAccurate)?.id == expected?.id,
-        "For marker \(marker), actual result: \(actual?.firstToken(viewMode: .sourceAccurate) ?? "nil") doesn't match expected value: \(expected?.firstToken(viewMode: .sourceAccurate) ?? "nil")"
+        actual.positionAfterSkippingLeadingTrivia == expected,
+        "For marker \(marker), actual result: \(actual.description) doesn't match expected value: \(sourceFileSyntax.token(at: expected) ?? "nil")"
       )
     }
   }

@@ -17,6 +17,7 @@ let package = Package(
     .library(name: "SwiftCompilerPlugin", targets: ["SwiftCompilerPlugin"]),
     .library(name: "SwiftDiagnostics", targets: ["SwiftDiagnostics"]),
     .library(name: "SwiftIDEUtils", targets: ["SwiftIDEUtils"]),
+    .library(name: "SwiftLexicalLookup", targets: ["SwiftLexicalLookup"]),
     .library(name: "SwiftOperators", targets: ["SwiftOperators"]),
     .library(name: "SwiftParser", targets: ["SwiftParser"]),
     .library(name: "SwiftParserDiagnostics", targets: ["SwiftParserDiagnostics"]),
@@ -26,7 +27,6 @@ let package = Package(
     .library(name: "SwiftSyntaxMacros", targets: ["SwiftSyntaxMacros"]),
     .library(name: "SwiftSyntaxMacroExpansion", targets: ["SwiftSyntaxMacroExpansion"]),
     .library(name: "SwiftSyntaxMacrosTestSupport", targets: ["SwiftSyntaxMacrosTestSupport"]),
-    .library(name: "SwiftLexicalLookup", targets: ["SwiftLexicalLookup"]),
     .library(name: "SwiftSyntaxMacrosGenericTestSupport", targets: ["SwiftSyntaxMacrosGenericTestSupport"]),
     .library(name: "_SwiftCompilerPluginMessageHandling", targets: ["SwiftCompilerPluginMessageHandling"]),
     .library(name: "_SwiftLibraryPluginProvider", targets: ["SwiftLibraryPluginProvider"]),
@@ -138,6 +138,18 @@ let package = Package(
       dependencies: ["_SwiftSyntaxTestSupport", "SwiftIDEUtils", "SwiftParser", "SwiftSyntax"]
     ),
 
+    // MARK: SwiftLexicalLookup
+
+    .target(
+      name: "SwiftLexicalLookup",
+      dependencies: ["SwiftSyntax"]
+    ),
+
+    .testTarget(
+      name: "SwiftLexicalLookupTest",
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftLexicalLookup"]
+    ),
+
     // MARK: SwiftLibraryPluginProvider
 
     .target(
@@ -239,18 +251,6 @@ let package = Package(
         "SwiftSyntaxMacros",
         "SwiftSyntaxMacrosGenericTestSupport",
       ]
-    ),
-
-    // MARK: SwiftLexicalLookup
-
-    .target(
-      name: "SwiftLexicalLookup",
-      dependencies: ["SwiftSyntax"]
-    ),
-
-    .testTarget(
-      name: "SwiftLexicalLookupTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftLexicalLookup"]
     ),
 
     // MARK: SwiftSyntaxMacrosGenericTestSupport

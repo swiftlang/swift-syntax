@@ -128,7 +128,7 @@ final class testSimpleQueries: XCTestCase {
         guard let fallthroughStmt = argument.ancestorOrSelf(mapping: { $0.as(FallThroughStmtSyntax.self) }) else {
           return []
         }
-        let result = fallthroughStmt.lookupFallthroughSourceAndDest()
+        let result = fallthroughStmt.lookupFallthroughSourceAndDestintation()
         return [result.source, result.destination]
       },
       expected: ["2️⃣": ["1️⃣", "3️⃣"], "4️⃣": ["3️⃣", "5️⃣"], "6️⃣": ["5️⃣", nil], "7️⃣": [nil, nil]]

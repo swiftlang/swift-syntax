@@ -196,7 +196,7 @@ private func evaluateIfConfig(
 
   // Logical '!'.
   if let prefixOp = condition.as(PrefixOperatorExprSyntax.self),
-     prefixOp.operator?.text == "!"
+     prefixOp.operator.text == "!"
   {
     return try !evaluateIfConfig(condition: prefixOp.expression, configuration: configuration)
   }
@@ -249,13 +249,13 @@ private func evaluateIfConfig(
       // Ensure that we have a single unlabeled argument that is either >= or < as a prefix
       // operator applied to a version.
       guard let argExpr = call.arguments.singleUnlabeledExpression,
-        let unaryArg = argExpr.as(PrefixOperatorExprSyntax.self),
-            let opToken = unaryArg.operator
+        let unaryArg = argExpr.as(PrefixOperatorExprSyntax.self)
       else {
         throw IfConfigError.requiresUnlabeledArgument(name: fnName, role: "version comparison (>= or <= a version)")
       }
 
       // Parse the version.
+      let opToken = unaryArg.operator
       guard let version = VersionTuple(parsing: unaryArg.expression.trimmedDescription) else {
         throw IfConfigError.invalidVersionOperand(name: fnName, syntax: unaryArg.expression)
       }

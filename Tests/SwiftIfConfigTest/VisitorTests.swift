@@ -9,11 +9,12 @@
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
-import XCTest
-import SwiftSyntax
-import SwiftParser
+import SwiftDiagnostics
 import SwiftIfConfig
-import _SwiftSyntaxTestSupport
+import SwiftParser
+import SwiftSyntax
+import SwiftSyntaxMacrosGenericTestSupport
+import XCTest
 
 /// Visitor that ensures that all of the nodes we visit are active.
 ///
@@ -68,6 +69,7 @@ class NameCheckingVisitor: ActiveSyntaxAnyVisitor<TestingBuildConfiguration> {
     return .visitChildren
   }
 }
+
 public class VisitorTests: XCTestCase {
   let linuxBuildConfig = TestingBuildConfiguration(
     customConditions: ["DEBUG", "ASSERTS"],
@@ -171,32 +173,97 @@ public class VisitorTests: XCTestCase {
   }
 
   func testRemoveInactive() {
-    assertStringsEqualWithDiff(
-      inputSource.removingInactive(in: linuxBuildConfig).description,
-      """
+    assertRemoveInactive(
+      inputSource.description,
+      configuration: linuxBuildConfig,
+      expectedSource: """
 
-      @available(*, deprecated, message: "use something else")
-      func f() {
-      }
-
-      struct S {
-        var generationCount = 0
-      }
-
-      func h() {
-        switch result {
-          case .success(let value):
-            break
+        @available(*, deprecated, message: "use something else")
+        func f() {
         }
-      }
 
-      func i() {
-        a.b
-          .c
-          .d()
-      }
-      func withAvail() { }
-      """
+        struct S {
+          var generationCount = 0
+        }
+
+        func h() {
+          switch result {
+            case .success(let value):
+              break
+          }
+        }
+
+        func i() {
+          a.b
+            .c
+            .d()
+        }
+        func withAvail() { }
+        """
+    )
+  }
+
+  func testRemoveInactiveWithErrors() {
+    var configuration = linuxBuildConfig
+    configuration.badAttributes.insert("available")
+
+    assertRemoveInactive(
+      inputSource.description,
+      configuration: configuration,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "unacceptable attribute 'available'",
+          line: 51,
+          column: 1
+        ),
+        DiagnosticSpec(
+          message: "unacceptable attribute 'available'",
+          line: 1,
+          column: 2
+        ),
+        DiagnosticSpec(
+          message: "unacceptable attribute 'available'",
+          line: 27,
+          column: 17
+        ),
+      ],
+      expectedSource: """
+
+        #if hasAttribute(available)
+        @available(*, deprecated, message: "use something else")
+        #else
+        @MainActor
+        #endif
+        func f() {
+        }
+
+        struct S {
+          var generationCount = 0
+        }
+
+        func h() {
+          switch result {
+            case .success(let value):
+              break
+          }
+        }
+
+        func i() {
+          a.b
+          #if DEBUG
+            .c
+          #endif
+          #if hasAttribute(available)
+            .d()
+          #endif
+        }
+
+        #if hasAttribute(available)
+        func withAvail() { }
+        #else
+        func notAvail() { }
+        #endif
+        """
     )
   }
 }

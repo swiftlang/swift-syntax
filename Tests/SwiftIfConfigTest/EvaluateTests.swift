@@ -1,3 +1,6 @@
+import SwiftIfConfig
+import SwiftParser
+import SwiftSyntax
 //===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
@@ -10,9 +13,6 @@
 //
 //===----------------------------------------------------------------------===//
 import XCTest
-import SwiftSyntax
-import SwiftParser
-import SwiftIfConfig
 import _SwiftSyntaxTestSupport
 
 public class EvaluateTests: XCTestCase {

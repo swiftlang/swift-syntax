@@ -152,7 +152,12 @@ let package = Package(
 
     .testTarget(
       name: "SwiftIfConfigTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftIfConfig", "SwiftParser"]
+      dependencies: [
+        "_SwiftSyntaxTestSupport",
+        "SwiftIfConfig",
+        "SwiftParser",
+        "SwiftSyntaxMacrosGenericTestSupport",
+      ]
     ),
 
     // MARK: SwiftLexicalLookup

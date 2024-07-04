@@ -1,3 +1,4 @@
+import SwiftOperators
 //===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
@@ -10,7 +11,6 @@
 //
 //===----------------------------------------------------------------------===//
 import SwiftSyntax
-import SwiftOperators
 
 enum IfConfigError: Error, CustomStringConvertible {
   case unknownExpression(ExprSyntax)
@@ -196,15 +196,15 @@ private func evaluateIfConfig(
 
   // Logical '!'.
   if let prefixOp = condition.as(PrefixOperatorExprSyntax.self),
-     prefixOp.operator.text == "!"
+    prefixOp.operator.text == "!"
   {
     return try !evaluateIfConfig(condition: prefixOp.expression, configuration: configuration)
   }
 
   // Logical '&&' and '||'.
   if let binOp = condition.as(InfixOperatorExprSyntax.self),
-     let op = binOp.operator.as(BinaryOperatorExprSyntax.self),
-     (op.operator.text == "&&" || op.operator.text == "||")
+    let op = binOp.operator.as(BinaryOperatorExprSyntax.self),
+    (op.operator.text == "&&" || op.operator.text == "||")
   {
     // Evaluate the left-hand side.
     let lhsResult = try evaluateIfConfig(condition: binOp.leftOperand, configuration: configuration)
@@ -290,7 +290,10 @@ private func evaluateIfConfig(
       return try doSingleIdentifierArgumentCheck(configuration.isActiveTargetRuntime, role: "runtime")
 
     case ._ptrauth:
-      return try doSingleIdentifierArgumentCheck(configuration.isActiveTargetPointerAuthentication, role: "pointer authentication scheme")
+      return try doSingleIdentifierArgumentCheck(
+        configuration.isActiveTargetPointerAuthentication,
+        role: "pointer authentication scheme"
+      )
 
     case ._endian:
       // Ensure that we have a single argument that is a simple identifier,
@@ -313,7 +316,10 @@ private func evaluateIfConfig(
         argFirst == "_",
         let expectedPointerBitWidth = Int(arg.dropFirst())
       else {
-        throw IfConfigError.requiresUnlabeledArgument(name: fnName, role: "pointer bit with ('_' followed by an integer)")
+        throw IfConfigError.requiresUnlabeledArgument(
+          name: fnName,
+          role: "pointer bit with ('_' followed by an integer)"
+        )
       }
 
       return configuration.targetPointerBitWidth == expectedPointerBitWidth

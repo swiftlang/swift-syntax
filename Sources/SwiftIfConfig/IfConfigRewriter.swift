@@ -19,6 +19,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftDiagnostics
 import SwiftSyntax
 
 /// Syntax rewriter that only visits syntax nodes that are active according
@@ -53,9 +54,15 @@ import SwiftSyntax
 /// than trivia).
 class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
   let configuration: Configuration
+  var diagnostics: [Diagnostic] = []
 
   init(configuration: Configuration) {
     self.configuration = configuration
+  }
+
+  private func reportEvaluationError(at node: some SyntaxProtocol, error: Error) {
+    let newDiagnostics = error.asDiagnostics(at: node)
+    diagnostics.append(contentsOf: newDiagnostics)
   }
 
   private func dropInactive<List: Collection & SyntaxCollection>(
@@ -69,6 +76,21 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
 
       // Find #ifs within the list.
       if let ifConfigDecl = elementAsIfConfig(element) {
+        // Evaluate the `#if` condition.
+        let activeClause: IfConfigClauseSyntax?
+        do {
+          activeClause = try ifConfigDecl.activeClause(in: configuration)
+        } catch {
+          // When an error occurs in the evaluation of the condition,
+          // keep the entire `#if`.
+          if anyChanged {
+            newElements.append(element)
+          }
+
+          reportEvaluationError(at: element, error: error)
+          continue
+        }
+
         // If this is the first element that changed, note that we have
         // changes and add all prior elements to the list of new elements.
         if !anyChanged {
@@ -76,12 +98,8 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
           newElements.append(contentsOf: node[..<elementIndex])
         }
 
-        // FIXME: Swallowing errors
-        guard let activeClause = try? ifConfigDecl.activeClause(in: configuration) else {
-          continue
-        }
-
-        guard let elements = activeClause.elements else {
+        // Extract the elements from the active clause, if there are any.
+        guard let elements = activeClause?.elements else {
           continue
         }
 
@@ -231,9 +249,15 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
     postfixIfConfig: PostfixIfConfigExprSyntax
   ) -> ExprSyntax {
     // Determine the active clause within this syntax node.
-    // TODO: Swallows errors
-    guard let activeClause = try? postfixIfConfig.config.activeClause(in: configuration),
-      case .postfixExpression(let postfixExpr) = activeClause.elements
+    let activeClause: IfConfigClauseSyntax?
+    do {
+      activeClause = try postfixIfConfig.config.activeClause(in: configuration)
+    } catch {
+      reportEvaluationError(at: postfixIfConfig, error: error)
+      return ExprSyntax(postfixIfConfig)
+    }
+
+    guard case .postfixExpression(let postfixExpr) = activeClause?.elements
     else {
       // If there is no active clause, return the base.
 
@@ -263,11 +287,15 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
     return applyBaseToPostfixExpression(base: base, postfix: postfixExpr)
   }
 
-  // TODO: PostfixIfConfigExprSyntax has a different form that doesn't work
+  // FIXME: PostfixIfConfigExprSyntax has a different form that doesn't work
   // well with the way dropInactive is written. We essentially need to
   // thread a the "base" into the active clause.
   override func visit(_ node: PostfixIfConfigExprSyntax) -> ExprSyntax {
     let rewrittenNode = dropInactive(outerBase: nil, postfixIfConfig: node)
+    if rewrittenNode == ExprSyntax(node) {
+      return rewrittenNode
+    }
+
     return visit(rewrittenNode)
   }
 }
@@ -276,8 +304,11 @@ extension SyntaxProtocol {
   /// Produce a copy of this syntax node that removes all syntax regions that
   /// are inactive according to the given build configuration, leaving only
   /// the code that is active within that build configuration.
-  public func removingInactive(in configuration: some BuildConfiguration) -> Syntax {
+  ///
+  /// Returns the syntax node with all inactive regions removed, along with an
+  /// array containing any diagnostics produced along the way.
+  public func removingInactive(in configuration: some BuildConfiguration) -> (Syntax, [Diagnostic]) {
     let visitor = ActiveSyntaxRewriter(configuration: configuration)
-    return visitor.rewrite(Syntax(self))
+    return (visitor.rewrite(Syntax(self)), visitor.diagnostics)
   }
 }

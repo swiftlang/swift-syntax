@@ -70,7 +70,8 @@ open class ActiveSyntaxVisitor<Configuration: BuildConfiguration>: SyntaxVisitor
     do {
       // If there is an active clause, visit it's children.
       if let activeClause = try node.activeClause(in: configuration),
-         let elements = activeClause.elements {
+        let elements = activeClause.elements
+      {
         walk(Syntax(elements))
       }
 
@@ -144,7 +145,8 @@ open class ActiveSyntaxAnyVisitor<Configuration: BuildConfiguration>: SyntaxAnyV
     do {
       // If there is an active clause, visit it's children.
       if let activeClause = try node.activeClause(in: configuration),
-         let elements = activeClause.elements {
+        let elements = activeClause.elements
+      {
         walk(Syntax(elements))
       }
 

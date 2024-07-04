@@ -146,7 +146,7 @@ public struct NoteSpec {
 
 func assertNote(
   _ note: Note,
-  in expansionContext: BasicMacroExpansionContext,
+  in expansionContext: DiagnosticAssertionContext,
   expected spec: NoteSpec,
   failureHandler: (TestFailureSpec) -> Void
 ) {
@@ -338,9 +338,36 @@ extension DiagnosticSpec {
   }
 }
 
-func assertDiagnostic(
+/// Describes the context in which we are asserting diagnostic correctness.
+///
+/// This is used to map source locations.
+public enum DiagnosticAssertionContext {
+  case macroExpansion(BasicMacroExpansionContext)
+  case tree(any SyntaxProtocol)
+
+  func location(
+    for position: AbsolutePosition,
+    anchoredAt node: Syntax,
+    fileName: String
+  ) -> SourceLocation {
+    switch self {
+    case .macroExpansion(let expansionContext):
+      return expansionContext.location(
+        for: position,
+        anchoredAt: node,
+        fileName: fileName
+      )
+
+    case .tree(let syntax):
+      return SourceLocationConverter(fileName: fileName, tree: syntax)
+        .location(for: position)
+    }
+  }
+}
+
+public func assertDiagnostic(
   _ diag: Diagnostic,
-  in expansionContext: BasicMacroExpansionContext,
+  in expansionContext: DiagnosticAssertionContext,
   expected spec: DiagnosticSpec,
   failureHandler: (TestFailureSpec) -> Void
 ) {
@@ -533,7 +560,12 @@ public func assertMacroExpansion(
     )
   } else {
     for (actualDiag, expectedDiag) in zip(context.diagnostics, diagnostics) {
-      assertDiagnostic(actualDiag, in: context, expected: expectedDiag, failureHandler: failureHandler)
+      assertDiagnostic(
+        actualDiag,
+        in: .macroExpansion(context),
+        expected: expectedDiag,
+        failureHandler: failureHandler
+      )
     }
   }
 

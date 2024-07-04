@@ -18,7 +18,7 @@ enum BuildConfigurationError: Error, CustomStringConvertible {
   var description: String {
     switch self {
     case .badAttribute(let attribute):
-      return "unacceptable attribute \(attribute)"
+      return "unacceptable attribute '\(attribute)'"
     }
   }
 }

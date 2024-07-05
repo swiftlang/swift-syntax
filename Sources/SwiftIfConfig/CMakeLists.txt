@@ -6,18 +6,20 @@
 # See http://swift.org/LICENSE.txt for license information
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
-add_swift_host_library(SwiftIfConfig
+add_swift_syntax_library(SwiftIfConfig
   BuildConfiguration.swift
+  IfConfigError.swift
   IfConfigEvaluation.swift
   IfConfigFunctions.swift
   IfConfigRewriter.swift
   IfConfigState.swift
   IfConfigVisitor.swift
   SyntaxLiteralUtils.swift
+  VersionTuple+Parsing.swift
   VersionTuple.swift
 )
 
-target_link_libraries(SwiftIfConfig PUBLIC
+target_link_swift_syntax_libraries(SwiftIfConfig PUBLIC
   SwiftSyntax
   SwiftDiagnostics
   SwiftOperators

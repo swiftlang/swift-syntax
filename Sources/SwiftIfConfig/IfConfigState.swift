@@ -12,10 +12,8 @@
 
 /// Describes the state of a particular region guarded by `#if` or similar.
 public enum IfConfigState {
-  /// The region is not parsed, and may contain syntax that is invalid.
-  ///
-  /// TODO: For now, the IfConfig library does not distinguish between
-  /// inactive and unparsed regions, so this case is never used.
+  /// The region is not part of the compiled program and is not even parsed,
+  /// and therefore many contain syntax that is invalid.
   case unparsed
   /// The region is parsed but is not part of the compiled program.
   case inactive

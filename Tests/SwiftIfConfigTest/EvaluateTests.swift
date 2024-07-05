@@ -77,13 +77,46 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("DEBUG && ASSERTS", .active, configuration: buildConfig)
     assertIfConfig("DEBUG && nope", .inactive, configuration: buildConfig)
     assertIfConfig("nope && DEBUG", .inactive, configuration: buildConfig)
-    assertIfConfig("nope && 3.14159", .inactive, configuration: buildConfig)
+    assertIfConfig(
+      "nope && 3.14159",
+      nil,
+      configuration: buildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "invalid conditional compilation expression",
+          line: 1,
+          column: 9
+        )
+      ]
+    )
     assertIfConfig("DEBUG || ASSERTS", .active, configuration: buildConfig)
     assertIfConfig("DEBUG || nope", .active, configuration: buildConfig)
     assertIfConfig("nope || DEBUG", .active, configuration: buildConfig)
     assertIfConfig("nope || !DEBUG", .inactive, configuration: buildConfig)
-    assertIfConfig("DEBUG || 3.14159", .active, configuration: buildConfig)
-    assertIfConfig("(DEBUG) || 3.14159", .active, configuration: buildConfig)
+    assertIfConfig(
+      "DEBUG || 3.14159",
+      nil,
+      configuration: buildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "invalid conditional compilation expression",
+          line: 1,
+          column: 10
+        )
+      ]
+    )
+    assertIfConfig(
+      "(DEBUG) || 3.14159",
+      nil,
+      configuration: buildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "invalid conditional compilation expression",
+          line: 1,
+          column: 12
+        )
+      ]
+    )
   }
 
   func testBadExpressions() throws {
@@ -135,15 +168,39 @@ public class EvaluateTests: XCTestCase {
   }
 
   func testVersions() throws {
-    assertIfConfig("swift(>=5.5", .active)
-    assertIfConfig("swift(<6", .active)
-    assertIfConfig("swift(>=6", .inactive)
-    assertIfConfig("compiler(>=5.8", .active)
-    assertIfConfig("compiler(>=5.9", .active)
-    assertIfConfig("compiler(>=5.10", .inactive)
+    assertIfConfig("swift(>=5.5)", .active)
+    assertIfConfig("swift(<6)", .active)
+    assertIfConfig("swift(>=6)", .unparsed)
+    assertIfConfig("compiler(>=5.8)", .active)
+    assertIfConfig("compiler(>=5.9)", .active)
+    assertIfConfig("compiler(>=5.10)", .unparsed)
     assertIfConfig(#"_compiler_version("5009.*.1")"#, .active)
-    assertIfConfig(#"_compiler_version("5009.*.3.2.3")"#, .inactive)
-    assertIfConfig(#"_compiler_version("5010.*.0")"#, .inactive)
+    assertIfConfig(#"_compiler_version("5009.*.3.2.3")"#, .unparsed)
+    assertIfConfig(#"_compiler_version("5010.*.0")"#, .unparsed)
+    assertIfConfig("compiler(>=5.10) && 3.14159", .unparsed)
+    assertIfConfig(
+      "compiler(>=5.10) || 3.14159",
+      nil,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "invalid conditional compilation expression",
+          line: 1,
+          column: 21
+        )
+      ]
+    )
+    assertIfConfig("compiler(>=5.9) || 3.14159", .active)
+    assertIfConfig(
+      "compiler(>=5.9) && 3.14159",
+      nil,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "invalid conditional compilation expression",
+          line: 1,
+          column: 20
+        )
+      ]
+    )
   }
 
   func testCanImport() throws {

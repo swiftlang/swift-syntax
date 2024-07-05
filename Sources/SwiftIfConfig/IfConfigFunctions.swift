@@ -52,4 +52,17 @@ enum IfConfigFunctions: String {
   /// A check for the target's pointer authentication scheme (e.g., _arm64e)
   /// via `_ptrauth(<name>)`.
   case _ptrauth
+
+  /// Whether uses of this function consistute a "versioned" check. Such checks
+  /// suppress parser diagnostics if the block failed.
+  var isVersioned: Bool {
+    switch self {
+    case .swift, .compiler, ._compiler_version:
+      return true
+
+    case .hasAttribute, .hasFeature, .canImport, .os, .arch, .targetEnvironment,
+      ._endian, ._pointerBitWidth, ._runtime, ._ptrauth:
+      return false
+    }
+  }
 }

@@ -249,12 +249,15 @@ extension VersionTuple {
 ///     build configuration itself.
 /// - Throws: Throws if an error occurs occur during evaluation. The error will
 ///   also be provided to the diagnostic handler before doing so.
-/// - Returns: Whether the condition holds with the given build configuration.
+/// - Returns: A pair of Boolean values. The first describes whether the
+///   condition holds with the given build configuration. The second whether
+///   the build condition is a "versioned" check that implies that we shouldn't
+///   diagnose syntax errors in blocks where the check fails.
 private func evaluateIfConfig(
   condition: ExprSyntax,
   configuration: some BuildConfiguration,
   diagnosticHandler: ((Diagnostic) -> Void)?
-) throws -> Bool {
+) throws -> (active: Bool, versioned: Bool) {
   /// Record the error before returning it. Use this for every 'throw' site
   /// in this evaluation.
   func recordedError(_ error: any Error, at node: some SyntaxProtocol) -> any Error {
@@ -275,8 +278,8 @@ private func evaluateIfConfig(
   /// appropriate diagnostic for the handler before rethrowing it.
   func checkConfiguration(
     at node: some SyntaxProtocol,
-    body: () throws -> Bool
-  ) throws -> Bool {
+    body: () throws -> (Bool, Bool)
+  ) throws -> (active: Bool, versioned: Bool) {
     do {
       return try body()
     } catch let error {
@@ -286,7 +289,7 @@ private func evaluateIfConfig(
 
   // Boolean literals evaluate as-is
   if let boolLiteral = condition.as(BooleanLiteralExprSyntax.self) {
-    return boolLiteral.literalValue
+    return (active: boolLiteral.literalValue, versioned: false)
   }
 
   // Integer literals aren't allowed, but we recognize them.
@@ -302,7 +305,7 @@ private func evaluateIfConfig(
       ).asDiagnostic
     )
 
-    return result
+    return (active: result, versioned: false)
   }
 
   // Declaration references are for custom compilation flags.
@@ -312,7 +315,7 @@ private func evaluateIfConfig(
 
     // Evaluate the custom condition. If the build configuration cannot answer this query, fail.
     return try checkConfiguration(at: identExpr) {
-      try configuration.isCustomConditionSet(name: ident)
+      (active: try configuration.isCustomConditionSet(name: ident), versioned: false)
     }
   }
 
@@ -320,11 +323,13 @@ private func evaluateIfConfig(
   if let prefixOp = condition.as(PrefixOperatorExprSyntax.self),
     prefixOp.operator.text == "!"
   {
-    return try !evaluateIfConfig(
+    let (innerActive, innerVersioned) = try evaluateIfConfig(
       condition: prefixOp.expression,
       configuration: configuration,
       diagnosticHandler: diagnosticHandler
     )
+
+    return (active: !innerActive, versioned: innerVersioned)
   }
 
   // Logical '&&' and '||'.
@@ -333,25 +338,45 @@ private func evaluateIfConfig(
     (op.operator.text == "&&" || op.operator.text == "||")
   {
     // Evaluate the left-hand side.
-    let lhsResult = try evaluateIfConfig(
+    let (lhsActive, lhsVersioned) = try evaluateIfConfig(
       condition: binOp.leftOperand,
       configuration: configuration,
       diagnosticHandler: diagnosticHandler
     )
 
-    // Short-circuit evaluation if we know the answer.
-    switch (lhsResult, op.operator.text) {
-    case (true, "||"): return true
-    case (false, "&&"): return false
-    default: break
+    // Short-circuit evaluation if we know the answer and the left-hand side
+    // was versioned.
+    if lhsVersioned {
+      switch (lhsActive, op.operator.text) {
+      case (true, "||"): return (active: true, versioned: lhsVersioned)
+      case (false, "&&"): return (active: false, versioned: lhsVersioned)
+      default: break
+      }
     }
 
-    // Evaluate the right-hand side and use that result.
-    return try evaluateIfConfig(
+    // Evaluate the right-hand side.
+    let (rhsActive, rhsVersioned) = try evaluateIfConfig(
       condition: binOp.rightOperand,
       configuration: configuration,
       diagnosticHandler: diagnosticHandler
     )
+
+    switch op.operator.text {
+    case "||":
+      return (
+        active: lhsActive || rhsActive,
+        versioned: lhsVersioned && rhsVersioned
+      )
+
+    case "&&":
+      return (
+        active: lhsActive && rhsActive,
+        versioned: lhsVersioned || rhsVersioned
+      )
+
+    default:
+      fatalError("prevented by condition for getting here")
+    }
   }
 
   // Look through parentheses.
@@ -371,7 +396,10 @@ private func evaluateIfConfig(
     let fn = IfConfigFunctions(rawValue: fnName)
   {
     /// Perform a check for an operation that takes a single identifier argument.
-    func doSingleIdentifierArgumentCheck(_ body: (String) throws -> Bool, role: String) throws -> Bool {
+    func doSingleIdentifierArgumentCheck(
+      _ body: (String) throws -> Bool,
+      role: String
+    ) throws -> (active: Bool, versioned: Bool) {
       // Ensure that we have a single argument that is a simple identifier.
       guard let argExpr = call.arguments.singleUnlabeledExpression,
         let arg = argExpr.simpleIdentifierExpr
@@ -382,12 +410,14 @@ private func evaluateIfConfig(
       }
 
       return try checkConfiguration(at: argExpr) {
-        try body(arg)
+        (active: try body(arg), versioned: fn.isVersioned)
       }
     }
 
     /// Perform a check for a version constraint as used in the "swift" or "compiler" version checks.
-    func doVersionComparisonCheck(_ actualVersion: VersionTuple) throws -> Bool {
+    func doVersionComparisonCheck(
+      _ actualVersion: VersionTuple
+    ) throws -> (active: Bool, versioned: Bool) {
       // Ensure that we have a single unlabeled argument that is either >= or < as a prefix
       // operator applied to a version.
       guard let argExpr = call.arguments.singleUnlabeledExpression,
@@ -410,9 +440,9 @@ private func evaluateIfConfig(
 
       switch opToken.text {
       case ">=":
-        return actualVersion >= version
+        return (active: actualVersion >= version, versioned: fn.isVersioned)
       case "<":
-        return actualVersion < version
+        return (active: actualVersion < version, versioned: fn.isVersioned)
       default:
         throw recordedError(.unsupportedVersionOperator(name: fnName, operator: opToken))
       }
@@ -459,7 +489,10 @@ private func evaluateIfConfig(
         )
       }
 
-      return configuration.endianness == expectedEndianness
+      return (
+        active: configuration.endianness == expectedEndianness,
+        versioned: fn.isVersioned
+      )
 
     case ._pointerBitWidth:
       // Ensure that we have a single argument that is a simple identifier, which
@@ -479,7 +512,10 @@ private func evaluateIfConfig(
         )
       }
 
-      return configuration.targetPointerBitWidth == expectedPointerBitWidth
+      return (
+        active: configuration.targetPointerBitWidth == expectedPointerBitWidth,
+        versioned: fn.isVersioned
+      )
 
     case .swift:
       return try doVersionComparisonCheck(configuration.languageVersion)
@@ -508,7 +544,10 @@ private func evaluateIfConfig(
       let versionString = stringSegment.content.text
       let expectedVersion = try VersionTuple(parsingCompilerBuildVersion: versionString, argExpr)
 
-      return configuration.compilerVersion >= expectedVersion
+      return (
+        active: configuration.compilerVersion >= expectedVersion,
+        versioned: fn.isVersioned
+      )
 
     case .canImport:
       // Retrieve the first argument, which must not have a label. This is
@@ -577,9 +616,12 @@ private func evaluateIfConfig(
       }
 
       return try checkConfiguration(at: call) {
-        try configuration.canImport(
-          importPath: importPath.map { String($0) },
-          version: version
+        (
+          active: try configuration.canImport(
+            importPath: importPath.map { String($0) },
+            version: version
+          ),
+          versioned: fn.isVersioned
         )
       }
     }
@@ -602,12 +644,17 @@ extension IfConfigState {
       throw error
     }.cast(ExprSyntax.self)
 
-    let result = try evaluateIfConfig(
+    let (active, versioned) = try evaluateIfConfig(
       condition: foldedCondition,
       configuration: configuration,
       diagnosticHandler: diagnosticHandler
     )
-    self = result ? .active : .inactive
+
+    switch (active, versioned) {
+    case (true, _): self = .active
+    case (false, false): self = .inactive
+    case (false, true): self = .unparsed
+    }
   }
 }
 
@@ -644,7 +691,7 @@ extension IfConfigDeclSyntax {
         condition: condition,
         configuration: configuration,
         diagnosticHandler: diagnosticHandler
-      ) {
+      ).active {
         return clause
       }
     }

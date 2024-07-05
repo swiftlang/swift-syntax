@@ -119,18 +119,6 @@ extension SyntaxProtocol {
     }
   }
 
-  /// Returns this node or the first ancestor that satisfies `condition`.
-  func ancestorOrSelf<T>(mapping map: (Syntax) -> T?) -> T? {
-    var walk: Syntax? = Syntax(self)
-    while let unwrappedParent = walk {
-      if let mapped = map(unwrappedParent) {
-        return mapped
-      }
-      walk = unwrappedParent.parent
-    }
-    return nil
-  }
-
   /// Returns `true` if the next token's leading trivia should be made leading trivia
   /// of this mode, when it is switched from being missing to present.
   var shouldBeInsertedAfterNextTokenTrivia: Bool {

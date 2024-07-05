@@ -12,6 +12,7 @@ builder:
       - SwiftCompilerPlugin
       - SwiftDiagnostics
       - SwiftIDEUtils
+      - SwiftLexicalLookup
       - SwiftOperators
       - SwiftParser
       - SwiftParserDiagnostics

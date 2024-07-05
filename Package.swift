@@ -17,6 +17,7 @@ let package = Package(
     .library(name: "SwiftCompilerPlugin", targets: ["SwiftCompilerPlugin"]),
     .library(name: "SwiftDiagnostics", targets: ["SwiftDiagnostics"]),
     .library(name: "SwiftIDEUtils", targets: ["SwiftIDEUtils"]),
+    .library(name: "SwiftLexicalLookup", targets: ["SwiftLexicalLookup"]),
     .library(name: "SwiftOperators", targets: ["SwiftOperators"]),
     .library(name: "SwiftParser", targets: ["SwiftParser"]),
     .library(name: "SwiftParserDiagnostics", targets: ["SwiftParserDiagnostics"]),
@@ -135,6 +136,18 @@ let package = Package(
     .testTarget(
       name: "SwiftIDEUtilsTest",
       dependencies: ["_SwiftSyntaxTestSupport", "SwiftIDEUtils", "SwiftParser", "SwiftSyntax"]
+    ),
+
+    // MARK: SwiftLexicalLookup
+
+    .target(
+      name: "SwiftLexicalLookup",
+      dependencies: ["SwiftSyntax"]
+    ),
+
+    .testTarget(
+      name: "SwiftLexicalLookupTest",
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftLexicalLookup"]
     ),
 
     // MARK: SwiftLibraryPluginProvider

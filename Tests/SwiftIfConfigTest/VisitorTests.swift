@@ -2,7 +2,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2023 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2024 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -25,9 +25,9 @@ class AllActiveVisitor: ActiveSyntaxAnyVisitor<TestingBuildConfiguration> {
     super.init(viewMode: .sourceAccurate, configuration: configuration)
   }
   open override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
-    var active: Bool = false
+    var active: IfConfigState = .inactive
     XCTAssertNoThrow(try active = node.isActive(in: configuration))
-    XCTAssertTrue(active)
+    XCTAssertEqual(active, .active)
     return .visitChildren
   }
 }

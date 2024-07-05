@@ -715,25 +715,55 @@ extension SyntaxProtocol {
   ///   #endif
   /// #endif
   ///
-  /// a call to `isActive` on the syntax node for the function `g` would return `true` when the
+  /// a call to `isActive` on the syntax node for the function `g` would return `active` when the
   /// configuration options `DEBUG` and `B` are provided, but `A` is not.
-  public func isActive(in configuration: some BuildConfiguration) throws -> Bool {
+  public func isActive(
+    in configuration: some BuildConfiguration,
+    diagnosticHandler: ((Diagnostic) -> Void)? = nil
+  ) throws -> IfConfigState {
     var currentNode: Syntax = Syntax(self)
+    var currentState: IfConfigState = .active
+
     while let parent = currentNode.parent {
       // If the parent is an `#if` configuration, check whether our current
-      // clause is active. If not, we're in an inactive region.
+      // clause is active. If not, we're in an inactive region. We also
+      // need to determine whether
       if let ifConfigClause = currentNode.as(IfConfigClauseSyntax.self),
-        let ifConfigDecl = ifConfigClause.parent?.as(IfConfigDeclSyntax.self)
+        let ifConfigDecl = ifConfigClause.parent?.parent?.as(IfConfigDeclSyntax.self)
       {
-        if try ifConfigDecl.activeClause(in: configuration) != ifConfigClause {
-          return false
+        let activeClause = try ifConfigDecl.activeClause(
+          in: configuration,
+          diagnosticHandler: diagnosticHandler
+        )
+
+        if activeClause != ifConfigClause {
+          // This was not the active clause, so we know that we're in an
+          // inactive block. However, depending on the condition of this
+          // clause and any enclosing clauses, it might be an unparsed block.
+
+          // Check this condition.
+          if let condition = ifConfigClause.condition {
+            // Evaluate this condition against the build configuration.
+            let (_, versioned) = try evaluateIfConfig(
+              condition: condition,
+              configuration: configuration,
+              diagnosticHandler: diagnosticHandler
+            )
+
+            // If the condition is versioned, this is an unparsed region.
+            // We already know that it is inactive, or we wouldn't be here.
+            if versioned {
+              return .unparsed
+            }
+          }
+
+          currentState = .inactive
         }
       }
 
       currentNode = parent
     }
 
-    // No more enclosing nodes; this code is active.
-    return true
+    return currentState
   }
 }

@@ -61,7 +61,37 @@ func assertIfConfig(
       )
     }
   }
+}
 
+/// Assert that the various marked positions in the source code have the
+/// expected active states.
+func assertActiveCode(
+  _ markedSource: String,
+  configuration: some BuildConfiguration = TestingBuildConfiguration(),
+  states: [String: IfConfigState],
+  file: StaticString = #filePath,
+  line: UInt = #line
+) throws {
+  // Pull out the markers that we'll use to dig out nodes to query.
+  let (markerLocations, source) = extractMarkers(markedSource)
+
+  var parser = Parser(source)
+  let tree = SourceFileSyntax.parse(from: &parser)
+
+  for (marker, location) in markerLocations {
+    guard let expectedState = states[marker] else {
+      XCTFail("Missing marker \(marker) in expected states", file: file, line: line)
+      continue
+    }
+
+    guard let token = tree.token(at: AbsolutePosition(utf8Offset: location)) else {
+      XCTFail("Unable to find token at location \(location)", file: file, line: line)
+      continue
+    }
+
+    let actualState = try token.isActive(in: configuration)
+    XCTAssertEqual(actualState, expectedState, "at marker \(marker)", file: file, line: line)
+  }
 }
 
 /// Assert that applying the given build configuration to the source code

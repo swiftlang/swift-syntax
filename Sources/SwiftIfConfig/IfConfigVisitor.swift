@@ -75,7 +75,7 @@ open class ActiveSyntaxVisitor<Configuration: BuildConfiguration>: SyntaxVisitor
         walk(Syntax(elements))
       }
 
-      // Skip everything else in the
+      // Skip everything else in the #if.
       return .skipChildren
     } catch {
       return reportEvaluationError(at: node, error: error)

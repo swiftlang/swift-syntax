@@ -32,6 +32,23 @@ public enum MacroRole: Sendable {
   case `extension`
   @_spi(ExperimentalLanguageFeature) case preamble
   @_spi(ExperimentalLanguageFeature) case body
+
+  init?(macroType: Macro.Type) {
+    switch macroType {
+    case is ExpressionMacro.Type: self = .expression
+    case is DeclarationMacro.Type: self = .declaration
+    case is AccessorMacro.Type: self = .accessor
+    case is MemberAttributeMacro.Type: self = .memberAttribute
+    case is MemberMacro.Type: self = .member
+    case is PeerMacro.Type: self = .peer
+    case is CodeItemMacro.Type: self = .codeItem
+    case is ExtensionMacro.Type: self = .extension
+    case is PreambleMacro.Type: self = .preamble
+    case is BodyMacro.Type: self = .body
+    default:
+      return nil
+    }
+  }
 }
 
 extension MacroRole {
@@ -50,6 +67,22 @@ extension MacroRole {
     case .body: return "BodyMacro"
     }
   }
+
+  var description: String {
+    switch self {
+    case .expression: return "expression"
+    case .declaration: return "declaration"
+    case .accessor: return "accessor"
+    case .memberAttribute: return "memberAttribute"
+    case .member: return "member"
+    case .peer: return "peer"
+    case .conformance: return "conformance"
+    case .codeItem: return "codeItem"
+    case .extension: return "extension"
+    case .preamble: return "preamble"
+    case .body: return "body"
+    }
+  }
 }
 
 /// Simple diagnostic message
@@ -63,6 +96,7 @@ enum MacroExpansionError: Error, CustomStringConvertible {
   case noFreestandingMacroRoles(Macro.Type)
   case moreThanOneBodyMacro
   case preambleWithoutBody
+  case noAttachedMacroRoles(Macro.Type)
 
   var description: String {
     switch self {
@@ -92,6 +126,9 @@ enum MacroExpansionError: Error, CustomStringConvertible {
 
     case .preambleWithoutBody:
       return "preamble macro cannot be applied to a function with no body"
+
+    case .noAttachedMacroRoles(let type):
+      return "macro implementation type '\(type)' does not conform to any attached macro protocol"
     }
   }
 }

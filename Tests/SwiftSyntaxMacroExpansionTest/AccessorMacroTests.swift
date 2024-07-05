@@ -411,4 +411,70 @@ final class AccessorMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testAccessorNotOnVariableOrSubscript() {
+    struct TestMacro: AccessorMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AccessorDeclSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      "@Test struct Foo {}",
+      expandedSource: "struct Foo {}",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'accessor' macro cannot be attached to struct",
+          line: 1,
+          column: 1,
+          fixIts: [FixItSpec(message: "Remove '@Test'")]
+        )
+      ],
+      macros: ["Test": TestMacro.self]
+    )
+
+    assertMacroExpansion(
+      "@Test func Foo() {}",
+      expandedSource: "func Foo() {}",
+      diagnostics: [
+        // The compiler will reject this with "'accessor' macro cannot be attached to global function"
+        DiagnosticSpec(
+          message: "'accessor' macro cannot be attached to function",
+          line: 1,
+          column: 1,
+          fixIts: [FixItSpec(message: "Remove '@Test'")]
+        )
+      ],
+      macros: ["Test": TestMacro.self]
+    )
+
+    assertMacroExpansion(
+      """
+      struct Foo {
+        @Test
+        func Bar() {}
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+          func Bar() {}
+        }
+        """,
+      diagnostics: [
+        // The compiler will reject this with "'accessor' macro cannot be attached to instance method"
+        DiagnosticSpec(
+          message: "'accessor' macro cannot be attached to function",
+          line: 2,
+          column: 3,
+          fixIts: [FixItSpec(message: "Remove '@Test'")]
+        )
+      ],
+      macros: ["Test": TestMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
 }

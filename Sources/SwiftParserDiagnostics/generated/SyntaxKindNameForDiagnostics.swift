@@ -19,7 +19,7 @@
 #endif
 
 extension SyntaxKind {
-  var nameForDiagnostics: String? {
+  public var nameForDiagnostics: String? {
     switch self {
     case .token:
       return "token"

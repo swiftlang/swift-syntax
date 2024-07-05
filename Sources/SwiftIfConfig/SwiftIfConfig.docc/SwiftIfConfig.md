@@ -4,7 +4,7 @@ A library to evaluate `#if` conditionals within a Swift syntax tree.
 
 ## Overview
 
-Swift provides the ability to conditionally compile parts of a source file based on various built-time conditions, including information about the target (operating system, processor architecture, environment), information about the compiler (version, supported attributes and features), and user-supplied conditions specified as part of the build (e.g., `DEBUG`), which we collectively refer to as the *build configuration*. These conditions can occur within a `#if` in the source code, e.g.,
+Swift provides the ability to conditionally compile parts of a source file based on various build-time conditions, including information about the target (operating system, processor architecture, environment), information about the compiler (version, supported attributes and features), and user-supplied conditions specified as part of the build (e.g., `DEBUG`), which we collectively refer to as the *build configuration*. These conditions can occur within a `#if` in the source code, e.g.,
 
 ```swift
 func f() {
@@ -29,4 +29,7 @@ The `SwiftIfConfig` library provides utilities to determine which syntax nodes a
 * <doc:ActiveSyntaxVisitor> and <doc:ActiveSyntaxAnyVisitor> are visitor types that only visit the syntax nodes that are included ("active") for a given build configuration, implicitly skipping any nodes within inactive `#if` clauses.
 * ``SyntaxProtocol/removingInactive(in:)`` produces a syntax node that removes all inactive regions (and their corresponding `IfConfigDeclSyntax` nodes) from the given syntax tree, returning a new tree that is free of `#if` conditions.
 * ``IfConfigDeclSyntax.activeClause(in:)`` determines which of the clauses of an `#if` is active for the given build configuration, returning the active clause.
-* ``SyntaxProtocol.isActive(in:)`` determines whether the given syntax node is active for the given build configuration.
+* ``SyntaxProtocol.isActive(in:)`` determines whether the given syntax node is active for the given build configuration. The result is one of "active"
+    (the node is included in the program), "inactive" (the node is not included
+    in the program), or "unparsed" (the node is not included in the program and
+    is also allowed to have syntax errors).

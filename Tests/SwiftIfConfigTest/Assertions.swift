@@ -18,11 +18,57 @@ import XCTest
 import _SwiftSyntaxGenericTestSupport
 import _SwiftSyntaxTestSupport
 
+/// Assert the results of evaluating the condition within an `#if` against the
+/// given build configuration.
+func assertIfConfig(
+  _ condition: ExprSyntax,
+  _ expectedState: IfConfigState?,
+  configuration: some BuildConfiguration = TestingBuildConfiguration(),
+  diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
+  file: StaticString = #filePath,
+  line: UInt = #line
+) {
+  // Evaluate the condition to check the state.
+  var actualDiagnostics: [Diagnostic] = []
+  do {
+    let actualState = try IfConfigState(condition: condition, configuration: configuration) { diag in
+      actualDiagnostics.append(diag)
+    }
+    XCTAssertEqual(actualState, expectedState, file: file, line: line)
+  } catch {
+    XCTAssertNil(expectedState, file: file, line: line)
+  }
+
+  // Check the diagnostics.
+  if actualDiagnostics.count != expectedDiagnostics.count {
+    XCTFail(
+      """
+      Expected \(expectedDiagnostics.count) diagnostics, but got \(actualDiagnostics.count):
+      \(actualDiagnostics.map(\.debugDescription).joined(separator: "\n"))
+      """,
+      file: file,
+      line: line
+    )
+  } else {
+    for (actualDiag, expectedDiag) in zip(actualDiagnostics, expectedDiagnostics) {
+      assertDiagnostic(
+        actualDiag,
+        in: .tree(condition),
+        expected: expectedDiag,
+        failureHandler: {
+          XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
+        }
+      )
+    }
+  }
+
+}
+
 /// Assert that applying the given build configuration to the source code
 /// returns the expected source and diagnostics.
 func assertRemoveInactive(
   _ source: String,
-  configuration: any BuildConfiguration,
+  configuration: some BuildConfiguration,
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
   expectedSource: String,
   file: StaticString = #filePath,

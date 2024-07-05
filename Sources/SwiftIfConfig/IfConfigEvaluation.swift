@@ -1,4 +1,3 @@
-import SwiftOperators
 //===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
@@ -10,12 +9,14 @@ import SwiftOperators
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
+import SwiftDiagnostics
+import SwiftOperators
 import SwiftSyntax
 
 enum IfConfigError: Error, CustomStringConvertible {
   case unknownExpression(ExprSyntax)
   case unhandledFunction(name: String, syntax: ExprSyntax)
-  case requiresUnlabeledArgument(name: String, role: String)
+  case requiresUnlabeledArgument(name: String, role: String, syntax: ExprSyntax)
   case unsupportedVersionOperator(name: String, operator: TokenSyntax)
   case invalidVersionOperand(name: String, syntax: ExprSyntax)
   case emptyVersionComponent(syntax: ExprSyntax)
@@ -25,6 +26,8 @@ enum IfConfigError: Error, CustomStringConvertible {
   case canImportMissingModule(syntax: ExprSyntax)
   case canImportLabel(syntax: ExprSyntax)
   case canImportTwoParameters(syntax: ExprSyntax)
+  case ignoredTrailingComponents(version: VersionTuple, syntax: ExprSyntax)
+  case integerLiteralCondition(syntax: ExprSyntax, replacement: Bool)
 
   var description: String {
     switch self {
@@ -34,7 +37,7 @@ enum IfConfigError: Error, CustomStringConvertible {
     case .unhandledFunction(name: let name, syntax: _):
       return "build configuration cannot handle '\(name)'"
 
-    case .requiresUnlabeledArgument(name: let name, role: let role):
+    case .requiresUnlabeledArgument(name: let name, role: let role, syntax: _):
       return "\(name) requires a single unlabeled argument for the \(role)"
 
     case .unsupportedVersionOperator(name: let name, operator: let op):
@@ -65,7 +68,80 @@ enum IfConfigError: Error, CustomStringConvertible {
 
     case .canImportTwoParameters(syntax: _):
       return "canImport can take only two parameters"
+
+    case .ignoredTrailingComponents(version: let version, syntax: _):
+      return "trailing components of version '\(version.description)' are ignored"
+
+    case .integerLiteralCondition(syntax: let syntax, replacement: let replacement):
+      return "'\(syntax.trimmedDescription)' is not a valid conditional compilation expression, use '\(replacement)'"
     }
+  }
+
+  /// Retrieve the syntax node associated with this error.
+  var syntax: Syntax {
+    switch self {
+    case .unknownExpression(let syntax),
+      .unhandledFunction(name: _, syntax: let syntax),
+      .requiresUnlabeledArgument(name: _, role: _, syntax: let syntax),
+      .invalidVersionOperand(name: _, syntax: let syntax),
+      .emptyVersionComponent(syntax: let syntax),
+      .compilerVersionOutOfRange(value: _, upperLimit: _, syntax: let syntax),
+      .compilerVersionTooManyComponents(syntax: let syntax),
+      .compilerVersionSecondComponentNotWildcard(syntax: let syntax),
+      .canImportMissingModule(syntax: let syntax),
+      .canImportLabel(syntax: let syntax),
+      .canImportTwoParameters(syntax: let syntax),
+      .ignoredTrailingComponents(version: _, syntax: let syntax),
+      .integerLiteralCondition(syntax: let syntax, replacement: _):
+      return Syntax(syntax)
+
+    case .unsupportedVersionOperator(name: _, operator: let op):
+      return Syntax(op)
+    }
+  }
+}
+
+extension IfConfigError: DiagnosticMessage {
+  var message: String { description }
+
+  var diagnosticID: MessageID {
+    .init(domain: "SwiftIfConfig", id: "IfConfigError")
+  }
+
+  var severity: SwiftDiagnostics.DiagnosticSeverity {
+    switch self {
+    case .ignoredTrailingComponents: return .warning
+    default: return .error
+    }
+  }
+
+  private struct SimpleFixItMessage: FixItMessage {
+    var message: String
+
+    var fixItID: MessageID {
+      .init(domain: "SwiftIfConfig", id: "IfConfigFixIt")
+    }
+  }
+
+  var asDiagnostic: Diagnostic {
+    // For the integer literal condition we have a Fix-It.
+    if case .integerLiteralCondition(let syntax, let replacement) = self {
+      return Diagnostic(
+        node: syntax,
+        message: self,
+        fixIt: .replace(
+          message: SimpleFixItMessage(
+            message: "replace with Boolean literal '\(replacement)'"
+          ),
+          oldNode: syntax,
+          newNode: BooleanLiteralExprSyntax(
+            literal: .keyword(replacement ? .true : .false)
+          )
+        )
+      )
+    }
+
+    return Diagnostic(node: syntax, message: self)
   }
 }
 
@@ -90,7 +166,6 @@ extension VersionTuple {
     func recordComponent(_ value: Int) throws {
       let limit = components.isEmpty ? 9223371 : 999
       if value < 0 || value > limit {
-        // FIXME: Can we provide a more precise location here?
         throw IfConfigError.compilerVersionOutOfRange(value: value, upperLimit: limit, syntax: versionSyntax)
       }
 
@@ -169,20 +244,65 @@ extension VersionTuple {
 ///     folded according to the logical operators table.
 ///   - configuration: The configuration against which the condition will be
 ///     evaluated.
-/// - Throws: Throws if an errors occur during evaluation.
+///   - diagnosticHandler: Receives any diagnostics that are produced by the
+///     evaluation, whether from errors in the source code or produced by the
+///     build configuration itself.
+/// - Throws: Throws if an error occurs occur during evaluation. The error will
+///   also be provided to the diagnostic handler before doing so.
 /// - Returns: Whether the condition holds with the given build configuration.
 private func evaluateIfConfig(
   condition: ExprSyntax,
-  configuration: some BuildConfiguration
+  configuration: some BuildConfiguration,
+  diagnosticHandler: ((Diagnostic) -> Void)?
 ) throws -> Bool {
+  /// Record the error before returning it. Use this for every 'throw' site
+  /// in this evaluation.
+  func recordedError(_ error: any Error, at node: some SyntaxProtocol) -> any Error {
+    if let diagnosticHandler {
+      error.asDiagnostics(at: node).forEach { diagnosticHandler($0) }
+    }
+
+    return error
+  }
+
+  /// Record an if-config evaluation error before returning it. Use this for
+  /// every 'throw' site in this evaluation.
+  func recordedError(_ error: IfConfigError) -> any Error {
+    return recordedError(error, at: error.syntax)
+  }
+
+  /// Check a configuration condition, translating any thrown error into an
+  /// appropriate diagnostic for the handler before rethrowing it.
+  func checkConfiguration(
+    at node: some SyntaxProtocol,
+    body: () throws -> Bool
+  ) throws -> Bool {
+    do {
+      return try body()
+    } catch let error {
+      throw recordedError(error, at: node)
+    }
+  }
+
   // Boolean literals evaluate as-is
   if let boolLiteral = condition.as(BooleanLiteralExprSyntax.self) {
     return boolLiteral.literalValue
   }
 
-  // Integer literals evaluate true if that are not "0".
-  if let intLiteral = condition.as(IntegerLiteralExprSyntax.self) {
-    return intLiteral.literal.text != "0"
+  // Integer literals aren't allowed, but we recognize them.
+  if let intLiteral = condition.as(IntegerLiteralExprSyntax.self),
+    (intLiteral.literal.text == "0" || intLiteral.literal.text == "1")
+  {
+    let result = intLiteral.literal.text == "1"
+
+    diagnosticHandler?(
+      IfConfigError.integerLiteralCondition(
+        syntax: condition,
+        replacement: result
+      ).asDiagnostic
+    )
+
+    return result
   }
 
   // Declaration references are for custom compilation flags.
@@ -191,14 +311,20 @@ private func evaluateIfConfig(
     let ident = identExpr.baseName.text
 
     // Evaluate the custom condition. If the build configuration cannot answer this query, fail.
-    return try configuration.isCustomConditionSet(name: ident)
+    return try checkConfiguration(at: identExpr) {
+      try configuration.isCustomConditionSet(name: ident)
+    }
   }
 
   // Logical '!'.
   if let prefixOp = condition.as(PrefixOperatorExprSyntax.self),
     prefixOp.operator.text == "!"
   {
-    return try !evaluateIfConfig(condition: prefixOp.expression, configuration: configuration)
+    return try !evaluateIfConfig(
+      condition: prefixOp.expression,
+      configuration: configuration,
+      diagnosticHandler: diagnosticHandler
+    )
   }
 
   // Logical '&&' and '||'.
@@ -207,7 +333,11 @@ private func evaluateIfConfig(
     (op.operator.text == "&&" || op.operator.text == "||")
   {
     // Evaluate the left-hand side.
-    let lhsResult = try evaluateIfConfig(condition: binOp.leftOperand, configuration: configuration)
+    let lhsResult = try evaluateIfConfig(
+      condition: binOp.leftOperand,
+      configuration: configuration,
+      diagnosticHandler: diagnosticHandler
+    )
 
     // Short-circuit evaluation if we know the answer.
     switch (lhsResult, op.operator.text) {
@@ -217,17 +347,25 @@ private func evaluateIfConfig(
     }
 
     // Evaluate the right-hand side and use that result.
-    return try evaluateIfConfig(condition: binOp.rightOperand, configuration: configuration)
+    return try evaluateIfConfig(
+      condition: binOp.rightOperand,
+      configuration: configuration,
+      diagnosticHandler: diagnosticHandler
+    )
   }
 
   // Look through parentheses.
   if let tuple = condition.as(TupleExprSyntax.self), tuple.isParentheses,
     let element = tuple.elements.first
   {
-    return try evaluateIfConfig(condition: element.expression, configuration: configuration)
+    return try evaluateIfConfig(
+      condition: element.expression,
+      configuration: configuration,
+      diagnosticHandler: diagnosticHandler
+    )
   }
 
-  // Calls syntax is for operations.
+  // Call syntax is for operations.
   if let call = condition.as(FunctionCallExprSyntax.self),
     let fnName = call.calledExpression.simpleIdentifierExpr,
     let fn = IfConfigFunctions(rawValue: fnName)
@@ -238,10 +376,14 @@ private func evaluateIfConfig(
       guard let argExpr = call.arguments.singleUnlabeledExpression,
         let arg = argExpr.simpleIdentifierExpr
       else {
-        throw IfConfigError.requiresUnlabeledArgument(name: fnName, role: role)
+        throw recordedError(
+          .requiresUnlabeledArgument(name: fnName, role: role, syntax: ExprSyntax(call))
+        )
       }
 
-      return try body(arg)
+      return try checkConfiguration(at: argExpr) {
+        try body(arg)
+      }
     }
 
     /// Perform a check for a version constraint as used in the "swift" or "compiler" version checks.
@@ -251,13 +393,19 @@ private func evaluateIfConfig(
       guard let argExpr = call.arguments.singleUnlabeledExpression,
         let unaryArg = argExpr.as(PrefixOperatorExprSyntax.self)
       else {
-        throw IfConfigError.requiresUnlabeledArgument(name: fnName, role: "version comparison (>= or <= a version)")
+        throw recordedError(
+          .requiresUnlabeledArgument(
+            name: fnName,
+            role: "version comparison (>= or <= a version)",
+            syntax: ExprSyntax(call)
+          )
+        )
       }
 
       // Parse the version.
       let opToken = unaryArg.operator
       guard let version = VersionTuple(parsing: unaryArg.expression.trimmedDescription) else {
-        throw IfConfigError.invalidVersionOperand(name: fnName, syntax: unaryArg.expression)
+        throw recordedError(.invalidVersionOperand(name: fnName, syntax: unaryArg.expression))
       }
 
       switch opToken.text {
@@ -266,7 +414,7 @@ private func evaluateIfConfig(
       case "<":
         return actualVersion < version
       default:
-        throw IfConfigError.unsupportedVersionOperator(name: fnName, operator: opToken)
+        throw recordedError(.unsupportedVersionOperator(name: fnName, operator: opToken))
       }
     }
 
@@ -302,7 +450,13 @@ private func evaluateIfConfig(
         let arg = argExpr.simpleIdentifierExpr,
         let expectedEndianness = Endianness(rawValue: arg)
       else {
-        throw IfConfigError.requiresUnlabeledArgument(name: fnName, role: "endiannes ('big' or 'little')")
+        throw recordedError(
+          .requiresUnlabeledArgument(
+            name: fnName,
+            role: "endiannes ('big' or 'little')",
+            syntax: ExprSyntax(call)
+          )
+        )
       }
 
       return configuration.endianness == expectedEndianness
@@ -316,9 +470,12 @@ private func evaluateIfConfig(
         argFirst == "_",
         let expectedPointerBitWidth = Int(arg.dropFirst())
       else {
-        throw IfConfigError.requiresUnlabeledArgument(
-          name: fnName,
-          role: "pointer bit with ('_' followed by an integer)"
+        throw recordedError(
+          .requiresUnlabeledArgument(
+            name: fnName,
+            role: "pointer bit with ('_' followed by an integer)",
+            syntax: ExprSyntax(call)
+          )
         )
       }
 
@@ -339,8 +496,13 @@ private func evaluateIfConfig(
         let segment = stringLiteral.segments.first,
         case .stringSegment(let stringSegment) = segment
       else {
-        // FIXME: better diagnostic here
-        throw IfConfigError.unknownExpression(condition)
+        throw recordedError(
+          .requiresUnlabeledArgument(
+            name: "_compiler_version",
+            role: "version",
+            syntax: ExprSyntax(call)
+          )
+        )
       }
 
       let versionString = stringSegment.content.text
@@ -354,7 +516,7 @@ private func evaluateIfConfig(
       guard let firstArg = call.arguments.first,
         firstArg.label == nil
       else {
-        throw IfConfigError.canImportMissingModule(syntax: ExprSyntax(call))
+        throw recordedError(.canImportMissingModule(syntax: ExprSyntax(call)))
       }
 
       // FIXME: This is a gross hack. Actually look at the sequence of
@@ -366,7 +528,7 @@ private func evaluateIfConfig(
       let version: CanImportVersion
       if let secondArg = call.arguments.dropFirst().first {
         if secondArg.label?.text != "_version" && secondArg.label?.text != "_underlyingVersion" {
-          throw IfConfigError.canImportLabel(syntax: secondArg.expression)
+          throw recordedError(.canImportLabel(syntax: secondArg.expression))
         }
 
         let versionText: String
@@ -380,11 +542,25 @@ private func evaluateIfConfig(
           versionText = secondArg.expression.trimmedDescription
         }
 
-        guard let versionTuple = VersionTuple(parsing: versionText) else {
-          throw IfConfigError.invalidVersionOperand(name: "canImport", syntax: secondArg.expression)
+        guard var versionTuple = VersionTuple(parsing: versionText) else {
+          throw recordedError(
+            .invalidVersionOperand(name: "canImport", syntax: secondArg.expression)
+          )
         }
 
-        // FIXME: Warning that the version can only have at most 4 components.
+        // Remove excess components from the version,
+        if versionTuple.components.count > 4 {
+          // Remove excess components.
+          versionTuple.components.removeSubrange(4...)
+
+          // Warn that we did this.
+          diagnosticHandler?(
+            IfConfigError.ignoredTrailingComponents(
+              version: versionTuple,
+              syntax: secondArg.expression
+            ).asDiagnostic
+          )
+        }
 
         if secondArg.label?.text == "_version" {
           version = .version(versionTuple)
@@ -394,30 +570,43 @@ private func evaluateIfConfig(
         }
 
         if call.arguments.count > 2 {
-          throw IfConfigError.canImportTwoParameters(syntax: ExprSyntax(call))
+          throw recordedError(.canImportTwoParameters(syntax: ExprSyntax(call)))
         }
       } else {
         version = .unversioned
       }
 
-      return try configuration.canImport(
-        importPath: importPath.map { String($0) },
-        version: version
-      )
+      return try checkConfiguration(at: call) {
+        try configuration.canImport(
+          importPath: importPath.map { String($0) },
+          version: version
+        )
+      }
     }
   }
 
-  throw IfConfigError.unknownExpression(condition)
+  throw recordedError(.unknownExpression(condition))
 }
 
 extension IfConfigState {
   /// Evaluate the given `#if` condition using the given build configuration, throwing an error if there is
   /// insufficient information to make a determination.
-  public init(condition: some ExprSyntaxProtocol, configuration: some BuildConfiguration) throws {
+  public init(
+    condition: some ExprSyntaxProtocol,
+    configuration: some BuildConfiguration,
+    diagnosticHandler: ((Diagnostic) -> Void)? = nil
+  ) throws {
     // Apply operator folding for !/&&/||.
-    let foldedCondition = try OperatorTable.logicalOperators.foldAll(condition).cast(ExprSyntax.self)
+    let foldedCondition = try OperatorTable.logicalOperators.foldAll(condition) { error in
+      diagnosticHandler?(error.asDiagnostic)
+      throw error
+    }.cast(ExprSyntax.self)
 
-    let result = try evaluateIfConfig(condition: foldedCondition, configuration: configuration)
+    let result = try evaluateIfConfig(
+      condition: foldedCondition,
+      configuration: configuration,
+      diagnosticHandler: diagnosticHandler
+    )
     self = result ? .active : .inactive
   }
 }
@@ -440,7 +629,10 @@ extension IfConfigDeclSyntax {
   /// passed, this function will return `nil` to indicate that none of the regions are active.
   ///
   /// If an error occurred while processing any of the `#if` clauses, this function will throw that error.
-  public func activeClause(in configuration: some BuildConfiguration) throws -> IfConfigClauseSyntax? {
+  public func activeClause(
+    in configuration: some BuildConfiguration,
+    diagnosticHandler: ((Diagnostic) -> Void)? = nil
+  ) throws -> IfConfigClauseSyntax? {
     for clause in clauses {
       // If there is no condition, we have reached an unconditional clause. Return it.
       guard let condition = clause.condition else {
@@ -448,7 +640,11 @@ extension IfConfigDeclSyntax {
       }
 
       // If this condition evaluates true, return this clause.
-      if try evaluateIfConfig(condition: condition, configuration: configuration) {
+      if try evaluateIfConfig(
+        condition: condition,
+        configuration: configuration,
+        diagnosticHandler: diagnosticHandler
+      ) {
         return clause
       }
     }

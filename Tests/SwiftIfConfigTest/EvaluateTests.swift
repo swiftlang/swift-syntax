@@ -1,6 +1,3 @@
-import SwiftIfConfig
-import SwiftParser
-import SwiftSyntax
 //===----------------------------------------------------------------------===//
 //
 // This source file is part of the Swift.org open source project
@@ -12,6 +9,10 @@ import SwiftSyntax
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
+import SwiftIfConfig
+import SwiftParser
+import SwiftSyntax
+import SwiftSyntaxMacrosGenericTestSupport
 import XCTest
 import _SwiftSyntaxTestSupport
 
@@ -19,131 +20,152 @@ public class EvaluateTests: XCTestCase {
   func testLiterals() throws {
     let buildConfig = TestingBuildConfiguration(customConditions: ["DEBUG", "ASSERTS"])
 
-    func ifConfigState(_ condition: ExprSyntax) throws -> IfConfigState {
-      try IfConfigState(condition: condition, configuration: buildConfig)
-    }
+    assertIfConfig("true", .active, configuration: buildConfig)
+    assertIfConfig("false", .inactive, configuration: buildConfig)
 
-    XCTAssertEqual(try ifConfigState("true"), .active)
-    XCTAssertEqual(try ifConfigState("false"), .inactive)
-
-    // FIXME: How can we produce warnings from this code?
-    XCTAssertEqual(try ifConfigState("1"), .active)
-    XCTAssertEqual(try ifConfigState("0"), .inactive)
+    assertIfConfig(
+      "1",
+      .active,
+      configuration: buildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'1' is not a valid conditional compilation expression, use 'true'",
+          line: 1,
+          column: 1,
+          fixIts: [
+            FixItSpec(message: "replace with Boolean literal 'true'")
+          ]
+        )
+      ]
+    )
+    assertIfConfig(
+      "0",
+      .inactive,
+      configuration: buildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'0' is not a valid conditional compilation expression, use 'false'",
+          line: 1,
+          column: 1,
+          fixIts: [
+            FixItSpec(message: "replace with Boolean literal 'false'")
+          ]
+        )
+      ]
+    )
+    assertIfConfig(
+      "2",
+      nil,
+      configuration: buildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "invalid conditional compilation expression",
+          line: 1,
+          column: 1
+        )
+      ]
+    )
   }
 
   func testCustomConfigs() throws {
     let buildConfig = TestingBuildConfiguration(customConditions: ["DEBUG", "ASSERTS"])
 
-    func ifConfigState(_ condition: ExprSyntax) throws -> IfConfigState {
-      try IfConfigState(condition: condition, configuration: buildConfig)
-    }
-
-    XCTAssertEqual(try ifConfigState("DEBUG"), .active)
-    XCTAssertEqual(try ifConfigState("NODEBUG"), .inactive)
-    XCTAssertEqual(try ifConfigState("!DEBUG"), .inactive)
-    XCTAssertEqual(try ifConfigState("!NODEBUG"), .active)
-    XCTAssertEqual(try ifConfigState("DEBUG && ASSERTS"), .active)
-    XCTAssertEqual(try ifConfigState("DEBUG && nope"), .inactive)
-    XCTAssertEqual(try ifConfigState("nope && DEBUG"), .inactive)
-    XCTAssertEqual(try ifConfigState("nope && 3.14159"), .inactive)
-    XCTAssertEqual(try ifConfigState("DEBUG || ASSERTS"), .active)
-    XCTAssertEqual(try ifConfigState("DEBUG || nope"), .active)
-    XCTAssertEqual(try ifConfigState("nope || DEBUG"), .active)
-    XCTAssertEqual(try ifConfigState("nope || !DEBUG"), .inactive)
-    XCTAssertEqual(try ifConfigState("DEBUG || 3.14159"), .active)
-    XCTAssertEqual(try ifConfigState("(DEBUG) || 3.14159"), .active)
+    assertIfConfig("DEBUG", .active, configuration: buildConfig)
+    assertIfConfig("NODEBUG", .inactive, configuration: buildConfig)
+    assertIfConfig("!DEBUG", .inactive, configuration: buildConfig)
+    assertIfConfig("!NODEBUG", .active, configuration: buildConfig)
+    assertIfConfig("DEBUG && ASSERTS", .active, configuration: buildConfig)
+    assertIfConfig("DEBUG && nope", .inactive, configuration: buildConfig)
+    assertIfConfig("nope && DEBUG", .inactive, configuration: buildConfig)
+    assertIfConfig("nope && 3.14159", .inactive, configuration: buildConfig)
+    assertIfConfig("DEBUG || ASSERTS", .active, configuration: buildConfig)
+    assertIfConfig("DEBUG || nope", .active, configuration: buildConfig)
+    assertIfConfig("nope || DEBUG", .active, configuration: buildConfig)
+    assertIfConfig("nope || !DEBUG", .inactive, configuration: buildConfig)
+    assertIfConfig("DEBUG || 3.14159", .active, configuration: buildConfig)
+    assertIfConfig("(DEBUG) || 3.14159", .active, configuration: buildConfig)
   }
 
   func testBadExpressions() throws {
     let buildConfig = TestingBuildConfiguration(customConditions: ["DEBUG", "ASSERTS"])
 
-    func ifConfigState(_ condition: ExprSyntax) throws -> IfConfigState {
-      try IfConfigState(condition: condition, configuration: buildConfig)
-    }
-
-    XCTAssertThrowsError(try ifConfigState("3.14159")) { error in
-      XCTAssertEqual(String(describing: error), "invalid conditional compilation expression")
-    }
+    assertIfConfig(
+      "3.14159",
+      nil,
+      configuration: buildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "invalid conditional compilation expression",
+          line: 1,
+          column: 1
+        )
+      ]
+    )
   }
 
   func testFeatures() throws {
     let buildConfig = TestingBuildConfiguration(features: ["ParameterPacks"])
 
-    func ifConfigState(_ condition: ExprSyntax) throws -> IfConfigState {
-      try IfConfigState(condition: condition, configuration: buildConfig)
-    }
-
-    XCTAssertEqual(try ifConfigState("hasFeature(ParameterPacks)"), .active)
-    XCTAssertEqual(try ifConfigState("hasFeature(HigherKindedGenerics)"), .inactive)
+    assertIfConfig("hasFeature(ParameterPacks)", .active, configuration: buildConfig)
+    assertIfConfig("hasFeature(HigherKindedGenerics)", .inactive, configuration: buildConfig)
   }
 
   func testAttributes() throws {
     let buildConfig = TestingBuildConfiguration(attributes: ["available"])
 
-    func ifConfigState(_ condition: ExprSyntax) throws -> IfConfigState {
-      try IfConfigState(condition: condition, configuration: buildConfig)
-    }
-
-    XCTAssertEqual(try ifConfigState("hasAttribute(available)"), .active)
-    XCTAssertEqual(try ifConfigState("hasAttribute(unsafeUnavailable)"), .inactive)
+    assertIfConfig("hasAttribute(available)", .active, configuration: buildConfig)
+    assertIfConfig("hasAttribute(unsafeUnavailable)", .inactive, configuration: buildConfig)
   }
 
   func testPlatform() throws {
-    let buildConfig = TestingBuildConfiguration()
-
-    func ifConfigState(_ condition: ExprSyntax) throws -> IfConfigState {
-      try IfConfigState(condition: condition, configuration: buildConfig)
-    }
-
-    XCTAssertEqual(try ifConfigState("os(Linux)"), .active)
-    XCTAssertEqual(try ifConfigState("os(BeOS)"), .inactive)
-    XCTAssertEqual(try ifConfigState("arch(arm64)"), .active)
-    XCTAssertEqual(try ifConfigState("arch(x86_64)"), .inactive)
-    XCTAssertEqual(try ifConfigState("targetEnvironment(simulator)"), .active)
-    XCTAssertEqual(try ifConfigState("targetEnvironment(blargh)"), .inactive)
-    XCTAssertEqual(try ifConfigState("_endian(little)"), .active)
-    XCTAssertEqual(try ifConfigState("_endian(big)"), .inactive)
-    XCTAssertEqual(try ifConfigState("_runtime(_Native)"), .active)
-    XCTAssertEqual(try ifConfigState("_runtime(_ObjC)"), .inactive)
-    XCTAssertEqual(try ifConfigState("_ptrauth(arm64e)"), .active)
-    XCTAssertEqual(try ifConfigState("_ptrauth(none)"), .inactive)
-    XCTAssertEqual(try ifConfigState("_pointerBitWidth(_64)"), .active)
-    XCTAssertEqual(try ifConfigState("_pointerBitWidth(_32)"), .inactive)
+    assertIfConfig("os(Linux)", .active)
+    assertIfConfig("os(BeOS)", .inactive)
+    assertIfConfig("arch(arm64)", .active)
+    assertIfConfig("arch(x86_64)", .inactive)
+    assertIfConfig("targetEnvironment(simulator)", .active)
+    assertIfConfig("targetEnvironment(blargh)", .inactive)
+    assertIfConfig("_endian(little)", .active)
+    assertIfConfig("_endian(big)", .inactive)
+    assertIfConfig("_runtime(_Native)", .active)
+    assertIfConfig("_runtime(_ObjC)", .inactive)
+    assertIfConfig("_ptrauth(arm64e)", .active)
+    assertIfConfig("_ptrauth(none)", .inactive)
+    assertIfConfig("_pointerBitWidth(_64)", .active)
+    assertIfConfig("_pointerBitWidth(_32)", .inactive)
   }
 
   func testVersions() throws {
-    let buildConfig = TestingBuildConfiguration()
-
-    func ifConfigState(_ condition: ExprSyntax) throws -> IfConfigState {
-      try IfConfigState(condition: condition, configuration: buildConfig)
-    }
-
-    XCTAssertEqual(try ifConfigState("swift(>=5.5"), .active)
-    XCTAssertEqual(try ifConfigState("swift(<6"), .active)
-    XCTAssertEqual(try ifConfigState("swift(>=6"), .inactive)
-    XCTAssertEqual(try ifConfigState("compiler(>=5.8"), .active)
-    XCTAssertEqual(try ifConfigState("compiler(>=5.9"), .active)
-    XCTAssertEqual(try ifConfigState("compiler(>=5.10"), .inactive)
-    XCTAssertEqual(try ifConfigState(#"_compiler_version("5009.*.1")"#), .active)
-    XCTAssertEqual(try ifConfigState(#"_compiler_version("5009.*.3.2.3")"#), .inactive)
-    XCTAssertEqual(try ifConfigState(#"_compiler_version("5010.*.0")"#), .inactive)
+    assertIfConfig("swift(>=5.5", .active)
+    assertIfConfig("swift(<6", .active)
+    assertIfConfig("swift(>=6", .inactive)
+    assertIfConfig("compiler(>=5.8", .active)
+    assertIfConfig("compiler(>=5.9", .active)
+    assertIfConfig("compiler(>=5.10", .inactive)
+    assertIfConfig(#"_compiler_version("5009.*.1")"#, .active)
+    assertIfConfig(#"_compiler_version("5009.*.3.2.3")"#, .inactive)
+    assertIfConfig(#"_compiler_version("5010.*.0")"#, .inactive)
   }
 
   func testCanImport() throws {
-    let buildConfig = TestingBuildConfiguration()
-
-    func ifConfigState(_ condition: ExprSyntax) throws -> IfConfigState {
-      try IfConfigState(condition: condition, configuration: buildConfig)
-    }
-
-    XCTAssertEqual(try ifConfigState("canImport(SwiftSyntax)"), .active)
-    XCTAssertEqual(try ifConfigState("canImport(SwiftSyntax.Sub)"), .active)
-    XCTAssertEqual(try ifConfigState("canImport(SwiftParser)"), .inactive)
-    XCTAssertEqual(try ifConfigState("canImport(SwiftSyntax, _version: 5.9)"), .active)
-    XCTAssertEqual(try ifConfigState("canImport(SwiftSyntax, _version: 5.10)"), .inactive)
-    XCTAssertEqual(try ifConfigState(#"canImport(SwiftSyntax, _version: "5.9")"#), .active)
-    XCTAssertEqual(try ifConfigState("canImport(SwiftSyntax, _underlyingVersion: 5009)"), .active)
-    XCTAssertEqual(try ifConfigState("canImport(SwiftSyntax, _underlyingVersion: 5009.10)"), .inactive)
-
+    assertIfConfig("canImport(SwiftSyntax)", .active)
+    assertIfConfig("canImport(SwiftSyntax.Sub)", .active)
+    assertIfConfig("canImport(SwiftParser)", .inactive)
+    assertIfConfig("canImport(SwiftSyntax, _version: 5.9)", .active)
+    assertIfConfig("canImport(SwiftSyntax, _version: 5.10)", .inactive)
+    assertIfConfig(#"canImport(SwiftSyntax, _version: "5.9")"#, .active)
+    assertIfConfig("canImport(SwiftSyntax, _underlyingVersion: 5009)", .active)
+    assertIfConfig("canImport(SwiftSyntax, _underlyingVersion: 5009.10", .inactive)
+    assertIfConfig(
+      "canImport(SwiftSyntax, _underlyingVersion: 5009.10.5.4.2.3.5",
+      .inactive,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "trailing components of version '5009.10.5.4' are ignored",
+          line: 1,
+          column: 44,
+          severity: .warning
+        )
+      ]
+    )
   }
 }

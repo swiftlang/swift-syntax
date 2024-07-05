@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Describes a version such as `5.9`.
-public struct VersionTuple {
+public struct VersionTuple: Sendable {
   /// The components of the version tuple, start with the major version.
   public var components: [Int]
 
@@ -60,5 +60,11 @@ extension VersionTuple: Equatable, Hashable {}
 extension VersionTuple: Comparable {
   public static func < (lhs: VersionTuple, rhs: VersionTuple) -> Bool {
     return lhs.normalized.components.lexicographicallyPrecedes(rhs.normalized.components)
+  }
+}
+
+extension VersionTuple: CustomStringConvertible {
+  public var description: String {
+    return components.map { String($0) }.joined(separator: ".")
   }
 }

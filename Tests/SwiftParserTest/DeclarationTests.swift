@@ -951,6 +951,52 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testTypedThrowsPlacedAfterArrow() {
+    assertParse(
+      "func test() -> 1️⃣throws(any Error) Int",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'throws(any Error)' must precede '->'",
+          fixIts: ["move 'throws(any Error)' in front of '->'"]
+        )
+      ],
+      fixedSource: "func test() throws(any Error) ->  Int"
+    )
+
+    assertParse(
+      "func test() -> 1️⃣throws(any Error Int",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'throws(any Error' must precede '->'",
+          fixIts: ["move 'throws(any Error' in front of '->'"]
+        )
+      ],
+      fixedSource: "func test() throws(any Error -> Int"
+    )
+
+    assertParse(
+      "func test() -> 1️⃣throws (Int, Int)",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'throws' must precede '->'",
+          fixIts: ["move 'throws' in front of '->'"]
+        )
+      ],
+      fixedSource: "func test() throws -> (Int, Int)"
+    )
+
+    assertParse(
+      "func test() -> 1️⃣throws (any Error) Int",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'throws' must precede '->'",
+          fixIts: ["move 'throws' in front of '->'"]
+        )
+      ],
+      fixedSource: "func test() throws -> (any Error) Int"
+    )
+  }
+
   func testTypedThrows() {
     assertParse(
       "func test() throws(any Error) -> Int { }"

@@ -78,6 +78,8 @@ func assertActiveCode(
   var parser = Parser(source)
   let tree = SourceFileSyntax.parse(from: &parser)
 
+  let configuredRegions = tree.configuredRegions(in: configuration)
+
   for (marker, location) in markerLocations {
     guard let expectedState = states[marker] else {
       XCTFail("Missing marker \(marker) in expected states", file: file, line: line)
@@ -90,7 +92,16 @@ func assertActiveCode(
     }
 
     let actualState = try token.isActive(in: configuration)
-    XCTAssertEqual(actualState, expectedState, "at marker \(marker)", file: file, line: line)
+    XCTAssertEqual(actualState, expectedState, "isActive(in:) at marker \(marker)", file: file, line: line)
+
+    let actualViaRegions = token.isActive(inConfiguredRegions: configuredRegions)
+    XCTAssertEqual(
+      actualViaRegions,
+      expectedState,
+      "isActive(inConfiguredRegions:) at marker \(marker)",
+      file: file,
+      line: line
+    )
   }
 }
 

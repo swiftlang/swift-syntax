@@ -514,23 +514,13 @@ extension SyntaxProtocol {
 
         if activeClause != ifConfigClause {
           // This was not the active clause, so we know that we're in an
-          // inactive block. However, depending on the condition of this
-          // clause and any enclosing clauses, it might be an unparsed block.
-
-          // Check this condition.
-          if let condition = ifConfigClause.condition {
-            // Evaluate this condition against the build configuration.
-            let (_, versioned) = try evaluateIfConfig(
-              condition: condition,
-              configuration: configuration,
-              diagnosticHandler: diagnosticHandler
-            )
-
-            // If the condition is versioned, this is an unparsed region.
-            // We already know that it is inactive, or we wouldn't be here.
-            if versioned {
-              return .unparsed
-            }
+          // inactive block. However, if the condition is versioned, this is an
+          // unparsed region.
+          if try ifConfigClause.isVersioned(
+            configuration: configuration,
+            diagnosticHandler: diagnosticHandler
+          ) {
+            return .unparsed
           }
 
           currentState = .inactive
@@ -541,5 +531,46 @@ extension SyntaxProtocol {
     }
 
     return currentState
+  }
+
+  /// Determine whether the given syntax node is active given a set of
+  /// configured regions as produced by `configuredRegions(in:)`.
+  ///
+  /// This is
+  /// an approximation
+  public func isActive(
+    inConfiguredRegions regions: [(IfConfigClauseSyntax, IfConfigState)]
+  ) -> IfConfigState {
+    var currentState: IfConfigState = .active
+    for (ifClause, state) in regions {
+      if self.position < ifClause.position {
+        return currentState
+      }
+
+      if self.position <= ifClause.endPosition {
+        currentState = state
+      }
+    }
+
+    return currentState
+  }
+}
+
+extension IfConfigClauseSyntax {
+  /// Determine whether this condition is "versioned".
+  func isVersioned(
+    configuration: some BuildConfiguration,
+    diagnosticHandler: ((Diagnostic) -> Void)?
+  ) throws -> Bool {
+    guard let condition else { return false }
+
+    // Evaluate this condition against the build configuration.
+    let (_, versioned) = try evaluateIfConfig(
+      condition: condition,
+      configuration: configuration,
+      diagnosticHandler: diagnosticHandler
+    )
+
+    return versioned
   }
 }

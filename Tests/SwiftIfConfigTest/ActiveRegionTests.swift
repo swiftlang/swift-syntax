@@ -26,6 +26,7 @@ public class ActiveRegionTests: XCTestCase {
   func testActiveRegions() throws {
     try assertActiveCode(
       """
+      4️⃣
       #if DEBUG
       0️⃣func f()
       #elseif ASSERTS
@@ -37,6 +38,7 @@ public class ActiveRegionTests: XCTestCase {
       3️⃣var i
       #endif
       #endif
+      5️⃣token
       """,
       configuration: linuxBuildConfig,
       states: [
@@ -44,6 +46,8 @@ public class ActiveRegionTests: XCTestCase {
         "1️⃣": .inactive,
         "2️⃣": .unparsed,
         "3️⃣": .inactive,
+        "4️⃣": .active,
+        "5️⃣": .active,
       ]
     )
   }

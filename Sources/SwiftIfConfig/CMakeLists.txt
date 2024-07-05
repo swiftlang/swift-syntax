@@ -8,6 +8,7 @@
 
 add_swift_syntax_library(SwiftIfConfig
   BuildConfiguration.swift
+  ConfiguredRegions.swift
   IfConfigError.swift
   IfConfigEvaluation.swift
   IfConfigFunctions.swift

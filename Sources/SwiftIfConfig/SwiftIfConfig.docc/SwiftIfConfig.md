@@ -33,3 +33,4 @@ The `SwiftIfConfig` library provides utilities to determine which syntax nodes a
     (the node is included in the program), "inactive" (the node is not included
     in the program), or "unparsed" (the node is not included in the program and
     is also allowed to have syntax errors).
+* ``SyntaxProtocol.configuredRegions(in:)`` produces an array describing the various regions in which a configuration has an effect, indicating active, inactive, and unparsed regions in the source tree. The array can be used as an input to `SyntaxProtocol.isActive(inConfiguredRegions:)`` to determine whether a given syntax node is active.

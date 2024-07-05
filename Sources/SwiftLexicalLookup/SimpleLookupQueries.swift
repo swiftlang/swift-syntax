@@ -68,7 +68,8 @@ extension SyntaxProtocol {
 
   // MARK: - lookupCatchNode
 
-  /// Given syntax node location, finds where an error could be caught. If `traverseCatchClause` is set to `true` lookup will skip the next do statement.
+  /// Given syntax node location, finds where an error could be caught.
+  /// If `traverseCatchClause` is set to `true` lookup will skip the next do statement.
   private func lookupCatchNodeHelper(traversedCatchClause: Bool) -> Syntax? {
     guard let parent else { return nil }
 
@@ -108,7 +109,8 @@ extension SyntaxProtocol {
     collectNodesOfTypeUpToFunctionBoundary(type, stopWithFirstMatch: true).first
   }
 
-  /// Collect syntax nodes matching the collection type up until encountering one of the specified syntax nodes. The nodes in the array are inside out, with the innermost node being the first.
+  /// Collect syntax nodes matching the collection type up until encountering one of the specified syntax nodes.
+  /// The nodes in the array are inside out, with the innermost node being the first.
   fileprivate func collectNodesOfTypeUpToFunctionBoundary<T: SyntaxProtocol>(
     _ type: T.Type,
     stopWithFirstMatch: Bool = false
@@ -128,7 +130,7 @@ extension SyntaxProtocol {
     )
   }
 
-  /// Callect syntax nodes matching the collection type up until encountering one of the specified syntax nodes.
+  /// Collect syntax nodes matching the collection type up until encountering one of the specified syntax nodes.
   private func collectNodes<T: SyntaxProtocol>(
     ofType type: T.Type,
     upTo stopAt: [SyntaxProtocol.Type],

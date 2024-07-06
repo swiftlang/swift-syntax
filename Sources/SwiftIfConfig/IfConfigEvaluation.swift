@@ -406,7 +406,7 @@ private func evaluateIfConfig(
   throw recordedError(.unknownExpression(condition))
 }
 
-extension IfConfigState {
+extension ConfiguredRegionState {
   /// Evaluate the given `#if` condition using the given build configuration, throwing an error if there is
   /// insufficient information to make a determination.
   public init(
@@ -496,9 +496,9 @@ extension SyntaxProtocol {
   public func isActive(
     in configuration: some BuildConfiguration,
     diagnosticHandler: ((Diagnostic) -> Void)? = nil
-  ) throws -> IfConfigState {
+  ) throws -> ConfiguredRegionState {
     var currentNode: Syntax = Syntax(self)
-    var currentState: IfConfigState = .active
+    var currentState: ConfiguredRegionState = .active
 
     while let parent = currentNode.parent {
       // If the parent is an `#if` configuration, check whether our current
@@ -539,9 +539,9 @@ extension SyntaxProtocol {
   /// This is
   /// an approximation
   public func isActive(
-    inConfiguredRegions regions: [(IfConfigClauseSyntax, IfConfigState)]
-  ) -> IfConfigState {
-    var currentState: IfConfigState = .active
+    inConfiguredRegions regions: [(IfConfigClauseSyntax, ConfiguredRegionState)]
+  ) -> ConfiguredRegionState {
+    var currentState: ConfiguredRegionState = .active
     for (ifClause, state) in regions {
       if self.position < ifClause.position {
         return currentState

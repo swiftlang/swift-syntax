@@ -9,11 +9,11 @@
 add_swift_syntax_library(SwiftIfConfig
   BuildConfiguration.swift
   ConfiguredRegions.swift
+  ConfiguredRegionState.swift
   IfConfigError.swift
   IfConfigEvaluation.swift
   IfConfigFunctions.swift
   IfConfigRewriter.swift
-  IfConfigState.swift
   IfConfigVisitor.swift
   SyntaxLiteralUtils.swift
   VersionTuple+Parsing.swift

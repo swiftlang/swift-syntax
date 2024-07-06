@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Describes the state of a particular region guarded by `#if` or similar.
-public enum IfConfigState {
+public enum ConfiguredRegionState {
   /// The region is not part of the compiled program and is not even parsed,
   /// and therefore many contain syntax that is invalid.
   case unparsed

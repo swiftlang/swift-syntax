@@ -25,7 +25,7 @@ class AllActiveVisitor: ActiveSyntaxAnyVisitor<TestingBuildConfiguration> {
     super.init(viewMode: .sourceAccurate, configuration: configuration)
   }
   open override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
-    var active: IfConfigState = .inactive
+    var active: ConfiguredRegionState = .inactive
     XCTAssertNoThrow(try active = node.isActive(in: configuration))
     XCTAssertEqual(active, .active)
     return .visitChildren

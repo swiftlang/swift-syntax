@@ -17,11 +17,8 @@ let package = Package(
     .library(name: "SwiftCompilerPlugin", targets: ["SwiftCompilerPlugin"]),
     .library(name: "SwiftDiagnostics", targets: ["SwiftDiagnostics"]),
     .library(name: "SwiftIDEUtils", targets: ["SwiftIDEUtils"]),
-<<<<<<< HEAD
-    .library(name: "SwiftLexicalLookup", targets: ["SwiftLexicalLookup"]),
-=======
     .library(name: "SwiftIfConfig", targets: ["SwiftIfConfig"]),
->>>>>>> d8c920b49 ([SwiftIfConfig] Add a new library for evaluating `#if` conditions.)
+    .library(name: "SwiftLexicalLookup", targets: ["SwiftLexicalLookup"]),
     .library(name: "SwiftOperators", targets: ["SwiftOperators"]),
     .library(name: "SwiftParser", targets: ["SwiftParser"]),
     .library(name: "SwiftParserDiagnostics", targets: ["SwiftParserDiagnostics"]),

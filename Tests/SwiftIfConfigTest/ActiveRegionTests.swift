@@ -51,4 +51,33 @@ public class ActiveRegionTests: XCTestCase {
       ]
     )
   }
+
+  func testActiveRegionsInPostfix() throws {
+    try assertActiveCode(
+      """
+      4️⃣a.b()
+      #if DEBUG
+      0️⃣.c()
+      #elseif ASSERTS
+      1️⃣.d()
+      #if compiler(>=8.0)
+      2️⃣.e()
+      #else
+      3️⃣.f()
+      #endif
+      #endif
+      5️⃣.g()
+      """,
+      configuration: linuxBuildConfig,
+      states: [
+        "0️⃣": .active,
+        "1️⃣": .inactive,
+        "2️⃣": .unparsed,
+        "3️⃣": .inactive,
+        "4️⃣": .active,
+        "5️⃣": .active,
+      ]
+    )
+
+  }
 }

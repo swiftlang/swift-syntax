@@ -287,9 +287,6 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
     return applyBaseToPostfixExpression(base: base, postfix: postfixExpr)
   }
 
-  // FIXME: PostfixIfConfigExprSyntax has a different form that doesn't work
-  // well with the way dropInactive is written. We essentially need to
-  // thread a the "base" into the active clause.
   override func visit(_ node: PostfixIfConfigExprSyntax) -> ExprSyntax {
     let rewrittenNode = dropInactive(outerBase: nil, postfixIfConfig: node)
     if rewrittenNode == ExprSyntax(node) {

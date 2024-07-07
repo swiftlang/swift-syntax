@@ -269,28 +269,34 @@ func evaluateIfConfig(
         versioned: fn.isVersioned
       )
 
-    case ._pointerBitWidth:
+    case ._pointerBitWidth, ._hasAtomicBitWidth:
       // Ensure that we have a single argument that is a simple identifier, which
       // is an underscore followed by an integer.
       guard let argExpr = call.arguments.singleUnlabeledExpression,
         let arg = argExpr.simpleIdentifierExpr,
         let argFirst = arg.first,
         argFirst == "_",
-        let expectedPointerBitWidth = Int(arg.dropFirst())
+        let expectedBitWidth = Int(arg.dropFirst())
       else {
         throw recordedError(
           .requiresUnlabeledArgument(
             name: fnName,
-            role: "pointer bit with ('_' followed by an integer)",
+            role: "bit width ('_' followed by an integer)",
             syntax: ExprSyntax(call)
           )
         )
       }
 
-      return (
-        active: configuration.targetPointerBitWidth == expectedPointerBitWidth,
-        versioned: fn.isVersioned
-      )
+      let active: Bool
+      if fn == ._pointerBitWidth {
+        active = configuration.targetPointerBitWidth == expectedBitWidth
+      } else if fn == ._hasAtomicBitWidth {
+        active = configuration.targetAtomicBitWidths.contains(expectedBitWidth)
+      } else {
+        fatalError("extraneous case above not handled")
+      }
+
+      return (active: active, versioned: fn.isVersioned)
 
     case .swift:
       return try doVersionComparisonCheck(configuration.languageVersion)

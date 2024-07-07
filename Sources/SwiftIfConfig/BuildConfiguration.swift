@@ -213,16 +213,29 @@ public protocol BuildConfiguration {
 
   /// The bit width of a data pointer for the target architecture.
   ///
-  /// The target's pointer bit with (which also corresponds to the number of
+  /// The target's pointer bit width (which also corresponds to the number of
   /// bits in `Int`/`UInt`) can only be queried with the experimental syntax
   /// `_pointerBitWidth(_<bitwidth>)`, e.g.,
   ///
   /// ```swift
-  /// #if _pointerBitWidth(32)
+  /// #if _pointerBitWidth(_32)
   /// // 32-bit system
   /// #endif
   /// ```
   var targetPointerBitWidth: Int { get }
+
+  /// The atomic bit widths that are natively supported by the target
+  /// architecture.
+  ///
+  /// This lists all of the bit widths for which the target provides support
+  /// for atomic operations. It can be queried with
+  /// `_hasAtomicBitWidth(_<bitwidth>)`, e.g.
+  ///
+  /// ```swift
+  /// #if _hasAtomicBitWidth(_64)
+  /// // 64-bit atomics are available
+  /// #endif
+  var targetAtomicBitWidths: [Int] { get }
 
   /// The endianness of the target architecture.
   ///

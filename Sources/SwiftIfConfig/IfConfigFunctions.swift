@@ -36,6 +36,10 @@ enum IfConfigFunctions: String {
   /// A check for the target environment (e.g., simulator) via `targetEnvironment(<environment>)`.
   case targetEnvironment
 
+  /// A check to determine whether the platform supports atomic operations
+  /// with the given bitwidth, e.g., `_hasAtomicBitWidth(_64)`.
+  case _hasAtomicBitWidth
+
   /// A historical check against a specific compiler build version via `_compiler_version("<version>")`.
   case _compiler_version
 
@@ -61,7 +65,7 @@ enum IfConfigFunctions: String {
       return true
 
     case .hasAttribute, .hasFeature, .canImport, .os, .arch, .targetEnvironment,
-      ._endian, ._pointerBitWidth, ._runtime, ._ptrauth:
+      ._hasAtomicBitWidth, ._endian, ._pointerBitWidth, ._runtime, ._ptrauth:
       return false
     }
   }

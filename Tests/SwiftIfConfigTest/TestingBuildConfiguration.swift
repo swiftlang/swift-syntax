@@ -93,6 +93,8 @@ struct TestingBuildConfiguration: BuildConfiguration {
 
   var targetPointerBitWidth: Int { 64 }
 
+  var targetAtomicBitWidths: [Int] { [32, 64] }
+
   var endianness: SwiftIfConfig.Endianness { .little }
 
   var languageVersion: VersionTuple { VersionTuple(5, 5) }

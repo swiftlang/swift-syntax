@@ -165,6 +165,8 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("_ptrauth(none)", .inactive)
     assertIfConfig("_pointerBitWidth(_64)", .active)
     assertIfConfig("_pointerBitWidth(_32)", .inactive)
+    assertIfConfig("_hasAtomicBitWidth(_64)", .active)
+    assertIfConfig("_hasAtomicBitWidth(_128)", .inactive)
   }
 
   func testVersions() throws {

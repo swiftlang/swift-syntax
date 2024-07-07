@@ -451,11 +451,13 @@ extension IfConfigDeclSyntax {
   /// command line, the second clause (containing `func g()`) would be returned. If neither was
   /// passed, this function will return `nil` to indicate that none of the regions are active.
   ///
-  /// If an error occurred while processing any of the `#if` clauses, this function will throw that error.
+  /// If an error occurrs while processing any of the `#if` clauses,
+  /// that clause will be considered inactive and this operation will
+  /// continue to evaluate later clauses.
   public func activeClause(
     in configuration: some BuildConfiguration,
     diagnosticHandler: ((Diagnostic) -> Void)? = nil
-  ) throws -> IfConfigClauseSyntax? {
+  ) -> IfConfigClauseSyntax? {
     for clause in clauses {
       // If there is no condition, we have reached an unconditional clause. Return it.
       guard let condition = clause.condition else {
@@ -463,11 +465,13 @@ extension IfConfigDeclSyntax {
       }
 
       // If this condition evaluates true, return this clause.
-      if try evaluateIfConfig(
-        condition: condition,
-        configuration: configuration,
-        diagnosticHandler: diagnosticHandler
-      ).active {
+      let isActive =
+        (try? evaluateIfConfig(
+          condition: condition,
+          configuration: configuration,
+          diagnosticHandler: diagnosticHandler
+        ))?.active ?? false
+      if isActive {
         return clause
       }
     }
@@ -507,7 +511,7 @@ extension SyntaxProtocol {
       if let ifConfigClause = currentNode.as(IfConfigClauseSyntax.self),
         let ifConfigDecl = ifConfigClause.parent?.parent?.as(IfConfigDeclSyntax.self)
       {
-        let activeClause = try ifConfigDecl.activeClause(
+        let activeClause = ifConfigDecl.activeClause(
           in: configuration,
           diagnosticHandler: diagnosticHandler
         )
@@ -516,10 +520,12 @@ extension SyntaxProtocol {
           // This was not the active clause, so we know that we're in an
           // inactive block. However, if the condition is versioned, this is an
           // unparsed region.
-          if try ifConfigClause.isVersioned(
-            configuration: configuration,
-            diagnosticHandler: diagnosticHandler
-          ) {
+          let isVersioned =
+            (try? ifConfigClause.isVersioned(
+              configuration: configuration,
+              diagnosticHandler: diagnosticHandler
+            )) ?? true
+          if isVersioned {
             return .unparsed
           }
 

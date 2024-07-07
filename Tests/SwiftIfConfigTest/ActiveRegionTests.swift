@@ -78,6 +78,23 @@ public class ActiveRegionTests: XCTestCase {
         "5️⃣": .active,
       ]
     )
+  }
 
+  func testActiveRegionsWithErrors() throws {
+    try assertActiveCode(
+      """
+      #if FOO > 10
+      0️⃣class Foo {
+      }
+      #else
+      1️⃣class Fallback {
+      }
+      #endif
+      """,
+      states: [
+        "0️⃣": .unparsed,
+        "1️⃣": .active,
+      ]
+    )
   }
 }

@@ -59,8 +59,9 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
   }
 
   override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
-    // If're not within an
-    let activeClause = inActiveRegion ? (try? node.activeClause(in: configuration)) : nil
+    // If we're in an active region, find the active clause. Otherwise,
+    // there isn't one.
+    let activeClause = inActiveRegion ? node.activeClause(in: configuration) : nil
     for clause in node.clauses {
       // If this is the active clause, record it and then recurse into the
       // elements.
@@ -81,7 +82,7 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
         (try? clause.isVersioned(
           configuration: configuration,
           diagnosticHandler: nil
-        )) ?? false
+        )) ?? true
 
       // If this is within an active region, or this is an unparsed region,
       // record it.

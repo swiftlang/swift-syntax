@@ -166,7 +166,7 @@ public class VisitorTests: XCTestCase {
     configuration.badAttributes.insert("available")
     let visitor = NameCheckingVisitor(
       configuration: configuration,
-      expectedNames: ["f", "h", "i", "S", "generationCount", "value", "withAvail", "notAvail"]
+      expectedNames: ["f", "h", "i", "S", "generationCount", "value", "notAvail"]
     )
     visitor.walk(inputSource)
     XCTAssertEqual(visitor.diagnostics.count, 3)
@@ -213,27 +213,23 @@ public class VisitorTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "unacceptable attribute 'available'",
+          line: 3,
+          column: 18
+        ),
+        DiagnosticSpec(
+          message: "unacceptable attribute 'available'",
+          line: 42,
+          column: 20
+        ),
+        DiagnosticSpec(
+          message: "unacceptable attribute 'available'",
           line: 51,
-          column: 1
-        ),
-        DiagnosticSpec(
-          message: "unacceptable attribute 'available'",
-          line: 1,
-          column: 2
-        ),
-        DiagnosticSpec(
-          message: "unacceptable attribute 'available'",
-          line: 27,
-          column: 17
+          column: 18
         ),
       ],
       expectedSource: """
 
-        #if hasAttribute(available)
-        @available(*, deprecated, message: "use something else")
-        #else
         @MainActor
-        #endif
         func f() {
         }
 
@@ -250,19 +246,9 @@ public class VisitorTests: XCTestCase {
 
         func i() {
           a.b
-          #if DEBUG
             .c
-          #endif
-          #if hasAttribute(available)
-            .d()
-          #endif
         }
-
-        #if hasAttribute(available)
-        func withAvail() { }
-        #else
         func notAvail() { }
-        #endif
         """
     )
   }

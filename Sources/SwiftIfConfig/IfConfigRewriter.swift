@@ -23,7 +23,7 @@ import SwiftDiagnostics
 import SwiftSyntax
 
 /// Syntax rewriter that only visits syntax nodes that are active according
-/// to a particular build configuration build configuration.
+/// to a particular build configuration.
 ///
 /// Given an example such as
 ///
@@ -54,15 +54,9 @@ import SwiftSyntax
 /// than trivia).
 class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
   let configuration: Configuration
-  var diagnostics: [Diagnostic] = []
 
   init(configuration: Configuration) {
     self.configuration = configuration
-  }
-
-  private func reportEvaluationError(at node: some SyntaxProtocol, error: Error) {
-    let newDiagnostics = error.asDiagnostics(at: node)
-    diagnostics.append(contentsOf: newDiagnostics)
   }
 
   private func dropInactive<List: Collection & SyntaxCollection>(
@@ -76,20 +70,8 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
 
       // Find #ifs within the list.
       if let ifConfigDecl = elementAsIfConfig(element) {
-        // Evaluate the `#if` condition.
-        let activeClause: IfConfigClauseSyntax?
-        do {
-          activeClause = try ifConfigDecl.activeClause(in: configuration)
-        } catch {
-          // When an error occurs in the evaluation of the condition,
-          // keep the entire `#if`.
-          if anyChanged {
-            newElements.append(element)
-          }
-
-          reportEvaluationError(at: element, error: error)
-          continue
-        }
+        // Retrieve the active `#if` clause
+        let activeClause = ifConfigDecl.activeClause(in: configuration)
 
         // If this is the first element that changed, note that we have
         // changes and add all prior elements to the list of new elements.
@@ -248,14 +230,8 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
     outerBase: ExprSyntax?,
     postfixIfConfig: PostfixIfConfigExprSyntax
   ) -> ExprSyntax {
-    // Determine the active clause within this syntax node.
-    let activeClause: IfConfigClauseSyntax?
-    do {
-      activeClause = try postfixIfConfig.config.activeClause(in: configuration)
-    } catch {
-      reportEvaluationError(at: postfixIfConfig, error: error)
-      return ExprSyntax(postfixIfConfig)
-    }
+    // Retrieve the active `if` clause.
+    let activeClause = postfixIfConfig.config.activeClause(in: configuration)
 
     guard case .postfixExpression(let postfixExpr) = activeClause?.elements
     else {
@@ -304,8 +280,29 @@ extension SyntaxProtocol {
   ///
   /// Returns the syntax node with all inactive regions removed, along with an
   /// array containing any diagnostics produced along the way.
+  ///
+  /// If there are errors in the conditions of any configuration
+  /// clauses, e.g., `#if FOO > 10`, then the condition will be
+  /// considered to have failed and the clauses's elements will be
+  /// removed.
   public func removingInactive(in configuration: some BuildConfiguration) -> (Syntax, [Diagnostic]) {
-    let visitor = ActiveSyntaxRewriter(configuration: configuration)
-    return (visitor.rewrite(Syntax(self)), visitor.diagnostics)
+    // First pass: Find all of the active clauses for the #ifs we need to
+    // visit, along with any diagnostics produced along the way. This process
+    // does not change the tree in any way.
+    let visitor = ActiveSyntaxVisitor(viewMode: .sourceAccurate, configuration: configuration)
+    visitor.walk(self)
+
+    // If there were no active clauses to visit, we're done!
+    if visitor.numIfClausesVisited == 0 {
+      return (Syntax(self), visitor.diagnostics)
+    }
+
+    // Second pass: Rewrite the syntax tree by removing the inactive clauses
+    // from each #if (along with the #ifs themselves).
+    let rewriter = ActiveSyntaxRewriter(configuration: configuration)
+    return (
+      rewriter.rewrite(Syntax(self)),
+      visitor.diagnostics
+    )
   }
 }

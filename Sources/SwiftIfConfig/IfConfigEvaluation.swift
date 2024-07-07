@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 import SwiftDiagnostics
-import SwiftOperators
 import SwiftSyntax
 
 /// Evaluate the condition of an `#if`.
@@ -29,7 +28,7 @@ import SwiftSyntax
 ///   condition holds with the given build configuration. The second whether
 ///   the build condition is a "versioned" check that implies that we shouldn't
 ///   diagnose syntax errors in blocks where the check fails.
-private func evaluateIfConfig(
+func evaluateIfConfig(
   condition: ExprSyntax,
   configuration: some BuildConfiguration,
   diagnosticHandler: ((Diagnostic) -> Void)?
@@ -404,162 +403,6 @@ private func evaluateIfConfig(
   }
 
   throw recordedError(.unknownExpression(condition))
-}
-
-extension ConfiguredRegionState {
-  /// Evaluate the given `#if` condition using the given build configuration, throwing an error if there is
-  /// insufficient information to make a determination.
-  public init(
-    condition: some ExprSyntaxProtocol,
-    configuration: some BuildConfiguration,
-    diagnosticHandler: ((Diagnostic) -> Void)? = nil
-  ) throws {
-    // Apply operator folding for !/&&/||.
-    let foldedCondition = try OperatorTable.logicalOperators.foldAll(condition) { error in
-      diagnosticHandler?(error.asDiagnostic)
-      throw error
-    }.cast(ExprSyntax.self)
-
-    let (active, versioned) = try evaluateIfConfig(
-      condition: foldedCondition,
-      configuration: configuration,
-      diagnosticHandler: diagnosticHandler
-    )
-
-    switch (active, versioned) {
-    case (true, _): self = .active
-    case (false, false): self = .inactive
-    case (false, true): self = .unparsed
-    }
-  }
-}
-
-extension IfConfigDeclSyntax {
-  /// Given a particular build configuration, determine which clause (if any) is the "active" clause.
-  ///
-  /// For example, for code like the following:
-  /// ```
-  /// #if A
-  ///  func f()
-  /// #elseif B
-  ///  func g()
-  /// #endif
-  /// ```
-  ///
-  /// If the `A` configuration option was passed on the command line (e.g. via `-DA`), the first clause
-  /// (containing `func f()`) would be returned. If not, and if the `B`configuration was passed on the
-  /// command line, the second clause (containing `func g()`) would be returned. If neither was
-  /// passed, this function will return `nil` to indicate that none of the regions are active.
-  ///
-  /// If an error occurrs while processing any of the `#if` clauses,
-  /// that clause will be considered inactive and this operation will
-  /// continue to evaluate later clauses.
-  public func activeClause(
-    in configuration: some BuildConfiguration,
-    diagnosticHandler: ((Diagnostic) -> Void)? = nil
-  ) -> IfConfigClauseSyntax? {
-    for clause in clauses {
-      // If there is no condition, we have reached an unconditional clause. Return it.
-      guard let condition = clause.condition else {
-        return clause
-      }
-
-      // If this condition evaluates true, return this clause.
-      let isActive =
-        (try? evaluateIfConfig(
-          condition: condition,
-          configuration: configuration,
-          diagnosticHandler: diagnosticHandler
-        ))?.active ?? false
-      if isActive {
-        return clause
-      }
-    }
-
-    return nil
-  }
-}
-
-extension SyntaxProtocol {
-  /// Determine whether the given syntax node is active within the given build configuration.
-  ///
-  /// This function evaluates the enclosing stack of `#if` conditions to determine whether the
-  /// given node is active in the program when it is compiled with the given build configuration.
-  ///
-  /// For example, given code like the following:
-  /// #if DEBUG
-  ///   #if A
-  ///    func f()
-  ///  #elseif B
-  ///    func g()
-  ///   #endif
-  /// #endif
-  ///
-  /// a call to `isActive` on the syntax node for the function `g` would return `active` when the
-  /// configuration options `DEBUG` and `B` are provided, but `A` is not.
-  public func isActive(
-    in configuration: some BuildConfiguration,
-    diagnosticHandler: ((Diagnostic) -> Void)? = nil
-  ) throws -> ConfiguredRegionState {
-    var currentNode: Syntax = Syntax(self)
-    var currentState: ConfiguredRegionState = .active
-
-    while let parent = currentNode.parent {
-      // If the parent is an `#if` configuration, check whether our current
-      // clause is active. If not, we're in an inactive region. We also
-      // need to determine whether
-      if let ifConfigClause = currentNode.as(IfConfigClauseSyntax.self),
-        let ifConfigDecl = ifConfigClause.parent?.parent?.as(IfConfigDeclSyntax.self)
-      {
-        let activeClause = ifConfigDecl.activeClause(
-          in: configuration,
-          diagnosticHandler: diagnosticHandler
-        )
-
-        if activeClause != ifConfigClause {
-          // This was not the active clause, so we know that we're in an
-          // inactive block. However, if the condition is versioned, this is an
-          // unparsed region.
-          let isVersioned =
-            (try? ifConfigClause.isVersioned(
-              configuration: configuration,
-              diagnosticHandler: diagnosticHandler
-            )) ?? true
-          if isVersioned {
-            return .unparsed
-          }
-
-          currentState = .inactive
-        }
-      }
-
-      currentNode = parent
-    }
-
-    return currentState
-  }
-
-  /// Determine whether the given syntax node is active given a set of
-  /// configured regions as produced by `configuredRegions(in:)`.
-  ///
-  /// This is
-  /// an approximation
-  public func isActive(
-    inConfiguredRegions regions: [(IfConfigClauseSyntax, ConfiguredRegionState)]
-  ) -> ConfiguredRegionState {
-    var currentState: ConfiguredRegionState = .active
-    for (ifClause, state) in regions {
-      if self.position < ifClause.position {
-        return currentState
-      }
-
-      if self.position <= ifClause.endPosition {
-        currentState = state
-      }
-    }
-
-    return currentState
-  }
 }
 
 extension IfConfigClauseSyntax {

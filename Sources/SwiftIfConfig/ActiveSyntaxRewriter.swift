@@ -22,6 +22,40 @@
 import SwiftDiagnostics
 import SwiftSyntax
 
+extension SyntaxProtocol {
+  /// Produce a copy of this syntax node that removes all syntax regions that
+  /// are inactive according to the given build configuration, leaving only
+  /// the code that is active within that build configuration.
+  ///
+  /// Returns the syntax node with all inactive regions removed, along with an
+  /// array containing any diagnostics produced along the way.
+  ///
+  /// If there are errors in the conditions of any configuration
+  /// clauses, e.g., `#if FOO > 10`, then the condition will be
+  /// considered to have failed and the clauses's elements will be
+  /// removed.
+  public func removingInactive(in configuration: some BuildConfiguration) -> (Syntax, [Diagnostic]) {
+    // First pass: Find all of the active clauses for the #ifs we need to
+    // visit, along with any diagnostics produced along the way. This process
+    // does not change the tree in any way.
+    let visitor = ActiveSyntaxVisitor(viewMode: .sourceAccurate, configuration: configuration)
+    visitor.walk(self)
+
+    // If there were no active clauses to visit, we're done!
+    if visitor.numIfClausesVisited == 0 {
+      return (Syntax(self), visitor.diagnostics)
+    }
+
+    // Second pass: Rewrite the syntax tree by removing the inactive clauses
+    // from each #if (along with the #ifs themselves).
+    let rewriter = ActiveSyntaxRewriter(configuration: configuration)
+    return (
+      rewriter.rewrite(Syntax(self)),
+      visitor.diagnostics
+    )
+  }
+}
+
 /// Syntax rewriter that only visits syntax nodes that are active according
 /// to a particular build configuration.
 ///
@@ -270,39 +304,5 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
     }
 
     return visit(rewrittenNode)
-  }
-}
-
-extension SyntaxProtocol {
-  /// Produce a copy of this syntax node that removes all syntax regions that
-  /// are inactive according to the given build configuration, leaving only
-  /// the code that is active within that build configuration.
-  ///
-  /// Returns the syntax node with all inactive regions removed, along with an
-  /// array containing any diagnostics produced along the way.
-  ///
-  /// If there are errors in the conditions of any configuration
-  /// clauses, e.g., `#if FOO > 10`, then the condition will be
-  /// considered to have failed and the clauses's elements will be
-  /// removed.
-  public func removingInactive(in configuration: some BuildConfiguration) -> (Syntax, [Diagnostic]) {
-    // First pass: Find all of the active clauses for the #ifs we need to
-    // visit, along with any diagnostics produced along the way. This process
-    // does not change the tree in any way.
-    let visitor = ActiveSyntaxVisitor(viewMode: .sourceAccurate, configuration: configuration)
-    visitor.walk(self)
-
-    // If there were no active clauses to visit, we're done!
-    if visitor.numIfClausesVisited == 0 {
-      return (Syntax(self), visitor.diagnostics)
-    }
-
-    // Second pass: Rewrite the syntax tree by removing the inactive clauses
-    // from each #if (along with the #ifs themselves).
-    let rewriter = ActiveSyntaxRewriter(configuration: configuration)
-    return (
-      rewriter.rewrite(Syntax(self)),
-      visitor.diagnostics
-    )
   }
 }

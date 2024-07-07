@@ -7,15 +7,17 @@
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
 add_swift_syntax_library(SwiftIfConfig
+  ActiveSyntaxVisitor.swift
+  ActiveSyntaxRewriter.swift
   BuildConfiguration.swift
   ConfiguredRegions.swift
   ConfiguredRegionState.swift
+  IfConfigDecl+IfConfig.swift
   IfConfigError.swift
   IfConfigEvaluation.swift
   IfConfigFunctions.swift
-  IfConfigRewriter.swift
-  IfConfigVisitor.swift
   SyntaxLiteralUtils.swift
+  SyntaxProtocol+IfConfig.swift
   VersionTuple+Parsing.swift
   VersionTuple.swift
 )

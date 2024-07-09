@@ -59,18 +59,22 @@ extension ScopeSyntax {
   var parentScope: ScopeSyntax? {
     self.parent?.scope
   }
+  
+  /// Returns all names introduced in this scope that `name` refers to and
+  /// is accessible at given syntax node then passes lookup to the parent.
+  func lookup(for name: String, at syntax: SyntaxProtocol) -> [LookupName] {
+    defaultLookupImplementation(for: name, at: syntax)
+  }
 
-  /// Returns all names introduced in this scope that `name` refers to and then
-  /// passes lookup to the parent. Optionally, if `positionSensitive` is set to `true`,
-  /// the method filters names that were introduced in this scope after `syntax`.
+  /// Returns all names introduced in this scope that `name` refers to and
+  /// is accessible at given syntax node then passes lookup to the parent.
   func defaultLookupImplementation(
     for name: String,
-    at syntax: SyntaxProtocol,
-    positionSensitive: Bool = false
+    at syntax: SyntaxProtocol
   ) -> [LookupName] {
     introducedNames
       .filter { introducedName in
-        (!positionSensitive || introducedName.isBefore(syntax)) && introducedName.refersTo(name)
+        introducedName.isAccessible(at: syntax) && introducedName.refersTo(name)
       } + (parentScope?.lookup(for: name, at: syntax) ?? [])
   }
 }

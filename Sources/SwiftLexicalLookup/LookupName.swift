@@ -15,17 +15,17 @@ import SwiftSyntax
 @_spi(Experimental) public enum LookupName {
   /// Identifier associated with the name.
   /// Could be an identifier of a variable, function or closure parameter and more
-  case identifier(String, SyntaxProtocol)
+  case identifier(IdentifiableSyntax, accessibleAfter: AbsolutePosition?)
   /// Declaration associated with the name.
   /// Could be class, struct, actor, protocol, function and more
-  case declaration(String, DeclSyntaxProtocol)
+  case declaration(NamedDeclSyntax, accessibleAfter: AbsolutePosition?)
 
   /// Syntax associated with this name.
   @_spi(Experimental) public var syntax: SyntaxProtocol {
     switch self {
-    case .identifier(_, let syntax):
+    case .identifier(let syntax, _):
       syntax
-    case .declaration(_, let syntax):
+    case .declaration(let syntax, _):
       syntax
     }
   }
@@ -33,16 +33,28 @@ import SwiftSyntax
   /// Introduced name.
   @_spi(Experimental) public var name: String {
     switch self {
-    case .identifier(let name, _):
-      name
-    case .declaration(let name, _):
-      name
+    case .identifier(let syntax, _):
+      syntax.identifier.text
+    case .declaration(let syntax, _):
+      syntax.name.text
+    }
+  }
+  
+  /// Point, after which the name is available in scope.
+  /// If set to `nil`, the name is available at any point in scope.
+  var accessibleAfter: AbsolutePosition? {
+    switch self {
+    case .identifier(_, let absolutePosition):
+      absolutePosition
+    case .declaration(_, let absolutePosition):
+      absolutePosition
     }
   }
 
   /// Checks if this name was introduced before the syntax used for lookup.
-  func isBefore(_ lookedUpSyntax: SyntaxProtocol) -> Bool {
-    syntax.position < lookedUpSyntax.position
+  func isAccessible(at lookedUpSyntax: SyntaxProtocol) -> Bool {
+    guard let accessibleAfter else { return true }
+    return accessibleAfter <= lookedUpSyntax.position
   }
 
   /// Checks if this name refers to the looked up phrase.
@@ -51,91 +63,50 @@ import SwiftSyntax
   }
 
   /// Extracts names introduced by the given `from` structure.
-  static func getNames(from syntax: SyntaxProtocol) -> [LookupName] {
+  static func getNames(from syntax: SyntaxProtocol, accessibleAfter: AbsolutePosition? = nil) -> [LookupName] {
     switch Syntax(syntax).as(SyntaxEnum.self) {
     case .variableDecl(let variableDecl):
       variableDecl.bindings.flatMap { binding in
-        getNames(from: binding.pattern)
+        getNames(from: binding.pattern, accessibleAfter: accessibleAfter)
       }
     case .tuplePattern(let tuplePattern):
       tuplePattern.elements.flatMap { tupleElement in
-        getNames(from: tupleElement.pattern)
+        getNames(from: tupleElement.pattern, accessibleAfter: accessibleAfter)
       }
     case .valueBindingPattern(let valueBindingPattern):
-      getNames(from: valueBindingPattern.pattern)
+      getNames(from: valueBindingPattern.pattern, accessibleAfter: accessibleAfter)
     case .expressionPattern(let expressionPattern):
-      getNames(from: expressionPattern.expression)
+      getNames(from: expressionPattern.expression, accessibleAfter: accessibleAfter)
     case .sequenceExpr(let sequenceExpr):
       sequenceExpr.elements.flatMap { expression in
-        getNames(from: expression)
+        getNames(from: expression, accessibleAfter: accessibleAfter)
       }
     case .patternExpr(let patternExpr):
-      getNames(from: patternExpr.pattern)
+      getNames(from: patternExpr.pattern, accessibleAfter: accessibleAfter)
     case .optionalBindingCondition(let optionalBinding):
-      getNames(from: optionalBinding.pattern)
-    case .identifierPattern(let identifierPattern):
-      handle(identifierPattern: identifierPattern)
-    case .closureShorthandParameter(let closureShorthandParameter):
-      handle(closureShorthandParameter: closureShorthandParameter)
-    case .closureParameter(let closureParameter):
-      handle(closureParameter: closureParameter)
-    case .functionDecl(let functionDecl):
-      handle(functionDecl: functionDecl)
-    case .classDecl(let classDecl):
-      handle(classDecl: classDecl)
-    case .structDecl(let structDecl):
-      handle(structDecl: structDecl)
-    case .actorDecl(let actorDecl):
-      handle(actorDecl: actorDecl)
-    case .protocolDecl(let protocolDecl):
-      handle(protocolDecl: protocolDecl)
+      getNames(from: optionalBinding.pattern, accessibleAfter: accessibleAfter)
     default:
-      []
+      if let namedDecl = Syntax(syntax).asProtocol(SyntaxProtocol.self) as? NamedDeclSyntax {
+        handle(namedDecl: namedDecl, accessibleAfter: accessibleAfter)
+      } else if let identifiable = Syntax(syntax).asProtocol(SyntaxProtocol.self) as? IdentifiableSyntax {
+        handle(identifiable: identifiable, accessibleAfter: accessibleAfter)
+      } else {
+        []
+      }
     }
   }
 
-  /// Extracts name introduced by `identifierPattern`.
-  private static func handle(identifierPattern: IdentifierPatternSyntax) -> [LookupName] {
-    [.identifier(identifierPattern.identifier.text, identifierPattern)]
-  }
-
-  /// Extracts name introduced by `closureParameter`.
-  private static func handle(closureParameter: ClosureParameterSyntax) -> [LookupName] {
-    [.identifier(closureParameter.secondName?.text ?? closureParameter.firstName.text, closureParameter)]
-  }
-
-  /// Extracts name introduced by `closureShorthandParameter`.
-  private static func handle(closureShorthandParameter: ClosureShorthandParameterSyntax) -> [LookupName] {
-    let name = closureShorthandParameter.name.text
-    if name != "_" {
-      return [.identifier(name, closureShorthandParameter)]
+  /// Extracts name introduced by `IdentifiableSyntax` node.
+  private static func handle(identifiable: IdentifiableSyntax, accessibleAfter: AbsolutePosition? = nil) -> [LookupName] {
+    if identifiable.identifier.text != "_" {
+      return [.identifier(identifiable, accessibleAfter: accessibleAfter)]
     } else {
       return []
     }
   }
-
-  /// Extracts name introduced by `functionDecl`.
-  private static func handle(functionDecl: FunctionDeclSyntax) -> [LookupName] {
-    [.declaration(functionDecl.name.text, functionDecl)]
-  }
-
-  /// Extracts name introduced by `classDecl`.
-  private static func handle(classDecl: ClassDeclSyntax) -> [LookupName] {
-    [.declaration(classDecl.name.text, classDecl)]
-  }
-
-  /// Extracts name introduced by `structDecl`.
-  private static func handle(structDecl: StructDeclSyntax) -> [LookupName] {
-    [.declaration(structDecl.name.text, structDecl)]
-  }
-
-  /// Extracts name introduced by `actorDecl`.
-  private static func handle(actorDecl: ActorDeclSyntax) -> [LookupName] {
-    [.declaration(actorDecl.name.text, actorDecl)]
-  }
-
-  /// Extracts name introduced by `protocolDecl`.
-  private static func handle(protocolDecl: ProtocolDeclSyntax) -> [LookupName] {
-    [.declaration(protocolDecl.name.text, protocolDecl)]
+  
+  /// Extracts name introduced by `NamedDeclSyntax` node.
+  private static func handle(namedDecl: NamedDeclSyntax, accessibleAfter: AbsolutePosition? = nil) -> [LookupName] {
+    [.declaration(namedDecl, accessibleAfter: accessibleAfter)]
   }
 }

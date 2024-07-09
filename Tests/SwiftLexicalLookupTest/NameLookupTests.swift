@@ -217,4 +217,28 @@ final class testNameLookup: XCTestCase {
       ])
     )
   }
+  
+  func testLookupInDeclaration() {
+    assertLexicalNameLookup(
+      source: """
+        class foo {
+          let 1️⃣a = 2️⃣a
+        
+          func foo() {
+            let 3️⃣a = 4️⃣a
+          
+            if let 5️⃣a = 6️⃣a {
+              let (a, b) = 8️⃣a
+            }
+          }
+        
+          let 9️⃣a = 0️⃣a
+        }
+        """,
+      references: ["2️⃣": ["1️⃣", "9️⃣"], "0️⃣": ["1️⃣", "9️⃣"], "4️⃣": ["1️⃣", "9️⃣"], "6️⃣": ["3️⃣", "1️⃣", "9️⃣"], "8️⃣": ["5️⃣", "3️⃣", "1️⃣", "9️⃣"]],
+      expectedResultTypes: .all(
+        IdentifierPatternSyntax.self
+      )
+    )
+  }
 }

@@ -63,13 +63,6 @@ enum ResultExpectation {
       expectedNames
     }
   }
-
-  static func == (lhs: ResultExpectation, rhs: LookupResult) -> Bool {
-    switch (lhs, rhs) {
-    case (.fromScope, .fromScope):
-      return true
-    }
-  }
 }
 
 /// `methodUnderTest` is called with the token at every position marker in the keys of `expected`.
@@ -164,24 +157,17 @@ func assertLexicalNameLookup(
       let result = argument.lookup(for: useNilAsTheParameter ? nil : argument.text)
 
       guard let expectedValues = references[marker] else {
-        XCTFail("For marker \(marker), couldn't find expectation")
+        XCTFail("For marker \(marker), couldn't find result expectation")
         return []
       }
 
       for (actual, expected) in zip(result, expectedValues) {
-        XCTAssert(
-          expected == actual,
-          "For marker \(marker), expected actual result \(actual) doesn't match expected \(expected)"
-        )
-
-        switch actual {
-        case .fromScope(let scope, withNames: _):
-          if case .fromScope(let expectedType, expectedNames: _) = expected {
-            XCTAssert(
-              scope.syntaxNodeType == expectedType,
-              "For marker \(marker), scope result type of \(scope.syntaxNodeType) doesn't match expected \(expectedType)"
-            )
-          }
+        switch (actual, expected) {
+        case (.fromScope(let scope, withNames: _), .fromScope(let expectedType, expectedNames: _)):
+          XCTAssert(
+            scope.syntaxNodeType == expectedType,
+            "For marker \(marker), scope result type of \(scope.syntaxNodeType) doesn't match expected \(expectedType)"
+          )
         }
       }
 

@@ -82,15 +82,3 @@ public struct ConvertComputedPropertyToStored: SyntaxRefactoringProvider {
     return nil
   }
 }
-
-fileprivate extension TokenSyntax {
-  var trivia: Trivia {
-    return leadingTrivia + trailingTrivia
-  }
-}
-
-fileprivate extension Trivia {
-  var droppingTrailingWhitespace: Trivia {
-    return Trivia(pieces: self.reversed().drop(while: \.isWhitespace).reversed())
-  }
-}

@@ -23,28 +23,28 @@ extension SyntaxProtocol {
   }
 }
 
-extension SourceFileSyntax: ScopeSyntax {
-  var introducedNames: [LookupName] {
+@_spi(Experimental) extension SourceFileSyntax: ScopeSyntax {
+  public var introducedNames: [LookupName] {
     []
   }
 }
 
-extension CodeBlockSyntax: ScopeSyntax {
-  var introducedNames: [LookupName] {
+@_spi(Experimental) extension CodeBlockSyntax: ScopeSyntax {
+  public var introducedNames: [LookupName] {
     statements.flatMap { codeBlockItem in
-      LookupName.getNames(from: codeBlockItem.item, accessibleAfter: codeBlockItem.item.endPosition)
+      LookupName.getNames(from: codeBlockItem.item, accessibleAfter: codeBlockItem.endPosition)
     }
   }
 }
 
-extension ForStmtSyntax: ScopeSyntax {
-  var introducedNames: [LookupName] {
+@_spi(Experimental) extension ForStmtSyntax: ScopeSyntax {
+  public var introducedNames: [LookupName] {
     LookupName.getNames(from: pattern)
   }
 }
 
-extension ClosureExprSyntax: ScopeSyntax {
-  var introducedNames: [LookupName] {
+@_spi(Experimental) extension ClosureExprSyntax: ScopeSyntax {
+  public var introducedNames: [LookupName] {
     signature?.parameterClause?.children(viewMode: .sourceAccurate).flatMap { parameter in
       if let parameterList = parameter.as(ClosureParameterListSyntax.self) {
         parameterList.children(viewMode: .sourceAccurate).flatMap { parameter in
@@ -57,16 +57,16 @@ extension ClosureExprSyntax: ScopeSyntax {
   }
 }
 
-extension WhileStmtSyntax: ScopeSyntax {
-  var introducedNames: [LookupName] {
+@_spi(Experimental) extension WhileStmtSyntax: ScopeSyntax {
+  public var introducedNames: [LookupName] {
     conditions.flatMap { element in
       LookupName.getNames(from: element.condition)
     }
   }
 }
 
-extension IfExprSyntax: ScopeSyntax {
-  var parentScope: ScopeSyntax? {
+@_spi(Experimental) extension IfExprSyntax: ScopeSyntax {
+  public var parentScope: ScopeSyntax? {
     getParent(for: self.parent, previousIfElse: self.elseKeyword == nil)
   }
 
@@ -85,13 +85,13 @@ extension IfExprSyntax: ScopeSyntax {
     }
   }
 
-  var introducedNames: [LookupName] {
+  public var introducedNames: [LookupName] {
     conditions.flatMap { element in
-      LookupName.getNames(from: element.condition, accessibleAfter: element.condition.endPosition)
+      LookupName.getNames(from: element.condition, accessibleAfter: element.endPosition)
     }
   }
 
-  func lookup(for name: String, at syntax: SyntaxProtocol) -> [LookupName] {
+  public func lookup(for name: String?, at syntax: SyntaxProtocol) -> [LookupResult] {
     if let elseBody, elseBody.position <= syntax.position, elseBody.endPosition >= syntax.position {
       parentScope?.lookup(for: name, at: syntax) ?? []
     } else {
@@ -100,8 +100,8 @@ extension IfExprSyntax: ScopeSyntax {
   }
 }
 
-extension MemberBlockSyntax: ScopeSyntax {
-  var introducedNames: [LookupName] {
+@_spi(Experimental) extension MemberBlockSyntax: ScopeSyntax {
+  public var introducedNames: [LookupName] {
     members.flatMap { member in
       LookupName.getNames(from: member.decl)
     }

@@ -31,7 +31,16 @@ final class testNameLookup: XCTestCase {
           }
         }
         """,
-      references: ["3️⃣": ["1️⃣"], "5️⃣": ["1️⃣"], "7️⃣": ["6️⃣", "1️⃣"], "8️⃣": ["2️⃣"], "9️⃣": ["4️⃣"]],
+      references: [
+        "3️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"])],
+        "5️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"])],
+        "7️⃣": [
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["6️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"]),
+        ],
+        "8️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["2️⃣"])],
+        "9️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["4️⃣"])],
+      ],
       expectedResultTypes: .all(IdentifierPatternSyntax.self)
     )
   }
@@ -49,7 +58,12 @@ final class testNameLookup: XCTestCase {
           8️⃣d
         }
         """,
-      references: ["5️⃣": ["1️⃣"], "6️⃣": ["2️⃣"], "7️⃣": ["3️⃣"], "8️⃣": ["4️⃣"]],
+      references: [
+        "5️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"])],
+        "6️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["2️⃣"])],
+        "7️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"])],
+        "8️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["4️⃣"])],
+      ],
       expectedResultTypes: .all(IdentifierPatternSyntax.self)
     )
   }
@@ -64,7 +78,15 @@ final class testNameLookup: XCTestCase {
           }
         }
         """,
-      references: ["2️⃣": ["1️⃣"], "3️⃣": [], "6️⃣": ["4️⃣", "1️⃣"], "7️⃣": ["5️⃣"]],
+      references: [
+        "2️⃣": [.fromScope(ForStmtSyntax.self, expectedNames: ["1️⃣"])],
+        "3️⃣": [],
+        "6️⃣": [
+          .fromScope(ForStmtSyntax.self, expectedNames: ["4️⃣"]),
+          .fromScope(ForStmtSyntax.self, expectedNames: ["1️⃣"]),
+        ],
+        "7️⃣": [.fromScope(ForStmtSyntax.self, expectedNames: ["5️⃣"])],
+      ],
       expectedResultTypes: .all(IdentifierPatternSyntax.self)
     )
   }
@@ -76,7 +98,7 @@ final class testNameLookup: XCTestCase {
           2️⃣a.foo()
         }
         """,
-      references: ["2️⃣": ["1️⃣"]],
+      references: ["2️⃣": [.fromScope(ForStmtSyntax.self, expectedNames: ["1️⃣"])]],
       expectedResultTypes: .all(IdentifierPatternSyntax.self)
     )
   }
@@ -93,7 +115,16 @@ final class testNameLookup: XCTestCase {
           9️⃣x()
         }
         """,
-      references: ["6️⃣": ["4️⃣", "1️⃣"], "7️⃣": ["2️⃣"], "8️⃣": ["5️⃣"], "9️⃣": ["3️⃣"], "0️⃣": []],
+      references: [
+        "6️⃣": [
+          .fromScope(ClosureExprSyntax.self, expectedNames: ["4️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"]),
+        ],
+        "7️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["2️⃣"])],
+        "8️⃣": [.fromScope(ClosureExprSyntax.self, expectedNames: ["5️⃣"])],
+        "9️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"])],
+        "0️⃣": [],
+      ],
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self,
         except: [
@@ -116,7 +147,16 @@ final class testNameLookup: XCTestCase {
           9️⃣x()
         }
         """,
-      references: ["6️⃣": ["1️⃣"], "7️⃣": ["4️⃣", "2️⃣"], "8️⃣": ["5️⃣"], "9️⃣": ["3️⃣"], "0️⃣": []],
+      references: [
+        "6️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"])],
+        "7️⃣": [
+          .fromScope(ClosureExprSyntax.self, expectedNames: ["4️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["2️⃣"]),
+        ],
+        "8️⃣": [.fromScope(ClosureExprSyntax.self, expectedNames: ["5️⃣"])],
+        "9️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"])],
+        "0️⃣": [],
+      ],
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self,
         except: [
@@ -138,7 +178,14 @@ final class testNameLookup: XCTestCase {
           }
         }
         """,
-      references: ["3️⃣": ["1️⃣"], "5️⃣": ["2️⃣"], "6️⃣": ["4️⃣", "1️⃣"]],
+      references: [
+        "3️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"])],
+        "5️⃣": [.fromScope(WhileStmtSyntax.self, expectedNames: ["2️⃣"])],
+        "6️⃣": [
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["4️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"]),
+        ],
+      ],
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self
       )
@@ -154,7 +201,14 @@ final class testNameLookup: XCTestCase {
           print(7️⃣a, 8️⃣b)
         }
         """,
-      references: ["2️⃣": [], "4️⃣": ["1️⃣"], "5️⃣": ["1️⃣"], "6️⃣": ["3️⃣"], "7️⃣": [], "8️⃣": []],
+      references: [
+        "2️⃣": [],
+        "4️⃣": [.fromScope(IfExprSyntax.self, expectedNames: ["1️⃣"])],
+        "5️⃣": [.fromScope(IfExprSyntax.self, expectedNames: ["1️⃣"])],
+        "6️⃣": [.fromScope(IfExprSyntax.self, expectedNames: ["3️⃣"])],
+        "7️⃣": [],
+        "8️⃣": [],
+      ],
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self
       )
@@ -179,7 +233,20 @@ final class testNameLookup: XCTestCase {
           print(0️⃣a)
         }
         """,
-      references: ["3️⃣": ["2️⃣", "1️⃣"], "5️⃣": ["4️⃣", "1️⃣"], "6️⃣": ["1️⃣"], "7️⃣": ["1️⃣"], "9️⃣": ["8️⃣"], "0️⃣": []],
+      references: [
+        "3️⃣": [
+          .fromScope(IfExprSyntax.self, expectedNames: ["2️⃣"]),
+          .fromScope(IfExprSyntax.self, expectedNames: ["1️⃣"]),
+        ],
+        "5️⃣": [
+          .fromScope(IfExprSyntax.self, expectedNames: ["4️⃣"]),
+          .fromScope(IfExprSyntax.self, expectedNames: ["1️⃣"]),
+        ],
+        "6️⃣": [.fromScope(IfExprSyntax.self, expectedNames: ["1️⃣"])],
+        "7️⃣": [.fromScope(IfExprSyntax.self, expectedNames: ["1️⃣"])],
+        "9️⃣": [.fromScope(IfExprSyntax.self, expectedNames: ["8️⃣"])],
+        "0️⃣": [],
+      ],
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self
       )
@@ -206,7 +273,12 @@ final class testNameLookup: XCTestCase {
           0️⃣protocol d {}
         }
         """,
-      references: ["5️⃣": ["1️⃣", "4️⃣"], "6️⃣": ["2️⃣", "3️⃣"], "7️⃣": ["9️⃣"], "8️⃣": ["0️⃣"]],
+      references: [
+        "5️⃣": [.fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "4️⃣"])],
+        "6️⃣": [.fromScope(MemberBlockSyntax.self, expectedNames: ["2️⃣", "3️⃣"])],
+        "7️⃣": [.fromScope(MemberBlockSyntax.self, expectedNames: ["9️⃣"])],
+        "8️⃣": [.fromScope(MemberBlockSyntax.self, expectedNames: ["0️⃣"])],
+      ],
       expectedResultTypes: .distinct([
         "1️⃣": IdentifierPatternSyntax.self,
         "2️⃣": ClassDeclSyntax.self,
@@ -217,13 +289,13 @@ final class testNameLookup: XCTestCase {
       ])
     )
   }
-  
+
   func testLookupInDeclaration() {
     assertLexicalNameLookup(
       source: """
         class foo {
           let 1️⃣a = 2️⃣a
-        
+
           func foo() {
             let 3️⃣a = 4️⃣a
           
@@ -231,14 +303,66 @@ final class testNameLookup: XCTestCase {
               let (a, b) = 8️⃣a
             }
           }
-        
+
           let 9️⃣a = 0️⃣a
         }
         """,
-      references: ["2️⃣": ["1️⃣", "9️⃣"], "0️⃣": ["1️⃣", "9️⃣"], "4️⃣": ["1️⃣", "9️⃣"], "6️⃣": ["3️⃣", "1️⃣", "9️⃣"], "8️⃣": ["5️⃣", "3️⃣", "1️⃣", "9️⃣"]],
+      references: [
+        "2️⃣": [.fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "9️⃣"])],
+        "0️⃣": [.fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "9️⃣"])],
+        "4️⃣": [.fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "9️⃣"])],
+        "6️⃣": [
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"]),
+          .fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "9️⃣"]),
+        ],
+        "8️⃣": [
+          .fromScope(IfExprSyntax.self, expectedNames: ["5️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"]),
+          .fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "9️⃣"]),
+        ],
+      ],
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self
       )
+    )
+  }
+
+  func testNameLookupForNilParameter() {
+    assertLexicalNameLookup(
+      source: """
+        class foo {
+          let 1️⃣a = 0
+          let 2️⃣b = 0
+
+          3️⃣func foo() {
+            let 4️⃣a = 0
+            let 5️⃣c = 0
+          
+            if let 6️⃣a = 7️⃣x {
+              let (8️⃣a, 9️⃣b) = (0, 0)
+              
+              0️⃣x
+            }
+          }
+        }
+        """,
+      references: [
+        "7️⃣": [
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["4️⃣", "5️⃣"]),
+          .fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣", "3️⃣"]),
+        ],
+        "0️⃣": [
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["8️⃣", "9️⃣"]),
+          .fromScope(IfExprSyntax.self, expectedNames: ["6️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["4️⃣", "5️⃣"]),
+          .fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣", "3️⃣"]),
+        ],
+      ],
+      expectedResultTypes: .all(
+        IdentifierPatternSyntax.self,
+        except: ["3️⃣": FunctionDeclSyntax.self]
+      ),
+      useNilAsTheParameter: true
     )
   }
 }

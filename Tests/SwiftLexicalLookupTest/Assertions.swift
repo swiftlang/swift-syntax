@@ -53,12 +53,31 @@ enum MarkerExpectation {
   }
 }
 
+/// Used to define
+enum ResultExpectation {
+  case fromScope(ScopeSyntax.Type, expectedNames: [String])
+
+  var expectedNames: [String] {
+    switch self {
+    case .fromScope(_, let expectedNames):
+      expectedNames
+    }
+  }
+
+  static func == (lhs: ResultExpectation, rhs: LookupResult) -> Bool {
+    switch (lhs, rhs) {
+    case (.fromScope, .fromScope):
+      return true
+    }
+  }
+}
+
 /// `methodUnderTest` is called with the token at every position marker in the keys of `expected`.
 /// It then asserts that the positions of the syntax nodes returned by `methodUnderTest` are the values in `expected`.
 /// It also checks whether result types match rules specified in `expectedResultTypes`.
 func assertLexicalScopeQuery(
   source: String,
-  methodUnderTest: (TokenSyntax) -> ([SyntaxProtocol?]),
+  methodUnderTest: (String, TokenSyntax) -> ([SyntaxProtocol?]),
   expected: [String: [String?]],
   expectedResultTypes: MarkerExpectation = .none
 ) {
@@ -80,7 +99,7 @@ func assertLexicalScopeQuery(
     }
 
     // Execute the tested method
-    let result = methodUnderTest(testArgument)
+    let result = methodUnderTest(marker, testArgument)
 
     // Extract the expected results for the test argument
     let expectedPositions: [AbsolutePosition?] = expectedMarkers.map { expectedMarker in
@@ -135,17 +154,48 @@ func assertLexicalScopeQuery(
 /// It also checks whether result types match rules specified in `expectedResultTypes`.
 func assertLexicalNameLookup(
   source: String,
-  references: [String: [String]],
-  expectedResultTypes: MarkerExpectation = .none
+  references: [String: [ResultExpectation]],
+  expectedResultTypes: MarkerExpectation = .none,
+  useNilAsTheParameter: Bool = false
 ) {
   assertLexicalScopeQuery(
     source: source,
-    methodUnderTest: { argument in
-      return argument.lookup(for: argument.text).map { lookUpResult in
-        lookUpResult.syntax
+    methodUnderTest: { marker, argument in
+      let result = argument.lookup(for: useNilAsTheParameter ? nil : argument.text)
+
+      guard let expectedValues = references[marker] else {
+        XCTFail("For marker \(marker), couldn't find expectation")
+        return []
+      }
+
+      for (actual, expected) in zip(result, expectedValues) {
+        XCTAssert(
+          expected == actual,
+          "For marker \(marker), expected actual result \(actual) doesn't match expected \(expected)"
+        )
+
+        switch actual {
+        case .fromScope(let scope, withNames: _):
+          if case .fromScope(let expectedType, expectedNames: _) = expected {
+            XCTAssert(
+              scope.syntaxNodeType == expectedType,
+              "For marker \(marker), scope result type of \(scope.syntaxNodeType) doesn't match expected \(expectedType)"
+            )
+          }
+        }
+      }
+
+      return result.flatMap { lookUpResult in
+        lookUpResult.names.map { lookupName in
+          lookupName.syntax
+        }
       }
     },
-    expected: references,
+    expected: references.mapValues { expectations in
+      expectations.flatMap { expectation in
+        expectation.expectedNames
+      }
+    },
     expectedResultTypes: expectedResultTypes
   )
 }

@@ -28,7 +28,7 @@ final class testSimpleQueries: XCTestCase {
           4️⃣break
         }
         """,
-      methodUnderTest: { argument in
+      methodUnderTest: { _, argument in
         argument.lookupLabeledStmts()
       },
       expected: ["3️⃣": ["2️⃣", "1️⃣"], "4️⃣": ["1️⃣"]]
@@ -42,7 +42,7 @@ final class testSimpleQueries: XCTestCase {
           1️⃣break
         }
         """,
-      methodUnderTest: { argument in
+      methodUnderTest: { _, argument in
         argument.lookupLabeledStmts()
       },
       expected: ["1️⃣": []]
@@ -63,7 +63,7 @@ final class testSimpleQueries: XCTestCase {
           4️⃣break
         }
         """,
-      methodUnderTest: { argument in
+      methodUnderTest: { _, argument in
         argument.lookupLabeledStmts()
       },
       expected: ["3️⃣": ["2️⃣"], "4️⃣": ["1️⃣"]]
@@ -82,7 +82,7 @@ final class testSimpleQueries: XCTestCase {
           4️⃣break
         }
         """,
-      methodUnderTest: { argument in
+      methodUnderTest: { _, argument in
         argument.lookupLabeledStmts()
       },
       expected: ["3️⃣": ["2️⃣"], "4️⃣": ["1️⃣"]]
@@ -101,7 +101,7 @@ final class testSimpleQueries: XCTestCase {
           4️⃣break
         }
         """,
-      methodUnderTest: { argument in
+      methodUnderTest: { _, argument in
         argument.lookupLabeledStmts()
       },
       expected: ["3️⃣": ["2️⃣"], "4️⃣": ["1️⃣"]]
@@ -124,7 +124,7 @@ final class testSimpleQueries: XCTestCase {
           6️⃣fallthrough
         }
         """,
-      methodUnderTest: { argument in
+      methodUnderTest: { _, argument in
         guard let fallthroughStmt = argument.ancestorOrSelf(mapping: { $0.as(FallThroughStmtSyntax.self) }) else {
           return []
         }
@@ -151,7 +151,7 @@ final class testSimpleQueries: XCTestCase {
           throw 7️⃣f()
         }
         """,
-      methodUnderTest: { argument in
+      methodUnderTest: { _, argument in
         return [argument.lookupCatchNode()]
       },
       expected: ["3️⃣": ["2️⃣"], "5️⃣": ["4️⃣"], "6️⃣": ["1️⃣"], "7️⃣": ["8️⃣"]]
@@ -174,7 +174,7 @@ final class testSimpleQueries: XCTestCase {
           }
         }
         """,
-      methodUnderTest: { argument in
+      methodUnderTest: { _, argument in
         [argument.lookupCatchNode()]
       },
       expected: ["4️⃣": ["3️⃣"], "5️⃣": ["2️⃣"], "7️⃣": ["6️⃣"], "8️⃣": ["1️⃣"]]
@@ -191,7 +191,7 @@ final class testSimpleQueries: XCTestCase {
           print(error)
         }
         """,
-      methodUnderTest: { argument in
+      methodUnderTest: { _, argument in
         [argument.lookupCatchNode()]
       },
       expected: ["2️⃣": ["1️⃣"], "3️⃣": ["1️⃣"], "4️⃣": ["1️⃣"], "6️⃣": ["5️⃣"], "7️⃣": ["5️⃣"], "8️⃣": ["5️⃣"]]

@@ -39,7 +39,7 @@ import SwiftSyntax
       syntax.name.text
     }
   }
-  
+
   /// Point, after which the name is available in scope.
   /// If set to `nil`, the name is available at any point in scope.
   var accessibleAfter: AbsolutePosition? {
@@ -97,14 +97,15 @@ import SwiftSyntax
   }
 
   /// Extracts name introduced by `IdentifiableSyntax` node.
-  private static func handle(identifiable: IdentifiableSyntax, accessibleAfter: AbsolutePosition? = nil) -> [LookupName] {
+  private static func handle(identifiable: IdentifiableSyntax, accessibleAfter: AbsolutePosition? = nil) -> [LookupName]
+  {
     if identifiable.identifier.text != "_" {
       return [.identifier(identifiable, accessibleAfter: accessibleAfter)]
     } else {
       return []
     }
   }
-  
+
   /// Extracts name introduced by `NamedDeclSyntax` node.
   private static func handle(namedDecl: NamedDeclSyntax, accessibleAfter: AbsolutePosition? = nil) -> [LookupName] {
     [.declaration(namedDecl, accessibleAfter: accessibleAfter)]

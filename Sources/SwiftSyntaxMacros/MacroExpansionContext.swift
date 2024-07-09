@@ -102,14 +102,23 @@ extension MacroExpansionContext {
   #endif
 }
 
-/// Diagnostic message used for thrown errors.
-private struct ThrownErrorDiagnostic: DiagnosticMessage {
-  let message: String
+private enum MacroExpansionContextError: DiagnosticMessage {
+  case internalError(SyntaxStringInterpolationInvalidNodeTypeError)
+  case missingError
+
+  var message: String {
+    switch self {
+    case .internalError(let error):
+      return "Internal macro error: \(error.description)"
+    case .missingError:
+      return "macro expansion failed without generating an error"
+    }
+  }
 
   var severity: DiagnosticSeverity { .error }
 
   var diagnosticID: MessageID {
-    .init(domain: "SwiftSyntaxMacros", id: "ThrownErrorDiagnostic")
+    .init(domain: "SwiftDiagnostics", id: "MacroExpansionContextError")
   }
 }
 
@@ -118,18 +127,15 @@ extension MacroExpansionContext {
   public func addDiagnostics(from error: Error, node: some SyntaxProtocol) {
     // Inspect the error to form an appropriate set of diagnostics.
     var diagnostics: [Diagnostic]
-    if let diagnosticsError = error as? DiagnosticsError {
-      diagnostics = diagnosticsError.diagnostics
-    } else if let message = error as? DiagnosticMessage {
-      diagnostics = [Diagnostic(node: Syntax(node), message: message)]
-    } else if let error = error as? SyntaxStringInterpolationInvalidNodeTypeError {
+
+    if let error = error as? SyntaxStringInterpolationInvalidNodeTypeError {
       let diagnostic = Diagnostic(
         node: Syntax(node),
-        message: ThrownErrorDiagnostic(message: "Internal macro error: \(error.description)")
+        message: MacroExpansionContextError.internalError(error)
       )
       diagnostics = [diagnostic]
     } else {
-      diagnostics = [Diagnostic(node: Syntax(node), message: ThrownErrorDiagnostic(message: String(describing: error)))]
+      diagnostics = error.asDiagnostics(at: node)
     }
 
     // Emit the diagnostics.
@@ -144,9 +150,7 @@ extension MacroExpansionContext {
       diagnose(
         Diagnostic(
           node: Syntax(node),
-          message: ThrownErrorDiagnostic(
-            message: "macro expansion failed without generating an error"
-          )
+          message: MacroExpansionContextError.missingError
         )
       )
     }

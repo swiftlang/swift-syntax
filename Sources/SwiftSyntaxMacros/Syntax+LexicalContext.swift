@@ -74,11 +74,11 @@ extension SyntaxProtocol {
     // with a trivial placeholder, though.
     case var tryExpr as TryExprSyntax:
       tryExpr = tryExpr.detached
-      tryExpr.expression = "()"
+      tryExpr.expression = ExprSyntax(TypeExprSyntax(type: IdentifierTypeSyntax(name: .wildcardToken())))
       return Syntax(tryExpr)
     case var awaitExpr as AwaitExprSyntax:
       awaitExpr = awaitExpr.detached
-      awaitExpr.expression = "()"
+      awaitExpr.expression = ExprSyntax(TypeExprSyntax(type: IdentifierTypeSyntax(name: .wildcardToken())))
       return Syntax(awaitExpr)
 
     default:

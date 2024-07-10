@@ -543,8 +543,8 @@ final class LexicalContextTests: XCTestCase {
             let arg: C
             var contextDescription: String {
               try await """
-              await ()
-              try ()
+              await _
+              try _
               contextDescription: String
               struct S {}
               { c in

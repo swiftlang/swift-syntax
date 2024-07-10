@@ -85,6 +85,16 @@ import SwiftSyntax
       getNames(from: patternExpr.pattern, accessibleAfter: accessibleAfter)
     case .optionalBindingCondition(let optionalBinding):
       getNames(from: optionalBinding.pattern, accessibleAfter: accessibleAfter)
+    case .matchingPatternCondition(let matchingPatternCondition):
+      getNames(from: matchingPatternCondition.pattern, accessibleAfter: accessibleAfter)
+    case .functionCallExpr(let functionCallExpr):
+      functionCallExpr.arguments.flatMap { argument in
+        getNames(from: argument.expression, accessibleAfter: accessibleAfter)
+      }
+    case .guardStmt(let guardStmt):
+      guardStmt.conditions.flatMap { cond in
+        getNames(from: cond.condition, accessibleAfter: cond.endPosition)
+      }
     default:
       if let namedDecl = Syntax(syntax).asProtocol(SyntaxProtocol.self) as? NamedDeclSyntax {
         handle(namedDecl: namedDecl, accessibleAfter: accessibleAfter)

@@ -16,12 +16,17 @@ import SwiftSyntax
 @_spi(Experimental) public enum LookupResult {
   /// Scope and the names that matched lookup.
   case fromScope(ScopeSyntax, withNames: [LookupName])
+  /// File scope, names that matched lookup and name introduction
+  /// strategy used for the lookup.
+  case fromFileScope(SourceFileSyntax, withNames: [LookupName], nameIntroductionStrategy: FileScopeNameIntroductionStrategy)
 
   /// Associated scope.
   @_spi(Experimental) public var scope: ScopeSyntax? {
     switch self {
     case .fromScope(let scopeSyntax, _):
       scopeSyntax
+    case .fromFileScope(let fileScopeSyntax, withNames: _, nameIntroductionStrategy: _):
+      fileScopeSyntax
     }
   }
 
@@ -29,6 +34,8 @@ import SwiftSyntax
   @_spi(Experimental) public var names: [LookupName] {
     switch self {
     case .fromScope(_, let names):
+      names
+    case .fromFileScope(_, withNames: let names, nameIntroductionStrategy: _):
       names
     }
   }

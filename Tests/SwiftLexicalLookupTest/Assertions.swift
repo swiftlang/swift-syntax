@@ -56,10 +56,13 @@ enum MarkerExpectation {
 /// Used to define
 enum ResultExpectation {
   case fromScope(ScopeSyntax.Type, expectedNames: [String])
+  case fromFileScope(expectedNames: [String], nameIntroductionStrategy: FileScopeNameIntroductionStrategy)
 
   var expectedNames: [String] {
     switch self {
     case .fromScope(_, let expectedNames):
+      expectedNames
+    case .fromFileScope(expectedNames: let expectedNames, nameIntroductionStrategy: _):
       expectedNames
     }
   }
@@ -149,12 +152,13 @@ func assertLexicalNameLookup(
   source: String,
   references: [String: [ResultExpectation]],
   expectedResultTypes: MarkerExpectation = .none,
-  useNilAsTheParameter: Bool = false
+  useNilAsTheParameter: Bool = false,
+  config: [LookupConfig] = []
 ) {
   assertLexicalScopeQuery(
     source: source,
     methodUnderTest: { marker, argument in
-      let result = argument.lookup(for: useNilAsTheParameter ? nil : argument.text)
+      let result = argument.lookup(for: useNilAsTheParameter ? nil : argument.text, with: config)
 
       guard let expectedValues = references[marker] else {
         XCTFail("For marker \(marker), couldn't find result expectation")
@@ -168,6 +172,13 @@ func assertLexicalNameLookup(
             scope.syntaxNodeType == expectedType,
             "For marker \(marker), scope result type of \(scope.syntaxNodeType) doesn't match expected \(expectedType)"
           )
+        case (.fromFileScope(_, withNames: _, nameIntroductionStrategy: let nameIntroductionStrategy), .fromFileScope(expectedNames: _, nameIntroductionStrategy: let expectedNameIntroductionStrategy)):
+          XCTAssert(
+            nameIntroductionStrategy == expectedNameIntroductionStrategy,
+            "For marker \(marker), actual file scope name introduction strategy \(nameIntroductionStrategy) doesn't match expected \(expectedNameIntroductionStrategy)"
+          )
+        default:
+          XCTFail("For marker \(marker), result actual result kind \(actual) doesn't match expected \(expected)")
         }
       }
 

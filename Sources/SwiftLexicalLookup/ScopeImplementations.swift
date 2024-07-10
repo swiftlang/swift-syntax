@@ -25,7 +25,50 @@ extension SyntaxProtocol {
 
 @_spi(Experimental) extension SourceFileSyntax: ScopeSyntax {
   public var introducedNames: [LookupName] {
-    []
+    introducedNames(using: .memberBlockUpToLastDecl)
+  }
+  
+  public func introducedNames(using nameIntroductionStrategy: FileScopeNameIntroductionStrategy) -> [LookupName] {
+    switch nameIntroductionStrategy {
+    case .memberBlockUpToLastDecl:
+      var encounteredNonDeclaration = false
+      
+      return statements.flatMap { codeBlockItem in
+        let item = codeBlockItem.item
+        
+        if encounteredNonDeclaration {
+          return LookupName.getNames(from: item, accessibleAfter: codeBlockItem.endPosition)
+        } else {
+          if item.is(DeclSyntax.self) || item.is(VariableDeclSyntax.self) {
+            return LookupName.getNames(from: item)
+          } else {
+            encounteredNonDeclaration = true
+            return LookupName.getNames(from: item, accessibleAfter: codeBlockItem.endPosition)
+          }
+        }
+      }
+    case .codeBlock:
+      return statements.flatMap { codeBlockItem in
+        LookupName.getNames(from: codeBlockItem.item, accessibleAfter: codeBlockItem.endPosition)
+      }
+    case .memberBlock:
+      return statements.flatMap { codeBlockItem in
+        LookupName.getNames(from: codeBlockItem.item)
+      }
+    }
+  }
+  
+  public func lookup(for name: String?, at syntax: SyntaxProtocol, with config: [LookupConfig]) -> [LookupResult] {
+    let nameIntroductionStrategy = config.first {
+      $0 is FileScopeNameIntroductionStrategy
+    } as? FileScopeNameIntroductionStrategy ?? .memberBlockUpToLastDecl
+    
+    let names = introducedNames(using: nameIntroductionStrategy)
+      .filter { introducedName in
+        introducedName.isAccessible(at: syntax) && (name == nil || introducedName.refersTo(name!))
+      }
+    
+    return [.fromFileScope(self, withNames: names, nameIntroductionStrategy: nameIntroductionStrategy)]
   }
 }
 
@@ -45,7 +88,17 @@ extension SyntaxProtocol {
 
 @_spi(Experimental) extension ClosureExprSyntax: ScopeSyntax {
   public var introducedNames: [LookupName] {
-    signature?.parameterClause?.children(viewMode: .sourceAccurate).flatMap { parameter in
+    let captureNames = signature?.capture?.children(viewMode: .sourceAccurate).flatMap { child in
+      if let captureList = child.as(ClosureCaptureListSyntax.self) {
+        captureList.children(viewMode: .sourceAccurate).flatMap { capture in
+          LookupName.getNames(from: capture)
+        }
+      } else {
+        LookupName.getNames(from: child)
+      }
+    } ?? []
+    
+    let parameterNames = signature?.parameterClause?.children(viewMode: .sourceAccurate).flatMap { parameter in
       if let parameterList = parameter.as(ClosureParameterListSyntax.self) {
         parameterList.children(viewMode: .sourceAccurate).flatMap { parameter in
           LookupName.getNames(from: parameter)
@@ -54,6 +107,8 @@ extension SyntaxProtocol {
         LookupName.getNames(from: parameter)
       }
     } ?? []
+    
+    return captureNames + parameterNames
   }
 }
 
@@ -91,11 +146,11 @@ extension SyntaxProtocol {
     }
   }
 
-  public func lookup(for name: String?, at syntax: SyntaxProtocol) -> [LookupResult] {
+  public func lookup(for name: String?, at syntax: SyntaxProtocol, with config: [LookupConfig]) -> [LookupResult] {
     if let elseBody, elseBody.position <= syntax.position, elseBody.endPosition >= syntax.position {
-      parentScope?.lookup(for: name, at: syntax) ?? []
+      lookupInParent(for: name, at: syntax, with: config)
     } else {
-      defaultLookupImplementation(for: name, at: syntax)
+      defaultLookupImplementation(for: name, at: syntax, with: config)
     }
   }
 }
@@ -104,6 +159,20 @@ extension SyntaxProtocol {
   public var introducedNames: [LookupName] {
     members.flatMap { member in
       LookupName.getNames(from: member.decl)
+    }
+  }
+}
+
+@_spi(Experimental) extension GuardStmtSyntax: ScopeSyntax {
+  public var introducedNames: [LookupName] {
+    []
+  }
+  
+  public func lookup(for name: String?, at syntax: SyntaxProtocol, with config: [LookupConfig]) -> [LookupResult] {
+    if body.position <= syntax.position && body.endPosition >= syntax.position {
+      lookupInParent(for: name, at: self, with: config)
+    } else {
+      defaultLookupImplementation(for: name, at: syntax, with: config)
     }
   }
 }

@@ -14,6 +14,7 @@ import SwiftSyntax
 
 extension SyntaxProtocol {
   /// Returns all names that `for` refers to at this syntax node.
+  /// Optional configuration can be passed as `with` to customize the lookup behavior.
   ///
   /// - Returns: An array of `LookupResult` for name `for` at this syntax node,
   /// ordered by visibility. If set to `nil`, returns all available names ordered by visibility.
@@ -42,8 +43,8 @@ extension SyntaxProtocol {
   /// declaration, followed by the first function name, and then the second function name,
   /// in this exact order. The constant declaration within the function body is omitted
   /// due to the ordering rules that prioritize visibility within the function body.
-  @_spi(Experimental) public func lookup(for name: String?) -> [LookupResult] {
-    scope?.lookup(for: name, at: self) ?? []
+  @_spi(Experimental) public func lookup(for name: String?, with config: [LookupConfig] = []) -> [LookupResult] {
+    scope?.lookup(for: name, at: self, with: config) ?? []
   }
 }
 
@@ -54,7 +55,7 @@ extension SyntaxProtocol {
   var introducedNames: [LookupName] { get }
   /// Finds all declarations `name` refers to. `at` specifies the node lookup was triggered with.
   /// If `name` set to `nil`, returns all available names at the given node.
-  func lookup(for name: String?, at syntax: SyntaxProtocol) -> [LookupResult]
+  func lookup(for name: String?, at syntax: SyntaxProtocol, with config: [LookupConfig]) -> [LookupResult]
 }
 
 @_spi(Experimental) extension ScopeSyntax {
@@ -65,16 +66,17 @@ extension SyntaxProtocol {
   /// Returns `LookupResult` of all names introduced in this scope that `name`
   /// refers to and is accessible at given syntax node then passes lookup to the parent.
   /// If `name` set to `nil`, returns all available names at the given node.
-  public func lookup(for name: String?, at syntax: SyntaxProtocol) -> [LookupResult] {
-    defaultLookupImplementation(for: name, at: syntax)
+  public func lookup(for name: String?, at syntax: SyntaxProtocol, with config: [LookupConfig]) -> [LookupResult] {
+    defaultLookupImplementation(for: name, at: syntax, with: config)
   }
 
   /// Returns `LookupResult` of all names introduced in this scope that `name`
   /// refers to and is accessible at given syntax node then passes lookup to the parent.
   /// If `name` set to `nil`, returns all available names at the given node.
-  public func defaultLookupImplementation(
+  func defaultLookupImplementation(
     for name: String?,
-    at syntax: SyntaxProtocol
+    at syntax: SyntaxProtocol,
+    with config: [LookupConfig]
   ) -> [LookupResult] {
     let filteredNames =
       introducedNames
@@ -83,9 +85,18 @@ extension SyntaxProtocol {
       }
 
     if filteredNames.isEmpty {
-      return parentScope?.lookup(for: name, at: syntax) ?? []
+      return lookupInParent(for: name, at: syntax, with: config)
     } else {
-      return [.fromScope(self, withNames: filteredNames)] + (parentScope?.lookup(for: name, at: syntax) ?? [])
+      return [.fromScope(self, withNames: filteredNames)] + lookupInParent(for: name, at: syntax, with: config)
     }
+  }
+  
+  /// Looks up in parent scope.
+  func lookupInParent(
+    for name: String?,
+    at syntax: SyntaxProtocol,
+    with config: [LookupConfig]
+  ) -> [LookupResult] {
+    parentScope?.lookup(for: name, at: syntax, with: config) ?? []
   }
 }

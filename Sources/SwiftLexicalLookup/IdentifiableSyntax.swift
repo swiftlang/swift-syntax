@@ -20,13 +20,19 @@ public protocol IdentifiableSyntax: SyntaxProtocol {
 extension IdentifierPatternSyntax: IdentifiableSyntax {}
 
 extension ClosureParameterSyntax: IdentifiableSyntax {
-  @_spi(Experimental) public var identifier: SwiftSyntax.TokenSyntax {
+  @_spi(Experimental) public var identifier: TokenSyntax {
     secondName ?? firstName
   }
 }
 
 extension ClosureShorthandParameterSyntax: IdentifiableSyntax {
-  @_spi(Experimental) public var identifier: SwiftSyntax.TokenSyntax {
+  @_spi(Experimental) public var identifier: TokenSyntax {
     name
+  }
+}
+
+extension ClosureCaptureSyntax: IdentifiableSyntax {
+  @_spi(Experimental) public var identifier: TokenSyntax {
+    expression.as(DeclReferenceExprSyntax.self)!.baseName
   }
 }

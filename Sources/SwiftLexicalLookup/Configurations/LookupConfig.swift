@@ -14,3 +14,9 @@ import Foundation
 
 /// Used to customize lookup behavior.
 @_spi(Experimental) public protocol LookupConfig {}
+
+extension LookupConfig {
+  var identifier: ObjectIdentifier {
+    ObjectIdentifier(Self.self)
+  }
+}

@@ -58,10 +58,8 @@ extension SyntaxProtocol {
     }
   }
   
-  public func lookup(for name: String?, at syntax: SyntaxProtocol, with config: [LookupConfig]) -> [LookupResult] {
-    let nameIntroductionStrategy = config.first {
-      $0 is FileScopeNameIntroductionStrategy
-    } as? FileScopeNameIntroductionStrategy ?? .memberBlockUpToLastDecl
+  public func lookup(for name: String?, at syntax: SyntaxProtocol, with configDict: LookupConfigDictionary) -> [LookupResult] {
+    let nameIntroductionStrategy = configDict[FileScopeNameIntroductionStrategy.self] ?? .memberBlockUpToLastDecl
     
     let names = introducedNames(using: nameIntroductionStrategy)
       .filter { introducedName in
@@ -146,11 +144,11 @@ extension SyntaxProtocol {
     }
   }
 
-  public func lookup(for name: String?, at syntax: SyntaxProtocol, with config: [LookupConfig]) -> [LookupResult] {
+  public func lookup(for name: String?, at syntax: SyntaxProtocol, with configDict: LookupConfigDictionary) -> [LookupResult] {
     if let elseBody, elseBody.position <= syntax.position, elseBody.endPosition >= syntax.position {
-      lookupInParent(for: name, at: syntax, with: config)
+      lookupInParent(for: name, at: syntax, with: configDict)
     } else {
-      defaultLookupImplementation(for: name, at: syntax, with: config)
+      defaultLookupImplementation(for: name, at: syntax, with: configDict)
     }
   }
 }
@@ -168,11 +166,11 @@ extension SyntaxProtocol {
     []
   }
   
-  public func lookup(for name: String?, at syntax: SyntaxProtocol, with config: [LookupConfig]) -> [LookupResult] {
+  public func lookup(for name: String?, at syntax: SyntaxProtocol, with configDict: LookupConfigDictionary) -> [LookupResult] {
     if body.position <= syntax.position && body.endPosition >= syntax.position {
-      lookupInParent(for: name, at: self, with: config)
+      lookupInParent(for: name, at: self, with: configDict)
     } else {
-      defaultLookupImplementation(for: name, at: syntax, with: config)
+      defaultLookupImplementation(for: name, at: syntax, with: configDict)
     }
   }
 }

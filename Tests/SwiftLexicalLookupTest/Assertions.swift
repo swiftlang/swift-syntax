@@ -172,7 +172,10 @@ func assertLexicalNameLookup(
             scope.syntaxNodeType == expectedType,
             "For marker \(marker), scope result type of \(scope.syntaxNodeType) doesn't match expected \(expectedType)"
           )
-        case (.fromFileScope(_, withNames: _, nameIntroductionStrategy: let nameIntroductionStrategy), .fromFileScope(expectedNames: _, nameIntroductionStrategy: let expectedNameIntroductionStrategy)):
+        case (
+          .fromFileScope(_, withNames: _, nameIntroductionStrategy: let nameIntroductionStrategy),
+          .fromFileScope(expectedNames: _, nameIntroductionStrategy: let expectedNameIntroductionStrategy)
+        ):
           XCTAssert(
             nameIntroductionStrategy == expectedNameIntroductionStrategy,
             "For marker \(marker), actual file scope name introduction strategy \(nameIntroductionStrategy) doesn't match expected \(expectedNameIntroductionStrategy)"

@@ -18,7 +18,11 @@ import SwiftSyntax
   case fromScope(ScopeSyntax, withNames: [LookupName])
   /// File scope, names that matched lookup and name introduction
   /// strategy used for the lookup.
-  case fromFileScope(SourceFileSyntax, withNames: [LookupName], nameIntroductionStrategy: FileScopeNameIntroductionStrategy)
+  case fromFileScope(
+    SourceFileSyntax,
+    withNames: [LookupName],
+    nameIntroductionStrategy: FileScopeNameIntroductionStrategy
+  )
 
   /// Associated scope.
   @_spi(Experimental) public var scope: ScopeSyntax? {

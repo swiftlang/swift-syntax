@@ -15,17 +15,17 @@ import SwiftSyntax
 /// Stores and provides easy access for lookup configuration.
 @_spi(Experimental) public struct LookupConfigDictionary {
   private var dictionary: [ObjectIdentifier: LookupConfig]
-  
+
   /// Creates a new lookup configuration dictionary
   /// from a given array of configurations.
   init(from configArray: [LookupConfig]) {
     dictionary = [:]
-    
+
     for config in configArray {
       dictionary[config.identifier] = config
     }
   }
-  
+
   subscript<T: LookupConfig>(key: T.Type) -> T? {
     get {
       return dictionary[ObjectIdentifier(key)] as? T

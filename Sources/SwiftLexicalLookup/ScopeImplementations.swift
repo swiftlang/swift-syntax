@@ -27,15 +27,15 @@ extension SyntaxProtocol {
   public var introducedNames: [LookupName] {
     introducedNames(using: .memberBlockUpToLastDecl)
   }
-  
+
   public func introducedNames(using nameIntroductionStrategy: FileScopeNameIntroductionStrategy) -> [LookupName] {
     switch nameIntroductionStrategy {
     case .memberBlockUpToLastDecl:
       var encounteredNonDeclaration = false
-      
+
       return statements.flatMap { codeBlockItem in
         let item = codeBlockItem.item
-        
+
         if encounteredNonDeclaration {
           return LookupName.getNames(from: item, accessibleAfter: codeBlockItem.endPosition)
         } else {
@@ -57,15 +57,19 @@ extension SyntaxProtocol {
       }
     }
   }
-  
-  public func lookup(for name: String?, at syntax: SyntaxProtocol, with configDict: LookupConfigDictionary) -> [LookupResult] {
+
+  public func lookup(
+    for name: String?,
+    at syntax: SyntaxProtocol,
+    with configDict: LookupConfigDictionary
+  ) -> [LookupResult] {
     let nameIntroductionStrategy = configDict[FileScopeNameIntroductionStrategy.self] ?? .memberBlockUpToLastDecl
-    
+
     let names = introducedNames(using: nameIntroductionStrategy)
       .filter { introducedName in
         introducedName.isAccessible(at: syntax) && (name == nil || introducedName.refersTo(name!))
       }
-    
+
     return [.fromFileScope(self, withNames: names, nameIntroductionStrategy: nameIntroductionStrategy)]
   }
 }
@@ -86,26 +90,28 @@ extension SyntaxProtocol {
 
 @_spi(Experimental) extension ClosureExprSyntax: ScopeSyntax {
   public var introducedNames: [LookupName] {
-    let captureNames = signature?.capture?.children(viewMode: .sourceAccurate).flatMap { child in
-      if let captureList = child.as(ClosureCaptureListSyntax.self) {
-        captureList.children(viewMode: .sourceAccurate).flatMap { capture in
-          LookupName.getNames(from: capture)
+    let captureNames =
+      signature?.capture?.children(viewMode: .sourceAccurate).flatMap { child in
+        if let captureList = child.as(ClosureCaptureListSyntax.self) {
+          captureList.children(viewMode: .sourceAccurate).flatMap { capture in
+            LookupName.getNames(from: capture)
+          }
+        } else {
+          LookupName.getNames(from: child)
         }
-      } else {
-        LookupName.getNames(from: child)
-      }
-    } ?? []
-    
-    let parameterNames = signature?.parameterClause?.children(viewMode: .sourceAccurate).flatMap { parameter in
-      if let parameterList = parameter.as(ClosureParameterListSyntax.self) {
-        parameterList.children(viewMode: .sourceAccurate).flatMap { parameter in
+      } ?? []
+
+    let parameterNames =
+      signature?.parameterClause?.children(viewMode: .sourceAccurate).flatMap { parameter in
+        if let parameterList = parameter.as(ClosureParameterListSyntax.self) {
+          parameterList.children(viewMode: .sourceAccurate).flatMap { parameter in
+            LookupName.getNames(from: parameter)
+          }
+        } else {
           LookupName.getNames(from: parameter)
         }
-      } else {
-        LookupName.getNames(from: parameter)
-      }
-    } ?? []
-    
+      } ?? []
+
     return captureNames + parameterNames
   }
 }
@@ -144,7 +150,11 @@ extension SyntaxProtocol {
     }
   }
 
-  public func lookup(for name: String?, at syntax: SyntaxProtocol, with configDict: LookupConfigDictionary) -> [LookupResult] {
+  public func lookup(
+    for name: String?,
+    at syntax: SyntaxProtocol,
+    with configDict: LookupConfigDictionary
+  ) -> [LookupResult] {
     if let elseBody, elseBody.position <= syntax.position, elseBody.endPosition >= syntax.position {
       lookupInParent(for: name, at: syntax, with: configDict)
     } else {
@@ -165,8 +175,12 @@ extension SyntaxProtocol {
   public var introducedNames: [LookupName] {
     []
   }
-  
-  public func lookup(for name: String?, at syntax: SyntaxProtocol, with configDict: LookupConfigDictionary) -> [LookupResult] {
+
+  public func lookup(
+    for name: String?,
+    at syntax: SyntaxProtocol,
+    with configDict: LookupConfigDictionary
+  ) -> [LookupResult] {
     if body.position <= syntax.position && body.endPosition >= syntax.position {
       lookupInParent(for: name, at: self, with: configDict)
     } else {

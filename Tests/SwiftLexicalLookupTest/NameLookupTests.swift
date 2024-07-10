@@ -134,7 +134,7 @@ final class testNameLookup: XCTestCase {
       )
     )
   }
-  
+
   func testClosureCaptureLookup() {
     assertLexicalNameLookup(
       source: """
@@ -156,7 +156,7 @@ final class testNameLookup: XCTestCase {
       expectedResultTypes: .all(
         ClosureCaptureSyntax.self,
         except: [
-          "1️⃣": IdentifierPatternSyntax.self,
+          "1️⃣": IdentifierPatternSyntax.self
         ]
       )
     )
@@ -353,7 +353,7 @@ final class testNameLookup: XCTestCase {
       )
     )
   }
-  
+
   func testIfCaseLookup() {
     assertLexicalNameLookup(
       source: """
@@ -402,25 +402,27 @@ final class testNameLookup: XCTestCase {
         "7️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: ["4️⃣", "5️⃣"]),
           .fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣", "3️⃣"]),
-          .fromFileScope(expectedNames: ["🔟"], nameIntroductionStrategy: .memberBlockUpToLastDecl)
+          .fromFileScope(expectedNames: ["🔟"], nameIntroductionStrategy: .memberBlockUpToLastDecl),
         ],
         "0️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: ["8️⃣", "9️⃣"]),
           .fromScope(IfExprSyntax.self, expectedNames: ["6️⃣"]),
           .fromScope(CodeBlockSyntax.self, expectedNames: ["4️⃣", "5️⃣"]),
           .fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣", "3️⃣"]),
-          .fromFileScope(expectedNames: ["🔟"], nameIntroductionStrategy: .memberBlockUpToLastDecl)
+          .fromFileScope(expectedNames: ["🔟"], nameIntroductionStrategy: .memberBlockUpToLastDecl),
         ],
       ],
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self,
-        except: ["3️⃣": FunctionDeclSyntax.self,
-                 "🔟": ClassDeclSyntax.self]
+        except: [
+          "3️⃣": FunctionDeclSyntax.self,
+          "🔟": ClassDeclSyntax.self,
+        ]
       ),
       useNilAsTheParameter: true
     )
   }
-  
+
   func testGuardLookup() {
     assertLexicalNameLookup(
       source: """
@@ -431,7 +433,7 @@ final class testNameLookup: XCTestCase {
             print(4️⃣a, 5️⃣b)
             return
           }
-        
+
           print(6️⃣a, 7️⃣b)
         }
         """,
@@ -446,7 +448,7 @@ final class testNameLookup: XCTestCase {
       )
     )
   }
-  
+
   func testGuardLookupInConditions() {
     assertLexicalNameLookup(
       source: """
@@ -465,24 +467,24 @@ final class testNameLookup: XCTestCase {
       )
     )
   }
-  
+
   func testSimpleFileScope() {
     assertLexicalNameLookup(
       source: """
         1️⃣class a {}
-        
+
         2️⃣class b {
           let x = 3️⃣a + 4️⃣b + 5️⃣c + 6️⃣d
         }
          
         let 8️⃣a = 0
-        
+
         7️⃣class c {}
-        
+
         if a == 0 {}
-        
+
         9️⃣class d {}
-        
+
         let x = 0️⃣d
         """,
       references: [
@@ -495,24 +497,24 @@ final class testNameLookup: XCTestCase {
       expectedResultTypes: .all(ClassDeclSyntax.self, except: ["8️⃣": IdentifierPatternSyntax.self])
     )
   }
-  
+
   func testFileScopeAsMember() {
     assertLexicalNameLookup(
       source: """
         1️⃣class a {}
-        
+
         2️⃣class b {
           let x = 3️⃣a + 4️⃣b + 5️⃣c + 6️⃣d
         }
          
         let 8️⃣a = 0
-        
+
         7️⃣class c {}
-        
+
         if a == 0 {}
-        
+
         9️⃣class d {}
-        
+
         let x = 0️⃣d
         """,
       references: [
@@ -526,24 +528,24 @@ final class testNameLookup: XCTestCase {
       config: [FileScopeNameIntroductionStrategy.memberBlock]
     )
   }
-  
+
   func testFileScopeAsCodeBlock() {
     assertLexicalNameLookup(
       source: """
         1️⃣class a {}
-        
+
         2️⃣class b {
           let x = 3️⃣a + 4️⃣b + 5️⃣c + 6️⃣d
         }
          
         let 8️⃣a = 0
-        
+
         7️⃣class c {}
-        
+
         if a == 0 {}
-        
+
         9️⃣class d {}
-        
+
         let x = 0️⃣d
         """,
       references: [

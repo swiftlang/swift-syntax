@@ -531,7 +531,7 @@ final class LexicalContextTests: XCTestCase {
         struct S {
           let arg: C
           var contextDescription: String {
-            #lexicalContextDescription
+            try await #lexicalContextDescription
           }
         }
         return S(arg: c)
@@ -542,7 +542,9 @@ final class LexicalContextTests: XCTestCase {
           struct S {
             let arg: C
             var contextDescription: String {
-              """
+              try await """
+              await _
+              try _
               contextDescription: String
               struct S {}
               { c in
@@ -551,7 +553,7 @@ final class LexicalContextTests: XCTestCase {
                 struct S {
                   let arg: C
                   var contextDescription: String {
-                    #lexicalContextDescription
+                    try await #lexicalContextDescription
                   }
                 }
                 return S(arg: c)

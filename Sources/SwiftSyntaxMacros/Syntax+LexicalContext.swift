@@ -67,6 +67,20 @@ extension SyntaxProtocol {
     case let freestandingMacro as FreestandingMacroExpansionSyntax:
       return Syntax(freestandingMacro.detached) as Syntax
 
+    // Try and await are preserved: A freestanding expression macro preceded
+    // by try or await may need to know whether those keywords are present so it
+    // can propagate them to any expressions in its expansion which were passed
+    // as arguments to the macro. The expression of the try or await is replaced
+    // with a trivial placeholder, though.
+    case var tryExpr as TryExprSyntax:
+      tryExpr = tryExpr.detached
+      tryExpr.expression = "()"
+      return Syntax(tryExpr)
+    case var awaitExpr as AwaitExprSyntax:
+      awaitExpr = awaitExpr.detached
+      awaitExpr.expression = "()"
+      return Syntax(awaitExpr)
+
     default:
       return nil
     }

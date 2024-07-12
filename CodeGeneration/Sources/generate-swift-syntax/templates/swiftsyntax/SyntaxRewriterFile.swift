@@ -44,9 +44,29 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
+      /// `Syntax.Info` salvaged from the node being deinitialized in 'visitChildren'.
+      ///
+      /// Instead of deallocating them and allocating memory for new syntax nodes, store the allocated memory in an array.
+      /// We can then re-use them to create new syntax nodes.
+      ///
+      /// The array's size should be a typical nesting depth of a Swift file. That way we can store all allocated syntax
+      /// nodes when unwinding the visitation stack.
+      ///
+      /// The actual `info` stored in the `Syntax.Info` objects is garbage. It needs to be set when any of the `Syntax.Info`
+      /// objects get re-used.
+      ///
+      /// Note: making the element non-nil causes 'swift::runtime::SwiftTLSContext::get()' traffic somehow.
+      private var recyclableNodeInfos: ContiguousArray<Syntax.Info?>
+      """
+    )
+
+    DeclSyntax(
+      """
       public init(viewMode: SyntaxTreeViewMode = .sourceAccurate) {
         self.viewMode = viewMode
         self.arena = nil
+        self.recyclableNodeInfos = []
+        self.recyclableNodeInfos.reserveCapacity(64)
       }
       """
     )
@@ -57,6 +77,8 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       public init(viewMode: SyntaxTreeViewMode = .sourceAccurate, arena: SyntaxArena? = nil) {
         self.viewMode = viewMode
         self.arena = arena
+        self.recyclableNodeInfos = []
+        self.recyclableNodeInfos.reserveCapacity(64)
       }
       """
     )
@@ -65,7 +87,8 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
       /// Rewrite `node`, keeping its parent unless `detach` is `true`.
       public func rewrite(_ node: some SyntaxProtocol, detach: Bool = false) -> Syntax {
-        let rewritten = self.dispatchVisit(Syntax(node))
+        var rewritten = Syntax(node)
+        self.dispatchVisit(&rewritten)
         if detach {
           return rewritten
         }
@@ -126,7 +149,9 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       ///   - Returns: the rewritten node
       @available(*, deprecated, renamed: "rewrite(_:detach:)")
       public func visit(_ node: Syntax) -> Syntax {
-        return dispatchVisit(node)
+        var rewritten = node
+        dispatchVisit(&rewritten)
+        return rewritten
       }
       """
     )
@@ -134,7 +159,9 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     DeclSyntax(
       """
       public func visit<T: SyntaxChildChoices>(_ node: T) -> T {
-        return dispatchVisit(Syntax(node)).cast(T.self)
+        var rewritten = Syntax(node)
+        dispatchVisit(&rewritten)
+        return rewritten.cast(T.self)
       }
       """
     )
@@ -177,7 +204,9 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         ///   - Returns: the rewritten node
         \(baseNode.apiAttributes())\
         public func visit(_ node: \(baseKind.syntaxType)) -> \(baseKind.syntaxType) {
-          return dispatchVisit(Syntax(node)).cast(\(baseKind.syntaxType).self)
+          var node: Syntax = Syntax(node)
+          dispatchVisit(&node)
+          return node.cast(\(baseKind.syntaxType).self)
         }
         """
       )
@@ -187,21 +216,16 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
       /// Interpret `node` as a node of type `nodeType`, visit it, calling
       /// the `visit` to transform the node.
+      @inline(__always)
       private func visitImpl<NodeType: SyntaxProtocol>(
-        _ node: Syntax,
+        _ node: inout Syntax,
         _ nodeType: NodeType.Type,
         _ visit: (NodeType) -> some SyntaxProtocol
-      ) -> Syntax {
-        let castedNode = node.cast(NodeType.self)
-        // Accessing _syntaxNode directly is faster than calling Syntax(node)
-        visitPre(node)
-        defer {
-          visitPost(node)
-        }
-        if let newNode = visitAny(node) {
-          return newNode
-        }
-        return Syntax(visit(castedNode))
+      ) {
+        let origNode = node
+        visitPre(origNode)
+        node = visitAny(origNode) ?? Syntax(visit(origNode.cast(NodeType.self)))
+        visitPost(origNode)
       }
       """
     )
@@ -242,17 +266,17 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                 /// that determines the correct visitation function will be popped of the
                 /// stack before the function is being called, making the switch's stack
                 /// space transient instead of having it linger in the call stack.
-                private func visitationFunc(for node: Syntax) -> ((Syntax) -> Syntax)
+                private func visitationFunc(for node: Syntax) -> ((inout Syntax) -> Void)
                 """
               ) {
                 try SwitchExprSyntax("switch node.raw.kind") {
                   SwitchCaseSyntax("case .token:") {
-                    StmtSyntax("return { self.visitImpl($0, TokenSyntax.self, self.visit) }")
+                    StmtSyntax("return { self.visitImpl(&$0, TokenSyntax.self, self.visit) }")
                   }
 
                   for node in NON_BASE_SYNTAX_NODES {
                     SwitchCaseSyntax("case .\(node.varOrCaseName):") {
-                      StmtSyntax("return { self.visitImpl($0, \(node.kind.syntaxType).self, self.visit) }")
+                      StmtSyntax("return { self.visitImpl(&$0, \(node.kind.syntaxType).self, self.visit) }")
                     }
                   }
                 }
@@ -260,8 +284,8 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
               DeclSyntax(
                 """
-                private func dispatchVisit(_ node: Syntax) -> Syntax {
-                  return visitationFunc(for: node)(node)
+                private func dispatchVisit(_ node: inout Syntax) {
+                  visitationFunc(for: node)(&node)
                 }
                 """
               )
@@ -272,15 +296,15 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           poundKeyword: .poundElseToken(),
           elements: .statements(
             CodeBlockItemListSyntax {
-              try! FunctionDeclSyntax("private func dispatchVisit(_ node: Syntax) -> Syntax") {
+              try! FunctionDeclSyntax("private func dispatchVisit(_ node: inout Syntax)") {
                 try SwitchExprSyntax("switch node.raw.kind") {
                   SwitchCaseSyntax("case .token:") {
-                    StmtSyntax("return visitImpl(node, TokenSyntax.self, visit)")
+                    StmtSyntax("return visitImpl(&node, TokenSyntax.self, visit)")
                   }
 
                   for node in NON_BASE_SYNTAX_NODES {
                     SwitchCaseSyntax("case .\(node.varOrCaseName):") {
-                      StmtSyntax("return visitImpl(node, \(node.kind.syntaxType).self, visit)")
+                      StmtSyntax("return visitImpl(&node, \(node.kind.syntaxType).self, visit)")
                     }
                   }
                 }
@@ -307,9 +331,9 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         // nodes are being collected.
         var newLayout: ContiguousArray<RawSyntax?>?
 
-        // Rewritten children just to keep their 'SyntaxArena' alive until they are
-        // wrapped with 'Syntax'
-        var rewrittens: ContiguousArray<Syntax> = []
+        // Keep 'SyntaxArena' of rewritten nodes alive until they are wrapped
+        // with 'Syntax'
+        var rewrittens: ContiguousArray<RetainedSyntaxArena> = []
 
         let syntaxNode = node._syntaxNode
 
@@ -329,10 +353,18 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           }
 
           // Build the Syntax node to rewrite
-          let absoluteRaw = AbsoluteRawSyntax(raw: child, info: info)
+          var childNode: Syntax
+          if !recyclableNodeInfos.isEmpty {
+            let recycledInfo: Syntax.Info = recyclableNodeInfos.removeLast()!
+            recycledInfo.info = .nonRoot(.init(parent: Syntax(node), absoluteInfo: info))
+            childNode = Syntax(child, info: recycledInfo)
+          } else {
+            let absoluteRaw = AbsoluteRawSyntax(raw: child, info: info)
+            childNode = Syntax(absoluteRaw, parent: syntaxNode)
+          }
 
-          let rewritten = dispatchVisit(Syntax(absoluteRaw, parent: syntaxNode))
-          if rewritten.id != info.nodeId {
+          dispatchVisit(&childNode)
+          if childNode.raw.id != child.id {
             // The node was rewritten, let's handle it
             if newLayout == nil {
               // We have not yet collected any previous rewritten nodes. Initialize
@@ -350,14 +382,23 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
             // Now that we know we have a new layout in which we collect rewritten
             // nodes, add it.
-            rewrittens.append(rewritten)
-            newLayout!.append(rewritten.raw)
+            rewrittens.append(childNode.raw.arenaReference.retained)
+            newLayout!.append(childNode.raw)
           } else {
             // The node was not changed by the rewriter. Only store it if a previous
             // node has been rewritten and we are collecting a rewritten layout.
             if newLayout != nil {
               newLayout!.append(raw)
             }
+          }
+
+          if recyclableNodeInfos.capacity > recyclableNodeInfos.count,
+             isKnownUniquelyReferenced(&childNode.info) {
+            var info: Syntax.Info! = nil
+            // 'swap' to avoid ref-counting traffic.
+            swap(&childNode.info, &info)
+            info.info = nil
+            recyclableNodeInfos.append(info)
           }
         }
 

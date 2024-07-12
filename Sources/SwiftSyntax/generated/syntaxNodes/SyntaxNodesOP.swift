@@ -128,15 +128,13 @@ public struct ObjCSelectorPieceSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeName, 
-          \Self.name, 
-          \Self.unexpectedBetweenNameAndColon, 
-          \Self.colon, 
-          \Self.unexpectedAfterColon
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeName, 
+        \Self.name, 
+        \Self.unexpectedBetweenNameAndColon, 
+        \Self.colon, 
+        \Self.unexpectedAfterColon
+      ])
 }
 
 // MARK: - OpaqueReturnTypeOfAttributeArgumentsSyntax
@@ -283,17 +281,15 @@ public struct OpaqueReturnTypeOfAttributeArgumentsSyntax: SyntaxProtocol, Syntax
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeMangledName, 
-          \Self.mangledName, 
-          \Self.unexpectedBetweenMangledNameAndComma, 
-          \Self.comma, 
-          \Self.unexpectedBetweenCommaAndOrdinal, 
-          \Self.ordinal, 
-          \Self.unexpectedAfterOrdinal
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeMangledName, 
+        \Self.mangledName, 
+        \Self.unexpectedBetweenMangledNameAndComma, 
+        \Self.comma, 
+        \Self.unexpectedBetweenCommaAndOrdinal, 
+        \Self.ordinal, 
+        \Self.unexpectedAfterOrdinal
+      ])
 }
 
 // MARK: - OperatorDeclSyntax
@@ -470,19 +466,17 @@ public struct OperatorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeFixitySpecifier, 
-          \Self.fixitySpecifier, 
-          \Self.unexpectedBetweenFixitySpecifierAndOperatorKeyword, 
-          \Self.operatorKeyword, 
-          \Self.unexpectedBetweenOperatorKeywordAndName, 
-          \Self.name, 
-          \Self.unexpectedBetweenNameAndOperatorPrecedenceAndTypes, 
-          \Self.operatorPrecedenceAndTypes, 
-          \Self.unexpectedAfterOperatorPrecedenceAndTypes
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeFixitySpecifier, 
+        \Self.fixitySpecifier, 
+        \Self.unexpectedBetweenFixitySpecifierAndOperatorKeyword, 
+        \Self.operatorKeyword, 
+        \Self.unexpectedBetweenOperatorKeywordAndName, 
+        \Self.name, 
+        \Self.unexpectedBetweenNameAndOperatorPrecedenceAndTypes, 
+        \Self.operatorPrecedenceAndTypes, 
+        \Self.unexpectedAfterOperatorPrecedenceAndTypes
+      ])
 }
 
 // MARK: - OperatorPrecedenceAndTypesSyntax
@@ -656,17 +650,15 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable, 
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeColon, 
-          \Self.colon, 
-          \Self.unexpectedBetweenColonAndPrecedenceGroup, 
-          \Self.precedenceGroup, 
-          \Self.unexpectedBetweenPrecedenceGroupAndDesignatedTypes, 
-          \Self.designatedTypes, 
-          \Self.unexpectedAfterDesignatedTypes
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeColon, 
+        \Self.colon, 
+        \Self.unexpectedBetweenColonAndPrecedenceGroup, 
+        \Self.precedenceGroup, 
+        \Self.unexpectedBetweenPrecedenceGroupAndDesignatedTypes, 
+        \Self.designatedTypes, 
+        \Self.unexpectedAfterDesignatedTypes
+      ])
 }
 
 // MARK: - OptionalBindingConditionSyntax
@@ -834,19 +826,17 @@ public struct OptionalBindingConditionSyntax: SyntaxProtocol, SyntaxHashable, _L
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeBindingSpecifier, 
-          \Self.bindingSpecifier, 
-          \Self.unexpectedBetweenBindingSpecifierAndPattern, 
-          \Self.pattern, 
-          \Self.unexpectedBetweenPatternAndTypeAnnotation, 
-          \Self.typeAnnotation, 
-          \Self.unexpectedBetweenTypeAnnotationAndInitializer, 
-          \Self.initializer, 
-          \Self.unexpectedAfterInitializer
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeBindingSpecifier, 
+        \Self.bindingSpecifier, 
+        \Self.unexpectedBetweenBindingSpecifierAndPattern, 
+        \Self.pattern, 
+        \Self.unexpectedBetweenPatternAndTypeAnnotation, 
+        \Self.typeAnnotation, 
+        \Self.unexpectedBetweenTypeAnnotationAndInitializer, 
+        \Self.initializer, 
+        \Self.unexpectedAfterInitializer
+      ])
 }
 
 // MARK: - OptionalChainingExprSyntax
@@ -954,15 +944,13 @@ public struct OptionalChainingExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _L
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeExpression, 
-          \Self.expression, 
-          \Self.unexpectedBetweenExpressionAndQuestionMark, 
-          \Self.questionMark, 
-          \Self.unexpectedAfterQuestionMark
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeExpression, 
+        \Self.expression, 
+        \Self.unexpectedBetweenExpressionAndQuestionMark, 
+        \Self.questionMark, 
+        \Self.unexpectedAfterQuestionMark
+      ])
 }
 
 // MARK: - OptionalTypeSyntax
@@ -1070,15 +1058,13 @@ public struct OptionalTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeWrappedType, 
-          \Self.wrappedType, 
-          \Self.unexpectedBetweenWrappedTypeAndQuestionMark, 
-          \Self.questionMark, 
-          \Self.unexpectedAfterQuestionMark
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeWrappedType, 
+        \Self.wrappedType, 
+        \Self.unexpectedBetweenWrappedTypeAndQuestionMark, 
+        \Self.questionMark, 
+        \Self.unexpectedAfterQuestionMark
+      ])
 }
 
 // MARK: - OriginallyDefinedInAttributeArgumentsSyntax
@@ -1300,21 +1286,19 @@ public struct OriginallyDefinedInAttributeArgumentsSyntax: SyntaxProtocol, Synta
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeModuleLabel, 
-          \Self.moduleLabel, 
-          \Self.unexpectedBetweenModuleLabelAndColon, 
-          \Self.colon, 
-          \Self.unexpectedBetweenColonAndModuleName, 
-          \Self.moduleName, 
-          \Self.unexpectedBetweenModuleNameAndComma, 
-          \Self.comma, 
-          \Self.unexpectedBetweenCommaAndPlatforms, 
-          \Self.platforms, 
-          \Self.unexpectedAfterPlatforms
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeModuleLabel, 
+        \Self.moduleLabel, 
+        \Self.unexpectedBetweenModuleLabelAndColon, 
+        \Self.colon, 
+        \Self.unexpectedBetweenColonAndModuleName, 
+        \Self.moduleName, 
+        \Self.unexpectedBetweenModuleNameAndComma, 
+        \Self.comma, 
+        \Self.unexpectedBetweenCommaAndPlatforms, 
+        \Self.platforms, 
+        \Self.unexpectedAfterPlatforms
+      ])
 }
 
 // MARK: - PackElementExprSyntax
@@ -1424,15 +1408,13 @@ public struct PackElementExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeEachKeyword, 
-          \Self.eachKeyword, 
-          \Self.unexpectedBetweenEachKeywordAndPack, 
-          \Self.pack, 
-          \Self.unexpectedAfterPack
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeEachKeyword, 
+        \Self.eachKeyword, 
+        \Self.unexpectedBetweenEachKeywordAndPack, 
+        \Self.pack, 
+        \Self.unexpectedAfterPack
+      ])
 }
 
 // MARK: - PackElementTypeSyntax
@@ -1540,15 +1522,13 @@ public struct PackElementTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeEachKeyword, 
-          \Self.eachKeyword, 
-          \Self.unexpectedBetweenEachKeywordAndPack, 
-          \Self.pack, 
-          \Self.unexpectedAfterPack
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeEachKeyword, 
+        \Self.eachKeyword, 
+        \Self.unexpectedBetweenEachKeywordAndPack, 
+        \Self.pack, 
+        \Self.unexpectedAfterPack
+      ])
 }
 
 // MARK: - PackExpansionExprSyntax
@@ -1658,15 +1638,13 @@ public struct PackExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeRepeatKeyword, 
-          \Self.repeatKeyword, 
-          \Self.unexpectedBetweenRepeatKeywordAndRepetitionPattern, 
-          \Self.repetitionPattern, 
-          \Self.unexpectedAfterRepetitionPattern
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeRepeatKeyword, 
+        \Self.repeatKeyword, 
+        \Self.unexpectedBetweenRepeatKeywordAndRepetitionPattern, 
+        \Self.repetitionPattern, 
+        \Self.unexpectedAfterRepetitionPattern
+      ])
 }
 
 // MARK: - PackExpansionTypeSyntax
@@ -1774,15 +1752,13 @@ public struct PackExpansionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeRepeatKeyword, 
-          \Self.repeatKeyword, 
-          \Self.unexpectedBetweenRepeatKeywordAndRepetitionPattern, 
-          \Self.repetitionPattern, 
-          \Self.unexpectedAfterRepetitionPattern
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeRepeatKeyword, 
+        \Self.repeatKeyword, 
+        \Self.unexpectedBetweenRepeatKeywordAndRepetitionPattern, 
+        \Self.repetitionPattern, 
+        \Self.unexpectedAfterRepetitionPattern
+      ])
 }
 
 // MARK: - PatternBindingSyntax
@@ -1991,21 +1967,19 @@ public struct PatternBindingSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforePattern, 
-          \Self.pattern, 
-          \Self.unexpectedBetweenPatternAndTypeAnnotation, 
-          \Self.typeAnnotation, 
-          \Self.unexpectedBetweenTypeAnnotationAndInitializer, 
-          \Self.initializer, 
-          \Self.unexpectedBetweenInitializerAndAccessorBlock, 
-          \Self.accessorBlock, 
-          \Self.unexpectedBetweenAccessorBlockAndTrailingComma, 
-          \Self.trailingComma, 
-          \Self.unexpectedAfterTrailingComma
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforePattern, 
+        \Self.pattern, 
+        \Self.unexpectedBetweenPatternAndTypeAnnotation, 
+        \Self.typeAnnotation, 
+        \Self.unexpectedBetweenTypeAnnotationAndInitializer, 
+        \Self.initializer, 
+        \Self.unexpectedBetweenInitializerAndAccessorBlock, 
+        \Self.accessorBlock, 
+        \Self.unexpectedBetweenAccessorBlockAndTrailingComma, 
+        \Self.trailingComma, 
+        \Self.unexpectedAfterTrailingComma
+      ])
 }
 
 // MARK: - PatternExprSyntax
@@ -2077,9 +2051,7 @@ public struct PatternExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([\Self.unexpectedBeforePattern, \Self.pattern, \Self.unexpectedAfterPattern])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforePattern, \Self.pattern, \Self.unexpectedAfterPattern])
 }
 
 // MARK: - PlatformVersionItemSyntax
@@ -2198,15 +2170,13 @@ public struct PlatformVersionItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforePlatformVersion, 
-          \Self.platformVersion, 
-          \Self.unexpectedBetweenPlatformVersionAndTrailingComma, 
-          \Self.trailingComma, 
-          \Self.unexpectedAfterTrailingComma
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforePlatformVersion, 
+        \Self.platformVersion, 
+        \Self.unexpectedBetweenPlatformVersionAndTrailingComma, 
+        \Self.trailingComma, 
+        \Self.unexpectedAfterTrailingComma
+      ])
 }
 
 // MARK: - PlatformVersionSyntax
@@ -2330,15 +2300,13 @@ public struct PlatformVersionSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforePlatform, 
-          \Self.platform, 
-          \Self.unexpectedBetweenPlatformAndVersion, 
-          \Self.version, 
-          \Self.unexpectedAfterVersion
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforePlatform, 
+        \Self.platform, 
+        \Self.unexpectedBetweenPlatformAndVersion, 
+        \Self.version, 
+        \Self.unexpectedAfterVersion
+      ])
 }
 
 // MARK: - PostfixIfConfigExprSyntax
@@ -2443,15 +2411,13 @@ public struct PostfixIfConfigExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Le
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeBase, 
-          \Self.base, 
-          \Self.unexpectedBetweenBaseAndConfig, 
-          \Self.config, 
-          \Self.unexpectedAfterConfig
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeBase, 
+        \Self.base, 
+        \Self.unexpectedBetweenBaseAndConfig, 
+        \Self.config, 
+        \Self.unexpectedAfterConfig
+      ])
 }
 
 // MARK: - PostfixOperatorExprSyntax
@@ -2559,15 +2525,13 @@ public struct PostfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Le
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeExpression, 
-          \Self.expression, 
-          \Self.unexpectedBetweenExpressionAndOperator, 
-          \Self.operator, 
-          \Self.unexpectedAfterOperator
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeExpression, 
+        \Self.expression, 
+        \Self.unexpectedBetweenExpressionAndOperator, 
+        \Self.operator, 
+        \Self.unexpectedAfterOperator
+      ])
 }
 
 // MARK: - PoundSourceLocationArgumentsSyntax
@@ -2819,25 +2783,23 @@ public struct PoundSourceLocationArgumentsSyntax: SyntaxProtocol, SyntaxHashable
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeFileLabel, 
-          \Self.fileLabel, 
-          \Self.unexpectedBetweenFileLabelAndFileColon, 
-          \Self.fileColon, 
-          \Self.unexpectedBetweenFileColonAndFileName, 
-          \Self.fileName, 
-          \Self.unexpectedBetweenFileNameAndComma, 
-          \Self.comma, 
-          \Self.unexpectedBetweenCommaAndLineLabel, 
-          \Self.lineLabel, 
-          \Self.unexpectedBetweenLineLabelAndLineColon, 
-          \Self.lineColon, 
-          \Self.unexpectedBetweenLineColonAndLineNumber, 
-          \Self.lineNumber, 
-          \Self.unexpectedAfterLineNumber
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeFileLabel, 
+        \Self.fileLabel, 
+        \Self.unexpectedBetweenFileLabelAndFileColon, 
+        \Self.fileColon, 
+        \Self.unexpectedBetweenFileColonAndFileName, 
+        \Self.fileName, 
+        \Self.unexpectedBetweenFileNameAndComma, 
+        \Self.comma, 
+        \Self.unexpectedBetweenCommaAndLineLabel, 
+        \Self.lineLabel, 
+        \Self.unexpectedBetweenLineLabelAndLineColon, 
+        \Self.lineColon, 
+        \Self.unexpectedBetweenLineColonAndLineNumber, 
+        \Self.lineNumber, 
+        \Self.unexpectedAfterLineNumber
+      ])
 }
 
 // MARK: - PoundSourceLocationSyntax
@@ -3001,19 +2963,17 @@ public struct PoundSourceLocationSyntax: DeclSyntaxProtocol, SyntaxHashable, _Le
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforePoundSourceLocation, 
-          \Self.poundSourceLocation, 
-          \Self.unexpectedBetweenPoundSourceLocationAndLeftParen, 
-          \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndArguments, 
-          \Self.arguments, 
-          \Self.unexpectedBetweenArgumentsAndRightParen, 
-          \Self.rightParen, 
-          \Self.unexpectedAfterRightParen
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforePoundSourceLocation, 
+        \Self.poundSourceLocation, 
+        \Self.unexpectedBetweenPoundSourceLocationAndLeftParen, 
+        \Self.leftParen, 
+        \Self.unexpectedBetweenLeftParenAndArguments, 
+        \Self.arguments, 
+        \Self.unexpectedBetweenArgumentsAndRightParen, 
+        \Self.rightParen, 
+        \Self.unexpectedAfterRightParen
+      ])
 }
 
 // MARK: - PrecedenceGroupAssignmentSyntax
@@ -3163,17 +3123,15 @@ public struct PrecedenceGroupAssignmentSyntax: SyntaxProtocol, SyntaxHashable, _
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeAssignmentLabel, 
-          \Self.assignmentLabel, 
-          \Self.unexpectedBetweenAssignmentLabelAndColon, 
-          \Self.colon, 
-          \Self.unexpectedBetweenColonAndValue, 
-          \Self.value, 
-          \Self.unexpectedAfterValue
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeAssignmentLabel, 
+        \Self.assignmentLabel, 
+        \Self.unexpectedBetweenAssignmentLabelAndColon, 
+        \Self.colon, 
+        \Self.unexpectedBetweenColonAndValue, 
+        \Self.value, 
+        \Self.unexpectedAfterValue
+      ])
 }
 
 // MARK: - PrecedenceGroupAssociativitySyntax
@@ -3324,17 +3282,15 @@ public struct PrecedenceGroupAssociativitySyntax: SyntaxProtocol, SyntaxHashable
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeAssociativityLabel, 
-          \Self.associativityLabel, 
-          \Self.unexpectedBetweenAssociativityLabelAndColon, 
-          \Self.colon, 
-          \Self.unexpectedBetweenColonAndValue, 
-          \Self.value, 
-          \Self.unexpectedAfterValue
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeAssociativityLabel, 
+        \Self.associativityLabel, 
+        \Self.unexpectedBetweenAssociativityLabelAndColon, 
+        \Self.colon, 
+        \Self.unexpectedBetweenColonAndValue, 
+        \Self.value, 
+        \Self.unexpectedAfterValue
+      ])
 }
 
 // MARK: - PrecedenceGroupDeclSyntax
@@ -3668,25 +3624,23 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Le
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeAttributes, 
-          \Self.attributes, 
-          \Self.unexpectedBetweenAttributesAndModifiers, 
-          \Self.modifiers, 
-          \Self.unexpectedBetweenModifiersAndPrecedencegroupKeyword, 
-          \Self.precedencegroupKeyword, 
-          \Self.unexpectedBetweenPrecedencegroupKeywordAndName, 
-          \Self.name, 
-          \Self.unexpectedBetweenNameAndLeftBrace, 
-          \Self.leftBrace, 
-          \Self.unexpectedBetweenLeftBraceAndGroupAttributes, 
-          \Self.groupAttributes, 
-          \Self.unexpectedBetweenGroupAttributesAndRightBrace, 
-          \Self.rightBrace, 
-          \Self.unexpectedAfterRightBrace
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeAttributes, 
+        \Self.attributes, 
+        \Self.unexpectedBetweenAttributesAndModifiers, 
+        \Self.modifiers, 
+        \Self.unexpectedBetweenModifiersAndPrecedencegroupKeyword, 
+        \Self.precedencegroupKeyword, 
+        \Self.unexpectedBetweenPrecedencegroupKeywordAndName, 
+        \Self.name, 
+        \Self.unexpectedBetweenNameAndLeftBrace, 
+        \Self.leftBrace, 
+        \Self.unexpectedBetweenLeftBraceAndGroupAttributes, 
+        \Self.groupAttributes, 
+        \Self.unexpectedBetweenGroupAttributesAndRightBrace, 
+        \Self.rightBrace, 
+        \Self.unexpectedAfterRightBrace
+      ])
 }
 
 // MARK: - PrecedenceGroupNameSyntax
@@ -3801,15 +3755,13 @@ public struct PrecedenceGroupNameSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeName, 
-          \Self.name, 
-          \Self.unexpectedBetweenNameAndTrailingComma, 
-          \Self.trailingComma, 
-          \Self.unexpectedAfterTrailingComma
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeName, 
+        \Self.name, 
+        \Self.unexpectedBetweenNameAndTrailingComma, 
+        \Self.trailingComma, 
+        \Self.unexpectedAfterTrailingComma
+      ])
 }
 
 // MARK: - PrecedenceGroupRelationSyntax
@@ -3985,17 +3937,15 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable, _Le
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeHigherThanOrLowerThanLabel, 
-          \Self.higherThanOrLowerThanLabel, 
-          \Self.unexpectedBetweenHigherThanOrLowerThanLabelAndColon, 
-          \Self.colon, 
-          \Self.unexpectedBetweenColonAndPrecedenceGroups, 
-          \Self.precedenceGroups, 
-          \Self.unexpectedAfterPrecedenceGroups
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeHigherThanOrLowerThanLabel, 
+        \Self.higherThanOrLowerThanLabel, 
+        \Self.unexpectedBetweenHigherThanOrLowerThanLabelAndColon, 
+        \Self.colon, 
+        \Self.unexpectedBetweenColonAndPrecedenceGroups, 
+        \Self.precedenceGroups, 
+        \Self.unexpectedAfterPrecedenceGroups
+      ])
 }
 
 // MARK: - PrefixOperatorExprSyntax
@@ -4115,15 +4065,13 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Lea
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeOperator, 
-          \Self.operator, 
-          \Self.unexpectedBetweenOperatorAndExpression, 
-          \Self.expression, 
-          \Self.unexpectedAfterExpression
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeOperator, 
+        \Self.operator, 
+        \Self.unexpectedBetweenOperatorAndExpression, 
+        \Self.expression, 
+        \Self.unexpectedAfterExpression
+      ])
 }
 
 // MARK: - PrimaryAssociatedTypeClauseSyntax
@@ -4290,17 +4238,15 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable,
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeLeftAngle, 
-          \Self.leftAngle, 
-          \Self.unexpectedBetweenLeftAngleAndPrimaryAssociatedTypes, 
-          \Self.primaryAssociatedTypes, 
-          \Self.unexpectedBetweenPrimaryAssociatedTypesAndRightAngle, 
-          \Self.rightAngle, 
-          \Self.unexpectedAfterRightAngle
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeLeftAngle, 
+        \Self.leftAngle, 
+        \Self.unexpectedBetweenLeftAngleAndPrimaryAssociatedTypes, 
+        \Self.primaryAssociatedTypes, 
+        \Self.unexpectedBetweenPrimaryAssociatedTypesAndRightAngle, 
+        \Self.rightAngle, 
+        \Self.unexpectedAfterRightAngle
+      ])
 }
 
 // MARK: - PrimaryAssociatedTypeSyntax
@@ -4415,15 +4361,13 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeName, 
-          \Self.name, 
-          \Self.unexpectedBetweenNameAndTrailingComma, 
-          \Self.trailingComma, 
-          \Self.unexpectedAfterTrailingComma
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeName, 
+        \Self.name, 
+        \Self.unexpectedBetweenNameAndTrailingComma, 
+        \Self.trailingComma, 
+        \Self.unexpectedAfterTrailingComma
+      ])
 }
 
 // MARK: - ProtocolDeclSyntax
@@ -4766,25 +4710,23 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeAttributes, 
-          \Self.attributes, 
-          \Self.unexpectedBetweenAttributesAndModifiers, 
-          \Self.modifiers, 
-          \Self.unexpectedBetweenModifiersAndProtocolKeyword, 
-          \Self.protocolKeyword, 
-          \Self.unexpectedBetweenProtocolKeywordAndName, 
-          \Self.name, 
-          \Self.unexpectedBetweenNameAndPrimaryAssociatedTypeClause, 
-          \Self.primaryAssociatedTypeClause, 
-          \Self.unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause, 
-          \Self.inheritanceClause, 
-          \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
-          \Self.genericWhereClause, 
-          \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock, 
-          \Self.memberBlock, 
-          \Self.unexpectedAfterMemberBlock
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeAttributes, 
+        \Self.attributes, 
+        \Self.unexpectedBetweenAttributesAndModifiers, 
+        \Self.modifiers, 
+        \Self.unexpectedBetweenModifiersAndProtocolKeyword, 
+        \Self.protocolKeyword, 
+        \Self.unexpectedBetweenProtocolKeywordAndName, 
+        \Self.name, 
+        \Self.unexpectedBetweenNameAndPrimaryAssociatedTypeClause, 
+        \Self.primaryAssociatedTypeClause, 
+        \Self.unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause, 
+        \Self.inheritanceClause, 
+        \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
+        \Self.genericWhereClause, 
+        \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock, 
+        \Self.memberBlock, 
+        \Self.unexpectedAfterMemberBlock
+      ])
 }

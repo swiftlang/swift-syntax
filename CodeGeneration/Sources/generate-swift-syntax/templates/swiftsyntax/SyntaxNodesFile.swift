@@ -199,17 +199,14 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           }
         }
 
-        try! VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
-          let layout = ArrayExprSyntax {
-            for child in node.children {
-              ArrayElementSyntax(
-                expression: ExprSyntax(#"\Self.\#(child.varOrCaseName)"#)
-              )
-            }
+        let layout = ArrayExprSyntax {
+          for child in node.children {
+            ArrayElementSyntax(
+              expression: ExprSyntax(#"\Self.\#(child.varOrCaseName)"#)
+            )
           }
-
-          StmtSyntax("return .layout(\(layout))")
         }
+        "public static let structure: SyntaxNodeStructure = .layout(\(layout))"
       }
     }
   }

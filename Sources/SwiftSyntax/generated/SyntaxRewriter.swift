@@ -31,33 +31,18 @@ open class SyntaxRewriter {
   /// intermediate nodes should be allocated.
   private let arena: SyntaxArena?
   
-  /// `Syntax.Info` salvaged from the node being deinitialized in 'visitChildren'.
-  ///
-  /// Instead of deallocating them and allocating memory for new syntax nodes, store the allocated memory in an array.
-  /// We can then re-use them to create new syntax nodes.
-  ///
-  /// The array's size should be a typical nesting depth of a Swift file. That way we can store all allocated syntax
-  /// nodes when unwinding the visitation stack.
-  ///
-  /// The actual `info` stored in the `Syntax.Info` objects is garbage. It needs to be set when any of the `Syntax.Info`
-  /// objects get re-used.
-  ///
-  /// Note: making the element non-nil causes 'swift::runtime::SwiftTLSContext::get()' traffic somehow.
-  private var recyclableNodeInfos: ContiguousArray<Syntax.Info?>
+  /// 'Syntax' object factory recycling 'Syntax.Info' instances.
+  private let nodeFactory: SyntaxNodeFactory = SyntaxNodeFactory()
   
   public init(viewMode: SyntaxTreeViewMode = .sourceAccurate) {
     self.viewMode = viewMode
     self.arena = nil
-    self.recyclableNodeInfos = []
-    self.recyclableNodeInfos.reserveCapacity(64)
   }
   
   @_spi(RawSyntax)
   public init(viewMode: SyntaxTreeViewMode = .sourceAccurate, arena: SyntaxArena? = nil) {
     self.viewMode = viewMode
     self.arena = arena
-    self.recyclableNodeInfos = []
-    self.recyclableNodeInfos.reserveCapacity(64)
   }
   
   /// Rewrite `node`, keeping its parent unless `detach` is `true`.
@@ -3952,15 +3937,7 @@ open class SyntaxRewriter {
       }
 
       // Build the Syntax node to rewrite
-      var childNode: Syntax
-      if !recyclableNodeInfos.isEmpty {
-        let recycledInfo: Syntax.Info = recyclableNodeInfos.removeLast()!
-        recycledInfo.info = .nonRoot(.init(parent: Syntax(node), absoluteInfo: info))
-        childNode = Syntax(child, info: recycledInfo)
-      } else {
-        let absoluteRaw = AbsoluteRawSyntax(raw: child, info: info)
-        childNode = Syntax(absoluteRaw, parent: syntaxNode)
-      }
+      var childNode = nodeFactory.create(parent: syntaxNode, raw: child, absoluteInfo: info)
 
       dispatchVisit(&childNode)
       if childNode.raw.id != child.id {
@@ -3991,14 +3968,8 @@ open class SyntaxRewriter {
         }
       }
 
-      if recyclableNodeInfos.capacity > recyclableNodeInfos.count,
-         isKnownUniquelyReferenced(&childNode.info) {
-        var info: Syntax.Info! = nil
-        // 'swap' to avoid ref-counting traffic.
-        swap(&childNode.info, &info)
-        info.info = nil
-        recyclableNodeInfos.append(info)
-      }
+      // Recycle 'childNode.info'
+      nodeFactory.dispose(&childNode)
     }
 
     if let newLayout {

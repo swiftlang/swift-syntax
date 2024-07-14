@@ -47,7 +47,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
         DeclSyntax(
           """
-          public init?(_ node: some SyntaxProtocol) {
+          public init?(_ node: __shared some SyntaxProtocol) {
             guard node.raw.kind == .\(node.varOrCaseName) else { return nil }
             self._syntaxNode = node._syntaxNode
           }
@@ -256,7 +256,7 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
       }
     }
 
-    try! InitializerDeclSyntax("public init?(_ node: some SyntaxProtocol)") {
+    try! InitializerDeclSyntax("public init?(_ node: __shared some SyntaxProtocol)") {
       for choice in choices {
         StmtSyntax(
           """

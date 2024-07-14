@@ -35,7 +35,7 @@
 public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .ternaryExpr else {
       return nil
     }
@@ -245,7 +245,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
 public struct ThenStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .thenStmt else {
       return nil
     }
@@ -361,7 +361,7 @@ public struct ThenStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynta
 public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .throwStmt else {
       return nil
     }
@@ -486,7 +486,7 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 public struct ThrowsClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .throwsClause else {
       return nil
     }
@@ -690,7 +690,7 @@ public struct ThrowsClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
 public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .tryExpr else {
       return nil
     }
@@ -838,7 +838,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntax
 public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .tupleExpr else {
       return nil
     }
@@ -1018,7 +1018,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
 public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .tuplePatternElement else {
       return nil
     }
@@ -1215,7 +1215,7 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .tuplePattern else {
       return nil
     }
@@ -1402,7 +1402,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPa
 public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .tupleTypeElement else {
       return nil
     }
@@ -1668,7 +1668,7 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
 public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .tupleType else {
       return nil
     }
@@ -1845,7 +1845,7 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSynt
 public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .typeAliasDecl else {
       return nil
     }
@@ -2159,7 +2159,7 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
 public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .typeAnnotation else {
       return nil
     }
@@ -2284,7 +2284,7 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
 public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .typeEffectSpecifiers else {
       return nil
     }
@@ -2401,7 +2401,7 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
 public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .typeExpr else {
       return nil
     }
@@ -2481,7 +2481,7 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
 public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .typeInitializerClause else {
       return nil
     }
@@ -2604,7 +2604,7 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
 public struct UnavailableFromAsyncAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .unavailableFromAsyncAttributeArguments else {
       return nil
     }
@@ -2756,7 +2756,7 @@ public struct UnavailableFromAsyncAttributeArgumentsSyntax: SyntaxProtocol, Synt
 public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .underscorePrivateAttributeArguments else {
       return nil
     }
@@ -2906,7 +2906,7 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
 public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .unresolvedAsExpr else {
       return nil
     }
@@ -3031,7 +3031,7 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
 public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .unresolvedIsExpr else {
       return nil
     }
@@ -3116,7 +3116,7 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
 public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .unresolvedTernaryExpr else {
       return nil
     }
@@ -3261,7 +3261,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
 public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .valueBindingPattern else {
       return nil
     }
@@ -3391,7 +3391,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, 
 public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .variableDecl else {
       return nil
     }
@@ -3669,7 +3669,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
 public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .versionComponent else {
       return nil
     }
@@ -3802,7 +3802,7 @@ public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
 public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .versionTuple else {
       return nil
     }
@@ -3956,7 +3956,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
 public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .whereClause else {
       return nil
     }
@@ -4073,7 +4073,7 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
 public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .whileStmt else {
       return nil
     }
@@ -4254,7 +4254,7 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .wildcardPattern else {
       return nil
     }
@@ -4351,7 +4351,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
       self = .single(ExprSyntax(node))
     }
     
-    public init?(_ node: some SyntaxProtocol) {
+    public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(YieldedExpressionsClauseSyntax.self) {
         self = .multiple(node)
         return
@@ -4414,7 +4414,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
   
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .yieldStmt else {
       return nil
     }
@@ -4534,7 +4534,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 public struct YieldedExpressionSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .yieldedExpression else {
       return nil
     }
@@ -4655,7 +4655,7 @@ public struct YieldedExpressionSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 public struct YieldedExpressionsClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .yieldedExpressionsClause else {
       return nil
     }

@@ -24,7 +24,7 @@ public protocol SyntaxProtocol: CustomStringConvertible,
 
   /// Converts the given specialized node to this type. Returns `nil` if the
   /// conversion is not possible.
-  init?(_ node: some SyntaxProtocol)
+  init?(_ node: __shared some SyntaxProtocol)
 
   /// The statically allowed structure of the syntax node.
   static var structure: SyntaxNodeStructure { get }

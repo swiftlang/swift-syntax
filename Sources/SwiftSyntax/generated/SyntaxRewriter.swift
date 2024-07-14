@@ -3897,7 +3897,7 @@ open class SyntaxRewriter {
 
     // newLayout is nil until the first child node is rewritten and rewritten
     // nodes are being collected.
-    var newLayout: ContiguousArray<RawSyntax?>?
+    var newLayout: UnsafeMutableBufferPointer<RawSyntax?> = .init(start: nil, count: 0)
 
     // Keep 'SyntaxArena' of rewritten nodes alive until they are wrapped
     // with 'Syntax'
@@ -3913,12 +3913,7 @@ open class SyntaxRewriter {
       }
 
       guard let child = raw, viewMode.shouldTraverse(node: child) else {
-        // Node does not exist or should not be visited. If we are collecting
-        // rewritten nodes, we need to collect this one as well, otherwise we
-        // can ignore it.
-        if newLayout != nil {
-          newLayout!.append(raw)
-        }
+        // Node does not exist or should not be visited.
         continue
       }
 
@@ -3928,44 +3923,31 @@ open class SyntaxRewriter {
       dispatchVisit(&childNode)
       if childNode.raw.id != child.id {
         // The node was rewritten, let's handle it
-        if newLayout == nil {
+
+        if newLayout.baseAddress == nil {
           // We have not yet collected any previous rewritten nodes. Initialize
-          // the new layout with the previous nodes of the parent. This is
-          // possible, since we know they were not rewritten.
-
-          // The below implementation is based on Collection.map but directly
-          // reserves enough capacity for the entire layout.
-          newLayout = ContiguousArray<RawSyntax?>()
-          newLayout!.reserveCapacity(node.raw.layoutView!.children.count)
-          for j in 0 ..< childIndex {
-            newLayout!.append(node.raw.layoutView!.children[j])
-          }
+          // the new layout with the previous nodes of the parent.
+          newLayout = .allocate(capacity: node.raw.layoutView!.children.count)
+          _ = newLayout.initialize(fromContentsOf: node.raw.layoutView!.children)
         }
 
-        // Now that we know we have a new layout in which we collect rewritten
-        // nodes, add it.
+        // Update the rewritten child.
+        newLayout[childIndex] = childNode.raw
+        // Retain the syntax arena of the new node until it's wrapped with Syntax node.
         rewrittens.append(childNode.raw.arenaReference.retained)
-        newLayout!.append(childNode.raw)
-      } else {
-        // The node was not changed by the rewriter. Only store it if a previous
-        // node has been rewritten and we are collecting a rewritten layout.
-        if newLayout != nil {
-          newLayout!.append(raw)
-        }
       }
 
       // Recycle 'childNode.info'
       nodeFactory.dispose(&childNode)
     }
 
-    if let newLayout {
+    if newLayout.baseAddress != nil {
       // A child node was rewritten. Build the updated node.
 
-      // Sanity check, ensure the new children are the same length.
-      precondition(newLayout.count == node.raw.layoutView!.children.count)
-
       let arena = SyntaxArena()
-      let newRaw = node.raw.layoutView!.replacingLayout(with: Array(newLayout), arena: arena)
+      let newRaw = node.raw.layoutView!.replacingLayout(with: newLayout, arena: arena)
+      newLayout.deinitialize()
+      newLayout.deallocate()
       // 'withExtendedLifetime' to keep 'SyntaxArena's of them alive until here.
       return withExtendedLifetime(rewrittens) {
         Syntax(raw: newRaw, rawNodeArena: arena).cast(SyntaxType.self)

@@ -34,27 +34,8 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      /// `Syntax.Info` objects created in `visitChildren` but whose `Syntax` nodes were not retained by the `visit`
-      /// functions implemented by a subclass of `SyntaxVisitor`.
-      ///
-      /// Instead of deallocating them and allocating memory for new syntax nodes, store the allocated memory in an array.
-      /// We can then re-use them to create new syntax nodes.
-      ///
-      /// The array's size should be a typical nesting depth of a Swift file. That way we can store all allocated syntax
-      /// nodes when unwinding the visitation stack.
-      ///
-      /// The actual `info` stored in the `Syntax.Info` objects is garbage. It needs to be set when any of the `Syntax.Info`
-      /// objects get re-used.
-      private var recyclableNodeInfos: ContiguousArray<Syntax.Info?> =  ContiguousArray(repeating: nil, count: 64)
-      """
-    )
-
-    DeclSyntax(
-      """
-      /// A bit is set to 1 if the corresponding index in `recyclableNodeInfos` is occupied and ready to be reused.
-      ///
-      /// The last bit in this UInt64 corresponds to index 0 in `recyclableNodeInfos`.
-      private var recyclableNodeInfosUsageBitmap: UInt64 = 0
+      /// 'Syntax' object factory recycling 'Syntax.Info' instances.
+      private let nodeFactory: SyntaxNodeFactory = SyntaxNodeFactory()
       """
     )
 
@@ -261,65 +242,14 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     DeclSyntax(
       """
       /// - Note: `node` is `inout` to avoid reference counting. See comment in `visitImpl`.
-      private func visitChildren(_ syntaxNode: inout Syntax) {
-        for childRaw in NonNilRawSyntaxChildren(syntaxNode, viewMode: viewMode) {
-          // syntaxNode gets retained here. That seems unnecessary but I don't know how to remove it.
-          var childNode: Syntax
-          if let recycledInfoIndex = recyclableNodeInfosUsageBitmap.indexOfRightmostOne {
-            var recycledInfo: Syntax.Info? = nil
-            // Use `swap` to extract the recyclable syntax node without incurring ref-counting.
-            swap(&recycledInfo, &recyclableNodeInfos[recycledInfoIndex])
-            assert(recycledInfo != nil, "Slot indicated by the bitmap did not contain a value")
-            recyclableNodeInfosUsageBitmap.setBitToZero(at: recycledInfoIndex)
-            // syntaxNode.info gets retained here. This is necessary because we build up the parent tree.
-            recycledInfo!.info = .nonRoot(.init(parent: syntaxNode, absoluteInfo: childRaw.info))
-            childNode = Syntax(childRaw.raw, info: recycledInfo!)
-          } else {
-            childNode = Syntax(childRaw, parent: syntaxNode)
-          }
+      private func visitChildren(_ node: inout Syntax) {
+        for case let (child?, info) in RawSyntaxChildren(node) where viewMode.shouldTraverse(node: child) {
+          var childNode = nodeFactory.create(parent: node, raw: child, absoluteInfo: info)
           visit(&childNode)
-          if isKnownUniquelyReferenced(&childNode.info) {
-            // The node didn't get stored by the subclass's visit method. We can re-use the memory of its `Syntax.Info`
-            // for future syntax nodes.
-            childNode.info.info = nil
-            if let emptySlot = recyclableNodeInfosUsageBitmap.indexOfRightmostZero {
-              // Use `swap` to store the recyclable syntax node without incurring ref-counting.
-              swap(&recyclableNodeInfos[emptySlot], &childNode.info)
-              assert(childNode.info == nil, "Slot should not have contained a value")
-              recyclableNodeInfosUsageBitmap.setBitToOne(at: emptySlot)
-            }
-          }
+          nodeFactory.dispose(&childNode)
         }
       }
       """
     )
   }
-
-  DeclSyntax(
-    """
-    fileprivate extension UInt64 {
-      var indexOfRightmostZero: Int? {
-        return (~self).indexOfRightmostOne
-      }
-
-      var indexOfRightmostOne: Int? {
-        let trailingZeroCount = self.trailingZeroBitCount
-        if trailingZeroCount == Self.bitWidth {
-          // All indicies are 0
-          return nil
-        }
-        return trailingZeroCount
-      }
-
-      mutating func setBitToZero(at index: Int) {
-        self &= ~(1 << index)
-      }
-
-      mutating func setBitToOne(at index: Int) {
-        self |= 1 << index
-      }
-    }
-
-    """
-  )
 }

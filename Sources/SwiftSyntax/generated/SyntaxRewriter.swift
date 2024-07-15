@@ -3915,17 +3915,7 @@ open class SyntaxRewriter {
     // with 'Syntax'
     var rewrittens: ContiguousArray<RetainedSyntaxArena> = []
 
-    // Incrementing i manually is faster than using .enumerated()
-    var childIndex = 0
-    for (raw, info) in RawSyntaxChildren(node) {
-      defer {
-        childIndex += 1
-      }
-
-      guard let child = raw, viewMode.shouldTraverse(node: child) else {
-        // Node does not exist or should not be visited.
-        continue
-      }
+    for case let (child?, info) in RawSyntaxChildren(node) where viewMode.shouldTraverse(node: child) {
 
       // Build the Syntax node to rewrite
       var childNode = nodeFactory.create(parent: node, raw: child, absoluteInfo: info)
@@ -3942,7 +3932,7 @@ open class SyntaxRewriter {
         }
 
         // Update the rewritten child.
-        newLayout[childIndex] = childNode.raw
+        newLayout[Int(info.indexInParent)] = childNode.raw
         // Retain the syntax arena of the new node until it's wrapped with Syntax node.
         rewrittens.append(childNode.raw.arenaReference.retained)
       }

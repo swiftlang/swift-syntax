@@ -440,8 +440,11 @@ final class testNameLookup: XCTestCase {
       references: [
         "4️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"])],
         "5️⃣": [],
-        "6️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣"])],
-        "7️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"])],
+        "6️⃣": [
+          .fromScope(GuardStmtSyntax.self, expectedNames: ["2️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"]),
+        ],
+        "7️⃣": [.fromScope(GuardStmtSyntax.self, expectedNames: ["3️⃣"])],
       ],
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self
@@ -459,8 +462,14 @@ final class testNameLookup: XCTestCase {
         """,
       references: [
         "3️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"])],
-        "5️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣"])],
-        "6️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣", "4️⃣"])],
+        "5️⃣": [
+          .fromScope(GuardStmtSyntax.self, expectedNames: ["2️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"]),
+        ],
+        "6️⃣": [
+          .fromScope(GuardStmtSyntax.self, expectedNames: ["2️⃣", "4️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"]),
+        ],
       ],
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self

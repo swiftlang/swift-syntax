@@ -85,7 +85,7 @@ extension SyntaxProtocol {
     let filteredNames =
       introducedNames
       .filter { introducedName in
-        introducedName.isAccessible(at: syntax) && (name == nil || introducedName.refersTo(name!))
+        does(name: name, referTo: introducedName, at: syntax)
       }
 
     if filteredNames.isEmpty {
@@ -102,5 +102,9 @@ extension SyntaxProtocol {
     with configDict: LookupConfigDictionary
   ) -> [LookupResult] {
     parentScope?.lookup(for: name, at: syntax, with: configDict) ?? []
+  }
+
+  func does(name: String?, referTo introducedName: LookupName, at syntax: SyntaxProtocol) -> Bool {
+    introducedName.isAccessible(at: syntax) && (name == nil || introducedName.refersTo(name!))
   }
 }

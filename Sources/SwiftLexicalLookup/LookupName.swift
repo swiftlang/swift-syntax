@@ -91,10 +91,6 @@ import SwiftSyntax
       functionCallExpr.arguments.flatMap { argument in
         getNames(from: argument.expression, accessibleAfter: accessibleAfter)
       }
-    case .guardStmt(let guardStmt):
-      guardStmt.conditions.flatMap { cond in
-        getNames(from: cond.condition, accessibleAfter: cond.endPosition)
-      }
     default:
       if let namedDecl = Syntax(syntax).asProtocol(SyntaxProtocol.self) as? NamedDeclSyntax {
         handle(namedDecl: namedDecl, accessibleAfter: accessibleAfter)

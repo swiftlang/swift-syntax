@@ -67,10 +67,11 @@ extension SyntaxProtocol {
 
     let names = introducedNames(using: nameIntroductionStrategy)
       .filter { introducedName in
-        introducedName.isAccessible(at: syntax) && (name == nil || introducedName.refersTo(name!))
+        does(name: name, referTo: introducedName, at: syntax)
       }
 
-    return [.fromFileScope(self, withNames: names, nameIntroductionStrategy: nameIntroductionStrategy)]
+    return names.isEmpty
+      ? [] : [.fromFileScope(self, withNames: names, nameIntroductionStrategy: nameIntroductionStrategy)]
   }
 }
 
@@ -79,6 +80,45 @@ extension SyntaxProtocol {
     statements.flatMap { codeBlockItem in
       LookupName.getNames(from: codeBlockItem.item, accessibleAfter: codeBlockItem.endPosition)
     }
+  }
+
+  public func lookup(
+    for name: String?,
+    at syntax: SyntaxProtocol,
+    with configDict: LookupConfigDictionary
+  ) -> [LookupResult] {
+    var result = [LookupResult]()
+    var currentChunk = [LookupName]()
+
+    for codeBlockItem in statements {
+      if let introducingToParentScope = Syntax(codeBlockItem.item).asProtocol(SyntaxProtocol.self)
+        as? IntroducingToParentScopeSyntax
+      {
+        if !currentChunk.isEmpty {
+          result.append(.fromScope(self, withNames: currentChunk))
+          currentChunk = []
+        }
+
+        result.append(contentsOf: introducingToParentScope.introducedToParent(for: name, at: syntax, with: configDict))
+      } else {
+        currentChunk.append(
+          contentsOf:
+            LookupName.getNames(
+              from: codeBlockItem.item,
+              accessibleAfter: codeBlockItem.endPosition
+            ).filter { introducedName in
+              does(name: name, referTo: introducedName, at: syntax)
+            }
+        )
+      }
+    }
+
+    if !currentChunk.isEmpty {
+      result.append(.fromScope(self, withNames: currentChunk))
+      currentChunk = []
+    }
+
+    return result.reversed() + lookupInParent(for: name, at: syntax, with: configDict)
   }
 }
 
@@ -171,7 +211,21 @@ extension SyntaxProtocol {
   }
 }
 
-@_spi(Experimental) extension GuardStmtSyntax: ScopeSyntax {
+@_spi(Experimental) extension GuardStmtSyntax: IntroducingToParentScopeSyntax {
+  public func introducedToParent(
+    for name: String?,
+    at syntax: SwiftSyntax.SyntaxProtocol,
+    with configDict: LookupConfigDictionary
+  ) -> [LookupResult] {
+    let names = conditions.flatMap { element in
+      LookupName.getNames(from: element.condition, accessibleAfter: element.endPosition)
+    }.filter { introducedName in
+      does(name: name, referTo: introducedName, at: syntax)
+    }
+
+    return names.isEmpty ? [] : [.fromScope(self, withNames: names)]
+  }
+
   public var introducedNames: [LookupName] {
     []
   }
@@ -182,7 +236,7 @@ extension SyntaxProtocol {
     with configDict: LookupConfigDictionary
   ) -> [LookupResult] {
     if body.position <= syntax.position && body.endPosition >= syntax.position {
-      lookupInParent(for: name, at: self, with: configDict)
+      lookupInParent(for: name, at: self, with: configDict) // Should we add a new config that will skip certain scopes in lookup? Could be more consistent.
     } else {
       defaultLookupImplementation(for: name, at: syntax, with: configDict)
     }

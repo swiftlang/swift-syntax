@@ -139,7 +139,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           ///   - Returns: the rewritten node
           \(node.apiAttributes())\
           open func visit(_ node: \(node.kind.syntaxType)) -> \(node.kind.syntaxType) {
-            return visitChildren(node)
+            return visitChildren(node._syntaxNode)?.cast(\(node.kind.syntaxType).self) ?? node
           }
           """
         )
@@ -151,7 +151,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           ///   - Returns: the rewritten node
           \(node.apiAttributes())\
           open func visit(_ node: \(node.kind.syntaxType)) -> \(node.baseType.syntaxBaseName) {
-            return \(node.baseType.syntaxBaseName)(visitChildren(node))
+            return \(node.baseType.syntaxBaseName)(visitChildren(node._syntaxNode)?.cast(\(node.kind.syntaxType).self) ?? node)
           }
           """
         )
@@ -281,9 +281,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      private func visitChildren<SyntaxType: SyntaxProtocol>(
-        _ node: SyntaxType
-      ) -> SyntaxType {
+      private func visitChildren(_ node: Syntax) -> Syntax? {
         // Walk over all children of this node and rewrite them. Don't store any
         // rewritten nodes until the first non-`nil` value is encountered. When this
         // happens, retrieve all previous syntax nodes from the parent node to
@@ -299,11 +297,9 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         // with 'Syntax'
         var rewrittens: ContiguousArray<RetainedSyntaxArena> = []
 
-        let syntaxNode = node._syntaxNode
-
         // Incrementing i manually is faster than using .enumerated()
         var childIndex = 0
-        for (raw, info) in RawSyntaxChildren(syntaxNode) {
+        for (raw, info) in RawSyntaxChildren(node) {
           defer { childIndex += 1 }
 
           guard let child = raw, viewMode.shouldTraverse(node: child) else {
@@ -312,7 +308,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           }
 
           // Build the Syntax node to rewrite
-          var childNode = nodeFactory.create(parent: syntaxNode, raw: child, absoluteInfo: info)
+          var childNode = nodeFactory.create(parent: node, raw: child, absoluteInfo: info)
 
           dispatchVisit(&childNode)
           if childNode.raw.id != child.id {
@@ -344,11 +340,11 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           newLayout.deallocate()
           // 'withExtendedLifetime' to keep 'SyntaxArena's of them alive until here.
           return withExtendedLifetime(rewrittens) {
-            Syntax(raw: newRaw, rawNodeArena: arena).cast(SyntaxType.self)
+            Syntax(raw: newRaw, rawNodeArena: arena)
           }
         } else {
           // No child node was rewritten. So no need to change this node as well.
-          return node
+          return nil
         }
       }
       """

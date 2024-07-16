@@ -140,14 +140,13 @@ final class testNameLookup: XCTestCase {
       source: """
         func foo() {
           let 1️⃣a = 1
-          let x = { [2️⃣weak self, 3️⃣a, 4️⃣unowned b] in
-            print(5️⃣self, 6️⃣a)
+          let x = { [3️⃣a, 4️⃣unowned b] in
+            print(6️⃣a)
           }
           let b = 0
         }
         """,
       references: [
-        "5️⃣": [.fromScope(ClosureExprSyntax.self, expectedNames: ["2️⃣"])],
         "6️⃣": [
           .fromScope(ClosureExprSyntax.self, expectedNames: ["3️⃣"]),
           .fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"]),

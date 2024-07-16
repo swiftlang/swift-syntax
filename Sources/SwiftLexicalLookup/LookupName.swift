@@ -31,12 +31,12 @@ import SwiftSyntax
   }
 
   /// Introduced name.
-  @_spi(Experimental) public var name: String {
+  @_spi(Experimental) public var identifier: Identifier? {
     switch self {
     case .identifier(let syntax, _):
-      syntax.identifier.text
+      Identifier(syntax.identifier)
     case .declaration(let syntax, _):
-      syntax.name.text
+      Identifier(syntax.name)
     }
   }
 
@@ -57,7 +57,8 @@ import SwiftSyntax
 
   /// Checks if this name refers to the looked up phrase.
   func refersTo(_ lookedUpName: String) -> Bool {
-    name == lookedUpName
+    guard let name = identifier?.name else { return false }
+    return name == lookedUpName
   }
 
   /// Extracts names introduced by the given `from` structure.

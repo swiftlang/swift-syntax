@@ -44,9 +44,7 @@ import SwiftSyntax
   /// If set to `nil`, the name is available at any point in scope.
   var accessibleAfter: AbsolutePosition? {
     switch self {
-    case .identifier(_, let absolutePosition):
-      absolutePosition
-    case .declaration(_, let absolutePosition):
+    case .identifier(_, let absolutePosition), .declaration(_, let absolutePosition):
       absolutePosition
     }
   }

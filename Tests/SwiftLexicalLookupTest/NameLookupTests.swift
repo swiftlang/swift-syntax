@@ -402,14 +402,14 @@ final class testNameLookup: XCTestCase {
         "7️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: ["4️⃣", "5️⃣"]),
           .fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣", "3️⃣"]),
-          .fromFileScope(expectedNames: ["🔟"], nameIntroductionStrategy: .memberBlockUpToLastDecl),
+          .fromFileScope(expectedNames: ["🔟"]),
         ],
         "0️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: ["8️⃣", "9️⃣"]),
           .fromScope(IfExprSyntax.self, expectedNames: ["6️⃣"]),
           .fromScope(CodeBlockSyntax.self, expectedNames: ["4️⃣", "5️⃣"]),
           .fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣", "3️⃣"]),
-          .fromFileScope(expectedNames: ["🔟"], nameIntroductionStrategy: .memberBlockUpToLastDecl),
+          .fromFileScope(expectedNames: ["🔟"]),
         ],
       ],
       expectedResultTypes: .all(
@@ -488,11 +488,11 @@ final class testNameLookup: XCTestCase {
         let x = 0️⃣d
         """,
       references: [
-        "3️⃣": [.fromFileScope(expectedNames: ["1️⃣", "8️⃣"], nameIntroductionStrategy: .memberBlockUpToLastDecl)],
-        "4️⃣": [.fromFileScope(expectedNames: ["2️⃣"], nameIntroductionStrategy: .memberBlockUpToLastDecl)],
-        "5️⃣": [.fromFileScope(expectedNames: ["7️⃣"], nameIntroductionStrategy: .memberBlockUpToLastDecl)],
+        "3️⃣": [.fromFileScope(expectedNames: ["1️⃣", "8️⃣"])],
+        "4️⃣": [.fromFileScope(expectedNames: ["2️⃣"])],
+        "5️⃣": [.fromFileScope(expectedNames: ["7️⃣"])],
         "6️⃣": [],
-        "0️⃣": [.fromFileScope(expectedNames: ["9️⃣"], nameIntroductionStrategy: .memberBlockUpToLastDecl)],
+        "0️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
       ],
       expectedResultTypes: .all(ClassDeclSyntax.self, except: ["8️⃣": IdentifierPatternSyntax.self])
     )
@@ -518,14 +518,14 @@ final class testNameLookup: XCTestCase {
         let x = 0️⃣d
         """,
       references: [
-        "3️⃣": [.fromFileScope(expectedNames: ["1️⃣", "8️⃣"], nameIntroductionStrategy: .memberBlock)],
-        "4️⃣": [.fromFileScope(expectedNames: ["2️⃣"], nameIntroductionStrategy: .memberBlock)],
-        "5️⃣": [.fromFileScope(expectedNames: ["7️⃣"], nameIntroductionStrategy: .memberBlock)],
-        "6️⃣": [.fromFileScope(expectedNames: ["9️⃣"], nameIntroductionStrategy: .memberBlock)],
-        "0️⃣": [.fromFileScope(expectedNames: ["9️⃣"], nameIntroductionStrategy: .memberBlock)],
+        "3️⃣": [.fromFileScope(expectedNames: ["1️⃣", "8️⃣"])],
+        "4️⃣": [.fromFileScope(expectedNames: ["2️⃣"])],
+        "5️⃣": [.fromFileScope(expectedNames: ["7️⃣"])],
+        "6️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
+        "0️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
       ],
       expectedResultTypes: .all(ClassDeclSyntax.self, except: ["8️⃣": IdentifierPatternSyntax.self]),
-      config: [FileScopeNameIntroductionStrategy.memberBlock]
+      config: LookupConfig(fileScopeHandling: .memberBlock)
     )
   }
 
@@ -549,14 +549,14 @@ final class testNameLookup: XCTestCase {
         let x = 0️⃣d
         """,
       references: [
-        "3️⃣": [.fromFileScope(expectedNames: ["1️⃣"], nameIntroductionStrategy: .codeBlock)],
+        "3️⃣": [.fromFileScope(expectedNames: ["1️⃣"])],
         "4️⃣": [],
         "5️⃣": [],
         "6️⃣": [],
-        "0️⃣": [.fromFileScope(expectedNames: ["9️⃣"], nameIntroductionStrategy: .codeBlock)],
+        "0️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
       ],
       expectedResultTypes: .all(ClassDeclSyntax.self, except: ["8️⃣": IdentifierPatternSyntax.self]),
-      config: [FileScopeNameIntroductionStrategy.codeBlock]
+      config: LookupConfig(fileScopeHandling: .codeBlock)
     )
   }
 }

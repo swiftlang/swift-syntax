@@ -13,7 +13,7 @@
 import SwiftSyntax
 
 /// Specifies how names should be introduced at the file scope.
-@_spi(Experimental) public enum FileScopeNameIntroductionStrategy: LookupConfig {
+@_spi(Experimental) public enum FileScopeHandlingConfig {
   /// Default behavior. Names introduced sequentially like in member block
   /// scope up to the first non-declaration after and including which,
   /// the declarations are treated like in code block scope.

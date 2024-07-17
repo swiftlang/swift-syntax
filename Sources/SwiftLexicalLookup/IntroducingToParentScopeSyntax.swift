@@ -16,6 +16,6 @@ import SwiftSyntax
   func introducedToParent(
     for name: String?,
     at syntax: SyntaxProtocol,
-    with configDict: LookupConfigDictionary
+    with config: LookupConfig
   ) -> [LookupResult]
 }

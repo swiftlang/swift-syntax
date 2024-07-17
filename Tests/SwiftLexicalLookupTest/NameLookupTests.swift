@@ -150,7 +150,7 @@ final class testNameLookup: XCTestCase {
         "6️⃣": [
           .fromScope(ClosureExprSyntax.self, expectedNames: ["3️⃣"]),
           .fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"]),
-        ],
+        ]
       ],
       expectedResultTypes: .all(
         ClosureCaptureSyntax.self,
@@ -564,6 +564,51 @@ final class testNameLookup: XCTestCase {
         "0️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
       ],
       expectedResultTypes: .all(ClassDeclSyntax.self, except: ["8️⃣": IdentifierPatternSyntax.self]),
+      config: LookupConfig(fileScopeHandling: .codeBlock)
+    )
+  }
+  
+  func testGuardOnFileScope() {
+    assertLexicalNameLookup(
+      source: """
+        let 1️⃣a = 0
+
+        class c {}
+
+        guard let 2️⃣a else { fatalError() }
+
+        3️⃣class a {}
+
+        let x = 4️⃣a
+        """,
+      references: [
+        "4️⃣": [.fromFileScope(expectedNames: ["1️⃣"]),
+                .fromFileScope(expectedNames: ["3️⃣"]),
+                .fromScope(GuardStmtSyntax.self, expectedNames: ["2️⃣"])],
+      ],
+      expectedResultTypes: .all(IdentifierPatternSyntax.self, except: ["3️⃣": ClassDeclSyntax.self])
+    )
+  }
+  
+  func testGuardOnFileScopeCodeBlock() {
+    assertLexicalNameLookup(
+      source: """
+        let 1️⃣a = 0
+
+        class c {}
+
+        guard let 2️⃣a else { fatalError() }
+
+        3️⃣class a {}
+
+        let x = 4️⃣a
+        """,
+      references: [
+        "4️⃣": [.fromFileScope(expectedNames: ["3️⃣"]),
+                .fromScope(GuardStmtSyntax.self, expectedNames: ["2️⃣"]),
+                .fromFileScope(expectedNames: ["1️⃣"]),],
+      ],
+      expectedResultTypes: .all(IdentifierPatternSyntax.self, except: ["3️⃣": ClassDeclSyntax.self]),
       config: LookupConfig(fileScopeHandling: .codeBlock)
     )
   }

@@ -66,6 +66,26 @@ enum ResultExpectation {
       expectedNames
     }
   }
+
+  var debugDescription: String {
+    switch self {
+    case .fromScope:
+      "fromScope"
+    case .fromFileScope:
+      "fromFileScope"
+    }
+  }
+}
+
+extension LookupResult {
+  var debugDescription: String {
+    switch self {
+    case .fromScope:
+      "fromScope"
+    case .fromFileScope:
+      "fromFileScope"
+    }
+  }
 }
 
 /// `methodUnderTest` is called with the token at every position marker in the keys of `expected`.
@@ -175,7 +195,9 @@ func assertLexicalNameLookup(
         case (.fromFileScope, .fromFileScope):
           break
         default:
-          XCTFail("For marker \(marker), result actual result kind \(actual) doesn't match expected \(expected)")
+          XCTFail(
+            "For marker \(marker), actual result kind \(actual.debugDescription) doesn't match expected \(expected.debugDescription)"
+          )
         }
       }
 

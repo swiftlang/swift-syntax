@@ -15,9 +15,17 @@ import Foundation
 @_spi(Experimental) public struct LookupConfig {
   /// Specifies behaviour of file scope.
   /// `memberBlockUpToLastDecl` by default.
-  public var fileScopeHandling: FileScopeHandlingConfig = .memberBlockUpToLastDecl
+  public var fileScopeHandling: FileScopeHandlingConfig
 
-  public init(fileScopeHandling: FileScopeHandlingConfig = .memberBlockUpToLastDecl) {
+  /// Specifies scopes that introduce names to their parent and
+  /// should be skipped during lookup in sequential scopes.
+  public var ignoreChildrenToParentIntroductionsFrom: [IntroducingToParentScopeSyntax]
+
+  public init(
+    fileScopeHandling: FileScopeHandlingConfig = .memberBlockUpToLastDecl,
+    ignoreChildrenToParentIntroductionsFrom: [IntroducingToParentScopeSyntax] = []
+  ) {
     self.fileScopeHandling = fileScopeHandling
+    self.ignoreChildrenToParentIntroductionsFrom = ignoreChildrenToParentIntroductionsFrom
   }
 }

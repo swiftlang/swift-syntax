@@ -23,7 +23,7 @@ extension SyntaxProtocol {
   }
 }
 
-@_spi(Experimental) extension SourceFileSyntax: ScopeSyntax {
+@_spi(Experimental) extension SourceFileSyntax: SequentialScopeSyntax {
   /// All names introduced in the file scope
   /// according to the default strategy: `memberBlockUpToLastDecl`.
   public var introducedNames: [LookupName] {
@@ -105,16 +105,58 @@ extension SyntaxProtocol {
     at syntax: SyntaxProtocol,
     with config: LookupConfig
   ) -> [LookupResult] {
-    let names = introducedNames(using: config.fileScopeHandling)
-      .filter { introducedName in
-        does(name: name, referTo: introducedName, at: syntax)
+    switch config.fileScopeHandling {
+    case .codeBlock:
+      return sequentialLookup(
+        in: statements,
+        for: name,
+        at: syntax,
+        with: config,
+        createResultsForThisScopeWith: { .fromFileScope(self, withNames: $0) }
+      )
+    case .memberBlock:
+      let names = introducedNames(using: .memberBlock)
+        .filter { lookupName in
+          does(name: name, referTo: lookupName, at: syntax)
+        }
+
+      return names.isEmpty ? [] : [.fromFileScope(self, withNames: names)]
+    case .memberBlockUpToLastDecl:
+      var members = [LookupName]()
+      var sequentialItems = [CodeBlockItemSyntax]()
+      var encounteredNonDeclaration = false
+
+      for codeBlockItem in statements {
+        let item = codeBlockItem.item
+
+        if encounteredNonDeclaration {
+          sequentialItems.append(codeBlockItem)
+        } else {
+          if item.is(DeclSyntax.self) || item.is(VariableDeclSyntax.self) {
+            let foundNames = LookupName.getNames(from: item)
+
+            members.append(contentsOf: foundNames.filter { does(name: name, referTo: $0, at: syntax) })
+          } else {
+            encounteredNonDeclaration = true
+            sequentialItems.append(codeBlockItem)
+          }
+        }
       }
 
-    return names.isEmpty ? [] : [.fromFileScope(self, withNames: names)]
+      let sequentialNames = sequentialLookup(
+        in: sequentialItems,
+        for: name,
+        at: syntax,
+        with: config,
+        createResultsForThisScopeWith: { .fromFileScope(self, withNames: $0) }
+      )
+
+      return (members.isEmpty ? [] : [.fromFileScope(self, withNames: members)]) + sequentialNames
+    }
   }
 }
 
-@_spi(Experimental) extension CodeBlockSyntax: ScopeSyntax {
+@_spi(Experimental) extension CodeBlockSyntax: SequentialScopeSyntax {
   /// Names introduced in the code block scope
   /// accessible after their declaration.
   public var introducedNames: [LookupName] {
@@ -123,43 +165,14 @@ extension SyntaxProtocol {
     }
   }
 
-  public func lookup(
-    for name: String?,
-    at syntax: SyntaxProtocol,
-    with configDict: LookupConfigDictionary
-  ) -> [LookupResult] {
-    var result = [LookupResult]()
-    var currentChunk = [LookupName]()
-
-    for codeBlockItem in statements {
-      if let introducingToParentScope = Syntax(codeBlockItem.item).asProtocol(SyntaxProtocol.self)
-        as? IntroducingToParentScopeSyntax
-      {
-        if !currentChunk.isEmpty {
-          result.append(.fromScope(self, withNames: currentChunk))
-          currentChunk = []
-        }
-
-        result.append(contentsOf: introducingToParentScope.introducedToParent(for: name, at: syntax, with: configDict))
-      } else {
-        currentChunk.append(
-          contentsOf:
-            LookupName.getNames(
-              from: codeBlockItem.item,
-              accessibleAfter: codeBlockItem.endPosition
-            ).filter { introducedName in
-              does(name: name, referTo: introducedName, at: syntax)
-            }
-        )
-      }
-    }
-
-    if !currentChunk.isEmpty {
-      result.append(.fromScope(self, withNames: currentChunk))
-      currentChunk = []
-    }
-
-    return result.reversed() + lookupInParent(for: name, at: syntax, with: configDict)
+  public func lookup(for name: String?, at syntax: SyntaxProtocol, with config: LookupConfig) -> [LookupResult] {
+    sequentialLookup(
+      in: statements,
+      for: name,
+      at: syntax,
+      with: config,
+      createResultsForThisScopeWith: { .fromScope(self, withNames: $0) }
+    )
   }
 }
 
@@ -300,7 +313,7 @@ extension SyntaxProtocol {
   public func introducedToParent(
     for name: String?,
     at syntax: SwiftSyntax.SyntaxProtocol,
-    with configDict: LookupConfigDictionary
+    with config: LookupConfig
   ) -> [LookupResult] {
     let names = conditions.flatMap { element in
       LookupName.getNames(from: element.condition, accessibleAfter: element.endPosition)
@@ -332,9 +345,11 @@ extension SyntaxProtocol {
     with config: LookupConfig
   ) -> [LookupResult] {
     if body.position <= syntax.position && body.endPosition >= syntax.position {
-      lookupInParent(for: name, at: self, with: config)
+      var newConfig = config
+      newConfig.ignoreChildrenToParentIntroductionsFrom.append(self)
+      return lookupInParent(for: name, at: syntax, with: newConfig)
     } else {
-      defaultLookupImplementation(for: name, at: syntax, with: config)
+      return defaultLookupImplementation(for: name, at: syntax, with: config)
     }
   }
 }

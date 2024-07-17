@@ -12,11 +12,12 @@
 
 import Foundation
 
-/// Used to customize lookup behavior.
-@_spi(Experimental) public protocol LookupConfig {}
+@_spi(Experimental) public struct LookupConfig {
+  /// Specifies behaviour of file scope.
+  /// `memberBlockUpToLastDecl` by default.
+  public var fileScopeHandling: FileScopeHandlingConfig = .memberBlockUpToLastDecl
 
-extension LookupConfig {
-  var identifier: ObjectIdentifier {
-    ObjectIdentifier(Self.self)
+  public init(fileScopeHandling: FileScopeHandlingConfig = .memberBlockUpToLastDecl) {
+    self.fileScopeHandling = fileScopeHandling
   }
 }

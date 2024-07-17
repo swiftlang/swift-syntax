@@ -31,12 +31,12 @@ import SwiftSyntax
   }
 
   /// Introduced name.
-  @_spi(Experimental) public var name: String {
+  @_spi(Experimental) public var identifier: Identifier? {
     switch self {
     case .identifier(let syntax, _):
-      syntax.identifier.text
+      Identifier(syntax.identifier)
     case .declaration(let syntax, _):
-      syntax.name.text
+      Identifier(syntax.name)
     }
   }
 
@@ -44,9 +44,7 @@ import SwiftSyntax
   /// If set to `nil`, the name is available at any point in scope.
   var accessibleAfter: AbsolutePosition? {
     switch self {
-    case .identifier(_, let absolutePosition):
-      absolutePosition
-    case .declaration(_, let absolutePosition):
+    case .identifier(_, let absolutePosition), .declaration(_, let absolutePosition):
       absolutePosition
     }
   }
@@ -59,7 +57,8 @@ import SwiftSyntax
 
   /// Checks if this name refers to the looked up phrase.
   func refersTo(_ lookedUpName: String) -> Bool {
-    name == lookedUpName
+    guard let name = identifier?.name else { return false }
+    return name == lookedUpName
   }
 
   /// Extracts names introduced by the given `from` structure.

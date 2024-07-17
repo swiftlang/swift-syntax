@@ -56,13 +56,13 @@ enum MarkerExpectation {
 /// Used to define
 enum ResultExpectation {
   case fromScope(ScopeSyntax.Type, expectedNames: [String])
-  case fromFileScope(expectedNames: [String], nameIntroductionStrategy: FileScopeNameIntroductionStrategy)
+  case fromFileScope(expectedNames: [String])
 
   var expectedNames: [String] {
     switch self {
     case .fromScope(_, let expectedNames):
       expectedNames
-    case .fromFileScope(expectedNames: let expectedNames, nameIntroductionStrategy: _):
+    case .fromFileScope(expectedNames: let expectedNames):
       expectedNames
     }
   }
@@ -153,7 +153,7 @@ func assertLexicalNameLookup(
   references: [String: [ResultExpectation]],
   expectedResultTypes: MarkerExpectation = .none,
   useNilAsTheParameter: Bool = false,
-  config: [LookupConfig] = []
+  config: LookupConfig = LookupConfig()
 ) {
   assertLexicalScopeQuery(
     source: source,
@@ -172,14 +172,8 @@ func assertLexicalNameLookup(
             scope.syntaxNodeType == expectedType,
             "For marker \(marker), scope result type of \(scope.syntaxNodeType) doesn't match expected \(expectedType)"
           )
-        case (
-          .fromFileScope(_, withNames: _, nameIntroductionStrategy: let nameIntroductionStrategy),
-          .fromFileScope(expectedNames: _, nameIntroductionStrategy: let expectedNameIntroductionStrategy)
-        ):
-          XCTAssert(
-            nameIntroductionStrategy == expectedNameIntroductionStrategy,
-            "For marker \(marker), actual file scope name introduction strategy \(nameIntroductionStrategy) doesn't match expected \(expectedNameIntroductionStrategy)"
-          )
+        case (.fromFileScope, .fromFileScope):
+          break
         default:
           XCTFail("For marker \(marker), result actual result kind \(actual) doesn't match expected \(expected)")
         }

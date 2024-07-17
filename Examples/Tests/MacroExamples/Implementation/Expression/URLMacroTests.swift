@@ -21,13 +21,18 @@ final class URLMacroTests: XCTestCase {
   func testExpansionWithMalformedURLEmitsError() {
     assertMacroExpansion(
       """
-      let invalid = #URL("https://not a url.com")
+      let invalid = #URL("https://not a url.com:invalid-port/")
       """,
       expandedSource: """
-        let invalid = #URL("https://not a url.com")
+        let invalid = #URL("https://not a url.com:invalid-port/")
         """,
       diagnostics: [
-        DiagnosticSpec(message: #"malformed url: "https://not a url.com""#, line: 1, column: 15, severity: .error)
+        DiagnosticSpec(
+          message: #"malformed url: "https://not a url.com:invalid-port/""#,
+          line: 1,
+          column: 15,
+          severity: .error
+        )
       ],
       macros: macros,
       indentationWidth: .spaces(2)

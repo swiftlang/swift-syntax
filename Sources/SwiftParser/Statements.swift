@@ -73,7 +73,10 @@ extension Parser {
     }
 
     let optLabel = self.parseOptionalStatementLabel()
-    switch self.canRecoverTo(anyIn: CanBeStatementStart.self) {
+    let recovery = self.canRecoverTo(anyIn: MisspelledCanBeStatementStart.FuzzyMatchSpecSet.self).map {
+      ($0.match.correctSpecSet, $0.handle)
+    }
+    switch recovery {
     case (.for, let handle)?:
       return label(self.parseForStatement(forHandle: handle), with: optLabel)
     case (.while, let handle)?:
@@ -140,7 +143,7 @@ extension Parser {
 extension Parser {
   /// Parse a guard statement.
   mutating func parseGuardStatement(guardHandle: RecoveryConsumptionHandle) -> RawGuardStmtSyntax {
-    let (unexpectedBeforeGuardKeyword, guardKeyword) = self.eat(guardHandle)
+    let (unexpectedBeforeGuardKeyword, guardKeyword) = self.expect(keyword: .guard, handle: guardHandle)
     let conditions = self.parseConditionList(isGuardStatement: true)
     let (unexpectedBeforeElseKeyword, elseKeyword) = self.expect(.keyword(.else))
     let body = self.parseCodeBlock(introducer: guardKeyword)
@@ -915,10 +918,12 @@ extension Parser.Lookahead {
     _ = self.consume(if: .identifier, followedBy: .colon)
     let switchSubject: CanBeStatementStart?
     if allowRecovery {
-      switchSubject = self.canRecoverTo(anyIn: CanBeStatementStart.self)?.0
+      switchSubject =
+        self.canRecoverTo(anyIn: MisspelledCanBeStatementStart.FuzzyMatchSpecSet.self)?.match.correctSpecSet
     } else {
-      switchSubject = self.at(anyIn: CanBeStatementStart.self)?.0
+      switchSubject = self.at(anyIn: MisspelledCanBeStatementStart.FuzzyMatchSpecSet.self)?.spec.correctSpecSet
     }
+
     switch switchSubject {
     case .return?,
       .throw?,

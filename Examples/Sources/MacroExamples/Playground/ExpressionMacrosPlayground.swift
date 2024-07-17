@@ -47,7 +47,7 @@ func runExpressionMacrosPlayground() {
 
   //  let domain = "domain.com"
   //print(#URL("https://\(domain)/api/path")) // error: #URL requires a static string literal
-  //print(#URL("https://not a url.com")) // error: Malformed url
+  //print(#URL("https://not a url.com:invalid-port/")) // error: Malformed url
 
   // MARK: - Warning
 

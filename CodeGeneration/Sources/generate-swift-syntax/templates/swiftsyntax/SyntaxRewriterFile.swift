@@ -101,7 +101,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       /// Override point to choose custom visitation dispatch instead of the
       /// specialized `visit(_:)` methods. Use this instead of those methods if
       /// you intend to dynamically dispatch rewriting behavior.
-      /// - note: If this method returns a non-nil result, the consequent
+      /// - note: If this method returns a non-nil result, the subsequent
       ///         `visitAny(_:)` methods and the specialized `visit(_:)`
       ///         methods will not be called for this node and the
       ///         visited node will be replaced by the returned node in the

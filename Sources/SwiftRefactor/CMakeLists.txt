@@ -9,6 +9,8 @@
 add_swift_syntax_library(SwiftRefactor
   AddSeparatorsToIntegerLiteral.swift
   CallToTrailingClosures.swift
+  ConvertComputedPropertyToStored.swift
+  ConvertStoredPropertyToComputed.swift
   ExpandEditorPlaceholder.swift
   FormatRawStringLiteral.swift
   IntegerLiteralUtilities.swift

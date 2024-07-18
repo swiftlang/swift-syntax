@@ -160,7 +160,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           ///   - Returns: the rewritten node
           \(node.apiAttributes())\
           open func visit(_ node: \(node.kind.syntaxType)) -> \(node.kind.syntaxType) {
-            return visitChildren(node._syntaxNode)?.cast(\(node.kind.syntaxType).self) ?? node
+            return visitChildren(node._syntaxNode).cast(\(node.kind.syntaxType).self)
           }
           """
         )
@@ -172,7 +172,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           ///   - Returns: the rewritten node
           \(node.apiAttributes())\
           open func visit(_ node: \(node.kind.syntaxType)) -> \(node.baseType.syntaxBaseName) {
-            return \(node.baseType.syntaxBaseName)(visitChildren(node._syntaxNode)?.cast(\(node.kind.syntaxType).self) ?? node)
+            return \(node.baseType.syntaxBaseName)(visitChildren(node._syntaxNode).cast(\(node.kind.syntaxType).self))
           }
           """
         )
@@ -302,7 +302,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      private func visitChildren(_ node: Syntax) -> Syntax? {
+      private func visitChildren(_ node: Syntax) -> Syntax {
         // Walk over all children of this node and rewrite them. Don't store any
         // rewritten nodes until the first non-`nil` value is encountered. When this
         // happens, retrieve all previous syntax nodes from the parent node to
@@ -357,7 +357,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           }
         } else {
           // No child node was rewritten. So no need to change this node as well.
-          return nil
+          return node
         }
       }
       """

@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Describes the mode to use to format the result of an expansion.
-public enum FormatMode {
+public enum FormatMode: Sendable {
   /// Perform a basic format of the expansion. This is primarily for inserting
   /// whitespace as required (eg. between two keywords), but also adds simple
   /// newline and indentation.

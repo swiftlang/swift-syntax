@@ -63,6 +63,7 @@ enum MacroExpansionError: Error, CustomStringConvertible {
   case noFreestandingMacroRoles(Macro.Type)
   case moreThanOneBodyMacro
   case preambleWithoutBody
+  case recursiveExpansion(any Macro.Type)
 
   var description: String {
     switch self {
@@ -92,6 +93,9 @@ enum MacroExpansionError: Error, CustomStringConvertible {
 
     case .preambleWithoutBody:
       return "preamble macro cannot be applied to a function with no body"
+
+    case .recursiveExpansion(let type):
+      return "recursive expansion of macro '\(type)'"
     }
   }
 }

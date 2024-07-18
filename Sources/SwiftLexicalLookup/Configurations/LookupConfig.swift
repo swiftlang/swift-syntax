@@ -19,13 +19,13 @@ import Foundation
 
   /// Specifies scopes that introduce names to their parent and
   /// should be skipped during lookup in sequential scopes.
-  public var ignoreChildrenToParentIntroductionsFrom: [IntroducingToParentScopeSyntax]
+  public var ignoreChildrenToSequentialParentIntroductionsFrom: [IntroducingToSequentialParentScopeSyntax]
 
   public init(
     fileScopeHandling: FileScopeHandlingConfig = .memberBlockUpToLastDecl,
-    ignoreChildrenToParentIntroductionsFrom: [IntroducingToParentScopeSyntax] = []
+    ignoreChildrenToSequentialParentIntroductionsFrom: [IntroducingToSequentialParentScopeSyntax] = []
   ) {
     self.fileScopeHandling = fileScopeHandling
-    self.ignoreChildrenToParentIntroductionsFrom = ignoreChildrenToParentIntroductionsFrom
+    self.ignoreChildrenToSequentialParentIntroductionsFrom = ignoreChildrenToSequentialParentIntroductionsFrom
   }
 }

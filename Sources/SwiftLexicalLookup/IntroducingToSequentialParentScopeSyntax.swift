@@ -12,8 +12,10 @@
 
 import SwiftSyntax
 
-@_spi(Experimental) public protocol IntroducingToParentScopeSyntax: ScopeSyntax {
-  func introducedToParent(
+@_spi(Experimental) public protocol IntroducingToSequentialParentScopeSyntax: ScopeSyntax {
+  /// Returns names matching lookup that should be
+  /// handled by it's parent sequential scope.
+  func introducesToSequentialParent(
     for name: String?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig

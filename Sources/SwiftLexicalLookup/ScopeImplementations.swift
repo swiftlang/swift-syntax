@@ -309,8 +309,8 @@ extension SyntaxProtocol {
   }
 }
 
-@_spi(Experimental) extension GuardStmtSyntax: IntroducingToParentScopeSyntax {
-  public func introducedToParent(
+@_spi(Experimental) extension GuardStmtSyntax: IntroducingToSequentialParentScopeSyntax {
+  public func introducesToSequentialParent(
     for name: String?,
     at syntax: SwiftSyntax.SyntaxProtocol,
     with config: LookupConfig
@@ -346,10 +346,33 @@ extension SyntaxProtocol {
   ) -> [LookupResult] {
     if body.position <= syntax.position && body.endPosition >= syntax.position {
       var newConfig = config
-      newConfig.ignoreChildrenToParentIntroductionsFrom.append(self)
+      newConfig.ignoreChildrenToSequentialParentIntroductionsFrom.append(self)
       return lookupInParent(for: name, at: syntax, with: newConfig)
     } else {
       return defaultLookupImplementation(for: name, at: syntax, with: config)
+    }
+  }
+}
+
+@_spi(Experimental) extension ActorDeclSyntax: TypeScopeSyntax {}
+@_spi(Experimental) extension ClassDeclSyntax: TypeScopeSyntax {}
+@_spi(Experimental) extension StructDeclSyntax: TypeScopeSyntax {}
+@_spi(Experimental) extension EnumDeclSyntax: TypeScopeSyntax {}
+@_spi(Experimental) extension ExtensionDeclSyntax: TypeScopeSyntax {}
+
+@_spi(Experimental) extension AccessorDeclSyntax: ScopeSyntax {
+  public var introducedNames: [LookupName] {
+    if let parameters {
+      LookupName.getNames(from: parameters)
+    } else {
+      switch accessorSpecifier.tokenKind {
+      case .keyword(.set), .keyword(.willSet):
+        [.newValue(self)]
+      case .keyword(.didSet):
+        [.oldValue(self)]
+      default:
+        []
+      }
     }
   }
 }

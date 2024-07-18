@@ -19,6 +19,18 @@ import SwiftSyntax
   /// Declaration associated with the name.
   /// Could be class, struct, actor, protocol, function and more
   case declaration(NamedDeclSyntax, accessibleAfter: AbsolutePosition?)
+  /// `self` keyword representing object instance.
+  case `self`(DeclSyntaxProtocol)
+  /// `Self` keyword representing object type.
+  case `Self`(DeclSyntaxProtocol)
+  /// `self` captured by a closure.
+  case selfCaptured(ClosureCaptureSyntax)
+  /// `error` available inside `catch` clause.
+  case error(CatchClauseSyntax)
+  /// `newValue` available by default inside `set` and `willSet`.
+  case newValue(AccessorDeclSyntax)
+  /// `oldValue` available by default inside `didSet`.
+  case oldValue(AccessorDeclSyntax)
 
   /// Syntax associated with this name.
   @_spi(Experimental) public var syntax: SyntaxProtocol {
@@ -26,6 +38,18 @@ import SwiftSyntax
     case .identifier(let syntax, _):
       syntax
     case .declaration(let syntax, _):
+      syntax
+    case .self(let syntax):
+      syntax
+    case .Self(let syntax):
+      syntax
+    case .selfCaptured(let syntax):
+      syntax
+    case .error(let syntax):
+      syntax
+    case .newValue(let syntax):
+      syntax
+    case .oldValue(let syntax):
       syntax
     }
   }
@@ -37,6 +61,8 @@ import SwiftSyntax
       Identifier(syntax.identifier)
     case .declaration(let syntax, _):
       Identifier(syntax.name)
+    default:
+      nil
     }
   }
 
@@ -46,6 +72,26 @@ import SwiftSyntax
     switch self {
     case .identifier(_, let absolutePosition), .declaration(_, let absolutePosition):
       absolutePosition
+    default:
+      nil
+    }
+  }
+
+  /// Used for name comparison.
+  var name: String? {
+    switch self {
+    case .identifier, .declaration:
+      identifier?.name
+    case .self, .selfCaptured:
+      "self"
+    case .Self:
+      "Self"
+    case .error:
+      "error"
+    case .newValue:
+      "newValue"
+    case .oldValue:
+      "oldValue"
     }
   }
 
@@ -57,7 +103,7 @@ import SwiftSyntax
 
   /// Checks if this name refers to the looked up phrase.
   func refersTo(_ lookedUpName: String) -> Bool {
-    guard let name = identifier?.name else { return false }
+    guard let name else { return false }
     return name == lookedUpName
   }
 
@@ -104,7 +150,11 @@ import SwiftSyntax
   /// Extracts name introduced by `IdentifiableSyntax` node.
   private static func handle(identifiable: IdentifiableSyntax, accessibleAfter: AbsolutePosition? = nil) -> [LookupName]
   {
-    if identifiable.identifier.text != "_" {
+    if let closureCapture = identifiable as? ClosureCaptureSyntax,
+      closureCapture.identifier.tokenKind == .keyword(.self)
+    {
+      return [.selfCaptured(closureCapture)]  // Handle `self` closure capture.
+    } else if identifiable.identifier.text != "_" {
       return [.identifier(identifiable, accessibleAfter: accessibleAfter)]
     } else {
       return []

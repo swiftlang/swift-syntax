@@ -12,7 +12,13 @@
 
 import SwiftSyntax
 
+/// Scope that, in addition to names introduced by itself,
+/// also handles names introduced by
+/// `IntroducingToSequentialParentScopeSyntax` children scopes.
 @_spi(Experimental) public protocol SequentialScopeSyntax: ScopeSyntax {
+  /// Returns names introduced by `codeBlockItems`
+  /// and included `IntroducingToSequentialParentScopeSyntax` children
+  /// scopes that match the lookup.
   func sequentialLookup(
     in codeBlockItems: any Collection<CodeBlockItemSyntax>,
     for name: String?,
@@ -35,9 +41,12 @@ import SwiftSyntax
 
     for codeBlockItem in codeBlockItems {
       if let introducingToParentScope = Syntax(codeBlockItem.item).asProtocol(SyntaxProtocol.self)
-        as? IntroducingToParentScopeSyntax
+        as? IntroducingToSequentialParentScopeSyntax
       {
-        guard !config.ignoreChildrenToParentIntroductionsFrom.contains(where: { $0.id == introducingToParentScope.id })
+        guard
+          !config.ignoreChildrenToSequentialParentIntroductionsFrom.contains(where: {
+            $0.id == introducingToParentScope.id
+          })
         else {
           continue
         }
@@ -47,7 +56,9 @@ import SwiftSyntax
           currentChunk = []
         }
 
-        result.append(contentsOf: introducingToParentScope.introducedToParent(for: name, at: syntax, with: config))
+        result.append(
+          contentsOf: introducingToParentScope.introducesToSequentialParent(for: name, at: syntax, with: config)
+        )
       } else {
         currentChunk.append(
           contentsOf:

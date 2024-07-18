@@ -41,3 +41,9 @@ extension ClosureCaptureSyntax: IdentifiableSyntax {
     expression.as(DeclReferenceExprSyntax.self)!.baseName
   }
 }
+
+extension AccessorParametersSyntax: IdentifiableSyntax {
+  @_spi(Experimental) public var identifier: TokenSyntax {
+    name
+  }
+}

@@ -107,4 +107,8 @@ public struct SyntaxArenaAllocatedBufferPointer<Element: Sendable>: RandomAccess
   var unsafeRawBufferPointer: UnsafeRawBufferPointer {
     return UnsafeRawBufferPointer(buffer)
   }
+
+  public func withContiguousStorageIfAvailable<R>(_ body: (UnsafeBufferPointer<Element>) throws -> R) rethrows -> R? {
+    try body(buffer)
+  }
 }

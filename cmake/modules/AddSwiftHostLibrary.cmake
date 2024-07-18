@@ -92,9 +92,15 @@ function(add_swift_syntax_library name)
   add_custom_command(
     TARGET ${target}
     POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -E touch_nocreate $<TARGET_FILE:${target}> $<TARGET_OBJECTS:${target}> "${module_base}"
+    COMMAND "${CMAKE_COMMAND}" -E touch_nocreate $<TARGET_FILE:${target}> "${module_base}"
     COMMAND_EXPAND_LISTS
     COMMENT "Update mtime of library outputs workaround")
+  add_custom_command(
+    TARGET ${target}
+    POST_BUILD
+    COMMAND "${CMAKE_COMMAND}" -E touch_nocreate $<TARGET_OBJECTS:${target}>
+    COMMAND_EXPAND_LISTS
+    COMMENT "Update mtime of objcect files workaround")
 
   set_target_properties(${target} PROPERTIES
     Swift_MODULE_NAME ${name}

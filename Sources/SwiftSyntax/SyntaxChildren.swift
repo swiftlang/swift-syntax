@@ -274,7 +274,7 @@ struct RawSyntaxChildren: BidirectionalCollection, Sendable {
     }
   }
 
-  init(_ base: Syntax) {
+  init(_ base: __shared Syntax) {
     self.init(base.absoluteRaw)
   }
 }

@@ -47,7 +47,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
         DeclSyntax(
           """
-          public init?(_ node: some SyntaxProtocol) {
+          public init?(_ node: __shared some SyntaxProtocol) {
             guard node.raw.kind == .\(node.varOrCaseName) else { return nil }
             self._syntaxNode = node._syntaxNode
           }
@@ -199,17 +199,14 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           }
         }
 
-        try! VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
-          let layout = ArrayExprSyntax {
-            for child in node.children {
-              ArrayElementSyntax(
-                expression: ExprSyntax(#"\Self.\#(child.varOrCaseName)"#)
-              )
-            }
+        let layout = ArrayExprSyntax {
+          for child in node.children {
+            ArrayElementSyntax(
+              expression: ExprSyntax(#"\Self.\#(child.varOrCaseName)"#)
+            )
           }
-
-          StmtSyntax("return .layout(\(layout))")
         }
+        "public static let structure: SyntaxNodeStructure = .layout(\(layout))"
       }
     }
   }
@@ -256,7 +253,7 @@ private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSynt
       }
     }
 
-    try! InitializerDeclSyntax("public init?(_ node: some SyntaxProtocol)") {
+    try! InitializerDeclSyntax("public init?(_ node: __shared some SyntaxProtocol)") {
       for choice in choices {
         StmtSyntax(
           """

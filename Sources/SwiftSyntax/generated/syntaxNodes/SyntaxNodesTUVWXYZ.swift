@@ -35,7 +35,7 @@
 public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .ternaryExpr else {
       return nil
     }
@@ -206,21 +206,19 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeCondition, 
-          \Self.condition, 
-          \Self.unexpectedBetweenConditionAndQuestionMark, 
-          \Self.questionMark, 
-          \Self.unexpectedBetweenQuestionMarkAndThenExpression, 
-          \Self.thenExpression, 
-          \Self.unexpectedBetweenThenExpressionAndColon, 
-          \Self.colon, 
-          \Self.unexpectedBetweenColonAndElseExpression, 
-          \Self.elseExpression, 
-          \Self.unexpectedAfterElseExpression
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeCondition, 
+        \Self.condition, 
+        \Self.unexpectedBetweenConditionAndQuestionMark, 
+        \Self.questionMark, 
+        \Self.unexpectedBetweenQuestionMarkAndThenExpression, 
+        \Self.thenExpression, 
+        \Self.unexpectedBetweenThenExpressionAndColon, 
+        \Self.colon, 
+        \Self.unexpectedBetweenColonAndElseExpression, 
+        \Self.elseExpression, 
+        \Self.unexpectedAfterElseExpression
+      ])
 }
 
 // MARK: - ThenStmtSyntax
@@ -245,7 +243,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
 public struct ThenStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .thenStmt else {
       return nil
     }
@@ -341,15 +339,13 @@ public struct ThenStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynta
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeThenKeyword, 
-          \Self.thenKeyword, 
-          \Self.unexpectedBetweenThenKeywordAndExpression, 
-          \Self.expression, 
-          \Self.unexpectedAfterExpression
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeThenKeyword, 
+        \Self.thenKeyword, 
+        \Self.unexpectedBetweenThenKeywordAndExpression, 
+        \Self.expression, 
+        \Self.unexpectedAfterExpression
+      ])
 }
 
 // MARK: - ThrowStmtSyntax
@@ -361,7 +357,7 @@ public struct ThenStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynta
 public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .throwStmt else {
       return nil
     }
@@ -457,15 +453,13 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeThrowKeyword, 
-          \Self.throwKeyword, 
-          \Self.unexpectedBetweenThrowKeywordAndExpression, 
-          \Self.expression, 
-          \Self.unexpectedAfterExpression
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeThrowKeyword, 
+        \Self.throwKeyword, 
+        \Self.unexpectedBetweenThrowKeywordAndExpression, 
+        \Self.expression, 
+        \Self.unexpectedAfterExpression
+      ])
 }
 
 // MARK: - ThrowsClauseSyntax
@@ -486,7 +480,7 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 public struct ThrowsClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .throwsClause else {
       return nil
     }
@@ -649,19 +643,17 @@ public struct ThrowsClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeThrowsSpecifier, 
-          \Self.throwsSpecifier, 
-          \Self.unexpectedBetweenThrowsSpecifierAndLeftParen, 
-          \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndType, 
-          \Self.type, 
-          \Self.unexpectedBetweenTypeAndRightParen, 
-          \Self.rightParen, 
-          \Self.unexpectedAfterRightParen
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeThrowsSpecifier, 
+        \Self.throwsSpecifier, 
+        \Self.unexpectedBetweenThrowsSpecifierAndLeftParen, 
+        \Self.leftParen, 
+        \Self.unexpectedBetweenLeftParenAndType, 
+        \Self.type, 
+        \Self.unexpectedBetweenTypeAndRightParen, 
+        \Self.rightParen, 
+        \Self.unexpectedAfterRightParen
+      ])
 }
 
 // MARK: - TryExprSyntax
@@ -690,7 +682,7 @@ public struct ThrowsClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
 public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .tryExpr else {
       return nil
     }
@@ -815,17 +807,15 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntax
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeTryKeyword, 
-          \Self.tryKeyword, 
-          \Self.unexpectedBetweenTryKeywordAndQuestionOrExclamationMark, 
-          \Self.questionOrExclamationMark, 
-          \Self.unexpectedBetweenQuestionOrExclamationMarkAndExpression, 
-          \Self.expression, 
-          \Self.unexpectedAfterExpression
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeTryKeyword, 
+        \Self.tryKeyword, 
+        \Self.unexpectedBetweenTryKeywordAndQuestionOrExclamationMark, 
+        \Self.questionOrExclamationMark, 
+        \Self.unexpectedBetweenQuestionOrExclamationMarkAndExpression, 
+        \Self.expression, 
+        \Self.unexpectedAfterExpression
+      ])
 }
 
 // MARK: - TupleExprSyntax
@@ -838,7 +828,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntax
 public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .tupleExpr else {
       return nil
     }
@@ -988,17 +978,15 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeLeftParen, 
-          \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndElements, 
-          \Self.elements, 
-          \Self.unexpectedBetweenElementsAndRightParen, 
-          \Self.rightParen, 
-          \Self.unexpectedAfterRightParen
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeLeftParen, 
+        \Self.leftParen, 
+        \Self.unexpectedBetweenLeftParenAndElements, 
+        \Self.elements, 
+        \Self.unexpectedBetweenElementsAndRightParen, 
+        \Self.rightParen, 
+        \Self.unexpectedAfterRightParen
+      ])
 }
 
 // MARK: - TuplePatternElementSyntax
@@ -1018,7 +1006,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
 public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .tuplePatternElement else {
       return nil
     }
@@ -1179,19 +1167,17 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeLabel, 
-          \Self.label, 
-          \Self.unexpectedBetweenLabelAndColon, 
-          \Self.colon, 
-          \Self.unexpectedBetweenColonAndPattern, 
-          \Self.pattern, 
-          \Self.unexpectedBetweenPatternAndTrailingComma, 
-          \Self.trailingComma, 
-          \Self.unexpectedAfterTrailingComma
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeLabel, 
+        \Self.label, 
+        \Self.unexpectedBetweenLabelAndColon, 
+        \Self.colon, 
+        \Self.unexpectedBetweenColonAndPattern, 
+        \Self.pattern, 
+        \Self.unexpectedBetweenPatternAndTrailingComma, 
+        \Self.trailingComma, 
+        \Self.unexpectedAfterTrailingComma
+      ])
 }
 
 // MARK: - TuplePatternSyntax
@@ -1215,7 +1201,7 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .tuplePattern else {
       return nil
     }
@@ -1371,17 +1357,15 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPa
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeLeftParen, 
-          \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndElements, 
-          \Self.elements, 
-          \Self.unexpectedBetweenElementsAndRightParen, 
-          \Self.rightParen, 
-          \Self.unexpectedAfterRightParen
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeLeftParen, 
+        \Self.leftParen, 
+        \Self.unexpectedBetweenLeftParenAndElements, 
+        \Self.elements, 
+        \Self.unexpectedBetweenElementsAndRightParen, 
+        \Self.rightParen, 
+        \Self.unexpectedAfterRightParen
+      ])
 }
 
 // MARK: - TupleTypeElementSyntax
@@ -1402,7 +1386,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPa
 public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .tupleTypeElement else {
       return nil
     }
@@ -1637,25 +1621,23 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeInoutKeyword, 
-          \Self.inoutKeyword, 
-          \Self.unexpectedBetweenInoutKeywordAndFirstName, 
-          \Self.firstName, 
-          \Self.unexpectedBetweenFirstNameAndSecondName, 
-          \Self.secondName, 
-          \Self.unexpectedBetweenSecondNameAndColon, 
-          \Self.colon, 
-          \Self.unexpectedBetweenColonAndType, 
-          \Self.type, 
-          \Self.unexpectedBetweenTypeAndEllipsis, 
-          \Self.ellipsis, 
-          \Self.unexpectedBetweenEllipsisAndTrailingComma, 
-          \Self.trailingComma, 
-          \Self.unexpectedAfterTrailingComma
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeInoutKeyword, 
+        \Self.inoutKeyword, 
+        \Self.unexpectedBetweenInoutKeywordAndFirstName, 
+        \Self.firstName, 
+        \Self.unexpectedBetweenFirstNameAndSecondName, 
+        \Self.secondName, 
+        \Self.unexpectedBetweenSecondNameAndColon, 
+        \Self.colon, 
+        \Self.unexpectedBetweenColonAndType, 
+        \Self.type, 
+        \Self.unexpectedBetweenTypeAndEllipsis, 
+        \Self.ellipsis, 
+        \Self.unexpectedBetweenEllipsisAndTrailingComma, 
+        \Self.trailingComma, 
+        \Self.unexpectedAfterTrailingComma
+      ])
 }
 
 // MARK: - TupleTypeSyntax
@@ -1668,7 +1650,7 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
 public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .tupleType else {
       return nil
     }
@@ -1818,17 +1800,15 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSynt
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeLeftParen, 
-          \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndElements, 
-          \Self.elements, 
-          \Self.unexpectedBetweenElementsAndRightParen, 
-          \Self.rightParen, 
-          \Self.unexpectedAfterRightParen
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeLeftParen, 
+        \Self.leftParen, 
+        \Self.unexpectedBetweenLeftParenAndElements, 
+        \Self.elements, 
+        \Self.unexpectedBetweenElementsAndRightParen, 
+        \Self.rightParen, 
+        \Self.unexpectedAfterRightParen
+      ])
 }
 
 // MARK: - TypeAliasDeclSyntax
@@ -1845,7 +1825,7 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSynt
 public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .typeAliasDecl else {
       return nil
     }
@@ -2122,25 +2102,23 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeAttributes, 
-          \Self.attributes, 
-          \Self.unexpectedBetweenAttributesAndModifiers, 
-          \Self.modifiers, 
-          \Self.unexpectedBetweenModifiersAndTypealiasKeyword, 
-          \Self.typealiasKeyword, 
-          \Self.unexpectedBetweenTypealiasKeywordAndName, 
-          \Self.name, 
-          \Self.unexpectedBetweenNameAndGenericParameterClause, 
-          \Self.genericParameterClause, 
-          \Self.unexpectedBetweenGenericParameterClauseAndInitializer, 
-          \Self.initializer, 
-          \Self.unexpectedBetweenInitializerAndGenericWhereClause, 
-          \Self.genericWhereClause, 
-          \Self.unexpectedAfterGenericWhereClause
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeAttributes, 
+        \Self.attributes, 
+        \Self.unexpectedBetweenAttributesAndModifiers, 
+        \Self.modifiers, 
+        \Self.unexpectedBetweenModifiersAndTypealiasKeyword, 
+        \Self.typealiasKeyword, 
+        \Self.unexpectedBetweenTypealiasKeywordAndName, 
+        \Self.name, 
+        \Self.unexpectedBetweenNameAndGenericParameterClause, 
+        \Self.genericParameterClause, 
+        \Self.unexpectedBetweenGenericParameterClauseAndInitializer, 
+        \Self.initializer, 
+        \Self.unexpectedBetweenInitializerAndGenericWhereClause, 
+        \Self.genericWhereClause, 
+        \Self.unexpectedAfterGenericWhereClause
+      ])
 }
 
 // MARK: - TypeAnnotationSyntax
@@ -2159,7 +2137,7 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
 public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .typeAnnotation else {
       return nil
     }
@@ -2258,15 +2236,13 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeColon, 
-          \Self.colon, 
-          \Self.unexpectedBetweenColonAndType, 
-          \Self.type, 
-          \Self.unexpectedAfterType
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeColon, 
+        \Self.colon, 
+        \Self.unexpectedBetweenColonAndType, 
+        \Self.type, 
+        \Self.unexpectedAfterType
+      ])
 }
 
 // MARK: - TypeEffectSpecifiersSyntax
@@ -2284,7 +2260,7 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
 public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .typeEffectSpecifiers else {
       return nil
     }
@@ -2382,15 +2358,13 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeAsyncSpecifier, 
-          \Self.asyncSpecifier, 
-          \Self.unexpectedBetweenAsyncSpecifierAndThrowsClause, 
-          \Self.throwsClause, 
-          \Self.unexpectedAfterThrowsClause
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeAsyncSpecifier, 
+        \Self.asyncSpecifier, 
+        \Self.unexpectedBetweenAsyncSpecifierAndThrowsClause, 
+        \Self.throwsClause, 
+        \Self.unexpectedAfterThrowsClause
+      ])
 }
 
 // MARK: - TypeExprSyntax
@@ -2401,7 +2375,7 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
 public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .typeExpr else {
       return nil
     }
@@ -2462,9 +2436,7 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([\Self.unexpectedBeforeType, \Self.type, \Self.unexpectedAfterType])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeType, \Self.type, \Self.unexpectedAfterType])
 }
 
 // MARK: - TypeInitializerClauseSyntax
@@ -2481,7 +2453,7 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
 public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .typeInitializerClause else {
       return nil
     }
@@ -2577,15 +2549,13 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeEqual, 
-          \Self.equal, 
-          \Self.unexpectedBetweenEqualAndValue, 
-          \Self.value, 
-          \Self.unexpectedAfterValue
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeEqual, 
+        \Self.equal, 
+        \Self.unexpectedBetweenEqualAndValue, 
+        \Self.value, 
+        \Self.unexpectedAfterValue
+      ])
 }
 
 // MARK: - UnavailableFromAsyncAttributeArgumentsSyntax
@@ -2604,7 +2574,7 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
 public struct UnavailableFromAsyncAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .unavailableFromAsyncAttributeArguments else {
       return nil
     }
@@ -2727,17 +2697,15 @@ public struct UnavailableFromAsyncAttributeArgumentsSyntax: SyntaxProtocol, Synt
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeMessageLabel, 
-          \Self.messageLabel, 
-          \Self.unexpectedBetweenMessageLabelAndColon, 
-          \Self.colon, 
-          \Self.unexpectedBetweenColonAndMessage, 
-          \Self.message, 
-          \Self.unexpectedAfterMessage
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeMessageLabel, 
+        \Self.messageLabel, 
+        \Self.unexpectedBetweenMessageLabelAndColon, 
+        \Self.colon, 
+        \Self.unexpectedBetweenColonAndMessage, 
+        \Self.message, 
+        \Self.unexpectedAfterMessage
+      ])
 }
 
 // MARK: - UnderscorePrivateAttributeArgumentsSyntax
@@ -2756,7 +2724,7 @@ public struct UnavailableFromAsyncAttributeArgumentsSyntax: SyntaxProtocol, Synt
 public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .underscorePrivateAttributeArguments else {
       return nil
     }
@@ -2879,17 +2847,15 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeSourceFileLabel, 
-          \Self.sourceFileLabel, 
-          \Self.unexpectedBetweenSourceFileLabelAndColon, 
-          \Self.colon, 
-          \Self.unexpectedBetweenColonAndFilename, 
-          \Self.filename, 
-          \Self.unexpectedAfterFilename
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeSourceFileLabel, 
+        \Self.sourceFileLabel, 
+        \Self.unexpectedBetweenSourceFileLabelAndColon, 
+        \Self.colon, 
+        \Self.unexpectedBetweenColonAndFilename, 
+        \Self.filename, 
+        \Self.unexpectedAfterFilename
+      ])
 }
 
 // MARK: - UnresolvedAsExprSyntax
@@ -2906,7 +2872,7 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
 public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .unresolvedAsExpr else {
       return nil
     }
@@ -3007,15 +2973,13 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeAsKeyword, 
-          \Self.asKeyword, 
-          \Self.unexpectedBetweenAsKeywordAndQuestionOrExclamationMark, 
-          \Self.questionOrExclamationMark, 
-          \Self.unexpectedAfterQuestionOrExclamationMark
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeAsKeyword, 
+        \Self.asKeyword, 
+        \Self.unexpectedBetweenAsKeywordAndQuestionOrExclamationMark, 
+        \Self.questionOrExclamationMark, 
+        \Self.unexpectedAfterQuestionOrExclamationMark
+      ])
 }
 
 // MARK: - UnresolvedIsExprSyntax
@@ -3031,7 +2995,7 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
 public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .unresolvedIsExpr else {
       return nil
     }
@@ -3095,9 +3059,7 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([\Self.unexpectedBeforeIsKeyword, \Self.isKeyword, \Self.unexpectedAfterIsKeyword])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeIsKeyword, \Self.isKeyword, \Self.unexpectedAfterIsKeyword])
 }
 
 // MARK: - UnresolvedTernaryExprSyntax
@@ -3116,7 +3078,7 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
 public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .unresolvedTernaryExpr else {
       return nil
     }
@@ -3239,17 +3201,15 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeQuestionMark, 
-          \Self.questionMark, 
-          \Self.unexpectedBetweenQuestionMarkAndThenExpression, 
-          \Self.thenExpression, 
-          \Self.unexpectedBetweenThenExpressionAndColon, 
-          \Self.colon, 
-          \Self.unexpectedAfterColon
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeQuestionMark, 
+        \Self.questionMark, 
+        \Self.unexpectedBetweenQuestionMarkAndThenExpression, 
+        \Self.thenExpression, 
+        \Self.unexpectedBetweenThenExpressionAndColon, 
+        \Self.colon, 
+        \Self.unexpectedAfterColon
+      ])
 }
 
 // MARK: - ValueBindingPatternSyntax
@@ -3261,7 +3221,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
 public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .valueBindingPattern else {
       return nil
     }
@@ -3364,15 +3324,13 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, 
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeBindingSpecifier, 
-          \Self.bindingSpecifier, 
-          \Self.unexpectedBetweenBindingSpecifierAndPattern, 
-          \Self.pattern, 
-          \Self.unexpectedAfterPattern
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeBindingSpecifier, 
+        \Self.bindingSpecifier, 
+        \Self.unexpectedBetweenBindingSpecifierAndPattern, 
+        \Self.pattern, 
+        \Self.unexpectedAfterPattern
+      ])
 }
 
 // MARK: - VariableDeclSyntax
@@ -3391,7 +3349,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, 
 public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .variableDecl else {
       return nil
     }
@@ -3639,19 +3597,17 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeAttributes, 
-          \Self.attributes, 
-          \Self.unexpectedBetweenAttributesAndModifiers, 
-          \Self.modifiers, 
-          \Self.unexpectedBetweenModifiersAndBindingSpecifier, 
-          \Self.bindingSpecifier, 
-          \Self.unexpectedBetweenBindingSpecifierAndBindings, 
-          \Self.bindings, 
-          \Self.unexpectedAfterBindings
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeAttributes, 
+        \Self.attributes, 
+        \Self.unexpectedBetweenAttributesAndModifiers, 
+        \Self.modifiers, 
+        \Self.unexpectedBetweenModifiersAndBindingSpecifier, 
+        \Self.bindingSpecifier, 
+        \Self.unexpectedBetweenBindingSpecifierAndBindings, 
+        \Self.bindings, 
+        \Self.unexpectedAfterBindings
+      ])
 }
 
 // MARK: - VersionComponentSyntax
@@ -3669,7 +3625,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
 public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .versionComponent else {
       return nil
     }
@@ -3774,15 +3730,13 @@ public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforePeriod, 
-          \Self.period, 
-          \Self.unexpectedBetweenPeriodAndNumber, 
-          \Self.number, 
-          \Self.unexpectedAfterNumber
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforePeriod, 
+        \Self.period, 
+        \Self.unexpectedBetweenPeriodAndNumber, 
+        \Self.number, 
+        \Self.unexpectedAfterNumber
+      ])
 }
 
 // MARK: - VersionTupleSyntax
@@ -3802,7 +3756,7 @@ public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
 public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .versionTuple else {
       return nil
     }
@@ -3930,15 +3884,13 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeMajor, 
-          \Self.major, 
-          \Self.unexpectedBetweenMajorAndComponents, 
-          \Self.components, 
-          \Self.unexpectedAfterComponents
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeMajor, 
+        \Self.major, 
+        \Self.unexpectedBetweenMajorAndComponents, 
+        \Self.components, 
+        \Self.unexpectedAfterComponents
+      ])
 }
 
 // MARK: - WhereClauseSyntax
@@ -3956,7 +3908,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
 public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .whereClause else {
       return nil
     }
@@ -4052,15 +4004,13 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeWhereKeyword, 
-          \Self.whereKeyword, 
-          \Self.unexpectedBetweenWhereKeywordAndCondition, 
-          \Self.condition, 
-          \Self.unexpectedAfterCondition
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeWhereKeyword, 
+        \Self.whereKeyword, 
+        \Self.unexpectedBetweenWhereKeywordAndCondition, 
+        \Self.condition, 
+        \Self.unexpectedAfterCondition
+      ])
 }
 
 // MARK: - WhileStmtSyntax
@@ -4073,7 +4023,7 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
 public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .whileStmt else {
       return nil
     }
@@ -4220,17 +4170,15 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeWhileKeyword, 
-          \Self.whileKeyword, 
-          \Self.unexpectedBetweenWhileKeywordAndConditions, 
-          \Self.conditions, 
-          \Self.unexpectedBetweenConditionsAndBody, 
-          \Self.body, 
-          \Self.unexpectedAfterBody
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeWhileKeyword, 
+        \Self.whileKeyword, 
+        \Self.unexpectedBetweenWhileKeywordAndConditions, 
+        \Self.conditions, 
+        \Self.unexpectedBetweenConditionsAndBody, 
+        \Self.body, 
+        \Self.unexpectedAfterBody
+      ])
 }
 
 // MARK: - WildcardPatternSyntax
@@ -4254,7 +4202,7 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .wildcardPattern else {
       return nil
     }
@@ -4318,9 +4266,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _Lea
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([\Self.unexpectedBeforeWildcard, \Self.wildcard, \Self.unexpectedAfterWildcard])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeWildcard, \Self.wildcard, \Self.unexpectedAfterWildcard])
 }
 
 // MARK: - YieldStmtSyntax
@@ -4351,7 +4297,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
       self = .single(ExprSyntax(node))
     }
     
-    public init?(_ node: some SyntaxProtocol) {
+    public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(YieldedExpressionsClauseSyntax.self) {
         self = .multiple(node)
         return
@@ -4414,7 +4360,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
   
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .yieldStmt else {
       return nil
     }
@@ -4510,15 +4456,13 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeYieldKeyword, 
-          \Self.yieldKeyword, 
-          \Self.unexpectedBetweenYieldKeywordAndYieldedExpressions, 
-          \Self.yieldedExpressions, 
-          \Self.unexpectedAfterYieldedExpressions
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeYieldKeyword, 
+        \Self.yieldKeyword, 
+        \Self.unexpectedBetweenYieldKeywordAndYieldedExpressions, 
+        \Self.yieldedExpressions, 
+        \Self.unexpectedAfterYieldedExpressions
+      ])
 }
 
 // MARK: - YieldedExpressionSyntax
@@ -4534,7 +4478,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 public struct YieldedExpressionSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .yieldedExpression else {
       return nil
     }
@@ -4630,15 +4574,13 @@ public struct YieldedExpressionSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeExpression, 
-          \Self.expression, 
-          \Self.unexpectedBetweenExpressionAndComma, 
-          \Self.comma, 
-          \Self.unexpectedAfterComma
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeExpression, 
+        \Self.expression, 
+        \Self.unexpectedBetweenExpressionAndComma, 
+        \Self.comma, 
+        \Self.unexpectedAfterComma
+      ])
 }
 
 // MARK: - YieldedExpressionsClauseSyntax
@@ -4655,7 +4597,7 @@ public struct YieldedExpressionSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 public struct YieldedExpressionsClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
   
-  public init?(_ node: some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .yieldedExpressionsClause else {
       return nil
     }
@@ -4805,15 +4747,13 @@ public struct YieldedExpressionsClauseSyntax: SyntaxProtocol, SyntaxHashable, _L
     }
   }
   
-  public static var structure: SyntaxNodeStructure {
-    return .layout([
-          \Self.unexpectedBeforeLeftParen, 
-          \Self.leftParen, 
-          \Self.unexpectedBetweenLeftParenAndElements, 
-          \Self.elements, 
-          \Self.unexpectedBetweenElementsAndRightParen, 
-          \Self.rightParen, 
-          \Self.unexpectedAfterRightParen
-        ])
-  }
+  public static let structure: SyntaxNodeStructure = .layout([
+        \Self.unexpectedBeforeLeftParen, 
+        \Self.leftParen, 
+        \Self.unexpectedBetweenLeftParenAndElements, 
+        \Self.elements, 
+        \Self.unexpectedBetweenElementsAndRightParen, 
+        \Self.rightParen, 
+        \Self.unexpectedAfterRightParen
+      ])
 }

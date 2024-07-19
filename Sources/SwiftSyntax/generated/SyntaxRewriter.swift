@@ -74,7 +74,7 @@ open class SyntaxRewriter {
   ///         methods will not be called for this node and the
   ///         visited node will be replaced by the returned node in the
   ///         rewritten tree.
-  ///         You can call the ``SyntaxWriter.rewrite(_:detach:)``
+  ///         You can call the `SyntaxWriter.rewrite(_:detach:)`
   ///         method recursively when returning a non-nil result
   ///         if you want to visit the node's children anyway.
   open func visitAny(_ node: Syntax) -> Syntax? {

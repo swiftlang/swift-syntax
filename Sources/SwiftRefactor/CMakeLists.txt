@@ -10,7 +10,9 @@ add_swift_syntax_library(SwiftRefactor
   AddSeparatorsToIntegerLiteral.swift
   CallToTrailingClosures.swift
   ConvertComputedPropertyToStored.swift
+  ConvertComputedPropertyToZeroParameterFunction.swift
   ConvertStoredPropertyToComputed.swift
+  ConvertZeroParameterFunctionToComputedProperty.swift
   ExpandEditorPlaceholder.swift
   FormatRawStringLiteral.swift
   IntegerLiteralUtilities.swift
@@ -18,6 +20,7 @@ add_swift_syntax_library(SwiftRefactor
   OpaqueParameterToGeneric.swift
   RefactoringProvider.swift
   RemoveSeparatorsFromIntegerLiteral.swift
+  SyntaxUtils.swift
 )
 
 target_link_swift_syntax_libraries(SwiftRefactor PUBLIC

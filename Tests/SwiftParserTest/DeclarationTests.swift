@@ -1268,25 +1268,34 @@ final class DeclarationTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "4️⃣",
-          message: "bare slash regex literal may not start with space"
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
         ),
         DiagnosticSpec(
           locationMarker: "5️⃣",
           message: "expected '/' to end regex literal",
           notes: [NoteSpec(locationMarker: "3️⃣", message: "to match this opening '/'")],
-          fixIts: ["insert '/\'"]
+          fixIts: ["insert '/'"]
         ),
         DiagnosticSpec(
           locationMarker: "6️⃣",
           message: "extraneous brace at top level"
         ),
       ],
-      fixedSource: """
+      applyFixIts: [
+        "insert '}'",
+        #"insert '\'"#,
+        "insert '/'",
+      ],
+      fixedSource: #"""
         struct S {
         }
-          / ###line 25 "line-directive.swift"/
+          /\ ###line 25 "line-directive.swift"/
         }
-        """
+        """#
     )
   }
 

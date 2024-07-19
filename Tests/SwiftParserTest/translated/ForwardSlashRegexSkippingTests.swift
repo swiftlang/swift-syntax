@@ -329,8 +329,18 @@ final class ForwardSlashRegexSkippingTests: ParserTestCase {
       """,
       diagnostics: [
         // TODO: Old parser had a fix-it to add backslash to escape
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
-      ]
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      applyFixIts: [],
+      fixedSource: """
+        func a4() { _ = / / }
+        """
     )
   }
 

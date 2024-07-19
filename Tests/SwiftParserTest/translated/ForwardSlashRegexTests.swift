@@ -167,8 +167,18 @@ final class ForwardSlashRegexTests: ParserTestCase {
       _ = !/1️⃣ /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
-      ]
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      applyFixIts: [],
+      fixedSource: """
+        _ = !/ /
+        """
     )
   }
 
@@ -178,8 +188,18 @@ final class ForwardSlashRegexTests: ParserTestCase {
       _ = !!/1️⃣ /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
-      ]
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      applyFixIts: [],
+      fixedSource: """
+        _ = !!/ /
+        """
     )
   }
 
@@ -1634,8 +1654,18 @@ final class ForwardSlashRegexTests: ParserTestCase {
       _ = /1️⃣ /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
-      ]
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      applyFixIts: [],
+      fixedSource: """
+        _ = / /
+        """
     )
   }
 
@@ -1645,8 +1675,14 @@ final class ForwardSlashRegexTests: ParserTestCase {
       _ = /1️⃣  /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
-      ]
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: ["convert to extended regex literal with '#'"]
+        )
+      ],
+      fixedSource: """
+        _ = #/  /#
+        """
     )
   }
 
@@ -1689,7 +1725,11 @@ final class ForwardSlashRegexTests: ParserTestCase {
       _ = ℹ️/1️⃣               2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "bare slash regex literal may not start with space"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "bare slash regex literal may not start with space",
+          fixIts: ["convert to extended regex literal with '#'"]
+        ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "expected '/' to end regex literal",
@@ -1697,9 +1737,20 @@ final class ForwardSlashRegexTests: ParserTestCase {
           fixIts: ["insert '/'"]
         ),
       ],
-      fixedSource: """
-        _ = /               /
-        """
+      fixItsApplications: [
+        .optIn(
+          applyFixIts: ["convert to extended regex literal with '#'"],
+          fixedSource: """
+            _ = #/               /#
+            """
+        ),
+        .optIn(
+          applyFixIts: ["insert '/'"],
+          fixedSource: """
+            _ = /               /
+            """
+        ),
+      ]
     )
   }
 

@@ -73,10 +73,14 @@ open class SyntaxRewriter {
   /// Override point to choose custom visitation dispatch instead of the
   /// specialized `visit(_:)` methods. Use this instead of those methods if
   /// you intend to dynamically dispatch rewriting behavior.
-  /// - note: If this method returns a non-nil result, the specialized
-  ///         `visit(_:)` methods will not be called for this node and the
+  /// - note: If this method returns a non-nil result, the subsequent
+  ///         `visitAny(_:)` methods and the specialized `visit(_:)`
+  ///         methods will not be called for this node and the
   ///         visited node will be replaced by the returned node in the
   ///         rewritten tree.
+  ///         You can call the ``SyntaxRewriter/rewrite(_:detach:)``
+  ///         method recursively when returning a non-nil result
+  ///         if you want to visit the node's children anyway.
   open func visitAny(_ node: Syntax) -> Syntax? {
     return nil
   }

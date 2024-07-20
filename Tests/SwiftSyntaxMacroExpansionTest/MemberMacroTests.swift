@@ -584,4 +584,36 @@ final class MemberMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+    
+  func testMemberMacroOnVar() {
+    struct TestMacro: MemberMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingMembersOf declaration: some DeclGroupSyntax,
+        conformingTo protocols: [TypeSyntax],
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        return []
+      }
+    }
+        
+    assertMacroExpansion(
+      """
+      @Test var x: Int
+      """,
+      expandedSource: """
+        // Should this be kept empty?
+        """,
+      diagnostics: [
+        DiagnosticSpec(
+            message: "Member Macros cannot be applied to variables.",
+            line: 1,
+            column: 1
+        )
+      ],
+      macros: [
+        "Test": TestMacro.self
+      ]
+    )
+  }
 }

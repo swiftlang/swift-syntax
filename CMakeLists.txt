@@ -42,23 +42,24 @@ option(SWIFT_SYNTAX_ENABLE_WMO_PRE_3_26
        $<IF:$<AND:$<NOT:$<CONFIG:Debug>>,$<PLATFORM_ID:Darwin>>,YES,NO>)
 
 include(AddSwiftHostLibrary)
+include(SwiftCompilerCapability)
 
-# Ensure that we do not link the _StringProcessing module. But we can
-# only pass this flag for new-enough compilers that support it.
-file(WRITE "${CMAKE_BINARY_DIR}/tmp/empty-check-string-processing.swift" "")
-execute_process(
-  COMMAND
-    "${CMAKE_Swift_COMPILER}"
-    -Xfrontend -disable-implicit-string-processing-module-import
-    -Xfrontend -parse-stdlib
-    -typecheck "${CMAKE_BINARY_DIR}/tmp/empty-check-string-processing.swift"
-  OUTPUT_QUIET ERROR_QUIET
-  RESULT_VARIABLE
-    SWIFT_SUPPORTS_DISABLE_IMPLICIT_STRING_PROCESSING_MODULE_IMPORT)
-if (NOT SWIFT_SUPPORTS_DISABLE_IMPLICIT_STRING_PROCESSING_MODULE_IMPORT)
-  add_compile_options(
-    $<$<COMPILE_LANGUAGE:Swift>:-Xfrontend>
-    $<$<COMPILE_LANGUAGE:Swift>:-disable-implicit-string-processing-module-import>)
+# Don't link with 'string-processing' and 'backtracing'.
+swift_supports_implicit_module("string-processing" SWIFT_SUPPORTS_DISABLE_IMPLICIT_STRING_PROCESSING_MODULE_IMPORT)
+swift_supports_implicit_module("backtracing" SWIFT_SUPPORTS_DISABLE_IMPLICIT_BACKTRACING_MODULE_IMPORT)
+if(SWIFT_SUPPORTS_DISABLE_IMPLICIT_STRING_PROCESSING_MODULE_IMPORT)
+  add_compile_options("$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Xfrontend -disable-implicit-string-processing-module-import>")
+endif()
+if(SWIFT_SUPPORTS_DISABLE_IMPLICIT_BACKTRACING_MODULE_IMPORT)
+  add_compile_options("$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Xfrontend -disable-implicit-backtracing-module-import>")
+endif()
+
+# SWIFTSYNTAX_EMIT_MODULE is TRUE by default
+if(NOT DEFINED SWIFTSYNTAX_EMIT_MODULE)
+  set(SWIFTSYNTAX_EMIT_MODULE TRUE)
+endif()
+if(SWIFTSYNTAX_EMIT_MODULE)
+  swift_get_package_cmo_support(SWIFT_PACKAGE_CMO_SUPPORT)
 endif()
 
 # Determine the module triple.

@@ -150,7 +150,7 @@ final class testNameLookup: XCTestCase {
         "6️⃣": [
           .fromScope(ClosureExprSyntax.self, expectedNames: ["3️⃣"]),
           .fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"]),
-        ],
+        ]
       ],
       expectedResultTypes: .all(
         ClosureCaptureSyntax.self,

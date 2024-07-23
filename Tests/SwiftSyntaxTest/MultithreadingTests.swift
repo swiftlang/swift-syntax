@@ -20,8 +20,9 @@ extension SyntaxProtocol {
   }
 }
 
-class MultithreadingTests: XCTestCase {
-
+// Marked as `@unchecked Sendable` to work around rdar://130094927, which complains about `MultithreadingTests` not conforming to
+// `Sendable`.
+class MultithreadingTests: XCTestCase, @unchecked Sendable {
   public func testPathological() {
     let tuple = TupleTypeSyntax(
       leftParen: .leftParenToken(),

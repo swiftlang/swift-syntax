@@ -12,9 +12,9 @@
 
 import SwiftSyntax
 
-extension SyntaxProtocol {
+@_spi(Experimental) extension SyntaxProtocol {
   /// Parent scope of this syntax node, or scope introduced by this syntax node.
-  var scope: ScopeSyntax? {
+  @_spi(Experimental) public var scope: ScopeSyntax? {
     if let scopeSyntax = Syntax(self).asProtocol(SyntaxProtocol.self) as? ScopeSyntax {
       scopeSyntax
     } else {
@@ -23,10 +23,10 @@ extension SyntaxProtocol {
   }
 }
 
-@_spi(Experimental) extension SourceFileSyntax: ScopeSyntax {
+@_spi(Experimental) extension SourceFileSyntax: SequentialScopeSyntax {
   /// All names introduced in the file scope
   /// according to the default strategy: `memberBlockUpToLastDecl`.
-  public var introducedNames: [LookupName] {
+  @_spi(Experimental) public var introducedNames: [LookupName] {
     introducedNames(using: .memberBlockUpToLastDecl)
   }
 
@@ -47,10 +47,10 @@ extension SyntaxProtocol {
   /// ```
   /// During lookup, according to different configurations,
   /// names available at the marked place are:
-  /// - for `fileScopeNameIntroductionStrategy` - a, b, c, d
+  /// - for `memberBlockUpToLastDecl` - a, b, c, d
   /// - for `memberBlock` - a, b, c, d, e, f
   /// - for `codeBlock` - a
-  public func introducedNames(using fileScopeHandling: FileScopeHandlingConfig) -> [LookupName] {
+  @_spi(Experimental) public func introducedNames(using fileScopeHandling: FileScopeHandlingConfig) -> [LookupName] {
     switch fileScopeHandling {
     case .memberBlockUpToLastDecl:
       var encounteredNonDeclaration = false
@@ -61,7 +61,7 @@ extension SyntaxProtocol {
         if encounteredNonDeclaration {
           return LookupName.getNames(from: item, accessibleAfter: codeBlockItem.endPosition)
         } else {
-          if item.is(DeclSyntax.self) || item.is(VariableDeclSyntax.self) {
+          if item.is(DeclSyntax.self) {
             return LookupName.getNames(from: item)
           } else {
             encounteredNonDeclaration = true
@@ -97,36 +97,97 @@ extension SyntaxProtocol {
   /// ```
   /// According to different configurations,
   /// names available at the marked place are:
-  /// - for `fileScopeNameIntroductionStrategy` - a, b, c, d
+  /// - for `memberBlockUpToLastDecl` - a, b, c, d
   /// - for `memberBlock` - a, b, c, d, e, f
   /// - for `codeBlock` - a
-  public func lookup(
+  @_spi(Experimental) public func lookup(
     for name: String?,
     at syntax: SyntaxProtocol,
-    with config: LookupConfig
+    with config: LookupConfig,
+    state: LookupState
   ) -> [LookupResult] {
-    let names = introducedNames(using: config.fileScopeHandling)
-      .filter { introducedName in
-        introducedName.isAccessible(at: syntax) && (name == nil || introducedName.refersTo(name!))
+    switch config.fileScopeHandling {
+    case .codeBlock:
+      return sequentialLookup(
+        in: statements,
+        for: name,
+        at: syntax,
+        with: config,
+        state: state,
+        createResultsForThisScopeWith: { .fromFileScope(self, withNames: $0) }
+      )
+    case .memberBlock:
+      let names = introducedNames(using: .memberBlock)
+        .filter { lookupName in
+          does(name: name, referTo: lookupName, at: syntax)
+        }
+
+      return names.isEmpty ? [] : [.fromFileScope(self, withNames: names)]
+    case .memberBlockUpToLastDecl:
+      var members = [LookupName]()
+      var sequentialItems = [CodeBlockItemSyntax]()
+      var encounteredNonDeclaration = false
+
+      for codeBlockItem in statements {
+        let item = codeBlockItem.item
+
+        if encounteredNonDeclaration {
+          sequentialItems.append(codeBlockItem)
+        } else {
+          if item.is(DeclSyntax.self) || item.is(VariableDeclSyntax.self) {
+            let foundNames = LookupName.getNames(from: item)
+
+            members.append(contentsOf: foundNames.filter { does(name: name, referTo: $0, at: syntax) })
+          } else {
+            encounteredNonDeclaration = true
+            sequentialItems.append(codeBlockItem)
+          }
+        }
       }
 
-    return [.fromFileScope(self, withNames: names)]
+      let sequentialNames = sequentialLookup(
+        in: sequentialItems,
+        for: name,
+        at: syntax,
+        with: config,
+        state: state,
+        createResultsForThisScopeWith: { .fromFileScope(self, withNames: $0) }
+      )
+
+      return (members.isEmpty ? [] : [.fromFileScope(self, withNames: members)]) + sequentialNames
+    }
   }
 }
 
-@_spi(Experimental) extension CodeBlockSyntax: ScopeSyntax {
+@_spi(Experimental) extension CodeBlockSyntax: SequentialScopeSyntax {
   /// Names introduced in the code block scope
   /// accessible after their declaration.
-  public var introducedNames: [LookupName] {
+  @_spi(Experimental) public var introducedNames: [LookupName] {
     statements.flatMap { codeBlockItem in
       LookupName.getNames(from: codeBlockItem.item, accessibleAfter: codeBlockItem.endPosition)
     }
+  }
+
+  @_spi(Experimental) public func lookup(
+    for name: String?,
+    at syntax: SyntaxProtocol,
+    with config: LookupConfig,
+    state: LookupState
+  ) -> [LookupResult] {
+    sequentialLookup(
+      in: statements,
+      for: name,
+      at: syntax,
+      with: config,
+      state: state,
+      createResultsForThisScopeWith: { .fromScope(self, withNames: $0) }
+    )
   }
 }
 
 @_spi(Experimental) extension ForStmtSyntax: ScopeSyntax {
   /// Names introduced in the `for` body.
-  public var introducedNames: [LookupName] {
+  @_spi(Experimental) public var introducedNames: [LookupName] {
     LookupName.getNames(from: pattern)
   }
 }
@@ -143,26 +204,20 @@ extension SyntaxProtocol {
   /// ```
   /// During lookup, names available at the marked place are:
   /// `self`, a, b.
-  public var introducedNames: [LookupName] {
+  @_spi(Experimental) public var introducedNames: [LookupName] {
     let captureNames =
-      signature?.capture?.children(viewMode: .sourceAccurate).flatMap { child in
-        if let captureList = child.as(ClosureCaptureListSyntax.self) {
-          captureList.children(viewMode: .sourceAccurate).flatMap { capture in
-            LookupName.getNames(from: capture)
-          }
-        } else {
-          LookupName.getNames(from: child)
-        }
+      signature?.capture?.items.flatMap { element in
+        LookupName.getNames(from: element)
       } ?? []
 
     let parameterNames =
       signature?.parameterClause?.children(viewMode: .sourceAccurate).flatMap { parameter in
         if let parameterList = parameter.as(ClosureParameterListSyntax.self) {
-          parameterList.children(viewMode: .sourceAccurate).flatMap { parameter in
+          return parameterList.children(viewMode: .sourceAccurate).flatMap { parameter in
             LookupName.getNames(from: parameter)
           }
         } else {
-          LookupName.getNames(from: parameter)
+          return LookupName.getNames(from: parameter)
         }
       } ?? []
 
@@ -172,7 +227,7 @@ extension SyntaxProtocol {
 
 @_spi(Experimental) extension WhileStmtSyntax: ScopeSyntax {
   /// Names introduced by the `while` loop by its conditions.
-  public var introducedNames: [LookupName] {
+  @_spi(Experimental) public var introducedNames: [LookupName] {
     conditions.flatMap { element in
       LookupName.getNames(from: element.condition)
     }
@@ -181,7 +236,7 @@ extension SyntaxProtocol {
 
 @_spi(Experimental) extension IfExprSyntax: ScopeSyntax {
   /// Parent scope, omitting ancestor `if` statements if part of their `else if` clause.
-  public var parentScope: ScopeSyntax? {
+  @_spi(Experimental) public var parentScope: ScopeSyntax? {
     getParent(for: self.parent, previousIfElse: self.elseKeyword == nil)
   }
 
@@ -217,7 +272,7 @@ extension SyntaxProtocol {
   }
 
   /// Names introduced by the `if` optional binding conditions.
-  public var introducedNames: [LookupName] {
+  @_spi(Experimental) public var introducedNames: [LookupName] {
     conditions.flatMap { element in
       LookupName.getNames(from: element.condition, accessibleAfter: element.endPosition)
     }
@@ -235,32 +290,46 @@ extension SyntaxProtocol {
   ///   // <-- a is not visible here
   /// }
   /// ```
-  public func lookup(
+  @_spi(Experimental) public func lookup(
     for name: String?,
     at syntax: SyntaxProtocol,
-    with config: LookupConfig
+    with config: LookupConfig,
+    state: LookupState
   ) -> [LookupResult] {
     if let elseBody, elseBody.position <= syntax.position, elseBody.endPosition >= syntax.position {
-      lookupInParent(for: name, at: syntax, with: config)
+      lookupInParent(for: name, at: syntax, with: config, state: state)
     } else {
-      defaultLookupImplementation(for: name, at: syntax, with: config)
+      defaultLookupImplementation(for: name, at: syntax, with: config, state: state)
     }
   }
 }
 
 @_spi(Experimental) extension MemberBlockSyntax: ScopeSyntax {
   /// All names introduced by members of this member scope.
-  public var introducedNames: [LookupName] {
+  @_spi(Experimental) public var introducedNames: [LookupName] {
     members.flatMap { member in
       LookupName.getNames(from: member.decl)
     }
   }
 }
 
-@_spi(Experimental) extension GuardStmtSyntax: ScopeSyntax {
-  /// Guard doesn't introduce any names to its children.
-  /// It's always empty.
-  public var introducedNames: [LookupName] {
+@_spi(Experimental) extension GuardStmtSyntax: IntroducingToSequentialParentScopeSyntax {
+  @_spi(Experimental) public func introducesToSequentialParent(
+    for name: String?,
+    at syntax: SwiftSyntax.SyntaxProtocol,
+    with config: LookupConfig,
+    state: LookupState
+  ) -> [LookupResult] {
+    let names = conditions.flatMap { element in
+      LookupName.getNames(from: element.condition, accessibleAfter: element.endPosition)
+    }.filter { introducedName in
+      does(name: name, referTo: introducedName, at: syntax)
+    }
+
+    return names.isEmpty ? [] : [.fromScope(self, withNames: names)]
+  }
+
+  @_spi(Experimental) public var introducedNames: [LookupName] {
     []
   }
 
@@ -275,15 +344,43 @@ extension SyntaxProtocol {
   /// }
   /// // a is visible here
   /// ```
-  public func lookup(
+  @_spi(Experimental) public func lookup(
     for name: String?,
     at syntax: SyntaxProtocol,
-    with config: LookupConfig
+    with config: LookupConfig,
+    state: LookupState
   ) -> [LookupResult] {
     if body.position <= syntax.position && body.endPosition >= syntax.position {
-      lookupInParent(for: name, at: self, with: config)
+      var newState = state
+      newState.skipSequentialIntroductionFrom = self
+      return lookupInParent(for: name, at: syntax, with: config, state: newState)
     } else {
-      defaultLookupImplementation(for: name, at: syntax, with: config)
+      return defaultLookupImplementation(for: name, at: syntax, with: config, state: state)
+    }
+  }
+}
+
+@_spi(Experimental) extension ActorDeclSyntax: TypeScopeSyntax {}
+@_spi(Experimental) extension ClassDeclSyntax: TypeScopeSyntax {}
+@_spi(Experimental) extension StructDeclSyntax: TypeScopeSyntax {}
+@_spi(Experimental) extension EnumDeclSyntax: TypeScopeSyntax {}
+@_spi(Experimental) extension ExtensionDeclSyntax: TypeScopeSyntax {}
+
+@_spi(Experimental) extension AccessorDeclSyntax: ScopeSyntax {
+  /// Implicit and/or explicit names introduced
+  /// withing the accessor..
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    if let parameters {
+      LookupName.getNames(from: parameters)
+    } else {
+      switch accessorSpecifier.tokenKind {
+      case .keyword(.set), .keyword(.willSet):
+        [.implicit(.newValue(self))]
+      case .keyword(.didSet):
+        [.implicit(.oldValue(self))]
+      default:
+        []
+      }
     }
   }
 }

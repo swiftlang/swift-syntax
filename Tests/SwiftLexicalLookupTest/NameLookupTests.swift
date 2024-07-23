@@ -73,8 +73,8 @@ final class testNameLookup: XCTestCase {
       source: """
         for 1️⃣i in 1..<4 {
           let (a, b) = (2️⃣i, 3️⃣j)
-          for (4️⃣i, 5️⃣j) in foo {
-            let (c, d) = (6️⃣i, 7️⃣j)
+          for (4️⃣i, (5️⃣j, 8️⃣k)) in foo {
+            let (c, d, e) = (6️⃣i, 7️⃣j, 9️⃣k)
           }
         }
         """,
@@ -86,6 +86,7 @@ final class testNameLookup: XCTestCase {
           .fromScope(ForStmtSyntax.self, expectedNames: ["1️⃣"]),
         ],
         "7️⃣": [.fromScope(ForStmtSyntax.self, expectedNames: ["5️⃣"])],
+        "9️⃣": [.fromScope(ForStmtSyntax.self, expectedNames: ["8️⃣"])],
       ],
       expectedResultTypes: .all(IdentifierPatternSyntax.self)
     )
@@ -138,24 +139,33 @@ final class testNameLookup: XCTestCase {
   func testClosureCaptureLookup() {
     assertLexicalNameLookup(
       source: """
-        func foo() {
-          let 1️⃣a = 1
-          let x = { [3️⃣a, 4️⃣unowned b] in
-            print(6️⃣a)
+        7️⃣class a {
+          func foo() {
+            let 1️⃣a = 1
+            let x = { [2️⃣weak self, 3️⃣a, 4️⃣unowned b] in
+              print(5️⃣self, 6️⃣a, 8️⃣b)
+            }
+            let b = 0
           }
-          let b = 0
         }
         """,
       references: [
+        "5️⃣": [
+          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.implicit(.self("2️⃣"))]),
+          .fromScope(ClassDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("7️⃣"))]),
+        ],
         "6️⃣": [
           .fromScope(ClosureExprSyntax.self, expectedNames: ["3️⃣"]),
           .fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"]),
-        ]
+          .fromFileScope(expectedNames: ["7️⃣"]),
+        ],
+        "8️⃣": [.fromScope(ClosureExprSyntax.self, expectedNames: ["4️⃣"])],
       ],
       expectedResultTypes: .all(
         ClosureCaptureSyntax.self,
         except: [
-          "1️⃣": IdentifierPatternSyntax.self
+          "1️⃣": IdentifierPatternSyntax.self,
+          "7️⃣": ClassDeclSyntax.self,
         ]
       )
     )
@@ -401,6 +411,10 @@ final class testNameLookup: XCTestCase {
         "7️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: ["4️⃣", "5️⃣"]),
           .fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣", "3️⃣"]),
+          .fromScope(
+            ClassDeclSyntax.self,
+            expectedNames: [NameExpectation.implicit(.self("🔟")), NameExpectation.implicit(.Self("🔟"))]
+          ),
           .fromFileScope(expectedNames: ["🔟"]),
         ],
         "0️⃣": [
@@ -408,6 +422,10 @@ final class testNameLookup: XCTestCase {
           .fromScope(IfExprSyntax.self, expectedNames: ["6️⃣"]),
           .fromScope(CodeBlockSyntax.self, expectedNames: ["4️⃣", "5️⃣"]),
           .fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣", "3️⃣"]),
+          .fromScope(
+            ClassDeclSyntax.self,
+            expectedNames: [NameExpectation.implicit(.self("🔟")), NameExpectation.implicit(.Self("🔟"))]
+          ),
           .fromFileScope(expectedNames: ["🔟"]),
         ],
       ],
@@ -439,8 +457,11 @@ final class testNameLookup: XCTestCase {
       references: [
         "4️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"])],
         "5️⃣": [],
-        "6️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣"])],
-        "7️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"])],
+        "6️⃣": [
+          .fromScope(GuardStmtSyntax.self, expectedNames: ["2️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"]),
+        ],
+        "7️⃣": [.fromScope(GuardStmtSyntax.self, expectedNames: ["3️⃣"])],
       ],
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self
@@ -458,8 +479,14 @@ final class testNameLookup: XCTestCase {
         """,
       references: [
         "3️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"])],
-        "5️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣"])],
-        "6️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣", "4️⃣"])],
+        "5️⃣": [
+          .fromScope(GuardStmtSyntax.self, expectedNames: ["2️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"]),
+        ],
+        "6️⃣": [
+          .fromScope(GuardStmtSyntax.self, expectedNames: ["2️⃣", "4️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"]),
+        ],
       ],
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self
@@ -556,6 +583,120 @@ final class testNameLookup: XCTestCase {
       ],
       expectedResultTypes: .all(ClassDeclSyntax.self, except: ["8️⃣": IdentifierPatternSyntax.self]),
       config: LookupConfig(fileScopeHandling: .codeBlock)
+    )
+  }
+
+  func testGuardOnFileScope() {
+    assertLexicalNameLookup(
+      source: """
+        let 1️⃣a = 0
+
+        class c {}
+
+        guard let 2️⃣a else { fatalError() }
+
+        3️⃣class a {}
+
+        let x = 4️⃣a
+        """,
+      references: [
+        "4️⃣": [
+          .fromFileScope(expectedNames: ["1️⃣"]),
+          .fromFileScope(expectedNames: ["3️⃣"]),
+          .fromScope(GuardStmtSyntax.self, expectedNames: ["2️⃣"]),
+        ]
+      ],
+      expectedResultTypes: .all(IdentifierPatternSyntax.self, except: ["3️⃣": ClassDeclSyntax.self])
+    )
+  }
+
+  func testGuardOnFileScopeCodeBlock() {
+    assertLexicalNameLookup(
+      source: """
+        let 1️⃣a = 0
+
+        class c {}
+
+        guard let 2️⃣a else { fatalError() }
+
+        3️⃣class a {}
+
+        let x = 4️⃣a
+        """,
+      references: [
+        "4️⃣": [
+          .fromFileScope(expectedNames: ["3️⃣"]),
+          .fromScope(GuardStmtSyntax.self, expectedNames: ["2️⃣"]),
+          .fromFileScope(expectedNames: ["1️⃣"]),
+        ]
+      ],
+      expectedResultTypes: .all(IdentifierPatternSyntax.self, except: ["3️⃣": ClassDeclSyntax.self]),
+      config: LookupConfig(fileScopeHandling: .codeBlock)
+    )
+  }
+
+  func testImplicitSelf() {
+    assertLexicalNameLookup(
+      source: """
+        1️⃣extension a {
+          2️⃣struct b {
+            func foo() {
+              let x: 3️⃣Self = 4️⃣self
+            }
+          }
+
+          func bar() {
+            let x: 5️⃣Self = 6️⃣self
+          }
+        }
+        """,
+      references: [
+        "3️⃣": [
+          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.Self("2️⃣"))]),
+          .fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.Self("1️⃣"))]),
+        ],
+        "4️⃣": [
+          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("2️⃣"))]),
+          .fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))]),
+        ],
+        "5️⃣": [.fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.Self("1️⃣"))])],
+        "6️⃣": [.fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))])],
+      ]
+    )
+  }
+
+  func testAccessorImplicitNames() {
+    assertLexicalNameLookup(
+      source: """
+        var a: Int {
+          get { y }
+          1️⃣set {
+            y = 2️⃣newValue
+          }
+        }
+
+        var b: Int {
+          get { y }
+          set3️⃣(newValue) {
+            y = 4️⃣newValue
+          }
+        }
+
+        var c = 0 {
+          5️⃣willSet {
+            6️⃣newValue
+          }
+          7️⃣didSet {
+            8️⃣oldValue
+          }
+        }
+        """,
+      references: [
+        "2️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.implicit(.newValue("1️⃣"))])],
+        "4️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.identifier("3️⃣")])],
+        "6️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.implicit(.newValue("5️⃣"))])],
+        "8️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.implicit(.oldValue("7️⃣"))])],
+      ]
     )
   }
 }

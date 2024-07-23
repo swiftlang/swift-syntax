@@ -10,16 +10,20 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
+import SwiftSyntax
 
-@_spi(Experimental) public struct LookupConfig {
-  /// Specifies behaviour of file scope.
-  /// `memberBlockUpToLastDecl` by default.
-  @_spi(Experimental) public var fileScopeHandling: FileScopeHandlingConfig
+@_spi(Experimental) public protocol TypeScopeSyntax: ScopeSyntax, DeclSyntaxProtocol {
+  /// `self` and `Self` names referring to
+  /// this scope.
+  var implicitInstanceAndTypeNames: [LookupName] { get }
+}
 
-  @_spi(Experimental) public init(
-    fileScopeHandling: FileScopeHandlingConfig = .memberBlockUpToLastDecl
-  ) {
-    self.fileScopeHandling = fileScopeHandling
+@_spi(Experimental) extension TypeScopeSyntax {
+  @_spi(Experimental) public var implicitInstanceAndTypeNames: [LookupName] {
+    [.implicit(.self(self)), .implicit(.Self(self))]
+  }
+
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    implicitInstanceAndTypeNames
   }
 }

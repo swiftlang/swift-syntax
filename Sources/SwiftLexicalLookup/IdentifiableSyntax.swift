@@ -13,25 +13,25 @@
 import SwiftSyntax
 
 /// Syntax node that can be refered to with an identifier.
-public protocol IdentifiableSyntax: SyntaxProtocol {
+@_spi(Experimental) public protocol IdentifiableSyntax: SyntaxProtocol {
   var identifier: TokenSyntax { get }
 }
 
-extension IdentifierPatternSyntax: IdentifiableSyntax {}
+@_spi(Experimental) extension IdentifierPatternSyntax: IdentifiableSyntax {}
 
-extension ClosureParameterSyntax: IdentifiableSyntax {
+@_spi(Experimental) extension ClosureParameterSyntax: IdentifiableSyntax {
   @_spi(Experimental) public var identifier: TokenSyntax {
     secondName ?? firstName
   }
 }
 
-extension ClosureShorthandParameterSyntax: IdentifiableSyntax {
+@_spi(Experimental) extension ClosureShorthandParameterSyntax: IdentifiableSyntax {
   @_spi(Experimental) public var identifier: TokenSyntax {
     name
   }
 }
 
-extension ClosureCaptureSyntax: IdentifiableSyntax {
+@_spi(Experimental) extension ClosureCaptureSyntax: IdentifiableSyntax {
   @_spi(Experimental) public var identifier: TokenSyntax {
     /* Doesn't work with closures like:
      _ = { [y=1+2] in
@@ -39,5 +39,11 @@ extension ClosureCaptureSyntax: IdentifiableSyntax {
      }
      */
     expression.as(DeclReferenceExprSyntax.self)!.baseName
+  }
+}
+
+@_spi(Experimental) extension AccessorParametersSyntax: IdentifiableSyntax {
+  @_spi(Experimental) public var identifier: TokenSyntax {
+    name
   }
 }

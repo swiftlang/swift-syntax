@@ -10,16 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
+import SwiftSyntax
 
-@_spi(Experimental) public struct LookupConfig {
-  /// Specifies behaviour of file scope.
-  /// `memberBlockUpToLastDecl` by default.
-  @_spi(Experimental) public var fileScopeHandling: FileScopeHandlingConfig
-
-  @_spi(Experimental) public init(
-    fileScopeHandling: FileScopeHandlingConfig = .memberBlockUpToLastDecl
-  ) {
-    self.fileScopeHandling = fileScopeHandling
-  }
+protocol IntroducingToSequentialParentScopeSyntax: ScopeSyntax {
+  /// Returns names matching lookup that should be
+  /// handled by it's parent sequential scope.
+  func introducesToSequentialParent(
+    for name: String?,
+    at syntax: SyntaxProtocol,
+    with config: LookupConfig,
+    state: LookupState
+  ) -> [LookupResult]
 }

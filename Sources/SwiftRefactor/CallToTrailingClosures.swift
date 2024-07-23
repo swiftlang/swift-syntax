@@ -152,12 +152,6 @@ extension FunctionCallExprSyntax {
   }
 }
 
-fileprivate extension Trivia {
-  var droppingLeadingWhitespace: Trivia {
-    return Trivia(pieces: self.drop(while: \.isWhitespace))
-  }
-}
-
 fileprivate extension Sequence {
   func dropSuffix(while predicate: (Element) -> Bool) -> [Element] {
     self.reversed().drop(while: predicate).reversed()

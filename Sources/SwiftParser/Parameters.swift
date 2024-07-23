@@ -160,10 +160,23 @@ extension Parser {
     let misplacedSpecifiers = parseMisplacedSpecifiers()
 
     let names = self.parseParameterNames()
-    let colon = self.consume(if: .colon)
+    var colon = self.consume(if: .colon)
+    // try to parse the type regardless of the presence of the preceding colon
+    // to tackle any unnamed parameter or missing colon
+    // e.g. [X], (:[X]) or (x [X])
+    let canParseType = withLookahead { $0.canParseType() }
     let type: RawTypeSyntax?
-    if colon != nil {
+    if canParseType {
       type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
+      if colon == nil {
+        // mark the preceding colon as missing if the type is present
+        // e.g. [X] or (x [X])
+        colon = missingToken(.colon)
+      }
+    } else if colon != nil {
+      // mark the type as missing if the preceding colon is present
+      // e.g. (:) or (_:)
+      type = RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
     } else {
       type = nil
     }

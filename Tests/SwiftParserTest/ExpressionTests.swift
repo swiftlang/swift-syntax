@@ -2875,6 +2875,77 @@ final class StatementExpressionTests: ParserTestCase {
     )
   }
 
+  func testClosureWithMalformedParameters() {
+    assertParse(
+      """
+      test { (1️⃣[X]) in }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier and ':' in parameter", fixIts: ["insert identifier and ':'"])
+      ],
+      fixedSource: """
+        test { (<#identifier#>: [X]) in }
+        """
+    )
+
+    assertParse(
+      """
+      test { (1️⃣: [X]) in }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier in parameter", fixIts: ["insert identifier"])
+      ],
+      fixedSource: """
+        test { (<#identifier#>: [X]) in }
+        """
+    )
+
+    assertParse(
+      """
+      test { (1️⃣:2️⃣) in }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected identifier in parameter",
+          fixIts: ["insert identifier"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected type in parameter",
+          fixIts: ["insert type"]
+        ),
+      ],
+      fixedSource: """
+        test { (<#identifier#>: <#type#>) in }
+        """
+    )
+
+    assertParse(
+      """
+      test { (foo1️⃣ @bar baz) in }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected ':' in parameter", fixIts: ["insert ':'"])
+      ],
+      fixedSource: """
+        test { (foo: @bar baz) in }
+        """
+    )
+
+    assertParse(
+      """
+      test { (x: 1️⃣) in }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected type in parameter", fixIts: ["insert type"])
+      ],
+      fixedSource: """
+        test { (x: <#type#>) in }
+        """
+    )
+  }
+
   func testTypedThrowsDisambiguation() {
     assertParse(
       "[() throws(MyError) 1️⃣async -> Void]()",

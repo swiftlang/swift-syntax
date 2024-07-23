@@ -403,7 +403,8 @@ extension VariableDeclSyntax {
     _ bindingSpecifier: Keyword,
     name: PatternSyntax,
     type: TypeAnnotationSyntax? = nil,
-    initializer: InitializerClauseSyntax? = nil
+    initializer: InitializerClauseSyntax? = nil,
+    accessorBlock: AccessorBlockSyntax? = nil
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
@@ -414,7 +415,8 @@ extension VariableDeclSyntax {
       PatternBindingSyntax(
         pattern: name,
         typeAnnotation: type,
-        initializer: initializer
+        initializer: initializer,
+        accessorBlock: accessorBlock
       )
     }
   }

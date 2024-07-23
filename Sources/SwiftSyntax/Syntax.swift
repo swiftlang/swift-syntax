@@ -310,17 +310,17 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   // Inline always so the optimizer can optimize this to a member access on `syntax` without having to go through
   // generics.
   @inline(__always)
-  public init(_ syntax: some SyntaxProtocol) {
+  public init(_ syntax: __shared some SyntaxProtocol) {
     self = syntax._syntaxNode
   }
 
   /// Creates a new ``Syntax`` node from any node that conforms to ``SyntaxProtocol``.
-  public init(fromProtocol syntax: SyntaxProtocol) {
+  public init(fromProtocol syntax: __shared SyntaxProtocol) {
     self = syntax._syntaxNode
   }
 
   /// Same as ``init(fromProtocol:)`` but returns `nil` if `syntax` is `nil`.
-  public init?(fromProtocol syntax: SyntaxProtocol?) {
+  public init?(fromProtocol syntax: __shared SyntaxProtocol?) {
     guard let syntax = syntax else { return nil }
     self = syntax._syntaxNode
   }

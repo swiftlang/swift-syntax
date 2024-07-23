@@ -18,6 +18,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 
 - <doc:Working-with-SwiftSyntax>
 - <doc:Macro-Versioning>
+- <doc:RawSyntaxValidation>
 - <doc:Glossary>
 
 ### Tutorials

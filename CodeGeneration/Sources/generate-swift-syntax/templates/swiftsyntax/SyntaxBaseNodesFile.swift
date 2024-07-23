@@ -183,7 +183,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         /// Create a \(raw: node.kind.doccLink) node from a specialized syntax node.
-        public init(_ syntax: some \(node.kind.protocolType)) {
+        public init(_ syntax: __shared some \(node.kind.protocolType)) {
           // We know this cast is going to succeed. Go through init(_: SyntaxData)
           // to do a sanity check and verify the kind matches in debug builds and get
           // maximum performance in release builds.
@@ -195,7 +195,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         /// Create a \(raw: node.kind.doccLink) node from a specialized optional syntax node.
-        public init?(_ syntax: (some \(node.kind.protocolType))?) {
+        public init?(_ syntax: __shared (some \(node.kind.protocolType))?) {
           guard let syntax = syntax else { return nil }
           self.init(syntax)
         }
@@ -204,7 +204,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        public init(fromProtocol syntax: \(node.kind.protocolType)) {
+        public init(fromProtocol syntax: __shared \(node.kind.protocolType)) {
           // We know this cast is going to succeed. Go through init(_: SyntaxData)
           // to do a sanity check and verify the kind matches in debug builds and get
           // maximum performance in release builds.
@@ -216,14 +216,14 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         /// Create a \(raw: node.kind.doccLink) node from a specialized optional syntax node.
-        public init?(fromProtocol syntax: \(node.kind.protocolType)?) {
+        public init?(fromProtocol syntax: __shared \(node.kind.protocolType)?) {
           guard let syntax = syntax else { return nil }
           self.init(fromProtocol: syntax)
         }
         """
       )
 
-      try InitializerDeclSyntax("public init?(_ node: some SyntaxProtocol)") {
+      try InitializerDeclSyntax("public init?(_ node: __shared some SyntaxProtocol)") {
         try SwitchExprSyntax("switch node.raw.kind") {
           SwitchCaseListSyntax {
             SwitchCaseSyntax(

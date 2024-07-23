@@ -92,3 +92,38 @@ public struct DiagnosticsError: Error, Sendable {
     )
   }
 }
+
+/// Diagnostic message used for thrown errors.
+private struct DiagnosticFromError: DiagnosticMessage {
+  let error: Error
+  let severity: DiagnosticSeverity = .error
+
+  var message: String {
+    return String(describing: error)
+  }
+
+  var diagnosticID: MessageID {
+    .init(domain: "SwiftDiagnostics", id: "\(type(of: error))")
+  }
+}
+
+extension Error {
+  /// Given an error, produce an array of diagnostics reporting the error,
+  /// using the given syntax node as the location if it wasn't otherwise known.
+  ///
+  /// This operation will look for diagnostics of known type, such as
+  /// `DiagnosticsError` and `DiagnosticMessage` to retain information. If
+  /// none of those apply, it will produce an `error` diagnostic whose message
+  /// comes from rendering the error as a string.
+  public func asDiagnostics(at node: some SyntaxProtocol) -> [Diagnostic] {
+    if let diagnosticsError = self as? DiagnosticsError {
+      return diagnosticsError.diagnostics
+    }
+
+    if let message = self as? DiagnosticMessage {
+      return [Diagnostic(node: Syntax(node), message: message)]
+    }
+
+    return [Diagnostic(node: Syntax(node), message: DiagnosticFromError(error: self))]
+  }
+}

@@ -53,7 +53,7 @@ function(add_swift_syntax_library name)
   # Create the library target.
   add_library(${target} ${ASHL_SOURCES})
 
-  if(NOT DEFINED SWIFTSYNTAX_EMIT_MODULE OR SWIFTSYNTAX_EMIT_MODULE)
+  if(SWIFTSYNTAX_EMIT_MODULE)
     # Determine where Swift modules will be built and installed.
     set(module_dir ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
     set(module_base "${module_dir}/${name}.swiftmodule")
@@ -79,6 +79,25 @@ function(add_swift_syntax_library name)
         -emit-module-interface-path;${module_interface_file};
         -emit-private-module-interface-path;${module_private_interface_file}
     >)
+
+    # Enable package CMO if possible.
+    if(SWIFT_PACKAGE_CMO_SUPPORT STREQUAL "IMPLEMENTED")
+      target_compile_options("${target}" PRIVATE
+        $<$<COMPILE_LANGUAGE:Swift>:
+          "SHELL:-package-name ${SWIFT_MODULE_ABI_NAME_PREFIX}${PROJECT_NAME}"
+          "SHELL:-Xfrontend -package-cmo"
+          "SHELL:-Xfrontend -allow-non-resilient-access"
+      >)
+    elseif(SWIFT_PACKAGE_CMO_SUPPORT STREQUAL "EXPERIMENTAL")
+      target_compile_options("${target}" PRIVATE
+        $<$<COMPILE_LANGUAGE:Swift>:
+          "SHELL:-package-name ${SWIFT_MODULE_ABI_NAME_PREFIX}${PROJECT_NAME}"
+          "SHELL:-Xfrontend -experimental-package-cmo"
+          "SHELL:-Xfrontend -experimental-allow-non-resilient-access"
+          "SHELL:-Xfrontend -experimental-package-bypass-resilience"
+      >)
+    endif()
+
   else()
     set(module_dir ${CMAKE_CURRENT_BINARY_DIR})
     set(module_base "${module_dir}/${name}.swiftmodule")
@@ -92,9 +111,15 @@ function(add_swift_syntax_library name)
   add_custom_command(
     TARGET ${target}
     POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -E touch_nocreate $<TARGET_FILE:${target}> $<TARGET_OBJECTS:${target}> "${module_base}"
+    COMMAND "${CMAKE_COMMAND}" -E touch_nocreate $<TARGET_FILE:${target}> "${module_base}"
     COMMAND_EXPAND_LISTS
     COMMENT "Update mtime of library outputs workaround")
+  add_custom_command(
+    TARGET ${target}
+    POST_BUILD
+    COMMAND "${CMAKE_COMMAND}" -E touch_nocreate $<TARGET_OBJECTS:${target}>
+    COMMAND_EXPAND_LISTS
+    COMMENT "Update mtime of objcect files workaround")
 
   set_target_properties(${target} PROPERTIES
     Swift_MODULE_NAME ${name}

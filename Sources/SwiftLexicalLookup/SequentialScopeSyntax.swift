@@ -24,6 +24,7 @@ import SwiftSyntax
     for name: String?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
+    state: LookupState,
     createResultsForThisScopeWith getResults: ([LookupName]) -> (LookupResult)
   ) -> [LookupResult]
 }
@@ -34,6 +35,7 @@ import SwiftSyntax
     for name: String?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
+    state: LookupState,
     createResultsForThisScopeWith getResults: ([LookupName]) -> (LookupResult)
   ) -> [LookupResult] {
     var result = [LookupResult]()
@@ -43,23 +45,24 @@ import SwiftSyntax
       if let introducingToParentScope = Syntax(codeBlockItem.item).asProtocol(SyntaxProtocol.self)
         as? IntroducingToSequentialParentScopeSyntax
       {
-        guard
-          !config.ignoreChildrenToSequentialParentIntroductionsFrom.contains(where: {
-            $0.id == introducingToParentScope.id
-          })
-        else {
+        // Check if the enocountered scope should be ignored.
+        if let scopeToSkip = state.skipSequentialIntroductionFrom,
+           scopeToSkip.id == introducingToParentScope.id {
           continue
         }
 
+        // If there are some names collected, create a new result for this scope.
         if !currentChunk.isEmpty {
           result.append(getResults(currentChunk))
           currentChunk = []
         }
 
+        // Add names introduced by the encountered scope.
         result.append(
-          contentsOf: introducingToParentScope.introducesToSequentialParent(for: name, at: syntax, with: config)
+          contentsOf: introducingToParentScope.introducesToSequentialParent(for: name, at: syntax, with: config, state: state)
         )
       } else {
+        // Extract new names from encountered node.
         currentChunk.append(
           contentsOf:
             LookupName.getNames(
@@ -72,11 +75,12 @@ import SwiftSyntax
       }
     }
 
+    // If there are some names collected, create a new result for this scope.
     if !currentChunk.isEmpty {
       result.append(getResults(currentChunk))
       currentChunk = []
     }
 
-    return (result.isEmpty ? [] : result.reversed()) + lookupInParent(for: name, at: syntax, with: config)
+    return (result.isEmpty ? [] : result.reversed()) + lookupInParent(for: name, at: syntax, with: config, state: state)
   }
 }

@@ -10,15 +10,12 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
+import Foundation
 
-@_spi(Experimental) public protocol IntroducingToSequentialParentScopeSyntax: ScopeSyntax {
-  /// Returns names matching lookup that should be
-  /// handled by it's parent sequential scope.
-  func introducesToSequentialParent(
-    for name: String?,
-    at syntax: SyntaxProtocol,
-    with config: LookupConfig,
-    state: LookupState
-  ) -> [LookupResult]
+@_spi(Experimental) public struct LookupState {
+  /// Specifies scopes that introduce names to their parent and
+  /// should be skipped during lookup in sequential scopes.
+  var skipSequentialIntroductionFrom: IntroducingToSequentialParentScopeSyntax?
+  
+  @_spi(Experimental) public init() {}
 }

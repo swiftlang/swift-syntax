@@ -17,15 +17,9 @@ import Foundation
   /// `memberBlockUpToLastDecl` by default.
   public var fileScopeHandling: FileScopeHandlingConfig
 
-  /// Specifies scopes that introduce names to their parent and
-  /// should be skipped during lookup in sequential scopes.
-  public var ignoreChildrenToSequentialParentIntroductionsFrom: [IntroducingToSequentialParentScopeSyntax]
-
   public init(
-    fileScopeHandling: FileScopeHandlingConfig = .memberBlockUpToLastDecl,
-    ignoreChildrenToSequentialParentIntroductionsFrom: [IntroducingToSequentialParentScopeSyntax] = []
+    fileScopeHandling: FileScopeHandlingConfig = .memberBlockUpToLastDecl
   ) {
     self.fileScopeHandling = fileScopeHandling
-    self.ignoreChildrenToSequentialParentIntroductionsFrom = ignoreChildrenToSequentialParentIntroductionsFrom
   }
 }

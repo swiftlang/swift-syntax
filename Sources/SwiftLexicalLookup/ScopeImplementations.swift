@@ -103,7 +103,8 @@ extension SyntaxProtocol {
   public func lookup(
     for name: String?,
     at syntax: SyntaxProtocol,
-    with config: LookupConfig
+    with config: LookupConfig,
+    state: LookupState
   ) -> [LookupResult] {
     switch config.fileScopeHandling {
     case .codeBlock:
@@ -112,6 +113,7 @@ extension SyntaxProtocol {
         for: name,
         at: syntax,
         with: config,
+        state: state,
         createResultsForThisScopeWith: { .fromFileScope(self, withNames: $0) }
       )
     case .memberBlock:
@@ -148,6 +150,7 @@ extension SyntaxProtocol {
         for: name,
         at: syntax,
         with: config,
+        state: state,
         createResultsForThisScopeWith: { .fromFileScope(self, withNames: $0) }
       )
 
@@ -165,18 +168,24 @@ extension SyntaxProtocol {
     }
   }
 
-  public func lookup(for name: String?, at syntax: SyntaxProtocol, with config: LookupConfig) -> [LookupResult] {
+  public func lookup(
+    for name: String?,
+    at syntax: SyntaxProtocol,
+    with config: LookupConfig,
+    state: LookupState
+  ) -> [LookupResult] {
     sequentialLookup(
       in: statements,
       for: name,
       at: syntax,
       with: config,
+      state: state,
       createResultsForThisScopeWith: { .fromScope(self, withNames: $0) }
     )
   }
 }
 
-@_spi(Experimental) extension ForStmtSyntax: ScopeSyntax {
+@_spi(Experimental) extension ForStmtSyntax: ScopeSyntax {  
   /// Names introduced in the `for` body.
   public var introducedNames: [LookupName] {
     LookupName.getNames(from: pattern)
@@ -290,12 +299,13 @@ extension SyntaxProtocol {
   public func lookup(
     for name: String?,
     at syntax: SyntaxProtocol,
-    with config: LookupConfig
+    with config: LookupConfig,
+    state: LookupState
   ) -> [LookupResult] {
     if let elseBody, elseBody.position <= syntax.position, elseBody.endPosition >= syntax.position {
-      lookupInParent(for: name, at: syntax, with: config)
+      lookupInParent(for: name, at: syntax, with: config, state: state)
     } else {
-      defaultLookupImplementation(for: name, at: syntax, with: config)
+      defaultLookupImplementation(for: name, at: syntax, with: config, state: state)
     }
   }
 }
@@ -313,7 +323,8 @@ extension SyntaxProtocol {
   public func introducesToSequentialParent(
     for name: String?,
     at syntax: SwiftSyntax.SyntaxProtocol,
-    with config: LookupConfig
+    with config: LookupConfig,
+    state: LookupState
   ) -> [LookupResult] {
     let names = conditions.flatMap { element in
       LookupName.getNames(from: element.condition, accessibleAfter: element.endPosition)
@@ -342,14 +353,15 @@ extension SyntaxProtocol {
   public func lookup(
     for name: String?,
     at syntax: SyntaxProtocol,
-    with config: LookupConfig
+    with config: LookupConfig,
+    state: LookupState
   ) -> [LookupResult] {
     if body.position <= syntax.position && body.endPosition >= syntax.position {
-      var newConfig = config
-      newConfig.ignoreChildrenToSequentialParentIntroductionsFrom.append(self)
-      return lookupInParent(for: name, at: syntax, with: newConfig)
+      var newState = state
+      newState.skipSequentialIntroductionFrom = self
+      return lookupInParent(for: name, at: syntax, with: config, state: newState)
     } else {
-      return defaultLookupImplementation(for: name, at: syntax, with: config)
+      return defaultLookupImplementation(for: name, at: syntax, with: config, state: state)
     }
   }
 }

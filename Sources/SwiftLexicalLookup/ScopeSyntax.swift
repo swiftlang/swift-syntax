@@ -47,7 +47,7 @@ extension SyntaxProtocol {
     for name: String?,
     with config: LookupConfig = LookupConfig()
   ) -> [LookupResult] {
-    scope?.lookup(for: name, at: self, with: config) ?? []
+    scope?.lookup(for: name, at: self, with: config, state: LookupState()) ?? []
   }
 }
 
@@ -58,7 +58,10 @@ extension SyntaxProtocol {
   var introducedNames: [LookupName] { get }
   /// Finds all declarations `name` refers to. `at` specifies the node lookup was triggered with.
   /// If `name` set to `nil`, returns all available names at the given node.
-  func lookup(for name: String?, at syntax: SyntaxProtocol, with config: LookupConfig) -> [LookupResult]
+  func lookup(for name: String?, 
+              at syntax: SyntaxProtocol,
+              with config: LookupConfig,
+              state: LookupState) -> [LookupResult]
 }
 
 @_spi(Experimental) extension ScopeSyntax {
@@ -72,9 +75,10 @@ extension SyntaxProtocol {
   public func lookup(
     for name: String?,
     at syntax: SyntaxProtocol,
-    with config: LookupConfig
+    with config: LookupConfig,
+    state: LookupState
   ) -> [LookupResult] {
-    defaultLookupImplementation(for: name, at: syntax, with: config)
+    defaultLookupImplementation(for: name, at: syntax, with: config, state: state)
   }
 
   /// Returns `LookupResult` of all names introduced in this scope that `name`
@@ -83,7 +87,8 @@ extension SyntaxProtocol {
   func defaultLookupImplementation(
     for name: String?,
     at syntax: SyntaxProtocol,
-    with config: LookupConfig
+    with config: LookupConfig,
+    state: LookupState
   ) -> [LookupResult] {
     let filteredNames =
       introducedNames
@@ -92,9 +97,9 @@ extension SyntaxProtocol {
       }
 
     if filteredNames.isEmpty {
-      return lookupInParent(for: name, at: syntax, with: config)
+      return lookupInParent(for: name, at: syntax, with: config, state: state)
     } else {
-      return [.fromScope(self, withNames: filteredNames)] + lookupInParent(for: name, at: syntax, with: config)
+      return [.fromScope(self, withNames: filteredNames)] + lookupInParent(for: name, at: syntax, with: config, state: state)
     }
   }
 
@@ -102,9 +107,10 @@ extension SyntaxProtocol {
   func lookupInParent(
     for name: String?,
     at syntax: SyntaxProtocol,
-    with config: LookupConfig
+    with config: LookupConfig,
+    state: LookupState
   ) -> [LookupResult] {
-    parentScope?.lookup(for: name, at: syntax, with: config) ?? []
+    parentScope?.lookup(for: name, at: syntax, with: config, state: state) ?? []
   }
 
   func does(name: String?, referTo introducedName: LookupName, at syntax: SyntaxProtocol) -> Bool {

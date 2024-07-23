@@ -150,8 +150,8 @@ final class testNameLookup: XCTestCase {
         """,
       references: [
         "5️⃣": [
-          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.selfCaptured("2️⃣")]),
-          .fromScope(ClassDeclSyntax.self, expectedNames: [NameExpectation.selfInstance("7️⃣")]),
+          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.implicit(.self("2️⃣"))]),
+          .fromScope(ClassDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("7️⃣"))]),
         ],
         "6️⃣": [
           .fromScope(ClosureExprSyntax.self, expectedNames: ["3️⃣"]),
@@ -412,7 +412,7 @@ final class testNameLookup: XCTestCase {
           .fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣", "3️⃣"]),
           .fromScope(
             ClassDeclSyntax.self,
-            expectedNames: [NameExpectation.selfInstance("🔟"), NameExpectation.selfType("🔟")]
+            expectedNames: [NameExpectation.implicit(.self("🔟")), NameExpectation.implicit(.Self("🔟"))]
           ),
           .fromFileScope(expectedNames: ["🔟"]),
         ],
@@ -423,7 +423,7 @@ final class testNameLookup: XCTestCase {
           .fromScope(MemberBlockSyntax.self, expectedNames: ["1️⃣", "2️⃣", "3️⃣"]),
           .fromScope(
             ClassDeclSyntax.self,
-            expectedNames: [NameExpectation.selfInstance("🔟"), NameExpectation.selfType("🔟")]
+            expectedNames: [NameExpectation.implicit(.self("🔟")), NameExpectation.implicit(.Self("🔟"))]
           ),
           .fromFileScope(expectedNames: ["🔟"]),
         ],
@@ -651,15 +651,15 @@ final class testNameLookup: XCTestCase {
         """,
       references: [
         "3️⃣": [
-          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.selfType("2️⃣")]),
-          .fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.selfType("1️⃣")]),
+          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.Self("2️⃣"))]),
+          .fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.Self("1️⃣"))]),
         ],
         "4️⃣": [
-          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.selfInstance("2️⃣")]),
-          .fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.selfInstance("1️⃣")]),
+          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("2️⃣"))]),
+          .fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))]),
         ],
-        "5️⃣": [.fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.selfType("1️⃣")])],
-        "6️⃣": [.fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.selfInstance("1️⃣")])],
+        "5️⃣": [.fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.Self("1️⃣"))])],
+        "6️⃣": [.fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))])],
       ]
     )
   }
@@ -691,10 +691,10 @@ final class testNameLookup: XCTestCase {
         }
         """,
       references: [
-        "2️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.newValue("1️⃣")])],
+        "2️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.implicit(.newValue("1️⃣"))])],
         "4️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.identifier("3️⃣")])],
-        "6️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.newValue("5️⃣")])],
-        "8️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.oldValue("7️⃣")])],
+        "6️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.implicit(.newValue("5️⃣"))])],
+        "8️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.implicit(.oldValue("7️⃣"))])],
       ]
     )
   }

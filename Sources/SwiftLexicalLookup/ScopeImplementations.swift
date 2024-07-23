@@ -379,9 +379,9 @@ extension SyntaxProtocol {
     } else {
       switch accessorSpecifier.tokenKind {
       case .keyword(.set), .keyword(.willSet):
-        [.newValue(self)]
+        [.implicit(.newValue(self))]
       case .keyword(.didSet):
-        [.oldValue(self)]
+        [.implicit(.oldValue(self))]
       default:
         []
       }

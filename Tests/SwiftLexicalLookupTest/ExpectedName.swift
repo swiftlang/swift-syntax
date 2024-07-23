@@ -25,29 +25,51 @@ extension String: ExpectedName {
   }
 }
 
+enum ImplicitNameExpectation {
+  case `self`(String)
+  case `Self`(String)
+  case error(String)
+  case newValue(String)
+  case oldValue(String)
+  
+  func assertExpectation(marker: String, for name: LookupImplicitNameKind) {
+    switch (name, self) {
+    case (.self, .self): break
+    case (.Self, .Self): break
+    case (.error, .error): break
+    case (.newValue, .newValue): break
+    case (.oldValue, .oldValue): break
+    default:
+      XCTFail("For marker \(marker), actual name kind \(name) doesn't match expected \(self)")
+    }
+  }
+  
+  var marker: String {
+    switch self {
+    case .self(let marker),
+      .Self(let marker),
+      .error(let marker),
+      .newValue(let marker),
+      .oldValue(let marker):
+      marker
+    }
+  }
+}
+
 /// Can be used to optionally assert
 /// exact lookup name kind.
 enum NameExpectation: ExpectedName {
   case identifier(String)
   case declaration(String)
-  case selfInstance(String)
-  case selfType(String)
-  case selfCaptured(String)
-  case error(String)
-  case newValue(String)
-  case oldValue(String)
+  case implicit(ImplicitNameExpectation)
 
   var marker: String {
     switch self {
     case .identifier(let marker),
-      .declaration(let marker),
-      .selfInstance(let marker),
-      .selfType(let marker),
-      .selfCaptured(let marker),
-      .error(let marker),
-      .newValue(let marker),
-      .oldValue(let marker):
+        .declaration(let marker):
       marker
+    case .implicit(let implicitName):
+      implicitName.marker
     }
   }
 
@@ -55,12 +77,8 @@ enum NameExpectation: ExpectedName {
     switch (name, self) {
     case (.identifier, .identifier): break
     case (.declaration, .declaration): break
-    case (.self, .selfInstance): break
-    case (.Self, .selfType): break
-    case (.selfCaptured, .selfCaptured): break
-    case (.error, .error): break
-    case (.newValue, .newValue): break
-    case (.oldValue, .oldValue): break
+    case (.implicit(let implicitName), .implicit(let implicitNameExpectation)):
+      implicitNameExpectation.assertExpectation(marker: marker, for: implicitName)
     default:
       XCTFail("For marker \(marker), actual name kind \(name) doesn't match expected \(self)")
     }

@@ -12,25 +12,60 @@
 
 import SwiftSyntax
 
-@_spi(Experimental) public enum LookupName {
-  /// Identifier associated with the name.
-  /// Could be an identifier of a variable, function or closure parameter and more
-  case identifier(IdentifiableSyntax, accessibleAfter: AbsolutePosition?)
-  /// Declaration associated with the name.
-  /// Could be class, struct, actor, protocol, function and more
-  case declaration(NamedDeclSyntax, accessibleAfter: AbsolutePosition?)
+@_spi(Experimental) public enum LookupImplicitNameKind {
   /// `self` keyword representing object instance.
-  case `self`(DeclSyntaxProtocol)
+  case `self`(SyntaxProtocol)
   /// `Self` keyword representing object type.
   case `Self`(DeclSyntaxProtocol)
   /// `self` captured by a closure.
-  case selfCaptured(ClosureCaptureSyntax)
-  /// `error` available inside `catch` clause.
   case error(CatchClauseSyntax)
   /// `newValue` available by default inside `set` and `willSet`.
   case newValue(AccessorDeclSyntax)
   /// `oldValue` available by default inside `didSet`.
   case oldValue(AccessorDeclSyntax)
+  
+  /// Syntax associated with this name.
+  @_spi(Experimental) public var syntax: SyntaxProtocol {
+    switch self {
+    case .self(let syntax):
+      syntax
+    case .Self(let syntax):
+      syntax
+    case .error(let syntax):
+      syntax
+    case .newValue(let syntax):
+      syntax
+    case .oldValue(let syntax):
+      syntax
+    }
+  }
+  
+  /// Used for name comparison.
+  var name: String {
+    switch self {
+    case .self:
+      "self"
+    case .Self:
+      "Self"
+    case .error:
+      "error"
+    case .newValue:
+      "newValue"
+    case .oldValue:
+      "oldValue"
+    }
+  }
+}
+
+@_spi(Experimental) public enum LookupName {
+  /// Identifier associated with the name.
+  /// Could be an identifier of a variable, function or closure parameter and more.
+  case identifier(IdentifiableSyntax, accessibleAfter: AbsolutePosition?)
+  /// Declaration associated with the name.
+  /// Could be class, struct, actor, protocol, function and more.
+  case declaration(NamedDeclSyntax, accessibleAfter: AbsolutePosition?)
+  /// Name introduced implicitly certain syntax nodes.
+  case implicit(LookupImplicitNameKind)
 
   /// Syntax associated with this name.
   @_spi(Experimental) public var syntax: SyntaxProtocol {
@@ -39,18 +74,8 @@ import SwiftSyntax
       syntax
     case .declaration(let syntax, _):
       syntax
-    case .self(let syntax):
-      syntax
-    case .Self(let syntax):
-      syntax
-    case .selfCaptured(let syntax):
-      syntax
-    case .error(let syntax):
-      syntax
-    case .newValue(let syntax):
-      syntax
-    case .oldValue(let syntax):
-      syntax
+    case .implicit(let implicitName):
+      implicitName.syntax
     }
   }
 
@@ -82,16 +107,8 @@ import SwiftSyntax
     switch self {
     case .identifier, .declaration:
       identifier?.name
-    case .self, .selfCaptured:
-      "self"
-    case .Self:
-      "Self"
-    case .error:
-      "error"
-    case .newValue:
-      "newValue"
-    case .oldValue:
-      "oldValue"
+    case .implicit(let implicitName):
+      implicitName.name
     }
   }
 
@@ -153,7 +170,7 @@ import SwiftSyntax
     if let closureCapture = identifiable as? ClosureCaptureSyntax,
       closureCapture.identifier.tokenKind == .keyword(.self)
     {
-      return [.selfCaptured(closureCapture)]  // Handle `self` closure capture.
+      return [.implicit(.self(closureCapture))]  // Handle `self` closure capture.
     } else if identifiable.identifier.text != "_" {
       return [.identifier(identifiable, accessibleAfter: accessibleAfter)]
     } else {

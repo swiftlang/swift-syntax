@@ -788,7 +788,10 @@ extension Parser {
         if self.at(.rightSquare) {
           args = []
         } else {
-          args = self.parseArgumentListElements(pattern: pattern, allowTrailingComma: false)
+          args = self.parseArgumentListElements(
+            pattern: pattern,
+            allowTrailingComma: self.experimentalFeatures.contains(.trailingComma)
+          )
         }
         let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquare)
 
@@ -1021,7 +1024,10 @@ extension Parser {
         if self.at(.rightSquare) {
           args = []
         } else {
-          args = self.parseArgumentListElements(pattern: pattern, allowTrailingComma: false)
+          args = self.parseArgumentListElements(
+            pattern: pattern,
+            allowTrailingComma: self.experimentalFeatures.contains(.trailingComma)
+          )
         }
         let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquare)
 
@@ -1316,7 +1322,10 @@ extension Parser {
     let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
     let rightParen: RawTokenSyntax?
     if leftParen != nil {
-      args = parseArgumentListElements(pattern: pattern, allowTrailingComma: false)
+      args = parseArgumentListElements(
+        pattern: pattern,
+        allowTrailingComma: self.experimentalFeatures.contains(.trailingComma)
+      )
       (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     } else {
       args = []
@@ -1742,7 +1751,7 @@ extension Parser {
               arena: self.arena
             )
           )
-        } while keepGoing != nil && self.hasProgressed(&loopProgress)
+        } while keepGoing != nil && !self.atCaptureListTerminator() && self.hasProgressed(&loopProgress)
       }
       // We were promised a right square bracket, so we're going to get it.
       var unexpectedNodes = [RawSyntax]()
@@ -1827,6 +1836,10 @@ extension Parser {
       inKeyword: inKeyword,
       arena: self.arena
     )
+  }
+
+  mutating func atCaptureListTerminator() -> Bool {
+    return self.at(.rightSquare)
   }
 
   mutating func parseClosureCaptureSpecifiers() -> RawClosureCaptureSpecifierSyntax? {
@@ -1940,7 +1953,7 @@ extension Parser {
   }
 
   mutating func atArgumentListTerminator(_ allowTrailingComma: Bool) -> Bool {
-    return allowTrailingComma && self.at(.rightParen)
+    return allowTrailingComma && (self.at(.rightParen) || self.at(.rightSquare))
   }
 }
 
@@ -2385,7 +2398,7 @@ extension Parser {
         } else {
           unexpectedPrePatternCase = nil
         }
-      } while keepGoing != nil && self.hasProgressed(&loopProgress)
+      } while keepGoing != nil && !self.atSwitchCaseListTerminator() && self.hasProgressed(&loopProgress)
     }
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
     return RawSwitchCaseLabelSyntax(
@@ -2396,6 +2409,10 @@ extension Parser {
       colon: colon,
       arena: self.arena
     )
+  }
+
+  mutating func atSwitchCaseListTerminator() -> Bool {
+    return self.experimentalFeatures.contains(.trailingComma) && self.at(.colon)
   }
 
   /// Parse a switch case with a 'default' label.

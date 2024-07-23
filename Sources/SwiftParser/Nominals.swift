@@ -315,7 +315,7 @@ extension Parser {
             arena: self.arena
           )
         )
-      } while keepGoing != nil && self.hasProgressed(&loopProgress)
+      } while keepGoing != nil && !self.atInheritanceListTerminator() && self.hasProgressed(&loopProgress)
     }
 
     let unexpectedAfterInheritedTypeCollection: RawUnexpectedNodesSyntax?
@@ -337,6 +337,10 @@ extension Parser {
       unexpectedAfterInheritedTypeCollection,
       arena: self.arena
     )
+  }
+
+  mutating func atInheritanceListTerminator() -> Bool {
+    return self.experimentalFeatures.contains(.trailingComma) && (self.at(.leftBrace) || self.at(.keyword(.where)))
   }
 
   mutating func parsePrimaryAssociatedTypes() -> RawPrimaryAssociatedTypeClauseSyntax {

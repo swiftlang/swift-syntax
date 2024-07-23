@@ -376,7 +376,10 @@ extension Parser {
       }
     case nil:
       return parseAttribute(argumentMode: .customAttribute) { parser in
-        let arguments = parser.parseArgumentListElements(pattern: .none, allowTrailingComma: false)
+        let arguments = parser.parseArgumentListElements(
+          pattern: .none,
+          allowTrailingComma: parser.experimentalFeatures.contains(.trailingComma)
+        )
         return .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
       }
     }
@@ -427,7 +430,7 @@ extension Parser {
     let additionalArgs = self.parseArgumentListElements(
       pattern: .none,
       flavor: .attributeArguments,
-      allowTrailingComma: false
+      allowTrailingComma: self.experimentalFeatures.contains(.trailingComma)
     )
     return [roleElement] + additionalArgs
   }
@@ -642,7 +645,7 @@ extension Parser {
     }
     let comma = self.consume(if: .comma)
     let arguments: RawDifferentiabilityWithRespectToArgumentSyntax?
-    if comma != nil {
+    if comma != nil && !atAttributeArgumentsListTerminator() {
       arguments = self.parseDifferentiabilityWithRespectToArgument()
     } else {
       arguments = nil
@@ -926,6 +929,11 @@ extension Parser {
 }
 
 extension Parser {
+
+  mutating func atAttributeArgumentsListTerminator() -> Bool {
+    return self.experimentalFeatures.contains(.trailingComma) && self.at(.rightParen)
+  }
+
   mutating func parseBackDeployedAttributeArguments() -> RawBackDeployedAttributeArgumentsSyntax {
     let (unexpectedBeforeLabel, label) = self.expect(.keyword(.before))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
@@ -941,7 +949,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    } while keepGoing != nil
+    } while keepGoing != nil && !atAttributeArgumentsListTerminator()
     return RawBackDeployedAttributeArgumentsSyntax(
       unexpectedBeforeLabel,
       beforeLabel: label,
@@ -1001,7 +1009,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    } while keepGoing != nil
+    } while keepGoing != nil && !atAttributeArgumentsListTerminator()
 
     return RawOriginallyDefinedInAttributeArgumentsSyntax(
       unexpectedBeforeModuleLabel,
@@ -1157,7 +1165,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    } while keepGoing != nil
+    } while keepGoing != nil && !atAttributeArgumentsListTerminator()
 
     return RawDocumentationAttributeArgumentListSyntax(elements: arguments, arena: self.arena)
   }

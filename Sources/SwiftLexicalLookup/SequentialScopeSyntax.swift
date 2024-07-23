@@ -15,7 +15,7 @@ import SwiftSyntax
 /// Scope that, in addition to names introduced by itself,
 /// also handles names introduced by
 /// `IntroducingToSequentialParentScopeSyntax` children scopes.
-@_spi(Experimental) public protocol SequentialScopeSyntax: ScopeSyntax {
+protocol SequentialScopeSyntax: ScopeSyntax {
   /// Returns names introduced by `codeBlockItems`
   /// and included `IntroducingToSequentialParentScopeSyntax` children
   /// scopes that match the lookup.
@@ -29,8 +29,8 @@ import SwiftSyntax
   ) -> [LookupResult]
 }
 
-@_spi(Experimental) extension SequentialScopeSyntax {
-  @_spi(Experimental) public func sequentialLookup(
+extension SequentialScopeSyntax {
+  func sequentialLookup(
     in codeBlockItems: any Collection<CodeBlockItemSyntax>,
     for name: String?,
     at syntax: SyntaxProtocol,
@@ -47,7 +47,8 @@ import SwiftSyntax
       {
         // Check if the enocountered scope should be ignored.
         if let scopeToSkip = state.skipSequentialIntroductionFrom,
-           scopeToSkip.id == introducingToParentScope.id {
+          scopeToSkip.id == introducingToParentScope.id
+        {
           continue
         }
 
@@ -59,7 +60,12 @@ import SwiftSyntax
 
         // Add names introduced by the encountered scope.
         result.append(
-          contentsOf: introducingToParentScope.introducesToSequentialParent(for: name, at: syntax, with: config, state: state)
+          contentsOf: introducingToParentScope.introducesToSequentialParent(
+            for: name,
+            at: syntax,
+            with: config,
+            state: state
+          )
         )
       } else {
         // Extract new names from encountered node.

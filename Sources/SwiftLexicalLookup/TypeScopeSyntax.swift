@@ -13,6 +13,8 @@
 import SwiftSyntax
 
 @_spi(Experimental) public protocol TypeScopeSyntax: ScopeSyntax, DeclSyntaxProtocol {
+  /// `self` and `Self` names referring to
+  /// this scope.
   var implicitInstanceAndTypeNames: [LookupName] { get }
 }
 

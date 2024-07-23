@@ -12,7 +12,7 @@
 
 import SwiftSyntax
 
-@_spi(Experimental) public protocol IntroducingToSequentialParentScopeSyntax: ScopeSyntax {
+protocol IntroducingToSequentialParentScopeSyntax: ScopeSyntax {
   /// Returns names matching lookup that should be
   /// handled by it's parent sequential scope.
   func introducesToSequentialParent(

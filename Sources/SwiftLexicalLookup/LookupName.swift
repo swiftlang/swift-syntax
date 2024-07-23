@@ -23,7 +23,7 @@ import SwiftSyntax
   case newValue(AccessorDeclSyntax)
   /// `oldValue` available by default inside `didSet`.
   case oldValue(AccessorDeclSyntax)
-  
+
   /// Syntax associated with this name.
   @_spi(Experimental) public var syntax: SyntaxProtocol {
     switch self {
@@ -39,7 +39,7 @@ import SwiftSyntax
       syntax
     }
   }
-  
+
   /// Used for name comparison.
   var name: String {
     switch self {

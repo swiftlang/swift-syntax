@@ -185,7 +185,7 @@ import SwiftSyntax
   }
 }
 
-@_spi(Experimental) extension ForStmtSyntax: ScopeSyntax {  
+@_spi(Experimental) extension ForStmtSyntax: ScopeSyntax {
   /// Names introduced in the `for` body.
   @_spi(Experimental) public var introducedNames: [LookupName] {
     LookupName.getNames(from: pattern)
@@ -367,6 +367,8 @@ import SwiftSyntax
 @_spi(Experimental) extension ExtensionDeclSyntax: TypeScopeSyntax {}
 
 @_spi(Experimental) extension AccessorDeclSyntax: ScopeSyntax {
+  /// Implicit and/or explicit names introduced
+  /// withing the accessor..
   @_spi(Experimental) public var introducedNames: [LookupName] {
     if let parameters {
       LookupName.getNames(from: parameters)

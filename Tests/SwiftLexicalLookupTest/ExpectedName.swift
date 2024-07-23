@@ -31,7 +31,7 @@ enum ImplicitNameExpectation {
   case error(String)
   case newValue(String)
   case oldValue(String)
-  
+
   func assertExpectation(marker: String, for name: LookupImplicitNameKind) {
     switch (name, self) {
     case (.self, .self): break
@@ -43,7 +43,7 @@ enum ImplicitNameExpectation {
       XCTFail("For marker \(marker), actual name kind \(name) doesn't match expected \(self)")
     }
   }
-  
+
   var marker: String {
     switch self {
     case .self(let marker),
@@ -66,7 +66,7 @@ enum NameExpectation: ExpectedName {
   var marker: String {
     switch self {
     case .identifier(let marker),
-        .declaration(let marker):
+      .declaration(let marker):
       marker
     case .implicit(let implicitName):
       implicitName.marker

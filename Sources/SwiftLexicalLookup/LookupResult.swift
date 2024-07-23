@@ -12,7 +12,7 @@
 
 import SwiftSyntax
 
-/// Represents resul
+/// Represents result from a specific scope.
 @_spi(Experimental) public enum LookupResult {
   /// Scope and the names that matched lookup.
   case fromScope(ScopeSyntax, withNames: [LookupName])

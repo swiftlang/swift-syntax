@@ -73,8 +73,8 @@ final class testNameLookup: XCTestCase {
       source: """
         for 1️⃣i in 1..<4 {
           let (a, b) = (2️⃣i, 3️⃣j)
-          for (4️⃣i, 5️⃣j) in foo {
-            let (c, d) = (6️⃣i, 7️⃣j)
+          for (4️⃣i, (5️⃣j, 8️⃣k)) in foo {
+            let (c, d, e) = (6️⃣i, 7️⃣j, 9️⃣k)
           }
         }
         """,
@@ -86,6 +86,7 @@ final class testNameLookup: XCTestCase {
           .fromScope(ForStmtSyntax.self, expectedNames: ["1️⃣"]),
         ],
         "7️⃣": [.fromScope(ForStmtSyntax.self, expectedNames: ["5️⃣"])],
+        "9️⃣": [.fromScope(ForStmtSyntax.self, expectedNames: ["8️⃣"])],
       ],
       expectedResultTypes: .all(IdentifierPatternSyntax.self)
     )

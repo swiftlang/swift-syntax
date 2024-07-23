@@ -15,7 +15,7 @@ import Foundation
 @_spi(Experimental) public struct LookupState {
   /// Specifies scopes that introduce names to their parent and
   /// should be skipped during lookup in sequential scopes.
-  var skipSequentialIntroductionFrom: IntroducingToSequentialParentScopeSyntax?
+  @_spi(Experimental) public var skipSequentialIntroductionFrom: IntroducingToSequentialParentScopeSyntax?
   
   @_spi(Experimental) public init() {}
 }

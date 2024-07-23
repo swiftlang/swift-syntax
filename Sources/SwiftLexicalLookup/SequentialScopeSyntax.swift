@@ -30,7 +30,7 @@ import SwiftSyntax
 }
 
 @_spi(Experimental) extension SequentialScopeSyntax {
-  public func sequentialLookup(
+  @_spi(Experimental) public func sequentialLookup(
     in codeBlockItems: any Collection<CodeBlockItemSyntax>,
     for name: String?,
     at syntax: SyntaxProtocol,

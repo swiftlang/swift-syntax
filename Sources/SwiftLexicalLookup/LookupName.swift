@@ -124,8 +124,11 @@ import SwiftSyntax
     return name == lookedUpName
   }
 
-  /// Extracts names introduced by the given `from` structure.
-  static func getNames(from syntax: SyntaxProtocol, accessibleAfter: AbsolutePosition? = nil) -> [LookupName] {
+  /// Extracts names introduced by the given `syntax` structure.
+  static func getNames(
+    from syntax: SyntaxProtocol,
+    accessibleAfter: AbsolutePosition? = nil
+  ) -> [LookupName] {
     switch Syntax(syntax).as(SyntaxEnum.self) {
     case .variableDecl(let variableDecl):
       variableDecl.bindings.flatMap { binding in
@@ -165,13 +168,15 @@ import SwiftSyntax
   }
 
   /// Extracts name introduced by `IdentifiableSyntax` node.
-  private static func handle(identifiable: IdentifiableSyntax, accessibleAfter: AbsolutePosition? = nil) -> [LookupName]
-  {
+  private static func handle(
+    identifiable: IdentifiableSyntax,
+    accessibleAfter: AbsolutePosition? = nil
+  ) -> [LookupName] {
     if let closureCapture = identifiable as? ClosureCaptureSyntax,
       closureCapture.identifier.tokenKind == .keyword(.self)
     {
       return [.implicit(.self(closureCapture))]  // Handle `self` closure capture.
-    } else if identifiable.identifier.text != "_" {
+    } else if identifiable.identifier.tokenKind != .wildcard {
       return [.identifier(identifiable, accessibleAfter: accessibleAfter)]
     } else {
       return []
@@ -179,7 +184,10 @@ import SwiftSyntax
   }
 
   /// Extracts name introduced by `NamedDeclSyntax` node.
-  private static func handle(namedDecl: NamedDeclSyntax, accessibleAfter: AbsolutePosition? = nil) -> [LookupName] {
+  private static func handle(
+    namedDecl: NamedDeclSyntax,
+    accessibleAfter: AbsolutePosition? = nil
+  ) -> [LookupName] {
     [.declaration(namedDecl, accessibleAfter: accessibleAfter)]
   }
 }

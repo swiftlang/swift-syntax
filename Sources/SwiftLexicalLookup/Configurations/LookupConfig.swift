@@ -15,9 +15,9 @@ import Foundation
 @_spi(Experimental) public struct LookupConfig {
   /// Specifies behaviour of file scope.
   /// `memberBlockUpToLastDecl` by default.
-  public var fileScopeHandling: FileScopeHandlingConfig
+  @_spi(Experimental) public var fileScopeHandling: FileScopeHandlingConfig
 
-  public init(
+  @_spi(Experimental) public init(
     fileScopeHandling: FileScopeHandlingConfig = .memberBlockUpToLastDecl
   ) {
     self.fileScopeHandling = fileScopeHandling

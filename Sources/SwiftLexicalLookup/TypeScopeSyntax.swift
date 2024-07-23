@@ -17,11 +17,11 @@ import SwiftSyntax
 }
 
 @_spi(Experimental) extension TypeScopeSyntax {
-  public var implicitInstanceAndTypeNames: [LookupName] {
+  @_spi(Experimental) public var implicitInstanceAndTypeNames: [LookupName] {
     [.implicit(.self(self)), .implicit(.Self(self))]
   }
 
-  public var introducedNames: [LookupName] {
+  @_spi(Experimental) public var introducedNames: [LookupName] {
     implicitInstanceAndTypeNames
   }
 }

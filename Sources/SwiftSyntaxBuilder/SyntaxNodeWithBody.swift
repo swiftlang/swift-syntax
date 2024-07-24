@@ -12,8 +12,10 @@
 
 #if swift(>=6)
 public import SwiftSyntax
+internal import SwiftParser
 #else
 import SwiftSyntax
+import SwiftParser
 #endif
 
 // MARK: - PartialSyntaxNode
@@ -124,7 +126,22 @@ extension WithOptionalCodeBlockSyntax where Self: DeclSyntaxProtocol {
     _ header: SyntaxNodeString,
     @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax
   ) throws {
-    let decl = DeclSyntax("\(header) {}")
+    // If the type provides a custom `SyntaxParseable` implementation, use that. Otherwise construct it as a
+    // `DeclSyntax`.
+    // We cannot use normal string interpolation here because the conformance to `ExpressibleByStringInterpolation` is
+    // not implied by `SyntaxParsable` but generated for each type by
+    // `SyntaxExpressibleByStringInterpolationConformances.swift`. And we can’t use that protocol in the `as?` check
+    // because then the compiler complains that `parsableType` is not instantiable. So, manually do the same work that
+    // a string literal with interpolation segments would do.
+    let decl: DeclSyntax
+    var stringInterpolation = SyntaxStringInterpolation(literalCapacity: 1, interpolationCount: 1)
+    stringInterpolation.appendInterpolation(header)
+    stringInterpolation.appendLiteral(" {}")
+    if let parsableType = Self.self as? SyntaxParseable.Type {
+      decl = parsableType.init(stringInterpolation: stringInterpolation).cast(DeclSyntax.self)
+    } else {
+      decl = DeclSyntax(stringInterpolation: stringInterpolation)
+    }
     guard let castedDecl = decl.as(Self.self) else {
       throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: decl)
     }
@@ -170,7 +187,17 @@ extension HasTrailingMemberDeclBlock where Self: DeclSyntaxProtocol {
     _ header: SyntaxNodeString,
     @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax
   ) throws {
-    let decl = DeclSyntax("\(header) {}")
+    // If the type provides a custom `SyntaxParseable` implementation, use that. Otherwise construct it as a
+    // `DeclSyntax`.
+    let decl: DeclSyntax
+    var stringInterpolation = SyntaxStringInterpolation(literalCapacity: 1, interpolationCount: 1)
+    stringInterpolation.appendInterpolation(header)
+    stringInterpolation.appendLiteral(" {}")
+    if let parsableType = Self.self as? SyntaxParseable.Type {
+      decl = parsableType.init(stringInterpolation: stringInterpolation).cast(DeclSyntax.self)
+    } else {
+      decl = DeclSyntax(stringInterpolation: stringInterpolation)
+    }
     guard let castedDecl = decl.as(Self.self) else {
       throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: decl)
     }

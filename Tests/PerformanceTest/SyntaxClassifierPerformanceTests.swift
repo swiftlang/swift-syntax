@@ -28,7 +28,7 @@ class SyntaxClassifierPerformanceTests: XCTestCase {
   func testClassifierPerformance() throws {
     try XCTSkipIf(longTestsDisabled)
 
-    let source = try String(contentsOf: inputFile)
+    let source = try String(contentsOf: inputFile, encoding: .utf8)
     let parsed = Parser.parse(source: source)
 
     try measureInstructions {

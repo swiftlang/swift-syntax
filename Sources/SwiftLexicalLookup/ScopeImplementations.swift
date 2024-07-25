@@ -81,7 +81,7 @@ import SwiftSyntax
   }
 
   /// Returns names matching lookup using provided file
-  /// scope handling configuration (by default: `memberBlockUpToLastDecl`).
+  /// scope handling configuration.
   ///
   /// Example usage:
   /// ```swift

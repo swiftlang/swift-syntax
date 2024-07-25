@@ -125,6 +125,13 @@ import SwiftSyntax
   }
 
   /// Extracts names introduced by the given `syntax` structure.
+  ///
+  /// When e.g. looking up a variable declaration like `let a = a`,
+  /// we expect `a` to be visible after the whole declaration.
+  /// That's why we can't just use `syntax.endPosition` for the `a` identifier pattern,
+  /// as the name would already be visible at the `a` reference withing the declaration.
+  /// That’s why code block and file scopes have to set
+  /// `accessibleAfter` to be the end position of the entire declaration syntax node.
   static func getNames(
     from syntax: SyntaxProtocol,
     accessibleAfter: AbsolutePosition? = nil

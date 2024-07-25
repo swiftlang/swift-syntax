@@ -132,7 +132,7 @@ import SwiftSyntax
     switch Syntax(syntax).as(SyntaxEnum.self) {
     case .variableDecl(let variableDecl):
       variableDecl.bindings.flatMap { binding in
-        getNames(from: binding.pattern, accessibleAfter: accessibleAfter)
+        getNames(from: binding.pattern, accessibleAfter: accessibleAfter != nil ? binding.endPositionBeforeTrailingTrivia : nil)
       }
     case .tuplePattern(let tuplePattern):
       tuplePattern.elements.flatMap { tupleElement in

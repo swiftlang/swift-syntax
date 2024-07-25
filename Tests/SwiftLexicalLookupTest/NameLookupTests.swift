@@ -50,7 +50,7 @@ final class testNameLookup: XCTestCase {
       source: """
         for i in 1..<4 {
           let (1️⃣a, 2️⃣b) = (1, 2)
-          let 3️⃣c = 3, 4️⃣d = 4
+          let 3️⃣c = 3, 4️⃣d = 9️⃣c
 
           5️⃣a
           6️⃣b
@@ -63,6 +63,7 @@ final class testNameLookup: XCTestCase {
         "6️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["2️⃣"])],
         "7️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"])],
         "8️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["4️⃣"])],
+        "9️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"])],
       ],
       expectedResultTypes: .all(IdentifierPatternSyntax.self)
     )

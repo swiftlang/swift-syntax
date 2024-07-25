@@ -699,4 +699,43 @@ final class testNameLookup: XCTestCase {
       ]
     )
   }
+  
+  func testBacktickCompatibility() {
+    assertLexicalNameLookup(
+      source: """
+        1️⃣struct Foo {
+          func test() {
+            let 2️⃣`self` = 1
+            print(3️⃣self)
+            print(4️⃣`self`)
+          }
+        }
+        
+        5️⃣struct Bar {
+          func test() {
+            print(6️⃣self)
+            let 7️⃣`self` = 1
+            print(8️⃣`self`)
+          }
+        }
+        """,
+      references: [
+        "3️⃣": [
+          .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("2️⃣")]),
+          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))])
+        ],
+        "4️⃣": [
+          .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("2️⃣")]),
+          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))])
+        ],
+        "6️⃣": [
+          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("5️⃣"))])
+        ],
+        "8️⃣": [
+          .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("7️⃣")]),
+          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("5️⃣"))])
+        ],
+      ]
+    )
+  }
 }

@@ -16,8 +16,8 @@ extension SyntaxProtocol {
   /// Returns all names that `for` refers to at this syntax node.
   /// Optional configuration can be passed as `config` to customize the lookup behavior.
   ///
-  /// - Returns: An array of `LookupResult` for `name`  at this syntax node,
-  /// ordered by visibility. If `name` is set to `nil`, returns all available names ordered by visibility.
+  /// - Returns: An array of `LookupResult` for `identifier`  at this syntax node,
+  /// ordered by visibility. If `identifier` is set to `nil`, returns all available names ordered by visibility.
   /// The order is from the innermost to the outermost scope,
   /// and within each result, names are ordered by their introduction
   /// in the source code.
@@ -44,10 +44,10 @@ extension SyntaxProtocol {
   /// in this exact order. The constant declaration within the function body is omitted
   /// due to the ordering rules that prioritize visibility within the function body.
   @_spi(Experimental) public func lookup(
-    for name: String?,
+    for identifier: Identifier?,
     with config: LookupConfig = LookupConfig()
   ) -> [LookupResult] {
-    scope?.lookup(for: name, at: self, with: config, state: LookupState()) ?? []
+    scope?.lookup(for: identifier, at: self, with: config, state: LookupState()) ?? []
   }
 }
 
@@ -59,7 +59,7 @@ extension SyntaxProtocol {
   /// Finds all declarations `name` refers to. `syntax` specifies the node lookup was triggered with.
   /// If `name` set to `nil`, returns all available names at the given node.
   func lookup(
-    for name: String?,
+    for identifier: Identifier?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
@@ -75,19 +75,19 @@ extension SyntaxProtocol {
   /// refers to and is accessible at given syntax node then passes lookup to the parent.
   /// If `name` set to `nil`, returns all available names at the given node.
   @_spi(Experimental) public func lookup(
-    for name: String?,
+    for identifier: Identifier?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
   ) -> [LookupResult] {
-    defaultLookupImplementation(for: name, at: syntax, with: config, state: state)
+    defaultLookupImplementation(for: identifier, at: syntax, with: config, state: state)
   }
 
   /// Returns `LookupResult` of all names introduced in this scope that `name`
   /// refers to and is accessible at given syntax node then passes lookup to the parent.
   /// If `name` set to `nil`, returns all available names at the given node.
   func defaultLookupImplementation(
-    for name: String?,
+    for identifier: Identifier?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
@@ -95,28 +95,28 @@ extension SyntaxProtocol {
     let filteredNames =
       introducedNames
       .filter { introducedName in
-        does(name: name, referTo: introducedName, at: syntax)
+        does(identifier: identifier, referTo: introducedName, at: syntax)
       }
 
     if filteredNames.isEmpty {
-      return lookupInParent(for: name, at: syntax, with: config, state: state)
+      return lookupInParent(for: identifier, at: syntax, with: config, state: state)
     } else {
       return [.fromScope(self, withNames: filteredNames)]
-        + lookupInParent(for: name, at: syntax, with: config, state: state)
+        + lookupInParent(for: identifier, at: syntax, with: config, state: state)
     }
   }
 
   /// Looks up in parent scope.
   func lookupInParent(
-    for name: String?,
+    for identifier: Identifier?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
   ) -> [LookupResult] {
-    parentScope?.lookup(for: name, at: syntax, with: config, state: state) ?? []
+    parentScope?.lookup(for: identifier, at: syntax, with: config, state: state) ?? []
   }
 
-  func does(name: String?, referTo introducedName: LookupName, at syntax: SyntaxProtocol) -> Bool {
-    introducedName.isAccessible(at: syntax) && (name == nil || introducedName.refersTo(name!))
+  func does(identifier: Identifier?, referTo introducedName: LookupName, at syntax: SyntaxProtocol) -> Bool {
+    introducedName.isAccessible(at: syntax) && (identifier == nil || introducedName.refersTo(identifier!))
   }
 }

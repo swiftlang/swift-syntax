@@ -14,13 +14,14 @@
 public struct Identifier: Equatable, Hashable, Sendable {
   /// The sanitized `text` of a token.
   public var name: String {
-    String(syntaxText: raw.name)
+    string?.name ?? String(syntaxText: raw!.name)
   }
 
   @_spi(RawSyntax)
-  public let raw: RawIdentifier
+  public let raw: RawIdentifier?
+  public let string: StringIdentifier?
 
-  private let arena: SyntaxArenaRef
+  private let arena: SyntaxArenaRef?
 
   public init?(_ token: TokenSyntax) {
     guard case .identifier = token.tokenKind else {
@@ -29,6 +30,24 @@ public struct Identifier: Equatable, Hashable, Sendable {
 
     self.raw = RawIdentifier(token.tokenView)
     self.arena = token.tokenView.raw.arenaReference
+    self.string = nil
+  }
+  
+  public init(_ string: String) {
+    self.string = StringIdentifier(string)
+    self.raw = nil
+    self.arena = nil
+  }
+  
+  public static func == (lhs: Self, rhs: Self) -> Bool {
+    if let lhsRaw = lhs.raw,
+       let rhsRaw = rhs.raw,
+       let lhsArena = lhs.arena,
+       let rhsArena = rhs.arena {
+      return lhsRaw == rhsRaw && lhsArena == rhsArena
+    } else {
+      return lhs.name == rhs.name
+    }
   }
 }
 
@@ -45,6 +64,21 @@ public struct RawIdentifier: Equatable, Hashable, Sendable {
       self.name = SyntaxText(rebasing: raw.rawText[startIndex..<endIndex])
     } else {
       self.name = raw.rawText
+    }
+  }
+}
+
+public struct StringIdentifier: Equatable, Hashable, Sendable {
+  public let name: String
+
+  fileprivate init(_ string: String) {
+    let backtick = "`"
+    if string.count > 2 && string.hasPrefix(backtick) && string.hasSuffix(backtick) {
+      let startIndex = string.index(after: string.startIndex)
+      let endIndex = string.index(before: string.endIndex)
+      self.name = String(string[startIndex..<endIndex])
+    } else {
+      self.name = string
     }
   }
 }

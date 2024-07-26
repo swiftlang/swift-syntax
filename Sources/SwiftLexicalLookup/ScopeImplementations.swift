@@ -14,7 +14,7 @@ import SwiftSyntax
 
 @_spi(Experimental) extension SyntaxProtocol {
   /// Parent scope of this syntax node, or scope introduced by this syntax node.
-  @_spi(Experimental) public var scope: ScopeSyntax? {
+  var scope: ScopeSyntax? {
     if let scopeSyntax = Syntax(self).asProtocol(SyntaxProtocol.self) as? ScopeSyntax {
       return scopeSyntax
     } else {
@@ -68,10 +68,6 @@ import SwiftSyntax
             return LookupName.getNames(from: item, accessibleAfter: codeBlockItem.endPosition)
           }
         }
-      }
-    case .codeBlock:
-      return statements.flatMap { codeBlockItem in
-        LookupName.getNames(from: codeBlockItem.item, accessibleAfter: codeBlockItem.endPosition)
       }
     case .memberBlock:
       return statements.flatMap { codeBlockItem in

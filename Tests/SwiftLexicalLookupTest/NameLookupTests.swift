@@ -532,37 +532,6 @@ final class testNameLookup: XCTestCase {
       config: LookupConfig(fileScopeHandling: .memberBlock)
     )
   }
-
-  func testFileScopeAsCodeBlock() {
-    assertLexicalNameLookup(
-      source: """
-        1️⃣class a {}
-
-        2️⃣class b {
-          let x = 3️⃣a + 4️⃣b + 5️⃣c + 6️⃣d
-        }
-         
-        let 8️⃣a = 0
-
-        7️⃣class c {}
-
-        if a == 0 {}
-
-        9️⃣class d {}
-
-        let 🔟a = 0️⃣d
-        """,
-      references: [
-        "3️⃣": [.fromFileScope(expectedNames: ["1️⃣"])],
-        "4️⃣": [.fromFileScope(expectedNames: ["2️⃣"])],
-        "5️⃣": [.fromFileScope(expectedNames: ["7️⃣"])],
-        "6️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
-        "0️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
-      ],
-      expectedResultTypes: .all(ClassDeclSyntax.self, except: ["8️⃣": IdentifierPatternSyntax.self]),
-      config: LookupConfig(fileScopeHandling: .codeBlock)
-    )
-  }
   
   func testDeclarationAvailabilityInCodeBlock() {
     assertLexicalNameLookup(

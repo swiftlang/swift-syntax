@@ -20,6 +20,4 @@ import SwiftSyntax
   /// This is the behavior that is being used
   /// for Swift files that don’t allow top-level code.
   case memberBlock
-  /// This is the behavior that is being used for e.g. function bodies.
-  case codeBlock
 }

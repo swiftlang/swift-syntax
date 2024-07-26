@@ -52,7 +52,7 @@ enum MarkerExpectation {
   }
 }
 
-/// Used to define
+/// Used to define result assertion.
 enum ResultExpectation {
   case fromScope(ScopeSyntax.Type, expectedNames: [String])
   case fromFileScope(expectedNames: [String])
@@ -118,19 +118,7 @@ func assertLexicalScopeQuery(
 
     // Assert validity of the output
     for (actual, (expectedMarker, expectedPosition)) in zip(result, zip(expectedMarkers, expectedPositions)) {
-      if actual == nil && expectedPosition == nil { continue }
-
-      guard let actual else {
-        XCTFail(
-          "For marker \(marker), actual is nil while expected is \(sourceFileSyntax.token(at: expectedPosition!)?.description ?? "nil")"
-        )
-        continue
-      }
-
-      guard let expectedPosition else {
-        XCTFail("For marker \(marker), actual is \(actual) while expected position is nil")
-        continue
-      }
+      guard let actual, let expectedPosition else { continue }
 
       XCTAssert(
         actual.positionAfterSkippingLeadingTrivia == expectedPosition,

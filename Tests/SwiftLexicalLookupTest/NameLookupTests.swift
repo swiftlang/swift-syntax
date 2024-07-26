@@ -486,13 +486,13 @@ final class testNameLookup: XCTestCase {
 
         9️⃣class d {}
 
-        let x = 0️⃣d
+        let 🔟a = 0️⃣d
         """,
       references: [
         "3️⃣": [.fromFileScope(expectedNames: ["1️⃣", "8️⃣"])],
         "4️⃣": [.fromFileScope(expectedNames: ["2️⃣"])],
         "5️⃣": [.fromFileScope(expectedNames: ["7️⃣"])],
-        "6️⃣": [],
+        "6️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
         "0️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
       ],
       expectedResultTypes: .all(ClassDeclSyntax.self, except: ["8️⃣": IdentifierPatternSyntax.self])
@@ -516,16 +516,19 @@ final class testNameLookup: XCTestCase {
 
         9️⃣class d {}
 
-        let x = 0️⃣d
+        let 🔟a = 0️⃣d
         """,
       references: [
-        "3️⃣": [.fromFileScope(expectedNames: ["1️⃣", "8️⃣"])],
+        "3️⃣": [.fromFileScope(expectedNames: ["1️⃣", "8️⃣", "🔟"])],
         "4️⃣": [.fromFileScope(expectedNames: ["2️⃣"])],
         "5️⃣": [.fromFileScope(expectedNames: ["7️⃣"])],
         "6️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
         "0️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
       ],
-      expectedResultTypes: .all(ClassDeclSyntax.self, except: ["8️⃣": IdentifierPatternSyntax.self]),
+      expectedResultTypes: .all(ClassDeclSyntax.self, except: [
+        "8️⃣": IdentifierPatternSyntax.self,
+        "🔟": IdentifierPatternSyntax.self
+      ]),
       config: LookupConfig(fileScopeHandling: .memberBlock)
     )
   }
@@ -547,17 +550,35 @@ final class testNameLookup: XCTestCase {
 
         9️⃣class d {}
 
-        let x = 0️⃣d
+        let 🔟a = 0️⃣d
         """,
       references: [
         "3️⃣": [.fromFileScope(expectedNames: ["1️⃣"])],
-        "4️⃣": [],
-        "5️⃣": [],
-        "6️⃣": [],
+        "4️⃣": [.fromFileScope(expectedNames: ["2️⃣"])],
+        "5️⃣": [.fromFileScope(expectedNames: ["7️⃣"])],
+        "6️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
         "0️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
       ],
       expectedResultTypes: .all(ClassDeclSyntax.self, except: ["8️⃣": IdentifierPatternSyntax.self]),
       config: LookupConfig(fileScopeHandling: .codeBlock)
+    )
+  }
+  
+  func testDeclarationAvailabilityInCodeBlock() {
+    assertLexicalNameLookup(
+      source: """
+        func x {
+          1️⃣class A {}
+        
+          let a = 2️⃣A()
+        
+          3️⃣class A {}
+        }
+        """,
+      references: [
+        "2️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣", "3️⃣"])]
+      ],
+      expectedResultTypes: .all(ClassDeclSyntax.self)
     )
   }
 }

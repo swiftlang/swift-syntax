@@ -18,14 +18,14 @@ import SwiftSyntax
   case identifier(IdentifiableSyntax, accessibleAfter: AbsolutePosition?)
   /// Declaration associated with the name.
   /// Could be class, struct, actor, protocol, function and more.
-  case declaration(NamedDeclSyntax, accessibleAfter: AbsolutePosition?)
+  case declaration(NamedDeclSyntax)
 
   /// Syntax associated with this name.
   @_spi(Experimental) public var syntax: SyntaxProtocol {
     switch self {
     case .identifier(let syntax, _):
       return syntax
-    case .declaration(let syntax, _):
+    case .declaration(let syntax):
       return syntax
     }
   }
@@ -35,7 +35,7 @@ import SwiftSyntax
     switch self {
     case .identifier(let syntax, _):
       return Identifier(syntax.identifier)
-    case .declaration(let syntax, _):
+    case .declaration(let syntax):
       return Identifier(syntax.name)
     }
   }
@@ -44,8 +44,10 @@ import SwiftSyntax
   /// If set to `nil`, the name is available at any point in scope.
   var accessibleAfter: AbsolutePosition? {
     switch self {
-    case .identifier(_, let absolutePosition), .declaration(_, let absolutePosition):
+    case .identifier(_, let absolutePosition):
       return absolutePosition
+    default:
+      return nil
     }
   }
 
@@ -133,6 +135,6 @@ import SwiftSyntax
     namedDecl: NamedDeclSyntax,
     accessibleAfter: AbsolutePosition? = nil
   ) -> [LookupName] {
-    [.declaration(namedDecl, accessibleAfter: accessibleAfter)]
+    [.declaration(namedDecl)]
   }
 }

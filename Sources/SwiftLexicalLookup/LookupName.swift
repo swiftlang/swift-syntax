@@ -14,19 +14,19 @@ import SwiftSyntax
 
 @_spi(Experimental) public enum LookupName {
   /// Identifier associated with the name.
-  /// Could be an identifier of a variable, function or closure parameter and more
+  /// Could be an identifier of a variable, function or closure parameter and more.
   case identifier(IdentifiableSyntax, accessibleAfter: AbsolutePosition?)
   /// Declaration associated with the name.
-  /// Could be class, struct, actor, protocol, function and more
+  /// Could be class, struct, actor, protocol, function and more.
   case declaration(NamedDeclSyntax, accessibleAfter: AbsolutePosition?)
 
   /// Syntax associated with this name.
   @_spi(Experimental) public var syntax: SyntaxProtocol {
     switch self {
     case .identifier(let syntax, _):
-      syntax
+      return syntax
     case .declaration(let syntax, _):
-      syntax
+      return syntax
     }
   }
 
@@ -34,9 +34,9 @@ import SwiftSyntax
   @_spi(Experimental) public var identifier: Identifier? {
     switch self {
     case .identifier(let syntax, _):
-      Identifier(syntax.identifier)
+      return Identifier(syntax.identifier)
     case .declaration(let syntax, _):
-      Identifier(syntax.name)
+      return Identifier(syntax.name)
     }
   }
 
@@ -45,7 +45,7 @@ import SwiftSyntax
   var accessibleAfter: AbsolutePosition? {
     switch self {
     case .identifier(_, let absolutePosition), .declaration(_, let absolutePosition):
-      absolutePosition
+      return absolutePosition
     }
   }
 
@@ -61,46 +61,59 @@ import SwiftSyntax
     return name == lookedUpName
   }
 
-  /// Extracts names introduced by the given `from` structure.
-  static func getNames(from syntax: SyntaxProtocol, accessibleAfter: AbsolutePosition? = nil) -> [LookupName] {
+  /// Extracts names introduced by the given `syntax` structure.
+  ///
+  /// When e.g. looking up a variable declaration like `let a = a`,
+  /// we expect `a` to be visible after the whole declaration.
+  /// That's why we can't just use `syntax.endPosition` for the `a` identifier pattern,
+  /// as the name would already be visible at the `a` reference withing the declaration.
+  /// That’s why code block and file scopes have to set
+  /// `accessibleAfter` to be the end position of the entire declaration syntax node.
+  static func getNames(
+    from syntax: SyntaxProtocol,
+    accessibleAfter: AbsolutePosition? = nil
+  ) -> [LookupName] {
     switch Syntax(syntax).as(SyntaxEnum.self) {
     case .variableDecl(let variableDecl):
-      variableDecl.bindings.flatMap { binding in
-        getNames(from: binding.pattern, accessibleAfter: accessibleAfter)
+      return variableDecl.bindings.flatMap { binding in
+        getNames(
+          from: binding.pattern,
+          accessibleAfter: accessibleAfter != nil ? binding.endPositionBeforeTrailingTrivia : nil
+        )
       }
     case .tuplePattern(let tuplePattern):
-      tuplePattern.elements.flatMap { tupleElement in
+      return tuplePattern.elements.flatMap { tupleElement in
         getNames(from: tupleElement.pattern, accessibleAfter: accessibleAfter)
       }
     case .valueBindingPattern(let valueBindingPattern):
-      getNames(from: valueBindingPattern.pattern, accessibleAfter: accessibleAfter)
+      return getNames(from: valueBindingPattern.pattern, accessibleAfter: accessibleAfter)
     case .expressionPattern(let expressionPattern):
-      getNames(from: expressionPattern.expression, accessibleAfter: accessibleAfter)
+      return getNames(from: expressionPattern.expression, accessibleAfter: accessibleAfter)
     case .sequenceExpr(let sequenceExpr):
-      sequenceExpr.elements.flatMap { expression in
+      return sequenceExpr.elements.flatMap { expression in
         getNames(from: expression, accessibleAfter: accessibleAfter)
       }
     case .patternExpr(let patternExpr):
-      getNames(from: patternExpr.pattern, accessibleAfter: accessibleAfter)
+      return getNames(from: patternExpr.pattern, accessibleAfter: accessibleAfter)
     case .optionalBindingCondition(let optionalBinding):
-      getNames(from: optionalBinding.pattern, accessibleAfter: accessibleAfter)
+      return getNames(from: optionalBinding.pattern, accessibleAfter: accessibleAfter)
     case .matchingPatternCondition(let matchingPatternCondition):
-      getNames(from: matchingPatternCondition.pattern, accessibleAfter: accessibleAfter)
+      return getNames(from: matchingPatternCondition.pattern, accessibleAfter: accessibleAfter)
     case .functionCallExpr(let functionCallExpr):
-      functionCallExpr.arguments.flatMap { argument in
+      return functionCallExpr.arguments.flatMap { argument in
         getNames(from: argument.expression, accessibleAfter: accessibleAfter)
       }
     case .guardStmt(let guardStmt):
-      guardStmt.conditions.flatMap { cond in
+      return guardStmt.conditions.flatMap { cond in
         getNames(from: cond.condition, accessibleAfter: cond.endPosition)
       }
     default:
       if let namedDecl = Syntax(syntax).asProtocol(SyntaxProtocol.self) as? NamedDeclSyntax {
-        handle(namedDecl: namedDecl, accessibleAfter: accessibleAfter)
+        return handle(namedDecl: namedDecl, accessibleAfter: accessibleAfter)
       } else if let identifiable = Syntax(syntax).asProtocol(SyntaxProtocol.self) as? IdentifiableSyntax {
-        handle(identifiable: identifiable, accessibleAfter: accessibleAfter)
+        return handle(identifiable: identifiable, accessibleAfter: accessibleAfter)
       } else {
-        []
+        return []
       }
     }
   }
@@ -108,7 +121,7 @@ import SwiftSyntax
   /// Extracts name introduced by `IdentifiableSyntax` node.
   private static func handle(identifiable: IdentifiableSyntax, accessibleAfter: AbsolutePosition? = nil) -> [LookupName]
   {
-    if identifiable.identifier.text != "_" {
+    if identifiable.identifier.tokenKind != .wildcard {
       return [.identifier(identifiable, accessibleAfter: accessibleAfter)]
     } else {
       return []
@@ -116,7 +129,10 @@ import SwiftSyntax
   }
 
   /// Extracts name introduced by `NamedDeclSyntax` node.
-  private static func handle(namedDecl: NamedDeclSyntax, accessibleAfter: AbsolutePosition? = nil) -> [LookupName] {
+  private static func handle(
+    namedDecl: NamedDeclSyntax,
+    accessibleAfter: AbsolutePosition? = nil
+  ) -> [LookupName] {
     [.declaration(namedDecl, accessibleAfter: accessibleAfter)]
   }
 }

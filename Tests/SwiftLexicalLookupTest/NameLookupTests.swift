@@ -50,7 +50,7 @@ final class testNameLookup: XCTestCase {
       source: """
         for i in 1..<4 {
           let (1️⃣a, 2️⃣b) = (1, 2)
-          let 3️⃣c = 3, 4️⃣d = 4
+          let 3️⃣c = 3, 4️⃣d = 9️⃣c
 
           5️⃣a
           6️⃣b
@@ -63,6 +63,7 @@ final class testNameLookup: XCTestCase {
         "6️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["2️⃣"])],
         "7️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"])],
         "8️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["4️⃣"])],
+        "9️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"])],
       ],
       expectedResultTypes: .all(IdentifierPatternSyntax.self)
     )
@@ -73,8 +74,8 @@ final class testNameLookup: XCTestCase {
       source: """
         for 1️⃣i in 1..<4 {
           let (a, b) = (2️⃣i, 3️⃣j)
-          for (4️⃣i, 5️⃣j) in foo {
-            let (c, d) = (6️⃣i, 7️⃣j)
+          for (4️⃣i, (5️⃣j, 8️⃣k)) in foo {
+            let (c, d, e) = (6️⃣i, 7️⃣j, 9️⃣k)
           }
         }
         """,
@@ -86,6 +87,7 @@ final class testNameLookup: XCTestCase {
           .fromScope(ForStmtSyntax.self, expectedNames: ["1️⃣"]),
         ],
         "7️⃣": [.fromScope(ForStmtSyntax.self, expectedNames: ["5️⃣"])],
+        "9️⃣": [.fromScope(ForStmtSyntax.self, expectedNames: ["8️⃣"])],
       ],
       expectedResultTypes: .all(IdentifierPatternSyntax.self)
     )

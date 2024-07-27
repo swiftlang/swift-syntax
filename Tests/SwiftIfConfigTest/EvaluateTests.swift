@@ -10,12 +10,14 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftDiagnostics
 import SwiftIfConfig
 import SwiftParser
 import SwiftSyntax
-import SwiftSyntaxMacrosGenericTestSupport
+@_spi(XCTestFailureLocation) @_spi(Testing) import SwiftSyntaxMacrosGenericTestSupport
 import XCTest
 import _SwiftSyntaxTestSupport
+import _SwiftSyntaxGenericTestSupport
 
 public class EvaluateTests: XCTestCase {
   func testLiterals() throws {
@@ -227,5 +229,45 @@ public class EvaluateTests: XCTestCase {
         )
       ]
     )
+  }
+}
+
+/// Assert the results of evaluating the condition within an `#if` against the
+/// given build configuration.
+func assertIfConfig(
+  _ condition: ExprSyntax,
+  _ expectedState: IfConfigRegionState,
+  configuration: some BuildConfiguration = TestingBuildConfiguration(),
+  diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
+  file: StaticString = #filePath,
+  line: UInt = #line
+) {
+  // Evaluate the condition to check the state.
+  let actualDiagnostics: [Diagnostic]
+  let actualState: IfConfigRegionState
+    (actualState, actualDiagnostics) = IfConfigRegionState.evaluating (condition, in: configuration)
+  XCTAssertEqual(actualState, expectedState, file: file, line: line)
+
+  // Check the diagnostics.
+  if actualDiagnostics.count != expectedDiagnostics.count {
+    XCTFail(
+      """
+      Expected \(expectedDiagnostics.count) diagnostics, but got \(actualDiagnostics.count):
+      \(actualDiagnostics.map(\.debugDescription).joined(separator: "\n"))
+      """,
+      file: file,
+      line: line
+    )
+  } else {
+    for (actualDiag, expectedDiag) in zip(actualDiagnostics, expectedDiagnostics) {
+      assertDiagnostic(
+        actualDiag,
+        in: .tree(condition),
+        expected: expectedDiag,
+        failureHandler: {
+          XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
+        }
+      )
+    }
   }
 }

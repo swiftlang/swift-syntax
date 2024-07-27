@@ -15,10 +15,8 @@ import SwiftSyntax
 
 extension SyntaxProtocol {
   /// Find all of the #if/#elseif/#else clauses within the given syntax node,
-  /// indicating their active state. This operation will recurse into active
-  /// clauses to represent the flattened nested structure, while nonactive
-  /// clauses need no recursion (because there is no relevant structure in
-  /// them).
+  /// indicating their active state. This operation will recurse into all
+  /// clauses to indicate regions of active / inactive / unparsed code.
   ///
   /// For example, given code like the following:
   /// #if DEBUG

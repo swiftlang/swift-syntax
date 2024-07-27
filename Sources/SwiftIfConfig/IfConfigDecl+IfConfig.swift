@@ -26,7 +26,7 @@ extension IfConfigDeclSyntax {
   /// ```
   ///
   /// If the `A` configuration option was passed on the command line (e.g. via `-DA`), the first clause
-  /// (containing `func f()`) would be returned. If not, and if the `B`configuration was passed on the
+  /// (containing `func f()`) would be returned. If not, and if the `B` configuration was passed on the
   /// command line, the second clause (containing `func g()`) would be returned. If neither was
   /// passed, this function will return `nil` to indicate that none of the regions are active.
   ///

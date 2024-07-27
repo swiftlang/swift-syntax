@@ -40,7 +40,7 @@ extension SyntaxProtocol {
     while let parent = currentNode.parent {
       // If the parent is an `#if` configuration, check whether our current
       // clause is active. If not, we're in an inactive region. We also
-      // need to determine whether
+      // need to determine whether an inactive region should be parsed or not.
       if let ifConfigClause = currentNode.as(IfConfigClauseSyntax.self),
         let ifConfigDecl = ifConfigClause.parent?.parent?.as(IfConfigDeclSyntax.self)
       {
@@ -73,8 +73,9 @@ extension SyntaxProtocol {
   /// Determine whether the given syntax node is active given a set of
   /// configured regions as produced by `configuredRegions(in:)`.
   ///
-  /// This is
-  /// an approximation
+  /// If you are querying whether many syntax nodes in a particular file are
+  /// active, consider calling `configuredRegions(in:)` once and using
+  /// this function. For occasional queries, use `isActive(in:)`.
   public func isActive(
     inConfiguredRegions regions: [(IfConfigClauseSyntax, IfConfigRegionState)]
   ) -> IfConfigRegionState {

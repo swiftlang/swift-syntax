@@ -38,7 +38,7 @@ extension SyntaxProtocol {
   ///   - Inactive region for the final `#else`.
   public func configuredRegions(
     in configuration: some BuildConfiguration
-  ) -> [(IfConfigClauseSyntax, ConfiguredRegionState)] {
+  ) -> [(IfConfigClauseSyntax, IfConfigRegionState)] {
     let visitor = ConfiguredRegionVisitor(configuration: configuration)
     visitor.walk(self)
     return visitor.regions
@@ -50,7 +50,7 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
   let configuration: Configuration
 
   /// The regions we've found so far.
-  var regions: [(IfConfigClauseSyntax, ConfiguredRegionState)] = []
+  var regions: [(IfConfigClauseSyntax, IfConfigRegionState)] = []
 
   /// Whether we are currently within an active region.
   var inActiveRegion = true

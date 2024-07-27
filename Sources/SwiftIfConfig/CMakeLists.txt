@@ -11,7 +11,7 @@ add_swift_syntax_library(SwiftIfConfig
   ActiveSyntaxRewriter.swift
   BuildConfiguration.swift
   ConfiguredRegions.swift
-  ConfiguredRegionState.swift
+  IfConfigRegionState.swift
   IfConfigDecl+IfConfig.swift
   IfConfigError.swift
   IfConfigEvaluation.swift

@@ -32,9 +32,9 @@ extension SyntaxProtocol {
   /// configuration options `DEBUG` and `B` are provided, but `A` is not.
   public func isActive(
     in configuration: some BuildConfiguration
-  ) -> (state: ConfiguredRegionState, diagnostics: [Diagnostic])  {
+  ) -> (state: IfConfigRegionState, diagnostics: [Diagnostic])  {
     var currentNode: Syntax = Syntax(self)
-    var currentState: ConfiguredRegionState = .active
+    var currentState: IfConfigRegionState = .active
     var diagnostics: [Diagnostic] = []
 
     while let parent = currentNode.parent {
@@ -76,9 +76,9 @@ extension SyntaxProtocol {
   /// This is
   /// an approximation
   public func isActive(
-    inConfiguredRegions regions: [(IfConfigClauseSyntax, ConfiguredRegionState)]
-  ) -> ConfiguredRegionState {
-    var currentState: ConfiguredRegionState = .active
+    inConfiguredRegions regions: [(IfConfigClauseSyntax, IfConfigRegionState)]
+  ) -> IfConfigRegionState {
+    var currentState: IfConfigRegionState = .active
     for (ifClause, state) in regions {
       if self.position < ifClause.position {
         return currentState

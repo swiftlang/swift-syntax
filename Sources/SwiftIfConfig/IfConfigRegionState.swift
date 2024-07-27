@@ -15,7 +15,7 @@ import SwiftOperators
 import SwiftSyntax
 
 /// Describes the state of a particular region guarded by `#if` or similar.
-public enum ConfiguredRegionState {
+public enum IfConfigRegionState {
   /// The region is not part of the compiled program and is not even parsed,
   /// and therefore many contain syntax that is invalid.
   case unparsed
@@ -30,7 +30,7 @@ public enum ConfiguredRegionState {
   public static func evaluating(
     _ condition: some ExprSyntaxProtocol,
     in configuration: some BuildConfiguration
-  ) -> (state: ConfiguredRegionState, diagnostics: [Diagnostic]) {
+  ) -> (state: IfConfigRegionState, diagnostics: [Diagnostic]) {
     // Apply operator folding for !/&&/||.
     var foldingDiagnostics: [Diagnostic] = []
     let foldedCondition = OperatorTable.logicalOperators.foldAll(condition) { error in

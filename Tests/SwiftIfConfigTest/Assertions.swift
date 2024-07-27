@@ -23,7 +23,7 @@ import _SwiftSyntaxTestSupport
 /// given build configuration.
 func assertIfConfig(
   _ condition: ExprSyntax,
-  _ expectedState: ConfiguredRegionState,
+  _ expectedState: IfConfigRegionState,
   configuration: some BuildConfiguration = TestingBuildConfiguration(),
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
   file: StaticString = #filePath,
@@ -31,8 +31,8 @@ func assertIfConfig(
 ) {
   // Evaluate the condition to check the state.
   let actualDiagnostics: [Diagnostic]
-  let actualState: ConfiguredRegionState
-    (actualState, actualDiagnostics) = ConfiguredRegionState.evaluating (condition, in: configuration)
+  let actualState: IfConfigRegionState
+    (actualState, actualDiagnostics) = IfConfigRegionState.evaluating (condition, in: configuration)
   XCTAssertEqual(actualState, expectedState, file: file, line: line)
 
   // Check the diagnostics.
@@ -64,7 +64,7 @@ func assertIfConfig(
 func assertActiveCode(
   _ markedSource: String,
   configuration: some BuildConfiguration = TestingBuildConfiguration(),
-  states: [String: ConfiguredRegionState],
+  states: [String: IfConfigRegionState],
   file: StaticString = #filePath,
   line: UInt = #line
 ) throws {

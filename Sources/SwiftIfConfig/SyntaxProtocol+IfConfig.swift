@@ -32,7 +32,7 @@ extension SyntaxProtocol {
   /// configuration options `DEBUG` and `B` are provided, but `A` is not.
   public func isActive(
     in configuration: some BuildConfiguration
-  ) -> (state: IfConfigRegionState, diagnostics: [Diagnostic])  {
+  ) -> (state: IfConfigRegionState, diagnostics: [Diagnostic]) {
     var currentNode: Syntax = Syntax(self)
     var currentState: IfConfigRegionState = .active
     var diagnostics: [Diagnostic] = []

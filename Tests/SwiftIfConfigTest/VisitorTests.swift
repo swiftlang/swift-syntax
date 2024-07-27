@@ -16,8 +16,8 @@ import SwiftParser
 import SwiftSyntax
 @_spi(XCTestFailureLocation) @_spi(Testing) import SwiftSyntaxMacrosGenericTestSupport
 import XCTest
-import _SwiftSyntaxTestSupport
 import _SwiftSyntaxGenericTestSupport
+import _SwiftSyntaxTestSupport
 
 /// Visitor that ensures that all of the nodes we visit are active.
 ///

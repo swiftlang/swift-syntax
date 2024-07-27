@@ -41,7 +41,8 @@ func evaluateIfConfig(
     return (
       active: false,
       versioned: true,
-      diagnostics: extraDiagnostics + error.asDiagnostics(at: node))
+      diagnostics: extraDiagnostics + error.asDiagnostics(at: node)
+    )
   }
 
   /// Record an if-config evaluation error before returning it. Use this for
@@ -133,9 +134,9 @@ func evaluateIfConfig(
       switch (lhsActive, op.operator.text) {
       case (true, "||"):
         return (active: true, versioned: lhsVersioned, diagnostics: lhsDiagnostics)
-      case (false, "&&"): 
+      case (false, "&&"):
         return (active: false, versioned: lhsVersioned, diagnostics: lhsDiagnostics)
-      default: 
+      default:
         break
       }
     }

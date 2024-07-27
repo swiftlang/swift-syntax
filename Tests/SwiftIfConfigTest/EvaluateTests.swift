@@ -16,8 +16,8 @@ import SwiftParser
 import SwiftSyntax
 @_spi(XCTestFailureLocation) @_spi(Testing) import SwiftSyntaxMacrosGenericTestSupport
 import XCTest
-import _SwiftSyntaxTestSupport
 import _SwiftSyntaxGenericTestSupport
+import _SwiftSyntaxTestSupport
 
 public class EvaluateTests: XCTestCase {
   func testLiterals() throws {
@@ -245,7 +245,7 @@ func assertIfConfig(
   // Evaluate the condition to check the state.
   let actualDiagnostics: [Diagnostic]
   let actualState: IfConfigRegionState
-    (actualState, actualDiagnostics) = IfConfigRegionState.evaluating (condition, in: configuration)
+  (actualState, actualDiagnostics) = IfConfigRegionState.evaluating(condition, in: configuration)
   XCTAssertEqual(actualState, expectedState, file: file, line: line)
 
   // Check the diagnostics.

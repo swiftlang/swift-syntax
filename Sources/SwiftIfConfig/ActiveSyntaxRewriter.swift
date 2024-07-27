@@ -25,7 +25,9 @@ extension SyntaxProtocol {
   /// clauses, e.g., `#if FOO > 10`, then the condition will be
   /// considered to have failed and the clauses's elements will be
   /// removed.
-  public func removingInactive(in configuration: some BuildConfiguration) -> (Syntax, [Diagnostic]) {
+  public func removingInactive(
+    in configuration: some BuildConfiguration
+  ) -> (result: Syntax, diagnostics: [Diagnostic]) {
     // First pass: Find all of the active clauses for the #ifs we need to
     // visit, along with any diagnostics produced along the way. This process
     // does not change the tree in any way.
@@ -33,7 +35,7 @@ extension SyntaxProtocol {
     visitor.walk(self)
 
     // If there were no active clauses to visit, we're done!
-    if visitor.numIfClausesVisited == 0 {
+    if !visitor.visitedAnyIfClauses {
       return (Syntax(self), visitor.diagnostics)
     }
 

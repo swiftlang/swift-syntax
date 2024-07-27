@@ -37,18 +37,18 @@ import SwiftSyntax
 /// it would not visit either `f` or `g`.
 ///
 /// All notes visited by this visitor will have the "active" state, i.e.,
-/// `node.isActive(in: configuration)` will evaluate to `.active` or will
-/// throw. When errors occur, they will be recorded in the set of
+/// `node.isActive(in: configuration)` will have evaluated to `.active`
+/// When errors occur, they will be recorded in the set of
 /// diagnostics.
 open class ActiveSyntaxVisitor<Configuration: BuildConfiguration>: SyntaxVisitor {
   /// The build configuration, which will be queried for each relevant `#if`.
   public let configuration: Configuration
 
-  /// The set of diagnostics accumulated during this walk of active syntax.
-  public var diagnostics: [Diagnostic] = []
+  /// The diagnostics accumulated during this walk of active syntax.
+  public private(set) var diagnostics: [Diagnostic] = []
 
-  /// The number of "#if" clauses that were visited.
-  var numIfClausesVisited: Int = 0
+  /// Whether we visited any "#if" clauses.
+  var visitedAnyIfClauses: Bool = false
 
   public init(viewMode: SyntaxTreeViewMode, configuration: Configuration) {
     self.configuration = configuration
@@ -56,14 +56,16 @@ open class ActiveSyntaxVisitor<Configuration: BuildConfiguration>: SyntaxVisitor
   }
 
   open override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
+    // Note: there is a clone of this code in ActiveSyntaxAnyVisitor. If you
+    // change one, please also change the other.
     let (activeClause, localDiagnostics) = node.activeClause(in: configuration)
     diagnostics.append(contentsOf: localDiagnostics)
 
-    numIfClausesVisited += 1
+    visitedAnyIfClauses = true
 
     // If there is an active clause, visit it's children.
     if let activeClause, let elements = activeClause.elements {
-      walk(Syntax(elements))
+      walk(elements)
     }
 
     // Skip everything else in the #if.
@@ -95,19 +97,14 @@ open class ActiveSyntaxVisitor<Configuration: BuildConfiguration>: SyntaxVisitor
 /// it would not visit either `f` or `g`.
 ///
 /// All notes visited by this visitor will have the "active" state, i.e.,
-/// `node.isActive(in: configuration)` will evaluate to `.active` or will
-/// throw.
-///
-/// All notes visited by this visitor will have the "active" state, i.e.,
-/// `node.isActive(in: configuration)` will evaluate to `.active` or will
-/// throw. When errors occur, they will be recorded in the set of
-/// diagnostivs.
+/// `node.isActive(in: configuration)` will have evaluated to `.active`.
+/// When errors occur, they will be recorded in the array of diagnostics.
 open class ActiveSyntaxAnyVisitor<Configuration: BuildConfiguration>: SyntaxAnyVisitor {
   /// The build configuration, which will be queried for each relevant `#if`.
   public let configuration: Configuration
 
-  /// The set of diagnostics accumulated during this walk of active syntax.
-  public var diagnostics: [Diagnostic] = []
+  /// The diagnostics accumulated during this walk of active syntax.
+  public private(set) var diagnostics: [Diagnostic] = []
 
   public init(viewMode: SyntaxTreeViewMode, configuration: Configuration) {
     self.configuration = configuration
@@ -115,12 +112,15 @@ open class ActiveSyntaxAnyVisitor<Configuration: BuildConfiguration>: SyntaxAnyV
   }
 
   open override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
+    // Note: there is a clone of this code in ActiveSyntaxVisitor. If you
+    // change one, please also change the other.
+
     // If there is an active clause, visit it's children.
     let (activeClause, localDiagnostics) = node.activeClause(in: configuration)
     diagnostics.append(contentsOf: localDiagnostics)
 
     if let activeClause, let elements = activeClause.elements {
-      walk(Syntax(elements))
+      walk(elements)
     }
 
     // Skip everything else in the #if.

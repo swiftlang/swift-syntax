@@ -25,5 +25,4 @@ add_swift_syntax_library(SwiftIfConfig
 target_link_swift_syntax_libraries(SwiftIfConfig PUBLIC
   SwiftSyntax
   SwiftDiagnostics
-  SwiftOperators
-  SwiftParser)
+  SwiftOperators)

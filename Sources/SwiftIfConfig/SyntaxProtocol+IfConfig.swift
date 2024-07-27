@@ -31,11 +31,11 @@ extension SyntaxProtocol {
   /// a call to `isActive` on the syntax node for the function `g` would return `active` when the
   /// configuration options `DEBUG` and `B` are provided, but `A` is not.
   public func isActive(
-    in configuration: some BuildConfiguration,
-    diagnosticHandler: ((Diagnostic) -> Void)? = nil
-  ) throws -> ConfiguredRegionState {
+    in configuration: some BuildConfiguration
+  ) -> (state: ConfiguredRegionState, diagnostics: [Diagnostic])  {
     var currentNode: Syntax = Syntax(self)
     var currentState: ConfiguredRegionState = .active
+    var diagnostics: [Diagnostic] = []
 
     while let parent = currentNode.parent {
       // If the parent is an `#if` configuration, check whether our current
@@ -45,22 +45,19 @@ extension SyntaxProtocol {
         let ifConfigDecl = ifConfigClause.parent?.parent?.as(IfConfigDeclSyntax.self)
       {
         let (activeClause, localDiagnostics) = ifConfigDecl.activeClause(in: configuration)
-
-        for diag in localDiagnostics {
-          diagnosticHandler?(diag)
-        }
+        diagnostics.append(contentsOf: localDiagnostics)
 
         if activeClause != ifConfigClause {
           // This was not the active clause, so we know that we're in an
           // inactive block. However, if the condition is versioned, this is an
           // unparsed region.
-          let isVersioned =
-            (try? ifConfigClause.isVersioned(
-              configuration: configuration,
-              diagnosticHandler: diagnosticHandler
-            )) ?? true
+          let (isVersioned, localDiagnostics) = ifConfigClause.isVersioned(
+            configuration: configuration
+          )
+          diagnostics.append(contentsOf: localDiagnostics)
+
           if isVersioned {
-            return .unparsed
+            return (.unparsed, diagnostics)
           }
 
           currentState = .inactive
@@ -70,7 +67,7 @@ extension SyntaxProtocol {
       currentNode = parent
     }
 
-    return currentState
+    return (currentState, diagnostics)
   }
 
   /// Determine whether the given syntax node is active given a set of

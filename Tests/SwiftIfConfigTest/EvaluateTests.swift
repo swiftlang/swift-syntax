@@ -56,7 +56,7 @@ public class EvaluateTests: XCTestCase {
     )
     assertIfConfig(
       "2",
-      nil,
+      .unparsed,
       configuration: buildConfig,
       diagnostics: [
         DiagnosticSpec(
@@ -80,7 +80,7 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("nope && DEBUG", .inactive, configuration: buildConfig)
     assertIfConfig(
       "nope && 3.14159",
-      nil,
+      .unparsed,
       configuration: buildConfig,
       diagnostics: [
         DiagnosticSpec(
@@ -96,7 +96,7 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("nope || !DEBUG", .inactive, configuration: buildConfig)
     assertIfConfig(
       "DEBUG || 3.14159",
-      nil,
+      .active,
       configuration: buildConfig,
       diagnostics: [
         DiagnosticSpec(
@@ -108,7 +108,7 @@ public class EvaluateTests: XCTestCase {
     )
     assertIfConfig(
       "(DEBUG) || 3.14159",
-      nil,
+      .active,
       configuration: buildConfig,
       diagnostics: [
         DiagnosticSpec(
@@ -125,7 +125,7 @@ public class EvaluateTests: XCTestCase {
 
     assertIfConfig(
       "3.14159",
-      nil,
+      .unparsed,
       configuration: buildConfig,
       diagnostics: [
         DiagnosticSpec(
@@ -183,7 +183,7 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("compiler(>=5.10) && 3.14159", .unparsed)
     assertIfConfig(
       "compiler(>=5.10) || 3.14159",
-      nil,
+      .unparsed,
       diagnostics: [
         DiagnosticSpec(
           message: "invalid conditional compilation expression",
@@ -195,7 +195,7 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("compiler(>=5.9) || 3.14159", .active)
     assertIfConfig(
       "compiler(>=5.9) && 3.14159",
-      nil,
+      .unparsed,
       diagnostics: [
         DiagnosticSpec(
           message: "invalid conditional compilation expression",

@@ -44,13 +44,12 @@ extension IfConfigDeclSyntax {
       }
 
       // If this condition evaluates true, return this clause.
-      let isActive =
-        (try? evaluateIfConfig(
-          condition: condition,
-          configuration: configuration
-        ) { 
-          diagnostics.append($0)
-        })?.active ?? false
+      let (isActive, _, localDiagnostics) = evaluateIfConfig(
+        condition: condition,
+        configuration: configuration
+      )
+      diagnostics.append(contentsOf: localDiagnostics)
+
       if isActive {
         return (clause, diagnostics: diagnostics)
       }

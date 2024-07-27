@@ -80,11 +80,9 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
       }
 
       // For inactive clauses, distinguish between inactive and unparsed.
-      let isVersioned =
-        (try? clause.isVersioned(
-          configuration: configuration,
-          diagnosticHandler: nil
-        )) ?? true
+      let isVersioned = clause.isVersioned(
+        configuration: configuration
+      ).versioned
 
       // If this is within an active region, or this is an unparsed region,
       // record it.

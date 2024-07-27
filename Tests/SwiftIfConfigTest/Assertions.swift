@@ -23,22 +23,17 @@ import _SwiftSyntaxTestSupport
 /// given build configuration.
 func assertIfConfig(
   _ condition: ExprSyntax,
-  _ expectedState: ConfiguredRegionState?,
+  _ expectedState: ConfiguredRegionState,
   configuration: some BuildConfiguration = TestingBuildConfiguration(),
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
   file: StaticString = #filePath,
   line: UInt = #line
 ) {
   // Evaluate the condition to check the state.
-  var actualDiagnostics: [Diagnostic] = []
-  do {
-    let actualState = try ConfiguredRegionState(condition: condition, configuration: configuration) { diag in
-      actualDiagnostics.append(diag)
-    }
-    XCTAssertEqual(actualState, expectedState, file: file, line: line)
-  } catch {
-    XCTAssertNil(expectedState, file: file, line: line)
-  }
+  let actualDiagnostics: [Diagnostic]
+  let actualState: ConfiguredRegionState
+    (actualState, actualDiagnostics) = ConfiguredRegionState.evaluating (condition, in: configuration)
+  XCTAssertEqual(actualState, expectedState, file: file, line: line)
 
   // Check the diagnostics.
   if actualDiagnostics.count != expectedDiagnostics.count {
@@ -92,7 +87,7 @@ func assertActiveCode(
       continue
     }
 
-    let actualState = try token.isActive(in: configuration)
+    let (actualState, _) = token.isActive(in: configuration)
     XCTAssertEqual(actualState, expectedState, "isActive(in:) at marker \(marker)", file: file, line: line)
 
     let actualViaRegions = token.isActive(inConfiguredRegions: configuredRegions)

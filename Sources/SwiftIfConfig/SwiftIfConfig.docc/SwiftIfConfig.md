@@ -1,4 +1,4 @@
-# `SwiftIfConfig`
+# SwiftIfConfig
 
 A library to evaluate `#if` conditionals within a Swift syntax tree.
 

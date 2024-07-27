@@ -9,6 +9,7 @@
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
+
 import SwiftDiagnostics
 import SwiftSyntax
 
@@ -55,9 +56,8 @@ open class ActiveSyntaxVisitor<Configuration: BuildConfiguration>: SyntaxVisitor
   }
 
   open override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
-    let activeClause = node.activeClause(in: configuration) { diag in
-      self.diagnostics.append(diag)
-    }
+    let (activeClause, localDiagnostics) = node.activeClause(in: configuration)
+    diagnostics.append(contentsOf: localDiagnostics)
 
     numIfClausesVisited += 1
 
@@ -116,9 +116,9 @@ open class ActiveSyntaxAnyVisitor<Configuration: BuildConfiguration>: SyntaxAnyV
 
   open override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
     // If there is an active clause, visit it's children.
-    let activeClause = node.activeClause(in: configuration) { diag in
-      self.diagnostics.append(diag)
-    }
+    let (activeClause, localDiagnostics) = node.activeClause(in: configuration)
+    diagnostics.append(contentsOf: localDiagnostics)
+
     if let activeClause, let elements = activeClause.elements {
       walk(Syntax(elements))
     }

@@ -9,6 +9,7 @@
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
+
 import SwiftDiagnostics
 import SwiftSyntax
 
@@ -43,10 +44,11 @@ extension SyntaxProtocol {
       if let ifConfigClause = currentNode.as(IfConfigClauseSyntax.self),
         let ifConfigDecl = ifConfigClause.parent?.parent?.as(IfConfigDeclSyntax.self)
       {
-        let activeClause = ifConfigDecl.activeClause(
-          in: configuration,
-          diagnosticHandler: diagnosticHandler
-        )
+        let (activeClause, localDiagnostics) = ifConfigDecl.activeClause(in: configuration)
+
+        for diag in localDiagnostics {
+          diagnosticHandler?(diag)
+        }
 
         if activeClause != ifConfigClause {
           // This was not the active clause, so we know that we're in an

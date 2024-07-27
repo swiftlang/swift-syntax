@@ -9,6 +9,7 @@
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
+
 import SwiftDiagnostics
 import SwiftSyntax
 
@@ -62,7 +63,7 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
   override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
     // If we're in an active region, find the active clause. Otherwise,
     // there isn't one.
-    let activeClause = inActiveRegion ? node.activeClause(in: configuration) : nil
+    let activeClause = inActiveRegion ? node.activeClause(in: configuration).clause : nil
     for clause in node.clauses {
       // If this is the active clause, record it and then recurse into the
       // elements.

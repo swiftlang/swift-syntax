@@ -29,28 +29,28 @@ public class ActiveRegionTests: XCTestCase {
   func testActiveRegions() throws {
     try assertActiveCode(
       """
-      4️⃣
+      1️⃣
       #if DEBUG
-      0️⃣func f()
+      2️⃣func f()
       #elseif ASSERTS
-      1️⃣func g()
+      3️⃣func g()
 
       #if compiler(>=8.0)
-      2️⃣func h()
+      4️⃣func h()
       #else
-      3️⃣var i
+      5️⃣var i
       #endif
       #endif
-      5️⃣token
+      6️⃣token
       """,
       configuration: linuxBuildConfig,
       states: [
-        "0️⃣": .active,
-        "1️⃣": .inactive,
-        "2️⃣": .unparsed,
+        "1️⃣": .active,
+        "2️⃣": .active,
         "3️⃣": .inactive,
-        "4️⃣": .active,
-        "5️⃣": .active,
+        "4️⃣": .unparsed,
+        "5️⃣": .inactive,
+        "6️⃣": .active,
       ]
     )
   }
@@ -58,27 +58,27 @@ public class ActiveRegionTests: XCTestCase {
   func testActiveRegionsInPostfix() throws {
     try assertActiveCode(
       """
-      4️⃣a.b()
+      1️⃣a.b()
       #if DEBUG
-      0️⃣.c()
+      2️⃣.c()
       #elseif ASSERTS
-      1️⃣.d()
+      3️⃣.d()
       #if compiler(>=8.0)
-      2️⃣.e()
+      4️⃣.e()
       #else
-      3️⃣.f()
+      5️⃣.f()
       #endif
       #endif
-      5️⃣.g()
+      6️⃣.g()
       """,
       configuration: linuxBuildConfig,
       states: [
-        "0️⃣": .active,
-        "1️⃣": .inactive,
-        "2️⃣": .unparsed,
+        "1️⃣": .active,
+        "2️⃣": .active,
         "3️⃣": .inactive,
-        "4️⃣": .active,
-        "5️⃣": .active,
+        "4️⃣": .unparsed,
+        "5️⃣": .inactive,
+        "6️⃣": .active,
       ]
     )
   }

@@ -12,42 +12,58 @@
 
 /// A canonicalized representation of an identifier that strips away backticks.
 public struct Identifier: Equatable, Hashable, Sendable {
-  /// The sanitized `text` of a token.
+  enum IdentifierKind: Hashable {
+    case token(raw: RawIdentifier, arena: SyntaxArenaRef)
+    case string(String)
+    
+    static func sanitize(string: String) -> IdentifierKind {
+      let backtick = "`"
+      if string.count > 2 && string.hasPrefix(backtick) && string.hasSuffix(backtick) {
+        let startIndex = string.index(after: string.startIndex)
+        let endIndex = string.index(before: string.endIndex)
+        return .string(String(string[startIndex..<endIndex]))
+      } else {
+        return .string(string)
+      }
+    }
+  }
+  
+  /// The sanitized name of the identifier.
   public var name: String {
-    string?.name ?? String(syntaxText: raw!.name)
+    switch identifier {
+    case .token(let raw, _):
+      String(syntaxText: raw.name)
+    case .string(let string):
+      string
+    }
+  }
+  
+  @_spi(RawSyntax)
+  public var raw: RawIdentifier? {
+    switch identifier {
+    case .token(let raw, _):
+      raw
+    default:
+      nil
+    }
   }
 
-  @_spi(RawSyntax)
-  public let raw: RawIdentifier?
-  public let string: StringIdentifier?
-
-  private let arena: SyntaxArenaRef?
+  let identifier: IdentifierKind
 
   public init?(_ token: TokenSyntax) {
     guard case .identifier = token.tokenKind else {
       return nil
     }
-
-    self.raw = RawIdentifier(token.tokenView)
-    self.arena = token.tokenView.raw.arenaReference
-    self.string = nil
+    
+    self.identifier = .token(raw: RawIdentifier(token.tokenView), arena: token.tokenView.raw.arenaReference)
   }
   
   public init(_ string: String) {
-    self.string = StringIdentifier(string)
-    self.raw = nil
-    self.arena = nil
+    self.identifier = IdentifierKind.sanitize(string: string)
   }
   
   public static func == (lhs: Self, rhs: Self) -> Bool {
-    if let lhsRaw = lhs.raw,
-       let rhsRaw = rhs.raw,
-       let lhsArena = lhs.arena,
-       let rhsArena = rhs.arena {
-      return lhsRaw == rhsRaw && lhsArena == rhsArena
-    } else {
-      return lhs.name == rhs.name
-    }
+    lhs.name == rhs.name
   }
 }
 
@@ -64,21 +80,6 @@ public struct RawIdentifier: Equatable, Hashable, Sendable {
       self.name = SyntaxText(rebasing: raw.rawText[startIndex..<endIndex])
     } else {
       self.name = raw.rawText
-    }
-  }
-}
-
-public struct StringIdentifier: Equatable, Hashable, Sendable {
-  public let name: String
-
-  fileprivate init(_ string: String) {
-    let backtick = "`"
-    if string.count > 2 && string.hasPrefix(backtick) && string.hasSuffix(backtick) {
-      let startIndex = string.index(after: string.startIndex)
-      let endIndex = string.index(before: string.endIndex)
-      self.name = String(string[startIndex..<endIndex])
-    } else {
-      self.name = string
     }
   }
 }

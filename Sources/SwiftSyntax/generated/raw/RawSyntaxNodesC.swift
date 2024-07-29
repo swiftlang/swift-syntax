@@ -935,30 +935,26 @@ public struct RawClosureCaptureSyntax: RawSyntaxNodeProtocol {
       _ unexpectedBeforeSpecifier: RawUnexpectedNodesSyntax? = nil, 
       specifier: RawClosureCaptureSpecifierSyntax?, 
       _ unexpectedBetweenSpecifierAndName: RawUnexpectedNodesSyntax? = nil, 
-      name: RawTokenSyntax?, 
-      _ unexpectedBetweenNameAndEqual: RawUnexpectedNodesSyntax? = nil, 
-      equal: RawTokenSyntax?, 
-      _ unexpectedBetweenEqualAndExpression: RawUnexpectedNodesSyntax? = nil, 
-      expression: RawExprSyntax, 
-      _ unexpectedBetweenExpressionAndTrailingComma: RawUnexpectedNodesSyntax? = nil, 
+      name: RawTokenSyntax, 
+      _ unexpectedBetweenNameAndInitializer: RawUnexpectedNodesSyntax? = nil, 
+      initializer: RawInitializerClauseSyntax?, 
+      _ unexpectedBetweenInitializerAndTrailingComma: RawUnexpectedNodesSyntax? = nil, 
       trailingComma: RawTokenSyntax?, 
       _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
     let raw = RawSyntax.makeLayout(
-      kind: .closureCapture, uninitializedCount: 11, arena: arena) { layout in
+      kind: .closureCapture, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeSpecifier?.raw
       layout[1] = specifier?.raw
       layout[2] = unexpectedBetweenSpecifierAndName?.raw
-      layout[3] = name?.raw
-      layout[4] = unexpectedBetweenNameAndEqual?.raw
-      layout[5] = equal?.raw
-      layout[6] = unexpectedBetweenEqualAndExpression?.raw
-      layout[7] = expression.raw
-      layout[8] = unexpectedBetweenExpressionAndTrailingComma?.raw
-      layout[9] = trailingComma?.raw
-      layout[10] = unexpectedAfterTrailingComma?.raw
+      layout[3] = name.raw
+      layout[4] = unexpectedBetweenNameAndInitializer?.raw
+      layout[5] = initializer?.raw
+      layout[6] = unexpectedBetweenInitializerAndTrailingComma?.raw
+      layout[7] = trailingComma?.raw
+      layout[8] = unexpectedAfterTrailingComma?.raw
     }
     self.init(unchecked: raw)
   }
@@ -975,36 +971,28 @@ public struct RawClosureCaptureSyntax: RawSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var name: RawTokenSyntax? {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))
+  public var name: RawTokenSyntax {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenNameAndEqual: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndInitializer: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var equal: RawTokenSyntax? {
-    layoutView.children[5].map(RawTokenSyntax.init(raw:))
+  public var initializer: RawInitializerClauseSyntax? {
+    layoutView.children[5].map(RawInitializerClauseSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenEqualAndExpression: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenInitializerAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var expression: RawExprSyntax {
-    layoutView.children[7].map(RawExprSyntax.init(raw:))!
-  }
-  
-  public var unexpectedBetweenExpressionAndTrailingComma: RawUnexpectedNodesSyntax? {
-    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-  
   public var trailingComma: RawTokenSyntax? {
-    layoutView.children[9].map(RawTokenSyntax.init(raw:))
+    layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
   
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
-    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

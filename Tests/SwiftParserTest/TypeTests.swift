@@ -94,8 +94,8 @@ final class TypeTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected identifier in closure capture",
-          fixIts: ["insert identifier"]
+          message: "expected closure capture in closure capture clause",
+          fixIts: ["insert closure capture"]
         ),
         DiagnosticSpec(
           locationMarker: "1️⃣",

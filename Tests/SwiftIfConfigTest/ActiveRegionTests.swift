@@ -104,7 +104,7 @@ public class ActiveRegionTests: XCTestCase {
 
 /// Assert that the various marked positions in the source code have the
 /// expected active states.
-func assertActiveCode(
+fileprivate func assertActiveCode(
   _ markedSource: String,
   configuration: some BuildConfiguration = TestingBuildConfiguration(),
   states: [String: IfConfigRegionState],

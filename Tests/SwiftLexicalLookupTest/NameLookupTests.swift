@@ -50,7 +50,7 @@ final class testNameLookup: XCTestCase {
       source: """
         for i in 1..<4 {
           let (1️⃣a, 2️⃣b) = (1, 2)
-          let 3️⃣c = 3, 4️⃣d = 4
+          let 3️⃣c = 3, 4️⃣d = 9️⃣c
 
           5️⃣a
           6️⃣b
@@ -63,6 +63,7 @@ final class testNameLookup: XCTestCase {
         "6️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["2️⃣"])],
         "7️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"])],
         "8️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["4️⃣"])],
+        "9️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"])],
       ],
       expectedResultTypes: .all(IdentifierPatternSyntax.self)
     )
@@ -73,8 +74,8 @@ final class testNameLookup: XCTestCase {
       source: """
         for 1️⃣i in 1..<4 {
           let (a, b) = (2️⃣i, 3️⃣j)
-          for (4️⃣i, 5️⃣j) in foo {
-            let (c, d) = (6️⃣i, 7️⃣j)
+          for (4️⃣i, (5️⃣j, 8️⃣k)) in foo {
+            let (c, d, e) = (6️⃣i, 7️⃣j, 9️⃣k)
           }
         }
         """,
@@ -86,6 +87,7 @@ final class testNameLookup: XCTestCase {
           .fromScope(ForStmtSyntax.self, expectedNames: ["1️⃣"]),
         ],
         "7️⃣": [.fromScope(ForStmtSyntax.self, expectedNames: ["5️⃣"])],
+        "9️⃣": [.fromScope(ForStmtSyntax.self, expectedNames: ["8️⃣"])],
       ],
       expectedResultTypes: .all(IdentifierPatternSyntax.self)
     )
@@ -484,13 +486,13 @@ final class testNameLookup: XCTestCase {
 
         9️⃣class d {}
 
-        let x = 0️⃣d
+        let 🔟a = 0️⃣d
         """,
       references: [
         "3️⃣": [.fromFileScope(expectedNames: ["1️⃣", "8️⃣"])],
         "4️⃣": [.fromFileScope(expectedNames: ["2️⃣"])],
         "5️⃣": [.fromFileScope(expectedNames: ["7️⃣"])],
-        "6️⃣": [],
+        "6️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
         "0️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
       ],
       expectedResultTypes: .all(ClassDeclSyntax.self, except: ["8️⃣": IdentifierPatternSyntax.self])
@@ -514,48 +516,41 @@ final class testNameLookup: XCTestCase {
 
         9️⃣class d {}
 
-        let x = 0️⃣d
+        let 🔟a = 0️⃣d
         """,
       references: [
-        "3️⃣": [.fromFileScope(expectedNames: ["1️⃣", "8️⃣"])],
+        "3️⃣": [.fromFileScope(expectedNames: ["1️⃣", "8️⃣", "🔟"])],
         "4️⃣": [.fromFileScope(expectedNames: ["2️⃣"])],
         "5️⃣": [.fromFileScope(expectedNames: ["7️⃣"])],
         "6️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
         "0️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
       ],
-      expectedResultTypes: .all(ClassDeclSyntax.self, except: ["8️⃣": IdentifierPatternSyntax.self]),
+      expectedResultTypes: .all(
+        ClassDeclSyntax.self,
+        except: [
+          "8️⃣": IdentifierPatternSyntax.self,
+          "🔟": IdentifierPatternSyntax.self,
+        ]
+      ),
       config: LookupConfig(fileScopeHandling: .memberBlock)
     )
   }
 
-  func testFileScopeAsCodeBlock() {
+  func testDeclarationAvailabilityInCodeBlock() {
     assertLexicalNameLookup(
       source: """
-        1️⃣class a {}
+        func x {
+          1️⃣class A {}
 
-        2️⃣class b {
-          let x = 3️⃣a + 4️⃣b + 5️⃣c + 6️⃣d
+          let a = 2️⃣A()
+
+          3️⃣class A {}
         }
-         
-        let 8️⃣a = 0
-
-        7️⃣class c {}
-
-        if a == 0 {}
-
-        9️⃣class d {}
-
-        let x = 0️⃣d
         """,
       references: [
-        "3️⃣": [.fromFileScope(expectedNames: ["1️⃣"])],
-        "4️⃣": [],
-        "5️⃣": [],
-        "6️⃣": [],
-        "0️⃣": [.fromFileScope(expectedNames: ["9️⃣"])],
+        "2️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣", "3️⃣"])]
       ],
-      expectedResultTypes: .all(ClassDeclSyntax.self, except: ["8️⃣": IdentifierPatternSyntax.self]),
-      config: LookupConfig(fileScopeHandling: .codeBlock)
+      expectedResultTypes: .all(ClassDeclSyntax.self)
     )
   }
 }

@@ -75,7 +75,7 @@ extension SequentialScopeSyntax {
               from: codeBlockItem.item,
               accessibleAfter: codeBlockItem.endPosition
             ).filter { introducedName in
-              does(name: name, referTo: introducedName, at: syntax)
+              checkName(name, refersTo: introducedName, at: syntax)
             }
         )
       }

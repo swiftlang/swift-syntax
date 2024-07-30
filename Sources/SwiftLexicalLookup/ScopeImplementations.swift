@@ -103,19 +103,10 @@ import SwiftSyntax
     state: LookupState
   ) -> [LookupResult] {
     switch config.fileScopeHandling {
-    case .codeBlock:
-      return sequentialLookup(
-        in: statements,
-        for: name,
-        at: syntax,
-        with: config,
-        state: state,
-        createResultsForThisScopeWith: { .fromFileScope(self, withNames: $0) }
-      )
     case .memberBlock:
       let names = introducedNames(using: .memberBlock)
         .filter { lookupName in
-          does(name: name, referTo: lookupName, at: syntax)
+          checkName(name, refersTo: lookupName, at: syntax)
         }
 
       return names.isEmpty ? [] : [.fromFileScope(self, withNames: names)]
@@ -133,7 +124,7 @@ import SwiftSyntax
           if item.is(DeclSyntax.self) || item.is(VariableDeclSyntax.self) {
             let foundNames = LookupName.getNames(from: item)
 
-            members.append(contentsOf: foundNames.filter { does(name: name, referTo: $0, at: syntax) })
+            members.append(contentsOf: foundNames.filter { checkName(name, refersTo: $0, at: syntax) })
           } else {
             encounteredNonDeclaration = true
             sequentialItems.append(codeBlockItem)
@@ -319,7 +310,7 @@ import SwiftSyntax
     let names = conditions.flatMap { element in
       LookupName.getNames(from: element.condition, accessibleAfter: element.endPosition)
     }.filter { introducedName in
-      does(name: name, referTo: introducedName, at: syntax)
+      checkName(name, refersTo: introducedName, at: syntax)
     }
 
     return names.isEmpty ? [] : [.fromScope(self, withNames: names)]

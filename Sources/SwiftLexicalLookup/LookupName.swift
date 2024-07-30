@@ -40,8 +40,8 @@ import SwiftSyntax
     }
   }
 
-  /// Used for name comparison.
-  var name: String {
+  /// Name associated with implicit name kind.
+  private var name: String {
     switch self {
     case .self:
       "self"
@@ -54,6 +54,11 @@ import SwiftSyntax
     case .oldValue:
       "oldValue"
     }
+  }
+  
+  /// Identifier used for name comparison.
+  var identifier: Identifier {
+    Identifier(name)
   }
 }
 
@@ -79,15 +84,15 @@ import SwiftSyntax
     }
   }
 
-  /// Introduced name.
+  /// Identifier used for name comparison.
   @_spi(Experimental) public var identifier: Identifier? {
     switch self {
     case .identifier(let syntax, _):
       Identifier(syntax.identifier)
     case .declaration(let syntax):
       Identifier(syntax.name)
-    default:
-      nil
+    case .implicit(let kind):
+      kind.identifier
     }
   }
 
@@ -102,16 +107,6 @@ import SwiftSyntax
     }
   }
 
-  /// Used for name comparison.
-  var name: String? {
-    switch self {
-    case .identifier, .declaration:
-      identifier?.name
-    case .implicit(let implicitName):
-      implicitName.name
-    }
-  }
-
   /// Checks if this name was introduced before the syntax used for lookup.
   func isAccessible(at lookedUpSyntax: SyntaxProtocol) -> Bool {
     guard let accessibleAfter else { return true }
@@ -119,9 +114,9 @@ import SwiftSyntax
   }
 
   /// Checks if this name refers to the looked up phrase.
-  func refersTo(_ lookedUpName: String) -> Bool {
-    guard let name else { return false }
-    return name == lookedUpName
+  func refersTo(_ lookedUpIdentifier: Identifier) -> Bool {
+    guard let identifier else { return false }
+    return identifier == lookedUpIdentifier
   }
 
   /// Extracts names introduced by the given `syntax` structure.

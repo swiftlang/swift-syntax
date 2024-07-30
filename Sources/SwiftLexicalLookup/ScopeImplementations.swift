@@ -97,7 +97,7 @@ import SwiftSyntax
   /// - for `memberBlock` - a, b, c, d, e, f
   /// - for `codeBlock` - a
   @_spi(Experimental) public func lookup(
-    for name: String?,
+    for identifier: Identifier?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
@@ -134,7 +134,7 @@ import SwiftSyntax
 
       let sequentialNames = sequentialLookup(
         in: sequentialItems,
-        for: name,
+        for: identifier,
         at: syntax,
         with: config,
         state: state,
@@ -156,14 +156,14 @@ import SwiftSyntax
   }
 
   @_spi(Experimental) public func lookup(
-    for name: String?,
+    for identifier: Identifier?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
   ) -> [LookupResult] {
     sequentialLookup(
       in: statements,
-      for: name,
+      for: identifier,
       at: syntax,
       with: config,
       state: state,
@@ -278,7 +278,7 @@ import SwiftSyntax
   /// }
   /// ```
   @_spi(Experimental) public func lookup(
-    for name: String?,
+    for identifier: Identifier?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
@@ -302,7 +302,7 @@ import SwiftSyntax
 
 @_spi(Experimental) extension GuardStmtSyntax: IntroducingToSequentialParentScopeSyntax {
   @_spi(Experimental) public func introducesToSequentialParent(
-    for name: String?,
+    for identifier: Identifier?,
     at syntax: SwiftSyntax.SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
@@ -332,7 +332,7 @@ import SwiftSyntax
   /// // a is visible here
   /// ```
   @_spi(Experimental) public func lookup(
-    for name: String?,
+    for identifier: Identifier?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
@@ -340,9 +340,9 @@ import SwiftSyntax
     if body.position <= syntax.position && body.endPosition >= syntax.position {
       var newState = state
       newState.skipSequentialIntroductionFrom = self
-      return lookupInParent(for: name, at: syntax, with: config, state: newState)
+      return lookupInParent(for: identifier, at: syntax, with: config, state: newState)
     } else {
-      return defaultLookupImplementation(for: name, at: syntax, with: config, state: state)
+      return defaultLookupImplementation(for: identifier, at: syntax, with: config, state: state)
     }
   }
 }

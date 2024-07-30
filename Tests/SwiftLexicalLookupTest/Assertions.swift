@@ -92,7 +92,9 @@ func assertLexicalNameLookup(
   assertLexicalScopeQuery(
     source: source,
     methodUnderTest: { marker, tokenAtMarker in
-      let result = tokenAtMarker.lookup(for: useNilAsTheParameter ? nil : tokenAtMarker.text, with: config)
+      let lookupIdentifier = Identifier(tokenAtMarker) ?? Identifier(tokenAtMarker.text)
+      
+      let result = tokenAtMarker.lookup(for: useNilAsTheParameter ? nil : lookupIdentifier, with: config)
 
       guard let expectedValues = references[marker] else {
         XCTFail("For marker \(marker), couldn't find result expectation")

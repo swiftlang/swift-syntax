@@ -16,7 +16,7 @@ protocol IntroducingToSequentialParentScopeSyntax: ScopeSyntax {
   /// Returns names matching lookup that should be
   /// handled by it's parent sequential scope.
   func introducesToSequentialParent(
-    for name: String?,
+    for identifier: Identifier?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState

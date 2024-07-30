@@ -32,9 +32,9 @@ public struct Identifier: Equatable, Hashable, Sendable {
   public var name: String {
     switch identifier {
     case .token(let raw, _):
-      String(syntaxText: raw.name)
+      return String(syntaxText: raw.name)
     case .string(let string):
-      string
+      return string
     }
   }
 
@@ -42,9 +42,9 @@ public struct Identifier: Equatable, Hashable, Sendable {
   public var raw: RawIdentifier? {
     switch identifier {
     case .token(let raw, _):
-      raw
+      return raw
     default:
-      nil
+      return nil
     }
   }
 

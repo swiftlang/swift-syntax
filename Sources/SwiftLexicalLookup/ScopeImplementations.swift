@@ -14,7 +14,7 @@ import SwiftSyntax
 
 @_spi(Experimental) extension SyntaxProtocol {
   /// Parent scope of this syntax node, or scope introduced by this syntax node.
-  @_spi(Experimental) public var scope: ScopeSyntax? {
+  var scope: ScopeSyntax? {
     if let scopeSyntax = Syntax(self).asProtocol(SyntaxProtocol.self) as? ScopeSyntax {
       return scopeSyntax
     } else {
@@ -358,15 +358,15 @@ import SwiftSyntax
   /// withing the accessor..
   @_spi(Experimental) public var introducedNames: [LookupName] {
     if let parameters {
-      LookupName.getNames(from: parameters)
+      return LookupName.getNames(from: parameters)
     } else {
       switch accessorSpecifier.tokenKind {
       case .keyword(.set), .keyword(.willSet):
-        [.implicit(.newValue(self))]
+        return [.implicit(.newValue(self))]
       case .keyword(.didSet):
-        [.implicit(.oldValue(self))]
+        return [.implicit(.oldValue(self))]
       default:
-        []
+        return []
       }
     }
   }

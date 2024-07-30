@@ -55,7 +55,7 @@ import SwiftSyntax
       "oldValue"
     }
   }
-  
+
   /// Identifier used for name comparison.
   var identifier: Identifier {
     Identifier(name)

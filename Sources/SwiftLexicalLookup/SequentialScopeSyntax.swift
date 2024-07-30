@@ -75,7 +75,7 @@ extension SequentialScopeSyntax {
               from: codeBlockItem.item,
               accessibleAfter: codeBlockItem.endPosition
             ).filter { introducedName in
-              checkName(name, refersTo: introducedName, at: syntax)
+              checkName(identifier, refersTo: introducedName, at: syntax)
             }
         )
       }
@@ -87,6 +87,7 @@ extension SequentialScopeSyntax {
       currentChunk = []
     }
 
-    return (result.isEmpty ? [] : result.reversed()) + lookupInParent(for: identifier, at: syntax, with: config, state: state)
+    return (result.isEmpty ? [] : result.reversed())
+      + lookupInParent(for: identifier, at: syntax, with: config, state: state)
   }
 }

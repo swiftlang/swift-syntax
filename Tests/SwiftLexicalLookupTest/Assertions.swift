@@ -15,6 +15,7 @@ import SwiftParser
 import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
+
 /// `methodUnderTest` is called with the token at every position marker in the keys of `expected`.
 /// It then asserts that the positions of the syntax nodes returned by `methodUnderTest` are the values in `expected`.
 /// It also checks whether result types match rules specified in `expectedResultTypes`.
@@ -93,7 +94,7 @@ func assertLexicalNameLookup(
     source: source,
     methodUnderTest: { marker, tokenAtMarker in
       let lookupIdentifier = Identifier(tokenAtMarker) ?? Identifier(tokenAtMarker.text)
-      
+
       let result = tokenAtMarker.lookup(for: useNilAsTheParameter ? nil : lookupIdentifier, with: config)
 
       guard let expectedValues = references[marker] else {

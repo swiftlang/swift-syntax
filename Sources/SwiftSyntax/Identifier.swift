@@ -15,7 +15,7 @@ public struct Identifier: Equatable, Hashable, Sendable {
   enum IdentifierKind: Hashable {
     case token(raw: RawIdentifier, arena: SyntaxArenaRef)
     case string(String)
-    
+
     static func sanitize(string: String) -> IdentifierKind {
       let backtick = "`"
       if string.count > 2 && string.hasPrefix(backtick) && string.hasSuffix(backtick) {
@@ -27,7 +27,7 @@ public struct Identifier: Equatable, Hashable, Sendable {
       }
     }
   }
-  
+
   /// The sanitized name of the identifier.
   public var name: String {
     switch identifier {
@@ -37,7 +37,7 @@ public struct Identifier: Equatable, Hashable, Sendable {
       string
     }
   }
-  
+
   @_spi(RawSyntax)
   public var raw: RawIdentifier? {
     switch identifier {
@@ -54,14 +54,14 @@ public struct Identifier: Equatable, Hashable, Sendable {
     guard case .identifier = token.tokenKind else {
       return nil
     }
-    
+
     self.identifier = .token(raw: RawIdentifier(token.tokenView), arena: token.tokenView.raw.arenaReference)
   }
-  
+
   public init(_ string: String) {
     self.identifier = IdentifierKind.sanitize(string: string)
   }
-  
+
   public static func == (lhs: Self, rhs: Self) -> Bool {
     lhs.name == rhs.name
   }

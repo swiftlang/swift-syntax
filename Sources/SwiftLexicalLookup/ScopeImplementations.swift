@@ -106,7 +106,7 @@ import SwiftSyntax
     case .memberBlock:
       let names = introducedNames(using: .memberBlock)
         .filter { lookupName in
-          checkName(name, refersTo: lookupName, at: syntax)
+          checkName(identifier, refersTo: lookupName, at: syntax)
         }
 
       return names.isEmpty ? [] : [.fromFileScope(self, withNames: names)]
@@ -124,7 +124,7 @@ import SwiftSyntax
           if item.is(DeclSyntax.self) || item.is(VariableDeclSyntax.self) {
             let foundNames = LookupName.getNames(from: item)
 
-            members.append(contentsOf: foundNames.filter { checkName(name, refersTo: $0, at: syntax) })
+            members.append(contentsOf: foundNames.filter { checkName(identifier, refersTo: $0, at: syntax) })
           } else {
             encounteredNonDeclaration = true
             sequentialItems.append(codeBlockItem)
@@ -284,9 +284,9 @@ import SwiftSyntax
     state: LookupState
   ) -> [LookupResult] {
     if let elseBody, elseBody.position <= syntax.position, elseBody.endPosition >= syntax.position {
-      return lookupInParent(for: name, at: syntax, with: config, state: state)
+      return lookupInParent(for: identifier, at: syntax, with: config, state: state)
     } else {
-      return defaultLookupImplementation(for: name, at: syntax, with: config, state: state)
+      return defaultLookupImplementation(for: identifier, at: syntax, with: config, state: state)
     }
   }
 }
@@ -310,7 +310,7 @@ import SwiftSyntax
     let names = conditions.flatMap { element in
       LookupName.getNames(from: element.condition, accessibleAfter: element.endPosition)
     }.filter { introducedName in
-      checkName(name, refersTo: introducedName, at: syntax)
+      checkName(identifier, refersTo: introducedName, at: syntax)
     }
 
     return names.isEmpty ? [] : [.fromScope(self, withNames: names)]

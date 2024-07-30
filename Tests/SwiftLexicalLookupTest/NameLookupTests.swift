@@ -668,7 +668,7 @@ final class testNameLookup: XCTestCase {
       ]
     )
   }
-  
+
   func testBacktickCompatibility() {
     assertLexicalNameLookup(
       source: """
@@ -679,7 +679,7 @@ final class testNameLookup: XCTestCase {
             print(4️⃣`self`)
           }
         }
-        
+
         5️⃣struct Bar {
           func test() {
             print(6️⃣self)
@@ -691,18 +691,18 @@ final class testNameLookup: XCTestCase {
       references: [
         "3️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("2️⃣")]),
-          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))])
+          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))]),
         ],
         "4️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("2️⃣")]),
-          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))])
+          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))]),
         ],
         "6️⃣": [
           .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("5️⃣"))])
         ],
         "8️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("7️⃣")]),
-          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("5️⃣"))])
+          .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("5️⃣"))]),
         ],
       ]
     )

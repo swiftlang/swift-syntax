@@ -253,7 +253,7 @@ public protocol BuildConfiguration {
   ///
   /// The language version can be queried with the `swift` directive that checks
   /// how the supported language version compares, as described by
-  /// [SE-0212](https://github.com/apple/swift-evolution/blob/main/proposals/0212-compiler-version-directive.md). For example:
+  /// [SE-0212](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0212-compiler-version-directive.md). For example:
   ///
   /// ```swift
   /// #if swift(>=5.5)

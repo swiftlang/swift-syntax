@@ -143,7 +143,7 @@ let package = Package(
 
     .target(
       name: "SwiftIfConfig",
-      dependencies: ["SwiftSyntax", "SwiftOperators"],
+      dependencies: ["SwiftSyntax", "SwiftDiagnostics", "SwiftOperators"],
       exclude: ["CMakeLists.txt"]
     ),
 

@@ -96,7 +96,7 @@ import SwiftSyntax
   /// - for `memberBlockUpToLastDecl` - a, b, c, d
   /// - for `memberBlock` - a, b, c, d, e, f
   /// - for `codeBlock` - a
-  @_spi(Experimental) public func lookup(
+  @_spi(Experimental) public func _lookup(
     for identifier: Identifier?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
@@ -155,7 +155,7 @@ import SwiftSyntax
     }
   }
 
-  @_spi(Experimental) public func lookup(
+  @_spi(Experimental) public func _lookup(
     for identifier: Identifier?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
@@ -277,7 +277,7 @@ import SwiftSyntax
   ///   // <-- a is not visible here
   /// }
   /// ```
-  @_spi(Experimental) public func lookup(
+  @_spi(Experimental) public func _lookup(
     for identifier: Identifier?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
@@ -331,7 +331,7 @@ import SwiftSyntax
   /// }
   /// // a is visible here
   /// ```
-  @_spi(Experimental) public func lookup(
+  @_spi(Experimental) public func _lookup(
     for identifier: Identifier?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,

@@ -47,7 +47,7 @@ extension SyntaxProtocol {
     for identifier: Identifier?,
     with config: LookupConfig = LookupConfig()
   ) -> [LookupResult] {
-    scope?.lookup(for: identifier, at: self, with: config, state: LookupState()) ?? []
+    scope?.lookup(for: identifier, at: self, with: config) ?? []
   }
 }
 
@@ -59,6 +59,16 @@ extension SyntaxProtocol {
   /// Finds all declarations `name` refers to. `syntax` specifies the node lookup was triggered with.
   /// If `name` set to `nil`, returns all available names at the given node.
   func lookup(
+    for identifier: Identifier?,
+    at syntax: SyntaxProtocol,
+    with config: LookupConfig
+  ) -> [LookupResult]
+  /// Finds all declarations `name` refers to. `syntax` specifies the node lookup was triggered with.
+  /// If `name` set to `nil`, returns all available names at the given node.
+  /// `state` represents lookup state passed between lookup methods.
+  ///
+  /// - Note: This method is intended for internal use only. For public usage, use ``ScopeSyntax/lookup(for:at:with:)`` instead.
+  func _lookup(
     for identifier: Identifier?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
@@ -74,13 +84,27 @@ extension SyntaxProtocol {
   /// Returns `LookupResult` of all names introduced in this scope that `name`
   /// refers to and is accessible at given syntax node then passes lookup to the parent.
   /// If `name` set to `nil`, returns all available names at the given node.
-  @_spi(Experimental) public func lookup(
+  /// `state` represents lookup state passed between lookup methods.
+  ///
+  /// - Note: This method is intended for internal use only. For public usage, use ``ScopeSyntax/lookup(for:at:with:)`` instead.
+  @_spi(Experimental) public func _lookup(
     for identifier: Identifier?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
   ) -> [LookupResult] {
     defaultLookupImplementation(for: identifier, at: syntax, with: config, state: state)
+  }
+  
+  /// Returns `LookupResult` of all names introduced in this scope that `name`
+  /// refers to and is accessible at given syntax node then passes lookup to the parent.
+  /// If `name` set to `nil`, returns all available names at the given node.
+  @_spi(Experimental) public func lookup(
+    for identifier: Identifier?,
+    at syntax: SyntaxProtocol,
+    with config: LookupConfig
+  ) -> [LookupResult] {
+    _lookup(for: identifier, at: syntax, with: config, state: LookupState())
   }
 
   /// Returns `LookupResult` of all names introduced in this scope that `name`
@@ -113,7 +137,7 @@ extension SyntaxProtocol {
     with config: LookupConfig,
     state: LookupState
   ) -> [LookupResult] {
-    parentScope?.lookup(for: identifier, at: syntax, with: config, state: state) ?? []
+    parentScope?._lookup(for: identifier, at: syntax, with: config, state: state) ?? []
   }
 
   func checkName(_ name: Identifier?, refersTo introducedName: LookupName, at syntax: SyntaxProtocol) -> Bool {

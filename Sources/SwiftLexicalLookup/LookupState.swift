@@ -17,5 +17,5 @@ import Foundation
   /// should be skipped during lookup in sequential scopes.
   var skipSequentialIntroductionFrom: IntroducingToSequentialParentScopeSyntax?
 
-  @_spi(Experimental) public init() {}
+  init() {}
 }

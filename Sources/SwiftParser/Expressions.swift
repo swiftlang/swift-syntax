@@ -1705,26 +1705,20 @@ extension Parser {
 
           // The thing being capture specified is an identifier, or as an identifier
           // followed by an initializer clause.
-          let unexpectedBeforeName: RawUnexpectedNodesSyntax?
-          let name: RawTokenSyntax
+          let (unexpectedBeforeName, name) = self.expect(
+            .identifier,
+            TokenSpec(.self),
+            default: .identifier
+          )
+
           let initializer: RawInitializerClauseSyntax?
-          if self.peek(isAt: .equal) {
+          if self.at(.equal) {
             // The name is a new declaration with
             // initializer clause.
-            (unexpectedBeforeName, name) = self.expect(
-              .identifier,
-              TokenSpec(.self, remapping: .identifier),
-              default: .identifier
-            )
             initializer = self.parseInitializerClause()
           } else {
             // This is the simple case - the identifier is the name and
             // the initializer clause is empty.
-            (unexpectedBeforeName, name) = self.expect(
-              .identifier,
-              TokenSpec(.self),
-              default: .identifier
-            )
             initializer = nil
           }
 

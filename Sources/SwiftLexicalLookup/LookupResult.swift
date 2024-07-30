@@ -23,9 +23,9 @@ import SwiftSyntax
   @_spi(Experimental) public var scope: ScopeSyntax? {
     switch self {
     case .fromScope(let scopeSyntax, _):
-      scopeSyntax
+      return scopeSyntax
     case .fromFileScope(let fileScopeSyntax, _):
-      fileScopeSyntax
+      return fileScopeSyntax
     }
   }
 
@@ -33,7 +33,7 @@ import SwiftSyntax
   @_spi(Experimental) public var names: [LookupName] {
     switch self {
     case .fromScope(_, let names), .fromFileScope(_, let names):
-      names
+      return names
     }
   }
 }

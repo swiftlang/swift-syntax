@@ -21,7 +21,7 @@ typedef struct {
 } AtomicBool;
 
 static inline AtomicBool *_Nonnull swiftsyntax_atomic_bool_create(bool initialValue) {
-  AtomicBool *atomic = malloc(sizeof(AtomicBool));
+  AtomicBool *atomic = (AtomicBool *)malloc(sizeof(AtomicBool));
   atomic->value = initialValue;
   return atomic;
 }

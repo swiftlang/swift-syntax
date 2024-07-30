@@ -10,27 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftParser
 import SwiftSyntax
+import SwiftSyntaxBuilder
 import XCTest
-import _SwiftSyntaxTestSupport
 
-class ParsingPerformanceTests: XCTestCase {
-
-  var inputFile: URL {
-    return URL(fileURLWithPath: #filePath)
-      .deletingLastPathComponent()
-      .appendingPathComponent("Inputs")
-      .appendingPathComponent("MinimalCollections.swift.input")
-  }
-
-  func testNativeParsingPerformance() throws {
-    try XCTSkipIf(longTestsDisabled)
-
-    let source = try String(contentsOf: inputFile, encoding: .utf8)
-
-    try measureInstructions {
-      _ = Parser.parse(source: source)
+final class AccessorDeclTests: XCTestCase {
+  func testCreateAccessorWithHeaderAndBody() throws {
+    let accessor = try AccessorDeclSyntax("get") {
+      ExprSyntax("1")
     }
+    XCTAssertEqual(accessor.body?.statements.count, 1)
   }
 }

@@ -28,7 +28,7 @@ class VisitorPerformanceTests: XCTestCase {
     try XCTSkipIf(longTestsDisabled)
     class EmptyVisitor: SyntaxVisitor {}
 
-    let source = try String(contentsOf: inputFile)
+    let source = try String(contentsOf: inputFile, encoding: .utf8)
     let parsed = Parser.parse(source: source)
     let emptyVisitor = EmptyVisitor(viewMode: .sourceAccurate)
 
@@ -41,7 +41,7 @@ class VisitorPerformanceTests: XCTestCase {
     try XCTSkipIf(longTestsDisabled)
     class EmptyRewriter: SyntaxRewriter {}
 
-    let source = try String(contentsOf: inputFile)
+    let source = try String(contentsOf: inputFile, encoding: .utf8)
     let parsed = Parser.parse(source: source)
     let emptyRewriter = EmptyRewriter(viewMode: .sourceAccurate)
 
@@ -54,7 +54,7 @@ class VisitorPerformanceTests: XCTestCase {
     try XCTSkipIf(longTestsDisabled)
     class EmptyAnyVisitor: SyntaxAnyVisitor {}
 
-    let source = try String(contentsOf: inputFile)
+    let source = try String(contentsOf: inputFile, encoding: .utf8)
     let parsed = Parser.parse(source: source)
     let emptyVisitor = EmptyAnyVisitor(viewMode: .sourceAccurate)
 

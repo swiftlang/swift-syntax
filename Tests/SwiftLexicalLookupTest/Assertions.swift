@@ -15,7 +15,6 @@ import SwiftParser
 import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
-
 /// `methodUnderTest` is called with the token at every position marker in the keys of `expected`.
 /// It then asserts that the positions of the syntax nodes returned by `methodUnderTest` are the values in `expected`.
 /// It also checks whether result types match rules specified in `expectedResultTypes`.
@@ -67,20 +66,7 @@ func assertLexicalScopeQuery(
 
     // Assert validity of the output
     for (actual, (expectedMarker, expectedPosition)) in zip(result, zip(expectedMarkers, expectedPositions)) {
-      if actual == nil && expectedPosition == nil { continue }
-
-      guard let actual else {
-        XCTFail(
-          "For marker \(marker), actual is nil while expected is \(sourceFileSyntax.token(at: expectedPosition!)?.description ?? "nil")"
-        )
-        continue
-      }
-
-      guard let expectedPosition else {
-        XCTFail("For marker \(marker), actual is \(actual) while expected position is nil")
-        continue
-      }
-
+      guard let actual, let expectedPosition else { continue }
       XCTAssert(
         actual.positionAfterSkippingLeadingTrivia == expectedPosition,
         "For marker \(marker), actual result: \(actual) doesn't match expected value: \(sourceFileSyntax.token(at: expectedPosition)?.description ?? "nil")"

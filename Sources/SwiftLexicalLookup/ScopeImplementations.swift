@@ -16,9 +16,9 @@ import SwiftSyntax
   /// Parent scope of this syntax node, or scope introduced by this syntax node.
   @_spi(Experimental) public var scope: ScopeSyntax? {
     if let scopeSyntax = Syntax(self).asProtocol(SyntaxProtocol.self) as? ScopeSyntax {
-      scopeSyntax
+      return scopeSyntax
     } else {
-      self.parent?.scope
+      return self.parent?.scope
     }
   }
 }
@@ -68,10 +68,6 @@ import SwiftSyntax
             return LookupName.getNames(from: item, accessibleAfter: codeBlockItem.endPosition)
           }
         }
-      }
-    case .codeBlock:
-      return statements.flatMap { codeBlockItem in
-        LookupName.getNames(from: codeBlockItem.item, accessibleAfter: codeBlockItem.endPosition)
       }
     case .memberBlock:
       return statements.flatMap { codeBlockItem in
@@ -297,9 +293,9 @@ import SwiftSyntax
     state: LookupState
   ) -> [LookupResult] {
     if let elseBody, elseBody.position <= syntax.position, elseBody.endPosition >= syntax.position {
-      lookupInParent(for: name, at: syntax, with: config, state: state)
+      return lookupInParent(for: name, at: syntax, with: config, state: state)
     } else {
-      defaultLookupImplementation(for: name, at: syntax, with: config, state: state)
+      return defaultLookupImplementation(for: name, at: syntax, with: config, state: state)
     }
   }
 }

@@ -10,6 +10,15 @@
 //
 //===----------------------------------------------------------------------===//
 
+//
+// This file defines the SyntaxRewriter, a class that performs a standard walk
+// and tree-rebuilding pattern.
+//
+// Subclassers of this class can override the walking behavior for any syntax
+// node and transform nodes however they like.
+//
+//===----------------------------------------------------------------------===//
+
 import SwiftDiagnostics
 import SwiftSyntax
 
@@ -25,9 +34,7 @@ extension SyntaxProtocol {
   /// clauses, e.g., `#if FOO > 10`, then the condition will be
   /// considered to have failed and the clauses's elements will be
   /// removed.
-  public func removingInactive(
-    in configuration: some BuildConfiguration
-  ) -> (result: Syntax, diagnostics: [Diagnostic]) {
+  public func removingInactive(in configuration: some BuildConfiguration) -> (Syntax, [Diagnostic]) {
     // First pass: Find all of the active clauses for the #ifs we need to
     // visit, along with any diagnostics produced along the way. This process
     // does not change the tree in any way.
@@ -35,7 +42,7 @@ extension SyntaxProtocol {
     visitor.walk(self)
 
     // If there were no active clauses to visit, we're done!
-    if !visitor.visitedAnyIfClauses {
+    if visitor.numIfClausesVisited == 0 {
       return (Syntax(self), visitor.diagnostics)
     }
 
@@ -81,13 +88,12 @@ extension SyntaxProtocol {
 /// than trivia).
 class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
   let configuration: Configuration
-  var diagnostics: [Diagnostic] = []
 
   init(configuration: Configuration) {
     self.configuration = configuration
   }
 
-  private func dropInactive<List: SyntaxCollection>(
+  private func dropInactive<List: Collection & SyntaxCollection>(
     _ node: List,
     elementAsIfConfig: (List.Element) -> IfConfigDeclSyntax?
   ) -> List {
@@ -99,10 +105,7 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
       // Find #ifs within the list.
       if let ifConfigDecl = elementAsIfConfig(element) {
         // Retrieve the active `#if` clause
-        let (activeClause, localDiagnostics) = ifConfigDecl.activeClause(in: configuration)
-
-        // Add these diagnostics.
-        diagnostics.append(contentsOf: localDiagnostics)
+        let activeClause = ifConfigDecl.activeClause(in: configuration)
 
         // If this is the first element that changed, note that we have
         // changes and add all prior elements to the list of new elements.
@@ -252,8 +255,7 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
       return dropInactive(outerBase: base, postfixIfConfig: postfixIfConfig)
     }
 
-    assertionFailure("Unhandled postfix expression in #if elimination")
-    return postfix
+    preconditionFailure("Unhandled postfix expression in #if elimination")
   }
 
   /// Drop inactive regions from a postfix `#if` configuration, applying the
@@ -263,10 +265,7 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
     postfixIfConfig: PostfixIfConfigExprSyntax
   ) -> ExprSyntax {
     // Retrieve the active `if` clause.
-    let (activeClause, localDiagnostics) = postfixIfConfig.config.activeClause(in: configuration)
-
-    // Record these diagnostics.
-    diagnostics.append(contentsOf: localDiagnostics)
+    let activeClause = postfixIfConfig.config.activeClause(in: configuration)
 
     guard case .postfixExpression(let postfixExpr) = activeClause?.elements
     else {

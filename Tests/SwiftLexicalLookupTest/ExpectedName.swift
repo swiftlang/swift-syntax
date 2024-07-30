@@ -51,7 +51,7 @@ enum ImplicitNameExpectation {
       .error(let marker),
       .newValue(let marker),
       .oldValue(let marker):
-      return marker
+      marker
     }
   }
 }
@@ -67,9 +67,9 @@ enum NameExpectation: ExpectedName {
     switch self {
     case .identifier(let marker),
       .declaration(let marker):
-      return marker
+      marker
     case .implicit(let implicitName):
-      return implicitName.marker
+      implicitName.marker
     }
   }
 

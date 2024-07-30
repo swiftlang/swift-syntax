@@ -40,8 +40,8 @@ import SwiftSyntax
     }
   }
 
-  /// Name associated with implicit name kind.
-  private var name: String {
+  /// Used for name comparison.
+  var name: String {
     switch self {
     case .self:
       "self"
@@ -55,11 +55,6 @@ import SwiftSyntax
       "oldValue"
     }
   }
-
-  /// Identifier used for name comparison.
-  var identifier: Identifier {
-    Identifier(name)
-  }
 }
 
 @_spi(Experimental) public enum LookupName {
@@ -68,8 +63,8 @@ import SwiftSyntax
   case identifier(IdentifiableSyntax, accessibleAfter: AbsolutePosition?)
   /// Declaration associated with the name.
   /// Could be class, struct, actor, protocol, function and more.
-  case declaration(NamedDeclSyntax)
-  /// Name introduced implicitly by certain syntax nodes.
+  case declaration(NamedDeclSyntax, accessibleAfter: AbsolutePosition?)
+  /// Name introduced implicitly certain syntax nodes.
   case implicit(LookupImplicitNameKind)
 
   /// Syntax associated with this name.
@@ -77,22 +72,22 @@ import SwiftSyntax
     switch self {
     case .identifier(let syntax, _):
       syntax
-    case .declaration(let syntax):
+    case .declaration(let syntax, _):
       syntax
     case .implicit(let implicitName):
       implicitName.syntax
     }
   }
 
-  /// Identifier used for name comparison.
+  /// Introduced name.
   @_spi(Experimental) public var identifier: Identifier? {
     switch self {
     case .identifier(let syntax, _):
       Identifier(syntax.identifier)
-    case .declaration(let syntax):
+    case .declaration(let syntax, _):
       Identifier(syntax.name)
-    case .implicit(let kind):
-      kind.identifier
+    default:
+      nil
     }
   }
 
@@ -100,10 +95,20 @@ import SwiftSyntax
   /// If set to `nil`, the name is available at any point in scope.
   var accessibleAfter: AbsolutePosition? {
     switch self {
-    case .identifier(_, let absolutePosition):
-      return absolutePosition
+    case .identifier(_, let absolutePosition), .declaration(_, let absolutePosition):
+      absolutePosition
     default:
-      return nil
+      nil
+    }
+  }
+
+  /// Used for name comparison.
+  var name: String? {
+    switch self {
+    case .identifier, .declaration:
+      identifier?.name
+    case .implicit(let implicitName):
+      implicitName.name
     }
   }
 
@@ -114,9 +119,9 @@ import SwiftSyntax
   }
 
   /// Checks if this name refers to the looked up phrase.
-  func refersTo(_ lookedUpIdentifier: Identifier) -> Bool {
-    guard let identifier else { return false }
-    return identifier == lookedUpIdentifier
+  func refersTo(_ lookedUpName: String) -> Bool {
+    guard let name else { return false }
+    return name == lookedUpName
   }
 
   /// Extracts names introduced by the given `syntax` structure.
@@ -133,41 +138,38 @@ import SwiftSyntax
   ) -> [LookupName] {
     switch Syntax(syntax).as(SyntaxEnum.self) {
     case .variableDecl(let variableDecl):
-      return variableDecl.bindings.flatMap { binding in
-        getNames(
-          from: binding.pattern,
-          accessibleAfter: accessibleAfter != nil ? binding.endPositionBeforeTrailingTrivia : nil
-        )
+      variableDecl.bindings.flatMap { binding in
+        getNames(from: binding.pattern, accessibleAfter: accessibleAfter != nil ? binding.endPositionBeforeTrailingTrivia : nil)
       }
     case .tuplePattern(let tuplePattern):
-      return tuplePattern.elements.flatMap { tupleElement in
+      tuplePattern.elements.flatMap { tupleElement in
         getNames(from: tupleElement.pattern, accessibleAfter: accessibleAfter)
       }
     case .valueBindingPattern(let valueBindingPattern):
-      return getNames(from: valueBindingPattern.pattern, accessibleAfter: accessibleAfter)
+      getNames(from: valueBindingPattern.pattern, accessibleAfter: accessibleAfter)
     case .expressionPattern(let expressionPattern):
-      return getNames(from: expressionPattern.expression, accessibleAfter: accessibleAfter)
+      getNames(from: expressionPattern.expression, accessibleAfter: accessibleAfter)
     case .sequenceExpr(let sequenceExpr):
-      return sequenceExpr.elements.flatMap { expression in
+      sequenceExpr.elements.flatMap { expression in
         getNames(from: expression, accessibleAfter: accessibleAfter)
       }
     case .patternExpr(let patternExpr):
-      return getNames(from: patternExpr.pattern, accessibleAfter: accessibleAfter)
+      getNames(from: patternExpr.pattern, accessibleAfter: accessibleAfter)
     case .optionalBindingCondition(let optionalBinding):
-      return getNames(from: optionalBinding.pattern, accessibleAfter: accessibleAfter)
+      getNames(from: optionalBinding.pattern, accessibleAfter: accessibleAfter)
     case .matchingPatternCondition(let matchingPatternCondition):
-      return getNames(from: matchingPatternCondition.pattern, accessibleAfter: accessibleAfter)
+      getNames(from: matchingPatternCondition.pattern, accessibleAfter: accessibleAfter)
     case .functionCallExpr(let functionCallExpr):
-      return functionCallExpr.arguments.flatMap { argument in
+      functionCallExpr.arguments.flatMap { argument in
         getNames(from: argument.expression, accessibleAfter: accessibleAfter)
       }
     default:
       if let namedDecl = Syntax(syntax).asProtocol(SyntaxProtocol.self) as? NamedDeclSyntax {
-        return handle(namedDecl: namedDecl, accessibleAfter: accessibleAfter)
+        handle(namedDecl: namedDecl, accessibleAfter: accessibleAfter)
       } else if let identifiable = Syntax(syntax).asProtocol(SyntaxProtocol.self) as? IdentifiableSyntax {
-        return handle(identifiable: identifiable, accessibleAfter: accessibleAfter)
+        handle(identifiable: identifiable, accessibleAfter: accessibleAfter)
       } else {
-        return []
+        []
       }
     }
   }
@@ -193,6 +195,6 @@ import SwiftSyntax
     namedDecl: NamedDeclSyntax,
     accessibleAfter: AbsolutePosition? = nil
   ) -> [LookupName] {
-    [.declaration(namedDecl)]
+    [.declaration(namedDecl, accessibleAfter: accessibleAfter)]
   }
 }

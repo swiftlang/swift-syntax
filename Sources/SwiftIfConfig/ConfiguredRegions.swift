@@ -9,14 +9,15 @@
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
-
 import SwiftDiagnostics
 import SwiftSyntax
 
 extension SyntaxProtocol {
   /// Find all of the #if/#elseif/#else clauses within the given syntax node,
-  /// indicating their active state. This operation will recurse into all
-  /// clauses to indicate regions of active / inactive / unparsed code.
+  /// indicating their active state. This operation will recurse into active
+  /// clauses to represent the flattened nested structure, while nonactive
+  /// clauses need no recursion (because there is no relevant structure in
+  /// them).
   ///
   /// For example, given code like the following:
   /// #if DEBUG
@@ -36,7 +37,7 @@ extension SyntaxProtocol {
   ///   - Inactive region for the final `#else`.
   public func configuredRegions(
     in configuration: some BuildConfiguration
-  ) -> [(IfConfigClauseSyntax, IfConfigRegionState)] {
+  ) -> [(IfConfigClauseSyntax, ConfiguredRegionState)] {
     let visitor = ConfiguredRegionVisitor(configuration: configuration)
     visitor.walk(self)
     return visitor.regions
@@ -48,7 +49,7 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
   let configuration: Configuration
 
   /// The regions we've found so far.
-  var regions: [(IfConfigClauseSyntax, IfConfigRegionState)] = []
+  var regions: [(IfConfigClauseSyntax, ConfiguredRegionState)] = []
 
   /// Whether we are currently within an active region.
   var inActiveRegion = true
@@ -61,7 +62,7 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
   override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
     // If we're in an active region, find the active clause. Otherwise,
     // there isn't one.
-    let activeClause = inActiveRegion ? node.activeClause(in: configuration).clause : nil
+    let activeClause = inActiveRegion ? node.activeClause(in: configuration) : nil
     for clause in node.clauses {
       // If this is the active clause, record it and then recurse into the
       // elements.
@@ -78,9 +79,11 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
       }
 
       // For inactive clauses, distinguish between inactive and unparsed.
-      let isVersioned = clause.isVersioned(
-        configuration: configuration
-      ).versioned
+      let isVersioned =
+        (try? clause.isVersioned(
+          configuration: configuration,
+          diagnosticHandler: nil
+        )) ?? true
 
       // If this is within an active region, or this is an unparsed region,
       // record it.

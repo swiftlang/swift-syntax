@@ -9,15 +9,12 @@
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
-
 import SwiftDiagnostics
 import SwiftIfConfig
 import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxMacrosGenericTestSupport
 import XCTest
-import _SwiftSyntaxGenericTestSupport
-import _SwiftSyntaxTestSupport
 
 public class ActiveRegionTests: XCTestCase {
   let linuxBuildConfig = TestingBuildConfiguration(
@@ -29,28 +26,28 @@ public class ActiveRegionTests: XCTestCase {
   func testActiveRegions() throws {
     try assertActiveCode(
       """
-      1️⃣
+      4️⃣
       #if DEBUG
-      2️⃣func f()
+      0️⃣func f()
       #elseif ASSERTS
-      3️⃣func g()
+      1️⃣func g()
 
       #if compiler(>=8.0)
-      4️⃣func h()
+      2️⃣func h()
       #else
-      5️⃣var i
+      3️⃣var i
       #endif
       #endif
-      6️⃣token
+      5️⃣token
       """,
       configuration: linuxBuildConfig,
       states: [
-        "1️⃣": .active,
-        "2️⃣": .active,
+        "0️⃣": .active,
+        "1️⃣": .inactive,
+        "2️⃣": .unparsed,
         "3️⃣": .inactive,
-        "4️⃣": .unparsed,
-        "5️⃣": .inactive,
-        "6️⃣": .active,
+        "4️⃣": .active,
+        "5️⃣": .active,
       ]
     )
   }
@@ -58,27 +55,27 @@ public class ActiveRegionTests: XCTestCase {
   func testActiveRegionsInPostfix() throws {
     try assertActiveCode(
       """
-      1️⃣a.b()
+      4️⃣a.b()
       #if DEBUG
-      2️⃣.c()
+      0️⃣.c()
       #elseif ASSERTS
-      3️⃣.d()
+      1️⃣.d()
       #if compiler(>=8.0)
-      4️⃣.e()
+      2️⃣.e()
       #else
-      5️⃣.f()
+      3️⃣.f()
       #endif
       #endif
-      6️⃣.g()
+      5️⃣.g()
       """,
       configuration: linuxBuildConfig,
       states: [
-        "1️⃣": .active,
-        "2️⃣": .active,
+        "0️⃣": .active,
+        "1️⃣": .inactive,
+        "2️⃣": .unparsed,
         "3️⃣": .inactive,
-        "4️⃣": .unparsed,
-        "5️⃣": .inactive,
-        "6️⃣": .active,
+        "4️⃣": .active,
+        "5️⃣": .active,
       ]
     )
   }
@@ -98,48 +95,6 @@ public class ActiveRegionTests: XCTestCase {
         "0️⃣": .unparsed,
         "1️⃣": .active,
       ]
-    )
-  }
-}
-
-/// Assert that the various marked positions in the source code have the
-/// expected active states.
-fileprivate func assertActiveCode(
-  _ markedSource: String,
-  configuration: some BuildConfiguration = TestingBuildConfiguration(),
-  states: [String: IfConfigRegionState],
-  file: StaticString = #filePath,
-  line: UInt = #line
-) throws {
-  // Pull out the markers that we'll use to dig out nodes to query.
-  let (markerLocations, source) = extractMarkers(markedSource)
-
-  var parser = Parser(source)
-  let tree = SourceFileSyntax.parse(from: &parser)
-
-  let configuredRegions = tree.configuredRegions(in: configuration)
-
-  for (marker, location) in markerLocations {
-    guard let expectedState = states[marker] else {
-      XCTFail("Missing marker \(marker) in expected states", file: file, line: line)
-      continue
-    }
-
-    guard let token = tree.token(at: AbsolutePosition(utf8Offset: location)) else {
-      XCTFail("Unable to find token at location \(location)", file: file, line: line)
-      continue
-    }
-
-    let (actualState, _) = token.isActive(in: configuration)
-    XCTAssertEqual(actualState, expectedState, "isActive(in:) at marker \(marker)", file: file, line: line)
-
-    let actualViaRegions = token.isActive(inConfiguredRegions: configuredRegions)
-    XCTAssertEqual(
-      actualViaRegions,
-      expectedState,
-      "isActive(inConfiguredRegions:) at marker \(marker)",
-      file: file,
-      line: line
     )
   }
 }

@@ -365,7 +365,6 @@ public enum DiagnosticAssertionContext {
   }
 }
 
-@_spi(Testing)
 public func assertDiagnostic(
   _ diag: Diagnostic,
   in expansionContext: DiagnosticAssertionContext,

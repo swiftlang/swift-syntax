@@ -9,14 +9,11 @@
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
-
-import SwiftDiagnostics
 import SwiftIfConfig
 import SwiftParser
 import SwiftSyntax
-@_spi(XCTestFailureLocation) @_spi(Testing) import SwiftSyntaxMacrosGenericTestSupport
+import SwiftSyntaxMacrosGenericTestSupport
 import XCTest
-import _SwiftSyntaxGenericTestSupport
 import _SwiftSyntaxTestSupport
 
 public class EvaluateTests: XCTestCase {
@@ -58,7 +55,7 @@ public class EvaluateTests: XCTestCase {
     )
     assertIfConfig(
       "2",
-      .unparsed,
+      nil,
       configuration: buildConfig,
       diagnostics: [
         DiagnosticSpec(
@@ -82,7 +79,7 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("nope && DEBUG", .inactive, configuration: buildConfig)
     assertIfConfig(
       "nope && 3.14159",
-      .unparsed,
+      nil,
       configuration: buildConfig,
       diagnostics: [
         DiagnosticSpec(
@@ -98,7 +95,7 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("nope || !DEBUG", .inactive, configuration: buildConfig)
     assertIfConfig(
       "DEBUG || 3.14159",
-      .active,
+      nil,
       configuration: buildConfig,
       diagnostics: [
         DiagnosticSpec(
@@ -110,7 +107,7 @@ public class EvaluateTests: XCTestCase {
     )
     assertIfConfig(
       "(DEBUG) || 3.14159",
-      .active,
+      nil,
       configuration: buildConfig,
       diagnostics: [
         DiagnosticSpec(
@@ -127,7 +124,7 @@ public class EvaluateTests: XCTestCase {
 
     assertIfConfig(
       "3.14159",
-      .unparsed,
+      nil,
       configuration: buildConfig,
       diagnostics: [
         DiagnosticSpec(
@@ -185,7 +182,7 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("compiler(>=5.10) && 3.14159", .unparsed)
     assertIfConfig(
       "compiler(>=5.10) || 3.14159",
-      .unparsed,
+      nil,
       diagnostics: [
         DiagnosticSpec(
           message: "invalid conditional compilation expression",
@@ -197,7 +194,7 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("compiler(>=5.9) || 3.14159", .active)
     assertIfConfig(
       "compiler(>=5.9) && 3.14159",
-      .unparsed,
+      nil,
       diagnostics: [
         DiagnosticSpec(
           message: "invalid conditional compilation expression",
@@ -229,45 +226,5 @@ public class EvaluateTests: XCTestCase {
         )
       ]
     )
-  }
-}
-
-/// Assert the results of evaluating the condition within an `#if` against the
-/// given build configuration.
-fileprivate func assertIfConfig(
-  _ condition: ExprSyntax,
-  _ expectedState: IfConfigRegionState,
-  configuration: some BuildConfiguration = TestingBuildConfiguration(),
-  diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
-  file: StaticString = #filePath,
-  line: UInt = #line
-) {
-  // Evaluate the condition to check the state.
-  let actualDiagnostics: [Diagnostic]
-  let actualState: IfConfigRegionState
-  (actualState, actualDiagnostics) = IfConfigRegionState.evaluating(condition, in: configuration)
-  XCTAssertEqual(actualState, expectedState, file: file, line: line)
-
-  // Check the diagnostics.
-  if actualDiagnostics.count != expectedDiagnostics.count {
-    XCTFail(
-      """
-      Expected \(expectedDiagnostics.count) diagnostics, but got \(actualDiagnostics.count):
-      \(actualDiagnostics.map(\.debugDescription).joined(separator: "\n"))
-      """,
-      file: file,
-      line: line
-    )
-  } else {
-    for (actualDiag, expectedDiag) in zip(actualDiagnostics, expectedDiagnostics) {
-      assertDiagnostic(
-        actualDiag,
-        in: .tree(condition),
-        expected: expectedDiag,
-        failureHandler: {
-          XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
-        }
-      )
-    }
   }
 }

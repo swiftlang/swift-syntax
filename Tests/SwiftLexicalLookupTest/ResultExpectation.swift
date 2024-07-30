@@ -22,18 +22,18 @@ enum ResultExpectation {
   var expectedNames: [ExpectedName] {
     switch self {
     case .fromScope(_, let expectedNames):
-      return expectedNames
+      expectedNames
     case .fromFileScope(expectedNames: let expectedNames):
-      return expectedNames
+      expectedNames
     }
   }
 
   var debugDescription: String {
     switch self {
     case .fromScope:
-      return "fromScope"
+      "fromScope"
     case .fromFileScope:
-      return "fromFileScope"
+      "fromFileScope"
     }
   }
 
@@ -65,9 +65,9 @@ extension LookupResult {
   var debugDescription: String {
     switch self {
     case .fromScope:
-      return "fromScope"
+      "fromScope"
     case .fromFileScope:
-      return "fromFileScope"
+      "fromFileScope"
     }
   }
 }

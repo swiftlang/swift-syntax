@@ -27,7 +27,7 @@ class ParsingPerformanceTests: XCTestCase {
   func testNativeParsingPerformance() throws {
     try XCTSkipIf(longTestsDisabled)
 
-    let source = try String(contentsOf: inputFile, encoding: .utf8)
+    let source = try String(contentsOf: inputFile)
 
     try measureInstructions {
       _ = Parser.parse(source: source)

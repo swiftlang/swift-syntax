@@ -21,7 +21,7 @@ protocol SequentialScopeSyntax: ScopeSyntax {
   /// scopes that match the lookup.
   func sequentialLookup(
     in codeBlockItems: any Collection<CodeBlockItemSyntax>,
-    for identifier: Identifier?,
+    for name: String?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState,
@@ -32,7 +32,7 @@ protocol SequentialScopeSyntax: ScopeSyntax {
 extension SequentialScopeSyntax {
   func sequentialLookup(
     in codeBlockItems: any Collection<CodeBlockItemSyntax>,
-    for identifier: Identifier?,
+    for name: String?,
     at syntax: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState,
@@ -61,7 +61,7 @@ extension SequentialScopeSyntax {
         // Add names introduced by the encountered scope.
         result.append(
           contentsOf: introducingToParentScope.introducesToSequentialParent(
-            for: identifier,
+            for: name,
             at: syntax,
             with: config,
             state: state
@@ -75,7 +75,7 @@ extension SequentialScopeSyntax {
               from: codeBlockItem.item,
               accessibleAfter: codeBlockItem.endPosition
             ).filter { introducedName in
-              checkName(identifier, refersTo: introducedName, at: syntax)
+              does(name: name, referTo: introducedName, at: syntax)
             }
         )
       }
@@ -87,7 +87,6 @@ extension SequentialScopeSyntax {
       currentChunk = []
     }
 
-    return (result.isEmpty ? [] : result.reversed())
-      + lookupInParent(for: identifier, at: syntax, with: config, state: state)
+    return (result.isEmpty ? [] : result.reversed()) + lookupInParent(for: name, at: syntax, with: config, state: state)
   }
 }

@@ -39,7 +39,7 @@ class IdentifierTests: XCTestCase {
   public func testIdentifier() {
     let token = TokenSyntax(stringLiteral: "sometoken")
     withExtendedLifetime(token) { token in
-      XCTAssertEqual(token.identifier?.raw?.name, SyntaxText("sometoken"))
+      XCTAssertEqual(token.identifier?.raw.name, SyntaxText("sometoken"))
     }
   }
 

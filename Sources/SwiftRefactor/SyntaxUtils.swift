@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 #if swift(>=6)
-internal import SwiftSyntax
+public import SwiftSyntax
 #else
 import SwiftSyntax
 #endif

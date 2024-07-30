@@ -257,7 +257,7 @@ public class VisitorTests: XCTestCase {
 
 /// Assert that applying the given build configuration to the source code
 /// returns the expected source and diagnostics.
-func assertRemoveInactive(
+fileprivate func assertRemoveInactive(
   _ source: String,
   configuration: some BuildConfiguration,
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],

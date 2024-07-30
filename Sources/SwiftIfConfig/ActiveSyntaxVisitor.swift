@@ -37,9 +37,8 @@ import SwiftSyntax
 /// it would not visit either `f` or `g`.
 ///
 /// All notes visited by this visitor will have the "active" state, i.e.,
-/// `node.isActive(in: configuration)` will have evaluated to `.active`
-/// When errors occur, they will be recorded in the set of
-/// diagnostics.
+/// `node.isActive(in: configuration)` will have evaluated to `.active`.
+/// When errors occur, they will be recorded in the array of diagnostics.
 open class ActiveSyntaxVisitor<Configuration: BuildConfiguration>: SyntaxVisitor {
   /// The build configuration, which will be queried for each relevant `#if`.
   public let configuration: Configuration

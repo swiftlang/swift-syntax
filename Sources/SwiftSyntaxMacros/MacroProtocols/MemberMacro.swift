@@ -81,6 +81,11 @@ extension MemberMacro {
   }
 
   /// Default implementation that ignores the unhandled conformances.
+  @available(
+    *,
+    deprecated,
+    message: "`MemberMacro` conformance should implement the `expansion` function that takes a `conformingTo` parameter"
+  )
   public static func expansion(
     of node: AttributeSyntax,
     providingMembersOf declaration: some DeclGroupSyntax,

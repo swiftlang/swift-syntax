@@ -10,37 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-extension ClosureCaptureSyntax {
-
-  /// Creates a ``ClosureCaptureSyntax`` with a `name`, and automatically adds an `equal` token to it since the name is non-optional.
-  ///
-  /// - SeeAlso: ``ClosureCaptureSyntax/init(leadingTrivia:_:specifier:_:name:_:initializer:_:trailingComma:_:trailingTrivia:)``.
-  ///
-  @available(
-    *,
-    deprecated,
-    message: "Use 'init(leadingTrivia:_:specifier:_:name:_:initializer:_:trailingComma:_:trailingTrivia:)' instead"
-  )
-  public init(
-    leadingTrivia: Trivia? = nil,
-    specifier: ClosureCaptureSpecifierSyntax? = nil,
-    name: TokenSyntax,
-    equal: TokenSyntax = TokenSyntax.equalToken(),
-    expression: some ExprSyntaxProtocol,
-    trailingComma: TokenSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-  ) {
-    self.init(
-      leadingTrivia: leadingTrivia,
-      specifier: specifier,
-      name: name,
-      initializer: InitializerClauseSyntax(equal: equal, value: expression),
-      trailingComma: trailingComma,
-      trailingTrivia: trailingTrivia
-    )
-  }
-}
-
 extension EnumCaseParameterSyntax {
 
   /// Creates an ``EnumCaseParameterSyntax`` with a `firstName`, and automatically adds a `colon` to it.

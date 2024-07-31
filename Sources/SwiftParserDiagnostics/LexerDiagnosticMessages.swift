@@ -325,8 +325,93 @@ extension SwiftSyntax.TokenDiagnostic {
         changes.append(.replaceLeadingTrivia(token: nextToken, newTrivia: []))
       }
       return [FixIt(message: .removeExtraneousWhitespace, changes: changes)]
+    case .spaceAtEndOfRegexLiteral:
+      if let regexLiteral = token.regexParent {
+        // wouldn't suggest `insertBackslash` because the potential presence of (?x) somewhere preceding the trailing
+        // space could mean the trailing space has no semantic meaning. Escaping the space could change the semantics.
+        return [regexLiteral.convertToExtendedRegexLiteralFixIt]
+      } else {
+        return []
+      }
+    case .spaceAtStartOfRegexLiteral:
+      guard let regexLiteral = token.regexParent else {
+        return []
+      }
+
+      let regexText = regexLiteral.regex.text
+      let lastIndex = regexText.index(before: regexText.endIndex)
+      if regexText.startIndex != lastIndex && regexText[lastIndex].isWhitespace {
+        // if the regex has a distinct trailing space, same as the handling at `case .spaceAtEndOfRegexLiteral`
+        return [regexLiteral.convertToExtendedRegexLiteralFixIt]
+      } else {
+        let escapedRegexText = #"\\#(regexText)"#
+        return [
+          regexLiteral.convertToExtendedRegexLiteralFixIt,
+          FixIt(
+            message: .insertBackslash,
+            changes: [
+              .replace(
+                oldNode: Syntax(regexLiteral),
+                newNode: Syntax(
+                  regexLiteral
+                    .with(\.regex, .regexLiteralPattern(escapedRegexText))
+                )
+              )
+            ]
+          ),
+        ]
+      }
     default:
       return []
     }
+  }
+}
+
+private extension TokenSyntax {
+  var regexParent: RegexLiteralExprSyntax? {
+    var parent = Syntax(self)
+    while parent.kind != .regexLiteralExpr, let upper = parent.parent {
+      parent = upper
+    }
+    return parent.as(RegexLiteralExprSyntax.self)
+  }
+}
+
+private extension RegexLiteralExprSyntax {
+  /// Creates a Fix-it that suggests converting to extended regex literal
+  ///
+  /// Covers the following cases:
+  /// ```swift
+  /// let leadingSpaceRegex = / ,/
+  /// // converts to
+  /// let leadingSpaceExtendedRegex = #/ ,/#
+  ///
+  /// let leadingAndTrailingSpaceRegex = / , /
+  /// // converts to
+  /// let leadingAndTrailingSpaceExtendedRegex = #/ , /#
+  ///
+  /// let trailingSpaceRegex = /, /
+  /// // converts to
+  /// let trailingSpaceExtendedRegex = #/ ,/#
+  ///
+  /// let trailingSpaceMissingClosingSlashRegex = /,
+  /// // converts to
+  /// let trailingSpaceExtendedRegex = #/, /#
+  /// ```
+  var convertToExtendedRegexLiteralFixIt: FixIt {
+    FixIt(
+      message: .convertToExtendedRegexLiteral,
+      changes: [
+        .replace(
+          oldNode: Syntax(self),
+          newNode: Syntax(
+            with(\.openingSlash, .regexSlashToken())
+              .with(\.openingPounds, .regexPoundDelimiter("#", leadingTrivia: leadingTrivia))
+              .with(\.closingPounds, .regexPoundDelimiter("#", trailingTrivia: trailingTrivia))
+              .with(\.closingSlash, .regexSlashToken())
+          )
+        )
+      ]
+    )
   }
 }

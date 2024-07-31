@@ -207,9 +207,6 @@ fileprivate struct RegexLiteralLexer {
         lastUnespacedSpaceOrTab.position.advanced(by: 1).pointer == slashBegin.position.pointer
       {
         if mustBeRegex {
-          // TODO: We ought to have a fix-it that suggests #/.../#. We could
-          // suggest escaping, but that would be wrong if the user has written (?x).
-          // TODO: Should we suggest #/.../# for space-as-first character too?
           builder.recordPatternError(.spaceAtEndOfRegexLiteral, at: lastUnespacedSpaceOrTab)
         } else {
           return .notARegex
@@ -256,7 +253,6 @@ fileprivate struct RegexLiteralLexer {
           // }
           //
           if mustBeRegex {
-            // TODO: We ought to have a fix-it that inserts a backslash to escape.
             builder.recordPatternError(.spaceAtStartOfRegexLiteral, at: cursor)
           } else {
             return .notARegex

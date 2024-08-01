@@ -39,7 +39,7 @@ struct AbsoluteRawSyntax: Sendable {
     return nil
   }
 
-  func replacingSelf(_ newRaw: RawSyntax, newRootId: UInt) -> AbsoluteRawSyntax {
+  func replacingSelf(_ newRaw: RawSyntax, newRootId: RootID) -> AbsoluteRawSyntax {
     let nodeId = SyntaxIdentifier(rootId: newRootId, indexInTree: info.nodeId.indexInTree)
     let newInfo = AbsoluteSyntaxInfo(position: info.position, nodeId: nodeId)
     return .init(raw: newRaw, info: newInfo)

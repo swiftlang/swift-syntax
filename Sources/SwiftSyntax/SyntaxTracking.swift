@@ -278,18 +278,39 @@ class IndexInTreeFinder: SyntaxAnyVisitor {
 }
 
 extension SyntaxProtocol {
-  /// The same ``Syntax`` but with tracking enabled in the entire tree.
+  /// Start tracking this syntax tree as the original tree for all trees derived
+  /// from it.
   ///
-  /// All syntax nodes derived from this will be able to find their
-  /// corresponding location in this original tree.
+  /// All syntax nodes derived from the returned, tracked, tree will be able to
+  /// find the corresponding node in the original tree by calling
+  /// ``SyntaxProtocol/originalNode(in:)``.
   ///
+  /// Derived nodes are
+  ///  - Nodes that contain a node from this tree as a subtree.
+  ///  - Nodes that resulted from modification of a node in this tree (e.g.
+  ///    modification of a child node or insertion of an element into a
+  ///    collection).
+  ///  - Detached subtrees of this tree (see ``SyntaxProtocol/detached``).
+  ///
+  /// Node tracking is not enabled by default because maintaining the mapping
+  /// back to the tracked tree has a performance cost that.
+  ///
+  /// A tree can only track a single original tree. I.e. it is not possible to
+  /// create a node that has one child in tracked tree A and another child in
+  /// tracked tree B. In practice, this should seldom pose an issue because the
+  /// most common use case is to mark the tree obtained from a file on disk as
+  /// the tracked tree and trees from separate source files will rarely be
+  /// merged.
+  ///
+  /// - SeeAlso: ``SyntaxProtocol/originalNode(in:)``
   /// - Complexity: O(number of ancestors)
   public var tracked: Self {
     return Syntax(self).tracked.cast(Self.self)
   }
 
   /// If this syntax node is tracking `originalTree` and this node originated
-  /// in that tree, return the corresponding corresponding node in `originalTree`.
+  /// from that tree, return the corresponding corresponding node in
+  /// `originalTree`.
   ///
   /// The original node will have the same structure as this node but the parent
   /// might be different since it's anchored in `originalTree`.

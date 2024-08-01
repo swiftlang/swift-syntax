@@ -130,12 +130,15 @@ extension PluginMessage.Diagnostic {
               to: .afterTrailingTrivia
             )
             text = newTrivia.description
+          case .replaceChild(let replaceChildData):
+            range = sourceManager.range(replaceChildData.replacementRange, in: replaceChildData.parent)
+            text = replaceChildData.newChild.description
           #if RESILIENT_LIBRARIES
           @unknown default:
             fatalError()
           #endif
           }
-          guard let range = range else {
+          guard let range else {
             return nil
           }
           return .init(

@@ -817,13 +817,13 @@ extension RawSyntax {
 
   static func makeLayout(
     kind: SyntaxKind,
-    from collection: some Collection<RawSyntax?>,
+    from collection: some Collection<Syntax?>,
     arena: __shared SyntaxArena,
     leadingTrivia: Trivia? = nil,
     trailingTrivia: Trivia? = nil
   ) -> RawSyntax {
     if leadingTrivia != nil || trailingTrivia != nil {
-      var layout = Array(collection)
+      var layout = collection.map { $0?.raw }
       if let leadingTrivia = leadingTrivia,
         // Find the index of the first non-empty node so we can attach the trivia to it.
         let idx = layout.firstIndex(where: { $0 != nil && ($0!.isToken || $0!.totalNodes > 1) })
@@ -842,11 +842,13 @@ extension RawSyntax {
           arena: arena
         )
       }
-      return .makeLayout(kind: kind, from: layout, arena: arena)
+      return .makeLayout(kind: kind, uninitializedCount: collection.count, arena: arena) {
+        _ = $0.initialize(from: layout)
+      }
     }
 
     return .makeLayout(kind: kind, uninitializedCount: collection.count, arena: arena) {
-      _ = $0.initialize(from: collection)
+      _ = $0.initialize(from: collection.lazy.map { $0?.raw })
     }
   }
 }

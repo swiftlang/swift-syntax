@@ -45,7 +45,7 @@ extension SyntaxCollection {
     let raw = withExtendedLifetime(children) {
       RawSyntax.makeLayout(
         kind: Self.syntaxKind,
-        from: children.map { $0.raw },
+        from: children.map { Syntax($0) },
         arena: arena
       )
     }

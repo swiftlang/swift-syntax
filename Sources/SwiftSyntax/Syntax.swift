@@ -23,10 +23,34 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   final class Info: @unchecked Sendable {
     // For root node.
     struct Root: Sendable {
-      private var arena: RetainedSyntaxArena
+      private let arena: RetainedSyntaxArena
 
       init(arena: RetainedSyntaxArena) {
         self.arena = arena
+      }
+    }
+
+    /// Class that owns a `Root`, is responsible for keeping it alive and also offers an unsafe pointer way to
+    /// access it.
+    ///
+    /// This way, the root node of a tree can own the root info and all other nodes in the tree can have an unsafe
+    /// pointer reference to the root info, which doesn't involve ref counting.
+    final class RefCountedRoot: Sendable {
+      /// `nonisolated(unsafe)` if fine because there are only two ways this gets accessed:
+      ///  - `pointer`: Here we reference `value` via inout to get a pointer to `Root` but the pointer is not mutable
+      ///    so no mutation happens here
+      #if swift(>=6)
+      private nonisolated(unsafe) var value: Root
+      #else
+      private var value: Root
+      #endif
+
+      fileprivate init(_ value: Root) {
+        self.value = value
+      }
+
+      fileprivate var pointer: UnsafePointer<Root> {
+        return withUnsafePointer(to: &value) { $0 }
       }
     }
 
@@ -34,10 +58,23 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     struct NonRoot: Sendable {
       var parent: Syntax
       var absoluteInfo: AbsoluteSyntaxInfo
+      // `nonisolated(unsafe)` is fine because `Root` is owned by `RefCountedRoot` and `RefCountedRoot` guarantees that
+      // `Root` is not changing after the tree has been created.
+      #if swift(>=6)
+      nonisolated(unsafe) var rootInfo: UnsafePointer<Root>
+      #else
+      var rootInfo: UnsafePointer<Root>
+      #endif
+
+      init(parent: Syntax, absoluteInfo: AbsoluteSyntaxInfo, rootInfo: UnsafePointer<Root>) {
+        self.parent = parent
+        self.absoluteInfo = absoluteInfo
+        self.rootInfo = rootInfo
+      }
     }
 
     enum InfoImpl: Sendable {
-      case root(Root)
+      case root(RefCountedRoot)
       case nonRoot(NonRoot)
     }
 
@@ -67,9 +104,9 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   var info: Info!
   let raw: RawSyntax
 
-  private var rootInfo: Info.Root {
+  var rootInfo: UnsafePointer<Info.Root> {
     switch info.info! {
-    case .root(let info): return info
+    case .root(let info): return info.pointer
     case .nonRoot(let info): return info.parent.rootInfo
     }
   }
@@ -135,7 +172,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   }
 
   init(_ raw: RawSyntax, parent: Syntax, absoluteInfo: AbsoluteSyntaxInfo) {
-    self.init(raw, info: Info(.nonRoot(.init(parent: parent, absoluteInfo: absoluteInfo))))
+    self.init(raw, info: Info(.nonRoot(.init(parent: parent, absoluteInfo: absoluteInfo, rootInfo: parent.rootInfo))))
   }
 
   /// Creates a `Syntax` with the provided raw syntax and parent.
@@ -155,12 +192,15 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   ///     has a chance to retain it.
   static func forRoot(_ raw: RawSyntax, rawNodeArena: RetainedSyntaxArena) -> Syntax {
     precondition(rawNodeArena == raw.arenaReference)
-    return Syntax(raw, info: Info(.root(.init(arena: rawNodeArena))))
+    return Syntax(raw, info: Info(.root(Syntax.Info.RefCountedRoot(Syntax.Info.Root(arena: rawNodeArena)))))
   }
 
   static func forRoot(_ raw: RawSyntax, rawNodeArena: SyntaxArena) -> Syntax {
     precondition(rawNodeArena == raw.arenaReference)
-    return Syntax(raw, info: Info(.root(.init(arena: RetainedSyntaxArena(rawNodeArena)))))
+    return Syntax(
+      raw,
+      info: Info(.root(Syntax.Info.RefCountedRoot(Syntax.Info.Root(arena: RetainedSyntaxArena(rawNodeArena)))))
+    )
   }
 
   /// Returns the child data at the provided index in this data's layout.

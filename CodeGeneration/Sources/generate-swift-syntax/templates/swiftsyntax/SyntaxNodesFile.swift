@@ -128,6 +128,20 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             operator: ExprSyntax(AssignmentExprSyntax()),
             rightOperand: initializer
           )
+
+          VariableDeclSyntax(
+            .let,
+            name: "nodes",
+            type: TypeAnnotationSyntax(type: TypeSyntax("[Syntax?]")),
+            initializer: InitializerClauseSyntax(
+              value: ArrayExprSyntax {
+                for child in node.children {
+                  ArrayElementSyntax(expression: ExprSyntax("Syntax(\(child.varOrCaseName.backtickedIfNeeded))"))
+                }
+              }
+            )
+          )
+          ExprSyntax("Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))")
         }
 
         for (index, child) in node.children.enumerated() {

@@ -78,6 +78,16 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeLeftParen), 
+        Syntax(leftParen), 
+        Syntax(unexpectedBetweenLeftParenAndDetail), 
+        Syntax(detail), 
+        Syntax(unexpectedBetweenDetailAndRightParen), 
+        Syntax(rightParen), 
+        Syntax(unexpectedAfterRightParen)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
@@ -223,6 +233,14 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeName), 
+        Syntax(name), 
+        Syntax(unexpectedBetweenNameAndDetail), 
+        Syntax(detail), 
+        Syntax(unexpectedAfterDetail)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeName: UnexpectedNodesSyntax? {
@@ -377,6 +395,14 @@ public struct DeclNameArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeName), 
+        Syntax(name), 
+        Syntax(unexpectedBetweenNameAndColon), 
+        Syntax(colon), 
+        Syntax(unexpectedAfterColon)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeName: UnexpectedNodesSyntax? {
@@ -502,6 +528,16 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeLeftParen), 
+        Syntax(leftParen), 
+        Syntax(unexpectedBetweenLeftParenAndArguments), 
+        Syntax(arguments), 
+        Syntax(unexpectedBetweenArgumentsAndRightParen), 
+        Syntax(rightParen), 
+        Syntax(unexpectedAfterRightParen)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
@@ -674,6 +710,14 @@ public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeBaseName), 
+        Syntax(baseName), 
+        Syntax(unexpectedBetweenBaseNameAndArgumentNames), 
+        Syntax(argumentNames), 
+        Syntax(unexpectedAfterArgumentNames)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeBaseName: UnexpectedNodesSyntax? {
@@ -797,6 +841,14 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeDeferKeyword), 
+        Syntax(deferKeyword), 
+        Syntax(unexpectedBetweenDeferKeywordAndBody), 
+        Syntax(body), 
+        Syntax(unexpectedAfterBody)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeDeferKeyword: UnexpectedNodesSyntax? {
@@ -945,6 +997,20 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Leaf
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeAttributes), 
+        Syntax(attributes), 
+        Syntax(unexpectedBetweenAttributesAndModifiers), 
+        Syntax(modifiers), 
+        Syntax(unexpectedBetweenModifiersAndDeinitKeyword), 
+        Syntax(deinitKeyword), 
+        Syntax(unexpectedBetweenDeinitKeywordAndEffectSpecifiers), 
+        Syntax(effectSpecifiers), 
+        Syntax(unexpectedBetweenEffectSpecifiersAndBody), 
+        Syntax(body), 
+        Syntax(unexpectedAfterBody)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -1168,6 +1234,8 @@ public struct DeinitializerEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashabl
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [Syntax(unexpectedBeforeAsyncSpecifier), Syntax(asyncSpecifier), Syntax(unexpectedAfterAsyncSpecifier)]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? {
@@ -1306,6 +1374,24 @@ public struct DerivativeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeOfLabel), 
+        Syntax(ofLabel), 
+        Syntax(unexpectedBetweenOfLabelAndColon), 
+        Syntax(colon), 
+        Syntax(unexpectedBetweenColonAndOriginalDeclName), 
+        Syntax(originalDeclName), 
+        Syntax(unexpectedBetweenOriginalDeclNameAndPeriod), 
+        Syntax(period), 
+        Syntax(unexpectedBetweenPeriodAndAccessorSpecifier), 
+        Syntax(accessorSpecifier), 
+        Syntax(unexpectedBetweenAccessorSpecifierAndComma), 
+        Syntax(comma), 
+        Syntax(unexpectedBetweenCommaAndArguments), 
+        Syntax(arguments), 
+        Syntax(unexpectedAfterArguments)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeOfLabel: UnexpectedNodesSyntax? {
@@ -1547,6 +1633,14 @@ public struct DesignatedTypeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeLeadingComma), 
+        Syntax(leadingComma), 
+        Syntax(unexpectedBetweenLeadingCommaAndName), 
+        Syntax(name), 
+        Syntax(unexpectedAfterName)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeLeadingComma: UnexpectedNodesSyntax? {
@@ -1681,6 +1775,18 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeKey), 
+        Syntax(key), 
+        Syntax(unexpectedBetweenKeyAndColon), 
+        Syntax(colon), 
+        Syntax(unexpectedBetweenColonAndValue), 
+        Syntax(value), 
+        Syntax(unexpectedBetweenValueAndTrailingComma), 
+        Syntax(trailingComma), 
+        Syntax(unexpectedAfterTrailingComma)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeKey: UnexpectedNodesSyntax? {
@@ -1929,6 +2035,16 @@ public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeLeftSquare), 
+        Syntax(leftSquare), 
+        Syntax(unexpectedBetweenLeftSquareAndContent), 
+        Syntax(content), 
+        Syntax(unexpectedBetweenContentAndRightSquare), 
+        Syntax(rightSquare), 
+        Syntax(unexpectedAfterRightSquare)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? {
@@ -2087,6 +2203,20 @@ public struct DictionaryTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeLeftSquare), 
+        Syntax(leftSquare), 
+        Syntax(unexpectedBetweenLeftSquareAndKey), 
+        Syntax(key), 
+        Syntax(unexpectedBetweenKeyAndColon), 
+        Syntax(colon), 
+        Syntax(unexpectedBetweenColonAndValue), 
+        Syntax(value), 
+        Syntax(unexpectedBetweenValueAndRightSquare), 
+        Syntax(rightSquare), 
+        Syntax(unexpectedAfterRightSquare)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? {
@@ -2274,6 +2404,14 @@ public struct DifferentiabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable, _
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeArgument), 
+        Syntax(argument), 
+        Syntax(unexpectedBetweenArgumentAndTrailingComma), 
+        Syntax(trailingComma), 
+        Syntax(unexpectedAfterTrailingComma)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeArgument: UnexpectedNodesSyntax? {
@@ -2408,6 +2546,16 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable, 
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeLeftParen), 
+        Syntax(leftParen), 
+        Syntax(unexpectedBetweenLeftParenAndArguments), 
+        Syntax(arguments), 
+        Syntax(unexpectedBetweenArgumentsAndRightParen), 
+        Syntax(rightParen), 
+        Syntax(unexpectedAfterRightParen)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
@@ -2671,6 +2819,16 @@ public struct DifferentiabilityWithRespectToArgumentSyntax: SyntaxProtocol, Synt
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeWrtLabel), 
+        Syntax(wrtLabel), 
+        Syntax(unexpectedBetweenWrtLabelAndColon), 
+        Syntax(colon), 
+        Syntax(unexpectedBetweenColonAndArguments), 
+        Syntax(arguments), 
+        Syntax(unexpectedAfterArguments)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeWrtLabel: UnexpectedNodesSyntax? {
@@ -2844,6 +3002,20 @@ public struct DifferentiableAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHash
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeKindSpecifier), 
+        Syntax(kindSpecifier), 
+        Syntax(unexpectedBetweenKindSpecifierAndKindSpecifierComma), 
+        Syntax(kindSpecifierComma), 
+        Syntax(unexpectedBetweenKindSpecifierCommaAndArguments), 
+        Syntax(arguments), 
+        Syntax(unexpectedBetweenArgumentsAndArgumentsComma), 
+        Syntax(argumentsComma), 
+        Syntax(unexpectedBetweenArgumentsCommaAndGenericWhereClause), 
+        Syntax(genericWhereClause), 
+        Syntax(unexpectedAfterGenericWhereClause)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeKindSpecifier: UnexpectedNodesSyntax? {
@@ -3033,6 +3205,8 @@ public struct DiscardAssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [Syntax(unexpectedBeforeWildcard), Syntax(wildcard), Syntax(unexpectedAfterWildcard)]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeWildcard: UnexpectedNodesSyntax? {
@@ -3123,6 +3297,14 @@ public struct DiscardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSy
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeDiscardKeyword), 
+        Syntax(discardKeyword), 
+        Syntax(unexpectedBetweenDiscardKeywordAndExpression), 
+        Syntax(expression), 
+        Syntax(unexpectedAfterExpression)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeDiscardKeyword: UnexpectedNodesSyntax? {
@@ -3271,6 +3453,16 @@ public struct DoExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeDoKeyword), 
+        Syntax(doKeyword), 
+        Syntax(unexpectedBetweenDoKeywordAndBody), 
+        Syntax(body), 
+        Syntax(unexpectedBetweenBodyAndCatchClauses), 
+        Syntax(catchClauses), 
+        Syntax(unexpectedAfterCatchClauses)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeDoKeyword: UnexpectedNodesSyntax? {
@@ -3447,6 +3639,18 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeDoKeyword), 
+        Syntax(doKeyword), 
+        Syntax(unexpectedBetweenDoKeywordAndThrowsClause), 
+        Syntax(throwsClause), 
+        Syntax(unexpectedBetweenThrowsClauseAndBody), 
+        Syntax(body), 
+        Syntax(unexpectedBetweenBodyAndCatchClauses), 
+        Syntax(catchClauses), 
+        Syntax(unexpectedAfterCatchClauses)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeDoKeyword: UnexpectedNodesSyntax? {
@@ -3730,6 +3934,18 @@ public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashab
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeLabel), 
+        Syntax(label), 
+        Syntax(unexpectedBetweenLabelAndColon), 
+        Syntax(colon), 
+        Syntax(unexpectedBetweenColonAndValue), 
+        Syntax(value), 
+        Syntax(unexpectedBetweenValueAndTrailingComma), 
+        Syntax(trailingComma), 
+        Syntax(unexpectedAfterTrailingComma)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeLabel: UnexpectedNodesSyntax? {
@@ -3907,6 +4123,16 @@ public struct DynamicReplacementAttributeArgumentsSyntax: SyntaxProtocol, Syntax
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeForLabel), 
+        Syntax(forLabel), 
+        Syntax(unexpectedBetweenForLabelAndColon), 
+        Syntax(colon), 
+        Syntax(unexpectedBetweenColonAndDeclName), 
+        Syntax(declName), 
+        Syntax(unexpectedAfterDeclName)
+      ]
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeForLabel: UnexpectedNodesSyntax? {

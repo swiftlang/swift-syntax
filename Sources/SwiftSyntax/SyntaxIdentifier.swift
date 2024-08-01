@@ -39,7 +39,7 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
   /// This is similar to ``SyntaxIdentifier`` but does not store the root ID of the tree.
   /// It can thus be transferred across trees that are structurally equivalent, for example two copies of the same tree
   /// that live in different processes.
-  public struct SyntaxIndexInTree: Hashable, Sendable {
+  public struct SyntaxIndexInTree: Comparable, Hashable, Sendable {
     /// When traversing the syntax tree using a depth-first traversal, the index at which the node will be visited.
     let indexInTree: UInt32
 
@@ -77,6 +77,11 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
     /// Creates a ``SyntaxIdentifier/SyntaxIndexInTree`` from an opaque value obtained using ``toOpaque()``.
     public init(fromOpaque opaque: UInt64) {
       self.indexInTree = UInt32(opaque)
+    }
+
+    /// Returns `true` if `lhs` occurs before `rhs` in the tree.
+    public static func < (lhs: SyntaxIndexInTree, rhs: SyntaxIndexInTree) -> Bool {
+      return lhs.indexInTree < rhs.indexInTree
     }
   }
 

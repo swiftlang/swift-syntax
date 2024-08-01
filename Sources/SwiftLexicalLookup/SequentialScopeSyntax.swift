@@ -64,6 +64,8 @@ extension SequentialScopeSyntax {
     }
 
     for codeBlockItem in itemsWithoutNamedDecl {
+      guard codeBlockItem.position < origin.position else { break }
+      
       if let introducingToParentScope = Syntax(codeBlockItem.item).asProtocol(SyntaxProtocol.self)
         as? IntroducingToSequentialParentScopeSyntax
       {

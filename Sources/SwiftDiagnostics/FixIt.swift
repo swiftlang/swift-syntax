@@ -27,15 +27,56 @@ public protocol FixItMessage: Sendable {
   var fixItID: MessageID { get }
 }
 
+/// Types conforming to this protocol provide the data required for replacing a child node of a parent node.
+///
+/// Conforming types should ensure the child of ``parent`` to be replaced at ``replacementRange`` is type-compatible
+/// with ``newChild``. Conforming types are stored as type-erased existentials (i.e. `any ReplacingChildData`) in
+///  ``FixIt/Change/replaceChild(data:)`` to keep ``FixIt`` type-erased.
+public protocol ReplacingChildData: Sendable {
+  associatedtype Parent: SyntaxProtocol
+  associatedtype Child: SyntaxProtocol
+
+  /// The node whose child node at ``replacementRange`` to be replaced by ``newChild``.
+  var parent: Parent { get }
+
+  /// The node to replace the child node of ``parent`` at ``replacementRange``.
+  var newChild: Child { get }
+
+  /// The absolute position range of the child node to be replaced.
+  ///
+  /// If a nil child node is to be replaced, conforming types should provide a zero-length range with both bounds
+  /// denoting the start position of ``newChild`` in ``parent`` after replacement.
+  var replacementRange: Range<AbsolutePosition> { get }
+}
+
 /// A Fix-It that can be applied to resolve a diagnostic.
 public struct FixIt: Sendable {
   public enum Change: Sendable {
+    struct ReplacingOptionalChildData<Parent: SyntaxProtocol, Child: SyntaxProtocol>: ReplacingChildData {
+      let parent: Parent
+      let newChild: Child
+      let keyPath: WritableKeyPath<Parent, Child?> & Sendable
+
+      var replacementRange: Range<AbsolutePosition> {
+        // need to upcast keyPath to strip Sendable for older Swift versions
+        let keyPath: WritableKeyPath<Parent, Child?> = keyPath
+        if let oldChild = parent[keyPath: keyPath] {
+          return oldChild.range
+        } else {
+          let newChild = parent.with(keyPath, newChild)[keyPath: keyPath]!
+          return newChild.position..<newChild.position
+        }
+      }
+    }
+
     /// Replace `oldNode` by `newNode`.
     case replace(oldNode: Syntax, newNode: Syntax)
     /// Replace the leading trivia on the given token
     case replaceLeadingTrivia(token: TokenSyntax, newTrivia: Trivia)
     /// Replace the trailing trivia on the given token
     case replaceTrailingTrivia(token: TokenSyntax, newTrivia: Trivia)
+    /// Replace the child node of the given parent node at the given replacement range with the given new child node
+    case replaceChild(data: any ReplacingChildData)
   }
 
   /// A description of what this Fix-It performs.
@@ -88,6 +129,12 @@ private extension FixIt.Change {
       return SourceEdit(
         range: token.endPositionBeforeTrailingTrivia..<token.endPosition,
         replacement: newTrivia.description
+      )
+
+    case .replaceChild(let replacingChildData):
+      return SourceEdit(
+        range: replacingChildData.replacementRange,
+        replacement: replacingChildData.newChild.description
       )
     }
   }

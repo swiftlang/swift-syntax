@@ -289,9 +289,9 @@ struct DiagnosticSpec {
 }
 
 /// Assert that `location` is the same as that of `locationMarker` in `tree`.
-func assertLocation<T: SyntaxProtocol>(
+func assertLocation(
   _ location: SourceLocation,
-  in tree: T,
+  in tree: some SyntaxProtocol,
   markerLocations: [String: Int],
   expectedLocationMarker locationMarker: String,
   file: StaticString = #filePath,
@@ -315,9 +315,9 @@ func assertLocation<T: SyntaxProtocol>(
 
 /// Assert that the diagnostic `note` produced in `tree` matches `spec`,
 /// using `markerLocations` to translate markers to actual source locations.
-func assertNote<T: SyntaxProtocol>(
+func assertNote(
   _ note: Note,
-  in tree: T,
+  in tree: some SyntaxProtocol,
   markerLocations: [String: Int],
   expected spec: NoteSpec
 ) {
@@ -335,9 +335,9 @@ func assertNote<T: SyntaxProtocol>(
 
 /// Assert that the diagnostic `diag` produced in `tree` matches `spec`,
 /// using `markerLocations` to translate markers to actual source locations.
-func assertDiagnostic<T: SyntaxProtocol>(
+func assertDiagnostic(
   _ diag: Diagnostic,
-  in tree: T,
+  in tree: some SyntaxProtocol,
   markerLocations: [String: Int],
   expected spec: DiagnosticSpec
 ) {
@@ -491,9 +491,9 @@ public struct AssertParseOptions: OptionSet, Sendable {
 extension ParserTestCase {
   /// After a test case has been mutated, assert that the mutated source
   /// round-trips and doesn’t hit any assertion failures in the parser.
-  fileprivate static func assertMutationRoundTrip<S: SyntaxProtocol>(
+  fileprivate static func assertMutationRoundTrip(
     source: [UInt8],
-    _ parse: (inout Parser) -> S,
+    _ parse: (inout Parser) -> some SyntaxProtocol,
     swiftVersion: Parser.SwiftVersion?,
     experimentalFeatures: Parser.ExperimentalFeatures,
     file: StaticString,
@@ -524,6 +524,76 @@ extension ParserTestCase {
     }
   }
 
+  enum FixItsApplication {
+    /// Apply only the fix-its whose messages are included in `applyFixIts` to generate `fixedSource`.
+    case optIn(applyFixIts: [String], fixedSource: String)
+    /// Apply all fix-its to generate `fixedSource`.
+    case all(fixedSource: String)
+
+    init?(applyFixIts: [String]?, expectedFixedSource: String?) {
+      if let applyFixIts {
+        self = .optIn(applyFixIts: applyFixIts, fixedSource: expectedFixedSource ?? "")
+      } else if let expectedFixedSource {
+        self = .all(fixedSource: expectedFixedSource)
+      } else {
+        return nil
+      }
+    }
+
+    var applyFixIts: [String]? {
+      switch self {
+      case .optIn(let applyFixIts, _):
+        return applyFixIts
+      case .all:
+        return nil
+      }
+    }
+
+    var expectedFixedSource: String {
+      switch self {
+      case .optIn(_, let fixedSource), .all(let fixedSource):
+        return fixedSource
+      }
+    }
+  }
+
+  /// Convenient version of `assertParse` that allows checking a single configuration of applied Fix-Its.
+  ///
+  /// - Parameters:
+  ///   - applyFixIts: Applies only the fix-its with these messages. Nil means applying all fix-its.
+  ///   - expectedFixedSource: Asserts that the source after applying fix-its matches
+  ///     this string.
+  func assertParse(
+    _ markedSource: String,
+    _ parse: @Sendable (inout Parser) -> some SyntaxProtocol = { SourceFileSyntax.parse(from: &$0) },
+    substructure expectedSubstructure: (some SyntaxProtocol)? = Optional<Syntax>.none,
+    substructureAfterMarker: String = "START",
+    diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
+    applyFixIts: [String]? = nil,
+    fixedSource expectedFixedSource: String? = nil,
+    options: AssertParseOptions = [],
+    swiftVersion: Parser.SwiftVersion? = nil,
+    experimentalFeatures: Parser.ExperimentalFeatures? = nil,
+    file: StaticString = #filePath,
+    line: UInt = #line
+  ) {
+    assertParse(
+      markedSource,
+      parse,
+      substructure: expectedSubstructure,
+      substructureAfterMarker: substructureAfterMarker,
+      diagnostics: expectedDiagnostics,
+      fixItsApplications: FixItsApplication(applyFixIts: applyFixIts, expectedFixedSource: expectedFixedSource).map {
+        [$0]
+      } ?? [],
+      options: options,
+      swiftVersion: swiftVersion,
+      experimentalFeatures: experimentalFeatures,
+      file: file,
+      line: line
+    )
+  }
+
   /// Verifies that parsing of `markedSource` produces expected results using a
   /// combination of various testing techniques:
   ///
@@ -531,7 +601,7 @@ extension ParserTestCase {
   ///    parsed tree is the same as the input.
   /// 2. Checks that parsing produces the expected list of diagnostics. If no
   ///    diagnostics are passed, asserts that the input parses without any errors.
-  /// 3. Checks that applying all Fix-Its of the source code results in the
+  /// 3. Checks that applying fix-its of the source code results in the
   ///    expected fixed source, effectively testing the Fix-Its.
   /// 4. If a substructure is passed, asserts that the parsed tree contains a
   ///    subtree of that structure.
@@ -558,21 +628,19 @@ extension ParserTestCase {
   ///   - expectedDiagnostics: Asserts the given diagnostics were output, by default it
   ///     asserts the parse was successful (ie. it has no diagnostics). Note
   ///     that `DiagnosticsSpec` uses the location marked by `1️⃣` by default.
-  ///   - applyFixIts: Applies only the fix-its with these messages.
-  ///   - expectedFixedSource: Asserts that the source after applying fix-its matches
-  ///     this string.
+  ///   - fixItsApplications: A list of `FixItsApplication` to check for whether applying certain fix-its to the source
+  ///     will generate a certain expected fixed source. An empty list means no fix-its are expected.
   ///   - swiftVersion: The version of Swift using which the file should be parsed.
   ///      Defaults to the latest version.
   ///   - experimentalFeatures: A list of experimental features to enable, or
   ///     `nil` to enable the default set of features provided by the test case.
-  func assertParse<S: SyntaxProtocol>(
+  func assertParse(
     _ markedSource: String,
-    _ parse: @Sendable (inout Parser) -> S = { SourceFileSyntax.parse(from: &$0) },
+    _ parse: @Sendable (inout Parser) -> some SyntaxProtocol = { SourceFileSyntax.parse(from: &$0) },
     substructure expectedSubstructure: (some SyntaxProtocol)? = Optional<Syntax>.none,
     substructureAfterMarker: String = "START",
     diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
-    applyFixIts: [String]? = nil,
-    fixedSource expectedFixedSource: String? = nil,
+    fixItsApplications: [FixItsApplication] = [],
     options: AssertParseOptions = [],
     swiftVersion: Parser.SwiftVersion? = nil,
     experimentalFeatures: Parser.ExperimentalFeatures? = nil,
@@ -591,7 +659,7 @@ extension ParserTestCase {
       parser.enableAlternativeTokenChoices()
     }
     #endif
-    let tree: S = parse(&parser)
+    let tree = parse(&parser)
 
     // Round-trip
     assertStringsEqualWithDiff(
@@ -640,27 +708,30 @@ extension ParserTestCase {
     }
 
     // Applying Fix-Its
-    if expectedDiagnostics.contains(where: { !$0.fixIts.isEmpty }) && expectedFixedSource == nil {
+    if expectedDiagnostics.contains(where: { !$0.fixIts.isEmpty }) && fixItsApplications.isEmpty {
       XCTFail("Expected a fixed source if the test case produces diagnostics with Fix-Its", file: file, line: line)
-    } else if let expectedFixedSource = expectedFixedSource {
-      let fixedTree = FixItApplier.applyFixes(from: diags, filterByMessages: applyFixIts, to: tree)
-      var fixedTreeDescription = fixedTree.description
-      if options.contains(.normalizeNewlinesInFixedSource) {
-        fixedTreeDescription =
-          fixedTreeDescription
-          .replacingOccurrences(of: "\r\n", with: "\n")
-          .replacingOccurrences(of: "\r", with: "\n")
+    } else {
+      for fixItsApplication in fixItsApplications {
+        let applyFixIts = fixItsApplication.applyFixIts
+        let fixedTree = FixItApplier.applyFixes(from: diags, filterByMessages: applyFixIts, to: tree)
+        var fixedTreeDescription = fixedTree.description
+        if options.contains(.normalizeNewlinesInFixedSource) {
+          fixedTreeDescription =
+            fixedTreeDescription
+            .replacingOccurrences(of: "\r\n", with: "\n")
+            .replacingOccurrences(of: "\r", with: "\n")
+        }
+        assertStringsEqualWithDiff(
+          fixedTreeDescription.trimmingTrailingWhitespace(),
+          fixItsApplication.expectedFixedSource.trimmingTrailingWhitespace(),
+          "Applying \(applyFixIts?.description ?? "all Fix-Its") didn’t produce the expected fixed source",
+          file: file,
+          line: line
+        )
       }
-      assertStringsEqualWithDiff(
-        fixedTreeDescription.trimmingTrailingWhitespace(),
-        expectedFixedSource.trimmingTrailingWhitespace(),
-        "Applying all Fix-Its didn’t produce the expected fixed source",
-        file: file,
-        line: line
-      )
     }
 
-    if expectedDiagnostics.allSatisfy({ $0.fixIts.isEmpty }) && expectedFixedSource != nil {
+    if expectedDiagnostics.allSatisfy({ $0.fixIts.isEmpty }) && !fixItsApplications.isEmpty {
       XCTFail(
         "Fixed source was provided but the test case produces no diagnostics with Fix-Its",
         file: file,
@@ -747,9 +818,9 @@ class TriviaRemover: SyntaxRewriter {
   }
 }
 
-func assertBasicFormat<S: SyntaxProtocol>(
+func assertBasicFormat(
   source: String,
-  parse: (inout Parser) -> S,
+  parse: (inout Parser) -> some SyntaxProtocol,
   swiftVersion: Parser.SwiftVersion?,
   experimentalFeatures: Parser.ExperimentalFeatures,
   file: StaticString = #filePath,

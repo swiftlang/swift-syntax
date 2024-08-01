@@ -51,4 +51,20 @@ extension FixIt {
       ]
     )
   }
+
+  public static func replaceChild<Parent: SyntaxProtocol, Child: SyntaxProtocol>(
+    message: FixItMessage,
+    parent: Parent,
+    replacingChildAt keyPath: WritableKeyPath<Parent, Child?> & Sendable,
+    with newChild: Child
+  ) -> Self {
+    FixIt(
+      message: message,
+      changes: [
+        .replaceChild(
+          data: FixIt.Change.ReplacingOptionalChildData(parent: parent, newChild: newChild, keyPath: keyPath)
+        )
+      ]
+    )
+  }
 }

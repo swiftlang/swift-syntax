@@ -923,7 +923,9 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       return DeclSyntax(node)
     }
 
-    guard node.bindings.count == 1, let binding = node.bindings.first else {
+    guard node.bindings.count == 1,
+      var binding = node.bindings.first
+    else {
       contextGenerator(Syntax(node)).addDiagnostics(
         from: MacroApplicationError.accessorMacroOnVariableWithMultipleBindings,
         node: node
@@ -931,17 +933,27 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       return DeclSyntax(node)
     }
 
-    let expansion = expandAccessors(of: node, existingAccessors: binding.accessorBlock)
+    var expansion = expandAccessors(of: node, existingAccessors: binding.accessorBlock)
+
     if expansion.accessors != binding.accessorBlock {
+      if binding.accessorBlock == nil {
+        // remove the trailing trivia of the variable declaration and move it
+        // to the trailing trivia of the left brace of the newly created accessor block
+        expansion.accessors?.leftBrace.trailingTrivia = binding.trailingTrivia
+        binding.trailingTrivia = []
+      }
+
       if binding.initializer != nil, expansion.expandsGetSet {
         // The accessor block will have a leading space, but there will already be a
         // space between the variable and the to-be-removed initializer. Remove the
         // leading trivia on the accessor block so we don't double up.
-        node.bindings[node.bindings.startIndex].accessorBlock = expansion.accessors?.with(\.leadingTrivia, [])
-        node.bindings[node.bindings.startIndex].initializer = nil
+        binding.accessorBlock = expansion.accessors?.with(\.leadingTrivia, [])
+        binding.initializer = nil
       } else {
-        node.bindings[node.bindings.startIndex].accessorBlock = expansion.accessors
+        binding.accessorBlock = expansion.accessors
       }
+
+      node.bindings = [binding]
     }
 
     return DeclSyntax(node)

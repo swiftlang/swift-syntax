@@ -429,7 +429,27 @@ final class RegexLiteralTests: ParserTestCase {
       /1️⃣ a/
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      fixItsApplications: [
+        .optIn(
+          applyFixIts: ["convert to extended regex literal with '#'"],
+          fixedSource: """
+            #/ a/#
+            """
+        ),
+        .optIn(
+          applyFixIts: [#"insert '\'"#],
+          fixedSource: #"""
+            /\ a/
+            """#
+        ),
       ]
     )
   }
@@ -440,7 +460,27 @@ final class RegexLiteralTests: ParserTestCase {
       let x = /1️⃣ a/
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      fixItsApplications: [
+        .optIn(
+          applyFixIts: ["convert to extended regex literal with '#'"],
+          fixedSource: """
+            let x = #/ a/#
+            """
+        ),
+        .optIn(
+          applyFixIts: [#"insert '\'"#],
+          fixedSource: #"""
+            let x = /\ a/
+            """#
+        ),
       ]
     )
   }
@@ -489,25 +529,71 @@ final class RegexLiteralTests: ParserTestCase {
     )
   }
 
+  func testClosingSpace4() {
+    assertParse(
+      """
+      /,1️⃣ /
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "bare slash regex literal may not end with space",
+          fixIts: ["convert to extended regex literal with '#'"]
+        )
+      ],
+      fixedSource: """
+        #/, /#
+        """
+    )
+  }
+
+  func testClosingSpace5() {
+    assertParse(
+      """
+      let x = /,1️⃣ /
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "bare slash regex literal may not end with space",
+          fixIts: ["convert to extended regex literal with '#'"]
+        )
+      ],
+      fixedSource: """
+        let x = #/, /#
+        """
+    )
+  }
+
   func testOpeningAndClosingSpace1() {
     assertParse(
       """
-      /1️⃣  /
+      /1️⃣   /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
-      ]
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: ["convert to extended regex literal with '#'"]
+        )
+      ],
+      fixedSource: """
+        #/   /#
+        """
     )
   }
 
   func testOpeningAndClosingSpace2() {
     assertParse(
       """
-      x += /1️⃣  /
+      x += /1️⃣   /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
-      ]
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: ["convert to extended regex literal with '#'"]
+        )
+      ],
+      fixedSource: """
+        x += #/   /#
+        """
     )
   }
 
@@ -525,7 +611,27 @@ final class RegexLiteralTests: ParserTestCase {
       /1️⃣ /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      fixItsApplications: [
+        .optIn(
+          applyFixIts: ["convert to extended regex literal with '#'"],
+          fixedSource: """
+            #/ /#
+            """
+        ),
+        .optIn(
+          applyFixIts: [#"insert '\'"#],
+          fixedSource: #"""
+            /\ /
+            """#
+        ),
       ]
     )
   }
@@ -536,7 +642,27 @@ final class RegexLiteralTests: ParserTestCase {
       let x = /1️⃣ /
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      fixItsApplications: [
+        .optIn(
+          applyFixIts: ["convert to extended regex literal with '#'"],
+          fixedSource: """
+            let x = #/ /#
+            """
+        ),
+        .optIn(
+          applyFixIts: [#"insert '\'"#],
+          fixedSource: #"""
+            let x = /\ /
+            """#
+        ),
       ]
     )
   }

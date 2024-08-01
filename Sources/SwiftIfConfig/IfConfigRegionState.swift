@@ -9,12 +9,13 @@
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
+
 import SwiftDiagnostics
 import SwiftOperators
 import SwiftSyntax
 
 /// Describes the state of a particular region guarded by `#if` or similar.
-public enum ConfiguredRegionState {
+public enum IfConfigRegionState {
   /// The region is not part of the compiled program and is not even parsed,
   /// and therefore many contain syntax that is invalid.
   case unparsed
@@ -23,29 +24,29 @@ public enum ConfiguredRegionState {
   /// The region is active and is part of the compiled program.
   case active
 
-  /// Evaluate the given `#if` condition using the given build configuration, throwing an error if there is
-  /// insufficient information to make a determination.
-  public init(
-    condition: some ExprSyntaxProtocol,
-    configuration: some BuildConfiguration,
-    diagnosticHandler: ((Diagnostic) -> Void)? = nil
-  ) throws {
+  /// Evaluate the given `#if` condition using the given build configuration
+  /// to determine its state and identify any problems encountered along the
+  /// way.
+  public static func evaluating(
+    _ condition: some ExprSyntaxProtocol,
+    in configuration: some BuildConfiguration
+  ) -> (state: IfConfigRegionState, diagnostics: [Diagnostic]) {
     // Apply operator folding for !/&&/||.
-    let foldedCondition = try OperatorTable.logicalOperators.foldAll(condition) { error in
-      diagnosticHandler?(error.asDiagnostic)
-      throw error
+    var foldingDiagnostics: [Diagnostic] = []
+    let foldedCondition = OperatorTable.logicalOperators.foldAll(condition) { error in
+      foldingDiagnostics.append(contentsOf: error.asDiagnostics(at: condition))
     }.cast(ExprSyntax.self)
 
-    let (active, versioned) = try evaluateIfConfig(
+    let (active, versioned, evalDiagnostics) = evaluateIfConfig(
       condition: foldedCondition,
-      configuration: configuration,
-      diagnosticHandler: diagnosticHandler
+      configuration: configuration
     )
 
+    let diagnostics = foldingDiagnostics + evalDiagnostics
     switch (active, versioned) {
-    case (true, _): self = .active
-    case (false, false): self = .inactive
-    case (false, true): self = .unparsed
+    case (true, _): return (.active, diagnostics)
+    case (false, false): return (.inactive, diagnostics)
+    case (false, true): return (.unparsed, diagnostics)
     }
   }
 }

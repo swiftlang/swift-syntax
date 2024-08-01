@@ -1,4 +1,4 @@
-# `SwiftIfConfig`
+# SwiftIfConfig
 
 A library to evaluate `#if` conditionals within a Swift syntax tree.
 
@@ -27,7 +27,7 @@ The syntax tree and its parser do not reason about the build configuration. Rath
 The `SwiftIfConfig` library provides utilities to determine which syntax nodes are part of a particular build configuration. Each utility requires that one provide a specific build configuration (i.e., an instance of a type that conforms to the <doc:BuildConfiguration> protocol), and provides a different view on essentially the same information:
 
 * <doc:ActiveSyntaxVisitor> and <doc:ActiveSyntaxAnyVisitor> are visitor types that only visit the syntax nodes that are included ("active") for a given build configuration, implicitly skipping any nodes within inactive `#if` clauses.
-* `SyntaxProtocol/removingInactive(in:)` produces a syntax node that removes all inactive regions (and their corresponding `IfConfigDeclSyntax` nodes) from the given syntax tree, returning a new tree that is free of `#if` conditions.
+* `SyntaxProtocol.removingInactive(in:)` produces a syntax node that removes all inactive regions (and their corresponding `IfConfigDeclSyntax` nodes) from the given syntax tree, returning a new tree that is free of `#if` conditions.
 * `IfConfigDeclSyntax.activeClause(in:)` determines which of the clauses of an `#if` is active for the given build configuration, returning the active clause.
 * `SyntaxProtocol.isActive(in:)` determines whether the given syntax node is active for the given build configuration. The result is one of "active"
     (the node is included in the program), "inactive" (the node is not included

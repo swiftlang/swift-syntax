@@ -10,7 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
 @_spi(Experimental) import SwiftLexicalLookup
 import SwiftParser
 import SwiftSyntax
@@ -53,7 +52,7 @@ enum MarkerExpectation {
   }
 }
 
-/// Used to define
+/// Used to define result assertion.
 enum ResultExpectation {
   case fromScope(ScopeSyntax.Type, expectedNames: [String])
   case fromFileScope(expectedNames: [String])
@@ -61,9 +60,9 @@ enum ResultExpectation {
   var expectedNames: [String] {
     switch self {
     case .fromScope(_, let expectedNames):
-      expectedNames
+      return expectedNames
     case .fromFileScope(expectedNames: let expectedNames):
-      expectedNames
+      return expectedNames
     }
   }
 }
@@ -73,7 +72,7 @@ enum ResultExpectation {
 /// It also checks whether result types match rules specified in `expectedResultTypes`.
 func assertLexicalScopeQuery(
   source: String,
-  methodUnderTest: (String, TokenSyntax) -> ([SyntaxProtocol?]),
+  methodUnderTest: (_ marker: String, _ tokenAtMarker: TokenSyntax) -> ([SyntaxProtocol?]),
   expected: [String: [String?]],
   expectedResultTypes: MarkerExpectation = .none
 ) {
@@ -118,27 +117,15 @@ func assertLexicalScopeQuery(
     }
 
     // Assert validity of the output
-    for (actual, expected) in zip(result, zip(expectedMarkers, expectedPositions)) {
-      if actual == nil && expected.1 == nil { continue }
-
-      guard let actual else {
-        XCTFail(
-          "For marker \(marker), actual is nil while expected is \(sourceFileSyntax.token(at: expected.1!)?.description ?? "nil")"
-        )
-        continue
-      }
-
-      guard let expectedPosition = expected.1 else {
-        XCTFail("For marker \(marker), actual is \(actual) while expected position is nil")
-        continue
-      }
+    for (actual, (expectedMarker, expectedPosition)) in zip(result, zip(expectedMarkers, expectedPositions)) {
+      guard let actual, let expectedPosition else { continue }
 
       XCTAssert(
         actual.positionAfterSkippingLeadingTrivia == expectedPosition,
-        "For marker \(marker), actual result: \(actual) doesn't match expected value: \(sourceFileSyntax.token(at: expected.1!)?.description ?? "nil")"
+        "For marker \(marker), actual result: \(actual) doesn't match expected value: \(sourceFileSyntax.token(at: expectedPosition)?.description ?? "nil")"
       )
 
-      if let expectedMarker = expected.0 {
+      if let expectedMarker {
         expectedResultTypes.assertMarkerType(marker: expectedMarker, actual: actual)
       }
     }
@@ -157,8 +144,8 @@ func assertLexicalNameLookup(
 ) {
   assertLexicalScopeQuery(
     source: source,
-    methodUnderTest: { marker, argument in
-      let result = argument.lookup(for: useNilAsTheParameter ? nil : argument.text, with: config)
+    methodUnderTest: { marker, tokenAtMarker in
+      let result = tokenAtMarker.lookup(for: useNilAsTheParameter ? nil : tokenAtMarker.text, with: config)
 
       guard let expectedValues = references[marker] else {
         XCTFail("For marker \(marker), couldn't find result expectation")

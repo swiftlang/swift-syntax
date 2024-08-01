@@ -49,24 +49,17 @@ final class PeerMacroTests: XCTestCase {
           newEffects = FunctionEffectSpecifiersSyntax(asyncSpecifier: .keyword(.async))
         }
 
-        let newSignature = funcDecl.signature.with(\.effectSpecifiers, newEffects)
-
         let diag = Diagnostic(
           node: Syntax(funcDecl.funcKeyword),
           message: SwiftSyntaxMacros.MacroExpansionErrorMessage(
             "can only add a completion-handler variant to an 'async' function"
           ),
           fixIts: [
-            FixIt(
-              message: SwiftSyntaxMacros.MacroExpansionFixItMessage(
-                "add 'async'"
-              ),
-              changes: [
-                FixIt.Change.replace(
-                  oldNode: Syntax(funcDecl.signature),
-                  newNode: Syntax(newSignature)
-                )
-              ]
+            .replaceChild(
+              message: SwiftSyntaxMacros.MacroExpansionFixItMessage("add 'async'"),
+              parent: funcDecl,
+              replacingChildAt: \.signature.effectSpecifiers,
+              with: newEffects
             )
           ]
         )

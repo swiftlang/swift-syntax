@@ -23,8 +23,18 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
       func a() { _ = /1️⃣ x*/ }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
-      ]
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      applyFixIts: [],
+      fixedSource: """
+        func a() { _ = / x*/ }
+        """
     )
   }
 
@@ -48,9 +58,28 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
       func d() { _ = /2️⃣ x{*/ }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "bare slash regex literal may not start with space"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "bare slash regex literal may not start with space"),
-      ]
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        ),
+      ],
+      applyFixIts: [],
+      fixedSource: """
+        func c() { _ = / x}*/ }
+        func d() { _ = / x{*/ }
+        """
     )
   }
 
@@ -65,7 +94,11 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "bare slash regex literal may not start with space"
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -74,6 +107,7 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
           fixIts: ["insert '/'"]
         ),
       ],
+      applyFixIts: ["insert '/'"],
       fixedSource: """
         func e() {
           _ = /         }/
@@ -92,7 +126,11 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "bare slash regex literal may not start with space"
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -101,6 +139,7 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
           fixIts: ["insert '/'"]
         ),
       ],
+      applyFixIts: ["insert '/'"],
       fixedSource: """
         func f() {
           _ = /         {/
@@ -269,7 +308,11 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "bare slash regex literal may not start with space"
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -282,6 +325,7 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
           message: "extraneous brace at top level"
         ),
       ],
+      applyFixIts: ["insert '/'"],
       fixedSource: #"""
         func m() {
           _ = / "/
@@ -298,8 +342,18 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
       func n() { /1️⃣ "{"}/ }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
-      ]
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      applyFixIts: [],
+      fixedSource: #"""
+        func n() { / "{"}/ }
+        """#
     )
   }
 
@@ -341,8 +395,18 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
       func err1() { _ = /1️⃣ 0xG}/ }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
-      ]
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      applyFixIts: [],
+      fixedSource: """
+        func err1() { _ = / 0xG}/ }
+        """
     )
   }
 
@@ -352,8 +416,18 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
       func err2() { _ = /1️⃣ 0oG}/ }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
-      ]
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      applyFixIts: [],
+      fixedSource: """
+        func err2() { _ = / 0oG}/ }
+        """
     )
   }
 
@@ -363,8 +437,18 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
       func err3() { _ = /1️⃣ {"/ }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
-      ]
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      applyFixIts: [],
+      fixedSource: """
+        func err3() { _ = / {"/ }
+        """
     )
   }
 
@@ -374,8 +458,18 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
       func err4() { _ = /1️⃣ {'/ }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
-      ]
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      applyFixIts: [],
+      fixedSource: """
+        func err4() { _ = / {'/ }
+        """
     )
   }
 
@@ -385,8 +479,18 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
       func err5() { _ = /1️⃣ {<#placeholder#>/ }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
-      ]
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      applyFixIts: [],
+      fixedSource: """
+        func err5() { _ = / {<#placeholder#>/ }
+        """
     )
   }
 }

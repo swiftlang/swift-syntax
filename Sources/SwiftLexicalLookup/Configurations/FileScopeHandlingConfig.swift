@@ -14,12 +14,10 @@ import SwiftSyntax
 
 /// Specifies how names should be introduced at the file scope.
 @_spi(Experimental) public enum FileScopeHandlingConfig {
-  /// Default behavior. Names introduced sequentially like in member block
-  /// scope up to the first non-declaration after and including which,
-  /// the declarations are treated like in code block scope.
+  /// This is the behavior that is being used
+  /// for Swift files with top-level code.
   case memberBlockUpToLastDecl
-  /// File scope behaves like member block scope.
+  /// This is the behavior that is being used
+  /// for Swift files that don’t allow top-level code.
   case memberBlock
-  /// File scope behaves like code block scope.
-  case codeBlock
 }

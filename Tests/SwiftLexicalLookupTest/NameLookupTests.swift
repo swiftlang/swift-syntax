@@ -152,7 +152,7 @@ final class testNameLookup: XCTestCase {
         """,
       references: [
         "5️⃣": [
-          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.implicit(.self("2️⃣"))]),
+          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.identifier("2️⃣")]),
           .fromScope(ClassDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("7️⃣"))]),
         ],
         "6️⃣": [
@@ -703,6 +703,32 @@ final class testNameLookup: XCTestCase {
         "8️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("7️⃣")]),
           .fromScope(StructDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("5️⃣"))]),
+        ],
+      ]
+    )
+  }
+
+  func testImplicitSelfOverride() {
+    assertLexicalNameLookup(
+      source: """
+        1️⃣class Foo {
+          func test() {
+            let 2️⃣`Self` = "abc"
+            print(3️⃣Self.self)
+
+            let 4️⃣`self` = "def"
+            print(5️⃣self)
+          }
+        }
+        """,
+      references: [
+        "3️⃣": [
+          .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("2️⃣")]),
+          .fromScope(ClassDeclSyntax.self, expectedNames: [NameExpectation.implicit(.Self("1️⃣"))]),
+        ],
+        "5️⃣": [
+          .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("4️⃣")]),
+          .fromScope(ClassDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))]),
         ],
       ]
     )

@@ -98,7 +98,7 @@ import SwiftSyntax
   /// - for `codeBlock` - a
   @_spi(Experimental) public func _lookup(
     for identifier: Identifier?,
-    at syntax: SyntaxProtocol,
+    at origin: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
   ) -> [LookupResult] {
@@ -106,13 +106,13 @@ import SwiftSyntax
     case .memberBlock:
       let names = introducedNames(using: .memberBlock)
         .filter { lookupName in
-          checkName(identifier, refersTo: lookupName, at: syntax)
+          checkName(identifier, refersTo: lookupName, at: origin)
         }
 
       return names.isEmpty ? [] : [.fromFileScope(self, withNames: names)]
     case .memberBlockUpToLastDecl:
-      var members = [LookupName]()
-      var sequentialItems = [CodeBlockItemSyntax]()
+      var members: [LookupName] = []
+      var sequentialItems: [CodeBlockItemSyntax] = []
       var encounteredNonDeclaration = false
 
       for codeBlockItem in statements {
@@ -124,7 +124,7 @@ import SwiftSyntax
           if item.is(DeclSyntax.self) || item.is(VariableDeclSyntax.self) {
             let foundNames = LookupName.getNames(from: item)
 
-            members.append(contentsOf: foundNames.filter { checkName(identifier, refersTo: $0, at: syntax) })
+            members.append(contentsOf: foundNames.filter { checkName(identifier, refersTo: $0, at: origin) })
           } else {
             encounteredNonDeclaration = true
             sequentialItems.append(codeBlockItem)
@@ -135,7 +135,7 @@ import SwiftSyntax
       let sequentialNames = sequentialLookup(
         in: sequentialItems,
         for: identifier,
-        at: syntax,
+        at: origin,
         with: config,
         state: state,
         createResultsForThisScopeWith: { .fromFileScope(self, withNames: $0) }
@@ -157,14 +157,14 @@ import SwiftSyntax
 
   @_spi(Experimental) public func _lookup(
     for identifier: Identifier?,
-    at syntax: SyntaxProtocol,
+    at origin: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
   ) -> [LookupResult] {
     sequentialLookup(
       in: statements,
       for: identifier,
-      at: syntax,
+      at: origin,
       with: config,
       state: state,
       createResultsForThisScopeWith: { .fromScope(self, withNames: $0) }
@@ -279,14 +279,14 @@ import SwiftSyntax
   /// ```
   @_spi(Experimental) public func _lookup(
     for identifier: Identifier?,
-    at syntax: SyntaxProtocol,
+    at origin: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
   ) -> [LookupResult] {
-    if let elseBody, elseBody.position <= syntax.position, elseBody.endPosition >= syntax.position {
-      return lookupInParent(for: identifier, at: syntax, with: config, state: state)
+    if let elseBody, elseBody.position <= origin.position, elseBody.endPosition >= origin.position {
+      return lookupInParent(for: identifier, at: origin, with: config, state: state)
     } else {
-      return defaultLookupImplementation(for: identifier, at: syntax, with: config, state: state)
+      return defaultLookupImplementation(for: identifier, at: origin, with: config, state: state)
     }
   }
 }
@@ -303,14 +303,14 @@ import SwiftSyntax
 @_spi(Experimental) extension GuardStmtSyntax: IntroducingToSequentialParentScopeSyntax {
   @_spi(Experimental) public func introducesToSequentialParent(
     for identifier: Identifier?,
-    at syntax: SwiftSyntax.SyntaxProtocol,
+    at origin: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
   ) -> [LookupResult] {
     let names = conditions.flatMap { element in
       LookupName.getNames(from: element.condition, accessibleAfter: element.endPosition)
     }.filter { introducedName in
-      checkName(identifier, refersTo: introducedName, at: syntax)
+      checkName(identifier, refersTo: introducedName, at: origin)
     }
 
     return names.isEmpty ? [] : [.fromScope(self, withNames: names)]
@@ -333,16 +333,16 @@ import SwiftSyntax
   /// ```
   @_spi(Experimental) public func _lookup(
     for identifier: Identifier?,
-    at syntax: SyntaxProtocol,
+    at origin: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
   ) -> [LookupResult] {
-    if body.position <= syntax.position && body.endPosition >= syntax.position {
+    if body.position <= origin.position && body.endPosition >= origin.position {
       var newState = state
       newState.skipSequentialIntroductionFrom = self
-      return lookupInParent(for: identifier, at: syntax, with: config, state: newState)
+      return lookupInParent(for: identifier, at: origin, with: config, state: newState)
     } else {
-      return defaultLookupImplementation(for: identifier, at: syntax, with: config, state: state)
+      return defaultLookupImplementation(for: identifier, at: origin, with: config, state: state)
     }
   }
 }

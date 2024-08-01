@@ -32,7 +32,7 @@ enum ImplicitNameExpectation {
   case newValue(String)
   case oldValue(String)
 
-  func assertExpectation(marker: String, for name: LookupImplicitNameKind) {
+  func assertExpectation(marker: String, for name: ImplicitDecl) {
     switch (name, self) {
     case (.self, .self): break
     case (.Self, .Self): break

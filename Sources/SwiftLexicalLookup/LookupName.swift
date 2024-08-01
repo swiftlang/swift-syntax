@@ -12,12 +12,17 @@
 
 import SwiftSyntax
 
-@_spi(Experimental) public enum LookupImplicitNameKind {
+/// An entity that is implicitly declared based on the syntactic structure of the program.
+@_spi(Experimental) public enum ImplicitDecl {
   /// `self` keyword representing object instance.
-  case `self`(SyntaxProtocol)
+  /// Could be associated with type declaration, extension,
+  /// or closure captures.
+  case `self`(DeclSyntaxProtocol)
   /// `Self` keyword representing object type.
+  /// Could be associated with type declaration or extension.
   case `Self`(DeclSyntaxProtocol)
-  /// `self` captured by a closure.
+  /// `error` value caught by a `catch`
+  /// block that does not specify a catch pattern.
   case error(CatchClauseSyntax)
   /// `newValue` available by default inside `set` and `willSet`.
   case newValue(AccessorDeclSyntax)
@@ -28,35 +33,58 @@ import SwiftSyntax
   @_spi(Experimental) public var syntax: SyntaxProtocol {
     switch self {
     case .self(let syntax):
-      syntax
+      return syntax
     case .Self(let syntax):
-      syntax
+      return syntax
     case .error(let syntax):
-      syntax
+      return syntax
     case .newValue(let syntax):
-      syntax
+      return syntax
     case .oldValue(let syntax):
-      syntax
+      return syntax
     }
   }
 
-  /// Name associated with implicit name kind.
+  /// The name of the implicit declaration.
   private var name: String {
     switch self {
     case .self:
-      "self"
+      return "self"
     case .Self:
-      "Self"
+      return "Self"
     case .error:
-      "error"
+      return "error"
     case .newValue:
-      "newValue"
+      return "newValue"
     case .oldValue:
-      "oldValue"
+      return "oldValue"
     }
   }
 
   /// Identifier used for name comparison.
+  ///
+  ///
+  /// ```swift
+  /// class Foo {
+  ///     func test() {
+  ///     let `Self` = "abc"
+  ///     print(Self.self)
+  ///
+  ///     let `self` = "def"
+  ///     print(self)
+  ///   }
+  /// }
+  ///
+  /// Foo().test()
+  /// ```
+  /// prints:
+  /// ```
+  /// abc
+  /// def
+  /// ```
+  /// `self` and `Self` identifers override
+  /// implicit `self` and `Self` introduced by
+  /// the `Foo` class declaration.
   var identifier: Identifier {
     Identifier(name)
   }
@@ -70,17 +98,17 @@ import SwiftSyntax
   /// Could be class, struct, actor, protocol, function and more.
   case declaration(NamedDeclSyntax)
   /// Name introduced implicitly by certain syntax nodes.
-  case implicit(LookupImplicitNameKind)
+  case implicit(ImplicitDecl)
 
   /// Syntax associated with this name.
   @_spi(Experimental) public var syntax: SyntaxProtocol {
     switch self {
     case .identifier(let syntax, _):
-      syntax
+      return syntax
     case .declaration(let syntax):
-      syntax
+      return syntax
     case .implicit(let implicitName):
-      implicitName.syntax
+      return implicitName.syntax
     }
   }
 
@@ -88,11 +116,11 @@ import SwiftSyntax
   @_spi(Experimental) public var identifier: Identifier? {
     switch self {
     case .identifier(let syntax, _):
-      Identifier(syntax.identifier)
+      return Identifier(syntax.identifier) ?? Identifier(syntax.identifier.text)
     case .declaration(let syntax):
-      Identifier(syntax.name)
+      return Identifier(syntax.name)
     case .implicit(let kind):
-      kind.identifier
+      return kind.identifier
     }
   }
 
@@ -177,11 +205,7 @@ import SwiftSyntax
     identifiable: IdentifiableSyntax,
     accessibleAfter: AbsolutePosition? = nil
   ) -> [LookupName] {
-    if let closureCapture = identifiable as? ClosureCaptureSyntax,
-      closureCapture.identifier.tokenKind == .keyword(.self)
-    {
-      return [.implicit(.self(closureCapture))]  // Handle `self` closure capture.
-    } else if identifiable.identifier.tokenKind != .wildcard {
+    if identifiable.identifier.tokenKind != .wildcard {
       return [.identifier(identifiable, accessibleAfter: accessibleAfter)]
     } else {
       return []

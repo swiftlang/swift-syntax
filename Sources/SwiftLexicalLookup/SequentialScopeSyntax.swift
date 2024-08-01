@@ -15,31 +15,39 @@ import SwiftSyntax
 /// Scope that, in addition to names introduced by itself,
 /// also handles names introduced by
 /// `IntroducingToSequentialParentScopeSyntax` children scopes.
-protocol SequentialScopeSyntax: ScopeSyntax {
+protocol SequentialScopeSyntax: ScopeSyntax {}
+
+extension SequentialScopeSyntax {
   /// Returns names introduced by `codeBlockItems`
   /// and included `IntroducingToSequentialParentScopeSyntax` children
   /// scopes that match the lookup.
+  ///
+  /// Example:
+  /// ```swift
+  /// func foo() {
+  ///   let a = 1
+  ///   guard let a = x else { return }
+  ///   let a = a // <-- 1
+  ///   guard let a = y else { return }
+  ///   a // <-- 2
+  /// }
+  /// ```
+  /// For the first `a` reference, sequential lookup returns
+  /// two results: from `guard` scope and from code block scope
+  /// in this exact order. For the second `a` reference,
+  /// sequential lookup yields results from four scopes starting
+  /// from the bottom: `guard`, code block, `guard` and
+  /// code block scope in this exact order.
   func sequentialLookup(
-    in codeBlockItems: any Collection<CodeBlockItemSyntax>,
+    in codeBlockItems: some Collection<CodeBlockItemSyntax>,
     for identifier: Identifier?,
-    at syntax: SyntaxProtocol,
-    with config: LookupConfig,
-    state: LookupState,
-    createResultsForThisScopeWith getResults: ([LookupName]) -> (LookupResult)
-  ) -> [LookupResult]
-}
-
-extension SequentialScopeSyntax {
-  func sequentialLookup(
-    in codeBlockItems: any Collection<CodeBlockItemSyntax>,
-    for identifier: Identifier?,
-    at syntax: SyntaxProtocol,
+    at origin: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState,
     createResultsForThisScopeWith getResults: ([LookupName]) -> (LookupResult)
   ) -> [LookupResult] {
-    var result = [LookupResult]()
-    var currentChunk = [LookupName]()
+    var result: [LookupResult] = []
+    var currentChunk: [LookupName] = []
 
     for codeBlockItem in codeBlockItems {
       if let introducingToParentScope = Syntax(codeBlockItem.item).asProtocol(SyntaxProtocol.self)
@@ -59,35 +67,28 @@ extension SequentialScopeSyntax {
         }
 
         // Add names introduced by the encountered scope.
-        result.append(
-          contentsOf: introducingToParentScope.introducesToSequentialParent(
-            for: identifier,
-            at: syntax,
-            with: config,
-            state: state
-          )
+        result += introducingToParentScope.introducesToSequentialParent(
+          for: identifier,
+          at: origin,
+          with: config,
+          state: state
         )
       } else {
         // Extract new names from encountered node.
-        currentChunk.append(
-          contentsOf:
-            LookupName.getNames(
-              from: codeBlockItem.item,
-              accessibleAfter: codeBlockItem.endPosition
-            ).filter { introducedName in
-              checkName(identifier, refersTo: introducedName, at: syntax)
-            }
-        )
+        currentChunk += LookupName.getNames(
+          from: codeBlockItem.item,
+          accessibleAfter: codeBlockItem.endPosition
+        ).filter { introducedName in
+          checkName(identifier, refersTo: introducedName, at: origin)
+        }
       }
     }
 
     // If there are some names collected, create a new result for this scope.
     if !currentChunk.isEmpty {
       result.append(getResults(currentChunk))
-      currentChunk = []
     }
 
-    return (result.isEmpty ? [] : result.reversed())
-      + lookupInParent(for: identifier, at: syntax, with: config, state: state)
+    return result.reversed() + lookupInParent(for: identifier, at: origin, with: config, state: state)
   }
 }

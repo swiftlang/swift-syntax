@@ -12,13 +12,9 @@
 
 import SwiftSyntax
 
-@_spi(Experimental) public protocol TypeScopeSyntax: ScopeSyntax, DeclSyntaxProtocol {
-  /// `self` and `Self` names referring to
-  /// this scope.
-  var implicitInstanceAndTypeNames: [LookupName] { get }
-}
+@_spi(Experimental) public protocol TypeScopeSyntax: ScopeSyntax, DeclSyntaxProtocol {}
 
-@_spi(Experimental) extension TypeScopeSyntax {
+extension TypeScopeSyntax {
   @_spi(Experimental) public var implicitInstanceAndTypeNames: [LookupName] {
     [.implicit(.self(self)), .implicit(.Self(self))]
   }

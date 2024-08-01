@@ -165,11 +165,11 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforePeriod, 
-            period, 
-            unexpectedBetweenPeriodAndComponent, 
-            component, 
-            unexpectedAfterComponent
+            Syntax(unexpectedBeforePeriod), 
+            Syntax(period), 
+            Syntax(unexpectedBetweenPeriodAndComponent), 
+            Syntax(component), 
+            Syntax(unexpectedAfterComponent)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePeriod?.raw, 
@@ -298,13 +298,13 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeBackslash, 
-            backslash, 
-            unexpectedBetweenBackslashAndRoot, 
-            root, 
-            unexpectedBetweenRootAndComponents, 
-            components, 
-            unexpectedAfterComponents
+            Syntax(unexpectedBeforeBackslash), 
+            Syntax(backslash), 
+            Syntax(unexpectedBetweenBackslashAndRoot), 
+            Syntax(root), 
+            Syntax(unexpectedBetweenRootAndComponents), 
+            Syntax(components), 
+            Syntax(unexpectedAfterComponents)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBackslash?.raw, 
@@ -475,7 +475,7 @@ public struct KeyPathOptionalComponentSyntax: SyntaxProtocol, SyntaxHashable, _L
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeQuestionOrExclamationMark, questionOrExclamationMark, unexpectedAfterQuestionOrExclamationMark))) { (arena, _) in
+    self = withExtendedLifetime((SyntaxArena(), (Syntax(unexpectedBeforeQuestionOrExclamationMark), Syntax(questionOrExclamationMark), Syntax(unexpectedAfterQuestionOrExclamationMark)))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeQuestionOrExclamationMark?.raw, questionOrExclamationMark.raw, unexpectedAfterQuestionOrExclamationMark?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.keyPathOptionalComponent,
@@ -564,11 +564,11 @@ public struct KeyPathPropertyComponentSyntax: SyntaxProtocol, SyntaxHashable, _L
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeDeclName, 
-            declName, 
-            unexpectedBetweenDeclNameAndGenericArgumentClause, 
-            genericArgumentClause, 
-            unexpectedAfterGenericArgumentClause
+            Syntax(unexpectedBeforeDeclName), 
+            Syntax(declName), 
+            Syntax(unexpectedBetweenDeclNameAndGenericArgumentClause), 
+            Syntax(genericArgumentClause), 
+            Syntax(unexpectedAfterGenericArgumentClause)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDeclName?.raw, 
@@ -692,13 +692,13 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable, _
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLeftSquare, 
-            leftSquare, 
-            unexpectedBetweenLeftSquareAndArguments, 
-            arguments, 
-            unexpectedBetweenArgumentsAndRightSquare, 
-            rightSquare, 
-            unexpectedAfterRightSquare
+            Syntax(unexpectedBeforeLeftSquare), 
+            Syntax(leftSquare), 
+            Syntax(unexpectedBetweenLeftSquareAndArguments), 
+            Syntax(arguments), 
+            Syntax(unexpectedBetweenArgumentsAndRightSquare), 
+            Syntax(rightSquare), 
+            Syntax(unexpectedAfterRightSquare)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftSquare?.raw, 
@@ -886,15 +886,15 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLabel, 
-            label, 
-            unexpectedBetweenLabelAndColon, 
-            colon, 
-            unexpectedBetweenColonAndExpression, 
-            expression, 
-            unexpectedBetweenExpressionAndTrailingComma, 
-            trailingComma, 
-            unexpectedAfterTrailingComma
+            Syntax(unexpectedBeforeLabel), 
+            Syntax(label), 
+            Syntax(unexpectedBetweenLabelAndColon), 
+            Syntax(colon), 
+            Syntax(unexpectedBetweenColonAndExpression), 
+            Syntax(expression), 
+            Syntax(unexpectedBetweenExpressionAndTrailingComma), 
+            Syntax(trailingComma), 
+            Syntax(unexpectedAfterTrailingComma)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
@@ -1084,15 +1084,15 @@ public struct LabeledSpecializeArgumentSyntax: SyntaxProtocol, SyntaxHashable, _
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLabel, 
-            label, 
-            unexpectedBetweenLabelAndColon, 
-            colon, 
-            unexpectedBetweenColonAndValue, 
-            value, 
-            unexpectedBetweenValueAndTrailingComma, 
-            trailingComma, 
-            unexpectedAfterTrailingComma
+            Syntax(unexpectedBeforeLabel), 
+            Syntax(label), 
+            Syntax(unexpectedBetweenLabelAndColon), 
+            Syntax(colon), 
+            Syntax(unexpectedBetweenColonAndValue), 
+            Syntax(value), 
+            Syntax(unexpectedBetweenValueAndTrailingComma), 
+            Syntax(trailingComma), 
+            Syntax(unexpectedAfterTrailingComma)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
@@ -1280,13 +1280,13 @@ public struct LabeledStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSy
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLabel, 
-            label, 
-            unexpectedBetweenLabelAndColon, 
-            colon, 
-            unexpectedBetweenColonAndStatement, 
-            statement, 
-            unexpectedAfterStatement
+            Syntax(unexpectedBeforeLabel), 
+            Syntax(label), 
+            Syntax(unexpectedBetweenLabelAndColon), 
+            Syntax(colon), 
+            Syntax(unexpectedBetweenColonAndStatement), 
+            Syntax(statement), 
+            Syntax(unexpectedAfterStatement)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
@@ -1453,23 +1453,23 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeType, 
-            type, 
-            unexpectedBetweenTypeAndColon, 
-            colon, 
-            unexpectedBetweenColonAndLayoutSpecifier, 
-            layoutSpecifier, 
-            unexpectedBetweenLayoutSpecifierAndLeftParen, 
-            leftParen, 
-            unexpectedBetweenLeftParenAndSize, 
-            size, 
-            unexpectedBetweenSizeAndComma, 
-            comma, 
-            unexpectedBetweenCommaAndAlignment, 
-            alignment, 
-            unexpectedBetweenAlignmentAndRightParen, 
-            rightParen, 
-            unexpectedAfterRightParen
+            Syntax(unexpectedBeforeType), 
+            Syntax(type), 
+            Syntax(unexpectedBetweenTypeAndColon), 
+            Syntax(colon), 
+            Syntax(unexpectedBetweenColonAndLayoutSpecifier), 
+            Syntax(layoutSpecifier), 
+            Syntax(unexpectedBetweenLayoutSpecifierAndLeftParen), 
+            Syntax(leftParen), 
+            Syntax(unexpectedBetweenLeftParenAndSize), 
+            Syntax(size), 
+            Syntax(unexpectedBetweenSizeAndComma), 
+            Syntax(comma), 
+            Syntax(unexpectedBetweenCommaAndAlignment), 
+            Syntax(alignment), 
+            Syntax(unexpectedBetweenAlignmentAndRightParen), 
+            Syntax(rightParen), 
+            Syntax(unexpectedAfterRightParen)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeType?.raw, 
@@ -1769,11 +1769,11 @@ public struct LifetimeSpecifierArgumentSyntax: SyntaxProtocol, SyntaxHashable, _
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeParameter, 
-            parameter, 
-            unexpectedBetweenParameterAndTrailingComma, 
-            trailingComma, 
-            unexpectedAfterTrailingComma
+            Syntax(unexpectedBeforeParameter), 
+            Syntax(parameter), 
+            Syntax(unexpectedBetweenParameterAndTrailingComma), 
+            Syntax(trailingComma), 
+            Syntax(unexpectedAfterTrailingComma)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeParameter?.raw, 
@@ -1924,17 +1924,17 @@ public struct LifetimeTypeSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeDependsOnKeyword, 
-            dependsOnKeyword, 
-            unexpectedBetweenDependsOnKeywordAndLeftParen, 
-            leftParen, 
-            unexpectedBetweenLeftParenAndScopedKeyword, 
-            scopedKeyword, 
-            unexpectedBetweenScopedKeywordAndArguments, 
-            arguments, 
-            unexpectedBetweenArgumentsAndRightParen, 
-            rightParen, 
-            unexpectedAfterRightParen
+            Syntax(unexpectedBeforeDependsOnKeyword), 
+            Syntax(dependsOnKeyword), 
+            Syntax(unexpectedBetweenDependsOnKeywordAndLeftParen), 
+            Syntax(leftParen), 
+            Syntax(unexpectedBetweenLeftParenAndScopedKeyword), 
+            Syntax(scopedKeyword), 
+            Syntax(unexpectedBetweenScopedKeywordAndArguments), 
+            Syntax(arguments), 
+            Syntax(unexpectedBetweenArgumentsAndRightParen), 
+            Syntax(rightParen), 
+            Syntax(unexpectedAfterRightParen)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDependsOnKeyword?.raw, 
@@ -2184,23 +2184,23 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAttributes, 
-            attributes, 
-            unexpectedBetweenAttributesAndModifiers, 
-            modifiers, 
-            unexpectedBetweenModifiersAndMacroKeyword, 
-            macroKeyword, 
-            unexpectedBetweenMacroKeywordAndName, 
-            name, 
-            unexpectedBetweenNameAndGenericParameterClause, 
-            genericParameterClause, 
-            unexpectedBetweenGenericParameterClauseAndSignature, 
-            signature, 
-            unexpectedBetweenSignatureAndDefinition, 
-            definition, 
-            unexpectedBetweenDefinitionAndGenericWhereClause, 
-            genericWhereClause, 
-            unexpectedAfterGenericWhereClause
+            Syntax(unexpectedBeforeAttributes), 
+            Syntax(attributes), 
+            Syntax(unexpectedBetweenAttributesAndModifiers), 
+            Syntax(modifiers), 
+            Syntax(unexpectedBetweenModifiersAndMacroKeyword), 
+            Syntax(macroKeyword), 
+            Syntax(unexpectedBetweenMacroKeywordAndName), 
+            Syntax(name), 
+            Syntax(unexpectedBetweenNameAndGenericParameterClause), 
+            Syntax(genericParameterClause), 
+            Syntax(unexpectedBetweenGenericParameterClauseAndSignature), 
+            Syntax(signature), 
+            Syntax(unexpectedBetweenSignatureAndDefinition), 
+            Syntax(definition), 
+            Syntax(unexpectedBetweenDefinitionAndGenericWhereClause), 
+            Syntax(genericWhereClause), 
+            Syntax(unexpectedAfterGenericWhereClause)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -2548,27 +2548,27 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAttributes, 
-            attributes, 
-            unexpectedBetweenAttributesAndModifiers, 
-            modifiers, 
-            unexpectedBetweenModifiersAndPound, 
-            pound, 
-            unexpectedBetweenPoundAndMacroName, 
-            macroName, 
-            unexpectedBetweenMacroNameAndGenericArgumentClause, 
-            genericArgumentClause, 
-            unexpectedBetweenGenericArgumentClauseAndLeftParen, 
-            leftParen, 
-            unexpectedBetweenLeftParenAndArguments, 
-            arguments, 
-            unexpectedBetweenArgumentsAndRightParen, 
-            rightParen, 
-            unexpectedBetweenRightParenAndTrailingClosure, 
-            trailingClosure, 
-            unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, 
-            additionalTrailingClosures, 
-            unexpectedAfterAdditionalTrailingClosures
+            Syntax(unexpectedBeforeAttributes), 
+            Syntax(attributes), 
+            Syntax(unexpectedBetweenAttributesAndModifiers), 
+            Syntax(modifiers), 
+            Syntax(unexpectedBetweenModifiersAndPound), 
+            Syntax(pound), 
+            Syntax(unexpectedBetweenPoundAndMacroName), 
+            Syntax(macroName), 
+            Syntax(unexpectedBetweenMacroNameAndGenericArgumentClause), 
+            Syntax(genericArgumentClause), 
+            Syntax(unexpectedBetweenGenericArgumentClauseAndLeftParen), 
+            Syntax(leftParen), 
+            Syntax(unexpectedBetweenLeftParenAndArguments), 
+            Syntax(arguments), 
+            Syntax(unexpectedBetweenArgumentsAndRightParen), 
+            Syntax(rightParen), 
+            Syntax(unexpectedBetweenRightParenAndTrailingClosure), 
+            Syntax(trailingClosure), 
+            Syntax(unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures), 
+            Syntax(additionalTrailingClosures), 
+            Syntax(unexpectedAfterAdditionalTrailingClosures)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -3018,23 +3018,23 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Lea
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforePound, 
-            pound, 
-            unexpectedBetweenPoundAndMacroName, 
-            macroName, 
-            unexpectedBetweenMacroNameAndGenericArgumentClause, 
-            genericArgumentClause, 
-            unexpectedBetweenGenericArgumentClauseAndLeftParen, 
-            leftParen, 
-            unexpectedBetweenLeftParenAndArguments, 
-            arguments, 
-            unexpectedBetweenArgumentsAndRightParen, 
-            rightParen, 
-            unexpectedBetweenRightParenAndTrailingClosure, 
-            trailingClosure, 
-            unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, 
-            additionalTrailingClosures, 
-            unexpectedAfterAdditionalTrailingClosures
+            Syntax(unexpectedBeforePound), 
+            Syntax(pound), 
+            Syntax(unexpectedBetweenPoundAndMacroName), 
+            Syntax(macroName), 
+            Syntax(unexpectedBetweenMacroNameAndGenericArgumentClause), 
+            Syntax(genericArgumentClause), 
+            Syntax(unexpectedBetweenGenericArgumentClauseAndLeftParen), 
+            Syntax(leftParen), 
+            Syntax(unexpectedBetweenLeftParenAndArguments), 
+            Syntax(arguments), 
+            Syntax(unexpectedBetweenArgumentsAndRightParen), 
+            Syntax(rightParen), 
+            Syntax(unexpectedBetweenRightParenAndTrailingClosure), 
+            Syntax(trailingClosure), 
+            Syntax(unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures), 
+            Syntax(additionalTrailingClosures), 
+            Syntax(unexpectedAfterAdditionalTrailingClosures)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforePound?.raw, 
@@ -3371,15 +3371,15 @@ public struct MatchingPatternConditionSyntax: SyntaxProtocol, SyntaxHashable, _L
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeCaseKeyword, 
-            caseKeyword, 
-            unexpectedBetweenCaseKeywordAndPattern, 
-            pattern, 
-            unexpectedBetweenPatternAndTypeAnnotation, 
-            typeAnnotation, 
-            unexpectedBetweenTypeAnnotationAndInitializer, 
-            initializer, 
-            unexpectedAfterInitializer
+            Syntax(unexpectedBeforeCaseKeyword), 
+            Syntax(caseKeyword), 
+            Syntax(unexpectedBetweenCaseKeywordAndPattern), 
+            Syntax(pattern), 
+            Syntax(unexpectedBetweenPatternAndTypeAnnotation), 
+            Syntax(typeAnnotation), 
+            Syntax(unexpectedBetweenTypeAnnotationAndInitializer), 
+            Syntax(initializer), 
+            Syntax(unexpectedAfterInitializer)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeCaseKeyword?.raw, 
@@ -3552,13 +3552,13 @@ public struct MemberAccessExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeBase, 
-            base, 
-            unexpectedBetweenBaseAndPeriod, 
-            period, 
-            unexpectedBetweenPeriodAndDeclName, 
-            declName, 
-            unexpectedAfterDeclName
+            Syntax(unexpectedBeforeBase), 
+            Syntax(base), 
+            Syntax(unexpectedBetweenBaseAndPeriod), 
+            Syntax(period), 
+            Syntax(unexpectedBetweenPeriodAndDeclName), 
+            Syntax(declName), 
+            Syntax(unexpectedAfterDeclName)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBase?.raw, 
@@ -3710,11 +3710,11 @@ public struct MemberBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeDecl, 
-            decl, 
-            unexpectedBetweenDeclAndSemicolon, 
-            semicolon, 
-            unexpectedAfterSemicolon
+            Syntax(unexpectedBeforeDecl), 
+            Syntax(decl), 
+            Syntax(unexpectedBetweenDeclAndSemicolon), 
+            Syntax(semicolon), 
+            Syntax(unexpectedAfterSemicolon)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeDecl?.raw, 
@@ -3847,13 +3847,13 @@ public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLeftBrace, 
-            leftBrace, 
-            unexpectedBetweenLeftBraceAndMembers, 
-            members, 
-            unexpectedBetweenMembersAndRightBrace, 
-            rightBrace, 
-            unexpectedAfterRightBrace
+            Syntax(unexpectedBeforeLeftBrace), 
+            Syntax(leftBrace), 
+            Syntax(unexpectedBetweenLeftBraceAndMembers), 
+            Syntax(members), 
+            Syntax(unexpectedBetweenMembersAndRightBrace), 
+            Syntax(rightBrace), 
+            Syntax(unexpectedAfterRightBrace)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLeftBrace?.raw, 
@@ -4031,15 +4031,15 @@ public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyn
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeBaseType, 
-            baseType, 
-            unexpectedBetweenBaseTypeAndPeriod, 
-            period, 
-            unexpectedBetweenPeriodAndName, 
-            name, 
-            unexpectedBetweenNameAndGenericArgumentClause, 
-            genericArgumentClause, 
-            unexpectedAfterGenericArgumentClause
+            Syntax(unexpectedBeforeBaseType), 
+            Syntax(baseType), 
+            Syntax(unexpectedBetweenBaseTypeAndPeriod), 
+            Syntax(period), 
+            Syntax(unexpectedBetweenPeriodAndName), 
+            Syntax(name), 
+            Syntax(unexpectedBetweenNameAndGenericArgumentClause), 
+            Syntax(genericArgumentClause), 
+            Syntax(unexpectedAfterGenericArgumentClause)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBaseType?.raw, 
@@ -4213,13 +4213,13 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeBaseType, 
-            baseType, 
-            unexpectedBetweenBaseTypeAndPeriod, 
-            period, 
-            unexpectedBetweenPeriodAndMetatypeSpecifier, 
-            metatypeSpecifier, 
-            unexpectedAfterMetatypeSpecifier
+            Syntax(unexpectedBeforeBaseType), 
+            Syntax(baseType), 
+            Syntax(unexpectedBetweenBaseTypeAndPeriod), 
+            Syntax(period), 
+            Syntax(unexpectedBetweenPeriodAndMetatypeSpecifier), 
+            Syntax(metatypeSpecifier), 
+            Syntax(unexpectedAfterMetatypeSpecifier)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeBaseType?.raw, 
@@ -4374,13 +4374,13 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSy
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAttributes, 
-            attributes, 
-            unexpectedBetweenAttributesAndModifiers, 
-            modifiers, 
-            unexpectedBetweenModifiersAndPlaceholder, 
-            placeholder, 
-            unexpectedAfterPlaceholder
+            Syntax(unexpectedBeforeAttributes), 
+            Syntax(attributes), 
+            Syntax(unexpectedBetweenAttributesAndModifiers), 
+            Syntax(modifiers), 
+            Syntax(unexpectedBetweenModifiersAndPlaceholder), 
+            Syntax(placeholder), 
+            Syntax(unexpectedAfterPlaceholder)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeAttributes?.raw, 
@@ -4581,7 +4581,7 @@ public struct MissingExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) { (arena, _) in
+    self = withExtendedLifetime((SyntaxArena(), (Syntax(unexpectedBeforePlaceholder), Syntax(placeholder), Syntax(unexpectedAfterPlaceholder)))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforePlaceholder?.raw, placeholder.raw, unexpectedAfterPlaceholder?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.missingExpr,
@@ -4665,7 +4665,7 @@ public struct MissingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _Leaf
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) { (arena, _) in
+    self = withExtendedLifetime((SyntaxArena(), (Syntax(unexpectedBeforePlaceholder), Syntax(placeholder), Syntax(unexpectedAfterPlaceholder)))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforePlaceholder?.raw, placeholder.raw, unexpectedAfterPlaceholder?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.missingPattern,
@@ -4749,7 +4749,7 @@ public struct MissingStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSy
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) { (arena, _) in
+    self = withExtendedLifetime((SyntaxArena(), (Syntax(unexpectedBeforePlaceholder), Syntax(placeholder), Syntax(unexpectedAfterPlaceholder)))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforePlaceholder?.raw, placeholder.raw, unexpectedAfterPlaceholder?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.missingStmt,
@@ -4833,7 +4833,7 @@ public struct MissingSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProt
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) { (arena, _) in
+    self = withExtendedLifetime((SyntaxArena(), (Syntax(unexpectedBeforePlaceholder), Syntax(placeholder), Syntax(unexpectedAfterPlaceholder)))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforePlaceholder?.raw, placeholder.raw, unexpectedAfterPlaceholder?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.missing,
@@ -4917,7 +4917,7 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSy
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) { (arena, _) in
+    self = withExtendedLifetime((SyntaxArena(), (Syntax(unexpectedBeforePlaceholder), Syntax(placeholder), Syntax(unexpectedAfterPlaceholder)))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforePlaceholder?.raw, placeholder.raw, unexpectedAfterPlaceholder?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.missingType,
@@ -5009,13 +5009,13 @@ public struct MultipleTrailingClosureElementSyntax: SyntaxProtocol, SyntaxHashab
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLabel, 
-            label, 
-            unexpectedBetweenLabelAndColon, 
-            colon, 
-            unexpectedBetweenColonAndClosure, 
-            closure, 
-            unexpectedAfterClosure
+            Syntax(unexpectedBeforeLabel), 
+            Syntax(label), 
+            Syntax(unexpectedBetweenLabelAndColon), 
+            Syntax(colon), 
+            Syntax(unexpectedBetweenColonAndClosure), 
+            Syntax(closure), 
+            Syntax(unexpectedAfterClosure)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeLabel?.raw, 
@@ -5163,11 +5163,11 @@ public struct NamedOpaqueReturnTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeGenericParameterClause, 
-            genericParameterClause, 
-            unexpectedBetweenGenericParameterClauseAndType, 
-            type, 
-            unexpectedAfterType
+            Syntax(unexpectedBeforeGenericParameterClause), 
+            Syntax(genericParameterClause), 
+            Syntax(unexpectedBetweenGenericParameterClauseAndType), 
+            Syntax(type), 
+            Syntax(unexpectedAfterType)
           ))) { (arena, _) in
       let layout: [RawSyntax?] = [
           unexpectedBeforeGenericParameterClause?.raw, 
@@ -5279,7 +5279,7 @@ public struct NilLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeNilKeyword, nilKeyword, unexpectedAfterNilKeyword))) { (arena, _) in
+    self = withExtendedLifetime((SyntaxArena(), (Syntax(unexpectedBeforeNilKeyword), Syntax(nilKeyword), Syntax(unexpectedAfterNilKeyword)))) { (arena, _) in
       let layout: [RawSyntax?] = [unexpectedBeforeNilKeyword?.raw, nilKeyword.raw, unexpectedAfterNilKeyword?.raw]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.nilLiteralExpr,

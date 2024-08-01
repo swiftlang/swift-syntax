@@ -355,7 +355,7 @@ import SwiftSyntax
 
 @_spi(Experimental) extension AccessorDeclSyntax: ScopeSyntax {
   /// Implicit and/or explicit names introduced
-  /// withing the accessor..
+  /// within the accessor.
   @_spi(Experimental) public var introducedNames: [LookupName] {
     if let parameters {
       return LookupName.getNames(from: parameters)
@@ -369,5 +369,12 @@ import SwiftSyntax
         return []
       }
     }
+  }
+}
+
+@_spi(Experimental) extension CatchClauseSyntax: ScopeSyntax {
+  /// Implicit `error` when there are no catch items.
+  public var introducedNames: [LookupName] {
+    return catchItems.isEmpty ? [.implicit(.error(self))] : []
   }
 }

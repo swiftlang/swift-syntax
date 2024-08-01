@@ -48,8 +48,22 @@ extension SequentialScopeSyntax {
   ) -> [LookupResult] {
     var result: [LookupResult] = []
     var currentChunk: [LookupName] = []
+    var itemsWithoutNamedDecl: [CodeBlockItemSyntax] = []
 
     for codeBlockItem in codeBlockItems {
+      if Syntax(codeBlockItem.item).isProtocol(NamedDeclSyntax.self) {
+        currentChunk += LookupName.getNames(
+          from: codeBlockItem.item,
+          accessibleAfter: codeBlockItem.endPosition
+        ).filter { introducedName in
+          checkName(identifier, refersTo: introducedName, at: origin)
+        }
+      } else {
+        itemsWithoutNamedDecl.append(codeBlockItem)
+      }
+    }
+
+    for codeBlockItem in itemsWithoutNamedDecl {
       if let introducingToParentScope = Syntax(codeBlockItem.item).asProtocol(SyntaxProtocol.self)
         as? IntroducingToSequentialParentScopeSyntax
       {
@@ -60,19 +74,24 @@ extension SequentialScopeSyntax {
           continue
         }
 
+        // Get results from encountered scope.
+        let introducedResults = introducingToParentScope.introducesToSequentialParent(
+          for: identifier,
+          at: origin,
+          with: config,
+          state: state
+        )
+
+        // Skip, if no results were found.
+        guard !introducedResults.isEmpty else { continue }
+
         // If there are some names collected, create a new result for this scope.
         if !currentChunk.isEmpty {
           result.append(getResults(currentChunk))
           currentChunk = []
         }
 
-        // Add names introduced by the encountered scope.
-        result += introducingToParentScope.introducesToSequentialParent(
-          for: identifier,
-          at: origin,
-          with: config,
-          state: state
-        )
+        result += introducedResults
       } else {
         // Extract new names from encountered node.
         currentChunk += LookupName.getNames(

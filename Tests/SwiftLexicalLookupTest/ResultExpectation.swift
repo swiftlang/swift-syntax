@@ -38,6 +38,11 @@ enum ResultExpectation {
   }
 
   static func assertResult(marker: String, result: [LookupResult], expectedValues: [ResultExpectation]) {
+    XCTAssert(
+      result.count == expectedValues.count,
+      "For marker \(marker), actual result count \(result.count) doesn't match expected \(expectedValues.count)"
+    )
+
     for (actual, expected) in zip(result, expectedValues) {
       switch (actual, expected) {
       case (

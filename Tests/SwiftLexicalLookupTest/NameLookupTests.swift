@@ -596,8 +596,8 @@ final class testNameLookup: XCTestCase {
       references: [
         "4️⃣": [
           .fromFileScope(expectedNames: ["1️⃣"]),
-          .fromFileScope(expectedNames: ["3️⃣"]),
           .fromScope(GuardStmtSyntax.self, expectedNames: ["2️⃣"]),
+          .fromFileScope(expectedNames: ["3️⃣"]),
         ]
       ],
       expectedResultTypes: .all(IdentifierPatternSyntax.self, except: ["3️⃣": ClassDeclSyntax.self])
@@ -729,6 +729,98 @@ final class testNameLookup: XCTestCase {
         "5️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("4️⃣")]),
           .fromScope(ClassDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))]),
+        ],
+      ]
+    )
+  }
+
+  func testImplicitErrorInCatchClause() {
+    assertLexicalNameLookup(
+      source: """
+        func foo() {
+          let 1️⃣error = 0
+
+          do {
+            try x.bar()
+            2️⃣error
+          } catch SomeError {
+            3️⃣error
+          } 4️⃣catch {
+            5️⃣error
+          }
+        }
+        """,
+      references: [
+        "2️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("1️⃣")])],
+        "3️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("1️⃣")])],
+        "5️⃣": [
+          .fromScope(CatchClauseSyntax.self, expectedNames: [NameExpectation.implicit(.error("4️⃣"))]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("1️⃣")]),
+        ],
+      ]
+    )
+  }
+
+  func testTypeDeclAvaialabilityInSequentialScope() {
+    let declExpectation: [ResultExpectation] = [
+      .fromScope(
+        CodeBlockSyntax.self,
+        expectedNames: [
+          NameExpectation.declaration("2️⃣"),
+          NameExpectation.declaration("5️⃣"),
+          NameExpectation.declaration("8️⃣"),
+        ]
+      )
+    ]
+
+    assertLexicalNameLookup(
+      source: """
+        func foo() {
+          1️⃣a
+          2️⃣class a {}
+          3️⃣a
+          guard let x else { return }
+          4️⃣a
+          5️⃣actor a {}
+          6️⃣a
+          guard let x else { return }
+          7️⃣a
+          8️⃣struct a {}
+          9️⃣a
+        }
+        """,
+      references: [
+        "1️⃣": declExpectation,
+        "3️⃣": declExpectation,
+        "4️⃣": declExpectation,
+        "6️⃣": declExpectation,
+        "7️⃣": declExpectation,
+        "9️⃣": declExpectation,
+      ]
+    )
+  }
+
+  func testNonMatchingGuardScopeDoesntPartitionResult() {
+    assertLexicalNameLookup(
+      source: """
+        func foo() {
+          let 1️⃣a = 1
+          let 2️⃣b = 2
+
+          guard let 3️⃣b = a else { return }
+
+          let 4️⃣a = 3
+          let 5️⃣b = 4
+
+          print(6️⃣a, 7️⃣b)
+        }
+        """,
+      references: [
+        "6️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣", "4️⃣"])],
+        "7️⃣": [
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["5️⃣"]),
+          .fromScope(GuardStmtSyntax.self, expectedNames: ["3️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["2️⃣"]),
         ],
       ]
     )

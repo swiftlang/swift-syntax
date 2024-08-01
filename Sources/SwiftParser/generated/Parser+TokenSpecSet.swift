@@ -560,6 +560,58 @@ extension ClosureCaptureSpecifierSyntax {
   }
 }
 
+extension ClosureCaptureSyntax {
+  @_spi(Diagnostics)
+  public enum NameOptions: TokenSpecSet {
+    case identifier
+    case `self`
+    
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.identifier):
+        self = .identifier
+      case TokenSpec(.self):
+        self = .self
+      default:
+        return nil
+      }
+    }
+    
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.identifier):
+        self = .identifier
+      case TokenSpec(.self):
+        self = .self
+      default:
+        return nil
+      }
+    }
+    
+    var spec: TokenSpec {
+      switch self {
+      case .identifier:
+        return .identifier
+      case .self:
+        return .keyword(.self)
+      }
+    }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .self:
+        return .keyword(.self)
+      }
+    }
+  }
+}
+
 extension ClosureParameterSyntax {
   @_spi(Diagnostics)
   public enum FirstNameOptions: TokenSpecSet {

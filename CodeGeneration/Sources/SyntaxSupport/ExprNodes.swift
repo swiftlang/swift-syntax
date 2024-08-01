@@ -341,7 +341,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "name",
-        kind: .token(choices: [.token(.identifier)])
+        kind: .token(choices: [.token(.identifier), .keyword(.self)])
       ),
       Child(
         name: "initializer",

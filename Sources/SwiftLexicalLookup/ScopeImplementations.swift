@@ -320,7 +320,7 @@ import SwiftSyntax
   ) -> [LookupResult] {
     guard body.position > origin.position || body.endPosition < origin.position
     else { return [] }
-    
+
     let names = conditions.flatMap { element in
       LookupName.getNames(from: element.condition, accessibleAfter: element.endPosition)
     }.filter { introducedName in

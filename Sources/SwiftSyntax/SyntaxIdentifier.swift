@@ -47,22 +47,22 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
     /// `raw`.
     func advancedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
       let newIndexInTree = self.indexInTree + UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
-      return .init(indexInTree: newIndexInTree)
+      return .init(newIndexInTree)
     }
 
     /// Assuming that this index points to the next sibling of `raw`, reverse it so that it points to the start of
     /// `raw`.
     func reversedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
       let newIndexInTree = self.indexInTree - UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
-      return .init(indexInTree: newIndexInTree)
+      return .init(newIndexInTree)
     }
 
     func advancedToFirstChild() -> SyntaxIndexInTree {
       let newIndexInTree = self.indexInTree + 1
-      return .init(indexInTree: newIndexInTree)
+      return .init(newIndexInTree)
     }
 
-    init(indexInTree: UInt32) {
+    init(_ indexInTree: UInt32) {
       self.indexInTree = indexInTree
     }
 
@@ -109,7 +109,7 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
   static func forRoot(_ raw: RawSyntax) -> SyntaxIdentifier {
     return SyntaxIdentifier(
       rootId: Self.rootId(of: raw),
-      indexInTree: SyntaxIndexInTree(indexInTree: 0)
+      indexInTree: SyntaxIndexInTree(0)
     )
   }
 
@@ -133,7 +133,7 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
     guard !root.hasParent else {
       return nil
     }
-    guard indexInTree.indexInTree < SyntaxIndexInTree(indexInTree: 0).advancedBy(root.raw).indexInTree else {
+    guard indexInTree.indexInTree < SyntaxIndexInTree(0).advancedBy(root.raw).indexInTree else {
       return nil
     }
 

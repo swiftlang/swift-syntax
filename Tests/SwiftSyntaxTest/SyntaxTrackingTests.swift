@@ -117,4 +117,45 @@ public class SyntaxTrackingTests: XCTestCase {
 
     XCTAssertEqual(codeBlockItemList.last?.item.originalNode(in: originalFunction)?.id, originalFunction.id)
   }
+
+  func testTwoLayerModification() throws {
+    let originalFunction = try FunctionDeclSyntax("func foo() {}").tracked
+    let modifiedFunction = originalFunction.with(\.name, "bar")
+    let secondModification = modifiedFunction.with(\.body, nil)
+
+    XCTAssertEqual(
+      secondModification.funcKeyword.originalNode(in: originalFunction)?.id,
+      originalFunction.funcKeyword.id
+    )
+    XCTAssertNil(secondModification.name.originalNode(in: originalFunction))
+    XCTAssertNil(secondModification.name.originalNode(in: modifiedFunction))
+  }
+
+  func testEditAndThenCreation() throws {
+    let originalFunction = try FunctionDeclSyntax("func foo() {}").tracked
+    let modifiedFunction = originalFunction.with(\.name, "bar")
+
+    let codeBlockItem = CodeBlockItemSyntax(item: .decl(DeclSyntax(modifiedFunction)))
+
+    XCTAssertEqual(
+      codeBlockItem.item.as(FunctionDeclSyntax.self)?.funcKeyword.originalNode(in: originalFunction)?.id,
+      originalFunction.funcKeyword.id
+    )
+    XCTAssertNil(codeBlockItem.item.as(FunctionDeclSyntax.self)?.name.originalNode(in: originalFunction)?.id)
+    XCTAssertNil(codeBlockItem.item.as(FunctionDeclSyntax.self)?.name.originalNode(in: modifiedFunction)?.id)
+  }
+
+  func testStartTrackingModifiedNode() throws {
+    let originalFunction = try FunctionDeclSyntax("func foo() {}").tracked
+    let modifiedFunction = originalFunction.with(\.name, "bar").tracked
+    let secondModification = modifiedFunction.with(\.body, nil)
+
+    XCTAssertNil(secondModification.funcKeyword.originalNode(in: originalFunction))
+    XCTAssertEqual(
+      secondModification.funcKeyword.originalNode(in: modifiedFunction)?.id,
+      modifiedFunction.funcKeyword.id
+    )
+    XCTAssertNil(secondModification.name.originalNode(in: originalFunction))
+    XCTAssertEqual(secondModification.name.originalNode(in: modifiedFunction)?.id, modifiedFunction.name.id)
+  }
 }

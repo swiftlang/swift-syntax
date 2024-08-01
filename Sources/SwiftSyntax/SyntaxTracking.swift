@@ -300,6 +300,9 @@ extension SyntaxProtocol {
   /// - SeeAlso: ``SyntaxProtocol/tracked``
   /// - Complexity: O(tracked ranges in this tree) + O(width * depth of original tree)
   public func originalNode(in originalTree: some SyntaxProtocol) -> Self? {
+    guard Syntax(self).syntaxTracking?.trackedTree == originalTree.id.rootId else {
+      return nil
+    }
     guard let originalIndexInTree = Syntax(self).syntaxTracking?.originalIndexInTree(of: self.id.indexInTree) else {
       return nil
     }

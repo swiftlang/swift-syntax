@@ -69,13 +69,6 @@ extension SequentialScopeSyntax {
       if let introducingToParentScope = Syntax(codeBlockItem.item).asProtocol(SyntaxProtocol.self)
         as? IntroducingToSequentialParentScopeSyntax
       {
-        // Check if the enocountered scope should be ignored.
-        if let scopeToSkip = state.skipSequentialIntroductionFrom,
-          scopeToSkip.id == introducingToParentScope.id
-        {
-          continue
-        }
-
         // Get results from encountered scope.
         let introducedResults = introducingToParentScope.introducesToSequentialParent(
           for: identifier,

@@ -15,9 +15,5 @@ import Foundation
 /// Represents internal state for lookup.
 /// It shouldn't be used by clients.
 @_spi(Experimental) public struct LookupState {
-  /// Specifies scopes that introduce names to their parent and
-  /// should be skipped during lookup in sequential scopes.
-  var skipSequentialIntroductionFrom: IntroducingToSequentialParentScopeSyntax?
-
   init() {}
 }

@@ -301,12 +301,26 @@ import SwiftSyntax
 }
 
 @_spi(Experimental) extension GuardStmtSyntax: IntroducingToSequentialParentScopeSyntax {
+  /// Returns names matching lookup.
+  /// Lookup triggered from inside of `else`
+  /// returns no names.
+  ///
+  /// Example:
+  /// ```swift
+  /// guard let a = x else {
+  ///   return // a is not visible here
+  /// }
+  /// // a is visible here
+  /// ```
   @_spi(Experimental) public func introducesToSequentialParent(
     for identifier: Identifier?,
     at origin: SyntaxProtocol,
     with config: LookupConfig,
     state: LookupState
   ) -> [LookupResult] {
+    guard body.position > origin.position || body.endPosition < origin.position
+    else { return [] }
+    
     let names = conditions.flatMap { element in
       LookupName.getNames(from: element.condition, accessibleAfter: element.endPosition)
     }.filter { introducedName in
@@ -318,32 +332,6 @@ import SwiftSyntax
 
   @_spi(Experimental) public var introducedNames: [LookupName] {
     []
-  }
-
-  /// Returns names matching lookup.
-  /// Lookup triggered from inside of `else`
-  /// clause is immediately forwarded to parent scope.
-  ///
-  /// Example:
-  /// ```swift
-  /// guard let a = x else {
-  ///   return // a is not visible here
-  /// }
-  /// // a is visible here
-  /// ```
-  @_spi(Experimental) public func _lookup(
-    for identifier: Identifier?,
-    at origin: SyntaxProtocol,
-    with config: LookupConfig,
-    state: LookupState
-  ) -> [LookupResult] {
-    if body.position <= origin.position && body.endPosition >= origin.position {
-      var newState = state
-      newState.skipSequentialIntroductionFrom = self
-      return lookupInParent(for: identifier, at: origin, with: config, state: newState)
-    } else {
-      return defaultLookupImplementation(for: identifier, at: origin, with: config, state: state)
-    }
   }
 }
 

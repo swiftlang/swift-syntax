@@ -37,13 +37,13 @@ public enum IfConfigRegionState {
       foldingDiagnostics.append(contentsOf: error.asDiagnostics(at: condition))
     }.cast(ExprSyntax.self)
 
-    let (active, versioned, evalDiagnostics) = evaluateIfConfig(
+    let (active, syntaxErrorsAllowed, evalDiagnostics) = evaluateIfConfig(
       condition: foldedCondition,
       configuration: configuration
     )
 
     let diagnostics = foldingDiagnostics + evalDiagnostics
-    switch (active, versioned) {
+    switch (active, syntaxErrorsAllowed) {
     case (true, _): return (.active, diagnostics)
     case (false, false): return (.inactive, diagnostics)
     case (false, true): return (.unparsed, diagnostics)

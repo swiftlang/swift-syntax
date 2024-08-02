@@ -49,14 +49,14 @@ extension SyntaxProtocol {
 
         if activeClause != ifConfigClause {
           // This was not the active clause, so we know that we're in an
-          // inactive block. However, if the condition is versioned, this is an
+          // inactive block. If syntax errors aren't allowable, this is an
           // unparsed region.
-          let (isVersioned, localDiagnostics) = ifConfigClause.isVersioned(
+          let (syntaxErrorsAllowed, localDiagnostics) = ifConfigClause.syntaxErrorsAllowed(
             configuration: configuration
           )
           diagnostics.append(contentsOf: localDiagnostics)
 
-          if isVersioned {
+          if syntaxErrorsAllowed {
             return (.unparsed, diagnostics)
           }
 

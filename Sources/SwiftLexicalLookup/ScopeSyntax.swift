@@ -47,7 +47,7 @@ extension SyntaxProtocol {
     for identifier: Identifier?,
     with config: LookupConfig = LookupConfig()
   ) -> [LookupResult] {
-    scope?.lookup(for: identifier, at: self, with: config) ?? []
+    scope?.lookup(for: identifier, at: self.position, with: config) ?? []
   }
 }
 
@@ -59,13 +59,10 @@ extension SyntaxProtocol {
   /// Finds all declarations `identifier` refers to. `syntax` specifies the node lookup was triggered with.
   /// If `identifier` set to `nil`, returns all available names at the given node.
   /// `state` represents lookup state passed between lookup methods.
-  ///
-  /// - Note: This method is intended for internal use only. For public usage, use ``ScopeSyntax/lookup(for:at:with:)`` instead.
-  func _lookup(
+  func lookup(
     for identifier: Identifier?,
-    at origin: SyntaxProtocol,
-    with config: LookupConfig,
-    state: LookupState
+    at origin: AbsolutePosition,
+    with config: LookupConfig
   ) -> [LookupResult]
 }
 
@@ -78,26 +75,12 @@ extension SyntaxProtocol {
   /// refers to and is accessible at given syntax node then passes lookup to the parent.
   /// If `identifier` set to `nil`, returns all available names at the given node.
   /// `state` represents lookup state passed between lookup methods.
-  ///
-  /// - Note: This method is intended for internal use only. For public usage, use ``ScopeSyntax/lookup(for:at:with:)`` instead.
-  @_spi(Experimental) public func _lookup(
-    for identifier: Identifier?,
-    at origin: SyntaxProtocol,
-    with config: LookupConfig,
-    state: LookupState
-  ) -> [LookupResult] {
-    defaultLookupImplementation(for: identifier, at: origin, with: config, state: state)
-  }
-
-  /// Returns `LookupResult` of all names introduced in this scope that `identifier`
-  /// refers to and is accessible at given syntax node then passes lookup to the parent.
-  /// If `identifier` set to `nil`, returns all available names at the given node.
   @_spi(Experimental) public func lookup(
     for identifier: Identifier?,
-    at origin: SyntaxProtocol,
+    at origin: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
-    _lookup(for: identifier, at: origin, with: config, state: LookupState())
+    defaultLookupImplementation(for: identifier, at: origin, with: config)
   }
 
   /// Returns `LookupResult` of all names introduced in this scope that `identifier`
@@ -105,9 +88,8 @@ extension SyntaxProtocol {
   /// If `identifier` set to `nil`, returns all available names at the given node.
   func defaultLookupImplementation(
     for identifier: Identifier?,
-    at origin: SyntaxProtocol,
-    with config: LookupConfig,
-    state: LookupState
+    at origin: AbsolutePosition,
+    with config: LookupConfig
   ) -> [LookupResult] {
     let filteredNames =
       introducedNames
@@ -116,24 +98,23 @@ extension SyntaxProtocol {
       }
 
     if filteredNames.isEmpty {
-      return lookupInParent(for: identifier, at: origin, with: config, state: state)
+      return lookupInParent(for: identifier, at: origin, with: config)
     } else {
       return [.fromScope(self, withNames: filteredNames)]
-        + lookupInParent(for: identifier, at: origin, with: config, state: state)
+        + lookupInParent(for: identifier, at: origin, with: config)
     }
   }
 
   /// Looks up in parent scope.
   func lookupInParent(
     for identifier: Identifier?,
-    at origin: SyntaxProtocol,
-    with config: LookupConfig,
-    state: LookupState
+    at origin: AbsolutePosition,
+    with config: LookupConfig
   ) -> [LookupResult] {
-    parentScope?._lookup(for: identifier, at: origin, with: config, state: state) ?? []
+    parentScope?.lookup(for: identifier, at: origin, with: config) ?? []
   }
 
-  func checkName(_ name: Identifier?, refersTo introducedName: LookupName, at origin: SyntaxProtocol) -> Bool {
+  func checkName(_ name: Identifier?, refersTo introducedName: LookupName, at origin: AbsolutePosition) -> Bool {
     introducedName.isAccessible(at: origin) && (name == nil || introducedName.refersTo(name!))
   }
 }

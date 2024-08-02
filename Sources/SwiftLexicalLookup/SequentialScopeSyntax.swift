@@ -41,12 +41,11 @@ extension SequentialScopeSyntax {
   func sequentialLookup(
     in codeBlockItems: some Collection<CodeBlockItemSyntax>,
     for identifier: Identifier?,
-    at origin: SyntaxProtocol,
+    at origin: AbsolutePosition,
     with config: LookupConfig,
-    state: LookupState,
     createResultsForThisScopeWith getResults: ([LookupName]) -> (LookupResult)
   ) -> [LookupResult] {
-    var result: [LookupResult] = []
+    var results: [LookupResult] = []
     var currentChunk: [LookupName] = []
     var itemsWithoutNamedDecl: [CodeBlockItemSyntax] = []
 
@@ -64,17 +63,16 @@ extension SequentialScopeSyntax {
     }
 
     for codeBlockItem in itemsWithoutNamedDecl {
-      guard codeBlockItem.position < origin.position else { break }
+      guard codeBlockItem.position < origin else { break }
 
       if let introducingToParentScope = Syntax(codeBlockItem.item).asProtocol(SyntaxProtocol.self)
         as? IntroducingToSequentialParentScopeSyntax
       {
         // Get results from encountered scope.
-        let introducedResults = introducingToParentScope.introducesToSequentialParent(
+        let introducedResults = introducingToParentScope.lookupFromSequentialParent(
           for: identifier,
           at: origin,
-          with: config,
-          state: state
+          with: config
         )
 
         // Skip, if no results were found.
@@ -82,11 +80,11 @@ extension SequentialScopeSyntax {
 
         // If there are some names collected, create a new result for this scope.
         if !currentChunk.isEmpty {
-          result.append(getResults(currentChunk))
+          results.append(getResults(currentChunk))
           currentChunk = []
         }
 
-        result += introducedResults
+        results += introducedResults
       } else {
         // Extract new names from encountered node.
         currentChunk += LookupName.getNames(
@@ -100,9 +98,9 @@ extension SequentialScopeSyntax {
 
     // If there are some names collected, create a new result for this scope.
     if !currentChunk.isEmpty {
-      result.append(getResults(currentChunk))
+      results.append(getResults(currentChunk))
     }
 
-    return result.reversed() + lookupInParent(for: identifier, at: origin, with: config, state: state)
+    return results.reversed() + lookupInParent(for: identifier, at: origin, with: config)
   }
 }

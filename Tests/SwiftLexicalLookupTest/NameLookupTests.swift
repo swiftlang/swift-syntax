@@ -152,7 +152,7 @@ final class testNameLookup: XCTestCase {
         """,
       references: [
         "5️⃣": [
-          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.identifier("2️⃣")]),
+          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.`self`("2️⃣")]),
           .fromScope(ClassDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("7️⃣"))]),
         ],
         "6️⃣": [

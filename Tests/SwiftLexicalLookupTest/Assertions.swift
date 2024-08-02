@@ -12,7 +12,7 @@
 
 @_spi(Experimental) import SwiftLexicalLookup
 import SwiftParser
-import SwiftSyntax
+@_spi(Testing) import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 
@@ -93,7 +93,7 @@ func assertLexicalNameLookup(
   assertLexicalScopeQuery(
     source: source,
     methodUnderTest: { marker, tokenAtMarker in
-      let lookupIdentifier = Identifier(tokenAtMarker) ?? Identifier(tokenAtMarker.text)
+      let lookupIdentifier = Identifier(tokenAtMarker) ?? Identifier(anyToken: tokenAtMarker)
 
       let result = tokenAtMarker.lookup(for: useNilAsTheParameter ? nil : lookupIdentifier, with: config)
 

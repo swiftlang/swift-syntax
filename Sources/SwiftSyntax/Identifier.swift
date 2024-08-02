@@ -12,58 +12,38 @@
 
 /// A canonicalized representation of an identifier that strips away backticks.
 public struct Identifier: Equatable, Hashable, Sendable {
-  enum IdentifierKind: Hashable {
-    case token(raw: RawIdentifier, arena: SyntaxArenaRef)
-    case string(String)
-
-    static func sanitize(string: String) -> IdentifierKind {
-      let backtick = "`"
-      if string.count > 2 && string.hasPrefix(backtick) && string.hasSuffix(backtick) {
-        let startIndex = string.index(after: string.startIndex)
-        let endIndex = string.index(before: string.endIndex)
-        return .string(String(string[startIndex..<endIndex]))
-      } else {
-        return .string(string)
-      }
-    }
-  }
-
   /// The sanitized name of the identifier.
   public var name: String {
-    switch identifier {
-    case .token(let raw, _):
-      return String(syntaxText: raw.name)
-    case .string(let string):
-      return string
-    }
+    String(syntaxText: raw.name)
   }
 
   @_spi(RawSyntax)
-  public var raw: RawIdentifier? {
-    switch identifier {
-    case .token(let raw, _):
-      return raw
-    default:
-      return nil
-    }
-  }
-
-  let identifier: IdentifierKind
+  public let raw: RawIdentifier
+  let arena: SyntaxArenaRef?
 
   public init?(_ token: TokenSyntax) {
     guard case .identifier = token.tokenKind else {
       return nil
     }
 
-    self.identifier = .token(raw: RawIdentifier(token.tokenView), arena: token.tokenView.raw.arenaReference)
+    self.raw = RawIdentifier(token.tokenView)
+    self.arena = token.raw.arenaReference
   }
 
-  public init(_ string: String) {
-    self.identifier = IdentifierKind.sanitize(string: string)
+  public init(_ staticString: StaticString) {
+    self.raw = RawIdentifier(staticString)
+    self.arena = nil
   }
 
   public static func == (lhs: Self, rhs: Self) -> Bool {
     lhs.name == rhs.name
+  }
+}
+
+extension Identifier {
+  @_spi(Testing) public init(anyToken token: TokenSyntax) {
+    self.raw = RawIdentifier(token.tokenView.rawText)
+    self.arena = token.raw.arenaReference
   }
 }
 
@@ -81,5 +61,13 @@ public struct RawIdentifier: Equatable, Hashable, Sendable {
     } else {
       self.name = raw.rawText
     }
+  }
+  
+  fileprivate init(_ staticString: StaticString) {
+    self.init(SyntaxText(staticString))
+  }
+  
+  fileprivate init(_ syntaxText: SyntaxText) {
+    name = syntaxText
   }
 }

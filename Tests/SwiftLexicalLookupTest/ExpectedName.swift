@@ -62,11 +62,15 @@ enum NameExpectation: ExpectedName {
   case identifier(String)
   case declaration(String)
   case implicit(ImplicitNameExpectation)
+  case `self`(String)
+  case `Self`(String)
 
   var marker: String {
     switch self {
     case .identifier(let marker),
-      .declaration(let marker):
+      .declaration(let marker),
+      .self(let marker),
+      .Self(let marker):
       return marker
     case .implicit(let implicitName):
       return implicitName.marker
@@ -77,6 +81,8 @@ enum NameExpectation: ExpectedName {
     switch (name, self) {
     case (.identifier, .identifier): break
     case (.declaration, .declaration): break
+    case (.self, .self): break
+    case (.Self, .Self): break
     case (.implicit(let implicitName), .implicit(let implicitNameExpectation)):
       implicitNameExpectation.assertExpectation(marker: marker, for: implicitName)
     default:

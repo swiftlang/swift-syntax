@@ -13,12 +13,14 @@
 import SwiftSyntax
 
 protocol IntroducingToSequentialParentScopeSyntax: ScopeSyntax {
-  /// Returns names matching lookup that should be
-  /// handled by it's parent sequential scope.
-  func introducesToSequentialParent(
+  /// Returns all names introduced to parent.
+  var namesIntroducedToSequentialParent: [LookupName] { get }
+  
+  /// Returns results matching lookup that should be
+  /// interleaved with results of the sequential parent.
+  func lookupFromSequentialParent(
     for identifier: Identifier?,
-    at origin: SyntaxProtocol,
-    with config: LookupConfig,
-    state: LookupState
+    at origin: AbsolutePosition,
+    with config: LookupConfig
   ) -> [LookupResult]
 }

@@ -811,7 +811,7 @@ final class testNameLookup: XCTestCase {
 
           let 4️⃣a = 3
           let 5️⃣b = 4
-        
+
           guard let 6️⃣a = b else { return }
 
           print(7️⃣a, 8️⃣b)

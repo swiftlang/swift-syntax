@@ -61,7 +61,7 @@ import SwiftSyntax
     }
   }
 
-  /// Note that `self` and `Self` are treated as identifiers for name lookup purposes 
+  /// Note that `self` and `Self` are treated as identifiers for name lookup purposes
   /// and that a variable named `self` can shadow the `self` keyword. For example.
   ///
   ///
@@ -150,8 +150,8 @@ import SwiftSyntax
   var accessibleAfter: AbsolutePosition? {
     switch self {
     case .identifier(_, let absolutePosition),
-         .self(_, let absolutePosition),
-         .Self(_, let absolutePosition):
+      .self(_, let absolutePosition),
+      .Self(_, let absolutePosition):
       return absolutePosition
     default:
       return nil

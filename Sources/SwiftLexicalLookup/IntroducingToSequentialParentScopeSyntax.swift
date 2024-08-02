@@ -15,7 +15,7 @@ import SwiftSyntax
 protocol IntroducingToSequentialParentScopeSyntax: ScopeSyntax {
   /// Returns all names introduced to parent.
   var namesIntroducedToSequentialParent: [LookupName] { get }
-  
+
   /// Returns results matching lookup that should be
   /// interleaved with results of the sequential parent.
   func lookupFromSequentialParent(

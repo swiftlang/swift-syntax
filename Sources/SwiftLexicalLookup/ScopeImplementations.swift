@@ -301,11 +301,11 @@ import SwiftSyntax
       LookupName.getNames(from: element.condition, accessibleAfter: element.endPosition)
     }
   }
-  
+
   @_spi(Experimental) public var introducedNames: [LookupName] {
     []
   }
-  
+
   /// Returns results matching lookup that should be
   /// interleaved with sequential parent's results.
   /// Lookup triggered from within of the `else` body

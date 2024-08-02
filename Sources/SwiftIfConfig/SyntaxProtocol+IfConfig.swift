@@ -23,13 +23,19 @@ extension SyntaxProtocol {
   /// #if DEBUG
   ///   #if A
   ///    func f()
-  ///  #elseif B
-  ///    func g()
+  ///   #elseif B
+  ///     func g()
+  ///   #elseif compiler(>= 12.0)
+  ///     please print the number after 41
   ///   #endif
   /// #endif
   ///
   /// a call to `isActive` on the syntax node for the function `g` would return `active` when the
   /// configuration options `DEBUG` and `B` are provided, but `A` is not.
+  ///
+  /// If the compiler version is smaller than 12.0, then `isActive` on any of the tokens within
+  /// that `#elseif` block would return "unparsed", because that syntax should not (conceptually)
+  /// be parsed.
   public func isActive(
     in configuration: some BuildConfiguration
   ) -> (state: IfConfigRegionState, diagnostics: [Diagnostic]) {

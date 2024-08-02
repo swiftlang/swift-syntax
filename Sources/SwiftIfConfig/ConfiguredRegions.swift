@@ -24,15 +24,18 @@ extension SyntaxProtocol {
   ///     func f()
   ///   #elseif B
   ///     func g()
+  ///   #elseif compiler(>= 12.0)
+  ///   please print the number after 41
   ///   #endif
   /// #else
   /// #endif
   ///
   /// If the configuration options `DEBUG` and `B` are provided, but `A` is not,
-  /// the results will be contain:
-  ///   - Active region for the `#if DEBUG`
-  ///   - Inactive region for the `#if A`
-  ///   - Active region for the `#elseif B`
+  /// and the compiler version is less than 12.0, the results will be contain:
+  ///   - Active region for the `#if DEBUG`.
+  ///   - Inactive region for the `#if A`.
+  ///   - Active region for the `#elseif B`.
+  ///   - Unparsed region for the `#elseif compiler(>= 12.0)`.
   ///   - Inactive region for the final `#else`.
   public func configuredRegions(
     in configuration: some BuildConfiguration

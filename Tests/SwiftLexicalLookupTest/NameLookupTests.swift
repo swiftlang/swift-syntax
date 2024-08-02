@@ -811,13 +811,18 @@ final class testNameLookup: XCTestCase {
 
           let 4️⃣a = 3
           let 5️⃣b = 4
+        
+          guard let 6️⃣a = b else { return }
 
-          print(6️⃣a, 7️⃣b)
+          print(7️⃣a, 8️⃣b)
         }
         """,
       references: [
-        "6️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣", "4️⃣"])],
         "7️⃣": [
+          .fromScope(GuardStmtSyntax.self, expectedNames: ["6️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣", "4️⃣"]),
+        ],
+        "8️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: ["5️⃣"]),
           .fromScope(GuardStmtSyntax.self, expectedNames: ["3️⃣"]),
           .fromScope(CodeBlockSyntax.self, expectedNames: ["2️⃣"]),

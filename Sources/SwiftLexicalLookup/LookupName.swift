@@ -61,10 +61,10 @@ import SwiftSyntax
     }
   }
 
+  /// Identifier used for name comparison.
+  ///
   /// Note that `self` and `Self` are treated as identifiers for name lookup purposes
   /// and that a variable named `self` can shadow the `self` keyword. For example.
-  ///
-  ///
   /// ```swift
   /// class Foo {
   ///     func test() {

@@ -78,19 +78,19 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
       }
 
       // For inactive clauses, distinguish between inactive and unparsed.
-      let isVersioned = clause.isVersioned(
+      let syntaxErrorsAllowed = clause.syntaxErrorsAllowed(
         configuration: configuration
-      ).versioned
+      ).syntaxErrorsAllowed
 
       // If this is within an active region, or this is an unparsed region,
       // record it.
-      if inActiveRegion || isVersioned {
-        regions.append((clause, isVersioned ? .unparsed : .inactive))
+      if inActiveRegion || syntaxErrorsAllowed {
+        regions.append((clause, syntaxErrorsAllowed ? .unparsed : .inactive))
       }
 
       // Recurse into inactive (but not unparsed) regions to find any
       // unparsed regions below.
-      if !isVersioned, let elements = clause.elements {
+      if !syntaxErrorsAllowed, let elements = clause.elements {
         let priorInActiveRegion = inActiveRegion
         inActiveRegion = false
         defer {

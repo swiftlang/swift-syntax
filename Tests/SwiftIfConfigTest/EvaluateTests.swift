@@ -216,9 +216,9 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("canImport(SwiftSyntax, _version: 5.10)", .inactive)
     assertIfConfig(#"canImport(SwiftSyntax, _version: "5.9")"#, .active)
     assertIfConfig("canImport(SwiftSyntax, _underlyingVersion: 5009)", .active)
-    assertIfConfig("canImport(SwiftSyntax, _underlyingVersion: 5009.10", .inactive)
+    assertIfConfig("canImport(SwiftSyntax, _underlyingVersion: 5009.10)", .inactive)
     assertIfConfig(
-      "canImport(SwiftSyntax, _underlyingVersion: 5009.10.5.4.2.3.5",
+      "canImport(SwiftSyntax, _underlyingVersion: 5009.10.5.4.2.3.5)",
       .inactive,
       diagnostics: [
         DiagnosticSpec(
@@ -226,6 +226,30 @@ public class EvaluateTests: XCTestCase {
           line: 1,
           column: 44,
           severity: .warning
+        )
+      ]
+    )
+    assertIfConfig(
+      "canImport(SwiftSyntax, _version: 20A301)",
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'canImport' version check has invalid version '20A301'",
+          line: 1,
+          column: 34,
+          severity: .error
+        )
+      ]
+    )
+    assertIfConfig(
+      #"canImport(SwiftSyntax, _version: "20A301")"#,
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: #"'canImport' version check has invalid version '"20A301"'"#,
+          line: 1,
+          column: 34,
+          severity: .error
         )
       ]
     )

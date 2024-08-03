@@ -109,12 +109,12 @@ func evaluateIfConfig(
   if let prefixOp = condition.as(PrefixOperatorExprSyntax.self),
     prefixOp.operator.text == "!"
   {
-    let (innerActive, innersyntaxErrorsAllowed, innerDiagnostics) = evaluateIfConfig(
+    let (innerActive, innerSyntaxErrorsAllowed, innerDiagnostics) = evaluateIfConfig(
       condition: prefixOp.expression,
       configuration: configuration
     )
 
-    return (active: !innerActive, syntaxErrorsAllowed: innersyntaxErrorsAllowed, diagnostics: innerDiagnostics)
+    return (active: !innerActive, syntaxErrorsAllowed: innerSyntaxErrorsAllowed, diagnostics: innerDiagnostics)
   }
 
   // Logical '&&' and '||'.
@@ -334,13 +334,7 @@ func evaluateIfConfig(
         let segment = stringLiteral.segments.first,
         case .stringSegment(let stringSegment) = segment
       else {
-        return recordError(
-          .requiresUnlabeledArgument(
-            name: "_compiler_version",
-            role: "version",
-            syntax: ExprSyntax(call)
-          )
-        )
+        return doVersionComparisonCheck(configuration.compilerVersion)
       }
 
       let versionString = stringSegment.content.text

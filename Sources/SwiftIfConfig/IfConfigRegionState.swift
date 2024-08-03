@@ -25,12 +25,12 @@ public enum IfConfigRegionState {
   case active
 
   /// Evaluate the given `#if` condition using the given build configuration
-  /// to determine its state and identify any problems encountered along the
-  /// way.
+  /// to determine its state, whether syntax errors in inactive conditions are
+  /// permitted, and to identify any problems encountered along the way.
   public static func evaluating(
     _ condition: some ExprSyntaxProtocol,
     in configuration: some BuildConfiguration
-  ) -> (state: IfConfigRegionState, diagnostics: [Diagnostic]) {
+  ) -> (state: IfConfigRegionState, syntaxErrorsAllowed: Bool, diagnostics: [Diagnostic]) {
     // Apply operator folding for !/&&/||.
     var foldingDiagnostics: [Diagnostic] = []
     let foldedCondition = OperatorTable.logicalOperators.foldAll(condition) { error in
@@ -44,9 +44,9 @@ public enum IfConfigRegionState {
 
     let diagnostics = foldingDiagnostics + evalDiagnostics
     switch (active, syntaxErrorsAllowed) {
-    case (true, _): return (.active, diagnostics)
-    case (false, false): return (.inactive, diagnostics)
-    case (false, true): return (.unparsed, diagnostics)
+    case (true, _): return (.active, syntaxErrorsAllowed, diagnostics)
+    case (false, false): return (.inactive, syntaxErrorsAllowed, diagnostics)
+    case (false, true): return (.unparsed, syntaxErrorsAllowed, diagnostics)
     }
   }
 }

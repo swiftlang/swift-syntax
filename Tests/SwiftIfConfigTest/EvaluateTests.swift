@@ -176,6 +176,17 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("swift(>=5.5)", .active)
     assertIfConfig("swift(<6)", .active)
     assertIfConfig("swift(>=6)", .unparsed)
+    assertIfConfig(
+      "swift(>=...)",
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'swift' version check has invalid version ''",
+          line: 1,
+          column: 9
+        )
+      ]
+    )
     assertIfConfig("compiler(>=5.8)", .active)
     assertIfConfig("compiler(>=5.9)", .active)
     assertIfConfig("compiler(>=5.10)", .unparsed)
@@ -201,6 +212,17 @@ public class EvaluateTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "invalid conditional compilation expression",
+          line: 1,
+          column: 20
+        )
+      ]
+    )
+    assertIfConfig(
+      #"_compiler_version("...")"#,
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "found empty version component",
           line: 1,
           column: 20
         )

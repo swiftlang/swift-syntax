@@ -27,7 +27,7 @@ extension VersionTuple {
     components = []
 
     // Version value are separated by periods.
-    let componentStrings = versionString.split(separator: ".")
+    let componentStrings = versionString.split(separator: ".", omittingEmptySubsequences: false)
 
     /// Record a component after checking its value.
     func recordComponent(_ value: Int) throws {

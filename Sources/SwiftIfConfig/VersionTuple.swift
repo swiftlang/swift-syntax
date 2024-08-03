@@ -33,7 +33,7 @@ public struct VersionTuple: Sendable {
   public init?(parsing string: String) {
     self.components = []
 
-    for componentText in string.split(separator: ".") {
+    for componentText in string.split(separator: ".", omittingEmptySubsequences: false) {
       guard let component = Int(componentText) else {
         return nil
       }

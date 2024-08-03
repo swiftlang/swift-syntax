@@ -109,12 +109,12 @@ func evaluateIfConfig(
   if let prefixOp = condition.as(PrefixOperatorExprSyntax.self),
     prefixOp.operator.text == "!"
   {
-    let (innerActive, innersyntaxErrorsAllowed, innerDiagnostics) = evaluateIfConfig(
+    let (innerActive, innerSyntaxErrorsAllowed, innerDiagnostics) = evaluateIfConfig(
       condition: prefixOp.expression,
       configuration: configuration
     )
 
-    return (active: !innerActive, syntaxErrorsAllowed: innersyntaxErrorsAllowed, diagnostics: innerDiagnostics)
+    return (active: !innerActive, syntaxErrorsAllowed: innerSyntaxErrorsAllowed, diagnostics: innerDiagnostics)
   }
 
   // Logical '&&' and '||'.

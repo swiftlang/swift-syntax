@@ -334,13 +334,7 @@ func evaluateIfConfig(
         let segment = stringLiteral.segments.first,
         case .stringSegment(let stringSegment) = segment
       else {
-        return recordError(
-          .requiresUnlabeledArgument(
-            name: "_compiler_version",
-            role: "version",
-            syntax: ExprSyntax(call)
-          )
-        )
+        return doVersionComparisonCheck(configuration.compilerVersion)
       }
 
       let versionString = stringSegment.content.text

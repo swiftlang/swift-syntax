@@ -193,6 +193,8 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig(#"_compiler_version("5009.*.1")"#, .active)
     assertIfConfig(#"_compiler_version("5009.*.3.2.3")"#, .unparsed)
     assertIfConfig(#"_compiler_version("5010.*.0")"#, .unparsed)
+    assertIfConfig("_compiler_version(>=5.8)", .active)
+    assertIfConfig("_compiler_version(>=12.0)", .unparsed)
     assertIfConfig("compiler(>=5.10) && 3.14159", .unparsed)
     assertIfConfig(
       "compiler(>=5.10) || 3.14159",

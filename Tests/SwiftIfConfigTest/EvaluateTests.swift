@@ -269,7 +269,7 @@ fileprivate func assertIfConfig(
   // Evaluate the condition to check the state.
   let actualDiagnostics: [Diagnostic]
   let actualState: IfConfigRegionState
-  (actualState, actualDiagnostics) = IfConfigRegionState.evaluating(condition, in: configuration)
+  (actualState, _, actualDiagnostics) = IfConfigRegionState.evaluating(condition, in: configuration)
   XCTAssertEqual(actualState, expectedState, file: file, line: line)
 
   // Check the diagnostics.

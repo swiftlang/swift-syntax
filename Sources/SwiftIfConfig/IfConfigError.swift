@@ -67,7 +67,7 @@ enum IfConfigError: Error, CustomStringConvertible {
       return "canImport requires a module name"
 
     case .canImportLabel(syntax: _):
-      return "2nd parameter of canImport should be labeled as _version or _underlyingVersion"
+      return "second parameter of canImport should be labeled as _version or _underlyingVersion"
 
     case .canImportTwoParameters(syntax: _):
       return "canImport can take only two parameters"

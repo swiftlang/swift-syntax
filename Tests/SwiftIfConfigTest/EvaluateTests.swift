@@ -277,6 +277,32 @@ public class EvaluateTests: XCTestCase {
         )
       ]
     )
+
+    assertIfConfig(
+      "canImport(A, 2.2)",
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: #"second parameter of canImport should be labeled as _version or _underlyingVersion"#,
+          line: 1,
+          column: 14,
+          severity: .error
+        )
+      ]
+    )
+
+    assertIfConfig(
+      "canImport(A, 2.2, 1.1)",
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: #"canImport can take only two parameters"#,
+          line: 1,
+          column: 1,
+          severity: .error
+        )
+      ]
+    )
   }
 
   func testLikelySimulatorEnvironment() throws {

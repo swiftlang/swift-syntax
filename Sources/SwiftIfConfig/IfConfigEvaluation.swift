@@ -374,6 +374,10 @@ func evaluateIfConfig(
         return recordError(.canImportMissingModule(syntax: ExprSyntax(call)))
       }
 
+      if call.arguments.count > 2 {
+        return recordError(.canImportTwoParameters(syntax: ExprSyntax(call)))
+      }
+
       // FIXME: This is a gross hack. Actually look at the sequence of
       // `MemberAccessExprSyntax` nodes and pull out the identifiers.
       let importPath = firstArg.expression.trimmedDescription.split(separator: ".")
@@ -422,10 +426,6 @@ func evaluateIfConfig(
         } else {
           assert(secondArg.label?.text == "_underlyingVersion")
           version = .underlyingVersion(versionTuple)
-        }
-
-        if call.arguments.count > 2 {
-          return recordError(.canImportTwoParameters(syntax: ExprSyntax(call)))
         }
       } else {
         version = .unversioned

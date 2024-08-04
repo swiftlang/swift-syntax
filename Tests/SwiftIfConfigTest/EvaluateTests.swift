@@ -230,6 +230,19 @@ public class EvaluateTests: XCTestCase {
         )
       ]
     )
+
+    assertIfConfig(
+      #"_compiler_version("5.7.100")"#,
+      .active,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "the second version component is not used for comparison in legacy compiler versions",
+          line: 1,
+          column: 19,
+          severity: .warning
+        )
+      ]
+    )
   }
 
   func testCanImport() throws {

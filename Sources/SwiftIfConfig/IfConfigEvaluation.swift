@@ -354,7 +354,11 @@ func evaluateIfConfig(
       let versionString = stringSegment.content.text
       let expectedVersion: VersionTuple
       do {
-        expectedVersion = try VersionTuple(parsingCompilerBuildVersion: versionString, argExpr)
+        expectedVersion = try VersionTuple.parseCompilerBuildVersion(
+          versionString,
+          argExpr,
+          extraDiagnostics: &extraDiagnostics
+        )
       } catch {
         return recordError(error, at: stringSegment.content)
       }

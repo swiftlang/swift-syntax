@@ -118,7 +118,8 @@ extension IfConfigError: DiagnosticMessage {
 
   var severity: SwiftDiagnostics.DiagnosticSeverity {
     switch self {
-    case .ignoredTrailingComponents, .likelySimulatorPlatform: return .warning
+    case .compilerVersionSecondComponentNotWildcard, .ignoredTrailingComponents, .likelySimulatorPlatform:
+      return .warning
     default: return .error
     }
   }

@@ -32,10 +32,7 @@ public enum IfConfigRegionState {
     in configuration: some BuildConfiguration
   ) -> (state: IfConfigRegionState, syntaxErrorsAllowed: Bool, diagnostics: [Diagnostic]) {
     // Apply operator folding for !/&&/||.
-    var foldingDiagnostics: [Diagnostic] = []
-    let foldedCondition = OperatorTable.logicalOperators.foldAll(condition) { error in
-      foldingDiagnostics.append(contentsOf: error.asDiagnostics(at: condition))
-    }.cast(ExprSyntax.self)
+    let (foldedCondition, foldingDiagnostics) = IfConfigClauseSyntax.foldOperators(condition)
 
     let (active, syntaxErrorsAllowed, evalDiagnostics) = evaluateIfConfig(
       condition: foldedCondition,

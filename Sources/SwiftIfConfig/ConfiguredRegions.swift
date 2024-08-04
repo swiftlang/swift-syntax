@@ -65,7 +65,18 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
     // If we're in an active region, find the active clause. Otherwise,
     // there isn't one.
     let activeClause = inActiveRegion ? node.activeClause(in: configuration).clause : nil
+    var foundActive = false
+    var syntaxErrorsAllowed = false
     for clause in node.clauses {
+      // If we haven't found the active clause yet, syntax errors are allowed
+      // depending on this clause.
+      if !foundActive {
+        syntaxErrorsAllowed =
+          clause.condition.map {
+            IfConfigClauseSyntax.syntaxErrorsAllowed($0).syntaxErrorsAllowed
+          } ?? false
+      }
+
       // If this is the active clause, record it and then recurse into the
       // elements.
       if clause == activeClause {
@@ -77,13 +88,9 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
           walk(elements)
         }
 
+        foundActive = true
         continue
       }
-
-      // For inactive clauses, distinguish between inactive and unparsed.
-      let syntaxErrorsAllowed = clause.syntaxErrorsAllowed(
-        configuration: configuration
-      ).syntaxErrorsAllowed
 
       // If this is within an active region, or this is an unparsed region,
       // record it.

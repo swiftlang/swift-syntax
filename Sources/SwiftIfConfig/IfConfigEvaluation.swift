@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
+import SwiftOperators
 import SwiftSyntax
 
 /// Evaluate the condition of an `#if`.
@@ -433,20 +434,77 @@ func evaluateIfConfig(
 }
 
 extension IfConfigClauseSyntax {
-  /// Determine whether this condition is "syntaxErrorsAllowed".
-  func syntaxErrorsAllowed(
-    configuration: some BuildConfiguration
+  /// Fold the operators within an #if condition, turning sequence expressions
+  /// involving the various allowed operators (&&, ||, !) into well-structured
+  /// binary operators.
+  public static func foldOperators(
+    _ condition: some ExprSyntaxProtocol
+  ) -> (folded: ExprSyntax, diagnostics: [Diagnostic]) {
+    var foldingDiagnostics: [Diagnostic] = []
+    let foldedCondition = OperatorTable.logicalOperators.foldAll(condition) { error in
+      foldingDiagnostics.append(contentsOf: error.asDiagnostics(at: condition))
+    }.cast(ExprSyntax.self)
+    return (folded: foldedCondition, diagnostics: foldingDiagnostics)
+  }
+
+  /// Determine whether the given expression, when used as the condition in
+  /// an inactive `#if` clause, implies that syntax errors are permitted within
+  /// that region.
+  public static func syntaxErrorsAllowed(
+    _ condition: some ExprSyntaxProtocol
   ) -> (syntaxErrorsAllowed: Bool, diagnostics: [Diagnostic]) {
-    guard let condition else {
-      return (syntaxErrorsAllowed: false, diagnostics: [])
+    let (foldedCondition, foldingDiagnostics) = IfConfigClauseSyntax.foldOperators(condition)
+
+    return (
+      !foldingDiagnostics.isEmpty || foldedCondition.allowsSyntaxErrorsFolded,
+      foldingDiagnostics
+    )
+  }
+}
+
+extension ExprSyntaxProtocol {
+  /// Determine whether this expression, when used as a condition within a #if
+  /// that evaluates false, implies that the code contained in that `#if`
+  ///
+  /// Check whether of allowsSyntaxErrors(_:) that assumes that inputs have
+  /// already been operator-folded.
+  var allowsSyntaxErrorsFolded: Bool {
+    // Logical '!'.
+    if let prefixOp = self.as(PrefixOperatorExprSyntax.self),
+      prefixOp.operator.text == "!"
+    {
+      return prefixOp.expression.allowsSyntaxErrorsFolded
     }
 
-    // Evaluate this condition against the build configuration.
-    let (_, syntaxErrorsAllowed, diagnostics) = evaluateIfConfig(
-      condition: condition,
-      configuration: configuration
-    )
+    // Logical '&&' and '||'.
+    if let binOp = self.as(InfixOperatorExprSyntax.self),
+      let op = binOp.operator.as(BinaryOperatorExprSyntax.self)
+    {
+      switch op.operator.text {
+      case "&&":
+        return binOp.leftOperand.allowsSyntaxErrorsFolded || binOp.rightOperand.allowsSyntaxErrorsFolded
+      case "||":
+        return binOp.leftOperand.allowsSyntaxErrorsFolded && binOp.rightOperand.allowsSyntaxErrorsFolded
+      default:
+        return false
+      }
+    }
 
-    return (syntaxErrorsAllowed, diagnostics)
+    // Look through parentheses.
+    if let tuple = self.as(TupleExprSyntax.self), tuple.isParentheses,
+      let element = tuple.elements.first
+    {
+      return element.expression.allowsSyntaxErrorsFolded
+    }
+
+    // Call syntax is for operations.
+    if let call = self.as(FunctionCallExprSyntax.self),
+      let fnName = call.calledExpression.simpleIdentifierExpr,
+      let fn = IfConfigFunctions(rawValue: fnName)
+    {
+      return fn.syntaxErrorsAllowed
+    }
+
+    return false
   }
 }

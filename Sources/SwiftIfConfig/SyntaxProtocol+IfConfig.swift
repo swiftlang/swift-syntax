@@ -57,10 +57,10 @@ extension SyntaxProtocol {
           // This was not the active clause, so we know that we're in an
           // inactive block. If syntax errors aren't allowable, this is an
           // unparsed region.
-          let (syntaxErrorsAllowed, localDiagnostics) = ifConfigClause.syntaxErrorsAllowed(
-            configuration: configuration
-          )
-          diagnostics.append(contentsOf: localDiagnostics)
+          let syntaxErrorsAllowed =
+            ifConfigClause.condition.map {
+              IfConfigClauseSyntax.syntaxErrorsAllowed($0).syntaxErrorsAllowed
+            } ?? false
 
           if syntaxErrorsAllowed {
             return (.unparsed, diagnostics)

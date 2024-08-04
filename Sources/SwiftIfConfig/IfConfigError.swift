@@ -12,6 +12,7 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
+import SwiftSyntaxBuilder
 
 /// Describes the kinds of errors that can occur when processing #if conditions.
 enum IfConfigError: Error, CustomStringConvertible {
@@ -29,6 +30,7 @@ enum IfConfigError: Error, CustomStringConvertible {
   case canImportTwoParameters(syntax: ExprSyntax)
   case ignoredTrailingComponents(version: VersionTuple, syntax: ExprSyntax)
   case integerLiteralCondition(syntax: ExprSyntax, replacement: Bool)
+  case likelySimulatorPlatform(syntax: ExprSyntax)
 
   var description: String {
     switch self {
@@ -75,6 +77,10 @@ enum IfConfigError: Error, CustomStringConvertible {
 
     case .integerLiteralCondition(syntax: let syntax, replacement: let replacement):
       return "'\(syntax.trimmedDescription)' is not a valid conditional compilation expression, use '\(replacement)'"
+
+    case .likelySimulatorPlatform:
+      return
+        "platform condition appears to be testing for simulator environment; use 'targetEnvironment(simulator)' instead"
     }
   }
 
@@ -93,7 +99,8 @@ enum IfConfigError: Error, CustomStringConvertible {
       .canImportLabel(syntax: let syntax),
       .canImportTwoParameters(syntax: let syntax),
       .ignoredTrailingComponents(version: _, syntax: let syntax),
-      .integerLiteralCondition(syntax: let syntax, replacement: _):
+      .integerLiteralCondition(syntax: let syntax, replacement: _),
+      .likelySimulatorPlatform(syntax: let syntax):
       return Syntax(syntax)
 
     case .unsupportedVersionOperator(name: _, operator: let op):
@@ -111,7 +118,7 @@ extension IfConfigError: DiagnosticMessage {
 
   var severity: SwiftDiagnostics.DiagnosticSeverity {
     switch self {
-    case .ignoredTrailingComponents: return .warning
+    case .ignoredTrailingComponents, .likelySimulatorPlatform: return .warning
     default: return .error
     }
   }
@@ -138,6 +145,21 @@ extension IfConfigError: DiagnosticMessage {
           newNode: BooleanLiteralExprSyntax(
             literal: .keyword(replacement ? .true : .false)
           )
+        )
+      )
+    }
+
+    // For the likely targetEnvironment(simulator) condition we have a Fix-It.
+    if case .likelySimulatorPlatform(let syntax) = self {
+      return Diagnostic(
+        node: syntax,
+        message: self,
+        fixIt: .replace(
+          message: SimpleFixItMessage(
+            message: "replace with 'targetEnvironment(simulator)'"
+          ),
+          oldNode: syntax,
+          newNode: "targetEnvironment(simulator)" as ExprSyntax
         )
       )
     }

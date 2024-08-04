@@ -278,6 +278,30 @@ public class EvaluateTests: XCTestCase {
       ]
     )
   }
+
+  func testLikelySimulatorEnvironment() throws {
+    assertIfConfig(
+      "((os(iOS) || os(tvOS)) && (arch(i386) || arch(x86_64))) && DEBUG",
+      .inactive,
+      diagnostics: [
+        DiagnosticSpec(
+          message:
+            "platform condition appears to be testing for simulator environment; use 'targetEnvironment(simulator)' instead",
+          line: 1,
+          column: 2,
+          severity: .warning,
+          fixIts: [
+            FixItSpec(message: "replace with 'targetEnvironment(simulator)'")
+          ]
+        )
+      ]
+    )
+
+    assertIfConfig(
+      "((os(iOS) || os(tvOS)) && (arch(arm64) || arch(x86_64))) && DEBUG",
+      .inactive
+    )
+  }
 }
 
 /// Assert the results of evaluating the condition within an `#if` against the

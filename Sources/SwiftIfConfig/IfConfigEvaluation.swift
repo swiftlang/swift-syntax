@@ -123,6 +123,11 @@ func evaluateIfConfig(
     let op = binOp.operator.as(BinaryOperatorExprSyntax.self),
     (op.operator.text == "&&" || op.operator.text == "||")
   {
+    // Check whether this was likely to be a check for targetEnvironment(simulator).
+    if let targetEnvironmentDiag = diagnoseLikelySimulatorEnvironmentTest(binOp) {
+      extraDiagnostics.append(targetEnvironmentDiag)
+    }
+
     // Evaluate the left-hand side.
     let (lhsActive, lhssyntaxErrorsAllowed, lhsDiagnostics) = evaluateIfConfig(
       condition: binOp.leftOperand,
@@ -134,9 +139,17 @@ func evaluateIfConfig(
     if lhssyntaxErrorsAllowed {
       switch (lhsActive, op.operator.text) {
       case (true, "||"):
-        return (active: true, syntaxErrorsAllowed: lhssyntaxErrorsAllowed, diagnostics: lhsDiagnostics)
+        return (
+          active: true,
+          syntaxErrorsAllowed: lhssyntaxErrorsAllowed,
+          diagnostics: extraDiagnostics + lhsDiagnostics
+        )
       case (false, "&&"):
-        return (active: false, syntaxErrorsAllowed: lhssyntaxErrorsAllowed, diagnostics: lhsDiagnostics)
+        return (
+          active: false,
+          syntaxErrorsAllowed: lhssyntaxErrorsAllowed,
+          diagnostics: extraDiagnostics + lhsDiagnostics
+        )
       default:
         break
       }
@@ -153,14 +166,14 @@ func evaluateIfConfig(
       return (
         active: lhsActive || rhsActive,
         syntaxErrorsAllowed: lhssyntaxErrorsAllowed && rhssyntaxErrorsAllowed,
-        diagnostics: lhsDiagnostics + rhsDiagnostics
+        diagnostics: extraDiagnostics + lhsDiagnostics + rhsDiagnostics
       )
 
     case "&&":
       return (
         active: lhsActive && rhsActive,
         syntaxErrorsAllowed: lhssyntaxErrorsAllowed || rhssyntaxErrorsAllowed,
-        diagnostics: lhsDiagnostics + rhsDiagnostics
+        diagnostics: extraDiagnostics + lhsDiagnostics + rhsDiagnostics
       )
 
     default:
@@ -431,6 +444,88 @@ func evaluateIfConfig(
   }
 
   return recordError(.unknownExpression(condition))
+}
+
+/// Determine whether the given condition only involves disjunctions that
+/// check the given config function against one of the provided values.
+///
+/// For example, this will match a condition like `os(iOS) ||  os(tvOS)`
+/// when passed `IfConfigFunctions.os` and `["iOS", "tvOS"]`.
+private func isConditionDisjunction(
+  _ condition: some ExprSyntaxProtocol,
+  function: IfConfigFunctions,
+  anyOf values: [String]
+) -> Bool {
+  // Recurse into disjunctions. Both sides need to match.
+  if let binOp = condition.as(InfixOperatorExprSyntax.self),
+    let op = binOp.operator.as(BinaryOperatorExprSyntax.self),
+    op.operator.text == "||"
+  {
+    return isConditionDisjunction(binOp.leftOperand, function: function, anyOf: values)
+      && isConditionDisjunction(binOp.rightOperand, function: function, anyOf: values)
+  }
+
+  // Look through parentheses.
+  if let tuple = condition.as(TupleExprSyntax.self), tuple.isParentheses,
+    let element = tuple.elements.first
+  {
+    return isConditionDisjunction(element.expression, function: function, anyOf: values)
+  }
+
+  // If we have a call to this function, check whether the argument is one of
+  // the acceptable values.
+  if let call = condition.as(FunctionCallExprSyntax.self),
+    let fnName = call.calledExpression.simpleIdentifierExpr,
+    let callFn = IfConfigFunctions(rawValue: fnName),
+    callFn == function,
+    let argExpr = call.arguments.singleUnlabeledExpression,
+    let arg = argExpr.simpleIdentifierExpr
+  {
+    return values.contains(arg)
+  }
+
+  return false
+}
+
+/// If this binary operator looks like it could be replaced by a
+/// targetEnvironment(simulator) check, produce a diagnostic that does so.
+///
+/// For example, this checks for conditions like:
+///
+/// ```
+/// #if (os(iOS) ||  os(tvOS)) && (arch(i386) || arch(x86_64))
+/// ```
+///
+/// which should be replaced with
+///
+/// ```
+/// #if targetEnvironment(simulator)
+/// ```
+private func diagnoseLikelySimulatorEnvironmentTest(
+  _ binOp: InfixOperatorExprSyntax
+) -> Diagnostic? {
+  guard let op = binOp.operator.as(BinaryOperatorExprSyntax.self),
+    op.operator.text == "&&"
+  else {
+    return nil
+  }
+
+  func isSimulatorPlatformOSTest(_ condition: ExprSyntax) -> Bool {
+    return isConditionDisjunction(condition, function: .os, anyOf: ["iOS", "tvOS", "watchOS"])
+  }
+
+  func isSimulatorPlatformArchTest(_ condition: ExprSyntax) -> Bool {
+    return isConditionDisjunction(condition, function: .arch, anyOf: ["i386", "x86_64"])
+  }
+
+  guard
+    (isSimulatorPlatformOSTest(binOp.leftOperand) && isSimulatorPlatformArchTest(binOp.rightOperand))
+      || (isSimulatorPlatformOSTest(binOp.rightOperand) && isSimulatorPlatformArchTest(binOp.leftOperand))
+  else {
+    return nil
+  }
+
+  return IfConfigError.likelySimulatorPlatform(syntax: ExprSyntax(binOp)).asDiagnostic
 }
 
 extension IfConfigClauseSyntax {

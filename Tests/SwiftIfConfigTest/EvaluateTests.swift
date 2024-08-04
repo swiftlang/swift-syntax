@@ -170,6 +170,19 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("_pointerBitWidth(_32)", .inactive)
     assertIfConfig("_hasAtomicBitWidth(_64)", .active)
     assertIfConfig("_hasAtomicBitWidth(_128)", .inactive)
+
+    assertIfConfig(
+      "_endian(mid)",
+      .inactive,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "unknown endianness for build configuration '_endian' (must be 'big' or 'little')",
+          line: 1,
+          column: 9,
+          severity: .warning
+        )
+      ]
+    )
   }
 
   func testVersions() throws {

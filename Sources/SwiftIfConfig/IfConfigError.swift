@@ -31,6 +31,7 @@ enum IfConfigError: Error, CustomStringConvertible {
   case ignoredTrailingComponents(version: VersionTuple, syntax: ExprSyntax)
   case integerLiteralCondition(syntax: ExprSyntax, replacement: Bool)
   case likelySimulatorPlatform(syntax: ExprSyntax)
+  case endiannessDoesNotMatch(syntax: ExprSyntax, argument: String)
 
   var description: String {
     switch self {
@@ -81,6 +82,9 @@ enum IfConfigError: Error, CustomStringConvertible {
     case .likelySimulatorPlatform:
       return
         "platform condition appears to be testing for simulator environment; use 'targetEnvironment(simulator)' instead"
+
+    case .endiannessDoesNotMatch:
+      return "unknown endianness for build configuration '_endian' (must be 'big' or 'little')"
     }
   }
 
@@ -100,7 +104,8 @@ enum IfConfigError: Error, CustomStringConvertible {
       .canImportTwoParameters(syntax: let syntax),
       .ignoredTrailingComponents(version: _, syntax: let syntax),
       .integerLiteralCondition(syntax: let syntax, replacement: _),
-      .likelySimulatorPlatform(syntax: let syntax):
+      .likelySimulatorPlatform(syntax: let syntax),
+      .endiannessDoesNotMatch(syntax: let syntax, argument: _):
       return Syntax(syntax)
 
     case .unsupportedVersionOperator(name: _, operator: let op):
@@ -118,7 +123,8 @@ extension IfConfigError: DiagnosticMessage {
 
   var severity: SwiftDiagnostics.DiagnosticSeverity {
     switch self {
-    case .compilerVersionSecondComponentNotWildcard, .ignoredTrailingComponents, .likelySimulatorPlatform:
+    case .compilerVersionSecondComponentNotWildcard, .ignoredTrailingComponents,
+      .likelySimulatorPlatform, .endiannessDoesNotMatch:
       return .warning
     default: return .error
     }

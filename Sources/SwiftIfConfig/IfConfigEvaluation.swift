@@ -283,23 +283,36 @@ func evaluateIfConfig(
       )
 
     case ._endian:
-      // Ensure that we have a single argument that is a simple identifier,
-      // either "little" or "big".
+      // Ensure that we have a single argument that is a simple identifier.
       guard let argExpr = call.arguments.singleUnlabeledExpression,
-        let arg = argExpr.simpleIdentifierExpr,
-        let expectedEndianness = Endianness(rawValue: arg)
+        let arg = argExpr.simpleIdentifierExpr
       else {
         return recordError(
           .requiresUnlabeledArgument(
             name: fnName,
-            role: "endiannes ('big' or 'little')",
+            role: "endianness ('big' or 'little')",
             syntax: ExprSyntax(call)
           )
         )
       }
 
+      // The argument needs to be either "little" or "big". Otherwise, we assume
+      // it fails.
+      let isActive: Bool
+      if let expectedEndianness = Endianness(rawValue: arg) {
+        isActive = configuration.endianness == expectedEndianness
+      } else {
+        // Complain about unknown endianness
+        extraDiagnostics.append(
+          contentsOf: IfConfigError.endiannessDoesNotMatch(syntax: argExpr, argument: arg)
+            .asDiagnostics(at: argExpr)
+        )
+
+        isActive = false
+      }
+
       return (
-        active: configuration.endianness == expectedEndianness,
+        active: isActive,
         syntaxErrorsAllowed: fn.syntaxErrorsAllowed,
         diagnostics: extraDiagnostics
       )

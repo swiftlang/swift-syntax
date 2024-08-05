@@ -183,6 +183,22 @@ public class EvaluateTests: XCTestCase {
         )
       ]
     )
+
+    assertIfConfig(
+      "targetEnvironment(macabi)",
+      .inactive,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'macabi' has been renamed to 'macCatalyst'",
+          line: 1,
+          column: 19,
+          severity: .warning,
+          fixIts: [
+            FixItSpec(message: "replace with 'macCatalyst'")
+          ]
+        )
+      ]
+    )
   }
 
   func testVersions() throws {

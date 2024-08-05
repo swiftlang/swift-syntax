@@ -32,6 +32,7 @@ enum IfConfigError: Error, CustomStringConvertible {
   case integerLiteralCondition(syntax: ExprSyntax, replacement: Bool)
   case likelySimulatorPlatform(syntax: ExprSyntax)
   case endiannessDoesNotMatch(syntax: ExprSyntax, argument: String)
+  case macabiIsMacCatalyst(syntax: ExprSyntax)
 
   var description: String {
     switch self {
@@ -83,6 +84,9 @@ enum IfConfigError: Error, CustomStringConvertible {
       return
         "platform condition appears to be testing for simulator environment; use 'targetEnvironment(simulator)' instead"
 
+    case .macabiIsMacCatalyst:
+      return "'macabi' has been renamed to 'macCatalyst'"
+
     case .endiannessDoesNotMatch:
       return "unknown endianness for build configuration '_endian' (must be 'big' or 'little')"
     }
@@ -105,7 +109,8 @@ enum IfConfigError: Error, CustomStringConvertible {
       .ignoredTrailingComponents(version: _, syntax: let syntax),
       .integerLiteralCondition(syntax: let syntax, replacement: _),
       .likelySimulatorPlatform(syntax: let syntax),
-      .endiannessDoesNotMatch(syntax: let syntax, argument: _):
+      .endiannessDoesNotMatch(syntax: let syntax, argument: _),
+      .macabiIsMacCatalyst(syntax: let syntax):
       return Syntax(syntax)
 
     case .unsupportedVersionOperator(name: _, operator: let op):
@@ -124,7 +129,7 @@ extension IfConfigError: DiagnosticMessage {
   var severity: SwiftDiagnostics.DiagnosticSeverity {
     switch self {
     case .compilerVersionSecondComponentNotWildcard, .ignoredTrailingComponents,
-      .likelySimulatorPlatform, .endiannessDoesNotMatch:
+      .likelySimulatorPlatform, .endiannessDoesNotMatch, .macabiIsMacCatalyst:
       return .warning
     default: return .error
     }
@@ -167,6 +172,21 @@ extension IfConfigError: DiagnosticMessage {
           ),
           oldNode: syntax,
           newNode: "targetEnvironment(simulator)" as ExprSyntax
+        )
+      )
+    }
+
+    // For the targetEnvironment(macabi) -> macCatalyst rename we have a Fix-It.
+    if case .macabiIsMacCatalyst(syntax: let syntax) = self {
+      return Diagnostic(
+        node: syntax,
+        message: self,
+        fixIt: .replace(
+          message: SimpleFixItMessage(
+            message: "replace with 'macCatalyst'"
+          ),
+          oldNode: syntax,
+          newNode: "macCatalyst" as ExprSyntax
         )
       )
     }

@@ -203,11 +203,21 @@ func evaluateIfConfig(
     ) -> (active: Bool, syntaxErrorsAllowed: Bool, diagnostics: [Diagnostic]) {
       // Ensure that we have a single argument that is a simple identifier.
       guard let argExpr = call.arguments.singleUnlabeledExpression,
-        let arg = argExpr.simpleIdentifierExpr
+        var arg = argExpr.simpleIdentifierExpr
       else {
         return recordError(
           .requiresUnlabeledArgument(name: fnName, role: role, syntax: ExprSyntax(call))
         )
+      }
+
+      // The historical "macabi" environment has been renamed to "macCatalyst".
+      if role == "environment" && arg == "macabi" {
+        extraDiagnostics.append(
+          IfConfigError.macabiIsMacCatalyst(syntax: argExpr)
+            .asDiagnostic
+        )
+
+        arg = "macCatalyst"
       }
 
       return checkConfiguration(at: argExpr) {
@@ -304,8 +314,8 @@ func evaluateIfConfig(
       } else {
         // Complain about unknown endianness
         extraDiagnostics.append(
-          contentsOf: IfConfigError.endiannessDoesNotMatch(syntax: argExpr, argument: arg)
-            .asDiagnostics(at: argExpr)
+          IfConfigError.endiannessDoesNotMatch(syntax: argExpr, argument: arg)
+            .asDiagnostic
         )
 
         isActive = false

@@ -120,6 +120,17 @@ public class EvaluateTests: XCTestCase {
         )
       ]
     )
+    assertIfConfig(
+      "BAR(_:)",
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "invalid conditional compilation expression",
+          line: 1,
+          column: 1
+        )
+      ]
+    )
   }
 
   func testBadExpressions() throws {
@@ -132,6 +143,31 @@ public class EvaluateTests: XCTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "invalid conditional compilation expression",
+          line: 1,
+          column: 1
+        )
+      ]
+    )
+
+    assertIfConfig(
+      "A == B",
+      .unparsed,
+      configuration: buildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected '&&' or '||' expression",
+          line: 1,
+          column: 3
+        )
+      ]
+    )
+
+    assertIfConfig(
+      "^DEBUG",
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected unary '!' expression",
           line: 1,
           column: 1
         )
@@ -170,6 +206,35 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("_pointerBitWidth(_32)", .inactive)
     assertIfConfig("_hasAtomicBitWidth(_64)", .active)
     assertIfConfig("_hasAtomicBitWidth(_128)", .inactive)
+
+    assertIfConfig(
+      "_endian(mid)",
+      .inactive,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "unknown endianness for build configuration '_endian' (must be 'big' or 'little')",
+          line: 1,
+          column: 9,
+          severity: .warning
+        )
+      ]
+    )
+
+    assertIfConfig(
+      "targetEnvironment(macabi)",
+      .inactive,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'macabi' has been renamed to 'macCatalyst'",
+          line: 1,
+          column: 19,
+          severity: .warning,
+          fixIts: [
+            FixItSpec(message: "replace with 'macCatalyst'")
+          ]
+        )
+      ]
+    )
   }
 
   func testVersions() throws {
@@ -230,6 +295,19 @@ public class EvaluateTests: XCTestCase {
         )
       ]
     )
+
+    assertIfConfig(
+      #"_compiler_version("5.7.100")"#,
+      .active,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "the second version component is not used for comparison in legacy compiler versions",
+          line: 1,
+          column: 19,
+          severity: .warning
+        )
+      ]
+    )
   }
 
   func testCanImport() throws {
@@ -276,6 +354,79 @@ public class EvaluateTests: XCTestCase {
           severity: .error
         )
       ]
+    )
+
+    assertIfConfig(
+      "canImport(A, 2.2)",
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: #"second parameter of canImport should be labeled as _version or _underlyingVersion"#,
+          line: 1,
+          column: 14,
+          severity: .error
+        )
+      ]
+    )
+
+    assertIfConfig(
+      "canImport(A, 2.2, 1.1)",
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: #"canImport can take only two parameters"#,
+          line: 1,
+          column: 1,
+          severity: .error
+        )
+      ]
+    )
+
+    assertIfConfig(
+      "canImport(A(b: 1, c: 2).B.C)",
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected module name",
+          line: 1,
+          column: 11,
+          severity: .error
+        )
+      ]
+    )
+
+    assertIfConfig(
+      "canImport(SwiftSyntax) || canImport(ExplodingModule)",
+      .active
+    )
+  }
+
+  func testLikelySimulatorEnvironment() throws {
+    assertIfConfig(
+      "((os(iOS) || os(tvOS)) && (arch(i386) || arch(x86_64)))",
+      .inactive,
+      diagnostics: [
+        DiagnosticSpec(
+          message:
+            "platform condition appears to be testing for simulator environment; use 'targetEnvironment(simulator)' instead",
+          line: 1,
+          column: 2,
+          severity: .warning,
+          fixIts: [
+            FixItSpec(message: "replace with 'targetEnvironment(simulator)'")
+          ]
+        )
+      ]
+    )
+
+    assertIfConfig(
+      "((os(iOS) || os(tvOS)) && (arch(arm64) || arch(x86_64)))",
+      .inactive
+    )
+
+    assertIfConfig(
+      "((os(iOS) || os(tvOS)) && (arch(i386) || arch(x86_64))) && DEBUG",
+      .inactive
     )
   }
 }

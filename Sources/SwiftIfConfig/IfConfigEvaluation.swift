@@ -30,7 +30,8 @@ import SwiftSyntax
 ///   diagnose syntax errors in blocks where the check fails.
 func evaluateIfConfig(
   condition: ExprSyntax,
-  configuration: some BuildConfiguration
+  configuration: some BuildConfiguration,
+  outermostCondition: Bool = true
 ) -> (active: Bool, syntaxErrorsAllowed: Bool, diagnostics: [Diagnostic]) {
   var extraDiagnostics: [Diagnostic] = []
 
@@ -96,10 +97,9 @@ func evaluateIfConfig(
   }
 
   // Declaration references are for custom compilation flags.
-  if let identExpr = condition.as(DeclReferenceExprSyntax.self) {
-    // FIXME: Need a real notion of an identifier.
-    let ident = identExpr.baseName.text
-
+  if let identExpr = condition.as(DeclReferenceExprSyntax.self),
+    let ident = identExpr.simpleIdentifier
+  {
     // Evaluate the custom condition. If the build configuration cannot answer this query, fail.
     return checkConfiguration(at: identExpr) {
       (active: try configuration.isCustomConditionSet(name: ident), syntaxErrorsAllowed: false)
@@ -107,12 +107,16 @@ func evaluateIfConfig(
   }
 
   // Logical '!'.
-  if let prefixOp = condition.as(PrefixOperatorExprSyntax.self),
-    prefixOp.operator.text == "!"
-  {
+  if let prefixOp = condition.as(PrefixOperatorExprSyntax.self) {
+    // If this isn't '!', complain.
+    guard prefixOp.operator.text == "!" else {
+      return recordError(.badPrefixOperator(syntax: condition))
+    }
+
     let (innerActive, innerSyntaxErrorsAllowed, innerDiagnostics) = evaluateIfConfig(
       condition: prefixOp.expression,
-      configuration: configuration
+      configuration: configuration,
+      outermostCondition: outermostCondition
     )
 
     return (active: !innerActive, syntaxErrorsAllowed: innerSyntaxErrorsAllowed, diagnostics: innerDiagnostics)
@@ -120,47 +124,80 @@ func evaluateIfConfig(
 
   // Logical '&&' and '||'.
   if let binOp = condition.as(InfixOperatorExprSyntax.self),
-    let op = binOp.operator.as(BinaryOperatorExprSyntax.self),
-    (op.operator.text == "&&" || op.operator.text == "||")
+    let op = binOp.operator.as(BinaryOperatorExprSyntax.self)
   {
+    // If this is neither && nor ||, it was already diagnosed as part of
+    // operator folding. Just return this as inactive.
+    guard op.operator.text == "&&" || op.operator.text == "||" else {
+      return (active: false, syntaxErrorsAllowed: true, diagnostics: extraDiagnostics)
+    }
+
+    // Check whether this was likely to be a check for targetEnvironment(simulator).
+    if outermostCondition,
+      let targetEnvironmentDiag = diagnoseLikelySimulatorEnvironmentTest(binOp)
+    {
+      extraDiagnostics.append(targetEnvironmentDiag)
+    }
+
     // Evaluate the left-hand side.
-    let (lhsActive, lhssyntaxErrorsAllowed, lhsDiagnostics) = evaluateIfConfig(
+    let (lhsActive, lhsSyntaxErrorsAllowed, lhsDiagnostics) = evaluateIfConfig(
       condition: binOp.leftOperand,
-      configuration: configuration
+      configuration: configuration,
+      outermostCondition: false
     )
 
-    // Short-circuit evaluation if we know the answer and the left-hand side
-    // was syntaxErrorsAllowed.
-    if lhssyntaxErrorsAllowed {
-      switch (lhsActive, op.operator.text) {
-      case (true, "||"):
-        return (active: true, syntaxErrorsAllowed: lhssyntaxErrorsAllowed, diagnostics: lhsDiagnostics)
-      case (false, "&&"):
-        return (active: false, syntaxErrorsAllowed: lhssyntaxErrorsAllowed, diagnostics: lhsDiagnostics)
-      default:
-        break
-      }
+    // Short-circuit evaluation if we know the answer. We still recurse into
+    // the right-hand side, but with a dummy configuration that won't have
+    // side effects, so we only get validation-related errors.
+    let shortCircuitResult: Bool?
+    switch (lhsActive, op.operator.text) {
+    case (true, "||"): shortCircuitResult = true
+    case (false, "&&"): shortCircuitResult = false
+    default: shortCircuitResult = nil
+    }
+
+    // If we are supposed to short-circuit and the left-hand side of this
+    // operator with inactive &&, stop now: we shouldn't evaluate the right-
+    // hand side at all.
+    if let isActive = shortCircuitResult, lhsSyntaxErrorsAllowed {
+      return (
+        active: isActive,
+        syntaxErrorsAllowed: lhsSyntaxErrorsAllowed,
+        diagnostics: extraDiagnostics + lhsDiagnostics
+      )
     }
 
     // Evaluate the right-hand side.
-    let (rhsActive, rhssyntaxErrorsAllowed, rhsDiagnostics) = evaluateIfConfig(
-      condition: binOp.rightOperand,
-      configuration: configuration
-    )
+    let rhsActive: Bool
+    let rhsSyntaxErrorsAllowed: Bool
+    let rhsDiagnostics: [Diagnostic]
+    if shortCircuitResult != nil {
+      (rhsActive, rhsSyntaxErrorsAllowed, rhsDiagnostics) = evaluateIfConfig(
+        condition: binOp.rightOperand,
+        configuration: CanImportSuppressingBuildConfiguration(other: configuration),
+        outermostCondition: false
+      )
+    } else {
+      (rhsActive, rhsSyntaxErrorsAllowed, rhsDiagnostics) = evaluateIfConfig(
+        condition: binOp.rightOperand,
+        configuration: configuration,
+        outermostCondition: false
+      )
+    }
 
     switch op.operator.text {
     case "||":
       return (
         active: lhsActive || rhsActive,
-        syntaxErrorsAllowed: lhssyntaxErrorsAllowed && rhssyntaxErrorsAllowed,
-        diagnostics: lhsDiagnostics + rhsDiagnostics
+        syntaxErrorsAllowed: lhsSyntaxErrorsAllowed && rhsSyntaxErrorsAllowed,
+        diagnostics: extraDiagnostics + lhsDiagnostics + rhsDiagnostics
       )
 
     case "&&":
       return (
         active: lhsActive && rhsActive,
-        syntaxErrorsAllowed: lhssyntaxErrorsAllowed || rhssyntaxErrorsAllowed,
-        diagnostics: lhsDiagnostics + rhsDiagnostics
+        syntaxErrorsAllowed: lhsSyntaxErrorsAllowed || rhsSyntaxErrorsAllowed,
+        diagnostics: extraDiagnostics + lhsDiagnostics + rhsDiagnostics
       )
 
     default:
@@ -174,7 +211,8 @@ func evaluateIfConfig(
   {
     return evaluateIfConfig(
       condition: element.expression,
-      configuration: configuration
+      configuration: configuration,
+      outermostCondition: outermostCondition
     )
   }
 
@@ -190,11 +228,21 @@ func evaluateIfConfig(
     ) -> (active: Bool, syntaxErrorsAllowed: Bool, diagnostics: [Diagnostic]) {
       // Ensure that we have a single argument that is a simple identifier.
       guard let argExpr = call.arguments.singleUnlabeledExpression,
-        let arg = argExpr.simpleIdentifierExpr
+        var arg = argExpr.simpleIdentifierExpr
       else {
         return recordError(
           .requiresUnlabeledArgument(name: fnName, role: role, syntax: ExprSyntax(call))
         )
+      }
+
+      // The historical "macabi" environment has been renamed to "macCatalyst".
+      if role == "environment" && arg == "macabi" {
+        extraDiagnostics.append(
+          IfConfigError.macabiIsMacCatalyst(syntax: argExpr)
+            .asDiagnostic
+        )
+
+        arg = "macCatalyst"
       }
 
       return checkConfiguration(at: argExpr) {
@@ -270,23 +318,36 @@ func evaluateIfConfig(
       )
 
     case ._endian:
-      // Ensure that we have a single argument that is a simple identifier,
-      // either "little" or "big".
+      // Ensure that we have a single argument that is a simple identifier.
       guard let argExpr = call.arguments.singleUnlabeledExpression,
-        let arg = argExpr.simpleIdentifierExpr,
-        let expectedEndianness = Endianness(rawValue: arg)
+        let arg = argExpr.simpleIdentifierExpr
       else {
         return recordError(
           .requiresUnlabeledArgument(
             name: fnName,
-            role: "endiannes ('big' or 'little')",
+            role: "endianness ('big' or 'little')",
             syntax: ExprSyntax(call)
           )
         )
       }
 
+      // The argument needs to be either "little" or "big". Otherwise, we assume
+      // it fails.
+      let isActive: Bool
+      if let expectedEndianness = Endianness(rawValue: arg) {
+        isActive = configuration.endianness == expectedEndianness
+      } else {
+        // Complain about unknown endianness
+        extraDiagnostics.append(
+          IfConfigError.endiannessDoesNotMatch(syntax: argExpr, argument: arg)
+            .asDiagnostic
+        )
+
+        isActive = false
+      }
+
       return (
-        active: configuration.endianness == expectedEndianness,
+        active: isActive,
         syntaxErrorsAllowed: fn.syntaxErrorsAllowed,
         diagnostics: extraDiagnostics
       )
@@ -341,7 +402,11 @@ func evaluateIfConfig(
       let versionString = stringSegment.content.text
       let expectedVersion: VersionTuple
       do {
-        expectedVersion = try VersionTuple(parsingCompilerBuildVersion: versionString, argExpr)
+        expectedVersion = try VersionTuple.parseCompilerBuildVersion(
+          versionString,
+          argExpr,
+          extraDiagnostics: &extraDiagnostics
+        )
       } catch {
         return recordError(error, at: stringSegment.content)
       }
@@ -361,9 +426,17 @@ func evaluateIfConfig(
         return recordError(.canImportMissingModule(syntax: ExprSyntax(call)))
       }
 
-      // FIXME: This is a gross hack. Actually look at the sequence of
-      // `MemberAccessExprSyntax` nodes and pull out the identifiers.
-      let importPath = firstArg.expression.trimmedDescription.split(separator: ".")
+      if call.arguments.count > 2 {
+        return recordError(.canImportTwoParameters(syntax: ExprSyntax(call)))
+      }
+
+      // Extract the import path.
+      let importPath: [String]
+      do {
+        importPath = try extractImportPath(firstArg.expression)
+      } catch {
+        return recordError(error, at: firstArg.expression)
+      }
 
       // If there is a second argument, it shall have the label _version or
       // _underlyingVersion.
@@ -410,10 +483,6 @@ func evaluateIfConfig(
           assert(secondArg.label?.text == "_underlyingVersion")
           version = .underlyingVersion(versionTuple)
         }
-
-        if call.arguments.count > 2 {
-          return recordError(.canImportTwoParameters(syntax: ExprSyntax(call)))
-        }
       } else {
         version = .unversioned
       }
@@ -433,6 +502,110 @@ func evaluateIfConfig(
   return recordError(.unknownExpression(condition))
 }
 
+/// Given an expression with the expected form A.B.C, extract the import path
+/// ["A", "B", "C"] from it. Throws an error if the expression doesn't match
+/// this form.
+private func extractImportPath(_ expression: some ExprSyntaxProtocol) throws -> [String] {
+  // Member access.
+  if let memberAccess = expression.as(MemberAccessExprSyntax.self),
+    let base = memberAccess.base,
+    let memberName = memberAccess.declName.simpleIdentifier
+  {
+    return try extractImportPath(base) + [memberName]
+  }
+
+  // Declaration reference.
+  if let declRef = expression.as(DeclReferenceExprSyntax.self),
+    let name = declRef.simpleIdentifier
+  {
+    return [name]
+  }
+
+  throw IfConfigError.expectedModuleName(syntax: ExprSyntax(expression))
+}
+
+/// Determine whether the given condition only involves disjunctions that
+/// check the given config function against one of the provided values.
+///
+/// For example, this will match a condition like `os(iOS) ||  os(tvOS)`
+/// when passed `IfConfigFunctions.os` and `["iOS", "tvOS"]`.
+private func isConditionDisjunction(
+  _ condition: some ExprSyntaxProtocol,
+  function: IfConfigFunctions,
+  anyOf values: [String]
+) -> Bool {
+  // Recurse into disjunctions. Both sides need to match.
+  if let binOp = condition.as(InfixOperatorExprSyntax.self),
+    let op = binOp.operator.as(BinaryOperatorExprSyntax.self),
+    op.operator.text == "||"
+  {
+    return isConditionDisjunction(binOp.leftOperand, function: function, anyOf: values)
+      && isConditionDisjunction(binOp.rightOperand, function: function, anyOf: values)
+  }
+
+  // Look through parentheses.
+  if let tuple = condition.as(TupleExprSyntax.self), tuple.isParentheses,
+    let element = tuple.elements.first
+  {
+    return isConditionDisjunction(element.expression, function: function, anyOf: values)
+  }
+
+  // If we have a call to this function, check whether the argument is one of
+  // the acceptable values.
+  if let call = condition.as(FunctionCallExprSyntax.self),
+    let fnName = call.calledExpression.simpleIdentifierExpr,
+    let callFn = IfConfigFunctions(rawValue: fnName),
+    callFn == function,
+    let argExpr = call.arguments.singleUnlabeledExpression,
+    let arg = argExpr.simpleIdentifierExpr
+  {
+    return values.contains(arg)
+  }
+
+  return false
+}
+
+/// If this binary operator looks like it could be replaced by a
+/// targetEnvironment(simulator) check, produce a diagnostic that does so.
+///
+/// For example, this checks for conditions like:
+///
+/// ```
+/// #if (os(iOS) ||  os(tvOS)) && (arch(i386) || arch(x86_64))
+/// ```
+///
+/// which should be replaced with
+///
+/// ```
+/// #if targetEnvironment(simulator)
+/// ```
+private func diagnoseLikelySimulatorEnvironmentTest(
+  _ binOp: InfixOperatorExprSyntax
+) -> Diagnostic? {
+  guard let op = binOp.operator.as(BinaryOperatorExprSyntax.self),
+    op.operator.text == "&&"
+  else {
+    return nil
+  }
+
+  func isSimulatorPlatformOSTest(_ condition: ExprSyntax) -> Bool {
+    return isConditionDisjunction(condition, function: .os, anyOf: ["iOS", "tvOS", "watchOS"])
+  }
+
+  func isSimulatorPlatformArchTest(_ condition: ExprSyntax) -> Bool {
+    return isConditionDisjunction(condition, function: .arch, anyOf: ["i386", "x86_64"])
+  }
+
+  guard
+    (isSimulatorPlatformOSTest(binOp.leftOperand) && isSimulatorPlatformArchTest(binOp.rightOperand))
+      || (isSimulatorPlatformOSTest(binOp.rightOperand) && isSimulatorPlatformArchTest(binOp.leftOperand))
+  else {
+    return nil
+  }
+
+  return IfConfigError.likelySimulatorPlatform(syntax: ExprSyntax(binOp)).asDiagnostic
+}
+
 extension IfConfigClauseSyntax {
   /// Fold the operators within an #if condition, turning sequence expressions
   /// involving the various allowed operators (&&, ||, !) into well-structured
@@ -442,6 +615,18 @@ extension IfConfigClauseSyntax {
   ) -> (folded: ExprSyntax, diagnostics: [Diagnostic]) {
     var foldingDiagnostics: [Diagnostic] = []
     let foldedCondition = OperatorTable.logicalOperators.foldAll(condition) { error in
+      // Replace the "unknown infix operator" diagnostic with a custom one
+      // that mentions that only '&&' and '||' are allowed.
+      if case .missingOperator(_, referencedFrom: let syntax) = error,
+        let binOp = syntax.parent?.as(BinaryOperatorExprSyntax.self)
+      {
+
+        foldingDiagnostics.append(
+          IfConfigError.badInfixOperator(syntax: ExprSyntax(binOp)).asDiagnostic
+        )
+        return
+      }
+
       foldingDiagnostics.append(contentsOf: error.asDiagnostics(at: condition))
     }.cast(ExprSyntax.self)
     return (folded: foldedCondition, diagnostics: foldingDiagnostics)
@@ -507,4 +692,56 @@ extension ExprSyntaxProtocol {
 
     return false
   }
+}
+
+/// Build configuration adaptor that suppresses calls to canImport, which
+/// can have side effects. This is somewhat of a hack for the compiler.
+private struct CanImportSuppressingBuildConfiguration<Other: BuildConfiguration>: BuildConfiguration {
+  var other: Other
+
+  func isCustomConditionSet(name: String) throws -> Bool {
+    return try other.isCustomConditionSet(name: name)
+  }
+
+  func hasFeature(name: String) throws -> Bool {
+    return try other.hasFeature(name: name)
+  }
+
+  func hasAttribute(name: String) throws -> Bool {
+    return try other.hasAttribute(name: name)
+  }
+
+  func canImport(importPath: [String], version: CanImportVersion) throws -> Bool {
+    return false
+  }
+
+  func isActiveTargetOS(name: String) throws -> Bool {
+    return try other.isActiveTargetOS(name: name)
+  }
+
+  func isActiveTargetArchitecture(name: String) throws -> Bool {
+    return try other.isActiveTargetArchitecture(name: name)
+  }
+
+  func isActiveTargetEnvironment(name: String) throws -> Bool {
+    return try other.isActiveTargetEnvironment(name: name)
+  }
+
+  func isActiveTargetRuntime(name: String) throws -> Bool {
+    return try other.isActiveTargetRuntime(name: name)
+  }
+
+  func isActiveTargetPointerAuthentication(name: String) throws -> Bool {
+    return try other.isActiveTargetPointerAuthentication(name: name)
+  }
+
+  var targetPointerBitWidth: Int { return other.targetPointerBitWidth }
+
+  var targetAtomicBitWidths: [Int] { return other.targetAtomicBitWidths }
+
+  var endianness: Endianness { return other.endianness }
+
+  var languageVersion: VersionTuple { return other.languageVersion }
+
+  var compilerVersion: VersionTuple { return other.compilerVersion }
 }

@@ -12,6 +12,7 @@
 
 import SwiftDiagnostics
 import SwiftSyntax
+import SwiftSyntaxBuilder
 
 /// Describes the kinds of errors that can occur when processing #if conditions.
 enum IfConfigError: Error, CustomStringConvertible {
@@ -29,6 +30,12 @@ enum IfConfigError: Error, CustomStringConvertible {
   case canImportTwoParameters(syntax: ExprSyntax)
   case ignoredTrailingComponents(version: VersionTuple, syntax: ExprSyntax)
   case integerLiteralCondition(syntax: ExprSyntax, replacement: Bool)
+  case likelySimulatorPlatform(syntax: ExprSyntax)
+  case endiannessDoesNotMatch(syntax: ExprSyntax, argument: String)
+  case macabiIsMacCatalyst(syntax: ExprSyntax)
+  case expectedModuleName(syntax: ExprSyntax)
+  case badInfixOperator(syntax: ExprSyntax)
+  case badPrefixOperator(syntax: ExprSyntax)
 
   var description: String {
     switch self {
@@ -65,7 +72,7 @@ enum IfConfigError: Error, CustomStringConvertible {
       return "canImport requires a module name"
 
     case .canImportLabel(syntax: _):
-      return "2nd parameter of canImport should be labeled as _version or _underlyingVersion"
+      return "second parameter of canImport should be labeled as _version or _underlyingVersion"
 
     case .canImportTwoParameters(syntax: _):
       return "canImport can take only two parameters"
@@ -75,6 +82,25 @@ enum IfConfigError: Error, CustomStringConvertible {
 
     case .integerLiteralCondition(syntax: let syntax, replacement: let replacement):
       return "'\(syntax.trimmedDescription)' is not a valid conditional compilation expression, use '\(replacement)'"
+
+    case .likelySimulatorPlatform:
+      return
+        "platform condition appears to be testing for simulator environment; use 'targetEnvironment(simulator)' instead"
+
+    case .macabiIsMacCatalyst:
+      return "'macabi' has been renamed to 'macCatalyst'"
+
+    case .endiannessDoesNotMatch:
+      return "unknown endianness for build configuration '_endian' (must be 'big' or 'little')"
+
+    case .expectedModuleName:
+      return "expected module name"
+
+    case .badInfixOperator:
+      return "expected '&&' or '||' expression"
+
+    case .badPrefixOperator:
+      return "expected unary '!' expression"
     }
   }
 
@@ -93,7 +119,13 @@ enum IfConfigError: Error, CustomStringConvertible {
       .canImportLabel(syntax: let syntax),
       .canImportTwoParameters(syntax: let syntax),
       .ignoredTrailingComponents(version: _, syntax: let syntax),
-      .integerLiteralCondition(syntax: let syntax, replacement: _):
+      .integerLiteralCondition(syntax: let syntax, replacement: _),
+      .likelySimulatorPlatform(syntax: let syntax),
+      .endiannessDoesNotMatch(syntax: let syntax, argument: _),
+      .macabiIsMacCatalyst(syntax: let syntax),
+      .expectedModuleName(syntax: let syntax),
+      .badInfixOperator(syntax: let syntax),
+      .badPrefixOperator(syntax: let syntax):
       return Syntax(syntax)
 
     case .unsupportedVersionOperator(name: _, operator: let op):
@@ -111,7 +143,9 @@ extension IfConfigError: DiagnosticMessage {
 
   var severity: SwiftDiagnostics.DiagnosticSeverity {
     switch self {
-    case .ignoredTrailingComponents: return .warning
+    case .compilerVersionSecondComponentNotWildcard, .ignoredTrailingComponents,
+      .likelySimulatorPlatform, .endiannessDoesNotMatch, .macabiIsMacCatalyst:
+      return .warning
     default: return .error
     }
   }
@@ -138,6 +172,36 @@ extension IfConfigError: DiagnosticMessage {
           newNode: BooleanLiteralExprSyntax(
             literal: .keyword(replacement ? .true : .false)
           )
+        )
+      )
+    }
+
+    // For the likely targetEnvironment(simulator) condition we have a Fix-It.
+    if case .likelySimulatorPlatform(let syntax) = self {
+      return Diagnostic(
+        node: syntax,
+        message: self,
+        fixIt: .replace(
+          message: SimpleFixItMessage(
+            message: "replace with 'targetEnvironment(simulator)'"
+          ),
+          oldNode: syntax,
+          newNode: "targetEnvironment(simulator)" as ExprSyntax
+        )
+      )
+    }
+
+    // For the targetEnvironment(macabi) -> macCatalyst rename we have a Fix-It.
+    if case .macabiIsMacCatalyst(syntax: let syntax) = self {
+      return Diagnostic(
+        node: syntax,
+        message: self,
+        fixIt: .replace(
+          message: SimpleFixItMessage(
+            message: "replace with 'macCatalyst'"
+          ),
+          oldNode: syntax,
+          newNode: "macCatalyst" as ExprSyntax
         )
       )
     }

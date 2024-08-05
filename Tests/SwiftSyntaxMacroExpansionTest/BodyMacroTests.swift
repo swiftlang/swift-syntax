@@ -125,4 +125,46 @@ final class BodyMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testDontAddIndentationWhenCollapsingBody() {
+    struct SourceLocationMacro: BodyMacro {
+      public static var formatMode: FormatMode { .disabled }
+
+      public static func expansion(
+        of node: AttributeSyntax,
+        providingBodyFor declaration: some DeclSyntaxProtocol & WithOptionalCodeBlockSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> [CodeBlockItemSyntax] {
+        guard let statements = declaration.body?.statements else {
+          return []
+        }
+        return statements.flatMap { statement in
+          CodeBlockItemListSyntax {
+            """
+            #sourceLocation(file: "test.swift", line: 1)
+            """
+            statement.trimmed(matching: \.isNewline)
+            "#sourceLocation()"
+          }
+        }
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @SourceLocationMacro
+      func f() {
+              let x: Int = 1
+      }
+      """,
+      expandedSource: """
+        func f() {
+        #sourceLocation(file: "test.swift", line: 1)
+                let x: Int = 1
+        #sourceLocation()
+        }
+        """,
+      macros: ["SourceLocationMacro": SourceLocationMacro.self]
+    )
+  }
 }

@@ -102,7 +102,7 @@ public struct SyntaxChildrenIndex: Hashable, Comparable, ExpressibleByNilLiteral
 
 fileprivate extension AbsoluteSyntaxInfo {
   /// Construct `AbsoluteSyntaxInfo` from the given index data and a `rootId`.
-  init(index: SyntaxChildrenIndexData, rootId: UInt) {
+  init(index: SyntaxChildrenIndexData, rootId: RootID) {
     let position = AbsoluteSyntaxPosition(
       offset: index.offset,
       indexInParent: index.indexInParent
@@ -152,7 +152,7 @@ struct RawSyntaxChildren: BidirectionalCollection, Sendable {
   }
 
   /// The rootId of the tree the child nodes belong to
-  private let rootId: UInt
+  private let rootId: RootID
 
   /// The number of children in `parent`. Cached to avoid reaching into `parent` for every index
   /// advancement
@@ -222,7 +222,7 @@ struct RawSyntaxChildren: BidirectionalCollection, Sendable {
       let offset = startIndex.offset + UInt32(parent.totalLength.utf8Length)
       let indexInParent = startIndex.indexInParent + UInt32(parentLayoutView.children.count)
       let indexInTree = startIndex.indexInTree.indexInTree + UInt32(parent.totalNodes) - 1
-      let syntaxIndexInTree = SyntaxIdentifier.SyntaxIndexInTree(indexInTree: indexInTree)
+      let syntaxIndexInTree = SyntaxIdentifier.SyntaxIndexInTree(indexInTree)
       let materialized = SyntaxChildrenIndex(
         offset: offset,
         indexInParent: indexInParent,

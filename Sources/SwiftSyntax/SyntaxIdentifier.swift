@@ -10,6 +10,18 @@
 //
 //===----------------------------------------------------------------------===//
 
+/// Uniquely identifies a syntax tree.
+struct RootID: Hashable, Sendable {
+  /// The pointer value of the root.
+  ///
+  /// Since the root ID might outlive the tree, it is not unsafe to access this.
+  private var id: UInt
+
+  fileprivate init(_ pointer: UnsafeRawPointer) {
+    self.id = UInt(bitPattern: pointer)
+  }
+}
+
 /// Provides a stable and unique identity for ``Syntax`` nodes.
 ///
 /// Note that two nodes might have the same contents even if their IDs are
@@ -27,7 +39,7 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
   /// This is similar to ``SyntaxIdentifier`` but does not store the root ID of the tree.
   /// It can thus be transferred across trees that are structurally equivalent, for example two copies of the same tree
   /// that live in different processes.
-  public struct SyntaxIndexInTree: Hashable, Sendable {
+  public struct SyntaxIndexInTree: Comparable, Hashable, Sendable {
     /// When traversing the syntax tree using a depth-first traversal, the index at which the node will be visited.
     let indexInTree: UInt32
 
@@ -35,22 +47,22 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
     /// `raw`.
     func advancedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
       let newIndexInTree = self.indexInTree + UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
-      return .init(indexInTree: newIndexInTree)
+      return .init(newIndexInTree)
     }
 
     /// Assuming that this index points to the next sibling of `raw`, reverse it so that it points to the start of
     /// `raw`.
     func reversedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
       let newIndexInTree = self.indexInTree - UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
-      return .init(indexInTree: newIndexInTree)
+      return .init(newIndexInTree)
     }
 
     func advancedToFirstChild() -> SyntaxIndexInTree {
       let newIndexInTree = self.indexInTree + 1
-      return .init(indexInTree: newIndexInTree)
+      return .init(newIndexInTree)
     }
 
-    init(indexInTree: UInt32) {
+    init(_ indexInTree: UInt32) {
       self.indexInTree = indexInTree
     }
 
@@ -66,6 +78,11 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
     public init(fromOpaque opaque: UInt64) {
       self.indexInTree = UInt32(opaque)
     }
+
+    /// Returns `true` if `lhs` occurs before `rhs` in the tree.
+    public static func < (lhs: SyntaxIndexInTree, rhs: SyntaxIndexInTree) -> Bool {
+      return lhs.indexInTree < rhs.indexInTree
+    }
   }
 
   /// Unique value for the root node.
@@ -74,14 +91,14 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
   /// same instance. This guarantees that the trees with the same 'rootId' have
   /// exact the same structure. But, two trees with exactly the same structure
   /// might still have different 'rootId's.
-  let rootId: UInt
+  let rootId: RootID
 
   /// Unique value for a node within its own tree.
   public let indexInTree: SyntaxIndexInTree
 
   /// Returns the `UInt` that is used as the root ID for the given raw syntax node.
-  private static func rootId(of raw: RawSyntax) -> UInt {
-    return UInt(bitPattern: raw.pointer.unsafeRawPointer)
+  private static func rootId(of raw: RawSyntax) -> RootID {
+    return RootID(raw.pointer.unsafeRawPointer)
   }
 
   func advancedBySibling(_ raw: RawSyntax?) -> SyntaxIdentifier {
@@ -97,7 +114,7 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
   static func forRoot(_ raw: RawSyntax) -> SyntaxIdentifier {
     return SyntaxIdentifier(
       rootId: Self.rootId(of: raw),
-      indexInTree: SyntaxIndexInTree(indexInTree: 0)
+      indexInTree: SyntaxIndexInTree(0)
     )
   }
 
@@ -121,7 +138,7 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
     guard !root.hasParent else {
       return nil
     }
-    guard indexInTree.indexInTree < SyntaxIndexInTree(indexInTree: 0).advancedBy(root.raw).indexInTree else {
+    guard indexInTree.indexInTree < SyntaxIndexInTree(0).advancedBy(root.raw).indexInTree else {
       return nil
     }
 

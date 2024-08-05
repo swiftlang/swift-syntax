@@ -51,29 +51,21 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeAttributes), 
+        Syntax(attributes), 
+        Syntax(unexpectedBetweenAttributesAndModifiers), 
+        Syntax(modifiers), 
+        Syntax(unexpectedBetweenModifiersAndPlaceholder), 
+        Syntax(placeholder), 
+        Syntax(unexpectedAfterPlaceholder)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAttributes, 
-            attributes, 
-            unexpectedBetweenAttributesAndModifiers, 
-            modifiers, 
-            unexpectedBetweenModifiersAndPlaceholder, 
-            placeholder, 
-            unexpectedAfterPlaceholder
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeAttributes?.raw, 
-          attributes.raw, 
-          unexpectedBetweenAttributesAndModifiers?.raw, 
-          modifiers.raw, 
-          unexpectedBetweenModifiersAndPlaceholder?.raw, 
-          placeholder.raw, 
-          unexpectedAfterPlaceholder?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.editorPlaceholderDecl,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -81,6 +73,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -117,7 +110,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -163,7 +156,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -246,13 +239,13 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [Syntax(unexpectedBeforePlaceholder), Syntax(placeholder), Syntax(unexpectedAfterPlaceholder)]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforePlaceholder, placeholder, unexpectedAfterPlaceholder))) { (arena, _) in
-      let layout: [RawSyntax?] = [unexpectedBeforePlaceholder?.raw, placeholder.raw, unexpectedAfterPlaceholder?.raw]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.editorPlaceholderExpr,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -260,6 +253,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforePlaceholder: UnexpectedNodesSyntax? {
@@ -336,33 +330,23 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeAttributes), 
+        Syntax(attributes), 
+        Syntax(unexpectedBetweenAttributesAndModifiers), 
+        Syntax(modifiers), 
+        Syntax(unexpectedBetweenModifiersAndCaseKeyword), 
+        Syntax(caseKeyword), 
+        Syntax(unexpectedBetweenCaseKeywordAndElements), 
+        Syntax(elements), 
+        Syntax(unexpectedAfterElements)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAttributes, 
-            attributes, 
-            unexpectedBetweenAttributesAndModifiers, 
-            modifiers, 
-            unexpectedBetweenModifiersAndCaseKeyword, 
-            caseKeyword, 
-            unexpectedBetweenCaseKeywordAndElements, 
-            elements, 
-            unexpectedAfterElements
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeAttributes?.raw, 
-          attributes.raw, 
-          unexpectedBetweenAttributesAndModifiers?.raw, 
-          modifiers.raw, 
-          unexpectedBetweenModifiersAndCaseKeyword?.raw, 
-          caseKeyword.raw, 
-          unexpectedBetweenCaseKeywordAndElements?.raw, 
-          elements.raw, 
-          unexpectedAfterElements?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.enumCaseDecl,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -370,6 +354,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -406,7 +391,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -452,7 +437,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -521,7 +506,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseElementList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -600,33 +585,23 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeName), 
+        Syntax(name), 
+        Syntax(unexpectedBetweenNameAndParameterClause), 
+        Syntax(parameterClause), 
+        Syntax(unexpectedBetweenParameterClauseAndRawValue), 
+        Syntax(rawValue), 
+        Syntax(unexpectedBetweenRawValueAndTrailingComma), 
+        Syntax(trailingComma), 
+        Syntax(unexpectedAfterTrailingComma)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeName, 
-            name, 
-            unexpectedBetweenNameAndParameterClause, 
-            parameterClause, 
-            unexpectedBetweenParameterClauseAndRawValue, 
-            rawValue, 
-            unexpectedBetweenRawValueAndTrailingComma, 
-            trailingComma, 
-            unexpectedAfterTrailingComma
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeName?.raw, 
-          name.raw, 
-          unexpectedBetweenNameAndParameterClause?.raw, 
-          parameterClause?.raw, 
-          unexpectedBetweenParameterClauseAndRawValue?.raw, 
-          rawValue?.raw, 
-          unexpectedBetweenRawValueAndTrailingComma?.raw, 
-          trailingComma?.raw, 
-          unexpectedAfterTrailingComma?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.enumCaseElement,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -634,6 +609,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeName: UnexpectedNodesSyntax? {
@@ -781,29 +757,21 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeLeftParen), 
+        Syntax(leftParen), 
+        Syntax(unexpectedBetweenLeftParenAndParameters), 
+        Syntax(parameters), 
+        Syntax(unexpectedBetweenParametersAndRightParen), 
+        Syntax(rightParen), 
+        Syntax(unexpectedAfterRightParen)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLeftParen, 
-            leftParen, 
-            unexpectedBetweenLeftParenAndParameters, 
-            parameters, 
-            unexpectedBetweenParametersAndRightParen, 
-            rightParen, 
-            unexpectedAfterRightParen
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeLeftParen?.raw, 
-          leftParen.raw, 
-          unexpectedBetweenLeftParenAndParameters?.raw, 
-          parameters.raw, 
-          unexpectedBetweenParametersAndRightParen?.raw, 
-          rightParen.raw, 
-          unexpectedAfterRightParen?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.enumCaseParameterClause,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -811,6 +779,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
@@ -870,7 +839,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.enumCaseParameterList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -977,45 +946,29 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeModifiers), 
+        Syntax(modifiers), 
+        Syntax(unexpectedBetweenModifiersAndFirstName), 
+        Syntax(firstName), 
+        Syntax(unexpectedBetweenFirstNameAndSecondName), 
+        Syntax(secondName), 
+        Syntax(unexpectedBetweenSecondNameAndColon), 
+        Syntax(colon), 
+        Syntax(unexpectedBetweenColonAndType), 
+        Syntax(type), 
+        Syntax(unexpectedBetweenTypeAndDefaultValue), 
+        Syntax(defaultValue), 
+        Syntax(unexpectedBetweenDefaultValueAndTrailingComma), 
+        Syntax(trailingComma), 
+        Syntax(unexpectedAfterTrailingComma)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeModifiers, 
-            modifiers, 
-            unexpectedBetweenModifiersAndFirstName, 
-            firstName, 
-            unexpectedBetweenFirstNameAndSecondName, 
-            secondName, 
-            unexpectedBetweenSecondNameAndColon, 
-            colon, 
-            unexpectedBetweenColonAndType, 
-            type, 
-            unexpectedBetweenTypeAndDefaultValue, 
-            defaultValue, 
-            unexpectedBetweenDefaultValueAndTrailingComma, 
-            trailingComma, 
-            unexpectedAfterTrailingComma
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeModifiers?.raw, 
-          modifiers.raw, 
-          unexpectedBetweenModifiersAndFirstName?.raw, 
-          firstName?.raw, 
-          unexpectedBetweenFirstNameAndSecondName?.raw, 
-          secondName?.raw, 
-          unexpectedBetweenSecondNameAndColon?.raw, 
-          colon?.raw, 
-          unexpectedBetweenColonAndType?.raw, 
-          type.raw, 
-          unexpectedBetweenTypeAndDefaultValue?.raw, 
-          defaultValue?.raw, 
-          unexpectedBetweenDefaultValueAndTrailingComma?.raw, 
-          trailingComma?.raw, 
-          unexpectedAfterTrailingComma?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.enumCaseParameter,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -1023,6 +976,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeModifiers: UnexpectedNodesSyntax? {
@@ -1058,7 +1012,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -1285,49 +1239,31 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeAttributes), 
+        Syntax(attributes), 
+        Syntax(unexpectedBetweenAttributesAndModifiers), 
+        Syntax(modifiers), 
+        Syntax(unexpectedBetweenModifiersAndEnumKeyword), 
+        Syntax(enumKeyword), 
+        Syntax(unexpectedBetweenEnumKeywordAndName), 
+        Syntax(name), 
+        Syntax(unexpectedBetweenNameAndGenericParameterClause), 
+        Syntax(genericParameterClause), 
+        Syntax(unexpectedBetweenGenericParameterClauseAndInheritanceClause), 
+        Syntax(inheritanceClause), 
+        Syntax(unexpectedBetweenInheritanceClauseAndGenericWhereClause), 
+        Syntax(genericWhereClause), 
+        Syntax(unexpectedBetweenGenericWhereClauseAndMemberBlock), 
+        Syntax(memberBlock), 
+        Syntax(unexpectedAfterMemberBlock)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAttributes, 
-            attributes, 
-            unexpectedBetweenAttributesAndModifiers, 
-            modifiers, 
-            unexpectedBetweenModifiersAndEnumKeyword, 
-            enumKeyword, 
-            unexpectedBetweenEnumKeywordAndName, 
-            name, 
-            unexpectedBetweenNameAndGenericParameterClause, 
-            genericParameterClause, 
-            unexpectedBetweenGenericParameterClauseAndInheritanceClause, 
-            inheritanceClause, 
-            unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
-            genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndMemberBlock, 
-            memberBlock, 
-            unexpectedAfterMemberBlock
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeAttributes?.raw, 
-          attributes.raw, 
-          unexpectedBetweenAttributesAndModifiers?.raw, 
-          modifiers.raw, 
-          unexpectedBetweenModifiersAndEnumKeyword?.raw, 
-          enumKeyword.raw, 
-          unexpectedBetweenEnumKeywordAndName?.raw, 
-          name.raw, 
-          unexpectedBetweenNameAndGenericParameterClause?.raw, 
-          genericParameterClause?.raw, 
-          unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw, 
-          inheritanceClause?.raw, 
-          unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
-          genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw, 
-          memberBlock.raw, 
-          unexpectedAfterMemberBlock?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.enumDecl,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -1335,6 +1271,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -1371,7 +1308,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -1417,7 +1354,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -1619,29 +1556,21 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _L
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeLanguage), 
+        Syntax(language), 
+        Syntax(unexpectedBetweenLanguageAndComma), 
+        Syntax(comma), 
+        Syntax(unexpectedBetweenCommaAndCxxName), 
+        Syntax(cxxName), 
+        Syntax(unexpectedAfterCxxName)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLanguage, 
-            language, 
-            unexpectedBetweenLanguageAndComma, 
-            comma, 
-            unexpectedBetweenCommaAndCxxName, 
-            cxxName, 
-            unexpectedAfterCxxName
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeLanguage?.raw, 
-          language.raw, 
-          unexpectedBetweenLanguageAndComma?.raw, 
-          comma?.raw, 
-          unexpectedBetweenCommaAndCxxName?.raw, 
-          cxxName?.raw, 
-          unexpectedAfterCxxName?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.exposeAttributeArguments,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -1649,6 +1578,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _L
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeLanguage: UnexpectedNodesSyntax? {
@@ -1768,13 +1698,13 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _L
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [Syntax(unexpectedBeforeExpression), Syntax(expression), Syntax(unexpectedAfterExpression)]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeExpression, expression, unexpectedAfterExpression))) { (arena, _) in
-      let layout: [RawSyntax?] = [unexpectedBeforeExpression?.raw, expression.raw, unexpectedAfterExpression?.raw]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.expressionPattern,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -1782,6 +1712,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _L
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
@@ -1860,37 +1791,25 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeBackslash), 
+        Syntax(backslash), 
+        Syntax(unexpectedBetweenBackslashAndPounds), 
+        Syntax(pounds), 
+        Syntax(unexpectedBetweenPoundsAndLeftParen), 
+        Syntax(leftParen), 
+        Syntax(unexpectedBetweenLeftParenAndExpressions), 
+        Syntax(expressions), 
+        Syntax(unexpectedBetweenExpressionsAndRightParen), 
+        Syntax(rightParen), 
+        Syntax(unexpectedAfterRightParen)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeBackslash, 
-            backslash, 
-            unexpectedBetweenBackslashAndPounds, 
-            pounds, 
-            unexpectedBetweenPoundsAndLeftParen, 
-            leftParen, 
-            unexpectedBetweenLeftParenAndExpressions, 
-            expressions, 
-            unexpectedBetweenExpressionsAndRightParen, 
-            rightParen, 
-            unexpectedAfterRightParen
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeBackslash?.raw, 
-          backslash.raw, 
-          unexpectedBetweenBackslashAndPounds?.raw, 
-          pounds?.raw, 
-          unexpectedBetweenPoundsAndLeftParen?.raw, 
-          leftParen.raw, 
-          unexpectedBetweenLeftParenAndExpressions?.raw, 
-          expressions.raw, 
-          unexpectedBetweenExpressionsAndRightParen?.raw, 
-          rightParen.raw, 
-          unexpectedAfterRightParen?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.expressionSegment,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -1898,6 +1817,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeBackslash: UnexpectedNodesSyntax? {
@@ -1996,7 +1916,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -2079,13 +1999,13 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStm
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [Syntax(unexpectedBeforeExpression), Syntax(expression), Syntax(unexpectedAfterExpression)]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeExpression, expression, unexpectedAfterExpression))) { (arena, _) in
-      let layout: [RawSyntax?] = [unexpectedBeforeExpression?.raw, expression.raw, unexpectedAfterExpression?.raw]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.expressionStmt,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -2093,6 +2013,7 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStm
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
@@ -2188,45 +2109,29 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeAttributes), 
+        Syntax(attributes), 
+        Syntax(unexpectedBetweenAttributesAndModifiers), 
+        Syntax(modifiers), 
+        Syntax(unexpectedBetweenModifiersAndExtensionKeyword), 
+        Syntax(extensionKeyword), 
+        Syntax(unexpectedBetweenExtensionKeywordAndExtendedType), 
+        Syntax(extendedType), 
+        Syntax(unexpectedBetweenExtendedTypeAndInheritanceClause), 
+        Syntax(inheritanceClause), 
+        Syntax(unexpectedBetweenInheritanceClauseAndGenericWhereClause), 
+        Syntax(genericWhereClause), 
+        Syntax(unexpectedBetweenGenericWhereClauseAndMemberBlock), 
+        Syntax(memberBlock), 
+        Syntax(unexpectedAfterMemberBlock)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAttributes, 
-            attributes, 
-            unexpectedBetweenAttributesAndModifiers, 
-            modifiers, 
-            unexpectedBetweenModifiersAndExtensionKeyword, 
-            extensionKeyword, 
-            unexpectedBetweenExtensionKeywordAndExtendedType, 
-            extendedType, 
-            unexpectedBetweenExtendedTypeAndInheritanceClause, 
-            inheritanceClause, 
-            unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
-            genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndMemberBlock, 
-            memberBlock, 
-            unexpectedAfterMemberBlock
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeAttributes?.raw, 
-          attributes.raw, 
-          unexpectedBetweenAttributesAndModifiers?.raw, 
-          modifiers.raw, 
-          unexpectedBetweenModifiersAndExtensionKeyword?.raw, 
-          extensionKeyword.raw, 
-          unexpectedBetweenExtensionKeywordAndExtendedType?.raw, 
-          extendedType.raw, 
-          unexpectedBetweenExtendedTypeAndInheritanceClause?.raw, 
-          inheritanceClause?.raw, 
-          unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
-          genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw, 
-          memberBlock.raw, 
-          unexpectedAfterMemberBlock?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.extensionDecl,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -2234,6 +2139,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -2278,7 +2184,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -2324,7 +2230,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -2489,13 +2395,13 @@ public struct FallThroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafSt
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [Syntax(unexpectedBeforeFallthroughKeyword), Syntax(fallthroughKeyword), Syntax(unexpectedAfterFallthroughKeyword)]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeFallthroughKeyword, fallthroughKeyword, unexpectedAfterFallthroughKeyword))) { (arena, _) in
-      let layout: [RawSyntax?] = [unexpectedBeforeFallthroughKeyword?.raw, fallthroughKeyword.raw, unexpectedAfterFallthroughKeyword?.raw]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.fallThroughStmt,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -2503,6 +2409,7 @@ public struct FallThroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafSt
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeFallthroughKeyword: UnexpectedNodesSyntax? {
@@ -2564,13 +2471,13 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [Syntax(unexpectedBeforeLiteral), Syntax(literal), Syntax(unexpectedAfterLiteral)]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeLiteral, literal, unexpectedAfterLiteral))) { (arena, _) in
-      let layout: [RawSyntax?] = [unexpectedBeforeLiteral?.raw, literal.raw, unexpectedAfterLiteral?.raw]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.floatLiteralExpr,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -2578,6 +2485,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeLiteral: UnexpectedNodesSyntax? {
@@ -2666,57 +2574,35 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeForKeyword), 
+        Syntax(forKeyword), 
+        Syntax(unexpectedBetweenForKeywordAndTryKeyword), 
+        Syntax(tryKeyword), 
+        Syntax(unexpectedBetweenTryKeywordAndAwaitKeyword), 
+        Syntax(awaitKeyword), 
+        Syntax(unexpectedBetweenAwaitKeywordAndCaseKeyword), 
+        Syntax(caseKeyword), 
+        Syntax(unexpectedBetweenCaseKeywordAndPattern), 
+        Syntax(pattern), 
+        Syntax(unexpectedBetweenPatternAndTypeAnnotation), 
+        Syntax(typeAnnotation), 
+        Syntax(unexpectedBetweenTypeAnnotationAndInKeyword), 
+        Syntax(inKeyword), 
+        Syntax(unexpectedBetweenInKeywordAndSequence), 
+        Syntax(sequence), 
+        Syntax(unexpectedBetweenSequenceAndWhereClause), 
+        Syntax(whereClause), 
+        Syntax(unexpectedBetweenWhereClauseAndBody), 
+        Syntax(body), 
+        Syntax(unexpectedAfterBody)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeForKeyword, 
-            forKeyword, 
-            unexpectedBetweenForKeywordAndTryKeyword, 
-            tryKeyword, 
-            unexpectedBetweenTryKeywordAndAwaitKeyword, 
-            awaitKeyword, 
-            unexpectedBetweenAwaitKeywordAndCaseKeyword, 
-            caseKeyword, 
-            unexpectedBetweenCaseKeywordAndPattern, 
-            pattern, 
-            unexpectedBetweenPatternAndTypeAnnotation, 
-            typeAnnotation, 
-            unexpectedBetweenTypeAnnotationAndInKeyword, 
-            inKeyword, 
-            unexpectedBetweenInKeywordAndSequence, 
-            sequence, 
-            unexpectedBetweenSequenceAndWhereClause, 
-            whereClause, 
-            unexpectedBetweenWhereClauseAndBody, 
-            body, 
-            unexpectedAfterBody
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeForKeyword?.raw, 
-          forKeyword.raw, 
-          unexpectedBetweenForKeywordAndTryKeyword?.raw, 
-          tryKeyword?.raw, 
-          unexpectedBetweenTryKeywordAndAwaitKeyword?.raw, 
-          awaitKeyword?.raw, 
-          unexpectedBetweenAwaitKeywordAndCaseKeyword?.raw, 
-          caseKeyword?.raw, 
-          unexpectedBetweenCaseKeywordAndPattern?.raw, 
-          pattern.raw, 
-          unexpectedBetweenPatternAndTypeAnnotation?.raw, 
-          typeAnnotation?.raw, 
-          unexpectedBetweenTypeAnnotationAndInKeyword?.raw, 
-          inKeyword.raw, 
-          unexpectedBetweenInKeywordAndSequence?.raw, 
-          sequence.raw, 
-          unexpectedBetweenSequenceAndWhereClause?.raw, 
-          whereClause?.raw, 
-          unexpectedBetweenWhereClauseAndBody?.raw, 
-          body.raw, 
-          unexpectedAfterBody?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.forStmt,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -2724,6 +2610,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeForKeyword: UnexpectedNodesSyntax? {
@@ -2984,25 +2871,19 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeExpression), 
+        Syntax(expression), 
+        Syntax(unexpectedBetweenExpressionAndExclamationMark), 
+        Syntax(exclamationMark), 
+        Syntax(unexpectedAfterExclamationMark)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeExpression, 
-            expression, 
-            unexpectedBetweenExpressionAndExclamationMark, 
-            exclamationMark, 
-            unexpectedAfterExclamationMark
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeExpression?.raw, 
-          expression.raw, 
-          unexpectedBetweenExpressionAndExclamationMark?.raw, 
-          exclamationMark.raw, 
-          unexpectedAfterExclamationMark?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.forceUnwrapExpr,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -3010,6 +2891,7 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeExpression: UnexpectedNodesSyntax? {
@@ -3110,41 +2992,27 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeCalledExpression), 
+        Syntax(calledExpression), 
+        Syntax(unexpectedBetweenCalledExpressionAndLeftParen), 
+        Syntax(leftParen), 
+        Syntax(unexpectedBetweenLeftParenAndArguments), 
+        Syntax(arguments), 
+        Syntax(unexpectedBetweenArgumentsAndRightParen), 
+        Syntax(rightParen), 
+        Syntax(unexpectedBetweenRightParenAndTrailingClosure), 
+        Syntax(trailingClosure), 
+        Syntax(unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures), 
+        Syntax(additionalTrailingClosures), 
+        Syntax(unexpectedAfterAdditionalTrailingClosures)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeCalledExpression, 
-            calledExpression, 
-            unexpectedBetweenCalledExpressionAndLeftParen, 
-            leftParen, 
-            unexpectedBetweenLeftParenAndArguments, 
-            arguments, 
-            unexpectedBetweenArgumentsAndRightParen, 
-            rightParen, 
-            unexpectedBetweenRightParenAndTrailingClosure, 
-            trailingClosure, 
-            unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures, 
-            additionalTrailingClosures, 
-            unexpectedAfterAdditionalTrailingClosures
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeCalledExpression?.raw, 
-          calledExpression.raw, 
-          unexpectedBetweenCalledExpressionAndLeftParen?.raw, 
-          leftParen?.raw, 
-          unexpectedBetweenLeftParenAndArguments?.raw, 
-          arguments.raw, 
-          unexpectedBetweenArgumentsAndRightParen?.raw, 
-          rightParen?.raw, 
-          unexpectedBetweenRightParenAndTrailingClosure?.raw, 
-          trailingClosure?.raw, 
-          unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures?.raw, 
-          additionalTrailingClosures.raw, 
-          unexpectedAfterAdditionalTrailingClosures?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.functionCallExpr,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -3152,6 +3020,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? {
@@ -3226,7 +3095,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -3310,7 +3179,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.multipleTrailingClosureElementList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -3423,49 +3292,31 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeAttributes), 
+        Syntax(attributes), 
+        Syntax(unexpectedBetweenAttributesAndModifiers), 
+        Syntax(modifiers), 
+        Syntax(unexpectedBetweenModifiersAndFuncKeyword), 
+        Syntax(funcKeyword), 
+        Syntax(unexpectedBetweenFuncKeywordAndName), 
+        Syntax(name), 
+        Syntax(unexpectedBetweenNameAndGenericParameterClause), 
+        Syntax(genericParameterClause), 
+        Syntax(unexpectedBetweenGenericParameterClauseAndSignature), 
+        Syntax(signature), 
+        Syntax(unexpectedBetweenSignatureAndGenericWhereClause), 
+        Syntax(genericWhereClause), 
+        Syntax(unexpectedBetweenGenericWhereClauseAndBody), 
+        Syntax(body), 
+        Syntax(unexpectedAfterBody)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAttributes, 
-            attributes, 
-            unexpectedBetweenAttributesAndModifiers, 
-            modifiers, 
-            unexpectedBetweenModifiersAndFuncKeyword, 
-            funcKeyword, 
-            unexpectedBetweenFuncKeywordAndName, 
-            name, 
-            unexpectedBetweenNameAndGenericParameterClause, 
-            genericParameterClause, 
-            unexpectedBetweenGenericParameterClauseAndSignature, 
-            signature, 
-            unexpectedBetweenSignatureAndGenericWhereClause, 
-            genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndBody, 
-            body, 
-            unexpectedAfterBody
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeAttributes?.raw, 
-          attributes.raw, 
-          unexpectedBetweenAttributesAndModifiers?.raw, 
-          modifiers.raw, 
-          unexpectedBetweenModifiersAndFuncKeyword?.raw, 
-          funcKeyword.raw, 
-          unexpectedBetweenFuncKeywordAndName?.raw, 
-          name.raw, 
-          unexpectedBetweenNameAndGenericParameterClause?.raw, 
-          genericParameterClause?.raw, 
-          unexpectedBetweenGenericParameterClauseAndSignature?.raw, 
-          signature.raw, 
-          unexpectedBetweenSignatureAndGenericWhereClause?.raw, 
-          genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndBody?.raw, 
-          body?.raw, 
-          unexpectedAfterBody?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.functionDecl,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -3473,6 +3324,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -3509,7 +3361,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -3555,7 +3407,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -3758,25 +3610,19 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeAsyncSpecifier), 
+        Syntax(asyncSpecifier), 
+        Syntax(unexpectedBetweenAsyncSpecifierAndThrowsClause), 
+        Syntax(throwsClause), 
+        Syntax(unexpectedAfterThrowsClause)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAsyncSpecifier, 
-            asyncSpecifier, 
-            unexpectedBetweenAsyncSpecifierAndThrowsClause, 
-            throwsClause, 
-            unexpectedAfterThrowsClause
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeAsyncSpecifier?.raw, 
-          asyncSpecifier?.raw, 
-          unexpectedBetweenAsyncSpecifierAndThrowsClause?.raw, 
-          throwsClause?.raw, 
-          unexpectedAfterThrowsClause?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.functionEffectSpecifiers,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -3784,6 +3630,7 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeAsyncSpecifier: UnexpectedNodesSyntax? {
@@ -3885,29 +3732,21 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeLeftParen), 
+        Syntax(leftParen), 
+        Syntax(unexpectedBetweenLeftParenAndParameters), 
+        Syntax(parameters), 
+        Syntax(unexpectedBetweenParametersAndRightParen), 
+        Syntax(rightParen), 
+        Syntax(unexpectedAfterRightParen)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLeftParen, 
-            leftParen, 
-            unexpectedBetweenLeftParenAndParameters, 
-            parameters, 
-            unexpectedBetweenParametersAndRightParen, 
-            rightParen, 
-            unexpectedAfterRightParen
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeLeftParen?.raw, 
-          leftParen.raw, 
-          unexpectedBetweenLeftParenAndParameters?.raw, 
-          parameters.raw, 
-          unexpectedBetweenParametersAndRightParen?.raw, 
-          rightParen.raw, 
-          unexpectedAfterRightParen?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.functionParameterClause,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -3915,6 +3754,7 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
@@ -3971,7 +3811,7 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.functionParameterList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -4089,53 +3929,33 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeAttributes), 
+        Syntax(attributes), 
+        Syntax(unexpectedBetweenAttributesAndModifiers), 
+        Syntax(modifiers), 
+        Syntax(unexpectedBetweenModifiersAndFirstName), 
+        Syntax(firstName), 
+        Syntax(unexpectedBetweenFirstNameAndSecondName), 
+        Syntax(secondName), 
+        Syntax(unexpectedBetweenSecondNameAndColon), 
+        Syntax(colon), 
+        Syntax(unexpectedBetweenColonAndType), 
+        Syntax(type), 
+        Syntax(unexpectedBetweenTypeAndEllipsis), 
+        Syntax(ellipsis), 
+        Syntax(unexpectedBetweenEllipsisAndDefaultValue), 
+        Syntax(defaultValue), 
+        Syntax(unexpectedBetweenDefaultValueAndTrailingComma), 
+        Syntax(trailingComma), 
+        Syntax(unexpectedAfterTrailingComma)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAttributes, 
-            attributes, 
-            unexpectedBetweenAttributesAndModifiers, 
-            modifiers, 
-            unexpectedBetweenModifiersAndFirstName, 
-            firstName, 
-            unexpectedBetweenFirstNameAndSecondName, 
-            secondName, 
-            unexpectedBetweenSecondNameAndColon, 
-            colon, 
-            unexpectedBetweenColonAndType, 
-            type, 
-            unexpectedBetweenTypeAndEllipsis, 
-            ellipsis, 
-            unexpectedBetweenEllipsisAndDefaultValue, 
-            defaultValue, 
-            unexpectedBetweenDefaultValueAndTrailingComma, 
-            trailingComma, 
-            unexpectedAfterTrailingComma
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeAttributes?.raw, 
-          attributes.raw, 
-          unexpectedBetweenAttributesAndModifiers?.raw, 
-          modifiers.raw, 
-          unexpectedBetweenModifiersAndFirstName?.raw, 
-          firstName.raw, 
-          unexpectedBetweenFirstNameAndSecondName?.raw, 
-          secondName?.raw, 
-          unexpectedBetweenSecondNameAndColon?.raw, 
-          colon.raw, 
-          unexpectedBetweenColonAndType?.raw, 
-          type.raw, 
-          unexpectedBetweenTypeAndEllipsis?.raw, 
-          ellipsis?.raw, 
-          unexpectedBetweenEllipsisAndDefaultValue?.raw, 
-          defaultValue?.raw, 
-          unexpectedBetweenDefaultValueAndTrailingComma?.raw, 
-          trailingComma?.raw, 
-          unexpectedAfterTrailingComma?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.functionParameter,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -4143,6 +3963,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
@@ -4179,7 +4000,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -4225,7 +4046,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(
@@ -4469,29 +4290,21 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeParameterClause), 
+        Syntax(parameterClause), 
+        Syntax(unexpectedBetweenParameterClauseAndEffectSpecifiers), 
+        Syntax(effectSpecifiers), 
+        Syntax(unexpectedBetweenEffectSpecifiersAndReturnClause), 
+        Syntax(returnClause), 
+        Syntax(unexpectedAfterReturnClause)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeParameterClause, 
-            parameterClause, 
-            unexpectedBetweenParameterClauseAndEffectSpecifiers, 
-            effectSpecifiers, 
-            unexpectedBetweenEffectSpecifiersAndReturnClause, 
-            returnClause, 
-            unexpectedAfterReturnClause
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeParameterClause?.raw, 
-          parameterClause.raw, 
-          unexpectedBetweenParameterClauseAndEffectSpecifiers?.raw, 
-          effectSpecifiers?.raw, 
-          unexpectedBetweenEffectSpecifiersAndReturnClause?.raw, 
-          returnClause?.raw, 
-          unexpectedAfterReturnClause?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.functionSignature,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -4499,6 +4312,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeParameterClause: UnexpectedNodesSyntax? {
@@ -4616,37 +4430,25 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       trailingTrivia: Trivia? = nil
     
   ) {
+    let nodes: [Syntax?] = [
+        Syntax(unexpectedBeforeLeftParen), 
+        Syntax(leftParen), 
+        Syntax(unexpectedBetweenLeftParenAndParameters), 
+        Syntax(parameters), 
+        Syntax(unexpectedBetweenParametersAndRightParen), 
+        Syntax(rightParen), 
+        Syntax(unexpectedBetweenRightParenAndEffectSpecifiers), 
+        Syntax(effectSpecifiers), 
+        Syntax(unexpectedBetweenEffectSpecifiersAndReturnClause), 
+        Syntax(returnClause), 
+        Syntax(unexpectedAfterReturnClause)
+      ]
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
-    self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLeftParen, 
-            leftParen, 
-            unexpectedBetweenLeftParenAndParameters, 
-            parameters, 
-            unexpectedBetweenParametersAndRightParen, 
-            rightParen, 
-            unexpectedBetweenRightParenAndEffectSpecifiers, 
-            effectSpecifiers, 
-            unexpectedBetweenEffectSpecifiersAndReturnClause, 
-            returnClause, 
-            unexpectedAfterReturnClause
-          ))) { (arena, _) in
-      let layout: [RawSyntax?] = [
-          unexpectedBeforeLeftParen?.raw, 
-          leftParen.raw, 
-          unexpectedBetweenLeftParenAndParameters?.raw, 
-          parameters.raw, 
-          unexpectedBetweenParametersAndRightParen?.raw, 
-          rightParen.raw, 
-          unexpectedBetweenRightParenAndEffectSpecifiers?.raw, 
-          effectSpecifiers?.raw, 
-          unexpectedBetweenEffectSpecifiersAndReturnClause?.raw, 
-          returnClause.raw, 
-          unexpectedAfterReturnClause?.raw
-        ]
+    self = withExtendedLifetime(SyntaxArena()) { (arena) in
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.functionType,
-        from: layout,
+        from: nodes,
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
@@ -4654,6 +4456,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))
   }
   
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
@@ -4710,7 +4513,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       collection = col.layoutView!.appending(element.raw, arena: arena)
     } else {
       collection = RawSyntax.makeLayout(kind: SyntaxKind.tupleTypeElementList,
-                                        from: [element.raw], arena: arena)
+                                        from: [Syntax(element)], arena: arena)
     }
     return Syntax(self)
       .replacingChild(

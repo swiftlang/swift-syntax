@@ -23,10 +23,47 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   final class Info: @unchecked Sendable {
     // For root node.
     struct Root: Sendable {
-      private var arena: RetainedSyntaxArena
+      private let arena: RetainedSyntaxArena
+      var syntaxTracking: SyntaxTracking?
 
-      init(arena: RetainedSyntaxArena) {
+      init(arena: RetainedSyntaxArena, syntaxTracking: SyntaxTracking?) {
         self.arena = arena
+        self.syntaxTracking = syntaxTracking
+      }
+    }
+
+    /// Class that owns a `Root`, is responsible for keeping it alive and also offers an unsafe pointer way to
+    /// access it.
+    ///
+    /// This way, the root node of a tree can own the root info and all other nodes in the tree can have an unsafe
+    /// pointer reference to the root info, which doesn't involve ref counting.
+    final class RefCountedRoot: Sendable {
+      /// `nonisolated(unsafe)` if fine because there are only two ways this gets accessed:
+      ///  - `pointer`: Here we reference `value` via inout to get a pointer to `Root` but the pointer is not mutable
+      ///    so no mutation happens here
+      #if swift(>=6)
+      private nonisolated(unsafe) var value: Root
+      #else
+      private var value: Root
+      #endif
+
+      fileprivate init(_ value: Root) {
+        self.value = value
+      }
+
+      fileprivate var pointer: UnsafePointer<Root> {
+        return withUnsafePointer(to: &value) { $0 }
+      }
+
+      /// Get a reference to the root info which can be mutated.
+      ///
+      ///  - Warning: This must only be used if the caller is guaranteed to have exclusive access to the tree and no
+      ///    concurrent accesses can happen. Effectively, this can only be guaranteed if the tree has just been created,
+      ///    and it hasn't been returned to any function which might concurrently access it.
+      ///    In practice, this should only be used to set the `SyntaxTracking` on the root after a new tree has been
+      ///    created (eg. by replacing a child in an existing tree) but before that new tree is returned to the client.
+      fileprivate var mutablePointer: UnsafeMutablePointer<Root> {
+        return withUnsafeMutablePointer(to: &value) { $0 }
       }
     }
 
@@ -34,10 +71,23 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     struct NonRoot: Sendable {
       var parent: Syntax
       var absoluteInfo: AbsoluteSyntaxInfo
+      // `nonisolated(unsafe)` is fine because `Root` is owned by `RefCountedRoot` and `RefCountedRoot` guarantees that
+      // `Root` is not changing after the tree has been created.
+      #if swift(>=6)
+      nonisolated(unsafe) var rootInfo: UnsafePointer<Root>
+      #else
+      var rootInfo: UnsafePointer<Root>
+      #endif
+
+      init(parent: Syntax, absoluteInfo: AbsoluteSyntaxInfo, rootInfo: UnsafePointer<Root>) {
+        self.parent = parent
+        self.absoluteInfo = absoluteInfo
+        self.rootInfo = rootInfo
+      }
     }
 
     enum InfoImpl: Sendable {
-      case root(Root)
+      case root(RefCountedRoot)
       case nonRoot(NonRoot)
     }
 
@@ -67,10 +117,24 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   var info: Info!
   let raw: RawSyntax
 
-  private var rootInfo: Info.Root {
+  var rootInfo: UnsafePointer<Info.Root> {
     switch info.info! {
-    case .root(let info): return info
+    case .root(let info): return info.pointer
     case .nonRoot(let info): return info.parent.rootInfo
+    }
+  }
+
+  /// Get a reference to the root info which can be mutated.
+  ///
+  ///  - Warning: This must only be used if the caller is guaranteed to have exclusive access to the tree and no
+  ///    concurrent accesses can happen. Effectively, this can only be guaranteed if the tree has just been created,
+  ///    and it hasn't been returned to any function which might concurrently access it.
+  ///    In practice, this should only be used to set the `SyntaxTracking` on the root after a new tree has been
+  ///    created (eg. by replacing a child in an existing tree) but before that new tree is returned to the client.
+  var mutableRootInfo: UnsafeMutablePointer<Info.Root> {
+    switch info.info! {
+    case .root(let info): return info.mutablePointer
+    case .nonRoot(let info): return info.parent.mutableRootInfo
     }
   }
 
@@ -108,6 +172,20 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     absoluteInfo.nodeId
   }
 
+  var syntaxTracking: SyntaxTracking? {
+    rootInfo.pointee.syntaxTracking
+  }
+
+  /// Set the translation ranges of the entire tree.
+  ///
+  ///  - Warning: This must only be used if the caller is guaranteed to have exclusive access to the tree and no
+  ///    concurrent accesses can happen. Effectively, this can only be guaranteed if the tree has just been created,
+  ///    and it hasn't been returned to any function which might concurrently access it.
+  func setSyntaxTrackingOfTree(_ syntaxTracking: SyntaxTracking?) {
+    precondition(rootInfo.pointee.syntaxTracking == nil)
+    mutableRootInfo.pointee.syntaxTracking = syntaxTracking
+  }
+
   /// The position of the start of this node's leading trivia
   public var position: AbsolutePosition {
     AbsolutePosition(utf8Offset: Int(absoluteInfo.offset))
@@ -135,7 +213,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   }
 
   init(_ raw: RawSyntax, parent: Syntax, absoluteInfo: AbsoluteSyntaxInfo) {
-    self.init(raw, info: Info(.nonRoot(.init(parent: parent, absoluteInfo: absoluteInfo))))
+    self.init(raw, info: Info(.nonRoot(.init(parent: parent, absoluteInfo: absoluteInfo, rootInfo: parent.rootInfo))))
   }
 
   /// Creates a `Syntax` with the provided raw syntax and parent.
@@ -155,12 +233,22 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   ///     has a chance to retain it.
   static func forRoot(_ raw: RawSyntax, rawNodeArena: RetainedSyntaxArena) -> Syntax {
     precondition(rawNodeArena == raw.arenaReference)
-    return Syntax(raw, info: Info(.root(.init(arena: rawNodeArena))))
+    return Syntax(
+      raw,
+      info: Info(.root(Syntax.Info.RefCountedRoot(Syntax.Info.Root(arena: rawNodeArena, syntaxTracking: nil))))
+    )
   }
 
   static func forRoot(_ raw: RawSyntax, rawNodeArena: SyntaxArena) -> Syntax {
     precondition(rawNodeArena == raw.arenaReference)
-    return Syntax(raw, info: Info(.root(.init(arena: RetainedSyntaxArena(rawNodeArena)))))
+    return Syntax(
+      raw,
+      info: Info(
+        .root(
+          Syntax.Info.RefCountedRoot(Syntax.Info.Root(arena: RetainedSyntaxArena(rawNodeArena), syntaxTracking: nil))
+        )
+      )
+    )
   }
 
   /// Returns the child data at the provided index in this data's layout.
@@ -256,12 +344,23 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   /// `newChild` has been addded to the result.
   func replacingChild(at index: Int, with newChild: Syntax?, arena: SyntaxArena) -> Syntax {
     return withExtendedLifetime(newChild) {
-      return replacingChild(
+      let result = replacingChild(
         at: index,
         with: newChild?.raw,
         rawNodeArena: newChild?.raw.arenaReference.retained,
         allocationArena: arena
       )
+      if trackedTree != nil {
+        var iter = RawSyntaxChildren(absoluteRaw).makeIterator()
+        for _ in 0..<index { _ = iter.next() }
+        let (raw, info) = iter.next()!
+        result.mutableRootInfo.pointee.syntaxTracking = syntaxTracking?.replacing(
+          oldIndexInTree: info.nodeId.indexInTree,
+          oldTotalNodes: raw?.totalNodes ?? 0,
+          by: newChild
+        )
+      }
+      return result
     }
   }
 

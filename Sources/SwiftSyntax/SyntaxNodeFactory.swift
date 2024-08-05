@@ -65,7 +65,7 @@ struct SyntaxNodeFactory {
   @inline(__always)
   func create(parent: Syntax, raw: RawSyntax, absoluteInfo: AbsoluteSyntaxInfo) -> Syntax {
     if let info = syntaxInfoRepo.pop() {
-      info.info = .nonRoot(.init(parent: parent, absoluteInfo: absoluteInfo))
+      info.info = .nonRoot(.init(parent: parent, absoluteInfo: absoluteInfo, rootInfo: parent.rootInfo))
       return Syntax(raw, info: info)
     } else {
       return Syntax(raw, parent: parent, absoluteInfo: absoluteInfo)

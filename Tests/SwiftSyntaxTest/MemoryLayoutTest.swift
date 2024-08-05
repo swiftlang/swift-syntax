@@ -34,8 +34,8 @@ final class MemoryLayoutTest: XCTestCase {
 
       "Syntax": .init(size: 16, stride: 16, alignment: 8),
       "Syntax.Info": .init(size: 8, stride: 8, alignment: 8),
-      "Syntax.Info.Root": .init(size: 8, stride: 8, alignment: 8),
-      "Syntax.Info.NonRoot": .init(size: 36, stride: 40, alignment: 8),
+      "Syntax.Info.Root": .init(size: 24, stride: 24, alignment: 8),
+      "Syntax.Info.NonRoot": .init(size: 48, stride: 48, alignment: 8),
     ]
 
     let values = SyntaxMemoryLayout.values

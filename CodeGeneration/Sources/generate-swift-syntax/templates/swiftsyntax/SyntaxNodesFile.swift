@@ -60,53 +60,44 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           \(node.generateInitializerDeclHeader())
           """
         ) {
-          let parameters = ClosureParameterListSyntax {
-            for child in node.children {
-              ClosureParameterSyntax(firstName: child.varOrCaseName.backtickedIfNeeded)
-            }
-          }
-
           let closureSignature = ClosureSignatureSyntax(
             parameterClause: .parameterClause(
               ClosureParameterClauseSyntax(
                 parameters: ClosureParameterListSyntax {
-                  ClosureParameterSyntax(firstName: .identifier("arena"))
-                  ClosureParameterSyntax(firstName: .wildcardToken())
+                  ClosureParameterSyntax(firstName: "arena")
                 }
               )
             )
           )
-          let layoutList = ArrayExprSyntax {
-            for child in node.children {
-              ArrayElementSyntax(
-                expression: MemberAccessExprSyntax(
-                  base: child.buildableType.optionalChained(
-                    expr: ExprSyntax("\(child.varOrCaseName.backtickedIfNeeded)")
-                  ),
-                  period: .periodToken(),
-                  name: "raw"
-                )
-              )
-            }
-          }
+          VariableDeclSyntax(
+            .let,
+            name: "nodes",
+            type: TypeAnnotationSyntax(type: TypeSyntax("[Syntax?]")),
+            initializer: InitializerClauseSyntax(
+              value: ArrayExprSyntax {
+                for child in node.children {
+                  ArrayElementSyntax(expression: ExprSyntax("Syntax(\(child.varOrCaseName.backtickedIfNeeded))"))
+                }
+              }
+            )
+          )
 
           let initializer = FunctionCallExprSyntax(
             calledExpression: ExprSyntax("withExtendedLifetime"),
             leftParen: .leftParenToken(),
             arguments: LabeledExprListSyntax {
-              LabeledExprSyntax(expression: ExprSyntax("(SyntaxArena(), (\(parameters)))"))
+              LabeledExprSyntax(expression: ExprSyntax("SyntaxArena()"))
             },
             rightParen: .rightParenToken(),
             trailingClosure: ClosureExprSyntax(signature: closureSignature) {
               if node.children.isEmpty {
                 DeclSyntax("let raw = RawSyntax.makeEmptyLayout(kind: SyntaxKind.\(node.varOrCaseName), arena: arena)")
               } else {
-                DeclSyntax("let layout: [RawSyntax?] = \(layoutList)")
                 DeclSyntax(
                   """
                   let raw = RawSyntax.makeLayout(
                     kind: SyntaxKind.\(node.varOrCaseName),
-                    from: layout,
+                    from: nodes,
                     arena: arena,
                     leadingTrivia: leadingTrivia,
                     trailingTrivia: trailingTrivia
@@ -128,6 +119,8 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             operator: ExprSyntax(AssignmentExprSyntax()),
             rightOperand: initializer
           )
+
+          ExprSyntax("Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: nodes))")
         }
 
         for (index, child) in node.children.enumerated() {
@@ -188,7 +181,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
                   collection = col.layoutView!.appending(element.raw, arena: arena)
                 } else {
                   collection = RawSyntax.makeLayout(kind: SyntaxKind.\(childNode.varOrCaseName),
-                                                    from: [element.raw], arena: arena)
+                                                    from: [Syntax(element)], arena: arena)
                 }
                 return Syntax(self)
                   .replacingChild(at: \(raw: index), with: collection, rawNodeArena: arena, allocationArena: arena)

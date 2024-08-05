@@ -45,11 +45,12 @@ extension SyntaxCollection {
     let raw = withExtendedLifetime(children) {
       RawSyntax.makeLayout(
         kind: Self.syntaxKind,
-        from: children.map { $0.raw },
+        from: children.map { Syntax($0) },
         arena: arena
       )
     }
     self = Syntax.forRoot(raw, rawNodeArena: RetainedSyntaxArena(arena)).cast(Self.self)
+    Syntax(self).setSyntaxTrackingOfTree(SyntaxTracking(tracking: children.map { Syntax($0) }))
   }
 
   public init(arrayLiteral elements: Element...) {
@@ -266,7 +267,29 @@ extension SyntaxCollection {
       let layoutRangeLowerBound = (subrange.lowerBound.data?.indexInParent).map(Int.init) ?? newLayout.endIndex
       let layoutRangeUpperBound = (subrange.upperBound.data?.indexInParent).map(Int.init) ?? newLayout.endIndex
       newLayout.replaceSubrange(layoutRangeLowerBound..<layoutRangeUpperBound, with: newElements.map { $0.raw })
-      self = replacingLayout(newLayout)
+      if var newSyntaxTracking = Syntax(self).syntaxTracking {
+        // Perform the tracking transformation in two steps.
+        // 1. Remove all old elements
+        newSyntaxTracking = newSyntaxTracking.replacing(
+          oldIndexInTree: subrange.lowerBound.data!.indexInTree,
+          oldTotalNodes: Int(
+            subrange.upperBound.data!.indexInTree.indexInTree - subrange.lowerBound.data!.indexInTree.indexInTree
+          ),
+          by: nil
+        )
+        // 2. Now insert all the new elements.
+        for element in newElements.reversed() {
+          newSyntaxTracking = newSyntaxTracking.replacing(
+            oldIndexInTree: subrange.lowerBound.data!.indexInTree,
+            oldTotalNodes: 0,
+            by: Syntax(element)
+          )
+        }
+        self = replacingLayout(newLayout)
+        Syntax(self).setSyntaxTrackingOfTree(newSyntaxTracking)
+      } else {
+        self = replacingLayout(newLayout)
+      }
     }
   }
 

@@ -157,7 +157,7 @@ final class AccessorMacroTests: XCTestCase {
       """,
       expandedSource: """
         var x: Int { // hello
-          get { 1 }
+        get { 1 }
         }
         """,
       macros: ["constantOne": ConstantOneSingleLineGetter.self],

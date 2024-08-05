@@ -156,7 +156,7 @@ final class BodyMacroTests: XCTestCase {
     )
   }
 
-  func testBodyNodeLocationFromContext() {
+  func testDontAddIndentationWhenCollapsingBody() {
     struct SourceLocationMacro: BodyMacro {
       public static var formatMode: FormatMode { .disabled }
 
@@ -168,17 +168,17 @@ final class BodyMacroTests: XCTestCase {
         guard let statements = declaration.body?.statements else {
           return []
         }
-        let body =
-          if let location = context.location(of: statements, at: .afterLeadingTrivia, filePathMode: .filePath) {
+        if let location = context.location(of: statements, at: .afterLeadingTrivia, filePathMode: .filePath) {
+          return statements.flatMap { statement in
             CodeBlockItemListSyntax {
               "#sourceLocation(file: \(location.file), line: \(location.line))"
-              statements
+              statement.trimmed(matching: \.isNewline)
               "#sourceLocation()"
             }
-          } else {
-            statements
           }
-        return Array(body)
+        } else {
+          return Array(statements)
+        }
       }
     }
 
@@ -186,19 +186,17 @@ final class BodyMacroTests: XCTestCase {
       """
       @SourceLocationMacro
       func f() {
-        let x: Int = 1
+              let x: Int = 1
       }
       """,
-      expandedSource:
-        """
+      expandedSource: """
         func f() {
-          #sourceLocation(file: "test.swift", line: 3)
-          let x: Int = 1
-          #sourceLocation()
+        #sourceLocation(file: "test.swift", line: 3)
+                let x: Int = 1
+        #sourceLocation()
         }
         """,
-      macros: ["SourceLocationMacro": SourceLocationMacro.self],
-      indentationWidth: indentationWidth
+      macros: ["SourceLocationMacro": SourceLocationMacro.self]
     )
   }
 }

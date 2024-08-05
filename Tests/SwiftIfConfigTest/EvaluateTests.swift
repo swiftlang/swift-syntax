@@ -387,6 +387,11 @@ public class EvaluateTests: XCTestCase {
         )
       ]
     )
+
+    assertIfConfig(
+      "canImport(SwiftSyntax) || canImport(ExplodingModule)",
+      .active
+    )
   }
 
   func testLikelySimulatorEnvironment() throws {

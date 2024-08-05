@@ -132,52 +132,63 @@ func evaluateIfConfig(
     }
 
     // Evaluate the left-hand side.
-    let (lhsActive, lhssyntaxErrorsAllowed, lhsDiagnostics) = evaluateIfConfig(
+    let (lhsActive, lhsSyntaxErrorsAllowed, lhsDiagnostics) = evaluateIfConfig(
       condition: binOp.leftOperand,
       configuration: configuration,
       outermostCondition: false
     )
 
-    // Short-circuit evaluation if we know the answer and the left-hand side
-    // was syntaxErrorsAllowed.
-    if lhssyntaxErrorsAllowed {
-      switch (lhsActive, op.operator.text) {
-      case (true, "||"):
-        return (
-          active: true,
-          syntaxErrorsAllowed: lhssyntaxErrorsAllowed,
-          diagnostics: extraDiagnostics + lhsDiagnostics
-        )
-      case (false, "&&"):
-        return (
-          active: false,
-          syntaxErrorsAllowed: lhssyntaxErrorsAllowed,
-          diagnostics: extraDiagnostics + lhsDiagnostics
-        )
-      default:
-        break
-      }
+    // Short-circuit evaluation if we know the answer. We still recurse into
+    // the right-hand side, but with a dummy configuration that won't have
+    // side effects, so we only get validation-related errors.
+    let shortCircuitResult: Bool?
+    switch (lhsActive, op.operator.text) {
+    case (true, "||"): shortCircuitResult = true
+    case (false, "&&"): shortCircuitResult = false
+    default: shortCircuitResult = nil
+    }
+
+    // If we are supposed to short-circuit and the left-hand side of this
+    // operator with inactive &&, stop now: we shouldn't evaluate the right-
+    // hand side at all.
+    if let isActive = shortCircuitResult, lhsSyntaxErrorsAllowed {
+      return (
+        active: isActive,
+        syntaxErrorsAllowed: lhsSyntaxErrorsAllowed,
+        diagnostics: extraDiagnostics + lhsDiagnostics
+      )
     }
 
     // Evaluate the right-hand side.
-    let (rhsActive, rhssyntaxErrorsAllowed, rhsDiagnostics) = evaluateIfConfig(
-      condition: binOp.rightOperand,
-      configuration: configuration,
-      outermostCondition: false
-    )
+    let rhsActive: Bool
+    let rhsSyntaxErrorsAllowed: Bool
+    let rhsDiagnostics: [Diagnostic]
+    if shortCircuitResult != nil {
+      (rhsActive, rhsSyntaxErrorsAllowed, rhsDiagnostics) = evaluateIfConfig(
+        condition: binOp.rightOperand,
+        configuration: CanImportSuppressingBuildConfiguration(other: configuration),
+        outermostCondition: false
+      )
+    } else {
+      (rhsActive, rhsSyntaxErrorsAllowed, rhsDiagnostics) = evaluateIfConfig(
+        condition: binOp.rightOperand,
+        configuration: configuration,
+        outermostCondition: false
+      )
+    }
 
     switch op.operator.text {
     case "||":
       return (
         active: lhsActive || rhsActive,
-        syntaxErrorsAllowed: lhssyntaxErrorsAllowed && rhssyntaxErrorsAllowed,
+        syntaxErrorsAllowed: lhsSyntaxErrorsAllowed && rhsSyntaxErrorsAllowed,
         diagnostics: extraDiagnostics + lhsDiagnostics + rhsDiagnostics
       )
 
     case "&&":
       return (
         active: lhsActive && rhsActive,
-        syntaxErrorsAllowed: lhssyntaxErrorsAllowed || rhssyntaxErrorsAllowed,
+        syntaxErrorsAllowed: lhsSyntaxErrorsAllowed || rhsSyntaxErrorsAllowed,
         diagnostics: extraDiagnostics + lhsDiagnostics + rhsDiagnostics
       )
 
@@ -673,4 +684,56 @@ extension ExprSyntaxProtocol {
 
     return false
   }
+}
+
+/// Build configuration adaptor that suppresses calls to canImport, which
+/// can have side effects. This is somewhat of a hack for the compiler.
+private struct CanImportSuppressingBuildConfiguration<Other: BuildConfiguration>: BuildConfiguration {
+  var other: Other
+
+  func isCustomConditionSet(name: String) throws -> Bool {
+    return try other.isCustomConditionSet(name: name)
+  }
+
+  func hasFeature(name: String) throws -> Bool {
+    return try other.hasFeature(name: name)
+  }
+
+  func hasAttribute(name: String) throws -> Bool {
+    return try other.hasAttribute(name: name)
+  }
+
+  func canImport(importPath: [String], version: CanImportVersion) throws -> Bool {
+    return false
+  }
+
+  func isActiveTargetOS(name: String) throws -> Bool {
+    return try other.isActiveTargetOS(name: name)
+  }
+
+  func isActiveTargetArchitecture(name: String) throws -> Bool {
+    return try other.isActiveTargetArchitecture(name: name)
+  }
+
+  func isActiveTargetEnvironment(name: String) throws -> Bool {
+    return try other.isActiveTargetEnvironment(name: name)
+  }
+
+  func isActiveTargetRuntime(name: String) throws -> Bool {
+    return try other.isActiveTargetRuntime(name: name)
+  }
+
+  func isActiveTargetPointerAuthentication(name: String) throws -> Bool {
+    return try other.isActiveTargetPointerAuthentication(name: name)
+  }
+
+  var targetPointerBitWidth: Int { return other.targetPointerBitWidth }
+
+  var targetAtomicBitWidths: [Int] { return other.targetAtomicBitWidths }
+
+  var endianness: Endianness { return other.endianness }
+
+  var languageVersion: VersionTuple { return other.languageVersion }
+
+  var compilerVersion: VersionTuple { return other.compilerVersion }
 }

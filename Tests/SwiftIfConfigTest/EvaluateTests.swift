@@ -120,6 +120,17 @@ public class EvaluateTests: XCTestCase {
         )
       ]
     )
+    assertIfConfig(
+      "BAR(_:)",
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "invalid conditional compilation expression",
+          line: 1,
+          column: 1
+        )
+      ]
+    )
   }
 
   func testBadExpressions() throws {

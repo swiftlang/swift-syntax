@@ -96,10 +96,9 @@ func evaluateIfConfig(
   }
 
   // Declaration references are for custom compilation flags.
-  if let identExpr = condition.as(DeclReferenceExprSyntax.self) {
-    // FIXME: Need a real notion of an identifier.
-    let ident = identExpr.baseName.text
-
+  if let identExpr = condition.as(DeclReferenceExprSyntax.self),
+    let ident = identExpr.simpleIdentifier
+  {
     // Evaluate the custom condition. If the build configuration cannot answer this query, fail.
     return checkConfiguration(at: identExpr) {
       (active: try configuration.isCustomConditionSet(name: ident), syntaxErrorsAllowed: false)
@@ -497,18 +496,6 @@ private func extractImportPath(_ expression: some ExprSyntaxProtocol) throws -> 
   }
 
   throw IfConfigError.expectedModuleName(syntax: ExprSyntax(expression))
-}
-
-extension DeclReferenceExprSyntax {
-  /// If this declaration reference is a simple identifier, return that
-  /// string.
-  fileprivate var simpleIdentifier: String? {
-    guard argumentNames == nil else {
-      return nil
-    }
-
-    return baseName.text
-  }
 }
 
 /// Determine whether the given condition only involves disjunctions that

@@ -148,6 +148,24 @@ public class EvaluateTests: XCTestCase {
         )
       ]
     )
+
+    assertIfConfig(
+      "A == B",
+      .unparsed,
+      configuration: buildConfig,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected '&&' or '||' expression",
+          line: 1,
+          column: 3
+        ),
+        DiagnosticSpec(
+          message: "invalid conditional compilation expression",
+          line: 1,
+          column: 1
+        ),
+      ]
+    )
   }
 
   func testFeatures() throws {

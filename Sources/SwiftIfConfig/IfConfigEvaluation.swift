@@ -589,6 +589,18 @@ extension IfConfigClauseSyntax {
   ) -> (folded: ExprSyntax, diagnostics: [Diagnostic]) {
     var foldingDiagnostics: [Diagnostic] = []
     let foldedCondition = OperatorTable.logicalOperators.foldAll(condition) { error in
+      // Replace the "unknown infix operator" diagnostic with a custom one
+      // that mentions that only '&&' and '||' are allowed.
+      if case .missingOperator(_, referencedFrom: let syntax) = error,
+        let binOp = syntax.parent?.as(BinaryOperatorExprSyntax.self)
+      {
+
+        foldingDiagnostics.append(
+          IfConfigError.badInfixOperator(syntax: ExprSyntax(binOp)).asDiagnostic
+        )
+        return
+      }
+
       foldingDiagnostics.append(contentsOf: error.asDiagnostics(at: condition))
     }.cast(ExprSyntax.self)
     return (folded: foldedCondition, diagnostics: foldingDiagnostics)

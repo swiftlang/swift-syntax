@@ -391,7 +391,7 @@ public class EvaluateTests: XCTestCase {
 
   func testLikelySimulatorEnvironment() throws {
     assertIfConfig(
-      "((os(iOS) || os(tvOS)) && (arch(i386) || arch(x86_64))) && DEBUG",
+      "((os(iOS) || os(tvOS)) && (arch(i386) || arch(x86_64)))",
       .inactive,
       diagnostics: [
         DiagnosticSpec(
@@ -408,7 +408,12 @@ public class EvaluateTests: XCTestCase {
     )
 
     assertIfConfig(
-      "((os(iOS) || os(tvOS)) && (arch(arm64) || arch(x86_64))) && DEBUG",
+      "((os(iOS) || os(tvOS)) && (arch(arm64) || arch(x86_64)))",
+      .inactive
+    )
+
+    assertIfConfig(
+      "((os(iOS) || os(tvOS)) && (arch(i386) || arch(x86_64))) && DEBUG",
       .inactive
     )
   }

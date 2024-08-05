@@ -30,7 +30,8 @@ import SwiftSyntax
 ///   diagnose syntax errors in blocks where the check fails.
 func evaluateIfConfig(
   condition: ExprSyntax,
-  configuration: some BuildConfiguration
+  configuration: some BuildConfiguration,
+  outermostCondition: Bool = true
 ) -> (active: Bool, syntaxErrorsAllowed: Bool, diagnostics: [Diagnostic]) {
   var extraDiagnostics: [Diagnostic] = []
 
@@ -111,7 +112,8 @@ func evaluateIfConfig(
   {
     let (innerActive, innerSyntaxErrorsAllowed, innerDiagnostics) = evaluateIfConfig(
       condition: prefixOp.expression,
-      configuration: configuration
+      configuration: configuration,
+      outermostCondition: outermostCondition
     )
 
     return (active: !innerActive, syntaxErrorsAllowed: innerSyntaxErrorsAllowed, diagnostics: innerDiagnostics)
@@ -123,14 +125,17 @@ func evaluateIfConfig(
     (op.operator.text == "&&" || op.operator.text == "||")
   {
     // Check whether this was likely to be a check for targetEnvironment(simulator).
-    if let targetEnvironmentDiag = diagnoseLikelySimulatorEnvironmentTest(binOp) {
+    if outermostCondition,
+      let targetEnvironmentDiag = diagnoseLikelySimulatorEnvironmentTest(binOp)
+    {
       extraDiagnostics.append(targetEnvironmentDiag)
     }
 
     // Evaluate the left-hand side.
     let (lhsActive, lhssyntaxErrorsAllowed, lhsDiagnostics) = evaluateIfConfig(
       condition: binOp.leftOperand,
-      configuration: configuration
+      configuration: configuration,
+      outermostCondition: false
     )
 
     // Short-circuit evaluation if we know the answer and the left-hand side
@@ -157,7 +162,8 @@ func evaluateIfConfig(
     // Evaluate the right-hand side.
     let (rhsActive, rhssyntaxErrorsAllowed, rhsDiagnostics) = evaluateIfConfig(
       condition: binOp.rightOperand,
-      configuration: configuration
+      configuration: configuration,
+      outermostCondition: false
     )
 
     switch op.operator.text {
@@ -186,7 +192,8 @@ func evaluateIfConfig(
   {
     return evaluateIfConfig(
       condition: element.expression,
-      configuration: configuration
+      configuration: configuration,
+      outermostCondition: outermostCondition
     )
   }
 

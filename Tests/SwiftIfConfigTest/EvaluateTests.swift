@@ -345,6 +345,19 @@ public class EvaluateTests: XCTestCase {
         )
       ]
     )
+
+    assertIfConfig(
+      "canImport(A(b: 1, c: 2).B.C)",
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected module name",
+          line: 1,
+          column: 11,
+          severity: .error
+        )
+      ]
+    )
   }
 
   func testLikelySimulatorEnvironment() throws {

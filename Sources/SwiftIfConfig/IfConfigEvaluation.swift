@@ -405,9 +405,13 @@ func evaluateIfConfig(
         return recordError(.canImportTwoParameters(syntax: ExprSyntax(call)))
       }
 
-      // FIXME: This is a gross hack. Actually look at the sequence of
-      // `MemberAccessExprSyntax` nodes and pull out the identifiers.
-      let importPath = firstArg.expression.trimmedDescription.split(separator: ".")
+      // Extract the import path.
+      let importPath: [String]
+      do {
+        importPath = try extractImportPath(firstArg.expression)
+      } catch {
+        return recordError(error, at: firstArg.expression)
+      }
 
       // If there is a second argument, it shall have the label _version or
       // _underlyingVersion.
@@ -471,6 +475,40 @@ func evaluateIfConfig(
   }
 
   return recordError(.unknownExpression(condition))
+}
+
+/// Given an expression with the expected form A.B.C, extract the import path
+/// ["A", "B", "C"] from it. Throws an error if the expression doesn't match
+/// this form.
+private func extractImportPath(_ expression: some ExprSyntaxProtocol) throws -> [String] {
+  // Member access.
+  if let memberAccess = expression.as(MemberAccessExprSyntax.self),
+    let base = memberAccess.base,
+    let memberName = memberAccess.declName.simpleIdentifier
+  {
+    return try extractImportPath(base) + [memberName]
+  }
+
+  // Declaration reference.
+  if let declRef = expression.as(DeclReferenceExprSyntax.self),
+    let name = declRef.simpleIdentifier
+  {
+    return [name]
+  }
+
+  throw IfConfigError.expectedModuleName(syntax: ExprSyntax(expression))
+}
+
+extension DeclReferenceExprSyntax {
+  /// If this declaration reference is a simple identifier, return that
+  /// string.
+  fileprivate var simpleIdentifier: String? {
+    guard argumentNames == nil else {
+      return nil
+    }
+
+    return baseName.text
+  }
 }
 
 /// Determine whether the given condition only involves disjunctions that

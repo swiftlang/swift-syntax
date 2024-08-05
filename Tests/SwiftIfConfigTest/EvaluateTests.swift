@@ -158,12 +158,19 @@ public class EvaluateTests: XCTestCase {
           message: "expected '&&' or '||' expression",
           line: 1,
           column: 3
-        ),
+        )
+      ]
+    )
+
+    assertIfConfig(
+      "^DEBUG",
+      .unparsed,
+      diagnostics: [
         DiagnosticSpec(
-          message: "invalid conditional compilation expression",
+          message: "expected unary '!' expression",
           line: 1,
           column: 1
-        ),
+        )
       ]
     )
   }

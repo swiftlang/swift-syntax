@@ -107,9 +107,12 @@ func evaluateIfConfig(
   }
 
   // Logical '!'.
-  if let prefixOp = condition.as(PrefixOperatorExprSyntax.self),
-    prefixOp.operator.text == "!"
-  {
+  if let prefixOp = condition.as(PrefixOperatorExprSyntax.self) {
+    // If this isn't '!', complain.
+    guard prefixOp.operator.text == "!" else {
+      return recordError(.badPrefixOperator(syntax: condition))
+    }
+
     let (innerActive, innerSyntaxErrorsAllowed, innerDiagnostics) = evaluateIfConfig(
       condition: prefixOp.expression,
       configuration: configuration,
@@ -121,9 +124,14 @@ func evaluateIfConfig(
 
   // Logical '&&' and '||'.
   if let binOp = condition.as(InfixOperatorExprSyntax.self),
-    let op = binOp.operator.as(BinaryOperatorExprSyntax.self),
-    (op.operator.text == "&&" || op.operator.text == "||")
+    let op = binOp.operator.as(BinaryOperatorExprSyntax.self)
   {
+    // If this is neither && nor ||, it was already diagnosed as part of
+    // operator folding. Just return this as inactive.
+    guard op.operator.text == "&&" || op.operator.text == "||" else {
+      return (active: false, syntaxErrorsAllowed: true, diagnostics: extraDiagnostics)
+    }
+
     // Check whether this was likely to be a check for targetEnvironment(simulator).
     if outermostCondition,
       let targetEnvironmentDiag = diagnoseLikelySimulatorEnvironmentTest(binOp)

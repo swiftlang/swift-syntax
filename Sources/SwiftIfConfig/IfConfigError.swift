@@ -35,6 +35,7 @@ enum IfConfigError: Error, CustomStringConvertible {
   case macabiIsMacCatalyst(syntax: ExprSyntax)
   case expectedModuleName(syntax: ExprSyntax)
   case badInfixOperator(syntax: ExprSyntax)
+  case badPrefixOperator(syntax: ExprSyntax)
 
   var description: String {
     switch self {
@@ -97,6 +98,9 @@ enum IfConfigError: Error, CustomStringConvertible {
 
     case .badInfixOperator:
       return "expected '&&' or '||' expression"
+
+    case .badPrefixOperator:
+      return "expected unary '!' expression"
     }
   }
 
@@ -120,7 +124,8 @@ enum IfConfigError: Error, CustomStringConvertible {
       .endiannessDoesNotMatch(syntax: let syntax, argument: _),
       .macabiIsMacCatalyst(syntax: let syntax),
       .expectedModuleName(syntax: let syntax),
-      .badInfixOperator(syntax: let syntax):
+      .badInfixOperator(syntax: let syntax),
+      .badPrefixOperator(syntax: let syntax):
       return Syntax(syntax)
 
     case .unsupportedVersionOperator(name: _, operator: let op):

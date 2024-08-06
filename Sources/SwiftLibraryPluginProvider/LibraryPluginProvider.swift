@@ -18,6 +18,8 @@ private import _SwiftLibraryPluginProviderCShims
 // because we don't want other modules depend on 'WinSDK'.
 #if canImport(Darwin)
 private import Darwin
+#elseif canImport(Android)
+private import Android
 #elseif canImport(Glibc)
 private import Glibc
 #elseif canImport(Musl)
@@ -29,6 +31,8 @@ import SwiftSyntaxMacros
 @_implementationOnly import _SwiftLibraryPluginProviderCShims
 #if canImport(Darwin)
 @_implementationOnly import Darwin
+#elseif canImport(Android)
+@_implementationOnly import Android
 #elseif canImport(Glibc)
 @_implementationOnly import Glibc
 #elseif canImport(Musl)
@@ -137,7 +141,12 @@ private func _loadLibrary(_ path: String) throws -> UnsafeMutableRawPointer {
 #else
 private func _loadLibrary(_ path: String) throws -> UnsafeMutableRawPointer {
   guard let dlHandle = dlopen(path, RTLD_LAZY | RTLD_LOCAL) else {
-    throw LibraryPluginError(message: "loader error: \(String(cString: dlerror()))")
+#if canImport(Android)
+    let err = String(cString: dlerror()!)
+#else
+    let err = String(cString: dlerror())
+#endif
+    throw LibraryPluginError(message: "loader error: \(err)")
   }
   return dlHandle
 }

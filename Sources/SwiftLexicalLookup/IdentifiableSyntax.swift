@@ -41,3 +41,9 @@ import SwiftSyntax
     expression.as(DeclReferenceExprSyntax.self)!.baseName
   }
 }
+
+@_spi(Experimental) extension AccessorParametersSyntax: IdentifiableSyntax {
+  @_spi(Experimental) public var identifier: TokenSyntax {
+    name
+  }
+}

@@ -12,6 +12,95 @@
 
 import SwiftSyntax
 
+/// An entity that is implicitly declared based on the syntactic structure of the program.
+@_spi(Experimental) public enum ImplicitDecl {
+  /// `self` keyword representing object instance.
+  /// Could be associated with type declaration, extension,
+  /// or closure captures.
+  case `self`(DeclSyntaxProtocol)
+  /// `Self` keyword representing object type.
+  /// Could be associated with type declaration or extension.
+  case `Self`(DeclSyntaxProtocol)
+  /// `error` value caught by a `catch`
+  /// block that does not specify a catch pattern.
+  case error(CatchClauseSyntax)
+  /// `newValue` available by default inside `set` and `willSet`.
+  case newValue(AccessorDeclSyntax)
+  /// `oldValue` available by default inside `didSet`.
+  case oldValue(AccessorDeclSyntax)
+
+  /// Syntax associated with this name.
+  @_spi(Experimental) public var syntax: SyntaxProtocol {
+    switch self {
+    case .self(let syntax):
+      return syntax
+    case .Self(let syntax):
+      return syntax
+    case .error(let syntax):
+      return syntax
+    case .newValue(let syntax):
+      return syntax
+    case .oldValue(let syntax):
+      return syntax
+    }
+  }
+
+  /// The name of the implicit declaration.
+  private var name: String {
+    switch self {
+    case .self:
+      return "self"
+    case .Self:
+      return "Self"
+    case .error:
+      return "error"
+    case .newValue:
+      return "newValue"
+    case .oldValue:
+      return "oldValue"
+    }
+  }
+
+  /// Identifier used for name comparison.
+  ///
+  /// Note that `self` and `Self` are treated as identifiers for name lookup purposes
+  /// and that a variable named `self` can shadow the `self` keyword. For example.
+  /// ```swift
+  /// class Foo {
+  ///     func test() {
+  ///     let `Self` = "abc"
+  ///     print(Self.self)
+  ///
+  ///     let `self` = "def"
+  ///     print(self)
+  ///   }
+  /// }
+  ///
+  /// Foo().test()
+  /// ```
+  /// prints:
+  /// ```
+  /// abc
+  /// def
+  /// ```
+  /// `self` and `Self` identifers override implicit `self` and `Self` introduced by
+  /// the `Foo` class declaration.
+  var identifier: Identifier {
+    switch self {
+    case .self:
+      return Identifier("self")
+    case .Self:
+      return Identifier("Self")
+    case .error:
+      return Identifier("error")
+    case .newValue:
+      return Identifier("newValue")
+    case .oldValue:
+      return Identifier("oldValue")
+    }
+  }
+}
+
 @_spi(Experimental) public enum LookupName {
   /// Identifier associated with the name.
   /// Could be an identifier of a variable, function or closure parameter and more.
@@ -19,6 +108,12 @@ import SwiftSyntax
   /// Declaration associated with the name.
   /// Could be class, struct, actor, protocol, function and more.
   case declaration(NamedDeclSyntax)
+  /// Name introduced implicitly by certain syntax nodes.
+  case implicit(ImplicitDecl)
+  /// Explicit `self` keyword.
+  case `self`(IdentifiableSyntax, accessibleAfter: AbsolutePosition?)
+  /// Explicit `Self` keyword.
+  case `Self`(IdentifiableSyntax, accessibleAfter: AbsolutePosition?)
 
   /// Syntax associated with this name.
   @_spi(Experimental) public var syntax: SyntaxProtocol {
@@ -27,16 +122,26 @@ import SwiftSyntax
       return syntax
     case .declaration(let syntax):
       return syntax
+    case .implicit(let implicitName):
+      return implicitName.syntax
+    case .self(let syntax, _), .Self(let syntax, _):
+      return syntax
     }
   }
 
-  /// Introduced name.
+  /// Identifier used for name comparison.
   @_spi(Experimental) public var identifier: Identifier? {
     switch self {
     case .identifier(let syntax, _):
       return Identifier(syntax.identifier)
     case .declaration(let syntax):
       return Identifier(syntax.name)
+    case .implicit(let kind):
+      return kind.identifier
+    case .self:
+      return Identifier("self")
+    case .Self:
+      return Identifier("Self")
     }
   }
 
@@ -44,7 +149,9 @@ import SwiftSyntax
   /// If set to `nil`, the name is available at any point in scope.
   var accessibleAfter: AbsolutePosition? {
     switch self {
-    case .identifier(_, let absolutePosition):
+    case .identifier(_, let absolutePosition),
+      .self(_, let absolutePosition),
+      .Self(_, let absolutePosition):
       return absolutePosition
     default:
       return nil
@@ -52,15 +159,15 @@ import SwiftSyntax
   }
 
   /// Checks if this name was introduced before the syntax used for lookup.
-  func isAccessible(at lookedUpSyntax: SyntaxProtocol) -> Bool {
+  func isAccessible(at origin: AbsolutePosition) -> Bool {
     guard let accessibleAfter else { return true }
-    return accessibleAfter <= lookedUpSyntax.position
+    return accessibleAfter <= origin
   }
 
   /// Checks if this name refers to the looked up phrase.
-  func refersTo(_ lookedUpName: String) -> Bool {
-    guard let name = identifier?.name else { return false }
-    return name == lookedUpName
+  func refersTo(_ lookedUpIdentifier: Identifier) -> Bool {
+    guard let identifier else { return false }
+    return identifier == lookedUpIdentifier
   }
 
   /// Extracts names introduced by the given `syntax` structure.
@@ -105,10 +212,6 @@ import SwiftSyntax
       return functionCallExpr.arguments.flatMap { argument in
         getNames(from: argument.expression, accessibleAfter: accessibleAfter)
       }
-    case .guardStmt(let guardStmt):
-      return guardStmt.conditions.flatMap { cond in
-        getNames(from: cond.condition, accessibleAfter: cond.endPosition)
-      }
     default:
       if let namedDecl = Syntax(syntax).asProtocol(SyntaxProtocol.self) as? NamedDeclSyntax {
         return handle(namedDecl: namedDecl, accessibleAfter: accessibleAfter)
@@ -121,12 +224,21 @@ import SwiftSyntax
   }
 
   /// Extracts name introduced by `IdentifiableSyntax` node.
-  private static func handle(identifiable: IdentifiableSyntax, accessibleAfter: AbsolutePosition? = nil) -> [LookupName]
-  {
-    if identifiable.identifier.tokenKind != .wildcard {
-      return [.identifier(identifiable, accessibleAfter: accessibleAfter)]
-    } else {
-      return []
+  private static func handle(
+    identifiable: IdentifiableSyntax,
+    accessibleAfter: AbsolutePosition? = nil
+  ) -> [LookupName] {
+    switch identifiable.identifier.tokenKind {
+    case .keyword(.self):
+      return [.self(identifiable, accessibleAfter: accessibleAfter)]
+    case .keyword(.Self):
+      return [.Self(identifiable, accessibleAfter: accessibleAfter)]
+    default:
+      if identifiable.identifier.tokenKind != .wildcard {
+        return [.identifier(identifiable, accessibleAfter: accessibleAfter)]
+      } else {
+        return []
+      }
     }
   }
 

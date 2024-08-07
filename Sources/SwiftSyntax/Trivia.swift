@@ -42,6 +42,68 @@ public struct Trivia: Sendable {
     pieces.isEmpty
   }
 
+  /// The string contents of all the comment pieces with any comments tokens trimmed.
+  ///
+  /// Each element in the array is the trimmed contents of a line comment, or, in the case of a multi-line comment a trimmed, concatenated single string.
+  public var commentValues: [String] {
+    var comments = [String]()
+    var partialComments = [String]()
+
+    var foundStartOfCodeBlock = false
+    var foundEndOfCodeBlock = false
+    var isInCodeBlock: Bool { foundStartOfCodeBlock && !foundEndOfCodeBlock }
+
+    for piece in pieces {
+      switch piece {
+      case .blockComment(let text), .docBlockComment(let text):
+        let text = text.trimmingCharacters(in: "\n")
+
+        foundStartOfCodeBlock = text.hasPrefix("/*")
+        foundEndOfCodeBlock = text.hasSuffix("*/")
+
+        let sanitized =
+          text
+          .split(separator: "\n")
+          .map { $0.trimmingAnyCharacters(in: "/*").trimmingAnyCharacters(in: " ") }
+          .filter { !$0.isEmpty }
+          .joined(separator: " ")
+
+        appendPartialCommentIfPossible(sanitized)
+
+      case .lineComment(let text), .docLineComment(let text):
+        if isInCodeBlock {
+          appendPartialCommentIfPossible(text)
+        } else {
+          comments.append(String(text.trimmingPrefix("/ ")))
+        }
+
+      default:
+        break
+      }
+
+      if foundEndOfCodeBlock, !partialComments.isEmpty {
+        appendSubstringsToLines()
+        partialComments.removeAll()
+      }
+    }
+
+    if !partialComments.isEmpty {
+      appendSubstringsToLines()
+    }
+
+    func appendPartialCommentIfPossible(_ text: String) {
+      guard partialComments.isEmpty || !text.isEmpty else { return }
+
+      partialComments.append(text)
+    }
+
+    func appendSubstringsToLines() {
+      comments.append(partialComments.joined(separator: " "))
+    }
+
+    return comments
+  }
+
   /// The length of all the pieces in this ``Trivia``.
   public var sourceLength: SourceLength {
     return pieces.map({ $0.sourceLength }).reduce(.zero, +)

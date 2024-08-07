@@ -25,6 +25,12 @@ import SwiftSyntax
   }
 }
 
+@_spi(Experimental) extension FunctionParameterSyntax: IdentifiableSyntax {
+  @_spi(Experimental) public var identifier: TokenSyntax {
+    secondName ?? firstName
+  }
+}
+
 @_spi(Experimental) extension ClosureShorthandParameterSyntax: IdentifiableSyntax {
   @_spi(Experimental) public var identifier: TokenSyntax {
     name
@@ -43,6 +49,18 @@ import SwiftSyntax
 }
 
 @_spi(Experimental) extension AccessorParametersSyntax: IdentifiableSyntax {
+  @_spi(Experimental) public var identifier: TokenSyntax {
+    name
+  }
+}
+
+@_spi(Experimental) extension GenericParameterSyntax: IdentifiableSyntax {
+  @_spi(Experimental) public var identifier: TokenSyntax {
+    name
+  }
+}
+
+@_spi(Experimental) extension PrimaryAssociatedTypeSyntax: IdentifiableSyntax {
   @_spi(Experimental) public var identifier: TokenSyntax {
     name
   }

@@ -19,15 +19,16 @@ public struct Identifier: Equatable, Hashable, Sendable {
 
   @_spi(RawSyntax)
   public let raw: RawIdentifier
-  let arena: SyntaxArenaRef?
+  private let arena: SyntaxArenaRef?
 
   public init?(_ token: TokenSyntax) {
-    guard case .identifier = token.tokenKind else {
+    switch token.tokenKind {
+    case .identifier, .keyword(.self), .keyword(.Self):
+      self.raw = RawIdentifier(token.tokenView)
+      self.arena = token.raw.arenaReference
+    default:
       return nil
     }
-
-    self.raw = RawIdentifier(token.tokenView)
-    self.arena = token.raw.arenaReference
   }
 
   public init(_ staticString: StaticString) {
@@ -37,13 +38,6 @@ public struct Identifier: Equatable, Hashable, Sendable {
 
   public static func == (lhs: Self, rhs: Self) -> Bool {
     lhs.name == rhs.name
-  }
-}
-
-extension Identifier {
-  @_spi(Testing) public init(anyToken token: TokenSyntax) {
-    self.raw = RawIdentifier(token.tokenView.rawText)
-    self.arena = token.raw.arenaReference
   }
 }
 

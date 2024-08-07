@@ -139,14 +139,6 @@ class SyntaxTests: XCTestCase {
     XCTAssertEqual(node.formatted().description, "label: MyType")
   }
 
-  public func testClosureCaptureSyntaxConvenienceInitWithEqual() {
-    let noNameClosureCapture = ClosureCaptureSyntax(expression: ExprSyntax("123"))
-    XCTAssertEqual(noNameClosureCapture.formatted().description, "123")
-
-    let node = ClosureCaptureSyntax(name: "test", expression: ExprSyntax("123"))
-    XCTAssertEqual(node.formatted().description, "test = 123")
-  }
-
   func testShareSyntaxIndexInTreeBetweenTrees() throws {
     let source = "func foo() {}"
 

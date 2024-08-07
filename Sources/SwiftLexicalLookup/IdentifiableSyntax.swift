@@ -33,12 +33,7 @@ import SwiftSyntax
 
 @_spi(Experimental) extension ClosureCaptureSyntax: IdentifiableSyntax {
   @_spi(Experimental) public var identifier: TokenSyntax {
-    /* Doesn't work with closures like:
-     _ = { [y=1+2] in
-       print(y)
-     }
-     */
-    expression.as(DeclReferenceExprSyntax.self)!.baseName
+    name
   }
 }
 

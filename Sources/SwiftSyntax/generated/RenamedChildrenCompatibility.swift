@@ -3656,6 +3656,77 @@ extension GenericParameterClauseSyntax {
   }
 }
 
+extension GenericParameterSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenAttributesAndSpecifier")
+  public var unexpectedBetweenAttributesAndEachKeyword: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenAttributesAndSpecifier
+    }
+    set {
+      unexpectedBetweenAttributesAndSpecifier = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "specifier")
+  public var eachKeyword: TokenSyntax? {
+    get {
+      return specifier
+    }
+    set {
+      specifier = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "unexpectedBetweenSpecifierAndName")
+  public var unexpectedBetweenEachKeywordAndName: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenSpecifierAndName
+    }
+    set {
+      unexpectedBetweenSpecifierAndName = newValue
+    }
+  }
+  
+  @available(*, deprecated, renamed: "GenericParameterSyntax(leadingTrivia:_:attributes:_:specifier:_:name:_:colon:_:inheritedType:_:trailingComma:_:trailingTrivia:)")
+  @_disfavoredOverload
+  public init(
+      leadingTrivia: Trivia? = nil,
+      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+      attributes: AttributeListSyntax = [],
+      _ unexpectedBetweenAttributesAndEachKeyword: UnexpectedNodesSyntax? = nil,
+      eachKeyword: TokenSyntax? = nil,
+      _ unexpectedBetweenEachKeywordAndName: UnexpectedNodesSyntax? = nil,
+      name: TokenSyntax,
+      _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil,
+      colon: TokenSyntax? = nil,
+      _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil,
+      inheritedType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
+      _ unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingComma: TokenSyntax? = nil,
+      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+      trailingTrivia: Trivia? = nil
+    
+  ) {
+    self.init(
+        leadingTrivia: leadingTrivia, 
+        unexpectedBeforeAttributes, 
+        attributes: attributes, 
+        unexpectedBetweenAttributesAndEachKeyword, 
+        specifier: eachKeyword, 
+        unexpectedBetweenEachKeywordAndName, 
+        name: name, 
+        unexpectedBetweenNameAndColon, 
+        colon: colon, 
+        unexpectedBetweenColonAndInheritedType, 
+        inheritedType: inheritedType, 
+        unexpectedBetweenInheritedTypeAndTrailingComma, 
+        trailingComma: trailingComma, 
+        unexpectedAfterTrailingComma, 
+        trailingTrivia: trailingTrivia
+      )
+  }
+}
+
 extension GenericRequirementSyntax {
   @available(*, deprecated, renamed: "unexpectedBeforeRequirement")
   public var unexpectedBeforeBody: UnexpectedNodesSyntax? {

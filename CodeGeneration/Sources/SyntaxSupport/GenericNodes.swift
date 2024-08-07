@@ -94,6 +94,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "specifier",
+        deprecatedName: "eachKeyword",
         kind: .token(choices: [
           .keyword(.each),
           .keyword(.let)

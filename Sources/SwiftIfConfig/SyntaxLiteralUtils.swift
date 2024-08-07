@@ -28,7 +28,7 @@ extension TupleExprSyntax {
 extension LabeledExprListSyntax {
   /// If this list is a single, unlabeled expression, return it.
   var singleUnlabeledExpression: ExprSyntax? {
-    guard count == 1, let element = first else { return nil }
+    guard count == 1, let element = first, element.label == nil else { return nil }
     return element.expression
   }
 }

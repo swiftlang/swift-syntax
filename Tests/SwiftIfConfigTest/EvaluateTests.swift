@@ -308,6 +308,19 @@ public class EvaluateTests: XCTestCase {
         )
       ]
     )
+
+    assertIfConfig(
+      "swift(version: >=5.5)",
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "swift requires a single unlabeled argument for the version comparison (>= or <= a version)",
+          line: 1,
+          column: 1,
+          severity: .error
+        )
+      ]
+    )
   }
 
   func testCanImport() throws {

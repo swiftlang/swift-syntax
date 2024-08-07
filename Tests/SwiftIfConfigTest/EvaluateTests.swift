@@ -308,6 +308,19 @@ public class EvaluateTests: XCTestCase {
         )
       ]
     )
+
+    assertIfConfig(
+      "swift(version: >=5.5)",
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'swift' requires a single unlabeled argument for the version comparison (>= or <= a version)",
+          line: 1,
+          column: 1,
+          severity: .error
+        )
+      ]
+    )
   }
 
   func testCanImport() throws {
@@ -361,7 +374,7 @@ public class EvaluateTests: XCTestCase {
       .unparsed,
       diagnostics: [
         DiagnosticSpec(
-          message: #"second parameter of canImport should be labeled as _version or _underlyingVersion"#,
+          message: #"second parameter of 'canImport' should be labeled as _version or _underlyingVersion"#,
           line: 1,
           column: 14,
           severity: .error
@@ -374,7 +387,7 @@ public class EvaluateTests: XCTestCase {
       .unparsed,
       diagnostics: [
         DiagnosticSpec(
-          message: #"canImport can take only two parameters"#,
+          message: #"'canImport' can take only two parameters"#,
           line: 1,
           column: 1,
           severity: .error

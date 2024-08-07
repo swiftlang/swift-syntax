@@ -93,10 +93,12 @@ public let GENERIC_NODES: [Node] = [
         kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true)
       ),
       Child(
-        name: "eachKeyword",
-        deprecatedName: "each",
-        kind: .token(choices: [.keyword(.each)]),
-        nameForDiagnostics: "parameter pack specifier",
+        name: "specifier",
+        kind: .token(choices: [
+          .keyword(.each),
+          .keyword(.let)
+        ]),
+        nameForDiagnostics: "specifier",
         isOptional: true
       ),
       Child(

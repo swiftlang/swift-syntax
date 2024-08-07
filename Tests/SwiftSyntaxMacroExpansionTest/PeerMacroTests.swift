@@ -58,7 +58,7 @@ final class PeerMacroTests: XCTestCase {
             .replaceChild(
               message: SwiftSyntaxMacros.MacroExpansionFixItMessage("add 'async'"),
               parent: funcDecl,
-              replacingChildAt: \.signature.effectSpecifiers,
+              replacingChildAt: \FunctionDeclSyntax.signature.effectSpecifiers,
               with: newEffects
             )
           ]

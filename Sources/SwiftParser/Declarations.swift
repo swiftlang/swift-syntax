@@ -435,11 +435,7 @@ extension Parser {
 
         // Parse the 'each' keyword for a type parameter pack 'each T' or a
         // 'let' keyword for a value parameter 'let N: Int'.
-        if let each = self.consume(if: .keyword(.each)) {
-          specifier = each
-        } else if let `let` = self.consume(if: .keyword(.let)) {
-          specifier = `let`
-        }
+        let specifier = self.consume(if: .keyword(.each), .keyword(.let))
 
         let (unexpectedBetweenSpecifierAndName, name) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
         if attributes.isEmpty && specifier == nil && unexpectedBetweenSpecifierAndName == nil && name.isMissing

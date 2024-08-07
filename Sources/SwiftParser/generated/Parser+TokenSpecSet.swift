@@ -1852,6 +1852,58 @@ extension FunctionParameterSyntax {
   }
 }
 
+extension GenericParameterSyntax {
+  @_spi(Diagnostics)
+  public enum SpecifierOptions: TokenSpecSet {
+    case each
+    case `let`
+    
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.each):
+        self = .each
+      case TokenSpec(.let):
+        self = .let
+      default:
+        return nil
+      }
+    }
+    
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.each):
+        self = .each
+      case TokenSpec(.let):
+        self = .let
+      default:
+        return nil
+      }
+    }
+    
+    var spec: TokenSpec {
+      switch self {
+      case .each:
+        return .keyword(.each)
+      case .let:
+        return .keyword(.let)
+      }
+    }
+    
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .each:
+        return .keyword(.each)
+      case .let:
+        return .keyword(.let)
+      }
+    }
+  }
+}
+
 extension IdentifierPatternSyntax {
   @_spi(Diagnostics)
   public enum IdentifierOptions: TokenSpecSet {

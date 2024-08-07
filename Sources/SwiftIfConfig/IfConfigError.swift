@@ -46,7 +46,7 @@ enum IfConfigError: Error, CustomStringConvertible {
       return "build configuration cannot handle '\(name)'"
 
     case .requiresUnlabeledArgument(name: let name, role: let role, syntax: _):
-      return "\(name) requires a single unlabeled argument for the \(role)"
+      return "'\(name)' requires a single unlabeled argument for the \(role)"
 
     case .unsupportedVersionOperator(name: let name, operator: let op):
       return "'\(name)' version check does not support operator '\(op.trimmedDescription)'"
@@ -69,13 +69,13 @@ enum IfConfigError: Error, CustomStringConvertible {
       return "compiler version must not have more than five components"
 
     case .canImportMissingModule(syntax: _):
-      return "canImport requires a module name"
+      return "'canImport' requires a module name"
 
     case .canImportLabel(syntax: _):
-      return "second parameter of canImport should be labeled as _version or _underlyingVersion"
+      return "second parameter of 'canImport' should be labeled as _version or _underlyingVersion"
 
     case .canImportTwoParameters(syntax: _):
-      return "canImport can take only two parameters"
+      return "'canImport' can take only two parameters"
 
     case .ignoredTrailingComponents(version: let version, syntax: _):
       return "trailing components of version '\(version.description)' are ignored"

@@ -431,11 +431,9 @@ extension Parser {
       repeat {
         let attributes = self.parseAttributeList()
 
-        var specifier: Token? = nil
-
         // Parse the 'each' keyword for a type parameter pack 'each T' or a
         // 'let' keyword for a value parameter 'let N: Int'.
-        let specifier = self.consume(if: .keyword(.each), .keyword(.let))
+        var specifier = self.consume(if: .keyword(.each), .keyword(.let))
 
         let (unexpectedBetweenSpecifierAndName, name) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
         if attributes.isEmpty && specifier == nil && unexpectedBetweenSpecifierAndName == nil && name.isMissing

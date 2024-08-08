@@ -24,7 +24,7 @@ class SigIntListener {
   /// Registers a `SIGINT` signal handler that forwards `SIGINT` to all
   /// subprocesses that are registered in `runningSubprocesses`
   static func registerSigIntSubprocessTerminationHandler() {
-    #if canImport(Darwin) || canImport(Glibc)
+    #if canImport(Darwin) || canImport(Glibc) || canImport(Bionic)
     signal(SIGINT) { _ in
       SigIntListener.hasReceivedSigInt = true
       for process in SigIntListener.runningSubprocesses {

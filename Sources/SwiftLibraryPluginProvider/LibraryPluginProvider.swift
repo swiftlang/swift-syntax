@@ -22,6 +22,8 @@ private import Darwin
 private import Glibc
 #elseif canImport(Musl)
 private import Musl
+#elseif canImport(Android)
+private import Android
 #endif
 #else
 import SwiftSyntaxMacros
@@ -137,7 +139,7 @@ private func _loadLibrary(_ path: String) throws -> UnsafeMutableRawPointer {
 #else
 private func _loadLibrary(_ path: String) throws -> UnsafeMutableRawPointer {
   guard let dlHandle = dlopen(path, RTLD_LAZY | RTLD_LOCAL) else {
-    throw LibraryPluginError(message: "loader error: \(String(cString: dlerror()))")
+    throw LibraryPluginError(message: "loader error: \(String(cString: dlerror()!))")
   }
   return dlHandle
 }

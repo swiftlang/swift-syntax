@@ -3288,4 +3288,36 @@ final class DeclarationTests: ParserTestCase {
         """
     )
   }
+
+  func testConstAsArgumentLabel() {
+    assertParse(
+      "func const(_const: String) {}",
+      substructure: FunctionParameterSyntax(
+        firstName: .identifier("_const"),
+        colon: .colonToken(),
+        type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("String")))
+      )
+    )
+
+    assertParse(
+      "func const(_const map: String) {}",
+      substructure: FunctionParameterSyntax(
+        firstName: .identifier("_const"),
+        secondName: .identifier("map"),
+        colon: .colonToken(),
+        type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("String")))
+      )
+    )
+
+    assertParse(
+      "func const(_const x y: String) {}",
+      substructure: FunctionParameterSyntax(
+        modifiers: [DeclModifierSyntax(name: .keyword(._const))],
+        firstName: .identifier("x"),
+        secondName: .identifier("y"),
+        colon: .colonToken(),
+        type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("String")))
+      )
+    )
+  }
 }

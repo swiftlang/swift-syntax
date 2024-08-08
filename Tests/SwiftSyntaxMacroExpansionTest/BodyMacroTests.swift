@@ -125,4 +125,34 @@ final class BodyMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testEmptyBodyMacro() {
+    struct EmptyBodyMacro: BodyMacro {
+      public static var formatMode: FormatMode { .disabled }
+
+      public static func expansion(
+        of node: AttributeSyntax,
+        providingBodyFor declaration: some DeclSyntaxProtocol & WithOptionalCodeBlockSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> [CodeBlockItemSyntax] {
+        return []
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @EmptyBody
+      func f() {
+        print(42)
+      }
+      """,
+      expandedSource: """
+        func f() {
+          print(42)
+        }
+        """,
+      diagnostics: [],
+      macros: ["EmptyBody": EmptyBodyMacro.self]
+    )
+  }
 }

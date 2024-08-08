@@ -44,10 +44,10 @@ extension SyntaxProtocol {
   /// in this exact order. The constant declaration within the function body is omitted
   /// due to the ordering rules that prioritize visibility within the function body.
   @_spi(Experimental) public func lookup(
-    for identifier: Identifier?,
+    _ identifier: Identifier?,
     with config: LookupConfig = LookupConfig()
   ) -> [LookupResult] {
-    scope?.lookup(for: identifier, at: self.position, with: config) ?? []
+    scope?.lookup(identifier, at: self.position, with: config) ?? []
   }
 }
 
@@ -58,10 +58,9 @@ extension SyntaxProtocol {
   var introducedNames: [LookupName] { get }
   /// Finds all declarations `identifier` refers to. `syntax` specifies the node lookup was triggered with.
   /// If `identifier` set to `nil`, returns all available names at the given node.
-  /// `state` represents lookup state passed between lookup methods.
   func lookup(
-    for identifier: Identifier?,
-    at origin: AbsolutePosition,
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult]
 }
@@ -74,47 +73,47 @@ extension SyntaxProtocol {
   /// Returns `LookupResult` of all names introduced in this scope that `identifier`
   /// refers to and is accessible at given syntax node then passes lookup to the parent.
   /// If `identifier` set to `nil`, returns all available names at the given node.
-  /// `state` represents lookup state passed between lookup methods.
   @_spi(Experimental) public func lookup(
-    for identifier: Identifier?,
-    at origin: AbsolutePosition,
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
-    defaultLookupImplementation(for: identifier, at: origin, with: config)
+    defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
   }
 
   /// Returns `LookupResult` of all names introduced in this scope that `identifier`
   /// refers to and is accessible at given syntax node then passes lookup to the parent.
   /// If `identifier` set to `nil`, returns all available names at the given node.
   func defaultLookupImplementation(
-    for identifier: Identifier?,
-    at origin: AbsolutePosition,
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
     let filteredNames =
       introducedNames
       .filter { introducedName in
-        checkName(identifier, refersTo: introducedName, at: origin)
+        checkName(identifier, refersTo: introducedName, at: lookUpPosition)
       }
 
     if filteredNames.isEmpty {
-      return lookupInParent(for: identifier, at: origin, with: config)
+      return lookupInParent(identifier, at: lookUpPosition, with: config)
     } else {
       return [.fromScope(self, withNames: filteredNames)]
-        + lookupInParent(for: identifier, at: origin, with: config)
+        + lookupInParent(identifier, at: lookUpPosition, with: config)
     }
   }
 
   /// Looks up in parent scope.
   func lookupInParent(
-    for identifier: Identifier?,
-    at origin: AbsolutePosition,
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
-    parentScope?.lookup(for: identifier, at: origin, with: config) ?? []
+    parentScope?.lookup(identifier, at: lookUpPosition, with: config) ?? []
   }
 
-  func checkName(_ name: Identifier?, refersTo introducedName: LookupName, at origin: AbsolutePosition) -> Bool {
-    introducedName.isAccessible(at: origin) && (name == nil || introducedName.refersTo(name!))
+  func checkName(_ name: Identifier?, refersTo introducedName: LookupName, at lookUpPosition: AbsolutePosition) -> Bool
+  {
+    introducedName.isAccessible(at: lookUpPosition) && (name == nil || introducedName.refersTo(name!))
   }
 }

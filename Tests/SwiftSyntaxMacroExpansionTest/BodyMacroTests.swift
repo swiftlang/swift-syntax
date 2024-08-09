@@ -155,4 +155,50 @@ final class BodyMacroTests: XCTestCase {
       macros: ["EmptyBody": EmptyBodyMacro.self]
     )
   }
+
+  func testBodyNodeLocationFromContext() {
+    struct SourceLocationMacro: BodyMacro {
+      public static var formatMode: FormatMode { .disabled }
+
+      public static func expansion(
+        of node: AttributeSyntax,
+        providingBodyFor declaration: some DeclSyntaxProtocol & WithOptionalCodeBlockSyntax,
+        in context: some MacroExpansionContext
+      ) throws -> [CodeBlockItemSyntax] {
+        guard let statements = declaration.body?.statements else {
+          return []
+        }
+        let body =
+          if let location = context.location(of: statements, at: .afterLeadingTrivia, filePathMode: .filePath) {
+            CodeBlockItemListSyntax {
+              "#sourceLocation(file: \(location.file), line: \(location.line))"
+              statements
+              "#sourceLocation()"
+            }
+          } else {
+            statements
+          }
+        return body.map(\.self)
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @SourceLocationMacro
+      func f() {
+        let x: Int = 1
+      }
+      """,
+      expandedSource:
+        """
+        func f() {
+          #sourceLocation(file: "test.swift", line: 3)
+          let x: Int = 1
+          #sourceLocation()
+        }
+        """,
+      macros: ["SourceLocationMacro": SourceLocationMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
 }

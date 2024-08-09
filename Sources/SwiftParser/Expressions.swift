@@ -1615,7 +1615,7 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseInitializerClause() -> RawInitializerClauseSyntax {
+  mutating func parseDefaultArgument() -> RawInitializerClauseSyntax {
     let unexpectedBeforeEq: RawUnexpectedNodesSyntax?
     let eq: RawTokenSyntax
     if let comparison = self.consumeIfContextualPunctuator("==") {
@@ -1704,22 +1704,29 @@ extension Parser {
           let specifier = self.parseClosureCaptureSpecifiers()
 
           // The thing being capture specified is an identifier, or as an identifier
-          // followed by an initializer clause.
-          let (unexpectedBeforeName, name) = self.expect(
-            .identifier,
-            TokenSpec(.self),
-            default: .identifier
-          )
-
-          let initializer: RawInitializerClauseSyntax?
-          if self.at(.equal) {
-            // The name is a new declaration with
-            // initializer clause.
-            initializer = self.parseInitializerClause()
+          // followed by an expression.
+          let unexpectedBeforeName: RawUnexpectedNodesSyntax?
+          let name: RawTokenSyntax?
+          let unexpectedBeforeEqual: RawUnexpectedNodesSyntax?
+          let equal: RawTokenSyntax?
+          let expression: RawExprSyntax
+          if self.peek(isAt: .equal) {
+            // The name is a new declaration.
+            (unexpectedBeforeName, name) = self.expect(
+              .identifier,
+              TokenSpec(.self, remapping: .identifier),
+              default: .identifier
+            )
+            (unexpectedBeforeEqual, equal) = self.expect(.equal)
+            expression = self.parseExpression(flavor: .basic, pattern: .none)
           } else {
-            // This is the simple case - the identifier is the name and
-            // the initializer clause is empty.
-            initializer = nil
+            // This is the simple case - the identifier is both the name and
+            // the expression to capture.
+            unexpectedBeforeName = nil
+            name = nil
+            unexpectedBeforeEqual = nil
+            equal = nil
+            expression = RawExprSyntax(self.parseIdentifierExpression(flavor: .basic))
           }
 
           keepGoing = self.consume(if: .comma)
@@ -1728,9 +1735,11 @@ extension Parser {
               specifier: specifier,
               unexpectedBeforeName,
               name: name,
-              initializer: initializer,
+              unexpectedBeforeEqual,
+              equal: equal,
+              expression: expression,
               trailingComma: keepGoing,
-              arena: arena
+              arena: self.arena
             )
           )
         } while keepGoing != nil && self.hasProgressed(&loopProgress)

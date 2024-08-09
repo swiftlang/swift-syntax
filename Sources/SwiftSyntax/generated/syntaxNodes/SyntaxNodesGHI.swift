@@ -3746,7 +3746,6 @@ public struct InheritedTypeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
 ///
 /// ### Contained in
 /// 
-///  - ``ClosureCaptureSyntax``.``ClosureCaptureSyntax/initializer``
 ///  - ``EnumCaseElementSyntax``.``EnumCaseElementSyntax/rawValue``
 ///  - ``EnumCaseParameterSyntax``.``EnumCaseParameterSyntax/defaultValue``
 ///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/defaultValue``

@@ -499,12 +499,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenSpecifierAndName"
   case \ClosureCaptureSyntax.name:
     return "name"
-  case \ClosureCaptureSyntax.unexpectedBetweenNameAndInitializer:
-    return "unexpectedBetweenNameAndInitializer"
-  case \ClosureCaptureSyntax.initializer:
-    return "initializer"
-  case \ClosureCaptureSyntax.unexpectedBetweenInitializerAndTrailingComma:
-    return "unexpectedBetweenInitializerAndTrailingComma"
+  case \ClosureCaptureSyntax.unexpectedBetweenNameAndEqual:
+    return "unexpectedBetweenNameAndEqual"
+  case \ClosureCaptureSyntax.equal:
+    return "equal"
+  case \ClosureCaptureSyntax.unexpectedBetweenEqualAndExpression:
+    return "unexpectedBetweenEqualAndExpression"
+  case \ClosureCaptureSyntax.expression:
+    return "expression"
+  case \ClosureCaptureSyntax.unexpectedBetweenExpressionAndTrailingComma:
+    return "unexpectedBetweenExpressionAndTrailingComma"
   case \ClosureCaptureSyntax.trailingComma:
     return "trailingComma"
   case \ClosureCaptureSyntax.unexpectedAfterTrailingComma:

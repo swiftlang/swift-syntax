@@ -341,12 +341,18 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "name",
-        kind: .token(choices: [.token(.identifier), .keyword(.self)])
+        kind: .token(choices: [.token(.identifier)]),
+        isOptional: true
       ),
       Child(
-        name: "initializer",
-        kind: .node(kind: .initializerClause),
+        name: "equal",
+        deprecatedName: "assignToken",
+        kind: .token(choices: [.token(.equal)]),
         isOptional: true
+      ),
+      Child(
+        name: "expression",
+        kind: .node(kind: .expr)
       ),
       Child(
         name: "trailingComma",

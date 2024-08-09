@@ -63,7 +63,7 @@ extension SequentialScopeSyntax {
           from: codeBlockItem.item,
           accessibleAfter: codeBlockItem.endPosition
         ).filter { introducedName in
-          checkName(identifier, refersTo: introducedName, at: lookUpPosition)
+          checkIdentifier(identifier, refersTo: introducedName, at: lookUpPosition)
         }
       } else {
         itemsWithoutNamedDecl.append(codeBlockItem)
@@ -99,7 +99,7 @@ extension SequentialScopeSyntax {
           from: codeBlockItem.item,
           accessibleAfter: codeBlockItem.endPosition
         ).filter { introducedName in
-          checkName(identifier, refersTo: introducedName, at: lookUpPosition)
+          checkIdentifier(identifier, refersTo: introducedName, at: lookUpPosition)
         }
       }
     }

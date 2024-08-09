@@ -152,11 +152,6 @@ import SwiftSyntax
     return accessibleAfter <= lookUpPosition
   }
 
-  /// Checks if this name refers to the looked up phrase.
-  func refersTo(_ lookedUpIdentifier: Identifier) -> Bool {
-    return identifier == lookedUpIdentifier
-  }
-
   /// Extracts names introduced by the given `syntax` structure.
   ///
   /// When e.g. looking up a variable declaration like `let a = a`,

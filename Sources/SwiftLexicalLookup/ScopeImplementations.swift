@@ -105,7 +105,7 @@ import SwiftSyntax
     case .memberBlock:
       let names = introducedNames(using: .memberBlock)
         .filter { lookupName in
-          checkName(identifier, refersTo: lookupName, at: lookUpPosition)
+          checkIdentifier(identifier, refersTo: lookupName, at: lookUpPosition)
         }
 
       return names.isEmpty ? [] : [.fromFileScope(self, withNames: names)]
@@ -121,7 +121,9 @@ import SwiftSyntax
           sequentialItems.append(codeBlockItem)
         } else if item.is(DeclSyntax.self) {
           let foundNames = LookupName.getNames(from: item)
-          members.append(contentsOf: foundNames.filter { checkName(identifier, refersTo: $0, at: lookUpPosition) })
+          members.append(
+            contentsOf: foundNames.filter { checkIdentifier(identifier, refersTo: $0, at: lookUpPosition) }
+          )
         } else {
           encounteredNonDeclaration = true
           sequentialItems.append(codeBlockItem)
@@ -323,7 +325,7 @@ import SwiftSyntax
     guard !body.range.contains(lookUpPosition) else { return [] }
 
     let names = namesIntroducedToSequentialParent.filter { introducedName in
-      checkName(identifier, refersTo: introducedName, at: lookUpPosition)
+      checkIdentifier(identifier, refersTo: introducedName, at: lookUpPosition)
     }
 
     return names.isEmpty ? [] : [.fromScope(self, withNames: names)]

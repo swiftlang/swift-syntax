@@ -92,7 +92,7 @@ extension SyntaxProtocol {
     let filteredNames =
       introducedNames
       .filter { introducedName in
-        checkName(identifier, refersTo: introducedName, at: lookUpPosition)
+        checkIdentifier(identifier, refersTo: introducedName, at: lookUpPosition)
       }
 
     if filteredNames.isEmpty {
@@ -112,8 +112,11 @@ extension SyntaxProtocol {
     parentScope?.lookup(identifier, at: lookUpPosition, with: config) ?? []
   }
 
-  func checkName(_ name: Identifier?, refersTo introducedName: LookupName, at lookUpPosition: AbsolutePosition) -> Bool
-  {
-    introducedName.isAccessible(at: lookUpPosition) && (name == nil || introducedName.refersTo(name!))
+  func checkIdentifier(
+    _ identifier: Identifier?,
+    refersTo introducedName: LookupName,
+    at lookUpPosition: AbsolutePosition
+  ) -> Bool {
+    introducedName.isAccessible(at: lookUpPosition) && (identifier == nil || introducedName.identifier == identifier!)
   }
 }

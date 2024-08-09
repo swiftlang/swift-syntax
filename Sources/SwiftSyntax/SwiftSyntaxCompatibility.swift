@@ -175,47 +175,6 @@ extension ClosureCaptureSyntax {
     }
   }
 
-  @available(
-    *,
-    deprecated,
-    renamed: "ClosureCaptureSyntax(leadingTrivia:_:specifier:_:name:_:initializer:_:trailingComma:_:trailingTrivia:)"
-  )
-  @_disfavoredOverload
-  public init(
-    leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil,
-    specifier: ClosureCaptureSpecifierSyntax? = nil,
-    _ unexpectedBetweenSpecifierAndName: UnexpectedNodesSyntax? = nil,
-    name: TokenSyntax? = nil,
-    _ unexpectedBetweenNameAndAssignToken: UnexpectedNodesSyntax? = nil,
-    assignToken: TokenSyntax? = nil,
-    _ unexpectedBetweenAssignTokenAndExpression: UnexpectedNodesSyntax? = nil,
-    expression: some ExprSyntaxProtocol,
-    _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil,
-    trailingComma: TokenSyntax? = nil,
-    _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-    trailingTrivia: Trivia? = nil
-
-  ) {
-    self.init(
-      leadingTrivia: leadingTrivia,
-      unexpectedBeforeSpecifier,
-      specifier: specifier,
-      unexpectedBetweenSpecifierAndName,
-      name: name ?? .identifier("", presence: .missing),
-      unexpectedBetweenNameAndAssignToken,
-      initializer: InitializerClauseSyntax(
-        equal: assignToken ?? .equalToken(presence: .missing),
-        unexpectedBetweenAssignTokenAndExpression,
-        value: expression
-      ),
-      unexpectedBetweenExpressionAndTrailingComma,
-      trailingComma: trailingComma,
-      unexpectedAfterTrailingComma,
-      trailingTrivia: trailingTrivia
-    )
-  }
-
   /// Creates a ``ClosureCaptureSyntax`` with a `name`, and automatically adds an `equal` token to it since the name is non-optional.
   ///
   /// - SeeAlso: ``ClosureCaptureSyntax/init(leadingTrivia:_:specifier:_:name:_:initializer:_:trailingComma:_:trailingTrivia:)``.

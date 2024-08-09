@@ -1551,12 +1551,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeAttributes"
   case \GenericParameterSyntax.attributes:
     return "attributes"
-  case \GenericParameterSyntax.unexpectedBetweenAttributesAndEachKeyword:
-    return "unexpectedBetweenAttributesAndEachKeyword"
-  case \GenericParameterSyntax.eachKeyword:
-    return "eachKeyword"
-  case \GenericParameterSyntax.unexpectedBetweenEachKeywordAndName:
-    return "unexpectedBetweenEachKeywordAndName"
+  case \GenericParameterSyntax.unexpectedBetweenAttributesAndSpecifier:
+    return "unexpectedBetweenAttributesAndSpecifier"
+  case \GenericParameterSyntax.specifier:
+    return "specifier"
+  case \GenericParameterSyntax.unexpectedBetweenSpecifierAndName:
+    return "unexpectedBetweenSpecifierAndName"
   case \GenericParameterSyntax.name:
     return "name"
   case \GenericParameterSyntax.unexpectedBetweenNameAndColon:

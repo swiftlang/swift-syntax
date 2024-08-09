@@ -390,9 +390,9 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol {
   public init(
       _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil, 
       attributes: RawAttributeListSyntax, 
-      _ unexpectedBetweenAttributesAndEachKeyword: RawUnexpectedNodesSyntax? = nil, 
-      eachKeyword: RawTokenSyntax?, 
-      _ unexpectedBetweenEachKeywordAndName: RawUnexpectedNodesSyntax? = nil, 
+      _ unexpectedBetweenAttributesAndSpecifier: RawUnexpectedNodesSyntax? = nil, 
+      specifier: RawTokenSyntax?, 
+      _ unexpectedBetweenSpecifierAndName: RawUnexpectedNodesSyntax? = nil, 
       name: RawTokenSyntax, 
       _ unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax? = nil, 
       colon: RawTokenSyntax?, 
@@ -408,9 +408,9 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol {
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes.raw
-      layout[2] = unexpectedBetweenAttributesAndEachKeyword?.raw
-      layout[3] = eachKeyword?.raw
-      layout[4] = unexpectedBetweenEachKeywordAndName?.raw
+      layout[2] = unexpectedBetweenAttributesAndSpecifier?.raw
+      layout[3] = specifier?.raw
+      layout[4] = unexpectedBetweenSpecifierAndName?.raw
       layout[5] = name.raw
       layout[6] = unexpectedBetweenNameAndColon?.raw
       layout[7] = colon?.raw
@@ -431,15 +431,15 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))!
   }
   
-  public var unexpectedBetweenAttributesAndEachKeyword: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenAttributesAndSpecifier: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var eachKeyword: RawTokenSyntax? {
+  public var specifier: RawTokenSyntax? {
     layoutView.children[3].map(RawTokenSyntax.init(raw:))
   }
   
-  public var unexpectedBetweenEachKeywordAndName: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenSpecifierAndName: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   

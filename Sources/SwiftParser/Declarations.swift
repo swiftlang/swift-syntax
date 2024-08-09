@@ -431,11 +431,12 @@ extension Parser {
       repeat {
         let attributes = self.parseAttributeList()
 
-        // Parse the 'each' keyword for a type parameter pack 'each T'.
-        var each = self.consume(if: .keyword(.each))
+        // Parse the 'each' keyword for a type parameter pack 'each T' or a
+        // 'let' keyword for a value parameter 'let N: Int'.
+        var specifier = self.consume(if: .keyword(.each), .keyword(.let))
 
-        let (unexpectedBetweenEachAndName, name) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
-        if attributes.isEmpty && each == nil && unexpectedBetweenEachAndName == nil && name.isMissing
+        let (unexpectedBetweenSpecifierAndName, name) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
+        if attributes.isEmpty && specifier == nil && unexpectedBetweenSpecifierAndName == nil && name.isMissing
           && elements.isEmpty && !self.at(prefix: ">")
         {
           break
@@ -445,8 +446,8 @@ extension Parser {
         let unexpectedBetweenNameAndColon: RawUnexpectedNodesSyntax?
         if let ellipsis = self.consume(ifPrefix: "...", as: .ellipsis) {
           unexpectedBetweenNameAndColon = RawUnexpectedNodesSyntax([ellipsis], arena: self.arena)
-          if each == nil {
-            each = missingToken(.each)
+          if specifier == nil {
+            specifier = missingToken(.each)
           }
         } else {
           unexpectedBetweenNameAndColon = nil
@@ -481,8 +482,8 @@ extension Parser {
         elements.append(
           RawGenericParameterSyntax(
             attributes: attributes,
-            eachKeyword: each,
-            unexpectedBetweenEachAndName,
+            specifier: specifier,
+            unexpectedBetweenSpecifierAndName,
             name: name,
             unexpectedBetweenNameAndColon,
             colon: colon,

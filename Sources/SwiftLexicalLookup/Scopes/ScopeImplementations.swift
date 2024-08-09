@@ -97,15 +97,15 @@ import SwiftSyntax
   /// - for `memberBlock` - a, b, c, d, e, f
   /// - for `codeBlock` - a
   @_spi(Experimental) public func lookup(
-    for identifier: Identifier?,
-    at origin: AbsolutePosition,
+    identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
     switch config.fileScopeHandling {
     case .memberBlock:
       let names = introducedNames(using: .memberBlock)
         .filter { lookupName in
-          checkName(identifier, refersTo: lookupName, at: origin)
+          checkName(identifier, refersTo: lookupName, at: lookUpPosition)
         }
 
       return names.isEmpty ? [] : [.fromFileScope(self, withNames: names)]
@@ -119,22 +119,19 @@ import SwiftSyntax
 
         if encounteredNonDeclaration {
           sequentialItems.append(codeBlockItem)
+        } else if item.is(DeclSyntax.self) {
+          let foundNames = LookupName.getNames(from: item)
+          members.append(contentsOf: foundNames.filter { checkName(identifier, refersTo: $0, at: lookUpPosition) })
         } else {
-          if item.is(DeclSyntax.self) {
-            let foundNames = LookupName.getNames(from: item)
-
-            members.append(contentsOf: foundNames.filter { checkName(identifier, refersTo: $0, at: origin) })
-          } else {
-            encounteredNonDeclaration = true
-            sequentialItems.append(codeBlockItem)
-          }
+          encounteredNonDeclaration = true
+          sequentialItems.append(codeBlockItem)
         }
       }
 
       let sequentialNames = sequentialLookup(
         in: sequentialItems,
-        for: identifier,
-        at: origin,
+        identifier: identifier,
+        at: lookUpPosition,
         with: config,
         createResultsForThisScopeWith: { .fromFileScope(self, withNames: $0) }
       )
@@ -154,14 +151,14 @@ import SwiftSyntax
   }
 
   @_spi(Experimental) public func lookup(
-    for identifier: Identifier?,
-    at origin: AbsolutePosition,
+    identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
     sequentialLookup(
       in: statements,
-      for: identifier,
-      at: origin,
+      identifier: identifier,
+      at: lookUpPosition,
       with: config,
       createResultsForThisScopeWith: { .fromScope(self, withNames: $0) }
     )
@@ -274,14 +271,14 @@ import SwiftSyntax
   /// }
   /// ```
   @_spi(Experimental) public func lookup(
-    for identifier: Identifier?,
-    at origin: AbsolutePosition,
+    identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
-    if let elseBody, elseBody.position <= origin, elseBody.endPosition >= origin {
-      return lookupInParent(for: identifier, at: origin, with: config)
+    if let elseBody, elseBody.range.contains(lookUpPosition) {
+      return lookupInParent(identifier: identifier, at: lookUpPosition, with: config)
     } else {
-      return defaultLookupImplementation(for: identifier, at: origin, with: config)
+      return defaultLookupImplementation(identifier: identifier, at: lookUpPosition, with: config)
     }
   }
 }
@@ -319,25 +316,24 @@ import SwiftSyntax
   /// // a is visible here
   /// ```
   func lookupFromSequentialParent(
-    for identifier: Identifier?,
-    at origin: AbsolutePosition,
+    identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
-    guard body.position > origin || body.endPosition < origin
-    else { return [] }
+    guard !body.range.contains(lookUpPosition) else { return [] }
 
     let names = namesIntroducedToSequentialParent.filter { introducedName in
-      checkName(identifier, refersTo: introducedName, at: origin)
+      checkName(identifier, refersTo: introducedName, at: lookUpPosition)
     }
 
     return names.isEmpty ? [] : [.fromScope(self, withNames: names)]
   }
 }
 
-@_spi(Experimental) extension ActorDeclSyntax: TypeScopeSyntax {}
-@_spi(Experimental) extension ClassDeclSyntax: TypeScopeSyntax {}
-@_spi(Experimental) extension StructDeclSyntax: TypeScopeSyntax {}
-@_spi(Experimental) extension EnumDeclSyntax: TypeScopeSyntax {}
+@_spi(Experimental) extension ActorDeclSyntax: TypeScopeSyntax, WithGenericParametersOrAssociatedTypesScopeSyntax {}
+@_spi(Experimental) extension ClassDeclSyntax: TypeScopeSyntax, WithGenericParametersOrAssociatedTypesScopeSyntax {}
+@_spi(Experimental) extension StructDeclSyntax: TypeScopeSyntax, WithGenericParametersOrAssociatedTypesScopeSyntax {}
+@_spi(Experimental) extension EnumDeclSyntax: TypeScopeSyntax, WithGenericParametersOrAssociatedTypesScopeSyntax {}
 @_spi(Experimental) extension ExtensionDeclSyntax: TypeScopeSyntax {}
 
 @_spi(Experimental) extension AccessorDeclSyntax: ScopeSyntax {
@@ -360,7 +356,50 @@ import SwiftSyntax
 
 @_spi(Experimental) extension CatchClauseSyntax: ScopeSyntax {
   /// Implicit `error` when there are no catch items.
-  public var introducedNames: [LookupName] {
+  @_spi(Experimental) public var introducedNames: [LookupName] {
     return catchItems.isEmpty ? [.implicit(.error(self))] : []
+  }
+}
+
+@_spi(Experimental) extension SwitchCaseSyntax: ScopeSyntax {
+  /// Names introduced within `case` items.
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    label.as(SwitchCaseLabelSyntax.self)?.caseItems.flatMap { child in
+      LookupName.getNames(from: child.pattern)
+    } ?? []
+  }
+}
+
+@_spi(Experimental) extension GenericParameterClauseSyntax: GenericParameterOrAssociatedTypeScopeSyntax {
+  /// Generic parameter names introduced by this clause.
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    parameters.children(viewMode: .sourceAccurate).flatMap { child in
+      LookupName.getNames(from: child, accessibleAfter: child.endPosition)
+    }
+  }
+}
+
+@_spi(Experimental) extension PrimaryAssociatedTypeClauseSyntax: GenericParameterOrAssociatedTypeScopeSyntax {
+  /// Primary associated type names introduced by this clause.
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    primaryAssociatedTypes.children(viewMode: .sourceAccurate).flatMap { child in
+      LookupName.getNames(from: child, accessibleAfter: child.endPosition)
+    }
+  }
+}
+
+@_spi(Experimental) extension ProtocolDeclSyntax: WithGenericParametersOrAssociatedTypesScopeSyntax {
+  /// Protocol declarations don't introduce names by themselves.
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    []
+  }
+}
+
+@_spi(Experimental) extension FunctionDeclSyntax: WithGenericParametersOrAssociatedTypesScopeSyntax {
+  /// Function parameters introduced by this function's signature.
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    signature.parameterClause.parameters.flatMap { parameter in
+      LookupName.getNames(from: parameter)
+    }
   }
 }

@@ -112,7 +112,7 @@ final class testNameLookup: XCTestCase {
           let 1️⃣a = 1
           let 2️⃣b = 2
           let 3️⃣x: (Int, Int, Int) = { 4️⃣a, _, 5️⃣c in
-            print(6️⃣a, 7️⃣b, 8️⃣c, 0️⃣$0)
+            print(6️⃣a, 7️⃣b, 8️⃣c)
           }
           9️⃣x()
         }
@@ -125,7 +125,6 @@ final class testNameLookup: XCTestCase {
         "7️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["2️⃣"])],
         "8️⃣": [.fromScope(ClosureExprSyntax.self, expectedNames: ["5️⃣"])],
         "9️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"])],
-        "0️⃣": [],
       ],
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self,
@@ -152,7 +151,7 @@ final class testNameLookup: XCTestCase {
         """,
       references: [
         "5️⃣": [
-          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.`self`("2️⃣")]),
+          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.identifier("2️⃣")]),
           .fromScope(ClassDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("7️⃣"))]),
         ],
         "6️⃣": [
@@ -179,7 +178,7 @@ final class testNameLookup: XCTestCase {
           let 1️⃣a = 1
           let 2️⃣b = 2
           let 3️⃣x = { (4️⃣a b: Int, 5️⃣c: Int) in
-              print(6️⃣a, 7️⃣b, 8️⃣c, 0️⃣$0)
+              print(6️⃣a, 7️⃣b, 8️⃣c)
           }
           9️⃣x()
         }
@@ -192,7 +191,6 @@ final class testNameLookup: XCTestCase {
         ],
         "8️⃣": [.fromScope(ClosureExprSyntax.self, expectedNames: ["5️⃣"])],
         "9️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"])],
-        "0️⃣": [],
       ],
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self,
@@ -659,12 +657,19 @@ final class testNameLookup: XCTestCase {
             8️⃣oldValue
           }
         }
+
+        var x: Int = 2 {
+          didSet(myNewValue) {
+            print(9️⃣newValue)
+          }
+        }
         """,
       references: [
         "2️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.implicit(.newValue("1️⃣"))])],
         "4️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.identifier("3️⃣")])],
         "6️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.implicit(.newValue("5️⃣"))])],
         "8️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.implicit(.oldValue("7️⃣"))])],
+        "9️⃣": [],
       ]
     )
   }
@@ -828,6 +833,136 @@ final class testNameLookup: XCTestCase {
           .fromScope(CodeBlockSyntax.self, expectedNames: ["2️⃣"]),
         ],
       ]
+    )
+  }
+
+  func testSwitchExpression() {
+    assertLexicalNameLookup(
+      source: """
+        switch {
+        case .x(let 1️⃣a, let 2️⃣b), .y(.c(let 3️⃣c), .z):
+          print(4️⃣a, 5️⃣b, 6️⃣c)
+        case .z(let 7️⃣a), .smth(let 8️⃣a)
+          print(9️⃣a)
+        default:
+          print(0️⃣a)
+        }
+        """,
+      references: [
+        "4️⃣": [.fromScope(SwitchCaseSyntax.self, expectedNames: ["1️⃣"])],
+        "5️⃣": [.fromScope(SwitchCaseSyntax.self, expectedNames: ["2️⃣"])],
+        "6️⃣": [.fromScope(SwitchCaseSyntax.self, expectedNames: ["3️⃣"])],
+        "9️⃣": [.fromScope(SwitchCaseSyntax.self, expectedNames: ["7️⃣", "8️⃣"])],
+        "0️⃣": [],
+      ],
+      expectedResultTypes: .all(IdentifierPatternSyntax.self)
+    )
+  }
+
+  func testSimpleGenericParameterScope() {
+    assertLexicalNameLookup(
+      source: """
+        class A<1️⃣T1, 2️⃣T2> {
+          let 7️⃣x: 3️⃣T1 = v
+          let y: 4️⃣T2 = v
+
+          class B<5️⃣T1> {
+            let z: 6️⃣T1 = v
+            
+            func test() {
+              print(8️⃣x)
+            }
+          }
+        }
+        """,
+      references: [
+        "3️⃣": [.fromScope(GenericParameterClauseSyntax.self, expectedNames: ["1️⃣"])],
+        "4️⃣": [.fromScope(GenericParameterClauseSyntax.self, expectedNames: ["2️⃣"])],
+        "6️⃣": [
+          .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["5️⃣"]),
+          .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["1️⃣"]),
+        ],
+        "8️⃣": [.fromScope(MemberBlockSyntax.self, expectedNames: ["7️⃣"])],
+      ],
+      expectedResultTypes: .all(GenericParameterSyntax.self, except: ["7️⃣": IdentifierPatternSyntax.self])
+    )
+  }
+
+  func testGenericParameterOrdering() {
+    assertLexicalNameLookup(
+      source: """
+        class Foo<1️⃣A: 2️⃣A, B: 3️⃣A, 4️⃣C: 5️⃣D, D: 6️⃣C> {}
+        """,
+      references: [
+        "2️⃣": [],
+        "3️⃣": [.fromScope(GenericParameterClauseSyntax.self, expectedNames: ["1️⃣"])],
+        "4️⃣": [],
+        "6️⃣": [.fromScope(GenericParameterClauseSyntax.self, expectedNames: ["4️⃣"])],
+      ],
+      expectedResultTypes: .all(GenericParameterSyntax.self)
+    )
+  }
+
+  func testPrimaryAssociatedTypes() {
+    assertLexicalNameLookup(
+      source: """
+        protocol Foo<1️⃣A, 2️⃣B> {
+            5️⃣associatedtype 3️⃣A
+            6️⃣associatedtype 4️⃣B
+        }
+        """,
+      references: [
+        "3️⃣": [
+          .fromScope(MemberBlockSyntax.self, expectedNames: ["5️⃣"]),  // Conceptually, should associated type be visible at it's declaration? It's a reference and declaration at the same time and all members' names are available inside their bodies, but at the same time it doesn't seem quite right...
+          .fromScope(PrimaryAssociatedTypeClauseSyntax.self, expectedNames: ["1️⃣"]),
+        ],
+        "4️⃣": [
+          .fromScope(MemberBlockSyntax.self, expectedNames: ["6️⃣"]),
+          .fromScope(PrimaryAssociatedTypeClauseSyntax.self, expectedNames: ["2️⃣"]),
+        ],
+      ],
+      expectedResultTypes: .all(
+        PrimaryAssociatedTypeSyntax.self,
+        except: [
+          "5️⃣": AssociatedTypeDeclSyntax.self,
+          "6️⃣": AssociatedTypeDeclSyntax.self,
+        ]
+      )
+    )
+  }
+
+  func testFunctionDeclarationScope() {
+    assertLexicalNameLookup(
+      source: """
+        class X<1️⃣A> {
+          let 2️⃣a: A
+
+          func foo<3️⃣A, 4️⃣B>(5️⃣a: 6️⃣A, 7️⃣b: 8️⃣B) -> 9️⃣B {
+            return 0️⃣a + 🔟b
+          }
+        }
+        """,
+      references: [
+        "6️⃣": [
+          .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["3️⃣"]),
+          .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["1️⃣"]),
+        ],
+        "8️⃣": [.fromScope(GenericParameterClauseSyntax.self, expectedNames: ["4️⃣"])],
+        "9️⃣": [.fromScope(GenericParameterClauseSyntax.self, expectedNames: ["4️⃣"])],
+        "0️⃣": [
+          .fromScope(FunctionDeclSyntax.self, expectedNames: ["5️⃣"]),
+          .fromScope(MemberBlockSyntax.self, expectedNames: ["2️⃣"]),
+        ],
+        "🔟": [.fromScope(FunctionDeclSyntax.self, expectedNames: ["7️⃣"])],
+      ],
+      expectedResultTypes: .all(
+        GenericParameterSyntax.self,
+        except: [
+          "2️⃣": IdentifierPatternSyntax.self,
+          "5️⃣": FunctionParameterSyntax.self,
+          "7️⃣": FunctionParameterSyntax.self,
+        ]
+      )
     )
   }
 }

@@ -40,12 +40,20 @@ extension SequentialScopeSyntax {
   /// code block scope in this exact order.
   func sequentialLookup(
     in codeBlockItems: some Collection<CodeBlockItemSyntax>,
-    for identifier: Identifier?,
-    at origin: AbsolutePosition,
+    identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
     with config: LookupConfig,
     createResultsForThisScopeWith getResults: ([LookupName]) -> (LookupResult)
   ) -> [LookupResult] {
+    // Sequential scope needs to ensure all type declarations are
+    // available in the whole scope (first loop) and
+    // then that results from IntroducingToSequentialParentScopeSyntax
+    // are properly interleaved with the results produced by this scope.
     var results: [LookupResult] = []
+    // We need to use currentChunk because we
+    // can't add the names directly to results
+    // as we need to partition them based on results
+    // obtained from IntroducingToSequentialParentScopeSyntax
     var currentChunk: [LookupName] = []
     var itemsWithoutNamedDecl: [CodeBlockItemSyntax] = []
 
@@ -55,7 +63,7 @@ extension SequentialScopeSyntax {
           from: codeBlockItem.item,
           accessibleAfter: codeBlockItem.endPosition
         ).filter { introducedName in
-          checkName(identifier, refersTo: introducedName, at: origin)
+          checkName(identifier, refersTo: introducedName, at: lookUpPosition)
         }
       } else {
         itemsWithoutNamedDecl.append(codeBlockItem)
@@ -63,15 +71,15 @@ extension SequentialScopeSyntax {
     }
 
     for codeBlockItem in itemsWithoutNamedDecl {
-      guard codeBlockItem.position < origin else { break }
+      guard codeBlockItem.position <= lookUpPosition else { break }
 
       if let introducingToParentScope = Syntax(codeBlockItem.item).asProtocol(SyntaxProtocol.self)
         as? IntroducingToSequentialParentScopeSyntax
       {
         // Get results from encountered scope.
         let introducedResults = introducingToParentScope.lookupFromSequentialParent(
-          for: identifier,
-          at: origin,
+          identifier: identifier,
+          at: lookUpPosition,
           with: config
         )
 
@@ -91,7 +99,7 @@ extension SequentialScopeSyntax {
           from: codeBlockItem.item,
           accessibleAfter: codeBlockItem.endPosition
         ).filter { introducedName in
-          checkName(identifier, refersTo: introducedName, at: origin)
+          checkName(identifier, refersTo: introducedName, at: lookUpPosition)
         }
       }
     }
@@ -101,6 +109,6 @@ extension SequentialScopeSyntax {
       results.append(getResults(currentChunk))
     }
 
-    return results.reversed() + lookupInParent(for: identifier, at: origin, with: config)
+    return results.reversed() + lookupInParent(identifier: identifier, at: lookUpPosition, with: config)
   }
 }

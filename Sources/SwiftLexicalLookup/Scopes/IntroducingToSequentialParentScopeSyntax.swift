@@ -19,8 +19,8 @@ protocol IntroducingToSequentialParentScopeSyntax: ScopeSyntax {
   /// Returns results matching lookup that should be
   /// interleaved with results of the sequential parent.
   func lookupFromSequentialParent(
-    for identifier: Identifier?,
-    at origin: AbsolutePosition,
+    identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult]
 }

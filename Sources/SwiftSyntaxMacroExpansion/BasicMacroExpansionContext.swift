@@ -210,7 +210,7 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
       // The syntax node came from the source file itself.
       rootSourceFile = directRootSourceFile
       offsetAdjustment = .zero
-    } else if let nodeInOriginalTree = sharedState.detachedNodes[Syntax(node)] {
+    } else if let nodeInOriginalTree = sharedState.detachedNodes[node.root] {
       // The syntax node came from a disconnected root, so adjust for that.
       rootSourceFile = nodeInOriginalTree.root.as(SourceFileSyntax.self)
       offsetAdjustment = SourceLength(utf8Length: nodeInOriginalTree.position.utf8Offset)

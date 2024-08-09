@@ -1281,17 +1281,7 @@ extension Parser {
             arena: self.arena
           )
 
-          /// Create a version of the same attribute with all tokens missing.
-          class TokenMissingMaker: SyntaxRewriter {
-            override func visit(_ token: TokenSyntax) -> TokenSyntax {
-              return .init(token.tokenKind, presence: .missing)
-            }
-          }
-          let tokenMissingMaker = TokenMissingMaker(arena: self.arena)
-          let missingAttributes = tokenMissingMaker.rewrite(
-            Syntax(raw: RawSyntax(recoveredAttributes), rawNodeArena: arena)
-          ).raw
-          attrs.attributes = missingAttributes.cast(RawAttributeListSyntax.self)
+          attrs.attributes = withAllTokensMarkedMissing(syntax: recoveredAttributes)
         }
 
         var (pattern, typeAnnotation) = self.parseTypedPattern()

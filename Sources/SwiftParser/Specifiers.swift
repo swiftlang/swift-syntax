@@ -772,16 +772,17 @@ extension Parser {
     _ effectSpecifiers: inout S?
   ) -> RawUnexpectedNodesSyntax? {
     var synthesizedAsync: RawTokenSyntax? = nil
-    var synthesizedThrows: RawTokenSyntax? = nil
-    var unexpected: [RawTokenSyntax] = []
+    var synthesizedThrowsClause: RawThrowsClauseSyntax? = nil
+    var unexpected: [RawSyntax] = []
     var loopProgress = LoopProgressCondition()
+
     while self.hasProgressed(&loopProgress) {
       if let (spec, handle, matchedSubset) = self.at(
         anyIn: S.MisspelledAsyncTokenKinds.self,
         or: S.CorrectAsyncTokenKinds.self
       ) {
         let misspelledAsync = self.eat(handle)
-        unexpected.append(misspelledAsync)
+        unexpected.append(RawSyntax(misspelledAsync))
         if effectSpecifiers?.asyncSpecifier == nil {
           if matchedSubset == S.CorrectAsyncTokenKinds.self {
             synthesizedAsync = missingToken(spec)
@@ -794,23 +795,82 @@ extension Parser {
         or: S.CorrectThrowsTokenKinds.self
       ) {
         let misspelledThrows = self.eat(handle)
-        unexpected.append(misspelledThrows)
-        if effectSpecifiers?.throwsClause == nil {
-          if matchedSubset == S.CorrectThrowsTokenKinds.self {
-            synthesizedThrows = missingToken(spec)
-          } else {
-            synthesizedThrows = missingToken(.throws)
+        unexpected.append(RawSyntax(misspelledThrows))
+        guard effectSpecifiers?.throwsClause == nil else {
+          continue
+        }
+        if matchedSubset == S.CorrectThrowsTokenKinds.self {
+          let synthesizedThrows = missingToken(spec)
+
+          // avoid generating diagnotics that suggest moving `throws` and the following type if there is any trivia
+          // between `throws` and the following left parenthesis, because the following type is likely to be the
+          // return type.
+          // e.g. -> throws (Int, Int)
+          //
+          // prefer pessimistic diagnostics even if they might be suboptimal.
+          // e.g. -> throws (any Error) Int
+          guard misspelledThrows.trailingTriviaByteLength == 0 && self.currentToken.leadingTriviaByteLength == 0 else {
+            synthesizedThrowsClause = RawThrowsClauseSyntax(
+              throwsSpecifier: synthesizedThrows,
+              leftParen: nil,
+              type: nil,
+              rightParen: nil,
+              arena: self.arena
+            )
+            continue
           }
+
+          guard
+            withLookahead({ lookahead in
+              lookahead.consume(if: .leftParen) != nil && lookahead.canParseType()
+            })
+          else {
+            synthesizedThrowsClause = RawThrowsClauseSyntax(
+              throwsSpecifier: synthesizedThrows,
+              leftParen: nil,
+              type: nil,
+              rightParen: nil,
+              arena: self.arena
+            )
+            continue
+          }
+
+          let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+          if let unexpectedBeforeLeftParen {
+            unexpected += unexpectedBeforeLeftParen.elements
+          }
+          unexpected.append(RawSyntax(leftParen))
+          let type = self.parseType()
+          unexpected.append(RawSyntax(type))
+          let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+          if let unexpectedBeforeRightParen {
+            unexpected += unexpectedBeforeRightParen.elements
+          }
+          if !rightParen.isMissing {
+            unexpected.append(RawSyntax(rightParen))
+          }
+
+          synthesizedThrowsClause = RawThrowsClauseSyntax(
+            throwsSpecifier: synthesizedThrows,
+            leftParen: missingToken(.leftParen),
+            type: self.withAllTokensMarkedMissing(syntax: type),
+            rightParen: rightParen.isMissing ? nil : missingToken(.rightParen),
+            arena: self.arena
+          )
+        } else {
+          synthesizedThrowsClause = RawThrowsClauseSyntax(
+            throwsSpecifier: missingToken(.throws),
+            leftParen: nil,
+            type: nil,
+            rightParen: nil,
+            arena: self.arena
+          )
         }
       } else {
         break
       }
     }
-    if synthesizedAsync != nil || synthesizedThrows != nil {
-      let synthesizedThrowsClause = synthesizedThrows.map {
-        RawThrowsClauseSyntax(throwsSpecifier: $0, leftParen: nil, type: nil, rightParen: nil, arena: self.arena)
-      }
-
+    if synthesizedAsync != nil || synthesizedThrowsClause != nil {
       if let specifiers = effectSpecifiers {
         effectSpecifiers = specifiers.withMisplaced(
           async: synthesizedAsync,

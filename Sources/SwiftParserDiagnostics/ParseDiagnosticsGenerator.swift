@@ -355,6 +355,23 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  private func replaceMisspelledKeyword(
+    keyword: TokenSyntax,
+    unexpected: UnexpectedNodesSyntax?,
+    message: @autoclosure () -> some DiagnosticMessage
+  ) {
+    if keyword.isMissing {
+      exchangeTokens(
+        unexpected: unexpected,
+        unexpectedTokenCondition: { $0.tokenKind.isIdentifier },
+        correctTokens: [keyword],
+        message: { _ in message() },
+        moveFixIt: { ReplaceTokensFixIt(replaceTokens: $0, replacements: [keyword]) },
+        removeRedundantFixIt: { RemoveRedundantFixIt(removeTokens: $0) }
+      )
+    }
+  }
+
   // MARK: - Generic diagnostic generation
 
   public override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
@@ -520,6 +537,22 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: AccessorDeclSyntax) -> SyntaxVisitorContinueKind {
+    guard !shouldSkip(node) else {
+      return .skipChildren
+    }
+
+    if let modifier = node.modifier {
+      replaceMisspelledKeyword(
+        keyword: modifier.name,
+        unexpected: modifier.unexpectedBeforeName,
+        message: MisspelledKeyword(keywordRole: "accessor modifier", token: modifier.name)
+      )
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: AccessorEffectSpecifiersSyntax) -> SyntaxVisitorContinueKind {
     return handleEffectSpecifiers(node)
   }
@@ -528,6 +561,13 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
+
+    replaceMisspelledKeyword(
+      keyword: node.associatedtypeKeyword,
+      unexpected: node.unexpectedBetweenModifiersAndAssociatedtypeKeyword,
+      message: .misspelledAssociatedtype
+    )
+
     // Emit a custom diagnostic for an unexpected 'each' before an associatedtype
     // name.
     removeToken(
@@ -791,10 +831,30 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: GuardStmtSyntax) -> SyntaxVisitorContinueKind {
+    guard !shouldSkip(node) else {
+      return .skipChildren
+    }
+
+    replaceMisspelledKeyword(
+      keyword: node.guardKeyword,
+      unexpected: node.unexpectedBeforeGuardKeyword,
+      message: MisspelledKeyword(keywordRole: "'guard' keyword", token: node.guardKeyword)
+    )
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: DeinitializerDeclSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren
     }
+
+    replaceMisspelledKeyword(
+      keyword: node.deinitKeyword,
+      unexpected: node.unexpectedBetweenModifiersAndDeinitKeyword,
+      message: .misspelledDeinit
+    )
 
     let name: TokenSyntax? = node
       .unexpectedBetweenDeinitKeywordAndEffectSpecifiers?

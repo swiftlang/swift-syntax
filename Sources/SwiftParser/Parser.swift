@@ -773,6 +773,56 @@ extension Parser {
       return self.eat(recoveryHandle)
     }
   }
+
+  mutating func expect(
+    spec: TokenSpec,
+    handle: RecoveryConsumptionHandle
+  ) -> (unexpectedBeforeKeyword: RawUnexpectedNodesSyntax?, keywordToken: RawTokenSyntax) {
+    let tokenKind = spec.synthesizedTokenKind
+    if case .keyword(let keyword) = spec.synthesizedTokenKind {
+      return self.expect(keyword: keyword, handle: handle)
+    } else {
+      return (nil, missingToken(tokenKind.decomposeToRaw().rawKind, text: tokenKind.defaultText))
+    }
+  }
+
+  mutating func expect(
+    keyword: Keyword,
+    handle: RecoveryConsumptionHandle
+  ) -> (unexpectedBeforeKeyword: RawUnexpectedNodesSyntax?, keywordToken: RawTokenSyntax) {
+    var (unexpectedBeforeKeyword, keywordToken) = self.eat(handle)
+
+    if keywordToken.tokenText != keyword.defaultText {
+      if let _ = unexpectedBeforeKeyword {
+        unexpectedBeforeKeyword = RawUnexpectedNodesSyntax(
+          combining: unexpectedBeforeKeyword,
+          keywordToken,
+          arena: self.arena
+        )
+      } else {
+        unexpectedBeforeKeyword = RawUnexpectedNodesSyntax([keywordToken], arena: self.arena)
+      }
+      keywordToken = missingToken(keyword)
+    }
+
+    return (unexpectedBeforeKeyword, keywordToken)
+  }
+
+  mutating func expectPossibleMisspelling<T: MisspelledTokenSpecSet>(
+    anyIn: T.Type,
+    default defaultKind: T.CorrectSpecSet
+  ) -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
+    if let (spec, handle) = self.at(anyIn: T.FuzzyMatchSpecSet.self) {
+      switch spec {
+      case .lhs(let misspelled):
+        return self.expect(spec: misspelled.correctSpecSet.spec, handle: .noRecovery(handle))
+      case .rhs:
+        return self.eat(.noRecovery(handle))
+      }
+    } else {
+      return (nil, missingToken(defaultKind.spec))
+    }
+  }
 }
 
 // MARK: Splitting Tokens

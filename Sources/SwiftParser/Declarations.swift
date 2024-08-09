@@ -209,9 +209,16 @@ extension Parser {
     )
 
     let recoveryResult: (match: DeclarationKeyword, handle: RecoveryConsumptionHandle)?
-    if let atResult = self.at(anyIn: DeclarationKeyword.self) {
+    if let atResult = self.at(anyIn: EitherTokenSpecSet<DeclarationKeyword, MisspelledPureDeclarationKeyword>.self) {
       // We are at a keyword that starts a declaration. Parse that declaration.
-      recoveryResult = (atResult.spec, .noRecovery(atResult.handle))
+      let spec: DeclarationKeyword
+      switch atResult.spec {
+      case .lhs(let declarationKeyword):
+        spec = declarationKeyword
+      case .rhs(let mispelledDeclarationKeyword):
+        spec = .lhs(mispelledDeclarationKeyword.correctSpecSet)
+      }
+      recoveryResult = (spec, .noRecovery(atResult.handle))
     } else if atFunctionDeclarationWithoutFuncKeyword() {
       // We aren't at a declaration keyword and it looks like we are at a function
       // declaration. Parse a function declaration.
@@ -885,7 +892,10 @@ extension Parser {
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawAssociatedTypeDeclSyntax {
-    let (unexpectedBeforeAssocKeyword, assocKeyword) = self.eat(handle)
+    let (unexpectedBeforeAssocKeyword, assocKeyword) = self.expect(
+      keyword: .associatedtype,
+      handle: handle
+    )
 
     // Detect an attempt to use a type parameter pack.
     let eachKeyword = self.consume(if: .keyword(.each))
@@ -1018,7 +1028,10 @@ extension Parser {
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawDeinitializerDeclSyntax {
-    let (unexpectedBeforeDeinitKeyword, deinitKeyword) = self.eat(handle)
+    let (unexpectedBeforeDeinitKeyword, deinitKeyword) = self.expect(
+      keyword: .deinit,
+      handle: handle
+    )
 
     var unexpectedNameAndSignature: [RawSyntax?] = []
 
@@ -1406,7 +1419,7 @@ extension Parser {
     // Check there is an identifier before consuming
     var look = self.lookahead()
     let _ = look.consumeAttributeList()
-    let hasModifier = look.consume(ifAnyIn: AccessorModifier.self) != nil
+    let hasModifier = look.consume(ifAnyIn: MisspelledAccessorModifier.FuzzyMatchSpecSet.self) != nil
     guard let (kind, _) = look.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) ?? forcedKind else {
       return nil
     }
@@ -1417,7 +1430,10 @@ extension Parser {
     // get and set.
     let modifier: RawDeclModifierSyntax?
     if hasModifier {
-      let (unexpectedBeforeName, name) = self.expect(anyIn: AccessorModifier.self, default: .mutating)
+      let (unexpectedBeforeName, name) = self.expectPossibleMisspelling(
+        anyIn: MisspelledAccessorModifier.self,
+        default: .mutating
+      )
       modifier = RawDeclModifierSyntax(
         unexpectedBeforeName,
         name: name,

@@ -112,7 +112,7 @@ final class testNameLookup: XCTestCase {
           let 1️⃣a = 1
           let 2️⃣b = 2
           let 3️⃣x: (Int, Int, Int) = { 4️⃣a, _, 5️⃣c in
-            print(6️⃣a, 7️⃣b, 8️⃣c, 0️⃣$0)
+            print(6️⃣a, 7️⃣b, 8️⃣c)
           }
           9️⃣x()
         }
@@ -125,7 +125,6 @@ final class testNameLookup: XCTestCase {
         "7️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["2️⃣"])],
         "8️⃣": [.fromScope(ClosureExprSyntax.self, expectedNames: ["5️⃣"])],
         "9️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"])],
-        "0️⃣": [],
       ],
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self,
@@ -152,7 +151,7 @@ final class testNameLookup: XCTestCase {
         """,
       references: [
         "5️⃣": [
-          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.`self`("2️⃣")]),
+          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.identifier("2️⃣")]),
           .fromScope(ClassDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("7️⃣"))]),
         ],
         "6️⃣": [
@@ -179,7 +178,7 @@ final class testNameLookup: XCTestCase {
           let 1️⃣a = 1
           let 2️⃣b = 2
           let 3️⃣x = { (4️⃣a b: Int, 5️⃣c: Int) in
-              print(6️⃣a, 7️⃣b, 8️⃣c, 0️⃣$0)
+              print(6️⃣a, 7️⃣b, 8️⃣c)
           }
           9️⃣x()
         }
@@ -192,7 +191,6 @@ final class testNameLookup: XCTestCase {
         ],
         "8️⃣": [.fromScope(ClosureExprSyntax.self, expectedNames: ["5️⃣"])],
         "9️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"])],
-        "0️⃣": [],
       ],
       expectedResultTypes: .all(
         IdentifierPatternSyntax.self,
@@ -659,12 +657,19 @@ final class testNameLookup: XCTestCase {
             8️⃣oldValue
           }
         }
+
+        var x: Int = 2 {
+          didSet(myNewValue) {
+            print(9️⃣newValue)
+          }
+        }
         """,
       references: [
         "2️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.implicit(.newValue("1️⃣"))])],
         "4️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.identifier("3️⃣")])],
         "6️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.implicit(.newValue("5️⃣"))])],
         "8️⃣": [.fromScope(AccessorDeclSyntax.self, expectedNames: [NameExpectation.implicit(.oldValue("7️⃣"))])],
+        "9️⃣": [],
       ]
     )
   }

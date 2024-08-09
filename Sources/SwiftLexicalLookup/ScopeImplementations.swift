@@ -97,15 +97,15 @@ import SwiftSyntax
   /// - for `memberBlock` - a, b, c, d, e, f
   /// - for `codeBlock` - a
   @_spi(Experimental) public func lookup(
-    for identifier: Identifier?,
-    at origin: AbsolutePosition,
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
     switch config.fileScopeHandling {
     case .memberBlock:
       let names = introducedNames(using: .memberBlock)
         .filter { lookupName in
-          checkName(identifier, refersTo: lookupName, at: origin)
+          checkIdentifier(identifier, refersTo: lookupName, at: lookUpPosition)
         }
 
       return names.isEmpty ? [] : [.fromFileScope(self, withNames: names)]
@@ -119,24 +119,22 @@ import SwiftSyntax
 
         if encounteredNonDeclaration {
           sequentialItems.append(codeBlockItem)
+        } else if item.is(DeclSyntax.self) {
+          let foundNames = LookupName.getNames(from: item)
+          members.append(
+            contentsOf: foundNames.filter { checkIdentifier(identifier, refersTo: $0, at: lookUpPosition) }
+          )
         } else {
-          if item.is(DeclSyntax.self) {
-            let foundNames = LookupName.getNames(from: item)
-
-            members.append(contentsOf: foundNames.filter { checkName(identifier, refersTo: $0, at: origin) })
-          } else {
-            encounteredNonDeclaration = true
-            sequentialItems.append(codeBlockItem)
-          }
+          encounteredNonDeclaration = true
+          sequentialItems.append(codeBlockItem)
         }
       }
 
       let sequentialNames = sequentialLookup(
         in: sequentialItems,
-        for: identifier,
-        at: origin,
-        with: config,
-        createResultsForThisScopeWith: { .fromFileScope(self, withNames: $0) }
+        identifier,
+        at: lookUpPosition,
+        with: config
       )
 
       return (members.isEmpty ? [] : [.fromFileScope(self, withNames: members)]) + sequentialNames
@@ -154,16 +152,15 @@ import SwiftSyntax
   }
 
   @_spi(Experimental) public func lookup(
-    for identifier: Identifier?,
-    at origin: AbsolutePosition,
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
     sequentialLookup(
       in: statements,
-      for: identifier,
-      at: origin,
-      with: config,
-      createResultsForThisScopeWith: { .fromScope(self, withNames: $0) }
+      identifier,
+      at: lookUpPosition,
+      with: config
     )
   }
 }
@@ -274,14 +271,14 @@ import SwiftSyntax
   /// }
   /// ```
   @_spi(Experimental) public func lookup(
-    for identifier: Identifier?,
-    at origin: AbsolutePosition,
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
-    if let elseBody, elseBody.position <= origin, elseBody.endPosition >= origin {
-      return lookupInParent(for: identifier, at: origin, with: config)
+    if let elseBody, elseBody.range.contains(lookUpPosition) {
+      return lookupInParent(identifier, at: lookUpPosition, with: config)
     } else {
-      return defaultLookupImplementation(for: identifier, at: origin, with: config)
+      return defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
     }
   }
 }
@@ -319,15 +316,14 @@ import SwiftSyntax
   /// // a is visible here
   /// ```
   func lookupFromSequentialParent(
-    for identifier: Identifier?,
-    at origin: AbsolutePosition,
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
-    guard body.position > origin || body.endPosition < origin
-    else { return [] }
+    guard !body.range.contains(lookUpPosition) else { return [] }
 
     let names = namesIntroducedToSequentialParent.filter { introducedName in
-      checkName(identifier, refersTo: introducedName, at: origin)
+      checkIdentifier(identifier, refersTo: introducedName, at: lookUpPosition)
     }
 
     return names.isEmpty ? [] : [.fromScope(self, withNames: names)]

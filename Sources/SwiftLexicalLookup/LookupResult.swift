@@ -36,4 +36,14 @@ import SwiftSyntax
       return names
     }
   }
+
+  /// Returns result specific for the particular `scope` kind with provided `names`.
+  static func getResult(for scope: ScopeSyntax, withNames names: [LookupName]) -> LookupResult {
+    switch Syntax(scope).as(SyntaxEnum.self) {
+    case .sourceFile(let sourceFileSyntax):
+      return .fromFileScope(sourceFileSyntax, withNames: names)
+    default:
+      return .fromScope(scope, withNames: names)
+    }
+  }
 }

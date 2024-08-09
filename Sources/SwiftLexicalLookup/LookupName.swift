@@ -110,10 +110,6 @@ import SwiftSyntax
   case declaration(NamedDeclSyntax)
   /// Name introduced implicitly by certain syntax nodes.
   case implicit(ImplicitDecl)
-  /// Explicit `self` keyword.
-  case `self`(IdentifiableSyntax, accessibleAfter: AbsolutePosition?)
-  /// Explicit `Self` keyword.
-  case `Self`(IdentifiableSyntax, accessibleAfter: AbsolutePosition?)
 
   /// Syntax associated with this name.
   @_spi(Experimental) public var syntax: SyntaxProtocol {
@@ -124,8 +120,6 @@ import SwiftSyntax
       return syntax
     case .implicit(let implicitName):
       return implicitName.syntax
-    case .self(let syntax, _), .Self(let syntax, _):
-      return syntax
     }
   }
 
@@ -138,10 +132,6 @@ import SwiftSyntax
       return Identifier(syntax.name)
     case .implicit(let kind):
       return kind.identifier
-    case .self:
-      return Identifier("self")
-    case .Self:
-      return Identifier("Self")
     }
   }
 
@@ -149,9 +139,7 @@ import SwiftSyntax
   /// If set to `nil`, the name is available at any point in scope.
   var accessibleAfter: AbsolutePosition? {
     switch self {
-    case .identifier(_, let absolutePosition),
-      .self(_, let absolutePosition),
-      .Self(_, let absolutePosition):
+    case .identifier(_, let absolutePosition):
       return absolutePosition
     default:
       return nil
@@ -159,15 +147,9 @@ import SwiftSyntax
   }
 
   /// Checks if this name was introduced before the syntax used for lookup.
-  func isAccessible(at origin: AbsolutePosition) -> Bool {
+  func isAccessible(at lookUpPosition: AbsolutePosition) -> Bool {
     guard let accessibleAfter else { return true }
-    return accessibleAfter <= origin
-  }
-
-  /// Checks if this name refers to the looked up phrase.
-  func refersTo(_ lookedUpIdentifier: Identifier) -> Bool {
-    guard let identifier else { return false }
-    return identifier == lookedUpIdentifier
+    return accessibleAfter <= lookUpPosition
   }
 
   /// Extracts names introduced by the given `syntax` structure.
@@ -229,16 +211,10 @@ import SwiftSyntax
     accessibleAfter: AbsolutePosition? = nil
   ) -> [LookupName] {
     switch identifiable.identifier.tokenKind {
-    case .keyword(.self):
-      return [.self(identifiable, accessibleAfter: accessibleAfter)]
-    case .keyword(.Self):
-      return [.Self(identifiable, accessibleAfter: accessibleAfter)]
+    case .wildcard:
+      return []
     default:
-      if identifiable.identifier.tokenKind != .wildcard {
-        return [.identifier(identifiable, accessibleAfter: accessibleAfter)]
-      } else {
-        return []
-      }
+      return [.identifier(identifiable, accessibleAfter: accessibleAfter)]
     }
   }
 

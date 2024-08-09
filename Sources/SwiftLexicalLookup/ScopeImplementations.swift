@@ -134,8 +134,7 @@ import SwiftSyntax
         in: sequentialItems,
         identifier,
         at: lookUpPosition,
-        with: config,
-        createResultsForThisScopeWith: { .fromFileScope(self, withNames: $0) }
+        with: config
       )
 
       return (members.isEmpty ? [] : [.fromFileScope(self, withNames: members)]) + sequentialNames
@@ -161,8 +160,7 @@ import SwiftSyntax
       in: statements,
       identifier,
       at: lookUpPosition,
-      with: config,
-      createResultsForThisScopeWith: { .fromScope(self, withNames: $0) }
+      with: config
     )
   }
 }

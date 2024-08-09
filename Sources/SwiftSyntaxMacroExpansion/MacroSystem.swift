@@ -668,6 +668,12 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   /// added to top-level 'CodeBlockItemList'.
   var extensions: [CodeBlockItemSyntax] = []
 
+  /// Stores the types of the freestanding macros that are currently expanding.
+  ///
+  /// As macros are expanded by DFS, `expandingFreestandingMacros` always represent the expansion path starting from
+  /// the root macro node to the last macro node currently expanding.
+  var expandingFreestandingMacros: [any Macro.Type] = []
+
   init(
     macroSystem: MacroSystem,
     contextGenerator: @escaping (Syntax) -> Context,
@@ -684,7 +690,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   }
 
   override func visitAny(_ node: Syntax) -> Syntax? {
-    if skipVisitAnyHandling.contains(node) {
+    guard !skipVisitAnyHandling.contains(node) else {
       return nil
     }
 
@@ -693,8 +699,10 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     // position are handled by 'visit(_:CodeBlockItemListSyntax)'.
     // Only expression expansions inside other syntax nodes is handled here.
     switch expandExpr(node: node) {
-    case .success(let expanded):
-      return Syntax(visit(expanded))
+    case .success(let expansion):
+      return expansion.withExpandedNode { expandedNode in
+        Syntax(visit(expandedNode))
+      }
     case .failure:
       return Syntax(node)
     case .notAMacro:
@@ -795,9 +803,11 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     func addResult(_ node: CodeBlockItemSyntax) {
       // Expand freestanding macro.
       switch expandCodeBlockItem(node: node) {
-      case .success(let expanded):
-        for item in expanded {
-          addResult(item)
+      case .success(let expansion):
+        expansion.withExpandedNode { expandedNode in
+          for item in expandedNode {
+            addResult(item)
+          }
         }
         return
       case .failure:
@@ -840,9 +850,11 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     func addResult(_ node: MemberBlockItemSyntax) {
       // Expand freestanding macro.
       switch expandMemberDecl(node: node) {
-      case .success(let expanded):
-        for item in expanded {
-          addResult(item)
+      case .success(let expansion):
+        expansion.withExpandedNode { expandedNode in
+          for item in expandedNode {
+            addResult(item)
+          }
         }
         return
       case .failure:
@@ -1218,9 +1230,36 @@ extension MacroApplication {
 // MARK: Freestanding macro expansion
 
 extension MacroApplication {
+  /// Encapsulates an expanded node, the type of the macro from which the node was expanded, and the macro application,
+  /// such that recursive macro expansion can be consistently detected.
+  struct MacroExpansion<ResultType> {
+    private let expandedNode: ResultType
+    private let macro: any Macro.Type
+    private unowned let macroApplication: MacroApplication
+
+    fileprivate init(expandedNode: ResultType, macro: any Macro.Type, macroApplication: MacroApplication) {
+      self.expandedNode = expandedNode
+      self.macro = macro
+      self.macroApplication = macroApplication
+    }
+
+    /// Invokes the given closure with the node resulting from a macro expansion.
+    ///
+    /// This method inserts a pair of push and pop operations immediately around the invocation of `body` to maintain
+    /// an exact stack of expanding freestanding macros to detect recursive macro expansion. Callers should perform any
+    /// further macro expansion on `expanded` only within the scope of `body`.
+    func withExpandedNode<T>(_ body: (_ expandedNode: ResultType) throws -> T) rethrows -> T {
+      macroApplication.expandingFreestandingMacros.append(macro)
+      defer {
+        macroApplication.expandingFreestandingMacros.removeLast()
+      }
+      return try body(expandedNode)
+    }
+  }
+
   enum MacroExpansionResult<ResultType> {
     /// Expansion of the macro succeeded.
-    case success(ResultType)
+    case success(expansion: MacroExpansion<ResultType>)
 
     /// Macro system found the macro to expand but running the expansion threw
     /// an error and thus no expansion result exists.
@@ -1230,18 +1269,37 @@ extension MacroApplication {
     case notAMacro
   }
 
+  /// Expands the given freestanding macro node into a syntax node by invoking the given closure.
+  ///
+  /// Any error thrown by `expandMacro` and circular expansion error will be added to diagnostics.
+  ///
+  /// - Parameters:
+  ///   - node: The freestanding macro node to be expanded.
+  ///   - expandMacro: The closure that expands the given macro type and macro node into a syntax node.
+  ///
+  /// - Returns:
+  /// Returns `.notAMacro` if `node` is `nil` or `node.macroName` isn't registered with any macro type.
+  /// Returns `.failure` if `expandMacro` throws an error or returns `nil`, or recursive expansion is detected.
+  /// Returns `.success` otherwise.
   private func expandFreestandingMacro<ExpandedMacroType: SyntaxProtocol>(
     _ node: (any FreestandingMacroExpansionSyntax)?,
-    expandMacro: (_ macro: Macro.Type, _ node: any FreestandingMacroExpansionSyntax) throws -> ExpandedMacroType?
+    expandMacro: (_ macro: any Macro.Type, _ node: any FreestandingMacroExpansionSyntax) throws -> ExpandedMacroType?
   ) -> MacroExpansionResult<ExpandedMacroType> {
     guard let node,
       let macro = macroSystem.lookup(node.macroName.text)?.type
     else {
       return .notAMacro
     }
+
     do {
+      guard !expandingFreestandingMacros.contains(where: { $0 == macro }) else {
+        // We may think of any ongoing macro expansion as a tree in which macro types being expanded are nodes.
+        // Any macro type being expanded more than once will create a cycle which the compiler as of now doesn't allow.
+        throw MacroExpansionError.recursiveExpansion(macro)
+      }
+
       if let expanded = try expandMacro(macro, node) {
-        return .success(expanded)
+        return .success(expansion: MacroExpansion(expandedNode: expanded, macro: macro, macroApplication: self))
       } else {
         return .failure
       }

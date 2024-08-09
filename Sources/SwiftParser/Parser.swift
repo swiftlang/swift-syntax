@@ -826,6 +826,24 @@ extension Parser {
   }
 }
 
+// MARK: Marking Tokens As Missing
+extension Parser {
+  private class TokenMissingMaker: SyntaxRewriter {
+    override func visit(_ token: TokenSyntax) -> TokenSyntax {
+      TokenSyntax(token.tokenKind, presence: .missing)
+    }
+  }
+
+  /// Creates a replicate of `syntax` with all tokens marked as missing.
+  func withAllTokensMarkedMissing<T: RawSyntaxNodeProtocol>(syntax: T) -> T {
+    let tokenMissingMaker = TokenMissingMaker(arena: self.arena)
+    let allMissing = tokenMissingMaker.rewrite(
+      Syntax(raw: RawSyntax(syntax), rawNodeArena: self.arena)
+    ).raw
+    return allMissing.cast(T.self)
+  }
+}
+
 extension SyntaxText {
   func withBuffer<Result>(_ body: (UnsafeBufferPointer<UInt8>) throws -> Result) rethrows -> Result {
     try body(UnsafeBufferPointer<UInt8>(start: self.baseAddress, count: self.count))

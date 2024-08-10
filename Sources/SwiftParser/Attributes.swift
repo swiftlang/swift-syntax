@@ -361,9 +361,7 @@ extension Parser {
           unexpectedBeforeAtSign,
           atSign: atSign,
           unexpectedBeforeAttributeName,
-          attributeName: RawTypeSyntax(
-            RawIdentifierTypeSyntax(name: attributeName, genericArgumentClause: nil, arena: self.arena)
-          ),
+          attributeName: RawIdentifierTypeSyntax(name: attributeName, genericArgumentClause: nil, arena: self.arena),
           leftParen: nil,
           arguments: nil,
           rightParen: nil,
@@ -394,13 +392,11 @@ extension RawLabeledExprSyntax {
     self.init(
       label: nil,
       colon: nil,
-      expression: RawExprSyntax(
-        RawDeclReferenceExprSyntax(
-          unexpectedBeforeIdentifier,
-          baseName: identifier,
-          argumentNames: nil,
-          arena: arena
-        )
+      expression: RawDeclReferenceExprSyntax(
+        unexpectedBeforeIdentifier,
+        baseName: identifier,
+        argumentNames: nil,
+        arena: arena
       ),
       unexpectedBetweenIdentifierAndTrailingComma,
       trailingComma: trailingComma,
@@ -448,9 +444,7 @@ extension Parser {
       unexpectedBeforeAtSign,
       atSign: atSign,
       unexpectedBeforeDifferentiable,
-      attributeName: RawTypeSyntax(
-        RawIdentifierTypeSyntax(name: differentiable, genericArgumentClause: nil, arena: self.arena)
-      ),
+      attributeName: RawIdentifierTypeSyntax(name: differentiable, genericArgumentClause: nil, arena: self.arena),
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
       arguments: .differentiableArguments(argument),
@@ -592,9 +586,7 @@ extension Parser {
       unexpectedBeforeAtSign,
       atSign: atSign,
       unexpectedBeforeDerivative,
-      attributeName: RawTypeSyntax(
-        RawIdentifierTypeSyntax(name: derivative, genericArgumentClause: nil, arena: self.arena)
-      ),
+      attributeName: RawIdentifierTypeSyntax(name: derivative, genericArgumentClause: nil, arena: self.arena),
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
       arguments: .derivativeRegistrationArguments(argument),
@@ -616,9 +608,7 @@ extension Parser {
       unexpectedBeforeAtSign,
       atSign: atSign,
       unexpectedBeforeTranspose,
-      attributeName: RawTypeSyntax(
-        RawIdentifierTypeSyntax(name: transpose, genericArgumentClause: nil, arena: self.arena)
-      ),
+      attributeName: RawIdentifierTypeSyntax(name: transpose, genericArgumentClause: nil, arena: self.arena),
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
       arguments: .derivativeRegistrationArguments(argument),

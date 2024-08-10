@@ -370,13 +370,11 @@ fileprivate extension Parser {
       // The missing item is not necessary to be a declaration,
       // which is just a placeholder here
       return RawCodeBlockItemSyntax(
-        item: .decl(
-          RawDeclSyntax(
-            RawMissingDeclSyntax(
-              attributes: self.emptyCollection(RawAttributeListSyntax.self),
-              modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
-              arena: self.arena
-            )
+        item: .init(
+          decl: RawMissingDeclSyntax(
+            attributes: self.emptyCollection(RawAttributeListSyntax.self),
+            modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
+            arena: self.arena
           )
         ),
         semicolon: nil,

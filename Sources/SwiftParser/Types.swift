@@ -36,7 +36,7 @@ extension Parser {
 
   mutating func parseTypeScalar(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
     let specifiersAndAttributes = self.parseTypeAttributeList(misplacedSpecifiers: misplacedSpecifiers)
-    var base = RawTypeSyntax(self.parseSimpleOrCompositionType())
+    var base = self.parseSimpleOrCompositionType()
     if self.withLookahead({ $0.canParseFunctionTypeArrow() }) {
       var effectSpecifiers = self.parseTypeEffectSpecifiers()
       let returnClause = self.parseFunctionReturnClause(
@@ -105,7 +105,7 @@ extension Parser {
         )
       )
     } else {
-      return RawTypeSyntax(base)
+      return base
     }
   }
 
@@ -251,7 +251,7 @@ extension Parser {
     case .leftParen:
       base = RawTypeSyntax(self.parseTupleTypeBody())
     case .leftSquare:
-      base = RawTypeSyntax(self.parseCollectionType())
+      base = self.parseCollectionType()
     case .wildcard:
       base = RawTypeSyntax(self.parsePlaceholderType())
     case nil:
@@ -520,7 +520,7 @@ extension Parser {
               secondName: nil,
               RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, unexpectedBeforeColon, arena: self.arena),
               colon: nil,
-              type: RawTypeSyntax(RawIdentifierTypeSyntax(name: first, genericArgumentClause: nil, arena: self.arena)),
+              type: RawIdentifierTypeSyntax(name: first, genericArgumentClause: nil, arena: self.arena),
               ellipsis: nil,
               trailingComma: self.missingToken(.comma),
               arena: self.arena
@@ -575,7 +575,7 @@ extension Parser {
         RawArrayTypeSyntax(
           remaingingTokens,
           leftSquare: missingToken(.leftSquare),
-          element: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+          element: RawMissingTypeSyntax(arena: self.arena),
           rightSquare: missingToken(.rightSquare),
           arena: self.arena
         )
@@ -936,8 +936,7 @@ extension Parser {
     specifierHandle: TokenConsumptionHandle
   ) -> RawTypeSpecifierListSyntax.Element {
     let specifier = self.eat(specifierHandle)
-    let simpleSpecifier = RawSimpleTypeSpecifierSyntax(specifier: specifier, arena: arena)
-    return .simpleTypeSpecifier(simpleSpecifier)
+    return .simpleTypeSpecifier(RawSimpleTypeSpecifierSyntax(specifier: specifier, arena: arena))
   }
 
   mutating func parseTypeAttributeList(

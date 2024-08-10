@@ -58,7 +58,7 @@ extension Parser {
   mutating func parseStatement() -> RawStmtSyntax {
     // If this is a label on a loop/switch statement, consume it and pass it into
     // parsing logic below.
-    func label<S: RawStmtSyntaxNodeProtocol>(_ stmt: S, with label: Parser.StatementLabel?) -> RawStmtSyntax {
+    func label(_ stmt: some RawStmtSyntaxNodeProtocol, with label: Parser.StatementLabel?) -> RawStmtSyntax {
       guard let label = label else {
         return RawStmtSyntax(stmt)
       }
@@ -66,7 +66,7 @@ extension Parser {
         RawLabeledStmtSyntax(
           label: label.label,
           colon: label.colon,
-          statement: RawStmtSyntax(stmt),
+          statement: stmt,
           arena: self.arena
         )
       )
@@ -87,7 +87,7 @@ extension Parser {
       if self.experimentalFeatures.contains(.doExpressions) {
         let doExpr = self.parseDoExpression(doHandle: handle)
         let doStmt = RawExpressionStmtSyntax(
-          expression: RawExprSyntax(doExpr),
+          expression: doExpr,
           arena: self.arena
         )
         return label(doStmt, with: optLabel)
@@ -97,7 +97,7 @@ extension Parser {
     case (.if, let handle)?:
       let ifExpr = self.parseIfExpression(ifHandle: handle)
       let ifStmt = RawExpressionStmtSyntax(
-        expression: RawExprSyntax(ifExpr),
+        expression: ifExpr,
         arena: self.arena
       )
       return label(ifStmt, with: optLabel)
@@ -106,7 +106,7 @@ extension Parser {
     case (.switch, let handle)?:
       let switchExpr = self.parseSwitchExpression(switchHandle: handle)
       let switchStmt = RawExpressionStmtSyntax(
-        expression: RawExprSyntax(switchExpr),
+        expression: switchExpr,
         arena: self.arena
       )
       return label(switchStmt, with: optLabel)
@@ -129,8 +129,7 @@ extension Parser {
     case (.then, let handle)? where experimentalFeatures.contains(.thenStatements):
       return label(self.parseThenStatement(handle: handle), with: optLabel)
     case nil, (.then, _)?:
-      let missingStmt = RawStmtSyntax(RawMissingStmtSyntax(arena: self.arena))
-      return label(missingStmt, with: optLabel)
+      return label(RawMissingStmtSyntax(arena: self.arena), with: optLabel)
     }
   }
 }
@@ -314,7 +313,7 @@ extension Parser {
           initializer: initializer
             ?? RawInitializerClauseSyntax(
               equal: RawTokenSyntax(missing: .equal, arena: self.arena),
-              value: RawExprSyntax(RawMissingExprSyntax(arena: self.arena)),
+              value: RawMissingExprSyntax(arena: self.arena),
               arena: self.arena
             ),
           arena: self.arena
@@ -520,7 +519,7 @@ extension Parser {
       conditions = RawConditionElementListSyntax(
         elements: [
           RawConditionElementSyntax(
-            condition: .expression(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
+            condition: .init(expression: RawMissingExprSyntax(arena: self.arena)),
             trailingComma: nil,
             arena: self.arena
           )
@@ -771,7 +770,7 @@ extension Parser {
         )
       )
     } else {
-      yieldedExpressions = .single(self.parseExpression(flavor: .basic, pattern: .none))
+      yieldedExpressions = .init(single: self.parseExpression(flavor: .basic, pattern: .none))
     }
 
     return RawYieldStmtSyntax(

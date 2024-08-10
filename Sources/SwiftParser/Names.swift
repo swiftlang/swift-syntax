@@ -33,7 +33,7 @@ extension Parser {
     }
     if let dollarIdent = self.consume(if: .dollarIdentifier) {
       return (
-        RawUnexpectedNodesSyntax(elements: [RawSyntax(dollarIdent)], arena: self.arena),
+        RawUnexpectedNodesSyntax([dollarIdent], arena: self.arena),
         self.missingToken(.identifier)
       )
     } else {

@@ -137,7 +137,7 @@ extension Parser {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawCodeBlockItemSyntax(
         remainingTokens,
-        item: .expr(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
+        item: .init(expr: RawMissingExprSyntax(arena: self.arena)),
         semicolon: nil,
         arena: self.arena
       )
@@ -147,8 +147,8 @@ extension Parser {
       // Parse them and put them in their own CodeBlockItem but as an unexpected node.
       let switchCase = self.parseSwitchCase()
       return RawCodeBlockItemSyntax(
-        RawUnexpectedNodesSyntax(elements: [RawSyntax(switchCase)], arena: self.arena),
-        item: .expr(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
+        RawUnexpectedNodesSyntax([switchCase], arena: self.arena),
+        item: .init(expr: RawMissingExprSyntax(arena: self.arena)),
         semicolon: nil,
         arena: self.arena
       )
@@ -192,16 +192,14 @@ extension Parser {
         let (op, rhs) = parseUnresolvedAsExpr(
           handle: .init(spec: .keyword(.as))
         )
-        let sequence = RawExprSyntax(
-          RawSequenceExprSyntax(
-            elements: RawExprListSyntax(
-              elements: [expr, op, rhs],
-              arena: self.arena
-            ),
+        let sequence = RawSequenceExprSyntax(
+          elements: RawExprListSyntax(
+            elements: [expr, op, rhs],
             arena: self.arena
-          )
+          ),
+          arena: self.arena
         )
-        return .expr(sequence)
+        return .init(expr: sequence)
       }
     }
     return .stmt(stmt)
@@ -237,9 +235,9 @@ extension Parser {
       } syntax: { parser, items in
         return .statements(RawCodeBlockItemListSyntax(elements: items, arena: parser.arena))
       }
-      return .decl(RawDeclSyntax(directive))
+      return .init(decl: directive)
     } else if self.at(.poundSourceLocation) {
-      return .decl(RawDeclSyntax(self.parsePoundSourceLocationDirective()))
+      return .init(decl: self.parsePoundSourceLocationDirective())
     } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl) {
       return .decl(self.parseDeclaration())
     } else if self.atStartOfStatement(preferExpr: false) {
@@ -251,7 +249,7 @@ extension Parser {
     } else if self.atStartOfStatement(allowRecovery: true, preferExpr: false) {
       return self.parseStatementItem()
     } else {
-      return .expr(RawExprSyntax(RawMissingExprSyntax(arena: self.arena)))
+      return .init(expr: RawMissingExprSyntax(arena: self.arena))
     }
   }
 }

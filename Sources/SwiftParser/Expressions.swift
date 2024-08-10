@@ -143,7 +143,7 @@ extension Parser {
         break
       }
     }
-    return RawExprSyntax(self.parseSequenceExpression(flavor: flavor, pattern: pattern))
+    return self.parseSequenceExpression(flavor: flavor, pattern: pattern)
   }
 }
 
@@ -569,7 +569,7 @@ extension Parser {
       return RawExprSyntax(
         RawInOutExprSyntax(
           ampersand: amp,
-          expression: RawExprSyntax(expr),
+          expression: expr,
           arena: self.arena
         )
       )
@@ -675,7 +675,7 @@ extension Parser {
 
     return RawExprSyntax(
       RawGenericSpecializationExprSyntax(
-        expression: RawExprSyntax(memberAccess),
+        expression: memberAccess,
         genericArgumentClause: generics,
         arena: self.arena
       )
@@ -1154,21 +1154,18 @@ extension Parser {
       // is the start of an enum or expr pattern.
       if pattern.admitsBinding && self.lookahead().isInBindingPatternPosition() {
         let identifier = self.eat(handle)
-        let pattern = RawPatternSyntax(
-          RawIdentifierPatternSyntax(
-            identifier: identifier,
-            arena: self.arena
-          )
+        let pattern = RawIdentifierPatternSyntax(
+          identifier: identifier,
+          arena: self.arena
         )
         return RawExprSyntax(RawPatternExprSyntax(pattern: pattern, arena: self.arena))
       }
 
-      return RawExprSyntax(self.parseIdentifierExpression(flavor: flavor))
+      return self.parseIdentifierExpression(flavor: flavor)
     case (.Self, _)?:  // Self
-      return RawExprSyntax(self.parseIdentifierExpression(flavor: flavor))
+      return self.parseIdentifierExpression(flavor: flavor)
     case (.Any, _)?:  // Any
-      let anyType = RawTypeSyntax(self.parseAnyType())
-      return RawExprSyntax(RawTypeExprSyntax(type: anyType, arena: self.arena))
+      return RawExprSyntax(RawTypeExprSyntax(type: self.parseAnyType(), arena: self.arena))
     case (.dollarIdentifier, _)?:
       return RawExprSyntax(self.parseAnonymousClosureArgument())
     case (.wildcard, let handle)?:  // _
@@ -1213,9 +1210,9 @@ extension Parser {
               arena: self.arena
             ),
             RawUnexpectedNodesSyntax(
-              elements: [
-                RawSyntax(period),
-                RawSyntax(integerLiteral),
+              [
+                period,
+                integerLiteral,
               ],
               arena: self.arena
             ),
@@ -1270,7 +1267,7 @@ extension Parser {
     let generics = self.parseGenericArguments()
     return RawExprSyntax(
       RawGenericSpecializationExprSyntax(
-        expression: RawExprSyntax(declName),
+        expression: declName,
         genericArgumentClause: generics,
         arena: self.arena
       )
@@ -1620,7 +1617,7 @@ extension Parser {
     let eq: RawTokenSyntax
     if let comparison = self.consumeIfContextualPunctuator("==") {
       unexpectedBeforeEq = RawUnexpectedNodesSyntax(
-        elements: [RawSyntax(comparison)],
+        [comparison],
         arena: self.arena
       )
       eq = missingToken(.equal)
@@ -1875,7 +1872,7 @@ extension Parser {
           remainingTokens,
           label: nil,
           colon: nil,
-          expression: RawExprSyntax(RawMissingExprSyntax(arena: self.arena)),
+          expression: RawMissingExprSyntax(arena: self.arena),
           trailingComma: nil,
           arena: self.arena
         )
@@ -2119,7 +2116,7 @@ extension Parser {
       conditions = RawConditionElementListSyntax(
         elements: [
           RawConditionElementSyntax(
-            condition: .expression(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
+            condition: .init(expression: RawMissingExprSyntax(arena: self.arena)),
             trailingComma: nil,
             arena: self.arena
           )
@@ -2246,11 +2243,9 @@ extension Parser {
                   caseItems: RawSwitchCaseItemListSyntax(
                     elements: [
                       RawSwitchCaseItemSyntax(
-                        pattern: RawPatternSyntax(
-                          RawIdentifierPatternSyntax(
-                            identifier: missingToken(.identifier),
-                            arena: self.arena
-                          )
+                        pattern: RawIdentifierPatternSyntax(
+                          identifier: missingToken(.identifier),
+                          arena: self.arena
                         ),
                         whereClause: nil,
                         trailingComma: nil,
@@ -2293,9 +2288,7 @@ extension Parser {
       unknownAttr = RawAttributeSyntax(
         atSign: at,
         unexpectedBeforeIdent,
-        attributeName: RawTypeSyntax(
-          RawIdentifierTypeSyntax(name: ident, genericArgumentClause: nil, arena: self.arena)
-        ),
+        attributeName: RawIdentifierTypeSyntax(name: ident, genericArgumentClause: nil, arena: self.arena),
         leftParen: nil,
         arguments: nil,
         rightParen: nil,
@@ -2318,9 +2311,7 @@ extension Parser {
           caseItems: RawSwitchCaseItemListSyntax(
             elements: [
               RawSwitchCaseItemSyntax(
-                pattern: RawPatternSyntax(
-                  RawIdentifierPatternSyntax(identifier: missingToken(.identifier), arena: self.arena)
-                ),
+                pattern: RawIdentifierPatternSyntax(identifier: missingToken(.identifier), arena: self.arena),
                 whereClause: nil,
                 trailingComma: nil,
                 arena: self.arena
@@ -2370,7 +2361,7 @@ extension Parser {
 
         if keepGoing != nil, let caseToken = self.consume(if: .keyword(.case)) {
           unexpectedPrePatternCase = RawUnexpectedNodesSyntax(
-            elements: [RawSyntax(caseToken)],
+            [caseToken],
             arena: self.arena
           )
         } else {

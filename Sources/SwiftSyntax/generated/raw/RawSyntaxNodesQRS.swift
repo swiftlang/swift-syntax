@@ -158,7 +158,7 @@ public struct RawRepeatStmtSyntax: RawStmtSyntaxNodeProtocol {
       _ unexpectedBetweenBodyAndWhileKeyword: RawUnexpectedNodesSyntax? = nil, 
       whileKeyword: RawTokenSyntax, 
       _ unexpectedBetweenWhileKeywordAndCondition: RawUnexpectedNodesSyntax? = nil, 
-      condition: RawExprSyntax, 
+      condition: some RawExprSyntaxNodeProtocol, 
       _ unexpectedAfterCondition: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -248,7 +248,7 @@ public struct RawReturnClauseSyntax: RawSyntaxNodeProtocol {
       _ unexpectedBeforeArrow: RawUnexpectedNodesSyntax? = nil, 
       arrow: RawTokenSyntax, 
       _ unexpectedBetweenArrowAndType: RawUnexpectedNodesSyntax? = nil, 
-      type: RawTypeSyntax, 
+      type: some RawTypeSyntaxNodeProtocol, 
       _ unexpectedAfterType: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -386,11 +386,11 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
   
   public init(
       _ unexpectedBeforeLeftType: RawUnexpectedNodesSyntax? = nil, 
-      leftType: RawTypeSyntax, 
+      leftType: some RawTypeSyntaxNodeProtocol, 
       _ unexpectedBetweenLeftTypeAndEqual: RawUnexpectedNodesSyntax? = nil, 
       equal: RawTokenSyntax, 
       _ unexpectedBetweenEqualAndRightType: RawUnexpectedNodesSyntax? = nil, 
-      rightType: RawTypeSyntax, 
+      rightType: some RawTypeSyntaxNodeProtocol, 
       _ unexpectedAfterRightType: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -718,7 +718,7 @@ public struct RawSomeOrAnyTypeSyntax: RawTypeSyntaxNodeProtocol {
       _ unexpectedBeforeSomeOrAnySpecifier: RawUnexpectedNodesSyntax? = nil, 
       someOrAnySpecifier: RawTokenSyntax, 
       _ unexpectedBetweenSomeOrAnySpecifierAndConstraint: RawUnexpectedNodesSyntax? = nil, 
-      constraint: RawTypeSyntax, 
+      constraint: some RawTypeSyntaxNodeProtocol, 
       _ unexpectedAfterConstraint: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -1575,7 +1575,7 @@ public struct RawSubscriptCallExprSyntax: RawExprSyntaxNodeProtocol {
   
   public init(
       _ unexpectedBeforeCalledExpression: RawUnexpectedNodesSyntax? = nil, 
-      calledExpression: RawExprSyntax, 
+      calledExpression: some RawExprSyntaxNodeProtocol, 
       _ unexpectedBetweenCalledExpressionAndLeftSquare: RawUnexpectedNodesSyntax? = nil, 
       leftSquare: RawTokenSyntax, 
       _ unexpectedBetweenLeftSquareAndArguments: RawUnexpectedNodesSyntax? = nil, 
@@ -1895,7 +1895,7 @@ public struct RawSuppressedTypeSyntax: RawTypeSyntaxNodeProtocol {
       _ unexpectedBeforeWithoutTilde: RawUnexpectedNodesSyntax? = nil, 
       withoutTilde: RawTokenSyntax, 
       _ unexpectedBetweenWithoutTildeAndType: RawUnexpectedNodesSyntax? = nil, 
-      type: RawTypeSyntax, 
+      type: some RawTypeSyntaxNodeProtocol, 
       _ unexpectedAfterType: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -2013,7 +2013,7 @@ public struct RawSwitchCaseItemSyntax: RawSyntaxNodeProtocol {
   
   public init(
       _ unexpectedBeforePattern: RawUnexpectedNodesSyntax? = nil, 
-      pattern: RawPatternSyntax, 
+      pattern: some RawPatternSyntaxNodeProtocol, 
       _ unexpectedBetweenPatternAndWhereClause: RawUnexpectedNodesSyntax? = nil, 
       whereClause: RawWhereClauseSyntax?, 
       _ unexpectedBetweenWhereClauseAndTrailingComma: RawUnexpectedNodesSyntax? = nil, 
@@ -2441,7 +2441,7 @@ public struct RawSwitchExprSyntax: RawExprSyntaxNodeProtocol {
       _ unexpectedBeforeSwitchKeyword: RawUnexpectedNodesSyntax? = nil, 
       switchKeyword: RawTokenSyntax, 
       _ unexpectedBetweenSwitchKeywordAndSubject: RawUnexpectedNodesSyntax? = nil, 
-      subject: RawExprSyntax, 
+      subject: some RawExprSyntaxNodeProtocol, 
       _ unexpectedBetweenSubjectAndLeftBrace: RawUnexpectedNodesSyntax? = nil, 
       leftBrace: RawTokenSyntax, 
       _ unexpectedBetweenLeftBraceAndCases: RawUnexpectedNodesSyntax? = nil, 

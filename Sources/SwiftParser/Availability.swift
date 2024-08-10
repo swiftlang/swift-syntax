@@ -26,7 +26,7 @@ extension Parser {
       repeat {
         let argument: RawAvailabilityArgumentSyntax.Argument
         if self.at(.identifier) {
-          argument = .availabilityVersionRestriction(self.parsePlatformVersion())
+          argument = .init(self.parsePlatformVersion())
         } else {
           argument = self.parseAvailabilitySpec()
         }
@@ -108,7 +108,7 @@ extension Parser {
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let stringValue = self.parseSimpleString()
 
-        entry = .availabilityLabeledArgument(
+        entry = .init(
           RawAvailabilityLabeledArgumentSyntax(
             label: argumentLabel,
             unexpectedBeforeColon,
@@ -122,7 +122,7 @@ extension Parser {
         let argumentLabel = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         let version = self.parseVersionTuple()
-        entry = .availabilityLabeledArgument(
+        entry = .init(
           RawAvailabilityLabeledArgumentSyntax(
             label: argumentLabel,
             unexpectedBeforeColon,
@@ -135,7 +135,7 @@ extension Parser {
         let argumentLabel = self.eat(handle)
         if let colon = self.consume(if: .colon) {
           let version = self.parseVersionTuple()
-          entry = .availabilityLabeledArgument(
+          entry = .init(
             RawAvailabilityLabeledArgumentSyntax(
               label: argumentLabel,
               colon: colon,
@@ -144,19 +144,19 @@ extension Parser {
             )
           )
         } else {
-          entry = .token(argumentLabel)
+          entry = .init(argumentLabel)
         }
       case (.unavailable, let handle)?,
         (.noasync, let handle)?:
         let argument = self.eat(handle)
-        entry = .token(argument)
+        entry = .init(argument)
       case (.star, _)?:
         entry = self.parseAvailabilitySpec()
       case (.identifier, let handle)?:
         if self.peek(isAt: .comma) {
           // An argument like `_iOS13Aligned` that isn't followed by a version.
           let version = self.eat(handle)
-          entry = .token(version)
+          entry = .init(version)
         } else {
           entry = self.parseAvailabilitySpec()
         }
@@ -179,10 +179,10 @@ extension Parser {
   /// Parse an availability argument.
   mutating func parseAvailabilitySpec() -> RawAvailabilityArgumentSyntax.Argument {
     if let star = self.consumeIfContextualPunctuator("*") {
-      return .token(star)
+      return .init(star)
     }
 
-    return .availabilityVersionRestriction(self.parsePlatformVersion())
+    return .init(self.parsePlatformVersion())
   }
 
   /// Parse an availability macro.

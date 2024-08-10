@@ -102,6 +102,26 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
               StmtSyntax("return nil")
             }
+
+            for (swiftName, kind) in choices {
+              if let choiceNode = SYNTAX_NODE_MAP[kind], choiceNode.kind.isBase {
+                DeclSyntax(
+                  """
+                  public init(_ other: some \(choiceNode.kind.rawProtocolType)) {
+                    self = .\(swiftName)(\(choiceNode.kind.rawType)(other))
+                  }
+                  """
+                )
+              } else {
+                DeclSyntax(
+                  """
+                  public init(_ other: \(kind.rawType)) {
+                    self = .\(swiftName)(other)
+                  }
+                  """
+                )
+              }
+            }
           }
         }
 
@@ -270,13 +290,23 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
 fileprivate extension Child {
   var rawParameterType: TypeSyntax {
-    let paramType: TypeSyntax
-    if case ChildKind.nodeChoices = kind {
-      paramType = syntaxChoicesType
+    var paramType: TypeSyntax
+    if !kind.isNodeChoicesEmpty {
+      paramType = "\(syntaxChoicesType)"
+    } else if hasBaseType && !isOptional {
+      paramType = "some \(syntaxNodeKind.rawProtocolType)"
     } else {
       paramType = syntaxNodeKind.rawType
     }
 
-    return buildableType.optionalWrapped(type: paramType)
+    if isOptional {
+      if paramType.is(SomeOrAnyTypeSyntax.self) {
+        paramType = "(\(paramType))?"
+      } else {
+        paramType = "\(paramType)?"
+      }
+    }
+
+    return paramType
   }
 }

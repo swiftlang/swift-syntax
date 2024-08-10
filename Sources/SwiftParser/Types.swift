@@ -520,7 +520,7 @@ extension Parser {
               secondName: nil,
               RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, unexpectedBeforeColon, arena: self.arena),
               colon: nil,
-              type: RawTypeSyntax(RawIdentifierTypeSyntax(name: first, genericArgumentClause: nil, arena: self.arena)),
+              type: RawIdentifierTypeSyntax(name: first, genericArgumentClause: nil, arena: self.arena),
               ellipsis: nil,
               trailingComma: self.missingToken(.comma),
               arena: self.arena
@@ -575,7 +575,7 @@ extension Parser {
         RawArrayTypeSyntax(
           remaingingTokens,
           leftSquare: missingToken(.leftSquare),
-          element: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+          element: RawMissingTypeSyntax(arena: self.arena),
           rightSquare: missingToken(.rightSquare),
           arena: self.arena
         )
@@ -936,8 +936,7 @@ extension Parser {
     specifierHandle: TokenConsumptionHandle
   ) -> RawTypeSpecifierListSyntax.Element {
     let specifier = self.eat(specifierHandle)
-    let simpleSpecifier = RawSimpleTypeSpecifierSyntax(specifier: specifier, arena: arena)
-    return .simpleTypeSpecifier(simpleSpecifier)
+    return .init(RawSimpleTypeSpecifierSyntax(specifier: specifier, arena: arena))
   }
 
   mutating func parseTypeAttributeList(
@@ -961,7 +960,7 @@ extension Parser {
       }
     }
     specifiers += misplacedSpecifiers.map {
-      .simpleTypeSpecifier(
+      .init(
         RawSimpleTypeSpecifierSyntax(
           specifier: missingToken($0.tokenKind, text: $0.tokenText),
           arena: arena
@@ -1009,7 +1008,7 @@ extension Parser {
       // Known type attribute that doesn't take any arguments
       return parseAttributeWithoutArguments()
     case .differentiable:
-      return .attribute(self.parseDifferentiableAttribute())
+      return .init(self.parseDifferentiableAttribute())
 
     case .convention:
       return parseAttribute(argumentMode: .required) { parser in
@@ -1017,16 +1016,16 @@ extension Parser {
       }
     case ._opaqueReturnTypeOf:
       return parseAttribute(argumentMode: .required) { parser in
-        return .opaqueReturnTypeOfAttributeArguments(parser.parseOpaqueReturnTypeOfAttributeArguments())
+        return .init(parser.parseOpaqueReturnTypeOfAttributeArguments())
       }
     case .isolated:
       return parseAttribute(argumentMode: .required) { parser in
-        return .argumentList(parser.parseIsolatedAttributeArguments())
+        return .init(parser.parseIsolatedAttributeArguments())
       }
     case nil:  // Custom attribute
       return parseAttribute(argumentMode: .customAttribute) { parser in
         let arguments = parser.parseArgumentListElements(pattern: .none, allowTrailingComma: false)
-        return .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
+        return .init(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
       }
 
     }

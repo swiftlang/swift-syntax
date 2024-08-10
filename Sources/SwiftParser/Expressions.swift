@@ -143,7 +143,7 @@ extension Parser {
         break
       }
     }
-    return RawExprSyntax(self.parseSequenceExpression(flavor: flavor, pattern: pattern))
+    return self.parseSequenceExpression(flavor: flavor, pattern: pattern)
   }
 }
 
@@ -569,7 +569,7 @@ extension Parser {
       return RawExprSyntax(
         RawInOutExprSyntax(
           ampersand: amp,
-          expression: RawExprSyntax(expr),
+          expression: expr,
           arena: self.arena
         )
       )
@@ -675,7 +675,7 @@ extension Parser {
 
     return RawExprSyntax(
       RawGenericSpecializationExprSyntax(
-        expression: RawExprSyntax(memberAccess),
+        expression: memberAccess,
         genericArgumentClause: generics,
         arena: self.arena
       )
@@ -968,7 +968,7 @@ extension Parser {
       components.append(
         RawKeyPathComponentSyntax(
           period: period,
-          component: .optional(
+          component: .init(
             RawKeyPathOptionalComponentSyntax(
               questionOrExclamationMark: questionOrExclaim,
               arena: self.arena
@@ -1028,7 +1028,7 @@ extension Parser {
         components.append(
           RawKeyPathComponentSyntax(
             period: period,
-            component: .subscript(
+            component: .init(
               RawKeyPathSubscriptComponentSyntax(
                 leftSquare: lsquare,
                 arguments: RawLabeledExprListSyntax(
@@ -1154,11 +1154,9 @@ extension Parser {
       // is the start of an enum or expr pattern.
       if pattern.admitsBinding && self.lookahead().isInBindingPatternPosition() {
         let identifier = self.eat(handle)
-        let pattern = RawPatternSyntax(
-          RawIdentifierPatternSyntax(
-            identifier: identifier,
-            arena: self.arena
-          )
+        let pattern = RawIdentifierPatternSyntax(
+          identifier: identifier,
+          arena: self.arena
         )
         return RawExprSyntax(RawPatternExprSyntax(pattern: pattern, arena: self.arena))
       }
@@ -1167,8 +1165,7 @@ extension Parser {
     case (.Self, _)?:  // Self
       return RawExprSyntax(self.parseIdentifierExpression(flavor: flavor))
     case (.Any, _)?:  // Any
-      let anyType = RawTypeSyntax(self.parseAnyType())
-      return RawExprSyntax(RawTypeExprSyntax(type: anyType, arena: self.arena))
+      return RawExprSyntax(RawTypeExprSyntax(type: self.parseAnyType(), arena: self.arena))
     case (.dollarIdentifier, _)?:
       return RawExprSyntax(self.parseAnonymousClosureArgument())
     case (.wildcard, let handle)?:  // _
@@ -1213,9 +1210,9 @@ extension Parser {
               arena: self.arena
             ),
             RawUnexpectedNodesSyntax(
-              elements: [
-                RawSyntax(period),
-                RawSyntax(integerLiteral),
+              [
+                period,
+                integerLiteral,
               ],
               arena: self.arena
             ),
@@ -1270,7 +1267,7 @@ extension Parser {
     let generics = self.parseGenericArguments()
     return RawExprSyntax(
       RawGenericSpecializationExprSyntax(
-        expression: RawExprSyntax(declName),
+        expression: declName,
         genericArgumentClause: generics,
         arena: self.arena
       )
@@ -1582,7 +1579,7 @@ extension Parser {
       return RawExprSyntax(
         RawDictionaryExprSyntax(
           leftSquare: lsquare,
-          content: .elements(
+          content: .init(
             RawDictionaryElementListSyntax(
               elements: elements.map {
                 $0.as(RawDictionaryElementSyntax.self)!
@@ -1620,7 +1617,7 @@ extension Parser {
     let eq: RawTokenSyntax
     if let comparison = self.consumeIfContextualPunctuator("==") {
       unexpectedBeforeEq = RawUnexpectedNodesSyntax(
-        elements: [RawSyntax(comparison)],
+        [comparison],
         arena: self.arena
       )
       eq = missingToken(.equal)
@@ -1765,7 +1762,7 @@ extension Parser {
         let params = self.parseParameterClause(RawClosureParameterClauseSyntax.self) { parser in
           parser.parseClosureParameter()
         }
-        parameterClause = .parameterClause(params)
+        parameterClause = .init(params)
       } else {
         var params = [RawClosureShorthandParameterSyntax]()
         var loopProgress = LoopProgressCondition()
@@ -1793,7 +1790,7 @@ extension Parser {
           } while keepGoing != nil && self.hasProgressed(&loopProgress)
         }
 
-        parameterClause = .simpleInput(RawClosureShorthandParameterListSyntax(elements: params, arena: self.arena))
+        parameterClause = .init(RawClosureShorthandParameterListSyntax(elements: params, arena: self.arena))
       }
 
       effectSpecifiers = self.parseTypeEffectSpecifiers()
@@ -1875,7 +1872,7 @@ extension Parser {
           remainingTokens,
           label: nil,
           colon: nil,
-          expression: RawExprSyntax(RawMissingExprSyntax(arena: self.arena)),
+          expression: RawMissingExprSyntax(arena: self.arena),
           trailingComma: nil,
           arena: self.arena
         )
@@ -2119,7 +2116,7 @@ extension Parser {
       conditions = RawConditionElementListSyntax(
         elements: [
           RawConditionElementSyntax(
-            condition: .expression(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
+            condition: .init(RawMissingExprSyntax(arena: self.arena)),
             trailingComma: nil,
             arena: self.arena
           )
@@ -2137,11 +2134,11 @@ extension Parser {
     let elseBody: RawIfExprSyntax.ElseBody?
     if elseKeyword != nil {
       if self.at(.keyword(.if)) {
-        elseBody = .ifExpr(
+        elseBody = .init(
           self.parseIfExpression(ifHandle: .constant(.keyword(.if)))
         )
       } else {
-        elseBody = .codeBlock(self.parseCodeBlock(introducer: ifKeyword))
+        elseBody = .init(self.parseCodeBlock(introducer: ifKeyword))
       }
     } else {
       elseBody = nil
@@ -2214,7 +2211,7 @@ extension Parser {
         // '#if' in 'case' position can enclose zero or more 'case' or 'default'
         // clauses.
         elements.append(
-          .ifConfigDecl(
+          .init(
             self.parsePoundIfDirective(
               { (parser, _) in parser.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery) },
               syntax: { parser, cases in
@@ -2237,20 +2234,18 @@ extension Parser {
           break
         }
         elements.append(
-          .switchCase(
+          .init(
             RawSwitchCaseSyntax(
               attribute: nil,
-              label: .case(
+              label: .init(
                 RawSwitchCaseLabelSyntax(
                   caseKeyword: missingToken(.case),
                   caseItems: RawSwitchCaseItemListSyntax(
                     elements: [
                       RawSwitchCaseItemSyntax(
-                        pattern: RawPatternSyntax(
-                          RawIdentifierPatternSyntax(
-                            identifier: missingToken(.identifier),
-                            arena: self.arena
-                          )
+                        pattern: RawIdentifierPatternSyntax(
+                          identifier: missingToken(.identifier),
+                          arena: self.arena
                         ),
                         whereClause: nil,
                         trailingComma: nil,
@@ -2269,7 +2264,7 @@ extension Parser {
           )
         )
       } else if self.withLookahead({ $0.atStartOfSwitchCase(allowRecovery: true) }) {
-        elements.append(.switchCase(self.parseSwitchCase()))
+        elements.append(.init(self.parseSwitchCase()))
       } else {
         break
       }
@@ -2293,9 +2288,7 @@ extension Parser {
       unknownAttr = RawAttributeSyntax(
         atSign: at,
         unexpectedBeforeIdent,
-        attributeName: RawTypeSyntax(
-          RawIdentifierTypeSyntax(name: ident, genericArgumentClause: nil, arena: self.arena)
-        ),
+        attributeName: RawIdentifierTypeSyntax(name: ident, genericArgumentClause: nil, arena: self.arena),
         leftParen: nil,
         arguments: nil,
         rightParen: nil,
@@ -2308,19 +2301,17 @@ extension Parser {
     let label: RawSwitchCaseSyntax.Label
     switch self.canRecoverTo(anyIn: SwitchCaseStart.self) {
     case (.case, let handle)?:
-      label = .case(self.parseSwitchCaseLabel(handle))
+      label = .init(self.parseSwitchCaseLabel(handle))
     case (.default, let handle)?:
-      label = .default(self.parseSwitchDefaultLabel(handle))
+      label = .init(self.parseSwitchDefaultLabel(handle))
     case nil:
-      label = .case(
+      label = .init(
         RawSwitchCaseLabelSyntax(
           caseKeyword: missingToken(.keyword(.case)),
           caseItems: RawSwitchCaseItemListSyntax(
             elements: [
               RawSwitchCaseItemSyntax(
-                pattern: RawPatternSyntax(
-                  RawIdentifierPatternSyntax(identifier: missingToken(.identifier), arena: self.arena)
-                ),
+                pattern: RawIdentifierPatternSyntax(identifier: missingToken(.identifier), arena: self.arena),
                 whereClause: nil,
                 trailingComma: nil,
                 arena: self.arena
@@ -2370,7 +2361,7 @@ extension Parser {
 
         if keepGoing != nil, let caseToken = self.consume(if: .keyword(.case)) {
           unexpectedPrePatternCase = RawUnexpectedNodesSyntax(
-            elements: [RawSyntax(caseToken)],
+            [caseToken],
             arena: self.arena
           )
         } else {

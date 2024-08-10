@@ -94,7 +94,7 @@ extension Parser {
       )
     case (.lhs(.dollarIdentifier), let handle)?:
       let dollarIdent = self.eat(handle)
-      let unexpectedBeforeIdentifier = RawUnexpectedNodesSyntax(elements: [RawSyntax(dollarIdent)], arena: self.arena)
+      let unexpectedBeforeIdentifier = RawUnexpectedNodesSyntax([dollarIdent], arena: self.arena)
       return RawPatternSyntax(
         RawIdentifierPatternSyntax(
           unexpectedBeforeIdentifier,
@@ -164,7 +164,7 @@ extension Parser {
             remainingTokens,
             label: nil,
             colon: nil,
-            pattern: RawPatternSyntax(RawMissingPatternSyntax(arena: self.arena)),
+            pattern: RawMissingPatternSyntax(arena: self.arena),
             trailingComma: nil,
             arena: self.arena
           )
@@ -257,8 +257,7 @@ extension Parser {
       // binding patterns much earlier.
       return RawPatternSyntax(pat.pattern)
     }
-    let expr = RawExprSyntax(patternSyntax)
-    return RawPatternSyntax(RawExpressionPatternSyntax(expression: expr, arena: self.arena))
+    return RawPatternSyntax(RawExpressionPatternSyntax(expression: patternSyntax, arena: self.arena))
   }
 }
 

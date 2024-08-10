@@ -797,7 +797,7 @@ public struct RawDerivativeAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
       _ unexpectedBetweenOfLabelAndColon: RawUnexpectedNodesSyntax? = nil, 
       colon: RawTokenSyntax, 
       _ unexpectedBetweenColonAndOriginalDeclName: RawUnexpectedNodesSyntax? = nil, 
-      originalDeclName: RawExprSyntax, 
+      originalDeclName: some RawExprSyntaxNodeProtocol, 
       _ unexpectedBetweenOriginalDeclNameAndPeriod: RawUnexpectedNodesSyntax? = nil, 
       period: RawTokenSyntax?, 
       _ unexpectedBetweenPeriodAndAccessorSpecifier: RawUnexpectedNodesSyntax? = nil, 
@@ -1093,11 +1093,11 @@ public struct RawDictionaryElementSyntax: RawSyntaxNodeProtocol {
   
   public init(
       _ unexpectedBeforeKey: RawUnexpectedNodesSyntax? = nil, 
-      key: RawExprSyntax, 
+      key: some RawExprSyntaxNodeProtocol, 
       _ unexpectedBetweenKeyAndColon: RawUnexpectedNodesSyntax? = nil, 
       colon: RawTokenSyntax, 
       _ unexpectedBetweenColonAndValue: RawUnexpectedNodesSyntax? = nil, 
-      value: RawExprSyntax, 
+      value: some RawExprSyntaxNodeProtocol, 
       _ unexpectedBetweenValueAndTrailingComma: RawUnexpectedNodesSyntax? = nil, 
       trailingComma: RawTokenSyntax?, 
       _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil, 
@@ -1185,6 +1185,14 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol {
         return
       }
       return nil
+    }
+    
+    public init(_ other: RawTokenSyntax) {
+      self = .colon(other)
+    }
+    
+    public init(_ other: RawDictionaryElementListSyntax) {
+      self = .elements(other)
     }
   }
   
@@ -1301,11 +1309,11 @@ public struct RawDictionaryTypeSyntax: RawTypeSyntaxNodeProtocol {
       _ unexpectedBeforeLeftSquare: RawUnexpectedNodesSyntax? = nil, 
       leftSquare: RawTokenSyntax, 
       _ unexpectedBetweenLeftSquareAndKey: RawUnexpectedNodesSyntax? = nil, 
-      key: RawTypeSyntax, 
+      key: some RawTypeSyntaxNodeProtocol, 
       _ unexpectedBetweenKeyAndColon: RawUnexpectedNodesSyntax? = nil, 
       colon: RawTokenSyntax, 
       _ unexpectedBetweenColonAndValue: RawUnexpectedNodesSyntax? = nil, 
-      value: RawTypeSyntax, 
+      value: some RawTypeSyntaxNodeProtocol, 
       _ unexpectedBetweenValueAndRightSquare: RawUnexpectedNodesSyntax? = nil, 
       rightSquare: RawTokenSyntax, 
       _ unexpectedAfterRightSquare: RawUnexpectedNodesSyntax? = nil, 
@@ -1606,6 +1614,14 @@ public struct RawDifferentiabilityWithRespectToArgumentSyntax: RawSyntaxNodeProt
       }
       return nil
     }
+    
+    public init(_ other: RawDifferentiabilityArgumentSyntax) {
+      self = .argument(other)
+    }
+    
+    public init(_ other: RawDifferentiabilityArgumentsSyntax) {
+      self = .argumentList(other)
+    }
   }
   
   @_spi(RawSyntax)
@@ -1885,7 +1901,7 @@ public struct RawDiscardStmtSyntax: RawStmtSyntaxNodeProtocol {
       _ unexpectedBeforeDiscardKeyword: RawUnexpectedNodesSyntax? = nil, 
       discardKeyword: RawTokenSyntax, 
       _ unexpectedBetweenDiscardKeywordAndExpression: RawUnexpectedNodesSyntax? = nil, 
-      expression: RawExprSyntax, 
+      expression: some RawExprSyntaxNodeProtocol, 
       _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -2180,6 +2196,14 @@ public struct RawDocumentationAttributeArgumentSyntax: RawSyntaxNodeProtocol {
         return
       }
       return nil
+    }
+    
+    public init(_ other: RawTokenSyntax) {
+      self = .token(other)
+    }
+    
+    public init(_ other: RawStringLiteralExprSyntax) {
+      self = .string(other)
     }
   }
   

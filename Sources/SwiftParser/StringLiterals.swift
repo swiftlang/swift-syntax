@@ -198,7 +198,7 @@ extension Parser {
           trailingTriviaPieces: lastMiddleSegment.content.trailingTriviaPieces.filter({ $0.isNewline }),
           arena: self.arena
         )
-        middleSegments[middleSegments.count - 1] = .stringSegment(
+        middleSegments[middleSegments.count - 1] = .init(
           RawStringSegmentSyntax(
             RawUnexpectedNodesSyntax(
               combining: lastMiddleSegment.unexpectedBeforeContent,
@@ -216,7 +216,7 @@ extension Parser {
         // Mark it as trivia.
         let content = self.reclassifyTrivia(in: lastMiddleSegment.content, trailing: newlineSuffix)
 
-        middleSegments[middleSegments.count - 1] = .stringSegment(
+        middleSegments[middleSegments.count - 1] = .init(
           RawStringSegmentSyntax(
             lastMiddleSegment.unexpectedBeforeContent,
             content: content,
@@ -543,7 +543,7 @@ extension Parser {
       guard currentToken.leadingTriviaText.isEmpty else { break }
 
       if let stringSegment = self.consume(if: .stringSegment, TokenSpec(.identifier, remapping: .stringSegment)) {
-        segments.append(.stringSegment(RawStringSegmentSyntax(content: stringSegment, arena: self.arena)))
+        segments.append(.init(RawStringSegmentSyntax(content: stringSegment, arena: self.arena)))
       } else if let backslash = self.consume(if: .backslash) {
         let (unexpectedBeforeDelimiter, delimiter) = self.parsePoundDelimiter(
           .rawStringPoundDelimiter,
@@ -587,7 +587,7 @@ extension Parser {
           self.lexemes.perform(stateTransition: .pop, currentToken: &self.currentToken)
         }
         segments.append(
-          .expressionSegment(
+          .init(
             RawExpressionSegmentSyntax(
               backslash: backslash,
               unexpectedBeforeDelimiter,

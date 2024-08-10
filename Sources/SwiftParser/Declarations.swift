@@ -532,11 +532,11 @@ extension Parser {
           keepGoing = self.consume(if: .comma)
           elements.append(
             RawGenericRequirementSyntax(
-              requirement: .sameTypeRequirement(
+              requirement: .init(
                 RawSameTypeRequirementSyntax(
-                  leftType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+                  leftType: RawMissingTypeSyntax(arena: self.arena),
                   equal: missingToken(.binaryOperator, text: "=="),
-                  rightType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+                  rightType: RawMissingTypeSyntax(arena: self.arena),
                   arena: self.arena
                 )
               ),
@@ -629,7 +629,7 @@ extension Parser {
               rightParen = nil
             }
 
-            requirement = .layoutRequirement(
+            requirement = .init(
               RawLayoutRequirementSyntax(
                 type: firstType,
                 colon: colon,
@@ -647,7 +647,7 @@ extension Parser {
           } else {
             // Parse the protocol or composition.
             let secondType = self.parseType()
-            requirement = .conformanceRequirement(
+            requirement = .init(
               RawConformanceRequirementSyntax(
                 leftType: firstType,
                 colon: colon,
@@ -661,7 +661,7 @@ extension Parser {
           (.prefixOperator, let handle)?:
           let equal = self.eat(handle)
           let secondType = self.parseType()
-          requirement = .sameTypeRequirement(
+          requirement = .init(
             RawSameTypeRequirementSyntax(
               leftType: firstType,
               equal: equal,
@@ -670,11 +670,11 @@ extension Parser {
             )
           )
         case nil:
-          requirement = .sameTypeRequirement(
+          requirement = .init(
             RawSameTypeRequirementSyntax(
               leftType: firstType,
               equal: RawTokenSyntax(missing: .binaryOperator, text: "==", arena: self.arena),
-              rightType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+              rightType: RawMissingTypeSyntax(arena: self.arena),
               arena: self.arena
             )
           )
@@ -722,12 +722,10 @@ extension Parser {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       let item = RawMemberBlockItemSyntax(
         remainingTokens,
-        decl: RawDeclSyntax(
-          RawMissingDeclSyntax(
-            attributes: self.emptyCollection(RawAttributeListSyntax.self),
-            modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
-            arena: self.arena
-          )
+        decl: RawMissingDeclSyntax(
+          attributes: self.emptyCollection(RawAttributeListSyntax.self),
+          modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
+          arena: self.arena
         ),
         semicolon: nil,
         arena: self.arena
@@ -1558,7 +1556,7 @@ extension Parser {
     let unexpectedBeforeEqual: RawUnexpectedNodesSyntax?
     let equal: RawTokenSyntax
     if let colon = self.consume(if: .colon) {
-      unexpectedBeforeEqual = RawUnexpectedNodesSyntax(elements: [RawSyntax(colon)], arena: self.arena)
+      unexpectedBeforeEqual = RawUnexpectedNodesSyntax([colon], arena: self.arena)
       equal = missingToken(.equal)
     } else {
       (unexpectedBeforeEqual, equal) = self.expect(.equal)
@@ -1844,7 +1842,7 @@ extension Parser {
             )
           }
           elements.append(
-            .precedenceGroupAssociativity(
+            .init(
               RawPrecedenceGroupAssociativitySyntax(
                 associativityLabel: associativity,
                 unexpectedBeforeColon,
@@ -1871,7 +1869,7 @@ extension Parser {
             unexpectedAfterFlag = nil
           }
           elements.append(
-            .precedenceGroupAssignment(
+            .init(
               RawPrecedenceGroupAssignmentSyntax(
                 assignmentLabel: assignmentKeyword,
                 unexpectedBeforeColon,
@@ -1906,7 +1904,7 @@ extension Parser {
             } while keepGoing != nil && self.hasProgressed(&namesProgress)
           }
           elements.append(
-            .precedenceGroupRelation(
+            .init(
               RawPrecedenceGroupRelationSyntax(
                 higherThanOrLowerThanLabel: level,
                 unexpectedBeforeColon,

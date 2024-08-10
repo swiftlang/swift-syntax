@@ -614,7 +614,7 @@ public struct RawEnumCaseParameterSyntax: RawSyntaxNodeProtocol {
       _ unexpectedBetweenSecondNameAndColon: RawUnexpectedNodesSyntax? = nil, 
       colon: RawTokenSyntax?, 
       _ unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax? = nil, 
-      type: RawTypeSyntax, 
+      type: some RawTypeSyntaxNodeProtocol, 
       _ unexpectedBetweenTypeAndDefaultValue: RawUnexpectedNodesSyntax? = nil, 
       defaultValue: RawInitializerClauseSyntax?, 
       _ unexpectedBetweenDefaultValueAndTrailingComma: RawUnexpectedNodesSyntax? = nil, 
@@ -1049,7 +1049,7 @@ public struct RawExpressionPatternSyntax: RawPatternSyntaxNodeProtocol {
   
   public init(
       _ unexpectedBeforeExpression: RawUnexpectedNodesSyntax? = nil, 
-      expression: RawExprSyntax, 
+      expression: some RawExprSyntaxNodeProtocol, 
       _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -1213,7 +1213,7 @@ public struct RawExpressionStmtSyntax: RawStmtSyntaxNodeProtocol {
   
   public init(
       _ unexpectedBeforeExpression: RawUnexpectedNodesSyntax? = nil, 
-      expression: RawExprSyntax, 
+      expression: some RawExprSyntaxNodeProtocol, 
       _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil, 
       arena: __shared SyntaxArena
     ) {
@@ -1277,7 +1277,7 @@ public struct RawExtensionDeclSyntax: RawDeclSyntaxNodeProtocol {
       _ unexpectedBetweenModifiersAndExtensionKeyword: RawUnexpectedNodesSyntax? = nil, 
       extensionKeyword: RawTokenSyntax, 
       _ unexpectedBetweenExtensionKeywordAndExtendedType: RawUnexpectedNodesSyntax? = nil, 
-      extendedType: RawTypeSyntax, 
+      extendedType: some RawTypeSyntaxNodeProtocol, 
       _ unexpectedBetweenExtendedTypeAndInheritanceClause: RawUnexpectedNodesSyntax? = nil, 
       inheritanceClause: RawInheritanceClauseSyntax?, 
       _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil, 
@@ -1525,13 +1525,13 @@ public struct RawForStmtSyntax: RawStmtSyntaxNodeProtocol {
       _ unexpectedBetweenAwaitKeywordAndCaseKeyword: RawUnexpectedNodesSyntax? = nil, 
       caseKeyword: RawTokenSyntax?, 
       _ unexpectedBetweenCaseKeywordAndPattern: RawUnexpectedNodesSyntax? = nil, 
-      pattern: RawPatternSyntax, 
+      pattern: some RawPatternSyntaxNodeProtocol, 
       _ unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? = nil, 
       typeAnnotation: RawTypeAnnotationSyntax?, 
       _ unexpectedBetweenTypeAnnotationAndInKeyword: RawUnexpectedNodesSyntax? = nil, 
       inKeyword: RawTokenSyntax, 
       _ unexpectedBetweenInKeywordAndSequence: RawUnexpectedNodesSyntax? = nil, 
-      sequence: RawExprSyntax, 
+      sequence: some RawExprSyntaxNodeProtocol, 
       _ unexpectedBetweenSequenceAndWhereClause: RawUnexpectedNodesSyntax? = nil, 
       whereClause: RawWhereClauseSyntax?, 
       _ unexpectedBetweenWhereClauseAndBody: RawUnexpectedNodesSyntax? = nil, 
@@ -1683,7 +1683,7 @@ public struct RawForceUnwrapExprSyntax: RawExprSyntaxNodeProtocol {
   
   public init(
       _ unexpectedBeforeExpression: RawUnexpectedNodesSyntax? = nil, 
-      expression: RawExprSyntax, 
+      expression: some RawExprSyntaxNodeProtocol, 
       _ unexpectedBetweenExpressionAndExclamationMark: RawUnexpectedNodesSyntax? = nil, 
       exclamationMark: RawTokenSyntax, 
       _ unexpectedAfterExclamationMark: RawUnexpectedNodesSyntax? = nil, 
@@ -1753,7 +1753,7 @@ public struct RawFunctionCallExprSyntax: RawExprSyntaxNodeProtocol {
   
   public init(
       _ unexpectedBeforeCalledExpression: RawUnexpectedNodesSyntax? = nil, 
-      calledExpression: RawExprSyntax, 
+      calledExpression: some RawExprSyntaxNodeProtocol, 
       _ unexpectedBetweenCalledExpressionAndLeftParen: RawUnexpectedNodesSyntax? = nil, 
       leftParen: RawTokenSyntax?, 
       _ unexpectedBetweenLeftParenAndArguments: RawUnexpectedNodesSyntax? = nil, 
@@ -2225,7 +2225,7 @@ public struct RawFunctionParameterSyntax: RawSyntaxNodeProtocol {
       _ unexpectedBetweenSecondNameAndColon: RawUnexpectedNodesSyntax? = nil, 
       colon: RawTokenSyntax, 
       _ unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax? = nil, 
-      type: RawTypeSyntax, 
+      type: some RawTypeSyntaxNodeProtocol, 
       _ unexpectedBetweenTypeAndEllipsis: RawUnexpectedNodesSyntax? = nil, 
       ellipsis: RawTokenSyntax?, 
       _ unexpectedBetweenEllipsisAndDefaultValue: RawUnexpectedNodesSyntax? = nil, 

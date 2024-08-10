@@ -137,7 +137,7 @@ extension Parser {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawCodeBlockItemSyntax(
         remainingTokens,
-        item: .expr(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
+        item: .init(RawMissingExprSyntax(arena: self.arena)),
         semicolon: nil,
         arena: self.arena
       )
@@ -147,8 +147,8 @@ extension Parser {
       // Parse them and put them in their own CodeBlockItem but as an unexpected node.
       let switchCase = self.parseSwitchCase()
       return RawCodeBlockItemSyntax(
-        RawUnexpectedNodesSyntax(elements: [RawSyntax(switchCase)], arena: self.arena),
-        item: .expr(RawExprSyntax(RawMissingExprSyntax(arena: self.arena))),
+        RawUnexpectedNodesSyntax([switchCase], arena: self.arena),
+        item: .init(RawMissingExprSyntax(arena: self.arena)),
         semicolon: nil,
         arena: self.arena
       )
@@ -237,21 +237,21 @@ extension Parser {
       } syntax: { parser, items in
         return .statements(RawCodeBlockItemListSyntax(elements: items, arena: parser.arena))
       }
-      return .decl(RawDeclSyntax(directive))
+      return .init(directive)
     } else if self.at(.poundSourceLocation) {
-      return .decl(RawDeclSyntax(self.parsePoundSourceLocationDirective()))
+      return .init(self.parsePoundSourceLocationDirective())
     } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl) {
-      return .decl(self.parseDeclaration())
+      return .init(self.parseDeclaration())
     } else if self.atStartOfStatement(preferExpr: false) {
       return self.parseStatementItem()
     } else if self.atStartOfExpression() {
-      return .expr(self.parseExpression(flavor: .basic, pattern: .none))
+      return .init(self.parseExpression(flavor: .basic, pattern: .none))
     } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl, allowRecovery: true) {
-      return .decl(self.parseDeclaration())
+      return .init(self.parseDeclaration())
     } else if self.atStartOfStatement(allowRecovery: true, preferExpr: false) {
       return self.parseStatementItem()
     } else {
-      return .expr(RawExprSyntax(RawMissingExprSyntax(arena: self.arena)))
+      return .init(RawMissingExprSyntax(arena: self.arena))
     }
   }
 }

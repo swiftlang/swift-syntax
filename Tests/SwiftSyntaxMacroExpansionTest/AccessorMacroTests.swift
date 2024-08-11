@@ -532,4 +532,136 @@ final class AccessorMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testLazyRemovedForReadModify() {
+    struct TestMacro: AccessorMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AccessorDeclSyntax] {
+        return [
+          """
+          _read {
+            lock.lock()
+            defer {
+              lock.unlock()
+            }
+            yield _x
+          }
+          """,
+          """
+          _modify {
+            lock.lock()
+            defer {
+              lock.unlock()
+            }
+            yield &_x
+          }
+          """
+        ]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @ThreadSafe
+      lazy var x: Int = 1
+      """,
+      expandedSource: """
+        var x: Int {
+          _read {
+            lock.lock()
+            defer {
+              lock.unlock()
+            }
+            yield _x
+          }
+          _modify {
+            lock.lock()
+            defer {
+              lock.unlock()
+            }
+            yield &_x
+          }
+        }
+        """,
+      macros: ["ThreadSafe": TestMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testLazyRemovedForGet() {
+    struct TestMacro: AccessorMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AccessorDeclSyntax] {
+        return [
+          """
+          get {
+            lock.lock() 
+            defer { 
+              lock.unlock() 
+            }
+            return _x
+          }
+          """
+        ]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @ThreadSafe
+      lazy var x: Int = 1
+      """,
+      expandedSource: """
+        var x: Int {
+          get {
+            lock.lock()
+            defer {
+              lock.unlock()
+            }
+            return _x
+          }
+        }
+        """,
+      macros: ["ThreadSafe": TestMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testLazyRemainsForObserver() {
+    struct DidSetAdder: AccessorMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AccessorDeclSyntax] {
+        return [
+          """
+          didSet {
+          }
+          """
+        ]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @addDidSet
+      lazy var x = 1
+      """,
+      expandedSource: """
+        lazy var x = 1 {
+          didSet {
+          }
+        }
+        """,
+      macros: ["addDidSet": DidSetAdder.self],
+      indentationWidth: indentationWidth
+    )
+  }
 }

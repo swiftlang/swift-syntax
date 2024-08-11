@@ -956,12 +956,13 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
         binding.trailingTrivia = []
       }
 
-      if binding.initializer != nil, expansion.expandsGetSet {
+      if binding.initializer != nil, expansion.expandsToComputedProperty {
         // The accessor block will have a leading space, but there will already be a
         // space between the variable and the to-be-removed initializer. Remove the
         // leading trivia on the accessor block so we don't double up.
         binding.accessorBlock = expansion.accessors?.with(\.leadingTrivia, [])
         binding.initializer = nil
+        node.modifiers.removeLazy()
       } else {
         binding.accessorBlock = expansion.accessors
       }
@@ -1161,14 +1162,14 @@ extension MacroApplication {
   private func expandAccessors(
     of storage: some DeclSyntaxProtocol,
     existingAccessors: AccessorBlockSyntax?
-  ) -> (accessors: AccessorBlockSyntax?, expandsGetSet: Bool) {
+  ) -> (accessors: AccessorBlockSyntax?, expandsToComputedProperty: Bool) {
     let accessorMacros = macroAttributes(attachedTo: DeclSyntax(storage), ofType: AccessorMacro.Type.self)
 
     var newAccessorsBlock = existingAccessors
-    var expandsGetSet = false
+    var expandsToComputedProperty = false
     func checkExpansions(_ accessors: AccessorDeclListSyntax?) {
       guard let accessors else { return }
-      expandsGetSet = expandsGetSet || accessors.contains(where: \.isGetOrSet)
+      expandsToComputedProperty = expandsToComputedProperty || accessors.contains(where: \.hasComputedPropertyAccessor)
     }
 
     for macro in accessorMacros {
@@ -1223,7 +1224,7 @@ extension MacroApplication {
         contextGenerator(Syntax(storage)).addDiagnostics(from: error, node: macro.attributeNode)
       }
     }
-    return (newAccessorsBlock, expandsGetSet)
+    return (newAccessorsBlock, expandsToComputedProperty)
   }
 }
 
@@ -1477,8 +1478,8 @@ private extension AttributeSyntax {
 }
 
 private extension AccessorDeclSyntax {
-  var isGetOrSet: Bool {
-    return accessorSpecifier.tokenKind == .keyword(.get) || accessorSpecifier.tokenKind == .keyword(.set)
+  var hasComputedPropertyAccessor: Bool {
+    [.keyword(.get), .keyword(.set), .keyword(._read), .keyword(._modify)].contains(accessorSpecifier.tokenKind)
   }
 }
 
@@ -1501,5 +1502,15 @@ private extension SyntaxProtocol {
       return TypeSyntax(IdentifierTypeSyntax(name: named.name.trimmed))
     }
     return base
+  }
+}
+
+private extension DeclModifierListSyntax {
+  mutating func removeLazy() {
+    guard let lazyModifierIndex = firstIndex(where: { $0.name.tokenKind == .keyword(.lazy) }) else {
+      return
+    }
+
+    remove(at: lazyModifierIndex)
   }
 }

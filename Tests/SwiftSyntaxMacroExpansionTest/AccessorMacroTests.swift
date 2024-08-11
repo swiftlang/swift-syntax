@@ -558,7 +558,7 @@ final class AccessorMacroTests: XCTestCase {
             }
             yield &_x
           }
-          """
+          """,
         ]
       }
     }

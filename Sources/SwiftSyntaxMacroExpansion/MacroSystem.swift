@@ -1169,7 +1169,7 @@ extension MacroApplication {
     var expandsToComputedProperty = false
     func checkExpansions(_ accessors: AccessorDeclListSyntax?) {
       guard let accessors else { return }
-      expandsToComputedProperty = expandsToComputedProperty || accessors.contains(where: \.hasComputedPropertyAccessor)
+      expandsToComputedProperty = expandsToComputedProperty || accessors.contains(where: \.isComputedPropertyAccessor)
     }
 
     for macro in accessorMacros {
@@ -1478,7 +1478,7 @@ private extension AttributeSyntax {
 }
 
 private extension AccessorDeclSyntax {
-  var hasComputedPropertyAccessor: Bool {
+  var isComputedPropertyAccessor: Bool {
     [.keyword(.get), .keyword(.set), .keyword(._read), .keyword(._modify)].contains(accessorSpecifier.tokenKind)
   }
 }

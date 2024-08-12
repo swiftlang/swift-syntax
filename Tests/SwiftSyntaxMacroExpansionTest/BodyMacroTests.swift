@@ -178,7 +178,7 @@ final class BodyMacroTests: XCTestCase {
           } else {
             statements
           }
-        return body.map(\.self)
+        return Array(body)
       }
     }
 

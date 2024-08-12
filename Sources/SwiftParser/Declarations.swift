@@ -520,7 +520,7 @@ extension Parser {
   }
 
   mutating func atGenericParametersListTerminator() -> Bool {
-    return self.experimentalFeatures.contains(.trailingComma) && self.at(prefix: ">")
+    return self.at(prefix: ">")
   }
 
   mutating func parseGenericWhereClause() -> RawGenericWhereClauseSyntax {
@@ -2039,7 +2039,7 @@ extension Parser {
     if leftParen != nil {
       args = parseArgumentListElements(
         pattern: .none,
-        allowTrailingComma: self.experimentalFeatures.contains(.trailingComma)
+        allowTrailingComma: true
       )
       (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     } else {

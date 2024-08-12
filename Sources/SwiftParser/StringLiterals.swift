@@ -553,7 +553,7 @@ extension Parser {
         let expressions = RawLabeledExprListSyntax(
           elements: self.parseArgumentListElements(
             pattern: .none,
-            allowTrailingComma: self.experimentalFeatures.contains(.trailingComma)
+            allowTrailingComma: true
           ),
           arena: self.arena
         )

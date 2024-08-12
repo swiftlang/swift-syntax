@@ -1027,7 +1027,7 @@ extension Parser {
       return parseAttribute(argumentMode: .customAttribute) { parser in
         let arguments = parser.parseArgumentListElements(
           pattern: .none,
-          allowTrailingComma: parser.experimentalFeatures.contains(.trailingComma)
+          allowTrailingComma: true
         )
         return .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
       }

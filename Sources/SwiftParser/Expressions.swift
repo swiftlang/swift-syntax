@@ -749,7 +749,7 @@ extension Parser {
         let args = self.parseArgumentListElements(
           pattern: pattern,
           flavor: flavor.callArgumentFlavor,
-          allowTrailingComma: experimentalFeatures.contains(.trailingComma)
+          allowTrailingComma: true
         )
         let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
 
@@ -788,7 +788,7 @@ extension Parser {
         } else {
           args = self.parseArgumentListElements(
             pattern: pattern,
-            allowTrailingComma: self.experimentalFeatures.contains(.trailingComma)
+            allowTrailingComma: true
           )
         }
         let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquare)
@@ -1024,7 +1024,7 @@ extension Parser {
         } else {
           args = self.parseArgumentListElements(
             pattern: pattern,
-            allowTrailingComma: self.experimentalFeatures.contains(.trailingComma)
+            allowTrailingComma: true
           )
         }
         let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquare)
@@ -1322,7 +1322,7 @@ extension Parser {
     if leftParen != nil {
       args = parseArgumentListElements(
         pattern: pattern,
-        allowTrailingComma: self.experimentalFeatures.contains(.trailingComma)
+        allowTrailingComma: true
       )
       (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
     } else {
@@ -1439,7 +1439,7 @@ extension Parser {
     let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
     let elements = self.parseArgumentListElements(
       pattern: pattern,
-      allowTrailingComma: experimentalFeatures.contains(.trailingComma)
+      allowTrailingComma: true
     )
     let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
     return RawTupleExprSyntax(

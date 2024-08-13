@@ -1066,29 +1066,28 @@ final class RecoveryTests: ParserTestCase {
   // MARK: - Recovery for multiple identifiers in decls
 
   func testRecovery58() {
-    let testCases: [UInt: (fixIt: String, fixedSource: String)] = [
-      #line: ("join the identifiers together", "protocol Multiident {}"),
-      #line: ("join the identifiers together with camel-case", "protocol MultiIdent {}"),
-    ]
-
-    for (line, testCase) in testCases {
-      assertParse(
-        """
-        protocol Multi 1️⃣ident {}
-        """,
-        diagnostics: [
-          DiagnosticSpec(
-            message: "found an unexpected second identifier in protocol; is there an accidental break?",
-            highlight: "ident",
-            fixIts: ["join the identifiers together", "join the identifiers together with camel-case"],
-            line: line
-          )
-        ],
-        applyFixIts: [testCase.fixIt],
-        fixedSource: testCase.fixedSource,
-        line: line
-      )
-    }
+    assertParse(
+      """
+      protocol Multi 1️⃣ident {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "found an unexpected second identifier in protocol; is there an accidental break?",
+          highlight: "ident",
+          fixIts: ["join the identifiers together", "join the identifiers together with camel-case"]
+        )
+      ],
+      fixItsApplications: [
+        .optIn(
+          applyFixIts: ["join the identifiers together"],
+          fixedSource: "protocol Multiident {}"
+        ),
+        .optIn(
+          applyFixIts: ["join the identifiers together with camel-case"],
+          fixedSource: "protocol MultiIdent {}"
+        ),
+      ]
+    )
   }
 
   func testRecovery60() {

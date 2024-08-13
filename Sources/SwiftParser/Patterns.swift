@@ -375,6 +375,7 @@ extension Parser.Lookahead {
         && !self.at(.keyword(.repeat))
         && !self.at(.keyword(.__shared))
         && !self.at(.keyword(.__owned))
+        && !self.at(.keyword(._const))
         && !self.at(.keyword(.borrowing))
         && !self.at(.keyword(.consuming))
         && !(experimentalFeatures.contains(.sendingArgsAndResults) && self.at(.keyword(.sending)))

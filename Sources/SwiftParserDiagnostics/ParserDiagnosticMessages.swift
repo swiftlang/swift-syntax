@@ -655,6 +655,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   public static var insertAttributeArguments: Self {
     .init("insert attribute argument")
   }
+  public static var insertBackslash: Self {
+    .init(#"insert '\'"#)
+  }
   public static var insertNewline: Self {
     .init("insert newline")
   }
@@ -690,6 +693,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   }
   public static var wrapInBackticks: Self {
     .init("if this name is unavoidable, use backticks to escape it")
+  }
+  public static var convertToExtendedRegexLiteral: Self {
+    .init("convert to extended regex literal with '#'")
   }
 }
 

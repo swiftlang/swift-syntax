@@ -129,7 +129,7 @@ extension Parser {
 
     let defaultValue: RawInitializerClauseSyntax?
     if self.at(.equal) || self.atContextualPunctuator("==") {
-      defaultValue = self.parseDefaultArgument()
+      defaultValue = self.parseInitializerClause()
     } else {
       defaultValue = nil
     }
@@ -234,7 +234,7 @@ extension Parser {
 
     let defaultValue: RawInitializerClauseSyntax?
     if self.at(.equal) || self.atContextualPunctuator("==") {
-      defaultValue = self.parseDefaultArgument()
+      defaultValue = self.parseInitializerClause()
     } else {
       defaultValue = nil
     }
@@ -263,17 +263,13 @@ extension Parser {
   mutating func parseParameterModifiers(isClosure: Bool) -> RawDeclModifierListSyntax {
     var elements = [RawDeclModifierSyntax]()
     var loopProgress = LoopProgressCondition()
-    MODIFIER_LOOP: while self.hasProgressed(&loopProgress) {
-      switch self.at(anyIn: ParameterModifier.self) {
-      case (._const, let handle)?:
-        elements.append(RawDeclModifierSyntax(name: self.eat(handle), detail: nil, arena: self.arena))
-      case (.isolated, let handle)?
-      where self.withLookahead({ !$0.startsParameterName(isClosure: isClosure, allowMisplacedSpecifierRecovery: false) }
-      ):
-        elements.append(RawDeclModifierSyntax(name: self.eat(handle), detail: nil, arena: self.arena))
-      default:
-        break MODIFIER_LOOP
+    while self.hasProgressed(&loopProgress) {
+      guard let match = self.at(anyIn: ParameterModifier.self),
+        !withLookahead({ $0.startsParameterName(isClosure: isClosure, allowMisplacedSpecifierRecovery: false) })
+      else {
+        break
       }
+      elements.append(RawDeclModifierSyntax(name: self.eat(match.handle), detail: nil, arena: self.arena))
     }
     if elements.isEmpty {
       return self.emptyCollection(RawDeclModifierListSyntax.self)

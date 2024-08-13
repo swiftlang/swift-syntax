@@ -482,22 +482,22 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(
           node: .enumCaseElement,
           message:
-            "child 'rawValue' is named inconsistently with 'MatchingPatternConditionSyntax.initializer', which has the same type ('InitializerClauseSyntax')"
+            "child 'rawValue' is named inconsistently with 'ClosureCaptureSyntax.initializer', which has the same type ('InitializerClauseSyntax')"
         ),
         ValidationFailure(
           node: .enumCaseParameter,
           message:
-            "child 'defaultValue' is named inconsistently with 'MatchingPatternConditionSyntax.initializer', which has the same type ('InitializerClauseSyntax')"
+            "child 'defaultValue' is named inconsistently with 'ClosureCaptureSyntax.initializer', which has the same type ('InitializerClauseSyntax')"
         ),
         ValidationFailure(
           node: .functionParameter,
           message:
-            "child 'defaultValue' is named inconsistently with 'MatchingPatternConditionSyntax.initializer', which has the same type ('InitializerClauseSyntax')"
+            "child 'defaultValue' is named inconsistently with 'ClosureCaptureSyntax.initializer', which has the same type ('InitializerClauseSyntax')"
         ),
         ValidationFailure(
           node: .macroDecl,
           message:
-            "child 'definition' is named inconsistently with 'MatchingPatternConditionSyntax.initializer', which has the same type ('InitializerClauseSyntax')"
+            "child 'definition' is named inconsistently with 'ClosureCaptureSyntax.initializer', which has the same type ('InitializerClauseSyntax')"
         ),
         // MARK: Miscellaneous
         ValidationFailure(

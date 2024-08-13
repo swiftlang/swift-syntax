@@ -44,7 +44,8 @@ public enum CanImportVersion {
 /// be imported is a complicated task only implemented in the Swift compiler.
 /// Therefore, queries are permitted to throw an error to report when they
 /// cannot answer a query, in which case this error will be reported to
-/// the caller.
+/// the caller and the condition will be treated as being "false", so the
+/// code covered by the condition will be inactive.
 public protocol BuildConfiguration {
   /// Determine whether a given custom build condition has been set.
   ///

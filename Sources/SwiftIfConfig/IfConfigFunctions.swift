@@ -57,9 +57,10 @@ enum IfConfigFunctions: String {
   /// via `_ptrauth(<name>)`.
   case _ptrauth
 
-  /// Whether uses of this function consistute a "versioned" check. Such checks
-  /// suppress parser diagnostics if the block failed.
-  var isVersioned: Bool {
+  /// Whether uses of this function consitutes a check that guards new syntax.
+  /// When such a check fails, the compiler should not diagnose syntax errors
+  /// within the covered block.
+  var syntaxErrorsAllowed: Bool {
     switch self {
     case .swift, .compiler, ._compiler_version:
       return true

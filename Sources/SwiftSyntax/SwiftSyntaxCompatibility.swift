@@ -144,6 +144,156 @@ extension DeclGroupSyntax {
   }
 }
 
+extension ClosureCaptureSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenNameAndInitializer")
+  public var unexpectedBetweenNameAndAssignToken: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenNameAndInitializer
+    }
+    set {
+      unexpectedBetweenNameAndInitializer = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "initializer.equal")
+  public var assignToken: TokenSyntax? {
+    get {
+      return initializer?.equal
+    }
+    set {
+      initializer?.equal = newValue ?? .equalToken(presence: .missing)
+    }
+  }
+
+  @available(*, deprecated, renamed: "initializer.unexpectedBetweenEqualAndValue")
+  public var unexpectedBetweenAssignTokenAndExpression: UnexpectedNodesSyntax? {
+    get {
+      return initializer?.unexpectedBetweenEqualAndValue
+    }
+    set {
+      initializer?.unexpectedBetweenEqualAndValue = newValue
+    }
+  }
+
+  /// Creates a ``ClosureCaptureSyntax`` with a `name`, and automatically adds an `equal` token to it since the name is non-optional.
+  ///
+  /// - SeeAlso: ``ClosureCaptureSyntax/init(leadingTrivia:_:specifier:_:name:_:initializer:_:trailingComma:_:trailingTrivia:)``.
+  ///
+  @available(
+    *,
+    deprecated,
+    message: "Use 'init(leadingTrivia:_:specifier:_:name:_:initializer:_:trailingComma:_:trailingTrivia:)' instead"
+  )
+  public init(
+    leadingTrivia: Trivia? = nil,
+    specifier: ClosureCaptureSpecifierSyntax? = nil,
+    name: TokenSyntax,
+    equal: TokenSyntax = TokenSyntax.equalToken(),
+    expression: some ExprSyntaxProtocol,
+    trailingComma: TokenSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      specifier: specifier,
+      name: name,
+      initializer: InitializerClauseSyntax(equal: equal, value: expression),
+      trailingComma: trailingComma,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenNameAndInitializer")
+  public var unexpectedBetweenNameAndEqual: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenNameAndInitializer
+    }
+    set {
+      unexpectedBetweenNameAndInitializer = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "initializer.equal")
+  public var equal: TokenSyntax? {
+    get {
+      return initializer?.equal
+    }
+    set {
+      initializer?.equal = newValue ?? .equalToken(presence: .missing)
+    }
+  }
+
+  @available(*, deprecated, renamed: "initializer.unexpectedBetweenEqualAndValue")
+  public var unexpectedBetweenEqualAndExpression: UnexpectedNodesSyntax? {
+    get {
+      return initializer?.unexpectedBetweenEqualAndValue
+    }
+    set {
+      initializer?.unexpectedBetweenEqualAndValue = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "initializer.value")
+  public var expression: ExprSyntax {
+    get {
+      return initializer?.value ?? ExprSyntax(MissingExprSyntax())
+    }
+    set(value) {
+      initializer?.value = value
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenInitializerAndTrailingComma")
+  public var unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenInitializerAndTrailingComma
+    }
+    set(value) {
+      unexpectedBetweenInitializerAndTrailingComma = value
+    }
+  }
+
+  @available(
+    *,
+    deprecated,
+    renamed: "ClosureCaptureSyntax(leadingTrivia:_:specifier:_:name:_:initializer:_:trailingComma:_:trailingTrivia:)"
+  )
+  @_disfavoredOverload
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil,
+    specifier: ClosureCaptureSpecifierSyntax? = nil,
+    _ unexpectedBetweenSpecifierAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax? = nil,
+    _ unexpectedBetweenNameAndEqual: UnexpectedNodesSyntax? = nil,
+    equal: TokenSyntax? = nil,
+    _ unexpectedBetweenEqualAndExpression: UnexpectedNodesSyntax? = nil,
+    expression: some ExprSyntaxProtocol,
+    _ unexpectedBetweenExpressionAndTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingComma: TokenSyntax? = nil,
+    _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeSpecifier,
+      specifier: specifier,
+      unexpectedBetweenSpecifierAndName,
+      name: name ?? .identifier("", presence: .missing),
+      unexpectedBetweenNameAndEqual,
+      initializer: InitializerClauseSyntax(
+        equal: equal ?? .equalToken(presence: .missing),
+        unexpectedBetweenEqualAndExpression,
+        value: expression
+      ),
+      unexpectedBetweenExpressionAndTrailingComma,
+      trailingComma: trailingComma,
+      unexpectedAfterTrailingComma,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
 extension EffectSpecifiersSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenAsyncSpecifierAndThrowsClause")
   public var unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? {

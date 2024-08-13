@@ -37,7 +37,27 @@ final class ForwardSlashRegexSkippingAllowedTests: ParserTestCase {
       func a() { /1️⃣ {}/ }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      fixItsApplications: [
+        .optIn(
+          applyFixIts: ["convert to extended regex literal with '#'"],
+          fixedSource: """
+            func a() { #/ {}/# }
+            """
+        ),
+        .optIn(
+          applyFixIts: [#"insert '\'"#],
+          fixedSource: #"""
+            func a() { /\ {}/ }
+            """#
+        ),
       ]
     )
   }
@@ -48,7 +68,27 @@ final class ForwardSlashRegexSkippingAllowedTests: ParserTestCase {
       func b() { /1️⃣ \{}/ }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      fixItsApplications: [
+        .optIn(
+          applyFixIts: ["convert to extended regex literal with '#'"],
+          fixedSource: #"""
+            func b() { #/ \{}/# }
+            """#
+        ),
+        .optIn(
+          applyFixIts: [#"insert '\'"#],
+          fixedSource: #"""
+            func b() { /\ \{}/ }
+            """#
+        ),
       ]
     )
   }
@@ -59,7 +99,27 @@ final class ForwardSlashRegexSkippingAllowedTests: ParserTestCase {
       func c() { /1️⃣ {"{"}/ }
       """#,
       diagnostics: [
-        DiagnosticSpec(message: "bare slash regex literal may not start with space")
+        DiagnosticSpec(
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
+        )
+      ],
+      fixItsApplications: [
+        .optIn(
+          applyFixIts: ["convert to extended regex literal with '#'"],
+          fixedSource: #"""
+            func c() { #/ {"{"}/# }
+            """#
+        ),
+        .optIn(
+          applyFixIts: [#"insert '\'"#],
+          fixedSource: #"""
+            func c() { /\ {"{"}/ }
+            """#
+        ),
       ]
     )
   }

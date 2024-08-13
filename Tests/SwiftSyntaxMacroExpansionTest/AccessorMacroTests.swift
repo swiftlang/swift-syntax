@@ -44,6 +44,127 @@ fileprivate struct ConstantOneGetter: AccessorMacro {
 final class AccessorMacroTests: XCTestCase {
   private let indentationWidth: Trivia = .spaces(2)
 
+  func testAccessorOnVariableDeclWithTrailingLineCommentAndNoAccessorBlock() {
+    assertMacroExpansion(
+      """
+      @constantOne
+      var x: Int /*1*/ // hello
+      """,
+      expandedSource: """
+        var x: Int { /*1*/ // hello
+          get {
+            return 1
+          }
+        }
+        """,
+      macros: ["constantOne": ConstantOneGetter.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      @constantOne
+      var x: Int /// hello
+      """,
+      expandedSource: """
+        var x: Int { /// hello
+          get {
+            return 1
+          }
+        }
+        """,
+      macros: ["constantOne": ConstantOneGetter.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      @constantOne
+      var x: Int = 1 /// hello
+      """,
+      expandedSource: """
+        var x: Int { /// hello
+          get {
+            return 1
+          }
+        }
+        """,
+      macros: ["constantOne": ConstantOneGetter.self],
+      indentationWidth: indentationWidth
+    )
+
+    assertMacroExpansion(
+      """
+      @constantOne
+      var x /// hello
+      """,
+      expandedSource: """
+        var x { /// hello
+          get {
+            return 1
+          }
+        }
+        """,
+      macros: ["constantOne": ConstantOneGetter.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testAccessorOnVariableDeclWithTrailingLineCommentAndAccessorBlock() {
+    assertMacroExpansion(
+      """
+      @constantOne
+      var x: Int /*h*/ { // hello
+        1
+      }
+      """,
+      expandedSource: """
+        var x: Int /*h*/ { // hello
+        get {
+            1
+        }
+          get {
+            return 1
+          }
+        }
+        """,
+      macros: ["constantOne": ConstantOneGetter.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testAccessorOnVariableDeclWithTrailingCommentsAndSingleLineGetterExpansion() {
+    struct ConstantOneSingleLineGetter: AccessorMacro {
+      static let formatMode: FormatMode = .disabled
+
+      static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AccessorDeclSyntax] {
+        return [
+          """
+          get { 1 }
+          """
+        ]
+      }
+    }
+
+    assertMacroExpansion(
+      """
+      @constantOne
+      var x: Int // hello
+      """,
+      expandedSource: """
+        var x: Int { // hello
+          get { 1 }
+        }
+        """,
+      macros: ["constantOne": ConstantOneSingleLineGetter.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
   func testAccessorOnVariableDeclWithExistingGetter() {
     assertMacroExpansion(
       """

@@ -170,19 +170,24 @@ class SourceManager {
     from startKind: PositionInSyntaxNode = .afterLeadingTrivia,
     to endKind: PositionInSyntaxNode = .beforeTrailingTrivia
   ) -> SourceRange? {
+    range(node.position(at: startKind)..<node.position(at: endKind), in: node)
+  }
+
+  /// Get ``SourceRange`` (file name + UTF-8 offset range) of `localRange` in `node`'s root node, which must be one
+  /// of the returned values from `add(_:)`.
+  func range(
+    _ localRange: @autoclosure () -> Range<AbsolutePosition>,
+    in node: some SyntaxProtocol
+  ) -> SourceRange? {
     guard let base = self.knownSourceSyntax[node.root.id] else {
       return nil
     }
-    let localStartPosition = node.position(at: startKind)
-    let localEndPosition = node.position(at: endKind)
-    precondition(localStartPosition <= localEndPosition)
-
     let positionOffset = base.location.offset
-
+    let localRange = localRange()
     return SourceRange(
       fileName: base.location.fileName,
-      startUTF8Offset: localStartPosition.advanced(by: positionOffset).utf8Offset,
-      endUTF8Offset: localEndPosition.advanced(by: positionOffset).utf8Offset
+      startUTF8Offset: localRange.lowerBound.advanced(by: positionOffset).utf8Offset,
+      endUTF8Offset: localRange.upperBound.advanced(by: positionOffset).utf8Offset
     )
   }
 

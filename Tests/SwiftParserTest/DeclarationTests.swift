@@ -951,6 +951,52 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testTypedThrowsPlacedAfterArrow() {
+    assertParse(
+      "func test() -> 1️⃣throws(any Error) Int",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'throws(any Error)' must precede '->'",
+          fixIts: ["move 'throws(any Error)' in front of '->'"]
+        )
+      ],
+      fixedSource: "func test() throws(any Error) ->  Int"
+    )
+
+    assertParse(
+      "func test() -> 1️⃣throws(any Error Int",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'throws(any Error' must precede '->'",
+          fixIts: ["move 'throws(any Error' in front of '->'"]
+        )
+      ],
+      fixedSource: "func test() throws(any Error -> Int"
+    )
+
+    assertParse(
+      "func test() -> 1️⃣throws (Int, Int)",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'throws' must precede '->'",
+          fixIts: ["move 'throws' in front of '->'"]
+        )
+      ],
+      fixedSource: "func test() throws -> (Int, Int)"
+    )
+
+    assertParse(
+      "func test() -> 1️⃣throws (any Error) Int",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'throws' must precede '->'",
+          fixIts: ["move 'throws' in front of '->'"]
+        )
+      ],
+      fixedSource: "func test() throws -> (any Error) Int"
+    )
+  }
+
   func testTypedThrows() {
     assertParse(
       "func test() throws(any Error) -> Int { }"
@@ -1268,25 +1314,34 @@ final class DeclarationTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "4️⃣",
-          message: "bare slash regex literal may not start with space"
+          message: "bare slash regex literal may not start with space",
+          fixIts: [
+            "convert to extended regex literal with '#'",
+            #"insert '\'"#,
+          ]
         ),
         DiagnosticSpec(
           locationMarker: "5️⃣",
           message: "expected '/' to end regex literal",
           notes: [NoteSpec(locationMarker: "3️⃣", message: "to match this opening '/'")],
-          fixIts: ["insert '/\'"]
+          fixIts: ["insert '/'"]
         ),
         DiagnosticSpec(
           locationMarker: "6️⃣",
           message: "extraneous brace at top level"
         ),
       ],
-      fixedSource: """
+      applyFixIts: [
+        "insert '}'",
+        #"insert '\'"#,
+        "insert '/'",
+      ],
+      fixedSource: #"""
         struct S {
         }
-          / ###line 25 "line-directive.swift"/
+          /\ ###line 25 "line-directive.swift"/
         }
-        """
+        """#
     )
   }
 
@@ -3277,6 +3332,38 @@ final class DeclarationTests: ParserTestCase {
       fixedSource: """
         @foo let a = "a", b = "b"
         """
+    )
+  }
+
+  func testConstAsArgumentLabel() {
+    assertParse(
+      "func const(_const: String) {}",
+      substructure: FunctionParameterSyntax(
+        firstName: .identifier("_const"),
+        colon: .colonToken(),
+        type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("String")))
+      )
+    )
+
+    assertParse(
+      "func const(_const map: String) {}",
+      substructure: FunctionParameterSyntax(
+        firstName: .identifier("_const"),
+        secondName: .identifier("map"),
+        colon: .colonToken(),
+        type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("String")))
+      )
+    )
+
+    assertParse(
+      "func const(_const x y: String) {}",
+      substructure: FunctionParameterSyntax(
+        modifiers: [DeclModifierSyntax(name: .keyword(._const))],
+        firstName: .identifier("x"),
+        secondName: .identifier("y"),
+        colon: .colonToken(),
+        type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("String")))
+      )
     )
   }
 }

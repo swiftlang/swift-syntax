@@ -538,84 +538,84 @@ final class InvalidTests: ParserTestCase {
   }
 
   func testInvalid23() {
-    let testCases: [UInt: (fixIt: String, fixedSource: String)] = [
-      #line: ("join the identifiers together", "func dogcow() {}"),
-      #line: ("join the identifiers together with camel-case", "func dogCow() {}"),
-    ]
-
-    for (line, testCase) in testCases {
-      assertParse(
-        """
-        func dog 1️⃣cow() {}
-        """,
-        diagnostics: [
-          DiagnosticSpec(
-            message: "found an unexpected second identifier in function; is there an accidental break?",
-            fixIts: [
-              "join the identifiers together",
-              "join the identifiers together with camel-case",
-            ]
-          )
-        ],
-        applyFixIts: [testCase.fixIt],
-        fixedSource: testCase.fixedSource,
-        line: line
-      )
-    }
+    assertParse(
+      """
+      func dog 1️⃣cow() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "found an unexpected second identifier in function; is there an accidental break?",
+          fixIts: [
+            "join the identifiers together",
+            "join the identifiers together with camel-case",
+          ]
+        )
+      ],
+      fixItsApplications: [
+        .optIn(
+          applyFixIts: ["join the identifiers together"],
+          fixedSource: "func dogcow() {}"
+        ),
+        .optIn(
+          applyFixIts: ["join the identifiers together with camel-case"],
+          fixedSource: "func dogCow() {}"
+        ),
+      ]
+    )
   }
 
   func testThreeIdentifersForFunctionName() {
-    let testCases: [UInt: (fixIt: String, fixedSource: String)] = [
-      #line: ("join the identifiers together", "func dogcowsheep() {}"),
-      #line: ("join the identifiers together with camel-case", "func dogCowSheep() {}"),
-    ]
-
-    for (line, testCase) in testCases {
-      assertParse(
-        """
-        func dog 1️⃣cow sheep() {}
-        """,
-        diagnostics: [
-          DiagnosticSpec(
-            message: "found an unexpected second identifier in function; is there an accidental break?",
-            fixIts: [
-              "join the identifiers together",
-              "join the identifiers together with camel-case",
-            ]
-          )
-        ],
-        applyFixIts: [testCase.fixIt],
-        fixedSource: testCase.fixedSource,
-        line: line
-      )
-    }
+    assertParse(
+      """
+      func dog 1️⃣cow sheep() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "found an unexpected second identifier in function; is there an accidental break?",
+          fixIts: [
+            "join the identifiers together",
+            "join the identifiers together with camel-case",
+          ]
+        )
+      ],
+      fixItsApplications: [
+        .optIn(
+          applyFixIts: ["join the identifiers together"],
+          fixedSource: "func dogcowsheep() {}"
+        ),
+        .optIn(
+          applyFixIts: ["join the identifiers together with camel-case"],
+          fixedSource: "func dogCowSheep() {}"
+        ),
+      ]
+    )
   }
 
   func testInvalid25() {
-    let testCases: [UInt: (fixIt: String, fixedSource: String)] = [
-      #line: ("join the identifiers together", "func friendship<T>(x: T) {}"),
-      #line: ("join the identifiers together with camel-case", "func friendShip<T>(x: T) {}"),
-    ]
-
-    for (line, testCase) in testCases {
-      assertParse(
-        """
-        func friend 1️⃣ship<T>(x: T) {}
-        """,
-        diagnostics: [
-          DiagnosticSpec(
-            message: "found an unexpected second identifier in function; is there an accidental break?",
-            fixIts: [
-              "join the identifiers together",
-              "join the identifiers together with camel-case",
-            ]
-          )
-        ],
-        applyFixIts: [testCase.fixIt],
-        fixedSource: testCase.fixedSource,
-        line: line
-      )
-    }
+    assertParse(
+      """
+      func friend 1️⃣ship<T>(x: T) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "found an unexpected second identifier in function; is there an accidental break?",
+          fixIts: [
+            "join the identifiers together",
+            "join the identifiers together with camel-case",
+          ]
+        )
+      ],
+      fixItsApplications: [
+        .optIn(
+          applyFixIts: ["join the identifiers together"],
+          fixedSource: "func friendship<T>(x: T) {}"
+        ),
+        .optIn(
+          applyFixIts: ["join the identifiers together with camel-case"],
+          fixedSource: "func friendShip<T>(x: T) {}"
+        ),
+      ]
+    )
   }
 
   func testInvalid26() {

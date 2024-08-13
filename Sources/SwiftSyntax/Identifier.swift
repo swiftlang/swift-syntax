@@ -58,10 +58,6 @@ public struct RawIdentifier: Equatable, Hashable, Sendable {
   }
 
   fileprivate init(_ staticString: StaticString) {
-    self.init(SyntaxText(staticString))
-  }
-
-  fileprivate init(_ syntaxText: SyntaxText) {
-    name = syntaxText
+    name = SyntaxText(staticString)
   }
 }

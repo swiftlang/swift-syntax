@@ -1,4 +1,4 @@
-// swift-tools-version:5.7
+// swift-tools-version:5.8
 
 import Foundation
 import PackageDescription
@@ -143,7 +143,7 @@ let package = Package(
 
     .target(
       name: "SwiftIfConfig",
-      dependencies: ["SwiftSyntax", "SwiftDiagnostics", "SwiftOperators"],
+      dependencies: ["SwiftSyntax", "SwiftSyntaxBuilder", "SwiftDiagnostics", "SwiftOperators"],
       exclude: ["CMakeLists.txt"]
     ),
 

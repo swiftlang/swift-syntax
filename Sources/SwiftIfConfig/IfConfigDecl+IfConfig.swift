@@ -43,9 +43,13 @@ extension IfConfigDeclSyntax {
         return (clause, diagnostics: diagnostics)
       }
 
+      // Apply operator folding for !/&&/||.
+      let (foldedCondition, foldingDiagnostics) = IfConfigClauseSyntax.foldOperators(condition)
+      diagnostics.append(contentsOf: foldingDiagnostics)
+
       // If this condition evaluates true, return this clause.
       let (isActive, _, localDiagnostics) = evaluateIfConfig(
-        condition: condition,
+        condition: foldedCondition,
         configuration: configuration
       )
       diagnostics.append(contentsOf: localDiagnostics)

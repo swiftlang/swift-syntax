@@ -388,6 +388,11 @@ public enum SyntaxNodeKind: String, CaseIterable {
     return "Raw\(syntaxType)"
   }
 
+  /// The name of this node at the `RawSyntax` level as an variable name.
+  public var rawTypeAsVarName: TypeSyntax {
+    "raw\(syntaxType)"
+  }
+
   /// For base nodes, the name of the corresponding raw protocol to which all the
   /// concrete raw nodes that have this base kind, conform.
   public var rawProtocolType: TypeSyntax {

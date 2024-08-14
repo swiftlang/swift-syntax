@@ -13,7 +13,20 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(RawSyntax)
-public protocol RawPatternSyntaxNodeProtocol: RawSyntaxNodeProtocol {}
+public protocol RawPatternSyntaxNodeProtocol: RawSyntaxNodeProtocol {
+  /// Type erased raw pattern syntax.
+  var rawPatternSyntax: RawPatternSyntax {
+    get
+  }
+}
+
+@_spi(RawSyntax)
+public extension RawPatternSyntaxNodeProtocol {
+  @inline(__always)
+  var rawPatternSyntax: RawPatternSyntax {
+    RawPatternSyntax(self)
+  }
+}
 
 @_spi(RawSyntax)
 public struct RawObjCSelectorPieceListSyntax: RawSyntaxNodeProtocol {
@@ -1263,6 +1276,12 @@ public struct RawPatternSyntax: RawPatternSyntaxNodeProtocol {
   
   public init(_ other: some RawPatternSyntaxNodeProtocol) {
     self.init(unchecked: other.raw)
+  }
+  
+  /// Optimization if this witness is a base type other than `RawSyntax` and `RawSyntaxCollection`.
+  @inline(__always)
+  public var rawPatternSyntax: RawPatternSyntax {
+    self
   }
 }
 

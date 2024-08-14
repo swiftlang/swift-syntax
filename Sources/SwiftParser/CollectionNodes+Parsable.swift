@@ -85,7 +85,7 @@ extension AttributeListSyntax: SyntaxParseable {
     } makeMissing: { remainingTokens, arena in
       return RawAttributeSyntax(
         atSign: RawTokenSyntax(missing: .atSign, arena: arena),
-        attributeName: RawTypeSyntax(RawMissingTypeSyntax(arena: arena)),
+        attributeName: RawMissingTypeSyntax(arena: arena).rawTypeSyntax,
         leftParen: nil,
         arguments: nil,
         rightParen: nil,
@@ -102,7 +102,7 @@ extension CodeBlockItemListSyntax: SyntaxParseable {
       return RawSyntax(node)
     } makeMissing: { remainingTokens, arena in
       let missingExpr = RawMissingExprSyntax(arena: arena)
-      return RawCodeBlockItemSyntax(item: .expr(RawExprSyntax(missingExpr)), semicolon: nil, arena: arena)
+      return RawCodeBlockItemSyntax(item: .expr(missingExpr.rawExprSyntax), semicolon: nil, arena: arena)
     }
   }
 }
@@ -119,7 +119,7 @@ extension MemberBlockItemListSyntax: SyntaxParseable {
         RawUnexpectedNodesSyntax(remainingTokens, arena: arena),
         arena: arena
       )
-      return RawMemberBlockItemSyntax(decl: RawDeclSyntax(missingDecl), semicolon: nil, arena: arena)
+      return RawMemberBlockItemSyntax(decl: missingDecl.rawDeclSyntax, semicolon: nil, arena: arena)
     }
   }
 }

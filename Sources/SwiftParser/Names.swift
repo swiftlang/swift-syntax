@@ -160,7 +160,7 @@ extension Parser {
     let period: RawTokenSyntax?
 
     if self.lookahead().canParseBaseTypeForQualifiedDeclName() {
-      type = RawExprSyntax(RawTypeExprSyntax(type: self.parseQualifiedTypeIdentifier(), arena: self.arena))
+      type = RawTypeExprSyntax(type: self.parseQualifiedTypeIdentifier(), arena: self.arena).rawExprSyntax
       period = self.expectWithoutRecovery(prefix: ".", as: .period)
     } else {
       type = nil
@@ -173,22 +173,20 @@ extension Parser {
       .operators,
     ])
     if let period = period {
-      return RawExprSyntax(
-        RawMemberAccessExprSyntax(
-          base: type,
-          period: period,
-          declName: declName,
-          arena: self.arena
-        )
-      )
+      return RawMemberAccessExprSyntax(
+        base: type,
+        period: period,
+        declName: declName,
+        arena: self.arena
+      ).rawExprSyntax
     } else {
-      return RawExprSyntax(declName)
+      return declName.rawExprSyntax
     }
   }
 
   mutating func parseQualifiedTypeIdentifier() -> RawTypeSyntax {
     if self.at(.keyword(.Any)) {
-      return RawTypeSyntax(self.parseAnyType())
+      return self.parseAnyType().rawTypeSyntax
     }
 
     let (unexpectedBeforeName, name) = self.expect(anyIn: IdentifierTypeSyntax.NameOptions.self, default: .identifier)
@@ -199,14 +197,12 @@ extension Parser {
       generics = nil
     }
 
-    var result = RawTypeSyntax(
-      RawIdentifierTypeSyntax(
-        unexpectedBeforeName,
-        name: name,
-        genericArgumentClause: generics,
-        arena: self.arena
-      )
-    )
+    var result = RawIdentifierTypeSyntax(
+      unexpectedBeforeName,
+      name: name,
+      genericArgumentClause: generics,
+      arena: self.arena
+    ).rawTypeSyntax
 
     // If qualified name base type cannot be parsed from the current
     // point (i.e. the next type identifier is not followed by a '.'),
@@ -234,7 +230,7 @@ extension Parser {
       } else {
         generics = nil
       }
-      result = RawTypeSyntax(
+      result =
         RawMemberTypeSyntax(
           baseType: result,
           period: keepGoing!,
@@ -242,8 +238,7 @@ extension Parser {
           name: name,
           genericArgumentClause: generics,
           arena: self.arena
-        )
-      )
+        ).rawTypeSyntax
 
       // If qualified name base type cannot be parsed from the current
       // point (i.e. the next type identifier is not followed by a '.'),

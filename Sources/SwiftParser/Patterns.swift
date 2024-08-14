@@ -54,69 +54,57 @@ extension Parser {
       let lparen = self.eat(handle)
       let elements = self.parsePatternTupleElements()
       let (unexpectedBeforeRParen, rparen) = self.expect(.rightParen)
-      return RawPatternSyntax(
-        RawTuplePatternSyntax(
-          leftParen: lparen,
-          elements: elements,
-          unexpectedBeforeRParen,
-          rightParen: rparen,
-          arena: self.arena
-        )
-      )
+      return RawTuplePatternSyntax(
+        leftParen: lparen,
+        elements: elements,
+        unexpectedBeforeRParen,
+        rightParen: rparen,
+        arena: self.arena
+      ).rawPatternSyntax
     case (.lhs(.wildcard), let handle)?:
       let wildcard = self.eat(handle)
-      return RawPatternSyntax(
-        RawWildcardPatternSyntax(
-          wildcard: wildcard,
-          arena: self.arena
-        )
-      )
+      return RawWildcardPatternSyntax(
+        wildcard: wildcard,
+        arena: self.arena
+      ).rawPatternSyntax
     case (.rhs(let introducer), let handle)?
     where self.withLookahead { $0.shouldParsePatternBinding(introducer: introducer) }:
       let bindingSpecifier = self.eat(handle)
       let value = self.parsePattern()
-      return RawPatternSyntax(
-        RawValueBindingPatternSyntax(
-          bindingSpecifier: bindingSpecifier,
-          pattern: value,
-          arena: self.arena
-        )
-      )
+      return RawValueBindingPatternSyntax(
+        bindingSpecifier: bindingSpecifier,
+        pattern: value,
+        arena: self.arena
+      ).rawPatternSyntax
     case (.lhs(.identifier), let handle)?,
       // If we shouldn't contextually parse a pattern binding introducer (because the previous pattern match guard failed), then parse it as an identifier.
       (.rhs(_), let handle)?:
       let identifier = self.eat(handle)
-      return RawPatternSyntax(
-        RawIdentifierPatternSyntax(
-          identifier: identifier,
-          arena: self.arena
-        )
-      )
+      return RawIdentifierPatternSyntax(
+        identifier: identifier,
+        arena: self.arena
+      ).rawPatternSyntax
     case (.lhs(.dollarIdentifier), let handle)?:
       let dollarIdent = self.eat(handle)
       let unexpectedBeforeIdentifier = RawUnexpectedNodesSyntax(elements: [RawSyntax(dollarIdent)], arena: self.arena)
-      return RawPatternSyntax(
-        RawIdentifierPatternSyntax(
-          unexpectedBeforeIdentifier,
-          identifier: missingToken(.identifier),
-          arena: self.arena
-        )
-      )
+      return RawIdentifierPatternSyntax(
+        unexpectedBeforeIdentifier,
+        identifier: missingToken(.identifier),
+        arena: self.arena
+      ).rawPatternSyntax
     case nil:
       break
     }
     if self.currentToken.isLexerClassifiedKeyword, !self.atStartOfLine {
       // Recover if a keyword was used instead of an identifier
       let keyword = self.consumeAnyToken()
-      return RawPatternSyntax(
-        RawIdentifierPatternSyntax(
-          RawUnexpectedNodesSyntax([keyword], arena: self.arena),
-          identifier: missingToken(.identifier),
-          arena: self.arena
-        )
-      )
+      return RawIdentifierPatternSyntax(
+        RawUnexpectedNodesSyntax([keyword], arena: self.arena),
+        identifier: missingToken(.identifier),
+        arena: self.arena
+      ).rawPatternSyntax
     } else {
-      return RawPatternSyntax(RawMissingPatternSyntax(arena: self.arena))
+      return RawMissingPatternSyntax(arena: self.arena).rawPatternSyntax
     }
   }
 
@@ -164,7 +152,7 @@ extension Parser {
             remainingTokens,
             label: nil,
             colon: nil,
-            pattern: RawPatternSyntax(RawMissingPatternSyntax(arena: self.arena)),
+            pattern: RawMissingPatternSyntax(arena: self.arena).rawPatternSyntax,
             trailingComma: nil,
             arena: self.arena
           )
@@ -222,24 +210,20 @@ extension Parser {
     case (.lhs(.is), let handle)?:
       let isKeyword = self.eat(handle)
       let type = self.parseType()
-      return RawPatternSyntax(
-        RawIsTypePatternSyntax(
-          isKeyword: isKeyword,
-          type: type,
-          arena: self.arena
-        )
-      )
+      return RawIsTypePatternSyntax(
+        isKeyword: isKeyword,
+        type: type,
+        arena: self.arena
+      ).rawPatternSyntax
     case (.rhs(let introducer), let handle)?
     where self.withLookahead { $0.shouldParsePatternBinding(introducer: introducer) }:
       let bindingSpecifier = self.eat(handle)
       let value = self.parseMatchingPattern(context: .bindingIntroducer)
-      return RawPatternSyntax(
-        RawValueBindingPatternSyntax(
-          bindingSpecifier: bindingSpecifier,
-          pattern: value,
-          arena: self.arena
-        )
-      )
+      return RawValueBindingPatternSyntax(
+        bindingSpecifier: bindingSpecifier,
+        pattern: value,
+        arena: self.arena
+      ).rawPatternSyntax
     case (.rhs(_), _)?,
       nil:
       break
@@ -255,10 +239,9 @@ extension Parser {
       //
       // FIXME: This is pretty gross. Let's find a way to disambiguate let
       // binding patterns much earlier.
-      return RawPatternSyntax(pat.pattern)
+      return pat.pattern
     }
-    let expr = RawExprSyntax(patternSyntax)
-    return RawPatternSyntax(RawExpressionPatternSyntax(expression: expr, arena: self.arena))
+    return RawExpressionPatternSyntax(expression: patternSyntax, arena: self.arena).rawPatternSyntax
   }
 }
 

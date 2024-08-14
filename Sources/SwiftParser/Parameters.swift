@@ -107,13 +107,12 @@ extension Parser {
       secondName.tokenText.isStartingWithUppercase
     {
       // Synthesize the secondName parameter as a type node.
-      type = RawTypeSyntax(
+      type =
         RawIdentifierTypeSyntax(
           name: secondName,
           genericArgumentClause: nil,
           arena: self.arena
-        )
-      )
+        ).rawTypeSyntax
       names = ParameterNames(
         unexpectedBeforeFirstName: names.unexpectedBeforeFirstName,
         firstName: names.firstName,
@@ -176,7 +175,7 @@ extension Parser {
     } else if colon != nil {
       // mark the type as missing if the preceding colon is present
       // e.g. (:) or (_:)
-      type = RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
+      type = RawMissingTypeSyntax(arena: self.arena).rawTypeSyntax
     } else {
       type = nil
     }
@@ -216,7 +215,7 @@ extension Parser {
       if colon!.isMissing {
         // If there was no colon, don't try to parse a type either so we are not
         // skipping over unrelated tokens trying to find a type during recvoery.
-        type = RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
+        type = RawMissingTypeSyntax(arena: self.arena).rawTypeSyntax
       } else {
         type = self.parseType(misplacedSpecifiers: misplacedSpecifiers)
       }

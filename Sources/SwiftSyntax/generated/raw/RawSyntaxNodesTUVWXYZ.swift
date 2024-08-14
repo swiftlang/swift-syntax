@@ -13,7 +13,20 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(RawSyntax)
-public protocol RawTypeSyntaxNodeProtocol: RawSyntaxNodeProtocol {}
+public protocol RawTypeSyntaxNodeProtocol: RawSyntaxNodeProtocol {
+  /// Type erased raw type syntax.
+  var rawTypeSyntax: RawTypeSyntax {
+    get
+  }
+}
+
+@_spi(RawSyntax)
+public extension RawTypeSyntaxNodeProtocol {
+  @inline(__always)
+  var rawTypeSyntax: RawTypeSyntax {
+    RawTypeSyntax(self)
+  }
+}
 
 @_spi(RawSyntax)
 public struct RawTernaryExprSyntax: RawExprSyntaxNodeProtocol {
@@ -1524,6 +1537,12 @@ public struct RawTypeSyntax: RawTypeSyntaxNodeProtocol {
   
   public init(_ other: some RawTypeSyntaxNodeProtocol) {
     self.init(unchecked: other.raw)
+  }
+  
+  /// Optimization if this witness is a base type other than `RawSyntax` and `RawSyntaxCollection`.
+  @inline(__always)
+  public var rawTypeSyntax: RawTypeSyntax {
+    self
   }
 }
 

@@ -22,13 +22,11 @@ extension Parser {
     // Parse pack expansion 'repeat T'.
     if let repeatKeyword = self.consume(if: .keyword(.repeat)) {
       let repetitionPattern = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
-      return RawTypeSyntax(
-        RawPackExpansionTypeSyntax(
-          repeatKeyword: repeatKeyword,
-          repetitionPattern: repetitionPattern,
-          arena: self.arena
-        )
-      )
+      return RawPackExpansionTypeSyntax(
+        repeatKeyword: repeatKeyword,
+        repetitionPattern: repetitionPattern,
+        arena: self.arena
+      ).rawTypeSyntax
     }
 
     return self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
@@ -36,7 +34,7 @@ extension Parser {
 
   mutating func parseTypeScalar(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
     let specifiersAndAttributes = self.parseTypeAttributeList(misplacedSpecifiers: misplacedSpecifiers)
-    var base = RawTypeSyntax(self.parseSimpleOrCompositionType())
+    var base = self.parseSimpleOrCompositionType()
     if self.withLookahead({ $0.canParseFunctionTypeArrow() }) {
       var effectSpecifiers = self.parseTypeEffectSpecifiers()
       let returnClause = self.parseFunctionReturnClause(
@@ -80,7 +78,7 @@ extension Parser {
         rightParen = RawTokenSyntax(missing: .rightParen, arena: self.arena)
       }
 
-      base = RawTypeSyntax(
+      base =
         RawFunctionTypeSyntax(
           unexpectedBeforeLeftParen,
           leftParen: leftParen,
@@ -91,21 +89,18 @@ extension Parser {
           effectSpecifiers: effectSpecifiers,
           returnClause: returnClause,
           arena: self.arena
-        )
-      )
+        ).rawTypeSyntax
     }
 
     if let specifiersAndAttributes {
-      return RawTypeSyntax(
-        RawAttributedTypeSyntax(
-          specifiers: specifiersAndAttributes.specifiers,
-          attributes: specifiersAndAttributes.attributes,
-          baseType: base,
-          arena: self.arena
-        )
-      )
+      return RawAttributedTypeSyntax(
+        specifiers: specifiersAndAttributes.specifiers,
+        attributes: specifiersAndAttributes.attributes,
+        baseType: base,
+        arena: self.arena
+      ).rawTypeSyntax
     } else {
-      return RawTypeSyntax(base)
+      return base
     }
   }
 
@@ -114,13 +109,11 @@ extension Parser {
     // 'each' is a contextual keyword for a pack reference.
     if let each = consume(if: .keyword(.each)) {
       let packType = parseSimpleType()
-      return RawTypeSyntax(
-        RawPackElementTypeSyntax(
-          eachKeyword: each,
-          pack: packType,
-          arena: self.arena
-        )
-      )
+      return RawPackElementTypeSyntax(
+        eachKeyword: each,
+        pack: packType,
+        arena: self.arena
+      ).rawTypeSyntax
     }
 
     let someOrAny = self.consume(if: .keyword(.some), .keyword(.any))
@@ -128,13 +121,11 @@ extension Parser {
     var base = self.parseSimpleType()
     guard self.atContextualPunctuator("&") else {
       if let someOrAny {
-        return RawTypeSyntax(
-          RawSomeOrAnyTypeSyntax(
-            someOrAnySpecifier: someOrAny,
-            constraint: base,
-            arena: self.arena
-          )
-        )
+        return RawSomeOrAnyTypeSyntax(
+          someOrAnySpecifier: someOrAny,
+          constraint: base,
+          arena: self.arena
+        ).rawTypeSyntax
       } else {
         return base
       }
@@ -164,22 +155,19 @@ extension Parser {
         )
       } while keepGoing != nil && self.hasProgressed(&loopProgress)
 
-      base = RawTypeSyntax(
+      base =
         RawCompositionTypeSyntax(
           elements: RawCompositionTypeElementListSyntax(elements: elements, arena: self.arena),
           arena: self.arena
-        )
-      )
+        ).rawTypeSyntax
     }
 
     if let someOrAny {
-      return RawTypeSyntax(
-        RawSomeOrAnyTypeSyntax(
-          someOrAnySpecifier: someOrAny,
-          constraint: base,
-          arena: self.arena
-        )
-      )
+      return RawSomeOrAnyTypeSyntax(
+        someOrAnySpecifier: someOrAny,
+        constraint: base,
+        arena: self.arena
+      ).rawTypeSyntax
     } else {
       return base
     }
@@ -233,13 +221,11 @@ extension Parser {
     // Wrap as a suppressed type if needed.
     func wrapInTilde(_ node: RawTypeSyntax) -> RawTypeSyntax {
       if let tilde = maybeTilde {
-        return RawTypeSyntax(
-          RawSuppressedTypeSyntax(
-            withoutTilde: tilde,
-            type: node,
-            arena: self.arena
-          )
-        )
+        return RawSuppressedTypeSyntax(
+          withoutTilde: tilde,
+          type: node,
+          arena: self.arena
+        ).rawTypeSyntax
       }
       return node
     }
@@ -249,13 +235,13 @@ extension Parser {
     case .Self, .Any, .identifier:
       base = self.parseTypeIdentifier()
     case .leftParen:
-      base = RawTypeSyntax(self.parseTupleTypeBody())
+      base = self.parseTupleTypeBody().rawTypeSyntax
     case .leftSquare:
-      base = RawTypeSyntax(self.parseCollectionType())
+      base = self.parseCollectionType()
     case .wildcard:
-      base = RawTypeSyntax(self.parsePlaceholderType())
+      base = self.parsePlaceholderType().rawTypeSyntax
     case nil:
-      return wrapInTilde(RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)))
+      return wrapInTilde(RawMissingTypeSyntax(arena: self.arena).rawTypeSyntax)
     }
 
     var loopProgress = LoopProgressCondition()
@@ -264,7 +250,7 @@ extension Parser {
         let (unexpectedPeriod, period, skipMemberName) = self.consumeMemberPeriod(previousNode: base)
         if skipMemberName {
           let missingIdentifier = missingToken(.identifier)
-          base = RawTypeSyntax(
+          base =
             RawMemberTypeSyntax(
               baseType: base,
               unexpectedPeriod,
@@ -272,20 +258,18 @@ extension Parser {
               name: missingIdentifier,
               genericArgumentClause: nil,
               arena: self.arena
-            )
-          )
+            ).rawTypeSyntax
           break
         } else if self.at(.keyword(.Type)) || self.at(.keyword(.Protocol)) {
           let metatypeSpecifier = self.consume(if: .keyword(.Type)) ?? self.consume(if: .keyword(.Protocol))!
-          base = RawTypeSyntax(
+          base =
             RawMetatypeTypeSyntax(
               baseType: base,
               unexpectedPeriod,
               period: period,
               metatypeSpecifier: metatypeSpecifier,
               arena: self.arena
-            )
-          )
+            ).rawTypeSyntax
         } else {
           let name: RawTokenSyntax
           if let handle = self.at(anyIn: MemberTypeSyntax.NameOptions.self)?.handle {
@@ -301,7 +285,7 @@ extension Parser {
           } else {
             generics = nil
           }
-          base = RawTypeSyntax(
+          base =
             RawMemberTypeSyntax(
               baseType: base,
               unexpectedPeriod,
@@ -309,8 +293,7 @@ extension Parser {
               name: name,
               genericArgumentClause: generics,
               arena: self.arena
-            )
-          )
+            ).rawTypeSyntax
         }
         continue
       }
@@ -321,11 +304,11 @@ extension Parser {
       }
 
       if self.at(TokenSpec(.postfixQuestionMark, allowAtStartOfLine: false)) {
-        base = RawTypeSyntax(self.parseOptionalType(base))
+        base = self.parseOptionalType(base).rawTypeSyntax
         continue
       }
       if self.at(TokenSpec(.exclamationMark, allowAtStartOfLine: false)) {
-        base = RawTypeSyntax(self.parseImplicitlyUnwrappedOptionalType(base))
+        base = self.parseImplicitlyUnwrappedOptionalType(base).rawTypeSyntax
         continue
       }
 
@@ -364,7 +347,7 @@ extension Parser {
   /// Parse a type identifier.
   mutating func parseTypeIdentifier() -> RawTypeSyntax {
     if self.at(.keyword(.Any)) {
-      return RawTypeSyntax(self.parseAnyType())
+      return self.parseAnyType().rawTypeSyntax
     }
 
     let (unexpectedBeforeName, name) = self.expect(anyIn: IdentifierTypeSyntax.NameOptions.self, default: .identifier)
@@ -375,14 +358,12 @@ extension Parser {
       generics = nil
     }
 
-    return RawTypeSyntax(
-      RawIdentifierTypeSyntax(
-        unexpectedBeforeName,
-        name: name,
-        genericArgumentClause: generics,
-        arena: self.arena
-      )
-    )
+    return RawIdentifierTypeSyntax(
+      unexpectedBeforeName,
+      name: name,
+      genericArgumentClause: generics,
+      arena: self.arena
+    ).rawTypeSyntax
   }
 
   /// Parse the existential `Any` type.
@@ -520,7 +501,7 @@ extension Parser {
               secondName: nil,
               RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, unexpectedBeforeColon, arena: self.arena),
               colon: nil,
-              type: RawTypeSyntax(RawIdentifierTypeSyntax(name: first, genericArgumentClause: nil, arena: self.arena)),
+              type: RawIdentifierTypeSyntax(name: first, genericArgumentClause: nil, arena: self.arena).rawTypeSyntax,
               ellipsis: nil,
               trailingComma: self.missingToken(.comma),
               arena: self.arena
@@ -571,15 +552,13 @@ extension Parser {
   /// Parse an array or dictionary type..
   mutating func parseCollectionType() -> RawTypeSyntax {
     if let remaingingTokens = remainingTokensIfMaximumNestingLevelReached() {
-      return RawTypeSyntax(
-        RawArrayTypeSyntax(
-          remaingingTokens,
-          leftSquare: missingToken(.leftSquare),
-          element: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
-          rightSquare: missingToken(.rightSquare),
-          arena: self.arena
-        )
-      )
+      return RawArrayTypeSyntax(
+        remaingingTokens,
+        leftSquare: missingToken(.leftSquare),
+        element: RawMissingTypeSyntax(arena: self.arena).rawTypeSyntax,
+        rightSquare: missingToken(.rightSquare),
+        arena: self.arena
+      ).rawTypeSyntax
     }
 
     let (unexpectedBeforeLSquare, leftsquare) = self.expect(.leftSquare)
@@ -587,30 +566,26 @@ extension Parser {
     if let colon = self.consume(if: .colon) {
       let secondType = self.parseType()
       let (unexpectedBeforeRSquareBracket, rightSquare) = self.expect(.rightSquare)
-      return RawTypeSyntax(
-        RawDictionaryTypeSyntax(
-          unexpectedBeforeLSquare,
-          leftSquare: leftsquare,
-          key: firstType,
-          colon: colon,
-          value: secondType,
-          unexpectedBeforeRSquareBracket,
-          rightSquare: rightSquare,
-          arena: self.arena
-        )
-      )
+      return RawDictionaryTypeSyntax(
+        unexpectedBeforeLSquare,
+        leftSquare: leftsquare,
+        key: firstType,
+        colon: colon,
+        value: secondType,
+        unexpectedBeforeRSquareBracket,
+        rightSquare: rightSquare,
+        arena: self.arena
+      ).rawTypeSyntax
     } else {
       let (unexpectedBeforeRSquareBracket, rSquareBracket) = self.expect(.rightSquare)
-      return RawTypeSyntax(
-        RawArrayTypeSyntax(
-          unexpectedBeforeLSquare,
-          leftSquare: leftsquare,
-          element: firstType,
-          unexpectedBeforeRSquareBracket,
-          rightSquare: rSquareBracket,
-          arena: self.arena
-        )
-      )
+      return RawArrayTypeSyntax(
+        unexpectedBeforeLSquare,
+        leftSquare: leftsquare,
+        element: firstType,
+        unexpectedBeforeRSquareBracket,
+        rightSquare: rSquareBracket,
+        arena: self.arena
+      ).rawTypeSyntax
     }
   }
 }
@@ -1040,13 +1015,11 @@ extension Parser {
     } else if self.at(prefix: "<") {
       let generics = self.parseGenericParameters()
       let baseType = self.parseType()
-      return RawTypeSyntax(
-        RawNamedOpaqueReturnTypeSyntax(
-          genericParameterClause: generics,
-          type: baseType,
-          arena: self.arena
-        )
-      )
+      return RawNamedOpaqueReturnTypeSyntax(
+        genericParameterClause: generics,
+        type: baseType,
+        arena: self.arena
+      ).rawTypeSyntax
     } else {
       var result = self.parseType()
 
@@ -1056,14 +1029,13 @@ extension Parser {
 
       // If the right square bracket is at a new line, we should just return the result
       if let rightSquare = self.consume(if: TokenSpec(.rightSquare, allowAtStartOfLine: false)) {
-        result = RawTypeSyntax(
+        result =
           RawArrayTypeSyntax(
             leftSquare: missingToken(.leftSquare),
             element: result,
             rightSquare: rightSquare,
             arena: self.arena
-          )
-        )
+          ).rawTypeSyntax
       } else if self.at(.colon) {
         var lookahead = self.lookahead()
         // We only want to continue with a dictionary if we can parse a colon and a simple type.
@@ -1077,7 +1049,7 @@ extension Parser {
         let secondType = self.parseSimpleType()
         let rightSquare = self.consume(if: .rightSquare) ?? self.missingToken(.rightSquare)
 
-        result = RawTypeSyntax(
+        result =
           RawDictionaryTypeSyntax(
             leftSquare: self.missingToken(.leftSquare),
             key: result,
@@ -1085,16 +1057,15 @@ extension Parser {
             value: secondType,
             rightSquare: rightSquare,
             arena: self.arena
-          )
-        )
+          ).rawTypeSyntax
       }
 
       var loopProgress = LoopProgressCondition()
       while self.hasProgressed(&loopProgress) {
         if self.at(TokenSpec(.postfixQuestionMark, allowAtStartOfLine: false)) {
-          result = RawTypeSyntax(self.parseOptionalType(result))
+          result = self.parseOptionalType(result).rawTypeSyntax
         } else if self.at(TokenSpec(.exclamationMark, allowAtStartOfLine: false)) {
-          result = RawTypeSyntax(self.parseImplicitlyUnwrappedOptionalType(result))
+          result = self.parseImplicitlyUnwrappedOptionalType(result).rawTypeSyntax
         } else {
           break
         }

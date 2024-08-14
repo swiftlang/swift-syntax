@@ -297,12 +297,11 @@ extension Parser {
       repeat {
         let type: RawTypeSyntax
         if let classKeyword = self.consume(if: .keyword(.class)) {
-          type = RawTypeSyntax(
+          type =
             RawClassRestrictionTypeSyntax(
               classKeyword: classKeyword,
               arena: self.arena
-            )
-          )
+            ).rawTypeSyntax
         } else {
           type = self.parseType()
         }

@@ -13,7 +13,20 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(RawSyntax)
-public protocol RawDeclSyntaxNodeProtocol: RawSyntaxNodeProtocol {}
+public protocol RawDeclSyntaxNodeProtocol: RawSyntaxNodeProtocol {
+  /// Type erased raw decl syntax.
+  var rawDeclSyntax: RawDeclSyntax {
+    get
+  }
+}
+
+@_spi(RawSyntax)
+public extension RawDeclSyntaxNodeProtocol {
+  @inline(__always)
+  var rawDeclSyntax: RawDeclSyntax {
+    RawDeclSyntax(self)
+  }
+}
 
 @_spi(RawSyntax)
 public struct RawDeclModifierDetailSyntax: RawSyntaxNodeProtocol {
@@ -525,6 +538,12 @@ public struct RawDeclSyntax: RawDeclSyntaxNodeProtocol {
   
   public init(_ other: some RawDeclSyntaxNodeProtocol) {
     self.init(unchecked: other.raw)
+  }
+  
+  /// Optimization if this witness is a base type other than `RawSyntax` and `RawSyntaxCollection`.
+  @inline(__always)
+  public var rawDeclSyntax: RawDeclSyntax {
+    self
   }
 }
 

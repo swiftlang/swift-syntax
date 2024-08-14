@@ -13,7 +13,20 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(RawSyntax)
-public protocol RawExprSyntaxNodeProtocol: RawSyntaxNodeProtocol {}
+public protocol RawExprSyntaxNodeProtocol: RawSyntaxNodeProtocol {
+  /// Type erased raw expr syntax.
+  var rawExprSyntax: RawExprSyntax {
+    get
+  }
+}
+
+@_spi(RawSyntax)
+public extension RawExprSyntaxNodeProtocol {
+  @inline(__always)
+  var rawExprSyntax: RawExprSyntax {
+    RawExprSyntax(self)
+  }
+}
 
 @_spi(RawSyntax)
 public struct RawEditorPlaceholderDeclSyntax: RawDeclSyntaxNodeProtocol {
@@ -1015,6 +1028,12 @@ public struct RawExprSyntax: RawExprSyntaxNodeProtocol {
   
   public init(_ other: some RawExprSyntaxNodeProtocol) {
     self.init(unchecked: other.raw)
+  }
+  
+  /// Optimization if this witness is a base type other than `RawSyntax` and `RawSyntaxCollection`.
+  @inline(__always)
+  public var rawExprSyntax: RawExprSyntax {
+    self
   }
 }
 

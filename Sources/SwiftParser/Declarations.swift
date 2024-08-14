@@ -200,7 +200,7 @@ extension Parser {
       } syntax: { parser, elements in
         return .decls(RawMemberBlockItemListSyntax(elements: elements, arena: parser.arena))
       }
-      return RawDeclSyntax(directive)
+      return directive.rawDeclSyntax
     }
 
     let attrs = DeclAttributes(
@@ -227,53 +227,48 @@ extension Parser {
 
     switch recoveryResult {
     case (.lhs(.import), let handle)?:
-      return RawDeclSyntax(self.parseImportDeclaration(attrs, handle))
+      return self.parseImportDeclaration(attrs, handle).rawDeclSyntax
     case (.lhs(.class), let handle)?:
-      return RawDeclSyntax(
-        self.parseNominalTypeDeclaration(for: RawClassDeclSyntax.self, attrs: attrs, introucerHandle: handle)
-      )
+      return self.parseNominalTypeDeclaration(for: RawClassDeclSyntax.self, attrs: attrs, introucerHandle: handle)
+        .rawDeclSyntax
     case (.lhs(.enum), let handle)?:
-      return RawDeclSyntax(
-        self.parseNominalTypeDeclaration(for: RawEnumDeclSyntax.self, attrs: attrs, introucerHandle: handle)
-      )
+      return self.parseNominalTypeDeclaration(for: RawEnumDeclSyntax.self, attrs: attrs, introucerHandle: handle)
+        .rawDeclSyntax
     case (.lhs(.case), let handle)?:
-      return RawDeclSyntax(self.parseEnumCaseDeclaration(attrs, handle))
+      return self.parseEnumCaseDeclaration(attrs, handle).rawDeclSyntax
     case (.lhs(.struct), let handle)?:
-      return RawDeclSyntax(
-        self.parseNominalTypeDeclaration(for: RawStructDeclSyntax.self, attrs: attrs, introucerHandle: handle)
-      )
+      return self.parseNominalTypeDeclaration(for: RawStructDeclSyntax.self, attrs: attrs, introucerHandle: handle)
+        .rawDeclSyntax
     case (.lhs(.protocol), let handle)?:
-      return RawDeclSyntax(
-        self.parseNominalTypeDeclaration(for: RawProtocolDeclSyntax.self, attrs: attrs, introucerHandle: handle)
-      )
+      return self.parseNominalTypeDeclaration(for: RawProtocolDeclSyntax.self, attrs: attrs, introucerHandle: handle)
+        .rawDeclSyntax
     case (.lhs(.associatedtype), let handle)?:
-      return RawDeclSyntax(self.parseAssociatedTypeDeclaration(attrs, handle))
+      return self.parseAssociatedTypeDeclaration(attrs, handle).rawDeclSyntax
     case (.lhs(.typealias), let handle)?:
-      return RawDeclSyntax(self.parseTypealiasDeclaration(attrs, handle))
+      return self.parseTypealiasDeclaration(attrs, handle).rawDeclSyntax
     case (.lhs(.extension), let handle)?:
-      return RawDeclSyntax(self.parseExtensionDeclaration(attrs, handle))
+      return self.parseExtensionDeclaration(attrs, handle).rawDeclSyntax
     case (.lhs(.func), let handle)?:
-      return RawDeclSyntax(self.parseFuncDeclaration(attrs, handle))
+      return self.parseFuncDeclaration(attrs, handle).rawDeclSyntax
     case (.lhs(.subscript), let handle)?:
-      return RawDeclSyntax(self.parseSubscriptDeclaration(attrs, handle))
+      return self.parseSubscriptDeclaration(attrs, handle).rawDeclSyntax
     case (.lhs(.`init`), let handle)?:
-      return RawDeclSyntax(self.parseInitializerDeclaration(attrs, handle))
+      return self.parseInitializerDeclaration(attrs, handle).rawDeclSyntax
     case (.lhs(.deinit), let handle)?:
-      return RawDeclSyntax(self.parseDeinitializerDeclaration(attrs, handle))
+      return self.parseDeinitializerDeclaration(attrs, handle).rawDeclSyntax
     case (.lhs(.operator), let handle)?:
-      return RawDeclSyntax(self.parseOperatorDeclaration(attrs, handle))
+      return self.parseOperatorDeclaration(attrs, handle).rawDeclSyntax
     case (.lhs(.precedencegroup), let handle)?:
-      return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs, handle))
+      return self.parsePrecedenceGroupDeclaration(attrs, handle).rawDeclSyntax
     case (.lhs(.actor), let handle)?:
-      return RawDeclSyntax(
-        self.parseNominalTypeDeclaration(for: RawActorDeclSyntax.self, attrs: attrs, introucerHandle: handle)
-      )
+      return self.parseNominalTypeDeclaration(for: RawActorDeclSyntax.self, attrs: attrs, introucerHandle: handle)
+        .rawDeclSyntax
     case (.lhs(.macro), let handle)?:
-      return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
+      return self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle).rawDeclSyntax
     case (.lhs(.pound), let handle)?:
-      return RawDeclSyntax(self.parseMacroExpansionDeclaration(attrs, handle))
+      return self.parseMacroExpansionDeclaration(attrs, handle).rawDeclSyntax
     case (.rhs, let handle)?:
-      return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
+      return self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList).rawDeclSyntax
     case nil:
       break
     }
@@ -283,32 +278,28 @@ extension Parser {
       let isProbablyTupleDecl = self.at(.leftParen) && self.peek(isAt: .identifier, .wildcard)
 
       if isProbablyVarDecl || isProbablyTupleDecl {
-        return RawDeclSyntax(self.parseBindingDeclaration(attrs, .missing(.keyword(.var))))
+        return self.parseBindingDeclaration(attrs, .missing(.keyword(.var))).rawDeclSyntax
       }
 
       if self.currentToken.isEditorPlaceholder {
         let placeholder = self.parseAnyIdentifier()
-        return RawDeclSyntax(
-          RawMissingDeclSyntax(
-            attributes: attrs.attributes,
-            modifiers: attrs.modifiers,
-            placeholder: placeholder,
-            arena: self.arena
-          )
-        )
+        return RawMissingDeclSyntax(
+          attributes: attrs.attributes,
+          modifiers: attrs.modifiers,
+          placeholder: placeholder,
+          arena: self.arena
+        ).rawDeclSyntax
       }
 
       if atFunctionDeclarationWithoutFuncKeyword() {
-        return RawDeclSyntax(self.parseFuncDeclaration(attrs, .missing(.keyword(.func))))
+        return self.parseFuncDeclaration(attrs, .missing(.keyword(.func))).rawDeclSyntax
       }
     }
-    return RawDeclSyntax(
-      RawMissingDeclSyntax(
-        attributes: attrs.attributes,
-        modifiers: attrs.modifiers,
-        arena: self.arena
-      )
-    )
+    return RawMissingDeclSyntax(
+      attributes: attrs.attributes,
+      modifiers: attrs.modifiers,
+      arena: self.arena
+    ).rawDeclSyntax
   }
 
   /// Returns `true` if it looks like the parser is positioned at a function declaration that’s missing the `func` keyword.
@@ -462,16 +453,15 @@ extension Parser {
             inherited = self.parseType()
           } else if let classKeyword = self.consume(if: .keyword(.class)) {
             unexpectedBeforeInherited = RawUnexpectedNodesSyntax([classKeyword], arena: self.arena)
-            inherited = RawTypeSyntax(
+            inherited =
               RawIdentifierTypeSyntax(
                 name: missingToken(.identifier, text: "AnyObject"),
                 genericArgumentClause: nil,
                 arena: self.arena
-              )
-            )
+              ).rawTypeSyntax
           } else {
             unexpectedBeforeInherited = nil
-            inherited = RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
+            inherited = RawMissingTypeSyntax(arena: self.arena).rawTypeSyntax
           }
         } else {
           unexpectedBeforeInherited = nil
@@ -534,9 +524,9 @@ extension Parser {
             RawGenericRequirementSyntax(
               requirement: .sameTypeRequirement(
                 RawSameTypeRequirementSyntax(
-                  leftType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+                  leftType: RawMissingTypeSyntax(arena: self.arena).rawTypeSyntax,
                   equal: missingToken(.binaryOperator, text: "=="),
-                  rightType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+                  rightType: RawMissingTypeSyntax(arena: self.arena).rawTypeSyntax,
                   arena: self.arena
                 )
               ),
@@ -674,7 +664,7 @@ extension Parser {
             RawSameTypeRequirementSyntax(
               leftType: firstType,
               equal: RawTokenSyntax(missing: .binaryOperator, text: "==", arena: self.arena),
-              rightType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+              rightType: RawMissingTypeSyntax(arena: self.arena).rawTypeSyntax,
               arena: self.arena
             )
           )
@@ -722,13 +712,11 @@ extension Parser {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       let item = RawMemberBlockItemSyntax(
         remainingTokens,
-        decl: RawDeclSyntax(
-          RawMissingDeclSyntax(
-            attributes: self.emptyCollection(RawAttributeListSyntax.self),
-            modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
-            arena: self.arena
-          )
-        ),
+        decl: RawMissingDeclSyntax(
+          attributes: self.emptyCollection(RawAttributeListSyntax.self),
+          modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
+          arena: self.arena
+        ).rawDeclSyntax,
         semicolon: nil,
         arena: self.arena
       )
@@ -737,7 +725,7 @@ extension Parser {
 
     let decl: RawDeclSyntax
     if self.at(.poundSourceLocation) {
-      decl = RawDeclSyntax(self.parsePoundSourceLocationDirective())
+      decl = self.parsePoundSourceLocationDirective().rawDeclSyntax
     } else {
       decl = self.parseDeclaration(inMemberDeclList: true)
     }
@@ -1291,14 +1279,13 @@ extension Parser {
         if let equal = self.consume(if: .equal) {
           var value = self.parseExpression(flavor: .basic, pattern: .none)
           if hasTryBeforeIntroducer && !value.is(RawTryExprSyntax.self) {
-            value = RawExprSyntax(
+            value =
               RawTryExprSyntax(
                 tryKeyword: missingToken(.try),
                 questionOrExclamationMark: nil,
                 expression: value,
                 arena: self.arena
-              )
-            )
+              ).rawExprSyntax
           }
           initializer = RawInitializerClauseSyntax(
             equal: equal,
@@ -1313,13 +1300,11 @@ extension Parser {
           // annotation and form an initializer clause from it instead.
           typeAnnotation = nil
           let initExpr = parsePostfixExpressionSuffix(
-            RawExprSyntax(
-              RawTypeExprSyntax(
-                type: typeAnnotationUnwrapped.type,
-                typeAnnotation?.unexpectedAfterType,
-                arena: self.arena
-              )
-            ),
+            RawTypeExprSyntax(
+              type: typeAnnotationUnwrapped.type,
+              typeAnnotation?.unexpectedAfterType,
+              arena: self.arena
+            ).rawExprSyntax,
             flavor: .basic,
             pattern: .none
           )

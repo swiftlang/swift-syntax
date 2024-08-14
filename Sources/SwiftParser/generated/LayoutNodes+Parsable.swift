@@ -371,13 +371,11 @@ fileprivate extension Parser {
       // which is just a placeholder here
       return RawCodeBlockItemSyntax(
         item: .decl(
-          RawDeclSyntax(
-            RawMissingDeclSyntax(
-              attributes: self.emptyCollection(RawAttributeListSyntax.self),
-              modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
-              arena: self.arena
-            )
-          )
+          RawMissingDeclSyntax(
+            attributes: self.emptyCollection(RawAttributeListSyntax.self),
+            modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
+            arena: self.arena
+          ).rawDeclSyntax
         ),
         semicolon: nil,
         arena: self.arena

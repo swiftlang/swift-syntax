@@ -46,12 +46,36 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
       && nodesStartingWith.contains(node.kind.syntaxType.description.droppingLeadingUnderscores.first!)
       && !node.kind.isDeprecated
     {
-      DeclSyntax(
-        """
-        \(node.apiAttributes(forRaw: true))\
-        public protocol \(node.kind.rawType)NodeProtocol: \(node.base.rawProtocolType) {}
-        """
-      )
+      if node.kind == .syntax || node.kind == .syntaxCollection {
+        DeclSyntax(
+          """
+          \(node.apiAttributes(forRaw: true))\
+          public protocol \(node.kind.rawType)NodeProtocol: \(node.base.rawProtocolType) {}
+          """
+        )
+      } else {
+        DeclSyntax(
+          """
+          \(node.apiAttributes(forRaw: true))\
+          public protocol \(node.kind.rawType)NodeProtocol: \(node.base.rawProtocolType) {
+            /// Type erased raw \(raw: node.kind) syntax.
+            var \(node.kind.rawTypeAsVarName): \(node.kind.rawType) { get }
+          }
+          """
+        )
+
+        DeclSyntax(
+          """
+          \(node.apiAttributes(forRaw: true))\
+          public extension \(node.kind.rawType)NodeProtocol {
+            @inline(__always)
+            var \(node.kind.rawTypeAsVarName): \(node.kind.rawType) {
+              \(node.kind.rawType)(self)
+            }
+          }
+          """
+        )
+      }
     }
 
     for node in SYNTAX_NODES
@@ -176,6 +200,18 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
             }
             """
           )
+
+          if node.kind != .syntax && node.kind != .syntaxCollection {
+            DeclSyntax(
+              """
+              /// Optimization if this witness is a base type other than `RawSyntax` and `RawSyntaxCollection`.
+              @inline(__always)
+              public var \(node.kind.rawTypeAsVarName): \(node.kind.rawType) {
+                self
+              }
+              """
+            )
+          }
         }
 
         if let node = node.collectionNode {

@@ -12,17 +12,15 @@
 
 import SwiftSyntax
 
-@_spi(Experimental) public protocol WithGenericParametersOrAssociatedTypesScopeSyntax: ScopeSyntax {
-  var genericParameterClause: GenericParameterClauseSyntax? { get }
-  var primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? { get }
-}
+/// Scope that introduces generic parameter names and directs
+/// futher lookup to it's `WithGenericParametersScopeSyntax`
+/// parent scope's parent scope (i.e. on return, bypasses names
+/// introduced by it's parent).
+@_spi(Experimental) public protocol GenericParameterScopeSyntax: ScopeSyntax {}
 
-@_spi(Experimental) extension WithGenericParametersOrAssociatedTypesScopeSyntax {
-  @_spi(Experimental) public var genericParameterClause: GenericParameterClauseSyntax? { nil }
-  @_spi(Experimental) public var primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? { nil }
-
-  /// Returns names matching lookup and passes lookup to
-  /// the generic parameter or primary associated type clause scopes.
+@_spi(Experimental) extension GenericParameterScopeSyntax {
+  /// Returns names matching lookup and bypasses
+  /// `WithGenericParametersScopeSyntax` parent scope in futher lookup.
   ///
   /// example:
   /// ```swift
@@ -35,8 +33,10 @@ import SwiftSyntax
   /// lookup first visits the code block scope associated
   /// with the function's body. Then, it's forwarded to the
   /// function declaration scope and then to generic parameter
-  /// scope (`WithGenericParametersOrAssociatedTypesScopeSyntax`)
-  /// instead of it's actual parent scope (in this case: file scope).
+  /// scope (`WithGenericParametersScopeSyntax`).
+  /// Then, to ensure there is no infinite cycle,
+  /// this method passes lookup to function scope's parent scope
+  /// (in this case: file scope).
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
@@ -44,19 +44,18 @@ import SwiftSyntax
   ) -> [LookupResult] {
     return defaultLookupImplementation(
       identifier,
-      at: position,
+      at: lookUpPosition,
       with: config,
       propagateToParent: false
     )
-      + lookupThroughGenericParameterScope(
+      + lookupBypassingParentResults(
         identifier,
         at: lookUpPosition,
         with: config
       )
   }
 
-  /// Passes lookup to this scope's generic parameter or
-  /// primary associated type clause scope (`WithGenericParametersOrAssociatedTypesScopeSyntax`).
+  /// Bypasses names introduced by `WithGenericParametersScopeSyntax` parent scope.
   ///
   /// example:
   /// ```swift
@@ -69,17 +68,22 @@ import SwiftSyntax
   /// lookup first visits the code block scope associated
   /// with the function's body. Then, it's forwarded to the
   /// function declaration scope and then to generic parameter
-  /// scope (`WithGenericParametersOrAssociatedTypesScopeSyntax`)
-  /// with this method (instead of using standard `lookupInParent`).
-  private func lookupThroughGenericParameterScope(
+  /// scope (`WithGenericParametersScopeSyntax`).
+  /// Then, to ensure there is no infinite cycle,
+  /// we use this method instead of the standard `lookupInParent`
+  /// to pass lookup to the function scope's parent scope (in this case: file scope)
+  /// and effectively bypass names already looked up before.
+  private func lookupBypassingParentResults(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
-    if let genericParameterClause {
-      return genericParameterClause.lookup(identifier, at: lookUpPosition, with: config)
-    } else if let primaryAssociatedTypeClause {
-      return primaryAssociatedTypeClause.lookup(identifier, at: lookUpPosition, with: config)
+    guard let parentScope else { return [] }
+
+    if let parentScope = Syntax(parentScope).asProtocol(SyntaxProtocol.self)
+      as? WithGenericParametersScopeSyntax
+    {
+      return parentScope.lookupInParent(identifier, at: lookUpPosition, with: config)
     } else {
       return lookupInParent(identifier, at: lookUpPosition, with: config)
     }

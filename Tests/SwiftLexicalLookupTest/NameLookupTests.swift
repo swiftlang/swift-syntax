@@ -906,26 +906,29 @@ final class testNameLookup: XCTestCase {
   func testPrimaryAssociatedTypes() {
     assertLexicalNameLookup(
       source: """
+        0️⃣class A {}
+
         protocol Foo<1️⃣A, 2️⃣B> {
-            5️⃣associatedtype 3️⃣A
-            6️⃣associatedtype 4️⃣B
+          3️⃣associatedtype A
+          4️⃣associatedtype B
+
+          class A {}
+          class B {}
         }
         """,
       references: [
-        "3️⃣": [
-          .fromScope(MemberBlockSyntax.self, expectedNames: ["5️⃣"]),  // Conceptually, should associated type be visible at it's declaration? It's a reference and declaration at the same time and all members' names are available inside their bodies, but at the same time it doesn't seem quite right...
-          .fromScope(PrimaryAssociatedTypeClauseSyntax.self, expectedNames: ["1️⃣"]),
+        "1️⃣": [
+          .fromScope(MemberBlockSyntax.self, expectedNames: ["3️⃣"]),
+          .fromFileScope(expectedNames: ["0️⃣"]),
         ],
-        "4️⃣": [
-          .fromScope(MemberBlockSyntax.self, expectedNames: ["6️⃣"]),
-          .fromScope(PrimaryAssociatedTypeClauseSyntax.self, expectedNames: ["2️⃣"]),
+        "2️⃣": [
+          .fromScope(MemberBlockSyntax.self, expectedNames: ["4️⃣"])
         ],
       ],
       expectedResultTypes: .all(
-        PrimaryAssociatedTypeSyntax.self,
+        AssociatedTypeDeclSyntax.self,
         except: [
-          "5️⃣": AssociatedTypeDeclSyntax.self,
-          "6️⃣": AssociatedTypeDeclSyntax.self,
+          "0️⃣": ClassDeclSyntax.self
         ]
       )
     )

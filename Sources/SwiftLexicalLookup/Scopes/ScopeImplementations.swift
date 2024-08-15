@@ -290,6 +290,24 @@ import SwiftSyntax
       LookupName.getNames(from: member.decl)
     }
   }
+
+  /// Creates a result from associated type declarations
+  /// made by it's members.
+  func lookupAssociatedTypeDeclarations(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig
+  ) -> [LookupResult] {
+    let filteredNames = members.flatMap { member in
+      guard member.decl.kind == .associatedTypeDecl else { return [LookupName]() }
+
+      return LookupName.getNames(from: member.decl)
+    }.filter { name in
+      checkIdentifier(identifier, refersTo: name, at: lookUpPosition)
+    }
+
+    return filteredNames.isEmpty ? [] : [.fromScope(self, withNames: filteredNames)]
+  }
 }
 
 @_spi(Experimental) extension GuardStmtSyntax: IntroducingToSequentialParentScopeSyntax {
@@ -330,10 +348,10 @@ import SwiftSyntax
   }
 }
 
-@_spi(Experimental) extension ActorDeclSyntax: TypeScopeSyntax, WithGenericParametersOrAssociatedTypesScopeSyntax {}
-@_spi(Experimental) extension ClassDeclSyntax: TypeScopeSyntax, WithGenericParametersOrAssociatedTypesScopeSyntax {}
-@_spi(Experimental) extension StructDeclSyntax: TypeScopeSyntax, WithGenericParametersOrAssociatedTypesScopeSyntax {}
-@_spi(Experimental) extension EnumDeclSyntax: TypeScopeSyntax, WithGenericParametersOrAssociatedTypesScopeSyntax {}
+@_spi(Experimental) extension ActorDeclSyntax: TypeScopeSyntax, WithGenericParametersScopeSyntax {}
+@_spi(Experimental) extension ClassDeclSyntax: TypeScopeSyntax, WithGenericParametersScopeSyntax {}
+@_spi(Experimental) extension StructDeclSyntax: TypeScopeSyntax, WithGenericParametersScopeSyntax {}
+@_spi(Experimental) extension EnumDeclSyntax: TypeScopeSyntax, WithGenericParametersScopeSyntax {}
 @_spi(Experimental) extension ExtensionDeclSyntax: TypeScopeSyntax {}
 
 @_spi(Experimental) extension AccessorDeclSyntax: ScopeSyntax {
@@ -370,7 +388,52 @@ import SwiftSyntax
   }
 }
 
-@_spi(Experimental) extension GenericParameterClauseSyntax: GenericParameterOrAssociatedTypeScopeSyntax {
+@_spi(Experimental) extension ProtocolDeclSyntax: ScopeSyntax {
+  /// Protocol declarations don't introduce names by themselves.
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    []
+  }
+
+  /// For the lookup initiated from inside primary
+  /// associated type clause, this function also finds
+  /// all associated type declarations made inside the
+  /// protocol member block.
+  ///
+  /// example:
+  /// ```swift
+  /// class A {}
+  ///
+  /// protocol Foo<A/*<-- lookup here>*/> {
+  ///  associatedtype A
+  ///  class A {}
+  /// }
+  /// ```
+  /// For the lookup started at the primary associated type `A`,
+  /// the function returns exactly two results. First associated with the member
+  /// block that consists of the `associatedtype A` declaration and
+  /// the latter one from the file scope and `class A` exactly in this order.
+  public func lookup(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig
+  ) -> [LookupResult] {
+    var results: [LookupResult] = []
+
+    if let primaryAssociatedTypeClause,
+      primaryAssociatedTypeClause.range.contains(lookUpPosition)
+    {
+      results = memberBlock.lookupAssociatedTypeDeclarations(
+        identifier,
+        at: lookUpPosition,
+        with: config
+      )
+    }
+
+    return results + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
+  }
+}
+
+@_spi(Experimental) extension GenericParameterClauseSyntax: GenericParameterScopeSyntax {
   /// Generic parameter names introduced by this clause.
   @_spi(Experimental) public var introducedNames: [LookupName] {
     parameters.children(viewMode: .sourceAccurate).flatMap { child in
@@ -379,23 +442,7 @@ import SwiftSyntax
   }
 }
 
-@_spi(Experimental) extension PrimaryAssociatedTypeClauseSyntax: GenericParameterOrAssociatedTypeScopeSyntax {
-  /// Primary associated type names introduced by this clause.
-  @_spi(Experimental) public var introducedNames: [LookupName] {
-    primaryAssociatedTypes.children(viewMode: .sourceAccurate).flatMap { child in
-      LookupName.getNames(from: child, accessibleAfter: child.endPosition)
-    }
-  }
-}
-
-@_spi(Experimental) extension ProtocolDeclSyntax: WithGenericParametersOrAssociatedTypesScopeSyntax {
-  /// Protocol declarations don't introduce names by themselves.
-  @_spi(Experimental) public var introducedNames: [LookupName] {
-    []
-  }
-}
-
-@_spi(Experimental) extension FunctionDeclSyntax: WithGenericParametersOrAssociatedTypesScopeSyntax {
+@_spi(Experimental) extension FunctionDeclSyntax: WithGenericParametersScopeSyntax {
   /// Function parameters introduced by this function's signature.
   @_spi(Experimental) public var introducedNames: [LookupName] {
     signature.parameterClause.parameters.flatMap { parameter in

@@ -12,16 +12,13 @@
 
 import SwiftSyntax
 
-/// Scope that introduces generic parameter or
-/// primary associated type names and directs
-/// futher lookup to it's `WithGenericParametersOrAssociatedTypesScopeSyntax`
-/// parent scope's parent scope (i.e. on return, bypasses names
-/// introduced by it's parent).
-@_spi(Experimental) public protocol GenericParameterOrAssociatedTypeScopeSyntax: ScopeSyntax {}
+@_spi(Experimental) public protocol WithGenericParametersScopeSyntax: ScopeSyntax {
+  var genericParameterClause: GenericParameterClauseSyntax? { get }
+}
 
-@_spi(Experimental) extension GenericParameterOrAssociatedTypeScopeSyntax {
-  /// Returns names matching lookup and bypasses
-  /// `WithGenericParametersOrAssociatedTypesScopeSyntax` parent scope in futher lookup.
+@_spi(Experimental) extension WithGenericParametersScopeSyntax {
+  /// Returns names matching lookup and passes lookup to
+  /// the generic parameter clause scopes.
   ///
   /// example:
   /// ```swift
@@ -34,10 +31,8 @@ import SwiftSyntax
   /// lookup first visits the code block scope associated
   /// with the function's body. Then, it's forwarded to the
   /// function declaration scope and then to generic parameter
-  /// scope (`WithGenericParametersOrAssociatedTypesScopeSyntax`).
-  /// Then, to ensure there is no infinite cycle,
-  /// this method passes lookup to function scope's parent scope
-  /// (in this case: file scope).
+  /// scope (`WithGenericParametersScopeSyntax`)
+  /// instead of it's actual parent scope (in this case: file scope).
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
@@ -45,18 +40,19 @@ import SwiftSyntax
   ) -> [LookupResult] {
     return defaultLookupImplementation(
       identifier,
-      at: lookUpPosition,
+      at: position,
       with: config,
       propagateToParent: false
     )
-      + lookupBypassingParentResults(
+      + lookupThroughGenericParameterScope(
         identifier,
         at: lookUpPosition,
         with: config
       )
   }
 
-  /// Bypasses names introduced by `WithGenericParametersOrAssociatedTypesScopeSyntax` parent scope.
+  /// Passes lookup to this scope's generic parameter or
+  /// primary associated type clause scope (`WithGenericParametersScopeSyntax`).
   ///
   /// example:
   /// ```swift
@@ -69,22 +65,15 @@ import SwiftSyntax
   /// lookup first visits the code block scope associated
   /// with the function's body. Then, it's forwarded to the
   /// function declaration scope and then to generic parameter
-  /// scope (`WithGenericParametersOrAssociatedTypesScopeSyntax`).
-  /// Then, to ensure there is no infinite cycle,
-  /// we use this method instead of the standard `lookupInParent`
-  /// to pass lookup to the function scope's parent scope (in this case: file scope)
-  /// and effectively bypass names already looked up before.
-  private func lookupBypassingParentResults(
+  /// scope (`WithGenericParametersScopeSyntax`)
+  /// with this method (instead of using standard `lookupInParent`).
+  private func lookupThroughGenericParameterScope(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
-    guard let parentScope else { return [] }
-
-    if let parentScope = Syntax(parentScope).asProtocol(SyntaxProtocol.self)
-      as? WithGenericParametersOrAssociatedTypesScopeSyntax
-    {
-      return parentScope.lookupInParent(identifier, at: lookUpPosition, with: config)
+    if let genericParameterClause {
+      return genericParameterClause.lookup(identifier, at: lookUpPosition, with: config)
     } else {
       return lookupInParent(identifier, at: lookUpPosition, with: config)
     }

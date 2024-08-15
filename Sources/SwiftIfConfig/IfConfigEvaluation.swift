@@ -97,7 +97,7 @@ func evaluateIfConfig(
 
   // Declaration references are for custom compilation flags.
   if let identExpr = condition.as(DeclReferenceExprSyntax.self),
-    let ident = identExpr.simpleIdentifier
+    let ident = identExpr.simpleIdentifier?.name
   {
     // Evaluate the custom condition. If the build configuration cannot answer this query, fail.
     return checkConfiguration(at: identExpr) {
@@ -214,7 +214,7 @@ func evaluateIfConfig(
 
   // Call syntax is for operations.
   if let call = condition.as(FunctionCallExprSyntax.self),
-    let fnName = call.calledExpression.simpleIdentifierExpr,
+    let fnName = call.calledExpression.simpleIdentifierExpr?.name,
     let fn = IfConfigFunctions(rawValue: fnName)
   {
     /// Perform a check for an operation that takes a single identifier argument.
@@ -224,7 +224,7 @@ func evaluateIfConfig(
     ) -> (active: Bool, syntaxErrorsAllowed: Bool, diagnostics: [Diagnostic]) {
       // Ensure that we have a single argument that is a simple identifier.
       guard let argExpr = call.arguments.singleUnlabeledExpression,
-        var arg = argExpr.simpleIdentifierExpr
+        var arg = argExpr.simpleIdentifierExpr?.name
       else {
         return recordError(
           .requiresUnlabeledArgument(name: fnName, role: role, syntax: ExprSyntax(call))
@@ -316,7 +316,7 @@ func evaluateIfConfig(
     case ._endian:
       // Ensure that we have a single argument that is a simple identifier.
       guard let argExpr = call.arguments.singleUnlabeledExpression,
-        let arg = argExpr.simpleIdentifierExpr
+        let arg = argExpr.simpleIdentifierExpr?.name
       else {
         return recordError(
           .requiresUnlabeledArgument(
@@ -352,7 +352,7 @@ func evaluateIfConfig(
       // Ensure that we have a single argument that is a simple identifier, which
       // is an underscore followed by an integer.
       guard let argExpr = call.arguments.singleUnlabeledExpression,
-        let arg = argExpr.simpleIdentifierExpr,
+        let arg = argExpr.simpleIdentifierExpr?.name,
         let argFirst = arg.first,
         argFirst == "_",
         let expectedBitWidth = Int(arg.dropFirst())
@@ -530,14 +530,14 @@ private func extractImportPath(_ expression: some ExprSyntaxProtocol) throws -> 
   // Member access.
   if let memberAccess = expression.as(MemberAccessExprSyntax.self),
     let base = memberAccess.base,
-    let memberName = memberAccess.declName.simpleIdentifier
+    let memberName = memberAccess.declName.simpleIdentifier?.name
   {
     return try extractImportPath(base) + [memberName]
   }
 
   // Declaration reference.
   if let declRef = expression.as(DeclReferenceExprSyntax.self),
-    let name = declRef.simpleIdentifier
+    let name = declRef.simpleIdentifier?.name
   {
     return [name]
   }
@@ -574,11 +574,11 @@ private func isConditionDisjunction(
   // If we have a call to this function, check whether the argument is one of
   // the acceptable values.
   if let call = condition.as(FunctionCallExprSyntax.self),
-    let fnName = call.calledExpression.simpleIdentifierExpr,
+    let fnName = call.calledExpression.simpleIdentifierExpr?.name,
     let callFn = IfConfigFunctions(rawValue: fnName),
     callFn == function,
     let argExpr = call.arguments.singleUnlabeledExpression,
-    let arg = argExpr.simpleIdentifierExpr
+    let arg = argExpr.simpleIdentifierExpr?.name
   {
     return values.contains(arg)
   }
@@ -705,7 +705,7 @@ extension ExprSyntaxProtocol {
 
     // Call syntax is for operations.
     if let call = self.as(FunctionCallExprSyntax.self),
-      let fnName = call.calledExpression.simpleIdentifierExpr,
+      let fnName = call.calledExpression.simpleIdentifierExpr?.name,
       let fn = IfConfigFunctions(rawValue: fnName)
     {
       return fn.syntaxErrorsAllowed

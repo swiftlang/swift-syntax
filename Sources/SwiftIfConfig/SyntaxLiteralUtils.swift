@@ -35,7 +35,7 @@ extension LabeledExprListSyntax {
 
 extension ExprSyntax {
   /// Whether this is a simple identifier expression and, if so, what the identifier string is.
-  var simpleIdentifierExpr: String? {
+  var simpleIdentifierExpr: Identifier? {
     guard let identExpr = self.as(DeclReferenceExprSyntax.self) else {
       return nil
     }
@@ -47,12 +47,11 @@ extension ExprSyntax {
 extension DeclReferenceExprSyntax {
   /// If this declaration reference is a simple identifier, return that
   /// string.
-  var simpleIdentifier: String? {
+  var simpleIdentifier: Identifier? {
     guard argumentNames == nil else {
       return nil
     }
 
-    /// FIXME: Make this an Identifier so we handle escaping properly.
-    return baseName.text
+    return baseName.identifier
   }
 }

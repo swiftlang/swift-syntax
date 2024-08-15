@@ -71,7 +71,7 @@ public class EvaluateTests: XCTestCase {
   }
 
   func testCustomConfigs() throws {
-    let buildConfig = TestingBuildConfiguration(customConditions: ["DEBUG", "ASSERTS"])
+    let buildConfig = TestingBuildConfiguration(customConditions: ["DEBUG", "ASSERTS", "try"])
 
     assertIfConfig("DEBUG", .active, configuration: buildConfig)
     assertIfConfig("NODEBUG", .inactive, configuration: buildConfig)
@@ -80,6 +80,8 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("DEBUG && ASSERTS", .active, configuration: buildConfig)
     assertIfConfig("DEBUG && nope", .inactive, configuration: buildConfig)
     assertIfConfig("nope && DEBUG", .inactive, configuration: buildConfig)
+    assertIfConfig("`try`", .active, configuration: buildConfig)
+    assertIfConfig("`return`", .inactive, configuration: buildConfig)
     assertIfConfig(
       "nope && 3.14159",
       .unparsed,

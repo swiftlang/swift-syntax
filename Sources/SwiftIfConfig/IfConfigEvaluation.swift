@@ -30,8 +30,7 @@ import SwiftSyntax
 ///   diagnose syntax errors in blocks where the check fails.
 func evaluateIfConfig(
   condition: ExprSyntax,
-  configuration: some BuildConfiguration,
-  outermostCondition: Bool = true
+  configuration: some BuildConfiguration
 ) -> (active: Bool, syntaxErrorsAllowed: Bool, diagnostics: [Diagnostic]) {
   var extraDiagnostics: [Diagnostic] = []
 
@@ -115,8 +114,7 @@ func evaluateIfConfig(
 
     let (innerActive, innerSyntaxErrorsAllowed, innerDiagnostics) = evaluateIfConfig(
       condition: prefixOp.expression,
-      configuration: configuration,
-      outermostCondition: outermostCondition
+      configuration: configuration
     )
 
     return (active: !innerActive, syntaxErrorsAllowed: innerSyntaxErrorsAllowed, diagnostics: innerDiagnostics)
@@ -133,7 +131,7 @@ func evaluateIfConfig(
     }
 
     // Check whether this was likely to be a check for targetEnvironment(simulator).
-    if outermostCondition,
+    if binOp.isOutermostIfCondition,
       let targetEnvironmentDiag = diagnoseLikelySimulatorEnvironmentTest(binOp)
     {
       extraDiagnostics.append(targetEnvironmentDiag)
@@ -142,8 +140,7 @@ func evaluateIfConfig(
     // Evaluate the left-hand side.
     let (lhsActive, lhsSyntaxErrorsAllowed, lhsDiagnostics) = evaluateIfConfig(
       condition: binOp.leftOperand,
-      configuration: configuration,
-      outermostCondition: false
+      configuration: configuration
     )
 
     // Determine whether we already know the result. We might short-circuit the
@@ -176,14 +173,12 @@ func evaluateIfConfig(
     if shortCircuitResult != nil {
       (rhsActive, rhsSyntaxErrorsAllowed, rhsDiagnostics) = evaluateIfConfig(
         condition: binOp.rightOperand,
-        configuration: CanImportSuppressingBuildConfiguration(other: configuration),
-        outermostCondition: false
+        configuration: CanImportSuppressingBuildConfiguration(other: configuration)
       )
     } else {
       (rhsActive, rhsSyntaxErrorsAllowed, rhsDiagnostics) = evaluateIfConfig(
         condition: binOp.rightOperand,
-        configuration: configuration,
-        outermostCondition: false
+        configuration: configuration
       )
     }
 
@@ -213,8 +208,7 @@ func evaluateIfConfig(
   {
     return evaluateIfConfig(
       condition: element.expression,
-      configuration: configuration,
-      outermostCondition: outermostCondition
+      configuration: configuration
     )
   }
 
@@ -502,6 +496,31 @@ func evaluateIfConfig(
   }
 
   return recordError(.unknownExpression(condition))
+}
+
+extension SyntaxProtocol {
+  /// Determine whether this expression node is an "outermost" #if condition,
+  /// meaning that it is not nested within some kind of expression like && or
+  /// ||.
+  fileprivate var isOutermostIfCondition: Bool {
+    // If there is no parent, it's the outermost condition.
+    guard let parent = self.parent else {
+      return true
+    }
+
+    // If we hit the #if condition clause, it's the outermost condition.
+    if parent.is(IfConfigClauseSyntax.self) {
+      return true
+    }
+
+    // We found an infix operator, so this is not an outermost #if condition.
+    if parent.is(InfixOperatorExprSyntax.self) {
+      return false
+    }
+
+    // Keep looking up the syntax tree.
+    return parent.isOutermostIfCondition
+  }
 }
 
 /// Given an expression with the expected form A.B.C, extract the import path

@@ -610,7 +610,7 @@ extension IfConfigClauseSyntax {
   /// Fold the operators within an #if condition, turning sequence expressions
   /// involving the various allowed operators (&&, ||, !) into well-structured
   /// binary operators.
-  public static func foldOperators(
+  static func foldOperators(
     _ condition: some ExprSyntaxProtocol
   ) -> (folded: ExprSyntax, diagnostics: [Diagnostic]) {
     var foldingDiagnostics: [Diagnostic] = []
@@ -635,7 +635,7 @@ extension IfConfigClauseSyntax {
   /// Determine whether the given expression, when used as the condition in
   /// an inactive `#if` clause, implies that syntax errors are permitted within
   /// that region.
-  public static func syntaxErrorsAllowed(
+  static func syntaxErrorsAllowed(
     _ condition: some ExprSyntaxProtocol
   ) -> (syntaxErrorsAllowed: Bool, diagnostics: [Diagnostic]) {
     let (foldedCondition, foldingDiagnostics) = IfConfigClauseSyntax.foldOperators(condition)

@@ -14,8 +14,11 @@ import SwiftDiagnostics
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-/// Describes the kinds of errors that can occur when processing #if conditions.
-enum IfConfigError: Error, CustomStringConvertible {
+/// Describes the kinds of diagnostics that can occur when processing #if
+/// conditions. This is an Error-conforming type so we can throw errors when
+/// needed, but the cases themselves are a mix of warnings and errors when
+/// rendered as a diagnostic.
+enum IfConfigDiagnostic: Error, CustomStringConvertible {
   case unknownExpression(ExprSyntax)
   case unhandledFunction(name: String, syntax: ExprSyntax)
   case requiresUnlabeledArgument(name: String, role: String, syntax: ExprSyntax)
@@ -134,11 +137,11 @@ enum IfConfigError: Error, CustomStringConvertible {
   }
 }
 
-extension IfConfigError: DiagnosticMessage {
+extension IfConfigDiagnostic: DiagnosticMessage {
   var message: String { description }
 
   var diagnosticID: MessageID {
-    .init(domain: "SwiftIfConfig", id: "IfConfigError")
+    .init(domain: "SwiftIfConfig", id: "IfConfigDiagnostic")
   }
 
   var severity: SwiftDiagnostics.DiagnosticSeverity {

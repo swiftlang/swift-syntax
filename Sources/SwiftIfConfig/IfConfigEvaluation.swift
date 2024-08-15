@@ -49,7 +49,7 @@ func evaluateIfConfig(
   /// Record an if-config evaluation error before returning it. Use this for
   /// every 'throw' site in this evaluation.
   func recordError(
-    _ error: IfConfigError
+    _ error: IfConfigDiagnostic
   ) -> (active: Bool, syntaxErrorsAllowed: Bool, diagnostics: [Diagnostic]) {
     return recordError(error, at: error.syntax)
   }
@@ -87,7 +87,7 @@ func evaluateIfConfig(
       active: result,
       syntaxErrorsAllowed: false,
       diagnostics: [
-        IfConfigError.integerLiteralCondition(
+        IfConfigDiagnostic.integerLiteralCondition(
           syntax: condition,
           replacement: result
         ).asDiagnostic
@@ -234,7 +234,7 @@ func evaluateIfConfig(
       // The historical "macabi" environment has been renamed to "macCatalyst".
       if role == "environment" && arg == "macabi" {
         extraDiagnostics.append(
-          IfConfigError.macabiIsMacCatalyst(syntax: argExpr)
+          IfConfigDiagnostic.macabiIsMacCatalyst(syntax: argExpr)
             .asDiagnostic
         )
 
@@ -335,7 +335,7 @@ func evaluateIfConfig(
       } else {
         // Complain about unknown endianness
         extraDiagnostics.append(
-          IfConfigError.endiannessDoesNotMatch(syntax: argExpr, argument: arg)
+          IfConfigDiagnostic.endiannessDoesNotMatch(syntax: argExpr, argument: arg)
             .asDiagnostic
         )
 
@@ -466,7 +466,7 @@ func evaluateIfConfig(
 
           // Warn that we did this.
           extraDiagnostics.append(
-            IfConfigError.ignoredTrailingComponents(
+            IfConfigDiagnostic.ignoredTrailingComponents(
               version: versionTuple,
               syntax: secondArg.expression
             ).asDiagnostic
@@ -542,7 +542,7 @@ private func extractImportPath(_ expression: some ExprSyntaxProtocol) throws -> 
     return [name]
   }
 
-  throw IfConfigError.expectedModuleName(syntax: ExprSyntax(expression))
+  throw IfConfigDiagnostic.expectedModuleName(syntax: ExprSyntax(expression))
 }
 
 /// Determine whether the given condition only involves disjunctions that
@@ -624,7 +624,7 @@ private func diagnoseLikelySimulatorEnvironmentTest(
     return nil
   }
 
-  return IfConfigError.likelySimulatorPlatform(syntax: ExprSyntax(binOp)).asDiagnostic
+  return IfConfigDiagnostic.likelySimulatorPlatform(syntax: ExprSyntax(binOp)).asDiagnostic
 }
 
 extension IfConfigClauseSyntax {
@@ -643,7 +643,7 @@ extension IfConfigClauseSyntax {
       {
 
         foldingDiagnostics.append(
-          IfConfigError.badInfixOperator(syntax: ExprSyntax(binOp)).asDiagnostic
+          IfConfigDiagnostic.badInfixOperator(syntax: ExprSyntax(binOp)).asDiagnostic
         )
         return
       }

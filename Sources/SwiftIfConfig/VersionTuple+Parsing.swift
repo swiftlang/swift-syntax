@@ -58,7 +58,7 @@ extension VersionTuple {
     func recordComponent(_ value: Int) throws {
       let limit = components.isEmpty ? 9223371 : 999
       if value < 0 || value > limit {
-        throw IfConfigError.compilerVersionOutOfRange(value: value, upperLimit: limit, syntax: versionSyntax)
+        throw IfConfigDiagnostic.compilerVersionOutOfRange(value: value, upperLimit: limit, syntax: versionSyntax)
       }
 
       components.append(value)
@@ -68,14 +68,14 @@ extension VersionTuple {
     for (index, componentString) in componentStrings.enumerated() {
       // Check ahead of time for empty version components
       if componentString.isEmpty {
-        throw IfConfigError.emptyVersionComponent(syntax: versionSyntax)
+        throw IfConfigDiagnostic.emptyVersionComponent(syntax: versionSyntax)
       }
 
       // The second component is always "*", and is never used for comparison.
       if index == 1 {
         if componentString != "*" {
           extraDiagnostics.append(
-            IfConfigError.compilerVersionSecondComponentNotWildcard(syntax: versionSyntax).asDiagnostic
+            IfConfigDiagnostic.compilerVersionSecondComponentNotWildcard(syntax: versionSyntax).asDiagnostic
           )
         }
         try recordComponent(0)
@@ -84,7 +84,7 @@ extension VersionTuple {
 
       // Every other component must be an integer value.
       guard let component = Int(componentString) else {
-        throw IfConfigError.invalidVersionOperand(name: "_compiler_version", syntax: versionSyntax)
+        throw IfConfigDiagnostic.invalidVersionOperand(name: "_compiler_version", syntax: versionSyntax)
       }
 
       try recordComponent(component)
@@ -92,7 +92,7 @@ extension VersionTuple {
 
     // Only allowed to specify up to 5 version components.
     if components.count > 5 {
-      throw IfConfigError.compilerVersionTooManyComponents(syntax: versionSyntax)
+      throw IfConfigDiagnostic.compilerVersionTooManyComponents(syntax: versionSyntax)
     }
 
     // In the beginning, '_compiler_version(string-literal)' was designed for a

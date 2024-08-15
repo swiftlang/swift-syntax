@@ -146,9 +146,9 @@ func evaluateIfConfig(
       outermostCondition: false
     )
 
-    // Short-circuit evaluation if we know the answer. We still recurse into
-    // the right-hand side, but with a dummy configuration that won't have
-    // side effects, so we only get validation-related errors.
+    // Determine whether we already know the result. We might short-circuit the
+    // evaluation, depending on whether we need to produce validation
+    // diagnostics for the right-hand side.
     let shortCircuitResult: Bool?
     switch (lhsActive, op.operator.text) {
     case (true, "||"): shortCircuitResult = true
@@ -157,8 +157,8 @@ func evaluateIfConfig(
     }
 
     // If we are supposed to short-circuit and the left-hand side of this
-    // operator with inactive &&, stop now: we shouldn't evaluate the right-
-    // hand side at all.
+    // operator permits syntax errors when it fails, stop now: we shouldn't
+    // process the right-hand side at all.
     if let isActive = shortCircuitResult, lhsSyntaxErrorsAllowed {
       return (
         active: isActive,
@@ -167,7 +167,9 @@ func evaluateIfConfig(
       )
     }
 
-    // Evaluate the right-hand side.
+    // Process the right-hand side. If we already know the answer, then
+    // avoid performing any build configuration queries that might cause
+    // side effects.
     let rhsActive: Bool
     let rhsSyntaxErrorsAllowed: Bool
     let rhsDiagnostics: [Diagnostic]

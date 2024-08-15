@@ -39,18 +39,18 @@ import SwiftSyntax
   /// this method passes lookup to function scope's parent scope
   /// (in this case: file scope).
   @_spi(Experimental) public func lookup(
-    identifier: Identifier?,
+    _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
     return defaultLookupImplementation(
-      identifier: identifier,
+      identifier,
       at: lookUpPosition,
       with: config,
       propagateToParent: false
     )
       + lookupBypassingParentResults(
-        identifier: identifier,
+        identifier,
         at: lookUpPosition,
         with: config
       )
@@ -75,7 +75,7 @@ import SwiftSyntax
   /// to pass lookup to the function scope's parent scope (in this case: file scope)
   /// and effectively bypass names already looked up before.
   private func lookupBypassingParentResults(
-    identifier: Identifier?,
+    _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
@@ -84,9 +84,9 @@ import SwiftSyntax
     if let parentScope = Syntax(parentScope).asProtocol(SyntaxProtocol.self)
       as? WithGenericParametersOrAssociatedTypesScopeSyntax
     {
-      return parentScope.lookupInParent(identifier: identifier, at: lookUpPosition, with: config)
+      return parentScope.lookupInParent(identifier, at: lookUpPosition, with: config)
     } else {
-      return lookupInParent(identifier: identifier, at: lookUpPosition, with: config)
+      return lookupInParent(identifier, at: lookUpPosition, with: config)
     }
   }
 }

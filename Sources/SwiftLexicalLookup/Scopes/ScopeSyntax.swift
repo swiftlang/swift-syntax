@@ -87,7 +87,8 @@ extension SyntaxProtocol {
   func defaultLookupImplementation(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    propagateToParent: Bool = true
   ) -> [LookupResult] {
     let filteredNames =
       introducedNames
@@ -95,12 +96,9 @@ extension SyntaxProtocol {
         checkIdentifier(identifier, refersTo: introducedName, at: lookUpPosition)
       }
 
-    if filteredNames.isEmpty {
-      return lookupInParent(identifier, at: lookUpPosition, with: config)
-    } else {
-      return [.fromScope(self, withNames: filteredNames)]
-        + lookupInParent(identifier, at: lookUpPosition, with: config)
-    }
+    let fromThisScope = filteredNames.isEmpty ? [] : [LookupResult.fromScope(self, withNames: filteredNames)]
+
+    return fromThisScope + (propagateToParent ? lookupInParent(identifier, at: lookUpPosition, with: config) : [])
   }
 
   /// Looks up in parent scope.

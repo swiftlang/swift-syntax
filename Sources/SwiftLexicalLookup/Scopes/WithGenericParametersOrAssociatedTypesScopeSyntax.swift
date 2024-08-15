@@ -38,18 +38,18 @@ import SwiftSyntax
   /// scope (`WithGenericParametersOrAssociatedTypesScopeSyntax`)
   /// instead of it's actual parent scope (in this case: file scope).
   @_spi(Experimental) public func lookup(
-    identifier: Identifier?,
+    _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
     return defaultLookupImplementation(
-      identifier: identifier,
+      identifier,
       at: position,
       with: config,
       propagateToParent: false
     )
       + lookupThroughGenericParameterScope(
-        identifier: identifier,
+        identifier,
         at: lookUpPosition,
         with: config
       )
@@ -72,16 +72,16 @@ import SwiftSyntax
   /// scope (`WithGenericParametersOrAssociatedTypesScopeSyntax`)
   /// with this method (instead of using standard `lookupInParent`).
   private func lookupThroughGenericParameterScope(
-    identifier: Identifier?,
+    _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
     if let genericParameterClause {
-      return genericParameterClause.lookup(identifier: identifier, at: lookUpPosition, with: config)
+      return genericParameterClause.lookup(identifier, at: lookUpPosition, with: config)
     } else if let primaryAssociatedTypeClause {
-      return primaryAssociatedTypeClause.lookup(identifier: identifier, at: lookUpPosition, with: config)
+      return primaryAssociatedTypeClause.lookup(identifier, at: lookUpPosition, with: config)
     } else {
-      return lookupInParent(identifier: identifier, at: lookUpPosition, with: config)
+      return lookupInParent(identifier, at: lookUpPosition, with: config)
     }
   }
 }

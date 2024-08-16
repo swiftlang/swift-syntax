@@ -1024,7 +1024,10 @@ extension Parser {
       }
     case nil:  // Custom attribute
       return parseAttribute(argumentMode: .customAttribute) { parser in
-        let arguments = parser.parseArgumentListElements(pattern: .none, allowTrailingComma: false)
+        let arguments = parser.parseArgumentListElements(
+          pattern: .none,
+          allowTrailingComma: true
+        )
         return .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
       }
 

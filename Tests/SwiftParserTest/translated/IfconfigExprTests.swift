@@ -322,18 +322,10 @@ final class IfconfigExprTests: ParserTestCase {
   func testIfconfigExpr23() {
     assertParse(
       """
-      #if canImport(A,1️⃣)
+      #if canImport(A,)
         let a = 1
       #endif
-      """,
-      diagnostics: [
-        DiagnosticSpec(message: "expected value in function call", fixIts: ["insert value"])
-      ],
-      fixedSource: """
-        #if canImport(A, <#expression#>)
-          let a = 1
-        #endif
-        """
+      """
     )
   }
 

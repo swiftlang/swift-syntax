@@ -32,7 +32,7 @@
 public func assert(
   _ condition: @autoclosure () -> Bool,
   _ message: @autoclosure () -> String = String(),
-  file: StaticString = #file,
+  file: StaticString = #fileID,
   line: UInt = #line
 ) {
   #if SWIFTSYNTAX_ENABLE_ASSERTIONS
@@ -51,7 +51,7 @@ public func assert(
 @_transparent
 public func assertionFailure(
   _ message: @autoclosure () -> String = String(),
-  file: StaticString = #file,
+  file: StaticString = #fileID,
   line: UInt = #line
 ) {
   #if SWIFTSYNTAX_ENABLE_ASSERTIONS
@@ -71,7 +71,7 @@ public func assertionFailure(
 public func precondition(
   _ condition: @autoclosure () -> Bool,
   _ message: @autoclosure () -> String = String(),
-  file: StaticString = #file,
+  file: StaticString = #fileID,
   line: UInt = #line
 ) {
   #if !SWIFTSYNTAX_DISABLE_PRECONDITIONS

@@ -323,6 +323,19 @@ public class EvaluateTests: XCTestCase {
         )
       ]
     )
+
+    assertIfConfig(
+      #"_compiler_version("5009.*.1000")"#,
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "compiler version component '1000' is not in the allowed range 0...999",
+          line: 1,
+          column: 20,
+          severity: .error
+        )
+      ]
+    )
   }
 
   func testCanImport() throws {

@@ -60,10 +60,8 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
     case .emptyVersionComponent(syntax: _):
       return "found empty version component"
 
-    case .compilerVersionOutOfRange(value: _, upperLimit: let upperLimit, syntax: _):
-      // FIXME: This matches the C++ implementation, but it would be more useful to
-      // provide the actual value as-written and avoid the mathy [0, N] syntax.
-      return "compiler version component out of range: must be in [0, \(upperLimit)]"
+    case .compilerVersionOutOfRange(value: let value, upperLimit: let upperLimit, syntax: _):
+      return "compiler version component '\(value)' is not in the allowed range 0...\(upperLimit)"
 
     case .compilerVersionSecondComponentNotWildcard(syntax: _):
       return "the second version component is not used for comparison in legacy compiler versions"

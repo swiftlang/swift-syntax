@@ -534,9 +534,9 @@ extension Parser {
             RawGenericRequirementSyntax(
               requirement: .sameTypeRequirement(
                 RawSameTypeRequirementSyntax(
-                  leftType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+                  leftType: RawMissingTypeSyntax(arena: self.arena),
                   equal: missingToken(.binaryOperator, text: "=="),
-                  rightType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+                  rightType: RawMissingTypeSyntax(arena: self.arena),
                   arena: self.arena
                 )
               ),
@@ -674,7 +674,7 @@ extension Parser {
             RawSameTypeRequirementSyntax(
               leftType: firstType,
               equal: RawTokenSyntax(missing: .binaryOperator, text: "==", arena: self.arena),
-              rightType: RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)),
+              rightType: RawMissingTypeSyntax(arena: self.arena),
               arena: self.arena
             )
           )
@@ -722,12 +722,10 @@ extension Parser {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       let item = RawMemberBlockItemSyntax(
         remainingTokens,
-        decl: RawDeclSyntax(
-          RawMissingDeclSyntax(
-            attributes: self.emptyCollection(RawAttributeListSyntax.self),
-            modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
-            arena: self.arena
-          )
+        decl: RawMissingDeclSyntax(
+          attributes: self.emptyCollection(RawAttributeListSyntax.self),
+          modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
+          arena: self.arena
         ),
         semicolon: nil,
         arena: self.arena
@@ -1558,7 +1556,7 @@ extension Parser {
     let unexpectedBeforeEqual: RawUnexpectedNodesSyntax?
     let equal: RawTokenSyntax
     if let colon = self.consume(if: .colon) {
-      unexpectedBeforeEqual = RawUnexpectedNodesSyntax(elements: [RawSyntax(colon)], arena: self.arena)
+      unexpectedBeforeEqual = RawUnexpectedNodesSyntax([colon], arena: self.arena)
       equal = missingToken(.equal)
     } else {
       (unexpectedBeforeEqual, equal) = self.expect(.equal)

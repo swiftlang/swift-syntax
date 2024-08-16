@@ -102,6 +102,18 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
               StmtSyntax("return nil")
             }
+
+            for (swiftName, kind) in choices {
+              if let choiceNode = SYNTAX_NODE_MAP[kind], choiceNode.kind.isBase {
+                DeclSyntax(
+                  """
+                  public init(\(swiftName): some \(choiceNode.kind.rawProtocolType)) {
+                    self = .\(swiftName)(\(choiceNode.kind.rawType)(\(swiftName)))
+                  }
+                  """
+                )
+              }
+            }
           }
         }
 
@@ -270,9 +282,16 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
 fileprivate extension Child {
   var rawParameterType: TypeSyntax {
-    let paramType: TypeSyntax
-    if case ChildKind.nodeChoices = kind {
-      paramType = syntaxChoicesType
+    var paramType: TypeSyntax
+    if !kind.isNodeChoicesEmpty {
+      paramType = "\(syntaxChoicesType)"
+    } else if hasBaseType && !isOptional {
+      // we restrict the use of generic type to non-optional parameter types, otherwise call sites would no longer be
+      // able to just pass `nil` to this parameter without specializing `(some Raw<Kind>SyntaxNodeProtocol)?`
+      //
+      // we've opted out of providing a default value to the parameter (e.g. `RawExprSyntax?.none`) as a workaround,
+      // as passing an explicit `nil` would prompt developers to think clearly whether this parameter should be parsed
+      paramType = "some \(syntaxNodeKind.rawProtocolType)"
     } else {
       paramType = syntaxNodeKind.rawType
     }

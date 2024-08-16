@@ -75,7 +75,7 @@ extension Parser {
 
     // Parse #if
     let (unexpectedBeforePoundIf, poundIf) = self.expect(.poundIf)
-    let condition = RawExprSyntax(self.parseSequenceExpression(flavor: .poundIfDirective))
+    let condition = self.parseSequenceExpression(flavor: .poundIfDirective)
     let unexpectedBetweenConditionAndElements = self.consumeRemainingTokenOnLine()
 
     clauses.append(
@@ -102,7 +102,7 @@ extension Parser {
       switch match {
       case .poundElseif:
         (unexpectedBeforePound, pound) = self.eat(handle)
-        condition = RawExprSyntax(self.parseSequenceExpression(flavor: .poundIfDirective))
+        condition = self.parseSequenceExpression(flavor: .poundIfDirective)
         unexpectedBetweenConditionAndElements = self.consumeRemainingTokenOnLine()
       case .poundElse:
         (unexpectedBeforePound, pound) = self.eat(handle)
@@ -114,7 +114,7 @@ extension Parser {
             arena: self.arena
           )
           pound = self.missingToken(.poundElseif)
-          condition = RawExprSyntax(self.parseSequenceExpression(flavor: .poundIfDirective))
+          condition = self.parseSequenceExpression(flavor: .poundIfDirective)
         } else {
           condition = nil
         }
@@ -132,7 +132,7 @@ extension Parser {
             arena: self.arena
           )
           pound = self.missingToken(.poundElseif)
-          condition = RawExprSyntax(self.parseSequenceExpression(flavor: .poundIfDirective))
+          condition = self.parseSequenceExpression(flavor: .poundIfDirective)
           unexpectedBetweenConditionAndElements = self.consumeRemainingTokenOnLine()
         } else {
           break LOOP

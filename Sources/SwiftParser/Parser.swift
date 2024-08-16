@@ -513,11 +513,11 @@ extension Parser {
   mutating func eat(_ handle: RecoveryConsumptionHandle) -> (RawUnexpectedNodesSyntax?, Token) {
     let unexpectedNodes: RawUnexpectedNodesSyntax?
     if handle.unexpectedTokens > 0 {
-      var unexpectedTokens = [RawSyntax]()
+      var unexpectedTokens = [RawTokenSyntax]()
       for _ in 0..<handle.unexpectedTokens {
-        unexpectedTokens.append(RawSyntax(self.consumeAnyTokenWithoutAdjustingNestingLevel()))
+        unexpectedTokens.append(self.consumeAnyTokenWithoutAdjustingNestingLevel())
       }
-      unexpectedNodes = RawUnexpectedNodesSyntax(elements: unexpectedTokens, arena: self.arena)
+      unexpectedNodes = RawUnexpectedNodesSyntax(unexpectedTokens, arena: self.arena)
     } else {
       unexpectedNodes = nil
     }
@@ -694,13 +694,13 @@ extension Parser {
     }
     if let unknown = self.consume(if: .unknown) {
       return (
-        RawUnexpectedNodesSyntax(elements: [RawSyntax(unknown)], arena: self.arena),
+        RawUnexpectedNodesSyntax([unknown], arena: self.arena),
         self.missingToken(.identifier)
       )
     }
     if let number = self.consume(if: .integerLiteral, .floatLiteral, .dollarIdentifier) {
       return (
-        RawUnexpectedNodesSyntax(elements: [RawSyntax(number)], arena: self.arena),
+        RawUnexpectedNodesSyntax([number], arena: self.arena),
         self.missingToken(.identifier)
       )
     } else if keywordRecovery,
@@ -709,7 +709,7 @@ extension Parser {
     {
       let keyword = self.consumeAnyToken()
       return (
-        RawUnexpectedNodesSyntax(elements: [RawSyntax(keyword)], arena: self.arena),
+        RawUnexpectedNodesSyntax([keyword], arena: self.arena),
         self.missingToken(.identifier)
       )
     }
@@ -880,7 +880,7 @@ extension Parser {
     // Invalid, extraneous whitespace. Have callers synthesize a missing
     // member if there's a newline after the period.
     return (
-      RawUnexpectedNodesSyntax(elements: [period.raw], arena: arena),
+      RawUnexpectedNodesSyntax([period], arena: arena),
       RawTokenSyntax(missing: .period, arena: arena),
       afterContainsAnyNewline
     )

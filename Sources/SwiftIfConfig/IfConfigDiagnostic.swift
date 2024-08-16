@@ -14,8 +14,11 @@ import SwiftDiagnostics
 import SwiftSyntax
 import SwiftSyntaxBuilder
 
-/// Describes the kinds of errors that can occur when processing #if conditions.
-enum IfConfigError: Error, CustomStringConvertible {
+/// Describes the kinds of diagnostics that can occur when processing #if
+/// conditions. This is an Error-conforming type so we can throw errors when
+/// needed, but the cases themselves are a mix of warnings and errors when
+/// rendered as a diagnostic.
+enum IfConfigDiagnostic: Error, CustomStringConvertible {
   case unknownExpression(ExprSyntax)
   case unhandledFunction(name: String, syntax: ExprSyntax)
   case requiresUnlabeledArgument(name: String, role: String, syntax: ExprSyntax)
@@ -57,10 +60,8 @@ enum IfConfigError: Error, CustomStringConvertible {
     case .emptyVersionComponent(syntax: _):
       return "found empty version component"
 
-    case .compilerVersionOutOfRange(value: _, upperLimit: let upperLimit, syntax: _):
-      // FIXME: This matches the C++ implementation, but it would be more useful to
-      // provide the actual value as-written and avoid the mathy [0, N] syntax.
-      return "compiler version component out of range: must be in [0, \(upperLimit)]"
+    case .compilerVersionOutOfRange(value: let value, upperLimit: let upperLimit, syntax: _):
+      return "compiler version component '\(value)' is not in the allowed range 0...\(upperLimit)"
 
     case .compilerVersionSecondComponentNotWildcard(syntax: _):
       return "the second version component is not used for comparison in legacy compiler versions"
@@ -134,11 +135,11 @@ enum IfConfigError: Error, CustomStringConvertible {
   }
 }
 
-extension IfConfigError: DiagnosticMessage {
+extension IfConfigDiagnostic: DiagnosticMessage {
   var message: String { description }
 
   var diagnosticID: MessageID {
-    .init(domain: "SwiftIfConfig", id: "IfConfigError")
+    .init(domain: "SwiftIfConfig", id: "IfConfigDiagnostic")
   }
 
   var severity: SwiftDiagnostics.DiagnosticSeverity {

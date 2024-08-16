@@ -13,7 +13,7 @@ add_swift_syntax_library(SwiftIfConfig
   ConfiguredRegions.swift
   IfConfigRegionState.swift
   IfConfigDecl+IfConfig.swift
-  IfConfigError.swift
+  IfConfigDiagnostic.swift
   IfConfigEvaluation.swift
   IfConfigFunctions.swift
   SyntaxLiteralUtils.swift

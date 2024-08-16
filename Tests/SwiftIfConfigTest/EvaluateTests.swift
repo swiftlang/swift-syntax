@@ -71,7 +71,7 @@ public class EvaluateTests: XCTestCase {
   }
 
   func testCustomConfigs() throws {
-    let buildConfig = TestingBuildConfiguration(customConditions: ["DEBUG", "ASSERTS"])
+    let buildConfig = TestingBuildConfiguration(customConditions: ["DEBUG", "ASSERTS", "try"])
 
     assertIfConfig("DEBUG", .active, configuration: buildConfig)
     assertIfConfig("NODEBUG", .inactive, configuration: buildConfig)
@@ -80,6 +80,8 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("DEBUG && ASSERTS", .active, configuration: buildConfig)
     assertIfConfig("DEBUG && nope", .inactive, configuration: buildConfig)
     assertIfConfig("nope && DEBUG", .inactive, configuration: buildConfig)
+    assertIfConfig("`try`", .active, configuration: buildConfig)
+    assertIfConfig("`return`", .inactive, configuration: buildConfig)
     assertIfConfig(
       "nope && 3.14159",
       .unparsed,
@@ -317,6 +319,19 @@ public class EvaluateTests: XCTestCase {
           message: "'swift' requires a single unlabeled argument for the version comparison (>= or <= a version)",
           line: 1,
           column: 1,
+          severity: .error
+        )
+      ]
+    )
+
+    assertIfConfig(
+      #"_compiler_version("5009.*.1000")"#,
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "compiler version component '1000' is not in the allowed range 0...999",
+          line: 1,
+          column: 20,
           severity: .error
         )
       ]

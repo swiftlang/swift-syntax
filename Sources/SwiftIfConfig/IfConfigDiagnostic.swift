@@ -39,6 +39,7 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
   case expectedModuleName(syntax: ExprSyntax)
   case badInfixOperator(syntax: ExprSyntax)
   case badPrefixOperator(syntax: ExprSyntax)
+  case unexpectedDefined(syntax: ExprSyntax, argument: String)
 
   var description: String {
     switch self {
@@ -102,6 +103,10 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
 
     case .badPrefixOperator:
       return "expected unary '!' expression"
+
+    case .unexpectedDefined:
+      return
+        "compilation conditions in Swift are always boolean and do not need to be checked for existence with 'defined()'"
     }
   }
 
@@ -126,7 +131,8 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
       .macabiIsMacCatalyst(syntax: let syntax),
       .expectedModuleName(syntax: let syntax),
       .badInfixOperator(syntax: let syntax),
-      .badPrefixOperator(syntax: let syntax):
+      .badPrefixOperator(syntax: let syntax),
+      .unexpectedDefined(syntax: let syntax, argument: _):
       return Syntax(syntax)
 
     case .unsupportedVersionOperator(name: _, operator: let op):
@@ -203,6 +209,21 @@ extension IfConfigDiagnostic: DiagnosticMessage {
           ),
           oldNode: syntax,
           newNode: "macCatalyst" as ExprSyntax
+        )
+      )
+    }
+
+    // For the targetEnvironment(macabi) -> macCatalyst rename we have a Fix-It.
+    if case .unexpectedDefined(syntax: let syntax, argument: let argument) = self {
+      return Diagnostic(
+        node: syntax,
+        message: self,
+        fixIt: .replace(
+          message: SimpleFixItMessage(
+            message: "remove 'defined()'"
+          ),
+          oldNode: syntax,
+          newNode: TokenSyntax.identifier(argument)
         )
       )
     }

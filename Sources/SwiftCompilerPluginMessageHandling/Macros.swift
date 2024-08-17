@@ -163,12 +163,18 @@ extension PluginProviderMessageHandler {
         in: context
       )
       if let expansions, hostCapability.hasExpandMacroResult {
+        let collapseIndentationWidth: Trivia?
+        switch macroDefinition.formatMode {
+        case .auto: collapseIndentationWidth = nil
+        case .disabled: collapseIndentationWidth = []
+        }
         // Make a single element array by collapsing the results into a string.
         expandedSources = [
           SwiftSyntaxMacroExpansion.collapse(
             expansions: expansions,
             for: role,
-            attachedTo: declarationNode
+            attachedTo: declarationNode,
+            indentationWidth: collapseIndentationWidth
           )
         ]
       } else {

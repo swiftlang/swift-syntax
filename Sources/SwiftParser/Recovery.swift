@@ -127,7 +127,7 @@ extension Parser.Lookahead {
       if let closingDelimiter = currentTokenPrecedence.closingTokenKind {
         let closingDelimiterSpec = TokenSpec(closingDelimiter)
         guard self.canRecoverTo(closingDelimiterSpec) != nil else {
-          break
+          continue
         }
         self.eat(closingDelimiterSpec)
       }

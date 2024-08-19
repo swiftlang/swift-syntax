@@ -99,6 +99,9 @@ func evaluateIfConfig(
   if let identExpr = condition.as(DeclReferenceExprSyntax.self),
     let ident = identExpr.simpleIdentifier?.name
   {
+    if let targetOSDiagnostic = diagnoseLikelyTargetOSTest(at: identExpr, name: ident) {
+      extraDiagnostics.append(targetOSDiagnostic)
+    }
     // Evaluate the custom condition. If the build configuration cannot answer this query, fail.
     return checkConfiguration(at: identExpr) {
       (active: try configuration.isCustomConditionSet(name: ident), syntaxErrorsAllowed: false)
@@ -626,6 +629,57 @@ private func diagnoseLikelySimulatorEnvironmentTest(
 
   return IfConfigDiagnostic.likelySimulatorPlatform(syntax: ExprSyntax(binOp)).asDiagnostic
 }
+
+/// If this identifier looks like it is a `TARGET_OS_*` compilation condition,
+/// produce a diagnostic that suggests replacing it with the `os(*)` syntax.
+///
+/// For example, this checks for conditions like:
+///
+/// ```
+/// #if TARGET_OS_IOS
+/// ```
+///
+/// which should be replaced with
+///
+/// ```
+/// #if os(iOS)
+/// ```
+private func diagnoseLikelyTargetOSTest(
+  at reference: DeclReferenceExprSyntax,
+  name: String
+) -> Diagnostic? {
+  let prefix = "TARGET_OS_"
+  guard name.hasPrefix(prefix) else { return nil }
+  let osName = String(name.dropFirst(prefix.count))
+
+  if unmappedTargetOSNames.contains(osName) {
+    return IfConfigDiagnostic.likelyTargetOS(syntax: ExprSyntax(reference), replacement: nil).asDiagnostic
+  }
+
+  guard let (function, argument) = targetOSNameMap[osName] else { return nil }
+  let replacement = FunctionCallExprSyntax(callee: DeclReferenceExprSyntax(baseName: .identifier(function))) {
+    LabeledExprSyntax(expression: DeclReferenceExprSyntax(baseName: .identifier(argument)))
+  }
+
+  return IfConfigDiagnostic.likelyTargetOS(
+    syntax: ExprSyntax(reference),
+    replacement: ExprSyntax(replacement)
+  ).asDiagnostic
+}
+
+// TARGET_OS_* macros that don’t have a direct Swift equivalent
+private let unmappedTargetOSNames = ["WIN32", "UNIX", "MAC", "IPHONE", "EMBEDDED"]
+private let targetOSNameMap: [String: (function: String, argument: String)] = [
+  "WINDOWS": ("os", "Windows"),
+  "LINUX": ("os", "Linux"),
+  "OSX": ("os", "macOS"),
+  "IOS": ("os", "iOS"),
+  "MACCATALYST": ("targetEnvironment", "macCatalyst"),
+  "TV": ("os", "tvOS"),
+  "WATCH": ("os", "watchOS"),
+  "VISION": ("os", "visionOS"),
+  "SIMULATOR": ("targetEnvironment", "simulator"),
+]
 
 extension IfConfigClauseSyntax {
   /// Fold the operators within an #if condition, turning sequence expressions

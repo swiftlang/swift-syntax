@@ -239,6 +239,71 @@ public class EvaluateTests: XCTestCase {
     )
   }
 
+  func testTargetOS() throws {
+    assertIfConfig("TARGET_OS_DISHWASHER", .inactive)
+
+    assertIfConfig(
+      "TARGET_OS_IOS",
+      .inactive,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'TARGET_OS_*' preprocessor macros are not available in Swift; use 'os(iOS)' instead",
+          line: 1,
+          column: 1,
+          severity: .warning,
+          fixIts: [
+            FixItSpec(message: "replace with 'os(iOS)'")
+          ]
+        )
+      ]
+    )
+
+    assertIfConfig(
+      "TARGET_OS_OSX",
+      .inactive,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'TARGET_OS_*' preprocessor macros are not available in Swift; use 'os(macOS)' instead",
+          line: 1,
+          column: 1,
+          severity: .warning,
+          fixIts: [
+            FixItSpec(message: "replace with 'os(macOS)'")
+          ]
+        )
+      ]
+    )
+
+    assertIfConfig(
+      "TARGET_OS_MACCATALYST",
+      .inactive,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'TARGET_OS_*' preprocessor macros are not available in Swift; use 'targetEnvironment(macCatalyst)' instead",
+          line: 1,
+          column: 1,
+          severity: .warning,
+          fixIts: [
+            FixItSpec(message: "replace with 'targetEnvironment(macCatalyst)'")
+          ]
+        )
+      ]
+    )
+
+    assertIfConfig(
+      "TARGET_OS_WIN32",
+      .inactive,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "'TARGET_OS_*' preprocessor macros are not available in Swift; use 'os(...)' conditionals instead",
+          line: 1,
+          column: 1,
+          severity: .warning
+        )
+      ]
+    )
+  }
+
   func testVersions() throws {
     assertIfConfig("swift(>=5.5)", .active)
     assertIfConfig("swift(<6)", .active)

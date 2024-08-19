@@ -656,29 +656,23 @@ private func diagnoseLikelyTargetOSTest(
     return IfConfigDiagnostic.likelyTargetOS(syntax: ExprSyntax(reference), replacement: nil).asDiagnostic
   }
 
-  guard let (function, argument) = targetOSNameMap[osName] else { return nil }
-  let replacement = FunctionCallExprSyntax(callee: DeclReferenceExprSyntax(baseName: .identifier(function))) {
-    LabeledExprSyntax(expression: DeclReferenceExprSyntax(baseName: .identifier(argument)))
-  }
+  guard let replacement = targetOSNameMap[osName] else { return nil }
 
-  return IfConfigDiagnostic.likelyTargetOS(
-    syntax: ExprSyntax(reference),
-    replacement: ExprSyntax(replacement)
-  ).asDiagnostic
+  return IfConfigDiagnostic.likelyTargetOS(syntax: ExprSyntax(reference), replacement: replacement).asDiagnostic
 }
 
 // TARGET_OS_* macros that don’t have a direct Swift equivalent
 private let unmappedTargetOSNames = ["WIN32", "UNIX", "MAC", "IPHONE", "EMBEDDED"]
-private let targetOSNameMap: [String: (function: String, argument: String)] = [
-  "WINDOWS": ("os", "Windows"),
-  "LINUX": ("os", "Linux"),
-  "OSX": ("os", "macOS"),
-  "IOS": ("os", "iOS"),
-  "MACCATALYST": ("targetEnvironment", "macCatalyst"),
-  "TV": ("os", "tvOS"),
-  "WATCH": ("os", "watchOS"),
-  "VISION": ("os", "visionOS"),
-  "SIMULATOR": ("targetEnvironment", "simulator"),
+private let targetOSNameMap: [String: ExprSyntax] = [
+  "WINDOWS": "os(Windows)",
+  "LINUX": "os(Linux)",
+  "OSX": "os(macOS)",
+  "IOS": "os(iOS)",
+  "MACCATALYST": "targetEnvironment(macCatalyst)",
+  "TV": "os(tvOS)",
+  "WATCH": "os(watchOS)",
+  "VISION": "os(visionOS)",
+  "SIMULATOR": "targetEnvironment(simulator)",
 ]
 
 extension IfConfigClauseSyntax {

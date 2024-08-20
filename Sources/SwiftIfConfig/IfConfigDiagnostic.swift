@@ -34,6 +34,7 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
   case ignoredTrailingComponents(version: VersionTuple, syntax: ExprSyntax)
   case integerLiteralCondition(syntax: ExprSyntax, replacement: Bool)
   case likelySimulatorPlatform(syntax: ExprSyntax)
+  case likelyTargetOS(syntax: ExprSyntax, replacement: ExprSyntax?)
   case endiannessDoesNotMatch(syntax: ExprSyntax, argument: String)
   case macabiIsMacCatalyst(syntax: ExprSyntax)
   case expectedModuleName(syntax: ExprSyntax)
@@ -89,6 +90,12 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
       return
         "platform condition appears to be testing for simulator environment; use 'targetEnvironment(simulator)' instead"
 
+    case .likelyTargetOS(syntax: _, replacement: let replacement?):
+      return "'TARGET_OS_*' preprocessor macros are not available in Swift; use '\(replacement)' instead"
+
+    case .likelyTargetOS(syntax: _, replacement: nil):
+      return "'TARGET_OS_*' preprocessor macros are not available in Swift; use 'os(...)' conditionals instead"
+
     case .macabiIsMacCatalyst:
       return "'macabi' has been renamed to 'macCatalyst'"
 
@@ -127,6 +134,7 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
       .ignoredTrailingComponents(version: _, syntax: let syntax),
       .integerLiteralCondition(syntax: let syntax, replacement: _),
       .likelySimulatorPlatform(syntax: let syntax),
+      .likelyTargetOS(syntax: let syntax, replacement: _),
       .endiannessDoesNotMatch(syntax: let syntax, argument: _),
       .macabiIsMacCatalyst(syntax: let syntax),
       .expectedModuleName(syntax: let syntax),
@@ -151,7 +159,7 @@ extension IfConfigDiagnostic: DiagnosticMessage {
   var severity: SwiftDiagnostics.DiagnosticSeverity {
     switch self {
     case .compilerVersionSecondComponentNotWildcard, .ignoredTrailingComponents,
-      .likelySimulatorPlatform, .endiannessDoesNotMatch, .macabiIsMacCatalyst:
+      .likelySimulatorPlatform, .likelyTargetOS, .endiannessDoesNotMatch, .macabiIsMacCatalyst:
       return .warning
     default: return .error
     }
@@ -194,6 +202,21 @@ extension IfConfigDiagnostic: DiagnosticMessage {
           ),
           oldNode: syntax,
           newNode: "targetEnvironment(simulator)" as ExprSyntax
+        )
+      )
+    }
+
+    // For the likely TARGET_OS_* condition we may have a Fix-It.
+    if case .likelyTargetOS(let syntax, let replacement?) = self {
+      return Diagnostic(
+        node: syntax,
+        message: self,
+        fixIt: .replace(
+          message: SimpleFixItMessage(
+            message: "replace with '\(replacement)'"
+          ),
+          oldNode: syntax,
+          newNode: replacement
         )
       )
     }

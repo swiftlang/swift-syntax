@@ -457,6 +457,69 @@ public class EvaluateTests: XCTestCase {
       .inactive
     )
   }
+
+  func testDefined() throws {
+    let message =
+      "compilation conditions in Swift are always boolean and do not need to be checked for existence with 'defined()'"
+
+    assertIfConfig(
+      "defined(FOO)",
+      .active,
+      configuration: TestingBuildConfiguration(customConditions: ["FOO"]),
+      diagnostics: [
+        DiagnosticSpec(
+          message: message,
+          line: 1,
+          column: 1,
+          severity: .error,
+          fixIts: [
+            FixItSpec(message: "remove 'defined()'")
+          ]
+        )
+      ]
+    )
+
+    assertIfConfig(
+      "defined(FOO)",
+      .inactive,
+      diagnostics: [
+        DiagnosticSpec(
+          message: message,
+          line: 1,
+          column: 1,
+          severity: .error,
+          fixIts: [
+            FixItSpec(message: "remove 'defined()'")
+          ]
+        )
+      ]
+    )
+
+    assertIfConfig(
+      "defined(FOO) || BAR || defined(BAZ)",
+      .inactive,
+      diagnostics: [
+        DiagnosticSpec(
+          message: message,
+          line: 1,
+          column: 1,
+          severity: .error,
+          fixIts: [
+            FixItSpec(message: "remove 'defined()'")
+          ]
+        ),
+        DiagnosticSpec(
+          message: message,
+          line: 1,
+          column: 24,
+          severity: .error,
+          fixIts: [
+            FixItSpec(message: "remove 'defined()'")
+          ]
+        ),
+      ]
+    )
+  }
 }
 
 /// Assert the results of evaluating the condition within an `#if` against the

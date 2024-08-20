@@ -313,6 +313,19 @@ func evaluateIfConfig(
         role: "pointer authentication scheme"
       )
 
+    case .defined:
+      guard let argExpr = call.arguments.singleUnlabeledExpression,
+        let arg = argExpr.simpleIdentifierExpr?.name
+      else {
+        return recordError(.unknownExpression(condition))
+      }
+      extraDiagnostics.append(
+        IfConfigDiagnostic.unexpectedDefined(syntax: condition, argument: arg).asDiagnostic
+      )
+      return checkConfiguration(at: condition) {
+        (active: try configuration.isCustomConditionSet(name: arg), syntaxErrorsAllowed: false)
+      }
+
     case ._endian:
       // Ensure that we have a single argument that is a simple identifier.
       guard let argExpr = call.arguments.singleUnlabeledExpression,

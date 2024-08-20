@@ -57,6 +57,9 @@ enum IfConfigFunctions: String {
   /// via `_ptrauth(<name>)`.
   case _ptrauth
 
+  /// An unsupported function used by C preprocessor macros (e.g. `#if defined(FOO)`)
+  case defined
+
   /// Whether uses of this function consitutes a check that guards new syntax.
   /// When such a check fails, the compiler should not diagnose syntax errors
   /// within the covered block.
@@ -66,7 +69,7 @@ enum IfConfigFunctions: String {
       return true
 
     case .hasAttribute, .hasFeature, .canImport, .os, .arch, .targetEnvironment,
-      ._hasAtomicBitWidth, ._endian, ._pointerBitWidth, ._runtime, ._ptrauth:
+      ._hasAtomicBitWidth, ._endian, ._pointerBitWidth, ._runtime, ._ptrauth, .defined:
       return false
     }
   }

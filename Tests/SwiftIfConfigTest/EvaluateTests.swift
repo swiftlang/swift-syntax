@@ -279,7 +279,8 @@ public class EvaluateTests: XCTestCase {
       .inactive,
       diagnostics: [
         DiagnosticSpec(
-          message: "'TARGET_OS_*' preprocessor macros are not available in Swift; use 'targetEnvironment(macCatalyst)' instead",
+          message:
+            "'TARGET_OS_*' preprocessor macros are not available in Swift; use 'targetEnvironment(macCatalyst)' instead",
           line: 1,
           column: 1,
           severity: .warning,

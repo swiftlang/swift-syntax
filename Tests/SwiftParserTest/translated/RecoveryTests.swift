@@ -1935,19 +1935,12 @@ final class RecoveryTests: ParserTestCase {
     assertParse(
       """
       struct ErrorInFunctionSignatureResultArrayType11 {
-        func foo() -> Int1️⃣[(a){a++}2️⃣] {
+        func foo() -> Int1️⃣[(a){a++}] {
         }
       }
       """,
       diagnostics: [
-        DiagnosticSpec(
-          locationMarker: "1️⃣",
-          message: "unexpected code '[(a)' in function"
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "unexpected code in struct"
-        )
+        DiagnosticSpec(message: "unexpected code '[(a){a++}]' in function")
       ]
     )
   }

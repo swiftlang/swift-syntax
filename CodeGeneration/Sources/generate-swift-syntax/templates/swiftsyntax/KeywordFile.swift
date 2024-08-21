@@ -31,7 +31,7 @@ let keywordFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         \(keyword.spec.apiAttributes)\
-        case \(keyword.spec.varOrCaseName.backtickedIfNeeded)
+        case \(keyword.spec.enumCaseDeclName)
         """
       )
     }
@@ -43,7 +43,7 @@ let keywordFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             try! SwitchExprSyntax("switch text") {
               for keyword in keywords {
                 SwitchCaseSyntax("case \(literal: keyword.name):") {
-                  ExprSyntax("self = .\(keyword.varOrCaseName)")
+                  ExprSyntax("self = .\(keyword.enumCaseCallName)")
                 }
               }
               SwitchCaseSyntax("default: return nil")

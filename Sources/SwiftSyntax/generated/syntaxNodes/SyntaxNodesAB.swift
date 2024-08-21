@@ -26,8 +26,8 @@
 ///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/accessorBlock``
 public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Accessors: SyntaxChildChoices, SyntaxHashable {
-    case `accessors`(AccessorDeclListSyntax)
-    case `getter`(CodeBlockItemListSyntax)
+    case accessors(AccessorDeclListSyntax)
+    case getter(CodeBlockItemListSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {
@@ -2324,26 +2324,26 @@ public struct AssociatedTypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
 ///  - ``SwitchCaseSyntax``.``SwitchCaseSyntax/attribute``
 public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Arguments: SyntaxChildChoices, SyntaxHashable {
-    case `argumentList`(LabeledExprListSyntax)
-    case `token`(TokenSyntax)
-    case `string`(StringLiteralExprSyntax)
-    case `availability`(AvailabilityArgumentListSyntax)
-    case `specializeArguments`(SpecializeAttributeArgumentListSyntax)
-    case `objCName`(ObjCSelectorPieceListSyntax)
-    case `implementsArguments`(ImplementsAttributeArgumentsSyntax)
-    case `differentiableArguments`(DifferentiableAttributeArgumentsSyntax)
-    case `derivativeRegistrationArguments`(DerivativeAttributeArgumentsSyntax)
-    case `backDeployedArguments`(BackDeployedAttributeArgumentsSyntax)
-    case `conventionArguments`(ConventionAttributeArgumentsSyntax)
-    case `conventionWitnessMethodArguments`(ConventionWitnessMethodAttributeArgumentsSyntax)
-    case `opaqueReturnTypeOfAttributeArguments`(OpaqueReturnTypeOfAttributeArgumentsSyntax)
-    case `exposeAttributeArguments`(ExposeAttributeArgumentsSyntax)
-    case `originallyDefinedInArguments`(OriginallyDefinedInAttributeArgumentsSyntax)
-    case `underscorePrivateAttributeArguments`(UnderscorePrivateAttributeArgumentsSyntax)
-    case `dynamicReplacementArguments`(DynamicReplacementAttributeArgumentsSyntax)
-    case `unavailableFromAsyncArguments`(UnavailableFromAsyncAttributeArgumentsSyntax)
-    case `effectsArguments`(EffectsAttributeArgumentListSyntax)
-    case `documentationArguments`(DocumentationAttributeArgumentListSyntax)
+    case argumentList(LabeledExprListSyntax)
+    case token(TokenSyntax)
+    case string(StringLiteralExprSyntax)
+    case availability(AvailabilityArgumentListSyntax)
+    case specializeArguments(SpecializeAttributeArgumentListSyntax)
+    case objCName(ObjCSelectorPieceListSyntax)
+    case implementsArguments(ImplementsAttributeArgumentsSyntax)
+    case differentiableArguments(DifferentiableAttributeArgumentsSyntax)
+    case derivativeRegistrationArguments(DerivativeAttributeArgumentsSyntax)
+    case backDeployedArguments(BackDeployedAttributeArgumentsSyntax)
+    case conventionArguments(ConventionAttributeArgumentsSyntax)
+    case conventionWitnessMethodArguments(ConventionWitnessMethodAttributeArgumentsSyntax)
+    case opaqueReturnTypeOfAttributeArguments(OpaqueReturnTypeOfAttributeArgumentsSyntax)
+    case exposeAttributeArguments(ExposeAttributeArgumentsSyntax)
+    case originallyDefinedInArguments(OriginallyDefinedInAttributeArgumentsSyntax)
+    case underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax)
+    case dynamicReplacementArguments(DynamicReplacementAttributeArgumentsSyntax)
+    case unavailableFromAsyncArguments(UnavailableFromAsyncAttributeArgumentsSyntax)
+    case effectsArguments(EffectsAttributeArgumentListSyntax)
+    case documentationArguments(DocumentationAttributeArgumentListSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {
@@ -3439,9 +3439,9 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
 ///  - ``AvailabilityArgumentListSyntax``
 public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Argument: SyntaxChildChoices, SyntaxHashable {
-    case `token`(TokenSyntax)
-    case `availabilityVersionRestriction`(PlatformVersionSyntax)
-    case `availabilityLabeledArgument`(AvailabilityLabeledArgumentSyntax)
+    case token(TokenSyntax)
+    case availabilityVersionRestriction(PlatformVersionSyntax)
+    case availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {
@@ -3887,8 +3887,8 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
 ///  - ``AvailabilityArgumentSyntax``.``AvailabilityArgumentSyntax/argument``
 public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Value: SyntaxChildChoices, SyntaxHashable {
-    case `string`(SimpleStringLiteralExprSyntax)
-    case `version`(VersionTupleSyntax)
+    case string(SimpleStringLiteralExprSyntax)
+    case version(VersionTupleSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {

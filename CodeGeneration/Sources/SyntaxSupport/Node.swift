@@ -21,7 +21,7 @@ import SwiftSyntax
 ///    but fixed types.
 ///  - Collection nodes contains an arbitrary number of children but all those
 ///    children are of the same type.
-public class Node {
+public class Node: IdentifierConvertible {
   fileprivate enum Data {
     case layout(children: [Child], traits: [String])
     case collection(choices: [SyntaxNodeKind])
@@ -61,10 +61,9 @@ public class Node {
   /// API generated should be SPI.
   public var isExperimental: Bool { experimentalFeature != nil }
 
-  /// A name for this node that is suitable to be used as a variables or enum
-  /// case's name.
-  public var varOrCaseName: TokenSyntax {
-    return kind.varOrCaseName
+  /// A name for this node as an identifier.
+  public var identifier: TokenSyntax {
+    return kind.identifier
   }
 
   /// If this is a layout node, return a view of the node that provides access
@@ -229,7 +228,7 @@ public class Node {
     let list =
       childIn
       .map {
-        if let childName = $0.child?.varOrCaseName {
+        if let childName = $0.child?.identifier {
           // This will repeat the syntax type before and after the dot, which is
           // a little unfortunate, but it's the only way I found to get docc to
           // generate a fully-qualified type + member.

@@ -1159,8 +1159,8 @@ public struct RawDictionaryElementSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol {
   public enum Content: RawSyntaxNodeProtocol {
-    case `colon`(RawTokenSyntax)
-    case `elements`(RawDictionaryElementListSyntax)
+    case colon(RawTokenSyntax)
+    case elements(RawDictionaryElementListSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawTokenSyntax.isKindOf(raw) || RawDictionaryElementListSyntax.isKindOf(raw)
@@ -1579,8 +1579,8 @@ public struct RawDifferentiabilityArgumentsSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawDifferentiabilityWithRespectToArgumentSyntax: RawSyntaxNodeProtocol {
   public enum Arguments: RawSyntaxNodeProtocol {
-    case `argument`(RawDifferentiabilityArgumentSyntax)
-    case `argumentList`(RawDifferentiabilityArgumentsSyntax)
+    case argument(RawDifferentiabilityArgumentSyntax)
+    case argumentList(RawDifferentiabilityArgumentsSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawDifferentiabilityArgumentSyntax.isKindOf(raw) || RawDifferentiabilityArgumentsSyntax.isKindOf(raw)
@@ -2154,8 +2154,8 @@ public struct RawDocumentationAttributeArgumentListSyntax: RawSyntaxNodeProtocol
 @_spi(RawSyntax)
 public struct RawDocumentationAttributeArgumentSyntax: RawSyntaxNodeProtocol {
   public enum Value: RawSyntaxNodeProtocol {
-    case `token`(RawTokenSyntax)
-    case `string`(RawStringLiteralExprSyntax)
+    case token(RawTokenSyntax)
+    case string(RawStringLiteralExprSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawTokenSyntax.isKindOf(raw) || RawStringLiteralExprSyntax.isKindOf(raw)

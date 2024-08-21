@@ -30,7 +30,7 @@ let tokenNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightHeader
     try! VariableDeclSyntax("var nameForDiagnostics: String") {
       try! SwitchExprSyntax("switch self") {
         for tokenSpec in Token.allCases.map(\.spec) where tokenSpec.kind != .keyword {
-          SwitchCaseSyntax("case .\(tokenSpec.varOrCaseName):") {
+          SwitchCaseSyntax("case .\(tokenSpec.enumCaseCallName):") {
             StmtSyntax("return \(literal: tokenSpec.nameForDiagnostics)")
           }
         }

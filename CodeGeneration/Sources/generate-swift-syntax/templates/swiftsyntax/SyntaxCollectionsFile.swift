@@ -44,7 +44,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             DeclSyntax(
               """
               \(choice.apiAttributes())\
-              case `\(choice.varOrCaseName)`(\(choice.kind.syntaxType))
+              case \(choice.enumCaseDeclName)(\(choice.kind.syntaxType))
               """
             )
           }
@@ -53,7 +53,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             SwitchExprSyntax(switchKeyword: .keyword(.switch), subject: ExprSyntax("self")) {
               for choiceName in node.elementChoices {
                 let choice = SYNTAX_NODE_MAP[choiceName]!
-                SwitchCaseSyntax("case .\(choice.varOrCaseName)(let node):") {
+                SwitchCaseSyntax("case .\(choice.enumCaseCallName)(let node):") {
                   StmtSyntax("return node._syntaxNode")
                 }
               }
@@ -67,7 +67,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                 """
                 \(choiceNode.apiAttributes())\
                 public init(_ node: some \(choiceNode.kind.protocolType)) {
-                  self = .\(choiceNode.varOrCaseName)(\(choiceNode.kind.syntaxType)(node))
+                  self = .\(choiceNode.memberCallName)(\(choiceNode.kind.syntaxType)(node))
                 }
                 """
               )
@@ -77,7 +77,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                 """
                 \(choiceNode.apiAttributes())\
                 public init(_ node: \(choiceNode.kind.syntaxType)) {
-                  self = .\(choiceNode.varOrCaseName)(node)
+                  self = .\(choiceNode.memberCallName)(node)
                 }
                 """
               )
@@ -90,7 +90,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
               StmtSyntax(
                 """
                 if let node = node.as(\(choiceNode.kind.syntaxType).self) {
-                  self = .\(choiceNode.varOrCaseName)(node)
+                  self = .\(choiceNode.memberCallName)(node)
                   return
                 }
                 """
@@ -126,13 +126,13 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         public init?(_ node: some SyntaxProtocol) {
-          guard node.raw.kind == .\(node.varOrCaseName) else { return nil }
+          guard node.raw.kind == .\(node.memberCallName) else { return nil }
           self._syntaxNode = node._syntaxNode
         }
         """
       )
 
-      DeclSyntax("public static let syntaxKind = SyntaxKind.\(node.varOrCaseName)")
+      DeclSyntax("public static let syntaxKind = SyntaxKind.\(node.memberCallName)")
     }
   }
 }

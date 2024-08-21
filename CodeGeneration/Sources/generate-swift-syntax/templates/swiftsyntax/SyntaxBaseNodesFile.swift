@@ -232,7 +232,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                   for childNode in SYNTAX_NODES where childNode.base == node.kind {
                     SwitchCaseItemSyntax(
                       pattern: ExpressionPatternSyntax(
-                        expression: ExprSyntax(".\(childNode.varOrCaseName)")
+                        expression: ExprSyntax(".\(childNode.memberCallName)")
                       )
                     )
                   }

@@ -29,8 +29,8 @@ let childNameForKeyPathFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         for child in node.children {
           SwitchCaseSyntax(
             """
-            case \\\(node.type.syntaxBaseName).\(child.varOrCaseName):
-              return \(literal: child.varOrCaseName.description)
+            case \\\(node.type.syntaxBaseName).\(child.memberCallName):
+              return \(literal: child.identifier.description)
             """
           )
         }

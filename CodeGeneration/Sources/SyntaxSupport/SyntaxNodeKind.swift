@@ -17,7 +17,7 @@ import SwiftSyntaxBuilder
 ///
 /// Using the cases of this enum, children of syntax nodes can refer the syntax
 /// node that defines their layout.
-public enum SyntaxNodeKind: String, CaseIterable {
+public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible {
   // Please keep this list sorted alphabetically
 
   case _canImportExpr
@@ -337,9 +337,8 @@ public enum SyntaxNodeKind: String, CaseIterable {
     }
   }
 
-  /// A name for this node that is suitable to be used as a variables or enum
-  /// case's name.
-  public var varOrCaseName: TokenSyntax {
+  /// A name for this node as an identifier.
+  public var identifier: TokenSyntax {
     return .identifier(rawValue)
   }
 

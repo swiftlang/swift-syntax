@@ -807,9 +807,9 @@ public struct GenericParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
 ///  - ``GenericRequirementListSyntax``
 public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Requirement: SyntaxChildChoices, SyntaxHashable {
-    case `sameTypeRequirement`(SameTypeRequirementSyntax)
-    case `conformanceRequirement`(ConformanceRequirementSyntax)
-    case `layoutRequirement`(LayoutRequirementSyntax)
+    case sameTypeRequirement(SameTypeRequirementSyntax)
+    case conformanceRequirement(ConformanceRequirementSyntax)
+    case layoutRequirement(LayoutRequirementSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {
@@ -1725,11 +1725,11 @@ public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
 ///  - ``IfConfigClauseListSyntax``
 public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Elements: SyntaxChildChoices, SyntaxHashable {
-    case `statements`(CodeBlockItemListSyntax)
-    case `switchCases`(SwitchCaseListSyntax)
-    case `decls`(MemberBlockItemListSyntax)
-    case `postfixExpression`(ExprSyntax)
-    case `attributes`(AttributeListSyntax)
+    case statements(CodeBlockItemListSyntax)
+    case switchCases(SwitchCaseListSyntax)
+    case decls(MemberBlockItemListSyntax)
+    case postfixExpression(ExprSyntax)
+    case attributes(AttributeListSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {
@@ -2209,8 +2209,8 @@ public struct IfConfigDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
 ///  - ``IfExprSyntax``.``IfExprSyntax/elseBody``
 public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public enum ElseBody: SyntaxChildChoices, SyntaxHashable {
-    case `ifExpr`(IfExprSyntax)
-    case `codeBlock`(CodeBlockSyntax)
+    case ifExpr(IfExprSyntax)
+    case codeBlock(CodeBlockSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {

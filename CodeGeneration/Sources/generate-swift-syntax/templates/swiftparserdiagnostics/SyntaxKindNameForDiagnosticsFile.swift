@@ -35,7 +35,7 @@ let syntaxKindNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightH
 
         for node in NON_BASE_SYNTAX_NODES {
           if let nameForDiagnostics = node.nameForDiagnostics {
-            SwitchCaseSyntax("case .\(node.varOrCaseName):") {
+            SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
               StmtSyntax("return \(literal: nameForDiagnostics)")
             }
           }

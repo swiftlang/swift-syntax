@@ -1987,9 +1987,9 @@ public struct RawPrecedenceGroupAssociativitySyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol {
   public enum Element: RawSyntaxNodeProtocol {
-    case `precedenceGroupRelation`(RawPrecedenceGroupRelationSyntax)
-    case `precedenceGroupAssignment`(RawPrecedenceGroupAssignmentSyntax)
-    case `precedenceGroupAssociativity`(RawPrecedenceGroupAssociativitySyntax)
+    case precedenceGroupRelation(RawPrecedenceGroupRelationSyntax)
+    case precedenceGroupAssignment(RawPrecedenceGroupAssignmentSyntax)
+    case precedenceGroupAssociativity(RawPrecedenceGroupAssociativitySyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawPrecedenceGroupRelationSyntax.isKindOf(raw) || RawPrecedenceGroupAssignmentSyntax.isKindOf(raw) || RawPrecedenceGroupAssociativitySyntax.isKindOf(raw)

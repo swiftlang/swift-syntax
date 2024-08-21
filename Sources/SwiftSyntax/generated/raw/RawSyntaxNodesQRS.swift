@@ -840,10 +840,10 @@ public struct RawSourceFileSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawSpecializeAttributeArgumentListSyntax: RawSyntaxNodeProtocol {
   public enum Element: RawSyntaxNodeProtocol {
-    case `labeledSpecializeArgument`(RawLabeledSpecializeArgumentSyntax)
-    case `specializeAvailabilityArgument`(RawSpecializeAvailabilityArgumentSyntax)
-    case `specializeTargetFunctionArgument`(RawSpecializeTargetFunctionArgumentSyntax)
-    case `genericWhereClause`(RawGenericWhereClauseSyntax)
+    case labeledSpecializeArgument(RawLabeledSpecializeArgumentSyntax)
+    case specializeAvailabilityArgument(RawSpecializeAvailabilityArgumentSyntax)
+    case specializeTargetFunctionArgument(RawSpecializeTargetFunctionArgumentSyntax)
+    case genericWhereClause(RawGenericWhereClauseSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawLabeledSpecializeArgumentSyntax.isKindOf(raw) || RawSpecializeAvailabilityArgumentSyntax.isKindOf(raw) || RawSpecializeTargetFunctionArgumentSyntax.isKindOf(raw) || RawGenericWhereClauseSyntax.isKindOf(raw)
@@ -1267,8 +1267,8 @@ public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawStringLiteralSegmentListSyntax: RawSyntaxNodeProtocol {
   public enum Element: RawSyntaxNodeProtocol {
-    case `stringSegment`(RawStringSegmentSyntax)
-    case `expressionSegment`(RawExpressionSegmentSyntax)
+    case stringSegment(RawStringSegmentSyntax)
+    case expressionSegment(RawExpressionSegmentSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawStringSegmentSyntax.isKindOf(raw) || RawExpressionSegmentSyntax.isKindOf(raw)
@@ -2149,8 +2149,8 @@ public struct RawSwitchCaseLabelSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
   public enum Element: RawSyntaxNodeProtocol {
-    case `switchCase`(RawSwitchCaseSyntax)
-    case `ifConfigDecl`(RawIfConfigDeclSyntax)
+    case switchCase(RawSwitchCaseSyntax)
+    case ifConfigDecl(RawIfConfigDeclSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawSwitchCaseSyntax.isKindOf(raw) || RawIfConfigDeclSyntax.isKindOf(raw)

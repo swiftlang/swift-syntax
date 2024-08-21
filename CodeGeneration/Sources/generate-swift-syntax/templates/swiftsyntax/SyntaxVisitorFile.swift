@@ -184,7 +184,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                   }
 
                   for node in NON_BASE_SYNTAX_NODES {
-                    SwitchCaseSyntax("case .\(node.varOrCaseName):") {
+                    SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
                       StmtSyntax(
                         "return { self.visitImpl(&$0, \(node.kind.syntaxType).self, self.visit, self.visitPost) }"
                       )
@@ -226,7 +226,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                   }
 
                   for node in NON_BASE_SYNTAX_NODES {
-                    SwitchCaseSyntax("case .\(node.varOrCaseName):") {
+                    SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
                       ExprSyntax("visitImpl(&node, \(node.kind.syntaxType).self, visit, visitPost)")
                     }
                   }

@@ -64,7 +64,7 @@ public struct SyntaxBuildableType: Hashable {
       return ExprSyntax(NilLiteralExprSyntax())
     } else if let token = token {
       if token.text != nil {
-        return ExprSyntax(".\(token.varOrCaseName)Token()")
+        return ExprSyntax(".\(token.identifier)Token()")
       }
     }
     return nil

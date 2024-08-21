@@ -69,13 +69,28 @@ extension Collection {
   }
 }
 
+private extension Keyword {
+  static let backticksNeeded: Set<String> = Set(
+    Keyword.allCases.map(\.spec).filter {
+      $0.isLexerClassified || $0.name == "Type" || $0.name == "Protocol"
+    }.map(\.name)
+  )
+}
+
 extension TokenSyntax {
-  public var backtickedIfNeeded: TokenSyntax {
-    if Keyword.allCases.map(\.spec).contains(where: {
-      $0.name == self.description && ($0.isLexerClassified || $0.name == "Type" || $0.name == "Protocol")
-    }) {
+  public var declNameOrVarCallName: Self {
+    if Keyword.backticksNeeded.contains(self.description) {
       return "`\(self)`"
     } else {
+      return self
+    }
+  }
+
+  public var nonVarCallNameOrLabelDeclName: Self {
+    switch self.tokenKind {
+    case .keyword(.`init`), .identifier("init"):
+      return "`init`"
+    default:
       return self
     }
   }

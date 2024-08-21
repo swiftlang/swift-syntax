@@ -529,9 +529,9 @@ public struct RawGenericRequirementListSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol {
   public enum Requirement: RawSyntaxNodeProtocol {
-    case `sameTypeRequirement`(RawSameTypeRequirementSyntax)
-    case `conformanceRequirement`(RawConformanceRequirementSyntax)
-    case `layoutRequirement`(RawLayoutRequirementSyntax)
+    case sameTypeRequirement(RawSameTypeRequirementSyntax)
+    case conformanceRequirement(RawConformanceRequirementSyntax)
+    case layoutRequirement(RawLayoutRequirementSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawSameTypeRequirementSyntax.isKindOf(raw) || RawConformanceRequirementSyntax.isKindOf(raw) || RawLayoutRequirementSyntax.isKindOf(raw)
@@ -1048,11 +1048,11 @@ public struct RawIfConfigClauseListSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol {
   public enum Elements: RawSyntaxNodeProtocol {
-    case `statements`(RawCodeBlockItemListSyntax)
-    case `switchCases`(RawSwitchCaseListSyntax)
-    case `decls`(RawMemberBlockItemListSyntax)
-    case `postfixExpression`(RawExprSyntax)
-    case `attributes`(RawAttributeListSyntax)
+    case statements(RawCodeBlockItemListSyntax)
+    case switchCases(RawSwitchCaseListSyntax)
+    case decls(RawMemberBlockItemListSyntax)
+    case postfixExpression(RawExprSyntax)
+    case attributes(RawAttributeListSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawCodeBlockItemListSyntax.isKindOf(raw) || RawSwitchCaseListSyntax.isKindOf(raw) || RawMemberBlockItemListSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw) || RawAttributeListSyntax.isKindOf(raw)
@@ -1255,8 +1255,8 @@ public struct RawIfConfigDeclSyntax: RawDeclSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawIfExprSyntax: RawExprSyntaxNodeProtocol {
   public enum ElseBody: RawSyntaxNodeProtocol {
-    case `ifExpr`(RawIfExprSyntax)
-    case `codeBlock`(RawCodeBlockSyntax)
+    case ifExpr(RawIfExprSyntax)
+    case codeBlock(RawCodeBlockSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawIfExprSyntax.isKindOf(raw) || RawCodeBlockSyntax.isKindOf(raw)

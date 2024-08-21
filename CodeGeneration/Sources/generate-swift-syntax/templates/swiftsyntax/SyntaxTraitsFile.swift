@@ -33,7 +33,7 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         DeclSyntax(
           """
           \(child.documentation)\
-          \(child.apiAttributes)var \(child.varOrCaseName): \(child.syntaxNodeKind.syntaxType)\(raw: questionMark) { get set }
+          \(child.apiAttributes)var \(child.varDeclName): \(child.syntaxNodeKind.syntaxType)\(raw: questionMark) { get set }
           """
         )
       }

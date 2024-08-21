@@ -1411,8 +1411,8 @@ public struct RawTypeInitializerClauseSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawTypeSpecifierListSyntax: RawSyntaxNodeProtocol {
   public enum Element: RawSyntaxNodeProtocol {
-    case `simpleTypeSpecifier`(RawSimpleTypeSpecifierSyntax)
-    case `lifetimeTypeSpecifier`(RawLifetimeTypeSpecifierSyntax)
+    case simpleTypeSpecifier(RawSimpleTypeSpecifierSyntax)
+    case lifetimeTypeSpecifier(RawLifetimeTypeSpecifierSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawSimpleTypeSpecifierSyntax.isKindOf(raw) || RawLifetimeTypeSpecifierSyntax.isKindOf(raw)
@@ -2518,8 +2518,8 @@ public struct RawWildcardPatternSyntax: RawPatternSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
   public enum YieldedExpressions: RawSyntaxNodeProtocol {
-    case `multiple`(RawYieldedExpressionsClauseSyntax)
-    case `single`(RawExprSyntax)
+    case multiple(RawYieldedExpressionsClauseSyntax)
+    case single(RawExprSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawYieldedExpressionsClauseSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw)

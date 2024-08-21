@@ -28,7 +28,7 @@ struct GrammarGenerator {
       if let tokenText = tokenSpec.text {
         return "`\(tokenText)`"
       } else {
-        return "`<\(tokenSpec.varOrCaseName)>`"
+        return "`<\(tokenSpec.identifier)>`"
       }
     }
   }
@@ -62,7 +62,7 @@ struct GrammarGenerator {
     return
       children
       .filter { !$0.isUnexpectedNodes }
-      .map { " - `\($0.varOrCaseName)`: \(generator.grammar(for: $0))" }
+      .map { " - `\($0.identifier)`: \(generator.grammar(for: $0))" }
       .joined(separator: "\n")
   }
 

@@ -104,6 +104,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``VariableDeclSyntax``.``VariableDeclSyntax/attributes``
 public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices, SyntaxHashable {
+    /// An `@` attribute.
     case attribute(AttributeSyntax)
     case ifConfigDecl(IfConfigDeclSyntax)
     
@@ -124,22 +125,18 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
       self = .ifConfigDecl(node)
     }
     
-    public init?(_ node: some SyntaxProtocol) {
+    public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(AttributeSyntax.self) {
         self = .attribute(node)
-        return
-      }
-      if let node = node.as(IfConfigDeclSyntax.self) {
+      } else if let node = node.as(IfConfigDeclSyntax.self) {
         self = .ifConfigDecl(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
-      return .choices([
-          .node(AttributeSyntax.self),
-          .node(IfConfigDeclSyntax.self)])
+      return .choices([.node(AttributeSyntax.self), .node(IfConfigDeclSyntax.self)])
     }
     
     /// Checks if the current syntax node can be cast to ``AttributeSyntax``.
@@ -887,7 +884,7 @@ public struct LabeledExprListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.labeledExprList
 }
 
-/// - Experiment: Requires experimental feature `nonescapableTypes`.
+/// - Note: Requires experimental feature `nonescapableTypes`.
 ///
 /// ### Children
 /// 
@@ -1034,8 +1031,11 @@ public struct PlatformVersionItemListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/groupAttributes``
 public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices, SyntaxHashable {
+    /// Specify the new precedence group's relation to existing precedence groups.
     case precedenceGroupRelation(PrecedenceGroupRelationSyntax)
+    /// Specifies the precedence of an operator when used in an operation that includes optional chaining.
     case precedenceGroupAssignment(PrecedenceGroupAssignmentSyntax)
+    /// Specifies how a sequence of operators with the same precedence level are grouped together in the absence of grouping parentheses.
     case precedenceGroupAssociativity(PrecedenceGroupAssociativitySyntax)
     
     public var _syntaxNode: Syntax {
@@ -1061,27 +1061,20 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
       self = .precedenceGroupAssociativity(node)
     }
     
-    public init?(_ node: some SyntaxProtocol) {
+    public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(PrecedenceGroupRelationSyntax.self) {
         self = .precedenceGroupRelation(node)
-        return
-      }
-      if let node = node.as(PrecedenceGroupAssignmentSyntax.self) {
+      } else if let node = node.as(PrecedenceGroupAssignmentSyntax.self) {
         self = .precedenceGroupAssignment(node)
-        return
-      }
-      if let node = node.as(PrecedenceGroupAssociativitySyntax.self) {
+      } else if let node = node.as(PrecedenceGroupAssociativitySyntax.self) {
         self = .precedenceGroupAssociativity(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
-      return .choices([
-          .node(PrecedenceGroupRelationSyntax.self),
-          .node(PrecedenceGroupAssignmentSyntax.self),
-          .node(PrecedenceGroupAssociativitySyntax.self)])
+      return .choices([.node(PrecedenceGroupRelationSyntax.self), .node(PrecedenceGroupAssignmentSyntax.self), .node(PrecedenceGroupAssociativitySyntax.self)])
     }
     
     /// Checks if the current syntax node can be cast to ``PrecedenceGroupRelationSyntax``.
@@ -1242,9 +1235,13 @@ public struct SimpleStringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHash
 ///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices, SyntaxHashable {
+    /// A labeled argument for the `@_specialize` attribute like `exported: true`
     case labeledSpecializeArgument(LabeledSpecializeArgumentSyntax)
+    /// The availability argument for the _specialize attribute
     case specializeAvailabilityArgument(SpecializeAvailabilityArgumentSyntax)
+    /// A labeled argument for the `@_specialize` attribute with a function decl value like `target: myFunc(_:)`
     case specializeTargetFunctionArgument(SpecializeTargetFunctionArgumentSyntax)
+    /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
     case genericWhereClause(GenericWhereClauseSyntax)
     
     public var _syntaxNode: Syntax {
@@ -1276,31 +1273,25 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
       self = .genericWhereClause(node)
     }
     
-    public init?(_ node: some SyntaxProtocol) {
+    public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(LabeledSpecializeArgumentSyntax.self) {
         self = .labeledSpecializeArgument(node)
-        return
-      }
-      if let node = node.as(SpecializeAvailabilityArgumentSyntax.self) {
+      } else if let node = node.as(SpecializeAvailabilityArgumentSyntax.self) {
         self = .specializeAvailabilityArgument(node)
-        return
-      }
-      if let node = node.as(SpecializeTargetFunctionArgumentSyntax.self) {
+      } else if let node = node.as(SpecializeTargetFunctionArgumentSyntax.self) {
         self = .specializeTargetFunctionArgument(node)
-        return
-      }
-      if let node = node.as(GenericWhereClauseSyntax.self) {
+      } else if let node = node.as(GenericWhereClauseSyntax.self) {
         self = .genericWhereClause(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
       return .choices([
-            .node(LabeledSpecializeArgumentSyntax.self),
-            .node(SpecializeAvailabilityArgumentSyntax.self),
-            .node(SpecializeTargetFunctionArgumentSyntax.self),
+            .node(LabeledSpecializeArgumentSyntax.self), 
+            .node(SpecializeAvailabilityArgumentSyntax.self), 
+            .node(SpecializeTargetFunctionArgumentSyntax.self), 
             .node(GenericWhereClauseSyntax.self)
           ])
     }
@@ -1415,7 +1406,13 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
 ///  - ``StringLiteralExprSyntax``.``StringLiteralExprSyntax/segments``
 public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices, SyntaxHashable {
+    /// A literal segment inside a string segment.
+    /// 
+    /// - SeeAlso: ``ExpressionSegmentSyntax``
     case stringSegment(StringSegmentSyntax)
+    /// An interpolated expression inside a string literal.
+    /// 
+    /// - SeeAlso: ``StringSegmentSyntax``
     case expressionSegment(ExpressionSegmentSyntax)
     
     public var _syntaxNode: Syntax {
@@ -1435,22 +1432,18 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
       self = .expressionSegment(node)
     }
     
-    public init?(_ node: some SyntaxProtocol) {
+    public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(StringSegmentSyntax.self) {
         self = .stringSegment(node)
-        return
-      }
-      if let node = node.as(ExpressionSegmentSyntax.self) {
+      } else if let node = node.as(ExpressionSegmentSyntax.self) {
         self = .expressionSegment(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
-      return .choices([
-          .node(StringSegmentSyntax.self),
-          .node(ExpressionSegmentSyntax.self)])
+      return .choices([.node(StringSegmentSyntax.self), .node(ExpressionSegmentSyntax.self)])
     }
     
     /// Checks if the current syntax node can be cast to ``StringSegmentSyntax``.
@@ -1562,22 +1555,18 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
       self = .ifConfigDecl(node)
     }
     
-    public init?(_ node: some SyntaxProtocol) {
+    public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(SwitchCaseSyntax.self) {
         self = .switchCase(node)
-        return
-      }
-      if let node = node.as(IfConfigDeclSyntax.self) {
+      } else if let node = node.as(IfConfigDeclSyntax.self) {
         self = .ifConfigDecl(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
-      return .choices([
-          .node(SwitchCaseSyntax.self),
-          .node(IfConfigDeclSyntax.self)])
+      return .choices([.node(SwitchCaseSyntax.self), .node(IfConfigDeclSyntax.self)])
     }
     
     /// Checks if the current syntax node can be cast to ``SwitchCaseSyntax``.
@@ -1693,7 +1682,10 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``AttributedTypeSyntax``.``AttributedTypeSyntax/specifiers``
 public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices, SyntaxHashable {
+    /// A specifier that can be attached to a type to eg. mark a parameter as `inout` or `consuming`
     case simpleTypeSpecifier(SimpleTypeSpecifierSyntax)
+    /// A specifier that specifies function parameter on whose lifetime a type depends
+    /// - Note: Requires experimental feature `nonescapableTypes`.
     #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
     #endif
@@ -1712,6 +1704,7 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
       self = .simpleTypeSpecifier(node)
     }
     
+    /// - Note: Requires experimental feature `nonescapableTypes`.
     #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
     #endif
@@ -1719,22 +1712,18 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
       self = .lifetimeTypeSpecifier(node)
     }
     
-    public init?(_ node: some SyntaxProtocol) {
+    public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(SimpleTypeSpecifierSyntax.self) {
         self = .simpleTypeSpecifier(node)
-        return
-      }
-      if let node = node.as(LifetimeTypeSpecifierSyntax.self) {
+      } else if let node = node.as(LifetimeTypeSpecifierSyntax.self) {
         self = .lifetimeTypeSpecifier(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
-      return .choices([
-          .node(SimpleTypeSpecifierSyntax.self),
-          .node(LifetimeTypeSpecifierSyntax.self)])
+      return .choices([.node(SimpleTypeSpecifierSyntax.self), .node(LifetimeTypeSpecifierSyntax.self)])
     }
     
     /// Checks if the current syntax node can be cast to ``SimpleTypeSpecifierSyntax``.
@@ -1762,6 +1751,7 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
     /// Checks if the current syntax node can be cast to `LifetimeTypeSpecifierSyntax`.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
+    /// - Note: Requires experimental feature `nonescapableTypes`.
     #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
     #endif
@@ -1772,6 +1762,7 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
     /// Attempts to cast the current syntax node to `LifetimeTypeSpecifierSyntax`.
     ///
     /// - Returns: An instance of `LifetimeTypeSpecifierSyntax`, or `nil` if the cast fails.
+    /// - Note: Requires experimental feature `nonescapableTypes`.
     #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
     #endif
@@ -1783,6 +1774,7 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
     ///
     /// - Returns: An instance of `LifetimeTypeSpecifierSyntax`.
     /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    /// - Note: Requires experimental feature `nonescapableTypes`.
     #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
     #endif

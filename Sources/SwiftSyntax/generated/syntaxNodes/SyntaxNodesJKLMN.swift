@@ -56,17 +56,13 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(KeyPathPropertyComponentSyntax.self) {
         self = .property(node)
-        return
-      }
-      if let node = node.as(KeyPathSubscriptComponentSyntax.self) {
+      } else if let node = node.as(KeyPathSubscriptComponentSyntax.self) {
         self = .subscript(node)
-        return
-      }
-      if let node = node.as(KeyPathOptionalComponentSyntax.self) {
+      } else if let node = node.as(KeyPathOptionalComponentSyntax.self) {
         self = .optional(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
@@ -1623,7 +1619,7 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 /// ### Example
 /// `data` in `func foo(data: Array<Item>) -> borrow(data) ComplexReferenceType`
 ///
-/// - Experiment: Requires experimental feature `nonescapableTypes`.
+/// - Note: Requires experimental feature `nonescapableTypes`.
 ///
 /// ### Children
 /// 
@@ -1754,7 +1750,7 @@ public struct LifetimeSpecifierArgumentSyntax: SyntaxProtocol, SyntaxHashable, _
 
 /// A specifier that specifies function parameter on whose lifetime a type depends
 ///
-/// - Experiment: Requires experimental feature `nonescapableTypes`.
+/// - Note: Requires experimental feature `nonescapableTypes`.
 ///
 /// ### Children
 /// 

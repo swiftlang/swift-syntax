@@ -3726,13 +3726,11 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(SwitchDefaultLabelSyntax.self) {
         self = .default(node)
-        return
-      }
-      if let node = node.as(SwitchCaseLabelSyntax.self) {
+      } else if let node = node.as(SwitchCaseLabelSyntax.self) {
         self = .case(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {

@@ -534,7 +534,7 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol {
     case layoutRequirement(RawLayoutRequirementSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawSameTypeRequirementSyntax.isKindOf(raw) || RawConformanceRequirementSyntax.isKindOf(raw) || RawLayoutRequirementSyntax.isKindOf(raw)
+      RawSameTypeRequirementSyntax.isKindOf(raw) || RawConformanceRequirementSyntax.isKindOf(raw) || RawLayoutRequirementSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -548,20 +548,16 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawSameTypeRequirementSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawSameTypeRequirementSyntax.self) {
         self = .sameTypeRequirement(node)
-        return
-      }
-      if let node = RawConformanceRequirementSyntax(other) {
+      } else if let node = node.as(RawConformanceRequirementSyntax.self) {
         self = .conformanceRequirement(node)
-        return
-      }
-      if let node = RawLayoutRequirementSyntax(other) {
+      } else if let node = node.as(RawLayoutRequirementSyntax.self) {
         self = .layoutRequirement(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
   }
   
@@ -1055,7 +1051,7 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol {
     case attributes(RawAttributeListSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawCodeBlockItemListSyntax.isKindOf(raw) || RawSwitchCaseListSyntax.isKindOf(raw) || RawMemberBlockItemListSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw) || RawAttributeListSyntax.isKindOf(raw)
+      RawCodeBlockItemListSyntax.isKindOf(raw) || RawSwitchCaseListSyntax.isKindOf(raw) || RawMemberBlockItemListSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw) || RawAttributeListSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -1073,28 +1069,20 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawCodeBlockItemListSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawCodeBlockItemListSyntax.self) {
         self = .statements(node)
-        return
-      }
-      if let node = RawSwitchCaseListSyntax(other) {
+      } else if let node = node.as(RawSwitchCaseListSyntax.self) {
         self = .switchCases(node)
-        return
-      }
-      if let node = RawMemberBlockItemListSyntax(other) {
+      } else if let node = node.as(RawMemberBlockItemListSyntax.self) {
         self = .decls(node)
-        return
-      }
-      if let node = RawExprSyntax(other) {
+      } else if let node = node.as(RawExprSyntax.self) {
         self = .postfixExpression(node)
-        return
-      }
-      if let node = RawAttributeListSyntax(other) {
+      } else if let node = node.as(RawAttributeListSyntax.self) {
         self = .attributes(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public init(postfixExpression: some RawExprSyntaxNodeProtocol) {
@@ -1259,7 +1247,7 @@ public struct RawIfExprSyntax: RawExprSyntaxNodeProtocol {
     case codeBlock(RawCodeBlockSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawIfExprSyntax.isKindOf(raw) || RawCodeBlockSyntax.isKindOf(raw)
+      RawIfExprSyntax.isKindOf(raw) || RawCodeBlockSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -1271,16 +1259,14 @@ public struct RawIfExprSyntax: RawExprSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawIfExprSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawIfExprSyntax.self) {
         self = .ifExpr(node)
-        return
-      }
-      if let node = RawCodeBlockSyntax(other) {
+      } else if let node = node.as(RawCodeBlockSyntax.self) {
         self = .codeBlock(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
   }
   

@@ -840,13 +840,17 @@ public struct RawSourceFileSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawSpecializeAttributeArgumentListSyntax: RawSyntaxNodeProtocol {
   public enum Element: RawSyntaxNodeProtocol {
+    /// A labeled argument for the `@_specialize` attribute like `exported: true`
     case labeledSpecializeArgument(RawLabeledSpecializeArgumentSyntax)
+    /// The availability argument for the _specialize attribute
     case specializeAvailabilityArgument(RawSpecializeAvailabilityArgumentSyntax)
+    /// A labeled argument for the `@_specialize` attribute with a function decl value like `target: myFunc(_:)`
     case specializeTargetFunctionArgument(RawSpecializeTargetFunctionArgumentSyntax)
+    /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
     case genericWhereClause(RawGenericWhereClauseSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawLabeledSpecializeArgumentSyntax.isKindOf(raw) || RawSpecializeAvailabilityArgumentSyntax.isKindOf(raw) || RawSpecializeTargetFunctionArgumentSyntax.isKindOf(raw) || RawGenericWhereClauseSyntax.isKindOf(raw)
+      RawLabeledSpecializeArgumentSyntax.isKindOf(raw) || RawSpecializeAvailabilityArgumentSyntax.isKindOf(raw) || RawSpecializeTargetFunctionArgumentSyntax.isKindOf(raw) || RawGenericWhereClauseSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -862,24 +866,18 @@ public struct RawSpecializeAttributeArgumentListSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawLabeledSpecializeArgumentSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawLabeledSpecializeArgumentSyntax.self) {
         self = .labeledSpecializeArgument(node)
-        return
-      }
-      if let node = RawSpecializeAvailabilityArgumentSyntax(other) {
+      } else if let node = node.as(RawSpecializeAvailabilityArgumentSyntax.self) {
         self = .specializeAvailabilityArgument(node)
-        return
-      }
-      if let node = RawSpecializeTargetFunctionArgumentSyntax(other) {
+      } else if let node = node.as(RawSpecializeTargetFunctionArgumentSyntax.self) {
         self = .specializeTargetFunctionArgument(node)
-        return
-      }
-      if let node = RawGenericWhereClauseSyntax(other) {
+      } else if let node = node.as(RawGenericWhereClauseSyntax.self) {
         self = .genericWhereClause(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
   }
   
@@ -1267,11 +1265,17 @@ public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawStringLiteralSegmentListSyntax: RawSyntaxNodeProtocol {
   public enum Element: RawSyntaxNodeProtocol {
+    /// A literal segment inside a string segment.
+    /// 
+    /// - SeeAlso: ``ExpressionSegmentSyntax``
     case stringSegment(RawStringSegmentSyntax)
+    /// An interpolated expression inside a string literal.
+    /// 
+    /// - SeeAlso: ``StringSegmentSyntax``
     case expressionSegment(RawExpressionSegmentSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawStringSegmentSyntax.isKindOf(raw) || RawExpressionSegmentSyntax.isKindOf(raw)
+      RawStringSegmentSyntax.isKindOf(raw) || RawExpressionSegmentSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -1283,16 +1287,14 @@ public struct RawStringLiteralSegmentListSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawStringSegmentSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawStringSegmentSyntax.self) {
         self = .stringSegment(node)
-        return
-      }
-      if let node = RawExpressionSegmentSyntax(other) {
+      } else if let node = node.as(RawExpressionSegmentSyntax.self) {
         self = .expressionSegment(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
   }
   
@@ -2153,7 +2155,7 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
     case ifConfigDecl(RawIfConfigDeclSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawSwitchCaseSyntax.isKindOf(raw) || RawIfConfigDeclSyntax.isKindOf(raw)
+      RawSwitchCaseSyntax.isKindOf(raw) || RawIfConfigDeclSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -2165,16 +2167,14 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawSwitchCaseSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawSwitchCaseSyntax.self) {
         self = .switchCase(node)
-        return
-      }
-      if let node = RawIfConfigDeclSyntax(other) {
+      } else if let node = node.as(RawIfConfigDeclSyntax.self) {
         self = .ifConfigDecl(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
   }
   
@@ -2233,7 +2233,7 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol {
     case `case`(RawSwitchCaseLabelSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawSwitchDefaultLabelSyntax.isKindOf(raw) || RawSwitchCaseLabelSyntax.isKindOf(raw)
+      RawSwitchDefaultLabelSyntax.isKindOf(raw) || RawSwitchCaseLabelSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -2245,16 +2245,14 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawSwitchDefaultLabelSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawSwitchDefaultLabelSyntax.self) {
         self = .default(node)
-        return
-      }
-      if let node = RawSwitchCaseLabelSyntax(other) {
+      } else if let node = node.as(RawSwitchCaseLabelSyntax.self) {
         self = .case(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
   }
   

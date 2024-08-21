@@ -1987,12 +1987,15 @@ public struct RawPrecedenceGroupAssociativitySyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol {
   public enum Element: RawSyntaxNodeProtocol {
+    /// Specify the new precedence group's relation to existing precedence groups.
     case precedenceGroupRelation(RawPrecedenceGroupRelationSyntax)
+    /// Specifies the precedence of an operator when used in an operation that includes optional chaining.
     case precedenceGroupAssignment(RawPrecedenceGroupAssignmentSyntax)
+    /// Specifies how a sequence of operators with the same precedence level are grouped together in the absence of grouping parentheses.
     case precedenceGroupAssociativity(RawPrecedenceGroupAssociativitySyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawPrecedenceGroupRelationSyntax.isKindOf(raw) || RawPrecedenceGroupAssignmentSyntax.isKindOf(raw) || RawPrecedenceGroupAssociativitySyntax.isKindOf(raw)
+      RawPrecedenceGroupRelationSyntax.isKindOf(raw) || RawPrecedenceGroupAssignmentSyntax.isKindOf(raw) || RawPrecedenceGroupAssociativitySyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -2006,20 +2009,16 @@ public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawPrecedenceGroupRelationSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawPrecedenceGroupRelationSyntax.self) {
         self = .precedenceGroupRelation(node)
-        return
-      }
-      if let node = RawPrecedenceGroupAssignmentSyntax(other) {
+      } else if let node = node.as(RawPrecedenceGroupAssignmentSyntax.self) {
         self = .precedenceGroupAssignment(node)
-        return
-      }
-      if let node = RawPrecedenceGroupAssociativitySyntax(other) {
+      } else if let node = node.as(RawPrecedenceGroupAssociativitySyntax.self) {
         self = .precedenceGroupAssociativity(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
   }
   

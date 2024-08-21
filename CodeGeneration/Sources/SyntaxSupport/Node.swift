@@ -21,7 +21,7 @@ import SwiftSyntax
 ///    but fixed types.
 ///  - Collection nodes contains an arbitrary number of children but all those
 ///    children are of the same type.
-public class Node: IdentifierConvertible {
+public class Node: NodeChoiceConvertible {
   fileprivate enum Data {
     case layout(children: [Child], traits: [String])
     case collection(choices: [SyntaxNodeKind])
@@ -40,8 +40,6 @@ public class Node: IdentifierConvertible {
   /// The kind of node’s supertype. This kind must have `isBase == true`
   public let base: SyntaxNodeKind
 
-  /// The experimental feature the node is part of, or `nil` if this isn't
-  /// for an experimental feature.
   public let experimentalFeature: ExperimentalFeature?
 
   /// When the node name is printed for diagnostics, this name is used.
@@ -57,9 +55,9 @@ public class Node: IdentifierConvertible {
   /// function that should be invoked to create this node.
   public let parserFunction: TokenSyntax?
 
-  /// If `true`, this is for an experimental language feature, and any public
-  /// API generated should be SPI.
-  public var isExperimental: Bool { experimentalFeature != nil }
+  public var syntaxNodeKind: SyntaxNodeKind {
+    self.kind
+  }
 
   /// A name for this node as an identifier.
   public var identifier: TokenSyntax {
@@ -112,14 +110,8 @@ public class Node: IdentifierConvertible {
     return attrList.with(\.trailingTrivia, attrList.isEmpty ? [] : .newline)
   }
 
-  /// The documentation note to print for an experimental feature.
-  public var experimentalDocNote: SwiftSyntax.Trivia {
-    let comment = experimentalFeature.map {
-      """
-      - Experiment: Requires experimental feature `\($0.token)`.
-      """
-    }
-    return SwiftSyntax.Trivia.docCommentTrivia(from: comment)
+  public var apiAttributes: AttributeListSyntax {
+    self.apiAttributes()
   }
 
   /// Construct the specification for a layout syntax node.

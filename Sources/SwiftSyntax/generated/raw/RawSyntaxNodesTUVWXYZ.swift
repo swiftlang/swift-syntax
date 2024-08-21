@@ -1411,11 +1411,17 @@ public struct RawTypeInitializerClauseSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawTypeSpecifierListSyntax: RawSyntaxNodeProtocol {
   public enum Element: RawSyntaxNodeProtocol {
+    /// A specifier that can be attached to a type to eg. mark a parameter as `inout` or `consuming`
     case simpleTypeSpecifier(RawSimpleTypeSpecifierSyntax)
+    /// A specifier that specifies function parameter on whose lifetime a type depends
+    /// - Note: Requires experimental feature `nonescapableTypes`.
+    #if compiler(>=5.8)
+    @_spi(ExperimentalLanguageFeatures)
+    #endif
     case lifetimeTypeSpecifier(RawLifetimeTypeSpecifierSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawSimpleTypeSpecifierSyntax.isKindOf(raw) || RawLifetimeTypeSpecifierSyntax.isKindOf(raw)
+      RawSimpleTypeSpecifierSyntax.isKindOf(raw) || RawLifetimeTypeSpecifierSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -1427,16 +1433,14 @@ public struct RawTypeSpecifierListSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawSimpleTypeSpecifierSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawSimpleTypeSpecifierSyntax.self) {
         self = .simpleTypeSpecifier(node)
-        return
-      }
-      if let node = RawLifetimeTypeSpecifierSyntax(other) {
+      } else if let node = node.as(RawLifetimeTypeSpecifierSyntax.self) {
         self = .lifetimeTypeSpecifier(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
   }
   
@@ -2522,7 +2526,7 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
     case single(RawExprSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawYieldedExpressionsClauseSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw)
+      RawYieldedExpressionsClauseSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -2534,16 +2538,14 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawYieldedExpressionsClauseSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawYieldedExpressionsClauseSyntax.self) {
         self = .multiple(node)
-        return
-      }
-      if let node = RawExprSyntax(other) {
+      } else if let node = node.as(RawExprSyntax.self) {
         self = .single(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public init(single: some RawExprSyntaxNodeProtocol) {

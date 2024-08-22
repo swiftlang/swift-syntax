@@ -143,6 +143,15 @@ final class AttributeTests: ParserTestCase {
     )
   }
 
+  func testSpecializeWithAvailability() {
+    assertParse(
+      """
+      @_specialize(exported: true, kind: full, availability: iOS, introduced: 15.4; where T == Swift.Int)
+      public func specializeWithAvailability<T>(_ t: T) { }
+      """
+    )
+  }
+
   func testObjCAttribute() {
     assertParse(
       """

@@ -717,7 +717,8 @@ extension IfConfigClauseSyntax {
   /// Determine whether the given expression, when used as the condition in
   /// an inactive `#if` clause, implies that syntax errors are permitted within
   /// that region.
-  static func syntaxErrorsAllowed(
+  @_spi(Compiler)
+  public static func syntaxErrorsAllowed(
     _ condition: some ExprSyntaxProtocol
   ) -> (syntaxErrorsAllowed: Bool, diagnostics: [Diagnostic]) {
     let (foldedCondition, foldingDiagnostics) = IfConfigClauseSyntax.foldOperators(condition)

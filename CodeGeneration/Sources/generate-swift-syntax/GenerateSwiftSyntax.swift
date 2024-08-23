@@ -129,6 +129,14 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxEnum.swift"], syntaxEnumFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxKind.swift"], syntaxKindFile),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxRewriter.swift"], syntaxRewriterFile()),
+      GeneratedFileSpec(
+        swiftSyntaxGeneratedDir + ["AsyncSyntaxRewriter.swift"],
+        syntaxRewriterFile(
+          className: "AsyncSyntaxRewriter",
+          functionEffectSpecifiers: "async",
+          functionCallOperators: "await"
+        )
+      ),
       GeneratedFileSpec(swiftSyntaxGeneratedDir + ["SyntaxTraits.swift"], syntaxTraitsFile),
       GeneratedFileSpec(
         swiftSyntaxGeneratedDir + ["SyntaxVisitor.swift"],

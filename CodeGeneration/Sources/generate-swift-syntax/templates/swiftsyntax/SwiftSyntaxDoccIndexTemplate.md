@@ -54,6 +54,7 @@ These articles are intended for developers wishing to contribute to SwiftSyntax
 - <doc:SwiftSyntax/SyntaxVisitor>
 - <doc:SwiftSyntax/SyntaxAnyVisitor>
 - <doc:SwiftSyntax/SyntaxRewriter>
+- <doc:SwiftSyntax/AsyncSyntaxRewriter>
 - <doc:SwiftSyntax/SyntaxTreeViewMode>
 - <doc:SwiftSyntax/SyntaxVisitorContinueKind>
 - <doc:SwiftSyntax/ReversedTokenSequence>

@@ -54,10 +54,10 @@ struct TestingBuildConfiguration: BuildConfiguration {
   }
 
   func canImport(
-    importPath: [String],
+    importPath: [(TokenSyntax, String)],
     version: CanImportVersion
   ) throws -> Bool {
-    guard let moduleName = importPath.first else {
+    guard let moduleName = importPath.first?.1 else {
       return false
     }
 

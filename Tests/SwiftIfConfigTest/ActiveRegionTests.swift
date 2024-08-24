@@ -49,7 +49,7 @@ public class ActiveRegionTests: XCTestCase {
         "2️⃣": .active,
         "3️⃣": .inactive,
         "4️⃣": .unparsed,
-        "5️⃣": .inactive,
+        "5️⃣": .unparsed,
         "6️⃣": .active,
       ]
     )
@@ -77,9 +77,11 @@ public class ActiveRegionTests: XCTestCase {
         "2️⃣": .active,
         "3️⃣": .inactive,
         "4️⃣": .unparsed,
-        "5️⃣": .inactive,
+        "5️⃣": .unparsed,
         "6️⃣": .active,
-      ]
+      ],
+      configuredRegionDescription:
+        "[[1:6 - 3:5] = active, [3:5 - 10:7] = inactive, [5:5 - 7:5] = unparsed, [7:5 - 9:5] = unparsed)]"
     )
   }
 
@@ -100,6 +102,25 @@ public class ActiveRegionTests: XCTestCase {
       ]
     )
   }
+
+  func testActiveRegionUnparsed() throws {
+    try assertActiveCode(
+      """
+      #if false
+       #if compiler(>=4.1)
+       1️⃣let _: Int = 1
+       #else
+        // There should be no error here.
+        2️⃣foo bar
+       #endif
+      #endif
+      """,
+      states: [
+        "1️⃣": .unparsed,
+        "2️⃣": .unparsed,
+      ]
+    )
+  }
 }
 
 /// Assert that the various marked positions in the source code have the
@@ -108,6 +129,7 @@ fileprivate func assertActiveCode(
   _ markedSource: String,
   configuration: some BuildConfiguration = TestingBuildConfiguration(),
   states: [String: IfConfigRegionState],
+  configuredRegionDescription: String? = nil,
   file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
@@ -133,7 +155,7 @@ fileprivate func assertActiveCode(
     let (actualState, _) = token.isActive(in: configuration)
     XCTAssertEqual(actualState, expectedState, "isActive(in:) at marker \(marker)", file: file, line: line)
 
-    let actualViaRegions = token.isActive(inConfiguredRegions: configuredRegions)
+    let actualViaRegions = configuredRegions.isActive(token)
     XCTAssertEqual(
       actualViaRegions,
       expectedState,
@@ -141,5 +163,15 @@ fileprivate func assertActiveCode(
       file: file,
       line: line
     )
+
+    if let configuredRegionDescription {
+      XCTAssertEqual(
+        configuredRegions.debugDescription,
+        configuredRegionDescription,
+        "configured region descsription",
+        file: file,
+        line: line
+      )
+    }
   }
 }

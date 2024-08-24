@@ -9,6 +9,7 @@
 // See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
+import SwiftSyntax
 
 /// Describes the ordering of a sequence of bytes that make up a word of
 /// storage for a particular architecture.
@@ -114,15 +115,15 @@ public protocol BuildConfiguration {
   /// information, which will translate into the `version` argument.
   ///
   /// - Parameters:
-  ///   - importPath: A nonempty sequence of identifiers describing the
-  ///     imported module, which was written in source as a dotted sequence,
-  ///     e.g., `UIKit.UIViewController` will be passed in as the import path
-  ///     array `["UIKit", "UIViewController"]`.
+  ///   - importPath: A nonempty sequence of (token, identifier) pairs
+  ///     describing the imported module, which was written in source as a
+  ///     dotted sequence, e.g., `UIKit.UIViewController` will be passed in as
+  ///     the import path array `[(token, "UIKit"), (token, "UIViewController")]`.
   ///   - version: The version restriction on the imported module. For the
   ///     normal `canImport(<import-path>)` syntax, this will always be
   ///     `CanImportVersion.unversioned`.
   /// - Returns: Whether the module can be imported.
-  func canImport(importPath: [String], version: CanImportVersion) throws -> Bool
+  func canImport(importPath: [(TokenSyntax, String)], version: CanImportVersion) throws -> Bool
 
   /// Determine whether the given name is the active target OS (e.g., Linux, iOS).
   ///

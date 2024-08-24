@@ -443,7 +443,7 @@ func evaluateIfConfig(
       }
 
       // Extract the import path.
-      let importPath: [String]
+      let importPath: [(TokenSyntax, String)]
       do {
         importPath = try extractImportPath(firstArg.expression)
       } catch {
@@ -502,7 +502,7 @@ func evaluateIfConfig(
       return checkConfiguration(at: call) {
         (
           active: try configuration.canImport(
-            importPath: importPath.map { String($0) },
+            importPath: importPath,
             version: version
           ),
           syntaxErrorsAllowed: fn.syntaxErrorsAllowed
@@ -540,22 +540,22 @@ extension SyntaxProtocol {
 }
 
 /// Given an expression with the expected form A.B.C, extract the import path
-/// ["A", "B", "C"] from it. Throws an error if the expression doesn't match
-/// this form.
-private func extractImportPath(_ expression: some ExprSyntaxProtocol) throws -> [String] {
+/// ["A", "B", "C"] from it with the token syntax nodes for each name.
+/// Throws an error if the expression doesn't match this form.
+private func extractImportPath(_ expression: some ExprSyntaxProtocol) throws -> [(TokenSyntax, String)] {
   // Member access.
   if let memberAccess = expression.as(MemberAccessExprSyntax.self),
     let base = memberAccess.base,
     let memberName = memberAccess.declName.simpleIdentifier?.name
   {
-    return try extractImportPath(base) + [memberName]
+    return try extractImportPath(base) + [(memberAccess.declName.baseName, memberName)]
   }
 
   // Declaration reference.
   if let declRef = expression.as(DeclReferenceExprSyntax.self),
     let name = declRef.simpleIdentifier?.name
   {
-    return [name]
+    return [(declRef.baseName, name)]
   }
 
   throw IfConfigDiagnostic.expectedModuleName(syntax: ExprSyntax(expression))
@@ -794,7 +794,7 @@ private struct CanImportSuppressingBuildConfiguration<Other: BuildConfiguration>
     return try other.hasAttribute(name: name)
   }
 
-  func canImport(importPath: [String], version: CanImportVersion) throws -> Bool {
+  func canImport(importPath: [(TokenSyntax, String)], version: CanImportVersion) throws -> Bool {
     return false
   }
 

@@ -82,20 +82,10 @@ extension SyntaxProtocol {
   /// If you are querying whether many syntax nodes in a particular file are
   /// active, consider calling `configuredRegions(in:)` once and using
   /// this function. For occasional queries, use `isActive(in:)`.
+  @available(*, deprecated, message: "Please use ConfiguredRegions.isActive(_:)")
   public func isActive(
-    inConfiguredRegions regions: [(IfConfigClauseSyntax, IfConfigRegionState)]
+    inConfiguredRegions regions: ConfiguredRegions
   ) -> IfConfigRegionState {
-    var currentState: IfConfigRegionState = .active
-    for (ifClause, state) in regions {
-      if self.position < ifClause.position {
-        return currentState
-      }
-
-      if self.position <= ifClause.endPosition {
-        currentState = state
-      }
-    }
-
-    return currentState
+    regions.isActive(self)
   }
 }

@@ -13,6 +13,63 @@
 import SwiftDiagnostics
 import SwiftSyntax
 
+/// Describes all of the #if/#elseif/#else clauses within the given syntax node,
+/// indicating their active state. This operation will recurse into all
+/// clauses to indicate regions of active / inactive / unparsed code.
+///
+/// For example, given code like the following:
+/// #if DEBUG
+///   #if A
+///     func f()
+///   #elseif B
+///     func g()
+///   #elseif compiler(>= 12.0)
+///   please print the number after 41
+///   #endif
+/// #else
+/// #endif
+///
+/// If the configuration options `DEBUG` and `B` are provided, but `A` is not,
+/// and the compiler version is less than 12.0, the results will be contain:
+///   - Active region for the `#if DEBUG`.
+///   - Inactive region for the `#if A`.
+///   - Active region for the `#elseif B`.
+///   - Unparsed region for the `#elseif compiler(>= 12.0)`.
+///   - Inactive region for the final `#else`.
+public struct ConfiguredRegions {
+  let regions: [Element]
+
+  /// The set of diagnostics produced when evaluating the configured regions.
+  public let diagnostics: [Diagnostic]
+
+  /// Determine whether the given syntax node is active within the configured
+  /// regions.
+  public func isActive(_ node: some SyntaxProtocol) -> IfConfigRegionState {
+    var currentState: IfConfigRegionState = .active
+    for (ifClause, state) in regions {
+      if node.position < ifClause.position {
+        return currentState
+      }
+
+      if node.position <= ifClause.endPosition {
+        currentState = state
+      }
+    }
+
+    return currentState
+  }
+}
+
+extension ConfiguredRegions: RandomAccessCollection {
+  public typealias Element = (IfConfigClauseSyntax, IfConfigRegionState)
+  public var startIndex: Int { regions.startIndex }
+  public var endIndex: Int { regions.endIndex }
+
+  public subscript(index: Int) -> Element {
+    regions[index]
+  }
+}
+
 extension SyntaxProtocol {
   /// Find all of the #if/#elseif/#else clauses within the given syntax node,
   /// indicating their active state. This operation will recurse into all
@@ -39,10 +96,13 @@ extension SyntaxProtocol {
   ///   - Inactive region for the final `#else`.
   public func configuredRegions(
     in configuration: some BuildConfiguration
-  ) -> [(IfConfigClauseSyntax, IfConfigRegionState)] {
+  ) -> ConfiguredRegions {
     let visitor = ConfiguredRegionVisitor(configuration: configuration)
     visitor.walk(self)
-    return visitor.regions
+    return ConfiguredRegions(
+      regions: visitor.regions,
+      diagnostics: visitor.diagnostics
+    )
   }
 }
 

@@ -56,57 +56,95 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
   /// Whether we are currently within an active region.
   var inActiveRegion = true
 
+  // All diagnostics encountered along the way.
+  var diagnostics: [Diagnostic] = []
+
   init(configuration: Configuration) {
     self.configuration = configuration
     super.init(viewMode: .sourceAccurate)
   }
 
   override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
-    // If we're in an active region, find the active clause. Otherwise,
-    // there isn't one.
-    let activeClause = inActiveRegion ? node.activeClause(in: configuration).clause : nil
+    // Walk through the clauses to find the active one.
     var foundActive = false
     var syntaxErrorsAllowed = false
     for clause in node.clauses {
-      // If we haven't found the active clause yet, syntax errors are allowed
-      // depending on this clause.
-      if !foundActive {
-        syntaxErrorsAllowed =
-          clause.condition.map {
-            IfConfigClauseSyntax.syntaxErrorsAllowed($0).syntaxErrorsAllowed
-          } ?? false
-      }
+      let isActive: Bool
+      if let condition = clause.condition {
+        if !foundActive {
+          // Fold operators so we can evaluate this #if condition.
+          let (foldedCondition, foldDiagnostics) = IfConfigClauseSyntax.foldOperators(condition)
+          diagnostics.append(contentsOf: foldDiagnostics)
 
-      // If this is the active clause, record it and then recurse into the
-      // elements.
-      if clause == activeClause {
-        assert(inActiveRegion)
+          // In an active region, evaluate the condition to determine whether
+          // this clause is active. Otherwise, this clause is inactive.
+          // inactive.
+          if inActiveRegion {
+            let (thisIsActive, _, evalDiagnostics) = evaluateIfConfig(
+              condition: foldedCondition,
+              configuration: configuration
+            )
+            diagnostics.append(contentsOf: evalDiagnostics)
 
-        regions.append((clause, .active))
+            // Determine if there was an error that prevented us from
+            // evaluating the condition. If so, we'll allow syntax errors
+            // from here on out.
+            let hadError =
+              foldDiagnostics.contains { diag in
+                diag.diagMessage.severity == .error
+              }
+              || evalDiagnostics.contains { diag in
+                diag.diagMessage.severity == .error
+              }
 
-        if let elements = clause.elements {
-          walk(elements)
+            if hadError {
+              isActive = false
+              syntaxErrorsAllowed = true
+            } else {
+              isActive = thisIsActive
+
+              // Determine whether syntax errors are allowed.
+              syntaxErrorsAllowed = foldedCondition.allowsSyntaxErrorsFolded
+            }
+          } else {
+            isActive = false
+
+            // Determine whether syntax errors are allowed, even though we
+            // skipped evaluation of the actual condition.
+            syntaxErrorsAllowed = foldedCondition.allowsSyntaxErrorsFolded
+          }
+        } else {
+          // We already found an active condition, so this is inactive.
+          isActive = false
         }
-
-        foundActive = true
-        continue
+      } else {
+        // This is an #else. It's active if we haven't found an active clause
+        // yet and are in an active region.
+        isActive = !foundActive && inActiveRegion
       }
 
-      // If this is within an active region, or this is an unparsed region,
-      // record it.
-      if inActiveRegion || syntaxErrorsAllowed {
-        regions.append((clause, syntaxErrorsAllowed ? .unparsed : .inactive))
+      // Determine and record the current state.
+      let currentState: IfConfigRegionState
+      switch (isActive, syntaxErrorsAllowed) {
+      case (true, _): currentState = .active
+      case (false, false): currentState = .inactive
+      case (false, true): currentState = .unparsed
       }
+      regions.append((clause, currentState))
 
-      // Recurse into inactive (but not unparsed) regions to find any
-      // unparsed regions below.
-      if !syntaxErrorsAllowed, let elements = clause.elements {
+      // If this is a parsed region, recurse into it.
+      if currentState != .unparsed, let elements = clause.elements {
         let priorInActiveRegion = inActiveRegion
-        inActiveRegion = false
+        inActiveRegion = isActive
         defer {
           inActiveRegion = priorInActiveRegion
         }
         walk(elements)
+      }
+
+      // Note when we found an active clause.
+      if isActive {
+        foundActive = true
       }
     }
 

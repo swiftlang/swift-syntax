@@ -49,7 +49,7 @@ public class ActiveRegionTests: XCTestCase {
         "2️⃣": .active,
         "3️⃣": .inactive,
         "4️⃣": .unparsed,
-        "5️⃣": .inactive,
+        "5️⃣": .unparsed,
         "6️⃣": .active,
       ]
     )
@@ -77,7 +77,7 @@ public class ActiveRegionTests: XCTestCase {
         "2️⃣": .active,
         "3️⃣": .inactive,
         "4️⃣": .unparsed,
-        "5️⃣": .inactive,
+        "5️⃣": .unparsed,
         "6️⃣": .active,
       ]
     )
@@ -97,6 +97,25 @@ public class ActiveRegionTests: XCTestCase {
       states: [
         "0️⃣": .unparsed,
         "1️⃣": .active,
+      ]
+    )
+  }
+
+  func testActiveRegionUnparsed() throws {
+    try assertActiveCode(
+      """
+      #if false
+       #if compiler(>=4.1)
+       1️⃣let _: Int = 1
+       #else
+        // There should be no error here.
+        2️⃣foo bar
+       #endif
+      #endif
+      """,
+      states: [
+        "1️⃣": .unparsed,
+        "2️⃣": .unparsed,
       ]
     )
   }

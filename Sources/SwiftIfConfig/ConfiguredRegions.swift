@@ -51,9 +51,7 @@ public struct ConfiguredRegions {
         return currentState
       }
 
-      let ifRegionStart =
-        ifClause.condition?.endPosition ?? ifClause.elements?._syntaxNode.position ?? ifClause.poundKeyword.endPosition
-      if node.position >= ifRegionStart && node.position <= ifClause.endPosition {
+      if node.position >= ifClause.regionStart && node.position <= ifClause.endPosition {
         currentState = state
       }
     }
@@ -69,6 +67,33 @@ extension ConfiguredRegions: RandomAccessCollection {
 
   public subscript(index: Int) -> Element {
     regions[index]
+  }
+}
+
+extension ConfiguredRegions: CustomDebugStringConvertible {
+  /// Provides source ranges for each of the configured regions.
+  public var debugDescription: String {
+    guard let firstRegion = first else {
+      return "[]"
+    }
+
+    let root = firstRegion.0.root
+    let converter = SourceLocationConverter(fileName: "", tree: root)
+    let regionDescriptions = regions.map { (ifClause, state) in
+      let startPosition = converter.location(for: ifClause.position)
+      let endPosition = converter.location(for: ifClause.endPosition)
+      return "[\(startPosition.line):\(startPosition.column) - \(endPosition.line):\(endPosition.column)] = \(state)"
+    }
+
+    return "[\(regionDescriptions.joined(separator: ", ")))]"
+  }
+}
+
+extension IfConfigClauseSyntax {
+  /// The effective start of the region after which code is subject to its
+  /// condition.
+  fileprivate var regionStart: AbsolutePosition {
+    condition?.endPosition ?? elements?._syntaxNode.position ?? poundKeyword.endPosition
   }
 }
 
@@ -118,6 +143,9 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
   /// Whether we are currently within an active region.
   var inActiveRegion = true
 
+  /// Whether we are currently within an #if at all.
+  var inAnyIfConfig = false
+
   // All diagnostics encountered along the way.
   var diagnostics: [Diagnostic] = []
 
@@ -127,9 +155,17 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
   }
 
   override func visit(_ node: IfConfigDeclSyntax) -> SyntaxVisitorContinueKind {
+    // We are in an #if.
+    let priorInAnyIfConfig = inAnyIfConfig
+    inAnyIfConfig = true
+    defer {
+      inAnyIfConfig = priorInAnyIfConfig
+    }
+
     // Walk through the clauses to find the active one.
     var foundActive = false
     var syntaxErrorsAllowed = false
+    let outerState: IfConfigRegionState = inActiveRegion ? .active : .inactive
     for clause in node.clauses {
       let isActive: Bool
       if let condition = clause.condition {
@@ -192,7 +228,11 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
       case (false, false): currentState = .inactive
       case (false, true): currentState = .unparsed
       }
-      regions.append((clause, currentState))
+
+      // If there is a state change, record it.
+      if !priorInAnyIfConfig || currentState != .inactive || currentState != outerState {
+        regions.append((clause, currentState))
+      }
 
       // If this is a parsed region, recurse into it.
       if currentState != .unparsed, let elements = clause.elements {

@@ -79,7 +79,9 @@ public class ActiveRegionTests: XCTestCase {
         "4️⃣": .unparsed,
         "5️⃣": .unparsed,
         "6️⃣": .active,
-      ]
+      ],
+      configuredRegionDescription:
+        "[[1:6 - 3:5] = active, [3:5 - 10:7] = inactive, [5:5 - 7:5] = unparsed, [7:5 - 9:5] = unparsed)]"
     )
   }
 
@@ -127,6 +129,7 @@ fileprivate func assertActiveCode(
   _ markedSource: String,
   configuration: some BuildConfiguration = TestingBuildConfiguration(),
   states: [String: IfConfigRegionState],
+  configuredRegionDescription: String? = nil,
   file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
@@ -152,7 +155,7 @@ fileprivate func assertActiveCode(
     let (actualState, _) = token.isActive(in: configuration)
     XCTAssertEqual(actualState, expectedState, "isActive(in:) at marker \(marker)", file: file, line: line)
 
-    let actualViaRegions = token.isActive(inConfiguredRegions: configuredRegions)
+    let actualViaRegions = configuredRegions.isActive(token)
     XCTAssertEqual(
       actualViaRegions,
       expectedState,
@@ -160,5 +163,15 @@ fileprivate func assertActiveCode(
       file: file,
       line: line
     )
+
+    if let configuredRegionDescription {
+      XCTAssertEqual(
+        configuredRegions.debugDescription,
+        configuredRegionDescription,
+        "configured region descsription",
+        file: file,
+        line: line
+      )
+    }
   }
 }

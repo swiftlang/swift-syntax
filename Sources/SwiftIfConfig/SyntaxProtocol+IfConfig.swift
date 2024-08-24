@@ -36,44 +36,16 @@ extension SyntaxProtocol {
   /// If the compiler version is smaller than 12.0, then `isActive` on any of the tokens within
   /// that `#elseif` block would return "unparsed", because that syntax should not (conceptually)
   /// be parsed.
+  ///
+  /// Note that this function requires processing all #ifs from the root node
+  /// of the syntax tree down to the current node. If performing more than a
+  /// small number of `isActive(_:)` queries, please form a `ConfiguredRegions`
+  /// instance and use `ConfiguredRegions.isActive(_:)` instead.
   public func isActive(
     in configuration: some BuildConfiguration
   ) -> (state: IfConfigRegionState, diagnostics: [Diagnostic]) {
-    var currentNode: Syntax = Syntax(self)
-    var currentState: IfConfigRegionState = .active
-    var diagnostics: [Diagnostic] = []
-
-    while let parent = currentNode.parent {
-      // If the parent is an `#if` configuration, check whether our current
-      // clause is active. If not, we're in an inactive region. We also
-      // need to determine whether an inactive region should be parsed or not.
-      if let ifConfigClause = currentNode.as(IfConfigClauseSyntax.self),
-        let ifConfigDecl = ifConfigClause.parent?.parent?.as(IfConfigDeclSyntax.self)
-      {
-        let (activeClause, localDiagnostics) = ifConfigDecl.activeClause(in: configuration)
-        diagnostics.append(contentsOf: localDiagnostics)
-
-        if activeClause != ifConfigClause {
-          // This was not the active clause, so we know that we're in an
-          // inactive block. If syntax errors aren't allowable, this is an
-          // unparsed region.
-          let syntaxErrorsAllowed =
-            ifConfigClause.condition.map {
-              IfConfigClauseSyntax.syntaxErrorsAllowed($0).syntaxErrorsAllowed
-            } ?? false
-
-          if syntaxErrorsAllowed {
-            return (.unparsed, diagnostics)
-          }
-
-          currentState = .inactive
-        }
-      }
-
-      currentNode = parent
-    }
-
-    return (currentState, diagnostics)
+    let configuredRegions = root.configuredRegions(in: configuration)
+    return (configuredRegions.isActive(self), configuredRegions.diagnostics)
   }
 
   /// Determine whether the given syntax node is active given a set of

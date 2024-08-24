@@ -51,7 +51,9 @@ public struct ConfiguredRegions {
         return currentState
       }
 
-      if node.position <= ifClause.endPosition {
+      let ifRegionStart =
+        ifClause.condition?.endPosition ?? ifClause.elements?._syntaxNode.position ?? ifClause.poundKeyword.endPosition
+      if node.position >= ifRegionStart && node.position <= ifClause.endPosition {
         currentState = state
       }
     }

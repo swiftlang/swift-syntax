@@ -245,24 +245,6 @@ extension UInt8 {
 }
 
 /// Allows direct comparisons between UInt8 and double quoted literals.
-extension UInt8 {
-  /// Equality operator
-  @_transparent
-  static func == (i: Self, s: Unicode.Scalar) -> Bool {
-    return i == UInt8(ascii: s)
-  }
-  /// Inequality operator
-  @_transparent
-  static func != (i: Self, s: Unicode.Scalar) -> Bool {
-    return i != UInt8(ascii: s)
-  }
-  /// Used in switch statements
-  @_transparent
-  static func ~= (s: Unicode.Scalar, i: Self) -> Bool {
-    return i == UInt8(ascii: s)
-  }
-}
-
 extension UInt8? {
   /// Equality operator
   @_transparent

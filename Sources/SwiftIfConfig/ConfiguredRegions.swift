@@ -44,19 +44,41 @@ public struct ConfiguredRegions {
 
   /// Determine whether the given syntax node is active within the configured
   /// regions.
+  ///
+  /// Any given node within the range of configured regions can either be
+  /// "active" (it is part of the program), "inactive" (it is not part of the
+  /// program), or "unparsed" (it is not part of the program and shouldn't
+  /// produce any syntax errors).
+  ///
+  /// This operation takes time that is logarthmic in the number of regions
+  /// in the syntax tree.
   public func isActive(_ node: some SyntaxProtocol) -> IfConfigRegionState {
-    var currentState: IfConfigRegionState = .active
-    for (ifClause, state) in regions {
-      if node.position < ifClause.position {
-        return currentState
+    // Find the slice of the regions in which this node lands.
+    var currentSlice = regions[...]
+    while !currentSlice.isEmpty {
+      let middle = currentSlice.startIndex + currentSlice.count / 2
+
+      // If the node is prior to the start of the middle, take the left-hand side.
+      if node.position < currentSlice[middle].0.regionStart {
+        currentSlice = currentSlice[..<middle]
+        continue
       }
 
-      if node.position >= ifClause.regionStart && node.position <= ifClause.endPosition {
-        currentState = state
+      // If the node is after the end of the middle, take the right-hand side.
+      if node.position > currentSlice[middle].0.endPosition {
+        currentSlice = currentSlice[(middle + 1)...]
+        continue
       }
+
+      // We cannot narrow the range any further.
+      break
     }
 
-    return currentState
+    // Find the last region in which this node lands. If there is no such
+    // region, this is active.
+    return currentSlice.last { region in
+      node.position >= region.0.regionStart && node.position <= region.0.endPosition
+    }?.1 ?? .active
   }
 }
 

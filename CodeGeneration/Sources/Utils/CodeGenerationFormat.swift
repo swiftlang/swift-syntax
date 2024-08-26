@@ -137,7 +137,8 @@ public class CodeGenerationFormat: BasicFormat {
     }
     decreaseIndentationLevel()
     if let lastChild = formattedChildren.last {
-      let nextTokenStartsWithNewline = lastChild.nextToken(viewMode: .sourceAccurate)?.leadingTrivia.first?.isNewline ?? false
+      let nextTokenStartsWithNewline =
+        lastChild.nextToken(viewMode: .sourceAccurate)?.leadingTrivia.first?.isNewline ?? false
       if !nextTokenStartsWithNewline {
         formattedChildren[formattedChildren.count - 1] = lastChild.with(
           \.trailingTrivia,

@@ -18,349 +18,349 @@
 @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 #endif
 
-private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
-  switch keyPath {
-  case \AccessorDeclSyntax.attributes:
+private func childNameForDiagnostics(_ property: SyntaxLayoutProperty) -> String? {
+  switch property {
+  case AccessorDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \AccessorDeclSyntax.modifier:
+  case AccessorDeclSyntax.layout[.modifier]:
     return "modifiers"
-  case \AccessorDeclSyntax.parameters:
+  case AccessorDeclSyntax.layout[.parameters]:
     return "parameter"
-  case \AccessorParametersSyntax.name:
+  case AccessorParametersSyntax.layout[.name]:
     return "name"
-  case \ActorDeclSyntax.attributes:
+  case ActorDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \ActorDeclSyntax.modifiers:
+  case ActorDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \ActorDeclSyntax.genericParameterClause:
+  case ActorDeclSyntax.layout[.genericParameterClause]:
     return "generic parameter clause"
-  case \ActorDeclSyntax.inheritanceClause:
+  case ActorDeclSyntax.layout[.inheritanceClause]:
     return "inheritance clause"
-  case \ActorDeclSyntax.genericWhereClause:
+  case ActorDeclSyntax.layout[.genericWhereClause]:
     return "generic where clause"
-  case \ArrayElementSyntax.expression:
+  case ArrayElementSyntax.layout[.expression]:
     return "value"
-  case \AssociatedTypeDeclSyntax.attributes:
+  case AssociatedTypeDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \AssociatedTypeDeclSyntax.modifiers:
+  case AssociatedTypeDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \AssociatedTypeDeclSyntax.inheritanceClause:
+  case AssociatedTypeDeclSyntax.layout[.inheritanceClause]:
     return "inheritance clause"
-  case \AssociatedTypeDeclSyntax.genericWhereClause:
+  case AssociatedTypeDeclSyntax.layout[.genericWhereClause]:
     return "generic where clause"
-  case \AttributeSyntax.attributeName:
+  case AttributeSyntax.layout[.attributeName]:
     return "name"
-  case \AvailabilityLabeledArgumentSyntax.label:
+  case AvailabilityLabeledArgumentSyntax.layout[.label]:
     return "label"
-  case \AvailabilityLabeledArgumentSyntax.value:
+  case AvailabilityLabeledArgumentSyntax.layout[.value]:
     return "value"
-  case \BreakStmtSyntax.label:
+  case BreakStmtSyntax.layout[.label]:
     return "label"
-  case \ClassDeclSyntax.attributes:
+  case ClassDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \ClassDeclSyntax.modifiers:
+  case ClassDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \ClassDeclSyntax.genericParameterClause:
+  case ClassDeclSyntax.layout[.genericParameterClause]:
     return "generic parameter clause"
-  case \ClassDeclSyntax.inheritanceClause:
+  case ClassDeclSyntax.layout[.inheritanceClause]:
     return "inheritance clause"
-  case \ClassDeclSyntax.genericWhereClause:
+  case ClassDeclSyntax.layout[.genericWhereClause]:
     return "generic where clause"
-  case \ClosureParameterClauseSyntax.parameters:
+  case ClosureParameterClauseSyntax.layout[.parameters]:
     return "parameters"
-  case \ClosureParameterSyntax.attributes:
+  case ClosureParameterSyntax.layout[.attributes]:
     return "attributes"
-  case \ClosureParameterSyntax.modifiers:
+  case ClosureParameterSyntax.layout[.modifiers]:
     return "modifiers"
-  case \ClosureParameterSyntax.type:
+  case ClosureParameterSyntax.layout[.type]:
     return "type"
-  case \ClosureShorthandParameterSyntax.name:
+  case ClosureShorthandParameterSyntax.layout[.name]:
     return "name"
-  case \ClosureSignatureSyntax.attributes:
+  case ClosureSignatureSyntax.layout[.attributes]:
     return "attributes"
-  case \CodeBlockSyntax.statements:
+  case CodeBlockSyntax.layout[.statements]:
     return "statements"
-  case \ContinueStmtSyntax.label:
+  case ContinueStmtSyntax.layout[.label]:
     return "label"
-  case \DeinitializerDeclSyntax.attributes:
+  case DeinitializerDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \DeinitializerDeclSyntax.modifiers:
+  case DeinitializerDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \DictionaryElementSyntax.key:
+  case DictionaryElementSyntax.layout[.key]:
     return "key"
-  case \DictionaryElementSyntax.value:
+  case DictionaryElementSyntax.layout[.value]:
     return "value"
-  case \DictionaryTypeSyntax.key:
+  case DictionaryTypeSyntax.layout[.key]:
     return "key type"
-  case \DictionaryTypeSyntax.value:
+  case DictionaryTypeSyntax.layout[.value]:
     return "value type"
-  case \DifferentiabilityWithRespectToArgumentSyntax.arguments:
+  case DifferentiabilityWithRespectToArgumentSyntax.layout[.arguments]:
     return "arguments"
-  case \DoExprSyntax.body:
+  case DoExprSyntax.layout[.body]:
     return "body"
-  case \DoStmtSyntax.body:
+  case DoStmtSyntax.layout[.body]:
     return "body"
-  case \DocumentationAttributeArgumentSyntax.label:
+  case DocumentationAttributeArgumentSyntax.layout[.label]:
     return "label"
-  case \EnumCaseDeclSyntax.attributes:
+  case EnumCaseDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \EnumCaseDeclSyntax.modifiers:
+  case EnumCaseDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \EnumCaseDeclSyntax.elements:
+  case EnumCaseDeclSyntax.layout[.elements]:
     return "elements"
-  case \EnumCaseElementSyntax.parameterClause:
+  case EnumCaseElementSyntax.layout[.parameterClause]:
     return "associated values"
-  case \EnumCaseParameterClauseSyntax.parameters:
+  case EnumCaseParameterClauseSyntax.layout[.parameters]:
     return "parameters"
-  case \EnumCaseParameterSyntax.modifiers:
+  case EnumCaseParameterSyntax.layout[.modifiers]:
     return "modifiers"
-  case \EnumCaseParameterSyntax.type:
+  case EnumCaseParameterSyntax.layout[.type]:
     return "type"
-  case \EnumCaseParameterSyntax.defaultValue:
+  case EnumCaseParameterSyntax.layout[.defaultValue]:
     return "default value"
-  case \EnumDeclSyntax.attributes:
+  case EnumDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \EnumDeclSyntax.modifiers:
+  case EnumDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \EnumDeclSyntax.genericParameterClause:
+  case EnumDeclSyntax.layout[.genericParameterClause]:
     return "generic parameter clause"
-  case \EnumDeclSyntax.inheritanceClause:
+  case EnumDeclSyntax.layout[.inheritanceClause]:
     return "inheritance clause"
-  case \EnumDeclSyntax.genericWhereClause:
+  case EnumDeclSyntax.layout[.genericWhereClause]:
     return "generic where clause"
-  case \ExtensionDeclSyntax.attributes:
+  case ExtensionDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \ExtensionDeclSyntax.modifiers:
+  case ExtensionDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \ExtensionDeclSyntax.inheritanceClause:
+  case ExtensionDeclSyntax.layout[.inheritanceClause]:
     return "inheritance clause"
-  case \ExtensionDeclSyntax.genericWhereClause:
+  case ExtensionDeclSyntax.layout[.genericWhereClause]:
     return "generic where clause"
-  case \ForStmtSyntax.body:
+  case ForStmtSyntax.layout[.body]:
     return "body"
-  case \FunctionCallExprSyntax.calledExpression:
+  case FunctionCallExprSyntax.layout[.calledExpression]:
     return "called expression"
-  case \FunctionCallExprSyntax.arguments:
+  case FunctionCallExprSyntax.layout[.arguments]:
     return "arguments"
-  case \FunctionCallExprSyntax.trailingClosure:
+  case FunctionCallExprSyntax.layout[.trailingClosure]:
     return "trailing closure"
-  case \FunctionCallExprSyntax.additionalTrailingClosures:
+  case FunctionCallExprSyntax.layout[.additionalTrailingClosures]:
     return "trailing closures"
-  case \FunctionDeclSyntax.attributes:
+  case FunctionDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \FunctionDeclSyntax.modifiers:
+  case FunctionDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \FunctionDeclSyntax.genericParameterClause:
+  case FunctionDeclSyntax.layout[.genericParameterClause]:
     return "generic parameter clause"
-  case \FunctionDeclSyntax.signature:
+  case FunctionDeclSyntax.layout[.signature]:
     return "function signature"
-  case \FunctionDeclSyntax.genericWhereClause:
+  case FunctionDeclSyntax.layout[.genericWhereClause]:
     return "generic where clause"
-  case \FunctionParameterClauseSyntax.parameters:
+  case FunctionParameterClauseSyntax.layout[.parameters]:
     return "parameters"
-  case \FunctionParameterSyntax.attributes:
+  case FunctionParameterSyntax.layout[.attributes]:
     return "attributes"
-  case \FunctionParameterSyntax.modifiers:
+  case FunctionParameterSyntax.layout[.modifiers]:
     return "modifiers"
-  case \FunctionParameterSyntax.secondName:
+  case FunctionParameterSyntax.layout[.secondName]:
     return "internal name"
-  case \FunctionParameterSyntax.type:
+  case FunctionParameterSyntax.layout[.type]:
     return "type"
-  case \FunctionParameterSyntax.defaultValue:
+  case FunctionParameterSyntax.layout[.defaultValue]:
     return "default value"
-  case \GenericParameterSyntax.specifier:
+  case GenericParameterSyntax.layout[.specifier]:
     return "specifier"
-  case \GenericParameterSyntax.name:
+  case GenericParameterSyntax.layout[.name]:
     return "name"
-  case \GenericParameterSyntax.inheritedType:
+  case GenericParameterSyntax.layout[.inheritedType]:
     return "inherited type"
-  case \GuardStmtSyntax.conditions:
+  case GuardStmtSyntax.layout[.conditions]:
     return "condition"
-  case \GuardStmtSyntax.body:
+  case GuardStmtSyntax.layout[.body]:
     return "body"
-  case \IfConfigClauseSyntax.condition:
+  case IfConfigClauseSyntax.layout[.condition]:
     return "condition"
-  case \IfExprSyntax.body:
+  case IfExprSyntax.layout[.body]:
     return "body"
-  case \IfExprSyntax.elseBody:
+  case IfExprSyntax.layout[.elseBody]:
     return "else body"
-  case \ImplementsAttributeArgumentsSyntax.type:
+  case ImplementsAttributeArgumentsSyntax.layout[.type]:
     return "type"
-  case \ImplementsAttributeArgumentsSyntax.declName:
+  case ImplementsAttributeArgumentsSyntax.layout[.declName]:
     return "declaration name"
-  case \ImportDeclSyntax.attributes:
+  case ImportDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \ImportDeclSyntax.modifiers:
+  case ImportDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \ImportPathComponentSyntax.name:
+  case ImportPathComponentSyntax.layout[.name]:
     return "name"
-  case \InitializerDeclSyntax.attributes:
+  case InitializerDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \InitializerDeclSyntax.modifiers:
+  case InitializerDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \InitializerDeclSyntax.genericParameterClause:
+  case InitializerDeclSyntax.layout[.genericParameterClause]:
     return "generic parameter clause"
-  case \InitializerDeclSyntax.signature:
+  case InitializerDeclSyntax.layout[.signature]:
     return "function signature"
-  case \InitializerDeclSyntax.genericWhereClause:
+  case InitializerDeclSyntax.layout[.genericWhereClause]:
     return "generic where clause"
-  case \KeyPathExprSyntax.root:
+  case KeyPathExprSyntax.layout[.root]:
     return "root"
-  case \KeyPathSubscriptComponentSyntax.arguments:
+  case KeyPathSubscriptComponentSyntax.layout[.arguments]:
     return "arguments"
-  case \LabeledExprSyntax.label:
+  case LabeledExprSyntax.layout[.label]:
     return "label"
-  case \LabeledExprSyntax.expression:
+  case LabeledExprSyntax.layout[.expression]:
     return "value"
-  case \LabeledSpecializeArgumentSyntax.label:
+  case LabeledSpecializeArgumentSyntax.layout[.label]:
     return "label"
-  case \LabeledSpecializeArgumentSyntax.value:
+  case LabeledSpecializeArgumentSyntax.layout[.value]:
     return "value"
-  case \LabeledStmtSyntax.label:
+  case LabeledStmtSyntax.layout[.label]:
     return "label name"
-  case \LayoutRequirementSyntax.type:
+  case LayoutRequirementSyntax.layout[.type]:
     return "constrained type"
-  case \LayoutRequirementSyntax.size:
+  case LayoutRequirementSyntax.layout[.size]:
     return "size"
-  case \LayoutRequirementSyntax.alignment:
+  case LayoutRequirementSyntax.layout[.alignment]:
     return "alignment"
-  case \LifetimeSpecifierArgumentSyntax.parameter:
+  case LifetimeSpecifierArgumentSyntax.layout[.parameter]:
     return "parameter reference"
-  case \MacroDeclSyntax.attributes:
+  case MacroDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \MacroDeclSyntax.modifiers:
+  case MacroDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \MacroDeclSyntax.genericParameterClause:
+  case MacroDeclSyntax.layout[.genericParameterClause]:
     return "generic parameter clause"
-  case \MacroDeclSyntax.signature:
+  case MacroDeclSyntax.layout[.signature]:
     return "macro signature"
-  case \MacroDeclSyntax.definition:
+  case MacroDeclSyntax.layout[.definition]:
     return "macro definition"
-  case \MacroDeclSyntax.genericWhereClause:
+  case MacroDeclSyntax.layout[.genericWhereClause]:
     return "generic where clause"
-  case \MacroExpansionDeclSyntax.attributes:
+  case MacroExpansionDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \MacroExpansionDeclSyntax.modifiers:
+  case MacroExpansionDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \MemberAccessExprSyntax.base:
+  case MemberAccessExprSyntax.layout[.base]:
     return "base"
-  case \MemberAccessExprSyntax.declName:
+  case MemberAccessExprSyntax.layout[.declName]:
     return "name"
-  case \MemberTypeSyntax.baseType:
+  case MemberTypeSyntax.layout[.baseType]:
     return "base type"
-  case \MemberTypeSyntax.name:
+  case MemberTypeSyntax.layout[.name]:
     return "name"
-  case \MetatypeTypeSyntax.baseType:
+  case MetatypeTypeSyntax.layout[.baseType]:
     return "base type"
-  case \MultipleTrailingClosureElementSyntax.label:
+  case MultipleTrailingClosureElementSyntax.layout[.label]:
     return "label"
-  case \ObjCSelectorPieceSyntax.name:
+  case ObjCSelectorPieceSyntax.layout[.name]:
     return "name"
-  case \OperatorDeclSyntax.fixitySpecifier:
+  case OperatorDeclSyntax.layout[.fixitySpecifier]:
     return "fixity"
-  case \OperatorPrecedenceAndTypesSyntax.precedenceGroup:
+  case OperatorPrecedenceAndTypesSyntax.layout[.precedenceGroup]:
     return "precedence group"
-  case \PatternBindingSyntax.typeAnnotation:
+  case PatternBindingSyntax.layout[.typeAnnotation]:
     return "type annotation"
-  case \PlatformVersionSyntax.platform:
+  case PlatformVersionSyntax.layout[.platform]:
     return "platform"
-  case \PlatformVersionSyntax.version:
+  case PlatformVersionSyntax.layout[.version]:
     return "version"
-  case \PoundSourceLocationArgumentsSyntax.fileName:
+  case PoundSourceLocationArgumentsSyntax.layout[.fileName]:
     return "file name"
-  case \PoundSourceLocationArgumentsSyntax.lineNumber:
+  case PoundSourceLocationArgumentsSyntax.layout[.lineNumber]:
     return "line number"
-  case \PoundSourceLocationSyntax.arguments:
+  case PoundSourceLocationSyntax.layout[.arguments]:
     return "arguments"
-  case \PrecedenceGroupDeclSyntax.attributes:
+  case PrecedenceGroupDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \PrecedenceGroupDeclSyntax.modifiers:
+  case PrecedenceGroupDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \PrecedenceGroupNameSyntax.name:
+  case PrecedenceGroupNameSyntax.layout[.name]:
     return "name"
-  case \PrimaryAssociatedTypeSyntax.name:
+  case PrimaryAssociatedTypeSyntax.layout[.name]:
     return "name"
-  case \ProtocolDeclSyntax.attributes:
+  case ProtocolDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \ProtocolDeclSyntax.modifiers:
+  case ProtocolDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \ProtocolDeclSyntax.primaryAssociatedTypeClause:
+  case ProtocolDeclSyntax.layout[.primaryAssociatedTypeClause]:
     return "primary associated type clause"
-  case \ProtocolDeclSyntax.inheritanceClause:
+  case ProtocolDeclSyntax.layout[.inheritanceClause]:
     return "inheritance clause"
-  case \ProtocolDeclSyntax.genericWhereClause:
+  case ProtocolDeclSyntax.layout[.genericWhereClause]:
     return "generic where clause"
-  case \RepeatStmtSyntax.body:
+  case RepeatStmtSyntax.layout[.body]:
     return "body"
-  case \RepeatStmtSyntax.condition:
+  case RepeatStmtSyntax.layout[.condition]:
     return "condition"
-  case \ReturnClauseSyntax.type:
+  case ReturnClauseSyntax.layout[.type]:
     return "return type"
-  case \SameTypeRequirementSyntax.leftType:
+  case SameTypeRequirementSyntax.layout[.leftType]:
     return "left-hand type"
-  case \SameTypeRequirementSyntax.rightType:
+  case SameTypeRequirementSyntax.layout[.rightType]:
     return "right-hand type"
-  case \SpecializeAvailabilityArgumentSyntax.availabilityLabel:
+  case SpecializeAvailabilityArgumentSyntax.layout[.availabilityLabel]:
     return "label"
-  case \SpecializeTargetFunctionArgumentSyntax.targetLabel:
+  case SpecializeTargetFunctionArgumentSyntax.layout[.targetLabel]:
     return "label"
-  case \SpecializeTargetFunctionArgumentSyntax.declName:
+  case SpecializeTargetFunctionArgumentSyntax.layout[.declName]:
     return "declaration name"
-  case \StructDeclSyntax.attributes:
+  case StructDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \StructDeclSyntax.modifiers:
+  case StructDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \StructDeclSyntax.genericParameterClause:
+  case StructDeclSyntax.layout[.genericParameterClause]:
     return "generic parameter clause"
-  case \StructDeclSyntax.inheritanceClause:
+  case StructDeclSyntax.layout[.inheritanceClause]:
     return "inheritance clause"
-  case \StructDeclSyntax.genericWhereClause:
+  case StructDeclSyntax.layout[.genericWhereClause]:
     return "generic where clause"
-  case \SubscriptCallExprSyntax.calledExpression:
+  case SubscriptCallExprSyntax.layout[.calledExpression]:
     return "called expression"
-  case \SubscriptCallExprSyntax.arguments:
+  case SubscriptCallExprSyntax.layout[.arguments]:
     return "arguments"
-  case \SubscriptCallExprSyntax.trailingClosure:
+  case SubscriptCallExprSyntax.layout[.trailingClosure]:
     return "trailing closure"
-  case \SubscriptCallExprSyntax.additionalTrailingClosures:
+  case SubscriptCallExprSyntax.layout[.additionalTrailingClosures]:
     return "trailing closures"
-  case \SubscriptDeclSyntax.attributes:
+  case SubscriptDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \SubscriptDeclSyntax.modifiers:
+  case SubscriptDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \SubscriptDeclSyntax.genericParameterClause:
+  case SubscriptDeclSyntax.layout[.genericParameterClause]:
     return "generic parameter clause"
-  case \SubscriptDeclSyntax.genericWhereClause:
+  case SubscriptDeclSyntax.layout[.genericWhereClause]:
     return "generic where clause"
-  case \SwitchCaseSyntax.label:
+  case SwitchCaseSyntax.layout[.label]:
     return "label"
-  case \TernaryExprSyntax.condition:
+  case TernaryExprSyntax.layout[.condition]:
     return "condition"
-  case \TernaryExprSyntax.thenExpression:
+  case TernaryExprSyntax.layout[.thenExpression]:
     return "first choice"
-  case \TernaryExprSyntax.elseExpression:
+  case TernaryExprSyntax.layout[.elseExpression]:
     return "second choice"
-  case \ThrowsClauseSyntax.type:
+  case ThrowsClauseSyntax.layout[.type]:
     return "thrown type"
-  case \TuplePatternElementSyntax.label:
+  case TuplePatternElementSyntax.layout[.label]:
     return "label"
-  case \TupleTypeElementSyntax.firstName:
+  case TupleTypeElementSyntax.layout[.firstName]:
     return "name"
-  case \TupleTypeElementSyntax.secondName:
+  case TupleTypeElementSyntax.layout[.secondName]:
     return "internal name"
-  case \TypeAliasDeclSyntax.attributes:
+  case TypeAliasDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \TypeAliasDeclSyntax.modifiers:
+  case TypeAliasDeclSyntax.layout[.modifiers]:
     return "modifiers"
-  case \TypeAliasDeclSyntax.genericParameterClause:
+  case TypeAliasDeclSyntax.layout[.genericParameterClause]:
     return "generic parameter clause"
-  case \TypeAliasDeclSyntax.genericWhereClause:
+  case TypeAliasDeclSyntax.layout[.genericWhereClause]:
     return "generic where clause"
-  case \TypeInitializerClauseSyntax.value:
+  case TypeInitializerClauseSyntax.layout[.value]:
     return "type"
-  case \VariableDeclSyntax.attributes:
+  case VariableDeclSyntax.layout[.attributes]:
     return "attributes"
-  case \VariableDeclSyntax.modifiers:
+  case VariableDeclSyntax.layout[.modifiers]:
     return "modifiers"
   default:
     return nil
@@ -369,9 +369,9 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
 
 extension SyntaxProtocol {
   var childNameInParent: String? {
-    guard let keyPath = self.keyPathInParent else {
+    guard let property = self.propertyInParent else {
       return nil
     }
-    return childNameForDiagnostics(keyPath)
+    return childNameForDiagnostics(property)
   }
 }

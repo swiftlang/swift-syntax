@@ -188,39 +188,40 @@ open class BasicFormat: SyntaxRewriter {
 
   /// Whether a leading newline on `token` should be added.
   open func requiresIndent(_ node: some SyntaxProtocol) -> Bool {
-    guard let keyPath = node.keyPathInParent else {
+
+    guard let property = node.propertyInParent else {
       return false
     }
-    switch keyPath {
-    case \AccessorBlockSyntax.accessors:
+    switch property {
+    case AccessorBlockSyntax.layout[.accessors]:
       return true
-    case \ArrayExprSyntax.elements:
+    case ArrayExprSyntax.layout[.elements]:
       return true
-    case \ClosureExprSyntax.statements:
+    case ClosureExprSyntax.layout[.statements]:
       return true
-    case \ClosureParameterClauseSyntax.parameters:
+    case ClosureParameterClauseSyntax.layout[.parameters]:
       return true
-    case \CodeBlockSyntax.statements:
+    case CodeBlockSyntax.layout[.statements]:
       return true
-    case \DictionaryElementSyntax.value:
+    case DictionaryElementSyntax.layout[.value]:
       return true
-    case \DictionaryExprSyntax.content:
+    case DictionaryExprSyntax.layout[.content]:
       return true
-    case \EnumCaseParameterClauseSyntax.parameters:
+    case EnumCaseParameterClauseSyntax.layout[.parameters]:
       return true
-    case \FunctionCallExprSyntax.arguments:
+    case FunctionCallExprSyntax.layout[.arguments]:
       return true
-    case \FunctionTypeSyntax.parameters:
+    case FunctionTypeSyntax.layout[.parameters]:
       return true
-    case \MemberDeclBlockSyntax.members:
+    case MemberBlockSyntax.layout[.members]:
       return true
-    case \ParameterClauseSyntax.parameters:
+    case FunctionParameterClauseSyntax.layout[.parameters]:
       return true
-    case \SwitchCaseSyntax.statements:
+    case SwitchCaseSyntax.layout[.statements]:
       return true
-    case \TupleExprSyntax.elements:
+    case TupleExprSyntax.layout[.elements]:
       return true
-    case \TupleTypeSyntax.elements:
+    case TupleTypeSyntax.layout[.elements]:
       return true
     default:
       return false
@@ -234,17 +235,17 @@ open class BasicFormat: SyntaxRewriter {
   /// as a closure or if it gets interpreted as the statements body. We should
   /// thus be conservative and not add a newline after the `{` in `BasicFormat`.
   private func isLeftBraceOfClosureInStmtConditionExpr(_ token: TokenSyntax?) -> Bool {
-    guard let token, token.keyPathInParent == \ClosureExprSyntax.leftBrace else {
+    guard let token, token.propertyInParent == ClosureExprSyntax.layout[.leftBrace] else {
       return false
     }
     return token.ancestorOrSelf(mapping: {
-      switch $0.keyPathInParent {
-      case \CatchItemSyntax.pattern,
-        \ConditionElementSyntax.condition,
-        \ExpressionPatternSyntax.expression,
-        \ForStmtSyntax.sequence,
-        \ForStmtSyntax.whereClause,
-        \SwitchExprSyntax.subject:
+      switch $0.propertyInParent {
+      case CatchItemSyntax.layout[.pattern],
+        ConditionElementSyntax.layout[.condition],
+        ExpressionPatternSyntax.layout[.expression],
+        ForStmtSyntax.layout[.sequence],
+        ForStmtSyntax.layout[.whereClause],
+        SwitchExprSyntax.layout[.subject]:
         return $0
       default:
         return nil
@@ -275,11 +276,8 @@ open class BasicFormat: SyntaxRewriter {
         if let ancestorsParent = ancestor.parent, childrenSeparatedByNewline(ancestorsParent) {
           return true
         }
-        switch ancestor.keyPathInParent {
-        case \IfConfigClauseSyntax.elements:
+        if ancestor.propertyInParent == IfConfigClauseSyntax.layout[.elements] {
           return true
-        default:
-          break
         }
       }
     }
@@ -363,9 +361,9 @@ open class BasicFormat: SyntaxRewriter {
       (nil, _):
       return false
     case (_, .colon):
-      switch second?.keyPathInParent {
-      case \TernaryExprSyntax.colon,
-        \UnresolvedTernaryExprSyntax.colon:
+      switch second?.propertyInParent {
+      case TernaryExprSyntax.layout[.colon],
+        UnresolvedTernaryExprSyntax.layout[.colon]:
         break
       default:
         return false
@@ -377,12 +375,12 @@ open class BasicFormat: SyntaxRewriter {
       // `<` and `>` need to be separated by a space because otherwise they become an operator
       return false
     case (_, .leftParen):
-      switch second?.keyPathInParent {
-      case \ClosureParameterClauseSyntax.leftParen,
-        \FunctionTypeSyntax.leftParen,
-        \TupleExprSyntax.leftParen,
-        \TuplePatternSyntax.leftParen,
-        \TupleTypeSyntax.leftParen:
+      switch second?.propertyInParent {
+      case ClosureParameterClauseSyntax.layout[.leftParen],
+        FunctionTypeSyntax.layout[.leftParen],
+        TupleExprSyntax.layout[.leftParen],
+        TuplePatternSyntax.layout[.leftParen],
+        TupleTypeSyntax.layout[.leftParen]:
         break
       default:
         return false
@@ -392,13 +390,13 @@ open class BasicFormat: SyntaxRewriter {
       break
     }
 
-    switch first?.keyPathInParent {
-    case \ExpressionSegmentSyntax.backslash,
-      \ExpressionSegmentSyntax.rightParen,
-      \DeclNameArgumentSyntax.colon,
-      \SimpleStringLiteralExprSyntax.openingQuote,
-      \StringLiteralExprSyntax.openingQuote,
-      \RegexLiteralExprSyntax.openingSlash:
+    switch first?.propertyInParent {
+    case ExpressionSegmentSyntax.layout[.backslash],
+      ExpressionSegmentSyntax.layout[.rightParen],
+      DeclNameArgumentSyntax.layout[.colon],
+      SimpleStringLiteralExprSyntax.layout[.openingQuote],
+      StringLiteralExprSyntax.layout[.openingQuote],
+      RegexLiteralExprSyntax.layout[.openingSlash]:
       return false
     default:
       break

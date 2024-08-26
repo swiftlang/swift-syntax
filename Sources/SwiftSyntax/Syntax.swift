@@ -390,7 +390,7 @@ extension Syntax {
 ///
 /// This can be used for handling Syntax node without ARC traffic.
 struct UnownedSyntax {
-  private let raw: RawSyntax
+  let raw: RawSyntax
   private let info: Unmanaged<Syntax.Info>
 
   @_transparent

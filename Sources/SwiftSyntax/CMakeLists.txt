@@ -30,6 +30,7 @@ add_swift_syntax_library(SwiftSyntax
   SyntaxCollection.swift
   SyntaxHashable.swift
   SyntaxIdentifier.swift
+  SyntaxLayout.swift
   SyntaxNodeFactory.swift
   SyntaxNodeStructure.swift
   SyntaxProtocol.swift
@@ -57,7 +58,7 @@ add_swift_syntax_library(SwiftSyntax
   generated/raw/RawSyntaxNodesTUVWXYZ.swift
   generated/raw/RawSyntaxValidation.swift
 
-  generated/ChildNameForKeyPath.swift
+  generated/ConcreteSyntaxProperty.swift
   generated/Keyword.swift
   generated/RenamedChildrenCompatibility.swift
   generated/RenamedNodesCompatibility.swift
@@ -66,6 +67,7 @@ add_swift_syntax_library(SwiftSyntax
   generated/SyntaxCollections.swift
   generated/SyntaxEnum.swift
   generated/SyntaxKind.swift
+  generated/SyntaxLayoutNodes.swift
   generated/SyntaxRewriter.swift
   generated/SyntaxTraits.swift
   generated/SyntaxVisitor.swift

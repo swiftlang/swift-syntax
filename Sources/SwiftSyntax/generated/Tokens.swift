@@ -23,7 +23,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -37,7 +36,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -51,7 +49,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -65,7 +62,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -74,14 +70,12 @@ extension TokenSyntax {
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
-    
   ) -> TokenSyntax {
     return TokenSyntax(
       .binaryOperator(text),
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -95,7 +89,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -109,7 +102,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -118,14 +110,12 @@ extension TokenSyntax {
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
-    
   ) -> TokenSyntax {
     return TokenSyntax(
       .dollarIdentifier(text),
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -139,7 +129,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -153,7 +142,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -167,7 +155,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -181,7 +168,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -190,14 +176,12 @@ extension TokenSyntax {
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
-    
   ) -> TokenSyntax {
     return TokenSyntax(
       .floatLiteral(text),
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -206,14 +190,12 @@ extension TokenSyntax {
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
-    
   ) -> TokenSyntax {
     return TokenSyntax(
       .identifier(text),
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -227,7 +209,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -236,14 +217,12 @@ extension TokenSyntax {
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
-    
   ) -> TokenSyntax {
     return TokenSyntax(
       .integerLiteral(text),
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -252,14 +231,12 @@ extension TokenSyntax {
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
-    
   ) -> TokenSyntax {
     return TokenSyntax(
       .keyword(value),
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -273,7 +250,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -287,7 +263,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -301,7 +276,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -315,7 +289,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -329,7 +302,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -343,7 +315,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -352,14 +323,12 @@ extension TokenSyntax {
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
-    
   ) -> TokenSyntax {
     return TokenSyntax(
       .postfixOperator(text),
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -373,7 +342,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -387,7 +355,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -401,7 +368,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -415,7 +381,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -429,7 +394,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -443,7 +407,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -457,7 +420,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -471,7 +433,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -485,7 +446,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -499,7 +459,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -508,14 +467,12 @@ extension TokenSyntax {
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
-    
   ) -> TokenSyntax {
     return TokenSyntax(
       .prefixOperator(text),
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -524,14 +481,12 @@ extension TokenSyntax {
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
-    
   ) -> TokenSyntax {
     return TokenSyntax(
       .rawStringPoundDelimiter(text),
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -540,14 +495,12 @@ extension TokenSyntax {
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
-    
   ) -> TokenSyntax {
     return TokenSyntax(
       .regexLiteralPattern(text),
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -556,14 +509,12 @@ extension TokenSyntax {
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
-    
   ) -> TokenSyntax {
     return TokenSyntax(
       .regexPoundDelimiter(text),
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -577,7 +528,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -591,7 +541,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -605,7 +554,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -619,7 +567,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -633,7 +580,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -647,7 +593,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -656,14 +601,12 @@ extension TokenSyntax {
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
-    
   ) -> TokenSyntax {
     return TokenSyntax(
       .shebang(text),
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -677,7 +620,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -691,7 +633,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -700,14 +641,12 @@ extension TokenSyntax {
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
-    
   ) -> TokenSyntax {
     return TokenSyntax(
       .stringSegment(text),
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -716,14 +655,12 @@ extension TokenSyntax {
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
     presence: SourcePresence = .present
-    
   ) -> TokenSyntax {
     return TokenSyntax(
       .unknown(text),
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
   
@@ -737,7 +674,6 @@ extension TokenSyntax {
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence
-      
     )
   }
 }

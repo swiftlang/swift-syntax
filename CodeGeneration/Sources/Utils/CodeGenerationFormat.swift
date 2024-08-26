@@ -136,11 +136,15 @@ public class CodeGenerationFormat: BasicFormat {
       }
     }
     decreaseIndentationLevel()
-    if !formattedChildren.isEmpty {
-      formattedChildren[formattedChildren.count - 1] = formattedChildren[formattedChildren.count - 1].with(
-        \.trailingTrivia,
-        indentedNewline
-      )
+    if let lastChild = formattedChildren.last {
+      let nextTokenStartsWithNewline =
+        lastChild.nextToken(viewMode: .sourceAccurate)?.leadingTrivia.first?.isNewline ?? false
+      if !nextTokenStartsWithNewline {
+        formattedChildren[formattedChildren.count - 1] = lastChild.with(
+          \.trailingTrivia,
+          indentedNewline
+        )
+      }
     }
     return formattedChildren
   }

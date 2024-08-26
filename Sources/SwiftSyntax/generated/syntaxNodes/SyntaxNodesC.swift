@@ -48,7 +48,6 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -84,7 +83,6 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -253,7 +251,6 @@ public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       version: VersionTupleSyntax,
       _ unexpectedAfterVersion: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -285,7 +282,6 @@ public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -430,7 +426,6 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
       body: CodeBlockSyntax,
       _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -458,7 +453,6 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -602,7 +596,6 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -630,7 +623,6 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -790,7 +782,6 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       memberBlock: MemberBlockSyntax,
       _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -838,7 +829,6 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -1112,7 +1102,6 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _L
       classKeyword: TokenSyntax = .keyword(.class),
       _ unexpectedAfterClassKeyword: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -1124,7 +1113,6 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _L
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -1197,7 +1185,6 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
       rightSquare: TokenSyntax = .rightSquareToken(),
       _ unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -1225,7 +1212,6 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -1375,7 +1361,6 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Le
       rightParen: TokenSyntax? = nil,
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -1407,7 +1392,6 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Le
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -1560,7 +1544,6 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -1592,7 +1575,6 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -1741,7 +1723,6 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       rightBrace: TokenSyntax = .rightBraceToken(),
       _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -1773,7 +1754,6 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -1943,7 +1923,6 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       rightParen: TokenSyntax = .rightParenToken(),
       _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -1971,7 +1950,6 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -2144,7 +2122,6 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -2192,7 +2169,6 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -2487,7 +2463,6 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable, _
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -2511,7 +2486,6 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable, _
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -2704,7 +2678,6 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       inKeyword: TokenSyntax = .keyword(.in),
       _ unexpectedAfterInKeyword: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -2744,7 +2717,6 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -3064,7 +3036,6 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
       semicolon: TokenSyntax? = nil,
       _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -3088,7 +3059,6 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -3202,7 +3172,6 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       rightBrace: TokenSyntax = .rightBraceToken(),
       _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -3230,7 +3199,6 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -3378,7 +3346,6 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       ampersand: TokenSyntax? = nil,
       _ unexpectedAfterAmpersand: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -3402,7 +3369,6 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -3486,7 +3452,6 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
       elements: CompositionTypeElementListSyntax,
       _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -3498,7 +3463,6 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -3745,7 +3709,6 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       trailingComma: TokenSyntax? = nil,
       _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -3769,7 +3732,6 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -3866,7 +3828,6 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       rightType: some TypeSyntaxProtocol,
       _ unexpectedAfterRightType: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -3894,7 +3855,6 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -4004,7 +3964,6 @@ public struct ConsumeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -4028,7 +3987,6 @@ public struct ConsumeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -4120,7 +4078,6 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtS
       label: TokenSyntax? = nil,
       _ unexpectedAfterLabel: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -4144,7 +4101,6 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtS
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -4253,7 +4209,6 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       cTypeString: StringLiteralExprSyntax? = nil,
       _ unexpectedAfterCTypeString: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -4289,7 +4244,6 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -4462,7 +4416,6 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
       protocolName: TokenSyntax,
       _ unexpectedAfterProtocolName: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -4490,7 +4443,6 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
@@ -4612,7 +4564,6 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
       expression: some ExprSyntaxProtocol,
       _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
       trailingTrivia: Trivia? = nil
-    
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -4636,7 +4587,6 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
         arena: arena,
         leadingTrivia: leadingTrivia,
         trailingTrivia: trailingTrivia
-        
       )
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }

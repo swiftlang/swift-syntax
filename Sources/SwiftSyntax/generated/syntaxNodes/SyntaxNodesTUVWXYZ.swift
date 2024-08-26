@@ -32,7 +32,7 @@
 ///  - `thenExpression`: ``ExprSyntax``
 ///  - `colon`: `:`
 ///  - `elseExpression`: ``ExprSyntax``
-public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
+public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -209,6 +209,10 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .ternaryExpr
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeCondition,
     \Self.condition,
@@ -243,7 +247,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
 #if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
 #endif
-public struct ThenStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
+public struct ThenStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -345,6 +349,10 @@ public struct ThenStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynta
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .thenStmt
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeThenKeyword,
     \Self.thenKeyword,
@@ -360,7 +368,7 @@ public struct ThenStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynta
 /// 
 ///  - `throwKeyword`: `throw`
 ///  - `expression`: ``ExprSyntax``
-public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
+public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -462,6 +470,10 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .throwStmt
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeThrowKeyword,
     \Self.throwKeyword,
@@ -486,7 +498,7 @@ public struct ThrowStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 ///  - ``DoStmtSyntax``.``DoStmtSyntax/throwsClause``
 ///  - ``FunctionEffectSpecifiersSyntax``.``FunctionEffectSpecifiersSyntax/throwsClause``
 ///  - ``TypeEffectSpecifiersSyntax``.``TypeEffectSpecifiersSyntax/throwsClause``
-public struct ThrowsClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+public struct ThrowsClauseSyntax: SyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -655,6 +667,10 @@ public struct ThrowsClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .throwsClause
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeThrowsSpecifier,
     \Self.throwsSpecifier,
@@ -691,7 +707,7 @@ public struct ThrowsClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
 ///  - `tryKeyword`: `try`
 ///  - `questionOrExclamationMark`: (`?` | `!`)?
 ///  - `expression`: ``ExprSyntax``
-public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
+public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -822,6 +838,10 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntax
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .tryExpr
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeTryKeyword,
     \Self.tryKeyword,
@@ -840,7 +860,7 @@ public struct TryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntax
 ///  - `leftParen`: `(`
 ///  - `elements`: ``LabeledExprListSyntax``
 ///  - `rightParen`: `)`
-public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
+public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -996,6 +1016,10 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .tupleExpr
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeLeftParen,
     \Self.leftParen,
@@ -1021,7 +1045,7 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
 /// ### Contained in
 /// 
 ///  - ``TuplePatternElementListSyntax``
-public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -1188,6 +1212,10 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .tuplePatternElement
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeLabel,
     \Self.label,
@@ -1219,7 +1247,7 @@ public struct TuplePatternElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 ///  - `leftParen`: `(`
 ///  - `elements`: ``TuplePatternElementListSyntax``
 ///  - `rightParen`: `)`
-public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
+public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -1381,6 +1409,10 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPa
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .tuplePattern
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeLeftParen,
     \Self.leftParen,
@@ -1407,7 +1439,7 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPa
 /// ### Contained in
 /// 
 ///  - ``TupleTypeElementListSyntax``
-public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -1648,6 +1680,10 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .tupleTypeElement
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeInoutKeyword,
     \Self.inoutKeyword,
@@ -1674,7 +1710,7 @@ public struct TupleTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
 ///  - `leftParen`: `(`
 ///  - `elements`: ``TupleTypeElementListSyntax``
 ///  - `rightParen`: `)`
-public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
+public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -1830,6 +1866,10 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSynt
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .tupleType
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeLeftParen,
     \Self.leftParen,
@@ -1852,7 +1892,7 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSynt
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `initializer`: ``TypeInitializerClauseSyntax``
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
-public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
+public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -2135,6 +2175,10 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .typeAliasDecl
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeAttributes,
     \Self.attributes,
@@ -2167,7 +2211,7 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
 ///  - ``MatchingPatternConditionSyntax``.``MatchingPatternConditionSyntax/typeAnnotation``
 ///  - ``OptionalBindingConditionSyntax``.``OptionalBindingConditionSyntax/typeAnnotation``
 ///  - ``PatternBindingSyntax``.``PatternBindingSyntax/typeAnnotation``
-public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -2272,6 +2316,10 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .typeAnnotation
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeColon,
     \Self.colon,
@@ -2293,7 +2341,7 @@ public struct TypeAnnotationSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
 ///  - ``ArrowExprSyntax``.``ArrowExprSyntax/effectSpecifiers``
 ///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/effectSpecifiers``
 ///  - ``FunctionTypeSyntax``.``FunctionTypeSyntax/effectSpecifiers``
-public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -2397,6 +2445,10 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .typeEffectSpecifiers
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeAsyncSpecifier,
     \Self.asyncSpecifier,
@@ -2411,7 +2463,7 @@ public struct TypeEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
 /// ### Children
 /// 
 ///  - `type`: ``TypeSyntax``
-public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
+public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -2478,6 +2530,10 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .typeExpr
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeType, \Self.type, \Self.unexpectedAfterType])
 }
 
@@ -2492,7 +2548,7 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
 /// 
 ///  - ``AssociatedTypeDeclSyntax``.``AssociatedTypeDeclSyntax/initializer``
 ///  - ``TypeAliasDeclSyntax``.``TypeAliasDeclSyntax/initializer``
-public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -2594,6 +2650,10 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .typeInitializerClause
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeEqual,
     \Self.equal,
@@ -2616,7 +2676,7 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
 /// ### Contained in
 /// 
 ///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
-public struct UnavailableFromAsyncAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+public struct UnavailableFromAsyncAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -2745,6 +2805,10 @@ public struct UnavailableFromAsyncAttributeArgumentsSyntax: SyntaxProtocol, Synt
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .unavailableFromAsyncAttributeArguments
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeMessageLabel,
     \Self.messageLabel,
@@ -2769,7 +2833,7 @@ public struct UnavailableFromAsyncAttributeArgumentsSyntax: SyntaxProtocol, Synt
 /// ### Contained in
 /// 
 ///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
-public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -2898,6 +2962,10 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .underscorePrivateAttributeArguments
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeSourceFileLabel,
     \Self.sourceFileLabel,
@@ -2920,7 +2988,7 @@ public struct UnderscorePrivateAttributeArgumentsSyntax: SyntaxProtocol, SyntaxH
 /// 
 ///  - `asKeyword`: `as`
 ///  - `questionOrExclamationMark`: (`?` | `!`)?
-public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
+public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -3027,6 +3095,10 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .unresolvedAsExpr
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeAsKeyword,
     \Self.asKeyword,
@@ -3046,7 +3118,7 @@ public struct UnresolvedAsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
 /// ### Children
 /// 
 ///  - `isKeyword`: `is`
-public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
+public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -3116,6 +3188,10 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .unresolvedIsExpr
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeIsKeyword, \Self.isKeyword, \Self.unexpectedAfterIsKeyword])
 }
 
@@ -3132,7 +3208,7 @@ public struct UnresolvedIsExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
 ///  - `questionMark`: `?`
 ///  - `thenExpression`: ``ExprSyntax``
 ///  - `colon`: `:`
-public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
+public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -3261,6 +3337,10 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .unresolvedTernaryExpr
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeQuestionMark,
     \Self.questionMark,
@@ -3283,7 +3363,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
 #if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
 #endif
-public struct UnsafeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
+public struct UnsafeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -3385,6 +3465,10 @@ public struct UnsafeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyn
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .unsafeExpr
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeUnsafeKeyword,
     \Self.unsafeKeyword,
@@ -3400,7 +3484,7 @@ public struct UnsafeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyn
 /// 
 ///  - `bindingSpecifier`: (`let` | `var` | `inout` | `_mutating` | `_borrowing` | `_consuming` | `borrowing`)
 ///  - `pattern`: ``PatternSyntax``
-public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
+public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -3509,6 +3593,10 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, 
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .valueBindingPattern
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeBindingSpecifier,
     \Self.bindingSpecifier,
@@ -3531,7 +3619,7 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, 
 ///  - `modifiers`: ``DeclModifierListSyntax``
 ///  - `bindingSpecifier`: (`let` | `var` | `inout` | `_mutating` | `_borrowing` | `_consuming`)
 ///  - `bindings`: ``PatternBindingListSyntax``
-public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
+public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -3785,6 +3873,10 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .variableDecl
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeAttributes,
     \Self.attributes,
@@ -3810,7 +3902,7 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
 /// ### Contained in
 /// 
 ///  - ``VersionComponentListSyntax``
-public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -3921,6 +4013,10 @@ public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .versionComponent
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforePeriod,
     \Self.period,
@@ -3944,7 +4040,7 @@ public struct VersionComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
 ///  - ``AvailabilityLabeledArgumentSyntax``.``AvailabilityLabeledArgumentSyntax/value``
 ///  - `_CanImportVersionInfoSyntax`.`_CanImportVersionInfoSyntax/version`
 ///  - ``PlatformVersionSyntax``.``PlatformVersionSyntax/version``
-public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -4078,6 +4174,10 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .versionTuple
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeMajor,
     \Self.major,
@@ -4099,7 +4199,7 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
 ///  - ``CatchItemSyntax``.``CatchItemSyntax/whereClause``
 ///  - ``ForStmtSyntax``.``ForStmtSyntax/whereClause``
 ///  - ``SwitchCaseItemSyntax``.``SwitchCaseItemSyntax/whereClause``
-public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -4201,6 +4301,10 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .whereClause
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeWhereKeyword,
     \Self.whereKeyword,
@@ -4217,7 +4321,7 @@ public struct WhereClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
 ///  - `whileKeyword`: `while`
 ///  - `conditions`: ``ConditionElementListSyntax``
 ///  - `body`: ``CodeBlockSyntax``
-public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
+public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -4370,6 +4474,10 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .whileStmt
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeWhileKeyword,
     \Self.whileKeyword,
@@ -4399,7 +4507,7 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 /// ### Children
 /// 
 ///  - `wildcard`: `_`
-public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPatternSyntaxNodeProtocol {
+public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -4469,6 +4577,10 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _Lea
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .wildcardPattern
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeWildcard, \Self.wildcard, \Self.unexpectedAfterWildcard])
 }
 
@@ -4478,7 +4590,7 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _Lea
 /// 
 ///  - `yieldKeyword`: `yield`
 ///  - `yieldedExpressions`: (``YieldedExpressionsClauseSyntax`` | ``ExprSyntax``)
-public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
+public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public enum YieldedExpressions: SyntaxChildChoices, SyntaxHashable {
     case multiple(YieldedExpressionsClauseSyntax)
     case single(ExprSyntax)
@@ -4660,6 +4772,10 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .yieldStmt
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeYieldKeyword,
     \Self.yieldKeyword,
@@ -4679,7 +4795,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 /// ### Contained in
 /// 
 ///  - ``YieldedExpressionListSyntax``
-public struct YieldedExpressionSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+public struct YieldedExpressionSyntax: SyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -4781,6 +4897,10 @@ public struct YieldedExpressionSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
   }
 
+  public static var syntaxKind: SyntaxKind {
+    .yieldedExpression
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeExpression,
     \Self.expression,
@@ -4801,7 +4921,7 @@ public struct YieldedExpressionSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 /// ### Contained in
 /// 
 ///  - ``YieldStmtSyntax``.``YieldStmtSyntax/yieldedExpressions``
-public struct YieldedExpressionsClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+public struct YieldedExpressionsClauseSyntax: SyntaxProtocol, SyntaxHashable, _LayoutSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -4955,6 +5075,10 @@ public struct YieldedExpressionsClauseSyntax: SyntaxProtocol, SyntaxHashable, _L
     set(value) {
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(YieldedExpressionsClauseSyntax.self)
     }
+  }
+
+  public static var syntaxKind: SyntaxKind {
+    .yieldedExpressionsClause
   }
 
   public static let structure: SyntaxNodeStructure = .layout([

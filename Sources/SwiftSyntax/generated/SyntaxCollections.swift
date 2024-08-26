@@ -36,7 +36,9 @@ public struct AccessorDeclListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.accessorDeclList
+  public static var syntaxKind: SyntaxKind {
+    .accessorDeclList
+  }
 }
 
 /// ### Children
@@ -63,7 +65,9 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.arrayElementList
+  public static var syntaxKind: SyntaxKind {
+    .arrayElementList
+  }
 }
 
 /// A list of attributes that can be attached to a declaration.
@@ -208,7 +212,9 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.attributeList
+  public static var syntaxKind: SyntaxKind {
+    .attributeList
+  }
 }
 
 /// ### Children
@@ -237,7 +243,9 @@ public struct AvailabilityArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.availabilityArgumentList
+  public static var syntaxKind: SyntaxKind {
+    .availabilityArgumentList
+  }
 }
 
 /// ### Children
@@ -264,7 +272,9 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.catchClauseList
+  public static var syntaxKind: SyntaxKind {
+    .catchClauseList
+  }
 }
 
 /// ### Children
@@ -291,7 +301,9 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.catchItemList
+  public static var syntaxKind: SyntaxKind {
+    .catchItemList
+  }
 }
 
 /// ### Children
@@ -318,7 +330,9 @@ public struct ClosureCaptureListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.closureCaptureList
+  public static var syntaxKind: SyntaxKind {
+    .closureCaptureList
+  }
 }
 
 /// ### Children
@@ -345,7 +359,9 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.closureParameterList
+  public static var syntaxKind: SyntaxKind {
+    .closureParameterList
+  }
 }
 
 /// A list of closure parameters that are not parenthesized and don't have type annotations.
@@ -385,7 +401,9 @@ public struct ClosureShorthandParameterListSyntax: SyntaxCollection, SyntaxHasha
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.closureShorthandParameterList
+  public static var syntaxKind: SyntaxKind {
+    .closureShorthandParameterList
+  }
 }
 
 /// ### Children
@@ -417,7 +435,9 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.codeBlockItemList
+  public static var syntaxKind: SyntaxKind {
+    .codeBlockItemList
+  }
 }
 
 /// ### Children
@@ -444,7 +464,9 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.compositionTypeElementList
+  public static var syntaxKind: SyntaxKind {
+    .compositionTypeElementList
+  }
 }
 
 /// ### Children
@@ -473,7 +495,9 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.conditionElementList
+  public static var syntaxKind: SyntaxKind {
+    .conditionElementList
+  }
 }
 
 /// ### Children
@@ -522,7 +546,9 @@ public struct DeclModifierListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.declModifierList
+  public static var syntaxKind: SyntaxKind {
+    .declModifierList
+  }
 }
 
 /// ### Children
@@ -549,7 +575,9 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.declNameArgumentList
+  public static var syntaxKind: SyntaxKind {
+    .declNameArgumentList
+  }
 }
 
 /// ### Children
@@ -576,7 +604,9 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.designatedTypeList
+  public static var syntaxKind: SyntaxKind {
+    .designatedTypeList
+  }
 }
 
 /// ### Children
@@ -603,7 +633,9 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.dictionaryElementList
+  public static var syntaxKind: SyntaxKind {
+    .dictionaryElementList
+  }
 }
 
 /// ### Children
@@ -630,7 +662,9 @@ public struct DifferentiabilityArgumentListSyntax: SyntaxCollection, SyntaxHasha
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.differentiabilityArgumentList
+  public static var syntaxKind: SyntaxKind {
+    .differentiabilityArgumentList
+  }
 }
 
 /// The arguments of the '@_documentation' attribute
@@ -659,7 +693,9 @@ public struct DocumentationAttributeArgumentListSyntax: SyntaxCollection, Syntax
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.documentationAttributeArgumentList
+  public static var syntaxKind: SyntaxKind {
+    .documentationAttributeArgumentList
+  }
 }
 
 /// The arguments of the '@_effects' attribute. These will be parsed during the SIL stage.
@@ -688,7 +724,9 @@ public struct EffectsAttributeArgumentListSyntax: SyntaxCollection, SyntaxHashab
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.effectsAttributeArgumentList
+  public static var syntaxKind: SyntaxKind {
+    .effectsAttributeArgumentList
+  }
 }
 
 /// A collection of 0 or more ``EnumCaseElementSyntax``s.
@@ -717,7 +755,9 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.enumCaseElementList
+  public static var syntaxKind: SyntaxKind {
+    .enumCaseElementList
+  }
 }
 
 /// ### Children
@@ -744,7 +784,9 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.enumCaseParameterList
+  public static var syntaxKind: SyntaxKind {
+    .enumCaseParameterList
+  }
 }
 
 /// A list of expressions connected by operators. This list is contained by a ``SequenceExprSyntax``.
@@ -773,7 +815,9 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.exprList
+  public static var syntaxKind: SyntaxKind {
+    .exprList
+  }
 }
 
 /// A list of function parameters that are type annotated and a label.
@@ -811,7 +855,9 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.functionParameterList
+  public static var syntaxKind: SyntaxKind {
+    .functionParameterList
+  }
 }
 
 /// ### Children
@@ -838,7 +884,9 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.genericArgumentList
+  public static var syntaxKind: SyntaxKind {
+    .genericArgumentList
+  }
 }
 
 /// ### Children
@@ -865,7 +913,9 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.genericParameterList
+  public static var syntaxKind: SyntaxKind {
+    .genericParameterList
+  }
 }
 
 /// ### Children
@@ -892,7 +942,9 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.genericRequirementList
+  public static var syntaxKind: SyntaxKind {
+    .genericRequirementList
+  }
 }
 
 /// ### Children
@@ -919,7 +971,9 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.ifConfigClauseList
+  public static var syntaxKind: SyntaxKind {
+    .ifConfigClauseList
+  }
 }
 
 /// ### Children
@@ -946,7 +1000,9 @@ public struct ImportPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.importPathComponentList
+  public static var syntaxKind: SyntaxKind {
+    .importPathComponentList
+  }
 }
 
 /// ### Children
@@ -973,7 +1029,9 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.inheritedTypeList
+  public static var syntaxKind: SyntaxKind {
+    .inheritedTypeList
+  }
 }
 
 /// The components of a key path
@@ -1002,7 +1060,9 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.keyPathComponentList
+  public static var syntaxKind: SyntaxKind {
+    .keyPathComponentList
+  }
 }
 
 /// ### Children
@@ -1036,7 +1096,9 @@ public struct LabeledExprListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.labeledExprList
+  public static var syntaxKind: SyntaxKind {
+    .labeledExprList
+  }
 }
 
 /// - Note: Requires experimental feature `nonescapableTypes`.
@@ -1064,7 +1126,9 @@ public struct LifetimeSpecifierArgumentListSyntax: SyntaxCollection, SyntaxHasha
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.lifetimeSpecifierArgumentList
+  public static var syntaxKind: SyntaxKind {
+    .lifetimeSpecifierArgumentList
+  }
 }
 
 /// ### Children
@@ -1092,7 +1156,9 @@ public struct MemberBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.memberBlockItemList
+  public static var syntaxKind: SyntaxKind {
+    .memberBlockItemList
+  }
 }
 
 /// ### Children
@@ -1122,7 +1188,9 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.multipleTrailingClosureElementList
+  public static var syntaxKind: SyntaxKind {
+    .multipleTrailingClosureElementList
+  }
 }
 
 /// ### Children
@@ -1149,7 +1217,9 @@ public struct ObjCSelectorPieceListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.objCSelectorPieceList
+  public static var syntaxKind: SyntaxKind {
+    .objCSelectorPieceList
+  }
 }
 
 /// ### Children
@@ -1176,7 +1246,9 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.patternBindingList
+  public static var syntaxKind: SyntaxKind {
+    .patternBindingList
+  }
 }
 
 /// ### Children
@@ -1204,7 +1276,9 @@ public struct PlatformVersionItemListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.platformVersionItemList
+  public static var syntaxKind: SyntaxKind {
+    .platformVersionItemList
+  }
 }
 
 /// ### Children
@@ -1343,7 +1417,9 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.precedenceGroupAttributeList
+  public static var syntaxKind: SyntaxKind {
+    .precedenceGroupAttributeList
+  }
 }
 
 /// ### Children
@@ -1370,7 +1446,9 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.precedenceGroupNameList
+  public static var syntaxKind: SyntaxKind {
+    .precedenceGroupNameList
+  }
 }
 
 /// ### Children
@@ -1397,7 +1475,9 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.primaryAssociatedTypeList
+  public static var syntaxKind: SyntaxKind {
+    .primaryAssociatedTypeList
+  }
 }
 
 /// String literal segments that only can contain non string interpolated or extended escaped strings
@@ -1426,7 +1506,9 @@ public struct SimpleStringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHash
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.simpleStringLiteralSegmentList
+  public static var syntaxKind: SyntaxKind {
+    .simpleStringLiteralSegmentList
+  }
 }
 
 /// A collection of arguments for the `@_specialize` attribute
@@ -1604,7 +1686,9 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.specializeAttributeArgumentList
+  public static var syntaxKind: SyntaxKind {
+    .specializeAttributeArgumentList
+  }
 }
 
 /// ### Children
@@ -1715,7 +1799,9 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.stringLiteralSegmentList
+  public static var syntaxKind: SyntaxKind {
+    .stringLiteralSegmentList
+  }
 }
 
 /// ### Children
@@ -1742,7 +1828,9 @@ public struct SwitchCaseItemListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.switchCaseItemList
+  public static var syntaxKind: SyntaxKind {
+    .switchCaseItemList
+  }
 }
 
 /// ### Children
@@ -1848,7 +1936,9 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.switchCaseList
+  public static var syntaxKind: SyntaxKind {
+    .switchCaseList
+  }
 }
 
 /// A list of ``TuplePatternElementSyntax``.
@@ -1877,7 +1967,9 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.tuplePatternElementList
+  public static var syntaxKind: SyntaxKind {
+    .tuplePatternElementList
+  }
 }
 
 /// ### Children
@@ -1905,7 +1997,9 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.tupleTypeElementList
+  public static var syntaxKind: SyntaxKind {
+    .tupleTypeElementList
+  }
 }
 
 /// ### Children
@@ -2032,7 +2126,9 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.typeSpecifierList
+  public static var syntaxKind: SyntaxKind {
+    .typeSpecifierList
+  }
 }
 
 /// A collection of syntax nodes that occurred in the source code but could not be used to form a valid syntax tree.
@@ -2057,7 +2153,9 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.unexpectedNodes
+  public static var syntaxKind: SyntaxKind {
+    .unexpectedNodes
+  }
 }
 
 /// ### Children
@@ -2084,7 +2182,9 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.versionComponentList
+  public static var syntaxKind: SyntaxKind {
+    .versionComponentList
+  }
 }
 
 /// ### Children
@@ -2111,5 +2211,7 @@ public struct YieldedExpressionListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node
   }
 
-  public static let syntaxKind = SyntaxKind.yieldedExpressionList
+  public static var syntaxKind: SyntaxKind {
+    .yieldedExpressionList
+  }
 }

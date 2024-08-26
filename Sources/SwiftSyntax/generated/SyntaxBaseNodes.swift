@@ -268,14 +268,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 }
 
-/// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
-/// These are syntax nodes that are not considered base nodes for other syntax types.
-///
-/// Syntax nodes conforming to this protocol have their inherited casting methods
-/// deprecated to prevent incorrect casting.
-public protocol _LeafDeclSyntaxNodeProtocol: DeclSyntaxProtocol {}
-
-extension _LeafDeclSyntaxNodeProtocol {
+extension _LeafSyntaxNodeProtocol where Self: DeclSyntaxProtocol {
   /// Checks if the current leaf syntax node can be cast to a different specified type.
   ///
   /// - Returns: `false` since the leaf node cannot be cast to a different specified type.
@@ -625,14 +618,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 }
 
-/// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
-/// These are syntax nodes that are not considered base nodes for other syntax types.
-///
-/// Syntax nodes conforming to this protocol have their inherited casting methods
-/// deprecated to prevent incorrect casting.
-public protocol _LeafExprSyntaxNodeProtocol: ExprSyntaxProtocol {}
-
-extension _LeafExprSyntaxNodeProtocol {
+extension _LeafSyntaxNodeProtocol where Self: ExprSyntaxProtocol {
   /// Checks if the current leaf syntax node can be cast to a different specified type.
   ///
   /// - Returns: `false` since the leaf node cannot be cast to a different specified type.
@@ -892,14 +878,7 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   }
 }
 
-/// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
-/// These are syntax nodes that are not considered base nodes for other syntax types.
-///
-/// Syntax nodes conforming to this protocol have their inherited casting methods
-/// deprecated to prevent incorrect casting.
-public protocol _LeafPatternSyntaxNodeProtocol: PatternSyntaxProtocol {}
-
-extension _LeafPatternSyntaxNodeProtocol {
+extension _LeafSyntaxNodeProtocol where Self: PatternSyntaxProtocol {
   /// Checks if the current leaf syntax node can be cast to a different specified type.
   ///
   /// - Returns: `false` since the leaf node cannot be cast to a different specified type.
@@ -1178,14 +1157,7 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
 }
 
-/// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
-/// These are syntax nodes that are not considered base nodes for other syntax types.
-///
-/// Syntax nodes conforming to this protocol have their inherited casting methods
-/// deprecated to prevent incorrect casting.
-public protocol _LeafStmtSyntaxNodeProtocol: StmtSyntaxProtocol {}
-
-extension _LeafStmtSyntaxNodeProtocol {
+extension _LeafSyntaxNodeProtocol where Self: StmtSyntaxProtocol {
   /// Checks if the current leaf syntax node can be cast to a different specified type.
   ///
   /// - Returns: `false` since the leaf node cannot be cast to a different specified type.
@@ -1467,14 +1439,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   }
 }
 
-/// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
-/// These are syntax nodes that are not considered base nodes for other syntax types.
-///
-/// Syntax nodes conforming to this protocol have their inherited casting methods
-/// deprecated to prevent incorrect casting.
-public protocol _LeafTypeSyntaxNodeProtocol: TypeSyntaxProtocol {}
-
-extension _LeafTypeSyntaxNodeProtocol {
+extension _LeafSyntaxNodeProtocol where Self: TypeSyntaxProtocol {
   /// Checks if the current leaf syntax node can be cast to a different specified type.
   ///
   /// - Returns: `false` since the leaf node cannot be cast to a different specified type.
@@ -1807,14 +1772,7 @@ extension Syntax {
   }
 }
 
-/// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
-/// These are syntax nodes that are not considered base nodes for other syntax types.
-///
-/// Syntax nodes conforming to this protocol have their inherited casting methods
-/// deprecated to prevent incorrect casting.
-public protocol _LeafSyntaxNodeProtocol: SyntaxProtocol {}
-
-extension _LeafSyntaxNodeProtocol {
+extension _LeafSyntaxNodeProtocol where Self: SyntaxProtocol {
   /// Checks if the current leaf syntax node can be cast to a different specified type.
   ///
   /// - Returns: `false` since the leaf node cannot be cast to a different specified type.

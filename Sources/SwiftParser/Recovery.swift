@@ -123,13 +123,33 @@ extension Parser.Lookahead {
       if currentTokenPrecedence >= recoveryPrecedence {
         break
       }
-      self.consumeAnyToken()
       if let closingDelimiter = currentTokenPrecedence.closingTokenKind {
         let closingDelimiterSpec = TokenSpec(closingDelimiter)
+        let canCloseAtSameLine: Int? = self.withLookahead { lookahead in
+          var tokensToSkip = 0
+          while !lookahead.at(.endOfFile), !lookahead.currentToken.isAtStartOfLine {
+            tokensToSkip += 1
+            if lookahead.at(closingDelimiterSpec) {
+              return tokensToSkip
+            } else {
+              lookahead.consumeAnyToken()
+            }
+          }
+          return nil
+        }
+        if let tokensToSkip = canCloseAtSameLine {
+          for _ in 0..<tokensToSkip {
+            self.consumeAnyToken()
+          }
+          continue
+        }
+        self.consumeAnyToken()
         guard self.canRecoverTo(closingDelimiterSpec) != nil else {
-          break
+          continue
         }
         self.eat(closingDelimiterSpec)
+      } else {
+        self.consumeAnyToken()
       }
     }
 

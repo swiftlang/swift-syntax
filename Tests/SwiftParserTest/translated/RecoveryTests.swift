@@ -1838,44 +1838,31 @@ final class RecoveryTests: ParserTestCase {
   func testRecovery100() {
     assertParse(
       """
-      struct ErrorInFunctionSignatureResultArrayType1 1️⃣{
-        func foo() -> Int2️⃣[ {
-          return [0]
-        }3️⃣  
-        func bar() -> Int4️⃣] {
+      struct ErrorInFunctionSignatureResultArrayType1 {
+        func foo() -> Int1️⃣[ {
           return [0]
         }
-      5️⃣}
+        func bar() -> Int2️⃣] {
+          return [0]
+        }
+      }
       """,
       diagnostics: [
         DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "unexpected code '[' in function"
+        ),
+        DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "expected '}' to end struct",
-          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '{'")],
-          fixIts: ["insert '}'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "3️⃣",
-          message: "expected ']' to end array",
-          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '['")],
-          fixIts: ["insert ']'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "4️⃣",
           message: "unexpected ']' in type; did you mean to write an array type?",
           fixIts: ["insert '['"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "5️⃣",
-          message: "extraneous brace at top level"
         ),
       ],
       fixedSource: """
         struct ErrorInFunctionSignatureResultArrayType1 {
-          func foo() -> Int
-        }[ {
+          func foo() -> Int[ {
             return [0]
-          }]
+          }
           func bar() -> [Int] {
             return [0]
           }
@@ -1887,45 +1874,15 @@ final class RecoveryTests: ParserTestCase {
   func testRecovery101() {
     assertParse(
       """
-      struct ErrorInFunctionSignatureResultArrayType2 1️⃣{
-        func foo() -> Int2️⃣[03️⃣ {
+      struct ErrorInFunctionSignatureResultArrayType2 {
+        func foo() -> Int1️⃣[0 {
           return [0]
-        }4️⃣
-      5️⃣}
+        }
+      }
       """,
       diagnostics: [
-        // TODO: Old parser expected error to add `]` on line 2, but we should just recover to
-        //       `{` with `[0` becoming unexpected.
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "expected '}' to end struct",
-          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '{'")],
-          fixIts: ["insert '}'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "3️⃣",
-          message: "expected ',' in array element",
-          fixIts: ["insert ','"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "4️⃣",
-          message: "expected ']' to end array",
-          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '['")],
-          fixIts: ["insert ']'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "5️⃣",
-          message: "extraneous brace at top level"
-        ),
-      ],
-      fixedSource: """
-        struct ErrorInFunctionSignatureResultArrayType2 {
-          func foo() -> Int
-        }[0, {
-            return [0]
-          }]
-        }
-        """
+        DiagnosticSpec(message: "unexpected code '[0' in function")
+      ]
     )
   }
 
@@ -1977,37 +1934,14 @@ final class RecoveryTests: ParserTestCase {
   func testRecovery105() {
     assertParse(
       """
-      struct ErrorInFunctionSignatureResultArrayType11 ℹ️{
-        func foo() -> Int1️⃣[(a){a++}]2️⃣ {
+      struct ErrorInFunctionSignatureResultArrayType11 {
+        func foo() -> Int1️⃣[(a){a++}] {
         }
-      3️⃣}
+      }
       """,
       diagnostics: [
-        // TODO: We should just recover to `{` with `[(a){a++}]` becoming unexpected.
-        DiagnosticSpec(
-          locationMarker: "1️⃣",
-          message: "expected '}' to end struct",
-          notes: [NoteSpec(message: "to match this opening '{'")],
-          fixIts: ["insert '}'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "consecutive statements on a line must be separated by newline or ';'",
-          fixIts: ["insert newline", "insert ';'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "3️⃣",
-          message: "extraneous brace at top level"
-        ),
-      ],
-      fixedSource: """
-        struct ErrorInFunctionSignatureResultArrayType11 {
-          func foo() -> Int
-        }[(a){a++}]
-          {
-          }
-        }
-        """
+        DiagnosticSpec(message: "unexpected code '[(a){a++}]' in function")
+      ]
     )
   }
 
@@ -2513,50 +2447,32 @@ final class RecoveryTests: ParserTestCase {
     assertParse(
       """
       #if true
-      struct Foo19605164 1️⃣{
-      func a2️⃣(s: S3️⃣[{{g4️⃣) -> Int {}
-      }}5️⃣}
+      struct Foo19605164 {
+      func a1️⃣(s: S2️⃣3️⃣[{{g4️⃣) -> Int {}
+      }}}
       #endif
       """,
       diagnostics: [
         DiagnosticSpec(
-          locationMarker: "3️⃣",
+          locationMarker: "2️⃣",
           message: "expected ')' to end parameter clause",
-          notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '('")],
+          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '('")],
           fixIts: ["insert ')'"]
         ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
-          message: "expected '}' to end struct",
-          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '{'")],
-          fixIts: ["insert '}'"]
+          message: "unexpected code '[' in function"
         ),
         DiagnosticSpec(
           locationMarker: "4️⃣",
           message: "unexpected code ') -> Int {}' in closure"
         ),
-        DiagnosticSpec(
-          locationMarker: "5️⃣",
-          message: "expected ',' in array element",
-          fixIts: ["insert ','"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "5️⃣",
-          message: "expected ']' to end array",
-          notes: [NoteSpec(locationMarker: "3️⃣", message: "to match this opening '['")],
-          fixIts: ["insert ']'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "5️⃣",
-          message: "unexpected brace in conditional compilation block"
-        ),
       ],
       fixedSource: """
         #if true
         struct Foo19605164 {
-        func a(s: S)
-        }[{{g) -> Int {}
-        }},]}
+        func a(s: S) [{{g) -> Int {}
+        }}}
         #endif
         """
     )
@@ -3211,28 +3127,13 @@ final class RecoveryTests: ParserTestCase {
   func testRecovery179() {
     assertParse(
       """
-      func testSkipUnbalancedParen() ℹ️{1️⃣
-        2️⃣?(
+      func testSkipUnbalancedParen() {
+        1️⃣?(
       }
       """,
       diagnostics: [
-        DiagnosticSpec(
-          locationMarker: "1️⃣",
-          message: "expected '}' to end function",
-          notes: [NoteSpec(message: "to match this opening '{'")],
-          fixIts: ["insert '}'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "extraneous code at top level"
-        ),
-      ],
-      fixedSource: """
-        func testSkipUnbalancedParen() {
-        }
-          ?(
-        }
-        """
+        DiagnosticSpec(message: "unexpected code '?(' in function")
+      ]
     )
   }
 

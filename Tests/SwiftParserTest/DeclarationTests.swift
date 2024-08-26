@@ -1301,47 +1301,13 @@ final class DeclarationTests: ParserTestCase {
   func testExpressionMember() {
     assertParse(
       """
-      struct S 1️⃣{2️⃣
-        3️⃣/4️⃣ ###line 25 "line-directive.swift"5️⃣
-      6️⃣}
+      struct S {
+        1️⃣/ ###line 25 "line-directive.swift"
+      }
       """,
       diagnostics: [
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "expected '}' to end struct",
-          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '{'")],
-          fixIts: ["insert '}'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "4️⃣",
-          message: "bare slash regex literal may not start with space",
-          fixIts: [
-            "convert to extended regex literal with '#'",
-            #"insert '\'"#,
-          ]
-        ),
-        DiagnosticSpec(
-          locationMarker: "5️⃣",
-          message: "expected '/' to end regex literal",
-          notes: [NoteSpec(locationMarker: "3️⃣", message: "to match this opening '/'")],
-          fixIts: ["insert '/'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "6️⃣",
-          message: "extraneous brace at top level"
-        ),
-      ],
-      applyFixIts: [
-        "insert '}'",
-        #"insert '\'"#,
-        "insert '/'",
-      ],
-      fixedSource: #"""
-        struct S {
-        }
-          /\ ###line 25 "line-directive.swift"/
-        }
-        """#
+        DiagnosticSpec(message: #"unexpected code '/ ###line 25 "line-directive.swift"' in struct"#)
+      ]
     )
   }
 

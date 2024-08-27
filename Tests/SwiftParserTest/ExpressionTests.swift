@@ -1312,7 +1312,7 @@ final class ExpressionTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "escaped newline at the last line of a multi-line string literal is not allowed",
-          fixIts: ["remove ''"]
+          fixIts: [#"remove '\'"#]
         )
       ],
       fixedSource: #"""

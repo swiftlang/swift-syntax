@@ -634,7 +634,7 @@ final class MultilineErrorsTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "escaped newline at the last line of a multi-line string literal is not allowed",
-          fixIts: ["remove '\'"]
+          fixIts: [#"remove '\'"#]
         )
       ],
       fixedSource: #"""
@@ -656,7 +656,7 @@ final class MultilineErrorsTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "escaped newline at the last line of a multi-line string literal is not allowed",
-          fixIts: ["remove ''"]
+          fixIts: [#"remove '\'"#]
         )
       ],
       fixedSource: #"""
@@ -677,7 +677,7 @@ final class MultilineErrorsTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "escaped newline at the last line of a multi-line string literal is not allowed",
-          fixIts: ["remove ''"]
+          fixIts: [#"remove '\'"#]
         )
       ],
       fixedSource: #"""
@@ -698,7 +698,7 @@ final class MultilineErrorsTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "escaped newline at the last line of a multi-line string literal is not allowed",
-          fixIts: ["remove ''"]
+          fixIts: [#"remove '\'"#]
         )
       ],
       fixedSource: #"""
@@ -710,27 +710,6 @@ final class MultilineErrorsTests: ParserTestCase {
   }
 
   func testMultilineErrors25() {
-    assertParseWithAllNewlineEndings(
-      #"""
-      _ = """
-        foo1️⃣\
-        """
-      """#,
-      diagnostics: [
-        DiagnosticSpec(
-          message: "escaped newline at the last line of a multi-line string literal is not allowed",
-          fixIts: ["remove ''"]
-        )
-      ],
-      fixedSource: #"""
-        _ = """
-          foo
-          """
-        """#
-    )
-  }
-
-  func testMultilineErrors26() {
     assertParseWithAllNewlineEndings(
       ##"""
       _ = ℹ️"""
@@ -756,7 +735,7 @@ final class MultilineErrorsTests: ParserTestCase {
     )
   }
 
-  func testMultilineErrors28() {
+  func testMultilineErrors26() {
     assertParseWithAllNewlineEndings(
       #"""
       _ = """
@@ -766,7 +745,7 @@ final class MultilineErrorsTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "escaped newline at the last line of a multi-line string literal is not allowed",
-          fixIts: ["remove ''"]
+          fixIts: [#"remove '\'"#]
         )
       ],
       fixedSource: #"""
@@ -777,7 +756,7 @@ final class MultilineErrorsTests: ParserTestCase {
     )
   }
 
-  func testMultilineErrors29() {
+  func testMultilineErrors27() {
     assertParseWithAllNewlineEndings(
       #"""
       _ = """1️⃣\
@@ -790,7 +769,7 @@ final class MultilineErrorsTests: ParserTestCase {
         ),
         DiagnosticSpec(
           message: "escaped newline at the last line of a multi-line string literal is not allowed",
-          fixIts: ["remove ''"]
+          fixIts: [#"remove '\'"#]
         ),
       ],
       fixedSource: #"""
@@ -802,7 +781,7 @@ final class MultilineErrorsTests: ParserTestCase {
     )
   }
 
-  func testMultilineErrors30() {
+  func testMultilineErrors28() {
     assertParseWithAllNewlineEndings(
       ##"""
       let _ = """
@@ -839,7 +818,7 @@ final class MultilineErrorsTests: ParserTestCase {
     )
   }
 
-  func testMultilineErrors31() {
+  func testMultilineErrors29() {
     assertParseWithAllNewlineEndings(
       ##"""
       let _ = """

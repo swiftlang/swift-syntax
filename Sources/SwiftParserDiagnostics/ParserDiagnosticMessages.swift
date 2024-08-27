@@ -671,7 +671,7 @@ extension FixItMessage where Self == StaticParserFixIt {
     .init("join the identifiers together with camel-case")
   }
   public static var removeBackslash: Self {
-    .init("remove '\'")
+    .init(#"remove '\'"#)
   }
   public static var removeExtraneousDelimiters: Self {
     .init("remove extraneous delimiters")

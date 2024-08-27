@@ -26,6 +26,20 @@ protocol TokenSpecSet: CaseIterable {
   init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures)
 }
 
+protocol MisspelledTokenSpecSet: TokenSpecSet {
+  associatedtype CorrectSpecSet: TokenSpecSet
+
+  typealias FuzzyMatchSpecSet = EitherTokenSpecSet<Self, CorrectSpecSet>
+
+  var correctSpecSet: CorrectSpecSet { get }
+}
+
+extension MisspelledTokenSpecSet {
+  var spec: TokenSpec {
+    TokenSpec(.identifier, recoveryPrecedence: correctSpecSet.spec.recoveryPrecedence)
+  }
+}
+
 /// A way to combine two token spec sets into an aggregate token spec set.
 enum EitherTokenSpecSet<LHS: TokenSpecSet, RHS: TokenSpecSet>: TokenSpecSet {
   case lhs(LHS)
@@ -58,6 +72,17 @@ enum EitherTokenSpecSet<LHS: TokenSpecSet, RHS: TokenSpecSet>: TokenSpecSet {
   }
 }
 
+extension EitherTokenSpecSet where LHS: MisspelledTokenSpecSet, RHS == LHS.CorrectSpecSet {
+  var correctSpecSet: RHS {
+    switch self {
+    case .lhs(let misspelled):
+      return misspelled.correctSpecSet
+    case .rhs(let correct):
+      return correct
+    }
+  }
+}
+
 // MARK: - Subsets
 
 enum AccessorModifier: TokenSpecSet {
@@ -85,6 +110,42 @@ enum AccessorModifier: TokenSpecSet {
     case .borrowing: return .keyword(.borrowing)
     case .mutating: return .keyword(.mutating)
     case .nonmutating: return .keyword(.nonmutating)
+    }
+  }
+}
+
+enum MisspelledAccessorModifier: MisspelledTokenSpecSet {
+  case consuming
+  case borrowing
+  case nonmutating
+
+  var correctSpecSet: AccessorModifier {
+    switch self {
+    case .consuming: return .consuming
+    case .borrowing: return .borrowing
+    case .nonmutating: return .nonmutating
+    }
+  }
+
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+    let text = lexeme.tokenText
+    switch text.count {
+    case 6:
+      switch text {
+      case "borrow": self = .borrowing
+      default: return nil
+      }
+    case 7:
+      switch text {
+      case "consume": self = .consuming
+      default: return nil
+      }
+    case 11:
+      switch text {
+      case "nonMutating": self = .nonmutating
+      default: return nil
+      }
+    default: return nil
     }
   }
 }
@@ -147,6 +208,35 @@ enum CanBeStatementStart: TokenSpecSet {
     case .throw: return .keyword(.throw)
     case .while: return .keyword(.while)
     case .yield: return .keyword(.yield)
+    }
+  }
+}
+
+enum MisspelledCanBeStatementStart: MisspelledTokenSpecSet {
+  case `guard`
+  case `switch`
+
+  var correctSpecSet: CanBeStatementStart {
+    switch self {
+    case .guard: return .guard
+    case .switch: return .switch
+    }
+  }
+
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+    let text = lexeme.tokenText
+    switch text.count {
+    case 5:
+      switch text {
+      case "gaurd": self = .guard
+      default: return nil
+      }
+    case 6:
+      switch text {
+      case "siwtch": self = .switch
+      default: return nil
+      }
+    default: return nil
     }
   }
 }
@@ -266,7 +356,6 @@ enum ContextualDeclKeyword: TokenSpecSet {
     }
   }
 }
-
 /// A `DeclarationKeyword` that is not a `ValueBindingPatternSyntax.BindingSpecifierOptions`.
 ///
 /// `ValueBindingPatternSyntax.BindingSpecifierOptions` are injected into
@@ -335,6 +424,80 @@ enum PureDeclarationKeyword: TokenSpecSet {
     case .subscript: return .keyword(.subscript)
     case .typealias: return .keyword(.typealias)
     case .pound: return TokenSpec(.pound, recoveryPrecedence: .openingPoundIf)
+    }
+  }
+}
+
+enum MisspelledPureDeclarationKeyword: MisspelledTokenSpecSet {
+  case `associatedtype`
+  case `class`
+  case `deinit`
+  case `func`
+  case `init`
+  case `precedencegroup`
+  case `protocol`
+  case `typealias`
+
+  var correctSpecSet: PureDeclarationKeyword {
+    switch self {
+    case .associatedtype: return .associatedtype
+    case .class: return .class
+    case .deinit: return .deinit
+    case .func: return .func
+    case .`init`: return .`init`
+    case .precedencegroup: return .precedencegroup
+    case .protocol: return .protocol
+    case .typealias: return .typealias
+    }
+  }
+
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+    let text = lexeme.tokenText
+    switch text.count {
+    case 3:
+      switch text {
+      case "def": self = .func
+      case "fun": self = .func
+      default: return nil
+      }
+    case 6:
+      switch text {
+      case "deInit": self = .deinit
+      case "object": self = .class
+      default: return nil
+      }
+    case 8:
+      switch text {
+      case "function": self = .func
+      default: return nil
+      }
+    case 9:
+      switch text {
+      case "interface": self = .protocol
+      case "typeAlias": self = .typealias
+      default: return nil
+      }
+    case 11:
+      switch text {
+      case "constructor": self = .`init`
+      default: return nil
+      }
+    case 13:
+      switch text {
+      case "associatetype", "associateType": self = .associatedtype
+      default: return nil
+      }
+    case 14:
+      switch text {
+      case "associatedType": self = .associatedtype
+      default: return nil
+      }
+    case 15:
+      switch text {
+      case "precedenceGroup": self = .precedencegroup
+      default: return nil
+      }
+    default: return nil
     }
   }
 }

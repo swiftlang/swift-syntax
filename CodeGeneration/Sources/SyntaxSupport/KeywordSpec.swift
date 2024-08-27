@@ -80,6 +80,16 @@ public func keywordsByLength() -> [(Int, [KeywordSpec])] {
   return result.sorted(by: { $0.key < $1.key })
 }
 
+public func falseFriendKeywordsByLength() -> [(Int, [(Keyword.FalseFriend, KeywordSpec)])] {
+  var result = [Int: [(Keyword.FalseFriend, KeywordSpec)]]()
+  for keyword in Keyword.allCases {
+    for falseFriend in keyword.falseFriends {
+      result[falseFriend.text.utf8CodeUnitCount, default: []].append((falseFriend, keyword.spec))
+    }
+  }
+  return result.sorted(by: { $0.key < $1.key })
+}
+
 public enum Keyword: CaseIterable {
   // Please keep these sorted alphabetically
 
@@ -737,6 +747,682 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("wrt")
     case .yield:
       return KeywordSpec("yield")
+    }
+  }
+
+  public struct ProgrammingLanguages: OptionSet, Hashable, CustomStringConvertible {
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+      self.rawValue = rawValue
+    }
+
+    public static let bash = ProgrammingLanguages(rawValue: 1 << 0)
+    public static let c = ProgrammingLanguages(rawValue: 1 << 1)
+    public static let cSharp = ProgrammingLanguages(rawValue: 1 << 2)
+    public static let cxx = ProgrammingLanguages(rawValue: 1 << 3)
+    public static let dart = ProgrammingLanguages(rawValue: 1 << 4)
+    public static let go = ProgrammingLanguages(rawValue: 1 << 5)
+    public static let java = ProgrammingLanguages(rawValue: 1 << 6)
+    public static let javaScript = ProgrammingLanguages(rawValue: 1 << 7)
+    public static let kotlin = ProgrammingLanguages(rawValue: 1 << 8)
+    public static let objC = ProgrammingLanguages(rawValue: 1 << 9)
+    public static let php = ProgrammingLanguages(rawValue: 1 << 10)
+    public static let powerShell = ProgrammingLanguages(rawValue: 1 << 11)
+    public static let python = ProgrammingLanguages(rawValue: 1 << 12)
+    public static let ruby = ProgrammingLanguages(rawValue: 1 << 13)
+    public static let rust = ProgrammingLanguages(rawValue: 1 << 14)
+    public static let scala = ProgrammingLanguages(rawValue: 1 << 15)
+    public static let typeScript = ProgrammingLanguages(rawValue: 1 << 16)
+    public static let visualBasic = ProgrammingLanguages(rawValue: 1 << 17)
+    public static let zig = ProgrammingLanguages(rawValue: 1 << 18)
+
+    public static let cFamily: ProgrammingLanguages = [.c, .cxx, .objC]
+    public static let ecmaScript: ProgrammingLanguages = [.javaScript, .typeScript]
+
+    public static let descriptions: [(ProgrammingLanguages, String)] = [
+      (.bash, "Bash"),
+      (.c, "C"),
+      (.cSharp, "C#"),
+      (.cxx, "C++"),
+      (.dart, "Dart"),
+      (.go, "Go"),
+      (.java, "Java"),
+      (.javaScript, "JavaScript"),
+      (.kotlin, "Kotlin"),
+      (.objC, "Objective-C"),
+      (.php, "PHP"),
+      (.powerShell, "PowerShell"),
+      (.python, "Python"),
+      (.ruby, "Ruby"),
+      (.rust, "Rust"),
+      (.scala, "Scala"),
+      (.typeScript, "TypeScript"),
+      (.visualBasic, "Visual Basic"),
+      (.zig, "Zig"),
+    ]
+
+    public var description: String {
+      ProgrammingLanguages.descriptions.filter { language, _ in
+        self.contains(language)
+      }.map(\.1)
+        .joined(separator: " / ")
+    }
+  }
+
+  public enum FalseFriend: ExpressibleByStringLiteral {
+    case mispelling(StaticString)
+    case languages(StaticString, ProgrammingLanguages)
+
+    public init(stringLiteral value: StaticString) {
+      self = .mispelling(value)
+    }
+
+    public var text: StaticString {
+      switch self {
+      case .mispelling(let text), .languages(let text, _):
+        return text
+      }
+    }
+
+    public var remark: String {
+      switch self {
+      case .mispelling:
+        return "misspelling"
+      case .languages(_, let programmingLanguages):
+        return "possible influences: \(programmingLanguages)"
+      }
+    }
+  }
+
+  public var falseFriends: [FalseFriend] {
+    switch self {
+    case .__consuming:
+      return [
+        "__consume",
+        "__consumed",
+      ]
+    case .__owned:
+      return [
+        "__own",
+        "__owning",
+      ]
+    case .__setter_access:
+      return []
+    case .__shared:
+      return [
+        "__sharing"
+      ]
+    case ._alignment:
+      return [
+        "_align",
+        "_aligned",
+      ]
+    case ._backDeploy:
+      return []
+    case ._borrow:
+      return [
+        .mispelling("_borrowed"),
+        .mispelling("_borrowing"),
+      ]
+    case ._borrowing:
+      return [
+        "_borrow",
+        "_borrowed",
+      ]
+    case ._BridgeObject:
+      return []
+    case ._cdecl:
+      return [
+        "cdeclaration"
+      ]
+    case ._Class:
+      return []
+    case ._compilerInitialized:
+      return []
+    case ._const:
+      return ["_final"]
+    case ._consuming:
+      return [
+        "_consume",
+        "_consumed",
+      ]
+    case ._documentation:
+      return []
+    case ._dynamicReplacement:
+      return []
+    case ._effects:
+      return []
+    case ._expose:
+      return []
+    case ._forward:
+      return []
+    case ._implements:
+      return ["_extends"]
+    case ._linear:
+      return []
+    case ._local:
+      return []
+    case ._modify:
+      return []
+    case ._move:
+      return []
+    case ._mutating:
+      return [
+        "_mutate",
+        "_mutated",
+      ]
+    case ._NativeClass:
+      return []
+    case ._NativeRefCountedObject:
+      return []
+    case ._noMetadata:
+      return []
+    case ._nonSendable:
+      return [
+        "_noSend",
+        "_nonSend",
+        "_noSending",
+        "_nonSending",
+      ]
+    case ._objcImplementation:
+      return ["_objectiveCImplementation"]
+    case ._objcRuntimeName:
+      return ["_objectiveCRuntimeName"]
+    case ._opaqueReturnTypeOf:
+      return []
+    case ._optimize:
+      return []
+    case ._originallyDefinedIn:
+      return []
+    case ._PackageDescription:
+      return []
+    case ._private:
+      return []
+    case ._projectedValueProperty:
+      return []
+    case ._read:
+      return []
+    case ._RefCountedObject:
+      return []
+    case ._semantics:
+      return []
+    case ._specialize:
+      return []
+    case ._spi:
+      return []
+    case ._spi_available:
+      return []
+    case ._swift_native_objc_runtime_base:
+      return []
+    case ._Trivial:
+      return []
+    case ._TrivialAtMost:
+      return []
+    case ._TrivialStride:
+      return []
+    case ._typeEraser:
+      return []
+    case ._unavailableFromAsync:
+      return []
+    case ._underlyingVersion:
+      return []
+    case ._UnknownLayout:
+      return []
+    case ._version:
+      return []
+    case .accesses:
+      return []
+    case .actor:
+      return []
+    case .addressWithNativeOwner:
+      return []
+    case .addressWithOwner:
+      return []
+    // FIXME: dyn => any?
+    case .any:
+      return [
+        "dyn"  // Rust
+      ]
+    case .Any:
+      return []
+    case .as:
+      return []
+    case .assignment:
+      return []
+    case .associatedtype:
+      return []
+    case .associativity:
+      return []
+    case .async:
+      return []
+    case .attached:
+      return [
+        "attach",
+        "attaching",
+      ]
+    case .autoclosure:
+      return []
+    case .availability:
+      return []
+    case .available:
+      return []
+    case .await:
+      return []
+    case .backDeployed:
+      return []
+    case .before:
+      return []
+    case .block:
+      return []
+    case .borrowing:
+      return [
+        "borrow",
+        "borrowed",
+      ]
+    case .break:
+      return []
+    case .canImport:
+      return []
+    case .case:
+      return []
+    case .catch:
+      return [
+        .languages("except", .python),
+        .languages("rescue", .ruby),
+      ]
+    case .class:
+      return []
+    case .compiler:
+      return []
+    case .consume:
+      return ["consuming"]
+    case .copy:
+      return ["clone"]
+    case .consuming:
+      return [
+        "consume",
+        "consumed",
+      ]
+    case .continue:
+      return [
+        .languages("next", .ruby),
+        "continuing",
+      ]
+    case .convenience:
+      return ["convenient"]
+    case .convention:
+      return []
+    case .cType:
+      return []
+    case .default:
+      return []
+    case .defer:
+      return []
+    case .deinit:
+      return [
+        .languages("dealloc", .objC)
+      ]
+    case .dependsOn:
+      return []
+    case .deprecated:
+      return []
+    case .derivative:
+      return []
+    case .didSet:
+      return []
+    case .differentiable:
+      return []
+    case .distributed:
+      return ["distributing"]
+    case .do:
+      return []
+    case .dynamic:
+      return []
+    case .each:
+      return []
+    // - TODO: 1-to-N
+    case .else:
+      return [
+        .languages("elif", [.bash, .python]),
+        .languages("elsif", .ruby),
+        // FIXME: VB case-insensitive
+        .languages("elseif", [.php, .powerShell, .visualBasic]),
+      ]
+    case .enum:
+      return []
+    case .escaping:
+      return ["escape"]
+    case .exclusivity:
+      return []
+    case .exported:
+      return ["export"]
+    case .extension:
+      return [
+        .languages("impl", .rust),
+        // FIXME: partial => extension?
+        .languages("partial", .cSharp),
+      ]
+    case .fallthrough:
+      return []
+    case .false:
+      return [
+        .languages("NO", .objC)
+      ]
+    case .file:
+      return []
+    case .fileprivate:
+      return []
+    // TODO: .final
+    case .final:
+      return []
+    case .for:
+      return [
+        .languages("foreach", [.cSharp, .powerShell])
+      ]
+    case .discard:
+      return []
+    case .forward:
+      return []
+    case .func:
+      // TODO: fun will be covered by Levenshtein Distance
+      return [
+        .languages("fn", [.rust, .zig]),
+        .languages("def", [.python, .ruby, .rust, .scala]),
+        // FIXME: VB case-insensitive
+        .languages("sub", .visualBasic),
+        // FIXME: VB case-insensitive
+        .languages("function", [.ecmaScript, .visualBasic]),
+      ]
+    case .freestanding:
+      return []
+    case .get:
+      return []
+    case .guard:
+      return [
+        .languages("unless", .ruby)
+      ]
+    case .higherThan:
+      return []
+    case .if:
+      return []
+    case .import:
+      return [
+        .languages("include", .cFamily)
+      ]
+    case .in:
+      return [
+        // FIXME: : => in?
+        .languages(":", [.cxx, .java])
+      ]
+    case .indirect:
+      return []
+    case .infix:
+      return []
+    case .`init`:
+      return [
+        .languages("constructor", [.ecmaScript, .kotlin])
+      ]
+    case .initializes:
+      return []
+    case .inline:
+      return []
+    case .inout:
+      return [
+        .languages("out", .cSharp),
+        .languages("ref", .cSharp),
+      ]
+    case .internal:
+      return [
+        // FIXME: protected => internal?
+        // FIXME: VB case-insensitive
+        .languages("protected", [.cxx, .cSharp, .java, .kotlin, .php, .scala, .visualBasic])
+      ]
+    case .introduced:
+      return []
+    case .is:
+      return [
+        .languages("instanceof", [.ecmaScript, .java, .php])
+      ]
+    case .isolated:
+      return ["isolating"]
+    case .kind:
+      return []
+    case .lazy:
+      return [
+        .languages("late", .dart),
+        .languages("lateinit", .kotlin),
+      ]
+    case .left:
+      return []
+    case .let:
+      return [
+        // FIXME: VB case-insensitive
+        .languages("dim", .visualBasic),
+        .languages("val", [.kotlin, .scala]),
+        .languages("const", [.ecmaScript, .zig]),
+        .languages("final", .dart),
+        .languages("constexpr", .cxx),
+      ]
+    case .line:
+      return []
+    case .linear:
+      return []
+    case .lowerThan:
+      return []
+    case .macro:
+      return []
+    case .message:
+      return []
+    case .metadata:
+      return []
+    case .module:
+      return [
+        // FIXME: mod => module?
+        .languages("mod", [.go, .rust])
+      ]
+    case .mutableAddressWithNativeOwner:
+      return []
+    case .mutableAddressWithOwner:
+      return []
+    case .mutating:
+      return ["mutate"]
+    case .nil:
+      return [
+        .languages("NaN", .ecmaScript),
+        .languages("None", .python),
+        .languages("null", [.cSharp, .java, .ecmaScript, .zig]),
+        .languages("NULL", .cFamily),
+        .languages("nullptr", .cxx),
+        .languages("undefined", [.ecmaScript, .zig]),
+      ]
+    case .noasync:
+      return []
+    case .noDerivative:
+      return []
+    case .noescape:
+      return ["noescaping"]
+    case .none:
+      return []
+    case .nonisolated:
+      return ["nonisolating"]
+    case .nonmutating:
+      return [
+        .languages("const", .cxx),
+        "nonmutate",
+      ]
+    case .objc:
+      return ["objectiveC"]
+    case .obsoleted:
+      return []
+    case .of:
+      return []
+    case .open:
+      return []
+    case .operator:
+      return []
+    case .optional:
+      return []
+    case .override:
+      return []
+    case .package:
+      return []
+    case .postfix:
+      return []
+    case .precedencegroup:
+      return []
+    case .preconcurrency:
+      return []
+    case .prefix:
+      return []
+    case .private:
+      return []
+    case .Protocol:
+      return []
+    case .protocol:
+      return [
+        .languages("trait", [.php, .rust, .scala]),
+        .languages("interface", [.cSharp, .java, .php, .typeScript]),
+        // FIXME: typeclass => protocol?
+        .languages("typeclass", .scala),
+      ]
+    case .public:
+      return [
+        .languages("pub", [.rust, .zig]),
+        // FIXME: VB case-insensitive
+        .languages("friend", [.cxx, .visualBasic]),
+      ]
+    case .reasync:
+      return []
+    case .renamed:
+      return []
+    case .repeat:
+      return []
+    case .required:
+      return []
+    case .rethrows:
+      return []
+    case .retroactive:
+      return []
+    case .return:
+      return []
+    case .reverse:
+      return []
+    case .right:
+      return []
+    case .safe:
+      return []
+    case .scoped:
+      return []
+    case .self:
+      return [
+        .languages("this", [.cxx, .dart, .ecmaScript, .java, .kotlin, .scala])
+      ]
+    case .sending:
+      return [
+        "send",
+        "sendable",
+      ]
+    case .Self:
+      return []
+    case .Sendable:
+      return [
+        "Send",
+        "Sending",
+      ]
+    case .set:
+      return []
+    case .some:
+      return []
+    case .sourceFile:
+      return []
+    case .spi:
+      return []
+    case .spiModule:
+      return []
+    case .static:
+      return []
+    case .struct:
+      return []
+    case .subscript:
+      return []
+    case .super:
+      return []
+    case .swift:
+      return []
+    case .switch:
+      return [
+        .languages("when", .kotlin),
+        .languages("match", .scala),
+        // FIXME: VB case-insensitive
+        .languages("select", .visualBasic),
+      ]
+    case .target:
+      return []
+    case .then:
+      return []
+    case .throw:
+      return [
+        .languages("raise", .python)
+      ]
+    case .throws:
+      return []
+    case .transpose:
+      return []
+    case .true:
+      return [
+        .languages("YES", .objC)
+      ]
+    case .try:
+      return []
+    case .Type:
+      return [
+        // FIXME: prototype => Type?
+        .languages("prototype", .ecmaScript)
+      ]
+    case .typealias:
+      return [
+        .languages("type", [.go, .rust, .scala, .typeScript]),
+        .languages("alias", .ruby),
+        .languages("typedef", [.cFamily, .dart]),
+      ]
+    case .unavailable:
+      return []
+    case .unchecked:
+      return []
+    case .unowned:
+      return []
+    case .unsafe:
+      return []
+    case .unsafeAddress:
+      return []
+    case .unsafeMutableAddress:
+      return []
+    // FIXME: mut => var?
+    case .var:
+      return [
+        .languages("mut", .rust)
+      ]
+    case .visibility:
+      return []
+    case .weak:
+      return []
+    case .where:
+      return [
+        .languages("when", .cSharp)
+      ]
+    case .while:
+      return [
+        .languages("until", .bash)
+      ]
+    case .willSet:
+      return []
+    case .witness_method:
+      return []
+    case .wrt:
+      return []
+    case .yield:
+      return []
     }
   }
 }

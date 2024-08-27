@@ -203,8 +203,14 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var missingConformanceRequirement: Self {
     .init("expected ':' or '==' to indicate a conformance or same-type requirement")
   }
+  public static var misspelledAssociatedtype: Self {
+    .init("expected 'associatedtype' keyword; did you mean 'associatedtype'?")
+  }
   public static var misspelledAsync: Self {
     .init("expected async specifier; did you mean 'async'?")
+  }
+  public static var misspelledDeinit: Self {
+    .init("expected 'deinit' keyword; did you mean 'deinit'?")
   }
   public static var misspelledThrows: Self {
     .init("expected throwing specifier; did you mean 'throws'?")
@@ -478,6 +484,15 @@ public struct MissingExpressionInStatement: ParserError {
     } else {
       return "expected expression in statement"
     }
+  }
+}
+
+public struct MisspelledKeyword: ParserError {
+  let keywordRole: String
+  let token: TokenSyntax
+
+  public var message: String {
+    "expected \(keywordRole); did you mean '\(token.text)'?"
   }
 }
 

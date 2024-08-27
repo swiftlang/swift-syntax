@@ -317,6 +317,42 @@ final class DeclarationTests: ParserTestCase {
         }
         """
     )
+
+    assertParse(
+      """
+      protocol P {
+        1️⃣associatedType A
+        2️⃣associatetype B
+        3️⃣associateType C
+        associatedtype D
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected 'associatedtype' keyword; did you mean 'associatedtype'?",
+          fixIts: ["replace 'associatedType' with 'associatedtype'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected 'associatedtype' keyword; did you mean 'associatedtype'?",
+          fixIts: ["replace 'associatetype' with 'associatedtype'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected 'associatedtype' keyword; did you mean 'associatedtype'?",
+          fixIts: ["replace 'associateType' with 'associatedtype'"]
+        ),
+      ],
+      fixedSource: """
+        protocol P {
+          associatedtype A
+          associatedtype B
+          associatedtype C
+          associatedtype D
+        }
+        """
+    )
   }
 
   func testVariableDeclarations() {
@@ -404,6 +440,37 @@ final class DeclarationTests: ParserTestCase {
         }
       }
       """
+    )
+
+    assertParse(
+      """
+      var foo: Int {
+        1️⃣consume set {
+          test += 1
+        }
+        2️⃣borrow get {}
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected accessor modifier; did you mean 'consuming'?",
+          fixIts: ["replace 'consume' with 'consuming'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected accessor modifier; did you mean 'borrowing'?",
+          fixIts: ["replace 'borrow' with 'borrowing'"]
+        ),
+      ],
+      fixedSource: """
+        var foo: Int {
+          consuming set {
+            test += 1
+          }
+          borrowing get {}
+        }
+        """
     )
   }
 
@@ -1627,6 +1694,42 @@ final class DeclarationTests: ParserTestCase {
   func testDeinitializers() {
     assertParse("deinit {}")
     assertParse("deinit")
+    assertParse(
+      """
+      class A {
+        1️⃣deInit {}
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected 'deinit' keyword; did you mean 'deinit'?",
+          fixIts: ["replace 'deInit' with 'deinit'"]
+        )
+      ],
+      fixedSource: """
+        class A {
+          deinit {}
+        }
+        """
+    )
+    assertParse(
+      """
+      class A {
+        1️⃣deInit
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected 'deinit' keyword; did you mean 'deinit'?",
+          fixIts: ["replace 'deInit' with 'deinit'"]
+        )
+      ],
+      fixedSource: """
+        class A {
+          deinit
+        }
+        """
+    )
   }
 
   func testAttributedMember() {

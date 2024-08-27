@@ -917,6 +917,22 @@ final class StatementTests: ParserTestCase {
         } else {}
         """
     )
+
+    assertParse(
+      """
+      1️⃣gaurd test else {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected 'guard' keyword; did you mean 'guard'?",
+          fixIts: ["replace 'gaurd' with 'guard'"]
+        )
+      ],
+      fixedSource: """
+        guard test else {}
+        """
+    )
   }
 
   func testTypedThrows() {

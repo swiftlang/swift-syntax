@@ -804,6 +804,292 @@ public enum Keyword: UInt8, Hashable, Sendable {
     }
   }
   
+    @_spi(RawSyntax)
+    public init?(falseFriendText text: SyntaxText) {
+    switch text.count {
+    case 1:
+      switch text {
+      case ":": // possible influences: C++ / Java
+        self = .in
+      default:
+        return nil
+      }
+    case 2:
+      switch text {
+      case "NO": // possible influences: Objective-C
+        self = .false
+      case "fn": // possible influences: Rust / Zig
+        self = .func
+      default:
+        return nil
+      }
+    case 3:
+      switch text {
+      case "dyn": // misspelling
+        self = .any
+      case "def": // possible influences: Python / Ruby / Rust / Scala
+        self = .func
+      case "sub": // possible influences: Visual Basic
+        self = .func
+      case "out": // possible influences: C#
+        self = .inout
+      case "ref": // possible influences: C#
+        self = .inout
+      case "dim": // possible influences: Visual Basic
+        self = .let
+      case "val": // possible influences: Kotlin / Scala
+        self = .let
+      case "mod": // possible influences: Go / Rust
+        self = .module
+      case "NaN": // possible influences: JavaScript / TypeScript
+        self = .nil
+      case "pub": // possible influences: Rust / Zig
+        self = .public
+      case "YES": // possible influences: Objective-C
+        self = .true
+      case "mut": // possible influences: Rust
+        self = .var
+      default:
+        return nil
+      }
+    case 4:
+      switch text {
+      case "next": // possible influences: Ruby
+        self = .continue
+      case "elif": // possible influences: Bash / Python
+        self = .else
+      case "impl": // possible influences: Rust
+        self = .extension
+      case "late": // possible influences: Dart
+        self = .lazy
+      case "None": // possible influences: Python
+        self = .nil
+      case "null": // possible influences: C# / Java / JavaScript / TypeScript / Zig
+        self = .nil
+      case "NULL": // possible influences: C / C++ / Objective-C
+        self = .nil
+      case "this": // possible influences: C++ / Dart / Java / JavaScript / Kotlin / Scala / TypeScript
+        self = .self
+      case "send": // misspelling
+        self = .sending
+      case "Send": // misspelling
+        self = .Sendable
+      case "when": // possible influences: Kotlin
+        self = .switch
+      case "type": // possible influences: Go / Rust / Scala / TypeScript
+        self = .typealias
+      case "when": // possible influences: C#
+        self = .where
+      default:
+        return nil
+      }
+    case 5:
+      switch text {
+      case "__own": // misspelling
+        self = .__owned
+      case "clone": // misspelling
+        self = .copy
+      case "elsif": // possible influences: Ruby
+        self = .else
+      case "const": // possible influences: JavaScript / TypeScript / Zig
+        self = .let
+      case "final": // possible influences: Dart
+        self = .let
+      case "const": // possible influences: C++
+        self = .nonmutating
+      case "trait": // possible influences: PHP / Rust / Scala
+        self = .protocol
+      case "match": // possible influences: Scala
+        self = .switch
+      case "raise": // possible influences: Python
+        self = .throw
+      case "alias": // possible influences: Ruby
+        self = .typealias
+      case "until": // possible influences: Bash
+        self = .while
+      default:
+        return nil
+      }
+    case 6:
+      switch text {
+      case "_align": // misspelling
+        self = ._alignment
+      case "_final": // misspelling
+        self = ._const
+      case "attach": // misspelling
+        self = .attached
+      case "borrow": // misspelling
+        self = .borrowing
+      case "except": // possible influences: Python
+        self = .catch
+      case "rescue": // possible influences: Ruby
+        self = .catch
+      case "elseif": // possible influences: PHP / PowerShell / Visual Basic
+        self = .else
+      case "escape": // misspelling
+        self = .escaping
+      case "export": // misspelling
+        self = .exported
+      case "unless": // possible influences: Ruby
+        self = .guard
+      case "mutate": // misspelling
+        self = .mutating
+      case "friend": // possible influences: C++ / Visual Basic
+        self = .public
+      case "select": // possible influences: Visual Basic
+        self = .switch
+      default:
+        return nil
+      }
+    case 7:
+      switch text {
+      case "_borrow": // misspelling
+        self = ._borrowing
+      case "_mutate": // misspelling
+        self = ._mutating
+      case "_noSend": // misspelling
+        self = ._nonSendable
+      case "consume": // misspelling
+        self = .consuming
+      case "dealloc": // possible influences: Objective-C
+        self = .deinit
+      case "partial": // possible influences: C#
+        self = .extension
+      case "foreach": // possible influences: C# / PowerShell
+        self = .for
+      case "include": // possible influences: C / C++ / Objective-C
+        self = .import
+      case "nullptr": // possible influences: C++
+        self = .nil
+      case "Sending": // misspelling
+        self = .Sendable
+      case "typedef": // possible influences: C / C++ / Dart / Objective-C
+        self = .typealias
+      default:
+        return nil
+      }
+    case 8:
+      switch text {
+      case "__owning": // misspelling
+        self = .__owned
+      case "_aligned": // misspelling
+        self = ._alignment
+      case "_consume": // misspelling
+        self = ._consuming
+      case "_extends": // misspelling
+        self = ._implements
+      case "_mutated": // misspelling
+        self = ._mutating
+      case "_nonSend": // misspelling
+        self = ._nonSendable
+      case "borrowed": // misspelling
+        self = .borrowing
+      case "consumed": // misspelling
+        self = .consuming
+      case "function": // possible influences: JavaScript / TypeScript / Visual Basic
+        self = .func
+      case "lateinit": // possible influences: Kotlin
+        self = .lazy
+      case "sendable": // misspelling
+        self = .sending
+      default:
+        return nil
+      }
+    case 9:
+      switch text {
+      case "__consume": // misspelling
+        self = .__consuming
+      case "__sharing": // misspelling
+        self = .__shared
+      case "_borrowed": // misspelling
+        self = ._borrow
+      case "_borrowed": // misspelling
+        self = ._borrowing
+      case "_consumed": // misspelling
+        self = ._consuming
+      case "attaching": // misspelling
+        self = .attached
+      case "consuming": // misspelling
+        self = .consume
+      case "protected": // possible influences: C# / C++ / Java / Kotlin / PHP / Scala / Visual Basic
+        self = .internal
+      case "isolating": // misspelling
+        self = .isolated
+      case "constexpr": // possible influences: C++
+        self = .let
+      case "undefined": // possible influences: JavaScript / TypeScript / Zig
+        self = .nil
+      case "nonmutate": // misspelling
+        self = .nonmutating
+      case "interface": // possible influences: C# / Java / PHP / TypeScript
+        self = .protocol
+      case "typeclass": // possible influences: Scala
+        self = .protocol
+      case "prototype": // possible influences: JavaScript / TypeScript
+        self = .Type
+      default:
+        return nil
+      }
+    case 10:
+      switch text {
+      case "__consumed": // misspelling
+        self = .__consuming
+      case "_borrowing": // misspelling
+        self = ._borrow
+      case "_noSending": // misspelling
+        self = ._nonSendable
+      case "continuing": // misspelling
+        self = .continue
+      case "convenient": // misspelling
+        self = .convenience
+      case "instanceof": // possible influences: Java / JavaScript / PHP / TypeScript
+        self = .is
+      case "noescaping": // misspelling
+        self = .noescape
+      case "objectiveC": // misspelling
+        self = .objc
+      default:
+        return nil
+      }
+    case 11:
+      switch text {
+      case "_nonSending": // misspelling
+        self = ._nonSendable
+      case "constructor": // possible influences: JavaScript / Kotlin / TypeScript
+        self = .`init`
+      default:
+        return nil
+      }
+    case 12:
+      switch text {
+      case "cdeclaration": // misspelling
+        self = ._cdecl
+      case "distributing": // misspelling
+        self = .distributed
+      case "nonisolating": // misspelling
+        self = .nonisolated
+      default:
+        return nil
+      }
+    case 22:
+      switch text {
+      case "_objectiveCRuntimeName": // misspelling
+        self = ._objcRuntimeName
+      default:
+        return nil
+      }
+    case 25:
+      switch text {
+      case "_objectiveCImplementation": // misspelling
+        self = ._objcImplementation
+      default:
+        return nil
+      }
+    default:
+      return nil
+    }
+  }
+  
   /// This is really unfortunate. Really, we should have a `switch` in
   /// `Keyword.defaultText` to return the keyword's kind but the constant lookup
   /// table is significantly faster. Ideally, we could also get the compiler to

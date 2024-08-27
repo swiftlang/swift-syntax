@@ -54,6 +54,29 @@ let keywordFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       }
     }
 
+    try! InitializerDeclSyntax(
+      """
+        @_spi(RawSyntax) 
+        public init?(falseFriendText text: SyntaxText)
+      """
+    ) {
+      try! SwitchExprSyntax("switch text.count") {
+        for (length, falseFriendKeywords) in falseFriendKeywordsByLength() {
+          SwitchCaseSyntax("case \(raw: length):") {
+            try! SwitchExprSyntax("switch text") {
+              for (falseFriend, keyword) in falseFriendKeywords {
+                SwitchCaseSyntax("case \(literal: falseFriend.text.description): // \(raw: falseFriend.remark)") {
+                  ExprSyntax("self = .\(keyword.varOrCaseName)")
+                }
+              }
+              SwitchCaseSyntax("default: return nil")
+            }
+          }
+        }
+        SwitchCaseSyntax("default: return nil")
+      }
+    }
+
     DeclSyntax(
       """
       /// This is really unfortunate. Really, we should have a `switch` in

@@ -58,6 +58,18 @@ final class ExpressionTests: ParserTestCase {
       }
       """
     )
+
+    assertParse(
+      """
+      func f(x:[Void])
+      {
+        var y:[[Void]] = x.map { [$0] }
+        {
+          $0.reserveCapacity(1)
+        } (&y[0])
+      }
+      """
+    )
   }
 
   func testTrailingClosures() {

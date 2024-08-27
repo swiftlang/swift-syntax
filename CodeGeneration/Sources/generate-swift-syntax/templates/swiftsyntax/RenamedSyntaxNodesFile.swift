@@ -42,7 +42,7 @@ let renamedSyntaxNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           """
           \(deprecationAttribute(for: syntaxKind))
           public static var \(raw: deprecatedName): Self {
-            return .\(syntaxKind.varOrCaseName)
+            return .\(syntaxKind.memberCallName)
           }
           """
         )

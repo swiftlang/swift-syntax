@@ -26,13 +26,13 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
 
           DeclSyntax(
             """
-            @available(*, deprecated, renamed: "\(child.varOrCaseName)")
+            @available(*, deprecated, renamed: "\(child.identifier)")
             public var \(deprecatedVarName): \(type) {
               get {
-                return \(child.varOrCaseName.backtickedIfNeeded)
+                return \(child.baseCallName)
               }
               set {
-                \(child.varOrCaseName.backtickedIfNeeded) = newValue
+                \(child.baseCallName) = newValue
               }
             }
             """
@@ -63,7 +63,7 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
 
       let deprecatedNames = layoutNode.children
         .filter { !$0.isUnexpectedNodes && $0.hasDeprecatedName }
-        .map { $0.varOrCaseName.description }
+        .map { $0.identifier.description }
         .joined(separator: ", ")
 
       let renamedArguments =
@@ -71,7 +71,7 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
           if child.isUnexpectedNodes {
             return "_:"
           } else {
-            return "\(child.varOrCaseName):"
+            return "\(child.labelDeclName):"
           }
         }.joined(separator: "")
 
@@ -88,12 +88,12 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
           LabeledExprSyntax(label: "leadingTrivia", expression: ExprSyntax("leadingTrivia"))
           for child in layoutNode.children {
             if child.isUnexpectedNodes {
-              LabeledExprSyntax(expression: ExprSyntax("\(child.deprecatedVarName ?? child.varOrCaseName)"))
+              LabeledExprSyntax(expression: ExprSyntax("\(child.deprecatedVarName ?? child.baseCallName)"))
             } else {
               LabeledExprSyntax(
-                label: child.varOrCaseName,
+                label: child.labelDeclName,
                 colon: .colonToken(),
-                expression: DeclReferenceExprSyntax(baseName: child.deprecatedVarName ?? child.varOrCaseName)
+                expression: DeclReferenceExprSyntax(baseName: child.deprecatedVarName ?? child.baseCallName)
               )
             }
           }

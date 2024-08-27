@@ -14,7 +14,7 @@ import SwiftSyntax
 
 /// The kind of token a node can contain. Either a token of a specific kind or a
 /// keyword with the given text.
-public enum TokenChoice: Equatable {
+public enum TokenChoice: Equatable, IdentifierConvertible {
   case keyword(Keyword)
   case token(Token)
 
@@ -25,12 +25,13 @@ public enum TokenChoice: Equatable {
     }
   }
 
-  public var varOrCaseName: TokenSyntax {
+  /// The name of this token choice as an identifier.
+  public var identifier: TokenSyntax {
     switch self {
     case .keyword(let keyword):
-      return keyword.spec.varOrCaseName
+      return keyword.spec.identifier
     case .token(let token):
-      return token.spec.varOrCaseName
+      return token.spec.identifier
     }
   }
 }
@@ -79,7 +80,7 @@ public enum ChildKind {
 
 /// A child of a node, that may be declared optional or a token with a
 /// restricted subset of acceptable kinds or texts.
-public class Child {
+public class Child: IdentifierConvertible {
   /// The name of the child.
   ///
   /// The first character of the name is always uppercase.
@@ -145,8 +146,8 @@ public class Child {
     }
   }
 
-  /// A name of this child that's suitable to be used for variable or enum case names.
-  public var varOrCaseName: TokenSyntax {
+  /// A name of this child as an identifier.
+  public var identifier: TokenSyntax {
     return .identifier(lowercaseFirstWord(name: name))
   }
 

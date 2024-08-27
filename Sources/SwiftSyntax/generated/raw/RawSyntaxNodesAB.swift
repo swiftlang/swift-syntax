@@ -15,8 +15,8 @@
 @_spi(RawSyntax)
 public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol {
   public enum Accessors: RawSyntaxNodeProtocol {
-    case `accessors`(RawAccessorDeclListSyntax)
-    case `getter`(RawCodeBlockItemListSyntax)
+    case accessors(RawAccessorDeclListSyntax)
+    case getter(RawCodeBlockItemListSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawAccessorDeclListSyntax.isKindOf(raw) || RawCodeBlockItemListSyntax.isKindOf(raw)
@@ -1225,8 +1225,8 @@ public struct RawAssociatedTypeDeclSyntax: RawDeclSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
   public enum Element: RawSyntaxNodeProtocol {
-    case `attribute`(RawAttributeSyntax)
-    case `ifConfigDecl`(RawIfConfigDeclSyntax)
+    case attribute(RawAttributeSyntax)
+    case ifConfigDecl(RawIfConfigDeclSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawAttributeSyntax.isKindOf(raw) || RawIfConfigDeclSyntax.isKindOf(raw)
@@ -1305,26 +1305,26 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
   public enum Arguments: RawSyntaxNodeProtocol {
-    case `argumentList`(RawLabeledExprListSyntax)
-    case `token`(RawTokenSyntax)
-    case `string`(RawStringLiteralExprSyntax)
-    case `availability`(RawAvailabilityArgumentListSyntax)
-    case `specializeArguments`(RawSpecializeAttributeArgumentListSyntax)
-    case `objCName`(RawObjCSelectorPieceListSyntax)
-    case `implementsArguments`(RawImplementsAttributeArgumentsSyntax)
-    case `differentiableArguments`(RawDifferentiableAttributeArgumentsSyntax)
-    case `derivativeRegistrationArguments`(RawDerivativeAttributeArgumentsSyntax)
-    case `backDeployedArguments`(RawBackDeployedAttributeArgumentsSyntax)
-    case `conventionArguments`(RawConventionAttributeArgumentsSyntax)
-    case `conventionWitnessMethodArguments`(RawConventionWitnessMethodAttributeArgumentsSyntax)
-    case `opaqueReturnTypeOfAttributeArguments`(RawOpaqueReturnTypeOfAttributeArgumentsSyntax)
-    case `exposeAttributeArguments`(RawExposeAttributeArgumentsSyntax)
-    case `originallyDefinedInArguments`(RawOriginallyDefinedInAttributeArgumentsSyntax)
-    case `underscorePrivateAttributeArguments`(RawUnderscorePrivateAttributeArgumentsSyntax)
-    case `dynamicReplacementArguments`(RawDynamicReplacementAttributeArgumentsSyntax)
-    case `unavailableFromAsyncArguments`(RawUnavailableFromAsyncAttributeArgumentsSyntax)
-    case `effectsArguments`(RawEffectsAttributeArgumentListSyntax)
-    case `documentationArguments`(RawDocumentationAttributeArgumentListSyntax)
+    case argumentList(RawLabeledExprListSyntax)
+    case token(RawTokenSyntax)
+    case string(RawStringLiteralExprSyntax)
+    case availability(RawAvailabilityArgumentListSyntax)
+    case specializeArguments(RawSpecializeAttributeArgumentListSyntax)
+    case objCName(RawObjCSelectorPieceListSyntax)
+    case implementsArguments(RawImplementsAttributeArgumentsSyntax)
+    case differentiableArguments(RawDifferentiableAttributeArgumentsSyntax)
+    case derivativeRegistrationArguments(RawDerivativeAttributeArgumentsSyntax)
+    case backDeployedArguments(RawBackDeployedAttributeArgumentsSyntax)
+    case conventionArguments(RawConventionAttributeArgumentsSyntax)
+    case conventionWitnessMethodArguments(RawConventionWitnessMethodAttributeArgumentsSyntax)
+    case opaqueReturnTypeOfAttributeArguments(RawOpaqueReturnTypeOfAttributeArgumentsSyntax)
+    case exposeAttributeArguments(RawExposeAttributeArgumentsSyntax)
+    case originallyDefinedInArguments(RawOriginallyDefinedInAttributeArgumentsSyntax)
+    case underscorePrivateAttributeArguments(RawUnderscorePrivateAttributeArgumentsSyntax)
+    case dynamicReplacementArguments(RawDynamicReplacementAttributeArgumentsSyntax)
+    case unavailableFromAsyncArguments(RawUnavailableFromAsyncAttributeArgumentsSyntax)
+    case effectsArguments(RawEffectsAttributeArgumentListSyntax)
+    case documentationArguments(RawDocumentationAttributeArgumentListSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawLabeledExprListSyntax.isKindOf(raw) || RawTokenSyntax.isKindOf(raw) || RawStringLiteralExprSyntax.isKindOf(raw) || RawAvailabilityArgumentListSyntax.isKindOf(raw) || RawSpecializeAttributeArgumentListSyntax.isKindOf(raw) || RawObjCSelectorPieceListSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeAttributeArgumentsSyntax.isKindOf(raw) || RawBackDeployedAttributeArgumentsSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawExposeAttributeArgumentsSyntax.isKindOf(raw) || RawOriginallyDefinedInAttributeArgumentsSyntax.isKindOf(raw) || RawUnderscorePrivateAttributeArgumentsSyntax.isKindOf(raw) || RawDynamicReplacementAttributeArgumentsSyntax.isKindOf(raw) || RawUnavailableFromAsyncAttributeArgumentsSyntax.isKindOf(raw) || RawEffectsAttributeArgumentListSyntax.isKindOf(raw) || RawDocumentationAttributeArgumentListSyntax.isKindOf(raw)
@@ -1699,9 +1699,9 @@ public struct RawAvailabilityArgumentListSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
   public enum Argument: RawSyntaxNodeProtocol {
-    case `token`(RawTokenSyntax)
-    case `availabilityVersionRestriction`(RawPlatformVersionSyntax)
-    case `availabilityLabeledArgument`(RawAvailabilityLabeledArgumentSyntax)
+    case token(RawTokenSyntax)
+    case availabilityVersionRestriction(RawPlatformVersionSyntax)
+    case availabilityLabeledArgument(RawAvailabilityLabeledArgumentSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawTokenSyntax.isKindOf(raw) || RawPlatformVersionSyntax.isKindOf(raw) || RawAvailabilityLabeledArgumentSyntax.isKindOf(raw)
@@ -1900,8 +1900,8 @@ public struct RawAvailabilityConditionSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
   public enum Value: RawSyntaxNodeProtocol {
-    case `string`(RawSimpleStringLiteralExprSyntax)
-    case `version`(RawVersionTupleSyntax)
+    case string(RawSimpleStringLiteralExprSyntax)
+    case version(RawVersionTupleSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawSimpleStringLiteralExprSyntax.isKindOf(raw) || RawVersionTupleSyntax.isKindOf(raw)

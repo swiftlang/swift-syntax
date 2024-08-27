@@ -26,9 +26,9 @@
 ///  - ``KeyPathComponentListSyntax``
 public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Component: SyntaxChildChoices, SyntaxHashable {
-    case `property`(KeyPathPropertyComponentSyntax)
+    case property(KeyPathPropertyComponentSyntax)
     case `subscript`(KeyPathSubscriptComponentSyntax)
-    case `optional`(KeyPathOptionalComponentSyntax)
+    case optional(KeyPathOptionalComponentSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {

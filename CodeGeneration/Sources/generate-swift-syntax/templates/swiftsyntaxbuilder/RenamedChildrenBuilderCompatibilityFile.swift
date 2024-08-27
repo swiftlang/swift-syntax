@@ -30,7 +30,7 @@ let renamedChildrenBuilderCompatibilityFile = try! SourceFileSyntax(leadingTrivi
     if let convenienceInit = try layoutNode.createConvenienceBuilderInitializer(useDeprecatedChildName: true) {
       let deprecatedNames = layoutNode.children
         .filter { !$0.isUnexpectedNodes && $0.hasDeprecatedName }
-        .compactMap { $0.varOrCaseName.description }
+        .compactMap { $0.identifier.description }
         .joined(separator: ", ")
 
       DeclSyntax(

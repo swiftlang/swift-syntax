@@ -72,12 +72,12 @@ extension Child {
       return buildableType.defaultValue
     }
     if token.text != nil {
-      return ExprSyntax(".\(token.varOrCaseName)Token()")
+      return ExprSyntax(".\(token.identifier)Token()")
     }
     if case .token(let choices, _, _) = kind,
       case .keyword(let keyword) = choices.only
     {
-      return ExprSyntax(".\(token.varOrCaseName)(.\(keyword.spec.varOrCaseName))")
+      return ExprSyntax(".\(token.memberCallName)(.\(keyword.spec.memberCallName))")
     }
     return nil
   }

@@ -65,9 +65,9 @@ public struct RawKeyPathComponentListSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol {
   public enum Component: RawSyntaxNodeProtocol {
-    case `property`(RawKeyPathPropertyComponentSyntax)
+    case property(RawKeyPathPropertyComponentSyntax)
     case `subscript`(RawKeyPathSubscriptComponentSyntax)
-    case `optional`(RawKeyPathOptionalComponentSyntax)
+    case optional(RawKeyPathOptionalComponentSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawKeyPathPropertyComponentSyntax.isKindOf(raw) || RawKeyPathSubscriptComponentSyntax.isKindOf(raw) || RawKeyPathOptionalComponentSyntax.isKindOf(raw)

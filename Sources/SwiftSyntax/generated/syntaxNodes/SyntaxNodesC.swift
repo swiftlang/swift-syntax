@@ -2569,8 +2569,8 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable, _
 ///  - ``ClosureExprSyntax``.``ClosureExprSyntax/signature``
 public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum ParameterClause: SyntaxChildChoices, SyntaxHashable {
-    case `simpleInput`(ClosureShorthandParameterListSyntax)
-    case `parameterClause`(ClosureParameterClauseSyntax)
+    case simpleInput(ClosureShorthandParameterListSyntax)
+    case parameterClause(ClosureParameterClauseSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {
@@ -2900,9 +2900,9 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
 ///  - ``CodeBlockItemListSyntax``
 public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Item: SyntaxChildChoices, SyntaxHashable {
-    case `decl`(DeclSyntax)
-    case `stmt`(StmtSyntax)
-    case `expr`(ExprSyntax)
+    case decl(DeclSyntax)
+    case stmt(StmtSyntax)
+    case expr(ExprSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {
@@ -3537,10 +3537,10 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
 ///  - ``ConditionElementListSyntax``
 public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Condition: SyntaxChildChoices, SyntaxHashable {
-    case `expression`(ExprSyntax)
-    case `availability`(AvailabilityConditionSyntax)
-    case `matchingPattern`(MatchingPatternConditionSyntax)
-    case `optionalBinding`(OptionalBindingConditionSyntax)
+    case expression(ExprSyntax)
+    case availability(AvailabilityConditionSyntax)
+    case matchingPattern(MatchingPatternConditionSyntax)
+    case optionalBinding(OptionalBindingConditionSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {

@@ -44,7 +44,7 @@ extension LayoutNode {
       if useDeprecatedChildName, let deprecatedVarName = child.deprecatedVarName {
         parameterName = deprecatedVarName
       } else {
-        parameterName = child.varOrCaseName
+        parameterName = child.labelDeclName
       }
 
       return FunctionParameterSyntax(
@@ -80,7 +80,7 @@ extension LayoutNode {
       if child.documentationAbstract.isEmpty {
         return nil
       }
-      return "  - \(child.varOrCaseName): \(child.documentationAbstract)"
+      return "  - \(child.identifier): \(child.documentationAbstract)"
     }
 
     let formattedParams = """
@@ -116,7 +116,7 @@ extension LayoutNode {
       if useDeprecatedChildName, let deprecatedVarName = child.deprecatedVarName {
         childName = deprecatedVarName
       } else {
-        childName = child.varOrCaseName
+        childName = child.identifier
       }
 
       if child.buildableType.isBuilderInitializable {
@@ -127,11 +127,11 @@ extension LayoutNode {
           let param = Node.from(type: child.buildableType).layoutNode!.singleNonDefaultedChild
           if child.isOptional {
             produceExpr = ExprSyntax(
-              "\(childName)Builder().map { \(child.buildableType.syntaxBaseName)(\(param.varOrCaseName): $0) }"
+              "\(childName)Builder().map { \(child.buildableType.syntaxBaseName)(\(param.labelDeclName): $0) }"
             )
           } else {
             produceExpr = ExprSyntax(
-              "\(child.buildableType.syntaxBaseName)(\(param.varOrCaseName): \(childName)Builder())"
+              "\(child.buildableType.syntaxBaseName)(\(param.labelDeclName): \(childName)Builder())"
             )
           }
         } else {
@@ -149,7 +149,7 @@ extension LayoutNode {
         )
         normalParameters.append(
           FunctionParameterSyntax(
-            firstName: childName,
+            firstName: childName.nonVarCallNameOrLabelDeclName,
             colon: .colonToken(),
             type: child.parameterType,
             defaultValue: child.defaultInitialization
@@ -158,7 +158,7 @@ extension LayoutNode {
       }
       delegatedInitArgs.append(
         LabeledExprSyntax(
-          label: child.isUnexpectedNodes ? nil : child.varOrCaseName,
+          label: child.isUnexpectedNodes ? nil : child.labelDeclName,
           colon: child.isUnexpectedNodes ? nil : .colonToken(),
           expression: produceExpr
         )
@@ -202,11 +202,11 @@ fileprivate func convertFromSyntaxProtocolToSyntaxType(
   if useDeprecatedChildName, let deprecatedVarName = child.deprecatedVarName {
     childName = deprecatedVarName
   } else {
-    childName = child.varOrCaseName
+    childName = child.identifier
   }
 
   if child.buildableType.isBaseType && !child.kind.isNodeChoices {
-    return ExprSyntax("\(child.buildableType.syntaxBaseName)(fromProtocol: \(childName.backtickedIfNeeded))")
+    return ExprSyntax("\(child.buildableType.syntaxBaseName)(fromProtocol: \(childName.declNameOrVarCallName))")
   }
-  return ExprSyntax("\(childName.backtickedIfNeeded)")
+  return ExprSyntax("\(childName.declNameOrVarCallName)")
 }

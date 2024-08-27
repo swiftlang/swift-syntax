@@ -12,7 +12,7 @@
 
 import SwiftSyntax
 
-public struct KeywordSpec {
+public struct KeywordSpec: IdentifierConvertible {
   /// The name of the keyword.
   public let name: String
 
@@ -29,13 +29,9 @@ public struct KeywordSpec {
   /// API generated should be marked as SPI
   public var isExperimental: Bool { experimentalFeature != nil }
 
-  /// The name of this keyword that's suitable to be used for variable or enum case names.
-  public var varOrCaseName: TokenSyntax {
-    if name == "init" {
-      return "`init`"
-    } else {
-      return TokenSyntax.identifier(name)
-    }
+  /// The name of this keyword as an identifier.
+  public var identifier: TokenSyntax {
+    TokenSyntax.identifier(name)
   }
 
   /// The attributes that should be printed on any API for the generated keyword.

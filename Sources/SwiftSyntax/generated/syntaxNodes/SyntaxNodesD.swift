@@ -1772,8 +1772,8 @@ public struct DictionaryElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 ///  - `rightSquare`: `]`
 public struct DictionaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public enum Content: SyntaxChildChoices, SyntaxHashable {
-    case `colon`(TokenSyntax)
-    case `elements`(DictionaryElementListSyntax)
+    case colon(TokenSyntax)
+    case elements(DictionaryElementListSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {
@@ -2504,8 +2504,8 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable, 
 ///  - ``DifferentiableAttributeArgumentsSyntax``.``DifferentiableAttributeArgumentsSyntax/arguments``
 public struct DifferentiabilityWithRespectToArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Arguments: SyntaxChildChoices, SyntaxHashable {
-    case `argument`(DifferentiabilityArgumentSyntax)
-    case `argumentList`(DifferentiabilityArgumentsSyntax)
+    case argument(DifferentiabilityArgumentSyntax)
+    case argumentList(DifferentiabilityArgumentsSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {
@@ -3546,8 +3546,8 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
 ///  - ``DocumentationAttributeArgumentListSyntax``
 public struct DocumentationAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Value: SyntaxChildChoices, SyntaxHashable {
-    case `token`(TokenSyntax)
-    case `string`(StringLiteralExprSyntax)
+    case token(TokenSyntax)
+    case string(StringLiteralExprSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {

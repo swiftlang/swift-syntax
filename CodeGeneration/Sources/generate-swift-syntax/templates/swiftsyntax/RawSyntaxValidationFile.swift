@@ -199,7 +199,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                 )
 
                 for node in NON_BASE_SYNTAX_NODES {
-                  try SwitchCaseSyntax("case .\(node.varOrCaseName):") {
+                  try SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
                     if let node = node.layoutNode {
                       ExprSyntax("assert(layout.count == \(raw: node.children.count))")
                       for (index, child) in node.children.enumerated() {
@@ -222,7 +222,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                               case .keyword(let keyword):
                                 ArrayElementSyntax(expression: ExprSyntax(".keyword(\(literal: keyword.spec.name))"))
                               case .token(let token):
-                                ArrayElementSyntax(expression: ExprSyntax(".tokenKind(.\(token.spec.varOrCaseName))"))
+                                ArrayElementSyntax(expression: ExprSyntax(".tokenKind(.\(token.spec.memberCallName))"))
                               }
                             }
                           }

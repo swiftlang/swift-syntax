@@ -4223,8 +4223,8 @@ public struct WildcardPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _Lea
 ///  - `yieldedExpressions`: (``YieldedExpressionsClauseSyntax`` | ``ExprSyntax``)
 public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public enum YieldedExpressions: SyntaxChildChoices, SyntaxHashable {
-    case `multiple`(YieldedExpressionsClauseSyntax)
-    case `single`(ExprSyntax)
+    case multiple(YieldedExpressionsClauseSyntax)
+    case single(ExprSyntax)
     
     public var _syntaxNode: Syntax {
       switch self {

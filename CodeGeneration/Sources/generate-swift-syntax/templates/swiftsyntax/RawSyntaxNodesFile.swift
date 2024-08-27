@@ -23,14 +23,14 @@ fileprivate extension Node {
         child -> (name: TypeSyntax, choices: [(caseName: TokenSyntax, kind: SyntaxNodeKind)])? in
         switch child.kind {
         case .nodeChoices(let choices):
-          return (child.syntaxChoicesType, choices.map { ($0.varOrCaseName, $0.syntaxNodeKind) })
+          return (child.syntaxChoicesType, choices.map { ($0.identifier, $0.syntaxNodeKind) })
         default:
           return nil
         }
       }
     } else if let node = node.collectionNode, node.elementChoices.count > 1 {
       let choices = node.elementChoices.map { choice -> (TokenSyntax, SyntaxNodeKind) in
-        (SYNTAX_NODE_MAP[choice]!.varOrCaseName, SYNTAX_NODE_MAP[choice]!.kind)
+        (SYNTAX_NODE_MAP[choice]!.identifier, SYNTAX_NODE_MAP[choice]!.kind)
       }
       return [("Element", choices)]
     } else {
@@ -69,7 +69,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
             """
           ) {
             for (caseName, kind) in choices {
-              DeclSyntax("case `\(caseName)`(\(kind.rawType))")
+              DeclSyntax("case \(caseName.declNameOrVarCallName)(\(kind.rawType))")
             }
 
             DeclSyntax(
@@ -83,7 +83,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
             try VariableDeclSyntax("public var raw: RawSyntax") {
               try SwitchExprSyntax("switch self") {
                 for (swiftName, _) in choices {
-                  SwitchCaseSyntax("case .\(swiftName)(let node): return node.raw")
+                  SwitchCaseSyntax("case .\(swiftName.nonVarCallNameOrLabelDeclName)(let node): return node.raw")
                 }
               }
             }
@@ -93,7 +93,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
                 StmtSyntax(
                   """
                   if let node = \(kind.rawType)(other) {
-                    self = .\(swiftName)(node)
+                    self = .\(swiftName.nonVarCallNameOrLabelDeclName)(node)
                     return
                   }
                   """
@@ -107,8 +107,8 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
               if let choiceNode = SYNTAX_NODE_MAP[kind], choiceNode.kind.isBase {
                 DeclSyntax(
                   """
-                  public init(\(swiftName): some \(choiceNode.kind.rawProtocolType)) {
-                    self = .\(swiftName)(\(choiceNode.kind.rawType)(\(swiftName)))
+                  public init(\(swiftName.nonVarCallNameOrLabelDeclName): some \(choiceNode.kind.rawProtocolType)) {
+                    self = .\(swiftName.nonVarCallNameOrLabelDeclName)(\(choiceNode.kind.rawType)(\(swiftName.declNameOrVarCallName)))
                   }
                   """
                 )
@@ -133,7 +133,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
               for n in SYNTAX_NODES where n.base == node.kind {
                 SwitchCaseItemSyntax(
                   pattern: ExpressionPatternSyntax(
-                    expression: ExprSyntax(".\(n.varOrCaseName)")
+                    expression: ExprSyntax(".\(n.memberCallName)")
                   )
                 )
               }
@@ -148,7 +148,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
               """
             )
           } else {
-            StmtSyntax("return raw.kind == .\(node.varOrCaseName)")
+            StmtSyntax("return raw.kind == .\(node.memberCallName)")
           }
         }
 
@@ -196,7 +196,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
             """
             public init(elements: [\(element)], arena: __shared SyntaxArena) {
               let raw = RawSyntax.makeLayout(
-                kind: .\(node.varOrCaseName), uninitializedCount: elements.count, arena: arena) { layout in
+                kind: .\(node.memberCallName), uninitializedCount: elements.count, arena: arena) { layout in
                   guard var ptr = layout.baseAddress else { return }
                   for elem in elements {
                     ptr.initialize(to: elem.raw)
@@ -221,8 +221,8 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
           let params = FunctionParameterListSyntax {
             for child in node.children {
               FunctionParameterSyntax(
-                firstName: child.isUnexpectedNodes ? .wildcardToken(trailingTrivia: .space) : child.varOrCaseName,
-                secondName: child.isUnexpectedNodes ? child.varOrCaseName : nil,
+                firstName: child.isUnexpectedNodes ? .wildcardToken(trailingTrivia: .space) : child.labelDeclName,
+                secondName: child.isUnexpectedNodes ? child.labelDeclName : nil,
                 colon: .colonToken(),
                 type: child.rawParameterType,
                 defaultValue: child.isUnexpectedNodes ? child.defaultInitialization : nil
@@ -239,7 +239,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
                   let optionalMark = child.isOptional ? "?" : ""
 
                   ExprSyntax(
-                    "layout[\(raw: index)] = \(child.varOrCaseName.backtickedIfNeeded)\(raw: optionalMark).raw"
+                    "layout[\(raw: index)] = \(child.baseCallName)\(raw: optionalMark).raw"
                   )
                   .with(\.leadingTrivia, .newline)
                 }
@@ -248,20 +248,20 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
               DeclSyntax(
                 """
                 let raw = RawSyntax.makeLayout(
-                  kind: .\(node.varOrCaseName), uninitializedCount: \(raw: node.children.count), arena: arena) { layout in
+                  kind: .\(node.memberCallName), uninitializedCount: \(raw: node.children.count), arena: arena) { layout in
                   \(list)
                 }
                 """
               )
             } else {
-              DeclSyntax("let raw = RawSyntax.makeEmptyLayout(kind: .\(node.varOrCaseName), arena: arena)")
+              DeclSyntax("let raw = RawSyntax.makeEmptyLayout(kind: .\(node.memberCallName), arena: arena)")
             }
             ExprSyntax("self.init(unchecked: raw)")
           }
 
           for (index, child) in node.children.enumerated() {
             try VariableDeclSyntax(
-              "public var \(child.varOrCaseName.backtickedIfNeeded): Raw\(child.buildableType.buildable)"
+              "public var \(child.varDeclName): Raw\(child.buildableType.buildable)"
             ) {
               let exclamationMark = child.isOptional ? "" : "!"
 

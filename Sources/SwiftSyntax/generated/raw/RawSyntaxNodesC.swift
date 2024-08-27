@@ -1487,8 +1487,8 @@ public struct RawClosureShorthandParameterSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
   public enum ParameterClause: RawSyntaxNodeProtocol {
-    case `simpleInput`(RawClosureShorthandParameterListSyntax)
-    case `parameterClause`(RawClosureParameterClauseSyntax)
+    case simpleInput(RawClosureShorthandParameterListSyntax)
+    case parameterClause(RawClosureParameterClauseSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawClosureShorthandParameterListSyntax.isKindOf(raw) || RawClosureParameterClauseSyntax.isKindOf(raw)
@@ -1685,9 +1685,9 @@ public struct RawCodeBlockItemListSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
   public enum Item: RawSyntaxNodeProtocol {
-    case `decl`(RawDeclSyntax)
-    case `stmt`(RawStmtSyntax)
-    case `expr`(RawExprSyntax)
+    case decl(RawDeclSyntax)
+    case stmt(RawStmtSyntax)
+    case expr(RawExprSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawDeclSyntax.isKindOf(raw) || RawStmtSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw)
@@ -2114,10 +2114,10 @@ public struct RawConditionElementListSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
   public enum Condition: RawSyntaxNodeProtocol {
-    case `expression`(RawExprSyntax)
-    case `availability`(RawAvailabilityConditionSyntax)
-    case `matchingPattern`(RawMatchingPatternConditionSyntax)
-    case `optionalBinding`(RawOptionalBindingConditionSyntax)
+    case expression(RawExprSyntax)
+    case availability(RawAvailabilityConditionSyntax)
+    case matchingPattern(RawMatchingPatternConditionSyntax)
+    case optionalBinding(RawOptionalBindingConditionSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
       return RawExprSyntax.isKindOf(raw) || RawAvailabilityConditionSyntax.isKindOf(raw) || RawMatchingPatternConditionSyntax.isKindOf(raw) || RawOptionalBindingConditionSyntax.isKindOf(raw)

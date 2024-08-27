@@ -21,13 +21,13 @@ let tokensFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       if tokenSpec.text != nil {
         DeclSyntax(
           """
-          public static func \(tokenSpec.varOrCaseName)Token(
+          public static func \(tokenSpec.identifier)Token(
             leadingTrivia: Trivia = [],
             trailingTrivia: Trivia = [],
             presence: SourcePresence = .present
           ) -> TokenSyntax {
             return TokenSyntax(
-              .\(tokenSpec.varOrCaseName),
+              .\(tokenSpec.memberCallName),
               leadingTrivia: leadingTrivia,
               trailingTrivia: trailingTrivia,
               presence: presence
@@ -38,14 +38,14 @@ let tokensFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       } else if tokenSpec.kind == .keyword {
         DeclSyntax(
           """
-          public static func \(tokenSpec.varOrCaseName)(
+          public static func \(tokenSpec.funcDeclName)(
             _ value: Keyword,
             leadingTrivia: Trivia = [],
             trailingTrivia: Trivia = [],
             presence: SourcePresence = .present
           ) -> TokenSyntax {
             return TokenSyntax(
-              .\(tokenSpec.varOrCaseName)(value),
+              .\(tokenSpec.memberCallName)(value),
               leadingTrivia: leadingTrivia,
               trailingTrivia: trailingTrivia,
               presence: presence
@@ -56,14 +56,14 @@ let tokensFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       } else {
         DeclSyntax(
           """
-          public static func \(tokenSpec.varOrCaseName)(
+          public static func \(tokenSpec.funcDeclName)(
             _ text: String,
             leadingTrivia: Trivia = [],
             trailingTrivia: Trivia = [],
             presence: SourcePresence = .present
           ) -> TokenSyntax {
             return TokenSyntax(
-              .\(tokenSpec.varOrCaseName)(text),
+              .\(tokenSpec.memberCallName)(text),
               leadingTrivia: leadingTrivia,
               trailingTrivia: trailingTrivia,
               presence: presence

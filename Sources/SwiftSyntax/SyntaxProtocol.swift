@@ -212,11 +212,7 @@ extension SyntaxProtocol {
 
   /// The root of the tree in which this node resides.
   public var root: Syntax {
-    var this = _syntaxNode
-    while let parent = this.parent {
-      this = parent
-    }
-    return this
+    return Syntax(self).root
   }
 
   /// Whether or not this node has a parent.
@@ -241,14 +237,18 @@ extension SyntaxProtocol {
 
   /// Returns this node or the first ancestor that satisfies `condition`.
   public func ancestorOrSelf<T>(mapping map: (Syntax) -> T?) -> T? {
-    var walk: Syntax? = Syntax(self)
-    while let unwrappedParent = walk {
-      if let mapped = map(unwrappedParent) {
-        return mapped
+    return self.withUnownedSyntax {
+      var node = $0
+      while true {
+        if let mapped = node.withValue(map) {
+          return mapped
+        }
+        guard let parent = node.parent else {
+          return nil
+        }
+        node = parent
       }
-      walk = unwrappedParent.parent
     }
-    return nil
   }
 }
 

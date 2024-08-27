@@ -81,10 +81,13 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     }
   }
 
-  private var root: Syntax {
-    switch info.info! {
-    case .root(_): return self
-    case .nonRoot(let info): return info.parent.root
+  public var root: Syntax {
+    return self.withUnownedSyntax {
+      var node = $0
+      while let parent = node.parent {
+        node = parent
+      }
+      return node.value
     }
   }
 
@@ -129,7 +132,10 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   }
 
   /// "designated" memberwise initializer of `Syntax`.
-  init(_ raw: RawSyntax, info: Info) {
+  // transparent because normal inlining is too late for eliminating ARC traffic for Info.
+  // FIXME: Remove @_transparent after OSSA enabled.
+  @_transparent
+  init(_ raw: RawSyntax, info: __shared Info) {
     self.raw = raw
     self.info = info
   }
@@ -309,7 +315,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   /// Create a ``Syntax`` node from a specialized syntax node.
   // Inline always so the optimizer can optimize this to a member access on `syntax` without having to go through
   // generics.
-  @inline(__always)
+  @_transparent
   public init(_ syntax: __shared some SyntaxProtocol) {
     self = syntax._syntaxNode
   }
@@ -377,6 +383,59 @@ extension Syntax {
   /// source even in the presence of invalid UTF-8.
   public var syntaxTextBytes: [UInt8] {
     return raw.syntaxTextBytes
+  }
+}
+
+/// Temporary non-owning Syntax.
+///
+/// This can be used for handling Syntax node without ARC traffic.
+struct UnownedSyntax {
+  private let raw: RawSyntax
+  private let info: Unmanaged<Syntax.Info>
+
+  @_transparent
+  init(_ node: __shared Syntax) {
+    self.raw = node.raw
+    self.info = .passUnretained(node.info.unsafelyUnwrapped)
+  }
+
+  /// Extract the Syntax value.
+  @inline(__always)
+  var value: Syntax {
+    Syntax(raw, info: info.takeUnretainedValue())
+  }
+
+  /// Get the parent of the Syntax value, but without retaining it.
+  @inline(__always)
+  var parent: UnownedSyntax? {
+    return info._withUnsafeGuaranteedRef {
+      switch $0.info.unsafelyUnwrapped {
+      case .nonRoot(let info):
+        return UnownedSyntax(info.parent)
+      case .root(_):
+        return nil
+      }
+    }
+  }
+
+  /// Temporarily use the Syntax value.
+  @inline(__always)
+  func withValue<T>(_ body: (Syntax) -> T) -> T {
+    info._withUnsafeGuaranteedRef {
+      body(Syntax(self.raw, info: $0))
+    }
+  }
+}
+
+extension SyntaxProtocol {
+  /// Execute the `body` with ``UnownedSyntax`` of `node`.
+  ///
+  /// This guarantees the life time of the `node` during the `body` is executed.
+  @inline(__always)
+  func withUnownedSyntax<T>(_ body: (UnownedSyntax) -> T) -> T {
+    return withExtendedLifetime(self) {
+      body(UnownedSyntax(Syntax($0)))
+    }
   }
 }
 

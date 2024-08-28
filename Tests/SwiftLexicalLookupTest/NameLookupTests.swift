@@ -968,4 +968,54 @@ final class testNameLookup: XCTestCase {
       )
     )
   }
+
+  func testSubscript() {
+    assertLexicalNameLookup(
+      source: """
+        class X {
+          let 0️⃣c = 123
+
+          subscript<1️⃣A, 2️⃣B>(3️⃣a: 4️⃣A, 5️⃣b: 6️⃣B) -> 7️⃣B {
+            return 8️⃣a + 9️⃣b + 🔟c
+          }
+        }
+        """,
+      references: [
+        "4️⃣": [.fromScope(GenericParameterClauseSyntax.self, expectedNames: ["1️⃣"])],
+        "6️⃣": [.fromScope(GenericParameterClauseSyntax.self, expectedNames: ["2️⃣"])],
+        "7️⃣": [.fromScope(GenericParameterClauseSyntax.self, expectedNames: ["2️⃣"])],
+        "8️⃣": [.fromScope(SubscriptDeclSyntax.self, expectedNames: ["3️⃣"])],
+        "9️⃣": [.fromScope(SubscriptDeclSyntax.self, expectedNames: ["5️⃣"])],
+        "🔟": [.fromScope(MemberBlockSyntax.self, expectedNames: ["0️⃣"])],
+      ],
+      expectedResultTypes: .all(
+        GenericParameterSyntax.self,
+        except: [
+          "0️⃣": IdentifierPatternSyntax.self,
+          "3️⃣": FunctionParameterSyntax.self,
+          "5️⃣": FunctionParameterSyntax.self,
+        ]
+      )
+    )
+  }
+
+  func testTypealias() {
+    assertLexicalNameLookup(
+      source: """
+        typealias SomeType<1️⃣A> = X<2️⃣A, 3️⃣NoMatch>
+
+        7️⃣typealias SomeOtherType<4️⃣A> = X<5️⃣A, 6️⃣SomeOtherType>
+        """,
+      references: [
+        "2️⃣": [.fromScope(GenericParameterClauseSyntax.self, expectedNames: ["1️⃣"])],
+        "3️⃣": [],
+        "5️⃣": [.fromScope(GenericParameterClauseSyntax.self, expectedNames: ["4️⃣"])],
+        "6️⃣": [.fromFileScope(expectedNames: ["7️⃣"])],
+      ],
+      expectedResultTypes: .all(
+        GenericParameterSyntax.self,
+        except: ["7️⃣": TypeAliasDeclSyntax.self]
+      )
+    )
+  }
 }

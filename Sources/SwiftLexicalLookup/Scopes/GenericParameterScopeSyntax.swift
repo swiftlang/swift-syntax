@@ -13,16 +13,16 @@
 import SwiftSyntax
 
 /// Scope that introduces generic parameter names and directs
-/// futher lookup to it's `WithGenericParametersScopeSyntax`
+/// futher lookup to its `WithGenericParametersScopeSyntax`
 /// parent scope's parent scope (i.e. on return, bypasses names
-/// introduced by it's parent).
+/// introduced by its parent).
 @_spi(Experimental) public protocol GenericParameterScopeSyntax: ScopeSyntax {}
 
 @_spi(Experimental) extension GenericParameterScopeSyntax {
   /// Returns names matching lookup and bypasses
   /// `WithGenericParametersScopeSyntax` parent scope in futher lookup.
   ///
-  /// example:
+  /// ### Example
   /// ```swift
   /// let a = 23
   /// func foo<A>(a: A) {
@@ -57,7 +57,7 @@ import SwiftSyntax
 
   /// Bypasses names introduced by `WithGenericParametersScopeSyntax` parent scope.
   ///
-  /// example:
+  /// ### Example
   /// ```swift
   /// let a = 23
   /// func foo<A>(a: A) {

@@ -20,7 +20,7 @@ import SwiftSyntax
   /// Returns names matching lookup and passes lookup to
   /// the generic parameter clause scopes.
   ///
-  /// example:
+  /// ### Example
   /// ```swift
   /// let a = 23
   /// func foo<A>(a: A) {
@@ -54,7 +54,7 @@ import SwiftSyntax
   /// Passes lookup to this scope's generic parameter or
   /// primary associated type clause scope (`WithGenericParametersScopeSyntax`).
   ///
-  /// example:
+  /// ### Example
   /// ```swift
   /// let a = 23
   /// func foo<A>(a: A) {

@@ -176,7 +176,7 @@ import SwiftSyntax
   /// All names introduced by the closure signature.
   /// Could be closure captures or (shorthand) parameters.
   ///
-  /// Example:
+  /// ### Example
   /// ```swift
   /// let x = { [weak self, a] b, _ in
   ///   // <--
@@ -222,7 +222,7 @@ import SwiftSyntax
 
   /// Finds parent scope, omitting ancestor `if` statements if part of their `else if` clause.
   ///
-  /// Example:
+  /// ### Example
   /// ```swift
   /// func foo() {
   ///   if let a = x {
@@ -262,7 +262,7 @@ import SwiftSyntax
   /// Lookup triggered from inside of `else`
   /// clause is immediately forwarded to parent scope.
   ///
-  /// Example:
+  /// ### Example
   /// ```swift
   /// if let a = x {
   ///   // <-- a is visible here
@@ -326,7 +326,7 @@ import SwiftSyntax
   /// Lookup triggered from within of the `else` body
   /// returns no names.
   ///
-  /// Example:
+  /// ### Example
   /// ```swift
   /// guard let a = x else {
   ///   return // a is not visible here
@@ -399,7 +399,7 @@ import SwiftSyntax
   /// all associated type declarations made inside the
   /// protocol member block.
   ///
-  /// example:
+  /// ### Example
   /// ```swift
   /// class A {}
   ///
@@ -436,7 +436,7 @@ import SwiftSyntax
 @_spi(Experimental) extension GenericParameterClauseSyntax: GenericParameterScopeSyntax {
   /// Generic parameter names introduced by this clause.
   @_spi(Experimental) public var introducedNames: [LookupName] {
-    parameters.children(viewMode: .sourceAccurate).flatMap { child in
+    parameters.children(viewMode: .fixedUp).flatMap { child in
       LookupName.getNames(from: child, accessibleAfter: child.endPosition)
     }
   }
@@ -448,5 +448,21 @@ import SwiftSyntax
     signature.parameterClause.parameters.flatMap { parameter in
       LookupName.getNames(from: parameter)
     }
+  }
+}
+
+@_spi(Experimental) extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax {
+  /// Parameters introduced by this subscript.
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    parameterClause.parameters.flatMap { parameter in
+      LookupName.getNames(from: parameter)
+    }
+  }
+}
+
+@_spi(Experimental) extension TypeAliasDeclSyntax: WithGenericParametersScopeSyntax {
+  /// Type alias doesn't introduce any names to it's children.
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    []
   }
 }

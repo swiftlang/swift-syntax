@@ -896,7 +896,7 @@ final class testNameLookup: XCTestCase {
       references: [
         "2️⃣": [],
         "3️⃣": [.fromScope(GenericParameterClauseSyntax.self, expectedNames: ["1️⃣"])],
-        "4️⃣": [],
+        "5️⃣": [],
         "6️⃣": [.fromScope(GenericParameterClauseSyntax.self, expectedNames: ["4️⃣"])],
       ],
       expectedResultTypes: .all(GenericParameterSyntax.self)

@@ -81,17 +81,17 @@ function(add_swift_syntax_library name)
     >)
 
     # Enable package CMO if possible.
-    if(SWIFT_PACKAGE_CMO_SUPPORT STREQUAL "IMPLEMENTED")
+    if(Swift_COMPILER_PACKAGE_CMO_SUPPORT STREQUAL "IMPLEMENTED")
       target_compile_options("${target}" PRIVATE
         $<$<COMPILE_LANGUAGE:Swift>:
-          "SHELL:-package-name ${SWIFT_MODULE_ABI_NAME_PREFIX}${PROJECT_NAME}"
+          "SHELL:-package-name ${SWIFTSYNTAX_PACKAGE_NAME}"
           "SHELL:-Xfrontend -package-cmo"
           "SHELL:-Xfrontend -allow-non-resilient-access"
       >)
-    elseif(SWIFT_PACKAGE_CMO_SUPPORT STREQUAL "EXPERIMENTAL")
+    elseif(Swift_COMPILER_PACKAGE_CMO_SUPPORT STREQUAL "EXPERIMENTAL")
       target_compile_options("${target}" PRIVATE
         $<$<COMPILE_LANGUAGE:Swift>:
-          "SHELL:-package-name ${SWIFT_MODULE_ABI_NAME_PREFIX}${PROJECT_NAME}"
+          "SHELL:-package-name ${SWIFTSYNTAX_PACKAGE_NAME}"
           "SHELL:-Xfrontend -experimental-package-cmo"
           "SHELL:-Xfrontend -experimental-allow-non-resilient-access"
           "SHELL:-Xfrontend -experimental-package-bypass-resilience"

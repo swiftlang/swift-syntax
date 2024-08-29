@@ -2293,6 +2293,17 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testVariableGetSetNextLine() {
+    assertParse(
+      """
+      struct X {
+        var x: Int
+        { 17 }
+      }
+      """
+    )
+  }
+
   func testVariableFollowedByReferenceToSet() {
     assertParse(
       """

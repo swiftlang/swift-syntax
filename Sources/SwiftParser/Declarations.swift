@@ -1355,7 +1355,8 @@ extension Parser {
 
         let accessors: RawAccessorBlockSyntax?
         if (self.at(.leftBrace)
-          && (!self.currentToken.isAtStartOfLine || self.withLookahead({ $0.atStartOfGetSetAccessor() })))
+          && (initializer == nil || !self.currentToken.isAtStartOfLine
+            || self.withLookahead({ $0.atStartOfGetSetAccessor() })))
           || (inMemberDeclList && self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil
             && !self.at(.keyword(.`init`)))
         {

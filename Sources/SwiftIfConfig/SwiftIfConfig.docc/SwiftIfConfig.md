@@ -29,8 +29,4 @@ The `SwiftIfConfig` library provides utilities to determine which syntax nodes a
 * <doc:ActiveSyntaxVisitor> and <doc:ActiveSyntaxAnyVisitor> are visitor types that only visit the syntax nodes that are included ("active") for a given build configuration, implicitly skipping any nodes within inactive `#if` clauses.
 * `SyntaxProtocol.removingInactive(in:)` produces a syntax node that removes all inactive regions (and their corresponding `IfConfigDeclSyntax` nodes) from the given syntax tree, returning a new tree that is free of `#if` conditions.
 * `IfConfigDeclSyntax.activeClause(in:)` determines which of the clauses of an `#if` is active for the given build configuration, returning the active clause.
-* `SyntaxProtocol.isActive(in:)` determines whether the given syntax node is active for the given build configuration. The result is one of "active"
-    (the node is included in the program), "inactive" (the node is not included
-    in the program), or "unparsed" (the node is not included in the program and
-    is also allowed to have syntax errors).
-* `SyntaxProtocol.configuredRegions(in:)` produces an array describing the various regions in which a configuration has an effect, indicating active, inactive, and unparsed regions in the source tree. The array can be used as an input to `SyntaxProtocol.isActive(inConfiguredRegions:)` to determine whether a given syntax node is active.
+* `SyntaxProtocol.configuredRegions(in:)` produces a `ConfiguredRegions` value that can be used to efficiently test whether a given syntax node is in an active, inactive, or unparsed region (via `isActive`).

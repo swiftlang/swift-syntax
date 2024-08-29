@@ -80,7 +80,7 @@ public enum ChildKind {
 
 /// A child of a node, that may be declared optional or a token with a
 /// restricted subset of acceptable kinds or texts.
-public class Child: NodeChoiceConvertible {
+public class Child: SyntaxNodeConvertible, NodeChoiceConvertible, ParameterConvertible {
   /// The name of the child.
   ///
   /// The first character of the name is always uppercase.
@@ -227,9 +227,9 @@ public class Child: NodeChoiceConvertible {
     case .nodeChoices(let choices):
       return choices.isEmpty
     case .node(let kind):
-      return kind.isBase
+      return kind.isBaseType
     case .collection(kind: let kind, _, _, _):
-      return kind.isBase
+      return kind.isBaseType
     case .token:
       return false
     }
@@ -242,6 +242,11 @@ public class Child: NodeChoiceConvertible {
   public var apiAttributes: AttributeListSyntax {
     guard isExperimental else { return "" }
     return AttributeListSyntax("@_spi(ExperimentalLanguageFeatures)").with(\.trailingTrivia, .newline)
+  }
+
+  /// The ``Node`` representation of this child, if any.
+  public var node: Node? {
+    self.syntaxNodeKind.node
   }
 
   /// If a classification is passed, it specifies the color identifiers in
@@ -271,5 +276,82 @@ public class Child: NodeChoiceConvertible {
     self.documentationSummary = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.documentationAbstract = String(documentation?.split(whereSeparator: \.isNewline).first ?? "")
     self.isOptional = isOptional
+  }
+}
+
+// MARK: SyntaxNodeConvertible
+public extension Child {
+  var isNode: Bool {
+    switch self.kind {
+    case .node, .collection:
+      return true
+    default:
+      return false
+    }
+  }
+
+  var syntaxType: TypeSyntax {
+    switch self.kind {
+    case .node(let kind), .collection(let kind, _, _, _):
+      return kind.syntaxType
+    case .nodeChoices:
+      return self.syntaxChoicesType
+    case .token:
+      return "TokenSyntax"
+    }
+  }
+}
+
+// MARK: ParameterConvertible
+extension Child {
+  public var parameterAnyType: TypeSyntax {
+    self.parameterType(specifier: "any")
+  }
+
+  public var parameterSomeType: TypeSyntax {
+    self.parameterType(specifier: "some")
+  }
+
+  func parameterType(
+    specifier: TokenSyntax,
+    protocolType: TypeSyntax? = nil,
+    syntaxType: TypeSyntax? = nil
+  ) -> TypeSyntax {
+    let type: TypeSyntax
+    if self.isBaseNode {
+      type = "\(specifier) \(protocolType ?? self.protocolType)"
+    } else {
+      type = syntaxType ?? self.syntaxType
+    }
+    return self.isOptional ? type.optionalWrapped : type
+  }
+
+  func defaultValue(syntaxType: TypeSyntax) -> ExprSyntax? {
+    guard !self.isOptional else {
+      if self.isBaseNode {
+        return "\(syntaxType.optionalWrapped).none"
+      } else {
+        return "nil"
+      }
+    }
+    if case .collection(_, _, defaultsToEmpty: true, _) = self.kind {
+      return "[]"
+    }
+    guard let token else {
+      return self.isOptional ? "nil" : nil
+    }
+    guard token.text == nil else {
+      return ".\(token.identifier)Token()"
+    }
+    guard case .token(let choices, _, _) = self.kind,
+      case .keyword(let keyword) = choices.only
+    else {
+      return nil
+    }
+    return ".\(token.memberCallName)(.\(keyword.spec.memberCallName))"
+  }
+
+  public var defaultValue: ExprSyntax? {
+    self.defaultValue(syntaxType: self.syntaxType)
   }
 }

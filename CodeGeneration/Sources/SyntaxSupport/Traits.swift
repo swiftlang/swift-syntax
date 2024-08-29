@@ -24,7 +24,7 @@ public class Trait {
   public let children: [Child]
 
   init(traitName: String, baseKind: SyntaxNodeKind? = nil, documentation: String? = nil, children: [Child]) {
-    precondition(baseKind?.isBase != false, "`baseKind` must be a base syntax node kind")
+    precondition(baseKind?.isBaseType != false, "`baseKind` must be a base syntax node kind")
     self.traitName = traitName
     self.baseKind = baseKind
     self.protocolName = .identifier("\(traitName)Syntax")

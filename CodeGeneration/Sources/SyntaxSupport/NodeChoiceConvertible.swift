@@ -13,23 +13,20 @@
 import SwiftSyntax
 
 /// Instances of a conforming type should provide necessary information for generating code of a node choice.
-public protocol NodeChoiceConvertible: IdentifierConvertible {
-  /// A docc comment describing the syntax node convertible, including the trivia provided when
+public protocol NodeChoiceConvertible: TypeConvertible, IdentifierConvertible {
+  /// A docc comment describing the node choice, including the trivia provided when
   /// initializing the syntax node convertible, and the list of possible token choices inferred automatically.
   var documentation: SwiftSyntax.Trivia { get }
 
-  /// The experimental feature the syntax node convertible represents, or `nil` if this isn't
+  /// The experimental feature the node choice represents, or `nil` if this isn't
   /// for an experimental feature.
   var experimentalFeature: ExperimentalFeature? { get }
 
-  /// The attributes that should be printed on any API for the syntax node convertible.
+  /// The attributes that should be printed on any API for the node choice.
   ///
   /// This is typically used to mark APIs as SPI when the keyword is part of
   /// an experimental language feature.
   var apiAttributes: AttributeListSyntax { get }
-
-  /// The kind of the syntax node convertible.
-  var syntaxNodeKind: SyntaxNodeKind { get }
 }
 
 public extension NodeChoiceConvertible {

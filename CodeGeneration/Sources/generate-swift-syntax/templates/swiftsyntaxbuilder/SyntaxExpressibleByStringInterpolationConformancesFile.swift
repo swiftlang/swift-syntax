@@ -29,7 +29,7 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax(le
   let typesExpressibleByStringInterpolation =
     SYNTAX_NODES
     .filter { $0.parserFunction != nil }
-    .map { $0.kind.syntaxType }
+    .map { $0.syntaxType }
     // `SyntaxParsable` conformance for collection nodes is hand-written.
     + [
       "AccessorDeclListSyntax",

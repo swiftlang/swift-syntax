@@ -2063,9 +2063,9 @@ public struct RawPrecedenceGroupAttributeListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: raw)
   }
   
-  public var elements: [RawSyntax] {
+  public var elements: [Element] {
     layoutView.children.map {
-      RawSyntax(raw: $0!)
+      Element($0!)!
     }
   }
 }

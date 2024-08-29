@@ -27,12 +27,10 @@ let buildableNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   )
 
   for node in SYNTAX_NODES.compactMap(\.layoutNode) {
-    let type = node.type
-
     if let convenienceInit = try! node.createConvenienceBuilderInitializer() {
       DeclSyntax(
         """
-        extension \(type.syntaxBaseName) {
+        extension \(node.syntaxType) {
         \(convenienceInit)
         }
         """

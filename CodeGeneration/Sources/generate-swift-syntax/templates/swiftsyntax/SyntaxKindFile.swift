@@ -26,7 +26,7 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for node in NON_BASE_SYNTAX_NODES {
       DeclSyntax(
         """
-        \(node.apiAttributes())\
+        \(node.apiAttributes)\
         case \(node.enumCaseDeclName)
         """
       )
@@ -34,7 +34,7 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     try VariableDeclSyntax("public var isSyntaxCollection: Bool") {
       try SwitchExprSyntax("switch self") {
-        for node in SYNTAX_NODES where node.base == .syntaxCollection {
+        for node in SYNTAX_NODES where node.baseKind == .syntaxCollection {
           SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
             StmtSyntax("return true")
           }
@@ -68,7 +68,7 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
         for node in NON_BASE_SYNTAX_NODES {
           SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
-            StmtSyntax("return \(node.kind.syntaxType).self")
+            StmtSyntax("return \(node.syntaxType).self")
           }
         }
       }

@@ -28,12 +28,11 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     ) {
       for child in trait.children {
-        let questionMark = child.isOptional ? "?" : ""
-
         DeclSyntax(
           """
           \(child.documentation)\
-          \(child.apiAttributes)var \(child.varDeclName): \(child.syntaxNodeKind.syntaxType)\(raw: questionMark) { get set }
+          \(child.apiAttributes)\
+          var \(child.varDeclName): \(child.actualType) { get set }
           """
         )
       }
@@ -81,7 +80,7 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
   for node in SYNTAX_NODES.compactMap(\.layoutNode) where !node.traits.isEmpty {
     DeclSyntax(
-      "extension \(node.kind.syntaxType): \(raw: node.traits.map { $0 + "Syntax" }.joined(separator: ", ")) {}"
+      "extension \(node.syntaxType): \(raw: node.traits.map { $0 + "Syntax" }.joined(separator: ", ")) {}"
     )
   }
 }

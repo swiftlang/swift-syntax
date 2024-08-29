@@ -26,8 +26,8 @@ let syntaxEnumFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for node in NON_BASE_SYNTAX_NODES {
       DeclSyntax(
         """
-        \(node.apiAttributes())\
-        case \(node.enumCaseDeclName)(\(node.kind.syntaxType))
+        \(node.apiAttributes)\
+        case \(node.enumCaseDeclName)(\(node.syntaxType))
         """
       )
     }
@@ -51,16 +51,16 @@ let syntaxEnumFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
         for node in NON_BASE_SYNTAX_NODES {
           SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
-            StmtSyntax("return .\(node.memberCallName)(\(node.kind.syntaxType)(self)!)")
+            StmtSyntax("return .\(node.memberCallName)(\(node.syntaxType)(self)!)")
           }
         }
       }
     }
   }
 
-  for base in SYNTAX_NODES where base.kind.isBase {
+  for base in SYNTAX_NODES where base.isBaseType {
     let baseKind = base.kind
-    let baseName = baseKind.rawValue.withFirstCharacterUppercased
+    let baseName = baseKind.nameInProperCase
     let enumType: TypeSyntax = "\(raw: baseName)SyntaxEnum"
 
     try! EnumDeclSyntax(
@@ -69,11 +69,11 @@ let syntaxEnumFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       public enum \(enumType)
       """
     ) {
-      for node in NON_BASE_SYNTAX_NODES where node.base == baseKind {
+      for node in NON_BASE_SYNTAX_NODES where node.baseKind == baseKind {
         DeclSyntax(
           """
-          \(node.apiAttributes())\
-          case \(node.enumCaseDeclName)(\(node.kind.syntaxType))
+          \(node.apiAttributes)\
+          case \(node.enumCaseDeclName)(\(node.syntaxType))
           """
         )
       }
@@ -91,9 +91,9 @@ let syntaxEnumFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
       ) {
         try SwitchExprSyntax("switch raw.kind") {
-          for node in NON_BASE_SYNTAX_NODES where node.base == baseKind {
+          for node in NON_BASE_SYNTAX_NODES where node.baseKind == baseKind {
             SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
-              StmtSyntax("return .\(node.memberCallName)(\(node.kind.syntaxType)(self)!)")
+              StmtSyntax("return .\(node.memberCallName)(\(node.syntaxType)(self)!)")
             }
           }
           SwitchCaseSyntax("default:") {

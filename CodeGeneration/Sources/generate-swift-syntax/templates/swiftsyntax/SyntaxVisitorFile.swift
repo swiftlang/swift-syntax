@@ -58,14 +58,14 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     )
 
-    for node in SYNTAX_NODES where !node.kind.isBase {
+    for node in SYNTAX_NODES where !node.isBaseNode {
       DeclSyntax(
         """
-        /// Visiting \(raw: node.kind.doccLink) specifically.
+        /// Visiting \(raw: node.doccLink) specifically.
         ///   - Parameter node: the node we are visiting.
         ///   - Returns: how should we continue visiting.
-        \(node.apiAttributes())\
-        open func visit(_ node: \(node.kind.syntaxType)) -> SyntaxVisitorContinueKind {
+        \(node.apiAttributes)\
+        open func visit(_ node: \(node.syntaxType)) -> SyntaxVisitorContinueKind {
           return .visitChildren
         }
         """
@@ -73,10 +73,10 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       DeclSyntax(
         """
-        /// The function called after visiting \(raw: node.kind.doccLink) and its descendants.
+        /// The function called after visiting \(raw: node.doccLink) and its descendants.
         ///   - node: the node we just finished visiting.
-        \(node.apiAttributes())\
-        open func visitPost(_ node: \(node.kind.syntaxType)) {}
+        \(node.apiAttributes)\
+        open func visitPost(_ node: \(node.syntaxType)) {}
         """
       )
     }
@@ -186,7 +186,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                   for node in NON_BASE_SYNTAX_NODES {
                     SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
                       StmtSyntax(
-                        "return { self.visitImpl(&$0, \(node.kind.syntaxType).self, self.visit, self.visitPost) }"
+                        "return { self.visitImpl(&$0, \(node.syntaxType).self, self.visit, self.visitPost) }"
                       )
                     }
                   }
@@ -227,7 +227,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
                   for node in NON_BASE_SYNTAX_NODES {
                     SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
-                      ExprSyntax("visitImpl(&node, \(node.kind.syntaxType).self, visit, visitPost)")
+                      ExprSyntax("visitImpl(&node, \(node.syntaxType).self, visit, visitPost)")
                     }
                   }
                 }

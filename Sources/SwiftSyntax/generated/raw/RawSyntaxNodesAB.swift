@@ -105,8 +105,8 @@ public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var accessors: RawSyntax {
-    layoutView.children[3]!
+  public var accessors: Accessors {
+    layoutView.children[3].flatMap(Accessors.init)!
   }
   
   public var unexpectedBetweenAccessorsAndRightBrace: RawUnexpectedNodesSyntax? {
@@ -1292,9 +1292,9 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: raw)
   }
   
-  public var elements: [RawSyntax] {
+  public var elements: [Element] {
     layoutView.children.map {
-      RawSyntax(raw: $0!)
+      Element($0!)!
     }
   }
 }
@@ -1506,8 +1506,8 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var arguments: RawSyntax? {
-    layoutView.children[7]
+  public var arguments: Arguments? {
+    layoutView.children[7].flatMap(Arguments.init)
   }
   
   public var unexpectedBetweenArgumentsAndRightParen: RawUnexpectedNodesSyntax? {
@@ -1746,8 +1746,8 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var argument: RawSyntax {
-    layoutView.children[1]!
+  public var argument: Argument {
+    layoutView.children[1].flatMap(Argument.init)!
   }
   
   public var unexpectedBetweenArgumentAndTrailingComma: RawUnexpectedNodesSyntax? {
@@ -1958,8 +1958,8 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var value: RawSyntax {
-    layoutView.children[5]!
+  public var value: Value {
+    layoutView.children[5].flatMap(Value.init)!
   }
   
   public var unexpectedAfterValue: RawUnexpectedNodesSyntax? {

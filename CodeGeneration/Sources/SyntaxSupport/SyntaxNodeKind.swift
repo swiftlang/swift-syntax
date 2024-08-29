@@ -17,7 +17,7 @@ import SwiftSyntaxBuilder
 ///
 /// Using the cases of this enum, children of syntax nodes can refer the syntax
 /// node that defines their layout.
-public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeConvertible {
+public enum SyntaxNodeKind: String, CaseIterable, SyntaxNodeKindProtocol, IdentifierConvertible {
   // Please keep this list sorted alphabetically
 
   case _canImportExpr
@@ -327,7 +327,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
     }
   }
 
-  public var isBase: Bool {
+  public var isBaseType: Bool {
     switch self {
     case .decl, .expr, .pattern, .stmt, .syntax, .syntaxCollection, .type:
       return true
@@ -411,7 +411,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   }
 
   public var identifier: TokenSyntax {
-    return .identifier(rawValue)
+    return .identifier(self.rawValue)
   }
 
   public var syntaxType: TypeSyntax {
@@ -421,22 +421,20 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
     case .syntaxCollection:
       return "SyntaxCollection"
     default:
-      return "\(raw: rawValue.withFirstCharacterUppercased)Syntax"
+      return "\(raw: self.nameInProperCase)Syntax"
     }
   }
 
-  public var isAvailableInDocc: Bool {
-    if let node = SYNTAX_NODE_MAP[self], node.isExperimental {
-      return false
-    } else if isDeprecated {
-      return false
+  public func doccLink(content: String) -> String {
+    if self.node?.isExperimental == true || self.isDeprecated {
+      return "`\(content)`"
     } else {
-      return true
+      return "``\(content)``"
     }
   }
 
   public var protocolType: TypeSyntax {
-    return "\(syntaxType)Protocol"
+    return "\(self.syntaxType)Protocol"
   }
 
   /// For base node types, generates the name of the protocol to which all
@@ -445,8 +443,8 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   /// - Warning: This property can only be accessed for base node kinds; attempting to
   /// access it for a non-base kind will result in a runtime error.
   public var leafProtocolType: TypeSyntax {
-    if isBase {
-      return "_Leaf\(syntaxType)NodeProtocol"
+    if self.isBaseType {
+      return "_Leaf\(self.syntaxType)NodeProtocol"
     } else {
       fatalError("Only base kind can define leaf protocol")
     }
@@ -537,19 +535,30 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
     }
   }
 
-  public var isDeprecated: Bool {
-    return rawValue.first == "_"
-  }
-
   var deprecationAttribute: AttributeSyntax? {
-    if let deprecationMessage = deprecationMessage {
+    if let deprecationMessage {
       AttributeSyntax("@available(*, deprecated, message: \(literal: deprecationMessage)")
     } else {
-      AttributeSyntax(#"@available(*, deprecated, renamed: "\#(syntaxType)")"#)
+      AttributeSyntax(#"@available(*, deprecated, renamed: "\#(self.syntaxType)")"#)
     }
   }
 
-  public var raw: RawSyntaxNodeKind {
-    RawSyntaxNodeKind(syntaxNodeKind: self)
+  public var nonRaw: Self {
+    self
+  }
+}
+
+public extension SyntaxNodeKindProtocol where NonRaw == SyntaxNodeKind {
+  /// The ``Node`` representation of this kind, if any.
+  var node: Node? {
+    SYNTAX_NODE_MAP[self.nonRaw]
+  }
+
+  var nameInProperCase: String {
+    self.nonRaw.rawValue.withFirstCharacterUppercased
+  }
+
+  var isDeprecated: Bool {
+    self.nonRaw.rawValue.first == "_"
   }
 }

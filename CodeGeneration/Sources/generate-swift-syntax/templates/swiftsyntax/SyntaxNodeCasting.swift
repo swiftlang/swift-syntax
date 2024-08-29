@@ -17,7 +17,7 @@ import SyntaxSupport
 extension ChildNodeChoices.Choice {
   @MemberBlockItemListBuilder
   var castingMethods: MemberBlockItemListSyntax {
-    if self.isBase {
+    if self.isBaseType {
       DeclSyntax(
         """
         /// Checks if the current syntax node can be cast to the type conforming to the ``\(self.protocolType)`` protocol.

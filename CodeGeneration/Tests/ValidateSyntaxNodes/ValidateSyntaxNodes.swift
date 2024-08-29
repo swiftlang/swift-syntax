@@ -87,7 +87,7 @@ fileprivate extension Child {
   func isFollowedByColonToken(in node: LayoutNode) -> Bool {
     let childIndex = node.children.firstIndex(where: { $0.identifier.description == self.identifier.description })
     guard let childIndex else {
-      preconditionFailure("\(self.identifier) is not a child of \(node.kind.syntaxType)")
+      preconditionFailure("\(self.identifier) is not a child of \(node.syntaxType)")
     }
     guard childIndex + 2 < node.children.count else {
       return false
@@ -120,13 +120,13 @@ class ValidateSyntaxNodes: XCTestCase {
   /// All nodes with base kind e.g. `ExprSyntax` should end with `ExprSyntax`.
   func testBaseKindSuffix() {
     var failures: [ValidationFailure] = []
-    for node in SYNTAX_NODES where node.base != .syntaxCollection {
-      if !node.kind.syntaxType.description.hasSuffix(node.base.syntaxType.description) {
+    for node in SYNTAX_NODES where node.baseKind != .syntaxCollection {
+      if !node.syntaxType.description.hasSuffix(node.baseKind.syntaxType.description) {
         failures.append(
           ValidationFailure(
             node: node.kind,
             message:
-              "has base kind '\(node.base.syntaxType)' but type name doesn’t have '\(node.base.syntaxType)' suffix"
+              "has base kind '\(node.baseKind.syntaxType)' but type name doesn’t have '\(node.baseKind.syntaxType)' suffix"
           )
         )
       }
@@ -151,7 +151,7 @@ class ValidateSyntaxNodes: XCTestCase {
     var failures: [ValidationFailure] = []
 
     for node in SYNTAX_NODES.compactMap(\.collectionNode) {
-      if !node.kind.syntaxType.description.hasSuffix("ListSyntax") {
+      if !node.syntaxType.description.hasSuffix("ListSyntax") {
         failures.append(
           ValidationFailure(
             node: node.kind,
@@ -456,7 +456,7 @@ class ValidateSyntaxNodes: XCTestCase {
       }
     }
 
-    for (kind, children) in childrenByNodeKind where !kind.isBase && kind != .token && kind != .stringLiteralExpr {
+    for (kind, children) in childrenByNodeKind where !kind.isBaseType && kind != .token && kind != .stringLiteralExpr {
       let childNames = children.map(\.child.identifier.description)
       let mostCommonChildName = childNames.mostCommon!
       let mostCommonChild = children.first(where: { $0.child.identifier.description == mostCommonChildName })!
@@ -467,7 +467,7 @@ class ValidateSyntaxNodes: XCTestCase {
             ValidationFailure(
               node: node.kind,
               message:
-                "child '\(child.identifier)' is named inconsistently with '\(mostCommonChild.node.kind.syntaxType).\(mostCommonChildName)', which has the same type ('\(kind.syntaxType)')"
+                "child '\(child.identifier)' is named inconsistently with '\(mostCommonChild.node.syntaxType).\(mostCommonChildName)', which has the same type ('\(kind.syntaxType)')"
             )
           )
         }
@@ -585,7 +585,7 @@ class ValidateSyntaxNodes: XCTestCase {
 
     for node in SYNTAX_NODES.compactMap(\.layoutNode) {
       for child in node.children {
-        if case .node(kind: let kind) = child.kind, SYNTAX_NODE_MAP[kind]?.collectionNode != nil {
+        if case .node(kind: let kind) = child.kind, kind.node?.collectionNode != nil {
           failures.append(
             ValidationFailure(
               node: node.kind,
@@ -756,7 +756,7 @@ class ValidateSyntaxNodes: XCTestCase {
     var failures: [ValidationFailure] = []
 
     for node in SYNTAX_NODES.compactMap(\.layoutNode) {
-      if node.kind.syntaxType.description.contains("List") {
+      if node.syntaxType.description.contains("List") {
         failures.append(
           ValidationFailure(
             node: node.kind,
@@ -797,7 +797,7 @@ class ValidateSyntaxNodes: XCTestCase {
     var failures: [ValidationFailure] = []
 
     for node in SYNTAX_NODES {
-      if node.kind.syntaxType.description.contains("Entry") {
+      if node.syntaxType.description.contains("Entry") {
         failures.append(
           ValidationFailure(
             node: node.kind,

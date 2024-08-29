@@ -15,33 +15,12 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 
 struct ChildNodeChoices {
-  struct Choice: IdentifierConvertible, TypeConvertible {
-    var documentation: SwiftSyntax.Trivia
+  @dynamicMemberLookup
+  struct Choice {
+    var node: any NodeChoiceConvertible
 
-    var experimentalDocNote: SwiftSyntax.Trivia
-
-    var apiAttributes: AttributeListSyntax
-
-    var identifier: TokenSyntax
-
-    var isBase: Bool
-
-    var syntaxType: TypeSyntax
-
-    var protocolType: TypeSyntax
-
-    var isAvailableInDocc: Bool
-
-    init(_ node: some NodeChoiceConvertible, forRaw: Bool) {
-      self.documentation = node.documentation
-      self.experimentalDocNote = node.experimentalDocNote
-      self.apiAttributes = node.apiAttributes
-      self.identifier = node.identifier
-      let type: any TypeConvertible = forRaw ? node.syntaxNodeKind.raw : node.syntaxNodeKind
-      self.isBase = type.isBase
-      self.syntaxType = type.syntaxType
-      self.protocolType = type.protocolType
-      self.isAvailableInDocc = type.isAvailableInDocc
+    subscript<T>(dynamicMember keyPath: KeyPath<any NodeChoiceConvertible, T>) -> T {
+      self.node[keyPath: keyPath]
     }
   }
 
@@ -83,7 +62,7 @@ extension Node {
         case .nodeChoices(let choices):
           return ChildNodeChoices(
             name: child.syntaxChoicesType,
-            choices: choices.map { ChildNodeChoices.Choice($0, forRaw: forRaw) }
+            choices: choices.map { ChildNodeChoices.Choice(node: forRaw ? $0.raw : $0) }
           )
         default:
           return nil
@@ -94,7 +73,7 @@ extension Node {
         ChildNodeChoices(
           name: "Element",
           choices: node.elementChoices.map {
-            ChildNodeChoices.Choice(SYNTAX_NODE_MAP[$0]!, forRaw: forRaw)
+            ChildNodeChoices.Choice(node: forRaw ? $0.node!.raw : $0.node!)
           }
         )
       ]
@@ -117,7 +96,7 @@ extension ChildNodeChoices.Choice {
   }
 
   func baseTypeInitDecl(hasArgumentName: Bool) -> InitializerDeclSyntax? {
-    guard self.isBase else {
+    guard self.isBaseType else {
       return nil
     }
     let firstName: SyntaxNodeString

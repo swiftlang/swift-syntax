@@ -39,8 +39,8 @@ let nodesSections: String = {
     let baseTypes = ["\(baseKind.syntaxType)", "\(baseKind.syntaxType)Protocol", "Missing\(baseKind.syntaxType)"]
     let leafTypes =
       SYNTAX_NODES
-      .filter({ $0.base == baseKind && !$0.kind.isMissing && !$0.isExperimental && !$0.kind.isDeprecated })
-      .map(\.kind.syntaxType.description)
+      .filter({ $0.baseKind == baseKind && !$0.kind.isMissing && !$0.isExperimental && !$0.isDeprecated })
+      .map(\.syntaxType.description)
     addSection(heading: heading, types: baseTypes + leafTypes)
   }
 
@@ -54,9 +54,9 @@ let nodesSections: String = {
         guard let node = node.collectionNode, !node.isExperimental else {
           return []
         }
-        return [node.kind.syntaxType.description]
+        return [node.syntaxType.description]
           + node.elementChoices
-          .filter { SYNTAX_NODE_MAP[$0] != nil && !SYNTAX_NODE_MAP[$0]!.isExperimental && !$0.isDeprecated }
+          .filter { $0.node != nil && !$0.node!.isExperimental && !$0.isDeprecated }
           .map(\.syntaxType.description)
           .filter { !handledSyntaxTypes.contains($0) }
       })
@@ -64,13 +64,13 @@ let nodesSections: String = {
 
   addSection(
     heading: "Attributes",
-    types: ATTRIBUTE_NODES.filter({ !$0.isExperimental && !$0.kind.isDeprecated }).map(\.kind.syntaxType.description)
+    types: ATTRIBUTE_NODES.filter({ !$0.isExperimental && !$0.isDeprecated }).map(\.syntaxType.description)
       .sorted()
   )
 
   addSection(
     heading: "Miscellaneous Syntax",
-    types: SYNTAX_NODES.filter({ !$0.isExperimental && !$0.kind.isDeprecated }).map(\.kind.syntaxType.description)
+    types: SYNTAX_NODES.filter({ !$0.isExperimental && !$0.isDeprecated }).map(\.syntaxType.description)
       .filter({
         !handledSyntaxTypes.contains($0)
       })

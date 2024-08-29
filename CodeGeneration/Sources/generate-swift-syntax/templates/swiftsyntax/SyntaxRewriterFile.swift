@@ -155,28 +155,28 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     )
 
-    for node in SYNTAX_NODES where !node.kind.isBase {
-      if (node.base == .syntax || node.base == .syntaxCollection) && node.kind != .missing {
+    for node in SYNTAX_NODES where !node.isBaseNode {
+      if (node.baseKind == .syntax || node.baseKind == .syntaxCollection) && node.kind != .missing {
         DeclSyntax(
           """
-          /// Visit a \(raw: node.kind.doccLink).
+          /// Visit a \(raw: node.doccLink).
           ///   - Parameter node: the node that is being visited
           ///   - Returns: the rewritten node
-          \(node.apiAttributes())\
-          open func visit(_ node: \(node.kind.syntaxType)) -> \(node.kind.syntaxType) {
-            return visitChildren(node._syntaxNode).cast(\(node.kind.syntaxType).self)
+          \(node.apiAttributes)\
+          open func visit(_ node: \(node.syntaxType)) -> \(node.syntaxType) {
+            return visitChildren(node._syntaxNode).cast(\(node.syntaxType).self)
           }
           """
         )
       } else {
         DeclSyntax(
           """
-          /// Visit a \(raw: node.kind.doccLink).
+          /// Visit a \(raw: node.doccLink).
           ///   - Parameter node: the node that is being visited
           ///   - Returns: the rewritten node
-          \(node.apiAttributes())\
-          open func visit(_ node: \(node.kind.syntaxType)) -> \(node.baseType.syntaxBaseName) {
-            return \(node.baseType.syntaxBaseName)(visitChildren(node._syntaxNode).cast(\(node.kind.syntaxType).self))
+          \(node.apiAttributes)\
+          open func visit(_ node: \(node.syntaxType)) -> \(node.baseKind.syntaxType) {
+            return \(node.baseKind.syntaxType)(visitChildren(node._syntaxNode).cast(\(node.syntaxType).self))
           }
           """
         )
@@ -184,18 +184,17 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     }
 
     for baseNode in SYNTAX_NODES
-    where baseNode.kind.isBase && baseNode.kind != .syntax && baseNode.kind != .syntaxCollection {
-      let baseKind = baseNode.kind
+    where baseNode.isBaseNode && baseNode.kind != .syntax && baseNode.kind != .syntaxCollection {
       DeclSyntax(
         """
-        /// Visit any \(baseKind.syntaxType) node.
+        /// Visit any \(baseNode.syntaxType) node.
         ///   - Parameter node: the node that is being visited
         ///   - Returns: the rewritten node
-        \(baseNode.apiAttributes())\
-        public func visit(_ node: \(baseKind.syntaxType)) -> \(baseKind.syntaxType) {
+        \(baseNode.apiAttributes)\
+        public func visit(_ node: \(baseNode.syntaxType)) -> \(baseNode.syntaxType) {
           var node: Syntax = Syntax(node)
           dispatchVisit(&node)
-          return node.cast(\(baseKind.syntaxType).self)
+          return node.cast(\(baseNode.syntaxType).self)
         }
         """
       )
@@ -265,7 +264,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
                   for node in NON_BASE_SYNTAX_NODES {
                     SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
-                      StmtSyntax("return { self.visitImpl(&$0, \(node.kind.syntaxType).self, self.visit) }")
+                      StmtSyntax("return { self.visitImpl(&$0, \(node.syntaxType).self, self.visit) }")
                     }
                   }
                 }
@@ -293,7 +292,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
                   for node in NON_BASE_SYNTAX_NODES {
                     SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
-                      StmtSyntax("return visitImpl(&node, \(node.kind.syntaxType).self, visit)")
+                      StmtSyntax("return visitImpl(&node, \(node.syntaxType).self, visit)")
                     }
                   }
                 }

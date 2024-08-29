@@ -170,26 +170,6 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                 """#
               )
 
-              DeclSyntax(
-                #"""
-                func assertAnyHasNoError(_ nodeKind: SyntaxKind, _ index: Int, _ errors: [ValidationError?]) {
-                  let nonNilErrors = errors.compactMap({ $0 })
-                  if nonNilErrors.count == errors.count, let firstError = nonNilErrors.first {
-                    let (file, line) = firstError.fileAndLine
-                    assertionFailure("""
-                      Error validating child at index \(index) of \(nodeKind):
-                      Node did not satisfy any node choice requirement.
-                      Validation failures:
-                      \(nonNilErrors.map({ "- \($0.description)" }).joined(separator: "\n"))
-
-                      See "RawSyntax Validation" in CONTRIBUTING.md to reproduce the failure locally.
-                      """, file: file, line: line)
-                    _ = 1
-                  }
-                }
-                """#
-              )
-
               try SwitchExprSyntax("switch kind") {
                 SwitchCaseSyntax(
                   """
@@ -205,16 +185,9 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                       for (index, child) in node.children.enumerated() {
                         switch child.kind {
                         case .nodeChoices(let choices):
-                          let verifiedChoices = ArrayExprSyntax {
-                            ArrayElementSyntax(
-                              leadingTrivia: .newline,
-                              expression: ExprSyntax(
-                                "verify(layout[\(raw: index)], as: Raw\(child.buildableType.buildable).self)"
-                              )
-                            )
-                          }
-
-                          ExprSyntax("assertAnyHasNoError(kind, \(raw: index), \(verifiedChoices))")
+                          ExprSyntax(
+                            "assertNoError(kind, \(raw: index), verify(layout[\(raw: index)], as: \(node.raw.syntaxType).\(child.raw.actualType).self))"
+                          )
                         case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _):
                           let choices = ArrayExprSyntax {
                             for choice in choices {
@@ -227,12 +200,12 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                             }
                           }
                           let verifyCall = ExprSyntax(
-                            "verify(layout[\(raw: index)], as: Raw\(child.buildableType.buildable).self, tokenChoices: \(choices))"
+                            "verify(layout[\(raw: index)], as: \(child.raw.actualType).self, tokenChoices: \(choices))"
                           )
                           ExprSyntax("assertNoError(kind, \(raw: index), \(verifyCall))")
                         default:
                           ExprSyntax(
-                            "assertNoError(kind, \(raw: index), verify(layout[\(raw: index)], as: Raw\(child.buildableType.buildable).self))"
+                            "assertNoError(kind, \(raw: index), verify(layout[\(raw: index)], as: \(child.raw.actualType).self))"
                           )
                         }
                       }
@@ -243,16 +216,9 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                             "assertNoError(kind, index, verify(element, as: \(onlyElement.raw.syntaxType).self))"
                           )
                         } else {
-                          let verifiedChoices = ArrayExprSyntax {
-                            for choiceName in node.elementChoices {
-                              let choice = SYNTAX_NODE_MAP[choiceName]!
-                              ArrayElementSyntax(
-                                leadingTrivia: .newline,
-                                expression: ExprSyntax("verify(element, as: \(choice.kind.raw.syntaxType).self)")
-                              )
-                            }
-                          }
-                          ExprSyntax("assertAnyHasNoError(kind, index, \(verifiedChoices))")
+                          ExprSyntax(
+                            "assertNoError(kind, index, verify(element, as: \(node.raw.syntaxType).Element.self))"
+                          )
                         }
                       }
                     }

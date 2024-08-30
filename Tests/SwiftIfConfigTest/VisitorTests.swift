@@ -300,12 +300,13 @@ public class VisitorTests: XCTestCase {
     )
   }
 
-  func testRemoveComments() {
+  func testRemoveCommentsAndSourceLocations() {
     let original: SourceFileSyntax = """
 
       /// This is a documentation comment
       func f() { }
 
+      #sourceLocation(file: "if-configs.swift", line: 200)
       /** Another documentation comment
           that is split across
           multiple lines */
@@ -318,12 +319,11 @@ public class VisitorTests: XCTestCase {
       """
 
     assertStringsEqualWithDiff(
-      original.descriptionWithoutComments,
+      original.descriptionWithoutCommentsAndSourceLocations,
       """
 
        
       func f() { }
-
 
 
       func g() { }

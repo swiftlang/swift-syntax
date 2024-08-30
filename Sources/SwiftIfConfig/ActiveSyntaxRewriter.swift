@@ -18,15 +18,20 @@ extension SyntaxProtocol {
   /// are inactive according to the given build configuration, leaving only
   /// the code that is active within that build configuration.
   ///
-  /// Returns the syntax node with all inactive regions removed, along with an
-  /// array containing any diagnostics produced along the way.
-  ///
   /// If there are errors in the conditions of any configuration
   /// clauses, e.g., `#if FOO > 10`, then the condition will be
   /// considered to have failed and the clauses's elements will be
   /// removed.
+  /// - Parameters:
+  ///   - configuration: the configuration to apply.
+  ///   - retainFeatureCheckIfConfigs: whether to retain `#if` blocks involving
+  ///     compiler version checks (e.g., `compiler(>=6.0)`) and `$`-based
+  ///     feature checks.
+  /// - Returns: the syntax node with all inactive regions removed, along with
+  ///   an array containing any diagnostics produced along the way.
   public func removingInactive(
-    in configuration: some BuildConfiguration
+    in configuration: some BuildConfiguration,
+    retainFeatureCheckIfConfigs: Bool = false
   ) -> (result: Syntax, diagnostics: [Diagnostic]) {
     // First pass: Find all of the active clauses for the #ifs we need to
     // visit, along with any diagnostics produced along the way. This process
@@ -41,7 +46,10 @@ extension SyntaxProtocol {
 
     // Second pass: Rewrite the syntax tree by removing the inactive clauses
     // from each #if (along with the #ifs themselves).
-    let rewriter = ActiveSyntaxRewriter(configuration: configuration)
+    let rewriter = ActiveSyntaxRewriter(
+      configuration: configuration,
+      retainFeatureCheckIfConfigs: retainFeatureCheckIfConfigs
+    )
     return (
       rewriter.rewrite(Syntax(self)),
       visitor.diagnostics
@@ -83,8 +91,12 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
   let configuration: Configuration
   var diagnostics: [Diagnostic] = []
 
-  init(configuration: Configuration) {
+  /// Whether to retain `#if` blocks containing compiler and feature checks.
+  var retainFeatureCheckIfConfigs: Bool
+
+  init(configuration: Configuration, retainFeatureCheckIfConfigs: Bool) {
     self.configuration = configuration
+    self.retainFeatureCheckIfConfigs = retainFeatureCheckIfConfigs
   }
 
   private func dropInactive<List: SyntaxCollection>(
@@ -97,7 +109,9 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
       let element = node[elementIndex]
 
       // Find #ifs within the list.
-      if let ifConfigDecl = elementAsIfConfig(element) {
+      if let ifConfigDecl = elementAsIfConfig(element),
+        (!retainFeatureCheckIfConfigs || !ifConfigDecl.containsFeatureCheck)
+      {
         // Retrieve the active `#if` clause
         let (activeClause, localDiagnostics) = ifConfigDecl.activeClause(in: configuration)
 
@@ -262,6 +276,12 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
     outerBase: ExprSyntax?,
     postfixIfConfig: PostfixIfConfigExprSyntax
   ) -> ExprSyntax {
+    // If we're supposed to retain #if configs that are feature checks, and
+    // this configuration has one, do so.
+    if retainFeatureCheckIfConfigs && postfixIfConfig.config.containsFeatureCheck {
+      return ExprSyntax(postfixIfConfig)
+    }
+
     // Retrieve the active `if` clause.
     let (activeClause, localDiagnostics) = postfixIfConfig.config.activeClause(in: configuration)
 
@@ -305,5 +325,57 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
     }
 
     return visit(rewrittenNode)
+  }
+}
+
+/// Helper class to find a feature or compiler check.
+fileprivate class FindFeatureCheckVisitor: SyntaxVisitor {
+  var foundFeatureCheck = false
+
+  override func visit(_ node: DeclReferenceExprSyntax) -> SyntaxVisitorContinueKind {
+    // Checks that start with $ are feature checks that should be retained.
+    if let identifier = node.simpleIdentifier,
+      let initialChar = identifier.name.first,
+      initialChar == "$"
+    {
+      foundFeatureCheck = true
+      return .skipChildren
+    }
+
+    return .visitChildren
+  }
+
+  override func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
+    if let calleeDeclRef = node.calledExpression.as(DeclReferenceExprSyntax.self),
+      let calleeName = calleeDeclRef.simpleIdentifier?.name,
+      (calleeName == "compiler" || calleeName == "_compiler_version")
+    {
+      foundFeatureCheck = true
+    }
+
+    return .skipChildren
+  }
+}
+
+extension ExprSyntaxProtocol {
+  /// Whether any of the nodes in this expression involve compiler or feature
+  /// checks.
+  fileprivate var containsFeatureCheck: Bool {
+    let visitor = FindFeatureCheckVisitor(viewMode: .fixedUp)
+    visitor.walk(self)
+    return visitor.foundFeatureCheck
+  }
+}
+
+extension IfConfigDeclSyntax {
+  /// Whether any of the clauses in this #if contain a feature check.
+  var containsFeatureCheck: Bool {
+    return clauses.contains { clause in
+      if let condition = clause.condition {
+        return condition.containsFeatureCheck
+      } else {
+        return false
+      }
+    }
   }
 }

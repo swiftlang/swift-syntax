@@ -379,3 +379,38 @@ extension IfConfigDeclSyntax {
     }
   }
 }
+
+extension SyntaxProtocol {
+  // Produce the source code for this syntax node with all of the comments
+  // removed. Each comment will be replaced with either a newline or a space,
+  // depending on whether the comment involved a newline.
+  @_spi(Compiler)
+  public var descriptionWithoutComments: String {
+    var result = ""
+    for token in tokens(viewMode: .sourceAccurate) {
+      token.leadingTrivia.writeWithoutComments(to: &result)
+      token.text.write(to: &result)
+      token.trailingTrivia.writeWithoutComments(to: &result)
+    }
+    return result
+  }
+}
+
+extension Trivia {
+  fileprivate func writeWithoutComments(to stream: inout some TextOutputStream) {
+    for piece in pieces {
+      switch piece {
+      case .backslashes, .carriageReturnLineFeeds, .carriageReturns, .formfeeds, .newlines, .pounds, .spaces, .tabs,
+        .unexpectedText, .verticalTabs:
+        piece.write(to: &stream)
+
+      case .blockComment(let text), .docBlockComment(let text), .docLineComment(let text), .lineComment(let text):
+        if text.contains(where: \.isNewline) {
+          stream.write("\n")
+        } else {
+          stream.write(" ")
+        }
+      }
+    }
+  }
+}

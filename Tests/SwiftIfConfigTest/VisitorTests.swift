@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-import SwiftIfConfig
+@_spi(Compiler) import SwiftIfConfig
 import SwiftParser
 import SwiftSyntax
 @_spi(XCTestFailureLocation) @_spi(Testing) import SwiftSyntaxMacrosGenericTestSupport
@@ -297,6 +297,42 @@ public class VisitorTests: XCTestCase {
           }) {
         }
         """
+    )
+  }
+
+  func testRemoveComments() {
+    let original: SourceFileSyntax = """
+
+      /// This is a documentation comment
+      func f() { }
+
+      /** Another documentation comment
+          that is split across
+          multiple lines */
+      func g() { }
+
+      func h() {
+        x +/*comment*/y
+        // foo
+      }
+      """
+
+    assertStringsEqualWithDiff(
+      original.descriptionWithoutComments,
+      """
+
+       
+      func f() { }
+
+
+
+      func g() { }
+
+      func h() {
+        x + y
+         
+      }
+      """
     )
   }
 }

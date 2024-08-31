@@ -47,17 +47,4 @@ extension SyntaxProtocol {
     let configuredRegions = root.configuredRegions(in: configuration)
     return (configuredRegions.isActive(self), configuredRegions.diagnostics)
   }
-
-  /// Determine whether the given syntax node is active given a set of
-  /// configured regions as produced by `configuredRegions(in:)`.
-  ///
-  /// If you are querying whether many syntax nodes in a particular file are
-  /// active, consider calling `configuredRegions(in:)` once and using
-  /// this function. For occasional queries, use `isActive(in:)`.
-  @available(*, deprecated, message: "Please use ConfiguredRegions.isActive(_:)")
-  public func isActive(
-    inConfiguredRegions regions: ConfiguredRegions
-  ) -> IfConfigRegionState {
-    regions.isActive(self)
-  }
 }

@@ -37,7 +37,7 @@ import SwiftSyntax
 ///   - Unparsed region for the `#elseif compiler(>= 12.0)`.
 ///   - Inactive region for the final `#else`.
 public struct ConfiguredRegions {
-  let regions: [Element]
+  let regions: [(ifClause: IfConfigClauseSyntax, state: IfConfigRegionState)]
 
   /// The set of diagnostics produced when evaluating the configured regions.
   public let diagnostics: [Diagnostic]
@@ -59,13 +59,13 @@ public struct ConfiguredRegions {
       let middle = currentSlice.startIndex + currentSlice.count / 2
 
       // If the node is prior to the start of the middle, take the left-hand side.
-      if node.position < currentSlice[middle].0.regionStart {
+      if node.position < currentSlice[middle].ifClause.regionStart {
         currentSlice = currentSlice[..<middle]
         continue
       }
 
       // If the node is after the end of the middle, take the right-hand side.
-      if node.position > currentSlice[middle].0.endPosition {
+      if node.position > currentSlice[middle].ifClause.endPosition {
         currentSlice = currentSlice[(middle + 1)...]
         continue
       }
@@ -77,13 +77,13 @@ public struct ConfiguredRegions {
     // Find the last region in which this node lands. If there is no such
     // region, this is active.
     return currentSlice.last { region in
-      node.position >= region.0.regionStart && node.position <= region.0.endPosition
-    }?.1 ?? .active
+      (region.ifClause.regionStart...region.ifClause.endPosition).contains(node.position)
+    }?.state ?? .active
   }
 }
 
 extension ConfiguredRegions: RandomAccessCollection {
-  public typealias Element = (IfConfigClauseSyntax, IfConfigRegionState)
+  public typealias Element = (ifClause: IfConfigClauseSyntax, state: IfConfigRegionState)
   public var startIndex: Int { regions.startIndex }
   public var endIndex: Int { regions.endIndex }
 
@@ -99,7 +99,7 @@ extension ConfiguredRegions: CustomDebugStringConvertible {
       return "[]"
     }
 
-    let root = firstRegion.0.root
+    let root = firstRegion.ifClause.root
     let converter = SourceLocationConverter(fileName: "", tree: root)
     let regionDescriptions = regions.map { (ifClause, state) in
       let startPosition = converter.location(for: ifClause.position)
@@ -198,7 +198,6 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
 
           // In an active region, evaluate the condition to determine whether
           // this clause is active. Otherwise, this clause is inactive.
-          // inactive.
           if inActiveRegion {
             let (thisIsActive, _, evalDiagnostics) = evaluateIfConfig(
               condition: foldedCondition,

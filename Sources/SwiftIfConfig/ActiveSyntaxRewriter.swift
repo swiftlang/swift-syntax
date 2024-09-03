@@ -24,14 +24,33 @@ extension SyntaxProtocol {
   /// removed.
   /// - Parameters:
   ///   - configuration: the configuration to apply.
+  /// - Returns: the syntax node with all inactive regions removed, along with
+  ///   an array containing any diagnostics produced along the way.
+  public func removingInactive(
+    in configuration: some BuildConfiguration
+  ) -> (result: Syntax, diagnostics: [Diagnostic]) {
+    return removingInactive(in: configuration, retainFeatureCheckIfConfigs: false)
+  }
+
+  /// Produce a copy of this syntax node that removes all syntax regions that
+  /// are inactive according to the given build configuration, leaving only
+  /// the code that is active within that build configuration.
+  ///
+  /// If there are errors in the conditions of any configuration
+  /// clauses, e.g., `#if FOO > 10`, then the condition will be
+  /// considered to have failed and the clauses's elements will be
+  /// removed.
+  /// - Parameters:
+  ///   - configuration: the configuration to apply.
   ///   - retainFeatureCheckIfConfigs: whether to retain `#if` blocks involving
   ///     compiler version checks (e.g., `compiler(>=6.0)`) and `$`-based
   ///     feature checks.
   /// - Returns: the syntax node with all inactive regions removed, along with
   ///   an array containing any diagnostics produced along the way.
+  @_spi(Compiler)
   public func removingInactive(
     in configuration: some BuildConfiguration,
-    retainFeatureCheckIfConfigs: Bool = false
+    retainFeatureCheckIfConfigs: Bool
   ) -> (result: Syntax, diagnostics: [Diagnostic]) {
     // First pass: Find all of the active clauses for the #ifs we need to
     // visit, along with any diagnostics produced along the way. This process

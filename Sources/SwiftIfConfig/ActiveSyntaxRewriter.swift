@@ -52,27 +52,64 @@ extension SyntaxProtocol {
     in configuration: some BuildConfiguration,
     retainFeatureCheckIfConfigs: Bool
   ) -> (result: Syntax, diagnostics: [Diagnostic]) {
-    // First pass: Find all of the active clauses for the #ifs we need to
-    // visit, along with any diagnostics produced along the way. This process
-    // does not change the tree in any way.
-    let visitor = ActiveSyntaxVisitor(viewMode: .sourceAccurate, configuration: configuration)
-    visitor.walk(self)
+    let configuredRegions = configuredRegions(in: configuration)
+    return (
+      result: configuredRegions.removingInactive(
+        from: self,
+        retainFeatureCheckIfConfigs: retainFeatureCheckIfConfigs
+      ),
+      diagnostics: configuredRegions.diagnostics
+    )
+  }
+}
 
-    // If there were no active clauses to visit, we're done!
-    if !visitor.visitedAnyIfClauses {
-      return (Syntax(self), visitor.diagnostics)
+extension ConfiguredRegions {
+  /// Produce a copy of some syntax node in the configured region that removes
+  /// all syntax regions that are inactive according to the build configuration,
+  /// leaving only the code that is active within that build configuration.
+  ///
+  /// If there are errors in the conditions of any configuration
+  /// clauses, e.g., `#if FOO > 10`, then the condition will be
+  /// considered to have failed and the clauses's elements will be
+  /// removed.
+  /// - Parameters:
+  ///   - node: the stnrax node from which inactive regions will be removed.
+  /// - Returns: the syntax node with all inactive regions removed.
+  public func removingInactive(from node: some SyntaxProtocol) -> Syntax {
+    return removingInactive(from: node, retainFeatureCheckIfConfigs: false)
+  }
+
+  /// Produce a copy of some syntax node in the configured region that removes
+  /// all syntax regions that are inactive according to the build configuration,
+  /// leaving only the code that is active within that build configuration.
+  ///
+  /// If there are errors in the conditions of any configuration
+  /// clauses, e.g., `#if FOO > 10`, then the condition will be
+  /// considered to have failed and the clauses's elements will be
+  /// removed.
+  /// - Parameters:
+  ///   - node: the stnrax node from which inactive regions will be removed.
+  ///   - retainFeatureCheckIfConfigs: whether to retain `#if` blocks involving
+  ///     compiler version checks (e.g., `compiler(>=6.0)`) and `$`-based
+  ///     feature checks.
+  /// - Returns: the syntax node with all inactive regions removed.
+  @_spi(Compiler)
+  public func removingInactive(
+    from node: some SyntaxProtocol,
+    retainFeatureCheckIfConfigs: Bool
+  ) -> Syntax {
+    // If there are no inactive regions, there's nothing to do.
+    if regions.isEmpty {
+      return Syntax(node)
     }
 
-    // Second pass: Rewrite the syntax tree by removing the inactive clauses
+    // Rewrite the syntax tree by removing the inactive clauses
     // from each #if (along with the #ifs themselves).
     let rewriter = ActiveSyntaxRewriter(
-      configuration: configuration,
+      configuredRegions: self,
       retainFeatureCheckIfConfigs: retainFeatureCheckIfConfigs
     )
-    return (
-      rewriter.rewrite(Syntax(self)),
-      visitor.diagnostics
-    )
+    return rewriter.rewrite(Syntax(node))
   }
 }
 
@@ -106,15 +143,16 @@ extension SyntaxProtocol {
 ///
 /// For any other target platforms, the resulting tree will be empty (other
 /// than trivia).
-class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
-  let configuration: Configuration
-  var diagnostics: [Diagnostic] = []
+class ActiveSyntaxRewriter: SyntaxRewriter {
+  let configuredRegions: ConfiguredRegions
+  var diagnostics: [Diagnostic]
 
   /// Whether to retain `#if` blocks containing compiler and feature checks.
   var retainFeatureCheckIfConfigs: Bool
 
-  init(configuration: Configuration, retainFeatureCheckIfConfigs: Bool) {
-    self.configuration = configuration
+  init(configuredRegions: ConfiguredRegions, retainFeatureCheckIfConfigs: Bool) {
+    self.configuredRegions = configuredRegions
+    self.diagnostics = configuredRegions.diagnostics
     self.retainFeatureCheckIfConfigs = retainFeatureCheckIfConfigs
   }
 
@@ -124,6 +162,19 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
   ) -> List {
     var newElements: [List.Element] = []
     var anyChanged = false
+
+    // Note that an element changed at the given index.
+    func noteElementChanged(at elementIndex: List.Index) {
+      if anyChanged {
+        return
+      }
+
+      // This is the first element that changed, so note that we have
+      // changes and add all prior elements to the list of new elements.
+      anyChanged = true
+      newElements.append(contentsOf: node[..<elementIndex])
+    }
+
     for elementIndex in node.indices {
       let element = node[elementIndex]
 
@@ -132,17 +183,9 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
         (!retainFeatureCheckIfConfigs || !ifConfigDecl.containsFeatureCheck)
       {
         // Retrieve the active `#if` clause
-        let (activeClause, localDiagnostics) = ifConfigDecl.activeClause(in: configuration)
+        let activeClause = configuredRegions.activeClause(for: ifConfigDecl)
 
-        // Add these diagnostics.
-        diagnostics.append(contentsOf: localDiagnostics)
-
-        // If this is the first element that changed, note that we have
-        // changes and add all prior elements to the list of new elements.
-        if !anyChanged {
-          anyChanged = true
-          newElements.append(contentsOf: node[..<elementIndex])
-        }
+        noteElementChanged(at: elementIndex)
 
         // Extract the elements from the active clause, if there are any.
         guard let elements = activeClause?.elements else {
@@ -161,6 +204,15 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
         continue
       }
 
+      // Transform the element directly. If it changed, note the changes.
+      if let transformedElement = rewrite(Syntax(element)).as(List.Element.self),
+        transformedElement.id != element.id
+      {
+        noteElementChanged(at: elementIndex)
+        newElements.append(transformedElement)
+        continue
+      }
+
       if anyChanged {
         newElements.append(element)
       }
@@ -174,47 +226,39 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
   }
 
   override func visit(_ node: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
-    let rewrittenNode = dropInactive(node) { element in
+    return dropInactive(node) { element in
       guard case .decl(let declElement) = element.item else {
         return nil
       }
 
       return declElement.as(IfConfigDeclSyntax.self)
     }
-
-    return super.visit(rewrittenNode)
   }
 
   override func visit(_ node: MemberBlockItemListSyntax) -> MemberBlockItemListSyntax {
-    let rewrittenNode = dropInactive(node) { element in
+    return dropInactive(node) { element in
       return element.decl.as(IfConfigDeclSyntax.self)
     }
-
-    return super.visit(rewrittenNode)
   }
 
   override func visit(_ node: SwitchCaseListSyntax) -> SwitchCaseListSyntax {
-    let rewrittenNode = dropInactive(node) { element in
+    return dropInactive(node) { element in
       if case .ifConfigDecl(let ifConfigDecl) = element {
         return ifConfigDecl
       }
 
       return nil
     }
-
-    return super.visit(rewrittenNode)
   }
 
   override func visit(_ node: AttributeListSyntax) -> AttributeListSyntax {
-    let rewrittenNode = dropInactive(node) { element in
+    return dropInactive(node) { element in
       if case .ifConfigDecl(let ifConfigDecl) = element {
         return ifConfigDecl
       }
 
       return nil
     }
-
-    return super.visit(rewrittenNode)
   }
 
   /// Apply the given base to the postfix expression.
@@ -234,7 +278,7 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
         return nil
       }
 
-      let newExpr = applyBaseToPostfixExpression(base: base, postfix: node[keyPath: keyPath])
+      let newExpr = applyBaseToPostfixExpression(base: base, postfix: visit(node[keyPath: keyPath]))
       return ExprSyntax(node.with(keyPath, newExpr))
     }
 
@@ -243,7 +287,7 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
       guard let memberBase = memberAccess.base else {
         // If this member access has no base, this is the base we are
         // replacing, terminating the recursion. Do so now.
-        return ExprSyntax(memberAccess.with(\.base, base))
+        return ExprSyntax(memberAccess.with(\.base, visit(base)))
       }
 
       let newBase = applyBaseToPostfixExpression(base: base, postfix: memberBase)
@@ -302,10 +346,7 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
     }
 
     // Retrieve the active `if` clause.
-    let (activeClause, localDiagnostics) = postfixIfConfig.config.activeClause(in: configuration)
-
-    // Record these diagnostics.
-    diagnostics.append(contentsOf: localDiagnostics)
+    let activeClause = configuredRegions.activeClause(for: postfixIfConfig.config)
 
     guard case .postfixExpression(let postfixExpr) = activeClause?.elements
     else {
@@ -315,7 +356,7 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
       // only have both in an ill-formed syntax tree that was manually
       // created.
       if let base = postfixIfConfig.base ?? outerBase {
-        return base
+        return visit(base)
       }
 
       // If there was no base, we're in an erroneous syntax tree that would
@@ -330,7 +371,7 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
 
     // If there is no base, return the postfix expression.
     guard let base = postfixIfConfig.base ?? outerBase else {
-      return postfixExpr
+      return visit(postfixExpr)
     }
 
     // Apply the base to the postfix expression.
@@ -338,12 +379,7 @@ class ActiveSyntaxRewriter<Configuration: BuildConfiguration>: SyntaxRewriter {
   }
 
   override func visit(_ node: PostfixIfConfigExprSyntax) -> ExprSyntax {
-    let rewrittenNode = dropInactive(outerBase: nil, postfixIfConfig: node)
-    if rewrittenNode == ExprSyntax(node) {
-      return rewrittenNode
-    }
-
-    return visit(rewrittenNode)
+    return dropInactive(outerBase: nil, postfixIfConfig: node)
   }
 }
 

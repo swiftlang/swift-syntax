@@ -46,9 +46,6 @@ open class ActiveSyntaxVisitor<Configuration: BuildConfiguration>: SyntaxVisitor
   /// The diagnostics accumulated during this walk of active syntax.
   public private(set) var diagnostics: [Diagnostic] = []
 
-  /// Whether we visited any "#if" clauses.
-  var visitedAnyIfClauses: Bool = false
-
   public init(viewMode: SyntaxTreeViewMode, configuration: Configuration) {
     self.configuration = configuration
     super.init(viewMode: viewMode)
@@ -59,8 +56,6 @@ open class ActiveSyntaxVisitor<Configuration: BuildConfiguration>: SyntaxVisitor
     // change one, please also change the other.
     let (activeClause, localDiagnostics) = node.activeClause(in: configuration)
     diagnostics.append(contentsOf: localDiagnostics)
-
-    visitedAnyIfClauses = true
 
     // If there is an active clause, visit it's children.
     if let activeClause, let elements = activeClause.elements {

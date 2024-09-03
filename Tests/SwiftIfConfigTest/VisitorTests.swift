@@ -23,26 +23,49 @@ import _SwiftSyntaxTestSupport
 ///
 /// This cross-checks the visitor itself with the `SyntaxProtocol.isActive(in:)`
 /// API.
-class AllActiveVisitor: ActiveSyntaxAnyVisitor<TestingBuildConfiguration> {
-  init(configuration: TestingBuildConfiguration) {
-    super.init(viewMode: .sourceAccurate, configuration: configuration)
+class AllActiveVisitor: ActiveSyntaxAnyVisitor {
+  let configuration: TestingBuildConfiguration
+
+  init(
+    configuration: TestingBuildConfiguration,
+    configuredRegions: ConfiguredRegions? = nil
+  ) {
+    self.configuration = configuration
+
+    if let configuredRegions {
+      super.init(viewMode: .sourceAccurate, configuredRegions: configuredRegions)
+    } else {
+      super.init(viewMode: .sourceAccurate, configuration: configuration)
+    }
   }
+
   open override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
     XCTAssertEqual(node.isActive(in: configuration).state, .active)
     return .visitChildren
   }
 }
 
-class NameCheckingVisitor: ActiveSyntaxAnyVisitor<TestingBuildConfiguration> {
+class NameCheckingVisitor: ActiveSyntaxAnyVisitor {
+  let configuration: TestingBuildConfiguration
+
   /// The set of names we are expected to visit. Any syntax nodes with
   /// names that aren't here will be rejected, and each of the names listed
   /// here must occur exactly once.
   var expectedNames: Set<String>
 
-  init(configuration: TestingBuildConfiguration, expectedNames: Set<String>) {
+  init(
+    configuration: TestingBuildConfiguration,
+    expectedNames: Set<String>,
+    configuredRegions: ConfiguredRegions? = nil
+  ) {
+    self.configuration = configuration
     self.expectedNames = expectedNames
 
-    super.init(viewMode: .sourceAccurate, configuration: configuration)
+    if let configuredRegions {
+      super.init(viewMode: .sourceAccurate, configuredRegions: configuredRegions)
+    } else {
+      super.init(viewMode: .sourceAccurate, configuration: configuration)
+    }
   }
 
   deinit {
@@ -145,32 +168,31 @@ public class VisitorTests: XCTestCase {
 
   func testAnyVisitorVisitsOnlyActive() throws {
     // Make sure that all visited nodes are active nodes.
-    AllActiveVisitor(configuration: linuxBuildConfig).walk(inputSource)
-    AllActiveVisitor(configuration: iosBuildConfig).walk(inputSource)
+    assertVisitedAllActive(linuxBuildConfig)
+    assertVisitedAllActive(iosBuildConfig)
   }
 
   func testVisitsExpectedNodes() throws {
     // Check that the right set of names is visited.
-    NameCheckingVisitor(
-      configuration: linuxBuildConfig,
+    assertVisitedExpectedNames(
+      linuxBuildConfig,
       expectedNames: ["f", "h", "i", "S", "generationCount", "value", "withAvail"]
-    ).walk(inputSource)
+    )
 
-    NameCheckingVisitor(
-      configuration: iosBuildConfig,
+    assertVisitedExpectedNames(
+      iosBuildConfig,
       expectedNames: ["g", "h", "i", "a", "S", "generationCount", "value", "error", "withAvail"]
-    ).walk(inputSource)
+    )
   }
 
   func testVisitorWithErrors() throws {
     var configuration = linuxBuildConfig
     configuration.badAttributes.insert("available")
-    let visitor = NameCheckingVisitor(
-      configuration: configuration,
-      expectedNames: ["f", "h", "i", "S", "generationCount", "value", "notAvail"]
+    assertVisitedExpectedNames(
+      configuration,
+      expectedNames: ["f", "h", "i", "S", "generationCount", "value", "notAvail"],
+      diagnosticCount: 3
     )
-    visitor.walk(inputSource)
-    XCTAssertEqual(visitor.diagnostics.count, 3)
   }
 
   func testRemoveInactive() {
@@ -334,6 +356,44 @@ public class VisitorTests: XCTestCase {
       }
       """
     )
+  }
+}
+
+extension VisitorTests {
+  /// Ensure that all visited nodes are active nodes according to the given
+  /// build configuration.
+  fileprivate func assertVisitedAllActive(_ configuration: TestingBuildConfiguration) {
+    AllActiveVisitor(configuration: configuration).walk(inputSource)
+
+    let configuredRegions = inputSource.configuredRegions(in: configuration)
+    AllActiveVisitor(
+      configuration: configuration,
+      configuredRegions: configuredRegions
+    ).walk(inputSource)
+  }
+
+  /// Ensure that we visit nodes with the set of names we were expecting to
+  /// visit.
+  fileprivate func assertVisitedExpectedNames(
+    _ configuration: TestingBuildConfiguration,
+    expectedNames: Set<String>,
+    diagnosticCount: Int = 0
+  ) {
+    let firstVisitor = NameCheckingVisitor(
+      configuration: configuration,
+      expectedNames: expectedNames
+    )
+    firstVisitor.walk(inputSource)
+    XCTAssertEqual(firstVisitor.diagnostics.count, diagnosticCount)
+
+    let configuredRegions = inputSource.configuredRegions(in: configuration)
+    let secondVisitor = NameCheckingVisitor(
+      configuration: configuration,
+      expectedNames: expectedNames,
+      configuredRegions: configuredRegions
+    )
+    secondVisitor.walk(inputSource)
+    XCTAssertEqual(secondVisitor.diagnostics.count, diagnosticCount)
   }
 }
 

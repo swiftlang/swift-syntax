@@ -337,8 +337,8 @@ public class VisitorTests: XCTestCase {
   }
 }
 
-/// Assert that applying the given build configuration to the source code
-/// returns the expected source and diagnostics.
+/// Assert that removing any inactive code according to the given build
+/// configuration returns the expected source and diagnostics.
 fileprivate func assertRemoveInactive(
   _ source: String,
   configuration: some BuildConfiguration,
@@ -351,39 +351,59 @@ fileprivate func assertRemoveInactive(
   var parser = Parser(source)
   let tree = SourceFileSyntax.parse(from: &parser)
 
-  let (treeWithoutInactive, actualDiagnostics) = tree.removingInactive(
-    in: configuration,
-    retainFeatureCheckIfConfigs: retainFeatureCheckIfConfigs
-  )
+  for useConfiguredRegions in [false, true] {
+    let fromDescription = useConfiguredRegions ? "configured regions" : "build configuration"
+    let treeWithoutInactive: Syntax
+    let actualDiagnostics: [Diagnostic]
 
-  // Check the resulting tree.
-  assertStringsEqualWithDiff(
-    treeWithoutInactive.description,
-    expectedSource,
-    file: file,
-    line: line
-  )
+    if useConfiguredRegions {
+      let configuredRegions = tree.configuredRegions(in: configuration)
+      actualDiagnostics = configuredRegions.diagnostics
+      treeWithoutInactive = configuredRegions.removingInactive(
+        from: tree,
+        retainFeatureCheckIfConfigs: retainFeatureCheckIfConfigs
+      )
+    } else {
+      (treeWithoutInactive, actualDiagnostics) = tree.removingInactive(
+        in: configuration,
+        retainFeatureCheckIfConfigs: retainFeatureCheckIfConfigs
+      )
+    }
 
-  // Check the diagnostics.
-  if actualDiagnostics.count != expectedDiagnostics.count {
-    XCTFail(
-      """
-      Expected \(expectedDiagnostics.count) diagnostics, but got \(actualDiagnostics.count):
-      \(actualDiagnostics.map(\.debugDescription).joined(separator: "\n"))
-      """,
+    // Check the resulting tree.
+    assertStringsEqualWithDiff(
+      treeWithoutInactive.description,
+      expectedSource,
+      "Active code (\(fromDescription))",
       file: file,
       line: line
     )
-  } else {
-    for (actualDiag, expectedDiag) in zip(actualDiagnostics, expectedDiagnostics) {
-      assertDiagnostic(
-        actualDiag,
-        in: .tree(tree),
-        expected: expectedDiag,
-        failureHandler: {
-          XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
-        }
+
+    // Check the diagnostics.
+    if actualDiagnostics.count != expectedDiagnostics.count {
+      XCTFail(
+        """
+        Expected \(expectedDiagnostics.count) diagnostics, but got \(actualDiagnostics.count) via \(fromDescription):
+        \(actualDiagnostics.map(\.debugDescription).joined(separator: "\n"))
+        """,
+        file: file,
+        line: line
       )
+    } else {
+      for (actualDiag, expectedDiag) in zip(actualDiagnostics, expectedDiagnostics) {
+        assertDiagnostic(
+          actualDiag,
+          in: .tree(tree),
+          expected: expectedDiag,
+          failureHandler: {
+            XCTFail(
+              $0.message + " via \(fromDescription)",
+              file: $0.location.staticFilePath,
+              line: $0.location.unsignedLine
+            )
+          }
+        )
+      }
     }
   }
 }

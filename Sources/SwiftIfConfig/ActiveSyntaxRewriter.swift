@@ -52,13 +52,15 @@ extension SyntaxProtocol {
     in configuration: some BuildConfiguration,
     retainFeatureCheckIfConfigs: Bool
   ) -> (result: Syntax, diagnostics: [Diagnostic]) {
-    let configuredRegions = configuredRegions(in: configuration)
+    // Rewrite the syntax tree by removing the inactive clauses
+    // from each #if (along with the #ifs themselves).
+    let rewriter = ActiveSyntaxRewriter(
+      configuration: configuration,
+      retainFeatureCheckIfConfigs: retainFeatureCheckIfConfigs
+    )
     return (
-      result: configuredRegions.removingInactive(
-        from: self,
-        retainFeatureCheckIfConfigs: retainFeatureCheckIfConfigs
-      ),
-      diagnostics: configuredRegions.diagnostics
+      rewriter.rewrite(Syntax(self)),
+      rewriter.diagnostics
     )
   }
 }
@@ -144,15 +146,21 @@ extension ConfiguredRegions {
 /// For any other target platforms, the resulting tree will be empty (other
 /// than trivia).
 class ActiveSyntaxRewriter: SyntaxRewriter {
-  let configuredRegions: ConfiguredRegions
+  let activeClauses: ActiveClauseEvaluator
   var diagnostics: [Diagnostic]
 
   /// Whether to retain `#if` blocks containing compiler and feature checks.
   var retainFeatureCheckIfConfigs: Bool
 
   init(configuredRegions: ConfiguredRegions, retainFeatureCheckIfConfigs: Bool) {
-    self.configuredRegions = configuredRegions
-    self.diagnostics = configuredRegions.diagnostics
+    self.activeClauses = .configuredRegions(configuredRegions)
+    self.diagnostics = activeClauses.priorDiagnostics
+    self.retainFeatureCheckIfConfigs = retainFeatureCheckIfConfigs
+  }
+
+  init(configuration: some BuildConfiguration, retainFeatureCheckIfConfigs: Bool) {
+    self.activeClauses = .configuration(configuration)
+    self.diagnostics = activeClauses.priorDiagnostics
     self.retainFeatureCheckIfConfigs = retainFeatureCheckIfConfigs
   }
 
@@ -183,7 +191,7 @@ class ActiveSyntaxRewriter: SyntaxRewriter {
         (!retainFeatureCheckIfConfigs || !ifConfigDecl.containsFeatureCheck)
       {
         // Retrieve the active `#if` clause
-        let activeClause = configuredRegions.activeClause(for: ifConfigDecl)
+        let activeClause = activeClauses.activeClause(for: ifConfigDecl, diagnostics: &diagnostics)
 
         noteElementChanged(at: elementIndex)
 
@@ -346,7 +354,7 @@ class ActiveSyntaxRewriter: SyntaxRewriter {
     }
 
     // Retrieve the active `if` clause.
-    let activeClause = configuredRegions.activeClause(for: postfixIfConfig.config)
+    let activeClause = activeClauses.activeClause(for: postfixIfConfig.config, diagnostics: &diagnostics)
 
     guard case .postfixExpression(let postfixExpr) = activeClause?.elements
     else {

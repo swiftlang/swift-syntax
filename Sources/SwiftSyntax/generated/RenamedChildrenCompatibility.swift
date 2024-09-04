@@ -3610,45 +3610,45 @@ extension GenericParameterClauseSyntax {
 }
 
 extension GenericParameterSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenAttributesAndEachKeyword")
-  public var unexpectedBetweenAttributesAndEach: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenAttributesAndSpecifier")
+  public var unexpectedBetweenAttributesAndEachKeyword: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenAttributesAndEachKeyword
+      return unexpectedBetweenAttributesAndSpecifier
     }
     set {
-      unexpectedBetweenAttributesAndEachKeyword = newValue
+      unexpectedBetweenAttributesAndSpecifier = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "eachKeyword")
-  public var each: TokenSyntax? {
+  @available(*, deprecated, renamed: "specifier")
+  public var eachKeyword: TokenSyntax? {
     get {
-      return eachKeyword
+      return specifier
     }
     set {
-      eachKeyword = newValue
+      specifier = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "unexpectedBetweenEachKeywordAndName")
-  public var unexpectedBetweenEachAndName: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenSpecifierAndName")
+  public var unexpectedBetweenEachKeywordAndName: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenEachKeywordAndName
+      return unexpectedBetweenSpecifierAndName
     }
     set {
-      unexpectedBetweenEachKeywordAndName = newValue
+      unexpectedBetweenSpecifierAndName = newValue
     }
   }
   
-  @available(*, deprecated, renamed: "GenericParameterSyntax(leadingTrivia:_:attributes:_:eachKeyword:_:name:_:colon:_:inheritedType:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "GenericParameterSyntax(leadingTrivia:_:attributes:_:specifier:_:name:_:colon:_:inheritedType:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
       leadingTrivia: Trivia? = nil,
       _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
       attributes: AttributeListSyntax = [],
-      _ unexpectedBetweenAttributesAndEach: UnexpectedNodesSyntax? = nil,
-      each: TokenSyntax? = nil,
-      _ unexpectedBetweenEachAndName: UnexpectedNodesSyntax? = nil,
+      _ unexpectedBetweenAttributesAndEachKeyword: UnexpectedNodesSyntax? = nil,
+      eachKeyword: TokenSyntax? = nil,
+      _ unexpectedBetweenEachKeywordAndName: UnexpectedNodesSyntax? = nil,
       name: TokenSyntax,
       _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil,
       colon: TokenSyntax? = nil,
@@ -3663,9 +3663,9 @@ extension GenericParameterSyntax {
         leadingTrivia: leadingTrivia, 
         unexpectedBeforeAttributes, 
         attributes: attributes, 
-        unexpectedBetweenAttributesAndEach, 
-        eachKeyword: each, 
-        unexpectedBetweenEachAndName, 
+        unexpectedBetweenAttributesAndEachKeyword, 
+        specifier: eachKeyword, 
+        unexpectedBetweenEachKeywordAndName, 
         name: name, 
         unexpectedBetweenNameAndColon, 
         colon: colon, 

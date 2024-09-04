@@ -39,6 +39,12 @@ import SwiftSyntax
 public struct ConfiguredRegions {
   let regions: [(ifClause: IfConfigClauseSyntax, state: IfConfigRegionState)]
 
+  // A mapping from each of the #if declarations that have been evaluated to
+  // the active clause. Absence from this map means that there is no active
+  // clause, either because every clause failed or because the entire #if
+  // itself is inactive.
+  var activeClauses: [IfConfigDeclSyntax: IfConfigClauseSyntax]
+
   /// The set of diagnostics produced when evaluating the configured regions.
   public let diagnostics: [Diagnostic]
 
@@ -79,6 +85,17 @@ public struct ConfiguredRegions {
     return currentSlice.last { region in
       (region.ifClause.regionStart...region.ifClause.endPosition).contains(node.position)
     }?.state ?? .active
+  }
+
+  /// Determine which clause of an `#if` declaration was active within this
+  /// set of configured regions.
+  ///
+  /// A particular `#if` declaration might have no active clause (e.g., this
+  /// operation will return a `nil`) if either none of the clauses had
+  /// conditions that succeeded, or the `#if` declaration itself is within an
+  /// inactive (or unparsed) region and therefore cannot have an active clause.
+  public func activeClause(for node: IfConfigDeclSyntax) -> IfConfigClauseSyntax? {
+    return activeClauses[node]
   }
 }
 
@@ -150,6 +167,7 @@ extension SyntaxProtocol {
     visitor.walk(self)
     return ConfiguredRegions(
       regions: visitor.regions,
+      activeClauses: visitor.activeClauses,
       diagnostics: visitor.diagnostics
     )
   }
@@ -170,6 +188,12 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
 
   // All diagnostics encountered along the way.
   var diagnostics: [Diagnostic] = []
+
+  // A mapping from each of the #if declarations that have been evaluated to
+  // the active clause. Absence from this map means that there is no active
+  // clause, either because every clause failed or because the entire #if
+  // itself is inactive.
+  var activeClauses: [IfConfigDeclSyntax: IfConfigClauseSyntax] = [:]
 
   init(configuration: Configuration) {
     self.configuration = configuration
@@ -240,6 +264,11 @@ fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: Sy
         // This is an #else. It's active if we haven't found an active clause
         // yet and are in an active region.
         isActive = !foundActive && inActiveRegion
+      }
+
+      // If this is the active clause, record it as such.
+      if isActive {
+        activeClauses[node] = clause
       }
 
       // Determine and record the current state.

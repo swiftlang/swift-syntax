@@ -7,6 +7,7 @@
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
 add_swift_syntax_library(SwiftIfConfig
+  ActiveClauseEvaluator.swift
   ActiveSyntaxVisitor.swift
   ActiveSyntaxRewriter.swift
   BuildConfiguration.swift

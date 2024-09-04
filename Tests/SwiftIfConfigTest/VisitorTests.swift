@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
-import SwiftIfConfig
+@_spi(Compiler) import SwiftIfConfig
 import SwiftParser
 import SwiftSyntax
 @_spi(XCTestFailureLocation) @_spi(Testing) import SwiftSyntaxMacrosGenericTestSupport
@@ -253,6 +253,88 @@ public class VisitorTests: XCTestCase {
         """
     )
   }
+
+  func testRemoveInactiveRetainingFeatureChecks() {
+    assertRemoveInactive(
+      """
+      public func hasIfCompilerCheck(_ x: () -> Bool = {
+      #if compiler(>=5.3)
+        return true
+      #else
+        return false
+      #endif
+
+      #if $Blah
+        return 0
+      #else
+        return 1
+      #endif
+
+      #if NOT_SET
+        return 3.14159
+      #else
+        return 2.71828
+      #endif
+        }) {
+      }
+      """,
+      configuration: linuxBuildConfig,
+      retainFeatureCheckIfConfigs: true,
+      expectedSource: """
+        public func hasIfCompilerCheck(_ x: () -> Bool = {
+        #if compiler(>=5.3)
+          return true
+        #else
+          return false
+        #endif
+
+        #if $Blah
+          return 0
+        #else
+          return 1
+        #endif
+          return 2.71828
+          }) {
+        }
+        """
+    )
+  }
+
+  func testRemoveCommentsAndSourceLocations() {
+    let original: SourceFileSyntax = """
+
+      /// This is a documentation comment
+      func f() { }
+
+      #sourceLocation(file: "if-configs.swift", line: 200)
+      /** Another documentation comment
+          that is split across
+          multiple lines */
+      func g() { }
+
+      func h() {
+        x +/*comment*/y
+        // foo
+      }
+      """
+
+    assertStringsEqualWithDiff(
+      original.descriptionWithoutCommentsAndSourceLocations,
+      """
+
+       
+      func f() { }
+
+
+      func g() { }
+
+      func h() {
+        x + y
+         
+      }
+      """
+    )
+  }
 }
 
 /// Assert that applying the given build configuration to the source code
@@ -260,6 +342,7 @@ public class VisitorTests: XCTestCase {
 fileprivate func assertRemoveInactive(
   _ source: String,
   configuration: some BuildConfiguration,
+  retainFeatureCheckIfConfigs: Bool = false,
   diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
   expectedSource: String,
   file: StaticString = #filePath,
@@ -268,7 +351,10 @@ fileprivate func assertRemoveInactive(
   var parser = Parser(source)
   let tree = SourceFileSyntax.parse(from: &parser)
 
-  let (treeWithoutInactive, actualDiagnostics) = tree.removingInactive(in: configuration)
+  let (treeWithoutInactive, actualDiagnostics) = tree.removingInactive(
+    in: configuration,
+    retainFeatureCheckIfConfigs: retainFeatureCheckIfConfigs
+  )
 
   // Check the resulting tree.
   assertStringsEqualWithDiff(

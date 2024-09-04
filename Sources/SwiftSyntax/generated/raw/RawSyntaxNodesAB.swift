@@ -19,7 +19,7 @@ public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol {
     case getter(RawCodeBlockItemListSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawAccessorDeclListSyntax.isKindOf(raw) || RawCodeBlockItemListSyntax.isKindOf(raw)
+      RawAccessorDeclListSyntax.isKindOf(raw) || RawCodeBlockItemListSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -31,16 +31,14 @@ public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawAccessorDeclListSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawAccessorDeclListSyntax.self) {
         self = .accessors(node)
-        return
-      }
-      if let node = RawCodeBlockItemListSyntax(other) {
+      } else if let node = node.as(RawCodeBlockItemListSyntax.self) {
         self = .getter(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
   }
   
@@ -1225,11 +1223,12 @@ public struct RawAssociatedTypeDeclSyntax: RawDeclSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
   public enum Element: RawSyntaxNodeProtocol {
+    /// An `@` attribute.
     case attribute(RawAttributeSyntax)
     case ifConfigDecl(RawIfConfigDeclSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawAttributeSyntax.isKindOf(raw) || RawIfConfigDeclSyntax.isKindOf(raw)
+      RawAttributeSyntax.isKindOf(raw) || RawIfConfigDeclSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -1241,16 +1240,14 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawAttributeSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawAttributeSyntax.self) {
         self = .attribute(node)
-        return
-      }
-      if let node = RawIfConfigDeclSyntax(other) {
+      } else if let node = node.as(RawIfConfigDeclSyntax.self) {
         self = .ifConfigDecl(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
   }
   
@@ -1327,7 +1324,7 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     case documentationArguments(RawDocumentationAttributeArgumentListSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawLabeledExprListSyntax.isKindOf(raw) || RawTokenSyntax.isKindOf(raw) || RawStringLiteralExprSyntax.isKindOf(raw) || RawAvailabilityArgumentListSyntax.isKindOf(raw) || RawSpecializeAttributeArgumentListSyntax.isKindOf(raw) || RawObjCSelectorPieceListSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeAttributeArgumentsSyntax.isKindOf(raw) || RawBackDeployedAttributeArgumentsSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawExposeAttributeArgumentsSyntax.isKindOf(raw) || RawOriginallyDefinedInAttributeArgumentsSyntax.isKindOf(raw) || RawUnderscorePrivateAttributeArgumentsSyntax.isKindOf(raw) || RawDynamicReplacementAttributeArgumentsSyntax.isKindOf(raw) || RawUnavailableFromAsyncAttributeArgumentsSyntax.isKindOf(raw) || RawEffectsAttributeArgumentListSyntax.isKindOf(raw) || RawDocumentationAttributeArgumentListSyntax.isKindOf(raw)
+      RawLabeledExprListSyntax.isKindOf(raw) || RawTokenSyntax.isKindOf(raw) || RawStringLiteralExprSyntax.isKindOf(raw) || RawAvailabilityArgumentListSyntax.isKindOf(raw) || RawSpecializeAttributeArgumentListSyntax.isKindOf(raw) || RawObjCSelectorPieceListSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeAttributeArgumentsSyntax.isKindOf(raw) || RawBackDeployedAttributeArgumentsSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawExposeAttributeArgumentsSyntax.isKindOf(raw) || RawOriginallyDefinedInAttributeArgumentsSyntax.isKindOf(raw) || RawUnderscorePrivateAttributeArgumentsSyntax.isKindOf(raw) || RawDynamicReplacementAttributeArgumentsSyntax.isKindOf(raw) || RawUnavailableFromAsyncAttributeArgumentsSyntax.isKindOf(raw) || RawEffectsAttributeArgumentListSyntax.isKindOf(raw) || RawDocumentationAttributeArgumentListSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -1375,88 +1372,50 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawLabeledExprListSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawLabeledExprListSyntax.self) {
         self = .argumentList(node)
-        return
-      }
-      if let node = RawTokenSyntax(other) {
+      } else if let node = node.as(RawTokenSyntax.self) {
         self = .token(node)
-        return
-      }
-      if let node = RawStringLiteralExprSyntax(other) {
+      } else if let node = node.as(RawStringLiteralExprSyntax.self) {
         self = .string(node)
-        return
-      }
-      if let node = RawAvailabilityArgumentListSyntax(other) {
+      } else if let node = node.as(RawAvailabilityArgumentListSyntax.self) {
         self = .availability(node)
-        return
-      }
-      if let node = RawSpecializeAttributeArgumentListSyntax(other) {
+      } else if let node = node.as(RawSpecializeAttributeArgumentListSyntax.self) {
         self = .specializeArguments(node)
-        return
-      }
-      if let node = RawObjCSelectorPieceListSyntax(other) {
+      } else if let node = node.as(RawObjCSelectorPieceListSyntax.self) {
         self = .objCName(node)
-        return
-      }
-      if let node = RawImplementsAttributeArgumentsSyntax(other) {
+      } else if let node = node.as(RawImplementsAttributeArgumentsSyntax.self) {
         self = .implementsArguments(node)
-        return
-      }
-      if let node = RawDifferentiableAttributeArgumentsSyntax(other) {
+      } else if let node = node.as(RawDifferentiableAttributeArgumentsSyntax.self) {
         self = .differentiableArguments(node)
-        return
-      }
-      if let node = RawDerivativeAttributeArgumentsSyntax(other) {
+      } else if let node = node.as(RawDerivativeAttributeArgumentsSyntax.self) {
         self = .derivativeRegistrationArguments(node)
-        return
-      }
-      if let node = RawBackDeployedAttributeArgumentsSyntax(other) {
+      } else if let node = node.as(RawBackDeployedAttributeArgumentsSyntax.self) {
         self = .backDeployedArguments(node)
-        return
-      }
-      if let node = RawConventionAttributeArgumentsSyntax(other) {
+      } else if let node = node.as(RawConventionAttributeArgumentsSyntax.self) {
         self = .conventionArguments(node)
-        return
-      }
-      if let node = RawConventionWitnessMethodAttributeArgumentsSyntax(other) {
+      } else if let node = node.as(RawConventionWitnessMethodAttributeArgumentsSyntax.self) {
         self = .conventionWitnessMethodArguments(node)
-        return
-      }
-      if let node = RawOpaqueReturnTypeOfAttributeArgumentsSyntax(other) {
+      } else if let node = node.as(RawOpaqueReturnTypeOfAttributeArgumentsSyntax.self) {
         self = .opaqueReturnTypeOfAttributeArguments(node)
-        return
-      }
-      if let node = RawExposeAttributeArgumentsSyntax(other) {
+      } else if let node = node.as(RawExposeAttributeArgumentsSyntax.self) {
         self = .exposeAttributeArguments(node)
-        return
-      }
-      if let node = RawOriginallyDefinedInAttributeArgumentsSyntax(other) {
+      } else if let node = node.as(RawOriginallyDefinedInAttributeArgumentsSyntax.self) {
         self = .originallyDefinedInArguments(node)
-        return
-      }
-      if let node = RawUnderscorePrivateAttributeArgumentsSyntax(other) {
+      } else if let node = node.as(RawUnderscorePrivateAttributeArgumentsSyntax.self) {
         self = .underscorePrivateAttributeArguments(node)
-        return
-      }
-      if let node = RawDynamicReplacementAttributeArgumentsSyntax(other) {
+      } else if let node = node.as(RawDynamicReplacementAttributeArgumentsSyntax.self) {
         self = .dynamicReplacementArguments(node)
-        return
-      }
-      if let node = RawUnavailableFromAsyncAttributeArgumentsSyntax(other) {
+      } else if let node = node.as(RawUnavailableFromAsyncAttributeArgumentsSyntax.self) {
         self = .unavailableFromAsyncArguments(node)
-        return
-      }
-      if let node = RawEffectsAttributeArgumentListSyntax(other) {
+      } else if let node = node.as(RawEffectsAttributeArgumentListSyntax.self) {
         self = .effectsArguments(node)
-        return
-      }
-      if let node = RawDocumentationAttributeArgumentListSyntax(other) {
+      } else if let node = node.as(RawDocumentationAttributeArgumentListSyntax.self) {
         self = .documentationArguments(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
   }
   
@@ -1699,12 +1658,17 @@ public struct RawAvailabilityArgumentListSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
   public enum Argument: RawSyntaxNodeProtocol {
+    /// ### Tokens
+    /// 
+    /// For syntax trees generated by the parser, this is guaranteed to be one of the following kinds:
+    ///  - `<binaryOperator>`
+    ///  - `<identifier>`
     case token(RawTokenSyntax)
     case availabilityVersionRestriction(RawPlatformVersionSyntax)
     case availabilityLabeledArgument(RawAvailabilityLabeledArgumentSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawTokenSyntax.isKindOf(raw) || RawPlatformVersionSyntax.isKindOf(raw) || RawAvailabilityLabeledArgumentSyntax.isKindOf(raw)
+      RawTokenSyntax.isKindOf(raw) || RawPlatformVersionSyntax.isKindOf(raw) || RawAvailabilityLabeledArgumentSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -1718,20 +1682,16 @@ public struct RawAvailabilityArgumentSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawTokenSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawTokenSyntax.self) {
         self = .token(node)
-        return
-      }
-      if let node = RawPlatformVersionSyntax(other) {
+      } else if let node = node.as(RawPlatformVersionSyntax.self) {
         self = .availabilityVersionRestriction(node)
-        return
-      }
-      if let node = RawAvailabilityLabeledArgumentSyntax(other) {
+      } else if let node = node.as(RawAvailabilityLabeledArgumentSyntax.self) {
         self = .availabilityLabeledArgument(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
   }
   
@@ -1904,7 +1864,7 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
     case version(RawVersionTupleSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawSimpleStringLiteralExprSyntax.isKindOf(raw) || RawVersionTupleSyntax.isKindOf(raw)
+      RawSimpleStringLiteralExprSyntax.isKindOf(raw) || RawVersionTupleSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -1916,16 +1876,14 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawSimpleStringLiteralExprSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawSimpleStringLiteralExprSyntax.self) {
         self = .string(node)
-        return
-      }
-      if let node = RawVersionTupleSyntax(other) {
+      } else if let node = node.as(RawVersionTupleSyntax.self) {
         self = .version(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
   }
   

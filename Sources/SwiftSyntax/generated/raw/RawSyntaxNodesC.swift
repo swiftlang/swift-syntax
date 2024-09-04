@@ -1491,7 +1491,7 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
     case parameterClause(RawClosureParameterClauseSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawClosureShorthandParameterListSyntax.isKindOf(raw) || RawClosureParameterClauseSyntax.isKindOf(raw)
+      RawClosureShorthandParameterListSyntax.isKindOf(raw) || RawClosureParameterClauseSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -1503,16 +1503,14 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawClosureShorthandParameterListSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawClosureShorthandParameterListSyntax.self) {
         self = .simpleInput(node)
-        return
-      }
-      if let node = RawClosureParameterClauseSyntax(other) {
+      } else if let node = node.as(RawClosureParameterClauseSyntax.self) {
         self = .parameterClause(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
   }
   
@@ -1690,7 +1688,7 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
     case expr(RawExprSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawDeclSyntax.isKindOf(raw) || RawStmtSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw)
+      RawDeclSyntax.isKindOf(raw) || RawStmtSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -1704,20 +1702,16 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawDeclSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawDeclSyntax.self) {
         self = .decl(node)
-        return
-      }
-      if let node = RawStmtSyntax(other) {
+      } else if let node = node.as(RawStmtSyntax.self) {
         self = .stmt(node)
-        return
-      }
-      if let node = RawExprSyntax(other) {
+      } else if let node = node.as(RawExprSyntax.self) {
         self = .expr(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public init(decl: some RawDeclSyntaxNodeProtocol) {
@@ -2120,7 +2114,7 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
     case optionalBinding(RawOptionalBindingConditionSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawExprSyntax.isKindOf(raw) || RawAvailabilityConditionSyntax.isKindOf(raw) || RawMatchingPatternConditionSyntax.isKindOf(raw) || RawOptionalBindingConditionSyntax.isKindOf(raw)
+      RawExprSyntax.isKindOf(raw) || RawAvailabilityConditionSyntax.isKindOf(raw) || RawMatchingPatternConditionSyntax.isKindOf(raw) || RawOptionalBindingConditionSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -2136,24 +2130,18 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawExprSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawExprSyntax.self) {
         self = .expression(node)
-        return
-      }
-      if let node = RawAvailabilityConditionSyntax(other) {
+      } else if let node = node.as(RawAvailabilityConditionSyntax.self) {
         self = .availability(node)
-        return
-      }
-      if let node = RawMatchingPatternConditionSyntax(other) {
+      } else if let node = node.as(RawMatchingPatternConditionSyntax.self) {
         self = .matchingPattern(node)
-        return
-      }
-      if let node = RawOptionalBindingConditionSyntax(other) {
+      } else if let node = node.as(RawOptionalBindingConditionSyntax.self) {
         self = .optionalBinding(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public init(expression: some RawExprSyntaxNodeProtocol) {

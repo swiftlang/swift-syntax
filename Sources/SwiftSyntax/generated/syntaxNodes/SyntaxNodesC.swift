@@ -2592,13 +2592,11 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(ClosureShorthandParameterListSyntax.self) {
         self = .simpleInput(node)
-        return
-      }
-      if let node = node.as(ClosureParameterClauseSyntax.self) {
+      } else if let node = node.as(ClosureParameterClauseSyntax.self) {
         self = .parameterClause(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
@@ -2930,17 +2928,13 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(DeclSyntax.self) {
         self = .decl(node)
-        return
-      }
-      if let node = node.as(StmtSyntax.self) {
+      } else if let node = node.as(StmtSyntax.self) {
         self = .stmt(node)
-        return
-      }
-      if let node = node.as(ExprSyntax.self) {
+      } else if let node = node.as(ExprSyntax.self) {
         self = .expr(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
@@ -2950,7 +2944,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     /// Checks if the current syntax node can be cast to the type conforming to the ``DeclSyntaxProtocol`` protocol.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
-    public func `is`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    public func `is`(_ syntaxType: (some DeclSyntaxProtocol).Type) -> Bool {
       return self.as(syntaxType) != nil
     }
     
@@ -2972,7 +2966,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     /// Checks if the current syntax node can be cast to the type conforming to the ``StmtSyntaxProtocol`` protocol.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
-    public func `is`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    public func `is`(_ syntaxType: (some StmtSyntaxProtocol).Type) -> Bool {
       return self.as(syntaxType) != nil
     }
     
@@ -2994,7 +2988,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
-    public func `is`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    public func `is`(_ syntaxType: (some ExprSyntaxProtocol).Type) -> Bool {
       return self.as(syntaxType) != nil
     }
     
@@ -3574,21 +3568,15 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(ExprSyntax.self) {
         self = .expression(node)
-        return
-      }
-      if let node = node.as(AvailabilityConditionSyntax.self) {
+      } else if let node = node.as(AvailabilityConditionSyntax.self) {
         self = .availability(node)
-        return
-      }
-      if let node = node.as(MatchingPatternConditionSyntax.self) {
+      } else if let node = node.as(MatchingPatternConditionSyntax.self) {
         self = .matchingPattern(node)
-        return
-      }
-      if let node = node.as(OptionalBindingConditionSyntax.self) {
+      } else if let node = node.as(OptionalBindingConditionSyntax.self) {
         self = .optionalBinding(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
@@ -3603,7 +3591,7 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
-    public func `is`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    public func `is`(_ syntaxType: (some ExprSyntaxProtocol).Type) -> Bool {
       return self.as(syntaxType) != nil
     }
     

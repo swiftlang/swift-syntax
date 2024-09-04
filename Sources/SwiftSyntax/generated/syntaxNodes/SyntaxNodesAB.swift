@@ -49,13 +49,11 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(AccessorDeclListSyntax.self) {
         self = .accessors(node)
-        return
-      }
-      if let node = node.as(CodeBlockItemListSyntax.self) {
+      } else if let node = node.as(CodeBlockItemListSyntax.self) {
         self = .getter(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
@@ -2449,85 +2447,47 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(LabeledExprListSyntax.self) {
         self = .argumentList(node)
-        return
-      }
-      if let node = node.as(TokenSyntax.self) {
+      } else if let node = node.as(TokenSyntax.self) {
         self = .token(node)
-        return
-      }
-      if let node = node.as(StringLiteralExprSyntax.self) {
+      } else if let node = node.as(StringLiteralExprSyntax.self) {
         self = .string(node)
-        return
-      }
-      if let node = node.as(AvailabilityArgumentListSyntax.self) {
+      } else if let node = node.as(AvailabilityArgumentListSyntax.self) {
         self = .availability(node)
-        return
-      }
-      if let node = node.as(SpecializeAttributeArgumentListSyntax.self) {
+      } else if let node = node.as(SpecializeAttributeArgumentListSyntax.self) {
         self = .specializeArguments(node)
-        return
-      }
-      if let node = node.as(ObjCSelectorPieceListSyntax.self) {
+      } else if let node = node.as(ObjCSelectorPieceListSyntax.self) {
         self = .objCName(node)
-        return
-      }
-      if let node = node.as(ImplementsAttributeArgumentsSyntax.self) {
+      } else if let node = node.as(ImplementsAttributeArgumentsSyntax.self) {
         self = .implementsArguments(node)
-        return
-      }
-      if let node = node.as(DifferentiableAttributeArgumentsSyntax.self) {
+      } else if let node = node.as(DifferentiableAttributeArgumentsSyntax.self) {
         self = .differentiableArguments(node)
-        return
-      }
-      if let node = node.as(DerivativeAttributeArgumentsSyntax.self) {
+      } else if let node = node.as(DerivativeAttributeArgumentsSyntax.self) {
         self = .derivativeRegistrationArguments(node)
-        return
-      }
-      if let node = node.as(BackDeployedAttributeArgumentsSyntax.self) {
+      } else if let node = node.as(BackDeployedAttributeArgumentsSyntax.self) {
         self = .backDeployedArguments(node)
-        return
-      }
-      if let node = node.as(ConventionAttributeArgumentsSyntax.self) {
+      } else if let node = node.as(ConventionAttributeArgumentsSyntax.self) {
         self = .conventionArguments(node)
-        return
-      }
-      if let node = node.as(ConventionWitnessMethodAttributeArgumentsSyntax.self) {
+      } else if let node = node.as(ConventionWitnessMethodAttributeArgumentsSyntax.self) {
         self = .conventionWitnessMethodArguments(node)
-        return
-      }
-      if let node = node.as(OpaqueReturnTypeOfAttributeArgumentsSyntax.self) {
+      } else if let node = node.as(OpaqueReturnTypeOfAttributeArgumentsSyntax.self) {
         self = .opaqueReturnTypeOfAttributeArguments(node)
-        return
-      }
-      if let node = node.as(ExposeAttributeArgumentsSyntax.self) {
+      } else if let node = node.as(ExposeAttributeArgumentsSyntax.self) {
         self = .exposeAttributeArguments(node)
-        return
-      }
-      if let node = node.as(OriginallyDefinedInAttributeArgumentsSyntax.self) {
+      } else if let node = node.as(OriginallyDefinedInAttributeArgumentsSyntax.self) {
         self = .originallyDefinedInArguments(node)
-        return
-      }
-      if let node = node.as(UnderscorePrivateAttributeArgumentsSyntax.self) {
+      } else if let node = node.as(UnderscorePrivateAttributeArgumentsSyntax.self) {
         self = .underscorePrivateAttributeArguments(node)
-        return
-      }
-      if let node = node.as(DynamicReplacementAttributeArgumentsSyntax.self) {
+      } else if let node = node.as(DynamicReplacementAttributeArgumentsSyntax.self) {
         self = .dynamicReplacementArguments(node)
-        return
-      }
-      if let node = node.as(UnavailableFromAsyncAttributeArgumentsSyntax.self) {
+      } else if let node = node.as(UnavailableFromAsyncAttributeArgumentsSyntax.self) {
         self = .unavailableFromAsyncArguments(node)
-        return
-      }
-      if let node = node.as(EffectsAttributeArgumentListSyntax.self) {
+      } else if let node = node.as(EffectsAttributeArgumentListSyntax.self) {
         self = .effectsArguments(node)
-        return
-      }
-      if let node = node.as(DocumentationAttributeArgumentListSyntax.self) {
+      } else if let node = node.as(DocumentationAttributeArgumentListSyntax.self) {
         self = .documentationArguments(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
@@ -3411,6 +3371,11 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
 ///  - ``AvailabilityArgumentListSyntax``
 public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Argument: SyntaxChildChoices, SyntaxHashable {
+    /// ### Tokens
+    /// 
+    /// For syntax trees generated by the parser, this is guaranteed to be one of the following kinds:
+    ///  - `<binaryOperator>`
+    ///  - `<identifier>`
     case token(TokenSyntax)
     case availabilityVersionRestriction(PlatformVersionSyntax)
     case availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax)
@@ -3441,17 +3406,13 @@ public struct AvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(TokenSyntax.self) {
         self = .token(node)
-        return
-      }
-      if let node = node.as(PlatformVersionSyntax.self) {
+      } else if let node = node.as(PlatformVersionSyntax.self) {
         self = .availabilityVersionRestriction(node)
-        return
-      }
-      if let node = node.as(AvailabilityLabeledArgumentSyntax.self) {
+      } else if let node = node.as(AvailabilityLabeledArgumentSyntax.self) {
         self = .availabilityLabeledArgument(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
@@ -3878,13 +3839,11 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable,
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(SimpleStringLiteralExprSyntax.self) {
         self = .string(node)
-        return
-      }
-      if let node = node.as(VersionTupleSyntax.self) {
+      } else if let node = node.as(VersionTupleSyntax.self) {
         self = .version(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {

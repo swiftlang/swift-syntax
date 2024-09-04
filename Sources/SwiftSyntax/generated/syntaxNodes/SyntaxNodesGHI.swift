@@ -829,17 +829,13 @@ public struct GenericRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(SameTypeRequirementSyntax.self) {
         self = .sameTypeRequirement(node)
-        return
-      }
-      if let node = node.as(ConformanceRequirementSyntax.self) {
+      } else if let node = node.as(ConformanceRequirementSyntax.self) {
         self = .conformanceRequirement(node)
-        return
-      }
-      if let node = node.as(LayoutRequirementSyntax.self) {
+      } else if let node = node.as(LayoutRequirementSyntax.self) {
         self = .layoutRequirement(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
@@ -1749,25 +1745,17 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(CodeBlockItemListSyntax.self) {
         self = .statements(node)
-        return
-      }
-      if let node = node.as(SwitchCaseListSyntax.self) {
+      } else if let node = node.as(SwitchCaseListSyntax.self) {
         self = .switchCases(node)
-        return
-      }
-      if let node = node.as(MemberBlockItemListSyntax.self) {
+      } else if let node = node.as(MemberBlockItemListSyntax.self) {
         self = .decls(node)
-        return
-      }
-      if let node = node.as(ExprSyntax.self) {
+      } else if let node = node.as(ExprSyntax.self) {
         self = .postfixExpression(node)
-        return
-      }
-      if let node = node.as(AttributeListSyntax.self) {
+      } else if let node = node.as(AttributeListSyntax.self) {
         self = .attributes(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
@@ -1849,7 +1837,7 @@ public struct IfConfigClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
     /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
-    public func `is`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    public func `is`(_ syntaxType: (some ExprSyntaxProtocol).Type) -> Bool {
       return self.as(syntaxType) != nil
     }
     
@@ -2208,13 +2196,11 @@ public struct IfExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(IfExprSyntax.self) {
         self = .ifExpr(node)
-        return
-      }
-      if let node = node.as(CodeBlockSyntax.self) {
+      } else if let node = node.as(CodeBlockSyntax.self) {
         self = .codeBlock(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {

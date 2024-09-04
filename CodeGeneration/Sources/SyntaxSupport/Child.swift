@@ -80,7 +80,7 @@ public enum ChildKind {
 
 /// A child of a node, that may be declared optional or a token with a
 /// restricted subset of acceptable kinds or texts.
-public class Child: IdentifierConvertible {
+public class Child: NodeChoiceConvertible {
   /// The name of the child.
   ///
   /// The first character of the name is always uppercase.
@@ -97,8 +97,6 @@ public class Child: IdentifierConvertible {
   /// Whether this child is optional and can be `nil`.
   public let isOptional: Bool
 
-  /// The experimental feature the child represents, or `nil` if this isn't
-  /// for an experimental feature.
   public let experimentalFeature: ExperimentalFeature?
 
   /// A name of this child that can be shown in diagnostics.
@@ -128,10 +126,6 @@ public class Child: IdentifierConvertible {
 
   /// The first line of the child's documentation
   public let documentationAbstract: String
-
-  /// If `true`, this is for an experimental language feature, and any public
-  /// API generated should be SPI.
-  public var isExperimental: Bool { experimentalFeature != nil }
 
   public var syntaxNodeKind: SyntaxNodeKind {
     switch kind {

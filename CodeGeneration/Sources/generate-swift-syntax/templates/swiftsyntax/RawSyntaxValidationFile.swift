@@ -239,14 +239,16 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                     } else if let node = node.collectionNode {
                       try ForStmtSyntax("for (index, element) in layout.enumerated()") {
                         if let onlyElement = node.elementChoices.only {
-                          ExprSyntax("assertNoError(kind, index, verify(element, as: \(onlyElement.rawType).self))")
+                          ExprSyntax(
+                            "assertNoError(kind, index, verify(element, as: \(onlyElement.raw.syntaxType).self))"
+                          )
                         } else {
                           let verifiedChoices = ArrayExprSyntax {
                             for choiceName in node.elementChoices {
                               let choice = SYNTAX_NODE_MAP[choiceName]!
                               ArrayElementSyntax(
                                 leadingTrivia: .newline,
-                                expression: ExprSyntax("verify(element, as: \(choice.kind.rawType).self)")
+                                expression: ExprSyntax("verify(element, as: \(choice.kind.raw.syntaxType).self)")
                               )
                             }
                           }

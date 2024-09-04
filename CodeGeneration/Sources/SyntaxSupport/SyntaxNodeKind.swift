@@ -17,7 +17,7 @@ import SwiftSyntaxBuilder
 ///
 /// Using the cases of this enum, children of syntax nodes can refer the syntax
 /// node that defines their layout.
-public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible {
+public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeConvertible {
   // Please keep this list sorted alphabetically
 
   case _canImportExpr
@@ -327,7 +327,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible {
     }
   }
 
-  /// Whether this is one of the syntax base nodes.
   public var isBase: Bool {
     switch self {
     case .decl, .expr, .pattern, .stmt, .syntax, .syntaxCollection, .type:
@@ -337,12 +336,10 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible {
     }
   }
 
-  /// A name for this node as an identifier.
   public var identifier: TokenSyntax {
     return .identifier(rawValue)
   }
 
-  /// The type name of this node in the SwiftSyntax module.
   public var syntaxType: TypeSyntax {
     switch self {
     case .syntax:
@@ -354,7 +351,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible {
     }
   }
 
-  /// Whether the node is public API and not underscored/deprecated and can thus be referenced in docc links.
   public var isAvailableInDocc: Bool {
     if let node = SYNTAX_NODE_MAP[self], node.isExperimental {
       return false
@@ -365,37 +361,8 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible {
     }
   }
 
-  /// If this node is non-experimental a docc link wrapped in two backticks.
-  ///
-  /// For experimental nodes, the node's type name in code font.
-  public var doccLink: String {
-    if isAvailableInDocc {
-      return "``\(syntaxType)``"
-    } else {
-      return "`\(syntaxType)`"
-    }
-  }
-
-  /// For base nodes, the name of the corresponding protocol to which all the
-  /// concrete nodes that have this base kind, conform.
   public var protocolType: TypeSyntax {
     return "\(syntaxType)Protocol"
-  }
-
-  /// The name of this node at the `RawSyntax` level.
-  public var rawType: TypeSyntax {
-    return "Raw\(syntaxType)"
-  }
-
-  /// For base nodes, the name of the corresponding raw protocol to which all the
-  /// concrete raw nodes that have this base kind, conform.
-  public var rawProtocolType: TypeSyntax {
-    switch self {
-    case .syntax, .syntaxCollection:
-      return "RawSyntaxNodeProtocol"
-    default:
-      return "Raw\(raw: rawValue.withFirstCharacterUppercased)SyntaxNodeProtocol"
-    }
   }
 
   /// For base node types, generates the name of the protocol to which all
@@ -506,5 +473,9 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible {
     } else {
       AttributeSyntax(#"@available(*, deprecated, renamed: "\#(syntaxType)")"#)
     }
+  }
+
+  public var raw: RawSyntaxNodeKind {
+    RawSyntaxNodeKind(syntaxNodeKind: self)
   }
 }

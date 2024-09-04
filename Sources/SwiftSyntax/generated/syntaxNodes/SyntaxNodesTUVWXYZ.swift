@@ -229,7 +229,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
 /// then <expr>
 /// ```
 ///
-/// - Experiment: Requires experimental feature `thenStatements`.
+/// - Note: Requires experimental feature `thenStatements`.
 ///
 /// ### Children
 /// 
@@ -4246,13 +4246,11 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(YieldedExpressionsClauseSyntax.self) {
         self = .multiple(node)
-        return
-      }
-      if let node = node.as(ExprSyntax.self) {
+      } else if let node = node.as(ExprSyntax.self) {
         self = .single(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
     
     public static var structure: SyntaxNodeStructure {
@@ -4284,7 +4282,7 @@ public struct YieldStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
     /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
-    public func `is`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> Bool {
+    public func `is`(_ syntaxType: (some ExprSyntaxProtocol).Type) -> Bool {
       return self.as(syntaxType) != nil
     }
     

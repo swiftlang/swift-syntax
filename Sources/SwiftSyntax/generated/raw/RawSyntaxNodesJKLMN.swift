@@ -70,7 +70,7 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol {
     case optional(RawKeyPathOptionalComponentSyntax)
     
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      return RawKeyPathPropertyComponentSyntax.isKindOf(raw) || RawKeyPathSubscriptComponentSyntax.isKindOf(raw) || RawKeyPathOptionalComponentSyntax.isKindOf(raw)
+      RawKeyPathPropertyComponentSyntax.isKindOf(raw) || RawKeyPathSubscriptComponentSyntax.isKindOf(raw) || RawKeyPathOptionalComponentSyntax.isKindOf(raw)
     }
     
     public var raw: RawSyntax {
@@ -84,20 +84,16 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol {
       }
     }
     
-    public init?(_ other: some RawSyntaxNodeProtocol) {
-      if let node = RawKeyPathPropertyComponentSyntax(other) {
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawKeyPathPropertyComponentSyntax.self) {
         self = .property(node)
-        return
-      }
-      if let node = RawKeyPathSubscriptComponentSyntax(other) {
+      } else if let node = node.as(RawKeyPathSubscriptComponentSyntax.self) {
         self = .subscript(node)
-        return
-      }
-      if let node = RawKeyPathOptionalComponentSyntax(other) {
+      } else if let node = node.as(RawKeyPathOptionalComponentSyntax.self) {
         self = .optional(node)
-        return
+      } else {
+        return nil
       }
-      return nil
     }
   }
   

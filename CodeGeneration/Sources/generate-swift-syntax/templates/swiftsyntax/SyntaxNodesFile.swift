@@ -33,10 +33,8 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
         public struct \(node.kind.syntaxType): \(node.baseType.syntaxBaseName)Protocol, SyntaxHashable, \(node.base.leafProtocolType)
         """
       ) {
-        for child in node.children {
-          if let childChoiceDecl = try! generateSyntaxChildChoices(for: child) {
-            childChoiceDecl
-          }
+        for childNodeChoices in node.node.childrenNodeChoices() {
+          childNodeChoices.enumDecl
         }
 
         // ==============
@@ -212,76 +210,36 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
   }
 }
 
-private func generateSyntaxChildChoices(for child: Child) throws -> EnumDeclSyntax? {
-  guard case .nodeChoices(let choices) = child.kind else {
-    return nil
-  }
+extension ChildNodeChoices {
+  var enumDecl: EnumDeclSyntax {
+    try! EnumDeclSyntax("public enum \(self.name): SyntaxChildChoices, SyntaxHashable") {
+      for choice in self.choices {
+        choice.enumCaseDecl
+      }
 
-  return try! EnumDeclSyntax("public enum \(child.syntaxChoicesType): SyntaxChildChoices, SyntaxHashable") {
-    for choice in choices {
-      DeclSyntax("case \(choice.enumCaseDeclName)(\(choice.syntaxNodeKind.syntaxType))")
-    }
+      self.syntaxGetter(propertyName: "_syntaxNode", propertyType: "Syntax")
 
-    try! VariableDeclSyntax("public var _syntaxNode: Syntax") {
-      try! SwitchExprSyntax("switch self") {
-        for choice in choices {
-          SwitchCaseSyntax("case .\(choice.enumCaseCallName)(let node):") {
-            StmtSyntax("return node._syntaxNode")
+      for choice in self.choices {
+        choice.baseTypeInitDecl(hasArgumentName: false) ?? choice.concreteTypeInitDecl
+      }
+
+      self.syntaxInitDecl(inputType: "__shared some SyntaxProtocol")
+
+      try! VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
+        let choices = ArrayExprSyntax {
+          for choice in self.choices {
+            ArrayElementSyntax(
+              expression: ExprSyntax(".node(\(choice.syntaxType).self)")
+            )
           }
         }
-      }
-    }
 
-    for choice in choices {
-      if let choiceNode = SYNTAX_NODE_MAP[choice.syntaxNodeKind], choiceNode.kind.isBase {
-        DeclSyntax(
-          """
-          public init(_ node: some \(choiceNode.kind.protocolType)) {
-            self = .\(choice.enumCaseCallName)(\(choiceNode.kind.syntaxType)(node))
-          }
-          """
-        )
-
-      } else {
-        DeclSyntax(
-          """
-          public init(_ node: \(choice.syntaxNodeKind.syntaxType)) {
-            self = .\(choice.enumCaseCallName)(node)
-          }
-          """
-        )
-      }
-    }
-
-    try! InitializerDeclSyntax("public init?(_ node: __shared some SyntaxProtocol)") {
-      for choice in choices {
-        StmtSyntax(
-          """
-          if let node = node.as(\(choice.syntaxNodeKind.syntaxType).self) {
-            self = .\(choice.enumCaseCallName)(node)
-            return
-          }
-          """
-        )
+        StmtSyntax("return .choices(\(choices))")
       }
 
-      StmtSyntax("return nil")
-    }
-
-    try! VariableDeclSyntax("public static var structure: SyntaxNodeStructure") {
-      let choices = ArrayExprSyntax {
-        for choice in choices {
-          ArrayElementSyntax(
-            expression: ExprSyntax(".node(\(choice.syntaxNodeKind.syntaxType).self)")
-          )
-        }
+      for choice in self.choices {
+        choice.castingMethods
       }
-
-      StmtSyntax("return .choices(\(choices))")
-    }
-
-    for choiceNode in choices {
-      choiceNodeCastingMethods(for: choiceNode.syntaxNodeKind)
     }
   }
 }

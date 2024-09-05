@@ -19,8 +19,7 @@ final class SendingTests: ParserTestCase {
       """
       class Klass {}
       func transferMain(_ x: sending Klass) -> ()
-      """,
-      experimentalFeatures: .sendingArgsAndResults
+      """
     )
   }
 
@@ -29,8 +28,7 @@ final class SendingTests: ParserTestCase {
       """
       class Klass {}
       func transferMain(_ y: Klass, _ x: sending Klass, _ z: Klass) -> ()
-      """,
-      experimentalFeatures: .sendingArgsAndResults
+      """
     )
   }
 }

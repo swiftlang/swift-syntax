@@ -1022,7 +1022,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     // Emit a custom diagnostic for an unexpected '...' after the type name.
-    if node.eachKeyword?.isPresent ?? false {
+    if node.specifier?.isPresent ?? false {
       removeToken(
         node.unexpectedBetweenNameAndColon,
         where: { $0.tokenKind == .ellipsis },
@@ -1030,7 +1030,8 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       )
     } else if let unexpected = node.unexpectedBetweenNameAndColon,
       let unexpectedEllipsis = unexpected.onlyPresentToken(where: { $0.tokenKind == .ellipsis }),
-      let each = node.eachKeyword
+      let specifier = node.specifier,
+      specifier.tokenKind == .keyword(.each)
     {
       addDiagnostic(
         unexpected,
@@ -1040,11 +1041,11 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
             message: ReplaceTokensFixIt(replaceTokens: [unexpectedEllipsis], replacements: [.keyword(.each)]),
             changes: [
               .makeMissing(unexpected),
-              .makePresent(each, trailingTrivia: .space),
+              .makePresent(specifier, trailingTrivia: .space),
             ]
           )
         ],
-        handledNodes: [unexpected.id, each.id]
+        handledNodes: [unexpected.id, specifier.id]
       )
     }
     if let inheritedTypeName = node.inheritedType?.as(IdentifierTypeSyntax.self)?.name {

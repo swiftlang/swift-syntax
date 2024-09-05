@@ -168,8 +168,8 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "type"
   case \FunctionParameterSyntax.defaultValue:
     return "default value"
-  case \GenericParameterSyntax.eachKeyword:
-    return "parameter pack specifier"
+  case \GenericParameterSyntax.specifier:
+    return "specifier"
   case \GenericParameterSyntax.name:
     return "name"
   case \GenericParameterSyntax.inheritedType:

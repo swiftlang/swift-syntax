@@ -1041,7 +1041,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
             message: ReplaceTokensFixIt(replaceTokens: [unexpectedEllipsis], replacements: [.keyword(.each)]),
             changes: [
               .makeMissing(unexpected),
-              .makePresent(specifier, trailingTrivia: .space)
+              .makePresent(specifier, trailingTrivia: .space),
             ]
           )
         ],

@@ -71,7 +71,7 @@ final class ValueGenericsTests: ParserTestCase {
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "extraneous code '>() {}' at top level"
-        )
+        ),
       ],
       fixedSource: """
         func requirement<each <#identifier#>>()let T>() {}
@@ -95,7 +95,7 @@ final class ValueGenericsTests: ParserTestCase {
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "unexpected code 'T>' before parameter clause"
-        )
+        ),
       ],
       fixedSource: """
         func requirement<let each>T>() {}

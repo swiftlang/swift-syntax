@@ -97,7 +97,7 @@ public let GENERIC_NODES: [Node] = [
         deprecatedName: "eachKeyword",
         kind: .token(choices: [
           .keyword(.each),
-          .keyword(.let)
+          .keyword(.let),
         ]),
         nameForDiagnostics: "specifier",
         isOptional: true

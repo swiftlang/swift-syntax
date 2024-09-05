@@ -687,10 +687,7 @@ public enum Keyword: CaseIterable {
     case .throws:
       return KeywordSpec("throws", isLexerClassified: true)
     case .sending:
-      return KeywordSpec(
-        "sending",
-        experimentalFeature: .sendingArgsAndResults
-      )
+      return KeywordSpec("sending")
     case .transpose:
       return KeywordSpec("transpose")
     case .true:

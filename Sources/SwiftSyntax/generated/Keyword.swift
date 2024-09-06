@@ -203,9 +203,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
   #endif
   case scoped
   case `self`
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
   case sending
   case `Self`
   case Sendable

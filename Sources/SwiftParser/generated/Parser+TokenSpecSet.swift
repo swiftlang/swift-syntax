@@ -858,9 +858,6 @@ extension DeclModifierSyntax {
     case `static`
     case unowned
     case weak
-    #if compiler(>=5.8)
-    @_spi(ExperimentalLanguageFeatures)
-    #endif
     case sending
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
@@ -935,7 +932,7 @@ extension DeclModifierSyntax {
         self = .unowned
       case TokenSpec(.weak):
         self = .weak
-      case TokenSpec(.sending) where experimentalFeatures.contains(.sendingArgsAndResults):
+      case TokenSpec(.sending):
         self = .sending
       default:
         return nil
@@ -3431,9 +3428,6 @@ extension SimpleTypeSpecifierSyntax {
     case _const
     case borrowing
     case consuming
-    #if compiler(>=5.8)
-    @_spi(ExperimentalLanguageFeatures)
-    #endif
     case sending
     
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
@@ -3452,7 +3446,7 @@ extension SimpleTypeSpecifierSyntax {
         self = .borrowing
       case TokenSpec(.consuming):
         self = .consuming
-      case TokenSpec(.sending) where experimentalFeatures.contains(.sendingArgsAndResults):
+      case TokenSpec(.sending):
         self = .sending
       default:
         return nil

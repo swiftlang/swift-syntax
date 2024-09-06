@@ -25,7 +25,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func atSignToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -38,7 +38,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func backslashToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -51,7 +51,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func backtickToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -64,7 +64,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func binaryOperator(
     _ text: String,
     leadingTrivia: Trivia = [],
@@ -78,7 +78,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func colonToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -91,7 +91,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func commaToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -104,7 +104,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func dollarIdentifier(
     _ text: String,
     leadingTrivia: Trivia = [],
@@ -118,7 +118,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func ellipsisToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -131,7 +131,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func endOfFileToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -144,7 +144,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func equalToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -157,7 +157,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func exclamationMarkToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -170,7 +170,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func floatLiteral(
     _ text: String,
     leadingTrivia: Trivia = [],
@@ -184,7 +184,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func identifier(
     _ text: String,
     leadingTrivia: Trivia = [],
@@ -198,7 +198,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func infixQuestionMarkToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -211,7 +211,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func integerLiteral(
     _ text: String,
     leadingTrivia: Trivia = [],
@@ -225,7 +225,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func keyword(
     _ value: Keyword,
     leadingTrivia: Trivia = [],
@@ -239,7 +239,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func leftAngleToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -252,7 +252,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func leftBraceToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -265,7 +265,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func leftParenToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -278,7 +278,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func leftSquareToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -291,7 +291,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func multilineStringQuoteToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -304,7 +304,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func periodToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -317,7 +317,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func postfixOperator(
     _ text: String,
     leadingTrivia: Trivia = [],
@@ -331,7 +331,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func postfixQuestionMarkToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -344,7 +344,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func poundToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -357,7 +357,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func poundAvailableToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -370,7 +370,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func poundElseToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -383,7 +383,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func poundElseifToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -396,7 +396,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func poundEndifToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -409,7 +409,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func poundIfToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -422,7 +422,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func poundSourceLocationToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -435,7 +435,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func poundUnavailableToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -448,7 +448,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func prefixAmpersandToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -461,7 +461,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func prefixOperator(
     _ text: String,
     leadingTrivia: Trivia = [],
@@ -475,7 +475,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func rawStringPoundDelimiter(
     _ text: String,
     leadingTrivia: Trivia = [],
@@ -489,7 +489,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func regexLiteralPattern(
     _ text: String,
     leadingTrivia: Trivia = [],
@@ -503,7 +503,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func regexPoundDelimiter(
     _ text: String,
     leadingTrivia: Trivia = [],
@@ -517,7 +517,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func regexSlashToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -530,7 +530,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func rightAngleToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -543,7 +543,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func rightBraceToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -556,7 +556,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func rightParenToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -569,7 +569,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func rightSquareToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -582,7 +582,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func semicolonToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -595,7 +595,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func shebang(
     _ text: String,
     leadingTrivia: Trivia = [],
@@ -609,7 +609,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func singleQuoteToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -622,7 +622,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func stringQuoteToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -635,7 +635,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func stringSegment(
     _ text: String,
     leadingTrivia: Trivia = [],
@@ -649,7 +649,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func unknown(
     _ text: String,
     leadingTrivia: Trivia = [],
@@ -663,7 +663,7 @@ extension TokenSyntax {
       presence: presence
     )
   }
-  
+
   public static func wildcardToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],

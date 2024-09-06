@@ -313,7 +313,7 @@ public enum SyntaxKind: Sendable {
   case yieldedExpressionList
   case yieldedExpression
   case yieldedExpressionsClause
-  
+
   public var isSyntaxCollection: Bool {
     switch self {
     case .accessorDeclList:
@@ -422,7 +422,7 @@ public enum SyntaxKind: Sendable {
       return false
     }
   }
-  
+
   public var isMissing: Bool {
     switch self {
     case .missing:
@@ -441,7 +441,7 @@ public enum SyntaxKind: Sendable {
       return false
     }
   }
-  
+
   public var syntaxNodeType: SyntaxProtocol.Type {
     switch self {
     case .token:

@@ -23,60 +23,60 @@
 ///  - `rightParen`: `)`
 public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == ._canImportExpr else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeCanImportKeyword: UnexpectedNodesSyntax? = nil,
-      canImportKeyword: TokenSyntax = .keyword(.canImport),
-      _ unexpectedBetweenCanImportKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
-      leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndImportPath: UnexpectedNodesSyntax? = nil,
-      importPath: TokenSyntax,
-      _ unexpectedBetweenImportPathAndVersionInfo: UnexpectedNodesSyntax? = nil,
-      versionInfo: _CanImportVersionInfoSyntax? = nil,
-      _ unexpectedBetweenVersionInfoAndRightParen: UnexpectedNodesSyntax? = nil,
-      rightParen: TokenSyntax = .rightParenToken(),
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeCanImportKeyword: UnexpectedNodesSyntax? = nil,
+    canImportKeyword: TokenSyntax = .keyword(.canImport),
+    _ unexpectedBetweenCanImportKeywordAndLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax = .leftParenToken(),
+    _ unexpectedBetweenLeftParenAndImportPath: UnexpectedNodesSyntax? = nil,
+    importPath: TokenSyntax,
+    _ unexpectedBetweenImportPathAndVersionInfo: UnexpectedNodesSyntax? = nil,
+    versionInfo: _CanImportVersionInfoSyntax? = nil,
+    _ unexpectedBetweenVersionInfoAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax = .rightParenToken(),
+    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeCanImportKeyword, 
-            canImportKeyword, 
-            unexpectedBetweenCanImportKeywordAndLeftParen, 
-            leftParen, 
-            unexpectedBetweenLeftParenAndImportPath, 
-            importPath, 
-            unexpectedBetweenImportPathAndVersionInfo, 
-            versionInfo, 
-            unexpectedBetweenVersionInfoAndRightParen, 
-            rightParen, 
-            unexpectedAfterRightParen
-          ))) { (arena, _) in
+      unexpectedBeforeCanImportKeyword,
+      canImportKeyword,
+      unexpectedBetweenCanImportKeywordAndLeftParen,
+      leftParen,
+      unexpectedBetweenLeftParenAndImportPath,
+      importPath,
+      unexpectedBetweenImportPathAndVersionInfo,
+      versionInfo,
+      unexpectedBetweenVersionInfoAndRightParen,
+      rightParen,
+      unexpectedAfterRightParen
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeCanImportKeyword?.raw, 
-          canImportKeyword.raw, 
-          unexpectedBetweenCanImportKeywordAndLeftParen?.raw, 
-          leftParen.raw, 
-          unexpectedBetweenLeftParenAndImportPath?.raw, 
-          importPath.raw, 
-          unexpectedBetweenImportPathAndVersionInfo?.raw, 
-          versionInfo?.raw, 
-          unexpectedBetweenVersionInfoAndRightParen?.raw, 
-          rightParen.raw, 
-          unexpectedAfterRightParen?.raw
-        ]
+        unexpectedBeforeCanImportKeyword?.raw,
+        canImportKeyword.raw,
+        unexpectedBetweenCanImportKeywordAndLeftParen?.raw,
+        leftParen.raw,
+        unexpectedBetweenLeftParenAndImportPath?.raw,
+        importPath.raw,
+        unexpectedBetweenImportPathAndVersionInfo?.raw,
+        versionInfo?.raw,
+        unexpectedBetweenVersionInfoAndRightParen?.raw,
+        rightParen.raw,
+        unexpectedAfterRightParen?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind._canImportExpr,
         from: layout,
@@ -87,7 +87,7 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeCanImportKeyword: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -96,7 +96,7 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportExprSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `canImport`.
@@ -108,7 +108,7 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportExprSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenCanImportKeywordAndLeftParen: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -117,7 +117,7 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportExprSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `(`.
@@ -129,7 +129,7 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportExprSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenLeftParenAndImportPath: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -138,7 +138,7 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportExprSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `<identifier>`.
@@ -150,7 +150,7 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportExprSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenImportPathAndVersionInfo: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -159,7 +159,7 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportExprSyntax.self)
     }
   }
-  
+
   public var versionInfo: _CanImportVersionInfoSyntax? {
     get {
       return Syntax(self).child(at: 7)?.cast(_CanImportVersionInfoSyntax.self)
@@ -168,7 +168,7 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
       self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportExprSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenVersionInfoAndRightParen: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
@@ -177,7 +177,7 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
       self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportExprSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `)`.
@@ -189,7 +189,7 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
       self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportExprSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
@@ -198,20 +198,20 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
       self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportExprSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeCanImportKeyword, 
-        \Self.canImportKeyword, 
-        \Self.unexpectedBetweenCanImportKeywordAndLeftParen, 
-        \Self.leftParen, 
-        \Self.unexpectedBetweenLeftParenAndImportPath, 
-        \Self.importPath, 
-        \Self.unexpectedBetweenImportPathAndVersionInfo, 
-        \Self.versionInfo, 
-        \Self.unexpectedBetweenVersionInfoAndRightParen, 
-        \Self.rightParen, 
-        \Self.unexpectedAfterRightParen
-      ])
+    \Self.unexpectedBeforeCanImportKeyword,
+    \Self.canImportKeyword,
+    \Self.unexpectedBetweenCanImportKeywordAndLeftParen,
+    \Self.leftParen,
+    \Self.unexpectedBetweenLeftParenAndImportPath,
+    \Self.importPath,
+    \Self.unexpectedBetweenImportPathAndVersionInfo,
+    \Self.versionInfo,
+    \Self.unexpectedBetweenVersionInfoAndRightParen,
+    \Self.rightParen,
+    \Self.unexpectedAfterRightParen
+  ])
 }
 
 // MARK: - _CanImportVersionInfoSyntax
@@ -228,54 +228,54 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
 ///  - `_CanImportExprSyntax`.`_CanImportExprSyntax/versionInfo`
 public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == ._canImportVersionInfo else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeComma: UnexpectedNodesSyntax? = nil,
-      comma: TokenSyntax = .commaToken(),
-      _ unexpectedBetweenCommaAndLabel: UnexpectedNodesSyntax? = nil,
-      label: TokenSyntax,
-      _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
-      colon: TokenSyntax = .colonToken(),
-      _ unexpectedBetweenColonAndVersion: UnexpectedNodesSyntax? = nil,
-      version: VersionTupleSyntax,
-      _ unexpectedAfterVersion: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeComma: UnexpectedNodesSyntax? = nil,
+    comma: TokenSyntax = .commaToken(),
+    _ unexpectedBetweenCommaAndLabel: UnexpectedNodesSyntax? = nil,
+    label: TokenSyntax,
+    _ unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax = .colonToken(),
+    _ unexpectedBetweenColonAndVersion: UnexpectedNodesSyntax? = nil,
+    version: VersionTupleSyntax,
+    _ unexpectedAfterVersion: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeComma, 
-            comma, 
-            unexpectedBetweenCommaAndLabel, 
-            label, 
-            unexpectedBetweenLabelAndColon, 
-            colon, 
-            unexpectedBetweenColonAndVersion, 
-            version, 
-            unexpectedAfterVersion
-          ))) { (arena, _) in
+      unexpectedBeforeComma,
+      comma,
+      unexpectedBetweenCommaAndLabel,
+      label,
+      unexpectedBetweenLabelAndColon,
+      colon,
+      unexpectedBetweenColonAndVersion,
+      version,
+      unexpectedAfterVersion
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeComma?.raw, 
-          comma.raw, 
-          unexpectedBetweenCommaAndLabel?.raw, 
-          label.raw, 
-          unexpectedBetweenLabelAndColon?.raw, 
-          colon.raw, 
-          unexpectedBetweenColonAndVersion?.raw, 
-          version.raw, 
-          unexpectedAfterVersion?.raw
-        ]
+        unexpectedBeforeComma?.raw,
+        comma.raw,
+        unexpectedBetweenCommaAndLabel?.raw,
+        label.raw,
+        unexpectedBetweenLabelAndColon?.raw,
+        colon.raw,
+        unexpectedBetweenColonAndVersion?.raw,
+        version.raw,
+        unexpectedAfterVersion?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind._canImportVersionInfo,
         from: layout,
@@ -286,7 +286,7 @@ public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeComma: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -295,7 +295,7 @@ public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportVersionInfoSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `,`.
@@ -307,7 +307,7 @@ public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportVersionInfoSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenCommaAndLabel: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -316,7 +316,7 @@ public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportVersionInfoSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be one of the following kinds:
@@ -330,7 +330,7 @@ public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportVersionInfoSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenLabelAndColon: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -339,7 +339,7 @@ public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportVersionInfoSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `:`.
@@ -351,7 +351,7 @@ public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportVersionInfoSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenColonAndVersion: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -360,7 +360,7 @@ public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportVersionInfoSyntax.self)
     }
   }
-  
+
   public var version: VersionTupleSyntax {
     get {
       return Syntax(self).child(at: 7)!.cast(VersionTupleSyntax.self)
@@ -369,7 +369,7 @@ public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportVersionInfoSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterVersion: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
@@ -378,18 +378,18 @@ public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(_CanImportVersionInfoSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeComma, 
-        \Self.comma, 
-        \Self.unexpectedBetweenCommaAndLabel, 
-        \Self.label, 
-        \Self.unexpectedBetweenLabelAndColon, 
-        \Self.colon, 
-        \Self.unexpectedBetweenColonAndVersion, 
-        \Self.version, 
-        \Self.unexpectedAfterVersion
-      ])
+    \Self.unexpectedBeforeComma,
+    \Self.comma,
+    \Self.unexpectedBetweenCommaAndLabel,
+    \Self.label,
+    \Self.unexpectedBetweenLabelAndColon,
+    \Self.colon,
+    \Self.unexpectedBetweenColonAndVersion,
+    \Self.version,
+    \Self.unexpectedAfterVersion
+  ])
 }
 
 // MARK: - CatchClauseSyntax
@@ -405,48 +405,48 @@ public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _
 ///  - ``CatchClauseListSyntax``
 public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .catchClause else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeCatchKeyword: UnexpectedNodesSyntax? = nil,
-      catchKeyword: TokenSyntax = .keyword(.catch),
-      _ unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodesSyntax? = nil,
-      catchItems: CatchItemListSyntax = [],
-      _ unexpectedBetweenCatchItemsAndBody: UnexpectedNodesSyntax? = nil,
-      body: CodeBlockSyntax,
-      _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeCatchKeyword: UnexpectedNodesSyntax? = nil,
+    catchKeyword: TokenSyntax = .keyword(.catch),
+    _ unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodesSyntax? = nil,
+    catchItems: CatchItemListSyntax = [],
+    _ unexpectedBetweenCatchItemsAndBody: UnexpectedNodesSyntax? = nil,
+    body: CodeBlockSyntax,
+    _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeCatchKeyword, 
-            catchKeyword, 
-            unexpectedBetweenCatchKeywordAndCatchItems, 
-            catchItems, 
-            unexpectedBetweenCatchItemsAndBody, 
-            body, 
-            unexpectedAfterBody
-          ))) { (arena, _) in
+      unexpectedBeforeCatchKeyword,
+      catchKeyword,
+      unexpectedBetweenCatchKeywordAndCatchItems,
+      catchItems,
+      unexpectedBetweenCatchItemsAndBody,
+      body,
+      unexpectedAfterBody
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeCatchKeyword?.raw, 
-          catchKeyword.raw, 
-          unexpectedBetweenCatchKeywordAndCatchItems?.raw, 
-          catchItems.raw, 
-          unexpectedBetweenCatchItemsAndBody?.raw, 
-          body.raw, 
-          unexpectedAfterBody?.raw
-        ]
+        unexpectedBeforeCatchKeyword?.raw,
+        catchKeyword.raw,
+        unexpectedBetweenCatchKeywordAndCatchItems?.raw,
+        catchItems.raw,
+        unexpectedBetweenCatchItemsAndBody?.raw,
+        body.raw,
+        unexpectedAfterBody?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.catchClause,
         from: layout,
@@ -457,7 +457,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeCatchKeyword: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -466,7 +466,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(CatchClauseSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `catch`.
@@ -478,7 +478,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(CatchClauseSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenCatchKeywordAndCatchItems: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -487,7 +487,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(CatchClauseSyntax.self)
     }
   }
-  
+
   public var catchItems: CatchItemListSyntax {
     get {
       return Syntax(self).child(at: 3)!.cast(CatchItemListSyntax.self)
@@ -496,7 +496,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(CatchClauseSyntax.self)
     }
   }
-  
+
   /// Adds the provided `element` to the node's `catchItems`
   /// collection.
   ///
@@ -516,14 +516,14 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
     }
     return Syntax(self)
       .replacingChild(
-        at: 3, 
-        with: collection, 
-        rawNodeArena: arena, 
-        allocationArena: arena
-      )
+      at: 3,
+      with: collection,
+      rawNodeArena: arena,
+      allocationArena: arena
+    )
       .cast(CatchClauseSyntax.self)
   }
-  
+
   public var unexpectedBetweenCatchItemsAndBody: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -532,7 +532,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(CatchClauseSyntax.self)
     }
   }
-  
+
   public var body: CodeBlockSyntax {
     get {
       return Syntax(self).child(at: 5)!.cast(CodeBlockSyntax.self)
@@ -541,7 +541,7 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(CatchClauseSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterBody: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -550,16 +550,16 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(CatchClauseSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeCatchKeyword, 
-        \Self.catchKeyword, 
-        \Self.unexpectedBetweenCatchKeywordAndCatchItems, 
-        \Self.catchItems, 
-        \Self.unexpectedBetweenCatchItemsAndBody, 
-        \Self.body, 
-        \Self.unexpectedAfterBody
-      ])
+    \Self.unexpectedBeforeCatchKeyword,
+    \Self.catchKeyword,
+    \Self.unexpectedBetweenCatchKeywordAndCatchItems,
+    \Self.catchItems,
+    \Self.unexpectedBetweenCatchItemsAndBody,
+    \Self.body,
+    \Self.unexpectedAfterBody
+  ])
 }
 
 // MARK: - CatchItemSyntax
@@ -575,48 +575,48 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
 ///  - ``CatchItemListSyntax``
 public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .catchItem else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil,
-      pattern: (some PatternSyntaxProtocol)? = PatternSyntax?.none,
-      _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil,
-      whereClause: WhereClauseSyntax? = nil,
-      _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingComma: TokenSyntax? = nil,
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforePattern: UnexpectedNodesSyntax? = nil,
+    pattern: (some PatternSyntaxProtocol)? = PatternSyntax?.none,
+    _ unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? = nil,
+    whereClause: WhereClauseSyntax? = nil,
+    _ unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingComma: TokenSyntax? = nil,
+    _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforePattern, 
-            pattern, 
-            unexpectedBetweenPatternAndWhereClause, 
-            whereClause, 
-            unexpectedBetweenWhereClauseAndTrailingComma, 
-            trailingComma, 
-            unexpectedAfterTrailingComma
-          ))) { (arena, _) in
+      unexpectedBeforePattern,
+      pattern,
+      unexpectedBetweenPatternAndWhereClause,
+      whereClause,
+      unexpectedBetweenWhereClauseAndTrailingComma,
+      trailingComma,
+      unexpectedAfterTrailingComma
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforePattern?.raw, 
-          pattern?.raw, 
-          unexpectedBetweenPatternAndWhereClause?.raw, 
-          whereClause?.raw, 
-          unexpectedBetweenWhereClauseAndTrailingComma?.raw, 
-          trailingComma?.raw, 
-          unexpectedAfterTrailingComma?.raw
-        ]
+        unexpectedBeforePattern?.raw,
+        pattern?.raw,
+        unexpectedBetweenPatternAndWhereClause?.raw,
+        whereClause?.raw,
+        unexpectedBetweenWhereClauseAndTrailingComma?.raw,
+        trailingComma?.raw,
+        unexpectedAfterTrailingComma?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.catchItem,
         from: layout,
@@ -627,7 +627,7 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforePattern: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -636,7 +636,7 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(CatchItemSyntax.self)
     }
   }
-  
+
   public var pattern: PatternSyntax? {
     get {
       return Syntax(self).child(at: 1)?.cast(PatternSyntax.self)
@@ -645,7 +645,7 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(CatchItemSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenPatternAndWhereClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -654,7 +654,7 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(CatchItemSyntax.self)
     }
   }
-  
+
   public var whereClause: WhereClauseSyntax? {
     get {
       return Syntax(self).child(at: 3)?.cast(WhereClauseSyntax.self)
@@ -663,7 +663,7 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(CatchItemSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenWhereClauseAndTrailingComma: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -672,7 +672,7 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(CatchItemSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `,`.
@@ -684,7 +684,7 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(CatchItemSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -693,16 +693,16 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(CatchItemSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforePattern, 
-        \Self.pattern, 
-        \Self.unexpectedBetweenPatternAndWhereClause, 
-        \Self.whereClause, 
-        \Self.unexpectedBetweenWhereClauseAndTrailingComma, 
-        \Self.trailingComma, 
-        \Self.unexpectedAfterTrailingComma
-      ])
+    \Self.unexpectedBeforePattern,
+    \Self.pattern,
+    \Self.unexpectedBetweenPatternAndWhereClause,
+    \Self.whereClause,
+    \Self.unexpectedBetweenWhereClauseAndTrailingComma,
+    \Self.trailingComma,
+    \Self.unexpectedAfterTrailingComma
+  ])
 }
 
 // MARK: - ClassDeclSyntax
@@ -743,14 +743,14 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
 ///  - `memberBlock`: ``MemberBlockSyntax``
 public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .classDecl else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - attributes: Attributes attached to the class declaration, such as an `@available` attribute.
@@ -763,66 +763,66 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
   ///   - memberBlock: The members of the class declaration. As class extension declarations may declare additional members, the contents of this member block isn't guaranteed to be a complete list of members for this type.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax = [],
-      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax = [],
-      _ unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil,
-      classKeyword: TokenSyntax = .keyword(.class),
-      _ unexpectedBetweenClassKeywordAndName: UnexpectedNodesSyntax? = nil,
-      name: TokenSyntax,
-      _ unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
-      genericParameterClause: GenericParameterClauseSyntax? = nil,
-      _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
-      inheritanceClause: InheritanceClauseSyntax? = nil,
-      _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-      genericWhereClause: GenericWhereClauseSyntax? = nil,
-      _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-      memberBlock: MemberBlockSyntax,
-      _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    _ unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil,
+    classKeyword: TokenSyntax = .keyword(.class),
+    _ unexpectedBetweenClassKeywordAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    _ unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
+    _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+    inheritanceClause: InheritanceClauseSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    memberBlock: MemberBlockSyntax,
+    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAttributes, 
-            attributes, 
-            unexpectedBetweenAttributesAndModifiers, 
-            modifiers, 
-            unexpectedBetweenModifiersAndClassKeyword, 
-            classKeyword, 
-            unexpectedBetweenClassKeywordAndName, 
-            name, 
-            unexpectedBetweenNameAndGenericParameterClause, 
-            genericParameterClause, 
-            unexpectedBetweenGenericParameterClauseAndInheritanceClause, 
-            inheritanceClause, 
-            unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
-            genericWhereClause, 
-            unexpectedBetweenGenericWhereClauseAndMemberBlock, 
-            memberBlock, 
-            unexpectedAfterMemberBlock
-          ))) { (arena, _) in
+      unexpectedBeforeAttributes,
+      attributes,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers,
+      unexpectedBetweenModifiersAndClassKeyword,
+      classKeyword,
+      unexpectedBetweenClassKeywordAndName,
+      name,
+      unexpectedBetweenNameAndGenericParameterClause,
+      genericParameterClause,
+      unexpectedBetweenGenericParameterClauseAndInheritanceClause,
+      inheritanceClause,
+      unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+      genericWhereClause,
+      unexpectedBetweenGenericWhereClauseAndMemberBlock,
+      memberBlock,
+      unexpectedAfterMemberBlock
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeAttributes?.raw, 
-          attributes.raw, 
-          unexpectedBetweenAttributesAndModifiers?.raw, 
-          modifiers.raw, 
-          unexpectedBetweenModifiersAndClassKeyword?.raw, 
-          classKeyword.raw, 
-          unexpectedBetweenClassKeywordAndName?.raw, 
-          name.raw, 
-          unexpectedBetweenNameAndGenericParameterClause?.raw, 
-          genericParameterClause?.raw, 
-          unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw, 
-          inheritanceClause?.raw, 
-          unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw, 
-          genericWhereClause?.raw, 
-          unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw, 
-          memberBlock.raw, 
-          unexpectedAfterMemberBlock?.raw
-        ]
+        unexpectedBeforeAttributes?.raw,
+        attributes.raw,
+        unexpectedBetweenAttributesAndModifiers?.raw,
+        modifiers.raw,
+        unexpectedBetweenModifiersAndClassKeyword?.raw,
+        classKeyword.raw,
+        unexpectedBetweenClassKeywordAndName?.raw,
+        name.raw,
+        unexpectedBetweenNameAndGenericParameterClause?.raw,
+        genericParameterClause?.raw,
+        unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw,
+        inheritanceClause?.raw,
+        unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
+        genericWhereClause?.raw,
+        unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw,
+        memberBlock.raw,
+        unexpectedAfterMemberBlock?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.classDecl,
         from: layout,
@@ -833,7 +833,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -842,7 +842,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   /// Attributes attached to the class declaration, such as an `@available` attribute.
   public var attributes: AttributeListSyntax {
     get {
@@ -852,7 +852,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
   ///
@@ -872,14 +872,14 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     }
     return Syntax(self)
       .replacingChild(
-        at: 1, 
-        with: collection, 
-        rawNodeArena: arena, 
-        allocationArena: arena
-      )
+      at: 1,
+      with: collection,
+      rawNodeArena: arena,
+      allocationArena: arena
+    )
       .cast(ClassDeclSyntax.self)
   }
-  
+
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -888,7 +888,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   /// Modifiers like `public` that are attached to the class declaration.
   public var modifiers: DeclModifierListSyntax {
     get {
@@ -898,7 +898,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
   ///
@@ -918,14 +918,14 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     }
     return Syntax(self)
       .replacingChild(
-        at: 3, 
-        with: collection, 
-        rawNodeArena: arena, 
-        allocationArena: arena
-      )
+      at: 3,
+      with: collection,
+      rawNodeArena: arena,
+      allocationArena: arena
+    )
       .cast(ClassDeclSyntax.self)
   }
-  
+
   public var unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -934,7 +934,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   /// The `class` keyword for this declaration.
   ///
   /// ### Tokens
@@ -948,7 +948,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenClassKeywordAndName: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -957,7 +957,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   /// The name of the class.
   ///
   /// ### Tokens
@@ -971,7 +971,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
@@ -980,7 +980,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   /// The generic parameters, if any, of the class declaration.
   public var genericParameterClause: GenericParameterClauseSyntax? {
     get {
@@ -990,7 +990,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
@@ -999,7 +999,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   /// The inheritance clause describing one or more conformances for this class declaration.
   public var inheritanceClause: InheritanceClauseSyntax? {
     get {
@@ -1009,7 +1009,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
@@ -1018,7 +1018,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   /// The `where` clause that applies to the generic parameters of this class declaration.
   public var genericWhereClause: GenericWhereClauseSyntax? {
     get {
@@ -1028,7 +1028,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
@@ -1037,7 +1037,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   /// The members of the class declaration. As class extension declarations may declare additional members, the contents of this member block isn't guaranteed to be a complete list of members for this type.
   public var memberBlock: MemberBlockSyntax {
     get {
@@ -1047,7 +1047,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 15, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 16)?.cast(UnexpectedNodesSyntax.self)
@@ -1056,26 +1056,26 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       self = Syntax(self).replacingChild(at: 16, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeAttributes, 
-        \Self.attributes, 
-        \Self.unexpectedBetweenAttributesAndModifiers, 
-        \Self.modifiers, 
-        \Self.unexpectedBetweenModifiersAndClassKeyword, 
-        \Self.classKeyword, 
-        \Self.unexpectedBetweenClassKeywordAndName, 
-        \Self.name, 
-        \Self.unexpectedBetweenNameAndGenericParameterClause, 
-        \Self.genericParameterClause, 
-        \Self.unexpectedBetweenGenericParameterClauseAndInheritanceClause, 
-        \Self.inheritanceClause, 
-        \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause, 
-        \Self.genericWhereClause, 
-        \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock, 
-        \Self.memberBlock, 
-        \Self.unexpectedAfterMemberBlock
-      ])
+    \Self.unexpectedBeforeAttributes,
+    \Self.attributes,
+    \Self.unexpectedBetweenAttributesAndModifiers,
+    \Self.modifiers,
+    \Self.unexpectedBetweenModifiersAndClassKeyword,
+    \Self.classKeyword,
+    \Self.unexpectedBetweenClassKeywordAndName,
+    \Self.name,
+    \Self.unexpectedBetweenNameAndGenericParameterClause,
+    \Self.genericParameterClause,
+    \Self.unexpectedBetweenGenericParameterClauseAndInheritanceClause,
+    \Self.inheritanceClause,
+    \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+    \Self.genericWhereClause,
+    \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock,
+    \Self.memberBlock,
+    \Self.unexpectedAfterMemberBlock
+  ])
 }
 
 // MARK: - ClassRestrictionTypeSyntax
@@ -1085,23 +1085,23 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
 ///  - `classKeyword`: `class`
 public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .classRestrictionType else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeClassKeyword: UnexpectedNodesSyntax? = nil,
-      classKeyword: TokenSyntax = .keyword(.class),
-      _ unexpectedAfterClassKeyword: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeClassKeyword: UnexpectedNodesSyntax? = nil,
+    classKeyword: TokenSyntax = .keyword(.class),
+    _ unexpectedAfterClassKeyword: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -1117,7 +1117,7 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _L
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeClassKeyword: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -1126,7 +1126,7 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _L
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ClassRestrictionTypeSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `class`.
@@ -1138,7 +1138,7 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _L
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ClassRestrictionTypeSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterClassKeyword: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -1147,7 +1147,7 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _L
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ClassRestrictionTypeSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeClassKeyword, \Self.classKeyword, \Self.unexpectedAfterClassKeyword])
 }
 
@@ -1164,48 +1164,48 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _L
 ///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/capture``
 public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .closureCaptureClause else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil,
-      leftSquare: TokenSyntax = .leftSquareToken(),
-      _ unexpectedBetweenLeftSquareAndItems: UnexpectedNodesSyntax? = nil,
-      items: ClosureCaptureListSyntax,
-      _ unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? = nil,
-      rightSquare: TokenSyntax = .rightSquareToken(),
-      _ unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? = nil,
+    leftSquare: TokenSyntax = .leftSquareToken(),
+    _ unexpectedBetweenLeftSquareAndItems: UnexpectedNodesSyntax? = nil,
+    items: ClosureCaptureListSyntax,
+    _ unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? = nil,
+    rightSquare: TokenSyntax = .rightSquareToken(),
+    _ unexpectedAfterRightSquare: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLeftSquare, 
-            leftSquare, 
-            unexpectedBetweenLeftSquareAndItems, 
-            items, 
-            unexpectedBetweenItemsAndRightSquare, 
-            rightSquare, 
-            unexpectedAfterRightSquare
-          ))) { (arena, _) in
+      unexpectedBeforeLeftSquare,
+      leftSquare,
+      unexpectedBetweenLeftSquareAndItems,
+      items,
+      unexpectedBetweenItemsAndRightSquare,
+      rightSquare,
+      unexpectedAfterRightSquare
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeLeftSquare?.raw, 
-          leftSquare.raw, 
-          unexpectedBetweenLeftSquareAndItems?.raw, 
-          items.raw, 
-          unexpectedBetweenItemsAndRightSquare?.raw, 
-          rightSquare.raw, 
-          unexpectedAfterRightSquare?.raw
-        ]
+        unexpectedBeforeLeftSquare?.raw,
+        leftSquare.raw,
+        unexpectedBetweenLeftSquareAndItems?.raw,
+        items.raw,
+        unexpectedBetweenItemsAndRightSquare?.raw,
+        rightSquare.raw,
+        unexpectedAfterRightSquare?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.closureCaptureClause,
         from: layout,
@@ -1216,7 +1216,7 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeLeftSquare: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -1225,7 +1225,7 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureClauseSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `[`.
@@ -1237,7 +1237,7 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureClauseSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenLeftSquareAndItems: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -1246,7 +1246,7 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureClauseSyntax.self)
     }
   }
-  
+
   public var items: ClosureCaptureListSyntax {
     get {
       return Syntax(self).child(at: 3)!.cast(ClosureCaptureListSyntax.self)
@@ -1255,7 +1255,7 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureClauseSyntax.self)
     }
   }
-  
+
   /// Adds the provided `element` to the node's `items`
   /// collection.
   ///
@@ -1275,14 +1275,14 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
     }
     return Syntax(self)
       .replacingChild(
-        at: 3, 
-        with: collection, 
-        rawNodeArena: arena, 
-        allocationArena: arena
-      )
+      at: 3,
+      with: collection,
+      rawNodeArena: arena,
+      allocationArena: arena
+    )
       .cast(ClosureCaptureClauseSyntax.self)
   }
-  
+
   public var unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -1291,7 +1291,7 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureClauseSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `]`.
@@ -1303,7 +1303,7 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureClauseSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterRightSquare: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -1312,16 +1312,16 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureClauseSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeLeftSquare, 
-        \Self.leftSquare, 
-        \Self.unexpectedBetweenLeftSquareAndItems, 
-        \Self.items, 
-        \Self.unexpectedBetweenItemsAndRightSquare, 
-        \Self.rightSquare, 
-        \Self.unexpectedAfterRightSquare
-      ])
+    \Self.unexpectedBeforeLeftSquare,
+    \Self.leftSquare,
+    \Self.unexpectedBetweenLeftSquareAndItems,
+    \Self.items,
+    \Self.unexpectedBetweenItemsAndRightSquare,
+    \Self.rightSquare,
+    \Self.unexpectedAfterRightSquare
+  ])
 }
 
 // MARK: - ClosureCaptureSpecifierSyntax
@@ -1338,54 +1338,54 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
 ///  - ``ClosureCaptureSyntax``.``ClosureCaptureSyntax/specifier``
 public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .closureCaptureSpecifier else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil,
-      specifier: TokenSyntax,
-      _ unexpectedBetweenSpecifierAndLeftParen: UnexpectedNodesSyntax? = nil,
-      leftParen: TokenSyntax? = nil,
-      _ unexpectedBetweenLeftParenAndDetail: UnexpectedNodesSyntax? = nil,
-      detail: TokenSyntax? = nil,
-      _ unexpectedBetweenDetailAndRightParen: UnexpectedNodesSyntax? = nil,
-      rightParen: TokenSyntax? = nil,
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil,
+    specifier: TokenSyntax,
+    _ unexpectedBetweenSpecifierAndLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndDetail: UnexpectedNodesSyntax? = nil,
+    detail: TokenSyntax? = nil,
+    _ unexpectedBetweenDetailAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax? = nil,
+    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeSpecifier, 
-            specifier, 
-            unexpectedBetweenSpecifierAndLeftParen, 
-            leftParen, 
-            unexpectedBetweenLeftParenAndDetail, 
-            detail, 
-            unexpectedBetweenDetailAndRightParen, 
-            rightParen, 
-            unexpectedAfterRightParen
-          ))) { (arena, _) in
+      unexpectedBeforeSpecifier,
+      specifier,
+      unexpectedBetweenSpecifierAndLeftParen,
+      leftParen,
+      unexpectedBetweenLeftParenAndDetail,
+      detail,
+      unexpectedBetweenDetailAndRightParen,
+      rightParen,
+      unexpectedAfterRightParen
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeSpecifier?.raw, 
-          specifier.raw, 
-          unexpectedBetweenSpecifierAndLeftParen?.raw, 
-          leftParen?.raw, 
-          unexpectedBetweenLeftParenAndDetail?.raw, 
-          detail?.raw, 
-          unexpectedBetweenDetailAndRightParen?.raw, 
-          rightParen?.raw, 
-          unexpectedAfterRightParen?.raw
-        ]
+        unexpectedBeforeSpecifier?.raw,
+        specifier.raw,
+        unexpectedBetweenSpecifierAndLeftParen?.raw,
+        leftParen?.raw,
+        unexpectedBetweenLeftParenAndDetail?.raw,
+        detail?.raw,
+        unexpectedBetweenDetailAndRightParen?.raw,
+        rightParen?.raw,
+        unexpectedAfterRightParen?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.closureCaptureSpecifier,
         from: layout,
@@ -1396,7 +1396,7 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeSpecifier: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -1405,7 +1405,7 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Le
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSpecifierSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be one of the following kinds:
@@ -1419,7 +1419,7 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Le
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSpecifierSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenSpecifierAndLeftParen: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -1428,7 +1428,7 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Le
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSpecifierSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `(`.
@@ -1440,7 +1440,7 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Le
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSpecifierSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenLeftParenAndDetail: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -1449,7 +1449,7 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Le
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSpecifierSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be one of the following kinds:
@@ -1463,7 +1463,7 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Le
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSpecifierSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenDetailAndRightParen: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -1472,7 +1472,7 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Le
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSpecifierSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `)`.
@@ -1484,7 +1484,7 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Le
       self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSpecifierSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
@@ -1493,18 +1493,18 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Le
       self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSpecifierSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeSpecifier, 
-        \Self.specifier, 
-        \Self.unexpectedBetweenSpecifierAndLeftParen, 
-        \Self.leftParen, 
-        \Self.unexpectedBetweenLeftParenAndDetail, 
-        \Self.detail, 
-        \Self.unexpectedBetweenDetailAndRightParen, 
-        \Self.rightParen, 
-        \Self.unexpectedAfterRightParen
-      ])
+    \Self.unexpectedBeforeSpecifier,
+    \Self.specifier,
+    \Self.unexpectedBetweenSpecifierAndLeftParen,
+    \Self.leftParen,
+    \Self.unexpectedBetweenLeftParenAndDetail,
+    \Self.detail,
+    \Self.unexpectedBetweenDetailAndRightParen,
+    \Self.rightParen,
+    \Self.unexpectedAfterRightParen
+  ])
 }
 
 // MARK: - ClosureCaptureSyntax
@@ -1521,54 +1521,54 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Le
 ///  - ``ClosureCaptureListSyntax``
 public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .closureCapture else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil,
-      specifier: ClosureCaptureSpecifierSyntax? = nil,
-      _ unexpectedBetweenSpecifierAndName: UnexpectedNodesSyntax? = nil,
-      name: TokenSyntax,
-      _ unexpectedBetweenNameAndInitializer: UnexpectedNodesSyntax? = nil,
-      initializer: InitializerClauseSyntax? = nil,
-      _ unexpectedBetweenInitializerAndTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingComma: TokenSyntax? = nil,
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeSpecifier: UnexpectedNodesSyntax? = nil,
+    specifier: ClosureCaptureSpecifierSyntax? = nil,
+    _ unexpectedBetweenSpecifierAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    _ unexpectedBetweenNameAndInitializer: UnexpectedNodesSyntax? = nil,
+    initializer: InitializerClauseSyntax? = nil,
+    _ unexpectedBetweenInitializerAndTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingComma: TokenSyntax? = nil,
+    _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeSpecifier, 
-            specifier, 
-            unexpectedBetweenSpecifierAndName, 
-            name, 
-            unexpectedBetweenNameAndInitializer, 
-            initializer, 
-            unexpectedBetweenInitializerAndTrailingComma, 
-            trailingComma, 
-            unexpectedAfterTrailingComma
-          ))) { (arena, _) in
+      unexpectedBeforeSpecifier,
+      specifier,
+      unexpectedBetweenSpecifierAndName,
+      name,
+      unexpectedBetweenNameAndInitializer,
+      initializer,
+      unexpectedBetweenInitializerAndTrailingComma,
+      trailingComma,
+      unexpectedAfterTrailingComma
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeSpecifier?.raw, 
-          specifier?.raw, 
-          unexpectedBetweenSpecifierAndName?.raw, 
-          name.raw, 
-          unexpectedBetweenNameAndInitializer?.raw, 
-          initializer?.raw, 
-          unexpectedBetweenInitializerAndTrailingComma?.raw, 
-          trailingComma?.raw, 
-          unexpectedAfterTrailingComma?.raw
-        ]
+        unexpectedBeforeSpecifier?.raw,
+        specifier?.raw,
+        unexpectedBetweenSpecifierAndName?.raw,
+        name.raw,
+        unexpectedBetweenNameAndInitializer?.raw,
+        initializer?.raw,
+        unexpectedBetweenInitializerAndTrailingComma?.raw,
+        trailingComma?.raw,
+        unexpectedAfterTrailingComma?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.closureCapture,
         from: layout,
@@ -1579,7 +1579,7 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeSpecifier: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -1588,7 +1588,7 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSyntax.self)
     }
   }
-  
+
   public var specifier: ClosureCaptureSpecifierSyntax? {
     get {
       return Syntax(self).child(at: 1)?.cast(ClosureCaptureSpecifierSyntax.self)
@@ -1597,7 +1597,7 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenSpecifierAndName: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -1606,7 +1606,7 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be one of the following kinds:
@@ -1620,7 +1620,7 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenNameAndInitializer: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -1629,7 +1629,7 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSyntax.self)
     }
   }
-  
+
   public var initializer: InitializerClauseSyntax? {
     get {
       return Syntax(self).child(at: 5)?.cast(InitializerClauseSyntax.self)
@@ -1638,7 +1638,7 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenInitializerAndTrailingComma: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -1647,7 +1647,7 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `,`.
@@ -1659,7 +1659,7 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
       self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
@@ -1668,18 +1668,18 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
       self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(ClosureCaptureSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeSpecifier, 
-        \Self.specifier, 
-        \Self.unexpectedBetweenSpecifierAndName, 
-        \Self.name, 
-        \Self.unexpectedBetweenNameAndInitializer, 
-        \Self.initializer, 
-        \Self.unexpectedBetweenInitializerAndTrailingComma, 
-        \Self.trailingComma, 
-        \Self.unexpectedAfterTrailingComma
-      ])
+    \Self.unexpectedBeforeSpecifier,
+    \Self.specifier,
+    \Self.unexpectedBetweenSpecifierAndName,
+    \Self.name,
+    \Self.unexpectedBetweenNameAndInitializer,
+    \Self.initializer,
+    \Self.unexpectedBetweenInitializerAndTrailingComma,
+    \Self.trailingComma,
+    \Self.unexpectedAfterTrailingComma
+  ])
 }
 
 // MARK: - ClosureExprSyntax
@@ -1700,54 +1700,54 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
 ///  - ``SubscriptCallExprSyntax``.``SubscriptCallExprSyntax/trailingClosure``
 public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .closureExpr else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil,
-      leftBrace: TokenSyntax = .leftBraceToken(),
-      _ unexpectedBetweenLeftBraceAndSignature: UnexpectedNodesSyntax? = nil,
-      signature: ClosureSignatureSyntax? = nil,
-      _ unexpectedBetweenSignatureAndStatements: UnexpectedNodesSyntax? = nil,
-      statements: CodeBlockItemListSyntax,
-      _ unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil,
-      rightBrace: TokenSyntax = .rightBraceToken(),
-      _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil,
+    leftBrace: TokenSyntax = .leftBraceToken(),
+    _ unexpectedBetweenLeftBraceAndSignature: UnexpectedNodesSyntax? = nil,
+    signature: ClosureSignatureSyntax? = nil,
+    _ unexpectedBetweenSignatureAndStatements: UnexpectedNodesSyntax? = nil,
+    statements: CodeBlockItemListSyntax,
+    _ unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil,
+    rightBrace: TokenSyntax = .rightBraceToken(),
+    _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLeftBrace, 
-            leftBrace, 
-            unexpectedBetweenLeftBraceAndSignature, 
-            signature, 
-            unexpectedBetweenSignatureAndStatements, 
-            statements, 
-            unexpectedBetweenStatementsAndRightBrace, 
-            rightBrace, 
-            unexpectedAfterRightBrace
-          ))) { (arena, _) in
+      unexpectedBeforeLeftBrace,
+      leftBrace,
+      unexpectedBetweenLeftBraceAndSignature,
+      signature,
+      unexpectedBetweenSignatureAndStatements,
+      statements,
+      unexpectedBetweenStatementsAndRightBrace,
+      rightBrace,
+      unexpectedAfterRightBrace
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeLeftBrace?.raw, 
-          leftBrace.raw, 
-          unexpectedBetweenLeftBraceAndSignature?.raw, 
-          signature?.raw, 
-          unexpectedBetweenSignatureAndStatements?.raw, 
-          statements.raw, 
-          unexpectedBetweenStatementsAndRightBrace?.raw, 
-          rightBrace.raw, 
-          unexpectedAfterRightBrace?.raw
-        ]
+        unexpectedBeforeLeftBrace?.raw,
+        leftBrace.raw,
+        unexpectedBetweenLeftBraceAndSignature?.raw,
+        signature?.raw,
+        unexpectedBetweenSignatureAndStatements?.raw,
+        statements.raw,
+        unexpectedBetweenStatementsAndRightBrace?.raw,
+        rightBrace.raw,
+        unexpectedAfterRightBrace?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.closureExpr,
         from: layout,
@@ -1758,7 +1758,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -1767,7 +1767,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ClosureExprSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `{`.
@@ -1779,7 +1779,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ClosureExprSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenLeftBraceAndSignature: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -1788,7 +1788,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ClosureExprSyntax.self)
     }
   }
-  
+
   public var signature: ClosureSignatureSyntax? {
     get {
       return Syntax(self).child(at: 3)?.cast(ClosureSignatureSyntax.self)
@@ -1797,7 +1797,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ClosureExprSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenSignatureAndStatements: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -1806,7 +1806,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ClosureExprSyntax.self)
     }
   }
-  
+
   public var statements: CodeBlockItemListSyntax {
     get {
       return Syntax(self).child(at: 5)!.cast(CodeBlockItemListSyntax.self)
@@ -1815,7 +1815,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ClosureExprSyntax.self)
     }
   }
-  
+
   /// Adds the provided `element` to the node's `statements`
   /// collection.
   ///
@@ -1835,14 +1835,14 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
     }
     return Syntax(self)
       .replacingChild(
-        at: 5, 
-        with: collection, 
-        rawNodeArena: arena, 
-        allocationArena: arena
-      )
+      at: 5,
+      with: collection,
+      rawNodeArena: arena,
+      allocationArena: arena
+    )
       .cast(ClosureExprSyntax.self)
   }
-  
+
   public var unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -1851,7 +1851,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ClosureExprSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `}`.
@@ -1863,7 +1863,7 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(ClosureExprSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterRightBrace: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
@@ -1872,18 +1872,18 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(ClosureExprSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeLeftBrace, 
-        \Self.leftBrace, 
-        \Self.unexpectedBetweenLeftBraceAndSignature, 
-        \Self.signature, 
-        \Self.unexpectedBetweenSignatureAndStatements, 
-        \Self.statements, 
-        \Self.unexpectedBetweenStatementsAndRightBrace, 
-        \Self.rightBrace, 
-        \Self.unexpectedAfterRightBrace
-      ])
+    \Self.unexpectedBeforeLeftBrace,
+    \Self.leftBrace,
+    \Self.unexpectedBetweenLeftBraceAndSignature,
+    \Self.signature,
+    \Self.unexpectedBetweenSignatureAndStatements,
+    \Self.statements,
+    \Self.unexpectedBetweenStatementsAndRightBrace,
+    \Self.rightBrace,
+    \Self.unexpectedAfterRightBrace
+  ])
 }
 
 // MARK: - ClosureParameterClauseSyntax
@@ -1899,14 +1899,14 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
 ///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/parameterClause``
 public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .closureParameterClause else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - leftParen: The '(' to open the parameter clause.
@@ -1914,36 +1914,36 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
   ///   - rightParen: The ')' to close the parameter clause.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
-      leftParen: TokenSyntax = .leftParenToken(),
-      _ unexpectedBetweenLeftParenAndParameters: UnexpectedNodesSyntax? = nil,
-      parameters: ClosureParameterListSyntax,
-      _ unexpectedBetweenParametersAndRightParen: UnexpectedNodesSyntax? = nil,
-      rightParen: TokenSyntax = .rightParenToken(),
-      _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax = .leftParenToken(),
+    _ unexpectedBetweenLeftParenAndParameters: UnexpectedNodesSyntax? = nil,
+    parameters: ClosureParameterListSyntax,
+    _ unexpectedBetweenParametersAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax = .rightParenToken(),
+    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLeftParen, 
-            leftParen, 
-            unexpectedBetweenLeftParenAndParameters, 
-            parameters, 
-            unexpectedBetweenParametersAndRightParen, 
-            rightParen, 
-            unexpectedAfterRightParen
-          ))) { (arena, _) in
+      unexpectedBeforeLeftParen,
+      leftParen,
+      unexpectedBetweenLeftParenAndParameters,
+      parameters,
+      unexpectedBetweenParametersAndRightParen,
+      rightParen,
+      unexpectedAfterRightParen
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeLeftParen?.raw, 
-          leftParen.raw, 
-          unexpectedBetweenLeftParenAndParameters?.raw, 
-          parameters.raw, 
-          unexpectedBetweenParametersAndRightParen?.raw, 
-          rightParen.raw, 
-          unexpectedAfterRightParen?.raw
-        ]
+        unexpectedBeforeLeftParen?.raw,
+        leftParen.raw,
+        unexpectedBetweenLeftParenAndParameters?.raw,
+        parameters.raw,
+        unexpectedBetweenParametersAndRightParen?.raw,
+        rightParen.raw,
+        unexpectedAfterRightParen?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.closureParameterClause,
         from: layout,
@@ -1954,7 +1954,7 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeLeftParen: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -1963,7 +1963,7 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterClauseSyntax.self)
     }
   }
-  
+
   /// The '(' to open the parameter clause.
   ///
   /// ### Tokens
@@ -1977,7 +1977,7 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterClauseSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenLeftParenAndParameters: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -1986,7 +1986,7 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterClauseSyntax.self)
     }
   }
-  
+
   /// The actual parameters.
   public var parameters: ClosureParameterListSyntax {
     get {
@@ -1996,7 +1996,7 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterClauseSyntax.self)
     }
   }
-  
+
   /// Adds the provided `element` to the node's `parameters`
   /// collection.
   ///
@@ -2016,14 +2016,14 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
     }
     return Syntax(self)
       .replacingChild(
-        at: 3, 
-        with: collection, 
-        rawNodeArena: arena, 
-        allocationArena: arena
-      )
+      at: 3,
+      with: collection,
+      rawNodeArena: arena,
+      allocationArena: arena
+    )
       .cast(ClosureParameterClauseSyntax.self)
   }
-  
+
   public var unexpectedBetweenParametersAndRightParen: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -2032,7 +2032,7 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterClauseSyntax.self)
     }
   }
-  
+
   /// The ')' to close the parameter clause.
   ///
   /// ### Tokens
@@ -2046,7 +2046,7 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterClauseSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -2055,16 +2055,16 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterClauseSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeLeftParen, 
-        \Self.leftParen, 
-        \Self.unexpectedBetweenLeftParenAndParameters, 
-        \Self.parameters, 
-        \Self.unexpectedBetweenParametersAndRightParen, 
-        \Self.rightParen, 
-        \Self.unexpectedAfterRightParen
-      ])
+    \Self.unexpectedBeforeLeftParen,
+    \Self.leftParen,
+    \Self.unexpectedBetweenLeftParenAndParameters,
+    \Self.parameters,
+    \Self.unexpectedBetweenParametersAndRightParen,
+    \Self.rightParen,
+    \Self.unexpectedAfterRightParen
+  ])
 }
 
 // MARK: - ClosureParameterSyntax
@@ -2085,14 +2085,14 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
 ///  - ``ClosureParameterListSyntax``
 public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .closureParameter else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - firstName: The label of this parameter that will be used when the closure is called.
@@ -2103,66 +2103,66 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
   ///   - trailingComma: If the parameter is followed by another parameter, the comma separating them.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax = [],
-      _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-      modifiers: DeclModifierListSyntax = [],
-      _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
-      firstName: TokenSyntax,
-      _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
-      secondName: TokenSyntax? = nil,
-      _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil,
-      colon: TokenSyntax? = nil,
-      _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
-      type: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
-      _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
-      ellipsis: TokenSyntax? = nil,
-      _ unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingComma: TokenSyntax? = nil,
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    _ unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? = nil,
+    firstName: TokenSyntax,
+    _ unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? = nil,
+    secondName: TokenSyntax? = nil,
+    _ unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax? = nil,
+    _ unexpectedBetweenColonAndType: UnexpectedNodesSyntax? = nil,
+    type: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
+    _ unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? = nil,
+    ellipsis: TokenSyntax? = nil,
+    _ unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingComma: TokenSyntax? = nil,
+    _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAttributes, 
-            attributes, 
-            unexpectedBetweenAttributesAndModifiers, 
-            modifiers, 
-            unexpectedBetweenModifiersAndFirstName, 
-            firstName, 
-            unexpectedBetweenFirstNameAndSecondName, 
-            secondName, 
-            unexpectedBetweenSecondNameAndColon, 
-            colon, 
-            unexpectedBetweenColonAndType, 
-            type, 
-            unexpectedBetweenTypeAndEllipsis, 
-            ellipsis, 
-            unexpectedBetweenEllipsisAndTrailingComma, 
-            trailingComma, 
-            unexpectedAfterTrailingComma
-          ))) { (arena, _) in
+      unexpectedBeforeAttributes,
+      attributes,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers,
+      unexpectedBetweenModifiersAndFirstName,
+      firstName,
+      unexpectedBetweenFirstNameAndSecondName,
+      secondName,
+      unexpectedBetweenSecondNameAndColon,
+      colon,
+      unexpectedBetweenColonAndType,
+      type,
+      unexpectedBetweenTypeAndEllipsis,
+      ellipsis,
+      unexpectedBetweenEllipsisAndTrailingComma,
+      trailingComma,
+      unexpectedAfterTrailingComma
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeAttributes?.raw, 
-          attributes.raw, 
-          unexpectedBetweenAttributesAndModifiers?.raw, 
-          modifiers.raw, 
-          unexpectedBetweenModifiersAndFirstName?.raw, 
-          firstName.raw, 
-          unexpectedBetweenFirstNameAndSecondName?.raw, 
-          secondName?.raw, 
-          unexpectedBetweenSecondNameAndColon?.raw, 
-          colon?.raw, 
-          unexpectedBetweenColonAndType?.raw, 
-          type?.raw, 
-          unexpectedBetweenTypeAndEllipsis?.raw, 
-          ellipsis?.raw, 
-          unexpectedBetweenEllipsisAndTrailingComma?.raw, 
-          trailingComma?.raw, 
-          unexpectedAfterTrailingComma?.raw
-        ]
+        unexpectedBeforeAttributes?.raw,
+        attributes.raw,
+        unexpectedBetweenAttributesAndModifiers?.raw,
+        modifiers.raw,
+        unexpectedBetweenModifiersAndFirstName?.raw,
+        firstName.raw,
+        unexpectedBetweenFirstNameAndSecondName?.raw,
+        secondName?.raw,
+        unexpectedBetweenSecondNameAndColon?.raw,
+        colon?.raw,
+        unexpectedBetweenColonAndType?.raw,
+        type?.raw,
+        unexpectedBetweenTypeAndEllipsis?.raw,
+        ellipsis?.raw,
+        unexpectedBetweenEllipsisAndTrailingComma?.raw,
+        trailingComma?.raw,
+        unexpectedAfterTrailingComma?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.closureParameter,
         from: layout,
@@ -2173,7 +2173,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -2182,7 +2182,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   public var attributes: AttributeListSyntax {
     get {
       return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
@@ -2191,7 +2191,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
   ///
@@ -2211,14 +2211,14 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
     return Syntax(self)
       .replacingChild(
-        at: 1, 
-        with: collection, 
-        rawNodeArena: arena, 
-        allocationArena: arena
-      )
+      at: 1,
+      with: collection,
+      rawNodeArena: arena,
+      allocationArena: arena
+    )
       .cast(ClosureParameterSyntax.self)
   }
-  
+
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -2227,7 +2227,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   public var modifiers: DeclModifierListSyntax {
     get {
       return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
@@ -2236,7 +2236,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   /// Adds the provided `element` to the node's `modifiers`
   /// collection.
   ///
@@ -2256,14 +2256,14 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
     return Syntax(self)
       .replacingChild(
-        at: 3, 
-        with: collection, 
-        rawNodeArena: arena, 
-        allocationArena: arena
-      )
+      at: 3,
+      with: collection,
+      rawNodeArena: arena,
+      allocationArena: arena
+    )
       .cast(ClosureParameterSyntax.self)
   }
-  
+
   public var unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -2272,7 +2272,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   /// The label of this parameter that will be used when the closure is called.
   ///
   /// ### Tokens
@@ -2288,7 +2288,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenFirstNameAndSecondName: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -2297,7 +2297,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   /// If this is specified, it is the name by which the parameter can be referenced inside the closure body. If it is `nil`, the closure parameter is referenced by the first name.
   ///
   /// ### Tokens
@@ -2313,7 +2313,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenSecondNameAndColon: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
@@ -2322,7 +2322,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   /// The colon separating the parameter's name and type.
   ///
   /// ### Tokens
@@ -2336,7 +2336,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenColonAndType: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
@@ -2345,7 +2345,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   /// The type of the parameter.
   public var type: TypeSyntax? {
     get {
@@ -2355,7 +2355,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenTypeAndEllipsis: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
@@ -2364,7 +2364,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   /// If the parameter is variadic, `...` to indicate that.
   ///
   /// ### Tokens
@@ -2378,7 +2378,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenEllipsisAndTrailingComma: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
@@ -2387,7 +2387,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   /// If the parameter is followed by another parameter, the comma separating them.
   ///
   /// ### Tokens
@@ -2401,7 +2401,7 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 15, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 16)?.cast(UnexpectedNodesSyntax.self)
@@ -2410,26 +2410,26 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 16, with: Syntax(value), arena: SyntaxArena()).cast(ClosureParameterSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeAttributes, 
-        \Self.attributes, 
-        \Self.unexpectedBetweenAttributesAndModifiers, 
-        \Self.modifiers, 
-        \Self.unexpectedBetweenModifiersAndFirstName, 
-        \Self.firstName, 
-        \Self.unexpectedBetweenFirstNameAndSecondName, 
-        \Self.secondName, 
-        \Self.unexpectedBetweenSecondNameAndColon, 
-        \Self.colon, 
-        \Self.unexpectedBetweenColonAndType, 
-        \Self.type, 
-        \Self.unexpectedBetweenTypeAndEllipsis, 
-        \Self.ellipsis, 
-        \Self.unexpectedBetweenEllipsisAndTrailingComma, 
-        \Self.trailingComma, 
-        \Self.unexpectedAfterTrailingComma
-      ])
+    \Self.unexpectedBeforeAttributes,
+    \Self.attributes,
+    \Self.unexpectedBetweenAttributesAndModifiers,
+    \Self.modifiers,
+    \Self.unexpectedBetweenModifiersAndFirstName,
+    \Self.firstName,
+    \Self.unexpectedBetweenFirstNameAndSecondName,
+    \Self.secondName,
+    \Self.unexpectedBetweenSecondNameAndColon,
+    \Self.colon,
+    \Self.unexpectedBetweenColonAndType,
+    \Self.type,
+    \Self.unexpectedBetweenTypeAndEllipsis,
+    \Self.ellipsis,
+    \Self.unexpectedBetweenEllipsisAndTrailingComma,
+    \Self.trailingComma,
+    \Self.unexpectedAfterTrailingComma
+  ])
 }
 
 // MARK: - ClosureShorthandParameterSyntax
@@ -2444,42 +2444,42 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
 ///  - ``ClosureShorthandParameterListSyntax``
 public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .closureShorthandParameter else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
-      name: TokenSyntax,
-      _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingComma: TokenSyntax? = nil,
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    _ unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingComma: TokenSyntax? = nil,
+    _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeName, 
-            name, 
-            unexpectedBetweenNameAndTrailingComma, 
-            trailingComma, 
-            unexpectedAfterTrailingComma
-          ))) { (arena, _) in
+      unexpectedBeforeName,
+      name,
+      unexpectedBetweenNameAndTrailingComma,
+      trailingComma,
+      unexpectedAfterTrailingComma
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeName?.raw, 
-          name.raw, 
-          unexpectedBetweenNameAndTrailingComma?.raw, 
-          trailingComma?.raw, 
-          unexpectedAfterTrailingComma?.raw
-        ]
+        unexpectedBeforeName?.raw,
+        name.raw,
+        unexpectedBetweenNameAndTrailingComma?.raw,
+        trailingComma?.raw,
+        unexpectedAfterTrailingComma?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.closureShorthandParameter,
         from: layout,
@@ -2490,7 +2490,7 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable, _
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeName: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -2499,7 +2499,7 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable, _
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ClosureShorthandParameterSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be one of the following kinds:
@@ -2513,7 +2513,7 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable, _
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ClosureShorthandParameterSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenNameAndTrailingComma: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -2522,7 +2522,7 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable, _
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ClosureShorthandParameterSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `,`.
@@ -2534,7 +2534,7 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable, _
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ClosureShorthandParameterSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -2543,14 +2543,14 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable, _
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ClosureShorthandParameterSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeName, 
-        \Self.name, 
-        \Self.unexpectedBetweenNameAndTrailingComma, 
-        \Self.trailingComma, 
-        \Self.unexpectedAfterTrailingComma
-      ])
+    \Self.unexpectedBeforeName,
+    \Self.name,
+    \Self.unexpectedBetweenNameAndTrailingComma,
+    \Self.trailingComma,
+    \Self.unexpectedAfterTrailingComma
+  ])
 }
 
 // MARK: - ClosureSignatureSyntax
@@ -2571,7 +2571,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
   public enum ParameterClause: SyntaxChildChoices, SyntaxHashable {
     case simpleInput(ClosureShorthandParameterListSyntax)
     case parameterClause(ClosureParameterClauseSyntax)
-    
+
     public var _syntaxNode: Syntax {
       switch self {
       case .simpleInput(let node):
@@ -2580,15 +2580,15 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
         return node._syntaxNode
       }
     }
-    
+
     public init(_ node: ClosureShorthandParameterListSyntax) {
       self = .simpleInput(node)
     }
-    
+
     public init(_ node: ClosureParameterClauseSyntax) {
       self = .parameterClause(node)
     }
-    
+
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(ClosureShorthandParameterListSyntax.self) {
         self = .simpleInput(node)
@@ -2598,25 +2598,25 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
         return nil
       }
     }
-    
+
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(ClosureShorthandParameterListSyntax.self), .node(ClosureParameterClauseSyntax.self)])
     }
-    
+
     /// Checks if the current syntax node can be cast to ``ClosureShorthandParameterListSyntax``.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
     public func `is`(_ syntaxType: ClosureShorthandParameterListSyntax.Type) -> Bool {
       return self.as(syntaxType) != nil
     }
-    
+
     /// Attempts to cast the current syntax node to ``ClosureShorthandParameterListSyntax``.
     ///
     /// - Returns: An instance of ``ClosureShorthandParameterListSyntax``, or `nil` if the cast fails.
     public func `as`(_ syntaxType: ClosureShorthandParameterListSyntax.Type) -> ClosureShorthandParameterListSyntax? {
       return ClosureShorthandParameterListSyntax.init(self)
     }
-    
+
     /// Force-casts the current syntax node to ``ClosureShorthandParameterListSyntax``.
     ///
     /// - Returns: An instance of ``ClosureShorthandParameterListSyntax``.
@@ -2624,21 +2624,21 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     public func cast(_ syntaxType: ClosureShorthandParameterListSyntax.Type) -> ClosureShorthandParameterListSyntax {
       return self.as(ClosureShorthandParameterListSyntax.self)!
     }
-    
+
     /// Checks if the current syntax node can be cast to ``ClosureParameterClauseSyntax``.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
     public func `is`(_ syntaxType: ClosureParameterClauseSyntax.Type) -> Bool {
       return self.as(syntaxType) != nil
     }
-    
+
     /// Attempts to cast the current syntax node to ``ClosureParameterClauseSyntax``.
     ///
     /// - Returns: An instance of ``ClosureParameterClauseSyntax``, or `nil` if the cast fails.
     public func `as`(_ syntaxType: ClosureParameterClauseSyntax.Type) -> ClosureParameterClauseSyntax? {
       return ClosureParameterClauseSyntax.init(self)
     }
-    
+
     /// Force-casts the current syntax node to ``ClosureParameterClauseSyntax``.
     ///
     /// - Returns: An instance of ``ClosureParameterClauseSyntax``.
@@ -2647,68 +2647,68 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       return self.as(ClosureParameterClauseSyntax.self)!
     }
   }
-  
+
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .closureSignature else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-      attributes: AttributeListSyntax = [],
-      _ unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? = nil,
-      capture: ClosureCaptureClauseSyntax? = nil,
-      _ unexpectedBetweenCaptureAndParameterClause: UnexpectedNodesSyntax? = nil,
-      parameterClause: ParameterClause? = nil,
-      _ unexpectedBetweenParameterClauseAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
-      effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
-      _ unexpectedBetweenEffectSpecifiersAndReturnClause: UnexpectedNodesSyntax? = nil,
-      returnClause: ReturnClauseSyntax? = nil,
-      _ unexpectedBetweenReturnClauseAndInKeyword: UnexpectedNodesSyntax? = nil,
-      inKeyword: TokenSyntax = .keyword(.in),
-      _ unexpectedAfterInKeyword: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? = nil,
+    capture: ClosureCaptureClauseSyntax? = nil,
+    _ unexpectedBetweenCaptureAndParameterClause: UnexpectedNodesSyntax? = nil,
+    parameterClause: ParameterClause? = nil,
+    _ unexpectedBetweenParameterClauseAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
+    effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndReturnClause: UnexpectedNodesSyntax? = nil,
+    returnClause: ReturnClauseSyntax? = nil,
+    _ unexpectedBetweenReturnClauseAndInKeyword: UnexpectedNodesSyntax? = nil,
+    inKeyword: TokenSyntax = .keyword(.in),
+    _ unexpectedAfterInKeyword: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeAttributes, 
-            attributes, 
-            unexpectedBetweenAttributesAndCapture, 
-            capture, 
-            unexpectedBetweenCaptureAndParameterClause, 
-            parameterClause, 
-            unexpectedBetweenParameterClauseAndEffectSpecifiers, 
-            effectSpecifiers, 
-            unexpectedBetweenEffectSpecifiersAndReturnClause, 
-            returnClause, 
-            unexpectedBetweenReturnClauseAndInKeyword, 
-            inKeyword, 
-            unexpectedAfterInKeyword
-          ))) { (arena, _) in
+      unexpectedBeforeAttributes,
+      attributes,
+      unexpectedBetweenAttributesAndCapture,
+      capture,
+      unexpectedBetweenCaptureAndParameterClause,
+      parameterClause,
+      unexpectedBetweenParameterClauseAndEffectSpecifiers,
+      effectSpecifiers,
+      unexpectedBetweenEffectSpecifiersAndReturnClause,
+      returnClause,
+      unexpectedBetweenReturnClauseAndInKeyword,
+      inKeyword,
+      unexpectedAfterInKeyword
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeAttributes?.raw, 
-          attributes.raw, 
-          unexpectedBetweenAttributesAndCapture?.raw, 
-          capture?.raw, 
-          unexpectedBetweenCaptureAndParameterClause?.raw, 
-          parameterClause?.raw, 
-          unexpectedBetweenParameterClauseAndEffectSpecifiers?.raw, 
-          effectSpecifiers?.raw, 
-          unexpectedBetweenEffectSpecifiersAndReturnClause?.raw, 
-          returnClause?.raw, 
-          unexpectedBetweenReturnClauseAndInKeyword?.raw, 
-          inKeyword.raw, 
-          unexpectedAfterInKeyword?.raw
-        ]
+        unexpectedBeforeAttributes?.raw,
+        attributes.raw,
+        unexpectedBetweenAttributesAndCapture?.raw,
+        capture?.raw,
+        unexpectedBetweenCaptureAndParameterClause?.raw,
+        parameterClause?.raw,
+        unexpectedBetweenParameterClauseAndEffectSpecifiers?.raw,
+        effectSpecifiers?.raw,
+        unexpectedBetweenEffectSpecifiersAndReturnClause?.raw,
+        returnClause?.raw,
+        unexpectedBetweenReturnClauseAndInKeyword?.raw,
+        inKeyword.raw,
+        unexpectedAfterInKeyword?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.closureSignature,
         from: layout,
@@ -2719,7 +2719,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -2728,7 +2728,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ClosureSignatureSyntax.self)
     }
   }
-  
+
   public var attributes: AttributeListSyntax {
     get {
       return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
@@ -2737,7 +2737,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ClosureSignatureSyntax.self)
     }
   }
-  
+
   /// Adds the provided `element` to the node's `attributes`
   /// collection.
   ///
@@ -2757,14 +2757,14 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
     return Syntax(self)
       .replacingChild(
-        at: 1, 
-        with: collection, 
-        rawNodeArena: arena, 
-        allocationArena: arena
-      )
+      at: 1,
+      with: collection,
+      rawNodeArena: arena,
+      allocationArena: arena
+    )
       .cast(ClosureSignatureSyntax.self)
   }
-  
+
   public var unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -2773,7 +2773,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ClosureSignatureSyntax.self)
     }
   }
-  
+
   public var capture: ClosureCaptureClauseSyntax? {
     get {
       return Syntax(self).child(at: 3)?.cast(ClosureCaptureClauseSyntax.self)
@@ -2782,7 +2782,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ClosureSignatureSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenCaptureAndParameterClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -2791,7 +2791,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ClosureSignatureSyntax.self)
     }
   }
-  
+
   public var parameterClause: ParameterClause? {
     get {
       return Syntax(self).child(at: 5)?.cast(ParameterClause.self)
@@ -2800,7 +2800,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ClosureSignatureSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenParameterClauseAndEffectSpecifiers: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -2809,7 +2809,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ClosureSignatureSyntax.self)
     }
   }
-  
+
   public var effectSpecifiers: TypeEffectSpecifiersSyntax? {
     get {
       return Syntax(self).child(at: 7)?.cast(TypeEffectSpecifiersSyntax.self)
@@ -2818,7 +2818,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(ClosureSignatureSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenEffectSpecifiersAndReturnClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
@@ -2827,7 +2827,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(ClosureSignatureSyntax.self)
     }
   }
-  
+
   public var returnClause: ReturnClauseSyntax? {
     get {
       return Syntax(self).child(at: 9)?.cast(ReturnClauseSyntax.self)
@@ -2836,7 +2836,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(ClosureSignatureSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenReturnClauseAndInKeyword: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
@@ -2845,7 +2845,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(ClosureSignatureSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `in`.
@@ -2857,7 +2857,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: SyntaxArena()).cast(ClosureSignatureSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterInKeyword: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
@@ -2866,22 +2866,22 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: SyntaxArena()).cast(ClosureSignatureSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeAttributes, 
-        \Self.attributes, 
-        \Self.unexpectedBetweenAttributesAndCapture, 
-        \Self.capture, 
-        \Self.unexpectedBetweenCaptureAndParameterClause, 
-        \Self.parameterClause, 
-        \Self.unexpectedBetweenParameterClauseAndEffectSpecifiers, 
-        \Self.effectSpecifiers, 
-        \Self.unexpectedBetweenEffectSpecifiersAndReturnClause, 
-        \Self.returnClause, 
-        \Self.unexpectedBetweenReturnClauseAndInKeyword, 
-        \Self.inKeyword, 
-        \Self.unexpectedAfterInKeyword
-      ])
+    \Self.unexpectedBeforeAttributes,
+    \Self.attributes,
+    \Self.unexpectedBetweenAttributesAndCapture,
+    \Self.capture,
+    \Self.unexpectedBetweenCaptureAndParameterClause,
+    \Self.parameterClause,
+    \Self.unexpectedBetweenParameterClauseAndEffectSpecifiers,
+    \Self.effectSpecifiers,
+    \Self.unexpectedBetweenEffectSpecifiersAndReturnClause,
+    \Self.returnClause,
+    \Self.unexpectedBetweenReturnClauseAndInKeyword,
+    \Self.inKeyword,
+    \Self.unexpectedAfterInKeyword
+  ])
 }
 
 // MARK: - CodeBlockItemSyntax
@@ -2901,7 +2901,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     case decl(DeclSyntax)
     case stmt(StmtSyntax)
     case expr(ExprSyntax)
-    
+
     public var _syntaxNode: Syntax {
       switch self {
       case .decl(let node):
@@ -2912,19 +2912,19 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
         return node._syntaxNode
       }
     }
-    
+
     public init(_ node: some DeclSyntaxProtocol) {
       self = .decl(DeclSyntax(node))
     }
-    
+
     public init(_ node: some StmtSyntaxProtocol) {
       self = .stmt(StmtSyntax(node))
     }
-    
+
     public init(_ node: some ExprSyntaxProtocol) {
       self = .expr(ExprSyntax(node))
     }
-    
+
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(DeclSyntax.self) {
         self = .decl(node)
@@ -2936,25 +2936,25 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
         return nil
       }
     }
-    
+
     public static var structure: SyntaxNodeStructure {
       return .choices([.node(DeclSyntax.self), .node(StmtSyntax.self), .node(ExprSyntax.self)])
     }
-    
+
     /// Checks if the current syntax node can be cast to the type conforming to the ``DeclSyntaxProtocol`` protocol.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
     public func `is`(_ syntaxType: (some DeclSyntaxProtocol).Type) -> Bool {
       return self.as(syntaxType) != nil
     }
-    
+
     /// Attempts to cast the current syntax node to the type conforming to the ``DeclSyntaxProtocol`` protocol.
     ///
     /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
     public func `as`<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
       return S.init(self)
     }
-    
+
     /// Force-casts the current syntax node to the type conforming to the ``DeclSyntaxProtocol`` protocol.
     ///
     /// - Returns: An instance of the specialized type.
@@ -2962,21 +2962,21 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     public func cast<S: DeclSyntaxProtocol>(_ syntaxType: S.Type) -> S {
       return self.as(S.self)!
     }
-    
+
     /// Checks if the current syntax node can be cast to the type conforming to the ``StmtSyntaxProtocol`` protocol.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
     public func `is`(_ syntaxType: (some StmtSyntaxProtocol).Type) -> Bool {
       return self.as(syntaxType) != nil
     }
-    
+
     /// Attempts to cast the current syntax node to the type conforming to the ``StmtSyntaxProtocol`` protocol.
     ///
     /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
     public func `as`<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
       return S.init(self)
     }
-    
+
     /// Force-casts the current syntax node to the type conforming to the ``StmtSyntaxProtocol`` protocol.
     ///
     /// - Returns: An instance of the specialized type.
@@ -2984,21 +2984,21 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     public func cast<S: StmtSyntaxProtocol>(_ syntaxType: S.Type) -> S {
       return self.as(S.self)!
     }
-    
+
     /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
     public func `is`(_ syntaxType: (some ExprSyntaxProtocol).Type) -> Bool {
       return self.as(syntaxType) != nil
     }
-    
+
     /// Attempts to cast the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
     ///
     /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
     public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
       return S.init(self)
     }
-    
+
     /// Force-casts the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
     ///
     /// - Returns: An instance of the specialized type.
@@ -3007,46 +3007,46 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
       return self.as(S.self)!
     }
   }
-  
+
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .codeBlockItem else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - item: The underlying node inside the code block.
   ///   - semicolon: If present, the trailing semicolon at the end of the item.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeItem: UnexpectedNodesSyntax? = nil,
-      item: Item,
-      _ unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? = nil,
-      semicolon: TokenSyntax? = nil,
-      _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeItem: UnexpectedNodesSyntax? = nil,
+    item: Item,
+    _ unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? = nil,
+    semicolon: TokenSyntax? = nil,
+    _ unexpectedAfterSemicolon: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeItem, 
-            item, 
-            unexpectedBetweenItemAndSemicolon, 
-            semicolon, 
-            unexpectedAfterSemicolon
-          ))) { (arena, _) in
+      unexpectedBeforeItem,
+      item,
+      unexpectedBetweenItemAndSemicolon,
+      semicolon,
+      unexpectedAfterSemicolon
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeItem?.raw, 
-          item.raw, 
-          unexpectedBetweenItemAndSemicolon?.raw, 
-          semicolon?.raw, 
-          unexpectedAfterSemicolon?.raw
-        ]
+        unexpectedBeforeItem?.raw,
+        item.raw,
+        unexpectedBetweenItemAndSemicolon?.raw,
+        semicolon?.raw,
+        unexpectedAfterSemicolon?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.codeBlockItem,
         from: layout,
@@ -3057,7 +3057,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeItem: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -3066,7 +3066,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(CodeBlockItemSyntax.self)
     }
   }
-  
+
   /// The underlying node inside the code block.
   public var item: Item {
     get {
@@ -3076,7 +3076,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(CodeBlockItemSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenItemAndSemicolon: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -3085,7 +3085,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(CodeBlockItemSyntax.self)
     }
   }
-  
+
   /// If present, the trailing semicolon at the end of the item.
   ///
   /// ### Tokens
@@ -3099,7 +3099,7 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(CodeBlockItemSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterSemicolon: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -3108,14 +3108,14 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(CodeBlockItemSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeItem, 
-        \Self.item, 
-        \Self.unexpectedBetweenItemAndSemicolon, 
-        \Self.semicolon, 
-        \Self.unexpectedAfterSemicolon
-      ])
+    \Self.unexpectedBeforeItem,
+    \Self.item,
+    \Self.unexpectedBetweenItemAndSemicolon,
+    \Self.semicolon,
+    \Self.unexpectedAfterSemicolon
+  ])
 }
 
 // MARK: - CodeBlockSyntax
@@ -3143,50 +3143,50 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
 ///  - ``WhileStmtSyntax``.``WhileStmtSyntax/body``
 public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .codeBlock else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - leftBrace: The brace introducing the code block.
   ///   - rightBrace: The brace closing the code block.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil,
-      leftBrace: TokenSyntax = .leftBraceToken(),
-      _ unexpectedBetweenLeftBraceAndStatements: UnexpectedNodesSyntax? = nil,
-      statements: CodeBlockItemListSyntax,
-      _ unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil,
-      rightBrace: TokenSyntax = .rightBraceToken(),
-      _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? = nil,
+    leftBrace: TokenSyntax = .leftBraceToken(),
+    _ unexpectedBetweenLeftBraceAndStatements: UnexpectedNodesSyntax? = nil,
+    statements: CodeBlockItemListSyntax,
+    _ unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? = nil,
+    rightBrace: TokenSyntax = .rightBraceToken(),
+    _ unexpectedAfterRightBrace: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLeftBrace, 
-            leftBrace, 
-            unexpectedBetweenLeftBraceAndStatements, 
-            statements, 
-            unexpectedBetweenStatementsAndRightBrace, 
-            rightBrace, 
-            unexpectedAfterRightBrace
-          ))) { (arena, _) in
+      unexpectedBeforeLeftBrace,
+      leftBrace,
+      unexpectedBetweenLeftBraceAndStatements,
+      statements,
+      unexpectedBetweenStatementsAndRightBrace,
+      rightBrace,
+      unexpectedAfterRightBrace
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeLeftBrace?.raw, 
-          leftBrace.raw, 
-          unexpectedBetweenLeftBraceAndStatements?.raw, 
-          statements.raw, 
-          unexpectedBetweenStatementsAndRightBrace?.raw, 
-          rightBrace.raw, 
-          unexpectedAfterRightBrace?.raw
-        ]
+        unexpectedBeforeLeftBrace?.raw,
+        leftBrace.raw,
+        unexpectedBetweenLeftBraceAndStatements?.raw,
+        statements.raw,
+        unexpectedBetweenStatementsAndRightBrace?.raw,
+        rightBrace.raw,
+        unexpectedAfterRightBrace?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.codeBlock,
         from: layout,
@@ -3197,7 +3197,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeLeftBrace: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -3206,7 +3206,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(CodeBlockSyntax.self)
     }
   }
-  
+
   /// The brace introducing the code block.
   ///
   /// ### Tokens
@@ -3220,7 +3220,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(CodeBlockSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenLeftBraceAndStatements: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -3229,7 +3229,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(CodeBlockSyntax.self)
     }
   }
-  
+
   public var statements: CodeBlockItemListSyntax {
     get {
       return Syntax(self).child(at: 3)!.cast(CodeBlockItemListSyntax.self)
@@ -3238,7 +3238,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(CodeBlockSyntax.self)
     }
   }
-  
+
   /// Adds the provided `element` to the node's `statements`
   /// collection.
   ///
@@ -3258,14 +3258,14 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     }
     return Syntax(self)
       .replacingChild(
-        at: 3, 
-        with: collection, 
-        rawNodeArena: arena, 
-        allocationArena: arena
-      )
+      at: 3,
+      with: collection,
+      rawNodeArena: arena,
+      allocationArena: arena
+    )
       .cast(CodeBlockSyntax.self)
   }
-  
+
   public var unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -3274,7 +3274,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(CodeBlockSyntax.self)
     }
   }
-  
+
   /// The brace closing the code block.
   ///
   /// ### Tokens
@@ -3288,7 +3288,7 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(CodeBlockSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterRightBrace: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -3297,16 +3297,16 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(CodeBlockSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeLeftBrace, 
-        \Self.leftBrace, 
-        \Self.unexpectedBetweenLeftBraceAndStatements, 
-        \Self.statements, 
-        \Self.unexpectedBetweenStatementsAndRightBrace, 
-        \Self.rightBrace, 
-        \Self.unexpectedAfterRightBrace
-      ])
+    \Self.unexpectedBeforeLeftBrace,
+    \Self.leftBrace,
+    \Self.unexpectedBetweenLeftBraceAndStatements,
+    \Self.statements,
+    \Self.unexpectedBetweenStatementsAndRightBrace,
+    \Self.rightBrace,
+    \Self.unexpectedAfterRightBrace
+  ])
 }
 
 // MARK: - CompositionTypeElementSyntax
@@ -3321,42 +3321,42 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
 ///  - ``CompositionTypeElementListSyntax``
 public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .compositionTypeElement else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeType: UnexpectedNodesSyntax? = nil,
-      type: some TypeSyntaxProtocol,
-      _ unexpectedBetweenTypeAndAmpersand: UnexpectedNodesSyntax? = nil,
-      ampersand: TokenSyntax? = nil,
-      _ unexpectedAfterAmpersand: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeType: UnexpectedNodesSyntax? = nil,
+    type: some TypeSyntaxProtocol,
+    _ unexpectedBetweenTypeAndAmpersand: UnexpectedNodesSyntax? = nil,
+    ampersand: TokenSyntax? = nil,
+    _ unexpectedAfterAmpersand: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeType, 
-            type, 
-            unexpectedBetweenTypeAndAmpersand, 
-            ampersand, 
-            unexpectedAfterAmpersand
-          ))) { (arena, _) in
+      unexpectedBeforeType,
+      type,
+      unexpectedBetweenTypeAndAmpersand,
+      ampersand,
+      unexpectedAfterAmpersand
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeType?.raw, 
-          type.raw, 
-          unexpectedBetweenTypeAndAmpersand?.raw, 
-          ampersand?.raw, 
-          unexpectedAfterAmpersand?.raw
-        ]
+        unexpectedBeforeType?.raw,
+        type.raw,
+        unexpectedBetweenTypeAndAmpersand?.raw,
+        ampersand?.raw,
+        unexpectedAfterAmpersand?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.compositionTypeElement,
         from: layout,
@@ -3367,7 +3367,7 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeType: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -3376,7 +3376,7 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(CompositionTypeElementSyntax.self)
     }
   }
-  
+
   public var type: TypeSyntax {
     get {
       return Syntax(self).child(at: 1)!.cast(TypeSyntax.self)
@@ -3385,7 +3385,7 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(CompositionTypeElementSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenTypeAndAmpersand: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -3394,7 +3394,7 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(CompositionTypeElementSyntax.self)
     }
   }
-  
+
   public var ampersand: TokenSyntax? {
     get {
       return Syntax(self).child(at: 3)?.cast(TokenSyntax.self)
@@ -3403,7 +3403,7 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(CompositionTypeElementSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterAmpersand: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -3412,14 +3412,14 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(CompositionTypeElementSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeType, 
-        \Self.type, 
-        \Self.unexpectedBetweenTypeAndAmpersand, 
-        \Self.ampersand, 
-        \Self.unexpectedAfterAmpersand
-      ])
+    \Self.unexpectedBeforeType,
+    \Self.type,
+    \Self.unexpectedBetweenTypeAndAmpersand,
+    \Self.ampersand,
+    \Self.unexpectedAfterAmpersand
+  ])
 }
 
 // MARK: - CompositionTypeSyntax
@@ -3429,23 +3429,23 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
 ///  - `elements`: ``CompositionTypeElementListSyntax``
 public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .compositionType else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeElements: UnexpectedNodesSyntax? = nil,
-      elements: CompositionTypeElementListSyntax,
-      _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeElements: UnexpectedNodesSyntax? = nil,
+    elements: CompositionTypeElementListSyntax,
+    _ unexpectedAfterElements: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
@@ -3461,7 +3461,7 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeElements: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -3470,7 +3470,7 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(CompositionTypeSyntax.self)
     }
   }
-  
+
   public var elements: CompositionTypeElementListSyntax {
     get {
       return Syntax(self).child(at: 1)!.cast(CompositionTypeElementListSyntax.self)
@@ -3479,7 +3479,7 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(CompositionTypeSyntax.self)
     }
   }
-  
+
   /// Adds the provided `element` to the node's `elements`
   /// collection.
   ///
@@ -3499,14 +3499,14 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
     }
     return Syntax(self)
       .replacingChild(
-        at: 1, 
-        with: collection, 
-        rawNodeArena: arena, 
-        allocationArena: arena
-      )
+      at: 1,
+      with: collection,
+      rawNodeArena: arena,
+      allocationArena: arena
+    )
       .cast(CompositionTypeSyntax.self)
   }
-  
+
   public var unexpectedAfterElements: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -3515,7 +3515,7 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(CompositionTypeSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeElements, \Self.elements, \Self.unexpectedAfterElements])
 }
 
@@ -3535,7 +3535,7 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     case availability(AvailabilityConditionSyntax)
     case matchingPattern(MatchingPatternConditionSyntax)
     case optionalBinding(OptionalBindingConditionSyntax)
-    
+
     public var _syntaxNode: Syntax {
       switch self {
       case .expression(let node):
@@ -3548,23 +3548,23 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
         return node._syntaxNode
       }
     }
-    
+
     public init(_ node: some ExprSyntaxProtocol) {
       self = .expression(ExprSyntax(node))
     }
-    
+
     public init(_ node: AvailabilityConditionSyntax) {
       self = .availability(node)
     }
-    
+
     public init(_ node: MatchingPatternConditionSyntax) {
       self = .matchingPattern(node)
     }
-    
+
     public init(_ node: OptionalBindingConditionSyntax) {
       self = .optionalBinding(node)
     }
-    
+
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(ExprSyntax.self) {
         self = .expression(node)
@@ -3578,30 +3578,30 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
         return nil
       }
     }
-    
+
     public static var structure: SyntaxNodeStructure {
       return .choices([
-            .node(ExprSyntax.self), 
-            .node(AvailabilityConditionSyntax.self), 
-            .node(MatchingPatternConditionSyntax.self), 
-            .node(OptionalBindingConditionSyntax.self)
-          ])
+        .node(ExprSyntax.self),
+        .node(AvailabilityConditionSyntax.self),
+        .node(MatchingPatternConditionSyntax.self),
+        .node(OptionalBindingConditionSyntax.self)
+      ])
     }
-    
+
     /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
     public func `is`(_ syntaxType: (some ExprSyntaxProtocol).Type) -> Bool {
       return self.as(syntaxType) != nil
     }
-    
+
     /// Attempts to cast the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
     ///
     /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
     public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
       return S.init(self)
     }
-    
+
     /// Force-casts the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
     ///
     /// - Returns: An instance of the specialized type.
@@ -3609,21 +3609,21 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     public func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
       return self.as(S.self)!
     }
-    
+
     /// Checks if the current syntax node can be cast to ``AvailabilityConditionSyntax``.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
     public func `is`(_ syntaxType: AvailabilityConditionSyntax.Type) -> Bool {
       return self.as(syntaxType) != nil
     }
-    
+
     /// Attempts to cast the current syntax node to ``AvailabilityConditionSyntax``.
     ///
     /// - Returns: An instance of ``AvailabilityConditionSyntax``, or `nil` if the cast fails.
     public func `as`(_ syntaxType: AvailabilityConditionSyntax.Type) -> AvailabilityConditionSyntax? {
       return AvailabilityConditionSyntax.init(self)
     }
-    
+
     /// Force-casts the current syntax node to ``AvailabilityConditionSyntax``.
     ///
     /// - Returns: An instance of ``AvailabilityConditionSyntax``.
@@ -3631,21 +3631,21 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     public func cast(_ syntaxType: AvailabilityConditionSyntax.Type) -> AvailabilityConditionSyntax {
       return self.as(AvailabilityConditionSyntax.self)!
     }
-    
+
     /// Checks if the current syntax node can be cast to ``MatchingPatternConditionSyntax``.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
     public func `is`(_ syntaxType: MatchingPatternConditionSyntax.Type) -> Bool {
       return self.as(syntaxType) != nil
     }
-    
+
     /// Attempts to cast the current syntax node to ``MatchingPatternConditionSyntax``.
     ///
     /// - Returns: An instance of ``MatchingPatternConditionSyntax``, or `nil` if the cast fails.
     public func `as`(_ syntaxType: MatchingPatternConditionSyntax.Type) -> MatchingPatternConditionSyntax? {
       return MatchingPatternConditionSyntax.init(self)
     }
-    
+
     /// Force-casts the current syntax node to ``MatchingPatternConditionSyntax``.
     ///
     /// - Returns: An instance of ``MatchingPatternConditionSyntax``.
@@ -3653,21 +3653,21 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     public func cast(_ syntaxType: MatchingPatternConditionSyntax.Type) -> MatchingPatternConditionSyntax {
       return self.as(MatchingPatternConditionSyntax.self)!
     }
-    
+
     /// Checks if the current syntax node can be cast to ``OptionalBindingConditionSyntax``.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
     public func `is`(_ syntaxType: OptionalBindingConditionSyntax.Type) -> Bool {
       return self.as(syntaxType) != nil
     }
-    
+
     /// Attempts to cast the current syntax node to ``OptionalBindingConditionSyntax``.
     ///
     /// - Returns: An instance of ``OptionalBindingConditionSyntax``, or `nil` if the cast fails.
     public func `as`(_ syntaxType: OptionalBindingConditionSyntax.Type) -> OptionalBindingConditionSyntax? {
       return OptionalBindingConditionSyntax.init(self)
     }
-    
+
     /// Force-casts the current syntax node to ``OptionalBindingConditionSyntax``.
     ///
     /// - Returns: An instance of ``OptionalBindingConditionSyntax``.
@@ -3676,44 +3676,44 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       return self.as(OptionalBindingConditionSyntax.self)!
     }
   }
-  
+
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .conditionElement else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeCondition: UnexpectedNodesSyntax? = nil,
-      condition: Condition,
-      _ unexpectedBetweenConditionAndTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingComma: TokenSyntax? = nil,
-      _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeCondition: UnexpectedNodesSyntax? = nil,
+    condition: Condition,
+    _ unexpectedBetweenConditionAndTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingComma: TokenSyntax? = nil,
+    _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeCondition, 
-            condition, 
-            unexpectedBetweenConditionAndTrailingComma, 
-            trailingComma, 
-            unexpectedAfterTrailingComma
-          ))) { (arena, _) in
+      unexpectedBeforeCondition,
+      condition,
+      unexpectedBetweenConditionAndTrailingComma,
+      trailingComma,
+      unexpectedAfterTrailingComma
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeCondition?.raw, 
-          condition.raw, 
-          unexpectedBetweenConditionAndTrailingComma?.raw, 
-          trailingComma?.raw, 
-          unexpectedAfterTrailingComma?.raw
-        ]
+        unexpectedBeforeCondition?.raw,
+        condition.raw,
+        unexpectedBetweenConditionAndTrailingComma?.raw,
+        trailingComma?.raw,
+        unexpectedAfterTrailingComma?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.conditionElement,
         from: layout,
@@ -3724,7 +3724,7 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeCondition: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -3733,7 +3733,7 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ConditionElementSyntax.self)
     }
   }
-  
+
   public var condition: Condition {
     get {
       return Syntax(self).child(at: 1)!.cast(Condition.self)
@@ -3742,7 +3742,7 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ConditionElementSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenConditionAndTrailingComma: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -3751,7 +3751,7 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ConditionElementSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `,`.
@@ -3763,7 +3763,7 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ConditionElementSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterTrailingComma: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -3772,14 +3772,14 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ConditionElementSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeCondition, 
-        \Self.condition, 
-        \Self.unexpectedBetweenConditionAndTrailingComma, 
-        \Self.trailingComma, 
-        \Self.unexpectedAfterTrailingComma
-      ])
+    \Self.unexpectedBeforeCondition,
+    \Self.condition,
+    \Self.unexpectedBetweenConditionAndTrailingComma,
+    \Self.trailingComma,
+    \Self.unexpectedAfterTrailingComma
+  ])
 }
 
 // MARK: - ConformanceRequirementSyntax
@@ -3795,48 +3795,48 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
 ///  - ``GenericRequirementSyntax``.``GenericRequirementSyntax/requirement``
 public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .conformanceRequirement else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeLeftType: UnexpectedNodesSyntax? = nil,
-      leftType: some TypeSyntaxProtocol,
-      _ unexpectedBetweenLeftTypeAndColon: UnexpectedNodesSyntax? = nil,
-      colon: TokenSyntax = .colonToken(),
-      _ unexpectedBetweenColonAndRightType: UnexpectedNodesSyntax? = nil,
-      rightType: some TypeSyntaxProtocol,
-      _ unexpectedAfterRightType: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeLeftType: UnexpectedNodesSyntax? = nil,
+    leftType: some TypeSyntaxProtocol,
+    _ unexpectedBetweenLeftTypeAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax = .colonToken(),
+    _ unexpectedBetweenColonAndRightType: UnexpectedNodesSyntax? = nil,
+    rightType: some TypeSyntaxProtocol,
+    _ unexpectedAfterRightType: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeLeftType, 
-            leftType, 
-            unexpectedBetweenLeftTypeAndColon, 
-            colon, 
-            unexpectedBetweenColonAndRightType, 
-            rightType, 
-            unexpectedAfterRightType
-          ))) { (arena, _) in
+      unexpectedBeforeLeftType,
+      leftType,
+      unexpectedBetweenLeftTypeAndColon,
+      colon,
+      unexpectedBetweenColonAndRightType,
+      rightType,
+      unexpectedAfterRightType
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeLeftType?.raw, 
-          leftType.raw, 
-          unexpectedBetweenLeftTypeAndColon?.raw, 
-          colon.raw, 
-          unexpectedBetweenColonAndRightType?.raw, 
-          rightType.raw, 
-          unexpectedAfterRightType?.raw
-        ]
+        unexpectedBeforeLeftType?.raw,
+        leftType.raw,
+        unexpectedBetweenLeftTypeAndColon?.raw,
+        colon.raw,
+        unexpectedBetweenColonAndRightType?.raw,
+        rightType.raw,
+        unexpectedAfterRightType?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.conformanceRequirement,
         from: layout,
@@ -3847,7 +3847,7 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeLeftType: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -3856,7 +3856,7 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ConformanceRequirementSyntax.self)
     }
   }
-  
+
   public var leftType: TypeSyntax {
     get {
       return Syntax(self).child(at: 1)!.cast(TypeSyntax.self)
@@ -3865,7 +3865,7 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ConformanceRequirementSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenLeftTypeAndColon: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -3874,7 +3874,7 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ConformanceRequirementSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `:`.
@@ -3886,7 +3886,7 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ConformanceRequirementSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenColonAndRightType: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -3895,7 +3895,7 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ConformanceRequirementSyntax.self)
     }
   }
-  
+
   public var rightType: TypeSyntax {
     get {
       return Syntax(self).child(at: 5)!.cast(TypeSyntax.self)
@@ -3904,7 +3904,7 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ConformanceRequirementSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterRightType: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -3913,16 +3913,16 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ConformanceRequirementSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeLeftType, 
-        \Self.leftType, 
-        \Self.unexpectedBetweenLeftTypeAndColon, 
-        \Self.colon, 
-        \Self.unexpectedBetweenColonAndRightType, 
-        \Self.rightType, 
-        \Self.unexpectedAfterRightType
-      ])
+    \Self.unexpectedBeforeLeftType,
+    \Self.leftType,
+    \Self.unexpectedBetweenLeftTypeAndColon,
+    \Self.colon,
+    \Self.unexpectedBetweenColonAndRightType,
+    \Self.rightType,
+    \Self.unexpectedAfterRightType
+  ])
 }
 
 // MARK: - ConsumeExprSyntax
@@ -3933,42 +3933,42 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
 ///  - `expression`: ``ExprSyntax``
 public struct ConsumeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .consumeExpr else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeConsumeKeyword: UnexpectedNodesSyntax? = nil,
-      consumeKeyword: TokenSyntax,
-      _ unexpectedBetweenConsumeKeywordAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: some ExprSyntaxProtocol,
-      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeConsumeKeyword: UnexpectedNodesSyntax? = nil,
+    consumeKeyword: TokenSyntax,
+    _ unexpectedBetweenConsumeKeywordAndExpression: UnexpectedNodesSyntax? = nil,
+    expression: some ExprSyntaxProtocol,
+    _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeConsumeKeyword, 
-            consumeKeyword, 
-            unexpectedBetweenConsumeKeywordAndExpression, 
-            expression, 
-            unexpectedAfterExpression
-          ))) { (arena, _) in
+      unexpectedBeforeConsumeKeyword,
+      consumeKeyword,
+      unexpectedBetweenConsumeKeywordAndExpression,
+      expression,
+      unexpectedAfterExpression
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeConsumeKeyword?.raw, 
-          consumeKeyword.raw, 
-          unexpectedBetweenConsumeKeywordAndExpression?.raw, 
-          expression.raw, 
-          unexpectedAfterExpression?.raw
-        ]
+        unexpectedBeforeConsumeKeyword?.raw,
+        consumeKeyword.raw,
+        unexpectedBetweenConsumeKeywordAndExpression?.raw,
+        expression.raw,
+        unexpectedAfterExpression?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.consumeExpr,
         from: layout,
@@ -3979,7 +3979,7 @@ public struct ConsumeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeConsumeKeyword: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -3988,7 +3988,7 @@ public struct ConsumeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ConsumeExprSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be one of the following kinds:
@@ -4002,7 +4002,7 @@ public struct ConsumeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ConsumeExprSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenConsumeKeywordAndExpression: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -4011,7 +4011,7 @@ public struct ConsumeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ConsumeExprSyntax.self)
     }
   }
-  
+
   public var expression: ExprSyntax {
     get {
       return Syntax(self).child(at: 3)!.cast(ExprSyntax.self)
@@ -4020,7 +4020,7 @@ public struct ConsumeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ConsumeExprSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -4029,14 +4029,14 @@ public struct ConsumeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ConsumeExprSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeConsumeKeyword, 
-        \Self.consumeKeyword, 
-        \Self.unexpectedBetweenConsumeKeywordAndExpression, 
-        \Self.expression, 
-        \Self.unexpectedAfterExpression
-      ])
+    \Self.unexpectedBeforeConsumeKeyword,
+    \Self.consumeKeyword,
+    \Self.unexpectedBetweenConsumeKeywordAndExpression,
+    \Self.expression,
+    \Self.unexpectedAfterExpression
+  ])
 }
 
 // MARK: - ContinueStmtSyntax
@@ -4047,42 +4047,42 @@ public struct ConsumeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
 ///  - `label`: `<identifier>`?
 public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .continueStmt else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeContinueKeyword: UnexpectedNodesSyntax? = nil,
-      continueKeyword: TokenSyntax = .keyword(.continue),
-      _ unexpectedBetweenContinueKeywordAndLabel: UnexpectedNodesSyntax? = nil,
-      label: TokenSyntax? = nil,
-      _ unexpectedAfterLabel: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeContinueKeyword: UnexpectedNodesSyntax? = nil,
+    continueKeyword: TokenSyntax = .keyword(.continue),
+    _ unexpectedBetweenContinueKeywordAndLabel: UnexpectedNodesSyntax? = nil,
+    label: TokenSyntax? = nil,
+    _ unexpectedAfterLabel: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeContinueKeyword, 
-            continueKeyword, 
-            unexpectedBetweenContinueKeywordAndLabel, 
-            label, 
-            unexpectedAfterLabel
-          ))) { (arena, _) in
+      unexpectedBeforeContinueKeyword,
+      continueKeyword,
+      unexpectedBetweenContinueKeywordAndLabel,
+      label,
+      unexpectedAfterLabel
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeContinueKeyword?.raw, 
-          continueKeyword.raw, 
-          unexpectedBetweenContinueKeywordAndLabel?.raw, 
-          label?.raw, 
-          unexpectedAfterLabel?.raw
-        ]
+        unexpectedBeforeContinueKeyword?.raw,
+        continueKeyword.raw,
+        unexpectedBetweenContinueKeywordAndLabel?.raw,
+        label?.raw,
+        unexpectedAfterLabel?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.continueStmt,
         from: layout,
@@ -4093,7 +4093,7 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtS
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeContinueKeyword: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -4102,7 +4102,7 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtS
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ContinueStmtSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `continue`.
@@ -4114,7 +4114,7 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtS
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ContinueStmtSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenContinueKeywordAndLabel: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -4123,7 +4123,7 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtS
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ContinueStmtSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `<identifier>`.
@@ -4135,7 +4135,7 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtS
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ContinueStmtSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterLabel: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -4144,14 +4144,14 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtS
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ContinueStmtSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeContinueKeyword, 
-        \Self.continueKeyword, 
-        \Self.unexpectedBetweenContinueKeywordAndLabel, 
-        \Self.label, 
-        \Self.unexpectedAfterLabel
-      ])
+    \Self.unexpectedBeforeContinueKeyword,
+    \Self.continueKeyword,
+    \Self.unexpectedBetweenContinueKeywordAndLabel,
+    \Self.label,
+    \Self.unexpectedAfterLabel
+  ])
 }
 
 // MARK: - ConventionAttributeArgumentsSyntax
@@ -4171,61 +4171,61 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtS
 ///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .conventionAttributeArguments else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - conventionLabel: The convention label.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeConventionLabel: UnexpectedNodesSyntax? = nil,
-      conventionLabel: TokenSyntax,
-      _ unexpectedBetweenConventionLabelAndComma: UnexpectedNodesSyntax? = nil,
-      comma: TokenSyntax? = nil,
-      _ unexpectedBetweenCommaAndCTypeLabel: UnexpectedNodesSyntax? = nil,
-      cTypeLabel: TokenSyntax? = nil,
-      _ unexpectedBetweenCTypeLabelAndColon: UnexpectedNodesSyntax? = nil,
-      colon: TokenSyntax? = nil,
-      _ unexpectedBetweenColonAndCTypeString: UnexpectedNodesSyntax? = nil,
-      cTypeString: StringLiteralExprSyntax? = nil,
-      _ unexpectedAfterCTypeString: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeConventionLabel: UnexpectedNodesSyntax? = nil,
+    conventionLabel: TokenSyntax,
+    _ unexpectedBetweenConventionLabelAndComma: UnexpectedNodesSyntax? = nil,
+    comma: TokenSyntax? = nil,
+    _ unexpectedBetweenCommaAndCTypeLabel: UnexpectedNodesSyntax? = nil,
+    cTypeLabel: TokenSyntax? = nil,
+    _ unexpectedBetweenCTypeLabelAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax? = nil,
+    _ unexpectedBetweenColonAndCTypeString: UnexpectedNodesSyntax? = nil,
+    cTypeString: StringLiteralExprSyntax? = nil,
+    _ unexpectedAfterCTypeString: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeConventionLabel, 
-            conventionLabel, 
-            unexpectedBetweenConventionLabelAndComma, 
-            comma, 
-            unexpectedBetweenCommaAndCTypeLabel, 
-            cTypeLabel, 
-            unexpectedBetweenCTypeLabelAndColon, 
-            colon, 
-            unexpectedBetweenColonAndCTypeString, 
-            cTypeString, 
-            unexpectedAfterCTypeString
-          ))) { (arena, _) in
+      unexpectedBeforeConventionLabel,
+      conventionLabel,
+      unexpectedBetweenConventionLabelAndComma,
+      comma,
+      unexpectedBetweenCommaAndCTypeLabel,
+      cTypeLabel,
+      unexpectedBetweenCTypeLabelAndColon,
+      colon,
+      unexpectedBetweenColonAndCTypeString,
+      cTypeString,
+      unexpectedAfterCTypeString
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeConventionLabel?.raw, 
-          conventionLabel.raw, 
-          unexpectedBetweenConventionLabelAndComma?.raw, 
-          comma?.raw, 
-          unexpectedBetweenCommaAndCTypeLabel?.raw, 
-          cTypeLabel?.raw, 
-          unexpectedBetweenCTypeLabelAndColon?.raw, 
-          colon?.raw, 
-          unexpectedBetweenColonAndCTypeString?.raw, 
-          cTypeString?.raw, 
-          unexpectedAfterCTypeString?.raw
-        ]
+        unexpectedBeforeConventionLabel?.raw,
+        conventionLabel.raw,
+        unexpectedBetweenConventionLabelAndComma?.raw,
+        comma?.raw,
+        unexpectedBetweenCommaAndCTypeLabel?.raw,
+        cTypeLabel?.raw,
+        unexpectedBetweenCTypeLabelAndColon?.raw,
+        colon?.raw,
+        unexpectedBetweenColonAndCTypeString?.raw,
+        cTypeString?.raw,
+        unexpectedAfterCTypeString?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.conventionAttributeArguments,
         from: layout,
@@ -4236,7 +4236,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeConventionLabel: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -4245,7 +4245,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ConventionAttributeArgumentsSyntax.self)
     }
   }
-  
+
   /// The convention label.
   ///
   /// ### Tokens
@@ -4259,7 +4259,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ConventionAttributeArgumentsSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenConventionLabelAndComma: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -4268,7 +4268,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ConventionAttributeArgumentsSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `,`.
@@ -4280,7 +4280,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ConventionAttributeArgumentsSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenCommaAndCTypeLabel: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -4289,7 +4289,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ConventionAttributeArgumentsSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `cType`.
@@ -4301,7 +4301,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ConventionAttributeArgumentsSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenCTypeLabelAndColon: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -4310,7 +4310,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ConventionAttributeArgumentsSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `:`.
@@ -4322,7 +4322,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(ConventionAttributeArgumentsSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenColonAndCTypeString: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
@@ -4331,7 +4331,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(ConventionAttributeArgumentsSyntax.self)
     }
   }
-  
+
   public var cTypeString: StringLiteralExprSyntax? {
     get {
       return Syntax(self).child(at: 9)?.cast(StringLiteralExprSyntax.self)
@@ -4340,7 +4340,7 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(ConventionAttributeArgumentsSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterCTypeString: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
@@ -4349,20 +4349,20 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(ConventionAttributeArgumentsSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeConventionLabel, 
-        \Self.conventionLabel, 
-        \Self.unexpectedBetweenConventionLabelAndComma, 
-        \Self.comma, 
-        \Self.unexpectedBetweenCommaAndCTypeLabel, 
-        \Self.cTypeLabel, 
-        \Self.unexpectedBetweenCTypeLabelAndColon, 
-        \Self.colon, 
-        \Self.unexpectedBetweenColonAndCTypeString, 
-        \Self.cTypeString, 
-        \Self.unexpectedAfterCTypeString
-      ])
+    \Self.unexpectedBeforeConventionLabel,
+    \Self.conventionLabel,
+    \Self.unexpectedBetweenConventionLabelAndComma,
+    \Self.comma,
+    \Self.unexpectedBetweenCommaAndCTypeLabel,
+    \Self.cTypeLabel,
+    \Self.unexpectedBetweenCTypeLabelAndColon,
+    \Self.colon,
+    \Self.unexpectedBetweenColonAndCTypeString,
+    \Self.cTypeString,
+    \Self.unexpectedAfterCTypeString
+  ])
 }
 
 // MARK: - ConventionWitnessMethodAttributeArgumentsSyntax
@@ -4380,14 +4380,14 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
 ///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .conventionWitnessMethodAttributeArguments else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - witnessMethodLabel: The `witnessMethod` label.
@@ -4395,36 +4395,36 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
   ///   - protocolName: The original protocol name.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeWitnessMethodLabel: UnexpectedNodesSyntax? = nil,
-      witnessMethodLabel: TokenSyntax = .keyword(.witness_method),
-      _ unexpectedBetweenWitnessMethodLabelAndColon: UnexpectedNodesSyntax? = nil,
-      colon: TokenSyntax = .colonToken(),
-      _ unexpectedBetweenColonAndProtocolName: UnexpectedNodesSyntax? = nil,
-      protocolName: TokenSyntax,
-      _ unexpectedAfterProtocolName: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeWitnessMethodLabel: UnexpectedNodesSyntax? = nil,
+    witnessMethodLabel: TokenSyntax = .keyword(.witness_method),
+    _ unexpectedBetweenWitnessMethodLabelAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax = .colonToken(),
+    _ unexpectedBetweenColonAndProtocolName: UnexpectedNodesSyntax? = nil,
+    protocolName: TokenSyntax,
+    _ unexpectedAfterProtocolName: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeWitnessMethodLabel, 
-            witnessMethodLabel, 
-            unexpectedBetweenWitnessMethodLabelAndColon, 
-            colon, 
-            unexpectedBetweenColonAndProtocolName, 
-            protocolName, 
-            unexpectedAfterProtocolName
-          ))) { (arena, _) in
+      unexpectedBeforeWitnessMethodLabel,
+      witnessMethodLabel,
+      unexpectedBetweenWitnessMethodLabelAndColon,
+      colon,
+      unexpectedBetweenColonAndProtocolName,
+      protocolName,
+      unexpectedAfterProtocolName
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeWitnessMethodLabel?.raw, 
-          witnessMethodLabel.raw, 
-          unexpectedBetweenWitnessMethodLabelAndColon?.raw, 
-          colon.raw, 
-          unexpectedBetweenColonAndProtocolName?.raw, 
-          protocolName.raw, 
-          unexpectedAfterProtocolName?.raw
-        ]
+        unexpectedBeforeWitnessMethodLabel?.raw,
+        witnessMethodLabel.raw,
+        unexpectedBetweenWitnessMethodLabelAndColon?.raw,
+        colon.raw,
+        unexpectedBetweenColonAndProtocolName?.raw,
+        protocolName.raw,
+        unexpectedAfterProtocolName?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.conventionWitnessMethodAttributeArguments,
         from: layout,
@@ -4435,7 +4435,7 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeWitnessMethodLabel: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -4444,7 +4444,7 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ConventionWitnessMethodAttributeArgumentsSyntax.self)
     }
   }
-  
+
   /// The `witnessMethod` label.
   ///
   /// ### Tokens
@@ -4458,7 +4458,7 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ConventionWitnessMethodAttributeArgumentsSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenWitnessMethodLabelAndColon: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -4467,7 +4467,7 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ConventionWitnessMethodAttributeArgumentsSyntax.self)
     }
   }
-  
+
   /// The colon separating the `witnessMethod` label and the original protocol name.
   ///
   /// ### Tokens
@@ -4481,7 +4481,7 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ConventionWitnessMethodAttributeArgumentsSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenColonAndProtocolName: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -4490,7 +4490,7 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ConventionWitnessMethodAttributeArgumentsSyntax.self)
     }
   }
-  
+
   /// The original protocol name.
   ///
   /// ### Tokens
@@ -4504,7 +4504,7 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ConventionWitnessMethodAttributeArgumentsSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterProtocolName: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -4513,16 +4513,16 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
       self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ConventionWitnessMethodAttributeArgumentsSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeWitnessMethodLabel, 
-        \Self.witnessMethodLabel, 
-        \Self.unexpectedBetweenWitnessMethodLabelAndColon, 
-        \Self.colon, 
-        \Self.unexpectedBetweenColonAndProtocolName, 
-        \Self.protocolName, 
-        \Self.unexpectedAfterProtocolName
-      ])
+    \Self.unexpectedBeforeWitnessMethodLabel,
+    \Self.witnessMethodLabel,
+    \Self.unexpectedBetweenWitnessMethodLabelAndColon,
+    \Self.colon,
+    \Self.unexpectedBetweenColonAndProtocolName,
+    \Self.protocolName,
+    \Self.unexpectedAfterProtocolName
+  ])
 }
 
 // MARK: - CopyExprSyntax
@@ -4533,42 +4533,42 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
 ///  - `expression`: ``ExprSyntax``
 public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
-  
+
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .copyExpr else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
   }
-  
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
-      leadingTrivia: Trivia? = nil,
-      _ unexpectedBeforeCopyKeyword: UnexpectedNodesSyntax? = nil,
-      copyKeyword: TokenSyntax = .keyword(.copy),
-      _ unexpectedBetweenCopyKeywordAndExpression: UnexpectedNodesSyntax? = nil,
-      expression: some ExprSyntaxProtocol,
-      _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
-      trailingTrivia: Trivia? = nil
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeCopyKeyword: UnexpectedNodesSyntax? = nil,
+    copyKeyword: TokenSyntax = .keyword(.copy),
+    _ unexpectedBetweenCopyKeywordAndExpression: UnexpectedNodesSyntax? = nil,
+    expression: some ExprSyntaxProtocol,
+    _ unexpectedAfterExpression: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-            unexpectedBeforeCopyKeyword, 
-            copyKeyword, 
-            unexpectedBetweenCopyKeywordAndExpression, 
-            expression, 
-            unexpectedAfterExpression
-          ))) { (arena, _) in
+      unexpectedBeforeCopyKeyword,
+      copyKeyword,
+      unexpectedBetweenCopyKeywordAndExpression,
+      expression,
+      unexpectedAfterExpression
+    ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-          unexpectedBeforeCopyKeyword?.raw, 
-          copyKeyword.raw, 
-          unexpectedBetweenCopyKeywordAndExpression?.raw, 
-          expression.raw, 
-          unexpectedAfterExpression?.raw
-        ]
+        unexpectedBeforeCopyKeyword?.raw,
+        copyKeyword.raw,
+        unexpectedBetweenCopyKeywordAndExpression?.raw,
+        expression.raw,
+        unexpectedAfterExpression?.raw
+      ]
       let raw = RawSyntax.makeLayout(
         kind: SyntaxKind.copyExpr,
         from: layout,
@@ -4579,7 +4579,7 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
       return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
     }
   }
-  
+
   public var unexpectedBeforeCopyKeyword: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -4588,7 +4588,7 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(CopyExprSyntax.self)
     }
   }
-  
+
   /// ### Tokens
   /// 
   /// For syntax trees generated by the parser, this is guaranteed to be `copy`.
@@ -4600,7 +4600,7 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(CopyExprSyntax.self)
     }
   }
-  
+
   public var unexpectedBetweenCopyKeywordAndExpression: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -4609,7 +4609,7 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
       self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(CopyExprSyntax.self)
     }
   }
-  
+
   public var expression: ExprSyntax {
     get {
       return Syntax(self).child(at: 3)!.cast(ExprSyntax.self)
@@ -4618,7 +4618,7 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(CopyExprSyntax.self)
     }
   }
-  
+
   public var unexpectedAfterExpression: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -4627,12 +4627,12 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
       self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(CopyExprSyntax.self)
     }
   }
-  
+
   public static let structure: SyntaxNodeStructure = .layout([
-        \Self.unexpectedBeforeCopyKeyword, 
-        \Self.copyKeyword, 
-        \Self.unexpectedBetweenCopyKeywordAndExpression, 
-        \Self.expression, 
-        \Self.unexpectedAfterExpression
-      ])
+    \Self.unexpectedBeforeCopyKeyword,
+    \Self.copyKeyword,
+    \Self.unexpectedBetweenCopyKeywordAndExpression,
+    \Self.expression,
+    \Self.unexpectedAfterExpression
+  ])
 }

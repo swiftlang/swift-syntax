@@ -2025,14 +2025,57 @@ extension Lexer.Cursor {
     // Check whether we have an identifier followed by another backtick, in which
     // case this is an escaped identifier.
     let identifierStart = self
-    if self.advance(if: { $0.isValidIdentifierStartCodePoint }) {
-      // Keep continuing the identifier.
-      self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
 
-      // If we have the terminating "`", it's an escaped identifier.
-      if self.advance(matching: "`") {
-        return Lexer.Result(.identifier)
+    // Scan until we see either a closing backtick or the end of the line. Do
+    // additional validation for raw identifiers along the way; if we see
+    // characters that aren't allowed (prohibited whitespace or unprintable
+    // ASCII characters) or if the identifier is an operator, provide a more
+    // precise diagnostic and location, but otherwise keep trying to tokenize
+    // it as a raw identifier as long as we see the closing backtick because
+    // it more likely represents what the user was trying to do.
+    var hasNonOperatorCharacter = false
+    var hasNonWhitespaceCharacter = false
+    var isEmpty = true
+    var error: LexingDiagnostic? = nil
+    while true {
+      let ch = self.peek()
+      if ch == nil || ch == "`" || ch == "\n" || ch == "\r" {
+        break
       }
+      let position = self
+      guard let scalar = self.advanceValidatingUTF8Character() else {
+        error = LexingDiagnostic(.invalidUtf8, position: position)
+        continue
+      }
+      if error == nil {
+        if scalar.isForbiddenRawIdentifierWhitespace {
+          error = LexingDiagnostic(.invalidWhitespaceInRawIdentifier, position: position)
+        } else if scalar == "\\" {
+          error = LexingDiagnostic(.invalidBackslashInRawIdentifier, position: position)
+        } else if scalar.isASCII && !scalar.isPrintableASCII {
+          error = LexingDiagnostic(.unprintableAsciiCharacter, position: position)
+        }
+      }
+      if !scalar.isPermittedRawIdentifierWhitespace {
+        hasNonWhitespaceCharacter = true
+      }
+      if (isEmpty && !scalar.isOperatorStartCodePoint) || !scalar.isOperatorContinuationCodePoint {
+        hasNonOperatorCharacter = true
+      }
+      isEmpty = false
+    }
+
+    // If we have the terminating "`", it's an escaped/raw identifier, unless
+    // it contained only operator characters or had other invalid elements.
+    if self.advance(matching: "`") {
+      if isEmpty {
+        error = LexingDiagnostic(.rawIdentifierCannotBeEmpty, position: quote)
+      } else if error == nil && !hasNonWhitespaceCharacter {
+        error = LexingDiagnostic(.rawIdentifierCannotBeAllWhitespace, position: quote)
+      } else if error == nil && !hasNonOperatorCharacter {
+        error = LexingDiagnostic(.rawIdentifierCannotBeOperator, position: quote)
+      }
+      return Lexer.Result(.identifier, error: error)
     }
 
     // Special case; allow '`$`'.

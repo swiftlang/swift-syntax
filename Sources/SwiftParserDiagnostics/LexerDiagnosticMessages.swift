@@ -71,11 +71,16 @@ public enum StaticTokenError: String, DiagnosticMessage {
   case expectedDigitInFloatLiteral = "expected a digit in floating point exponent"
   case expectedHexCodeInUnicodeEscape = #"expected hexadecimal code in \u{...} escape sequence"#
   case expectedHexDigitInHexLiteral = "expected hexadecimal digit (0-9, A-F) in integer literal"
+  case invalidBackslashInRawIdentifier = "a raw identifier cannot contain a backslash"
   case invalidCharacter = "invalid character in source file"
   case invalidEscapeSequenceInStringLiteral = "invalid escape sequence in literal"
   case invalidIdentifierStartCharacter = "an identifier cannot begin with this character"
   case invalidNumberOfHexDigitsInUnicodeEscape = #"\u{...} escape sequence expects between 1 and 8 hex digits"#
   case invalidUtf8 = "invalid UTF-8 found in source file"
+  case invalidWhitespaceInRawIdentifier = "invalid whitespace found in raw identifier"
+  case rawIdentifierCannotBeAllWhitespace = "a raw identifier cannot contain only whitespace characters"
+  case rawIdentifierCannotBeEmpty = "a raw identifier cannot be empty"
+  case rawIdentifierCannotBeOperator = "a raw identifier cannot contain only operator characters"
   case tokenDiagnosticOffsetOverflow =
     "the lexer discovered an error in this token but was not able to represent its offset due to overflow; please split the token"
   case sourceConflictMarker = "source control conflict marker in source file"
@@ -211,6 +216,7 @@ extension SwiftSyntax.TokenDiagnostic {
       // inside `ParseDiagnosticsGenerator` but fall back to an error message
       // here in case the error is not diagnosed.
       return InvalidIndentationInMultiLineStringLiteralError(kind: .insufficientIndentation, lines: 1)
+    case .invalidBackslashInRawIdentifier: return StaticTokenError.invalidBackslashInRawIdentifier
     case .invalidBinaryDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .binary(scalarAtErrorOffset))
     case .invalidCharacter: return StaticTokenError.invalidCharacter
     case .invalidDecimalDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .decimal(scalarAtErrorOffset))
@@ -223,9 +229,14 @@ extension SwiftSyntax.TokenDiagnostic {
     case .invalidNumberOfHexDigitsInUnicodeEscape: return StaticTokenError.invalidNumberOfHexDigitsInUnicodeEscape
     case .invalidOctalDigitInIntegerLiteral: return InvalidDigitInIntegerLiteral(kind: .octal(scalarAtErrorOffset))
     case .invalidUtf8: return StaticTokenError.invalidUtf8
+    case .invalidWhitespaceInRawIdentifier: return StaticTokenError.invalidWhitespaceInRawIdentifier
     case .multilineRegexClosingNotOnNewline: return StaticTokenError.multilineRegexClosingNotOnNewline
     case .nonBreakingSpace: return StaticTokenWarning.nonBreakingSpace
     case .nulCharacter: return StaticTokenWarning.nulCharacter
+    case .rawIdentifierCannotBeAllWhitespace: return StaticTokenError.rawIdentifierCannotBeAllWhitespace
+    case .rawIdentifierCannotBeEmpty: return StaticTokenError.rawIdentifierCannotBeEmpty
+    case .rawIdentifierCannotBeOperator:
+      return StaticTokenError.rawIdentifierCannotBeOperator
     case .sourceConflictMarker: return StaticTokenError.sourceConflictMarker
     case .spaceAtEndOfRegexLiteral: return StaticTokenError.spaceAtEndOfRegexLiteral
     case .spaceAtStartOfRegexLiteral: return StaticTokenError.spaceAtStartOfRegexLiteral

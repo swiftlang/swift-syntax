@@ -76,11 +76,14 @@ class LexerTests: ParserTestCase {
 
   func testEscapedIdentifiers() {
     assertLexemes(
-      "`Hello` `World` `$`",
+      "`Hello` `World` `$` `with a space` `/not-an*operator+` `123`",
       lexemes: [
         LexemeSpec(.identifier, text: "`Hello`", trailing: " "),
         LexemeSpec(.identifier, text: "`World`", trailing: " "),
-        LexemeSpec(.identifier, text: "`$`"),
+        LexemeSpec(.identifier, text: "`$`", trailing: " "),
+        LexemeSpec(.identifier, text: "`with a space`", trailing: " "),
+        LexemeSpec(.identifier, text: "`/not-an*operator+`", trailing: " "),
+        LexemeSpec(.identifier, text: "`123`"),
       ]
     )
   }

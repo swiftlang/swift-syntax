@@ -14,7 +14,7 @@ import SwiftSyntax
 extension SyntaxProtocol {
   /// Indent this node’s lines by the provided amount.
   ///
-  /// - Parameter includeFirstLine: Whether the first token of this node should be indented.
+  /// - Parameter indentFirstLine: Whether the first token of this node should be indented.
   ///   Pass `true` if you know that this node will be placed at the beginning of a line, even if its
   ///   current leading trivia does not start with a newline (such as at the very start of a file).
   public func indented(by indentation: Trivia, indentFirstLine: Bool = false) -> Syntax {

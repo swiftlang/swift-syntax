@@ -20,6 +20,10 @@ public struct RawSyntaxNodeKind: TypeConvertible {
     self.syntaxNodeKind.isBase
   }
 
+  public var base: RawSyntaxNodeKind {
+    Self(syntaxNodeKind: self.syntaxNodeKind.base)
+  }
+
   public var syntaxType: TypeSyntax {
     "Raw\(self.syntaxNodeKind.syntaxType)"
   }

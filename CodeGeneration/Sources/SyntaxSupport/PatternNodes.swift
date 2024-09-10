@@ -13,7 +13,6 @@
 public let PATTERN_NODES: [Node] = [
   Node(
     kind: .expressionPattern,
-    base: .pattern,
     nameForDiagnostics: "pattern",
     documentation: """
       A pattern that contains an ``ExprSyntaxProtocol``.
@@ -40,7 +39,6 @@ public let PATTERN_NODES: [Node] = [
 
   Node(
     kind: .identifierPattern,
-    base: .pattern,
     nameForDiagnostics: "pattern",
     documentation: """
       A pattern that contains a ``TokenSyntax``.
@@ -72,7 +70,6 @@ public let PATTERN_NODES: [Node] = [
 
   Node(
     kind: .isTypePattern,
-    base: .pattern,
     nameForDiagnostics: "'is' pattern",
     children: [
       Child(
@@ -88,7 +85,6 @@ public let PATTERN_NODES: [Node] = [
 
   Node(
     kind: .tuplePatternElementList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     documentation: """
       A list of ``TuplePatternElementSyntax``.
@@ -98,7 +94,6 @@ public let PATTERN_NODES: [Node] = [
 
   Node(
     kind: .tuplePatternElement,
-    base: .syntax,
     nameForDiagnostics: nil,
     documentation: """
       An element that represents a single tuple value in ``TuplePatternElementListSyntax``.
@@ -138,7 +133,6 @@ public let PATTERN_NODES: [Node] = [
 
   Node(
     kind: .tuplePattern,
-    base: .pattern,
     nameForDiagnostics: "tuple pattern",
     documentation: """
       A pattern that contains a list of other pattern.
@@ -175,7 +169,6 @@ public let PATTERN_NODES: [Node] = [
 
   Node(
     kind: .typeAnnotation,
-    base: .syntax,
     nameForDiagnostics: "type annotation",
     children: [
       Child(
@@ -192,7 +185,6 @@ public let PATTERN_NODES: [Node] = [
 
   Node(
     kind: .valueBindingPattern,
-    base: .pattern,
     nameForDiagnostics: "value binding pattern",
     children: [
       Child(
@@ -214,7 +206,6 @@ public let PATTERN_NODES: [Node] = [
 
   Node(
     kind: .wildcardPattern,
-    base: .pattern,
     nameForDiagnostics: "wildcard pattern",
     documentation: """
       A pattern that represent a wildcard.

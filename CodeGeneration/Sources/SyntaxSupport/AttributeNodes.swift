@@ -13,7 +13,6 @@
 public let ATTRIBUTE_NODES: [Node] = [
   Node(
     kind: .attributeList,
-    base: .syntaxCollection,
     nameForDiagnostics: "attributes",
     documentation: """
       A list of attributes that can be attached to a declaration.
@@ -34,7 +33,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .attribute,
-    base: .syntax,
     nameForDiagnostics: "attribute",
     documentation: "An `@` attribute.",
     parserFunction: "parseAttribute",
@@ -161,7 +159,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .specializeAvailabilityArgument,
-    base: .syntax,
     nameForDiagnostics: "availability entry",
     documentation: "The availability argument for the _specialize attribute",
     children: [
@@ -195,7 +192,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .platformVersionItem,
-    base: .syntax,
     nameForDiagnostics: "version",
     documentation: "A single platform/version pair in an attribute, e.g. `iOS 10.1`.",
     traits: ["WithTrailingComma"],
@@ -217,14 +213,12 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .platformVersionItemList,
-    base: .syntaxCollection,
     nameForDiagnostics: "version list",
     elementChoices: [.platformVersionItem]
   ),
 
   Node(
     kind: .backDeployedAttributeArguments,
-    base: .syntax,
     nameForDiagnostics: "'@backDeployed' arguments",
     documentation: "A collection of arguments for the `@backDeployed` attribute",
     children: [
@@ -253,7 +247,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .conventionAttributeArguments,
-    base: .syntax,
     nameForDiagnostics: "@convention(...) arguments",
     documentation: "The arguments for the '@convention(...)'.",
     children: [
@@ -287,7 +280,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .conventionWitnessMethodAttributeArguments,
-    base: .syntax,
     nameForDiagnostics: "@convention(...) arguments for witness methods",
     documentation: "The arguments for the '@convention(witness_method: ...)'.",
     children: [
@@ -312,7 +304,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .derivativeAttributeArguments,
-    base: .syntax,
     nameForDiagnostics: "attribute arguments",
     documentation:
       "The arguments for the '@derivative(of:)' and '@transpose(of:)' attributes: the 'of:' label, the original declaration name, and an optional differentiability parameter list.",
@@ -361,14 +352,12 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .differentiabilityArgumentList,
-    base: .syntaxCollection,
     nameForDiagnostics: "differentiability parameters",
     elementChoices: [.differentiabilityArgument]
   ),
 
   Node(
     kind: .differentiabilityArgument,
-    base: .syntax,
     nameForDiagnostics: "differentiability argument",
     documentation:
       "A differentiability argument: either the \"self\" identifier, a function parameter name, or a function parameter index.",
@@ -391,7 +380,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .differentiabilityWithRespectToArgument,
-    base: .syntax,
     nameForDiagnostics: "'@differentiable' argument",
     documentation: "A clause containing differentiability parameters.",
     children: [
@@ -427,7 +415,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .differentiabilityArguments,
-    base: .syntax,
     nameForDiagnostics: "differentiability arguments",
     documentation: "The differentiability arguments.",
     children: [
@@ -450,7 +437,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .differentiableAttributeArguments,
-    base: .syntax,
     nameForDiagnostics: "'@differentiable' arguments",
     documentation:
       "The arguments for the `@differentiable` attribute: an optional differentiability kind, an optional differentiability parameter clause, and an optional 'where' clause.",
@@ -496,7 +482,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .documentationAttributeArgument,
-    base: .syntax,
     nameForDiagnostics: "@_documentation argument",
     traits: [
       "WithTrailingComma"
@@ -542,7 +527,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .documentationAttributeArgumentList,
-    base: .syntaxCollection,
     nameForDiagnostics: "@_documentation arguments",
     documentation: "The arguments of the '@_documentation' attribute",
     elementChoices: [.documentationAttributeArgument]
@@ -550,7 +534,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .dynamicReplacementAttributeArguments,
-    base: .syntax,
     nameForDiagnostics: "@_dynamicReplacement argument",
     documentation: "The arguments for the '@_dynamicReplacement' attribute",
     children: [
@@ -572,7 +555,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .effectsAttributeArgumentList,
-    base: .syntaxCollection,
     nameForDiagnostics: "@_effects arguments",
     documentation: "The arguments of the '@_effects' attribute. These will be parsed during the SIL stage.",
     elementChoices: [.token]
@@ -580,7 +562,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .exposeAttributeArguments,
-    base: .syntax,
     nameForDiagnostics: "@_expose arguments",
     documentation: "The arguments for the '@_expose' attribute",
     children: [
@@ -603,7 +584,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .implementsAttributeArguments,
-    base: .syntax,
     nameForDiagnostics: "@_implements arguemnts",
     documentation:
       "The arguments for the `@_implements` attribute of the form `Type, methodName(arg1Label:arg2Label:)`",
@@ -631,7 +611,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .labeledSpecializeArgument,
-    base: .syntax,
     nameForDiagnostics: "attribute argument",
     documentation: "A labeled argument for the `@_specialize` attribute like `exported: true`",
     traits: [
@@ -673,7 +652,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .objCSelectorPiece,
-    base: .syntax,
     nameForDiagnostics: "Objective-C selector piece",
     documentation:
       "A piece of an Objective-C selector. Either consisting of just an identifier for a nullary selector, an identifier and a colon for a labeled argument or just a colon for an unlabeled argument",
@@ -696,14 +674,12 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .objCSelectorPieceList,
-    base: .syntaxCollection,
     nameForDiagnostics: "Objective-C selector",
     elementChoices: [.objCSelectorPiece]
   ),
 
   Node(
     kind: .opaqueReturnTypeOfAttributeArguments,
-    base: .syntax,
     nameForDiagnostics: "opaque return type arguments",
     documentation: "The arguments for the '@_opaqueReturnTypeOf()'.",
     children: [
@@ -726,7 +702,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .originallyDefinedInAttributeArguments,
-    base: .syntax,
     nameForDiagnostics: "@_originallyDefinedIn arguments",
     documentation: "The arguments for the '@_originallyDefinedIn' attribute",
     children: [
@@ -755,7 +730,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .specializeAttributeArgumentList,
-    base: .syntaxCollection,
     nameForDiagnostics: "argument to '@_specialize",
     documentation: "A collection of arguments for the `@_specialize` attribute",
     elementChoices: [
@@ -766,7 +740,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .specializeTargetFunctionArgument,
-    base: .syntax,
     nameForDiagnostics: "attribute argument",
     documentation:
       "A labeled argument for the `@_specialize` attribute with a function decl value like `target: myFunc(_:)`",
@@ -804,7 +777,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .unavailableFromAsyncAttributeArguments,
-    base: .syntax,
     nameForDiagnostics: "@_unavailableFromAsync argument",
     documentation: "The arguments for the '@_unavailableFromAsync' attribute",
     children: [
@@ -825,7 +797,6 @@ public let ATTRIBUTE_NODES: [Node] = [
 
   Node(
     kind: .underscorePrivateAttributeArguments,
-    base: .syntax,
     nameForDiagnostics: "@_private argument",
     documentation: "The arguments for the '@_private' attribute",
     children: [

@@ -13,14 +13,12 @@
 public let COMMON_NODES: [Node] = [
   Node(
     kind: .codeBlockItemList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.codeBlockItem]
   ),
 
   Node(
     kind: .codeBlockItem,
-    base: .syntax,
     nameForDiagnostics: nil,
     documentation: "A CodeBlockItem is any Syntax node that appears on its own line inside a CodeBlock.",
     parserFunction: "parseNonOptionalCodeBlockItem",
@@ -54,7 +52,6 @@ public let COMMON_NODES: [Node] = [
 
   Node(
     kind: .codeBlock,
-    base: .syntax,
     nameForDiagnostics: "code block",
     parserFunction: "parseCodeBlock",
     traits: [
@@ -82,7 +79,6 @@ public let COMMON_NODES: [Node] = [
 
   Node(
     kind: .throwsClause,
-    base: .syntax,
     nameForDiagnostics: "throws clause",
     children: [
       Child(
@@ -114,7 +110,6 @@ public let COMMON_NODES: [Node] = [
 
   Node(
     kind: .accessorEffectSpecifiers,
-    base: .syntax,
     nameForDiagnostics: "accessor specifiers",
     traits: [
       "EffectSpecifiers"
@@ -137,7 +132,6 @@ public let COMMON_NODES: [Node] = [
 
   Node(
     kind: .functionEffectSpecifiers,
-    base: .syntax,
     nameForDiagnostics: "effect specifiers",
     traits: [
       "EffectSpecifiers"
@@ -160,7 +154,6 @@ public let COMMON_NODES: [Node] = [
 
   Node(
     kind: .deinitializerEffectSpecifiers,
-    base: .syntax,
     nameForDiagnostics: "effect specifiers",
     traits: [],
     children: [
@@ -175,21 +168,18 @@ public let COMMON_NODES: [Node] = [
 
   Node(
     kind: .decl,
-    base: .syntax,
     nameForDiagnostics: "declaration",
     parserFunction: "parseDeclaration"
   ),
 
   Node(
     kind: .expr,
-    base: .syntax,
     nameForDiagnostics: "expression",
     parserFunction: "parseExpression"
   ),
 
   Node(
     kind: .missingDecl,
-    base: .decl,
     nameForDiagnostics: "declaration",
     documentation:
       "In case the source code is missing a declaration, this node stands in place of the missing declaration.",
@@ -225,7 +215,6 @@ public let COMMON_NODES: [Node] = [
 
   Node(
     kind: .missingExpr,
-    base: .expr,
     nameForDiagnostics: "expression",
     documentation:
       "In case the source code is missing an expression, this node stands in place of the missing expression.",
@@ -247,7 +236,6 @@ public let COMMON_NODES: [Node] = [
 
   Node(
     kind: .missingPattern,
-    base: .pattern,
     nameForDiagnostics: "pattern",
     documentation: "In case the source code is missing a pattern, this node stands in place of the missing pattern.",
     traits: [
@@ -268,7 +256,6 @@ public let COMMON_NODES: [Node] = [
 
   Node(
     kind: .missingStmt,
-    base: .stmt,
     nameForDiagnostics: "statement",
     documentation:
       "In case the source code is missing a statement, this node stands in place of the missing statement.",
@@ -290,7 +277,6 @@ public let COMMON_NODES: [Node] = [
 
   Node(
     kind: .missing,
-    base: .syntax,
     nameForDiagnostics: nil,
     documentation: "In case the source code is missing a syntax node, this node stands in place of the missing node.",
     traits: [
@@ -311,7 +297,6 @@ public let COMMON_NODES: [Node] = [
 
   Node(
     kind: .missingType,
-    base: .type,
     nameForDiagnostics: "type",
     documentation: "In case the source code is missing a type, this node stands in place of the missing type.",
     traits: [
@@ -332,21 +317,18 @@ public let COMMON_NODES: [Node] = [
 
   Node(
     kind: .pattern,
-    base: .syntax,
     nameForDiagnostics: "pattern",
     parserFunction: "parsePattern"
   ),
 
   Node(
     kind: .stmt,
-    base: .syntax,
     nameForDiagnostics: "statement",
     parserFunction: "parseStatement"
   ),
 
   Node(
     kind: .typeEffectSpecifiers,
-    base: .syntax,
     nameForDiagnostics: "effect specifiers",
     traits: [
       "EffectSpecifiers"
@@ -368,14 +350,12 @@ public let COMMON_NODES: [Node] = [
 
   Node(
     kind: .type,
-    base: .syntax,
     nameForDiagnostics: "type",
     parserFunction: "parseType"
   ),
 
   Node(
     kind: .unexpectedNodes,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     documentation:
       "A collection of syntax nodes that occurred in the source code but could not be used to form a valid syntax tree.",

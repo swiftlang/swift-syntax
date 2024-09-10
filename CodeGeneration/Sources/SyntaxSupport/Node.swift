@@ -38,7 +38,9 @@ public class Node: NodeChoiceConvertible {
   public let kind: SyntaxNodeKind
 
   /// The kind of node’s supertype. This kind must have `isBase == true`
-  public let base: SyntaxNodeKind
+  public var base: SyntaxNodeKind {
+    self.kind.base
+  }
 
   public let experimentalFeature: ExperimentalFeature?
 
@@ -117,7 +119,6 @@ public class Node: NodeChoiceConvertible {
   /// Construct the specification for a layout syntax node.
   init(
     kind: SyntaxNodeKind,
-    base: SyntaxNodeKind,
     experimentalFeature: ExperimentalFeature? = nil,
     nameForDiagnostics: String?,
     documentation: String? = nil,
@@ -125,11 +126,10 @@ public class Node: NodeChoiceConvertible {
     traits: [String] = [],
     children: [Child] = []
   ) {
-    precondition(base != .syntaxCollection)
-    precondition(base.isBase, "unknown base kind '\(base)' for node '\(kind)'")
+    precondition(kind.base != .syntaxCollection)
+    precondition(kind.base.isBase, "unknown base kind '\(kind.base)' for node '\(kind)'")
 
     self.kind = kind
-    self.base = base
     self.experimentalFeature = experimentalFeature
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
@@ -274,7 +274,6 @@ public class Node: NodeChoiceConvertible {
   /// `base` must be `.syntaxCollection`.
   init(
     kind: SyntaxNodeKind,
-    base: SyntaxNodeKind,
     experimentalFeature: ExperimentalFeature? = nil,
     nameForDiagnostics: String?,
     documentation: String? = nil,
@@ -282,8 +281,7 @@ public class Node: NodeChoiceConvertible {
     elementChoices: [SyntaxNodeKind]
   ) {
     self.kind = kind
-    precondition(base == .syntaxCollection)
-    self.base = base
+    precondition(kind.base == .syntaxCollection)
     self.experimentalFeature = experimentalFeature
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)

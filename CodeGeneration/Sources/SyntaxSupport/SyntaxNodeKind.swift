@@ -336,6 +336,80 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
     }
   }
 
+  public var base: Self {
+    switch self {
+    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl,
+      .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl,
+      .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl,
+      .structDecl, .subscriptDecl, .typeAliasDecl, .variableDecl:
+      return .decl
+    case ._canImportExpr, ._canImportVersionInfo, .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr,
+      .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr,
+      .dictionaryExpr, .discardAssignmentExpr, .doExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr,
+      .functionCallExpr, .genericSpecializationExpr, .ifExpr, .infixOperatorExpr, .inOutExpr, .integerLiteralExpr,
+      .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr,
+      .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr,
+      .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .simpleStringLiteralExpr,
+      .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr,
+      .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
+      return .expr
+    case .expressionPattern, .identifierPattern, .isTypePattern, .missingPattern, .tuplePattern, .valueBindingPattern,
+      .wildcardPattern:
+      return .pattern
+    case .breakStmt, .continueStmt, .deferStmt, .discardStmt, .doStmt, .expressionStmt, .fallThroughStmt, .forStmt,
+      .guardStmt, .labeledStmt, .missingStmt, .repeatStmt, .returnStmt, .thenStmt, .throwStmt, .whileStmt, .yieldStmt:
+      return .stmt
+    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType,
+      .identifierType, .implicitlyUnwrappedOptionalType, .memberType, .metatypeType, .missingType,
+      .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType,
+      .tupleType:
+      return .type
+    case .accessorDeclList, .arrayElementList, .attributeList, .availabilityArgumentList, .catchClauseList,
+      .catchItemList, .closureCaptureList, .closureParameterList, .closureShorthandParameterList, .codeBlockItemList,
+      .compositionTypeElementList, .conditionElementList, .declModifierList, .declNameArgumentList, .designatedTypeList,
+      .dictionaryElementList, .differentiabilityArgumentList, .documentationAttributeArgumentList,
+      .effectsAttributeArgumentList, .enumCaseElementList, .enumCaseParameterList, .exprList, .functionParameterList,
+      .genericArgumentList, .genericParameterList, .genericRequirementList, .ifConfigClauseList,
+      .importPathComponentList, .inheritedTypeList, .keyPathComponentList, .labeledExprList,
+      .lifetimeSpecifierArgumentList, .memberBlockItemList, .multipleTrailingClosureElementList, .objCSelectorPieceList,
+      .patternBindingList, .platformVersionItemList, .precedenceGroupAttributeList, .precedenceGroupNameList,
+      .primaryAssociatedTypeList, .simpleStringLiteralSegmentList, .specializeAttributeArgumentList,
+      .stringLiteralSegmentList, .switchCaseItemList, .switchCaseList, .tuplePatternElementList, .tupleTypeElementList,
+      .typeSpecifierList, .unexpectedNodes, .versionComponentList, .yieldedExpressionList:
+      return .syntaxCollection
+    case .accessorBlock, .accessorEffectSpecifiers, .accessorParameters, .arrayElement, .attribute,
+      .availabilityArgument, .availabilityCondition, .availabilityLabeledArgument, .backDeployedAttributeArguments,
+      .catchClause, .catchItem, .closureCapture, .closureCaptureClause, .closureCaptureSpecifier, .closureParameter,
+      .closureParameterClause, .closureShorthandParameter, .closureSignature, .codeBlock, .codeBlockItem,
+      .compositionTypeElement, .conditionElement, .conformanceRequirement, .conventionAttributeArguments,
+      .conventionWitnessMethodAttributeArguments, .decl, .declModifier, .declModifierDetail, .declNameArgument,
+      .declNameArguments, .deinitializerEffectSpecifiers, .derivativeAttributeArguments, .designatedType,
+      .dictionaryElement, .differentiabilityArgument, .differentiabilityArguments,
+      .differentiabilityWithRespectToArgument, .differentiableAttributeArguments, .documentationAttributeArgument,
+      .dynamicReplacementAttributeArguments, .enumCaseElement, .enumCaseParameter, .enumCaseParameterClause,
+      .exposeAttributeArguments, .expr, .expressionSegment, .functionEffectSpecifiers, .functionParameter,
+      .functionParameterClause, .functionSignature, .genericArgument, .genericArgumentClause, .genericParameter,
+      .genericParameterClause, .genericRequirement, .genericWhereClause, .ifConfigClause, .implementsAttributeArguments,
+      .importPathComponent, .inheritanceClause, .inheritedType, .initializerClause, .keyPathComponent,
+      .keyPathOptionalComponent, .keyPathPropertyComponent, .keyPathSubscriptComponent, .labeledExpr,
+      .labeledSpecializeArgument, .layoutRequirement, .lifetimeSpecifierArgument, .lifetimeTypeSpecifier,
+      .matchingPatternCondition, .memberBlock, .memberBlockItem, .missing, .multipleTrailingClosureElement,
+      .objCSelectorPiece, .opaqueReturnTypeOfAttributeArguments, .operatorPrecedenceAndTypes, .optionalBindingCondition,
+      .originallyDefinedInAttributeArguments, .pattern, .patternBinding, .platformVersion, .platformVersionItem,
+      .poundSourceLocationArguments, .precedenceGroupAssignment, .precedenceGroupAssociativity, .precedenceGroupName,
+      .precedenceGroupRelation, .primaryAssociatedType, .primaryAssociatedTypeClause, .returnClause,
+      .sameTypeRequirement, .simpleTypeSpecifier, .sourceFile, .specializeAvailabilityArgument,
+      .specializeTargetFunctionArgument, .stmt, .stringSegment, .switchCase, .switchCaseItem, .switchCaseLabel,
+      .switchDefaultLabel, .throwsClause, .tuplePatternElement, .tupleTypeElement, .type, .typeAnnotation,
+      .typeEffectSpecifiers, .typeInitializerClause, .typeSpecifier, .lifetimeSpecifierArguments,
+      .unavailableFromAsyncAttributeArguments, .underscorePrivateAttributeArguments, .versionComponent, .versionTuple,
+      .whereClause, .yieldedExpression, .yieldedExpressionsClause:
+      return .syntax
+    case .syntax, .syntaxCollection, .token:
+      return .syntax
+    }
+  }
+
   public var identifier: TokenSyntax {
     return .identifier(rawValue)
   }

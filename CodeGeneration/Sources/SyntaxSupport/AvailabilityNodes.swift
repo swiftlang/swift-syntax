@@ -13,7 +13,6 @@
 public let AVAILABILITY_NODES: [Node] = [
   Node(
     kind: .availabilityArgument,
-    base: .syntax,
     nameForDiagnostics: "availability argument",
     documentation:
       "A single argument to an `@available` argument like `*`, `iOS 10.1`, or `message: \"This has been deprecated\"`.",
@@ -53,7 +52,6 @@ public let AVAILABILITY_NODES: [Node] = [
 
   Node(
     kind: .availabilityLabeledArgument,
-    base: .syntax,
     nameForDiagnostics: "availability argument",
     documentation:
       "An argument to an `@available` attribute that consists of a label and a value, e.g. `message: \"This has been deprecated\"`.",
@@ -95,14 +93,12 @@ public let AVAILABILITY_NODES: [Node] = [
 
   Node(
     kind: .availabilityArgumentList,
-    base: .syntaxCollection,
     nameForDiagnostics: "'@availability' arguments",
     elementChoices: [.availabilityArgument]
   ),
 
   Node(
     kind: .platformVersion,
-    base: .syntax,
     nameForDiagnostics: "version restriction",
     documentation:
       "An argument to `@available` that restricts the availability on a certain platform to a version, e.g. `iOS 10` or `swift 3.4`.",
@@ -132,7 +128,6 @@ public let AVAILABILITY_NODES: [Node] = [
 
   Node(
     kind: .versionComponent,
-    base: .syntax,
     nameForDiagnostics: nil,
     documentation: "An element to represent a single component in a version, like `.1`.",
     children: [
@@ -151,14 +146,12 @@ public let AVAILABILITY_NODES: [Node] = [
 
   Node(
     kind: .versionComponentList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.versionComponent]
   ),
 
   Node(
     kind: .versionTuple,
-    base: .syntax,
     nameForDiagnostics: "version tuple",
     documentation:
       "A version number like `1.2.0`. Only the first version component is required. There might be an arbitrary number of following components.",

@@ -13,14 +13,12 @@
 public let EXPR_NODES: [Node] = [
   Node(
     kind: .arrayElementList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.arrayElement]
   ),
 
   Node(
     kind: .arrayElement,
-    base: .syntax,
     nameForDiagnostics: "array element",
     documentation: "An element inside an array literal.",
     traits: [
@@ -42,7 +40,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .arrayExpr,
-    base: .expr,
     nameForDiagnostics: "array",
     documentation: "An array literal.",
     children: [
@@ -65,7 +62,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .arrowExpr,
-    base: .expr,
     nameForDiagnostics: nil,
     documentation: """
       The arrow when a type is used at a position that syntactically expectes an expression.
@@ -94,7 +90,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .asExpr,
-    base: .expr,
     nameForDiagnostics: "'as'",
     documentation: """
       The cast of an expressison to a different type.
@@ -137,7 +132,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .assignmentExpr,
-    base: .expr,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -150,7 +144,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .awaitExpr,
-    base: .expr,
     nameForDiagnostics: "'await' expression",
     children: [
       Child(
@@ -166,7 +159,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .binaryOperatorExpr,
-    base: .expr,
     nameForDiagnostics: "operator",
     documentation: """
       An operator like `+` or `-`.
@@ -186,7 +178,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .booleanLiteralExpr,
-    base: .expr,
     nameForDiagnostics: "bool literal",
     children: [
       Child(
@@ -199,7 +190,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .borrowExpr,
-    base: .expr,
     nameForDiagnostics: "'_borrow' expression",
     children: [
       Child(
@@ -215,7 +205,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: ._canImportExpr,
-    base: .expr,
     nameForDiagnostics: "'canImport' expression",
     children: [
       Child(
@@ -244,7 +233,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: ._canImportVersionInfo,
-    base: .expr,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -269,7 +257,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .switchCaseItem,
-    base: .syntax,
     nameForDiagnostics: nil,
     traits: [
       "WithTrailingComma"
@@ -294,14 +281,12 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .closureCaptureList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.closureCapture]
   ),
 
   Node(
     kind: .closureCaptureSpecifier,
-    base: .syntax,
     nameForDiagnostics: "closure capture specifier",
     children: [
       Child(
@@ -328,7 +313,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .closureCapture,
-    base: .syntax,
     nameForDiagnostics: "closure capture",
     traits: [
       "WithTrailingComma"
@@ -358,7 +342,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .closureCaptureClause,
-    base: .syntax,
     nameForDiagnostics: "closure capture clause",
     children: [
       Child(
@@ -378,7 +361,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .closureParameter,
-    base: .syntax,
     nameForDiagnostics: "parameter",
     parserFunction: "parseClosureParameter",
     traits: ["WithTrailingComma", "WithAttributes", "WithModifiers"],
@@ -435,14 +417,12 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .closureParameterList,
-    base: .syntaxCollection,
     nameForDiagnostics: "parameter list",
     elementChoices: [.closureParameter]
   ),
 
   Node(
     kind: .closureParameterClause,
-    base: .syntax,
     nameForDiagnostics: "parameter clause",
     traits: [
       "Parenthesized"
@@ -470,7 +450,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .closureExpr,
-    base: .expr,
     nameForDiagnostics: "closure",
     traits: [
       "Braced",
@@ -499,7 +478,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .closureShorthandParameterList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     documentation: """
       A list of closure parameters that are not parenthesized and don't have type annotations.
@@ -520,7 +498,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .closureShorthandParameter,
-    base: .syntax,
     nameForDiagnostics: "closure parameter",
     traits: [
       "WithTrailingComma"
@@ -541,7 +518,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .closureSignature,
-    base: .syntax,
     nameForDiagnostics: "closure signature",
     traits: [
       "WithAttributes"
@@ -594,14 +570,12 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .declNameArgumentList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.declNameArgument]
   ),
 
   Node(
     kind: .declNameArgument,
-    base: .syntax,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -617,7 +591,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .declNameArguments,
-    base: .syntax,
     nameForDiagnostics: nil,
     traits: [
       "Parenthesized"
@@ -640,14 +613,12 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .dictionaryElementList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.dictionaryElement]
   ),
 
   Node(
     kind: .dictionaryElement,
-    base: .syntax,
     nameForDiagnostics: "dictionary element",
     documentation: "An element inside a dictionary literal.",
     traits: [
@@ -680,7 +651,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .dictionaryExpr,
-    base: .expr,
     nameForDiagnostics: "dictionary",
     documentation: "A dictionary literal",
     children: [
@@ -710,7 +680,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .discardAssignmentExpr,
-    base: .expr,
     nameForDiagnostics: nil,
     documentation: """
       A `_` that discards a value inside an assignment.
@@ -736,7 +705,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .doExpr,
-    base: .expr,
     experimentalFeature: .doExpressions,
     nameForDiagnostics: "'do' block",
     documentation: """
@@ -784,7 +752,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .editorPlaceholderExpr,
-    base: .expr,
     nameForDiagnostics: "editor placeholder",
     documentation: """
       - Warning: This ``EditorPlaceholderExprSyntax`` node is not generated by the parser anymore. Placeholders are represented by a ``DeclReferenceExprSyntax``.
@@ -800,7 +767,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .exprList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     documentation: "A list of expressions connected by operators. This list is contained by a ``SequenceExprSyntax``.",
     elementChoices: [.expr]
@@ -808,7 +774,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .expressionSegment,
-    base: .syntax,
     nameForDiagnostics: nil,
     documentation: """
       An interpolated expression inside a string literal.
@@ -846,7 +811,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .floatLiteralExpr,
-    base: .expr,
     nameForDiagnostics: "floating literal",
     children: [
       Child(
@@ -859,7 +823,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .forceUnwrapExpr,
-    base: .expr,
     nameForDiagnostics: "force unwrap",
     children: [
       Child(
@@ -875,7 +838,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .functionCallExpr,
-    base: .expr,
     nameForDiagnostics: "function call",
     children: [
       Child(
@@ -919,7 +881,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .declReferenceExpr,
-    base: .expr,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -948,7 +909,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .ifExpr,
-    base: .expr,
     nameForDiagnostics: "'if' statement",
     traits: [
       "WithCodeBlock"
@@ -992,7 +952,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .inOutExpr,
-    base: .expr,
     nameForDiagnostics: "inout expression",
     documentation: "An expression prefixed with `&` to pass an argument to an `inout` parameter.",
     children: [
@@ -1009,7 +968,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .infixOperatorExpr,
-    base: .expr,
     nameForDiagnostics: nil,
     documentation: """
       An infix operator call like `1 + 2`.
@@ -1037,7 +995,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .integerLiteralExpr,
-    base: .expr,
     nameForDiagnostics: "integer literal",
     children: [
       Child(
@@ -1050,7 +1007,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .isExpr,
-    base: .expr,
     nameForDiagnostics: "'is'",
     documentation: """
       Checks if an expression is of a given type.
@@ -1088,7 +1044,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .keyPathComponentList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     documentation: "The components of a key path",
     elementChoices: [.keyPathComponent]
@@ -1096,7 +1051,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .keyPathComponent,
-    base: .syntax,
     nameForDiagnostics: "key path component",
     documentation: "A single key path component",
     children: [
@@ -1127,7 +1081,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .keyPathExpr,
-    base: .expr,
     nameForDiagnostics: "key path",
     documentation: #"""
       A key path.
@@ -1158,7 +1111,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .keyPathOptionalComponent,
-    base: .syntax,
     nameForDiagnostics: "key path optional component",
     documentation: "A key path component like `?` or `!`.",
     children: [
@@ -1171,7 +1123,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .keyPathPropertyComponent,
-    base: .syntax,
     nameForDiagnostics: "key path property component",
     documentation: "A key path component like `.property` or `.1`.",
     children: [
@@ -1189,7 +1140,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .keyPathSubscriptComponent,
-    base: .syntax,
     nameForDiagnostics: "key path subscript component",
     documentation: "A key path component like `.[17]`",
     children: [
@@ -1214,7 +1164,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .macroExpansionExpr,
-    base: .expr,
     nameForDiagnostics: "macro expansion",
     documentation: "The expansion of a freestanding macro in a position that expects an expression.",
     traits: [
@@ -1271,7 +1220,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .memberAccessExpr,
-    base: .expr,
     nameForDiagnostics: "member access",
     documentation: "An expression that access a member like a function or a property.",
     children: [
@@ -1298,7 +1246,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .consumeExpr,
-    base: .expr,
     nameForDiagnostics: "'consume' expression",
     children: [
       Child(
@@ -1315,7 +1262,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .copyExpr,
-    base: .expr,
     nameForDiagnostics: "'copy' expression",
     children: [
       Child(
@@ -1331,14 +1277,12 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .multipleTrailingClosureElementList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.multipleTrailingClosureElement]
   ),
 
   Node(
     kind: .multipleTrailingClosureElement,
-    base: .syntax,
     nameForDiagnostics: "trailing closure",
     children: [
       Child(
@@ -1359,7 +1303,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .nilLiteralExpr,
-    base: .expr,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -1371,7 +1314,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .optionalChainingExpr,
-    base: .expr,
     nameForDiagnostics: "optional chaining",
     children: [
       Child(
@@ -1387,7 +1329,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .packElementExpr,
-    base: .expr,
     nameForDiagnostics: nil,
     documentation: "A pack element expression spelled with `each`.",
     children: [
@@ -1405,7 +1346,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .packExpansionExpr,
-    base: .expr,
     nameForDiagnostics: nil,
     documentation: "A pack expansion expression spelled with `repeat`.",
     children: [
@@ -1423,7 +1363,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .postfixIfConfigExpr,
-    base: .expr,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -1440,7 +1379,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .postfixOperatorExpr,
-    base: .expr,
     nameForDiagnostics: "postfix expression",
     children: [
       Child(
@@ -1457,7 +1395,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .prefixOperatorExpr,
-    base: .expr,
     nameForDiagnostics: "operator",
     documentation: """
       A prefix operator applied to a value.
@@ -1488,7 +1425,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .regexLiteralExpr,
-    base: .expr,
     nameForDiagnostics: "regex literal",
     children: [
       Child(
@@ -1521,7 +1457,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .sequenceExpr,
-    base: .expr,
     nameForDiagnostics: nil,
     documentation: """
       A flat list of expressions before operator folding using the `SwiftOperators` library.
@@ -1542,7 +1477,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .genericSpecializationExpr,
-    base: .expr,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -1558,7 +1492,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .stringLiteralExpr,
-    base: .expr,
     nameForDiagnostics: "string literal",
     documentation: #"""
       A string literal.
@@ -1601,14 +1534,12 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .stringLiteralSegmentList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.stringSegment, .expressionSegment]
   ),
 
   Node(
     kind: .simpleStringLiteralExpr,
-    base: .expr,
     nameForDiagnostics: "simple string literal",
     documentation: "A simple string that can’t contain string interpolation and cannot have raw string delimiters.",
     children: [
@@ -1632,7 +1563,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .simpleStringLiteralSegmentList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     documentation: "String literal segments that only can contain non string interpolated or extended escaped strings",
     elementChoices: [.stringSegment]
@@ -1640,7 +1570,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .stringSegment,
-    base: .syntax,
     nameForDiagnostics: nil,
     documentation: """
       A literal segment inside a string segment.
@@ -1657,7 +1586,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .subscriptCallExpr,
-    base: .expr,
     nameForDiagnostics: "subscript",
     children: [
       Child(
@@ -1701,7 +1629,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .superExpr,
-    base: .expr,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -1713,7 +1640,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .switchCaseLabel,
-    base: .syntax,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -1733,14 +1659,12 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .switchCaseList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.switchCase, .ifConfigDecl]
   ),
 
   Node(
     kind: .switchCase,
-    base: .syntax,
     nameForDiagnostics: "switch case",
     parserFunction: "parseSwitchCase",
     traits: ["WithStatements"],
@@ -1775,7 +1699,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .switchDefaultLabel,
-    base: .syntax,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -1791,7 +1714,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .switchExpr,
-    base: .expr,
     nameForDiagnostics: "'switch' statement",
     documentation: """
       A `switch` expression.
@@ -1842,7 +1764,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .ternaryExpr,
-    base: .expr,
     nameForDiagnostics: "ternay expression",
     documentation: """
       The ternary operator with operator precedences resolved.
@@ -1889,7 +1810,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .tryExpr,
-    base: .expr,
     nameForDiagnostics: "'try' expression",
     documentation: """
       An expression prefixed with `try`.
@@ -1927,14 +1847,12 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .labeledExprList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.labeledExpr]
   ),
 
   Node(
     kind: .labeledExpr,
-    base: .syntax,
     nameForDiagnostics: nil,
     documentation: """
       An expression that is prefixed by a label.
@@ -1973,7 +1891,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .tupleExpr,
-    base: .expr,
     nameForDiagnostics: "tuple",
     traits: [
       "Parenthesized"
@@ -1997,7 +1914,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .typeExpr,
-    base: .expr,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -2009,7 +1925,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .unresolvedAsExpr,
-    base: .expr,
     nameForDiagnostics: "'as'",
     documentation: """
       The `as` keyword without any operands.
@@ -2033,7 +1948,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .unresolvedIsExpr,
-    base: .expr,
     nameForDiagnostics: "'is'",
     documentation: """
       The `is` keyword without any operands.
@@ -2052,7 +1966,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .patternExpr,
-    base: .expr,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -2064,7 +1977,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .unresolvedTernaryExpr,
-    base: .expr,
     nameForDiagnostics: "ternary operator",
     documentation: """
       The middle section of a ternary operator between `?` and `:`.
@@ -2093,7 +2005,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .yieldedExpression,
-    base: .syntax,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -2110,7 +2021,6 @@ public let EXPR_NODES: [Node] = [
 
   Node(
     kind: .yieldedExpressionList,
-    base: .syntaxCollection,
     nameForDiagnostics: "yield list",
     elementChoices: [.yieldedExpression]
   ),

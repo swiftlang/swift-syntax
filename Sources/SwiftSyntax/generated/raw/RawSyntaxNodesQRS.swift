@@ -922,9 +922,9 @@ public struct RawSpecializeAttributeArgumentListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: raw)
   }
   
-  public var elements: [RawSyntax] {
+  public var elements: [Element] {
     layoutView.children.map {
-      RawSyntax(raw: $0!)
+      Element($0!)!
     }
   }
 }
@@ -1339,9 +1339,9 @@ public struct RawStringLiteralSegmentListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: raw)
   }
   
-  public var elements: [RawSyntax] {
+  public var elements: [Element] {
     layoutView.children.map {
-      RawSyntax(raw: $0!)
+      Element($0!)!
     }
   }
 }
@@ -2219,9 +2219,9 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: raw)
   }
   
-  public var elements: [RawSyntax] {
+  public var elements: [Element] {
     layoutView.children.map {
-      RawSyntax(raw: $0!)
+      Element($0!)!
     }
   }
 }
@@ -2319,8 +2319,8 @@ public struct RawSwitchCaseSyntax: RawSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var label: RawSyntax {
-    layoutView.children[3]!
+  public var label: Label {
+    layoutView.children[3].flatMap(Label.init)!
   }
   
   public var unexpectedBetweenLabelAndStatements: RawUnexpectedNodesSyntax? {

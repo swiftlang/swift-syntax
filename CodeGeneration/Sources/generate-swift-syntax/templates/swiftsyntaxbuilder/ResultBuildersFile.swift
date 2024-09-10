@@ -27,20 +27,18 @@ let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   )
 
   for node in SYNTAX_NODES.compactMap(\.collectionNode) {
-    let type = SyntaxBuildableType(kind: .node(kind: node.kind))
-
     try! StructDeclSyntax(
       """
-      // MARK: - \(type.resultBuilderType)
+      // MARK: - \(node.resultBuilderType)
 
-      \(node.node.apiAttributes())\
+      \(node.apiAttributes)\
       @resultBuilder
-      public struct \(type.resultBuilderType): ListBuilder
+      public struct \(node.resultBuilderType): ListBuilder
       """
     ) {
       DeclSyntax(
         """
-        public typealias FinalResult = \(type.syntaxBaseName)
+        public typealias FinalResult = \(node.syntaxType)
         """
       )
 
@@ -48,7 +46,7 @@ let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         for elementChoice in node.elementChoices {
           DeclSyntax(
             """
-            \(SYNTAX_NODE_MAP[elementChoice]?.apiAttributes() ?? [])\
+            \(elementChoice.node?.apiAttributes ?? [])\
             public static func buildExpression(_ expression: \(elementChoice.syntaxType)) -> Component {
               buildExpression(.init(expression))
             }
@@ -60,8 +58,8 @@ let resultBuildersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      extension \(type.syntaxBaseName) {
-        public init(@\(type.resultBuilderType) itemsBuilder: () throws -> \(type.syntaxBaseName)) rethrows {
+      extension \(node.syntaxType) {
+        public init(@\(node.resultBuilderType) itemsBuilder: () throws -> \(node.syntaxType)) rethrows {
           self = try itemsBuilder()
         }
       }

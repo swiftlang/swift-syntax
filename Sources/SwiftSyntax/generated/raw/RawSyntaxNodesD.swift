@@ -1252,8 +1252,8 @@ public struct RawDictionaryExprSyntax: RawExprSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var content: RawSyntax {
-    layoutView.children[3]!
+  public var content: Content {
+    layoutView.children[3].flatMap(Content.init)!
   }
   
   public var unexpectedBetweenContentAndRightSquare: RawUnexpectedNodesSyntax? {
@@ -1678,8 +1678,8 @@ public struct RawDifferentiabilityWithRespectToArgumentSyntax: RawSyntaxNodeProt
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var arguments: RawSyntax {
-    layoutView.children[5]!
+  public var arguments: Arguments {
+    layoutView.children[5].flatMap(Arguments.init)!
   }
   
   public var unexpectedAfterArguments: RawUnexpectedNodesSyntax? {
@@ -2264,8 +2264,8 @@ public struct RawDocumentationAttributeArgumentSyntax: RawSyntaxNodeProtocol {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var value: RawSyntax {
-    layoutView.children[5]!
+  public var value: Value {
+    layoutView.children[5].flatMap(Value.init)!
   }
   
   public var unexpectedBetweenValueAndTrailingComma: RawUnexpectedNodesSyntax? {

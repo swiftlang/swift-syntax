@@ -13,7 +13,6 @@
 public let TYPE_NODES: [Node] = [
   Node(
     kind: .arrayType,
-    base: .type,
     nameForDiagnostics: "array type",
     children: [
       Child(
@@ -36,7 +35,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .attributedType,
-    base: .type,
     nameForDiagnostics: "type",
     traits: [
       "WithAttributes"
@@ -63,7 +61,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .classRestrictionType,
-    base: .type,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -75,14 +72,12 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .compositionTypeElementList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.compositionTypeElement]
   ),
 
   Node(
     kind: .compositionTypeElement,
-    base: .syntax,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -99,7 +94,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .compositionType,
-    base: .type,
     nameForDiagnostics: "type composition",
     children: [
       Child(
@@ -111,7 +105,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .someOrAnyType,
-    base: .type,
     nameForDiagnostics: "type",
     children: [
       Child(
@@ -128,7 +121,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .dictionaryType,
-    base: .type,
     nameForDiagnostics: "dictionary type",
     children: [
       Child(
@@ -162,7 +154,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .functionType,
-    base: .type,
     nameForDiagnostics: "function type",
     traits: [
       "Parenthesized"
@@ -200,7 +191,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .genericArgumentClause,
-    base: .syntax,
     nameForDiagnostics: "generic argument clause",
     children: [
       Child(
@@ -222,14 +212,12 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .genericArgumentList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.genericArgument]
   ),
 
   Node(
     kind: .genericArgument,
-    base: .syntax,
     nameForDiagnostics: "generic argument",
     traits: [
       "WithTrailingComma"
@@ -250,7 +238,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .implicitlyUnwrappedOptionalType,
-    base: .type,
     nameForDiagnostics: "implicitly unwrapped optional type",
     children: [
       Child(
@@ -266,7 +253,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .memberType,
-    base: .type,
     nameForDiagnostics: "member type",
     children: [
       Child(
@@ -293,7 +279,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .metatypeType,
-    base: .type,
     nameForDiagnostics: "metatype",
     children: [
       Child(
@@ -315,7 +300,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .namedOpaqueReturnType,
-    base: .type,
     nameForDiagnostics: "named opaque return type",
     children: [
       Child(
@@ -334,7 +318,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .optionalType,
-    base: .type,
     nameForDiagnostics: "optional type",
     children: [
       Child(
@@ -350,7 +333,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .suppressedType,
-    base: .type,
     nameForDiagnostics: "suppressed type conformance",
     children: [
       Child(
@@ -367,7 +349,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .packExpansionType,
-    base: .type,
     nameForDiagnostics: "variadic expansion",
     children: [
       Child(
@@ -384,7 +365,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .packElementType,
-    base: .type,
     nameForDiagnostics: "pack element",
     children: [
       Child(
@@ -401,7 +381,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .identifierType,
-    base: .type,
     nameForDiagnostics: "type",
     children: [
       Child(
@@ -423,14 +402,12 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .tupleTypeElementList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.tupleTypeElement]
   ),
 
   Node(
     kind: .tupleTypeElement,
-    base: .syntax,
     nameForDiagnostics: nil,
     traits: [
       "WithTrailingComma"
@@ -479,7 +456,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .tupleType,
-    base: .type,
     nameForDiagnostics: "tuple type",
     traits: [
       "Parenthesized"
@@ -502,7 +478,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .lifetimeSpecifierArgument,
-    base: .syntax,
     experimentalFeature: .nonescapableTypes,
     nameForDiagnostics: nil,
     documentation: """
@@ -536,7 +511,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .lifetimeSpecifierArgumentList,
-    base: .syntaxCollection,
     experimentalFeature: .nonescapableTypes,
     nameForDiagnostics: nil,
     elementChoices: [.lifetimeSpecifierArgument]
@@ -544,7 +518,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .lifetimeTypeSpecifier,
-    base: .syntax,
     experimentalFeature: .nonescapableTypes,
     nameForDiagnostics: "lifetime specifier",
     documentation: "A specifier that specifies function parameter on whose lifetime a type depends",
@@ -577,7 +550,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .simpleTypeSpecifier,
-    base: .syntax,
     nameForDiagnostics: "type specifier",
     documentation: "A specifier that can be attached to a type to eg. mark a parameter as `inout` or `consuming`",
     children: [
@@ -600,7 +572,6 @@ public let TYPE_NODES: [Node] = [
 
   Node(
     kind: .typeSpecifierList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.simpleTypeSpecifier, .lifetimeTypeSpecifier]
   ),

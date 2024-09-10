@@ -13,7 +13,6 @@
 public let DECL_NODES: [Node] = [
   Node(
     kind: .importPathComponent,
-    base: .syntax,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -37,14 +36,12 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .importPathComponentList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.importPathComponent]
   ),
 
   Node(
     kind: .accessorBlock,
-    base: .syntax,
     nameForDiagnostics: nil,
     parserFunction: "parseAccessorBlock",
     traits: [
@@ -79,7 +76,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .accessorDecl,
-    base: .decl,
     nameForDiagnostics: "accessor",
     parserFunction: "parseAccessorDecl",
     traits: [
@@ -139,14 +135,12 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .accessorDeclList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.accessorDecl]
   ),
 
   Node(
     kind: .accessorParameters,
-    base: .syntax,
     nameForDiagnostics: nil,
     traits: [
       "Parenthesized"
@@ -170,7 +164,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .actorDecl,
-    base: .decl,
     nameForDiagnostics: "actor",
     traits: [
       "DeclGroup",
@@ -232,7 +225,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .associatedTypeDecl,
-    base: .decl,
     nameForDiagnostics: "associatedtype declaration",
     documentation: """
       An `associatedtype` declaration
@@ -316,7 +308,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .classDecl,
-    base: .decl,
     nameForDiagnostics: "class",
     documentation: """
       A `class` declaration
@@ -406,7 +397,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .declModifierDetail,
-    base: .syntax,
     nameForDiagnostics: nil,
     traits: [
       "Parenthesized"
@@ -429,7 +419,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .declModifier,
-    base: .syntax,
     nameForDiagnostics: "modifier",
     children: [
       Child(
@@ -483,7 +472,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .deinitializerDecl,
-    base: .decl,
     nameForDiagnostics: "deinitializer",
     documentation: """
       A `deint` declaration
@@ -534,7 +522,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .designatedType,
-    base: .syntax,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -550,14 +537,12 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .designatedTypeList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.designatedType]
   ),
 
   Node(
     kind: .editorPlaceholderDecl,
-    base: .decl,
     nameForDiagnostics: "editor placeholder",
     documentation: """
       An editor placeholder, e.g. `<#declaration#>` that is used in a position that expects a declaration.
@@ -594,7 +579,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .enumCaseParameterClause,
-    base: .syntax,
     nameForDiagnostics: "parameter clause",
     traits: [
       "Parenthesized"
@@ -622,14 +606,12 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .enumCaseParameterList,
-    base: .syntaxCollection,
     nameForDiagnostics: "parameter list",
     elementChoices: [.enumCaseParameter]
   ),
 
   Node(
     kind: .enumCaseParameter,
-    base: .syntax,
     nameForDiagnostics: "parameter",
     parserFunction: "parseEnumCaseParameter",
     traits: ["WithTrailingComma", "WithModifiers"],
@@ -680,7 +662,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .enumCaseDecl,
-    base: .decl,
     nameForDiagnostics: "enum case",
     documentation:
       "A `case` declaration of a Swift `enum`. It can have 1 or more `EnumCaseElement`s inside, each declaring a different case of the enum.",
@@ -717,7 +698,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .enumCaseElementList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     documentation: "A collection of 0 or more ``EnumCaseElementSyntax``s.",
     elementChoices: [.enumCaseElement]
@@ -725,7 +705,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .enumCaseElement,
-    base: .syntax,
     nameForDiagnostics: nil,
     documentation:
       "An element of an enum case, containing the name of the case and, optionally, either associated values or an assignment to a raw value.",
@@ -764,7 +743,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .enumDecl,
-    base: .decl,
     nameForDiagnostics: "enum",
     documentation: "A Swift `enum` declaration.",
     traits: [
@@ -832,7 +810,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .extensionDecl,
-    base: .decl,
     nameForDiagnostics: "extension",
     documentation: """
         An `extension` declaration.
@@ -911,7 +888,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .functionDecl,
-    base: .decl,
     nameForDiagnostics: "function",
     documentation: """
         A Swift `func` declaration.
@@ -1004,7 +980,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .functionParameterList,
-    base: .syntaxCollection,
     nameForDiagnostics: "parameter list",
     documentation: """
       A list of function parameters that are type annotated and a label.
@@ -1023,7 +998,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .functionParameter,
-    base: .syntax,
     nameForDiagnostics: "parameter",
     documentation: "A function parameter",
     parserFunction: "parseFunctionParameter",
@@ -1090,7 +1064,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .functionSignature,
-    base: .syntax,
     nameForDiagnostics: "function signature",
     documentation: "A function signature that defines the interface of the function.",
     children: [
@@ -1118,14 +1091,12 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .ifConfigClauseList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.ifConfigClause]
   ),
 
   Node(
     kind: .ifConfigClause,
-    base: .syntax,
     nameForDiagnostics: "conditional compilation clause",
     children: [
       Child(
@@ -1169,7 +1140,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .ifConfigDecl,
-    base: .decl,
     nameForDiagnostics: "conditional compilation block",
     children: [
       Child(
@@ -1185,7 +1155,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .importDecl,
-    base: .decl,
     nameForDiagnostics: "import",
     documentation: """
       An `import` declaration
@@ -1251,14 +1220,12 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .inheritedTypeList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.inheritedType]
   ),
 
   Node(
     kind: .inheritedType,
-    base: .syntax,
     nameForDiagnostics: "inherited type",
     traits: [
       "WithTrailingComma"
@@ -1279,7 +1246,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .initializerClause,
-    base: .syntax,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -1295,7 +1261,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .initializerDecl,
-    base: .decl,
     nameForDiagnostics: "initializer",
     documentation: """
       An `init` declaration
@@ -1374,7 +1339,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .macroDecl,
-    base: .decl,
     nameForDiagnostics: "macro",
     traits: [
       "NamedDecl",
@@ -1433,7 +1397,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .macroExpansionDecl,
-    base: .decl,
     nameForDiagnostics: "macro expansion",
     documentation: "The expansion of a freestanding macro in a position that expects a declaration.",
     traits: [
@@ -1502,7 +1465,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .memberBlock,
-    base: .syntax,
     nameForDiagnostics: "member block",
     parserFunction: "parseMemberBlock",
     traits: ["Braced"],
@@ -1524,7 +1486,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .memberBlockItem,
-    base: .syntax,
     nameForDiagnostics: nil,
     documentation: "A member declaration of a type consisting of a declaration and an optional semicolon;",
     children: [
@@ -1544,21 +1505,18 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .memberBlockItemList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.memberBlockItem]
   ),
 
   Node(
     kind: .declModifierList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.declModifier]
   ),
 
   Node(
     kind: .operatorDecl,
-    base: .decl,
     nameForDiagnostics: "operator declaration",
     documentation: "A Swift `operator` declaration.",
     traits: [
@@ -1592,7 +1550,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .operatorPrecedenceAndTypes,
-    base: .syntax,
     nameForDiagnostics: nil,
     documentation:
       "A clause to specify precedence group in infix operator declarations, and designated types in any operator declaration.",
@@ -1617,7 +1574,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .functionParameterClause,
-    base: .syntax,
     nameForDiagnostics: "parameter clause",
     traits: [
       "Parenthesized"
@@ -1642,14 +1598,12 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .patternBindingList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.patternBinding]
   ),
 
   Node(
     kind: .patternBinding,
-    base: .syntax,
     nameForDiagnostics: nil,
     documentation: """
       Defines variables inside a variable declaration.
@@ -1713,7 +1667,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .poundSourceLocationArguments,
-    base: .syntax,
     nameForDiagnostics: "'#sourceLocation' arguments",
     children: [
       Child(
@@ -1755,7 +1708,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .poundSourceLocation,
-    base: .decl,
     nameForDiagnostics: "'#sourceLocation' directive",
     traits: [
       "Parenthesized"
@@ -1785,7 +1737,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .precedenceGroupAssignment,
-    base: .syntax,
     nameForDiagnostics: "'assignment' property of precedencegroup",
     documentation: "Specifies the precedence of an operator when used in an operation that includes optional chaining.",
     children: [
@@ -1810,7 +1761,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .precedenceGroupAssociativity,
-    base: .syntax,
     nameForDiagnostics: "'associativity' property of precedencegroup",
     documentation:
       "Specifies how a sequence of operators with the same precedence level are grouped together in the absence of grouping parentheses.",
@@ -1834,14 +1784,12 @@ public let DECL_NODES: [Node] = [
   ),
   Node(
     kind: .precedenceGroupAttributeList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.precedenceGroupRelation, .precedenceGroupAssignment, .precedenceGroupAssociativity]
   ),
 
   Node(
     kind: .precedenceGroupDecl,
-    base: .decl,
     nameForDiagnostics: "precedencegroup",
     documentation: "A Swift `precedencegroup` declaration.",
     traits: [
@@ -1891,7 +1839,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .precedenceGroupName,
-    base: .syntax,
     nameForDiagnostics: nil,
     traits: ["WithTrailingComma"],
     children: [
@@ -1910,14 +1857,12 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .precedenceGroupNameList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.precedenceGroupName]
   ),
 
   Node(
     kind: .precedenceGroupRelation,
-    base: .syntax,
     nameForDiagnostics: "'relation' property of precedencegroup",
     documentation: "Specify the new precedence group's relation to existing precedence groups.",
     children: [
@@ -1942,7 +1887,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .protocolDecl,
-    base: .decl,
     nameForDiagnostics: "protocol",
     documentation: """
       A `protocol` declaration
@@ -2016,7 +1960,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .returnClause,
-    base: .syntax,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -2036,7 +1979,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .sourceFile,
-    base: .syntax,
     nameForDiagnostics: "source file",
     parserFunction: "parseSourceFile",
     traits: ["WithStatements"],
@@ -2061,7 +2003,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .structDecl,
-    base: .decl,
     nameForDiagnostics: "struct",
     documentation: """
       A `struct` declaration
@@ -2187,7 +2128,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .subscriptDecl,
-    base: .decl,
     nameForDiagnostics: "subscript",
     traits: [
       "WithAttributes",
@@ -2245,7 +2185,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .inheritanceClause,
-    base: .syntax,
     nameForDiagnostics: "inheritance clause",
     children: [
       Child(
@@ -2262,7 +2201,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .typeInitializerClause,
-    base: .syntax,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -2279,7 +2217,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .typeAliasDecl,
-    base: .decl,
     nameForDiagnostics: "typealias declaration",
     traits: [
       "NamedDecl",
@@ -2331,7 +2268,6 @@ public let DECL_NODES: [Node] = [
 
   Node(
     kind: .variableDecl,
-    base: .decl,
     nameForDiagnostics: "variable",
     documentation: """
       Declaration of one or more variables

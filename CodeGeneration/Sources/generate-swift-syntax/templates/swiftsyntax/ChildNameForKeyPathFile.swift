@@ -28,10 +28,10 @@ let childNameForKeyPathFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       for node in NON_BASE_SYNTAX_NODES.compactMap(\.layoutNode) {
         for child in node.children {
           SwitchCaseSyntax(
-            """
-            case \\\(node.type.syntaxBaseName).\(child.memberCallName):
-              return \(literal: child.identifier.description)
-            """
+            #"""
+            case \\#(node.syntaxType).\#(child.memberCallName):
+              return \#(literal: child.identifier.description)
+            """#
           )
         }
       }

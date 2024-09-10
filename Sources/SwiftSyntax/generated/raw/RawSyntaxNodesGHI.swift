@@ -612,8 +612,8 @@ public struct RawGenericRequirementSyntax: RawSyntaxNodeProtocol {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var requirement: RawSyntax {
-    layoutView.children[1]!
+  public var requirement: Requirement {
+    layoutView.children[1].flatMap(Requirement.init)!
   }
   
   public var unexpectedBetweenRequirementAndTrailingComma: RawUnexpectedNodesSyntax? {
@@ -1161,8 +1161,8 @@ public struct RawIfConfigClauseSyntax: RawSyntaxNodeProtocol {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var elements: RawSyntax? {
-    layoutView.children[5]
+  public var elements: Elements? {
+    layoutView.children[5].flatMap(Elements.init)
   }
   
   public var unexpectedAfterElements: RawUnexpectedNodesSyntax? {
@@ -1365,8 +1365,8 @@ public struct RawIfExprSyntax: RawExprSyntaxNodeProtocol {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var elseBody: RawSyntax? {
-    layoutView.children[9]
+  public var elseBody: ElseBody? {
+    layoutView.children[9].flatMap(ElseBody.init)
   }
   
   public var unexpectedAfterElseBody: RawUnexpectedNodesSyntax? {

@@ -1485,9 +1485,9 @@ public struct RawTypeSpecifierListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: raw)
   }
   
-  public var elements: [RawSyntax] {
+  public var elements: [Element] {
     layoutView.children.map {
-      RawSyntax(raw: $0!)
+      Element($0!)!
     }
   }
 }
@@ -2612,8 +2612,8 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var yieldedExpressions: RawSyntax {
-    layoutView.children[3]!
+  public var yieldedExpressions: YieldedExpressions {
+    layoutView.children[3].flatMap(YieldedExpressions.init)!
   }
   
   public var unexpectedAfterYieldedExpressions: RawUnexpectedNodesSyntax? {

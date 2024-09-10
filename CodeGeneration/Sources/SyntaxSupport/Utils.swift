@@ -95,3 +95,13 @@ extension TokenSyntax {
     }
   }
 }
+
+extension TypeSyntaxProtocol {
+  var optionalWrapped: TypeSyntax {
+    if self.is(SomeOrAnyTypeSyntax.self) {
+      return "(\(self))?"
+    } else {
+      return "\(self)?"
+    }
+  }
+}

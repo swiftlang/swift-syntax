@@ -12,39 +12,37 @@
 
 import SwiftSyntax
 
-/// Instances of a conforming type should provide syntax type information to be used in code generation.
+/// Implementations should provide the definition of the syntax type to be generated..
 public protocol TypeConvertible {
-  /// Whether this is one of the syntax base nodes.
-  var isBase: Bool {
+  /// Whether this is one of the syntax base types.
+  var isBaseType: Bool {
     get
   }
 
-  /// The type name of this node in the SwiftSyntax module.
+  /// The name of this type in the SwiftSyntax module.
   var syntaxType: TypeSyntax {
     get
   }
 
-  /// For base nodes, the name of the corresponding protocol to which all the
-  /// concrete nodes that have this base kind, conform.
+  /// For base types, the name of the corresponding protocol to which all the
+  /// concrete types that have this base type, conform.
   var protocolType: TypeSyntax {
     get
   }
 
-  /// Whether the node is public API and not underscored/deprecated and can thus be referenced in docc links.
-  var isAvailableInDocc: Bool {
+  /// Whether this type is deprecated.
+  var isDeprecated: Bool {
     get
   }
+
+  /// If this type is non-experimental and non-deprecated, `content` wrapped in two backticks.
+  /// Otherwise, `content` in code font.
+  func doccLink(content: String) -> String
 }
 
 public extension TypeConvertible {
-  /// If this node is non-experimental a docc link wrapped in two backticks.
-  ///
-  /// For experimental nodes, the node's type name in code font.
+  /// Convenience version of ``doccLink(content:)`` with `content` set to the syntax type name.
   var doccLink: String {
-    if self.isAvailableInDocc {
-      return "``\(self.syntaxType)``"
-    } else {
-      return "`\(self.syntaxType)`"
-    }
+    self.doccLink(content: "\(self.syntaxType)")
   }
 }

@@ -22,15 +22,15 @@ import Utils
 func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
   SourceFileSyntax(leadingTrivia: copyrightHeader) {
     for node in SYNTAX_NODES.compactMap(\.layoutNode)
-    where nodesStartingWith.contains(node.kind.syntaxType.description.droppingLeadingUnderscores.first!) {
+    where nodesStartingWith.contains(node.syntaxType.description.droppingLeadingUnderscores.first!) {
       // We are actually handling this node now
       try! StructDeclSyntax(
         """
-        // MARK: - \(node.kind.syntaxType)
+        // MARK: - \(node.syntaxType)
 
         \(SwiftSyntax.Trivia(joining: [node.documentation, node.experimentalDocNote, node.grammar, node.containedIn]))\
-        \(node.node.apiAttributes())\
-        public struct \(node.kind.syntaxType): \(node.baseType.syntaxBaseName)Protocol, SyntaxHashable, \(node.base.leafProtocolType)
+        \(node.apiAttributes)\
+        public struct \(node.syntaxType): \(node.baseKind.protocolType), SyntaxHashable, \(node.baseKind.leafProtocolType)
         """
       ) {
         for childNodeChoices in node.node.childrenNodeChoices() {
@@ -76,11 +76,10 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           )
           let layoutList = ArrayExprSyntax {
             for child in node.children {
+              let baseExpr = ExprSyntax("\(child.baseCallName)")
               ArrayElementSyntax(
                 expression: MemberAccessExprSyntax(
-                  base: child.buildableType.optionalChained(
-                    expr: ExprSyntax("\(child.baseCallName)")
-                  ),
+                  base: child.isOptional ? "\(baseExpr)?" : baseExpr,
                   period: .periodToken(),
                   name: "raw"
                 )
@@ -133,26 +132,25 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           // Children properties
           // ===================
 
-          let childType: TypeSyntax =
-            child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
-          let type = child.isOptional ? TypeSyntax("\(childType)?") : TypeSyntax("\(childType)")
-
-          try! VariableDeclSyntax(
+          try VariableDeclSyntax(
             """
             \(child.documentation)\
-            \(child.apiAttributes)public var \(child.varDeclName): \(type)
+            \(child.apiAttributes)\
+            public var \(child.varDeclName): \(child.actualType)
             """
           ) {
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
               let optionalityMarker: TokenSyntax =
                 child.isOptional ? .infixQuestionMarkToken() : .exclamationMarkToken()
-              StmtSyntax("return Syntax(self).child(at: \(raw: index))\(optionalityMarker).cast(\(childType).self)")
+              StmtSyntax(
+                "return Syntax(self).child(at: \(raw: index))\(optionalityMarker).cast(\(child.syntaxType).self)"
+              )
             }
 
             AccessorDeclSyntax(
               """
               set(value) {
-                self = Syntax(self).replacingChild(at: \(raw: index), with: Syntax(value), arena: SyntaxArena()).cast(\(node.kind.syntaxType).self)
+                self = Syntax(self).replacingChild(at: \(raw: index), with: Syntax(value), arena: SyntaxArena()).cast(\(node.syntaxType).self)
               }
               """
             )
@@ -163,11 +161,11 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           // ===============
           // We don't currently support adding elements to a specific unexpected collection.
           // If needed, this could be added in the future, but for now withUnexpected should be sufficient.
-          if let childNode = SYNTAX_NODE_MAP[child.syntaxNodeKind]?.collectionNode,
+          if let childNode = child.node?.collectionNode,
             !child.isUnexpectedNodes,
             case .collection(_, collectionElementName: let childElt, _, _) = child.kind
           {
-            let childEltType = childNode.collectionElementType.syntaxBaseName
+            let childEltType = childNode.collectionElementType.syntaxType
 
             DeclSyntax(
               """
@@ -179,7 +177,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
               /// - returns: A copy of the receiver with the provided `\(raw: childElt)`
               ///            appended to its `\(child.identifier)` collection.
               @available(*, deprecated, message: "Use node.\(child.identifier).append(newElement) instead")
-              public func add\(raw: childElt)(_ element: \(childEltType)) -> \(node.kind.syntaxType) {
+              public func add\(raw: childElt)(_ element: \(childEltType)) -> \(node.syntaxType) {
                 var collection: RawSyntax
                 let arena = SyntaxArena()
                 if let col = raw.layoutView!.children[\(raw: index)] {
@@ -190,7 +188,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
                 }
                 return Syntax(self)
                   .replacingChild(at: \(raw: index), with: collection, rawNodeArena: arena, allocationArena: arena)
-                  .cast(\(node.kind.syntaxType).self)
+                  .cast(\(node.syntaxType).self)
               }
               """
             )

@@ -17,17 +17,13 @@ import Utils
 
 let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copyrightHeader) {
   for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode).filter({ $0.children.hasDeprecatedChild }) {
-    try ExtensionDeclSyntax("extension \(layoutNode.type.syntaxBaseName)") {
+    try ExtensionDeclSyntax("extension \(layoutNode.syntaxType)") {
       for child in layoutNode.children {
         if let deprecatedVarName = child.deprecatedVarName {
-          let childType: TypeSyntax =
-            child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
-          let type = child.isOptional ? TypeSyntax("\(childType)?") : childType
-
           DeclSyntax(
             """
             @available(*, deprecated, renamed: "\(child.identifier)")
-            public var \(deprecatedVarName): \(type) {
+            public var \(deprecatedVarName): \(child.actualType) {
               get {
                 return \(child.baseCallName)
               }
@@ -37,7 +33,7 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
             }
             """
           )
-          if let childNode = SYNTAX_NODE_MAP[child.syntaxNodeKind]?.collectionNode,
+          if let childNode = child.node?.collectionNode,
             !child.isUnexpectedNodes,
             case .collection(
               kind: _,
@@ -47,12 +43,12 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
             ) = child.kind,
             let deprecatedCollectionElementName
           {
-            let childEltType = childNode.collectionElementType.syntaxBaseName
+            let childEltType = childNode.collectionElementType.syntaxType
 
             DeclSyntax(
               """
               @available(*, deprecated, renamed: "add\(raw: collectionElementName)")
-              public func add\(raw: deprecatedCollectionElementName)(_ element: \(childEltType)) -> \(layoutNode.kind.syntaxType) {
+              public func add\(raw: deprecatedCollectionElementName)(_ element: \(childEltType)) -> \(layoutNode.actualType) {
                 return add\(raw: collectionElementName)(element)
               }
               """
@@ -75,7 +71,7 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
           }
         }.joined(separator: "")
 
-      let renamedName = "\(layoutNode.type.syntaxBaseName)(leadingTrivia:\(renamedArguments)trailingTrivia:)"
+      let renamedName = "\(layoutNode.syntaxType)(leadingTrivia:\(renamedArguments)trailingTrivia:)"
 
       try! InitializerDeclSyntax(
         """

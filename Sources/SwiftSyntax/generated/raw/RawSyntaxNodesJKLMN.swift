@@ -156,8 +156,8 @@ public struct RawKeyPathComponentSyntax: RawSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var component: RawSyntax {
-    layoutView.children[3]!
+  public var component: Component {
+    layoutView.children[3].flatMap(Component.init)!
   }
   
   public var unexpectedAfterComponent: RawUnexpectedNodesSyntax? {

@@ -1597,8 +1597,8 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var parameterClause: RawSyntax? {
-    layoutView.children[5]
+  public var parameterClause: ParameterClause? {
+    layoutView.children[5].flatMap(ParameterClause.init)
   }
   
   public var unexpectedBetweenParameterClauseAndEffectSpecifiers: RawUnexpectedNodesSyntax? {
@@ -1778,8 +1778,8 @@ public struct RawCodeBlockItemSyntax: RawSyntaxNodeProtocol {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var item: RawSyntax {
-    layoutView.children[1]!
+  public var item: Item {
+    layoutView.children[1].flatMap(Item.init)!
   }
   
   public var unexpectedBetweenItemAndSemicolon: RawUnexpectedNodesSyntax? {
@@ -2200,8 +2200,8 @@ public struct RawConditionElementSyntax: RawSyntaxNodeProtocol {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
   
-  public var condition: RawSyntax {
-    layoutView.children[1]!
+  public var condition: Condition {
+    layoutView.children[1].flatMap(Condition.init)!
   }
   
   public var unexpectedBetweenConditionAndTrailingComma: RawUnexpectedNodesSyntax? {

@@ -13,7 +13,6 @@
 public let GENERIC_NODES: [Node] = [
   Node(
     kind: .conformanceRequirement,
-    base: .syntax,
     nameForDiagnostics: "conformance requirement",
     children: [
       Child(
@@ -35,7 +34,6 @@ public let GENERIC_NODES: [Node] = [
 
   Node(
     kind: .genericParameterClause,
-    base: .syntax,
     nameForDiagnostics: "generic parameter clause",
     documentation: "The parameter clause that defines the generic parameters.",
     parserFunction: "parseGenericParameters",
@@ -74,14 +72,12 @@ public let GENERIC_NODES: [Node] = [
 
   Node(
     kind: .genericParameterList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.genericParameter]
   ),
 
   Node(
     kind: .genericParameter,
-    base: .syntax,
     nameForDiagnostics: "generic parameter",
     traits: [
       "WithTrailingComma",
@@ -128,14 +124,12 @@ public let GENERIC_NODES: [Node] = [
 
   Node(
     kind: .genericRequirementList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.genericRequirement]
   ),
 
   Node(
     kind: .genericRequirement,
-    base: .syntax,
     nameForDiagnostics: nil,
     traits: [
       "WithTrailingComma"
@@ -169,7 +163,6 @@ public let GENERIC_NODES: [Node] = [
 
   Node(
     kind: .genericWhereClause,
-    base: .syntax,
     nameForDiagnostics: "'where' clause",
     documentation:
       "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
@@ -190,7 +183,6 @@ public let GENERIC_NODES: [Node] = [
 
   Node(
     kind: .layoutRequirement,
-    base: .syntax,
     nameForDiagnostics: "layout requirement",
     children: [
       Child(
@@ -250,7 +242,6 @@ public let GENERIC_NODES: [Node] = [
 
   Node(
     kind: .primaryAssociatedTypeClause,
-    base: .syntax,
     nameForDiagnostics: "primary associated type clause",
     children: [
       Child(
@@ -273,14 +264,12 @@ public let GENERIC_NODES: [Node] = [
 
   Node(
     kind: .primaryAssociatedTypeList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.primaryAssociatedType]
   ),
 
   Node(
     kind: .primaryAssociatedType,
-    base: .syntax,
     nameForDiagnostics: nil,
     traits: [
       "WithTrailingComma"
@@ -301,7 +290,6 @@ public let GENERIC_NODES: [Node] = [
 
   Node(
     kind: .sameTypeRequirement,
-    base: .syntax,
     nameForDiagnostics: "same type requirement",
     children: [
       Child(

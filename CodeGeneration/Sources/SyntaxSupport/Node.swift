@@ -21,7 +21,7 @@ import SwiftSyntax
 ///    but fixed types.
 ///  - Collection nodes contains an arbitrary number of children but all those
 ///    children are of the same type.
-public class Node: NodeChoiceConvertible {
+public class Node: SyntaxNodeConvertible, NodeChoiceConvertible {
   fileprivate enum Data {
     case layout(children: [Child], traits: [String])
     case collection(choices: [SyntaxNodeKind])
@@ -38,7 +38,9 @@ public class Node: NodeChoiceConvertible {
   public let kind: SyntaxNodeKind
 
   /// The kind of node’s supertype. This kind must have `isBase == true`
-  public let base: SyntaxNodeKind
+  public var baseKind: SyntaxNodeKind {
+    self.kind.base
+  }
 
   public let experimentalFeature: ExperimentalFeature?
 
@@ -55,6 +57,10 @@ public class Node: NodeChoiceConvertible {
   /// function that should be invoked to create this node.
   public let parserFunction: TokenSyntax?
 
+  public let isOptional = false
+
+  public let isNode = true
+
   public var syntaxNodeKind: SyntaxNodeKind {
     self.kind
   }
@@ -69,7 +75,7 @@ public class Node: NodeChoiceConvertible {
   public var layoutNode: LayoutNode? {
     switch data {
     case .layout:
-      if kind.isBase {
+      if kind.isBaseType {
         return nil
       } else {
         return LayoutNode(node: self)
@@ -117,7 +123,6 @@ public class Node: NodeChoiceConvertible {
   /// Construct the specification for a layout syntax node.
   init(
     kind: SyntaxNodeKind,
-    base: SyntaxNodeKind,
     experimentalFeature: ExperimentalFeature? = nil,
     nameForDiagnostics: String?,
     documentation: String? = nil,
@@ -125,11 +130,10 @@ public class Node: NodeChoiceConvertible {
     traits: [String] = [],
     children: [Child] = []
   ) {
-    precondition(base != .syntaxCollection)
-    precondition(base.isBase, "unknown base kind '\(base)' for node '\(kind)'")
+    precondition(kind.base != .syntaxCollection)
+    precondition(kind.base.isBaseType, "unknown base kind '\(kind.base)' for node '\(kind)'")
 
     self.kind = kind
-    self.base = base
     self.experimentalFeature = experimentalFeature
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
@@ -219,18 +223,14 @@ public class Node: NodeChoiceConvertible {
 
     let list =
       childIn
-      .map {
-        if let childName = $0.child?.identifier {
+      .map { (node, child) in
+        if let childName = child?.identifier {
           // This will repeat the syntax type before and after the dot, which is
           // a little unfortunate, but it's the only way I found to get docc to
           // generate a fully-qualified type + member.
-          if $0.node.isAvailableInDocc {
-            return " - \($0.node.doccLink).``\($0.node.syntaxType)/\(childName)``"
-          } else {
-            return " - \($0.node.doccLink).`\($0.node.syntaxType)/\(childName)`"
-          }
+          return " - \(node.doccLink).\(node.doccLink(content: "\(node.syntaxType)/\(childName)"))"
         } else {
-          return " - \($0.node.doccLink)"
+          return " - \(node.doccLink)"
         }
       }
       .joined(separator: "\n")
@@ -252,8 +252,8 @@ public class Node: NodeChoiceConvertible {
 
     let list =
       SYNTAX_NODES
-      .filter { $0.base == self.kind && !$0.isExperimental && !$0.kind.isDeprecated }
-      .map { "- \($0.kind.doccLink)" }
+      .filter { $0.baseKind == self.kind && !$0.isExperimental && !$0.isDeprecated }
+      .map { "- \($0.doccLink)" }
       .joined(separator: "\n")
 
     guard !list.isEmpty else {
@@ -274,7 +274,6 @@ public class Node: NodeChoiceConvertible {
   /// `base` must be `.syntaxCollection`.
   init(
     kind: SyntaxNodeKind,
-    base: SyntaxNodeKind,
     experimentalFeature: ExperimentalFeature? = nil,
     nameForDiagnostics: String?,
     documentation: String? = nil,
@@ -282,8 +281,7 @@ public class Node: NodeChoiceConvertible {
     elementChoices: [SyntaxNodeKind]
   ) {
     self.kind = kind
-    precondition(base == .syntaxCollection)
-    self.base = base
+    precondition(kind.base == .syntaxCollection)
     self.experimentalFeature = experimentalFeature
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)

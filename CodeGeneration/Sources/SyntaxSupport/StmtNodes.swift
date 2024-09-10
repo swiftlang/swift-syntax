@@ -13,7 +13,6 @@
 public let STMT_NODES: [Node] = [
   Node(
     kind: .availabilityCondition,
-    base: .syntax,
     nameForDiagnostics: "availability condition",
     children: [
       Child(
@@ -38,7 +37,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .breakStmt,
-    base: .stmt,
     nameForDiagnostics: "'break' statement",
     children: [
       Child(
@@ -56,21 +54,18 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .switchCaseItemList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.switchCaseItem]
   ),
 
   Node(
     kind: .catchClauseList,
-    base: .syntaxCollection,
     nameForDiagnostics: "'catch' clause",
     elementChoices: [.catchClause]
   ),
 
   Node(
     kind: .catchClause,
-    base: .syntax,
     nameForDiagnostics: "'catch' clause",
     parserFunction: "parseCatchClause",
     traits: ["WithCodeBlock"],
@@ -92,14 +87,12 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .catchItemList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.catchItem]
   ),
 
   Node(
     kind: .catchItem,
-    base: .syntax,
     nameForDiagnostics: nil,
     traits: [
       "WithTrailingComma"
@@ -125,14 +118,12 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .conditionElementList,
-    base: .syntaxCollection,
     nameForDiagnostics: nil,
     elementChoices: [.conditionElement]
   ),
 
   Node(
     kind: .conditionElement,
-    base: .syntax,
     nameForDiagnostics: nil,
     traits: [
       "WithTrailingComma"
@@ -169,7 +160,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .continueStmt,
-    base: .stmt,
     nameForDiagnostics: "'continue' statement",
     children: [
       Child(
@@ -187,7 +177,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .deferStmt,
-    base: .stmt,
     nameForDiagnostics: "'defer' statement",
     traits: [
       "WithCodeBlock"
@@ -206,7 +195,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .doStmt,
-    base: .stmt,
     nameForDiagnostics: "'do' statement",
     traits: [
       "WithCodeBlock"
@@ -236,7 +224,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .expressionStmt,
-    base: .stmt,
     nameForDiagnostics: "expression",
     children: [
       Child(
@@ -248,7 +235,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .fallThroughStmt,
-    base: .stmt,
     nameForDiagnostics: "'fallthrough' statement",
     children: [
       Child(
@@ -260,7 +246,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .forStmt,
-    base: .stmt,
     nameForDiagnostics: "'for' statement",
     traits: [
       "WithCodeBlock"
@@ -318,7 +303,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .discardStmt,
-    base: .stmt,
     nameForDiagnostics: "'discard' statement",
     children: [
       Child(
@@ -334,7 +318,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .guardStmt,
-    base: .stmt,
     nameForDiagnostics: "'guard' statement",
     traits: [
       "WithCodeBlock"
@@ -363,7 +346,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .labeledStmt,
-    base: .stmt,
     nameForDiagnostics: "labeled statement",
     children: [
       Child(
@@ -386,7 +368,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .matchingPatternCondition,
-    base: .syntax,
     nameForDiagnostics: "pattern matching",
     children: [
       Child(
@@ -411,7 +392,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .optionalBindingCondition,
-    base: .syntax,
     nameForDiagnostics: "optional binding",
     children: [
       Child(
@@ -441,7 +421,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .repeatStmt,
-    base: .stmt,
     nameForDiagnostics: "'repeat' statement",
     traits: [
       "WithCodeBlock"
@@ -470,7 +449,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .returnStmt,
-    base: .stmt,
     nameForDiagnostics: "'return' statement",
     children: [
       Child(
@@ -487,7 +465,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .throwStmt,
-    base: .stmt,
     nameForDiagnostics: "'throw' statement",
     children: [
       Child(
@@ -503,7 +480,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .whereClause,
-    base: .syntax,
     nameForDiagnostics: "'where' clause",
     children: [
       Child(
@@ -520,7 +496,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .whileStmt,
-    base: .stmt,
     nameForDiagnostics: "'while' statement",
     traits: [
       "WithCodeBlock"
@@ -543,7 +518,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .yieldedExpressionsClause,
-    base: .syntax,
     nameForDiagnostics: nil,
     children: [
       Child(
@@ -564,7 +538,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .yieldStmt,
-    base: .stmt,
     nameForDiagnostics: "'yield' statement",
     children: [
       Child(
@@ -592,7 +565,6 @@ public let STMT_NODES: [Node] = [
 
   Node(
     kind: .thenStmt,
-    base: .stmt,
     experimentalFeature: .thenStatements,
     nameForDiagnostics: "'then' statement",
     documentation: """

@@ -119,27 +119,27 @@ extension LayoutNode {
         childName = child.identifier
       }
 
-      if child.buildableType.isBuilderInitializable {
+      if let initializableBuilder = child.initializableBuilder {
         // Allow initializing certain syntax collections with result builders
         shouldCreateInitializer = true
-        let builderInitializableType = child.buildableType.builderInitializableType
-        if child.buildableType.builderInitializableType != child.buildableType {
-          let param = Node.from(type: child.buildableType).layoutNode!.singleNonDefaultedChild
+        let syntaxNodeConvertible: any SyntaxNodeConvertible
+        switch initializableBuilder {
+        case .otherType(let type, let parameterLabel):
           if child.isOptional {
-            produceExpr = ExprSyntax(
-              "\(childName)Builder().map { \(child.buildableType.syntaxBaseName)(\(param.labelDeclName): $0) }"
-            )
+            produceExpr =
+              "\(childName)Builder().map { \(child.syntaxType)(\(parameterLabel): $0) }"
           } else {
-            produceExpr = ExprSyntax(
-              "\(child.buildableType.syntaxBaseName)(\(param.labelDeclName): \(childName)Builder())"
-            )
+            produceExpr =
+              "\(child.syntaxType)(\(parameterLabel): \(childName)Builder())"
           }
-        } else {
-          produceExpr = ExprSyntax("\(childName)Builder()")
+          syntaxNodeConvertible = type
+        case .sameType:
+          produceExpr = "\(childName)Builder()"
+          syntaxNodeConvertible = child
         }
         builderParameters.append(
           FunctionParameterSyntax(
-            "@\(builderInitializableType.resultBuilderType) \(childName)Builder: () throws-> \(builderInitializableType.syntax)"
+            "@\(syntaxNodeConvertible.resultBuilderType) \(childName)Builder: () throws-> \(syntaxNodeConvertible.actualType)"
           )
         )
       } else {
@@ -151,7 +151,7 @@ extension LayoutNode {
           FunctionParameterSyntax(
             firstName: childName.nonVarCallNameOrLabelDeclName,
             colon: .colonToken(),
-            type: child.parameterType,
+            type: child.parameterAnyType,
             defaultValue: child.defaultInitialization
           )
         )
@@ -205,8 +205,9 @@ fileprivate func convertFromSyntaxProtocolToSyntaxType(
     childName = child.identifier
   }
 
-  if child.buildableType.isBaseType && !child.kind.isNodeChoices {
-    return ExprSyntax("\(child.buildableType.syntaxBaseName)(fromProtocol: \(childName.declNameOrVarCallName))")
+  if child.isBaseNode {
+    return "\(child.syntaxType)(fromProtocol: \(childName))"
+  } else {
+    return "\(childName)"
   }
-  return ExprSyntax("\(childName.declNameOrVarCallName)")
 }

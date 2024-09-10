@@ -12,32 +12,42 @@
 
 import SwiftSyntax
 
-/// A wrapper of ``SyntaxNodeKind`` providing syntax type information for the raw side.
-public struct RawSyntaxNodeKind: TypeConvertible {
-  public var syntaxNodeKind: SyntaxNodeKind
+public extension SyntaxNodeKind {
+  /// A wrapper of ``SyntaxNodeKind`` providing syntax type information for the raw side.
+  struct Raw: SyntaxNodeKindProtocol {
+    public var nonRaw: SyntaxNodeKind
 
-  public var isBase: Bool {
-    self.syntaxNodeKind.isBase
-  }
+    public var raw: Self {
+      self
+    }
 
-  public var syntaxType: TypeSyntax {
-    "Raw\(self.syntaxNodeKind.syntaxType)"
-  }
+    public var isBaseType: Bool {
+      self.nonRaw.isBaseType
+    }
 
-  public var protocolType: TypeSyntax {
-    switch self {
-    case .syntax, .syntaxCollection:
-      return "RawSyntaxNodeProtocol"
-    default:
-      return "\(self.syntaxType)NodeProtocol"
+    public var syntaxType: TypeSyntax {
+      "Raw\(self.nonRaw.syntaxType)"
+    }
+
+    public var protocolType: TypeSyntax {
+      switch self {
+      case .syntax, .syntaxCollection:
+        return "RawSyntaxNodeProtocol"
+      default:
+        return "\(self.syntaxType)NodeProtocol"
+      }
+    }
+
+    public func doccLink(content: String) -> String {
+      "`\(content)`"
+    }
+
+    public static func ~= (lhs: SyntaxNodeKind, rhs: Self) -> Bool {
+      lhs == rhs.nonRaw
     }
   }
 
-  public var isAvailableInDocc: Bool {
-    false
-  }
-
-  public static func ~= (lhs: SyntaxNodeKind, rhs: Self) -> Bool {
-    lhs == rhs.syntaxNodeKind
+  var raw: Raw {
+    Raw(nonRaw: self)
   }
 }

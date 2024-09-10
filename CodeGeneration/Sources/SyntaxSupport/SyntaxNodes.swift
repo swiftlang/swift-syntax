@@ -24,8 +24,8 @@ private let unsortedSyntaxNodes: [Node] =
 public let SYNTAX_NODES: [Node] =
   unsortedSyntaxNodes
   .sorted { (lhs: Node, rhs: Node) -> Bool in
-    let lhsSortKey = lhs.kind.syntaxType.description.droppingLeadingUnderscores
-    let rhsSortKey = rhs.kind.syntaxType.description.droppingLeadingUnderscores
+    let lhsSortKey = lhs.syntaxType.description.droppingLeadingUnderscores
+    let rhsSortKey = rhs.syntaxType.description.droppingLeadingUnderscores
     return lhsSortKey < rhsSortKey
   }
 
@@ -34,4 +34,4 @@ public let SYNTAX_NODE_MAP: [SyntaxNodeKind: Node] = Dictionary(
   uniqueKeysWithValues: SYNTAX_NODES.map { node in (node.kind, node) }
 )
 
-public let NON_BASE_SYNTAX_NODES = SYNTAX_NODES.filter { !$0.kind.isBase }
+public let NON_BASE_SYNTAX_NODES = SYNTAX_NODES.filter { !$0.isBaseType }

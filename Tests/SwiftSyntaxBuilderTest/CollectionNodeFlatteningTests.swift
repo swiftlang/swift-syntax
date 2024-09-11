@@ -75,4 +75,31 @@ final class CollectionNodeFlatteningTests: XCTestCase {
       """
     )
   }
+
+  func test_FlattenCodeBlockItemListWithCodeBlockInterpolated() {
+    let block = CodeBlockItemListSyntax {
+      "let a = 1"
+      "let b = 2"
+      "let c = 3"
+    }
+
+    let buildable = CodeBlockItemListSyntax {
+      "let one = object.methodOne()"
+      "let two = object.methodTwo()"
+      "let three = {\(block)}()"
+    }
+
+    assertBuildResult(
+      buildable,
+      """
+      let one = object.methodOne()
+      let two = object.methodTwo()
+      let three = {
+          let a = 1
+          let b = 2
+          let c = 3
+      }()
+      """
+    )
+  }
 }

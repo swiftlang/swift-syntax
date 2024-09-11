@@ -40,6 +40,18 @@ extension CodeBlockItemListBuilder {
   public static func buildExpression(_ expression: some Sequence<DeclSyntaxProtocol>) -> Component {
     buildExpression(expression.map { CodeBlockItemSyntax(item: .decl(DeclSyntax($0))) })
   }
+
+  public static func buildFinalResult(_ component: Component) -> CodeBlockItemListSyntax {
+    .init(
+      component.enumerated().map { (index, expression) in
+        if index > component.startIndex, !expression.leadingTrivia.contains(where: \.isNewline) {
+          return expression.with(\.leadingTrivia, .newline.merging(expression.leadingTrivia))
+        } else {
+          return expression
+        }
+      }
+    )
+  }
 }
 
 extension ConditionElementListBuilder {

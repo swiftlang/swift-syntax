@@ -22,7 +22,7 @@ extension SequentialScopeSyntax {
   /// and included `IntroducingToSequentialParentScopeSyntax` children
   /// scopes that match the lookup.
   ///
-  /// Example:
+  /// ### Example
   /// ```swift
   /// func foo() {
   ///   let a = 1

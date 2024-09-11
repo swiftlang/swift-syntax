@@ -176,7 +176,7 @@ import SwiftSyntax
   /// All names introduced by the closure signature.
   /// Could be closure captures or (shorthand) parameters.
   ///
-  /// Example:
+  /// ### Example
   /// ```swift
   /// let x = { [weak self, a] b, _ in
   ///   // <--
@@ -222,7 +222,7 @@ import SwiftSyntax
 
   /// Finds parent scope, omitting ancestor `if` statements if part of their `else if` clause.
   ///
-  /// Example:
+  /// ### Example
   /// ```swift
   /// func foo() {
   ///   if let a = x {
@@ -262,7 +262,7 @@ import SwiftSyntax
   /// Lookup triggered from inside of `else`
   /// clause is immediately forwarded to parent scope.
   ///
-  /// Example:
+  /// ### Example
   /// ```swift
   /// if let a = x {
   ///   // <-- a is visible here
@@ -290,6 +290,24 @@ import SwiftSyntax
       LookupName.getNames(from: member.decl)
     }
   }
+
+  /// Creates a result from associated type declarations
+  /// made by it's members.
+  func lookupAssociatedTypeDeclarations(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig
+  ) -> [LookupResult] {
+    let filteredNames = members.flatMap { member in
+      guard member.decl.kind == .associatedTypeDecl else { return [LookupName]() }
+
+      return LookupName.getNames(from: member.decl)
+    }.filter { name in
+      checkIdentifier(identifier, refersTo: name, at: lookUpPosition)
+    }
+
+    return filteredNames.isEmpty ? [] : [.fromScope(self, withNames: filteredNames)]
+  }
 }
 
 @_spi(Experimental) extension GuardStmtSyntax: IntroducingToSequentialParentScopeSyntax {
@@ -308,7 +326,7 @@ import SwiftSyntax
   /// Lookup triggered from within of the `else` body
   /// returns no names.
   ///
-  /// Example:
+  /// ### Example
   /// ```swift
   /// guard let a = x else {
   ///   return // a is not visible here
@@ -330,10 +348,10 @@ import SwiftSyntax
   }
 }
 
-@_spi(Experimental) extension ActorDeclSyntax: TypeScopeSyntax {}
-@_spi(Experimental) extension ClassDeclSyntax: TypeScopeSyntax {}
-@_spi(Experimental) extension StructDeclSyntax: TypeScopeSyntax {}
-@_spi(Experimental) extension EnumDeclSyntax: TypeScopeSyntax {}
+@_spi(Experimental) extension ActorDeclSyntax: TypeScopeSyntax, WithGenericParametersScopeSyntax {}
+@_spi(Experimental) extension ClassDeclSyntax: TypeScopeSyntax, WithGenericParametersScopeSyntax {}
+@_spi(Experimental) extension StructDeclSyntax: TypeScopeSyntax, WithGenericParametersScopeSyntax {}
+@_spi(Experimental) extension EnumDeclSyntax: TypeScopeSyntax, WithGenericParametersScopeSyntax {}
 @_spi(Experimental) extension ExtensionDeclSyntax: TypeScopeSyntax {}
 
 @_spi(Experimental) extension AccessorDeclSyntax: ScopeSyntax {
@@ -356,7 +374,95 @@ import SwiftSyntax
 
 @_spi(Experimental) extension CatchClauseSyntax: ScopeSyntax {
   /// Implicit `error` when there are no catch items.
-  public var introducedNames: [LookupName] {
+  @_spi(Experimental) public var introducedNames: [LookupName] {
     return catchItems.isEmpty ? [.implicit(.error(self))] : []
+  }
+}
+
+@_spi(Experimental) extension SwitchCaseSyntax: ScopeSyntax {
+  /// Names introduced within `case` items.
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    label.as(SwitchCaseLabelSyntax.self)?.caseItems.flatMap { child in
+      LookupName.getNames(from: child.pattern)
+    } ?? []
+  }
+}
+
+@_spi(Experimental) extension ProtocolDeclSyntax: ScopeSyntax {
+  /// Protocol declarations don't introduce names by themselves.
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    []
+  }
+
+  /// For the lookup initiated from inside primary
+  /// associated type clause, this function also finds
+  /// all associated type declarations made inside the
+  /// protocol member block.
+  ///
+  /// ### Example
+  /// ```swift
+  /// class A {}
+  ///
+  /// protocol Foo<A/*<-- lookup here>*/> {
+  ///  associatedtype A
+  ///  class A {}
+  /// }
+  /// ```
+  /// For the lookup started at the primary associated type `A`,
+  /// the function returns exactly two results. First associated with the member
+  /// block that consists of the `associatedtype A` declaration and
+  /// the latter one from the file scope and `class A` exactly in this order.
+  public func lookup(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig
+  ) -> [LookupResult] {
+    var results: [LookupResult] = []
+
+    if let primaryAssociatedTypeClause,
+      primaryAssociatedTypeClause.range.contains(lookUpPosition)
+    {
+      results = memberBlock.lookupAssociatedTypeDeclarations(
+        identifier,
+        at: lookUpPosition,
+        with: config
+      )
+    }
+
+    return results + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
+  }
+}
+
+@_spi(Experimental) extension GenericParameterClauseSyntax: GenericParameterScopeSyntax {
+  /// Generic parameter names introduced by this clause.
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    parameters.children(viewMode: .fixedUp).flatMap { child in
+      LookupName.getNames(from: child, accessibleAfter: child.endPosition)
+    }
+  }
+}
+
+@_spi(Experimental) extension FunctionDeclSyntax: WithGenericParametersScopeSyntax {
+  /// Function parameters introduced by this function's signature.
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    signature.parameterClause.parameters.flatMap { parameter in
+      LookupName.getNames(from: parameter)
+    }
+  }
+}
+
+@_spi(Experimental) extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax {
+  /// Parameters introduced by this subscript.
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    parameterClause.parameters.flatMap { parameter in
+      LookupName.getNames(from: parameter)
+    }
+  }
+}
+
+@_spi(Experimental) extension TypeAliasDeclSyntax: WithGenericParametersScopeSyntax {
+  /// Type alias doesn't introduce any names to it's children.
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    []
   }
 }

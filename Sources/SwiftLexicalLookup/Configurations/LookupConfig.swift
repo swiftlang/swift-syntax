@@ -10,8 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-import Foundation
-
 @_spi(Experimental) public struct LookupConfig {
   /// Specifies behavior of file scope.
   @_spi(Experimental) public var fileScopeHandling: FileScopeHandlingConfig

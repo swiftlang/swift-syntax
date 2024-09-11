@@ -528,5 +528,15 @@ public func collapse<Node: SyntaxProtocol>(
     break
   }
 
-  return expansions.joined(separator: separator)
+  // Join the expansions ensuring `separator` between them.
+  var collapsed = ""
+  for expansion in expansions {
+    if collapsed.isEmpty || expansion.hasPrefix(separator) {
+      collapsed.append(expansion)
+    } else {
+      collapsed.append(separator + expansion)
+    }
+  }
+
+  return collapsed
 }

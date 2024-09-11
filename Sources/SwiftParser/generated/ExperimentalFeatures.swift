@@ -16,7 +16,7 @@ extension Parser {
   @_spi(ExperimentalLanguageFeatures)
   public struct ExperimentalFeatures: OptionSet, Sendable {
     public let rawValue: UInt
-    
+
     public init(rawValue: UInt) {
       self.rawValue = rawValue
     }
@@ -26,16 +26,16 @@ extension Parser {
 extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of reference bindings.
   public static let referenceBindings = Self (rawValue: 1 << 0)
-  
+
   /// Whether to enable the parsing of 'then' statements.
   public static let thenStatements = Self (rawValue: 1 << 1)
-  
+
   /// Whether to enable the parsing of 'do' expressions.
   public static let doExpressions = Self (rawValue: 1 << 2)
-  
+
   /// Whether to enable the parsing of NonEscableTypes.
   public static let nonescapableTypes = Self (rawValue: 1 << 3)
-  
+
   /// Whether to enable the parsing of trailing comma.
   public static let trailingComma = Self (rawValue: 1 << 4)
 }

@@ -64,7 +64,7 @@ public enum TokenKind: Hashable, Sendable {
   case stringSegment(String)
   case unknown(String)
   case wildcard
-  
+
   /// The textual representation of this token kind.
   @_spi(Testing)
   public var text: String {
@@ -171,7 +171,7 @@ public enum TokenKind: Hashable, Sendable {
       return "_"
     }
   }
-  
+
   /// If this token kind always has the same syntax text, that syntax text, otherwise `nil`.
   @_spi(RawSyntax)
   public var defaultText: SyntaxText? {
@@ -254,7 +254,7 @@ public enum TokenKind: Hashable, Sendable {
       return ""
     }
   }
-  
+
   /// Returns `true` if the token is a Swift punctuator.
   ///
   /// Punctuation tokens generally separate identifiers from each other. For
@@ -532,7 +532,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   case stringSegment
   case unknown
   case wildcard
-  
+
   @_spi(RawSyntax)
   public var defaultText: SyntaxText? {
     switch self {
@@ -612,7 +612,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return nil
     }
   }
-  
+
   /// Returns `true` if the token is a Swift punctuator.
   ///
   /// Punctuation tokens generally separate identifiers from each other. For
@@ -870,7 +870,7 @@ extension TokenKind {
       return .wildcard
     }
   }
-  
+
   /// Returns the ``RawTokenKind`` of this ``TokenKind`` and, if this ``TokenKind``
   /// has associated text, the associated text, otherwise `nil`.
   @_spi(RawSyntax)

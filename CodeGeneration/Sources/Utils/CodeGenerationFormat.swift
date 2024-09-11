@@ -104,6 +104,25 @@ public class CodeGenerationFormat: BasicFormat {
     }
   }
 
+  public override func requiresIndent(_ node: some SyntaxProtocol) -> Bool {
+    switch node.kind {
+    case .arrayElementList, .dictionaryElementList, .functionParameterList, .labeledExprList:
+      let indentManually = node.children(viewMode: .sourceAccurate).count > maxElementsOnSameLine
+      if indentManually {
+        return false
+      }
+      let startsOnNewline =
+        node.leadingTrivia.contains(where: \.isNewline)
+        || node.previousToken(viewMode: .sourceAccurate)?.trailingTrivia.contains(where: \.isNewline) ?? false
+      if !startsOnNewline {
+        return false
+      }
+    default:
+      break
+    }
+    return super.requiresIndent(node)
+  }
+
   // MARK: - Private
 
   private func shouldBeSeparatedByTwoNewlines(node: CodeBlockItemSyntax) -> Bool {
@@ -114,9 +133,9 @@ public class CodeGenerationFormat: BasicFormat {
 
   private func ensuringTwoLeadingNewlines<NodeType: SyntaxProtocol>(node: NodeType) -> NodeType {
     if node.leadingTrivia.first?.isNewline ?? false {
-      return node.with(\.leadingTrivia, indentedNewline + node.leadingTrivia)
+      return node.with(\.leadingTrivia, .newline + node.leadingTrivia)
     } else {
-      return node.with(\.leadingTrivia, indentedNewline + indentedNewline + node.leadingTrivia)
+      return node.with(\.leadingTrivia, .newlines(2) + node.leadingTrivia)
     }
   }
 
@@ -126,14 +145,20 @@ public class CodeGenerationFormat: BasicFormat {
   ) -> [SyntaxType] {
     increaseIndentationLevel()
     var formattedChildren = children.map {
-      self.rewrite($0.cast(SyntaxType.self)).cast(SyntaxType.self)
+      return self.rewrite($0.cast(SyntaxType.self)).cast(SyntaxType.self)
     }
-    formattedChildren = formattedChildren.map {
-      if $0.leadingTrivia.first?.isNewline == true {
-        return $0
-      } else {
-        return $0.with(\.leadingTrivia, indentedNewline + $0.leadingTrivia)
+    formattedChildren = formattedChildren.map { child in
+      var child = child
+      child.trailingTrivia = Trivia(pieces: child.trailingTrivia.drop(while: \.isSpaceOrTab))
+
+      let startsOnNewline =
+        child.leadingTrivia.contains(where: \.isNewline)
+        || child.previousToken(viewMode: .sourceAccurate)?.trailingTrivia.contains(where: \.isNewline) ?? false
+
+      if !startsOnNewline {
+        child.leadingTrivia = indentedNewline + child.leadingTrivia
       }
+      return child
     }
     decreaseIndentationLevel()
     if let lastChild = formattedChildren.last {

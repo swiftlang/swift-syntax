@@ -49,11 +49,11 @@ extension ArrayElementListSyntax {
 @resultBuilder
 public struct AttributeListBuilder: ListBuilder {
   public typealias FinalResult = AttributeListSyntax
-  
+
   public static func buildExpression(_ expression: AttributeSyntax) -> Component {
     buildExpression(.init(expression))
   }
-  
+
   public static func buildExpression(_ expression: IfConfigDeclSyntax) -> Component {
     buildExpression(.init(expression))
   }
@@ -515,15 +515,15 @@ extension PlatformVersionItemListSyntax {
 @resultBuilder
 public struct PrecedenceGroupAttributeListBuilder: ListBuilder {
   public typealias FinalResult = PrecedenceGroupAttributeListSyntax
-  
+
   public static func buildExpression(_ expression: PrecedenceGroupRelationSyntax) -> Component {
     buildExpression(.init(expression))
   }
-  
+
   public static func buildExpression(_ expression: PrecedenceGroupAssignmentSyntax) -> Component {
     buildExpression(.init(expression))
   }
-  
+
   public static func buildExpression(_ expression: PrecedenceGroupAssociativitySyntax) -> Component {
     buildExpression(.init(expression))
   }
@@ -579,19 +579,19 @@ extension SimpleStringLiteralSegmentListSyntax {
 @resultBuilder
 public struct SpecializeAttributeArgumentListBuilder: ListBuilder {
   public typealias FinalResult = SpecializeAttributeArgumentListSyntax
-  
+
   public static func buildExpression(_ expression: LabeledSpecializeArgumentSyntax) -> Component {
     buildExpression(.init(expression))
   }
-  
+
   public static func buildExpression(_ expression: SpecializeAvailabilityArgumentSyntax) -> Component {
     buildExpression(.init(expression))
   }
-  
+
   public static func buildExpression(_ expression: SpecializeTargetFunctionArgumentSyntax) -> Component {
     buildExpression(.init(expression))
   }
-  
+
   public static func buildExpression(_ expression: GenericWhereClauseSyntax) -> Component {
     buildExpression(.init(expression))
   }
@@ -608,11 +608,11 @@ extension SpecializeAttributeArgumentListSyntax {
 @resultBuilder
 public struct StringLiteralSegmentListBuilder: ListBuilder {
   public typealias FinalResult = StringLiteralSegmentListSyntax
-  
+
   public static func buildExpression(_ expression: StringSegmentSyntax) -> Component {
     buildExpression(.init(expression))
   }
-  
+
   public static func buildExpression(_ expression: ExpressionSegmentSyntax) -> Component {
     buildExpression(.init(expression))
   }
@@ -642,11 +642,11 @@ extension SwitchCaseItemListSyntax {
 @resultBuilder
 public struct SwitchCaseListBuilder: ListBuilder {
   public typealias FinalResult = SwitchCaseListSyntax
-  
+
   public static func buildExpression(_ expression: SwitchCaseSyntax) -> Component {
     buildExpression(.init(expression))
   }
-  
+
   public static func buildExpression(_ expression: IfConfigDeclSyntax) -> Component {
     buildExpression(.init(expression))
   }
@@ -689,11 +689,11 @@ extension TupleTypeElementListSyntax {
 @resultBuilder
 public struct TypeSpecifierListBuilder: ListBuilder {
   public typealias FinalResult = TypeSpecifierListSyntax
-  
+
   public static func buildExpression(_ expression: SimpleTypeSpecifierSyntax) -> Component {
     buildExpression(.init(expression))
   }
-  
+
   #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
   #endif

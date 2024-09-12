@@ -69,6 +69,7 @@ public struct Trivia: Sendable {
 
   /// Creates a new ``Trivia`` by merging in the given trivia. Only includes one
   /// copy of a common prefix of `self` and `trivia`.
+  @available(*, deprecated, message: "Use mergingCommonPrefix(trivia) or mergingCommonSuffix(trivia) instead")
   public func merging(_ trivia: Trivia?) -> Trivia {
     guard let trivia else {
       return self
@@ -84,14 +85,67 @@ public struct Trivia: Sendable {
     return lhs.appending(rhs)
   }
 
+  /// Creates a new ``Trivia`` by merging in the given trivia. Only includes one
+  /// copy of the common prefix of `self` and `trivia`.
+  public func mergingCommonPrefix(_ trivia: Trivia?) -> Trivia {
+    guard let trivia else {
+      return self
+    }
+
+    let lhs = self.decomposed
+    let rhs = trivia.decomposed
+    let commonPrefix = zip(lhs, rhs).prefix(while: ==)
+    if commonPrefix.isEmpty {
+      return lhs + rhs
+    } else {
+      return lhs + Trivia(pieces: rhs.dropFirst(commonPrefix.count))
+    }
+  }
+
+  /// Creates a new ``Trivia`` by merging in the given trivia. Only includes one
+  /// copy of the common suffix of `self` and `trivia`.
+  public func mergingCommonSuffix(_ trivia: Trivia?) -> Trivia {
+    guard let trivia else {
+      return self
+    }
+
+    let lhs = self.decomposed
+    let rhs = trivia.decomposed
+    let commonSuffix = zip(lhs.reversed(), rhs.reversed()).prefix(while: ==)
+    if commonSuffix.isEmpty {
+      return lhs + rhs
+    } else {
+      return Trivia(pieces: lhs.dropLast(commonSuffix.count)) + rhs
+    }
+  }
+
   /// Creates a new ``Trivia`` by merging the leading and trailing ``Trivia``
   /// of `triviaOf` into the end of `self`. Only includes one copy of any
   /// common prefixes.
+  @available(*, deprecated, message: "Use mergingCommonPrefix(triviaOf:) or mergingCommonSuffix(triviaOf:) instead")
   public func merging(triviaOf node: (some SyntaxProtocol)?) -> Trivia {
     guard let node else {
       return self
     }
     return merging(node.leadingTrivia).merging(node.trailingTrivia)
+  }
+
+  /// Creates a new ``Trivia`` by merging ``SyntaxProtocol/leadingTrivia`` and ``SyntaxProtocol/trailingTrivia`` of
+  /// `node` into the end of `self`. Only includes one copy of any common prefixes.
+  public func mergingCommonPrefix(triviaOf node: (some SyntaxProtocol)?) -> Trivia {
+    guard let node else {
+      return self
+    }
+    return self.mergingCommonPrefix(node.leadingTrivia).mergingCommonPrefix(node.trailingTrivia)
+  }
+
+  /// Creates a new ``Trivia`` by merging ``SyntaxProtocol/leadingTrivia`` and ``SyntaxProtocol/trailingTrivia`` of
+  /// `node` into the end of `self`. Only includes one copy of any common suffixes.
+  public func mergingCommonSuffix(triviaOf node: (some SyntaxProtocol)?) -> Trivia {
+    guard let node else {
+      return self
+    }
+    return self.mergingCommonSuffix(node.leadingTrivia).mergingCommonSuffix(node.trailingTrivia)
   }
 
   /// Concatenates two collections of ``Trivia`` into one collection.
@@ -213,5 +267,19 @@ extension RawTriviaPiece: CustomDebugStringConvertible {
   /// Do not rely on this output being stable.
   public var debugDescription: String {
     TriviaPiece(raw: self).debugDescription
+  }
+}
+
+public extension SyntaxProtocol {
+  /// Create a new ``Trivia`` by merging ``SyntaxProtocol/leadingTrivia`` and ``SyntaxProtocol/trailingTrivia`` of
+  /// this node, including only one copy of their common prefix.
+  var triviaByMergingCommonPrefix: Trivia {
+    self.leadingTrivia.mergingCommonPrefix(self.trailingTrivia)
+  }
+
+  /// Create a new ``Trivia`` by merging ``SyntaxProtocol/leadingTrivia`` and ``SyntaxProtocol/trailingTrivia`` of
+  /// this node, including only one copy of their common suffix.
+  var triviaByMergingCommonSuffix: Trivia {
+    self.leadingTrivia.mergingCommonSuffix(self.trailingTrivia)
   }
 }

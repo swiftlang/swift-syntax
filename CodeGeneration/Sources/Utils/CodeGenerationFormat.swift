@@ -158,7 +158,14 @@ public class CodeGenerationFormat: BasicFormat {
     }
     formattedChildren = formattedChildren.map { child in
       var child = child
-      child.trailingTrivia = Trivia(pieces: child.trailingTrivia.drop(while: \.isSpaceOrTab))
+
+      if let firstNonSpaceOrTabIndex = child.trailingTrivia.firstIndex(where: { !$0.isSpaceOrTab }) {
+        if child.trailingTrivia[firstNonSpaceOrTabIndex].isNewline {
+          child.trailingTrivia = Trivia(pieces: child.trailingTrivia.suffix(from: firstNonSpaceOrTabIndex))
+        }
+      } else {
+        child.trailingTrivia = Trivia()
+      }
 
       if !child.startsOnNewline {
         child.leadingTrivia = indentedNewline + child.leadingTrivia

@@ -3338,8 +3338,8 @@ final class DeclarationTests: ParserTestCase {
   func testCoroutineAccessors() {
     assertParse(
       """
-      var i_rm: Int {
-        _read {
+      var irm: Int {
+        read {
           yield _i
         }
         modify {
@@ -3366,6 +3366,22 @@ final class DeclarationTests: ParserTestCase {
         )
       ]
     )
-
+    assertParse(
+      """
+      var ir_m: Int {
+        _modify {
+          yield &_i
+        }
+        1️⃣read {
+          yield _i
+        }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "unexpected code in variable"
+        )
+      ]
+    )
   }
 }

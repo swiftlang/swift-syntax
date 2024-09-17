@@ -32,6 +32,10 @@ extension AccessorDeclSyntax {
     case mutableAddressWithOwner
     case mutableAddressWithNativeOwner
     case _read
+    #if compiler(>=5.8)
+    @_spi(ExperimentalLanguageFeatures)
+    #endif
+    case read
     case _modify
     #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
@@ -63,6 +67,8 @@ extension AccessorDeclSyntax {
         self = .mutableAddressWithNativeOwner
       case TokenSpec(._read):
         self = ._read
+      case TokenSpec(.read) where experimentalFeatures.contains(.coroutineAccessors):
+        self = .read
       case TokenSpec(._modify):
         self = ._modify
       case TokenSpec(.modify) where experimentalFeatures.contains(.coroutineAccessors):
@@ -98,6 +104,8 @@ extension AccessorDeclSyntax {
         self = .mutableAddressWithNativeOwner
       case TokenSpec(._read):
         self = ._read
+      case TokenSpec(.read):
+        self = .read
       case TokenSpec(._modify):
         self = ._modify
       case TokenSpec(.modify):
@@ -133,6 +141,8 @@ extension AccessorDeclSyntax {
         return .keyword(.mutableAddressWithNativeOwner)
       case ._read:
         return .keyword(._read)
+      case .read:
+        return .keyword(.read)
       case ._modify:
         return .keyword(._modify)
       case .modify:
@@ -170,6 +180,8 @@ extension AccessorDeclSyntax {
         return .keyword(.mutableAddressWithNativeOwner)
       case ._read:
         return .keyword(._read)
+      case .read:
+        return .keyword(.read)
       case ._modify:
         return .keyword(._modify)
       case .modify:

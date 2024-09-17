@@ -1,7 +1,7 @@
 # Unqualified Lookup Rules
 
 ## Overview
-Unqualified lookup can be initiated from any source position, optionally targeting a specific identifier for name comparison. Unqualified lookup traverses the syntax tree from bottom-up, collecting names that match the lookup criteria. A name matches the lookup if the specified identifier (if present) refers to the introduced name and the position from which the unqualified lookup was triggered is preceded by the position where the name was introduced (if specified).
+Unqualified lookup can be initiated from any source position, optionally targeting a specific identifier for name comparison. Unqualified lookup traverses the syntax tree from bottom-up, collecting names that match the lookup criteria. A name matches the lookup if the specified identifier (if present) refers to the introduced name and the position from which the unqualified lookup was triggered is preceded by the position where the name was introduced, provided the name enforces position based availability by itself (such exceptions are for example type declarations).
 
 ## Default Scope Behavior
 Names are introduced and their availabilities are set by special syntax nodes referred to as syntax scopes or simply scopes. By default, each scope for lookup produces a result object that associates the scope of origin with the matched names. Lookup is then invoked on the parent scope, i.e., the closest syntax scope ancestor of the original scope in the syntax tree.
@@ -15,10 +15,11 @@ There are three distinct kinds of names identified by unqualified lookup:
 ## Specialized Scopes
 Some scopes share common behavior and can be further generalized as follows:
 - **Type Scope** (`TypeScopeSyntax`): Implicitly introduces `self` and `Self` names.
-- **Sequential Scope** (`SequentialScopeSyntax`): Interleaves its own results with results produced by introducing to sequential parent scopes when encountered during name extraction. Results are ordered from closest to furthest from the unqualified lookup position.
+- **Sequential Scope** (`SequentialScopeSyntax`): Interleaves its own results with results produced by *Introducing to Sequential Parent Scopes* when encountered during name extraction. Results are ordered from closest to furthest from the unqualified lookup position.
 - **Introducing to Sequential Parent Scope** (`IntroducingToSequentialParentScopeSyntax`): Produces a result that is later interleaved with the results produced by its sequential parent.
 
-> Example of Sequential Scope behavior (code block):
+> Example:
+> Sequential Scope behavior (code block):
 > ```swift
 > func foo(x: Int?) {
 >   // Guard scope
@@ -38,12 +39,13 @@ Some scopes share common behavior and can be further generalized as follows:
 > }
 > ```
 > When looking up the reference `a`, we get 4 results in total, going from the bottom to the top of the source code: the `a` declaration associated with the function's code block body scope, the `a` variable associated with the bottom-most `guard`, another `a` declaration associated with the code block, and finally the `a` introduced in the top-most `guard`.
-> When looking up `b`, on the other hand, we get just one result — the `b` declaration inside the bottom-most `guard`.
+> When looking up `b`, on the other hand, we get just one result: the `b` declaration inside the bottom-most `guard`.
 
-- **With Generic Parameters Scope** (`WithGenericParametersScopeSyntax`): Instead of invoking lookup on its parent scope, it first tries to pass it to the generic parameter scope if available.
-- **Generic Parameter Scope** (`GenericParameterScopeSyntax`): Instead of invoking lookup on its parent scope, it first tries to invoke it on the with-generic-parameters scope's parent.
+- **With Generic Parameters Scope** (`WithGenericParametersScopeSyntax`): Instead of invoking lookup on its parent scope, it first tries to pass it to the *Generic Parameter Scope* if available.
+- **Generic Parameter Scope** (`GenericParameterScopeSyntax`): Instead of invoking lookup on its parent scope, it first tries to invoke it on the *With Generic Parameters Scope's* parent.
 
-> Example of Generic Parameter Scope Behavior:
+> Example:
+> Generic Parameter Scope Behavior:
 > ```swift
 > class Foo<A, B: A> { // <-- lookup here
 >   func bar<A, C>() {
@@ -51,7 +53,7 @@ Some scopes share common behavior and can be further generalized as follows:
 >   }
 > }
 > ```
-> When starting the lookup from the location marked `X` without name matching, we get two results. The first is associated with the generic parameter scope of the `bar` function, containing the names `A` and `C` in that exact order. The second is associated with the class `Foo`, containing the names `A` and `B` in that exact order. 
+> When starting the lookup from the location marked `X` without identifier matching, we get two results. The first is associated with the generic parameter scope of the `bar` function, containing the names `A` and `C` in that exact order. The second is associated with the class `Foo`, containing the names `A` and `B` in that exact order. 
 > When performing lookup at the `A` reference in the `Foo` class generic parameter clause, the generic parameter `A` introduced inside the clause is returned as in the result.
 
 ## Particular Scope Implementations

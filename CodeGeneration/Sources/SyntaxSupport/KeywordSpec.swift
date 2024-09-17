@@ -218,6 +218,7 @@ public enum Keyword: CaseIterable {
   case macro
   case message
   case metadata
+  case modify
   case module
   case mutableAddressWithNativeOwner
   case mutableAddressWithOwner
@@ -576,6 +577,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("message")
     case .metadata:
       return KeywordSpec("metadata")
+    case .modify:
+      return KeywordSpec("modify", experimentalFeature: .coroutineAccessors)
     case .module:
       return KeywordSpec("module")
     case .mutableAddressWithNativeOwner:

@@ -243,6 +243,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       .keyword("mutableAddressWithNativeOwner"),
       .keyword("_read"),
       .keyword("_modify"),
+      .keyword("modify"),
       .keyword("init")
     ]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))

@@ -3334,4 +3334,20 @@ final class DeclarationTests: ParserTestCase {
       )
     )
   }
+
+  func testCoroutineAccessors() {
+    assertParse(
+      """
+      var i_rm: Int {
+        _read {
+          yield _i
+        }
+        modify {
+          yield &_i
+        }
+      }
+      """,
+      experimentalFeatures: .coroutineAccessors
+    )
+  }
 }

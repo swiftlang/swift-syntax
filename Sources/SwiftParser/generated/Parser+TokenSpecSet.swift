@@ -33,6 +33,10 @@ extension AccessorDeclSyntax {
     case mutableAddressWithNativeOwner
     case _read
     case _modify
+    #if compiler(>=5.8)
+    @_spi(ExperimentalLanguageFeatures)
+    #endif
+    case modify
     case `init`
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
@@ -61,6 +65,8 @@ extension AccessorDeclSyntax {
         self = ._read
       case TokenSpec(._modify):
         self = ._modify
+      case TokenSpec(.modify) where experimentalFeatures.contains(.coroutineAccessors):
+        self = .modify
       case TokenSpec(.`init`):
         self = .`init`
       default:
@@ -94,6 +100,8 @@ extension AccessorDeclSyntax {
         self = ._read
       case TokenSpec(._modify):
         self = ._modify
+      case TokenSpec(.modify):
+        self = .modify
       case TokenSpec(.`init`):
         self = .`init`
       default:
@@ -127,6 +135,8 @@ extension AccessorDeclSyntax {
         return .keyword(._read)
       case ._modify:
         return .keyword(._modify)
+      case .modify:
+        return .keyword(.modify)
       case .`init`:
         return .keyword(.`init`)
       }
@@ -162,6 +172,8 @@ extension AccessorDeclSyntax {
         return .keyword(._read)
       case ._modify:
         return .keyword(._modify)
+      case .modify:
+        return .keyword(.modify)
       case .`init`:
         return .keyword(.`init`)
       }

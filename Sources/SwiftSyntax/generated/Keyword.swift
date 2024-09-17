@@ -161,6 +161,10 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case macro
   case message
   case metadata
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case modify
   case module
   case mutableAddressWithNativeOwner
   case mutableAddressWithOwner
@@ -416,6 +420,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .inline
       case "linear":
         self = .linear
+      case "modify":
+        self = .modify
       case "module":
         self = .module
       case "prefix":
@@ -946,6 +952,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "macro",
     "message",
     "metadata",
+    "modify",
     "module",
     "mutableAddressWithNativeOwner",
     "mutableAddressWithOwner",

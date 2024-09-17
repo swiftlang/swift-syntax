@@ -192,6 +192,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case `Protocol`
   case `protocol`
   case `public`
+  case read
   case reasync
   case renamed
   case `repeat`
@@ -326,6 +327,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .objc
       case "open":
         self = .open
+      case "read":
+        self = .read
       case "safe":
         self = .safe
       case "self":
@@ -980,6 +983,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "Protocol",
     "protocol",
     "public",
+    "read",
     "reasync",
     "renamed",
     "repeat",

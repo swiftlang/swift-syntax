@@ -3339,7 +3339,7 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       """
       var i_rm: Int {
-        _read {
+        read {
           yield _i
         }
         modify {

@@ -246,6 +246,7 @@ public enum Keyword: CaseIterable {
   case `Protocol`
   case `protocol`
   case `public`
+  case read
   case reasync
   case renamed
   case `repeat`
@@ -631,6 +632,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("protocol", isLexerClassified: true)
     case .public:
       return KeywordSpec("public", isLexerClassified: true)
+    case .read:
+      return KeywordSpec("read")
     case .reasync:
       return KeywordSpec("reasync")
     case .renamed:

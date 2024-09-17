@@ -242,6 +242,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       .keyword("mutableAddressWithOwner"),
       .keyword("mutableAddressWithNativeOwner"),
       .keyword("_read"),
+      .keyword("read"),
       .keyword("_modify"),
       .keyword("modify"),
       .keyword("init")

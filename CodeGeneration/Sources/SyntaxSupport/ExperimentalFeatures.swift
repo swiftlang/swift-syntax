@@ -18,6 +18,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case doExpressions
   case nonescapableTypes
   case trailingComma
+  case coroutineAccessors
 
   /// The name of the feature, which is used in the doc comment.
   public var featureName: String {
@@ -32,6 +33,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "NonEscableTypes"
     case .trailingComma:
       return "trailing comma"
+    case .coroutineAccessors:
+      return "CoroutineAccessors"
     }
   }
 

@@ -21,6 +21,13 @@ import SwiftSyntax
       return self.parent?.scope
     }
   }
+
+  /// This node's line and column separated by `:`.
+  var debugLineWithColumnDescription: String {
+    let location = SourceLocationConverter(fileName: "", tree: root).location(for: position)
+
+    return "\(location.line):\(location.column)"
+  }
 }
 
 @_spi(Experimental) extension SourceFileSyntax: SequentialScopeSyntax {
@@ -28,6 +35,10 @@ import SwiftSyntax
   /// according to the default strategy: `memberBlockUpToLastDecl`.
   @_spi(Experimental) public var introducedNames: [LookupName] {
     introducedNames(using: .memberBlockUpToLastDecl)
+  }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "FileScope"
   }
 
   /// All names introduced in the file scope
@@ -101,6 +112,8 @@ import SwiftSyntax
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
+    guard config.includeMembers else { return [] }
+
     switch config.fileScopeHandling {
     case .memberBlock:
       let names = introducedNames(using: .memberBlock)
@@ -151,6 +164,10 @@ import SwiftSyntax
     }
   }
 
+  @_spi(Experimental) public var scopeDebugName: String {
+    "CodeBlockScope"
+  }
+
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
@@ -170,21 +187,15 @@ import SwiftSyntax
   @_spi(Experimental) public var introducedNames: [LookupName] {
     LookupName.getNames(from: pattern)
   }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "ForStmtScope"
+  }
 }
 
-@_spi(Experimental) extension ClosureExprSyntax: ScopeSyntax {
-  /// All names introduced by the closure signature.
-  /// Could be closure captures or (shorthand) parameters.
-  ///
-  /// ### Example
-  /// ```swift
-  /// let x = { [weak self, a] b, _ in
-  ///   // <--
-  /// }
-  /// ```
-  /// During lookup, names available at the marked place are:
-  /// `self`, a, b.
-  @_spi(Experimental) public var introducedNames: [LookupName] {
+@_spi(Experimental) extension ClosureExprSyntax: SequentialScopeSyntax {
+  /// Names introduced in this closure's signature.
+  var introducedNamesInSignature: [LookupName] {
     let captureNames =
       signature?.capture?.items.flatMap { element in
         LookupName.getNames(from: element)
@@ -203,6 +214,54 @@ import SwiftSyntax
 
     return captureNames + parameterNames
   }
+
+  /// Names introduced sequentially in body.
+  var introducedNamesInBody: [LookupName] {
+    statements.flatMap { codeBlockItem in
+      LookupName.getNames(from: codeBlockItem.item, accessibleAfter: codeBlockItem.endPosition)
+    }
+  }
+
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    introducedNamesInSignature + introducedNamesInBody
+  }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "ClosureExprScope"
+  }
+
+  /// All names introduced by the closure signature and its body.
+  /// Could be closure captures, (shorthand) parameters or
+  /// sequential results from the body.
+  ///
+  /// ### Example
+  /// ```swift
+  /// let x = { [weak self, a] b, _ in
+  ///   let c = 42
+  ///   // <--
+  ///   let d = 42
+  /// }
+  /// ```
+  /// During lookup, names available at the marked place are:
+  /// `self`, `a`, `b` and `c`.
+  @_spi(Experimental) public func lookup(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig
+  ) -> [LookupResult] {
+    let filteredSignatureNames = introducedNamesInSignature.filter { name in
+      checkIdentifier(identifier, refersTo: name, at: lookUpPosition)
+    }
+
+    return sequentialLookup(
+      in: statements,
+      identifier,
+      at: lookUpPosition,
+      with: config,
+      propagateToParent: false
+    ) + (filteredSignatureNames.isEmpty ? [] : [.fromScope(self, withNames: filteredSignatureNames)])
+      + (config.finishInSequentialScope ? [] : lookupInParent(identifier, at: lookUpPosition, with: config))
+  }
 }
 
 @_spi(Experimental) extension WhileStmtSyntax: ScopeSyntax {
@@ -211,6 +270,10 @@ import SwiftSyntax
     conditions.flatMap { element in
       LookupName.getNames(from: element.condition)
     }
+  }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "WhileStmtScope"
   }
 }
 
@@ -253,9 +316,13 @@ import SwiftSyntax
 
   /// Names introduced by the `if` optional binding conditions.
   @_spi(Experimental) public var introducedNames: [LookupName] {
-    conditions.flatMap { element in
+    conditions.reversed().flatMap { element in
       LookupName.getNames(from: element.condition, accessibleAfter: element.endPosition)
     }
+  }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "IfExprScope"
   }
 
   /// Returns names matching lookup.
@@ -291,6 +358,24 @@ import SwiftSyntax
     }
   }
 
+  @_spi(Experimental) public var scopeDebugName: String {
+    "MemberBlockScope"
+  }
+
+  /// Lookup results from this member block scope.
+  /// Bypasses names from this scope if `includeMembers` set to `false`.
+  @_spi(Experimental) public func lookup(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig
+  ) -> [LookupResult] {
+    if config.includeMembers {
+      return defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
+    } else {
+      return lookupInParent(identifier, at: lookUpPosition, with: config)
+    }
+  }
+
   /// Creates a result from associated type declarations
   /// made by it's members.
   func lookupAssociatedTypeDeclarations(
@@ -312,13 +397,17 @@ import SwiftSyntax
 
 @_spi(Experimental) extension GuardStmtSyntax: IntroducingToSequentialParentScopeSyntax {
   var namesIntroducedToSequentialParent: [LookupName] {
-    conditions.flatMap { element in
+    conditions.reversed().flatMap { element in
       LookupName.getNames(from: element.condition, accessibleAfter: element.endPosition)
     }
   }
 
   @_spi(Experimental) public var introducedNames: [LookupName] {
     []
+  }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "GuardStmtScope"
   }
 
   /// Returns results matching lookup that should be
@@ -348,11 +437,51 @@ import SwiftSyntax
   }
 }
 
-@_spi(Experimental) extension ActorDeclSyntax: TypeScopeSyntax, WithGenericParametersScopeSyntax {}
-@_spi(Experimental) extension ClassDeclSyntax: TypeScopeSyntax, WithGenericParametersScopeSyntax {}
-@_spi(Experimental) extension StructDeclSyntax: TypeScopeSyntax, WithGenericParametersScopeSyntax {}
-@_spi(Experimental) extension EnumDeclSyntax: TypeScopeSyntax, WithGenericParametersScopeSyntax {}
-@_spi(Experimental) extension ExtensionDeclSyntax: TypeScopeSyntax {}
+@_spi(Experimental) extension ActorDeclSyntax: NominalTypeDeclSyntax {
+  @_spi(Experimental) public var scopeDebugName: String {
+    "ActorDeclScope"
+  }
+}
+@_spi(Experimental) extension ClassDeclSyntax: NominalTypeDeclSyntax {
+  @_spi(Experimental) public var scopeDebugName: String {
+    "ClassDeclScope"
+  }
+}
+@_spi(Experimental) extension StructDeclSyntax: NominalTypeDeclSyntax {
+  @_spi(Experimental) public var scopeDebugName: String {
+    "StructDeclScope"
+  }
+}
+@_spi(Experimental) extension EnumDeclSyntax: NominalTypeDeclSyntax {
+  @_spi(Experimental) public var scopeDebugName: String {
+    "EnumDeclScope"
+  }
+}
+@_spi(Experimental) extension ExtensionDeclSyntax: LookInMembersScopeSyntax {
+  @_spi(Experimental) public var lookupMembersPosition: AbsolutePosition {
+    extendedType.position
+  }
+
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    []
+  }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "ExtensionDeclScope"
+  }
+
+  @_spi(Experimental) public func lookup(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig
+  ) -> [LookupResult] {
+    if memberBlock.range.contains(lookUpPosition) {
+      return [.lookInMembers(self)] + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
+    } else {
+      return defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
+    }
+  }
+}
 
 @_spi(Experimental) extension AccessorDeclSyntax: ScopeSyntax {
   /// Implicit and/or explicit names introduced within the accessor.
@@ -370,12 +499,20 @@ import SwiftSyntax
       }
     }
   }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "AccessorDeclScope"
+  }
 }
 
 @_spi(Experimental) extension CatchClauseSyntax: ScopeSyntax {
   /// Implicit `error` when there are no catch items.
   @_spi(Experimental) public var introducedNames: [LookupName] {
     return catchItems.isEmpty ? [.implicit(.error(self))] : []
+  }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "CatchClauseScope"
   }
 }
 
@@ -386,12 +523,20 @@ import SwiftSyntax
       LookupName.getNames(from: child.pattern)
     } ?? []
   }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "SwitchCaseScope"
+  }
 }
 
 @_spi(Experimental) extension ProtocolDeclSyntax: ScopeSyntax {
   /// Protocol declarations don't introduce names by themselves.
   @_spi(Experimental) public var introducedNames: [LookupName] {
     []
+  }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "ProtocolDeclScope"
   }
 
   /// For the lookup initiated from inside primary
@@ -437,8 +582,12 @@ import SwiftSyntax
   /// Generic parameter names introduced by this clause.
   @_spi(Experimental) public var introducedNames: [LookupName] {
     parameters.children(viewMode: .fixedUp).flatMap { child in
-      LookupName.getNames(from: child, accessibleAfter: child.endPosition)
+      LookupName.getNames(from: child)
     }
+  }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "GenericParameterClauseScope"
   }
 }
 
@@ -447,7 +596,37 @@ import SwiftSyntax
   @_spi(Experimental) public var introducedNames: [LookupName] {
     signature.parameterClause.parameters.flatMap { parameter in
       LookupName.getNames(from: parameter)
+    } + (parentScope?.is(MemberBlockSyntax.self) ?? false ? [.implicit(.self(self))] : [])
+  }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "FunctionDeclScope"
+  }
+
+  /// Lookup results from this function scope.
+  /// Routes to generic parameter clause scope if exists.
+  @_spi(Experimental) public func lookup(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig
+  ) -> [LookupResult] {
+    var thisScopeResults: [LookupResult] = []
+
+    if !signature.range.contains(lookUpPosition) {
+      thisScopeResults = defaultLookupImplementation(
+        identifier,
+        at: position,
+        with: config,
+        propagateToParent: false
+      )
     }
+
+    return thisScopeResults
+      + lookupThroughGenericParameterScope(
+        identifier,
+        at: lookUpPosition,
+        with: config
+      )
   }
 }
 
@@ -458,11 +637,19 @@ import SwiftSyntax
       LookupName.getNames(from: parameter)
     }
   }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "SubscriptDeclScope"
+  }
 }
 
 @_spi(Experimental) extension TypeAliasDeclSyntax: WithGenericParametersScopeSyntax {
   /// Type alias doesn't introduce any names to it's children.
   @_spi(Experimental) public var introducedNames: [LookupName] {
     []
+  }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "TypeAliasDeclScope"
   }
 }

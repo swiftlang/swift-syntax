@@ -16,8 +16,8 @@ import SwiftSyntax
 @_spi(Experimental) public enum ImplicitDecl {
   /// `self` keyword representing object instance.
   /// Could be associated with type declaration, extension,
-  /// or closure captures.
-  case `self`(DeclSyntaxProtocol)
+  /// or closure captures. Introduced at function edge.
+  case `self`(FunctionDeclSyntax)
   /// `Self` keyword representing object type.
   /// Could be associated with type declaration or extension.
   case `Self`(DeclSyntaxProtocol)
@@ -135,6 +135,35 @@ import SwiftSyntax
     }
   }
 
+  /// Position of this name.
+  /// 
+  /// For some syntax nodes, their position doesn't reflect
+  /// the position at which a particular name was introduced at.
+  /// Such cases are function parameters (as they can
+  /// contain two identifiers) and function declarations (where name
+  /// is precided by access modifiers and `func` keyword).
+  @_spi(Experimental) public var position: AbsolutePosition {
+    switch self {
+    case .identifier(let syntax, _):
+      switch Syntax(syntax).as(SyntaxEnum.self) {
+      case .functionParameter(let functionParameter):
+        return functionParameter.secondName?.positionAfterSkippingLeadingTrivia
+          ?? functionParameter.firstName.positionAfterSkippingLeadingTrivia
+      default:
+        return syntax.position
+      }
+    case .declaration(let syntax):
+      return syntax.name.position
+    case .implicit(let implicitName):
+      switch implicitName {
+      case .self(let functionDecl):
+        return functionDecl.name.position
+      default:
+        return implicitName.syntax.position
+      }
+    }
+  }
+
   /// Point, after which the name is available in scope.
   /// If set to `nil`, the name is available at any point in scope.
   var accessibleAfter: AbsolutePosition? {
@@ -224,5 +253,28 @@ import SwiftSyntax
     accessibleAfter: AbsolutePosition? = nil
   ) -> [LookupName] {
     [.declaration(namedDecl)]
+  }
+
+  /// Debug description of this lookup name.
+  @_spi(Experimental) public var debugDescription: String {
+    let sourceLocationConverter = SourceLocationConverter(fileName: "", tree: syntax.root)
+    let location = sourceLocationConverter.location(for: position)
+    let strName = (identifier != nil ? identifier!.name : "NO-NAME") + " at: \(location.line):\(location.column)"
+
+    switch self {
+    case .identifier:
+      let str = "identifier: \(strName)"
+
+      if let accessibleAfter {
+        let location = sourceLocationConverter.location(for: accessibleAfter)
+        return str + " after: \(location.line):\(location.column)"
+      } else {
+        return str
+      }
+    case .declaration:
+      return "declaration: \(strName)"
+    case .implicit:
+      return "implicit: \(strName)"
+    }
   }
 }

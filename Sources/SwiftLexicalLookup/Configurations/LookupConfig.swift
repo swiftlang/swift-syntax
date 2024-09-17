@@ -13,14 +13,26 @@
 @_spi(Experimental) public struct LookupConfig {
   /// Specifies behavior of file scope.
   @_spi(Experimental) public var fileScopeHandling: FileScopeHandlingConfig
+  /// Specifies whether lookup should finish in the closest sequential scope.
+  @_spi(Experimental) public var finishInSequentialScope: Bool
+  /// Specifies whether to include results generated in file and member block scopes.
+  @_spi(Experimental) public var includeMembers: Bool
 
   /// Creates a new lookup configuration.
   ///
   /// - `fileScopeHandling` - specifies behavior of file scope.
   ///   `memberBlockUpToLastDecl` by default.
+  /// - `finishInSequentialScope` - specifies whether lookup should finish
+  ///   in the closest sequential scope. `false` by default.
+  /// - `includeMembers` - specifies whether to include results generated
+  ///   in file and member block scopes. `true` by default.
   @_spi(Experimental) public init(
-    fileScopeHandling: FileScopeHandlingConfig = .memberBlockUpToLastDecl
+    fileScopeHandling: FileScopeHandlingConfig = .memberBlockUpToLastDecl,
+    finishInSequentialScope: Bool = false,
+    includeMembers: Bool = true
   ) {
     self.fileScopeHandling = fileScopeHandling
+    self.finishInSequentialScope = finishInSequentialScope
+    self.includeMembers = includeMembers
   }
 }

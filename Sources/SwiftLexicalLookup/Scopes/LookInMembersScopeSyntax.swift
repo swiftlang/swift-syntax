@@ -12,14 +12,7 @@
 
 import SwiftSyntax
 
-@_spi(Experimental) public protocol TypeScopeSyntax: ScopeSyntax, DeclSyntaxProtocol {}
-
-extension TypeScopeSyntax {
-  @_spi(Experimental) public var implicitInstanceAndTypeNames: [LookupName] {
-    [.implicit(.self(self)), .implicit(.Self(self))]
-  }
-
-  @_spi(Experimental) public var introducedNames: [LookupName] {
-    implicitInstanceAndTypeNames
-  }
+@_spi(Experimental) public protocol LookInMembersScopeSyntax: ScopeSyntax {
+  /// Position used for member lookup.
+  var lookupMembersPosition: AbsolutePosition { get }
 }

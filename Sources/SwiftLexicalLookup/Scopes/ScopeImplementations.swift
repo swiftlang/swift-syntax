@@ -112,10 +112,10 @@ import SwiftSyntax
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
-    guard config.includeMembers else { return [] }
-
     switch config.fileScopeHandling {
     case .memberBlock:
+      guard config.includeMembers else { return [] }
+      
       let names = introducedNames(using: .memberBlock)
         .filter { lookupName in
           checkIdentifier(identifier, refersTo: lookupName, at: lookUpPosition)
@@ -150,7 +150,7 @@ import SwiftSyntax
         with: config
       )
 
-      return (members.isEmpty ? [] : [.fromFileScope(self, withNames: members)]) + sequentialNames
+      return (members.isEmpty || !config.includeMembers ? [] : [.fromFileScope(self, withNames: members)]) + sequentialNames
     }
   }
 }
@@ -522,15 +522,37 @@ import SwiftSyntax
       }
     }
 
-    if let parentScope, parentScope.is(AccessorBlockSyntax.self) {
-      return names + [.implicit(.self(self))]
-    } else {
-      return names
-    }
+    return names
   }
 
   @_spi(Experimental) public var scopeDebugName: String {
     "AccessorDeclScope"
+  }
+  
+  /// Returns result with matching names from
+  /// this scope and passes result with implicit `self`
+  /// to be introduced after the `subscript`
+  /// declaration scope grandparent.
+  @_spi(Experimental) public func lookup(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig
+  ) -> [LookupResult] {
+    guard let parentAccessorBlockScope = parentScope?.as(AccessorBlockSyntax.self) else {
+      return defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
+    }
+    
+    return defaultLookupImplementation(
+      identifier,
+      at: lookUpPosition,
+      with: config,
+      propagateToParent: false
+    ) + parentAccessorBlockScope.interleaveAccessorResultsAfterSubscriptLookup(
+      identifier,
+      at: lookUpPosition,
+      with: config,
+      resultsToInterleave: [.fromScope(self, withNames: [.implicit(.self(self))])]
+    )
   }
 }
 
@@ -584,7 +606,7 @@ import SwiftSyntax
       with: config,
       propagateToParent: false
     ) + (filteredNamesFromLabel.isEmpty ? [] : [.fromScope(self, withNames: filteredNamesFromLabel)])
-      + lookupInParent(identifier, at: lookUpPosition, with: config)
+    + (config.finishInSequentialScope ? [] : lookupInParent(identifier, at: lookUpPosition, with: config))
   }
 }
 
@@ -714,6 +736,39 @@ import SwiftSyntax
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
+    interleaveResultsAfterThisSubscriptLookup(
+      identifier,
+      at: lookUpPosition,
+      with: config,
+      resultsToInterleave: []
+    )
+  }
+  
+  /// Lookup names in this scope and add `resultsToInterleave`
+  /// after results from this scope.
+  ///
+  /// It's used to handle implicit `self` introduction
+  /// at the boundaries of accessors in this subscript.
+  /// ```swift
+  /// class X {
+  ///   subscript(self: Int) -> Int {
+  ///     get {
+  ///       self // <-- lookup here
+  ///     }
+  ///   }
+  /// }
+  /// ```
+  /// In this case, the `self` reference references the `self`
+  /// function parameter which shadows implicit `self`
+  /// introduced at the boundary of the getter. That's why
+  /// this function needs to ensure the implicit `self` passed
+  /// from inside the accessor block is added after `subscript` parameters.
+  func interleaveResultsAfterThisSubscriptLookup(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig,
+    resultsToInterleave: [LookupResult]
+  ) -> [LookupResult] {
     var thisScopeResults: [LookupResult] = []
 
     if !parameterClause.range.contains(lookUpPosition) && !returnClause.range.contains(lookUpPosition) {
@@ -725,7 +780,7 @@ import SwiftSyntax
       )
     }
 
-    return thisScopeResults
+    return thisScopeResults + resultsToInterleave
       + lookupThroughGenericParameterScope(
         identifier,
         at: lookUpPosition,
@@ -766,6 +821,26 @@ import SwiftSyntax
     case .accessors:
       return lookupInParent(identifier, at: lookUpPosition, with: config)
     }
+  }
+  
+  /// Used by children accessors to interleave
+  /// their results with parent `subscript` declaration scope.
+  func interleaveAccessorResultsAfterSubscriptLookup(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig,
+    resultsToInterleave: [LookupResult]
+  ) -> [LookupResult] {
+    guard let parentSubscriptScope = parentScope?.as(SubscriptDeclSyntax.self) else {
+      return lookupInParent(identifier, at: lookUpPosition, with: config)
+    }
+    
+    return parentSubscriptScope.interleaveResultsAfterThisSubscriptLookup(
+      identifier,
+      at: lookUpPosition,
+      with: config,
+      resultsToInterleave: resultsToInterleave
+    )
   }
 }
 

@@ -17,7 +17,7 @@ import SwiftSyntax
   /// `self` keyword representing object instance.
   /// Could be associated with type declaration, extension,
   /// or closure captures. Introduced at function edge.
-  case `self`(FunctionDeclSyntax)
+  case `self`(DeclSyntaxProtocol)
   /// `Self` keyword representing object type.
   /// Could be associated with type declaration or extension.
   case `Self`(DeclSyntaxProtocol)
@@ -136,7 +136,7 @@ import SwiftSyntax
   }
 
   /// Position of this name.
-  /// 
+  ///
   /// For some syntax nodes, their position doesn't reflect
   /// the position at which a particular name was introduced at.
   /// Such cases are function parameters (as they can
@@ -145,21 +145,24 @@ import SwiftSyntax
   @_spi(Experimental) public var position: AbsolutePosition {
     switch self {
     case .identifier(let syntax, _):
-      switch Syntax(syntax).as(SyntaxEnum.self) {
-      case .functionParameter(let functionParameter):
-        return functionParameter.secondName?.positionAfterSkippingLeadingTrivia
-          ?? functionParameter.firstName.positionAfterSkippingLeadingTrivia
-      default:
-        return syntax.position
-      }
+      return syntax.identifier.positionAfterSkippingLeadingTrivia
     case .declaration(let syntax):
       return syntax.name.position
     case .implicit(let implicitName):
       switch implicitName {
-      case .self(let functionDecl):
-        return functionDecl.name.position
+      case .self(let declSyntax):
+        switch Syntax(declSyntax).as(SyntaxEnum.self) {
+        case .functionDecl(let functionDecl):
+          return functionDecl.name.position
+        case .subscriptDecl(let subscriptDecl):
+          return subscriptDecl.accessorBlock?.position ?? subscriptDecl.endPosition
+        default:
+          return declSyntax.positionAfterSkippingLeadingTrivia
+        }
+      case .error(let catchClause):
+        return catchClause.body.position
       default:
-        return implicitName.syntax.position
+        return implicitName.syntax.positionAfterSkippingLeadingTrivia
       }
     }
   }
@@ -195,7 +198,7 @@ import SwiftSyntax
   ) -> [LookupName] {
     switch Syntax(syntax).as(SyntaxEnum.self) {
     case .variableDecl(let variableDecl):
-      return variableDecl.bindings.flatMap { binding in
+      return variableDecl.bindings.reversed().flatMap { binding in
         getNames(
           from: binding.pattern,
           accessibleAfter: accessibleAfter != nil ? binding.endPositionBeforeTrailingTrivia : nil
@@ -239,12 +242,7 @@ import SwiftSyntax
     identifiable: IdentifiableSyntax,
     accessibleAfter: AbsolutePosition? = nil
   ) -> [LookupName] {
-    switch identifiable.identifier.tokenKind {
-    case .wildcard:
-      return []
-    default:
-      return [.identifier(identifiable, accessibleAfter: accessibleAfter)]
-    }
+    [.identifier(identifiable, accessibleAfter: accessibleAfter)]
   }
 
   /// Extracts name introduced by `NamedDeclSyntax` node.

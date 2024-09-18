@@ -633,7 +633,7 @@ final class testNameLookup: XCTestCase {
     )
   }
 
-  func testGuardOnFileScope() {
+  func testGuardOnFileScope() {  // TODO: Fix this according to ASTScope (ommiting class a)
     assertLexicalNameLookup(
       source: """
         let 1️⃣a = 0
@@ -902,7 +902,7 @@ final class testNameLookup: XCTestCase {
     )
   }
 
-  func testSwitchExpression() {
+  func testSwitchExpression() {  // TODO: For some reason ASTScope doesn't introduce any results besides first function call expr.
     assertLexicalNameLookup(
       source: """
         switch {
@@ -973,20 +973,16 @@ final class testNameLookup: XCTestCase {
         """,
       references: [
         "2️⃣": [
-          .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["1️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["1️⃣"])
         ],
         "3️⃣": [
-          .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["1️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["1️⃣"])
         ],
         "5️⃣": [
-          .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["7️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["7️⃣"])
         ],
         "6️⃣": [
-          .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["4️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["4️⃣"])
         ],
       ],
       expectedResultTypes: .all(GenericParameterSyntax.self)
@@ -1070,7 +1066,7 @@ final class testNameLookup: XCTestCase {
     )
   }
 
-  func testSubscript() {
+  func testSubscript() {  // TODO: Fix behavior of self keyword in subscript with accessors.
     assertLexicalNameLookup(
       source: """
         class X {

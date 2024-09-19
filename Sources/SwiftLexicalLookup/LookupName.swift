@@ -154,8 +154,20 @@ import SwiftSyntax
         switch Syntax(declSyntax).as(SyntaxEnum.self) {
         case .functionDecl(let functionDecl):
           return functionDecl.name.position
+        case .initializerDecl(let initializerDecl):
+          return initializerDecl.initKeyword.positionAfterSkippingLeadingTrivia
         case .subscriptDecl(let subscriptDecl):
           return subscriptDecl.accessorBlock?.position ?? subscriptDecl.endPosition
+        case .variableDecl(let variableDecl):
+          return variableDecl.bindings.first?.accessorBlock?.positionAfterSkippingLeadingTrivia
+            ?? variableDecl.endPosition
+        default:
+          return declSyntax.positionAfterSkippingLeadingTrivia
+        }
+      case .Self(let declSyntax):
+        switch Syntax(declSyntax).as(SyntaxEnum.self) {
+        case .protocolDecl(let protocolDecl):
+          return protocolDecl.name.positionAfterSkippingLeadingTrivia
         default:
           return declSyntax.positionAfterSkippingLeadingTrivia
         }
@@ -226,6 +238,8 @@ import SwiftSyntax
       return functionCallExpr.arguments.flatMap { argument in
         getNames(from: argument.expression, accessibleAfter: accessibleAfter)
       }
+    case .optionalChainingExpr(let optionalChainingExpr):
+      return getNames(from: optionalChainingExpr.expression, accessibleAfter: accessibleAfter)
     default:
       if let namedDecl = Syntax(syntax).asProtocol(SyntaxProtocol.self) as? NamedDeclSyntax {
         return handle(namedDecl: namedDecl, accessibleAfter: accessibleAfter)

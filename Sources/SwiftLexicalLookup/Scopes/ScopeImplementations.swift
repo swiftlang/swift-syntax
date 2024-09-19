@@ -115,7 +115,7 @@ import SwiftSyntax
     switch config.fileScopeHandling {
     case .memberBlock:
       guard config.includeMembers else { return [] }
-      
+
       let names = introducedNames(using: .memberBlock)
         .filter { lookupName in
           checkIdentifier(identifier, refersTo: lookupName, at: lookUpPosition)
@@ -150,7 +150,8 @@ import SwiftSyntax
         with: config
       )
 
-      return (members.isEmpty || !config.includeMembers ? [] : [.fromFileScope(self, withNames: members)]) + sequentialNames
+      return (members.isEmpty || !config.includeMembers ? [] : [.fromFileScope(self, withNames: members)])
+        + sequentialNames
     }
   }
 }
@@ -528,7 +529,7 @@ import SwiftSyntax
   @_spi(Experimental) public var scopeDebugName: String {
     "AccessorDeclScope"
   }
-  
+
   /// Returns result with matching names from
   /// this scope and passes result with implicit `self`
   /// to be introduced after the `subscript`
@@ -541,18 +542,24 @@ import SwiftSyntax
     guard let parentAccessorBlockScope = parentScope?.as(AccessorBlockSyntax.self) else {
       return defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
     }
-    
+
+    let implicitSelf: [LookupName] = [.implicit(.self(self))]
+      .filter { name in
+        checkIdentifier(identifier, refersTo: name, at: lookUpPosition)
+      }
+
     return defaultLookupImplementation(
       identifier,
       at: lookUpPosition,
       with: config,
       propagateToParent: false
-    ) + parentAccessorBlockScope.interleaveAccessorResultsAfterSubscriptLookup(
-      identifier,
-      at: lookUpPosition,
-      with: config,
-      resultsToInterleave: [.fromScope(self, withNames: [.implicit(.self(self))])]
     )
+      + parentAccessorBlockScope.interleaveAccessorResultsAfterSubscriptLookup(
+        identifier,
+        at: lookUpPosition,
+        with: config,
+        resultsToInterleave: implicitSelf.isEmpty ? [] : [.fromScope(self, withNames: implicitSelf)]
+      )
   }
 }
 
@@ -606,14 +613,18 @@ import SwiftSyntax
       with: config,
       propagateToParent: false
     ) + (filteredNamesFromLabel.isEmpty ? [] : [.fromScope(self, withNames: filteredNamesFromLabel)])
-    + (config.finishInSequentialScope ? [] : lookupInParent(identifier, at: lookUpPosition, with: config))
+      + (config.finishInSequentialScope ? [] : lookupInParent(identifier, at: lookUpPosition, with: config))
   }
 }
 
-@_spi(Experimental) extension ProtocolDeclSyntax: ScopeSyntax {
+@_spi(Experimental) extension ProtocolDeclSyntax: ScopeSyntax, LookInMembersScopeSyntax {
   /// Protocol declarations don't introduce names by themselves.
   @_spi(Experimental) public var introducedNames: [LookupName] {
-    []
+    [.implicit(.Self(self))]
+  }
+
+  @_spi(Experimental) public var lookupMembersPosition: AbsolutePosition {
+    name.positionAfterSkippingLeadingTrivia
   }
 
   @_spi(Experimental) public var scopeDebugName: String {
@@ -655,7 +666,13 @@ import SwiftSyntax
       )
     }
 
-    return results + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
+    return results
+      + defaultLookupImplementation(
+        identifier,
+        at: lookUpPosition,
+        with: config,
+        propagateToParent: false
+      ) + [.lookInMembers(self)] + lookupInParent(identifier, at: lookUpPosition, with: config)
   }
 }
 
@@ -672,42 +689,15 @@ import SwiftSyntax
   }
 }
 
-@_spi(Experimental) extension FunctionDeclSyntax: WithGenericParametersScopeSyntax {
-  /// Function parameters introduced by this function's signature.
-  @_spi(Experimental) public var introducedNames: [LookupName] {
-    signature.parameterClause.parameters.flatMap { parameter in
-      LookupName.getNames(from: parameter)
-    } + (parentScope?.is(MemberBlockSyntax.self) ?? false ? [.implicit(.self(self))] : [])
-  }
-
+@_spi(Experimental) extension FunctionDeclSyntax: FunctionScopeSyntax {
   @_spi(Experimental) public var scopeDebugName: String {
     "FunctionDeclScope"
   }
+}
 
-  /// Lookup results from this function scope.
-  /// Routes to generic parameter clause scope if exists.
-  @_spi(Experimental) public func lookup(
-    _ identifier: Identifier?,
-    at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
-  ) -> [LookupResult] {
-    var thisScopeResults: [LookupResult] = []
-
-    if !signature.range.contains(lookUpPosition) {
-      thisScopeResults = defaultLookupImplementation(
-        identifier,
-        at: position,
-        with: config,
-        propagateToParent: false
-      )
-    }
-
-    return thisScopeResults
-      + lookupThroughGenericParameterScope(
-        identifier,
-        at: lookUpPosition,
-        with: config
-      )
+@_spi(Experimental) extension InitializerDeclSyntax: FunctionScopeSyntax {
+  @_spi(Experimental) public var scopeDebugName: String {
+    "InitializerDeclScope"
   }
 }
 
@@ -743,7 +733,7 @@ import SwiftSyntax
       resultsToInterleave: []
     )
   }
-  
+
   /// Lookup names in this scope and add `resultsToInterleave`
   /// after results from this scope.
   ///
@@ -822,7 +812,7 @@ import SwiftSyntax
       return lookupInParent(identifier, at: lookUpPosition, with: config)
     }
   }
-  
+
   /// Used by children accessors to interleave
   /// their results with parent `subscript` declaration scope.
   func interleaveAccessorResultsAfterSubscriptLookup(
@@ -834,7 +824,7 @@ import SwiftSyntax
     guard let parentSubscriptScope = parentScope?.as(SubscriptDeclSyntax.self) else {
       return lookupInParent(identifier, at: lookUpPosition, with: config)
     }
-    
+
     return parentSubscriptScope.interleaveResultsAfterThisSubscriptLookup(
       identifier,
       at: lookUpPosition,
@@ -852,5 +842,41 @@ import SwiftSyntax
 
   @_spi(Experimental) public var scopeDebugName: String {
     "TypeAliasDeclScope"
+  }
+}
+
+@_spi(Experimental) extension VariableDeclSyntax: ScopeSyntax {
+  /// Variable decl scope doesn't introduce any
+  /// names unless it is a member and is looked
+  /// up from inside it's accessor block.
+  @_spi(Experimental) public var introducedNames: [LookupName] {
+    []
+  }
+
+  @_spi(Experimental) public var scopeDebugName: String {
+    "VariableDeclScope"
+  }
+
+  /// If a member and looked up from inside
+  /// it's accessor block, introduce implicit
+  /// `self` and propagate the lookup further.
+  @_spi(Experimental) public func lookup(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig
+  ) -> [LookupResult] {
+    if let parentScope,
+      parentScope.is(MemberBlockSyntax.self),
+      bindings.first?.accessorBlock?.range.contains(lookUpPosition) ?? false
+    {
+      return defaultLookupImplementation(
+        in: [.implicit(.self(self))],
+        identifier,
+        at: lookUpPosition,
+        with: config
+      )
+    } else {
+      return lookupInParent(identifier, at: lookUpPosition, with: config)
+    }
   }
 }

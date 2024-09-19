@@ -87,13 +87,14 @@ extension SyntaxProtocol {
   /// refers to and is accessible at given syntax node then passes lookup to the parent.
   /// If `identifier` set to `nil`, returns all available names at the given node.
   func defaultLookupImplementation(
+    in names: [LookupName]? = nil,
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig,
     propagateToParent: Bool = true
   ) -> [LookupResult] {
     let filteredNames =
-      introducedNames
+      (names ?? introducedNames)
       .filter { introducedName in
         checkIdentifier(identifier, refersTo: introducedName, at: lookUpPosition)
       }

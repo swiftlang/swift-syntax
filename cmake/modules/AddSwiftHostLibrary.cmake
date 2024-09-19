@@ -32,16 +32,18 @@ function(target_link_swift_syntax_libraries TARGET)
   # seem to be being tracked.
   #
   # Remove once rdar://102202478 is fixed.
-  foreach(DEPENDENCY ${dependencies})
-    string(REGEX REPLACE [<>:\"/\\|?*] _ sanitized ${DEPENDENCY})
-    add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/forced-${sanitized}-dep.swift
-      COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/forced-${sanitized}-dep.swift
-      DEPENDS ${DEPENDENCY}
-    )
-    target_sources(${TARGET} PRIVATE
-      ${CMAKE_CURRENT_BINARY_DIR}/forced-${sanitized}-dep.swift
-    )
-  endforeach()
+  if(NOT CMP0157_IS_NEW)
+    foreach(DEPENDENCY ${dependencies})
+      string(REGEX REPLACE [<>:\"/\\|?*] _ sanitized ${DEPENDENCY})
+      add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/forced-${sanitized}-dep.swift
+        COMMAND ${CMAKE_COMMAND} -E touch ${CMAKE_CURRENT_BINARY_DIR}/forced-${sanitized}-dep.swift
+        DEPENDS ${DEPENDENCY}
+      )
+      target_sources(${TARGET} PRIVATE
+        ${CMAKE_CURRENT_BINARY_DIR}/forced-${sanitized}-dep.swift
+      )
+    endforeach()
+  endif()
 endfunction()
 
 # Add a new host library with the given name.
@@ -52,6 +54,9 @@ function(add_swift_syntax_library name)
 
   # Create the library target.
   add_library(${target} ${ASHL_SOURCES})
+
+  set_property(TARGET ${target} PROPERTY
+    Swift_COMPILATION_MODE "$<IF:$<CONFIG:Release,RelWithDebInfo>,wholemodule,incremental>")
 
   if(SWIFTSYNTAX_EMIT_MODULE)
     # Determine where Swift modules will be built and installed.
@@ -104,22 +109,24 @@ function(add_swift_syntax_library name)
     set(module_file "${module_file}")
   endif()
 
-  # Touch the library and objects to workaround their mtime not being updated
-  # when there are no real changes (eg. a file was updated with a comment).
-  # Ideally this should be done in the driver, which could only update the
-  # files that have changed.
-  add_custom_command(
-    TARGET ${target}
-    POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -E touch_nocreate $<TARGET_FILE:${target}> "${module_base}"
-    COMMAND_EXPAND_LISTS
-    COMMENT "Update mtime of library outputs workaround")
-  add_custom_command(
-    TARGET ${target}
-    POST_BUILD
-    COMMAND "${CMAKE_COMMAND}" -E touch_nocreate $<TARGET_OBJECTS:${target}>
-    COMMAND_EXPAND_LISTS
-    COMMENT "Update mtime of objcect files workaround")
+  if(NOT CMP0157_IS_NEW)
+    # Touch the library and objects to workaround their mtime not being updated
+    # when there are no real changes (eg. a file was updated with a comment).
+    # Ideally this should be done in the driver, which could only update the
+    # files that have changed.
+    add_custom_command(
+      TARGET ${target}
+      POST_BUILD
+      COMMAND "${CMAKE_COMMAND}" -E touch_nocreate $<TARGET_FILE:${target}> "${module_base}"
+      COMMAND_EXPAND_LISTS
+      COMMENT "Update mtime of library outputs workaround")
+    add_custom_command(
+      TARGET ${target}
+      POST_BUILD
+      COMMAND "${CMAKE_COMMAND}" -E touch_nocreate $<TARGET_OBJECTS:${target}>
+      COMMAND_EXPAND_LISTS
+      COMMENT "Update mtime of objcect files workaround")
+  endif()
 
   set_target_properties(${target} PROPERTIES
     Swift_MODULE_NAME ${name}

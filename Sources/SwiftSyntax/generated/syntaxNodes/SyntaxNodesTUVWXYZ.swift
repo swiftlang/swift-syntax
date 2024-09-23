@@ -928,11 +928,11 @@ public struct TupleExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(TupleExprSyntax.self)
   }
 
@@ -1301,11 +1301,11 @@ public struct TuplePatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _LeafPa
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(TuplePatternSyntax.self)
   }
 
@@ -1742,11 +1742,11 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSynt
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(TupleTypeSyntax.self)
   }
 
@@ -1920,11 +1920,11 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(TypeAliasDeclSyntax.self)
   }
 
@@ -1965,11 +1965,11 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(TypeAliasDeclSyntax.self)
   }
 
@@ -3405,11 +3405,11 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(VariableDeclSyntax.self)
   }
 
@@ -3451,11 +3451,11 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(VariableDeclSyntax.self)
   }
 
@@ -3536,11 +3536,11 @@ public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     }
     return Syntax(self)
       .replacingChild(
-      at: 7,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 7,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(VariableDeclSyntax.self)
   }
 
@@ -3819,11 +3819,11 @@ public struct VersionTupleSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(VersionTupleSyntax.self)
   }
 
@@ -4083,11 +4083,11 @@ public struct WhileStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(WhileStmtSyntax.self)
   }
 
@@ -4647,11 +4647,11 @@ public struct YieldedExpressionsClauseSyntax: SyntaxProtocol, SyntaxHashable, _L
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(YieldedExpressionsClauseSyntax.self)
   }
 

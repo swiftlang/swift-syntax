@@ -853,11 +853,11 @@ public struct SequenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprS
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(SequenceExprSyntax.self)
   }
 
@@ -1008,11 +1008,11 @@ public struct SimpleStringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable,
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(SimpleStringLiteralExprSyntax.self)
   }
 
@@ -1388,11 +1388,11 @@ public struct SourceFileSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(SourceFileSyntax.self)
   }
 
@@ -1597,11 +1597,11 @@ public struct SpecializeAvailabilityArgumentSyntax: SyntaxProtocol, SyntaxHashab
     }
     return Syntax(self)
       .replacingChild(
-      at: 5,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 5,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(SpecializeAvailabilityArgumentSyntax.self)
   }
 
@@ -2014,11 +2014,11 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     }
     return Syntax(self)
       .replacingChild(
-      at: 5,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 5,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(StringLiteralExprSyntax.self)
   }
 
@@ -2374,11 +2374,11 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(StructDeclSyntax.self)
   }
 
@@ -2420,11 +2420,11 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(StructDeclSyntax.self)
   }
 
@@ -2739,11 +2739,11 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     }
     return Syntax(self)
       .replacingChild(
-      at: 5,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 5,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(SubscriptCallExprSyntax.self)
   }
 
@@ -2823,11 +2823,11 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     }
     return Syntax(self)
       .replacingChild(
-      at: 11,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 11,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(SubscriptCallExprSyntax.self)
   }
 
@@ -2993,11 +2993,11 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(SubscriptDeclSyntax.self)
   }
 
@@ -3038,11 +3038,11 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(SubscriptDeclSyntax.self)
   }
 
@@ -3641,11 +3641,11 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(SwitchCaseLabelSyntax.self)
   }
 
@@ -3911,11 +3911,11 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
     }
     return Syntax(self)
       .replacingChild(
-      at: 5,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 5,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(SwitchCaseSyntax.self)
   }
 
@@ -4255,11 +4255,11 @@ public struct SwitchExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyn
     }
     return Syntax(self)
       .replacingChild(
-      at: 7,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 7,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(SwitchExprSyntax.self)
   }
 

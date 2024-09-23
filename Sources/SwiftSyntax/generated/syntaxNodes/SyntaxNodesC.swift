@@ -516,11 +516,11 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(CatchClauseSyntax.self)
   }
 
@@ -872,11 +872,11 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(ClassDeclSyntax.self)
   }
 
@@ -918,11 +918,11 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(ClassDeclSyntax.self)
   }
 
@@ -1275,11 +1275,11 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(ClosureCaptureClauseSyntax.self)
   }
 
@@ -1835,11 +1835,11 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
     }
     return Syntax(self)
       .replacingChild(
-      at: 5,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 5,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(ClosureExprSyntax.self)
   }
 
@@ -2016,11 +2016,11 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(ClosureParameterClauseSyntax.self)
   }
 
@@ -2211,11 +2211,11 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(ClosureParameterSyntax.self)
   }
 
@@ -2256,11 +2256,11 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(ClosureParameterSyntax.self)
   }
 
@@ -2757,11 +2757,11 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(ClosureSignatureSyntax.self)
   }
 
@@ -3258,11 +3258,11 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(CodeBlockSyntax.self)
   }
 
@@ -3499,11 +3499,11 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(CompositionTypeSyntax.self)
   }
 

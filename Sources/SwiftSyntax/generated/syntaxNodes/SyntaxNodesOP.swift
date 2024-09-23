@@ -625,11 +625,11 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable, 
     }
     return Syntax(self)
       .replacingChild(
-      at: 5,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 5,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(OperatorPrecedenceAndTypesSyntax.self)
   }
 
@@ -1253,11 +1253,11 @@ public struct OriginallyDefinedInAttributeArgumentsSyntax: SyntaxProtocol, Synta
     }
     return Syntax(self)
       .replacingChild(
-      at: 9,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 9,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(OriginallyDefinedInAttributeArgumentsSyntax.self)
   }
 
@@ -3383,11 +3383,11 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Le
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(PrecedenceGroupDeclSyntax.self)
   }
 
@@ -3429,11 +3429,11 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Le
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(PrecedenceGroupDeclSyntax.self)
   }
 
@@ -3540,11 +3540,11 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Le
     }
     return Syntax(self)
       .replacingChild(
-      at: 11,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 11,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(PrecedenceGroupDeclSyntax.self)
   }
 
@@ -3870,11 +3870,11 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable, _Le
     }
     return Syntax(self)
       .replacingChild(
-      at: 5,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 5,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(PrecedenceGroupRelationSyntax.self)
   }
 
@@ -4146,11 +4146,11 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable,
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(PrimaryAssociatedTypeClauseSyntax.self)
   }
 
@@ -4467,11 +4467,11 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(ProtocolDeclSyntax.self)
   }
 
@@ -4513,11 +4513,11 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(ProtocolDeclSyntax.self)
   }
 

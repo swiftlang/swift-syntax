@@ -20,7 +20,7 @@ import SwiftSyntax
   case `self`(DeclSyntaxProtocol)
   /// `Self` keyword representing object type.
   /// Could be associated with type declaration or extension.
-  case `Self`(DeclSyntaxProtocol)
+  case `Self`(ProtocolDeclSyntax)
   /// `error` value caught by a `catch`
   /// block that does not specify a catch pattern.
   case error(CatchClauseSyntax)
@@ -164,13 +164,8 @@ import SwiftSyntax
         default:
           return declSyntax.positionAfterSkippingLeadingTrivia
         }
-      case .Self(let declSyntax):
-        switch Syntax(declSyntax).as(SyntaxEnum.self) {
-        case .protocolDecl(let protocolDecl):
-          return protocolDecl.name.positionAfterSkippingLeadingTrivia
-        default:
-          return declSyntax.positionAfterSkippingLeadingTrivia
-        }
+      case .Self(let protocolDecl):
+        return protocolDecl.name.positionAfterSkippingLeadingTrivia
       case .error(let catchClause):
         return catchClause.body.position
       default:
@@ -271,7 +266,7 @@ import SwiftSyntax
   @_spi(Experimental) public var debugDescription: String {
     let sourceLocationConverter = SourceLocationConverter(fileName: "", tree: syntax.root)
     let location = sourceLocationConverter.location(for: position)
-    let strName = (identifier != nil ? identifier!.name : "NO-NAME") + " at: \(location.line):\(location.column)"
+    let strName = (identifier?.name ?? "NO-NAME") + " at: \(location.line):\(location.column)"
 
     switch self {
     case .identifier:

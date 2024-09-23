@@ -15,6 +15,7 @@ add_swift_syntax_library(SwiftLexicalLookup
   Configurations/FileScopeHandlingConfig.swift
   Configurations/LookupConfig.swift
   
+  Scopes/CanInterleaveResultsLaterScopeSyntax.swift
   Scopes/FunctionScopeSyntax.swift
   Scopes/GenericParameterScopeSyntax.swift
   Scopes/IntroducingToSequentialParentScopeSyntax.swift

@@ -508,22 +508,18 @@ import SwiftSyntax
 @_spi(Experimental) extension AccessorDeclSyntax: ScopeSyntax {
   /// Implicit and/or explicit names introduced within the accessor.
   @_spi(Experimental) public var introducedNames: [LookupName] {
-    let names: [LookupName]
-
     if let parameters {
-      names = LookupName.getNames(from: parameters)
+      return LookupName.getNames(from: parameters)
     } else {
       switch accessorSpecifier.tokenKind {
       case .keyword(.set), .keyword(.willSet):
-        names = [.implicit(.newValue(self))]
+        return [.implicit(.newValue(self))]
       case .keyword(.didSet):
-        names = [.implicit(.oldValue(self))]
+        return [.implicit(.oldValue(self))]
       default:
-        names = []
+        return []
       }
     }
-
-    return names
   }
 
   @_spi(Experimental) public var scopeDebugName: String {
@@ -539,7 +535,10 @@ import SwiftSyntax
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
-    guard let parentAccessorBlockScope = parentScope?.as(AccessorBlockSyntax.self) else {
+    guard let parentScope,
+      let canInterleaveLaterScope = Syntax(parentScope).asProtocol(SyntaxProtocol.self)
+        as? CanInterleaveResultsLaterScopeSyntax
+    else {
       return defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
     }
 
@@ -554,7 +553,7 @@ import SwiftSyntax
       with: config,
       propagateToParent: false
     )
-      + parentAccessorBlockScope.interleaveAccessorResultsAfterSubscriptLookup(
+      + canInterleaveLaterScope.lookupWithInterleavedResults(
         identifier,
         at: lookUpPosition,
         with: config,
@@ -701,7 +700,8 @@ import SwiftSyntax
   }
 }
 
-@_spi(Experimental) extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax {
+@_spi(Experimental)
+extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveResultsLaterScopeSyntax {
   /// Parameters introduced by this subscript and possibly `self` keyword.
   @_spi(Experimental) public var introducedNames: [LookupName] {
     let parameters = parameterClause.parameters.flatMap { parameter in
@@ -726,7 +726,7 @@ import SwiftSyntax
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
-    interleaveResultsAfterThisSubscriptLookup(
+    lookupWithInterleavedResults(
       identifier,
       at: lookUpPosition,
       with: config,
@@ -753,7 +753,7 @@ import SwiftSyntax
   /// introduced at the boundary of the getter. That's why
   /// this function needs to ensure the implicit `self` passed
   /// from inside the accessor block is added after `subscript` parameters.
-  func interleaveResultsAfterThisSubscriptLookup(
+  func lookupWithInterleavedResults(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig,
@@ -779,7 +779,7 @@ import SwiftSyntax
   }
 }
 
-@_spi(Experimental) extension AccessorBlockSyntax: SequentialScopeSyntax {
+@_spi(Experimental) extension AccessorBlockSyntax: SequentialScopeSyntax, CanInterleaveResultsLaterScopeSyntax {
   /// Names from the accessors or
   /// getters of this accessor block scope.
   @_spi(Experimental) public var introducedNames: [LookupName] {
@@ -815,17 +815,20 @@ import SwiftSyntax
 
   /// Used by children accessors to interleave
   /// their results with parent `subscript` declaration scope.
-  func interleaveAccessorResultsAfterSubscriptLookup(
+  func lookupWithInterleavedResults(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig,
     resultsToInterleave: [LookupResult]
   ) -> [LookupResult] {
-    guard let parentSubscriptScope = parentScope?.as(SubscriptDeclSyntax.self) else {
+    guard let parentScope,
+      let canInterleaveLaterScope = Syntax(parentScope).asProtocol(SyntaxProtocol.self)
+        as? CanInterleaveResultsLaterScopeSyntax
+    else {
       return lookupInParent(identifier, at: lookUpPosition, with: config)
     }
 
-    return parentSubscriptScope.interleaveResultsAfterThisSubscriptLookup(
+    return canInterleaveLaterScope.lookupWithInterleavedResults(
       identifier,
       at: lookUpPosition,
       with: config,
@@ -845,7 +848,7 @@ import SwiftSyntax
   }
 }
 
-@_spi(Experimental) extension VariableDeclSyntax: ScopeSyntax {
+@_spi(Experimental) extension VariableDeclSyntax: CanInterleaveResultsLaterScopeSyntax {
   /// Variable decl scope doesn't introduce any
   /// names unless it is a member and is looked
   /// up from inside it's accessor block.
@@ -878,5 +881,18 @@ import SwiftSyntax
     } else {
       return lookupInParent(identifier, at: lookUpPosition, with: config)
     }
+  }
+
+  func lookupWithInterleavedResults(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig,
+    resultsToInterleave: [LookupResult]
+  ) -> [LookupResult] {
+    guard parentScope?.is(MemberBlockSyntax.self) ?? false else {
+      return lookupInParent(identifier, at: lookUpPosition, with: config)
+    }
+
+    return resultsToInterleave + lookupInParent(identifier, at: lookUpPosition, with: config)
   }
 }

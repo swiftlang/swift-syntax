@@ -94,12 +94,6 @@ import SwiftSyntax
 @_spi(Experimental) extension [LookupResult] {
   /// Debug description this array of lookup results.
   @_spi(Experimental) public var debugDescription: String {
-    var str: String = ""
-
-    for (index, result) in self.enumerated() {
-      str += result.debugDescription + (index + 1 == self.count ? "" : "\n")
-    }
-
-    return str
+    return self.map(\.debugDescription).joined(separator: "\n")
   }
 }

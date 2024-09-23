@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import XCTest
 
 final class CollectionNodeFlatteningTests: XCTestCase {
-  func test_FlattenCodeBlockItemListWithBuilder() {
+  func testFlattenCodeBlockItemListWithBuilder() {
     @CodeBlockItemListBuilder
     func buildInnerCodeBlockItemList() -> CodeBlockItemListSyntax {
       [ExprSyntax("innerBuilder1"), ExprSyntax("innerBuilder2")].lazy.map {
@@ -47,7 +47,7 @@ final class CollectionNodeFlatteningTests: XCTestCase {
     )
   }
 
-  func test_FlattenCodeBlockItemListWithCodeBlockItemStrings() {
+  func testFlattenCodeBlockItemListWithCodeBlockItemStrings() {
     let buildable = CodeBlockItemListSyntax {
       "let one = object.methodOne()"
       "let two = object.methodTwo()"
@@ -62,7 +62,7 @@ final class CollectionNodeFlatteningTests: XCTestCase {
     )
   }
 
-  func test_FlattenCodeBlockItemListWithCodeBlockItemStringArray() {
+  func testFlattenCodeBlockItemListWithCodeBlockItemStringArray() {
     let buildable = CodeBlockItemListSyntax {
       ["let one = object.methodOne()", "let two = object.methodTwo()"]
     }
@@ -76,7 +76,7 @@ final class CollectionNodeFlatteningTests: XCTestCase {
     )
   }
 
-  func test_FlattenCodeBlockItemListWithCodeBlockInterpolated() {
+  func testFlattenCodeBlockItemListWithCodeBlockInterpolated() {
     let block = CodeBlockItemListSyntax {
       "let a = 1"
       "let b = 2"
@@ -102,4 +102,21 @@ final class CollectionNodeFlatteningTests: XCTestCase {
       """
     )
   }
+
+  func testFlattenCodeBlockItemListWithTrailingNewline() {
+    let buildable = CodeBlockItemListSyntax {
+      DeclSyntax("let a = 1").with(\.trailingTrivia, .newline)
+      DeclSyntax("let b = 2").with(\.trailingTrivia, .newline)
+    }
+
+    assertBuildResult(
+      buildable,
+      """
+      let a = 1
+      let b = 2
+
+      """
+    )
+  }
+
 }

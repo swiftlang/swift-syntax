@@ -83,8 +83,8 @@ public func failStringsEqualWithDiff(
 
   // Use `CollectionDifference` on supported platforms to get `diff`-like line-based output. On
   // older platforms, fall back to simple string comparison.
-  let actualLines = actual.split(separator: "\n")
-  let expectedLines = expected.split(separator: "\n")
+  let actualLines = actual.split(separator: "\n", omittingEmptySubsequences: false)
+  let expectedLines = expected.split(separator: "\n", omittingEmptySubsequences: false)
 
   let difference = actualLines.difference(from: expectedLines)
 

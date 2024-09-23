@@ -42,9 +42,15 @@ extension CodeBlockItemListBuilder {
   }
 
   public static func buildFinalResult(_ component: Component) -> CodeBlockItemListSyntax {
-    .init(
-      component.enumerated().map { (index, expression) in
-        if index > component.startIndex, !expression.leadingTrivia.contains(where: \.isNewline) {
+    // Treat the first element as being on a new line. It doesn't need a leading newline
+    var previousEndedInNewline = true
+
+    return CodeBlockItemListSyntax(
+      component.map { expression in
+        defer {
+          previousEndedInNewline = expression.trailingTrivia.pieces.last?.isNewline ?? false
+        }
+        if !previousEndedInNewline, !expression.leadingTrivia.contains(where: \.isNewline) {
           return expression.with(\.leadingTrivia, .newline.merging(expression.leadingTrivia))
         } else {
           return expression

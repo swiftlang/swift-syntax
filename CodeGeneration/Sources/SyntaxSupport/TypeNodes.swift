@@ -257,7 +257,7 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "argument",
-        kind: .node(kind: .type)
+        kind: .node(kind: .genericArgumentType)
       ),
       Child(
         name: "trailingComma",
@@ -652,4 +652,25 @@ public let TYPE_NODES: [Node] = [
     nameForDiagnostics: nil,
     elementChoices: [.simpleTypeSpecifier, .lifetimeTypeSpecifier]
   ),
+
+  Node(
+    kind: .genericArgumentType,
+    base: .type,
+    nameForDiagnostics: "generic argument type",
+    children: [
+      Child(
+        name: "value",
+        kind: .nodeChoices(choices: [
+          Child(
+            name: "type",
+            kind: .node(kind: .type)
+          ),
+          Child(
+            name: "expr",
+            kind: .node(kind: .expr)
+          )
+        ])
+      )
+    ]
+  )
 ]

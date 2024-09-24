@@ -626,9 +626,9 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyn
 
 /// ### Children
 /// 
-///  - `leftType`: ``TypeSyntax``
+///  - `leftType`: ``GenericArgumentTypeSyntax``
 ///  - `equal`: (`<binaryOperator>` | `<prefixOperator>` | `<postfixOperator>`)
-///  - `rightType`: ``TypeSyntax``
+///  - `rightType`: ``GenericArgumentTypeSyntax``
 ///
 /// ### Contained in
 /// 
@@ -649,11 +649,11 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeLeftType: UnexpectedNodesSyntax? = nil,
-    leftType: some TypeSyntaxProtocol,
+    leftType: GenericArgumentTypeSyntax,
     _ unexpectedBetweenLeftTypeAndEqual: UnexpectedNodesSyntax? = nil,
     equal: TokenSyntax,
     _ unexpectedBetweenEqualAndRightType: UnexpectedNodesSyntax? = nil,
-    rightType: some TypeSyntaxProtocol,
+    rightType: GenericArgumentTypeSyntax,
     _ unexpectedAfterRightType: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -697,9 +697,9 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
     }
   }
 
-  public var leftType: TypeSyntax {
+  public var leftType: GenericArgumentTypeSyntax {
     get {
-      return Syntax(self).child(at: 1)!.cast(TypeSyntax.self)
+      return Syntax(self).child(at: 1)!.cast(GenericArgumentTypeSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(SameTypeRequirementSyntax.self)
@@ -739,9 +739,9 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
     }
   }
 
-  public var rightType: TypeSyntax {
+  public var rightType: GenericArgumentTypeSyntax {
     get {
-      return Syntax(self).child(at: 5)!.cast(TypeSyntax.self)
+      return Syntax(self).child(at: 5)!.cast(GenericArgumentTypeSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(SameTypeRequirementSyntax.self)

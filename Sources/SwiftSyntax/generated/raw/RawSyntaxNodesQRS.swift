@@ -386,11 +386,11 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
 
   public init(
     _ unexpectedBeforeLeftType: RawUnexpectedNodesSyntax? = nil,
-    leftType: some RawTypeSyntaxNodeProtocol,
+    leftType: RawGenericArgumentTypeSyntax,
     _ unexpectedBetweenLeftTypeAndEqual: RawUnexpectedNodesSyntax? = nil,
     equal: RawTokenSyntax,
     _ unexpectedBetweenEqualAndRightType: RawUnexpectedNodesSyntax? = nil,
-    rightType: some RawTypeSyntaxNodeProtocol,
+    rightType: RawGenericArgumentTypeSyntax,
     _ unexpectedAfterRightType: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
@@ -412,8 +412,8 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var leftType: RawTypeSyntax {
-    layoutView.children[1].map(RawTypeSyntax.init(raw:))!
+  public var leftType: RawGenericArgumentTypeSyntax {
+    layoutView.children[1].map(RawGenericArgumentTypeSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenLeftTypeAndEqual: RawUnexpectedNodesSyntax? {
@@ -428,8 +428,8 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var rightType: RawTypeSyntax {
-    layoutView.children[5].map(RawTypeSyntax.init(raw:))!
+  public var rightType: RawGenericArgumentTypeSyntax {
+    layoutView.children[5].map(RawGenericArgumentTypeSyntax.init(raw:))!
   }
 
   public var unexpectedAfterRightType: RawUnexpectedNodesSyntax? {

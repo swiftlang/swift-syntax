@@ -260,8 +260,10 @@ final class TypeTests: ParserTestCase {
                 genericArgumentClause: GenericArgumentClauseSyntax(
                   arguments: GenericArgumentListSyntax([
                     GenericArgumentSyntax(
-                      argument: IdentifierTypeSyntax(
-                        name: .identifier("Foo")
+                      argument: GenericArgumentTypeSyntax(
+                        value: .type(TypeSyntax(IdentifierTypeSyntax(
+                          name: .identifier("Foo")
+                        )))
                       )
                     )
                   ])

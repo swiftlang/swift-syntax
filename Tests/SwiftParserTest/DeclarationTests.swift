@@ -2715,8 +2715,9 @@ final class DeclarationTests: ParserTestCase {
           genericArgumentClause: GenericArgumentClauseSyntax(
             arguments: GenericArgumentListSyntax([
               GenericArgumentSyntax(
-                argument:
-                  IdentifierTypeSyntax(name: .identifier("T"))
+                argument: GenericArgumentTypeSyntax(
+                  value: .type(TypeSyntax(IdentifierTypeSyntax(name: .identifier("T"))))
+                )
               )
             ])
           )

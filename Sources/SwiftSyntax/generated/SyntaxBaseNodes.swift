@@ -1371,6 +1371,7 @@ extension Syntax {
 /// - ``CompositionTypeSyntax``
 /// - ``DictionaryTypeSyntax``
 /// - ``FunctionTypeSyntax``
+/// - ``GenericArgumentTypeSyntax``
 /// - ``IdentifierTypeSyntax``
 /// - ``ImplicitlyUnwrappedOptionalTypeSyntax``
 /// - ``MemberTypeSyntax``
@@ -1419,7 +1420,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public init?(_ node: __shared some SyntaxProtocol) {
     switch node.raw.kind {
-    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
+    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .genericArgumentType, .identifierType, .implicitlyUnwrappedOptionalType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -1450,6 +1451,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       .node(CompositionTypeSyntax.self),
       .node(DictionaryTypeSyntax.self),
       .node(FunctionTypeSyntax.self),
+      .node(GenericArgumentTypeSyntax.self),
       .node(IdentifierTypeSyntax.self),
       .node(ImplicitlyUnwrappedOptionalTypeSyntax.self),
       .node(MemberTypeSyntax.self),
@@ -1637,6 +1639,7 @@ extension Syntax {
       .node(GenericArgumentClauseSyntax.self),
       .node(GenericArgumentListSyntax.self),
       .node(GenericArgumentSyntax.self),
+      .node(GenericArgumentTypeSyntax.self),
       .node(GenericParameterClauseSyntax.self),
       .node(GenericParameterListSyntax.self),
       .node(GenericParameterSyntax.self),

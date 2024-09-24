@@ -334,7 +334,7 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "leftType",
-        kind: .node(kind: .type),
+        kind: .node(kind: .genericArgumentType),
         nameForDiagnostics: "left-hand type"
       ),
       Child(
@@ -343,7 +343,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "rightType",
-        kind: .node(kind: .type),
+        kind: .node(kind: .genericArgumentType),
         nameForDiagnostics: "right-hand type"
       ),
     ],

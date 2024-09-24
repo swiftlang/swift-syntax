@@ -29,6 +29,7 @@ fileprivate struct NoOpMemberMacro: MemberMacro {
   static func expansion(
     of node: AttributeSyntax,
     providingMembersOf declaration: some DeclGroupSyntax,
+    conformingTo protocols: [TypeSyntax],
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
     return []
@@ -43,6 +44,7 @@ final class MemberMacroTests: XCTestCase {
       static func expansion(
         of node: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,
+        conformingTo protocols: [TypeSyntax],
         in context: some MacroExpansionContext
       ) throws -> [DeclSyntax] {
         guard case .argumentList(let arguments) = node.arguments else {
@@ -88,6 +90,7 @@ final class MemberMacroTests: XCTestCase {
       static func expansion(
         of node: AttributeSyntax,
         providingMembersOf decl: some DeclGroupSyntax,
+        conformingTo protocols: [TypeSyntax],
         in context: some MacroExpansionContext
       ) throws -> [DeclSyntax] {
         return ["var _storage: Storage<Self>"]
@@ -179,6 +182,7 @@ final class MemberMacroTests: XCTestCase {
       static func expansion(
         of node: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,
+        conformingTo protocols: [TypeSyntax],
         in context: some MacroExpansionContext
       ) throws -> [DeclSyntax] {
         guard case .argumentList(let arguments) = node.arguments, let argument = arguments.first?.expression else {
@@ -227,6 +231,7 @@ final class MemberMacroTests: XCTestCase {
       static func expansion(
         of node: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,
+        conformingTo protocols: [TypeSyntax],
         in context: some MacroExpansionContext
       ) throws -> [DeclSyntax] {
         guard case .argumentList(let arguments) = node.arguments, let argument = arguments.first?.expression else {

@@ -194,7 +194,7 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
 
 /// ### Children
 /// 
-///  - `argument`: ``TypeSyntax``
+///  - `argument`: ``GenericArgumentTypeSyntax``
 ///  - `trailingComma`: `,`?
 ///
 /// ### Contained in
@@ -216,7 +216,7 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeArgument: UnexpectedNodesSyntax? = nil,
-    argument: some TypeSyntaxProtocol,
+    argument: GenericArgumentTypeSyntax,
     _ unexpectedBetweenArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax? = nil,
     _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
@@ -258,9 +258,9 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
     }
   }
 
-  public var argument: TypeSyntax {
+  public var argument: GenericArgumentTypeSyntax {
     get {
-      return Syntax(self).child(at: 1)!.cast(TypeSyntax.self)
+      return Syntax(self).child(at: 1)!.cast(GenericArgumentTypeSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(GenericArgumentSyntax.self)
@@ -304,6 +304,162 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
     \Self.trailingComma,
     \Self.unexpectedAfterTrailingComma
   ])
+}
+
+// MARK: - GenericArgumentTypeSyntax
+
+/// ### Children
+/// 
+///  - `value`: (``TypeSyntax`` | ``ExprSyntax``)
+///
+/// ### Contained in
+/// 
+///  - ``GenericArgumentSyntax``.``GenericArgumentSyntax/argument``
+///  - ``SameTypeRequirementSyntax``.``SameTypeRequirementSyntax/leftType``
+///  - ``SameTypeRequirementSyntax``.``SameTypeRequirementSyntax/rightType``
+public struct GenericArgumentTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
+  public enum Value: SyntaxChildChoices, SyntaxHashable {
+    case type(TypeSyntax)
+    case expr(ExprSyntax)
+
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .type(let node):
+        return node._syntaxNode
+      case .expr(let node):
+        return node._syntaxNode
+      }
+    }
+
+    public init(_ node: some TypeSyntaxProtocol) {
+      self = .type(TypeSyntax(node))
+    }
+
+    public init(_ node: some ExprSyntaxProtocol) {
+      self = .expr(ExprSyntax(node))
+    }
+
+    public init?(_ node: __shared some SyntaxProtocol) {
+      if let node = node.as(TypeSyntax.self) {
+        self = .type(node)
+      } else if let node = node.as(ExprSyntax.self) {
+        self = .expr(node)
+      } else {
+        return nil
+      }
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([.node(TypeSyntax.self), .node(ExprSyntax.self)])
+    }
+
+    /// Checks if the current syntax node can be cast to the type conforming to the ``TypeSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: (some TypeSyntaxProtocol).Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to the type conforming to the ``TypeSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+    public func `as`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+      return S.init(self)
+    }
+
+    /// Force-casts the current syntax node to the type conforming to the ``TypeSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+      return self.as(S.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: (some ExprSyntaxProtocol).Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+    public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+      return S.init(self)
+    }
+
+    /// Force-casts the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+      return self.as(S.self)!
+    }
+  }
+
+  public let _syntaxNode: Syntax
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard node.raw.kind == .genericArgumentType else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeValue: UnexpectedNodesSyntax? = nil,
+    value: Value,
+    _ unexpectedAfterValue: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeValue, value, unexpectedAfterValue))) { (arena, _) in
+      let layout: [RawSyntax?] = [unexpectedBeforeValue?.raw, value.raw, unexpectedAfterValue?.raw]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.genericArgumentType,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeValue: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(GenericArgumentTypeSyntax.self)
+    }
+  }
+
+  public var value: Value {
+    get {
+      return Syntax(self).child(at: 1)!.cast(Value.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(GenericArgumentTypeSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterValue: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(GenericArgumentTypeSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeValue, \Self.value, \Self.unexpectedAfterValue])
 }
 
 // MARK: - GenericParameterClauseSyntax

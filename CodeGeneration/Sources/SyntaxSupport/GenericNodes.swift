@@ -307,7 +307,7 @@ public let GENERIC_NODES: [Node] = [
       Child(
         name: "leftType",
         deprecatedName: "leftTypeIdentifier",
-        kind: .node(kind: .type),
+        kind: .node(kind: .genericArgumentType),
         nameForDiagnostics: "left-hand type"
       ),
       Child(
@@ -318,7 +318,7 @@ public let GENERIC_NODES: [Node] = [
       Child(
         name: "rightType",
         deprecatedName: "rightTypeIdentifier",
-        kind: .node(kind: .type),
+        kind: .node(kind: .genericArgumentType),
         nameForDiagnostics: "right-hand type"
       ),
     ]

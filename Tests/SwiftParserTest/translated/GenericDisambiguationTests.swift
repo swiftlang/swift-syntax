@@ -91,11 +91,15 @@ final class GenericDisambiguationTests: ParserTestCase {
       """,
       substructure: GenericArgumentListSyntax([
         GenericArgumentSyntax(
-          argument: IdentifierTypeSyntax(name: .identifier("b")),
+          argument: GenericArgumentTypeSyntax(
+            value: .type(TypeSyntax(IdentifierTypeSyntax(name: .identifier("b"))))
+          ),
           trailingComma: .commaToken()
         ),
         GenericArgumentSyntax(
-          argument: IdentifierTypeSyntax(name: .identifier("c"))
+          argument: GenericArgumentTypeSyntax(
+            value: .type(TypeSyntax(IdentifierTypeSyntax(name: .identifier("c"))))
+          )
         ),
       ])
     )
@@ -109,11 +113,15 @@ final class GenericDisambiguationTests: ParserTestCase {
       """,
       substructure: GenericArgumentListSyntax([
         GenericArgumentSyntax(
-          argument: IdentifierTypeSyntax(name: .identifier("b")),
+          argument: GenericArgumentTypeSyntax(
+            value: .type(TypeSyntax(IdentifierTypeSyntax(name: .identifier("b"))))
+          ),
           trailingComma: .commaToken()
         ),
         GenericArgumentSyntax(
-          argument: IdentifierTypeSyntax(name: .identifier("c"))
+          argument: GenericArgumentTypeSyntax(
+            value: .type(TypeSyntax(IdentifierTypeSyntax(name: .identifier("c"))))
+          )
         ),
       ])
     )

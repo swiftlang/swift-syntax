@@ -1529,6 +1529,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "trailingComma"
   case \GenericArgumentSyntax.unexpectedAfterTrailingComma:
     return "unexpectedAfterTrailingComma"
+  case \GenericArgumentTypeSyntax.unexpectedBeforeValue:
+    return "unexpectedBeforeValue"
+  case \GenericArgumentTypeSyntax.value:
+    return "value"
+  case \GenericArgumentTypeSyntax.unexpectedAfterValue:
+    return "unexpectedAfterValue"
   case \GenericParameterClauseSyntax.unexpectedBeforeLeftAngle:
     return "unexpectedBeforeLeftAngle"
   case \GenericParameterClauseSyntax.leftAngle:

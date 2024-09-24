@@ -138,6 +138,7 @@ public enum SyntaxKind: Sendable {
   case genericArgumentClause
   case genericArgumentList
   case genericArgument
+  case genericArgumentType
   case genericParameterClause
   case genericParameterList
   case genericParameter
@@ -686,6 +687,8 @@ public enum SyntaxKind: Sendable {
       return GenericArgumentListSyntax.self
     case .genericArgument:
       return GenericArgumentSyntax.self
+    case .genericArgumentType:
+      return GenericArgumentTypeSyntax.self
     case .genericParameterClause:
       return GenericParameterClauseSyntax.self
     case .genericParameterList:

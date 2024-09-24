@@ -102,4 +102,147 @@ final class ValueGenericsTests: ParserTestCase {
         """
     )
   }
+
+  func testIntegers() {
+    assertParse(
+      """
+      let x: 1️⃣123
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected type in type annotation",
+          fixIts: ["insert type"]
+        ),
+        DiagnosticSpec(
+          message: "expected '=' in variable",
+          fixIts: ["insert '='"]
+        )
+      ],
+      fixedSource: """
+        let x: <#type#> = 123
+        """
+    )
+
+    assertParse(
+      """
+      let x: Generic<123>
+      """
+    )
+
+    // FIXME?: We can't parse this either in the old parser or the swift-syntax one.
+    assertParse(
+      """
+      let x: Generic1️⃣<-123>
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "extraneous code '<-123>' at top level"
+        )
+      ]
+    )
+
+    assertParse(
+      """
+      typealias One = 1️⃣1
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected type in typealias declaration",
+          fixIts: ["insert type"]
+        )
+      ],
+      fixedSource: """
+        typealias One = <#type#>1
+        """
+    )
+
+    assertParse(
+      """
+      extension Vector where N == 123 {}
+      """
+    )
+
+    assertParse(
+      """
+      extension Vector where 123 == N {}
+      """
+    )
+
+    assertParse(
+      """
+      extension Vector where N == -123 {}
+      """
+    )
+
+    assertParse(
+      """
+      extension Vector where -123 == N {}
+      """
+    )
+
+    assertParse(
+      """
+      extension Vector where N: 1️⃣123 {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected type in conformance requirement",
+          fixIts: ["insert type"]
+        ),
+        DiagnosticSpec(
+          message: "unexpected code '123' in extension"
+        )
+      ],
+      fixedSource: """
+        extension Vector where N: <#type#> 123 {}
+        """
+    )
+
+    assertParse(
+      """
+      extension Vector where N: 1️⃣-123 {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected type in conformance requirement",
+          fixIts: ["insert type"]
+        ),
+        DiagnosticSpec(
+          message: "unexpected code '-123' in extension"
+        )
+      ],
+      fixedSource: """
+        extension Vector where N: <#type#> -123 {}
+        """
+    )
+
+    // FIXME: Not the best diagnostic
+    assertParse(
+      """
+      extension Vector where 1231️⃣: N {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ':' or '==' to indicate a conformance or same-type requirement"
+        ),
+        DiagnosticSpec(
+          message: "unexpected code ': N' in extension"
+        )
+      ]
+    )
+
+    assertParse(
+      """
+      extension Vector where -1231️⃣: N {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ':' or '==' to indicate a conformance or same-type requirement"
+        ),
+        DiagnosticSpec(
+          message: "unexpected code ': N' in extension"
+        )
+      ]
+    )
+  }
 }

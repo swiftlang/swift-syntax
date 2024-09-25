@@ -498,7 +498,13 @@ import SwiftSyntax
     with config: LookupConfig
   ) -> [LookupResult] {
     if memberBlock.range.contains(lookUpPosition) {
-      return [.lookInMembers(self)] + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
+      let implicitSelf: [LookupName] = [.implicit(.Self(self))]
+        .filter { name in
+          checkIdentifier(identifier, refersTo: name, at: lookUpPosition)
+        }
+
+      return (implicitSelf.isEmpty ? [] : [.fromScope(self, withNames: implicitSelf)]) + [.lookInMembers(self)]
+        + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
     } else {
       return defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
     }
@@ -665,13 +671,16 @@ import SwiftSyntax
       )
     }
 
+    let lookInMembers: [LookupResult] =
+      inheritanceClause?.range.contains(lookUpPosition) ?? false ? [] : [.lookInMembers(self)]
+
     return results
       + defaultLookupImplementation(
         identifier,
         at: lookUpPosition,
         with: config,
         propagateToParent: false
-      ) + [.lookInMembers(self)] + lookupInParent(identifier, at: lookUpPosition, with: config)
+      ) + lookInMembers + lookupInParent(identifier, at: lookUpPosition, with: config)
   }
 }
 
@@ -868,12 +877,11 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
-    if let parentScope,
-      parentScope.is(MemberBlockSyntax.self),
-      bindings.first?.accessorBlock?.range.contains(lookUpPosition) ?? false
-    {
+    if bindings.first?.accessorBlock?.range.contains(lookUpPosition) ?? false {
+      let shouldIntroduceSelf = parentScope?.is(MemberBlockSyntax.self) ?? false
+
       return defaultLookupImplementation(
-        in: [.implicit(.self(self))],
+        in: LookupName.getNames(from: self) + (shouldIntroduceSelf ? [.implicit(.self(self))] : []),
         identifier,
         at: lookUpPosition,
         with: config
@@ -883,6 +891,8 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
     }
   }
 
+  /// If a member, introduce results passed in `resultsToInterleave`
+  /// and then pass lookup to the parent. Otherwise, perform `lookup`.
   func lookupWithInterleavedResults(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
@@ -890,7 +900,7 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
     resultsToInterleave: [LookupResult]
   ) -> [LookupResult] {
     guard parentScope?.is(MemberBlockSyntax.self) ?? false else {
-      return lookupInParent(identifier, at: lookUpPosition, with: config)
+      return lookup(identifier, at: lookUpPosition, with: config)
     }
 
     return resultsToInterleave + lookupInParent(identifier, at: lookUpPosition, with: config)

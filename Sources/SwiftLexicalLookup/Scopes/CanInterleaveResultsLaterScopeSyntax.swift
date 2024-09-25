@@ -13,6 +13,9 @@
 import SwiftSyntax
 
 protocol CanInterleaveResultsLaterScopeSyntax: ScopeSyntax {
+  /// Perform lookup in this scope and later introduce results
+  /// passed as `resultsToInterleave`.
+  /// The exact behavior depends on a specific scope.
   func lookupWithInterleavedResults(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,

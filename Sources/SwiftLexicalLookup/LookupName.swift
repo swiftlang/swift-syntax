@@ -20,7 +20,7 @@ import SwiftSyntax
   case `self`(DeclSyntaxProtocol)
   /// `Self` keyword representing object type.
   /// Could be associated with type declaration or extension.
-  case `Self`(ProtocolDeclSyntax)
+  case `Self`(DeclSyntaxProtocol)
   /// `error` value caught by a `catch`
   /// block that does not specify a catch pattern.
   case error(CatchClauseSyntax)
@@ -147,27 +147,33 @@ import SwiftSyntax
     case .identifier(let syntax, _):
       return syntax.identifier.positionAfterSkippingLeadingTrivia
     case .declaration(let syntax):
-      return syntax.name.position
+      return syntax.name.positionAfterSkippingLeadingTrivia
     case .implicit(let implicitName):
       switch implicitName {
       case .self(let declSyntax):
         switch Syntax(declSyntax).as(SyntaxEnum.self) {
         case .functionDecl(let functionDecl):
-          return functionDecl.name.position
+          return functionDecl.name.positionAfterSkippingLeadingTrivia
         case .initializerDecl(let initializerDecl):
           return initializerDecl.initKeyword.positionAfterSkippingLeadingTrivia
         case .subscriptDecl(let subscriptDecl):
-          return subscriptDecl.accessorBlock?.position ?? subscriptDecl.endPosition
+          return subscriptDecl.accessorBlock?.positionAfterSkippingLeadingTrivia
+            ?? subscriptDecl.endPositionBeforeTrailingTrivia
         case .variableDecl(let variableDecl):
           return variableDecl.bindings.first?.accessorBlock?.positionAfterSkippingLeadingTrivia
             ?? variableDecl.endPosition
         default:
           return declSyntax.positionAfterSkippingLeadingTrivia
         }
-      case .Self(let protocolDecl):
-        return protocolDecl.name.positionAfterSkippingLeadingTrivia
+      case .Self(let declSyntax):
+        switch Syntax(declSyntax).as(SyntaxEnum.self) {
+        case .protocolDecl(let protocolDecl):
+          return protocolDecl.name.positionAfterSkippingLeadingTrivia
+        default:
+          return declSyntax.positionAfterSkippingLeadingTrivia
+        }
       case .error(let catchClause):
-        return catchClause.body.position
+        return catchClause.body.positionAfterSkippingLeadingTrivia
       default:
         return implicitName.syntax.positionAfterSkippingLeadingTrivia
       }

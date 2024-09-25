@@ -660,7 +660,7 @@ final class testNameLookup: XCTestCase {
   func testImplicitSelf() {
     assertLexicalNameLookup(
       source: """
-        extension a {
+        7️⃣extension a {
           struct b {
             2️⃣func foo() {
               let x: 3️⃣Self = 4️⃣self
@@ -675,6 +675,7 @@ final class testNameLookup: XCTestCase {
       references: [
         "3️⃣": [
           .lookInMembers(StructDeclSyntax.self),
+          .fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.Self("7️⃣"))]),
           .lookInMembers(ExtensionDeclSyntax.self),
         ],
         "4️⃣": [
@@ -683,7 +684,8 @@ final class testNameLookup: XCTestCase {
           .lookInMembers(ExtensionDeclSyntax.self),
         ],
         "5️⃣": [
-          .lookInMembers(ExtensionDeclSyntax.self)
+          .fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.Self("7️⃣"))]),
+          .lookInMembers(ExtensionDeclSyntax.self),
         ],
         "6️⃣": [
           .fromScope(FunctionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))]),

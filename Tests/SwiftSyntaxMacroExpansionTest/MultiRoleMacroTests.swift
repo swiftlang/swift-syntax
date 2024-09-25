@@ -126,6 +126,7 @@ final class MultiRoleMacroTests: XCTestCase {
       static func expansion(
         of node: AttributeSyntax,
         providingMembersOf declaration: some DeclGroupSyntax,
+        conformingTo protocols: [TypeSyntax],
         in context: some MacroExpansionContext
       ) throws -> [DeclSyntax] {
         return ["var _storage: Wrapper<Self>"]

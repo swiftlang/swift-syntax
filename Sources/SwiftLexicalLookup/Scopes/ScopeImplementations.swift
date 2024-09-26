@@ -671,8 +671,7 @@ import SwiftSyntax
       )
     }
 
-    let lookInMembers: [LookupResult] =
-      inheritanceClause?.range.contains(lookUpPosition) ?? false ? [] : [.lookInMembers(self)]
+    let lookInMembers: [LookupResult] = memberBlock.range.contains(lookUpPosition) ? [.lookInMembers(self)] : []
 
     return results
       + defaultLookupImplementation(

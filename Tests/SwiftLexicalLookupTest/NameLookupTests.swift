@@ -1007,12 +1007,10 @@ final class testNameLookup: XCTestCase {
       references: [
         "1️⃣": [
           .fromScope(MemberBlockSyntax.self, expectedNames: ["3️⃣"]),
-          .lookInMembers(ProtocolDeclSyntax.self),
           .fromFileScope(expectedNames: ["0️⃣"]),
         ],
         "2️⃣": [
-          .fromScope(MemberBlockSyntax.self, expectedNames: ["4️⃣"]),
-          .lookInMembers(ProtocolDeclSyntax.self),
+          .fromScope(MemberBlockSyntax.self, expectedNames: ["4️⃣"])
         ],
       ],
       expectedResultTypes: .all(

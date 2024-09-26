@@ -3351,6 +3351,25 @@ final class DeclarationTests: ParserTestCase {
     )
     assertParse(
       """
+      public var i: Int {
+        _read {
+          yield _i
+        }
+        read {
+          yield _i
+        }
+        _modify {
+          yield &_i
+        }
+        modify {
+          yield &_i
+        }
+      }
+      """,
+      experimentalFeatures: .coroutineAccessors
+    )
+    assertParse(
+      """
       var i_rm: Int {
         _read {
           yield _i

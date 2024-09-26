@@ -21,138 +21,138 @@ import SwiftSyntax
 extension AccessorBlockSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension AccessorBlockSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension AccessorBlockSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension AccessorDeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension AccessorDeclSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension AccessorDeclSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension AttributeSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension AttributeSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension AttributeSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension CatchClauseSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension CatchClauseSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension CatchClauseSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension ClosureParameterSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension ClosureParameterSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension ClosureParameterSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension CodeBlockItemSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension CodeBlockItemSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension CodeBlockItemSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension CodeBlockSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension CodeBlockSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension CodeBlockSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension DeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension DeclSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension DeclSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension EnumCaseParameterSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension EnumCaseParameterSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension EnumCaseParameterSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension ExprSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension ExprSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension ExprSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension FunctionParameterSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension FunctionParameterSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension FunctionParameterSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension GenericParameterClauseSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension GenericParameterClauseSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension GenericParameterClauseSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension MemberBlockSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension MemberBlockSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension MemberBlockSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension PatternSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension PatternSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension PatternSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension SourceFileSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension SourceFileSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension SourceFileSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension StmtSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension StmtSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension StmtSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension SwitchCaseSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension SwitchCaseSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension SwitchCaseSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension TypeSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension TypeSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension TypeSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension VersionTupleSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension VersionTupleSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension VersionTupleSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension AccessorDeclListSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension AccessorDeclListSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension AccessorDeclListSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension AttributeListSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension AttributeListSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension AttributeListSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension CodeBlockItemListSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension CodeBlockItemListSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension CodeBlockItemListSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension MemberBlockItemListSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension MemberBlockItemListSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension MemberBlockItemListSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 

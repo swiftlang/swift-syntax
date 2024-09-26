@@ -43,7 +43,7 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax(le
     DeclSyntax(
       """
       #if compiler(>=6)
-      extension \(type): @retroactive ExpressibleByStringInterpolation {}
+      extension \(type): Swift.ExpressibleByStringInterpolation {}
       #endif
       """
     )

@@ -466,7 +466,7 @@ extension TokenSyntax: SyntaxExpressibleByStringInterpolation {
 #if compiler(>=6)
 // Silence warning that TokenSyntax has a retroactive conformance to `ExpressibleByStringInterpolation` through
 // `SyntaxExpressibleByStringInterpolation`.
-extension TokenSyntax: @retroactive ExpressibleByStringInterpolation {}
+extension TokenSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 // MARK: - Trivia expressible as string
@@ -515,7 +515,7 @@ extension Trivia {
 }
 
 #if compiler(>=6)
-extension Trivia: @retroactive ExpressibleByStringInterpolation {}
+extension Trivia: Swift.ExpressibleByStringInterpolation {}
 #else
 extension Trivia: ExpressibleByStringInterpolation {}
 #endif

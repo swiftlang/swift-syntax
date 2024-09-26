@@ -633,7 +633,7 @@ final class testNameLookup: XCTestCase {
     )
   }
 
-  func testGuardOnFileScope() {  // TODO: Fix this according to ASTScope (ommiting class a)
+  func testGuardOnFileScope() {
     assertLexicalNameLookup(
       source: """
         let 1️⃣a = 0
@@ -904,7 +904,7 @@ final class testNameLookup: XCTestCase {
     )
   }
 
-  func testSwitchExpression() {  // TODO: For some reason ASTScope doesn't introduce any results besides first function call expr.
+  func testSwitchExpression() {
     assertLexicalNameLookup(
       source: """
         switch {
@@ -1070,7 +1070,7 @@ final class testNameLookup: XCTestCase {
     )
   }
 
-  func testSubscript() {  // TODO: Fix behavior of self keyword in subscript with accessors.
+  func testSubscript() {
     assertLexicalNameLookup(
       source: """
         class X {

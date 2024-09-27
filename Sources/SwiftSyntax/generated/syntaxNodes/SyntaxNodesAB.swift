@@ -369,11 +369,11 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(AccessorDeclSyntax.self)
   }
 
@@ -918,11 +918,11 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(ActorDeclSyntax.self)
   }
 
@@ -964,11 +964,11 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(ActorDeclSyntax.self)
   }
 
@@ -1362,11 +1362,11 @@ public struct ArrayExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(ArrayExprSyntax.self)
   }
 
@@ -2095,11 +2095,11 @@ public struct AssociatedTypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(AssociatedTypeDeclSyntax.self)
   }
 
@@ -2141,11 +2141,11 @@ public struct AssociatedTypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(AssociatedTypeDeclSyntax.self)
   }
 
@@ -3264,11 +3264,11 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(AttributedTypeSyntax.self)
   }
 
@@ -3310,11 +3310,11 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(AttributedTypeSyntax.self)
   }
 
@@ -3750,11 +3750,11 @@ public struct AvailabilityConditionSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
     }
     return Syntax(self)
       .replacingChild(
-      at: 5,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 5,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(AvailabilityConditionSyntax.self)
   }
 
@@ -4309,11 +4309,11 @@ public struct BackDeployedAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashab
     }
     return Syntax(self)
       .replacingChild(
-      at: 5,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 5,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(BackDeployedAttributeArgumentsSyntax.self)
   }
 

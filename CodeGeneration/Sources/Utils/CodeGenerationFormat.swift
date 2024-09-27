@@ -96,6 +96,18 @@ public class CodeGenerationFormat: BasicFormat {
     let children = node.children(viewMode: .all)
     // Short tuple element list literals are presented on one line, list each element on a different line.
     if children.count > maxElementsOnSameLine {
+      let inMethodCallThatStartsOnNewline =
+        node.parent?.as(FunctionCallExprSyntax.self)?.calledExpression.as(MemberAccessExprSyntax.self)?.period
+        .startsOnNewline ?? false
+      if inMethodCallThatStartsOnNewline {
+        increaseIndentationLevel()
+      }
+      defer {
+        if inMethodCallThatStartsOnNewline {
+          decreaseIndentationLevel()
+        }
+      }
+
       return LabeledExprListSyntax(
         formatChildrenSeparatedByNewline(children: children, elementType: LabeledExprSyntax.self)
       )
@@ -111,10 +123,7 @@ public class CodeGenerationFormat: BasicFormat {
       if indentManually {
         return false
       }
-      let startsOnNewline =
-        node.leadingTrivia.contains(where: \.isNewline)
-        || node.previousToken(viewMode: .sourceAccurate)?.trailingTrivia.contains(where: \.isNewline) ?? false
-      if !startsOnNewline {
+      if !node.startsOnNewline {
         return false
       }
     default:
@@ -151,11 +160,7 @@ public class CodeGenerationFormat: BasicFormat {
       var child = child
       child.trailingTrivia = Trivia(pieces: child.trailingTrivia.drop(while: \.isSpaceOrTab))
 
-      let startsOnNewline =
-        child.leadingTrivia.contains(where: \.isNewline)
-        || child.previousToken(viewMode: .sourceAccurate)?.trailingTrivia.contains(where: \.isNewline) ?? false
-
-      if !startsOnNewline {
+      if !child.startsOnNewline {
         child.leadingTrivia = indentedNewline + child.leadingTrivia
       }
       return child
@@ -172,5 +177,12 @@ public class CodeGenerationFormat: BasicFormat {
       }
     }
     return formattedChildren
+  }
+}
+
+private extension SyntaxProtocol {
+  var startsOnNewline: Bool {
+    return self.leadingTrivia.contains(where: \.isNewline)
+      || self.previousToken(viewMode: .sourceAccurate)?.trailingTrivia.contains(where: \.isNewline) ?? false
   }
 }

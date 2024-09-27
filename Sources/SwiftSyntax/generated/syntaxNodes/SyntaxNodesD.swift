@@ -554,11 +554,11 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(DeclNameArgumentsSyntax.self)
   }
 
@@ -971,11 +971,11 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Leaf
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(DeinitializerDeclSyntax.self)
   }
 
@@ -1017,11 +1017,11 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Leaf
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(DeinitializerDeclSyntax.self)
   }
 
@@ -2440,11 +2440,11 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable, 
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(DifferentiabilityArgumentsSyntax.self)
   }
 
@@ -3308,11 +3308,11 @@ public struct DoExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
     }
     return Syntax(self)
       .replacingChild(
-      at: 5,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 5,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(DoExprSyntax.self)
   }
 
@@ -3501,11 +3501,11 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
     }
     return Syntax(self)
       .replacingChild(
-      at: 7,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 7,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(DoStmtSyntax.self)
   }
 

@@ -387,11 +387,11 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
     }
     return Syntax(self)
       .replacingChild(
-      at: 5,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 5,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(KeyPathExprSyntax.self)
   }
 
@@ -737,11 +737,11 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable, _
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(KeyPathSubscriptComponentSyntax.self)
   }
 
@@ -1939,11 +1939,11 @@ public struct LifetimeTypeSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
     }
     return Syntax(self)
       .replacingChild(
-      at: 7,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 7,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(LifetimeTypeSpecifierSyntax.self)
   }
 
@@ -2128,11 +2128,11 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(MacroDeclSyntax.self)
   }
 
@@ -2173,11 +2173,11 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(MacroDeclSyntax.self)
   }
 
@@ -2478,11 +2478,11 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(MacroExpansionDeclSyntax.self)
   }
 
@@ -2523,11 +2523,11 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(MacroExpansionDeclSyntax.self)
   }
 
@@ -2651,11 +2651,11 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
     }
     return Syntax(self)
       .replacingChild(
-      at: 13,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 13,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(MacroExpansionDeclSyntax.self)
   }
 
@@ -2735,11 +2735,11 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
     }
     return Syntax(self)
       .replacingChild(
-      at: 19,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 19,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(MacroExpansionDeclSyntax.self)
   }
 
@@ -2997,11 +2997,11 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Lea
     }
     return Syntax(self)
       .replacingChild(
-      at: 9,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 9,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(MacroExpansionExprSyntax.self)
   }
 
@@ -3081,11 +3081,11 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Lea
     }
     return Syntax(self)
       .replacingChild(
-      at: 15,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 15,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(MacroExpansionExprSyntax.self)
   }
 
@@ -3686,11 +3686,11 @@ public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(MemberBlockSyntax.self)
   }
 
@@ -4155,11 +4155,11 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSy
     }
     return Syntax(self)
       .replacingChild(
-      at: 1,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(MissingDeclSyntax.self)
   }
 
@@ -4201,11 +4201,11 @@ public struct MissingDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSy
     }
     return Syntax(self)
       .replacingChild(
-      at: 3,
-      with: collection,
-      rawNodeArena: arena,
-      allocationArena: arena
-    )
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
       .cast(MissingDeclSyntax.self)
   }
 

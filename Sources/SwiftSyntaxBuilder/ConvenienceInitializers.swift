@@ -83,7 +83,7 @@ extension BooleanLiteralExprSyntax {
   }
 }
 #if compiler(>=6)
-extension BooleanLiteralExprSyntax: @retroactive ExpressibleByBooleanLiteral {}
+extension BooleanLiteralExprSyntax: Swift.ExpressibleByBooleanLiteral {}
 #else
 extension BooleanLiteralExprSyntax: ExpressibleByBooleanLiteral {}
 #endif
@@ -184,7 +184,7 @@ extension FloatLiteralExprSyntax {
 }
 
 #if compiler(>=6)
-extension FloatLiteralExprSyntax: @retroactive ExpressibleByFloatLiteral {}
+extension FloatLiteralExprSyntax: Swift.ExpressibleByFloatLiteral {}
 #else
 extension FloatLiteralExprSyntax: ExpressibleByFloatLiteral {}
 #endif
@@ -227,7 +227,7 @@ extension IntegerLiteralExprSyntax {
 }
 
 #if compiler(>=6)
-extension IntegerLiteralExprSyntax: @retroactive ExpressibleByIntegerLiteral {}
+extension IntegerLiteralExprSyntax: Swift.ExpressibleByIntegerLiteral {}
 #else
 extension IntegerLiteralExprSyntax: ExpressibleByIntegerLiteral {}
 #endif

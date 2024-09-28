@@ -173,13 +173,15 @@ public class CodeGenerationFormat: BasicFormat {
       return child
     }
     decreaseIndentationLevel()
-    if let lastChild = formattedChildren.last {
+    if let lastChild = formattedChildren.last,
+      !lastChild.trailingTrivia.contains(where: \.isNewline)
+    {
       let nextTokenStartsWithNewline =
         lastChild.nextToken(viewMode: .sourceAccurate)?.leadingTrivia.first?.isNewline ?? false
       if !nextTokenStartsWithNewline {
         formattedChildren[formattedChildren.count - 1] = lastChild.with(
           \.trailingTrivia,
-          indentedNewline
+          lastChild.trailingTrivia + indentedNewline
         )
       }
     }

@@ -251,7 +251,7 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifier`: ``DeclModifierSyntax``?
-///  - `accessorSpecifier`: (`get` | `set` | `didSet` | `willSet` | `unsafeAddress` | `addressWithOwner` | `addressWithNativeOwner` | `unsafeMutableAddress` | `mutableAddressWithOwner` | `mutableAddressWithNativeOwner` | `_read` | `_modify` | `init`)
+///  - `accessorSpecifier`: (`get` | `set` | `didSet` | `willSet` | `unsafeAddress` | `addressWithOwner` | `addressWithNativeOwner` | `unsafeMutableAddress` | `mutableAddressWithOwner` | `mutableAddressWithNativeOwner` | `_read` | `read` | `_modify` | `modify` | `init`)
 ///  - `parameters`: ``AccessorParametersSyntax``?
 ///  - `effectSpecifiers`: ``AccessorEffectSpecifiersSyntax``?
 ///  - `body`: ``CodeBlockSyntax``?
@@ -418,7 +418,9 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
   ///  - `mutableAddressWithOwner`
   ///  - `mutableAddressWithNativeOwner`
   ///  - `_read`
+  ///  - `read`
   ///  - `_modify`
+  ///  - `modify`
   ///  - `init`
   public var accessorSpecifier: TokenSyntax {
     get {

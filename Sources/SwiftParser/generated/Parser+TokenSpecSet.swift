@@ -32,7 +32,15 @@ extension AccessorDeclSyntax {
     case mutableAddressWithOwner
     case mutableAddressWithNativeOwner
     case _read
+    #if compiler(>=5.8)
+    @_spi(ExperimentalLanguageFeatures)
+    #endif
+    case read
     case _modify
+    #if compiler(>=5.8)
+    @_spi(ExperimentalLanguageFeatures)
+    #endif
+    case modify
     case `init`
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
@@ -59,8 +67,12 @@ extension AccessorDeclSyntax {
         self = .mutableAddressWithNativeOwner
       case TokenSpec(._read):
         self = ._read
+      case TokenSpec(.read) where experimentalFeatures.contains(.coroutineAccessors):
+        self = .read
       case TokenSpec(._modify):
         self = ._modify
+      case TokenSpec(.modify) where experimentalFeatures.contains(.coroutineAccessors):
+        self = .modify
       case TokenSpec(.`init`):
         self = .`init`
       default:
@@ -92,8 +104,12 @@ extension AccessorDeclSyntax {
         self = .mutableAddressWithNativeOwner
       case TokenSpec(._read):
         self = ._read
+      case TokenSpec(.read):
+        self = .read
       case TokenSpec(._modify):
         self = ._modify
+      case TokenSpec(.modify):
+        self = .modify
       case TokenSpec(.`init`):
         self = .`init`
       default:
@@ -125,8 +141,12 @@ extension AccessorDeclSyntax {
         return .keyword(.mutableAddressWithNativeOwner)
       case ._read:
         return .keyword(._read)
+      case .read:
+        return .keyword(.read)
       case ._modify:
         return .keyword(._modify)
+      case .modify:
+        return .keyword(.modify)
       case .`init`:
         return .keyword(.`init`)
       }
@@ -160,8 +180,12 @@ extension AccessorDeclSyntax {
         return .keyword(.mutableAddressWithNativeOwner)
       case ._read:
         return .keyword(._read)
+      case .read:
+        return .keyword(.read)
       case ._modify:
         return .keyword(._modify)
+      case .modify:
+        return .keyword(.modify)
       case .`init`:
         return .keyword(.`init`)
       }

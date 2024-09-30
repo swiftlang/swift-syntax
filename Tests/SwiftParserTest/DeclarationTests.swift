@@ -3334,4 +3334,73 @@ final class DeclarationTests: ParserTestCase {
       )
     )
   }
+
+  func testCoroutineAccessors() {
+    assertParse(
+      """
+      var irm: Int {
+        read {
+          yield _i
+        }
+        modify {
+          yield &_i
+        }
+      }
+      """,
+      experimentalFeatures: .coroutineAccessors
+    )
+    assertParse(
+      """
+      public var i: Int {
+        _read {
+          yield _i
+        }
+        read {
+          yield _i
+        }
+        _modify {
+          yield &_i
+        }
+        modify {
+          yield &_i
+        }
+      }
+      """,
+      experimentalFeatures: .coroutineAccessors
+    )
+    assertParse(
+      """
+      var i_rm: Int {
+        _read {
+          yield _i
+        }
+        1️⃣modify {
+          yield &_i
+        }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "unexpected code in variable"
+        )
+      ]
+    )
+    assertParse(
+      """
+      var ir_m: Int {
+        _modify {
+          yield &_i
+        }
+        1️⃣read {
+          yield _i
+        }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "unexpected code in variable"
+        )
+      ]
+    )
+  }
 }

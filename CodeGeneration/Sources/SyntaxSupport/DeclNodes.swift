@@ -113,7 +113,9 @@ public let DECL_NODES: [Node] = [
           .keyword(.mutableAddressWithOwner),
           .keyword(.mutableAddressWithNativeOwner),
           .keyword(._read),
+          .keyword(.read),
           .keyword(._modify),
+          .keyword(.modify),
           .keyword(.`init`),
         ])
       ),

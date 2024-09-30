@@ -404,6 +404,9 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
     switch definition.formatMode {
     case .auto: collapseIndentationWidth = indentationWidth
     case .disabled: collapseIndentationWidth = []
+    #if RESILIENT_LIBRARIES
+    @unknown default: fatalError()
+    #endif
     }
     return collapse(
       expansions: expandedSources,

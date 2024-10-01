@@ -846,7 +846,7 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 
 // MARK: - DeinitializerDeclSyntax
 
-/// A `deint` declaration
+/// A `deinit` declaration
 /// 
 /// An example of a deinitializer is
 /// 

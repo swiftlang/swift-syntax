@@ -115,7 +115,7 @@ final class PeerMacroTests: XCTestCase {
 
       // Drop the @addCompletionHandler attribute from the new declaration.
       let newAttributeList = funcDecl.attributes.filter {
-        guard case let .attribute(attribute) = $0 else {
+        guard case .attribute(let attribute) = $0 else {
           return true
         }
         return attribute.attributeName.as(IdentifierTypeSyntax.self)?.name == "addCompletionHandler"

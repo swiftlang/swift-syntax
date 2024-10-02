@@ -84,13 +84,13 @@ public struct OptionSetMacro {
   ) -> (StructDeclSyntax, EnumDeclSyntax, TypeSyntax)? {
     // Determine the name of the options enum.
     let optionsEnumName: String
-    if case let .argumentList(arguments) = attribute.arguments,
+    if case .argumentList(let arguments) = attribute.arguments,
       let optionEnumNameArg = arguments.first(labeled: optionsEnumNameArgumentLabel)
     {
       // We have a options name; make sure it is a string literal.
       guard let stringLiteral = optionEnumNameArg.expression.as(StringLiteralExprSyntax.self),
         stringLiteral.segments.count == 1,
-        case let .stringSegment(optionsEnumNameString)? = stringLiteral.segments.first
+        case .stringSegment(let optionsEnumNameString)? = stringLiteral.segments.first
       else {
         if emitDiagnostics {
           context.diagnose(

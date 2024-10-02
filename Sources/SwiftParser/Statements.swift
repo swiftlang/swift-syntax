@@ -293,7 +293,7 @@ extension Parser {
     }
 
     switch kind {
-    case let .optional(unexpectedBeforeBindingKeyword, bindingSpecifier, pattern):
+    case .optional(let unexpectedBeforeBindingKeyword, let bindingSpecifier, let pattern):
       return .optionalBinding(
         RawOptionalBindingConditionSyntax(
           unexpectedBeforeBindingKeyword,
@@ -304,7 +304,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case let .pattern(caseKeyword, pattern):
+    case .pattern(let caseKeyword, let pattern):
       return .matchingPattern(
         RawMatchingPatternConditionSyntax(
           caseKeyword: caseKeyword,

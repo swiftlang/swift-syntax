@@ -94,9 +94,9 @@ struct ExpandSingleEditorPlaceholder: EditRefactoringProvider {
 
     let expanded: String
     switch placeholder {
-    case let .basic(text):
+    case .basic(let text):
       expanded = String(text)
-    case let .typed(text, type):
+    case .typed(let text, let type):
       if let functionType = type.as(FunctionTypeSyntax.self) {
         let basicFormat = BasicFormat(
           indentationWidth: context.indentationWidth,
@@ -326,7 +326,7 @@ extension FunctionCallExprSyntax {
       guard let expr = arg.expression.as(DeclReferenceExprSyntax.self),
         expr.baseName.isEditorPlaceholder,
         let data = EditorPlaceholderData(token: expr.baseName),
-        case let .typed(_, type) = data,
+        case .typed(_, let type) = data,
         type.is(FunctionTypeSyntax.self)
       else {
         break

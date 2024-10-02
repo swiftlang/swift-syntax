@@ -214,7 +214,7 @@ class OperatorPrecedenceTests: XCTestCase {
     }
 
     XCTAssertEqual(errors.count, 2)
-    guard case let .operatorAlreadyExists(existing, new) = errors[0] else {
+    guard case .operatorAlreadyExists(let existing, let new) = errors[0] else {
       XCTFail("expected an 'operator already exists' error")
       return
     }
@@ -223,7 +223,7 @@ class OperatorPrecedenceTests: XCTestCase {
     _ = existing
     _ = new
 
-    guard case let .groupAlreadyExists(existingGroup, newGroup) = errors[1] else {
+    guard case .groupAlreadyExists(let existingGroup, let newGroup) = errors[1] else {
       XCTFail("expected a 'group already exists' error")
       return
     }
@@ -254,7 +254,7 @@ class OperatorPrecedenceTests: XCTestCase {
     }
 
     XCTAssertEqual(errors.count, 2)
-    guard case let .operatorAlreadyExists(existing, new) = errors[0] else {
+    guard case .operatorAlreadyExists(let existing, let new) = errors[0] else {
       XCTFail("expected an 'operator already exists' error")
       return
     }
@@ -305,7 +305,7 @@ class OperatorPrecedenceTests: XCTestCase {
       }
 
       XCTAssertEqual(errors.count, 2)
-      guard case let .missingGroup(groupName, location) = errors[0] else {
+      guard case .missingGroup(let groupName, let location) = errors[0] else {
         XCTFail("expected a 'missing group' error")
         return
       }
@@ -324,7 +324,7 @@ class OperatorPrecedenceTests: XCTestCase {
       }
 
       XCTAssertEqual(errors.count, 1)
-      guard case let .missingOperator(operatorName, location) = errors[0] else {
+      guard case .missingOperator(let operatorName, let location) = errors[0] else {
         XCTFail("expected a 'missing operator' error")
         return
       }
@@ -344,7 +344,7 @@ class OperatorPrecedenceTests: XCTestCase {
 
       XCTAssertEqual(errors.count, 1)
       guard
-        case let .incomparableOperators(_, leftGroup, _, rightGroup) =
+        case .incomparableOperators(_, let leftGroup, _, let rightGroup) =
           errors[0]
       else {
         XCTFail("expected an 'incomparable operator' error")
@@ -369,7 +369,7 @@ class OperatorPrecedenceTests: XCTestCase {
 
       XCTAssertEqual(errors.count, 1)
       guard
-        case let .incomparableOperators(_, leftGroup, _, rightGroup) =
+        case .incomparableOperators(_, let leftGroup, _, let rightGroup) =
           errors[0]
       else {
         XCTFail("expected an 'incomparable operator' error")

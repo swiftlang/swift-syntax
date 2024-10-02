@@ -38,8 +38,8 @@ import SwiftSyntax
     items[..<pivotPoint]
       .sort { lhs, rhs in
         guard
-          case let .import(lhsImport, _) = lhs,
-          case let .import(rhsImport, _) = rhs
+          case .import(let lhsImport, _) = lhs,
+          case .import(let rhsImport, _) = rhs
         else {
           fatalError("Partition must only contain import items!")
         }

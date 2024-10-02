@@ -25,7 +25,7 @@ public enum WarningMacro: ExpressionMacro {
       let stringLiteral = firstElement.expression
         .as(StringLiteralExprSyntax.self),
       stringLiteral.segments.count == 1,
-      case let .stringSegment(messageString)? = stringLiteral.segments.first
+      case .stringSegment(let messageString)? = stringLiteral.segments.first
     else {
       throw CustomError.message("#myWarning macro requires a string literal")
     }

@@ -161,9 +161,9 @@ public enum SubtreeError: Error, CustomStringConvertible {
 
   public var description: String {
     switch self {
-    case let .invalidMarker(name):
+    case .invalidMarker(let name):
       return "Could not find marker with name '\(name)'"
-    case let .invalidSubtree(tree, afterUTF8Offset, type):
+    case .invalidSubtree(let tree, let afterUTF8Offset, let type):
       return
         "Could not find subtree after UTF8 offset \(afterUTF8Offset) with type \(type) in:\n\(tree.debugDescription)"
     }

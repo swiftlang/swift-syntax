@@ -26,9 +26,9 @@ internal enum _CodingPathNode {
     switch self {
     case .root:
       return []
-    case let .node(key, parent):
+    case .node(let key, let parent):
       return parent.path + [key]
-    case let .indexNode(index, parent):
+    case .indexNode(let index, let parent):
       return parent.path + [_CodingKey(index: index)]
     }
   }
@@ -87,17 +87,17 @@ internal enum _CodingKey: CodingKey {
 
   var stringValue: String {
     switch self {
-    case let .string(str): return str
-    case let .int(int): return "\(int)"
-    case let .index(index): return "Index \(index)"
+    case .string(let str): return str
+    case .int(let int): return "\(int)"
+    case .index(let index): return "Index \(index)"
     }
   }
 
   var intValue: Int? {
     switch self {
     case .string: return nil
-    case let .int(int): return int
-    case let .index(index): return index
+    case .int(let int): return int
+    case .index(let index): return index
     }
   }
 }

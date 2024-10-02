@@ -1,5 +1,7 @@
 # Contributing
 
+This document contains notes about development and testing of swift-syntax, the [Contributor Documentation](Contributor%20Documentation) folder has some more in-depth documents.
+
 ## Building & Testing
 
 swift-syntax is a SwiftPM package, so you can build and test it using anything that supports packages - opening in Xcode, Visual Studio Code with [Swift for Visual Studio Code](https://github.com/swift-server/vscode-swift) installed, or through the command line using `swift build` and `swift test`.
@@ -13,7 +15,7 @@ swift-syntax is a SwiftPM package, so you can build and test it using anything t
 > - On the command line: Set the `SKIP_LONG_TESTS` environment variable to `1` when running tests, e.g by running `SKIP_LONG_TESTS=1 swift test`
 
 > [!NOTE]
-> If you are only modifying the `SwiftParser` module, you can run only the parser tests by selecting the `SwiftParserTest` target. 
+> If you are only modifying the `SwiftParser` module, you can run only the parser tests by selecting the `SwiftParserTest` target.
 > - In Xcode: Select the `SwiftParserTest` scheme. If you can’t find it in your Schemes, you need to manually add it using Product -> Scheme -> New Scheme…
 > - On the command line: Run `swift test --test-product SwiftParserTests`
 
@@ -30,7 +32,7 @@ It will build a local copy of swift-format from the `main` branch and format the
 Generated source code is not formatted to make it easier to spot changes when re-running code generation.
 
 > [!NOTE]
-> You can add a git hook to ensure all commits to the swift-syntax repository are correctly formatted. 
+> You can add a git hook to ensure all commits to the swift-syntax repository are correctly formatted.
 > 1. Save the following contents to `swift-syntax/.git/hooks/pre-commit`
 > ```bash
 > #!/usr/bin/env bash
@@ -39,7 +41,7 @@ Generated source code is not formatted to make it easier to spot changes when re
 > swift "$SOURCE_DIR/swift-syntax-dev-utils" format --lint
 > ```
 > 2. Mark the file as executable: `chmod a+x swift-syntax/.git/hooks/pre-commit`
-> 3. If you have global git hooks installed, be sure to call them at the end of the script with `path/to/global/hooks/pre-commit "$@"` 
+> 3. If you have global git hooks installed, be sure to call them at the end of the script with `path/to/global/hooks/pre-commit "$@"`
 
 
 ## Generating Source Code
@@ -54,7 +56,7 @@ Alternatively, you can generate the files from the command line by running the f
 
 ## Running Pre-PR Checks Script
 
-To ensure that your changes to the project are implemented correctly and do not introduce issues across the repository, a script has been provided to automate the necessary pre-PR checks. 
+To ensure that your changes to the project are implemented correctly and do not introduce issues across the repository, a script has been provided to automate the necessary pre-PR checks.
 
 ```bash
 ./swift-syntax-dev-utils local-pr-precheck
@@ -69,7 +71,7 @@ Prefer to squash the commits of your PR (*pull request*) and avoid adding commit
 
 We prefer to not squash commits when merging a PR because, especially for larger PRs, it sometimes makes sense to split the PR into multiple self-contained chunks of changes. For example, a PR might do a refactoring first before adding a new feature or fixing a bug. This separation is useful for two reasons:
 - During review, the commits can be reviewed individually, making each review chunk smaller
-- In case this PR introduced a bug that is identified later, it is possible to check if it resulted from the refactoring or the actual change, thereby making it easier find the lines that introduce the issue. 
+- In case this PR introduced a bug that is identified later, it is possible to check if it resulted from the refactoring or the actual change, thereby making it easier find the lines that introduce the issue.
 
 ## Opening a PR
 
@@ -92,7 +94,7 @@ See the [dedicated section][section] on the Swift project website.
 
 After you opened your PR, a maintainer will review it and test your changes in CI (*Continuous Integration*) by adding a `@swift-ci Please test` comment on the pull request. Once your PR is approved and CI has passed, the maintainer will merge your pull request.
 
-Only contributors with [commit access](https://www.swift.org/contributing/#commit-access) are able to approve pull requests and trigger CI. 
+Only contributors with [commit access](https://www.swift.org/contributing/#commit-access) are able to approve pull requests and trigger CI.
 
 ## Additional Verification
 
@@ -100,9 +102,9 @@ swift-syntax has additional verification methods (see the sections below) that p
 
 ### RawSyntax Validation
 
-When the `SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION` environment variable is set while building swift-syntax, SwiftSyntax will perform additional validation that the layout of the syntax tree is correct. It validates that 
+When the `SWIFTSYNTAX_ENABLE_RAWSYNTAX_VALIDATION` environment variable is set while building swift-syntax, SwiftSyntax will perform additional validation that the layout of the syntax tree is correct. It validates that
 1. every child of a syntax node has the correct kind, which should be guaranteed by the Swift type system in most cases
-2. each token only has one of the token kinds that is specified in the syntax tree layout of the `CodeGeneration` package. 
+2. each token only has one of the token kinds that is specified in the syntax tree layout of the `CodeGeneration` package.
 
 If this validation hits an assertion failure that a token is not accepted at a certain position in the syntax tree, double-check if the token kind that is being stored in the syntax tree actually makes sense here. If it does not, check if there is a parser bug or whether you need to remap the token kind. If it does make sense, add the token kind to `.token(choices:)` of the syntax node in CodeGeneration, re-generate that source code and run tests again.
 

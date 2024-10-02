@@ -81,33 +81,6 @@ let nodesSections: String = {
   return result
 }()
 
-var contributingDocs: String = {
-  let contributingDocsFolder = URL(fileURLWithPath: #filePath)
-    .deletingLastPathComponent()
-    .deletingLastPathComponent()
-    .deletingLastPathComponent()
-    .deletingLastPathComponent()
-    .deletingLastPathComponent()
-    .deletingLastPathComponent()
-    .appendingPathComponent("Sources")
-    .appendingPathComponent("SwiftSyntax")
-    .appendingPathComponent("Documentation.docc")
-    .appendingPathComponent("Contributing")
-
-  let files =
-    (try? FileManager.default.contentsOfDirectory(at: contributingDocsFolder, includingPropertiesForKeys: nil)) ?? []
-
-  return files.compactMap { file in
-    if file.pathExtension != "md" {
-      return nil
-    }
-    let doccName = file.lastPathComponent
-      .replacingOccurrences(of: ".md", with: "")
-      .replacingOccurrences(of: " ", with: "-")
-    return "- <doc:\(doccName)>"
-  }.sorted().joined(separator: "\n")
-}()
-
 let swiftSyntaxDoccIndex: String = {
   let templateURL = URL(fileURLWithPath: #filePath)
     .deletingLastPathComponent()
@@ -117,5 +90,4 @@ let swiftSyntaxDoccIndex: String = {
   return
     template
     .replacingOccurrences(of: "{{Nodes}}", with: nodesSections)
-    .replacingOccurrences(of: "{{ContributingDocs}}", with: contributingDocs)
 }()

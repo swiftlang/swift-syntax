@@ -816,14 +816,6 @@ extension Parser {
   struct StatementLabel {
     var label: RawTokenSyntax
     var colon: RawTokenSyntax
-
-    init(
-      label: RawTokenSyntax,
-      colon: RawTokenSyntax
-    ) {
-      self.label = label
-      self.colon = colon
-    }
   }
 
   /// Parse an optional label that defines a named control flow point.

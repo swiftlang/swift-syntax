@@ -14,10 +14,6 @@ extension Character {
   fileprivate struct Info: OptionSet {
     var rawValue: UInt8
 
-    init(rawValue: UInt8) {
-      self.rawValue = rawValue
-    }
-
     static let IDENT_START: Self = .init(rawValue: 0x01)
     static let IDENT_CONT: Self = .init(rawValue: 0x02)
     static let DECIMAL: Self = .init(rawValue: 0x04)

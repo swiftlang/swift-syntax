@@ -208,19 +208,9 @@ public enum PluginMessage {
       public struct Change: Codable {
         public var range: PositionRange
         public var newText: String
-
-        internal init(range: PositionRange, newText: String) {
-          self.range = range
-          self.newText = newText
-        }
       }
       public var message: String
       public var changes: [Change]
-
-      internal init(message: String, changes: [Change]) {
-        self.message = message
-        self.changes = changes
-      }
     }
     public var message: String
     public var severity: Severity

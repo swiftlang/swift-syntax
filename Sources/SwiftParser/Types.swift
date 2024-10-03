@@ -190,9 +190,8 @@ extension Parser {
     return parseSimpleType(forAttributeName: true)
   }
 
-  /// Parse a "simple" type
   mutating func parseSimpleType(
-    stopAtFirstPeriod: Bool = false,
+    allowMemberTypes: Bool = true,
     forAttributeName: Bool = false
   ) -> RawTypeSyntax {
     enum TypeBaseStart: TokenSpecSet {
@@ -260,7 +259,7 @@ extension Parser {
 
     var loopProgress = LoopProgressCondition()
     while self.hasProgressed(&loopProgress) {
-      if !stopAtFirstPeriod, self.at(.period) {
+      if self.at(.period) && (allowMemberTypes || self.peek(isAt: .keyword(.Type), .keyword(.Protocol))) {
         let (unexpectedPeriod, period, skipMemberName) = self.consumeMemberPeriod(previousNode: base)
         if skipMemberName {
           let missingIdentifier = missingToken(.identifier)

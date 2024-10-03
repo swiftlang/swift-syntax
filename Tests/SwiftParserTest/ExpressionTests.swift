@@ -230,8 +230,9 @@ final class ExpressionTests: ParserTestCase {
 
     assertParse(
       #"""
-      \String?.!.count.?
-      """#
+      \String?.!.count1️⃣.?
+      """#,
+      diagnostics: [DiagnosticSpec(message: "extraneous code '.?' at top level")]
     )
 
     assertParse(
@@ -242,8 +243,9 @@ final class ExpressionTests: ParserTestCase {
 
     assertParse(
       #"""
-      \Optional.?!?!?!?.??!
-      """#
+      \Optional.?!?!?!?1️⃣.??!
+      """#,
+      diagnostics: [DiagnosticSpec(message: "extraneous code '.??!' at top level")]
     )
 
     assertParse(
@@ -251,6 +253,147 @@ final class ExpressionTests: ParserTestCase {
       _ = distinctUntilChanged(\ .?.status)
       _ = distinctUntilChanged(\.?.status)
       """#
+    )
+  }
+
+  func testKeyPathSubscript() {
+    assertParse(
+      #"\Foo.Type.[2]"#,
+      substructure: KeyPathExprSyntax(
+        root: TypeSyntax(
+          MetatypeTypeSyntax(baseType: TypeSyntax("Foo"), metatypeSpecifier: .keyword(.Type))
+        ),
+        components: KeyPathComponentListSyntax([
+          KeyPathComponentSyntax(
+            period: .periodToken(),
+            component: KeyPathComponentSyntax.Component(
+              KeyPathSubscriptComponentSyntax(
+                arguments: LabeledExprListSyntax([LabeledExprSyntax(expression: ExprSyntax("2"))])
+              )
+            )
+          )
+        ])
+      )
+    )
+
+    assertParse(
+      #"\Foo.Bar.[2]"#,
+      substructure: KeyPathExprSyntax(
+        root: TypeSyntax("Foo"),
+        components: KeyPathComponentListSyntax([
+          KeyPathComponentSyntax(
+            period: .periodToken(),
+            component: KeyPathComponentSyntax.Component(
+              KeyPathPropertyComponentSyntax(declName: DeclReferenceExprSyntax(baseName: .identifier("Bar")))
+            )
+          ),
+          KeyPathComponentSyntax(
+            period: .periodToken(),
+            component: KeyPathComponentSyntax.Component(
+              KeyPathSubscriptComponentSyntax(
+                arguments: LabeledExprListSyntax([LabeledExprSyntax(expression: ExprSyntax("2"))])
+              )
+            )
+          ),
+        ])
+      )
+    )
+
+    assertParse(
+      #"\Foo.Bar.[2].1️⃣[1]"#,
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier in key path property component", fixIts: ["insert identifier"])
+      ],
+      fixedSource: #"\Foo.Bar.[2].<#identifier#>[1]"#
+    )
+
+    assertParse(
+      #"\Foo.Bar.?.1️⃣[1]"#,
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier in key path property component", fixIts: ["insert identifier"])
+      ],
+      fixedSource: #"\Foo.Bar.?.<#identifier#>[1]"#
+    )
+  }
+
+  func testChainedOptionalUnwrapsWithDot() {
+    assertParse(
+      #"\T.?1️⃣.!"#,
+      diagnostics: [DiagnosticSpec(message: "extraneous code '.!' at top level")]
+    )
+  }
+
+  func testChainedOptionalUnwrapsAfterSubscript() {
+    assertParse(
+      #"\T.abc[2]1️⃣.?"#,
+      diagnostics: [DiagnosticSpec(message: "extraneous code '.?' at top level")]
+    )
+  }
+
+  func testKeyPathFollowedByOperator() {
+    // The following is valid Swift. Make sure we parse it as such.
+    //
+    // struct Foo {
+    //   var bar: Int?
+    // }
+    //
+    // infix operator .?.
+    //
+    // func .?.(_ x: AnyKeyPath, _ a: Int) {}
+    //
+    // var blah = 2
+    // \Foo?.?.bar.?.blah
+    // \Foo?.?.?.blah
+
+    assertParse(
+      #"\Foo?.?.bar.?.blah"#,
+      substructure: SequenceExprSyntax(
+        elements: ExprListSyntax([
+          ExprSyntax(
+            KeyPathExprSyntax(
+              root: TypeSyntax("Foo?"),
+              components: [
+                KeyPathComponentSyntax(
+                  period: .periodToken(),
+                  component: .optional(
+                    KeyPathOptionalComponentSyntax(questionOrExclamationMark: .postfixQuestionMarkToken())
+                  )
+                ),
+                KeyPathComponentSyntax(
+                  period: .periodToken(),
+                  component: .property(
+                    KeyPathPropertyComponentSyntax(declName: DeclReferenceExprSyntax(baseName: "bar"))
+                  )
+                ),
+              ]
+            )
+          ),
+          ExprSyntax(BinaryOperatorExprSyntax(operator: .binaryOperator(".?."))),
+          ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("blah"))),
+        ])
+      )
+    )
+    assertParse(
+      #"\Foo?.?.?.blah"#,
+      substructure: SequenceExprSyntax(
+        elements: ExprListSyntax([
+          ExprSyntax(
+            KeyPathExprSyntax(
+              root: TypeSyntax("Foo?"),
+              components: [
+                KeyPathComponentSyntax(
+                  period: .periodToken(),
+                  component: .optional(
+                    KeyPathOptionalComponentSyntax(questionOrExclamationMark: .postfixQuestionMarkToken())
+                  )
+                )
+              ]
+            )
+          ),
+          ExprSyntax(BinaryOperatorExprSyntax(operator: .binaryOperator(".?."))),
+          ExprSyntax(DeclReferenceExprSyntax(baseName: .identifier("blah"))),
+        ])
+      )
     )
   }
 

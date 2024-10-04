@@ -167,6 +167,9 @@ extension PluginProviderMessageHandler {
         switch macroDefinition.formatMode {
         case .auto: collapseIndentationWidth = nil
         case .disabled: collapseIndentationWidth = []
+        #if RESILIENT_LIBRARIES
+        @unknown default: fatalError()
+        #endif
         }
         // Make a single element array by collapsing the results into a string.
         expandedSources = [

@@ -488,7 +488,7 @@ public let DECL_NODES: [Node] = [
     base: .decl,
     nameForDiagnostics: "deinitializer",
     documentation: """
-      A `deint` declaration
+      A `deinit` declaration
 
       An example of a deinitializer is
 

@@ -54,11 +54,6 @@ if(SWIFT_SUPPORTS_DISABLE_IMPLICIT_BACKTRACING_MODULE_IMPORT)
   add_compile_options("$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Xfrontend -disable-implicit-backtracing-module-import>")
 endif()
 
-# SWIFTSYNTAX_EMIT_MODULE is TRUE by default
-if(NOT DEFINED SWIFTSYNTAX_EMIT_MODULE)
-  set(SWIFTSYNTAX_EMIT_MODULE TRUE)
-endif()
-
 if(NOT DEFINED Swift_COMPILER_PACKAGE_CMO_SUPPORT AND SWIFTSYNTAX_EMIT_MODULE)
   swift_get_package_cmo_support(Swift_COMPILER_PACKAGE_CMO_SUPPORT)
 endif()

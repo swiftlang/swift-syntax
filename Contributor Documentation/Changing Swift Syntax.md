@@ -65,7 +65,7 @@ Node(
 
 Added syntactic elements will require corresponding changes to the included
 SwiftParser library. For an introduction on parsing Swift nodes, see
-[the article on Parsing Basics](https://github.com/swiftlang/swift-syntax/tree/main/Sources/SwiftParser/SwiftParser.docc/ParsingBasics.md).
+[the article on Parsing Basics](./Parsing%20Basics.md).
 
 When updating nodes, certain clients of SwiftSyntax that are relying upon those
 nodes will need to be changed in tandem. For example, the

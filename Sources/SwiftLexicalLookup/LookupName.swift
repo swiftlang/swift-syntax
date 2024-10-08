@@ -16,7 +16,7 @@ import SwiftSyntax
 @_spi(Experimental) public enum ImplicitDecl {
   /// `self` keyword representing object instance.
   /// Could be associated with type declaration, extension,
-  /// or closure captures.
+  /// or closure captures. Introduced at function edge.
   case `self`(DeclSyntaxProtocol)
   /// `Self` keyword representing object type.
   /// Could be associated with type declaration or extension.
@@ -135,6 +135,51 @@ import SwiftSyntax
     }
   }
 
+  /// Position of this name.
+  ///
+  /// For some syntax nodes, their position doesn't reflect
+  /// the position at which a particular name was introduced at.
+  /// Such cases are function parameters (as they can
+  /// contain two identifiers) and function declarations (where name
+  /// is precided by access modifiers and `func` keyword).
+  @_spi(Experimental) public var position: AbsolutePosition {
+    switch self {
+    case .identifier(let syntax, _):
+      return syntax.identifier.positionAfterSkippingLeadingTrivia
+    case .declaration(let syntax):
+      return syntax.name.positionAfterSkippingLeadingTrivia
+    case .implicit(let implicitName):
+      switch implicitName {
+      case .self(let declSyntax):
+        switch Syntax(declSyntax).as(SyntaxEnum.self) {
+        case .functionDecl(let functionDecl):
+          return functionDecl.name.positionAfterSkippingLeadingTrivia
+        case .initializerDecl(let initializerDecl):
+          return initializerDecl.initKeyword.positionAfterSkippingLeadingTrivia
+        case .subscriptDecl(let subscriptDecl):
+          return subscriptDecl.accessorBlock?.positionAfterSkippingLeadingTrivia
+            ?? subscriptDecl.endPositionBeforeTrailingTrivia
+        case .variableDecl(let variableDecl):
+          return variableDecl.bindings.first?.accessorBlock?.positionAfterSkippingLeadingTrivia
+            ?? variableDecl.endPosition
+        default:
+          return declSyntax.positionAfterSkippingLeadingTrivia
+        }
+      case .Self(let declSyntax):
+        switch Syntax(declSyntax).as(SyntaxEnum.self) {
+        case .protocolDecl(let protocolDecl):
+          return protocolDecl.name.positionAfterSkippingLeadingTrivia
+        default:
+          return declSyntax.positionAfterSkippingLeadingTrivia
+        }
+      case .error(let catchClause):
+        return catchClause.body.positionAfterSkippingLeadingTrivia
+      default:
+        return implicitName.syntax.positionAfterSkippingLeadingTrivia
+      }
+    }
+  }
+
   /// Point, after which the name is available in scope.
   /// If set to `nil`, the name is available at any point in scope.
   var accessibleAfter: AbsolutePosition? {
@@ -166,7 +211,7 @@ import SwiftSyntax
   ) -> [LookupName] {
     switch Syntax(syntax).as(SyntaxEnum.self) {
     case .variableDecl(let variableDecl):
-      return variableDecl.bindings.flatMap { binding in
+      return variableDecl.bindings.reversed().flatMap { binding in
         getNames(
           from: binding.pattern,
           accessibleAfter: accessibleAfter != nil ? binding.endPositionBeforeTrailingTrivia : nil
@@ -194,6 +239,8 @@ import SwiftSyntax
       return functionCallExpr.arguments.flatMap { argument in
         getNames(from: argument.expression, accessibleAfter: accessibleAfter)
       }
+    case .optionalChainingExpr(let optionalChainingExpr):
+      return getNames(from: optionalChainingExpr.expression, accessibleAfter: accessibleAfter)
     default:
       if let namedDecl = Syntax(syntax).asProtocol(SyntaxProtocol.self) as? NamedDeclSyntax {
         return handle(namedDecl: namedDecl, accessibleAfter: accessibleAfter)
@@ -210,12 +257,7 @@ import SwiftSyntax
     identifiable: IdentifiableSyntax,
     accessibleAfter: AbsolutePosition? = nil
   ) -> [LookupName] {
-    switch identifiable.identifier.tokenKind {
-    case .wildcard:
-      return []
-    default:
-      return [.identifier(identifiable, accessibleAfter: accessibleAfter)]
-    }
+    [.identifier(identifiable, accessibleAfter: accessibleAfter)]
   }
 
   /// Extracts name introduced by `NamedDeclSyntax` node.
@@ -224,5 +266,28 @@ import SwiftSyntax
     accessibleAfter: AbsolutePosition? = nil
   ) -> [LookupName] {
     [.declaration(namedDecl)]
+  }
+
+  /// Debug description of this lookup name.
+  @_spi(Experimental) public var debugDescription: String {
+    let sourceLocationConverter = SourceLocationConverter(fileName: "", tree: syntax.root)
+    let location = sourceLocationConverter.location(for: position)
+    let strName = (identifier?.name ?? "NO-NAME") + " at: \(location.line):\(location.column)"
+
+    switch self {
+    case .identifier:
+      let str = "identifier: \(strName)"
+
+      if let accessibleAfter {
+        let location = sourceLocationConverter.location(for: accessibleAfter)
+        return str + " after: \(location.line):\(location.column)"
+      } else {
+        return str
+      }
+    case .declaration:
+      return "declaration: \(strName)"
+    case .implicit:
+      return "implicit: \(strName)"
+    }
   }
 }

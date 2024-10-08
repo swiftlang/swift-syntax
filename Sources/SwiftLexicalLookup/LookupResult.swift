@@ -18,14 +18,18 @@ import SwiftSyntax
   case fromScope(ScopeSyntax, withNames: [LookupName])
   /// File scope and names that matched lookup.
   case fromFileScope(SourceFileSyntax, withNames: [LookupName])
+  /// Indicates where to perform member lookup.
+  case lookInMembers(LookInMembersScopeSyntax)
 
   /// Associated scope.
-  @_spi(Experimental) public var scope: ScopeSyntax? {
+  @_spi(Experimental) public var scope: ScopeSyntax {
     switch self {
     case .fromScope(let scopeSyntax, _):
       return scopeSyntax
     case .fromFileScope(let fileScopeSyntax, _):
       return fileScopeSyntax
+    case .lookInMembers(let lookInMemb):
+      return lookInMemb
     }
   }
 
@@ -34,6 +38,8 @@ import SwiftSyntax
     switch self {
     case .fromScope(_, let names), .fromFileScope(_, let names):
       return names
+    case .lookInMembers(_):
+      return []
     }
   }
 
@@ -45,5 +51,49 @@ import SwiftSyntax
     default:
       return .fromScope(scope, withNames: names)
     }
+  }
+
+  /// Debug description of this lookup name.
+  @_spi(Experimental) public var debugDescription: String {
+    var description =
+      resultKindDebugName + ": " + scope.scopeDebugDescription
+
+    switch self {
+    case .lookInMembers:
+      break
+    default:
+      if !names.isEmpty {
+        description += "\n"
+      }
+    }
+
+    for (index, name) in names.enumerated() {
+      if index + 1 == names.count {
+        description += "`-" + name.debugDescription
+      } else {
+        description += "|-" + name.debugDescription + "\n"
+      }
+    }
+
+    return description
+  }
+
+  /// Debug name of this result kind.
+  private var resultKindDebugName: String {
+    switch self {
+    case .fromScope:
+      return "fromScope"
+    case .fromFileScope:
+      return "fromFileScope"
+    case .lookInMembers:
+      return "lookInMembers"
+    }
+  }
+}
+
+@_spi(Experimental) extension [LookupResult] {
+  /// Debug description this array of lookup results.
+  @_spi(Experimental) public var debugDescription: String {
+    return self.map(\.debugDescription).joined(separator: "\n")
   }
 }

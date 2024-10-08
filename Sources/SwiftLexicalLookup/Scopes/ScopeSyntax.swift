@@ -56,6 +56,8 @@ extension SyntaxProtocol {
   var parentScope: ScopeSyntax? { get }
   /// Names found in this scope. Ordered from first to last introduced.
   var introducedNames: [LookupName] { get }
+  /// Debug description of this scope.
+  var scopeDebugName: String { get }
   /// Finds all declarations `identifier` refers to. `syntax` specifies the node lookup was triggered with.
   /// If `identifier` set to `nil`, returns all available names at the given node.
   func lookup(
@@ -85,13 +87,14 @@ extension SyntaxProtocol {
   /// refers to and is accessible at given syntax node then passes lookup to the parent.
   /// If `identifier` set to `nil`, returns all available names at the given node.
   func defaultLookupImplementation(
+    in names: [LookupName]? = nil,
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig,
     propagateToParent: Bool = true
   ) -> [LookupResult] {
     let filteredNames =
-      introducedNames
+      (names ?? introducedNames)
       .filter { introducedName in
         checkIdentifier(identifier, refersTo: introducedName, at: lookUpPosition)
       }
@@ -116,5 +119,10 @@ extension SyntaxProtocol {
     at lookUpPosition: AbsolutePosition
   ) -> Bool {
     introducedName.isAccessible(at: lookUpPosition) && (identifier == nil || introducedName.identifier == identifier!)
+  }
+
+  /// Debug description of this scope.
+  @_spi(Experimental) public var scopeDebugDescription: String {
+    scopeDebugName + " " + debugLineWithColumnDescription
   }
 }

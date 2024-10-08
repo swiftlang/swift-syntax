@@ -12,14 +12,14 @@
 
 import SwiftSyntax
 
-@_spi(Experimental) public protocol TypeScopeSyntax: ScopeSyntax, DeclSyntaxProtocol {}
-
-extension TypeScopeSyntax {
-  @_spi(Experimental) public var implicitInstanceAndTypeNames: [LookupName] {
-    [.implicit(.self(self)), .implicit(.Self(self))]
-  }
-
-  @_spi(Experimental) public var introducedNames: [LookupName] {
-    implicitInstanceAndTypeNames
-  }
+protocol CanInterleaveResultsLaterScopeSyntax: ScopeSyntax {
+  /// Perform lookup in this scope and later introduce results
+  /// passed as `resultsToInterleave`.
+  /// The exact behavior depends on a specific scope.
+  func lookupWithInterleavedResults(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig,
+    resultsToInterleave: [LookupResult]
+  ) -> [LookupResult]
 }

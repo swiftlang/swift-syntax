@@ -15,12 +15,15 @@ add_swift_syntax_library(SwiftLexicalLookup
   Configurations/FileScopeHandlingConfig.swift
   Configurations/LookupConfig.swift
   
+  Scopes/CanInterleaveResultsLaterScopeSyntax.swift
+  Scopes/FunctionScopeSyntax.swift
   Scopes/GenericParameterScopeSyntax.swift
   Scopes/IntroducingToSequentialParentScopeSyntax.swift
+  Scopes/LookInMembersScopeSyntax.swift
+  Scopes/NominalTypeDeclSyntax.swift
   Scopes/ScopeImplementations.swift
   Scopes/ScopeSyntax.swift
   Scopes/SequentialScopeSyntax.swift
-  Scopes/TypeScopeSyntax.swift
   Scopes/WithGenericParametersScopeSyntax.swift
 )
 

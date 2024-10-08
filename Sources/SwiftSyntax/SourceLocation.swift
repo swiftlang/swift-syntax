@@ -571,36 +571,36 @@ fileprivate extension RawTriviaPiece {
   ) -> SourceLength {
     var lineLength = prefix
     switch self {
-    case let .spaces(count),
-      let .tabs(count),
-      let .verticalTabs(count),
-      let .formfeeds(count),
-      let .backslashes(count),
-      let .pounds(count):
+    case .spaces(let count),
+      .tabs(let count),
+      .verticalTabs(let count),
+      .formfeeds(let count),
+      .backslashes(let count),
+      .pounds(let count):
       lineLength += SourceLength(utf8Length: count)
-    case let .newlines(count),
-      let .carriageReturns(count):
+    case .newlines(let count),
+      .carriageReturns(let count):
       let newLineLength = SourceLength(utf8Length: 1)
       body(lineLength + newLineLength)
       for _ in 1..<count {
         body(newLineLength)
       }
       lineLength = .zero
-    case let .carriageReturnLineFeeds(count):
+    case .carriageReturnLineFeeds(let count):
       let carriageReturnLineLength = SourceLength(utf8Length: 2)
       body(lineLength + carriageReturnLineLength)
       for _ in 1..<count {
         body(carriageReturnLineLength)
       }
       lineLength = .zero
-    case let .lineComment(text),
-      let .docLineComment(text):
+    case .lineComment(let text),
+      .docLineComment(let text):
       // Line comments are not supposed to contain newlines.
       precondition(!text.containsSwiftNewline(), "line comment created that contained a new-line character")
       lineLength += SourceLength(utf8Length: text.count)
-    case let .blockComment(text),
-      let .docBlockComment(text),
-      let .unexpectedText(text):
+    case .blockComment(let text),
+      .docBlockComment(let text),
+      .unexpectedText(let text):
       lineLength = text.forEachLineLength(prefix: lineLength, body: body)
     }
     return lineLength

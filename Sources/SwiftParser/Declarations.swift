@@ -161,11 +161,6 @@ extension Parser {
   struct DeclAttributes {
     var attributes: RawAttributeListSyntax
     var modifiers: RawDeclModifierListSyntax
-
-    init(attributes: RawAttributeListSyntax, modifiers: RawDeclModifierListSyntax) {
-      self.attributes = attributes
-      self.modifiers = modifiers
-    }
   }
 
   /// Parse a declaration.

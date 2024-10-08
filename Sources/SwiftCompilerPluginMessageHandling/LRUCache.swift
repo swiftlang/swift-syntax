@@ -56,17 +56,17 @@ public class LRUCache<Key: Hashable, Value> {
 
     set {
       switch (table[key], newValue) {
-      case let (nil, newValue?):  // create.
+      case (nil, let newValue?):  // create.
         self.ensureCapacityForNewValue()
         let node = _Node(key: key, value: newValue)
         addToHead(node: node)
         table[key] = node
 
-      case let (node?, newValue?):  // update.
+      case (let node?, let newValue?):  // update.
         moveToHead(node: node)
         node.value = newValue
 
-      case let (node?, nil):  // delete.
+      case (let node?, nil):  // delete.
         remove(node: node)
         table[key] = nil
 

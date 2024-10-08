@@ -96,9 +96,7 @@ struct CompilerPluginError: Error, CustomStringConvertible {
 
 struct MacroProviderAdapter<Plugin: CompilerPlugin>: PluginProvider {
   let plugin: Plugin
-  init(plugin: Plugin) {
-    self.plugin = plugin
-  }
+
   func resolveMacro(moduleName: String, typeName: String) throws -> Macro.Type {
     try plugin.resolveMacro(moduleName: moduleName, typeName: typeName)
   }

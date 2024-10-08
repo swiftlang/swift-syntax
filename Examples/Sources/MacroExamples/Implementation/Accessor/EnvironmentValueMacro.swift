@@ -20,7 +20,7 @@ public struct EnvironmentValueMacro: AccessorMacro {
     in context: some MacroExpansionContext
   ) throws -> [AccessorDeclSyntax] {
     guard
-      case let .argumentList(arguments) = node.arguments,
+      case .argumentList(let arguments) = node.arguments,
       let argument = arguments.first
     else { return [] }
 

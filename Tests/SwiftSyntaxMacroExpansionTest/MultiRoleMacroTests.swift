@@ -81,7 +81,7 @@ final class MultiRoleMacroTests: XCTestCase {
         guard case .argumentList(let arguments) = node.arguments,
           let stringLiteral = arguments.first?.expression.as(StringLiteralExprSyntax.self),
           stringLiteral.segments.count == 1,
-          case let .stringSegment(wrapperTypeNameSegment)? = stringLiteral.segments.first
+          case .stringSegment(let wrapperTypeNameSegment)? = stringLiteral.segments.first
         else {
           return []
         }

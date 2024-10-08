@@ -89,7 +89,7 @@ public struct AddAsyncMacro: PeerMacro {
 
     // Drop the @addAsync attribute from the new declaration.
     let newAttributeList = funcDecl.attributes.filter {
-      guard case let .attribute(attribute) = $0,
+      guard case .attribute(let attribute) = $0,
         let attributeType = attribute.attributeName.as(IdentifierTypeSyntax.self),
         let nodeType = node.attributeName.as(IdentifierTypeSyntax.self)
       else {

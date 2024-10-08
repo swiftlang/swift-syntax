@@ -39,7 +39,7 @@ let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
   for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode) {
     for child in layoutNode.children {
-      if case let .token(choices, _, _) = child.kind, choices.count > 1 {
+      if case .token(let choices, _, _) = child.kind, choices.count > 1 {
         try! ExtensionDeclSyntax("extension \(layoutNode.kind.syntaxType)") {
           try EnumDeclSyntax(
             """

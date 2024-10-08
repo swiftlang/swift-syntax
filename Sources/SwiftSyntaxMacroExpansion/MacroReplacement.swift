@@ -372,7 +372,7 @@ extension MacroDeclSyntax {
   ) -> ExprSyntax {
     // Dig out the argument list.
     let argumentList: LabeledExprListSyntax?
-    if case let .argumentList(argList) = node.arguments {
+    if case .argumentList(let argList) = node.arguments {
       argumentList = argList
     } else {
       argumentList = nil

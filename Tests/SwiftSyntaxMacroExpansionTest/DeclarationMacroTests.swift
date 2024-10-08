@@ -55,7 +55,7 @@ final class DeclarationMacroTests: XCTestCase {
           let stringLiteral = firstElement.expression
             .as(StringLiteralExprSyntax.self),
           stringLiteral.segments.count == 1,
-          case let .stringSegment(messageString) = stringLiteral.segments.first
+          case .stringSegment(let messageString) = stringLiteral.segments.first
         else {
           throw SwiftSyntaxMacros.MacroExpansionErrorMessage("#error macro requires a string literal")
         }
@@ -118,7 +118,7 @@ final class DeclarationMacroTests: XCTestCase {
       ) throws -> [DeclSyntax] {
         guard let stringLiteral = node.arguments.first?.expression.as(StringLiteralExprSyntax.self),
           stringLiteral.segments.count == 1,
-          case let .stringSegment(prefix) = stringLiteral.segments.first
+          case .stringSegment(let prefix) = stringLiteral.segments.first
         else {
           throw SwiftSyntaxMacros.MacroExpansionErrorMessage(
             "#bitwidthNumberedStructs macro requires a string literal"

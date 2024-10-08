@@ -19,7 +19,7 @@ import SwiftSyntax
 public struct ConvertComputedPropertyToStored: SyntaxRefactoringProvider {
   public static func refactor(syntax: VariableDeclSyntax, in context: ()) -> VariableDeclSyntax? {
     guard syntax.bindings.count == 1, let binding = syntax.bindings.first,
-      let accessorBlock = binding.accessorBlock, case let .getter(body) = accessorBlock.accessors, !body.isEmpty
+      let accessorBlock = binding.accessorBlock, case .getter(let body) = accessorBlock.accessors, !body.isEmpty
     else {
       return nil
     }

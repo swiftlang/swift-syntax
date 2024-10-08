@@ -25,7 +25,7 @@ final class MacroReplacementTests: XCTestCase {
       """
 
     let definition = try macro.cast(MacroDeclSyntax.self).checkDefinition()
-    guard case let .expansion(_, replacements, _) = definition else {
+    guard case .expansion(_, let replacements, _) = definition else {
       XCTFail("not an expansion definition")
       fatalError()
     }
@@ -96,7 +96,7 @@ final class MacroReplacementTests: XCTestCase {
 
     let macroDecl = macro.cast(MacroDeclSyntax.self)
     let definition = try macroDecl.checkDefinition()
-    guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
+    guard case .expansion(let expansion, let replacements, let genericReplacements) = definition else {
       XCTFail("not a normal expansion")
       fatalError()
     }
@@ -128,7 +128,7 @@ final class MacroReplacementTests: XCTestCase {
 
     let macroDecl = macro.cast(MacroDeclSyntax.self)
     let definition = try macroDecl.checkDefinition()
-    guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
+    guard case .expansion(let expansion, let replacements, let genericReplacements) = definition else {
       XCTFail("not a normal expansion")
       return
     }
@@ -171,7 +171,7 @@ final class MacroReplacementTests: XCTestCase {
 
     let macroDecl = macro.cast(MacroDeclSyntax.self)
     let definition = try macroDecl.checkDefinition()
-    guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
+    guard case .expansion(let expansion, let replacements, let genericReplacements) = definition else {
       XCTFail("not a normal expansion")
       return
     }
@@ -213,7 +213,7 @@ final class MacroReplacementTests: XCTestCase {
 
     let macroDecl = macro.cast(MacroDeclSyntax.self)
     let definition = try macroDecl.checkDefinition()
-    guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
+    guard case .expansion(let expansion, let replacements, let genericReplacements) = definition else {
       XCTFail("not a normal expansion")
       return
     }
@@ -247,7 +247,7 @@ final class MacroReplacementTests: XCTestCase {
 
     let macroDecl = macro.cast(MacroDeclSyntax.self)
     let definition = try macroDecl.checkDefinition()
-    guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
+    guard case .expansion(let expansion, let replacements, let genericReplacements) = definition else {
       XCTFail("not a normal expansion")
       return
     }
@@ -281,7 +281,7 @@ final class MacroReplacementTests: XCTestCase {
 
     let macroDecl = macro.cast(MacroDeclSyntax.self)
     let definition = try macroDecl.checkDefinition()
-    guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
+    guard case .expansion(let expansion, let replacements, let genericReplacements) = definition else {
       XCTFail("not a normal expansion")
       return
     }
@@ -315,7 +315,7 @@ final class MacroReplacementTests: XCTestCase {
 
     let macroDecl = macro.cast(MacroDeclSyntax.self)
     let definition = try macroDecl.checkDefinition()
-    guard case let .expansion(expansion, replacements, genericReplacements) = definition else {
+    guard case .expansion(let expansion, let replacements, let genericReplacements) = definition else {
       XCTFail("not a normal expansion")
       return
     }

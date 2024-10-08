@@ -993,7 +993,7 @@ extension MacroApplication {
     }
 
     return attributedNode.attributes.compactMap {
-      guard case let .attribute(attribute) = $0,
+      guard case .attribute(let attribute) = $0,
         let attributeName = attribute.attributeName.as(IdentifierTypeSyntax.self)?.name.text,
         let macroSpec = macroSystem.lookup(attributeName)
       else {

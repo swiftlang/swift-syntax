@@ -11,9 +11,7 @@ add_swift_syntax_library(SwiftLexicalLookup
   LookupName.swift
   LookupResult.swift
   SimpleLookupQueries.swift
-  
-  Configurations/FileScopeHandlingConfig.swift
-  Configurations/LookupConfig.swift
+  LookupConfig.swift
   
   Scopes/CanInterleaveResultsLaterScopeSyntax.swift
   Scopes/FunctionScopeSyntax.swift

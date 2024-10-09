@@ -12,24 +12,26 @@
 
 import SwiftSyntax
 
-protocol NominalTypeDeclSyntax: LookInMembersScopeSyntax, NamedDeclSyntax, WithGenericParametersScopeSyntax {
+@_spi(Experimental)
+public protocol NominalTypeDeclSyntax: LookInMembersScopeSyntax, NamedDeclSyntax, WithGenericParametersScopeSyntax {
   var genericParameterClause: GenericParameterClauseSyntax? { get }
+  var genericWhereClause: GenericWhereClauseSyntax? { get }
   var inheritanceClause: InheritanceClauseSyntax? { get }
 }
 
 extension NominalTypeDeclSyntax {
   @_spi(Experimental) public var lookupMembersPosition: AbsolutePosition {
-    name.position
+    name.positionAfterSkippingLeadingTrivia
   }
 
   /// Nominal type doesn't introduce any names by itself.
-  @_spi(Experimental) public var introducedNames: [LookupName] {
+  @_spi(Experimental) public var defaultIntroducedNames: [LookupName] {
     []
   }
 
   /// Function used by generic parameter clause
   /// scope on return from it's lookup.
-  func returningLookupFromGenericParameterScope(
+  @_spi(Experimental) public func returningLookupFromGenericParameterScope(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
@@ -38,7 +40,7 @@ extension NominalTypeDeclSyntax {
       return lookupInParent(identifier, at: lookUpPosition, with: config)
     } else if let genericParameterClause, genericParameterClause.range.contains(lookUpPosition) {
       return lookupInParent(identifier, at: lookUpPosition, with: config)
-    } else if name.range.contains(lookUpPosition) {
+    } else if name.range.contains(lookUpPosition) || genericWhereClause?.range.contains(lookUpPosition) ?? false {
       return lookupInParent(identifier, at: lookUpPosition, with: config)
     } else {
       return [.lookInMembers(self)] + lookupInParent(identifier, at: lookUpPosition, with: config)

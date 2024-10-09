@@ -12,13 +12,14 @@
 
 import SwiftSyntax
 
-protocol FunctionScopeSyntax: DeclSyntaxProtocol, WithGenericParametersScopeSyntax {
+@_spi(Experimental) public protocol FunctionScopeSyntax: DeclSyntaxProtocol, WithGenericParametersScopeSyntax {
   var signature: FunctionSignatureSyntax { get }
+  var body: CodeBlockSyntax? { get }
 }
 
 extension FunctionScopeSyntax {
   /// Function parameters introduced by this function's signature.
-  @_spi(Experimental) public var introducedNames: [LookupName] {
+  @_spi(Experimental) public var defaultIntroducedNames: [LookupName] {
     signature.parameterClause.parameters.flatMap { parameter in
       LookupName.getNames(from: parameter)
     } + (parentScope?.is(MemberBlockSyntax.self) ?? false ? [.implicit(.self(self))] : [])
@@ -33,7 +34,7 @@ extension FunctionScopeSyntax {
   ) -> [LookupResult] {
     var thisScopeResults: [LookupResult] = []
 
-    if !signature.range.contains(lookUpPosition) {
+    if body?.range.contains(lookUpPosition) ?? false {
       thisScopeResults = defaultLookupImplementation(
         identifier,
         at: position,

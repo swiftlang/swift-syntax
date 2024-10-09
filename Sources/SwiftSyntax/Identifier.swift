@@ -17,6 +17,8 @@ public struct Identifier: Equatable, Hashable, Sendable {
     String(syntaxText: raw.name)
   }
 
+  public let dollarIdentifierStr: String?
+
   @_spi(RawSyntax)
   public let raw: RawIdentifier
   private let arena: SyntaxArenaRef?
@@ -26,6 +28,13 @@ public struct Identifier: Equatable, Hashable, Sendable {
     case .identifier, .keyword(.self), .keyword(.Self):
       self.raw = RawIdentifier(token.tokenView)
       self.arena = token.raw.arenaReference
+
+      self.dollarIdentifierStr = nil
+    case .dollarIdentifier(let dollarIdentifierStr):
+      self.raw = RawIdentifier(token.tokenView)
+      self.arena = token.raw.arenaReference
+
+      self.dollarIdentifierStr = dollarIdentifierStr
     default:
       return nil
     }
@@ -34,10 +43,24 @@ public struct Identifier: Equatable, Hashable, Sendable {
   public init(_ staticString: StaticString) {
     self.raw = RawIdentifier(staticString)
     self.arena = nil
+
+    let name = String(syntaxText: raw.name)
+
+    if name.first == "$" && Int(name.dropFirst()) != nil {
+      self.dollarIdentifierStr = name
+    } else {
+      self.dollarIdentifierStr = nil
+    }
   }
 
   public static func == (lhs: Self, rhs: Self) -> Bool {
     lhs.name == rhs.name
+  }
+
+  private static func getDollarIdentifierNumber(str: String) -> Int? {
+    guard str.first == "$" else { return nil }
+
+    return Int(str.dropFirst())
   }
 }
 

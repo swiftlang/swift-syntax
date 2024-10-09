@@ -20,6 +20,10 @@ import SwiftSyntax
   case fromFileScope(SourceFileSyntax, withNames: [LookupName])
   /// Indicates where to perform member lookup.
   case lookInMembers(LookInMembersScopeSyntax)
+  /// Indicates to lookup generic parameters of extended type.
+  case lookInGenericParametersOfExtendedType(ExtensionDeclSyntax)
+  /// Indicates this closure expression could introduce dollar identifiers.
+  case mightIntroduceDollarIdentifiers(ClosureExprSyntax)
 
   /// Associated scope.
   @_spi(Experimental) public var scope: ScopeSyntax {
@@ -30,6 +34,10 @@ import SwiftSyntax
       return fileScopeSyntax
     case .lookInMembers(let lookInMemb):
       return lookInMemb
+    case .lookInGenericParametersOfExtendedType(let extensionDecl):
+      return extensionDecl
+    case .mightIntroduceDollarIdentifiers(let closureExpr):
+      return closureExpr
     }
   }
 
@@ -38,7 +46,9 @@ import SwiftSyntax
     switch self {
     case .fromScope(_, let names), .fromFileScope(_, let names):
       return names
-    case .lookInMembers(_):
+    case .lookInMembers(_),
+      .lookInGenericParametersOfExtendedType(_),
+      .mightIntroduceDollarIdentifiers(_):
       return []
     }
   }
@@ -51,6 +61,14 @@ import SwiftSyntax
     default:
       return .fromScope(scope, withNames: names)
     }
+  }
+
+  /// Returns result specific for the particular `scope` kind with provided `names`
+  /// as an array with one element. If names are empty, returns an empty array.
+  static func getResultArray(for scope: ScopeSyntax, withNames names: [LookupName]) -> [LookupResult] {
+    guard !names.isEmpty else { return [] }
+
+    return [getResult(for: scope, withNames: names)]
   }
 
   /// Debug description of this lookup name.
@@ -87,6 +105,10 @@ import SwiftSyntax
       return "fromFileScope"
     case .lookInMembers:
       return "lookInMembers"
+    case .lookInGenericParametersOfExtendedType(_):
+      return "lookInGenericParametersOfExtendedType"
+    case .mightIntroduceDollarIdentifiers(_):
+      return "mightIntroduceDollarIdentifiers"
     }
   }
 }

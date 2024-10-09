@@ -12,7 +12,7 @@
 
 import SwiftSyntax
 
-protocol WithGenericParametersScopeSyntax: ScopeSyntax {
+@_spi(Experimental) public protocol WithGenericParametersScopeSyntax: ScopeSyntax {
   var genericParameterClause: GenericParameterClauseSyntax? { get }
 
   func returningLookupFromGenericParameterScope(
@@ -73,7 +73,7 @@ protocol WithGenericParametersScopeSyntax: ScopeSyntax {
   /// function declaration scope and then to generic parameter
   /// scope (`WithGenericParametersScopeSyntax`)
   /// with this method (instead of using standard `lookupInParent`).
-  func lookupThroughGenericParameterScope(
+  @_spi(Experimental) public func lookupThroughGenericParameterScope(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
@@ -85,7 +85,7 @@ protocol WithGenericParametersScopeSyntax: ScopeSyntax {
     }
   }
 
-  func returningLookupFromGenericParameterScope(
+  @_spi(Experimental) public func returningLookupFromGenericParameterScope(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig

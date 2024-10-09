@@ -12,8 +12,14 @@
 
 import SwiftSyntax
 
-@_spi(Experimental) public protocol WithGenericParametersScopeSyntax: ScopeSyntax {
+protocol WithGenericParametersScopeSyntax: ScopeSyntax {
   var genericParameterClause: GenericParameterClauseSyntax? { get }
+
+  func returningLookupFromGenericParameterScope(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig
+  ) -> [LookupResult]
 }
 
 @_spi(Experimental) extension WithGenericParametersScopeSyntax {
@@ -67,7 +73,7 @@ import SwiftSyntax
   /// function declaration scope and then to generic parameter
   /// scope (`WithGenericParametersScopeSyntax`)
   /// with this method (instead of using standard `lookupInParent`).
-  private func lookupThroughGenericParameterScope(
+  func lookupThroughGenericParameterScope(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
@@ -75,7 +81,15 @@ import SwiftSyntax
     if let genericParameterClause {
       return genericParameterClause.lookup(identifier, at: lookUpPosition, with: config)
     } else {
-      return lookupInParent(identifier, at: lookUpPosition, with: config)
+      return returningLookupFromGenericParameterScope(identifier, at: lookUpPosition, with: config)
     }
+  }
+
+  func returningLookupFromGenericParameterScope(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig
+  ) -> [LookupResult] {
+    lookupInParent(identifier, at: lookUpPosition, with: config)
   }
 }

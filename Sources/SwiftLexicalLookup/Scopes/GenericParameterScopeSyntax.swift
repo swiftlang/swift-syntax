@@ -16,7 +16,7 @@ import SwiftSyntax
 /// futher lookup to its `WithGenericParametersScopeSyntax`
 /// parent scope's parent scope (i.e. on return, bypasses names
 /// introduced by its parent).
-@_spi(Experimental) public protocol GenericParameterScopeSyntax: ScopeSyntax {}
+protocol GenericParameterScopeSyntax: ScopeSyntax {}
 
 @_spi(Experimental) extension GenericParameterScopeSyntax {
   /// Returns names matching lookup and bypasses
@@ -83,7 +83,7 @@ import SwiftSyntax
     if let parentScope = Syntax(parentScope).asProtocol(SyntaxProtocol.self)
       as? WithGenericParametersScopeSyntax
     {
-      return parentScope.lookupInParent(identifier, at: lookUpPosition, with: config)
+      return parentScope.returningLookupFromGenericParameterScope(identifier, at: lookUpPosition, with: config)
     } else {
       return lookupInParent(identifier, at: lookUpPosition, with: config)
     }

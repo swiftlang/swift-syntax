@@ -4,7 +4,7 @@ Each example can be executed by navigating into this folder and running `swift r
 
 - [AddOneToIntegerLiterals](Sources/AddOneToIntegerLiterals/AddOneToIntegerLiterals.swift): Command line tool to add 1 to every integer literal in a source file
 - [CodeGenerationUsingSwiftSyntaxBuilder](Sources/CodeGenerationUsingSwiftSyntaxBuilder/CodeGenerationUsingSwiftSyntaxBuilder.swift): Code-generate a simple source file using SwiftSyntaxBuilder
-- [ExamplePlugin](Sources/ExamplePlugin): Compiler plugin executable using [`SwiftCompilerPlugin`](../Sources/SwiftCompilerPlugin)
+- [ExamplePlugin](Examples/Sources/MacroExamples/Implementation/Plugin.swift): Compiler plugin executable using [`SwiftCompilerPlugin`](../Sources/SwiftCompilerPlugin)
 - [MacroExamples](Sources/MacroExamples): A collection of Swift macros
 
 Furthermore, SwiftSyntax uses [`SwiftSyntaxBuilder`](../Sources/SwiftSyntaxBuilder) extensively to generate its own code. That code can be found in the [CodeGeneration](../CodeGeneration) package.

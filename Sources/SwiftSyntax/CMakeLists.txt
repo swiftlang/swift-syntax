@@ -15,6 +15,7 @@ add_swift_syntax_library(SwiftSyntax
   CommonAncestor.swift
   Convenience.swift
   CustomTraits.swift
+  EditorPlaceholder.swift
   Identifier.swift
   MemoryLayout.swift
   MissingNodeInitializers.swift

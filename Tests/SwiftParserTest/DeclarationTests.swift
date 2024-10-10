@@ -3277,7 +3277,12 @@ final class DeclarationTests: ParserTestCase {
     )
 
     // Not actually valid, needs to be diagnosed during type checking
-    assertParse("public init() -> Int")
+    assertParse(
+      "public init() 1️⃣->  Int",
+      diagnostics: [
+        DiagnosticSpec(message: "initializers cannot have a result type")
+      ]
+    )
   }
 
   func testSendingTypeSpecifier() {

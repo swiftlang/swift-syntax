@@ -81,10 +81,10 @@ enum NameExpectation: ExpectedName {
     case (.declaration, .declaration): break
     case (.implicit(let implicitName), .implicit(let implicitNameExpectation)):
       implicitNameExpectation.assertExpectation(marker: marker, for: implicitName)
-    case (.dollarIdentifier(_, let acutalStr), .dollarIdentifier(_, let expectedStr)):
+    case (.dollarIdentifier(_, let actualStr), .dollarIdentifier(_, let expectedStr)):
       XCTAssert(
-        acutalStr == expectedStr,
-        "For marker \(marker), actual identifier \(acutalStr) doesn't match expected \(expectedStr)"
+        actualStr == expectedStr,
+        "For marker \(marker), actual identifier \(actualStr) doesn't match expected \(expectedStr)"
       )
     default:
       XCTFail("For marker \(marker), actual name kind \(name) doesn't match expected \(self)")

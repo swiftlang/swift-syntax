@@ -21,8 +21,34 @@ import SwiftSyntax
   /// Indicates where to perform member lookup.
   case lookInMembers(LookInMembersScopeSyntax)
   /// Indicates to lookup generic parameters of extended type.
+  ///
+  /// ### Example
+  /// ```swift
+  /// extension Foo {
+  ///   func bar() {
+  ///     let a = A() // <-- lookup here
+  ///   }
+  /// }
+  /// ```
+  /// For a lookup started at the marked position, `lookInGenericParametersOfExtendedType`
+  /// will be included as one of the results prompting the client
+  /// to lookup the generic parameters of of the extended `Foo` type.
   case lookInGenericParametersOfExtendedType(ExtensionDeclSyntax)
   /// Indicates this closure expression could introduce dollar identifiers.
+  ///
+  /// ### Example
+  /// ```swift
+  /// func foo() {
+  ///   let a = {
+  ///     $0 // <-- lookup here
+  ///   }
+  /// }
+  /// ```
+  /// When looking up for any identifier at the indicated position,
+  /// the result will include `mightIntroduceDollarIdentifiers`
+  /// result kind. If it's performed for a dollar identifier, `LookupName.dollarIdentifier`
+  /// with the appropriate identifier will be used in the
+  /// result associated with the closure expression inside `a`.
   case mightIntroduceDollarIdentifiers(ClosureExprSyntax)
 
   /// Associated scope.

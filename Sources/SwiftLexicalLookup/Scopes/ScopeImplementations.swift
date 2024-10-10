@@ -424,14 +424,14 @@ import SwiftSyntax
       if inRightTypeOrSameTypeRequirement(lookUpPosition) {
         return [.lookInGenericParametersOfExtendedType(self)] + [.lookInMembers(self)]
           + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
-      } else {
-        return [.lookInGenericParametersOfExtendedType(self)]
-          + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
       }
-    } else {
+      
       return [.lookInGenericParametersOfExtendedType(self)]
-        + lookupInParent(identifier, at: lookUpPosition, with: config)
+        + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
     }
+    
+    return [.lookInGenericParametersOfExtendedType(self)]
+      + lookupInParent(identifier, at: lookUpPosition, with: config)
   }
 
   /// Returns `true` if `checkedPosition` is a right type of a

@@ -425,11 +425,11 @@ import SwiftSyntax
         return [.lookInGenericParametersOfExtendedType(self)] + [.lookInMembers(self)]
           + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
       }
-      
+
       return [.lookInGenericParametersOfExtendedType(self)]
         + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
     }
-    
+
     return [.lookInGenericParametersOfExtendedType(self)]
       + lookupInParent(identifier, at: lookUpPosition, with: config)
   }

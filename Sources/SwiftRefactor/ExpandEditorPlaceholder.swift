@@ -13,12 +13,12 @@
 #if swift(>=6)
 import SwiftBasicFormat
 import SwiftParser
-public import SwiftSyntax
+@_spi(RawSyntax) public import SwiftSyntax
 import SwiftSyntaxBuilder
 #else
 import SwiftBasicFormat
 import SwiftParser
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 import SwiftSyntaxBuilder
 #endif
 
@@ -88,31 +88,26 @@ struct ExpandSingleEditorPlaceholder: EditRefactoringProvider {
   }
 
   static func textRefactor(syntax token: TokenSyntax, in context: Context = Context()) -> [SourceEdit] {
-    guard let placeholder = EditorPlaceholderData(token: token) else {
+    guard let placeholder = EditorPlaceholderExpansionData(token: token) else {
       return []
     }
 
     let expanded: String
-    switch placeholder {
-    case let .basic(text):
-      expanded = String(text)
-    case let .typed(text, type):
-      if let functionType = type.as(FunctionTypeSyntax.self) {
-        let basicFormat = BasicFormat(
-          indentationWidth: context.indentationWidth,
-          initialIndentation: context.initialIndentation
-        )
-        var formattedExpansion = functionType.closureExpansion.formatted(using: basicFormat).description
-        // Strip the initial indentation from the placeholder itself. We only introduced the initial indentation to
-        // format consecutive lines. We don't want it at the front of the initial line because it replaces an expression
-        // that might be in the middle of a line.
-        if formattedExpansion.hasPrefix(context.initialIndentation.description) {
-          formattedExpansion = String(formattedExpansion.dropFirst(context.initialIndentation.description.count))
-        }
-        expanded = formattedExpansion
-      } else {
-        expanded = String(text)
+    if let functionType = placeholder.typeForExpansion?.as(FunctionTypeSyntax.self) {
+      let basicFormat = BasicFormat(
+        indentationWidth: context.indentationWidth,
+        initialIndentation: context.initialIndentation
+      )
+      var formattedExpansion = functionType.closureExpansion.formatted(using: basicFormat).description
+      // Strip the initial indentation from the placeholder itself. We only introduced the initial indentation to
+      // format consecutive lines. We don't want it at the front of the initial line because it replaces an expression
+      // that might be in the middle of a line.
+      if formattedExpansion.hasPrefix(context.initialIndentation.description) {
+        formattedExpansion = String(formattedExpansion.dropFirst(context.initialIndentation.description.count))
       }
+      expanded = formattedExpansion
+    } else {
+      expanded = placeholder.displayText
     }
 
     return [
@@ -325,8 +320,8 @@ extension FunctionCallExprSyntax {
     for arg in arguments.reversed() {
       guard let expr = arg.expression.as(DeclReferenceExprSyntax.self),
         expr.baseName.isEditorPlaceholder,
-        let data = EditorPlaceholderData(token: expr.baseName),
-        case let .typed(_, type) = data,
+        let data = EditorPlaceholderExpansionData(token: expr.baseName),
+        let type = data.typeForExpansion,
         type.is(FunctionTypeSyntax.self)
       else {
         break
@@ -371,85 +366,25 @@ extension FunctionCallExprSyntax {
   }
 }
 
-/// Placeholder text must start with '<#' and end with
-/// '#>'. Placeholders can be one of the following formats:
-/// ```
-///   'T##' display-string '##' type-string ('##' type-for-expansion-string)?
-///   'T##' display-and-type-string
-///   display-string
-/// ```
-///
-/// NOTE: It is required that '##' is not a valid substring of display-string
-/// or type-string. If this ends up not the case for some reason, we can consider
-/// adding escaping for '##'.
-@_spi(SourceKitLSP)
-public enum EditorPlaceholderData {
-  case basic(text: Substring)
-  case typed(text: Substring, type: TypeSyntax)
+private struct EditorPlaceholderExpansionData {
+  let displayText: String
+  let typeForExpansion: TypeSyntax?
 
   init?(token: TokenSyntax) {
-    self.init(text: token.text)
-  }
-
-  @_spi(SourceKitLSP)
-  public init?(text: String) {
-    guard isPlaceholder(text) else {
+    guard let rawData = token.rawEditorPlaceHolderData else {
       return nil
     }
-    var text = text.dropFirst(2).dropLast(2)
 
-    if !text.hasPrefix("T##") {
-      // No type information
-      self = .basic(text: text)
-      return
-    }
-
-    // Drop 'T##'
-    text = text.dropFirst(3)
-
-    var typeText: Substring
-    (text, typeText) = split(text, separatedBy: "##")
-    if typeText.isEmpty {
-      // Only type information present
-      self.init(typeText: text)
-      return
-    }
-
-    // Have type text, see if we also have expansion text
-
-    let expansionText: Substring
-    (typeText, expansionText) = split(typeText, separatedBy: "##")
-    if expansionText.isEmpty {
-      if typeText.isEmpty {
-        // No type information
-        self = .basic(text: text)
-      } else {
-        // Only have type text, use it for the placeholder expansion
-        self.init(typeText: typeText)
-      }
-
-      return
-    }
-
-    // Have expansion type text, use it for the placeholder expansion
-    self.init(typeText: expansionText)
-  }
-
-  init(typeText: Substring) {
-    var parser = Parser(String(typeText))
-
-    let type: TypeSyntax = TypeSyntax.parse(from: &parser)
-    if type.hasError {
-      self = .basic(text: typeText)
+    if let typeText = rawData.typeForExpansionText, !typeText.isEmpty {
+      self.displayText = String(syntaxText: typeText)
+      var parser = Parser(UnsafeBufferPointer(start: typeText.baseAddress, count: typeText.count))
+      let type: TypeSyntax = TypeSyntax.parse(from: &parser)
+      self.typeForExpansion = type.hasError ? nil : type
     } else {
-      self = .typed(text: typeText, type: type)
+      self.displayText = String(syntaxText: rawData.displayText)
+      self.typeForExpansion = nil
     }
   }
-}
-
-@_spi(Testing)
-public func isPlaceholder(_ str: String) -> Bool {
-  return str.hasPrefix(placeholderStart) && str.hasSuffix(placeholderEnd)
 }
 
 @_spi(Testing)
@@ -460,17 +395,6 @@ public func wrapInPlaceholder(_ str: String) -> String {
 @_spi(Testing)
 public func wrapInTypePlaceholder(_ str: String, type: String) -> String {
   return wrapInPlaceholder("T##" + str + "##" + type)
-}
-
-/// Split the given string into two components on the first instance of
-/// `separatedBy`. The second element is empty if `separatedBy` is missing
-/// from the initial string.
-fileprivate func split(_ text: Substring, separatedBy separator: String) -> (Substring, Substring) {
-  var rest = text
-  while !rest.isEmpty && !rest.hasPrefix(separator) {
-    rest = rest.dropFirst()
-  }
-  return (text.dropLast(rest.count), rest.dropFirst(2))
 }
 
 fileprivate let placeholderStart: String = "<#"

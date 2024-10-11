@@ -143,16 +143,6 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     return raw.totalLength
   }
 
-  /// Whether the token text is an editor placeholder or not.
-  public var isEditorPlaceholder: Bool {
-    switch self.tokenKind {
-    case .identifier(let text):
-      return text.hasPrefix("<#") && text.hasSuffix("#>")
-    default:
-      return false
-    }
-  }
-
   /// An identifier created from `self`.
   public var identifier: Identifier? {
     switch self.tokenKind {

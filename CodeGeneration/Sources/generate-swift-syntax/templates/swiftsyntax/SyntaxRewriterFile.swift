@@ -88,7 +88,7 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     DeclSyntax(
       """
       /// Visit a ``TokenSyntax``.
-      ///   - Parameter node: the node that is being visited
+      ///   - Parameter token: the token that is being visited
       ///   - Returns: the rewritten node
       open func visit(_ token: TokenSyntax) -> TokenSyntax {
         return token

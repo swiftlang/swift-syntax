@@ -55,13 +55,13 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       /// Prints the provided trivia as they would be written in a source file.
       ///
       /// - Parameter stream: The stream to which to print the trivia.
-      public func write(to target: inout some TextOutputStream)
+      public func write(to stream: inout some TextOutputStream)
       """
     ) {
       DeclSyntax(
         """
         func printRepeated(_ character: String, count: Int) {
-          for _ in 0..<count { target.write(character) }
+          for _ in 0..<count { stream.write(character) }
         }
         """
       )
@@ -75,7 +75,7 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             }
           } else {
             SwitchCaseSyntax("case let .\(trivia.enumCaseName)(text):") {
-              ExprSyntax("target.write(text)")
+              ExprSyntax("stream.write(text)")
             }
           }
         }

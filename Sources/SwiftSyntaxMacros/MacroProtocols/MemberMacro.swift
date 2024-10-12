@@ -41,7 +41,7 @@ public protocol MemberMacro: AttachedMacro {
   /// - Parameters:
   ///   - node: The custom attribute describing the attached macro.
   ///   - declaration: The declaration the macro attribute is attached to.
-  ///   - conformingTo: The set of protocols that were declared
+  ///   - protocols: The set of protocols that were declared
   ///     in the set of conformances for the macro and to which the declaration
   ///     does not explicitly conform. The member macro itself cannot declare
   ///     conformances to these protocols (only an extension macro can do that),

@@ -792,7 +792,7 @@ public struct AccessorParametersSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
-///  - `memberBlock`: ``MemberBlockSyntax``
+///  - `memberBlock`: ``MemberBlockSyntax``!
 public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
@@ -828,7 +828,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax? = nil,
     _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-    memberBlock: MemberBlockSyntax,
+    memberBlock: MemberBlockSyntax! = nil,
     _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -869,7 +869,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
         unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
         genericWhereClause?.raw,
         unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw,
-        memberBlock.raw,
+        memberBlock?.raw,
         unexpectedAfterMemberBlock?.raw
       ]
       let raw = RawSyntax.makeLayout(
@@ -1085,9 +1085,9 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     }
   }
 
-  public var memberBlock: MemberBlockSyntax {
+  public var memberBlock: MemberBlockSyntax! {
     get {
-      return Syntax(self).child(at: 15)!.cast(MemberBlockSyntax.self)
+      return Syntax(self).child(at: 15)?.cast(MemberBlockSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 15, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)

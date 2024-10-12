@@ -135,7 +135,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
           let childType: TypeSyntax =
             child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
-          let type = child.isOptional ? TypeSyntax("\(childType)?") : TypeSyntax("\(childType)")
+          let type = TypeSyntax("\(childType)\(raw: child.optionality?.rawValue ?? "")")
 
           try! VariableDeclSyntax(
             """
@@ -145,7 +145,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           ) {
             AccessorDeclSyntax(accessorSpecifier: .keyword(.get)) {
               let optionalityMarker: TokenSyntax =
-                child.isOptional ? .infixQuestionMarkToken() : .exclamationMarkToken()
+                child.optionality != nil ? .infixQuestionMarkToken() : .exclamationMarkToken()
               StmtSyntax("return Syntax(self).child(at: \(raw: index))\(optionalityMarker).cast(\(childType).self)")
             }
 

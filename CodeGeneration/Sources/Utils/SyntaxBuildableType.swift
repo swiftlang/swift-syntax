@@ -20,10 +20,10 @@ import SyntaxSupport
 /// kind.
 public struct SyntaxBuildableType: Hashable {
   public let kind: SyntaxOrTokenNodeKind
-  public let isOptional: Bool
+  public let optionality: Optionality?
 
-  public init(kind: SyntaxOrTokenNodeKind, isOptional: Bool = false) {
-    self.isOptional = isOptional
+  public init(kind: SyntaxOrTokenNodeKind, optionality: Optionality? = nil) {
+    self.optionality = optionality
     self.kind = kind
   }
 
@@ -60,7 +60,7 @@ public struct SyntaxBuildableType: Hashable {
   /// with fixed test), return an expression that can be used as the
   /// default value for a function parameter. Otherwise, return `nil`.
   public var defaultValue: ExprSyntax? {
-    if isOptional {
+    if optionality != nil {
       return ExprSyntax(NilLiteralExprSyntax())
     } else if let token = token {
       if token.text != nil {
@@ -108,7 +108,7 @@ public struct SyntaxBuildableType: Hashable {
       if case .some(.some(let builderInitializableType)) = BUILDER_INITIALIZABLE_TYPES[kind] {
         return Self(
           kind: .node(kind: builderInitializableType),
-          isOptional: isOptional
+          optionality: optionality
         )
       } else {
         return self
@@ -132,8 +132,8 @@ public struct SyntaxBuildableType: Hashable {
   /// The corresponding `*Syntax` type defined in the `SwiftSyntax` module,
   /// which will eventually get built from `SwiftSyntaxBuilder`. If the type
   /// is optional, this terminates with a `?`.
-  public var syntax: TypeSyntax {
-    return optionalWrapped(type: syntaxBaseName)
+  public func syntax(canUseIUO: Bool = true) -> TypeSyntax {
+    return optionalWrapped(type: syntaxBaseName, canUseIUO: canUseIUO)
   }
 
   /// The type that is used for parameters in SwiftSyntaxBuilder that take this
@@ -167,27 +167,33 @@ public struct SyntaxBuildableType: Hashable {
     }
   }
 
-  /// Wraps a type in an optional depending on whether `isOptional` is true.
-  public func optionalWrapped(type: some TypeSyntaxProtocol) -> TypeSyntax {
-    if isOptional {
+  /// Wraps a type in an optional depending on whether `optionality` is true.
+  public func optionalWrapped(type: some TypeSyntaxProtocol, canUseIUO: Bool = true) -> TypeSyntax {
+    switch optionality {
+    case .some(.implicitlyUnwrapped):
+      if canUseIUO {
+        return TypeSyntax(ImplicitlyUnwrappedOptionalTypeSyntax(wrappedType: type))
+      }
+      fallthrough
+    case .some(.normal):
       return TypeSyntax(OptionalTypeSyntax(wrappedType: type))
-    } else {
+    case nil:
       return TypeSyntax(type)
     }
   }
 
-  /// Wraps a type in an optional chaining depending on whether `isOptional` is true.
+  /// Wraps a type in an optional chaining depending on whether `optionality` is true.
   public func optionalChained(expr: some ExprSyntaxProtocol) -> ExprSyntax {
-    if isOptional {
+    if optionality != nil {
       return ExprSyntax(OptionalChainingExprSyntax(expression: expr))
     } else {
       return ExprSyntax(expr)
     }
   }
 
-  /// Wraps a type in a force unwrap expression depending on whether `isOptional` is true.
+  /// Wraps a type in a force unwrap expression depending on whether `optionality` is true.
   public func forceUnwrappedIfNeeded(expr: some ExprSyntaxProtocol) -> ExprSyntax {
-    if isOptional {
+    if optionality != nil {
       return ExprSyntax(ForceUnwrapExprSyntax(expression: expr))
     } else {
       return ExprSyntax(expr)

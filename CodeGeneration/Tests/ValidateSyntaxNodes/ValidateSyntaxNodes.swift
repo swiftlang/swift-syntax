@@ -81,7 +81,7 @@ fileprivate extension ChildKind {
 fileprivate extension Child {
   func hasSameType(as other: Child) -> Bool {
     return identifier.description == other.identifier.description && kind.hasSameType(as: other.kind)
-      && isOptional == other.isOptional
+      && optionality == other.optionality
   }
 
   func isFollowedByColonToken(in node: LayoutNode) -> Bool {
@@ -816,7 +816,7 @@ class ValidateSyntaxNodes: XCTestCase {
 
     for node in SYNTAX_NODES.compactMap(\.layoutNode) {
       for child in node.children {
-        if case .collection = child.kind, child.isOptional, !child.isUnexpectedNodes {
+        if case .collection = child.kind, child.optionality != nil, !child.isUnexpectedNodes {
           failures.append(
             ValidationFailure(
               node: node.kind,

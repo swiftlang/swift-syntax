@@ -31,11 +31,11 @@ extension LayoutNode {
         paramType = child.syntaxNodeKind.syntaxType
       }
 
-      if child.isOptional {
+      if let optionality = child.optionality {
         if paramType.is(SomeOrAnyTypeSyntax.self) {
-          paramType = "(\(paramType))?"
+          paramType = "(\(paramType))\(raw: optionality.rawValue)"
         } else {
-          paramType = "\(paramType)?"
+          paramType = "\(paramType)\(raw: optionality.rawValue)"
         }
       }
 
@@ -125,7 +125,7 @@ extension LayoutNode {
         let builderInitializableType = child.buildableType.builderInitializableType
         if child.buildableType.builderInitializableType != child.buildableType {
           let param = Node.from(type: child.buildableType).layoutNode!.singleNonDefaultedChild
-          if child.isOptional {
+          if child.optionality != nil {
             produceExpr = ExprSyntax(
               "\(childName)Builder().map { \(child.buildableType.syntaxBaseName)(\(param.labelDeclName): $0) }"
             )
@@ -139,7 +139,7 @@ extension LayoutNode {
         }
         builderParameters.append(
           FunctionParameterSyntax(
-            "@\(builderInitializableType.resultBuilderType) \(childName)Builder: () throws-> \(builderInitializableType.syntax)"
+            "@\(builderInitializableType.resultBuilderType) \(childName)Builder: () throws -> \(builderInitializableType.syntax(canUseIUO: false))"
           )
         )
       } else {

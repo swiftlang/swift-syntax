@@ -161,7 +161,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
               let list = ExprListSyntax {
                 ExprSyntax("layout.initialize(repeating: nil)")
                 for (index, child) in node.children.enumerated() {
-                  let optionalMark = child.isOptional ? "?" : ""
+                  let optionalMark = (child.optionality != nil) ? "?" : ""
 
                   ExprSyntax(
                     "layout[\(raw: index)] = \(child.baseCallName)\(raw: optionalMark).raw"
@@ -188,7 +188,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
             try VariableDeclSyntax(
               "public var \(child.varDeclName): Raw\(child.buildableType.buildable)"
             ) {
-              let exclamationMark = child.isOptional ? "" : "!"
+              let exclamationMark = child.optionality != nil ? "" : "!"
 
               if child.syntaxNodeKind == .syntax {
                 ExprSyntax("layoutView.children[\(raw: index)]\(raw: exclamationMark)")
@@ -232,7 +232,7 @@ fileprivate extension Child {
     var paramType: TypeSyntax
     if !kind.isNodeChoicesEmpty {
       paramType = "\(syntaxChoicesType)"
-    } else if hasBaseType && !isOptional {
+    } else if hasBaseType && optionality == nil {
       // we restrict the use of generic type to non-optional parameter types, otherwise call sites would no longer be
       // able to just pass `nil` to this parameter without specializing `(some Raw<Kind>SyntaxNodeProtocol)?`
       //

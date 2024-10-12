@@ -287,7 +287,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 15, verify(layout[15], as: RawMemberBlockSyntax.self))
+    assertNoError(kind, 15, verify(layout[15], as: RawMemberBlockSyntax!.self))
     assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
   case .arrayElementList:
     for (index, element) in layout.enumerated() {
@@ -533,7 +533,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 15, verify(layout[15], as: RawMemberBlockSyntax.self))
+    assertNoError(kind, 15, verify(layout[15], as: RawMemberBlockSyntax!.self))
     assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
   case .classRestrictionType:
     assert(layout.count == 3)
@@ -1122,7 +1122,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 15, verify(layout[15], as: RawMemberBlockSyntax.self))
+    assertNoError(kind, 15, verify(layout[15], as: RawMemberBlockSyntax!.self))
     assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
   case .exposeAttributeArguments:
     assert(layout.count == 7)
@@ -1175,7 +1175,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 11, verify(layout[11], as: RawGenericWhereClauseSyntax?.self))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 13, verify(layout[13], as: RawMemberBlockSyntax.self))
+    assertNoError(kind, 13, verify(layout[13], as: RawMemberBlockSyntax!.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
   case .fallThroughStmt:
     assert(layout.count == 3)
@@ -2218,7 +2218,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 15, verify(layout[15], as: RawMemberBlockSyntax.self))
+    assertNoError(kind, 15, verify(layout[15], as: RawMemberBlockSyntax!.self))
     assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
   case .regexLiteralExpr:
     assert(layout.count == 11)
@@ -2387,7 +2387,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 15, verify(layout[15], as: RawMemberBlockSyntax.self))
+    assertNoError(kind, 15, verify(layout[15], as: RawMemberBlockSyntax!.self))
     assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
   case .subscriptCallExpr:
     assert(layout.count == 13)

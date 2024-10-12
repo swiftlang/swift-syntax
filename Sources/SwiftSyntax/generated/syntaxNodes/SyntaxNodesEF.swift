@@ -1229,7 +1229,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
-///  - `memberBlock`: ``MemberBlockSyntax``
+///  - `memberBlock`: ``MemberBlockSyntax``!
 public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
@@ -1268,7 +1268,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax? = nil,
     _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-    memberBlock: MemberBlockSyntax,
+    memberBlock: MemberBlockSyntax! = nil,
     _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -1309,7 +1309,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
         unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
         genericWhereClause?.raw,
         unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw,
-        memberBlock.raw,
+        memberBlock?.raw,
         unexpectedAfterMemberBlock?.raw
       ]
       let raw = RawSyntax.makeLayout(
@@ -1528,9 +1528,9 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
   }
 
   /// The cases and other members associated with this enum declaration. Because enum extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type.
-  public var memberBlock: MemberBlockSyntax {
+  public var memberBlock: MemberBlockSyntax! {
     get {
-      return Syntax(self).child(at: 15)!.cast(MemberBlockSyntax.self)
+      return Syntax(self).child(at: 15)?.cast(MemberBlockSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 15, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
@@ -2125,7 +2125,7 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStm
 ///  - `extendedType`: ``TypeSyntax``
 ///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
-///  - `memberBlock`: ``MemberBlockSyntax``
+///  - `memberBlock`: ``MemberBlockSyntax``!
 public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
@@ -2161,7 +2161,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax? = nil,
     _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-    memberBlock: MemberBlockSyntax,
+    memberBlock: MemberBlockSyntax! = nil,
     _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -2198,7 +2198,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
         unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
         genericWhereClause?.raw,
         unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw,
-        memberBlock.raw,
+        memberBlock?.raw,
         unexpectedAfterMemberBlock?.raw
       ]
       let raw = RawSyntax.makeLayout(
@@ -2402,9 +2402,9 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
   }
 
   /// The members of the extension declaration. As this is an extension, the contents of this member block isn't guaranteed to be a complete list of members for this type.
-  public var memberBlock: MemberBlockSyntax {
+  public var memberBlock: MemberBlockSyntax! {
     get {
-      return Syntax(self).child(at: 13)!.cast(MemberBlockSyntax.self)
+      return Syntax(self).child(at: 13)?.cast(MemberBlockSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)

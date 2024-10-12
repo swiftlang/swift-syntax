@@ -28,7 +28,7 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
     ) {
       for child in trait.children {
-        let questionMark = child.isOptional ? "?" : ""
+        let questionMark = child.optionality?.rawValue ?? ""
 
         DeclSyntax(
           """

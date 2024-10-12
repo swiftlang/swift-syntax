@@ -2242,7 +2242,7 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
-///  - `memberBlock`: ``MemberBlockSyntax``
+///  - `memberBlock`: ``MemberBlockSyntax``!
 public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
@@ -2281,7 +2281,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax? = nil,
     _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-    memberBlock: MemberBlockSyntax,
+    memberBlock: MemberBlockSyntax! = nil,
     _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -2322,7 +2322,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
         unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
         genericWhereClause?.raw,
         unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw,
-        memberBlock.raw,
+        memberBlock?.raw,
         unexpectedAfterMemberBlock?.raw
       ]
       let raw = RawSyntax.makeLayout(
@@ -2541,9 +2541,9 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
   }
 
   /// The members of the struct declaration. Because struct extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type.
-  public var memberBlock: MemberBlockSyntax {
+  public var memberBlock: MemberBlockSyntax! {
     get {
-      return Syntax(self).child(at: 15)!.cast(MemberBlockSyntax.self)
+      return Syntax(self).child(at: 15)?.cast(MemberBlockSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 15, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclSyntax.self)

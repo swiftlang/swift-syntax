@@ -227,7 +227,8 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "memberBlock",
-        kind: .node(kind: .memberBlock)
+        kind: .node(kind: .memberBlock),
+        optionality: .implicitlyUnwrapped
       ),
     ]
   ),
@@ -401,7 +402,8 @@ public let DECL_NODES: [Node] = [
         name: "memberBlock",
         kind: .node(kind: .memberBlock),
         documentation:
-          "The members of the class declaration. As class extension declarations may declare additional members, the contents of this member block isn't guaranteed to be a complete list of members for this type."
+          "The members of the class declaration. As class extension declarations may declare additional members, the contents of this member block isn't guaranteed to be a complete list of members for this type.",
+        optionality: .implicitlyUnwrapped
       ),
     ]
   ),
@@ -827,7 +829,8 @@ public let DECL_NODES: [Node] = [
         name: "memberBlock",
         kind: .node(kind: .memberBlock),
         documentation:
-          "The cases and other members associated with this enum declaration. Because enum extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type."
+          "The cases and other members associated with this enum declaration. Because enum extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type.",
+        optionality: .implicitlyUnwrapped
       ),
     ]
   ),
@@ -906,7 +909,8 @@ public let DECL_NODES: [Node] = [
         name: "memberBlock",
         kind: .node(kind: .memberBlock),
         documentation:
-          "The members of the extension declaration. As this is an extension, the contents of this member block isn't guaranteed to be a complete list of members for this type."
+          "The members of the extension declaration. As this is an extension, the contents of this member block isn't guaranteed to be a complete list of members for this type.",
+        optionality: .implicitlyUnwrapped
       ),
     ]
   ),
@@ -2011,7 +2015,8 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "memberBlock",
         kind: .node(kind: .memberBlock),
-        documentation: "The members of the protocol declaration."
+        documentation: "The members of the protocol declaration.",
+        optionality: .implicitlyUnwrapped
       ),
     ]
   ),
@@ -2182,7 +2187,8 @@ public let DECL_NODES: [Node] = [
         name: "memberBlock",
         kind: .node(kind: .memberBlock),
         documentation:
-          "The members of the struct declaration. Because struct extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type."
+          "The members of the struct declaration. Because struct extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type.",
+        optionality: .implicitlyUnwrapped
       ),
     ]
   ),

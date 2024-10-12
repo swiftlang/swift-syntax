@@ -153,7 +153,7 @@ extension WithOptionalCodeBlockSyntax where Self: DeclSyntaxProtocol {
 // MARK: HasTrailingMemberDeclBlock
 
 public protocol HasTrailingMemberDeclBlock {
-  var memberBlock: MemberBlockSyntax { get set }
+  var memberBlock: MemberBlockSyntax! { get set }
 
   /// Constructs a syntax node where `header` builds the text of the node before the members in braces and `membersBuilder` is used to list the node’s members.
   ///
@@ -178,14 +178,14 @@ public protocol HasTrailingMemberDeclBlock {
   /// Throws an error if `header` defines a different node type than the type the initializer is called on. E.g. if calling `try StructDeclSyntax("class MyClass") {}`
   init(
     _ header: SyntaxNodeString,
-    @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax
+    @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax?
   ) throws
 }
 
 extension HasTrailingMemberDeclBlock where Self: DeclSyntaxProtocol {
   public init(
     _ header: SyntaxNodeString,
-    @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax
+    @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax?
   ) throws {
     // If the type provides a custom `SyntaxParseable` implementation, use that. Otherwise construct it as a
     // `DeclSyntax`.
@@ -202,7 +202,7 @@ extension HasTrailingMemberDeclBlock where Self: DeclSyntaxProtocol {
       throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: decl)
     }
     self = castedDecl
-    self.memberBlock = try MemberBlockSyntax(members: membersBuilder())
+    self.memberBlock = try membersBuilder().map { MemberBlockSyntax(members: $0) }
   }
 }
 

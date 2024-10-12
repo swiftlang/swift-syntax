@@ -29,7 +29,7 @@ protocol NominalTypeDeclarationTrait {
     primaryOrGenerics: PrimaryOrGenerics?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberBlockSyntax,
+    memberBlock: RawMemberBlockSyntax?,
     arena: __shared SyntaxArena
   )
 
@@ -47,7 +47,7 @@ extension RawProtocolDeclSyntax: NominalTypeDeclarationTrait {
     primaryOrGenerics: RawPrimaryAssociatedTypeClauseSyntax?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberBlockSyntax,
+    memberBlock: RawMemberBlockSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -81,7 +81,7 @@ extension RawClassDeclSyntax: NominalTypeDeclarationTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberBlockSyntax,
+    memberBlock: RawMemberBlockSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -115,7 +115,7 @@ extension RawActorDeclSyntax: NominalTypeDeclarationTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberBlockSyntax,
+    memberBlock: RawMemberBlockSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -149,7 +149,7 @@ extension RawStructDeclSyntax: NominalTypeDeclarationTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberBlockSyntax,
+    memberBlock: RawMemberBlockSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -183,7 +183,7 @@ extension RawEnumDeclSyntax: NominalTypeDeclarationTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberBlockSyntax,
+    memberBlock: RawMemberBlockSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(

@@ -925,14 +925,16 @@ extension Parser {
 
 extension Parser {
   /// Determine if this is a key path postfix operator like ".?!?".
-  private func getNumOptionalKeyPathPostfixComponents(
-    _ tokenText: SyntaxText
-  ) -> Int? {
+  private func getNumOptionalKeyPathPostfixComponents(_ tokenText: SyntaxText, mayBeAfterTypeName: Bool) -> Int? {
+    var mayBeAfterTypeName = mayBeAfterTypeName
     // Make sure every character is ".", "!", or "?", without two "."s in a row.
     var numComponents = 0
     var lastWasDot = false
     for byte in tokenText {
       if byte == UInt8(ascii: ".") {
+        if !mayBeAfterTypeName {
+          break
+        }
         if lastWasDot {
           return nil
         }
@@ -942,6 +944,7 @@ extension Parser {
       }
 
       if byte == UInt8(ascii: "!") || byte == UInt8(ascii: "?") {
+        mayBeAfterTypeName = false
         lastWasDot = false
         numComponents += 1
         continue
@@ -955,22 +958,31 @@ extension Parser {
 
   /// Consume the optional key path postfix ino a set of key path components.
   private mutating func consumeOptionalKeyPathPostfix(
-    numComponents: Int
+    numComponents: Int,
+    mayBeAfterTypeName: inout Bool
   ) -> [RawKeyPathComponentSyntax] {
     var components: [RawKeyPathComponentSyntax] = []
 
     for _ in 0..<numComponents {
       // Consume a period, if there is one.
-      let period = self.consume(ifPrefix: ".", as: .period)
+      var unexpectedBeforeComponent: RawUnexpectedNodesSyntax?
+      var period = self.consume(ifPrefix: ".", as: .period)
+      if !mayBeAfterTypeName {
+        // A period is only permitted after the type name. See comment on `mayBeAfterTypeName` in `parseKeyPathExpression`.
+        unexpectedBeforeComponent = RawUnexpectedNodesSyntax([period], arena: arena)
+        period = nil
+      }
 
       // Consume the '!' or '?'.
       let questionOrExclaim =
         self.consume(ifPrefix: "!", as: .exclamationMark)
         ?? self.expectWithoutRecovery(prefix: "?", as: .postfixQuestionMark)
 
+      mayBeAfterTypeName = false
       components.append(
         RawKeyPathComponentSyntax(
           period: period,
+          unexpectedBeforeComponent,
           component: .optional(
             RawKeyPathOptionalComponentSyntax(
               questionOrExclamationMark: questionOrExclaim,
@@ -997,18 +1009,22 @@ extension Parser {
     // the token is an operator starts with '.', or the following token is '['.
     let rootType: RawTypeSyntax?
     if !self.at(prefix: ".") {
-      rootType = self.parseSimpleType(stopAtFirstPeriod: true)
+      rootType = self.parseSimpleType(allowMemberTypes: false)
     } else {
       rootType = nil
     }
 
     var components: [RawKeyPathComponentSyntax] = []
     var loopProgress = LoopProgressCondition()
+    // Whether all components parsed so far are property components and we could thus be after the base type name of the
+    // subscript. Syntax like `.[2]` or `.?` is only permitted after the type name. Since we don't know what constitutes
+    // a nested type reference and what constitutes a type's member, we can only disallow it in the parser after seeing
+    // the first non-property component.
+    var mayBeAfterTypeName = true
     while self.hasProgressed(&loopProgress) {
-      // Check for a [] or .[] suffix. The latter is only permitted when there
-      // are no components.
+      // Check for a [] or .[] suffix.
       if self.at(TokenSpec(.leftSquare, allowAtStartOfLine: false))
-        || (components.isEmpty && self.at(.period) && self.peek(isAt: .leftSquare))
+        || (mayBeAfterTypeName && self.at(.period) && self.peek(isAt: .leftSquare))
       {
         // Consume the '.', if it's allowed here.
         let period: RawTokenSyntax?
@@ -1031,6 +1047,7 @@ extension Parser {
         }
         let (unexpectedBeforeRSquare, rsquare) = self.expect(.rightSquare)
 
+        mayBeAfterTypeName = false
         components.append(
           RawKeyPathComponentSyntax(
             period: period,
@@ -1056,13 +1073,14 @@ extension Parser {
       // periods, '?'s, and '!'s. Expand that into key path components.
       if self.at(.prefixOperator, .binaryOperator, .postfixOperator) || self.at(.postfixQuestionMark, .exclamationMark),
         let numComponents = getNumOptionalKeyPathPostfixComponents(
-          self.currentToken.tokenText
-        )
+          currentToken.tokenText,
+          mayBeAfterTypeName: mayBeAfterTypeName
+        ),
+        numComponents > 0
       {
-        components.append(
-          contentsOf: self.consumeOptionalKeyPathPostfix(
-            numComponents: numComponents
-          )
+        components += self.consumeOptionalKeyPathPostfix(
+          numComponents: numComponents,
+          mayBeAfterTypeName: &mayBeAfterTypeName
         )
         continue
       }

@@ -3,6 +3,48 @@
 import Foundation
 import PackageDescription
 
+let products: [Product]
+
+if buildDynamicLibrary {
+  products = [
+    .library(
+      name: "_SwiftSyntaxDynamic",
+      type: .dynamic,
+      targets: [
+        "SwiftBasicFormat",
+        "SwiftDiagnostics",
+        "SwiftIDEUtils",
+        "SwiftParser",
+        "SwiftParserDiagnostics",
+        "SwiftRefactor",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+      ]
+    )
+  ]
+} else {
+  products = [
+    .library(name: "SwiftBasicFormat", targets: ["SwiftBasicFormat"]),
+    .library(name: "SwiftCompilerPlugin", targets: ["SwiftCompilerPlugin"]),
+    .library(name: "SwiftDiagnostics", targets: ["SwiftDiagnostics"]),
+    .library(name: "SwiftIDEUtils", targets: ["SwiftIDEUtils"]),
+    .library(name: "SwiftIfConfig", targets: ["SwiftIfConfig"]),
+    .library(name: "SwiftLexicalLookup", targets: ["SwiftLexicalLookup"]),
+    .library(name: "SwiftOperators", targets: ["SwiftOperators"]),
+    .library(name: "SwiftParser", targets: ["SwiftParser"]),
+    .library(name: "SwiftParserDiagnostics", targets: ["SwiftParserDiagnostics"]),
+    .library(name: "SwiftRefactor", targets: ["SwiftRefactor"]),
+    .library(name: "SwiftSyntax", targets: ["SwiftSyntax"]),
+    .library(name: "SwiftSyntaxBuilder", targets: ["SwiftSyntaxBuilder"]),
+    .library(name: "SwiftSyntaxMacros", targets: ["SwiftSyntaxMacros"]),
+    .library(name: "SwiftSyntaxMacroExpansion", targets: ["SwiftSyntaxMacroExpansion"]),
+    .library(name: "SwiftSyntaxMacrosTestSupport", targets: ["SwiftSyntaxMacrosTestSupport"]),
+    .library(name: "SwiftSyntaxMacrosGenericTestSupport", targets: ["SwiftSyntaxMacrosGenericTestSupport"]),
+    .library(name: "_SwiftCompilerPluginMessageHandling", targets: ["SwiftCompilerPluginMessageHandling"]),
+    .library(name: "_SwiftLibraryPluginProvider", targets: ["SwiftLibraryPluginProvider"]),
+  ]
+}
+
 let package = Package(
   name: "swift-syntax",
   platforms: [
@@ -12,26 +54,7 @@ let package = Package(
     .watchOS(.v6),
     .macCatalyst(.v13),
   ],
-  products: [
-    .library(name: "SwiftBasicFormat", type: type, targets: ["SwiftBasicFormat"]),
-    .library(name: "SwiftCompilerPlugin", type: type, targets: ["SwiftCompilerPlugin"]),
-    .library(name: "SwiftDiagnostics", type: type, targets: ["SwiftDiagnostics"]),
-    .library(name: "SwiftIDEUtils", type: type, targets: ["SwiftIDEUtils"]),
-    .library(name: "SwiftIfConfig", type: type, targets: ["SwiftIfConfig"]),
-    .library(name: "SwiftLexicalLookup", type: type, targets: ["SwiftLexicalLookup"]),
-    .library(name: "SwiftOperators", type: type, targets: ["SwiftOperators"]),
-    .library(name: "SwiftParser", type: type, targets: ["SwiftParser"]),
-    .library(name: "SwiftParserDiagnostics", type: type, targets: ["SwiftParserDiagnostics"]),
-    .library(name: "SwiftRefactor", type: type, targets: ["SwiftRefactor"]),
-    .library(name: "SwiftSyntax", type: type, targets: ["SwiftSyntax"]),
-    .library(name: "SwiftSyntaxBuilder", type: type, targets: ["SwiftSyntaxBuilder"]),
-    .library(name: "SwiftSyntaxMacros", type: type, targets: ["SwiftSyntaxMacros"]),
-    .library(name: "SwiftSyntaxMacroExpansion", type: type, targets: ["SwiftSyntaxMacroExpansion"]),
-    .library(name: "SwiftSyntaxMacrosTestSupport", type: type, targets: ["SwiftSyntaxMacrosTestSupport"]),
-    .library(name: "SwiftSyntaxMacrosGenericTestSupport", type: type, targets: ["SwiftSyntaxMacrosGenericTestSupport"]),
-    .library(name: "_SwiftCompilerPluginMessageHandling", type: type, targets: ["SwiftCompilerPluginMessageHandling"]),
-    .library(name: "_SwiftLibraryPluginProvider", type: type, targets: ["SwiftLibraryPluginProvider"]),
-  ],
+  products: products,
   targets: [
     // MARK: - Internal helper targets
     .target(
@@ -407,17 +430,12 @@ var rawSyntaxValidation: Bool { hasEnvironmentVariable("SWIFTSYNTAX_ENABLE_RAWSY
 /// See CONTRIBUTING.md for more information
 var alternateTokenIntrospection: Bool { hasEnvironmentVariable("SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION") }
 
-/// The types of libraries to build.
+/// Instead of building object files for all modules to be statically linked, build a single dynamic library.
 ///
 /// This allows us to build swift-syntax as dynamic libraries, which in turn allows us to build SourceKit-LSP using
 /// SwiftPM on Windows. Linking swift-syntax statically into sourcekit-lsp exceeds the maximum number of exported
 /// symbols on Windows.
-var type: Product.Library.LibraryType? {
-  if hasEnvironmentVariable("SWIFTSYNTAX_BUILD_DYNAMIC_LIBRARIES") {
-    return .dynamic
-  }
-  return nil
-}
+var buildDynamicLibrary: Bool { hasEnvironmentVariable("SWIFTSYNTAX_BUILD_DYNAMIC_LIBRARY") }
 
 // MARK: - Compute custom build settings
 

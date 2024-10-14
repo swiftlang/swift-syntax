@@ -19,6 +19,8 @@ enum ResultExpectation {
   case fromScope(ScopeSyntax.Type, expectedNames: [ExpectedName])
   case fromFileScope(expectedNames: [ExpectedName])
   case lookInMembers(LookInMembersScopeSyntax.Type)
+  case lookInGenericParametersOfExtendedType
+  case mightIntroduceDollarIdentifiers
 
   var expectedNames: [ExpectedName] {
     switch self {
@@ -26,7 +28,9 @@ enum ResultExpectation {
       return expectedNames
     case .fromFileScope(expectedNames: let expectedNames):
       return expectedNames
-    case .lookInMembers:
+    case .lookInMembers,
+      .lookInGenericParametersOfExtendedType,
+      .mightIntroduceDollarIdentifiers:
       return []
     }
   }
@@ -39,6 +43,10 @@ enum ResultExpectation {
       return "fromFileScope"
     case .lookInMembers:
       return "lookInMembers"
+    case .lookInGenericParametersOfExtendedType:
+      return "lookInGenericParametersOfExtendedType"
+    case .mightIntroduceDollarIdentifiers:
+      return "mightIntroduceDollarIdentifiers"
     }
   }
 
@@ -67,6 +75,10 @@ enum ResultExpectation {
           scope.syntaxNodeType == expectedType,
           "For marker \(marker), scope result type of \(scope.syntaxNodeType) doesn't match expected \(expectedType)"
         )
+      case (.lookInGenericParametersOfExtendedType, .lookInGenericParametersOfExtendedType):
+        break
+      case (.mightIntroduceDollarIdentifiers, .mightIntroduceDollarIdentifiers):
+        break
       default:
         XCTFail(
           "For marker \(marker), actual result kind \(actual.debugDescription) doesn't match expected \(expected.debugDescription)"

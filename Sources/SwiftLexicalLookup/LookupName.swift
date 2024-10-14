@@ -46,7 +46,7 @@ import SwiftSyntax
   }
 
   /// The name of the implicit declaration.
-  private var name: String {
+  private var name: StaticString {
     switch self {
     case .self:
       return "self"
@@ -86,17 +86,38 @@ import SwiftSyntax
   /// `self` and `Self` identifers override implicit `self` and `Self` introduced by
   /// the `Foo` class declaration.
   var identifier: Identifier {
+    Identifier(name)
+  }
+
+  /// Position of this implicit name.
+  @_spi(Experimental) public var position: AbsolutePosition {
     switch self {
-    case .self:
-      return Identifier("self")
-    case .Self:
-      return Identifier("Self")
-    case .error:
-      return Identifier("error")
-    case .newValue:
-      return Identifier("newValue")
-    case .oldValue:
-      return Identifier("oldValue")
+    case .self(let declSyntax):
+      switch Syntax(declSyntax).as(SyntaxEnum.self) {
+      case .functionDecl(let functionDecl):
+        return functionDecl.name.positionAfterSkippingLeadingTrivia
+      case .initializerDecl(let initializerDecl):
+        return initializerDecl.initKeyword.positionAfterSkippingLeadingTrivia
+      case .subscriptDecl(let subscriptDecl):
+        return subscriptDecl.accessorBlock?.positionAfterSkippingLeadingTrivia
+          ?? subscriptDecl.endPositionBeforeTrailingTrivia
+      case .variableDecl(let variableDecl):
+        return variableDecl.bindings.first?.accessorBlock?.positionAfterSkippingLeadingTrivia
+          ?? variableDecl.endPosition
+      default:
+        return declSyntax.positionAfterSkippingLeadingTrivia
+      }
+    case .Self(let declSyntax):
+      switch Syntax(declSyntax).as(SyntaxEnum.self) {
+      case .protocolDecl(let protocolDecl):
+        return protocolDecl.name.positionAfterSkippingLeadingTrivia
+      default:
+        return declSyntax.positionAfterSkippingLeadingTrivia
+      }
+    case .error(let catchClause):
+      return catchClause.catchItems.positionAfterSkippingLeadingTrivia
+    default:
+      return syntax.positionAfterSkippingLeadingTrivia
     }
   }
 }
@@ -110,6 +131,8 @@ import SwiftSyntax
   case declaration(NamedDeclSyntax)
   /// Name introduced implicitly by certain syntax nodes.
   case implicit(ImplicitDecl)
+  /// Dollar identifier introduced by a closure without parameters.
+  case dollarIdentifier(ClosureExprSyntax, strRepresentation: String)
 
   /// Syntax associated with this name.
   @_spi(Experimental) public var syntax: SyntaxProtocol {
@@ -120,6 +143,8 @@ import SwiftSyntax
       return syntax
     case .implicit(let implicitName):
       return implicitName.syntax
+    case .dollarIdentifier(let closureExpr, _):
+      return closureExpr
     }
   }
 
@@ -132,6 +157,8 @@ import SwiftSyntax
       return Identifier(syntax.name)
     case .implicit(let kind):
       return kind.identifier
+    case .dollarIdentifier(_, strRepresentation: _):
+      return nil
     }
   }
 
@@ -149,34 +176,9 @@ import SwiftSyntax
     case .declaration(let syntax):
       return syntax.name.positionAfterSkippingLeadingTrivia
     case .implicit(let implicitName):
-      switch implicitName {
-      case .self(let declSyntax):
-        switch Syntax(declSyntax).as(SyntaxEnum.self) {
-        case .functionDecl(let functionDecl):
-          return functionDecl.name.positionAfterSkippingLeadingTrivia
-        case .initializerDecl(let initializerDecl):
-          return initializerDecl.initKeyword.positionAfterSkippingLeadingTrivia
-        case .subscriptDecl(let subscriptDecl):
-          return subscriptDecl.accessorBlock?.positionAfterSkippingLeadingTrivia
-            ?? subscriptDecl.endPositionBeforeTrailingTrivia
-        case .variableDecl(let variableDecl):
-          return variableDecl.bindings.first?.accessorBlock?.positionAfterSkippingLeadingTrivia
-            ?? variableDecl.endPosition
-        default:
-          return declSyntax.positionAfterSkippingLeadingTrivia
-        }
-      case .Self(let declSyntax):
-        switch Syntax(declSyntax).as(SyntaxEnum.self) {
-        case .protocolDecl(let protocolDecl):
-          return protocolDecl.name.positionAfterSkippingLeadingTrivia
-        default:
-          return declSyntax.positionAfterSkippingLeadingTrivia
-        }
-      case .error(let catchClause):
-        return catchClause.body.positionAfterSkippingLeadingTrivia
-      default:
-        return implicitName.syntax.positionAfterSkippingLeadingTrivia
-      }
+      return implicitName.position
+    case .dollarIdentifier(let closureExpr, _):
+      return closureExpr.positionAfterSkippingLeadingTrivia
     }
   }
 
@@ -195,6 +197,17 @@ import SwiftSyntax
   func isAccessible(at lookUpPosition: AbsolutePosition) -> Bool {
     guard let accessibleAfter else { return true }
     return accessibleAfter <= lookUpPosition
+  }
+
+  func refersTo(_ otherIdentifier: Identifier?) -> Bool {
+    guard let otherIdentifier else { return true }
+
+    switch self {
+    case .dollarIdentifier(_, let strRepresentation):
+      return strRepresentation == otherIdentifier.name
+    default:
+      return identifier == otherIdentifier
+    }
   }
 
   /// Extracts names introduced by the given `syntax` structure.
@@ -221,6 +234,12 @@ import SwiftSyntax
       return tuplePattern.elements.flatMap { tupleElement in
         getNames(from: tupleElement.pattern, accessibleAfter: accessibleAfter)
       }
+    case .tupleExpr(let tupleExpr):
+      return tupleExpr.elements.flatMap { tupleElement in
+        getNames(from: tupleElement, accessibleAfter: accessibleAfter)
+      }
+    case .labeledExpr(let labeledExpr):
+      return getNames(from: labeledExpr.expression, accessibleAfter: accessibleAfter)
     case .valueBindingPattern(let valueBindingPattern):
       return getNames(from: valueBindingPattern.pattern, accessibleAfter: accessibleAfter)
     case .expressionPattern(let expressionPattern):
@@ -288,6 +307,8 @@ import SwiftSyntax
       return "declaration: \(strName)"
     case .implicit:
       return "implicit: \(strName)"
+    case .dollarIdentifier(_, strRepresentation: let str):
+      return "dollarIdentifier: \(str)"
     }
   }
 }

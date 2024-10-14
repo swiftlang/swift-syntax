@@ -3465,7 +3465,7 @@ open class SyntaxVisitor {
   }
 
   /// Visiting ``TokenSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
+  ///   - Parameter token: the token we are visiting.
   ///   - Returns: how should we continue visiting.
   open func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren

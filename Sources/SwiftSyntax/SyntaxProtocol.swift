@@ -583,9 +583,9 @@ extension SyntaxProtocol {
 
   /// Prints the raw value of this node to the provided stream.
   /// - Parameter stream: The stream to which to print the raw tree.
-  public func write<Target>(to target: inout Target)
+  public func write<Target>(to stream: inout Target)
   where Target: TextOutputStream {
-    Syntax(self).raw.write(to: &target)
+    Syntax(self).raw.write(to: &stream)
   }
 
   /// A copy of this node without the leading trivia of the first token in the
@@ -667,8 +667,8 @@ extension SyntaxProtocol {
   ///   `[startLine:startCol...endLine:endCol]` to each node.
   ///   - mark: Adds `***` around the given node, intended to highlight it in
   ///   the dump.
-  ///   - indentLevel: The starting indent level, 0 by default. Each level is 2
-  ///   spaces.
+  ///   - indentString: The starting indentation, empty by default. Each
+  ///   additional indentation will add 2 spaces.
   public func debugDescription(
     includeTrivia: Bool = false,
     converter: SourceLocationConverter? = nil,

@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftParser
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftSyntax
 import XCTest
 
 final class AttributeTests: ParserTestCase {
@@ -962,6 +962,179 @@ final class AttributeTests: ParserTestCase {
       """
       var array = [@convention(swift) @isolated(any) () -> ()]()
       """
+    )
+  }
+
+  func testABIAttribute() {
+    assertParse(
+      """
+      @abi(func fn() -> Int)
+      func fn1() -> Int { }
+      """,
+      substructure: FunctionDeclSyntax(
+        attributes: [
+          .attribute(AttributeSyntax(
+            attributeName: TypeSyntax(IdentifierTypeSyntax(name: .identifier("abi"))),
+            leftParen: .leftParenToken(),
+            arguments: .abiArguments(
+              ABIAttributeArgumentsSyntax(
+                provider: FunctionDeclSyntax(
+                  name: .identifier("fn"),
+                  signature: FunctionSignatureSyntax(
+                    parameterClause: FunctionParameterClauseSyntax(
+                      parameters: []
+                    ),
+                    returnClause: ReturnClauseSyntax(
+                      type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("Int")))
+                    )
+                  )
+                )
+              )
+            ),
+            rightParen: .rightParenToken()
+          ))
+        ],
+        name: .identifier("fn1"),
+        signature: FunctionSignatureSyntax(
+          parameterClause: FunctionParameterClauseSyntax(
+            parameters: []
+          ),
+          returnClause: ReturnClauseSyntax(
+            type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("Int")))
+          )
+        ),
+        body: CodeBlockSyntax(statements: [])
+      ),
+      experimentalFeatures: [.abiAttribute]
+    )
+
+    assertParse(
+      """
+      @abi(var x, y)
+      var x, y
+      """,
+      experimentalFeatures: [.abiAttribute]
+    )
+
+    assertParse(
+      """
+      @abi(class Sub: Super, Proto where Assoc: OtherProto)
+      class Sub: Super, Proto where Assoc: OtherProto {}
+      """,
+      experimentalFeatures: [.abiAttribute]
+    )
+
+    // Invalid, but diagnosed in ASTGen
+    assertParse(
+      """
+      @abi(var x = 1, y = 2)
+      var x, y
+
+      @abi(var a { get {} set {} })
+      var a
+
+      @abi(class Sub: Super, Proto where Assoc: OtherProto {})
+      class Sub: Super, Proto where Assoc: OtherProto {}
+      """,
+      experimentalFeatures: [.abiAttribute]
+    )
+
+    // Caught here
+    assertParse(
+      """
+      class Sub: Super, Proto where Assoc: OtherProto1️⃣
+
+      func fn1() {}
+
+      @abi(var 2️⃣)
+      var v1
+
+      @abi4️⃣(var v23️⃣
+      var v2
+
+      @abi(5️⃣)
+      func fn2() {}
+
+      @abi6️⃣
+      func fn3() {}
+
+      // Suboptimal:
+      @abi7️⃣ func fn4_abi()8️⃣)
+      func fn4() {}9️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '{' in class",
+          fixIts: ["insert '{'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected pattern in variable",
+          fixIts: ["insert pattern"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ')' to end attribute",
+          notes: [
+            NoteSpec(
+              locationMarker: "4️⃣",
+              message: "to match this opening '('"
+            )
+          ],
+          fixIts: ["insert ')'"]
+        ),
+        // FIXME: Custom fix-it with copy of decl it's attached to
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "expected argument for '@abi' attribute",
+          fixIts: ["insert attribute argument"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "6️⃣",
+          message: "expected '(', ABI-providing declaration, and ')' in attribute",
+          fixIts: ["insert '(', ABI-providing declaration, and ')'"]
+        ),
+        // FIXME: Suboptimal diagnosis
+        DiagnosticSpec(
+          locationMarker: "7️⃣",
+          message: "expected '(', ABI-providing declaration, and ')' in attribute",
+          fixIts: ["insert '(', ABI-providing declaration, and ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "8️⃣",
+          message: "unexpected code ')' before function"
+        ),
+        // FIXME: Leave this out if the opener is missing?
+        DiagnosticSpec(
+          locationMarker: "9️⃣",
+          message: "expected '}' to end class",
+          fixIts: ["insert '}'"]
+        ),
+      ],
+      fixedSource: """
+      class Sub: Super, Proto where Assoc: OtherProto {
+
+      func fn1() {}
+
+      @abi(var <#pattern#>)
+      var v1
+
+      @abi(var v2)
+      var v2
+
+      @abi(<#declaration#>)
+      func fn2() {}
+
+      @abi(<#declaration#>)
+      func fn3() {}
+
+      // Suboptimal:
+      @abi(<#declaration#>) func fn4_abi())
+      func fn4() {}
+      }
+      """,
+      experimentalFeatures: [.abiAttribute]
     )
   }
 

@@ -41,4 +41,7 @@ extension Parser.ExperimentalFeatures {
 
   /// Whether to enable the parsing of CoroutineAccessors.
   public static let coroutineAccessors = Self (rawValue: 1 << 5)
+
+  /// Whether to enable the parsing of @abi attribute.
+  public static let abiAttribute = Self (rawValue: 1 << 6)
 }

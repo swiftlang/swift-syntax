@@ -527,6 +527,7 @@ public let TYPE_NODES: [Node] = [
     kind: .typeSpecifierList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
+    disableSameTypeForUniqueChoice: true,
     elementChoices: [.simpleTypeSpecifier]
   ),
 ]

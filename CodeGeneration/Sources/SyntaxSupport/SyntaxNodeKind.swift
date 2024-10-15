@@ -182,9 +182,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case labeledSpecializeArgument
   case labeledStmt
   case layoutRequirement
-  case lifetimeSpecifierArgument
-  case lifetimeSpecifierArgumentList
-  case lifetimeTypeSpecifier
   case macroDecl
   case macroExpansionDecl
   case macroExpansionExpr
@@ -290,7 +287,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case typeExpr
   case typeInitializerClause
   case typeSpecifier
-  case lifetimeSpecifierArguments
   case typeSpecifierList
   case unavailableFromAsyncAttributeArguments
   case underscorePrivateAttributeArguments

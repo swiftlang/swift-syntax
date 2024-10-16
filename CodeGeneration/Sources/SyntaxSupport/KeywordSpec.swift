@@ -167,7 +167,6 @@ public enum Keyword: CaseIterable {
   case `default`
   case `defer`
   case `deinit`
-  case dependsOn
   case deprecated
   case derivative
   case didSet
@@ -257,7 +256,6 @@ public enum Keyword: CaseIterable {
   case reverse
   case right
   case safe
-  case scoped
   case `self`
   case sending
   case `Self`
@@ -476,8 +474,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("defer", isLexerClassified: true)
     case .deinit:
       return KeywordSpec("deinit", isLexerClassified: true)
-    case .dependsOn:
-      return KeywordSpec("dependsOn", experimentalFeature: .nonescapableTypes)
     case .deprecated:
       return KeywordSpec("deprecated")
     case .derivative:
@@ -654,8 +650,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("right")
     case .safe:
       return KeywordSpec("safe")
-    case .scoped:
-      return KeywordSpec("scoped", experimentalFeature: .nonescapableTypes)
     case .self:
       return KeywordSpec("self", isLexerClassified: true)
     case .Self:

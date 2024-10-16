@@ -1229,36 +1229,6 @@ open class SyntaxRewriter {
     return visitChildren(node._syntaxNode).cast(LayoutRequirementSyntax.self)
   }
 
-  /// Visit a `LifetimeSpecifierArgumentListSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  open func visit(_ node: LifetimeSpecifierArgumentListSyntax) -> LifetimeSpecifierArgumentListSyntax {
-    return visitChildren(node._syntaxNode).cast(LifetimeSpecifierArgumentListSyntax.self)
-  }
-
-  /// Visit a `LifetimeSpecifierArgumentSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  open func visit(_ node: LifetimeSpecifierArgumentSyntax) -> LifetimeSpecifierArgumentSyntax {
-    return visitChildren(node._syntaxNode).cast(LifetimeSpecifierArgumentSyntax.self)
-  }
-
-  /// Visit a `LifetimeTypeSpecifierSyntax`.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  open func visit(_ node: LifetimeTypeSpecifierSyntax) -> LifetimeTypeSpecifierSyntax {
-    return visitChildren(node._syntaxNode).cast(LifetimeTypeSpecifierSyntax.self)
-  }
-
   /// Visit a ``MacroDeclSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2831,18 +2801,6 @@ open class SyntaxRewriter {
       return {
         self.visitImpl(&$0, LayoutRequirementSyntax.self, self.visit)
       }
-    case .lifetimeSpecifierArgumentList:
-      return {
-        self.visitImpl(&$0, LifetimeSpecifierArgumentListSyntax.self, self.visit)
-      }
-    case .lifetimeSpecifierArgument:
-      return {
-        self.visitImpl(&$0, LifetimeSpecifierArgumentSyntax.self, self.visit)
-      }
-    case .lifetimeTypeSpecifier:
-      return {
-        self.visitImpl(&$0, LifetimeTypeSpecifierSyntax.self, self.visit)
-      }
     case .macroDecl:
       return {
         self.visitImpl(&$0, MacroDeclSyntax.self, self.visit)
@@ -3653,12 +3611,6 @@ open class SyntaxRewriter {
       return visitImpl(&node, LabeledStmtSyntax.self, visit)
     case .layoutRequirement:
       return visitImpl(&node, LayoutRequirementSyntax.self, visit)
-    case .lifetimeSpecifierArgumentList:
-      return visitImpl(&node, LifetimeSpecifierArgumentListSyntax.self, visit)
-    case .lifetimeSpecifierArgument:
-      return visitImpl(&node, LifetimeSpecifierArgumentSyntax.self, visit)
-    case .lifetimeTypeSpecifier:
-      return visitImpl(&node, LifetimeTypeSpecifierSyntax.self, visit)
     case .macroDecl:
       return visitImpl(&node, MacroDeclSyntax.self, visit)
     case .macroExpansionDecl:

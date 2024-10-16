@@ -116,7 +116,9 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
         }
 
         if let node = node.collectionNode {
-          let element = node.elementChoices.only != nil ? node.elementChoices.only!.raw.syntaxType : "Element"
+          let element =
+            node.elementChoices.only != nil && !node.disableSameTypeForUniqueChoice
+            ? node.elementChoices.only!.raw.syntaxType : "Element"
           DeclSyntax(
             """
             public init(elements: [\(element)], arena: __shared SyntaxArena) {

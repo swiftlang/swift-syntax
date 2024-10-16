@@ -224,8 +224,6 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "size"
   case \LayoutRequirementSyntax.alignment:
     return "alignment"
-  case \LifetimeSpecifierArgumentSyntax.parameter:
-    return "parameter reference"
   case \MacroDeclSyntax.attributes:
     return "attributes"
   case \MacroDeclSyntax.modifiers:

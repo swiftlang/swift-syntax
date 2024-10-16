@@ -1053,4 +1053,19 @@ final class AttributeTests: ParserTestCase {
         """
     )
   }
+
+  func testLifetimeAttribute() {
+    assertParse(
+      """
+      @lifetime(ne)
+      func foo(_ ne: NE) -> NE { ne }
+      """
+    )
+    assertParse(
+      """
+      @lifetime(neOut: neIn)
+      func foo(_ neOut: inout NE, _ neIn: NE) { neOut = neIn }
+      """
+    )
+  }
 }

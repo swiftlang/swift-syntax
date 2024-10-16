@@ -1413,22 +1413,14 @@ public struct RawTypeSpecifierListSyntax: RawSyntaxNodeProtocol {
   public enum Element: RawSyntaxNodeProtocol {
     /// A specifier that can be attached to a type to eg. mark a parameter as `inout` or `consuming`
     case simpleTypeSpecifier(RawSimpleTypeSpecifierSyntax)
-    /// A specifier that specifies function parameter on whose lifetime a type depends
-    /// - Note: Requires experimental feature `nonescapableTypes`.
-    #if compiler(>=5.8)
-    @_spi(ExperimentalLanguageFeatures)
-    #endif
-    case lifetimeTypeSpecifier(RawLifetimeTypeSpecifierSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      RawSimpleTypeSpecifierSyntax.isKindOf(raw) || RawLifetimeTypeSpecifierSyntax.isKindOf(raw)
+      RawSimpleTypeSpecifierSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
       switch self {
       case .simpleTypeSpecifier(let node):
-        return node.raw
-      case .lifetimeTypeSpecifier(let node):
         return node.raw
       }
     }
@@ -1436,8 +1428,6 @@ public struct RawTypeSpecifierListSyntax: RawSyntaxNodeProtocol {
     public init?(_ node: __shared some RawSyntaxNodeProtocol) {
       if let node = node.as(RawSimpleTypeSpecifierSyntax.self) {
         self = .simpleTypeSpecifier(node)
-      } else if let node = node.as(RawLifetimeTypeSpecifierSyntax.self) {
-        self = .lifetimeTypeSpecifier(node)
       } else {
         return nil
       }
@@ -1485,9 +1475,9 @@ public struct RawTypeSpecifierListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: raw)
   }
 
-  public var elements: [RawSyntax] {
+  public var elements: [RawSimpleTypeSpecifierSyntax] {
     layoutView.children.map {
-      RawSyntax(raw: $0!)
+      RawSimpleTypeSpecifierSyntax(raw: $0!)
     }
   }
 }

@@ -429,22 +429,6 @@ extension LabeledExprListSyntax {
   }
 }
 
-// MARK: - LifetimeSpecifierArgumentListBuilder
-
-#if compiler(>=5.8)
-@_spi(ExperimentalLanguageFeatures)
-#endif
-@resultBuilder
-public struct LifetimeSpecifierArgumentListBuilder: ListBuilder {
-  public typealias FinalResult = LifetimeSpecifierArgumentListSyntax
-}
-
-extension LifetimeSpecifierArgumentListSyntax {
-  public init(@LifetimeSpecifierArgumentListBuilder itemsBuilder: () throws -> LifetimeSpecifierArgumentListSyntax) rethrows {
-    self = try itemsBuilder()
-  }
-}
-
 // MARK: - MemberBlockItemListBuilder
 
 @resultBuilder
@@ -689,17 +673,6 @@ extension TupleTypeElementListSyntax {
 @resultBuilder
 public struct TypeSpecifierListBuilder: ListBuilder {
   public typealias FinalResult = TypeSpecifierListSyntax
-
-  public static func buildExpression(_ expression: SimpleTypeSpecifierSyntax) -> Component {
-    buildExpression(.init(expression))
-  }
-
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  public static func buildExpression(_ expression: LifetimeTypeSpecifierSyntax) -> Component {
-    buildExpression(.init(expression))
-  }
 }
 
 extension TypeSpecifierListSyntax {

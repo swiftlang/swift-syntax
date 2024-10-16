@@ -21,8 +21,8 @@ fileprivate extension SyntaxProtocol {
     var contextualClassif: (SyntaxClassification, Bool)? = nil
     var curData = Syntax(self)
     repeat {
-      guard let parent = curData.parent, let keyPath = curData.keyPathInParent else { break }
-      contextualClassif = SyntaxClassification.classify(keyPath)
+      guard let parent = curData.parent, let property = curData.propertyInParent else { break }
+      contextualClassif = SyntaxClassification.classify(property)
       curData = parent
     } while contextualClassif == nil
     return contextualClassif
@@ -202,11 +202,8 @@ private struct ClassificationVisitor {
     for case (let index, let child?) in children.enumerated() {
 
       let classification: (classification: SyntaxClassification, force: Bool)?
-      if case .layout(let layout) = descriptor.node.kind.syntaxNodeType.structure {
-        classification = SyntaxClassification.classify(layout[index])
-      } else {
-        classification = nil
-      }
+      let property = SyntaxLayoutProperty(syntaxKind: descriptor.node.kind, index: .init(UInt32(index)))
+      classification = SyntaxClassification.classify(property)
 
       if let classification, classification.force {
         // Leading trivia.

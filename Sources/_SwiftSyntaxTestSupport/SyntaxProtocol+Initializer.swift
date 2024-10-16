@@ -211,21 +211,19 @@ extension SyntaxProtocol {
           }
         }
       )
-    } else if case .layout(let layout) = self.syntaxNodeType.structure {
+    } else if case .layout = self.syntaxNodeType.structure {
       let typeName = String(describing: type(of: self))
       return ExprSyntax(
         FunctionCallExprSyntax(callee: DeclReferenceExprSyntax(baseName: .identifier(typeName))) {
-          for keyPath in layout {
-            let label = childName(keyPath) ?? ""
-            let value = self[keyPath: keyPath as! PartialKeyPath<Self>] as! SyntaxProtocol?
+          for child in children(viewMode: .all) {
+            let property = child.propertyInParent!
+            let label = property.name!
             let isUnexpected = label.hasPrefix("unexpected")
-            if value != nil {
-              LabeledExprSyntax(
-                label: isUnexpected ? nil : .identifier(label),
-                colon: isUnexpected ? nil : .colonToken(),
-                expression: value?.debugInitCallExpr(includeTrivia: includeTrivia) ?? ExprSyntax(NilLiteralExprSyntax())
-              )
-            }
+            LabeledExprSyntax(
+              label: isUnexpected ? nil : .identifier(label),
+              colon: isUnexpected ? nil : .colonToken(),
+              expression: child.debugInitCallExpr(includeTrivia: includeTrivia)
+            )
           }
         }
       )

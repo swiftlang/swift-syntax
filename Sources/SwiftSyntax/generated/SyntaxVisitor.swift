@@ -1964,60 +1964,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: LayoutRequirementSyntax) {
   }
 
-  /// Visiting `LifetimeSpecifierArgumentListSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  open func visit(_ node: LifetimeSpecifierArgumentListSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `LifetimeSpecifierArgumentListSyntax` and its descendants.
-  ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  open func visitPost(_ node: LifetimeSpecifierArgumentListSyntax) {
-  }
-
-  /// Visiting `LifetimeSpecifierArgumentSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  open func visit(_ node: LifetimeSpecifierArgumentSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `LifetimeSpecifierArgumentSyntax` and its descendants.
-  ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  open func visitPost(_ node: LifetimeSpecifierArgumentSyntax) {
-  }
-
-  /// Visiting `LifetimeTypeSpecifierSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  open func visit(_ node: LifetimeTypeSpecifierSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `LifetimeTypeSpecifierSyntax` and its descendants.
-  ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  open func visitPost(_ node: LifetimeTypeSpecifierSyntax) {
-  }
-
   /// Visiting ``MacroDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4175,18 +4121,6 @@ open class SyntaxVisitor {
       return {
         self.visitImpl(&$0, LayoutRequirementSyntax.self, self.visit, self.visitPost)
       }
-    case .lifetimeSpecifierArgumentList:
-      return {
-        self.visitImpl(&$0, LifetimeSpecifierArgumentListSyntax.self, self.visit, self.visitPost)
-      }
-    case .lifetimeSpecifierArgument:
-      return {
-        self.visitImpl(&$0, LifetimeSpecifierArgumentSyntax.self, self.visit, self.visitPost)
-      }
-    case .lifetimeTypeSpecifier:
-      return {
-        self.visitImpl(&$0, LifetimeTypeSpecifierSyntax.self, self.visit, self.visitPost)
-      }
     case .macroDecl:
       return {
         self.visitImpl(&$0, MacroDeclSyntax.self, self.visit, self.visitPost)
@@ -5001,12 +4935,6 @@ open class SyntaxVisitor {
       visitImpl(&node, LabeledStmtSyntax.self, visit, visitPost)
     case .layoutRequirement:
       visitImpl(&node, LayoutRequirementSyntax.self, visit, visitPost)
-    case .lifetimeSpecifierArgumentList:
-      visitImpl(&node, LifetimeSpecifierArgumentListSyntax.self, visit, visitPost)
-    case .lifetimeSpecifierArgument:
-      visitImpl(&node, LifetimeSpecifierArgumentSyntax.self, visit, visitPost)
-    case .lifetimeTypeSpecifier:
-      visitImpl(&node, LifetimeTypeSpecifierSyntax.self, visit, visitPost)
     case .macroDecl:
       visitImpl(&node, MacroDeclSyntax.self, visit, visitPost)
     case .macroExpansionDecl:

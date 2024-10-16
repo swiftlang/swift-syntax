@@ -1995,38 +1995,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightParen"
   case \LayoutRequirementSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
-  case \LifetimeSpecifierArgumentSyntax.unexpectedBeforeParameter:
-    return "unexpectedBeforeParameter"
-  case \LifetimeSpecifierArgumentSyntax.parameter:
-    return "parameter"
-  case \LifetimeSpecifierArgumentSyntax.unexpectedBetweenParameterAndTrailingComma:
-    return "unexpectedBetweenParameterAndTrailingComma"
-  case \LifetimeSpecifierArgumentSyntax.trailingComma:
-    return "trailingComma"
-  case \LifetimeSpecifierArgumentSyntax.unexpectedAfterTrailingComma:
-    return "unexpectedAfterTrailingComma"
-  case \LifetimeTypeSpecifierSyntax.unexpectedBeforeDependsOnKeyword:
-    return "unexpectedBeforeDependsOnKeyword"
-  case \LifetimeTypeSpecifierSyntax.dependsOnKeyword:
-    return "dependsOnKeyword"
-  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenDependsOnKeywordAndLeftParen:
-    return "unexpectedBetweenDependsOnKeywordAndLeftParen"
-  case \LifetimeTypeSpecifierSyntax.leftParen:
-    return "leftParen"
-  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenLeftParenAndScopedKeyword:
-    return "unexpectedBetweenLeftParenAndScopedKeyword"
-  case \LifetimeTypeSpecifierSyntax.scopedKeyword:
-    return "scopedKeyword"
-  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenScopedKeywordAndArguments:
-    return "unexpectedBetweenScopedKeywordAndArguments"
-  case \LifetimeTypeSpecifierSyntax.arguments:
-    return "arguments"
-  case \LifetimeTypeSpecifierSyntax.unexpectedBetweenArgumentsAndRightParen:
-    return "unexpectedBetweenArgumentsAndRightParen"
-  case \LifetimeTypeSpecifierSyntax.rightParen:
-    return "rightParen"
-  case \LifetimeTypeSpecifierSyntax.unexpectedAfterRightParen:
-    return "unexpectedAfterRightParen"
   case \MacroDeclSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
   case \MacroDeclSyntax.attributes:

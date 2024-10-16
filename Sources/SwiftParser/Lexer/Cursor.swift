@@ -2025,24 +2025,25 @@ extension Lexer.Cursor {
     // Check whether we have an identifier followed by another backtick, in which
     // case this is an escaped identifier.
     let identifierStart = self
-    if self.advance(if: { $0.isValidIdentifierStartCodePoint }) {
-      // Keep continuing the identifier.
-      self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
 
-      // If we have the terminating "`", it's an escaped identifier.
-      if self.advance(matching: "`") {
-        return Lexer.Result(.identifier)
+    self.advance(while: { $0.isValidInRawIdentifier })
+    // If we have the terminating "`", it's an escaped identifier, unless it
+    // contained only operator characters.
+    let text = identifierStart.text(upTo: self)
+    if self.advance(matching: "`") {
+      var error: LexingDiagnostic? = nil
+      if text.isEmpty {
+        error = LexingDiagnostic(.rawIdentifierCannotBeEmpty, position: quote)
+      } else if String(syntaxText: text).isValidSwiftOperator {
+        // Diagnose an escaped identifier that is all operator characters, but
+        // still return it as an identifier to improve recovery, since it
+        // matches what the user was most likely trying to do.
+        error = LexingDiagnostic(
+          .rawIdentifierCannotBeOperator,
+          position: quote
+        )
       }
-    }
-
-    // Special case; allow '`$`'.
-    if quote.starts(with: "`$`".utf8) {
-      self = quote
-      let firstBacktickConsumed = self.advance(matching: "`")
-      let dollarConsumed = self.advance(matching: "$")
-      let secondBacktickConsumed = self.advance(matching: "`")
-      precondition(firstBacktickConsumed && dollarConsumed && secondBacktickConsumed)
-      return Lexer.Result(.identifier)
+      return Lexer.Result(.identifier, error: error)
     }
 
     // The backtick is punctuation.

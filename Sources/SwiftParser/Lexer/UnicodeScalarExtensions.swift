@@ -93,6 +93,16 @@ extension Unicode.Scalar {
     return true
   }
 
+  var isValidInRawIdentifier: Bool {
+    if self.value < 0x80 {
+      guard isPrintableASCII else {
+        return false
+      }
+      return UInt8(self.value) != "`"
+    }
+    return true
+  }
+
   /// isOperatorStartCodePoint - Return true if the specified code point is a
   /// valid start of an operator.
   var isOperatorStartCodePoint: Bool {

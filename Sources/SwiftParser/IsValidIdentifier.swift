@@ -63,6 +63,22 @@ extension String {
       return isValidMemberAccess(self)
     }
   }
+
+  /// A value indicating whether the given string is a valid operator in Swift.
+  public var isValidSwiftOperator: Bool {
+    guard !isEmpty else { return false }
+
+    let us = unicodeScalars
+    var index = us.startIndex
+    guard us[index].isOperatorStartCodePoint else { return false }
+
+    index = us.index(after: index)
+    while index != us.endIndex {
+      guard us[index].isOperatorContinuationCodePoint else { return false }
+      index = us.index(after: index)
+    }
+    return true
+  }
 }
 
 private func isValidVariableName(_ name: String) -> Bool {

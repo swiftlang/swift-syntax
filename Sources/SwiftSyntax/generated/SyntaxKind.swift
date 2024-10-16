@@ -15,6 +15,10 @@
 /// Enumerates the known kinds of Syntax represented in the Syntax tree.
 public enum SyntaxKind: Sendable {
   case token
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case abiAttributeArguments
   case accessorBlock
   case accessorDeclList
   case accessorDecl
@@ -446,6 +450,8 @@ public enum SyntaxKind: Sendable {
     switch self {
     case .token:
       return TokenSyntax.self
+    case .abiAttributeArguments:
+      return ABIAttributeArgumentsSyntax.self
     case .accessorBlock:
       return AccessorBlockSyntax.self
     case .accessorDeclList:

@@ -36,6 +36,16 @@ public enum TokenChoice: Equatable, IdentifierConvertible {
   }
 }
 
+/// If a child can be optional, what flavor of optional is it? Used to make
+/// some children optional without breaking source compatibility.
+public enum Optionality: String {
+  /// An ordinary `Optional` which must be explicitly unwrapped by users.
+  case normal = "?"
+  /// An implicitly-unwrapped `Optional` which maintains source compatibility
+  /// if the child's optionality has changed.
+  case implicitlyUnwrapped = "!"
+}
+
 public enum ChildKind {
   /// The child always contains a node of the given `kind`.
   case node(kind: SyntaxNodeKind)
@@ -95,7 +105,7 @@ public class Child: NodeChoiceConvertible {
   public let kind: ChildKind
 
   /// Whether this child is optional and can be `nil`.
-  public let isOptional: Bool
+  public let optionality: Optionality?
 
   public let experimentalFeature: ExperimentalFeature?
 
@@ -256,7 +266,7 @@ public class Child: NodeChoiceConvertible {
     experimentalFeature: ExperimentalFeature? = nil,
     nameForDiagnostics: String? = nil,
     documentation: String? = nil,
-    isOptional: Bool = false
+    optionality: Optionality? = nil
   ) {
     precondition(name.first?.isLowercase ?? true, "The first letter of a child’s name should be lowercase")
     precondition(
@@ -270,6 +280,31 @@ public class Child: NodeChoiceConvertible {
     self.nameForDiagnostics = nameForDiagnostics
     self.documentationSummary = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.documentationAbstract = String(documentation?.split(whereSeparator: \.isNewline).first ?? "")
-    self.isOptional = isOptional
+    self.optionality = optionality
+  }
+
+  /// If a classification is passed, it specifies the color identifiers in
+  /// that subtree should inherit for syntax coloring. Must be a member of
+  /// ``SyntaxClassification``.
+  /// If `forceClassification` is also set to true, all child nodes (not only
+  /// identifiers) inherit the syntax classification.
+  convenience init(
+    name: String,
+    deprecatedName: String? = nil,
+    kind: ChildKind,
+    experimentalFeature: ExperimentalFeature? = nil,
+    nameForDiagnostics: String? = nil,
+    documentation: String? = nil,
+    isOptional: Bool
+  ) {
+    self.init(
+      name: name,
+      deprecatedName: deprecatedName,
+      kind: kind,
+      experimentalFeature: experimentalFeature,
+      nameForDiagnostics: nameForDiagnostics,
+      documentation: documentation,
+      optionality: isOptional ? .normal : nil
+    )
   }
 }

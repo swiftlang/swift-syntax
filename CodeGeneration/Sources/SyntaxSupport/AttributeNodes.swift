@@ -141,6 +141,11 @@ public let ATTRIBUTE_NODES: [Node] = [
             name: "documentationArguments",
             kind: .node(kind: .documentationAttributeArgumentList)
           ),
+          Child(
+            name: "abiArguments",
+            kind: .node(kind: .abiAttributeArguments),
+            experimentalFeature: .abiAttribute
+          )
         ]),
         documentation: """
           The arguments of the attribute.
@@ -247,6 +252,20 @@ public let ATTRIBUTE_NODES: [Node] = [
           deprecatedCollectionElementName: "Availability"
         ),
         documentation: "The list of OS versions in which the declaration became ABI stable."
+      ),
+    ]
+  ),
+
+  Node(
+    kind: .abiAttributeArguments,
+    base: .syntax,
+    experimentalFeature: .abiAttribute,
+    nameForDiagnostics: "ABI-providing declaration",
+    documentation: "The arguments of the '@abi' attribute",
+    children: [
+      Child(
+        name: "provider",
+        kind: .node(kind: .decl)
       ),
     ]
   ),

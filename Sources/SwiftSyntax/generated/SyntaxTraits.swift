@@ -99,7 +99,7 @@ public protocol DeclGroupSyntax: SyntaxProtocol, DeclSyntaxProtocol {
     set
   }
 
-  var memberBlock: MemberBlockSyntax {
+  var memberBlock: MemberBlockSyntax! {
     get
     set
   }

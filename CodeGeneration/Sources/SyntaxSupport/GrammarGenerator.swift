@@ -34,7 +34,7 @@ struct GrammarGenerator {
   }
 
   private func grammar(for child: Child) -> String {
-    let optionality = child.isOptional ? "?" : ""
+    let optionality = child.optionality?.rawValue ?? ""
     switch child.kind {
     case .node(let kind):
       return "\(kind.doccLink)\(optionality)"

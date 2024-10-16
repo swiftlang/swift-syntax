@@ -79,7 +79,7 @@ extension ActorDeclSyntax {
     genericWhereClause: GenericWhereClauseSyntax? = nil,
     unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
     unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
-    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax,
+    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax?,
     trailingTrivia: Trivia? = nil
   ) rethrows {
     try self.init(
@@ -99,7 +99,9 @@ extension ActorDeclSyntax {
       unexpectedBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause: genericWhereClause,
       unexpectedBetweenGenericWhereClauseAndMemberBlock,
-      memberBlock: MemberBlockSyntax(members: memberBlockBuilder()),
+      memberBlock: memberBlockBuilder().map {
+        MemberBlockSyntax(members: $0)
+      },
       unexpectedAfterMemberBlock,
       trailingTrivia: trailingTrivia
     )
@@ -180,7 +182,7 @@ extension ClassDeclSyntax {
     genericWhereClause: GenericWhereClauseSyntax? = nil,
     unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
     unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
-    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax,
+    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax?,
     trailingTrivia: Trivia? = nil
   ) rethrows {
     try self.init(
@@ -200,7 +202,9 @@ extension ClassDeclSyntax {
       unexpectedBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause: genericWhereClause,
       unexpectedBetweenGenericWhereClauseAndMemberBlock,
-      memberBlock: MemberBlockSyntax(members: memberBlockBuilder()),
+      memberBlock: memberBlockBuilder().map {
+        MemberBlockSyntax(members: $0)
+      },
       unexpectedAfterMemberBlock,
       trailingTrivia: trailingTrivia
     )
@@ -461,7 +465,7 @@ extension EnumDeclSyntax {
     genericWhereClause: GenericWhereClauseSyntax? = nil,
     unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
     unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
-    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax,
+    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax?,
     trailingTrivia: Trivia? = nil
   ) rethrows {
     try self.init(
@@ -481,7 +485,9 @@ extension EnumDeclSyntax {
       unexpectedBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause: genericWhereClause,
       unexpectedBetweenGenericWhereClauseAndMemberBlock,
-      memberBlock: MemberBlockSyntax(members: memberBlockBuilder()),
+      memberBlock: memberBlockBuilder().map {
+        MemberBlockSyntax(members: $0)
+      },
       unexpectedAfterMemberBlock,
       trailingTrivia: trailingTrivia
     )
@@ -541,7 +547,7 @@ extension ExtensionDeclSyntax {
     genericWhereClause: GenericWhereClauseSyntax? = nil,
     unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
     unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
-    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax,
+    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax?,
     trailingTrivia: Trivia? = nil
   ) rethrows {
     try self.init(
@@ -559,7 +565,9 @@ extension ExtensionDeclSyntax {
       unexpectedBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause: genericWhereClause,
       unexpectedBetweenGenericWhereClauseAndMemberBlock,
-      memberBlock: MemberBlockSyntax(members: memberBlockBuilder()),
+      memberBlock: memberBlockBuilder().map {
+        MemberBlockSyntax(members: $0)
+      },
       unexpectedAfterMemberBlock,
       trailingTrivia: trailingTrivia
     )
@@ -1131,7 +1139,7 @@ extension ProtocolDeclSyntax {
     genericWhereClause: GenericWhereClauseSyntax? = nil,
     unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
     unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
-    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax,
+    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax?,
     trailingTrivia: Trivia? = nil
   ) rethrows {
     try self.init(
@@ -1151,7 +1159,9 @@ extension ProtocolDeclSyntax {
       unexpectedBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause: genericWhereClause,
       unexpectedBetweenGenericWhereClauseAndMemberBlock,
-      memberBlock: MemberBlockSyntax(members: memberBlockBuilder()),
+      memberBlock: memberBlockBuilder().map {
+        MemberBlockSyntax(members: $0)
+      },
       unexpectedAfterMemberBlock,
       trailingTrivia: trailingTrivia
     )
@@ -1255,7 +1265,7 @@ extension StructDeclSyntax {
     genericWhereClause: GenericWhereClauseSyntax? = nil,
     unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
     unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
-    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax,
+    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax?,
     trailingTrivia: Trivia? = nil
   ) rethrows {
     try self.init(
@@ -1275,7 +1285,9 @@ extension StructDeclSyntax {
       unexpectedBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause: genericWhereClause,
       unexpectedBetweenGenericWhereClauseAndMemberBlock,
-      memberBlock: MemberBlockSyntax(members: memberBlockBuilder()),
+      memberBlock: memberBlockBuilder().map {
+        MemberBlockSyntax(members: $0)
+      },
       unexpectedAfterMemberBlock,
       trailingTrivia: trailingTrivia
     )

@@ -22,7 +22,14 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
         if let deprecatedVarName = child.deprecatedVarName {
           let childType: TypeSyntax =
             child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
-          let type = child.isOptional ? TypeSyntax("\(childType)?") : childType
+          let type = switch child.optionality {
+          case .none:
+            childType
+          case .normal:
+            TypeSyntax("\(childType)?")
+          case .implicitlyUnwrapped:
+            TypeSyntax("\(childType)!")
+          }
 
           DeclSyntax(
             """

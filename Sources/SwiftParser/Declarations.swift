@@ -168,11 +168,24 @@ extension Parser {
     }
   }
 
+  /// Information about the syntactic position of the declaration being parsed.
+  /// Used to tweak recovery and to permit missing bodies.
+  enum DeclarationParsingContext {
+    /// The declaration is at the top level of a file.
+    case topLevelCode
+
+    /// The declaration is nested inside the member list of a DeclGroupSyntax.
+    case memberList
+
+    /// The declaration is nested inside the argument list of an attribute.
+    case attribute
+  }
+
   /// Parse a declaration.
   ///
-  /// If `inMemberDeclList` is `true`, we know that the next item must be a
+  /// If `parseContext` is `memberList`, we know that the next item must be a
   /// declaration and thus start with a keyword. This allows further recovery.
-  mutating func parseDeclaration(inMemberDeclList: Bool = false) -> RawDeclSyntax {
+  mutating func parseDeclaration(in parseContext: DeclarationParsingContext = .topLevelCode) -> RawDeclSyntax {
     // If we are at a `#if` of attributes, the `#if` directive should be
     // parsed when we're parsing the attributes.
     if self.at(.poundIf) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
@@ -221,7 +234,14 @@ extension Parser {
       // to parse.
       // If we are inside a memberDecl list, we don't want to eat closing braces (which most likely close the outer context)
       // while recovering to the declaration start.
-      let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
+      let recoveryPrecedence = switch parseContext {
+      case .topLevelCode:
+        Optional<TokenPrecedence>.none
+      case .memberList:
+        Optional(TokenPrecedence.closingBrace)
+      case .attribute:
+        Optional(TokenPrecedence.weakBracketed(closingDelimiter: .rightParen))
+      }
       recoveryResult = self.canRecoverTo(anyIn: DeclarationKeyword.self, overrideRecoveryPrecedence: recoveryPrecedence)
     }
 
@@ -230,28 +250,28 @@ extension Parser {
       return RawDeclSyntax(self.parseImportDeclaration(attrs, handle))
     case (.lhs(.class), let handle)?:
       return RawDeclSyntax(
-        self.parseNominalTypeDeclaration(for: RawClassDeclSyntax.self, attrs: attrs, introucerHandle: handle)
+        self.parseNominalTypeDeclaration(for: RawClassDeclSyntax.self, attrs: attrs, introucerHandle: handle, parseContext: parseContext)
       )
     case (.lhs(.enum), let handle)?:
       return RawDeclSyntax(
-        self.parseNominalTypeDeclaration(for: RawEnumDeclSyntax.self, attrs: attrs, introucerHandle: handle)
+        self.parseNominalTypeDeclaration(for: RawEnumDeclSyntax.self, attrs: attrs, introucerHandle: handle, parseContext: parseContext)
       )
     case (.lhs(.case), let handle)?:
       return RawDeclSyntax(self.parseEnumCaseDeclaration(attrs, handle))
     case (.lhs(.struct), let handle)?:
       return RawDeclSyntax(
-        self.parseNominalTypeDeclaration(for: RawStructDeclSyntax.self, attrs: attrs, introucerHandle: handle)
+        self.parseNominalTypeDeclaration(for: RawStructDeclSyntax.self, attrs: attrs, introucerHandle: handle, parseContext: parseContext)
       )
     case (.lhs(.protocol), let handle)?:
       return RawDeclSyntax(
-        self.parseNominalTypeDeclaration(for: RawProtocolDeclSyntax.self, attrs: attrs, introucerHandle: handle)
+        self.parseNominalTypeDeclaration(for: RawProtocolDeclSyntax.self, attrs: attrs, introucerHandle: handle, parseContext: parseContext)
       )
     case (.lhs(.associatedtype), let handle)?:
       return RawDeclSyntax(self.parseAssociatedTypeDeclaration(attrs, handle))
     case (.lhs(.typealias), let handle)?:
       return RawDeclSyntax(self.parseTypealiasDeclaration(attrs, handle))
     case (.lhs(.extension), let handle)?:
-      return RawDeclSyntax(self.parseExtensionDeclaration(attrs, handle))
+      return RawDeclSyntax(self.parseExtensionDeclaration(attrs, handle, parseContext: parseContext))
     case (.lhs(.func), let handle)?:
       return RawDeclSyntax(self.parseFuncDeclaration(attrs, handle))
     case (.lhs(.subscript), let handle)?:
@@ -266,19 +286,19 @@ extension Parser {
       return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs, handle))
     case (.lhs(.actor), let handle)?:
       return RawDeclSyntax(
-        self.parseNominalTypeDeclaration(for: RawActorDeclSyntax.self, attrs: attrs, introucerHandle: handle)
+        self.parseNominalTypeDeclaration(for: RawActorDeclSyntax.self, attrs: attrs, introucerHandle: handle, parseContext: parseContext)
       )
     case (.lhs(.macro), let handle)?:
       return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
     case (.lhs(.pound), let handle)?:
       return RawDeclSyntax(self.parseMacroExpansionDeclaration(attrs, handle))
     case (.rhs, let handle)?:
-      return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
+      return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: parseContext != .topLevelCode))
     case nil:
       break
     }
 
-    if inMemberDeclList {
+    if parseContext != .topLevelCode {
       let isProbablyVarDecl = self.at(.identifier, .wildcard) && self.peek(isAt: .colon, .equal, .comma)
       let isProbablyTupleDecl = self.at(.leftParen) && self.peek(isAt: .identifier, .wildcard)
 
@@ -377,7 +397,8 @@ extension Parser {
   /// Parse an extension declaration.
   mutating func parseExtensionDeclaration(
     _ attrs: DeclAttributes,
-    _ handle: RecoveryConsumptionHandle
+    _ handle: RecoveryConsumptionHandle,
+    parseContext: DeclarationParsingContext
   ) -> RawExtensionDeclSyntax {
     let (unexpectedBeforeExtensionKeyword, extensionKeyword) = self.eat(handle)
     let type = self.parseType()
@@ -395,7 +416,12 @@ extension Parser {
     } else {
       whereClause = nil
     }
-    let memberBlock = self.parseMemberBlock(introducer: extensionKeyword)
+    let memberBlock: RawMemberBlockSyntax?
+    if parseContext == .attribute && !self.at(.leftBrace) {
+      memberBlock = nil
+    } else {
+      memberBlock = self.parseMemberBlock(introducer: extensionKeyword)
+    }
     return RawExtensionDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
@@ -746,7 +772,7 @@ extension Parser {
     if self.at(.poundSourceLocation) {
       decl = RawDeclSyntax(self.parsePoundSourceLocationDirective())
     } else {
-      decl = self.parseDeclaration(inMemberDeclList: true)
+      decl = self.parseDeclaration(in: .memberList)
     }
 
     let semi = self.consume(if: .semicolon)

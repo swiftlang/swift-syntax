@@ -63,7 +63,7 @@ public let TRAITS: [Trait] = [
           "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
         isOptional: true
       ),
-      Child(name: "memberBlock", kind: .node(kind: .memberBlock)),
+      Child(name: "memberBlock", kind: .node(kind: .memberBlock), optionality: .implicitlyUnwrapped),
     ]
   ),
   Trait(

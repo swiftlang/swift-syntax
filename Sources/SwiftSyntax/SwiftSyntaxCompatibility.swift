@@ -136,7 +136,11 @@ extension DeclGroupSyntax {
   @available(*, deprecated, renamed: "memberBlock")
   public var members: MemberDeclBlockSyntax {
     get {
-      return memberBlock
+      return memberBlock ?? MemberDeclBlockSyntax(
+        leftBrace: .leftBraceToken(presence: .missing),
+        members: [],
+        rightBrace: .rightBraceToken(presence: .missing)
+      )
     }
     set(value) {
       memberBlock = value

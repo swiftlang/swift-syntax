@@ -740,7 +740,7 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
-///  - `memberBlock`: ``MemberBlockSyntax``
+///  - `memberBlock`: ``MemberBlockSyntax``!
 public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
@@ -779,7 +779,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax? = nil,
     _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-    memberBlock: MemberBlockSyntax,
+    memberBlock: MemberBlockSyntax! = nil,
     _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -820,7 +820,7 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
         unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
         genericWhereClause?.raw,
         unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw,
-        memberBlock.raw,
+        memberBlock?.raw,
         unexpectedAfterMemberBlock?.raw
       ]
       let raw = RawSyntax.makeLayout(
@@ -1039,9 +1039,9 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
   }
 
   /// The members of the class declaration. As class extension declarations may declare additional members, the contents of this member block isn't guaranteed to be a complete list of members for this type.
-  public var memberBlock: MemberBlockSyntax {
+  public var memberBlock: MemberBlockSyntax! {
     get {
-      return Syntax(self).child(at: 15)!.cast(MemberBlockSyntax.self)
+      return Syntax(self).child(at: 15)?.cast(MemberBlockSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 15, with: Syntax(value), arena: SyntaxArena()).cast(ClassDeclSyntax.self)

@@ -106,6 +106,16 @@ open class SyntaxRewriter {
     return rewritten.cast(T.self)
   }
 
+  /// Visit a `ABIAttributeArgumentsSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  open func visit(_ node: ABIAttributeArgumentsSyntax) -> ABIAttributeArgumentsSyntax {
+    return visitChildren(node._syntaxNode).cast(ABIAttributeArgumentsSyntax.self)
+  }
+
   /// Visit a ``AccessorBlockSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2191,6 +2201,10 @@ open class SyntaxRewriter {
       return {
         self.visitImpl(&$0, TokenSyntax.self, self.visit)
       }
+    case .abiAttributeArguments:
+      return {
+        self.visitImpl(&$0, ABIAttributeArgumentsSyntax.self, self.visit)
+      }
     case .accessorBlock:
       return {
         self.visitImpl(&$0, AccessorBlockSyntax.self, self.visit)
@@ -3333,6 +3347,8 @@ open class SyntaxRewriter {
     switch node.raw.kind {
     case .token:
       return visitImpl(&node, TokenSyntax.self, visit)
+    case .abiAttributeArguments:
+      return visitImpl(&node, ABIAttributeArgumentsSyntax.self, visit)
     case .accessorBlock:
       return visitImpl(&node, AccessorBlockSyntax.self, visit)
     case .accessorDeclList:

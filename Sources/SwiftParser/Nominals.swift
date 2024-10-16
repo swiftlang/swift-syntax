@@ -29,7 +29,7 @@ protocol NominalTypeDeclarationTrait {
     primaryOrGenerics: PrimaryOrGenerics?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberBlockSyntax,
+    memberBlock: RawMemberBlockSyntax?,
     arena: __shared SyntaxArena
   )
 
@@ -47,7 +47,7 @@ extension RawProtocolDeclSyntax: NominalTypeDeclarationTrait {
     primaryOrGenerics: RawPrimaryAssociatedTypeClauseSyntax?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberBlockSyntax,
+    memberBlock: RawMemberBlockSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -81,7 +81,7 @@ extension RawClassDeclSyntax: NominalTypeDeclarationTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberBlockSyntax,
+    memberBlock: RawMemberBlockSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -115,7 +115,7 @@ extension RawActorDeclSyntax: NominalTypeDeclarationTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberBlockSyntax,
+    memberBlock: RawMemberBlockSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -149,7 +149,7 @@ extension RawStructDeclSyntax: NominalTypeDeclarationTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberBlockSyntax,
+    memberBlock: RawMemberBlockSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -183,7 +183,7 @@ extension RawEnumDeclSyntax: NominalTypeDeclarationTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    memberBlock: RawMemberBlockSyntax,
+    memberBlock: RawMemberBlockSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -211,7 +211,8 @@ extension Parser {
   mutating func parseNominalTypeDeclaration<T>(
     for T: T.Type,
     attrs: DeclAttributes,
-    introucerHandle: RecoveryConsumptionHandle
+    introucerHandle: RecoveryConsumptionHandle,
+    parseContext: DeclarationParsingContext
   ) -> T where T: NominalTypeDeclarationTrait {
     let (unexpectedBeforeIntroducerKeyword, introducerKeyword) = self.eat(introucerHandle)
     let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
@@ -258,7 +259,12 @@ extension Parser {
       whereClause = nil
     }
 
-    let memberBlock = self.parseMemberBlock(introducer: introducerKeyword)
+    let memberBlock: RawMemberBlockSyntax?
+    if parseContext == .attribute && !self.at(.leftBrace) {
+      memberBlock = nil
+    } else {
+      memberBlock = self.parseMemberBlock(introducer: introducerKeyword)
+    }
     return T.init(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,

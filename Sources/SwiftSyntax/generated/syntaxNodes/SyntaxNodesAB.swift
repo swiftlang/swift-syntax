@@ -12,6 +12,87 @@
 //
 //===----------------------------------------------------------------------===//
 
+// MARK: - ABIAttributeArgumentsSyntax
+
+/// The arguments of the '@abi' attribute
+///
+/// - Note: Requires experimental feature `abiAttribute`.
+///
+/// ### Children
+/// 
+///  - `provider`: ``DeclSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
+#if compiler(>=5.8)
+@_spi(ExperimentalLanguageFeatures)
+#endif
+public struct ABIAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+  public let _syntaxNode: Syntax
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard node.raw.kind == .abiAttributeArguments else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeProvider: UnexpectedNodesSyntax? = nil,
+    provider: some DeclSyntaxProtocol,
+    _ unexpectedAfterProvider: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeProvider, provider, unexpectedAfterProvider))) { (arena, _) in
+      let layout: [RawSyntax?] = [unexpectedBeforeProvider?.raw, provider.raw, unexpectedAfterProvider?.raw]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.abiAttributeArguments,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeProvider: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ABIAttributeArgumentsSyntax.self)
+    }
+  }
+
+  public var provider: DeclSyntax {
+    get {
+      return Syntax(self).child(at: 1)!.cast(DeclSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ABIAttributeArgumentsSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterProvider: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ABIAttributeArgumentsSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeProvider, \Self.provider, \Self.unexpectedAfterProvider])
+}
+
 // MARK: - AccessorBlockSyntax
 
 /// ### Children
@@ -792,7 +873,7 @@ public struct AccessorParametersSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
-///  - `memberBlock`: ``MemberBlockSyntax``
+///  - `memberBlock`: ``MemberBlockSyntax``!
 public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
@@ -828,7 +909,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax? = nil,
     _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-    memberBlock: MemberBlockSyntax,
+    memberBlock: MemberBlockSyntax! = nil,
     _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -869,7 +950,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
         unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
         genericWhereClause?.raw,
         unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw,
-        memberBlock.raw,
+        memberBlock?.raw,
         unexpectedAfterMemberBlock?.raw
       ]
       let raw = RawSyntax.makeLayout(
@@ -1085,9 +1166,9 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     }
   }
 
-  public var memberBlock: MemberBlockSyntax {
+  public var memberBlock: MemberBlockSyntax! {
     get {
-      return Syntax(self).child(at: 15)!.cast(MemberBlockSyntax.self)
+      return Syntax(self).child(at: 15)?.cast(MemberBlockSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 15, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
@@ -2291,7 +2372,7 @@ public struct AssociatedTypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
 ///  - `atSign`: `@`
 ///  - `attributeName`: ``TypeSyntax``
 ///  - `leftParen`: `(`?
-///  - `arguments`: (``LabeledExprListSyntax`` | ``TokenSyntax`` | ``StringLiteralExprSyntax`` | ``AvailabilityArgumentListSyntax`` | ``SpecializeAttributeArgumentListSyntax`` | ``ObjCSelectorPieceListSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeAttributeArgumentsSyntax`` | ``BackDeployedAttributeArgumentsSyntax`` | ``ConventionAttributeArgumentsSyntax`` | ``ConventionWitnessMethodAttributeArgumentsSyntax`` | ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` | ``ExposeAttributeArgumentsSyntax`` | ``OriginallyDefinedInAttributeArgumentsSyntax`` | ``UnderscorePrivateAttributeArgumentsSyntax`` | ``DynamicReplacementAttributeArgumentsSyntax`` | ``UnavailableFromAsyncAttributeArgumentsSyntax`` | ``EffectsAttributeArgumentListSyntax`` | ``DocumentationAttributeArgumentListSyntax``)?
+///  - `arguments`: (``LabeledExprListSyntax`` | ``TokenSyntax`` | ``StringLiteralExprSyntax`` | ``AvailabilityArgumentListSyntax`` | ``SpecializeAttributeArgumentListSyntax`` | ``ObjCSelectorPieceListSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeAttributeArgumentsSyntax`` | ``BackDeployedAttributeArgumentsSyntax`` | ``ConventionAttributeArgumentsSyntax`` | ``ConventionWitnessMethodAttributeArgumentsSyntax`` | ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` | ``ExposeAttributeArgumentsSyntax`` | ``OriginallyDefinedInAttributeArgumentsSyntax`` | ``UnderscorePrivateAttributeArgumentsSyntax`` | ``DynamicReplacementAttributeArgumentsSyntax`` | ``UnavailableFromAsyncAttributeArgumentsSyntax`` | ``EffectsAttributeArgumentListSyntax`` | ``DocumentationAttributeArgumentListSyntax`` | `ABIAttributeArgumentsSyntax`)?
 ///  - `rightParen`: `)`?
 ///
 /// ### Contained in
@@ -2320,6 +2401,9 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     case unavailableFromAsyncArguments(UnavailableFromAsyncAttributeArgumentsSyntax)
     case effectsArguments(EffectsAttributeArgumentListSyntax)
     case documentationArguments(DocumentationAttributeArgumentListSyntax)
+    /// - Note: Requires experimental feature `abiAttribute`.
+    @_spi(ExperimentalLanguageFeatures)
+    case abiArguments(ABIAttributeArgumentsSyntax)
 
     public var _syntaxNode: Syntax {
       switch self {
@@ -2362,6 +2446,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       case .effectsArguments(let node):
         return node._syntaxNode
       case .documentationArguments(let node):
+        return node._syntaxNode
+      case .abiArguments(let node):
         return node._syntaxNode
       }
     }
@@ -2446,6 +2532,12 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = .documentationArguments(node)
     }
 
+    /// - Note: Requires experimental feature `abiAttribute`.
+    @_spi(ExperimentalLanguageFeatures)
+    public init(_ node: ABIAttributeArgumentsSyntax) {
+      self = .abiArguments(node)
+    }
+
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(LabeledExprListSyntax.self) {
         self = .argumentList(node)
@@ -2487,6 +2579,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
         self = .effectsArguments(node)
       } else if let node = node.as(DocumentationAttributeArgumentListSyntax.self) {
         self = .documentationArguments(node)
+      } else if let node = node.as(ABIAttributeArgumentsSyntax.self) {
+        self = .abiArguments(node)
       } else {
         return nil
       }
@@ -2513,7 +2607,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
         .node(DynamicReplacementAttributeArgumentsSyntax.self),
         .node(UnavailableFromAsyncAttributeArgumentsSyntax.self),
         .node(EffectsAttributeArgumentListSyntax.self),
-        .node(DocumentationAttributeArgumentListSyntax.self)
+        .node(DocumentationAttributeArgumentListSyntax.self),
+        .node(ABIAttributeArgumentsSyntax.self)
       ])
     }
 
@@ -2955,6 +3050,34 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
     public func cast(_ syntaxType: DocumentationAttributeArgumentListSyntax.Type) -> DocumentationAttributeArgumentListSyntax {
       return self.as(DocumentationAttributeArgumentListSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to `ABIAttributeArgumentsSyntax`.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    /// - Note: Requires experimental feature `abiAttribute`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func `is`(_ syntaxType: ABIAttributeArgumentsSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to `ABIAttributeArgumentsSyntax`.
+    ///
+    /// - Returns: An instance of `ABIAttributeArgumentsSyntax`, or `nil` if the cast fails.
+    /// - Note: Requires experimental feature `abiAttribute`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func `as`(_ syntaxType: ABIAttributeArgumentsSyntax.Type) -> ABIAttributeArgumentsSyntax? {
+      return ABIAttributeArgumentsSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to `ABIAttributeArgumentsSyntax`.
+    ///
+    /// - Returns: An instance of `ABIAttributeArgumentsSyntax`.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    /// - Note: Requires experimental feature `abiAttribute`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func cast(_ syntaxType: ABIAttributeArgumentsSyntax.Type) -> ABIAttributeArgumentsSyntax {
+      return self.as(ABIAttributeArgumentsSyntax.self)!
     }
   }
 

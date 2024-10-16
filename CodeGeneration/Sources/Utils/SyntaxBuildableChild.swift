@@ -40,7 +40,7 @@ extension Child {
     }
     return SyntaxBuildableType(
       kind: buildableKind,
-      isOptional: isOptional
+      optionality: optionality
     )
   }
 
@@ -58,7 +58,7 @@ extension Child {
   }
 
   public var defaultValue: ExprSyntax? {
-    if isOptional || isUnexpectedNodes {
+    if optionality != nil || isUnexpectedNodes {
       if buildableType.isBaseType && kind.isNodeChoicesEmpty {
         return ExprSyntax("\(buildableType.buildable).none")
       } else {
@@ -131,7 +131,7 @@ extension Child {
     }
 
     var preconditionChoices: [ExprSyntax] = []
-    if buildableType.isOptional {
+    if buildableType.optionality != nil {
       preconditionChoices.append(
         ExprSyntax(
           SequenceExprSyntax {

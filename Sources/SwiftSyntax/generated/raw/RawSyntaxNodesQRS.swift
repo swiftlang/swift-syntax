@@ -1449,7 +1449,7 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
     _ unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? = nil,
-    memberBlock: RawMemberBlockSyntax,
+    memberBlock: RawMemberBlockSyntax!,
     _ unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
@@ -1471,7 +1471,7 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
       layout[14] = unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw
-      layout[15] = memberBlock.raw
+      layout[15] = memberBlock?.raw
       layout[16] = unexpectedAfterMemberBlock?.raw
     }
     self.init(unchecked: raw)
@@ -1537,8 +1537,8 @@ public struct RawStructDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var memberBlock: RawMemberBlockSyntax {
-    layoutView.children[15].map(RawMemberBlockSyntax.init(raw:))!
+  public var memberBlock: RawMemberBlockSyntax! {
+    layoutView.children[15].map(RawMemberBlockSyntax.init(raw:))
   }
 
   public var unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? {

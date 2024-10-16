@@ -645,7 +645,8 @@ import SwiftSyntax
     var results: [LookupResult] = []
 
     if let primaryAssociatedTypeClause,
-      primaryAssociatedTypeClause.range.contains(lookUpPosition)
+       primaryAssociatedTypeClause.range.contains(lookUpPosition),
+       let memberBlock
     {
       results = memberBlock.lookupAssociatedTypeDeclarations(
         identifier,

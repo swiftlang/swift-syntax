@@ -116,7 +116,7 @@ final class ValueGenericsTests: ParserTestCase {
         DiagnosticSpec(
           message: "expected '=' in variable",
           fixIts: ["insert '='"]
-        )
+        ),
       ],
       fixedSource: """
         let x: <#type#> = 123
@@ -191,7 +191,7 @@ final class ValueGenericsTests: ParserTestCase {
         ),
         DiagnosticSpec(
           message: "unexpected code '123' in extension"
-        )
+        ),
       ],
       fixedSource: """
         extension Vector where N: <#type#> 123 {}
@@ -209,7 +209,7 @@ final class ValueGenericsTests: ParserTestCase {
         ),
         DiagnosticSpec(
           message: "unexpected code '-123' in extension"
-        )
+        ),
       ],
       fixedSource: """
         extension Vector where N: <#type#> -123 {}
@@ -227,7 +227,7 @@ final class ValueGenericsTests: ParserTestCase {
         ),
         DiagnosticSpec(
           message: "unexpected code ': N' in extension"
-        )
+        ),
       ]
     )
 
@@ -241,7 +241,7 @@ final class ValueGenericsTests: ParserTestCase {
         ),
         DiagnosticSpec(
           message: "unexpected code ': N' in extension"
-        )
+        ),
       ]
     )
   }

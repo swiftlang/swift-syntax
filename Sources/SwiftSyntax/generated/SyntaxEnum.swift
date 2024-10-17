@@ -138,7 +138,6 @@ public enum SyntaxEnum: Sendable {
   case genericArgumentClause(GenericArgumentClauseSyntax)
   case genericArgumentList(GenericArgumentListSyntax)
   case genericArgument(GenericArgumentSyntax)
-  case genericArgumentType(GenericArgumentTypeSyntax)
   case genericParameterClause(GenericParameterClauseSyntax)
   case genericParameterList(GenericParameterListSyntax)
   case genericParameter(GenericParameterSyntax)
@@ -562,8 +561,6 @@ extension Syntax {
       return .genericArgumentList(GenericArgumentListSyntax(self)!)
     case .genericArgument:
       return .genericArgument(GenericArgumentSyntax(self)!)
-    case .genericArgumentType:
-      return .genericArgumentType(GenericArgumentTypeSyntax(self)!)
     case .genericParameterClause:
       return .genericParameterClause(GenericParameterClauseSyntax(self)!)
     case .genericParameterList:
@@ -1267,7 +1264,6 @@ public enum TypeSyntaxEnum {
   case compositionType(CompositionTypeSyntax)
   case dictionaryType(DictionaryTypeSyntax)
   case functionType(FunctionTypeSyntax)
-  case genericArgumentType(GenericArgumentTypeSyntax)
   case identifierType(IdentifierTypeSyntax)
   case implicitlyUnwrappedOptionalType(ImplicitlyUnwrappedOptionalTypeSyntax)
   case memberType(MemberTypeSyntax)
@@ -1298,8 +1294,6 @@ extension TypeSyntax {
       return .dictionaryType(DictionaryTypeSyntax(self)!)
     case .functionType:
       return .functionType(FunctionTypeSyntax(self)!)
-    case .genericArgumentType:
-      return .genericArgumentType(GenericArgumentTypeSyntax(self)!)
     case .identifierType:
       return .identifierType(IdentifierTypeSyntax(self)!)
     case .implicitlyUnwrappedOptionalType:

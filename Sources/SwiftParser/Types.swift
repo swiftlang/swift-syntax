@@ -418,7 +418,7 @@ extension Parser {
       repeat {
         let argument = self.parseGenericArgumentType()
 
-        if arguments.isEmpty, argument.value.raw.is(RawMissingTypeSyntax.self) {
+        if arguments.isEmpty, argument.raw.is(RawMissingTypeSyntax.self) {
           break
         }
 
@@ -449,17 +449,11 @@ extension Parser {
     )
   }
 
-  mutating func parseGenericArgumentType() -> RawGenericArgumentTypeSyntax {
+  mutating func parseGenericArgumentType() -> RawGenericArgumentSyntax.Argument {
     if let valueType = self.parseValueType() {
-      return RawGenericArgumentTypeSyntax(
-        value: .expr(valueType),
-        arena: self.arena
-      )
+      return .expr(valueType)
     } else {
-      return RawGenericArgumentTypeSyntax(
-        value: .type(self.parseType()),
-        arena: self.arena
-      )
+      return .type(self.parseType())
     }
   }
 }
@@ -710,7 +704,8 @@ extension Parser.Lookahead {
 
       // '-123' for value generics.
       if self.currentToken.tokenText == "-",
-         self.peek(isAt: .integerLiteral) {
+        self.peek(isAt: .integerLiteral)
+      {
         self.consumeAnyToken()
         self.consumeAnyToken()
         return true
@@ -1137,10 +1132,17 @@ extension Parser {
 
 extension Parser {
   mutating func parseValueType() -> RawExprSyntax? {
+    // If the 'ValueGenerics' experimental feature hasn't been added, then don't
+    // attempt to parse values as types.
+    guard self.experimentalFeatures.contains(.valueGenerics) else {
+      return nil
+    }
+
     // Eat any '-' preceding integer literals.
     var minusSign: RawTokenSyntax? = nil
-    if self.currentToken.tokenText == "-",
-       self.peek(isAt: .integerLiteral) {
+    if self.atContextualPunctuator("-"),
+      self.peek(isAt: .integerLiteral)
+    {
       minusSign = self.consumeIfContextualPunctuator("-", remapping: .prefixOperator)
     }
 
@@ -1156,11 +1158,13 @@ extension Parser {
         return RawExprSyntax(integerExpr)
       }
 
-      return RawExprSyntax(RawPrefixOperatorExprSyntax(
-        operator: minusSign,
-        expression: integerExpr,
-        arena: self.arena
-      ))
+      return RawExprSyntax(
+        RawPrefixOperatorExprSyntax(
+          operator: minusSign,
+          expression: integerExpr,
+          arena: self.arena
+        )
+      )
     }
 
     return nil

@@ -180,7 +180,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/CompositionTypeSyntax>
 - <doc:SwiftSyntax/DictionaryTypeSyntax>
 - <doc:SwiftSyntax/FunctionTypeSyntax>
-- <doc:SwiftSyntax/GenericArgumentTypeSyntax>
 - <doc:SwiftSyntax/IdentifierTypeSyntax>
 - <doc:SwiftSyntax/ImplicitlyUnwrappedOptionalTypeSyntax>
 - <doc:SwiftSyntax/MemberTypeSyntax>

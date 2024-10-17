@@ -376,10 +376,14 @@ final class StatementTests: ParserTestCase {
           leftAngle: .leftAngleToken(),
           arguments: GenericArgumentListSyntax([
             GenericArgumentSyntax(
-              argument: GenericArgumentTypeSyntax(value: .type(TypeSyntax(OptionalTypeSyntax(
-                wrappedType: IdentifierTypeSyntax(name: .identifier("String")),
-                questionMark: .postfixQuestionMarkToken()
-              ))))
+              argument: .type(
+                TypeSyntax(
+                  OptionalTypeSyntax(
+                    wrappedType: IdentifierTypeSyntax(name: .identifier("String")),
+                    questionMark: .postfixQuestionMarkToken()
+                  )
+                )
+              )
             )
           ]),
           rightAngle: .rightAngleToken()
@@ -398,7 +402,7 @@ final class StatementTests: ParserTestCase {
           leftAngle: .leftAngleToken(),
           arguments: GenericArgumentListSyntax([
             GenericArgumentSyntax(
-              argument: GenericArgumentTypeSyntax(value: .type(TypeSyntax(IdentifierTypeSyntax(name: .keyword(.Any)))))
+              argument: .type(TypeSyntax(IdentifierTypeSyntax(name: .keyword(.Any))))
             )
           ]),
           rightAngle: .rightAngleToken()

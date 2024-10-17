@@ -146,78 +146,10 @@ public struct RawGenericArgumentListSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol {
-  @_spi(RawSyntax)
-  public var layoutView: RawSyntaxLayoutView {
-    return raw.layoutView!
-  }
-
-  public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .genericArgument
-  }
-
-  public var raw: RawSyntax
-
-  init(raw: RawSyntax) {
-    precondition(Self.isKindOf(raw))
-    self.raw = raw
-  }
-
-  private init(unchecked raw: RawSyntax) {
-    self.raw = raw
-  }
-
-  public init?(_ other: some RawSyntaxNodeProtocol) {
-    guard Self.isKindOf(other.raw) else {
-      return nil
-    }
-    self.init(unchecked: other.raw)
-  }
-
-  public init(
-    _ unexpectedBeforeArgument: RawUnexpectedNodesSyntax? = nil,
-    argument: RawGenericArgumentTypeSyntax,
-    _ unexpectedBetweenArgumentAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
-    trailingComma: RawTokenSyntax?,
-    _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
-  ) {
-    let raw = RawSyntax.makeLayout(
-      kind: .genericArgument, uninitializedCount: 5, arena: arena) { layout in
-      layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeArgument?.raw
-      layout[1] = argument.raw
-      layout[2] = unexpectedBetweenArgumentAndTrailingComma?.raw
-      layout[3] = trailingComma?.raw
-      layout[4] = unexpectedAfterTrailingComma?.raw
-    }
-    self.init(unchecked: raw)
-  }
-
-  public var unexpectedBeforeArgument: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-
-  public var argument: RawGenericArgumentTypeSyntax {
-    layoutView.children[1].map(RawGenericArgumentTypeSyntax.init(raw:))!
-  }
-
-  public var unexpectedBetweenArgumentAndTrailingComma: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-
-  public var trailingComma: RawTokenSyntax? {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))
-  }
-
-  public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-}
-
-@_spi(RawSyntax)
-public struct RawGenericArgumentTypeSyntax: RawTypeSyntaxNodeProtocol {
-  public enum Value: RawSyntaxNodeProtocol {
+  public enum Argument: RawSyntaxNodeProtocol {
     case type(RawTypeSyntax)
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
     case expr(RawExprSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -247,6 +179,8 @@ public struct RawGenericArgumentTypeSyntax: RawTypeSyntaxNodeProtocol {
       self = .type(RawTypeSyntax(type))
     }
 
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
     public init(expr: some RawExprSyntaxNodeProtocol) {
       self = .expr(RawExprSyntax(expr))
     }
@@ -258,7 +192,7 @@ public struct RawGenericArgumentTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .genericArgumentType
+    return raw.kind == .genericArgument
   }
 
   public var raw: RawSyntax
@@ -280,31 +214,43 @@ public struct RawGenericArgumentTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public init(
-    _ unexpectedBeforeValue: RawUnexpectedNodesSyntax? = nil,
-    value: Value,
-    _ unexpectedAfterValue: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeArgument: RawUnexpectedNodesSyntax? = nil,
+    argument: Argument,
+    _ unexpectedBetweenArgumentAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
+    trailingComma: RawTokenSyntax?,
+    _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .genericArgumentType, uninitializedCount: 3, arena: arena) { layout in
+      kind: .genericArgument, uninitializedCount: 5, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeValue?.raw
-      layout[1] = value.raw
-      layout[2] = unexpectedAfterValue?.raw
+      layout[0] = unexpectedBeforeArgument?.raw
+      layout[1] = argument.raw
+      layout[2] = unexpectedBetweenArgumentAndTrailingComma?.raw
+      layout[3] = trailingComma?.raw
+      layout[4] = unexpectedAfterTrailingComma?.raw
     }
     self.init(unchecked: raw)
   }
 
-  public var unexpectedBeforeValue: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeArgument: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var value: RawSyntax {
+  public var argument: RawSyntax {
     layoutView.children[1]!
   }
 
-  public var unexpectedAfterValue: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenArgumentAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var trailingComma: RawTokenSyntax? {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))
+  }
+
+  public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

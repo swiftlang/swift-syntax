@@ -1484,18 +1484,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: GenericArgumentSyntax) {
   }
 
-  /// Visiting ``GenericArgumentTypeSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: GenericArgumentTypeSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting ``GenericArgumentTypeSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: GenericArgumentTypeSyntax) {
-  }
-
   /// Visiting ``GenericParameterClauseSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4027,10 +4015,6 @@ open class SyntaxVisitor {
       return {
         self.visitImpl(&$0, GenericArgumentSyntax.self, self.visit, self.visitPost)
       }
-    case .genericArgumentType:
-      return {
-        self.visitImpl(&$0, GenericArgumentTypeSyntax.self, self.visit, self.visitPost)
-      }
     case .genericParameterClause:
       return {
         self.visitImpl(&$0, GenericParameterClauseSyntax.self, self.visit, self.visitPost)
@@ -4937,8 +4921,6 @@ open class SyntaxVisitor {
       visitImpl(&node, GenericArgumentListSyntax.self, visit, visitPost)
     case .genericArgument:
       visitImpl(&node, GenericArgumentSyntax.self, visit, visitPost)
-    case .genericArgumentType:
-      visitImpl(&node, GenericArgumentTypeSyntax.self, visit, visitPost)
     case .genericParameterClause:
       visitImpl(&node, GenericParameterClauseSyntax.self, visit, visitPost)
     case .genericParameterList:

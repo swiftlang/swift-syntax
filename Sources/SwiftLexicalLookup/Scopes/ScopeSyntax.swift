@@ -122,8 +122,27 @@ extension SyntaxProtocol {
     introducedName.isAccessible(at: lookUpPosition) && introducedName.refersTo(identifier)
   }
 
+  var isMember: Bool {
+    if parentScope?.is(MemberBlockSyntax.self) ?? false {
+      return true
+    } else if let parentIfConfig = parentScope?.as(IfConfigDeclSyntax.self) {
+      return parentIfConfig.isMember
+    } else {
+      return false
+    }
+  }
+
   /// Debug description of this scope.
   @_spi(Experimental) public var scopeDebugDescription: String {
     scopeDebugName + " " + debugLineWithColumnDescription
+  }
+
+  /// Hierarchy of scopes starting from this scope.
+  @_spi(Experimental) public var scopeDebugHierarchyDescription: String {
+    if let parentScope = parentScope {
+      return parentScope.scopeDebugHierarchyDescription + " <-- " + scopeDebugDescription
+    } else {
+      return scopeDebugDescription
+    }
   }
 }

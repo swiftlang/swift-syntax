@@ -184,7 +184,7 @@ let package = Package(
 
     .target(
       name: "SwiftLexicalLookup",
-      dependencies: ["SwiftSyntax"]
+      dependencies: ["SwiftSyntax", "SwiftIfConfig"]
     ),
 
     .testTarget(

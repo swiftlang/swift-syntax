@@ -43,6 +43,7 @@ extension SequentialScopeSyntax {
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig,
+    ignoreNamedDecl: Bool = false,
     propagateToParent: Bool = true
   ) -> [LookupResult] {
     // Sequential scope needs to ensure all type declarations are
@@ -55,27 +56,24 @@ extension SequentialScopeSyntax {
     // as we need to partition them based on results
     // obtained from IntroducingToSequentialParentScopeSyntax
     var currentChunk: [LookupName] = []
-    var itemsWithoutNamedDecl: [CodeBlockItemSyntax] = []
+    // During first iteration, the algorithm collects all named
+    // decls from the code block and (nested) active clauses
+    // of if config declarations. After the first pass, performs
+    // name matching on these and appends as a separate result to the results.
+    var collectedNamedDecls: [NamedDeclSyntax] = []
 
-    for codeBlockItem in codeBlockItems {
-      if Syntax(codeBlockItem.item).isProtocol(NamedDeclSyntax.self) {
-        currentChunk += LookupName.getNames(
-          from: codeBlockItem.item,
-          accessibleAfter: codeBlockItem.endPosition
-        ).filter { introducedName in
-          checkIdentifier(identifier, refersTo: introducedName, at: lookUpPosition)
-        }
-      } else {
-        itemsWithoutNamedDecl.append(codeBlockItem)
+    for codeBlockItem in codeBlockItems.reversed() {
+      if let namedDecl = codeBlockItem.item.asProtocol(NamedDeclSyntax.self) {
+        guard !ignoreNamedDecl else { continue }
+
+        collectedNamedDecls.append(namedDecl)
+        continue
+      } else if let ifConfigDecl = codeBlockItem.item.as(IfConfigDeclSyntax.self),
+        !ignoreNamedDecl
+      {
+        collectedNamedDecls += ifConfigDecl.getNamedDecls(for: config)
       }
-    }
 
-    if !currentChunk.isEmpty {
-      results.append(LookupResult.getResult(for: self, withNames: currentChunk))
-      currentChunk = []
-    }
-
-    for codeBlockItem in itemsWithoutNamedDecl {
       if let introducingToParentScope = Syntax(codeBlockItem.item).asProtocol(SyntaxProtocol.self)
         as? IntroducingToSequentialParentScopeSyntax
       {
@@ -91,7 +89,7 @@ extension SequentialScopeSyntax {
 
         // If there are some names collected, create a new result for this scope.
         if !currentChunk.isEmpty {
-          results.append(LookupResult.getResult(for: self, withNames: currentChunk.reversed()))
+          results.append(LookupResult.getResult(for: self, withNames: currentChunk))
           currentChunk = []
         }
 
@@ -100,8 +98,8 @@ extension SequentialScopeSyntax {
         // Extract new names from encountered node.
         currentChunk += LookupName.getNames(
           from: codeBlockItem.item,
-          accessibleAfter: codeBlockItem.endPosition
-        ).reversed().filter { introducedName in
+          accessibleAfter: codeBlockItem.item.endPosition
+        ).filter { introducedName in
           checkIdentifier(identifier, refersTo: introducedName, at: lookUpPosition)
         }
       }
@@ -109,10 +107,23 @@ extension SequentialScopeSyntax {
 
     // If there are some names collected, create a new result for this scope.
     if !currentChunk.isEmpty {
-      results.append(LookupResult.getResult(for: self, withNames: currentChunk.reversed()))
+      results.append(LookupResult.getResult(for: self, withNames: currentChunk))
+      currentChunk = []
     }
 
-    return results.reversed()
+    // Filter named decls to be appended to the results.
+    for namedDecl in collectedNamedDecls.reversed() {
+      currentChunk += LookupName.getNames(
+        from: namedDecl,
+        accessibleAfter: namedDecl.endPosition
+      ).filter { introducedName in
+        checkIdentifier(identifier, refersTo: introducedName, at: lookUpPosition)
+      }
+    }
+
+    results += LookupResult.getResultArray(for: self, withNames: currentChunk)
+
+    return results
       + (config.finishInSequentialScope || !propagateToParent
         ? [] : lookupInParent(identifier, at: lookUpPosition, with: config))
   }

@@ -104,6 +104,10 @@ import SwiftSyntax
       case .variableDecl(let variableDecl):
         return variableDecl.bindings.first?.accessorBlock?.positionAfterSkippingLeadingTrivia
           ?? variableDecl.endPosition
+      case .accessorDecl(let accessorDecl):
+        return accessorDecl.accessorSpecifier.positionAfterSkippingLeadingTrivia
+      case .deinitializerDecl(let deinitializerDecl):
+        return deinitializerDecl.deinitKeyword.positionAfterSkippingLeadingTrivia
       default:
         return declSyntax.positionAfterSkippingLeadingTrivia
       }
@@ -111,13 +115,15 @@ import SwiftSyntax
       switch Syntax(declSyntax).as(SyntaxEnum.self) {
       case .protocolDecl(let protocolDecl):
         return protocolDecl.name.positionAfterSkippingLeadingTrivia
+      case .extensionDecl(let extensionDecl):
+        return extensionDecl.extensionKeyword.positionAfterSkippingLeadingTrivia
       default:
         return declSyntax.positionAfterSkippingLeadingTrivia
       }
+    case .newValue(let accessorDecl), .oldValue(let accessorDecl):
+      return accessorDecl.accessorSpecifier.positionAfterSkippingLeadingTrivia
     case .error(let catchClause):
       return catchClause.catchItems.positionAfterSkippingLeadingTrivia
-    default:
-      return syntax.positionAfterSkippingLeadingTrivia
     }
   }
 }
@@ -276,7 +282,11 @@ import SwiftSyntax
     identifiable: IdentifiableSyntax,
     accessibleAfter: AbsolutePosition? = nil
   ) -> [LookupName] {
-    [.identifier(identifiable, accessibleAfter: accessibleAfter)]
+    if case .wildcard = identifiable.identifier.tokenKind {
+      return []
+    }
+
+    return [.identifier(identifiable, accessibleAfter: accessibleAfter)]
   }
 
   /// Extracts name introduced by `NamedDeclSyntax` node.

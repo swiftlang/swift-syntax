@@ -1022,14 +1022,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  override open func visit(_ node: GenericArgumentTypeSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: GenericArgumentTypeSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-
   override open func visit(_ node: GenericParameterClauseSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

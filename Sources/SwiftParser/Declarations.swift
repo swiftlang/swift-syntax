@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 #if swift(>=6)
-@_spi(RawSyntax) internal import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
 #else
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 #endif
 
 extension DeclarationModifier {
@@ -524,6 +524,22 @@ extension Parser {
     return self.at(prefix: ">")
   }
 
+  mutating func parseSameTypeLeftType() -> RawSameTypeRequirementSyntax.LeftType {
+    if let valueType = self.parseValueType() {
+      return .expr(valueType)
+    } else {
+      return .type(self.parseType())
+    }
+  }
+
+  mutating func parseSameTypeRightType() -> RawSameTypeRequirementSyntax.RightType {
+    if let valueType = self.parseValueType() {
+      return .expr(valueType)
+    } else {
+      return .type(self.parseType())
+    }
+  }
+
   mutating func parseGenericWhereClause() -> RawGenericWhereClauseSyntax {
     let (unexpectedBeforeWhereKeyword, whereKeyword) = self.expect(.keyword(.where))
 
@@ -532,9 +548,9 @@ extension Parser {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
-        let firstArgument = self.parseGenericArgumentType()
+        let firstArgument = self.parseSameTypeLeftType()
 
-        guard !firstArgument.value.raw.is(RawMissingTypeSyntax.self) else {
+        guard !firstArgument.raw.is(RawMissingTypeSyntax.self) else {
           keepGoing = self.consume(if: .comma)
           elements.append(
             RawGenericRequirementSyntax(
@@ -542,7 +558,7 @@ extension Parser {
                 RawSameTypeRequirementSyntax(
                   leftType: firstArgument,
                   equal: missingToken(.binaryOperator, text: "=="),
-                  rightType: firstArgument,
+                  rightType: .type(RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))),
                   arena: self.arena
                 )
               ),
@@ -555,7 +571,7 @@ extension Parser {
 
         let requirement: RawGenericRequirementSyntax.Requirement
 
-        switch RawGenericArgumentTypeSyntax.Value(firstArgument.value.raw)! {
+        switch firstArgument {
         // If the first argument is an expression, then we have to have a same
         // type requirement. We do not allow conformance requirements like
         // '123: Protocol' or layout constraints on expressions.
@@ -564,7 +580,7 @@ extension Parser {
             anyIn: SameTypeRequirementSyntax.EqualOptions.self,
             default: .binaryOperator
           )
-          let secondArgument = self.parseGenericArgumentType()
+          let secondArgument = self.parseSameTypeRightType()
           requirement = .sameTypeRequirement(
             RawSameTypeRequirementSyntax(
               leftType: firstArgument,
@@ -689,7 +705,7 @@ extension Parser {
             (.postfixOperator, let handle)?,
             (.prefixOperator, let handle)?:
             let equal = self.eat(handle)
-            let secondArgument = self.parseGenericArgumentType()
+            let secondArgument = self.parseSameTypeRightType()
             requirement = .sameTypeRequirement(
               RawSameTypeRequirementSyntax(
                 leftType: firstArgument,
@@ -703,10 +719,7 @@ extension Parser {
               RawSameTypeRequirementSyntax(
                 leftType: firstArgument,
                 equal: RawTokenSyntax(missing: .binaryOperator, text: "==", arena: self.arena),
-                rightType: RawGenericArgumentTypeSyntax(
-                  value: .type(RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))),
-                  arena: self.arena
-                ),
+                rightType: .type(RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))),
                 arena: self.arena
               )
             )

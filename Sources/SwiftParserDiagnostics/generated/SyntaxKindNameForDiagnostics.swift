@@ -197,8 +197,6 @@ extension SyntaxKind {
       return "generic argument clause"
     case .genericArgument:
       return "generic argument"
-    case .genericArgumentType:
-      return "generic argument type"
     case .genericParameterClause:
       return "generic parameter clause"
     case .genericParameter:

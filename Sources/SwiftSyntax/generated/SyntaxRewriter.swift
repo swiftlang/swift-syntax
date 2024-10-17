@@ -949,13 +949,6 @@ open class SyntaxRewriter {
     return visitChildren(node._syntaxNode).cast(GenericArgumentSyntax.self)
   }
 
-  /// Visit a ``GenericArgumentTypeSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: GenericArgumentTypeSyntax) -> TypeSyntax {
-    return TypeSyntax(visitChildren(node._syntaxNode).cast(GenericArgumentTypeSyntax.self))
-  }
-
   /// Visit a ``GenericParameterClauseSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2678,10 +2671,6 @@ open class SyntaxRewriter {
       return {
         self.visitImpl(&$0, GenericArgumentSyntax.self, self.visit)
       }
-    case .genericArgumentType:
-      return {
-        self.visitImpl(&$0, GenericArgumentTypeSyntax.self, self.visit)
-      }
     case .genericParameterClause:
       return {
         self.visitImpl(&$0, GenericParameterClauseSyntax.self, self.visit)
@@ -3584,8 +3573,6 @@ open class SyntaxRewriter {
       return visitImpl(&node, GenericArgumentListSyntax.self, visit)
     case .genericArgument:
       return visitImpl(&node, GenericArgumentSyntax.self, visit)
-    case .genericArgumentType:
-      return visitImpl(&node, GenericArgumentTypeSyntax.self, visit)
     case .genericParameterClause:
       return visitImpl(&node, GenericParameterClauseSyntax.self, visit)
     case .genericParameterList:

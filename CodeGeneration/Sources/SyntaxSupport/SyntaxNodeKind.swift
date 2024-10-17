@@ -142,7 +142,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case genericArgument
   case genericArgumentClause
   case genericArgumentList
-  case genericArgumentType
   case genericParameter
   case genericParameterClause
   case genericParameterList

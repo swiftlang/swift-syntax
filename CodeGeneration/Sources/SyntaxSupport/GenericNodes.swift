@@ -307,8 +307,20 @@ public let GENERIC_NODES: [Node] = [
       Child(
         name: "leftType",
         deprecatedName: "leftTypeIdentifier",
-        kind: .node(kind: .type),
-        nameForDiagnostics: "left-hand type"
+        kind: .nodeChoices(choices: [
+          Child(
+            name: "type",
+            kind: .node(kind: .type)
+          ),
+          Child(
+            name: "expr",
+            kind: .node(kind: .expr),
+            experimentalFeature: .valueGenerics
+          ),
+        ]),
+        nameForDiagnostics: "left-hand type",
+        documentation:
+          "The left hand side type for a same type requirement. This can either be a regular type argument or an expression for value generics."
       ),
       Child(
         name: "equal",
@@ -318,8 +330,20 @@ public let GENERIC_NODES: [Node] = [
       Child(
         name: "rightType",
         deprecatedName: "rightTypeIdentifier",
-        kind: .node(kind: .type),
-        nameForDiagnostics: "right-hand type"
+        kind: .nodeChoices(choices: [
+          Child(
+            name: "type",
+            kind: .node(kind: .type)
+          ),
+          Child(
+            name: "expr",
+            kind: .node(kind: .expr),
+            experimentalFeature: .valueGenerics
+          ),
+        ]),
+        nameForDiagnostics: "right-hand type",
+        documentation:
+          "The right hand side type for a same type requirement. This can either be a regular type argument or an expression for value generics."
       ),
     ]
   ),

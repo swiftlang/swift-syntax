@@ -626,14 +626,194 @@ public struct ReturnStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyn
 
 /// ### Children
 /// 
-///  - `leftType`: ``TypeSyntax``
+///  - `leftType`: (``TypeSyntax`` | ``ExprSyntax``)
 ///  - `equal`: (`<binaryOperator>` | `<prefixOperator>` | `<postfixOperator>`)
-///  - `rightType`: ``TypeSyntax``
+///  - `rightType`: (``TypeSyntax`` | ``ExprSyntax``)
 ///
 /// ### Contained in
 /// 
 ///  - ``GenericRequirementSyntax``.``GenericRequirementSyntax/requirement``
 public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+  public enum LeftType: SyntaxChildChoices, SyntaxHashable {
+    case type(TypeSyntax)
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    case expr(ExprSyntax)
+
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .type(let node):
+        return node._syntaxNode
+      case .expr(let node):
+        return node._syntaxNode
+      }
+    }
+
+    public init(_ node: some TypeSyntaxProtocol) {
+      self = .type(TypeSyntax(node))
+    }
+
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    public init(_ node: some ExprSyntaxProtocol) {
+      self = .expr(ExprSyntax(node))
+    }
+
+    public init?(_ node: __shared some SyntaxProtocol) {
+      if let node = node.as(TypeSyntax.self) {
+        self = .type(node)
+      } else if let node = node.as(ExprSyntax.self) {
+        self = .expr(node)
+      } else {
+        return nil
+      }
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([.node(TypeSyntax.self), .node(ExprSyntax.self)])
+    }
+
+    /// Checks if the current syntax node can be cast to the type conforming to the ``TypeSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: (some TypeSyntaxProtocol).Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to the type conforming to the ``TypeSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+    public func `as`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+      return S.init(self)
+    }
+
+    /// Force-casts the current syntax node to the type conforming to the ``TypeSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+      return self.as(S.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func `is`(_ syntaxType: (some ExprSyntaxProtocol).Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+      return S.init(self)
+    }
+
+    /// Force-casts the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+      return self.as(S.self)!
+    }
+  }
+
+  public enum RightType: SyntaxChildChoices, SyntaxHashable {
+    case type(TypeSyntax)
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    case expr(ExprSyntax)
+
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .type(let node):
+        return node._syntaxNode
+      case .expr(let node):
+        return node._syntaxNode
+      }
+    }
+
+    public init(_ node: some TypeSyntaxProtocol) {
+      self = .type(TypeSyntax(node))
+    }
+
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    public init(_ node: some ExprSyntaxProtocol) {
+      self = .expr(ExprSyntax(node))
+    }
+
+    public init?(_ node: __shared some SyntaxProtocol) {
+      if let node = node.as(TypeSyntax.self) {
+        self = .type(node)
+      } else if let node = node.as(ExprSyntax.self) {
+        self = .expr(node)
+      } else {
+        return nil
+      }
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([.node(TypeSyntax.self), .node(ExprSyntax.self)])
+    }
+
+    /// Checks if the current syntax node can be cast to the type conforming to the ``TypeSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: (some TypeSyntaxProtocol).Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to the type conforming to the ``TypeSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+    public func `as`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+      return S.init(self)
+    }
+
+    /// Force-casts the current syntax node to the type conforming to the ``TypeSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+      return self.as(S.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func `is`(_ syntaxType: (some ExprSyntaxProtocol).Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+      return S.init(self)
+    }
+
+    /// Force-casts the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+      return self.as(S.self)!
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -645,15 +825,17 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - leftType: The left hand side type for a same type requirement. This can either be a regular type argument or an expression for value generics.
+  ///   - rightType: The right hand side type for a same type requirement. This can either be a regular type argument or an expression for value generics.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeLeftType: UnexpectedNodesSyntax? = nil,
-    leftType: some TypeSyntaxProtocol,
+    leftType: LeftType,
     _ unexpectedBetweenLeftTypeAndEqual: UnexpectedNodesSyntax? = nil,
     equal: TokenSyntax,
     _ unexpectedBetweenEqualAndRightType: UnexpectedNodesSyntax? = nil,
-    rightType: some TypeSyntaxProtocol,
+    rightType: RightType,
     _ unexpectedAfterRightType: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -697,9 +879,10 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
     }
   }
 
-  public var leftType: TypeSyntax {
+  /// The left hand side type for a same type requirement. This can either be a regular type argument or an expression for value generics.
+  public var leftType: LeftType {
     get {
-      return Syntax(self).child(at: 1)!.cast(TypeSyntax.self)
+      return Syntax(self).child(at: 1)!.cast(LeftType.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(SameTypeRequirementSyntax.self)
@@ -739,9 +922,10 @@ public struct SameTypeRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
     }
   }
 
-  public var rightType: TypeSyntax {
+  /// The right hand side type for a same type requirement. This can either be a regular type argument or an expression for value generics.
+  public var rightType: RightType {
     get {
-      return Syntax(self).child(at: 5)!.cast(TypeSyntax.self)
+      return Syntax(self).child(at: 5)!.cast(RightType.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(SameTypeRequirementSyntax.self)

@@ -150,7 +150,7 @@ final class TypeMemberTests: ParserTestCase {
           \.genericArgumentClause,
           GenericArgumentClauseSyntax(
             arguments: .init([
-              GenericArgumentSyntax(argument: IdentifierTypeSyntax(name: .identifier("W")))
+              GenericArgumentSyntax(argument: .type(TypeSyntax(IdentifierTypeSyntax(name: .identifier("W")))))
             ])
           )
         ),

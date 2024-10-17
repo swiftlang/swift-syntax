@@ -146,6 +146,46 @@ public struct RawGenericArgumentListSyntax: RawSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol {
+  public enum Argument: RawSyntaxNodeProtocol {
+    case type(RawTypeSyntax)
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    case expr(RawExprSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      RawTypeSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw)
+    }
+
+    public var raw: RawSyntax {
+      switch self {
+      case .type(let node):
+        return node.raw
+      case .expr(let node):
+        return node.raw
+      }
+    }
+
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawTypeSyntax.self) {
+        self = .type(node)
+      } else if let node = node.as(RawExprSyntax.self) {
+        self = .expr(node)
+      } else {
+        return nil
+      }
+    }
+
+    public init(type: some RawTypeSyntaxNodeProtocol) {
+      self = .type(RawTypeSyntax(type))
+    }
+
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    public init(expr: some RawExprSyntaxNodeProtocol) {
+      self = .expr(RawExprSyntax(expr))
+    }
+  }
+
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
     return raw.layoutView!
@@ -175,7 +215,7 @@ public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol {
 
   public init(
     _ unexpectedBeforeArgument: RawUnexpectedNodesSyntax? = nil,
-    argument: some RawTypeSyntaxNodeProtocol,
+    argument: Argument,
     _ unexpectedBetweenArgumentAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
@@ -197,8 +237,8 @@ public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var argument: RawTypeSyntax {
-    layoutView.children[1].map(RawTypeSyntax.init(raw:))!
+  public var argument: RawSyntax {
+    layoutView.children[1]!
   }
 
   public var unexpectedBetweenArgumentAndTrailingComma: RawUnexpectedNodesSyntax? {

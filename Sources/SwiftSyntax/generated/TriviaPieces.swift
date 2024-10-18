@@ -31,11 +31,11 @@ public enum TriviaPiece: Sendable {
   case carriageReturnLineFeeds(Int)
   /// A documentation block comment, starting with '/**' and ending with '*/'.
   case docBlockComment(String)
-  /// A documentation line comment, starting with '///'.
+  /// A documentation line comment, starting with '///' and excluding the trailing newline.
   case docLineComment(String)
   /// A form-feed 'f' character.
   case formfeeds(Int)
-  /// A developer line comment, starting with '//'
+  /// A developer line comment, starting with '//' and excluding the trailing newline.
   case lineComment(String)
   /// A newline '\n' character.
   case newlines(Int)

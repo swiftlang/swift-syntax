@@ -81,7 +81,7 @@ public struct OptionSetMacro {
     attachedTo decl: some DeclGroupSyntax,
     in context: some MacroExpansionContext,
     emitDiagnostics: Bool
-  ) -> (StructDeclSyntax, EnumDeclSyntax, TypeSyntax)? {
+  ) -> (StructDeclSyntax, EnumDeclSyntax, GenericArgumentSyntax.Argument)? {
     // Determine the name of the options enum.
     let optionsEnumName: String
     if case let .argumentList(arguments) = attribute.arguments,

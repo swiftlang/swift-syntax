@@ -135,7 +135,7 @@ final class ValueGenericsTests: ParserTestCase {
 
     assertParse(
       """
-      let x: Generic<-321>
+      let x: Generic<-123>
       """,
       experimentalFeatures: .valueGenerics
     )
@@ -222,7 +222,6 @@ final class ValueGenericsTests: ParserTestCase {
       experimentalFeatures: .valueGenerics
     )
 
-    // FIXME: Not the best diagnostic
     assertParse(
       """
       extension Vector where 1231️⃣: N {}
@@ -250,15 +249,6 @@ final class ValueGenericsTests: ParserTestCase {
           message: "unexpected code ': N' in extension"
         ),
       ],
-      experimentalFeatures: .valueGenerics
-    )
-  }
-
-  func testNegativeInteger() {
-    assertParse(
-      """
-      let x: Generic<-321>
-      """,
       experimentalFeatures: .valueGenerics
     )
   }

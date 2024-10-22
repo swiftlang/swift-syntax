@@ -10,6 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
+@_spi(ExperimentalLanguageFeatures)
+import SwiftParser
 import SwiftSyntax
 import XCTest
 
@@ -120,25 +122,22 @@ final class ValueGenericsTests: ParserTestCase {
       ],
       fixedSource: """
         let x: <#type#> = 123
-        """
+        """,
+      experimentalFeatures: .valueGenerics
     )
 
     assertParse(
       """
       let x: Generic<123>
-      """
+      """,
+      experimentalFeatures: .valueGenerics
     )
 
-    // FIXME?: We can't parse this either in the old parser or the swift-syntax one.
     assertParse(
       """
-      let x: Generic1️⃣<-123>
+      let x: Generic<-321>
       """,
-      diagnostics: [
-        DiagnosticSpec(
-          message: "extraneous code '<-123>' at top level"
-        )
-      ]
+      experimentalFeatures: .valueGenerics
     )
 
     assertParse(
@@ -153,31 +152,36 @@ final class ValueGenericsTests: ParserTestCase {
       ],
       fixedSource: """
         typealias One = <#type#>1
-        """
+        """,
+      experimentalFeatures: .valueGenerics
     )
 
     assertParse(
       """
       extension Vector where N == 123 {}
-      """
+      """,
+      experimentalFeatures: .valueGenerics
     )
 
     assertParse(
       """
       extension Vector where 123 == N {}
-      """
+      """,
+      experimentalFeatures: .valueGenerics
     )
 
     assertParse(
       """
       extension Vector where N == -123 {}
-      """
+      """,
+      experimentalFeatures: .valueGenerics
     )
 
     assertParse(
       """
       extension Vector where -123 == N {}
-      """
+      """,
+      experimentalFeatures: .valueGenerics
     )
 
     assertParse(
@@ -195,7 +199,8 @@ final class ValueGenericsTests: ParserTestCase {
       ],
       fixedSource: """
         extension Vector where N: <#type#> 123 {}
-        """
+        """,
+      experimentalFeatures: .valueGenerics
     )
 
     assertParse(
@@ -213,7 +218,8 @@ final class ValueGenericsTests: ParserTestCase {
       ],
       fixedSource: """
         extension Vector where N: <#type#> -123 {}
-        """
+        """,
+      experimentalFeatures: .valueGenerics
     )
 
     // FIXME: Not the best diagnostic
@@ -228,7 +234,8 @@ final class ValueGenericsTests: ParserTestCase {
         DiagnosticSpec(
           message: "unexpected code ': N' in extension"
         ),
-      ]
+      ],
+      experimentalFeatures: .valueGenerics
     )
 
     assertParse(
@@ -242,7 +249,17 @@ final class ValueGenericsTests: ParserTestCase {
         DiagnosticSpec(
           message: "unexpected code ': N' in extension"
         ),
-      ]
+      ],
+      experimentalFeatures: .valueGenerics
+    )
+  }
+
+  func testNegativeInteger() {
+    assertParse(
+      """
+      let x: Generic<-321>
+      """,
+      experimentalFeatures: .valueGenerics
     )
   }
 }

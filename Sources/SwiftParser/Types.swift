@@ -295,7 +295,7 @@ extension Parser {
             name = missingToken(.identifier)
           }
           let generics: RawGenericArgumentClauseSyntax?
-          if self.atContextualPunctuator("<") {
+          if self.at(prefix: "<") {
             generics = self.parseGenericArguments()
           } else {
             generics = nil
@@ -702,15 +702,6 @@ extension Parser.Lookahead {
         fallthrough
       }
 
-      // '-123' for value generics.
-      if self.currentToken.tokenText == "-",
-        self.peek(isAt: .integerLiteral)
-      {
-        self.consumeAnyToken()
-        self.consumeAnyToken()
-        return true
-      }
-
       return false
     case TokenSpec(.Self), TokenSpec(.identifier):
       guard self.canParseTypeIdentifier() else {
@@ -861,7 +852,7 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseAsGenericArgumentList() -> Bool {
-    guard self.atContextualPunctuator("<") else {
+    guard self.at(prefix: "<") else {
       return false
     }
 
@@ -881,9 +872,21 @@ extension Parser.Lookahead {
     if !self.at(prefix: ">") {
       var loopProgress = LoopProgressCondition()
       repeat {
-        guard self.canParseType() else {
-          return false
+        // A generic argument can either be a type or an integer literal (who is
+        // optionally negative).
+        if self.canParseType() {
+          continue
+        } else if self.currentToken.tokenText == "-",
+          self.peek(isAt: .integerLiteral)
+        {
+          self.consumeAnyToken()
+          self.consumeAnyToken()
+          continue
+        } else if self.consume(if: .integerLiteral) != nil {
+          continue
         }
+        
+        return false
         // Parse the comma, if the list continues.
       } while self.consume(if: .comma) != nil && self.hasProgressed(&loopProgress)
     }

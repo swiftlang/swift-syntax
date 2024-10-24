@@ -139,7 +139,49 @@ final class ValueGenericsTests: ParserTestCase {
       """,
       experimentalFeatures: .valueGenerics
     )
+    
+    assertParse(
+      """
+      let x = Generic<123>.self
+      """,
+      experimentalFeatures: .valueGenerics
+    )
 
+    assertParse(
+      """
+      let x = Generic<-123>.self
+      """,
+      experimentalFeatures: .valueGenerics
+    )
+
+    assertParse(
+      """
+      let x = Generic<123, Int>.self
+      """,
+      experimentalFeatures: .valueGenerics
+    )
+
+    assertParse(
+      """
+      let x = Generic<-123, Int>.self
+      """,
+      experimentalFeatures: .valueGenerics
+    )
+    
+    assertParse(
+      """
+      let x = Generic<Int, 123>.self
+      """,
+      experimentalFeatures: .valueGenerics
+    )
+
+    assertParse(
+      """
+      let x: Generic<Int, -123>.self
+      """,
+      experimentalFeatures: .valueGenerics
+    )
+    
     assertParse(
       """
       typealias One = 1️⃣1
@@ -250,6 +292,19 @@ final class ValueGenericsTests: ParserTestCase {
         ),
       ],
       experimentalFeatures: .valueGenerics
+    )
+    
+    assertParse(
+      "func foo() -> (1️⃣-1) X",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected type in tuple type",
+          fixIts: ["insert type"]
+        ),
+        DiagnosticSpec(message: "unexpected code '-1' in tuple type"),
+      ],
+      fixedSource: "func foo() -> (<#type#>-1) X",
+      experimentalFeatures: [.valueGenerics]
     )
   }
 }

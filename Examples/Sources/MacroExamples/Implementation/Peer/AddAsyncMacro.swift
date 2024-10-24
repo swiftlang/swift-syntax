@@ -82,7 +82,7 @@ public struct AddAsyncMacro: PeerMacro {
         successReturnType = type
 
       case .some(.expr(_)):
-        fatalError("expression not available here")
+        throw CustomError.message("Found unexpected value generic in Result type")
 
       case .none:
         successReturnType = nil

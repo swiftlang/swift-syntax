@@ -852,7 +852,7 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseAsGenericArgumentList() -> Bool {
-    guard self.at(prefix: "<") else {
+    guard self.at(prefix: "<"), !self.at(prefix: "<>") else {
       return false
     }
 

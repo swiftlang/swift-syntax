@@ -1393,7 +1393,7 @@ private extension AccessorBlockSyntax {
         accessorSpecifier: .keyword(.get, leadingTrivia: .newline + baseIndentation, trailingTrivia: .space),
         body: CodeBlockSyntax(
           leftBrace: .leftBraceToken(),
-          statements: Indenter.indent(getter, indentation: indentationWidth),
+          statements: getter.indented(by: indentationWidth),
           rightBrace: .rightBraceToken(leadingTrivia: .newline + baseIndentation)
         )
       )

@@ -50,6 +50,7 @@ extension EnumDeclSyntax: DeclSyntaxParseable {}
 extension ExtensionDeclSyntax: DeclSyntaxParseable {}
 extension FunctionDeclSyntax: DeclSyntaxParseable {}
 extension ImportDeclSyntax: DeclSyntaxParseable {}
+extension InitializerDeclSyntax: DeclSyntaxParseable {}
 extension VariableDeclSyntax: DeclSyntaxParseable {}
 extension MacroDeclSyntax: DeclSyntaxParseable {}
 extension OperatorDeclSyntax: DeclSyntaxParseable {}

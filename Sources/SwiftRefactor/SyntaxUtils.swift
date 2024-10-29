@@ -31,13 +31,3 @@ extension Trivia {
     return Trivia(pieces: self.reversed().drop(while: \.isWhitespace).reversed())
   }
 }
-
-extension TypeSyntax {
-  var isVoid: Bool {
-    switch self.as(TypeSyntaxEnum.self) {
-    case .identifierType(let identifierType) where identifierType.name.text == "Void": return true
-    case .tupleType(let tupleType) where tupleType.elements.isEmpty: return true
-    default: return false
-    }
-  }
-}

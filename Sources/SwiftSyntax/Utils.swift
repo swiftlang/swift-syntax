@@ -102,3 +102,29 @@ extension RawUnexpectedNodesSyntax {
     self.init(raw: raw)
   }
 }
+
+extension TypeSyntax {
+  public var isVoid: Bool {
+    switch self.as(TypeSyntaxEnum.self) {
+    case .identifierType(let identifierType) where identifierType.name.text == "Void": return true
+    case .tupleType(let tupleType) where tupleType.elements.isEmpty: return true
+    case .memberType(let memberType) where memberType.name.text == "Void": return memberType.baseType.isSwiftCoreModule
+    default: return false
+    }
+  }
+
+  public var isSwiftInt: Bool {
+    switch self.as(TypeSyntaxEnum.self) {
+    case .identifierType(let identifierType) where identifierType.name.text == "Int": return true
+    case .memberType(let memberType) where memberType.name.text == "Int": return memberType.baseType.isSwiftCoreModule
+    default: return false
+    }
+  }
+
+  public var isSwiftCoreModule: Bool {
+    guard let identifierType = self.as(IdentifierTypeSyntax.self) else {
+      return false
+    }
+    return identifierType.name.text == "Swift"
+  }
+}

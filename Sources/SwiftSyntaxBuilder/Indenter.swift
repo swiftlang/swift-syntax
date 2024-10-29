@@ -30,7 +30,7 @@ extension Trivia {
 }
 
 /// Adds a given amount of indentation after every newline in a syntax tree.
-@available(*, deprecated, message: "Use 'indented(by:)' from SwiftBasicFormat instead")
+@available(*, deprecated, message: "Use 'SyntaxProtocol.indented(by:)' from SwiftBasicFormat instead")
 public class Indenter: SyntaxRewriter {
   let indentation: Trivia
 

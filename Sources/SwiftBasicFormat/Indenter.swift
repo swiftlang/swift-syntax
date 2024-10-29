@@ -38,7 +38,7 @@ private class Indenter: SyntaxRewriter {
     self.shouldIndent = indentFirstLine
   }
 
-  private func indentIfNeeded() -> [TriviaPiece] {
+  private func indentationIfNeeded() -> [TriviaPiece] {
     if shouldIndent {
       shouldIndent = false
       return indentation.pieces
@@ -60,7 +60,7 @@ private class Indenter: SyntaxRewriter {
     result.reserveCapacity(trivia.count)
 
     for piece in trivia.pieces {
-      result.append(contentsOf: indentIfNeeded())
+      result.append(contentsOf: indentationIfNeeded())
       switch piece {
       case .newlines, .carriageReturns, .carriageReturnLineFeeds:
         shouldIndent = true
@@ -76,7 +76,7 @@ private class Indenter: SyntaxRewriter {
         result.append(piece)
       }
     }
-    result.append(contentsOf: indentIfNeeded())
+    result.append(contentsOf: indentationIfNeeded())
     return Trivia(pieces: result)
   }
 

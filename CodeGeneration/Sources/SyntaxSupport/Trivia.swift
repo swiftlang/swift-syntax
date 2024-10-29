@@ -150,7 +150,7 @@ public let TRIVIAS: [Trivia] = [
 
   Trivia(
     name: "DocLineComment",
-    comment: #"A documentation line comment, starting with '///'."#,
+    comment: #"A documentation line comment, starting with '///' and excluding the trailing newline."#,
     isComment: true
   ),
 
@@ -168,7 +168,7 @@ public let TRIVIAS: [Trivia] = [
 
   Trivia(
     name: "LineComment",
-    comment: #"A developer line comment, starting with '//'"#,
+    comment: #"A developer line comment, starting with '//' and excluding the trailing newline."#,
     isComment: true
   ),
 

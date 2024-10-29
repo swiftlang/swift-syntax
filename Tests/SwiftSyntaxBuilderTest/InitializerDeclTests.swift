@@ -87,4 +87,14 @@ final class InitializerDeclTests: XCTestCase {
       """
     )
   }
+
+  func testParseableInitializer() throws {
+    assertBuildResult(
+      try InitializerDeclSyntax("init() {}"),
+      """
+      init() {
+      }
+      """
+    )
+  }
 }

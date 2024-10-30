@@ -25,7 +25,12 @@ fileprivate func assertIndented(
   file: StaticString = #filePath,
   line: UInt = #line
 ) {
-  assertStringsEqualWithDiff(Parser.parse(source: source).indented(by: indentation, indentFirstLine: indentFirstLine).description, expected, file: file, line: line)
+  assertStringsEqualWithDiff(
+    Parser.parse(source: source).indented(by: indentation, indentFirstLine: indentFirstLine).description,
+    expected,
+    file: file,
+    line: line
+  )
 }
 
 final class IndentTests: XCTestCase {

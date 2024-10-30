@@ -87,12 +87,14 @@ private class Indenter: SyntaxRewriter {
     // newline here is before the start of the trailing trivia (since
     // it is part of the string’s value)
     if case .stringSegment(let content) = token.tokenKind,
-       let last = content.last,
-       last.isNewline {
+      let last = content.last,
+      last.isNewline
+    {
       shouldIndent = true
     }
 
-    return token
+    return
+      token
       .with(\.leadingTrivia, indentedLeadingTrivia)
       // source files as parsed can’t have anything requiring indentation
       // here, but it’s easy to do `.with(\.trailingTrivia, .newline)` so

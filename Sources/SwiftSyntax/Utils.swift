@@ -103,28 +103,64 @@ extension RawUnexpectedNodesSyntax {
   }
 }
 
-extension TypeSyntax {
+extension TypeSyntaxProtocol {
+  /// Check if this syntax matches any of the standard names for `Void`:
+  /// * Void
+  /// * Swift.Void
+  /// * ()
   public var isVoid: Bool {
-    switch self.as(TypeSyntaxEnum.self) {
-    case .identifierType(let identifierType) where identifierType.name.text == "Void": return true
-    case .tupleType(let tupleType) where tupleType.elements.isEmpty: return true
-    case .memberType(let memberType) where memberType.name.text == "Void": return memberType.baseType.isSwiftCoreModule
-    default: return false
+    if let identifierType = self.as(IdentifierTypeSyntax.self) {
+      return identifierType.name.text == "Void"
     }
+    if let memberType = self.as(MemberTypeSyntax.self) {
+      return memberType.baseType.isSwiftCoreModule && memberType.name.text == "Void"
+    }
+    if let tupleType = self.as(TupleTypeSyntax.self) {
+      return tupleType.elements.isEmpty
+    }
+    return false
   }
 
-  public var isSwiftInt: Bool {
-    switch self.as(TypeSyntaxEnum.self) {
-    case .identifierType(let identifierType) where identifierType.name.text == "Int": return true
-    case .memberType(let memberType) where memberType.name.text == "Int": return memberType.baseType.isSwiftCoreModule
-    default: return false
-    }
-  }
-
-  public var isSwiftCoreModule: Bool {
+  var isSwiftCoreModule: Bool {
     guard let identifierType = self.as(IdentifierTypeSyntax.self) else {
       return false
     }
     return identifierType.name.text == "Swift"
+  }
+
+  /// Check if this syntax could resolve to the type passed. Only supports types where the canonical type
+  /// can be named using only IdentifierTypeSyntax and MemberTypeSyntax. A non-exhaustive list of unsupported
+  /// types includes:
+  /// * array types
+  /// * function types
+  /// * optional types
+  /// * tuple types (including Void!)
+  /// The type syntax is allowed to use any level of qualified name for the type, e.g. Swift.Int.self
+  /// will match against both "Swift.Int" and "Int".
+  ///
+  /// - Parameter type: Type to check against. NB: if passing a type alias, the canonical type will be used.
+  /// - Returns: true if `self` spells out some suffix of the fully qualified name of `type`, otherwise false
+  public func canRepresentBasicType(type: Any.Type) -> Bool {
+    let qualifiedTypeName = String(reflecting: type)
+    var typeNames = qualifiedTypeName.split(separator: ".")
+    var currType: TypeSyntaxProtocol = self
+
+    while !typeNames.isEmpty {
+      let typeName = typeNames.popLast()!
+      if let identifierType = currType.as(IdentifierTypeSyntax.self) {
+        // It doesn't matter whether this is the final element of typeNames, because we don't know
+        // surrounding context - the Foo.Bar.Baz type can be referred to as `Baz` inside Foo.Bar
+        return identifierType.name.text == typeName
+      } else if let memberType = currType.as(MemberTypeSyntax.self) {
+        if memberType.name.text != typeName {
+          return false
+        }
+        currType = memberType.baseType
+      } else {
+        return false
+      }
+    }
+
+    return false
   }
 }

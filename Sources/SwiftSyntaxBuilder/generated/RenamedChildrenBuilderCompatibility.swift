@@ -62,7 +62,56 @@ extension AccessorDeclSyntax {
 }
 
 extension ActorDeclSyntax {
-  @available(*, deprecated, message: "Use an initializer with name argument(s).")
+  @available(*, deprecated, message: "Use an initializer with actorHeader argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+    leadingTrivia: Trivia? = nil,
+    unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? = nil,
+    actorKeyword: TokenSyntax = .keyword(.actor),
+    unexpectedBetweenActorKeywordAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
+    unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+    inheritanceClause: InheritanceClauseSyntax? = nil,
+    unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax,
+    trailingTrivia: Trivia? = nil
+  ) rethrows {
+    try self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      attributes: attributes,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers: modifiers,
+      unexpectedBetweenModifiersAndActorKeyword,
+      actorKeyword: actorKeyword,
+      unexpectedBetweenActorKeywordAndName,
+      name: name,
+      unexpectedBetweenNameAndGenericParameterClause,
+      genericParameterClause: genericParameterClause,
+      unexpectedBetweenGenericParameterClauseAndInheritanceClause,
+      inheritanceClause: inheritanceClause,
+      unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+      genericWhereClause: genericWhereClause,
+      unexpectedBetweenGenericWhereClauseAndMemberBlock,
+      memberBlock: MemberBlockSyntax(members: memberBlockBuilder()),
+      unexpectedAfterMemberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension ActorDeclSyntax {
+  @available(*, deprecated, message: "Use an initializer with actorHeader argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -140,7 +189,56 @@ extension ArrayExprSyntax {
 }
 
 extension ClassDeclSyntax {
-  @available(*, deprecated, message: "Use an initializer with name argument(s).")
+  @available(*, deprecated, message: "Use an initializer with classHeader argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+    leadingTrivia: Trivia? = nil,
+    unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil,
+    classKeyword: TokenSyntax = .keyword(.class),
+    unexpectedBetweenClassKeywordAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
+    unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+    inheritanceClause: InheritanceClauseSyntax? = nil,
+    unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax,
+    trailingTrivia: Trivia? = nil
+  ) rethrows {
+    try self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      attributes: attributes,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers: modifiers,
+      unexpectedBetweenModifiersAndClassKeyword,
+      classKeyword: classKeyword,
+      unexpectedBetweenClassKeywordAndName,
+      name: name,
+      unexpectedBetweenNameAndGenericParameterClause,
+      genericParameterClause: genericParameterClause,
+      unexpectedBetweenGenericParameterClauseAndInheritanceClause,
+      inheritanceClause: inheritanceClause,
+      unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+      genericWhereClause: genericWhereClause,
+      unexpectedBetweenGenericWhereClauseAndMemberBlock,
+      memberBlock: MemberBlockSyntax(members: memberBlockBuilder()),
+      unexpectedAfterMemberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension ClassDeclSyntax {
+  @available(*, deprecated, message: "Use an initializer with classHeader argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -189,7 +287,56 @@ extension ClassDeclSyntax {
 }
 
 extension EnumDeclSyntax {
-  @available(*, deprecated, message: "Use an initializer with name, genericParameterClause argument(s).")
+  @available(*, deprecated, message: "Use an initializer with enumHeader argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+    leadingTrivia: Trivia? = nil,
+    unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? = nil,
+    enumKeyword: TokenSyntax = .keyword(.enum),
+    unexpectedBetweenEnumKeywordAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
+    unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+    inheritanceClause: InheritanceClauseSyntax? = nil,
+    unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax,
+    trailingTrivia: Trivia? = nil
+  ) rethrows {
+    try self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      attributes: attributes,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers: modifiers,
+      unexpectedBetweenModifiersAndEnumKeyword,
+      enumKeyword: enumKeyword,
+      unexpectedBetweenEnumKeywordAndName,
+      name: name,
+      unexpectedBetweenNameAndGenericParameterClause,
+      genericParameterClause: genericParameterClause,
+      unexpectedBetweenGenericParameterClauseAndInheritanceClause,
+      inheritanceClause: inheritanceClause,
+      unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+      genericWhereClause: genericWhereClause,
+      unexpectedBetweenGenericWhereClauseAndMemberBlock,
+      memberBlock: MemberBlockSyntax(members: memberBlockBuilder()),
+      unexpectedAfterMemberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension EnumDeclSyntax {
+  @available(*, deprecated, message: "Use an initializer with enumHeader argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -269,6 +416,51 @@ extension ExpressionSegmentSyntax {
       unexpectedBetweenExpressionsAndRightParen,
       rightParen: rightParen,
       unexpectedAfterRightParen,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension ExtensionDeclSyntax {
+  @available(*, deprecated, message: "Use an initializer with extensionHeader argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+    leadingTrivia: Trivia? = nil,
+    unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodesSyntax? = nil,
+    extensionKeyword: TokenSyntax = .keyword(.extension),
+    unexpectedBetweenExtensionKeywordAndExtendedType: UnexpectedNodesSyntax? = nil,
+    extendedType: TypeSyntaxProtocol,
+    unexpectedBetweenExtendedTypeAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+    inheritanceClause: InheritanceClauseSyntax? = nil,
+    unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax,
+    trailingTrivia: Trivia? = nil
+  ) rethrows {
+    try self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      attributes: attributes,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers: modifiers,
+      unexpectedBetweenModifiersAndExtensionKeyword,
+      extensionKeyword: extensionKeyword,
+      unexpectedBetweenExtensionKeywordAndExtendedType,
+      extendedType: TypeSyntax(fromProtocol: extendedType),
+      unexpectedBetweenExtendedTypeAndInheritanceClause,
+      inheritanceClause: inheritanceClause,
+      unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+      genericWhereClause: genericWhereClause,
+      unexpectedBetweenGenericWhereClauseAndMemberBlock,
+      memberBlock: MemberBlockSyntax(members: memberBlockBuilder()),
+      unexpectedAfterMemberBlock,
       trailingTrivia: trailingTrivia
     )
   }
@@ -700,7 +892,56 @@ extension MacroExpansionExprSyntax {
 }
 
 extension ProtocolDeclSyntax {
-  @available(*, deprecated, message: "Use an initializer with name argument(s).")
+  @available(*, deprecated, message: "Use an initializer with protocolHeader argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+    leadingTrivia: Trivia? = nil,
+    unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? = nil,
+    protocolKeyword: TokenSyntax = .keyword(.protocol),
+    unexpectedBetweenProtocolKeywordAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    unexpectedBetweenNameAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? = nil,
+    primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? = nil,
+    unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+    inheritanceClause: InheritanceClauseSyntax? = nil,
+    unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax,
+    trailingTrivia: Trivia? = nil
+  ) rethrows {
+    try self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      attributes: attributes,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers: modifiers,
+      unexpectedBetweenModifiersAndProtocolKeyword,
+      protocolKeyword: protocolKeyword,
+      unexpectedBetweenProtocolKeywordAndName,
+      name: name,
+      unexpectedBetweenNameAndPrimaryAssociatedTypeClause,
+      primaryAssociatedTypeClause: primaryAssociatedTypeClause,
+      unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause,
+      inheritanceClause: inheritanceClause,
+      unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+      genericWhereClause: genericWhereClause,
+      unexpectedBetweenGenericWhereClauseAndMemberBlock,
+      memberBlock: MemberBlockSyntax(members: memberBlockBuilder()),
+      unexpectedAfterMemberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension ProtocolDeclSyntax {
+  @available(*, deprecated, message: "Use an initializer with protocolHeader argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -778,7 +1019,56 @@ extension SourceFileSyntax {
 }
 
 extension StructDeclSyntax {
-  @available(*, deprecated, message: "Use an initializer with name argument(s).")
+  @available(*, deprecated, message: "Use an initializer with structHeader argument(s).")
+  @_disfavoredOverload
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+    leadingTrivia: Trivia? = nil,
+    unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil,
+    structKeyword: TokenSyntax = .keyword(.struct),
+    unexpectedBetweenStructKeywordAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
+    unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+    inheritanceClause: InheritanceClauseSyntax? = nil,
+    unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    @MemberBlockItemListBuilder memberBlockBuilder: () throws -> MemberBlockItemListSyntax,
+    trailingTrivia: Trivia? = nil
+  ) rethrows {
+    try self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      attributes: attributes,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers: modifiers,
+      unexpectedBetweenModifiersAndStructKeyword,
+      structKeyword: structKeyword,
+      unexpectedBetweenStructKeywordAndName,
+      name: name,
+      unexpectedBetweenNameAndGenericParameterClause,
+      genericParameterClause: genericParameterClause,
+      unexpectedBetweenGenericParameterClauseAndInheritanceClause,
+      inheritanceClause: inheritanceClause,
+      unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+      genericWhereClause: genericWhereClause,
+      unexpectedBetweenGenericWhereClauseAndMemberBlock,
+      memberBlock: MemberBlockSyntax(members: memberBlockBuilder()),
+      unexpectedAfterMemberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension StructDeclSyntax {
+  @available(*, deprecated, message: "Use an initializer with structHeader argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(

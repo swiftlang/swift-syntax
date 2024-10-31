@@ -27,7 +27,7 @@ public struct RawDeclGroupHeaderSyntax: RawDeclGroupHeaderSyntaxNodeProtocol {
 
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
     switch raw.kind {
-    case .missingDeclHeader:
+    case .actorDeclHeader, .classDeclHeader, .enumDeclHeader, .extensionDeclHeader, .missingDeclHeader, .protocolDeclHeader, .structDeclHeader:
       return true
     default:
       return false

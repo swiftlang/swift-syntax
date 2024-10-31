@@ -736,7 +736,7 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(node: .attributedType, message: "child 'baseType' should not end with 'Type'"),
         ValidationFailure(node: .conformanceRequirement, message: "child 'leftType' should not end with 'Type'"),
         ValidationFailure(node: .conformanceRequirement, message: "child 'rightType' should not end with 'Type'"),
-        ValidationFailure(node: .extensionDecl, message: "child 'extendedType' should not end with 'Type'"),
+        ValidationFailure(node: .extensionDeclHeader, message: "child 'extendedType' should not end with 'Type'"),
         ValidationFailure(node: .genericParameter, message: "child 'inheritedType' should not end with 'Type'"),
         ValidationFailure(
           node: .implicitlyUnwrappedOptionalType,

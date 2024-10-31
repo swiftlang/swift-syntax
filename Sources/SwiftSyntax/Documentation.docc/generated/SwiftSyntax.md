@@ -336,8 +336,10 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/AccessorBlockSyntax>
 - <doc:SwiftSyntax/AccessorEffectSpecifiersSyntax>
 - <doc:SwiftSyntax/AccessorParametersSyntax>
+- <doc:SwiftSyntax/ActorDeclHeaderSyntax>
 - <doc:SwiftSyntax/AvailabilityConditionSyntax>
 - <doc:SwiftSyntax/AvailabilityLabeledArgumentSyntax>
+- <doc:SwiftSyntax/ClassDeclHeaderSyntax>
 - <doc:SwiftSyntax/ClosureCaptureClauseSyntax>
 - <doc:SwiftSyntax/ClosureCaptureSpecifierSyntax>
 - <doc:SwiftSyntax/ClosureParameterClauseSyntax>
@@ -349,6 +351,8 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/DeclNameArgumentsSyntax>
 - <doc:SwiftSyntax/DeinitializerEffectSpecifiersSyntax>
 - <doc:SwiftSyntax/EnumCaseParameterClauseSyntax>
+- <doc:SwiftSyntax/EnumDeclHeaderSyntax>
+- <doc:SwiftSyntax/ExtensionDeclHeaderSyntax>
 - <doc:SwiftSyntax/FunctionEffectSpecifiersSyntax>
 - <doc:SwiftSyntax/FunctionParameterClauseSyntax>
 - <doc:SwiftSyntax/FunctionSignatureSyntax>
@@ -369,9 +373,11 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/PlatformVersionSyntax>
 - <doc:SwiftSyntax/PoundSourceLocationArgumentsSyntax>
 - <doc:SwiftSyntax/PrimaryAssociatedTypeClauseSyntax>
+- <doc:SwiftSyntax/ProtocolDeclHeaderSyntax>
 - <doc:SwiftSyntax/ReturnClauseSyntax>
 - <doc:SwiftSyntax/SameTypeRequirementSyntax>
 - <doc:SwiftSyntax/SourceFileSyntax>
+- <doc:SwiftSyntax/StructDeclHeaderSyntax>
 - <doc:SwiftSyntax/SwitchCaseLabelSyntax>
 - <doc:SwiftSyntax/SwitchDefaultLabelSyntax>
 - <doc:SwiftSyntax/ThrowsClauseSyntax>
@@ -389,6 +395,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/EffectSpecifiersSyntax>
 - <doc:SwiftSyntax/FreestandingMacroExpansionSyntax>
 - <doc:SwiftSyntax/NamedDeclSyntax>
+- <doc:SwiftSyntax/NamedDeclHeaderSyntax>
 - <doc:SwiftSyntax/MissingNodeSyntax>
 - <doc:SwiftSyntax/ParenthesizedSyntax>
 - <doc:SwiftSyntax/WithAttributesSyntax>

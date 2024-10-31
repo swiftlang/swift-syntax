@@ -27,6 +27,8 @@ extension SyntaxKind {
       return "accessor"
     case .accessorEffectSpecifiers:
       return "accessor specifiers"
+    case .actorDeclHeader:
+      return "actor"
     case .actorDecl:
       return "actor"
     case .arrayElement:
@@ -71,6 +73,8 @@ extension SyntaxKind {
       return "'catch' clause"
     case .catchClause:
       return "'catch' clause"
+    case .classDeclHeader:
+      return "class"
     case .classDecl:
       return "class"
     case .closureCaptureClause:
@@ -159,6 +163,8 @@ extension SyntaxKind {
       return "parameter list"
     case .enumCaseParameter:
       return "parameter"
+    case .enumDeclHeader:
+      return "enum"
     case .enumDecl:
       return "enum"
     case .exposeAttributeArguments:
@@ -167,6 +173,8 @@ extension SyntaxKind {
       return "pattern"
     case .expressionStmt:
       return "expression"
+    case .extensionDeclHeader:
+      return "extension"
     case .extensionDecl:
       return "extension"
     case .fallThroughStmt:
@@ -329,6 +337,8 @@ extension SyntaxKind {
       return "operator"
     case .primaryAssociatedTypeClause:
       return "primary associated type clause"
+    case .protocolDeclHeader:
+      return "protocol"
     case .protocolDecl:
       return "protocol"
     case .regexLiteralExpr:
@@ -355,6 +365,8 @@ extension SyntaxKind {
       return "attribute argument"
     case .stringLiteralExpr:
       return "string literal"
+    case .structDeclHeader:
+      return "struct"
     case .structDecl:
       return "struct"
     case .subscriptCallExpr:

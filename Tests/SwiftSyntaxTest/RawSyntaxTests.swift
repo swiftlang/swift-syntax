@@ -52,7 +52,7 @@ fileprivate func cannedStructDecl(arena: ParsingSyntaxArena) -> RawStructDeclSyn
     rightBrace: rBrace,
     arena: arena
   )
-  return RawStructDeclSyntax(
+  let header = RawStructDeclHeaderSyntax(
     attributes: RawAttributeListSyntax(elements: [], arena: arena),
     modifiers: RawDeclModifierListSyntax(elements: [], arena: arena),
     structKeyword: structKW,
@@ -60,6 +60,10 @@ fileprivate func cannedStructDecl(arena: ParsingSyntaxArena) -> RawStructDeclSyn
     genericParameterClause: nil,
     inheritanceClause: nil,
     genericWhereClause: nil,
+    arena: arena
+  )
+  return RawStructDeclSyntax(
+    structHeader: header,
     memberBlock: memberBlock,
     arena: arena
   )
@@ -83,8 +87,8 @@ final class RawSyntaxTests: XCTestCase {
   func testAccessor() {
     withExtendedLifetime(ParsingSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
       let structDecl = cannedStructDecl(arena: arena)
-      XCTAssertEqual(structDecl.name.tokenKind, .identifier)
-      XCTAssertEqual(structDecl.structKeyword.tokenText, "struct")
+      XCTAssertEqual(structDecl.structHeader.name.tokenKind, .identifier)
+      XCTAssertEqual(structDecl.structHeader.structKeyword.tokenText, "struct")
       XCTAssertEqual(structDecl.memberBlock.leftBrace.tokenText, "{")
       XCTAssertEqual(structDecl.memberBlock.members.elements.count, 0)
 

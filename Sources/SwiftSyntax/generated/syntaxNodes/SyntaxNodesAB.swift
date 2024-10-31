@@ -781,7 +781,7 @@ public struct AccessorParametersSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
   ])
 }
 
-// MARK: - ActorDeclSyntax
+// MARK: - ActorDeclHeaderSyntax
 
 /// ### Children
 /// 
@@ -792,12 +792,15 @@ public struct AccessorParametersSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
-///  - `memberBlock`: ``MemberBlockSyntax``
-public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
+///
+/// ### Contained in
+/// 
+///  - ``ActorDeclSyntax``.``ActorDeclSyntax/actorHeader``
+public struct ActorDeclHeaderSyntax: DeclGroupHeaderSyntaxProtocol, SyntaxHashable, _LeafDeclGroupHeaderSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .actorDecl else {
+    guard node.raw.kind == .actorDeclHeader else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -827,9 +830,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     inheritanceClause: InheritanceClauseSyntax? = nil,
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax? = nil,
-    _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-    memberBlock: MemberBlockSyntax,
-    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
@@ -849,9 +850,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       inheritanceClause,
       unexpectedBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause,
-      unexpectedBetweenGenericWhereClauseAndMemberBlock,
-      memberBlock,
-      unexpectedAfterMemberBlock
+      unexpectedAfterGenericWhereClause
     ))) { (arena, _) in
       let layout: [RawSyntax?] = [
         unexpectedBeforeAttributes?.raw,
@@ -868,12 +867,10 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
         inheritanceClause?.raw,
         unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
         genericWhereClause?.raw,
-        unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw,
-        memberBlock.raw,
-        unexpectedAfterMemberBlock?.raw
+        unexpectedAfterGenericWhereClause?.raw
       ]
       let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.actorDecl,
+        kind: SyntaxKind.actorDeclHeader,
         from: layout,
         arena: arena,
         leadingTrivia: leadingTrivia,
@@ -888,7 +885,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclHeaderSyntax.self)
     }
   }
 
@@ -897,7 +894,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclHeaderSyntax.self)
     }
   }
 
@@ -909,7 +906,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
   @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
-  public func addAttribute(_ element: Syntax) -> ActorDeclSyntax {
+  public func addAttribute(_ element: Syntax) -> ActorDeclHeaderSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
@@ -925,7 +922,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
         rawNodeArena: arena,
         allocationArena: arena
       )
-      .cast(ActorDeclSyntax.self)
+      .cast(ActorDeclHeaderSyntax.self)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
@@ -933,7 +930,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclHeaderSyntax.self)
     }
   }
 
@@ -943,7 +940,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclHeaderSyntax.self)
     }
   }
 
@@ -955,7 +952,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
   @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
-  public func addModifier(_ element: DeclModifierSyntax) -> ActorDeclSyntax {
+  public func addModifier(_ element: DeclModifierSyntax) -> ActorDeclHeaderSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
@@ -971,7 +968,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
         rawNodeArena: arena,
         allocationArena: arena
       )
-      .cast(ActorDeclSyntax.self)
+      .cast(ActorDeclHeaderSyntax.self)
   }
 
   public var unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? {
@@ -979,7 +976,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclHeaderSyntax.self)
     }
   }
 
@@ -993,7 +990,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclHeaderSyntax.self)
     }
   }
 
@@ -1002,7 +999,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclHeaderSyntax.self)
     }
   }
 
@@ -1016,7 +1013,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return Syntax(self).child(at: 7)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclHeaderSyntax.self)
     }
   }
 
@@ -1025,7 +1022,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclHeaderSyntax.self)
     }
   }
 
@@ -1035,7 +1032,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return Syntax(self).child(at: 9)?.cast(GenericParameterClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclHeaderSyntax.self)
     }
   }
 
@@ -1044,7 +1041,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclHeaderSyntax.self)
     }
   }
 
@@ -1053,7 +1050,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return Syntax(self).child(at: 11)?.cast(InheritanceClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclHeaderSyntax.self)
     }
   }
 
@@ -1062,7 +1059,7 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclHeaderSyntax.self)
     }
   }
 
@@ -1072,34 +1069,16 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return Syntax(self).child(at: 13)?.cast(GenericWhereClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclHeaderSyntax.self)
     }
   }
 
-  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
+  public var unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
-    }
-  }
-
-  public var memberBlock: MemberBlockSyntax {
-    get {
-      return Syntax(self).child(at: 15)!.cast(MemberBlockSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 15, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
-    }
-  }
-
-  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 16)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 16, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclHeaderSyntax.self)
     }
   }
 
@@ -1118,7 +1097,116 @@ public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     \Self.inheritanceClause,
     \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause,
     \Self.genericWhereClause,
-    \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock,
+    \Self.unexpectedAfterGenericWhereClause
+  ])
+}
+
+// MARK: - ActorDeclSyntax
+
+/// ### Children
+/// 
+///  - `actorHeader`: ``ActorDeclHeaderSyntax``
+///  - `memberBlock`: ``MemberBlockSyntax``
+public struct ActorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
+  public let _syntaxNode: Syntax
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard node.raw.kind == .actorDecl else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - actorHeader: The header of the actor declaration.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeActorHeader: UnexpectedNodesSyntax? = nil,
+    actorHeader: ActorDeclHeaderSyntax,
+    _ unexpectedBetweenActorHeaderAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    memberBlock: MemberBlockSyntax,
+    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((SyntaxArena(), (
+      unexpectedBeforeActorHeader,
+      actorHeader,
+      unexpectedBetweenActorHeaderAndMemberBlock,
+      memberBlock,
+      unexpectedAfterMemberBlock
+    ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeActorHeader?.raw,
+        actorHeader.raw,
+        unexpectedBetweenActorHeaderAndMemberBlock?.raw,
+        memberBlock.raw,
+        unexpectedAfterMemberBlock?.raw
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.actorDecl,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeActorHeader: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+    }
+  }
+
+  /// The header of the actor declaration.
+  public var actorHeader: ActorDeclHeaderSyntax {
+    get {
+      return Syntax(self).child(at: 1)!.cast(ActorDeclHeaderSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenActorHeaderAndMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+    }
+  }
+
+  public var memberBlock: MemberBlockSyntax {
+    get {
+      return Syntax(self).child(at: 3)!.cast(MemberBlockSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ActorDeclSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([
+    \Self.unexpectedBeforeActorHeader,
+    \Self.actorHeader,
+    \Self.unexpectedBetweenActorHeaderAndMemberBlock,
     \Self.memberBlock,
     \Self.unexpectedAfterMemberBlock
   ])

@@ -103,37 +103,235 @@ extension AccessorDeclSyntax {
 }
 
 extension ActorDeclSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenActorKeywordAndName")
+  @available(*, deprecated, renamed: "unexpectedBeforeActorHeader")
+  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeActorHeader
+    }
+    set {
+      unexpectedBeforeActorHeader = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "actorHeader.attributes")
+  public var attributes: AttributeListSyntax {
+    get {
+      return actorHeader.attributes
+    }
+    set {
+      actorHeader.attributes = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "actorHeader.unexpectedBetweenAttributesAndModifiers")
+  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
+    get {
+      return actorHeader.unexpectedBetweenAttributesAndModifiers
+    }
+    set {
+      actorHeader.unexpectedBetweenAttributesAndModifiers = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "actorHeader.modifiers")
+  public var modifiers: DeclModifierListSyntax {
+    get {
+      return actorHeader.modifiers
+    }
+    set {
+      actorHeader.modifiers = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "actorHeader.unexpectedBetweenModifiersAndActorKeyword")
+  public var unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? {
+    get {
+      return actorHeader.unexpectedBetweenModifiersAndActorKeyword
+    }
+    set {
+      actorHeader.unexpectedBetweenModifiersAndActorKeyword = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "actorHeader.actorKeyword")
+  public var actorKeyword: TokenSyntax {
+    get {
+      return actorHeader.actorKeyword
+    }
+    set {
+      actorHeader.actorKeyword = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "actorHeader.unexpectedBetweenActorKeywordAndName")
+  public var unexpectedBetweenActorKeywordAndName: UnexpectedNodesSyntax? {
+    get {
+      return actorHeader.unexpectedBetweenActorKeywordAndName
+    }
+    set {
+      actorHeader.unexpectedBetweenActorKeywordAndName = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "actorHeader.name")
+  public var name: TokenSyntax {
+    get {
+      return actorHeader.name
+    }
+    set {
+      actorHeader.name = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "actorHeader.unexpectedBetweenNameAndGenericParameterClause")
+  public var unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? {
+    get {
+      return actorHeader.unexpectedBetweenNameAndGenericParameterClause
+    }
+    set {
+      actorHeader.unexpectedBetweenNameAndGenericParameterClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "actorHeader.genericParameterClause")
+  public var genericParameterClause: GenericParameterClauseSyntax? {
+    get {
+      return actorHeader.genericParameterClause
+    }
+    set {
+      actorHeader.genericParameterClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "actorHeader.unexpectedBetweenGenericParameterClauseAndInheritanceClause")
+  public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? {
+    get {
+      return actorHeader.unexpectedBetweenGenericParameterClauseAndInheritanceClause
+    }
+    set {
+      actorHeader.unexpectedBetweenGenericParameterClauseAndInheritanceClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "actorHeader.inheritanceClause")
+  public var inheritanceClause: InheritanceClauseSyntax? {
+    get {
+      return actorHeader.inheritanceClause
+    }
+    set {
+      actorHeader.inheritanceClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "actorHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause")
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return actorHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause
+    }
+    set {
+      actorHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "actorHeader.genericWhereClause")
+  public var genericWhereClause: GenericWhereClauseSyntax? {
+    get {
+      return actorHeader.genericWhereClause
+    }
+    set {
+      actorHeader.genericWhereClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenActorHeaderAndMemberBlock")
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenActorHeaderAndMemberBlock
+    }
+    set {
+      unexpectedBetweenActorHeaderAndMemberBlock = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "actorHeader.unexpectedBetweenActorKeywordAndName")
   public var unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenActorKeywordAndName
+      return actorHeader.unexpectedBetweenActorKeywordAndName
     }
     set {
-      unexpectedBetweenActorKeywordAndName = newValue
+      actorHeader.unexpectedBetweenActorKeywordAndName = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "name")
+  @available(*, deprecated, renamed: "actorHeader.name")
   public var identifier: TokenSyntax {
     get {
-      return name
+      return actorHeader.name
     }
     set {
-      name = newValue
+      actorHeader.name = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "unexpectedBetweenNameAndGenericParameterClause")
+  @available(*, deprecated, renamed: "actorHeader.unexpectedBetweenNameAndGenericParameterClause")
   public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenNameAndGenericParameterClause
+      return actorHeader.unexpectedBetweenNameAndGenericParameterClause
     }
     set {
-      unexpectedBetweenNameAndGenericParameterClause = newValue
+      actorHeader.unexpectedBetweenNameAndGenericParameterClause = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:actorKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:actorHeader:_:memberBlock:_:trailingTrivia:)")
+  @_disfavoredOverload
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    _ unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? = nil,
+    actorKeyword: TokenSyntax = .keyword(.actor),
+    _ unexpectedBetweenActorKeywordAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    _ unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
+    _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+    inheritanceClause: InheritanceClauseSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    memberBlock: MemberBlockSyntax,
+    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      actorHeader: ActorDeclHeaderSyntax(
+        attributes: attributes,
+        unexpectedBetweenAttributesAndModifiers,
+        modifiers: modifiers,
+        unexpectedBetweenModifiersAndActorKeyword,
+        actorKeyword: actorKeyword,
+        unexpectedBetweenActorKeywordAndName,
+        name: name,
+        unexpectedBetweenNameAndGenericParameterClause,
+        genericParameterClause: genericParameterClause,
+        unexpectedBetweenGenericParameterClauseAndInheritanceClause,
+        inheritanceClause: inheritanceClause,
+        unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+        genericWhereClause: genericWhereClause
+      ),
+      unexpectedBetweenGenericWhereClauseAndMemberBlock,
+      memberBlock: memberBlock,
+      unexpectedAfterMemberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:actorHeader:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -159,19 +357,21 @@ extension ActorDeclSyntax {
     self.init(
       leadingTrivia: leadingTrivia,
       unexpectedBeforeAttributes,
-      attributes: attributes,
-      unexpectedBetweenAttributesAndModifiers,
-      modifiers: modifiers,
-      unexpectedBetweenModifiersAndActorKeyword,
-      actorKeyword: actorKeyword,
-      unexpectedBetweenActorKeywordAndIdentifier,
-      name: identifier,
-      unexpectedBetweenIdentifierAndGenericParameterClause,
-      genericParameterClause: genericParameterClause,
-      unexpectedBetweenGenericParameterClauseAndInheritanceClause,
-      inheritanceClause: inheritanceClause,
-      unexpectedBetweenInheritanceClauseAndGenericWhereClause,
-      genericWhereClause: genericWhereClause,
+      actorHeader: ActorDeclHeaderSyntax(
+        attributes: attributes,
+        unexpectedBetweenAttributesAndModifiers,
+        modifiers: modifiers,
+        unexpectedBetweenModifiersAndActorKeyword,
+        actorKeyword: actorKeyword,
+        unexpectedBetweenActorKeywordAndIdentifier,
+        name: identifier,
+        unexpectedBetweenIdentifierAndGenericParameterClause,
+        genericParameterClause: genericParameterClause,
+        unexpectedBetweenGenericParameterClauseAndInheritanceClause,
+        inheritanceClause: inheritanceClause,
+        unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+        genericWhereClause: genericWhereClause
+      ),
       unexpectedBetweenGenericWhereClauseAndMemberBlock,
       memberBlock: memberBlock,
       unexpectedAfterMemberBlock,
@@ -1074,37 +1274,235 @@ extension _CanImportVersionInfoSyntax {
 }
 
 extension ClassDeclSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenClassKeywordAndName")
+  @available(*, deprecated, renamed: "unexpectedBeforeClassHeader")
+  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeClassHeader
+    }
+    set {
+      unexpectedBeforeClassHeader = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "classHeader.attributes")
+  public var attributes: AttributeListSyntax {
+    get {
+      return classHeader.attributes
+    }
+    set {
+      classHeader.attributes = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "classHeader.unexpectedBetweenAttributesAndModifiers")
+  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
+    get {
+      return classHeader.unexpectedBetweenAttributesAndModifiers
+    }
+    set {
+      classHeader.unexpectedBetweenAttributesAndModifiers = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "classHeader.modifiers")
+  public var modifiers: DeclModifierListSyntax {
+    get {
+      return classHeader.modifiers
+    }
+    set {
+      classHeader.modifiers = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "classHeader.unexpectedBetweenModifiersAndClassKeyword")
+  public var unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? {
+    get {
+      return classHeader.unexpectedBetweenModifiersAndClassKeyword
+    }
+    set {
+      classHeader.unexpectedBetweenModifiersAndClassKeyword = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "classHeader.classKeyword")
+  public var classKeyword: TokenSyntax {
+    get {
+      return classHeader.classKeyword
+    }
+    set {
+      classHeader.classKeyword = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "classHeader.unexpectedBetweenClassKeywordAndName")
+  public var unexpectedBetweenClassKeywordAndName: UnexpectedNodesSyntax? {
+    get {
+      return classHeader.unexpectedBetweenClassKeywordAndName
+    }
+    set {
+      classHeader.unexpectedBetweenClassKeywordAndName = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "classHeader.name")
+  public var name: TokenSyntax {
+    get {
+      return classHeader.name
+    }
+    set {
+      classHeader.name = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "classHeader.unexpectedBetweenNameAndGenericParameterClause")
+  public var unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? {
+    get {
+      return classHeader.unexpectedBetweenNameAndGenericParameterClause
+    }
+    set {
+      classHeader.unexpectedBetweenNameAndGenericParameterClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "classHeader.genericParameterClause")
+  public var genericParameterClause: GenericParameterClauseSyntax? {
+    get {
+      return classHeader.genericParameterClause
+    }
+    set {
+      classHeader.genericParameterClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "classHeader.unexpectedBetweenGenericParameterClauseAndInheritanceClause")
+  public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? {
+    get {
+      return classHeader.unexpectedBetweenGenericParameterClauseAndInheritanceClause
+    }
+    set {
+      classHeader.unexpectedBetweenGenericParameterClauseAndInheritanceClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "classHeader.inheritanceClause")
+  public var inheritanceClause: InheritanceClauseSyntax? {
+    get {
+      return classHeader.inheritanceClause
+    }
+    set {
+      classHeader.inheritanceClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "classHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause")
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return classHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause
+    }
+    set {
+      classHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "classHeader.genericWhereClause")
+  public var genericWhereClause: GenericWhereClauseSyntax? {
+    get {
+      return classHeader.genericWhereClause
+    }
+    set {
+      classHeader.genericWhereClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenClassHeaderAndMemberBlock")
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenClassHeaderAndMemberBlock
+    }
+    set {
+      unexpectedBetweenClassHeaderAndMemberBlock = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "classHeader.unexpectedBetweenClassKeywordAndName")
   public var unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenClassKeywordAndName
+      return classHeader.unexpectedBetweenClassKeywordAndName
     }
     set {
-      unexpectedBetweenClassKeywordAndName = newValue
+      classHeader.unexpectedBetweenClassKeywordAndName = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "name")
+  @available(*, deprecated, renamed: "classHeader.name")
   public var identifier: TokenSyntax {
     get {
-      return name
+      return classHeader.name
     }
     set {
-      name = newValue
+      classHeader.name = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "unexpectedBetweenNameAndGenericParameterClause")
+  @available(*, deprecated, renamed: "classHeader.unexpectedBetweenNameAndGenericParameterClause")
   public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenNameAndGenericParameterClause
+      return classHeader.unexpectedBetweenNameAndGenericParameterClause
     }
     set {
-      unexpectedBetweenNameAndGenericParameterClause = newValue
+      classHeader.unexpectedBetweenNameAndGenericParameterClause = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:classKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:classHeader:_:memberBlock:_:trailingTrivia:)")
+  @_disfavoredOverload
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    _ unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil,
+    classKeyword: TokenSyntax = .keyword(.class),
+    _ unexpectedBetweenClassKeywordAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    _ unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
+    _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+    inheritanceClause: InheritanceClauseSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    memberBlock: MemberBlockSyntax,
+    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      classHeader: ClassDeclHeaderSyntax(
+        attributes: attributes,
+        unexpectedBetweenAttributesAndModifiers,
+        modifiers: modifiers,
+        unexpectedBetweenModifiersAndClassKeyword,
+        classKeyword: classKeyword,
+        unexpectedBetweenClassKeywordAndName,
+        name: name,
+        unexpectedBetweenNameAndGenericParameterClause,
+        genericParameterClause: genericParameterClause,
+        unexpectedBetweenGenericParameterClauseAndInheritanceClause,
+        inheritanceClause: inheritanceClause,
+        unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+        genericWhereClause: genericWhereClause
+      ),
+      unexpectedBetweenGenericWhereClauseAndMemberBlock,
+      memberBlock: memberBlock,
+      unexpectedAfterMemberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:classHeader:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1130,19 +1528,21 @@ extension ClassDeclSyntax {
     self.init(
       leadingTrivia: leadingTrivia,
       unexpectedBeforeAttributes,
-      attributes: attributes,
-      unexpectedBetweenAttributesAndModifiers,
-      modifiers: modifiers,
-      unexpectedBetweenModifiersAndClassKeyword,
-      classKeyword: classKeyword,
-      unexpectedBetweenClassKeywordAndIdentifier,
-      name: identifier,
-      unexpectedBetweenIdentifierAndGenericParameterClause,
-      genericParameterClause: genericParameterClause,
-      unexpectedBetweenGenericParameterClauseAndInheritanceClause,
-      inheritanceClause: inheritanceClause,
-      unexpectedBetweenInheritanceClauseAndGenericWhereClause,
-      genericWhereClause: genericWhereClause,
+      classHeader: ClassDeclHeaderSyntax(
+        attributes: attributes,
+        unexpectedBetweenAttributesAndModifiers,
+        modifiers: modifiers,
+        unexpectedBetweenModifiersAndClassKeyword,
+        classKeyword: classKeyword,
+        unexpectedBetweenClassKeywordAndIdentifier,
+        name: identifier,
+        unexpectedBetweenIdentifierAndGenericParameterClause,
+        genericParameterClause: genericParameterClause,
+        unexpectedBetweenGenericParameterClauseAndInheritanceClause,
+        inheritanceClause: inheritanceClause,
+        unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+        genericWhereClause: genericWhereClause
+      ),
       unexpectedBetweenGenericWhereClauseAndMemberBlock,
       memberBlock: memberBlock,
       unexpectedAfterMemberBlock,
@@ -2574,57 +2974,255 @@ extension EnumCaseParameterSyntax {
 }
 
 extension EnumDeclSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenEnumKeywordAndName")
+  @available(*, deprecated, renamed: "unexpectedBeforeEnumHeader")
+  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeEnumHeader
+    }
+    set {
+      unexpectedBeforeEnumHeader = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "enumHeader.attributes")
+  public var attributes: AttributeListSyntax {
+    get {
+      return enumHeader.attributes
+    }
+    set {
+      enumHeader.attributes = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "enumHeader.unexpectedBetweenAttributesAndModifiers")
+  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
+    get {
+      return enumHeader.unexpectedBetweenAttributesAndModifiers
+    }
+    set {
+      enumHeader.unexpectedBetweenAttributesAndModifiers = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "enumHeader.modifiers")
+  public var modifiers: DeclModifierListSyntax {
+    get {
+      return enumHeader.modifiers
+    }
+    set {
+      enumHeader.modifiers = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "enumHeader.unexpectedBetweenModifiersAndEnumKeyword")
+  public var unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? {
+    get {
+      return enumHeader.unexpectedBetweenModifiersAndEnumKeyword
+    }
+    set {
+      enumHeader.unexpectedBetweenModifiersAndEnumKeyword = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "enumHeader.enumKeyword")
+  public var enumKeyword: TokenSyntax {
+    get {
+      return enumHeader.enumKeyword
+    }
+    set {
+      enumHeader.enumKeyword = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "enumHeader.unexpectedBetweenEnumKeywordAndName")
+  public var unexpectedBetweenEnumKeywordAndName: UnexpectedNodesSyntax? {
+    get {
+      return enumHeader.unexpectedBetweenEnumKeywordAndName
+    }
+    set {
+      enumHeader.unexpectedBetweenEnumKeywordAndName = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "enumHeader.name")
+  public var name: TokenSyntax {
+    get {
+      return enumHeader.name
+    }
+    set {
+      enumHeader.name = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "enumHeader.unexpectedBetweenNameAndGenericParameterClause")
+  public var unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? {
+    get {
+      return enumHeader.unexpectedBetweenNameAndGenericParameterClause
+    }
+    set {
+      enumHeader.unexpectedBetweenNameAndGenericParameterClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "enumHeader.genericParameterClause")
+  public var genericParameterClause: GenericParameterClauseSyntax? {
+    get {
+      return enumHeader.genericParameterClause
+    }
+    set {
+      enumHeader.genericParameterClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "enumHeader.unexpectedBetweenGenericParameterClauseAndInheritanceClause")
+  public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? {
+    get {
+      return enumHeader.unexpectedBetweenGenericParameterClauseAndInheritanceClause
+    }
+    set {
+      enumHeader.unexpectedBetweenGenericParameterClauseAndInheritanceClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "enumHeader.inheritanceClause")
+  public var inheritanceClause: InheritanceClauseSyntax? {
+    get {
+      return enumHeader.inheritanceClause
+    }
+    set {
+      enumHeader.inheritanceClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "enumHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause")
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return enumHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause
+    }
+    set {
+      enumHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "enumHeader.genericWhereClause")
+  public var genericWhereClause: GenericWhereClauseSyntax? {
+    get {
+      return enumHeader.genericWhereClause
+    }
+    set {
+      enumHeader.genericWhereClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenEnumHeaderAndMemberBlock")
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenEnumHeaderAndMemberBlock
+    }
+    set {
+      unexpectedBetweenEnumHeaderAndMemberBlock = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "enumHeader.unexpectedBetweenEnumKeywordAndName")
   public var unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenEnumKeywordAndName
+      return enumHeader.unexpectedBetweenEnumKeywordAndName
     }
     set {
-      unexpectedBetweenEnumKeywordAndName = newValue
+      enumHeader.unexpectedBetweenEnumKeywordAndName = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "name")
+  @available(*, deprecated, renamed: "enumHeader.name")
   public var identifier: TokenSyntax {
     get {
-      return name
+      return enumHeader.name
     }
     set {
-      name = newValue
+      enumHeader.name = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "unexpectedBetweenNameAndGenericParameterClause")
+  @available(*, deprecated, renamed: "enumHeader.unexpectedBetweenNameAndGenericParameterClause")
   public var unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenNameAndGenericParameterClause
+      return enumHeader.unexpectedBetweenNameAndGenericParameterClause
     }
     set {
-      unexpectedBetweenNameAndGenericParameterClause = newValue
+      enumHeader.unexpectedBetweenNameAndGenericParameterClause = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "genericParameterClause")
+  @available(*, deprecated, renamed: "enumHeader.genericParameterClause")
   public var genericParameters: GenericParameterClauseSyntax? {
     get {
-      return genericParameterClause
+      return enumHeader.genericParameterClause
     }
     set {
-      genericParameterClause = newValue
+      enumHeader.genericParameterClause = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "unexpectedBetweenGenericParameterClauseAndInheritanceClause")
+  @available(*, deprecated, renamed: "enumHeader.unexpectedBetweenGenericParameterClauseAndInheritanceClause")
   public var unexpectedBetweenGenericParametersAndInheritanceClause: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenGenericParameterClauseAndInheritanceClause
+      return enumHeader.unexpectedBetweenGenericParameterClauseAndInheritanceClause
     }
     set {
-      unexpectedBetweenGenericParameterClauseAndInheritanceClause = newValue
+      enumHeader.unexpectedBetweenGenericParameterClauseAndInheritanceClause = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:enumKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:enumHeader:_:memberBlock:_:trailingTrivia:)")
+  @_disfavoredOverload
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    _ unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? = nil,
+    enumKeyword: TokenSyntax = .keyword(.enum),
+    _ unexpectedBetweenEnumKeywordAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    _ unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
+    _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+    inheritanceClause: InheritanceClauseSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    memberBlock: MemberBlockSyntax,
+    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      enumHeader: EnumDeclHeaderSyntax(
+        attributes: attributes,
+        unexpectedBetweenAttributesAndModifiers,
+        modifiers: modifiers,
+        unexpectedBetweenModifiersAndEnumKeyword,
+        enumKeyword: enumKeyword,
+        unexpectedBetweenEnumKeywordAndName,
+        name: name,
+        unexpectedBetweenNameAndGenericParameterClause,
+        genericParameterClause: genericParameterClause,
+        unexpectedBetweenGenericParameterClauseAndInheritanceClause,
+        inheritanceClause: inheritanceClause,
+        unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+        genericWhereClause: genericWhereClause
+      ),
+      unexpectedBetweenGenericWhereClauseAndMemberBlock,
+      memberBlock: memberBlock,
+      unexpectedAfterMemberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:enumHeader:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2650,19 +3248,21 @@ extension EnumDeclSyntax {
     self.init(
       leadingTrivia: leadingTrivia,
       unexpectedBeforeAttributes,
-      attributes: attributes,
-      unexpectedBetweenAttributesAndModifiers,
-      modifiers: modifiers,
-      unexpectedBetweenModifiersAndEnumKeyword,
-      enumKeyword: enumKeyword,
-      unexpectedBetweenEnumKeywordAndIdentifier,
-      name: identifier,
-      unexpectedBetweenIdentifierAndGenericParameters,
-      genericParameterClause: genericParameters,
-      unexpectedBetweenGenericParametersAndInheritanceClause,
-      inheritanceClause: inheritanceClause,
-      unexpectedBetweenInheritanceClauseAndGenericWhereClause,
-      genericWhereClause: genericWhereClause,
+      enumHeader: EnumDeclHeaderSyntax(
+        attributes: attributes,
+        unexpectedBetweenAttributesAndModifiers,
+        modifiers: modifiers,
+        unexpectedBetweenModifiersAndEnumKeyword,
+        enumKeyword: enumKeyword,
+        unexpectedBetweenEnumKeywordAndIdentifier,
+        name: identifier,
+        unexpectedBetweenIdentifierAndGenericParameters,
+        genericParameterClause: genericParameters,
+        unexpectedBetweenGenericParametersAndInheritanceClause,
+        inheritanceClause: inheritanceClause,
+        unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+        genericWhereClause: genericWhereClause
+      ),
       unexpectedBetweenGenericWhereClauseAndMemberBlock,
       memberBlock: memberBlock,
       unexpectedAfterMemberBlock,
@@ -2732,6 +3332,182 @@ extension ExpressionSegmentSyntax {
       unexpectedBetweenExpressionsAndRightParen,
       rightParen: rightParen,
       unexpectedAfterRightParen,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension ExtensionDeclSyntax {
+  @available(*, deprecated, renamed: "unexpectedBeforeExtensionHeader")
+  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeExtensionHeader
+    }
+    set {
+      unexpectedBeforeExtensionHeader = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "extensionHeader.attributes")
+  public var attributes: AttributeListSyntax {
+    get {
+      return extensionHeader.attributes
+    }
+    set {
+      extensionHeader.attributes = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "extensionHeader.unexpectedBetweenAttributesAndModifiers")
+  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
+    get {
+      return extensionHeader.unexpectedBetweenAttributesAndModifiers
+    }
+    set {
+      extensionHeader.unexpectedBetweenAttributesAndModifiers = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "extensionHeader.modifiers")
+  public var modifiers: DeclModifierListSyntax {
+    get {
+      return extensionHeader.modifiers
+    }
+    set {
+      extensionHeader.modifiers = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "extensionHeader.unexpectedBetweenModifiersAndExtensionKeyword")
+  public var unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodesSyntax? {
+    get {
+      return extensionHeader.unexpectedBetweenModifiersAndExtensionKeyword
+    }
+    set {
+      extensionHeader.unexpectedBetweenModifiersAndExtensionKeyword = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "extensionHeader.extensionKeyword")
+  public var extensionKeyword: TokenSyntax {
+    get {
+      return extensionHeader.extensionKeyword
+    }
+    set {
+      extensionHeader.extensionKeyword = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "extensionHeader.unexpectedBetweenExtensionKeywordAndExtendedType")
+  public var unexpectedBetweenExtensionKeywordAndExtendedType: UnexpectedNodesSyntax? {
+    get {
+      return extensionHeader.unexpectedBetweenExtensionKeywordAndExtendedType
+    }
+    set {
+      extensionHeader.unexpectedBetweenExtensionKeywordAndExtendedType = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "extensionHeader.extendedType")
+  public var extendedType: TypeSyntax {
+    get {
+      return extensionHeader.extendedType
+    }
+    set {
+      extensionHeader.extendedType = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "extensionHeader.unexpectedBetweenExtendedTypeAndInheritanceClause")
+  public var unexpectedBetweenExtendedTypeAndInheritanceClause: UnexpectedNodesSyntax? {
+    get {
+      return extensionHeader.unexpectedBetweenExtendedTypeAndInheritanceClause
+    }
+    set {
+      extensionHeader.unexpectedBetweenExtendedTypeAndInheritanceClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "extensionHeader.inheritanceClause")
+  public var inheritanceClause: InheritanceClauseSyntax? {
+    get {
+      return extensionHeader.inheritanceClause
+    }
+    set {
+      extensionHeader.inheritanceClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "extensionHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause")
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return extensionHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause
+    }
+    set {
+      extensionHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "extensionHeader.genericWhereClause")
+  public var genericWhereClause: GenericWhereClauseSyntax? {
+    get {
+      return extensionHeader.genericWhereClause
+    }
+    set {
+      extensionHeader.genericWhereClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenExtensionHeaderAndMemberBlock")
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenExtensionHeaderAndMemberBlock
+    }
+    set {
+      unexpectedBetweenExtensionHeaderAndMemberBlock = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:extensionHeader:_:memberBlock:_:trailingTrivia:)")
+  @_disfavoredOverload
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    _ unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodesSyntax? = nil,
+    extensionKeyword: TokenSyntax = .keyword(.extension),
+    _ unexpectedBetweenExtensionKeywordAndExtendedType: UnexpectedNodesSyntax? = nil,
+    extendedType: some TypeSyntaxProtocol,
+    _ unexpectedBetweenExtendedTypeAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+    inheritanceClause: InheritanceClauseSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    memberBlock: MemberBlockSyntax,
+    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      extensionHeader: ExtensionDeclHeaderSyntax(
+        attributes: attributes,
+        unexpectedBetweenAttributesAndModifiers,
+        modifiers: modifiers,
+        unexpectedBetweenModifiersAndExtensionKeyword,
+        extensionKeyword: extensionKeyword,
+        unexpectedBetweenExtensionKeywordAndExtendedType,
+        extendedType: extendedType,
+        unexpectedBetweenExtendedTypeAndInheritanceClause,
+        inheritanceClause: inheritanceClause,
+        unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+        genericWhereClause: genericWhereClause
+      ),
+      unexpectedBetweenGenericWhereClauseAndMemberBlock,
+      memberBlock: memberBlock,
+      unexpectedAfterMemberBlock,
       trailingTrivia: trailingTrivia
     )
   }
@@ -6366,37 +7142,235 @@ extension PrimaryAssociatedTypeClauseSyntax {
 }
 
 extension ProtocolDeclSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenProtocolKeywordAndName")
+  @available(*, deprecated, renamed: "unexpectedBeforeProtocolHeader")
+  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeProtocolHeader
+    }
+    set {
+      unexpectedBeforeProtocolHeader = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "protocolHeader.attributes")
+  public var attributes: AttributeListSyntax {
+    get {
+      return protocolHeader.attributes
+    }
+    set {
+      protocolHeader.attributes = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "protocolHeader.unexpectedBetweenAttributesAndModifiers")
+  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
+    get {
+      return protocolHeader.unexpectedBetweenAttributesAndModifiers
+    }
+    set {
+      protocolHeader.unexpectedBetweenAttributesAndModifiers = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "protocolHeader.modifiers")
+  public var modifiers: DeclModifierListSyntax {
+    get {
+      return protocolHeader.modifiers
+    }
+    set {
+      protocolHeader.modifiers = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "protocolHeader.unexpectedBetweenModifiersAndProtocolKeyword")
+  public var unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? {
+    get {
+      return protocolHeader.unexpectedBetweenModifiersAndProtocolKeyword
+    }
+    set {
+      protocolHeader.unexpectedBetweenModifiersAndProtocolKeyword = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "protocolHeader.protocolKeyword")
+  public var protocolKeyword: TokenSyntax {
+    get {
+      return protocolHeader.protocolKeyword
+    }
+    set {
+      protocolHeader.protocolKeyword = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "protocolHeader.unexpectedBetweenProtocolKeywordAndName")
+  public var unexpectedBetweenProtocolKeywordAndName: UnexpectedNodesSyntax? {
+    get {
+      return protocolHeader.unexpectedBetweenProtocolKeywordAndName
+    }
+    set {
+      protocolHeader.unexpectedBetweenProtocolKeywordAndName = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "protocolHeader.name")
+  public var name: TokenSyntax {
+    get {
+      return protocolHeader.name
+    }
+    set {
+      protocolHeader.name = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "protocolHeader.unexpectedBetweenNameAndPrimaryAssociatedTypeClause")
+  public var unexpectedBetweenNameAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? {
+    get {
+      return protocolHeader.unexpectedBetweenNameAndPrimaryAssociatedTypeClause
+    }
+    set {
+      protocolHeader.unexpectedBetweenNameAndPrimaryAssociatedTypeClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "protocolHeader.primaryAssociatedTypeClause")
+  public var primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? {
+    get {
+      return protocolHeader.primaryAssociatedTypeClause
+    }
+    set {
+      protocolHeader.primaryAssociatedTypeClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "protocolHeader.unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause")
+  public var unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: UnexpectedNodesSyntax? {
+    get {
+      return protocolHeader.unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause
+    }
+    set {
+      protocolHeader.unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "protocolHeader.inheritanceClause")
+  public var inheritanceClause: InheritanceClauseSyntax? {
+    get {
+      return protocolHeader.inheritanceClause
+    }
+    set {
+      protocolHeader.inheritanceClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "protocolHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause")
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return protocolHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause
+    }
+    set {
+      protocolHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "protocolHeader.genericWhereClause")
+  public var genericWhereClause: GenericWhereClauseSyntax? {
+    get {
+      return protocolHeader.genericWhereClause
+    }
+    set {
+      protocolHeader.genericWhereClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenProtocolHeaderAndMemberBlock")
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenProtocolHeaderAndMemberBlock
+    }
+    set {
+      unexpectedBetweenProtocolHeaderAndMemberBlock = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "protocolHeader.unexpectedBetweenProtocolKeywordAndName")
   public var unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenProtocolKeywordAndName
+      return protocolHeader.unexpectedBetweenProtocolKeywordAndName
     }
     set {
-      unexpectedBetweenProtocolKeywordAndName = newValue
+      protocolHeader.unexpectedBetweenProtocolKeywordAndName = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "name")
+  @available(*, deprecated, renamed: "protocolHeader.name")
   public var identifier: TokenSyntax {
     get {
-      return name
+      return protocolHeader.name
     }
     set {
-      name = newValue
+      protocolHeader.name = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "unexpectedBetweenNameAndPrimaryAssociatedTypeClause")
+  @available(*, deprecated, renamed: "protocolHeader.unexpectedBetweenNameAndPrimaryAssociatedTypeClause")
   public var unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenNameAndPrimaryAssociatedTypeClause
+      return protocolHeader.unexpectedBetweenNameAndPrimaryAssociatedTypeClause
     }
     set {
-      unexpectedBetweenNameAndPrimaryAssociatedTypeClause = newValue
+      protocolHeader.unexpectedBetweenNameAndPrimaryAssociatedTypeClause = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:protocolKeyword:_:name:_:primaryAssociatedTypeClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:protocolHeader:_:memberBlock:_:trailingTrivia:)")
+  @_disfavoredOverload
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    _ unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? = nil,
+    protocolKeyword: TokenSyntax = .keyword(.protocol),
+    _ unexpectedBetweenProtocolKeywordAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    _ unexpectedBetweenNameAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? = nil,
+    primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? = nil,
+    _ unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+    inheritanceClause: InheritanceClauseSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    memberBlock: MemberBlockSyntax,
+    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      protocolHeader: ProtocolDeclHeaderSyntax(
+        attributes: attributes,
+        unexpectedBetweenAttributesAndModifiers,
+        modifiers: modifiers,
+        unexpectedBetweenModifiersAndProtocolKeyword,
+        protocolKeyword: protocolKeyword,
+        unexpectedBetweenProtocolKeywordAndName,
+        name: name,
+        unexpectedBetweenNameAndPrimaryAssociatedTypeClause,
+        primaryAssociatedTypeClause: primaryAssociatedTypeClause,
+        unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause,
+        inheritanceClause: inheritanceClause,
+        unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+        genericWhereClause: genericWhereClause
+      ),
+      unexpectedBetweenGenericWhereClauseAndMemberBlock,
+      memberBlock: memberBlock,
+      unexpectedAfterMemberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:protocolHeader:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -6422,19 +7396,21 @@ extension ProtocolDeclSyntax {
     self.init(
       leadingTrivia: leadingTrivia,
       unexpectedBeforeAttributes,
-      attributes: attributes,
-      unexpectedBetweenAttributesAndModifiers,
-      modifiers: modifiers,
-      unexpectedBetweenModifiersAndProtocolKeyword,
-      protocolKeyword: protocolKeyword,
-      unexpectedBetweenProtocolKeywordAndIdentifier,
-      name: identifier,
-      unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause,
-      primaryAssociatedTypeClause: primaryAssociatedTypeClause,
-      unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause,
-      inheritanceClause: inheritanceClause,
-      unexpectedBetweenInheritanceClauseAndGenericWhereClause,
-      genericWhereClause: genericWhereClause,
+      protocolHeader: ProtocolDeclHeaderSyntax(
+        attributes: attributes,
+        unexpectedBetweenAttributesAndModifiers,
+        modifiers: modifiers,
+        unexpectedBetweenModifiersAndProtocolKeyword,
+        protocolKeyword: protocolKeyword,
+        unexpectedBetweenProtocolKeywordAndIdentifier,
+        name: identifier,
+        unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause,
+        primaryAssociatedTypeClause: primaryAssociatedTypeClause,
+        unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause,
+        inheritanceClause: inheritanceClause,
+        unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+        genericWhereClause: genericWhereClause
+      ),
       unexpectedBetweenGenericWhereClauseAndMemberBlock,
       memberBlock: memberBlock,
       unexpectedAfterMemberBlock,
@@ -7139,37 +8115,235 @@ extension StringLiteralExprSyntax {
 }
 
 extension StructDeclSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenStructKeywordAndName")
+  @available(*, deprecated, renamed: "unexpectedBeforeStructHeader")
+  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeStructHeader
+    }
+    set {
+      unexpectedBeforeStructHeader = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "structHeader.attributes")
+  public var attributes: AttributeListSyntax {
+    get {
+      return structHeader.attributes
+    }
+    set {
+      structHeader.attributes = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "structHeader.unexpectedBetweenAttributesAndModifiers")
+  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
+    get {
+      return structHeader.unexpectedBetweenAttributesAndModifiers
+    }
+    set {
+      structHeader.unexpectedBetweenAttributesAndModifiers = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "structHeader.modifiers")
+  public var modifiers: DeclModifierListSyntax {
+    get {
+      return structHeader.modifiers
+    }
+    set {
+      structHeader.modifiers = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "structHeader.unexpectedBetweenModifiersAndStructKeyword")
+  public var unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? {
+    get {
+      return structHeader.unexpectedBetweenModifiersAndStructKeyword
+    }
+    set {
+      structHeader.unexpectedBetweenModifiersAndStructKeyword = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "structHeader.structKeyword")
+  public var structKeyword: TokenSyntax {
+    get {
+      return structHeader.structKeyword
+    }
+    set {
+      structHeader.structKeyword = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "structHeader.unexpectedBetweenStructKeywordAndName")
+  public var unexpectedBetweenStructKeywordAndName: UnexpectedNodesSyntax? {
+    get {
+      return structHeader.unexpectedBetweenStructKeywordAndName
+    }
+    set {
+      structHeader.unexpectedBetweenStructKeywordAndName = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "structHeader.name")
+  public var name: TokenSyntax {
+    get {
+      return structHeader.name
+    }
+    set {
+      structHeader.name = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "structHeader.unexpectedBetweenNameAndGenericParameterClause")
+  public var unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? {
+    get {
+      return structHeader.unexpectedBetweenNameAndGenericParameterClause
+    }
+    set {
+      structHeader.unexpectedBetweenNameAndGenericParameterClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "structHeader.genericParameterClause")
+  public var genericParameterClause: GenericParameterClauseSyntax? {
+    get {
+      return structHeader.genericParameterClause
+    }
+    set {
+      structHeader.genericParameterClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "structHeader.unexpectedBetweenGenericParameterClauseAndInheritanceClause")
+  public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? {
+    get {
+      return structHeader.unexpectedBetweenGenericParameterClauseAndInheritanceClause
+    }
+    set {
+      structHeader.unexpectedBetweenGenericParameterClauseAndInheritanceClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "structHeader.inheritanceClause")
+  public var inheritanceClause: InheritanceClauseSyntax? {
+    get {
+      return structHeader.inheritanceClause
+    }
+    set {
+      structHeader.inheritanceClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "structHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause")
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return structHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause
+    }
+    set {
+      structHeader.unexpectedBetweenInheritanceClauseAndGenericWhereClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "structHeader.genericWhereClause")
+  public var genericWhereClause: GenericWhereClauseSyntax? {
+    get {
+      return structHeader.genericWhereClause
+    }
+    set {
+      structHeader.genericWhereClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenStructHeaderAndMemberBlock")
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenStructHeaderAndMemberBlock
+    }
+    set {
+      unexpectedBetweenStructHeaderAndMemberBlock = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "structHeader.unexpectedBetweenStructKeywordAndName")
   public var unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenStructKeywordAndName
+      return structHeader.unexpectedBetweenStructKeywordAndName
     }
     set {
-      unexpectedBetweenStructKeywordAndName = newValue
+      structHeader.unexpectedBetweenStructKeywordAndName = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "name")
+  @available(*, deprecated, renamed: "structHeader.name")
   public var identifier: TokenSyntax {
     get {
-      return name
+      return structHeader.name
     }
     set {
-      name = newValue
+      structHeader.name = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "unexpectedBetweenNameAndGenericParameterClause")
+  @available(*, deprecated, renamed: "structHeader.unexpectedBetweenNameAndGenericParameterClause")
   public var unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenNameAndGenericParameterClause
+      return structHeader.unexpectedBetweenNameAndGenericParameterClause
     }
     set {
-      unexpectedBetweenNameAndGenericParameterClause = newValue
+      structHeader.unexpectedBetweenNameAndGenericParameterClause = newValue
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:structKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:structHeader:_:memberBlock:_:trailingTrivia:)")
+  @_disfavoredOverload
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    _ unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil,
+    structKeyword: TokenSyntax = .keyword(.struct),
+    _ unexpectedBetweenStructKeywordAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    _ unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
+    _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+    inheritanceClause: InheritanceClauseSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    memberBlock: MemberBlockSyntax,
+    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      structHeader: StructDeclHeaderSyntax(
+        attributes: attributes,
+        unexpectedBetweenAttributesAndModifiers,
+        modifiers: modifiers,
+        unexpectedBetweenModifiersAndStructKeyword,
+        structKeyword: structKeyword,
+        unexpectedBetweenStructKeywordAndName,
+        name: name,
+        unexpectedBetweenNameAndGenericParameterClause,
+        genericParameterClause: genericParameterClause,
+        unexpectedBetweenGenericParameterClauseAndInheritanceClause,
+        inheritanceClause: inheritanceClause,
+        unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+        genericWhereClause: genericWhereClause
+      ),
+      unexpectedBetweenGenericWhereClauseAndMemberBlock,
+      memberBlock: memberBlock,
+      unexpectedAfterMemberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:structHeader:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -7195,19 +8369,21 @@ extension StructDeclSyntax {
     self.init(
       leadingTrivia: leadingTrivia,
       unexpectedBeforeAttributes,
-      attributes: attributes,
-      unexpectedBetweenAttributesAndModifiers,
-      modifiers: modifiers,
-      unexpectedBetweenModifiersAndStructKeyword,
-      structKeyword: structKeyword,
-      unexpectedBetweenStructKeywordAndIdentifier,
-      name: identifier,
-      unexpectedBetweenIdentifierAndGenericParameterClause,
-      genericParameterClause: genericParameterClause,
-      unexpectedBetweenGenericParameterClauseAndInheritanceClause,
-      inheritanceClause: inheritanceClause,
-      unexpectedBetweenInheritanceClauseAndGenericWhereClause,
-      genericWhereClause: genericWhereClause,
+      structHeader: StructDeclHeaderSyntax(
+        attributes: attributes,
+        unexpectedBetweenAttributesAndModifiers,
+        modifiers: modifiers,
+        unexpectedBetweenModifiersAndStructKeyword,
+        structKeyword: structKeyword,
+        unexpectedBetweenStructKeywordAndIdentifier,
+        name: identifier,
+        unexpectedBetweenIdentifierAndGenericParameterClause,
+        genericParameterClause: genericParameterClause,
+        unexpectedBetweenGenericParameterClauseAndInheritanceClause,
+        inheritanceClause: inheritanceClause,
+        unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+        genericWhereClause: genericWhereClause
+      ),
       unexpectedBetweenGenericWhereClauseAndMemberBlock,
       memberBlock: memberBlock,
       unexpectedAfterMemberBlock,
@@ -8557,6 +9733,58 @@ extension YieldedExpressionsClauseSyntax {
       unexpectedAfterRightParen,
       trailingTrivia: trailingTrivia
     )
+  }
+}
+
+extension DeclGroupSyntax {
+  @available(*, deprecated, renamed: "header.attributes")
+  public var attributes: AttributeListSyntax {
+    get {
+      return header.attributes
+    }
+    set {
+      header.attributes = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "header.modifiers")
+  public var modifiers: DeclModifierListSyntax {
+    get {
+      return header.modifiers
+    }
+    set {
+      header.modifiers = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "header.introducer")
+  public var introducer: TokenSyntax {
+    get {
+      return header.introducer
+    }
+    set {
+      header.introducer = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "header.inheritanceClause")
+  public var inheritanceClause: InheritanceClauseSyntax? {
+    get {
+      return header.inheritanceClause
+    }
+    set {
+      header.inheritanceClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "header.genericWhereClause")
+  public var genericWhereClause: GenericWhereClauseSyntax? {
+    get {
+      return header.genericWhereClause
+    }
+    set {
+      header.genericWhereClause = newValue
+    }
   }
 }
 

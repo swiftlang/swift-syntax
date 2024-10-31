@@ -53,25 +53,18 @@ public let TRAITS: [Trait] = [
     traitName: "DeclGroup",
     baseKind: .decl,
     children: [
-      Child(name: "attributes", kind: .node(kind: .attributeList)),
-      Child(name: "modifiers", kind: .node(kind: .declModifierList)),
       Child(
-        name: "introducer",
-        kind: .token(choices: [
-          .keyword(.actor), .keyword(.class), .keyword(.enum), .keyword(.extension), .keyword(.protocol),
-          .keyword(.struct),
-        ]),
-        documentation: "The token that introduces this declaration, eg. `class` for a class declaration."
-      ),
-      Child(name: "inheritanceClause", kind: .node(kind: .inheritanceClause), isOptional: true),
-      Child(
-        name: "genericWhereClause",
-        kind: .node(kind: .genericWhereClause),
+        name: "header",
+        kind: .node(kind: .declGroupHeader),
         documentation:
-          "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
-        isOptional: true
+          "The header of the declaration."
       ),
       Child(name: "memberBlock", kind: .node(kind: .memberBlock)),
+    ],
+    childHistory: [
+      [
+        "header": .extracted
+      ]
     ]
   ),
   Trait(
@@ -112,6 +105,13 @@ public let TRAITS: [Trait] = [
   Trait(
     traitName: "NamedDecl",
     baseKind: .decl,
+    children: [
+      Child(name: "name", kind: .token(choices: [.token(.identifier)]))
+    ]
+  ),
+  Trait(
+    traitName: "NamedDeclHeader",
+    baseKind: .declGroupHeader,
     children: [
       Child(name: "name", kind: .token(choices: [.token(.identifier)]))
     ]

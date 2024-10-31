@@ -28,6 +28,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case accessorEffectSpecifiers
   case accessorParameters
   case actorDecl
+  case actorDeclHeader
   case arrayElement
   case arrayElementList
   case arrayExpr
@@ -54,6 +55,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case catchItem
   case catchItemList
   case classDecl
+  case classDeclHeader
   case classRestrictionType
   case closureCapture
   case closureCaptureClause
@@ -121,6 +123,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case enumCaseParameterClause
   case enumCaseParameterList
   case enumDecl
+  case enumDeclHeader
   case exposeAttributeArguments
   case expr
   case expressionPattern
@@ -128,6 +131,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case expressionStmt
   case exprList
   case extensionDecl
+  case extensionDeclHeader
   case fallThroughStmt
   case floatLiteralExpr
   case forceUnwrapExpr
@@ -243,6 +247,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case primaryAssociatedTypeClause
   case primaryAssociatedTypeList
   case protocolDecl
+  case protocolDeclHeader
   case regexLiteralExpr
   case repeatStmt
   case returnClause
@@ -262,6 +267,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case stringLiteralSegmentList
   case stringSegment
   case structDecl
+  case structDeclHeader
   case subscriptCallExpr
   case subscriptDecl
   case superExpr

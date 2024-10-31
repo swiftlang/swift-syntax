@@ -4032,7 +4032,7 @@ public struct PrefixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Lea
 ///
 /// ### Contained in
 /// 
-///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/primaryAssociatedTypeClause``
+///  - ``ProtocolDeclHeaderSyntax``.``ProtocolDeclHeaderSyntax/primaryAssociatedTypeClause``
 public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
@@ -4314,16 +4314,14 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
   ])
 }
 
-// MARK: - ProtocolDeclSyntax
+// MARK: - ProtocolDeclHeaderSyntax
 
-/// A `protocol` declaration
+/// A `protocol` declaration header
 /// 
-/// An example of a protocol declaration is
+/// An example of a protocol declaration header is
 /// 
 /// ```swift
-/// protocol Example {
-///   var isValid: Bool { get }
-/// }
+/// protocol Example
 /// ```
 ///
 /// ### Children
@@ -4335,12 +4333,15 @@ public struct PrimaryAssociatedTypeSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
 ///  - `primaryAssociatedTypeClause`: ``PrimaryAssociatedTypeClauseSyntax``?
 ///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
-///  - `memberBlock`: ``MemberBlockSyntax``
-public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
+///
+/// ### Contained in
+/// 
+///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/protocolHeader``
+public struct ProtocolDeclHeaderSyntax: DeclGroupHeaderSyntaxProtocol, SyntaxHashable, _LeafDeclGroupHeaderSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .protocolDecl else {
+    guard node.raw.kind == .protocolDeclHeader else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -4355,7 +4356,6 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
   ///   - primaryAssociatedTypeClause: The primary associated type for the protocol.
   ///   - inheritanceClause: The inheritance clause describing one or more conformances for this protocol declaration.
   ///   - genericWhereClause: The `where` clause that applies to the generic parameters of this protocol declaration.
-  ///   - memberBlock: The members of the protocol declaration.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
     leadingTrivia: Trivia? = nil,
@@ -4373,9 +4373,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     inheritanceClause: InheritanceClauseSyntax? = nil,
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax? = nil,
-    _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-    memberBlock: MemberBlockSyntax,
-    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
@@ -4395,9 +4393,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       inheritanceClause,
       unexpectedBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause,
-      unexpectedBetweenGenericWhereClauseAndMemberBlock,
-      memberBlock,
-      unexpectedAfterMemberBlock
+      unexpectedAfterGenericWhereClause
     ))) { (arena, _) in
       let layout: [RawSyntax?] = [
         unexpectedBeforeAttributes?.raw,
@@ -4414,12 +4410,10 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
         inheritanceClause?.raw,
         unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
         genericWhereClause?.raw,
-        unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw,
-        memberBlock.raw,
-        unexpectedAfterMemberBlock?.raw
+        unexpectedAfterGenericWhereClause?.raw
       ]
       let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.protocolDecl,
+        kind: SyntaxKind.protocolDeclHeader,
         from: layout,
         arena: arena,
         leadingTrivia: leadingTrivia,
@@ -4434,7 +4428,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclHeaderSyntax.self)
     }
   }
 
@@ -4444,7 +4438,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclHeaderSyntax.self)
     }
   }
 
@@ -4456,7 +4450,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
   @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
-  public func addAttribute(_ element: Syntax) -> ProtocolDeclSyntax {
+  public func addAttribute(_ element: Syntax) -> ProtocolDeclHeaderSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
@@ -4472,7 +4466,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
         rawNodeArena: arena,
         allocationArena: arena
       )
-      .cast(ProtocolDeclSyntax.self)
+      .cast(ProtocolDeclHeaderSyntax.self)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
@@ -4480,7 +4474,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclHeaderSyntax.self)
     }
   }
 
@@ -4490,7 +4484,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclHeaderSyntax.self)
     }
   }
 
@@ -4502,7 +4496,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
   @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
-  public func addModifier(_ element: DeclModifierSyntax) -> ProtocolDeclSyntax {
+  public func addModifier(_ element: DeclModifierSyntax) -> ProtocolDeclHeaderSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
@@ -4518,7 +4512,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
         rawNodeArena: arena,
         allocationArena: arena
       )
-      .cast(ProtocolDeclSyntax.self)
+      .cast(ProtocolDeclHeaderSyntax.self)
   }
 
   public var unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? {
@@ -4526,7 +4520,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclHeaderSyntax.self)
     }
   }
 
@@ -4540,7 +4534,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclHeaderSyntax.self)
     }
   }
 
@@ -4549,7 +4543,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclHeaderSyntax.self)
     }
   }
 
@@ -4563,7 +4557,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 7)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclHeaderSyntax.self)
     }
   }
 
@@ -4572,7 +4566,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclHeaderSyntax.self)
     }
   }
 
@@ -4582,7 +4576,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 9)?.cast(PrimaryAssociatedTypeClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclHeaderSyntax.self)
     }
   }
 
@@ -4591,7 +4585,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclHeaderSyntax.self)
     }
   }
 
@@ -4601,7 +4595,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 11)?.cast(InheritanceClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclHeaderSyntax.self)
     }
   }
 
@@ -4610,7 +4604,7 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclHeaderSyntax.self)
     }
   }
 
@@ -4620,35 +4614,16 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 13)?.cast(GenericWhereClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclHeaderSyntax.self)
     }
   }
 
-  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
+  public var unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
-    }
-  }
-
-  /// The members of the protocol declaration.
-  public var memberBlock: MemberBlockSyntax {
-    get {
-      return Syntax(self).child(at: 15)!.cast(MemberBlockSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 15, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
-    }
-  }
-
-  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 16)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 16, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclHeaderSyntax.self)
     }
   }
 
@@ -4667,7 +4642,128 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     \Self.inheritanceClause,
     \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause,
     \Self.genericWhereClause,
-    \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock,
+    \Self.unexpectedAfterGenericWhereClause
+  ])
+}
+
+// MARK: - ProtocolDeclSyntax
+
+/// A `protocol` declaration
+/// 
+/// An example of a protocol declaration is
+/// 
+/// ```swift
+/// protocol Example {
+///   var isValid: Bool { get }
+/// }
+/// ```
+///
+/// ### Children
+/// 
+///  - `protocolHeader`: ``ProtocolDeclHeaderSyntax``
+///  - `memberBlock`: ``MemberBlockSyntax``
+public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
+  public let _syntaxNode: Syntax
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard node.raw.kind == .protocolDecl else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - protocolHeader: The header of the protocol.
+  ///   - memberBlock: The members of the protocol declaration.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeProtocolHeader: UnexpectedNodesSyntax? = nil,
+    protocolHeader: ProtocolDeclHeaderSyntax,
+    _ unexpectedBetweenProtocolHeaderAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    memberBlock: MemberBlockSyntax,
+    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((SyntaxArena(), (
+      unexpectedBeforeProtocolHeader,
+      protocolHeader,
+      unexpectedBetweenProtocolHeaderAndMemberBlock,
+      memberBlock,
+      unexpectedAfterMemberBlock
+    ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeProtocolHeader?.raw,
+        protocolHeader.raw,
+        unexpectedBetweenProtocolHeaderAndMemberBlock?.raw,
+        memberBlock.raw,
+        unexpectedAfterMemberBlock?.raw
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.protocolDecl,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeProtocolHeader: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+    }
+  }
+
+  /// The header of the protocol.
+  public var protocolHeader: ProtocolDeclHeaderSyntax {
+    get {
+      return Syntax(self).child(at: 1)!.cast(ProtocolDeclHeaderSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenProtocolHeaderAndMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+    }
+  }
+
+  /// The members of the protocol declaration.
+  public var memberBlock: MemberBlockSyntax {
+    get {
+      return Syntax(self).child(at: 3)!.cast(MemberBlockSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ProtocolDeclSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([
+    \Self.unexpectedBeforeProtocolHeader,
+    \Self.protocolHeader,
+    \Self.unexpectedBetweenProtocolHeaderAndMemberBlock,
     \Self.memberBlock,
     \Self.unexpectedAfterMemberBlock
   ])

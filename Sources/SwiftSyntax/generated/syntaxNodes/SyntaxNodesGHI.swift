@@ -319,14 +319,14 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
 ///
 /// ### Contained in
 /// 
-///  - ``ActorDeclSyntax``.``ActorDeclSyntax/genericParameterClause``
-///  - ``ClassDeclSyntax``.``ClassDeclSyntax/genericParameterClause``
-///  - ``EnumDeclSyntax``.``EnumDeclSyntax/genericParameterClause``
+///  - ``ActorDeclHeaderSyntax``.``ActorDeclHeaderSyntax/genericParameterClause``
+///  - ``ClassDeclHeaderSyntax``.``ClassDeclHeaderSyntax/genericParameterClause``
+///  - ``EnumDeclHeaderSyntax``.``EnumDeclHeaderSyntax/genericParameterClause``
 ///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/genericParameterClause``
 ///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/genericParameterClause``
 ///  - ``MacroDeclSyntax``.``MacroDeclSyntax/genericParameterClause``
 ///  - ``NamedOpaqueReturnTypeSyntax``.``NamedOpaqueReturnTypeSyntax/genericParameterClause``
-///  - ``StructDeclSyntax``.``StructDeclSyntax/genericParameterClause``
+///  - ``StructDeclHeaderSyntax``.``StructDeclHeaderSyntax/genericParameterClause``
 ///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/genericParameterClause``
 ///  - ``TypeAliasDeclSyntax``.``TypeAliasDeclSyntax/genericParameterClause``
 public struct GenericParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
@@ -1136,21 +1136,21 @@ public struct GenericSpecializationExprSyntax: ExprSyntaxProtocol, SyntaxHashabl
 ///
 /// ### Contained in
 /// 
-///  - ``ActorDeclSyntax``.``ActorDeclSyntax/genericWhereClause``
+///  - ``ActorDeclHeaderSyntax``.``ActorDeclHeaderSyntax/genericWhereClause``
 ///  - ``AssociatedTypeDeclSyntax``.``AssociatedTypeDeclSyntax/genericWhereClause``
-///  - ``ClassDeclSyntax``.``ClassDeclSyntax/genericWhereClause``
+///  - ``ClassDeclHeaderSyntax``.``ClassDeclHeaderSyntax/genericWhereClause``
 ///  - ``DeclGroupHeaderSyntax``.``DeclGroupHeaderSyntax/genericWhereClause``
 ///  - ``DifferentiableAttributeArgumentsSyntax``.``DifferentiableAttributeArgumentsSyntax/genericWhereClause``
-///  - ``EnumDeclSyntax``.``EnumDeclSyntax/genericWhereClause``
-///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/genericWhereClause``
+///  - ``EnumDeclHeaderSyntax``.``EnumDeclHeaderSyntax/genericWhereClause``
+///  - ``ExtensionDeclHeaderSyntax``.``ExtensionDeclHeaderSyntax/genericWhereClause``
 ///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/genericWhereClause``
 ///  - ``GenericParameterClauseSyntax``.``GenericParameterClauseSyntax/genericWhereClause``
 ///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/genericWhereClause``
 ///  - ``MacroDeclSyntax``.``MacroDeclSyntax/genericWhereClause``
 ///  - ``MissingDeclHeaderSyntax``.``MissingDeclHeaderSyntax/genericWhereClause``
-///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/genericWhereClause``
+///  - ``ProtocolDeclHeaderSyntax``.``ProtocolDeclHeaderSyntax/genericWhereClause``
 ///  - ``SpecializeAttributeArgumentListSyntax``
-///  - ``StructDeclSyntax``.``StructDeclSyntax/genericWhereClause``
+///  - ``StructDeclHeaderSyntax``.``StructDeclHeaderSyntax/genericWhereClause``
 ///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/genericWhereClause``
 ///  - ``TypeAliasDeclSyntax``.``TypeAliasDeclSyntax/genericWhereClause``
 public struct GenericWhereClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
@@ -3429,15 +3429,15 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 ///
 /// ### Contained in
 /// 
-///  - ``ActorDeclSyntax``.``ActorDeclSyntax/inheritanceClause``
+///  - ``ActorDeclHeaderSyntax``.``ActorDeclHeaderSyntax/inheritanceClause``
 ///  - ``AssociatedTypeDeclSyntax``.``AssociatedTypeDeclSyntax/inheritanceClause``
-///  - ``ClassDeclSyntax``.``ClassDeclSyntax/inheritanceClause``
+///  - ``ClassDeclHeaderSyntax``.``ClassDeclHeaderSyntax/inheritanceClause``
 ///  - ``DeclGroupHeaderSyntax``.``DeclGroupHeaderSyntax/inheritanceClause``
-///  - ``EnumDeclSyntax``.``EnumDeclSyntax/inheritanceClause``
-///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/inheritanceClause``
+///  - ``EnumDeclHeaderSyntax``.``EnumDeclHeaderSyntax/inheritanceClause``
+///  - ``ExtensionDeclHeaderSyntax``.``ExtensionDeclHeaderSyntax/inheritanceClause``
 ///  - ``MissingDeclHeaderSyntax``.``MissingDeclHeaderSyntax/inheritanceClause``
-///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/inheritanceClause``
-///  - ``StructDeclSyntax``.``StructDeclSyntax/inheritanceClause``
+///  - ``ProtocolDeclHeaderSyntax``.``ProtocolDeclHeaderSyntax/inheritanceClause``
+///  - ``StructDeclHeaderSyntax``.``StructDeclHeaderSyntax/inheritanceClause``
 public struct InheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 

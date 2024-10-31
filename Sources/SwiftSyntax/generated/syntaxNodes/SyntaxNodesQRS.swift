@@ -2173,6 +2173,353 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
   public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeContent, \Self.content, \Self.unexpectedAfterContent])
 }
 
+// MARK: - StructDeclHeaderSyntax
+
+/// A `struct` declaration header
+/// 
+/// An example of a struct declaration header is
+/// 
+/// ```swift
+/// struct SomeStruct
+/// ```
+/// 
+/// A struct declaration may include a type inheritance clause listing
+/// one or more protocols the struct conforms to. The example below uses
+/// Hashable and Equatable protocols.
+/// 
+/// ```swift
+/// struct AdvancedStruct: Hashable, Equatable
+/// ```
+/// 
+/// A struct declaration may include a generic parameter clause as well
+/// as a generic where clause.
+/// 
+/// ```swift
+/// struct Stack<Element>
+/// ```
+///
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``DeclModifierListSyntax``
+///  - `structKeyword`: `struct`
+///  - `name`: `<identifier>`
+///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
+///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
+///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``StructDeclSyntax``.``StructDeclSyntax/structHeader``
+public struct StructDeclHeaderSyntax: DeclGroupHeaderSyntaxProtocol, SyntaxHashable, _LeafDeclGroupHeaderSyntaxNodeProtocol {
+  public let _syntaxNode: Syntax
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard node.raw.kind == .structDeclHeader else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - attributes: Attributes that are attached to the struct declaration.
+  ///   - modifiers: Modifiers like `public` that are attached to the struct declaration.
+  ///   - structKeyword: The `struct` keyword for this declaration.
+  ///   - name: Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it.
+  ///   - genericParameterClause: The generic parameters, if any, of the struct declaration.
+  ///   - inheritanceClause: The struct declaration inheritance clause describing one or more conformances for this struct declaration.
+  ///   - genericWhereClause: The `where` clause that applies to the generic parameters of this struct declaration.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    _ unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil,
+    structKeyword: TokenSyntax = .keyword(.struct),
+    _ unexpectedBetweenStructKeywordAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    _ unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
+    genericParameterClause: GenericParameterClauseSyntax? = nil,
+    _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+    inheritanceClause: InheritanceClauseSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((SyntaxArena(), (
+      unexpectedBeforeAttributes,
+      attributes,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers,
+      unexpectedBetweenModifiersAndStructKeyword,
+      structKeyword,
+      unexpectedBetweenStructKeywordAndName,
+      name,
+      unexpectedBetweenNameAndGenericParameterClause,
+      genericParameterClause,
+      unexpectedBetweenGenericParameterClauseAndInheritanceClause,
+      inheritanceClause,
+      unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+      genericWhereClause,
+      unexpectedAfterGenericWhereClause
+    ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeAttributes?.raw,
+        attributes.raw,
+        unexpectedBetweenAttributesAndModifiers?.raw,
+        modifiers.raw,
+        unexpectedBetweenModifiersAndStructKeyword?.raw,
+        structKeyword.raw,
+        unexpectedBetweenStructKeywordAndName?.raw,
+        name.raw,
+        unexpectedBetweenNameAndGenericParameterClause?.raw,
+        genericParameterClause?.raw,
+        unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw,
+        inheritanceClause?.raw,
+        unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
+        genericWhereClause?.raw,
+        unexpectedAfterGenericWhereClause?.raw
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.structDeclHeader,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  /// Attributes that are attached to the struct declaration.
+  public var attributes: AttributeListSyntax {
+    get {
+      return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  /// Adds the provided `element` to the node's `attributes`
+  /// collection.
+  ///
+  /// - param element: The new `Attribute` to add to the node's
+  ///                  `attributes` collection.
+  /// - returns: A copy of the receiver with the provided `Attribute`
+  ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
+  public func addAttribute(_ element: Syntax) -> StructDeclHeaderSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[1] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+                                        from: [element.raw], arena: arena)
+    }
+    return Syntax(self)
+      .replacingChild(
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
+      .cast(StructDeclHeaderSyntax.self)
+  }
+
+  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  /// Modifiers like `public` that are attached to the struct declaration.
+  public var modifiers: DeclModifierListSyntax {
+    get {
+      return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  /// Adds the provided `element` to the node's `modifiers`
+  /// collection.
+  ///
+  /// - param element: The new `Modifier` to add to the node's
+  ///                  `modifiers` collection.
+  /// - returns: A copy of the receiver with the provided `Modifier`
+  ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
+  public func addModifier(_ element: DeclModifierSyntax) -> StructDeclHeaderSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
+                                        from: [element.raw], arena: arena)
+    }
+    return Syntax(self)
+      .replacingChild(
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
+      .cast(StructDeclHeaderSyntax.self)
+  }
+
+  public var unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  /// The `struct` keyword for this declaration.
+  ///
+  /// ### Tokens
+  /// 
+  /// For syntax trees generated by the parser, this is guaranteed to be `struct`.
+  public var structKeyword: TokenSyntax {
+    get {
+      return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenStructKeywordAndName: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  /// Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it.
+  ///
+  /// ### Tokens
+  /// 
+  /// For syntax trees generated by the parser, this is guaranteed to be `<identifier>`.
+  public var name: TokenSyntax {
+    get {
+      return Syntax(self).child(at: 7)!.cast(TokenSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  /// The generic parameters, if any, of the struct declaration.
+  public var genericParameterClause: GenericParameterClauseSyntax? {
+    get {
+      return Syntax(self).child(at: 9)?.cast(GenericParameterClauseSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  /// The struct declaration inheritance clause describing one or more conformances for this struct declaration.
+  public var inheritanceClause: InheritanceClauseSyntax? {
+    get {
+      return Syntax(self).child(at: 11)?.cast(InheritanceClauseSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  /// The `where` clause that applies to the generic parameters of this struct declaration.
+  public var genericWhereClause: GenericWhereClauseSyntax? {
+    get {
+      return Syntax(self).child(at: 13)?.cast(GenericWhereClauseSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([
+    \Self.unexpectedBeforeAttributes,
+    \Self.attributes,
+    \Self.unexpectedBetweenAttributesAndModifiers,
+    \Self.modifiers,
+    \Self.unexpectedBetweenModifiersAndStructKeyword,
+    \Self.structKeyword,
+    \Self.unexpectedBetweenStructKeywordAndName,
+    \Self.name,
+    \Self.unexpectedBetweenNameAndGenericParameterClause,
+    \Self.genericParameterClause,
+    \Self.unexpectedBetweenGenericParameterClauseAndInheritanceClause,
+    \Self.inheritanceClause,
+    \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+    \Self.genericWhereClause,
+    \Self.unexpectedAfterGenericWhereClause
+  ])
+}
+
 // MARK: - StructDeclSyntax
 
 /// A `struct` declaration
@@ -2235,13 +2582,7 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
 ///
 /// ### Children
 /// 
-///  - `attributes`: ``AttributeListSyntax``
-///  - `modifiers`: ``DeclModifierListSyntax``
-///  - `structKeyword`: `struct`
-///  - `name`: `<identifier>`
-///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
-///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
-///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
+///  - `structHeader`: ``StructDeclHeaderSyntax``
 ///  - `memberBlock`: ``MemberBlockSyntax``
 public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
@@ -2255,32 +2596,14 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
 
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - attributes: Attributes that are attached to the struct declaration.
-  ///   - modifiers: Modifiers like `public` that are attached to the struct declaration.
-  ///   - structKeyword: The `struct` keyword for this declaration.
-  ///   - name: Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it.
-  ///   - genericParameterClause: The generic parameters, if any, of the struct declaration.
-  ///   - inheritanceClause: The struct declaration inheritance clause describing one or more conformances for this struct declaration.
-  ///   - genericWhereClause: The `where` clause that applies to the generic parameters of this struct declaration.
-  ///   - memberBlock: The members of the struct declaration. Because struct extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type.
+  ///   - structHeader: Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it.
+  ///   - memberBlock: The header of the struct declaration.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
     leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
-    attributes: AttributeListSyntax = [],
-    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: DeclModifierListSyntax = [],
-    _ unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil,
-    structKeyword: TokenSyntax = .keyword(.struct),
-    _ unexpectedBetweenStructKeywordAndName: UnexpectedNodesSyntax? = nil,
-    name: TokenSyntax,
-    _ unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
-    genericParameterClause: GenericParameterClauseSyntax? = nil,
-    _ unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? = nil,
-    inheritanceClause: InheritanceClauseSyntax? = nil,
-    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
-    genericWhereClause: GenericWhereClauseSyntax? = nil,
-    _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeStructHeader: UnexpectedNodesSyntax? = nil,
+    structHeader: StructDeclHeaderSyntax,
+    _ unexpectedBetweenStructHeaderAndMemberBlock: UnexpectedNodesSyntax? = nil,
     memberBlock: MemberBlockSyntax,
     _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
@@ -2288,40 +2611,16 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((SyntaxArena(), (
-      unexpectedBeforeAttributes,
-      attributes,
-      unexpectedBetweenAttributesAndModifiers,
-      modifiers,
-      unexpectedBetweenModifiersAndStructKeyword,
-      structKeyword,
-      unexpectedBetweenStructKeywordAndName,
-      name,
-      unexpectedBetweenNameAndGenericParameterClause,
-      genericParameterClause,
-      unexpectedBetweenGenericParameterClauseAndInheritanceClause,
-      inheritanceClause,
-      unexpectedBetweenInheritanceClauseAndGenericWhereClause,
-      genericWhereClause,
-      unexpectedBetweenGenericWhereClauseAndMemberBlock,
+      unexpectedBeforeStructHeader,
+      structHeader,
+      unexpectedBetweenStructHeaderAndMemberBlock,
       memberBlock,
       unexpectedAfterMemberBlock
     ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-        unexpectedBeforeAttributes?.raw,
-        attributes.raw,
-        unexpectedBetweenAttributesAndModifiers?.raw,
-        modifiers.raw,
-        unexpectedBetweenModifiersAndStructKeyword?.raw,
-        structKeyword.raw,
-        unexpectedBetweenStructKeywordAndName?.raw,
-        name.raw,
-        unexpectedBetweenNameAndGenericParameterClause?.raw,
-        genericParameterClause?.raw,
-        unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw,
-        inheritanceClause?.raw,
-        unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
-        genericWhereClause?.raw,
-        unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw,
+        unexpectedBeforeStructHeader?.raw,
+        structHeader.raw,
+        unexpectedBetweenStructHeaderAndMemberBlock?.raw,
         memberBlock.raw,
         unexpectedAfterMemberBlock?.raw
       ]
@@ -2336,7 +2635,7 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
     }
   }
 
-  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeStructHeader: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -2345,44 +2644,17 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
     }
   }
 
-  /// Attributes that are attached to the struct declaration.
-  public var attributes: AttributeListSyntax {
+  /// Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it.
+  public var structHeader: StructDeclHeaderSyntax {
     get {
-      return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
+      return Syntax(self).child(at: 1)!.cast(StructDeclHeaderSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclSyntax.self)
     }
   }
 
-  /// Adds the provided `element` to the node's `attributes`
-  /// collection.
-  ///
-  /// - param element: The new `Attribute` to add to the node's
-  ///                  `attributes` collection.
-  /// - returns: A copy of the receiver with the provided `Attribute`
-  ///            appended to its `attributes` collection.
-  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
-  public func addAttribute(_ element: Syntax) -> StructDeclSyntax {
-    var collection: RawSyntax
-    let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 1,
-        with: collection,
-        rawNodeArena: arena,
-        allocationArena: arena
-      )
-      .cast(StructDeclSyntax.self)
-  }
-
-  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenStructHeaderAndMemberBlock: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -2391,44 +2663,17 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
     }
   }
 
-  /// Modifiers like `public` that are attached to the struct declaration.
-  public var modifiers: DeclModifierListSyntax {
+  /// The header of the struct declaration.
+  public var memberBlock: MemberBlockSyntax {
     get {
-      return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
+      return Syntax(self).child(at: 3)!.cast(MemberBlockSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclSyntax.self)
     }
   }
 
-  /// Adds the provided `element` to the node's `modifiers`
-  /// collection.
-  ///
-  /// - param element: The new `Modifier` to add to the node's
-  ///                  `modifiers` collection.
-  /// - returns: A copy of the receiver with the provided `Modifier`
-  ///            appended to its `modifiers` collection.
-  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
-  public func addModifier(_ element: DeclModifierSyntax) -> StructDeclSyntax {
-    var collection: RawSyntax
-    let arena = SyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 3,
-        with: collection,
-        rawNodeArena: arena,
-        allocationArena: arena
-      )
-      .cast(StructDeclSyntax.self)
-  }
-
-  public var unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? {
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -2437,144 +2682,10 @@ public struct StructDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyn
     }
   }
 
-  /// The `struct` keyword for this declaration.
-  ///
-  /// ### Tokens
-  /// 
-  /// For syntax trees generated by the parser, this is guaranteed to be `struct`.
-  public var structKeyword: TokenSyntax {
-    get {
-      return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclSyntax.self)
-    }
-  }
-
-  public var unexpectedBetweenStructKeywordAndName: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclSyntax.self)
-    }
-  }
-
-  /// Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it.
-  ///
-  /// ### Tokens
-  /// 
-  /// For syntax trees generated by the parser, this is guaranteed to be `<identifier>`.
-  public var name: TokenSyntax {
-    get {
-      return Syntax(self).child(at: 7)!.cast(TokenSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclSyntax.self)
-    }
-  }
-
-  public var unexpectedBetweenNameAndGenericParameterClause: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclSyntax.self)
-    }
-  }
-
-  /// The generic parameters, if any, of the struct declaration.
-  public var genericParameterClause: GenericParameterClauseSyntax? {
-    get {
-      return Syntax(self).child(at: 9)?.cast(GenericParameterClauseSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclSyntax.self)
-    }
-  }
-
-  public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclSyntax.self)
-    }
-  }
-
-  /// The struct declaration inheritance clause describing one or more conformances for this struct declaration.
-  public var inheritanceClause: InheritanceClauseSyntax? {
-    get {
-      return Syntax(self).child(at: 11)?.cast(InheritanceClauseSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclSyntax.self)
-    }
-  }
-
-  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclSyntax.self)
-    }
-  }
-
-  /// The `where` clause that applies to the generic parameters of this struct declaration.
-  public var genericWhereClause: GenericWhereClauseSyntax? {
-    get {
-      return Syntax(self).child(at: 13)?.cast(GenericWhereClauseSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclSyntax.self)
-    }
-  }
-
-  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclSyntax.self)
-    }
-  }
-
-  /// The members of the struct declaration. Because struct extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type.
-  public var memberBlock: MemberBlockSyntax {
-    get {
-      return Syntax(self).child(at: 15)!.cast(MemberBlockSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 15, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclSyntax.self)
-    }
-  }
-
-  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 16)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 16, with: Syntax(value), arena: SyntaxArena()).cast(StructDeclSyntax.self)
-    }
-  }
-
   public static let structure: SyntaxNodeStructure = .layout([
-    \Self.unexpectedBeforeAttributes,
-    \Self.attributes,
-    \Self.unexpectedBetweenAttributesAndModifiers,
-    \Self.modifiers,
-    \Self.unexpectedBetweenModifiersAndStructKeyword,
-    \Self.structKeyword,
-    \Self.unexpectedBetweenStructKeywordAndName,
-    \Self.name,
-    \Self.unexpectedBetweenNameAndGenericParameterClause,
-    \Self.genericParameterClause,
-    \Self.unexpectedBetweenGenericParameterClauseAndInheritanceClause,
-    \Self.inheritanceClause,
-    \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause,
-    \Self.genericWhereClause,
-    \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock,
+    \Self.unexpectedBeforeStructHeader,
+    \Self.structHeader,
+    \Self.unexpectedBetweenStructHeaderAndMemberBlock,
     \Self.memberBlock,
     \Self.unexpectedAfterMemberBlock
   ])

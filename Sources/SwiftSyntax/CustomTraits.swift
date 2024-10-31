@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-extension ActorDeclSyntax {
+extension ActorDeclHeaderSyntax {
   public var introducer: TokenSyntax {
     get {
       return actorKeyword
@@ -21,7 +21,18 @@ extension ActorDeclSyntax {
   }
 }
 
-extension ClassDeclSyntax {
+extension ActorDeclSyntax {
+  public var header: DeclGroupHeaderSyntax {
+    get {
+      return DeclGroupHeaderSyntax(actorHeader)
+    }
+    set {
+      actorHeader = newValue.cast(ActorDeclHeaderSyntax.self)
+    }
+  }
+}
+
+extension ClassDeclHeaderSyntax {
   public var introducer: TokenSyntax {
     get {
       return classKeyword
@@ -32,7 +43,18 @@ extension ClassDeclSyntax {
   }
 }
 
-extension EnumDeclSyntax {
+extension ClassDeclSyntax {
+  public var header: DeclGroupHeaderSyntax {
+    get {
+      return DeclGroupHeaderSyntax(classHeader)
+    }
+    set {
+      classHeader = newValue.cast(ClassDeclHeaderSyntax.self)
+    }
+  }
+}
+
+extension EnumDeclHeaderSyntax {
   public var introducer: TokenSyntax {
     get {
       return enumKeyword
@@ -43,13 +65,35 @@ extension EnumDeclSyntax {
   }
 }
 
-extension ExtensionDeclSyntax {
+extension EnumDeclSyntax {
+  public var header: DeclGroupHeaderSyntax {
+    get {
+      return DeclGroupHeaderSyntax(enumHeader)
+    }
+    set {
+      enumHeader = newValue.cast(EnumDeclHeaderSyntax.self)
+    }
+  }
+}
+
+extension ExtensionDeclHeaderSyntax {
   public var introducer: TokenSyntax {
     get {
       return extensionKeyword
     }
     set {
       extensionKeyword = newValue
+    }
+  }
+}
+
+extension ExtensionDeclSyntax {
+  public var header: DeclGroupHeaderSyntax {
+    get {
+      return DeclGroupHeaderSyntax(extensionHeader)
+    }
+    set {
+      extensionHeader = newValue.cast(ExtensionDeclHeaderSyntax.self)
     }
   }
 }
@@ -65,7 +109,7 @@ extension MissingDeclHeaderSyntax {
   }
 }
 
-extension ProtocolDeclSyntax {
+extension ProtocolDeclHeaderSyntax {
   public var introducer: TokenSyntax {
     get {
       return protocolKeyword
@@ -76,13 +120,35 @@ extension ProtocolDeclSyntax {
   }
 }
 
-extension StructDeclSyntax {
+extension ProtocolDeclSyntax {
+  public var header: DeclGroupHeaderSyntax {
+    get {
+      return DeclGroupHeaderSyntax(protocolHeader)
+    }
+    set {
+      protocolHeader = newValue.cast(ProtocolDeclHeaderSyntax.self)
+    }
+  }
+}
+
+extension StructDeclHeaderSyntax {
   public var introducer: TokenSyntax {
     get {
       return structKeyword
     }
     set {
       structKeyword = newValue
+    }
+  }
+}
+
+extension StructDeclSyntax {
+  public var header: DeclGroupHeaderSyntax {
+    get {
+      return DeclGroupHeaderSyntax(structHeader)
+    }
+    set {
+      structHeader = newValue.cast(StructDeclHeaderSyntax.self)
     }
   }
 }

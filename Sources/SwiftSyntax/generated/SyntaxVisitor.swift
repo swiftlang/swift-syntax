@@ -98,6 +98,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: AccessorParametersSyntax) {
   }
 
+  /// Visiting ``ActorDeclHeaderSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ActorDeclHeaderSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``ActorDeclHeaderSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ActorDeclHeaderSyntax) {
+  }
+
   /// Visiting ``ActorDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -432,6 +444,18 @@ open class SyntaxVisitor {
   /// The function called after visiting ``CatchItemSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: CatchItemSyntax) {
+  }
+
+  /// Visiting ``ClassDeclHeaderSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ClassDeclHeaderSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``ClassDeclHeaderSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ClassDeclHeaderSyntax) {
   }
 
   /// Visiting ``ClassDeclSyntax`` specifically.
@@ -1220,6 +1244,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: EnumCaseParameterSyntax) {
   }
 
+  /// Visiting ``EnumDeclHeaderSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: EnumDeclHeaderSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``EnumDeclHeaderSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: EnumDeclHeaderSyntax) {
+  }
+
   /// Visiting ``EnumDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1290,6 +1326,18 @@ open class SyntaxVisitor {
   /// The function called after visiting ``ExpressionStmtSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ExpressionStmtSyntax) {
+  }
+
+  /// Visiting ``ExtensionDeclHeaderSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ExtensionDeclHeaderSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``ExtensionDeclHeaderSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ExtensionDeclHeaderSyntax) {
   }
 
   /// Visiting ``ExtensionDeclSyntax`` specifically.
@@ -2678,6 +2726,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: PrimaryAssociatedTypeSyntax) {
   }
 
+  /// Visiting ``ProtocolDeclHeaderSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ProtocolDeclHeaderSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``ProtocolDeclHeaderSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ProtocolDeclHeaderSyntax) {
+  }
+
   /// Visiting ``ProtocolDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2892,6 +2952,18 @@ open class SyntaxVisitor {
   /// The function called after visiting ``StringSegmentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: StringSegmentSyntax) {
+  }
+
+  /// Visiting ``StructDeclHeaderSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: StructDeclHeaderSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``StructDeclHeaderSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: StructDeclHeaderSyntax) {
   }
 
   /// Visiting ``StructDeclSyntax`` specifically.
@@ -3567,6 +3639,10 @@ open class SyntaxVisitor {
       return {
         self.visitImpl(&$0, AccessorParametersSyntax.self, self.visit, self.visitPost)
       }
+    case .actorDeclHeader:
+      return {
+        self.visitImpl(&$0, ActorDeclHeaderSyntax.self, self.visit, self.visitPost)
+      }
     case .actorDecl:
       return {
         self.visitImpl(&$0, ActorDeclSyntax.self, self.visit, self.visitPost)
@@ -3678,6 +3754,10 @@ open class SyntaxVisitor {
     case .catchItem:
       return {
         self.visitImpl(&$0, CatchItemSyntax.self, self.visit, self.visitPost)
+      }
+    case .classDeclHeader:
+      return {
+        self.visitImpl(&$0, ClassDeclHeaderSyntax.self, self.visit, self.visitPost)
       }
     case .classDecl:
       return {
@@ -3939,6 +4019,10 @@ open class SyntaxVisitor {
       return {
         self.visitImpl(&$0, EnumCaseParameterSyntax.self, self.visit, self.visitPost)
       }
+    case .enumDeclHeader:
+      return {
+        self.visitImpl(&$0, EnumDeclHeaderSyntax.self, self.visit, self.visitPost)
+      }
     case .enumDecl:
       return {
         self.visitImpl(&$0, EnumDeclSyntax.self, self.visit, self.visitPost)
@@ -3962,6 +4046,10 @@ open class SyntaxVisitor {
     case .expressionStmt:
       return {
         self.visitImpl(&$0, ExpressionStmtSyntax.self, self.visit, self.visitPost)
+      }
+    case .extensionDeclHeader:
+      return {
+        self.visitImpl(&$0, ExtensionDeclHeaderSyntax.self, self.visit, self.visitPost)
       }
     case .extensionDecl:
       return {
@@ -4419,6 +4507,10 @@ open class SyntaxVisitor {
       return {
         self.visitImpl(&$0, PrimaryAssociatedTypeSyntax.self, self.visit, self.visitPost)
       }
+    case .protocolDeclHeader:
+      return {
+        self.visitImpl(&$0, ProtocolDeclHeaderSyntax.self, self.visit, self.visitPost)
+      }
     case .protocolDecl:
       return {
         self.visitImpl(&$0, ProtocolDeclSyntax.self, self.visit, self.visitPost)
@@ -4490,6 +4582,10 @@ open class SyntaxVisitor {
     case .stringSegment:
       return {
         self.visitImpl(&$0, StringSegmentSyntax.self, self.visit, self.visitPost)
+      }
+    case .structDeclHeader:
+      return {
+        self.visitImpl(&$0, StructDeclHeaderSyntax.self, self.visit, self.visitPost)
       }
     case .structDecl:
       return {
@@ -4707,6 +4803,8 @@ open class SyntaxVisitor {
       visitImpl(&node, AccessorEffectSpecifiersSyntax.self, visit, visitPost)
     case .accessorParameters:
       visitImpl(&node, AccessorParametersSyntax.self, visit, visitPost)
+    case .actorDeclHeader:
+      visitImpl(&node, ActorDeclHeaderSyntax.self, visit, visitPost)
     case .actorDecl:
       visitImpl(&node, ActorDeclSyntax.self, visit, visitPost)
     case .arrayElementList:
@@ -4763,6 +4861,8 @@ open class SyntaxVisitor {
       visitImpl(&node, CatchItemListSyntax.self, visit, visitPost)
     case .catchItem:
       visitImpl(&node, CatchItemSyntax.self, visit, visitPost)
+    case .classDeclHeader:
+      visitImpl(&node, ClassDeclHeaderSyntax.self, visit, visitPost)
     case .classDecl:
       visitImpl(&node, ClassDeclSyntax.self, visit, visitPost)
     case .classRestrictionType:
@@ -4893,6 +4993,8 @@ open class SyntaxVisitor {
       visitImpl(&node, EnumCaseParameterListSyntax.self, visit, visitPost)
     case .enumCaseParameter:
       visitImpl(&node, EnumCaseParameterSyntax.self, visit, visitPost)
+    case .enumDeclHeader:
+      visitImpl(&node, EnumDeclHeaderSyntax.self, visit, visitPost)
     case .enumDecl:
       visitImpl(&node, EnumDeclSyntax.self, visit, visitPost)
     case .exposeAttributeArguments:
@@ -4905,6 +5007,8 @@ open class SyntaxVisitor {
       visitImpl(&node, ExpressionSegmentSyntax.self, visit, visitPost)
     case .expressionStmt:
       visitImpl(&node, ExpressionStmtSyntax.self, visit, visitPost)
+    case .extensionDeclHeader:
+      visitImpl(&node, ExtensionDeclHeaderSyntax.self, visit, visitPost)
     case .extensionDecl:
       visitImpl(&node, ExtensionDeclSyntax.self, visit, visitPost)
     case .fallThroughStmt:
@@ -5133,6 +5237,8 @@ open class SyntaxVisitor {
       visitImpl(&node, PrimaryAssociatedTypeListSyntax.self, visit, visitPost)
     case .primaryAssociatedType:
       visitImpl(&node, PrimaryAssociatedTypeSyntax.self, visit, visitPost)
+    case .protocolDeclHeader:
+      visitImpl(&node, ProtocolDeclHeaderSyntax.self, visit, visitPost)
     case .protocolDecl:
       visitImpl(&node, ProtocolDeclSyntax.self, visit, visitPost)
     case .regexLiteralExpr:
@@ -5169,6 +5275,8 @@ open class SyntaxVisitor {
       visitImpl(&node, StringLiteralSegmentListSyntax.self, visit, visitPost)
     case .stringSegment:
       visitImpl(&node, StringSegmentSyntax.self, visit, visitPost)
+    case .structDeclHeader:
+      visitImpl(&node, StructDeclHeaderSyntax.self, visit, visitPost)
     case .structDecl:
       visitImpl(&node, StructDeclSyntax.self, visit, visitPost)
     case .subscriptCallExpr:

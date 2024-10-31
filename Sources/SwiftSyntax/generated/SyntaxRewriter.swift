@@ -141,6 +141,13 @@ open class SyntaxRewriter {
     return visitChildren(node._syntaxNode).cast(AccessorParametersSyntax.self)
   }
 
+  /// Visit a ``ActorDeclHeaderSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ActorDeclHeaderSyntax) -> DeclGroupHeaderSyntax {
+    return DeclGroupHeaderSyntax(visitChildren(node._syntaxNode).cast(ActorDeclHeaderSyntax.self))
+  }
+
   /// Visit a ``ActorDeclSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -335,6 +342,13 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: CatchItemSyntax) -> CatchItemSyntax {
     return visitChildren(node._syntaxNode).cast(CatchItemSyntax.self)
+  }
+
+  /// Visit a ``ClassDeclHeaderSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ClassDeclHeaderSyntax) -> DeclGroupHeaderSyntax {
+    return DeclGroupHeaderSyntax(visitChildren(node._syntaxNode).cast(ClassDeclHeaderSyntax.self))
   }
 
   /// Visit a ``ClassDeclSyntax``.
@@ -795,6 +809,13 @@ open class SyntaxRewriter {
     return visitChildren(node._syntaxNode).cast(EnumCaseParameterSyntax.self)
   }
 
+  /// Visit a ``EnumDeclHeaderSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: EnumDeclHeaderSyntax) -> DeclGroupHeaderSyntax {
+    return DeclGroupHeaderSyntax(visitChildren(node._syntaxNode).cast(EnumDeclHeaderSyntax.self))
+  }
+
   /// Visit a ``EnumDeclSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -835,6 +856,13 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: ExpressionStmtSyntax) -> StmtSyntax {
     return StmtSyntax(visitChildren(node._syntaxNode).cast(ExpressionStmtSyntax.self))
+  }
+
+  /// Visit a ``ExtensionDeclHeaderSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ExtensionDeclHeaderSyntax) -> DeclGroupHeaderSyntax {
+    return DeclGroupHeaderSyntax(visitChildren(node._syntaxNode).cast(ExtensionDeclHeaderSyntax.self))
   }
 
   /// Visit a ``ExtensionDeclSyntax``.
@@ -1644,6 +1672,13 @@ open class SyntaxRewriter {
     return visitChildren(node._syntaxNode).cast(PrimaryAssociatedTypeSyntax.self)
   }
 
+  /// Visit a ``ProtocolDeclHeaderSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ProtocolDeclHeaderSyntax) -> DeclGroupHeaderSyntax {
+    return DeclGroupHeaderSyntax(visitChildren(node._syntaxNode).cast(ProtocolDeclHeaderSyntax.self))
+  }
+
   /// Visit a ``ProtocolDeclSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1768,6 +1803,13 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: StringSegmentSyntax) -> StringSegmentSyntax {
     return visitChildren(node._syntaxNode).cast(StringSegmentSyntax.self)
+  }
+
+  /// Visit a ``StructDeclHeaderSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: StructDeclHeaderSyntax) -> DeclGroupHeaderSyntax {
+    return DeclGroupHeaderSyntax(visitChildren(node._syntaxNode).cast(StructDeclHeaderSyntax.self))
   }
 
   /// Visit a ``StructDeclSyntax``.
@@ -2227,6 +2269,10 @@ open class SyntaxRewriter {
       return {
         self.visitImpl(&$0, AccessorParametersSyntax.self, self.visit)
       }
+    case .actorDeclHeader:
+      return {
+        self.visitImpl(&$0, ActorDeclHeaderSyntax.self, self.visit)
+      }
     case .actorDecl:
       return {
         self.visitImpl(&$0, ActorDeclSyntax.self, self.visit)
@@ -2338,6 +2384,10 @@ open class SyntaxRewriter {
     case .catchItem:
       return {
         self.visitImpl(&$0, CatchItemSyntax.self, self.visit)
+      }
+    case .classDeclHeader:
+      return {
+        self.visitImpl(&$0, ClassDeclHeaderSyntax.self, self.visit)
       }
     case .classDecl:
       return {
@@ -2599,6 +2649,10 @@ open class SyntaxRewriter {
       return {
         self.visitImpl(&$0, EnumCaseParameterSyntax.self, self.visit)
       }
+    case .enumDeclHeader:
+      return {
+        self.visitImpl(&$0, EnumDeclHeaderSyntax.self, self.visit)
+      }
     case .enumDecl:
       return {
         self.visitImpl(&$0, EnumDeclSyntax.self, self.visit)
@@ -2622,6 +2676,10 @@ open class SyntaxRewriter {
     case .expressionStmt:
       return {
         self.visitImpl(&$0, ExpressionStmtSyntax.self, self.visit)
+      }
+    case .extensionDeclHeader:
+      return {
+        self.visitImpl(&$0, ExtensionDeclHeaderSyntax.self, self.visit)
       }
     case .extensionDecl:
       return {
@@ -3079,6 +3137,10 @@ open class SyntaxRewriter {
       return {
         self.visitImpl(&$0, PrimaryAssociatedTypeSyntax.self, self.visit)
       }
+    case .protocolDeclHeader:
+      return {
+        self.visitImpl(&$0, ProtocolDeclHeaderSyntax.self, self.visit)
+      }
     case .protocolDecl:
       return {
         self.visitImpl(&$0, ProtocolDeclSyntax.self, self.visit)
@@ -3150,6 +3212,10 @@ open class SyntaxRewriter {
     case .stringSegment:
       return {
         self.visitImpl(&$0, StringSegmentSyntax.self, self.visit)
+      }
+    case .structDeclHeader:
+      return {
+        self.visitImpl(&$0, StructDeclHeaderSyntax.self, self.visit)
       }
     case .structDecl:
       return {
@@ -3363,6 +3429,8 @@ open class SyntaxRewriter {
       return visitImpl(&node, AccessorEffectSpecifiersSyntax.self, visit)
     case .accessorParameters:
       return visitImpl(&node, AccessorParametersSyntax.self, visit)
+    case .actorDeclHeader:
+      return visitImpl(&node, ActorDeclHeaderSyntax.self, visit)
     case .actorDecl:
       return visitImpl(&node, ActorDeclSyntax.self, visit)
     case .arrayElementList:
@@ -3419,6 +3487,8 @@ open class SyntaxRewriter {
       return visitImpl(&node, CatchItemListSyntax.self, visit)
     case .catchItem:
       return visitImpl(&node, CatchItemSyntax.self, visit)
+    case .classDeclHeader:
+      return visitImpl(&node, ClassDeclHeaderSyntax.self, visit)
     case .classDecl:
       return visitImpl(&node, ClassDeclSyntax.self, visit)
     case .classRestrictionType:
@@ -3549,6 +3619,8 @@ open class SyntaxRewriter {
       return visitImpl(&node, EnumCaseParameterListSyntax.self, visit)
     case .enumCaseParameter:
       return visitImpl(&node, EnumCaseParameterSyntax.self, visit)
+    case .enumDeclHeader:
+      return visitImpl(&node, EnumDeclHeaderSyntax.self, visit)
     case .enumDecl:
       return visitImpl(&node, EnumDeclSyntax.self, visit)
     case .exposeAttributeArguments:
@@ -3561,6 +3633,8 @@ open class SyntaxRewriter {
       return visitImpl(&node, ExpressionSegmentSyntax.self, visit)
     case .expressionStmt:
       return visitImpl(&node, ExpressionStmtSyntax.self, visit)
+    case .extensionDeclHeader:
+      return visitImpl(&node, ExtensionDeclHeaderSyntax.self, visit)
     case .extensionDecl:
       return visitImpl(&node, ExtensionDeclSyntax.self, visit)
     case .fallThroughStmt:
@@ -3789,6 +3863,8 @@ open class SyntaxRewriter {
       return visitImpl(&node, PrimaryAssociatedTypeListSyntax.self, visit)
     case .primaryAssociatedType:
       return visitImpl(&node, PrimaryAssociatedTypeSyntax.self, visit)
+    case .protocolDeclHeader:
+      return visitImpl(&node, ProtocolDeclHeaderSyntax.self, visit)
     case .protocolDecl:
       return visitImpl(&node, ProtocolDeclSyntax.self, visit)
     case .regexLiteralExpr:
@@ -3825,6 +3901,8 @@ open class SyntaxRewriter {
       return visitImpl(&node, StringLiteralSegmentListSyntax.self, visit)
     case .stringSegment:
       return visitImpl(&node, StringSegmentSyntax.self, visit)
+    case .structDeclHeader:
+      return visitImpl(&node, StructDeclHeaderSyntax.self, visit)
     case .structDecl:
       return visitImpl(&node, StructDeclSyntax.self, visit)
     case .subscriptCallExpr:

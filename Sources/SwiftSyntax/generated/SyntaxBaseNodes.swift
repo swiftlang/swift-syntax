@@ -193,7 +193,13 @@ extension Syntax {
 
 /// ### Subtypes
 /// 
+/// - ``ActorDeclHeaderSyntax``
+/// - ``ClassDeclHeaderSyntax``
+/// - ``EnumDeclHeaderSyntax``
+/// - ``ExtensionDeclHeaderSyntax``
 /// - ``MissingDeclHeaderSyntax``
+/// - ``ProtocolDeclHeaderSyntax``
+/// - ``StructDeclHeaderSyntax``
 public struct DeclGroupHeaderSyntax: DeclGroupHeaderSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
@@ -230,7 +236,7 @@ public struct DeclGroupHeaderSyntax: DeclGroupHeaderSyntaxProtocol, SyntaxHashab
 
   public init?(_ node: __shared some SyntaxProtocol) {
     switch node.raw.kind {
-    case .missingDeclHeader:
+    case .actorDeclHeader, .classDeclHeader, .enumDeclHeader, .extensionDeclHeader, .missingDeclHeader, .protocolDeclHeader, .structDeclHeader:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -255,7 +261,14 @@ public struct DeclGroupHeaderSyntax: DeclGroupHeaderSyntaxProtocol, SyntaxHashab
 
   public static var structure: SyntaxNodeStructure {
     return .choices([
-      .node(MissingDeclHeaderSyntax.self)])
+      .node(ActorDeclHeaderSyntax.self),
+      .node(ClassDeclHeaderSyntax.self),
+      .node(EnumDeclHeaderSyntax.self),
+      .node(ExtensionDeclHeaderSyntax.self),
+      .node(MissingDeclHeaderSyntax.self),
+      .node(ProtocolDeclHeaderSyntax.self),
+      .node(StructDeclHeaderSyntax.self)
+    ])
   }
 
   public var attributes: AttributeListSyntax {
@@ -1882,6 +1895,7 @@ extension Syntax {
       .node(AccessorDeclSyntax.self),
       .node(AccessorEffectSpecifiersSyntax.self),
       .node(AccessorParametersSyntax.self),
+      .node(ActorDeclHeaderSyntax.self),
       .node(ActorDeclSyntax.self),
       .node(ArrayElementListSyntax.self),
       .node(ArrayElementSyntax.self),
@@ -1910,6 +1924,7 @@ extension Syntax {
       .node(CatchClauseSyntax.self),
       .node(CatchItemListSyntax.self),
       .node(CatchItemSyntax.self),
+      .node(ClassDeclHeaderSyntax.self),
       .node(ClassDeclSyntax.self),
       .node(ClassRestrictionTypeSyntax.self),
       .node(ClosureCaptureClauseSyntax.self),
@@ -1975,12 +1990,14 @@ extension Syntax {
       .node(EnumCaseParameterClauseSyntax.self),
       .node(EnumCaseParameterListSyntax.self),
       .node(EnumCaseParameterSyntax.self),
+      .node(EnumDeclHeaderSyntax.self),
       .node(EnumDeclSyntax.self),
       .node(ExposeAttributeArgumentsSyntax.self),
       .node(ExprListSyntax.self),
       .node(ExpressionPatternSyntax.self),
       .node(ExpressionSegmentSyntax.self),
       .node(ExpressionStmtSyntax.self),
+      .node(ExtensionDeclHeaderSyntax.self),
       .node(ExtensionDeclSyntax.self),
       .node(FallThroughStmtSyntax.self),
       .node(FloatLiteralExprSyntax.self),
@@ -2095,6 +2112,7 @@ extension Syntax {
       .node(PrimaryAssociatedTypeClauseSyntax.self),
       .node(PrimaryAssociatedTypeListSyntax.self),
       .node(PrimaryAssociatedTypeSyntax.self),
+      .node(ProtocolDeclHeaderSyntax.self),
       .node(ProtocolDeclSyntax.self),
       .node(RegexLiteralExprSyntax.self),
       .node(RepeatStmtSyntax.self),
@@ -2113,6 +2131,7 @@ extension Syntax {
       .node(StringLiteralExprSyntax.self),
       .node(StringLiteralSegmentListSyntax.self),
       .node(StringSegmentSyntax.self),
+      .node(StructDeclHeaderSyntax.self),
       .node(StructDeclSyntax.self),
       .node(SubscriptCallExprSyntax.self),
       .node(SubscriptDeclSyntax.self),

@@ -349,7 +349,7 @@ final class StringInterpolationTests: XCTestCase {
   }
 
   func testStringInterpolationInBuilder() {
-    let ext = ExtensionDeclSyntax(extendedType: TypeSyntax("MyType")) {
+    let ext = ExtensionDeclSyntax(extensionHeader: .init(extendedType: TypeSyntax("MyType"))) {
       DeclSyntax(
         """
         ///

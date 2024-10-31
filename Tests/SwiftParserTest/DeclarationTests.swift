@@ -2337,8 +2337,10 @@ final class DeclarationTests: ParserTestCase {
         CodeBlockItemSyntax(
           item: .init(
             ClassDeclSyntax(
-              classKeyword: .keyword(.class),
-              name: .identifier("A"),
+              classHeader: ClassDeclHeaderSyntax(
+                classKeyword: .keyword(.class),
+                name: .identifier("A")
+              ),
               memberBlock: MemberBlockSyntax(
                 leftBrace: .leftBraceToken(),
                 members: MemberBlockItemListSyntax(),
@@ -2351,8 +2353,10 @@ final class DeclarationTests: ParserTestCase {
         CodeBlockItemSyntax(
           item: .init(
             ClassDeclSyntax(
-              classKeyword: .keyword(.class),
-              name: .identifier("B"),
+              classHeader: .init(
+                classKeyword: .keyword(.class),
+                name: .identifier("B")
+              ),
               memberBlock: MemberBlockSyntax(
                 leftBrace: .leftBraceToken(),
                 members: MemberBlockItemListSyntax(),

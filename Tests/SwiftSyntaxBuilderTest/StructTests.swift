@@ -17,7 +17,7 @@ import XCTest
 final class StructTests: XCTestCase {
   func testEmptyStruct() {
     let leadingTrivia = Trivia.unexpectedText("␣")
-    let buildable = StructDeclSyntax(leadingTrivia: leadingTrivia, name: "TestStruct") {}
+    let buildable = StructDeclSyntax(leadingTrivia: leadingTrivia, structHeader: .init(name: "TestStruct")) {}
 
     assertBuildResult(
       buildable,
@@ -44,8 +44,10 @@ final class StructTests: XCTestCase {
         .docLineComment("/// with multi line comment where the newline is a CR"),
         .carriageReturns(1),
       ],
-      structKeyword: .keyword(.struct),
-      name: "CarriateReturnsStruct",
+      structHeader: .init(
+        structKeyword: .keyword(.struct),
+        name: "CarriateReturnsStruct"
+      ),
       memberBlock: MemberBlockSyntax(members: [])
     )
     let carriageReturnFormFeedsStruct = StructDeclSyntax(
@@ -55,8 +57,10 @@ final class StructTests: XCTestCase {
         .docLineComment("/// with multi line comment where the newline is a CRLF"),
         .carriageReturnLineFeeds(1),
       ],
-      structKeyword: .keyword(.struct),
-      name: "CarriageReturnFormFeedsStruct",
+      structHeader: .init(
+        structKeyword: .keyword(.struct),
+        name: "CarriageReturnFormFeedsStruct"
+      ),
       memberBlock: MemberBlockSyntax(members: [])
     )
     let testStruct = try StructDeclSyntax("public struct TestStruct") {
@@ -87,7 +91,7 @@ final class StructTests: XCTestCase {
   }
 
   func testControlWithLoopAndIf() {
-    let myStruct = StructDeclSyntax(name: "MyStruct") {
+    let myStruct = StructDeclSyntax(structHeader: .init(name: "MyStruct")) {
       for i in 0..<5 {
         if i.isMultiple(of: 2) {
           VariableDeclSyntax(bindingSpecifier: .keyword(.let)) {

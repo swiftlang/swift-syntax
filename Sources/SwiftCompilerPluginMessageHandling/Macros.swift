@@ -132,7 +132,7 @@ extension PluginProviderMessageHandler {
     }
     let conformanceList = conformanceListSyntax.map {
       let placeholderStruct = sourceManager.add($0).cast(StructDeclSyntax.self)
-      return placeholderStruct.inheritanceClause!.inheritedTypes
+      return placeholderStruct.structHeader.inheritanceClause!.inheritedTypes
     }
 
     let context = PluginMacroExpansionContext(

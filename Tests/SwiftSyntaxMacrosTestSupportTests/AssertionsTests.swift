@@ -33,7 +33,7 @@ final class AssertionsTests: XCTestCase {
       if let structDecl = declaration.as(StructDeclSyntax.self) {
         context.diagnose(
           .init(
-            node: structDecl.structKeyword,
+            node: structDecl.structHeader.structKeyword,
             message: OnlyStruct()
           )
         )
@@ -52,11 +52,11 @@ final class AssertionsTests: XCTestCase {
       if let structDecl = declaration.as(StructDeclSyntax.self) {
         context.diagnose(
           .init(
-            node: structDecl.structKeyword,
+            node: structDecl.structHeader.structKeyword,
             message: OnlyStruct(),
             highlights: [
-              Syntax(structDecl.structKeyword),
-              Syntax(structDecl.name),
+              Syntax(structDecl.structHeader.structKeyword),
+              Syntax(structDecl.structHeader.name),
             ]
           )
         )

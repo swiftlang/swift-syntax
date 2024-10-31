@@ -391,7 +391,7 @@ import SwiftSyntax
 }
 @_spi(Experimental) extension ExtensionDeclSyntax: LookInMembersScopeSyntax {
   @_spi(Experimental) public var lookupMembersPosition: AbsolutePosition {
-    extendedType.position
+    extensionHeader.extendedType.position
   }
 
   @_spi(Experimental) public var defaultIntroducedNames: [LookupName] {
@@ -420,7 +420,8 @@ import SwiftSyntax
         + defaultLookupImplementation(identifier, at: lookUpPosition, with: config, propagateToParent: false)
         + [.lookInMembers(self)]
         + lookupInParent(identifier, at: lookUpPosition, with: config)
-    } else if !extendedType.range.contains(lookUpPosition) && genericWhereClause != nil {
+    } else if !extensionHeader.extendedType.range.contains(lookUpPosition) && extensionHeader.genericWhereClause != nil
+    {
       if inRightTypeOrSameTypeRequirement(lookUpPosition) {
         return [.lookInGenericParametersOfExtendedType(self)] + [.lookInMembers(self)]
           + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
@@ -439,7 +440,7 @@ import SwiftSyntax
   private func inRightTypeOrSameTypeRequirement(
     _ checkedPosition: AbsolutePosition
   ) -> Bool {
-    genericWhereClause?.requirements.contains { elem in
+    extensionHeader.genericWhereClause?.requirements.contains { elem in
       switch Syntax(elem.requirement).as(SyntaxEnum.self) {
       case .conformanceRequirement(let conformanceRequirement):
         return conformanceRequirement.rightType.range.contains(checkedPosition)
@@ -612,7 +613,7 @@ import SwiftSyntax
   }
 
   @_spi(Experimental) public var lookupMembersPosition: AbsolutePosition {
-    name.positionAfterSkippingLeadingTrivia
+    protocolHeader.name.positionAfterSkippingLeadingTrivia
   }
 
   @_spi(Experimental) public var scopeDebugName: String {
@@ -644,7 +645,7 @@ import SwiftSyntax
   ) -> [LookupResult] {
     var results: [LookupResult] = []
 
-    if let primaryAssociatedTypeClause,
+    if let primaryAssociatedTypeClause = protocolHeader.primaryAssociatedTypeClause,
       primaryAssociatedTypeClause.range.contains(lookUpPosition)
     {
       results = memberBlock.lookupAssociatedTypeDeclarations(
@@ -656,7 +657,7 @@ import SwiftSyntax
 
     let lookInMembers: [LookupResult]
 
-    if !(inheritanceClause?.range.contains(lookUpPosition) ?? false) {
+    if !(protocolHeader.inheritanceClause?.range.contains(lookUpPosition) ?? false) {
       lookInMembers = [.lookInMembers(self)]
     } else {
       lookInMembers = []

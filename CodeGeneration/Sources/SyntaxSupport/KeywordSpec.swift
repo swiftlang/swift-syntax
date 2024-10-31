@@ -131,6 +131,7 @@ public enum Keyword: CaseIterable {
   case _underlyingVersion
   case _UnknownLayout
   case _version
+  case abi
   case accesses
   case actor
   case addressWithNativeOwner
@@ -404,6 +405,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("_UnknownLayout")
     case ._version:
       return KeywordSpec("_version")
+    case .abi:
+      return KeywordSpec("abi", experimentalFeature: .abiAttribute)
     case .accesses:
       return KeywordSpec("accesses")
     case .actor:

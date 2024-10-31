@@ -29,6 +29,7 @@ protocol NominalTypeDeclarationHeaderTrait: DeclarationGroupHeaderTrait {
     primaryOrGenerics: PrimaryOrGenerics?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
+    trailingUnexpectedNodes: RawUnexpectedNodesSyntax?,
     arena: __shared SyntaxArena
   )
 
@@ -46,6 +47,7 @@ extension RawProtocolDeclHeaderSyntax: NominalTypeDeclarationHeaderTrait {
     primaryOrGenerics: RawPrimaryAssociatedTypeClauseSyntax?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
+    trailingUnexpectedNodes: RawUnexpectedNodesSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -58,6 +60,7 @@ extension RawProtocolDeclHeaderSyntax: NominalTypeDeclarationHeaderTrait {
       primaryAssociatedTypeClause: primaryOrGenerics,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
+      trailingUnexpectedNodes,
       arena: arena
     )
   }
@@ -86,6 +89,7 @@ extension RawClassDeclHeaderSyntax: NominalTypeDeclarationHeaderTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
+    trailingUnexpectedNodes: RawUnexpectedNodesSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -98,6 +102,7 @@ extension RawClassDeclHeaderSyntax: NominalTypeDeclarationHeaderTrait {
       genericParameterClause: primaryOrGenerics,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
+      trailingUnexpectedNodes,
       arena: arena
     )
   }
@@ -126,6 +131,7 @@ extension RawActorDeclHeaderSyntax: NominalTypeDeclarationHeaderTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
+    trailingUnexpectedNodes: RawUnexpectedNodesSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -138,6 +144,7 @@ extension RawActorDeclHeaderSyntax: NominalTypeDeclarationHeaderTrait {
       genericParameterClause: primaryOrGenerics,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
+      trailingUnexpectedNodes,
       arena: arena
     )
   }
@@ -166,6 +173,7 @@ extension RawStructDeclHeaderSyntax: NominalTypeDeclarationHeaderTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
+    trailingUnexpectedNodes: RawUnexpectedNodesSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -178,6 +186,7 @@ extension RawStructDeclHeaderSyntax: NominalTypeDeclarationHeaderTrait {
       genericParameterClause: primaryOrGenerics,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
+      trailingUnexpectedNodes,
       arena: arena
     )
   }
@@ -206,6 +215,7 @@ extension RawEnumDeclHeaderSyntax: NominalTypeDeclarationHeaderTrait {
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
+    trailingUnexpectedNodes: RawUnexpectedNodesSyntax?,
     arena: __shared SyntaxArena
   ) {
     self.init(
@@ -218,6 +228,7 @@ extension RawEnumDeclHeaderSyntax: NominalTypeDeclarationHeaderTrait {
       genericParameterClause: primaryOrGenerics,
       inheritanceClause: inheritanceClause,
       genericWhereClause: genericWhereClause,
+      trailingUnexpectedNodes,
       arena: arena
     )
   }
@@ -240,7 +251,8 @@ extension Parser {
   mutating func parseNominalTypeDeclarationHeader<T>(
     for T: T.Type,
     attrs: DeclAttributes,
-    introducerHandle: RecoveryConsumptionHandle
+    introducerHandle: RecoveryConsumptionHandle,
+    allowsMemberBlock: Bool
   ) -> (T, shouldContinueParsing: Bool) where T: NominalTypeDeclarationHeaderTrait {
     let (unexpectedBeforeIntroducerKeyword, introducerKeyword) = self.eat(introducerHandle)
     let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
@@ -256,6 +268,7 @@ extension Parser {
           primaryOrGenerics: nil,
           inheritanceClause: nil,
           genericWhereClause: nil,
+          trailingUnexpectedNodes: nil,
           arena: self.arena
         ),
         shouldContinueParsing: false
@@ -284,6 +297,16 @@ extension Parser {
       whereClause = nil
     }
 
+    // If we know there shouldn't be a member block, but there is, gobble it up whole right now.
+    var trailingUnexpectedNodes: RawUnexpectedNodesSyntax?
+    if !allowsMemberBlock && self.at(.leftBrace) {
+      let forbiddenMemberBlock = parseMemberBlock(introducer: introducerKeyword)
+      trailingUnexpectedNodes = RawUnexpectedNodesSyntax(
+        [forbiddenMemberBlock],
+        arena: self.arena
+      )
+    }
+
     return (
       T.init(
         attributes: attrs.attributes,
@@ -295,6 +318,7 @@ extension Parser {
         primaryOrGenerics: primaryOrGenerics,
         inheritanceClause: inheritance,
         genericWhereClause: whereClause,
+        trailingUnexpectedNodes: trailingUnexpectedNodes,
         arena: self.arena
       ),
       shouldContinueParsing: true

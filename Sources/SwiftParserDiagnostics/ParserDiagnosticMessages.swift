@@ -17,7 +17,7 @@ public import SwiftDiagnostics
 #else
 import SwiftDiagnostics
 @_spi(Diagnostics) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftSyntax
 #endif
 
 fileprivate let diagnosticDomain: String = "SwiftParser"
@@ -269,6 +269,25 @@ extension DiagnosticMessage where Self == StaticParserError {
 }
 
 // MARK: - Diagnostics (please sort alphabetically)
+
+public struct DeclarationMemberBlockNotAllowedOnHeader: ParserError {
+  public let header: DeclGroupHeaderSyntax
+
+  private var headerDescription: String {
+    header.kind.nameForDiagnostics ?? "declaration"
+  }
+
+  private var contextDescription: String {
+    if header.parent?.is(ABIAttributeArgumentsSyntax.self) ?? false {
+      return "in '@abi' attribute"
+    }
+    return "here"
+  }
+
+  public var message: String {
+    "\(headerDescription) header \(contextDescription) cannot have a member block"
+  }
+}
 
 public struct AsyncMustPrecedeThrows: ParserError {
   public let asyncKeywords: [TokenSyntax]

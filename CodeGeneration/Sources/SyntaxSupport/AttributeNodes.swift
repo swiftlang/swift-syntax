@@ -139,6 +139,11 @@ public let ATTRIBUTE_NODES: [Node] = [
             name: "documentationArguments",
             kind: .node(kind: .documentationAttributeArgumentList)
           ),
+          Child(
+            name: "abiArguments",
+            kind: .node(kind: .abiAttributeArguments),
+            experimentalFeature: .abiAttribute
+          ),
         ]),
         documentation: """
           The arguments of the attribute.
@@ -264,6 +269,31 @@ public let ATTRIBUTE_NODES: [Node] = [
       [
         "platforms": .renamed(from: "versionList")
       ]
+    ]
+  ),
+
+  Node(
+    kind: .abiAttributeArguments,
+    base: .syntax,
+    experimentalFeature: .abiAttribute,
+    nameForDiagnostics: "ABI-providing declaration",
+    documentation: "The arguments of the '@abi' attribute",
+    children: [
+      Child(
+        name: "provider",
+        kind: ChildKind.nodeChoices(choices: [
+          Child(name: "associatedType", kind: .node(kind: .associatedTypeDecl)),
+          Child(name: "declGroup", kind: .node(kind: .declGroupHeader)),
+          Child(name: "deinitializer", kind: .node(kind: .deinitializerDecl)),
+          Child(name: "enumCase", kind: .node(kind: .enumCaseDecl)),
+          Child(name: "function", kind: .node(kind: .functionDecl)),
+          Child(name: "initializer", kind: .node(kind: .initializerDecl)),
+          Child(name: "subscript", kind: .node(kind: .subscriptDecl)),
+          Child(name: "typeAlias", kind: .node(kind: .typeAliasDecl)),
+          Child(name: "variable", kind: .node(kind: .variableDecl)),
+          Child(name: "unsupported", kind: .node(kind: .decl)),
+        ])
+      )
     ]
   ),
 

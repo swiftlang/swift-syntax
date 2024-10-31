@@ -477,6 +477,22 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         SpaceSeparatedIdentifiersError(firstToken: previousToken, additionalTokens: tokens),
         fixIts: fixIts
       )
+    } else if node.count == 1,
+      let onlyChild = node.first!.as(MemberBlockSyntax.self),
+      let parentHeader = node.parent?.as(DeclGroupHeaderSyntax.self)
+    {
+      addDiagnostic(
+        node,
+        DeclarationMemberBlockNotAllowedOnHeader(header: parentHeader),
+        fixIts: [
+          FixIt(
+            message: RemoveNodesFixIt([Syntax(onlyChild)]),
+            changes: [
+              .makeMissing(node, transferTrivia: true)
+            ]
+          )
+        ]
+      )
     } else {
       addDiagnostic(node, UnexpectedNodesError(unexpectedNodes: node), highlights: [Syntax(node)])
     }

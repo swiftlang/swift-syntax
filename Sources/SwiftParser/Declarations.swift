@@ -168,11 +168,37 @@ extension Parser {
     }
   }
 
+  enum DeclarationParseContext {
+    case topLevel
+    case memberDeclList
+    case argumentList
+
+    var requiresDecl: Bool {
+      switch self {
+      case .topLevel:
+        return false
+      case .memberDeclList, .argumentList:
+        return true
+      }
+    }
+
+    var recoveryPrecedence: TokenPrecedence? {
+      switch self {
+      case .topLevel:
+        return nil
+      case .memberDeclList:
+        return .closingBrace
+      case .argumentList:
+        return .weakBracketed(closingDelimiter: .rightParen)
+      }
+    }
+  }
+
   /// Parse a declaration.
   ///
   /// If `inMemberDeclList` is `true`, we know that the next item must be a
   /// declaration and thus start with a keyword. This allows further recovery.
-  mutating func parseDeclaration(inMemberDeclList: Bool = false) -> RawDeclSyntax {
+  mutating func parseDeclaration(in context: DeclarationParseContext = .topLevel) -> RawDeclSyntax {
     // If we are at a `#if` of attributes, the `#if` directive should be
     // parsed when we're parsing the attributes.
     if self.at(.poundIf) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
@@ -221,8 +247,10 @@ extension Parser {
       // to parse.
       // If we are inside a memberDecl list, we don't want to eat closing braces (which most likely close the outer context)
       // while recovering to the declaration start.
-      let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
-      recoveryResult = self.canRecoverTo(anyIn: DeclarationKeyword.self, overrideRecoveryPrecedence: recoveryPrecedence)
+      recoveryResult = self.canRecoverTo(
+        anyIn: DeclarationKeyword.self,
+        overrideRecoveryPrecedence: context.recoveryPrecedence
+      )
     }
 
     switch recoveryResult {
@@ -230,7 +258,8 @@ extension Parser {
       let (header, shouldContinueParsing) = parseHeaderForDeclarationGroup(
         attrs: attrs,
         introducer: introducer,
-        introducerHandle: handle
+        introducerHandle: handle,
+        allowsMemberBlock: true
       )
       return parseDeclarationGroup(for: header, shouldParseMemberBlock: shouldContinueParsing)
     case (.simple(.import), let handle)?:
@@ -258,12 +287,12 @@ extension Parser {
     case (.simple(.pound), let handle)?:
       return RawDeclSyntax(self.parseMacroExpansionDeclaration(attrs, handle))
     case (.binding, let handle)?:
-      return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
+      return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, in: context))
     case nil:
       break
     }
 
-    if inMemberDeclList {
+    if context.requiresDecl {
       let isProbablyVarDecl = self.at(.identifier, .wildcard) && self.peek(isAt: .colon, .equal, .comma)
       let isProbablyTupleDecl = self.at(.leftParen) && self.peek(isAt: .identifier, .wildcard)
 
@@ -366,7 +395,12 @@ extension Parser {
     }
 
     if let (match, handle) = recoveryResult {
-      return parseHeaderForDeclarationGroup(attrs: attrs, introducer: match, introducerHandle: handle).0
+      return parseHeaderForDeclarationGroup(
+        attrs: attrs,
+        introducer: match,
+        introducerHandle: handle,
+        allowsMemberBlock: false
+      ).0
     }
 
     if inMemberDeclList {
@@ -397,11 +431,17 @@ extension Parser {
     )
   }
 
-  /// Parse the header of a declaration group that will eventually have a member block attached.
+  /// Parse the header of a declaration group that will belong to some larger construct.
+  ///
+  /// - Parameters:
+  ///   - allowsMemberBlock: If `false`, a member block is definitively *not*
+  ///     expected after this header and if one is found, it should be
+  ///     proactively consumed.
   mutating func parseHeaderForDeclarationGroup(
     attrs: DeclAttributes,
     introducer: DeclGroupHeaderSyntax.IntroducerOptions,
-    introducerHandle: RecoveryConsumptionHandle
+    introducerHandle: RecoveryConsumptionHandle,
+    allowsMemberBlock: Bool
   ) -> (RawDeclGroupHeaderSyntax, shouldContinueParsing: Bool) {
     func eraseToRawDeclGroupHeaderSyntax(
       _ result: (some RawDeclGroupHeaderSyntaxNodeProtocol, Bool)
@@ -415,7 +455,8 @@ extension Parser {
         self.parseNominalTypeDeclarationHeader(
           for: RawClassDeclHeaderSyntax.self,
           attrs: attrs,
-          introducerHandle: introducerHandle
+          introducerHandle: introducerHandle,
+          allowsMemberBlock: allowsMemberBlock
         )
       )
     case .enum:
@@ -423,7 +464,8 @@ extension Parser {
         self.parseNominalTypeDeclarationHeader(
           for: RawEnumDeclHeaderSyntax.self,
           attrs: attrs,
-          introducerHandle: introducerHandle
+          introducerHandle: introducerHandle,
+          allowsMemberBlock: allowsMemberBlock
         )
       )
     case .struct:
@@ -431,7 +473,8 @@ extension Parser {
         self.parseNominalTypeDeclarationHeader(
           for: RawStructDeclHeaderSyntax.self,
           attrs: attrs,
-          introducerHandle: introducerHandle
+          introducerHandle: introducerHandle,
+          allowsMemberBlock: allowsMemberBlock
         )
       )
     case .protocol:
@@ -439,17 +482,23 @@ extension Parser {
         self.parseNominalTypeDeclarationHeader(
           for: RawProtocolDeclHeaderSyntax.self,
           attrs: attrs,
-          introducerHandle: introducerHandle
+          introducerHandle: introducerHandle,
+          allowsMemberBlock: allowsMemberBlock
         )
       )
     case .extension:
-      return (RawDeclGroupHeaderSyntax(self.parseExtensionDeclarationHeader(attrs, introducerHandle)), true)
+      return (
+        RawDeclGroupHeaderSyntax(
+          self.parseExtensionDeclarationHeader(attrs, introducerHandle, allowsMemberBlock: allowsMemberBlock)
+        ), true
+      )
     case .actor:
       return eraseToRawDeclGroupHeaderSyntax(
         self.parseNominalTypeDeclarationHeader(
           for: RawActorDeclHeaderSyntax.self,
           attrs: attrs,
-          introducerHandle: introducerHandle
+          introducerHandle: introducerHandle,
+          allowsMemberBlock: allowsMemberBlock
         )
       )
     }
@@ -623,14 +672,15 @@ extension Parser {
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawExtensionDeclSyntax {
-    let header = parseExtensionDeclarationHeader(attrs, handle)
+    let header = parseExtensionDeclarationHeader(attrs, handle, allowsMemberBlock: true)
     return parseDeclarationGroup(for: header)
   }
 
   /// Parse the header of an extension declaration.
   mutating func parseExtensionDeclarationHeader(
     _ attrs: DeclAttributes,
-    _ handle: RecoveryConsumptionHandle
+    _ handle: RecoveryConsumptionHandle,
+    allowsMemberBlock: Bool
   ) -> RawExtensionDeclHeaderSyntax {
     let (unexpectedBeforeExtensionKeyword, extensionKeyword) = self.eat(handle)
     let type = self.parseType()
@@ -648,6 +698,17 @@ extension Parser {
     } else {
       whereClause = nil
     }
+
+    // If we know there shouldn't be a member block, but there is, gobble it up whole right now.
+    var trailingUnexpectedNodes: RawUnexpectedNodesSyntax?
+    if !allowsMemberBlock && self.at(.leftBrace) {
+      let forbiddenMemberBlock = parseMemberBlock(introducer: extensionKeyword)
+      trailingUnexpectedNodes = RawUnexpectedNodesSyntax(
+        [forbiddenMemberBlock],
+        arena: self.arena
+      )
+    }
+
     return RawExtensionDeclHeaderSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
@@ -656,6 +717,7 @@ extension Parser {
       extendedType: type,
       inheritanceClause: inheritance,
       genericWhereClause: whereClause,
+      trailingUnexpectedNodes,
       arena: self.arena
     )
   }
@@ -997,7 +1059,7 @@ extension Parser {
     if self.at(.poundSourceLocation) {
       decl = RawDeclSyntax(self.parsePoundSourceLocationDirective())
     } else {
-      decl = self.parseDeclaration(inMemberDeclList: true)
+      decl = self.parseDeclaration(in: .memberDeclList)
     }
 
     let semi = self.consume(if: .semicolon)
@@ -1519,7 +1581,7 @@ extension Parser {
   mutating func parseBindingDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle,
-    inMemberDeclList: Bool = false
+    in context: DeclarationParseContext = .topLevel
   ) -> RawVariableDeclSyntax {
     let (unexpectedBeforeIntroducer, introducer) = self.eat(handle)
     let hasTryBeforeIntroducer = unexpectedBeforeIntroducer?.containsToken(where: { TokenSpec(.try) ~= $0 }) ?? false
@@ -1609,7 +1671,7 @@ extension Parser {
         if (self.at(.leftBrace)
           && (initializer == nil || !self.currentToken.isAtStartOfLine
             || self.withLookahead({ $0.atStartOfGetSetAccessor() })))
-          || (inMemberDeclList && self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil
+          || (context == .memberDeclList && self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil
             && !self.at(.keyword(.`init`)))
         {
           accessors = self.parseAccessorBlock()

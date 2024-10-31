@@ -1890,6 +1890,7 @@ extension Syntax {
   public static var structure: SyntaxNodeStructure {
     return .choices([
       .node(TokenSyntax.self),
+      .node(ABIAttributeArgumentsSyntax.self),
       .node(AccessorBlockSyntax.self),
       .node(AccessorDeclListSyntax.self),
       .node(AccessorDeclSyntax.self),

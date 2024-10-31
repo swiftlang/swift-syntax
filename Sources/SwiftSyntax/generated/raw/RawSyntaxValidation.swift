@@ -209,6 +209,12 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
   switch kind {
   case .token:
     assertionFailure("validateLayout for .token kind is not supported")
+  case .abiAttributeArguments:
+    assert(layout.count == 3)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertAnyHasNoError(kind, 1, [
+      verify(layout[1], as: RawSyntax.self)])
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
   case .accessorBlock:
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))

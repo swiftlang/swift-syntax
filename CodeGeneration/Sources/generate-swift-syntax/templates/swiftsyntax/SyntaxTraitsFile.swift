@@ -37,6 +37,16 @@ let syntaxTraitsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           """
         )
       }
+
+      if trait.requiresInit {
+        let signature = InitSignature(trait)
+        DeclSyntax(
+          """
+          \(signature.generateInitializerDocComment())
+          \(signature.generateInitializerDeclHeader(isRequirement: true))
+          """
+        )
+      }
     }
 
     try! ExtensionDeclSyntax("extension \(trait.protocolName)") {

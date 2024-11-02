@@ -184,6 +184,22 @@ public struct SyntaxStringInterpolationInvalidNodeTypeError: Error, CustomString
   }
 }
 
+/// Describes an error when building a syntax node with string interpolation resulted in an unexpected node type.
+public struct SyntaxStringInterpolationInvalidHeaderForNodeTypeError: Error, CustomStringConvertible {
+  let declType: SyntaxProtocol.Type
+  let headerType: SyntaxProtocol.Type
+
+  /// Initialize the invalid node type error providing an expected type, and the actual node that resulted.
+  public init<S: SyntaxProtocol>(declType: SyntaxProtocol.Type, headerNode: S) {
+    self.declType = declType
+    self.headerType = type(of: headerNode)
+  }
+
+  public var description: String {
+    return "Attempted to construct an \(declType) declaration with a header of mismatched type \(headerType)"
+  }
+}
+
 /// A string interpolation error based on a ``SwiftDiagnostics/Diagnostic``.
 struct SyntaxStringInterpolationDiagnosticError: Error, CustomStringConvertible {
   let diagnostics: [Diagnostic]

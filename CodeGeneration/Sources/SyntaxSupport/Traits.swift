@@ -21,6 +21,7 @@ public class Trait {
   public let baseKind: SyntaxNodeKind?
   public let protocolName: TokenSyntax
   public let documentation: SwiftSyntax.Trivia
+  public let requiresInit: Bool
   public let children: [Child]
   public let childHistory: Child.History
 
@@ -28,6 +29,7 @@ public class Trait {
     traitName: String,
     baseKind: SyntaxNodeKind? = nil,
     documentation: String? = nil,
+    requiresInit: Bool = false,
     children: [Child],
     childHistory: Child.History = []
   ) {
@@ -36,6 +38,7 @@ public class Trait {
     self.baseKind = baseKind
     self.protocolName = .identifier("\(traitName)Syntax")
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
+    self.requiresInit = requiresInit
     self.children = children
     self.childHistory = childHistory
   }
@@ -52,6 +55,7 @@ public let TRAITS: [Trait] = [
   Trait(
     traitName: "DeclGroup",
     baseKind: .decl,
+    requiresInit: true,
     children: [
       Child(
         name: "header",

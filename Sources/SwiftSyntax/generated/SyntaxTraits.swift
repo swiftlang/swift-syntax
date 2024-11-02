@@ -72,6 +72,18 @@ public protocol DeclGroupSyntax: SyntaxProtocol, DeclSyntaxProtocol {
     get
     set
   }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - header: The header of the declaration.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+
+  init?(
+    leadingTrivia: Trivia? ,
+    header: some DeclGroupHeaderSyntaxProtocol,
+    memberBlock: MemberBlockSyntax,
+    trailingTrivia: Trivia?
+  )
 }
 
 extension DeclGroupSyntax {

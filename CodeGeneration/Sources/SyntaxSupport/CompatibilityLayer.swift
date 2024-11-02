@@ -180,6 +180,8 @@ public struct CompatibilityLayer {
       vars += children.filter { knownVars.insert($0).inserted }
 
       // We don't create compatibility layers for protocol requirement inits.
+      // In theory, we *could* create compatibility layers for traits with `requiresInit: true`, but the only one we'd
+      // create so far is unnecessary and tricky to implement.
       if !areRequirements {
         initSignatures.append(InitSignature(children: children))
       }

@@ -28,7 +28,7 @@ public struct GroupedDiagnostics {
     let id: SourceFileID
 
     /// The syntax tree for the source file.
-    let tree: SourceFileSyntax
+    let tree: Syntax
 
     /// The source location converter for this source file.
     let sourceLocationConverter: SourceLocationConverter
@@ -55,7 +55,7 @@ public struct GroupedDiagnostics {
 
   /// Mapping from the root source file syntax nodes to the corresponding
   /// source file IDs.
-  var rootIndexes: [SourceFileSyntax: SourceFileID] = [:]
+  var rootIndexes: [Syntax: SourceFileID] = [:]
 
   public init() {}
 
@@ -71,12 +71,13 @@ public struct GroupedDiagnostics {
   /// - Returns: The unique ID for this source file.
   @discardableResult
   public mutating func addSourceFile(
-    tree: SourceFileSyntax,
+    tree: some SyntaxProtocol,
     sourceLocationConverter: SourceLocationConverter? = nil,
     displayName: String,
     parent: (SourceFileID, AbsolutePosition)? = nil,
     diagnostics: [Diagnostic] = []
   ) -> SourceFileID {
+    let tree = Syntax(tree)
     // Determine the ID this source file will have.
     let id = SourceFileID(id: sourceFiles.count)
     let slc =
@@ -108,11 +109,7 @@ public struct GroupedDiagnostics {
 
   /// Find the ID of the source file containing this syntax node.
   func findSourceFileContaining(_ node: Syntax) -> SourceFileID? {
-    guard let rootSourceFile = node.root.as(SourceFileSyntax.self) else {
-      return nil
-    }
-
-    return rootIndexes[rootSourceFile]
+    return rootIndexes[node.root]
   }
 
   /// Add a diagnostic to the set of grouped diagnostics.

@@ -16,7 +16,7 @@ import SyntaxSupport
 import Utils
 
 let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode).filter({ $0.children.hasDeprecatedChild }) {
+  for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode).filter({ !$0.childHistory.isEmpty }) {
     var deprecatedMembers = SYNTAX_COMPATIBILITY_LAYER.deprecatedMembers(for: layoutNode)
 
     try ExtensionDeclSyntax("extension \(layoutNode.type.syntaxBaseName)") {
@@ -41,9 +41,12 @@ func makeCompatibilityVar(for child: Child) -> DeclSyntax {
   let type = child.isOptional ? TypeSyntax("\(childType)?") : childType
 
   // Form the access chain for the current name.
-  let childPath = child.newestChild ?? child
-  let childPathString = childPath.name
-  let childAccess = ExprSyntax(DeclReferenceExprSyntax(baseName: childPath.baseCallName))
+  let childPath = child.newestChildPath
+  let childPathString = childPath.map(\.name).joined(separator: ".")
+  let childBase = ExprSyntax(DeclReferenceExprSyntax(baseName: childPath.first!.baseCallName))
+  let childAccess = childPath.dropFirst().reduce(childBase) { base, child in
+    ExprSyntax(MemberAccessExprSyntax(base: base, name: child.baseCallName))
+  }
 
   return DeclSyntax(
     """

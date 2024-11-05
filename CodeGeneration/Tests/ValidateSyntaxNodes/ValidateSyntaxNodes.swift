@@ -53,7 +53,7 @@ fileprivate extension ChildKind {
     switch (self, other) {
     case (.node(let kind), .node(kind: let otherKind)):
       return kind == otherKind
-    case (.nodeChoices(let choices), .nodeChoices(let otherChoices)):
+    case (.nodeChoices(let choices, _), .nodeChoices(let otherChoices, _)):
       return choices.count == otherChoices.count && zip(choices, otherChoices).allSatisfy { $0.hasSameType(as: $1) }
     case (.collection(kind: let kind, _, _, _), .collection(kind: let otherKind, _, _, _)):
       return kind == otherKind
@@ -71,7 +71,7 @@ fileprivate extension ChildKind {
   var isCollection: Bool {
     switch self {
     case .node: return false
-    case .nodeChoices(let choices): return choices.contains(where: { $0.kind.isCollection })
+    case .nodeChoices(let choices, _): return choices.contains(where: { $0.kind.isCollection })
     case .collection: return true
     case .token: return false
     }

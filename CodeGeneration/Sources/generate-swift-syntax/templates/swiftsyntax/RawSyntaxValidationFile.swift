@@ -204,7 +204,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                       ExprSyntax("assert(layout.count == \(raw: node.children.count))")
                       for (index, child) in node.children.enumerated() {
                         switch child.kind {
-                        case .nodeChoices(let choices):
+                        case .nodeChoices(let choices, _):
                           let verifiedChoices = ArrayExprSyntax {
                             ArrayElementSyntax(
                               leadingTrivia: .newline,

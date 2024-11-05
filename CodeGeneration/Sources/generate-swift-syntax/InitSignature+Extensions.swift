@@ -205,7 +205,7 @@ fileprivate func convertFromSyntaxProtocolToSyntaxType(
 extension InitSignature {
   /// Interprets `self` as an initializer parameter list and generates arguments to
   /// call the non-deprecated initializer. This will generate nested initializer calls for
-  /// any children with a compound `newerChildPath`.
+  /// any children with a compound `newestChildPath`.
   func makeArgumentsToInitializeNewestChildren() -> [LabeledExprSyntax] {
     var root: [InitParameterMapping] = []
 
@@ -250,19 +250,19 @@ extension InitSignature {
 /// ```swift
 /// [
 ///   InitParameterMapping(
-///     newerChild: "child for current LongstandingNode.a",
+///     newestChild: "child for current LongstandingNode.a",
 ///     argument: .decl("child for historical LongstandingNode.b")
 ///   ),
 ///   InitParameterMapping(
-///     newerChild: "child for current LongstandingNode.nested",
+///     newestChild: "child for current LongstandingNode.nested",
 ///     argument: .nestedInit(
 ///       [
 ///         InitParameterMapping(
-///           newerChild: "child for current NestedNodeExtractedLater.x",
+///           newestChild: "child for current NestedNodeExtractedLater.x",
 ///           argument: .decl("child for historical LongstandingNode.x")
 ///         ),
 ///         InitParameterMapping(
-///           newerChild: "child for current NestedNodeExtractedLater.y",
+///           newestChild: "child for current NestedNodeExtractedLater.y",
 ///           argument: .decl("child for historical LongstandingNode.y")
 ///         )
 ///       ]
@@ -285,20 +285,64 @@ extension InitSignature {
 /// )
 /// ```
 private struct InitParameterMapping {
-  var newerChild: Child
+  var newestChild: Child
   var argument: Argument
 
   enum Argument {
     case decl(olderChild: Child)
+    case nestedInit([InitParameterMapping])
   }
 
   static func addChild(_ olderChild: Child, to mappings: inout [InitParameterMapping]) {
-    mappings.append(
-      InitParameterMapping(
-        newerChild: olderChild.newestChild ?? olderChild,
-        argument: .decl(olderChild: olderChild)
+    guard !olderChild.newestChildPath.isEmpty else {
+      // This child is not historical, so we can just pass it right through.
+      mappings.append(
+        InitParameterMapping(
+          newestChild: olderChild,
+          argument: .decl(olderChild: olderChild)
+        )
       )
-    )
+      return
+    }
+
+    addChild(olderChild, to: &mappings, at: olderChild.newestChildPath[...])
+  }
+
+  private static func addChild(
+    _ olderChild: Child,
+    to mappings: inout [InitParameterMapping],
+    at newestChildPath: ArraySlice<Child>
+  ) {
+    let targetNewestChild = newestChildPath.first!
+
+    if newestChildPath.count == 1 {
+      // We've found the argument list this ought to be added to.
+      let newMapping = InitParameterMapping(newestChild: targetNewestChild, argument: .decl(olderChild: olderChild))
+      mappings.append(newMapping)
+      return
+    }
+
+    // We've found a parent of the argument list this ought to be added to.
+    var (i, nestedArgMappings) = findOrCreateNestedInit(for: targetNewestChild, in: &mappings)
+    addChild(olderChild, to: &nestedArgMappings, at: newestChildPath.dropFirst())
+    mappings[i].argument = .nestedInit(nestedArgMappings)
+  }
+
+  private static func findOrCreateNestedInit(
+    for newestChild: Child,
+    in mappings: inout [InitParameterMapping]
+  ) -> (index: Int, nestedArgMapping: [InitParameterMapping]) {
+    // If there isn't an existing mapping, we'll append a new one.
+    guard let i = mappings.firstIndex(where: { $0.newestChild == newestChild }) else {
+      mappings.append(InitParameterMapping(newestChild: newestChild, argument: .nestedInit([])))
+      return (mappings.endIndex - 1, [])
+    }
+
+    // We found an existing mapping for this child and its nested children.
+    guard case .nestedInit(let nestedArgs) = mappings[i].argument else {
+      fatalError("Can't nest parameter inside parameter!")
+    }
+    return (i, nestedArgs)
   }
 }
 
@@ -308,10 +352,19 @@ extension InitParameterMapping {
       switch argument {
       case .decl(olderChild: let olderChild):
         ExprSyntax(DeclReferenceExprSyntax(baseName: olderChild.baseCallName))
+
+      case .nestedInit(let initArgs):
+        ExprSyntax(
+          FunctionCallExprSyntax(callee: TypeExprSyntax(type: newestChild.syntaxNodeKind.syntaxType)) {
+            for initArg in initArgs {
+              initArg.makeArgumentExpr()
+            }
+          }
+        )
       }
 
     return LabeledExprSyntax(
-      label: newerChild.isUnexpectedNodes ? nil : newerChild.name,
+      label: newestChild.isUnexpectedNodes ? nil : newestChild.name,
       expression: argValue
     )
   }

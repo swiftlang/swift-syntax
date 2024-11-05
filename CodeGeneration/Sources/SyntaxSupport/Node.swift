@@ -23,7 +23,7 @@ import SwiftSyntax
 ///    children are of the same type.
 public class Node: NodeChoiceConvertible {
   fileprivate enum Data {
-    case layout(children: [Child], traits: [String])
+    case layout(children: [Child], childHistory: Child.History, traits: [String])
     case collection(choices: [SyntaxNodeKind])
   }
 
@@ -123,7 +123,8 @@ public class Node: NodeChoiceConvertible {
     documentation: String? = nil,
     parserFunction: TokenSyntax? = nil,
     traits: [String] = [],
-    children: [Child] = []
+    children: [Child] = [],
+    childHistory: Child.History = []
   ) {
     precondition(base != .syntaxCollection)
     precondition(base.isBase, "unknown base kind '\(base)' for node '\(kind)'")
@@ -137,7 +138,7 @@ public class Node: NodeChoiceConvertible {
 
     let childrenWithUnexpected = kind.isBase ? children : interleaveUnexpectedChildren(children)
 
-    self.data = .layout(children: childrenWithUnexpected, traits: traits)
+    self.data = .layout(children: childrenWithUnexpected, childHistory: childHistory, traits: traits)
   }
 
   /// A doc comment that lists all the nodes in which this node occurs as a child in.
@@ -270,7 +271,7 @@ public struct LayoutNode {
   /// This includes unexpected children
   public var children: [Child] {
     switch node.data {
-    case .layout(children: let children, traits: _):
+    case .layout(children: let children, childHistory: _, traits: _):
       return children
     case .collection:
       preconditionFailure("NodeLayoutView must wrap a Node with data `.layout`")
@@ -282,10 +283,20 @@ public struct LayoutNode {
     return children.filter { !$0.isUnexpectedNodes }
   }
 
+  /// The history of the layout node's children.
+  public var childHistory: Child.History {
+    switch node.data {
+    case .layout(children: _, childHistory: let childHistory, traits: _):
+      return childHistory
+    case .collection:
+      preconditionFailure("NodeLayoutView must wrap a Node with data `.layout`")
+    }
+  }
+
   /// Traits that the node conforms to.
   public var traits: [String] {
     switch node.data {
-    case .layout(children: _, traits: let traits):
+    case .layout(children: _, childHistory: _, traits: let traits):
       return traits
     case .collection:
       preconditionFailure("NodeLayoutView must wrap a Node with data `.layout`")
@@ -365,7 +376,7 @@ fileprivate extension Child {
     switch kind {
     case .node(let kind):
       return [kind]
-    case .nodeChoices(let choices):
+    case .nodeChoices(let choices, _):
       return choices.flatMap(\.kinds)
     case .collection(kind: let kind, _, _, _):
       return [kind]

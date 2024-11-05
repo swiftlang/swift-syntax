@@ -17,36 +17,43 @@ import Utils
 
 let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copyrightHeader) {
   for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode).filter({ $0.children.hasDeprecatedChild }) {
+    var deprecatedMembers = SYNTAX_COMPATIBILITY_LAYER.deprecatedMembers(for: layoutNode)
+
     try ExtensionDeclSyntax("extension \(layoutNode.type.syntaxBaseName)") {
-      for child in layoutNode.children {
-        if let deprecatedVarName = child.deprecatedVarName {
-          makeCompatibilityVar(for: child, deprecatedVarName: deprecatedVarName)
-          if let addMethod = makeCompatibilityAddMethod(for: child) {
-            addMethod
-          }
+      for child in deprecatedMembers.vars {
+        makeCompatibilityVar(for: child)
+        if let addMethod = makeCompatibilityAddMethod(for: child) {
+          addMethod
         }
       }
 
       let renamedName = InitSignature(layoutNode).compoundName
-      makeCompatibilityInit(for: InitSignature(layoutNode), renamedName: renamedName)
+      for signature in deprecatedMembers.inits {
+        makeCompatibilityInit(for: signature, renamedName: renamedName)
+      }
     }
   }
 }
 
-func makeCompatibilityVar(for child: Child, deprecatedVarName: TokenSyntax) -> DeclSyntax {
+func makeCompatibilityVar(for child: Child) -> DeclSyntax {
   let childType: TypeSyntax =
     child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
   let type = child.isOptional ? TypeSyntax("\(childType)?") : childType
 
+  // Form the access chain for the current name.
+  let childPath = child.newestChild ?? child
+  let childPathString = childPath.name
+  let childAccess = ExprSyntax(DeclReferenceExprSyntax(baseName: childPath.baseCallName))
+
   return DeclSyntax(
     """
-    @available(*, deprecated, renamed: "\(child.identifier)")
-    public var \(deprecatedVarName): \(type) {
+    @available(*, deprecated, renamed: \(literal: childPathString))
+    public var \(child.identifier): \(type) {
       get {
-        return \(child.baseCallName)
+        return \(childAccess)
       }
       set {
-        \(child.baseCallName) = newValue
+        \(childAccess) = newValue
       }
     }
     """
@@ -84,7 +91,7 @@ func makeCompatibilityInit(for signature: InitSignature, renamedName: String) ->
     """
     @available(*, deprecated, renamed: \(literal: renamedName))
     @_disfavoredOverload
-    \(signature.generateInitializerDeclHeader(useDeprecatedChildName: true))
+    \(signature.generateInitializerDeclHeader())
     """
   ) {
     FunctionCallExprSyntax(callee: ExprSyntax("self.init")) {

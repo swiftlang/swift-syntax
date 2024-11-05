@@ -150,7 +150,7 @@ public class Child: NodeChoiceConvertible {
   /// For any other kind of child nodes, accessing this property crashes.
   public var syntaxChoicesType: TypeSyntax {
     precondition(kind.isNodeChoices, "Cannot get `syntaxChoicesType` for node that doesn’t have nodeChoices")
-    return "\(raw: name.withFirstCharacterUppercased)"
+    return "\(raw: newestName.withFirstCharacterUppercased)"
   }
 
   /// If this child only has tokens, the type that the generated `TokenSpecSet` should get.
@@ -158,20 +158,33 @@ public class Child: NodeChoiceConvertible {
   /// For any other kind of child nodes, accessing this property crashes.
   public var tokenSpecSetType: TypeSyntax {
     precondition(kind.isToken, "Cannot get `tokenSpecSetType` for node that isn’t a token")
-    return "\(raw: name.withFirstCharacterUppercased)Options"
-  }
-
-  /// The deprecated name of this child that's suitable to be used for variable or enum case names.
-  public var deprecatedVarName: TokenSyntax? {
-    guard let deprecatedName = deprecatedName else {
-      return nil
-    }
-    return .identifier(lowercaseFirstWord(name: deprecatedName))
+    return "\(raw: newestName.withFirstCharacterUppercased)Options"
   }
 
   /// Determines if this child has a deprecated name
   public var hasDeprecatedName: Bool {
     return deprecatedName != nil
+  }
+
+  /// If this child is actually part of another child's history, links back
+  /// to the newest (that is, most current/non-deprecated) version of the
+  /// child. Nil if this is the newest version of the child.
+  public let newestChild: Child?
+
+  /// True if this child was created by a `Child.Refactoring`. Such children
+  /// are part of the compatibility layer and are therefore deprecated.
+  public var isHistorical: Bool {
+    newestChild != nil
+  }
+
+  /// Replaces the nodes in `newerChildPath` with their own `newerChildPath`s,
+  /// if any, to form a child path enitrely of non-historical nodes.
+  static private func makeNewestChild(from newerChild: Child?) -> Child? {
+    return newerChild?.newestChild ?? newerChild
+  }
+
+  private var newestName: String {
+    return newestChild?.name ?? name
   }
 
   /// If the child ends with "token" in the kind, it's considered a token node.
@@ -244,11 +257,6 @@ public class Child: NodeChoiceConvertible {
     return AttributeListSyntax("@_spi(ExperimentalLanguageFeatures)").with(\.trailingTrivia, .newline)
   }
 
-  /// If a classification is passed, it specifies the color identifiers in
-  /// that subtree should inherit for syntax coloring. Must be a member of
-  /// ``SyntaxClassification``.
-  /// If `forceClassification` is also set to true, all child nodes (not only
-  /// identifiers) inherit the syntax classification.
   init(
     name: String,
     deprecatedName: String? = nil,
@@ -256,7 +264,8 @@ public class Child: NodeChoiceConvertible {
     experimentalFeature: ExperimentalFeature? = nil,
     nameForDiagnostics: String? = nil,
     documentation: String? = nil,
-    isOptional: Bool = false
+    isOptional: Bool = false,
+    newerChild: Child? = nil
   ) {
     precondition(name.first?.isLowercase ?? true, "The first letter of a child’s name should be lowercase")
     precondition(
@@ -265,11 +274,63 @@ public class Child: NodeChoiceConvertible {
     )
     self.name = name
     self.deprecatedName = deprecatedName
+    self.newestChild = Self.makeNewestChild(from: newerChild)
     self.kind = kind
     self.experimentalFeature = experimentalFeature
     self.nameForDiagnostics = nameForDiagnostics
     self.documentationSummary = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.documentationAbstract = String(documentation?.split(whereSeparator: \.isNewline).first ?? "")
     self.isOptional = isOptional
+  }
+
+  /// Create a node that is a copy of the last node in `newerChildPath`, but
+  /// with modifications.
+  init(renamingTo replacementName: String? = nil, newerChild other: Child) {
+    self.name = replacementName ?? other.name
+    self.deprecatedName = nil
+    self.newestChild = Self.makeNewestChild(from: other)
+    self.kind = other.kind
+    self.experimentalFeature = other.experimentalFeature
+    self.nameForDiagnostics = other.nameForDiagnostics
+    self.documentationSummary = other.documentationSummary
+    self.documentationAbstract = other.documentationAbstract
+    self.isOptional = other.isOptional
+  }
+
+  /// Create a child for the unexpected nodes between two children (either or
+  /// both of which may be `nil`).
+  convenience init(forUnexpectedBetween earlier: Child?, and later: Child?, newerChild: Child? = nil) {
+    let name =
+      switch (earlier, later) {
+      case (nil, let later?):
+        "unexpectedBefore\(later.name.withFirstCharacterUppercased)"
+      case (let earlier?, nil):
+        "unexpectedAfter\(earlier.name.withFirstCharacterUppercased)"
+      case (let earlier?, let later?):
+        "unexpectedBetween\(earlier.name.withFirstCharacterUppercased)And\(later.name.withFirstCharacterUppercased)"
+      case (nil, nil):
+        fatalError("unexpected node has no siblings?")
+      }
+
+    self.init(
+      name: name,
+      deprecatedName: nil,  // deprecation of unexpected nodes is handled in CompatibilityLayer
+      kind: .collection(kind: .unexpectedNodes, collectionElementName: name.withFirstCharacterUppercased),
+      experimentalFeature: earlier?.experimentalFeature ?? later?.experimentalFeature,
+      nameForDiagnostics: nil,
+      documentation: nil,
+      isOptional: true,
+      newerChild: newerChild
+    )
+  }
+}
+
+extension Child: Hashable {
+  public static func == (lhs: Child, rhs: Child) -> Bool {
+    lhs === rhs
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(ObjectIdentifier(self))
   }
 }

@@ -135,59 +135,8 @@ public class Node: NodeChoiceConvertible {
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction
 
-    let childrenWithUnexpected: [Child]
-    if children.isEmpty {
-      childrenWithUnexpected = [
-        Child(
-          name: "unexpected",
-          kind: .collection(kind: .unexpectedNodes, collectionElementName: "Unexpected"),
-          isOptional: true
-        )
-      ]
-    } else {
-      // Add implicitly generated UnexpectedNodes children between
-      // any two defined children
-      childrenWithUnexpected =
-        children.enumerated().flatMap { (i, child) -> [Child] in
-          let childName = child.name.withFirstCharacterUppercased
+    let childrenWithUnexpected = kind.isBase ? children : interleaveUnexpectedChildren(children)
 
-          let unexpectedName: String
-          let unexpectedDeprecatedName: String?
-
-          if i == 0 {
-            unexpectedName = "unexpectedBefore\(childName)"
-            unexpectedDeprecatedName = child.deprecatedName.map { "unexpectedBefore\($0.withFirstCharacterUppercased)" }
-          } else {
-            unexpectedName = "unexpectedBetween\(children[i - 1].name.withFirstCharacterUppercased)And\(childName)"
-            if let deprecatedName = children[i - 1].deprecatedName?.withFirstCharacterUppercased {
-              unexpectedDeprecatedName =
-                "unexpectedBetween\(deprecatedName)And\(child.deprecatedName?.withFirstCharacterUppercased ?? childName)"
-            } else if let deprecatedName = child.deprecatedName?.withFirstCharacterUppercased {
-              unexpectedDeprecatedName =
-                "unexpectedBetween\(children[i - 1].name.withFirstCharacterUppercased)And\(deprecatedName)"
-            } else {
-              unexpectedDeprecatedName = nil
-            }
-          }
-          let unexpectedBefore = Child(
-            name: unexpectedName,
-            deprecatedName: unexpectedDeprecatedName,
-            kind: .collection(kind: .unexpectedNodes, collectionElementName: unexpectedName),
-            isOptional: true
-          )
-          return [unexpectedBefore, child]
-        } + [
-          Child(
-            name: "unexpectedAfter\(children.last!.name.withFirstCharacterUppercased)",
-            deprecatedName: children.last!.deprecatedName.map { "unexpectedAfter\($0.withFirstCharacterUppercased)" },
-            kind: .collection(
-              kind: .unexpectedNodes,
-              collectionElementName: "UnexpectedAfter\(children.last!.name.withFirstCharacterUppercased)"
-            ),
-            isOptional: true
-          )
-        ]
-    }
     self.data = .layout(children: childrenWithUnexpected, traits: traits)
   }
 
@@ -423,5 +372,14 @@ fileprivate extension Child {
     case .token:
       return [.token]
     }
+  }
+}
+
+fileprivate func interleaveUnexpectedChildren(_ children: [Child]) -> [Child] {
+  let liftedChildren = children.lazy.map(Optional.some)
+  let pairedChildren = zip([nil] + liftedChildren, liftedChildren + [nil])
+
+  return pairedChildren.flatMap { earlier, later in
+    [earlier, Child(forUnexpectedBetween: earlier, and: later)].compactMap { $0 }
   }
 }

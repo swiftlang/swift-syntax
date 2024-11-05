@@ -111,6 +111,7 @@ public let TRAITS: [Trait] = [
   ),
   Trait(
     traitName: "NamedDecl",
+    baseKind: .decl,
     children: [
       Child(name: "name", kind: .token(choices: [.token(.identifier)]))
     ]

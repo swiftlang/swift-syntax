@@ -116,6 +116,30 @@ fileprivate extension Array where Element: Hashable, Element: Comparable {
   }
 }
 
+extension LayoutNode {
+  /// True if `self` satisfies all of the requirements of `trait`, regardless
+  /// of whether it actually declares conformance to it.
+  func canConform(to trait: Trait) -> Bool {
+    if let traitBaseKind = trait.baseKind {
+      guard traitBaseKind == self.base else {
+        return false
+      }
+    }
+
+    return trait.children.allSatisfy { traitChild in
+      self.children.contains { nodeChild in
+        traitChild.hasSameType(as: nodeChild)
+      }
+    }
+  }
+
+  /// True if `self` declares conformance to `trait`, regardless of whether
+  /// it satisfies the trait's requirements.
+  func conforms(to trait: Trait) -> Bool {
+    self.traits.contains(trait.traitName)
+  }
+}
+
 class ValidateSyntaxNodes: XCTestCase {
   /// All nodes with base kind e.g. `ExprSyntax` should end with `ExprSyntax`.
   func testBaseKindSuffix() {
@@ -514,12 +538,7 @@ class ValidateSyntaxNodes: XCTestCase {
 
     for node in SYNTAX_NODES.compactMap(\.layoutNode) {
       for trait in TRAITS {
-        let canConformToTrait = trait.children.allSatisfy { traitChild in
-          node.children.contains { nodeChild in
-            traitChild.hasSameType(as: nodeChild)
-          }
-        }
-        if canConformToTrait && !node.traits.contains(trait.traitName) {
+        if node.canConform(to: trait) && !node.conforms(to: trait) {
           failures.append(
             ValidationFailure(
               node: node.kind,
@@ -533,7 +552,6 @@ class ValidateSyntaxNodes: XCTestCase {
     assertFailuresMatchXFails(
       failures,
       expectedFailures: [
-        ValidationFailure(node: .accessorParameters, message: "could conform to trait 'NamedDecl' but does not"),
         ValidationFailure(node: .availabilityCondition, message: "could conform to trait 'Parenthesized' but does not"),
         ValidationFailure(node: ._canImportExpr, message: "could conform to trait 'Parenthesized' but does not"),
         ValidationFailure(
@@ -542,10 +560,6 @@ class ValidateSyntaxNodes: XCTestCase {
         ),
         ValidationFailure(node: .editorPlaceholderDecl, message: "could conform to trait 'MissingNode' but does not"),
         ValidationFailure(node: .editorPlaceholderExpr, message: "could conform to trait 'MissingNode' but does not"),
-        ValidationFailure(node: .enumCaseElement, message: "could conform to trait 'NamedDecl' but does not"),
-        ValidationFailure(node: .genericParameter, message: "could conform to trait 'NamedDecl' but does not"),
-        ValidationFailure(node: .precedenceGroupName, message: "could conform to trait 'NamedDecl' but does not"),
-        ValidationFailure(node: .primaryAssociatedType, message: "could conform to trait 'NamedDecl' but does not"),
         ValidationFailure(
           node: .yieldedExpressionsClause,
           message: "could conform to trait 'Parenthesized' but does not"

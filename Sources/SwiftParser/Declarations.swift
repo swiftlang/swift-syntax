@@ -110,7 +110,7 @@ extension TokenConsumer {
       declStartKeyword = subparser.at(anyIn: DeclarationKeyword.self)?.0
     }
     switch declStartKeyword {
-    case .lhs(.actor):
+    case .group(.actor):
       // actor Foo {}
       if subparser.peek().rawTokenKind == .identifier {
         return true
@@ -123,16 +123,16 @@ extension TokenConsumer {
         lookahead.consumeAnyToken()
       } while lookahead.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl)
       return lookahead.at(.identifier)
-    case .lhs(.case):
+    case .simple(.case):
       // When 'case' appears inside a function, it's probably a switch
       // case, not an enum case declaration.
       return false
-    case .lhs(.`init`):
+    case .simple(.`init`):
       return allowInitDecl
-    case .lhs(.macro):
+    case .simple(.macro):
       // macro Foo ...
       return subparser.peek().rawTokenKind == .identifier
-    case .lhs(.pound):
+    case .simple(.pound):
       // Force parsing '#<identifier>' after attributes as a macro expansion decl.
       if hasAttribute || hasModifier {
         return true
@@ -215,7 +215,7 @@ extension Parser {
     } else if atFunctionDeclarationWithoutFuncKeyword() {
       // We aren't at a declaration keyword and it looks like we are at a function
       // declaration. Parse a function declaration.
-      recoveryResult = (.lhs(.func), .missing(.keyword(.func)))
+      recoveryResult = (.simple(.func), .missing(.keyword(.func)))
     } else {
       // In all other cases, use standard token recovery to find the declaration
       // to parse.
@@ -226,53 +226,53 @@ extension Parser {
     }
 
     switch recoveryResult {
-    case (.lhs(.import), let handle)?:
+    case (.simple(.import), let handle)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs, handle))
-    case (.lhs(.class), let handle)?:
+    case (.group(.class), let handle)?:
       return RawDeclSyntax(
         self.parseNominalTypeDeclaration(for: RawClassDeclSyntax.self, attrs: attrs, introucerHandle: handle)
       )
-    case (.lhs(.enum), let handle)?:
+    case (.group(.enum), let handle)?:
       return RawDeclSyntax(
         self.parseNominalTypeDeclaration(for: RawEnumDeclSyntax.self, attrs: attrs, introucerHandle: handle)
       )
-    case (.lhs(.case), let handle)?:
+    case (.simple(.case), let handle)?:
       return RawDeclSyntax(self.parseEnumCaseDeclaration(attrs, handle))
-    case (.lhs(.struct), let handle)?:
+    case (.group(.struct), let handle)?:
       return RawDeclSyntax(
         self.parseNominalTypeDeclaration(for: RawStructDeclSyntax.self, attrs: attrs, introucerHandle: handle)
       )
-    case (.lhs(.protocol), let handle)?:
+    case (.group(.protocol), let handle)?:
       return RawDeclSyntax(
         self.parseNominalTypeDeclaration(for: RawProtocolDeclSyntax.self, attrs: attrs, introucerHandle: handle)
       )
-    case (.lhs(.associatedtype), let handle)?:
+    case (.simple(.associatedtype), let handle)?:
       return RawDeclSyntax(self.parseAssociatedTypeDeclaration(attrs, handle))
-    case (.lhs(.typealias), let handle)?:
+    case (.simple(.typealias), let handle)?:
       return RawDeclSyntax(self.parseTypealiasDeclaration(attrs, handle))
-    case (.lhs(.extension), let handle)?:
+    case (.group(.extension), let handle)?:
       return RawDeclSyntax(self.parseExtensionDeclaration(attrs, handle))
-    case (.lhs(.func), let handle)?:
+    case (.simple(.func), let handle)?:
       return RawDeclSyntax(self.parseFuncDeclaration(attrs, handle))
-    case (.lhs(.subscript), let handle)?:
+    case (.simple(.subscript), let handle)?:
       return RawDeclSyntax(self.parseSubscriptDeclaration(attrs, handle))
-    case (.lhs(.`init`), let handle)?:
+    case (.simple(.`init`), let handle)?:
       return RawDeclSyntax(self.parseInitializerDeclaration(attrs, handle))
-    case (.lhs(.deinit), let handle)?:
+    case (.simple(.deinit), let handle)?:
       return RawDeclSyntax(self.parseDeinitializerDeclaration(attrs, handle))
-    case (.lhs(.operator), let handle)?:
+    case (.simple(.operator), let handle)?:
       return RawDeclSyntax(self.parseOperatorDeclaration(attrs, handle))
-    case (.lhs(.precedencegroup), let handle)?:
+    case (.simple(.precedencegroup), let handle)?:
       return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs, handle))
-    case (.lhs(.actor), let handle)?:
+    case (.group(.actor), let handle)?:
       return RawDeclSyntax(
         self.parseNominalTypeDeclaration(for: RawActorDeclSyntax.self, attrs: attrs, introucerHandle: handle)
       )
-    case (.lhs(.macro), let handle)?:
+    case (.simple(.macro), let handle)?:
       return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
-    case (.lhs(.pound), let handle)?:
+    case (.simple(.pound), let handle)?:
       return RawDeclSyntax(self.parseMacroExpansionDeclaration(attrs, handle))
-    case (.rhs, let handle)?:
+    case (.binding, let handle)?:
       return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
     case nil:
       break

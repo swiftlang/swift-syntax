@@ -267,82 +267,102 @@ enum ContextualDeclKeyword: TokenSpecSet {
   }
 }
 
-/// A `DeclarationKeyword` that is not a `ValueBindingPatternSyntax.BindingSpecifierOptions`.
-///
-/// `ValueBindingPatternSyntax.BindingSpecifierOptions` are injected into
-/// `DeclarationKeyword` via an `EitherTokenSpecSet`.
-enum PureDeclarationKeyword: TokenSpecSet {
-  case actor
-  case `associatedtype`
-  case `case`
-  case `class`
-  case `deinit`
-  case `enum`
-  case `extension`
-  case `func`
-  case `import`
-  case `init`
-  case macro
-  case `operator`
-  case `precedencegroup`
-  case `protocol`
-  case `struct`
-  case `subscript`
-  case `typealias`
-  case pound
+/// Union of the following token kind subsets:
+///  - `ValueBindingPatternSyntax.BindingSpecifierOptions`
+///  - `DeclGroupHeaderSyntax.IntroducerOptions`
+///  - `DeclarationKeyword.Simple` (containing other declaration keywords)
+enum DeclarationKeyword: TokenSpecSet {
+  /// A keyword introducing a binding declaration (a declaration which binds patterns to values).
+  case binding(Binding)
+
+  /// A keyword introducing a declaration group (a declaration with a member block).
+  case group(Group)
+
+  /// A keyword introducing a simple declaration (a declaration which is neither a group nor a binding).
+  case simple(Simple)
 
   init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-    switch PrepareForKeywordMatch(lexeme) {
-    case TokenSpec(.actor): self = .actor
-    case TokenSpec(.macro): self = .macro
-    case TokenSpec(.associatedtype): self = .associatedtype
-    case TokenSpec(.case): self = .case
-    case TokenSpec(.class): self = .class
-    case TokenSpec(.deinit): self = .deinit
-    case TokenSpec(.enum): self = .enum
-    case TokenSpec(.extension): self = .extension
-    case TokenSpec(.func): self = .func
-    case TokenSpec(.import): self = .import
-    case TokenSpec(.`init`): self = .`init`
-    case TokenSpec(.operator): self = .operator
-    case TokenSpec(.precedencegroup): self = .precedencegroup
-    case TokenSpec(.protocol): self = .protocol
-    case TokenSpec(.struct): self = .struct
-    case TokenSpec(.subscript): self = .subscript
-    case TokenSpec(.typealias): self = .typealias
-    case TokenSpec(.pound): self = .pound
-    default: return nil
+    if let simple = Simple(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
+      self = .simple(simple)
+    } else if let group = Group(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
+      self = .group(group)
+    } else if let binding = Binding(lexeme: lexeme, experimentalFeatures: experimentalFeatures) {
+      self = .binding(binding)
+    } else {
+      return nil
     }
   }
 
   var spec: TokenSpec {
     switch self {
-    case .actor: return TokenSpec(.actor, recoveryPrecedence: .declKeyword)
-    case .associatedtype: return .keyword(.associatedtype)
-    case .case: return TokenSpec(.case, recoveryPrecedence: .declKeyword)
-    case .class: return .keyword(.class)
-    case .deinit: return .keyword(.deinit)
-    case .enum: return .keyword(.enum)
-    case .extension: return .keyword(.extension)
-    case .func: return .keyword(.func)
-    case .import: return .keyword(.import)
-    case .`init`: return .keyword(.`init`)
-    case .macro: return TokenSpec(.macro, recoveryPrecedence: .declKeyword)
-    case .operator: return .keyword(.operator)
-    case .precedencegroup: return .keyword(.precedencegroup)
-    case .protocol: return .keyword(.protocol)
-    case .struct: return .keyword(.struct)
-    case .subscript: return .keyword(.subscript)
-    case .typealias: return .keyword(.typealias)
-    case .pound: return TokenSpec(.pound, recoveryPrecedence: .openingPoundIf)
+    case .simple(let simple): return simple.spec
+    case .group(let group): return group.spec
+    case .binding(let binding): return binding.spec
+    }
+  }
+
+  static let allCases: [DeclarationKeyword] =
+    Binding.allCases.map { .binding($0) } + Group.allCases.map { .group($0) } + Simple.allCases.map { .simple($0) }
+}
+
+extension DeclarationKeyword {
+  /// Type for a keyword introducing a binding declaration (a declaration which binds patterns to values).
+  typealias Binding = ValueBindingPatternSyntax.BindingSpecifierOptions
+
+  /// Type for a keyword introducing a declaration group (a declaration with a member block).
+  typealias Group = DeclGroupHeaderSyntax.IntroducerOptions
+
+  /// Type for a keyword introducing a simple declaration (a declaration which is neither a group nor a binding).
+  enum Simple: TokenSpecSet {
+    case `associatedtype`
+    case `case`
+    case `deinit`
+    case `func`
+    case `import`
+    case `init`
+    case macro
+    case `operator`
+    case `precedencegroup`
+    case `subscript`
+    case `typealias`
+    case pound
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.macro): self = .macro
+      case TokenSpec(.associatedtype): self = .associatedtype
+      case TokenSpec(.case): self = .case
+      case TokenSpec(.deinit): self = .deinit
+      case TokenSpec(.func): self = .func
+      case TokenSpec(.import): self = .import
+      case TokenSpec(.`init`): self = .`init`
+      case TokenSpec(.operator): self = .operator
+      case TokenSpec(.precedencegroup): self = .precedencegroup
+      case TokenSpec(.subscript): self = .subscript
+      case TokenSpec(.typealias): self = .typealias
+      case TokenSpec(.pound): self = .pound
+      default: return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .associatedtype: return .keyword(.associatedtype)
+      case .case: return TokenSpec(.case, recoveryPrecedence: .declKeyword)
+      case .deinit: return .keyword(.deinit)
+      case .func: return .keyword(.func)
+      case .import: return .keyword(.import)
+      case .`init`: return .keyword(.`init`)
+      case .macro: return TokenSpec(.macro, recoveryPrecedence: .declKeyword)
+      case .operator: return .keyword(.operator)
+      case .precedencegroup: return .keyword(.precedencegroup)
+      case .subscript: return .keyword(.subscript)
+      case .typealias: return .keyword(.typealias)
+      case .pound: return TokenSpec(.pound, recoveryPrecedence: .openingPoundIf)
+      }
     }
   }
 }
-
-typealias DeclarationKeyword = EitherTokenSpecSet<
-  PureDeclarationKeyword,
-  ValueBindingPatternSyntax.BindingSpecifierOptions
->
 
 enum DeclarationModifier: TokenSpecSet {
   case __consuming

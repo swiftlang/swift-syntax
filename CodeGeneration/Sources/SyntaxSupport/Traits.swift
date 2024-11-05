@@ -22,6 +22,7 @@ public class Trait {
   public let protocolName: TokenSyntax
   public let documentation: SwiftSyntax.Trivia
   public let children: [Child]
+  public let childHistory: Child.History
 
   init(
     traitName: String,
@@ -36,7 +37,7 @@ public class Trait {
     self.protocolName = .identifier("\(traitName)Syntax")
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.children = children
-    // FIXME: We don't appear to have ever generated compatibility layers for children of traits!
+    self.childHistory = childHistory
   }
 }
 
@@ -104,6 +105,7 @@ public let TRAITS: [Trait] = [
         "pound": .renamed(from: "poundToken"),
         "macroName": .renamed(from: "macro"),
         "arguments": .renamed(from: "argumentList"),
+        "genericArgumentClause": .renamed(from: "genericArguments"),
       ]
     ]
   ),

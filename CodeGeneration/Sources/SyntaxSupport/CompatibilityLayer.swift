@@ -15,6 +15,9 @@ public struct CompatibilityLayer {
   /// Deprecated members that the compatibility layer needs for each node.
   private var deprecatedMembersByNode: [SyntaxNodeKind: DeprecatedMemberInfo] = [:]
 
+  /// Deprecated members that the compatibility layer needs for each trait.
+  public var deprecatedMembersByTrait: [String: DeprecatedMemberInfo] = [:]
+
   /// Cache for `replacementChildren(for:by:)`. Ensures that we don't create two different replacement children even
   /// if we refactor the same child twice, so we can reliably equate and hash `Child` objects by object identity.
   private var cachedReplacementChildren: [Child: [Child]] = [:]
@@ -24,12 +27,20 @@ public struct CompatibilityLayer {
     return deprecatedMembersByNode[node.kind] ?? DeprecatedMemberInfo()
   }
 
-  internal init(nodes: [Node]) {
+  /// Returns the deprecated members that the compatibility layer needs for `trait`.
+  public func deprecatedMembers(for trait: Trait) -> DeprecatedMemberInfo {
+    return deprecatedMembersByTrait[trait.traitName] ?? DeprecatedMemberInfo()
+  }
+
+  internal init(nodes: [Node], traits: [Trait]) {
     // This instance will be stored in a global that's used from multiple threads simultaneously, so it won't be safe
     // to mutate once the initializer returns. We therefore do all the work to populate its tables up front, rather
     // than computing it lazily on demand.
     for node in nodes {
       computeMembers(for: node)
+    }
+    for trait in traits {
+      computeMembers(for: trait)
     }
   }
 
@@ -79,24 +90,56 @@ public struct CompatibilityLayer {
       return
     }
 
+    let result = computeMembersFor(
+      typeName: layoutNode.kind.rawValue,
+      initialChildren: layoutNode.children,
+      history: layoutNode.childHistory,
+      areRequirements: false
+    )
+
+    deprecatedMembersByNode[node.syntaxNodeKind] = result
+  }
+
+  private mutating func computeMembers(for trait: Trait) {
+    guard deprecatedMembersByTrait[trait.traitName] == nil else {
+      return
+    }
+
+    let result = computeMembersFor(
+      typeName: trait.traitName,
+      initialChildren: trait.children,
+      history: trait.childHistory,
+      areRequirements: true
+    )
+
+    deprecatedMembersByTrait[trait.traitName] = result
+  }
+
+  /// Compute and cache compatibility layer information for the given children.
+  private mutating func computeMembersFor(
+    typeName: String,
+    initialChildren: [Child],
+    history: Child.History,
+    areRequirements: Bool
+  ) -> DeprecatedMemberInfo {
     // The results that will ultimately be saved into the DeprecatedMemberInfo.
     var vars: [Child] = []
     var initSignatures: [InitSignature] = []
 
     // Temporary working state for the loop.
-    var children = layoutNode.children
+    var children = initialChildren
     var knownVars = Set(children)
 
     func firstIndexOfChild(named targetName: String) -> Int {
       guard let i = children.firstIndex(where: { $0.name == targetName }) else {
         fatalError(
-          "couldn't find '\(targetName)' in current children of \(node.syntaxNodeKind.rawValue): \(String(reflecting: children.map(\.name)))"
+          "couldn't find '\(targetName)' in current children of \(typeName): \(String(reflecting: children.map(\.name)))"
         )
       }
       return i
     }
 
-    for changeSet in layoutNode.childHistory {
+    for changeSet in history {
       var unexpectedChildrenWithNewNames: Set<Child> = []
 
       // First pass: Apply the changes explicitly specified in the change set.
@@ -106,12 +149,14 @@ public struct CompatibilityLayer {
         let replacementChildren = replacementChildren(for: children[i], by: refactoring)
         children.replaceSubrange(i...i, with: replacementChildren)
 
-        // Mark adjacent unexpected node children whose names have changed too.
-        if currentName != replacementChildren.first?.name {
-          unexpectedChildrenWithNewNames.insert(children[i - 1])
-        }
-        if currentName != replacementChildren.last?.name {
-          unexpectedChildrenWithNewNames.insert(children[i + replacementChildren.count])
+        if !areRequirements {
+          // Mark adjacent unexpected node children whose names have changed too.
+          if currentName != replacementChildren.first?.name {
+            unexpectedChildrenWithNewNames.insert(children[i - 1])
+          }
+          if currentName != replacementChildren.last?.name {
+            unexpectedChildrenWithNewNames.insert(children[i + replacementChildren.count])
+          }
         }
       }
 
@@ -134,10 +179,13 @@ public struct CompatibilityLayer {
       // Third pass: Append newly-created children to vars. We do this now so that changes from the first two passes are properly interleaved, preserving source order.
       vars += children.filter { knownVars.insert($0).inserted }
 
-      initSignatures.append(InitSignature(children: children))
+      // We don't create compatibility layers for protocol requirement inits.
+      if !areRequirements {
+        initSignatures.append(InitSignature(children: children))
+      }
     }
 
-    deprecatedMembersByNode[node.syntaxNodeKind] = DeprecatedMemberInfo(vars: vars, inits: initSignatures)
+    return DeprecatedMemberInfo(vars: vars, inits: initSignatures)
   }
 }
 

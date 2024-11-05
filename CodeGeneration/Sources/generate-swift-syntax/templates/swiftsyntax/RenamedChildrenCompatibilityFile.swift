@@ -33,6 +33,21 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
       }
     }
   }
+
+  for trait in TRAITS.filter({ !$0.childHistory.isEmpty }) {
+    var deprecatedMembers = SYNTAX_COMPATIBILITY_LAYER.deprecatedMembers(for: trait)
+
+    try ExtensionDeclSyntax("extension \(trait.protocolName)") {
+      for child in deprecatedMembers.vars {
+        makeCompatibilityVar(for: child)
+        if let addMethod = makeCompatibilityAddMethod(for: child) {
+          addMethod
+        }
+      }
+
+      // Not currently generating compatibility inits for traits.
+    }
+  }
 }
 
 func makeCompatibilityVar(for child: Child) -> DeclSyntax {

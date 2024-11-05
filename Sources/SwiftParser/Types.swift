@@ -885,7 +885,7 @@ extension Parser.Lookahead {
         } else if self.consume(if: .integerLiteral) != nil {
           continue
         }
-        
+
         return false
         // Parse the comma, if the list continues.
       } while self.consume(if: .comma) != nil && self.hasProgressed(&loopProgress)

@@ -10,8 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(ExperimentalLanguageFeatures)
-import SwiftParser
+@_spi(ExperimentalLanguageFeatures) import SwiftParser
 import SwiftSyntax
 import XCTest
 
@@ -139,7 +138,7 @@ final class ValueGenericsTests: ParserTestCase {
       """,
       experimentalFeatures: .valueGenerics
     )
-    
+
     assertParse(
       """
       let x = Generic<123>.self
@@ -167,7 +166,7 @@ final class ValueGenericsTests: ParserTestCase {
       """,
       experimentalFeatures: .valueGenerics
     )
-    
+
     assertParse(
       """
       let x = Generic<Int, 123>.self
@@ -181,7 +180,7 @@ final class ValueGenericsTests: ParserTestCase {
       """,
       experimentalFeatures: .valueGenerics
     )
-    
+
     assertParse(
       """
       typealias One = 1️⃣1
@@ -293,7 +292,7 @@ final class ValueGenericsTests: ParserTestCase {
       ],
       experimentalFeatures: .valueGenerics
     )
-    
+
     assertParse(
       "func foo() -> (1️⃣-1) X",
       diagnostics: [

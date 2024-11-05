@@ -15,7 +15,19 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-extension LayoutNode {
+extension InitSignature {
+  var compoundName: String {
+    let renamedArguments = children.map { child in
+      if child.isUnexpectedNodes {
+        return "_:"
+      } else {
+        return "\(child.labelDeclName):"
+      }
+    }.joined(separator: "")
+
+    return "init(leadingTrivia:\(renamedArguments)trailingTrivia:)"
+  }
+
   func generateInitializerDeclHeader(useDeprecatedChildName: Bool = false) -> SyntaxNodeString {
     if children.isEmpty {
       return "public init()"
@@ -209,4 +221,32 @@ fileprivate func convertFromSyntaxProtocolToSyntaxType(
     return ExprSyntax("\(child.buildableType.syntaxBaseName)(fromProtocol: \(childName.declNameOrVarCallName))")
   }
   return ExprSyntax("\(childName.declNameOrVarCallName)")
+}
+
+extension InitSignature {
+  /// Generates arguments to pass this initializer's parameters through to the
+  /// non-deprecated initializer. This will generate nested initializer calls for
+  /// any children with a compound `newerChildPath`.
+  func makeArgumentsToInitializeNewestChildren() -> [LabeledExprSyntax] {
+    return children.map { child in
+      let deprecatedName: TokenSyntax
+
+      if let deprecatedVarName = child.deprecatedVarName {
+        deprecatedName = deprecatedVarName
+      } else {
+        deprecatedName = child.varDeclName
+      }
+
+      let argValue = ExprSyntax(DeclReferenceExprSyntax(baseName: deprecatedName))
+
+      if child.isUnexpectedNodes {
+        return LabeledExprSyntax(expression: argValue)
+      }
+      return LabeledExprSyntax(
+        label: child.labelDeclName,
+        colon: .colonToken(),
+        expression: argValue
+      )
+    }
+  }
 }

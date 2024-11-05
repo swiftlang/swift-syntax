@@ -40,7 +40,8 @@ public enum ChildKind {
   /// The child always contains a node of the given `kind`.
   case node(kind: SyntaxNodeKind)
   /// The child always contains a node that matches one of the `choices`.
-  case nodeChoices(choices: [Child])
+  case nodeChoices(choices: [Child], childHistory: Child.History = [])
+  // FIXME: We don't appear to have ever generated compatibility layers for children of node choices!
   /// The child is a collection of `kind`.
   case collection(
     kind: SyntaxNodeKind,
@@ -70,7 +71,7 @@ public enum ChildKind {
   }
 
   public var isNodeChoicesEmpty: Bool {
-    if case .nodeChoices(let nodeChoices) = self {
+    if case .nodeChoices(let nodeChoices, _) = self {
       return nodeChoices.isEmpty
     } else {
       return true
@@ -85,11 +86,6 @@ public class Child: NodeChoiceConvertible {
   ///
   /// The first character of the name is always uppercase.
   public let name: String
-
-  /// If the child has been renamed, its old, now deprecated, name.
-  ///
-  /// This is used to generate deprecated compatibility layers.
-  public let deprecatedName: String?
 
   /// The kind of the child (node, token, collection, ...)
   public let kind: ChildKind
@@ -150,7 +146,7 @@ public class Child: NodeChoiceConvertible {
   /// For any other kind of child nodes, accessing this property crashes.
   public var syntaxChoicesType: TypeSyntax {
     precondition(kind.isNodeChoices, "Cannot get `syntaxChoicesType` for node that doesn’t have nodeChoices")
-    return "\(raw: name.withFirstCharacterUppercased)"
+    return "\(raw: newestName.withFirstCharacterUppercased)"
   }
 
   /// If this child only has tokens, the type that the generated `TokenSpecSet` should get.
@@ -158,20 +154,76 @@ public class Child: NodeChoiceConvertible {
   /// For any other kind of child nodes, accessing this property crashes.
   public var tokenSpecSetType: TypeSyntax {
     precondition(kind.isToken, "Cannot get `tokenSpecSetType` for node that isn’t a token")
-    return "\(raw: name.withFirstCharacterUppercased)Options"
+    return "\(raw: newestName.withFirstCharacterUppercased)Options"
   }
 
-  /// The deprecated name of this child that's suitable to be used for variable or enum case names.
-  public var deprecatedVarName: TokenSyntax? {
-    guard let deprecatedName = deprecatedName else {
-      return nil
+  /// If this child is deprecated, describes the sequence of accesses necessary
+  /// to reach the equivalent value using non-deprecated children; if the child
+  /// is not deprecated, this array is empty.
+  ///
+  /// Think of the elements of this array like components in a key path:
+  /// `newestChildPath[0]` is a child of the same node `self` is a child of,
+  /// `newestChildPath[1]` is a child of the node in `newestChildPath[0]`,
+  /// `newestChildPath[2]` is a child of the node in `newestChildPath[1]`,
+  /// and so on. To access the current value of this child, you must access each child
+  /// in the path *in sequence* on the node returned by the last access.
+  ///
+  /// ```
+  /// // Suppose the `newestChildPath` of `fooBar` looks like:
+  /// //
+  /// //    [ Child(name: "foo", ...), Child(name: "bar", ...) ]
+  /// //
+  /// // A compatibility property might look like this:
+  /// var fooBar: BarSyntax {
+  ///   get {
+  ///     return self.foo.bar
+  ///   }
+  ///   set {
+  ///     self.foo.bar = newValue
+  ///   }
+  /// }
+  /// ```
+  ///
+  /// If the child has only ever had `Refactoring.renamed(from:)`, there will
+  /// only be one element in the path; if `Refactoring.extracted` is involved,
+  /// there may be many elements.
+  ///
+  /// - Invariant: `newestChildPath.first`, if present, is always a sibling of `self`.
+  /// - Invariant: `newestChildPath.last`, if present, always has the same `kind` as `self`.
+  /// - Invariant: All elements in `newestChildPath` are not historical.
+  /// - Note: This array does *not* record all of the previous versions
+  ///         of the child. That information is not directly available anywhere.
+  public let newestChildPath: [Child]
+
+  /// True if this child was created by a `Child.Refactoring`. Such children
+  /// are part of the compatibility layer and are therefore deprecated.
+  public var isHistorical: Bool {
+    !newestChildPath.isEmpty
+  }
+
+  /// Replaces the nodes in `newerChildPath` with their own `newerChildPath`s,
+  /// if any, to form a child path enitrely of non-historical nodes.
+  static private func makeNewestChildPath(from newerChildPath: [Child]) -> [Child] {
+    var result: [Child] = []
+
+    // Push the children onto the stack in reverse order so they end up in the right place once they're resolved.
+    var workStack = Array(newerChildPath.reversed())
+
+    while let elem = workStack.popLast() {
+      if elem.isHistorical {
+        // There's an even newer version. Start working on that.
+        workStack.append(contentsOf: elem.newestChildPath.reversed())
+      } else {
+        // We've reached the current version of the child.
+        result.append(elem)
+      }
     }
-    return .identifier(lowercaseFirstWord(name: deprecatedName))
+
+    return result
   }
 
-  /// Determines if this child has a deprecated name
-  public var hasDeprecatedName: Bool {
-    return deprecatedName != nil
+  private var newestName: String {
+    return newestChildPath.last?.name ?? name
   }
 
   /// If the child ends with "token" in the kind, it's considered a token node.
@@ -224,7 +276,7 @@ public class Child: NodeChoiceConvertible {
   /// it has no node choices.
   public var hasBaseType: Bool {
     switch kind {
-    case .nodeChoices(let choices):
+    case .nodeChoices(let choices, _):
       return choices.isEmpty
     case .node(let kind):
       return kind.isBase
@@ -244,32 +296,118 @@ public class Child: NodeChoiceConvertible {
     return AttributeListSyntax("@_spi(ExperimentalLanguageFeatures)").with(\.trailingTrivia, .newline)
   }
 
-  /// If a classification is passed, it specifies the color identifiers in
-  /// that subtree should inherit for syntax coloring. Must be a member of
-  /// ``SyntaxClassification``.
-  /// If `forceClassification` is also set to true, all child nodes (not only
-  /// identifiers) inherit the syntax classification.
   init(
     name: String,
-    deprecatedName: String? = nil,
     kind: ChildKind,
     experimentalFeature: ExperimentalFeature? = nil,
     nameForDiagnostics: String? = nil,
     documentation: String? = nil,
-    isOptional: Bool = false
+    isOptional: Bool = false,
+    newerChildPath: [Child] = []
   ) {
     precondition(name.first?.isLowercase ?? true, "The first letter of a child’s name should be lowercase")
-    precondition(
-      deprecatedName?.first?.isLowercase ?? true,
-      "The first letter of a child’s deprecatedName should be lowercase"
-    )
     self.name = name
-    self.deprecatedName = deprecatedName
+    self.newestChildPath = Self.makeNewestChildPath(from: newerChildPath)
     self.kind = kind
     self.experimentalFeature = experimentalFeature
     self.nameForDiagnostics = nameForDiagnostics
     self.documentationSummary = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.documentationAbstract = String(documentation?.split(whereSeparator: \.isNewline).first ?? "")
     self.isOptional = isOptional
+  }
+
+  /// Create a node that is a copy of the last node in `newerChildPath`, but
+  /// with modifications.
+  init(renamingTo replacementName: String? = nil, newerChildPath: [Child]) {
+    let other = newerChildPath.last!
+
+    self.name = replacementName ?? other.name
+    self.newestChildPath = Self.makeNewestChildPath(from: newerChildPath)
+    self.kind = other.kind
+    self.experimentalFeature = other.experimentalFeature
+    self.nameForDiagnostics = other.nameForDiagnostics
+    self.documentationSummary = other.documentationSummary
+    self.documentationAbstract = other.documentationAbstract
+    self.isOptional = other.isOptional
+  }
+
+  /// Create a child for the unexpected nodes between two children (either or
+  /// both of which may be `nil`).
+  convenience init(forUnexpectedBetween earlier: Child?, and later: Child?, newerChildPath: [Child] = []) {
+    let name =
+      switch (earlier, later) {
+      case (nil, let later?):
+        "unexpectedBefore\(later.name.withFirstCharacterUppercased)"
+      case (let earlier?, nil):
+        "unexpectedAfter\(earlier.name.withFirstCharacterUppercased)"
+      case (let earlier?, let later?):
+        "unexpectedBetween\(earlier.name.withFirstCharacterUppercased)And\(later.name.withFirstCharacterUppercased)"
+      case (nil, nil):
+        fatalError("unexpected node has no siblings?")
+      }
+
+    self.init(
+      name: name,
+      kind: .collection(kind: .unexpectedNodes, collectionElementName: name.withFirstCharacterUppercased),
+      experimentalFeature: earlier?.experimentalFeature ?? later?.experimentalFeature,
+      nameForDiagnostics: nil,
+      documentation: nil,
+      isOptional: true,
+      newerChildPath: newerChildPath
+    )
+  }
+}
+
+extension Child: Hashable {
+  public static func == (lhs: Child, rhs: Child) -> Bool {
+    lhs === rhs
+  }
+
+  public func hash(into hasher: inout Hasher) {
+    hasher.combine(ObjectIdentifier(self))
+  }
+}
+
+extension Child {
+  /// A set of changes to the children that were all made simultaneously. The
+  /// key is the *new* name of the child; any names in the value are old names.
+  public typealias ChangeSet = KeyValuePairs<String, Refactoring>
+
+  /// A history of change sets applied to a group of children, ordered from
+  /// most recent set of changes to most distant.
+  ///
+  /// The first element is the newest set of changes; the last element is the oldest set
+  /// of changes. The change sets are applied on top of one another; for
+  /// example, this node has a child that was originally named `foo`, then
+  /// `bar`, and now `baz`:
+  ///
+  /// ```swift
+  /// Node(
+  ///     ...
+  ///     children: [
+  ///         Child(name: "baz", ...),
+  ///     ],
+  ///     childHistory: [
+  ///         // The key here is "baz", the current name
+  ///         [ "baz": .renamed(from: "bar") ],
+  ///         // The key here is "bar", the name before the previous change set
+  ///         [ "bar": .renamed(from: "foo") ],
+  ///     }
+  /// }
+  /// ```
+  public typealias History = [ChangeSet]
+
+  /// Specifies a historical change to a given child, and is able to generate
+  /// replacement children to substitute for it in deprecated compatibility
+  /// layers.
+  public enum Refactoring {
+    /// This child was renamed at some point in the past, so a deprecated alias
+    /// should be provided. The associated value is the *old*, now-deprecated name.
+    case renamed(from: String)
+
+    /// Several adjacent children were extracted into a separate node at some
+    /// point in the past, so deprecated aliases that flatten the other node's
+    /// children into this node should be provided.
+    case extracted
   }
 }

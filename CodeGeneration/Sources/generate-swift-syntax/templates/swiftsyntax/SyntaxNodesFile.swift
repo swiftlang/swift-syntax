@@ -52,10 +52,12 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           """
         )
 
+        let initSignature = InitSignature(node)
+
         try! InitializerDeclSyntax(
           """
-          \(node.generateInitializerDocComment())\
-          \(node.generateInitializerDeclHeader())
+          \(initSignature.generateInitializerDocComment())\
+          \(initSignature.generateInitializerDeclHeader())
           """
         ) {
           let parameters = ClosureParameterListSyntax {

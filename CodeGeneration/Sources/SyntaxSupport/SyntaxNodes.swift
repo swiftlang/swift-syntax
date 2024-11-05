@@ -35,3 +35,5 @@ public let SYNTAX_NODE_MAP: [SyntaxNodeKind: Node] = Dictionary(
 )
 
 public let NON_BASE_SYNTAX_NODES = SYNTAX_NODES.filter { !$0.kind.isBase }
+
+public let SYNTAX_COMPATIBILITY_LAYER = CompatibilityLayer(nodes: SYNTAX_NODES, traits: TRAITS)

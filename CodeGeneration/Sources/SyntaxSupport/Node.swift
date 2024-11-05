@@ -23,7 +23,7 @@ import SwiftSyntax
 ///    children are of the same type.
 public class Node: NodeChoiceConvertible {
   fileprivate enum Data {
-    case layout(children: [Child], traits: [String])
+    case layout(children: [Child], childHistory: Child.History, traits: [String])
     case collection(choices: [SyntaxNodeKind])
   }
 
@@ -123,7 +123,8 @@ public class Node: NodeChoiceConvertible {
     documentation: String? = nil,
     parserFunction: TokenSyntax? = nil,
     traits: [String] = [],
-    children: [Child] = []
+    children: [Child] = [],
+    childHistory: Child.History = []
   ) {
     precondition(base != .syntaxCollection)
     precondition(base.isBase, "unknown base kind '\(base)' for node '\(kind)'")
@@ -135,60 +136,9 @@ public class Node: NodeChoiceConvertible {
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction
 
-    let childrenWithUnexpected: [Child]
-    if children.isEmpty {
-      childrenWithUnexpected = [
-        Child(
-          name: "unexpected",
-          kind: .collection(kind: .unexpectedNodes, collectionElementName: "Unexpected"),
-          isOptional: true
-        )
-      ]
-    } else {
-      // Add implicitly generated UnexpectedNodes children between
-      // any two defined children
-      childrenWithUnexpected =
-        children.enumerated().flatMap { (i, child) -> [Child] in
-          let childName = child.name.withFirstCharacterUppercased
+    let childrenWithUnexpected = kind.isBase ? children : interleaveUnexpectedChildren(children)
 
-          let unexpectedName: String
-          let unexpectedDeprecatedName: String?
-
-          if i == 0 {
-            unexpectedName = "unexpectedBefore\(childName)"
-            unexpectedDeprecatedName = child.deprecatedName.map { "unexpectedBefore\($0.withFirstCharacterUppercased)" }
-          } else {
-            unexpectedName = "unexpectedBetween\(children[i - 1].name.withFirstCharacterUppercased)And\(childName)"
-            if let deprecatedName = children[i - 1].deprecatedName?.withFirstCharacterUppercased {
-              unexpectedDeprecatedName =
-                "unexpectedBetween\(deprecatedName)And\(child.deprecatedName?.withFirstCharacterUppercased ?? childName)"
-            } else if let deprecatedName = child.deprecatedName?.withFirstCharacterUppercased {
-              unexpectedDeprecatedName =
-                "unexpectedBetween\(children[i - 1].name.withFirstCharacterUppercased)And\(deprecatedName)"
-            } else {
-              unexpectedDeprecatedName = nil
-            }
-          }
-          let unexpectedBefore = Child(
-            name: unexpectedName,
-            deprecatedName: unexpectedDeprecatedName,
-            kind: .collection(kind: .unexpectedNodes, collectionElementName: unexpectedName),
-            isOptional: true
-          )
-          return [unexpectedBefore, child]
-        } + [
-          Child(
-            name: "unexpectedAfter\(children.last!.name.withFirstCharacterUppercased)",
-            deprecatedName: children.last!.deprecatedName.map { "unexpectedAfter\($0.withFirstCharacterUppercased)" },
-            kind: .collection(
-              kind: .unexpectedNodes,
-              collectionElementName: "UnexpectedAfter\(children.last!.name.withFirstCharacterUppercased)"
-            ),
-            isOptional: true
-          )
-        ]
-    }
-    self.data = .layout(children: childrenWithUnexpected, traits: traits)
+    self.data = .layout(children: childrenWithUnexpected, childHistory: childHistory, traits: traits)
   }
 
   /// A doc comment that lists all the nodes in which this node occurs as a child in.
@@ -321,7 +271,7 @@ public struct LayoutNode {
   /// This includes unexpected children
   public var children: [Child] {
     switch node.data {
-    case .layout(children: let children, traits: _):
+    case .layout(children: let children, childHistory: _, traits: _):
       return children
     case .collection:
       preconditionFailure("NodeLayoutView must wrap a Node with data `.layout`")
@@ -333,10 +283,20 @@ public struct LayoutNode {
     return children.filter { !$0.isUnexpectedNodes }
   }
 
+  /// The history of the layout node's children.
+  public var childHistory: Child.History {
+    switch node.data {
+    case .layout(children: _, childHistory: let childHistory, traits: _):
+      return childHistory
+    case .collection:
+      preconditionFailure("NodeLayoutView must wrap a Node with data `.layout`")
+    }
+  }
+
   /// Traits that the node conforms to.
   public var traits: [String] {
     switch node.data {
-    case .layout(children: _, traits: let traits):
+    case .layout(children: _, childHistory: _, traits: let traits):
       return traits
     case .collection:
       preconditionFailure("NodeLayoutView must wrap a Node with data `.layout`")
@@ -416,12 +376,21 @@ fileprivate extension Child {
     switch kind {
     case .node(let kind):
       return [kind]
-    case .nodeChoices(let choices):
+    case .nodeChoices(let choices, _):
       return choices.flatMap(\.kinds)
     case .collection(kind: let kind, _, _, _):
       return [kind]
     case .token:
       return [.token]
     }
+  }
+}
+
+fileprivate func interleaveUnexpectedChildren(_ children: [Child]) -> [Child] {
+  let liftedChildren = children.lazy.map(Optional.some)
+  let pairedChildren = zip([nil] + liftedChildren, liftedChildren + [nil])
+
+  return pairedChildren.flatMap { earlier, later in
+    [earlier, Child(forUnexpectedBetween: earlier, and: later)].compactMap { $0 }
   }
 }

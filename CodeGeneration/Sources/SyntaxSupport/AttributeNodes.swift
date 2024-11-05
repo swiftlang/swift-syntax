@@ -41,7 +41,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "atSign",
-        deprecatedName: "atSignToken",
         kind: .token(choices: [.token(.atSign)]),
         documentation: "The `@` sign."
       ),
@@ -59,7 +58,6 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "arguments",
-        deprecatedName: "argument",
         kind: .nodeChoices(choices: [
           Child(
             name: "argumentList",
@@ -156,6 +154,12 @@ public let ATTRIBUTE_NODES: [Node] = [
         documentation: "If the attribute takes arguments, the closing parenthesis.",
         isOptional: true
       ),
+    ],
+    childHistory: [
+      [
+        "atSign": .renamed(from: "atSignToken"),
+        "arguments": .renamed(from: "argument"),
+      ]
     ]
   ),
 
@@ -167,7 +171,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "availabilityLabel",
-        deprecatedName: "label",
         kind: .token(choices: [.keyword(.availability)]),
         nameForDiagnostics: "label",
         documentation: "The label of the argument"
@@ -179,7 +182,6 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "availabilityArguments",
-        deprecatedName: "availabilityList",
         kind: .collection(
           kind: .availabilityArgumentList,
           collectionElementName: "AvailabilityArgument",
@@ -190,6 +192,12 @@ public let ATTRIBUTE_NODES: [Node] = [
         name: "semicolon",
         kind: .token(choices: [.token(.semicolon)])
       ),
+    ],
+    childHistory: [
+      [
+        "availabilityLabel": .renamed(from: "label"),
+        "availabilityArguments": .renamed(from: "availabilityList"),
+      ]
     ]
   ),
 
@@ -202,7 +210,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "platformVersion",
-        deprecatedName: "availabilityVersionRestriction",
         kind: .node(kind: .platformVersion),
         documentation: "The platform/version pair, e.g. `iOS 10.1`"
       ),
@@ -212,6 +219,11 @@ public let ATTRIBUTE_NODES: [Node] = [
         documentation: "A trailing comma if the argument is followed by another argument",
         isOptional: true
       ),
+    ],
+    childHistory: [
+      [
+        "platformVersion": .renamed(from: "availabilityVersionRestriction")
+      ]
     ]
   ),
 
@@ -240,7 +252,6 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "platforms",
-        deprecatedName: "versionList",
         kind: .collection(
           kind: .platformVersionItemList,
           collectionElementName: "Platform",
@@ -248,6 +259,11 @@ public let ATTRIBUTE_NODES: [Node] = [
         ),
         documentation: "The list of OS versions in which the declaration became ABI stable."
       ),
+    ],
+    childHistory: [
+      [
+        "platforms": .renamed(from: "versionList")
+      ]
     ]
   ),
 
@@ -340,7 +356,6 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "accessorSpecifier",
-        deprecatedName: "accessorKind",
         kind: .token(choices: [.keyword(.get), .keyword(.set)]),
         documentation: "The accessor name.",
         isOptional: true
@@ -352,10 +367,15 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "arguments",
-        deprecatedName: "diffParams",
         kind: .node(kind: .differentiabilityWithRespectToArgument),
         isOptional: true
       ),
+    ],
+    childHistory: [
+      [
+        "accessorSpecifier": .renamed(from: "accessorKind"),
+        "arguments": .renamed(from: "diffParams"),
+      ]
     ]
   ),
 
@@ -378,7 +398,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "argument",
-        deprecatedName: "parameter",
         kind: .token(choices: [.token(.identifier), .token(.integerLiteral), .keyword(.self)])
       ),
       Child(
@@ -386,6 +405,11 @@ public let ATTRIBUTE_NODES: [Node] = [
         kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
+    ],
+    childHistory: [
+      [
+        "argument": .renamed(from: "parameter")
+      ]
     ]
   ),
 
@@ -407,21 +431,31 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "arguments",
-        deprecatedName: "parameters",
-        kind: .nodeChoices(choices: [
-          Child(
-            name: "argument",
-            deprecatedName: "parameter",
-            kind: .node(kind: .differentiabilityArgument)
-          ),
-          Child(
-            name: "argumentList",
-            deprecatedName: "parameterList",
-            kind: .node(kind: .differentiabilityArguments)
-          ),
-        ]),
+        kind: .nodeChoices(
+          choices: [
+            Child(
+              name: "argument",
+              kind: .node(kind: .differentiabilityArgument)
+            ),
+            Child(
+              name: "argumentList",
+              kind: .node(kind: .differentiabilityArguments)
+            ),
+          ],
+          childHistory: [
+            [
+              "argument": .renamed(from: "parameter"),
+              "argumentList": .renamed(from: "parameterList"),
+            ]
+          ]
+        ),
         nameForDiagnostics: "arguments"
       ),
+    ],
+    childHistory: [
+      [
+        "arguments": .renamed(from: "parameters")
+      ]
     ]
   ),
 
@@ -437,7 +471,6 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "arguments",
-        deprecatedName: "differentiabilityParameters",
         kind: .collection(kind: .differentiabilityArgumentList, collectionElementName: "Argument"),
         documentation: "The parameters for differentiation."
       ),
@@ -445,6 +478,11 @@ public let ATTRIBUTE_NODES: [Node] = [
         name: "rightParen",
         kind: .token(choices: [.token(.rightParen)])
       ),
+    ],
+    childHistory: [
+      [
+        "arguments": .renamed(from: "differentiabilityParameters")
+      ]
     ]
   ),
 
@@ -457,40 +495,44 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "kindSpecifier",
-        deprecatedName: "diffKind",
         kind: .token(choices: [.keyword(._forward), .keyword(.reverse), .keyword(._linear)]),
         documentation: "The differentiability kind, if it exists.",
         isOptional: true
       ),
       Child(
         name: "kindSpecifierComma",
-        deprecatedName: "diffKindComma",
         kind: .token(choices: [.token(.comma)]),
         documentation: "The comma following the differentiability kind, if it exists.",
         isOptional: true
       ),
       Child(
         name: "arguments",
-        deprecatedName: "diffParams",
         kind: .node(kind: .differentiabilityWithRespectToArgument),
         documentation: "The differentiability arguments, if any exists.",
         isOptional: true
       ),
       Child(
         name: "argumentsComma",
-        deprecatedName: "diffParamsComma",
         kind: .token(choices: [.token(.comma)]),
         documentation: "The comma following the differentiability arguments clause, if it exists.",
         isOptional: true
       ),
       Child(
         name: "genericWhereClause",
-        deprecatedName: "whereClause",
         kind: .node(kind: .genericWhereClause),
         documentation:
           "A `where` clause that places additional constraints on generic parameters like `where T: Differentiable`.",
         isOptional: true
       ),
+    ],
+    childHistory: [
+      [
+        "kindSpecifier": .renamed(from: "diffKind"),
+        "kindSpecifierComma": .renamed(from: "diffKindComma"),
+        "arguments": .renamed(from: "diffParams"),
+        "argumentsComma": .renamed(from: "diffParamsComma"),
+        "genericWhereClause": .renamed(from: "whereClause"),
+      ]
     ]
   ),
 
@@ -564,9 +606,13 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "declName",
-        deprecatedName: "declname",
         kind: .node(kind: .declReferenceExpr)
       ),
+    ],
+    childHistory: [
+      [
+        "declName": .renamed(from: "declname")
+      ]
     ]
   ),
 
@@ -621,11 +667,15 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "declName",
-        deprecatedName: "declname",
         kind: .node(kind: .declReferenceExpr),
         nameForDiagnostics: "declaration name",
         documentation: "The value for this argument"
       ),
+    ],
+    childHistory: [
+      [
+        "declName": .renamed(from: "declname")
+      ]
     ]
   ),
 
@@ -776,7 +826,6 @@ public let ATTRIBUTE_NODES: [Node] = [
     children: [
       Child(
         name: "targetLabel",
-        deprecatedName: "label",
         kind: .token(choices: [.keyword(.target)]),
         nameForDiagnostics: "label",
         documentation: "The label of the argument"
@@ -788,7 +837,6 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "declName",
-        deprecatedName: "declname",
         kind: .node(kind: .declReferenceExpr),
         nameForDiagnostics: "declaration name",
         documentation: "The value for this argument"
@@ -799,6 +847,12 @@ public let ATTRIBUTE_NODES: [Node] = [
         documentation: "A trailing comma if this argument is followed by another one",
         isOptional: true
       ),
+    ],
+    childHistory: [
+      [
+        "targetLabel": .renamed(from: "label"),
+        "declName": .renamed(from: "declname"),
+      ]
     ]
   ),
 

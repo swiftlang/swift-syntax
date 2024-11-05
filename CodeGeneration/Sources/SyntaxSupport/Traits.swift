@@ -22,14 +22,22 @@ public class Trait {
   public let protocolName: TokenSyntax
   public let documentation: SwiftSyntax.Trivia
   public let children: [Child]
+  public let childHistory: Child.History
 
-  init(traitName: String, baseKind: SyntaxNodeKind? = nil, documentation: String? = nil, children: [Child]) {
+  init(
+    traitName: String,
+    baseKind: SyntaxNodeKind? = nil,
+    documentation: String? = nil,
+    children: [Child],
+    childHistory: Child.History = []
+  ) {
     precondition(baseKind?.isBase != false, "`baseKind` must be a base syntax node kind")
     self.traitName = traitName
     self.baseKind = baseKind
     self.protocolName = .identifier("\(traitName)Syntax")
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.children = children
+    self.childHistory = childHistory
   }
 }
 
@@ -83,14 +91,22 @@ public let TRAITS: [Trait] = [
   Trait(
     traitName: "FreestandingMacroExpansion",
     children: [
-      Child(name: "pound", deprecatedName: "poundToken", kind: .token(choices: [.token(.pound)])),
-      Child(name: "macroName", deprecatedName: "macro", kind: .token(choices: [.token(.identifier)])),
+      Child(name: "pound", kind: .token(choices: [.token(.pound)])),
+      Child(name: "macroName", kind: .token(choices: [.token(.identifier)])),
       Child(name: "genericArgumentClause", kind: .node(kind: .genericArgumentClause), isOptional: true),
       Child(name: "leftParen", kind: .token(choices: [.token(.leftParen)]), isOptional: true),
-      Child(name: "arguments", deprecatedName: "argumentList", kind: .node(kind: .labeledExprList)),
+      Child(name: "arguments", kind: .node(kind: .labeledExprList)),
       Child(name: "rightParen", kind: .token(choices: [.token(.rightParen)]), isOptional: true),
       Child(name: "trailingClosure", kind: .node(kind: .closureExpr), isOptional: true),
       Child(name: "additionalTrailingClosures", kind: .node(kind: .multipleTrailingClosureElementList)),
+    ],
+    childHistory: [
+      [
+        "pound": .renamed(from: "poundToken"),
+        "macroName": .renamed(from: "macro"),
+        "arguments": .renamed(from: "argumentList"),
+        "genericArgumentClause": .renamed(from: "genericArguments"),
+      ]
     ]
   ),
   Trait(

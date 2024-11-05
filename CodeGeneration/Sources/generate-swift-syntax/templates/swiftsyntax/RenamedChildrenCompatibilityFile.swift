@@ -16,90 +16,110 @@ import SyntaxSupport
 import Utils
 
 let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode).filter({ $0.children.hasDeprecatedChild }) {
+  for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode).filter({ !$0.childHistory.isEmpty }) {
+    var deprecatedMembers = SYNTAX_COMPATIBILITY_LAYER.deprecatedMembers(for: layoutNode)
+
     try ExtensionDeclSyntax("extension \(layoutNode.type.syntaxBaseName)") {
-      for child in layoutNode.children {
-        if let deprecatedVarName = child.deprecatedVarName {
-          let childType: TypeSyntax =
-            child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
-          let type = child.isOptional ? TypeSyntax("\(childType)?") : childType
-
-          DeclSyntax(
-            """
-            @available(*, deprecated, renamed: "\(child.identifier)")
-            public var \(deprecatedVarName): \(type) {
-              get {
-                return \(child.baseCallName)
-              }
-              set {
-                \(child.baseCallName) = newValue
-              }
-            }
-            """
-          )
-          if let childNode = SYNTAX_NODE_MAP[child.syntaxNodeKind]?.collectionNode,
-            !child.isUnexpectedNodes,
-            case .collection(
-              kind: _,
-              collectionElementName: let collectionElementName,
-              defaultsToEmpty: _,
-              deprecatedCollectionElementName: let deprecatedCollectionElementName
-            ) = child.kind,
-            let deprecatedCollectionElementName
-          {
-            let childEltType = childNode.collectionElementType.syntaxBaseName
-
-            DeclSyntax(
-              """
-              @available(*, deprecated, renamed: "add\(raw: collectionElementName)")
-              public func add\(raw: deprecatedCollectionElementName)(_ element: \(childEltType)) -> \(layoutNode.kind.syntaxType) {
-                return add\(raw: collectionElementName)(element)
-              }
-              """
-            )
-          }
+      for child in deprecatedMembers.vars {
+        makeCompatibilityVar(for: child)
+        if let addMethod = makeCompatibilityAddMethod(for: child) {
+          addMethod
         }
       }
 
-      let deprecatedNames = layoutNode.children
-        .filter { !$0.isUnexpectedNodes && $0.hasDeprecatedName }
-        .map { $0.identifier.description }
-        .joined(separator: ", ")
+      let renamedName = InitSignature(layoutNode).compoundName
+      for signature in deprecatedMembers.inits {
+        makeCompatibilityInit(for: signature, renamedName: renamedName)
+      }
+    }
+  }
 
-      let renamedArguments =
-        layoutNode.children.map { child in
-          if child.isUnexpectedNodes {
-            return "_:"
-          } else {
-            return "\(child.labelDeclName):"
-          }
-        }.joined(separator: "")
+  for trait in TRAITS.filter({ !$0.childHistory.isEmpty }) {
+    var deprecatedMembers = SYNTAX_COMPATIBILITY_LAYER.deprecatedMembers(for: trait)
 
-      let renamedName = "\(layoutNode.type.syntaxBaseName)(leadingTrivia:\(renamedArguments)trailingTrivia:)"
-
-      try! InitializerDeclSyntax(
-        """
-        @available(*, deprecated, renamed: \(literal: renamedName))
-        @_disfavoredOverload
-        \(layoutNode.generateInitializerDeclHeader(useDeprecatedChildName: true))
-        """
-      ) {
-        FunctionCallExprSyntax(callee: ExprSyntax("self.init")) {
-          LabeledExprSyntax(label: "leadingTrivia", expression: ExprSyntax("leadingTrivia"))
-          for child in layoutNode.children {
-            if child.isUnexpectedNodes {
-              LabeledExprSyntax(expression: ExprSyntax("\(child.deprecatedVarName ?? child.baseCallName)"))
-            } else {
-              LabeledExprSyntax(
-                label: child.labelDeclName,
-                colon: .colonToken(),
-                expression: DeclReferenceExprSyntax(baseName: child.deprecatedVarName ?? child.baseCallName)
-              )
-            }
-          }
-          LabeledExprSyntax(label: "trailingTrivia", expression: ExprSyntax("trailingTrivia"))
+    try ExtensionDeclSyntax("extension \(trait.protocolName)") {
+      for child in deprecatedMembers.vars {
+        makeCompatibilityVar(for: child)
+        if let addMethod = makeCompatibilityAddMethod(for: child) {
+          addMethod
         }
       }
+
+      // Not currently generating compatibility inits for traits.
+    }
+  }
+}
+
+func makeCompatibilityVar(for child: Child) -> DeclSyntax {
+  let childType: TypeSyntax =
+    child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
+  let type = child.isOptional ? TypeSyntax("\(childType)?") : childType
+
+  // Form the access chain for the current name.
+  let childPath = child.newestChildPath
+  let childPathString = childPath.map(\.name).joined(separator: ".")
+  let childBase = ExprSyntax(DeclReferenceExprSyntax(baseName: childPath.first!.baseCallName))
+  let childAccess = childPath.dropFirst().reduce(childBase) { base, child in
+    ExprSyntax(MemberAccessExprSyntax(base: base, name: child.baseCallName))
+  }
+
+  return DeclSyntax(
+    """
+    @available(*, deprecated, renamed: \(literal: childPathString))
+    public var \(child.identifier): \(type) {
+      get {
+        return \(childAccess)
+      }
+      set {
+        \(childAccess) = newValue
+      }
+    }
+    """
+  )
+}
+
+func makeCompatibilityAddMethod(for child: Child) -> DeclSyntax? {
+  if let childNode = SYNTAX_NODE_MAP[child.syntaxNodeKind]?.collectionNode,
+    !child.isUnexpectedNodes,
+    case .collection(
+      kind: _,
+      collectionElementName: let collectionElementName,
+      defaultsToEmpty: _,
+      deprecatedCollectionElementName: let deprecatedCollectionElementName
+    ) = child.kind,
+    let deprecatedCollectionElementName
+  {
+    let childEltType = childNode.collectionElementType.syntaxBaseName
+
+    return DeclSyntax(
+      """
+      @available(*, deprecated, renamed: "add\(raw: collectionElementName)")
+      public func add\(raw: deprecatedCollectionElementName)(_ element: \(childEltType)) -> Self {
+        return add\(raw: collectionElementName)(element)
+      }
+      """
+    )
+  }
+
+  return nil
+}
+
+func makeCompatibilityInit(for signature: InitSignature, renamedName: String) -> InitializerDeclSyntax {
+  try! InitializerDeclSyntax(
+    """
+    @available(*, deprecated, renamed: \(literal: renamedName))
+    @_disfavoredOverload
+    \(signature.generateInitializerDeclHeader())
+    """
+  ) {
+    FunctionCallExprSyntax(callee: ExprSyntax("self.init")) {
+      LabeledExprSyntax(label: "leadingTrivia", expression: ExprSyntax("leadingTrivia"))
+
+      for argExpr in signature.makeArgumentsToInitializeNewestChildren() {
+        argExpr
+      }
+
+      LabeledExprSyntax(label: "trailingTrivia", expression: ExprSyntax("trailingTrivia"))
     }
   }
 }

@@ -311,6 +311,116 @@ extension Parser {
     )
   }
 
+  /// Parse the standalone header of a declaration group (a header that won't have a member block attached to it).
+  /// For a header that will have a member list attached, use ``Parser/parseHeaderForDeclarationGroup(attrs:keyword:handle:)``, which this method wraps.
+  ///
+  /// If `inMemberDeclList` is `true`, we know that the next item must be a
+  /// declaration and thus start with a keyword. This allows further recovery.
+  mutating func parseDeclarationGroupHeader(inMemberDeclList: Bool = false) -> RawDeclGroupHeaderSyntax {
+    // If we are at a `#if` of attributes, the `#if` directive should be
+    // parsed when we're parsing the attributes.
+    if self.at(.poundIf) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
+      // If we're at a #if, that's not actually allowed here; parse it and add
+      // it as an unexpected node of a MissingDeclGroupHeaderSyntax.
+      let directive = self.parsePoundIfDirective { (parser, _) in
+        let parsedDecl = parser.parseDeclaration()
+        let semicolon = parser.consume(if: .semicolon)
+        return RawMemberBlockItemSyntax(
+          decl: parsedDecl,
+          semicolon: semicolon,
+          arena: parser.arena
+        )
+      } addSemicolonIfNeeded: { lastElement, newItemAtStartOfLine, parser in
+        if lastElement.semicolon == nil && !newItemAtStartOfLine {
+          return RawMemberBlockItemSyntax(
+            lastElement.unexpectedBeforeDecl,
+            decl: lastElement.decl,
+            lastElement.unexpectedBetweenDeclAndSemicolon,
+            semicolon: parser.missingToken(.semicolon),
+            lastElement.unexpectedAfterSemicolon,
+            arena: parser.arena
+          )
+        } else {
+          return nil
+        }
+      } syntax: { parser, elements in
+        return .decls(RawMemberBlockItemListSyntax(elements: elements, arena: parser.arena))
+      }
+      return RawDeclGroupHeaderSyntax(
+        RawMissingDeclHeaderSyntax(
+          RawUnexpectedNodesSyntax([directive], arena: self.arena),
+          attributes: emptyCollection(RawAttributeListSyntax.self),
+          modifiers: emptyCollection(RawDeclModifierListSyntax.self),
+          placeholder: missingToken(.identifier, text: "decl"),
+          inheritanceClause: nil,
+          genericWhereClause: nil,
+          arena: self.arena
+        )
+      )
+    }
+
+    let attrs = DeclAttributes(
+      attributes: self.parseAttributeList(),
+      modifiers: self.parseDeclModifierList()
+    )
+
+    let recoveryResult: (match: DeclGroupHeaderSyntax.IntroducerOptions, handle: RecoveryConsumptionHandle)?
+    if let atResult = self.at(anyIn: DeclGroupHeaderSyntax.IntroducerOptions.self) {
+      // We are at a keyword that starts a declaration. Parse that declaration.
+      recoveryResult = (atResult.spec, .noRecovery(atResult.handle))
+    } else {
+      // In all other cases, use standard token recovery to find the declaration
+      // to parse.
+      // If we are inside a memberDecl list, we don't want to eat closing braces (which most likely close the outer context)
+      // while recovering to the declaration start.
+      let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
+      recoveryResult = self.canRecoverTo(
+        anyIn: DeclGroupHeaderSyntax.IntroducerOptions.self,
+        overrideRecoveryPrecedence: recoveryPrecedence
+      )
+    }
+
+    if let (match, handle) = recoveryResult {
+      return parseHeaderForDeclarationGroup(attrs: attrs, introducer: match, introducerHandle: handle).0
+    }
+
+    if inMemberDeclList {
+      if self.currentToken.isEditorPlaceholder {
+        let placeholder = self.parseAnyIdentifier()
+        return RawDeclGroupHeaderSyntax(
+          RawMissingDeclHeaderSyntax(
+            attributes: attrs.attributes,
+            modifiers: attrs.modifiers,
+            placeholder: placeholder,
+            inheritanceClause: nil,
+            genericWhereClause: nil,
+            arena: self.arena
+          )
+        )
+      }
+    }
+
+    return RawDeclGroupHeaderSyntax(
+      RawMissingDeclHeaderSyntax(
+        attributes: attrs.attributes,
+        modifiers: attrs.modifiers,
+        placeholder: missingToken(.identifier, text: "decl"),
+        inheritanceClause: nil,
+        genericWhereClause: nil,
+        arena: self.arena
+      )
+    )
+  }
+
+  /// Parse the header of a declaration group that will eventually have a member block attached.
+  mutating func parseHeaderForDeclarationGroup(
+    attrs: DeclAttributes,
+    introducer: DeclGroupHeaderSyntax.IntroducerOptions,
+    introducerHandle: RecoveryConsumptionHandle
+  ) -> (RawDeclGroupHeaderSyntax, shouldContinueParsing: Bool) {
+    fatalError("not yet implemented")
+  }
+
   /// Returns `true` if it looks like the parser is positioned at a function declaration that’s missing the `func` keyword.
   fileprivate mutating func atFunctionDeclarationWithoutFuncKeyword() -> Bool {
     var nextTokenIsLeftParenOrLeftAngle: Bool {

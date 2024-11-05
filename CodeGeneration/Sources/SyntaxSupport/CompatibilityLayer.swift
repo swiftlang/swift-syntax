@@ -94,7 +94,7 @@ public struct CompatibilityLayer {
       typeName: layoutNode.kind.rawValue,
       initialChildren: layoutNode.children,
       history: layoutNode.childHistory,
-      areRequirements: false
+      areRequirements: layoutNode.kind.isBase
     )
 
     deprecatedMembersByNode[node.syntaxNodeKind] = result

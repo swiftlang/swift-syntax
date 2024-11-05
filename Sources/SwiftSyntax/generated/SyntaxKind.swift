@@ -200,6 +200,7 @@ public enum SyntaxKind: Sendable {
   case memberBlock
   case memberType
   case metatypeType
+  case missingDeclHeader
   case missingDecl
   case missingExpr
   case missingPattern
@@ -428,6 +429,8 @@ public enum SyntaxKind: Sendable {
     case .missing:
       return true
     case .missingDecl:
+      return true
+    case .missingDeclHeader:
       return true
     case .missingExpr:
       return true
@@ -792,6 +795,8 @@ public enum SyntaxKind: Sendable {
       return MemberTypeSyntax.self
     case .metatypeType:
       return MetatypeTypeSyntax.self
+    case .missingDeclHeader:
+      return MissingDeclHeaderSyntax.self
     case .missingDecl:
       return MissingDeclSyntax.self
     case .missingExpr:

@@ -54,6 +54,17 @@ extension ExtensionDeclSyntax {
   }
 }
 
+extension MissingDeclHeaderSyntax {
+  public var introducer: TokenSyntax {
+    get {
+      return placeholder
+    }
+    set {
+      placeholder = newValue
+    }
+  }
+}
+
 extension ProtocolDeclSyntax {
   public var introducer: TokenSyntax {
     get {

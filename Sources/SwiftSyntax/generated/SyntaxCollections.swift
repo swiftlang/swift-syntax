@@ -82,6 +82,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``ClassDeclSyntax``.``ClassDeclSyntax/attributes``
 ///  - ``ClosureParameterSyntax``.``ClosureParameterSyntax/attributes``
 ///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/attributes``
+///  - ``DeclGroupHeaderSyntax``.``DeclGroupHeaderSyntax/attributes``
 ///  - ``DeinitializerDeclSyntax``.``DeinitializerDeclSyntax/attributes``
 ///  - ``EditorPlaceholderDeclSyntax``.``EditorPlaceholderDeclSyntax/attributes``
 ///  - ``EnumCaseDeclSyntax``.``EnumCaseDeclSyntax/attributes``
@@ -95,6 +96,7 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/attributes``
 ///  - ``MacroDeclSyntax``.``MacroDeclSyntax/attributes``
 ///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/attributes``
+///  - ``MissingDeclHeaderSyntax``.``MissingDeclHeaderSyntax/attributes``
 ///  - ``MissingDeclSyntax``.``MissingDeclSyntax/attributes``
 ///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/attributes``
 ///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/attributes``
@@ -426,6 +428,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``AssociatedTypeDeclSyntax``.``AssociatedTypeDeclSyntax/modifiers``
 ///  - ``ClassDeclSyntax``.``ClassDeclSyntax/modifiers``
 ///  - ``ClosureParameterSyntax``.``ClosureParameterSyntax/modifiers``
+///  - ``DeclGroupHeaderSyntax``.``DeclGroupHeaderSyntax/modifiers``
 ///  - ``DeinitializerDeclSyntax``.``DeinitializerDeclSyntax/modifiers``
 ///  - ``EditorPlaceholderDeclSyntax``.``EditorPlaceholderDeclSyntax/modifiers``
 ///  - ``EnumCaseDeclSyntax``.``EnumCaseDeclSyntax/modifiers``
@@ -438,6 +441,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/modifiers``
 ///  - ``MacroDeclSyntax``.``MacroDeclSyntax/modifiers``
 ///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/modifiers``
+///  - ``MissingDeclHeaderSyntax``.``MissingDeclHeaderSyntax/modifiers``
 ///  - ``MissingDeclSyntax``.``MissingDeclSyntax/modifiers``
 ///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/modifiers``
 ///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/modifiers``

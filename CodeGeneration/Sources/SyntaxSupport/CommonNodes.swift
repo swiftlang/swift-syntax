@@ -181,10 +181,95 @@ public let COMMON_NODES: [Node] = [
   ),
 
   Node(
+    kind: .declGroupHeader,
+    base: .syntax,
+    nameForDiagnostics: "declaration group header",
+    parserFunction: "parseDeclarationGroupHeader",
+    traits: [
+      "WithAttributes",
+      "WithModifiers",
+    ],
+    children: [
+      Child(
+        name: "attributes",
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        nameForDiagnostics: "attributes"
+      ),
+      Child(
+        name: "modifiers",
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        nameForDiagnostics: "modifiers",
+        documentation: "Modifiers like `public` that are attached to the actor declaration."
+      ),
+      Child(
+        name: "introducer",
+        kind: .token(choices: [
+          .keyword(.actor), .keyword(.class), .keyword(.enum), .keyword(.extension), .keyword(.protocol),
+          .keyword(.struct),
+        ]),
+        documentation: "The token that introduces this declaration, eg. `class` for a class declaration."
+      ),
+      Child(name: "inheritanceClause", kind: .node(kind: .inheritanceClause), isOptional: true),
+      Child(
+        name: "genericWhereClause",
+        kind: .node(kind: .genericWhereClause),
+        documentation:
+          "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
+        isOptional: true
+      ),
+    ]
+  ),
+
+  Node(
     kind: .expr,
     base: .syntax,
     nameForDiagnostics: "expression",
     parserFunction: "parseExpression"
+  ),
+
+  Node(
+    kind: .missingDeclHeader,
+    base: .declGroupHeader,
+    nameForDiagnostics: "declaration group header",
+    documentation:
+      "In case the source code is missing a declaration group header, this node stands in place of the missing header.",
+    traits: [
+      "MissingNode",
+      "WithAttributes",
+      "WithModifiers",
+    ],
+    children: [
+      Child(
+        name: "attributes",
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        documentation:
+          "If there were standalone attributes without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these."
+      ),
+      Child(
+        name: "modifiers",
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        documentation:
+          "If there were standalone modifiers without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these."
+      ),
+      Child(
+        name: "placeholder",
+        kind: .token(choices: [.token(.identifier)], requiresLeadingSpace: false, requiresTrailingSpace: false),
+        documentation: """
+          A placeholder, i.e. `<#decl#>`, that can be inserted into the source code to represent the missing declaration.
+
+          This token should always have `presence = .missing`.
+          """
+      ),
+      Child(name: "inheritanceClause", kind: .node(kind: .inheritanceClause), isOptional: true),
+      Child(
+        name: "genericWhereClause",
+        kind: .node(kind: .genericWhereClause),
+        documentation:
+          "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
+        isOptional: true
+      ),
+
+    ]
   ),
 
   Node(

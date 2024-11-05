@@ -844,6 +844,94 @@ extension ConsumeExprSyntax {
   }
 }
 
+extension DeclGroupHeaderSyntax {
+  @_spi(Diagnostics)
+  public enum IntroducerOptions: TokenSpecSet {
+    case actor
+    case `class`
+    case `enum`
+    case `extension`
+    case `protocol`
+    case `struct`
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.actor):
+        self = .actor
+      case TokenSpec(.class):
+        self = .class
+      case TokenSpec(.enum):
+        self = .enum
+      case TokenSpec(.extension):
+        self = .extension
+      case TokenSpec(.protocol):
+        self = .protocol
+      case TokenSpec(.struct):
+        self = .struct
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.actor):
+        self = .actor
+      case TokenSpec(.class):
+        self = .class
+      case TokenSpec(.enum):
+        self = .enum
+      case TokenSpec(.extension):
+        self = .extension
+      case TokenSpec(.protocol):
+        self = .protocol
+      case TokenSpec(.struct):
+        self = .struct
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .actor:
+        return .keyword(.actor)
+      case .class:
+        return .keyword(.class)
+      case .enum:
+        return .keyword(.enum)
+      case .extension:
+        return .keyword(.extension)
+      case .protocol:
+        return .keyword(.protocol)
+      case .struct:
+        return .keyword(.struct)
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .actor:
+        return .keyword(.actor)
+      case .class:
+        return .keyword(.class)
+      case .enum:
+        return .keyword(.enum)
+      case .extension:
+        return .keyword(.extension)
+      case .protocol:
+        return .keyword(.protocol)
+      case .struct:
+        return .keyword(.struct)
+      }
+    }
+  }
+}
+
 extension DeclModifierSyntax {
   @_spi(Diagnostics)
   public enum NameOptions: TokenSpecSet {

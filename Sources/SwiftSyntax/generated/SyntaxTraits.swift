@@ -711,6 +711,8 @@ extension CodeBlockSyntax: BracedSyntax, WithStatementsSyntax {}
 
 extension ConditionElementSyntax: WithTrailingCommaSyntax {}
 
+extension DeclGroupHeaderSyntax: WithAttributesSyntax, WithModifiersSyntax {}
+
 extension DeclModifierDetailSyntax: ParenthesizedSyntax {}
 
 extension DeclNameArgumentsSyntax: ParenthesizedSyntax {}
@@ -786,6 +788,8 @@ extension MacroExpansionDeclSyntax: FreestandingMacroExpansionSyntax, WithAttrib
 extension MacroExpansionExprSyntax: FreestandingMacroExpansionSyntax {}
 
 extension MemberBlockSyntax: BracedSyntax {}
+
+extension MissingDeclHeaderSyntax: MissingNodeSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
 extension MissingDeclSyntax: MissingNodeSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 

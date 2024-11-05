@@ -2138,6 +2138,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: MetatypeTypeSyntax) {
   }
 
+  /// Visiting ``MissingDeclHeaderSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: MissingDeclHeaderSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``MissingDeclHeaderSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: MissingDeclHeaderSyntax) {
+  }
+
   /// Visiting ``MissingDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4227,6 +4239,10 @@ open class SyntaxVisitor {
       return {
         self.visitImpl(&$0, MetatypeTypeSyntax.self, self.visit, self.visitPost)
       }
+    case .missingDeclHeader:
+      return {
+        self.visitImpl(&$0, MissingDeclHeaderSyntax.self, self.visit, self.visitPost)
+      }
     case .missingDecl:
       return {
         self.visitImpl(&$0, MissingDeclSyntax.self, self.visit, self.visitPost)
@@ -5027,6 +5043,8 @@ open class SyntaxVisitor {
       visitImpl(&node, MemberTypeSyntax.self, visit, visitPost)
     case .metatypeType:
       visitImpl(&node, MetatypeTypeSyntax.self, visit, visitPost)
+    case .missingDeclHeader:
+      visitImpl(&node, MissingDeclHeaderSyntax.self, visit, visitPost)
     case .missingDecl:
       visitImpl(&node, MissingDeclSyntax.self, visit, visitPost)
     case .missingExpr:

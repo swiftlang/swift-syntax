@@ -21,7 +21,7 @@ import Utils
 /// It then only emits those syntax nodes whose base kind are that specified kind.
 func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
   SourceFileSyntax(leadingTrivia: copyrightHeader) {
-    for node in SYNTAX_NODES.compactMap(\.layoutNode)
+    for node in NON_BASE_SYNTAX_NODES.compactMap(\.layoutNode)
     where nodesStartingWith.contains(node.kind.syntaxType.description.droppingLeadingUnderscores.first!) {
       // We are actually handling this node now
       try! StructDeclSyntax(

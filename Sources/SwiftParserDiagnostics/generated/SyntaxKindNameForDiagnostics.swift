@@ -269,6 +269,8 @@ extension SyntaxKind {
       return "member type"
     case .metatypeType:
       return "metatype"
+    case .missingDeclHeader:
+      return "declaration group header"
     case .missingDecl:
       return "declaration"
     case .missingExpr:

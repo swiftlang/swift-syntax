@@ -1139,6 +1139,7 @@ public struct GenericSpecializationExprSyntax: ExprSyntaxProtocol, SyntaxHashabl
 ///  - ``ActorDeclSyntax``.``ActorDeclSyntax/genericWhereClause``
 ///  - ``AssociatedTypeDeclSyntax``.``AssociatedTypeDeclSyntax/genericWhereClause``
 ///  - ``ClassDeclSyntax``.``ClassDeclSyntax/genericWhereClause``
+///  - ``DeclGroupHeaderSyntax``.``DeclGroupHeaderSyntax/genericWhereClause``
 ///  - ``DifferentiableAttributeArgumentsSyntax``.``DifferentiableAttributeArgumentsSyntax/genericWhereClause``
 ///  - ``EnumDeclSyntax``.``EnumDeclSyntax/genericWhereClause``
 ///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/genericWhereClause``
@@ -1146,6 +1147,7 @@ public struct GenericSpecializationExprSyntax: ExprSyntaxProtocol, SyntaxHashabl
 ///  - ``GenericParameterClauseSyntax``.``GenericParameterClauseSyntax/genericWhereClause``
 ///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/genericWhereClause``
 ///  - ``MacroDeclSyntax``.``MacroDeclSyntax/genericWhereClause``
+///  - ``MissingDeclHeaderSyntax``.``MissingDeclHeaderSyntax/genericWhereClause``
 ///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/genericWhereClause``
 ///  - ``SpecializeAttributeArgumentListSyntax``
 ///  - ``StructDeclSyntax``.``StructDeclSyntax/genericWhereClause``
@@ -3430,8 +3432,10 @@ public struct InfixOperatorExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 ///  - ``ActorDeclSyntax``.``ActorDeclSyntax/inheritanceClause``
 ///  - ``AssociatedTypeDeclSyntax``.``AssociatedTypeDeclSyntax/inheritanceClause``
 ///  - ``ClassDeclSyntax``.``ClassDeclSyntax/inheritanceClause``
+///  - ``DeclGroupHeaderSyntax``.``DeclGroupHeaderSyntax/inheritanceClause``
 ///  - ``EnumDeclSyntax``.``EnumDeclSyntax/inheritanceClause``
 ///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/inheritanceClause``
+///  - ``MissingDeclHeaderSyntax``.``MissingDeclHeaderSyntax/inheritanceClause``
 ///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/inheritanceClause``
 ///  - ``StructDeclSyntax``.``StructDeclSyntax/inheritanceClause``
 public struct InheritanceClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {

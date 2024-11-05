@@ -142,7 +142,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
           )
         }
 
-        if let node = node.layoutNode {
+        if !node.kind.isBase, let node = node.layoutNode {
           let params = FunctionParameterListSyntax {
             for child in node.children {
               FunctionParameterSyntax(

@@ -1329,6 +1329,13 @@ open class SyntaxRewriter {
     return TypeSyntax(visitChildren(node._syntaxNode).cast(MetatypeTypeSyntax.self))
   }
 
+  /// Visit a ``MissingDeclHeaderSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: MissingDeclHeaderSyntax) -> DeclGroupHeaderSyntax {
+    return DeclGroupHeaderSyntax(visitChildren(node._syntaxNode).cast(MissingDeclHeaderSyntax.self))
+  }
+
   /// Visit a ``MissingDeclSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2100,6 +2107,15 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: YieldedExpressionsClauseSyntax) -> YieldedExpressionsClauseSyntax {
     return visitChildren(node._syntaxNode).cast(YieldedExpressionsClauseSyntax.self)
+  }
+
+  /// Visit any DeclGroupHeaderSyntax node.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  public func visit(_ node: DeclGroupHeaderSyntax) -> DeclGroupHeaderSyntax {
+    var node: Syntax = Syntax(node)
+    dispatchVisit(&node)
+    return node.cast(DeclGroupHeaderSyntax.self)
   }
 
   /// Visit any DeclSyntax node.
@@ -2882,6 +2898,10 @@ open class SyntaxRewriter {
     case .metatypeType:
       return {
         self.visitImpl(&$0, MetatypeTypeSyntax.self, self.visit)
+      }
+    case .missingDeclHeader:
+      return {
+        self.visitImpl(&$0, MissingDeclHeaderSyntax.self, self.visit)
       }
     case .missingDecl:
       return {
@@ -3679,6 +3699,8 @@ open class SyntaxRewriter {
       return visitImpl(&node, MemberTypeSyntax.self, visit)
     case .metatypeType:
       return visitImpl(&node, MetatypeTypeSyntax.self, visit)
+    case .missingDeclHeader:
+      return visitImpl(&node, MissingDeclHeaderSyntax.self, visit)
     case .missingDecl:
       return visitImpl(&node, MissingDeclSyntax.self, visit)
     case .missingExpr:

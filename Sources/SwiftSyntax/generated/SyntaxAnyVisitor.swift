@@ -1464,6 +1464,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  override open func visit(_ node: MissingDeclHeaderSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: MissingDeclHeaderSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: MissingDeclSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

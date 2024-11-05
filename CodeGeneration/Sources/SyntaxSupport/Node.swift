@@ -69,11 +69,7 @@ public class Node: NodeChoiceConvertible {
   public var layoutNode: LayoutNode? {
     switch data {
     case .layout:
-      if kind.isBase {
-        return nil
-      } else {
-        return LayoutNode(node: self)
-      }
+      return LayoutNode(node: self)
     default:
       return nil
     }

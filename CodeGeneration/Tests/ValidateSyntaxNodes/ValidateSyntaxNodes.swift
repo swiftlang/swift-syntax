@@ -145,12 +145,12 @@ class ValidateSyntaxNodes: XCTestCase {
   func testBaseKindSuffix() {
     var failures: [ValidationFailure] = []
     for node in SYNTAX_NODES where node.base != .syntaxCollection {
-      if !node.kind.syntaxType.description.hasSuffix(node.base.syntaxType.description) {
+      if !node.kind.syntaxType.description.hasSuffix(node.base.baseTypeSuffix!) {
         failures.append(
           ValidationFailure(
             node: node.kind,
             message:
-              "has base kind '\(node.base.syntaxType)' but type name doesn’t have '\(node.base.syntaxType)' suffix"
+              "has base kind '\(node.base.syntaxType)' but type name doesn’t have '\(node.base.baseTypeSuffix!)' suffix"
           )
         )
       }
@@ -460,6 +460,11 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(
           node: .declModifier,
           message: "child 'name' only has keywords as its token choices and should thus end with 'Specifier'"
+        ),
+        // An extension member for '*DeclSyntax.introducer' already existed; we're just formalizing it
+        ValidationFailure(
+          node: .declGroupHeader,
+          message: "child 'introducer' only has keywords as its token choices and should thus end with 'Specifier'"
         ),
       ]
     )

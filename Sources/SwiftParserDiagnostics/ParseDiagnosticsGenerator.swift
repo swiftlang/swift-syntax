@@ -415,6 +415,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       let previousToken = node.previousToken(viewMode: .sourceAccurate),
       previousToken.tokenKind.isIdentifier,
       previousToken.parent?.is(DeclSyntax.self) == true
+        || previousToken.parent?.is(DeclGroupHeaderSyntax.self) == true
         || previousToken.parent?.is(IdentifierPatternSyntax.self) == true
     {
       // If multiple identifiers are used for a declaration name, offer to join them together.

@@ -81,6 +81,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case conventionWitnessMethodAttributeArguments
   case copyExpr
   case decl
+  case declGroupHeader
   case declModifier
   case declModifierDetail
   case declModifierList
@@ -197,6 +198,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case metatypeType
   case missing
   case missingDecl
+  case missingDeclHeader
   case missingExpr
   case missingPattern
   case missingStmt
@@ -320,7 +322,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   /// `true` if this is one of the `missing*` cases.
   public var isMissing: Bool {
     switch self {
-    case .missingDecl, .missingExpr, .missingPattern, .missingStmt, .missing, .missingType:
+    case .missingDecl, .missingDeclHeader, .missingExpr, .missingPattern, .missingStmt, .missing, .missingType:
       return true
     default:
       return false
@@ -329,7 +331,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
 
   public var isBase: Bool {
     switch self {
-    case .decl, .expr, .pattern, .stmt, .syntax, .syntaxCollection, .type:
+    case .decl, .declGroupHeader, .expr, .pattern, .stmt, .syntax, .syntaxCollection, .type:
       return true
     default:
       return false
@@ -348,6 +350,15 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
       return "SyntaxCollection"
     default:
       return "\(raw: rawValue.withFirstCharacterUppercased)Syntax"
+    }
+  }
+
+  public var baseTypeSuffix: String? {
+    switch self {
+    case .declGroupHeader:
+      return "DeclHeaderSyntax"
+    default:
+      return isBase ? syntaxType.description : nil
     }
   }
 

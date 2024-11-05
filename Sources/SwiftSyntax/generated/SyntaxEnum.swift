@@ -200,6 +200,7 @@ public enum SyntaxEnum: Sendable {
   case memberBlock(MemberBlockSyntax)
   case memberType(MemberTypeSyntax)
   case metatypeType(MetatypeTypeSyntax)
+  case missingDeclHeader(MissingDeclHeaderSyntax)
   case missingDecl(MissingDeclSyntax)
   case missingExpr(MissingExprSyntax)
   case missingPattern(MissingPatternSyntax)
@@ -667,6 +668,8 @@ extension Syntax {
       return .memberType(MemberTypeSyntax(self)!)
     case .metatypeType:
       return .metatypeType(MetatypeTypeSyntax(self)!)
+    case .missingDeclHeader:
+      return .missingDeclHeader(MissingDeclHeaderSyntax(self)!)
     case .missingDecl:
       return .missingDecl(MissingDeclSyntax(self)!)
     case .missingExpr:
@@ -887,6 +890,23 @@ extension Syntax {
       return .yieldedExpression(YieldedExpressionSyntax(self)!)
     case .yieldedExpressionsClause:
       return .yieldedExpressionsClause(YieldedExpressionsClauseSyntax(self)!)
+    }
+  }
+}
+
+/// Enum to exhaustively switch over all different DeclGroupHeader syntax nodes.
+public enum DeclGroupHeaderSyntaxEnum {
+  case missingDeclHeader(MissingDeclHeaderSyntax)
+}
+
+extension DeclGroupHeaderSyntax {
+  /// Get an enum that can be used to exhaustively switch over all DeclGroupHeader syntax nodes.
+  public func `as`(_: DeclGroupHeaderSyntaxEnum.Type) -> DeclGroupHeaderSyntaxEnum {
+    switch raw.kind {
+    case .missingDeclHeader:
+      return .missingDeclHeader(MissingDeclHeaderSyntax(self)!)
+    default:
+      preconditionFailure("unknown DeclGroupHeader syntax kind")
     }
   }
 }

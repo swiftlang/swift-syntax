@@ -2225,6 +2225,28 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "metatypeSpecifier"
   case \MetatypeTypeSyntax.unexpectedAfterMetatypeSpecifier:
     return "unexpectedAfterMetatypeSpecifier"
+  case \MissingDeclHeaderSyntax.unexpectedBeforeAttributes:
+    return "unexpectedBeforeAttributes"
+  case \MissingDeclHeaderSyntax.attributes:
+    return "attributes"
+  case \MissingDeclHeaderSyntax.unexpectedBetweenAttributesAndModifiers:
+    return "unexpectedBetweenAttributesAndModifiers"
+  case \MissingDeclHeaderSyntax.modifiers:
+    return "modifiers"
+  case \MissingDeclHeaderSyntax.unexpectedBetweenModifiersAndPlaceholder:
+    return "unexpectedBetweenModifiersAndPlaceholder"
+  case \MissingDeclHeaderSyntax.placeholder:
+    return "placeholder"
+  case \MissingDeclHeaderSyntax.unexpectedBetweenPlaceholderAndInheritanceClause:
+    return "unexpectedBetweenPlaceholderAndInheritanceClause"
+  case \MissingDeclHeaderSyntax.inheritanceClause:
+    return "inheritanceClause"
+  case \MissingDeclHeaderSyntax.unexpectedBetweenInheritanceClauseAndGenericWhereClause:
+    return "unexpectedBetweenInheritanceClauseAndGenericWhereClause"
+  case \MissingDeclHeaderSyntax.genericWhereClause:
+    return "genericWhereClause"
+  case \MissingDeclHeaderSyntax.unexpectedAfterGenericWhereClause:
+    return "unexpectedAfterGenericWhereClause"
   case \MissingDeclSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
   case \MissingDeclSyntax.attributes:

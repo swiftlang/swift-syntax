@@ -344,6 +344,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/ClosureSignatureSyntax>
 - <doc:SwiftSyntax/CodeBlockSyntax>
 - <doc:SwiftSyntax/ConformanceRequirementSyntax>
+- <doc:SwiftSyntax/DeclGroupHeaderSyntax>
 - <doc:SwiftSyntax/DeclModifierDetailSyntax>
 - <doc:SwiftSyntax/DeclNameArgumentsSyntax>
 - <doc:SwiftSyntax/DeinitializerEffectSpecifiersSyntax>
@@ -361,6 +362,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/LayoutRequirementSyntax>
 - <doc:SwiftSyntax/MatchingPatternConditionSyntax>
 - <doc:SwiftSyntax/MemberBlockSyntax>
+- <doc:SwiftSyntax/MissingDeclHeaderSyntax>
 - <doc:SwiftSyntax/MissingSyntax>
 - <doc:SwiftSyntax/OperatorPrecedenceAndTypesSyntax>
 - <doc:SwiftSyntax/OptionalBindingConditionSyntax>

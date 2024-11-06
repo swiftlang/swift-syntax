@@ -31,8 +31,8 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       public struct \(node.kind.syntaxType): SyntaxCollection, SyntaxHashable
       """
     ) {
-      if let onlyElement = node.elementChoices.only {
-        DeclSyntax("public typealias Element = \(onlyElement.syntaxType)")
+      if node.elementChoices.only != nil && !node.disableSameTypeForUniqueChoice {
+        DeclSyntax("public typealias Element = \(node.elementChoices.only!.syntaxType)")
       } else {
         for childNodeChoices in node.node.childrenNodeChoices() {
           childNodeChoices.enumDecl

@@ -3271,13 +3271,13 @@ final class DeclarationTests: ParserTestCase {
   }
 
   func testInitializerWithReturnType() {
-    assertParse(
-      "init(_ ptr: UnsafeRawBufferPointer, _ a: borrowing Array<Int>) -> dependsOn(a) Self",
-      experimentalFeatures: .nonescapableTypes
-    )
-
     // Not actually valid, needs to be diagnosed during type checking
-    assertParse("public init() -> Int")
+    assertParse(
+      "public init() 1️⃣->  Int",
+      diagnostics: [
+        DiagnosticSpec(message: "initializers cannot have a result type")
+      ]
+    )
   }
 
   func testSendingTypeSpecifier() {

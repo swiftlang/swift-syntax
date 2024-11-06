@@ -89,7 +89,9 @@ extension Node {
           return nil
         }
       }
-    } else if let node = self.collectionNode, node.elementChoices.count > 1 {
+    } else if let node = self.collectionNode, node.elementChoices.count == 1, !node.disableSameTypeForUniqueChoice {
+      return []
+    } else if let node = self.collectionNode, node.elementChoices.count >= 1 {
       return [
         ChildNodeChoices(
           name: "Element",

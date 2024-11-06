@@ -55,6 +55,8 @@ public class Node: NodeChoiceConvertible {
   /// function that should be invoked to create this node.
   public let parserFunction: TokenSyntax?
 
+  public let disableSameTypeForUniqueChoice: Bool
+
   public var syntaxNodeKind: SyntaxNodeKind {
     self.kind
   }
@@ -121,6 +123,7 @@ public class Node: NodeChoiceConvertible {
     experimentalFeature: ExperimentalFeature? = nil,
     nameForDiagnostics: String?,
     documentation: String? = nil,
+    disableSameTypeForUniqueChoice: Bool = false,
     parserFunction: TokenSyntax? = nil,
     traits: [String] = [],
     children: [Child] = [],
@@ -134,6 +137,7 @@ public class Node: NodeChoiceConvertible {
     self.experimentalFeature = experimentalFeature
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
+    self.disableSameTypeForUniqueChoice = disableSameTypeForUniqueChoice
     self.parserFunction = parserFunction
 
     let childrenWithUnexpected = kind.isBase ? children : interleaveUnexpectedChildren(children)
@@ -228,6 +232,7 @@ public class Node: NodeChoiceConvertible {
     experimentalFeature: ExperimentalFeature? = nil,
     nameForDiagnostics: String?,
     documentation: String? = nil,
+    disableSameTypeForUniqueChoice: Bool = false,
     parserFunction: TokenSyntax? = nil,
     elementChoices: [SyntaxNodeKind]
   ) {
@@ -237,6 +242,7 @@ public class Node: NodeChoiceConvertible {
     self.experimentalFeature = experimentalFeature
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
+    self.disableSameTypeForUniqueChoice = disableSameTypeForUniqueChoice
     self.parserFunction = parserFunction
 
     assert(!elementChoices.isEmpty)

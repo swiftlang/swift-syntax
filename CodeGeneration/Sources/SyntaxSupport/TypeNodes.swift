@@ -549,81 +549,6 @@ public let TYPE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .lifetimeSpecifierArgument,
-    base: .syntax,
-    experimentalFeature: .nonescapableTypes,
-    nameForDiagnostics: nil,
-    documentation: """
-      A single argument that can be added to a lifetime specifier like `borrow`, `mutate`, `consume` or `copy`.
-
-      ### Example
-      `data` in `func foo(data: Array<Item>) -> borrow(data) ComplexReferenceType`
-      """,
-    traits: [
-      "WithTrailingComma"
-    ],
-    children: [
-      Child(
-        name: "parameter",
-        kind: .token(choices: [.token(.identifier), .keyword(.self), .token(.integerLiteral)]),
-        nameForDiagnostics: "parameter reference",
-        documentation: """
-          The parameter on which the lifetime of this type depends. 
-
-          This can be an identifier referring to an external parameter name, an integer literal to refer to an unnamed
-          parameter or `self` if the type's lifetime depends on the object the method is called on.
-          """
-      ),
-      Child(
-        name: "trailingComma",
-        kind: .token(choices: [.token(.comma)]),
-        isOptional: true
-      ),
-    ]
-  ),
-
-  Node(
-    kind: .lifetimeSpecifierArgumentList,
-    base: .syntaxCollection,
-    experimentalFeature: .nonescapableTypes,
-    nameForDiagnostics: nil,
-    elementChoices: [.lifetimeSpecifierArgument]
-  ),
-
-  Node(
-    kind: .lifetimeTypeSpecifier,
-    base: .syntax,
-    experimentalFeature: .nonescapableTypes,
-    nameForDiagnostics: "lifetime specifier",
-    documentation: "A specifier that specifies function parameter on whose lifetime a type depends",
-    children: [
-      Child(
-        name: "dependsOnKeyword",
-        kind: .token(choices: [.keyword(.dependsOn)]),
-        documentation: "lifetime dependence specifier on the return type"
-      ),
-      Child(
-        name: "leftParen",
-        kind: .token(choices: [.token(.leftParen)])
-      ),
-      Child(
-        name: "scopedKeyword",
-        kind: .token(choices: [.keyword(.scoped)]),
-        documentation: "lifetime of return value is scoped to the lifetime of the original value",
-        isOptional: true
-      ),
-      Child(
-        name: "arguments",
-        kind: .collection(kind: .lifetimeSpecifierArgumentList, collectionElementName: "Arguments")
-      ),
-      Child(
-        name: "rightParen",
-        kind: .token(choices: [.token(.rightParen)])
-      ),
-    ]
-  ),
-
-  Node(
     kind: .simpleTypeSpecifier,
     base: .syntax,
     nameForDiagnostics: "type specifier",
@@ -650,6 +575,7 @@ public let TYPE_NODES: [Node] = [
     kind: .typeSpecifierList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
-    elementChoices: [.simpleTypeSpecifier, .lifetimeTypeSpecifier]
+    disableSameTypeForUniqueChoice: true,
+    elementChoices: [.simpleTypeSpecifier]
   ),
 ]

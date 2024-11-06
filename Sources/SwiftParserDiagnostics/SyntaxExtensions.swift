@@ -211,7 +211,6 @@ extension TypeSpecifierListSyntax {
     return self.compactMap { specifier in
       switch specifier {
       case .simpleTypeSpecifier(let specifier): return specifier.specifier
-      case .lifetimeTypeSpecifier: return nil
       #if RESILIENT_LIBRARIES
       @unknown default:
         fatalError()

@@ -236,7 +236,7 @@ enum TokenPrecedence: Comparable {
       .convenience, .override, .package, .open,
       .__setter_access, .indirect, .isolated, .nonisolated, .distributed, ._local,
       .inout, ._mutating, ._borrow, ._borrowing, .borrowing, ._consuming, .consuming, .consume,
-      .dependsOn, .scoped, .sending,
+      .sending,
       // Accessors
       .get, .set, .didSet, .willSet, .unsafeAddress, .addressWithOwner, .addressWithNativeOwner, .unsafeMutableAddress,
       .mutableAddressWithOwner, .mutableAddressWithNativeOwner, ._read, .read, ._modify, .modify,

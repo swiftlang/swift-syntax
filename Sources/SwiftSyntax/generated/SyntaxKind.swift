@@ -178,18 +178,6 @@ public enum SyntaxKind: Sendable {
   case labeledSpecializeArgument
   case labeledStmt
   case layoutRequirement
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  case lifetimeSpecifierArgumentList
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  case lifetimeSpecifierArgument
-  #if compiler(>=5.8)
-  @_spi(ExperimentalLanguageFeatures)
-  #endif
-  case lifetimeTypeSpecifier
   case macroDecl
   case macroExpansionDecl
   case macroExpansionExpr
@@ -377,8 +365,6 @@ public enum SyntaxKind: Sendable {
     case .keyPathComponentList:
       return true
     case .labeledExprList:
-      return true
-    case .lifetimeSpecifierArgumentList:
       return true
     case .memberBlockItemList:
       return true
@@ -766,12 +752,6 @@ public enum SyntaxKind: Sendable {
       return LabeledStmtSyntax.self
     case .layoutRequirement:
       return LayoutRequirementSyntax.self
-    case .lifetimeSpecifierArgumentList:
-      return LifetimeSpecifierArgumentListSyntax.self
-    case .lifetimeSpecifierArgument:
-      return LifetimeSpecifierArgumentSyntax.self
-    case .lifetimeTypeSpecifier:
-      return LifetimeTypeSpecifierSyntax.self
     case .macroDecl:
       return MacroDeclSyntax.self
     case .macroExpansionDecl:

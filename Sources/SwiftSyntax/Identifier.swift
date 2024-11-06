@@ -17,7 +17,10 @@ public struct Identifier: Equatable, Hashable, Sendable {
     String(syntaxText: raw.name)
   }
 
-  public let dollarIdentifierStr: String?
+  /// `true` if the identifier is a dollar identifier.
+  public var isDollarIdentifier: Bool {
+    raw.name.hasPrefix(SyntaxText("$"))
+  }
 
   @_spi(RawSyntax)
   public let raw: RawIdentifier
@@ -26,41 +29,67 @@ public struct Identifier: Equatable, Hashable, Sendable {
   public init?(_ token: TokenSyntax) {
     switch token.tokenKind {
     case .identifier, .keyword(.self), .keyword(.Self):
-      self.raw = RawIdentifier(token.tokenView)
+      self.raw = RawIdentifier(token.tokenView.rawText)
       self.arena = token.raw.arenaReference
-
-      self.dollarIdentifierStr = nil
     case .dollarIdentifier(let dollarIdentifierStr):
-      self.raw = RawIdentifier(token.tokenView)
       self.arena = token.raw.arenaReference
 
-      self.dollarIdentifierStr = dollarIdentifierStr
+      if Self.isPaddedDollarIdentifier(dollarIdentfierStr: dollarIdentifierStr),
+        let newDollarIdentifierNumber = Int(dollarIdentifierStr.dropFirst())
+      {
+        let newDollarIdentifierStr = "$\(newDollarIdentifierNumber)"
+        let sanitizedDollarIdentifierSyntaxText = token.raw.arenaReference.intern(newDollarIdentifierStr)
+
+        self.raw = RawIdentifier(sanitizedDollarIdentifierSyntaxText)
+      } else {
+        self.raw = RawIdentifier(token.tokenView.rawText)
+      }
     default:
       return nil
     }
   }
 
-  public init(_ staticString: StaticString) {
-    self.raw = RawIdentifier(staticString)
+  /// Create a new `Identifier` from given `staticString`.
+  ///
+  /// - Precondition: `staticString` is a canonical identifier i.e. doesn't
+  ///   use backticks and is not a dollar identifier with leading zeros.
+  public init(staticString: StaticString) {
+    precondition(
+      Self.isCanonicalRepresentation(staticString),
+      "\(staticString) is not a canonical identifier."
+    )
+
+    self.raw = RawIdentifier(SyntaxText(staticString))
     self.arena = nil
-
-    let name = String(syntaxText: raw.name)
-
-    if name.first == "$" && Int(name.dropFirst()) != nil {
-      self.dollarIdentifierStr = name
-    } else {
-      self.dollarIdentifierStr = nil
-    }
   }
 
   public static func == (lhs: Self, rhs: Self) -> Bool {
     lhs.name == rhs.name
   }
 
-  private static func getDollarIdentifierNumber(str: String) -> Int? {
-    guard str.first == "$" else { return nil }
+  /// Returns `true` if `staticString` is a canonical identifier i.e. doesn't
+  /// use backticks and is not a dollar identifier with leading zeros.
+  private static func isCanonicalRepresentation(_ staticString: StaticString) -> Bool {
+    let text = SyntaxText(staticString)
 
-    return Int(str.dropFirst())
+    guard !Self.hasBackticks(text) else { return false }
+
+    let str = String(syntaxText: text)
+    let isDollarIdentifier = str.first == "$" && Int(str.dropFirst()) != nil
+
+    return !(isDollarIdentifier && Self.isPaddedDollarIdentifier(dollarIdentfierStr: str))
+  }
+
+  /// Returns `true` if `rawText` doesn't use backticks.
+  fileprivate static func hasBackticks(_ rawText: SyntaxText) -> Bool {
+    let backtick = SyntaxText("`")
+    return rawText.count > 2 && rawText.hasPrefix(backtick) && rawText.hasSuffix(backtick)
+  }
+
+  /// Returns `true` if `dollarIdentfierStr` is not a
+  /// dollar identifier with leading zeros.
+  fileprivate static func isPaddedDollarIdentifier(dollarIdentfierStr: String) -> Bool {
+    dollarIdentfierStr.count > 2 && dollarIdentfierStr.hasPrefix("$0")
   }
 }
 
@@ -69,18 +98,14 @@ public struct RawIdentifier: Equatable, Hashable, Sendable {
   public let name: SyntaxText
 
   @_spi(RawSyntax)
-  fileprivate init(_ raw: RawSyntaxTokenView) {
-    let backtick = SyntaxText("`")
-    if raw.rawText.count > 2 && raw.rawText.hasPrefix(backtick) && raw.rawText.hasSuffix(backtick) {
-      let startIndex = raw.rawText.index(after: raw.rawText.startIndex)
-      let endIndex = raw.rawText.index(before: raw.rawText.endIndex)
-      self.name = SyntaxText(rebasing: raw.rawText[startIndex..<endIndex])
-    } else {
-      self.name = raw.rawText
+  fileprivate init(_ rawText: SyntaxText) {
+    guard Identifier.hasBackticks(rawText) else {
+      self.name = rawText
+      return
     }
-  }
 
-  fileprivate init(_ staticString: StaticString) {
-    name = SyntaxText(staticString)
+    let startIndex = rawText.index(after: rawText.startIndex)
+    let endIndex = rawText.index(before: rawText.endIndex)
+    self.name = SyntaxText(rebasing: rawText[startIndex..<endIndex])
   }
 }

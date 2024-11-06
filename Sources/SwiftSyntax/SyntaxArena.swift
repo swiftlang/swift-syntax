@@ -291,6 +291,12 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
     return RetainedSyntaxArena(value)
   }
 
+  /// Copies a UTF8 sequence of `String` to the memory the referenced arena manages, and
+  /// returns the copied string as a ``SyntaxText``
+  func intern(_ value: String) -> SyntaxText {
+    self.value.intern(value)
+  }
+
   #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
   /// Accessor for the underlying's `SyntaxArena.hasParent`
   var hasParent: Bool {

@@ -188,10 +188,10 @@ import SwiftSyntax
         checkIdentifier(identifier, refersTo: name, at: lookUpPosition)
       }
 
-      if let dollarIdentifierStr = identifier?.dollarIdentifierStr {
+      if let identifier, identifier.isDollarIdentifier {
         signatureResults = LookupResult.getResultArray(
           for: self,
-          withNames: filteredCaptureNames + [LookupName.dollarIdentifier(self, strRepresentation: dollarIdentifierStr)]
+          withNames: filteredCaptureNames + [LookupName.dollarIdentifier(self, strRepresentation: identifier.name)]
         )
       } else {
         signatureResults =

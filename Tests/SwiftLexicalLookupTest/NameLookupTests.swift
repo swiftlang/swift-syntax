@@ -142,7 +142,7 @@ final class testNameLookup: XCTestCase {
         func foo() {
           let 0️⃣a = 1
           let x = 5️⃣{
-            print(2️⃣a, 3️⃣$0, 4️⃣$123)
+            print(2️⃣a, 3️⃣$0, 4️⃣$123, 6️⃣$00000001)
           }
         }
         """,
@@ -156,6 +156,9 @@ final class testNameLookup: XCTestCase {
         ],
         "4️⃣": [
           .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.dollarIdentifier("5️⃣", "$123")])
+        ],
+        "6️⃣": [
+          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.dollarIdentifier("5️⃣", "$1")])
         ],
       ]
     )

@@ -116,17 +116,41 @@ fileprivate extension Array where Element: Hashable, Element: Comparable {
   }
 }
 
+extension LayoutNode {
+  /// True if `self` satisfies all of the requirements of `trait`, regardless
+  /// of whether it actually declares conformance to it.
+  func canConform(to trait: Trait) -> Bool {
+    if let traitBaseKind = trait.baseKind {
+      guard traitBaseKind == self.base else {
+        return false
+      }
+    }
+
+    return trait.children.allSatisfy { traitChild in
+      self.children.contains { nodeChild in
+        traitChild.hasSameType(as: nodeChild)
+      }
+    }
+  }
+
+  /// True if `self` declares conformance to `trait`, regardless of whether
+  /// it satisfies the trait's requirements.
+  func conforms(to trait: Trait) -> Bool {
+    self.traits.contains(trait.traitName)
+  }
+}
+
 class ValidateSyntaxNodes: XCTestCase {
   /// All nodes with base kind e.g. `ExprSyntax` should end with `ExprSyntax`.
   func testBaseKindSuffix() {
     var failures: [ValidationFailure] = []
     for node in SYNTAX_NODES where node.base != .syntaxCollection {
-      if !node.kind.syntaxType.description.hasSuffix(node.base.syntaxType.description) {
+      if !node.kind.syntaxType.description.hasSuffix(node.base.baseTypeSuffix!) {
         failures.append(
           ValidationFailure(
             node: node.kind,
             message:
-              "has base kind '\(node.base.syntaxType)' but type name doesn’t have '\(node.base.syntaxType)' suffix"
+              "has base kind '\(node.base.syntaxType)' but type name doesn’t have '\(node.base.baseTypeSuffix!)' suffix"
           )
         )
       }
@@ -437,6 +461,11 @@ class ValidateSyntaxNodes: XCTestCase {
           node: .declModifier,
           message: "child 'name' only has keywords as its token choices and should thus end with 'Specifier'"
         ),
+        // An extension member for '*DeclSyntax.introducer' already existed; we're just formalizing it
+        ValidationFailure(
+          node: .declGroupHeader,
+          message: "child 'introducer' only has keywords as its token choices and should thus end with 'Specifier'"
+        ),
       ]
     )
   }
@@ -514,12 +543,7 @@ class ValidateSyntaxNodes: XCTestCase {
 
     for node in SYNTAX_NODES.compactMap(\.layoutNode) {
       for trait in TRAITS {
-        let canConformToTrait = trait.children.allSatisfy { traitChild in
-          node.children.contains { nodeChild in
-            traitChild.hasSameType(as: nodeChild)
-          }
-        }
-        if canConformToTrait && !node.traits.contains(trait.traitName) {
+        if node.canConform(to: trait) && !node.conforms(to: trait) {
           failures.append(
             ValidationFailure(
               node: node.kind,
@@ -533,7 +557,6 @@ class ValidateSyntaxNodes: XCTestCase {
     assertFailuresMatchXFails(
       failures,
       expectedFailures: [
-        ValidationFailure(node: .accessorParameters, message: "could conform to trait 'NamedDecl' but does not"),
         ValidationFailure(node: .availabilityCondition, message: "could conform to trait 'Parenthesized' but does not"),
         ValidationFailure(node: ._canImportExpr, message: "could conform to trait 'Parenthesized' but does not"),
         ValidationFailure(
@@ -542,10 +565,6 @@ class ValidateSyntaxNodes: XCTestCase {
         ),
         ValidationFailure(node: .editorPlaceholderDecl, message: "could conform to trait 'MissingNode' but does not"),
         ValidationFailure(node: .editorPlaceholderExpr, message: "could conform to trait 'MissingNode' but does not"),
-        ValidationFailure(node: .enumCaseElement, message: "could conform to trait 'NamedDecl' but does not"),
-        ValidationFailure(node: .genericParameter, message: "could conform to trait 'NamedDecl' but does not"),
-        ValidationFailure(node: .precedenceGroupName, message: "could conform to trait 'NamedDecl' but does not"),
-        ValidationFailure(node: .primaryAssociatedType, message: "could conform to trait 'NamedDecl' but does not"),
         ValidationFailure(
           node: .yieldedExpressionsClause,
           message: "could conform to trait 'Parenthesized' but does not"
@@ -717,7 +736,7 @@ class ValidateSyntaxNodes: XCTestCase {
         ValidationFailure(node: .attributedType, message: "child 'baseType' should not end with 'Type'"),
         ValidationFailure(node: .conformanceRequirement, message: "child 'leftType' should not end with 'Type'"),
         ValidationFailure(node: .conformanceRequirement, message: "child 'rightType' should not end with 'Type'"),
-        ValidationFailure(node: .extensionDecl, message: "child 'extendedType' should not end with 'Type'"),
+        ValidationFailure(node: .extensionDeclHeader, message: "child 'extendedType' should not end with 'Type'"),
         ValidationFailure(node: .genericParameter, message: "child 'inheritedType' should not end with 'Type'"),
         ValidationFailure(
           node: .implicitlyUnwrappedOptionalType,

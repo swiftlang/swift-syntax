@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftParser
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftSyntax
 import XCTest
 
 final class AttributeTests: ParserTestCase {
@@ -962,6 +962,272 @@ final class AttributeTests: ParserTestCase {
       """
       var array = [@convention(swift) @isolated(any) () -> ()]()
       """
+    )
+  }
+
+  func testABIAttribute() {
+    func abiAttr(_ provider: ABIAttributeArgumentsSyntax.Provider) -> AttributeListSyntax.Element {
+      return .attribute(
+        AttributeSyntax(
+          attributeName: TypeSyntax("abi"),
+          leftParen: .leftParenToken(),
+          arguments: .abiArguments(
+            ABIAttributeArgumentsSyntax(
+              provider: provider
+            )
+          ),
+          rightParen: .rightParenToken()
+        )
+      )
+    }
+
+    assertParse(
+      """
+      @abi(func fn() -> Int)
+      func fn1() -> Int { }
+      """,
+      substructure: FunctionDeclSyntax(
+        attributes: [
+          abiAttr(
+            .function(
+              FunctionDeclSyntax(
+                name: "fn",
+                signature: FunctionSignatureSyntax(
+                  parameterClause: FunctionParameterClauseSyntax {},
+                  returnClause: ReturnClauseSyntax(type: TypeSyntax("Int"))
+                ),
+                body: nil
+              )
+            )
+          )
+        ],
+        name: "fn1",
+        signature: FunctionSignatureSyntax(
+          parameterClause: FunctionParameterClauseSyntax {},
+          returnClause: ReturnClauseSyntax(type: TypeSyntax("Int"))
+        )
+      ) {},
+      experimentalFeatures: [.abiAttribute]
+    )
+
+    assertParse(
+      """
+      @abi(associatedtype AssocTy)
+      associatedtype AssocTy
+
+      @abi(actor Actor)
+      actor Actor {}
+
+      @abi(class Class)
+      class Class {}
+
+      @abi(enum Enum)
+      enum Enum {}
+
+      @abi(extension Extension)
+      extension Extension {}
+
+      @abi(protocol Protocol)
+      protocol Protocol {}
+
+      @abi(struct Struct)
+      struct Struct {}
+
+      @abi(deinit)
+      deinit {}
+
+      enum EnumCaseDeclNotParsedAtTopLevel {
+        @abi(case someCase)
+        case someCase
+      }
+
+      @abi(func fn())
+      func fn()
+
+      @abi(init())
+      init() {}
+
+      @abi(subscript(i: Int) -> Element)
+      subscript(i: Int) -> Element {}
+
+      @abi(typealias Typealias = @escaping () -> Void)
+      typealias Typealias = () -> Void
+
+      @abi(let c1, c2)
+      let c1, c2
+
+      @abi(var v1, v2)
+      var v1, v2
+      """,
+      experimentalFeatures: [.abiAttribute]
+    )
+
+    assertParse(
+      """
+      @abi(1️⃣<#fnord#>)
+      func placeholder() {}
+      """,
+      substructure: abiAttr(
+        .unsupported(
+          DeclSyntax(
+            MissingDeclSyntax(placeholder: .identifier("<#fnord#>"))
+          )
+        )
+      ),
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "editor placeholder in source file")
+      ],
+      experimentalFeatures: [.abiAttribute]
+    )
+
+    assertParse(
+      """
+      @abi(1️⃣import Fnord)
+      func invalidDecl() {}
+      """,
+      substructure: abiAttr(
+        .unsupported(
+          DeclSyntax(
+            ImportDeclSyntax(
+              path: [ImportPathComponentSyntax(name: "Fnord")]
+            )
+          )
+        )
+      ),
+      experimentalFeatures: [.abiAttribute]
+    )
+
+    assertParse(
+      """
+      @abi(class Sub: Super, Proto where Assoc: OtherProto)
+      class Sub: Super, Proto where Assoc: OtherProto {}
+      """,
+      experimentalFeatures: [.abiAttribute]
+    )
+
+    // Invalid, but diagnosed in ASTGen
+    assertParse(
+      """
+      @abi(associatedtype AssocTy = T)
+      associatedtype AssocTy
+
+      @abi(deinit {})
+      deinit {}
+
+      enum EnumCaseDeclNotParsedAtTopLevel {
+        @abi(case someCase = 42)
+        case someCase
+      }
+
+      @abi(func fn() {})
+      func fn()
+
+      @abi(init() {})
+      init() {}
+
+      @abi(subscript(i: Int) -> Element { get {} set {} })
+      subscript(i: Int) -> Element {}
+
+      @abi(let c1 = 1, c2 = 2)
+      let c1, c2
+
+      @abi(var v1 = 1, v2 = 2)
+      var v1, v2
+
+      @abi(var v3 { get {} set {} })
+      var v3
+      """,
+      experimentalFeatures: [.abiAttribute]
+    )
+
+    // Caught here
+    assertParse(
+      """
+      @abi(class Sub: Super, Proto where Assoc: OtherProto 1️⃣{})
+      class Sub: Super, Proto where Assoc: OtherProto {}
+
+      @abi(var 2️⃣)
+      var v1
+
+      @abi4️⃣(var v23️⃣
+      var v2
+
+      @abi(5️⃣)
+      func fn2() {}
+
+      @abi6️⃣
+      func fn3() {}
+
+      // Suboptimal:
+      @abi7️⃣ func fn4_abi()8️⃣)
+      func fn4() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "class header in '@abi' attribute cannot have a member block",
+          fixIts: ["remove member block"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected pattern in variable",
+          fixIts: ["insert pattern"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected ')' to end attribute",
+          notes: [
+            NoteSpec(
+              locationMarker: "4️⃣",
+              message: "to match this opening '('"
+            )
+          ],
+          fixIts: ["insert ')'"]
+        ),
+        // FIXME: Custom fix-it with copy of decl it's attached to
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "expected argument for '@abi' attribute",
+          fixIts: ["insert attribute argument"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "6️⃣",
+          message: "expected '(', ABI-providing declaration, and ')' in attribute",
+          fixIts: ["insert '(', ABI-providing declaration, and ')'"]
+        ),
+        // FIXME: Suboptimal diagnosis
+        DiagnosticSpec(
+          locationMarker: "7️⃣",
+          message: "expected '(', ABI-providing declaration, and ')' in attribute",
+          fixIts: ["insert '(', ABI-providing declaration, and ')'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "8️⃣",
+          message: "unexpected code ')' before function"
+        ),
+      ],
+      // FIXME: Would love to have the fix-it delete the space before the close paren on the first line
+      fixedSource: """
+        @abi(class Sub: Super, Proto where Assoc: OtherProto )
+        class Sub: Super, Proto where Assoc: OtherProto {}
+
+        @abi(var <#pattern#>)
+        var v1
+
+        @abi(var v2)
+        var v2
+
+        @abi(<#declaration#>)
+        func fn2() {}
+
+        @abi(<#declaration#>)
+        func fn3() {}
+
+        // Suboptimal:
+        @abi(<#declaration#>) func fn4_abi())
+        func fn4() {}
+        """,
+      experimentalFeatures: [.abiAttribute]
     )
   }
 

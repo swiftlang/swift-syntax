@@ -2159,6 +2159,112 @@ public struct RawMetatypeTypeSyntax: RawTypeSyntaxNodeProtocol {
 }
 
 @_spi(RawSyntax)
+public struct RawMissingDeclHeaderSyntax: RawDeclGroupHeaderSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .missingDeclHeader
+  }
+
+  public var raw: RawSyntax
+
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
+    attributes: RawAttributeListSyntax,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
+    modifiers: RawDeclModifierListSyntax,
+    _ unexpectedBetweenModifiersAndPlaceholder: RawUnexpectedNodesSyntax? = nil,
+    placeholder: RawTokenSyntax,
+    _ unexpectedBetweenPlaceholderAndInheritanceClause: RawUnexpectedNodesSyntax? = nil,
+    inheritanceClause: RawInheritanceClauseSyntax?,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
+    genericWhereClause: RawGenericWhereClauseSyntax?,
+    _ unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared SyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .missingDeclHeader, uninitializedCount: 11, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeAttributes?.raw
+      layout[1] = attributes.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
+      layout[3] = modifiers.raw
+      layout[4] = unexpectedBetweenModifiersAndPlaceholder?.raw
+      layout[5] = placeholder.raw
+      layout[6] = unexpectedBetweenPlaceholderAndInheritanceClause?.raw
+      layout[7] = inheritanceClause?.raw
+      layout[8] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
+      layout[9] = genericWhereClause?.raw
+      layout[10] = unexpectedAfterGenericWhereClause?.raw
+    }
+    self.init(unchecked: raw)
+  }
+
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var attributes: RawAttributeListSyntax {
+    layoutView.children[1].map(RawAttributeListSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenModifiersAndPlaceholder: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var placeholder: RawTokenSyntax {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenPlaceholderAndInheritanceClause: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var inheritanceClause: RawInheritanceClauseSyntax? {
+    layoutView.children[7].map(RawInheritanceClauseSyntax.init(raw:))
+  }
+
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var genericWhereClause: RawGenericWhereClauseSyntax? {
+    layoutView.children[9].map(RawGenericWhereClauseSyntax.init(raw:))
+  }
+
+  public var unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? {
+    layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
+@_spi(RawSyntax)
 public struct RawMissingDeclSyntax: RawDeclSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {

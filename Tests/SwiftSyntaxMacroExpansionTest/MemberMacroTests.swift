@@ -450,7 +450,7 @@ final class MemberMacroTests: XCTestCase {
                   // This doesn't account for other attributes that *could* be present in the
                   // attribute list, but for this test it will be fine.
                   .replace(
-                    oldNode: Syntax(declaration.attributes),
+                    oldNode: Syntax(declaration.header.attributes),
                     newNode: Syntax(AttributeListSyntax())
                   )
                 ]

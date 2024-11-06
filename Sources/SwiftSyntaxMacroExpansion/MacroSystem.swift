@@ -1490,7 +1490,7 @@ private extension SyntaxProtocol {
   var syntacticQualifiedTypeContext: TypeSyntax? {
     if let ext = self.as(ExtensionDeclSyntax.self) {
       // Don't handle nested 'extension' cases - they are invalid anyway.
-      return ext.extendedType.trimmed
+      return ext.extensionHeader.extendedType.trimmed
     }
 
     let base = self.parent?.syntacticQualifiedTypeContext

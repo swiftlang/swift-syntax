@@ -28,15 +28,15 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "parameter"
   case \AccessorParametersSyntax.name:
     return "name"
-  case \ActorDeclSyntax.attributes:
+  case \ActorDeclHeaderSyntax.attributes:
     return "attributes"
-  case \ActorDeclSyntax.modifiers:
+  case \ActorDeclHeaderSyntax.modifiers:
     return "modifiers"
-  case \ActorDeclSyntax.genericParameterClause:
+  case \ActorDeclHeaderSyntax.genericParameterClause:
     return "generic parameter clause"
-  case \ActorDeclSyntax.inheritanceClause:
+  case \ActorDeclHeaderSyntax.inheritanceClause:
     return "inheritance clause"
-  case \ActorDeclSyntax.genericWhereClause:
+  case \ActorDeclHeaderSyntax.genericWhereClause:
     return "generic where clause"
   case \ArrayElementSyntax.expression:
     return "value"
@@ -56,15 +56,15 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "value"
   case \BreakStmtSyntax.label:
     return "label"
-  case \ClassDeclSyntax.attributes:
+  case \ClassDeclHeaderSyntax.attributes:
     return "attributes"
-  case \ClassDeclSyntax.modifiers:
+  case \ClassDeclHeaderSyntax.modifiers:
     return "modifiers"
-  case \ClassDeclSyntax.genericParameterClause:
+  case \ClassDeclHeaderSyntax.genericParameterClause:
     return "generic parameter clause"
-  case \ClassDeclSyntax.inheritanceClause:
+  case \ClassDeclHeaderSyntax.inheritanceClause:
     return "inheritance clause"
-  case \ClassDeclSyntax.genericWhereClause:
+  case \ClassDeclHeaderSyntax.genericWhereClause:
     return "generic where clause"
   case \ClosureParameterClauseSyntax.parameters:
     return "parameters"
@@ -118,23 +118,23 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "type"
   case \EnumCaseParameterSyntax.defaultValue:
     return "default value"
-  case \EnumDeclSyntax.attributes:
+  case \EnumDeclHeaderSyntax.attributes:
     return "attributes"
-  case \EnumDeclSyntax.modifiers:
+  case \EnumDeclHeaderSyntax.modifiers:
     return "modifiers"
-  case \EnumDeclSyntax.genericParameterClause:
+  case \EnumDeclHeaderSyntax.genericParameterClause:
     return "generic parameter clause"
-  case \EnumDeclSyntax.inheritanceClause:
+  case \EnumDeclHeaderSyntax.inheritanceClause:
     return "inheritance clause"
-  case \EnumDeclSyntax.genericWhereClause:
+  case \EnumDeclHeaderSyntax.genericWhereClause:
     return "generic where clause"
-  case \ExtensionDeclSyntax.attributes:
+  case \ExtensionDeclHeaderSyntax.attributes:
     return "attributes"
-  case \ExtensionDeclSyntax.modifiers:
+  case \ExtensionDeclHeaderSyntax.modifiers:
     return "modifiers"
-  case \ExtensionDeclSyntax.inheritanceClause:
+  case \ExtensionDeclHeaderSyntax.inheritanceClause:
     return "inheritance clause"
-  case \ExtensionDeclSyntax.genericWhereClause:
+  case \ExtensionDeclHeaderSyntax.genericWhereClause:
     return "generic where clause"
   case \ForStmtSyntax.body:
     return "body"
@@ -280,15 +280,15 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "name"
   case \PrimaryAssociatedTypeSyntax.name:
     return "name"
-  case \ProtocolDeclSyntax.attributes:
+  case \ProtocolDeclHeaderSyntax.attributes:
     return "attributes"
-  case \ProtocolDeclSyntax.modifiers:
+  case \ProtocolDeclHeaderSyntax.modifiers:
     return "modifiers"
-  case \ProtocolDeclSyntax.primaryAssociatedTypeClause:
+  case \ProtocolDeclHeaderSyntax.primaryAssociatedTypeClause:
     return "primary associated type clause"
-  case \ProtocolDeclSyntax.inheritanceClause:
+  case \ProtocolDeclHeaderSyntax.inheritanceClause:
     return "inheritance clause"
-  case \ProtocolDeclSyntax.genericWhereClause:
+  case \ProtocolDeclHeaderSyntax.genericWhereClause:
     return "generic where clause"
   case \RepeatStmtSyntax.body:
     return "body"
@@ -306,15 +306,15 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "label"
   case \SpecializeTargetFunctionArgumentSyntax.declName:
     return "declaration name"
-  case \StructDeclSyntax.attributes:
+  case \StructDeclHeaderSyntax.attributes:
     return "attributes"
-  case \StructDeclSyntax.modifiers:
+  case \StructDeclHeaderSyntax.modifiers:
     return "modifiers"
-  case \StructDeclSyntax.genericParameterClause:
+  case \StructDeclHeaderSyntax.genericParameterClause:
     return "generic parameter clause"
-  case \StructDeclSyntax.inheritanceClause:
+  case \StructDeclHeaderSyntax.inheritanceClause:
     return "inheritance clause"
-  case \StructDeclSyntax.genericWhereClause:
+  case \StructDeclHeaderSyntax.genericWhereClause:
     return "generic where clause"
   case \SubscriptCallExprSyntax.calledExpression:
     return "called expression"

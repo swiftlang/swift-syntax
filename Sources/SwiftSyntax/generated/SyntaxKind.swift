@@ -15,11 +15,16 @@
 /// Enumerates the known kinds of Syntax represented in the Syntax tree.
 public enum SyntaxKind: Sendable {
   case token
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case abiAttributeArguments
   case accessorBlock
   case accessorDeclList
   case accessorDecl
   case accessorEffectSpecifiers
   case accessorParameters
+  case actorDeclHeader
   case actorDecl
   case arrayElementList
   case arrayElement
@@ -48,6 +53,7 @@ public enum SyntaxKind: Sendable {
   case catchClause
   case catchItemList
   case catchItem
+  case classDeclHeader
   case classDecl
   case classRestrictionType
   case closureCaptureClause
@@ -116,12 +122,14 @@ public enum SyntaxKind: Sendable {
   case enumCaseParameterClause
   case enumCaseParameterList
   case enumCaseParameter
+  case enumDeclHeader
   case enumDecl
   case exposeAttributeArguments
   case exprList
   case expressionPattern
   case expressionSegment
   case expressionStmt
+  case extensionDeclHeader
   case extensionDecl
   case fallThroughStmt
   case floatLiteralExpr
@@ -200,6 +208,7 @@ public enum SyntaxKind: Sendable {
   case memberBlock
   case memberType
   case metatypeType
+  case missingDeclHeader
   case missingDecl
   case missingExpr
   case missingPattern
@@ -244,6 +253,7 @@ public enum SyntaxKind: Sendable {
   case primaryAssociatedTypeClause
   case primaryAssociatedTypeList
   case primaryAssociatedType
+  case protocolDeclHeader
   case protocolDecl
   case regexLiteralExpr
   case repeatStmt
@@ -262,6 +272,7 @@ public enum SyntaxKind: Sendable {
   case stringLiteralExpr
   case stringLiteralSegmentList
   case stringSegment
+  case structDeclHeader
   case structDecl
   case subscriptCallExpr
   case subscriptDecl
@@ -429,6 +440,8 @@ public enum SyntaxKind: Sendable {
       return true
     case .missingDecl:
       return true
+    case .missingDeclHeader:
+      return true
     case .missingExpr:
       return true
     case .missingPattern:
@@ -446,6 +459,8 @@ public enum SyntaxKind: Sendable {
     switch self {
     case .token:
       return TokenSyntax.self
+    case .abiAttributeArguments:
+      return ABIAttributeArgumentsSyntax.self
     case .accessorBlock:
       return AccessorBlockSyntax.self
     case .accessorDeclList:
@@ -456,6 +471,8 @@ public enum SyntaxKind: Sendable {
       return AccessorEffectSpecifiersSyntax.self
     case .accessorParameters:
       return AccessorParametersSyntax.self
+    case .actorDeclHeader:
+      return ActorDeclHeaderSyntax.self
     case .actorDecl:
       return ActorDeclSyntax.self
     case .arrayElementList:
@@ -512,6 +529,8 @@ public enum SyntaxKind: Sendable {
       return CatchItemListSyntax.self
     case .catchItem:
       return CatchItemSyntax.self
+    case .classDeclHeader:
+      return ClassDeclHeaderSyntax.self
     case .classDecl:
       return ClassDeclSyntax.self
     case .classRestrictionType:
@@ -642,6 +661,8 @@ public enum SyntaxKind: Sendable {
       return EnumCaseParameterListSyntax.self
     case .enumCaseParameter:
       return EnumCaseParameterSyntax.self
+    case .enumDeclHeader:
+      return EnumDeclHeaderSyntax.self
     case .enumDecl:
       return EnumDeclSyntax.self
     case .exposeAttributeArguments:
@@ -654,6 +675,8 @@ public enum SyntaxKind: Sendable {
       return ExpressionSegmentSyntax.self
     case .expressionStmt:
       return ExpressionStmtSyntax.self
+    case .extensionDeclHeader:
+      return ExtensionDeclHeaderSyntax.self
     case .extensionDecl:
       return ExtensionDeclSyntax.self
     case .fallThroughStmt:
@@ -792,6 +815,8 @@ public enum SyntaxKind: Sendable {
       return MemberTypeSyntax.self
     case .metatypeType:
       return MetatypeTypeSyntax.self
+    case .missingDeclHeader:
+      return MissingDeclHeaderSyntax.self
     case .missingDecl:
       return MissingDeclSyntax.self
     case .missingExpr:
@@ -880,6 +905,8 @@ public enum SyntaxKind: Sendable {
       return PrimaryAssociatedTypeListSyntax.self
     case .primaryAssociatedType:
       return PrimaryAssociatedTypeSyntax.self
+    case .protocolDeclHeader:
+      return ProtocolDeclHeaderSyntax.self
     case .protocolDecl:
       return ProtocolDeclSyntax.self
     case .regexLiteralExpr:
@@ -916,6 +943,8 @@ public enum SyntaxKind: Sendable {
       return StringLiteralSegmentListSyntax.self
     case .stringSegment:
       return StringSegmentSyntax.self
+    case .structDeclHeader:
+      return StructDeclHeaderSyntax.self
     case .structDecl:
       return StructDeclSyntax.self
     case .subscriptCallExpr:

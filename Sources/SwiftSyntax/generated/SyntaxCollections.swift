@@ -76,17 +76,18 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/attributes``
-///  - ``ActorDeclSyntax``.``ActorDeclSyntax/attributes``
+///  - ``ActorDeclHeaderSyntax``.``ActorDeclHeaderSyntax/attributes``
 ///  - ``AssociatedTypeDeclSyntax``.``AssociatedTypeDeclSyntax/attributes``
 ///  - ``AttributedTypeSyntax``.``AttributedTypeSyntax/attributes``
-///  - ``ClassDeclSyntax``.``ClassDeclSyntax/attributes``
+///  - ``ClassDeclHeaderSyntax``.``ClassDeclHeaderSyntax/attributes``
 ///  - ``ClosureParameterSyntax``.``ClosureParameterSyntax/attributes``
 ///  - ``ClosureSignatureSyntax``.``ClosureSignatureSyntax/attributes``
+///  - ``DeclGroupHeaderSyntax``.``DeclGroupHeaderSyntax/attributes``
 ///  - ``DeinitializerDeclSyntax``.``DeinitializerDeclSyntax/attributes``
 ///  - ``EditorPlaceholderDeclSyntax``.``EditorPlaceholderDeclSyntax/attributes``
 ///  - ``EnumCaseDeclSyntax``.``EnumCaseDeclSyntax/attributes``
-///  - ``EnumDeclSyntax``.``EnumDeclSyntax/attributes``
-///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/attributes``
+///  - ``EnumDeclHeaderSyntax``.``EnumDeclHeaderSyntax/attributes``
+///  - ``ExtensionDeclHeaderSyntax``.``ExtensionDeclHeaderSyntax/attributes``
 ///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/attributes``
 ///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/attributes``
 ///  - ``GenericParameterSyntax``.``GenericParameterSyntax/attributes``
@@ -95,10 +96,11 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/attributes``
 ///  - ``MacroDeclSyntax``.``MacroDeclSyntax/attributes``
 ///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/attributes``
+///  - ``MissingDeclHeaderSyntax``.``MissingDeclHeaderSyntax/attributes``
 ///  - ``MissingDeclSyntax``.``MissingDeclSyntax/attributes``
 ///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/attributes``
-///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/attributes``
-///  - ``StructDeclSyntax``.``StructDeclSyntax/attributes``
+///  - ``ProtocolDeclHeaderSyntax``.``ProtocolDeclHeaderSyntax/attributes``
+///  - ``StructDeclHeaderSyntax``.``StructDeclHeaderSyntax/attributes``
 ///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/attributes``
 ///  - ``TypeAliasDeclSyntax``.``TypeAliasDeclSyntax/attributes``
 ///  - ``VariableDeclSyntax``.``VariableDeclSyntax/attributes``
@@ -422,26 +424,28 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///
 /// ### Contained in
 /// 
-///  - ``ActorDeclSyntax``.``ActorDeclSyntax/modifiers``
+///  - ``ActorDeclHeaderSyntax``.``ActorDeclHeaderSyntax/modifiers``
 ///  - ``AssociatedTypeDeclSyntax``.``AssociatedTypeDeclSyntax/modifiers``
-///  - ``ClassDeclSyntax``.``ClassDeclSyntax/modifiers``
+///  - ``ClassDeclHeaderSyntax``.``ClassDeclHeaderSyntax/modifiers``
 ///  - ``ClosureParameterSyntax``.``ClosureParameterSyntax/modifiers``
+///  - ``DeclGroupHeaderSyntax``.``DeclGroupHeaderSyntax/modifiers``
 ///  - ``DeinitializerDeclSyntax``.``DeinitializerDeclSyntax/modifiers``
 ///  - ``EditorPlaceholderDeclSyntax``.``EditorPlaceholderDeclSyntax/modifiers``
 ///  - ``EnumCaseDeclSyntax``.``EnumCaseDeclSyntax/modifiers``
 ///  - ``EnumCaseParameterSyntax``.``EnumCaseParameterSyntax/modifiers``
-///  - ``EnumDeclSyntax``.``EnumDeclSyntax/modifiers``
-///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/modifiers``
+///  - ``EnumDeclHeaderSyntax``.``EnumDeclHeaderSyntax/modifiers``
+///  - ``ExtensionDeclHeaderSyntax``.``ExtensionDeclHeaderSyntax/modifiers``
 ///  - ``FunctionDeclSyntax``.``FunctionDeclSyntax/modifiers``
 ///  - ``FunctionParameterSyntax``.``FunctionParameterSyntax/modifiers``
 ///  - ``ImportDeclSyntax``.``ImportDeclSyntax/modifiers``
 ///  - ``InitializerDeclSyntax``.``InitializerDeclSyntax/modifiers``
 ///  - ``MacroDeclSyntax``.``MacroDeclSyntax/modifiers``
 ///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/modifiers``
+///  - ``MissingDeclHeaderSyntax``.``MissingDeclHeaderSyntax/modifiers``
 ///  - ``MissingDeclSyntax``.``MissingDeclSyntax/modifiers``
 ///  - ``PrecedenceGroupDeclSyntax``.``PrecedenceGroupDeclSyntax/modifiers``
-///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/modifiers``
-///  - ``StructDeclSyntax``.``StructDeclSyntax/modifiers``
+///  - ``ProtocolDeclHeaderSyntax``.``ProtocolDeclHeaderSyntax/modifiers``
+///  - ``StructDeclHeaderSyntax``.``StructDeclHeaderSyntax/modifiers``
 ///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/modifiers``
 ///  - ``TypeAliasDeclSyntax``.``TypeAliasDeclSyntax/modifiers``
 ///  - ``VariableDeclSyntax``.``VariableDeclSyntax/modifiers``

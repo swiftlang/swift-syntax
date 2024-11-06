@@ -31,14 +31,16 @@ final class HashbangLibraryTests: ParserTestCase {
             item: .decl(
               DeclSyntax(
                 ClassDeclSyntax(
-                  classKeyword: .keyword(
-                    .class,
-                    leadingTrivia: [
-                      .newlines(1)
-                    ],
-                    trailingTrivia: .space
+                  classHeader: ClassDeclHeaderSyntax(
+                    classKeyword: .keyword(
+                      .class,
+                      leadingTrivia: [
+                        .newlines(1)
+                      ],
+                      trailingTrivia: .space
+                    ),
+                    name: .identifier("Foo", trailingTrivia: .space)
                   ),
-                  name: .identifier("Foo", trailingTrivia: .space),
                   memberBlock: MemberBlockSyntax(
                     members: MemberBlockItemListSyntax([])
                   )

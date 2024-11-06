@@ -40,8 +40,10 @@ class SyntaxTests: XCTestCase {
 
   public func testDetached() {
     let s = StructDeclSyntax(
-      structKeyword: .keyword(.struct),
-      name: .identifier("someStruct"),
+      structHeader: .init(
+        structKeyword: .keyword(.struct),
+        name: .identifier("someStruct")
+      ),
       memberBlock: MemberBlockSyntax(leftBrace: .leftBraceToken(), members: [], rightBrace: .rightBraceToken())
     )
 

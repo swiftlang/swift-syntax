@@ -22,12 +22,14 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
 
   case _canImportExpr
   case _canImportVersionInfo
+  case abiAttributeArguments
   case accessorBlock
   case accessorDecl
   case accessorDeclList
   case accessorEffectSpecifiers
   case accessorParameters
   case actorDecl
+  case actorDeclHeader
   case arrayElement
   case arrayElementList
   case arrayExpr
@@ -54,6 +56,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case catchItem
   case catchItemList
   case classDecl
+  case classDeclHeader
   case classRestrictionType
   case closureCapture
   case closureCaptureClause
@@ -81,6 +84,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case conventionWitnessMethodAttributeArguments
   case copyExpr
   case decl
+  case declGroupHeader
   case declModifier
   case declModifierDetail
   case declModifierList
@@ -120,6 +124,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case enumCaseParameterClause
   case enumCaseParameterList
   case enumDecl
+  case enumDeclHeader
   case exposeAttributeArguments
   case expr
   case expressionPattern
@@ -127,6 +132,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case expressionStmt
   case exprList
   case extensionDecl
+  case extensionDeclHeader
   case fallThroughStmt
   case floatLiteralExpr
   case forceUnwrapExpr
@@ -197,6 +203,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case metatypeType
   case missing
   case missingDecl
+  case missingDeclHeader
   case missingExpr
   case missingPattern
   case missingStmt
@@ -241,6 +248,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case primaryAssociatedTypeClause
   case primaryAssociatedTypeList
   case protocolDecl
+  case protocolDeclHeader
   case regexLiteralExpr
   case repeatStmt
   case returnClause
@@ -260,6 +268,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case stringLiteralSegmentList
   case stringSegment
   case structDecl
+  case structDeclHeader
   case subscriptCallExpr
   case subscriptDecl
   case superExpr
@@ -320,7 +329,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   /// `true` if this is one of the `missing*` cases.
   public var isMissing: Bool {
     switch self {
-    case .missingDecl, .missingExpr, .missingPattern, .missingStmt, .missing, .missingType:
+    case .missingDecl, .missingDeclHeader, .missingExpr, .missingPattern, .missingStmt, .missing, .missingType:
       return true
     default:
       return false
@@ -329,7 +338,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
 
   public var isBase: Bool {
     switch self {
-    case .decl, .expr, .pattern, .stmt, .syntax, .syntaxCollection, .type:
+    case .decl, .declGroupHeader, .expr, .pattern, .stmt, .syntax, .syntaxCollection, .type:
       return true
     default:
       return false
@@ -340,6 +349,15 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
     return .identifier(rawValue)
   }
 
+  public var uppercasedFirstWordRawValue: String {
+    switch self {
+    case .abiAttributeArguments:
+      "ABIAttributeArguments"
+    default:
+      rawValue.withFirstCharacterUppercased
+    }
+  }
+
   public var syntaxType: TypeSyntax {
     switch self {
     case .syntax:
@@ -347,7 +365,16 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
     case .syntaxCollection:
       return "SyntaxCollection"
     default:
-      return "\(raw: rawValue.withFirstCharacterUppercased)Syntax"
+      return "\(raw: uppercasedFirstWordRawValue)Syntax"
+    }
+  }
+
+  public var baseTypeSuffix: String? {
+    switch self {
+    case .declGroupHeader:
+      return "DeclHeaderSyntax"
+    default:
+      return isBase ? syntaxType.description : nil
     }
   }
 

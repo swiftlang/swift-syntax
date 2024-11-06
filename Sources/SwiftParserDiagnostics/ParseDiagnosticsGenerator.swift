@@ -415,6 +415,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       let previousToken = node.previousToken(viewMode: .sourceAccurate),
       previousToken.tokenKind.isIdentifier,
       previousToken.parent?.is(DeclSyntax.self) == true
+        || previousToken.parent?.is(DeclGroupHeaderSyntax.self) == true
         || previousToken.parent?.is(IdentifierPatternSyntax.self) == true
     {
       // If multiple identifiers are used for a declaration name, offer to join them together.
@@ -475,6 +476,22 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         node,
         SpaceSeparatedIdentifiersError(firstToken: previousToken, additionalTokens: tokens),
         fixIts: fixIts
+      )
+    } else if node.count == 1,
+      let onlyChild = node.first!.as(MemberBlockSyntax.self),
+      let parentHeader = node.parent?.as(DeclGroupHeaderSyntax.self)
+    {
+      addDiagnostic(
+        node,
+        DeclarationMemberBlockNotAllowedOnHeader(header: parentHeader),
+        fixIts: [
+          FixIt(
+            message: RemoveNodesFixIt([Syntax(onlyChild)]),
+            changes: [
+              .makeMissing(node, transferTrivia: true)
+            ]
+          )
+        ]
       )
     } else {
       addDiagnostic(node, UnexpectedNodesError(unexpectedNodes: node), highlights: [Syntax(node)])

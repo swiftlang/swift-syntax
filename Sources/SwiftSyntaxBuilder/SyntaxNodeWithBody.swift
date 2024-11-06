@@ -177,32 +177,27 @@ public protocol HasTrailingMemberDeclBlock {
   ///
   /// Throws an error if `header` defines a different node type than the type the initializer is called on. E.g. if calling `try StructDeclSyntax("class MyClass") {}`
   init(
-    _ header: SyntaxNodeString,
+    _ header: DeclGroupHeaderSyntax,
     @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax
   ) throws
 }
 
-extension HasTrailingMemberDeclBlock where Self: DeclSyntaxProtocol {
+extension HasTrailingMemberDeclBlock where Self: DeclGroupSyntax {
   public init(
-    _ header: SyntaxNodeString,
+    _ header: DeclGroupHeaderSyntax,
     @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax
   ) throws {
-    // If the type provides a custom `SyntaxParseable` implementation, use that. Otherwise construct it as a
-    // `DeclSyntax`.
-    let decl: DeclSyntax
-    var stringInterpolation = SyntaxStringInterpolation(literalCapacity: 1, interpolationCount: 1)
-    stringInterpolation.appendInterpolation(header)
-    stringInterpolation.appendLiteral(" {}")
-    if let parsableType = Self.self as? SyntaxParseable.Type {
-      decl = parsableType.init(stringInterpolation: stringInterpolation).cast(DeclSyntax.self)
-    } else {
-      decl = DeclSyntax(stringInterpolation: stringInterpolation)
+    guard
+      let newSelf = Self(
+        leadingTrivia: nil,
+        header: header,
+        memberBlock: try MemberBlockSyntax(members: membersBuilder()),
+        trailingTrivia: nil
+      )
+    else {
+      throw SyntaxStringInterpolationInvalidHeaderForNodeTypeError(declType: Self.self, headerNode: header)
     }
-    guard let castedDecl = decl.as(Self.self) else {
-      throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: decl)
-    }
-    self = castedDecl
-    self.memberBlock = try MemberBlockSyntax(members: membersBuilder())
+    self = newSelf
   }
 }
 

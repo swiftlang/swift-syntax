@@ -4050,6 +4050,266 @@ public struct MetatypeTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
   ])
 }
 
+// MARK: - MissingDeclHeaderSyntax
+
+/// In case the source code is missing a declaration group header, this node stands in place of the missing header.
+///
+/// ### Children
+/// 
+///  - `attributes`: ``AttributeListSyntax``
+///  - `modifiers`: ``DeclModifierListSyntax``
+///  - `placeholder`: `<identifier>`
+///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
+///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
+public struct MissingDeclHeaderSyntax: DeclGroupHeaderSyntaxProtocol, SyntaxHashable, _LeafDeclGroupHeaderSyntaxNodeProtocol {
+  public let _syntaxNode: Syntax
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard node.raw.kind == .missingDeclHeader else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - attributes: If there were standalone attributes without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these.
+  ///   - modifiers: If there were standalone modifiers without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these.
+  ///   - placeholder: A placeholder, i.e. `<#decl#>`, that can be inserted into the source code to represent the missing declaration.
+  ///   - genericWhereClause: A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    _ unexpectedBetweenModifiersAndPlaceholder: UnexpectedNodesSyntax? = nil,
+    placeholder: TokenSyntax,
+    _ unexpectedBetweenPlaceholderAndInheritanceClause: UnexpectedNodesSyntax? = nil,
+    inheritanceClause: InheritanceClauseSyntax? = nil,
+    _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax? = nil,
+    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((SyntaxArena(), (
+      unexpectedBeforeAttributes,
+      attributes,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers,
+      unexpectedBetweenModifiersAndPlaceholder,
+      placeholder,
+      unexpectedBetweenPlaceholderAndInheritanceClause,
+      inheritanceClause,
+      unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+      genericWhereClause,
+      unexpectedAfterGenericWhereClause
+    ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeAttributes?.raw,
+        attributes.raw,
+        unexpectedBetweenAttributesAndModifiers?.raw,
+        modifiers.raw,
+        unexpectedBetweenModifiersAndPlaceholder?.raw,
+        placeholder.raw,
+        unexpectedBetweenPlaceholderAndInheritanceClause?.raw,
+        inheritanceClause?.raw,
+        unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
+        genericWhereClause?.raw,
+        unexpectedAfterGenericWhereClause?.raw
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.missingDeclHeader,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeAttributes: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(MissingDeclHeaderSyntax.self)
+    }
+  }
+
+  /// If there were standalone attributes without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these.
+  public var attributes: AttributeListSyntax {
+    get {
+      return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(MissingDeclHeaderSyntax.self)
+    }
+  }
+
+  /// Adds the provided `element` to the node's `attributes`
+  /// collection.
+  ///
+  /// - param element: The new `Attribute` to add to the node's
+  ///                  `attributes` collection.
+  /// - returns: A copy of the receiver with the provided `Attribute`
+  ///            appended to its `attributes` collection.
+  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
+  public func addAttribute(_ element: Syntax) -> MissingDeclHeaderSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[1] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
+                                        from: [element.raw], arena: arena)
+    }
+    return Syntax(self)
+      .replacingChild(
+        at: 1,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
+      .cast(MissingDeclHeaderSyntax.self)
+  }
+
+  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(MissingDeclHeaderSyntax.self)
+    }
+  }
+
+  /// If there were standalone modifiers without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these.
+  public var modifiers: DeclModifierListSyntax {
+    get {
+      return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(MissingDeclHeaderSyntax.self)
+    }
+  }
+
+  /// Adds the provided `element` to the node's `modifiers`
+  /// collection.
+  ///
+  /// - param element: The new `Modifier` to add to the node's
+  ///                  `modifiers` collection.
+  /// - returns: A copy of the receiver with the provided `Modifier`
+  ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
+  public func addModifier(_ element: DeclModifierSyntax) -> MissingDeclHeaderSyntax {
+    var collection: RawSyntax
+    let arena = SyntaxArena()
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
+                                        from: [element.raw], arena: arena)
+    }
+    return Syntax(self)
+      .replacingChild(
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        allocationArena: arena
+      )
+      .cast(MissingDeclHeaderSyntax.self)
+  }
+
+  public var unexpectedBetweenModifiersAndPlaceholder: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(MissingDeclHeaderSyntax.self)
+    }
+  }
+
+  /// A placeholder, i.e. `<#decl#>`, that can be inserted into the source code to represent the missing declaration.
+  /// 
+  /// This token should always have `presence = .missing`.
+  ///
+  /// ### Tokens
+  /// 
+  /// For syntax trees generated by the parser, this is guaranteed to be `<identifier>`.
+  public var placeholder: TokenSyntax {
+    get {
+      return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(MissingDeclHeaderSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenPlaceholderAndInheritanceClause: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(MissingDeclHeaderSyntax.self)
+    }
+  }
+
+  public var inheritanceClause: InheritanceClauseSyntax? {
+    get {
+      return Syntax(self).child(at: 7)?.cast(InheritanceClauseSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(MissingDeclHeaderSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(MissingDeclHeaderSyntax.self)
+    }
+  }
+
+  /// A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
+  public var genericWhereClause: GenericWhereClauseSyntax? {
+    get {
+      return Syntax(self).child(at: 9)?.cast(GenericWhereClauseSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(MissingDeclHeaderSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(MissingDeclHeaderSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([
+    \Self.unexpectedBeforeAttributes,
+    \Self.attributes,
+    \Self.unexpectedBetweenAttributesAndModifiers,
+    \Self.modifiers,
+    \Self.unexpectedBetweenModifiersAndPlaceholder,
+    \Self.placeholder,
+    \Self.unexpectedBetweenPlaceholderAndInheritanceClause,
+    \Self.inheritanceClause,
+    \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+    \Self.genericWhereClause,
+    \Self.unexpectedAfterGenericWhereClause
+  ])
+}
+
 // MARK: - MissingDeclSyntax
 
 /// In case the source code is missing a declaration, this node stands in place of the missing declaration.

@@ -21,7 +21,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       node.documentation,
       node.subtypes,
     ])
-    DeclSyntax(
+    try! ProtocolDeclSyntax(
       """
       // MARK: - \(node.kind.syntaxType)
 
@@ -31,9 +31,26 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       ///
       ///  - Warning: Do not conform to this protocol yourself.
       \(node.apiAttributes())\
-      public protocol \(node.kind.protocolType): \(node.base.protocolType) {}
+      public protocol \(node.kind.protocolType): \(node.base.protocolType)
       """
-    )
+    ) {
+      for child in node.layoutNode?.children ?? [] {
+        // ==================================
+        // Children properties (requirements)
+        // ==================================
+
+        let childType: TypeSyntax =
+          child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
+        let type = child.isOptional ? TypeSyntax("\(childType)?") : TypeSyntax("\(childType)")
+
+        DeclSyntax(
+          """
+          \(child.documentation)\
+          \(child.apiAttributes) var \(child.varDeclName): \(type) { get set }
+          """
+        )
+      }
+    }
 
     DeclSyntax(
       #"""
@@ -284,6 +301,41 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         }
 
         StmtSyntax("return .choices(\(choices))")
+      }
+
+      for child in node.layoutNode?.children ?? [] {
+        // =================================================
+        // Children properties (type-erased implementations)
+        // =================================================
+
+        let childType: TypeSyntax =
+          child.kind.isNodeChoicesEmpty ? child.syntaxNodeKind.syntaxType : child.syntaxChoicesType
+        let type = child.isOptional ? TypeSyntax("\(childType)?") : TypeSyntax("\(childType)")
+
+        try! VariableDeclSyntax(
+          """
+          \(child.documentation)\
+          \(child.apiAttributes)public var \(child.varDeclName): \(type)
+          """
+        ) {
+          AccessorDeclSyntax(
+            """
+            get {
+              return self.asProtocol(\(node.kind.protocolType).self).\(child.baseCallName)
+            }
+            """
+          )
+
+          AccessorDeclSyntax(
+            """
+            set(value) {
+              var existentialCopy = self.asProtocol(\(node.kind.protocolType).self)
+              existentialCopy.\(child.baseCallName) = value
+              self = \(node.kind.syntaxType)(fromProtocol: existentialCopy)
+            }
+            """
+          )
+        }
       }
     }
 

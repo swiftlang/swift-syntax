@@ -13,7 +13,49 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(RawSyntax)
+public protocol RawDeclGroupHeaderSyntaxNodeProtocol: RawSyntaxNodeProtocol {}
+
+@_spi(RawSyntax)
 public protocol RawDeclSyntaxNodeProtocol: RawSyntaxNodeProtocol {}
+
+@_spi(RawSyntax)
+public struct RawDeclGroupHeaderSyntax: RawDeclGroupHeaderSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    switch raw.kind {
+    case .actorDeclHeader, .classDeclHeader, .enumDeclHeader, .extensionDeclHeader, .missingDeclHeader, .protocolDeclHeader, .structDeclHeader:
+      return true
+    default:
+      return false
+    }
+  }
+
+  public var raw: RawSyntax
+
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+
+  public init(_ other: some RawDeclGroupHeaderSyntaxNodeProtocol) {
+    self.init(unchecked: other.raw)
+  }
+}
 
 @_spi(RawSyntax)
 public struct RawDeclModifierDetailSyntax: RawSyntaxNodeProtocol {

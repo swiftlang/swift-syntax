@@ -17,6 +17,12 @@
 @_spi(RawSyntax)
 public func childName(_ keyPath: AnyKeyPath) -> String? {
   switch keyPath {
+  case \ABIAttributeArgumentsSyntax.unexpectedBeforeProvider:
+    return "unexpectedBeforeProvider"
+  case \ABIAttributeArgumentsSyntax.provider:
+    return "provider"
+  case \ABIAttributeArgumentsSyntax.unexpectedAfterProvider:
+    return "unexpectedAfterProvider"
   case \AccessorBlockSyntax.unexpectedBeforeLeftBrace:
     return "unexpectedBeforeLeftBrace"
   case \AccessorBlockSyntax.leftBrace:
@@ -81,36 +87,42 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightParen"
   case \AccessorParametersSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
-  case \ActorDeclSyntax.unexpectedBeforeAttributes:
+  case \ActorDeclHeaderSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
-  case \ActorDeclSyntax.attributes:
+  case \ActorDeclHeaderSyntax.attributes:
     return "attributes"
-  case \ActorDeclSyntax.unexpectedBetweenAttributesAndModifiers:
+  case \ActorDeclHeaderSyntax.unexpectedBetweenAttributesAndModifiers:
     return "unexpectedBetweenAttributesAndModifiers"
-  case \ActorDeclSyntax.modifiers:
+  case \ActorDeclHeaderSyntax.modifiers:
     return "modifiers"
-  case \ActorDeclSyntax.unexpectedBetweenModifiersAndActorKeyword:
+  case \ActorDeclHeaderSyntax.unexpectedBetweenModifiersAndActorKeyword:
     return "unexpectedBetweenModifiersAndActorKeyword"
-  case \ActorDeclSyntax.actorKeyword:
+  case \ActorDeclHeaderSyntax.actorKeyword:
     return "actorKeyword"
-  case \ActorDeclSyntax.unexpectedBetweenActorKeywordAndName:
+  case \ActorDeclHeaderSyntax.unexpectedBetweenActorKeywordAndName:
     return "unexpectedBetweenActorKeywordAndName"
-  case \ActorDeclSyntax.name:
+  case \ActorDeclHeaderSyntax.name:
     return "name"
-  case \ActorDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:
+  case \ActorDeclHeaderSyntax.unexpectedBetweenNameAndGenericParameterClause:
     return "unexpectedBetweenNameAndGenericParameterClause"
-  case \ActorDeclSyntax.genericParameterClause:
+  case \ActorDeclHeaderSyntax.genericParameterClause:
     return "genericParameterClause"
-  case \ActorDeclSyntax.unexpectedBetweenGenericParameterClauseAndInheritanceClause:
+  case \ActorDeclHeaderSyntax.unexpectedBetweenGenericParameterClauseAndInheritanceClause:
     return "unexpectedBetweenGenericParameterClauseAndInheritanceClause"
-  case \ActorDeclSyntax.inheritanceClause:
+  case \ActorDeclHeaderSyntax.inheritanceClause:
     return "inheritanceClause"
-  case \ActorDeclSyntax.unexpectedBetweenInheritanceClauseAndGenericWhereClause:
+  case \ActorDeclHeaderSyntax.unexpectedBetweenInheritanceClauseAndGenericWhereClause:
     return "unexpectedBetweenInheritanceClauseAndGenericWhereClause"
-  case \ActorDeclSyntax.genericWhereClause:
+  case \ActorDeclHeaderSyntax.genericWhereClause:
     return "genericWhereClause"
-  case \ActorDeclSyntax.unexpectedBetweenGenericWhereClauseAndMemberBlock:
-    return "unexpectedBetweenGenericWhereClauseAndMemberBlock"
+  case \ActorDeclHeaderSyntax.unexpectedAfterGenericWhereClause:
+    return "unexpectedAfterGenericWhereClause"
+  case \ActorDeclSyntax.unexpectedBeforeActorHeader:
+    return "unexpectedBeforeActorHeader"
+  case \ActorDeclSyntax.actorHeader:
+    return "actorHeader"
+  case \ActorDeclSyntax.unexpectedBetweenActorHeaderAndMemberBlock:
+    return "unexpectedBetweenActorHeaderAndMemberBlock"
   case \ActorDeclSyntax.memberBlock:
     return "memberBlock"
   case \ActorDeclSyntax.unexpectedAfterMemberBlock:
@@ -419,36 +431,42 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "trailingComma"
   case \CatchItemSyntax.unexpectedAfterTrailingComma:
     return "unexpectedAfterTrailingComma"
-  case \ClassDeclSyntax.unexpectedBeforeAttributes:
+  case \ClassDeclHeaderSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
-  case \ClassDeclSyntax.attributes:
+  case \ClassDeclHeaderSyntax.attributes:
     return "attributes"
-  case \ClassDeclSyntax.unexpectedBetweenAttributesAndModifiers:
+  case \ClassDeclHeaderSyntax.unexpectedBetweenAttributesAndModifiers:
     return "unexpectedBetweenAttributesAndModifiers"
-  case \ClassDeclSyntax.modifiers:
+  case \ClassDeclHeaderSyntax.modifiers:
     return "modifiers"
-  case \ClassDeclSyntax.unexpectedBetweenModifiersAndClassKeyword:
+  case \ClassDeclHeaderSyntax.unexpectedBetweenModifiersAndClassKeyword:
     return "unexpectedBetweenModifiersAndClassKeyword"
-  case \ClassDeclSyntax.classKeyword:
+  case \ClassDeclHeaderSyntax.classKeyword:
     return "classKeyword"
-  case \ClassDeclSyntax.unexpectedBetweenClassKeywordAndName:
+  case \ClassDeclHeaderSyntax.unexpectedBetweenClassKeywordAndName:
     return "unexpectedBetweenClassKeywordAndName"
-  case \ClassDeclSyntax.name:
+  case \ClassDeclHeaderSyntax.name:
     return "name"
-  case \ClassDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:
+  case \ClassDeclHeaderSyntax.unexpectedBetweenNameAndGenericParameterClause:
     return "unexpectedBetweenNameAndGenericParameterClause"
-  case \ClassDeclSyntax.genericParameterClause:
+  case \ClassDeclHeaderSyntax.genericParameterClause:
     return "genericParameterClause"
-  case \ClassDeclSyntax.unexpectedBetweenGenericParameterClauseAndInheritanceClause:
+  case \ClassDeclHeaderSyntax.unexpectedBetweenGenericParameterClauseAndInheritanceClause:
     return "unexpectedBetweenGenericParameterClauseAndInheritanceClause"
-  case \ClassDeclSyntax.inheritanceClause:
+  case \ClassDeclHeaderSyntax.inheritanceClause:
     return "inheritanceClause"
-  case \ClassDeclSyntax.unexpectedBetweenInheritanceClauseAndGenericWhereClause:
+  case \ClassDeclHeaderSyntax.unexpectedBetweenInheritanceClauseAndGenericWhereClause:
     return "unexpectedBetweenInheritanceClauseAndGenericWhereClause"
-  case \ClassDeclSyntax.genericWhereClause:
+  case \ClassDeclHeaderSyntax.genericWhereClause:
     return "genericWhereClause"
-  case \ClassDeclSyntax.unexpectedBetweenGenericWhereClauseAndMemberBlock:
-    return "unexpectedBetweenGenericWhereClauseAndMemberBlock"
+  case \ClassDeclHeaderSyntax.unexpectedAfterGenericWhereClause:
+    return "unexpectedAfterGenericWhereClause"
+  case \ClassDeclSyntax.unexpectedBeforeClassHeader:
+    return "unexpectedBeforeClassHeader"
+  case \ClassDeclSyntax.classHeader:
+    return "classHeader"
+  case \ClassDeclSyntax.unexpectedBetweenClassHeaderAndMemberBlock:
+    return "unexpectedBetweenClassHeaderAndMemberBlock"
   case \ClassDeclSyntax.memberBlock:
     return "memberBlock"
   case \ClassDeclSyntax.unexpectedAfterMemberBlock:
@@ -1171,36 +1189,42 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "trailingComma"
   case \EnumCaseParameterSyntax.unexpectedAfterTrailingComma:
     return "unexpectedAfterTrailingComma"
-  case \EnumDeclSyntax.unexpectedBeforeAttributes:
+  case \EnumDeclHeaderSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
-  case \EnumDeclSyntax.attributes:
+  case \EnumDeclHeaderSyntax.attributes:
     return "attributes"
-  case \EnumDeclSyntax.unexpectedBetweenAttributesAndModifiers:
+  case \EnumDeclHeaderSyntax.unexpectedBetweenAttributesAndModifiers:
     return "unexpectedBetweenAttributesAndModifiers"
-  case \EnumDeclSyntax.modifiers:
+  case \EnumDeclHeaderSyntax.modifiers:
     return "modifiers"
-  case \EnumDeclSyntax.unexpectedBetweenModifiersAndEnumKeyword:
+  case \EnumDeclHeaderSyntax.unexpectedBetweenModifiersAndEnumKeyword:
     return "unexpectedBetweenModifiersAndEnumKeyword"
-  case \EnumDeclSyntax.enumKeyword:
+  case \EnumDeclHeaderSyntax.enumKeyword:
     return "enumKeyword"
-  case \EnumDeclSyntax.unexpectedBetweenEnumKeywordAndName:
+  case \EnumDeclHeaderSyntax.unexpectedBetweenEnumKeywordAndName:
     return "unexpectedBetweenEnumKeywordAndName"
-  case \EnumDeclSyntax.name:
+  case \EnumDeclHeaderSyntax.name:
     return "name"
-  case \EnumDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:
+  case \EnumDeclHeaderSyntax.unexpectedBetweenNameAndGenericParameterClause:
     return "unexpectedBetweenNameAndGenericParameterClause"
-  case \EnumDeclSyntax.genericParameterClause:
+  case \EnumDeclHeaderSyntax.genericParameterClause:
     return "genericParameterClause"
-  case \EnumDeclSyntax.unexpectedBetweenGenericParameterClauseAndInheritanceClause:
+  case \EnumDeclHeaderSyntax.unexpectedBetweenGenericParameterClauseAndInheritanceClause:
     return "unexpectedBetweenGenericParameterClauseAndInheritanceClause"
-  case \EnumDeclSyntax.inheritanceClause:
+  case \EnumDeclHeaderSyntax.inheritanceClause:
     return "inheritanceClause"
-  case \EnumDeclSyntax.unexpectedBetweenInheritanceClauseAndGenericWhereClause:
+  case \EnumDeclHeaderSyntax.unexpectedBetweenInheritanceClauseAndGenericWhereClause:
     return "unexpectedBetweenInheritanceClauseAndGenericWhereClause"
-  case \EnumDeclSyntax.genericWhereClause:
+  case \EnumDeclHeaderSyntax.genericWhereClause:
     return "genericWhereClause"
-  case \EnumDeclSyntax.unexpectedBetweenGenericWhereClauseAndMemberBlock:
-    return "unexpectedBetweenGenericWhereClauseAndMemberBlock"
+  case \EnumDeclHeaderSyntax.unexpectedAfterGenericWhereClause:
+    return "unexpectedAfterGenericWhereClause"
+  case \EnumDeclSyntax.unexpectedBeforeEnumHeader:
+    return "unexpectedBeforeEnumHeader"
+  case \EnumDeclSyntax.enumHeader:
+    return "enumHeader"
+  case \EnumDeclSyntax.unexpectedBetweenEnumHeaderAndMemberBlock:
+    return "unexpectedBetweenEnumHeaderAndMemberBlock"
   case \EnumDeclSyntax.memberBlock:
     return "memberBlock"
   case \EnumDeclSyntax.unexpectedAfterMemberBlock:
@@ -1253,32 +1277,38 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "expression"
   case \ExpressionStmtSyntax.unexpectedAfterExpression:
     return "unexpectedAfterExpression"
-  case \ExtensionDeclSyntax.unexpectedBeforeAttributes:
+  case \ExtensionDeclHeaderSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
-  case \ExtensionDeclSyntax.attributes:
+  case \ExtensionDeclHeaderSyntax.attributes:
     return "attributes"
-  case \ExtensionDeclSyntax.unexpectedBetweenAttributesAndModifiers:
+  case \ExtensionDeclHeaderSyntax.unexpectedBetweenAttributesAndModifiers:
     return "unexpectedBetweenAttributesAndModifiers"
-  case \ExtensionDeclSyntax.modifiers:
+  case \ExtensionDeclHeaderSyntax.modifiers:
     return "modifiers"
-  case \ExtensionDeclSyntax.unexpectedBetweenModifiersAndExtensionKeyword:
+  case \ExtensionDeclHeaderSyntax.unexpectedBetweenModifiersAndExtensionKeyword:
     return "unexpectedBetweenModifiersAndExtensionKeyword"
-  case \ExtensionDeclSyntax.extensionKeyword:
+  case \ExtensionDeclHeaderSyntax.extensionKeyword:
     return "extensionKeyword"
-  case \ExtensionDeclSyntax.unexpectedBetweenExtensionKeywordAndExtendedType:
+  case \ExtensionDeclHeaderSyntax.unexpectedBetweenExtensionKeywordAndExtendedType:
     return "unexpectedBetweenExtensionKeywordAndExtendedType"
-  case \ExtensionDeclSyntax.extendedType:
+  case \ExtensionDeclHeaderSyntax.extendedType:
     return "extendedType"
-  case \ExtensionDeclSyntax.unexpectedBetweenExtendedTypeAndInheritanceClause:
+  case \ExtensionDeclHeaderSyntax.unexpectedBetweenExtendedTypeAndInheritanceClause:
     return "unexpectedBetweenExtendedTypeAndInheritanceClause"
-  case \ExtensionDeclSyntax.inheritanceClause:
+  case \ExtensionDeclHeaderSyntax.inheritanceClause:
     return "inheritanceClause"
-  case \ExtensionDeclSyntax.unexpectedBetweenInheritanceClauseAndGenericWhereClause:
+  case \ExtensionDeclHeaderSyntax.unexpectedBetweenInheritanceClauseAndGenericWhereClause:
     return "unexpectedBetweenInheritanceClauseAndGenericWhereClause"
-  case \ExtensionDeclSyntax.genericWhereClause:
+  case \ExtensionDeclHeaderSyntax.genericWhereClause:
     return "genericWhereClause"
-  case \ExtensionDeclSyntax.unexpectedBetweenGenericWhereClauseAndMemberBlock:
-    return "unexpectedBetweenGenericWhereClauseAndMemberBlock"
+  case \ExtensionDeclHeaderSyntax.unexpectedAfterGenericWhereClause:
+    return "unexpectedAfterGenericWhereClause"
+  case \ExtensionDeclSyntax.unexpectedBeforeExtensionHeader:
+    return "unexpectedBeforeExtensionHeader"
+  case \ExtensionDeclSyntax.extensionHeader:
+    return "extensionHeader"
+  case \ExtensionDeclSyntax.unexpectedBetweenExtensionHeaderAndMemberBlock:
+    return "unexpectedBetweenExtensionHeaderAndMemberBlock"
   case \ExtensionDeclSyntax.memberBlock:
     return "memberBlock"
   case \ExtensionDeclSyntax.unexpectedAfterMemberBlock:
@@ -2225,6 +2255,28 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "metatypeSpecifier"
   case \MetatypeTypeSyntax.unexpectedAfterMetatypeSpecifier:
     return "unexpectedAfterMetatypeSpecifier"
+  case \MissingDeclHeaderSyntax.unexpectedBeforeAttributes:
+    return "unexpectedBeforeAttributes"
+  case \MissingDeclHeaderSyntax.attributes:
+    return "attributes"
+  case \MissingDeclHeaderSyntax.unexpectedBetweenAttributesAndModifiers:
+    return "unexpectedBetweenAttributesAndModifiers"
+  case \MissingDeclHeaderSyntax.modifiers:
+    return "modifiers"
+  case \MissingDeclHeaderSyntax.unexpectedBetweenModifiersAndPlaceholder:
+    return "unexpectedBetweenModifiersAndPlaceholder"
+  case \MissingDeclHeaderSyntax.placeholder:
+    return "placeholder"
+  case \MissingDeclHeaderSyntax.unexpectedBetweenPlaceholderAndInheritanceClause:
+    return "unexpectedBetweenPlaceholderAndInheritanceClause"
+  case \MissingDeclHeaderSyntax.inheritanceClause:
+    return "inheritanceClause"
+  case \MissingDeclHeaderSyntax.unexpectedBetweenInheritanceClauseAndGenericWhereClause:
+    return "unexpectedBetweenInheritanceClauseAndGenericWhereClause"
+  case \MissingDeclHeaderSyntax.genericWhereClause:
+    return "genericWhereClause"
+  case \MissingDeclHeaderSyntax.unexpectedAfterGenericWhereClause:
+    return "unexpectedAfterGenericWhereClause"
   case \MissingDeclSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
   case \MissingDeclSyntax.attributes:
@@ -2687,36 +2739,42 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "trailingComma"
   case \PrimaryAssociatedTypeSyntax.unexpectedAfterTrailingComma:
     return "unexpectedAfterTrailingComma"
-  case \ProtocolDeclSyntax.unexpectedBeforeAttributes:
+  case \ProtocolDeclHeaderSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
-  case \ProtocolDeclSyntax.attributes:
+  case \ProtocolDeclHeaderSyntax.attributes:
     return "attributes"
-  case \ProtocolDeclSyntax.unexpectedBetweenAttributesAndModifiers:
+  case \ProtocolDeclHeaderSyntax.unexpectedBetweenAttributesAndModifiers:
     return "unexpectedBetweenAttributesAndModifiers"
-  case \ProtocolDeclSyntax.modifiers:
+  case \ProtocolDeclHeaderSyntax.modifiers:
     return "modifiers"
-  case \ProtocolDeclSyntax.unexpectedBetweenModifiersAndProtocolKeyword:
+  case \ProtocolDeclHeaderSyntax.unexpectedBetweenModifiersAndProtocolKeyword:
     return "unexpectedBetweenModifiersAndProtocolKeyword"
-  case \ProtocolDeclSyntax.protocolKeyword:
+  case \ProtocolDeclHeaderSyntax.protocolKeyword:
     return "protocolKeyword"
-  case \ProtocolDeclSyntax.unexpectedBetweenProtocolKeywordAndName:
+  case \ProtocolDeclHeaderSyntax.unexpectedBetweenProtocolKeywordAndName:
     return "unexpectedBetweenProtocolKeywordAndName"
-  case \ProtocolDeclSyntax.name:
+  case \ProtocolDeclHeaderSyntax.name:
     return "name"
-  case \ProtocolDeclSyntax.unexpectedBetweenNameAndPrimaryAssociatedTypeClause:
+  case \ProtocolDeclHeaderSyntax.unexpectedBetweenNameAndPrimaryAssociatedTypeClause:
     return "unexpectedBetweenNameAndPrimaryAssociatedTypeClause"
-  case \ProtocolDeclSyntax.primaryAssociatedTypeClause:
+  case \ProtocolDeclHeaderSyntax.primaryAssociatedTypeClause:
     return "primaryAssociatedTypeClause"
-  case \ProtocolDeclSyntax.unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause:
+  case \ProtocolDeclHeaderSyntax.unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause:
     return "unexpectedBetweenPrimaryAssociatedTypeClauseAndInheritanceClause"
-  case \ProtocolDeclSyntax.inheritanceClause:
+  case \ProtocolDeclHeaderSyntax.inheritanceClause:
     return "inheritanceClause"
-  case \ProtocolDeclSyntax.unexpectedBetweenInheritanceClauseAndGenericWhereClause:
+  case \ProtocolDeclHeaderSyntax.unexpectedBetweenInheritanceClauseAndGenericWhereClause:
     return "unexpectedBetweenInheritanceClauseAndGenericWhereClause"
-  case \ProtocolDeclSyntax.genericWhereClause:
+  case \ProtocolDeclHeaderSyntax.genericWhereClause:
     return "genericWhereClause"
-  case \ProtocolDeclSyntax.unexpectedBetweenGenericWhereClauseAndMemberBlock:
-    return "unexpectedBetweenGenericWhereClauseAndMemberBlock"
+  case \ProtocolDeclHeaderSyntax.unexpectedAfterGenericWhereClause:
+    return "unexpectedAfterGenericWhereClause"
+  case \ProtocolDeclSyntax.unexpectedBeforeProtocolHeader:
+    return "unexpectedBeforeProtocolHeader"
+  case \ProtocolDeclSyntax.protocolHeader:
+    return "protocolHeader"
+  case \ProtocolDeclSyntax.unexpectedBetweenProtocolHeaderAndMemberBlock:
+    return "unexpectedBetweenProtocolHeaderAndMemberBlock"
   case \ProtocolDeclSyntax.memberBlock:
     return "memberBlock"
   case \ProtocolDeclSyntax.unexpectedAfterMemberBlock:
@@ -2909,36 +2967,42 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "content"
   case \StringSegmentSyntax.unexpectedAfterContent:
     return "unexpectedAfterContent"
-  case \StructDeclSyntax.unexpectedBeforeAttributes:
+  case \StructDeclHeaderSyntax.unexpectedBeforeAttributes:
     return "unexpectedBeforeAttributes"
-  case \StructDeclSyntax.attributes:
+  case \StructDeclHeaderSyntax.attributes:
     return "attributes"
-  case \StructDeclSyntax.unexpectedBetweenAttributesAndModifiers:
+  case \StructDeclHeaderSyntax.unexpectedBetweenAttributesAndModifiers:
     return "unexpectedBetweenAttributesAndModifiers"
-  case \StructDeclSyntax.modifiers:
+  case \StructDeclHeaderSyntax.modifiers:
     return "modifiers"
-  case \StructDeclSyntax.unexpectedBetweenModifiersAndStructKeyword:
+  case \StructDeclHeaderSyntax.unexpectedBetweenModifiersAndStructKeyword:
     return "unexpectedBetweenModifiersAndStructKeyword"
-  case \StructDeclSyntax.structKeyword:
+  case \StructDeclHeaderSyntax.structKeyword:
     return "structKeyword"
-  case \StructDeclSyntax.unexpectedBetweenStructKeywordAndName:
+  case \StructDeclHeaderSyntax.unexpectedBetweenStructKeywordAndName:
     return "unexpectedBetweenStructKeywordAndName"
-  case \StructDeclSyntax.name:
+  case \StructDeclHeaderSyntax.name:
     return "name"
-  case \StructDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:
+  case \StructDeclHeaderSyntax.unexpectedBetweenNameAndGenericParameterClause:
     return "unexpectedBetweenNameAndGenericParameterClause"
-  case \StructDeclSyntax.genericParameterClause:
+  case \StructDeclHeaderSyntax.genericParameterClause:
     return "genericParameterClause"
-  case \StructDeclSyntax.unexpectedBetweenGenericParameterClauseAndInheritanceClause:
+  case \StructDeclHeaderSyntax.unexpectedBetweenGenericParameterClauseAndInheritanceClause:
     return "unexpectedBetweenGenericParameterClauseAndInheritanceClause"
-  case \StructDeclSyntax.inheritanceClause:
+  case \StructDeclHeaderSyntax.inheritanceClause:
     return "inheritanceClause"
-  case \StructDeclSyntax.unexpectedBetweenInheritanceClauseAndGenericWhereClause:
+  case \StructDeclHeaderSyntax.unexpectedBetweenInheritanceClauseAndGenericWhereClause:
     return "unexpectedBetweenInheritanceClauseAndGenericWhereClause"
-  case \StructDeclSyntax.genericWhereClause:
+  case \StructDeclHeaderSyntax.genericWhereClause:
     return "genericWhereClause"
-  case \StructDeclSyntax.unexpectedBetweenGenericWhereClauseAndMemberBlock:
-    return "unexpectedBetweenGenericWhereClauseAndMemberBlock"
+  case \StructDeclHeaderSyntax.unexpectedAfterGenericWhereClause:
+    return "unexpectedAfterGenericWhereClause"
+  case \StructDeclSyntax.unexpectedBeforeStructHeader:
+    return "unexpectedBeforeStructHeader"
+  case \StructDeclSyntax.structHeader:
+    return "structHeader"
+  case \StructDeclSyntax.unexpectedBetweenStructHeaderAndMemberBlock:
+    return "unexpectedBetweenStructHeaderAndMemberBlock"
   case \StructDeclSyntax.memberBlock:
     return "memberBlock"
   case \StructDeclSyntax.unexpectedAfterMemberBlock:

@@ -134,7 +134,7 @@ extension SyntaxProtocol {
     // Extensions
     if let extensionDecl = self.as(ExtensionDeclSyntax.self) {
       // FIXME: It would be nice to be able to switch on type syntax...
-      let extendedType = extensionDecl.extendedType
+      let extendedType = extensionDecl.extensionHeader.extendedType
       if let simple = extendedType.as(IdentifierTypeSyntax.self) {
         return simple.name.trimmedDescription
       }

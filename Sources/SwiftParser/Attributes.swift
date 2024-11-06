@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 #if swift(>=6)
-@_spi(RawSyntax) internal import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) internal import SwiftSyntax
 #else
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftSyntax
 #endif
 
 extension Parser {
@@ -58,6 +58,7 @@ extension Parser {
     case _typeEraser
     case _unavailableFromAsync
     case `rethrows`
+    case abi
     case attached
     case available
     case backDeployed
@@ -95,6 +96,7 @@ extension Parser {
       case TokenSpec(._typeEraser): self = ._typeEraser
       case TokenSpec(._unavailableFromAsync): self = ._unavailableFromAsync
       case TokenSpec(.`rethrows`): self = .rethrows
+      case TokenSpec(.abi) where experimentalFeatures.contains(.abiAttribute): self = .abi
       case TokenSpec(.attached): self = .attached
       case TokenSpec(.available): self = .available
       case TokenSpec(.backDeployed): self = .backDeployed
@@ -136,6 +138,7 @@ extension Parser {
       case ._typeEraser: return .keyword(._typeEraser)
       case ._unavailableFromAsync: return .keyword(._unavailableFromAsync)
       case .`rethrows`: return .keyword(.rethrows)
+      case .abi: return .keyword(.abi)
       case .attached: return .keyword(.attached)
       case .available: return .keyword(.available)
       case .backDeployed: return .keyword(.backDeployed)
@@ -176,9 +179,16 @@ extension Parser {
     case noArgument
   }
 
+  /// Parse the argument of an attribute, if it has one.
+  ///
+  /// - Parameters:
+  ///   - argumentMode: Indicates whether the attribute must, may, or may not have an argument.
+  ///   - parseArguments: Called to parse the argument list. If there is an opening parenthesis, it will have already been consumed.
+  ///   - parseMissingArguments: If provided, called instead of `parseArgument` when an argument list was required but no opening parenthesis was present.
   mutating func parseAttribute(
     argumentMode: AttributeArgumentMode,
-    parseArguments: (inout Parser) -> RawAttributeSyntax.Arguments
+    parseArguments: (inout Parser) -> RawAttributeSyntax.Arguments,
+    parseMissingArguments: ((inout Parser) -> RawAttributeSyntax.Arguments)? = nil
   ) -> RawAttributeListSyntax.Element {
     var (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     if atSign.trailingTriviaByteLength > 0 || self.currentToken.leadingTriviaByteLength > 0 {
@@ -213,7 +223,12 @@ extension Parser {
         )
         leftParen = leftParen.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
       }
-      let argument = parseArguments(&self)
+      let argument =
+        if let parseMissingArguments, leftParen.presence == .missing {
+          parseMissingArguments(&self)
+        } else {
+          parseArguments(&self)
+        }
       let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
       return .attribute(
         RawAttributeSyntax(
@@ -255,6 +270,12 @@ extension Parser {
     }
 
     switch peek(isAtAnyIn: DeclarationAttributeWithSpecialSyntax.self) {
+    case .abi:
+      return parseAttribute(argumentMode: .required) { parser in
+        return .abiArguments(parser.parseABIAttributeArguments())
+      } parseMissingArguments: { parser in
+        return .abiArguments(parser.parseABIAttributeArguments(missing: true))
+      }
     case .available, ._spi_available:
       return parseAttribute(argumentMode: .required) { parser in
         return .availability(parser.parseAvailabilityArgumentSpecList())
@@ -915,6 +936,75 @@ extension Parser {
       elements: [isolationKindElement],
       arena: self.arena
     )
+  }
+}
+
+extension Parser {
+  mutating func parseABIAttributeArguments(missing: Bool = false) -> RawABIAttributeArgumentsSyntax {
+    let providerDecl: RawABIAttributeArgumentsSyntax.Provider
+    if missing || at(.rightParen) {
+      // There are two situations where the left paren might be missing:
+      //   1. The user just forgot the paren: `@abi var x_abi: Int) var x: Int`
+      //   2. The user forgot the whole argument list: `@abi var x: Int`
+      // Normally, we would distinguish these by seeing if whatever comes after
+      // the attribute parses as an argument. However, for @abi the argument is
+      // a decl, so in #2, we would consume the decl the attribute is attached
+      // to! This leads to a lousy diagnostic in that situation.
+      // Avoid this problem by simply returning a missing decl immediately.
+      // FIXME: Could we look ahead to find an unbalanced parenthesis?
+      providerDecl = .unsupported(
+        RawDeclSyntax(
+          RawMissingDeclSyntax(
+            attributes: self.emptyCollection(RawAttributeListSyntax.self),
+            modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
+            arena: arena
+          )
+        )
+      )
+    } else {
+      switch nextDeclarationKeyword() {
+      case .group?:
+        providerDecl = RawABIAttributeArgumentsSyntax.Provider(parseDeclarationGroupHeader())!
+
+      case .simple?, .binding?, nil:
+        providerDecl = RawABIAttributeArgumentsSyntax.Provider(parseDeclaration(in: .argumentList))!
+      }
+    }
+
+    return RawABIAttributeArgumentsSyntax(provider: providerDecl, arena: arena)
+  }
+
+  mutating func nextDeclarationKeyword() -> DeclarationKeyword? {
+    return self.withLookahead { subparser in
+      // Consume attributes.
+      var attributeProgress = LoopProgressCondition()
+      while subparser.hasProgressed(&attributeProgress) && subparser.at(.atSign) {
+        _ = subparser.consumeAttributeList()
+      }
+
+      // Consume modifiers.
+      if subparser.currentToken.isLexerClassifiedKeyword || subparser.currentToken.rawTokenKind == .identifier {
+        var modifierProgress = LoopProgressCondition()
+        while let (modifierKind, handle) = subparser.at(anyIn: DeclarationModifier.self),
+          subparser.hasProgressed(&modifierProgress)
+        {
+          if modifierKind == .class {
+            // `class` is a modifier only if it's followed by an introducer or modifier.
+            if subparser.peek(isAtAnyIn: DeclarationStart.self) == nil {
+              break
+            }
+          }
+          subparser.eat(handle)
+          if subparser.at(.leftParen) && modifierKind.canHaveParenthesizedArgument {
+            subparser.consumeAnyToken()
+            subparser.consume(to: .rightParen)
+          }
+        }
+      }
+
+      // Is the next thing a declaration introducer?
+      return subparser.at(anyIn: DeclarationKeyword.self)?.spec
+    }
   }
 }
 

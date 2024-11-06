@@ -283,6 +283,7 @@ enum TokenPrecedence: Comparable {
       ._swift_native_objc_runtime_base,
       ._typeEraser,
       ._unavailableFromAsync,
+      .abi,
       .attached,
       .available,
       .backDeployed,

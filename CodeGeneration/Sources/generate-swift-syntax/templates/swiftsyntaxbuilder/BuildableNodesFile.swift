@@ -26,7 +26,7 @@ let buildableNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     """
   )
 
-  for node in SYNTAX_NODES.compactMap(\.layoutNode) {
+  for node in NON_BASE_SYNTAX_NODES.compactMap(\.layoutNode) {
     let type = node.type
 
     if let convenienceInit = try! InitSignature(node).createConvenienceBuilderInitializer() {

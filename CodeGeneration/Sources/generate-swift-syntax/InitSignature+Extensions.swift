@@ -28,9 +28,11 @@ extension InitSignature {
     return "init(leadingTrivia:\(renamedArguments)trailingTrivia:)"
   }
 
-  func generateInitializerDeclHeader() -> SyntaxNodeString {
+  func generateInitializerDeclHeader(isRequirement: Bool = false) -> SyntaxNodeString {
+    let stub = isRequirement ? "init?" : "public init"
+
     if children.isEmpty {
-      return "public init()"
+      return "\(raw: stub)()"
     }
 
     func createFunctionParameterSyntax(for child: Child) -> FunctionParameterSyntax {
@@ -63,19 +65,25 @@ extension InitSignature {
       )
     }
 
+    func transformParam(_ param: FunctionParameterSyntax) -> FunctionParameterSyntax {
+      isRequirement ? param.with(\.defaultValue, nil) : param
+    }
+
     let params = FunctionParameterListSyntax {
-      FunctionParameterSyntax("leadingTrivia: Trivia? = nil")
+      transformParam(FunctionParameterSyntax("leadingTrivia: Trivia? = nil"))
 
       for child in children {
-        createFunctionParameterSyntax(for: child)
+        transformParam(createFunctionParameterSyntax(for: child))
       }
 
-      FunctionParameterSyntax("trailingTrivia: Trivia? = nil")
-        .with(\.leadingTrivia, .newline)
+      transformParam(
+        FunctionParameterSyntax("trailingTrivia: Trivia? = nil")
+          .with(\.leadingTrivia, .newline)
+      )
     }
 
     return """
-      public init(
+      \(raw: stub)(
       \(params)
       )
       """

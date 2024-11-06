@@ -1216,9 +1216,9 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
   ])
 }
 
-// MARK: - EnumDeclSyntax
+// MARK: - EnumDeclHeaderSyntax
 
-/// A Swift `enum` declaration.
+/// A Swift `enum` declaration header.
 ///
 /// ### Children
 /// 
@@ -1229,12 +1229,15 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
-///  - `memberBlock`: ``MemberBlockSyntax``
-public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
+///
+/// ### Contained in
+/// 
+///  - ``EnumDeclSyntax``.``EnumDeclSyntax/enumHeader``
+public struct EnumDeclHeaderSyntax: DeclGroupHeaderSyntaxProtocol, SyntaxHashable, _LeafDeclGroupHeaderSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .enumDecl else {
+    guard node.raw.kind == .enumDeclHeader else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -1249,7 +1252,6 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
   ///   - genericParameterClause: The generic parameters, if any, for this enum declaration.
   ///   - inheritanceClause: The inheritance clause describing conformances or raw values for this enum declaration.
   ///   - genericWhereClause: The `where` clause that applies to the generic parameters of this enum declaration.
-  ///   - memberBlock: The cases and other members associated with this enum declaration. Because enum extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1267,9 +1269,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
     inheritanceClause: InheritanceClauseSyntax? = nil,
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax? = nil,
-    _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-    memberBlock: MemberBlockSyntax,
-    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
@@ -1289,9 +1289,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       inheritanceClause,
       unexpectedBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause,
-      unexpectedBetweenGenericWhereClauseAndMemberBlock,
-      memberBlock,
-      unexpectedAfterMemberBlock
+      unexpectedAfterGenericWhereClause
     ))) { (arena, _) in
       let layout: [RawSyntax?] = [
         unexpectedBeforeAttributes?.raw,
@@ -1308,12 +1306,10 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
         inheritanceClause?.raw,
         unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
         genericWhereClause?.raw,
-        unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw,
-        memberBlock.raw,
-        unexpectedAfterMemberBlock?.raw
+        unexpectedAfterGenericWhereClause?.raw
       ]
       let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.enumDecl,
+        kind: SyntaxKind.enumDeclHeader,
         from: layout,
         arena: arena,
         leadingTrivia: leadingTrivia,
@@ -1328,7 +1324,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclHeaderSyntax.self)
     }
   }
 
@@ -1338,7 +1334,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclHeaderSyntax.self)
     }
   }
 
@@ -1350,7 +1346,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
   @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
-  public func addAttribute(_ element: Syntax) -> EnumDeclSyntax {
+  public func addAttribute(_ element: Syntax) -> EnumDeclHeaderSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
@@ -1366,7 +1362,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
         rawNodeArena: arena,
         allocationArena: arena
       )
-      .cast(EnumDeclSyntax.self)
+      .cast(EnumDeclHeaderSyntax.self)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
@@ -1374,7 +1370,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclHeaderSyntax.self)
     }
   }
 
@@ -1384,7 +1380,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclHeaderSyntax.self)
     }
   }
 
@@ -1396,7 +1392,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
   @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
-  public func addModifier(_ element: DeclModifierSyntax) -> EnumDeclSyntax {
+  public func addModifier(_ element: DeclModifierSyntax) -> EnumDeclHeaderSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
@@ -1412,7 +1408,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
         rawNodeArena: arena,
         allocationArena: arena
       )
-      .cast(EnumDeclSyntax.self)
+      .cast(EnumDeclHeaderSyntax.self)
   }
 
   public var unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? {
@@ -1420,7 +1416,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclHeaderSyntax.self)
     }
   }
 
@@ -1434,7 +1430,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclHeaderSyntax.self)
     }
   }
 
@@ -1443,7 +1439,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclHeaderSyntax.self)
     }
   }
 
@@ -1457,7 +1453,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 7)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclHeaderSyntax.self)
     }
   }
 
@@ -1466,7 +1462,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclHeaderSyntax.self)
     }
   }
 
@@ -1476,7 +1472,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 9)?.cast(GenericParameterClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclHeaderSyntax.self)
     }
   }
 
@@ -1485,7 +1481,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclHeaderSyntax.self)
     }
   }
 
@@ -1495,7 +1491,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 11)?.cast(InheritanceClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclHeaderSyntax.self)
     }
   }
 
@@ -1504,7 +1500,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclHeaderSyntax.self)
     }
   }
 
@@ -1514,35 +1510,16 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 13)?.cast(GenericWhereClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclHeaderSyntax.self)
     }
   }
 
-  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
+  public var unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
-    }
-  }
-
-  /// The cases and other members associated with this enum declaration. Because enum extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type.
-  public var memberBlock: MemberBlockSyntax {
-    get {
-      return Syntax(self).child(at: 15)!.cast(MemberBlockSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 15, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
-    }
-  }
-
-  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 16)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 16, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclHeaderSyntax.self)
     }
   }
 
@@ -1561,7 +1538,120 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
     \Self.inheritanceClause,
     \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause,
     \Self.genericWhereClause,
-    \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock,
+    \Self.unexpectedAfterGenericWhereClause
+  ])
+}
+
+// MARK: - EnumDeclSyntax
+
+/// A Swift `enum` declaration.
+///
+/// ### Children
+/// 
+///  - `enumHeader`: ``EnumDeclHeaderSyntax``
+///  - `memberBlock`: ``MemberBlockSyntax``
+public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
+  public let _syntaxNode: Syntax
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard node.raw.kind == .enumDecl else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - enumHeader: The header of the enum declaration.
+  ///   - memberBlock: The cases and other members associated with this enum declaration. Because enum extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeEnumHeader: UnexpectedNodesSyntax? = nil,
+    enumHeader: EnumDeclHeaderSyntax,
+    _ unexpectedBetweenEnumHeaderAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    memberBlock: MemberBlockSyntax,
+    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((SyntaxArena(), (
+      unexpectedBeforeEnumHeader,
+      enumHeader,
+      unexpectedBetweenEnumHeaderAndMemberBlock,
+      memberBlock,
+      unexpectedAfterMemberBlock
+    ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeEnumHeader?.raw,
+        enumHeader.raw,
+        unexpectedBetweenEnumHeaderAndMemberBlock?.raw,
+        memberBlock.raw,
+        unexpectedAfterMemberBlock?.raw
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.enumDecl,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeEnumHeader: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+    }
+  }
+
+  /// The header of the enum declaration.
+  public var enumHeader: EnumDeclHeaderSyntax {
+    get {
+      return Syntax(self).child(at: 1)!.cast(EnumDeclHeaderSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenEnumHeaderAndMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+    }
+  }
+
+  /// The cases and other members associated with this enum declaration. Because enum extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type.
+  public var memberBlock: MemberBlockSyntax {
+    get {
+      return Syntax(self).child(at: 3)!.cast(MemberBlockSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(EnumDeclSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([
+    \Self.unexpectedBeforeEnumHeader,
+    \Self.enumHeader,
+    \Self.unexpectedBetweenEnumHeaderAndMemberBlock,
     \Self.memberBlock,
     \Self.unexpectedAfterMemberBlock
   ])
@@ -2103,18 +2193,14 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStm
   public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeExpression, \Self.expression, \Self.unexpectedAfterExpression])
 }
 
-// MARK: - ExtensionDeclSyntax
+// MARK: - ExtensionDeclHeaderSyntax
 
-///   An `extension` declaration.
+///   An `extension` declaration header.
 /// 
 ///  ### Example
 /// 
 ///   ```swift
-///   extension String {
-///     var url: URL? {
-///       URL(string: self)
-///     }
-///   }
+///   extension String
 ///   ```
 ///
 /// ### Children
@@ -2125,12 +2211,15 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStm
 ///  - `extendedType`: ``TypeSyntax``
 ///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
-///  - `memberBlock`: ``MemberBlockSyntax``
-public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
+///
+/// ### Contained in
+/// 
+///  - ``ExtensionDeclSyntax``.``ExtensionDeclSyntax/extensionHeader``
+public struct ExtensionDeclHeaderSyntax: DeclGroupHeaderSyntaxProtocol, SyntaxHashable, _LeafDeclGroupHeaderSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
-    guard node.raw.kind == .extensionDecl else {
+    guard node.raw.kind == .extensionDeclHeader else {
       return nil
     }
     self._syntaxNode = node._syntaxNode
@@ -2144,7 +2233,6 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
   ///   - extendedType: The extended `type` for which the extension is added.
   ///   - inheritanceClause: The inheritance clause describing one or more conformances for this extension declaration.
   ///   - genericWhereClause: A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.
-  ///   - memberBlock: The members of the extension declaration. As this is an extension, the contents of this member block isn't guaranteed to be a complete list of members for this type.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2160,9 +2248,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     inheritanceClause: InheritanceClauseSyntax? = nil,
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax? = nil,
-    _ unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? = nil,
-    memberBlock: MemberBlockSyntax,
-    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
     // Extend the lifetime of all parameters so their arenas don't get destroyed
@@ -2180,9 +2266,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       inheritanceClause,
       unexpectedBetweenInheritanceClauseAndGenericWhereClause,
       genericWhereClause,
-      unexpectedBetweenGenericWhereClauseAndMemberBlock,
-      memberBlock,
-      unexpectedAfterMemberBlock
+      unexpectedAfterGenericWhereClause
     ))) { (arena, _) in
       let layout: [RawSyntax?] = [
         unexpectedBeforeAttributes?.raw,
@@ -2197,12 +2281,10 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
         inheritanceClause?.raw,
         unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw,
         genericWhereClause?.raw,
-        unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw,
-        memberBlock.raw,
-        unexpectedAfterMemberBlock?.raw
+        unexpectedAfterGenericWhereClause?.raw
       ]
       let raw = RawSyntax.makeLayout(
-        kind: SyntaxKind.extensionDecl,
+        kind: SyntaxKind.extensionDeclHeader,
         from: layout,
         arena: arena,
         leadingTrivia: leadingTrivia,
@@ -2217,7 +2299,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclHeaderSyntax.self)
     }
   }
 
@@ -2235,7 +2317,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclHeaderSyntax.self)
     }
   }
 
@@ -2247,7 +2329,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
   /// - returns: A copy of the receiver with the provided `Attribute`
   ///            appended to its `attributes` collection.
   @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
-  public func addAttribute(_ element: Syntax) -> ExtensionDeclSyntax {
+  public func addAttribute(_ element: Syntax) -> ExtensionDeclHeaderSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[1] {
@@ -2263,7 +2345,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
         rawNodeArena: arena,
         allocationArena: arena
       )
-      .cast(ExtensionDeclSyntax.self)
+      .cast(ExtensionDeclHeaderSyntax.self)
   }
 
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
@@ -2271,7 +2353,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclHeaderSyntax.self)
     }
   }
 
@@ -2281,7 +2363,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclHeaderSyntax.self)
     }
   }
 
@@ -2293,7 +2375,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
   /// - returns: A copy of the receiver with the provided `Modifier`
   ///            appended to its `modifiers` collection.
   @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
-  public func addModifier(_ element: DeclModifierSyntax) -> ExtensionDeclSyntax {
+  public func addModifier(_ element: DeclModifierSyntax) -> ExtensionDeclHeaderSyntax {
     var collection: RawSyntax
     let arena = SyntaxArena()
     if let col = raw.layoutView!.children[3] {
@@ -2309,7 +2391,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
         rawNodeArena: arena,
         allocationArena: arena
       )
-      .cast(ExtensionDeclSyntax.self)
+      .cast(ExtensionDeclHeaderSyntax.self)
   }
 
   public var unexpectedBetweenModifiersAndExtensionKeyword: UnexpectedNodesSyntax? {
@@ -2317,7 +2399,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclHeaderSyntax.self)
     }
   }
 
@@ -2331,7 +2413,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclHeaderSyntax.self)
     }
   }
 
@@ -2340,7 +2422,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclHeaderSyntax.self)
     }
   }
 
@@ -2350,7 +2432,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 7)!.cast(TypeSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclHeaderSyntax.self)
     }
   }
 
@@ -2359,7 +2441,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclHeaderSyntax.self)
     }
   }
 
@@ -2369,7 +2451,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 9)?.cast(InheritanceClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclHeaderSyntax.self)
     }
   }
 
@@ -2378,7 +2460,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclHeaderSyntax.self)
     }
   }
 
@@ -2388,35 +2470,16 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 11)?.cast(GenericWhereClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclHeaderSyntax.self)
     }
   }
 
-  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: UnexpectedNodesSyntax? {
+  public var unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
-    }
-  }
-
-  /// The members of the extension declaration. As this is an extension, the contents of this member block isn't guaranteed to be a complete list of members for this type.
-  public var memberBlock: MemberBlockSyntax {
-    get {
-      return Syntax(self).child(at: 13)!.cast(MemberBlockSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
-    }
-  }
-
-  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclHeaderSyntax.self)
     }
   }
 
@@ -2433,7 +2496,130 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     \Self.inheritanceClause,
     \Self.unexpectedBetweenInheritanceClauseAndGenericWhereClause,
     \Self.genericWhereClause,
-    \Self.unexpectedBetweenGenericWhereClauseAndMemberBlock,
+    \Self.unexpectedAfterGenericWhereClause
+  ])
+}
+
+// MARK: - ExtensionDeclSyntax
+
+///   An `extension` declaration.
+/// 
+///  ### Example
+/// 
+///   ```swift
+///   extension String {
+///     var url: URL? {
+///       URL(string: self)
+///     }
+///   }
+///   ```
+///
+/// ### Children
+/// 
+///  - `extensionHeader`: ``ExtensionDeclHeaderSyntax``
+///  - `memberBlock`: ``MemberBlockSyntax``
+public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
+  public let _syntaxNode: Syntax
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard node.raw.kind == .extensionDecl else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - extensionHeader: The header of the extension declaration.
+  ///   - memberBlock: The members of the extension declaration. As this is an extension, the contents of this member block isn't guaranteed to be a complete list of members for this type.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeExtensionHeader: UnexpectedNodesSyntax? = nil,
+    extensionHeader: ExtensionDeclHeaderSyntax,
+    _ unexpectedBetweenExtensionHeaderAndMemberBlock: UnexpectedNodesSyntax? = nil,
+    memberBlock: MemberBlockSyntax,
+    _ unexpectedAfterMemberBlock: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((SyntaxArena(), (
+      unexpectedBeforeExtensionHeader,
+      extensionHeader,
+      unexpectedBetweenExtensionHeaderAndMemberBlock,
+      memberBlock,
+      unexpectedAfterMemberBlock
+    ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeExtensionHeader?.raw,
+        extensionHeader.raw,
+        unexpectedBetweenExtensionHeaderAndMemberBlock?.raw,
+        memberBlock.raw,
+        unexpectedAfterMemberBlock?.raw
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.extensionDecl,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeExtensionHeader: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+    }
+  }
+
+  /// The header of the extension declaration.
+  public var extensionHeader: ExtensionDeclHeaderSyntax {
+    get {
+      return Syntax(self).child(at: 1)!.cast(ExtensionDeclHeaderSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenExtensionHeaderAndMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+    }
+  }
+
+  /// The members of the extension declaration. As this is an extension, the contents of this member block isn't guaranteed to be a complete list of members for this type.
+  public var memberBlock: MemberBlockSyntax {
+    get {
+      return Syntax(self).child(at: 3)!.cast(MemberBlockSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterMemberBlock: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: SyntaxArena()).cast(ExtensionDeclSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([
+    \Self.unexpectedBeforeExtensionHeader,
+    \Self.extensionHeader,
+    \Self.unexpectedBetweenExtensionHeaderAndMemberBlock,
     \Self.memberBlock,
     \Self.unexpectedAfterMemberBlock
   ])

@@ -477,14 +477,14 @@ public struct RawCatchItemSyntax: RawSyntaxNodeProtocol {
 }
 
 @_spi(RawSyntax)
-public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
+public struct RawClassDeclHeaderSyntax: RawDeclGroupHeaderSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
     return raw.layoutView!
   }
 
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .classDecl
+    return raw.kind == .classDeclHeader
   }
 
   public var raw: RawSyntax
@@ -520,13 +520,11 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
     inheritanceClause: RawInheritanceClauseSyntax?,
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    _ unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? = nil,
-    memberBlock: RawMemberBlockSyntax,
-    _ unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .classDecl, uninitializedCount: 17, arena: arena) { layout in
+      kind: .classDeclHeader, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes.raw
@@ -542,9 +540,7 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[11] = inheritanceClause?.raw
       layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
-      layout[14] = unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw
-      layout[15] = memberBlock.raw
-      layout[16] = unexpectedAfterMemberBlock?.raw
+      layout[14] = unexpectedAfterGenericWhereClause?.raw
     }
     self.init(unchecked: raw)
   }
@@ -605,16 +601,78 @@ public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawClassDeclSyntax: RawDeclSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .classDecl
+  }
+
+  public var raw: RawSyntax
+
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeClassHeader: RawUnexpectedNodesSyntax? = nil,
+    classHeader: RawClassDeclHeaderSyntax,
+    _ unexpectedBetweenClassHeaderAndMemberBlock: RawUnexpectedNodesSyntax? = nil,
+    memberBlock: RawMemberBlockSyntax,
+    _ unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared SyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .classDecl, uninitializedCount: 5, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeClassHeader?.raw
+      layout[1] = classHeader.raw
+      layout[2] = unexpectedBetweenClassHeaderAndMemberBlock?.raw
+      layout[3] = memberBlock.raw
+      layout[4] = unexpectedAfterMemberBlock?.raw
+    }
+    self.init(unchecked: raw)
+  }
+
+  public var unexpectedBeforeClassHeader: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var classHeader: RawClassDeclHeaderSyntax {
+    layoutView.children[1].map(RawClassDeclHeaderSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenClassHeaderAndMemberBlock: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var memberBlock: RawMemberBlockSyntax {
-    layoutView.children[15].map(RawMemberBlockSyntax.init(raw:))!
+    layoutView.children[3].map(RawMemberBlockSyntax.init(raw:))!
   }
 
   public var unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? {
-    layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

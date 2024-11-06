@@ -179,12 +179,11 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
-    kind: .actorDecl,
-    base: .decl,
+    kind: .actorDeclHeader,
+    base: .declGroupHeader,
     nameForDiagnostics: "actor",
     traits: [
-      "DeclGroup",
-      "NamedDecl",
+      "NamedDeclHeader",
       "WithAttributes",
       "WithGenericParameters",
       "WithModifiers",
@@ -232,6 +231,26 @@ public let DECL_NODES: [Node] = [
           "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
         isOptional: true
       ),
+    ]
+  ),
+
+  Node(
+    kind: .actorDecl,
+    base: .decl,
+    nameForDiagnostics: "actor",
+    traits: [
+      "DeclGroup",
+      "NamedDecl",
+      "WithAttributes",
+      "WithGenericParameters",
+      "WithModifiers",
+    ],
+    children: [
+      Child(
+        name: "actorHeader",
+        kind: .node(kind: .actorDeclHeader),
+        documentation: "The header of the actor declaration."
+      ),
       Child(
         name: "memberBlock",
         kind: .node(kind: .memberBlock)
@@ -239,8 +258,11 @@ public let DECL_NODES: [Node] = [
     ],
     childHistory: [
       [
+        "actorHeader": .extracted
+      ],
+      [
         "name": .renamed(from: "identifier")
-      ]
+      ],
     ]
   ),
 
@@ -333,37 +355,20 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
-    kind: .classDecl,
-    base: .decl,
+    kind: .classDeclHeader,
+    base: .declGroupHeader,
     nameForDiagnostics: "class",
     documentation: """
-      A `class` declaration
+      A `class` declaration header
 
-      An example of a class declaration is
+      An example of a class declaration header is
 
       ```swift
-      class SomeClass {
-        let someMember: String
-
-        init(someMember: String) {
-          self.someMember = someMember
-        }
-
-        func foo() {
-          print(someMember)
-        }
-
-        static func bar() -> Int {
-          return 1
-        }
-      }
+      class SomeClass
       ```
-
-      A class declaration may be declared without any members.
       """,
     traits: [
-      "DeclGroup",
-      "NamedDecl",
+      "NamedDeclHeader",
       "WithAttributes",
       "WithGenericParameters",
       "WithModifiers",
@@ -412,6 +417,51 @@ public let DECL_NODES: [Node] = [
         documentation: "The `where` clause that applies to the generic parameters of this class declaration.",
         isOptional: true
       ),
+    ]
+  ),
+
+  Node(
+    kind: .classDecl,
+    base: .decl,
+    nameForDiagnostics: "class",
+    documentation: """
+      A `class` declaration
+
+      An example of a class declaration is
+
+      ```swift
+      class SomeClass {
+        let someMember: String
+
+        init(someMember: String) {
+          self.someMember = someMember
+        }
+
+        func foo() {
+          print(someMember)
+        }
+
+        static func bar() -> Int {
+          return 1
+        }
+      }
+      ```
+
+      A class declaration may be declared without any members.
+      """,
+    traits: [
+      "DeclGroup",
+      "NamedDecl",
+      "WithAttributes",
+      "WithGenericParameters",
+      "WithModifiers",
+    ],
+    children: [
+      Child(
+        name: "classHeader",
+        kind: .node(kind: .classDeclHeader),
+        documentation: "The header of the class declaration."
+      ),
       Child(
         name: "memberBlock",
         kind: .node(kind: .memberBlock),
@@ -421,8 +471,11 @@ public let DECL_NODES: [Node] = [
     ],
     childHistory: [
       [
+        "classHeader": .extracted
+      ],
+      [
         "name": .renamed(from: "identifier")
-      ]
+      ],
     ]
   ),
 
@@ -801,13 +854,12 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
-    kind: .enumDecl,
-    base: .decl,
+    kind: .enumDeclHeader,
+    base: .declGroupHeader,
     nameForDiagnostics: "enum",
-    documentation: "A Swift `enum` declaration.",
+    documentation: "A Swift `enum` declaration header.",
     traits: [
-      "DeclGroup",
-      "NamedDecl",
+      "NamedDeclHeader",
       "WithAttributes",
       "WithGenericParameters",
       "WithModifiers",
@@ -857,6 +909,27 @@ public let DECL_NODES: [Node] = [
         documentation: "The `where` clause that applies to the generic parameters of this enum declaration.",
         isOptional: true
       ),
+    ]
+  ),
+
+  Node(
+    kind: .enumDecl,
+    base: .decl,
+    nameForDiagnostics: "enum",
+    documentation: "A Swift `enum` declaration.",
+    traits: [
+      "DeclGroup",
+      "NamedDecl",
+      "WithAttributes",
+      "WithGenericParameters",
+      "WithModifiers",
+    ],
+    children: [
+      Child(
+        name: "enumHeader",
+        kind: .node(kind: .enumDeclHeader),
+        documentation: "The header of the enum declaration."
+      ),
       Child(
         name: "memberBlock",
         kind: .node(kind: .memberBlock),
@@ -866,31 +939,29 @@ public let DECL_NODES: [Node] = [
     ],
     childHistory: [
       [
+        "enumHeader": .extracted
+      ],
+      [
         "name": .renamed(from: "identifier"),
         "genericParameterClause": .renamed(from: "genericParameters"),
-      ]
+      ],
     ]
   ),
 
   Node(
-    kind: .extensionDecl,
-    base: .decl,
+    kind: .extensionDeclHeader,
+    base: .declGroupHeader,
     nameForDiagnostics: "extension",
     documentation: """
-        An `extension` declaration.
+        An `extension` declaration header.
 
        ### Example
 
         ```swift
-        extension String {
-          var url: URL? {
-            URL(string: self)
-          }
-        }
+        extension String
         ```
       """,
     traits: [
-      "DeclGroup",
       "WithAttributes",
       "WithModifiers",
     ],
@@ -942,12 +1013,48 @@ public let DECL_NODES: [Node] = [
           "A `where` clause that places additional constraints on generic parameters like `where Element: Hashable`.",
         isOptional: true
       ),
+    ]
+  ),
+
+  Node(
+    kind: .extensionDecl,
+    base: .decl,
+    nameForDiagnostics: "extension",
+    documentation: """
+        An `extension` declaration.
+
+       ### Example
+
+        ```swift
+        extension String {
+          var url: URL? {
+            URL(string: self)
+          }
+        }
+        ```
+      """,
+    traits: [
+      "DeclGroup",
+      "WithAttributes",
+      "WithModifiers",
+    ],
+    children: [
+      Child(
+        name: "extensionHeader",
+        kind: .node(kind: .extensionDeclHeader),
+        documentation: "The header of the extension declaration."
+      ),
       Child(
         name: "memberBlock",
         kind: .node(kind: .memberBlock),
         documentation:
           "The members of the extension declaration. As this is an extension, the contents of this member block isn't guaranteed to be a complete list of members for this type."
       ),
+    ],
+    childHistory: [
+      [
+        "extensionHeader": .extracted
+      ]
     ]
   ),
 
@@ -2047,23 +2154,20 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
-    kind: .protocolDecl,
-    base: .decl,
+    kind: .protocolDeclHeader,
+    base: .declGroupHeader,
     nameForDiagnostics: "protocol",
     documentation: """
-      A `protocol` declaration
+      A `protocol` declaration header
 
-      An example of a protocol declaration is
+      An example of a protocol declaration header is
 
       ```swift
-      protocol Example {
-        var isValid: Bool { get }
-      }
+      protocol Example
       ```
       """,
     traits: [
-      "DeclGroup",
-      "NamedDecl",
+      "NamedDeclHeader",
       "WithAttributes",
       "WithModifiers",
     ],
@@ -2111,6 +2215,36 @@ public let DECL_NODES: [Node] = [
         documentation: "The `where` clause that applies to the generic parameters of this protocol declaration.",
         isOptional: true
       ),
+    ]
+  ),
+
+  Node(
+    kind: .protocolDecl,
+    base: .decl,
+    nameForDiagnostics: "protocol",
+    documentation: """
+      A `protocol` declaration
+
+      An example of a protocol declaration is
+
+      ```swift
+      protocol Example {
+        var isValid: Bool { get }
+      }
+      ```
+      """,
+    traits: [
+      "DeclGroup",
+      "NamedDecl",
+      "WithAttributes",
+      "WithModifiers",
+    ],
+    children: [
+      Child(
+        name: "protocolHeader",
+        kind: .node(kind: .protocolDeclHeader),
+        documentation: "The header of the protocol."
+      ),
       Child(
         name: "memberBlock",
         kind: .node(kind: .memberBlock),
@@ -2119,8 +2253,11 @@ public let DECL_NODES: [Node] = [
     ],
     childHistory: [
       [
+        "protocolHeader": .extracted
+      ],
+      [
         "name": .renamed(from: "identifier")
-      ]
+      ],
     ]
   ),
 
@@ -2174,6 +2311,89 @@ public let DECL_NODES: [Node] = [
       [
         "endOfFileToken": .renamed(from: "eofToken")
       ]
+    ]
+  ),
+
+  Node(
+    kind: .structDeclHeader,
+    base: .declGroupHeader,
+    nameForDiagnostics: "struct",
+    documentation: """
+      A `struct` declaration header
+
+      An example of a struct declaration header is
+
+      ```swift
+      struct SomeStruct
+      ```
+
+      A struct declaration may include a type inheritance clause listing
+      one or more protocols the struct conforms to. The example below uses
+      Hashable and Equatable protocols.
+
+      ```swift
+      struct AdvancedStruct: Hashable, Equatable
+      ```
+
+      A struct declaration may include a generic parameter clause as well
+      as a generic where clause.
+
+      ```swift
+      struct Stack<Element>
+      ```
+      """,
+    traits: [
+      "NamedDeclHeader",
+      "WithAttributes",
+      "WithGenericParameters",
+      "WithModifiers",
+    ],
+    children: [
+      Child(
+        name: "attributes",
+        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        nameForDiagnostics: "attributes",
+        documentation: "Attributes that are attached to the struct declaration."
+      ),
+      Child(
+        name: "modifiers",
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        nameForDiagnostics: "modifiers",
+        documentation: "Modifiers like `public` that are attached to the struct declaration."
+      ),
+      Child(
+        name: "structKeyword",
+        kind: .token(choices: [.keyword(.struct)]),
+        documentation: "The `struct` keyword for this declaration."
+      ),
+      Child(
+        name: "name",
+        kind: .token(choices: [.token(.identifier)]),
+        documentation:
+          "Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it."
+      ),
+      Child(
+        name: "genericParameterClause",
+        kind: .node(kind: .genericParameterClause),
+        nameForDiagnostics: "generic parameter clause",
+        documentation: "The generic parameters, if any, of the struct declaration.",
+        isOptional: true
+      ),
+      Child(
+        name: "inheritanceClause",
+        kind: .node(kind: .inheritanceClause),
+        nameForDiagnostics: "inheritance clause",
+        documentation:
+          "The struct declaration inheritance clause describing one or more conformances for this struct declaration.",
+        isOptional: true
+      ),
+      Child(
+        name: "genericWhereClause",
+        kind: .node(kind: .genericWhereClause),
+        nameForDiagnostics: "generic where clause",
+        documentation: "The `where` clause that applies to the generic parameters of this struct declaration.",
+        isOptional: true
+      ),
     ]
   ),
 
@@ -2249,61 +2469,24 @@ public let DECL_NODES: [Node] = [
     ],
     children: [
       Child(
-        name: "attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
-        nameForDiagnostics: "attributes",
-        documentation: "Attributes that are attached to the struct declaration."
-      ),
-      Child(
-        name: "modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
-        nameForDiagnostics: "modifiers",
-        documentation: "Modifiers like `public` that are attached to the struct declaration."
-      ),
-      Child(
-        name: "structKeyword",
-        kind: .token(choices: [.keyword(.struct)]),
-        documentation: "The `struct` keyword for this declaration."
-      ),
-      Child(
-        name: "name",
-        kind: .token(choices: [.token(.identifier)]),
+        name: "structHeader",
+        kind: .node(kind: .structDeclHeader),
         documentation:
           "Declares the name of this struct. If the name matches a reserved keyword use backticks to escape it."
       ),
       Child(
-        name: "genericParameterClause",
-        kind: .node(kind: .genericParameterClause),
-        nameForDiagnostics: "generic parameter clause",
-        documentation: "The generic parameters, if any, of the struct declaration.",
-        isOptional: true
-      ),
-      Child(
-        name: "inheritanceClause",
-        kind: .node(kind: .inheritanceClause),
-        nameForDiagnostics: "inheritance clause",
-        documentation:
-          "The struct declaration inheritance clause describing one or more conformances for this struct declaration.",
-        isOptional: true
-      ),
-      Child(
-        name: "genericWhereClause",
-        kind: .node(kind: .genericWhereClause),
-        nameForDiagnostics: "generic where clause",
-        documentation: "The `where` clause that applies to the generic parameters of this struct declaration.",
-        isOptional: true
-      ),
-      Child(
         name: "memberBlock",
         kind: .node(kind: .memberBlock),
-        documentation:
-          "The members of the struct declaration. Because struct extension declarations may declare additional members the contents of this member block isn't guaranteed to be a complete list of members for this type."
+        documentation: "The header of the struct declaration."
       ),
     ],
     childHistory: [
       [
+        "structHeader": .extracted
+      ],
+      [
         "name": .renamed(from: "identifier")
-      ]
+      ],
     ]
   ),
 

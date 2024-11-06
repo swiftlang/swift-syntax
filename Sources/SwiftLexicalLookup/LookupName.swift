@@ -110,7 +110,7 @@ import SwiftSyntax
     case .Self(let declSyntax):
       switch Syntax(declSyntax).as(SyntaxEnum.self) {
       case .protocolDecl(let protocolDecl):
-        return protocolDecl.name.positionAfterSkippingLeadingTrivia
+        return protocolDecl.protocolHeader.name.positionAfterSkippingLeadingTrivia
       default:
         return declSyntax.positionAfterSkippingLeadingTrivia
       }

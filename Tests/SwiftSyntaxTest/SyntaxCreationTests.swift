@@ -23,8 +23,10 @@ fileprivate func cannedStructDecl() -> StructDeclSyntax {
     rightBrace: rBrace
   )
   return StructDeclSyntax(
-    structKeyword: structKW,
-    name: fooID,
+    structHeader: .init(
+      structKeyword: structKW,
+      name: fooID
+    ),
     memberBlock: memberBlock
   )
 }
@@ -46,7 +48,7 @@ class SyntaxCreationTests: XCTestCase {
     let forType = TokenSyntax.identifier("`for`", trailingTrivia: .space)
     let newBrace = TokenSyntax.rightBraceToken(leadingTrivia: .newlines(2))
 
-    let renamed = structDecl.with(\.name, forType)
+    let renamed = structDecl.with(\.structHeader.name, forType)
       .with(
         \.memberBlock,
         structDecl.memberBlock

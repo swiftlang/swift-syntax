@@ -15,11 +15,16 @@
 /// Enum to exhaustively switch over all different syntax nodes.
 public enum SyntaxEnum: Sendable {
   case token(TokenSyntax)
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case abiAttributeArguments(ABIAttributeArgumentsSyntax)
   case accessorBlock(AccessorBlockSyntax)
   case accessorDeclList(AccessorDeclListSyntax)
   case accessorDecl(AccessorDeclSyntax)
   case accessorEffectSpecifiers(AccessorEffectSpecifiersSyntax)
   case accessorParameters(AccessorParametersSyntax)
+  case actorDeclHeader(ActorDeclHeaderSyntax)
   case actorDecl(ActorDeclSyntax)
   case arrayElementList(ArrayElementListSyntax)
   case arrayElement(ArrayElementSyntax)
@@ -48,6 +53,7 @@ public enum SyntaxEnum: Sendable {
   case catchClause(CatchClauseSyntax)
   case catchItemList(CatchItemListSyntax)
   case catchItem(CatchItemSyntax)
+  case classDeclHeader(ClassDeclHeaderSyntax)
   case classDecl(ClassDeclSyntax)
   case classRestrictionType(ClassRestrictionTypeSyntax)
   case closureCaptureClause(ClosureCaptureClauseSyntax)
@@ -116,12 +122,14 @@ public enum SyntaxEnum: Sendable {
   case enumCaseParameterClause(EnumCaseParameterClauseSyntax)
   case enumCaseParameterList(EnumCaseParameterListSyntax)
   case enumCaseParameter(EnumCaseParameterSyntax)
+  case enumDeclHeader(EnumDeclHeaderSyntax)
   case enumDecl(EnumDeclSyntax)
   case exposeAttributeArguments(ExposeAttributeArgumentsSyntax)
   case exprList(ExprListSyntax)
   case expressionPattern(ExpressionPatternSyntax)
   case expressionSegment(ExpressionSegmentSyntax)
   case expressionStmt(ExpressionStmtSyntax)
+  case extensionDeclHeader(ExtensionDeclHeaderSyntax)
   case extensionDecl(ExtensionDeclSyntax)
   case fallThroughStmt(FallThroughStmtSyntax)
   case floatLiteralExpr(FloatLiteralExprSyntax)
@@ -200,6 +208,7 @@ public enum SyntaxEnum: Sendable {
   case memberBlock(MemberBlockSyntax)
   case memberType(MemberTypeSyntax)
   case metatypeType(MetatypeTypeSyntax)
+  case missingDeclHeader(MissingDeclHeaderSyntax)
   case missingDecl(MissingDeclSyntax)
   case missingExpr(MissingExprSyntax)
   case missingPattern(MissingPatternSyntax)
@@ -244,6 +253,7 @@ public enum SyntaxEnum: Sendable {
   case primaryAssociatedTypeClause(PrimaryAssociatedTypeClauseSyntax)
   case primaryAssociatedTypeList(PrimaryAssociatedTypeListSyntax)
   case primaryAssociatedType(PrimaryAssociatedTypeSyntax)
+  case protocolDeclHeader(ProtocolDeclHeaderSyntax)
   case protocolDecl(ProtocolDeclSyntax)
   case regexLiteralExpr(RegexLiteralExprSyntax)
   case repeatStmt(RepeatStmtSyntax)
@@ -262,6 +272,7 @@ public enum SyntaxEnum: Sendable {
   case stringLiteralExpr(StringLiteralExprSyntax)
   case stringLiteralSegmentList(StringLiteralSegmentListSyntax)
   case stringSegment(StringSegmentSyntax)
+  case structDeclHeader(StructDeclHeaderSyntax)
   case structDecl(StructDeclSyntax)
   case subscriptCallExpr(SubscriptCallExprSyntax)
   case subscriptDecl(SubscriptDeclSyntax)
@@ -321,6 +332,8 @@ extension Syntax {
     switch raw.kind {
     case .token:
       return .token(TokenSyntax(self)!)
+    case .abiAttributeArguments:
+      return .abiAttributeArguments(ABIAttributeArgumentsSyntax(self)!)
     case .accessorBlock:
       return .accessorBlock(AccessorBlockSyntax(self)!)
     case .accessorDeclList:
@@ -331,6 +344,8 @@ extension Syntax {
       return .accessorEffectSpecifiers(AccessorEffectSpecifiersSyntax(self)!)
     case .accessorParameters:
       return .accessorParameters(AccessorParametersSyntax(self)!)
+    case .actorDeclHeader:
+      return .actorDeclHeader(ActorDeclHeaderSyntax(self)!)
     case .actorDecl:
       return .actorDecl(ActorDeclSyntax(self)!)
     case .arrayElementList:
@@ -387,6 +402,8 @@ extension Syntax {
       return .catchItemList(CatchItemListSyntax(self)!)
     case .catchItem:
       return .catchItem(CatchItemSyntax(self)!)
+    case .classDeclHeader:
+      return .classDeclHeader(ClassDeclHeaderSyntax(self)!)
     case .classDecl:
       return .classDecl(ClassDeclSyntax(self)!)
     case .classRestrictionType:
@@ -517,6 +534,8 @@ extension Syntax {
       return .enumCaseParameterList(EnumCaseParameterListSyntax(self)!)
     case .enumCaseParameter:
       return .enumCaseParameter(EnumCaseParameterSyntax(self)!)
+    case .enumDeclHeader:
+      return .enumDeclHeader(EnumDeclHeaderSyntax(self)!)
     case .enumDecl:
       return .enumDecl(EnumDeclSyntax(self)!)
     case .exposeAttributeArguments:
@@ -529,6 +548,8 @@ extension Syntax {
       return .expressionSegment(ExpressionSegmentSyntax(self)!)
     case .expressionStmt:
       return .expressionStmt(ExpressionStmtSyntax(self)!)
+    case .extensionDeclHeader:
+      return .extensionDeclHeader(ExtensionDeclHeaderSyntax(self)!)
     case .extensionDecl:
       return .extensionDecl(ExtensionDeclSyntax(self)!)
     case .fallThroughStmt:
@@ -667,6 +688,8 @@ extension Syntax {
       return .memberType(MemberTypeSyntax(self)!)
     case .metatypeType:
       return .metatypeType(MetatypeTypeSyntax(self)!)
+    case .missingDeclHeader:
+      return .missingDeclHeader(MissingDeclHeaderSyntax(self)!)
     case .missingDecl:
       return .missingDecl(MissingDeclSyntax(self)!)
     case .missingExpr:
@@ -755,6 +778,8 @@ extension Syntax {
       return .primaryAssociatedTypeList(PrimaryAssociatedTypeListSyntax(self)!)
     case .primaryAssociatedType:
       return .primaryAssociatedType(PrimaryAssociatedTypeSyntax(self)!)
+    case .protocolDeclHeader:
+      return .protocolDeclHeader(ProtocolDeclHeaderSyntax(self)!)
     case .protocolDecl:
       return .protocolDecl(ProtocolDeclSyntax(self)!)
     case .regexLiteralExpr:
@@ -791,6 +816,8 @@ extension Syntax {
       return .stringLiteralSegmentList(StringLiteralSegmentListSyntax(self)!)
     case .stringSegment:
       return .stringSegment(StringSegmentSyntax(self)!)
+    case .structDeclHeader:
+      return .structDeclHeader(StructDeclHeaderSyntax(self)!)
     case .structDecl:
       return .structDecl(StructDeclSyntax(self)!)
     case .subscriptCallExpr:
@@ -887,6 +914,41 @@ extension Syntax {
       return .yieldedExpression(YieldedExpressionSyntax(self)!)
     case .yieldedExpressionsClause:
       return .yieldedExpressionsClause(YieldedExpressionsClauseSyntax(self)!)
+    }
+  }
+}
+
+/// Enum to exhaustively switch over all different DeclGroupHeader syntax nodes.
+public enum DeclGroupHeaderSyntaxEnum {
+  case actorDeclHeader(ActorDeclHeaderSyntax)
+  case classDeclHeader(ClassDeclHeaderSyntax)
+  case enumDeclHeader(EnumDeclHeaderSyntax)
+  case extensionDeclHeader(ExtensionDeclHeaderSyntax)
+  case missingDeclHeader(MissingDeclHeaderSyntax)
+  case protocolDeclHeader(ProtocolDeclHeaderSyntax)
+  case structDeclHeader(StructDeclHeaderSyntax)
+}
+
+extension DeclGroupHeaderSyntax {
+  /// Get an enum that can be used to exhaustively switch over all DeclGroupHeader syntax nodes.
+  public func `as`(_: DeclGroupHeaderSyntaxEnum.Type) -> DeclGroupHeaderSyntaxEnum {
+    switch raw.kind {
+    case .actorDeclHeader:
+      return .actorDeclHeader(ActorDeclHeaderSyntax(self)!)
+    case .classDeclHeader:
+      return .classDeclHeader(ClassDeclHeaderSyntax(self)!)
+    case .enumDeclHeader:
+      return .enumDeclHeader(EnumDeclHeaderSyntax(self)!)
+    case .extensionDeclHeader:
+      return .extensionDeclHeader(ExtensionDeclHeaderSyntax(self)!)
+    case .missingDeclHeader:
+      return .missingDeclHeader(MissingDeclHeaderSyntax(self)!)
+    case .protocolDeclHeader:
+      return .protocolDeclHeader(ProtocolDeclHeaderSyntax(self)!)
+    case .structDeclHeader:
+      return .structDeclHeader(StructDeclHeaderSyntax(self)!)
+    default:
+      preconditionFailure("unknown DeclGroupHeader syntax kind")
     }
   }
 }

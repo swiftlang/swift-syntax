@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-extension ActorDeclSyntax {
+extension ActorDeclHeaderSyntax {
   public var introducer: TokenSyntax {
     get {
       return actorKeyword
@@ -21,7 +21,35 @@ extension ActorDeclSyntax {
   }
 }
 
-extension ClassDeclSyntax {
+extension ActorDeclSyntax {
+  public var header: DeclGroupHeaderSyntax {
+    get {
+      return DeclGroupHeaderSyntax(actorHeader)
+    }
+    set {
+      actorHeader = newValue.cast(ActorDeclHeaderSyntax.self)
+    }
+  }
+
+  public init?(
+    leadingTrivia: Trivia? = nil,
+    header: some DeclGroupHeaderSyntaxProtocol,
+    memberBlock: MemberBlockSyntax,
+    trailingTrivia: Trivia? = nil
+  ) {
+    guard let actorHeader = header.as(ActorDeclHeaderSyntax.self) else {
+      return nil
+    }
+    self.init(
+      leadingTrivia: leadingTrivia,
+      actorHeader: actorHeader,
+      memberBlock: memberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension ClassDeclHeaderSyntax {
   public var introducer: TokenSyntax {
     get {
       return classKeyword
@@ -32,7 +60,35 @@ extension ClassDeclSyntax {
   }
 }
 
-extension EnumDeclSyntax {
+extension ClassDeclSyntax {
+  public var header: DeclGroupHeaderSyntax {
+    get {
+      return DeclGroupHeaderSyntax(classHeader)
+    }
+    set {
+      classHeader = newValue.cast(ClassDeclHeaderSyntax.self)
+    }
+  }
+
+  public init?(
+    leadingTrivia: Trivia? = nil,
+    header: some DeclGroupHeaderSyntaxProtocol,
+    memberBlock: MemberBlockSyntax,
+    trailingTrivia: Trivia? = nil
+  ) {
+    guard let classHeader = header.as(ClassDeclHeaderSyntax.self) else {
+      return nil
+    }
+    self.init(
+      leadingTrivia: leadingTrivia,
+      classHeader: classHeader,
+      memberBlock: memberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension EnumDeclHeaderSyntax {
   public var introducer: TokenSyntax {
     get {
       return enumKeyword
@@ -43,7 +99,35 @@ extension EnumDeclSyntax {
   }
 }
 
-extension ExtensionDeclSyntax {
+extension EnumDeclSyntax {
+  public var header: DeclGroupHeaderSyntax {
+    get {
+      return DeclGroupHeaderSyntax(enumHeader)
+    }
+    set {
+      enumHeader = newValue.cast(EnumDeclHeaderSyntax.self)
+    }
+  }
+
+  public init?(
+    leadingTrivia: Trivia? = nil,
+    header: some DeclGroupHeaderSyntaxProtocol,
+    memberBlock: MemberBlockSyntax,
+    trailingTrivia: Trivia? = nil
+  ) {
+    guard let enumHeader = header.as(EnumDeclHeaderSyntax.self) else {
+      return nil
+    }
+    self.init(
+      leadingTrivia: leadingTrivia,
+      enumHeader: enumHeader,
+      memberBlock: memberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension ExtensionDeclHeaderSyntax {
   public var introducer: TokenSyntax {
     get {
       return extensionKeyword
@@ -54,7 +138,46 @@ extension ExtensionDeclSyntax {
   }
 }
 
-extension ProtocolDeclSyntax {
+extension ExtensionDeclSyntax {
+  public var header: DeclGroupHeaderSyntax {
+    get {
+      return DeclGroupHeaderSyntax(extensionHeader)
+    }
+    set {
+      extensionHeader = newValue.cast(ExtensionDeclHeaderSyntax.self)
+    }
+  }
+
+  public init?(
+    leadingTrivia: Trivia? = nil,
+    header: some DeclGroupHeaderSyntaxProtocol,
+    memberBlock: MemberBlockSyntax,
+    trailingTrivia: Trivia? = nil
+  ) {
+    guard let extensionHeader = header.as(ExtensionDeclHeaderSyntax.self) else {
+      return nil
+    }
+    self.init(
+      leadingTrivia: leadingTrivia,
+      extensionHeader: extensionHeader,
+      memberBlock: memberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension MissingDeclHeaderSyntax {
+  public var introducer: TokenSyntax {
+    get {
+      return placeholder
+    }
+    set {
+      placeholder = newValue
+    }
+  }
+}
+
+extension ProtocolDeclHeaderSyntax {
   public var introducer: TokenSyntax {
     get {
       return protocolKeyword
@@ -65,7 +188,35 @@ extension ProtocolDeclSyntax {
   }
 }
 
-extension StructDeclSyntax {
+extension ProtocolDeclSyntax {
+  public var header: DeclGroupHeaderSyntax {
+    get {
+      return DeclGroupHeaderSyntax(protocolHeader)
+    }
+    set {
+      protocolHeader = newValue.cast(ProtocolDeclHeaderSyntax.self)
+    }
+  }
+
+  public init?(
+    leadingTrivia: Trivia? = nil,
+    header: some DeclGroupHeaderSyntaxProtocol,
+    memberBlock: MemberBlockSyntax,
+    trailingTrivia: Trivia? = nil
+  ) {
+    guard let protocolHeader = header.as(ProtocolDeclHeaderSyntax.self) else {
+      return nil
+    }
+    self.init(
+      leadingTrivia: leadingTrivia,
+      protocolHeader: protocolHeader,
+      memberBlock: memberBlock,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension StructDeclHeaderSyntax {
   public var introducer: TokenSyntax {
     get {
       return structKeyword
@@ -73,6 +224,34 @@ extension StructDeclSyntax {
     set {
       structKeyword = newValue
     }
+  }
+}
+
+extension StructDeclSyntax {
+  public var header: DeclGroupHeaderSyntax {
+    get {
+      return DeclGroupHeaderSyntax(structHeader)
+    }
+    set {
+      structHeader = newValue.cast(StructDeclHeaderSyntax.self)
+    }
+  }
+
+  public init?(
+    leadingTrivia: Trivia? = nil,
+    header: some DeclGroupHeaderSyntaxProtocol,
+    memberBlock: MemberBlockSyntax,
+    trailingTrivia: Trivia? = nil
+  ) {
+    guard let structHeader = header.as(StructDeclHeaderSyntax.self) else {
+      return nil
+    }
+    self.init(
+      leadingTrivia: leadingTrivia,
+      structHeader: structHeader,
+      memberBlock: memberBlock,
+      trailingTrivia: trailingTrivia
+    )
   }
 }
 

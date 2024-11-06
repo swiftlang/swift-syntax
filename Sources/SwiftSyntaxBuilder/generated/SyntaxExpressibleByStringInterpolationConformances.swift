@@ -60,6 +60,12 @@ extension CodeBlockSyntax: SyntaxExpressibleByStringInterpolation {}
 extension CodeBlockSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
+extension DeclGroupHeaderSyntax: SyntaxExpressibleByStringInterpolation {}
+
+#if compiler(>=6)
+extension DeclGroupHeaderSyntax: Swift.ExpressibleByStringInterpolation {}
+#endif
+
 extension DeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)

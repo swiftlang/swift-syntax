@@ -12,6 +12,143 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if compiler(>=5.8)
+@_spi(ExperimentalLanguageFeatures)
+#endif
+@_spi(RawSyntax)
+public struct RawABIAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
+  public enum Provider: RawSyntaxNodeProtocol {
+    case associatedType(RawAssociatedTypeDeclSyntax)
+    case declGroup(RawDeclGroupHeaderSyntax)
+    case deinitializer(RawDeinitializerDeclSyntax)
+    case enumCase(RawEnumCaseDeclSyntax)
+    case function(RawFunctionDeclSyntax)
+    case initializer(RawInitializerDeclSyntax)
+    case `subscript`(RawSubscriptDeclSyntax)
+    case typeAlias(RawTypeAliasDeclSyntax)
+    case variable(RawVariableDeclSyntax)
+    case unsupported(RawDeclSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      RawAssociatedTypeDeclSyntax.isKindOf(raw) || RawDeclGroupHeaderSyntax.isKindOf(raw) || RawDeinitializerDeclSyntax.isKindOf(raw) || RawEnumCaseDeclSyntax.isKindOf(raw) || RawFunctionDeclSyntax.isKindOf(raw) || RawInitializerDeclSyntax.isKindOf(raw) || RawSubscriptDeclSyntax.isKindOf(raw) || RawTypeAliasDeclSyntax.isKindOf(raw) || RawVariableDeclSyntax.isKindOf(raw) || RawDeclSyntax.isKindOf(raw)
+    }
+
+    public var raw: RawSyntax {
+      switch self {
+      case .associatedType(let node):
+        return node.raw
+      case .declGroup(let node):
+        return node.raw
+      case .deinitializer(let node):
+        return node.raw
+      case .enumCase(let node):
+        return node.raw
+      case .function(let node):
+        return node.raw
+      case .initializer(let node):
+        return node.raw
+      case .subscript(let node):
+        return node.raw
+      case .typeAlias(let node):
+        return node.raw
+      case .variable(let node):
+        return node.raw
+      case .unsupported(let node):
+        return node.raw
+      }
+    }
+
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawAssociatedTypeDeclSyntax.self) {
+        self = .associatedType(node)
+      } else if let node = node.as(RawDeclGroupHeaderSyntax.self) {
+        self = .declGroup(node)
+      } else if let node = node.as(RawDeinitializerDeclSyntax.self) {
+        self = .deinitializer(node)
+      } else if let node = node.as(RawEnumCaseDeclSyntax.self) {
+        self = .enumCase(node)
+      } else if let node = node.as(RawFunctionDeclSyntax.self) {
+        self = .function(node)
+      } else if let node = node.as(RawInitializerDeclSyntax.self) {
+        self = .initializer(node)
+      } else if let node = node.as(RawSubscriptDeclSyntax.self) {
+        self = .subscript(node)
+      } else if let node = node.as(RawTypeAliasDeclSyntax.self) {
+        self = .typeAlias(node)
+      } else if let node = node.as(RawVariableDeclSyntax.self) {
+        self = .variable(node)
+      } else if let node = node.as(RawDeclSyntax.self) {
+        self = .unsupported(node)
+      } else {
+        return nil
+      }
+    }
+
+    public init(declGroup: some RawDeclGroupHeaderSyntaxNodeProtocol) {
+      self = .declGroup(RawDeclGroupHeaderSyntax(declGroup))
+    }
+
+    public init(unsupported: some RawDeclSyntaxNodeProtocol) {
+      self = .unsupported(RawDeclSyntax(unsupported))
+    }
+  }
+
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .abiAttributeArguments
+  }
+
+  public var raw: RawSyntax
+
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeProvider: RawUnexpectedNodesSyntax? = nil,
+    provider: Provider,
+    _ unexpectedAfterProvider: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared SyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .abiAttributeArguments, uninitializedCount: 3, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeProvider?.raw
+      layout[1] = provider.raw
+      layout[2] = unexpectedAfterProvider?.raw
+    }
+    self.init(unchecked: raw)
+  }
+
+  public var unexpectedBeforeProvider: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var provider: RawSyntax {
+    layoutView.children[1]!
+  }
+
+  public var unexpectedAfterProvider: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
 @_spi(RawSyntax)
 public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol {
   public enum Accessors: RawSyntaxNodeProtocol {
@@ -443,14 +580,14 @@ public struct RawAccessorParametersSyntax: RawSyntaxNodeProtocol {
 }
 
 @_spi(RawSyntax)
-public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
+public struct RawActorDeclHeaderSyntax: RawDeclGroupHeaderSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
     return raw.layoutView!
   }
 
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .actorDecl
+    return raw.kind == .actorDeclHeader
   }
 
   public var raw: RawSyntax
@@ -486,13 +623,11 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
     inheritanceClause: RawInheritanceClauseSyntax?,
     _ unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
-    _ unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? = nil,
-    memberBlock: RawMemberBlockSyntax,
-    _ unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .actorDecl, uninitializedCount: 17, arena: arena) { layout in
+      kind: .actorDeclHeader, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes.raw
@@ -508,9 +643,7 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[11] = inheritanceClause?.raw
       layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
       layout[13] = genericWhereClause?.raw
-      layout[14] = unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw
-      layout[15] = memberBlock.raw
-      layout[16] = unexpectedAfterMemberBlock?.raw
+      layout[14] = unexpectedAfterGenericWhereClause?.raw
     }
     self.init(unchecked: raw)
   }
@@ -571,16 +704,78 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? {
+  public var unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .actorDecl
+  }
+
+  public var raw: RawSyntax
+
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeActorHeader: RawUnexpectedNodesSyntax? = nil,
+    actorHeader: RawActorDeclHeaderSyntax,
+    _ unexpectedBetweenActorHeaderAndMemberBlock: RawUnexpectedNodesSyntax? = nil,
+    memberBlock: RawMemberBlockSyntax,
+    _ unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared SyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .actorDecl, uninitializedCount: 5, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeActorHeader?.raw
+      layout[1] = actorHeader.raw
+      layout[2] = unexpectedBetweenActorHeaderAndMemberBlock?.raw
+      layout[3] = memberBlock.raw
+      layout[4] = unexpectedAfterMemberBlock?.raw
+    }
+    self.init(unchecked: raw)
+  }
+
+  public var unexpectedBeforeActorHeader: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var actorHeader: RawActorDeclHeaderSyntax {
+    layoutView.children[1].map(RawActorDeclHeaderSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenActorHeaderAndMemberBlock: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
   public var memberBlock: RawMemberBlockSyntax {
-    layoutView.children[15].map(RawMemberBlockSyntax.init(raw:))!
+    layoutView.children[3].map(RawMemberBlockSyntax.init(raw:))!
   }
 
   public var unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? {
-    layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 
@@ -1322,9 +1517,12 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     case unavailableFromAsyncArguments(RawUnavailableFromAsyncAttributeArgumentsSyntax)
     case effectsArguments(RawEffectsAttributeArgumentListSyntax)
     case documentationArguments(RawDocumentationAttributeArgumentListSyntax)
+    /// - Note: Requires experimental feature `abiAttribute`.
+    @_spi(ExperimentalLanguageFeatures)
+    case abiArguments(RawABIAttributeArgumentsSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      RawLabeledExprListSyntax.isKindOf(raw) || RawTokenSyntax.isKindOf(raw) || RawStringLiteralExprSyntax.isKindOf(raw) || RawAvailabilityArgumentListSyntax.isKindOf(raw) || RawSpecializeAttributeArgumentListSyntax.isKindOf(raw) || RawObjCSelectorPieceListSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeAttributeArgumentsSyntax.isKindOf(raw) || RawBackDeployedAttributeArgumentsSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawExposeAttributeArgumentsSyntax.isKindOf(raw) || RawOriginallyDefinedInAttributeArgumentsSyntax.isKindOf(raw) || RawUnderscorePrivateAttributeArgumentsSyntax.isKindOf(raw) || RawDynamicReplacementAttributeArgumentsSyntax.isKindOf(raw) || RawUnavailableFromAsyncAttributeArgumentsSyntax.isKindOf(raw) || RawEffectsAttributeArgumentListSyntax.isKindOf(raw) || RawDocumentationAttributeArgumentListSyntax.isKindOf(raw)
+      RawLabeledExprListSyntax.isKindOf(raw) || RawTokenSyntax.isKindOf(raw) || RawStringLiteralExprSyntax.isKindOf(raw) || RawAvailabilityArgumentListSyntax.isKindOf(raw) || RawSpecializeAttributeArgumentListSyntax.isKindOf(raw) || RawObjCSelectorPieceListSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeAttributeArgumentsSyntax.isKindOf(raw) || RawBackDeployedAttributeArgumentsSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawExposeAttributeArgumentsSyntax.isKindOf(raw) || RawOriginallyDefinedInAttributeArgumentsSyntax.isKindOf(raw) || RawUnderscorePrivateAttributeArgumentsSyntax.isKindOf(raw) || RawDynamicReplacementAttributeArgumentsSyntax.isKindOf(raw) || RawUnavailableFromAsyncAttributeArgumentsSyntax.isKindOf(raw) || RawEffectsAttributeArgumentListSyntax.isKindOf(raw) || RawDocumentationAttributeArgumentListSyntax.isKindOf(raw) || RawABIAttributeArgumentsSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
@@ -1368,6 +1566,8 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
       case .effectsArguments(let node):
         return node.raw
       case .documentationArguments(let node):
+        return node.raw
+      case .abiArguments(let node):
         return node.raw
       }
     }
@@ -1413,6 +1613,8 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
         self = .effectsArguments(node)
       } else if let node = node.as(RawDocumentationAttributeArgumentListSyntax.self) {
         self = .documentationArguments(node)
+      } else if let node = node.as(RawABIAttributeArgumentsSyntax.self) {
+        self = .abiArguments(node)
       } else {
         return nil
       }

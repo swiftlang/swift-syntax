@@ -110,7 +110,7 @@ extension TokenConsumer {
       declStartKeyword = subparser.at(anyIn: DeclarationKeyword.self)?.0
     }
     switch declStartKeyword {
-    case .lhs(.actor):
+    case .group(.actor):
       // actor Foo {}
       if subparser.peek().rawTokenKind == .identifier {
         return true
@@ -123,16 +123,16 @@ extension TokenConsumer {
         lookahead.consumeAnyToken()
       } while lookahead.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl)
       return lookahead.at(.identifier)
-    case .lhs(.case):
+    case .simple(.case):
       // When 'case' appears inside a function, it's probably a switch
       // case, not an enum case declaration.
       return false
-    case .lhs(.`init`):
+    case .simple(.`init`):
       return allowInitDecl
-    case .lhs(.macro):
+    case .simple(.macro):
       // macro Foo ...
       return subparser.peek().rawTokenKind == .identifier
-    case .lhs(.pound):
+    case .simple(.pound):
       // Force parsing '#<identifier>' after attributes as a macro expansion decl.
       if hasAttribute || hasModifier {
         return true
@@ -168,11 +168,37 @@ extension Parser {
     }
   }
 
+  enum DeclarationParseContext {
+    case topLevel
+    case memberDeclList
+    case argumentList
+
+    var requiresDecl: Bool {
+      switch self {
+      case .topLevel:
+        return false
+      case .memberDeclList, .argumentList:
+        return true
+      }
+    }
+
+    var recoveryPrecedence: TokenPrecedence? {
+      switch self {
+      case .topLevel:
+        return nil
+      case .memberDeclList:
+        return .closingBrace
+      case .argumentList:
+        return .weakBracketed(closingDelimiter: .rightParen)
+      }
+    }
+  }
+
   /// Parse a declaration.
   ///
   /// If `inMemberDeclList` is `true`, we know that the next item must be a
   /// declaration and thus start with a keyword. This allows further recovery.
-  mutating func parseDeclaration(inMemberDeclList: Bool = false) -> RawDeclSyntax {
+  mutating func parseDeclaration(in context: DeclarationParseContext = .topLevel) -> RawDeclSyntax {
     // If we are at a `#if` of attributes, the `#if` directive should be
     // parsed when we're parsing the attributes.
     if self.at(.poundIf) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
@@ -215,70 +241,58 @@ extension Parser {
     } else if atFunctionDeclarationWithoutFuncKeyword() {
       // We aren't at a declaration keyword and it looks like we are at a function
       // declaration. Parse a function declaration.
-      recoveryResult = (.lhs(.func), .missing(.keyword(.func)))
+      recoveryResult = (.simple(.func), .missing(.keyword(.func)))
     } else {
       // In all other cases, use standard token recovery to find the declaration
       // to parse.
       // If we are inside a memberDecl list, we don't want to eat closing braces (which most likely close the outer context)
       // while recovering to the declaration start.
-      let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
-      recoveryResult = self.canRecoverTo(anyIn: DeclarationKeyword.self, overrideRecoveryPrecedence: recoveryPrecedence)
+      recoveryResult = self.canRecoverTo(
+        anyIn: DeclarationKeyword.self,
+        overrideRecoveryPrecedence: context.recoveryPrecedence
+      )
     }
 
     switch recoveryResult {
-    case (.lhs(.import), let handle)?:
+    case (.group(let introducer), let handle)?:
+      let (header, shouldContinueParsing) = parseHeaderForDeclarationGroup(
+        attrs: attrs,
+        introducer: introducer,
+        introducerHandle: handle,
+        allowsMemberBlock: true
+      )
+      return parseDeclarationGroup(for: header, shouldParseMemberBlock: shouldContinueParsing)
+    case (.simple(.import), let handle)?:
       return RawDeclSyntax(self.parseImportDeclaration(attrs, handle))
-    case (.lhs(.class), let handle)?:
-      return RawDeclSyntax(
-        self.parseNominalTypeDeclaration(for: RawClassDeclSyntax.self, attrs: attrs, introucerHandle: handle)
-      )
-    case (.lhs(.enum), let handle)?:
-      return RawDeclSyntax(
-        self.parseNominalTypeDeclaration(for: RawEnumDeclSyntax.self, attrs: attrs, introucerHandle: handle)
-      )
-    case (.lhs(.case), let handle)?:
+    case (.simple(.case), let handle)?:
       return RawDeclSyntax(self.parseEnumCaseDeclaration(attrs, handle))
-    case (.lhs(.struct), let handle)?:
-      return RawDeclSyntax(
-        self.parseNominalTypeDeclaration(for: RawStructDeclSyntax.self, attrs: attrs, introucerHandle: handle)
-      )
-    case (.lhs(.protocol), let handle)?:
-      return RawDeclSyntax(
-        self.parseNominalTypeDeclaration(for: RawProtocolDeclSyntax.self, attrs: attrs, introucerHandle: handle)
-      )
-    case (.lhs(.associatedtype), let handle)?:
+    case (.simple(.associatedtype), let handle)?:
       return RawDeclSyntax(self.parseAssociatedTypeDeclaration(attrs, handle))
-    case (.lhs(.typealias), let handle)?:
+    case (.simple(.typealias), let handle)?:
       return RawDeclSyntax(self.parseTypealiasDeclaration(attrs, handle))
-    case (.lhs(.extension), let handle)?:
-      return RawDeclSyntax(self.parseExtensionDeclaration(attrs, handle))
-    case (.lhs(.func), let handle)?:
+    case (.simple(.func), let handle)?:
       return RawDeclSyntax(self.parseFuncDeclaration(attrs, handle))
-    case (.lhs(.subscript), let handle)?:
+    case (.simple(.subscript), let handle)?:
       return RawDeclSyntax(self.parseSubscriptDeclaration(attrs, handle))
-    case (.lhs(.`init`), let handle)?:
+    case (.simple(.`init`), let handle)?:
       return RawDeclSyntax(self.parseInitializerDeclaration(attrs, handle))
-    case (.lhs(.deinit), let handle)?:
+    case (.simple(.deinit), let handle)?:
       return RawDeclSyntax(self.parseDeinitializerDeclaration(attrs, handle))
-    case (.lhs(.operator), let handle)?:
+    case (.simple(.operator), let handle)?:
       return RawDeclSyntax(self.parseOperatorDeclaration(attrs, handle))
-    case (.lhs(.precedencegroup), let handle)?:
+    case (.simple(.precedencegroup), let handle)?:
       return RawDeclSyntax(self.parsePrecedenceGroupDeclaration(attrs, handle))
-    case (.lhs(.actor), let handle)?:
-      return RawDeclSyntax(
-        self.parseNominalTypeDeclaration(for: RawActorDeclSyntax.self, attrs: attrs, introucerHandle: handle)
-      )
-    case (.lhs(.macro), let handle)?:
+    case (.simple(.macro), let handle)?:
       return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
-    case (.lhs(.pound), let handle)?:
+    case (.simple(.pound), let handle)?:
       return RawDeclSyntax(self.parseMacroExpansionDeclaration(attrs, handle))
-    case (.rhs, let handle)?:
-      return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
+    case (.binding, let handle)?:
+      return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, in: context))
     case nil:
       break
     }
 
-    if inMemberDeclList {
+    if context.requiresDecl {
       let isProbablyVarDecl = self.at(.identifier, .wildcard) && self.peek(isAt: .colon, .equal, .comma)
       let isProbablyTupleDecl = self.at(.leftParen) && self.peek(isAt: .identifier, .wildcard)
 
@@ -309,6 +323,185 @@ extension Parser {
         arena: self.arena
       )
     )
+  }
+
+  /// Parse the standalone header of a declaration group (a header that won't have a member block attached to it).
+  /// For a header that will have a member list attached, use ``Parser/parseHeaderForDeclarationGroup(attrs:keyword:handle:)``, which this method wraps.
+  ///
+  /// If `inMemberDeclList` is `true`, we know that the next item must be a
+  /// declaration and thus start with a keyword. This allows further recovery.
+  mutating func parseDeclarationGroupHeader(inMemberDeclList: Bool = false) -> RawDeclGroupHeaderSyntax {
+    // If we are at a `#if` of attributes, the `#if` directive should be
+    // parsed when we're parsing the attributes.
+    if self.at(.poundIf) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
+      // If we're at a #if, that's not actually allowed here; parse it and add
+      // it as an unexpected node of a MissingDeclGroupHeaderSyntax.
+      let directive = self.parsePoundIfDirective { (parser, _) in
+        let parsedDecl = parser.parseDeclaration()
+        let semicolon = parser.consume(if: .semicolon)
+        return RawMemberBlockItemSyntax(
+          decl: parsedDecl,
+          semicolon: semicolon,
+          arena: parser.arena
+        )
+      } addSemicolonIfNeeded: { lastElement, newItemAtStartOfLine, parser in
+        if lastElement.semicolon == nil && !newItemAtStartOfLine {
+          return RawMemberBlockItemSyntax(
+            lastElement.unexpectedBeforeDecl,
+            decl: lastElement.decl,
+            lastElement.unexpectedBetweenDeclAndSemicolon,
+            semicolon: parser.missingToken(.semicolon),
+            lastElement.unexpectedAfterSemicolon,
+            arena: parser.arena
+          )
+        } else {
+          return nil
+        }
+      } syntax: { parser, elements in
+        return .decls(RawMemberBlockItemListSyntax(elements: elements, arena: parser.arena))
+      }
+      return RawDeclGroupHeaderSyntax(
+        RawMissingDeclHeaderSyntax(
+          RawUnexpectedNodesSyntax([directive], arena: self.arena),
+          attributes: emptyCollection(RawAttributeListSyntax.self),
+          modifiers: emptyCollection(RawDeclModifierListSyntax.self),
+          placeholder: missingToken(.identifier, text: "decl"),
+          inheritanceClause: nil,
+          genericWhereClause: nil,
+          arena: self.arena
+        )
+      )
+    }
+
+    let attrs = DeclAttributes(
+      attributes: self.parseAttributeList(),
+      modifiers: self.parseDeclModifierList()
+    )
+
+    let recoveryResult: (match: DeclGroupHeaderSyntax.IntroducerOptions, handle: RecoveryConsumptionHandle)?
+    if let atResult = self.at(anyIn: DeclGroupHeaderSyntax.IntroducerOptions.self) {
+      // We are at a keyword that starts a declaration. Parse that declaration.
+      recoveryResult = (atResult.spec, .noRecovery(atResult.handle))
+    } else {
+      // In all other cases, use standard token recovery to find the declaration
+      // to parse.
+      // If we are inside a memberDecl list, we don't want to eat closing braces (which most likely close the outer context)
+      // while recovering to the declaration start.
+      let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
+      recoveryResult = self.canRecoverTo(
+        anyIn: DeclGroupHeaderSyntax.IntroducerOptions.self,
+        overrideRecoveryPrecedence: recoveryPrecedence
+      )
+    }
+
+    if let (match, handle) = recoveryResult {
+      return parseHeaderForDeclarationGroup(
+        attrs: attrs,
+        introducer: match,
+        introducerHandle: handle,
+        allowsMemberBlock: false
+      ).0
+    }
+
+    if inMemberDeclList {
+      if self.currentToken.isEditorPlaceholder {
+        let placeholder = self.parseAnyIdentifier()
+        return RawDeclGroupHeaderSyntax(
+          RawMissingDeclHeaderSyntax(
+            attributes: attrs.attributes,
+            modifiers: attrs.modifiers,
+            placeholder: placeholder,
+            inheritanceClause: nil,
+            genericWhereClause: nil,
+            arena: self.arena
+          )
+        )
+      }
+    }
+
+    return RawDeclGroupHeaderSyntax(
+      RawMissingDeclHeaderSyntax(
+        attributes: attrs.attributes,
+        modifiers: attrs.modifiers,
+        placeholder: missingToken(.identifier, text: "decl"),
+        inheritanceClause: nil,
+        genericWhereClause: nil,
+        arena: self.arena
+      )
+    )
+  }
+
+  /// Parse the header of a declaration group that will belong to some larger construct.
+  ///
+  /// - Parameters:
+  ///   - allowsMemberBlock: If `false`, a member block is definitively *not*
+  ///     expected after this header and if one is found, it should be
+  ///     proactively consumed.
+  mutating func parseHeaderForDeclarationGroup(
+    attrs: DeclAttributes,
+    introducer: DeclGroupHeaderSyntax.IntroducerOptions,
+    introducerHandle: RecoveryConsumptionHandle,
+    allowsMemberBlock: Bool
+  ) -> (RawDeclGroupHeaderSyntax, shouldContinueParsing: Bool) {
+    func eraseToRawDeclGroupHeaderSyntax(
+      _ result: (some RawDeclGroupHeaderSyntaxNodeProtocol, Bool)
+    ) -> (RawDeclGroupHeaderSyntax, shouldContinueParsing: Bool) {
+      return (RawDeclGroupHeaderSyntax(result.0), result.1)
+    }
+
+    switch introducer {
+    case .class:
+      return eraseToRawDeclGroupHeaderSyntax(
+        self.parseNominalTypeDeclarationHeader(
+          for: RawClassDeclHeaderSyntax.self,
+          attrs: attrs,
+          introducerHandle: introducerHandle,
+          allowsMemberBlock: allowsMemberBlock
+        )
+      )
+    case .enum:
+      return eraseToRawDeclGroupHeaderSyntax(
+        self.parseNominalTypeDeclarationHeader(
+          for: RawEnumDeclHeaderSyntax.self,
+          attrs: attrs,
+          introducerHandle: introducerHandle,
+          allowsMemberBlock: allowsMemberBlock
+        )
+      )
+    case .struct:
+      return eraseToRawDeclGroupHeaderSyntax(
+        self.parseNominalTypeDeclarationHeader(
+          for: RawStructDeclHeaderSyntax.self,
+          attrs: attrs,
+          introducerHandle: introducerHandle,
+          allowsMemberBlock: allowsMemberBlock
+        )
+      )
+    case .protocol:
+      return eraseToRawDeclGroupHeaderSyntax(
+        self.parseNominalTypeDeclarationHeader(
+          for: RawProtocolDeclHeaderSyntax.self,
+          attrs: attrs,
+          introducerHandle: introducerHandle,
+          allowsMemberBlock: allowsMemberBlock
+        )
+      )
+    case .extension:
+      return (
+        RawDeclGroupHeaderSyntax(
+          self.parseExtensionDeclarationHeader(attrs, introducerHandle, allowsMemberBlock: allowsMemberBlock)
+        ), true
+      )
+    case .actor:
+      return eraseToRawDeclGroupHeaderSyntax(
+        self.parseNominalTypeDeclarationHeader(
+          for: RawActorDeclHeaderSyntax.self,
+          attrs: attrs,
+          introducerHandle: introducerHandle,
+          allowsMemberBlock: allowsMemberBlock
+        )
+      )
+    }
   }
 
   /// Returns `true` if it looks like the parser is positioned at a function declaration that’s missing the `func` keyword.
@@ -373,12 +566,122 @@ extension Parser {
   }
 }
 
+protocol DeclarationGroupHeaderTrait {
+  var introducer: RawTokenSyntax { get }
+
+  associatedtype Declaration: RawDeclSyntaxNodeProtocol
+
+  func makeDeclaration(
+    memberBlock: RawMemberBlockSyntax,
+    arena: __shared SyntaxArena
+  ) -> Declaration
+}
+
+extension RawExtensionDeclHeaderSyntax: DeclarationGroupHeaderTrait {
+  var introducer: RawTokenSyntax {
+    return self.extensionKeyword
+  }
+
+  func makeDeclaration(memberBlock: RawMemberBlockSyntax, arena: SyntaxArena) -> RawExtensionDeclSyntax {
+    RawExtensionDeclSyntax(extensionHeader: self, memberBlock: memberBlock, arena: arena)
+  }
+}
+
+extension RawMissingDeclHeaderSyntax: DeclarationGroupHeaderTrait {
+  var introducer: RawTokenSyntax {
+    return self.placeholder
+  }
+
+  func makeDeclaration(memberBlock: RawMemberBlockSyntax, arena: SyntaxArena) -> RawMissingDeclSyntax {
+    RawMissingDeclSyntax(
+      self.unexpectedBeforeAttributes,
+      attributes: self.attributes,
+      self.unexpectedBetweenAttributesAndModifiers,
+      modifiers: self.modifiers,
+      self.unexpectedBetweenModifiersAndPlaceholder,
+      placeholder: self.placeholder,
+      RawUnexpectedNodesSyntax(
+        combining: [
+          self.unexpectedBetweenPlaceholderAndInheritanceClause,
+          RawUnexpectedNodesSyntax([self.inheritanceClause], arena: arena),
+          self.unexpectedBetweenInheritanceClauseAndGenericWhereClause,
+          RawUnexpectedNodesSyntax([self.genericWhereClause], arena: arena),
+          self.unexpectedAfterGenericWhereClause,
+        ],
+        RawUnexpectedNodesSyntax([memberBlock], arena: arena)!,
+        arena: arena
+      ),
+      arena: arena
+    )
+  }
+}
+
+extension RawDeclGroupHeaderSyntax: DeclarationGroupHeaderTrait {
+  private typealias ConcreteExistentialSelf = RawSyntaxNodeProtocol & DeclarationGroupHeaderTrait
+  private var asConcreteExistentialSelf: any ConcreteExistentialSelf {
+    let subtypes: [any ConcreteExistentialSelf.Type] = [
+      RawExtensionDeclHeaderSyntax.self,
+      RawProtocolDeclHeaderSyntax.self,
+      RawClassDeclHeaderSyntax.self,
+      RawActorDeclHeaderSyntax.self,
+      RawStructDeclHeaderSyntax.self,
+      RawEnumDeclHeaderSyntax.self,
+      RawMissingDeclHeaderSyntax.self,
+    ]
+
+    for subtype in subtypes {
+      if let result = subtype.init(self) {
+        return result
+      }
+    }
+
+    fatalError("Node \(self) does not have a known subtype")
+  }
+
+  func makeDeclaration(memberBlock: RawMemberBlockSyntax, arena: SyntaxArena) -> RawDeclSyntax {
+    return RawDeclSyntax(asConcreteExistentialSelf.makeDeclaration(memberBlock: memberBlock, arena: arena))
+  }
+
+  var introducer: RawTokenSyntax {
+    return asConcreteExistentialSelf.introducer
+  }
+}
+
 extension Parser {
+  /// Parse a declaration group (class, struct, enum, actor, protocol, extension) body given its header.
+  mutating func parseDeclarationGroup<T>(
+    for header: T,
+    shouldParseMemberBlock: Bool = true
+  ) -> T.Declaration where T: DeclarationGroupHeaderTrait {
+    let memberBlock =
+      if shouldParseMemberBlock {
+        self.parseMemberBlock(introducer: header.introducer)
+      } else {
+        RawMemberBlockSyntax(
+          leftBrace: missingToken(.leftBrace),
+          members: RawMemberBlockItemListSyntax(elements: [], arena: self.arena),
+          rightBrace: missingToken(.rightBrace),
+          arena: self.arena
+        )
+      }
+    return header.makeDeclaration(memberBlock: memberBlock, arena: self.arena)
+  }
+
   /// Parse an extension declaration.
   mutating func parseExtensionDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle
   ) -> RawExtensionDeclSyntax {
+    let header = parseExtensionDeclarationHeader(attrs, handle, allowsMemberBlock: true)
+    return parseDeclarationGroup(for: header)
+  }
+
+  /// Parse the header of an extension declaration.
+  mutating func parseExtensionDeclarationHeader(
+    _ attrs: DeclAttributes,
+    _ handle: RecoveryConsumptionHandle,
+    allowsMemberBlock: Bool
+  ) -> RawExtensionDeclHeaderSyntax {
     let (unexpectedBeforeExtensionKeyword, extensionKeyword) = self.eat(handle)
     let type = self.parseType()
 
@@ -395,8 +698,18 @@ extension Parser {
     } else {
       whereClause = nil
     }
-    let memberBlock = self.parseMemberBlock(introducer: extensionKeyword)
-    return RawExtensionDeclSyntax(
+
+    // If we know there shouldn't be a member block, but there is, gobble it up whole right now.
+    var trailingUnexpectedNodes: RawUnexpectedNodesSyntax?
+    if !allowsMemberBlock && self.at(.leftBrace) {
+      let forbiddenMemberBlock = parseMemberBlock(introducer: extensionKeyword)
+      trailingUnexpectedNodes = RawUnexpectedNodesSyntax(
+        [forbiddenMemberBlock],
+        arena: self.arena
+      )
+    }
+
+    return RawExtensionDeclHeaderSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
       unexpectedBeforeExtensionKeyword,
@@ -404,7 +717,7 @@ extension Parser {
       extendedType: type,
       inheritanceClause: inheritance,
       genericWhereClause: whereClause,
-      memberBlock: memberBlock,
+      trailingUnexpectedNodes,
       arena: self.arena
     )
   }
@@ -746,7 +1059,7 @@ extension Parser {
     if self.at(.poundSourceLocation) {
       decl = RawDeclSyntax(self.parsePoundSourceLocationDirective())
     } else {
-      decl = self.parseDeclaration(inMemberDeclList: true)
+      decl = self.parseDeclaration(in: .memberDeclList)
     }
 
     let semi = self.consume(if: .semicolon)
@@ -1268,7 +1581,7 @@ extension Parser {
   mutating func parseBindingDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle,
-    inMemberDeclList: Bool = false
+    in context: DeclarationParseContext = .topLevel
   ) -> RawVariableDeclSyntax {
     let (unexpectedBeforeIntroducer, introducer) = self.eat(handle)
     let hasTryBeforeIntroducer = unexpectedBeforeIntroducer?.containsToken(where: { TokenSpec(.try) ~= $0 }) ?? false
@@ -1358,7 +1671,7 @@ extension Parser {
         if (self.at(.leftBrace)
           && (initializer == nil || !self.currentToken.isAtStartOfLine
             || self.withLookahead({ $0.atStartOfGetSetAccessor() })))
-          || (inMemberDeclList && self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil
+          || (context == .memberDeclList && self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil
             && !self.at(.keyword(.`init`)))
         {
           accessors = self.parseAccessorBlock()

@@ -56,6 +56,20 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  override open func visit(_ node: ABIAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  override open func visitPost(_ node: ABIAttributeArgumentsSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: AccessorBlockSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -93,6 +107,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: AccessorParametersSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
+  override open func visit(_ node: ActorDeclHeaderSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: ActorDeclHeaderSyntax) {
     visitAnyPost(node._syntaxNode)
   }
 
@@ -317,6 +339,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: CatchItemSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
+  override open func visit(_ node: ClassDeclHeaderSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: ClassDeclHeaderSyntax) {
     visitAnyPost(node._syntaxNode)
   }
 
@@ -846,6 +876,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  override open func visit(_ node: EnumDeclHeaderSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: EnumDeclHeaderSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: EnumDeclSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -891,6 +929,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: ExpressionStmtSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
+  override open func visit(_ node: ExtensionDeclHeaderSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: ExtensionDeclHeaderSyntax) {
     visitAnyPost(node._syntaxNode)
   }
 
@@ -1464,6 +1510,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  override open func visit(_ node: MissingDeclHeaderSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: MissingDeclHeaderSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: MissingDeclSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -1816,6 +1870,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  override open func visit(_ node: ProtocolDeclHeaderSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: ProtocolDeclHeaderSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: ProtocolDeclSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -1957,6 +2019,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: StringSegmentSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
+  override open func visit(_ node: StructDeclHeaderSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: StructDeclHeaderSyntax) {
     visitAnyPost(node._syntaxNode)
   }
 

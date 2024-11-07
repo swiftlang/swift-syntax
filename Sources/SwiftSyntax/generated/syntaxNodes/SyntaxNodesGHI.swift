@@ -194,13 +194,103 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
 
 /// ### Children
 /// 
-///  - `argument`: ``TypeSyntax``
+///  - `argument`: (``TypeSyntax`` | ``ExprSyntax``)
 ///  - `trailingComma`: `,`?
 ///
 /// ### Contained in
 /// 
 ///  - ``GenericArgumentListSyntax``
 public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+  public enum Argument: SyntaxChildChoices, SyntaxHashable {
+    case type(TypeSyntax)
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    case expr(ExprSyntax)
+
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .type(let node):
+        return node._syntaxNode
+      case .expr(let node):
+        return node._syntaxNode
+      }
+    }
+
+    public init(_ node: some TypeSyntaxProtocol) {
+      self = .type(TypeSyntax(node))
+    }
+
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    public init(_ node: some ExprSyntaxProtocol) {
+      self = .expr(ExprSyntax(node))
+    }
+
+    public init?(_ node: __shared some SyntaxProtocol) {
+      if let node = node.as(TypeSyntax.self) {
+        self = .type(node)
+      } else if let node = node.as(ExprSyntax.self) {
+        self = .expr(node)
+      } else {
+        return nil
+      }
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([.node(TypeSyntax.self), .node(ExprSyntax.self)])
+    }
+
+    /// Checks if the current syntax node can be cast to the type conforming to the ``TypeSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: (some TypeSyntaxProtocol).Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to the type conforming to the ``TypeSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+    public func `as`<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+      return S.init(self)
+    }
+
+    /// Force-casts the current syntax node to the type conforming to the ``TypeSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast<S: TypeSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+      return self.as(S.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func `is`(_ syntaxType: (some ExprSyntaxProtocol).Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
+      return S.init(self)
+    }
+
+    /// Force-casts the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
+    ///
+    /// - Returns: An instance of the specialized type.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
+      return self.as(S.self)!
+    }
+  }
+
   public let _syntaxNode: Syntax
 
   public init?(_ node: __shared some SyntaxProtocol) {
@@ -212,11 +302,12 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
 
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - argument: The argument type for a generic argument. This can either be a regular type argument or an expression for value generics.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeArgument: UnexpectedNodesSyntax? = nil,
-    argument: some TypeSyntaxProtocol,
+    argument: Argument,
     _ unexpectedBetweenArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax? = nil,
     _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
@@ -258,9 +349,10 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
     }
   }
 
-  public var argument: TypeSyntax {
+  /// The argument type for a generic argument. This can either be a regular type argument or an expression for value generics.
+  public var argument: Argument {
     get {
-      return Syntax(self).child(at: 1)!.cast(TypeSyntax.self)
+      return Syntax(self).child(at: 1)!.cast(Argument.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(GenericArgumentSyntax.self)

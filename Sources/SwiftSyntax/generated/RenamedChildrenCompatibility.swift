@@ -3450,7 +3450,7 @@ extension GenericArgumentSyntax {
   }
 
   @available(*, deprecated, renamed: "argument")
-  public var argumentType: TypeSyntax {
+  public var argumentType: Argument {
     get {
       return argument
     }
@@ -3474,7 +3474,7 @@ extension GenericArgumentSyntax {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeArgumentType: UnexpectedNodesSyntax? = nil,
-    argumentType: some TypeSyntaxProtocol,
+    argumentType: Argument,
     _ unexpectedBetweenArgumentTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax? = nil,
     _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
@@ -6615,7 +6615,7 @@ extension SameTypeRequirementSyntax {
   }
 
   @available(*, deprecated, renamed: "leftType")
-  public var leftTypeIdentifier: TypeSyntax {
+  public var leftTypeIdentifier: LeftType {
     get {
       return leftType
     }
@@ -6655,7 +6655,7 @@ extension SameTypeRequirementSyntax {
   }
 
   @available(*, deprecated, renamed: "rightType")
-  public var rightTypeIdentifier: TypeSyntax {
+  public var rightTypeIdentifier: RightType {
     get {
       return rightType
     }
@@ -6679,11 +6679,11 @@ extension SameTypeRequirementSyntax {
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? = nil,
-    leftTypeIdentifier: some TypeSyntaxProtocol,
+    leftTypeIdentifier: LeftType,
     _ unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodesSyntax? = nil,
     equalityToken: TokenSyntax,
     _ unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
-    rightTypeIdentifier: some TypeSyntaxProtocol,
+    rightTypeIdentifier: RightType,
     _ unexpectedAfterRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {

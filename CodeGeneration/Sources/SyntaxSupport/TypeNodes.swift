@@ -257,7 +257,19 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "argument",
-        kind: .node(kind: .type)
+        kind: .nodeChoices(choices: [
+          Child(
+            name: "type",
+            kind: .node(kind: .type)
+          ),
+          Child(
+            name: "expr",
+            kind: .node(kind: .expr),
+            experimentalFeature: .valueGenerics
+          ),
+        ]),
+        documentation:
+          "The argument type for a generic argument. This can either be a regular type argument or an expression for value generics."
       ),
       Child(
         name: "trailingComma",

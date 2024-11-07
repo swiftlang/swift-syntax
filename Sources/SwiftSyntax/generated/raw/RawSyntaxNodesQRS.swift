@@ -357,6 +357,86 @@ public struct RawReturnStmtSyntax: RawStmtSyntaxNodeProtocol {
 
 @_spi(RawSyntax)
 public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
+  public enum LeftType: RawSyntaxNodeProtocol {
+    case type(RawTypeSyntax)
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    case expr(RawExprSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      RawTypeSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw)
+    }
+
+    public var raw: RawSyntax {
+      switch self {
+      case .type(let node):
+        return node.raw
+      case .expr(let node):
+        return node.raw
+      }
+    }
+
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawTypeSyntax.self) {
+        self = .type(node)
+      } else if let node = node.as(RawExprSyntax.self) {
+        self = .expr(node)
+      } else {
+        return nil
+      }
+    }
+
+    public init(type: some RawTypeSyntaxNodeProtocol) {
+      self = .type(RawTypeSyntax(type))
+    }
+
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    public init(expr: some RawExprSyntaxNodeProtocol) {
+      self = .expr(RawExprSyntax(expr))
+    }
+  }
+
+  public enum RightType: RawSyntaxNodeProtocol {
+    case type(RawTypeSyntax)
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    case expr(RawExprSyntax)
+
+    public static func isKindOf(_ raw: RawSyntax) -> Bool {
+      RawTypeSyntax.isKindOf(raw) || RawExprSyntax.isKindOf(raw)
+    }
+
+    public var raw: RawSyntax {
+      switch self {
+      case .type(let node):
+        return node.raw
+      case .expr(let node):
+        return node.raw
+      }
+    }
+
+    public init?(_ node: __shared some RawSyntaxNodeProtocol) {
+      if let node = node.as(RawTypeSyntax.self) {
+        self = .type(node)
+      } else if let node = node.as(RawExprSyntax.self) {
+        self = .expr(node)
+      } else {
+        return nil
+      }
+    }
+
+    public init(type: some RawTypeSyntaxNodeProtocol) {
+      self = .type(RawTypeSyntax(type))
+    }
+
+    /// - Note: Requires experimental feature `valueGenerics`.
+    @_spi(ExperimentalLanguageFeatures)
+    public init(expr: some RawExprSyntaxNodeProtocol) {
+      self = .expr(RawExprSyntax(expr))
+    }
+  }
+
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
     return raw.layoutView!
@@ -386,11 +466,11 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
 
   public init(
     _ unexpectedBeforeLeftType: RawUnexpectedNodesSyntax? = nil,
-    leftType: some RawTypeSyntaxNodeProtocol,
+    leftType: LeftType,
     _ unexpectedBetweenLeftTypeAndEqual: RawUnexpectedNodesSyntax? = nil,
     equal: RawTokenSyntax,
     _ unexpectedBetweenEqualAndRightType: RawUnexpectedNodesSyntax? = nil,
-    rightType: some RawTypeSyntaxNodeProtocol,
+    rightType: RightType,
     _ unexpectedAfterRightType: RawUnexpectedNodesSyntax? = nil,
     arena: __shared SyntaxArena
   ) {
@@ -412,8 +492,8 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var leftType: RawTypeSyntax {
-    layoutView.children[1].map(RawTypeSyntax.init(raw:))!
+  public var leftType: RawSyntax {
+    layoutView.children[1]!
   }
 
   public var unexpectedBetweenLeftTypeAndEqual: RawUnexpectedNodesSyntax? {
@@ -428,8 +508,8 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var rightType: RawTypeSyntax {
-    layoutView.children[5].map(RawTypeSyntax.init(raw:))!
+  public var rightType: RawSyntax {
+    layoutView.children[5]!
   }
 
   public var unexpectedAfterRightType: RawUnexpectedNodesSyntax? {

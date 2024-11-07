@@ -193,7 +193,7 @@ extension Parser {
 
     let (unexpectedBeforeName, name) = self.expect(anyIn: IdentifierTypeSyntax.NameOptions.self, default: .identifier)
     let generics: RawGenericArgumentClauseSyntax?
-    if self.atContextualPunctuator("<") {
+    if self.at(prefix: "<") {
       generics = self.parseGenericArguments()
     } else {
       generics = nil
@@ -229,7 +229,7 @@ extension Parser {
         default: .identifier
       )
       let generics: RawGenericArgumentClauseSyntax?
-      if self.atContextualPunctuator("<") {
+      if self.at(prefix: "<") {
         generics = self.parseGenericArguments()
       } else {
         generics = nil

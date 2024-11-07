@@ -262,13 +262,13 @@ private final class MacroExpansionRewriter: SyntaxRewriter {
   let parameterReplacements: [DeclReferenceExprSyntax: Int]
   let arguments: [ExprSyntax]
   let genericParameterReplacements: [GenericArgumentSyntax: Int]
-  let genericArguments: [TypeSyntax]
+  let genericArguments: [GenericArgumentSyntax.Argument]
 
   init(
     parameterReplacements: [DeclReferenceExprSyntax: Int],
     arguments: [ExprSyntax],
     genericReplacements: [GenericArgumentSyntax: Int],
-    genericArguments: [TypeSyntax]
+    genericArguments: [GenericArgumentSyntax.Argument]
   ) {
     self.parameterReplacements = parameterReplacements
     self.arguments = arguments
@@ -331,7 +331,7 @@ extension MacroDeclSyntax {
       },
       uniquingKeysWith: { l, r in l }
     )
-    let genericArguments: [TypeSyntax] =
+    let genericArguments: [GenericArgumentSyntax.Argument] =
       genericArgumentList?.arguments.map { $0.argument } ?? []
 
     let rewriter = MacroExpansionRewriter(

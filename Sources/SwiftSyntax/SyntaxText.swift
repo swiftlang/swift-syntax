@@ -47,10 +47,11 @@ import Musl
 /// replacement character (`\u{FFFD}`).
 @_spi(RawSyntax)
 public struct SyntaxText: Sendable {
-  var buffer: SyntaxArenaAllocatedBufferPointer<UInt8>
+  public typealias Buffer = SyntaxArenaAllocatedBufferPointer<UInt8>
+  var buffer: Buffer
 
   /// Construct a ``SyntaxText`` whose text is represented by the given `buffer`.
-  public init(buffer: SyntaxArenaAllocatedBufferPointer<UInt8>) {
+  public init(buffer: Buffer) {
     self.buffer = buffer
   }
 
@@ -179,6 +180,18 @@ extension SyntaxText: RandomAccessCollection {
   /// Access the byte at `index`.
   public subscript(index: Index) -> Element {
     get { return buffer[index] }
+  }
+
+  public func makeIterator() -> Buffer.Iterator {
+    buffer.makeIterator()
+  }
+
+  public func withContiguousStorageIfAvailable<R>(_ body: (UnsafeBufferPointer<Element>) throws -> R) rethrows -> R? {
+    try buffer.withContiguousStorageIfAvailable(body)
+  }
+
+  public func _copyContents(initializing ptr: UnsafeMutableBufferPointer<Element>) -> (Iterator, Int) {
+    buffer._copyContents(initializing: ptr)
   }
 }
 

@@ -17,7 +17,8 @@
 /// reference its contents, we know that the pointer's contents won't get
 /// deallocated while being accessed and thus we can add an unchecked `Sendable`
 /// conformance.
-@_spi(RawSyntax) public struct SyntaxArenaAllocatedPointer<Element: Sendable>: @unchecked Sendable {
+@_spi(RawSyntax)
+public struct SyntaxArenaAllocatedPointer<Element: Sendable>: @unchecked Sendable {
   private let pointer: UnsafePointer<Element>
 
   /// Create a pointer from an `UnsafePointer` that was allocated inside a
@@ -61,22 +62,21 @@ public struct SyntaxArenaAllocatedBufferPointer<Element: Sendable>: RandomAccess
   /// - Important: The client needs to ensure sure that the buffer is indeed
   ///   allocated by a ``SyntaxArena`` and that the ``SyntaxArena`` will outlive
   ///   any users of this ``SyntaxArenaAllocatedBufferPointer``.
-  @_spi(RawSyntax) public init(_ buffer: UnsafeBufferPointer<Element>) {
+  public init(_ buffer: UnsafeBufferPointer<Element>) {
     self.buffer = buffer
   }
 
-  @_spi(RawSyntax)
   public subscript<RangeType: RangeExpression<Int>>(
     range: RangeType
   ) -> SyntaxArenaAllocatedBufferPointer<Element> {
     return SyntaxArenaAllocatedBufferPointer(UnsafeBufferPointer(rebasing: self.buffer[range]))
   }
 
-  @_spi(RawSyntax) public subscript(_ index: Int) -> Element {
+  public subscript(_ index: Int) -> Element {
     return self.buffer[index]
   }
 
-  @_spi(RawSyntax) public func makeIterator() -> UnsafeBufferPointer<Element>.Iterator {
+  public func makeIterator() -> UnsafeBufferPointer<Element>.Iterator {
     return buffer.makeIterator()
   }
 
@@ -110,5 +110,9 @@ public struct SyntaxArenaAllocatedBufferPointer<Element: Sendable>: RandomAccess
 
   public func withContiguousStorageIfAvailable<R>(_ body: (UnsafeBufferPointer<Element>) throws -> R) rethrows -> R? {
     try body(buffer)
+  }
+
+  public func _copyContents(initializing ptr: UnsafeMutableBufferPointer<Element>) -> (Iterator, Int) {
+    buffer._copyContents(initializing: ptr)
   }
 }

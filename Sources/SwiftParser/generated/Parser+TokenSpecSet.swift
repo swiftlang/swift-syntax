@@ -428,6 +428,58 @@ extension BooleanLiteralExprSyntax {
   }
 }
 
+extension BorrowExprSyntax {
+  @_spi(Diagnostics)
+  public enum BorrowKeywordOptions: TokenSpecSet {
+    case _borrow
+    case borrow
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(._borrow):
+        self = ._borrow
+      case TokenSpec(.borrow):
+        self = .borrow
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(._borrow):
+        self = ._borrow
+      case TokenSpec(.borrow):
+        self = .borrow
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case ._borrow:
+        return .keyword(._borrow)
+      case .borrow:
+        return .keyword(.borrow)
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case ._borrow:
+        return .keyword(._borrow)
+      case .borrow:
+        return .keyword(.borrow)
+      }
+    }
+  }
+}
+
 extension _CanImportVersionInfoSyntax {
   @_spi(Diagnostics)
   public enum LabelOptions: TokenSpecSet {

@@ -694,6 +694,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
   case _move
   case _borrow
   case `try`
+  case borrow
   case consume
   case copy
   case `repeat`
@@ -706,6 +707,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
     case TokenSpec(._move): self = ._move
     case TokenSpec(._borrow): self = ._borrow
     case TokenSpec(.try): self = .try
+    case TokenSpec(.borrow): self = .borrow
     case TokenSpec(.consume): self = .consume
     case TokenSpec(.copy): self = .copy
     case TokenSpec(.repeat): self = .repeat
@@ -720,6 +722,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
     case .await: return .keyword(.await)
     case ._move: return .keyword(._move)
     case ._borrow: return .keyword(._borrow)
+    case .borrow: return .keyword(.borrow)
     case .consume: return .keyword(.consume)
     case .copy: return .keyword(.copy)
     case .try: return .keyword(.try)

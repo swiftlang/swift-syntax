@@ -150,6 +150,7 @@ public enum Keyword: CaseIterable {
   case backDeployed
   case before
   case block
+  case borrow
   case borrowing
   case `break`
   case canImport
@@ -442,6 +443,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("before")
     case .block:
       return KeywordSpec("block")
+    case .borrow:
+      return KeywordSpec("borrow")
     case .borrowing:
       return KeywordSpec("borrowing")
     case .break:

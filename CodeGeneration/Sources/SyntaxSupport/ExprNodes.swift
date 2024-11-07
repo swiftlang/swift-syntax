@@ -228,7 +228,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "borrowKeyword",
-        kind: .token(choices: [.keyword(._borrow)])
+        kind: .token(choices: [.keyword(._borrow), .keyword(.borrow)])
       ),
       Child(
         name: "expression",

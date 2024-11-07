@@ -1210,6 +1210,38 @@ final class ExpressionTests: ParserTestCase {
     assertParse("use(_borrow msg)")
     assertParse("_borrow msg")
     assertParse("let b = (_borrow self).buffer")
+    assertParse("borrow msg")
+    assertParse("use(borrow msg)")
+    assertParse("borrow(msg)")
+    assertParse("borrow (msg)")
+  }
+
+  func testBorrowNameFunctionCallStructure1() {
+    assertParse(
+      """
+      borrow(msg)
+      """,
+      substructure: FunctionCallExprSyntax(
+        calledExpression: DeclReferenceExprSyntax(baseName: .identifier("borrow")),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([LabeledExprSyntax(expression: ExprSyntax("msg"))]),
+        rightParen: .rightParenToken()
+      )
+    )
+  }
+
+  func testBorrowNameFunctionCallStructure2() {
+    assertParse(
+      """
+      borrow (msg)
+      """,
+      substructure: FunctionCallExprSyntax(
+        calledExpression: DeclReferenceExprSyntax(baseName: .identifier("borrow")),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([LabeledExprSyntax(expression: ExprSyntax("msg"))]),
+        rightParen: .rightParenToken()
+      )
+    )
   }
 
   func testCodeCompletionExpressions() {

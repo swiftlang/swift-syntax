@@ -21,8 +21,28 @@ public enum ExperimentalFeature: String, CaseIterable {
   case coroutineAccessors
   case valueGenerics
 
-  /// The name of the feature, which is used in the doc comment.
+  /// The name of the feature as it is written in the compiler's `Features.def` file.
   public var featureName: String {
+    switch self {
+    case .referenceBindings:
+      return "ReferenceBindings"
+    case .thenStatements:
+      return "ThenStatements"
+    case .doExpressions:
+      return "DoExpressions"
+    case .nonescapableTypes:
+      return "NonescapableTypes"
+    case .trailingComma:
+      return "TrailingComma"
+    case .coroutineAccessors:
+      return "CoroutineAccessors"
+    case .valueGenerics:
+      return "ValueGenerics"
+    }
+  }
+
+  /// A brief description of the feature that is used in the doc comment.
+  public var documentationDescription: String {
     switch self {
     case .referenceBindings:
       return "reference bindings"
@@ -31,13 +51,13 @@ public enum ExperimentalFeature: String, CaseIterable {
     case .doExpressions:
       return "'do' expressions"
     case .nonescapableTypes:
-      return "NonEscableTypes"
+      return "non-escapable types"
     case .trailingComma:
-      return "trailing comma"
+      return "trailing commas"
     case .coroutineAccessors:
-      return "CoroutineAccessors"
+      return "coroutine accessors"
     case .valueGenerics:
-      return "ValueGenerics"
+      return "value generics"
     }
   }
 

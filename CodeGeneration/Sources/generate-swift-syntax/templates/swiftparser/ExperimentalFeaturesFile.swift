@@ -34,10 +34,31 @@ let experimentalFeaturesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) 
     for (i, feature) in ExperimentalFeature.allCases.enumerated() {
       DeclSyntax(
         """
-        /// Whether to enable the parsing of \(raw: feature.featureName).
+        /// Whether to enable the parsing of \(raw: feature.documentationDescription).
         public static let \(feature.token) = Self(rawValue: 1 << \(raw: i))
         """
       )
+    }
+
+    try! InitializerDeclSyntax(
+      """
+      /// Creates a new value representing the experimental feature with the
+      /// given name, or returns nil if the name is not recognized.
+      public init?(name: String)
+      """
+    ) {
+      try! SwitchExprSyntax("switch name") {
+        SwitchCaseListSyntax {
+          for feature in ExperimentalFeature.allCases {
+            SwitchCaseSyntax(#"case "\#(raw: feature.featureName)":"#) {
+              ExprSyntax("self = .\(feature.token)")
+            }
+          }
+          SwitchCaseSyntax("default:") {
+            StmtSyntax("return nil")
+          }
+        }
+      }
     }
   }
 }

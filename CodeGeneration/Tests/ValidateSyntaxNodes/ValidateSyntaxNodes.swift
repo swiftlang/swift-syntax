@@ -318,12 +318,6 @@ class ValidateSyntaxNodes: XCTestCase {
 
         // MARK: Tokens that contain underscores
         ValidationFailure(
-          node: .borrowExpr,
-          message:
-            "child 'borrowKeyword' has a single keyword as its only token choice and should thus be named '_borrowKeyword'"
-            // _borrow is underscored and thus BorrowKeyword is the correct spelling
-        ),
-        ValidationFailure(
           node: .conventionWitnessMethodAttributeArguments,
           message:
             "child 'witnessMethodLabel' has a single keyword as its only token choice and is followed by a colon. It should thus be named 'witness_methodLabel'"
@@ -410,7 +404,11 @@ class ValidateSyntaxNodes: XCTestCase {
           message: "child 'consumeKeyword' only has keywords as its token choices and should thus end with 'Specifier'"
             // ConsumeKeyword can be 'consume' or '_move' and '_move' is deprecated
         ),
-
+        ValidationFailure(
+          node: .borrowExpr,
+          message: "child 'borrowKeyword' only has keywords as its token choices and should thus end with 'Specifier'"
+            // BorrowKeyword can be 'borrow' or '_borrow', eventually '_borrow' will be deprecated
+        ),
         // MARK: Conceptually a value, not a specifier
         ValidationFailure(
           node: .booleanLiteralExpr,

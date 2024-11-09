@@ -458,6 +458,11 @@ extension Parser {
         )
       )
     case (._borrow, let handle)?:
+      fallthrough
+    case (.borrow, let handle)?:
+      if !atContextualExpressionModifier() {
+        break EXPR_PREFIX
+      }
       let borrowTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor: flavor,

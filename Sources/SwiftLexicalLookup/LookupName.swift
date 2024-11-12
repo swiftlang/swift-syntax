@@ -86,7 +86,7 @@ import SwiftSyntax
   /// `self` and `Self` identifers override implicit `self` and `Self` introduced by
   /// the `Foo` class declaration.
   var identifier: Identifier {
-    Identifier(name)
+    Identifier(canonicalName: name)
   }
 
   /// Position of this implicit name.

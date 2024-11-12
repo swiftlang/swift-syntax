@@ -33,15 +33,38 @@ extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of 'do' expressions.
   public static let doExpressions = Self (rawValue: 1 << 2)
 
-  /// Whether to enable the parsing of NonEscableTypes.
+  /// Whether to enable the parsing of non-escapable types.
   public static let nonescapableTypes = Self (rawValue: 1 << 3)
 
-  /// Whether to enable the parsing of trailing comma.
+  /// Whether to enable the parsing of trailing commas.
   public static let trailingComma = Self (rawValue: 1 << 4)
 
-  /// Whether to enable the parsing of CoroutineAccessors.
+  /// Whether to enable the parsing of coroutine accessors.
   public static let coroutineAccessors = Self (rawValue: 1 << 5)
 
-  /// Whether to enable the parsing of ValueGenerics.
+  /// Whether to enable the parsing of value generics.
   public static let valueGenerics = Self (rawValue: 1 << 6)
+
+  /// Creates a new value representing the experimental feature with the
+  /// given name, or returns nil if the name is not recognized.
+  public init?(name: String) {
+    switch name {
+    case "ReferenceBindings":
+      self = .referenceBindings
+    case "ThenStatements":
+      self = .thenStatements
+    case "DoExpressions":
+      self = .doExpressions
+    case "NonescapableTypes":
+      self = .nonescapableTypes
+    case "TrailingComma":
+      self = .trailingComma
+    case "CoroutineAccessors":
+      self = .coroutineAccessors
+    case "ValueGenerics":
+      self = .valueGenerics
+    default:
+      return nil
+    }
+  }
 }

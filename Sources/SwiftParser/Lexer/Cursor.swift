@@ -2025,24 +2025,53 @@ extension Lexer.Cursor {
     // Check whether we have an identifier followed by another backtick, in which
     // case this is an escaped identifier.
     let identifierStart = self
-    if self.advance(if: { $0.isValidIdentifierStartCodePoint }) {
-      // Keep continuing the identifier.
-      self.advance(while: { $0.isValidIdentifierContinuationCodePoint })
 
-      // If we have the terminating "`", it's an escaped identifier.
-      if self.advance(matching: "`") {
-        return Lexer.Result(.identifier)
+    // Track some information while advancing so that we can more efficiently
+    // detect invalid identifiers later. Even if we end in a situation that is
+    // invalid (for example, it contains a backslash), we want to continue
+    // scanning until we reach a terminating backtick if possible because it
+    // provides better error recover and more likely resembles what the user
+    // was trying to write.
+    var sawNonWhitespace = false
+    var sawNonOperator = false
+    var sawBackslash = false
+    var isFirstScalar = true
+    self.advance(while: {
+      guard $0.isValidWhenLexingRawIdentifier else {
+        return false
       }
-    }
+      if isFirstScalar {
+        if !$0.isOperatorStartCodePoint {
+          sawNonOperator = true
+        }
+        isFirstScalar = false
+      } else if !$0.isOperatorContinuationCodePoint {
+        sawNonOperator = true
+      }
+      if !$0.properties.isWhitespace {
+        sawNonWhitespace = true
+      }
+      if $0 == "\\" {
+        sawBackslash = true
+      }
+      return true
+    })
 
-    // Special case; allow '`$`'.
-    if quote.starts(with: "`$`".utf8) {
-      self = quote
-      let firstBacktickConsumed = self.advance(matching: "`")
-      let dollarConsumed = self.advance(matching: "$")
-      let secondBacktickConsumed = self.advance(matching: "`")
-      precondition(firstBacktickConsumed && dollarConsumed && secondBacktickConsumed)
-      return Lexer.Result(.identifier)
+    // If we have the terminating "`", it's an escaped identifier, unless it
+    // contained only operator characters.
+    let text = identifierStart.text(upTo: self)
+    if self.advance(matching: "`") {
+      var error: LexingDiagnostic? = nil
+      if text.isEmpty {
+        error = LexingDiagnostic(.rawIdentifierCannotBeEmpty, position: quote)
+      } else if !sawNonWhitespace {
+        error = LexingDiagnostic(.rawIdentifierCannotBeEntirelyWhitespace, position: quote)
+      } else if !sawNonOperator {
+        error = LexingDiagnostic(.rawIdentifierCannotBeOperator, position: quote)
+      } else if sawBackslash {
+        error = LexingDiagnostic(.rawIdentifierCannotContainBacklash, position: quote)
+      }
+      return Lexer.Result(.identifier, error: error)
     }
 
     // The backtick is punctuation.

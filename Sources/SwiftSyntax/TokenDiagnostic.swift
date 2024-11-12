@@ -49,6 +49,10 @@ public struct TokenDiagnostic: Hashable, Sendable {
     case multilineRegexClosingNotOnNewline
     case nonBreakingSpace
     case nulCharacter
+    case rawIdentifierCannotBeEmpty
+    case rawIdentifierCannotBeEntirelyWhitespace
+    case rawIdentifierCannotBeOperator
+    case rawIdentifierCannotContainBacklash
     case sourceConflictMarker
     case spaceAtEndOfRegexLiteral
     case spaceAtStartOfRegexLiteral
@@ -88,6 +92,10 @@ public struct TokenDiagnostic: Hashable, Sendable {
       case .multilineRegexClosingNotOnNewline: return .error
       case .nonBreakingSpace: return .warning
       case .nulCharacter: return .warning
+      case .rawIdentifierCannotBeEmpty: return .error
+      case .rawIdentifierCannotBeEntirelyWhitespace: return .error
+      case .rawIdentifierCannotBeOperator: return .error
+      case .rawIdentifierCannotContainBacklash: return .error
       case .sourceConflictMarker: return .error
       case .spaceAtEndOfRegexLiteral: return .error
       case .spaceAtStartOfRegexLiteral: return .error

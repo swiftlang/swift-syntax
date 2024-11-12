@@ -93,6 +93,22 @@ extension Unicode.Scalar {
     return true
   }
 
+  /// True if this code point is allowed when lexing a raw identifier.
+  ///
+  /// This does not mean that the characters is necessarily _valid_ inside a
+  /// raw identifier. We scan more than we eventually accept so that we can
+  /// provide better diagnostics and recovery in certain failing cases, like
+  /// when a raw identifier contains a backslash or is entirely an operator.
+  var isValidWhenLexingRawIdentifier: Bool {
+    if self.value < 0x80 {
+      guard isPrintableASCII else {
+        return false
+      }
+      return UInt8(self.value) != "`"
+    }
+    return true
+  }
+
   /// isOperatorStartCodePoint - Return true if the specified code point is a
   /// valid start of an operator.
   var isOperatorStartCodePoint: Bool {

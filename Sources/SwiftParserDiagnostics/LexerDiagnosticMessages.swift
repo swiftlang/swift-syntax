@@ -76,6 +76,10 @@ public enum StaticTokenError: String, DiagnosticMessage {
   case invalidIdentifierStartCharacter = "an identifier cannot begin with this character"
   case invalidNumberOfHexDigitsInUnicodeEscape = #"\u{...} escape sequence expects between 1 and 8 hex digits"#
   case invalidUtf8 = "invalid UTF-8 found in source file"
+  case rawIdentifierCannotBeEmpty = "a raw identifier cannot be empty"
+  case rawIdentifierCannotBeEntirelyWhitespace = "a raw identifier cannot be entirely whitespace"
+  case rawIdentifierCannotBeOperator = "a raw identifier cannot contain only operator characters"
+  case rawIdentifierCannotContainBacklash = "a raw identifier cannot contain backslashes"
   case tokenDiagnosticOffsetOverflow =
     "the lexer discovered an error in this token but was not able to represent its offset due to overflow; please split the token"
   case sourceConflictMarker = "source control conflict marker in source file"
@@ -226,6 +230,13 @@ extension SwiftSyntax.TokenDiagnostic {
     case .multilineRegexClosingNotOnNewline: return StaticTokenError.multilineRegexClosingNotOnNewline
     case .nonBreakingSpace: return StaticTokenWarning.nonBreakingSpace
     case .nulCharacter: return StaticTokenWarning.nulCharacter
+    case .rawIdentifierCannotBeEmpty: return StaticTokenError.rawIdentifierCannotBeEmpty
+    case .rawIdentifierCannotBeEntirelyWhitespace:
+      return StaticTokenError.rawIdentifierCannotBeEntirelyWhitespace
+    case .rawIdentifierCannotBeOperator:
+      return StaticTokenError.rawIdentifierCannotBeOperator
+    case .rawIdentifierCannotContainBacklash:
+      return StaticTokenError.rawIdentifierCannotContainBacklash
     case .sourceConflictMarker: return StaticTokenError.sourceConflictMarker
     case .spaceAtEndOfRegexLiteral: return StaticTokenError.spaceAtEndOfRegexLiteral
     case .spaceAtStartOfRegexLiteral: return StaticTokenError.spaceAtStartOfRegexLiteral

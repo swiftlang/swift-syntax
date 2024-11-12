@@ -19,7 +19,7 @@ public struct Identifier: Equatable, Hashable, Sendable {
 
   /// `true` if the identifier is a dollar identifier.
   public var isDollarIdentifier: Bool {
-    raw.name.hasPrefix(SyntaxText("$"))
+    raw.original.hasPrefix(SyntaxText("$")) && Int(String(syntaxText: raw.original).dropFirst()) != nil
   }
 
   @_spi(RawSyntax)
@@ -49,17 +49,17 @@ public struct Identifier: Equatable, Hashable, Sendable {
     }
   }
 
-  /// Create a new `Identifier` from given `staticString`.
+  /// Create a new `Identifier` from given `canonicalName`.
   ///
-  /// - Precondition: `staticString` is a canonical identifier i.e. doesn't
+  /// - Precondition: `canonicalName` is a canonical identifier i.e. doesn't
   ///   use backticks and is not a dollar identifier with leading zeros.
-  public init(staticString: StaticString) {
+  public init(canonicalName: StaticString) {
     precondition(
-      Self.isCanonicalRepresentation(staticString),
-      "\(staticString) is not a canonical identifier."
+      Self.isCanonicalRepresentation(canonicalName),
+      "\(canonicalName) is not a canonical identifier."
     )
 
-    self.raw = RawIdentifier(SyntaxText(staticString))
+    self.raw = RawIdentifier(SyntaxText(canonicalName))
     self.arena = nil
   }
 
@@ -95,10 +95,13 @@ public struct Identifier: Equatable, Hashable, Sendable {
 
 @_spi(RawSyntax)
 public struct RawIdentifier: Equatable, Hashable, Sendable {
+  fileprivate let original: SyntaxText
   public let name: SyntaxText
 
   @_spi(RawSyntax)
   fileprivate init(_ rawText: SyntaxText) {
+    self.original = rawText
+
     guard Identifier.hasBackticks(rawText) else {
       self.name = rawText
       return

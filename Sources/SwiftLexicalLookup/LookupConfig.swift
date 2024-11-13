@@ -33,7 +33,7 @@ import SwiftIfConfig
   /// If `finishInSequentialScope` would be set to `false`, the only name
   /// returned by lookup would be the `a` declaration from inside function body.
   @_spi(Experimental) public var finishInSequentialScope: Bool
-  @_spi(Experimental) public var buildConfiguration: BuildConfiguration?
+  @_spi(Experimental) public var configuredRegions: ConfiguredRegions?
 
   /// Creates a new lookup configuration.
   ///
@@ -41,9 +41,9 @@ import SwiftIfConfig
   ///   in the closest sequential scope. `false` by default.
   @_spi(Experimental) public init(
     finishInSequentialScope: Bool = false,
-    buildConfiguration: BuildConfiguration? = nil
+    configuredRegions: ConfiguredRegions? = nil
   ) {
     self.finishInSequentialScope = finishInSequentialScope
-    self.buildConfiguration = buildConfiguration
+    self.configuredRegions = configuredRegions
   }
 }

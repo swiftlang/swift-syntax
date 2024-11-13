@@ -498,7 +498,26 @@ import SwiftSyntax
 }
 
 @_spi(Experimental) extension CatchClauseSyntax: ScopeSyntax {
-  /// Implicit `error` when there are no catch items.
+  /// Name introduced by the catch clause.
+  ///
+  /// `defaultIntroducedNames` contains implicit `error` name if
+  /// no names are declared in catch items and they don't contain any expression patterns.
+  /// Otherwise, `defaultIntroducedNames` contains names introduced by the clause.
+  ///
+  /// ### Example
+  /// ```swift
+  /// do {
+  ///   // ...
+  /// } catch SomeError, .x(let a) {
+  ///   // <-- lookup here, result: [a]
+  /// } catch .x(let a) {
+  ///   // <-- lookup here, result: [a]
+  /// } catch SomeError {
+  ///   // <-- lookup here, result: [empty]
+  /// } catch {
+  ///   // <-- lookup here, result: implicit(error)
+  /// }
+  /// ```
   @_spi(Experimental) public var defaultIntroducedNames: [LookupName] {
     var containsExpressionSyntax = false
 
@@ -942,8 +961,8 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
   ) -> [LookupResult] {
     let clause: IfConfigClauseSyntax?
 
-    if let buildConfiguration = config.buildConfiguration {
-      (clause, _) = activeClause(in: buildConfiguration)
+    if let configuredRegions = config.configuredRegions {
+      clause = configuredRegions.activeClause(for: self)
     } else {
       clause =
         clauses
@@ -967,8 +986,8 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
   func getNamedDecls(for config: LookupConfig) -> [NamedDeclSyntax] {
     let clause: IfConfigClauseSyntax?
 
-    if let buildConfiguration = config.buildConfiguration {
-      (clause, _) = activeClause(in: buildConfiguration)
+    if let configuredRegions = config.configuredRegions {
+      clause = configuredRegions.activeClause(for: self)
     } else {
       clause =
         clauses

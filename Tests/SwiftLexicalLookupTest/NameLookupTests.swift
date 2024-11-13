@@ -708,10 +708,7 @@ final class testNameLookup: XCTestCase {
         """,
       references: [
         "2️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("1️⃣")])],
-        "3️⃣": [
-          .fromScope(CatchClauseSyntax.self, expectedNames: [NameExpectation.implicit(.error("6️⃣"))]),
-          .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("1️⃣")]),
-        ],
+        "3️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("1️⃣")])],
         "5️⃣": [
           .fromScope(CatchClauseSyntax.self, expectedNames: [NameExpectation.implicit(.error("4️⃣"))]),
           .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("1️⃣")]),
@@ -1013,6 +1010,84 @@ final class testNameLookup: XCTestCase {
       expectedResultTypes: .all(
         GenericParameterSyntax.self
       )
+    )
+  }
+
+  func testDefaultIfConfigBehavior() {
+    assertLexicalNameLookup(
+      source: """
+        func foo() {
+          let 0️⃣a = 1️⃣x
+
+          #if DEBUG
+
+          let b = 2️⃣x
+          class A {}
+
+          #else
+
+          let 3️⃣c = 4️⃣x
+          5️⃣class B {}
+          
+          #if DEBUG
+
+          let d = 6️⃣x
+          class C {}
+
+          #else
+
+          let 7️⃣e = 8️⃣x
+          9️⃣class D {}
+
+          #endif
+          
+          #endif
+          
+          🔟class E {}
+        }
+        """,
+      references: [
+        "1️⃣": [.fromScope(CodeBlockSyntax.self, expectedNames: ["5️⃣", "9️⃣", "🔟"])],
+        "2️⃣": [
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["0️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["5️⃣", "9️⃣", "🔟"]),
+        ],
+        "4️⃣": [
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["0️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["5️⃣", "9️⃣", "🔟"]),
+        ],
+        "6️⃣": [
+          .fromScope(IfConfigDeclSyntax.self, expectedNames: ["3️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["0️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["5️⃣", "9️⃣", "🔟"]),
+        ],
+        "8️⃣": [
+          .fromScope(IfConfigDeclSyntax.self, expectedNames: ["3️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["0️⃣"]),
+          .fromScope(CodeBlockSyntax.self, expectedNames: ["5️⃣", "9️⃣", "🔟"]),
+        ],
+      ],
+      useNilAsTheParameter: true
+    )
+  }
+
+  func testMacroDeclaration() {
+    let sameResult: [ResultExpectation] = [
+      .fromScope(MacroDeclSyntax.self, expectedNames: ["1️⃣", "3️⃣"]),
+      .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["0️⃣"]),
+    ]
+
+    assertLexicalNameLookup(
+      source: """
+        public macro externalMacro<0️⃣T>(1️⃣module: 2️⃣String, 3️⃣type: 4️⃣String) -> 5️⃣T = 6️⃣X
+        """,
+      references: [
+        "2️⃣": sameResult,
+        "4️⃣": sameResult,
+        "5️⃣": sameResult,
+        "6️⃣": sameResult,
+      ],
+      useNilAsTheParameter: true
     )
   }
 }

@@ -26,6 +26,9 @@ private let swiftParserGeneratedDir = ["SwiftParser", generatedDirName]
 private let swiftParserDiagnosticsGeneratedDir = ["SwiftParserDiagnostics", generatedDirName]
 private let swiftSyntaxGeneratedDir = ["SwiftSyntax", generatedDirName]
 private let swiftSyntaxBuilderGeneratedDir = ["SwiftSyntaxBuilder", generatedDirName]
+private let swiftSyntaxMacroExpansionGeneratedDir = ["SwiftSyntaxMacroExpansion", generatedDirName]
+private let swiftSyntaxMacrosGenericTestSupportGeneratedDir = ["SwiftSyntaxMacrosGenericTestSupport", generatedDirName]
+private let swiftSyntaxMacrosTestSupportGeneratedDir = ["SwiftSyntaxMacrosTestSupport", generatedDirName]
 private let BASE_KIND_FILES: [SyntaxNodeKind: String] = [
   .decl: "SyntaxDeclNodes.swift",
   .expr: "SyntaxExprNodes.swift",
@@ -159,6 +162,28 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
       GeneratedFileSpec(
         swiftSyntaxBuilderGeneratedDir + ["RenamedChildrenBuilderCompatibility.swift"],
         renamedChildrenBuilderCompatibilityFile
+      ),
+
+      // SwiftSyntaxMacroExpansion
+      GeneratedFileSpec(
+        swiftSyntaxMacroExpansionGeneratedDir + ["MacroExpansion.swift"],
+        macroExpansionFile
+      ),
+      GeneratedFileSpec(
+        swiftSyntaxMacroExpansionGeneratedDir + ["MacroSystem.swift"],
+        macroSystemFile
+      ),
+
+      // SwiftSyntaxMacrosGenericTestSupport
+      GeneratedFileSpec(
+        swiftSyntaxMacrosGenericTestSupportGeneratedDir + ["Assertions.swift"],
+        genericMacroAssertionsFile
+      ),
+
+      // SwiftSyntaxMacrosTestSupport
+      GeneratedFileSpec(
+        swiftSyntaxMacrosTestSupportGeneratedDir + ["Assertions.swift"],
+        macroAssertionsFile
       ),
     ]
     // This split of letters produces files for the syntax nodes that have about equal size, which improves compile time

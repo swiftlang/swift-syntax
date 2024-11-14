@@ -108,10 +108,10 @@ extension CompilerPlugin {
 
   /// Main entry point of the plugin — sets up a standard I/O communication
   /// channel with the plugin host and runs the main message loop.
-  public static func main() throws {
+  public static func main() async throws {
     let connection = try StandardIOMessageConnection()
     let provider = MacroProviderAdapter(plugin: Self())
     let impl = CompilerPluginMessageListener(connection: connection, provider: provider)
-    impl.main()
+    await impl.main()
   }
 }

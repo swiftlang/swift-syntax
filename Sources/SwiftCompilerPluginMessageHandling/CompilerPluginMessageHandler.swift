@@ -96,12 +96,12 @@ public class CompilerPluginMessageListener<Connection: MessageConnection, Handle
   ///
   /// On internal errors, such as I/O errors or JSON serialization errors, print
   /// an error message and `exit(1)`
-  public func main() {
+  public func main() async {
     #if os(WASI)
     // Rather than blocking on read(), let the host tell us when there's data.
     readabilityHandler = { _ = self.handleNextMessage() }
     #else
-    while handleNextMessage() {}
+    while await handleNextMessage() {}
     #endif
   }
 
@@ -109,12 +109,12 @@ public class CompilerPluginMessageListener<Connection: MessageConnection, Handle
   ///
   /// - Returns: `true` if there was a message to read, `false`
   /// if the end-of-file was reached.
-  private func handleNextMessage() -> Bool {
+  private func handleNextMessage() async -> Bool {
     do {
       guard let message = try connection.waitForNextMessage(HostToPluginMessage.self) else {
         return false
       }
-      let result = handler.handleMessage(message)
+      let result = await handler.handleMessage(message)
       try connection.sendMessage(result)
       return true
     } catch {
@@ -132,7 +132,7 @@ public class CompilerPluginMessageListener<Connection: MessageConnection, Handle
 @_spi(PluginMessage)
 public protocol PluginMessageHandler {
   /// Handles a single message received from the plugin host.
-  func handleMessage(_ message: HostToPluginMessage) -> PluginToHostMessage
+  func handleMessage(_ message: HostToPluginMessage) async -> PluginToHostMessage
 }
 
 /// A `PluginMessageHandler` that uses a `PluginProvider`.
@@ -154,7 +154,7 @@ public class PluginProviderMessageHandler<Provider: PluginProvider>: PluginMessa
   }
 
   /// Handles a single message received from the plugin host.
-  public func handleMessage(_ message: HostToPluginMessage) -> PluginToHostMessage {
+  public func handleMessage(_ message: HostToPluginMessage) async -> PluginToHostMessage {
     switch message {
     case .getCapability(let hostCapability):
       // Remember the peer capability if provided.
@@ -176,7 +176,7 @@ public class PluginProviderMessageHandler<Provider: PluginProvider>: PluginMessa
       let expandingSyntax,
       let lexicalContext
     ):
-      return expandFreestandingMacro(
+      return await expandFreestandingMacro(
         macro: macro,
         macroRole: macroRole,
         discriminator: discriminator,
@@ -195,7 +195,7 @@ public class PluginProviderMessageHandler<Provider: PluginProvider>: PluginMessa
       let conformanceListSyntax,
       let lexicalContext
     ):
-      return expandAttachedMacro(
+      return await expandAttachedMacro(
         macro: macro,
         macroRole: macroRole,
         discriminator: discriminator,

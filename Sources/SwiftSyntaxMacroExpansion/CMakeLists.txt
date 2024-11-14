@@ -3,11 +3,11 @@ add_swift_syntax_library(SwiftSyntaxMacroExpansion
   FunctionParameterUtils.swift
   IndentationUtils.swift
   MacroArgument.swift
-  MacroExpansion.swift
   MacroExpansionDiagnosticMessages.swift
   MacroReplacement.swift
   MacroSpec.swift
-  MacroSystem.swift
+  generated/MacroExpansion.swift
+  generated/MacroSystem.swift
 )
 
 target_link_swift_syntax_libraries(SwiftSyntaxMacroExpansion PUBLIC

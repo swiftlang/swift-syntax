@@ -58,6 +58,7 @@ add_swift_syntax_library(SwiftSyntax
   generated/raw/RawSyntaxNodesTUVWXYZ.swift
   generated/raw/RawSyntaxValidation.swift
 
+  generated/AsyncSyntaxRewriter.swift
   generated/ChildNameForKeyPath.swift
   generated/Keyword.swift
   generated/RenamedChildrenCompatibility.swift

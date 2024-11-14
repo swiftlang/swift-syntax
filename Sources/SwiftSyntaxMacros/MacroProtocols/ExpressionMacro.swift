@@ -24,4 +24,20 @@ public protocol ExpressionMacro: FreestandingMacro {
     of node: some FreestandingMacroExpansionSyntax,
     in context: some MacroExpansionContext
   ) throws -> ExprSyntax
+
+  /// Expand a macro described by the given freestanding macro expansion
+  /// within the given context to produce a replacement expression.
+  static func expansion(
+    of node: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
+  ) async throws -> ExprSyntax
+}
+
+extension ExpressionMacro {
+  public static func expansion(
+    of node: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
+  ) async throws -> ExprSyntax {
+    return try { try self.expansion(of: node, in: context) }()
+  }
 }

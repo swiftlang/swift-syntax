@@ -40,4 +40,46 @@ public protocol ExtensionMacro: AttachedMacro {
     conformingTo protocols: [TypeSyntax],
     in context: some MacroExpansionContext
   ) throws -> [ExtensionDeclSyntax]
+
+  /// Expand an attached extension macro to produce a set of extensions.
+  ///
+  /// - Parameters:
+  ///   - node: The custom attribute describing the attached macro.
+  ///   - declaration: The declaration the macro attribute is attached to.
+  ///   - type: The type to provide extensions of.
+  ///   - protocols: The list of protocols to add conformances to. These will
+  ///     always be protocols that `type` does not already state a conformance
+  ///     to.
+  ///   - context: The context in which to perform the macro expansion.
+  ///
+  /// - Returns: the set of extension declarations introduced by the macro,
+  ///   which are always inserted at top-level scope. Each extension must extend
+  ///   the `type` parameter.
+  static func expansion(
+    of node: AttributeSyntax,
+    attachedTo declaration: some DeclGroupSyntax,
+    providingExtensionsOf type: some TypeSyntaxProtocol,
+    conformingTo protocols: [TypeSyntax],
+    in context: some MacroExpansionContext
+  ) async throws -> [ExtensionDeclSyntax]
+}
+
+extension ExtensionMacro {
+  public static func expansion(
+    of node: AttributeSyntax,
+    attachedTo declaration: some DeclGroupSyntax,
+    providingExtensionsOf type: some TypeSyntaxProtocol,
+    conformingTo protocols: [TypeSyntax],
+    in context: some MacroExpansionContext
+  ) async throws -> [ExtensionDeclSyntax] {
+    return try {
+      try self.expansion(
+        of: node,
+        attachedTo: declaration,
+        providingExtensionsOf: type,
+        conformingTo: protocols,
+        in: context
+      )
+    }()
+  }
 }

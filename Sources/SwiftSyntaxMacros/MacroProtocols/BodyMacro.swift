@@ -27,4 +27,25 @@ public protocol BodyMacro: AttachedMacro {
     providingBodyFor declaration: some DeclSyntaxProtocol & WithOptionalCodeBlockSyntax,
     in context: some MacroExpansionContext
   ) throws -> [CodeBlockItemSyntax]
+
+  /// Expand a macro described by the given custom attribute and
+  /// attached to the given declaration and evaluated within a
+  /// particular expansion context.
+  ///
+  /// The macro expansion can introduce a body for the given function.
+  static func expansion(
+    of node: AttributeSyntax,
+    providingBodyFor declaration: some DeclSyntaxProtocol & WithOptionalCodeBlockSyntax,
+    in context: some MacroExpansionContext
+  ) async throws -> [CodeBlockItemSyntax]
+}
+
+extension BodyMacro {
+  public static func expansion(
+    of node: AttributeSyntax,
+    providingBodyFor declaration: some DeclSyntaxProtocol & WithOptionalCodeBlockSyntax,
+    in context: some MacroExpansionContext
+  ) async throws -> [CodeBlockItemSyntax] {
+    return try { try self.expansion(of: node, providingBodyFor: declaration, in: context) }()
+  }
 }

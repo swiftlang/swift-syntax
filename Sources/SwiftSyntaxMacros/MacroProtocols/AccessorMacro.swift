@@ -24,4 +24,23 @@ public protocol AccessorMacro: AttachedMacro {
     providingAccessorsOf declaration: some DeclSyntaxProtocol,
     in context: some MacroExpansionContext
   ) throws -> [AccessorDeclSyntax]
+
+  /// Expand a macro that's expressed as a custom attribute attached to
+  /// the given declaration. The result is a set of accessors for the
+  /// declaration.
+  static func expansion(
+    of node: AttributeSyntax,
+    providingAccessorsOf declaration: some DeclSyntaxProtocol,
+    in context: some MacroExpansionContext
+  ) async throws -> [AccessorDeclSyntax]
+}
+
+extension AccessorMacro {
+  public static func expansion(
+    of node: AttributeSyntax,
+    providingAccessorsOf declaration: some DeclSyntaxProtocol,
+    in context: some MacroExpansionContext
+  ) async throws -> [AccessorDeclSyntax] {
+    return try { try self.expansion(of: node, providingAccessorsOf: declaration, in: context) }()
+  }
 }

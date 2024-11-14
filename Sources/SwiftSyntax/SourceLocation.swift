@@ -522,38 +522,33 @@ fileprivate extension SyntaxText {
     prefix: SourceLength = .zero,
     body: (SourceLength) -> ()
   ) -> SourceLength {
-    //    let startIndex = utf8.startIndex
-    //    let endIndex = utf8.endIndex
     var curIdx = startIndex
-    var lineLength = prefix
-    let advanceLengthByOne = { () -> () in
-      lineLength += SourceLength(utf8Length: 1)
-      curIdx = self.index(after: curIdx)
-    }
+    let endIdx = endIndex
+    var lineStart = curIdx - prefix.utf8Length
 
-    while curIdx < endIndex {
-      let char = self[curIdx]
-      advanceLengthByOne()
+    while curIdx != endIdx {
+      let chr = self[curIdx]
+      curIdx &+= 1
 
       /// From https://docs.swift.org/swift-book/ReferenceManual/LexicalStructure.html#grammar_line-break
       /// * line-break → U+000A
       /// * line-break → U+000D
       /// * line-break → U+000D followed by U+000A
-      let isNewline = { () -> Bool in
-        if char == 10 { return true }
-        if char == 13 {
-          if curIdx < endIndex && self[curIdx] == 10 { advanceLengthByOne() }
-          return true
+      switch chr {
+      case UInt8(ascii: "\n"):
+        break
+      case UInt8(ascii: "\r"):
+        if curIdx != endIdx && self[curIdx] == UInt8(ascii: "\n") {
+          curIdx &+= 1
         }
-        return false
+        break
+      default:
+        continue
       }
-
-      if isNewline() {
-        body(lineLength)
-        lineLength = .zero
-      }
+      body(SourceLength(utf8Length: curIdx - lineStart))
+      lineStart = curIdx
     }
-    return lineLength
+    return SourceLength(utf8Length: curIdx - lineStart)
   }
 
   func containsSwiftNewline() -> Bool {

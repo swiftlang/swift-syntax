@@ -63,7 +63,7 @@ extension AccessorDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "AccessorDeclSyntax(leadingTrivia:_:attributes:_:modifier:_:accessorSpecifier:_:parameters:_:effectSpecifiers:_:body:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifier:_:accessorSpecifier:_:parameters:_:effectSpecifiers:_:body:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -133,7 +133,7 @@ extension ActorDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ActorDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:actorKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:actorKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -241,7 +241,7 @@ extension ArrayExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ArrayExprSyntax(leadingTrivia:_:leftSquare:_:elements:_:rightSquare:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftSquare:_:elements:_:rightSquare:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -339,7 +339,7 @@ extension ArrayTypeSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ArrayTypeSyntax(leadingTrivia:_:leftSquare:_:element:_:rightSquare:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftSquare:_:element:_:rightSquare:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -397,7 +397,7 @@ extension ArrowExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ArrowExprSyntax(leadingTrivia:_:effectSpecifiers:_:arrow:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:effectSpecifiers:_:arrow:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -481,7 +481,7 @@ extension AsExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "AsExprSyntax(leadingTrivia:_:expression:_:asKeyword:_:questionOrExclamationMark:_:type:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:expression:_:asKeyword:_:questionOrExclamationMark:_:type:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -543,7 +543,7 @@ extension AssignmentExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "AssignmentExprSyntax(leadingTrivia:_:equal:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:equal:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -593,7 +593,7 @@ extension AssociatedTypeDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "AssociatedTypeDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:associatedtypeKeyword:_:name:_:inheritanceClause:_:initializer:_:genericWhereClause:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:associatedtypeKeyword:_:name:_:inheritanceClause:_:initializer:_:genericWhereClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -697,7 +697,7 @@ extension AttributeSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "AttributeSyntax(leadingTrivia:_:atSign:_:attributeName:_:leftParen:_:arguments:_:rightParen:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:atSign:_:attributeName:_:leftParen:_:arguments:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -763,7 +763,7 @@ extension AvailabilityArgumentSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "AvailabilityArgumentSyntax(leadingTrivia:_:argument:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:argument:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -817,7 +817,7 @@ extension AvailabilityConditionSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "AvailabilityConditionSyntax(leadingTrivia:_:availabilityKeyword:_:leftParen:_:availabilityArguments:_:rightParen:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:availabilityKeyword:_:leftParen:_:availabilityArguments:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -870,7 +870,7 @@ extension BackDeployedAttributeArgumentsSyntax {
   }
 
   @available(*, deprecated, renamed: "addPlatform")
-  public func addAvailability(_ element: PlatformVersionItemSyntax) -> BackDeployedAttributeArgumentsSyntax {
+  public func addAvailability(_ element: PlatformVersionItemSyntax) -> Self {
     return addPlatform(element)
   }
 
@@ -884,7 +884,7 @@ extension BackDeployedAttributeArgumentsSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "BackDeployedAttributeArgumentsSyntax(leadingTrivia:_:beforeLabel:_:colon:_:platforms:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:beforeLabel:_:colon:_:platforms:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -942,7 +942,7 @@ extension BinaryOperatorExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "BinaryOperatorExprSyntax(leadingTrivia:_:operator:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:operator:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -992,7 +992,7 @@ extension BooleanLiteralExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "BooleanLiteralExprSyntax(leadingTrivia:_:literal:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:literal:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1042,7 +1042,7 @@ extension _CanImportVersionInfoSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "_CanImportVersionInfoSyntax(leadingTrivia:_:comma:_:label:_:colon:_:version:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:comma:_:label:_:colon:_:version:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1104,7 +1104,7 @@ extension ClassDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ClassDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:classKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:classKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1182,7 +1182,7 @@ extension ClosureParameterClauseSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ClosureParameterClauseSyntax(leadingTrivia:_:leftParen:_:parameters:_:rightParen:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftParen:_:parameters:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1290,7 +1290,7 @@ extension ClosureSignatureSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ClosureSignatureSyntax(leadingTrivia:_:attributes:_:capture:_:parameterClause:_:effectSpecifiers:_:returnClause:_:inKeyword:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:capture:_:parameterClause:_:effectSpecifiers:_:returnClause:_:inKeyword:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1390,7 +1390,7 @@ extension ConformanceRequirementSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ConformanceRequirementSyntax(leadingTrivia:_:leftType:_:colon:_:rightType:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftType:_:colon:_:rightType:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1448,7 +1448,7 @@ extension ConsumeExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ConsumeExprSyntax(leadingTrivia:_:consumeKeyword:_:expression:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:consumeKeyword:_:expression:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1522,7 +1522,7 @@ extension DeclReferenceExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "DeclReferenceExprSyntax(leadingTrivia:_:baseName:_:argumentNames:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:baseName:_:argumentNames:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1606,7 +1606,7 @@ extension DerivativeAttributeArgumentsSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "DerivativeAttributeArgumentsSyntax(leadingTrivia:_:ofLabel:_:colon:_:originalDeclName:_:period:_:accessorSpecifier:_:comma:_:arguments:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:ofLabel:_:colon:_:originalDeclName:_:period:_:accessorSpecifier:_:comma:_:arguments:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1710,7 +1710,7 @@ extension DictionaryElementSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "DictionaryElementSyntax(leadingTrivia:_:key:_:colon:_:value:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:key:_:colon:_:value:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1842,7 +1842,7 @@ extension DictionaryTypeSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "DictionaryTypeSyntax(leadingTrivia:_:leftSquare:_:key:_:colon:_:value:_:rightSquare:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftSquare:_:key:_:colon:_:value:_:rightSquare:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1908,7 +1908,7 @@ extension DifferentiabilityArgumentSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "DifferentiabilityArgumentSyntax(leadingTrivia:_:argument:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:argument:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1962,7 +1962,7 @@ extension DifferentiabilityArgumentsSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "DifferentiabilityArgumentsSyntax(leadingTrivia:_:leftParen:_:arguments:_:rightParen:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftParen:_:arguments:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2020,7 +2020,7 @@ extension DifferentiabilityWithRespectToArgumentSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "DifferentiabilityWithRespectToArgumentSyntax(leadingTrivia:_:wrtLabel:_:colon:_:arguments:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:wrtLabel:_:colon:_:arguments:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2158,7 +2158,7 @@ extension DifferentiableAttributeArgumentsSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "DifferentiableAttributeArgumentsSyntax(leadingTrivia:_:kindSpecifier:_:kindSpecifierComma:_:arguments:_:argumentsComma:_:genericWhereClause:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:kindSpecifier:_:kindSpecifierComma:_:arguments:_:argumentsComma:_:genericWhereClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2224,7 +2224,7 @@ extension DynamicReplacementAttributeArgumentsSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "DynamicReplacementAttributeArgumentsSyntax(leadingTrivia:_:forLabel:_:colon:_:declName:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:forLabel:_:colon:_:declName:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2282,7 +2282,7 @@ extension EditorPlaceholderDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "EditorPlaceholderDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:placeholder:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:placeholder:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2340,7 +2340,7 @@ extension EditorPlaceholderExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "EditorPlaceholderExprSyntax(leadingTrivia:_:placeholder:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:placeholder:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2410,7 +2410,7 @@ extension EnumCaseElementSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "EnumCaseElementSyntax(leadingTrivia:_:name:_:parameterClause:_:rawValue:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:name:_:parameterClause:_:rawValue:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2472,7 +2472,7 @@ extension EnumCaseParameterClauseSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "EnumCaseParameterClauseSyntax(leadingTrivia:_:leftParen:_:parameters:_:rightParen:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftParen:_:parameters:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2530,7 +2530,7 @@ extension EnumCaseParameterSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "EnumCaseParameterSyntax(leadingTrivia:_:modifiers:_:firstName:_:secondName:_:colon:_:type:_:defaultValue:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:modifiers:_:firstName:_:secondName:_:colon:_:type:_:defaultValue:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2624,7 +2624,7 @@ extension EnumDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "EnumDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:enumKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:enumKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2702,7 +2702,7 @@ extension ExpressionSegmentSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ExpressionSegmentSyntax(leadingTrivia:_:backslash:_:pounds:_:leftParen:_:expressions:_:rightParen:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:backslash:_:pounds:_:leftParen:_:expressions:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2768,7 +2768,7 @@ extension FloatLiteralExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "FloatLiteralExprSyntax(leadingTrivia:_:literal:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:literal:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2818,7 +2818,7 @@ extension ForStmtSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ForStmtSyntax(leadingTrivia:_:forKeyword:_:tryKeyword:_:awaitKeyword:_:caseKeyword:_:pattern:_:typeAnnotation:_:inKeyword:_:sequence:_:whereClause:_:body:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:forKeyword:_:tryKeyword:_:awaitKeyword:_:caseKeyword:_:pattern:_:typeAnnotation:_:inKeyword:_:sequence:_:whereClause:_:body:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2904,7 +2904,7 @@ extension FunctionCallExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "FunctionCallExprSyntax(leadingTrivia:_:calledExpression:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:calledExpression:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2974,7 +2974,7 @@ extension FunctionDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "FunctionDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:funcKeyword:_:name:_:genericParameterClause:_:signature:_:genericWhereClause:_:body:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:funcKeyword:_:name:_:genericParameterClause:_:signature:_:genericWhereClause:_:body:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3052,7 +3052,7 @@ extension FunctionParameterClauseSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "FunctionParameterClauseSyntax(leadingTrivia:_:leftParen:_:parameters:_:rightParen:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftParen:_:parameters:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3110,7 +3110,7 @@ extension FunctionParameterSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "FunctionParameterSyntax(leadingTrivia:_:attributes:_:modifiers:_:firstName:_:secondName:_:colon:_:type:_:ellipsis:_:defaultValue:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:firstName:_:secondName:_:colon:_:type:_:ellipsis:_:defaultValue:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3222,7 +3222,7 @@ extension FunctionSignatureSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "FunctionSignatureSyntax(leadingTrivia:_:parameterClause:_:effectSpecifiers:_:returnClause:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:parameterClause:_:effectSpecifiers:_:returnClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3271,7 +3271,7 @@ extension FunctionTypeSyntax {
   }
 
   @available(*, deprecated, renamed: "addParameter")
-  public func addArgument(_ element: TupleTypeElementSyntax) -> FunctionTypeSyntax {
+  public func addArgument(_ element: TupleTypeElementSyntax) -> Self {
     return addParameter(element)
   }
 
@@ -3315,7 +3315,7 @@ extension FunctionTypeSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "FunctionTypeSyntax(leadingTrivia:_:leftParen:_:parameters:_:rightParen:_:effectSpecifiers:_:returnClause:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftParen:_:parameters:_:rightParen:_:effectSpecifiers:_:returnClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3411,7 +3411,7 @@ extension GenericArgumentClauseSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "GenericArgumentClauseSyntax(leadingTrivia:_:leftAngle:_:arguments:_:rightAngle:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftAngle:_:arguments:_:rightAngle:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3450,7 +3450,7 @@ extension GenericArgumentSyntax {
   }
 
   @available(*, deprecated, renamed: "argument")
-  public var argumentType: TypeSyntax {
+  public var argumentType: Argument {
     get {
       return argument
     }
@@ -3469,12 +3469,12 @@ extension GenericArgumentSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "GenericArgumentSyntax(leadingTrivia:_:argument:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:argument:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeArgumentType: UnexpectedNodesSyntax? = nil,
-    argumentType: some TypeSyntaxProtocol,
+    argumentType: Argument,
     _ unexpectedBetweenArgumentTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax? = nil,
     _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
@@ -3534,7 +3534,7 @@ extension GenericParameterClauseSyntax {
   }
 
   @available(*, deprecated, renamed: "addParameter")
-  public func addGenericParameter(_ element: GenericParameterSyntax) -> GenericParameterClauseSyntax {
+  public func addGenericParameter(_ element: GenericParameterSyntax) -> Self {
     return addParameter(element)
   }
 
@@ -3578,7 +3578,7 @@ extension GenericParameterClauseSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "GenericParameterClauseSyntax(leadingTrivia:_:leftAngle:_:parameters:_:genericWhereClause:_:rightAngle:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftAngle:_:parameters:_:genericWhereClause:_:rightAngle:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3640,7 +3640,7 @@ extension GenericParameterSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "GenericParameterSyntax(leadingTrivia:_:attributes:_:specifier:_:name:_:colon:_:inheritedType:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:specifier:_:name:_:colon:_:inheritedType:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3710,7 +3710,7 @@ extension GenericRequirementSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "GenericRequirementSyntax(leadingTrivia:_:requirement:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:requirement:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3764,7 +3764,7 @@ extension GenericWhereClauseSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "GenericWhereClauseSyntax(leadingTrivia:_:whereKeyword:_:requirements:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:whereKeyword:_:requirements:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3818,7 +3818,7 @@ extension ImplementsAttributeArgumentsSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ImplementsAttributeArgumentsSyntax(leadingTrivia:_:type:_:comma:_:declName:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:type:_:comma:_:declName:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3896,7 +3896,7 @@ extension ImportDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ImportDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:importKeyword:_:importKindSpecifier:_:path:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:importKeyword:_:importKindSpecifier:_:path:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3962,7 +3962,7 @@ extension ImportPathComponentSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ImportPathComponentSyntax(leadingTrivia:_:name:_:trailingPeriod:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:name:_:trailingPeriod:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -4016,7 +4016,7 @@ extension InfixOperatorExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "InfixOperatorExprSyntax(leadingTrivia:_:leftOperand:_:operator:_:rightOperand:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftOperand:_:operator:_:rightOperand:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -4074,7 +4074,7 @@ extension InheritanceClauseSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "InheritanceClauseSyntax(leadingTrivia:_:colon:_:inheritedTypes:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:colon:_:inheritedTypes:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -4128,7 +4128,7 @@ extension InheritedTypeSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "InheritedTypeSyntax(leadingTrivia:_:type:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:type:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -4182,7 +4182,7 @@ extension IntegerLiteralExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "IntegerLiteralExprSyntax(leadingTrivia:_:literal:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:literal:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -4252,7 +4252,7 @@ extension IsExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "IsExprSyntax(leadingTrivia:_:expression:_:isKeyword:_:type:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:expression:_:isKeyword:_:type:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -4350,7 +4350,7 @@ extension KeyPathSubscriptComponentSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "KeyPathSubscriptComponentSyntax(leadingTrivia:_:leftSquare:_:arguments:_:rightSquare:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftSquare:_:arguments:_:rightSquare:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -4428,7 +4428,7 @@ extension LabeledStmtSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "LabeledStmtSyntax(leadingTrivia:_:label:_:colon:_:statement:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:label:_:colon:_:statement:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -4516,7 +4516,7 @@ extension LayoutRequirementSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "LayoutRequirementSyntax(leadingTrivia:_:type:_:colon:_:layoutSpecifier:_:leftParen:_:size:_:comma:_:alignment:_:rightParen:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:type:_:colon:_:layoutSpecifier:_:leftParen:_:size:_:comma:_:alignment:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -4594,7 +4594,7 @@ extension MacroDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "MacroDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:macroKeyword:_:name:_:genericParameterClause:_:signature:_:definition:_:genericWhereClause:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:macroKeyword:_:name:_:genericParameterClause:_:signature:_:definition:_:genericWhereClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -4742,7 +4742,7 @@ extension MacroExpansionDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "MacroExpansionDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:pound:_:macroName:_:genericArgumentClause:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:pound:_:macroName:_:genericArgumentClause:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -4898,7 +4898,7 @@ extension MacroExpansionExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "MacroExpansionExprSyntax(leadingTrivia:_:pound:_:macroName:_:genericArgumentClause:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:pound:_:macroName:_:genericArgumentClause:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -4976,7 +4976,7 @@ extension MemberAccessExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "MemberAccessExprSyntax(leadingTrivia:_:base:_:period:_:declName:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:base:_:period:_:declName:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -5034,7 +5034,7 @@ extension MetatypeTypeSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "MetatypeTypeSyntax(leadingTrivia:_:baseType:_:period:_:metatypeSpecifier:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:baseType:_:period:_:metatypeSpecifier:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -5112,7 +5112,7 @@ extension NamedOpaqueReturnTypeSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "NamedOpaqueReturnTypeSyntax(leadingTrivia:_:genericParameterClause:_:type:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:genericParameterClause:_:type:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -5196,7 +5196,7 @@ extension OperatorDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "OperatorDeclSyntax(leadingTrivia:_:fixitySpecifier:_:operatorKeyword:_:name:_:operatorPrecedenceAndTypes:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:fixitySpecifier:_:operatorKeyword:_:name:_:operatorPrecedenceAndTypes:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -5258,7 +5258,7 @@ extension OptionalBindingConditionSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "OptionalBindingConditionSyntax(leadingTrivia:_:bindingSpecifier:_:pattern:_:typeAnnotation:_:initializer:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:bindingSpecifier:_:pattern:_:typeAnnotation:_:initializer:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -5320,7 +5320,7 @@ extension PackElementExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "PackElementExprSyntax(leadingTrivia:_:eachKeyword:_:pack:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:eachKeyword:_:pack:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -5374,7 +5374,7 @@ extension PackElementTypeSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "PackElementTypeSyntax(leadingTrivia:_:eachKeyword:_:pack:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:eachKeyword:_:pack:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -5428,7 +5428,7 @@ extension PackExpansionExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "PackExpansionExprSyntax(leadingTrivia:_:repeatKeyword:_:repetitionPattern:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:repeatKeyword:_:repetitionPattern:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -5482,7 +5482,7 @@ extension PackExpansionTypeSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "PackExpansionTypeSyntax(leadingTrivia:_:repeatKeyword:_:repetitionPattern:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:repeatKeyword:_:repetitionPattern:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -5536,7 +5536,7 @@ extension PatternBindingSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "PatternBindingSyntax(leadingTrivia:_:pattern:_:typeAnnotation:_:initializer:_:accessorBlock:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:pattern:_:typeAnnotation:_:initializer:_:accessorBlock:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -5602,7 +5602,7 @@ extension PlatformVersionItemSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "PlatformVersionItemSyntax(leadingTrivia:_:platformVersion:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:platformVersion:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -5656,7 +5656,7 @@ extension PostfixOperatorExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "PostfixOperatorExprSyntax(leadingTrivia:_:expression:_:operator:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:expression:_:operator:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -5780,7 +5780,7 @@ extension PoundSourceLocationArgumentsSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "PoundSourceLocationArgumentsSyntax(leadingTrivia:_:fileLabel:_:fileColon:_:fileName:_:comma:_:lineLabel:_:lineColon:_:lineNumber:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:fileLabel:_:fileColon:_:fileName:_:comma:_:lineLabel:_:lineColon:_:lineNumber:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -5854,7 +5854,7 @@ extension PoundSourceLocationSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "PoundSourceLocationSyntax(leadingTrivia:_:poundSourceLocation:_:leftParen:_:arguments:_:rightParen:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:poundSourceLocation:_:leftParen:_:arguments:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -5946,7 +5946,7 @@ extension PrecedenceGroupAssignmentSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "PrecedenceGroupAssignmentSyntax(leadingTrivia:_:assignmentLabel:_:colon:_:value:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:assignmentLabel:_:colon:_:value:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -6004,7 +6004,7 @@ extension PrecedenceGroupAssociativitySyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "PrecedenceGroupAssociativitySyntax(leadingTrivia:_:associativityLabel:_:colon:_:value:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:associativityLabel:_:colon:_:value:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -6062,7 +6062,7 @@ extension PrecedenceGroupDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "PrecedenceGroupDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:precedencegroupKeyword:_:name:_:leftBrace:_:groupAttributes:_:rightBrace:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:precedencegroupKeyword:_:name:_:leftBrace:_:groupAttributes:_:rightBrace:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -6166,7 +6166,7 @@ extension PrecedenceGroupRelationSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "PrecedenceGroupRelationSyntax(leadingTrivia:_:higherThanOrLowerThanLabel:_:colon:_:precedenceGroups:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:higherThanOrLowerThanLabel:_:colon:_:precedenceGroups:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -6244,7 +6244,7 @@ extension PrefixOperatorExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "PrefixOperatorExprSyntax(leadingTrivia:_:operator:_:expression:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:operator:_:expression:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -6338,7 +6338,7 @@ extension PrimaryAssociatedTypeClauseSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "PrimaryAssociatedTypeClauseSyntax(leadingTrivia:_:leftAngle:_:primaryAssociatedTypes:_:rightAngle:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftAngle:_:primaryAssociatedTypes:_:rightAngle:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -6396,7 +6396,7 @@ extension ProtocolDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ProtocolDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:protocolKeyword:_:name:_:primaryAssociatedTypeClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:protocolKeyword:_:name:_:primaryAssociatedTypeClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -6514,7 +6514,7 @@ extension RegexLiteralExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "RegexLiteralExprSyntax(leadingTrivia:_:openingPounds:_:openingSlash:_:regex:_:closingSlash:_:closingPounds:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:openingPounds:_:openingSlash:_:regex:_:closingSlash:_:closingPounds:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -6580,7 +6580,7 @@ extension ReturnClauseSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ReturnClauseSyntax(leadingTrivia:_:arrow:_:type:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:arrow:_:type:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -6615,7 +6615,7 @@ extension SameTypeRequirementSyntax {
   }
 
   @available(*, deprecated, renamed: "leftType")
-  public var leftTypeIdentifier: TypeSyntax {
+  public var leftTypeIdentifier: LeftType {
     get {
       return leftType
     }
@@ -6655,7 +6655,7 @@ extension SameTypeRequirementSyntax {
   }
 
   @available(*, deprecated, renamed: "rightType")
-  public var rightTypeIdentifier: TypeSyntax {
+  public var rightTypeIdentifier: RightType {
     get {
       return rightType
     }
@@ -6674,16 +6674,16 @@ extension SameTypeRequirementSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "SameTypeRequirementSyntax(leadingTrivia:_:leftType:_:equal:_:rightType:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftType:_:equal:_:rightType:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeLeftTypeIdentifier: UnexpectedNodesSyntax? = nil,
-    leftTypeIdentifier: some TypeSyntaxProtocol,
+    leftTypeIdentifier: LeftType,
     _ unexpectedBetweenLeftTypeIdentifierAndEqualityToken: UnexpectedNodesSyntax? = nil,
     equalityToken: TokenSyntax,
     _ unexpectedBetweenEqualityTokenAndRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
-    rightTypeIdentifier: some TypeSyntaxProtocol,
+    rightTypeIdentifier: RightType,
     _ unexpectedAfterRightTypeIdentifier: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
   ) {
@@ -6732,7 +6732,7 @@ extension SomeOrAnyTypeSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "SomeOrAnyTypeSyntax(leadingTrivia:_:someOrAnySpecifier:_:constraint:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:someOrAnySpecifier:_:constraint:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -6786,7 +6786,7 @@ extension SourceFileSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "SourceFileSyntax(leadingTrivia:_:shebang:_:statements:_:endOfFileToken:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:shebang:_:statements:_:endOfFileToken:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -6865,7 +6865,7 @@ extension SpecializeAvailabilityArgumentSyntax {
   }
 
   @available(*, deprecated, renamed: "addAvailabilityArgument")
-  public func addAvailability(_ element: AvailabilityArgumentSyntax) -> SpecializeAvailabilityArgumentSyntax {
+  public func addAvailability(_ element: AvailabilityArgumentSyntax) -> Self {
     return addAvailabilityArgument(element)
   }
 
@@ -6879,7 +6879,7 @@ extension SpecializeAvailabilityArgumentSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "SpecializeAvailabilityArgumentSyntax(leadingTrivia:_:availabilityLabel:_:colon:_:availabilityArguments:_:semicolon:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:availabilityLabel:_:colon:_:availabilityArguments:_:semicolon:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -6971,7 +6971,7 @@ extension SpecializeTargetFunctionArgumentSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "SpecializeTargetFunctionArgumentSyntax(leadingTrivia:_:targetLabel:_:colon:_:declName:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:targetLabel:_:colon:_:declName:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -7103,7 +7103,7 @@ extension StringLiteralExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "StringLiteralExprSyntax(leadingTrivia:_:openingPounds:_:openingQuote:_:segments:_:closingQuote:_:closingPounds:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:openingPounds:_:openingQuote:_:segments:_:closingQuote:_:closingPounds:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -7169,7 +7169,7 @@ extension StructDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "StructDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:structKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:structKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -7287,7 +7287,7 @@ extension SubscriptCallExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "SubscriptCallExprSyntax(leadingTrivia:_:calledExpression:_:leftSquare:_:arguments:_:rightSquare:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:calledExpression:_:leftSquare:_:arguments:_:rightSquare:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -7407,7 +7407,7 @@ extension SubscriptDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "SubscriptDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:subscriptKeyword:_:genericParameterClause:_:parameterClause:_:returnClause:_:genericWhereClause:_:accessorBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:subscriptKeyword:_:genericParameterClause:_:parameterClause:_:returnClause:_:genericWhereClause:_:accessorBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -7485,7 +7485,7 @@ extension SuppressedTypeSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "SuppressedTypeSyntax(leadingTrivia:_:withoutTilde:_:type:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:withoutTilde:_:type:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -7539,7 +7539,7 @@ extension SwitchCaseSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "SwitchCaseSyntax(leadingTrivia:_:attribute:_:label:_:statements:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attribute:_:label:_:statements:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -7597,7 +7597,7 @@ extension SwitchExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "SwitchExprSyntax(leadingTrivia:_:switchKeyword:_:subject:_:leftBrace:_:cases:_:rightBrace:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:switchKeyword:_:subject:_:leftBrace:_:cases:_:rightBrace:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -7733,7 +7733,7 @@ extension TernaryExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "TernaryExprSyntax(leadingTrivia:_:condition:_:questionMark:_:thenExpression:_:colon:_:elseExpression:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:condition:_:questionMark:_:thenExpression:_:colon:_:elseExpression:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -7799,7 +7799,7 @@ extension TupleExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "TupleExprSyntax(leadingTrivia:_:leftParen:_:elements:_:rightParen:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftParen:_:elements:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -7877,7 +7877,7 @@ extension TuplePatternElementSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "TuplePatternElementSyntax(leadingTrivia:_:label:_:colon:_:pattern:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:label:_:colon:_:pattern:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -7959,7 +7959,7 @@ extension TupleTypeElementSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "TupleTypeElementSyntax(leadingTrivia:_:inoutKeyword:_:firstName:_:secondName:_:colon:_:type:_:ellipsis:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:inoutKeyword:_:firstName:_:secondName:_:colon:_:type:_:ellipsis:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -8033,7 +8033,7 @@ extension TypeAliasDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "TypeAliasDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:typealiasKeyword:_:name:_:genericParameterClause:_:initializer:_:genericWhereClause:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:typealiasKeyword:_:name:_:genericParameterClause:_:initializer:_:genericWhereClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -8107,7 +8107,7 @@ extension UnresolvedAsExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "UnresolvedAsExprSyntax(leadingTrivia:_:asKeyword:_:questionOrExclamationMark:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:asKeyword:_:questionOrExclamationMark:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -8161,7 +8161,7 @@ extension UnresolvedIsExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "UnresolvedIsExprSyntax(leadingTrivia:_:isKeyword:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:isKeyword:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -8231,7 +8231,7 @@ extension UnresolvedTernaryExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "UnresolvedTernaryExprSyntax(leadingTrivia:_:questionMark:_:thenExpression:_:colon:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:questionMark:_:thenExpression:_:colon:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -8309,7 +8309,7 @@ extension ValueBindingPatternSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "ValueBindingPatternSyntax(leadingTrivia:_:bindingSpecifier:_:pattern:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:bindingSpecifier:_:pattern:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -8363,7 +8363,7 @@ extension VariableDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "VariableDeclSyntax(leadingTrivia:_:attributes:_:modifiers:_:bindingSpecifier:_:bindings:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:bindingSpecifier:_:bindings:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -8425,7 +8425,7 @@ extension WhereClauseSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "WhereClauseSyntax(leadingTrivia:_:whereKeyword:_:condition:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:whereKeyword:_:condition:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -8479,7 +8479,7 @@ extension YieldStmtSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "YieldStmtSyntax(leadingTrivia:_:yieldKeyword:_:yieldedExpressions:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:yieldKeyword:_:yieldedExpressions:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -8533,7 +8533,7 @@ extension YieldedExpressionsClauseSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "YieldedExpressionsClauseSyntax(leadingTrivia:_:leftParen:_:elements:_:rightParen:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftParen:_:elements:_:rightParen:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -8557,5 +8557,47 @@ extension YieldedExpressionsClauseSyntax {
       unexpectedAfterRightParen,
       trailingTrivia: trailingTrivia
     )
+  }
+}
+
+extension FreestandingMacroExpansionSyntax {
+  @available(*, deprecated, renamed: "pound")
+  public var poundToken: TokenSyntax {
+    get {
+      return pound
+    }
+    set {
+      pound = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "macroName")
+  public var macro: TokenSyntax {
+    get {
+      return macroName
+    }
+    set {
+      macroName = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "genericArgumentClause")
+  public var genericArguments: GenericArgumentClauseSyntax? {
+    get {
+      return genericArgumentClause
+    }
+    set {
+      genericArgumentClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "arguments")
+  public var argumentList: LabeledExprListSyntax {
+    get {
+      return arguments
+    }
+    set {
+      arguments = newValue
+    }
   }
 }

@@ -21,7 +21,6 @@ public let AVAILABILITY_NODES: [Node] = [
     children: [
       Child(
         name: "argument",
-        deprecatedName: "entry",
         kind: .nodeChoices(choices: [
           Child(
             name: "token",
@@ -48,6 +47,11 @@ public let AVAILABILITY_NODES: [Node] = [
         documentation: "A trailing comma if the argument is followed by another argument.",
         isOptional: true
       ),
+    ],
+    childHistory: [
+      [
+        "argument": .renamed(from: "entry")
+      ]
     ]
   ),
 

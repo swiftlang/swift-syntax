@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 import SwiftSyntaxMacros
 
 extension SyntaxCollection {
@@ -71,12 +71,24 @@ public struct AddAsyncMacro: PeerMacro {
     let returnType = completionHandlerParameter.parameters.first?.type
 
     let isResultReturn = returnType?.children(viewMode: .all).first?.description == "Result"
-    let successReturnType =
-      if isResultReturn {
-        returnType!.as(IdentifierTypeSyntax.self)!.genericArgumentClause?.arguments.first!.argument
-      } else {
-        returnType
+    let successReturnType: TypeSyntax?
+
+    if isResultReturn {
+      let argument = returnType!.as(IdentifierTypeSyntax.self)!.genericArgumentClause?.arguments.first!.argument
+
+      switch argument {
+      case .some(.type(let type)):
+        successReturnType = type
+
+      case .some(.expr(_)):
+        throw CustomError.message("Found unexpected value generic in Result type")
+
+      case .none:
+        successReturnType = nil
       }
+    } else {
+      successReturnType = returnType
+    }
 
     // Remove completionHandler and comma from the previous parameter
     var newParameterList = funcDecl.signature.parameterClause.parameters

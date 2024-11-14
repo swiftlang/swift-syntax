@@ -38,7 +38,7 @@ struct GrammarGenerator {
     switch child.kind {
     case .node(let kind):
       return "\(kind.doccLink)\(optionality)"
-    case .nodeChoices(let choices):
+    case .nodeChoices(let choices, _):
       let choicesDescriptions = choices.map { grammar(for: $0) }
       return "(\(choicesDescriptions.joined(separator: " | ")))\(optionality)"
     case .collection(kind: let kind, _, _, _):

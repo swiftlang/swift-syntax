@@ -26,5 +26,6 @@ add_swift_syntax_library(SwiftLexicalLookup
 )
 
 target_link_swift_syntax_libraries(SwiftLexicalLookup PUBLIC
-  SwiftSyntax)
+  SwiftSyntax
+  SwiftIfConfig)
 

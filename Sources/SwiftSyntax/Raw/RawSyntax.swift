@@ -361,16 +361,23 @@ extension RawSyntax {
 }
 
 extension RawTriviaPiece {
-  func withSyntaxText(body: (SyntaxText) throws -> Void) rethrows {
+  /// Call `body` with the syntax text of this trivia piece.
+  ///
+  /// If `isEphemeral` is `true`, the ``SyntaxText`` argument is only guaranteed
+  /// to be valid within the call.
+  func withSyntaxText(body: (SyntaxText, _ isEphemeral: Bool) throws -> Void) rethrows {
     if let syntaxText = storedText {
-      try body(syntaxText)
+      try body(syntaxText, /*isEphemeral*/ false)
       return
     }
 
     var description = ""
     write(to: &description)
     try description.withUTF8 { buffer in
-      try body(SyntaxText(baseAddress: buffer.baseAddress, count: buffer.count))
+      try body(
+        SyntaxText(baseAddress: buffer.baseAddress, count: buffer.count),
+        /*isEphemeral*/ true
+      )
     }
   }
 }
@@ -382,21 +389,21 @@ extension RawSyntax {
   /// Unlike `description`, this provides a source-accurate representation
   /// even in the presence of malformed UTF-8 in the input source.
   ///
-  /// The ``SyntaxText`` arguments passed to the visitor are only guaranteed
-  /// to be valid within that call. It is unsafe to escape the `SyntaxValue`
-  /// values outside of the closure.
-  public func withEachSyntaxText(body: (SyntaxText) throws -> Void) rethrows {
+  /// If `isEphemeral` is `true`, the ``SyntaxText`` arguments passed to the
+  /// visitor are only guaranteed to be valid within that call. Otherwise, they
+  /// are valid as long as the raw syntax is alive.
+  public func withEachSyntaxText(body: (SyntaxText, _ isEphemeral: Bool) throws -> Void) rethrows {
     switch rawData.payload {
     case .parsedToken(let dat):
       if dat.presence == .present {
-        try body(dat.wholeText)
+        try body(dat.wholeText, /*isEphemeral*/ false)
       }
     case .materializedToken(let dat):
       if dat.presence == .present {
         for p in dat.leadingTrivia {
           try p.withSyntaxText(body: body)
         }
-        try body(dat.tokenText)
+        try body(dat.tokenText, /*isEphemeral*/ false)
         for p in dat.trailingTrivia {
           try p.withSyntaxText(body: body)
         }
@@ -412,9 +419,20 @@ extension RawSyntax {
   /// source even in the presence of invalid UTF-8.
   public var syntaxTextBytes: [UInt8] {
     var result: [UInt8] = []
-    withEachSyntaxText { syntaxText in
-      result.append(contentsOf: syntaxText)
+    var buf: SyntaxText = ""
+    withEachSyntaxText { syntaxText, isEphemeral in
+      if isEphemeral {
+        result.append(contentsOf: buf)
+        result.append(contentsOf: syntaxText)
+        buf = ""
+      } else if let base = buf.baseAddress, base + buf.count == syntaxText.baseAddress {
+        buf = SyntaxText(baseAddress: base, count: buf.count + syntaxText.count)
+      } else {
+        result.append(contentsOf: buf)
+        buf = syntaxText
+      }
     }
+    result.append(contentsOf: buf)
     return result
   }
 }

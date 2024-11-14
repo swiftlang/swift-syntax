@@ -15,17 +15,23 @@ internal import SwiftDiagnostics
 public import SwiftParser
 internal import SwiftParserDiagnostics
 internal import SwiftSyntax
+// Don't introduce a dependency on OSLog when building SwiftSyntax using CMake
+// for the compiler.
+#if canImport(os) && !SWIFTSYNTAX_NO_OSLOG_DEPENDENCY
+private import os
+#endif
+
 #else
 import SwiftDiagnostics
 import SwiftParser
 import SwiftParserDiagnostics
 import SwiftSyntax
-#endif
 
 // Don't introduce a dependency on OSLog when building SwiftSyntax using CMake
 // for the compiler.
-#if canImport(OSLog) && !SWIFTSYNTAX_NO_OSLOG_DEPENDENCY
-import OSLog
+#if canImport(os) && !SWIFTSYNTAX_NO_OSLOG_DEPENDENCY
+import os
+#endif
 #endif
 
 /// Only set from `withStringInterpolationParsingErrorsSuppressed`, which is only intended for testing purposes that are

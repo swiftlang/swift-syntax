@@ -18,7 +18,6 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "leftType",
-        deprecatedName: "leftTypeIdentifier",
         kind: .node(kind: .type)
       ),
       Child(
@@ -27,9 +26,14 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "rightType",
-        deprecatedName: "rightTypeIdentifier",
         kind: .node(kind: .type)
       ),
+    ],
+    childHistory: [
+      [
+        "leftType": .renamed(from: "leftTypeIdentifier"),
+        "rightType": .renamed(from: "rightTypeIdentifier"),
+      ]
     ]
   ),
 
@@ -42,13 +46,11 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "leftAngle",
-        deprecatedName: "leftAngleBracket",
         kind: .token(choices: [.token(.leftAngle)]),
         documentation: "The opening angle bracket (`<`) of the generic parameter clause."
       ),
       Child(
         name: "parameters",
-        deprecatedName: "genericParameterList",
         kind: .collection(
           kind: .genericParameterList,
           collectionElementName: "Parameter",
@@ -65,10 +67,16 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "rightAngle",
-        deprecatedName: "rightAngleBracket",
         kind: .token(choices: [.token(.rightAngle)]),
         documentation: "The closing angle bracket (`>`) of the generic parameter clause."
       ),
+    ],
+    childHistory: [
+      [
+        "leftAngle": .renamed(from: "leftAngleBracket"),
+        "parameters": .renamed(from: "genericParameterList"),
+        "rightAngle": .renamed(from: "rightAngleBracket"),
+      ]
     ]
   ),
 
@@ -94,7 +102,6 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "specifier",
-        deprecatedName: "eachKeyword",
         kind: .token(choices: [
           .keyword(.each),
           .keyword(.let),
@@ -123,6 +130,11 @@ public let GENERIC_NODES: [Node] = [
         kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
+    ],
+    childHistory: [
+      [
+        "specifier": .renamed(from: "eachKeyword")
+      ]
     ]
   ),
 
@@ -143,7 +155,6 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "requirement",
-        deprecatedName: "body",
         kind: .nodeChoices(choices: [
           Child(
             name: "sameTypeRequirement",
@@ -164,6 +175,11 @@ public let GENERIC_NODES: [Node] = [
         kind: .token(choices: [.token(.comma)]),
         isOptional: true
       ),
+    ],
+    childHistory: [
+      [
+        "requirement": .renamed(from: "body")
+      ]
     ]
   ),
 
@@ -181,10 +197,14 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "requirements",
-        deprecatedName: "requirementList",
         kind: .collection(kind: .genericRequirementList, collectionElementName: "Requirement"),
         documentation: "The list of requirements in the clause."
       ),
+    ],
+    childHistory: [
+      [
+        "requirements": .renamed(from: "requirementList")
+      ]
     ]
   ),
 
@@ -195,7 +215,6 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "type",
-        deprecatedName: "typeIdentifier",
         kind: .node(kind: .type),
         nameForDiagnostics: "constrained type"
       ),
@@ -205,7 +224,6 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "layoutSpecifier",
-        deprecatedName: "layoutConstraint",
         kind: .token(choices: [
           .keyword(._Trivial),
           .keyword(._TrivialAtMost),
@@ -245,6 +263,12 @@ public let GENERIC_NODES: [Node] = [
         kind: .token(choices: [.token(.rightParen)]),
         isOptional: true
       ),
+    ],
+    childHistory: [
+      [
+        "type": .renamed(from: "typeIdentifier"),
+        "layoutSpecifier": .renamed(from: "layoutConstraint"),
+      ]
     ]
   ),
 
@@ -255,19 +279,23 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "leftAngle",
-        deprecatedName: "leftAngleBracket",
         kind: .token(choices: [.token(.leftAngle)])
       ),
       Child(
         name: "primaryAssociatedTypes",
-        deprecatedName: "primaryAssociatedTypeList",
         kind: .collection(kind: .primaryAssociatedTypeList, collectionElementName: "PrimaryAssociatedType")
       ),
       Child(
         name: "rightAngle",
-        deprecatedName: "rightAngleBracket",
         kind: .token(choices: [.token(.rightAngle)])
       ),
+    ],
+    childHistory: [
+      [
+        "leftAngle": .renamed(from: "leftAngleBracket"),
+        "primaryAssociatedTypes": .renamed(from: "primaryAssociatedTypeList"),
+        "rightAngle": .renamed(from: "rightAngleBracket"),
+      ]
     ]
   ),
 
@@ -306,21 +334,49 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "leftType",
-        deprecatedName: "leftTypeIdentifier",
-        kind: .node(kind: .type),
-        nameForDiagnostics: "left-hand type"
+        kind: .nodeChoices(choices: [
+          Child(
+            name: "type",
+            kind: .node(kind: .type)
+          ),
+          Child(
+            name: "expr",
+            kind: .node(kind: .expr),
+            experimentalFeature: .valueGenerics
+          ),
+        ]),
+        nameForDiagnostics: "left-hand type",
+        documentation:
+          "The left hand side type for a same type requirement. This can either be a regular type argument or an expression for value generics."
       ),
       Child(
         name: "equal",
-        deprecatedName: "equalityToken",
         kind: .token(choices: [.token(.binaryOperator), .token(.prefixOperator), .token(.postfixOperator)])
       ),
       Child(
         name: "rightType",
-        deprecatedName: "rightTypeIdentifier",
-        kind: .node(kind: .type),
-        nameForDiagnostics: "right-hand type"
+        kind: .nodeChoices(choices: [
+          Child(
+            name: "type",
+            kind: .node(kind: .type)
+          ),
+          Child(
+            name: "expr",
+            kind: .node(kind: .expr),
+            experimentalFeature: .valueGenerics
+          ),
+        ]),
+        nameForDiagnostics: "right-hand type",
+        documentation:
+          "The right hand side type for a same type requirement. This can either be a regular type argument or an expression for value generics."
       ),
+    ],
+    childHistory: [
+      [
+        "leftType": .renamed(from: "leftTypeIdentifier"),
+        "equal": .renamed(from: "equalityToken"),
+        "rightType": .renamed(from: "rightTypeIdentifier"),
+      ]
     ]
   ),
 

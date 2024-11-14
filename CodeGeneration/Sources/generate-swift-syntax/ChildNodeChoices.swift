@@ -80,7 +80,7 @@ extension Node {
     if let node = self.layoutNode {
       return node.children.compactMap { child in
         switch child.kind {
-        case .nodeChoices(let choices):
+        case .nodeChoices(let choices, _):
           return ChildNodeChoices(
             name: child.syntaxChoicesType,
             choices: choices.map { ChildNodeChoices.Choice($0, forRaw: forRaw) }

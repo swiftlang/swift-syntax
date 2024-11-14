@@ -17,7 +17,7 @@ import SwiftSyntax
 #endif
 
 extension Trivia {
-  func indented(indentation: Trivia) -> Trivia {
+  fileprivate func indented(indentation: Trivia) -> Trivia {
     let mappedPieces = self.flatMap { (piece) -> [TriviaPiece] in
       if piece.isNewline {
         return [piece] + indentation.pieces
@@ -30,6 +30,7 @@ extension Trivia {
 }
 
 /// Adds a given amount of indentation after every newline in a syntax tree.
+@available(*, deprecated, message: "Use 'SyntaxProtocol.indented(by:)' from SwiftBasicFormat instead")
 public class Indenter: SyntaxRewriter {
   let indentation: Trivia
 

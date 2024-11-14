@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 #if swift(>=6)
-@_spi(RawSyntax) internal import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
 #else
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 #endif
 
 extension DeclarationModifier {
@@ -524,6 +524,22 @@ extension Parser {
     return self.at(prefix: ">")
   }
 
+  mutating func parseSameTypeLeftType() -> RawSameTypeRequirementSyntax.LeftType {
+    if let valueType = self.parseValueType() {
+      return .expr(valueType)
+    } else {
+      return .type(self.parseType())
+    }
+  }
+
+  mutating func parseSameTypeRightType() -> RawSameTypeRequirementSyntax.RightType {
+    if let valueType = self.parseValueType() {
+      return .expr(valueType)
+    } else {
+      return .type(self.parseType())
+    }
+  }
+
   mutating func parseGenericWhereClause() -> RawGenericWhereClauseSyntax {
     let (unexpectedBeforeWhereKeyword, whereKeyword) = self.expect(.keyword(.where))
 
@@ -532,16 +548,17 @@ extension Parser {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
-        let firstType = self.parseType()
-        guard !firstType.is(RawMissingTypeSyntax.self) else {
+        let firstArgument = self.parseSameTypeLeftType()
+
+        guard !firstArgument.raw.is(RawMissingTypeSyntax.self) else {
           keepGoing = self.consume(if: .comma)
           elements.append(
             RawGenericRequirementSyntax(
               requirement: .sameTypeRequirement(
                 RawSameTypeRequirementSyntax(
-                  leftType: RawMissingTypeSyntax(arena: self.arena),
+                  leftType: firstArgument,
                   equal: missingToken(.binaryOperator, text: "=="),
-                  rightType: RawMissingTypeSyntax(arena: self.arena),
+                  rightType: .type(RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))),
                   arena: self.arena
                 )
               ),
@@ -552,137 +569,161 @@ extension Parser {
           continue
         }
 
-        enum ExpectedTokenKind: TokenSpecSet {
-          case colon
-          case binaryOperator
-          case postfixOperator
-          case prefixOperator
-
-          init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-            switch (lexeme.rawTokenKind, lexeme.tokenText) {
-            case (.colon, _): self = .colon
-            case (.binaryOperator, "=="): self = .binaryOperator
-            case (.postfixOperator, "=="): self = .postfixOperator
-            case (.prefixOperator, "=="): self = .prefixOperator
-            default: return nil
-            }
-          }
-
-          var spec: TokenSpec {
-            switch self {
-            case .colon: return .colon
-            case .binaryOperator: return .binaryOperator
-            case .postfixOperator: return .postfixOperator
-            case .prefixOperator: return .prefixOperator
-            }
-          }
-        }
-
         let requirement: RawGenericRequirementSyntax.Requirement
-        switch self.at(anyIn: ExpectedTokenKind.self) {
-        case (.colon, let handle)?:
-          let colon = self.eat(handle)
-          // A conformance-requirement.
-          if let (layoutSpecifier, handle) = self.at(anyIn: LayoutRequirementSyntax.LayoutSpecifierOptions.self) {
-            // Parse a layout constraint.
-            let specifier = self.eat(handle)
 
-            let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
-            let leftParen: RawTokenSyntax?
-            let size: RawTokenSyntax?
-            let comma: RawTokenSyntax?
-            let alignment: RawTokenSyntax?
-            let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
-            let rightParen: RawTokenSyntax?
+        switch firstArgument {
+        // If the first argument is an expression, then we have to have a same
+        // type requirement. We do not allow conformance requirements like
+        // '123: Protocol' or layout constraints on expressions.
+        case .expr:
+          let (unexpectedBeforeEqual, equal) = self.expect(
+            anyIn: SameTypeRequirementSyntax.EqualOptions.self,
+            default: .binaryOperator
+          )
+          let secondArgument = self.parseSameTypeRightType()
+          requirement = .sameTypeRequirement(
+            RawSameTypeRequirementSyntax(
+              leftType: firstArgument,
+              unexpectedBeforeEqual,
+              equal: equal,
+              rightType: secondArgument,
+              arena: self.arena
+            )
+          )
 
-            var hasArguments: Bool {
-              switch layoutSpecifier {
-              case ._Trivial,
-                ._TrivialAtMost,
-                ._TrivialStride:
-                return true
+        // Otherwise, this can be a conformance, same type, or layout constraint.
+        case .type(let firstType):
+          enum ExpectedTokenKind: TokenSpecSet {
+            case colon
+            case binaryOperator
+            case postfixOperator
+            case prefixOperator
 
-              case ._UnknownLayout,
-                ._RefCountedObject,
-                ._NativeRefCountedObject,
-                ._Class,
-                ._NativeClass,
-                ._BridgeObject:
-                return false
+            init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+              switch (lexeme.rawTokenKind, lexeme.tokenText) {
+              case (.colon, _): self = .colon
+              case (.binaryOperator, "=="): self = .binaryOperator
+              case (.postfixOperator, "=="): self = .postfixOperator
+              case (.prefixOperator, "=="): self = .prefixOperator
+              default: return nil
               }
             }
 
-            // Unlike the other layout constraints, _Trivial's argument list
-            // is optional.
-            if hasArguments && (layoutSpecifier != ._Trivial || self.at(.leftParen)) {
-              (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-              size = self.expectWithoutRecovery(.integerLiteral)
-              comma = self.consume(if: .comma)
-              if comma != nil {
-                alignment = self.expectWithoutRecovery(.integerLiteral)
+            var spec: TokenSpec {
+              switch self {
+              case .colon: return .colon
+              case .binaryOperator: return .binaryOperator
+              case .postfixOperator: return .postfixOperator
+              case .prefixOperator: return .prefixOperator
+              }
+            }
+          }
+
+          switch self.at(anyIn: ExpectedTokenKind.self) {
+          case (.colon, let handle)?:
+            let colon = self.eat(handle)
+            // A conformance-requirement.
+            if let (layoutSpecifier, handle) = self.at(anyIn: LayoutRequirementSyntax.LayoutSpecifierOptions.self) {
+              // Parse a layout constraint.
+              let specifier = self.eat(handle)
+
+              let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?
+              let leftParen: RawTokenSyntax?
+              let size: RawTokenSyntax?
+              let comma: RawTokenSyntax?
+              let alignment: RawTokenSyntax?
+              let unexpectedBeforeRightParen: RawUnexpectedNodesSyntax?
+              let rightParen: RawTokenSyntax?
+
+              var hasArguments: Bool {
+                switch layoutSpecifier {
+                case ._Trivial,
+                  ._TrivialAtMost,
+                  ._TrivialStride:
+                  return true
+
+                case ._UnknownLayout,
+                  ._RefCountedObject,
+                  ._NativeRefCountedObject,
+                  ._Class,
+                  ._NativeClass,
+                  ._BridgeObject:
+                  return false
+                }
+              }
+
+              // Unlike the other layout constraints, _Trivial's argument list
+              // is optional.
+              if hasArguments && (layoutSpecifier != ._Trivial || self.at(.leftParen)) {
+                (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+                size = self.expectWithoutRecovery(.integerLiteral)
+                comma = self.consume(if: .comma)
+                if comma != nil {
+                  alignment = self.expectWithoutRecovery(.integerLiteral)
+                } else {
+                  alignment = nil
+                }
+                (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
               } else {
+                unexpectedBeforeLeftParen = nil
+                leftParen = nil
+                size = nil
+                comma = nil
                 alignment = nil
+                unexpectedBeforeRightParen = nil
+                rightParen = nil
               }
-              (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-            } else {
-              unexpectedBeforeLeftParen = nil
-              leftParen = nil
-              size = nil
-              comma = nil
-              alignment = nil
-              unexpectedBeforeRightParen = nil
-              rightParen = nil
-            }
 
-            requirement = .layoutRequirement(
-              RawLayoutRequirementSyntax(
-                type: firstType,
-                colon: colon,
-                layoutSpecifier: specifier,
-                unexpectedBeforeLeftParen,
-                leftParen: leftParen,
-                size: size,
-                comma: comma,
-                alignment: alignment,
-                unexpectedBeforeRightParen,
-                rightParen: rightParen,
+              requirement = .layoutRequirement(
+                RawLayoutRequirementSyntax(
+                  type: firstType,
+                  colon: colon,
+                  layoutSpecifier: specifier,
+                  unexpectedBeforeLeftParen,
+                  leftParen: leftParen,
+                  size: size,
+                  comma: comma,
+                  alignment: alignment,
+                  unexpectedBeforeRightParen,
+                  rightParen: rightParen,
+                  arena: self.arena
+                )
+              )
+            } else {
+              // Parse the protocol or composition.
+              let secondType = self.parseType()
+              requirement = .conformanceRequirement(
+                RawConformanceRequirementSyntax(
+                  leftType: firstType,
+                  colon: colon,
+                  rightType: secondType,
+                  arena: self.arena
+                )
+              )
+            }
+          case (.binaryOperator, let handle)?,
+            (.postfixOperator, let handle)?,
+            (.prefixOperator, let handle)?:
+            let equal = self.eat(handle)
+            let secondArgument = self.parseSameTypeRightType()
+            requirement = .sameTypeRequirement(
+              RawSameTypeRequirementSyntax(
+                leftType: firstArgument,
+                equal: equal,
+                rightType: secondArgument,
                 arena: self.arena
               )
             )
-          } else {
-            // Parse the protocol or composition.
-            let secondType = self.parseType()
-            requirement = .conformanceRequirement(
-              RawConformanceRequirementSyntax(
-                leftType: firstType,
-                colon: colon,
-                rightType: secondType,
+          case nil:
+            requirement = .sameTypeRequirement(
+              RawSameTypeRequirementSyntax(
+                leftType: firstArgument,
+                equal: RawTokenSyntax(missing: .binaryOperator, text: "==", arena: self.arena),
+                rightType: .type(RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))),
                 arena: self.arena
               )
             )
           }
-        case (.binaryOperator, let handle)?,
-          (.postfixOperator, let handle)?,
-          (.prefixOperator, let handle)?:
-          let equal = self.eat(handle)
-          let secondType = self.parseType()
-          requirement = .sameTypeRequirement(
-            RawSameTypeRequirementSyntax(
-              leftType: firstType,
-              equal: equal,
-              rightType: secondType,
-              arena: self.arena
-            )
-          )
-        case nil:
-          requirement = .sameTypeRequirement(
-            RawSameTypeRequirementSyntax(
-              leftType: firstType,
-              equal: RawTokenSyntax(missing: .binaryOperator, text: "==", arena: self.arena),
-              rightType: RawMissingTypeSyntax(arena: self.arena),
-              arena: self.arena
-            )
-          )
         }
 
         keepGoing = self.consume(if: .comma)

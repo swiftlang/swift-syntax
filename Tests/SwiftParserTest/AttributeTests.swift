@@ -1053,4 +1053,30 @@ final class AttributeTests: ParserTestCase {
         """
     )
   }
+
+  func testLifetimeAttribute() {
+    assertParse(
+      """
+      struct NE: ~Escapable {}
+
+      @lifetime(ne)
+      func derive1(ne: NE) -> NE { ne }
+
+      @lifetime(borrow ne)
+      func derive2(ne: borrowing NE) -> NE { ne }
+
+      @lifetime(ne1, n2)
+      func derive3(ne1: NE, ne2: NE) -> NE { ne1 }
+
+      @lifetime(borrow ne1, n2)
+      func derive4(ne1: NE, ne2: NE) -> NE { ne1 }
+
+      @lifetime(neOut: ne)
+      func derive5(ne: NE, neOut: inout NE) -> NE { neOut = ne }
+
+      @lifetime(neOut: borrow ne)
+      func derive6(ne: borrowing NE, neOut: inout NE) -> NE { neOut = ne }
+      """
+    )
+  }
 }

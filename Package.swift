@@ -184,7 +184,7 @@ let package = Package(
 
     .target(
       name: "SwiftLexicalLookup",
-      dependencies: ["SwiftSyntax"]
+      dependencies: ["SwiftSyntax", "SwiftIfConfig"]
     ),
 
     .testTarget(
@@ -235,6 +235,11 @@ let package = Package(
     .target(
       name: "SwiftSyntax600",
       path: "Sources/VersionMarkerModules/SwiftSyntax600"
+    ),
+
+    .target(
+      name: "SwiftSyntax601",
+      path: "Sources/VersionMarkerModules/SwiftSyntax601"
     ),
 
     // MARK: SwiftSyntaxBuilder

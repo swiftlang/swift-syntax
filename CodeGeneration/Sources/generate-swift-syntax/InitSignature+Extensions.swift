@@ -15,8 +15,20 @@ import SwiftSyntaxBuilder
 import SyntaxSupport
 import Utils
 
-extension LayoutNode {
-  func generateInitializerDeclHeader(useDeprecatedChildName: Bool = false) -> SyntaxNodeString {
+extension InitSignature {
+  var compoundName: String {
+    let renamedArguments = children.map { child in
+      if child.isUnexpectedNodes {
+        return "_:"
+      } else {
+        return "\(child.labelDeclName):"
+      }
+    }.joined(separator: "")
+
+    return "init(leadingTrivia:\(renamedArguments)trailingTrivia:)"
+  }
+
+  func generateInitializerDeclHeader() -> SyntaxNodeString {
     if children.isEmpty {
       return "public init()"
     }
@@ -39,13 +51,7 @@ extension LayoutNode {
         }
       }
 
-      let parameterName: TokenSyntax
-
-      if useDeprecatedChildName, let deprecatedVarName = child.deprecatedVarName {
-        parameterName = deprecatedVarName
-      } else {
-        parameterName = child.labelDeclName
-      }
+      let parameterName = child.labelDeclName
 
       return FunctionParameterSyntax(
         leadingTrivia: .newline,
@@ -96,7 +102,7 @@ extension LayoutNode {
   }
 
   /// Create a builder-based convenience initializer, if needed.
-  func createConvenienceBuilderInitializer(useDeprecatedChildName: Bool = false) throws -> InitializerDeclSyntax? {
+  func createConvenienceBuilderInitializer() throws -> InitializerDeclSyntax? {
     // Only create the convenience initializer if at least one parameter
     // is different than in the default initializer generated above.
     var shouldCreateInitializer = false
@@ -111,13 +117,7 @@ extension LayoutNode {
     for child in children {
       /// The expression that is used to call the default initializer defined above.
       let produceExpr: ExprSyntax
-      let childName: TokenSyntax
-
-      if useDeprecatedChildName, let deprecatedVarName = child.deprecatedVarName {
-        childName = deprecatedVarName
-      } else {
-        childName = child.identifier
-      }
+      let childName = child.identifier
 
       if child.buildableType.isBuilderInitializable {
         // Allow initializing certain syntax collections with result builders
@@ -143,10 +143,7 @@ extension LayoutNode {
           )
         )
       } else {
-        produceExpr = convertFromSyntaxProtocolToSyntaxType(
-          child: child,
-          useDeprecatedChildName: useDeprecatedChildName
-        )
+        produceExpr = convertFromSyntaxProtocolToSyntaxType(child: child)
         normalParameters.append(
           FunctionParameterSyntax(
             firstName: childName.nonVarCallNameOrLabelDeclName,
@@ -195,18 +192,180 @@ extension LayoutNode {
 }
 
 fileprivate func convertFromSyntaxProtocolToSyntaxType(
-  child: Child,
-  useDeprecatedChildName: Bool = false
+  child: Child
 ) -> ExprSyntax {
-  let childName: TokenSyntax
-  if useDeprecatedChildName, let deprecatedVarName = child.deprecatedVarName {
-    childName = deprecatedVarName
-  } else {
-    childName = child.identifier
-  }
+  let childName = child.identifier
 
   if child.buildableType.isBaseType && !child.kind.isNodeChoices {
     return ExprSyntax("\(child.buildableType.syntaxBaseName)(fromProtocol: \(childName.declNameOrVarCallName))")
   }
   return ExprSyntax("\(childName.declNameOrVarCallName)")
+}
+
+extension InitSignature {
+  /// Interprets `self` as an initializer parameter list and generates arguments to
+  /// call the non-deprecated initializer. This will generate nested initializer calls for
+  /// any children with a compound `newestChildPath`.
+  func makeArgumentsToInitializeNewestChildren() -> [LabeledExprSyntax] {
+    var root: [InitParameterMapping] = []
+
+    for child in children {
+      InitParameterMapping.addChild(child, to: &root)
+    }
+
+    return root.map { $0.makeArgumentExpr() }
+  }
+}
+
+/// Represents the means by which a newest child, possibly at a nested position, is created from
+/// one or more historical children.
+///
+/// For example, consider a couple of nodes with some child history:
+/// ```
+/// Node(
+///   kind: .nestedNodeExtractedLater,
+///   children: [
+///     Child(name: "x", ...),
+///     Child(name: "y", ...),
+///   ]
+/// ),
+/// Node(
+///   kind: .longstandingNode,
+///   children: [
+///     Child(name: "a", ...),
+///     Child(name: "nested", kind: .node(.nestedNodeExtractedLater), ...),
+///   ],
+///   childHistory: [
+///     [
+///       "a": .renamed(from: "b"),
+///       "nested": .extracted
+///     ]
+///   ]
+/// )
+/// ```
+///
+/// These will end up being represented by `InitParameterMapping`s that look something like
+/// this (with string literals standing in for the object references):
+///
+/// ```swift
+/// [
+///   InitParameterMapping(
+///     newestChild: "child for current LongstandingNode.a",
+///     argument: .decl("child for historical LongstandingNode.b")
+///   ),
+///   InitParameterMapping(
+///     newestChild: "child for current LongstandingNode.nested",
+///     argument: .nestedInit(
+///       [
+///         InitParameterMapping(
+///           newestChild: "child for current NestedNodeExtractedLater.x",
+///           argument: .decl("child for historical LongstandingNode.x")
+///         ),
+///         InitParameterMapping(
+///           newestChild: "child for current NestedNodeExtractedLater.y",
+///           argument: .decl("child for historical LongstandingNode.y")
+///         )
+///       ]
+///     )
+///   )
+/// ]
+/// ```
+///
+/// Which matches the structure of the `self.init` arguments we must generate to call from the
+/// compatibility `LongstandingNodeSyntax.init(b:x:y:)` to the current
+/// `LongstandingNodeSyntax.init(a:nested:)`:
+///
+/// ```swift
+/// self.init(
+///   a: b,
+///   nested: NestedNodeExtractedLaterSyntax(
+///     x: x,
+///     y: y
+///   )
+/// )
+/// ```
+private struct InitParameterMapping {
+  var newestChild: Child
+  var argument: Argument
+
+  enum Argument {
+    case decl(olderChild: Child)
+    case nestedInit([InitParameterMapping])
+  }
+
+  static func addChild(_ olderChild: Child, to mappings: inout [InitParameterMapping]) {
+    guard !olderChild.newestChildPath.isEmpty else {
+      // This child is not historical, so we can just pass it right through.
+      mappings.append(
+        InitParameterMapping(
+          newestChild: olderChild,
+          argument: .decl(olderChild: olderChild)
+        )
+      )
+      return
+    }
+
+    addChild(olderChild, to: &mappings, at: olderChild.newestChildPath[...])
+  }
+
+  private static func addChild(
+    _ olderChild: Child,
+    to mappings: inout [InitParameterMapping],
+    at newestChildPath: ArraySlice<Child>
+  ) {
+    let targetNewestChild = newestChildPath.first!
+
+    if newestChildPath.count == 1 {
+      // We've found the argument list this ought to be added to.
+      let newMapping = InitParameterMapping(newestChild: targetNewestChild, argument: .decl(olderChild: olderChild))
+      mappings.append(newMapping)
+      return
+    }
+
+    // We've found a parent of the argument list this ought to be added to.
+    var (i, nestedArgMappings) = findOrCreateNestedInit(for: targetNewestChild, in: &mappings)
+    addChild(olderChild, to: &nestedArgMappings, at: newestChildPath.dropFirst())
+    mappings[i].argument = .nestedInit(nestedArgMappings)
+  }
+
+  private static func findOrCreateNestedInit(
+    for newestChild: Child,
+    in mappings: inout [InitParameterMapping]
+  ) -> (index: Int, nestedArgMapping: [InitParameterMapping]) {
+    // If there isn't an existing mapping, we'll append a new one.
+    guard let i = mappings.firstIndex(where: { $0.newestChild == newestChild }) else {
+      mappings.append(InitParameterMapping(newestChild: newestChild, argument: .nestedInit([])))
+      return (mappings.endIndex - 1, [])
+    }
+
+    // We found an existing mapping for this child and its nested children.
+    guard case .nestedInit(let nestedArgs) = mappings[i].argument else {
+      fatalError("Can't nest parameter inside parameter!")
+    }
+    return (i, nestedArgs)
+  }
+}
+
+extension InitParameterMapping {
+  func makeArgumentExpr() -> LabeledExprSyntax {
+    let argValue =
+      switch argument {
+      case .decl(olderChild: let olderChild):
+        ExprSyntax(DeclReferenceExprSyntax(baseName: olderChild.baseCallName))
+
+      case .nestedInit(let initArgs):
+        ExprSyntax(
+          FunctionCallExprSyntax(callee: TypeExprSyntax(type: newestChild.syntaxNodeKind.syntaxType)) {
+            for initArg in initArgs {
+              initArg.makeArgumentExpr()
+            }
+          }
+        )
+      }
+
+    return LabeledExprSyntax(
+      label: newestChild.isUnexpectedNodes ? nil : newestChild.name,
+      expression: argValue
+    )
+  }
 }

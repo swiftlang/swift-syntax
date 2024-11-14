@@ -90,6 +90,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case backDeployed
   case before
   case block
+  case borrow
   case borrowing
   case `break`
   case canImport
@@ -416,6 +417,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = ._local
       case "before":
         self = .before
+      case "borrow":
+        self = .borrow
       case "deinit":
         self = .deinit
       case "didSet":
@@ -890,6 +893,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "backDeployed",
     "before",
     "block",
+    "borrow",
     "borrowing",
     "break",
     "canImport",

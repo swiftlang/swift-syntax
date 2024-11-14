@@ -27,7 +27,7 @@ final class PatternTests: ParserTestCase {
                 expression: DeclReferenceExprSyntax(baseName: .identifier("E")),
                 genericArgumentClause: GenericArgumentClauseSyntax(
                   arguments: .init([
-                    .init(argument: IdentifierTypeSyntax(name: .identifier("Int")))
+                    .init(argument: .type(TypeSyntax(IdentifierTypeSyntax(name: .identifier("Int")))))
                   ])
                 )
               ),

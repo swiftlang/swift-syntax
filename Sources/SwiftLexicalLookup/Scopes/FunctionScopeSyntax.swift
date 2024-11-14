@@ -22,7 +22,7 @@ extension FunctionScopeSyntax {
   @_spi(Experimental) public var defaultIntroducedNames: [LookupName] {
     signature.parameterClause.parameters.flatMap { parameter in
       LookupName.getNames(from: parameter)
-    } + (parentScope?.is(MemberBlockSyntax.self) ?? false ? [.implicit(.self(self))] : [])
+    } + (isMember ? [.implicit(.self(self))] : [])
   }
 
   /// Lookup results from this function scope.

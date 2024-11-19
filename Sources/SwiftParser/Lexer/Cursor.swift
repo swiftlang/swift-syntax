@@ -2448,6 +2448,7 @@ extension Lexer.Cursor {
 
       // Must occur at start of line.
       guard restOfBuffer.previous == "\n" || restOfBuffer.previous == "\r" else {
+        _ = restOfBuffer.advance()
         continue
       }
 

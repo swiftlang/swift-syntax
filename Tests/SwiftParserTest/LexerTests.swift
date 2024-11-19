@@ -1706,4 +1706,19 @@ class LexerTests: ParserTestCase {
       ]
     )
   }
+
+  func testConflictMarkerNotAtStartOfLine() {
+    assertLexemes(
+      #"""
+      <<<<<<< a
+       >>>>>>> a
+      """#,
+      lexemes: [
+        LexemeSpec(.binaryOperator, text: "<<<<<<<", trailing: " "),
+        LexemeSpec(.identifier, text: "a"),
+        LexemeSpec(.binaryOperator, leading: "\n ", text: ">>>>>>>", trailing: " ", flags: [.isAtStartOfLine]),
+        LexemeSpec(.identifier, text: "a"),
+      ]
+    )
+  }
 }

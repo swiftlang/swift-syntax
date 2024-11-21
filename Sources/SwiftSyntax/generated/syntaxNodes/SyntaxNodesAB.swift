@@ -12,6 +12,394 @@
 //
 //===----------------------------------------------------------------------===//
 
+// MARK: - ABIAttributeArgumentsSyntax
+
+/// The arguments of the '@abi' attribute
+///
+/// - Note: Requires experimental feature `abiAttribute`.
+///
+/// ### Children
+/// 
+///  - `provider`: (``AssociatedTypeDeclSyntax`` | ``DeinitializerDeclSyntax`` | ``EnumCaseDeclSyntax`` | ``FunctionDeclSyntax`` | ``InitializerDeclSyntax`` | ``MissingDeclSyntax`` | ``SubscriptDeclSyntax`` | ``TypeAliasDeclSyntax`` | ``VariableDeclSyntax``)
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
+#if compiler(>=5.8)
+@_spi(ExperimentalLanguageFeatures)
+#endif
+public struct ABIAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+  public enum Provider: SyntaxChildChoices, SyntaxHashable {
+    case associatedType(AssociatedTypeDeclSyntax)
+    case deinitializer(DeinitializerDeclSyntax)
+    case enumCase(EnumCaseDeclSyntax)
+    case function(FunctionDeclSyntax)
+    case initializer(InitializerDeclSyntax)
+    case missing(MissingDeclSyntax)
+    case `subscript`(SubscriptDeclSyntax)
+    case typeAlias(TypeAliasDeclSyntax)
+    case variable(VariableDeclSyntax)
+
+    public var _syntaxNode: Syntax {
+      switch self {
+      case .associatedType(let node):
+        return node._syntaxNode
+      case .deinitializer(let node):
+        return node._syntaxNode
+      case .enumCase(let node):
+        return node._syntaxNode
+      case .function(let node):
+        return node._syntaxNode
+      case .initializer(let node):
+        return node._syntaxNode
+      case .missing(let node):
+        return node._syntaxNode
+      case .subscript(let node):
+        return node._syntaxNode
+      case .typeAlias(let node):
+        return node._syntaxNode
+      case .variable(let node):
+        return node._syntaxNode
+      }
+    }
+
+    public init(_ node: AssociatedTypeDeclSyntax) {
+      self = .associatedType(node)
+    }
+
+    public init(_ node: DeinitializerDeclSyntax) {
+      self = .deinitializer(node)
+    }
+
+    public init(_ node: EnumCaseDeclSyntax) {
+      self = .enumCase(node)
+    }
+
+    public init(_ node: FunctionDeclSyntax) {
+      self = .function(node)
+    }
+
+    public init(_ node: InitializerDeclSyntax) {
+      self = .initializer(node)
+    }
+
+    public init(_ node: MissingDeclSyntax) {
+      self = .missing(node)
+    }
+
+    public init(_ node: SubscriptDeclSyntax) {
+      self = .subscript(node)
+    }
+
+    public init(_ node: TypeAliasDeclSyntax) {
+      self = .typeAlias(node)
+    }
+
+    public init(_ node: VariableDeclSyntax) {
+      self = .variable(node)
+    }
+
+    public init?(_ node: __shared some SyntaxProtocol) {
+      if let node = node.as(AssociatedTypeDeclSyntax.self) {
+        self = .associatedType(node)
+      } else if let node = node.as(DeinitializerDeclSyntax.self) {
+        self = .deinitializer(node)
+      } else if let node = node.as(EnumCaseDeclSyntax.self) {
+        self = .enumCase(node)
+      } else if let node = node.as(FunctionDeclSyntax.self) {
+        self = .function(node)
+      } else if let node = node.as(InitializerDeclSyntax.self) {
+        self = .initializer(node)
+      } else if let node = node.as(MissingDeclSyntax.self) {
+        self = .missing(node)
+      } else if let node = node.as(SubscriptDeclSyntax.self) {
+        self = .subscript(node)
+      } else if let node = node.as(TypeAliasDeclSyntax.self) {
+        self = .typeAlias(node)
+      } else if let node = node.as(VariableDeclSyntax.self) {
+        self = .variable(node)
+      } else {
+        return nil
+      }
+    }
+
+    public static var structure: SyntaxNodeStructure {
+      return .choices([
+        .node(AssociatedTypeDeclSyntax.self),
+        .node(DeinitializerDeclSyntax.self),
+        .node(EnumCaseDeclSyntax.self),
+        .node(FunctionDeclSyntax.self),
+        .node(InitializerDeclSyntax.self),
+        .node(MissingDeclSyntax.self),
+        .node(SubscriptDeclSyntax.self),
+        .node(TypeAliasDeclSyntax.self),
+        .node(VariableDeclSyntax.self)
+      ])
+    }
+
+    /// Checks if the current syntax node can be cast to ``AssociatedTypeDeclSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: AssociatedTypeDeclSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to ``AssociatedTypeDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``AssociatedTypeDeclSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: AssociatedTypeDeclSyntax.Type) -> AssociatedTypeDeclSyntax? {
+      return AssociatedTypeDeclSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to ``AssociatedTypeDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``AssociatedTypeDeclSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: AssociatedTypeDeclSyntax.Type) -> AssociatedTypeDeclSyntax {
+      return self.as(AssociatedTypeDeclSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to ``DeinitializerDeclSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: DeinitializerDeclSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to ``DeinitializerDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``DeinitializerDeclSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: DeinitializerDeclSyntax.Type) -> DeinitializerDeclSyntax? {
+      return DeinitializerDeclSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to ``DeinitializerDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``DeinitializerDeclSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: DeinitializerDeclSyntax.Type) -> DeinitializerDeclSyntax {
+      return self.as(DeinitializerDeclSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to ``EnumCaseDeclSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: EnumCaseDeclSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to ``EnumCaseDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``EnumCaseDeclSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: EnumCaseDeclSyntax.Type) -> EnumCaseDeclSyntax? {
+      return EnumCaseDeclSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to ``EnumCaseDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``EnumCaseDeclSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: EnumCaseDeclSyntax.Type) -> EnumCaseDeclSyntax {
+      return self.as(EnumCaseDeclSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to ``FunctionDeclSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: FunctionDeclSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to ``FunctionDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``FunctionDeclSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: FunctionDeclSyntax.Type) -> FunctionDeclSyntax? {
+      return FunctionDeclSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to ``FunctionDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``FunctionDeclSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: FunctionDeclSyntax.Type) -> FunctionDeclSyntax {
+      return self.as(FunctionDeclSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to ``InitializerDeclSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: InitializerDeclSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to ``InitializerDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``InitializerDeclSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: InitializerDeclSyntax.Type) -> InitializerDeclSyntax? {
+      return InitializerDeclSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to ``InitializerDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``InitializerDeclSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: InitializerDeclSyntax.Type) -> InitializerDeclSyntax {
+      return self.as(InitializerDeclSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to ``MissingDeclSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: MissingDeclSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to ``MissingDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``MissingDeclSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: MissingDeclSyntax.Type) -> MissingDeclSyntax? {
+      return MissingDeclSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to ``MissingDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``MissingDeclSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: MissingDeclSyntax.Type) -> MissingDeclSyntax {
+      return self.as(MissingDeclSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to ``SubscriptDeclSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: SubscriptDeclSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to ``SubscriptDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``SubscriptDeclSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: SubscriptDeclSyntax.Type) -> SubscriptDeclSyntax? {
+      return SubscriptDeclSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to ``SubscriptDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``SubscriptDeclSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: SubscriptDeclSyntax.Type) -> SubscriptDeclSyntax {
+      return self.as(SubscriptDeclSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to ``TypeAliasDeclSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: TypeAliasDeclSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to ``TypeAliasDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``TypeAliasDeclSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: TypeAliasDeclSyntax.Type) -> TypeAliasDeclSyntax? {
+      return TypeAliasDeclSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to ``TypeAliasDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``TypeAliasDeclSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: TypeAliasDeclSyntax.Type) -> TypeAliasDeclSyntax {
+      return self.as(TypeAliasDeclSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to ``VariableDeclSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: VariableDeclSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to ``VariableDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``VariableDeclSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: VariableDeclSyntax.Type) -> VariableDeclSyntax? {
+      return VariableDeclSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to ``VariableDeclSyntax``.
+    ///
+    /// - Returns: An instance of ``VariableDeclSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: VariableDeclSyntax.Type) -> VariableDeclSyntax {
+      return self.as(VariableDeclSyntax.self)!
+    }
+  }
+
+  public let _syntaxNode: Syntax
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard node.raw.kind == .abiAttributeArguments else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeProvider: UnexpectedNodesSyntax? = nil,
+    provider: Provider,
+    _ unexpectedAfterProvider: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((SyntaxArena(), (unexpectedBeforeProvider, provider, unexpectedAfterProvider))) { (arena, _) in
+      let layout: [RawSyntax?] = [unexpectedBeforeProvider?.raw, provider.raw, unexpectedAfterProvider?.raw]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.abiAttributeArguments,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeProvider: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: SyntaxArena()).cast(ABIAttributeArgumentsSyntax.self)
+    }
+  }
+
+  public var provider: Provider {
+    get {
+      return Syntax(self).child(at: 1)!.cast(Provider.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: SyntaxArena()).cast(ABIAttributeArgumentsSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterProvider: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: SyntaxArena()).cast(ABIAttributeArgumentsSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeProvider, \Self.provider, \Self.unexpectedAfterProvider])
+}
+
 // MARK: - AccessorBlockSyntax
 
 /// ### Children
@@ -2291,7 +2679,7 @@ public struct AssociatedTypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
 ///  - `atSign`: `@`
 ///  - `attributeName`: ``TypeSyntax``
 ///  - `leftParen`: `(`?
-///  - `arguments`: (``LabeledExprListSyntax`` | ``TokenSyntax`` | ``StringLiteralExprSyntax`` | ``AvailabilityArgumentListSyntax`` | ``SpecializeAttributeArgumentListSyntax`` | ``ObjCSelectorPieceListSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeAttributeArgumentsSyntax`` | ``BackDeployedAttributeArgumentsSyntax`` | ``ConventionAttributeArgumentsSyntax`` | ``ConventionWitnessMethodAttributeArgumentsSyntax`` | ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` | ``ExposeAttributeArgumentsSyntax`` | ``OriginallyDefinedInAttributeArgumentsSyntax`` | ``UnderscorePrivateAttributeArgumentsSyntax`` | ``DynamicReplacementAttributeArgumentsSyntax`` | ``UnavailableFromAsyncAttributeArgumentsSyntax`` | ``EffectsAttributeArgumentListSyntax`` | ``DocumentationAttributeArgumentListSyntax``)?
+///  - `arguments`: (``LabeledExprListSyntax`` | ``TokenSyntax`` | ``StringLiteralExprSyntax`` | ``AvailabilityArgumentListSyntax`` | ``SpecializeAttributeArgumentListSyntax`` | ``ObjCSelectorPieceListSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeAttributeArgumentsSyntax`` | ``BackDeployedAttributeArgumentsSyntax`` | ``ConventionAttributeArgumentsSyntax`` | ``ConventionWitnessMethodAttributeArgumentsSyntax`` | ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` | ``ExposeAttributeArgumentsSyntax`` | ``OriginallyDefinedInAttributeArgumentsSyntax`` | ``UnderscorePrivateAttributeArgumentsSyntax`` | ``DynamicReplacementAttributeArgumentsSyntax`` | ``UnavailableFromAsyncAttributeArgumentsSyntax`` | ``EffectsAttributeArgumentListSyntax`` | ``DocumentationAttributeArgumentListSyntax`` | `ABIAttributeArgumentsSyntax`)?
 ///  - `rightParen`: `)`?
 ///
 /// ### Contained in
@@ -2320,6 +2708,9 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     case unavailableFromAsyncArguments(UnavailableFromAsyncAttributeArgumentsSyntax)
     case effectsArguments(EffectsAttributeArgumentListSyntax)
     case documentationArguments(DocumentationAttributeArgumentListSyntax)
+    /// - Note: Requires experimental feature `abiAttribute`.
+    @_spi(ExperimentalLanguageFeatures)
+    case abiArguments(ABIAttributeArgumentsSyntax)
 
     public var _syntaxNode: Syntax {
       switch self {
@@ -2362,6 +2753,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       case .effectsArguments(let node):
         return node._syntaxNode
       case .documentationArguments(let node):
+        return node._syntaxNode
+      case .abiArguments(let node):
         return node._syntaxNode
       }
     }
@@ -2446,6 +2839,12 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = .documentationArguments(node)
     }
 
+    /// - Note: Requires experimental feature `abiAttribute`.
+    @_spi(ExperimentalLanguageFeatures)
+    public init(_ node: ABIAttributeArgumentsSyntax) {
+      self = .abiArguments(node)
+    }
+
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(LabeledExprListSyntax.self) {
         self = .argumentList(node)
@@ -2487,6 +2886,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
         self = .effectsArguments(node)
       } else if let node = node.as(DocumentationAttributeArgumentListSyntax.self) {
         self = .documentationArguments(node)
+      } else if let node = node.as(ABIAttributeArgumentsSyntax.self) {
+        self = .abiArguments(node)
       } else {
         return nil
       }
@@ -2513,7 +2914,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
         .node(DynamicReplacementAttributeArgumentsSyntax.self),
         .node(UnavailableFromAsyncAttributeArgumentsSyntax.self),
         .node(EffectsAttributeArgumentListSyntax.self),
-        .node(DocumentationAttributeArgumentListSyntax.self)
+        .node(DocumentationAttributeArgumentListSyntax.self),
+        .node(ABIAttributeArgumentsSyntax.self)
       ])
     }
 
@@ -2955,6 +3357,34 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
     public func cast(_ syntaxType: DocumentationAttributeArgumentListSyntax.Type) -> DocumentationAttributeArgumentListSyntax {
       return self.as(DocumentationAttributeArgumentListSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to `ABIAttributeArgumentsSyntax`.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    /// - Note: Requires experimental feature `abiAttribute`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func `is`(_ syntaxType: ABIAttributeArgumentsSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to `ABIAttributeArgumentsSyntax`.
+    ///
+    /// - Returns: An instance of `ABIAttributeArgumentsSyntax`, or `nil` if the cast fails.
+    /// - Note: Requires experimental feature `abiAttribute`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func `as`(_ syntaxType: ABIAttributeArgumentsSyntax.Type) -> ABIAttributeArgumentsSyntax? {
+      return ABIAttributeArgumentsSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to `ABIAttributeArgumentsSyntax`.
+    ///
+    /// - Returns: An instance of `ABIAttributeArgumentsSyntax`.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    /// - Note: Requires experimental feature `abiAttribute`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func cast(_ syntaxType: ABIAttributeArgumentsSyntax.Type) -> ABIAttributeArgumentsSyntax {
+      return self.as(ABIAttributeArgumentsSyntax.self)!
     }
   }
 

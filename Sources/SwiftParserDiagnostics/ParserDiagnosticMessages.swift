@@ -306,6 +306,30 @@ public struct CannotParseVersionTuple: ParserError {
   }
 }
 
+public struct DeclarationNotPermittedInContext: ParserError {
+  public var missingDecl: MissingDeclSyntax
+  public var invalidDecl: DeclSyntax
+
+  public var message: String {
+    return "\(self.invalidDeclDescription) is not permitted \(self.missingDeclContextDescription)"
+  }
+
+  var invalidDeclDescription: String {
+    return invalidDecl.kind.nameForDiagnostics ?? "declaration"
+  }
+
+  var missingDeclContextDescription: String {
+    guard
+      let description = missingDecl.parent?.ancestorOrSelf(mapping: { ancestor in
+        ancestor.nodeTypeNameForDiagnostics(allowBlockNames: false)
+      })
+    else {
+      return "here"
+    }
+    return "as \(description)"
+  }
+}
+
 public struct DeinitializerSignatureError: ParserError {
   public let name: TokenSyntax?
   public let params: FunctionParameterClauseSyntax?

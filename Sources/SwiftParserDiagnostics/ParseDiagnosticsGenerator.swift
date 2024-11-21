@@ -1339,6 +1339,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   }
 
   public override func visit(_ node: MissingDeclSyntax) -> SyntaxVisitorContinueKind {
+    // If the missing decl contains another decl as unexpected syntax, diagnose that decl as syntactically invalid.
+    if let invalidDecl = node.unexpectedBeforeAttributes?.only?.as(DeclSyntax.self) {
+      addDiagnostic(node, DeclarationNotPermittedInContext(missingDecl: node, invalidDecl: invalidDecl))
+      return .skipChildren
+    }
+
     return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 

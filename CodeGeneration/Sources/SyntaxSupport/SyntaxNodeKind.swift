@@ -22,6 +22,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
 
   case _canImportExpr
   case _canImportVersionInfo
+  case abiAttributeArguments
   case accessorBlock
   case accessorDecl
   case accessorDeclList
@@ -340,6 +341,15 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
     return .identifier(rawValue)
   }
 
+  public var uppercasedFirstWordRawValue: String {
+    switch self {
+    case .abiAttributeArguments:
+      "ABIAttributeArguments"
+    default:
+      rawValue.withFirstCharacterUppercased
+    }
+  }
+
   public var syntaxType: TypeSyntax {
     switch self {
     case .syntax:
@@ -347,7 +357,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
     case .syntaxCollection:
       return "SyntaxCollection"
     default:
-      return "\(raw: rawValue.withFirstCharacterUppercased)Syntax"
+      return "\(raw: uppercasedFirstWordRawValue)Syntax"
     }
   }
 

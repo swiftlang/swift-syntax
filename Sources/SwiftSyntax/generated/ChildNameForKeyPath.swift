@@ -17,6 +17,12 @@
 @_spi(RawSyntax)
 public func childName(_ keyPath: AnyKeyPath) -> String? {
   switch keyPath {
+  case \ABIAttributeArgumentsSyntax.unexpectedBeforeProvider:
+    return "unexpectedBeforeProvider"
+  case \ABIAttributeArgumentsSyntax.provider:
+    return "provider"
+  case \ABIAttributeArgumentsSyntax.unexpectedAfterProvider:
+    return "unexpectedAfterProvider"
   case \AccessorBlockSyntax.unexpectedBeforeLeftBrace:
     return "unexpectedBeforeLeftBrace"
   case \AccessorBlockSyntax.leftBrace:

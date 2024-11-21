@@ -71,6 +71,10 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _underlyingVersion
   case _UnknownLayout
   case _version
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case abi
   case accesses
   case actor
   case addressWithNativeOwner
@@ -272,6 +276,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
       }
     case 3:
       switch text {
+      case "abi":
+        self = .abi
       case "any":
         self = .any
       case "Any":
@@ -874,6 +880,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "_underlyingVersion",
     "_UnknownLayout",
     "_version",
+    "abi",
     "accesses",
     "actor",
     "addressWithNativeOwner",

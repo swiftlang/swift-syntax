@@ -45,6 +45,9 @@ extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of value generics.
   public static let valueGenerics = Self (rawValue: 1 << 6)
 
+  /// Whether to enable the parsing of @abi attribute.
+  public static let abiAttribute = Self (rawValue: 1 << 7)
+
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
   public init?(name: String) {
@@ -63,6 +66,8 @@ extension Parser.ExperimentalFeatures {
       self = .coroutineAccessors
     case "ValueGenerics":
       self = .valueGenerics
+    case "ABIAttribute":
+      self = .abiAttribute
     default:
       return nil
     }

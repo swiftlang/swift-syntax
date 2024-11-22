@@ -574,13 +574,44 @@ import SwiftSyntax
 @_spi(Experimental) extension SwitchCaseSyntax: SequentialScopeSyntax {
   /// Names introduced within `case` items.
   var namesFromLabel: [LookupName] {
-    label.as(SwitchCaseLabelSyntax.self)?.caseItems.flatMap { child in
+    guard let switchCaseItemList = label.as(SwitchCaseLabelSyntax.self)?.caseItems else { return [] }
+
+    let extractedNames = switchCaseItemList.flatMap { child in
       if let exprPattern = child.pattern.as(ExpressionPatternSyntax.self) {
         return LookupName.getNames(from: exprPattern.expression)
       } else {
         return LookupName.getNames(from: child.pattern)
       }
-    } ?? []
+    }
+
+    if switchCaseItemList.count <= 1 {
+      return extractedNames
+    }
+
+    var orderedKeys: [Identifier] = []
+    var partitioned: [Identifier: [LookupName]] = [:]
+
+    for extractedName in extractedNames {
+      guard let identifier = extractedName.identifier else { continue }
+
+      if !partitioned.keys.contains(identifier) {
+        orderedKeys.append(identifier)
+      }
+
+      if partitioned[identifier] == nil {
+        partitioned[identifier] = [extractedName]
+      } else {
+        partitioned[identifier]?.append(extractedName)
+      }
+    }
+
+    return
+      orderedKeys
+      .compactMap { key in
+        guard let names = partitioned[key] else { return nil }
+
+        return .compositeName(names)
+      }
   }
 
   /// Names introduced within `case` items

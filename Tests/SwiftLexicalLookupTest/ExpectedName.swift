@@ -16,12 +16,12 @@ import XCTest
 
 /// Used to define lookup name assertion.
 protocol ExpectedName {
-  var marker: String { get }
+  var marker: [String] { get }
 }
 
 extension String: ExpectedName {
-  var marker: String {
-    self
+  var marker: [String] {
+    [self]
   }
 }
 
@@ -63,15 +63,22 @@ enum NameExpectation: ExpectedName {
   case declaration(String)
   case implicit(ImplicitNameExpectation)
   case dollarIdentifier(String, String)
+  case compositeName([NameExpectation])
 
-  var marker: String {
+  var marker: [String] {
     switch self {
     case .identifier(let marker),
       .declaration(let marker),
       .dollarIdentifier(let marker, _):
-      return marker
+      return [marker]
     case .implicit(let implicitName):
-      return implicitName.marker
+      return [implicitName.marker]
+    case .compositeName(let expectedNames):
+      return
+        expectedNames
+        .flatMap { expectedName in
+          expectedName.marker
+        }
     }
   }
 
@@ -86,6 +93,15 @@ enum NameExpectation: ExpectedName {
         actualStr == expectedStr,
         "For marker \(marker), actual identifier \(actualStr) doesn't match expected \(expectedStr)"
       )
+    case (.compositeName(let actualNames), .compositeName(let expectedNames)):
+      XCTAssert(
+        actualNames.count == expectedNames.count,
+        "For marker \(marker), actual composite name count \(actualNames.count) doesn't match expected \(expectedNames.count)"
+      )
+
+      for (actualName, expectedName) in zip(actualNames, expectedNames) {
+        expectedName.assertExpectation(marker: marker, for: actualName)
+      }
     default:
       XCTFail("For marker \(marker), actual name kind \(name) doesn't match expected \(self)")
     }

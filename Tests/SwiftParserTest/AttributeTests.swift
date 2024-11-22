@@ -1293,6 +1293,40 @@ final class AttributeTests: ParserTestCase {
         """,
       experimentalFeatures: [.abiAttribute]
     )
+
+    // `#if` is banned inside an `@abi` attribute.
+    // The code that generates feature checks in module interfaces could easily fail in ways that would generate this
+    // syntax, so we want to make sure we give a good diagnostic.
+
+    assertParse(
+      """
+      @abi(
+        1️⃣#if $TypedThrows
+        func _fn<E: Error>() throws(E)
+        #endif
+      )
+      func fn<E: Error>() throws(E) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "conditional compilation not permitted in ABI-providing declaration",
+          highlight: """
+
+              #if $TypedThrows
+              #endif
+            """,
+          fixIts: ["remove '#if $TypedThrows' and '#endif'"]
+        )
+      ],
+      fixedSource: """
+        @abi(
+          func _fn<E: Error>() throws(E)
+        )
+        func fn<E: Error>() throws(E) {}
+        """,
+      experimentalFeatures: [.abiAttribute]
+    )
   }
 
   func testSpaceBetweenAtAndAttribute() {

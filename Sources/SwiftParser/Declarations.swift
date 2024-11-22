@@ -205,6 +205,17 @@ extension Parser {
         return .weakBracketed(closingDelimiter: .rightParen)
       }
     }
+
+    /// Is `#if` allowed in this context? If not, we parse it into unexpected syntax on whatever declaration is nested
+    /// inside it.
+    var allowsIfConfigDecl: Bool {
+      switch self {
+      case .topLevelOrCodeBlock, .memberDeclList:
+        return true
+      case .argumentList:
+        return false
+      }
+    }
   }
 
   /// Parse a declaration.
@@ -238,6 +249,20 @@ extension Parser {
         }
       } syntax: { parser, elements in
         return .decls(RawMemberBlockItemListSyntax(elements: elements, arena: parser.arena))
+      }
+      if !context.allowsIfConfigDecl {
+        // Convert the IfConfig to unexpected syntax around the first decl inside it, if any.
+        return directive.makeUnexpectedKeepingFirstNode(of: RawDeclSyntax.self, arena: self.arena) { node in
+          return !node.is(RawIfConfigDeclSyntax.self)
+        } makeMissing: {
+          return RawDeclSyntax(
+            RawMissingDeclSyntax(
+              attributes: self.emptyCollection(RawAttributeListSyntax.self),
+              modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
+              arena: self.arena
+            )
+          )
+        }
       }
       return RawDeclSyntax(directive)
     }

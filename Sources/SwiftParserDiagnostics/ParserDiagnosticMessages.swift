@@ -407,6 +407,21 @@ public struct IdentifierNotAllowedInOperatorName: ParserError {
   }
 }
 
+public struct IfConfigDeclNotAllowedInContext: ParserError {
+  public let context: Syntax
+
+  private var contextDescription: String {
+    if let description = context.ancestorOrSelf(mapping: { $0.nodeTypeNameForDiagnostics(allowBlockNames: true) }) {
+      return "in \(description)"
+    }
+    return "here"
+  }
+
+  public var message: String {
+    return "conditional compilation not permitted \(contextDescription)"
+  }
+}
+
 public struct InvalidFloatLiteralMissingLeadingZero: ParserError {
   public let decimalDigits: TokenSyntax
 

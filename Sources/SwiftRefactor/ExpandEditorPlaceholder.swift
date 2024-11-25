@@ -40,7 +40,9 @@ import SwiftSyntaxBuilder
 /// `type-for-expansion-string`), is parsed into a syntax node. If that node is
 /// a `FunctionTypeSyntax` then the placeholder is expanded into a
 /// `ClosureExprSyntax`. Otherwise it is expanded as is, which is also the case
-/// for when only a display string is provided.
+/// for when only a display string is provided. You may customize the formatting
+/// of a closure expansion via ``Context/closureLiteralFormat``, for example to
+/// change whether it is split onto multiple lines.
 ///
 /// ## Function Typed Placeholder
 /// ### Before
@@ -78,12 +80,29 @@ import SwiftSyntaxBuilder
 /// ```
 struct ExpandSingleEditorPlaceholder: EditRefactoringProvider {
   struct Context {
-    let indentationWidth: Trivia?
-    let initialIndentation: Trivia
+    /// The formatter to use when expanding a function-typed placeholder.
+    let closureLiteralFormat: BasicFormat
+    /// When true, the expansion will wrap a function-typed placeholder's entire
+    /// expansion in placeholder delimiters, in addition to any placeholders
+    /// inside the expanded closure literal.
+    ///
+    /// With `allowNestedPlaceholders = false`
+    /// ```swift
+    /// { someInt in <#String#> }
+    /// ```
+    ///
+    /// With `allowNestedPlaceholders = true`
+    /// ```swift
+    /// <#{ someInt in <#String#> }#>
+    /// ```
+    let allowNestedPlaceholders: Bool
 
-    init(indentationWidth: Trivia? = nil, initialIndentation: Trivia = []) {
-      self.indentationWidth = indentationWidth
-      self.initialIndentation = initialIndentation
+    init(
+      closureLiteralFormat: BasicFormat = BasicFormat(),
+      allowNestedPlaceholders: Bool = false
+    ) {
+      self.closureLiteralFormat = closureLiteralFormat
+      self.allowNestedPlaceholders = allowNestedPlaceholders
     }
   }
 
@@ -94,16 +113,17 @@ struct ExpandSingleEditorPlaceholder: EditRefactoringProvider {
 
     let expanded: String
     if let functionType = placeholder.typeForExpansion?.as(FunctionTypeSyntax.self) {
-      let basicFormat = BasicFormat(
-        indentationWidth: context.indentationWidth,
-        initialIndentation: context.initialIndentation
-      )
-      var formattedExpansion = functionType.closureExpansion.formatted(using: basicFormat).description
+      let format = context.closureLiteralFormat
+      let initialIndentation = format.currentIndentationLevel
+      var formattedExpansion = functionType.closureExpansion.formatted(using: format).description
       // Strip the initial indentation from the placeholder itself. We only introduced the initial indentation to
       // format consecutive lines. We don't want it at the front of the initial line because it replaces an expression
       // that might be in the middle of a line.
-      if formattedExpansion.hasPrefix(context.initialIndentation.description) {
-        formattedExpansion = String(formattedExpansion.dropFirst(context.initialIndentation.description.count))
+      if formattedExpansion.hasPrefix(initialIndentation.description) {
+        formattedExpansion = String(formattedExpansion.dropFirst(initialIndentation.description.count))
+      }
+      if context.allowNestedPlaceholders {
+        formattedExpansion = wrapInPlaceholder(formattedExpansion)
       }
       expanded = formattedExpansion
     } else {
@@ -161,20 +181,24 @@ public struct ExpandEditorPlaceholder: EditRefactoringProvider {
       let arg = placeholder.parent?.as(LabeledExprSyntax.self),
       let argList = arg.parent?.as(LabeledExprListSyntax.self),
       let call = argList.parent?.as(FunctionCallExprSyntax.self),
-      let expandedTrailingClosures = ExpandEditorPlaceholdersToTrailingClosures.expandTrailingClosurePlaceholders(
+      let expandedClosures = ExpandEditorPlaceholdersToLiteralClosures.expandClosurePlaceholders(
         in: call,
         ifIncluded: arg,
-        indentationWidth: context.indentationWidth
+        context: ExpandEditorPlaceholdersToLiteralClosures.Context(
+          format: .trailing(indentationWidth: context.indentationWidth)
+        )
       )
     else {
       return ExpandSingleEditorPlaceholder.textRefactor(syntax: token)
     }
 
-    return [SourceEdit.replace(call, with: expandedTrailingClosures.description)]
+    return [SourceEdit.replace(call, with: expandedClosures.description)]
   }
 }
 
-/// Expand all the editor placeholders in the function call that can be converted to trailing closures.
+/// Expand all the editor placeholders in the function call to literal closures.
+/// By default they will be expanded to trailing form; if you provide your own
+/// formatter via ``Context/format`` they will be expanded inline.
 ///
 /// ## Before
 /// ```swift
@@ -185,7 +209,7 @@ public struct ExpandEditorPlaceholder: EditRefactoringProvider {
 /// )
 /// ```
 ///
-/// ## Expansion of `foo`
+/// ## Expansion of `foo`, default behavior
 /// ```swift
 /// foo(
 ///   arg: <#T##Int#>,
@@ -195,12 +219,50 @@ public struct ExpandEditorPlaceholder: EditRefactoringProvider {
 ///   <#T##String#>
 /// }
 /// ```
-public struct ExpandEditorPlaceholdersToTrailingClosures: SyntaxRefactoringProvider {
+///
+/// ## Expansion of `foo` with a basic custom formatter
+/// ```swift
+/// foo(
+///   arg: <#T##Int#>,
+///   firstClosure: { someInt in
+///     <#T##String#>
+///   },
+///   secondClosure: { someInt in
+///     <#T##String#>
+///   }
+/// )
+/// ```
+///
+/// ## Expansion of `foo`, custom formatter with `allowNestedPlaceholders: true`
+/// ```swift
+/// foo(
+///   arg: <#T##Int#>,
+///   firstClosure: <#{ someInt in
+///     <#T##String#>
+///   }#>,
+///   secondClosure: <#{ someInt in
+///     <#T##String#>
+///   }#>
+/// )
+/// ```
+public struct ExpandEditorPlaceholdersToLiteralClosures: SyntaxRefactoringProvider {
   public struct Context {
-    public let indentationWidth: Trivia?
+    public enum Format {
+      /// Default formatting behavior: expand to trailing closures.
+      case trailing(indentationWidth: Trivia?)
+      /// Use the given formatter and expand the placeholder inline, without
+      /// moving it to trailing position. If `allowNestedPlaceholders` is true,
+      /// the entire closure will also be wrapped as a placeholder.
+      case custom(BasicFormat, allowNestedPlaceholders: Bool)
+    }
+    public let format: Format
+
+    public init(format: Format) {
+      self.format = format
+    }
 
     public init(indentationWidth: Trivia? = nil) {
-      self.indentationWidth = indentationWidth
+      self.init(format: .trailing(indentationWidth: indentationWidth))
     }
   }
 
@@ -208,7 +270,11 @@ public struct ExpandEditorPlaceholdersToTrailingClosures: SyntaxRefactoringProvi
     syntax call: FunctionCallExprSyntax,
     in context: Context = Context()
   ) -> FunctionCallExprSyntax? {
-    return Self.expandTrailingClosurePlaceholders(in: call, ifIncluded: nil, indentationWidth: context.indentationWidth)
+    return Self.expandClosurePlaceholders(
+      in: call,
+      ifIncluded: nil,
+      context: context
+    )
   }
 
   /// If the given argument is `nil` or one of the last arguments that are all
@@ -216,24 +282,35 @@ public struct ExpandEditorPlaceholdersToTrailingClosures: SyntaxRefactoringProvi
   /// closure, then return a replacement of this call with one that uses
   /// closures based on the function types provided by each editor placeholder.
   /// Otherwise return nil.
-  fileprivate static func expandTrailingClosurePlaceholders(
+  fileprivate static func expandClosurePlaceholders(
     in call: FunctionCallExprSyntax,
     ifIncluded arg: LabeledExprSyntax?,
-    indentationWidth: Trivia?
+    context: Context
   ) -> FunctionCallExprSyntax? {
-    guard let expanded = call.expandTrailingClosurePlaceholders(ifIncluded: arg, indentationWidth: indentationWidth)
-    else {
-      return nil
-    }
+    switch context.format {
+    case let .custom(formatter, allowNestedPlaceholders: allowNesting):
+      let expanded = call.expandClosurePlaceholders(
+        ifIncluded: arg,
+        customFormat: formatter,
+        allowNestedPlaceholders: allowNesting
+      )
+      return expanded?.expr
 
-    let callToTrailingContext = CallToTrailingClosures.Context(
-      startAtArgument: call.arguments.count - expanded.numClosures
-    )
-    guard let trailing = CallToTrailingClosures.refactor(syntax: expanded.expr, in: callToTrailingContext) else {
-      return nil
-    }
+    case let .trailing(indentationWidth):
+      guard let expanded = call.expandClosurePlaceholders(ifIncluded: arg, indentationWidth: indentationWidth)
+      else {
+        return nil
+      }
 
-    return trailing
+      let callToTrailingContext = CallToTrailingClosures.Context(
+        startAtArgument: call.arguments.count - expanded.numClosures
+      )
+      guard let trailing = CallToTrailingClosures.refactor(syntax: expanded.expr, in: callToTrailingContext) else {
+        return nil
+      }
+
+      return trailing
+    }
   }
 }
 
@@ -311,9 +388,11 @@ extension FunctionCallExprSyntax {
   /// closure, then return a replacement of this call with one that uses
   /// closures based on the function types provided by each editor placeholder.
   /// Otherwise return nil.
-  fileprivate func expandTrailingClosurePlaceholders(
+  fileprivate func expandClosurePlaceholders(
     ifIncluded: LabeledExprSyntax?,
-    indentationWidth: Trivia?
+    indentationWidth: Trivia? = nil,
+    customFormat: BasicFormat? = nil,
+    allowNestedPlaceholders: Bool = false
   ) -> (expr: FunctionCallExprSyntax, numClosures: Int)? {
     var includedArg = false
     var argsToExpand = 0
@@ -343,8 +422,12 @@ extension FunctionCallExprSyntax {
       let edits = ExpandSingleEditorPlaceholder.textRefactor(
         syntax: arg.expression.cast(DeclReferenceExprSyntax.self).baseName,
         in: ExpandSingleEditorPlaceholder.Context(
-          indentationWidth: indentationWidth,
-          initialIndentation: lineIndentation
+          closureLiteralFormat: customFormat
+            ?? BasicFormat(
+              indentationWidth: indentationWidth,
+              initialIndentation: lineIndentation
+            ),
+          allowNestedPlaceholders: allowNestedPlaceholders
         )
       )
       guard edits.count == 1, let edit = edits.first, !edit.replacement.isEmpty else {

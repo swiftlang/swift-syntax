@@ -292,7 +292,7 @@ extension Lexer {
       self.stateStack.perform(stateTransition: stateTransition, stateAllocator: stateAllocator)
     }
 
-    func starts(with possiblePrefix: some Sequence<UInt8>) -> Bool {
+    func starts(with possiblePrefix: SyntaxText) -> Bool {
       return self.input.starts(with: possiblePrefix)
     }
 
@@ -2036,7 +2036,7 @@ extension Lexer.Cursor {
     }
 
     // Special case; allow '`$`'.
-    if quote.starts(with: "`$`".utf8) {
+    if quote.starts(with: "`$`") {
       self = quote
       let firstBacktickConsumed = self.advance(matching: "`")
       let dollarConsumed = self.advance(matching: "$")
@@ -2383,7 +2383,7 @@ extension Lexer.Cursor {
     case normal
     case perforce
 
-    var introducer: String {
+    var introducer: SyntaxText {
       switch self {
       case .perforce:
         return ">>>> "
@@ -2392,7 +2392,7 @@ extension Lexer.Cursor {
       }
     }
 
-    var terminator: String {
+    var terminator: SyntaxText {
       switch self {
       case .perforce:
         return "<<<<\n"
@@ -2408,11 +2408,15 @@ extension Lexer.Cursor {
     }
 
     // Check to see if we have <<<<<<< or >>>>.
-    guard start.starts(with: "<<<<<<< ".utf8) || start.starts(with: ">>>> ".utf8) else {
+    let kind: ConflictMarker
+    if start.starts(with: ConflictMarker.normal.introducer) {
+      kind = .normal
+    } else if start.starts(with: ConflictMarker.perforce.introducer) {
+      kind = .perforce
+    } else {
       return false
     }
 
-    let kind = start.is(at: "<") ? ConflictMarker.normal : .perforce
     guard let end = Self.findConflictEnd(start, markerKind: kind) else {
       // No end of conflict marker found.
       return false
@@ -2432,29 +2436,31 @@ extension Lexer.Cursor {
   static func findConflictEnd(_ curPtr: Lexer.Cursor, markerKind: ConflictMarker) -> Lexer.Cursor? {
     // Get a reference to the rest of the buffer minus the length of the start
     // of the conflict marker.
-    let advanced = curPtr.input.baseAddress?.advanced(by: markerKind.introducer.utf8.count)
+    let advanced = curPtr.input.baseAddress?.advanced(by: markerKind.introducer.count)
     var restOfBuffer = Lexer.Cursor(
-      input: .init(start: advanced, count: curPtr.input.count - markerKind.introducer.utf8.count),
-      previous: curPtr.input[markerKind.introducer.utf8.count - 1]
+      input: .init(start: advanced, count: curPtr.input.count - markerKind.introducer.count),
+      previous: curPtr.input[markerKind.introducer.count - 1]
     )
+    let terminator = markerKind.terminator
+    let terminatorStart = terminator.first!
     while !restOfBuffer.isAtEndOfFile {
-      let terminatorStart = markerKind.terminator.unicodeScalars.first!
-      restOfBuffer.advance(while: { byte in byte != terminatorStart })
+      restOfBuffer.advance(while: { $0.value != terminatorStart })
 
-      guard restOfBuffer.starts(with: markerKind.terminator.utf8) else {
+      guard restOfBuffer.starts(with: terminator) else {
         _ = restOfBuffer.advance()
         continue
       }
 
       // Must occur at start of line.
       guard restOfBuffer.previous == "\n" || restOfBuffer.previous == "\r" else {
+        _ = restOfBuffer.advance()
         continue
       }
 
-      let advanced = restOfBuffer.input.baseAddress?.advanced(by: markerKind.terminator.utf8.count)
+      let advanced = restOfBuffer.input.baseAddress?.advanced(by: terminator.count)
       return Lexer.Cursor(
-        input: .init(start: advanced, count: restOfBuffer.input.count - markerKind.terminator.utf8.count),
-        previous: restOfBuffer.input[markerKind.terminator.utf8.count - 1]
+        input: .init(start: advanced, count: restOfBuffer.input.count - terminator.count),
+        previous: restOfBuffer.input[terminator.count - 1]
       )
     }
     return nil

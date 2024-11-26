@@ -145,19 +145,9 @@ public final class SourceLocationConverter: Sendable {
   private let fileName: String
   /// The source of the file, modeled as data so it can contain invalid UTF-8.
   private let source: [UInt8]
-  /// Array of lines and the position at the start of the line.
-  private let lines: [AbsolutePosition]
-  /// Position at end of file.
-  private let endOfFile: AbsolutePosition
-
-  /// The information from all `#sourceLocation` directives in the file
-  /// necessary to compute presumed locations.
-  ///
-  /// - `sourceLine` is the physical line number of the end of the last token of
-  ///   `#sourceLocation(...)` directive within the current file.
-  /// - `arguments` are the `file` and `line` arguments of the directive or `nil`
-  ///   if spelled as `#sourceLocation()` to reset the source location directive.
-  private let sourceLocationDirectives: [(sourceLine: Int, arguments: SourceLocationDirectiveArguments?)]
+  /// The line table.
+  @_spi(Compiler)
+  public let lineTable: SourceLineTable
 
   /// Create a new ``SourceLocationConverter`` to convert between ``AbsolutePosition``
   /// and ``SourceLocation`` in a syntax tree.
@@ -173,7 +163,8 @@ public final class SourceLocationConverter: Sendable {
     precondition(tree.parent == nil, "SourceLocationConverter must be passed the root of the syntax tree")
     self.fileName = fileName
     self.source = tree.syntaxTextBytes
-    (self.lines, self.endOfFile, self.sourceLocationDirectives) = computeLines(tree: Syntax(tree))
+    self.lineTable = .create(for: tree)
+    precondition(self.lineTable.endOfFile.utf8Offset == self.source.count)
   }
 
   /// Create a new ``SourceLocationConverter`` to convert between ``AbsolutePosition``
@@ -201,45 +192,48 @@ public final class SourceLocationConverter: Sendable {
   ///   - file: The file path associated with the syntax tree.
   ///   - source: The source code to convert positions to line/columns for.
   @available(*, deprecated, message: "Use init(fileName:tree:) instead")
-  public init(file: String, source: String) {
+  public init(file: String, source sourceStr: String) {
     self.fileName = file
-    self.source = Array(source.utf8)
-    (self.lines, endOfFile) = self.source.withUnsafeBufferPointer { buf in
-      // Technically, `buf` is not allocated in a `SyntaxArena` but it satisfies
-      // all the required properties: `buf` will always outlive any references
-      // to it.
-      let syntaxArenaBuf = SyntaxArenaAllocatedBufferPointer(buf)
-      return computeLines(SyntaxText(buffer: syntaxArenaBuf))
-    }
-    precondition(source.utf8.count == endOfFile.utf8Offset)
-    self.sourceLocationDirectives = []
+    self.source = Array(sourceStr.utf8)
+    var sourceStr = sourceStr
+    self.lineTable = sourceStr.withSyntaxText(computeLines(text:))
+    precondition(self.lineTable.endOfFile == AbsolutePosition(utf8Offset: self.source.count))
   }
 
-  /// Execute the body with an array that contains each source line.
-  func withSourceLines<T>(_ body: ([SyntaxText]) throws -> T) rethrows -> T {
-    return try source.withUnsafeBufferPointer { (sourcePointer: UnsafeBufferPointer<UInt8>) in
-      var result: [SyntaxText] = []
-      var previousLoc = AbsolutePosition.startOfFile
-      precondition(lines.first == AbsolutePosition.startOfFile)
-      for lineStartLoc in lines.dropFirst() + [endOfFile] {
-        result.append(
+  var endOfFile: AbsolutePosition {
+    self.lineTable.endOfFile
+  }
+
+  /// Execute the body with each source line text.
+  func forEachSourceLine(_ body: (SyntaxText) throws -> Void) rethrows {
+    try source.withUnsafeBufferPointer { (sourceBuffer: UnsafeBufferPointer<UInt8>) in
+      guard let baseAddress = sourceBuffer.baseAddress else {
+        // Empty file.
+        try body("")
+        return
+      }
+
+      var position: AbsolutePosition = .startOfFile
+      try lineTable.forEachEndOfLinePosition { endOfLine in
+        try body(
           SyntaxText(
-            baseAddress: sourcePointer.baseAddress?.advanced(by: previousLoc.utf8Offset),
-            count: lineStartLoc.utf8Offset - previousLoc.utf8Offset
+            baseAddress: baseAddress.advanced(by: position.utf8Offset),
+            count: endOfLine.utf8Offset - position.utf8Offset
           )
         )
-        previousLoc = lineStartLoc
+        position = endOfLine
       }
-      return try body(result)
     }
   }
 
   /// Return the source lines of the file as `String`s.
   /// Because `String` cannot model invalid UTF-8, the concatenation of these source lines might not be source-accurate in case there are Unicode errors in the source file, but for most practical purposes, this should not pose an issue.
   public var sourceLines: [String] {
-    return withSourceLines { syntaxTextLines in
-      return syntaxTextLines.map { String(syntaxText: $0) }
+    var result: [String] = []
+    self.forEachSourceLine { line in
+      result.append(String(syntaxText: line))
     }
+    return result
   }
 
   /// Convert a ``AbsolutePosition`` to a ``SourceLocation``.
@@ -248,24 +242,9 @@ public final class SourceLocationConverter: Sendable {
   /// for the end of file is returned. If position is negative the location for
   /// start of file is returned.
   public func location(for position: AbsolutePosition) -> SourceLocation {
-    let physicalLocation = physicalLocation(for: position)
-    if let lastSourceLocationDirective =
-      sourceLocationDirectives
-      .last(where: { $0.sourceLine < physicalLocation.line }),
-      let arguments = lastSourceLocationDirective.arguments
-    {
-      let presumedLine = arguments.line + physicalLocation.line - lastSourceLocationDirective.sourceLine - 1
-      return SourceLocation(
-        line: physicalLocation.line,
-        column: physicalLocation.column,
-        offset: physicalLocation.offset,
-        file: physicalLocation.file,
-        presumedLine: presumedLine,
-        presumedFile: arguments.file
-      )
-    }
-
-    return physicalLocation
+    // Clamp the given position to the source range if needed.
+    let pos = max(.startOfFile, min(position, self.endOfFile))
+    return lineTable.location(for: pos, originalFileName: self.fileName)
   }
 
   /// Compute the location of `position` without taking `#sourceLocation`
@@ -276,92 +255,63 @@ public final class SourceLocationConverter: Sendable {
   /// is returned. If position is negative the location for start of file is
   /// returned.
   private func physicalLocation(for position: AbsolutePosition) -> SourceLocation {
-    // Clamp the given position to the end of file if needed.
-    let pos = min(position, endOfFile)
-    if pos.utf8Offset < 0 {
-      return SourceLocation(line: 1, column: 1, offset: 0, file: self.fileName)
-    }
+    // Clamp the given position to the source range if needed.
+    let pos = max(.startOfFile, min(position, self.endOfFile))
 
-    precondition(!lines.isEmpty)
-    var first = lines.startIndex
-    var i: Int
-    var step: Int
-    var count = lines.endIndex - first
-    // Do an upper bound search, first element that is > value. This provides
-    // the line index coming after the one where the position belongs to.
-    while count > 0 {
-      step = count / 2
-      i = first + step
-      if !(pos < lines[i]) {
-        first = i + 1
-        count -= step + 1
-      } else {
-        count = step
-      }
-    }
-
-    precondition(first > 0)
-    let lineIdx = first - 1
-    let lineStartOffset = lines[lineIdx].utf8Offset
-    let colOffset = pos.utf8Offset - lineStartOffset
-
-    let line = lineIdx + 1
-    let column = colOffset + 1
+    let lineCol = lineTable.physicalLineAndColumn(for: pos)
 
     return SourceLocation(
-      line: line,
-      column: column,
+      line: lineCol.line,
+      column: lineCol.column,
       offset: pos.utf8Offset,
       file: self.fileName
     )
   }
 
-  /// Convert a line/column to a ``SourceLocation``. If the line/column exceeds
-  /// the boundaries of the file or the line, the position returned is one
-  /// adjusted to the closest boundary (beginning/end of file or line).
+  /// Convert a physical line/column to a ``AbsolutePosition``. If the
+  /// line/column exceeds the boundaries of the file or the line, the position
+  /// returned is one adjusted to the closest boundary (beginning/end of file or line).
   ///
   /// - Parameters:
   ///   - line: A 1-based line number.
   ///   - column: A 1-based, UTF8 offset from the start of line.
   public func position(ofLine line: Int, column: Int) -> AbsolutePosition {
-    let lineIdx = line - 1
-    guard lineIdx >= lines.startIndex else {
+    guard line >= 1 else {
       return .startOfFile
     }
-    guard lineIdx < lines.endIndex else {
+    guard line <= lineTable.lineCount else {
       return self.endOfFile
     }
-    let lineStart = lines[lineIdx]
-    let lineEnd = lineIdx + 1 < lines.endIndex ? lines[lineIdx + 1] : self.endOfFile
-    let colOffset = column - 1
-    guard colOffset >= 0 else {
-      return lineStart
-    }
-    return min(lineStart + SourceLength(utf8Length: colOffset), lineEnd)
+    let lineRange = lineTable.range(forLine: line)
+    let lineLength = lineRange.end.utf8Offset - lineRange.start.utf8Offset
+
+    // The last line is not terminated with a newline, clamp to the end of the line.
+    // Otherwise the last column is the position of the newline character.
+    let maxColumn = line == lineTable.lineCount ? lineLength + 1 : lineLength
+    let column = max(1, min(column, maxColumn))
+
+    return lineRange.start.advanced(by: column - 1)
   }
 
   /// Returns false if the `position` is out-of-bounds for the file.
   public func isValid(position pos: AbsolutePosition) -> Bool {
-    return pos >= .startOfFile && pos <= self.endOfFile
+    return lineTable.isValid(position: pos)
   }
 
   /// Returns false if the `line`/`column` pair is out-of-bounds for the file or
   /// that specific line.
   public func isValid(line: Int, column: Int) -> Bool {
-    let lineIdx = line - 1
-    guard lineIdx >= lines.startIndex else {
+    guard 1 <= line, line <= lineTable.lineCount, 1 <= column else {
       return false
     }
-    guard lineIdx < lines.endIndex else {
-      return false
-    }
-    let lineStart = lines[lineIdx]
-    let lineEnd = lineIdx + 1 < lines.endIndex ? lines[lineIdx + 1] : self.endOfFile
-    let colOffset = column - 1
-    guard colOffset >= 0 else {
-      return false
-    }
-    return lineStart + SourceLength(utf8Length: colOffset) <= lineEnd
+
+    let lineRange = lineTable.range(forLine: line)
+    let lineLength = lineRange.end.utf8Offset - lineRange.start.utf8Offset
+
+    // The last line is not terminated with a newline, so the end position is valid.
+    // Otherwise the end position is the start position of the next line.
+    let maxColumn = line == lineTable.lineCount ? lineLength + 1 : lineLength
+    return column <= maxColumn
   }
 }
 
@@ -478,57 +428,286 @@ extension SyntaxProtocol {
   }
 }
 
-/// Returns array of lines with the position at the start of the line and
-/// the end-of-file position.
-fileprivate func computeLines(
-  tree: Syntax
-) -> (
-  lines: [AbsolutePosition],
-  endOfFile: AbsolutePosition,
-  sourceLocationDirectives: [(sourceLine: Int, arguments: SourceLocationDirectiveArguments?)]
-) {
-  var lines: [AbsolutePosition] = [.startOfFile]
-  var position: AbsolutePosition = .startOfFile
-  var sourceLocationDirectives: [(sourceLine: Int, arguments: SourceLocationDirectiveArguments?)] = []
-  let lastLineLength = tree.raw.forEachLineLength { lineLength in
-    position += lineLength
-    lines.append(position)
-  } handleSourceLocationDirective: { lineOffset, args in
-    sourceLocationDirectives.append((sourceLine: lines.count + lineOffset, arguments: args))
+/// `Array` wrapper to perform binary searches.
+private struct SortedArray<Element>: RandomAccessCollection {
+  typealias Storage = [Element]
+  let storage: Storage
+
+  /// Initialize with the pre-sorted array.
+  ///
+  /// It is the caller's responsibility to pre-sort the array. Otherwise, the
+  /// behavior is undefined.
+  init(sortedArray: [Element]) {
+    self.storage = sortedArray
   }
-  return (lines, position + lastLineLength, sourceLocationDirectives)
+
+  /// Find the first index where the element is ordered after `value`.
+  func upperBoundIndex<Value>(_ val: Value, by areIncreasingOrder: (Value, Element) -> Bool) -> Storage.Index {
+    var start = storage.startIndex
+    var end = storage.endIndex
+    while end > start {
+      let idx = (end - start) / 2 + start
+      if areIncreasingOrder(val, storage[idx]) {
+        end = idx
+      } else {
+        start = idx + 1
+      }
+    }
+    return start
+  }
+
+  /// Equivalent to `upperBoundIndex(val, by: <)`.
+  func upperBoundIndex(_ val: Element) -> Storage.Index where Element: Comparable {
+    self.upperBoundIndex(val, by: <)
+  }
+
+  var startIndex: Int { storage.startIndex }
+  var endIndex: Int { storage.endIndex }
+  subscript(index: Storage.Index) -> Element {
+    storage[index]
+  }
+  func makeIterator() -> Storage.Iterator {
+    storage.makeIterator()
+  }
+  func withContiguousStorageIfAvailable<R>(_ body: (UnsafeBufferPointer<Element>) throws -> R) rethrows -> R? {
+    try storage.withUnsafeBufferPointer(body)
+  }
 }
 
-fileprivate func computeLines(_ source: SyntaxText) -> ([AbsolutePosition], AbsolutePosition) {
-  var lines: [AbsolutePosition] = []
-  // First line starts from the beginning.
-  lines.append(.startOfFile)
-  var position: AbsolutePosition = .startOfFile
-  let addLine = { (lineLength: SourceLength) in
-    position += lineLength
-    lines.append(position)
+extension SortedArray: Sendable where Element: Sendable {}
+
+/// Represent a virtual file region in the source file.
+@_spi(Compiler)
+public struct VirtualFile: Sendable {
+  /// Start position of the virtual file region
+  public var startPosition: AbsolutePosition
+  /// End position of the virtual file region
+  public var endPosition: AbsolutePosition
+  /// Virtual file name.
+  public var fileName: String
+  /// Line number offset from the physical line number.
+  public var lineOffset: Int
+  /// The position of the filename literal.
+  public var fileNamePosition: AbsolutePosition
+}
+
+@_spi(Compiler)
+public final class SourceLineTable: Sendable {
+  /// Array of the *end* of newline character of the each line.
+  private let lineEnds: SortedArray<AbsolutePosition>
+
+  /// Array of virtual files declared in the source tree.
+  private let virtualFileTable: SortedArray<VirtualFile>
+
+  /// The end position of the file.
+  ///
+  /// If the last line was terminated with a newline character, this must be the
+  /// same value as `table.last`.
+  let endOfFile: AbsolutePosition
+
+  init(lineEnds: [AbsolutePosition], virtualFiles: [VirtualFile], endOfFile: AbsolutePosition) {
+    precondition((lineEnds.last ?? .startOfFile) <= endOfFile)
+    self.lineEnds = SortedArray(sortedArray: lineEnds)
+    self.virtualFileTable = SortedArray(sortedArray: virtualFiles)
+    self.endOfFile = endOfFile
   }
-  var curPrefix: SourceLength = .zero
-  curPrefix = source.forEachLineLength(prefix: curPrefix, body: addLine)
-  position += curPrefix
-  return (lines, position)
+
+  /// Create an instance by traversing a Syntax tree.
+  public static func create(for tree: some SyntaxProtocol) -> SourceLineTable {
+    return computeLines(tree: Syntax(tree))
+  }
+
+  /// Line count.
+  ///
+  /// This is always 1 or greater, even for an empty file.
+  public var lineCount: Int {
+    return lineEnds.count + 1
+  }
+
+  public func isValid(position: AbsolutePosition) -> Bool {
+    return .startOfFile <= position && position <= endOfFile
+  }
+
+  /// The line number at the given position.
+  ///
+  /// `position` must be `0 ... endOfFile`
+  public func physicalLine(for position: AbsolutePosition) -> Int {
+    precondition(isValid(position: position))
+    let lineIdx = lineEnds.upperBoundIndex(position)
+    return lineIdx + 1
+  }
+
+  /// The physical line number and column number at the given position.
+  ///
+  /// `position` must be `0 ... endOfFile`
+  public func physicalLineAndColumn(for position: AbsolutePosition) -> (line: Int, column: Int) {
+    precondition(isValid(position: position))
+    let lineIdx = lineEnds.upperBoundIndex(position)
+    let columnOffset: Int
+    if lineIdx == 0 {
+      columnOffset = position.utf8Offset
+    } else {
+      columnOffset = position.utf8Offset - lineEnds[lineIdx - 1].utf8Offset
+    }
+    return (lineIdx + 1, columnOffset + 1)
+  }
+
+  /// The location for the given position.
+  ///
+  /// `position` must be `0 ... endOfFile`
+  public func location(for position: AbsolutePosition, originalFileName: String) -> SourceLocation {
+    let lineCol = self.physicalLineAndColumn(for: position)
+    let virtualFile = self.virtualFile(for: position)
+    return SourceLocation(
+      line: lineCol.line,
+      column: lineCol.column,
+      offset: position.utf8Offset,
+      file: originalFileName,
+      presumedLine: lineCol.line + (virtualFile?.lineOffset ?? 0),
+      presumedFile: virtualFile?.fileName ?? originalFileName
+    )
+  }
+
+  /// The position range of the given line number.
+  ///
+  /// `line` must be `1 ... lineCount`
+  public func range(forLine line: Int) -> (start: AbsolutePosition, end: AbsolutePosition) {
+    precondition(1 <= line && line <= self.lineCount)
+    let start = line != 1 ? lineEnds[line - 2] : .startOfFile
+    let end = line != self.lineCount ? lineEnds[line - 1] : self.endOfFile
+    return (start, end)
+  }
+
+  /// Call `body` with the each end-of-line position.
+  ///
+  /// I.e. position of the end of each newline characters, _and_ the end of the file.
+  public func forEachEndOfLinePosition(_ body: (AbsolutePosition) throws -> Void) rethrows {
+    try lineEnds.forEach(body)
+    try body(endOfFile)
+  }
+
+  /// The virtual file at the given position.
+  public func virtualFile(for pos: AbsolutePosition) -> VirtualFile? {
+    let idx = virtualFileTable.upperBoundIndex(pos, by: { pos, virtualFile in pos < virtualFile.endPosition })
+    guard idx != virtualFileTable.endIndex else {
+      return nil
+    }
+
+    let virtualFile = virtualFileTable[idx]
+    if pos < virtualFile.startPosition {
+      return nil
+    }
+    return virtualFile
+  }
+
+  public var virtualFiles: [VirtualFile] {
+    virtualFileTable.storage
+  }
+}
+
+/// Create ``SourceLineTable`` by traversing a Syntax tree.
+private func computeLines(tree: Syntax) -> SourceLineTable {
+  // Collected end-of-line positions.
+  var lineEnds: [AbsolutePosition] = []
+  // Collected pairs of #sourceLocation directive position and the RawSyntax.
+  var directives: [(position: AbsolutePosition, lineIdx: Int, raw: RawSyntax)] = []
+
+  let endOfTree = tree.raw.forEachEndOfLine(position: tree.position) { eol in
+    lineEnds.append(eol)
+  } handleSourceLocationDirective: { position, raw in
+    directives.append((position: position, lineIdx: lineEnds.count, raw: raw))
+  }
+  precondition(endOfTree == tree.endPosition)
+
+  // Create VirtualFiles from the collected #sourceLocation directives.
+  var virtualFiles: [VirtualFile] = []
+  LOOP: for (position, var lineIdx, raw) in directives {
+    let directiveStartPosition = position + raw.leadingTriviaLength
+    let directiveEndPosition = position + raw.totalLength - raw.trailingTriviaLength
+    precondition(directiveEndPosition <= endOfTree && lineIdx <= lineEnds.count)
+
+    // Close the last virtual file if it's open.
+    // Make sure the #sourceLocation directive itself doesn't belong to any VirtualFile.
+    if let lastEndPos = virtualFiles.last?.endPosition, lastEndPos > directiveStartPosition {
+      virtualFiles[virtualFiles.count - 1].endPosition = directiveStartPosition
+    }
+
+    // 'lineIdx' is the line of the 'position', i.e. the start of the leading
+    // trivia of the directive. Advance it to the end of the directive.
+    while lineIdx < lineEnds.count && directiveEndPosition > lineEnds[lineIdx] {
+      lineIdx += 1
+    }
+
+    // Ignore #sourceLocation at the end of file without following newline.
+    guard lineIdx < lineEnds.count else {
+      continue LOOP
+    }
+
+    // The virtual file starts at the _next_ line of the directive.
+    let vFileStartPosition = lineEnds[lineIdx]
+
+    // Parse the arguments.
+    let directive = PoundSourceLocationSyntax(Syntax.forRoot(raw, rawNodeArena: raw.arenaReference.retained))!
+    guard
+      // If it's '#sourceLocation', we're done.
+      let argsClause = directive.arguments,
+      // Ignore #sourceLocation(...) with malformed arguments.
+      let arguments = try? SourceLocationDirectiveArguments(argsClause)
+    else {
+      continue LOOP
+    }
+    let fileNamePosition =
+      (position + SourceLength(utf8Length: argsClause.fileName.position.utf8Offset)
+        + argsClause.fileName.leadingTriviaLength)
+
+    // For example, if there is '#sourceLocation(file: "foo.in", line: 100)' on
+    // line:1 (i.e. lineIdx:0), the virtual file starts on line:2, so the
+    // physical line:2 is assumed to be line:100, thus the 'lineOffset' is 98.
+    let lineOffset = arguments.line - lineIdx - 2
+
+    // Open the virtual file to the end of the file.
+    virtualFiles.append(
+      VirtualFile(
+        startPosition: vFileStartPosition,
+        endPosition: endOfTree,
+        fileName: arguments.file,
+        lineOffset: lineOffset,
+        fileNamePosition: fileNamePosition
+      )
+    )
+  }
+
+  return SourceLineTable(lineEnds: lineEnds, virtualFiles: virtualFiles, endOfFile: endOfTree)
+}
+
+/// Compute ``SourceLineTable`` from a ``SyntaxText``.
+fileprivate func computeLines(text: SyntaxText) -> SourceLineTable {
+  var lineEnds: [AbsolutePosition] = []
+  let endPos = text.forEachEndOfLine(position: .startOfFile) { pos in
+    lineEnds.append(pos)
+  }
+  precondition(endPos.utf8Offset == text.count)
+  return SourceLineTable(lineEnds: lineEnds, virtualFiles: [], endOfFile: endPos)
 }
 
 fileprivate extension SyntaxText {
-  /// Walks and passes to `body` the ``SourceLength`` for every detected line,
-  /// with the newline character included.
-  /// - Returns: The leftover ``SourceLength`` at the end of the walk.
-  func forEachLineLength(
-    prefix: SourceLength = .zero,
-    body: (SourceLength) -> ()
-  ) -> SourceLength {
-    var curIdx = startIndex
-    let endIdx = endIndex
-    var lineStart = curIdx - prefix.utf8Length
+  /// Walks and passes to `body` the ``AbsolutePosition`` _after_ every newline.
+  ///
+  /// - Parameter position: The start position of the callee.
+  /// - Returns: The position at the end of the walk.
+  func forEachEndOfLine(
+    position: AbsolutePosition,
+    body: (AbsolutePosition) -> ()
+  ) -> AbsolutePosition {
+    guard let startPtr = buffer.baseAddress else {
+      return position
+    }
+    let endPtr = startPtr.advanced(by: buffer.count)
+    var ptr = startPtr
 
-    while curIdx != endIdx {
-      let chr = self[curIdx]
-      curIdx &+= 1
+    while ptr != endPtr {
+      let chr = ptr.pointee
+      ptr += 1
 
       /// From https://docs.swift.org/swift-book/ReferenceManual/LexicalStructure.html#grammar_line-break
       /// * line-break → U+000A
@@ -538,33 +717,33 @@ fileprivate extension SyntaxText {
       case UInt8(ascii: "\n"):
         break
       case UInt8(ascii: "\r"):
-        if curIdx != endIdx && self[curIdx] == UInt8(ascii: "\n") {
-          curIdx &+= 1
+        if ptr != endPtr && ptr.pointee == UInt8(ascii: "\n") {
+          ptr += 1
         }
         break
       default:
         continue
       }
-      body(SourceLength(utf8Length: curIdx - lineStart))
-      lineStart = curIdx
+      body(position.advanced(by: startPtr.distance(to: ptr)))
     }
-    return SourceLength(utf8Length: curIdx - lineStart)
+    return position.advanced(by: buffer.count)
   }
 
   func containsSwiftNewline() -> Bool {
-    return self.contains { $0 == 10 || $0 == 13 }
+    return self.contains { $0 == UInt8(ascii: "\n") || $0 == UInt8(ascii: "\r") }
   }
 }
 
 fileprivate extension RawTriviaPiece {
-  /// Walks and passes to `body` the ``SourceLength`` for every detected line,
-  /// with the newline character included.
-  /// - Returns: The leftover ``SourceLength`` at the end of the walk.
-  func forEachLineLength(
-    prefix: SourceLength = .zero,
-    body: (SourceLength) -> ()
-  ) -> SourceLength {
-    var lineLength = prefix
+  /// Walks and passes to `body` the ``AbsolutePosition`` _after_ every newline.
+  ///
+  /// - Parameter position: The start position of the callee.
+  /// - Returns: The position at the end of the walk.
+  func forEachEndOfLine(
+    position: AbsolutePosition,
+    body: (AbsolutePosition) -> ()
+  ) -> AbsolutePosition {
+    var position = position
     switch self {
     case let .spaces(count),
       let .tabs(count),
@@ -572,107 +751,88 @@ fileprivate extension RawTriviaPiece {
       let .formfeeds(count),
       let .backslashes(count),
       let .pounds(count):
-      lineLength += SourceLength(utf8Length: count)
+      position = position.advanced(by: count)
     case let .newlines(count),
       let .carriageReturns(count):
-      let newLineLength = SourceLength(utf8Length: 1)
-      body(lineLength + newLineLength)
-      for _ in 1..<count {
-        body(newLineLength)
+      for _ in 0..<count {
+        position = position.advanced(by: 1)
+        body(position)
       }
-      lineLength = .zero
     case let .carriageReturnLineFeeds(count):
-      let carriageReturnLineLength = SourceLength(utf8Length: 2)
-      body(lineLength + carriageReturnLineLength)
-      for _ in 1..<count {
-        body(carriageReturnLineLength)
+      for _ in 0..<count {
+        position = position.advanced(by: 2)
+        body(position)
       }
-      lineLength = .zero
     case let .lineComment(text),
       let .docLineComment(text):
       // Line comments are not supposed to contain newlines.
       precondition(!text.containsSwiftNewline(), "line comment created that contained a new-line character")
-      lineLength += SourceLength(utf8Length: text.count)
+      position = position.advanced(by: text.count)
     case let .blockComment(text),
       let .docBlockComment(text),
       let .unexpectedText(text):
-      lineLength = text.forEachLineLength(prefix: lineLength, body: body)
+      position = text.forEachEndOfLine(position: position, body: body)
     }
-    return lineLength
+    return position
   }
 }
 
 fileprivate extension RawTriviaPieceBuffer {
-  /// Walks and passes to `body` the ``SourceLength`` for every detected line,
-  /// with the newline character included.
-  /// - Returns: The leftover ``SourceLength`` at the end of the walk.
-  func forEachLineLength(
-    prefix: SourceLength = .zero,
-    body: (SourceLength) -> ()
-  ) -> SourceLength {
-    var curPrefix = prefix
+  /// Walks and passes to `body` the ``AbsolutePosition`` _after_ every newline.
+  ///
+  /// - Parameter position: The start position of the callee.
+  /// - Returns: The position at the end of the walk.
+  func forEachEndOfLine(
+    position: AbsolutePosition,
+    body: (AbsolutePosition) -> ()
+  ) -> AbsolutePosition {
+    var position = position
     for piece in self {
-      curPrefix = piece.forEachLineLength(prefix: curPrefix, body: body)
+      position = piece.forEachEndOfLine(position: position, body: body)
     }
-    return curPrefix
+    return position
   }
 }
 
 fileprivate extension RawSyntax {
-  /// Walks and passes to `body` the ``SourceLength`` for every detected line,
-  /// with the newline character included.
-  /// - Returns: The leftover ``SourceLength`` at the end of the walk.
-  func forEachLineLength(
-    prefix: SourceLength = .zero,
-    body: (SourceLength) -> (),
-    handleSourceLocationDirective: (_ lineOffset: Int, _ arguments: SourceLocationDirectiveArguments?) -> ()
-  ) -> SourceLength {
-    var curPrefix = prefix
+  /// Walks and passes to `body` the ``AbsolutePosition`` _after_ every newline character,
+  ///
+  /// - Parameters:
+  ///   - position: The start position of the callee.
+  ///   - body: Called for each end-of-line position.
+  ///   - handleSourceLocationDirective: Called for each `#sourceLocation` node in the tree.
+  ///     - position: position of the directive raw syntax.
+  ///     - rawSyntax: ``RawSyntax`` of the directive.
+  /// - Returns: The position at the end of the walk.
+  func forEachEndOfLine(
+    position: AbsolutePosition,
+    body: (AbsolutePosition) -> (),
+    handleSourceLocationDirective: (_ position: AbsolutePosition, _ rawSyntax: RawSyntax) -> ()
+  ) -> AbsolutePosition {
+    var position = position
     switch self.rawData.payload {
     case .parsedToken(let dat):
-      curPrefix = dat.wholeText.forEachLineLength(prefix: curPrefix, body: body)
+      position = dat.wholeText.forEachEndOfLine(position: position, body: body)
     case .materializedToken(let dat):
-      curPrefix = dat.leadingTrivia.forEachLineLength(prefix: curPrefix, body: body)
-      curPrefix = dat.tokenText.forEachLineLength(prefix: curPrefix, body: body)
-      curPrefix = dat.trailingTrivia.forEachLineLength(prefix: curPrefix, body: body)
+      position = dat.leadingTrivia.forEachEndOfLine(position: position, body: body)
+      position = dat.tokenText.forEachEndOfLine(position: position, body: body)
+      position = dat.trailingTrivia.forEachEndOfLine(position: position, body: body)
     case .layout(let dat):
+      // Handle '#sourceLocation' directive.
+      if dat.kind == .poundSourceLocation {
+        // Do this before `node.forEachEndOfLine` call below so the caller can
+        // know the exact position of the directive.
+        handleSourceLocationDirective(position, self)
+      }
+
       for case let node? in dat.layout where SyntaxTreeViewMode.sourceAccurate.shouldTraverse(node: node) {
-        curPrefix = node.forEachLineLength(
-          prefix: curPrefix,
+        position = node.forEachEndOfLine(
+          position: position,
           body: body,
           handleSourceLocationDirective: handleSourceLocationDirective
         )
       }
-
-      // Handle '#sourceLocation' directive.
-      if dat.kind == .poundSourceLocation {
-        // Count newlines in the trailing trivia. The client want to get the
-        // line of the _end_ of '#sourceLocation()' directive.
-        var lineOffset = 0
-        if let lastTok = self.lastToken(viewMode: .sourceAccurate) {
-          switch lastTok.raw.rawData.payload {
-          case .parsedToken(let dat):
-            _ = dat.trailingTriviaText.forEachLineLength(body: { _ in lineOffset -= 1 })
-          case .materializedToken(let dat):
-            _ = dat.trailingTrivia.forEachLineLength(body: { _ in lineOffset -= 1 })
-          case .layout(_):
-            preconditionFailure("lastToken(viewMode:) returned non-token")
-          }
-        }
-
-        let directive = Syntax.forRoot(self, rawNodeArena: self.arenaReference.retained)
-          .cast(PoundSourceLocationSyntax.self)
-        if let args = directive.arguments {
-          if let parsedArgs = try? SourceLocationDirectiveArguments(args) {
-            // Ignore any malformed `#sourceLocation` directives.
-            handleSourceLocationDirective(lineOffset, parsedArgs)
-          }
-        } else {
-          // `#sourceLocation()` without any arguments resets the `#sourceLocation` directive.
-          handleSourceLocationDirective(lineOffset, nil)
-        }
-      }
     }
-    return curPrefix
+    return position
   }
 }

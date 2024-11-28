@@ -103,7 +103,7 @@ import SwiftSyntax
           ?? subscriptDecl.endPositionBeforeTrailingTrivia
       case .variableDecl(let variableDecl):
         return variableDecl.bindings.first?.accessorBlock?.positionAfterSkippingLeadingTrivia
-          ?? variableDecl.endPosition
+          ?? variableDecl.bindings.positionAfterSkippingLeadingTrivia
       case .accessorDecl(let accessorDecl):
         return accessorDecl.accessorSpecifier.positionAfterSkippingLeadingTrivia
       case .deinitializerDecl(let deinitializerDecl):
@@ -139,14 +139,14 @@ import SwiftSyntax
   case implicit(ImplicitDecl)
   /// Dollar identifier introduced by a closure without parameters.
   case dollarIdentifier(ClosureExprSyntax, strRepresentation: String)
-  /// Equivalent identifiers grouped together.
-  /// The associated array of names is always non-empty.
+  /// Represents equivalent identifiers grouped together.
+  /// - Important: The array should be non-empty.
   ///
   /// ### Example:
   /// ```swift
-  /// switch x {
-  /// case .a(let smth), .b(let smth):
-  ///   print(smth) // <-- lookup here
+  /// switch X {
+  /// case .a(let x), .b(let x):
+  ///   print(x) // <-- lookup here
   /// }
   /// ```
   /// For lookup at the given position, the result

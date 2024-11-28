@@ -144,7 +144,7 @@ import SwiftSyntax
 
   /// Capture, parameter and body names introduced in this scope.
   @_spi(Experimental) public var defaultIntroducedNames: [LookupName] {
-    captureNames + parameterNames + introducedNamesInBody
+    parameterNames + captureNames + introducedNamesInBody
   }
 
   @_spi(Experimental) public var scopeDebugName: String {
@@ -202,7 +202,7 @@ import SwiftSyntax
     } else {
       signatureResults = LookupResult.getResultArray(
         for: self,
-        withNames: (captureNames + parameterNames).filter { name in
+        withNames: (parameterNames + captureNames).filter { name in
           checkIdentifier(identifier, refersTo: name, at: lookUpPosition)
         }
       )
@@ -638,7 +638,7 @@ import SwiftSyntax
       checkIdentifier(identifier, refersTo: name, at: lookUpPosition)
     }
 
-    if label.range.contains(lookUpPosition) {
+    if label.range.contains(lookUpPosition) && !isInWhereClause(lookUpPosition: lookUpPosition) {
       return config.finishInSequentialScope ? [] : lookupInParent(identifier, at: lookUpPosition, with: config)
     } else if config.finishInSequentialScope {
       return sequentialLookup(
@@ -659,6 +659,20 @@ import SwiftSyntax
         + LookupResult.getResultArray(for: self, withNames: filteredNamesFromLabel)
         + lookupInParent(identifier, at: lookUpPosition, with: config)
     }
+  }
+
+  /// Returns `true` if `lookUpPosition` is inside a `where`
+  /// clause associated with one of the case items of this scope.
+  private func isInWhereClause(lookUpPosition: AbsolutePosition) -> Bool {
+    guard let switchCaseItemList = label.as(SwitchCaseLabelSyntax.self)?.caseItems else { return false }
+
+    for item in switchCaseItemList {
+      if item.whereClause?.range.contains(lookUpPosition) ?? false {
+        return true
+      }
+    }
+
+    return false
   }
 }
 
@@ -934,7 +948,9 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig
   ) -> [LookupResult] {
-    if bindings.first?.accessorBlock?.range.contains(lookUpPosition) ?? false {
+    if (bindings.first?.accessorBlock?.range.contains(lookUpPosition) ?? false)
+      || shouldIntroduceSelfIfLazy(lookUpPosition: lookUpPosition)
+    {
       return defaultLookupImplementation(
         in: (isMember ? [.implicit(.self(self))] : LookupName.getNames(from: self)),
         identifier,
@@ -959,6 +975,16 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
     }
 
     return resultsToInterleave + lookupInParent(identifier, at: lookUpPosition, with: config)
+  }
+
+  /// Returns `true`, if `lookUpPosition` is in initializer of
+  /// this variable declaration and the declaration is lazy.
+  private func shouldIntroduceSelfIfLazy(lookUpPosition: AbsolutePosition) -> Bool {
+    guard bindings.first?.initializer?.range.contains(lookUpPosition) ?? false else { return false }
+
+    return modifiers.contains {
+      $0.name.tokenKind == .keyword(.lazy)
+    }
   }
 }
 

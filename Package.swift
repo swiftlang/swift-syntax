@@ -393,7 +393,7 @@ let package = Package(
 
     .testTarget(
       name: "SwiftRefactorTest",
-      dependencies: ["_SwiftSyntaxTestSupport", "SwiftRefactor"]
+      dependencies: ["_SwiftSyntaxTestSupport", "SwiftIDEUtils", "SwiftRefactor"]
     ),
 
     // MARK: - Deprecated targets

@@ -25,6 +25,7 @@ add_swift_syntax_library(SwiftRefactor
 
   PackageManifest/AbsolutePath.swift
   PackageManifest/AddPackageDependency.swift
+  PackageManifest/AddTargetDependency.swift
   PackageManifest/ManifestEditError.swift
   PackageManifest/ManifestEditRefactoringProvider.swift
   PackageManifest/ManifestSyntaxRepresentable.swift
@@ -35,6 +36,7 @@ add_swift_syntax_library(SwiftRefactor
   PackageManifest/SemanticVersion.swift
   PackageManifest/SourceControlURL.swift
   PackageManifest/SyntaxEditUtils.swift
+  PackageManifest/TargetDescription.swift
 )
 
 target_link_swift_syntax_libraries(SwiftRefactor PUBLIC

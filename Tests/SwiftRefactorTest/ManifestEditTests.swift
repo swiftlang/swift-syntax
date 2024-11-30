@@ -281,6 +281,48 @@ final class ManifestEditTests: XCTestCase {
       }
     }
   }
+
+  func testAddTargetDependency() throws {
+    try assertManifestRefactor(
+      """
+      // swift-tools-version: 5.5
+      let package = Package(
+          name: "packages",
+          dependencies: [
+              .package(url: "https://github.com/swiftlang/swift-example.git", from: "1.2.3"),
+          ],
+          targets: [
+              .testTarget(
+                  name: "MyTest"
+              ),
+          ]
+      )
+      """,
+      expectedManifest: """
+        // swift-tools-version: 5.5
+        let package = Package(
+            name: "packages",
+            dependencies: [
+                .package(url: "https://github.com/swiftlang/swift-example.git", from: "1.2.3"),
+            ],
+            targets: [
+                .testTarget(
+                    name: "MyTest",
+                    dependencies: [
+                        .product(name: "SomethingOrOther", package: "swift-example"),
+                    ]
+                ),
+            ]
+        )
+        """,
+      provider: AddTargetDependency.self,
+      context: .init(
+        dependency: .product(name: "SomethingOrOther", package: "swift-example"),
+        targetName: "MyTest"
+      )
+    )
+  }
+
 }
 
 /// Assert that applying the given edit/refactor operation to the manifest

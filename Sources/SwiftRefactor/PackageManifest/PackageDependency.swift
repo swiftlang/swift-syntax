@@ -12,6 +12,7 @@
 
 import SwiftParser
 import SwiftSyntax
+import SwiftSyntaxBuilder
 
 /// Describes a package dependency for refactoring purposes. This is a syntactic
 /// subset of the full package manifest's description of a package dependency.

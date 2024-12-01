@@ -18,4 +18,18 @@ public struct RelativePath: CustomStringConvertible, Equatable, Hashable, Sendab
   public init(_ description: String) {
     self.description = description
   }
+
+  #if os(Windows)
+  static let pathSeparator: Character = "\\"
+  #else
+  static let pathSeparator: Character = "/"
+  #endif
+
+  public func appending(_ component: String) -> Self {
+    Self(description + String(RelativePath.pathSeparator) + component)
+  }
+
+  public func appending(components: [String]) -> Self {
+    appending(components.joined(separator: String(RelativePath.pathSeparator)))
+  }
 }

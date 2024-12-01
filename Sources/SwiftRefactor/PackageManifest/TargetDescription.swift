@@ -17,15 +17,91 @@ import SwiftSyntax
 public struct TargetDescription {
   public let name: String
 
-  public enum Dependency {
+  /// The type of target.
+  public let type: TargetKind
+
+  public internal(set) var dependencies: [Dependency]
+
+  public let path: String?
+
+  public let url: String?
+
+  public let checksum: String?
+
+  public enum TargetKind: String {
+    case binary
+    case executable
+    case library
+    case macro
+    case plugin
+    case system
+    case test
+  }
+
+  public enum Dependency: Sendable {
+    case byName(name: String)
     case target(name: String)
     case product(name: String, package: String?)
+  }
+  public init(
+    name: String,
+    type: TargetKind = .library,
+    dependencies: [Dependency] = [],
+    path: String? = nil,
+    url: String? = nil,
+    checksum: String? = nil
+  ) {
+    self.name = name
+    self.type = type
+    self.dependencies = dependencies
+    self.path = path
+    self.url = url
+    self.checksum = checksum
+  }
+}
+
+extension TargetDescription: ManifestSyntaxRepresentable {
+  /// The function name in the package manifest.
+  private var functionName: String {
+    switch type {
+    case .binary: "binaryTarget"
+    case .executable: "executableTarget"
+    case .library: "target"
+    case .macro: "macro"
+    case .plugin: "plugin"
+    case .system: "systemLibrary"
+    case .test: "testTarget"
+    }
+  }
+
+  func asSyntax() -> ExprSyntax {
+    var arguments: [LabeledExprSyntax] = []
+    arguments.append(label: "name", stringLiteral: name)
+    // FIXME: pluginCapability
+
+    arguments.appendIfNonEmpty(
+      label: "dependencies",
+      arrayLiteral: dependencies
+    )
+
+    arguments.appendIf(label: "path", stringLiteral: path)
+    arguments.appendIf(label: "url", stringLiteral: url)
+
+    // Only for plugins
+    arguments.appendIf(label: "checksum", stringLiteral: checksum)
+
+    let separateParen: String = arguments.count > 1 ? "\n" : ""
+    let argumentsSyntax = LabeledExprListSyntax(arguments)
+    return ".\(raw: functionName)(\(argumentsSyntax)\(raw: separateParen))"
   }
 }
 
 extension TargetDescription.Dependency: ManifestSyntaxRepresentable {
   func asSyntax() -> ExprSyntax {
     switch self {
+    case .byName(name: let name):
+      "\(literal: name)"
+
     case .target(name: let name):
       ".target(name: \(literal: name))"
 

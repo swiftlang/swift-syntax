@@ -144,32 +144,30 @@ public struct AddTarget: ManifestEditRefactoringProvider {
         to: &auxiliaryFiles
       )
 
-      if #available(macOS 13.0, iOS 16.0, watchOS 9.0, tvOS 16.0, *) {
-        if manifest.description.firstRange(of: "swift-syntax") == nil {
-          newPackageCall =
-            try AddPackageDependency
-            .addPackageDependencyLocal(
-              .swiftSyntax(
-                version: configuration.swiftSyntaxVersion
-              ),
-              to: newPackageCall
-            )
+      if !manifest.containsStringLiteral("swift-syntax") {
+        newPackageCall =
+          try AddPackageDependency
+          .addPackageDependencyLocal(
+            .swiftSyntax(
+              version: configuration.swiftSyntaxVersion
+            ),
+            to: newPackageCall
+          )
 
-          // Look for the first import declaration and insert an
-          // import of `CompilerPluginSupport` there.
-          let newImport = "import CompilerPluginSupport\n"
-          for node in manifest.statements {
-            if let importDecl = node.item.as(ImportDeclSyntax.self) {
-              let insertPos = importDecl
-                .positionAfterSkippingLeadingTrivia
-              extraManifestEdits.append(
-                SourceEdit(
-                  range: insertPos..<insertPos,
-                  replacement: newImport
-                )
+        // Look for the first import declaration and insert an
+        // import of `CompilerPluginSupport` there.
+        let newImport = "import CompilerPluginSupport\n"
+        for node in manifest.statements {
+          if let importDecl = node.item.as(ImportDeclSyntax.self) {
+            let insertPos = importDecl
+              .positionAfterSkippingLeadingTrivia
+            extraManifestEdits.append(
+              SourceEdit(
+                range: insertPos..<insertPos,
+                replacement: newImport
               )
-              break
-            }
+            )
+            break
           }
         }
       }
@@ -387,4 +385,34 @@ fileprivate extension TargetDescription {
 
 fileprivate extension String {
   func localizedFirstWordCapitalized() -> String { prefix(1).uppercased() + dropFirst() }
+}
+
+extension SourceFileSyntax {
+  private class ContainsLiteralVisitor: SyntaxVisitor {
+    let string: String
+    var found: Bool = false
+
+    init(string: String) {
+      self.string = string
+      super.init(viewMode: .sourceAccurate)
+    }
+
+    override func visit(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
+      if let representedLiteralValue = node.representedLiteralValue,
+        representedLiteralValue == string
+      {
+        found = true
+      }
+
+      return .skipChildren
+    }
+  }
+
+  /// Determine whether this source file contains a string literal
+  /// matching the given contents.
+  fileprivate func containsStringLiteral(_ contents: String) -> Bool {
+    let visitor = ContainsLiteralVisitor(string: contents)
+    visitor.walk(self)
+    return visitor.found
+  }
 }

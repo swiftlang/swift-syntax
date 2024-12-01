@@ -282,6 +282,45 @@ final class ManifestEditTests: XCTestCase {
     }
   }
 
+  func testAddLibraryProduct() throws {
+    try assertManifestRefactor(
+      """
+      // swift-tools-version: 5.5
+      let package = Package(
+          name: "packages",
+          targets: [
+              .target(name: "MyLib"),
+          ],
+      )
+      """,
+      expectedManifest: """
+        // swift-tools-version: 5.5
+        let package = Package(
+            name: "packages",
+            products: [
+                .library(
+                    name: "MyLib",
+                    type: .dynamic,
+                    targets: [ "MyLib" ]
+                ),
+            ],
+            targets: [
+                .target(name: "MyLib"),
+            ],
+        )
+        """,
+      provider: AddProduct.self,
+      context: .init(
+        product:
+          ProductDescription(
+            name: "MyLib",
+            type: .library(.dynamic),
+            targets: ["MyLib"]
+          )
+      )
+    )
+  }
+
   func testAddLibraryTarget() throws {
     try assertManifestRefactor(
       """

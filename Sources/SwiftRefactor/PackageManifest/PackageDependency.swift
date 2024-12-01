@@ -89,7 +89,7 @@ extension PackageDependency.SourceControl: ManifestSyntaxRepresentable {
     case .local:
       fatalError()
     case .remote(let url):
-      ".package(url: \(literal: url.description), \(requirement.asSyntax()))"
+      return ".package(url: \(literal: url.description), \(requirement.asSyntax()))"
     }
   }
 }
@@ -104,30 +104,30 @@ extension PackageDependency.SourceControl.Requirement: ManifestSyntaxRepresentab
   func asSyntax() -> LabeledExprSyntax {
     switch self {
     case .exact(let version):
-      LabeledExprSyntax(
+      return LabeledExprSyntax(
         label: "exact",
         expression: version.asSyntax()
       )
 
     case .rangeFrom(let range):
-      LabeledExprSyntax(
+      return LabeledExprSyntax(
         label: "from",
         expression: range.asSyntax()
       )
 
     case .range(let lowerBound, let upperBound):
-      LabeledExprSyntax(
+      return LabeledExprSyntax(
         expression: "\(lowerBound.asSyntax())..<\(upperBound.asSyntax())" as ExprSyntax
       )
 
     case .revision(let revision):
-      LabeledExprSyntax(
+      return LabeledExprSyntax(
         label: "revision",
         expression: "\(literal: revision)" as ExprSyntax
       )
 
     case .branch(let branch):
-      LabeledExprSyntax(
+      return LabeledExprSyntax(
         label: "branch",
         expression: "\(literal: branch)" as ExprSyntax
       )
@@ -139,19 +139,19 @@ extension PackageDependency.Registry.Requirement: ManifestSyntaxRepresentable {
   func asSyntax() -> LabeledExprSyntax {
     switch self {
     case .exact(let version):
-      LabeledExprSyntax(
+      return LabeledExprSyntax(
         label: "exact",
         expression: version.asSyntax()
       )
 
     case .rangeFrom(let range):
-      LabeledExprSyntax(
+      return LabeledExprSyntax(
         label: "from",
         expression: range.asSyntax()
       )
 
     case .range(let lowerBound, let upperBound):
-      LabeledExprSyntax(
+      return LabeledExprSyntax(
         expression: "\(lowerBound.asSyntax())..<\(upperBound.asSyntax())" as ExprSyntax
       )
     }

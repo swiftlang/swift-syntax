@@ -605,6 +605,40 @@ final class ManifestEditTests: XCTestCase {
     )
   }
 
+  func testAddJava2SwiftPlugin() throws {
+    try assertManifestRefactor(
+      """
+      // swift-tools-version: 5.7
+      let package = Package(
+          name: "packages",
+          targets: [
+              .target(
+                  name: "MyLib"
+              )
+          ]
+      )
+      """,
+      expectedManifest: """
+        // swift-tools-version: 5.7
+        let package = Package(
+            name: "packages",
+            targets: [
+                .target(
+                    name: "MyLib",
+                    plugins: [
+                        .plugin(name: "Java2SwiftPlugin", package: "swift-java"),
+                    ]
+                )
+            ]
+        )
+        """,
+      provider: AddPluginUsage.self,
+      context: .init(
+        targetName: "MyLib",
+        pluginUsage: .plugin(name: "Java2SwiftPlugin", package: "swift-java")
+      )
+    )
+  }
 }
 
 /// Assert that applying the given edit/refactor operation to the manifest

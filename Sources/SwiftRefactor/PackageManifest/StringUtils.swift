@@ -20,7 +20,7 @@ extension String {
     let replacementUnichar: UnicodeScalar = "_"
     var mangledUnichars: [UnicodeScalar] = self.unicodeScalars.map({
       switch $0.value {
-      case // A-Z
+      case  // A-Z
       0x0041...0x005A,
         // a-z
         0x0061...0x007A,
@@ -199,7 +199,7 @@ extension String {
     // Apply further restrictions to the prefix.
     loop: for (idx, c) in mangledUnichars.enumerated() {
       switch c.value {
-      case // 0-9
+      case  // 0-9
       0x0030...0x0039,
         // Annex D.
         0x0660...0x0669, 0x06F0...0x06F9, 0x0966...0x096F,

@@ -28,6 +28,14 @@ public struct TargetDescription {
 
   public let checksum: String?
 
+  /// The usages of package plugins by the target.
+  public let pluginUsages: [PluginUsage]?
+
+  /// Represents a target's usage of a plugin target or product.
+  public enum PluginUsage {
+    case plugin(name: String, package: String?)
+  }
+
   public enum TargetKind: String {
     case binary
     case executable
@@ -43,13 +51,15 @@ public struct TargetDescription {
     case target(name: String)
     case product(name: String, package: String?)
   }
+
   public init(
     name: String,
     type: TargetKind = .library,
     dependencies: [Dependency] = [],
     path: String? = nil,
     url: String? = nil,
-    checksum: String? = nil
+    checksum: String? = nil,
+    pluginUsages: [PluginUsage]? = nil
   ) {
     self.name = name
     self.type = type
@@ -57,6 +67,7 @@ public struct TargetDescription {
     self.path = path
     self.url = url
     self.checksum = checksum
+    self.pluginUsages = pluginUsages
   }
 }
 
@@ -90,6 +101,10 @@ extension TargetDescription: ManifestSyntaxRepresentable {
     // Only for plugins
     arguments.appendIf(label: "checksum", stringLiteral: checksum)
 
+    if let pluginUsages {
+      arguments.appendIfNonEmpty(label: "plugins", arrayLiteral: pluginUsages)
+    }
+
     let separateParen: String = arguments.count > 1 ? "\n" : ""
     let argumentsSyntax = LabeledExprListSyntax(arguments)
     return ".\(raw: functionName)(\(argumentsSyntax)\(raw: separateParen))"
@@ -110,6 +125,18 @@ extension TargetDescription.Dependency: ManifestSyntaxRepresentable {
 
     case .product(name: let name, package: let package):
       ".product(name: \(literal: name), package: \(literal: package))"
+    }
+  }
+}
+
+extension TargetDescription.PluginUsage: ManifestSyntaxRepresentable {
+  func asSyntax() -> ExprSyntax {
+    switch self {
+    case .plugin(name: let name, package: nil):
+      ".plugin(name: \(literal: name))"
+
+    case .plugin(name: let name, package: let package):
+      ".plugin(name: \(literal: name), package: \(literal: package))"
     }
   }
 }

@@ -61,32 +61,8 @@ public struct AddTargetDependency: ManifestEditRefactoringProvider {
       throw ManifestEditError.cannotFindPackage
     }
 
-    // Dig out the array of targets.
-    guard let targetsArgument = packageCall.findArgument(labeled: "targets"),
-      let targetArray = targetsArgument.expression.findArrayArgument()
-    else {
-      throw ManifestEditError.cannotFindTargets
-    }
-
-    // Look for a call whose name is a string literal matching the
-    // requested target name.
-    func matchesTargetCall(call: FunctionCallExprSyntax) -> Bool {
-      guard let nameArgument = call.findArgument(labeled: "name") else {
-        return false
-      }
-
-      guard let stringLiteral = nameArgument.expression.as(StringLiteralExprSyntax.self),
-        let literalValue = stringLiteral.representedLiteralValue
-      else {
-        return false
-      }
-
-      return literalValue == targetName
-    }
-
-    guard let targetCall = FunctionCallExprSyntax.findFirst(in: targetArray, matching: matchesTargetCall) else {
-      throw ManifestEditError.cannotFindTarget(targetName: targetName)
-    }
+    // Find the target to be modified.
+    let targetCall = try packageCall.findManifestTargetCall(targetName: targetName)
 
     let newTargetCall = try addTargetDependencyLocal(
       dependency,

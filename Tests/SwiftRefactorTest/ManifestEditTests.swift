@@ -282,6 +282,249 @@ final class ManifestEditTests: XCTestCase {
     }
   }
 
+  func testAddLibraryTarget() throws {
+    try assertManifestRefactor(
+      """
+      // swift-tools-version: 5.5
+      let package = Package(
+          name: "packages"
+      )
+      """,
+      expectedManifest: """
+        // swift-tools-version: 5.5
+        let package = Package(
+            name: "packages",
+            targets: [
+                .target(name: "MyLib"),
+            ]
+        )
+        """,
+      expectedAuxiliarySources: [
+        RelativePath("Sources/MyLib/MyLib.swift"): """
+
+        """
+      ],
+      provider: AddTarget.self,
+      context: .init(
+        target: TargetDescription(name: "MyLib")
+      )
+    )
+  }
+
+  func testAddLibraryTargetWithDependencies() throws {
+    try assertManifestRefactor(
+      """
+      // swift-tools-version: 5.5
+      let package = Package(
+          name: "packages"
+      )
+      """,
+      expectedManifest: """
+        // swift-tools-version: 5.5
+        let package = Package(
+            name: "packages",
+            targets: [
+                .target(
+                    name: "MyLib",
+                    dependencies: [
+                        "OtherLib",
+                        .product(name: "SwiftSyntax", package: "swift-syntax"),
+                        .target(name: "TargetLib")
+                    ]
+                ),
+            ]
+        )
+        """,
+      expectedAuxiliarySources: [
+        RelativePath("Sources/MyLib/MyLib.swift"): """
+        import OtherLib
+        import SwiftSyntax
+        import TargetLib
+
+        """
+      ],
+      provider: AddTarget.self,
+      context: .init(
+        target: TargetDescription(
+          name: "MyLib",
+          dependencies: [
+            .byName(name: "OtherLib"),
+            .product(name: "SwiftSyntax", package: "swift-syntax"),
+            .target(name: "TargetLib"),
+          ]
+        )
+      )
+    )
+  }
+
+  func testAddExecutableTargetWithDependencies() throws {
+    try assertManifestRefactor(
+      """
+      // swift-tools-version: 5.5
+      let package = Package(
+          name: "packages",
+          targets: [
+              // These are the targets
+              .target(name: "MyLib")
+          ]
+      )
+      """,
+      expectedManifest: """
+        // swift-tools-version: 5.5
+        let package = Package(
+            name: "packages",
+            targets: [
+                // These are the targets
+                .target(name: "MyLib"),
+                .executableTarget(
+                    name: "MyProgram target-name",
+                    dependencies: [
+                        .product(name: "SwiftSyntax", package: "swift-syntax"),
+                        .target(name: "TargetLib"),
+                        "MyLib"
+                    ]
+                ),
+            ]
+        )
+        """,
+      expectedAuxiliarySources: [
+        RelativePath("Sources/MyProgram target-name/MyProgram target-name.swift"): """
+        import MyLib
+        import SwiftSyntax
+        import TargetLib
+
+        @main
+        struct MyProgram_target_nameMain {
+            static func main() {
+                print("Hello, world")
+            }
+        }
+        """
+      ],
+      provider: AddTarget.self,
+      context: .init(
+        target: TargetDescription(
+          name: "MyProgram target-name",
+          type: .executable,
+          dependencies: [
+            .product(name: "SwiftSyntax", package: "swift-syntax"),
+            .target(name: "TargetLib"),
+            .byName(name: "MyLib"),
+          ]
+        ),
+      )
+    )
+  }
+
+  func testAddMacroTarget() throws {
+    try assertManifestRefactor(
+      """
+      // swift-tools-version: 5.5
+      import PackageDescription
+
+      let package = Package(
+          name: "packages"
+      )
+      """,
+      expectedManifest: """
+        // swift-tools-version: 5.5
+        import CompilerPluginSupport
+        import PackageDescription
+
+        let package = Package(
+            name: "packages",
+            dependencies: [
+                .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "600.0.0-latest"),
+            ],
+            targets: [
+                .macro(
+                    name: "MyMacro target-name",
+                    dependencies: [
+                        .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
+                        .product(name: "SwiftSyntaxMacros", package: "swift-syntax")
+                    ]
+                ),
+            ]
+        )
+        """,
+      expectedAuxiliarySources: [
+        RelativePath("Sources/MyMacro target-name/MyMacro target-name.swift"): """
+        import SwiftCompilerPlugin
+        import SwiftSyntaxMacros
+
+        struct MyMacro_target_name: Macro {
+            /// TODO: Implement one or more of the protocols that inherit
+            /// from Macro. The appropriate macro protocol is determined
+            /// by the "macro" declaration that MyMacro_target_name implements.
+            /// Examples include:
+            ///     @freestanding(expression) macro --> ExpressionMacro
+            ///     @attached(member) macro         --> MemberMacro
+        }
+        """,
+        RelativePath("Sources/MyMacro target-name/ProvidedMacros.swift"): """
+        import SwiftCompilerPlugin
+
+        @main
+        struct MyMacro_target_nameMacros: CompilerPlugin {
+            let providingMacros: [Macro.Type] = [
+                MyMacro_target_name.self,
+            ]
+        }
+        """,
+      ],
+      provider: AddTarget.self,
+      context: .init(
+        target: TargetDescription(
+          name: "MyMacro target-name",
+          type: .macro
+        )
+      )
+    )
+  }
+
+  func testAddSwiftTestingTestTarget() throws {
+    try assertManifestRefactor(
+      """
+      // swift-tools-version: 5.5
+      let package = Package(
+          name: "packages"
+      )
+      """,
+      expectedManifest: """
+        // swift-tools-version: 5.5
+        let package = Package(
+            name: "packages",
+            targets: [
+                .testTarget(name: "MyTest target-name"),
+            ]
+        )
+        """,
+      expectedAuxiliarySources: [
+        RelativePath("Tests/MyTest target-name/MyTest target-name.swift"): """
+        import Testing
+
+        @Suite
+        struct MyTest_target_nameTests {
+            @Test("MyTest_target_name tests")
+            func example() {
+                #expect(42 == 17 + 25)
+            }
+        }
+        """
+      ],
+      provider: AddTarget.self,
+      context: .init(
+        target: TargetDescription(
+          name: "MyTest target-name",
+          type: .test
+        ),
+        configuration: .init(
+          testHarness: .swiftTesting
+        )
+      )
+    )
+  }
+
   func testAddTargetDependency() throws {
     try assertManifestRefactor(
       """

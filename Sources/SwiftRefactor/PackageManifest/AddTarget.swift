@@ -17,10 +17,10 @@ import SwiftSyntaxBuilder
 /// Add a target to a manifest's source code.
 public struct AddTarget: ManifestEditRefactoringProvider {
   public struct Context {
-    public let target: TargetDescription
+    public let target: Target
     public let configuration: Configuration
 
-    public init(target: TargetDescription, configuration: Configuration = .init()) {
+    public init(target: Target, configuration: Configuration = .init()) {
       self.target = target
       self.configuration = configuration
     }
@@ -187,7 +187,7 @@ public struct AddTarget: ManifestEditRefactoringProvider {
   /// source files.
   fileprivate static func addPrimarySourceFile(
     outerPath: RelativePath,
-    target: TargetDescription,
+    target: Target,
     configuration: Configuration,
     to auxiliaryFiles: inout AuxiliaryFiles
   ) {
@@ -300,7 +300,7 @@ public struct AddTarget: ManifestEditRefactoringProvider {
   /// for a macro target.
   fileprivate static func addProvidedMacrosSourceFile(
     outerPath: RelativePath,
-    target: TargetDescription,
+    target: Target,
     to auxiliaryFiles: inout AuxiliaryFiles
   ) {
     auxiliaryFiles.addSourceFile(
@@ -321,7 +321,7 @@ public struct AddTarget: ManifestEditRefactoringProvider {
   }
 }
 
-fileprivate extension TargetDescription.Dependency {
+fileprivate extension Target.Dependency {
   /// Retrieve the name of the dependency
   var name: String {
     switch self {
@@ -349,7 +349,7 @@ fileprivate extension AuxiliaryFiles {
 
 /// The set of dependencies we need to introduce to a newly-created macro
 /// target.
-fileprivate let macroTargetDependencies: [TargetDescription.Dependency] = [
+fileprivate let macroTargetDependencies: [Target.Dependency] = [
   .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
   .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
 ]
@@ -375,7 +375,7 @@ fileprivate extension PackageDependency {
   }
 }
 
-fileprivate extension TargetDescription {
+fileprivate extension Target {
   var sanitizedName: String {
     name
       .mangledToC99ExtendedIdentifier()

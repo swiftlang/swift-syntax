@@ -14,7 +14,7 @@ import SwiftSyntax
 
 /// The result of editing a package, including any edits to the package
 /// manifest and any new files that are introduced.
-public struct PackageEditResult {
+public struct PackageEdit {
   /// Edits to perform to the package manifest.
   public var manifestEdits: [SourceEdit] = []
 

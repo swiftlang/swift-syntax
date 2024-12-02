@@ -15,7 +15,7 @@ import SwiftSyntax
 public protocol ManifestEditRefactoringProvider: EditRefactoringProvider
 where Self.Input == SourceFileSyntax {
 
-  static func manifestRefactor(syntax: SourceFileSyntax, in context: Context) throws -> PackageEditResult
+  static func manifestRefactor(syntax: SourceFileSyntax, in context: Context) throws -> PackageEdit
 }
 
 extension EditRefactoringProvider where Self: ManifestEditRefactoringProvider {

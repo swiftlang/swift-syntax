@@ -39,7 +39,7 @@ public struct AddPluginUsage: ManifestEditRefactoringProvider {
   public static func manifestRefactor(
     syntax manifest: SourceFileSyntax,
     in context: Context
-  ) throws -> PackageEditResult {
+  ) throws -> PackageEdit {
     let targetName = context.targetName
     let pluginUsage = context.pluginUsage
 
@@ -56,7 +56,7 @@ public struct AddPluginUsage: ManifestEditRefactoringProvider {
       newElement: pluginUsage.asSyntax()
     )
 
-    return PackageEditResult(
+    return PackageEdit(
       manifestEdits: [
         .replace(targetCall, with: newTargetCall.description)
       ]

@@ -343,7 +343,7 @@ final class ManifestEditTests: XCTestCase {
 
         """
       ],
-      provider: AddTarget.self,
+      provider: AddPackageTarget.self,
       context: .init(
         target: Target(name: "MyLib")
       )
@@ -382,7 +382,7 @@ final class ManifestEditTests: XCTestCase {
 
         """
       ],
-      provider: AddTarget.self,
+      provider: AddPackageTarget.self,
       context: .init(
         target: Target(
           name: "MyLib",
@@ -440,7 +440,7 @@ final class ManifestEditTests: XCTestCase {
         }
         """
       ],
-      provider: AddTarget.self,
+      provider: AddPackageTarget.self,
       context: .init(
         target: Target(
           name: "MyProgram target-name",
@@ -511,7 +511,7 @@ final class ManifestEditTests: XCTestCase {
         }
         """,
       ],
-      provider: AddTarget.self,
+      provider: AddPackageTarget.self,
       context: .init(
         target: Target(
           name: "MyMacro target-name",
@@ -551,7 +551,7 @@ final class ManifestEditTests: XCTestCase {
         }
         """
       ],
-      provider: AddTarget.self,
+      provider: AddPackageTarget.self,
       context: .init(
         target: Target(
           name: "MyTest target-name",

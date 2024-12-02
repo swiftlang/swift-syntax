@@ -36,7 +36,6 @@ add_swift_syntax_library(SwiftRefactor
   PackageManifest/PackageEdit.swift
   PackageManifest/PackageIdentity.swift
   PackageManifest/ProductDescription.swift
-  PackageManifest/ProductType.swift
   PackageManifest/RelativePath.swift
   PackageManifest/SemanticVersion.swift
   PackageManifest/SourceControlURL.swift

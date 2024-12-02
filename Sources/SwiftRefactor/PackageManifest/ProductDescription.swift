@@ -24,6 +24,39 @@ public struct ProductDescription {
   /// The type of product.
   public let type: ProductType
 
+  public enum ProductType {
+    /// The type of library.
+    public enum LibraryType: String, Codable, Sendable {
+
+      /// Static library.
+      case `static`
+
+      /// Dynamic library.
+      case `dynamic`
+
+      /// The type of library is unspecified and should be decided by package manager.
+      case automatic
+    }
+
+    /// A library product.
+    case library(LibraryType)
+
+    /// An executable product.
+    case executable
+
+    /// An executable code snippet.
+    case snippet
+
+    /// An plugin product.
+    case plugin
+
+    /// A test product.
+    case test
+
+    /// A macro product.
+    case `macro`
+  }
+
   public init(
     name: String,
     type: ProductType,

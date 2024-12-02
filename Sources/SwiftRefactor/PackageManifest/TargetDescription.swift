@@ -75,13 +75,13 @@ extension TargetDescription: ManifestSyntaxRepresentable {
   /// The function name in the package manifest.
   private var functionName: String {
     switch type {
-    case .binary: "binaryTarget"
-    case .executable: "executableTarget"
-    case .library: "target"
-    case .macro: "macro"
-    case .plugin: "plugin"
-    case .system: "systemLibrary"
-    case .test: "testTarget"
+    case .binary: return "binaryTarget"
+    case .executable: return "executableTarget"
+    case .library: return "target"
+    case .macro: return "macro"
+    case .plugin: return "plugin"
+    case .system: return "systemLibrary"
+    case .test: return "testTarget"
     }
   }
 

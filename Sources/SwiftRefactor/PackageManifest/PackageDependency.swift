@@ -68,9 +68,9 @@ public enum PackageDependency: Sendable {
 extension PackageDependency: ManifestSyntaxRepresentable {
   func asSyntax() -> ExprSyntax {
     switch self {
-    case .fileSystem(let filesystem): filesystem.asSyntax()
-    case .sourceControl(let sourceControl): sourceControl.asSyntax()
-    case .registry(let registry): registry.asSyntax()
+    case .fileSystem(let filesystem): return filesystem.asSyntax()
+    case .sourceControl(let sourceControl): return sourceControl.asSyntax()
+    case .registry(let registry): return registry.asSyntax()
     }
   }
 }

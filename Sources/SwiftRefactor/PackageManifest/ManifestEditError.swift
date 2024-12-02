@@ -25,13 +25,13 @@ extension ManifestEditError: CustomStringConvertible {
   public var description: String {
     switch self {
     case .cannotFindPackage:
-      "invalid manifest: unable to find 'Package' declaration"
+      return "invalid manifest: unable to find 'Package' declaration"
     case .cannotFindTargets:
-      "unable to find package targets in manifest"
+      return "unable to find package targets in manifest"
     case .cannotFindTarget(targetName: let name):
-      "unable to find target named '\(name)' in package"
+      return "unable to find target named '\(name)' in package"
     case .cannotFindArrayLiteralArgument(argumentName: let name, node: _):
-      "unable to find array literal for '\(name)' argument"
+      return "unable to find array literal for '\(name)' argument"
     }
   }
 }

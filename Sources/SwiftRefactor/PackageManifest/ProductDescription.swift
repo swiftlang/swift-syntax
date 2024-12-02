@@ -42,12 +42,12 @@ extension ProductDescription: ManifestSyntaxRepresentable {
   /// to check the precondition.
   private var functionName: String {
     switch type {
-    case .executable: "executable"
-    case .library(_): "library"
-    case .macro: "macro"
-    case .plugin: "plugin"
-    case .snippet: "snippet"
-    case .test: "test"
+    case .executable: return "executable"
+    case .library(_): return "library"
+    case .macro: return "macro"
+    case .plugin: return "plugin"
+    case .snippet: return "snippet"
+    case .test: return "test"
     }
   }
 

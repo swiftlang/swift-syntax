@@ -328,7 +328,7 @@ fileprivate extension TargetDescription.Dependency {
     case .target(name: let name),
       .byName(name: let name),
       .product(name: let name, package: _):
-      name
+      return name
     }
   }
 }

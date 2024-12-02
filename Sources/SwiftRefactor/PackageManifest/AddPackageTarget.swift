@@ -15,7 +15,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 /// Add a target to a manifest's source code.
-public struct AddTarget: ManifestEditRefactoringProvider {
+public struct AddPackageTarget: ManifestEditRefactoringProvider {
   public struct Context {
     public let target: Target
     public let configuration: Configuration

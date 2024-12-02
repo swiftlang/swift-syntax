@@ -18,12 +18,12 @@ import SwiftSyntaxBuilder
 public struct AddTargetDependency: ManifestEditRefactoringProvider {
   public struct Context {
     /// The dependency to add.
-    public var dependency: TargetDescription.Dependency
+    public var dependency: Target.Dependency
 
     /// The name of the target to which the dependency will be added.
     public var targetName: String
 
-    public init(dependency: TargetDescription.Dependency, targetName: String) {
+    public init(dependency: Target.Dependency, targetName: String) {
       self.dependency = dependency
       self.targetName = targetName
     }
@@ -78,7 +78,7 @@ public struct AddTargetDependency: ManifestEditRefactoringProvider {
 
   /// Implementation of adding a target dependency to an existing call.
   static func addTargetDependencyLocal(
-    _ dependency: TargetDescription.Dependency,
+    _ dependency: Target.Dependency,
     to targetCall: FunctionCallExprSyntax
   ) throws -> FunctionCallExprSyntax {
     try targetCall.appendingToArrayArgument(

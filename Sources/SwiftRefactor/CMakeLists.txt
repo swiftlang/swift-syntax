@@ -42,7 +42,7 @@ add_swift_syntax_library(SwiftRefactor
   PackageManifest/SourceControlURL.swift
   PackageManifest/StringUtils.swift
   PackageManifest/SyntaxEditUtils.swift
-  PackageManifest/TargetDescription.swift
+  PackageManifest/Target.swift
 )
 
 target_link_swift_syntax_libraries(SwiftRefactor PUBLIC

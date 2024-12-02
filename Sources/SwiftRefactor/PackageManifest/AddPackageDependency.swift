@@ -41,7 +41,7 @@ public struct AddPackageDependency: ManifestEditRefactoringProvider {
   public static func manifestRefactor(
     syntax manifest: SourceFileSyntax,
     in context: Context
-  ) throws -> PackageEditResult {
+  ) throws -> PackageEdit {
     let dependency = context.dependency
     guard let packageCall = manifest.findCall(calleeName: "Package") else {
       throw ManifestEditError.cannotFindPackage
@@ -52,7 +52,7 @@ public struct AddPackageDependency: ManifestEditRefactoringProvider {
       to: packageCall
     )
 
-    return PackageEditResult(
+    return PackageEdit(
       manifestEdits: [
         .replace(packageCall, with: newPackageCall.description)
       ]

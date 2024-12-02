@@ -79,7 +79,7 @@ public struct AddTarget: ManifestEditRefactoringProvider {
   public static func manifestRefactor(
     syntax manifest: SourceFileSyntax,
     in context: Context
-  ) throws -> PackageEditResult {
+  ) throws -> PackageEdit {
     let configuration = context.configuration
     guard let packageCall = manifest.findCall(calleeName: "Package") else {
       throw ManifestEditError.cannotFindPackage
@@ -114,7 +114,7 @@ public struct AddTarget: ManifestEditRefactoringProvider {
     }
 
     guard let outerDirectory else {
-      return PackageEditResult(
+      return PackageEdit(
         manifestEdits: [
           .replace(packageCall, with: newPackageCall.description)
         ]
@@ -175,7 +175,7 @@ public struct AddTarget: ManifestEditRefactoringProvider {
     default: break;
     }
 
-    return PackageEditResult(
+    return PackageEdit(
       manifestEdits: [
         .replace(packageCall, with: newPackageCall.description)
       ] + extraManifestEdits,

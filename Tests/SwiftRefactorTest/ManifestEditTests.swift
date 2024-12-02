@@ -673,7 +673,7 @@ func assertManifestRefactor(
   expectedAuxiliarySources: [RelativePath: SourceFileSyntax] = [:],
   file: StaticString = #filePath,
   line: UInt = #line,
-  operation: (SourceFileSyntax) throws -> PackageEditResult
+  operation: (SourceFileSyntax) throws -> PackageEdit
 ) rethrows {
   let edits = try operation(originalManifest)
   let editedManifestSource = FixItApplier.apply(

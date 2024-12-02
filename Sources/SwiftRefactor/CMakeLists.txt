@@ -33,7 +33,7 @@ add_swift_syntax_library(SwiftRefactor
   PackageManifest/ManifestEditRefactoringProvider.swift
   PackageManifest/ManifestSyntaxRepresentable.swift
   PackageManifest/PackageDependency.swift
-  PackageManifest/PackageEditResult.swift
+  PackageManifest/PackageEdit.swift
   PackageManifest/PackageIdentity.swift
   PackageManifest/ProductDescription.swift
   PackageManifest/ProductType.swift

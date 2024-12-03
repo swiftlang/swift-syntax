@@ -190,6 +190,69 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                 """#
               )
 
+              for node in NON_BASE_SYNTAX_NODES {
+                try FunctionDeclSyntax(
+                  "func validate\(node.kind.syntaxType)(kind: SyntaxKind, layout: RawSyntaxBuffer)"
+                ) {
+                  if let node = node.layoutNode {
+                    ExprSyntax("assert(layout.count == \(raw: node.children.count))")
+                    for (index, child) in node.children.enumerated() {
+                      switch child.kind {
+                      case .nodeChoices(let choices, _):
+                        let verifiedChoices = ArrayExprSyntax {
+                          ArrayElementSyntax(
+                            leadingTrivia: .newline,
+                            expression: ExprSyntax(
+                              "verify(layout[\(raw: index)], as: Raw\(child.buildableType.buildable).self)"
+                            )
+                          )
+                        }
+
+                        ExprSyntax("assertAnyHasNoError(kind, \(raw: index), \(verifiedChoices))")
+                      case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _):
+                        let choices = ArrayExprSyntax {
+                          for choice in choices {
+                            switch choice {
+                            case .keyword(let keyword):
+                              ArrayElementSyntax(expression: ExprSyntax(".keyword(\(literal: keyword.spec.name))"))
+                            case .token(let token):
+                              ArrayElementSyntax(expression: ExprSyntax(".tokenKind(.\(token.spec.memberCallName))"))
+                            }
+                          }
+                        }
+                        let verifyCall = ExprSyntax(
+                          "verify(layout[\(raw: index)], as: Raw\(child.buildableType.buildable).self, tokenChoices: \(choices))"
+                        )
+                        ExprSyntax("assertNoError(kind, \(raw: index), \(verifyCall))")
+                      default:
+                        ExprSyntax(
+                          "assertNoError(kind, \(raw: index), verify(layout[\(raw: index)], as: Raw\(child.buildableType.buildable).self))"
+                        )
+                      }
+                    }
+                  } else if let node = node.collectionNode {
+                    try ForStmtSyntax("for (index, element) in layout.enumerated()") {
+                      if let onlyElement = node.elementChoices.only {
+                        ExprSyntax(
+                          "assertNoError(kind, index, verify(element, as: \(onlyElement.raw.syntaxType).self))"
+                        )
+                      } else {
+                        let verifiedChoices = ArrayExprSyntax {
+                          for choiceName in node.elementChoices {
+                            let choice = SYNTAX_NODE_MAP[choiceName]!
+                            ArrayElementSyntax(
+                              leadingTrivia: .newline,
+                              expression: ExprSyntax("verify(element, as: \(choice.kind.raw.syntaxType).self)")
+                            )
+                          }
+                        }
+                        ExprSyntax("assertAnyHasNoError(kind, index, \(verifiedChoices))")
+                      }
+                    }
+                  }
+                }
+              }
+
               try SwitchExprSyntax("switch kind") {
                 SwitchCaseSyntax(
                   """
@@ -199,63 +262,8 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                 )
 
                 for node in NON_BASE_SYNTAX_NODES {
-                  try SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
-                    if let node = node.layoutNode {
-                      ExprSyntax("assert(layout.count == \(raw: node.children.count))")
-                      for (index, child) in node.children.enumerated() {
-                        switch child.kind {
-                        case .nodeChoices(let choices, _):
-                          let verifiedChoices = ArrayExprSyntax {
-                            ArrayElementSyntax(
-                              leadingTrivia: .newline,
-                              expression: ExprSyntax(
-                                "verify(layout[\(raw: index)], as: Raw\(child.buildableType.buildable).self)"
-                              )
-                            )
-                          }
-
-                          ExprSyntax("assertAnyHasNoError(kind, \(raw: index), \(verifiedChoices))")
-                        case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _):
-                          let choices = ArrayExprSyntax {
-                            for choice in choices {
-                              switch choice {
-                              case .keyword(let keyword):
-                                ArrayElementSyntax(expression: ExprSyntax(".keyword(\(literal: keyword.spec.name))"))
-                              case .token(let token):
-                                ArrayElementSyntax(expression: ExprSyntax(".tokenKind(.\(token.spec.memberCallName))"))
-                              }
-                            }
-                          }
-                          let verifyCall = ExprSyntax(
-                            "verify(layout[\(raw: index)], as: Raw\(child.buildableType.buildable).self, tokenChoices: \(choices))"
-                          )
-                          ExprSyntax("assertNoError(kind, \(raw: index), \(verifyCall))")
-                        default:
-                          ExprSyntax(
-                            "assertNoError(kind, \(raw: index), verify(layout[\(raw: index)], as: Raw\(child.buildableType.buildable).self))"
-                          )
-                        }
-                      }
-                    } else if let node = node.collectionNode {
-                      try ForStmtSyntax("for (index, element) in layout.enumerated()") {
-                        if let onlyElement = node.elementChoices.only {
-                          ExprSyntax(
-                            "assertNoError(kind, index, verify(element, as: \(onlyElement.raw.syntaxType).self))"
-                          )
-                        } else {
-                          let verifiedChoices = ArrayExprSyntax {
-                            for choiceName in node.elementChoices {
-                              let choice = SYNTAX_NODE_MAP[choiceName]!
-                              ArrayElementSyntax(
-                                leadingTrivia: .newline,
-                                expression: ExprSyntax("verify(element, as: \(choice.kind.raw.syntaxType).self)")
-                              )
-                            }
-                          }
-                          ExprSyntax("assertAnyHasNoError(kind, index, \(verifiedChoices))")
-                        }
-                      }
-                    }
+                  SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
+                    ExprSyntax("validate\(node.kind.syntaxType)(kind: kind, layout: layout)")
                   }
                 }
               }

@@ -20,6 +20,10 @@ import _SwiftSyntaxTestSupport
 class ParserTests: ParserTestCase {
   /// Run a single parse test.
   static func runParseTest(fileURL: URL, checkDiagnostics: Bool) throws {
+    print("Parsing \(fileURL) - start")
+    defer {
+      print("Parsing \(fileURL) - done")
+    }
     let fileContents = try Data(contentsOf: fileURL)
     let parsed = fileContents.withUnsafeBytes({ buffer in
       // Release builds are fine with the default maximum nesting level of 256.
@@ -71,7 +75,7 @@ class ParserTests: ParserTestCase {
       }
 
     print("\(name) - processing \(fileURLs.count) source files")
-    DispatchQueue.concurrentPerform(iterations: fileURLs.count) { fileURLIndex in
+    (0..<fileURLs.count).forEach { fileURLIndex in
       let fileURL = fileURLs[fileURLIndex]
       if shouldExclude(fileURL) {
         return

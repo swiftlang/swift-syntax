@@ -23,6 +23,8 @@ extension SyntaxKind {
     switch self {
     case .token:
       return "token"
+    case .abiAttributeArguments:
+      return "ABI-providing declaration"
     case .accessorDecl:
       return "accessor"
     case .accessorEffectSpecifiers:

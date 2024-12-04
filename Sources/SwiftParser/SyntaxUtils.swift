@@ -105,6 +105,169 @@ extension RawUnexpectedNodesSyntax {
   }
 }
 
+// MARK: - Converting nodes to unexpected nodes
+
+extension RawSyntaxNodeProtocol {
+  /// Select one node somewhere inside `self` and return a version of it with all of the other tokens in `self`
+  /// converted to unexpected nodes.
+  ///
+  /// This is the same as ``RawSyntaxNodeProtocol/makeUnexpectedKeepingNodes(of:arena:where:makeMissing:)`` except that
+  /// it always keeps, and always returns, exactly one node (the first one that would be encountered in a depth-first
+  /// search, or the missing node). The other nodes that would have been kept are converted to unexpected tokens as
+  /// usual. See that method for details about the behavior.
+  ///
+  /// - Parameters:
+  ///   - keptType: The type of node that should be kept and returned.
+  ///   - arena: The syntax arena to allocate new or copied nodes within.
+  ///   - predicate: Should return `true` for the node that should be kept. Allows more selectivity than `keptType`
+  ///     alone.
+  ///   - makeMissing: If there are no children which satisfy `keptType` and `predicate`, this closure will be called
+  ///     to create a substitute node for the unexpected syntax to be attached to. It's typically used to return a "missing syntax"
+  ///     node, though that's not a technical requirement.
+  ///
+  /// - Returns: The kept node (or the missing node) with the other tokens in `self` attached to its leading and
+  ///   trailing unexpected node children.
+  func makeUnexpectedKeepingFirstNode<KeptNode: RawSyntaxNodeProtocol>(
+    of keptType: KeptNode.Type,
+    arena: SyntaxArena,
+    where predicate: (KeptNode) -> Bool,
+    makeMissing: () -> KeptNode
+  ) -> KeptNode {
+    var alreadyFoundFirst = false
+    func compositePredicate(_ node: KeptNode) -> Bool {
+      if alreadyFoundFirst || !predicate(node) {
+        return false
+      }
+      alreadyFoundFirst = true
+      return true
+    }
+
+    return makeUnexpectedKeepingNodes(
+      of: keptType,
+      arena: arena,
+      where: compositePredicate,
+      makeMissing: makeMissing
+    ).first!
+  }
+
+  /// Select a number of nodes inside `self` and return versions of them with all of the other tokens in`self`
+  /// attached to them as unexpected nodes.
+  ///
+  /// For instance, if you had a `RawIfConfigDeclSyntax` like this:
+  ///
+  /// ```swift
+  /// #if FOO
+  ///     func x() {}
+  ///     func y() {}
+  /// #elseif BAR
+  ///     func a() {}
+  ///     func b() {}
+  /// #endif
+  /// ```
+  ///
+  /// Then a call like this:
+  ///
+  /// ```swift
+  /// let functions = directive.makeUnexpectedKeepingNodes(
+  ///     of: RawFunctionDeclSyntax.self,
+  ///     arena: parser.arena,
+  ///     where: { node in true },
+  ///     makeMissing: { RawFunctionDeclSyntax(...) }
+  /// )
+  /// ```
+  ///
+  /// Would return an array of four `RawFunctionDeclSyntax` nodes with the tokens for `#if FOO`, `#elseif BAR`, and
+  /// `#endif` added to the nodes for `x()`, `a()`, and `b()` respectively.
+  ///
+  /// Specifically, this method performs a depth-first recursive search of the children of `self`, collecting nodes of
+  /// type `keptType` for which `predicate` returns `true`. These nodes are then modified to add all of the tokens
+  /// within `self`, but outside of the kept nodes, to their leading or trailing `RawUnexpectedNodesSyntax` child. If
+  /// no kept nodes are found, the `makeMissing` closure is used to create a "missing syntax" node the tokens can be
+  /// attached to.
+  ///
+  /// Tokens are usually added to the leading unexpected node child of the next kept node, except for tokens after the
+  /// last kept node, which are added to the trailing unexpected node child of the last kept node.
+  ///
+  /// Token and collection nodes cannot be kept, as they cannot have unexpected syntax attached to them; however,
+  /// parents of such nodes can be kept.
+  ///
+  /// - Parameters:
+  ///   - keptType: The type of node that should be kept and returned in the array.
+  ///   - arena: The syntax arena to allocate new or copied nodes within.
+  ///   - predicate: Should return `true` for nodes that should be kept. Allows more selectivity than `keptType` alone.
+  ///   - makeMissing: If there are no children which satisfy `keptType` and `predicate`, this closure will be called
+  ///     to create a substitute node for the unexpected syntax to be attached to. It's typically used to return a "missing syntax"
+  ///     node, though that's not a technical requirement.
+  ///
+  /// - Returns: The kept nodes (or the missing node) with the other tokens in `self` attached to them at appropriate
+  ///   unexpected node children. Note that there is always at least one node in the array.
+  func makeUnexpectedKeepingNodes<KeptNode: RawSyntaxNodeProtocol>(
+    of keptType: KeptNode.Type,
+    arena: SyntaxArena,
+    where predicate: (KeptNode) -> Bool,
+    makeMissing: () -> KeptNode
+  ) -> [KeptNode] {
+    var keptNodes: [KeptNode] = []
+    var accumulatedTokens: [RawTokenSyntax] = []
+
+    func attachAccumulatedTokensToLastKeptNode(appending: Bool) {
+      if accumulatedTokens.isEmpty {
+        // Nothing to add? Nothing to do.
+        return
+      }
+
+      let lastKeptNodeIndex = keptNodes.endIndex - 1
+      let lastKeptNode = keptNodes[lastKeptNodeIndex].raw.layoutView!
+
+      let childIndex = appending ? lastKeptNode.children.endIndex - 1 : 0
+
+      let newUnexpected: RawUnexpectedNodesSyntax
+      if let oldUnexpected = lastKeptNode.children[childIndex]?.cast(RawUnexpectedNodesSyntax.self) {
+        if appending {
+          newUnexpected = RawUnexpectedNodesSyntax(combining: oldUnexpected, accumulatedTokens, arena: arena)!
+        } else {
+          newUnexpected = RawUnexpectedNodesSyntax(combining: accumulatedTokens, oldUnexpected, arena: arena)!
+        }
+      } else {
+        newUnexpected = RawUnexpectedNodesSyntax(accumulatedTokens, arena: arena)!
+      }
+
+      keptNodes[lastKeptNodeIndex] = lastKeptNode.replacingChild(
+        at: childIndex,
+        with: newUnexpected.raw,
+        arena: arena
+      ).cast(KeptNode.self)
+
+      accumulatedTokens.removeAll()
+    }
+
+    func walk(_ raw: RawSyntax) {
+      if let token = RawTokenSyntax(raw) {
+        if !token.isMissing {
+          accumulatedTokens.append(token)
+        }
+      } else if !raw.kind.isSyntaxCollection, let node = raw.as(KeptNode.self), predicate(node) {
+        keptNodes.append(node)
+        attachAccumulatedTokensToLastKeptNode(appending: false)
+      } else {
+        for case let child? in raw.layoutView!.children {
+          walk(child)
+        }
+      }
+    }
+
+    walk(self.raw)
+
+    if keptNodes.isEmpty {
+      keptNodes.append(makeMissing())
+    }
+
+    attachAccumulatedTokensToLastKeptNode(appending: true)
+
+    return keptNodes
+  }
+}
+
 // MARK: - Misc
 
 extension SyntaxText {

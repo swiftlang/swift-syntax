@@ -20,6 +20,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case trailingComma
   case coroutineAccessors
   case valueGenerics
+  case abiAttribute
 
   /// The name of the feature as it is written in the compiler's `Features.def` file.
   public var featureName: String {
@@ -38,6 +39,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "CoroutineAccessors"
     case .valueGenerics:
       return "ValueGenerics"
+    case .abiAttribute:
+      return "ABIAttribute"
     }
   }
 
@@ -58,6 +61,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "coroutine accessors"
     case .valueGenerics:
       return "value generics"
+    case .abiAttribute:
+      return "@abi attribute"
     }
   }
 

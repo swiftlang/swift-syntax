@@ -60,7 +60,7 @@ let syntaxEnumFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
   for base in SYNTAX_NODES where base.kind.isBase {
     let baseKind = base.kind
-    let baseName = baseKind.rawValue.withFirstCharacterUppercased
+    let baseName = baseKind.uppercasedFirstWordRawValue
     let enumType: TypeSyntax = "\(raw: baseName)SyntaxEnum"
 
     try! EnumDeclSyntax(

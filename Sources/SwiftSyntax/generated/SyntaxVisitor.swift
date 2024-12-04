@@ -38,6 +38,24 @@ open class SyntaxVisitor {
     visit(&syntaxNode)
   }
 
+  /// Visiting `ABIAttributeArgumentsSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  open func visit(_ node: ABIAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `ABIAttributeArgumentsSyntax` and its descendants.
+  ///   - node: the node we just finished visiting.
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  open func visitPost(_ node: ABIAttributeArgumentsSyntax) {
+  }
+
   /// Visiting ``AccessorBlockSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3535,6 +3553,10 @@ open class SyntaxVisitor {
         // No children to visit.
         self.visitPost(node)
       }
+    case .abiAttributeArguments:
+      return {
+        self.visitImpl(&$0, ABIAttributeArgumentsSyntax.self, self.visit, self.visitPost)
+      }
     case .accessorBlock:
       return {
         self.visitImpl(&$0, AccessorBlockSyntax.self, self.visit, self.visitPost)
@@ -4681,6 +4703,8 @@ open class SyntaxVisitor {
       _ = visit(node)
       // No children to visit.
       visitPost(node)
+    case .abiAttributeArguments:
+      visitImpl(&node, ABIAttributeArgumentsSyntax.self, visit, visitPost)
     case .accessorBlock:
       visitImpl(&node, AccessorBlockSyntax.self, visit, visitPost)
     case .accessorDeclList:

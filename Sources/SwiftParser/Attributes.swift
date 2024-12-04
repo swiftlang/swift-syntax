@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 #if swift(>=6)
-@_spi(RawSyntax) internal import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) internal import SwiftSyntax
 #else
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftSyntax
 #endif
 
 extension Parser {
@@ -58,6 +58,7 @@ extension Parser {
     case _typeEraser
     case _unavailableFromAsync
     case `rethrows`
+    case abi
     case attached
     case available
     case backDeployed
@@ -95,6 +96,7 @@ extension Parser {
       case TokenSpec(._typeEraser): self = ._typeEraser
       case TokenSpec(._unavailableFromAsync): self = ._unavailableFromAsync
       case TokenSpec(.`rethrows`): self = .rethrows
+      case TokenSpec(.abi) where experimentalFeatures.contains(.abiAttribute): self = .abi
       case TokenSpec(.attached): self = .attached
       case TokenSpec(.available): self = .available
       case TokenSpec(.backDeployed): self = .backDeployed
@@ -136,6 +138,7 @@ extension Parser {
       case ._typeEraser: return .keyword(._typeEraser)
       case ._unavailableFromAsync: return .keyword(._unavailableFromAsync)
       case .`rethrows`: return .keyword(.rethrows)
+      case .abi: return .keyword(.abi)
       case .attached: return .keyword(.attached)
       case .available: return .keyword(.available)
       case .backDeployed: return .keyword(.backDeployed)
@@ -176,9 +179,16 @@ extension Parser {
     case noArgument
   }
 
+  /// Parse the argument of an attribute, if it has one.
+  ///
+  /// - Parameters:
+  ///   - argumentMode: Indicates whether the attribute must, may, or may not have an argument.
+  ///   - parseArguments: Called to parse the argument list. If there is an opening parenthesis, it will have already been consumed.
+  ///   - parseMissingArguments: If provided, called instead of `parseArgument` when an argument list was required but no opening parenthesis was present.
   mutating func parseAttribute(
     argumentMode: AttributeArgumentMode,
-    parseArguments: (inout Parser) -> RawAttributeSyntax.Arguments
+    parseArguments: (inout Parser) -> RawAttributeSyntax.Arguments,
+    parseMissingArguments: ((inout Parser) -> RawAttributeSyntax.Arguments)? = nil
   ) -> RawAttributeListSyntax.Element {
     var (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     if atSign.trailingTriviaByteLength > 0 || self.currentToken.leadingTriviaByteLength > 0 {
@@ -213,7 +223,12 @@ extension Parser {
         )
         leftParen = leftParen.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
       }
-      let argument = parseArguments(&self)
+      let argument: RawAttributeSyntax.Arguments
+      if let parseMissingArguments, leftParen.presence == .missing {
+        argument = parseMissingArguments(&self)
+      } else {
+        argument = parseArguments(&self)
+      }
       let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
       return .attribute(
         RawAttributeSyntax(
@@ -255,6 +270,12 @@ extension Parser {
     }
 
     switch peek(isAtAnyIn: DeclarationAttributeWithSpecialSyntax.self) {
+    case .abi:
+      return parseAttribute(argumentMode: .required) { parser in
+        return .abiArguments(parser.parseABIAttributeArguments())
+      } parseMissingArguments: { parser in
+        return .abiArguments(parser.parseABIAttributeArguments(missingLParen: true))
+      }
     case .available, ._spi_available:
       return parseAttribute(argumentMode: .required) { parser in
         return .availability(parser.parseAvailabilityArgumentSpecList())
@@ -915,6 +936,52 @@ extension Parser {
       elements: [isolationKindElement],
       arena: self.arena
     )
+  }
+}
+
+extension Parser {
+  /// Parse the arguments inside an `@abi(...)` attribute.
+  ///
+  /// - Parameter missingLParen: `true` if the opening paren for the argument list was missing.
+  mutating func parseABIAttributeArguments(missingLParen: Bool = false) -> RawABIAttributeArgumentsSyntax {
+    func makeMissingProviderArguments(unexpectedBefore: [RawSyntax]) -> RawABIAttributeArgumentsSyntax {
+      return RawABIAttributeArgumentsSyntax(
+        provider: .missing(
+          RawMissingDeclSyntax(
+            unexpectedBefore.isEmpty ? nil : RawUnexpectedNodesSyntax(elements: unexpectedBefore, arena: self.arena),
+            attributes: self.emptyCollection(RawAttributeListSyntax.self),
+            modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
+            placeholder: self.missingToken(.identifier, text: "<#declaration#>"),
+            arena: arena
+          )
+        ),
+        arena: self.arena
+      )
+    }
+
+    // Consider the three kinds of mistakes we might see here:
+    //
+    //   1. The user forgot the argument: `@abi(<<here>>) var x: Int`
+    //   2. The user forgot the left paren: `@abi<<here>> var x_abi: Int) var x: Int`
+    //   3. The user forgot the whole argument list: `@abi<<here>> var x: Int`
+    //
+    // It's difficult to write code that recovers from both #2 and #3. The problem is that in both cases, what comes
+    // next looks like a declaration, so a simple lookahead cannot distinguish between them--you'd have to parse all
+    // the way to the closing paren. (And what if *that's* also missing?)
+    //
+    // In lieu of that, we judge that recovering gracefully from #3 is more important than #2 and therefore do not even
+    // attempt to parse the argument unless we've seen a left paren.
+    guard !missingLParen && !self.at(.rightParen) else {
+      return makeMissingProviderArguments(unexpectedBefore: [])
+    }
+
+    let decl = parseDeclaration(in: .argumentList)
+
+    guard let provider = RawABIAttributeArgumentsSyntax.Provider(decl) else {
+      return makeMissingProviderArguments(unexpectedBefore: [decl.raw])
+    }
+
+    return RawABIAttributeArgumentsSyntax(provider: provider, arena: self.arena)
   }
 }
 

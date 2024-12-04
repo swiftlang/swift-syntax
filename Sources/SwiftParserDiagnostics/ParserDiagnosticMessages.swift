@@ -306,6 +306,30 @@ public struct CannotParseVersionTuple: ParserError {
   }
 }
 
+public struct DeclarationNotPermittedInContext: ParserError {
+  public var missingDecl: MissingDeclSyntax
+  public var invalidDecl: DeclSyntax
+
+  public var message: String {
+    return "\(self.invalidDeclDescription) is not permitted \(self.missingDeclContextDescription)"
+  }
+
+  var invalidDeclDescription: String {
+    return invalidDecl.kind.nameForDiagnostics ?? "declaration"
+  }
+
+  var missingDeclContextDescription: String {
+    guard
+      let description = missingDecl.parent?.ancestorOrSelf(mapping: { ancestor in
+        ancestor.nodeTypeNameForDiagnostics(allowBlockNames: false)
+      })
+    else {
+      return "here"
+    }
+    return "as \(description)"
+  }
+}
+
 public struct DeinitializerSignatureError: ParserError {
   public let name: TokenSyntax?
   public let params: FunctionParameterClauseSyntax?
@@ -380,6 +404,21 @@ public struct IdentifierNotAllowedInOperatorName: ParserError {
   public var message: String {
     return
       "\(nodesDescription([identifier], format: false)) is considered an identifier and must not appear within an operator name"
+  }
+}
+
+public struct IfConfigDeclNotAllowedInContext: ParserError {
+  public let context: Syntax
+
+  private var contextDescription: String {
+    if let description = context.ancestorOrSelf(mapping: { $0.nodeTypeNameForDiagnostics(allowBlockNames: true) }) {
+      return "in \(description)"
+    }
+    return "here"
+  }
+
+  public var message: String {
+    return "conditional compilation not permitted \(contextDescription)"
   }
 }
 

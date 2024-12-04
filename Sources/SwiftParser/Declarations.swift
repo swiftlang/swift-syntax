@@ -168,11 +168,61 @@ extension Parser {
     }
   }
 
+  /// Describes the context around a declaration in order to modify how it is parsed.
+  enum DeclarationParseContext {
+    /// The declaration is in top-level code or a function body; that is, it may be mixed with statements and
+    /// expressions.
+    case topLevelOrCodeBlock
+
+    /// The declaration is in a member list.
+    case memberDeclList
+
+    /// The declaration is in an argument list (for instance, of an `@abi` attribute).
+    case argumentList
+
+    /// Should the parser assume that any syntax it encounters here *must* be declaration syntax? This allows more
+    /// aggressive recovery which might misinterpret statement or expression syntax as malformed declaration syntax.
+    var requiresDecl: Bool {
+      switch self {
+      case .topLevelOrCodeBlock:
+        return false
+      case .memberDeclList, .argumentList:
+        return true
+      }
+    }
+
+    /// If an introducer is not found at the expected location, what token should terminate our search for one?
+    var recoveryPrecedence: TokenPrecedence? {
+      switch self {
+      case .topLevelOrCodeBlock:
+        // Scan as far as we want.
+        return nil
+      case .memberDeclList:
+        // Don't scan past the enclosing brace.
+        return .closingBrace
+      case .argumentList:
+        // Don't scan past the closing parenthesis.
+        return .weakBracketed(closingDelimiter: .rightParen)
+      }
+    }
+
+    /// Is `#if` allowed in this context? If not, we parse it into unexpected syntax on whatever declaration is nested
+    /// inside it.
+    var allowsIfConfigDecl: Bool {
+      switch self {
+      case .topLevelOrCodeBlock, .memberDeclList:
+        return true
+      case .argumentList:
+        return false
+      }
+    }
+  }
+
   /// Parse a declaration.
   ///
-  /// If `inMemberDeclList` is `true`, we know that the next item must be a
-  /// declaration and thus start with a keyword. This allows further recovery.
-  mutating func parseDeclaration(inMemberDeclList: Bool = false) -> RawDeclSyntax {
+  /// - Parameter context: Describes the code around the declaration being parsed. This affects how the parser tries
+  ///                      to recover from malformed syntax in the declaration.
+  mutating func parseDeclaration(in context: DeclarationParseContext = .topLevelOrCodeBlock) -> RawDeclSyntax {
     // If we are at a `#if` of attributes, the `#if` directive should be
     // parsed when we're parsing the attributes.
     if self.at(.poundIf) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
@@ -200,6 +250,20 @@ extension Parser {
       } syntax: { parser, elements in
         return .decls(RawMemberBlockItemListSyntax(elements: elements, arena: parser.arena))
       }
+      if !context.allowsIfConfigDecl {
+        // Convert the IfConfig to unexpected syntax around the first decl inside it, if any.
+        return directive.makeUnexpectedKeepingFirstNode(of: RawDeclSyntax.self, arena: self.arena) { node in
+          return !node.is(RawIfConfigDeclSyntax.self)
+        } makeMissing: {
+          return RawDeclSyntax(
+            RawMissingDeclSyntax(
+              attributes: self.emptyCollection(RawAttributeListSyntax.self),
+              modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
+              arena: self.arena
+            )
+          )
+        }
+      }
       return RawDeclSyntax(directive)
     }
 
@@ -221,8 +285,10 @@ extension Parser {
       // to parse.
       // If we are inside a memberDecl list, we don't want to eat closing braces (which most likely close the outer context)
       // while recovering to the declaration start.
-      let recoveryPrecedence = inMemberDeclList ? TokenPrecedence.closingBrace : nil
-      recoveryResult = self.canRecoverTo(anyIn: DeclarationKeyword.self, overrideRecoveryPrecedence: recoveryPrecedence)
+      recoveryResult = self.canRecoverTo(
+        anyIn: DeclarationKeyword.self,
+        overrideRecoveryPrecedence: context.recoveryPrecedence
+      )
     }
 
     switch recoveryResult {
@@ -273,17 +339,17 @@ extension Parser {
     case (.lhs(.pound), let handle)?:
       return RawDeclSyntax(self.parseMacroExpansionDeclaration(attrs, handle))
     case (.rhs, let handle)?:
-      return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, inMemberDeclList: inMemberDeclList))
+      return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, in: context))
     case nil:
       break
     }
 
-    if inMemberDeclList {
+    if context.requiresDecl {
       let isProbablyVarDecl = self.at(.identifier, .wildcard) && self.peek(isAt: .colon, .equal, .comma)
       let isProbablyTupleDecl = self.at(.leftParen) && self.peek(isAt: .identifier, .wildcard)
 
       if isProbablyVarDecl || isProbablyTupleDecl {
-        return RawDeclSyntax(self.parseBindingDeclaration(attrs, .missing(.keyword(.var))))
+        return RawDeclSyntax(self.parseBindingDeclaration(attrs, .missing(.keyword(.var)), in: context))
       }
 
       if self.currentToken.isEditorPlaceholder {
@@ -787,7 +853,7 @@ extension Parser {
     if self.at(.poundSourceLocation) {
       decl = RawDeclSyntax(self.parsePoundSourceLocationDirective())
     } else {
-      decl = self.parseDeclaration(inMemberDeclList: true)
+      decl = self.parseDeclaration(in: .memberDeclList)
     }
 
     let semi = self.consume(if: .semicolon)
@@ -1309,7 +1375,7 @@ extension Parser {
   mutating func parseBindingDeclaration(
     _ attrs: DeclAttributes,
     _ handle: RecoveryConsumptionHandle,
-    inMemberDeclList: Bool = false
+    in context: DeclarationParseContext
   ) -> RawVariableDeclSyntax {
     let (unexpectedBeforeIntroducer, introducer) = self.eat(handle)
     let hasTryBeforeIntroducer = unexpectedBeforeIntroducer?.containsToken(where: { TokenSpec(.try) ~= $0 }) ?? false
@@ -1399,7 +1465,7 @@ extension Parser {
         if (self.at(.leftBrace)
           && (initializer == nil || !self.currentToken.isAtStartOfLine
             || self.withLookahead({ $0.atStartOfGetSetAccessor() })))
-          || (inMemberDeclList && self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil
+          || (context.requiresDecl && self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil
             && !self.at(.keyword(.`init`)))
         {
           accessors = self.parseAccessorBlock()

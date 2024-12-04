@@ -151,7 +151,7 @@ public struct SyntaxBuildableType: Hashable {
   public var resultBuilderType: TypeSyntax {
     switch kind {
     case .node(kind: let kind):
-      return TypeSyntax("\(raw: kind.rawValue.withFirstCharacterUppercased)Builder")
+      return TypeSyntax("\(raw: kind.uppercasedFirstWordRawValue)Builder")
     case .token:
       preconditionFailure("Tokens cannot be constructed using result builders")
     }

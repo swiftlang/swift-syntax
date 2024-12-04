@@ -476,6 +476,27 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
         SpaceSeparatedIdentifiersError(firstToken: previousToken, additionalTokens: tokens),
         fixIts: fixIts
       )
+    } else if let parent = node.parent,
+      node.firstToken(viewMode: .sourceAccurate)?.tokenKind == .poundIf,
+      let otherNode = parent.children(viewMode: .sourceAccurate).last?.as(UnexpectedNodesSyntax.self),
+      otherNode.lastToken(viewMode: .sourceAccurate)?.tokenKind == .poundEndif
+    {
+      let diagnoseOn = parent.parent ?? parent
+      addDiagnostic(
+        diagnoseOn,
+        IfConfigDeclNotAllowedInContext(context: diagnoseOn),
+        highlights: [Syntax(node), Syntax(otherNode)],
+        fixIts: [
+          FixIt(
+            message: RemoveNodesFixIt([Syntax(node), Syntax(otherNode)]),
+            changes: [
+              .makeMissing([Syntax(node)], transferTrivia: false),
+              .makeMissing([Syntax(otherNode)], transferTrivia: false),
+            ]
+          )
+        ],
+        handledNodes: [node.id, otherNode.id]
+      )
     } else {
       addDiagnostic(node, UnexpectedNodesError(unexpectedNodes: node), highlights: [Syntax(node)])
     }
@@ -1339,6 +1360,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
   }
 
   public override func visit(_ node: MissingDeclSyntax) -> SyntaxVisitorContinueKind {
+    // If the missing decl contains another decl as unexpected syntax, diagnose that decl as syntactically invalid.
+    if let invalidDecl = node.unexpectedBeforeAttributes?.only?.as(DeclSyntax.self) {
+      addDiagnostic(node, DeclarationNotPermittedInContext(missingDecl: node, invalidDecl: invalidDecl))
+      return .skipChildren
+    }
+
     return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 

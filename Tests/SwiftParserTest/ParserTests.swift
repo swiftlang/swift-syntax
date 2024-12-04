@@ -125,6 +125,7 @@ class ParserTests: ParserTestCase {
   /// Swift compiler. This requires the Swift compiler to have been checked
   /// out into the "swift" directory alongside swift-syntax.
   func testSwiftValidationTestsuite() throws {
+    try XCTSkipIf(true, "Crashing with signal 10 in CI")
     try XCTSkipIf(longTestsDisabled)
     let testDir =
       packageDir

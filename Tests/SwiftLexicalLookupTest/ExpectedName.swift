@@ -93,7 +93,7 @@ enum NameExpectation: ExpectedName {
         actualStr == expectedStr,
         "For marker \(marker), actual identifier \(actualStr) doesn't match expected \(expectedStr)"
       )
-    case (.compositeName(let actualNames), .compositeName(let expectedNames)):
+    case (.equivalentNames(let actualNames), .compositeName(let expectedNames)):
       XCTAssert(
         actualNames.count == expectedNames.count,
         "For marker \(marker), actual composite name count \(actualNames.count) doesn't match expected \(expectedNames.count)"

@@ -106,7 +106,7 @@ func assertLexicalNameLookup(
 
       return result.flatMap { lookUpResult in
         lookUpResult.names.flatMap { lookupName in
-          if case .compositeName(let names) = lookupName {
+          if case .equivalentNames(let names) = lookupName {
             return names.map(\.syntax)
           } else {
             return [lookupName.syntax]

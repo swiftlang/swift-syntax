@@ -598,11 +598,7 @@ import SwiftSyntax
         orderedKeys.append(identifier)
       }
 
-      if partitioned[identifier] == nil {
-        partitioned[identifier] = [extractedName]
-      } else {
-        partitioned[identifier]?.append(extractedName)
-      }
+      partitioned[identifier, default: []].append(extractedName)
     }
 
     return
@@ -610,7 +606,7 @@ import SwiftSyntax
       .compactMap { key in
         guard let names = partitioned[key] else { return nil }
 
-        return .compositeName(names)
+        return .equivalentNames(names)
       }
   }
 

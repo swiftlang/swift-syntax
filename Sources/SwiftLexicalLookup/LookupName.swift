@@ -139,7 +139,7 @@ import SwiftSyntax
   case implicit(ImplicitDecl)
   /// Dollar identifier introduced by a closure without parameters.
   case dollarIdentifier(ClosureExprSyntax, strRepresentation: String)
-  /// Represents equivalent identifiers grouped together.
+  /// Represents equivalent names grouped together.
   /// - Important: The array should be non-empty.
   ///
   /// ### Example:
@@ -150,8 +150,8 @@ import SwiftSyntax
   /// }
   /// ```
   /// For lookup at the given position, the result
-  /// contains only one (composite) name
-  case compositeName([LookupName])
+  /// contains only one name, that represents both `let x` declarations.
+  case equivalentNames([LookupName])
 
   /// Syntax associated with this name.
   @_spi(Experimental) public var syntax: SyntaxProtocol {
@@ -164,7 +164,7 @@ import SwiftSyntax
       return implicitName.syntax
     case .dollarIdentifier(let closureExpr, _):
       return closureExpr
-    case .compositeName(let names):
+    case .equivalentNames(let names):
       return names.first!.syntax
     }
   }
@@ -180,7 +180,7 @@ import SwiftSyntax
       return kind.identifier
     case .dollarIdentifier(_, strRepresentation: _):
       return nil
-    case .compositeName(let names):
+    case .equivalentNames(let names):
       return names.first!.identifier
     }
   }
@@ -202,7 +202,7 @@ import SwiftSyntax
       return implicitName.position
     case .dollarIdentifier(let closureExpr, _):
       return closureExpr.positionAfterSkippingLeadingTrivia
-    case .compositeName(let names):
+    case .equivalentNames(let names):
       return names.first!.position
     }
   }
@@ -338,20 +338,8 @@ import SwiftSyntax
       return "implicit: \(strName)"
     case .dollarIdentifier(_, strRepresentation: let str):
       return "dollarIdentifier: \(str)"
-    case .compositeName(let names):
-      var result = "Composite name: [ "
-
-      for (index, name) in names.enumerated() {
-        result += name.debugDescription
-
-        if index < names.count - 1 {
-          result += ", "
-        } else {
-          result += " ]"
-        }
-      }
-
-      return result
+    case .equivalentNames(let names):
+      return "Composite name: [ \(names.map(\.debugDescription).joined(separator: ", ")) ]"
     }
   }
 }

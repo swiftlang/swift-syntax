@@ -63,7 +63,7 @@ enum NameExpectation: ExpectedName {
   case declaration(String)
   case implicit(ImplicitNameExpectation)
   case dollarIdentifier(String, String)
-  case compositeName([NameExpectation])
+  case equivalentNames([NameExpectation])
 
   var marker: [String] {
     switch self {
@@ -73,7 +73,7 @@ enum NameExpectation: ExpectedName {
       return [marker]
     case .implicit(let implicitName):
       return [implicitName.marker]
-    case .compositeName(let expectedNames):
+    case .equivalentNames(let expectedNames):
       return
         expectedNames
         .flatMap { expectedName in
@@ -93,7 +93,7 @@ enum NameExpectation: ExpectedName {
         actualStr == expectedStr,
         "For marker \(marker), actual identifier \(actualStr) doesn't match expected \(expectedStr)"
       )
-    case (.equivalentNames(let actualNames), .compositeName(let expectedNames)):
+    case (.equivalentNames(let actualNames), .equivalentNames(let expectedNames)):
       XCTAssert(
         actualNames.count == expectedNames.count,
         "For marker \(marker), actual composite name count \(actualNames.count) doesn't match expected \(expectedNames.count)"

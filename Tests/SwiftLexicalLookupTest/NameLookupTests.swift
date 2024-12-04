@@ -827,15 +827,15 @@ final class testNameLookup: XCTestCase {
           .fromScope(
             SwitchCaseSyntax.self,
             expectedNames: [
-              NameExpectation.compositeName([.identifier("1️⃣"), .identifier("3️⃣")]),
-              NameExpectation.compositeName([.identifier("2️⃣"), .identifier("4️⃣")]),
+              NameExpectation.equivalentNames([.identifier("1️⃣"), .identifier("3️⃣")]),
+              NameExpectation.equivalentNames([.identifier("2️⃣"), .identifier("4️⃣")]),
             ]
           )
         ],
         "9️⃣": [
           .fromScope(
             SwitchCaseSyntax.self,
-            expectedNames: [NameExpectation.compositeName([.identifier("7️⃣"), .identifier("8️⃣")])]
+            expectedNames: [NameExpectation.equivalentNames([.identifier("7️⃣"), .identifier("8️⃣")])]
           )
         ],
       ],

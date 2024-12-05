@@ -477,6 +477,9 @@ private struct SortedArray<Element>: RandomAccessCollection {
 extension SortedArray: Sendable where Element: Sendable {}
 
 /// Represent a virtual file region in the source file.
+///
+/// This type corresponds to `swift::SourceManager::VirtualFile` in the compiler,
+/// and is used for populating the virtual file information in it.
 @_spi(Compiler)
 public struct VirtualFile: Sendable {
   /// Start position of the virtual file region
@@ -487,7 +490,8 @@ public struct VirtualFile: Sendable {
   public var fileName: String
   /// Line number offset from the physical line number.
   public var lineOffset: Int
-  /// The position of the filename literal.
+  /// The position of the file name string literal in the `#sourceLocation` directive.
+  /// This can be used to diagnose the file name in the compiler.
   public var fileNamePosition: AbsolutePosition
 }
 

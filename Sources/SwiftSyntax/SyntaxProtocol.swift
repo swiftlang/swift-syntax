@@ -235,7 +235,10 @@ extension SyntaxProtocol {
     return self.previousToken(viewMode: .sourceAccurate)
   }
 
-  /// Returns this node or the first ancestor that satisfies `condition`.
+  /// Applies `map` to this node and each of its ancestors until a non-`nil`
+  /// value is produced, then returns that value.
+  ///
+  /// If no node has a non-`nil` mapping, returns `nil`.
   public func ancestorOrSelf<T>(mapping map: (Syntax) -> T?) -> T? {
     return self.withUnownedSyntax {
       var node = $0

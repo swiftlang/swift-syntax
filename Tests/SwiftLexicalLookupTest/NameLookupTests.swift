@@ -791,9 +791,11 @@ final class testNameLookup: XCTestCase {
     assertLexicalNameLookup(
       source: """
         switch {
-        case .x(let 1️⃣a, let 2️⃣b), .y(.c(let 3️⃣c), .z):
-          print(4️⃣a, 5️⃣b, 6️⃣c)
-        case .z(let 7️⃣a), .smth(let 8️⃣a)
+        case .x(let 1️⃣a, let 2️⃣b):
+          print(4️⃣a, 5️⃣b)
+        case .y(.c(let 3️⃣c), .z):
+          print(6️⃣c)
+        case .z(let 7️⃣a)
           print(9️⃣a)
         default:
           print(0️⃣a)
@@ -803,10 +805,42 @@ final class testNameLookup: XCTestCase {
         "4️⃣": [.fromScope(SwitchCaseSyntax.self, expectedNames: ["1️⃣"])],
         "5️⃣": [.fromScope(SwitchCaseSyntax.self, expectedNames: ["2️⃣"])],
         "6️⃣": [.fromScope(SwitchCaseSyntax.self, expectedNames: ["3️⃣"])],
-        "9️⃣": [.fromScope(SwitchCaseSyntax.self, expectedNames: ["7️⃣", "8️⃣"])],
+        "9️⃣": [.fromScope(SwitchCaseSyntax.self, expectedNames: ["7️⃣"])],
         "0️⃣": [],
       ],
       expectedResultTypes: .all(IdentifierPatternSyntax.self)
+    )
+  }
+
+  func testCompositeNames() {
+    assertLexicalNameLookup(
+      source: """
+        switch X {
+        case .x(let 1️⃣a, let 2️⃣b), .y(let 3️⃣a, let 4️⃣b):
+          print(5️⃣x)
+        case .z(let 7️⃣a), .smth(let 8️⃣a):
+          print(9️⃣x)
+        }
+        """,
+      references: [
+        "5️⃣": [
+          .fromScope(
+            SwitchCaseSyntax.self,
+            expectedNames: [
+              NameExpectation.equivalentNames([.identifier("1️⃣"), .identifier("3️⃣")]),
+              NameExpectation.equivalentNames([.identifier("2️⃣"), .identifier("4️⃣")]),
+            ]
+          )
+        ],
+        "9️⃣": [
+          .fromScope(
+            SwitchCaseSyntax.self,
+            expectedNames: [NameExpectation.equivalentNames([.identifier("7️⃣"), .identifier("8️⃣")])]
+          )
+        ],
+      ],
+      expectedResultTypes: .all(IdentifierPatternSyntax.self),
+      useNilAsTheParameter: true
     )
   }
 

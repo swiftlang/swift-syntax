@@ -103,7 +103,7 @@ import SwiftSyntax
           ?? subscriptDecl.endPositionBeforeTrailingTrivia
       case .variableDecl(let variableDecl):
         return variableDecl.bindings.first?.accessorBlock?.positionAfterSkippingLeadingTrivia
-          ?? variableDecl.endPosition
+          ?? variableDecl.bindings.positionAfterSkippingLeadingTrivia
       case .accessorDecl(let accessorDecl):
         return accessorDecl.accessorSpecifier.positionAfterSkippingLeadingTrivia
       case .deinitializerDecl(let deinitializerDecl):
@@ -139,6 +139,19 @@ import SwiftSyntax
   case implicit(ImplicitDecl)
   /// Dollar identifier introduced by a closure without parameters.
   case dollarIdentifier(ClosureExprSyntax, strRepresentation: String)
+  /// Represents equivalent names grouped together.
+  /// - Important: The array should be non-empty.
+  ///
+  /// ### Example:
+  /// ```swift
+  /// switch X {
+  /// case .a(let x), .b(let x):
+  ///   print(x) // <-- lookup here
+  /// }
+  /// ```
+  /// For lookup at the given position, the result
+  /// contains only one name, that represents both `let x` declarations.
+  case equivalentNames([LookupName])
 
   /// Syntax associated with this name.
   @_spi(Experimental) public var syntax: SyntaxProtocol {
@@ -151,6 +164,8 @@ import SwiftSyntax
       return implicitName.syntax
     case .dollarIdentifier(let closureExpr, _):
       return closureExpr
+    case .equivalentNames(let names):
+      return names.first!.syntax
     }
   }
 
@@ -165,6 +180,8 @@ import SwiftSyntax
       return kind.identifier
     case .dollarIdentifier(_, strRepresentation: _):
       return nil
+    case .equivalentNames(let names):
+      return names.first!.identifier
     }
   }
 
@@ -185,6 +202,8 @@ import SwiftSyntax
       return implicitName.position
     case .dollarIdentifier(let closureExpr, _):
       return closureExpr.positionAfterSkippingLeadingTrivia
+    case .equivalentNames(let names):
+      return names.first!.position
     }
   }
 
@@ -319,6 +338,8 @@ import SwiftSyntax
       return "implicit: \(strName)"
     case .dollarIdentifier(_, strRepresentation: let str):
       return "dollarIdentifier: \(str)"
+    case .equivalentNames(let names):
+      return "Composite name: [ \(names.map(\.debugDescription).joined(separator: ", ")) ]"
     }
   }
 }

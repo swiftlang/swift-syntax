@@ -30,4 +30,27 @@ public protocol PreambleMacro: AttachedMacro {
     providingPreambleFor declaration: some DeclSyntaxProtocol & WithOptionalCodeBlockSyntax,
     in context: some MacroExpansionContext
   ) throws -> [CodeBlockItemSyntax]
+
+  /// Expand a macro described by the given custom attribute and
+  /// attached to the given declaration and evaluated within a
+  /// particular expansion context.
+  ///
+  /// The macro expansion can introduce code items that form a preamble to
+  /// the body of the given function. The code items produced by this macro
+  /// expansion will be inserted at the beginning of the function body.
+  static func expansion(
+    of node: AttributeSyntax,
+    providingPreambleFor declaration: some DeclSyntaxProtocol & WithOptionalCodeBlockSyntax,
+    in context: some MacroExpansionContext
+  ) async throws -> [CodeBlockItemSyntax]
+}
+
+extension PreambleMacro {
+  public static func expansion(
+    of node: AttributeSyntax,
+    providingPreambleFor declaration: some DeclSyntaxProtocol & WithOptionalCodeBlockSyntax,
+    in context: some MacroExpansionContext
+  ) async throws -> [CodeBlockItemSyntax] {
+    return try { try expansion(of: node, providingPreambleFor: declaration, in: context) }()
+  }
 }

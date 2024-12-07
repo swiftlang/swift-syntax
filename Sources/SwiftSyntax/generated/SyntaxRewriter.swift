@@ -2167,7 +2167,12 @@ open class SyntaxRewriter {
   ) {
     let origNode = node
     visitPre(origNode)
-    node = visitAny(origNode) ?? Syntax(visit(origNode.cast(NodeType.self)))
+    node =
+      if let newNode = visitAny(origNode) {
+        newNode
+      } else {
+        Syntax(visit(origNode.cast(NodeType.self)))
+      }
     visitPost(origNode)
   }
 

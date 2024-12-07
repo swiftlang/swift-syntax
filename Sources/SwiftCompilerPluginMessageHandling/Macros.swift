@@ -55,7 +55,7 @@ extension PluginProviderMessageHandler {
     discriminator: String,
     expandingSyntax: PluginMessage.Syntax,
     lexicalContext: [PluginMessage.Syntax]?
-  ) -> PluginToHostMessage {
+  ) async -> PluginToHostMessage {
     let sourceManager = SourceManager(syntaxRegistry: syntaxRegistry)
     let syntax = sourceManager.add(expandingSyntax, foldingWith: .standardOperators)
 
@@ -83,7 +83,7 @@ extension PluginProviderMessageHandler {
         macroRole = try inferFreestandingMacroRole(definition: macroDefinition)
       }
 
-      expandedSource = SwiftSyntaxMacroExpansion.expandFreestandingMacro(
+      expandedSource = await SwiftSyntaxMacroExpansion.expandFreestandingMacro(
         definition: macroDefinition,
         macroRole: macroRole,
         node: macroSyntax,
@@ -119,7 +119,7 @@ extension PluginProviderMessageHandler {
     extendedTypeSyntax: PluginMessage.Syntax?,
     conformanceListSyntax: PluginMessage.Syntax?,
     lexicalContext: [PluginMessage.Syntax]?
-  ) -> PluginToHostMessage {
+  ) async -> PluginToHostMessage {
     let sourceManager = SourceManager(syntaxRegistry: syntaxRegistry)
     let attributeNode = sourceManager.add(
       attributeSyntax,
@@ -152,7 +152,7 @@ extension PluginProviderMessageHandler {
       let macroDefinition = try resolveMacro(macro)
       let role = MacroRole(messageMacroRole: macroRole)
 
-      let expansions = SwiftSyntaxMacroExpansion.expandAttachedMacroWithoutCollapsing(
+      let expansions = await SwiftSyntaxMacroExpansion.expandAttachedMacroWithoutCollapsing(
         definition: macroDefinition,
         macroRole: role,
         attributeNode: attributeNode,

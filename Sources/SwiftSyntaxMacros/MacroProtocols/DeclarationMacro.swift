@@ -23,6 +23,13 @@ public protocol DeclarationMacro: FreestandingMacro {
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax]
 
+  /// Expand a macro described by the given freestanding macro expansion
+  /// declaration within the given context to produce a set of declarations.
+  static func expansion(
+    of node: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
+  ) async throws -> [DeclSyntax]
+
   /// Whether to copy attributes on the expansion syntax to expanded declarations,
   /// 'true' by default.
   static var propagateFreestandingMacroAttributes: Bool { get }
@@ -32,6 +39,13 @@ public protocol DeclarationMacro: FreestandingMacro {
 }
 
 extension DeclarationMacro {
+  public static func expansion(
+    of node: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
+  ) async throws -> [DeclSyntax] {
+    return try { try self.expansion(of: node, in: context) }()
+  }
+
   public static var propagateFreestandingMacroAttributes: Bool { true }
   public static var propagateFreestandingMacroModifiers: Bool { true }
 }

@@ -22,4 +22,20 @@ public protocol CodeItemMacro: FreestandingMacro {
     of node: some FreestandingMacroExpansionSyntax,
     in context: some MacroExpansionContext
   ) throws -> [CodeBlockItemSyntax]
+
+  /// Expand a macro described by the given freestanding macro expansion
+  /// declaration within the given context to produce a set of declarations.
+  static func expansion(
+    of node: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
+  ) async throws -> [CodeBlockItemSyntax]
+}
+
+extension CodeItemMacro {
+  public static func expansion(
+    of node: some FreestandingMacroExpansionSyntax,
+    in context: some MacroExpansionContext
+  ) async throws -> [CodeBlockItemSyntax] {
+    return try { try expansion(of: node, in: context) }()
+  }
 }

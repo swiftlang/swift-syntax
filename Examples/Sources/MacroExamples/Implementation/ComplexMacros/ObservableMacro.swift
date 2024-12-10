@@ -35,6 +35,7 @@ public struct ObservableMacro: MemberMacro, MemberAttributeMacro {
   public static func expansion(
     of node: AttributeSyntax,
     providingMembersOf declaration: some DeclGroupSyntax,
+    conformingTo: [TypeSyntax],
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
     guard let identified = declaration.asProtocol(NamedDeclSyntax.self) else {

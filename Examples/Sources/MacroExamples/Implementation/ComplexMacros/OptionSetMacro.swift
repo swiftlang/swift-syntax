@@ -177,6 +177,7 @@ extension OptionSetMacro: MemberMacro {
   public static func expansion(
     of attribute: AttributeSyntax,
     providingMembersOf decl: some DeclGroupSyntax,
+    conformingTo: [TypeSyntax],
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
     // Decode the expansion arguments.

@@ -133,6 +133,12 @@ public class CompilerPluginMessageListener<Connection: MessageConnection, Handle
 public protocol PluginMessageHandler {
   /// Handles a single message received from the plugin host.
   func handleMessage(_ message: HostToPluginMessage) -> PluginToHostMessage
+
+  /// Deterministically and synchronously cleans up resources that cannot be dealt with in
+  /// a deinitializer due to possible errors thrown during the clean up. Usually this
+  /// includes closure of file handles, sockets, shutting down external processes and IPC
+  /// resources set up for these processes, etc.
+  func shutDown() throws
 }
 
 /// A `PluginMessageHandler` that uses a `PluginProvider`.
@@ -226,6 +232,10 @@ public class PluginProviderMessageHandler<Provider: PluginProvider>: PluginMessa
       return .loadPluginLibraryResult(loaded: diags.isEmpty, diagnostics: diags)
     }
   }
+
+  /// Empty implementation for the default message handler, since all resources are automatically
+  /// cleaned up in the synthesized initializer.
+  public func shutDown() throws {}
 }
 
 @_spi(PluginMessage)

@@ -96,12 +96,13 @@ public class CompilerPluginMessageListener<Connection: MessageConnection, Handle
   ///
   /// On internal errors, such as I/O errors or JSON serialization errors, print
   /// an error message and `exit(1)`
-  public func main() {
+  public func main() throws {
     #if os(WASI)
     // Rather than blocking on read(), let the host tell us when there's data.
     readabilityHandler = { _ = self.handleNextMessage() }
     #else
     while handleNextMessage() {}
+    try self.handler.shutDown()
     #endif
   }
 

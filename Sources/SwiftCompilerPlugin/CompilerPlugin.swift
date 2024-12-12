@@ -112,6 +112,6 @@ extension CompilerPlugin {
     let connection = try StandardIOMessageConnection()
     let provider = MacroProviderAdapter(plugin: Self())
     let impl = CompilerPluginMessageListener(connection: connection, provider: provider)
-    impl.main()
+    try impl.main()
   }
 }

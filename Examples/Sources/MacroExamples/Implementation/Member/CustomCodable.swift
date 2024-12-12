@@ -17,6 +17,7 @@ public enum CustomCodable: MemberMacro {
   public static func expansion(
     of node: AttributeSyntax,
     providingMembersOf declaration: some DeclGroupSyntax,
+    conformingTo: [TypeSyntax],
     in context: some MacroExpansionContext
   ) throws -> [DeclSyntax] {
     let memberList = declaration.memberBlock.members

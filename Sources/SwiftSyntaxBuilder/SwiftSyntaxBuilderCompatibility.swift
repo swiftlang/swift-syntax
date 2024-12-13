@@ -13,7 +13,7 @@
 // This file provides compatibility aliases to keep dependents of SwiftSyntaxBuilder building.
 // All users of the declarations in this file should transition away from them ASAP.
 
-#if swift(>=6)
+#if compiler(>=6)
 internal import SwiftSyntax
 #else
 import SwiftSyntax

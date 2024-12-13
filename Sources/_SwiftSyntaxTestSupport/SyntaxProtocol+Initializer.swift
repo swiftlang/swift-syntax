@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6)
+#if compiler(>=6)
 internal import SwiftBasicFormat
 @_spi(Testing) internal import SwiftParser
 @_spi(RawSyntax) public import SwiftSyntax

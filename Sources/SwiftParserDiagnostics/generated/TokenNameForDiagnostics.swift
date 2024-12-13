@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6)
+#if compiler(>=6)
 @_spi(RawSyntax) internal import SwiftSyntax
 #else
 @_spi(RawSyntax) import SwiftSyntax

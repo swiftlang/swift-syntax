@@ -18,7 +18,7 @@ import Utils
 let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax(
     """
-    #if swift(>=6)
+    #if compiler(>=6)
     internal import SwiftSyntax
     #else
     import SwiftSyntax

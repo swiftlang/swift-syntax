@@ -18,7 +18,7 @@ import Utils
 let childNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax(
     """
-    #if swift(>=6)
+    #if compiler(>=6)
     @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
     #else
     @_spi(ExperimentalLanguageFeatures) import SwiftSyntax

@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6)
+#if compiler(>=6)
 @_spi(RawSyntax) @_spi(BumpPtrAllocator) internal import SwiftSyntax
 #else
 @_spi(RawSyntax) @_spi(BumpPtrAllocator) import SwiftSyntax

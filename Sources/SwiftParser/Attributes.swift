@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6)
+#if compiler(>=6)
 @_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) internal import SwiftSyntax
 #else
 @_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftSyntax

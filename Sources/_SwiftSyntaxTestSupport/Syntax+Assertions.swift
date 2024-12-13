@@ -14,7 +14,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6)
+#if compiler(>=6)
 public import SwiftSyntax
 private import XCTest
 #else

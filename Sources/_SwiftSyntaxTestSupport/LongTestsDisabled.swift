@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6)
+#if compiler(>=6)
 private import Foundation
 #else
 import Foundation

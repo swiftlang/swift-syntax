@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6)
-private import _SwiftSyntaxCShims
+#if compiler(>=6)
+@_implementationOnly private import _SwiftSyntaxCShims
 public import SwiftSyntaxMacros
 #else
 @_implementationOnly import _SwiftSyntaxCShims

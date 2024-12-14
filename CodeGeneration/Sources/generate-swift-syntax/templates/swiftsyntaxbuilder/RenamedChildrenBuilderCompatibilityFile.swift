@@ -18,7 +18,7 @@ import Utils
 let renamedChildrenBuilderCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax(
     """
-    #if swift(>=6)
+    #if compiler(>=6)
     public import SwiftSyntax
     #else
     import SwiftSyntax

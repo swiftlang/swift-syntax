@@ -40,10 +40,7 @@ To use it, you can pull the source archive from the relevant release tag
 into your `MODULE.bazel` file (preferred and recommended) with `bazel_dep`. Bzlmod support was added starting release of `509.0.0` and above. All available versions can be found in the [Bazel Central Registry](https://registry.bazel.build/modules/swift-syntax)
 
 ```python3
-bazel_dep(
-    name = "swift-syntax",
-    version = "600.0.1",
-)
+bazel_dep(name = "swift-syntax", version = "600.0.1")
 ```
 
 You can also pull source archive with `WORKSPACE` but note that it is preferred to use `MODULE.bazel`. To use `WORKSPACE` and swift-syntax, you can use `http_archive` as such

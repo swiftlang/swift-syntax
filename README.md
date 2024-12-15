@@ -58,7 +58,7 @@ http_archive(
 
 ```
 
-To depend on the libraries you need from the
+and depend on the libraries you need from the
 [`BUILD.bazel`](BUILD.bazel) file. Each library also has an associated
 `Library_opt` target (such as `SwiftSyntax_opt`) which forces
 SwiftSyntax to always build with optimizations enabled. This may help

@@ -46,7 +46,7 @@ bazel_dep(
 )
 ```
 
-You can also pull source archive with `WORKSPACE` but note that it is preferred to use `MODULE.bazel` with latest version and also `WORKSPACE` is being deprecated as of Bazel 8 and unsupported on Bazel 9. To use `WORKSPACE` and swift-syntax, you can use `http_archive` as such
+You can also pull source archive with `WORKSPACE` but note that it is preferred to use `MODULE.bazel`. To use `WORKSPACE` and swift-syntax, you can use `http_archive` as such
 
 ```python3
 http_archive(

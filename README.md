@@ -46,7 +46,7 @@ bazel_dep(
 )
 ```
 
-You can also pull source archive with `WORKSPACE` prior to `509.0.0` but note that it is preferred to use `MODULE.bazel` with latest version and also `WORKSPACE` is being deprecated as of Bazel 8 and unsupported on Bazel 9. To use `WORKSPACE` and swift-syntax, you can use `http_archive` as such
+You can also pull source archive with `WORKSPACE` but note that it is preferred to use `MODULE.bazel` with latest version and also `WORKSPACE` is being deprecated as of Bazel 8 and unsupported on Bazel 9. To use `WORKSPACE` and swift-syntax, you can use `http_archive` as such
 
 ```python3
 http_archive(
@@ -55,7 +55,6 @@ http_archive(
     strip_prefix = "swift-syntax-509.1.0",
     url = "https://github.com/apple/swift-syntax/archive/refs/tags/509.1.0.tar.gz",
 )
-
 ```
 
 and depend on the libraries you need from the

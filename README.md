@@ -37,7 +37,7 @@ Start contributing to SwiftSyntax see [this guide](CONTRIBUTING.md) for more inf
 
 SwiftSyntax provides an experimental [Bazel](https://bazel.build) build configuration, maintained by Keith Smiley. 
 To use it, you can pull the source archive from the relevant release tag
-into your `MODULE.bazel` file (preferred and recommended) with `bazel_dep`. Bzlmod support was added starting release of `509.0.0` and above. All available versions can be found in the [Bazel Central Registry](https://registry.bazel.build/)
+into your `MODULE.bazel` file (preferred and recommended) with `bazel_dep`. Bzlmod support was added starting release of `509.0.0` and above. All available versions can be found in the [Bazel Central Registry](https://registry.bazel.build/modules/swift-syntax)
 
 ```python3
 bazel_dep(

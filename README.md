@@ -36,8 +36,29 @@ Start contributing to SwiftSyntax see [this guide](CONTRIBUTING.md) for more inf
 ## Bazel
 
 SwiftSyntax provides an experimental [Bazel](https://bazel.build) build configuration, maintained by Keith Smiley. 
-To use it you can pull the source archive from the relevant release tag
-into your `WORKSPACE` and depend on the libraries you need from the
+To use it, you can pull the source archive from the relevant release tag
+into your `MODULE.bazel` file (preferred and recommended) with `bazel_dep`. Bzlmod support was added starting release of `509.0.0` and above. All available versions can be found in the [Bazel Central Registry](https://registry.bazel.build/)
+
+```sh
+bazel_dep(
+    name = "swift-syntax",
+    version = "600.0.1",
+)
+```
+
+You can also pull source archive with `WORKSPACE` prior to `509.0.0` but note that it is preferred to use `MODULE.bazel` with latest version and also `WORKSPACE` is being deprecated as of Bazel 8 and unsupported on Bazel 9. To use `WORKSPACE` and swift-syntax, you can use `http_archive` as such
+
+```sh
+http_archive(
+    name = "SwiftSyntax",
+    sha256 = "f070fd44db9b33f430fd5b5d2700f1e2001c0028711859600e80cc975074fab0",
+    strip_prefix = "swift-syntax-509.1.0",
+    url = "https://github.com/apple/swift-syntax/archive/refs/tags/509.1.0.tar.gz",
+)
+
+```
+
+To depend on the libraries you need from the
 [`BUILD.bazel`](BUILD.bazel) file. Each library also has an associated
 `Library_opt` target (such as `SwiftSyntax_opt`) which forces
 SwiftSyntax to always build with optimizations enabled. This may help

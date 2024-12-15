@@ -39,7 +39,7 @@ SwiftSyntax provides an experimental [Bazel](https://bazel.build) build configur
 To use it, you can pull the source archive from the relevant release tag
 into your `MODULE.bazel` file (preferred and recommended) with `bazel_dep`. Bzlmod support was added starting release of `509.0.0` and above. All available versions can be found in the [Bazel Central Registry](https://registry.bazel.build/)
 
-```sh
+```python3
 bazel_dep(
     name = "swift-syntax",
     version = "600.0.1",
@@ -48,7 +48,7 @@ bazel_dep(
 
 You can also pull source archive with `WORKSPACE` prior to `509.0.0` but note that it is preferred to use `MODULE.bazel` with latest version and also `WORKSPACE` is being deprecated as of Bazel 8 and unsupported on Bazel 9. To use `WORKSPACE` and swift-syntax, you can use `http_archive` as such
 
-```sh
+```python3
 http_archive(
     name = "SwiftSyntax",
     sha256 = "f070fd44db9b33f430fd5b5d2700f1e2001c0028711859600e80cc975074fab0",

@@ -84,6 +84,42 @@ swift_syntax_test(
 )
 
 swift_syntax_library(
+    name = "SwiftIfConfig",
+    deps = [
+        ":SwiftDiagnostics",
+        ":SwiftOperators",
+        ":SwiftSyntax",
+        ":SwiftSyntaxBuilder",
+    ],
+)
+
+swift_syntax_test(
+    name = "SwiftIfConfigTest",
+    deps = [
+        ":SwiftIfConfig",
+        ":SwiftParser",
+        ":SwiftSyntaxMacrosGenericTestSupport",
+        ":_SwiftSyntaxTestSupport",
+    ],
+)
+
+swift_syntax_library(
+    name = "SwiftLexicalLookup",
+    deps = [
+        ":SwiftIfConfig",
+        ":SwiftSyntax",
+    ],
+)
+
+swift_syntax_test(
+    name = "SwiftLexicalLookupTest",
+    deps = [
+        ":SwiftLexicalLookup",
+        ":_SwiftSyntaxTestSupport",
+    ],
+)
+
+swift_syntax_library(
     name = "SwiftLibraryPluginProvider",
     deps = [
         ":SwiftCompilerPluginMessageHandling",
@@ -192,6 +228,13 @@ swift_syntax_library(
 swift_syntax_library(
     name = "SwiftSyntax600",
     srcs = glob(["Sources/VersionMarkerModules/SwiftSyntax600/**/*.swift"]),
+    deps = [
+    ],
+)
+
+swift_syntax_library(
+    name = "SwiftSyntax601",
+    srcs = glob(["Sources/VersionMarkerModules/SwiftSyntax601/**/*.swift"]),
     deps = [
     ],
 )

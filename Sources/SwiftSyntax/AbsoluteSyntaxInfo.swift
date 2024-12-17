@@ -2,7 +2,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2023 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2024 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -10,49 +10,52 @@
 //
 //===----------------------------------------------------------------------===//
 
-struct AbsoluteSyntaxPosition: Sendable {
-  /// The UTF-8 offset of the syntax node in the source file
-  let offset: UInt32
-  let indexInParent: UInt32
-
-  func advancedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxPosition {
-    let newOffset = self.offset + UInt32(truncatingIfNeeded: raw?.totalLength.utf8Length ?? 0)
-    let newIndexInParent = self.indexInParent + 1
-    return .init(offset: newOffset, indexInParent: newIndexInParent)
-  }
-
-  func advancedToFirstChild() -> AbsoluteSyntaxPosition {
-    return .init(offset: self.offset, indexInParent: 0)
-  }
-
-  static var forRoot: AbsoluteSyntaxPosition {
-    return .init(offset: 0, indexInParent: 0)
-  }
-}
-
 /// `AbsoluteSyntaxInfo` represents the information that relates a `RawSyntax`
 /// to a source file tree, like its absolute source offset.
 struct AbsoluteSyntaxInfo: Sendable {
-  let position: AbsoluteSyntaxPosition
-  let nodeId: SyntaxIdentifier
+  /// The UTF-8 offset at which the syntax node’s leading trivia start in the source file.
+  let offset: UInt32
 
-  /// The UTF-8 offset of the syntax node in the source file
-  var offset: UInt32 { return position.offset }
-  var indexInParent: UInt32 { return position.indexInParent }
+  /// Index in parent's layout. Note that this counts `nil` children.
+  let layoutIndexInParent: UInt32
+
+  /// Index of the node when traversing the syntax tree using a depth-first traversal.
+  /// This skips `nil` children in the parent's layout.
+  let indexInTree: UInt32
 
   func advancedBySibling(_ raw: RawSyntax?) -> AbsoluteSyntaxInfo {
-    let newPosition = position.advancedBySibling(raw)
-    let newNodeId = nodeId.advancedBySibling(raw)
-    return .init(position: newPosition, nodeId: newNodeId)
+    if let raw {
+      // '&+' operations are safe because we have the preconditions in 'forRoot(_:)'.
+      return AbsoluteSyntaxInfo(
+        offset: offset &+ UInt32(truncatingIfNeeded: raw.totalLength.utf8Length),
+        layoutIndexInParent: layoutIndexInParent &+ 1,
+        indexInTree: indexInTree &+ UInt32(truncatingIfNeeded: raw.totalNodes)
+      )
+    } else {
+      return AbsoluteSyntaxInfo(
+        offset: offset,
+        layoutIndexInParent: layoutIndexInParent &+ 1,
+        indexInTree: indexInTree
+      )
+    }
   }
 
   func advancedToFirstChild() -> AbsoluteSyntaxInfo {
-    let newPosition = position.advancedToFirstChild()
-    let newNodeId = nodeId.advancedToFirstChild()
-    return .init(position: newPosition, nodeId: newNodeId)
+    return AbsoluteSyntaxInfo(
+      offset: offset,
+      layoutIndexInParent: 0,
+      indexInTree: indexInTree &+ 1
+    )
   }
 
   static func forRoot(_ raw: RawSyntax) -> AbsoluteSyntaxInfo {
-    return .init(position: .forRoot, nodeId: .forRoot(raw))
+    // These checks ensure the safety of the unchecked arithmetic operations in 'advancedBySibling(_:)'.
+    precondition(raw.totalLength.utf8Length <= UInt32.max, "too long")
+    precondition(raw.totalNodes <= UInt32.max, "too many nodes")
+    return AbsoluteSyntaxInfo(
+      offset: 0,
+      layoutIndexInParent: 0,
+      indexInTree: 0
+    )
   }
 }

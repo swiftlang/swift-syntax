@@ -31,25 +31,6 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
     /// When traversing the syntax tree using a depth-first traversal, the index at which the node will be visited.
     let indexInTree: UInt32
 
-    /// Assuming that this index points to the start of `raw`, advance it so that it points to the next sibling of
-    /// `raw`.
-    func advancedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
-      let newIndexInTree = self.indexInTree + UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
-      return .init(indexInTree: newIndexInTree)
-    }
-
-    /// Assuming that this index points to the next sibling of `raw`, reverse it so that it points to the start of
-    /// `raw`.
-    func reversedBy(_ raw: RawSyntax?) -> SyntaxIndexInTree {
-      let newIndexInTree = self.indexInTree - UInt32(truncatingIfNeeded: raw?.totalNodes ?? 0)
-      return .init(indexInTree: newIndexInTree)
-    }
-
-    func advancedToFirstChild() -> SyntaxIndexInTree {
-      let newIndexInTree = self.indexInTree + 1
-      return .init(indexInTree: newIndexInTree)
-    }
-
     init(indexInTree: UInt32) {
       self.indexInTree = indexInTree
     }
@@ -79,28 +60,6 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
   /// Unique value for a node within its own tree.
   public let indexInTree: SyntaxIndexInTree
 
-  /// Returns the `UInt` that is used as the root ID for the given raw syntax node.
-  private static func rootId(of raw: RawSyntax) -> UInt {
-    return UInt(bitPattern: raw.pointer.unsafeRawPointer)
-  }
-
-  func advancedBySibling(_ raw: RawSyntax?) -> SyntaxIdentifier {
-    let newIndexInTree = indexInTree.advancedBy(raw)
-    return SyntaxIdentifier(rootId: self.rootId, indexInTree: newIndexInTree)
-  }
-
-  func advancedToFirstChild() -> SyntaxIdentifier {
-    let newIndexInTree = self.indexInTree.advancedToFirstChild()
-    return SyntaxIdentifier(rootId: self.rootId, indexInTree: newIndexInTree)
-  }
-
-  static func forRoot(_ raw: RawSyntax) -> SyntaxIdentifier {
-    return SyntaxIdentifier(
-      rootId: Self.rootId(of: raw),
-      indexInTree: SyntaxIndexInTree(indexInTree: 0)
-    )
-  }
-
   /// Forms a ``SyntaxIdentifier`` from an ``SyntaxIdentifier/SyntaxIndexInTree`` inside a ``Syntax`` node that
   /// constitutes the tree's root.
   ///
@@ -118,14 +77,11 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
     _ indexInTree: SyntaxIndexInTree,
     relativeToRoot root: some SyntaxProtocol
   ) -> SyntaxIdentifier? {
-    guard !root.hasParent else {
-      return nil
-    }
-    guard indexInTree.indexInTree < SyntaxIndexInTree(indexInTree: 0).advancedBy(root.raw).indexInTree else {
+    guard !root.hasParent, Int(truncatingIfNeeded: indexInTree.indexInTree) < root.raw.totalNodes else {
       return nil
     }
 
-    return SyntaxIdentifier(rootId: Self.rootId(of: root.raw), indexInTree: indexInTree)
+    return SyntaxIdentifier(rootId: UInt(rawID: root.raw.id), indexInTree: indexInTree)
   }
 
   /// A ``SyntaxIdentifier`` compares less than another ``SyntaxIdentifier`` if the node at that identifier occurs first

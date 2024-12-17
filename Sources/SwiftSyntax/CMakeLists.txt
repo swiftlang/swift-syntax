@@ -8,7 +8,6 @@
 
 add_swift_syntax_library(SwiftSyntax
   AbsolutePosition.swift
-  AbsoluteRawSyntax.swift
   AbsoluteSyntaxInfo.swift
   Assert.swift
   BumpPtrAllocator.swift
@@ -31,7 +30,6 @@ add_swift_syntax_library(SwiftSyntax
   SyntaxCollection.swift
   SyntaxHashable.swift
   SyntaxIdentifier.swift
-  SyntaxNodeFactory.swift
   SyntaxNodeStructure.swift
   SyntaxProtocol.swift
   SyntaxText.swift

@@ -10,26 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
-#ifndef SWIFTSYNTAX_STDIO_H
-#define SWIFTSYNTAX_STDIO_H
+#ifndef SWIFTSYNTAX_BRIDGING_H
+#define SWIFTSYNTAX_BRIDGING_H
 
-#include "_bridging.h"
+#if __has_attribute(swift_name)
+#define SWIFT_NAME_S(NAME) __attribute__((swift_name(NAME)))
+#else
+#define SWIFT_NAME_S(NAME)
+#endif
 
-#include <stdio.h>
-
-SWIFT_NAME_S("getter:_stdout()")
-static inline FILE *swiftsyntax_stdout(void) {
-  return stdout;
-}
-
-SWIFT_NAME_S("getter:_stdin()")
-static inline FILE *swiftsyntax_stdin(void) {
-  return stdin;
-}
-
-SWIFT_NAME_S("getter:_stderr()")
-static inline FILE *swiftsyntax_stderr(void) {
-  return stderr;
-}
-
-#endif // SWIFTSYNTAX_STDIO_H
+#endif // SWIFTSYNTAX_BRIDGING_H

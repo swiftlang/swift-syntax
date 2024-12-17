@@ -1,7 +1,11 @@
 module _SwiftSyntaxCShims {
   header "_includes.h"
-  header "AtomicBool.h"
+  header "Atomics.h"
+  header "PlatformMutex.h"
   header "swiftsyntax_errno.h"
   header "swiftsyntax_stdio.h"
+
+  textual header "_bridging.h"
+
   export *
 }

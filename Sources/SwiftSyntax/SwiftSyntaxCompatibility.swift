@@ -326,6 +326,30 @@ extension EffectSpecifiersSyntax {
   }
 }
 
+extension GenericArgumentSyntax {
+  @_disfavoredOverload
+  @available(*, deprecated, message: "use GenericArgumentSyntax.Argument for 'argument'")
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeArgument: UnexpectedNodesSyntax? = nil,
+    argument: some TypeSyntaxProtocol,
+    _ unexpectedBetweenArgumentAndTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingComma: TokenSyntax? = nil,
+    _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeArgument,
+      argument: .type(TypeSyntax(argument)),
+      unexpectedBetweenArgumentAndTrailingComma,
+      trailingComma: trailingComma,
+      unexpectedAfterTrailingComma,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
 extension FunctionEffectSpecifiersSyntax {
   @_disfavoredOverload
   @available(*, deprecated, message: "use throwsClause instead of throwsSpecifier")

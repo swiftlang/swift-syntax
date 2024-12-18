@@ -3039,8 +3039,50 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
 
 // MARK: - FunctionCallExprSyntax
 
+/// A function or method call expression.
+///
+/// This type represents function calls in Swift syntax, with support for labeled arguments and trailing closures. Function calls have three main parts:
+/// - The called expression (like a function name or method reference)
+/// - Parenthesized arguments (which may be labeled)
+/// - Optional trailing closures
+///
+/// Example creating a simple function call:
+/// ```swift
+/// let call = FunctionCallExprSyntax(
+///   calledExpression: DeclReferenceExprSyntax(baseName: "print"),
+///   leftParen: .leftParenToken(),
+///   arguments: LabeledExprListSyntax([
+///     LabeledExprSyntax(
+///       expression: StringLiteralExprSyntax(content: "Hello")
+///     )
+///   ]),
+///   rightParen: .rightParenToken()
+/// )
+/// ```
+///
+/// Example creating a function call with labeled arguments:
+/// ```swift
+/// let call = FunctionCallExprSyntax(
+///   calledExpression: DeclReferenceExprSyntax(baseName: "String"),
+///   leftParen: .leftParenToken(),
+///   arguments: LabeledExprListSyntax {
+///     LabeledExprSyntax(
+///       label: .identifier("localized"),
+///       colon: .colonToken(),
+///       expression: keyExpr
+///     )
+///     LabeledExprSyntax(
+///       label: .identifier("defaultValue"),
+///       colon: .colonToken(),
+///       expression: defaultExpr
+///     )
+///   },
+///   rightParen: .rightParenToken()
+/// )
+/// ```
+///
 /// ### Children
-/// 
+///
 ///  - `calledExpression`: ``ExprSyntax``
 ///  - `leftParen`: `(`?
 ///  - `arguments`: ``LabeledExprListSyntax``
@@ -3050,6 +3092,13 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
 public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  /// Internal initializer used by swift-syntax to create function calls from existing syntax nodes.
+  ///
+  /// This initializer is not intended for direct use when creating function calls programmatically.
+  /// Instead, use the main initializer that accepts individual components.
+  ///
+  /// - Parameters:
+  ///   - node: An existing syntax node to convert. Must be of kind `.functionCallExpr`.
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .functionCallExpr else {
       return nil
@@ -3057,9 +3106,36 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
     self._syntaxNode = node._syntaxNode
   }
 
+  /// Creates a new function call expression with the given components.
+  ///
+  /// Example:
+  /// ```swift
+  /// let call = FunctionCallExprSyntax(
+  ///   calledExpression: DeclReferenceExprSyntax(baseName: "print"),
+  ///   leftParen: .leftParenToken(),
+  ///   arguments: LabeledExprListSyntax([
+  ///     LabeledExprSyntax(expression: valueExpr)
+  ///   ]),
+  ///   rightParen: .rightParenToken()
+  /// )
+  /// ```
+  ///
   /// - Parameters:
-  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node's first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - unexpectedBeforeCalledExpression: Used internally by swift-syntax to handle malformed source code. When creating expressions programmatically, you should pass nil.
+  ///   - calledExpression: The expression being called (usually a reference to a function or method).
+  ///   - unexpectedBetweenCalledExpressionAndLeftParen: Used internally by swift-syntax to handle malformed source code. When creating expressions programmatically, you should pass nil.
+  ///   - leftParen: The opening parenthesis token, created using `.leftParenToken()`.
+  ///   - unexpectedBetweenLeftParenAndArguments: Used internally by swift-syntax to handle malformed source code. When creating expressions programmatically, you should pass nil.
+  ///   - arguments: The list of arguments to the function.
+  ///   - unexpectedBetweenArgumentsAndRightParen: Used internally by swift-syntax to handle malformed source code. When creating expressions programmatically, you should pass nil.
+  ///   - rightParen: The closing parenthesis token, created using `.rightParenToken()`.
+  ///   - unexpectedBetweenRightParenAndTrailingClosure: Used internally by swift-syntax to handle malformed source code. When creating expressions programmatically, you should pass nil.
+  ///   - trailingClosure: An optional trailing closure argument.
+  ///   - unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: Used internally by swift-syntax to handle malformed source code. When creating expressions programmatically, you should pass nil.
+  ///   - additionalTrailingClosures: Additional trailing closure arguments.
+  ///   - unexpectedAfterAdditionalTrailingClosures: Used internally by swift-syntax to handle malformed source code. When creating expressions programmatically, you should pass nil.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node's last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil,

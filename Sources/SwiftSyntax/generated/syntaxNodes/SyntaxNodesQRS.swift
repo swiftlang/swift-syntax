@@ -2277,16 +2277,31 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 
 // MARK: - StringSegmentSyntax
 
-/// A literal segment inside a string segment.
-/// 
-/// - SeeAlso: ``ExpressionSegmentSyntax``
+/// A string literal segment that represents plain text content within a string literal expression.
+///
+/// Used to construct string literals programmatically, especially in macros that need to generate or manipulate string content. For example, in a string literal `"Hello \(name)"`, the `"Hello "` part would be represented by a `StringSegmentSyntax`.
+///
+/// Creating a string segment requires special attention to use `.stringSegment()` for the content token to ensure proper formatting. For example, when creating a simple string segment:
+/// ```swift
+/// let segment = StringSegmentSyntax(content: .stringSegment("Hello World"))
+/// ```
+///
+/// This type is commonly used in macros for:
+/// - Creating and validating string literals at compile time (e.g., URL validation)
+/// - Building string-based error messages and diagnostics
+/// - Generating code that contains string literals
+/// - Constructing string interpolations
+///
+/// Important: When creating a string segment from a string literal, always use `.stringSegment(string)` rather than just passing the string directly. Using the raw string will create an identifier token instead of a string segment token, which can lead to formatting issues.
+///
+/// - SeeAlso: ``ExpressionSegmentSyntax`` for segments containing string interpolations
 ///
 /// ### Children
-/// 
+///
 ///  - `content`: `<stringSegment>`
 ///
 /// ### Contained in
-/// 
+///
 ///  - ``SimpleStringLiteralSegmentListSyntax``
 ///  - ``StringLiteralSegmentListSyntax``
 public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
@@ -2299,9 +2314,23 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     self._syntaxNode = node._syntaxNode
   }
 
+  /// Creates a new string segment with the given content and optional trivia.
+  ///
+  /// Example:
+  /// ```swift
+  /// let stringLiteral = StringLiteralExprSyntax(
+  ///   openingQuote: .stringQuoteToken(),
+  ///   segments: StringLiteralSegmentListSyntax([.stringSegment(.stringSegment("Some Text"))]),
+  ///   closingQuote: .stringQuoteToken()
+  /// )
+  /// ```
+  ///
   /// - Parameters:
-  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node's first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - unexpectedBeforeContent: Used internally by swift-syntax to handle malformed source code. When creating string segments programmatically, you should pass nil.
+  ///   - content: The string content token, created using `.stringSegment("your string")`
+  ///   - unexpectedAfterContent: Used internally by swift-syntax to handle malformed source code. When creating string segments programmatically, you should pass nil.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node's last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeContent: UnexpectedNodesSyntax? = nil,

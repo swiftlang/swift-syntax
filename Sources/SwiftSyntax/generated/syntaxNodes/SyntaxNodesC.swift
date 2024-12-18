@@ -31,6 +31,11 @@ public struct _CanImportExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
@@ -236,6 +241,11 @@ public struct _CanImportVersionInfoSyntax: ExprSyntaxProtocol, SyntaxHashable, _
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
@@ -413,6 +423,11 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
@@ -583,6 +598,11 @@ public struct CatchItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
@@ -749,6 +769,11 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   /// - Parameters:
@@ -1093,6 +1118,11 @@ public struct ClassRestrictionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _L
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
@@ -1170,6 +1200,11 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   /// - Parameters:
@@ -1344,6 +1379,11 @@ public struct ClosureCaptureSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   /// - Parameters:
@@ -1529,6 +1569,11 @@ public struct ClosureCaptureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
@@ -1706,6 +1751,11 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   /// - Parameters:
@@ -1907,6 +1957,11 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - leftParen: The '(' to open the parameter clause.
@@ -2091,6 +2146,11 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   /// - Parameters:
@@ -2452,6 +2512,11 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable, _
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
@@ -2655,6 +2720,11 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   /// - Parameters:
@@ -3017,6 +3087,11 @@ public struct CodeBlockItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - item: The underlying node inside the code block.
@@ -3149,6 +3224,11 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   /// - Parameters:
@@ -3329,6 +3409,11 @@ public struct CompositionTypeElementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
@@ -3435,6 +3520,11 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   /// - Parameters:
@@ -3686,6 +3776,11 @@ public struct ConditionElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
@@ -3801,6 +3896,11 @@ public struct ConformanceRequirementSyntax: SyntaxProtocol, SyntaxHashable, _Lea
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   /// - Parameters:
@@ -3941,6 +4041,11 @@ public struct ConsumeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
@@ -4053,6 +4158,11 @@ public struct ContinueStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtS
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   /// - Parameters:
@@ -4177,6 +4287,11 @@ public struct ConventionAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   /// - Parameters:
@@ -4388,6 +4503,11 @@ public struct ConventionWitnessMethodAttributeArgumentsSyntax: SyntaxProtocol, S
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - witnessMethodLabel: The `witnessMethod` label.
@@ -4539,6 +4659,11 @@ public struct CopyExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   /// - Parameters:

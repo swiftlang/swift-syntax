@@ -31,6 +31,11 @@ public struct AccessorDeclListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.accessorDeclList
 }
 
@@ -51,6 +56,11 @@ public struct ArrayElementListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.arrayElementList
@@ -193,6 +203,11 @@ public struct AttributeListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.attributeList
 }
 
@@ -217,6 +232,11 @@ public struct AvailabilityArgumentListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.availabilityArgumentList
 }
 
@@ -237,6 +257,11 @@ public struct CatchClauseListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.catchClauseList
@@ -261,6 +286,11 @@ public struct CatchItemListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.catchItemList
 }
 
@@ -283,6 +313,11 @@ public struct ClosureCaptureListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.closureCaptureList
 }
 
@@ -303,6 +338,11 @@ public struct ClosureParameterListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.closureParameterList
@@ -340,6 +380,11 @@ public struct ClosureShorthandParameterListSyntax: SyntaxCollection, SyntaxHasha
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.closureShorthandParameterList
 }
 
@@ -367,6 +412,11 @@ public struct CodeBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.codeBlockItemList
 }
 
@@ -387,6 +437,11 @@ public struct CompositionTypeElementListSyntax: SyntaxCollection, SyntaxHashable
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.compositionTypeElementList
@@ -411,6 +466,11 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.conditionElementList
@@ -457,6 +517,11 @@ public struct DeclModifierListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.declModifierList
 }
 
@@ -477,6 +542,11 @@ public struct DeclNameArgumentListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.declNameArgumentList
@@ -501,6 +571,11 @@ public struct DesignatedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.designatedTypeList
 }
 
@@ -523,6 +598,11 @@ public struct DictionaryElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.dictionaryElementList
 }
 
@@ -543,6 +623,11 @@ public struct DifferentiabilityArgumentListSyntax: SyntaxCollection, SyntaxHasha
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.differentiabilityArgumentList
@@ -569,6 +654,11 @@ public struct DocumentationAttributeArgumentListSyntax: SyntaxCollection, Syntax
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.documentationAttributeArgumentList
 }
 
@@ -591,6 +681,11 @@ public struct EffectsAttributeArgumentListSyntax: SyntaxCollection, SyntaxHashab
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.effectsAttributeArgumentList
@@ -617,6 +712,11 @@ public struct EnumCaseElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.enumCaseElementList
 }
 
@@ -637,6 +737,11 @@ public struct EnumCaseParameterListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.enumCaseParameterList
@@ -661,6 +766,11 @@ public struct ExprListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.exprList
@@ -696,6 +806,11 @@ public struct FunctionParameterListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.functionParameterList
 }
 
@@ -716,6 +831,11 @@ public struct GenericArgumentListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.genericArgumentList
@@ -740,6 +860,11 @@ public struct GenericParameterListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.genericParameterList
 }
 
@@ -760,6 +885,11 @@ public struct GenericRequirementListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.genericRequirementList
@@ -784,6 +914,11 @@ public struct IfConfigClauseListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.ifConfigClauseList
 }
 
@@ -804,6 +939,11 @@ public struct ImportPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.importPathComponentList
@@ -828,6 +968,11 @@ public struct InheritedTypeListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.inheritedTypeList
 }
 
@@ -850,6 +995,11 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.keyPathComponentList
@@ -881,6 +1031,11 @@ public struct LabeledExprListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.labeledExprList
 }
 
@@ -904,6 +1059,11 @@ public struct LifetimeSpecifierArgumentListSyntax: SyntaxCollection, SyntaxHasha
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.lifetimeSpecifierArgumentList
 }
 
@@ -925,6 +1085,11 @@ public struct MemberBlockItemListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.memberBlockItemList
@@ -952,6 +1117,11 @@ public struct MultipleTrailingClosureElementListSyntax: SyntaxCollection, Syntax
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.multipleTrailingClosureElementList
 }
 
@@ -972,6 +1142,11 @@ public struct ObjCSelectorPieceListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.objCSelectorPieceList
@@ -996,6 +1171,11 @@ public struct PatternBindingListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.patternBindingList
 }
 
@@ -1017,6 +1197,11 @@ public struct PlatformVersionItemListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.platformVersionItemList
@@ -1153,6 +1338,11 @@ public struct PrecedenceGroupAttributeListSyntax: SyntaxCollection, SyntaxHashab
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.precedenceGroupAttributeList
 }
 
@@ -1173,6 +1363,11 @@ public struct PrecedenceGroupNameListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.precedenceGroupNameList
@@ -1197,6 +1392,11 @@ public struct PrimaryAssociatedTypeListSyntax: SyntaxCollection, SyntaxHashable 
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.primaryAssociatedTypeList
 }
 
@@ -1219,6 +1419,11 @@ public struct SimpleStringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHash
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.simpleStringLiteralSegmentList
@@ -1394,6 +1599,11 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.specializeAttributeArgumentList
 }
 
@@ -1500,6 +1710,11 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.stringLiteralSegmentList
 }
 
@@ -1520,6 +1735,11 @@ public struct SwitchCaseItemListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.switchCaseItemList
@@ -1623,6 +1843,11 @@ public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.switchCaseList
 }
 
@@ -1647,6 +1872,11 @@ public struct TuplePatternElementListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.tuplePatternElementList
 }
 
@@ -1668,6 +1898,11 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.tupleTypeElementList
@@ -1792,6 +2027,11 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.typeSpecifierList
 }
 
@@ -1810,6 +2050,11 @@ public struct UnexpectedNodesSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.unexpectedNodes
@@ -1834,6 +2079,11 @@ public struct VersionComponentListSyntax: SyntaxCollection, SyntaxHashable {
     self._syntaxNode = node._syntaxNode
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   public static let syntaxKind = SyntaxKind.versionComponentList
 }
 
@@ -1854,6 +2104,11 @@ public struct YieldedExpressionListSyntax: SyntaxCollection, SyntaxHashable {
       return nil
     }
     self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
   }
 
   public static let syntaxKind = SyntaxKind.yieldedExpressionList

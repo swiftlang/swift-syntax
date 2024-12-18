@@ -454,6 +454,28 @@ extension Syntax {
   }
 }
 
+/// A type-erased expression node in the Swift syntax tree.
+///
+/// This type provides a common API for working with any kind of Swift expression. It can represent various expression types like:
+/// - Function calls (`print("Hello")`)
+/// - Literals (`42`, `true`, `"text"`)
+/// - Member access (`object.property`)
+/// - Operators (`a + b`)
+/// - And many more
+///
+/// Example converting a specific expression type to ExprSyntax:
+/// ```swift
+/// let specificExpr = StringLiteralExprSyntax(content: "Hello")
+/// let genericExpr = ExprSyntax(specificExpr)
+/// ```
+///
+/// Example checking and converting back to a specific type:
+/// ```swift
+/// if let stringLiteral = expr.as(StringLiteralExprSyntax.self) {
+///   // Work with the specific string literal expression
+/// }
+/// ```
+///
 /// ### Subtypes
 /// 
 /// - ``ArrayExprSyntax``
@@ -509,7 +531,10 @@ extension Syntax {
 public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 
-  /// Create a ``ExprSyntax`` node from a specialized syntax node.
+  /// Creates a type-erased expression from a specialized expression syntax node.
+  ///
+  /// - Parameters:
+  ///   - syntax: The specialized expression node to convert to a generic ExprSyntax.
   public init(_ syntax: __shared some ExprSyntaxProtocol) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
@@ -517,7 +542,10 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self = Syntax(syntax).cast(Self.self)
   }
 
-  /// Create a ``ExprSyntax`` node from a specialized optional syntax node.
+  /// Creates an optional type-erased expression from an optional specialized expression syntax node.
+  ///
+  /// - Parameters:
+  ///   - syntax: The optional specialized expression node to convert to a generic ExprSyntax.
   public init?(_ syntax: __shared (some ExprSyntaxProtocol)?) {
     guard let syntax = syntax else {
       return nil
@@ -525,6 +553,10 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self.init(syntax)
   }
 
+  /// Creates a type-erased expression from an expression protocol type.
+  ///
+  /// - Parameters:
+  ///   - syntax: The expression protocol type to convert to a generic ExprSyntax.
   public init(fromProtocol syntax: __shared ExprSyntaxProtocol) {
     // We know this cast is going to succeed. Go through init(_: SyntaxData)
     // to do a sanity check and verify the kind matches in debug builds and get
@@ -532,7 +564,10 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self = Syntax(syntax).cast(Self.self)
   }
 
-  /// Create a ``ExprSyntax`` node from a specialized optional syntax node.
+  /// Creates an optional type-erased expression from an optional expression protocol type.
+  ///
+  /// - Parameters:
+  ///   - syntax: The optional expression protocol type to convert to a generic ExprSyntax.
   public init?(fromProtocol syntax: __shared ExprSyntaxProtocol?) {
     guard let syntax = syntax else {
       return nil
@@ -540,6 +575,12 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
     self.init(fromProtocol: syntax)
   }
 
+  /// Creates a type-erased expression from any syntax node that represents an expression.
+  ///
+  /// This initializer succeeds only for syntax nodes that represent valid Swift expressions.
+  ///
+  /// - Parameters:
+  ///   - node: The syntax node to convert. Must be one of the supported expression kinds.
   public init?(_ node: __shared some SyntaxProtocol) {
     switch node.raw.kind {
     case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, ._canImportExpr, ._canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .doExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .simpleStringLiteralExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:

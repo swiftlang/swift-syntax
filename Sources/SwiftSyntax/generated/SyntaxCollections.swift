@@ -855,12 +855,42 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.keyPathComponentList
 }
 
+/// A list of labeled expressions used in function calls, macro expansions, and other contexts where arguments can have labels.
+///
+/// This collection represents a list of expressions that may have labels, such as function call arguments or macro parameters.
+///
+/// Example of creating a list of labeled arguments:
+/// ```swift
+/// let arguments = LabeledExprListSyntax {
+///   LabeledExprSyntax(
+///     label: .identifier("localized"),
+///     colon: .colonToken(),
+///     expression: stringLiteral
+///   )
+///   LabeledExprSyntax(
+///     label: .identifier("defaultValue"),
+///     colon: .colonToken(),
+///     expression: defaultValueLiteral
+///   )
+/// }
+/// ```
+///
+/// Example of creating a function call with labeled arguments:
+/// ```swift
+/// let functionCall = FunctionCallExprSyntax(
+///   calledExpression: ExprSyntax(name),
+///   leftParen: .leftParenToken(),
+///   arguments: arguments,
+///   rightParen: .rightParenToken()
+/// )
+/// ```
+///
 /// ### Children
-/// 
+///
 /// ``LabeledExprSyntax`` `*`
 ///
 /// ### Contained in
-/// 
+///
 ///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 ///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/expressions``
 ///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/arguments``
@@ -874,6 +904,21 @@ public struct LabeledExprListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  /// Creates a list of labeled expressions from a syntax node.
+  ///
+  /// Example:
+  /// ```swift
+  /// let arguments = LabeledExprListSyntax {
+  ///   LabeledExprSyntax(
+  ///     label: .identifier("name"),
+  ///     colon: .colonToken(),
+  ///     expression: nameExpr
+  ///   )
+  /// }
+  /// ```
+  ///
+  /// - Parameters:
+  ///   - node: The syntax node to create the list from. Must be of kind `.labeledExprList`.
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .labeledExprList else {
       return nil

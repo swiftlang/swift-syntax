@@ -2307,6 +2307,13 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  /// Internal initializer used by swift-syntax to create string segments from existing syntax nodes.
+  ///
+  /// This initializer is not intended for direct use when creating string segments programmatically.
+  /// Instead, use the main initializer that accepts individual components.
+  ///
+  /// - Parameters:
+  ///   - node: An existing syntax node to convert. Must be of kind `.stringSegment`.
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .stringSegment else {
       return nil

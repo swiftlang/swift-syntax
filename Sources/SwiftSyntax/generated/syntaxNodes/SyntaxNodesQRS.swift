@@ -2292,7 +2292,7 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 /// - Generating code that contains string literals
 /// - Constructing string interpolations
 ///
-/// Important: When creating a string segment from a string literal, always use `.stringSegment(string)` rather than just passing the string directly. Using the raw string will create an identifier token instead of a string segment token, which can lead to formatting issues.
+/// - Important: When creating a string segment from a string literal, always use `.stringSegment(string)` rather than just passing the string directly. Using the raw string will create an identifier token instead of a string segment token, which can lead to formatting issues.
 ///
 /// - SeeAlso: ``ExpressionSegmentSyntax`` for segments containing string interpolations
 ///

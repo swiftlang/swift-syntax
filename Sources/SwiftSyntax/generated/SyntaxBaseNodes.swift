@@ -469,7 +469,7 @@ extension Syntax {
 /// let genericExpr = ExprSyntax(specificExpr)
 /// ```
 ///
-/// Example checking and converting back to a specific type:
+/// Example casting a `ExprSyntax` to a more specific `StringLiteralExprSyntax`
 /// ```swift
 /// if let stringLiteral = expr.as(StringLiteralExprSyntax.self) {
 ///   // Work with the specific string literal expression

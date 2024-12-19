@@ -1506,9 +1506,10 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
 
     /// Creates a new Element wrapping a string segment.
     ///
-    /// This initializer is used when adding literal text content to a string literal. The string segment should be created using `.stringSegment()` to ensure proper formatting.
+/// This initializer is used when adding literal text content to a string literal. The string segment’s content token should be created using `.stringSegment()` to ensure proper formatting.
     ///
-    /// Example from warning macro:
+    /// ### Example
+    /// To create a string literal `"warning: invalid configuration"`
     /// ```swift
     /// let element = StringLiteralSegmentListSyntax.Element(
     ///   StringSegmentSyntax(content: .stringSegment("warning: invalid configuration"))
@@ -1525,7 +1526,8 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
     ///
     /// This initializer is used when adding interpolated expressions to a string literal.
     ///
-    /// Example from diagnostic message:
+    /// ### Example
+    /// To create a string interpolation segment containing `\(errorValue)`
     /// ```swift
     /// let element = StringLiteralSegmentListSyntax.Element(
     ///   ExpressionSegmentSyntax(

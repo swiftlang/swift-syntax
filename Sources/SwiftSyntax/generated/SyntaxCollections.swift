@@ -855,6 +855,34 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
   public static let syntaxKind = SyntaxKind.keyPathComponentList
 }
 
+/// A list of labeled expressions used in function calls, macro expansions, and other contexts where arguments can have labels.
+///
+/// This collection represents a list of expressions that may have labels, such as function call arguments or macro parameters.
+///
+/// ### Examples
+/// ```swift
+/// let arguments = LabeledExprListSyntax {
+///   LabeledExprSyntax(
+///     label: .identifier("localized"),
+///     colon: .colonToken(),
+///     expression: stringLiteral
+///   )
+///   LabeledExprSyntax(
+///     label: .identifier("defaultValue"),
+///     colon: .colonToken(),
+///     expression: defaultValueLiteral
+///   )
+/// }
+/// ```
+///
+/// let functionCall = FunctionCallExprSyntax(
+///   calledExpression: ExprSyntax(name),
+///   leftParen: .leftParenToken(),
+///   arguments: arguments,
+///   rightParen: .rightParenToken()
+/// )
+/// ```
+///
 /// ### Children
 /// 
 /// ``LabeledExprSyntax`` `*`
@@ -874,6 +902,17 @@ public struct LabeledExprListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  /// Creates a list of labeled expressions from a syntax node.
+  ///
+  /// ### Example
+  /// ```swift
+  /// if let list = LabeledExprListSyntax(someNode) {
+  ///   // Process the labeled expressions
+  /// }
+  /// ```
+  ///
+  /// - Parameters:
+  ///   - node: The syntax node to convert. Returns nil if the node is not of kind `.labeledExprList`.
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .labeledExprList else {
       return nil
@@ -1397,6 +1436,25 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
   public static let syntaxKind = SyntaxKind.specializeAttributeArgumentList
 }
 
+/// A collection of string literal segments representing both plain text and interpolated expressions.
+/// 
+/// Represents the contents of a string literal by storing a sequence of segments. Each segment in the collection is either a text segment for static string content or an expression segment for interpolations.
+/// For example, in the string literal `"Hello \(name)"`, the collection contains a text segment for `"Hello "` followed by an expression segment for `\(name)`.
+/// 
+/// ### Examples
+/// ```swift
+/// let segments = StringLiteralSegmentListSyntax([
+///   .stringSegment(.init(content: .stringSegment("Hello "))),
+///   .expressionSegment(/* interpolation expression */)
+/// ])
+/// 
+/// let stringLiteral = StringLiteralExprSyntax(
+///   openingQuote: .stringQuoteToken(),
+///   segments: segments,
+///   closingQuote: .stringQuoteToken()
+/// )
+/// ```
+///
 /// ### Children
 /// 
 /// (``StringSegmentSyntax`` | ``ExpressionSegmentSyntax``) `*`
@@ -1405,12 +1463,33 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
 /// 
 ///  - ``StringLiteralExprSyntax``.``StringLiteralExprSyntax/segments``
 public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
+  /// Represents either a literal string segment or an interpolated expression segment within a string literal.
+  ///
+  /// This enum handles the two possible types of segments that can appear in a string literal:
+  /// - Plain text segments (like `"Hello "` in `"Hello \(name)"`)
+  /// - Expression segments (like `\(name)` in `"Hello \(name)"`)
+  ///
+  /// ### Examples
+  /// ```swift
+  /// let segments = StringLiteralSegmentListSyntax([
+  ///   .stringSegment(.init(content: .stringSegment("Hello "))),
+  ///   .expressionSegment(.init(
+  ///     leftParen: .leftParenToken(),
+  ///     expressions: ExprListSyntax([ExprSyntax("name")]),
+  ///     rightParen: .rightParenToken()
+  ///   ))
+  /// ])
+  /// ```
   public enum Element: SyntaxChildChoices, SyntaxHashable {
-    /// A literal segment inside a string segment.
+    /// A literal text segment inside a string literal.
+    /// 
+    /// This case represents static text content like `"Hello "` in `"Hello \(name)"`.
     /// 
     /// - SeeAlso: ``ExpressionSegmentSyntax``
     case stringSegment(StringSegmentSyntax)
-    /// An interpolated expression inside a string literal.
+    /// An interpolated expression segment inside a string literal.
+    /// 
+    /// This case represents interpolated expressions like `\(name)` in `"Hello \(name)"`.
     /// 
     /// - SeeAlso: ``StringSegmentSyntax``
     case expressionSegment(ExpressionSegmentSyntax)
@@ -1424,14 +1503,60 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
       }
     }
 
+    /// Creates a new Element wrapping a string segment.
+    ///
+    /// This initializer is used when adding literal text content to a string literal. The string segment's content token should be created using `.stringSegment()` to ensure proper formatting.
+    ///
+    /// ### Examples
+    /// ```swift
+    /// let element = StringLiteralSegmentListSyntax.Element(
+    ///   StringSegmentSyntax(content: .stringSegment("warning: invalid configuration"))
+    /// )
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - node: The string segment to wrap in this element.
     public init(_ node: StringSegmentSyntax) {
       self = .stringSegment(node)
     }
 
+    /// Creates a new Element wrapping an expression segment.
+    ///
+    /// This initializer is used when adding interpolated expressions to a string literal.
+    ///
+    /// ### Example
+    /// To create a string interpolation segment containing `\(errorValue)`
+    /// ```swift
+    /// let element = StringLiteralSegmentListSyntax.Element(
+    ///   ExpressionSegmentSyntax(
+    ///     expressions: ExprListSyntax([
+    ///       ExprSyntax("errorValue")
+    ///     ])
+    ///   )
+    /// )
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - node: The expression segment to wrap in this element.
     public init(_ node: ExpressionSegmentSyntax) {
       self = .expressionSegment(node)
     }
 
+    /// Creates a new Element from a syntax node.
+    ///
+    /// ### Examples
+    /// ```swift
+    /// guard
+    ///   let stringLiteral = node.as(StringLiteralExprSyntax.self),
+    ///   let firstSegment = stringLiteral.segments.first,
+    ///   case .stringSegment(let segment) = firstSegment
+    /// else {
+    ///   throw CustomError.message("Expected string literal")
+    /// }
+    /// ```
+    ///
+    /// - Parameters:
+    ///   - node: The syntax node to convert. Returns nil if node is neither a StringSegmentSyntax nor an ExpressionSegmentSyntax.
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(StringSegmentSyntax.self) {
         self = .stringSegment(node)
@@ -1493,6 +1618,21 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
 
   public let _syntaxNode: Syntax
 
+  /// Creates a list of string literal segments from a syntax node.
+  ///
+  /// ### Example
+  /// ```swift
+  /// let stringLiteral = StringLiteralExprSyntax(
+  ///   openingQuote: .stringQuoteToken(),
+  ///   segments: StringLiteralSegmentListSyntax([
+  ///     .stringSegment(.init(content: .stringSegment("Hello")))
+  ///   ]),
+  ///   closingQuote: .stringQuoteToken()
+  /// )
+  /// ```
+  ///
+  /// - Parameters:
+  ///   - node: The syntax node to convert. Returns nil if the node is not of kind `.stringLiteralSegmentList`.
   public init?(_ node: some SyntaxProtocol) {
     guard node.raw.kind == .stringLiteralSegmentList else {
       return nil

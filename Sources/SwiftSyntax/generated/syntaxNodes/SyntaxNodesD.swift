@@ -605,6 +605,27 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 
 // MARK: - DeclReferenceExprSyntax
 
+/// An expression that refers to a declaration by name, such as a reference to a function, type, or variable.
+/// 
+/// This type represents references to declarations in Swift code, commonly used when building syntax for:
+/// - Function and type references
+/// - Variable and property references
+/// - Special declarations like `self`, `Self`, and `init`
+/// 
+/// ### Examples
+/// ```swift
+/// // Creating a reference to a type
+/// let stringReference = DeclReferenceExprSyntax(baseName: "String")
+/// 
+/// // Using a reference in a function call
+/// let functionCall = FunctionCallExprSyntax(
+///   calledExpression: DeclReferenceExprSyntax(baseName: "print"),
+///   leftParen: .leftParenToken(),
+///   arguments: arguments,
+///   rightParen: .rightParenToken()
+/// )
+/// ```
+///
 /// ### Children
 /// 
 ///  - `baseName`: (`<identifier>` | `self` | `Self` | `init` | `deinit` | `subscript` | `<dollarIdentifier>` | `<binaryOperator>` | `<integerLiteral>`)
@@ -620,6 +641,13 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  /// Internal initializer used by swift-syntax to create declaration references from existing syntax nodes.
+  ///
+  /// This initializer is not intended for direct use when creating declaration references programmatically.
+  /// Instead, use the main initializer that accepts individual components.
+  ///
+  /// - Parameters:
+  ///   - node: An existing syntax node to convert. Must be of kind `.declReferenceExpr`.
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .declReferenceExpr else {
       return nil
@@ -627,9 +655,24 @@ public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     self._syntaxNode = node._syntaxNode
   }
 
+  /// Creates a new declaration reference with the given base name and optional components.
+  ///
+  /// ### Example
+  /// To create a reference to a declaration:
+  /// ```swift
+  /// let reference = DeclReferenceExprSyntax(
+  ///   baseName: .identifier("String")
+  /// )
+  /// ```
+  ///
   /// - Parameters:
-  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node's first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - unexpectedBeforeBaseName: Used internally by swift-syntax to handle malformed source code. When creating expressions programmatically, you should pass nil.
+  ///   - baseName: The name of the declaration being referenced.
+  ///   - unexpectedBetweenBaseNameAndArgumentNames: Used internally by swift-syntax to handle malformed source code. When creating expressions programmatically, you should pass nil.
+  ///   - argumentNames: Optional argument labels when referring to specific function overloads.
+  ///   - unexpectedAfterArgumentNames: Used internally by swift-syntax to handle malformed source code. When creating expressions programmatically, you should pass nil.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node's last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeBaseName: UnexpectedNodesSyntax? = nil,

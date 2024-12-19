@@ -861,7 +861,9 @@ public let EXPR_NODES: [Node] = [
     base: .syntax,
     nameForDiagnostics: nil,
     documentation: """
-      An interpolated expression inside a string literal.
+      An interpolated expression segment inside a string literal.
+      
+      This case represents interpolated expressions like `\\(name)` in `"Hello \\(name)"`.
 
       - SeeAlso: ``StringSegmentSyntax``
       """,
@@ -935,6 +937,48 @@ public let EXPR_NODES: [Node] = [
     kind: .functionCallExpr,
     base: .expr,
     nameForDiagnostics: "function call",
+    documentation: """
+      A function or method call expression.
+
+      This type represents function calls in Swift syntax, with support for labeled arguments and trailing closures. Function calls have three main parts:
+      - The called expression (like a function name or method reference)
+      - Parenthesized arguments (which may be labeled)
+      - Optional trailing closures
+
+      ### Examples
+      ```swift
+      // Creating a simple function call
+      let call = FunctionCallExprSyntax(
+        calledExpression: DeclReferenceExprSyntax(baseName: "print"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(
+            expression: StringLiteralExprSyntax(content: "Hello")
+          )
+        ]),
+        rightParen: .rightParenToken()
+      )
+
+      // Creating a function call with labeled arguments
+      let call = FunctionCallExprSyntax(
+        calledExpression: DeclReferenceExprSyntax(baseName: "String"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(
+            label: .identifier("localized"),
+            colon: .colonToken(),
+            expression: keyExpr
+          ),
+          LabeledExprSyntax(
+            label: .identifier("defaultValue"),
+            colon: .colonToken(),
+            expression: defaultExpr
+          )
+        ]),
+        rightParen: .rightParenToken()
+      )
+      ```
+      """,
     children: [
       Child(
         name: "calledExpression",
@@ -983,6 +1027,28 @@ public let EXPR_NODES: [Node] = [
     kind: .declReferenceExpr,
     base: .expr,
     nameForDiagnostics: nil,
+    documentation: """
+      An expression that refers to a declaration by name, such as a reference to a function, type, or variable.
+
+      This type represents references to declarations in Swift code, commonly used when building syntax for:
+      - Function and type references
+      - Variable and property references
+      - Special declarations like `self`, `Self`, and `init`
+
+      ### Examples
+      ```swift
+      // Creating a reference to a type
+      let stringReference = DeclReferenceExprSyntax(baseName: "String")
+
+      // Using a reference in a function call
+      let functionCall = FunctionCallExprSyntax(
+        calledExpression: DeclReferenceExprSyntax(baseName: "print"),
+        leftParen: .leftParenToken(),
+        arguments: arguments,
+        rightParen: .rightParenToken()
+      )
+      ```
+      """,
     children: [
       Child(
         name: "baseName",
@@ -1721,6 +1787,26 @@ public let EXPR_NODES: [Node] = [
     kind: .stringLiteralSegmentList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
+    documentation: """
+      A collection of string literal segments representing both plain text and interpolated expressions.
+
+      Represents the contents of a string literal by storing a sequence of segments. Each segment in the collection is either a text segment for static string content or an expression segment for interpolations.
+      For example, in the string literal `"Hello \\(name)"`, the collection contains a text segment for `"Hello "` followed by an expression segment for `\\(name)`.
+
+      ### Examples
+      ```swift
+      let segments = StringLiteralSegmentListSyntax([
+        .stringSegment(.init(content: .stringSegment("Hello "))),
+        .expressionSegment(/* interpolation expression */)
+      ])
+
+      let stringLiteral = StringLiteralExprSyntax(
+        openingQuote: .stringQuoteToken(),
+        segments: segments,
+        closingQuote: .stringQuoteToken()
+      )
+      ```
+      """,
     elementChoices: [.stringSegment, .expressionSegment]
   ),
 
@@ -1761,8 +1847,10 @@ public let EXPR_NODES: [Node] = [
     base: .syntax,
     nameForDiagnostics: nil,
     documentation: """
-      A literal segment inside a string segment.
-
+      A literal text segment inside a string literal.
+      
+      This case represents static text content like `"Hello "` in `"Hello \\(name)"`.
+      
       - SeeAlso: ``ExpressionSegmentSyntax``
       """,
     children: [
@@ -2071,11 +2159,37 @@ public let EXPR_NODES: [Node] = [
     base: .syntax,
     nameForDiagnostics: nil,
     documentation: """
-      An expression that is prefixed by a label.
+      An expression with an optional label and colon, used in function calls, tuple elements, and macro arguments.
 
-      For example, labeled expressions occur in
-      - Function calls, where the label is the parameter label.
-      - Tuples, where the label is the name of the tuple element.
+      This type represents labeled expressions in Swift syntax, commonly used for:
+      - Function call arguments with parameter labels
+      - Tuple elements with names
+      - Macro arguments with labels
+
+      ### Examples
+      ```swift
+      // Creating a labeled argument
+      let labeledArg = LabeledExprSyntax(
+        label: .identifier("localized"),
+        colon: .colonToken(),
+        expression: stringLiteral
+      )
+
+      // Creating a list of labeled arguments
+      let arguments = LabeledExprListSyntax([
+        LabeledExprSyntax(
+          label: .identifier("name"),
+          colon: .colonToken(),
+          expression: nameExpr
+        ),
+        LabeledExprSyntax(
+          label: .identifier("value"),
+          colon: .colonToken(),
+          expression: valueExpr,
+          trailingComma: .commaToken()
+        )
+      ])
+      ```
       """,
     traits: [
       "WithTrailingComma"

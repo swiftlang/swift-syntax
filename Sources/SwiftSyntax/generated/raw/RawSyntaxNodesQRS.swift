@@ -1345,11 +1345,15 @@ public struct RawStringLiteralExprSyntax: RawExprSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawStringLiteralSegmentListSyntax: RawSyntaxNodeProtocol {
   public enum Element: RawSyntaxNodeProtocol {
-    /// A literal segment inside a string segment.
+    /// A literal text segment inside a string literal.
+    /// 
+    /// This case represents static text content like `"Hello "` in `"Hello \(name)"`.
     /// 
     /// - SeeAlso: ``ExpressionSegmentSyntax``
     case stringSegment(RawStringSegmentSyntax)
-    /// An interpolated expression inside a string literal.
+    /// An interpolated expression segment inside a string literal.
+    /// 
+    /// This case represents interpolated expressions like `\(name)` in `"Hello \(name)"`.
     /// 
     /// - SeeAlso: ``StringSegmentSyntax``
     case expressionSegment(RawExpressionSegmentSyntax)

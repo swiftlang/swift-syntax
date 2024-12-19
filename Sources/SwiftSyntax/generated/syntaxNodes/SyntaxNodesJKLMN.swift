@@ -788,11 +788,37 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable, _
 
 // MARK: - LabeledExprSyntax
 
-/// An expression that is prefixed by a label.
+/// An expression with an optional label and colon, used in function calls, tuple elements, and macro arguments.
 /// 
-/// For example, labeled expressions occur in
-/// - Function calls, where the label is the parameter label.
-/// - Tuples, where the label is the name of the tuple element.
+/// This type represents labeled expressions in Swift syntax, commonly used for:
+/// - Function call arguments with parameter labels
+/// - Tuple elements with names
+/// - Macro arguments with labels
+/// 
+/// ### Examples
+/// ```swift
+/// // Creating a labeled argument
+/// let labeledArg = LabeledExprSyntax(
+///   label: .identifier("localized"),
+///   colon: .colonToken(),
+///   expression: stringLiteral
+/// )
+/// 
+/// // Creating a list of labeled arguments
+/// let arguments = LabeledExprListSyntax([
+///   LabeledExprSyntax(
+///     label: .identifier("name"),
+///     colon: .colonToken(),
+///     expression: nameExpr
+///   ),
+///   LabeledExprSyntax(
+///     label: .identifier("value"),
+///     colon: .colonToken(),
+///     expression: valueExpr,
+///     trailingComma: .commaToken()
+///   )
+/// ])
+/// ```
 ///
 /// ### Children
 /// 
@@ -807,6 +833,13 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable, _
 public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  /// Internal initializer used by swift-syntax to create labeled expressions from existing syntax nodes.
+  ///
+  /// This initializer is not intended for direct use when creating labeled expressions programmatically.
+  /// Instead, use the main initializer that accepts individual components.
+  ///
+  /// - Parameters:
+  ///   - node: The syntax node to convert. Returns nil if the node is not of kind `.labeledExpr`.
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .labeledExpr else {
       return nil
@@ -814,9 +847,30 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
     self._syntaxNode = node._syntaxNode
   }
 
+  /// Creates a new labeled expression with the given components.
+  ///
+  /// ### Example
+  /// To create a labeled argument for a function call:
+  /// ```swift
+  /// let argument = LabeledExprSyntax(
+  ///   label: .identifier("defaultValue"),
+  ///   colon: .colonToken(),
+  ///   expression: stringLiteral
+  /// )
+  /// ```
+  ///
   /// - Parameters:
-  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node's first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - unexpectedBeforeLabel: Used internally by swift-syntax to handle malformed source code. When creating expressions programmatically, you should pass nil.
+  ///   - label: The optional label for this expression, created using `.identifier()` for named labels or `._` for unnamed ones.
+  ///   - unexpectedBetweenLabelAndColon: Used internally by swift-syntax to handle malformed source code. When creating expressions programmatically, you should pass nil.
+  ///   - colon: The colon token that follows the label, created using `.colonToken()`.
+  ///   - unexpectedBetweenColonAndExpression: Used internally by swift-syntax to handle malformed source code. When creating expressions programmatically, you should pass nil.
+  ///   - expression: The expression being labeled.
+  ///   - unexpectedBetweenExpressionAndTrailingComma: Used internally by swift-syntax to handle malformed source code. When creating expressions programmatically, you should pass nil.
+  ///   - trailingComma: An optional trailing comma, useful when this expression is part of a list.
+  ///   - unexpectedAfterTrailingComma: Used internally by swift-syntax to handle malformed source code. When creating expressions programmatically, you should pass nil.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node's last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeLabel: UnexpectedNodesSyntax? = nil,

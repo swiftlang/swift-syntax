@@ -2277,9 +2277,27 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 
 // MARK: - StringSegmentSyntax
 
-/// A literal segment inside a string segment.
+/// A string literal segment that represents plain text content within a string literal expression.
 /// 
-/// - SeeAlso: ``ExpressionSegmentSyntax``
+/// In a string literal `"Hello \(name)"`, the `"Hello "` part is represented by a `StringSegmentSyntax`, while `\(name)` is represented by an `ExpressionSegmentSyntax`.
+/// 
+/// Creating a string segment requires special attention to use `.stringSegment()` for the content token to ensure proper formatting.
+/// 
+/// ### Examples
+/// ```swift
+/// let segment = StringSegmentSyntax(content: .stringSegment("Hello World"))
+/// 
+/// let stringLiteral = StringLiteralExprSyntax(
+///   openingQuote: .stringQuoteToken(),
+///   segments: StringLiteralSegmentListSyntax([.stringSegment(segment)]),
+///   closingQuote: .stringQuoteToken()
+/// )
+/// ```
+/// 
+/// - Important: When creating a string segment from a string literal, always use `.stringSegment(string)` rather than just passing the string directly. Using the raw string will create an identifier token instead of a string segment token, which can lead to formatting issues.
+/// 
+/// - SeeAlso: ``ExpressionSegmentSyntax`` for segments containing string interpolations
+/// 
 ///
 /// ### Children
 /// 
@@ -2292,6 +2310,13 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
+  /// Internal initializer used by swift-syntax to create string segments from existing syntax nodes.
+  ///
+  /// This initializer is not intended for direct use when creating string segments programmatically.
+  /// Instead, use the main initializer that accepts individual components.
+  ///
+  /// - Parameters:
+  ///   - node: An existing syntax node to convert. Returns nil if the node is not of kind `.stringSegment`.
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .stringSegment else {
       return nil
@@ -2299,9 +2324,23 @@ public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
     self._syntaxNode = node._syntaxNode
   }
 
+  /// Creates a new string segment with the given content and optional trivia.
+  ///
+  /// ### Example
+  /// ```swift
+  /// let stringLiteral = StringLiteralExprSyntax(
+  ///   openingQuote: .stringQuoteToken(),
+  ///   segments: StringLiteralSegmentListSyntax([.stringSegment(.stringSegment("Some Text"))]),
+  ///   closingQuote: .stringQuoteToken()
+  /// )
+  /// ```
+  ///
   /// - Parameters:
-  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node's first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - unexpectedBeforeContent: Used internally by swift-syntax to handle malformed source code. When creating string segments programmatically, you should pass nil.
+  ///   - content: The string content token, created using `.stringSegment("your string")` to ensure proper formatting.
+  ///   - unexpectedAfterContent: Used internally by swift-syntax to handle malformed source code. When creating string segments programmatically, you should pass nil.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node's last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeContent: UnexpectedNodesSyntax? = nil,

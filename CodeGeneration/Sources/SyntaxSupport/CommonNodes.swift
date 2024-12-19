@@ -184,6 +184,28 @@ public let COMMON_NODES: [Node] = [
     kind: .expr,
     base: .syntax,
     nameForDiagnostics: "expression",
+    documentation: """
+      A type-erased expression node in the Swift syntax tree.
+
+      This type provides a common API for working with any kind of Swift expression. It can represent various expression types like:
+      - Function calls (`print("Hello")`)
+      - Literals (`42`, `true`, `"text"`)
+      - Member access (`object.property`)
+      - Operators (`a + b`)
+      - And many more
+
+      ### Examples
+      ```swift
+      // Converting a specific expression type to ExprSyntax
+      let specificExpr = StringLiteralExprSyntax(content: "Hello")
+      let genericExpr = ExprSyntax(specificExpr)
+
+      // Casting ExprSyntax to a more specific StringLiteralExprSyntax
+      if let stringLiteral = expr.as(StringLiteralExprSyntax.self) {
+        // Work with the specific string literal expression
+      }
+      ```  
+      """,
     parserFunction: "parseExpression"
   ),
 

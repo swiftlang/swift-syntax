@@ -213,7 +213,7 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       )
       changes.append(FixIt.MultiNodeChange.makeMissing(misplacedTokens, transferTrivia: false))
     } else {
-      changes += misplacedTokens.map { FixIt.MultiNodeChange.makeMissing($0) }
+      changes += [.makeMissing(misplacedTokens)]
       changes += correctAndMissingNodes.map { FixIt.MultiNodeChange.makePresent($0) }
     }
     var fixIts: [FixIt] = []

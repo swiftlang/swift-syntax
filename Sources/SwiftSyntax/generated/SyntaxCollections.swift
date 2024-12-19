@@ -1482,9 +1482,9 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
   /// ```
   public enum Element: SyntaxChildChoices, SyntaxHashable {
     /// A literal text segment inside a string literal.
-    ///
+    /// 
     /// This case represents static text content like `"Hello "` in `"Hello \(name)"`.
-    ///
+    /// 
     /// - SeeAlso: ``ExpressionSegmentSyntax``
     case stringSegment(StringSegmentSyntax)
     /// An interpolated expression segment inside a string literal.

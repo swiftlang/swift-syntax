@@ -789,12 +789,12 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable, _
 // MARK: - LabeledExprSyntax
 
 /// An expression with an optional label and colon, used in function calls, tuple elements, and macro arguments.
-///
+/// 
 /// This type represents labeled expressions in Swift syntax, commonly used for:
 /// - Function call arguments with parameter labels
 /// - Tuple elements with names
 /// - Macro arguments with labels
-///
+/// 
 /// ### Examples
 /// ```swift
 /// // Creating a labeled argument
@@ -803,7 +803,7 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable, _
 ///   colon: .colonToken(),
 ///   expression: stringLiteral
 /// )
-///
+/// 
 /// // Creating a list of labeled arguments
 /// let arguments = LabeledExprListSyntax([
 ///   LabeledExprSyntax(

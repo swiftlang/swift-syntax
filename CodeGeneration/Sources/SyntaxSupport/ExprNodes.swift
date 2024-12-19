@@ -862,7 +862,7 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: nil,
     documentation: """
       An interpolated expression segment inside a string literal.
-
+      
       This case represents interpolated expressions like `\\(name)` in `"Hello \\(name)"`.
 
       - SeeAlso: ``StringSegmentSyntax``
@@ -1847,27 +1847,11 @@ public let EXPR_NODES: [Node] = [
     base: .syntax,
     nameForDiagnostics: nil,
     documentation: """
-      A string literal segment that represents plain text content within a string literal expression.
+      A literal text segment inside a string literal.
       
-      In a string literal `"Hello \\(name)"`, the `"Hello "` part is represented by a `StringSegmentSyntax`, while `\\(name)` is represented by an `ExpressionSegmentSyntax`.
+      This case represents static text content like `"Hello "` in `"Hello \\(name)"`.
       
-      Creating a string segment requires special attention to use `.stringSegment()` for the content token to ensure proper formatting.
-      
-      ### Examples
-      ```swift
-      let segment = StringSegmentSyntax(content: .stringSegment("Hello World"))
-      
-      let stringLiteral = StringLiteralExprSyntax(
-        openingQuote: .stringQuoteToken(),
-        segments: StringLiteralSegmentListSyntax([.stringSegment(segment)]),
-        closingQuote: .stringQuoteToken()
-      )
-      ```
-      
-      - Important: When creating a string segment from a string literal, always use `.stringSegment(string)` rather than just passing the string directly. Using the raw string will create an identifier token instead of a string segment token, which can lead to formatting issues.
-
-      - SeeAlso: ``ExpressionSegmentSyntax`` for segments containing string interpolations
-
+      - SeeAlso: ``ExpressionSegmentSyntax``
       """,
     children: [
       Child(
@@ -2175,11 +2159,37 @@ public let EXPR_NODES: [Node] = [
     base: .syntax,
     nameForDiagnostics: nil,
     documentation: """
-      An expression that is prefixed by a label.
+      An expression with an optional label and colon, used in function calls, tuple elements, and macro arguments.
 
-      For example, labeled expressions occur in
-      - Function calls, where the label is the parameter label.
-      - Tuples, where the label is the name of the tuple element.
+      This type represents labeled expressions in Swift syntax, commonly used for:
+      - Function call arguments with parameter labels
+      - Tuple elements with names
+      - Macro arguments with labels
+
+      ### Examples
+      ```swift
+      // Creating a labeled argument
+      let labeledArg = LabeledExprSyntax(
+        label: .identifier("localized"),
+        colon: .colonToken(),
+        expression: stringLiteral
+      )
+
+      // Creating a list of labeled arguments
+      let arguments = LabeledExprListSyntax([
+        LabeledExprSyntax(
+          label: .identifier("name"),
+          colon: .colonToken(),
+          expression: nameExpr
+        ),
+        LabeledExprSyntax(
+          label: .identifier("value"),
+          colon: .colonToken(),
+          expression: valueExpr,
+          trailingComma: .commaToken()
+        )
+      ])
+      ```
       """,
     traits: [
       "WithTrailingComma"

@@ -1798,7 +1798,9 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _L
 
 // MARK: - ExpressionSegmentSyntax
 
-/// An interpolated expression inside a string literal.
+/// An interpolated expression segment inside a string literal.
+/// 
+/// This case represents interpolated expressions like `\(name)` in `"Hello \(name)"`.
 /// 
 /// - SeeAlso: ``StringSegmentSyntax``
 ///

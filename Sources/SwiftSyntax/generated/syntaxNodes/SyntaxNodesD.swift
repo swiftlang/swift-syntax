@@ -606,17 +606,17 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 // MARK: - DeclReferenceExprSyntax
 
 /// An expression that refers to a declaration by name, such as a reference to a function, type, or variable.
-///
+/// 
 /// This type represents references to declarations in Swift code, commonly used when building syntax for:
 /// - Function and type references
 /// - Variable and property references
 /// - Special declarations like `self`, `Self`, and `init`
-///
+/// 
 /// ### Examples
 /// ```swift
 /// // Creating a reference to a type
 /// let stringReference = DeclReferenceExprSyntax(baseName: "String")
-///
+/// 
 /// // Using a reference in a function call
 /// let functionCall = FunctionCallExprSyntax(
 ///   calledExpression: DeclReferenceExprSyntax(baseName: "print"),
@@ -627,12 +627,12 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 /// ```
 ///
 /// ### Children
-///
+/// 
 ///  - `baseName`: (`<identifier>` | `self` | `Self` | `init` | `deinit` | `subscript` | `<dollarIdentifier>` | `<binaryOperator>` | `<integerLiteral>`)
 ///  - `argumentNames`: ``DeclNameArgumentsSyntax``?
 ///
 /// ### Contained in
-///
+/// 
 ///  - ``DynamicReplacementAttributeArgumentsSyntax``.``DynamicReplacementAttributeArgumentsSyntax/declName``
 ///  - ``ImplementsAttributeArgumentsSyntax``.``ImplementsAttributeArgumentsSyntax/declName``
 ///  - ``KeyPathPropertyComponentSyntax``.``KeyPathPropertyComponentSyntax/declName``

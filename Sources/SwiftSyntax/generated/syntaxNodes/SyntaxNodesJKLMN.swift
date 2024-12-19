@@ -821,14 +821,14 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable, _
 /// ```
 ///
 /// ### Children
-///
+/// 
 ///  - `label`: (`<identifier>` | `_`)?
 ///  - `colon`: `:`?
 ///  - `expression`: ``ExprSyntax``
 ///  - `trailingComma`: `,`?
 ///
 /// ### Contained in
-///
+/// 
 ///  - ``LabeledExprListSyntax``
 public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax

@@ -884,11 +884,11 @@ public struct KeyPathComponentListSyntax: SyntaxCollection, SyntaxHashable {
 /// ```
 ///
 /// ### Children
-///
+/// 
 /// ``LabeledExprSyntax`` `*`
 ///
 /// ### Contained in
-///
+/// 
 ///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
 ///  - ``ExpressionSegmentSyntax``.``ExpressionSegmentSyntax/expressions``
 ///  - ``FunctionCallExprSyntax``.``FunctionCallExprSyntax/arguments``
@@ -1437,17 +1437,17 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
 }
 
 /// A collection of string literal segments representing both plain text and interpolated expressions.
-///
+/// 
 /// Represents the contents of a string literal by storing a sequence of segments. Each segment in the collection is either a text segment for static string content or an expression segment for interpolations.
 /// For example, in the string literal `"Hello \(name)"`, the collection contains a text segment for `"Hello "` followed by an expression segment for `\(name)`.
-///
+/// 
 /// ### Examples
 /// ```swift
 /// let segments = StringLiteralSegmentListSyntax([
 ///   .stringSegment(.init(content: .stringSegment("Hello "))),
 ///   .expressionSegment(/* interpolation expression */)
 /// ])
-///
+/// 
 /// let stringLiteral = StringLiteralExprSyntax(
 ///   openingQuote: .stringQuoteToken(),
 ///   segments: segments,
@@ -1456,11 +1456,11 @@ public struct SpecializeAttributeArgumentListSyntax: SyntaxCollection, SyntaxHas
 /// ```
 ///
 /// ### Children
-///
+/// 
 /// (``StringSegmentSyntax`` | ``ExpressionSegmentSyntax``) `*`
 ///
 /// ### Contained in
-///
+/// 
 ///  - ``StringLiteralExprSyntax``.``StringLiteralExprSyntax/segments``
 public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
   /// Represents either a literal string segment or an interpolated expression segment within a string literal.
@@ -1487,11 +1487,10 @@ public struct StringLiteralSegmentListSyntax: SyntaxCollection, SyntaxHashable {
     ///
     /// - SeeAlso: ``ExpressionSegmentSyntax``
     case stringSegment(StringSegmentSyntax)
-
     /// An interpolated expression segment inside a string literal.
-    ///
+    /// 
     /// This case represents interpolated expressions like `\(name)` in `"Hello \(name)"`.
-    ///
+    /// 
     /// - SeeAlso: ``StringSegmentSyntax``
     case expressionSegment(ExpressionSegmentSyntax)
 

@@ -3040,12 +3040,12 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
 // MARK: - FunctionCallExprSyntax
 
 /// A function or method call expression.
-///
+/// 
 /// This type represents function calls in Swift syntax, with support for labeled arguments and trailing closures. Function calls have three main parts:
 /// - The called expression (like a function name or method reference)
 /// - Parenthesized arguments (which may be labeled)
 /// - Optional trailing closures
-///
+/// 
 /// ### Examples
 /// ```swift
 /// // Creating a simple function call
@@ -3059,7 +3059,7 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
 ///   ]),
 ///   rightParen: .rightParenToken()
 /// )
-///
+/// 
 /// // Creating a function call with labeled arguments
 /// let call = FunctionCallExprSyntax(
 ///   calledExpression: DeclReferenceExprSyntax(baseName: "String"),
@@ -3081,7 +3081,7 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
 /// ```
 ///
 /// ### Children
-///
+/// 
 ///  - `calledExpression`: ``ExprSyntax``
 ///  - `leftParen`: `(`?
 ///  - `arguments`: ``LabeledExprListSyntax``

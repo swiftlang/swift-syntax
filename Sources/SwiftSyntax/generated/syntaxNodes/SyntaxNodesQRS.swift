@@ -2278,32 +2278,33 @@ public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 // MARK: - StringSegmentSyntax
 
 /// A string literal segment that represents plain text content within a string literal expression.
-///
+/// 
 /// In a string literal `"Hello \(name)"`, the `"Hello "` part is represented by a `StringSegmentSyntax`, while `\(name)` is represented by an `ExpressionSegmentSyntax`.
-///
+/// 
 /// Creating a string segment requires special attention to use `.stringSegment()` for the content token to ensure proper formatting.
-///
+/// 
 /// ### Examples
 /// ```swift
 /// let segment = StringSegmentSyntax(content: .stringSegment("Hello World"))
-///
+/// 
 /// let stringLiteral = StringLiteralExprSyntax(
 ///   openingQuote: .stringQuoteToken(),
 ///   segments: StringLiteralSegmentListSyntax([.stringSegment(segment)]),
 ///   closingQuote: .stringQuoteToken()
 /// )
 /// ```
-///
+/// 
 /// - Important: When creating a string segment from a string literal, always use `.stringSegment(string)` rather than just passing the string directly. Using the raw string will create an identifier token instead of a string segment token, which can lead to formatting issues.
-///
+/// 
 /// - SeeAlso: ``ExpressionSegmentSyntax`` for segments containing string interpolations
+/// 
 ///
 /// ### Children
-///
+/// 
 ///  - `content`: `<stringSegment>`
 ///
 /// ### Contained in
-///
+/// 
 ///  - ``SimpleStringLiteralSegmentListSyntax``
 ///  - ``StringLiteralSegmentListSyntax``
 public struct StringSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {

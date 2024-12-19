@@ -3046,8 +3046,9 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
 /// - Parenthesized arguments (which may be labeled)
 /// - Optional trailing closures
 ///
-/// Example creating a simple function call:
+/// ### Examples
 /// ```swift
+/// // Creating a simple function call
 /// let call = FunctionCallExprSyntax(
 ///   calledExpression: DeclReferenceExprSyntax(baseName: "print"),
 ///   leftParen: .leftParenToken(),
@@ -3058,25 +3059,23 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
 ///   ]),
 ///   rightParen: .rightParenToken()
 /// )
-/// ```
 ///
-/// Example creating a function call with labeled arguments:
-/// ```swift
+/// // Creating a function call with labeled arguments
 /// let call = FunctionCallExprSyntax(
 ///   calledExpression: DeclReferenceExprSyntax(baseName: "String"),
 ///   leftParen: .leftParenToken(),
-///   arguments: LabeledExprListSyntax {
+///   arguments: LabeledExprListSyntax([
 ///     LabeledExprSyntax(
 ///       label: .identifier("localized"),
 ///       colon: .colonToken(),
 ///       expression: keyExpr
-///     )
+///     ),
 ///     LabeledExprSyntax(
 ///       label: .identifier("defaultValue"),
 ///       colon: .colonToken(),
 ///       expression: defaultExpr
 ///     )
-///   },
+///   ]),
 ///   rightParen: .rightParenToken()
 /// )
 /// ```
@@ -3108,7 +3107,8 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
 
   /// Creates a new function call expression with the given components.
   ///
-  /// Example:
+  /// ### Example
+  /// To create a simple function call:
   /// ```swift
   /// let call = FunctionCallExprSyntax(
   ///   calledExpression: DeclReferenceExprSyntax(baseName: "print"),

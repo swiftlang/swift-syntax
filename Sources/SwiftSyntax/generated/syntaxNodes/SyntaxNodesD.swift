@@ -612,13 +612,12 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 /// - Variable and property references
 /// - Special declarations like `self`, `Self`, and `init`
 ///
-/// Example creating a simple reference to a type:
+/// ### Examples
 /// ```swift
+/// // Creating a reference to a type
 /// let stringReference = DeclReferenceExprSyntax(baseName: "String")
-/// ```
 ///
-/// Example using a declaration reference in a function call:
-/// ```swift
+/// // Using a reference in a function call
 /// let functionCall = FunctionCallExprSyntax(
 ///   calledExpression: DeclReferenceExprSyntax(baseName: "print"),
 ///   leftParen: .leftParenToken(),
@@ -658,7 +657,8 @@ public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 
   /// Creates a new declaration reference with the given base name and optional components.
   ///
-  /// Example creating a reference to a type:
+  /// ### Example
+  /// To create a reference to a declaration:
   /// ```swift
   /// let reference = DeclReferenceExprSyntax(
   ///   baseName: .identifier("String")

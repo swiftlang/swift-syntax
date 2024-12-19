@@ -463,19 +463,18 @@ extension Syntax {
 /// - Operators (`a + b`)
 /// - And many more
 ///
-/// Example converting a specific expression type to ExprSyntax:
+/// ### Examples
 /// ```swift
+/// // Converting a specific expression type to ExprSyntax
 /// let specificExpr = StringLiteralExprSyntax(content: "Hello")
 /// let genericExpr = ExprSyntax(specificExpr)
-/// ```
 ///
-/// Example casting a `ExprSyntax` to a more specific `StringLiteralExprSyntax`
-/// ```swift
+/// // Casting ExprSyntax to a more specific StringLiteralExprSyntax
 /// if let stringLiteral = expr.as(StringLiteralExprSyntax.self) {
 ///   // Work with the specific string literal expression
 /// }
 /// ```
-///
+/// 
 /// ### Subtypes
 /// 
 /// - ``ArrayExprSyntax``

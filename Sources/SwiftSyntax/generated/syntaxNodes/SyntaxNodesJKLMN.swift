@@ -795,30 +795,29 @@ public struct KeyPathSubscriptComponentSyntax: SyntaxProtocol, SyntaxHashable, _
 /// - Tuple elements with names
 /// - Macro arguments with labels
 ///
-/// Example creating a labeled expression for a function call:
+/// ### Examples
 /// ```swift
+/// // Creating a labeled argument
 /// let labeledArg = LabeledExprSyntax(
 ///   label: .identifier("localized"),
 ///   colon: .colonToken(),
 ///   expression: stringLiteral
 /// )
-/// ```
 ///
-/// Example creating multiple labeled expressions in a list:
-/// ```swift
-/// let arguments = LabeledExprListSyntax {
+/// // Creating a list of labeled arguments
+/// let arguments = LabeledExprListSyntax([
 ///   LabeledExprSyntax(
 ///     label: .identifier("name"),
 ///     colon: .colonToken(),
 ///     expression: nameExpr
-///   )
+///   ),
 ///   LabeledExprSyntax(
 ///     label: .identifier("value"),
 ///     colon: .colonToken(),
 ///     expression: valueExpr,
 ///     trailingComma: .commaToken()
 ///   )
-/// }
+/// ])
 /// ```
 ///
 /// ### Children
@@ -840,7 +839,7 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
   /// Instead, use the main initializer that accepts individual components.
   ///
   /// - Parameters:
-  ///   - node: An existing syntax node to convert. Must be of kind `.labeledExpr`.
+  ///   - node: The syntax node to convert. Returns nil if the node is not of kind `.labeledExpr`.
   public init?(_ node: __shared some SyntaxProtocol) {
     guard node.raw.kind == .labeledExpr else {
       return nil
@@ -850,7 +849,8 @@ public struct LabeledExprSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
 
   /// Creates a new labeled expression with the given components.
   ///
-  /// Example creating a labeled string literal argument:
+  /// ### Example
+  /// To create a labeled argument for a function call:
   /// ```swift
   /// let argument = LabeledExprSyntax(
   ///   label: .identifier("defaultValue"),

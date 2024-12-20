@@ -108,14 +108,14 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   ///   - rawNodeArena: The arena in which `raw` is allocated. It is passed to
   ///     make sure the arena doesn’t get de-allocated before the ``Syntax``
   ///     has a chance to retain it.
-  static func forRoot(_ raw: RawSyntax, rawNodeArena: RetainedSyntaxArena) -> Syntax {
+  static func forRoot(_ raw: RawSyntax, rawNodeArena: RetainedRawSyntaxArena) -> Syntax {
     precondition(rawNodeArena == raw.arenaReference)
     let arena = SyntaxDataArena(raw: raw, rawNodeArena: rawNodeArena)
     return Self(arena: arena, dataRef: arena.root)
   }
 
-  static func forRoot(_ raw: RawSyntax, rawNodeArena: SyntaxArena) -> Syntax {
-    return forRoot(raw, rawNodeArena: RetainedSyntaxArena(rawNodeArena))
+  static func forRoot(_ raw: RawSyntax, rawNodeArena: RawSyntaxArena) -> Syntax {
+    return forRoot(raw, rawNodeArena: RetainedRawSyntaxArena(rawNodeArena))
   }
 
   /// References to the children data.
@@ -147,7 +147,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   ///   - allocationArena: The arena in which  new nodes should be allocated
   /// - Returns: A syntax tree with all parents where this node has been
   ///            replaced by `newRaw`
-  func replacingSelf(_ newRaw: RawSyntax, rawNodeArena: RetainedSyntaxArena, allocationArena: SyntaxArena) -> Syntax {
+  func replacingSelf(_ newRaw: RawSyntax, rawNodeArena: RetainedRawSyntaxArena, allocationArena: RawSyntaxArena) -> Syntax {
     precondition(newRaw.arenaReference == rawNodeArena)
     // If we have a parent already, then ask our current parent to copy itself
     // recursively up to the root.
@@ -180,8 +180,8 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   func replacingChild(
     at index: Int,
     with newChild: RawSyntax?,
-    rawNodeArena: RetainedSyntaxArena?,
-    allocationArena: SyntaxArena
+    rawNodeArena: RetainedRawSyntaxArena?,
+    allocationArena: RawSyntaxArena
   ) -> Syntax {
     precondition(newChild == nil || (rawNodeArena != nil && newChild!.arenaReference == rawNodeArena!))
     // After newRaw has been allocated in `allocationArena`, `rawNodeArena` will
@@ -190,28 +190,28 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     let newRaw = withExtendedLifetime(rawNodeArena) {
       raw.layoutView!.replacingChild(at: index, with: newChild, arena: allocationArena)
     }
-    return replacingSelf(newRaw, rawNodeArena: RetainedSyntaxArena(allocationArena), allocationArena: allocationArena)
+    return replacingSelf(newRaw, rawNodeArena: RetainedRawSyntaxArena(allocationArena), allocationArena: allocationArena)
   }
 
-  /// Same as `replacingChild(at:with:rawNodeArena:allocationArena:)` but takes a `__SyntaxArena` instead of a `RetainedSyntaxArena`.
+  /// Same as `replacingChild(at:with:rawNodeArena:allocationArena:)` but takes a `__RawSyntaxArena` instead of a `RetainedRawSyntaxArena`.
   func replacingChild(
     at index: Int,
     with newChild: RawSyntax?,
-    rawNodeArena: SyntaxArena?,
-    allocationArena: SyntaxArena
+    rawNodeArena: RawSyntaxArena?,
+    allocationArena: RawSyntaxArena
   ) -> Syntax {
     return self.replacingChild(
       at: index,
       with: newChild,
-      rawNodeArena: rawNodeArena.map(RetainedSyntaxArena.init),
+      rawNodeArena: rawNodeArena.map(RetainedRawSyntaxArena.init),
       allocationArena: allocationArena
     )
   }
 
-  /// Identical to `replacingChild(at: Int, with: RawSyntax?, arena: SyntaxArena)`
+  /// Identical to `replacingChild(at: Int, with: RawSyntax?, arena: RawSyntaxArena)`
   /// that ensures that the arena of`newChild` doesn’t get de-allocated before
   /// `newChild` has been addded to the result.
-  func replacingChild(at index: Int, with newChild: Syntax?, arena: SyntaxArena) -> Syntax {
+  func replacingChild(at index: Int, with newChild: Syntax?, arena: RawSyntaxArena) -> Syntax {
     return withExtendedLifetime(newChild) {
       return replacingChild(
         at: index,
@@ -222,25 +222,25 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     }
   }
 
-  func withLeadingTrivia(_ leadingTrivia: Trivia, arena: SyntaxArena) -> Syntax {
+  func withLeadingTrivia(_ leadingTrivia: Trivia, arena: RawSyntaxArena) -> Syntax {
     if let raw = raw.withLeadingTrivia(leadingTrivia, arena: arena) {
-      return replacingSelf(raw, rawNodeArena: RetainedSyntaxArena(arena), allocationArena: arena)
+      return replacingSelf(raw, rawNodeArena: RetainedRawSyntaxArena(arena), allocationArena: arena)
     } else {
       return self
     }
   }
 
-  func withTrailingTrivia(_ trailingTrivia: Trivia, arena: SyntaxArena) -> Syntax {
+  func withTrailingTrivia(_ trailingTrivia: Trivia, arena: RawSyntaxArena) -> Syntax {
     if let raw = raw.withTrailingTrivia(trailingTrivia, arena: arena) {
-      return replacingSelf(raw, rawNodeArena: RetainedSyntaxArena(arena), allocationArena: arena)
+      return replacingSelf(raw, rawNodeArena: RetainedRawSyntaxArena(arena), allocationArena: arena)
     } else {
       return self
     }
   }
 
-  func withPresence(_ presence: SourcePresence, arena: SyntaxArena) -> Syntax {
+  func withPresence(_ presence: SourcePresence, arena: RawSyntaxArena) -> Syntax {
     if let raw = raw.tokenView?.withPresence(presence, arena: arena) {
-      return replacingSelf(raw, rawNodeArena: RetainedSyntaxArena(arena), allocationArena: arena)
+      return replacingSelf(raw, rawNodeArena: RetainedRawSyntaxArena(arena), allocationArena: arena)
     } else {
       return self
     }
@@ -265,13 +265,13 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   }
 
   @_spi(RawSyntax)
-  public init(raw: RawSyntax, rawNodeArena: __shared RetainedSyntaxArena) {
+  public init(raw: RawSyntax, rawNodeArena: __shared RetainedRawSyntaxArena) {
     self = .forRoot(raw, rawNodeArena: rawNodeArena)
   }
 
   @_spi(RawSyntax)
-  public init(raw: RawSyntax, rawNodeArena: __shared SyntaxArena) {
-    self = .forRoot(raw, rawNodeArena: RetainedSyntaxArena(rawNodeArena))
+  public init(raw: RawSyntax, rawNodeArena: __shared RawSyntaxArena) {
+    self = .forRoot(raw, rawNodeArena: RetainedRawSyntaxArena(rawNodeArena))
   }
 
   /// Create a ``Syntax`` node from a specialized syntax node.
@@ -334,8 +334,8 @@ extension Syntax {
   }
 }
 
-typealias SyntaxDataReference = SyntaxArenaAllocatedPointer<SyntaxData>
-typealias SyntaxDataReferenceBuffer = SyntaxArenaAllocatedBufferPointer<SyntaxDataReference?>
+typealias SyntaxDataReference = ArenaAllocatedPointer<SyntaxData>
+typealias SyntaxDataReferenceBuffer = ArenaAllocatedBufferPointer<SyntaxDataReference?>
 
 /// Node data for a `Syntax`, allocated and managed by `SyntaxDataArena`.
 ///
@@ -364,12 +364,12 @@ final class SyntaxDataArena: @unchecked Sendable {
   private let allocator: BumpPtrAllocator
 
   /// Retaining reference to the arena of the _root_ ``RawSyntax``
-  private let rawArena: RetainedSyntaxArena
+  private let rawArena: RetainedRawSyntaxArena
 
   /// Root node.
   let root: SyntaxDataReference
 
-  init(raw: RawSyntax, rawNodeArena: RetainedSyntaxArena) {
+  init(raw: RawSyntax, rawNodeArena: RetainedRawSyntaxArena) {
     precondition(rawNodeArena == raw.arenaReference)
 
     self.mutex = PlatformMutex.create()

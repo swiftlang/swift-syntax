@@ -47,7 +47,7 @@ import Musl
 /// replacement character (`\u{FFFD}`).
 @_spi(RawSyntax)
 public struct SyntaxText: Sendable {
-  public typealias Buffer = SyntaxArenaAllocatedBufferPointer<UInt8>
+  public typealias Buffer = ArenaAllocatedBufferPointer<UInt8>
   var buffer: Buffer
 
   /// Construct a ``SyntaxText`` whose text is represented by the given `buffer`.

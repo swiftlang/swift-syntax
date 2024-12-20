@@ -171,7 +171,7 @@ public struct RawSyntaxTokenView: Sendable {
   /// Returns a ``RawSyntax`` node with the same source text but with the token
   /// kind changed to `newValue`.
   @_spi(RawSyntax)
-  public func withKind(_ newValue: TokenKind, arena: SyntaxArena) -> RawSyntax {
+  public func withKind(_ newValue: TokenKind, arena: RawSyntaxArena) -> RawSyntax {
     arena.addChild(self.raw.arenaReference)
     switch raw.rawData.payload {
     case .parsedToken(_):
@@ -198,7 +198,7 @@ public struct RawSyntaxTokenView: Sendable {
 
   /// Returns a ``RawSyntax`` node with the presence changed to `newValue`.
   @_spi(RawSyntax)
-  public func withPresence(_ newValue: SourcePresence, arena: SyntaxArena) -> RawSyntax {
+  public func withPresence(_ newValue: SourcePresence, arena: RawSyntaxArena) -> RawSyntax {
     arena.addChild(self.raw.arenaReference)
     switch raw.rawData.payload {
     case .parsedToken(var payload):
@@ -281,7 +281,7 @@ public struct RawSyntaxTokenView: Sendable {
   }
 
   @_spi(RawSyntax)
-  public func withTokenDiagnostic(tokenDiagnostic: TokenDiagnostic?, arena: SyntaxArena) -> RawTokenSyntax {
+  public func withTokenDiagnostic(tokenDiagnostic: TokenDiagnostic?, arena: RawSyntaxArena) -> RawTokenSyntax {
     arena.addChild(self.raw.arenaReference)
     switch raw.rawData.payload {
     case .parsedToken(var dat):

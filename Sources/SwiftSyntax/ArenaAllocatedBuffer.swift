@@ -11,22 +11,22 @@
 //===----------------------------------------------------------------------===//
 
 /// An `UnsafePointer` pointing into memory that was allocated by a
-/// ``SyntaxArena``.
+/// ``RawSyntaxArena``.
 ///
 /// Because the syntax arena will always outlive any syntax nodes that
 /// reference its contents, we know that the pointer's contents won't get
 /// deallocated while being accessed and thus we can add an unchecked `Sendable`
 /// conformance.
 @_spi(RawSyntax)
-public struct SyntaxArenaAllocatedPointer<Element: Sendable>: @unchecked Sendable {
+public struct ArenaAllocatedPointer<Element: Sendable>: @unchecked Sendable {
   private let pointer: UnsafePointer<Element>
 
   /// Create a pointer from an `UnsafePointer` that was allocated inside a
-  /// ``SyntaxArena``.
+  /// ``RawSyntaxArena``.
   ///
   /// - Important: The client needs to ensure sure that the buffer is indeed
-  ///   allocated by a ``SyntaxArena`` and that the ``SyntaxArena`` will outlive
-  ///   any users of this ``SyntaxArenaAllocatedBufferPointer``.
+  ///   allocated by a ``RawSyntaxArena`` and that the ``RawSyntaxArena`` will outlive
+  ///   any users of this ``ArenaAllocatedBufferPointer``.
   init(_ buffer: UnsafePointer<Element>) {
     self.pointer = buffer
   }
@@ -41,14 +41,14 @@ public struct SyntaxArenaAllocatedPointer<Element: Sendable>: @unchecked Sendabl
 }
 
 /// An `UnsafeBufferPointer` pointing into memory that was allocated by a
-/// ``SyntaxArena``.
+/// ``RawSyntaxArena``.
 ///
 /// Because the syntax arena will always outlive any syntax nodes that
 /// reference its contents, we know that the buffer's contents won't get
 /// deallocated while being accessed and thus we can add an unchecked `Sendable`
 /// conformance.
 @_spi(RawSyntax)
-public struct SyntaxArenaAllocatedBufferPointer<Element: Sendable>: RandomAccessCollection, @unchecked Sendable {
+public struct ArenaAllocatedBufferPointer<Element: Sendable>: RandomAccessCollection, @unchecked Sendable {
   private let buffer: UnsafeBufferPointer<Element>
 
   /// Create an empty buffer with no elements.
@@ -57,19 +57,19 @@ public struct SyntaxArenaAllocatedBufferPointer<Element: Sendable>: RandomAccess
   }
 
   /// Create a buffer pointer from an `UnsafeBufferPointer` that was allocated
-  /// inside a ``SyntaxArena``.
+  /// inside a ``RawSyntaxArena``.
   ///
   /// - Important: The client needs to ensure sure that the buffer is indeed
-  ///   allocated by a ``SyntaxArena`` and that the ``SyntaxArena`` will outlive
-  ///   any users of this ``SyntaxArenaAllocatedBufferPointer``.
+  ///   allocated by a ``RawSyntaxArena`` and that the ``RawSyntaxArena`` will outlive
+  ///   any users of this ``ArenaAllocatedBufferPointer``.
   public init(_ buffer: UnsafeBufferPointer<Element>) {
     self.buffer = buffer
   }
 
   public subscript<RangeType: RangeExpression<Int>>(
     range: RangeType
-  ) -> SyntaxArenaAllocatedBufferPointer<Element> {
-    return SyntaxArenaAllocatedBufferPointer(UnsafeBufferPointer(rebasing: self.buffer[range]))
+  ) -> ArenaAllocatedBufferPointer<Element> {
+    return ArenaAllocatedBufferPointer(UnsafeBufferPointer(rebasing: self.buffer[range]))
   }
 
   public subscript(_ index: Int) -> Element {

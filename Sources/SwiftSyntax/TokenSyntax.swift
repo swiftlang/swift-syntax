@@ -48,7 +48,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     trailingTrivia: Trivia = [],
     presence: SourcePresence
   ) {
-    let arena = SyntaxArena()
+    let arena = RawSyntaxArena()
     let raw = RawSyntax.makeMaterializedToken(
       kind: kind,
       leadingTrivia: leadingTrivia,
@@ -57,7 +57,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
       tokenDiagnostic: nil,
       arena: arena
     )
-    self = Syntax.forRoot(raw, rawNodeArena: RetainedSyntaxArena(arena)).cast(TokenSyntax.self)
+    self = Syntax.forRoot(raw, rawNodeArena: RetainedRawSyntaxArena(arena)).cast(TokenSyntax.self)
   }
 
   /// Whether the token is present or missing.
@@ -66,7 +66,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
       return tokenView.presence
     }
     set {
-      self = Syntax(self).withPresence(newValue, arena: SyntaxArena()).cast(TokenSyntax.self)
+      self = Syntax(self).withPresence(newValue, arena: RawSyntaxArena()).cast(TokenSyntax.self)
     }
   }
 
@@ -86,7 +86,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
       return tokenView.formLeadingTrivia()
     }
     set {
-      self = Syntax(self).withLeadingTrivia(newValue, arena: SyntaxArena()).cast(TokenSyntax.self)
+      self = Syntax(self).withLeadingTrivia(newValue, arena: RawSyntaxArena()).cast(TokenSyntax.self)
     }
   }
 
@@ -96,7 +96,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
       return tokenView.formTrailingTrivia()
     }
     set {
-      self = Syntax(self).withTrailingTrivia(newValue, arena: SyntaxArena()).cast(TokenSyntax.self)
+      self = Syntax(self).withTrailingTrivia(newValue, arena: RawSyntaxArena()).cast(TokenSyntax.self)
     }
   }
 
@@ -109,10 +109,10 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
       guard raw.kind == .token else {
         fatalError("TokenSyntax must have token as its raw")
       }
-      let arena = SyntaxArena()
+      let arena = RawSyntaxArena()
       let newRaw = tokenView.withKind(newValue, arena: arena)
       self = Syntax(self)
-        .replacingSelf(newRaw, rawNodeArena: RetainedSyntaxArena(arena), allocationArena: arena)
+        .replacingSelf(newRaw, rawNodeArena: RetainedRawSyntaxArena(arena), allocationArena: arena)
         .cast(TokenSyntax.self)
     }
   }

@@ -49,15 +49,15 @@ fileprivate func assertRawBytesLexeme(
 ) {
   XCTAssertEqual(lexeme.rawTokenKind, kind, file: file, line: line)
   leadingTrivia.withUnsafeBufferPointer { leadingTrivia in
-    let leadingTriviaText = SyntaxText(buffer: SyntaxArenaAllocatedBufferPointer(leadingTrivia))
+    let leadingTriviaText = SyntaxText(buffer: ArenaAllocatedBufferPointer(leadingTrivia))
     XCTAssertEqual(lexeme.leadingTriviaText, leadingTriviaText, file: file, line: line)
   }
   text.withUnsafeBufferPointer { textBuffer in
-    let text = SyntaxText(buffer: SyntaxArenaAllocatedBufferPointer(textBuffer))
+    let text = SyntaxText(buffer: ArenaAllocatedBufferPointer(textBuffer))
     XCTAssertEqual(lexeme.tokenText, text, file: file, line: line)
   }
   trailingTrivia.withUnsafeBufferPointer { trailingTrivia in
-    let trailingTriviaText = SyntaxText(buffer: SyntaxArenaAllocatedBufferPointer(trailingTrivia))
+    let trailingTriviaText = SyntaxText(buffer: ArenaAllocatedBufferPointer(trailingTrivia))
     XCTAssertEqual(lexeme.trailingTriviaText, trailingTriviaText, file: file, line: line)
   }
   XCTAssertEqual(lexeme.diagnostic, error, file: file, line: line)

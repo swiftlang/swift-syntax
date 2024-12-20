@@ -59,7 +59,7 @@ public struct RawSyntaxLayoutView {
   @_spi(RawSyntax)
   public func replacingLayout(
     with elements: some Collection<RawSyntax?>,
-    arena: SyntaxArena
+    arena: RawSyntaxArena
   ) -> RawSyntax {
     return .makeLayout(
       kind: raw.kind,
@@ -75,7 +75,7 @@ public struct RawSyntaxLayoutView {
   public func insertingChild(
     _ newChild: RawSyntax?,
     at index: Int,
-    arena: SyntaxArena
+    arena: RawSyntaxArena
   ) -> RawSyntax {
     precondition(children.count >= index)
     return .makeLayout(
@@ -95,7 +95,7 @@ public struct RawSyntaxLayoutView {
   @_spi(RawSyntax)
   public func removingChild(
     at index: Int,
-    arena: SyntaxArena
+    arena: RawSyntaxArena
   ) -> RawSyntax {
     precondition(children.count > index)
     let count = children.count - 1
@@ -121,7 +121,7 @@ public struct RawSyntaxLayoutView {
   }
 
   @_spi(RawSyntax)
-  public func appending(_ newChild: RawSyntax?, arena: SyntaxArena) -> RawSyntax {
+  public func appending(_ newChild: RawSyntax?, arena: RawSyntaxArena) -> RawSyntax {
     insertingChild(newChild, at: children.count, arena: arena)
   }
 
@@ -129,7 +129,7 @@ public struct RawSyntaxLayoutView {
   public func replacingChildSubrange(
     _ range: Range<Int>,
     with elements: some Collection<RawSyntax?>,
-    arena: SyntaxArena
+    arena: RawSyntaxArena
   ) -> RawSyntax {
     precondition(!raw.isToken)
     let newCount = children.count - range.count + elements.count
@@ -159,7 +159,7 @@ public struct RawSyntaxLayoutView {
   public func replacingChild(
     at index: Int,
     with newChild: RawSyntax?,
-    arena: SyntaxArena
+    arena: RawSyntaxArena
   ) -> RawSyntax {
     precondition(!raw.isToken && children.count > index)
     return .makeLayout(

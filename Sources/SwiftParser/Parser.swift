@@ -831,7 +831,7 @@ extension Parser {
 
   /// Creates a replicate of `syntax` with all tokens marked as missing.
   func withAllTokensMarkedMissing<T: RawSyntaxNodeProtocol>(syntax: T) -> T {
-    let tokenMissingMaker = TokenMissingMaker(arena: self.arena)
+    let tokenMissingMaker = TokenMissingMaker(rawAllocationArena: self.arena)
     let allMissing = tokenMissingMaker.rewrite(
       Syntax(raw: RawSyntax(syntax), rawNodeArena: self.arena)
     ).raw

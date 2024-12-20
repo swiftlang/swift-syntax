@@ -24,22 +24,22 @@
 open class SyntaxRewriter {
   public let viewMode: SyntaxTreeViewMode
 
-  /// The arena in which the parents of rewritten nodes should be allocated.
+  /// The raw arena in which the parents of rewritten nodes should be allocated.
   /// 
   /// The `SyntaxRewriter` subclass is responsible for generating the rewritten nodes. To incorporate them into the
   /// tree, all of the rewritten node's parents also need to be re-created. This is the arena in which those 
-  /// intermediate nodes should be allocated.
-  private let arena: RawSyntaxArena?
+  /// intermediate raw nodes should be allocated.
+  private let rawArena: RawSyntaxArena?
 
   public init(viewMode: SyntaxTreeViewMode = .sourceAccurate) {
     self.viewMode = viewMode
-    self.arena = nil
+    self.rawArena = nil
   }
 
   @_spi(RawSyntax)
-  public init(viewMode: SyntaxTreeViewMode = .sourceAccurate, arena: RawSyntaxArena? = nil) {
+  public init(viewMode: SyntaxTreeViewMode = .sourceAccurate, rawAllocationArena: RawSyntaxArena? = nil) {
     self.viewMode = viewMode
-    self.arena = arena
+    self.rawArena = rawAllocationArena
   }
 
   /// Rewrite `node`, keeping its parent unless `detach` is `true`.
@@ -50,7 +50,7 @@ open class SyntaxRewriter {
     }
 
     return withExtendedLifetime(rewritten) {
-      return Syntax(node).replacingSelf(rewritten.raw, rawNodeArena: rewritten.raw.arenaReference.retained, allocationArena: RawSyntaxArena())
+      return Syntax(node).replacingSelf(rewritten.raw, rawNodeArena: rewritten.raw.arenaReference.retained, rawAllocationArena: RawSyntaxArena())
     }
   }
 
@@ -4812,13 +4812,13 @@ open class SyntaxRewriter {
     if newLayout.baseAddress != nil {
       // A child node was rewritten. Build the updated node.
 
-      let arena = self.arena ?? RawSyntaxArena()
-      let newRaw = node.raw.layoutView!.replacingLayout(with: newLayout, arena: arena)
+      let rawArena = self.rawArena ?? RawSyntaxArena()
+      let newRaw = node.raw.layoutView!.replacingLayout(with: newLayout, arena: rawArena)
       newLayout.deinitialize()
       newLayout.deallocate()
       // 'withExtendedLifetime' to keep 'RawSyntaxArena's of them alive until here.
       return withExtendedLifetime(rewrittens) {
-        Syntax(raw: newRaw, rawNodeArena: arena)
+        Syntax(raw: newRaw, rawNodeArena: rawArena)
       }
     } else {
       // No child node was rewritten. So no need to change this node as well.

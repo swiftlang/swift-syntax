@@ -71,7 +71,7 @@ extension SyntaxCollection {
     let arena = RawSyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     return Syntax(self)
-      .replacingSelf(newRaw, rawNodeArena: RetainedRawSyntaxArena(arena), allocationArena: arena)
+      .replacingSelf(newRaw, rawNodeArena: RetainedRawSyntaxArena(arena), rawAllocationArena: arena)
       .cast(Self.self)
   }
 

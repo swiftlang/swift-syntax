@@ -163,7 +163,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             AccessorDeclSyntax(
               """
               set(value) {
-                self = Syntax(self).replacingChild(at: \(raw: index), with: Syntax(value), arena: RawSyntaxArena()).cast(\(node.kind.syntaxType).self)
+                self = Syntax(self).replacingChild(at: \(raw: index), with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(\(node.kind.syntaxType).self)
               }
               """
             )
@@ -200,7 +200,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
                                                     from: [element.raw], arena: arena)
                 }
                 return Syntax(self)
-                  .replacingChild(at: \(raw: index), with: collection, rawNodeArena: arena, allocationArena: arena)
+                  .replacingChild(at: \(raw: index), with: collection, rawNodeArena: arena, rawAllocationArena: arena)
                   .cast(\(node.kind.syntaxType).self)
               }
               """

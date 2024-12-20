@@ -86,7 +86,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(EditorPlaceholderDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EditorPlaceholderDeclSyntax.self)
     }
   }
 
@@ -96,7 +96,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
       return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(EditorPlaceholderDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EditorPlaceholderDeclSyntax.self)
     }
   }
 
@@ -122,7 +122,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
         at: 1,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(EditorPlaceholderDeclSyntax.self)
   }
@@ -132,7 +132,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(EditorPlaceholderDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EditorPlaceholderDeclSyntax.self)
     }
   }
 
@@ -142,7 +142,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
       return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(EditorPlaceholderDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EditorPlaceholderDeclSyntax.self)
     }
   }
 
@@ -168,7 +168,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
         at: 3,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(EditorPlaceholderDeclSyntax.self)
   }
@@ -178,7 +178,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(EditorPlaceholderDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EditorPlaceholderDeclSyntax.self)
     }
   }
 
@@ -192,7 +192,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(EditorPlaceholderDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EditorPlaceholderDeclSyntax.self)
     }
   }
 
@@ -201,7 +201,7 @@ public struct EditorPlaceholderDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(EditorPlaceholderDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EditorPlaceholderDeclSyntax.self)
     }
   }
 
@@ -263,7 +263,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(EditorPlaceholderExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EditorPlaceholderExprSyntax.self)
     }
   }
 
@@ -275,7 +275,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(EditorPlaceholderExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EditorPlaceholderExprSyntax.self)
     }
   }
 
@@ -284,7 +284,7 @@ public struct EditorPlaceholderExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(EditorPlaceholderExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EditorPlaceholderExprSyntax.self)
     }
   }
 
@@ -371,7 +371,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
     }
   }
 
@@ -381,7 +381,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
     }
   }
 
@@ -407,7 +407,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
         at: 1,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(EnumCaseDeclSyntax.self)
   }
@@ -417,7 +417,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
     }
   }
 
@@ -427,7 +427,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
     }
   }
 
@@ -453,7 +453,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
         at: 3,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(EnumCaseDeclSyntax.self)
   }
@@ -463,7 +463,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
     }
   }
 
@@ -477,7 +477,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
     }
   }
 
@@ -486,7 +486,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
     }
   }
 
@@ -496,7 +496,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 7)!.cast(EnumCaseElementListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
     }
   }
 
@@ -522,7 +522,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
         at: 7,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(EnumCaseDeclSyntax.self)
   }
@@ -532,7 +532,7 @@ public struct EnumCaseDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseDeclSyntax.self)
     }
   }
 
@@ -633,7 +633,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
     }
   }
 
@@ -647,7 +647,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
     }
   }
 
@@ -656,7 +656,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
     }
   }
 
@@ -666,7 +666,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
       return Syntax(self).child(at: 3)?.cast(EnumCaseParameterClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
     }
   }
 
@@ -675,7 +675,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
     }
   }
 
@@ -685,7 +685,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
       return Syntax(self).child(at: 5)?.cast(InitializerClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
     }
   }
 
@@ -694,7 +694,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
     }
   }
 
@@ -708,7 +708,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
       return Syntax(self).child(at: 7)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
     }
   }
 
@@ -717,7 +717,7 @@ public struct EnumCaseElementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseElementSyntax.self)
     }
   }
 
@@ -808,7 +808,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterClauseSyntax.self)
     }
   }
 
@@ -822,7 +822,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterClauseSyntax.self)
     }
   }
 
@@ -831,7 +831,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterClauseSyntax.self)
     }
   }
 
@@ -841,7 +841,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return Syntax(self).child(at: 3)!.cast(EnumCaseParameterListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterClauseSyntax.self)
     }
   }
 
@@ -867,7 +867,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
         at: 3,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(EnumCaseParameterClauseSyntax.self)
   }
@@ -877,7 +877,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterClauseSyntax.self)
     }
   }
 
@@ -891,7 +891,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterClauseSyntax.self)
     }
   }
 
@@ -900,7 +900,7 @@ public struct EnumCaseParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterClauseSyntax.self)
     }
   }
 
@@ -1018,7 +1018,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
     }
   }
 
@@ -1027,7 +1027,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 1)!.cast(DeclModifierListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
     }
   }
 
@@ -1053,7 +1053,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
         at: 1,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(EnumCaseParameterSyntax.self)
   }
@@ -1063,7 +1063,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
     }
   }
 
@@ -1077,7 +1077,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 3)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
     }
   }
 
@@ -1086,7 +1086,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
     }
   }
 
@@ -1100,7 +1100,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 5)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
     }
   }
 
@@ -1109,7 +1109,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
     }
   }
 
@@ -1123,7 +1123,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 7)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
     }
   }
 
@@ -1132,7 +1132,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
     }
   }
 
@@ -1142,7 +1142,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 9)!.cast(TypeSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
     }
   }
 
@@ -1151,7 +1151,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
     }
   }
 
@@ -1161,7 +1161,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 11)?.cast(InitializerClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
     }
   }
 
@@ -1170,7 +1170,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
     }
   }
 
@@ -1184,7 +1184,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 13)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
     }
   }
 
@@ -1193,7 +1193,7 @@ public struct EnumCaseParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumCaseParameterSyntax.self)
     }
   }
 
@@ -1328,7 +1328,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1338,7 +1338,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1364,7 +1364,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
         at: 1,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(EnumDeclSyntax.self)
   }
@@ -1374,7 +1374,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1384,7 +1384,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1410,7 +1410,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
         at: 3,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(EnumDeclSyntax.self)
   }
@@ -1420,7 +1420,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1434,7 +1434,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1443,7 +1443,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1457,7 +1457,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 7)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1466,7 +1466,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1476,7 +1476,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 9)?.cast(GenericParameterClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1485,7 +1485,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1495,7 +1495,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 11)?.cast(InheritanceClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1504,7 +1504,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1514,7 +1514,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 13)?.cast(GenericWhereClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1523,7 +1523,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1533,7 +1533,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 15)!.cast(MemberBlockSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 15, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 15, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1542,7 +1542,7 @@ public struct EnumDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynta
       return Syntax(self).child(at: 16)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 16, with: Syntax(value), arena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 16, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(EnumDeclSyntax.self)
     }
   }
 
@@ -1640,7 +1640,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _L
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(ExposeAttributeArgumentsSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExposeAttributeArgumentsSyntax.self)
     }
   }
 
@@ -1649,7 +1649,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _L
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(ExposeAttributeArgumentsSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExposeAttributeArgumentsSyntax.self)
     }
   }
 
@@ -1658,7 +1658,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _L
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(ExposeAttributeArgumentsSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExposeAttributeArgumentsSyntax.self)
     }
   }
 
@@ -1670,7 +1670,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _L
       return Syntax(self).child(at: 3)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(ExposeAttributeArgumentsSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExposeAttributeArgumentsSyntax.self)
     }
   }
 
@@ -1679,7 +1679,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _L
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(ExposeAttributeArgumentsSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExposeAttributeArgumentsSyntax.self)
     }
   }
 
@@ -1688,7 +1688,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _L
       return Syntax(self).child(at: 5)?.cast(StringLiteralExprSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(ExposeAttributeArgumentsSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExposeAttributeArgumentsSyntax.self)
     }
   }
 
@@ -1697,7 +1697,7 @@ public struct ExposeAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _L
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(ExposeAttributeArgumentsSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExposeAttributeArgumentsSyntax.self)
     }
   }
 
@@ -1771,7 +1771,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _L
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionPatternSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionPatternSyntax.self)
     }
   }
 
@@ -1780,7 +1780,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _L
       return Syntax(self).child(at: 1)!.cast(ExprSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionPatternSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionPatternSyntax.self)
     }
   }
 
@@ -1789,7 +1789,7 @@ public struct ExpressionPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _L
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionPatternSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionPatternSyntax.self)
     }
   }
 
@@ -1885,7 +1885,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
     }
   }
 
@@ -1897,7 +1897,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
     }
   }
 
@@ -1906,7 +1906,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
     }
   }
 
@@ -1918,7 +1918,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 3)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
     }
   }
 
@@ -1927,7 +1927,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
     }
   }
 
@@ -1939,7 +1939,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
     }
   }
 
@@ -1948,7 +1948,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
     }
   }
 
@@ -1957,7 +1957,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 7)!.cast(LabeledExprListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
     }
   }
 
@@ -1983,7 +1983,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
         at: 7,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(ExpressionSegmentSyntax.self)
   }
@@ -1993,7 +1993,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
     }
   }
 
@@ -2005,7 +2005,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 9)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
     }
   }
 
@@ -2014,7 +2014,7 @@ public struct ExpressionSegmentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionSegmentSyntax.self)
     }
   }
 
@@ -2078,7 +2078,7 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStm
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionStmtSyntax.self)
     }
   }
 
@@ -2087,7 +2087,7 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStm
       return Syntax(self).child(at: 1)!.cast(ExprSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionStmtSyntax.self)
     }
   }
 
@@ -2096,7 +2096,7 @@ public struct ExpressionStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStm
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(ExpressionStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExpressionStmtSyntax.self)
     }
   }
 
@@ -2217,7 +2217,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
     }
   }
 
@@ -2235,7 +2235,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
     }
   }
 
@@ -2261,7 +2261,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
         at: 1,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(ExtensionDeclSyntax.self)
   }
@@ -2271,7 +2271,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
     }
   }
 
@@ -2281,7 +2281,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
     }
   }
 
@@ -2307,7 +2307,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
         at: 3,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(ExtensionDeclSyntax.self)
   }
@@ -2317,7 +2317,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
     }
   }
 
@@ -2331,7 +2331,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
     }
   }
 
@@ -2340,7 +2340,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
     }
   }
 
@@ -2350,7 +2350,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 7)!.cast(TypeSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
     }
   }
 
@@ -2359,7 +2359,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
     }
   }
 
@@ -2369,7 +2369,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 9)?.cast(InheritanceClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
     }
   }
 
@@ -2378,7 +2378,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
     }
   }
 
@@ -2388,7 +2388,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 11)?.cast(GenericWhereClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
     }
   }
 
@@ -2397,7 +2397,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
     }
   }
 
@@ -2407,7 +2407,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 13)!.cast(MemberBlockSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
     }
   }
 
@@ -2416,7 +2416,7 @@ public struct ExtensionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ExtensionDeclSyntax.self)
     }
   }
 
@@ -2484,7 +2484,7 @@ public struct FallThroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafSt
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(FallThroughStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FallThroughStmtSyntax.self)
     }
   }
 
@@ -2496,7 +2496,7 @@ public struct FallThroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafSt
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(FallThroughStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FallThroughStmtSyntax.self)
     }
   }
 
@@ -2505,7 +2505,7 @@ public struct FallThroughStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafSt
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(FallThroughStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FallThroughStmtSyntax.self)
     }
   }
 
@@ -2557,7 +2557,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(FloatLiteralExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FloatLiteralExprSyntax.self)
     }
   }
 
@@ -2569,7 +2569,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(FloatLiteralExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FloatLiteralExprSyntax.self)
     }
   }
 
@@ -2578,7 +2578,7 @@ public struct FloatLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(FloatLiteralExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FloatLiteralExprSyntax.self)
     }
   }
 
@@ -2701,7 +2701,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2713,7 +2713,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2722,7 +2722,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2734,7 +2734,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 3)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2743,7 +2743,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2755,7 +2755,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 5)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2764,7 +2764,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2776,7 +2776,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 7)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2785,7 +2785,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2794,7 +2794,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 9)!.cast(PatternSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2803,7 +2803,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2812,7 +2812,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 11)?.cast(TypeAnnotationSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2821,7 +2821,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2833,7 +2833,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 13)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2842,7 +2842,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2851,7 +2851,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 15)!.cast(ExprSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 15, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 15, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2860,7 +2860,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 16)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 16, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 16, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2869,7 +2869,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 17)?.cast(WhereClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 17, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 17, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2878,7 +2878,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 18)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 18, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 18, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2887,7 +2887,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 19)!.cast(CodeBlockSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 19, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 19, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2896,7 +2896,7 @@ public struct ForStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntax
       return Syntax(self).child(at: 20)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 20, with: Syntax(value), arena: RawSyntaxArena()).cast(ForStmtSyntax.self)
+      self = Syntax(self).replacingChild(at: 20, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForStmtSyntax.self)
     }
   }
 
@@ -2985,7 +2985,7 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(ForceUnwrapExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForceUnwrapExprSyntax.self)
     }
   }
 
@@ -2994,7 +2994,7 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
       return Syntax(self).child(at: 1)!.cast(ExprSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(ForceUnwrapExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForceUnwrapExprSyntax.self)
     }
   }
 
@@ -3003,7 +3003,7 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(ForceUnwrapExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForceUnwrapExprSyntax.self)
     }
   }
 
@@ -3015,7 +3015,7 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
       return Syntax(self).child(at: 3)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(ForceUnwrapExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForceUnwrapExprSyntax.self)
     }
   }
 
@@ -3024,7 +3024,7 @@ public struct ForceUnwrapExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafEx
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(ForceUnwrapExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ForceUnwrapExprSyntax.self)
     }
   }
 
@@ -3125,7 +3125,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
     }
   }
 
@@ -3134,7 +3134,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 1)!.cast(ExprSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
     }
   }
 
@@ -3143,7 +3143,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
     }
   }
 
@@ -3155,7 +3155,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 3)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
     }
   }
 
@@ -3164,7 +3164,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
     }
   }
 
@@ -3173,7 +3173,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 5)!.cast(LabeledExprListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
     }
   }
 
@@ -3199,7 +3199,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
         at: 5,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(FunctionCallExprSyntax.self)
   }
@@ -3209,7 +3209,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
     }
   }
 
@@ -3221,7 +3221,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 7)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
     }
   }
 
@@ -3230,7 +3230,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
     }
   }
 
@@ -3239,7 +3239,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 9)?.cast(ClosureExprSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
     }
   }
 
@@ -3248,7 +3248,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
     }
   }
 
@@ -3257,7 +3257,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 11)!.cast(MultipleTrailingClosureElementListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
     }
   }
 
@@ -3283,7 +3283,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
         at: 11,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(FunctionCallExprSyntax.self)
   }
@@ -3293,7 +3293,7 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
+      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionCallExprSyntax.self)
     }
   }
 
@@ -3444,7 +3444,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3454,7 +3454,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3480,7 +3480,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
         at: 1,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(FunctionDeclSyntax.self)
   }
@@ -3490,7 +3490,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3500,7 +3500,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3526,7 +3526,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
         at: 3,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(FunctionDeclSyntax.self)
   }
@@ -3536,7 +3536,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3550,7 +3550,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3559,7 +3559,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3577,7 +3577,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 7)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3586,7 +3586,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3596,7 +3596,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 9)?.cast(GenericParameterClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3605,7 +3605,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3615,7 +3615,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 11)!.cast(FunctionSignatureSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3624,7 +3624,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3634,7 +3634,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 13)?.cast(GenericWhereClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3643,7 +3643,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3653,7 +3653,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 15)?.cast(CodeBlockSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 15, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 15, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3662,7 +3662,7 @@ public struct FunctionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       return Syntax(self).child(at: 16)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 16, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
+      self = Syntax(self).replacingChild(at: 16, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionDeclSyntax.self)
     }
   }
 
@@ -3753,7 +3753,7 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionEffectSpecifiersSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionEffectSpecifiersSyntax.self)
     }
   }
 
@@ -3769,7 +3769,7 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
       return Syntax(self).child(at: 1)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionEffectSpecifiersSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionEffectSpecifiersSyntax.self)
     }
   }
 
@@ -3778,7 +3778,7 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionEffectSpecifiersSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionEffectSpecifiersSyntax.self)
     }
   }
 
@@ -3788,7 +3788,7 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
       return Syntax(self).child(at: 3)?.cast(ThrowsClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionEffectSpecifiersSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionEffectSpecifiersSyntax.self)
     }
   }
 
@@ -3797,7 +3797,7 @@ public struct FunctionEffectSpecifiersSyntax: SyntaxProtocol, SyntaxHashable, _L
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionEffectSpecifiersSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionEffectSpecifiersSyntax.self)
     }
   }
 
@@ -3882,7 +3882,7 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterClauseSyntax.self)
     }
   }
 
@@ -3894,7 +3894,7 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterClauseSyntax.self)
     }
   }
 
@@ -3903,7 +3903,7 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterClauseSyntax.self)
     }
   }
 
@@ -3912,7 +3912,7 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return Syntax(self).child(at: 3)!.cast(FunctionParameterListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterClauseSyntax.self)
     }
   }
 
@@ -3938,7 +3938,7 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
         at: 3,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(FunctionParameterClauseSyntax.self)
   }
@@ -3948,7 +3948,7 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterClauseSyntax.self)
     }
   }
 
@@ -3960,7 +3960,7 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterClauseSyntax.self)
     }
   }
 
@@ -3969,7 +3969,7 @@ public struct FunctionParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Le
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterClauseSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterClauseSyntax.self)
     }
   }
 
@@ -4108,7 +4108,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4118,7 +4118,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 1)!.cast(AttributeListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4144,7 +4144,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
         at: 1,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(FunctionParameterSyntax.self)
   }
@@ -4154,7 +4154,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4164,7 +4164,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4190,7 +4190,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
         at: 3,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(FunctionParameterSyntax.self)
   }
@@ -4200,7 +4200,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4216,7 +4216,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4225,7 +4225,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4241,7 +4241,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 7)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4250,7 +4250,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4264,7 +4264,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 9)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4273,7 +4273,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4283,7 +4283,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 11)!.cast(TypeSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4292,7 +4292,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4306,7 +4306,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 13)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 13, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4315,7 +4315,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 14)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 14, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4325,7 +4325,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 15)?.cast(InitializerClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 15, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 15, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4334,7 +4334,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 16)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 16, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 16, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4348,7 +4348,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 17)?.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 17, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 17, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4357,7 +4357,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 18)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 18, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
+      self = Syntax(self).replacingChild(at: 18, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionParameterSyntax.self)
     }
   }
 
@@ -4462,7 +4462,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
     }
   }
 
@@ -4472,7 +4472,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 1)!.cast(FunctionParameterClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
     }
   }
 
@@ -4481,7 +4481,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
     }
   }
 
@@ -4491,7 +4491,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 3)?.cast(FunctionEffectSpecifiersSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
     }
   }
 
@@ -4500,7 +4500,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
     }
   }
 
@@ -4510,7 +4510,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 5)?.cast(ReturnClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
     }
   }
 
@@ -4519,7 +4519,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
     }
   }
 
@@ -4615,7 +4615,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
     }
   }
 
@@ -4627,7 +4627,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
     }
   }
 
@@ -4636,7 +4636,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
     }
   }
 
@@ -4645,7 +4645,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       return Syntax(self).child(at: 3)!.cast(TupleTypeElementListSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
     }
   }
 
@@ -4671,7 +4671,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
         at: 3,
         with: collection,
         rawNodeArena: arena,
-        allocationArena: arena
+        rawAllocationArena: arena
       )
       .cast(FunctionTypeSyntax.self)
   }
@@ -4681,7 +4681,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
     }
   }
 
@@ -4693,7 +4693,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
     }
   }
 
@@ -4702,7 +4702,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
     }
   }
 
@@ -4711,7 +4711,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       return Syntax(self).child(at: 7)?.cast(TypeEffectSpecifiersSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
     }
   }
 
@@ -4720,7 +4720,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
     }
   }
 
@@ -4729,7 +4729,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       return Syntax(self).child(at: 9)!.cast(ReturnClauseSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
+      self = Syntax(self).replacingChild(at: 9, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
     }
   }
 
@@ -4738,7 +4738,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
-      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), arena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
+      self = Syntax(self).replacingChild(at: 10, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
     }
   }
 

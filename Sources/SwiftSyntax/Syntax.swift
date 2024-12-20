@@ -144,10 +144,14 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   /// - Parameters:
   ///   - newRaw: The node that should replace `self`
   ///   - rawNodeArena: The arena in which `newRaw` resides
-  ///   - allocationArena: The arena in which  new nodes should be allocated
+  ///   - rawAllocationArena: The arena in which  new nodes should be allocated
   /// - Returns: A syntax tree with all parents where this node has been
   ///            replaced by `newRaw`
-  func replacingSelf(_ newRaw: RawSyntax, rawNodeArena: RetainedRawSyntaxArena, allocationArena: RawSyntaxArena) -> Syntax {
+  func replacingSelf(
+    _ newRaw: RawSyntax,
+    rawNodeArena: RetainedRawSyntaxArena,
+    rawAllocationArena: RawSyntaxArena
+  ) -> Syntax {
     precondition(newRaw.arenaReference == rawNodeArena)
     // If we have a parent already, then ask our current parent to copy itself
     // recursively up to the root.
@@ -156,7 +160,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
         at: layoutIndexInParent,
         with: newRaw,
         rawNodeArena: rawNodeArena,
-        allocationArena: allocationArena
+        rawAllocationArena: rawAllocationArena
       )
       return newParent.child(at: layoutIndexInParent)!
     } else {
@@ -172,8 +176,8 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   ///   - index: The index pointing to where in the raw layout to place this
   ///            child.
   ///   - newChild: The raw syntax for the new child to replace.
-  ///   - newChildArena: The arena in which `newChild` resides.
-  ///   - arena: The arena in which the new node will be allocated.
+  ///   - rawNodeArena: The arena in which `newChild` resides.
+  ///   - rawAllocationArena: The arena in which the new node will be allocated.
   /// - Returns: The new root node created by this operation, and the new child
   ///            syntax data.
   /// - SeeAlso: replacingSelf(_:)
@@ -181,66 +185,82 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     at index: Int,
     with newChild: RawSyntax?,
     rawNodeArena: RetainedRawSyntaxArena?,
-    allocationArena: RawSyntaxArena
+    rawAllocationArena: RawSyntaxArena
   ) -> Syntax {
     precondition(newChild == nil || (rawNodeArena != nil && newChild!.arenaReference == rawNodeArena!))
     // After newRaw has been allocated in `allocationArena`, `rawNodeArena` will
     // be a child arena of `allocationArena` and thus, `allocationArena` will
     // keep `newChild` alive.
     let newRaw = withExtendedLifetime(rawNodeArena) {
-      raw.layoutView!.replacingChild(at: index, with: newChild, arena: allocationArena)
+      raw.layoutView!.replacingChild(at: index, with: newChild, arena: rawAllocationArena)
     }
-    return replacingSelf(newRaw, rawNodeArena: RetainedRawSyntaxArena(allocationArena), allocationArena: allocationArena)
+    return replacingSelf(
+      newRaw,
+      rawNodeArena: RetainedRawSyntaxArena(rawAllocationArena),
+      rawAllocationArena: rawAllocationArena
+    )
   }
 
-  /// Same as `replacingChild(at:with:rawNodeArena:allocationArena:)` but takes a `__RawSyntaxArena` instead of a `RetainedRawSyntaxArena`.
+  /// Same as `replacingChild(at:with:rawNodeArena:rawAllocationArena:)` but takes a `__RawSyntaxArena` instead of a `RetainedRawSyntaxArena`.
   func replacingChild(
     at index: Int,
     with newChild: RawSyntax?,
     rawNodeArena: RawSyntaxArena?,
-    allocationArena: RawSyntaxArena
+    rawAllocationArena: RawSyntaxArena
   ) -> Syntax {
     return self.replacingChild(
       at: index,
       with: newChild,
       rawNodeArena: rawNodeArena.map(RetainedRawSyntaxArena.init),
-      allocationArena: allocationArena
+      rawAllocationArena: rawAllocationArena
     )
   }
 
-  /// Identical to `replacingChild(at: Int, with: RawSyntax?, arena: RawSyntaxArena)`
+  /// Identical to `replacingChild(at: Int, with: RawSyntax?, rawAllocationArena: RawSyntaxArena)`
   /// that ensures that the arena of`newChild` doesn’t get de-allocated before
   /// `newChild` has been addded to the result.
-  func replacingChild(at index: Int, with newChild: Syntax?, arena: RawSyntaxArena) -> Syntax {
+  func replacingChild(at index: Int, with newChild: Syntax?, rawAllocationArena: RawSyntaxArena) -> Syntax {
     return withExtendedLifetime(newChild) {
       return replacingChild(
         at: index,
         with: newChild?.raw,
         rawNodeArena: newChild?.raw.arenaReference.retained,
-        allocationArena: arena
+        rawAllocationArena: rawAllocationArena
       )
     }
   }
 
-  func withLeadingTrivia(_ leadingTrivia: Trivia, arena: RawSyntaxArena) -> Syntax {
-    if let raw = raw.withLeadingTrivia(leadingTrivia, arena: arena) {
-      return replacingSelf(raw, rawNodeArena: RetainedRawSyntaxArena(arena), allocationArena: arena)
+  func withLeadingTrivia(_ leadingTrivia: Trivia, rawAllocationArena: RawSyntaxArena) -> Syntax {
+    if let raw = raw.withLeadingTrivia(leadingTrivia, arena: rawAllocationArena) {
+      return replacingSelf(
+        raw,
+        rawNodeArena: RetainedRawSyntaxArena(rawAllocationArena),
+        rawAllocationArena: rawAllocationArena
+      )
     } else {
       return self
     }
   }
 
-  func withTrailingTrivia(_ trailingTrivia: Trivia, arena: RawSyntaxArena) -> Syntax {
-    if let raw = raw.withTrailingTrivia(trailingTrivia, arena: arena) {
-      return replacingSelf(raw, rawNodeArena: RetainedRawSyntaxArena(arena), allocationArena: arena)
+  func withTrailingTrivia(_ trailingTrivia: Trivia, rawAllocationArena: RawSyntaxArena) -> Syntax {
+    if let raw = raw.withTrailingTrivia(trailingTrivia, arena: rawAllocationArena) {
+      return replacingSelf(
+        raw,
+        rawNodeArena: RetainedRawSyntaxArena(rawAllocationArena),
+        rawAllocationArena: rawAllocationArena
+      )
     } else {
       return self
     }
   }
 
-  func withPresence(_ presence: SourcePresence, arena: RawSyntaxArena) -> Syntax {
-    if let raw = raw.tokenView?.withPresence(presence, arena: arena) {
-      return replacingSelf(raw, rawNodeArena: RetainedRawSyntaxArena(arena), allocationArena: arena)
+  func withPresence(_ presence: SourcePresence, rawAllocationArena: RawSyntaxArena) -> Syntax {
+    if let raw = raw.tokenView?.withPresence(presence, arena: rawAllocationArena) {
+      return replacingSelf(
+        raw,
+        rawNodeArena: RetainedRawSyntaxArena(rawAllocationArena),
+        rawAllocationArena: rawAllocationArena
+      )
     } else {
       return self
     }

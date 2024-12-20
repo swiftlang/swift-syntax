@@ -71,7 +71,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
       return tokenView.presence
     }
     set {
-      self = Syntax(self).withPresence(newValue, arena: RawSyntaxArena()).cast(TokenSyntax.self)
+      self = Syntax(self).withPresence(newValue, rawAllocationArena: RawSyntaxArena()).cast(TokenSyntax.self)
     }
   }
 
@@ -91,7 +91,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
       return tokenView.formLeadingTrivia()
     }
     set {
-      self = Syntax(self).withLeadingTrivia(newValue, arena: RawSyntaxArena()).cast(TokenSyntax.self)
+      self = Syntax(self).withLeadingTrivia(newValue, rawAllocationArena: RawSyntaxArena()).cast(TokenSyntax.self)
     }
   }
 
@@ -101,7 +101,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
       return tokenView.formTrailingTrivia()
     }
     set {
-      self = Syntax(self).withTrailingTrivia(newValue, arena: RawSyntaxArena()).cast(TokenSyntax.self)
+      self = Syntax(self).withTrailingTrivia(newValue, rawAllocationArena: RawSyntaxArena()).cast(TokenSyntax.self)
     }
   }
 
@@ -117,7 +117,7 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
       let arena = RawSyntaxArena()
       let newRaw = tokenView.withKind(newValue, arena: arena)
       self = Syntax(self)
-        .replacingSelf(newRaw, rawNodeArena: RetainedRawSyntaxArena(arena), allocationArena: arena)
+        .replacingSelf(newRaw, rawNodeArena: RetainedRawSyntaxArena(arena), rawAllocationArena: arena)
         .cast(TokenSyntax.self)
     }
   }

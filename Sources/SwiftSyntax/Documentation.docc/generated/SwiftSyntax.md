@@ -411,7 +411,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 ### Internals
 
 - <doc:SwiftSyntax/SyntaxProtocol>
-- <doc:SwiftSyntax/SyntaxArena>
+- <doc:SwiftSyntax/RawSyntaxArena>
 - <doc:SwiftSyntax/SyntaxEnum>
 - <doc:SwiftSyntax/SyntaxHashable>
 - <doc:SwiftSyntax/SyntaxIdentifier>

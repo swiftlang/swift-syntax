@@ -29,7 +29,7 @@ extension RawEnumCaseParameterSyntax: RawParameterTrait {}
 protocol RawParameterListTrait: RawSyntaxNodeProtocol {
   associatedtype ParameterSyntax: RawParameterTrait
 
-  init(elements: [ParameterSyntax], arena: __shared SyntaxArena)
+  init(elements: [ParameterSyntax], arena: __shared RawSyntaxArena)
 }
 
 extension RawFunctionParameterListSyntax: RawParameterListTrait {}
@@ -47,7 +47,7 @@ protocol RawParameterClauseTrait: RawSyntaxNodeProtocol {
     _ unexpectedBetweenParameterListAndRightParen: RawUnexpectedNodesSyntax?,
     rightParen: RawTokenSyntax,
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax?,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   )
 }
 

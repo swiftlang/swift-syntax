@@ -14,7 +14,7 @@ extension MissingDeclSyntax {
   public init(
     attributes: AttributeListSyntax,
     modifiers: DeclModifierListSyntax,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     self.init(
       attributes: attributes,
@@ -70,7 +70,7 @@ extension RawMissingDeclSyntax {
   public init(
     attributes: RawAttributeListSyntax,
     modifiers: RawDeclModifierListSyntax,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     self.init(
       attributes: attributes,
@@ -82,7 +82,7 @@ extension RawMissingDeclSyntax {
 }
 
 extension RawMissingExprSyntax {
-  public init(arena: __shared SyntaxArena) {
+  public init(arena: __shared RawSyntaxArena) {
     self.init(
       placeholder: RawTokenSyntax(missing: .identifier, text: "<#expression#>", arena: arena),
       arena: arena
@@ -91,7 +91,7 @@ extension RawMissingExprSyntax {
 }
 
 extension RawMissingPatternSyntax {
-  public init(arena: __shared SyntaxArena) {
+  public init(arena: __shared RawSyntaxArena) {
     self.init(
       placeholder: RawTokenSyntax(missing: .identifier, text: "<#pattern#>", arena: arena),
       arena: arena
@@ -100,7 +100,7 @@ extension RawMissingPatternSyntax {
 }
 
 extension RawMissingStmtSyntax {
-  public init(arena: __shared SyntaxArena) {
+  public init(arena: __shared RawSyntaxArena) {
     self.init(
       placeholder: RawTokenSyntax(missing: .identifier, text: "<#statement#>", arena: arena),
       arena: arena
@@ -109,7 +109,7 @@ extension RawMissingStmtSyntax {
 }
 
 extension RawMissingTypeSyntax {
-  public init(arena: __shared SyntaxArena) {
+  public init(arena: __shared RawSyntaxArena) {
     self.init(
       placeholder: RawTokenSyntax(missing: .identifier, text: "<#type#>", arena: arena),
       arena: arena
@@ -118,7 +118,7 @@ extension RawMissingTypeSyntax {
 }
 
 extension RawMissingSyntax {
-  public init(arena: __shared SyntaxArena) {
+  public init(arena: __shared RawSyntaxArena) {
     self.init(
       placeholder: RawTokenSyntax(missing: .identifier, text: "<#syntax#>", arena: arena),
       arena: arena

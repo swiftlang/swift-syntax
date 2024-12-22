@@ -305,7 +305,7 @@ public enum RawTriviaPiece: Equatable, Sendable {
   case unexpectedText(SyntaxText)
   case verticalTabs(Int)
 
-  static func make(_ piece: TriviaPiece, arena: SyntaxArena) -> RawTriviaPiece {
+  static func make(_ piece: TriviaPiece, arena: RawSyntaxArena) -> RawTriviaPiece {
     switch piece {
     case let .backslashes(count):
       return .backslashes(count)

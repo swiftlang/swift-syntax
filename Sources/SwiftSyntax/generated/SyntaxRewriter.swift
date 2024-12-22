@@ -29,7 +29,7 @@ open class SyntaxRewriter {
   /// The `SyntaxRewriter` subclass is responsible for generating the rewritten nodes. To incorporate them into the
   /// tree, all of the rewritten node's parents also need to be re-created. This is the arena in which those 
   /// intermediate nodes should be allocated.
-  private let arena: SyntaxArena?
+  private let arena: RawSyntaxArena?
 
   /// 'Syntax' object factory recycling 'Syntax.Info' instances.
   private let nodeFactory: SyntaxNodeFactory = SyntaxNodeFactory()
@@ -40,7 +40,7 @@ open class SyntaxRewriter {
   }
 
   @_spi(RawSyntax)
-  public init(viewMode: SyntaxTreeViewMode = .sourceAccurate, arena: SyntaxArena? = nil) {
+  public init(viewMode: SyntaxTreeViewMode = .sourceAccurate, arena: RawSyntaxArena? = nil) {
     self.viewMode = viewMode
     self.arena = arena
   }
@@ -54,7 +54,7 @@ open class SyntaxRewriter {
     }
 
     return withExtendedLifetime(rewritten) {
-      return Syntax(node).replacingSelf(rewritten.raw, rawNodeArena: rewritten.raw.arenaReference.retained, allocationArena: SyntaxArena())
+      return Syntax(node).replacingSelf(rewritten.raw, rawNodeArena: rewritten.raw.arenaReference.retained, rawAllocationArena: RawSyntaxArena())
     }
   }
 
@@ -3931,9 +3931,9 @@ open class SyntaxRewriter {
     // nodes are being collected.
     var newLayout: UnsafeMutableBufferPointer<RawSyntax?> = .init(start: nil, count: 0)
 
-    // Keep 'SyntaxArena' of rewritten nodes alive until they are wrapped
+    // Keep 'RawSyntaxArena' of rewritten nodes alive until they are wrapped
     // with 'Syntax'
-    var rewrittens: ContiguousArray<RetainedSyntaxArena> = []
+    var rewrittens: ContiguousArray<RetainedRawSyntaxArena> = []
 
     for case let (child?, info) in RawSyntaxChildren(node) where viewMode.shouldTraverse(node: child) {
 
@@ -3964,11 +3964,11 @@ open class SyntaxRewriter {
     if newLayout.baseAddress != nil {
       // A child node was rewritten. Build the updated node.
 
-      let arena = self.arena ?? SyntaxArena()
+      let arena = self.arena ?? RawSyntaxArena()
       let newRaw = node.raw.layoutView!.replacingLayout(with: newLayout, arena: arena)
       newLayout.deinitialize()
       newLayout.deallocate()
-      // 'withExtendedLifetime' to keep 'SyntaxArena's of them alive until here.
+      // 'withExtendedLifetime' to keep 'RawSyntaxArena's of them alive until here.
       return withExtendedLifetime(rewrittens) {
         Syntax(raw: newRaw, rawNodeArena: arena)
       }

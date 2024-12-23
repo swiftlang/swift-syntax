@@ -3403,4 +3403,30 @@ final class StatementExpressionTests: ParserTestCase {
       substructureAfterMarker: "1️⃣"
     )
   }
+
+  func testFunctionParameterWithMalformedParameters() {
+    assertParse(
+      """
+      init(1️⃣String.Index, x:(Int) -> Int) rethrows
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier and ':' in parameter", fixIts: ["insert identifier and ':'"])
+      ],
+      fixedSource: """
+        init(<#identifier#>: String.Index, x:(Int) -> Int) rethrows
+        """
+    )
+
+    assertParse(
+      """
+      init(1️⃣String.Index) rethrows
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier and ':' in parameter", fixIts: ["insert identifier and ':'"])
+      ],
+      fixedSource: """
+        init(<#identifier#>: String.Index) rethrows
+        """
+    )
+  }
 }

@@ -73,8 +73,10 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
   }
 
   public var id: SyntaxIdentifier {
-    SyntaxIdentifier(
-      rootId: UInt(rawID: arena.root.pointee.raw.id),
+    // This var is a workaround for a potential compiler bug (rdar://141977987)
+    let rootDataRef = arena.root
+    return SyntaxIdentifier(
+      rootId: UInt(rawID: rootDataRef.pointee.raw.id),
       indexInTree: SyntaxIdentifier.SyntaxIndexInTree(indexInTree: absoluteInfo.indexInTree)
     )
   }

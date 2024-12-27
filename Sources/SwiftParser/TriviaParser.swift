@@ -30,6 +30,25 @@ public struct TriviaParser {
 
     while true {
       let start = cursor
+
+      // Check for first UTF-8 byte of box drawing characters
+      if cursor.peek() == 0xE2 {
+        // Eat all inert box-drawing characters
+        cursor.advance(while: { char in
+          switch char {
+          case "╔", "╝", "║", "═":
+            return true;
+          default:
+            return false
+          }
+        })
+
+        if cursor.hasProgressed(comparedTo: start) {
+          pieces.append(.boxDrawing(start.text(upTo: cursor)))
+          continue
+        }
+      }
+
       switch cursor.advance() {
       case nil:
         // Finished.
@@ -112,7 +131,7 @@ public struct TriviaParser {
       // piece start.
       cursor.advance(while: { char in
         switch char {
-        case " ", "\n", "\r", "\t", "\u{000B}", "\u{000C}", "/", "#", "<", ">":
+        case " ", "\n", "\r", "\t", "\u{000B}", "\u{000C}", "/", "#", "<", ">", "╔", "╝", "║", "═":
           return false
         default:
           return true

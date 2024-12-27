@@ -57,7 +57,7 @@ fileprivate extension ChildKind {
       return choices.count == otherChoices.count && zip(choices, otherChoices).allSatisfy { $0.hasSameType(as: $1) }
     case (.collection(kind: let kind, _, _, _), .collection(kind: let otherKind, _, _, _)):
       return kind == otherKind
-    case (.token(let choices, _, _), .token(let otherChoices, _, _)):
+    case (.token(let choices, _, _, _), .token(let otherChoices, _, _, _)):
       return choices == otherChoices
     case (.node(let kind), .collection(kind: let otherKind, _, _, _)):
       return kind == otherKind
@@ -92,7 +92,7 @@ fileprivate extension Child {
     guard childIndex + 2 < node.children.count else {
       return false
     }
-    if case .token(choices: [.token(.colon)], _, _) = node.children[childIndex + 2].kind {
+    if case .token(choices: [.token(.colon)], _, _, _) = node.children[childIndex + 2].kind {
       return true
     } else {
       return false
@@ -173,7 +173,7 @@ class ValidateSyntaxNodes: XCTestCase {
   ///
   /// - Returns: A failure message if validation failed, otherwise `nil`
   private func validateSingleTokenChoiceChild(child: Child, in node: LayoutNode) -> String? {
-    guard case .token(choices: let tokenChoices, _, _) = child.kind, let choice = tokenChoices.only else {
+    guard case .token(choices: let tokenChoices, _, _, _) = child.kind, let choice = tokenChoices.only else {
       return nil
     }
     switch choice {
@@ -369,7 +369,7 @@ class ValidateSyntaxNodes: XCTestCase {
     var failures: [ValidationFailure] = []
     for node in SYNTAX_NODES.compactMap(\.layoutNode) {
       for child in node.children {
-        guard case .token(choices: let tokenChoices, _, _) = child.kind,
+        guard case .token(choices: let tokenChoices, _, _, _) = child.kind,
           tokenChoices.count > 1,
           tokenChoices.allSatisfy({ $0.isKeyword })
         else {

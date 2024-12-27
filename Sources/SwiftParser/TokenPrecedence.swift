@@ -53,16 +53,18 @@ enum TokenPrecedence: Comparable {
   case closingPoundIf
 
   /// If the precedence is `weakBracketed` or `strongBracketed`, the closing delimiter of the bracketed group.
-  var closingTokenKind: RawTokenKind? {
+  var closingTokenKinds: [RawTokenKind] {
     switch self {
     case .weakBracketed(closingDelimiter: let closingDelimiter):
-      return closingDelimiter
+      return [closingDelimiter]
+    case .openingBrace(closingDelimiter: .trailingBoxCorner):
+      return [.trailingBoxCorner, .trailingBoxJunction]
     case .openingBrace(closingDelimiter: let closingDelimiter):
-      return closingDelimiter
+      return [closingDelimiter]
     case .openingPoundIf:
-      return .poundEndif
+      return [.poundEndif]
     default:
-      return nil
+      return []
     }
   }
 
@@ -166,6 +168,8 @@ enum TokenPrecedence: Comparable {
       self = .weakBracketClose
 
     // MARK: Strong bracketed
+    case .leadingBoxCorner, .leadingBoxJunction:
+      self = .openingBrace(closingDelimiter: .trailingBoxCorner)
     case .leftBrace:
       self = .openingBrace(closingDelimiter: .rightBrace)
     case .poundElseif, .poundElse, .poundIf:
@@ -181,7 +185,7 @@ enum TokenPrecedence: Comparable {
       self = .strongPunctuator
 
     // MARK: Strong bracket close
-    case .rightBrace:
+    case .rightBrace, .trailingBoxCorner, .trailingBoxJunction:
       self = .closingBrace
     case .poundEndif:
       self = .closingPoundIf

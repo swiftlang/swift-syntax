@@ -74,7 +74,7 @@ extension Child {
     if token.text != nil {
       return ExprSyntax(".\(token.identifier)Token()")
     }
-    if case .token(let choices, _, _) = kind,
+    if case .token(let choices, _, _, _) = kind,
       case .keyword(let keyword) = choices.only
     {
       return ExprSyntax(".\(token.memberCallName)(.\(keyword.spec.memberCallName))")
@@ -100,7 +100,7 @@ extension Child {
   /// `precondition` statement that verifies the variable with name var_name and of type
   /// ``TokenSyntax`` contains one of the supported text options. Otherwise return `nil`.
   public func generateAssertStmtTextChoices(varName: String) -> FunctionCallExprSyntax? {
-    guard case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _) = kind else {
+    guard case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _, defaultAt: _) = kind else {
       return nil
     }
 

@@ -31,6 +31,8 @@ public enum TokenKind: Hashable, Sendable {
   case infixQuestionMark
   case integerLiteral(String)
   case keyword(Keyword)
+  case leadingBoxCorner
+  case leadingBoxJunction
   case leftAngle
   case leftBrace
   case leftParen
@@ -62,6 +64,8 @@ public enum TokenKind: Hashable, Sendable {
   case singleQuote
   case stringQuote
   case stringSegment(String)
+  case trailingBoxCorner
+  case trailingBoxJunction
   case unknown(String)
   case wildcard
 
@@ -103,6 +107,10 @@ public enum TokenKind: Hashable, Sendable {
       return text
     case .keyword(let assoc):
       return String(syntaxText: assoc.defaultText)
+    case .leadingBoxCorner:
+      return "╗"
+    case .leadingBoxJunction:
+      return "╣"
     case .leftAngle:
       return "<"
     case .leftBrace:
@@ -165,6 +173,10 @@ public enum TokenKind: Hashable, Sendable {
       return #"""#
     case .stringSegment(let text):
       return text
+    case .trailingBoxCorner:
+      return "╚"
+    case .trailingBoxJunction:
+      return "╠"
     case .unknown(let text):
       return text
     case .wildcard:
@@ -200,6 +212,10 @@ public enum TokenKind: Hashable, Sendable {
       return "?"
     case .keyword(let assoc):
       return assoc.defaultText
+    case .leadingBoxCorner:
+      return "╗"
+    case .leadingBoxJunction:
+      return "╣"
     case .leftAngle:
       return "<"
     case .leftBrace:
@@ -248,6 +264,10 @@ public enum TokenKind: Hashable, Sendable {
       return "'"
     case .stringQuote:
       return #"""#
+    case .trailingBoxCorner:
+      return "╚"
+    case .trailingBoxJunction:
+      return "╠"
     case .wildcard:
       return "_"
     default:
@@ -296,6 +316,10 @@ public enum TokenKind: Hashable, Sendable {
       return false
     case .keyword:
       return false
+    case .leadingBoxCorner:
+      return true
+    case .leadingBoxJunction:
+      return true
     case .leftAngle:
       return true
     case .leftBrace:
@@ -358,6 +382,10 @@ public enum TokenKind: Hashable, Sendable {
       return true
     case .stringSegment:
       return false
+    case .trailingBoxCorner:
+      return true
+    case .trailingBoxJunction:
+      return true
     case .unknown:
       return false
     case .wildcard:
@@ -403,6 +431,10 @@ extension TokenKind: Equatable {
       return lhsText == rhsText
     case (.keyword(let lhsText), .keyword(let rhsText)):
       return lhsText == rhsText
+    case (.leadingBoxCorner, .leadingBoxCorner):
+      return true
+    case (.leadingBoxJunction, .leadingBoxJunction):
+      return true
     case (.leftAngle, .leftAngle):
       return true
     case (.leftBrace, .leftBrace):
@@ -465,6 +497,10 @@ extension TokenKind: Equatable {
       return true
     case (.stringSegment(let lhsText), .stringSegment(let rhsText)):
       return lhsText == rhsText
+    case (.trailingBoxCorner, .trailingBoxCorner):
+      return true
+    case (.trailingBoxJunction, .trailingBoxJunction):
+      return true
     case (.unknown(let lhsText), .unknown(let rhsText)):
       return lhsText == rhsText
     case (.wildcard, .wildcard):
@@ -499,6 +535,8 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   case infixQuestionMark
   case integerLiteral
   case keyword
+  case leadingBoxCorner
+  case leadingBoxJunction
   case leftAngle
   case leftBrace
   case leftParen
@@ -530,6 +568,8 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   case singleQuote
   case stringQuote
   case stringSegment
+  case trailingBoxCorner
+  case trailingBoxJunction
   case unknown
   case wildcard
 
@@ -558,6 +598,10 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return "!"
     case .infixQuestionMark:
       return "?"
+    case .leadingBoxCorner:
+      return "╗"
+    case .leadingBoxJunction:
+      return "╣"
     case .leftAngle:
       return "<"
     case .leftBrace:
@@ -606,6 +650,10 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return "'"
     case .stringQuote:
       return #"""#
+    case .trailingBoxCorner:
+      return "╚"
+    case .trailingBoxJunction:
+      return "╠"
     case .wildcard:
       return "_"
     default:
@@ -654,6 +702,10 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return false
     case .keyword:
       return false
+    case .leadingBoxCorner:
+      return true
+    case .leadingBoxJunction:
+      return true
     case .leftAngle:
       return true
     case .leftBrace:
@@ -716,6 +768,10 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return true
     case .stringSegment:
       return false
+    case .trailingBoxCorner:
+      return true
+    case .trailingBoxJunction:
+      return true
     case .unknown:
       return false
     case .wildcard:
@@ -777,6 +833,12 @@ extension TokenKind {
       return text.withSyntaxText { text in
         return .keyword(Keyword(text)!)
       }
+    case .leadingBoxCorner:
+      precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
+      return .leadingBoxCorner
+    case .leadingBoxJunction:
+      precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
+      return .leadingBoxJunction
     case .leftAngle:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .leftAngle
@@ -863,6 +925,12 @@ extension TokenKind {
       return .stringQuote
     case .stringSegment:
       return .stringSegment(text)
+    case .trailingBoxCorner:
+      precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
+      return .trailingBoxCorner
+    case .trailingBoxJunction:
+      precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
+      return .trailingBoxJunction
     case .unknown:
       return .unknown(text)
     case .wildcard:
@@ -910,6 +978,10 @@ extension TokenKind {
       return (.integerLiteral, str)
     case .keyword(let keyword):
       return (.keyword, String(syntaxText: keyword.defaultText))
+    case .leadingBoxCorner:
+      return (.leadingBoxCorner, nil)
+    case .leadingBoxJunction:
+      return (.leadingBoxJunction, nil)
     case .leftAngle:
       return (.leftAngle, nil)
     case .leftBrace:
@@ -972,6 +1044,10 @@ extension TokenKind {
       return (.stringQuote, nil)
     case .stringSegment(let str):
       return (.stringSegment, str)
+    case .trailingBoxCorner:
+      return (.trailingBoxCorner, nil)
+    case .trailingBoxJunction:
+      return (.trailingBoxJunction, nil)
     case .unknown(let str):
       return (.unknown, str)
     case .wildcard:

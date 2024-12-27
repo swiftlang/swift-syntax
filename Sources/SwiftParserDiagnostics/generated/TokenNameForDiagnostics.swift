@@ -53,6 +53,10 @@ extension TokenKind {
       return "?"
     case .integerLiteral:
       return "integer literal"
+    case .leadingBoxCorner:
+      return "╗"
+    case .leadingBoxJunction:
+      return "╣"
     case .leftAngle:
       return "<"
     case .leftBrace:
@@ -115,6 +119,10 @@ extension TokenKind {
       return #"""#
     case .stringSegment:
       return "string segment"
+    case .trailingBoxCorner:
+      return "╚"
+    case .trailingBoxJunction:
+      return "╠"
     case .unknown:
       return "token"
     case .wildcard:

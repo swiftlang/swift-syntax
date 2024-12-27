@@ -150,6 +150,48 @@ final class TriviaParserTests: ParserTestCase {
         ),
       ]
     )
+
+    XCTAssertEqual(
+      TriviaParser.parseTrivia(
+        """
+        ╔═════ hello ═════╗
+        ║      world      ║
+        ╠═══════foo═══════╣
+        ║       bar       ║
+        ╚═════════════════╝
+        """,
+        position: .leading
+      ),
+      [
+        .boxDrawing("╔═════"),
+        .spaces(1),
+        .unexpectedText("hello"),
+        .spaces(1),
+        .boxDrawing("═════"),
+        .unexpectedText("╗"),
+        .newlines(1),
+        .boxDrawing("║"),
+        .spaces(6),
+        .unexpectedText("world"),
+        .spaces(6),
+        .boxDrawing("║"),
+        .newlines(1),
+        .unexpectedText("╠"),
+        .boxDrawing("═══════"),
+        .unexpectedText("foo"),
+        .boxDrawing("═══════"),
+        .unexpectedText("╣"),
+        .newlines(1),
+        .boxDrawing("║"),
+        .spaces(7),
+        .unexpectedText("bar"),
+        .spaces(7),
+        .boxDrawing("║"),
+        .newlines(1),
+        .unexpectedText("╚"),
+        .boxDrawing("═════════════════╝"),
+      ]
+    )
   }
 
   func testRawSyntaxLazyTriviaPieces() {

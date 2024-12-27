@@ -168,6 +168,164 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testFuncBoxDrawing() {
+    func callIsMultiple(of value: Int) -> FunctionCallExprSyntax {
+      FunctionCallExprSyntax(
+        calledExpression: MemberAccessExprSyntax(
+          base: DeclReferenceExprSyntax(baseName: .identifier("i")),
+          name: .identifier("isMultiple")
+        ),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax {
+          LabeledExprSyntax(
+            label: "of",
+            expression: IntegerLiteralExprSyntax(value)
+          )
+        },
+        rightParen: .rightParenToken()
+      )
+    }
+
+    func callPrint(_ literal: StringLiteralExprSyntax) -> FunctionCallExprSyntax {
+      FunctionCallExprSyntax(
+        calledExpression: DeclReferenceExprSyntax(baseName: .identifier("print")),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax {
+          LabeledExprSyntax(expression: literal)
+        },
+        rightParen: .rightParenToken()
+      )
+    }
+
+    assertParse(
+      #"""
+      ╔═════════════ func fizzBuzz() ═════════════╗
+      ║ ╔═══════════ for i in 0..<100 ══════════╗ ║
+      ║ ║ ╔═════ if i.isMultiple(of: 15) ═════╗ ║ ║
+      ║ ║ ║        print("fizzbuzz ")         ║ ║ ║
+      ║ ║ ╠═══ else if i.isMultiple(of: 3) ═══╣ ║ ║
+      ║ ║ ║          print("fizz ")           ║ ║ ║
+      ║ ║ ╠═══ else if i.isMultiple(of: 5) ═══╣ ║ ║
+      ║ ║ ║          print("buzz ")           ║ ║ ║
+      ║ ║ ╠══════════════ else ═══════════════╣ ║ ║
+      ║ ║ ║          print("\(i) ")           ║ ║ ║
+      ║ ║ ╚═══════════════════════════════════╝ ║ ║
+      ║ ╚═══════════════════════════════════════╝ ║
+      ╚═══════════════════════════════════════════╝
+      """#,
+      substructure: Syntax(
+        FunctionDeclSyntax(
+          attributes: [],
+          modifiers: [],
+          funcKeyword: .keyword(.func),
+          name: .identifier("fizzBuzz"),
+          signature: FunctionSignatureSyntax(
+            parameterClause: FunctionParameterClauseSyntax(
+              leftParen: .leftParenToken(),
+              parameters: [],
+              rightParen: .rightParenToken()
+            )
+          ),
+          body: CodeBlockSyntax(
+            leftBrace: .leadingBoxCornerToken(),
+            statements: CodeBlockItemListSyntax {
+              ForStmtSyntax(
+                forKeyword: .keyword(.for),
+                pattern: IdentifierPatternSyntax(
+                  identifier: .identifier("i")
+                ),
+                inKeyword: .keyword(.in),
+                sequence: SequenceExprSyntax {
+                  IntegerLiteralExprSyntax(0)
+                  BinaryOperatorExprSyntax(text: "..<")
+                  IntegerLiteralExprSyntax(100)
+                },
+                body: CodeBlockSyntax(
+                  leftBrace: .leadingBoxCornerToken(),
+                  statements: CodeBlockItemListSyntax {
+                    ExpressionStmtSyntax(
+                      expression: IfExprSyntax(
+                        ifKeyword: .keyword(.if),
+                        conditions: ConditionElementListSyntax {
+                          callIsMultiple(of: 15)
+                        },
+                        body: CodeBlockSyntax(
+                          leftBrace: .leadingBoxCornerToken(),
+                          statements: CodeBlockItemListSyntax {
+                            callPrint(StringLiteralExprSyntax(content: "fizzbuzz "))
+                          },
+                          rightBrace: .trailingBoxJunctionToken()
+                        ),
+                        elseKeyword: .keyword(.else),
+                        elseBody: IfExprSyntax.ElseBody.ifExpr(
+                          IfExprSyntax(
+                            ifKeyword: .keyword(.if),
+                            conditions: ConditionElementListSyntax {
+                              callIsMultiple(of: 3)
+                            },
+                            body: CodeBlockSyntax(
+                              leftBrace: .leadingBoxJunctionToken(),
+                              statements: CodeBlockItemListSyntax {
+                                callPrint(StringLiteralExprSyntax(content: "fizz "))
+                              },
+                              rightBrace: .trailingBoxJunctionToken()
+                            ),
+                            elseKeyword: .keyword(.else),
+                            elseBody: IfExprSyntax.ElseBody.ifExpr(
+                              IfExprSyntax(
+                                ifKeyword: .keyword(.if),
+                                conditions: ConditionElementListSyntax {
+                                  callIsMultiple(of: 5)
+                                },
+                                body: CodeBlockSyntax(
+                                  leftBrace: .leadingBoxJunctionToken(),
+                                  statements: CodeBlockItemListSyntax {
+                                    callPrint(StringLiteralExprSyntax(content: "buzz "))
+                                  },
+                                  rightBrace: .trailingBoxJunctionToken()
+                                ),
+                                elseKeyword: .keyword(.else),
+                                elseBody: .codeBlock(
+                                  CodeBlockSyntax(
+                                    leftBrace: .leadingBoxJunctionToken(),
+                                    statements: CodeBlockItemListSyntax {
+                                      callPrint(
+                                        StringLiteralExprSyntax(
+                                          openingQuote: .stringQuoteToken(),
+                                          segments: StringLiteralSegmentListSyntax {
+                                            StringSegmentSyntax(content: .stringSegment(""))
+                                            ExpressionSegmentSyntax(
+                                              expressions: LabeledExprListSyntax {
+                                                LabeledExprSyntax(expression: DeclReferenceExprSyntax(baseName: .identifier("i")))
+                                              }
+                                            )
+                                            StringSegmentSyntax(content: .stringSegment(" "))
+                                          },
+                                          closingQuote: .stringQuoteToken()
+                                        )
+                                      )
+                                    },
+                                    rightBrace: .trailingBoxCornerToken()
+                                  )
+                                )
+                              )
+                            )
+                          )
+                        )
+                      )
+                    )
+                  },
+                  rightBrace: .trailingBoxCornerToken()
+                )
+              )
+            },
+            rightBrace: .trailingBoxCornerToken()
+          )
+        )
+      )
+    )
+  }
+
   func testClassParsing() {
     assertParse("class Foo {}")
 

@@ -767,6 +767,8 @@ fileprivate extension RawTriviaPiece {
         position = position.advanced(by: 2)
         body(position)
       }
+    case let .boxDrawing(text):
+      position = position.advanced(by: text.count)
     case let .lineComment(text),
       let .docLineComment(text):
       // Line comments are not supposed to contain newlines.

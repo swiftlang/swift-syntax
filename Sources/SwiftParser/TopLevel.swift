@@ -97,7 +97,7 @@ extension Parser {
   /// This function is used when parsing places where function bodies are
   /// optional - like the function requirements in protocol declarations.
   mutating func parseOptionalCodeBlock(allowInitDecl: Bool = true) -> RawCodeBlockSyntax? {
-    guard self.at(.leftBrace) || self.canRecoverTo(TokenSpec(.leftBrace, allowAtStartOfLine: false)) != nil else {
+    guard self.at(anyIn: CodeBlockSyntax.LeftBraceOptions.self) != nil || self.canRecoverTo(anyIn: CodeBlockSyntax.LeftBraceOptions.self) != nil else {
       return nil
     }
     return self.parseCodeBlock(allowInitDecl: allowInitDecl)
@@ -109,8 +109,8 @@ extension Parser {
   /// If the left brace is missing, its indentation will be used to judge whether a following `}` was
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
   mutating func parseCodeBlock(introducer: RawTokenSyntax? = nil, allowInitDecl: Bool = true) -> RawCodeBlockSyntax {
-    let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
-    let itemList = parseCodeBlockItemList(allowInitDecl: allowInitDecl, until: { $0.at(.rightBrace) })
+    let (unexpectedBeforeLBrace, lbrace) = self.expect(anyIn: CodeBlockSyntax.LeftBraceOptions.self, default: .leftBrace)
+    let itemList = parseCodeBlockItemList(allowInitDecl: allowInitDecl, until: { $0.at(rightBrace(for: lbrace)) })
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
 
     return .init(

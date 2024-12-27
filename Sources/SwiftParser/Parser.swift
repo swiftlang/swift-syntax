@@ -399,9 +399,9 @@ public struct Parser {
 
   private mutating func adjustNestingLevel(for tokenKind: RawTokenKind) {
     switch tokenKind {
-    case .leftAngle, .leftBrace, .leftParen, .leftSquare, .poundIf:
+    case .leadingBoxCorner, .leadingBoxJunction, .leftAngle, .leftBrace, .leftParen, .leftSquare, .poundIf:
       nestingLevel += 1
-    case .rightAngle, .rightBrace, .rightParen, .rightSquare, .poundEndif:
+    case .rightAngle, .rightBrace, .rightParen, .rightSquare, .poundEndif, .trailingBoxCorner, .trailingBoxJunction:
       nestingLevel -= 1
     default:
       break
@@ -557,6 +557,25 @@ extension Parser {
 
 // MARK: Expecting Tokens with Recovery
 
+func rightBrace(for leftBrace: RawTokenKind) -> [TokenSpec] {
+  switch leftBrace {
+  case .leftBrace:
+    return [.rightBrace]
+  case .leadingBoxCorner, .leadingBoxJunction:
+    return [.trailingBoxCorner, .trailingBoxJunction]
+  default:
+    preconditionFailure("Passed in \(leftBrace), not a left brace")
+  }
+}
+
+func rightBrace(for leftBrace: RawTokenSyntax) -> [TokenSpec] {
+  return rightBrace(for: leftBrace.tokenKind)
+}
+
+func rightBrace(for leftBrace: TokenSpec) -> [TokenSpec] {
+  return rightBrace(for: leftBrace.synthesizedTokenKind.decomposeToRaw().rawKind)
+}
+
 extension Parser {
   /// Implements the paradigm shared across all `expect` methods.
   @inline(__always)
@@ -602,14 +621,13 @@ extension Parser {
   ///     a missing token of `defaultKind`.
   @inline(__always)
   mutating func expect(
-    _ spec1: TokenSpec,
-    _ spec2: TokenSpec,
-    default defaultKind: TokenSpec
+    _ specs: [TokenSpec],
+    default defaultKind: TokenSpec? = nil
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
     return expectImpl(
-      consume: { $0.consume(if: spec1, spec2) },
-      canRecoverTo: { $0.canRecoverTo(spec1, spec2) },
-      makeMissing: { $0.missingToken(defaultKind) }
+      consume: { $0.consume(if: specs) },
+      canRecoverTo: { $0.canRecoverTo(specs) },
+      makeMissing: { $0.missingToken(defaultKind ?? specs.first!) }
     )
   }
 
@@ -622,16 +640,10 @@ extension Parser {
   ///     a missing token of `defaultKind`.
   @inline(__always)
   mutating func expect(
-    _ spec1: TokenSpec,
-    _ spec2: TokenSpec,
-    _ spec3: TokenSpec,
+    _ specs: TokenSpec...,
     default defaultKind: TokenSpec
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
-    return expectImpl(
-      consume: { $0.consume(if: spec1, spec2, spec3) },
-      canRecoverTo: { $0.canRecoverTo(spec1, spec2, spec3) },
-      makeMissing: { $0.missingToken(defaultKind) }
-    )
+    return expect(specs, default: defaultKind)
   }
 
   @inline(__always)
@@ -746,15 +758,16 @@ extension Parser {
       }
     }
 
+    let rightBraces = rightBrace(for: leftBrace)
     guard leftBrace.isMissing, let introducer = introducer else {
       // Fast path for correct parses: If leftBrace is not missing, just `expect`.
-      return self.expect(.rightBrace)
+      return self.expect(rightBraces)
     }
 
     var lookahead = self.lookahead()
-    guard let recoveryHandle = lookahead.canRecoverTo(.rightBrace) else {
+    guard let recoveryHandle = lookahead.canRecoverTo(rightBraces) else {
       // We can't recover to '}'. Synthesize it.
-      return (nil, self.missingToken(.rightBrace))
+      return (nil, self.missingToken(rightBraces.first!))
     }
 
     // We can recover to a '}'. Decide whether we want to eat it based on its indentation.
@@ -762,13 +775,13 @@ extension Parser {
     switch (indentation(introducer.leadingTriviaPieces), indentation(rightBraceTrivia)) {
     // Catch cases where the brace has known indentation that is less than that of `introducer`, in which case we don't want to consume it.
     case (.spaces(let introducerSpaces), .spaces(let rightBraceSpaces)) where rightBraceSpaces < introducerSpaces:
-      return (nil, self.missingToken(.rightBrace))
+      return (nil, self.missingToken(rightBraces.first!))
     case (.tabs(let introducerTabs), .tabs(let rightBraceTabs)) where rightBraceTabs < introducerTabs:
-      return (nil, self.missingToken(.rightBrace))
+      return (nil, self.missingToken(rightBraces.first!))
     case (.spaces, .tabs(0)):
-      return (nil, self.missingToken(.rightBrace))
+      return (nil, self.missingToken(rightBraces.first!))
     case (.tabs, .spaces(0)):
-      return (nil, self.missingToken(.rightBrace))
+      return (nil, self.missingToken(rightBraces.first!))
     default:
       return self.eat(recoveryHandle)
     }

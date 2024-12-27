@@ -340,7 +340,7 @@ extension Parser {
   }
 
   mutating func atInheritanceListTerminator() -> Bool {
-    return self.experimentalFeatures.contains(.trailingComma) && (self.at(.leftBrace) || self.at(.keyword(.where)))
+    return self.experimentalFeatures.contains(.trailingComma) && (self.at(anyIn: MemberBlockSyntax.LeftBraceOptions.self) != nil || self.at(.keyword(.where)))
   }
 
   mutating func parsePrimaryAssociatedTypes() -> RawPrimaryAssociatedTypeClauseSyntax {
@@ -379,7 +379,7 @@ extension Parser {
     return self.withLookahead {
       $0.consume(if: .leftParen)
       guard $0.canParseType() else { return false }
-      return $0.at(.rightParen, .keyword(.where), .leftBrace) || $0.at(.endOfFile)
+      return $0.at(.rightParen, .keyword(.where), .leftBrace, .leadingBoxCorner, .leadingBoxJunction) || $0.at(.endOfFile)
     }
   }
 }

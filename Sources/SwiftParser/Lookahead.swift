@@ -90,8 +90,19 @@ extension Parser.Lookahead: TokenConsumer {
   ///
   /// - Parameter kind: The kind of token to consume.
   /// - Returns: A token of the given kind.
-  mutating func eat(_ spec: TokenSpec) -> Token {
-    return self.consume(if: spec)!
+  mutating func eat(_ specs: [TokenSpec]) -> Token {
+    return self.consume(if: specs)!
+  }
+
+  /// Consumes the current token, and asserts that it matches `spec`.
+  ///
+  /// If the token kind did not match, this function will abort. It is useful
+  /// to insert structural invariants during parsing.
+  ///
+  /// - Parameter kind: The kind of token to consume.
+  /// - Returns: A token of the given kind.
+  mutating func eat(_ specs: TokenSpec...) -> Token {
+    return self.eat(specs)
   }
 
   #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
@@ -269,7 +280,7 @@ extension Parser.Lookahead {
 
 extension Parser.Lookahead {
   mutating func atStartOfGetSetAccessor() -> Bool {
-    precondition(self.at(.leftBrace), "not checking a brace?")
+    precondition(self.at(anyIn: AccessorBlockSyntax.LeftBraceOptions.self) != nil, "not checking a brace?")
 
     // The only case this can happen is if the accessor label is immediately after
     // a brace (possibly preceded by attributes).  "get" is implicit, so it can't
@@ -291,7 +302,7 @@ extension Parser.Lookahead {
 
     // Eat the "{".
     var lookahead = self.lookahead()
-    lookahead.eat(.leftBrace)
+    lookahead.consume(ifAnyIn: CodeBlockSyntax.LeftBraceOptions.self)!
 
     // Eat attributes, if present.
     while lookahead.consume(if: .atSign) != nil {
@@ -334,6 +345,8 @@ extension Parser.Lookahead {
   //  - String interpolation contains parentheses, so it automatically skips
   //    until the closing parenthesis.
   private enum BracketedTokens: TokenSpecSet {
+    case leadingBoxCorner
+    case leadingBoxJunction
     case leftParen
     case leftBrace
     case leftSquare
@@ -343,6 +356,8 @@ extension Parser.Lookahead {
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch lexeme.rawTokenKind {
+      case .leadingBoxCorner: self = .leadingBoxCorner
+      case .leadingBoxJunction: self = .leadingBoxJunction
       case .leftParen: self = .leftParen
       case .leftBrace: self = .leftBrace
       case .leftSquare: self = .leftSquare
@@ -355,6 +370,8 @@ extension Parser.Lookahead {
 
     var spec: TokenSpec {
       switch self {
+      case .leadingBoxCorner: return .leadingBoxCorner
+      case .leadingBoxJunction: return .leadingBoxJunction
       case .leftParen: return .leftParen
       case .leftBrace: return .leftBrace
       case .leftSquare: return .leftSquare
@@ -384,6 +401,9 @@ extension Parser.Lookahead {
       case .skipSingle:
         let t = self.at(anyIn: BracketedTokens.self)
         switch t {
+        case (.leadingBoxCorner, let handle)?, (.leadingBoxJunction, let handle)?:
+          self.eat(handle)
+          stack += [.skipSinglePost(start: t!.spec), .skipUntil(.trailingBoxCorner, .trailingBoxJunction)]
         case (.leftParen, let handle)?:
           self.eat(handle)
           stack += [.skipSinglePost(start: .leftParen), .skipUntil(.rightParen, .rightBrace)]
@@ -404,6 +424,8 @@ extension Parser.Lookahead {
         }
       case .skipSinglePost(start: let start):
         switch start {
+        case .leadingBoxCorner, .leadingBoxJunction:
+          self.consume(if: .trailingBoxJunction, .trailingBoxJunction)
         case .leftParen:
           self.consume(if: .rightParen)
         case .leftBrace:

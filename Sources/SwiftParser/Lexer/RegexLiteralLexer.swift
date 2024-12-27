@@ -606,7 +606,7 @@ extension Lexer.Cursor {
       return false
 
     // Prefix grammar that appears before an expression.
-    case .leftAngle, .leftBrace, .leftParen, .leftSquare, .prefixOperator, .prefixAmpersand:
+    case .leadingBoxCorner, .leadingBoxJunction, .leftAngle, .leftBrace, .leftParen, .leftSquare, .prefixOperator, .prefixAmpersand:
       return true
 
     // Binary operators sequence expressions.
@@ -618,7 +618,7 @@ extension Lexer.Cursor {
       return true
 
     // Postfix grammar would expect a binary operator next.
-    case .postfixOperator, .exclamationMark, .postfixQuestionMark, .rightAngle, .rightBrace, .rightParen, .rightSquare:
+    case .postfixOperator, .exclamationMark, .postfixQuestionMark, .rightAngle, .rightBrace, .rightParen, .rightSquare, .trailingBoxCorner, .trailingBoxJunction:
       return false
 
     // Punctuation that does not sequence expressions.

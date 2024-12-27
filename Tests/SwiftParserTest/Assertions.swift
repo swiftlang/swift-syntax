@@ -100,8 +100,8 @@ private func assertTokens(
 
     if actualLexeme.leadingTriviaText != expectedLexeme.leadingTrivia {
       assertStringsEqualWithDiff(
-        String(syntaxText: actualLexeme.leadingTriviaText),
-        String(syntaxText: expectedLexeme.leadingTrivia),
+        String(reflecting: String(syntaxText: actualLexeme.leadingTriviaText)),
+        String(reflecting: String(syntaxText: expectedLexeme.leadingTrivia)),
         "Leading trivia does not match",
         file: expectedLexeme.file,
         line: expectedLexeme.line
@@ -120,8 +120,8 @@ private func assertTokens(
 
     if actualLexeme.trailingTriviaText != expectedLexeme.trailingTrivia {
       assertStringsEqualWithDiff(
-        String(syntaxText: actualLexeme.trailingTriviaText),
-        String(syntaxText: expectedLexeme.trailingTrivia),
+        String(reflecting: String(syntaxText: actualLexeme.trailingTriviaText)),
+        String(reflecting: String(syntaxText: expectedLexeme.trailingTrivia)),
         "Trailing trivia does not match",
         file: expectedLexeme.file,
         line: expectedLexeme.line

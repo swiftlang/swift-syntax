@@ -12,10 +12,10 @@
 
 #if compiler(>=6)
 public import SwiftSyntax
-internal import SwiftParser
+@_spi(Diagnostics) internal import SwiftParser
 #else
 import SwiftSyntax
-import SwiftParser
+@_spi(Diagnostics) import SwiftParser
 #endif
 
 // MARK: - PartialSyntaxNode
@@ -46,6 +46,61 @@ extension SyntaxStringInterpolation {
   }
 }
 
+public enum CodeBlockStyle {
+  case braces
+  case box(leadingJoined: Bool = false, trailingJoined: Bool = false)
+
+  init(leftBrace: TokenSyntax, rightBrace: TokenSyntax) {
+    switch (leftBrace.tokenKind, rightBrace.tokenKind) {
+    case (.leadingBoxCorner, .trailingBoxCorner):
+      self = .box()
+    case (.leadingBoxCorner, .trailingBoxJunction):
+      self = .box(trailingJoined: true)
+    case (.leadingBoxJunction, .trailingBoxCorner):
+      self = .box(leadingJoined: true)
+    case (.leadingBoxJunction, .trailingBoxJunction):
+      self = .box(leadingJoined: true, trailingJoined: true)
+
+    default:
+      self = .braces
+    }
+  }
+
+  var leftBrace: TokenSyntax {
+    switch self {
+    case .braces:
+      return .leftBraceToken()
+    case .box(leadingJoined: true, trailingJoined: _):
+      return .leadingBoxJunctionToken()
+    case .box(leadingJoined: false, trailingJoined: _):
+      return .leadingBoxCornerToken()
+    }
+  }
+
+  var rightBrace: TokenSyntax {
+    switch self {
+    case .braces:
+      return .rightBraceToken()
+    case .box(leadingJoined: _, trailingJoined: true):
+      return .trailingBoxJunctionToken()
+    case .box(leadingJoined: _, trailingJoined: false):
+      return .trailingBoxCornerToken()
+    }
+  }
+
+  func withJoining(leading: Bool = false, trailing: Bool = false) -> CodeBlockStyle {
+    switch self {
+    case .braces:
+      return self
+    case .box(leadingJoined: let oldLeading, trailingJoined: let oldTrailing):
+      return .box(
+        leadingJoined: leading || oldLeading,
+        trailingJoined: trailing || oldTrailing
+      )
+    }
+  }
+}
+
 // MARK: - HasTrailingCodeBlock
 
 public protocol HasTrailingCodeBlock: WithCodeBlockSyntax {
@@ -68,12 +123,13 @@ public protocol HasTrailingCodeBlock: WithCodeBlockSyntax {
   /// ```
   ///
   /// Throws an error if `header` defines a different node type than the type the initializer is called on. E.g. if calling `try IfStmtSyntax("while x < 5") {}`
-  init(_ header: SyntaxNodeString, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) rethrows
+  init(_ header: SyntaxNodeString, delimitedBy blockStyle: CodeBlockStyle, @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax) rethrows
 }
 
 extension HasTrailingCodeBlock where Self: StmtSyntaxProtocol {
   public init(
     _ header: SyntaxNodeString,
+    delimitedBy blockStyle: CodeBlockStyle = .braces,
     @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax
   ) throws {
     let stmt = StmtSyntax("\(header) {}")
@@ -81,17 +137,26 @@ extension HasTrailingCodeBlock where Self: StmtSyntaxProtocol {
       throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: stmt)
     }
     self = castedStmt
-    self.body = try CodeBlockSyntax(statements: bodyBuilder())
+    self.body = try CodeBlockSyntax(
+      leftBrace: blockStyle.leftBrace,
+      statements: bodyBuilder(),
+      rightBrace: blockStyle.rightBrace
+    )
   }
 }
 
 extension CatchClauseSyntax: HasTrailingCodeBlock {
   public init(
     _ header: SyntaxNodeString,
+    delimitedBy blockStyle: CodeBlockStyle = .braces,
     @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax
   ) rethrows {
     self = CatchClauseSyntax("\(header) {}")
-    self.body = try CodeBlockSyntax(statements: bodyBuilder())
+    self.body = try CodeBlockSyntax(
+      leftBrace: blockStyle.leftBrace,
+      statements: bodyBuilder(),
+      rightBrace: blockStyle.rightBrace
+    )
   }
 }
 extension DeferStmtSyntax: HasTrailingCodeBlock {}
@@ -124,6 +189,7 @@ extension WithOptionalCodeBlockSyntax where Self: DeclSyntaxProtocol {
   /// Throws an error if `header` defines a different node type than the type the initializer is called on. E.g. if calling `try FunctionDeclSyntax("init") {}`
   public init(
     _ header: SyntaxNodeString,
+    delimitedBy blockStyle: CodeBlockStyle = .braces,
     @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax
   ) throws {
     // If the type provides a custom `SyntaxParseable` implementation, use that. Otherwise construct it as a
@@ -146,7 +212,11 @@ extension WithOptionalCodeBlockSyntax where Self: DeclSyntaxProtocol {
       throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: decl)
     }
     self = castedDecl
-    self.body = try CodeBlockSyntax(statements: bodyBuilder())
+    self.body = try CodeBlockSyntax(
+      leftBrace: blockStyle.leftBrace,
+      statements: bodyBuilder(),
+      rightBrace: blockStyle.rightBrace
+    )
   }
 }
 
@@ -178,6 +248,7 @@ public protocol HasTrailingMemberDeclBlock {
   /// Throws an error if `header` defines a different node type than the type the initializer is called on. E.g. if calling `try StructDeclSyntax("class MyClass") {}`
   init(
     _ header: SyntaxNodeString,
+    delimitedBy blockStyle: CodeBlockStyle,
     @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax
   ) throws
 }
@@ -185,6 +256,7 @@ public protocol HasTrailingMemberDeclBlock {
 extension HasTrailingMemberDeclBlock where Self: DeclSyntaxProtocol {
   public init(
     _ header: SyntaxNodeString,
+    delimitedBy blockStyle: CodeBlockStyle = .braces,
     @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax
   ) throws {
     // If the type provides a custom `SyntaxParseable` implementation, use that. Otherwise construct it as a
@@ -202,7 +274,11 @@ extension HasTrailingMemberDeclBlock where Self: DeclSyntaxProtocol {
       throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: decl)
     }
     self = castedDecl
-    self.memberBlock = try MemberBlockSyntax(members: membersBuilder())
+    self.memberBlock = try MemberBlockSyntax(
+      leftBrace: blockStyle.leftBrace,
+      members: membersBuilder(),
+      rightBrace: blockStyle.rightBrace
+    )
   }
 }
 
@@ -218,6 +294,33 @@ extension StructDeclSyntax: HasTrailingMemberDeclBlock {}
 // So we cannot conform to `HasTrailingCodeBlock`
 
 extension IfExprSyntax {
+  private static func rewriteBlockStyle(
+    of ifExpr: IfExprSyntax,
+    to blockStyle: CodeBlockStyle
+  ) -> IfExprSyntax {
+    var ifExpr = ifExpr
+
+    let ifStyle = ifExpr.elseBody != nil ? blockStyle.withJoining(trailing: true) : blockStyle
+    ifExpr.body.leftBrace = ifStyle.leftBrace
+    ifExpr.body.rightBrace = ifStyle.rightBrace
+
+    if let elseBody = ifExpr.elseBody {
+      let elseStyle = blockStyle.withJoining(leading: true)
+
+      switch elseBody {
+      case .codeBlock(var codeBlock):
+        codeBlock.leftBrace = elseStyle.leftBrace
+        codeBlock.rightBrace = elseStyle.rightBrace
+        ifExpr.elseBody = .codeBlock(codeBlock)
+
+      case .ifExpr(let elseIfExpr):
+        ifExpr.elseBody = .ifExpr(rewriteBlockStyle(of: elseIfExpr, to: elseStyle))
+      }
+    }
+
+    return ifExpr
+  }
+
   /// Constructs an `if` expression with an optional `else` block.
   ///
   /// `header` specifies the part of the `if` expression before the body’s first brace.
@@ -237,17 +340,20 @@ extension IfExprSyntax {
   /// Throws an error if `header` does not start an `if` expression. E.g. if calling `try IfExprSyntax("while true") {}`
   public init(
     _ header: SyntaxNodeString,
+    delimitedBy blockStyle: CodeBlockStyle = .braces,
     @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax,
     @CodeBlockItemListBuilder `else` elseBuilder: () throws -> CodeBlockItemListSyntax? = { nil }
   ) throws {
     let expr = ExprSyntax("\(header) {}")
-    guard let ifExpr = expr.as(Self.self) else {
+    guard var ifExpr = expr.as(Self.self) else {
       throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: expr)
     }
-    self = ifExpr
-    self.body = try CodeBlockSyntax(statements: bodyBuilder())
-    self.elseBody = try elseBuilder().map { .codeBlock(CodeBlockSyntax(statements: $0)) }
-    self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
+
+    ifExpr.body = try CodeBlockSyntax(statements: bodyBuilder())
+    ifExpr.elseBody = try elseBuilder().map { .codeBlock(CodeBlockSyntax(statements: $0)) }
+    ifExpr.elseKeyword = ifExpr.elseBody != nil ? .keyword(.else) : nil
+
+    self = Self.rewriteBlockStyle(of: ifExpr, to: blockStyle)
   }
 
   /// Constructs an `if` expression with a following `else if` clause.
@@ -286,17 +392,63 @@ extension IfExprSyntax {
   /// Throws an error if `header` does not start an `if` expression. E.g. if calling `try IfExprSyntax("while true", bodyBuilder: {}, elseIf: {})`
   public init(
     _ header: SyntaxNodeString,
+    delimitedBy blockStyle: CodeBlockStyle = .braces,
     @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax,
     elseIf: IfExprSyntax
   ) throws {
     let expr = ExprSyntax("\(header) {}")
-    guard let ifExpr = expr.as(Self.self) else {
+    guard var ifExpr = expr.as(Self.self) else {
       throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: expr)
     }
-    self = ifExpr
-    self.body = CodeBlockSyntax(statements: try bodyBuilder())
-    self.elseBody = .ifExpr(elseIf)
-    self.elseKeyword = elseBody != nil ? .keyword(.else) : nil
+
+    ifExpr.body = CodeBlockSyntax(statements: try bodyBuilder())
+    ifExpr.elseBody = .ifExpr(elseIf)
+    ifExpr.elseKeyword = ifExpr.elseBody != nil ? .keyword(.else) : nil
+
+    self = Self.rewriteBlockStyle(of: ifExpr, to: blockStyle)
+  }
+
+  private var deepestRightBrace: TokenSyntax {
+    switch elseBody {
+    case nil:
+      return body.rightBrace
+    case .codeBlock(let codeBlock):
+      return codeBlock.rightBrace
+    case .ifExpr(let elseIfExpr):
+      return elseIfExpr.deepestRightBrace
+    }
+  }
+
+  private var inferredBlockStyle: CodeBlockStyle {
+    return CodeBlockStyle(leftBrace: self.body.leftBrace, rightBrace: self.deepestRightBrace)
+  }
+
+  public func `else`(
+    if ifHeader: SyntaxNodeString? = nil,
+    @CodeBlockItemListBuilder elseBuilder: () -> CodeBlockItemListSyntax
+  ) throws -> IfExprSyntax {
+    let newElseBody: ElseBody
+    if let existingElseBody = elseBody {
+      // We should attach this node to a child.
+      switch existingElseBody {
+      case .codeBlock(_):
+        preconditionFailure("todo: throw an error")
+      case .ifExpr(let elseIfExpr):
+        newElseBody = .ifExpr(try elseIfExpr.else(if: ifHeader, elseBuilder: elseBuilder))
+      }
+    } else {
+      // We should attach this node here.
+      if let ifHeader {
+        newElseBody = .ifExpr(try IfExprSyntax(ifHeader, bodyBuilder: elseBuilder))
+      } else {
+        newElseBody = .codeBlock(CodeBlockSyntax(statementsBuilder: elseBuilder))
+      }
+    }
+
+    return Self.rewriteBlockStyle(
+      of: self.with(\.elseBody, newElseBody).with(\.elseKeyword, .keyword(.else)),
+      to: self.inferredBlockStyle
+    )
   }
 }
 

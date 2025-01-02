@@ -303,15 +303,10 @@ public struct Parser {
   ///                          if this is `nil`.
   ///   - parseTransition: The previously recorded state for an incremental
   ///                      parse, or `nil`.
-  ///   - arena: Arena the parsing syntax are made into. If it's `nil`, a new
-  ///            arena is created automatically, and `input` copied into the
-  ///            arena. If non-`nil`, `input` must be within its registered
-  ///            source buffer or allocator.
   public init(
     _ input: UnsafeBufferPointer<UInt8>,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
-    arena: ParsingSyntaxArena? = nil,
     swiftVersion: SwiftVersion? = nil
   ) {
     // Chain to the private buffer initializer.
@@ -319,7 +314,7 @@ public struct Parser {
       buffer: input,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
-      arena: arena,
+      arena: nil,
       swiftVersion: swiftVersion,
       experimentalFeatures: []
     )

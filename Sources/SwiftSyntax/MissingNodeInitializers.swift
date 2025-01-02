@@ -13,8 +13,7 @@
 extension MissingDeclSyntax {
   public init(
     attributes: AttributeListSyntax,
-    modifiers: DeclModifierListSyntax,
-    arena: __shared SyntaxArena
+    modifiers: DeclModifierListSyntax
   ) {
     self.init(
       attributes: attributes,

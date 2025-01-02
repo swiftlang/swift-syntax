@@ -50,6 +50,15 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
       )
 
+      DeclSyntax(
+        """
+        @_transparent
+        init(unsafeCasting node: Syntax) {
+          self._syntaxNode = node
+        }
+        """
+      )
+
       DeclSyntax("public static let syntaxKind = SyntaxKind.\(node.memberCallName)")
     }
   }

@@ -215,7 +215,7 @@ public struct RawSyntax: Sendable {
   }
 
   var rawData: RawSyntaxData {
-    pointer.pointee
+    @_transparent unsafeAddress { pointer.pointer }
   }
 
   internal var arenaReference: SyntaxArenaRef {

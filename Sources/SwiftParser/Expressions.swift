@@ -59,7 +59,10 @@ extension TokenConsumer {
       // whether the '{' is the start of a closure expression or a
       // brace statement for 'repeat { ... } while'
       let lookahead = self.lookahead()
-      return lookahead.peek().rawTokenKind != .leftBrace
+      return CodeBlockSyntax.LeftBraceOptions(
+        lexeme: lookahead.peek(),
+        experimentalFeatures: self.experimentalFeatures
+      ) == nil
     }
 
     return false
@@ -763,7 +766,7 @@ extension Parser {
         // If we can parse trailing closures, do so.
         let trailingClosure: RawClosureExprSyntax?
         let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax
-        if case .basic = flavor, self.at(.leftBrace), self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) })
+        if case .basic = flavor, self.at(anyIn: ClosureExprSyntax.LeftBraceOptions.self) != nil, self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) })
         {
           (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor: flavor)
         } else {
@@ -803,7 +806,7 @@ extension Parser {
         // If we can parse trailing closures, do so.
         let trailingClosure: RawClosureExprSyntax?
         let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax
-        if case .basic = flavor, self.at(.leftBrace), self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) })
+        if case .basic = flavor, self.at(anyIn: ClosureExprSyntax.LeftBraceOptions.self) != nil, self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) })
         {
           (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor: flavor)
         } else {
@@ -827,7 +830,7 @@ extension Parser {
       }
 
       // Check for a trailing closure, if allowed.
-      if self.at(.leftBrace) && !leadingExpr.raw.kind.isLiteral
+      if self.at(anyIn: ClosureExprSyntax.LeftBraceOptions.self) != nil && !leadingExpr.raw.kind.isLiteral
         && self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) })
       {
         // Add dummy blank argument list to the call expression syntax.
@@ -848,7 +851,7 @@ extension Parser {
 
         // We only allow a single trailing closure on a call.  This could be
         // generalized in the future, but needs further design.
-        if self.at(.leftBrace) {
+        if self.at(anyIn: ClosureExprSyntax.LeftBraceOptions.self) != nil {
           break
         }
         continue
@@ -1219,7 +1222,7 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (.leftBrace, _)?:  // expr-closure
+    case (.leadingBoxCorner, _)?, (.leadingBoxJunction, _)?, (.leftBrace, _)?:  // expr-closure
       return RawExprSyntax(self.parseClosureExpression())
     case (.period, let handle)?:  // .foo
       let period = self.eat(handle)
@@ -1356,7 +1359,7 @@ extension Parser {
     // Parse the optional trailing closures.
     let trailingClosure: RawClosureExprSyntax?
     let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax
-    if case .basic = flavor, self.at(.leftBrace), self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) }) {
+    if case .basic = flavor, self.at(anyIn: ClosureExprSyntax.LeftBraceOptions.self) != nil, self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) }) {
       (trailingClosure, additionalTrailingClosures) = self.parseTrailingClosures(flavor: flavor)
     } else {
       trailingClosure = nil
@@ -1683,15 +1686,15 @@ extension Parser {
   /// Parse a closure expression.
   mutating func parseClosureExpression() -> RawClosureExprSyntax {
     // Parse the opening left brace.
-    let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
+    let (unexpectedBeforeLBrace, lbrace) = self.expect(anyIn: ClosureExprSyntax.LeftBraceOptions.self, default: .leftBrace)
     // Parse the closure-signature, if present.
     let signature = self.parseClosureSignatureIfPresent()
 
     // Parse the body.
-    let elements = parseCodeBlockItemList(until: { $0.at(.rightBrace) })
+    let elements = parseCodeBlockItemList(until: { $0.at(rightBrace(for: lbrace)) })
 
     // Parse the closing '}'.
-    let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
+    let (unexpectedBeforeRBrace, rbrace) = self.expect(rightBrace(for: lbrace))
     return RawClosureExprSyntax(
       unexpectedBeforeLBrace,
       leftBrace: lbrace,
@@ -2019,7 +2022,7 @@ extension Parser.Lookahead {
     // `label: switch x { ... }`.
     var lookahead = self.lookahead()
     lookahead.consumeAnyToken()
-    if lookahead.peek().rawTokenKind == .leftBrace {
+    if SwitchExprSyntax.LeftBraceOptions(lexeme: lookahead.peek(), experimentalFeatures: experimentalFeatures) != nil {
       return true
     }
     if lookahead.peek().isEditorPlaceholder {
@@ -2035,7 +2038,7 @@ extension Parser.Lookahead {
   /// handle this by doing some lookahead in common situations. And later, Sema
   /// will emit a diagnostic with a fixit to add wrapping parens.
   mutating func atValidTrailingClosure(flavor: Parser.ExprFlavor) -> Bool {
-    precondition(self.at(.leftBrace), "Couldn't be a trailing closure")
+    precondition(self.at(anyIn: ClosureExprSyntax.LeftBraceOptions.self) != nil, "Couldn't be a trailing closure")
 
     // If this is the start of a get/set accessor, then it isn't a trailing
     // closure.
@@ -2075,21 +2078,24 @@ extension Parser.Lookahead {
     // to see if it is immediately followed by a token which indicates we should
     // consider it part of the preceding expression
     var lookahead = self.lookahead()
-    lookahead.eat(.leftBrace)
+    let lbrace = lookahead.at(anyIn: ClosureExprSyntax.LeftBraceOptions.self)!.spec
+    lookahead.eat(lbrace.spec)
     var loopProgress = LoopProgressCondition()
-    while !lookahead.at(.endOfFile, .rightBrace)
+    while !lookahead.at([.endOfFile] + rightBrace(for: lbrace.spec))
       && !lookahead.at(.poundEndif, .poundElse, .poundElseif)
       && lookahead.hasProgressed(&loopProgress)
     {
       lookahead.skipSingle()
     }
 
-    guard lookahead.consume(if: .rightBrace) != nil else {
+    guard lookahead.consume(if: rightBrace(for: lbrace.spec)) != nil else {
       return false
     }
 
     switch lookahead.currentToken {
-    case TokenSpec(.leftBrace),
+    case TokenSpec(.leadingBoxCorner),
+      TokenSpec(.leadingBoxJunction),
+      TokenSpec(.leftBrace),
       TokenSpec(.where),
       TokenSpec(.comma):
       return true
@@ -2148,7 +2154,7 @@ extension Parser {
 
     let conditions: RawConditionElementListSyntax
 
-    if self.at(.leftBrace) {
+    if self.at(anyIn: CodeBlockSyntax.LeftBraceOptions.self) != nil {
       conditions = RawConditionElementListSyntax(
         elements: [
           RawConditionElementSyntax(
@@ -2205,13 +2211,13 @@ extension Parser {
     // a ``RawClosureExprSyntax`` in the condition, which is most likely not what the user meant.
     // Create a missing condition instead and use the `{` for the start of the body.
     let subject: RawExprSyntax
-    if self.at(.leftBrace) {
+    if self.at(anyIn: SwitchExprSyntax.LeftBraceOptions.self) != nil {
       subject = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
     } else {
       subject = self.parseExpression(flavor: .stmtCondition, pattern: .none)
     }
 
-    let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
+    let (unexpectedBeforeLBrace, lbrace) = self.expect(anyIn: SwitchExprSyntax.LeftBraceOptions.self, default: .leftBrace)
 
     let cases = self.parseSwitchCases(allowStandaloneStmtRecovery: !lbrace.isMissing)
 

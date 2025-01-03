@@ -836,6 +836,8 @@ enum PrimaryExpressionStart: TokenSpecSet {
   case identifier
   case `init`
   case integerLiteral
+  case leadingBoxCorner
+  case leadingBoxJunction
   case leftBrace
   case leftParen
   case leftSquare
@@ -868,6 +870,8 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case TokenSpec(.identifier): self = .identifier
     case TokenSpec(.`init`): self = .`init`
     case TokenSpec(.integerLiteral): self = .integerLiteral
+    case TokenSpec(.leadingBoxCorner): self = .leadingBoxCorner
+    case TokenSpec(.leadingBoxJunction): self = .leadingBoxJunction
     case TokenSpec(.leftBrace): self = .leftBrace
     case TokenSpec(.leftParen): self = .leftParen
     case TokenSpec(.leftSquare): self = .leftSquare
@@ -903,6 +907,8 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case .identifier: return .identifier
     case .`init`: return .keyword(.`init`)
     case .integerLiteral: return .integerLiteral
+    case .leadingBoxCorner: return .leadingBoxCorner
+    case .leadingBoxJunction: return .leadingBoxJunction
     case .leftBrace: return .leftBrace
     case .leftParen: return .leftParen
     case .leftSquare: return .leftSquare

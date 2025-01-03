@@ -49,6 +49,8 @@ public enum TriviaPiece: Sendable {
   case unexpectedText(String)
   /// A vertical tab '\v' character.
   case verticalTabs(Int)
+  /// Box-drawing characters which have no syntactic significance.
+  case boxDrawing(String)
 }
 
 extension TriviaPiece: TextOutputStreamable {
@@ -90,6 +92,8 @@ extension TriviaPiece: TextOutputStreamable {
       stream.write(text)
     case let .verticalTabs(count):
       printRepeated("\u{b}", count: count)
+    case let .boxDrawing(text):
+      stream.write(text)
     }
   }
 }
@@ -126,6 +130,8 @@ extension TriviaPiece: CustomDebugStringConvertible {
       return "unexpectedText(\(name.debugDescription))"
     case .verticalTabs(let data):
       return "verticalTabs(\(data))"
+    case .boxDrawing(let name):
+      return "boxDrawing(\(name.debugDescription))"
     }
   }
 }
@@ -245,6 +251,11 @@ extension Trivia {
   public static var verticalTab: Trivia {
     return .verticalTabs(1)
   }
+
+  /// Returns a piece of trivia for BoxDrawing.
+  public static func boxDrawing(_ text: String) -> Trivia {
+    return [.boxDrawing(text)]
+  }
 }
 
 extension TriviaPiece: Equatable {}
@@ -280,6 +291,8 @@ extension TriviaPiece {
       return SourceLength(of: text)
     case let .verticalTabs(count):
       return SourceLength(utf8Length: count)
+    case let .boxDrawing(text):
+      return SourceLength(of: text)
     }
   }
 }
@@ -304,6 +317,7 @@ public enum RawTriviaPiece: Equatable, Sendable {
   case tabs(Int)
   case unexpectedText(SyntaxText)
   case verticalTabs(Int)
+  case boxDrawing(SyntaxText)
 
   static func make(_ piece: TriviaPiece, arena: SyntaxArena) -> RawTriviaPiece {
     switch piece {
@@ -335,6 +349,8 @@ public enum RawTriviaPiece: Equatable, Sendable {
       return .unexpectedText(arena.intern(text))
     case let .verticalTabs(count):
       return .verticalTabs(count)
+    case let .boxDrawing(text):
+      return .boxDrawing(arena.intern(text))
     }
   }
 }
@@ -370,6 +386,8 @@ extension TriviaPiece {
       self = .unexpectedText(String(syntaxText: text))
     case let .verticalTabs(count):
       self = .verticalTabs(count)
+    case let .boxDrawing(text):
+      self = .boxDrawing(String(syntaxText: text))
     }
   }
 }
@@ -405,6 +423,8 @@ extension RawTriviaPiece {
       return text.count
     case let .verticalTabs(count):
       return count
+    case let .boxDrawing(text):
+      return text.count
     }
   }
 
@@ -438,6 +458,8 @@ extension RawTriviaPiece {
       return text
     case .verticalTabs(_):
       return nil
+    case .boxDrawing(let text):
+      return text
     }
   }
 }

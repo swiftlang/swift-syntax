@@ -52,7 +52,7 @@ public enum ChildKind {
   /// The child is a token that matches one of the given `choices`.
   /// If `requiresLeadingSpace` or `requiresTrailingSpace` is not `nil`, it
   /// overrides the default leading/trailing space behavior of the token.
-  case token(choices: [TokenChoice], requiresLeadingSpace: Bool? = nil, requiresTrailingSpace: Bool? = nil)
+  case token(choices: [TokenChoice], requiresLeadingSpace: Bool? = nil, requiresTrailingSpace: Bool? = nil, defaultAt: Int? = nil)
 
   public var isNodeChoices: Bool {
     if case .nodeChoices = self {
@@ -108,7 +108,7 @@ public class Child: NodeChoiceConvertible {
   /// A docc comment describing the child, including the trivia provided when
   /// initializing the ``Child``, and the list of possible token choices inferred automatically.
   public var documentation: SwiftSyntax.Trivia {
-    if case .token(let choices, _, _) = kind {
+    if case .token(let choices, _, _, _) = kind {
       let tokenChoicesTrivia = SwiftSyntax.Trivia.docCommentTrivia(
         from: GrammarGenerator.childTokenChoices(for: choices)
       )
@@ -230,9 +230,18 @@ public class Child: NodeChoiceConvertible {
   /// Grab the existing reference to that token from the global list.
   public var tokenKind: Token? {
     switch kind {
-    case .token(let choices, _, _):
-      if choices.count == 1 {
-        switch choices.first! {
+    case .token(let choices, _, _, defaultAt: let defaultIndex):
+      let defaultToken: TokenChoice?
+      if let defaultIndex {
+        defaultToken = choices[defaultIndex]
+      } else if let onlyToken = choices.only {
+        defaultToken = onlyToken
+      } else {
+        defaultToken = nil
+      }
+
+      if let defaultToken {
+        switch defaultToken {
         case .keyword: return .keyword
         case .token(let token): return token
         }

@@ -428,4 +428,29 @@ final class FunctionTests: XCTestCase {
       """
     )
   }
+
+  func testResultBuilderInitializerOfFunctionCallExpr() {
+    let functionCallExpr = FunctionCallExprSyntax(calledExpression: DeclReferenceExprSyntax(baseName: .identifier("f")))
+    {
+      LabeledExprSyntax(expression: NilLiteralExprSyntax())
+    }
+    assertBuildResult(
+      functionCallExpr,
+      """
+      f(nil)
+      """
+    )
+    let functionCallExprWithParenArgument = FunctionCallExprSyntax(
+      calledExpression: DeclReferenceExprSyntax(baseName: .identifier("f")),
+      leftParen: .leftParenToken(leadingTrivia: .space)
+    ) {
+      LabeledExprSyntax(expression: NilLiteralExprSyntax())
+    }
+    assertBuildResult(
+      functionCallExprWithParenArgument,
+      """
+      f (nil)
+      """
+    )
+  }
 }

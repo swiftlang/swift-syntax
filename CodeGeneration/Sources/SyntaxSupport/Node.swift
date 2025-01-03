@@ -219,6 +219,16 @@ public class Node: NodeChoiceConvertible {
     )
   }
 
+  /// A boolean value that indicates whether the result builder-based initializer should be automatically generated.
+  public var shouldCreateBuilderInitializer: Bool {
+    switch kind {
+    case .functionCallExpr:
+      return false
+    default:
+      return true
+    }
+  }
+
   /// Construct the specification for a collection syntax node.
   ///
   /// `base` must be `.syntaxCollection`.

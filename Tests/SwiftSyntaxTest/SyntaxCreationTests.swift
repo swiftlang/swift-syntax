@@ -176,13 +176,6 @@ class SyntaxCreationTests: XCTestCase {
     let call2 = call1.with(\.leftParen, nil).with(\.rightParen, nil)
     XCTAssertNil(call2.leftParen)
     XCTAssertNil(call2.rightParen)
-
-    let call3 = FunctionCallExprSyntax(
-      calledExpression: printID,
-      arguments: LabeledExprListSyntax([arg])
-    )
-    XCTAssertNil(call3.leftParen)
-    XCTAssertNil(call3.rightParen)
   }
 
   public func testMakeStringLiteralExpr() {

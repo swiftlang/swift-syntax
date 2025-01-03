@@ -33,9 +33,10 @@ final class MemoryLayoutTest: XCTestCase {
       "RawSyntax?": .init(size: 8, stride: 8, alignment: 8),
 
       "Syntax": .init(size: 16, stride: 16, alignment: 8),
-      "Syntax.Info": .init(size: 8, stride: 8, alignment: 8),
-      "Syntax.Info.Root": .init(size: 8, stride: 8, alignment: 8),
-      "Syntax.Info.NonRoot": .init(size: 36, stride: 40, alignment: 8),
+      "SyntaxData": .init(size: 32, stride: 32, alignment: 8),
+      "AbsoluteSyntaxInfo": .init(size: 12, stride: 12, alignment: 4),
+      "SyntaxDataReference?": .init(size: 8, stride: 8, alignment: 8),
+      "AtomicPointer": .init(size: 8, stride: 8, alignment: 8),
     ]
 
     let values = SyntaxMemoryLayout.values
@@ -44,5 +45,14 @@ final class MemoryLayoutTest: XCTestCase {
       let actualValue = try XCTUnwrap(values[exp.key], "Missing '\(exp.key)'")
       XCTAssertEqual(actualValue, exp.value, "Matching '\(exp.key)' values")
     }
+  }
+
+  func testSyntaxDataTailAllocation() throws {
+    #if !arch(x86_64) && !arch(arm64)
+    throw XCTSkip("Only runs on x86_64 and arm64")
+    #endif
+    let values = SyntaxMemoryLayout.values
+    // This ensures 'AtomicPointer' is safe to tail allocate right after 'SyntaxData.stride'
+    XCTAssertGreaterThanOrEqual(values["SyntaxData"]!.alignment, values["AtomicPointer"]!.alignment)
   }
 }

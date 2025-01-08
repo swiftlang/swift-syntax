@@ -52,13 +52,39 @@ extension FixIt {
 
 // MARK: - Make missing
 
+private extension FixIt.Change {
+  /// Transfers the leading and trailing trivia of `nodes` to the previous token
+  /// While doing this, it tries to be smart, merging trivia where it makes sense
+  /// and refusing to add e.g. a space after punctuation, where it usually
+  /// doesn't make sense.
+  static func transferTriviaAtSides(from nodes: [some SyntaxProtocol]) -> Self? {
+    guard let first = nodes.first, let last = nodes.last else {
+      preconditionFailure("nodes must not be empty")
+    }
+    let removedTriviaAtSides = first.leadingTrivia.mergingCommonSuffix(last.trailingTrivia)
+    guard !removedTriviaAtSides.isEmpty, let previousToken = first.previousToken(viewMode: .sourceAccurate) else {
+      return nil
+    }
+    let mergedTrivia = previousToken.trailingTrivia.mergingCommonPrefix(removedTriviaAtSides)
+    // We merge with the common prefix instead of the common suffix to preserve the original shape of the previous
+    // token's trailing trivia after merging.
+    guard !previousToken.tokenKind.isPunctuation || !mergedTrivia.allSatisfy(\.isSpaceOrTab) else {
+      // Punctuation is generally not followed by spaces in Swift.
+      // If this action would only add spaces to the punctuation, drop it.
+      // This generally yields better results.
+      return nil
+    }
+    return .replaceTrailingTrivia(token: previousToken, newTrivia: mergedTrivia)
+  }
+}
+
 extension FixIt.MultiNodeChange {
-  /// Replaced a present token with a missing node.
+  /// Replaced a present token with a missing token.
   ///
   /// If `transferTrivia` is `true`, the leading and trailing trivia of the
-  /// removed node will be transferred to the trailing trivia of the previous token.
+  /// removed token will be transferred to the trailing trivia of the previous token.
   static func makeMissing(_ token: TokenSyntax, transferTrivia: Bool = true) -> Self {
-    return makeMissing([token], transferTrivia: transferTrivia)
+    self.makeMissing([token], transferTrivia: transferTrivia)
   }
 
   /// Replace present tokens with missing tokens.
@@ -68,57 +94,33 @@ extension FixIt.MultiNodeChange {
   /// tokens.
   static func makeMissing(_ tokens: [TokenSyntax], transferTrivia: Bool = true) -> Self {
     precondition(tokens.allSatisfy(\.isPresent))
-    return .makeMissing(tokens.map(Syntax.init), transferTrivia: transferTrivia)
+    return self.makeMissing(tokens.map(Syntax.init), transferTrivia: transferTrivia)
   }
 
   /// If `transferTrivia` is `true`, the leading and trailing trivia of the
   /// removed node will be transferred to the trailing trivia of the previous token.
   static func makeMissing(_ node: (some SyntaxProtocol)?, transferTrivia: Bool = true) -> Self {
-    guard let node = node else {
+    guard let node else {
       return FixIt.MultiNodeChange(primitiveChanges: [])
     }
-    var changes = [FixIt.Change.replace(oldNode: Syntax(node), newNode: MissingMaker().rewrite(node, detach: true))]
-    if transferTrivia {
-      changes += FixIt.MultiNodeChange.transferTriviaAtSides(from: [node]).primitiveChanges
-    }
-    return FixIt.MultiNodeChange(primitiveChanges: changes)
+    return self.makeMissing([node], transferTrivia: transferTrivia)
   }
 
-  /// Transfers the leading and trailing trivia of `nodes` to the previous token
-  /// While doing this, it tries to be smart, merging trivia where it makes sense
-  /// and refusing to add e.g. a space after punctuation, where it usually
-  /// doesn't make sense.
-  private static func transferTriviaAtSides(from nodes: [some SyntaxProtocol]) -> Self {
-    let removedTriviaAtSides = (nodes.first?.leadingTrivia ?? []).merging(nodes.last?.trailingTrivia ?? [])
-    if !removedTriviaAtSides.isEmpty, let previousToken = nodes.first?.previousToken(viewMode: .sourceAccurate) {
-      let mergedTrivia = previousToken.trailingTrivia.merging(removedTriviaAtSides)
-      if previousToken.tokenKind.isPunctuation, mergedTrivia.allSatisfy({ $0.isSpaceOrTab }) {
-        // Punctuation is generally not followed by spaces in Swift.
-        // If this action would only add spaces to the punctuation, drop it.
-        // This generally yields better results.
-        return FixIt.MultiNodeChange()
-      }
-      return FixIt.MultiNodeChange(.replaceTrailingTrivia(token: previousToken, newTrivia: mergedTrivia))
-    } else {
-      return FixIt.MultiNodeChange()
-    }
-  }
-
-  /// Replace present nodes with their missing equivalents.
+  /// Replace present nodes with missing nodes.
   ///
   /// If `transferTrivia` is `true`, the leading trivia of the first node and
   /// the trailing trivia of the last node will be transferred to their adjecent
   /// tokens.
-  static func makeMissing(_ nodes: [Syntax], transferTrivia: Bool = true) -> Self {
+  static func makeMissing(_ nodes: [some SyntaxProtocol], transferTrivia: Bool = true) -> Self {
     precondition(!nodes.isEmpty)
     var changes = nodes.map {
       FixIt.Change.replace(
-        oldNode: $0,
+        oldNode: Syntax($0),
         newNode: MissingMaker().rewrite($0, detach: true)
       )
     }
-    if transferTrivia {
-      changes += FixIt.MultiNodeChange.transferTriviaAtSides(from: nodes).primitiveChanges
+    if transferTrivia, let transferredTrivia = FixIt.Change.transferTriviaAtSides(from: nodes) {
+      changes.append(transferredTrivia)
     }
     return FixIt.MultiNodeChange(primitiveChanges: changes)
   }

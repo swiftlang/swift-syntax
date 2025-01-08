@@ -965,13 +965,6 @@ extension RawSyntax: Identifiable {
   }
 }
 
-extension UInt {
-  /// Convert `RawSymtax.ID` to `UInt`. Lossless.
-  init(rawID: RawSyntax.ID) {
-    self.init(bitPattern: rawID.pointer)
-  }
-}
-
 /// See `SyntaxMemoryLayout`.
 let RawSyntaxDataMemoryLayouts: [String: SyntaxMemoryLayout.Value] = [
   "RawSyntaxData": .init(RawSyntaxData.self),

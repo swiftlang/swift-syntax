@@ -55,7 +55,7 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
   /// same instance. This guarantees that the trees with the same 'rootId' have
   /// exact the same structure. But, two trees with exactly the same structure
   /// might still have different 'rootId's.
-  let rootId: UInt
+  let rootId: RawSyntax.ID
 
   /// Unique value for a node within its own tree.
   public let indexInTree: SyntaxIndexInTree
@@ -81,7 +81,7 @@ public struct SyntaxIdentifier: Comparable, Hashable, Sendable {
       return nil
     }
 
-    return SyntaxIdentifier(rootId: UInt(rawID: root.raw.id), indexInTree: indexInTree)
+    return SyntaxIdentifier(rootId: root.raw.id, indexInTree: indexInTree)
   }
 
   /// A ``SyntaxIdentifier`` compares less than another ``SyntaxIdentifier`` if the node at that identifier occurs first

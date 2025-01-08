@@ -364,7 +364,7 @@ extension SyntaxProtocol {
   /// ``SyntaxIdentifier``) or if no node with the given identifier is a child of this syntax node, returns `nil`.
   public func node(at syntaxIdentifier: SyntaxIdentifier) -> Syntax? {
     let syntax = Syntax(self)
-    guard UInt(rawID: syntax.raw.id) == syntaxIdentifier.rootId else {
+    guard syntax.raw.id == syntaxIdentifier.rootId else {
       return nil
     }
 

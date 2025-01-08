@@ -350,6 +350,252 @@ extension GenericArgumentSyntax {
   }
 }
 
+extension FunctionCallExprSyntax {
+  @_disfavoredOverload
+  @available(
+    *,
+    deprecated,
+    message: "Use the initializer that does not provide default values for leftParen and rightParen."
+  )
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeCalledExasdfpression: UnexpectedNodesSyntax? = nil,
+    calledExpression: some ExprSyntaxProtocol,
+    _ unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+    arguments: LabeledExprListSyntax,
+    _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax?,
+    _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
+    trailingClosure: ClosureExprSyntax? = nil,
+    _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
+    _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeCalledExasdfpression,
+      calledExpression: calledExpression,
+      leftParen: nil,
+      unexpectedBetweenLeftParenAndArguments,
+      arguments: arguments,
+      unexpectedBetweenArgumentsAndRightParen,
+      rightParen: rightParen,
+      unexpectedBetweenRightParenAndTrailingClosure,
+      trailingClosure: trailingClosure,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
+      additionalTrailingClosures: additionalTrailingClosures,
+      unexpectedAfterAdditionalTrailingClosures,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @_disfavoredOverload
+  @available(
+    *,
+    deprecated,
+    message: "Use the initializer that does not provide default values for leftParen and rightParen."
+  )
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeCalledExasdfpression: UnexpectedNodesSyntax? = nil,
+    calledExpression: some ExprSyntaxProtocol,
+    _ unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax?,
+    _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+    arguments: LabeledExprListSyntax,
+    _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
+    trailingClosure: ClosureExprSyntax? = nil,
+    _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
+    _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeCalledExasdfpression,
+      calledExpression: calledExpression,
+      leftParen: leftParen,
+      unexpectedBetweenLeftParenAndArguments,
+      arguments: arguments,
+      unexpectedBetweenArgumentsAndRightParen,
+      rightParen: nil,
+      unexpectedBetweenRightParenAndTrailingClosure,
+      trailingClosure: trailingClosure,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
+      additionalTrailingClosures: additionalTrailingClosures,
+      unexpectedAfterAdditionalTrailingClosures,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @_disfavoredOverload
+  @available(
+    *,
+    deprecated,
+    message: "Use the initializer that does not provide default values for leftParen and rightParen."
+  )
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeCalledExasdfpression: UnexpectedNodesSyntax? = nil,
+    calledExpression: some ExprSyntaxProtocol,
+    _ unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+    arguments: LabeledExprListSyntax,
+    _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
+    trailingClosure: ClosureExprSyntax? = nil,
+    _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
+    _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeCalledExasdfpression,
+      calledExpression: calledExpression,
+      leftParen: nil,
+      unexpectedBetweenLeftParenAndArguments,
+      arguments: arguments,
+      unexpectedBetweenArgumentsAndRightParen,
+      rightParen: nil,
+      unexpectedBetweenRightParenAndTrailingClosure,
+      trailingClosure: trailingClosure,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
+      additionalTrailingClosures: additionalTrailingClosures,
+      unexpectedAfterAdditionalTrailingClosures,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @_disfavoredOverload
+  @available(
+    *,
+    deprecated,
+    renamed:
+      "init(leadingTrivia:_:calledExpression:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)"
+  )
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil,
+    calledExpression: some ExprSyntaxProtocol,
+    _ unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil,
+    argumentList: LabeledExprListSyntax,
+    _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax?,
+    _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
+    trailingClosure: ClosureExprSyntax? = nil,
+    _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
+    _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeCalledExpression,
+      calledExpression: calledExpression,
+      unexpectedBetweenCalledExpressionAndLeftParen,
+      leftParen: nil,
+      unexpectedBetweenLeftParenAndArgumentList,
+      arguments: argumentList,
+      unexpectedBetweenArgumentListAndRightParen,
+      rightParen: rightParen,
+      unexpectedBetweenRightParenAndTrailingClosure,
+      trailingClosure: trailingClosure,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
+      additionalTrailingClosures: additionalTrailingClosures,
+      unexpectedAfterAdditionalTrailingClosures,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @_disfavoredOverload
+  @available(
+    *,
+    deprecated,
+    renamed:
+      "init(leadingTrivia:_:calledExpression:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)"
+  )
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil,
+    calledExpression: some ExprSyntaxProtocol,
+    _ unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax?,
+    _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil,
+    argumentList: LabeledExprListSyntax,
+    _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
+    trailingClosure: ClosureExprSyntax? = nil,
+    _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
+    _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeCalledExpression,
+      calledExpression: calledExpression,
+      unexpectedBetweenCalledExpressionAndLeftParen,
+      leftParen: leftParen,
+      unexpectedBetweenLeftParenAndArgumentList,
+      arguments: argumentList,
+      unexpectedBetweenArgumentListAndRightParen,
+      rightParen: nil,
+      unexpectedBetweenRightParenAndTrailingClosure,
+      trailingClosure: trailingClosure,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
+      additionalTrailingClosures: additionalTrailingClosures,
+      unexpectedAfterAdditionalTrailingClosures,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @_disfavoredOverload
+  @available(
+    *,
+    deprecated,
+    renamed:
+      "init(leadingTrivia:_:calledExpression:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)"
+  )
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil,
+    calledExpression: some ExprSyntaxProtocol,
+    _ unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArgumentList: UnexpectedNodesSyntax? = nil,
+    argumentList: LabeledExprListSyntax,
+    _ unexpectedBetweenArgumentListAndRightParen: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
+    trailingClosure: ClosureExprSyntax? = nil,
+    _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
+    _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeCalledExpression,
+      calledExpression: calledExpression,
+      unexpectedBetweenCalledExpressionAndLeftParen,
+      leftParen: nil,
+      unexpectedBetweenLeftParenAndArgumentList,
+      arguments: argumentList,
+      unexpectedBetweenArgumentListAndRightParen,
+      rightParen: nil,
+      unexpectedBetweenRightParenAndTrailingClosure,
+      trailingClosure: trailingClosure,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
+      additionalTrailingClosures: additionalTrailingClosures,
+      unexpectedAfterAdditionalTrailingClosures,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
 extension FunctionEffectSpecifiersSyntax {
   @_disfavoredOverload
   @available(*, deprecated, message: "use throwsClause instead of throwsSpecifier")

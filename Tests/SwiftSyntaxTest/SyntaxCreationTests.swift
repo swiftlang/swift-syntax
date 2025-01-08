@@ -179,7 +179,9 @@ class SyntaxCreationTests: XCTestCase {
 
     let call3 = FunctionCallExprSyntax(
       calledExpression: printID,
-      arguments: LabeledExprListSyntax([arg])
+      leftParen: nil,
+      arguments: LabeledExprListSyntax([arg]),
+      rightParen: nil
     )
     XCTAssertNil(call3.leftParen)
     XCTAssertNil(call3.rightParen)

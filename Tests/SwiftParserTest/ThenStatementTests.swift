@@ -267,7 +267,9 @@ final class ThenStatementTests: ParserTestCase {
       substructure:
         FunctionCallExprSyntax(
           calledExpression: DeclReferenceExprSyntax(baseName: .identifier("then")),
+          leftParen: nil,
           arguments: .init([]),
+          rightParen: nil,
           trailingClosure: ClosureExprSyntax(statements: .init([]))
         )
     )
@@ -282,7 +284,9 @@ final class ThenStatementTests: ParserTestCase {
       substructure:
         FunctionCallExprSyntax(
           calledExpression: DeclReferenceExprSyntax(baseName: .identifier("then")),
+          leftParen: nil,
           arguments: .init([]),
+          rightParen: nil,
           trailingClosure: ClosureExprSyntax(statements: .init([]))
         )
     )

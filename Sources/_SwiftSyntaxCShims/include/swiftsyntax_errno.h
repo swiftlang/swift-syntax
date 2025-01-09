@@ -13,11 +13,9 @@
 #ifndef SWIFTSYNTAX_ERRNO_H
 #define SWIFTSYNTAX_ERRNO_H
 
-#include "_bridging.h"
-
 #include <errno.h>
 
-SWIFT_NAME_S("getter:_errno()")
+__attribute__((swift_name("getter:_errno()")))
 static inline int swiftsyntax_errno(void) {
   return errno;
 }

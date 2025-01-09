@@ -38,4 +38,16 @@ static inline void swiftsyntax_atomic_bool_destroy(AtomicBool *_Nonnull atomic) 
   free(atomic);
 }
 
+typedef struct {
+  _Atomic(const void *_Nullable) value;
+} AtomicPointer;
+
+static inline const void *_Nullable swiftsyntax_atomic_pointer_get(const AtomicPointer *_Nonnull atomic) {
+  return atomic->value;
+}
+
+static inline void swiftsyntax_atomic_pointer_set(AtomicPointer *_Nonnull atomic, const void *_Nullable newValue) {
+  atomic->value = newValue;
+}
+
 #endif // SWIFTSYNTAX_ATOMICBOOL_H

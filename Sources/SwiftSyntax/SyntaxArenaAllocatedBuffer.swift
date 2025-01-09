@@ -27,16 +27,12 @@ public struct SyntaxArenaAllocatedPointer<Element: Sendable>: @unchecked Sendabl
   /// - Important: The client needs to ensure sure that the buffer is indeed
   ///   allocated by a ``SyntaxArena`` and that the ``SyntaxArena`` will outlive
   ///   any users of this ``SyntaxArenaAllocatedBufferPointer``.
-  init(_ pointer: UnsafePointer<Element>) {
-    self.pointer = pointer
+  init(_ buffer: UnsafePointer<Element>) {
+    self.pointer = buffer
   }
 
   var pointee: Element {
     @_transparent unsafeAddress { pointer }
-  }
-
-  func advanced(by n: Int) -> Self {
-    Self(pointer.advanced(by: n))
   }
 
   var unsafeRawPointer: UnsafeRawPointer {
@@ -70,12 +66,10 @@ public struct SyntaxArenaAllocatedBufferPointer<Element: Sendable>: RandomAccess
     self.buffer = buffer
   }
 
-  /// Create a buffer over the same memory as the given buffer slice.
-  public init(rebasing slice: Self.SubSequence) {
-    self.buffer = UnsafeBufferPointer(
-      start: slice.base.baseAddress?.advanced(by: slice.startIndex),
-      count: slice.count
-    )
+  public subscript<RangeType: RangeExpression<Int>>(
+    range: RangeType
+  ) -> SyntaxArenaAllocatedBufferPointer<Element> {
+    return SyntaxArenaAllocatedBufferPointer(UnsafeBufferPointer(rebasing: self.buffer[range]))
   }
 
   public subscript(_ index: Int) -> Element {

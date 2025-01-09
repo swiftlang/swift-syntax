@@ -11,7 +11,6 @@
 //===----------------------------------------------------------------------===//
 
 #include "_includes.h"
-#include "Atomics.h"
-#include "PlatformMutex.h"
+#include "AtomicBool.h"
 #include "swiftsyntax_errno.h"
 #include "swiftsyntax_stdio.h"

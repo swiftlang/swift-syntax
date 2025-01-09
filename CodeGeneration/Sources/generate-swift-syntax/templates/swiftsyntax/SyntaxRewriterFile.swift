@@ -44,6 +44,13 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
+      /// 'Syntax' object factory recycling 'Syntax.Info' instances.
+      private let nodeFactory: SyntaxNodeFactory = SyntaxNodeFactory()
+      """
+    )
+
+    DeclSyntax(
+      """
       public init(viewMode: SyntaxTreeViewMode = .sourceAccurate) {
         self.viewMode = viewMode
         self.arena = nil
@@ -323,11 +330,11 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         // with 'Syntax'
         var rewrittens: ContiguousArray<RetainedSyntaxArena> = []
 
-        for case let childDataRef? in node.layoutBuffer where viewMode.shouldTraverse(node: childDataRef.pointee.raw) {
+        for case let (child?, info) in RawSyntaxChildren(node) where viewMode.shouldTraverse(node: child) {
 
           // Build the Syntax node to rewrite
-          let childNode = visitImpl(Syntax(arena: node.arena, dataRef: childDataRef))
-          if childNode.raw.id != childDataRef.pointee.raw.id {
+          var childNode = visitImpl(nodeFactory.create(parent: node, raw: child, absoluteInfo: info))
+          if childNode.raw.id != child.id {
             // The node was rewritten, let's handle it
 
             if newLayout.baseAddress == nil {
@@ -338,10 +345,13 @@ let syntaxRewriterFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             }
 
             // Update the rewritten child.
-            newLayout[Int(childDataRef.pointee.absoluteInfo.layoutIndexInParent)] = childNode.raw
+            newLayout[Int(info.indexInParent)] = childNode.raw
             // Retain the syntax arena of the new node until it's wrapped with Syntax node.
             rewrittens.append(childNode.raw.arenaReference.retained)
           }
+
+          // Recycle 'childNode.info'
+          nodeFactory.dispose(&childNode)
         }
 
         if newLayout.baseAddress != nil {

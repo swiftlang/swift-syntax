@@ -385,7 +385,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "accessorSpecifier",
-        kind: .token(choices: [.keyword(.get), .keyword(.set)]),
+        kind: .token(choices: [.keyword(.get), .keyword(.set), .keyword(._modify)]),
         documentation: "The accessor name.",
         isOptional: true
       ),

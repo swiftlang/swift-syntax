@@ -1374,6 +1374,7 @@ extension DerivativeAttributeArgumentsSyntax {
   public enum AccessorSpecifierOptions: TokenSpecSet {
     case get
     case set
+    case _modify
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -1381,6 +1382,8 @@ extension DerivativeAttributeArgumentsSyntax {
         self = .get
       case TokenSpec(.set):
         self = .set
+      case TokenSpec(._modify):
+        self = ._modify
       default:
         return nil
       }
@@ -1392,6 +1395,8 @@ extension DerivativeAttributeArgumentsSyntax {
         self = .get
       case TokenSpec(.set):
         self = .set
+      case TokenSpec(._modify):
+        self = ._modify
       default:
         return nil
       }
@@ -1403,6 +1408,8 @@ extension DerivativeAttributeArgumentsSyntax {
         return .keyword(.get)
       case .set:
         return .keyword(.set)
+      case ._modify:
+        return .keyword(._modify)
       }
     }
 
@@ -1416,6 +1423,8 @@ extension DerivativeAttributeArgumentsSyntax {
         return .keyword(.get)
       case .set:
         return .keyword(.set)
+      case ._modify:
+        return .keyword(._modify)
       }
     }
   }

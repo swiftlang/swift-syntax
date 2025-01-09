@@ -950,7 +950,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.period)]))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 9, verify(layout[9], as: RawTokenSyntax?.self, tokenChoices: [.keyword("get"), .keyword("set")]))
+    assertNoError(kind, 9, verify(layout[9], as: RawTokenSyntax?.self, tokenChoices: [.keyword("get"), .keyword("set"), .keyword("_modify")]))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 11, verify(layout[11], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))

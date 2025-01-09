@@ -944,7 +944,8 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "leftParen",
         kind: .token(choices: [.token(.leftParen)]),
-        isOptional: true
+        isOptional: true,
+        providesDefaultInitialization: false
       ),
       Child(
         name: "arguments",
@@ -954,7 +955,8 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "rightParen",
         kind: .token(choices: [.token(.rightParen)]),
-        isOptional: true
+        isOptional: true,
+        providesDefaultInitialization: false
       ),
       Child(
         name: "trailingClosure",

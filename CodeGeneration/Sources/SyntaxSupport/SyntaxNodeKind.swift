@@ -299,6 +299,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case unresolvedAsExpr
   case unresolvedIsExpr
   case unresolvedTernaryExpr
+  case unsafeExpr
   case valueBindingPattern
   case variableDecl
   case versionComponent

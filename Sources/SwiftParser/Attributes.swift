@@ -650,7 +650,12 @@ extension Parser {
     let unexpectedBeforeAccessor: RawUnexpectedNodesSyntax?
     let accessor: RawTokenSyntax?
     if period != nil {
-      (unexpectedBeforeAccessor, accessor) = self.expect(.keyword(.get), .keyword(.set), default: .keyword(.get))
+      (unexpectedBeforeAccessor, accessor) = self.expect(
+        .keyword(.get),
+        .keyword(.set),
+        .keyword(._modify),
+        default: .keyword(.get)
+      )
     } else {
       (unexpectedBeforeAccessor, accessor) = (nil, nil)
     }

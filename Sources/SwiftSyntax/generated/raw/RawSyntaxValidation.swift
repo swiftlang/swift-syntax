@@ -2973,6 +2973,14 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.colon)]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
   }
+  func validateUnsafeExprSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("unsafe")]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawExprSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+  }
   func validateValueBindingPatternSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -3632,6 +3640,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     validateUnresolvedIsExprSyntax(kind: kind, layout: layout)
   case .unresolvedTernaryExpr:
     validateUnresolvedTernaryExprSyntax(kind: kind, layout: layout)
+  case .unsafeExpr:
+    validateUnsafeExprSyntax(kind: kind, layout: layout)
   case .valueBindingPattern:
     validateValueBindingPatternSyntax(kind: kind, layout: layout)
   case .variableDecl:

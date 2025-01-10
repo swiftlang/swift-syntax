@@ -399,6 +399,8 @@ extension SyntaxKind {
       return "'is'"
     case .unresolvedTernaryExpr:
       return "ternary operator"
+    case .unsafeExpr:
+      return "'unsafe' expression"
     case .valueBindingPattern:
       return "value binding pattern"
     case .variableDecl:

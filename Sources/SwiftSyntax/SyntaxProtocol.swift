@@ -253,20 +253,7 @@ extension SyntaxProtocol {
   /// Recursively walks through the tree to find the token semantically before
   /// this node.
   public func previousToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
-    guard let parent = self.parent else {
-      return nil
-    }
-    let siblings = parent.children(viewMode: viewMode)
-    // `self` could be a missing node at index 0 and `viewMode` be `.sourceAccurate`.
-    // In that case `siblings` skips over the missing `self` node and has a `startIndex > 0`.
-    if siblings.startIndex < self.indexInParent {
-      for child in siblings[..<self.indexInParent].reversed() {
-        if let token = child.lastToken(viewMode: viewMode) {
-          return token
-        }
-      }
-    }
-    return parent.previousToken(viewMode: viewMode)
+    return self._syntaxNode.previousToken(viewMode: viewMode)
   }
 
   @available(*, deprecated, message: "Use nextToken(viewMode:) instead")
@@ -277,16 +264,7 @@ extension SyntaxProtocol {
   /// Recursively walks through the tree to find the next token semantically
   /// after this node.
   public func nextToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
-    guard let parent = self.parent else {
-      return nil
-    }
-    let siblings = parent.children(viewMode: viewMode)
-    for child in siblings[siblings.index(after: self.indexInParent)...] {
-      if let token = child.firstToken(viewMode: viewMode) {
-        return token
-      }
-    }
-    return parent.nextToken(viewMode: viewMode)
+    return self._syntaxNode.nextToken(viewMode: viewMode)
   }
 
   @available(*, deprecated, message: "Use firstToken(viewMode: .sourceAccurate) instead")
@@ -296,17 +274,7 @@ extension SyntaxProtocol {
 
   /// Returns the first token node that is part of this syntax node.
   public func firstToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
-    guard viewMode.shouldTraverse(node: raw) else { return nil }
-    if let token = _syntaxNode.as(TokenSyntax.self) {
-      return token
-    }
-
-    for child in children(viewMode: viewMode) {
-      if let token = child.firstToken(viewMode: viewMode) {
-        return token
-      }
-    }
-    return nil
+    return self._syntaxNode.firstToken(viewMode: viewMode)
   }
 
   @available(*, deprecated, message: "Use lastToken(viewMode: .sourceAccurate) instead")
@@ -316,17 +284,7 @@ extension SyntaxProtocol {
 
   /// Returns the last token node that is part of this syntax node.
   public func lastToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
-    guard viewMode.shouldTraverse(node: raw) else { return nil }
-    if let token = _syntaxNode.as(TokenSyntax.self) {
-      return token
-    }
-
-    for child in children(viewMode: viewMode).reversed() {
-      if let tok = child.lastToken(viewMode: viewMode) {
-        return tok
-      }
-    }
-    return nil
+    return self._syntaxNode.lastToken(viewMode: viewMode)
   }
 
   /// Sequence of tokens that are part of this Syntax node.

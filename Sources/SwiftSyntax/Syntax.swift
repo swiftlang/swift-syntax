@@ -36,7 +36,7 @@ public struct Syntax: SyntaxProtocol, SyntaxHashable {
     self.dataRef = dataRef
   }
 
-  private var data: SyntaxData {
+  var data: SyntaxData {
     @_transparent unsafeAddress { dataRef.pointer }
   }
 

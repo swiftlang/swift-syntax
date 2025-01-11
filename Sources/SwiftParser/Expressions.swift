@@ -444,6 +444,19 @@ extension Parser {
           arena: self.arena
         )
       )
+    case (.unsafe, let handle)?:
+      let unsafeTok = self.eat(handle)
+      let sub = self.parseSequenceExpressionElement(
+        flavor: flavor,
+        pattern: pattern
+      )
+      return RawExprSyntax(
+        RawUnsafeExprSyntax(
+          unsafeKeyword: unsafeTok,
+          expression: sub,
+          arena: self.arena
+        )
+      )
     case (._move, let handle)?:
       let moveKeyword = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(

@@ -542,7 +542,7 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   public init?(_ node: __shared some SyntaxProtocol) {
     switch node.raw.kind {
-    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, ._canImportExpr, ._canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .doExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .simpleStringLiteralExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr:
+    case .arrayExpr, .arrowExpr, .asExpr, .assignmentExpr, .awaitExpr, .binaryOperatorExpr, .booleanLiteralExpr, .borrowExpr, ._canImportExpr, ._canImportVersionInfo, .closureExpr, .consumeExpr, .copyExpr, .declReferenceExpr, .dictionaryExpr, .discardAssignmentExpr, .doExpr, .editorPlaceholderExpr, .floatLiteralExpr, .forceUnwrapExpr, .functionCallExpr, .genericSpecializationExpr, .ifExpr, .inOutExpr, .infixOperatorExpr, .integerLiteralExpr, .isExpr, .keyPathExpr, .macroExpansionExpr, .memberAccessExpr, .missingExpr, .nilLiteralExpr, .optionalChainingExpr, .packElementExpr, .packExpansionExpr, .patternExpr, .postfixIfConfigExpr, .postfixOperatorExpr, .prefixOperatorExpr, .regexLiteralExpr, .sequenceExpr, .simpleStringLiteralExpr, .stringLiteralExpr, .subscriptCallExpr, .superExpr, .switchExpr, .ternaryExpr, .tryExpr, .tupleExpr, .typeExpr, .unresolvedAsExpr, .unresolvedIsExpr, .unresolvedTernaryExpr, .unsafeExpr:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -619,7 +619,8 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
       .node(TypeExprSyntax.self),
       .node(UnresolvedAsExprSyntax.self),
       .node(UnresolvedIsExprSyntax.self),
-      .node(UnresolvedTernaryExprSyntax.self)
+      .node(UnresolvedTernaryExprSyntax.self),
+      .node(UnsafeExprSyntax.self)
     ])
   }
 }
@@ -1789,6 +1790,7 @@ extension Syntax {
       .node(UnresolvedAsExprSyntax.self),
       .node(UnresolvedIsExprSyntax.self),
       .node(UnresolvedTernaryExprSyntax.self),
+      .node(UnsafeExprSyntax.self),
       .node(ValueBindingPatternSyntax.self),
       .node(VariableDeclSyntax.self),
       .node(VersionComponentListSyntax.self),

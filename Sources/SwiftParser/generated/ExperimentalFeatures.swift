@@ -48,6 +48,9 @@ extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of @abi attribute.
   public static let abiAttribute = Self (rawValue: 1 << 7)
 
+  /// Whether to enable the parsing of 'unsafe' expression.
+  public static let unsafeExpression = Self (rawValue: 1 << 8)
+
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
   public init?(name: String) {
@@ -68,6 +71,8 @@ extension Parser.ExperimentalFeatures {
       self = .valueGenerics
     case "ABIAttribute":
       self = .abiAttribute
+    case "WarnUnsafe":
+      self = .unsafeExpression
     default:
       return nil
     }

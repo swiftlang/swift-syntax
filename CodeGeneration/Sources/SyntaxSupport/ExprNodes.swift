@@ -181,6 +181,23 @@ public let EXPR_NODES: [Node] = [
   ),
 
   Node(
+    kind: .unsafeExpr,
+    base: .expr,
+    experimentalFeature: .unsafeExpression,
+    nameForDiagnostics: "'unsafe' expression",
+    children: [
+      Child(
+        name: "unsafeKeyword",
+        kind: .token(choices: [.keyword(.unsafe)])
+      ),
+      Child(
+        name: "expression",
+        kind: .node(kind: .expr)
+      ),
+    ]
+  ),
+
+  Node(
     kind: .binaryOperatorExpr,
     base: .expr,
     nameForDiagnostics: "operator",

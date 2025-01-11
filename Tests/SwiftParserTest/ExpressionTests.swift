@@ -2188,6 +2188,40 @@ final class StatementExpressionTests: ParserTestCase {
     )
   }
 
+  func testUnsafeExpr() {
+    assertParse(
+      """
+      func f() {
+        let x = unsafe y
+      }
+      """,
+      experimentalFeatures: .unsafeExpression
+    )
+
+    assertParse(
+      """
+      func f() {
+        let x = unsafe1️⃣ y
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: [
+            "insert newline",
+            "insert ';'",
+          ]
+        )
+      ],
+      fixedSource: """
+        func f() {
+          let x = unsafe
+          y
+        }
+        """
+    )
+  }
+
   func testUnterminatedInterpolationAtEndOfMultilineStringLiteral() {
     assertParse(
       #"""

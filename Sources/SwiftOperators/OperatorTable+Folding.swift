@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-public import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) public import SwiftSyntax
 #else
-import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 #endif
 
 extension ExprSyntax {
@@ -104,8 +104,8 @@ extension OperatorTable {
     op: ExprSyntax,
     rhs: ExprSyntax
   ) -> ExprSyntax {
-    // If the left-hand side is a "try" or "await", hoist it up to encompass
-    // the right-hand side as well.
+    // If the left-hand side is a "try", "await", or "unsafe", hoist it up to
+    // encompass the right-hand side as well.
     if let tryExpr = lhs.as(TryExprSyntax.self) {
       return ExprSyntax(
         TryExprSyntax(
@@ -134,6 +134,24 @@ extension OperatorTable {
             op: op,
             rhs: rhs
           )
+        )
+      )
+    }
+
+    if let unsafeExpr = lhs.as(UnsafeExprSyntax.self) {
+      return ExprSyntax(
+        UnsafeExprSyntax(
+          leadingTrivia: unsafeExpr.leadingTrivia,
+          unsafeExpr.unexpectedBeforeUnsafeKeyword,
+          unsafeKeyword: unsafeExpr.unsafeKeyword,
+          unsafeExpr.unexpectedBetweenUnsafeKeywordAndExpression,
+          expression: makeBinaryOperationExpr(
+            lhs: unsafeExpr.expression,
+            op: op,
+            rhs: rhs
+          ),
+          unsafeExpr.unexpectedAfterExpression,
+          trailingTrivia: unsafeExpr.trailingTrivia
         )
       )
     }

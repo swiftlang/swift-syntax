@@ -2268,6 +2268,20 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  override open func visit(_ node: UnsafeExprSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  override open func visitPost(_ node: UnsafeExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: ValueBindingPatternSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

@@ -2214,11 +2214,11 @@ final class StatementExpressionTests: ParserTestCase {
         )
       ],
       fixedSource: """
-      func f() {
-        let x = unsafe
-        y
-      }
-      """
+        func f() {
+          let x = unsafe
+          y
+        }
+        """
     )
   }
 

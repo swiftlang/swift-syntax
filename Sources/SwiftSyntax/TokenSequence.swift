@@ -10,6 +10,70 @@
 //
 //===----------------------------------------------------------------------===//
 
+extension Syntax {
+  /// Implementation of 'SyntaxProtocol.previousToken(viewMode:)'
+  func previousToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
+    guard let parentDataRef = data.parent else {
+      return nil
+    }
+    for case let childDataRef? in arena.layout(for: parentDataRef)[..<layoutIndexInParent].reversed() {
+      if let token = Syntax(arena: arena, dataRef: childDataRef).lastToken(viewMode: viewMode) {
+        return token
+      }
+    }
+    return Syntax(arena: arena, dataRef: parentDataRef).previousToken(viewMode: viewMode)
+  }
+
+  /// Implementation of 'SyntaxProtocol.nextToken(viewMode:)'
+  func nextToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
+    guard let parentDataRef = data.parent else {
+      return nil
+    }
+    for case let childDataRef? in arena.layout(for: parentDataRef)[(layoutIndexInParent &+ 1)...] {
+      if let token = Syntax(arena: arena, dataRef: childDataRef).firstToken(viewMode: viewMode) {
+        return token
+      }
+    }
+    return Syntax(arena: arena, dataRef: parentDataRef).nextToken(viewMode: viewMode)
+  }
+
+  /// Implementation of 'SyntaxProtocol.firstToken(viewMode:)'
+  ///
+  /// - Note: Can't use 'RawSyntax.firstToken(viewMode:)' because it loses absolute info.
+  func firstToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
+    guard viewMode.shouldTraverse(node: raw) else {
+      return nil
+    }
+    if raw.isToken {
+      return TokenSyntax(self)!
+    }
+    for case let childDataRef? in layoutBuffer {
+      if let token = Syntax(arena: arena, dataRef: childDataRef).firstToken(viewMode: viewMode) {
+        return token
+      }
+    }
+    return nil
+  }
+
+  /// Implementation of 'SyntaxProtocol.lastToken(viewMode:)'
+  ///
+  /// - Note: Can't use 'RawSyntax.lastToken(viewMode:)' because it loses absolute info.
+  func lastToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
+    guard viewMode.shouldTraverse(node: raw) else {
+      return nil
+    }
+    if raw.isToken {
+      return TokenSyntax(self)!
+    }
+    for case let childDataRef? in layoutBuffer.reversed() {
+      if let token = Syntax(arena: arena, dataRef: childDataRef).lastToken(viewMode: viewMode) {
+        return token
+      }
+    }
+    return nil
+  }
+}
+
 /// Sequence of tokens that are part of the provided Syntax node.
 public struct TokenSequence: Sequence, Sendable {
   /// Iterates over a ``TokenSequence``.

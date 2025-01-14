@@ -1721,4 +1721,26 @@ class LexerTests: ParserTestCase {
       ]
     )
   }
+
+  func testBoxDrawing() {
+    assertLexemes(
+      """
+      ╔═════ hello ═════╗
+      ║      world      ║
+      ╠═══════foo═══════╣
+      ║       bar       ║
+      ╚═════════════════╝
+      """,
+      lexemes: [
+        LexemeSpec(.identifier, leading: "╔═════ ", text: "hello", trailing: " ═════"),
+        LexemeSpec(.leadingBoxCorner, text: "╗", trailing: ""),
+        LexemeSpec(.identifier, leading: "\n║      ", text: "world", trailing: "      ║", flags: .isAtStartOfLine),
+        LexemeSpec(.trailingBoxJunction, leading: "\n", text: "╠", trailing: "═══════", flags: .isAtStartOfLine),
+        LexemeSpec(.identifier, text: "foo", trailing: "═══════"),
+        LexemeSpec(.leadingBoxJunction, text: "╣"),
+        LexemeSpec(.identifier, leading: "\n║       ", text: "bar", trailing: "       ║", flags:.isAtStartOfLine),
+        LexemeSpec(.trailingBoxCorner, leading: "\n", text: "╚", trailing: "═════════════════╝", flags: .isAtStartOfLine),
+      ]
+    )
+  }
 }

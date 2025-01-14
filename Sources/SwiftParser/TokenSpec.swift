@@ -192,6 +192,14 @@ public struct TokenSpec: Sendable {
     default: return TokenKind.fromRaw(kind: rawTokenKind, text: "")
     }
   }
+
+  func disallowedAtStartOfLine() -> TokenSpec {
+    if let keyword {
+      return .init(keyword, remapping: remapping, recoveryPrecedence: recoveryPrecedence, allowAtStartOfLine: false)
+    }
+    return .init(rawTokenKind, remapping: remapping, recoveryPrecedence: recoveryPrecedence, allowAtStartOfLine: false)
+
+  }
 }
 
 extension TokenConsumer {

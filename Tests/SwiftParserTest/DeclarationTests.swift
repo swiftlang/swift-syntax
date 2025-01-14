@@ -168,6 +168,49 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testFuncBoxDrawing() throws {
+    func callPrint(_ literal: StringLiteralExprSyntax) -> FunctionCallExprSyntax {
+      FunctionCallExprSyntax(callee: DeclReferenceExprSyntax(baseName: "print")) {
+        LabeledExprSyntax(expression: literal)
+      }
+    }
+
+    assertParse(
+      #"""
+      ╔═════════════ func fizzBuzz() ═════════════╗
+      ║ ╔═══════════ for i in 0..<100 ══════════╗ ║
+      ║ ║ ╔═════ if i.isMultiple(of: 15) ═════╗ ║ ║
+      ║ ║ ║        print("fizzbuzz ")         ║ ║ ║
+      ║ ║ ╠═══ else if i.isMultiple(of: 3) ═══╣ ║ ║
+      ║ ║ ║          print("fizz ")           ║ ║ ║
+      ║ ║ ╠═══ else if i.isMultiple(of: 5) ═══╣ ║ ║
+      ║ ║ ║          print("buzz ")           ║ ║ ║
+      ║ ║ ╠══════════════ else ═══════════════╣ ║ ║
+      ║ ║ ║          print("\(i) ")           ║ ║ ║
+      ║ ║ ╚═══════════════════════════════════╝ ║ ║
+      ║ ╚═══════════════════════════════════════╝ ║
+      ╚═══════════════════════════════════════════╝
+      """#,
+      substructure: Syntax(
+        try FunctionDeclSyntax("func fizzBuzz()", delimitedBy: .box()) {
+          try ForStmtSyntax("for i in 0..<100", delimitedBy: .box()) {
+            ExpressionStmtSyntax(
+              expression: try IfExprSyntax("if i.isMultiple(of: 15)", delimitedBy: .box()) {
+                ExprSyntax(#"print("fizzbuzz ")"#)
+              }.else(if: "if i.isMultiple(of: 3)") {
+                ExprSyntax(#"print("fizz ")"#)
+              }.else(if: "if i.isMultiple(of: 5)") {
+                ExprSyntax(#"print("buzz ")"#)
+              }.else {
+                ExprSyntax(#"print("\(i) ")"#)
+              }
+            )
+          }
+        }
+      )
+    )
+  }
+
   func testClassParsing() {
     assertParse("class Foo {}")
 

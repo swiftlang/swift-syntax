@@ -232,4 +232,9 @@ public let TRIVIAS: [Trivia] = [
       Character("\u{2B7F}")
     ]
   ),
+
+  Trivia(
+    name: "BoxDrawing",
+    comment: #"Box-drawing characters which have no syntactic significance."#
+  ),
 ]

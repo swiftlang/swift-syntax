@@ -202,7 +202,7 @@ extension Parser {
     }
     // Condition terminator is start of statement body for `if` or `while` statements.
     // Missing `else` is a common mistake for `guard` statements so we fall back to lookahead for a body.
-    return self.at(.leftBrace) && withLookahead({ $0.atStartOfConditionalStatementBody() })
+    return self.at(anyIn: CodeBlockSyntax.LeftBraceOptions.self) != nil && withLookahead({ $0.atStartOfConditionalStatementBody() })
   }
 
   /// Parse a condition element.
@@ -454,7 +454,7 @@ extension Parser {
   mutating func parseCatchClause() -> RawCatchClauseSyntax {
     let (unexpectedBeforeCatchKeyword, catchKeyword) = self.expect(.keyword(.catch))
     var catchItems = [RawCatchItemSyntax]()
-    if !self.at(.leftBrace) {
+    if self.at(anyIn: CodeBlockSyntax.LeftBraceOptions.self) == nil {
       var keepGoing: RawTokenSyntax? = nil
       var loopProgress = LoopProgressCondition()
       repeat {
@@ -486,7 +486,7 @@ extension Parser {
     // If this is a 'catch' clause and we have "catch {" or "catch where...",
     // then we get an implicit "let error" pattern.
     let pattern: RawPatternSyntax?
-    if self.at(.leftBrace, .keyword(.where)) {
+    if self.at(.keyword(.where)) || self.at(anyIn: CodeBlockSyntax.LeftBraceOptions.self) != nil {
       pattern = nil
     } else {
       pattern = self.parseMatchingPattern(context: .matching)
@@ -515,7 +515,7 @@ extension Parser {
   mutating func parseWhileStatement(whileHandle: RecoveryConsumptionHandle) -> RawWhileStmtSyntax {
     let (unexpectedBeforeWhileKeyword, whileKeyword) = self.eat(whileHandle)
     let conditions: RawConditionElementListSyntax
-    if self.at(.leftBrace) {
+    if self.at(anyIn: CodeBlockSyntax.LeftBraceOptions.self) != nil {
       conditions = RawConditionElementListSyntax(
         elements: [
           RawConditionElementSyntax(
@@ -598,7 +598,7 @@ extension Parser {
     // a `RawClosureExprSyntax` in the condition, which is most likely not what the user meant.
     // Create a missing condition instead and use the `{` for the start of the body.
     let expr: RawExprSyntax
-    if self.at(.leftBrace) {
+    if self.at(anyIn: CodeBlockSyntax.LeftBraceOptions.self) != nil {
       expr = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
     } else {
       expr = self.parseExpression(flavor: .stmtCondition, pattern: .none)
@@ -937,7 +937,7 @@ extension Parser.Lookahead {
       // is a pack expansion expression.
       // FIXME: 'repeat' followed by '{' could be a pack expansion
       // with a closure pattern.
-      return self.peek().rawTokenKind == .leftBrace
+      return CodeBlockSyntax.LeftBraceOptions(lexeme: self.peek(), experimentalFeatures: self.experimentalFeatures) != nil
     case .yield?:
       switch self.peek().rawTokenKind {
       case .prefixAmpersand:
@@ -1008,7 +1008,7 @@ extension Parser.Lookahead {
       // expr.
       return false
 
-    case .leftBrace:
+    case .trailingBoxCorner, .trailingBoxJunction, .leftBrace:
       // This is a trailing closure.
       return false
 
@@ -1074,7 +1074,7 @@ extension Parser.Lookahead {
 
   /// Returns `true` if the current token represents the start of an `if` or `while` statement body.
   mutating func atStartOfConditionalStatementBody() -> Bool {
-    guard at(.leftBrace) else {
+    guard let lbrace = at(anyIn: CodeBlockSyntax.LeftBraceOptions.self)?.spec else {
       // Statement bodies always start with a '{'. If there is no '{', we can't be at the statement body.
       return false
     }
@@ -1091,7 +1091,7 @@ extension Parser.Lookahead {
       // If the current token is an `else` keyword, this must be the statement body of an `if` statement since conditions can't be followed by `else`.
       return true
     }
-    if self.at(.rightBrace, .rightParen) {
+    if self.at(rightBrace(for: lbrace.spec) + [.rightParen]) {
       // A right brace or parenthesis cannot start a statement body, nor can the condition list continue afterwards. So, this must be the statement body.
       // This covers cases like `if true, { if true, { } }` or `( if true, { print(0) } )`. While the latter is not valid code, it improves diagnostics.
       return true

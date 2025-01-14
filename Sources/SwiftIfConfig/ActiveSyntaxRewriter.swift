@@ -478,7 +478,7 @@ extension Trivia {
     for piece in pieces {
       switch piece {
       case .backslashes, .carriageReturnLineFeeds, .carriageReturns, .formfeeds, .newlines, .pounds, .spaces, .tabs,
-        .unexpectedText, .verticalTabs:
+        .unexpectedText, .verticalTabs, .boxDrawing:
         piece.write(to: &stream)
 
       case .blockComment(let text), .docBlockComment(let text), .docLineComment(let text), .lineComment(let text):

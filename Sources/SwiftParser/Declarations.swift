@@ -1660,6 +1660,15 @@ extension Parser {
     _ handle: RecoveryConsumptionHandle
   ) -> RawTypeAliasDeclSyntax {
     let (unexpectedBeforeTypealiasKeyword, typealiasKeyword) = self.eat(handle)
+
+    var extendedType: RawTypeSyntax? = nil
+    var unexpectedBeforePeriod: RawUnexpectedNodesSyntax? = nil
+    var period: RawTokenSyntax? = nil
+    if self.lookahead().canParseExtendedTypeForNominalTypeDecl() {
+      extendedType = parseSimpleType(parsingContext: .nominalTypeDeclExtendedName)
+      (unexpectedBeforePeriod, period) = self.expect(.period)
+    }
+
     let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
 
     // Parse a generic parameter list if it is present.
@@ -1700,6 +1709,9 @@ extension Parser {
       modifiers: attrs.modifiers,
       unexpectedBeforeTypealiasKeyword,
       typealiasKeyword: typealiasKeyword,
+      extendedType: extendedType,
+      unexpectedBeforePeriod,
+      period: period,
       unexpectedBeforeName,
       name: name,
       genericParameterClause: generics,

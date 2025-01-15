@@ -24,6 +24,9 @@ protocol NominalTypeDeclarationTrait {
     modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
+    extendedType: RawTypeSyntax?,
+    _ unexpectedBeforePeriod: RawUnexpectedNodesSyntax?,
+    period: RawTokenSyntax?,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
     name: RawTokenSyntax,
     primaryOrGenerics: PrimaryOrGenerics?,
@@ -42,6 +45,9 @@ extension RawProtocolDeclSyntax: NominalTypeDeclarationTrait {
     modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
+    extendedType: RawTypeSyntax?,
+    _ unexpectedBeforePeriod: RawUnexpectedNodesSyntax?,
+    period: RawTokenSyntax?,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
     name: RawTokenSyntax,
     primaryOrGenerics: RawPrimaryAssociatedTypeClauseSyntax?,
@@ -55,6 +61,9 @@ extension RawProtocolDeclSyntax: NominalTypeDeclarationTrait {
       modifiers: modifiers,
       unexpectedBeforeIntroducerKeyword,
       protocolKeyword: introducerKeyword,
+      extendedType: extendedType,
+      unexpectedBeforePeriod,
+      period: period,
       unexpectedBeforeIdentifier,
       name: name,
       primaryAssociatedTypeClause: primaryOrGenerics,
@@ -76,6 +85,9 @@ extension RawClassDeclSyntax: NominalTypeDeclarationTrait {
     modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
+    extendedType: RawTypeSyntax?,
+    _ unexpectedBeforePeriod: RawUnexpectedNodesSyntax?,
+    period: RawTokenSyntax?,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
     name: RawTokenSyntax,
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
@@ -89,6 +101,9 @@ extension RawClassDeclSyntax: NominalTypeDeclarationTrait {
       modifiers: modifiers,
       unexpectedBeforeIntroducerKeyword,
       classKeyword: introducerKeyword,
+      extendedType: extendedType,
+      unexpectedBeforePeriod,
+      period: period,
       unexpectedBeforeIdentifier,
       name: name,
       genericParameterClause: primaryOrGenerics,
@@ -110,6 +125,9 @@ extension RawActorDeclSyntax: NominalTypeDeclarationTrait {
     modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
+    extendedType: RawTypeSyntax?,
+    _ unexpectedBeforePeriod: RawUnexpectedNodesSyntax?,
+    period: RawTokenSyntax?,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
     name: RawTokenSyntax,
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
@@ -123,6 +141,9 @@ extension RawActorDeclSyntax: NominalTypeDeclarationTrait {
       modifiers: modifiers,
       unexpectedBeforeIntroducerKeyword,
       actorKeyword: introducerKeyword,
+      extendedType: extendedType,
+      unexpectedBeforePeriod,
+      period: period,
       unexpectedBeforeIdentifier,
       name: name,
       genericParameterClause: primaryOrGenerics,
@@ -144,6 +165,9 @@ extension RawStructDeclSyntax: NominalTypeDeclarationTrait {
     modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
+    extendedType: RawTypeSyntax?,
+    _ unexpectedBeforePeriod: RawUnexpectedNodesSyntax?,
+    period: RawTokenSyntax?,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
     name: RawTokenSyntax,
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
@@ -157,6 +181,9 @@ extension RawStructDeclSyntax: NominalTypeDeclarationTrait {
       modifiers: modifiers,
       unexpectedBeforeIntroducerKeyword,
       structKeyword: introducerKeyword,
+      extendedType: extendedType,
+      unexpectedBeforePeriod,
+      period: period,
       unexpectedBeforeIdentifier,
       name: name,
       genericParameterClause: primaryOrGenerics,
@@ -178,6 +205,9 @@ extension RawEnumDeclSyntax: NominalTypeDeclarationTrait {
     modifiers: RawDeclModifierListSyntax,
     _ unexpectedBeforeIntroducerKeyword: RawUnexpectedNodesSyntax?,
     introducerKeyword: RawTokenSyntax,
+    extendedType: RawTypeSyntax?,
+    _ unexpectedBeforePeriod: RawUnexpectedNodesSyntax?,
+    period: RawTokenSyntax?,
     _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax?,
     name: RawTokenSyntax,
     primaryOrGenerics: RawGenericParameterClauseSyntax?,
@@ -191,6 +221,9 @@ extension RawEnumDeclSyntax: NominalTypeDeclarationTrait {
       modifiers: modifiers,
       unexpectedBeforeIntroducerKeyword,
       enumKeyword: introducerKeyword,
+      extendedType: extendedType,
+      unexpectedBeforePeriod,
+      period: period,
       unexpectedBeforeIdentifier,
       name: name,
       genericParameterClause: primaryOrGenerics,
@@ -214,6 +247,15 @@ extension Parser {
     introucerHandle: RecoveryConsumptionHandle
   ) -> T where T: NominalTypeDeclarationTrait {
     let (unexpectedBeforeIntroducerKeyword, introducerKeyword) = self.eat(introucerHandle)
+
+    var extendedType: RawTypeSyntax? = nil
+    var unexpectedBeforePeriod: RawUnexpectedNodesSyntax? = nil
+    var period: RawTokenSyntax? = nil
+    if self.lookahead().canParseExtendedTypeForNominalTypeDecl() {
+      extendedType = parseSimpleType(parsingContext: .nominalTypeDeclExtendedName)
+      (unexpectedBeforePeriod, period) = self.expect(.period)
+    }
+
     let (unexpectedBeforeName, name) = self.expectIdentifier(keywordRecovery: true)
     if unexpectedBeforeName == nil && name.isMissing && self.atStartOfLine {
       return T.init(
@@ -221,6 +263,9 @@ extension Parser {
         modifiers: attrs.modifiers,
         unexpectedBeforeIntroducerKeyword,
         introducerKeyword: introducerKeyword,
+        extendedType: extendedType,
+        unexpectedBeforePeriod,
+        period: period,
         unexpectedBeforeName,
         name: name,
         primaryOrGenerics: nil,
@@ -264,6 +309,9 @@ extension Parser {
       modifiers: attrs.modifiers,
       unexpectedBeforeIntroducerKeyword,
       introducerKeyword: introducerKeyword,
+      extendedType: extendedType,
+      unexpectedBeforePeriod,
+      period: period,
       unexpectedBeforeName,
       name: name,
       primaryOrGenerics: primaryOrGenerics,

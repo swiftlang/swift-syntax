@@ -207,6 +207,17 @@ public let DECL_NODES: [Node] = [
         documentation: "The `actor` keyword."
       ),
       Child(
+        name: "extendedType",
+        kind: .node(kind: .type),
+        documentation: "The `type` in which this actor is nested.",
+        isOptional: true
+      ),
+      Child(
+        name: "period",
+        kind: .token(choices: [.token(.period)]),
+        isOptional: true
+      ),
+      Child(
         name: "name",
         kind: .token(choices: [.token(.identifier)]),
         documentation: "The name of the actor. If the name matches a reserved keyword use backticks to escape it."
@@ -385,6 +396,17 @@ public let DECL_NODES: [Node] = [
         name: "classKeyword",
         kind: .token(choices: [.keyword(.class)]),
         documentation: "The `class` keyword for this declaration."
+      ),
+      Child(
+        name: "extendedType",
+        kind: .node(kind: .type),
+        documentation: "The `type` in which this class is nested.",
+        isOptional: true
+      ),
+      Child(
+        name: "period",
+        kind: .token(choices: [.token(.period)]),
+        isOptional: true
       ),
       Child(
         name: "name",
@@ -829,6 +851,17 @@ public let DECL_NODES: [Node] = [
         name: "enumKeyword",
         kind: .token(choices: [.keyword(.enum)]),
         documentation: "The `enum` keyword for this declaration."
+      ),
+      Child(
+        name: "extendedType",
+        kind: .node(kind: .type),
+        documentation: "The `type` in which this enum declaration is nested.",
+        isOptional: true
+      ),
+      Child(
+        name: "period",
+        kind: .token(choices: [.token(.period)]),
+        isOptional: true
       ),
       Child(
         name: "name",
@@ -2086,6 +2119,17 @@ public let DECL_NODES: [Node] = [
         documentation: "The `protocol` keyword for this declaration."
       ),
       Child(
+        name: "extendedType",
+        kind: .node(kind: .type),
+        documentation: "The `type` in which this protocol is nested.",
+        isOptional: true
+      ),
+      Child(
+        name: "period",
+        kind: .token(choices: [.token(.period)]),
+        isOptional: true
+      ),
+      Child(
         name: "name",
         kind: .token(choices: [.token(.identifier)]),
         documentation: "The name of the protocol."
@@ -2266,6 +2310,17 @@ public let DECL_NODES: [Node] = [
         documentation: "The `struct` keyword for this declaration."
       ),
       Child(
+        name: "extendedType",
+        kind: .node(kind: .type),
+        documentation: "The `type` in which this struct is nested.",
+        isOptional: true
+      ),
+      Child(
+        name: "period",
+        kind: .token(choices: [.token(.period)]),
+        isOptional: true
+      ),
+      Child(
         name: "name",
         kind: .token(choices: [.token(.identifier)]),
         documentation:
@@ -2431,6 +2486,17 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "typealiasKeyword",
         kind: .token(choices: [.keyword(.typealias)])
+      ),
+      Child(
+        name: "extendedType",
+        kind: .node(kind: .type),
+        documentation: "The `type` in which this type alias is nested.",
+        isOptional: true
+      ),
+      Child(
+        name: "period",
+        kind: .token(choices: [.token(.period)]),
+        isOptional: true
       ),
       Child(
         name: "name",

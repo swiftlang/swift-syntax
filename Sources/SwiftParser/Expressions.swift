@@ -1027,7 +1027,7 @@ extension Parser {
     // the token is an operator starts with '.', or the following token is '['.
     let rootType: RawTypeSyntax?
     if !self.at(prefix: ".") {
-      rootType = self.parseSimpleType(allowMemberTypes: false)
+      rootType = self.parseSimpleType(parsingContext: .keyPathRoot)
     } else {
       rootType = nil
     }

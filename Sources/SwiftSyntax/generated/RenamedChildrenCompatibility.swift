@@ -103,13 +103,13 @@ extension AccessorDeclSyntax {
 }
 
 extension ActorDeclSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenActorKeywordAndName")
-  public var unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenPeriodAndName")
+  public var unexpectedBetweenPeriodAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenActorKeywordAndName
+      return unexpectedBetweenPeriodAndName
     }
     set {
-      unexpectedBetweenActorKeywordAndName = newValue
+      unexpectedBetweenPeriodAndName = newValue
     }
   }
 
@@ -133,7 +133,7 @@ extension ActorDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:actorKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:actorKeyword:_:extendedType:_:period:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -143,7 +143,11 @@ extension ActorDeclSyntax {
     modifiers: DeclModifierListSyntax = [],
     _ unexpectedBetweenModifiersAndActorKeyword: UnexpectedNodesSyntax? = nil,
     actorKeyword: TokenSyntax = .keyword(.actor),
-    _ unexpectedBetweenActorKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenActorKeywordAndExtendedType: UnexpectedNodesSyntax? = nil,
+    extendedType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
+    _ unexpectedBetweenExtendedTypeAndPeriod: UnexpectedNodesSyntax? = nil,
+    period: TokenSyntax? = nil,
+    _ unexpectedBetweenPeriodAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
     genericParameterClause: GenericParameterClauseSyntax? = nil,
@@ -164,7 +168,11 @@ extension ActorDeclSyntax {
       modifiers: modifiers,
       unexpectedBetweenModifiersAndActorKeyword,
       actorKeyword: actorKeyword,
-      unexpectedBetweenActorKeywordAndIdentifier,
+      unexpectedBetweenActorKeywordAndExtendedType,
+      extendedType: extendedType,
+      unexpectedBetweenExtendedTypeAndPeriod,
+      period: period,
+      unexpectedBetweenPeriodAndIdentifier,
       name: identifier,
       unexpectedBetweenIdentifierAndGenericParameterClause,
       genericParameterClause: genericParameterClause,
@@ -1074,13 +1082,13 @@ extension _CanImportVersionInfoSyntax {
 }
 
 extension ClassDeclSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenClassKeywordAndName")
-  public var unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenPeriodAndName")
+  public var unexpectedBetweenPeriodAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenClassKeywordAndName
+      return unexpectedBetweenPeriodAndName
     }
     set {
-      unexpectedBetweenClassKeywordAndName = newValue
+      unexpectedBetweenPeriodAndName = newValue
     }
   }
 
@@ -1104,7 +1112,7 @@ extension ClassDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:classKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:classKeyword:_:extendedType:_:period:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1114,7 +1122,11 @@ extension ClassDeclSyntax {
     modifiers: DeclModifierListSyntax = [],
     _ unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? = nil,
     classKeyword: TokenSyntax = .keyword(.class),
-    _ unexpectedBetweenClassKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenClassKeywordAndExtendedType: UnexpectedNodesSyntax? = nil,
+    extendedType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
+    _ unexpectedBetweenExtendedTypeAndPeriod: UnexpectedNodesSyntax? = nil,
+    period: TokenSyntax? = nil,
+    _ unexpectedBetweenPeriodAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
     genericParameterClause: GenericParameterClauseSyntax? = nil,
@@ -1135,7 +1147,11 @@ extension ClassDeclSyntax {
       modifiers: modifiers,
       unexpectedBetweenModifiersAndClassKeyword,
       classKeyword: classKeyword,
-      unexpectedBetweenClassKeywordAndIdentifier,
+      unexpectedBetweenClassKeywordAndExtendedType,
+      extendedType: extendedType,
+      unexpectedBetweenExtendedTypeAndPeriod,
+      period: period,
+      unexpectedBetweenPeriodAndIdentifier,
       name: identifier,
       unexpectedBetweenIdentifierAndGenericParameterClause,
       genericParameterClause: genericParameterClause,
@@ -2574,13 +2590,13 @@ extension EnumCaseParameterSyntax {
 }
 
 extension EnumDeclSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenEnumKeywordAndName")
-  public var unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenPeriodAndName")
+  public var unexpectedBetweenPeriodAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenEnumKeywordAndName
+      return unexpectedBetweenPeriodAndName
     }
     set {
-      unexpectedBetweenEnumKeywordAndName = newValue
+      unexpectedBetweenPeriodAndName = newValue
     }
   }
 
@@ -2624,7 +2640,7 @@ extension EnumDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:enumKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:enumKeyword:_:extendedType:_:period:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2634,7 +2650,11 @@ extension EnumDeclSyntax {
     modifiers: DeclModifierListSyntax = [],
     _ unexpectedBetweenModifiersAndEnumKeyword: UnexpectedNodesSyntax? = nil,
     enumKeyword: TokenSyntax = .keyword(.enum),
-    _ unexpectedBetweenEnumKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenEnumKeywordAndExtendedType: UnexpectedNodesSyntax? = nil,
+    extendedType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
+    _ unexpectedBetweenExtendedTypeAndPeriod: UnexpectedNodesSyntax? = nil,
+    period: TokenSyntax? = nil,
+    _ unexpectedBetweenPeriodAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndGenericParameters: UnexpectedNodesSyntax? = nil,
     genericParameters: GenericParameterClauseSyntax? = nil,
@@ -2655,7 +2675,11 @@ extension EnumDeclSyntax {
       modifiers: modifiers,
       unexpectedBetweenModifiersAndEnumKeyword,
       enumKeyword: enumKeyword,
-      unexpectedBetweenEnumKeywordAndIdentifier,
+      unexpectedBetweenEnumKeywordAndExtendedType,
+      extendedType: extendedType,
+      unexpectedBetweenExtendedTypeAndPeriod,
+      period: period,
+      unexpectedBetweenPeriodAndIdentifier,
       name: identifier,
       unexpectedBetweenIdentifierAndGenericParameters,
       genericParameterClause: genericParameters,
@@ -6366,13 +6390,13 @@ extension PrimaryAssociatedTypeClauseSyntax {
 }
 
 extension ProtocolDeclSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenProtocolKeywordAndName")
-  public var unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenPeriodAndName")
+  public var unexpectedBetweenPeriodAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenProtocolKeywordAndName
+      return unexpectedBetweenPeriodAndName
     }
     set {
-      unexpectedBetweenProtocolKeywordAndName = newValue
+      unexpectedBetweenPeriodAndName = newValue
     }
   }
 
@@ -6396,7 +6420,7 @@ extension ProtocolDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:protocolKeyword:_:name:_:primaryAssociatedTypeClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:protocolKeyword:_:extendedType:_:period:_:name:_:primaryAssociatedTypeClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -6406,7 +6430,11 @@ extension ProtocolDeclSyntax {
     modifiers: DeclModifierListSyntax = [],
     _ unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? = nil,
     protocolKeyword: TokenSyntax = .keyword(.protocol),
-    _ unexpectedBetweenProtocolKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenProtocolKeywordAndExtendedType: UnexpectedNodesSyntax? = nil,
+    extendedType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
+    _ unexpectedBetweenExtendedTypeAndPeriod: UnexpectedNodesSyntax? = nil,
+    period: TokenSyntax? = nil,
+    _ unexpectedBetweenPeriodAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause: UnexpectedNodesSyntax? = nil,
     primaryAssociatedTypeClause: PrimaryAssociatedTypeClauseSyntax? = nil,
@@ -6427,7 +6455,11 @@ extension ProtocolDeclSyntax {
       modifiers: modifiers,
       unexpectedBetweenModifiersAndProtocolKeyword,
       protocolKeyword: protocolKeyword,
-      unexpectedBetweenProtocolKeywordAndIdentifier,
+      unexpectedBetweenProtocolKeywordAndExtendedType,
+      extendedType: extendedType,
+      unexpectedBetweenExtendedTypeAndPeriod,
+      period: period,
+      unexpectedBetweenPeriodAndIdentifier,
       name: identifier,
       unexpectedBetweenIdentifierAndPrimaryAssociatedTypeClause,
       primaryAssociatedTypeClause: primaryAssociatedTypeClause,
@@ -7139,13 +7171,13 @@ extension StringLiteralExprSyntax {
 }
 
 extension StructDeclSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenStructKeywordAndName")
-  public var unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenPeriodAndName")
+  public var unexpectedBetweenPeriodAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenStructKeywordAndName
+      return unexpectedBetweenPeriodAndName
     }
     set {
-      unexpectedBetweenStructKeywordAndName = newValue
+      unexpectedBetweenPeriodAndName = newValue
     }
   }
 
@@ -7169,7 +7201,7 @@ extension StructDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:structKeyword:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:structKeyword:_:extendedType:_:period:_:name:_:genericParameterClause:_:inheritanceClause:_:genericWhereClause:_:memberBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -7179,7 +7211,11 @@ extension StructDeclSyntax {
     modifiers: DeclModifierListSyntax = [],
     _ unexpectedBetweenModifiersAndStructKeyword: UnexpectedNodesSyntax? = nil,
     structKeyword: TokenSyntax = .keyword(.struct),
-    _ unexpectedBetweenStructKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenStructKeywordAndExtendedType: UnexpectedNodesSyntax? = nil,
+    extendedType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
+    _ unexpectedBetweenExtendedTypeAndPeriod: UnexpectedNodesSyntax? = nil,
+    period: TokenSyntax? = nil,
+    _ unexpectedBetweenPeriodAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
     genericParameterClause: GenericParameterClauseSyntax? = nil,
@@ -7200,7 +7236,11 @@ extension StructDeclSyntax {
       modifiers: modifiers,
       unexpectedBetweenModifiersAndStructKeyword,
       structKeyword: structKeyword,
-      unexpectedBetweenStructKeywordAndIdentifier,
+      unexpectedBetweenStructKeywordAndExtendedType,
+      extendedType: extendedType,
+      unexpectedBetweenExtendedTypeAndPeriod,
+      period: period,
+      unexpectedBetweenPeriodAndIdentifier,
       name: identifier,
       unexpectedBetweenIdentifierAndGenericParameterClause,
       genericParameterClause: genericParameterClause,
@@ -8003,13 +8043,13 @@ extension TupleTypeElementSyntax {
 }
 
 extension TypeAliasDeclSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenTypealiasKeywordAndName")
-  public var unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenPeriodAndName")
+  public var unexpectedBetweenPeriodAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenTypealiasKeywordAndName
+      return unexpectedBetweenPeriodAndName
     }
     set {
-      unexpectedBetweenTypealiasKeywordAndName = newValue
+      unexpectedBetweenPeriodAndName = newValue
     }
   }
 
@@ -8033,7 +8073,7 @@ extension TypeAliasDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:typealiasKeyword:_:name:_:genericParameterClause:_:initializer:_:genericWhereClause:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:typealiasKeyword:_:extendedType:_:period:_:name:_:genericParameterClause:_:initializer:_:genericWhereClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -8043,7 +8083,11 @@ extension TypeAliasDeclSyntax {
     modifiers: DeclModifierListSyntax = [],
     _ unexpectedBetweenModifiersAndTypealiasKeyword: UnexpectedNodesSyntax? = nil,
     typealiasKeyword: TokenSyntax = .keyword(.typealias),
-    _ unexpectedBetweenTypealiasKeywordAndIdentifier: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenTypealiasKeywordAndExtendedType: UnexpectedNodesSyntax? = nil,
+    extendedType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
+    _ unexpectedBetweenExtendedTypeAndPeriod: UnexpectedNodesSyntax? = nil,
+    period: TokenSyntax? = nil,
+    _ unexpectedBetweenPeriodAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndGenericParameterClause: UnexpectedNodesSyntax? = nil,
     genericParameterClause: GenericParameterClauseSyntax? = nil,
@@ -8062,7 +8106,11 @@ extension TypeAliasDeclSyntax {
       modifiers: modifiers,
       unexpectedBetweenModifiersAndTypealiasKeyword,
       typealiasKeyword: typealiasKeyword,
-      unexpectedBetweenTypealiasKeywordAndIdentifier,
+      unexpectedBetweenTypealiasKeywordAndExtendedType,
+      extendedType: extendedType,
+      unexpectedBetweenExtendedTypeAndPeriod,
+      period: period,
+      unexpectedBetweenPeriodAndIdentifier,
       name: identifier,
       unexpectedBetweenIdentifierAndGenericParameterClause,
       genericParameterClause: genericParameterClause,

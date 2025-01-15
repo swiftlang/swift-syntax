@@ -39,7 +39,7 @@ extension SyntaxCollection {
   }
 
   public init<Children: Sequence>(_ children: Children) where Children.Element == Element {
-    let arena = SyntaxArena()
+    let arena = RawSyntaxArena()
     // Extend the lifetime of children so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     let raw = withExtendedLifetime(children) {
@@ -49,7 +49,7 @@ extension SyntaxCollection {
         arena: arena
       )
     }
-    self = Syntax.forRoot(raw, rawNodeArena: RetainedSyntaxArena(arena)).cast(Self.self)
+    self = Syntax.forRoot(raw, rawNodeArena: RetainedRawSyntaxArena(arena)).cast(Self.self)
   }
 
   public init(arrayLiteral elements: Element...) {
@@ -68,10 +68,10 @@ extension SyntaxCollection {
   ///                     collection.
   /// - Returns: A new collection with the new layout underlying it.
   internal func replacingLayout(_ layout: [RawSyntax?]) -> Self {
-    let arena = SyntaxArena()
+    let arena = RawSyntaxArena()
     let newRaw = layoutView.replacingLayout(with: layout, arena: arena)
     return Syntax(self)
-      .replacingSelf(newRaw, rawNodeArena: RetainedSyntaxArena(arena), allocationArena: arena)
+      .replacingSelf(newRaw, rawNodeArena: RetainedRawSyntaxArena(arena), rawAllocationArena: arena)
       .cast(Self.self)
   }
 

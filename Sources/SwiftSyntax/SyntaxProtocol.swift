@@ -484,7 +484,7 @@ extension SyntaxProtocol {
       return raw.formLeadingTrivia()
     }
     set {
-      self = Syntax(self).withLeadingTrivia(newValue, arena: SyntaxArena()).cast(Self.self)
+      self = Syntax(self).withLeadingTrivia(newValue, rawAllocationArena: RawSyntaxArena()).cast(Self.self)
     }
   }
 
@@ -503,7 +503,7 @@ extension SyntaxProtocol {
       return raw.formTrailingTrivia()
     }
     set {
-      self = Syntax(self).withTrailingTrivia(newValue, arena: SyntaxArena()).cast(Self.self)
+      self = Syntax(self).withTrailingTrivia(newValue, rawAllocationArena: RawSyntaxArena()).cast(Self.self)
     }
   }
 

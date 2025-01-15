@@ -168,13 +168,13 @@ protocol RawMisplacedEffectSpecifiersTrait {
   init(
     asyncSpecifier: RawTokenSyntax?,
     throwsClause: RawThrowsClauseSyntax?,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   )
 
   func withMisplaced(
     async misplacedAsyncKeyword: RawTokenSyntax?,
     throws misplacedThrowsClause: RawThrowsClauseSyntax?,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) -> Self
 }
 
@@ -188,7 +188,7 @@ protocol RawEffectSpecifiersTrait: RawMisplacedEffectSpecifiersTrait {
     _ unexpectedBetweenAsyncSpecifierAndThrowsClause: RawUnexpectedNodesSyntax?,
     throwsClause: RawThrowsClauseSyntax?,
     _ unexpectedAfterThrowsClause: RawUnexpectedNodesSyntax?,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   )
 }
 
@@ -196,7 +196,7 @@ extension RawEffectSpecifiersTrait {
   init(
     asyncSpecifier: RawTokenSyntax?,
     throwsClause: RawThrowsClauseSyntax?,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     self.init(
       nil,
@@ -211,7 +211,7 @@ extension RawEffectSpecifiersTrait {
   func withMisplaced(
     async misplacedAsyncKeyword: RawTokenSyntax?,
     throws misplacedThrowsClause: RawThrowsClauseSyntax?,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) -> Self {
     return Self.init(
       self.unexpectedBeforeAsyncSpecifier,
@@ -543,7 +543,7 @@ extension RawDeinitializerEffectSpecifiersSyntax: RawMisplacedEffectSpecifiersTr
   init(
     asyncSpecifier: RawTokenSyntax?,
     throwsClause: RawThrowsClauseSyntax?,
-    arena: __shared SwiftSyntax.SyntaxArena
+    arena: __shared SwiftSyntax.RawSyntaxArena
   ) {
     // `throwsSpecifier` should never be present because `parseMisplacedEffectSpecifiers()` only creates missing tokens
     // and `CorrectThrowsTokenKinds` is an empty `TokenSpecSet`.
@@ -561,7 +561,7 @@ extension RawDeinitializerEffectSpecifiersSyntax: RawMisplacedEffectSpecifiersTr
   func withMisplaced(
     async misplacedAsyncKeyword: RawTokenSyntax?,
     throws misplacedThrowsClause: RawThrowsClauseSyntax?,
-    arena: SyntaxArena
+    arena: RawSyntaxArena
   ) -> RawDeinitializerEffectSpecifiersSyntax {
     // `throwsClause` should never be present because `parseMisplacedEffectSpecifiers()` only creates missing tokens
     // and `CorrectThrowsTokenKinds` is an empty `TokenSpecSet`.

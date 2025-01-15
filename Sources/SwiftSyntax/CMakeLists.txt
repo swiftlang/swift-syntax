@@ -9,6 +9,7 @@
 add_swift_syntax_library(SwiftSyntax
   AbsolutePosition.swift
   AbsoluteSyntaxInfo.swift
+  ArenaAllocatedBuffer.swift
   Assert.swift
   BumpPtrAllocator.swift
   CommonAncestor.swift
@@ -24,8 +25,6 @@ add_swift_syntax_library(SwiftSyntax
   SourcePresence.swift
   SwiftSyntaxCompatibility.swift
   Syntax.swift
-  SyntaxArena.swift
-  SyntaxArenaAllocatedBuffer.swift
   SyntaxChildren.swift
   SyntaxCollection.swift
   SyntaxHashable.swift
@@ -41,6 +40,7 @@ add_swift_syntax_library(SwiftSyntax
   Utils.swift
 
   Raw/RawSyntax.swift
+  Raw/RawSyntaxArena.swift
   Raw/RawSyntaxLayoutView.swift
   Raw/RawSyntaxNodeProtocol.swift
   Raw/RawSyntaxTokenView.swift

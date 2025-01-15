@@ -930,23 +930,30 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
   }
 
   override func visit(_ node: VariableDeclSyntax) -> DeclSyntax {
-    var node = super.visit(node).cast(VariableDeclSyntax.self)
+    var rewrittenNode = super.visit(node).cast(VariableDeclSyntax.self)
 
-    guard !macroAttributes(attachedTo: DeclSyntax(node), ofType: AccessorMacro.Type.self).isEmpty else {
-      return DeclSyntax(node)
+    guard !macroAttributes(attachedTo: DeclSyntax(rewrittenNode), ofType: AccessorMacro.Type.self).isEmpty else {
+      return DeclSyntax(rewrittenNode)
     }
 
-    guard node.bindings.count == 1,
-      var binding = node.bindings.first
+    guard rewrittenNode.bindings.count == 1,
+      var binding = rewrittenNode.bindings.first
     else {
       contextGenerator(Syntax(node)).addDiagnostics(
         from: MacroApplicationError.accessorMacroOnVariableWithMultipleBindings,
-        node: node
+        node: rewrittenNode
       )
-      return DeclSyntax(node)
+      return DeclSyntax(rewrittenNode)
     }
 
-    var expansion = expandAccessors(of: node, existingAccessors: binding.accessorBlock)
+    // Generate the context based on the node before it was rewritten by calling `super.visit`. If the node was modified
+    // by `super.visit`, it will not have any parents, which would cause the lexical context to be empty.
+    let context = contextGenerator(Syntax(node))
+    var expansion = expandAccessors(
+      of: rewrittenNode,
+      context: context,
+      existingAccessors: binding.accessorBlock
+    )
 
     if expansion.accessors != binding.accessorBlock {
       if binding.accessorBlock == nil {
@@ -966,16 +973,25 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
         binding.accessorBlock = expansion.accessors
       }
 
-      node.bindings = [binding]
+      rewrittenNode.bindings = [binding]
     }
 
-    return DeclSyntax(node)
+    return DeclSyntax(rewrittenNode)
   }
 
   override func visit(_ node: SubscriptDeclSyntax) -> DeclSyntax {
-    var node = super.visit(node).cast(SubscriptDeclSyntax.self)
-    node.accessorBlock = expandAccessors(of: node, existingAccessors: node.accessorBlock).accessors
-    return DeclSyntax(node)
+    var rewrittenNode = super.visit(node).cast(SubscriptDeclSyntax.self)
+    // Generate the context based on the node before it was rewritten by calling `super.visit`. If the node was modified
+    // by `super.visit`, it will not have any parents, which would cause the lexical context to be empty.
+    let context = contextGenerator(Syntax(node))
+    rewrittenNode.accessorBlock =
+      expandAccessors(
+        of: rewrittenNode,
+        context: context,
+        existingAccessors: rewrittenNode.accessorBlock
+      )
+      .accessors
+    return DeclSyntax(rewrittenNode)
   }
 }
 
@@ -1160,6 +1176,7 @@ extension MacroApplication {
   ///   removed).
   private func expandAccessors(
     of storage: some DeclSyntaxProtocol,
+    context: Context,
     existingAccessors: AccessorBlockSyntax?
   ) -> (accessors: AccessorBlockSyntax?, expandsGetSet: Bool) {
     let accessorMacros = macroAttributes(attachedTo: DeclSyntax(storage), ofType: AccessorMacro.Type.self)
@@ -1184,7 +1201,7 @@ extension MacroApplication {
             definition: macro.definition,
             attributeNode: macro.attributeNode,
             attachedTo: DeclSyntax(storage),
-            in: contextGenerator(Syntax(storage)),
+            in: context,
             indentationWidth: indentationWidth
           ) {
             checkExpansions(newAccessors)
@@ -1201,7 +1218,7 @@ extension MacroApplication {
           definition: macro.definition,
           attributeNode: macro.attributeNode,
           attachedTo: DeclSyntax(storage),
-          in: contextGenerator(Syntax(storage)),
+          in: context,
           indentationWidth: indentationWidth
         ) {
           guard case .accessors(let accessorList) = newAccessors.accessors else {
@@ -1220,7 +1237,7 @@ extension MacroApplication {
           }
         }
       } catch {
-        contextGenerator(Syntax(storage)).addDiagnostics(from: error, node: macro.attributeNode)
+        context.addDiagnostics(from: error, node: macro.attributeNode)
       }
     }
     return (newAccessorsBlock, expandsGetSet)

@@ -110,13 +110,27 @@ extension PluginMessage.Diagnostic {
           let text: String
           switch $0 {
           case .replace(let oldNode, let newNode):
+            // Replace the whole node including leading/trailing trivia, but if
+            // the trivia are the same, don't include them in the replacing range.
+            let leadingMatch = oldNode.leadingTrivia == newNode.leadingTrivia
+            let trailingMatch = oldNode.trailingTrivia == newNode.trailingTrivia
             range = sourceManager.range(
               of: oldNode,
-              from: .afterLeadingTrivia,
-              to: .beforeTrailingTrivia
+              from: leadingMatch ? .afterLeadingTrivia : .beforeLeadingTrivia,
+              to: trailingMatch ? .beforeTrailingTrivia : .afterTrailingTrivia
             )
-            text = newNode.trimmedDescription
+            var newNode = newNode.detached
+            if leadingMatch {
+              newNode.leadingTrivia = []
+            }
+            if trailingMatch {
+              newNode.trailingTrivia = []
+            }
+            text = newNode.description
           case .replaceLeadingTrivia(let token, let newTrivia):
+            guard token.leadingTrivia != newTrivia else {
+              return nil
+            }
             range = sourceManager.range(
               of: Syntax(token),
               from: .beforeLeadingTrivia,
@@ -124,6 +138,9 @@ extension PluginMessage.Diagnostic {
             )
             text = newTrivia.description
           case .replaceTrailingTrivia(let token, let newTrivia):
+            guard token.trailingTrivia != newTrivia else {
+              return nil
+            }
             range = sourceManager.range(
               of: Syntax(token),
               from: .beforeTrailingTrivia,

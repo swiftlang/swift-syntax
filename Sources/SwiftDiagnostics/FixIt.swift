@@ -97,7 +97,9 @@ extension FixIt {
   public var edits: [SourceEdit] {
     var existingEdits = [SourceEdit]()
     for change in changes {
-      let edit = change.edit
+      guard let edit = change.edit else {
+        continue
+      }
       let isOverlapping = existingEdits.contains { edit.range.overlaps($0.range) }
       if !isOverlapping {
         // The edit overlaps with the previous edit. We can't apply both
@@ -111,21 +113,40 @@ extension FixIt {
 }
 
 private extension FixIt.Change {
-  var edit: SourceEdit {
+  var edit: SourceEdit? {
     switch self {
     case .replace(let oldNode, let newNode):
+      // Replace the whole node including leading/trailing trivia, but if
+      // the trivia are the same, don't include them in the replacing range.
+      let leadingMatch = oldNode.leadingTrivia == newNode.leadingTrivia
+      let trailingMatch = oldNode.trailingTrivia == newNode.trailingTrivia
+      let start = leadingMatch ? oldNode.positionAfterSkippingLeadingTrivia : oldNode.position
+      let end = trailingMatch ? oldNode.endPositionBeforeTrailingTrivia : oldNode.endPosition
+      var newNode = newNode.detached
+      if leadingMatch {
+        newNode.leadingTrivia = []
+      }
+      if trailingMatch {
+        newNode.trailingTrivia = []
+      }
       return SourceEdit(
-        range: oldNode.position..<oldNode.endPosition,
+        range: start..<end,
         replacement: newNode.description
       )
 
     case .replaceLeadingTrivia(let token, let newTrivia):
+      guard token.leadingTrivia != newTrivia else {
+        return nil
+      }
       return SourceEdit(
         range: token.position..<token.positionAfterSkippingLeadingTrivia,
         replacement: newTrivia.description
       )
 
     case .replaceTrailingTrivia(let token, let newTrivia):
+      guard token.trailingTrivia != newTrivia else {
+        return nil
+      }
       return SourceEdit(
         range: token.endPositionBeforeTrailingTrivia..<token.endPosition,
         replacement: newTrivia.description

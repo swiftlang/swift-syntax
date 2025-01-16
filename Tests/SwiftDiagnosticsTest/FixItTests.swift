@@ -18,14 +18,14 @@ import _SwiftSyntaxTestSupport
 
 final class FixItTests: XCTestCase {
   func testEditsForFixIt() throws {
-    let markedSource = "protocol 1️⃣Multi 2️⃣ident 3️⃣{}"
+    let markedSource = "protocol 1️⃣Multi2️⃣ 3️⃣ident 4️⃣{}"
     let (markers, source) = extractMarkers(markedSource)
     let positions = markers.mapValues { AbsolutePosition(utf8Offset: $0) }
-    XCTAssertEqual(positions.count, 3)
+    XCTAssertEqual(positions.count, 4)
 
     let expectedEdits = [
-      SourceEdit(range: positions["1️⃣"]!..<positions["2️⃣"]!, replacement: "Multiident "),
-      SourceEdit(range: positions["2️⃣"]!..<positions["3️⃣"]!, replacement: ""),
+      SourceEdit(range: positions["1️⃣"]!..<positions["2️⃣"]!, replacement: "Multiident"),
+      SourceEdit(range: positions["3️⃣"]!..<positions["4️⃣"]!, replacement: ""),
     ]
     let tree = Parser.parse(source: source)
     let diags = ParseDiagnosticsGenerator.diagnostics(for: tree)

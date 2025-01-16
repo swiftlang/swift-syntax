@@ -36,6 +36,7 @@ public enum FixItApplier {
   ) -> String {
     let messages = messages ?? diagnostics.compactMap { $0.fixIts.first?.message.message }
 
+    // FIXME: This assumes every fix-it is applied to a node in the 'tree', which is not guaranteed.
     let edits =
       diagnostics
       .flatMap(\.fixIts)

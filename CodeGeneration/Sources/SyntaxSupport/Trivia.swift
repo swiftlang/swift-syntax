@@ -39,10 +39,8 @@ public class Trivia {
   /// The doc comment describing the trivia.
   public let comment: SwiftSyntax.Trivia
 
-  /// The list of characters that make up the trivia.
-  ///
-  /// Useful for multi-character trivias like `\r\n`.
-  public let characters: [Character]
+  /// The characters that make up the trivia.
+  public let characters: String?
 
   /// The traits.
   public let traits: TriviaTraits
@@ -65,13 +63,10 @@ public class Trivia {
     }
   }
 
-  /// The length of the `characters` array.
-  public var charactersLen: Int { characters.count }
-
   /// Indicates if the trivia is a collection of characters.
   ///
   /// If `true`, the trivia is made up of multiple characters.
-  public var isCollection: Bool { charactersLen > 0 }
+  public var isCollection: Bool { characters != nil }
 
   /// Initializes a new `Trivia` instance.
   ///
@@ -83,7 +78,7 @@ public class Trivia {
   init(
     name: TokenSyntax,
     comment: SwiftSyntax.Trivia,
-    characters: [Character] = [],
+    characters: String? = nil,
     traits: TriviaTraits = []
   ) {
     self.name = name
@@ -97,7 +92,7 @@ public let TRIVIAS: [Trivia] = [
   Trivia(
     name: "Backslash",
     comment: #"A backslash that is at the end of a line in a multi-line string literal to escape the newline."#,
-    characters: ["\\"]
+    characters: "\\"
   ),
 
   Trivia(
@@ -109,14 +104,14 @@ public let TRIVIAS: [Trivia] = [
   Trivia(
     name: "CarriageReturn",
     comment: #"A newline '\r' character."#,
-    characters: ["\r"],
+    characters: "\r",
     traits: [.whitespace, .newline]
   ),
 
   Trivia(
     name: "CarriageReturnLineFeed",
     comment: #"A newline consists of contiguous '\r' and '\n' characters."#,
-    characters: ["\r", "\n"],
+    characters: "\r\n",
     traits: [.whitespace, .newline]
   ),
 
@@ -136,7 +131,7 @@ public let TRIVIAS: [Trivia] = [
   Trivia(
     name: "Formfeed",
     comment: #"A form-feed 'f' character."#,
-    characters: ["\u{000C}"],
+    characters: "\u{000C}",
     traits: [.whitespace]
   ),
 
@@ -149,27 +144,27 @@ public let TRIVIAS: [Trivia] = [
   Trivia(
     name: "Newline",
     comment: #"A newline '\n' character."#,
-    characters: ["\n"],
+    characters: "\n",
     traits: [.whitespace, .newline]
   ),
 
   Trivia(
     name: "Pound",
     comment: #"A '#' that is at the end of a line in a multi-line string literal to escape the newline."#,
-    characters: ["#"]
+    characters: "#"
   ),
 
   Trivia(
     name: "Space",
     comment: #"A space ' ' character."#,
-    characters: [" "],
+    characters: " ",
     traits: [.whitespace, .spaceOrTab]
   ),
 
   Trivia(
     name: "Tab",
     comment: #"A tab '\t' character."#,
-    characters: ["\t"],
+    characters: "\t",
     traits: [.whitespace, .spaceOrTab]
   ),
 
@@ -182,7 +177,7 @@ public let TRIVIAS: [Trivia] = [
   Trivia(
     name: "VerticalTab",
     comment: #"A vertical tab '\v' character."#,
-    characters: ["\u{000B}"],
+    characters: "\u{000B}",
     traits: [.whitespace]
   ),
 ]

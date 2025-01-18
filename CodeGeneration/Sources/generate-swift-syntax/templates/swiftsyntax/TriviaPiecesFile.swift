@@ -68,10 +68,9 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
       try SwitchExprSyntax("switch self") {
         for trivia in TRIVIAS {
-          if trivia.isCollection {
-            let joined = trivia.characters.map { "\($0)" }.joined()
+          if let characters = trivia.characters {
             SwitchCaseSyntax("case let .\(trivia.enumCaseName)(count):") {
-              ExprSyntax("printRepeated(\(literal: joined), count: count)")
+              ExprSyntax("printRepeated(\(literal: characters), count: count)")
             }
           } else {
             SwitchCaseSyntax("case let .\(trivia.enumCaseName)(text):") {
@@ -112,11 +111,10 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     """
   ) {
     for trivia in TRIVIAS {
-      if trivia.isCollection {
-        let joined = trivia.characters.map { "\($0)" }.joined()
+      if let characters = trivia.characters {
         DeclSyntax(
           """
-          /// Returns a piece of trivia for some number of \(literal: joined) characters.
+          /// Returns a piece of trivia for some number of \(literal: characters) characters.
           public static func \(trivia.enumCaseName)(_ count: Int) -> Trivia {
             return [.\(trivia.enumCaseName)(count)]
           }
@@ -125,7 +123,7 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
         DeclSyntax(
           """
-          /// Gets a piece of trivia for \(literal: joined) characters.
+          /// Gets a piece of trivia for \(literal: characters) characters.
           public static var \(trivia.lowerName): Trivia {
             return .\(trivia.enumCaseName)(1)
           }
@@ -151,10 +149,10 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     try VariableDeclSyntax("public var sourceLength: SourceLength") {
       try SwitchExprSyntax("switch self") {
         for trivia in TRIVIAS {
-          if trivia.isCollection {
+          if let characters = trivia.characters {
             SwitchCaseSyntax("case let .\(trivia.enumCaseName)(count):") {
-              if trivia.charactersLen != 1 {
-                StmtSyntax("return SourceLength(utf8Length: count * \(raw: trivia.charactersLen))")
+              if characters.utf8.count != 1 {
+                StmtSyntax("return SourceLength(utf8Length: count * \(raw: characters.utf8.count))")
               } else {
                 StmtSyntax("return SourceLength(utf8Length: count)")
               }
@@ -231,10 +229,10 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     try VariableDeclSyntax("public var byteLength: Int") {
       try SwitchExprSyntax("switch self") {
         for trivia in TRIVIAS {
-          if trivia.isCollection {
+          if let characters = trivia.characters {
             SwitchCaseSyntax("case let .\(trivia.enumCaseName)(count):") {
-              if trivia.charactersLen != 1 {
-                StmtSyntax("return count * \(raw: trivia.charactersLen)")
+              if characters.utf8.count != 1 {
+                StmtSyntax("return count * \(raw: characters.utf8.count)")
               } else {
                 StmtSyntax("return count")
               }

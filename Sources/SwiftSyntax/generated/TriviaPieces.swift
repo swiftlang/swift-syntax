@@ -443,12 +443,8 @@ extension RawTriviaPiece {
 }
 
 extension TriviaPiece {
-  /// Returns `true` if this piece is a newline, space or tab.
+  /// Returns `true` if this piece is a whitespace.
   public var isWhitespace: Bool {
-    return isSpaceOrTab || isNewline
-  }
-
-  public var isNewline: Bool {
     switch self {
     case .carriageReturns:
       return true
@@ -458,6 +454,10 @@ extension TriviaPiece {
       return true
     case .newlines:
       return true
+    case .spaces:
+      return true
+    case .tabs:
+      return true
     case .verticalTabs:
       return true
     default:
@@ -465,6 +465,21 @@ extension TriviaPiece {
     }
   }
 
+  /// Returns `true` if this piece is a newline.
+  public var isNewline: Bool {
+    switch self {
+    case .carriageReturns:
+      return true
+    case .carriageReturnLineFeeds:
+      return true
+    case .newlines:
+      return true
+    default:
+      return false
+    }
+  }
+
+  /// Returns `true` if this piece is a space or tab.
   public var isSpaceOrTab: Bool {
     switch self {
     case .spaces:
@@ -479,7 +494,13 @@ extension TriviaPiece {
   /// Returns `true` if this piece is a comment.
   public var isComment: Bool {
     switch self {
-    case .lineComment, .blockComment, .docLineComment, .docBlockComment:
+    case .blockComment:
+      return true
+    case .docBlockComment:
+      return true
+    case .docLineComment:
+      return true
+    case .lineComment:
       return true
     default:
       return false
@@ -488,12 +509,8 @@ extension TriviaPiece {
 }
 
 extension RawTriviaPiece {
-  /// Returns `true` if this piece is a newline, space or tab.
+  /// Returns `true` if this piece is a whitespace.
   public var isWhitespace: Bool {
-    return isSpaceOrTab || isNewline
-  }
-
-  public var isNewline: Bool {
     switch self {
     case .carriageReturns:
       return true
@@ -503,6 +520,10 @@ extension RawTriviaPiece {
       return true
     case .newlines:
       return true
+    case .spaces:
+      return true
+    case .tabs:
+      return true
     case .verticalTabs:
       return true
     default:
@@ -510,6 +531,21 @@ extension RawTriviaPiece {
     }
   }
 
+  /// Returns `true` if this piece is a newline.
+  public var isNewline: Bool {
+    switch self {
+    case .carriageReturns:
+      return true
+    case .carriageReturnLineFeeds:
+      return true
+    case .newlines:
+      return true
+    default:
+      return false
+    }
+  }
+
+  /// Returns `true` if this piece is a space or tab.
   public var isSpaceOrTab: Bool {
     switch self {
     case .spaces:
@@ -524,7 +560,13 @@ extension RawTriviaPiece {
   /// Returns `true` if this piece is a comment.
   public var isComment: Bool {
     switch self {
-    case .lineComment, .blockComment, .docLineComment, .docBlockComment:
+    case .blockComment:
+      return true
+    case .docBlockComment:
+      return true
+    case .docLineComment:
+      return true
+    case .lineComment:
       return true
     default:
       return false

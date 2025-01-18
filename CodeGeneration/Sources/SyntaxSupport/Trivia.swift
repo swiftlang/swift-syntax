@@ -12,6 +12,26 @@
 
 import SwiftSyntax
 
+public struct TriviaTraits: OptionSet {
+  public var rawValue: UInt8
+
+  public init(rawValue: UInt8) {
+    self.rawValue = rawValue
+  }
+
+  // Indicates this is a whitespace.
+  public static var whitespace: Self { .init(rawValue: 1 << 0) }
+
+  // Indicates a newline in Swift source code.
+  public static var newline: Self { .init(rawValue: 1 << 1) }
+
+  // Horizontal space.
+  public static var spaceOrTab: Self { .init(rawValue: 1 << 2) }
+
+  // Comment in Swift source code.
+  public static var comment: Self { .init(rawValue: 1 << 3) }
+}
+
 public class Trivia {
   /// The name of the trivia.
   public let name: TokenSyntax
@@ -29,10 +49,8 @@ public class Trivia {
   /// This might differ from `characters` due to Swift's character escape requirements.
   public let swiftCharacters: [Character]
 
-  /// Indicates if the trivia represents a comment.
-  ///
-  /// If `true`, the trivia is some form of a comment in the Swift code.
-  public let isComment: Bool
+  /// The traits.
+  public let traits: TriviaTraits
 
   /// The name of the trivia in lowercase.
   public var lowerName: TokenSyntax { .identifier(lowercaseFirstWord(name: name.text)) }
@@ -60,16 +78,6 @@ public class Trivia {
   /// If `true`, the trivia is made up of multiple characters.
   public var isCollection: Bool { charactersLen > 0 }
 
-  /// Indicates if the trivia contains only whitespace characters.
-  public var isBlank: Bool {
-    characters.contains { $0.isWhitespace }
-  }
-
-  /// Indicates if the trivia contains newline characters.
-  public var isNewLine: Bool {
-    characters.contains { $0.isNewline }
-  }
-
   /// Initializes a new `Trivia` instance.
   ///
   /// - Parameters:
@@ -83,12 +91,12 @@ public class Trivia {
     comment: SwiftSyntax.Trivia,
     characters: [Character] = [],
     swiftCharacters: [Character] = [],
-    isComment: Bool = false
+    traits: TriviaTraits = []
   ) {
     self.name = name
     self.comment = comment
-    self.isComment = isComment
     self.characters = characters
+    self.traits = traits
 
     // Swift sometimes doesn't support escaped characters like \f or \v;
     // we should allow specifying alternatives explicitly.
@@ -115,7 +123,7 @@ public let TRIVIAS: [Trivia] = [
   Trivia(
     name: "BlockComment",
     comment: #"A developer block comment, starting with '/*' and ending with '*/'."#,
-    isComment: true
+    traits: [.comment]
   ),
 
   Trivia(
@@ -126,7 +134,8 @@ public let TRIVIAS: [Trivia] = [
     ],
     swiftCharacters: [
       Character("\r")
-    ]
+    ],
+    traits: [.whitespace, .newline]
   ),
 
   Trivia(
@@ -139,19 +148,20 @@ public let TRIVIAS: [Trivia] = [
     swiftCharacters: [
       Character("\r"),
       Character("\n"),
-    ]
+    ],
+    traits: [.whitespace, .newline]
   ),
 
   Trivia(
     name: "DocBlockComment",
     comment: #"A documentation block comment, starting with '/**' and ending with '*/'."#,
-    isComment: true
+    traits: [.comment]
   ),
 
   Trivia(
     name: "DocLineComment",
     comment: #"A documentation line comment, starting with '///' and excluding the trailing newline."#,
-    isComment: true
+    traits: [.comment]
   ),
 
   // Swift don't support form feed '\f' so we use the raw unicode
@@ -163,13 +173,14 @@ public let TRIVIAS: [Trivia] = [
     ],
     swiftCharacters: [
       Character("\u{240C}")
-    ]
+    ],
+    traits: [.whitespace]
   ),
 
   Trivia(
     name: "LineComment",
     comment: #"A developer line comment, starting with '//' and excluding the trailing newline."#,
-    isComment: true
+    traits: [.comment]
   ),
 
   Trivia(
@@ -180,7 +191,8 @@ public let TRIVIAS: [Trivia] = [
     ],
     swiftCharacters: [
       Character("\n")
-    ]
+    ],
+    traits: [.whitespace, .newline]
   ),
 
   Trivia(
@@ -202,7 +214,8 @@ public let TRIVIAS: [Trivia] = [
     ],
     swiftCharacters: [
       Character(" ")
-    ]
+    ],
+    traits: [.whitespace, .spaceOrTab]
   ),
 
   Trivia(
@@ -213,7 +226,8 @@ public let TRIVIAS: [Trivia] = [
     ],
     swiftCharacters: [
       Character("\t")
-    ]
+    ],
+    traits: [.whitespace, .spaceOrTab]
   ),
 
   Trivia(
@@ -230,6 +244,7 @@ public let TRIVIAS: [Trivia] = [
     ],
     swiftCharacters: [
       Character("\u{2B7F}")
-    ]
+    ],
+    traits: [.whitespace]
   ),
 ]

@@ -271,23 +271,12 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 }
 
 fileprivate func generateIsHelpers(for pieceName: TokenSyntax) throws -> ExtensionDeclSyntax {
-  return try ExtensionDeclSyntax("extension \(pieceName)") {
-    DeclSyntax(
-      """
-      /// Returns `true` if this piece is a newline, space or tab.
-      public var isWhitespace: Bool {
-        return isSpaceOrTab || isNewline
-      }
-      """
-    )
-
-    try VariableDeclSyntax("public var isNewline: Bool") {
+  func generateHelper(_ header: SyntaxNodeString, trait: TriviaTraits) throws -> VariableDeclSyntax {
+    try VariableDeclSyntax(header) {
       try SwitchExprSyntax("switch self") {
-        for trivia in TRIVIAS {
-          if trivia.isNewLine {
-            SwitchCaseSyntax("case .\(trivia.enumCaseName):") {
-              StmtSyntax("return true")
-            }
+        for trivia in TRIVIAS where trivia.traits.contains(trait) {
+          SwitchCaseSyntax("case .\(trivia.enumCaseName):") {
+            StmtSyntax("return true")
           }
         }
         SwitchCaseSyntax("default:") {
@@ -295,34 +284,39 @@ fileprivate func generateIsHelpers(for pieceName: TokenSyntax) throws -> Extensi
         }
       }
     }
+  }
 
-    DeclSyntax(
+  return try ExtensionDeclSyntax("extension \(pieceName)") {
+    try generateHelper(
       """
-      public var isSpaceOrTab: Bool {
-        switch self {
-        case .spaces:
-          return true
-        case .tabs:
-          return true
-        default:
-          return false
-        }
-      }
-      """
+      /// Returns `true` if this piece is a whitespace.
+      public var isWhitespace: Bool
+      """,
+      trait: .whitespace
     )
 
-    DeclSyntax(
+    try generateHelper(
+      """
+      /// Returns `true` if this piece is a newline.
+      public var isNewline: Bool
+      """,
+      trait: .newline
+    )
+
+    try generateHelper(
+      """
+      /// Returns `true` if this piece is a space or tab.
+      public var isSpaceOrTab: Bool
+      """,
+      trait: .spaceOrTab
+    )
+
+    try generateHelper(
       """
       /// Returns `true` if this piece is a comment.
-      public var isComment: Bool {
-        switch self {
-        case .lineComment, .blockComment, .docLineComment, .docBlockComment:
-          return true
-        default:
-          return false
-        }
-      }
-      """
+      public var isComment: Bool
+      """,
+      trait: .comment
     )
   }
 }

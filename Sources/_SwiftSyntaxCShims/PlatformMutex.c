@@ -13,6 +13,13 @@
 #include "PlatformMutex.h"
 #include <stdlib.h>
 
+#if defined(__wasi__) && !defined(_REENTRANT)
+#define SWIFTSYNTAX_HAS_THREAD 0
+#else
+#define SWIFTSYNTAX_HAS_THREAD 1
+#endif
+
+#if SWIFTSYNTAX_HAS_THREAD
 #if defined(__APPLE__)
 #include <os/lock.h>
 
@@ -81,5 +88,20 @@ void swiftsyntax_platform_mutex_destroy(PlatformMutex m) {
 }
 
 #else
-#error "platfrom mutex implementation is not available"
+#error "platform mutex implementation is not available"
+// Add platform specific implementation above, or set SWIFTSYNTAX_HAS_THREAD to 0.
 #endif
+
+#else // SWIFTSYNTAX_HAS_THREAD
+
+PlatformMutex swiftsyntax_platform_mutex_create() {
+  PlatformMutex m;
+  m.opaque = 0;
+  return m;
+}
+
+void swiftsyntax_platform_mutex_lock(PlatformMutex m) {}
+void swiftsyntax_platform_mutex_unlock(PlatformMutex m) {}
+void swiftsyntax_platform_mutex_destroy(PlatformMutex m) {}
+
+#endif // SWIFTSYNTAX_HAS_THREAD

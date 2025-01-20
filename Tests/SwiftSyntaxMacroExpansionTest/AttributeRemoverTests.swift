@@ -470,4 +470,21 @@ final class AttributeRemoverTests: XCTestCase {
         """
     )
   }
+
+  func testKeepPoundIfInAttributes() {
+    assertSyntaxRemovingTestAttributes(
+      """
+      #if true
+      @inlinable
+      #endif
+      func f() {}
+      """,
+      reduction: """
+        #if true
+        @inlinable
+        #endif
+        func f() {}
+        """
+    )
+  }
 }

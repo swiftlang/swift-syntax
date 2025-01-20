@@ -530,7 +530,11 @@ public class AttributeRemover: SyntaxRewriter {
 
   public override func visit(_ node: AttributeListSyntax) -> AttributeListSyntax {
     var filteredAttributes: [AttributeListSyntax.Element] = []
-    for case .attribute(let attribute) in node {
+    for attribute in node {
+      guard case .attribute(let attribute) = attribute else {
+        filteredAttributes.append(attribute)
+        continue
+      }
       if self.predicate(attribute) {
         var leadingTrivia = attribute.leadingTrivia
 

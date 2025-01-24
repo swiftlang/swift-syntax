@@ -671,6 +671,7 @@ final class AttributeTests: ParserTestCase {
 
   func testDocumentationAttribute() {
     assertParse("@_documentation(visibility: internal) @_exported import A")
+    assertParse("@_documentation(visibility: package) @objc final public class Klass {}")
     assertParse("@_documentation(metadata: cool_stuff) public class SomeClass {}")
     assertParse(#"@_documentation(metadata: "this is a longer string") public class OtherClass {}"#)
     assertParse(

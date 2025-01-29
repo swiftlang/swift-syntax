@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6)
+#if compiler(>=6)
 internal import SwiftBasicFormat
 internal import SwiftDiagnostics
 internal import SwiftOperators

@@ -22,6 +22,9 @@ fileprivate let closurePlaceholder = wrapInPlaceholder("T##closure##() -> Void")
 fileprivate let closureWithArgPlaceholder = wrapInPlaceholder(
   "T##(Int) -> String##(Int) -> String##(_ someInt: Int) -> String"
 )
+fileprivate let closureCombinedTypeDisplayPlaceholder = wrapInPlaceholder(
+  "T##(Int) -> String"
+)
 fileprivate let voidPlaceholder = wrapInPlaceholder("T##code##Void")
 fileprivate let intPlaceholder = wrapInPlaceholder("T##Int##Int")
 fileprivate let stringPlaceholder = wrapInPlaceholder("T##String##String")
@@ -190,7 +193,7 @@ final class ExpandEditorPlaceholderTests: XCTestCase {
   }
 
   func testExpandEditorPlaceholdersToSingleTrailingClosures() throws {
-    try assertExpandEditorPlaceholdersToTrailingClosures(
+    try assertExpandEditorPlaceholdersToClosures(
       """
       foo(arg: \(intPlaceholder), closure: \(closureWithArgPlaceholder))
       """,
@@ -203,7 +206,7 @@ final class ExpandEditorPlaceholderTests: XCTestCase {
   }
 
   func testExpandEditorPlaceholdersToMultipleTrailingClosures() throws {
-    try assertExpandEditorPlaceholdersToTrailingClosures(
+    try assertExpandEditorPlaceholdersToClosures(
       """
       foo(arg: \(intPlaceholder), firstClosure: \(closureWithArgPlaceholder), secondClosure: \(closureWithArgPlaceholder))
       """,
@@ -218,7 +221,7 @@ final class ExpandEditorPlaceholderTests: XCTestCase {
   }
 
   func testExpandEditorPlaceholdersDoesntExpandClosureBeforeNormalArgs() throws {
-    try assertExpandEditorPlaceholdersToTrailingClosures(
+    try assertExpandEditorPlaceholdersToClosures(
       """
       foo(pre: \(closurePlaceholder), arg: \(intPlaceholder), closure: \(closureWithArgPlaceholder))
       """,
@@ -231,7 +234,7 @@ final class ExpandEditorPlaceholderTests: XCTestCase {
   }
 
   func testCallHasInitialIndentation() throws {
-    try assertExpandEditorPlaceholdersToTrailingClosures(
+    try assertExpandEditorPlaceholdersToClosures(
       """
           foo(arg: 1, closure: \(closureWithArgPlaceholder))
       """,
@@ -244,7 +247,7 @@ final class ExpandEditorPlaceholderTests: XCTestCase {
   }
 
   func testCustomIndentationWidth() throws {
-    try assertExpandEditorPlaceholdersToTrailingClosures(
+    try assertExpandEditorPlaceholdersToClosures(
       """
       foo(arg: 1, closure: \(closureWithArgPlaceholder))
       """,
@@ -253,12 +256,12 @@ final class ExpandEditorPlaceholderTests: XCTestCase {
           \(stringPlaceholder)
         }
         """,
-      indentationWidth: .spaces(2)
+      format: .trailing(indentationWidth: .spaces(2))
     )
   }
 
   func testCustomIndentationWidthWithInitialIndentation() throws {
-    try assertExpandEditorPlaceholdersToTrailingClosures(
+    try assertExpandEditorPlaceholdersToClosures(
       """
         foo(arg: 1, closure: \(closureWithArgPlaceholder))
       """,
@@ -267,12 +270,12 @@ final class ExpandEditorPlaceholderTests: XCTestCase {
             \(stringPlaceholder)
           }
         """,
-      indentationWidth: .spaces(2)
+      format: .trailing(indentationWidth: .spaces(2))
     )
   }
 
   func testMultilineCall() throws {
-    try assertExpandEditorPlaceholdersToTrailingClosures(
+    try assertExpandEditorPlaceholdersToClosures(
       """
       foo(
           arg: 1,
@@ -290,7 +293,7 @@ final class ExpandEditorPlaceholderTests: XCTestCase {
   }
 
   func testMultilineIndentedCall() throws {
-    try assertExpandEditorPlaceholdersToTrailingClosures(
+    try assertExpandEditorPlaceholdersToClosures(
       """
           foo(
               arg: 1,
@@ -308,7 +311,7 @@ final class ExpandEditorPlaceholderTests: XCTestCase {
   }
 
   func testMultilineCallWithNoAdditionalArguments() throws {
-    try assertExpandEditorPlaceholdersToTrailingClosures(
+    try assertExpandEditorPlaceholdersToClosures(
       """
       foo(
           closure: \(closureWithArgPlaceholder)
@@ -319,6 +322,133 @@ final class ExpandEditorPlaceholderTests: XCTestCase {
             \(stringPlaceholder)
         }
         """
+    )
+  }
+
+  // MARK:- Custom closure format
+
+  func testSingleClosuresWithCustomFormat() throws {
+    try assertExpandEditorPlaceholdersToClosures(
+      """
+      foo(arg: \(intPlaceholder), closure: \(closureWithArgPlaceholder))
+      """,
+      expected: """
+        foo(arg: \(intPlaceholder), closure: <#{ someInt in \(stringPlaceholder) }#>)
+        """,
+      format: .testCustom()
+    )
+  }
+
+  func testWithCustomFormatClosurePlaceholderCombinedTypeAndDisplayString() async throws {
+    let intPlaceholder = wrapInPlaceholder("Int")
+    try assertExpandEditorPlaceholdersToClosures(
+      """
+      foo(closure: \(closureCombinedTypeDisplayPlaceholder))
+      """,
+      expected: """
+        foo(closure: <#{ \(intPlaceholder) in \(stringPlaceholder) }#>)
+        """,
+      format: .testCustom()
+    )
+  }
+
+  func testWithCustomFormatToMultipleClosuresWithCustomFormat() throws {
+    try assertExpandEditorPlaceholdersToClosures(
+      """
+      foo(arg: \(intPlaceholder), firstClosure: \(closureWithArgPlaceholder), secondClosure: \(closureWithArgPlaceholder))
+      """,
+      expected: """
+        foo(arg: \(intPlaceholder), firstClosure: <#{ someInt in \(stringPlaceholder) }#>, secondClosure: <#{ someInt in \(stringPlaceholder) }#>)
+        """,
+      format: .testCustom()
+    )
+  }
+
+  func testWithCustomFormatDoesntExpandClosureBeforeNormalArgs() throws {
+    try assertExpandEditorPlaceholdersToClosures(
+      """
+      foo(pre: \(closurePlaceholder), arg: \(intPlaceholder), closure: \(closureWithArgPlaceholder))
+      """,
+      expected: """
+        foo(pre: \(closurePlaceholder), arg: \(intPlaceholder), closure: <#{ someInt in \(stringPlaceholder) }#>)
+        """,
+      format: .testCustom()
+    )
+  }
+
+  func testWithCustomFormatCallHasInitialIndentation() throws {
+    try assertExpandEditorPlaceholdersToClosures(
+      """
+          foo(arg: 1, closure: \(closureWithArgPlaceholder))
+      """,
+      expected: """
+            foo(arg: 1, closure: <#{ someInt in \(stringPlaceholder) }#>)
+        """,
+      format: .testCustom()
+    )
+  }
+
+  func testCustomFormatAndCustomIndentationWidthWithInitialIndentation() throws {
+    try assertExpandEditorPlaceholdersToClosures(
+      """
+        foo(arg: 1, closure: \(closureWithArgPlaceholder))
+      """,
+      expected: """
+          foo(arg: 1, closure: <#{ someInt in \(stringPlaceholder) }#>)
+        """,
+      format: .testCustom(indentationWidth: .spaces(2))
+    )
+  }
+
+  func testCustomFormatMultilineCall() throws {
+    try assertExpandEditorPlaceholdersToClosures(
+      """
+      foo(
+          arg: 1,
+          closure: \(closureWithArgPlaceholder)
+      )
+      """,
+      expected: """
+        foo(
+            arg: 1,
+            closure: <#{ someInt in \(stringPlaceholder) }#>
+        )
+        """,
+      format: .testCustom()
+    )
+  }
+
+  func testCustomFormatMultilineIndentedCall() throws {
+    try assertExpandEditorPlaceholdersToClosures(
+      """
+          foo(
+              arg: 1,
+              closure: \(closureWithArgPlaceholder)
+          )
+      """,
+      expected: """
+            foo(
+                arg: 1,
+                closure: <#{ someInt in \(stringPlaceholder) }#>
+            )
+        """,
+      format: .testCustom()
+    )
+  }
+
+  func testCustomFormatMultilineCallWithNoAdditionalArguments() throws {
+    try assertExpandEditorPlaceholdersToClosures(
+      """
+      foo(
+          closure: \(closureWithArgPlaceholder)
+      )
+      """,
+      expected: """
+        foo(
+            closure: <#{ someInt in \(stringPlaceholder) }#>
+        )
+        """,
+      format: .testCustom()
     )
   }
 }
@@ -398,10 +528,10 @@ fileprivate func assertRefactorPlaceholderToken(
   )
 }
 
-fileprivate func assertExpandEditorPlaceholdersToTrailingClosures(
+fileprivate func assertExpandEditorPlaceholdersToClosures(
   _ expr: String,
   expected: String,
-  indentationWidth: Trivia? = nil,
+  format: ExpandEditorPlaceholdersToLiteralClosures.Context.Format = .trailing(indentationWidth: nil),
   file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
@@ -410,10 +540,22 @@ fileprivate func assertExpandEditorPlaceholdersToTrailingClosures(
 
   try assertRefactor(
     call,
-    context: ExpandEditorPlaceholdersToTrailingClosures.Context(indentationWidth: indentationWidth),
-    provider: ExpandEditorPlaceholdersToTrailingClosures.self,
+    context: ExpandEditorPlaceholdersToLiteralClosures.Context(format: format),
+    provider: ExpandEditorPlaceholdersToLiteralClosures.self,
     expected: [SourceEdit.replace(call, with: expected)],
     file: file,
     line: line
   )
+}
+
+fileprivate extension ExpandEditorPlaceholdersToLiteralClosures.Context.Format {
+  static func testCustom(indentationWidth: Trivia? = nil) -> Self {
+    .custom(CustomClosureFormat(indentationWidth: indentationWidth), allowNestedPlaceholders: true)
+  }
+}
+
+fileprivate class CustomClosureFormat: BasicFormat {
+  override func requiresNewline(between _: TokenSyntax?, and _: TokenSyntax?) -> Bool {
+    return false
+  }
 }

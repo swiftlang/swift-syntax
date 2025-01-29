@@ -15,6 +15,10 @@
 /// Enum to exhaustively switch over all different syntax nodes.
 public enum SyntaxEnum: Sendable {
   case token(TokenSyntax)
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case abiAttributeArguments(ABIAttributeArgumentsSyntax)
   case accessorBlock(AccessorBlockSyntax)
   case accessorDeclList(AccessorDeclListSyntax)
   case accessorDecl(AccessorDeclSyntax)
@@ -301,6 +305,10 @@ public enum SyntaxEnum: Sendable {
   case unresolvedAsExpr(UnresolvedAsExprSyntax)
   case unresolvedIsExpr(UnresolvedIsExprSyntax)
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case unsafeExpr(UnsafeExprSyntax)
   case valueBindingPattern(ValueBindingPatternSyntax)
   case variableDecl(VariableDeclSyntax)
   case versionComponentList(VersionComponentListSyntax)
@@ -321,6 +329,8 @@ extension Syntax {
     switch raw.kind {
     case .token:
       return .token(TokenSyntax(self)!)
+    case .abiAttributeArguments:
+      return .abiAttributeArguments(ABIAttributeArgumentsSyntax(self)!)
     case .accessorBlock:
       return .accessorBlock(AccessorBlockSyntax(self)!)
     case .accessorDeclList:
@@ -863,6 +873,8 @@ extension Syntax {
       return .unresolvedIsExpr(UnresolvedIsExprSyntax(self)!)
     case .unresolvedTernaryExpr:
       return .unresolvedTernaryExpr(UnresolvedTernaryExprSyntax(self)!)
+    case .unsafeExpr:
+      return .unsafeExpr(UnsafeExprSyntax(self)!)
     case .valueBindingPattern:
       return .valueBindingPattern(ValueBindingPatternSyntax(self)!)
     case .variableDecl:
@@ -1035,6 +1047,10 @@ public enum ExprSyntaxEnum {
   case unresolvedAsExpr(UnresolvedAsExprSyntax)
   case unresolvedIsExpr(UnresolvedIsExprSyntax)
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
+  #if compiler(>=5.8)
+  @_spi(ExperimentalLanguageFeatures)
+  #endif
+  case unsafeExpr(UnsafeExprSyntax)
 }
 
 extension ExprSyntax {
@@ -1147,6 +1163,8 @@ extension ExprSyntax {
       return .unresolvedIsExpr(UnresolvedIsExprSyntax(self)!)
     case .unresolvedTernaryExpr:
       return .unresolvedTernaryExpr(UnresolvedTernaryExprSyntax(self)!)
+    case .unsafeExpr:
+      return .unsafeExpr(UnsafeExprSyntax(self)!)
     default:
       preconditionFailure("unknown Expr syntax kind")
     }

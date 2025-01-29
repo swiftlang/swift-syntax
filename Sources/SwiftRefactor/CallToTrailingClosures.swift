@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6)
+#if compiler(>=6)
 import SwiftBasicFormat
 public import SwiftSyntax
 #else

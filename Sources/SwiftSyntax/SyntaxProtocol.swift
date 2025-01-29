@@ -156,6 +156,9 @@ extension SyntaxProtocol {
   /// Return this subtree with this node as the root, ie. detach this node
   /// from its parent.
   public var detached: Self {
+    if !self.hasParent {
+      return self
+    }
     // Make sure `self` (and thus the arena of `self.raw`) can’t get deallocated
     // before the detached node can be created.
     return withExtendedLifetime(self) {
@@ -202,7 +205,7 @@ extension SyntaxProtocol {
 
   /// The index of this node in a ``SyntaxChildren`` collection.
   internal var indexInParent: SyntaxChildrenIndex {
-    return SyntaxChildrenIndex(Syntax(self).absoluteInfo)
+    return SyntaxChildrenIndex(value: Syntax(self).layoutIndexInParent)
   }
 
   /// The parent of this syntax node, or `nil` if this node is the root.
@@ -217,7 +220,7 @@ extension SyntaxProtocol {
 
   /// Whether or not this node has a parent.
   public var hasParent: Bool {
-    return parent != nil
+    return Syntax(self).hasParent
   }
 
   public var keyPathInParent: AnyKeyPath? {
@@ -227,7 +230,7 @@ extension SyntaxProtocol {
     guard case .layout(let childrenKeyPaths) = parent.kind.syntaxNodeType.structure else {
       return nil
     }
-    return childrenKeyPaths[Syntax(self).indexInParent]
+    return childrenKeyPaths[Syntax(self).layoutIndexInParent]
   }
 
   @available(*, deprecated, message: "Use previousToken(viewMode:) instead")
@@ -235,20 +238,12 @@ extension SyntaxProtocol {
     return self.previousToken(viewMode: .sourceAccurate)
   }
 
-  /// Returns this node or the first ancestor that satisfies `condition`.
+  /// Applies `map` to this node and each of its ancestors until a non-`nil`
+  /// value is produced, then returns that value.
+  ///
+  /// If no node has a non-`nil` mapping, returns `nil`.
   public func ancestorOrSelf<T>(mapping map: (Syntax) -> T?) -> T? {
-    return self.withUnownedSyntax {
-      var node = $0
-      while true {
-        if let mapped = node.withValue(map) {
-          return mapped
-        }
-        guard let parent = node.parent else {
-          return nil
-        }
-        node = parent
-      }
-    }
+    Syntax(self).ancestorOrSelf(mapping: map)
   }
 }
 
@@ -258,21 +253,7 @@ extension SyntaxProtocol {
   /// Recursively walks through the tree to find the token semantically before
   /// this node.
   public func previousToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
-    guard let parent = self.parent else {
-      return nil
-    }
-    let siblings = NonNilRawSyntaxChildren(parent, viewMode: viewMode)
-    // `self` could be a missing node at index 0 and `viewMode` be `.sourceAccurate`.
-    // In that case `siblings` skips over the missing `self` node and has a `startIndex > 0`.
-    if self.indexInParent >= siblings.startIndex {
-      for absoluteRaw in siblings[..<self.indexInParent].reversed() {
-        let child = Syntax(absoluteRaw, parent: parent)
-        if let token = child.lastToken(viewMode: viewMode) {
-          return token
-        }
-      }
-    }
-    return parent.previousToken(viewMode: viewMode)
+    return self._syntaxNode.previousToken(viewMode: viewMode)
   }
 
   @available(*, deprecated, message: "Use nextToken(viewMode:) instead")
@@ -283,18 +264,7 @@ extension SyntaxProtocol {
   /// Recursively walks through the tree to find the next token semantically
   /// after this node.
   public func nextToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
-    guard let parent = self.parent else {
-      return nil
-    }
-    let siblings = NonNilRawSyntaxChildren(parent, viewMode: viewMode)
-    let nextSiblingIndex = siblings.index(after: self.indexInParent)
-    for absoluteRaw in siblings[nextSiblingIndex...] {
-      let child = Syntax(absoluteRaw, parent: parent)
-      if let token = child.firstToken(viewMode: viewMode) {
-        return token
-      }
-    }
-    return parent.nextToken(viewMode: viewMode)
+    return self._syntaxNode.nextToken(viewMode: viewMode)
   }
 
   @available(*, deprecated, message: "Use firstToken(viewMode: .sourceAccurate) instead")
@@ -304,17 +274,7 @@ extension SyntaxProtocol {
 
   /// Returns the first token node that is part of this syntax node.
   public func firstToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
-    guard viewMode.shouldTraverse(node: raw) else { return nil }
-    if let token = _syntaxNode.as(TokenSyntax.self) {
-      return token
-    }
-
-    for child in children(viewMode: viewMode) {
-      if let token = child.firstToken(viewMode: viewMode) {
-        return token
-      }
-    }
-    return nil
+    return self._syntaxNode.firstToken(viewMode: viewMode)
   }
 
   @available(*, deprecated, message: "Use lastToken(viewMode: .sourceAccurate) instead")
@@ -324,17 +284,7 @@ extension SyntaxProtocol {
 
   /// Returns the last token node that is part of this syntax node.
   public func lastToken(viewMode: SyntaxTreeViewMode) -> TokenSyntax? {
-    guard viewMode.shouldTraverse(node: raw) else { return nil }
-    if let token = _syntaxNode.as(TokenSyntax.self) {
-      return token
-    }
-
-    for child in children(viewMode: viewMode).reversed() {
-      if let tok = child.lastToken(viewMode: viewMode) {
-        return tok
-      }
-    }
-    return nil
+    return self._syntaxNode.lastToken(viewMode: viewMode)
   }
 
   /// Sequence of tokens that are part of this Syntax node.
@@ -371,20 +321,27 @@ extension SyntaxProtocol {
   /// If the identifier references a node from a different tree (ie. one that has a different root ID in the
   /// ``SyntaxIdentifier``) or if no node with the given identifier is a child of this syntax node, returns `nil`.
   public func node(at syntaxIdentifier: SyntaxIdentifier) -> Syntax? {
-    guard self.id <= syntaxIdentifier && syntaxIdentifier < self.id.advancedBySibling(self.raw) else {
-      // The syntax identifier is not part of this tree.
+    let syntax = Syntax(self)
+    guard syntax.raw.id == syntaxIdentifier.rootId else {
       return nil
     }
-    if self.id == syntaxIdentifier {
-      return Syntax(self)
-    }
-    for child in children(viewMode: .all) {
-      if let node = child.node(at: syntaxIdentifier) {
+
+    func _node(at indexInTree: UInt32, in node: Syntax) -> Syntax? {
+      let i = node.absoluteInfo.indexInTree
+      if i == indexInTree {
         return node
       }
+      guard i < indexInTree, indexInTree < i &+ UInt32(truncatingIfNeeded: node.raw.totalNodes) else {
+        return nil
+      }
+      for child in node.children(viewMode: .all) {
+        if let node = _node(at: indexInTree, in: child) {
+          return node
+        }
+      }
+      preconditionFailure("syntaxIdentifier is covered by this node but not any of its children?")
     }
-
-    preconditionFailure("syntaxIdentifier is covered by this node but not any of its children?")
+    return _node(at: syntaxIdentifier.indexInTree.indexInTree, in: syntax)
   }
 }
 

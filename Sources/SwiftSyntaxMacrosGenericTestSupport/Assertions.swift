@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6.0)
+#if compiler(>=6)
 import SwiftBasicFormat
 public import SwiftDiagnostics
 @_spi(FixItApplier) import SwiftIDEUtils

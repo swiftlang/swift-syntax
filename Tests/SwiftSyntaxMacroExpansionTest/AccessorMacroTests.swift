@@ -532,4 +532,37 @@ final class AccessorMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testClosureInAccessorMacro() {
+    enum PropertyWrapperMacro: AccessorMacro {
+      public static func expansion(
+        of node: AttributeSyntax,
+        providingAccessorsOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [AccessorDeclSyntax] {
+        guard let structDecl = context.lexicalContext.first?.as(StructDeclSyntax.self) else {
+          return []
+        }
+
+        return ["get { \(literal: structDecl.name.text) }"]
+      }
+    }
+    assertMacroExpansion(
+      """
+      struct Foo {
+          @TestWrapper(b: { a in 1 }) var test3: Thing
+      }
+      """,
+      expandedSource: """
+        struct Foo {
+            var test3: Thing {
+                get {
+                    "Foo"
+                }
+            }
+        }
+        """,
+      macros: ["TestWrapper": PropertyWrapperMacro.self]
+    )
+  }
 }

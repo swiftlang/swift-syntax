@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6)
+#if compiler(>=6)
 @_spi(RawSyntax) internal import SwiftSyntax
 #else
 @_spi(RawSyntax) import SwiftSyntax
@@ -441,6 +441,19 @@ extension Parser {
           tryKeyword: tryKeyword,
           questionOrExclamationMark: mark,
           expression: expression,
+          arena: self.arena
+        )
+      )
+    case (.unsafe, let handle)?:
+      let unsafeTok = self.eat(handle)
+      let sub = self.parseSequenceExpressionElement(
+        flavor: flavor,
+        pattern: pattern
+      )
+      return RawExprSyntax(
+        RawUnsafeExprSyntax(
+          unsafeKeyword: unsafeTok,
+          expression: sub,
           arena: self.arena
         )
       )

@@ -86,7 +86,7 @@ extension Child {
   /// ` = default_value` that can be used as the default value to for a
   /// function parameter. Otherwise, return `nil`.
   public var defaultInitialization: InitializerClauseSyntax? {
-    if let defaultValue {
+    if providesDefaultInitialization, let defaultValue {
       return InitializerClauseSyntax(
         equal: .equalToken(leadingTrivia: .space, trailingTrivia: .space),
         value: defaultValue

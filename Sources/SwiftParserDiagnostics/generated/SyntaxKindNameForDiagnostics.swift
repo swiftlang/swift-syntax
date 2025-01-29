@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6)
+#if compiler(>=6)
 @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
 #else
 @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
@@ -23,6 +23,8 @@ extension SyntaxKind {
     switch self {
     case .token:
       return "token"
+    case .abiAttributeArguments:
+      return "ABI-providing declaration"
     case .accessorDecl:
       return "accessor"
     case .accessorEffectSpecifiers:
@@ -397,6 +399,8 @@ extension SyntaxKind {
       return "'is'"
     case .unresolvedTernaryExpr:
       return "ternary operator"
+    case .unsafeExpr:
+      return "'unsafe' expression"
     case .valueBindingPattern:
       return "value binding pattern"
     case .variableDecl:

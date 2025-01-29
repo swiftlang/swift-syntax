@@ -17,6 +17,12 @@
 @_spi(RawSyntax)
 public func childName(_ keyPath: AnyKeyPath) -> String? {
   switch keyPath {
+  case \ABIAttributeArgumentsSyntax.unexpectedBeforeProvider:
+    return "unexpectedBeforeProvider"
+  case \ABIAttributeArgumentsSyntax.provider:
+    return "provider"
+  case \ABIAttributeArgumentsSyntax.unexpectedAfterProvider:
+    return "unexpectedAfterProvider"
   case \AccessorBlockSyntax.unexpectedBeforeLeftBrace:
     return "unexpectedBeforeLeftBrace"
   case \AccessorBlockSyntax.leftBrace:
@@ -3381,6 +3387,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "colon"
   case \UnresolvedTernaryExprSyntax.unexpectedAfterColon:
     return "unexpectedAfterColon"
+  case \UnsafeExprSyntax.unexpectedBeforeUnsafeKeyword:
+    return "unexpectedBeforeUnsafeKeyword"
+  case \UnsafeExprSyntax.unsafeKeyword:
+    return "unsafeKeyword"
+  case \UnsafeExprSyntax.unexpectedBetweenUnsafeKeywordAndExpression:
+    return "unexpectedBetweenUnsafeKeywordAndExpression"
+  case \UnsafeExprSyntax.expression:
+    return "expression"
+  case \UnsafeExprSyntax.unexpectedAfterExpression:
+    return "unexpectedAfterExpression"
   case \ValueBindingPatternSyntax.unexpectedBeforeBindingSpecifier:
     return "unexpectedBeforeBindingSpecifier"
   case \ValueBindingPatternSyntax.bindingSpecifier:

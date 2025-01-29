@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6)
+#if compiler(>=6)
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
 #else
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
@@ -700,6 +700,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
   case `repeat`
   case each
   case any
+  case unsafe
 
   init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
@@ -713,6 +714,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
     case TokenSpec(.repeat): self = .repeat
     case TokenSpec(.each): self = .each
     case TokenSpec(.any): self = .any
+    case TokenSpec(.unsafe) where experimentalFeatures.contains(.unsafeExpression): self = .unsafe
     default: return nil
     }
   }
@@ -729,6 +731,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
     case .repeat: return .keyword(.repeat)
     case .each: return .keyword(.each)
     case .any: return .keyword(.any)
+    case .unsafe: return .keyword(.unsafe)
     }
   }
 }

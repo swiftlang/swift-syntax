@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6)
+#if compiler(>=6)
 internal import SwiftDiagnostics
 internal import SwiftParserDiagnostics
 public import SwiftSyntax

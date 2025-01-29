@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6)
+#if compiler(>=6)
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
 #else
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
@@ -283,6 +283,7 @@ enum TokenPrecedence: Comparable {
       ._swift_native_objc_runtime_base,
       ._typeEraser,
       ._unavailableFromAsync,
+      .abi,
       .attached,
       .available,
       .backDeployed,

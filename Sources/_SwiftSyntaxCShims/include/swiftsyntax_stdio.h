@@ -13,19 +13,21 @@
 #ifndef SWIFTSYNTAX_STDIO_H
 #define SWIFTSYNTAX_STDIO_H
 
+#include "_bridging.h"
+
 #include <stdio.h>
 
-__attribute__((swift_name("getter:_stdout()")))
+SWIFT_NAME_S("getter:_stdout()")
 static inline FILE *swiftsyntax_stdout(void) {
   return stdout;
 }
 
-__attribute__((swift_name("getter:_stdin()")))
+SWIFT_NAME_S("getter:_stdin()")
 static inline FILE *swiftsyntax_stdin(void) {
   return stdin;
 }
 
-__attribute__((swift_name("getter:_stderr()")))
+SWIFT_NAME_S("getter:_stderr()")
 static inline FILE *swiftsyntax_stderr(void) {
   return stderr;
 }

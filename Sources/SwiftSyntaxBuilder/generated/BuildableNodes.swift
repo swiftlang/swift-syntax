@@ -12,7 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6)
+#if compiler(>=6)
 @_spi(ExperimentalLanguageFeatures) public import SwiftSyntax
 #else
 @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
@@ -628,10 +628,10 @@ extension FunctionCallExprSyntax {
     unexpectedBeforeCalledExpression: UnexpectedNodesSyntax? = nil,
     calledExpression: ExprSyntaxProtocol,
     unexpectedBetweenCalledExpressionAndLeftParen: UnexpectedNodesSyntax? = nil,
-    leftParen: TokenSyntax? = nil,
+    leftParen: TokenSyntax?,
     unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
     unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
-    rightParen: TokenSyntax? = nil,
+    rightParen: TokenSyntax?,
     unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
     trailingClosure: ClosureExprSyntax? = nil,
     unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,

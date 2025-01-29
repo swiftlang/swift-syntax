@@ -84,11 +84,13 @@ Once you've pushed your branch, you should see an option on this repository's pa
 > [!TIP]
 > If you are stuck, it’s encouraged to submit a PR that describes the issue you’re having, e.g. if there are tests that are failing, build failures you can’t resolve, or if you have architectural questions. We’re happy to work with you to resolve those issue.
 
-## Opening a PR for Release Branch
+### Opening a PR for Release Branch
 
-See the [dedicated section][section] on the Swift project website.
+See the [dedicated section](https://www.swift.org/contributing/#release-branch-pull-requests) on the Swift project website.
 
-[section]: https://www.swift.org/contributing/#release-branch-pull-requests
+## Changing public API
+
+If you are modifying public API, request feedback for these changes from the community by opening a RFC as described by the [RFC Process](Contributor%20Documentation/RFC%20Process.md).
 
 ## Review and CI Testing
 

@@ -52,6 +52,15 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           """
         )
 
+        DeclSyntax(
+          """
+          @_transparent
+          init(unsafeCasting node: Syntax) {
+            self._syntaxNode = node
+          }
+          """
+        )
+
         let initSignature = InitSignature(node)
 
         try! InitializerDeclSyntax(

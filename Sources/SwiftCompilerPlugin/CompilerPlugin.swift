@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6.0)
+#if compiler(>=6)
 public import SwiftSyntaxMacros
 @_spi(PluginMessage) private import SwiftCompilerPluginMessageHandling
 #else
@@ -112,6 +112,6 @@ extension CompilerPlugin {
     let connection = try StandardIOMessageConnection()
     let provider = MacroProviderAdapter(plugin: Self())
     let impl = CompilerPluginMessageListener(connection: connection, provider: provider)
-    impl.main()
+    try impl.main()
   }
 }

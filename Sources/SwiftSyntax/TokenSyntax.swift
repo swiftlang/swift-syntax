@@ -40,6 +40,11 @@ public struct TokenSyntax: SyntaxProtocol, SyntaxHashable {
     self._syntaxNode = Syntax(node)
   }
 
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
   /// Construct a new token with the given `kind`, `leadingTrivia`,
   /// `trailingTrivia` and `presence`.
   public init(

@@ -105,14 +105,18 @@ func assertLexicalNameLookup(
       ResultExpectation.assertResult(marker: marker, result: result, expectedValues: expectedValues)
 
       return result.flatMap { lookUpResult in
-        lookUpResult.names.map { lookupName in
-          lookupName.syntax
+        lookUpResult.names.flatMap { lookupName in
+          if case .equivalentNames(let names) = lookupName {
+            return names.map(\.syntax)
+          } else {
+            return [lookupName.syntax]
+          }
         }
       }
     },
     expected: references.mapValues { expectations in
       expectations.flatMap { expectation in
-        expectation.expectedNames.map { expectedName in
+        expectation.expectedNames.flatMap { expectedName in
           expectedName.marker
         }
       }

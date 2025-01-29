@@ -139,6 +139,11 @@ public let ATTRIBUTE_NODES: [Node] = [
             name: "documentationArguments",
             kind: .node(kind: .documentationAttributeArgumentList)
           ),
+          Child(
+            name: "abiArguments",
+            kind: .node(kind: .abiAttributeArguments),
+            experimentalFeature: .abiAttribute
+          ),
         ]),
         documentation: """
           The arguments of the attribute.
@@ -268,6 +273,30 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
+    kind: .abiAttributeArguments,
+    base: .syntax,
+    experimentalFeature: .abiAttribute,
+    nameForDiagnostics: "ABI-providing declaration",
+    documentation: "The arguments of the '@abi' attribute",
+    children: [
+      Child(
+        name: "provider",
+        kind: .nodeChoices(choices: [
+          Child(name: "associatedType", kind: .node(kind: .associatedTypeDecl)),
+          Child(name: "deinitializer", kind: .node(kind: .deinitializerDecl)),
+          Child(name: "enumCase", kind: .node(kind: .enumCaseDecl)),
+          Child(name: "function", kind: .node(kind: .functionDecl)),
+          Child(name: "initializer", kind: .node(kind: .initializerDecl)),
+          Child(name: "missing", kind: .node(kind: .missingDecl)),
+          Child(name: "subscript", kind: .node(kind: .subscriptDecl)),
+          Child(name: "typeAlias", kind: .node(kind: .typeAliasDecl)),
+          Child(name: "variable", kind: .node(kind: .variableDecl)),
+        ])
+      )
+    ]
+  ),
+
+  Node(
     kind: .conventionAttributeArguments,
     base: .syntax,
     nameForDiagnostics: "@convention(...) arguments",
@@ -356,7 +385,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "accessorSpecifier",
-        kind: .token(choices: [.keyword(.get), .keyword(.set)]),
+        kind: .token(choices: [.keyword(.get), .keyword(.set), .keyword(._modify)]),
         documentation: "The accessor name.",
         isOptional: true
       ),

@@ -44,14 +44,10 @@ option(SWIFT_SYNTAX_ENABLE_WMO_PRE_3_26
 include(AddSwiftHostLibrary)
 include(SwiftCompilerCapability)
 
-# Don't link with 'string-processing' and 'backtracing'.
+# Don't link with 'string-processing'
 swift_supports_implicit_module("string-processing" SWIFT_SUPPORTS_DISABLE_IMPLICIT_STRING_PROCESSING_MODULE_IMPORT)
-swift_supports_implicit_module("backtracing" SWIFT_SUPPORTS_DISABLE_IMPLICIT_BACKTRACING_MODULE_IMPORT)
 if(SWIFT_SUPPORTS_DISABLE_IMPLICIT_STRING_PROCESSING_MODULE_IMPORT)
   add_compile_options("$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Xfrontend -disable-implicit-string-processing-module-import>")
-endif()
-if(SWIFT_SUPPORTS_DISABLE_IMPLICIT_BACKTRACING_MODULE_IMPORT)
-  add_compile_options("$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Xfrontend -disable-implicit-backtracing-module-import>")
 endif()
 
 if(NOT DEFINED Swift_COMPILER_PACKAGE_CMO_SUPPORT AND SWIFTSYNTAX_EMIT_MODULE)

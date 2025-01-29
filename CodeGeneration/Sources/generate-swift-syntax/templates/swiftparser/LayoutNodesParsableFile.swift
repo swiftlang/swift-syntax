@@ -18,7 +18,7 @@ import Utils
 let layoutNodesParsableFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   DeclSyntax(
     """
-    #if swift(>=6)
+    #if compiler(>=6)
     @_spi(RawSyntax) public import SwiftSyntax
     #else
     @_spi(RawSyntax) import SwiftSyntax

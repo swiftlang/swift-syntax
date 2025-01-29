@@ -7,8 +7,6 @@ Glossary of terms and abbreviations used in SwiftSyntax
 To avoid ongoing repetition of common long terms, SwiftSyntax uses a couple of abbreviations that are common in compiler projects.
 
 
-**Arena** See ``SyntaxArena``
-
 **Decl** Abbreviation for *Declaration*
 
 **Expr** Abbreviation for *Expression*

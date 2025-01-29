@@ -186,10 +186,10 @@ extension RawSyntaxData.ParsedToken {
 
 extension RawSyntaxData.MaterializedToken {
   var leadingTrivia: RawTriviaPieceBuffer {
-    triviaPieces[..<Int(numLeadingTrivia)]
+    RawTriviaPieceBuffer(rebasing: triviaPieces[..<Int(numLeadingTrivia)])
   }
   var trailingTrivia: RawTriviaPieceBuffer {
-    triviaPieces[Int(numLeadingTrivia)...]
+    RawTriviaPieceBuffer(rebasing: triviaPieces[Int(numLeadingTrivia)...])
   }
 }
 
@@ -215,7 +215,7 @@ public struct RawSyntax: Sendable {
   }
 
   var rawData: RawSyntaxData {
-    pointer.pointee
+    @_transparent unsafeAddress { pointer.pointer }
   }
 
   internal var arenaReference: SyntaxArenaRef {
@@ -954,7 +954,7 @@ extension RawSyntax {
 extension RawSyntax: Identifiable {
   public struct ID: Hashable, @unchecked Sendable {
     /// The pointer to the start of the `RawSyntax` node.
-    private var pointer: UnsafeRawPointer
+    fileprivate var pointer: UnsafeRawPointer
     fileprivate init(_ raw: RawSyntax) {
       self.pointer = raw.pointer.unsafeRawPointer
     }

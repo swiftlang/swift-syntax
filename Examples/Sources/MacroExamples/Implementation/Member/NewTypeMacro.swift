@@ -20,6 +20,7 @@ extension NewTypeMacro: MemberMacro {
   public static func expansion<Declaration, Context>(
     of node: AttributeSyntax,
     providingMembersOf declaration: Declaration,
+    conformingTo: [TypeSyntax],
     in context: Context
   ) throws -> [DeclSyntax] where Declaration: DeclGroupSyntax, Context: MacroExpansionContext {
     do {

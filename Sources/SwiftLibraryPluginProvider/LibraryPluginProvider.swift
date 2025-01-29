@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if swift(>=6.0)
+#if compiler(>=6)
 public import SwiftSyntaxMacros
 @_spi(PluginMessage) public import SwiftCompilerPluginMessageHandling
 private import _SwiftLibraryPluginProviderCShims

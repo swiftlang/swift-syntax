@@ -93,6 +93,9 @@ public class Child: NodeChoiceConvertible {
   /// Whether this child is optional and can be `nil`.
   public let isOptional: Bool
 
+  /// Whether this child provides a default value when used as a parameter in a function.
+  public let providesDefaultInitialization: Bool
+
   public let experimentalFeature: ExperimentalFeature?
 
   /// A name of this child that can be shown in diagnostics.
@@ -303,6 +306,7 @@ public class Child: NodeChoiceConvertible {
     nameForDiagnostics: String? = nil,
     documentation: String? = nil,
     isOptional: Bool = false,
+    providesDefaultInitialization: Bool = true,
     newerChildPath: [Child] = []
   ) {
     precondition(name.first?.isLowercase ?? true, "The first letter of a child’s name should be lowercase")
@@ -314,6 +318,7 @@ public class Child: NodeChoiceConvertible {
     self.documentationSummary = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.documentationAbstract = String(documentation?.split(whereSeparator: \.isNewline).first ?? "")
     self.isOptional = isOptional
+    self.providesDefaultInitialization = providesDefaultInitialization
   }
 
   /// Create a node that is a copy of the last node in `newerChildPath`, but
@@ -329,6 +334,7 @@ public class Child: NodeChoiceConvertible {
     self.documentationSummary = other.documentationSummary
     self.documentationAbstract = other.documentationAbstract
     self.isOptional = other.isOptional
+    self.providesDefaultInitialization = other.providesDefaultInitialization
   }
 
   /// Create a child for the unexpected nodes between two children (either or
@@ -353,6 +359,7 @@ public class Child: NodeChoiceConvertible {
       nameForDiagnostics: nil,
       documentation: nil,
       isOptional: true,
+      providesDefaultInitialization: true,
       newerChildPath: newerChildPath
     )
   }

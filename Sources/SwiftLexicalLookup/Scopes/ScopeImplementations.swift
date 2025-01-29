@@ -390,7 +390,7 @@ import SwiftSyntax
     "EnumDeclScope"
   }
 }
-@_spi(Experimental) extension ExtensionDeclSyntax: LookInMembersScopeSyntax {
+@_spi(Experimental) extension ExtensionDeclSyntax: ScopeSyntax, LookInMembersScopeSyntax {
   @_spi(Experimental) public var lookupMembersPosition: AbsolutePosition {
     if let memberType = extendedType.as(MemberTypeSyntax.self) {
       return memberType.name.positionAfterSkippingLeadingTrivia

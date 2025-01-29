@@ -13,7 +13,7 @@
 import SwiftSyntax
 
 /// An entity that is implicitly declared based on the syntactic structure of the program.
-@_spi(Experimental) public enum ImplicitDecl {
+public enum ImplicitDecl {
   /// `self` keyword representing object instance.
   /// Could be associated with type declaration, extension,
   /// or closure captures. Introduced at function edge.
@@ -30,7 +30,7 @@ import SwiftSyntax
   case oldValue(AccessorDeclSyntax)
 
   /// Syntax associated with this name.
-  @_spi(Experimental) public var syntax: SyntaxProtocol {
+  public var syntax: SyntaxProtocol {
     switch self {
     case .self(let syntax):
       return syntax
@@ -46,7 +46,7 @@ import SwiftSyntax
   }
 
   /// The name of the implicit declaration.
-  private var name: StaticString {
+  public var name: StaticString {
     switch self {
     case .self:
       return "self"
@@ -85,12 +85,12 @@ import SwiftSyntax
   /// ```
   /// `self` and `Self` identifers override implicit `self` and `Self` introduced by
   /// the `Foo` class declaration.
-  var identifier: Identifier {
+  public var identifier: Identifier {
     Identifier(canonicalName: name)
   }
 
   /// Position of this implicit name.
-  @_spi(Experimental) public var position: AbsolutePosition {
+  public var position: AbsolutePosition {
     switch self {
     case .self(let declSyntax):
       switch Syntax(declSyntax).as(SyntaxEnum.self) {
@@ -128,7 +128,7 @@ import SwiftSyntax
   }
 }
 
-@_spi(Experimental) public enum LookupName {
+public enum LookupName {
   /// Identifier associated with the name.
   /// Could be an identifier of a variable, function or closure parameter and more.
   case identifier(IdentifiableSyntax, accessibleAfter: AbsolutePosition?)
@@ -154,7 +154,7 @@ import SwiftSyntax
   case equivalentNames([LookupName])
 
   /// Syntax associated with this name.
-  @_spi(Experimental) public var syntax: SyntaxProtocol {
+  public var syntax: SyntaxProtocol {
     switch self {
     case .identifier(let syntax, _):
       return syntax
@@ -170,7 +170,7 @@ import SwiftSyntax
   }
 
   /// Identifier used for name comparison.
-  @_spi(Experimental) public var identifier: Identifier? {
+  public var identifier: Identifier? {
     switch self {
     case .identifier(let syntax, _):
       return Identifier(syntax.identifier)
@@ -192,7 +192,7 @@ import SwiftSyntax
   /// Such cases are function parameters (as they can
   /// contain two identifiers) and function declarations (where name
   /// is precided by access modifiers and `func` keyword).
-  @_spi(Experimental) public var position: AbsolutePosition {
+  public var position: AbsolutePosition {
     switch self {
     case .identifier(let syntax, _):
       return syntax.identifier.positionAfterSkippingLeadingTrivia
@@ -317,7 +317,7 @@ import SwiftSyntax
   }
 
   /// Debug description of this lookup name.
-  @_spi(Experimental) public var debugDescription: String {
+  public var debugDescription: String {
     let sourceLocationConverter = SourceLocationConverter(fileName: "", tree: syntax.root)
     let location = sourceLocationConverter.location(for: position)
     let strName = (identifier?.name ?? "NO-NAME") + " at: \(location.line):\(location.column)"

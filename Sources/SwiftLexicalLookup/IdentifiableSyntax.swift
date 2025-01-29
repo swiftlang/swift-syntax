@@ -13,50 +13,50 @@
 import SwiftSyntax
 
 /// Syntax node that can be refered to with an identifier.
-@_spi(Experimental) public protocol IdentifiableSyntax: SyntaxProtocol {
+public protocol IdentifiableSyntax: SyntaxProtocol {
   var identifier: TokenSyntax { get }
 }
 
-@_spi(Experimental) extension IdentifierPatternSyntax: IdentifiableSyntax {}
+extension IdentifierPatternSyntax: IdentifiableSyntax {}
 
-@_spi(Experimental) extension ClosureParameterSyntax: IdentifiableSyntax {
-  @_spi(Experimental) public var identifier: TokenSyntax {
+extension ClosureParameterSyntax: IdentifiableSyntax {
+  public var identifier: TokenSyntax {
     secondName ?? firstName
   }
 }
 
-@_spi(Experimental) extension FunctionParameterSyntax: IdentifiableSyntax {
-  @_spi(Experimental) public var identifier: TokenSyntax {
+extension FunctionParameterSyntax: IdentifiableSyntax {
+  public var identifier: TokenSyntax {
     secondName ?? firstName
   }
 }
 
-@_spi(Experimental) extension ClosureShorthandParameterSyntax: IdentifiableSyntax {
-  @_spi(Experimental) public var identifier: TokenSyntax {
+extension ClosureShorthandParameterSyntax: IdentifiableSyntax {
+  public var identifier: TokenSyntax {
     name
   }
 }
 
-@_spi(Experimental) extension ClosureCaptureSyntax: IdentifiableSyntax {
-  @_spi(Experimental) public var identifier: TokenSyntax {
+extension ClosureCaptureSyntax: IdentifiableSyntax {
+  public var identifier: TokenSyntax {
     name
   }
 }
 
-@_spi(Experimental) extension AccessorParametersSyntax: IdentifiableSyntax {
-  @_spi(Experimental) public var identifier: TokenSyntax {
+extension AccessorParametersSyntax: IdentifiableSyntax {
+  public var identifier: TokenSyntax {
     name
   }
 }
 
-@_spi(Experimental) extension GenericParameterSyntax: IdentifiableSyntax {
-  @_spi(Experimental) public var identifier: TokenSyntax {
+extension GenericParameterSyntax: IdentifiableSyntax {
+  public var identifier: TokenSyntax {
     name
   }
 }
 
-@_spi(Experimental) extension PrimaryAssociatedTypeSyntax: IdentifiableSyntax {
-  @_spi(Experimental) public var identifier: TokenSyntax {
+extension PrimaryAssociatedTypeSyntax: IdentifiableSyntax {
+  public var identifier: TokenSyntax {
     name
   }
 }

@@ -43,7 +43,7 @@ extension SyntaxProtocol {
   /// declaration, followed by the first function name, and then the second function name,
   /// in this exact order. The constant declaration within the function body is omitted
   /// due to the ordering rules that prioritize visibility within the function body.
-  @_spi(Experimental) public func lookup(
+  public func lookup(
     _ identifier: Identifier?,
     with config: LookupConfig = LookupConfig()
   ) -> [LookupResult] {

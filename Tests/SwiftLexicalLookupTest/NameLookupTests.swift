@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-@_spi(Experimental) import SwiftLexicalLookup
+import SwiftLexicalLookup
 import SwiftSyntax
 import XCTest
 

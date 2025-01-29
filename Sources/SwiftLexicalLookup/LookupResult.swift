@@ -13,11 +13,9 @@
 import SwiftSyntax
 
 /// Represents result from a specific scope.
-@_spi(Experimental) public enum LookupResult {
+public enum LookupResult {
   /// Scope and the names that matched lookup.
-  case fromScope(ScopeSyntax, withNames: [LookupName])
-  /// File scope and names that matched lookup.
-  case fromFileScope(SourceFileSyntax, withNames: [LookupName])
+  case fromScope(SyntaxProtocol, withNames: [LookupName])
   /// Indicates where to perform member lookup.
   case lookInMembers(LookInMembersScopeSyntax)
   /// Indicates to lookup generic parameters of extended type.
@@ -52,12 +50,10 @@ import SwiftSyntax
   case mightIntroduceDollarIdentifiers(ClosureExprSyntax)
 
   /// Associated scope.
-  @_spi(Experimental) public var scope: ScopeSyntax {
+  public var scope: SyntaxProtocol {
     switch self {
     case .fromScope(let scopeSyntax, _):
       return scopeSyntax
-    case .fromFileScope(let fileScopeSyntax, _):
-      return fileScopeSyntax
     case .lookInMembers(let lookInMemb):
       return lookInMemb
     case .lookInGenericParametersOfExtendedType(let extensionDecl):
@@ -68,9 +64,9 @@ import SwiftSyntax
   }
 
   /// Names that matched lookup.
-  @_spi(Experimental) public var names: [LookupName] {
+  public var names: [LookupName] {
     switch self {
-    case .fromScope(_, let names), .fromFileScope(_, let names):
+    case .fromScope(_, let names):
       return names
     case .lookInMembers(_),
       .lookInGenericParametersOfExtendedType(_),
@@ -79,28 +75,19 @@ import SwiftSyntax
     }
   }
 
-  /// Returns result specific for the particular `scope` kind with provided `names`.
-  static func getResult(for scope: ScopeSyntax, withNames names: [LookupName]) -> LookupResult {
-    switch Syntax(scope).as(SyntaxEnum.self) {
-    case .sourceFile(let sourceFileSyntax):
-      return .fromFileScope(sourceFileSyntax, withNames: names)
-    default:
-      return .fromScope(scope, withNames: names)
-    }
-  }
-
   /// Returns result specific for the particular `scope` kind with provided `names`
   /// as an array with one element. If names are empty, returns an empty array.
   static func getResultArray(for scope: ScopeSyntax, withNames names: [LookupName]) -> [LookupResult] {
     guard !names.isEmpty else { return [] }
 
-    return [getResult(for: scope, withNames: names)]
+    return [.fromScope(scope, withNames: names)]
   }
 
   /// Debug description of this lookup name.
-  @_spi(Experimental) public var debugDescription: String {
+  public var debugDescription: String {
     var description =
-      resultKindDebugName + ": " + scope.scopeDebugDescription
+      resultKindDebugName + ": "
+      + ((Syntax(scope).asProtocol(SyntaxProtocol.self) as? ScopeSyntax)?.scopeDebugDescription ?? "NOT-A-SCOPE")
 
     switch self {
     case .lookInMembers:
@@ -127,8 +114,6 @@ import SwiftSyntax
     switch self {
     case .fromScope:
       return "fromScope"
-    case .fromFileScope:
-      return "fromFileScope"
     case .lookInMembers:
       return "lookInMembers"
     case .lookInGenericParametersOfExtendedType(_):
@@ -139,9 +124,9 @@ import SwiftSyntax
   }
 }
 
-@_spi(Experimental) extension [LookupResult] {
+extension [LookupResult] {
   /// Debug description this array of lookup results.
-  @_spi(Experimental) public var debugDescription: String {
+  public var debugDescription: String {
     return self.map(\.debugDescription).joined(separator: "\n")
   }
 }

@@ -10,12 +10,10 @@
 //
 //===----------------------------------------------------------------------===//
 
-public protocol SyntaxCollection: SyntaxProtocol, BidirectionalCollection, ExpressibleByArrayLiteral
+public protocol SyntaxCollection: SyntaxProtocol, _LeafSyntaxNodeProtocol, BidirectionalCollection,
+  ExpressibleByArrayLiteral
 where Element: SyntaxProtocol, Index == SyntaxChildrenIndex {
   associatedtype Iterator = SyntaxCollectionIterator<Element>
-
-  /// The ``SyntaxKind`` of the syntax node that conforms to ``SyntaxCollection``.
-  static var syntaxKind: SyntaxKind { get }
 }
 
 extension SyntaxCollection {

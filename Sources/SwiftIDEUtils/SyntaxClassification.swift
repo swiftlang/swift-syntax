@@ -63,35 +63,35 @@ extension SyntaxClassification {
   ///   - childKind: The node syntax kind.
   /// - Returns: A pair of classification and whether it is "forced", or nil if
   ///   no classification is attached.
-  internal static func classify(_ keyPath: AnyKeyPath) -> (SyntaxClassification, Bool)? {
-    switch keyPath {
-    case \AttributeSyntax.attributeName:
+  internal static func classify(_ property: SyntaxLayoutProperty) -> (SyntaxClassification, Bool)? {
+    switch property {
+    case AttributeSyntax.layout[.attributeName]:
       return (.attribute, true)
-    case \PlatformVersionItemSyntax.platformVersion:
+    case PlatformVersionItemSyntax.layout[.platformVersion]:
       return (.keyword, false)
-    case \AvailabilityVersionRestrictionSyntax.platform:
+    case PlatformVersionSyntax.layout[.platform]:
       return (.keyword, false)
-    case \DeclModifierSyntax.name:
+    case DeclModifierSyntax.layout[.name]:
       return (.attribute, false)
-    case \IfConfigClauseSyntax.poundKeyword:
+    case IfConfigClauseSyntax.layout[.poundKeyword]:
       return (.ifConfigDirective, false)
-    case \IfConfigClauseSyntax.condition:
+    case IfConfigClauseSyntax.layout[.condition]:
       return (.ifConfigDirective, false)
-    case \IfConfigDeclSyntax.poundEndif:
+    case IfConfigDeclSyntax.layout[.poundEndif]:
       return (.ifConfigDirective, false)
-    case \MemberTypeIdentifierSyntax.name:
+    case MemberTypeSyntax.layout[.name]:
       return (.type, false)
-    case \OperatorDeclSyntax.name:
+    case OperatorDeclSyntax.layout[.name]:
       return (.operator, false)
-    case \PrecedenceGroupAssociativitySyntax.associativityLabel:
+    case PrecedenceGroupAssociativitySyntax.layout[.associativityLabel]:
       return (.keyword, false)
-    case \PrecedenceGroupRelationSyntax.higherThanOrLowerThanLabel:
+    case PrecedenceGroupRelationSyntax.layout[.higherThanOrLowerThanLabel]:
       return (.keyword, false)
-    case \SimpleTypeIdentifierSyntax.name:
+    case IdentifierTypeSyntax.layout[.name]:
       return (.type, false)
-    case \FunctionParameterSyntax.firstName:
+    case FunctionParameterSyntax.layout[.firstName]:
       return (.argumentLabel, false)
-    case \LabeledExprSyntax.label:
+    case LabeledExprSyntax.layout[.label]:
       return (.argumentLabel, false)
     default:
       return nil

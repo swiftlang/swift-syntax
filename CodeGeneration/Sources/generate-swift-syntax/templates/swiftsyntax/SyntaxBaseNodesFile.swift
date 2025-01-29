@@ -287,8 +287,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       }
     }
 
-    leafProtocolDecl(type: node.kind.leafProtocolType, inheritedType: node.kind.protocolType)
-    leafProtocolExtension(type: node.kind.leafProtocolType, inheritedType: node.kind.protocolType)
+    leafProtocolExtension(inheritedType: node.kind.protocolType)
   }
 
   try! ExtensionDeclSyntax(
@@ -317,27 +316,13 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     }
   }
 
-  leafProtocolDecl(type: "_LeafSyntaxNodeProtocol", inheritedType: "SyntaxProtocol")
-  leafProtocolExtension(type: "_LeafSyntaxNodeProtocol", inheritedType: "SyntaxProtocol")
+  leafProtocolExtension(inheritedType: "SyntaxProtocol")
 }
 
-private func leafProtocolDecl(type: TypeSyntax, inheritedType: TypeSyntax) -> DeclSyntax {
-  DeclSyntax(
-    """
-    /// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
-    /// These are syntax nodes that are not considered base nodes for other syntax types.
-    ///
-    /// Syntax nodes conforming to this protocol have their inherited casting methods
-    /// deprecated to prevent incorrect casting.
-    public protocol \(type): \(inheritedType) {}
-    """
-  )
-}
-
-private func leafProtocolExtension(type: TypeSyntax, inheritedType: TypeSyntax) -> DeclSyntax {
-  DeclSyntax(
+private func leafProtocolExtension(inheritedType: TypeSyntax) -> DeclSyntax {
+  return DeclSyntax(
     #"""
-    extension \#(type) {
+    extension _LeafSyntaxNodeProtocol where Self: \#(inheritedType) {
       /// Checks if the current leaf syntax node can be cast to a different specified type.
       ///
       /// - Returns: `false` since the leaf node cannot be cast to a different specified type.

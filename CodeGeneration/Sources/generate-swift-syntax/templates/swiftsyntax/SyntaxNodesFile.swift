@@ -30,7 +30,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
 
         \(SwiftSyntax.Trivia(joining: [node.documentation, node.experimentalDocNote, node.grammar, node.containedIn]))\
         \(node.node.apiAttributes())\
-        public struct \(node.kind.syntaxType): \(node.baseType.syntaxBaseName)Protocol, SyntaxHashable, \(node.base.leafProtocolType)
+        public struct \(node.kind.syntaxType): \(node.baseType.syntaxBaseName)Protocol, SyntaxHashable, _LayoutSyntaxNodeProtocol
         """
       ) {
         for childNodeChoices in node.node.childrenNodeChoices() {
@@ -207,6 +207,12 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             )
           }
         }
+
+        // ========
+        // Metadata
+        // ========
+
+        DeclSyntax("public static var syntaxKind: SyntaxKind { .\(node.enumCaseCallName) }")
 
         let layout = ArrayExprSyntax {
           for child in node.children {

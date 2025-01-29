@@ -46,6 +46,20 @@ let syntaxKindFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       }
     }
 
+    try VariableDeclSyntax("public var isLayout: Bool") {
+      try SwitchExprSyntax("switch self") {
+        for node in SYNTAX_NODES where node.layoutNode != nil {
+          SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
+            StmtSyntax("return true")
+          }
+        }
+
+        SwitchCaseSyntax("default:") {
+          StmtSyntax("return false")
+        }
+      }
+    }
+
     try VariableDeclSyntax("public var isMissing: Bool") {
       try SwitchExprSyntax("switch self") {
         for name in SyntaxNodeKind.allCases where name.isMissing {

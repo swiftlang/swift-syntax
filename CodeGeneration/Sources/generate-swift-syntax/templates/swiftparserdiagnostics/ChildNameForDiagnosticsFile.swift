@@ -27,13 +27,13 @@ let childNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightHeader
   )
 
   try! FunctionDeclSyntax(
-    "private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String?"
+    "private func childNameForDiagnostics(_ property: SyntaxLayoutProperty) -> String?"
   ) {
-    try! SwitchExprSyntax("switch keyPath") {
+    try! SwitchExprSyntax("switch property") {
       for node in NON_BASE_SYNTAX_NODES.compactMap(\.layoutNode) {
         for child in node.children {
           if let nameForDiagnostics = child.nameForDiagnostics {
-            SwitchCaseSyntax("case \\\(node.type.syntaxBaseName).\(child.memberCallName):") {
+            SwitchCaseSyntax("case \(node.type.syntaxBaseName).layout[.\(child.memberCallName)]:") {
               StmtSyntax(#"return "\#(raw: nameForDiagnostics)""#)
             }
           }
@@ -52,10 +52,10 @@ let childNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightHeader
     """
     extension SyntaxProtocol {
       var childNameInParent: String? {
-        guard let keyPath = self.keyPathInParent else {
+        guard let property = self.propertyInParent else {
           return nil
         }
-        return childNameForDiagnostics(keyPath)
+        return childNameForDiagnostics(property)
       }
     }
     """

@@ -688,7 +688,7 @@ extension SyntaxProtocol {
       target.write("\n")
       target.write(indentString)
       target.write(isLastChild ? "╰─" : "├─")
-      if let keyPath = child.keyPathInParent, let name = childName(keyPath) {
+      if let property = child.propertyInParent, let name = property.name {
         target.write("\(name): ")
       } else if self.kind.isSyntaxCollection {
         target.write("[\(num)]: ")
@@ -742,4 +742,11 @@ extension SyntaxChildChoices {
   public func cast<S: SyntaxProtocol>(_ syntaxType: S.Type) -> S {
     return self.as(S.self)!
   }
+}
+
+/// Protocol that syntax nodes conform to if they don't have any semantic subtypes.
+/// These are syntax nodes that are not considered base nodes for other syntax types.
+public protocol _LeafSyntaxNodeProtocol: SyntaxProtocol {
+  /// The ``SyntaxKind`` of the syntax node.
+  static var syntaxKind: SyntaxKind { get }
 }

@@ -376,19 +376,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
     return "\(syntaxType)Protocol"
   }
 
-  /// For base node types, generates the name of the protocol to which all
-  /// concrete leaf nodes that derive from this base kind should conform.
-  ///
-  /// - Warning: This property can only be accessed for base node kinds; attempting to
-  /// access it for a non-base kind will result in a runtime error.
-  public var leafProtocolType: TypeSyntax {
-    if isBase {
-      return "_Leaf\(syntaxType)NodeProtocol"
-    } else {
-      fatalError("Only base kind can define leaf protocol")
-    }
-  }
-
   /// If the syntax kind has been renamed, the previous raw value that is now
   /// deprecated.
   public var deprecatedRawValue: String? {

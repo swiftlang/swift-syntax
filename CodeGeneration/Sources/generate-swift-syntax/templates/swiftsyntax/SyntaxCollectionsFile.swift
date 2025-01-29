@@ -59,7 +59,7 @@ let syntaxCollectionsFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
       )
 
-      DeclSyntax("public static let syntaxKind = SyntaxKind.\(node.memberCallName)")
+      DeclSyntax("public static var syntaxKind: SyntaxKind { .\(node.enumCaseCallName) }")
     }
   }
 }

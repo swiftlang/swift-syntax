@@ -16,6 +16,13 @@
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 #endif
 
+enum SimpleTypeParsingContext {
+  case `default`
+  case keyPathRoot
+  case attributeName
+  case nominalTypeDeclExtendedName
+}
+
 extension Parser {
   /// Parse a type.
   mutating func parseType(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
@@ -187,12 +194,11 @@ extension Parser {
 
   /// Parse the subset of types that we allow in attribute names.
   mutating func parseAttributeName() -> RawTypeSyntax {
-    return parseSimpleType(forAttributeName: true)
+    return parseSimpleType(parsingContext: .attributeName)
   }
 
   mutating func parseSimpleType(
-    allowMemberTypes: Bool = true,
-    forAttributeName: Bool = false
+    parsingContext: SimpleTypeParsingContext = .default
   ) -> RawTypeSyntax {
     enum TypeBaseStart: TokenSpecSet {
       case `Self`
@@ -257,9 +263,25 @@ extension Parser {
       return wrapInTilde(RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)))
     }
 
+    func shouldContinueAfterPeriod() -> Bool {
+      if self.peek(isAt: .keyword(.Type), .keyword(.Protocol)) {
+        return true
+      }
+      switch parsingContext {
+      case .keyPathRoot:
+        return false
+      case .nominalTypeDeclExtendedName:
+        var lookahead = self.lookahead()
+        lookahead.eat(.period)
+        return lookahead.canParseExtendedTypeForNominalTypeDecl()
+      default:
+        return true
+      }
+    }
+
     var loopProgress = LoopProgressCondition()
     while self.hasProgressed(&loopProgress) {
-      if self.at(.period) && (allowMemberTypes || self.peek(isAt: .keyword(.Type), .keyword(.Protocol))) {
+      if self.at(.period) && shouldContinueAfterPeriod() {
         let (unexpectedPeriod, period, skipMemberName) = self.consumeMemberPeriod(previousNode: base)
         if skipMemberName {
           let missingIdentifier = missingToken(.identifier)
@@ -315,7 +337,7 @@ extension Parser {
       }
 
       // Do not allow ? or ! suffixes when parsing attribute names.
-      if forAttributeName {
+      if parsingContext == .attributeName {
         break
       }
 
@@ -691,7 +713,7 @@ extension Parser.Lookahead {
     return true
   }
 
-  mutating func canParseSimpleType() -> Bool {
+  mutating func canParseSimpleType(parsingContext: SimpleTypeParsingContext = .default) -> Bool {
     switch self.currentToken {
     case TokenSpec(.Any):
       self.consumeAnyToken()
@@ -736,6 +758,10 @@ extension Parser.Lookahead {
     var loopProgress = LoopProgressCondition()
     while self.hasProgressed(&loopProgress) {
       if self.at(.period) {
+        if parsingContext == .nominalTypeDeclExtendedName {
+          return true
+        }
+
         self.consumeAnyToken()
         if self.at(.keyword(.Type)) || self.at(.keyword(.Protocol)) {
           self.consumeAnyToken()

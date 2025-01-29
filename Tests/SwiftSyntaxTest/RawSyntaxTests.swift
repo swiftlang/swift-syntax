@@ -56,6 +56,8 @@ fileprivate func cannedStructDecl(arena: ParsingSyntaxArena) -> RawStructDeclSyn
     attributes: RawAttributeListSyntax(elements: [], arena: arena),
     modifiers: RawDeclModifierListSyntax(elements: [], arena: arena),
     structKeyword: structKW,
+    extendedType: nil,
+    period: nil,
     name: fooID,
     genericParameterClause: nil,
     inheritanceClause: nil,

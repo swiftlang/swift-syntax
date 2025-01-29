@@ -602,7 +602,11 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
     modifiers: RawDeclModifierListSyntax,
     _ unexpectedBetweenModifiersAndActorKeyword: RawUnexpectedNodesSyntax? = nil,
     actorKeyword: RawTokenSyntax,
-    _ unexpectedBetweenActorKeywordAndName: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenActorKeywordAndExtendedType: RawUnexpectedNodesSyntax? = nil,
+    extendedType: RawTypeSyntax?,
+    _ unexpectedBetweenExtendedTypeAndPeriod: RawUnexpectedNodesSyntax? = nil,
+    period: RawTokenSyntax?,
+    _ unexpectedBetweenPeriodAndName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
     _ unexpectedBetweenNameAndGenericParameterClause: RawUnexpectedNodesSyntax? = nil,
     genericParameterClause: RawGenericParameterClauseSyntax?,
@@ -616,7 +620,7 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .actorDecl, uninitializedCount: 17, arena: arena) { layout in
+      kind: .actorDecl, uninitializedCount: 21, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes.raw
@@ -624,17 +628,21 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndActorKeyword?.raw
       layout[5] = actorKeyword.raw
-      layout[6] = unexpectedBetweenActorKeywordAndName?.raw
-      layout[7] = name.raw
-      layout[8] = unexpectedBetweenNameAndGenericParameterClause?.raw
-      layout[9] = genericParameterClause?.raw
-      layout[10] = unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw
-      layout[11] = inheritanceClause?.raw
-      layout[12] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
-      layout[13] = genericWhereClause?.raw
-      layout[14] = unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw
-      layout[15] = memberBlock.raw
-      layout[16] = unexpectedAfterMemberBlock?.raw
+      layout[6] = unexpectedBetweenActorKeywordAndExtendedType?.raw
+      layout[7] = extendedType?.raw
+      layout[8] = unexpectedBetweenExtendedTypeAndPeriod?.raw
+      layout[9] = period?.raw
+      layout[10] = unexpectedBetweenPeriodAndName?.raw
+      layout[11] = name.raw
+      layout[12] = unexpectedBetweenNameAndGenericParameterClause?.raw
+      layout[13] = genericParameterClause?.raw
+      layout[14] = unexpectedBetweenGenericParameterClauseAndInheritanceClause?.raw
+      layout[15] = inheritanceClause?.raw
+      layout[16] = unexpectedBetweenInheritanceClauseAndGenericWhereClause?.raw
+      layout[17] = genericWhereClause?.raw
+      layout[18] = unexpectedBetweenGenericWhereClauseAndMemberBlock?.raw
+      layout[19] = memberBlock.raw
+      layout[20] = unexpectedAfterMemberBlock?.raw
     }
     self.init(unchecked: raw)
   }
@@ -663,48 +671,64 @@ public struct RawActorDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
 
-  public var unexpectedBetweenActorKeywordAndName: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenActorKeywordAndExtendedType: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var name: RawTokenSyntax {
-    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
+  public var extendedType: RawTypeSyntax? {
+    layoutView.children[7].map(RawTypeSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenNameAndGenericParameterClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenExtendedTypeAndPeriod: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var genericParameterClause: RawGenericParameterClauseSyntax? {
-    layoutView.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
+  public var period: RawTokenSyntax? {
+    layoutView.children[9].map(RawTokenSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenPeriodAndName: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var inheritanceClause: RawInheritanceClauseSyntax? {
-    layoutView.children[11].map(RawInheritanceClauseSyntax.init(raw:))
+  public var name: RawTokenSyntax {
+    layoutView.children[11].map(RawTokenSyntax.init(raw:))!
   }
 
-  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndGenericParameterClause: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var genericWhereClause: RawGenericWhereClauseSyntax? {
-    layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
+  public var genericParameterClause: RawGenericParameterClauseSyntax? {
+    layoutView.children[13].map(RawGenericParameterClauseSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenGenericParameterClauseAndInheritanceClause: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
+  public var inheritanceClause: RawInheritanceClauseSyntax? {
+    layoutView.children[15].map(RawInheritanceClauseSyntax.init(raw:))
+  }
+
+  public var unexpectedBetweenInheritanceClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+    layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var genericWhereClause: RawGenericWhereClauseSyntax? {
+    layoutView.children[17].map(RawGenericWhereClauseSyntax.init(raw:))
+  }
+
+  public var unexpectedBetweenGenericWhereClauseAndMemberBlock: RawUnexpectedNodesSyntax? {
+    layoutView.children[18].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
   public var memberBlock: RawMemberBlockSyntax {
-    layoutView.children[15].map(RawMemberBlockSyntax.init(raw:))!
+    layoutView.children[19].map(RawMemberBlockSyntax.init(raw:))!
   }
 
   public var unexpectedAfterMemberBlock: RawUnexpectedNodesSyntax? {
-    layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[20].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

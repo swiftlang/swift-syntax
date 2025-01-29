@@ -271,6 +271,14 @@ extension Parser.Lookahead {
     }
     return lookahead.at(prefix: ".")
   }
+
+  func canParseExtendedTypeForNominalTypeDecl() -> Bool {
+    var lookahead = self.lookahead()
+    guard lookahead.canParseSimpleType(parsingContext: .nominalTypeDeclExtendedName) else {
+      return false
+    }
+    return lookahead.at(prefix: ".")
+  }
 }
 
 extension Parser.Lookahead {

@@ -99,8 +99,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndActorKeyword"
   case \ActorDeclSyntax.actorKeyword:
     return "actorKeyword"
-  case \ActorDeclSyntax.unexpectedBetweenActorKeywordAndName:
-    return "unexpectedBetweenActorKeywordAndName"
+  case \ActorDeclSyntax.unexpectedBetweenActorKeywordAndExtendedType:
+    return "unexpectedBetweenActorKeywordAndExtendedType"
+  case \ActorDeclSyntax.extendedType:
+    return "extendedType"
+  case \ActorDeclSyntax.unexpectedBetweenExtendedTypeAndPeriod:
+    return "unexpectedBetweenExtendedTypeAndPeriod"
+  case \ActorDeclSyntax.period:
+    return "period"
+  case \ActorDeclSyntax.unexpectedBetweenPeriodAndName:
+    return "unexpectedBetweenPeriodAndName"
   case \ActorDeclSyntax.name:
     return "name"
   case \ActorDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:
@@ -437,8 +445,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndClassKeyword"
   case \ClassDeclSyntax.classKeyword:
     return "classKeyword"
-  case \ClassDeclSyntax.unexpectedBetweenClassKeywordAndName:
-    return "unexpectedBetweenClassKeywordAndName"
+  case \ClassDeclSyntax.unexpectedBetweenClassKeywordAndExtendedType:
+    return "unexpectedBetweenClassKeywordAndExtendedType"
+  case \ClassDeclSyntax.extendedType:
+    return "extendedType"
+  case \ClassDeclSyntax.unexpectedBetweenExtendedTypeAndPeriod:
+    return "unexpectedBetweenExtendedTypeAndPeriod"
+  case \ClassDeclSyntax.period:
+    return "period"
+  case \ClassDeclSyntax.unexpectedBetweenPeriodAndName:
+    return "unexpectedBetweenPeriodAndName"
   case \ClassDeclSyntax.name:
     return "name"
   case \ClassDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:
@@ -1189,8 +1205,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndEnumKeyword"
   case \EnumDeclSyntax.enumKeyword:
     return "enumKeyword"
-  case \EnumDeclSyntax.unexpectedBetweenEnumKeywordAndName:
-    return "unexpectedBetweenEnumKeywordAndName"
+  case \EnumDeclSyntax.unexpectedBetweenEnumKeywordAndExtendedType:
+    return "unexpectedBetweenEnumKeywordAndExtendedType"
+  case \EnumDeclSyntax.extendedType:
+    return "extendedType"
+  case \EnumDeclSyntax.unexpectedBetweenExtendedTypeAndPeriod:
+    return "unexpectedBetweenExtendedTypeAndPeriod"
+  case \EnumDeclSyntax.period:
+    return "period"
+  case \EnumDeclSyntax.unexpectedBetweenPeriodAndName:
+    return "unexpectedBetweenPeriodAndName"
   case \EnumDeclSyntax.name:
     return "name"
   case \EnumDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:
@@ -2705,8 +2729,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndProtocolKeyword"
   case \ProtocolDeclSyntax.protocolKeyword:
     return "protocolKeyword"
-  case \ProtocolDeclSyntax.unexpectedBetweenProtocolKeywordAndName:
-    return "unexpectedBetweenProtocolKeywordAndName"
+  case \ProtocolDeclSyntax.unexpectedBetweenProtocolKeywordAndExtendedType:
+    return "unexpectedBetweenProtocolKeywordAndExtendedType"
+  case \ProtocolDeclSyntax.extendedType:
+    return "extendedType"
+  case \ProtocolDeclSyntax.unexpectedBetweenExtendedTypeAndPeriod:
+    return "unexpectedBetweenExtendedTypeAndPeriod"
+  case \ProtocolDeclSyntax.period:
+    return "period"
+  case \ProtocolDeclSyntax.unexpectedBetweenPeriodAndName:
+    return "unexpectedBetweenPeriodAndName"
   case \ProtocolDeclSyntax.name:
     return "name"
   case \ProtocolDeclSyntax.unexpectedBetweenNameAndPrimaryAssociatedTypeClause:
@@ -2927,8 +2959,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndStructKeyword"
   case \StructDeclSyntax.structKeyword:
     return "structKeyword"
-  case \StructDeclSyntax.unexpectedBetweenStructKeywordAndName:
-    return "unexpectedBetweenStructKeywordAndName"
+  case \StructDeclSyntax.unexpectedBetweenStructKeywordAndExtendedType:
+    return "unexpectedBetweenStructKeywordAndExtendedType"
+  case \StructDeclSyntax.extendedType:
+    return "extendedType"
+  case \StructDeclSyntax.unexpectedBetweenExtendedTypeAndPeriod:
+    return "unexpectedBetweenExtendedTypeAndPeriod"
+  case \StructDeclSyntax.period:
+    return "period"
+  case \StructDeclSyntax.unexpectedBetweenPeriodAndName:
+    return "unexpectedBetweenPeriodAndName"
   case \StructDeclSyntax.name:
     return "name"
   case \StructDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:
@@ -3275,8 +3315,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndTypealiasKeyword"
   case \TypeAliasDeclSyntax.typealiasKeyword:
     return "typealiasKeyword"
-  case \TypeAliasDeclSyntax.unexpectedBetweenTypealiasKeywordAndName:
-    return "unexpectedBetweenTypealiasKeywordAndName"
+  case \TypeAliasDeclSyntax.unexpectedBetweenTypealiasKeywordAndExtendedType:
+    return "unexpectedBetweenTypealiasKeywordAndExtendedType"
+  case \TypeAliasDeclSyntax.extendedType:
+    return "extendedType"
+  case \TypeAliasDeclSyntax.unexpectedBetweenExtendedTypeAndPeriod:
+    return "unexpectedBetweenExtendedTypeAndPeriod"
+  case \TypeAliasDeclSyntax.period:
+    return "period"
+  case \TypeAliasDeclSyntax.unexpectedBetweenPeriodAndName:
+    return "unexpectedBetweenPeriodAndName"
   case \TypeAliasDeclSyntax.name:
     return "name"
   case \TypeAliasDeclSyntax.unexpectedBetweenNameAndGenericParameterClause:

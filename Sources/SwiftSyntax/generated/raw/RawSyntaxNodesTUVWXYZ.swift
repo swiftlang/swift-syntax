@@ -1046,7 +1046,11 @@ public struct RawTypeAliasDeclSyntax: RawDeclSyntaxNodeProtocol {
     modifiers: RawDeclModifierListSyntax,
     _ unexpectedBetweenModifiersAndTypealiasKeyword: RawUnexpectedNodesSyntax? = nil,
     typealiasKeyword: RawTokenSyntax,
-    _ unexpectedBetweenTypealiasKeywordAndName: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenTypealiasKeywordAndExtendedType: RawUnexpectedNodesSyntax? = nil,
+    extendedType: RawTypeSyntax?,
+    _ unexpectedBetweenExtendedTypeAndPeriod: RawUnexpectedNodesSyntax? = nil,
+    period: RawTokenSyntax?,
+    _ unexpectedBetweenPeriodAndName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
     _ unexpectedBetweenNameAndGenericParameterClause: RawUnexpectedNodesSyntax? = nil,
     genericParameterClause: RawGenericParameterClauseSyntax?,
@@ -1058,7 +1062,7 @@ public struct RawTypeAliasDeclSyntax: RawDeclSyntaxNodeProtocol {
     arena: __shared SyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .typeAliasDecl, uninitializedCount: 15, arena: arena) { layout in
+      kind: .typeAliasDecl, uninitializedCount: 19, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes.raw
@@ -1066,15 +1070,19 @@ public struct RawTypeAliasDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndTypealiasKeyword?.raw
       layout[5] = typealiasKeyword.raw
-      layout[6] = unexpectedBetweenTypealiasKeywordAndName?.raw
-      layout[7] = name.raw
-      layout[8] = unexpectedBetweenNameAndGenericParameterClause?.raw
-      layout[9] = genericParameterClause?.raw
-      layout[10] = unexpectedBetweenGenericParameterClauseAndInitializer?.raw
-      layout[11] = initializer.raw
-      layout[12] = unexpectedBetweenInitializerAndGenericWhereClause?.raw
-      layout[13] = genericWhereClause?.raw
-      layout[14] = unexpectedAfterGenericWhereClause?.raw
+      layout[6] = unexpectedBetweenTypealiasKeywordAndExtendedType?.raw
+      layout[7] = extendedType?.raw
+      layout[8] = unexpectedBetweenExtendedTypeAndPeriod?.raw
+      layout[9] = period?.raw
+      layout[10] = unexpectedBetweenPeriodAndName?.raw
+      layout[11] = name.raw
+      layout[12] = unexpectedBetweenNameAndGenericParameterClause?.raw
+      layout[13] = genericParameterClause?.raw
+      layout[14] = unexpectedBetweenGenericParameterClauseAndInitializer?.raw
+      layout[15] = initializer.raw
+      layout[16] = unexpectedBetweenInitializerAndGenericWhereClause?.raw
+      layout[17] = genericWhereClause?.raw
+      layout[18] = unexpectedAfterGenericWhereClause?.raw
     }
     self.init(unchecked: raw)
   }
@@ -1103,40 +1111,56 @@ public struct RawTypeAliasDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
 
-  public var unexpectedBetweenTypealiasKeywordAndName: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenTypealiasKeywordAndExtendedType: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var name: RawTokenSyntax {
-    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
+  public var extendedType: RawTypeSyntax? {
+    layoutView.children[7].map(RawTypeSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenNameAndGenericParameterClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenExtendedTypeAndPeriod: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var genericParameterClause: RawGenericParameterClauseSyntax? {
-    layoutView.children[9].map(RawGenericParameterClauseSyntax.init(raw:))
+  public var period: RawTokenSyntax? {
+    layoutView.children[9].map(RawTokenSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenGenericParameterClauseAndInitializer: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenPeriodAndName: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var initializer: RawTypeInitializerClauseSyntax {
-    layoutView.children[11].map(RawTypeInitializerClauseSyntax.init(raw:))!
+  public var name: RawTokenSyntax {
+    layoutView.children[11].map(RawTokenSyntax.init(raw:))!
   }
 
-  public var unexpectedBetweenInitializerAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndGenericParameterClause: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
+  public var genericParameterClause: RawGenericParameterClauseSyntax? {
+    layoutView.children[13].map(RawGenericParameterClauseSyntax.init(raw:))
+  }
+
+  public var unexpectedBetweenGenericParameterClauseAndInitializer: RawUnexpectedNodesSyntax? {
+    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var initializer: RawTypeInitializerClauseSyntax {
+    layoutView.children[15].map(RawTypeInitializerClauseSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenInitializerAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+    layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
   public var genericWhereClause: RawGenericWhereClauseSyntax? {
-    layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
+    layoutView.children[17].map(RawGenericWhereClauseSyntax.init(raw:))
   }
 
   public var unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? {
-    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[18].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

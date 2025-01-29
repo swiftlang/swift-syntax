@@ -3402,4 +3402,91 @@ final class DeclarationTests: ParserTestCase {
       ]
     )
   }
+
+  func testImplicitlyNestedNominals() {
+    assertParse(
+      "struct Outer.Inner {}",
+      substructure: StructDeclSyntax(
+        extendedType: TypeSyntax(IdentifierTypeSyntax(name: .identifier("Outer"))),
+        period: .periodToken(),
+        name: .identifier("Inner"),
+        memberBlock: MemberBlockSyntax(
+          leftBrace: .leftBraceToken(),
+          members: MemberBlockItemListSyntax(),
+          rightBrace: .rightBraceToken()
+        )
+      )
+    )
+    assertParse(
+      "class Outer.Middle.Inner {}",
+      substructure: ClassDeclSyntax(
+        extendedType: TypeSyntax(
+          MemberTypeSyntax(
+            baseType: IdentifierTypeSyntax(name: .identifier("Outer")),
+            name: .identifier("Middle")
+          )
+        ),
+        period: .periodToken(),
+        name: .identifier("Inner"),
+        memberBlock: MemberBlockSyntax(
+          leftBrace: .leftBraceToken(),
+          members: MemberBlockItemListSyntax(),
+          rightBrace: .rightBraceToken()
+        )
+      )
+    )
+    assertParse(
+      "enum [Int].Nested {}",
+      substructure: EnumDeclSyntax(
+        extendedType: TypeSyntax(
+          ArrayTypeSyntax(element: IdentifierTypeSyntax(name: .identifier("Int")))
+        ),
+        period: .periodToken(),
+        name: .identifier("Nested"),
+        memberBlock: MemberBlockSyntax(
+          leftBrace: .leftBraceToken(),
+          members: MemberBlockItemListSyntax(),
+          rightBrace: .rightBraceToken()
+        )
+      )
+    )
+    assertParse(
+      "protocol Outer?.Inner {}",
+      substructure: ProtocolDeclSyntax(
+        extendedType: TypeSyntax(
+          OptionalTypeSyntax(wrappedType: IdentifierTypeSyntax(name: .identifier("Outer")))
+        ),
+        period: .periodToken(),
+        name: .identifier("Inner"),
+        memberBlock: MemberBlockSyntax(
+          leftBrace: .leftBraceToken(),
+          members: MemberBlockItemListSyntax(),
+          rightBrace: .rightBraceToken()
+        )
+      )
+    )
+    assertParse(
+      "typealias Outer<Param>.Inner = Other",
+      substructure: TypeAliasDeclSyntax(
+        extendedType: TypeSyntax(
+          IdentifierTypeSyntax(
+            name: .identifier("Outer"),
+            genericArgumentClause: GenericArgumentClauseSyntax(
+              arguments: [
+                GenericArgumentSyntax(
+                  argument: .type(
+                    TypeSyntax(IdentifierTypeSyntax(name: .identifier("Param")))
+                  )
+                )
+              ])
+          )
+        ),
+        period: .periodToken(),
+        name: .identifier("Inner"),
+        initializer: TypeInitializerClauseSyntax(
+          value: IdentifierTypeSyntax(name: .identifier("Other"))
+        )
+      )
+    )
+  }
 }

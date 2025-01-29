@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-@_spi(RawSyntax) internal import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
 #else
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 #endif
 
 extension TokenConsumer {
@@ -1103,11 +1103,54 @@ extension Parser {
         continue
       }
 
-      // Check for a .name or .1 suffix.
+      // Check for a .name, .1, .name(), .name("Kiwi"), .name(fruit:),
+      // .name(_:), .name(fruit: "Kiwi) suffix.
       if self.at(.period) {
         let (unexpectedPeriod, period, declName, generics) = parseDottedExpressionSuffix(
           previousNode: components.last?.raw ?? rootType?.raw ?? backslash.raw
         )
+
+        // If fully applied method component, parse as a keypath method.
+        if self.experimentalFeatures.contains(.keypathWithMethodMembers)
+          && self.at(.leftParen)
+        {
+          var (unexpectedBeforeLParen, leftParen) = self.expect(.leftParen)
+          if let generics = generics {
+            unexpectedBeforeLParen = RawUnexpectedNodesSyntax(
+              (unexpectedBeforeLParen?.elements ?? []) + [RawSyntax(generics)],
+              arena: self.arena
+            )
+          }
+          let args = self.parseArgumentListElements(
+            pattern: pattern,
+            allowTrailingComma: true
+          )
+          let (unexpectedBeforeRParen, rightParen) = self.expect(.rightParen)
+
+          components.append(
+            RawKeyPathComponentSyntax(
+              unexpectedPeriod,
+              period: period,
+              component: .method(
+                RawKeyPathMethodComponentSyntax(
+                  declName: declName,
+                  unexpectedBeforeLParen,
+                  leftParen: leftParen,
+                  arguments: RawLabeledExprListSyntax(
+                    elements: args,
+                    arena: self.arena
+                  ),
+                  unexpectedBeforeRParen,
+                  rightParen: rightParen,
+                  arena: self.arena
+                )
+              ),
+              arena: self.arena
+            )
+          )
+          continue
+        }
+        // Else, parse as a property.
         components.append(
           RawKeyPathComponentSyntax(
             unexpectedPeriod,
@@ -1128,7 +1171,6 @@ extension Parser {
       // No more postfix expressions.
       break
     }
-
     return RawKeyPathExprSyntax(
       unexpectedBeforeBackslash,
       backslash: backslash,

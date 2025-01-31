@@ -40,6 +40,10 @@ public enum SyntaxKind: Sendable {
   case availabilityArgument
   case availabilityCondition
   case availabilityLabeledArgument
+  #if compiler(>=5.8)
+  @_spi(Compiler)
+  #endif
+  case availabilityMacroDefinition
   case awaitExpr
   case backDeployedAttributeArguments
   case binaryOperatorExpr
@@ -498,6 +502,8 @@ public enum SyntaxKind: Sendable {
       return AvailabilityConditionSyntax.self
     case .availabilityLabeledArgument:
       return AvailabilityLabeledArgumentSyntax.self
+    case .availabilityMacroDefinition:
+      return AvailabilityMacroDefinitionSyntax.self
     case .awaitExpr:
       return AwaitExprSyntax.self
     case .backDeployedAttributeArguments:

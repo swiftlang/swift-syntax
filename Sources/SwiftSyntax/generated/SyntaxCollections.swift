@@ -1044,6 +1044,10 @@ public struct LabeledExprListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Children
 /// 
 /// `LifetimeSpecifierArgumentSyntax` `*`
+///
+/// ### Contained in
+/// 
+///  - `LifetimeTypeSpecifierSyntax`.`LifetimeTypeSpecifierSyntax/arguments`
 #if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
 #endif

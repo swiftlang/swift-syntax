@@ -40,6 +40,10 @@ public enum SyntaxEnum: Sendable {
   case availabilityArgument(AvailabilityArgumentSyntax)
   case availabilityCondition(AvailabilityConditionSyntax)
   case availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax)
+  #if compiler(>=5.8)
+  @_spi(Compiler)
+  #endif
+  case availabilityMacroDefinition(AvailabilityMacroDefinitionSyntax)
   case awaitExpr(AwaitExprSyntax)
   case backDeployedAttributeArguments(BackDeployedAttributeArgumentsSyntax)
   case binaryOperatorExpr(BinaryOperatorExprSyntax)
@@ -373,6 +377,8 @@ extension Syntax {
       return .availabilityCondition(AvailabilityConditionSyntax(self)!)
     case .availabilityLabeledArgument:
       return .availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax(self)!)
+    case .availabilityMacroDefinition:
+      return .availabilityMacroDefinition(AvailabilityMacroDefinitionSyntax(self)!)
     case .awaitExpr:
       return .awaitExpr(AwaitExprSyntax(self)!)
     case .backDeployedAttributeArguments:

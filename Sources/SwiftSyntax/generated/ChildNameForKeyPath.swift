@@ -301,6 +301,20 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "value"
   case \AvailabilityLabeledArgumentSyntax.unexpectedAfterValue:
     return "unexpectedAfterValue"
+  case \AvailabilityMacroDefinitionSyntax.unexpectedBeforePlatformVersion:
+    return "unexpectedBeforePlatformVersion"
+  case \AvailabilityMacroDefinitionSyntax.platformVersion:
+    return "platformVersion"
+  case \AvailabilityMacroDefinitionSyntax.unexpectedBetweenPlatformVersionAndColon:
+    return "unexpectedBetweenPlatformVersionAndColon"
+  case \AvailabilityMacroDefinitionSyntax.colon:
+    return "colon"
+  case \AvailabilityMacroDefinitionSyntax.unexpectedBetweenColonAndSpecs:
+    return "unexpectedBetweenColonAndSpecs"
+  case \AvailabilityMacroDefinitionSyntax.specs:
+    return "specs"
+  case \AvailabilityMacroDefinitionSyntax.unexpectedAfterSpecs:
+    return "unexpectedAfterSpecs"
   case \AwaitExprSyntax.unexpectedBeforeAwaitKeyword:
     return "unexpectedBeforeAwaitKeyword"
   case \AwaitExprSyntax.awaitKeyword:

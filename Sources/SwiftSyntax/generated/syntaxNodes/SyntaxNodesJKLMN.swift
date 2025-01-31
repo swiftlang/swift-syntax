@@ -1670,6 +1670,10 @@ public struct LayoutRequirementSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 /// 
 ///  - `parameter`: (`<identifier>` | `self` | `<integerLiteral>`)
 ///  - `trailingComma`: `,`?
+///
+/// ### Contained in
+/// 
+///  - `LifetimeSpecifierArgumentListSyntax`
 #if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
 #endif

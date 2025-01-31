@@ -16,12 +16,21 @@ import SyntaxSupport
 import Utils
 
 let syntaxKindNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
+  var importingAttrs = AttributeListSyntax {
+    var seen: Set<String> = []
+    AttributeSyntax("@_spi(ExperimentalLanguageFeatures)").with(\.trailingTrivia, .space)
+    for node in NON_BASE_SYNTAX_NODES {
+      if let spi = node.spi, seen.insert(spi.text).inserted {
+        AttributeSyntax("@_spi(\(spi))").with(\.trailingTrivia, .space)
+      }
+    }
+  }
   DeclSyntax(
     """
     #if compiler(>=6)
-    @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
+    \(importingAttrs) internal import SwiftSyntax
     #else
-    @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+    \(importingAttrs) import SwiftSyntax
     #endif
     """
   )

@@ -42,6 +42,9 @@ public class Node: NodeChoiceConvertible {
 
   public let experimentalFeature: ExperimentalFeature?
 
+  /// SPI name if this node is only available for the SPI.
+  public let spi: TokenSyntax?
+
   /// When the node name is printed for diagnostics, this name is used.
   /// If `nil`, `nameForDiagnostics` will print the parent node’s name.
   public let nameForDiagnostics: String?
@@ -103,6 +106,14 @@ public class Node: NodeChoiceConvertible {
           """
         experimentalSPI.with(\.trailingTrivia, .newline)
       }
+      if let spi = self.spi {
+        let spiAttr: AttributeListSyntax = """
+          #if compiler(>=5.8)
+          @_spi(\(spi))
+          #endif
+          """
+        spiAttr.with(\.trailingTrivia, .newline)
+      }
       if forRaw {
         "@_spi(RawSyntax)"
       }
@@ -119,6 +130,7 @@ public class Node: NodeChoiceConvertible {
     kind: SyntaxNodeKind,
     base: SyntaxNodeKind,
     experimentalFeature: ExperimentalFeature? = nil,
+    spi: TokenSyntax? = nil,
     nameForDiagnostics: String?,
     documentation: String? = nil,
     parserFunction: TokenSyntax? = nil,
@@ -132,6 +144,7 @@ public class Node: NodeChoiceConvertible {
     self.kind = kind
     self.base = base
     self.experimentalFeature = experimentalFeature
+    self.spi = spi
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction
@@ -139,6 +152,10 @@ public class Node: NodeChoiceConvertible {
     let childrenWithUnexpected = kind.isBase ? children : interleaveUnexpectedChildren(children)
 
     self.data = .layout(children: childrenWithUnexpected, childHistory: childHistory, traits: traits)
+  }
+
+  public var hiddenInDocumentation: Bool {
+    self.isExperimental || self.spi != nil || self.kind.isDeprecated
   }
 
   /// A doc comment that lists all the nodes in which this node occurs as a child in.
@@ -149,7 +166,10 @@ public class Node: NodeChoiceConvertible {
       return []
     }
     var childIn: [(node: SyntaxNodeKind, child: Child?)] = []
-    for node in SYNTAX_NODES where !node.isExperimental {
+    for node in SYNTAX_NODES {
+      if !self.hiddenInDocumentation && node.hiddenInDocumentation {
+        continue
+      }
       if let layout = node.layoutNode {
         for child in layout.children {
           if child.kinds.contains(self.kind) {
@@ -202,7 +222,7 @@ public class Node: NodeChoiceConvertible {
 
     let list =
       SYNTAX_NODES
-      .filter { $0.base == self.kind && !$0.isExperimental && !$0.kind.isDeprecated }
+      .filter { $0.base == self.kind && (!$0.hiddenInDocumentation || self.hiddenInDocumentation) }
       .map { "- \($0.kind.doccLink)" }
       .joined(separator: "\n")
 
@@ -226,6 +246,7 @@ public class Node: NodeChoiceConvertible {
     kind: SyntaxNodeKind,
     base: SyntaxNodeKind,
     experimentalFeature: ExperimentalFeature? = nil,
+    spi: TokenSyntax? = nil,
     nameForDiagnostics: String?,
     documentation: String? = nil,
     parserFunction: TokenSyntax? = nil,
@@ -235,6 +256,7 @@ public class Node: NodeChoiceConvertible {
     precondition(base == .syntaxCollection)
     self.base = base
     self.experimentalFeature = experimentalFeature
+    self.spi = spi
     self.nameForDiagnostics = nameForDiagnostics
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction

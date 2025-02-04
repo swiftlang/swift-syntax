@@ -13,9 +13,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler)  public import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) public import SwiftSyntax
 #else
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler)  import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) import SwiftSyntax
 #endif
 
 public protocol SyntaxParseable: SyntaxProtocol {

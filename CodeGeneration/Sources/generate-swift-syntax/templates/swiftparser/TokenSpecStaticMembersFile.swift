@@ -16,15 +16,7 @@ import SyntaxSupport
 import Utils
 
 let tokenSpecStaticMembersFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax(
-    """
-    #if compiler(>=6)
-    @_spi(RawSyntax) internal import SwiftSyntax
-    #else
-    @_spi(RawSyntax) import SwiftSyntax
-    #endif
-    """
-  )
+  importSwiftSyntax()
 
   try! ExtensionDeclSyntax("extension TokenSpec") {
     for tokenSpec in Token.allCases.map(\.spec) where tokenSpec.kind != .keyword {

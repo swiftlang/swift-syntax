@@ -44,6 +44,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case availabilityArgumentList
   case availabilityCondition
   case availabilityLabeledArgument
+  case availabilityMacroDefinition
   case awaitExpr
   case backDeployedAttributeArguments
   case binaryOperatorExpr

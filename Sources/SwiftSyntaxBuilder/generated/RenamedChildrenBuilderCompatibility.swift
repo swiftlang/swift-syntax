@@ -13,9 +13,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-public import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) public import SwiftSyntax
 #else
-import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) import SwiftSyntax
 #endif
 
 extension AccessorDeclSyntax {

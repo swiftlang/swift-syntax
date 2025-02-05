@@ -16,15 +16,7 @@ import SyntaxSupport
 import Utils
 
 let renamedChildrenBuilderCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax(
-    """
-    #if compiler(>=6)
-    public import SwiftSyntax
-    #else
-    import SwiftSyntax
-    #endif
-    """
-  )
+  importSwiftSyntax(accessLevel: .public)
 
   for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode).filter({ !$0.childHistory.isEmpty }) {
     let deprecatedMembers = SYNTAX_COMPATIBILITY_LAYER.deprecatedMembers(for: layoutNode)

@@ -1540,6 +1540,7 @@ extension Syntax {
       .node(AvailabilityArgumentSyntax.self),
       .node(AvailabilityConditionSyntax.self),
       .node(AvailabilityLabeledArgumentSyntax.self),
+      .node(AvailabilityMacroDefinitionSyntax.self),
       .node(AwaitExprSyntax.self),
       .node(BackDeployedAttributeArgumentsSyntax.self),
       .node(BinaryOperatorExprSyntax.self),

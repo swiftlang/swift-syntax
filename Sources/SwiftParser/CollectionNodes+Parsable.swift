@@ -72,6 +72,7 @@ extension AccessorDeclListSyntax: SyntaxParseable {
         parameters: nil,
         effectSpecifiers: nil,
         body: nil,
+        RawUnexpectedNodesSyntax(remainingTokens, arena: arena),
         arena: arena
       )
     }
@@ -89,6 +90,7 @@ extension AttributeListSyntax: SyntaxParseable {
         leftParen: nil,
         arguments: nil,
         rightParen: nil,
+        RawUnexpectedNodesSyntax(remainingTokens, arena: arena),
         arena: arena
       )
     }
@@ -104,6 +106,7 @@ extension CodeBlockItemListSyntax: SyntaxParseable {
       RawCodeBlockItemSyntax(
         item: .init(expr: RawMissingExprSyntax(arena: arena)),
         semicolon: nil,
+        RawUnexpectedNodesSyntax(remainingTokens, arena: arena),
         arena: arena
       )
     }

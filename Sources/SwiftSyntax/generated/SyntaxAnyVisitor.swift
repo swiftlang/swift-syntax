@@ -238,6 +238,20 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  #if compiler(>=5.8)
+  @_spi(Compiler)
+  #endif
+  override open func visit(_ node: AvailabilityMacroDefinitionSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  #if compiler(>=5.8)
+  @_spi(Compiler)
+  #endif
+  override open func visitPost(_ node: AvailabilityMacroDefinitionSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: AwaitExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

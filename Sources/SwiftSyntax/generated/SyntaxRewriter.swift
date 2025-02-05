@@ -255,6 +255,16 @@ open class SyntaxRewriter {
     return AvailabilityLabeledArgumentSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
+  /// Visit a ``AvailabilityMacroDefinitionSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  #if compiler(>=5.8)
+  @_spi(Compiler)
+  #endif
+  open func visit(_ node: AvailabilityMacroDefinitionSyntax) -> AvailabilityMacroDefinitionSyntax {
+    return AvailabilityMacroDefinitionSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
   /// Visit a ``AwaitExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2265,6 +2275,11 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitAvailabilityMacroDefinitionSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(AvailabilityMacroDefinitionSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitAwaitExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AwaitExprSyntax(unsafeCasting: node)))
   }
@@ -3651,6 +3666,8 @@ open class SyntaxRewriter {
       return self.visitAvailabilityConditionSyntaxImpl(_:)
     case .availabilityLabeledArgument:
       return self.visitAvailabilityLabeledArgumentSyntaxImpl(_:)
+    case .availabilityMacroDefinition:
+      return self.visitAvailabilityMacroDefinitionSyntaxImpl(_:)
     case .awaitExpr:
       return self.visitAwaitExprSyntaxImpl(_:)
     case .backDeployedAttributeArguments:
@@ -4231,6 +4248,8 @@ open class SyntaxRewriter {
       return visitAvailabilityConditionSyntaxImpl(node)
     case .availabilityLabeledArgument:
       return visitAvailabilityLabeledArgumentSyntaxImpl(node)
+    case .availabilityMacroDefinition:
+      return visitAvailabilityMacroDefinitionSyntaxImpl(node)
     case .awaitExpr:
       return visitAwaitExprSyntaxImpl(node)
     case .backDeployedAttributeArguments:

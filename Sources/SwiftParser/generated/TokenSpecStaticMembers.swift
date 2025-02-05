@@ -13,9 +13,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-@_spi(RawSyntax) internal import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) internal import SwiftSyntax
 #else
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) import SwiftSyntax
 #endif
 
 extension TokenSpec {

@@ -304,6 +304,24 @@ open class SyntaxVisitor {
   open func visitPost(_ node: AvailabilityLabeledArgumentSyntax) {
   }
 
+  /// Visiting ``AvailabilityMacroDefinitionSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  #if compiler(>=5.8)
+  @_spi(Compiler)
+  #endif
+  open func visit(_ node: AvailabilityMacroDefinitionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``AvailabilityMacroDefinitionSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  #if compiler(>=5.8)
+  @_spi(Compiler)
+  #endif
+  open func visitPost(_ node: AvailabilityMacroDefinitionSyntax) {
+  }
+
   /// Visiting ``AwaitExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3692,6 +3710,14 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitAvailabilityMacroDefinitionSyntaxImpl(_ node: Syntax) {
+    if visit(AvailabilityMacroDefinitionSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(AvailabilityMacroDefinitionSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitAwaitExprSyntaxImpl(_ node: Syntax) {
     if visit(AwaitExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -5867,6 +5893,8 @@ open class SyntaxVisitor {
       return self.visitAvailabilityConditionSyntaxImpl(_:)
     case .availabilityLabeledArgument:
       return self.visitAvailabilityLabeledArgumentSyntaxImpl(_:)
+    case .availabilityMacroDefinition:
+      return self.visitAvailabilityMacroDefinitionSyntaxImpl(_:)
     case .awaitExpr:
       return self.visitAwaitExprSyntaxImpl(_:)
     case .backDeployedAttributeArguments:
@@ -6447,6 +6475,8 @@ open class SyntaxVisitor {
       self.visitAvailabilityConditionSyntaxImpl(node)
     case .availabilityLabeledArgument:
       self.visitAvailabilityLabeledArgumentSyntaxImpl(node)
+    case .availabilityMacroDefinition:
+      self.visitAvailabilityMacroDefinitionSyntaxImpl(node)
     case .awaitExpr:
       self.visitAwaitExprSyntaxImpl(node)
     case .backDeployedAttributeArguments:

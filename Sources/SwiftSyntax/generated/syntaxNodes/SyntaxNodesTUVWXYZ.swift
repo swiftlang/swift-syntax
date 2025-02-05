@@ -240,9 +240,7 @@ public struct TernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
 /// 
 ///  - `thenKeyword`: `then`
 ///  - `expression`: ``ExprSyntax``
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 public struct ThenStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
@@ -3280,9 +3278,7 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
 /// 
 ///  - `unsafeKeyword`: `unsafe`
 ///  - `expression`: ``ExprSyntax``
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 public struct UnsafeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 

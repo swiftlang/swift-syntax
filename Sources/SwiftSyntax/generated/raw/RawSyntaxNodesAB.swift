@@ -12,9 +12,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 @_spi(RawSyntax)
 public struct RawABIAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   public enum Provider: RawSyntaxNodeProtocol {
@@ -2098,9 +2096,7 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
   }
 }
 
-#if compiler(>=5.8)
 @_spi(Compiler)
-#endif
 @_spi(RawSyntax)
 public struct RawAvailabilityMacroDefinitionSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)

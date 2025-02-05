@@ -25,9 +25,7 @@
 /// ### Contained in
 /// 
 ///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 public struct ABIAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Provider: SyntaxChildChoices, SyntaxHashable {
     case associatedType(AssociatedTypeDeclSyntax)
@@ -4573,9 +4571,7 @@ public struct AvailabilityLabeledArgumentSyntax: SyntaxProtocol, SyntaxHashable,
 ///  - `platformVersion`: ``PlatformVersionSyntax``
 ///  - `colon`: `:`
 ///  - `specs`: ``AvailabilityArgumentListSyntax``
-#if compiler(>=5.8)
 @_spi(Compiler)
-#endif
 public struct AvailabilityMacroDefinitionSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 

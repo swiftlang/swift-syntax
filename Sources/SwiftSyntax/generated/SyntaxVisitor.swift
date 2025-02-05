@@ -37,18 +37,14 @@ open class SyntaxVisitor {
   /// Visiting `ABIAttributeArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: ABIAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting `ABIAttributeArgumentsSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visitPost(_ node: ABIAttributeArgumentsSyntax) {
   }
 
@@ -307,18 +303,14 @@ open class SyntaxVisitor {
   /// Visiting ``AvailabilityMacroDefinitionSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
   @_spi(Compiler)
-  #endif
   open func visit(_ node: AvailabilityMacroDefinitionSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting ``AvailabilityMacroDefinitionSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
   @_spi(Compiler)
-  #endif
   open func visitPost(_ node: AvailabilityMacroDefinitionSyntax) {
   }
 
@@ -1081,18 +1073,14 @@ open class SyntaxVisitor {
   /// Visiting `DoExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: DoExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting `DoExprSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visitPost(_ node: DoExprSyntax) {
   }
 
@@ -1999,54 +1987,42 @@ open class SyntaxVisitor {
   /// Visiting `LifetimeSpecifierArgumentListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: LifetimeSpecifierArgumentListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting `LifetimeSpecifierArgumentListSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visitPost(_ node: LifetimeSpecifierArgumentListSyntax) {
   }
 
   /// Visiting `LifetimeSpecifierArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: LifetimeSpecifierArgumentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting `LifetimeSpecifierArgumentSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visitPost(_ node: LifetimeSpecifierArgumentSyntax) {
   }
 
   /// Visiting `LifetimeTypeSpecifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: LifetimeTypeSpecifierSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting `LifetimeTypeSpecifierSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visitPost(_ node: LifetimeTypeSpecifierSyntax) {
   }
 
@@ -3073,18 +3049,14 @@ open class SyntaxVisitor {
   /// Visiting `ThenStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: ThenStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting `ThenStmtSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visitPost(_ node: ThenStmtSyntax) {
   }
 
@@ -3355,18 +3327,14 @@ open class SyntaxVisitor {
   /// Visiting `UnsafeExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: UnsafeExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting `UnsafeExprSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visitPost(_ node: UnsafeExprSyntax) {
   }
 

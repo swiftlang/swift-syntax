@@ -96,29 +96,20 @@ public class Node: NodeChoiceConvertible {
   /// Retrieve the attributes that should be printed on any API for the
   /// generated node. If `forRaw` is true, this is for the raw syntax node.
   public func apiAttributes(forRaw: Bool = false) -> AttributeListSyntax {
-    let attrList = AttributeListSyntax {
+    AttributeListSyntax {
       if isExperimental {
-        // SPI for enum cases currently requires Swift 5.8 to work correctly.
-        let experimentalSPI: AttributeListSyntax = """
-          #if compiler(>=5.8)
-          @_spi(ExperimentalLanguageFeatures)
-          #endif
-          """
-        experimentalSPI.with(\.trailingTrivia, .newline)
+        AttributeSyntax("@_spi(ExperimentalLanguageFeatures)")
+          .with(\.trailingTrivia, .newline)
       }
       if let spi = self.spi {
-        let spiAttr: AttributeListSyntax = """
-          #if compiler(>=5.8)
-          @_spi(\(spi))
-          #endif
-          """
-        spiAttr.with(\.trailingTrivia, .newline)
+        AttributeSyntax("@_spi(\(spi))")
+          .with(\.trailingTrivia, .newline)
       }
       if forRaw {
-        "@_spi(RawSyntax)"
+        AttributeSyntax("@_spi(RawSyntax)")
+          .with(\.trailingTrivia, .newline)
       }
     }
-    return attrList.with(\.trailingTrivia, attrList.isEmpty ? [] : .newline)
   }
 
   public var apiAttributes: AttributeListSyntax {

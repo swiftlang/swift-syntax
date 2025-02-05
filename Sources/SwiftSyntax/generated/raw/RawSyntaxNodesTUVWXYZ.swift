@@ -121,9 +121,7 @@ public struct RawTernaryExprSyntax: RawExprSyntaxNodeProtocol {
   }
 }
 
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 @_spi(RawSyntax)
 public struct RawThenStmtSyntax: RawStmtSyntaxNodeProtocol {
   @_spi(RawSyntax)
@@ -1415,9 +1413,7 @@ public struct RawTypeSpecifierListSyntax: RawSyntaxNodeProtocol {
     case simpleTypeSpecifier(RawSimpleTypeSpecifierSyntax)
     /// A specifier that specifies function parameter on whose lifetime a type depends
     /// - Note: Requires experimental feature `nonescapableTypes`.
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case lifetimeTypeSpecifier(RawLifetimeTypeSpecifierSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -1955,9 +1951,7 @@ public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol {
   }
 }
 
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 @_spi(RawSyntax)
 public struct RawUnsafeExprSyntax: RawExprSyntaxNodeProtocol {
   @_spi(RawSyntax)

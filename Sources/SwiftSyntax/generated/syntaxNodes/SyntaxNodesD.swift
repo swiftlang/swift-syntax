@@ -3270,9 +3270,7 @@ public struct DiscardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSy
 ///  - `doKeyword`: `do`
 ///  - `body`: ``CodeBlockSyntax``
 ///  - `catchClauses`: ``CatchClauseListSyntax``
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 public struct DoExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 

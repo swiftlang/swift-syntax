@@ -919,9 +919,7 @@ public struct RawLayoutRequirementSyntax: RawSyntaxNodeProtocol {
   }
 }
 
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 @_spi(RawSyntax)
 public struct RawLifetimeSpecifierArgumentListSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)
@@ -972,9 +970,7 @@ public struct RawLifetimeSpecifierArgumentListSyntax: RawSyntaxNodeProtocol {
   }
 }
 
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 @_spi(RawSyntax)
 public struct RawLifetimeSpecifierArgumentSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)
@@ -1045,9 +1041,7 @@ public struct RawLifetimeSpecifierArgumentSyntax: RawSyntaxNodeProtocol {
   }
 }
 
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 @_spi(RawSyntax)
 public struct RawLifetimeTypeSpecifierSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)

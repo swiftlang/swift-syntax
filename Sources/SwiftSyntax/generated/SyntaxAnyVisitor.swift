@@ -56,16 +56,12 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   override open func visit(_ node: ABIAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   override open func visitPost(_ node: ABIAttributeArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
@@ -238,16 +234,12 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(Compiler)
-  #endif
   override open func visit(_ node: AvailabilityMacroDefinitionSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(Compiler)
-  #endif
   override open func visitPost(_ node: AvailabilityMacroDefinitionSyntax) {
     visitAnyPost(node._syntaxNode)
   }
@@ -756,16 +748,12 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   override open func visit(_ node: DoExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   override open func visitPost(_ node: DoExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }
@@ -1370,44 +1358,32 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   override open func visit(_ node: LifetimeSpecifierArgumentListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   override open func visitPost(_ node: LifetimeSpecifierArgumentListSyntax) {
     visitAnyPost(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   override open func visit(_ node: LifetimeSpecifierArgumentSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   override open func visitPost(_ node: LifetimeSpecifierArgumentSyntax) {
     visitAnyPost(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   override open func visit(_ node: LifetimeTypeSpecifierSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   override open func visitPost(_ node: LifetimeTypeSpecifierSyntax) {
     visitAnyPost(node._syntaxNode)
   }
@@ -2092,16 +2068,12 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   override open func visit(_ node: ThenStmtSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   override open func visitPost(_ node: ThenStmtSyntax) {
     visitAnyPost(node._syntaxNode)
   }
@@ -2282,16 +2254,12 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   override open func visit(_ node: UnsafeExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   override open func visitPost(_ node: UnsafeExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }

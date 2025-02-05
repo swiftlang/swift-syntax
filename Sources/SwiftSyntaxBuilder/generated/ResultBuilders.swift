@@ -431,9 +431,7 @@ extension LabeledExprListSyntax {
 
 // MARK: - LifetimeSpecifierArgumentListBuilder
 
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 @resultBuilder
 public struct LifetimeSpecifierArgumentListBuilder: ListBuilder {
   public typealias FinalResult = LifetimeSpecifierArgumentListSyntax
@@ -694,9 +692,7 @@ public struct TypeSpecifierListBuilder: ListBuilder {
     buildExpression(.init(expression))
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   public static func buildExpression(_ expression: LifetimeTypeSpecifierSyntax) -> Component {
     buildExpression(.init(expression))
   }

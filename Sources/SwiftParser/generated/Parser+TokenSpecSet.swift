@@ -32,14 +32,10 @@ extension AccessorDeclSyntax {
     case mutableAddressWithOwner
     case mutableAddressWithNativeOwner
     case _read
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case read
     case _modify
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case modify
     case `init`
 
@@ -3085,14 +3081,10 @@ extension OptionalBindingConditionSyntax {
     case `let`
     case `var`
     case `inout`
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _mutating
     case _borrowing
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _consuming
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
@@ -4049,14 +4041,10 @@ extension ValueBindingPatternSyntax {
     case `let`
     case `var`
     case `inout`
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _mutating
     case _borrowing
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _consuming
     case borrowing
 
@@ -4152,14 +4140,10 @@ extension VariableDeclSyntax {
     case `let`
     case `var`
     case `inout`
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _mutating
     case _borrowing
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _consuming
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {

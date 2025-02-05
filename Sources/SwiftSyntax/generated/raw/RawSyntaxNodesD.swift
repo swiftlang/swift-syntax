@@ -1921,9 +1921,7 @@ public struct RawDiscardStmtSyntax: RawStmtSyntaxNodeProtocol {
   }
 }
 
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 @_spi(RawSyntax)
 public struct RawDoExprSyntax: RawExprSyntaxNodeProtocol {
   @_spi(RawSyntax)

@@ -101,9 +101,7 @@ open class SyntaxRewriter {
   /// Visit a `ABIAttributeArgumentsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: ABIAttributeArgumentsSyntax) -> ABIAttributeArgumentsSyntax {
     return ABIAttributeArgumentsSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
@@ -258,9 +256,7 @@ open class SyntaxRewriter {
   /// Visit a ``AvailabilityMacroDefinitionSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
   @_spi(Compiler)
-  #endif
   open func visit(_ node: AvailabilityMacroDefinitionSyntax) -> AvailabilityMacroDefinitionSyntax {
     return AvailabilityMacroDefinitionSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
@@ -709,9 +705,7 @@ open class SyntaxRewriter {
   /// Visit a `DoExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: DoExprSyntax) -> ExprSyntax {
     return ExprSyntax(DoExprSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
@@ -1244,9 +1238,7 @@ open class SyntaxRewriter {
   /// Visit a `LifetimeSpecifierArgumentListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: LifetimeSpecifierArgumentListSyntax) -> LifetimeSpecifierArgumentListSyntax {
     return LifetimeSpecifierArgumentListSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
@@ -1254,9 +1246,7 @@ open class SyntaxRewriter {
   /// Visit a `LifetimeSpecifierArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: LifetimeSpecifierArgumentSyntax) -> LifetimeSpecifierArgumentSyntax {
     return LifetimeSpecifierArgumentSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
@@ -1264,9 +1254,7 @@ open class SyntaxRewriter {
   /// Visit a `LifetimeTypeSpecifierSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: LifetimeTypeSpecifierSyntax) -> LifetimeTypeSpecifierSyntax {
     return LifetimeTypeSpecifierSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
@@ -1869,9 +1857,7 @@ open class SyntaxRewriter {
   /// Visit a `ThenStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: ThenStmtSyntax) -> StmtSyntax {
     return StmtSyntax(ThenStmtSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
@@ -2033,9 +2019,7 @@ open class SyntaxRewriter {
   /// Visit a `UnsafeExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: UnsafeExprSyntax) -> ExprSyntax {
     return ExprSyntax(UnsafeExprSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }

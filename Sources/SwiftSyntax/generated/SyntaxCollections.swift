@@ -1048,9 +1048,7 @@ public struct LabeledExprListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - `LifetimeTypeSpecifierSyntax`.`LifetimeTypeSpecifierSyntax/arguments`
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 public struct LifetimeSpecifierArgumentListSyntax: SyntaxCollection, SyntaxHashable {
   public typealias Element = LifetimeSpecifierArgumentSyntax
 
@@ -1925,9 +1923,7 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
     case simpleTypeSpecifier(SimpleTypeSpecifierSyntax)
     /// A specifier that specifies function parameter on whose lifetime a type depends
     /// - Note: Requires experimental feature `nonescapableTypes`.
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case lifetimeTypeSpecifier(LifetimeTypeSpecifierSyntax)
 
     public var _syntaxNode: Syntax {
@@ -1944,9 +1940,7 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
     }
 
     /// - Note: Requires experimental feature `nonescapableTypes`.
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     public init(_ node: LifetimeTypeSpecifierSyntax) {
       self = .lifetimeTypeSpecifier(node)
     }
@@ -1991,9 +1985,7 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
     /// - Note: Requires experimental feature `nonescapableTypes`.
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     public func `is`(_ syntaxType: LifetimeTypeSpecifierSyntax.Type) -> Bool {
       return self.as(syntaxType) != nil
     }
@@ -2002,9 +1994,7 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
     ///
     /// - Returns: An instance of `LifetimeTypeSpecifierSyntax`, or `nil` if the cast fails.
     /// - Note: Requires experimental feature `nonescapableTypes`.
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     public func `as`(_ syntaxType: LifetimeTypeSpecifierSyntax.Type) -> LifetimeTypeSpecifierSyntax? {
       return LifetimeTypeSpecifierSyntax.init(self)
     }
@@ -2014,9 +2004,7 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
     /// - Returns: An instance of `LifetimeTypeSpecifierSyntax`.
     /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
     /// - Note: Requires experimental feature `nonescapableTypes`.
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     public func cast(_ syntaxType: LifetimeTypeSpecifierSyntax.Type) -> LifetimeTypeSpecifierSyntax {
       return self.as(LifetimeTypeSpecifierSyntax.self)!
     }

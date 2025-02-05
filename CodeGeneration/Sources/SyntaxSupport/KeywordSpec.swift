@@ -38,17 +38,12 @@ public struct KeywordSpec: IdentifierConvertible {
   ///
   /// This is typically used to mark APIs as SPI when the keyword is part of an experimental language feature.
   public var apiAttributes: AttributeListSyntax {
-    let attrList = AttributeListSyntax {
+    AttributeListSyntax {
       if isExperimental {
-        let experimentalSPI: AttributeListSyntax = """
-          #if compiler(>=5.8)
-          @_spi(ExperimentalLanguageFeatures)
-          #endif
-          """
-        experimentalSPI.with(\.trailingTrivia, .newline)
+        AttributeSyntax("@_spi(ExperimentalLanguageFeatures)")
+          .with(\.trailingTrivia, .newline)
       }
     }
-    return attrList.with(\.trailingTrivia, attrList.isEmpty ? [] : .newline)
   }
 
   /// Initializes a new `KeywordSpec` instance.

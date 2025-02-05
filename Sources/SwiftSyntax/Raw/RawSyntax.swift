@@ -218,6 +218,10 @@ public struct RawSyntax: Sendable {
     @_transparent unsafeAddress { pointer.pointer }
   }
 
+  public var arena: RetainedSyntaxArena {
+    arenaReference.retained
+  }
+
   internal var arenaReference: SyntaxArenaRef {
     rawData.arenaReference
   }

@@ -411,7 +411,7 @@ extension RawLabeledExprSyntax {
     identifier: RawTokenSyntax,
     _ unexpectedBetweenIdentifierAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     self.init(
       label: nil,

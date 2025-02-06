@@ -188,7 +188,7 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     try FunctionDeclSyntax(
       """
-      static func make(_ piece: TriviaPiece, arena: SyntaxArena) -> RawTriviaPiece
+      static func make(_ piece: TriviaPiece, arena: RawSyntaxArena) -> RawTriviaPiece
       """
     ) {
       try SwitchExprSyntax("switch piece") {

@@ -20,7 +20,7 @@ fileprivate extension SyntaxCollection {
   static func parse(
     from parser: inout Parser,
     parse: (_ parser: inout Parser) -> some RawSyntaxNodeProtocol,
-    makeMissing: (_ remainingTokens: [RawSyntax], _ arena: SyntaxArena) -> some RawSyntaxNodeProtocol
+    makeMissing: (_ remainingTokens: [RawSyntax], _ arena: RawSyntaxArena) -> some RawSyntaxNodeProtocol
   ) -> Self {
     // Keep the parser alive so that the arena in which `raw` is allocated
     // doesn’t get deallocated before we have a chance to create a syntax node

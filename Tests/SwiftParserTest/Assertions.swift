@@ -144,7 +144,7 @@ private func assertTokens(
       )
     case (let actualError?, let expectedError?):
       // Create a token from the lexeme so we can pass it to `TokenDiagnostic.diagnosticMessage(in:)`
-      let arena = ParsingSyntaxArena(parseTriviaFunction: TriviaParser.parseTrivia)
+      let arena = ParsingRawSyntaxArena(parseTriviaFunction: TriviaParser.parseTrivia)
       let rawToken = RawTokenSyntax(
         kind: actualLexeme.rawTokenKind,
         wholeText: arena.intern(actualLexeme.wholeText),

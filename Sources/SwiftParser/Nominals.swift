@@ -30,7 +30,7 @@ protocol NominalTypeDeclarationTrait {
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
     memberBlock: RawMemberBlockSyntax,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   )
 
   static func parsePrimaryOrGenerics(_ parser: inout Parser) -> PrimaryOrGenerics?
@@ -48,7 +48,7 @@ extension RawProtocolDeclSyntax: NominalTypeDeclarationTrait {
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
     memberBlock: RawMemberBlockSyntax,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     self.init(
       attributes: attributes,
@@ -82,7 +82,7 @@ extension RawClassDeclSyntax: NominalTypeDeclarationTrait {
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
     memberBlock: RawMemberBlockSyntax,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     self.init(
       attributes: attributes,
@@ -116,7 +116,7 @@ extension RawActorDeclSyntax: NominalTypeDeclarationTrait {
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
     memberBlock: RawMemberBlockSyntax,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     self.init(
       attributes: attributes,
@@ -150,7 +150,7 @@ extension RawStructDeclSyntax: NominalTypeDeclarationTrait {
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
     memberBlock: RawMemberBlockSyntax,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     self.init(
       attributes: attributes,
@@ -184,7 +184,7 @@ extension RawEnumDeclSyntax: NominalTypeDeclarationTrait {
     inheritanceClause: RawInheritanceClauseSyntax?,
     genericWhereClause: RawGenericWhereClauseSyntax?,
     memberBlock: RawMemberBlockSyntax,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     self.init(
       attributes: attributes,

@@ -32,7 +32,7 @@ extension RawUnexpectedNodesSyntax {
 
   /// If `nodes` is not empty, construct a ``RawUnexpectedNodesSyntax``
   /// containing those tokens, otherwise return `nil`.
-  init?<SyntaxType: RawSyntaxNodeProtocol>(_ nodes: [SyntaxType], arena: __shared SyntaxArena) {
+  init?<SyntaxType: RawSyntaxNodeProtocol>(_ nodes: [SyntaxType], arena: __shared RawSyntaxArena) {
     if nodes.isEmpty {
       return nil
     } else {
@@ -42,7 +42,7 @@ extension RawUnexpectedNodesSyntax {
 
   /// If `nodes` contains non-`nil` values, construct a ``RawUnexpectedNodesSyntax``
   /// containing those tokens, otherwise return `nil`.
-  init?<SyntaxType: RawSyntaxNodeProtocol>(_ nodes: [SyntaxType?], arena: __shared SyntaxArena) {
+  init?<SyntaxType: RawSyntaxNodeProtocol>(_ nodes: [SyntaxType?], arena: __shared RawSyntaxArena) {
     self.init(nodes.compactMap({ $0 }), arena: arena)
   }
 }
@@ -80,7 +80,7 @@ extension RawUnexpectedNodesSyntax {
   init?(
     combining syntax1: some UnexpectedNodesCombinable,
     _ syntax2: some UnexpectedNodesCombinable,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     self.init(syntax1.elements + syntax2.elements, arena: arena)
   }
@@ -89,7 +89,7 @@ extension RawUnexpectedNodesSyntax {
     combining syntax1: some UnexpectedNodesCombinable,
     _ syntax2: some UnexpectedNodesCombinable,
     _ syntax3: some UnexpectedNodesCombinable,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     self.init(syntax1.elements + syntax2.elements + syntax3.elements, arena: arena)
   }
@@ -99,7 +99,7 @@ extension RawUnexpectedNodesSyntax {
     _ syntax2: some UnexpectedNodesCombinable,
     _ syntax3: some UnexpectedNodesCombinable,
     _ syntax4: some UnexpectedNodesCombinable,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     self.init(syntax1.elements + syntax2.elements + syntax3.elements + syntax4.elements, arena: arena)
   }
@@ -129,7 +129,7 @@ extension RawSyntaxNodeProtocol {
   ///   trailing unexpected node children.
   func makeUnexpectedKeepingFirstNode<KeptNode: RawSyntaxNodeProtocol>(
     of keptType: KeptNode.Type,
-    arena: SyntaxArena,
+    arena: RawSyntaxArena,
     where predicate: (KeptNode) -> Bool,
     makeMissing: () -> KeptNode
   ) -> KeptNode {
@@ -203,7 +203,7 @@ extension RawSyntaxNodeProtocol {
   ///   unexpected node children. Note that there is always at least one node in the array.
   func makeUnexpectedKeepingNodes<KeptNode: RawSyntaxNodeProtocol>(
     of keptType: KeptNode.Type,
-    arena: SyntaxArena,
+    arena: RawSyntaxArena,
     where predicate: (KeptNode) -> Bool,
     makeMissing: () -> KeptNode
   ) -> [KeptNode] {

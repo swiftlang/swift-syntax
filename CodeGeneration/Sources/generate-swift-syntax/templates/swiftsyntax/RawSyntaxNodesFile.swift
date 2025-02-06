@@ -119,7 +119,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
           let element = node.elementChoices.only != nil ? node.elementChoices.only!.raw.syntaxType : "Element"
           DeclSyntax(
             """
-            public init(elements: [\(element)], arena: __shared SyntaxArena) {
+            public init(elements: [\(element)], arena: __shared RawSyntaxArena) {
               let raw = RawSyntax.makeLayout(
                 kind: .\(node.memberCallName), uninitializedCount: elements.count, arena: arena) { layout in
                   guard var ptr = layout.baseAddress else { return }
@@ -154,7 +154,7 @@ func rawSyntaxNodesFile(nodesStartingWith: [Character]) -> SourceFileSyntax {
               )
             }
 
-            FunctionParameterSyntax("arena: __shared SyntaxArena")
+            FunctionParameterSyntax("arena: __shared RawSyntaxArena")
           }
           try InitializerDeclSyntax("public init(\(params))") {
             if !node.children.isEmpty {

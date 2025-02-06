@@ -13,7 +13,7 @@
 @_spi(RawSyntax) import SwiftSyntax
 import XCTest
 
-fileprivate func cannedStructDecl(arena: ParsingSyntaxArena) -> RawStructDeclSyntax {
+fileprivate func cannedStructDecl(arena: ParsingRawSyntaxArena) -> RawStructDeclSyntax {
   let structKW = RawTokenSyntax(
     kind: .keyword,
     text: arena.intern("struct"),
@@ -68,7 +68,7 @@ fileprivate func cannedStructDecl(arena: ParsingSyntaxArena) -> RawStructDeclSyn
 final class RawSyntaxTests: XCTestCase {
 
   func testFactory() {
-    withExtendedLifetime(ParsingSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
+    withExtendedLifetime(ParsingRawSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
       let structDecl = cannedStructDecl(arena: arena)
       XCTAssertEqual(
         "\(structDecl.raw)",
@@ -81,7 +81,7 @@ final class RawSyntaxTests: XCTestCase {
   }
 
   func testAccessor() {
-    withExtendedLifetime(ParsingSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
+    withExtendedLifetime(ParsingRawSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
       let structDecl = cannedStructDecl(arena: arena)
       XCTAssertEqual(structDecl.name.tokenKind, .identifier)
       XCTAssertEqual(structDecl.structKeyword.tokenText, "struct")
@@ -96,7 +96,7 @@ final class RawSyntaxTests: XCTestCase {
   }
 
   func testMaterializedToken() {
-    withExtendedLifetime(ParsingSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
+    withExtendedLifetime(ParsingRawSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
       let ident = RawTokenSyntax(
         kind: .identifier,
         text: arena.intern("foo"),
@@ -118,7 +118,7 @@ final class RawSyntaxTests: XCTestCase {
   }
 
   func testParsedToken() {
-    withExtendedLifetime(ParsingSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
+    withExtendedLifetime(ParsingRawSyntaxArena(parseTriviaFunction: dummyParseToken)) { arena in
       let ident = RawTokenSyntax(
         kind: .identifier,
         wholeText: arena.intern("\nfoo "),

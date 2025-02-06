@@ -20,7 +20,7 @@
 ///
 /// The following is only relevant if you are accessing the raw syntax tree using
 /// `RawSyntax` nodes. When working with syntax trees using SwiftSyntax’s API,
-/// the usage of a ``SyntaxArena`` is transparent.
+/// the usage of a ``RawSyntaxArena`` is transparent.
 ///
 /// Contrary to Swift’s usual memory model, syntax node's are not individually
 /// reference-counted. Instead, they live in an arena. That arena allocates a
@@ -30,28 +30,28 @@
 /// significantly speeds up parsing.
 ///
 /// As a consequence, syntax nodes cannot be freed individually but the memory
-/// will get freed once the owning ``SyntaxArena`` gets freed. Thus, it needs to
-/// be manually ensured that the ``SyntaxArena`` is not deallocated while any
+/// will get freed once the owning ``RawSyntaxArena`` gets freed. Thus, it needs to
+/// be manually ensured that the ``RawSyntaxArena`` is not deallocated while any
 /// of its nodes are being accessed. The `SyntaxData` type ensures this as
 /// follows:
-/// - The root node has a strong reference to its ``SyntaxArena``
+/// - The root node has a strong reference to its ``RawSyntaxArena``
 /// - Each node retains its parent `SyntaxData`, thus keeping it alive.
-/// - If any node is allocated within a different ``SyntaxArena``,  that arena
+/// - If any node is allocated within a different ``RawSyntaxArena``,  that arena
 ///   is added to the root's `childRefs` property and thus kept a live as long
 ///   as the parent tree is alive.
 ///
-/// As an added benefit of the ``SyntaxArena``, `RawSyntax` nodes don’t need to
+/// As an added benefit of the ``RawSyntaxArena``, `RawSyntax` nodes don’t need to
 /// be reference-counted, further improving the performance of ``SwiftSyntax``
 /// when worked with at that level.
 @_spi(RawSyntax)
-public class SyntaxArena {
+public class RawSyntaxArena {
   /// Bump-pointer allocator for all "intern" methods.
   fileprivate let allocator: BumpPtrAllocator
 
   /// If the syntax tree that’s allocated in this arena references nodes from
   /// other arenas, `childRefs` contains references to the arenas. Child arenas
   /// are retained in `addChild()` and are released in `deinit`.
-  private var childRefs: Set<SyntaxArenaRef>
+  private var childRefs: Set<RawSyntaxArenaRef>
 
   #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
   /// Whether or not this arena has been added to other arenas as a child.
@@ -62,7 +62,7 @@ public class SyntaxArena {
   fileprivate let hasParent: UnsafeMutablePointer<AtomicBool>
   #endif
 
-  /// Construct a new ``SyntaxArena`` in which syntax nodes can be allocated.
+  /// Construct a new ``RawSyntaxArena`` in which syntax nodes can be allocated.
   public convenience init() {
     self.init(slabSize: 128)
   }
@@ -137,15 +137,15 @@ public class SyntaxArena {
     return UnsafePointer(allocated)
   }
 
-  /// Adds an ``SyntaxArena`` to this arena as a "child". Do nothing if `arenaRef`
+  /// Adds an ``RawSyntaxArena`` to this arena as a "child". Do nothing if `arenaRef`
   /// refers `self`.
   ///
   /// When an arena added to another arena, it's owned and is never released
   /// until the parent arena is deinitialized. This can be used when the syntax
   /// tree managed by this arena want to hold a subtree owned by other arena.
   /// See also `RawSyntax.layout()`.
-  func addChild(_ otherRef: SyntaxArenaRef) {
-    if SyntaxArenaRef(self) == otherRef { return }
+  func addChild(_ otherRef: RawSyntaxArenaRef) {
+    if RawSyntaxArenaRef(self) == otherRef { return }
 
     #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
     precondition(
@@ -171,9 +171,9 @@ public class SyntaxArena {
   }
 }
 
-/// SyntaxArena for parsing.
+/// RawSyntaxArena for parsing.
 @_spi(RawSyntax)
-public class ParsingSyntaxArena: SyntaxArena {
+public class ParsingRawSyntaxArena: RawSyntaxArena {
   public typealias ParseTriviaFunction = (_ source: SyntaxText, _ position: TriviaPosition) -> [RawTriviaPiece]
 
   /// Source file buffer the Syntax tree represents.
@@ -181,7 +181,7 @@ public class ParsingSyntaxArena: SyntaxArena {
 
   /// Function to parse trivia.
   ///
-  /// - Important: Must never be changed to a mutable value. See `SyntaxArenaRef.parseTrivia`.
+  /// - Important: Must never be changed to a mutable value. See `RawSyntaxArenaRef.parseTrivia`.
   private let parseTriviaFunction: ParseTriviaFunction
 
   public init(parseTriviaFunction: @escaping ParseTriviaFunction) {
@@ -227,50 +227,50 @@ public class ParsingSyntaxArena: SyntaxArena {
 
   /// Parse `source` into a list of ``RawTriviaPiece`` using `parseTriviaFunction`.
   public func parseTrivia(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
-    // Must never access mutable state. See `SyntaxArenaRef.parseTrivia`.
+    // Must never access mutable state. See `RawSyntaxArenaRef.parseTrivia`.
     return self.parseTriviaFunction(source, position)
   }
 }
 
-/// An opaque wrapper around `SyntaxArena` that keeps the arena alive.
+/// An opaque wrapper around `RawSyntaxArena` that keeps the arena alive.
 @_spi(RawSyntax)
-public struct RetainedSyntaxArena: @unchecked Sendable {
+public struct RetainedRawSyntaxArena: @unchecked Sendable {
   // Unchecked conformance to sendable is fine because `arena` is not
   // accessible. It is just used to keep the arena alive.
-  private let arena: SyntaxArena
+  private let arena: RawSyntaxArena
 
-  init(_ arena: SyntaxArena) {
+  init(_ arena: RawSyntaxArena) {
     self.arena = arena
   }
 
-  fileprivate func arenaRef() -> SyntaxArenaRef {
-    return SyntaxArenaRef(arena)
+  fileprivate func arenaRef() -> RawSyntaxArenaRef {
+    return RawSyntaxArenaRef(arena)
   }
 }
 
-/// Unsafely unowned reference to ``SyntaxArena``. The user is responsible to
-/// maintain the lifetime of the ``SyntaxArena``.
+/// Unsafely unowned reference to ``RawSyntaxArena``. The user is responsible to
+/// maintain the lifetime of the ``RawSyntaxArena``.
 ///
-/// `RawSyntaxData` holds its ``SyntaxArena`` in this form to prevent their cyclic
-/// strong references. Also, passing around ``SyntaxArena`` in this form doesn't
+/// `RawSyntaxData` holds its ``RawSyntaxArena`` in this form to prevent their cyclic
+/// strong references. Also, passing around ``RawSyntaxArena`` in this form doesn't
 /// cause any ref-counting traffic.
-struct SyntaxArenaRef: Hashable, @unchecked Sendable {
-  private let _value: Unmanaged<SyntaxArena>
+struct RawSyntaxArenaRef: Hashable, @unchecked Sendable {
+  private let _value: Unmanaged<RawSyntaxArena>
 
-  init(_ value: __shared SyntaxArena) {
+  init(_ value: __shared RawSyntaxArena) {
     self._value = .passUnretained(value)
   }
 
-  /// Returns the ``SyntaxArena``
-  private var value: SyntaxArena {
+  /// Returns the ``RawSyntaxArena``
+  private var value: RawSyntaxArena {
     get { self._value.takeUnretainedValue() }
   }
 
-  /// Assuming that this references a `ParsingSyntaxArena`,
+  /// Assuming that this references a `ParsingRawSyntaxArena`,
   func parseTrivia(source: SyntaxText, position: TriviaPosition) -> [RawTriviaPiece] {
     // It is safe to access `_value` here because `parseTrivia` only accesses
     // `parseTriviaFunction`, which is a constant.
-    (value as! ParsingSyntaxArena).parseTrivia(source: source, position: position)
+    (value as! ParsingRawSyntaxArena).parseTrivia(source: source, position: position)
   }
 
   func retain() {
@@ -282,8 +282,8 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
   }
 
   /// Get an opaque wrapper that keeps the syntax arena alive.
-  var retained: RetainedSyntaxArena {
-    return RetainedSyntaxArena(value)
+  var retained: RetainedRawSyntaxArena {
+    return RetainedRawSyntaxArena(value)
   }
 
   /// Copies a UTF8 sequence of `String` to the memory the referenced arena manages, and
@@ -293,12 +293,12 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
   }
 
   #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
-  /// Accessor for the underlying's `SyntaxArena.hasParent`
+  /// Accessor for the underlying's `RawSyntaxArena.hasParent`
   var hasParent: Bool {
     swiftsyntax_atomic_bool_get(value.hasParent)
   }
 
-  /// Sets the `SyntaxArena.hasParent` on the referenced arena.
+  /// Sets the `RawSyntaxArena.hasParent` on the referenced arena.
   func setHasParent(_ newValue: Bool) {
     swiftsyntax_atomic_bool_set(value.hasParent, newValue)
   }
@@ -308,23 +308,23 @@ struct SyntaxArenaRef: Hashable, @unchecked Sendable {
     hasher.combine(_value.toOpaque())
   }
 
-  static func == (lhs: SyntaxArenaRef, rhs: SyntaxArenaRef) -> Bool {
+  static func == (lhs: RawSyntaxArenaRef, rhs: RawSyntaxArenaRef) -> Bool {
     return lhs._value.toOpaque() == rhs._value.toOpaque()
   }
 
-  static func == (lhs: SyntaxArenaRef, rhs: __shared SyntaxArena) -> Bool {
-    return lhs == SyntaxArenaRef(rhs)
+  static func == (lhs: RawSyntaxArenaRef, rhs: __shared RawSyntaxArena) -> Bool {
+    return lhs == RawSyntaxArenaRef(rhs)
   }
 
-  static func == (lhs: __shared SyntaxArena, rhs: SyntaxArenaRef) -> Bool {
+  static func == (lhs: __shared RawSyntaxArena, rhs: RawSyntaxArenaRef) -> Bool {
     return rhs == lhs
   }
 
-  static func == (lhs: SyntaxArenaRef, rhs: RetainedSyntaxArena) -> Bool {
+  static func == (lhs: RawSyntaxArenaRef, rhs: RetainedRawSyntaxArena) -> Bool {
     return lhs == rhs.arenaRef()
   }
 
-  static func == (lhs: RetainedSyntaxArena, rhs: SyntaxArenaRef) -> Bool {
+  static func == (lhs: RetainedRawSyntaxArena, rhs: RawSyntaxArenaRef) -> Bool {
     return rhs == lhs
   }
 }

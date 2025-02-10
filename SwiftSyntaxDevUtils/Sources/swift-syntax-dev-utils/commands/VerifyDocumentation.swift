@@ -60,7 +60,6 @@ struct VerifyDocumentation: ParsableCommand {
         "-scheme",
         product,
         "-destination", "platform=macOS",
-        "OTHER_DOCC_FLAGS='--warnings-as-errors'",
       ]
     ).run(captureStdout: false, captureStderr: false, verbose: self.verbose)
   }

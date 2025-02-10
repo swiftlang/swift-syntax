@@ -46,11 +46,34 @@ struct VerifyDocumentation: ParsableCommand {
     }
   }
 
+  func xcodeVersion(xcodebuildExec: URL) throws -> (major: Int, minor: Int) {
+    let result = try ProcessRunner(
+      executableURL: xcodebuildExec,
+      arguments: ["-version"]
+    ).run(captureStdout: true, captureStderr: false, verbose: false)
+    let xcodeVersionRegex = Regex {
+      "Xcode "
+      Capture(OneOrMore(.digit))
+      "."
+      Capture(OneOrMore(.digit))
+    }
+    guard let match = result.stdout.firstMatch(of: xcodeVersionRegex), let major = Int(match.1),
+      let minor = Int(match.2)
+    else {
+      throw ScriptExectutionError(message: "Failed to extract Xcode version to verify documentation")
+    }
+    return (major, minor)
+  }
+
   func buildDocumentation(product: String) throws {
     guard let xcodebuildExec = try? Paths.xcodebuildExec else {
       return
     }
     logSection("Building documentation for \(product)")
+    var otherDoccFlags = ["--warnings-as-errors"]
+    if try xcodeVersion(xcodebuildExec: xcodebuildExec) >= (16, 0) {
+      otherDoccFlags.append("--disable-parameters-and-returns-validation")
+    }
     try ProcessRunner(
       executableURL: xcodebuildExec,
       arguments: [
@@ -60,7 +83,7 @@ struct VerifyDocumentation: ParsableCommand {
         "-scheme",
         product,
         "-destination", "platform=macOS",
-        "OTHER_DOCC_FLAGS='--warnings-as-errors'",
+        "OTHER_DOCC_FLAGS=\(otherDoccFlags.joined(separator: " "))",
       ]
     ).run(captureStdout: false, captureStderr: false, verbose: self.verbose)
   }

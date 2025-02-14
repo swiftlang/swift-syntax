@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftParser
 import SwiftSyntax
 import XCTest
 
@@ -69,325 +70,387 @@ class TriviaTests: XCTestCase {
     XCTAssertNotEqual(TriviaPiece.unexpectedText("e"), .unexpectedText("f"))
     XCTAssertNotEqual(TriviaPiece.unexpectedText("e"), .lineComment("e"))
   }
-  
+
   func testTriviaCommentValues() {
-    XCTAssertTrue(Trivia(pieces: []).commentValues.isEmpty)
 
-    // MARK: line comment
+    // MARK: Line comment
 
-    XCTAssertEqual(
-      Trivia(pieces: [.lineComment("")]).commentValues,
-      [""]
+    assertCommentValue("//", commentValue: "")
+    assertCommentValue("// Some line comment", commentValue: "Some line comment")
+
+    assertCommentValue(
+      """
+      // Some line comment
+      // Another
+      """,
+      commentValue: "Some line comment\nAnother"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [.lineComment("Some line comment")]).commentValues,
-      ["Some line comment"]
+    assertCommentValue(
+      """
+      // - Task
+      //   - Subtask
+      // - Task 2
+      """,
+      commentValue: """
+        - Task
+          - Subtask
+        - Task 2
+        """
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [.lineComment("// Some line comment")]).commentValues,
-      ["Some line comment"]
+    assertCommentValue(
+      """
+      //- Task
+      //  - Subtask
+      //- Task 2
+      """,
+      commentValue: """
+        - Task
+          - Subtask
+        - Task 2
+        """
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .lineComment("// Some line comment"),
-        .lineComment("// Another"),
-      ]).commentValues,
-      [
-        "Some line comment",
-        "Another",
-      ]
+    // MARK: Doc line comment
+
+    assertCommentValue("/// Some doc line comment", commentValue: "Some doc line comment")
+
+    assertCommentValue(
+      """
+      /// Some doc line comment
+      /// Another
+      """,
+      commentValue: "Some doc line comment\nAnother"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .lineComment("// Some line comment"),
-        .lineComment("Other"),
-      ]).commentValues,
-      [
-        "Some line comment",
-        "Other",
-      ]
+    assertCommentValue(
+      """
+      /// - Task
+      ///   - Subtask
+      /// - Task 2
+      """,
+      commentValue: """
+        - Task
+          - Subtask
+        - Task 2
+        """
     )
 
-    // MARK: doc line comment
-
-    XCTAssertEqual(
-      Trivia(pieces: [.docLineComment("")]).commentValues,
-      [""]
+    assertCommentValue(
+      """
+      ///- Task
+      ///  - Subtask
+      ///- Task 2
+      """,
+      commentValue: """
+        - Task
+          - Subtask
+        - Task 2
+        """
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [.docLineComment("Some doc line comment")]).commentValues,
-      ["Some doc line comment"]
+    // MARK: Block comment
+
+    assertCommentValue("/* Some block comment */", commentValue: "Some block comment")
+
+    assertCommentValue(
+      """
+      /* Some block comment
+      * spread on many lines */
+      """,
+      commentValue: "Some block comment\n* spread on many lines"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [.docLineComment("/// Some doc line comment")]).commentValues,
-      ["Some doc line comment"]
+    assertCommentValue(
+      """
+      /* Some block comment
+      * spread on many lines
+      */
+      """,
+      commentValue: "Some block comment\n* spread on many lines"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .docLineComment("/// Some doc line comment"),
-        .docLineComment("/// Another"),
-      ]).commentValues,
-      [
-        "Some doc line comment",
-        "Another",
-      ]
+    assertCommentValue(
+      """
+      /*
+      Some block comment
+      spread on many lines */
+      """,
+      commentValue: "Some block comment\nspread on many lines"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .docLineComment("/// Some doc line comment"),
-        .docLineComment("Other"),
-      ]).commentValues,
-      [
-        "Some doc line comment",
-        "Other",
-      ]
+    assertCommentValue(
+      """
+      /* Some block comment
+      * spread on many lines */
+      /* Another block comment */
+      """,
+      commentValue: "Some block comment\n* spread on many lines\nAnother block comment"
     )
 
-    // MARK: block comment
+    assertCommentValue(
+      """
+      /* Some block comment
+      * spread on many lines */
 
-    XCTAssertEqual(
-      Trivia(pieces: [.blockComment("")]).commentValues,
-      [""]
+      /* Another block comment */
+      """,
+      commentValue: "Some block comment\n* spread on many lines\nAnother block comment"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [.blockComment("Some block comment")]).commentValues,
-      ["Some block comment"]
+    assertCommentValue(
+      """
+      /*
+      *  Some block comment
+      *  spread on many lines
+      */
+      """,
+      commentValue: "*  Some block comment\n*  spread on many lines"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [.blockComment("/* Some block comment */")]).commentValues,
-      ["Some block comment"]
+    assertCommentValue(
+      """
+      /*
+      Paragraph 1
+
+      Paragraph 2
+      */
+      """,
+      commentValue: "Paragraph 1\n\nParagraph 2"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .blockComment("/* Some block comment"),
-        .blockComment("* spread on many lines */"),
-      ]).commentValues,
-      [
-        "Some block comment spread on many lines"
-      ]
+    assertCommentValue(
+      """
+      /* 
+      /abc
+      */
+      """,
+      commentValue: "/abc"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .blockComment("/* Some block comment"),
-        .blockComment("* spread on many lines"),
-        .blockComment("*/"),
-      ]).commentValues,
-      [
-        "Some block comment spread on many lines"
-      ]
-    )
+    assertCommentValue("/* ///// abc */", commentValue: "///// abc")
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .blockComment("/* Some block comment"),
-        .blockComment("* spread on many lines */"),
-        .blockComment("/* Another block comment */"),
-      ]).commentValues,
-      [
-        "Some block comment spread on many lines",
-        "Another block comment",
-      ]
-    )
-
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .blockComment("/* Some block comment"),
-        .blockComment("* spread on many lines */"),
-        .newlines(2),
-        .blockComment("/* Another block comment */"),
-      ]).commentValues,
-      [
-        "Some block comment spread on many lines",
-        "Another block comment",
-      ]
-    )
-
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .blockComment(
-          """
+    assertCommentValue(
+      """
           /*
           Some block comment
-          spread on many lines
+          with another line
           */
-          """
-        )
-      ]).commentValues,
-      ["Some block comment spread on many lines"]
+      """,
+      commentValue: "Some block comment\nwith another line"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .blockComment(
-          """
-          /*
-          *  Some block comment
-          *  spread on many lines
-          */
-          """
-        )
-      ]).commentValues,
-      ["Some block comment spread on many lines"]
+    assertCommentValue(
+      """
+      /*
+       Some block comment
+       with another line
+      */
+      """,
+      commentValue: " Some block comment\n with another line"
     )
 
-    // MARK: doc block comment
-
-    XCTAssertEqual(
-      Trivia(pieces: [.docBlockComment("")]).commentValues,
-      [""]
+    assertCommentValue(
+      """
+        /* 
+      unindented line
+        */
+      """,
+      commentValue: "unindented line"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [.docBlockComment("Some doc block comment")]).commentValues,
-      ["Some doc block comment"]
+    // MARK: Doc block comment
+
+    assertCommentValue(
+      """
+      /** Some doc block comment */
+      """,
+      commentValue: "Some doc block comment"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [.docBlockComment("/** Some doc block comment */")]).commentValues,
-      ["Some doc block comment"]
+    assertCommentValue(
+      """
+      /** Some doc block comment
+      * spread on many lines */
+      """,
+      commentValue: "Some doc block comment\n* spread on many lines"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .docBlockComment("/** Some doc block comment"),
-        .docBlockComment("* spread on many lines */"),
-      ]).commentValues,
-      [
-        "Some doc block comment spread on many lines"
-      ]
+    assertCommentValue(
+      """
+      /** Some doc block comment
+      * spread on many lines
+      */
+      """,
+      commentValue: "Some doc block comment\n* spread on many lines"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .docBlockComment("/** Some doc block comment"),
-        .docBlockComment("* spread on many lines"),
-        .docBlockComment("*/"),
-      ]).commentValues,
-      [
-        "Some doc block comment spread on many lines"
-      ]
+    assertCommentValue(
+      """
+      /** Some doc block comment
+      * spread on many lines */
+      /** Another doc block comment */
+      """,
+      commentValue: "Some doc block comment\n* spread on many lines\nAnother doc block comment"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .docBlockComment("/** Some doc block comment"),
-        .docBlockComment("* spread on many lines */"),
-        .docBlockComment("/** Another doc block comment */"),
-      ]).commentValues,
-      [
-        "Some doc block comment spread on many lines",
-        "Another doc block comment",
-      ]
+    assertCommentValue(
+      """
+      /** Some doc block comment
+      * spread on many lines */
+
+      /** Another doc block comment */
+      """,
+      commentValue: "Some doc block comment\n* spread on many lines\nAnother doc block comment"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .docBlockComment("/** Some doc block comment"),
-        .docBlockComment("* spread on many lines */"),
-        .newlines(2),
-        .docBlockComment("/** Another doc block comment */"),
-      ]).commentValues,
-      [
-        "Some doc block comment spread on many lines",
-        "Another doc block comment",
-      ]
+    assertCommentValue(
+      """
+      /**
+      Some doc block comment
+      spread on many lines
+      */
+      """,
+      commentValue: "Some doc block comment\nspread on many lines"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .docBlockComment(
-          """
+    assertCommentValue(
+      """
+      /**
+      *  Some doc block comment
+      *  spread on many lines
+      */
+      """,
+      commentValue: "*  Some doc block comment\n*  spread on many lines"
+    )
+
+    assertCommentValue(
+      """
+      /**
+       *  Some doc block comment
+       *  with a line comment
+       */
+      """,
+      commentValue: "*  Some doc block comment\n*  with a line comment"
+    )
+
+    assertCommentValue("/** ///// abc */", commentValue: "///// abc")
+
+    assertCommentValue(
+      """
           /**
-          Some doc block comment
-          spread on many lines
+          Some block comment
+          with another line
           */
-          """
-        )
-      ]).commentValues,
-      ["Some doc block comment spread on many lines"]
+      """,
+      commentValue: "Some block comment\nwith another line"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .docBlockComment(
-          """
-          /**
-          *  Some doc block comment
-          *  spread on many lines
-          */
-          """
-        )
-      ]).commentValues,
-      ["Some doc block comment spread on many lines"]
+    assertCommentValue(
+      """
+      /**
+       Some block comment
+       with another line
+      */
+      """,
+      commentValue: " Some block comment\n with another line"
     )
 
     // MARK: Mixing comment styles
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .docBlockComment(
-          """
-          /**
-          *  Some doc block comment
-          *  // spread on many lines
-          *  with a line comment
-          */
-          """
-        )
-      ]).commentValues,
-      ["Some doc block comment // spread on many lines with a line comment"]
+    assertCommentValue(
+      """
+      /**
+      *  Some doc block comment
+      *  // spread on many lines
+      *  with a line comment
+      */
+      """,
+      commentValue: "*  Some doc block comment\n*  // spread on many lines\n*  with a line comment"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .docBlockComment("/** Some doc block comment"),
-        .docBlockComment("* spread on many lines */"),
-        .newlines(2),
-        .docLineComment("/// Some doc line comment"),
-        .docLineComment("// Some line comment"),
-        .newlines(2),
-        .spaces(4),
-        .blockComment("/* Some block comment"),
-        .blockComment("* spread on many lines */"),
-        .newlines(2),
-        .docBlockComment("/** Another doc block comment */"),
-      ]).commentValues,
-      [
-        "Some doc block comment spread on many lines",
-        "Some doc line comment",
-        "Some line comment",
-        "Some block comment spread on many lines",
-        "Another doc block comment",
-      ]
+    assertCommentValue(
+      """
+      /**
+      * Some doc block comment
+      * // spread on many lines
+      * with a line comment
+      */
+      """,
+      commentValue: "* Some doc block comment\n* // spread on many lines\n* with a line comment"
     )
 
-    XCTAssertEqual(
-      Trivia(pieces: [
-        .docBlockComment("/* Some block comment"),
-        .docLineComment("// A line comment in a block"),
-        .docBlockComment("* spread on many lines */"),
-        .newlines(2),
-        .blockComment("/** Some doc block comment"),
-        .docLineComment("/// A doc line comment in a block"),
-        .blockComment("* spread on"),
-        .blockComment("* many lines */"),
-      ]).commentValues,
-      [
-        "Some block comment // A line comment in a block spread on many lines",
-        "Some doc block comment /// A doc line comment in a block spread on many lines",
-      ]
+    assertCommentValue(
+      """
+      /** Some doc block comment
+      * spread on many lines */
+
+      /// Some doc line comment
+      // Some line comment
+
+      /* Some block comment
+      * spread on many lines */
+      /** Another doc block comment */
+      """,
+      commentValue: """
+        Some doc block comment
+        * spread on many lines
+        Some doc line comment
+        Some line comment
+        Some block comment
+        * spread on many lines
+        Another doc block comment
+        """
+    )
+
+    assertCommentValue(
+      """
+      /* Some block comment
+      * // A line comment in a block
+      * spread on many lines */
+      /** Some doc block comment
+      * /// A doc line comment in a block
+      * spread on
+      * many lines */
+      """,
+      commentValue: """
+        Some block comment
+        * // A line comment in a block
+        * spread on many lines
+        Some doc block comment
+        * /// A doc line comment in a block
+        * spread on
+        * many lines
+        """
     )
   }
+}
+
+func assertCommentValue(
+  _ input: String,
+  commentValue expected: String,
+  file: StaticString = #filePath,
+  line: UInt = #line
+) {
+  let trivia = parseTrivia(from: input)
+  XCTAssertEqual(trivia.commentValue, expected, file: file, line: line)
+}
+
+private func parseTrivia(from input: String) -> Trivia {
+  // Wrap the input in valid Swift code so the parser can recognize it
+  let wrappedSource = "let _ = 0\n\(input)\nlet _ = 1"
+
+  let sourceFile = Parser.parse(source: wrappedSource)
+
+  // Find the token where the comment would appear (before `let _ = 1`)
+  guard
+    let commentToken = sourceFile.tokens(viewMode: .sourceAccurate).first(where: {
+      $0.leadingTrivia.contains(where: { $0.isComment })
+    })
+  else {
+    return []
+  }
+
+  return commentToken.leadingTrivia
 }

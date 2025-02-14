@@ -43,65 +43,109 @@ public struct Trivia: Sendable {
   }
 
   /// The string contents of all the comment pieces with any comments tokens trimmed.
-  ///
-  /// Each element in the array is the trimmed contents of a line comment, or, in the case of a multi-line comment a trimmed, concatenated single string.
-  public var commentValues: [String] {
+  public var commentValue: String {
     var comments = [String]()
-    var partialComments = [String]()
 
-    var foundStartOfCodeBlock = false
-    var foundEndOfCodeBlock = false
-    var isInCodeBlock: Bool { foundStartOfCodeBlock && !foundEndOfCodeBlock }
+    // Determine if all line comments have a single space
+    lazy var allLineCommentsHaveSpace: Bool = {
+      return pieces.allSatisfy { piece in
+        switch piece {
+        case .lineComment(let text):
+          return text.hasPrefix("// ")
+        case .docLineComment(let text):
+          return text.hasPrefix("/// ")
+        default:
+          return true
+        }
+      }
+    }()
+
+    // Helper function to trim leading and trailing whitespace
+    func trimWhitespace(_ text: String) -> String {
+      let trimmed = text.drop(while: { $0 == " " })
+        .reversed()
+        .drop(while: { $0 == " " })
+        .reversed()
+      return String(trimmed)
+    }
+
+    // Helper function to trim leading and trailing newlines
+    func trimNewlines(_ text: String) -> String {
+      let trimmed = text.drop(while: { $0 == "\n" })
+        .reversed()
+        .drop(while: { $0 == "\n" })
+        .reversed()
+      return String(trimmed)
+    }
+
+    // Helper function to process block comments
+    func processBlockComment(_ text: String, prefix: String, suffix: String) -> String {
+      var text = text
+      text.removeFirst(prefix.count)
+      text.removeLast(suffix.count)
+      text = trimWhitespace(text)
+      text = trimNewlines(text)
+      return text
+    }
+
+    // Helper function to process multiline block comments
+    func processMultilineBlockComment(_ text: String) -> String {
+      var lines = text.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
+
+      lines.removeFirst()
+
+      let minIndentation =
+        lines
+        .filter { !$0.isEmpty }
+        .map { $0.prefix { $0 == " " }.count }
+        .min() ?? 0
+
+      if let lastLine = lines.last {
+        if trimWhitespace(lastLine) == "*/" {
+          lines.removeLast()
+        } else {
+          lines[lines.count - 1].removeLast(2)
+          lines[lines.count - 1] = trimWhitespace(lines[lines.count - 1])
+        }
+      }
+
+      let unindentedLines = lines.map { line in
+        guard line.count >= minIndentation else { return line }
+        return String(line.dropFirst(minIndentation))
+      }
+
+      return unindentedLines.joined(separator: "\n")
+    }
 
     for piece in pieces {
       switch piece {
-      case .blockComment(let text), .docBlockComment(let text):
-        let text = text.trimmingCharacters(in: "\n")
+      case .blockComment(let text):
+        let processedText =
+          text.hasPrefix("/*\n")
+          ? processMultilineBlockComment(text)
+          : processBlockComment(text, prefix: "/*", suffix: "*/")
+        comments.append(processedText)
 
-        foundStartOfCodeBlock = text.hasPrefix("/*")
-        foundEndOfCodeBlock = text.hasSuffix("*/")
+      case .docBlockComment(let text):
+        let processedText =
+          text.hasPrefix("/**\n")
+          ? processMultilineBlockComment(text)
+          : processBlockComment(text, prefix: "/**", suffix: "*/")
+        comments.append(processedText)
 
-        let sanitized =
-          text
-          .split(separator: "\n")
-          .map { $0.trimmingAnyCharacters(in: "/*").trimmingAnyCharacters(in: " ") }
-          .filter { !$0.isEmpty }
-          .joined(separator: " ")
+      case .lineComment(let text):
+        let prefix = allLineCommentsHaveSpace ? "// " : "//"
+        comments.append(String(text.dropFirst(prefix.count)))
 
-        appendPartialCommentIfPossible(sanitized)
-
-      case .lineComment(let text), .docLineComment(let text):
-        if isInCodeBlock {
-          appendPartialCommentIfPossible(text)
-        } else {
-          comments.append(String(text.trimmingPrefix("/ ")))
-        }
+      case .docLineComment(let text):
+        let prefix = allLineCommentsHaveSpace ? "/// " : "///"
+        comments.append(String(text.dropFirst(prefix.count)))
 
       default:
         break
       }
-
-      if foundEndOfCodeBlock, !partialComments.isEmpty {
-        appendSubstringsToLines()
-        partialComments.removeAll()
-      }
     }
-
-    if !partialComments.isEmpty {
-      appendSubstringsToLines()
-    }
-
-    func appendPartialCommentIfPossible(_ text: String) {
-      guard partialComments.isEmpty || !text.isEmpty else { return }
-
-      partialComments.append(text)
-    }
-
-    func appendSubstringsToLines() {
-      comments.append(partialComments.joined(separator: " "))
-    }
-
-    return comments
+    return comments.joined(separator: "\n")
   }
 
   /// The length of all the pieces in this ``Trivia``.

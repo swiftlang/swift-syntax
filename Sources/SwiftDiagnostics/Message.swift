@@ -26,7 +26,7 @@ public struct MessageID: Hashable, Sendable {
   }
 }
 
-public enum DiagnosticSeverity: Sendable {
+public enum DiagnosticSeverity: Sendable, Hashable {
   case error
   case warning
   case note

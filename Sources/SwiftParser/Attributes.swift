@@ -1170,6 +1170,7 @@ extension Parser {
           case `private`
           case `fileprivate`
           case `internal`
+          case `package`
           case `public`
           case `open`
 
@@ -1178,6 +1179,7 @@ extension Parser {
             case .private: return .keyword(.private)
             case .fileprivate: return .keyword(.fileprivate)
             case .internal: return .keyword(.internal)
+            case .package: return .keyword(.package)
             case .public: return .keyword(.public)
             case .open: return .keyword(.open)
             }
@@ -1188,6 +1190,7 @@ extension Parser {
             case TokenSpec(.private): self = .private
             case TokenSpec(.fileprivate): self = .fileprivate
             case TokenSpec(.internal): self = .internal
+            case TokenSpec(.package): self = .package
             case TokenSpec(.public): self = .public
             case TokenSpec(.open): self = .open
             default: return nil

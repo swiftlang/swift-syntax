@@ -15,9 +15,9 @@ import SwiftSyntax
 /// Represents result from a specific scope.
 public enum LookupResult {
   /// Scope and the names that matched lookup.
-  case fromScope(SyntaxProtocol, withNames: [LookupName])
+  case fromScope(Syntax, withNames: [LookupName])
   /// Indicates where to perform member lookup.
-  case lookInMembers(LookInMembersScopeSyntax)
+  case lookInMembers(Syntax)
   /// Indicates to lookup generic parameters of extended type.
   ///
   /// ### Example
@@ -80,7 +80,7 @@ public enum LookupResult {
   static func getResultArray(for scope: ScopeSyntax, withNames names: [LookupName]) -> [LookupResult] {
     guard !names.isEmpty else { return [] }
 
-    return [.fromScope(scope, withNames: names)]
+    return [.fromScope(Syntax(scope), withNames: names)]
   }
 
   /// Debug description of this lookup name.

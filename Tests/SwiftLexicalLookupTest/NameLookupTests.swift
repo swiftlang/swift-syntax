@@ -152,13 +152,13 @@ final class testNameLookup: XCTestCase {
           .fromScope(CodeBlockSyntax.self, expectedNames: ["0️⃣"]),
         ],
         "3️⃣": [
-          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.dollarIdentifier("5️⃣", "$0")])
+          .mightIntroduceDollarIdentifiers
         ],
         "4️⃣": [
-          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.dollarIdentifier("5️⃣", "$123")])
+          .mightIntroduceDollarIdentifiers
         ],
         "6️⃣": [
-          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.dollarIdentifier("5️⃣", "$1")])
+          .mightIntroduceDollarIdentifiers
         ],
       ]
     )

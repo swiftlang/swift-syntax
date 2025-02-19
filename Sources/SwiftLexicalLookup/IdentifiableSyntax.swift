@@ -13,50 +13,50 @@
 import SwiftSyntax
 
 /// Syntax node that can be refered to with an identifier.
-public protocol IdentifiableSyntax: SyntaxProtocol {
+protocol IdentifiableSyntax: SyntaxProtocol {
   var identifier: TokenSyntax { get }
 }
 
 extension IdentifierPatternSyntax: IdentifiableSyntax {}
 
 extension ClosureParameterSyntax: IdentifiableSyntax {
-  public var identifier: TokenSyntax {
+  var identifier: TokenSyntax {
     secondName ?? firstName
   }
 }
 
 extension FunctionParameterSyntax: IdentifiableSyntax {
-  public var identifier: TokenSyntax {
+  var identifier: TokenSyntax {
     secondName ?? firstName
   }
 }
 
 extension ClosureShorthandParameterSyntax: IdentifiableSyntax {
-  public var identifier: TokenSyntax {
+  var identifier: TokenSyntax {
     name
   }
 }
 
 extension ClosureCaptureSyntax: IdentifiableSyntax {
-  public var identifier: TokenSyntax {
+  var identifier: TokenSyntax {
     name
   }
 }
 
 extension AccessorParametersSyntax: IdentifiableSyntax {
-  public var identifier: TokenSyntax {
+  var identifier: TokenSyntax {
     name
   }
 }
 
 extension GenericParameterSyntax: IdentifiableSyntax {
-  public var identifier: TokenSyntax {
+  var identifier: TokenSyntax {
     name
   }
 }
 
 extension PrimaryAssociatedTypeSyntax: IdentifiableSyntax {
-  public var identifier: TokenSyntax {
+  var identifier: TokenSyntax {
     name
   }
 }

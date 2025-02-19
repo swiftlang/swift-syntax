@@ -15,13 +15,16 @@ import SwiftSyntax
 /// An entity that is implicitly declared based on the syntactic structure of the program.
 public enum ImplicitDecl {
   /// `self` keyword representing object instance.
-  /// Could be associated with type declaration, extension,
-  /// or closure captures. Introduced at function edge.
-  case `self`(DeclSyntaxProtocol)
+  /// Introduced at member boundary.
+  /// Associated syntax node could be: `FunctionDeclSyntax`,
+  /// `AccessorDeclSyntax`, `SubscriptDeclSyntax`,
+  /// `DeinitializerDeclSyntax`, or `InitializerDeclSyntax`.
+  case `self`(DeclSyntax)
   /// `Self` keyword representing object type.
-  /// Could be associated with type declaration or extension.
-  case `Self`(DeclSyntaxProtocol)
-  /// `error` value caught by a `catch`
+  /// Associated syntax node could be: `ExtensionDeclSyntax`,
+  /// or `ProtocolDeclSyntax`.
+  case `Self`(DeclSyntax)
+  /// `error` available by default inside `catch`
   /// block that does not specify a catch pattern.
   case error(CatchClauseSyntax)
   /// `newValue` available by default inside `set` and `willSet`.
@@ -131,14 +134,12 @@ public enum ImplicitDecl {
 public enum LookupName {
   /// Identifier associated with the name.
   /// Could be an identifier of a variable, function or closure parameter and more.
-  case identifier(IdentifiableSyntax, accessibleAfter: AbsolutePosition?)
+  case identifier(Syntax, accessibleAfter: AbsolutePosition?)
   /// Declaration associated with the name.
   /// Could be class, struct, actor, protocol, function and more.
-  case declaration(NamedDeclSyntax)
+  case declaration(Syntax)
   /// Name introduced implicitly by certain syntax nodes.
   case implicit(ImplicitDecl)
-  /// Dollar identifier introduced by a closure without parameters.
-  case dollarIdentifier(ClosureExprSyntax, strRepresentation: String)
   /// Represents equivalent names grouped together.
   /// - Important: The array should be non-empty.
   ///
@@ -162,24 +163,20 @@ public enum LookupName {
       return syntax
     case .implicit(let implicitName):
       return implicitName.syntax
-    case .dollarIdentifier(let closureExpr, _):
-      return closureExpr
     case .equivalentNames(let names):
       return names.first!.syntax
     }
   }
 
   /// Identifier used for name comparison.
-  public var identifier: Identifier? {
+  public var identifier: Identifier {
     switch self {
     case .identifier(let syntax, _):
-      return Identifier(syntax.identifier)
+      return Identifier((syntax.asProtocol(SyntaxProtocol.self) as! IdentifiableSyntax).identifier)!
     case .declaration(let syntax):
-      return Identifier(syntax.name)
+      return Identifier((syntax.asProtocol(SyntaxProtocol.self) as! NamedDeclSyntax).name)!
     case .implicit(let kind):
       return kind.identifier
-    case .dollarIdentifier(_, strRepresentation: _):
-      return nil
     case .equivalentNames(let names):
       return names.first!.identifier
     }
@@ -195,13 +192,12 @@ public enum LookupName {
   public var position: AbsolutePosition {
     switch self {
     case .identifier(let syntax, _):
-      return syntax.identifier.positionAfterSkippingLeadingTrivia
+      return (syntax.asProtocol(SyntaxProtocol.self) as! IdentifiableSyntax).identifier
+        .positionAfterSkippingLeadingTrivia
     case .declaration(let syntax):
-      return syntax.name.positionAfterSkippingLeadingTrivia
+      return (syntax.asProtocol(SyntaxProtocol.self) as! NamedDeclSyntax).name.positionAfterSkippingLeadingTrivia
     case .implicit(let implicitName):
       return implicitName.position
-    case .dollarIdentifier(let closureExpr, _):
-      return closureExpr.positionAfterSkippingLeadingTrivia
     case .equivalentNames(let names):
       return names.first!.position
     }
@@ -226,13 +222,7 @@ public enum LookupName {
 
   func refersTo(_ otherIdentifier: Identifier?) -> Bool {
     guard let otherIdentifier else { return true }
-
-    switch self {
-    case .dollarIdentifier(_, let strRepresentation):
-      return strRepresentation == otherIdentifier.name
-    default:
-      return identifier == otherIdentifier
-    }
+    return identifier == otherIdentifier
   }
 
   /// Extracts names introduced by the given `syntax` structure.
@@ -305,7 +295,7 @@ public enum LookupName {
       return []
     }
 
-    return [.identifier(identifiable, accessibleAfter: accessibleAfter)]
+    return [.identifier(Syntax(identifiable), accessibleAfter: accessibleAfter)]
   }
 
   /// Extracts name introduced by `NamedDeclSyntax` node.
@@ -313,14 +303,14 @@ public enum LookupName {
     namedDecl: NamedDeclSyntax,
     accessibleAfter: AbsolutePosition? = nil
   ) -> [LookupName] {
-    [.declaration(namedDecl)]
+    [.declaration(Syntax(namedDecl))]
   }
 
   /// Debug description of this lookup name.
   public var debugDescription: String {
     let sourceLocationConverter = SourceLocationConverter(fileName: "", tree: syntax.root)
     let location = sourceLocationConverter.location(for: position)
-    let strName = (identifier?.name ?? "NO-NAME") + " at: \(location.line):\(location.column)"
+    let strName = identifier.name + " at: \(location.line):\(location.column)"
 
     switch self {
     case .identifier:
@@ -336,8 +326,6 @@ public enum LookupName {
       return "declaration: \(strName)"
     case .implicit:
       return "implicit: \(strName)"
-    case .dollarIdentifier(_, strRepresentation: let str):
-      return "dollarIdentifier: \(str)"
     case .equivalentNames(let names):
       return "Composite name: [ \(names.map(\.debugDescription).joined(separator: ", ")) ]"
     }

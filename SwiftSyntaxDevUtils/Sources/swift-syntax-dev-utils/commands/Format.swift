@@ -16,7 +16,7 @@ import Foundation
 /// Directories that should not be formatted.
 fileprivate let directoriesToExclude = [
   "lit_tests",
-  "generated",
+  "generatedSources",
   "build",
   "Inputs",
   ".build",

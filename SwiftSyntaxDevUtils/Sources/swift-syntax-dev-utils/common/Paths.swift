@@ -27,6 +27,11 @@ enum Paths {
       .appendingPathComponent("Sources")
   }
 
+  static var generatedSourcesDir: URL {
+    packageDir
+      .appendingPathComponent("generatedSources")
+  }
+
   static var examplesDir: URL {
     packageDir
       .appendingPathComponent("Examples")

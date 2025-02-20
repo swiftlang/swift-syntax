@@ -106,6 +106,14 @@ open class SyntaxRewriter {
     return ABIAttributeArgumentsSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
+  /// Visit a ``AccessorBlockFileSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  @_spi(Compiler)
+  open func visit(_ node: AccessorBlockFileSyntax) -> AccessorBlockFileSyntax {
+    return AccessorBlockFileSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
   /// Visit a ``AccessorBlockSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -204,6 +212,14 @@ open class SyntaxRewriter {
     return DeclSyntax(AssociatedTypeDeclSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
+  /// Visit a ``AttributeClauseFileSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  @_spi(Compiler)
+  open func visit(_ node: AttributeClauseFileSyntax) -> AttributeClauseFileSyntax {
+    return AttributeClauseFileSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
   /// Visit a ``AttributeListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -253,12 +269,12 @@ open class SyntaxRewriter {
     return AvailabilityLabeledArgumentSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
-  /// Visit a ``AvailabilityMacroDefinitionSyntax``.
+  /// Visit a ``AvailabilityMacroDefinitionFileSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
   @_spi(Compiler)
-  open func visit(_ node: AvailabilityMacroDefinitionSyntax) -> AvailabilityMacroDefinitionSyntax {
-    return AvailabilityMacroDefinitionSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  open func visit(_ node: AvailabilityMacroDefinitionFileSyntax) -> AvailabilityMacroDefinitionFileSyntax {
+    return AvailabilityMacroDefinitionFileSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
   /// Visit a ``AwaitExprSyntax``.
@@ -434,6 +450,14 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: ClosureSignatureSyntax) -> ClosureSignatureSyntax {
     return ClosureSignatureSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
+  /// Visit a ``CodeBlockFileSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  @_spi(Compiler)
+  open func visit(_ node: CodeBlockFileSyntax) -> CodeBlockFileSyntax {
+    return CodeBlockFileSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
   /// Visit a ``CodeBlockItemListSyntax``.
@@ -1292,6 +1316,14 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: MemberAccessExprSyntax) -> ExprSyntax {
     return ExprSyntax(MemberAccessExprSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
+  }
+
+  /// Visit a ``MemberBlockItemListFileSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  @_spi(Compiler)
+  open func visit(_ node: MemberBlockItemListFileSyntax) -> MemberBlockItemListFileSyntax {
+    return MemberBlockItemListFileSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
   /// Visit a ``MemberBlockItemListSyntax``.
@@ -2154,6 +2186,11 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitAccessorBlockFileSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(AccessorBlockFileSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitAccessorBlockSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AccessorBlockSyntax(unsafeCasting: node)))
   }
@@ -2224,6 +2261,11 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitAttributeClauseFileSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(AttributeClauseFileSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitAttributeListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AttributeListSyntax(unsafeCasting: node)))
   }
@@ -2259,8 +2301,8 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
-  private func visitAvailabilityMacroDefinitionSyntaxImpl(_ node: Syntax) -> Syntax {
-    Syntax(visit(AvailabilityMacroDefinitionSyntax(unsafeCasting: node)))
+  private func visitAvailabilityMacroDefinitionFileSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(AvailabilityMacroDefinitionFileSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
@@ -2386,6 +2428,11 @@ open class SyntaxRewriter {
   @inline(never)
   private func visitClosureSignatureSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ClosureSignatureSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
+  private func visitCodeBlockFileSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(CodeBlockFileSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
@@ -2999,6 +3046,11 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitMemberBlockItemListFileSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(MemberBlockItemListFileSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitMemberBlockItemListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MemberBlockItemListSyntax(unsafeCasting: node)))
   }
@@ -3608,6 +3660,8 @@ open class SyntaxRewriter {
       return self.visitTokenSyntaxImpl(_:)
     case .abiAttributeArguments:
       return self.visitABIAttributeArgumentsSyntaxImpl(_:)
+    case .accessorBlockFile:
+      return self.visitAccessorBlockFileSyntaxImpl(_:)
     case .accessorBlock:
       return self.visitAccessorBlockSyntaxImpl(_:)
     case .accessorDeclList:
@@ -3636,6 +3690,8 @@ open class SyntaxRewriter {
       return self.visitAssignmentExprSyntaxImpl(_:)
     case .associatedTypeDecl:
       return self.visitAssociatedTypeDeclSyntaxImpl(_:)
+    case .attributeClauseFile:
+      return self.visitAttributeClauseFileSyntaxImpl(_:)
     case .attributeList:
       return self.visitAttributeListSyntaxImpl(_:)
     case .attribute:
@@ -3650,8 +3706,8 @@ open class SyntaxRewriter {
       return self.visitAvailabilityConditionSyntaxImpl(_:)
     case .availabilityLabeledArgument:
       return self.visitAvailabilityLabeledArgumentSyntaxImpl(_:)
-    case .availabilityMacroDefinition:
-      return self.visitAvailabilityMacroDefinitionSyntaxImpl(_:)
+    case .availabilityMacroDefinitionFile:
+      return self.visitAvailabilityMacroDefinitionFileSyntaxImpl(_:)
     case .awaitExpr:
       return self.visitAwaitExprSyntaxImpl(_:)
     case .backDeployedAttributeArguments:
@@ -3702,6 +3758,8 @@ open class SyntaxRewriter {
       return self.visitClosureShorthandParameterSyntaxImpl(_:)
     case .closureSignature:
       return self.visitClosureSignatureSyntaxImpl(_:)
+    case .codeBlockFile:
+      return self.visitCodeBlockFileSyntaxImpl(_:)
     case .codeBlockItemList:
       return self.visitCodeBlockItemListSyntaxImpl(_:)
     case .codeBlockItem:
@@ -3946,6 +4004,8 @@ open class SyntaxRewriter {
       return self.visitMatchingPatternConditionSyntaxImpl(_:)
     case .memberAccessExpr:
       return self.visitMemberAccessExprSyntaxImpl(_:)
+    case .memberBlockItemListFile:
+      return self.visitMemberBlockItemListFileSyntaxImpl(_:)
     case .memberBlockItemList:
       return self.visitMemberBlockItemListSyntaxImpl(_:)
     case .memberBlockItem:
@@ -4190,6 +4250,8 @@ open class SyntaxRewriter {
       return visitTokenSyntaxImpl(node)
     case .abiAttributeArguments:
       return visitABIAttributeArgumentsSyntaxImpl(node)
+    case .accessorBlockFile:
+      return visitAccessorBlockFileSyntaxImpl(node)
     case .accessorBlock:
       return visitAccessorBlockSyntaxImpl(node)
     case .accessorDeclList:
@@ -4218,6 +4280,8 @@ open class SyntaxRewriter {
       return visitAssignmentExprSyntaxImpl(node)
     case .associatedTypeDecl:
       return visitAssociatedTypeDeclSyntaxImpl(node)
+    case .attributeClauseFile:
+      return visitAttributeClauseFileSyntaxImpl(node)
     case .attributeList:
       return visitAttributeListSyntaxImpl(node)
     case .attribute:
@@ -4232,8 +4296,8 @@ open class SyntaxRewriter {
       return visitAvailabilityConditionSyntaxImpl(node)
     case .availabilityLabeledArgument:
       return visitAvailabilityLabeledArgumentSyntaxImpl(node)
-    case .availabilityMacroDefinition:
-      return visitAvailabilityMacroDefinitionSyntaxImpl(node)
+    case .availabilityMacroDefinitionFile:
+      return visitAvailabilityMacroDefinitionFileSyntaxImpl(node)
     case .awaitExpr:
       return visitAwaitExprSyntaxImpl(node)
     case .backDeployedAttributeArguments:
@@ -4284,6 +4348,8 @@ open class SyntaxRewriter {
       return visitClosureShorthandParameterSyntaxImpl(node)
     case .closureSignature:
       return visitClosureSignatureSyntaxImpl(node)
+    case .codeBlockFile:
+      return visitCodeBlockFileSyntaxImpl(node)
     case .codeBlockItemList:
       return visitCodeBlockItemListSyntaxImpl(node)
     case .codeBlockItem:
@@ -4528,6 +4594,8 @@ open class SyntaxRewriter {
       return visitMatchingPatternConditionSyntaxImpl(node)
     case .memberAccessExpr:
       return visitMemberAccessExprSyntaxImpl(node)
+    case .memberBlockItemListFile:
+      return visitMemberBlockItemListFileSyntaxImpl(node)
     case .memberBlockItemList:
       return visitMemberBlockItemListSyntaxImpl(node)
     case .memberBlockItem:

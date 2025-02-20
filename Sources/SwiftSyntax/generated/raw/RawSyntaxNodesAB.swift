@@ -134,6 +134,101 @@ public struct RawABIAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   }
 }
 
+@_spi(Compiler)
+@_spi(RawSyntax)
+public struct RawAccessorBlockFileSyntax: RawSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .accessorBlockFile
+  }
+
+  public var raw: RawSyntax
+
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax? = nil,
+    leftBrace: RawTokenSyntax?,
+    _ unexpectedBetweenLeftBraceAndAccessors: RawUnexpectedNodesSyntax? = nil,
+    accessors: RawAccessorDeclListSyntax,
+    _ unexpectedBetweenAccessorsAndRightBrace: RawUnexpectedNodesSyntax? = nil,
+    rightBrace: RawTokenSyntax?,
+    _ unexpectedBetweenRightBraceAndEndOfFileToken: RawUnexpectedNodesSyntax? = nil,
+    endOfFileToken: RawTokenSyntax,
+    _ unexpectedAfterEndOfFileToken: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared RawSyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .accessorBlockFile, uninitializedCount: 9, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeLeftBrace?.raw
+      layout[1] = leftBrace?.raw
+      layout[2] = unexpectedBetweenLeftBraceAndAccessors?.raw
+      layout[3] = accessors.raw
+      layout[4] = unexpectedBetweenAccessorsAndRightBrace?.raw
+      layout[5] = rightBrace?.raw
+      layout[6] = unexpectedBetweenRightBraceAndEndOfFileToken?.raw
+      layout[7] = endOfFileToken.raw
+      layout[8] = unexpectedAfterEndOfFileToken?.raw
+    }
+    self.init(unchecked: raw)
+  }
+
+  public var unexpectedBeforeLeftBrace: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var leftBrace: RawTokenSyntax? {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))
+  }
+
+  public var unexpectedBetweenLeftBraceAndAccessors: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var accessors: RawAccessorDeclListSyntax {
+    layoutView.children[3].map(RawAccessorDeclListSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenAccessorsAndRightBrace: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var rightBrace: RawTokenSyntax? {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))
+  }
+
+  public var unexpectedBetweenRightBraceAndEndOfFileToken: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var endOfFileToken: RawTokenSyntax {
+    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
+  }
+
+  public var unexpectedAfterEndOfFileToken: RawUnexpectedNodesSyntax? {
+    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
 @_spi(RawSyntax)
 public struct RawAccessorBlockSyntax: RawSyntaxNodeProtocol {
   public enum Accessors: RawSyntaxNodeProtocol {
@@ -1342,6 +1437,89 @@ public struct RawAssociatedTypeDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 }
 
+@_spi(Compiler)
+@_spi(RawSyntax)
+public struct RawAttributeClauseFileSyntax: RawSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .attributeClauseFile
+  }
+
+  public var raw: RawSyntax
+
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
+    attributes: RawAttributeListSyntax,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
+    modifiers: RawDeclModifierListSyntax,
+    _ unexpectedBetweenModifiersAndEndOfFileToken: RawUnexpectedNodesSyntax? = nil,
+    endOfFileToken: RawTokenSyntax,
+    _ unexpectedAfterEndOfFileToken: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared RawSyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .attributeClauseFile, uninitializedCount: 7, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeAttributes?.raw
+      layout[1] = attributes.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
+      layout[3] = modifiers.raw
+      layout[4] = unexpectedBetweenModifiersAndEndOfFileToken?.raw
+      layout[5] = endOfFileToken.raw
+      layout[6] = unexpectedAfterEndOfFileToken?.raw
+    }
+    self.init(unchecked: raw)
+  }
+
+  public var unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var attributes: RawAttributeListSyntax {
+    layoutView.children[1].map(RawAttributeListSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenModifiersAndEndOfFileToken: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var endOfFileToken: RawTokenSyntax {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+  }
+
+  public var unexpectedAfterEndOfFileToken: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
 @_spi(RawSyntax)
 public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
   public enum Element: RawSyntaxNodeProtocol {
@@ -2098,14 +2276,14 @@ public struct RawAvailabilityLabeledArgumentSyntax: RawSyntaxNodeProtocol {
 
 @_spi(Compiler)
 @_spi(RawSyntax)
-public struct RawAvailabilityMacroDefinitionSyntax: RawSyntaxNodeProtocol {
+public struct RawAvailabilityMacroDefinitionFileSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {
     return raw.layoutView!
   }
 
   public static func isKindOf(_ raw: RawSyntax) -> Bool {
-    return raw.kind == .availabilityMacroDefinition
+    return raw.kind == .availabilityMacroDefinitionFile
   }
 
   public var raw: RawSyntax
@@ -2133,11 +2311,13 @@ public struct RawAvailabilityMacroDefinitionSyntax: RawSyntaxNodeProtocol {
     colon: RawTokenSyntax,
     _ unexpectedBetweenColonAndSpecs: RawUnexpectedNodesSyntax? = nil,
     specs: RawAvailabilityArgumentListSyntax,
-    _ unexpectedAfterSpecs: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenSpecsAndEndOfFileToken: RawUnexpectedNodesSyntax? = nil,
+    endOfFileToken: RawTokenSyntax,
+    _ unexpectedAfterEndOfFileToken: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .availabilityMacroDefinition, uninitializedCount: 7, arena: arena) { layout in
+      kind: .availabilityMacroDefinitionFile, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforePlatformVersion?.raw
       layout[1] = platformVersion.raw
@@ -2145,7 +2325,9 @@ public struct RawAvailabilityMacroDefinitionSyntax: RawSyntaxNodeProtocol {
       layout[3] = colon.raw
       layout[4] = unexpectedBetweenColonAndSpecs?.raw
       layout[5] = specs.raw
-      layout[6] = unexpectedAfterSpecs?.raw
+      layout[6] = unexpectedBetweenSpecsAndEndOfFileToken?.raw
+      layout[7] = endOfFileToken.raw
+      layout[8] = unexpectedAfterEndOfFileToken?.raw
     }
     self.init(unchecked: raw)
   }
@@ -2174,8 +2356,16 @@ public struct RawAvailabilityMacroDefinitionSyntax: RawSyntaxNodeProtocol {
     layoutView.children[5].map(RawAvailabilityArgumentListSyntax.init(raw:))!
   }
 
-  public var unexpectedAfterSpecs: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenSpecsAndEndOfFileToken: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var endOfFileToken: RawTokenSyntax {
+    layoutView.children[7].map(RawTokenSyntax.init(raw:))!
+  }
+
+  public var unexpectedAfterEndOfFileToken: RawUnexpectedNodesSyntax? {
+    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

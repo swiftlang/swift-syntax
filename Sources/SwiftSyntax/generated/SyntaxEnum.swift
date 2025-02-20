@@ -17,6 +17,8 @@ public enum SyntaxEnum: Sendable {
   case token(TokenSyntax)
   @_spi(ExperimentalLanguageFeatures)
   case abiAttributeArguments(ABIAttributeArgumentsSyntax)
+  @_spi(Compiler)
+  case accessorBlockFile(AccessorBlockFileSyntax)
   case accessorBlock(AccessorBlockSyntax)
   case accessorDeclList(AccessorDeclListSyntax)
   case accessorDecl(AccessorDeclSyntax)
@@ -31,6 +33,8 @@ public enum SyntaxEnum: Sendable {
   case asExpr(AsExprSyntax)
   case assignmentExpr(AssignmentExprSyntax)
   case associatedTypeDecl(AssociatedTypeDeclSyntax)
+  @_spi(Compiler)
+  case attributeClauseFile(AttributeClauseFileSyntax)
   case attributeList(AttributeListSyntax)
   case attribute(AttributeSyntax)
   case attributedType(AttributedTypeSyntax)
@@ -39,7 +43,7 @@ public enum SyntaxEnum: Sendable {
   case availabilityCondition(AvailabilityConditionSyntax)
   case availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax)
   @_spi(Compiler)
-  case availabilityMacroDefinition(AvailabilityMacroDefinitionSyntax)
+  case availabilityMacroDefinitionFile(AvailabilityMacroDefinitionFileSyntax)
   case awaitExpr(AwaitExprSyntax)
   case backDeployedAttributeArguments(BackDeployedAttributeArgumentsSyntax)
   case binaryOperatorExpr(BinaryOperatorExprSyntax)
@@ -65,6 +69,8 @@ public enum SyntaxEnum: Sendable {
   case closureShorthandParameterList(ClosureShorthandParameterListSyntax)
   case closureShorthandParameter(ClosureShorthandParameterSyntax)
   case closureSignature(ClosureSignatureSyntax)
+  @_spi(Compiler)
+  case codeBlockFile(CodeBlockFileSyntax)
   case codeBlockItemList(CodeBlockItemListSyntax)
   case codeBlockItem(CodeBlockItemSyntax)
   case codeBlock(CodeBlockSyntax)
@@ -191,6 +197,8 @@ public enum SyntaxEnum: Sendable {
   case macroExpansionExpr(MacroExpansionExprSyntax)
   case matchingPatternCondition(MatchingPatternConditionSyntax)
   case memberAccessExpr(MemberAccessExprSyntax)
+  @_spi(Compiler)
+  case memberBlockItemListFile(MemberBlockItemListFileSyntax)
   case memberBlockItemList(MemberBlockItemListSyntax)
   case memberBlockItem(MemberBlockItemSyntax)
   case memberBlock(MemberBlockSyntax)
@@ -319,6 +327,8 @@ extension Syntax {
       return .token(TokenSyntax(self)!)
     case .abiAttributeArguments:
       return .abiAttributeArguments(ABIAttributeArgumentsSyntax(self)!)
+    case .accessorBlockFile:
+      return .accessorBlockFile(AccessorBlockFileSyntax(self)!)
     case .accessorBlock:
       return .accessorBlock(AccessorBlockSyntax(self)!)
     case .accessorDeclList:
@@ -347,6 +357,8 @@ extension Syntax {
       return .assignmentExpr(AssignmentExprSyntax(self)!)
     case .associatedTypeDecl:
       return .associatedTypeDecl(AssociatedTypeDeclSyntax(self)!)
+    case .attributeClauseFile:
+      return .attributeClauseFile(AttributeClauseFileSyntax(self)!)
     case .attributeList:
       return .attributeList(AttributeListSyntax(self)!)
     case .attribute:
@@ -361,8 +373,8 @@ extension Syntax {
       return .availabilityCondition(AvailabilityConditionSyntax(self)!)
     case .availabilityLabeledArgument:
       return .availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax(self)!)
-    case .availabilityMacroDefinition:
-      return .availabilityMacroDefinition(AvailabilityMacroDefinitionSyntax(self)!)
+    case .availabilityMacroDefinitionFile:
+      return .availabilityMacroDefinitionFile(AvailabilityMacroDefinitionFileSyntax(self)!)
     case .awaitExpr:
       return .awaitExpr(AwaitExprSyntax(self)!)
     case .backDeployedAttributeArguments:
@@ -413,6 +425,8 @@ extension Syntax {
       return .closureShorthandParameter(ClosureShorthandParameterSyntax(self)!)
     case .closureSignature:
       return .closureSignature(ClosureSignatureSyntax(self)!)
+    case .codeBlockFile:
+      return .codeBlockFile(CodeBlockFileSyntax(self)!)
     case .codeBlockItemList:
       return .codeBlockItemList(CodeBlockItemListSyntax(self)!)
     case .codeBlockItem:
@@ -657,6 +671,8 @@ extension Syntax {
       return .matchingPatternCondition(MatchingPatternConditionSyntax(self)!)
     case .memberAccessExpr:
       return .memberAccessExpr(MemberAccessExprSyntax(self)!)
+    case .memberBlockItemListFile:
+      return .memberBlockItemListFile(MemberBlockItemListFileSyntax(self)!)
     case .memberBlockItemList:
       return .memberBlockItemList(MemberBlockItemListSyntax(self)!)
     case .memberBlockItem:

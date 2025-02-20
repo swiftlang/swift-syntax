@@ -25,6 +25,8 @@ extension SyntaxKind {
       return "token"
     case .abiAttributeArguments:
       return "ABI-providing declaration"
+    case .accessorBlockFile:
+      return "accessors"
     case .accessorDecl:
       return "accessor"
     case .accessorEffectSpecifiers:
@@ -41,6 +43,8 @@ extension SyntaxKind {
       return "'as'"
     case .associatedTypeDecl:
       return "associatedtype declaration"
+    case .attributeClauseFile:
+      return "attribute list"
     case .attributeList:
       return "attributes"
     case .attribute:
@@ -55,7 +59,7 @@ extension SyntaxKind {
       return "availability condition"
     case .availabilityLabeledArgument:
       return "availability argument"
-    case .availabilityMacroDefinition:
+    case .availabilityMacroDefinitionFile:
       return "availability macro definition"
     case .awaitExpr:
       return "'await' expression"
@@ -95,6 +99,8 @@ extension SyntaxKind {
       return "closure parameter"
     case .closureSignature:
       return "closure signature"
+    case .codeBlockFile:
+      return "code block"
     case .codeBlock:
       return "code block"
     case .compositionType:
@@ -267,6 +273,8 @@ extension SyntaxKind {
       return "pattern matching"
     case .memberAccessExpr:
       return "member access"
+    case .memberBlockItemListFile:
+      return "member list"
     case .memberBlock:
       return "member block"
     case .memberType:

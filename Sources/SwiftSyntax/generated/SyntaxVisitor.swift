@@ -48,6 +48,20 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ABIAttributeArgumentsSyntax) {
   }
 
+  /// Visiting ``AccessorBlockFileSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(Compiler)
+  open func visit(_ node: AccessorBlockFileSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``AccessorBlockFileSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(Compiler)
+  open func visitPost(_ node: AccessorBlockFileSyntax) {
+  }
+
   /// Visiting ``AccessorBlockSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -216,6 +230,20 @@ open class SyntaxVisitor {
   open func visitPost(_ node: AssociatedTypeDeclSyntax) {
   }
 
+  /// Visiting ``AttributeClauseFileSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(Compiler)
+  open func visit(_ node: AttributeClauseFileSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``AttributeClauseFileSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(Compiler)
+  open func visitPost(_ node: AttributeClauseFileSyntax) {
+  }
+
   /// Visiting ``AttributeListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -300,18 +328,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: AvailabilityLabeledArgumentSyntax) {
   }
 
-  /// Visiting ``AvailabilityMacroDefinitionSyntax`` specifically.
+  /// Visiting ``AvailabilityMacroDefinitionFileSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   @_spi(Compiler)
-  open func visit(_ node: AvailabilityMacroDefinitionSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: AvailabilityMacroDefinitionFileSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting ``AvailabilityMacroDefinitionSyntax`` and its descendants.
+  /// The function called after visiting ``AvailabilityMacroDefinitionFileSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   @_spi(Compiler)
-  open func visitPost(_ node: AvailabilityMacroDefinitionSyntax) {
+  open func visitPost(_ node: AvailabilityMacroDefinitionFileSyntax) {
   }
 
   /// Visiting ``AwaitExprSyntax`` specifically.
@@ -612,6 +640,20 @@ open class SyntaxVisitor {
   /// The function called after visiting ``ClosureSignatureSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: ClosureSignatureSyntax) {
+  }
+
+  /// Visiting ``CodeBlockFileSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(Compiler)
+  open func visit(_ node: CodeBlockFileSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``CodeBlockFileSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(Compiler)
+  open func visitPost(_ node: CodeBlockFileSyntax) {
   }
 
   /// Visiting ``CodeBlockItemListSyntax`` specifically.
@@ -2086,6 +2128,20 @@ open class SyntaxVisitor {
   open func visitPost(_ node: MemberAccessExprSyntax) {
   }
 
+  /// Visiting ``MemberBlockItemListFileSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(Compiler)
+  open func visit(_ node: MemberBlockItemListFileSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``MemberBlockItemListFileSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(Compiler)
+  open func visitPost(_ node: MemberBlockItemListFileSyntax) {
+  }
+
   /// Visiting ``MemberBlockItemListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3510,6 +3566,14 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitAccessorBlockFileSyntaxImpl(_ node: Syntax) {
+    if visit(AccessorBlockFileSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(AccessorBlockFileSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitAccessorBlockSyntaxImpl(_ node: Syntax) {
     if visit(AccessorBlockSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -3622,6 +3686,14 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitAttributeClauseFileSyntaxImpl(_ node: Syntax) {
+    if visit(AttributeClauseFileSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(AttributeClauseFileSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitAttributeListSyntaxImpl(_ node: Syntax) {
     if visit(AttributeListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -3678,11 +3750,11 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitAvailabilityMacroDefinitionSyntaxImpl(_ node: Syntax) {
-    if visit(AvailabilityMacroDefinitionSyntax(unsafeCasting: node)) == .visitChildren {
+  private func visitAvailabilityMacroDefinitionFileSyntaxImpl(_ node: Syntax) {
+    if visit(AvailabilityMacroDefinitionFileSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
     }
-    visitPost(AvailabilityMacroDefinitionSyntax(unsafeCasting: node))
+    visitPost(AvailabilityMacroDefinitionFileSyntax(unsafeCasting: node))
   }
 
   @inline(never)
@@ -3883,6 +3955,14 @@ open class SyntaxVisitor {
       visitChildren(node)
     }
     visitPost(ClosureSignatureSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitCodeBlockFileSyntaxImpl(_ node: Syntax) {
+    if visit(CodeBlockFileSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(CodeBlockFileSyntax(unsafeCasting: node))
   }
 
   @inline(never)
@@ -4862,6 +4942,14 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitMemberBlockItemListFileSyntaxImpl(_ node: Syntax) {
+    if visit(MemberBlockItemListFileSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(MemberBlockItemListFileSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitMemberBlockItemListSyntaxImpl(_ node: Syntax) {
     if visit(MemberBlockItemListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -5819,6 +5907,8 @@ open class SyntaxVisitor {
       return self.visitTokenSyntaxImpl(_:)
     case .abiAttributeArguments:
       return self.visitABIAttributeArgumentsSyntaxImpl(_:)
+    case .accessorBlockFile:
+      return self.visitAccessorBlockFileSyntaxImpl(_:)
     case .accessorBlock:
       return self.visitAccessorBlockSyntaxImpl(_:)
     case .accessorDeclList:
@@ -5847,6 +5937,8 @@ open class SyntaxVisitor {
       return self.visitAssignmentExprSyntaxImpl(_:)
     case .associatedTypeDecl:
       return self.visitAssociatedTypeDeclSyntaxImpl(_:)
+    case .attributeClauseFile:
+      return self.visitAttributeClauseFileSyntaxImpl(_:)
     case .attributeList:
       return self.visitAttributeListSyntaxImpl(_:)
     case .attribute:
@@ -5861,8 +5953,8 @@ open class SyntaxVisitor {
       return self.visitAvailabilityConditionSyntaxImpl(_:)
     case .availabilityLabeledArgument:
       return self.visitAvailabilityLabeledArgumentSyntaxImpl(_:)
-    case .availabilityMacroDefinition:
-      return self.visitAvailabilityMacroDefinitionSyntaxImpl(_:)
+    case .availabilityMacroDefinitionFile:
+      return self.visitAvailabilityMacroDefinitionFileSyntaxImpl(_:)
     case .awaitExpr:
       return self.visitAwaitExprSyntaxImpl(_:)
     case .backDeployedAttributeArguments:
@@ -5913,6 +6005,8 @@ open class SyntaxVisitor {
       return self.visitClosureShorthandParameterSyntaxImpl(_:)
     case .closureSignature:
       return self.visitClosureSignatureSyntaxImpl(_:)
+    case .codeBlockFile:
+      return self.visitCodeBlockFileSyntaxImpl(_:)
     case .codeBlockItemList:
       return self.visitCodeBlockItemListSyntaxImpl(_:)
     case .codeBlockItem:
@@ -6157,6 +6251,8 @@ open class SyntaxVisitor {
       return self.visitMatchingPatternConditionSyntaxImpl(_:)
     case .memberAccessExpr:
       return self.visitMemberAccessExprSyntaxImpl(_:)
+    case .memberBlockItemListFile:
+      return self.visitMemberBlockItemListFileSyntaxImpl(_:)
     case .memberBlockItemList:
       return self.visitMemberBlockItemListSyntaxImpl(_:)
     case .memberBlockItem:
@@ -6401,6 +6497,8 @@ open class SyntaxVisitor {
       self.visitTokenSyntaxImpl(node)
     case .abiAttributeArguments:
       self.visitABIAttributeArgumentsSyntaxImpl(node)
+    case .accessorBlockFile:
+      self.visitAccessorBlockFileSyntaxImpl(node)
     case .accessorBlock:
       self.visitAccessorBlockSyntaxImpl(node)
     case .accessorDeclList:
@@ -6429,6 +6527,8 @@ open class SyntaxVisitor {
       self.visitAssignmentExprSyntaxImpl(node)
     case .associatedTypeDecl:
       self.visitAssociatedTypeDeclSyntaxImpl(node)
+    case .attributeClauseFile:
+      self.visitAttributeClauseFileSyntaxImpl(node)
     case .attributeList:
       self.visitAttributeListSyntaxImpl(node)
     case .attribute:
@@ -6443,8 +6543,8 @@ open class SyntaxVisitor {
       self.visitAvailabilityConditionSyntaxImpl(node)
     case .availabilityLabeledArgument:
       self.visitAvailabilityLabeledArgumentSyntaxImpl(node)
-    case .availabilityMacroDefinition:
-      self.visitAvailabilityMacroDefinitionSyntaxImpl(node)
+    case .availabilityMacroDefinitionFile:
+      self.visitAvailabilityMacroDefinitionFileSyntaxImpl(node)
     case .awaitExpr:
       self.visitAwaitExprSyntaxImpl(node)
     case .backDeployedAttributeArguments:
@@ -6495,6 +6595,8 @@ open class SyntaxVisitor {
       self.visitClosureShorthandParameterSyntaxImpl(node)
     case .closureSignature:
       self.visitClosureSignatureSyntaxImpl(node)
+    case .codeBlockFile:
+      self.visitCodeBlockFileSyntaxImpl(node)
     case .codeBlockItemList:
       self.visitCodeBlockItemListSyntaxImpl(node)
     case .codeBlockItem:
@@ -6739,6 +6841,8 @@ open class SyntaxVisitor {
       self.visitMatchingPatternConditionSyntaxImpl(node)
     case .memberAccessExpr:
       self.visitMemberAccessExprSyntaxImpl(node)
+    case .memberBlockItemListFile:
+      self.visitMemberBlockItemListFileSyntaxImpl(node)
     case .memberBlockItemList:
       self.visitMemberBlockItemListSyntaxImpl(node)
     case .memberBlockItem:

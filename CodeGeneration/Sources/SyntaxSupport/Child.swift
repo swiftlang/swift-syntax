@@ -45,7 +45,7 @@ public enum ChildKind {
   /// The child is a collection of `kind`.
   case collection(
     kind: SyntaxNodeKind,
-    collectionElementName: String,
+    collectionElementName: String? = nil,
     defaultsToEmpty: Bool = false,
     deprecatedCollectionElementName: String? = nil
   )

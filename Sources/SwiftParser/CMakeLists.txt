@@ -11,6 +11,7 @@ add_swift_syntax_library(SwiftParser
   Availability.swift
   CharacterInfo.swift
   CollectionNodes+Parsable.swift
+  CompilerFiles.swift
   Declarations.swift
   Directives.swift
   ExpressionInterpretedAsVersionTuple.swift

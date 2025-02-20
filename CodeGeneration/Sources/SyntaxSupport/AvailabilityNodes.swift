@@ -181,30 +181,4 @@ public let AVAILABILITY_NODES: [Node] = [
       ),
     ]
   ),
-
-  Node(
-    kind: .availabilityMacroDefinition,
-    base: .syntax,
-    spi: "Compiler",
-    nameForDiagnostics: "availability macro definition",
-    documentation: "Syntax for '-define-availability' compiler arguments, never appear in Swift source code",
-    parserFunction: "parseAvailabilityMacroDefinition",
-    children: [
-      Child(
-        name: "platformVersion",
-        kind: .node(kind: .platformVersion)
-      ),
-      Child(
-        name: "colon",
-        kind: .token(choices: [.token(.colon)])
-      ),
-      Child(
-        name: "specs",
-        kind: .collection(
-          kind: .availabilityArgumentList,
-          collectionElementName: "AvailabilityArgument"
-        )
-      ),
-    ]
-  ),
 ]

@@ -93,6 +93,31 @@ extension Unicode.Scalar {
     return true
   }
 
+  var isForbiddenRawIdentifierWhitespace: Bool {
+    let c = self.value
+    // This is the set of code points satisfying the `White_Space` property,
+    // excluding the set satisfying the `Pattern_White_Space` property, and
+    // excluding any other ASCII non-printables and Unicode separators. In
+    // other words, the only whitespace code points allowed in a raw
+    // identifier are U+0020, and U+200E/200F (LTR/RTL marks).
+    return (c >= 0x0009 && c <= 0x000D) as Bool
+      || (c == 0x0085) as Bool
+      || (c == 0x00A0) as Bool
+      || (c == 0x1680) as Bool
+      || (c >= 0x2000 && c <= 0x200A) as Bool
+      || (c >= 0x2028 && c <= 0x2029) as Bool
+      || (c == 0x202F) as Bool
+      || (c == 0x205F) as Bool
+      || (c == 0x3000) as Bool
+  }
+
+  var isPermittedRawIdentifierWhitespace: Bool {
+    let c = self.value
+    return (c == 0x0020) as Bool
+      || (c == 0x200E) as Bool
+      || (c == 0x200F) as Bool
+  }
+
   /// isOperatorStartCodePoint - Return true if the specified code point is a
   /// valid start of an operator.
   var isOperatorStartCodePoint: Bool {

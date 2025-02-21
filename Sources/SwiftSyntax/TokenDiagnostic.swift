@@ -35,6 +35,7 @@ public struct TokenDiagnostic: Hashable, Sendable {
     case extraneousTrailingWhitespaceError
     case extraneousTrailingWhitespaceWarning
     case insufficientIndentationInMultilineStringLiteral
+    case invalidBackslashInRawIdentifier
     case invalidBinaryDigitInIntegerLiteral
     case invalidCharacter
     case invalidDecimalDigitInIntegerLiteral
@@ -46,9 +47,13 @@ public struct TokenDiagnostic: Hashable, Sendable {
     case invalidNumberOfHexDigitsInUnicodeEscape
     case invalidOctalDigitInIntegerLiteral
     case invalidUtf8
+    case invalidWhitespaceInRawIdentifier
     case multilineRegexClosingNotOnNewline
     case nonBreakingSpace
     case nulCharacter
+    case rawIdentifierCannotBeAllWhitespace
+    case rawIdentifierCannotBeEmpty
+    case rawIdentifierCannotBeOperator
     case sourceConflictMarker
     case spaceAtEndOfRegexLiteral
     case spaceAtStartOfRegexLiteral
@@ -74,6 +79,7 @@ public struct TokenDiagnostic: Hashable, Sendable {
       case .extraneousTrailingWhitespaceError: return .error
       case .extraneousTrailingWhitespaceWarning: return .warning
       case .insufficientIndentationInMultilineStringLiteral: return .error
+      case .invalidBackslashInRawIdentifier: return .error
       case .invalidBinaryDigitInIntegerLiteral: return .error
       case .invalidCharacter: return .error
       case .invalidDecimalDigitInIntegerLiteral: return .error
@@ -85,9 +91,13 @@ public struct TokenDiagnostic: Hashable, Sendable {
       case .invalidNumberOfHexDigitsInUnicodeEscape: return .error
       case .invalidOctalDigitInIntegerLiteral: return .error
       case .invalidUtf8: return .error
+      case .invalidWhitespaceInRawIdentifier: return .error
       case .multilineRegexClosingNotOnNewline: return .error
       case .nonBreakingSpace: return .warning
       case .nulCharacter: return .warning
+      case .rawIdentifierCannotBeAllWhitespace: return .error
+      case .rawIdentifierCannotBeEmpty: return .error
+      case .rawIdentifierCannotBeOperator: return .error
       case .sourceConflictMarker: return .error
       case .spaceAtEndOfRegexLiteral: return .error
       case .spaceAtStartOfRegexLiteral: return .error

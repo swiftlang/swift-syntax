@@ -15,9 +15,7 @@
 /// Enum to exhaustively switch over all different syntax nodes.
 public enum SyntaxEnum: Sendable {
   case token(TokenSyntax)
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case abiAttributeArguments(ABIAttributeArgumentsSyntax)
   case accessorBlock(AccessorBlockSyntax)
   case accessorDeclList(AccessorDeclListSyntax)
@@ -40,6 +38,8 @@ public enum SyntaxEnum: Sendable {
   case availabilityArgument(AvailabilityArgumentSyntax)
   case availabilityCondition(AvailabilityConditionSyntax)
   case availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax)
+  @_spi(Compiler)
+  case availabilityMacroDefinition(AvailabilityMacroDefinitionSyntax)
   case awaitExpr(AwaitExprSyntax)
   case backDeployedAttributeArguments(BackDeployedAttributeArgumentsSyntax)
   case binaryOperatorExpr(BinaryOperatorExprSyntax)
@@ -103,9 +103,7 @@ public enum SyntaxEnum: Sendable {
   case differentiableAttributeArguments(DifferentiableAttributeArgumentsSyntax)
   case discardAssignmentExpr(DiscardAssignmentExprSyntax)
   case discardStmt(DiscardStmtSyntax)
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case doExpr(DoExprSyntax)
   case doStmt(DoStmtSyntax)
   case documentationAttributeArgumentList(DocumentationAttributeArgumentListSyntax)
@@ -182,17 +180,11 @@ public enum SyntaxEnum: Sendable {
   case labeledSpecializeArgument(LabeledSpecializeArgumentSyntax)
   case labeledStmt(LabeledStmtSyntax)
   case layoutRequirement(LayoutRequirementSyntax)
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case lifetimeSpecifierArgumentList(LifetimeSpecifierArgumentListSyntax)
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case lifetimeSpecifierArgument(LifetimeSpecifierArgumentSyntax)
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case lifetimeTypeSpecifier(LifetimeTypeSpecifierSyntax)
   case macroDecl(MacroDeclSyntax)
   case macroExpansionDecl(MacroExpansionDeclSyntax)
@@ -279,9 +271,7 @@ public enum SyntaxEnum: Sendable {
   case switchDefaultLabel(SwitchDefaultLabelSyntax)
   case switchExpr(SwitchExprSyntax)
   case ternaryExpr(TernaryExprSyntax)
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case thenStmt(ThenStmtSyntax)
   case throwStmt(ThrowStmtSyntax)
   case throwsClause(ThrowsClauseSyntax)
@@ -305,9 +295,7 @@ public enum SyntaxEnum: Sendable {
   case unresolvedAsExpr(UnresolvedAsExprSyntax)
   case unresolvedIsExpr(UnresolvedIsExprSyntax)
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case unsafeExpr(UnsafeExprSyntax)
   case valueBindingPattern(ValueBindingPatternSyntax)
   case variableDecl(VariableDeclSyntax)
@@ -373,6 +361,8 @@ extension Syntax {
       return .availabilityCondition(AvailabilityConditionSyntax(self)!)
     case .availabilityLabeledArgument:
       return .availabilityLabeledArgument(AvailabilityLabeledArgumentSyntax(self)!)
+    case .availabilityMacroDefinition:
+      return .availabilityMacroDefinition(AvailabilityMacroDefinitionSyntax(self)!)
     case .awaitExpr:
       return .awaitExpr(AwaitExprSyntax(self)!)
     case .backDeployedAttributeArguments:
@@ -1007,9 +997,7 @@ public enum ExprSyntaxEnum {
   case declReferenceExpr(DeclReferenceExprSyntax)
   case dictionaryExpr(DictionaryExprSyntax)
   case discardAssignmentExpr(DiscardAssignmentExprSyntax)
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case doExpr(DoExprSyntax)
   case editorPlaceholderExpr(EditorPlaceholderExprSyntax)
   case floatLiteralExpr(FloatLiteralExprSyntax)
@@ -1047,9 +1035,7 @@ public enum ExprSyntaxEnum {
   case unresolvedAsExpr(UnresolvedAsExprSyntax)
   case unresolvedIsExpr(UnresolvedIsExprSyntax)
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case unsafeExpr(UnsafeExprSyntax)
 }
 
@@ -1221,9 +1207,7 @@ public enum StmtSyntaxEnum {
   case missingStmt(MissingStmtSyntax)
   case repeatStmt(RepeatStmtSyntax)
   case returnStmt(ReturnStmtSyntax)
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case thenStmt(ThenStmtSyntax)
   case throwStmt(ThrowStmtSyntax)
   case whileStmt(WhileStmtSyntax)

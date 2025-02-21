@@ -250,7 +250,7 @@ fileprivate extension Syntax {
 }
 
 class PluginMacroExpansionContext {
-  private var sourceManger: SourceManager
+  private var sourceManager: SourceManager
 
   /// The lexical context of the macro expansion described by this context.
   let lexicalContext: [Syntax]
@@ -272,7 +272,7 @@ class PluginMacroExpansionContext {
   internal private(set) var diagnostics: [Diagnostic] = []
 
   init(sourceManager: SourceManager, lexicalContext: [Syntax], expansionDiscriminator: String = "") {
-    self.sourceManger = sourceManager
+    self.sourceManager = sourceManager
     self.lexicalContext = lexicalContext
     self.expansionDiscriminator = expansionDiscriminator
   }
@@ -316,7 +316,7 @@ extension PluginMacroExpansionContext: MacroExpansionContext {
     at positionMode: PositionInSyntaxNode,
     filePathMode: SourceLocationFilePathMode
   ) -> AbstractSourceLocation? {
-    guard let location = sourceManger.location(of: Syntax(node), at: positionMode, filePathMode: filePathMode) else {
+    guard let location = sourceManager.location(of: Syntax(node), at: positionMode, filePathMode: filePathMode) else {
       return nil
     }
     return AbstractSourceLocation(location)

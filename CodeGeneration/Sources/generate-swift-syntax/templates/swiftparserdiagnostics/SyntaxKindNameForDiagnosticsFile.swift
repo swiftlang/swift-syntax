@@ -16,15 +16,7 @@ import SyntaxSupport
 import Utils
 
 let syntaxKindNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax(
-    """
-    #if compiler(>=6)
-    @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
-    #else
-    @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
-    #endif
-    """
-  )
+  importSwiftSyntax()
 
   try! ExtensionDeclSyntax("extension SyntaxKind") {
     try VariableDeclSyntax("var nameForDiagnostics: String?") {

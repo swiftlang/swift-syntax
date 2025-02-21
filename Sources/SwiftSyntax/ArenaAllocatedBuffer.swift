@@ -11,22 +11,21 @@
 //===----------------------------------------------------------------------===//
 
 /// An `UnsafePointer` pointing into memory that was allocated by a
-/// ``SyntaxArena``.
+/// ``RawSyntaxArena`` or ``SyntaxDataArena``.
 ///
-/// Because the syntax arena will always outlive any syntax nodes that
-/// reference its contents, we know that the pointer's contents won't get
-/// deallocated while being accessed and thus we can add an unchecked `Sendable`
-/// conformance.
+/// Because the arena will always outlive any syntax nodes that reference its
+/// contents, we know that the pointees won't get deallocated while being
+/// accessed and thus we can add an unchecked `Sendable` conformance.
 @_spi(RawSyntax)
-public struct SyntaxArenaAllocatedPointer<Element: Sendable>: @unchecked Sendable {
+public struct ArenaAllocatedPointer<Element: Sendable>: @unchecked Sendable {
   let pointer: UnsafePointer<Element>
 
   /// Create a pointer from an `UnsafePointer` that was allocated inside a
-  /// ``SyntaxArena``.
+  /// ``RawSyntaxArena`` or ``SyntaxDataArena``.
   ///
   /// - Important: The client needs to ensure sure that the buffer is indeed
-  ///   allocated by a ``SyntaxArena`` and that the ``SyntaxArena`` will outlive
-  ///   any users of this ``SyntaxArenaAllocatedBufferPointer``.
+  ///   allocated by an arena and that the arena will outlive any users of this
+  ///   ``ArenaAllocatedPointer``.
   init(_ pointer: UnsafePointer<Element>) {
     self.pointer = pointer
   }
@@ -45,14 +44,13 @@ public struct SyntaxArenaAllocatedPointer<Element: Sendable>: @unchecked Sendabl
 }
 
 /// An `UnsafeBufferPointer` pointing into memory that was allocated by a
-/// ``SyntaxArena``.
+/// ``RawSyntaxArena`` or ``SyntaxDataArena``.
 ///
-/// Because the syntax arena will always outlive any syntax nodes that
-/// reference its contents, we know that the buffer's contents won't get
-/// deallocated while being accessed and thus we can add an unchecked `Sendable`
-/// conformance.
+/// Because the arena will always outlive any syntax nodes that reference its
+/// contents, we know that the buffer's contents won't get deallocated while
+/// being accessed and thus we can add an unchecked `Sendable` conformance.
 @_spi(RawSyntax)
-public struct SyntaxArenaAllocatedBufferPointer<Element: Sendable>: RandomAccessCollection, @unchecked Sendable {
+public struct ArenaAllocatedBufferPointer<Element: Sendable>: RandomAccessCollection, @unchecked Sendable {
   private let buffer: UnsafeBufferPointer<Element>
 
   /// Create an empty buffer with no elements.
@@ -61,11 +59,11 @@ public struct SyntaxArenaAllocatedBufferPointer<Element: Sendable>: RandomAccess
   }
 
   /// Create a buffer pointer from an `UnsafeBufferPointer` that was allocated
-  /// inside a ``SyntaxArena``.
+  /// inside a ``RawSyntaxArena`` or ``SyntaxDataArena``.
   ///
   /// - Important: The client needs to ensure sure that the buffer is indeed
-  ///   allocated by a ``SyntaxArena`` and that the ``SyntaxArena`` will outlive
-  ///   any users of this ``SyntaxArenaAllocatedBufferPointer``.
+  ///   allocated by an arena and that the arena will outlive any users of this
+  ///   ``ArenaAllocatedBufferPointer``.
   public init(_ buffer: UnsafeBufferPointer<Element>) {
     self.buffer = buffer
   }

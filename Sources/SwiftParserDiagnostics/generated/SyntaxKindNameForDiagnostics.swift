@@ -13,9 +13,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-@_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) internal import SwiftSyntax
 #else
-@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) import SwiftSyntax
 #endif
 
 extension SyntaxKind {
@@ -55,6 +55,8 @@ extension SyntaxKind {
       return "availability condition"
     case .availabilityLabeledArgument:
       return "availability argument"
+    case .availabilityMacroDefinition:
+      return "availability macro definition"
     case .awaitExpr:
       return "'await' expression"
     case .backDeployedAttributeArguments:

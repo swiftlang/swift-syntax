@@ -451,6 +451,16 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       verify(layout[5], as: RawSyntax.self)])
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
   }
+  func validateAvailabilityMacroDefinitionSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 7)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawPlatformVersionSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.colon)]))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawAvailabilityArgumentListSyntax.self))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+  }
   func validateAwaitExprSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -3140,6 +3150,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     validateAvailabilityConditionSyntax(kind: kind, layout: layout)
   case .availabilityLabeledArgument:
     validateAvailabilityLabeledArgumentSyntax(kind: kind, layout: layout)
+  case .availabilityMacroDefinition:
+    validateAvailabilityMacroDefinitionSyntax(kind: kind, layout: layout)
   case .awaitExpr:
     validateAwaitExprSyntax(kind: kind, layout: layout)
   case .backDeployedAttributeArguments:

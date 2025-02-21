@@ -13,9 +13,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) public import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) public import SwiftSyntax
 #else
-@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) import SwiftSyntax
 #endif
 
 extension AccessorDeclSyntax {
@@ -32,14 +32,10 @@ extension AccessorDeclSyntax {
     case mutableAddressWithOwner
     case mutableAddressWithNativeOwner
     case _read
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case read
     case _modify
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case modify
     case `init`
 
@@ -3085,14 +3081,10 @@ extension OptionalBindingConditionSyntax {
     case `let`
     case `var`
     case `inout`
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _mutating
     case _borrowing
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _consuming
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
@@ -4049,14 +4041,10 @@ extension ValueBindingPatternSyntax {
     case `let`
     case `var`
     case `inout`
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _mutating
     case _borrowing
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _consuming
     case borrowing
 
@@ -4152,14 +4140,10 @@ extension VariableDeclSyntax {
     case `let`
     case `var`
     case `inout`
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _mutating
     case _borrowing
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case _consuming
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {

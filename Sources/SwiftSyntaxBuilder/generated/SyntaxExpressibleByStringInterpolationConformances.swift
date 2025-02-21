@@ -13,9 +13,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-internal import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) internal import SwiftSyntax
 #else
-import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) import SwiftSyntax
 #endif
 
 extension AccessorBlockSyntax: SyntaxExpressibleByStringInterpolation {}
@@ -34,6 +34,12 @@ extension AttributeSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension AttributeSyntax: Swift.ExpressibleByStringInterpolation {}
+#endif
+
+extension AvailabilityMacroDefinitionSyntax: SyntaxExpressibleByStringInterpolation {}
+
+#if compiler(>=6)
+extension AvailabilityMacroDefinitionSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension CatchClauseSyntax: SyntaxExpressibleByStringInterpolation {}

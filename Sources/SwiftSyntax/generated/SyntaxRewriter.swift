@@ -24,22 +24,22 @@
 open class SyntaxRewriter {
   public let viewMode: SyntaxTreeViewMode
 
-  /// The arena in which the parents of rewritten nodes should be allocated.
+  /// The raw arena in which the parents of rewritten nodes should be allocated.
   /// 
   /// The `SyntaxRewriter` subclass is responsible for generating the rewritten nodes. To incorporate them into the
   /// tree, all of the rewritten node's parents also need to be re-created. This is the arena in which those 
-  /// intermediate nodes should be allocated.
-  private let arena: SyntaxArena?
+  /// intermediate raw nodes should be allocated.
+  private let rawArena: RawSyntaxArena?
 
   public init(viewMode: SyntaxTreeViewMode = .sourceAccurate) {
     self.viewMode = viewMode
-    self.arena = nil
+    self.rawArena = nil
   }
 
   @_spi(RawSyntax)
-  public init(viewMode: SyntaxTreeViewMode = .sourceAccurate, arena: SyntaxArena? = nil) {
+  public init(viewMode: SyntaxTreeViewMode = .sourceAccurate, rawAllocationArena: RawSyntaxArena? = nil) {
     self.viewMode = viewMode
-    self.arena = arena
+    self.rawArena = rawAllocationArena
   }
 
   /// Rewrite `node`, keeping its parent unless `detach` is `true`.
@@ -50,7 +50,7 @@ open class SyntaxRewriter {
     }
 
     return withExtendedLifetime(rewritten) {
-      return Syntax(node).replacingSelf(rewritten.raw, rawNodeArena: rewritten.raw.arenaReference.retained, allocationArena: SyntaxArena())
+      return Syntax(node).replacingSelf(rewritten.raw, rawNodeArena: rewritten.raw.arenaReference.retained, rawAllocationArena: RawSyntaxArena())
     }
   }
 
@@ -101,9 +101,7 @@ open class SyntaxRewriter {
   /// Visit a `ABIAttributeArgumentsSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: ABIAttributeArgumentsSyntax) -> ABIAttributeArgumentsSyntax {
     return ABIAttributeArgumentsSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
@@ -253,6 +251,14 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: AvailabilityLabeledArgumentSyntax) -> AvailabilityLabeledArgumentSyntax {
     return AvailabilityLabeledArgumentSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
+  /// Visit a ``AvailabilityMacroDefinitionSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  @_spi(Compiler)
+  open func visit(_ node: AvailabilityMacroDefinitionSyntax) -> AvailabilityMacroDefinitionSyntax {
+    return AvailabilityMacroDefinitionSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
   /// Visit a ``AwaitExprSyntax``.
@@ -699,9 +705,7 @@ open class SyntaxRewriter {
   /// Visit a `DoExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: DoExprSyntax) -> ExprSyntax {
     return ExprSyntax(DoExprSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
@@ -1234,9 +1238,7 @@ open class SyntaxRewriter {
   /// Visit a `LifetimeSpecifierArgumentListSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: LifetimeSpecifierArgumentListSyntax) -> LifetimeSpecifierArgumentListSyntax {
     return LifetimeSpecifierArgumentListSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
@@ -1244,9 +1246,7 @@ open class SyntaxRewriter {
   /// Visit a `LifetimeSpecifierArgumentSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: LifetimeSpecifierArgumentSyntax) -> LifetimeSpecifierArgumentSyntax {
     return LifetimeSpecifierArgumentSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
@@ -1254,9 +1254,7 @@ open class SyntaxRewriter {
   /// Visit a `LifetimeTypeSpecifierSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: LifetimeTypeSpecifierSyntax) -> LifetimeTypeSpecifierSyntax {
     return LifetimeTypeSpecifierSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
@@ -1859,9 +1857,7 @@ open class SyntaxRewriter {
   /// Visit a `ThenStmtSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: ThenStmtSyntax) -> StmtSyntax {
     return StmtSyntax(ThenStmtSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
@@ -2023,9 +2019,7 @@ open class SyntaxRewriter {
   /// Visit a `UnsafeExprSyntax`.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: UnsafeExprSyntax) -> ExprSyntax {
     return ExprSyntax(UnsafeExprSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
@@ -2262,6 +2256,11 @@ open class SyntaxRewriter {
   @inline(never)
   private func visitAvailabilityLabeledArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(AvailabilityLabeledArgumentSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
+  private func visitAvailabilityMacroDefinitionSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(AvailabilityMacroDefinitionSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
@@ -3651,6 +3650,8 @@ open class SyntaxRewriter {
       return self.visitAvailabilityConditionSyntaxImpl(_:)
     case .availabilityLabeledArgument:
       return self.visitAvailabilityLabeledArgumentSyntaxImpl(_:)
+    case .availabilityMacroDefinition:
+      return self.visitAvailabilityMacroDefinitionSyntaxImpl(_:)
     case .awaitExpr:
       return self.visitAwaitExprSyntaxImpl(_:)
     case .backDeployedAttributeArguments:
@@ -4231,6 +4232,8 @@ open class SyntaxRewriter {
       return visitAvailabilityConditionSyntaxImpl(node)
     case .availabilityLabeledArgument:
       return visitAvailabilityLabeledArgumentSyntaxImpl(node)
+    case .availabilityMacroDefinition:
+      return visitAvailabilityMacroDefinitionSyntaxImpl(node)
     case .awaitExpr:
       return visitAwaitExprSyntaxImpl(node)
     case .backDeployedAttributeArguments:
@@ -4781,9 +4784,9 @@ open class SyntaxRewriter {
     // nodes are being collected.
     var newLayout: UnsafeMutableBufferPointer<RawSyntax?> = .init(start: nil, count: 0)
 
-    // Keep 'SyntaxArena' of rewritten nodes alive until they are wrapped
+    // Keep 'RawSyntaxArena' of rewritten nodes alive until they are wrapped
     // with 'Syntax'
-    var rewrittens: ContiguousArray<RetainedSyntaxArena> = []
+    var rewrittens: ContiguousArray<RetainedRawSyntaxArena> = []
 
     for case let childDataRef? in node.layoutBuffer where viewMode.shouldTraverse(node: childDataRef.pointee.raw) {
 
@@ -4809,13 +4812,13 @@ open class SyntaxRewriter {
     if newLayout.baseAddress != nil {
       // A child node was rewritten. Build the updated node.
 
-      let arena = self.arena ?? SyntaxArena()
-      let newRaw = node.raw.layoutView!.replacingLayout(with: newLayout, arena: arena)
+      let rawArena = self.rawArena ?? RawSyntaxArena()
+      let newRaw = node.raw.layoutView!.replacingLayout(with: newLayout, arena: rawArena)
       newLayout.deinitialize()
       newLayout.deallocate()
-      // 'withExtendedLifetime' to keep 'SyntaxArena's of them alive until here.
+      // 'withExtendedLifetime' to keep 'RawSyntaxArena's of them alive until here.
       return withExtendedLifetime(rewrittens) {
-        Syntax(raw: newRaw, rawNodeArena: arena)
+        Syntax(raw: newRaw, rawNodeArena: rawArena)
       }
     } else {
       // No child node was rewritten. So no need to change this node as well.

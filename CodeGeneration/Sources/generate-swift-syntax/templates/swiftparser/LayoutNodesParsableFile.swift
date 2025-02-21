@@ -16,15 +16,7 @@ import SyntaxSupport
 import Utils
 
 let layoutNodesParsableFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax(
-    """
-    #if compiler(>=6)
-    @_spi(RawSyntax) public import SwiftSyntax
-    #else
-    @_spi(RawSyntax) import SwiftSyntax
-    #endif
-    """
-  )
+  importSwiftSyntax(accessLevel: .public)
 
   DeclSyntax(
     """
@@ -49,7 +41,7 @@ let layoutNodesParsableFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             defer { withExtendedLifetime(parser) {} }
             let node = parser.\(parserFunction)()
             let raw = RawSyntax(parser.parseRemainder(into: node))
-            return Syntax(raw: raw, rawNodeArena: parser.arena).cast(Self.self)
+            return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
           }
         }
         """

@@ -24,7 +24,7 @@ public struct Identifier: Equatable, Hashable, Sendable {
 
   @_spi(RawSyntax)
   public let raw: RawIdentifier
-  private let arena: SyntaxArenaRef?
+  private let arena: RawSyntaxArenaRef?
 
   public init?(_ token: TokenSyntax) {
     switch token.tokenKind {

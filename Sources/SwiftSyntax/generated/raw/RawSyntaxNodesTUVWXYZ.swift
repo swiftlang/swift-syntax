@@ -56,7 +56,7 @@ public struct RawTernaryExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedBetweenColonAndElseExpression: RawUnexpectedNodesSyntax? = nil,
     elseExpression: some RawExprSyntaxNodeProtocol,
     _ unexpectedAfterElseExpression: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .ternaryExpr, uninitializedCount: 11, arena: arena) { layout in
@@ -121,9 +121,7 @@ public struct RawTernaryExprSyntax: RawExprSyntaxNodeProtocol {
   }
 }
 
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 @_spi(RawSyntax)
 public struct RawThenStmtSyntax: RawStmtSyntaxNodeProtocol {
   @_spi(RawSyntax)
@@ -159,7 +157,7 @@ public struct RawThenStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedBetweenThenKeywordAndExpression: RawUnexpectedNodesSyntax? = nil,
     expression: some RawExprSyntaxNodeProtocol,
     _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .thenStmt, uninitializedCount: 5, arena: arena) { layout in
@@ -229,7 +227,7 @@ public struct RawThrowStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedBetweenThrowKeywordAndExpression: RawUnexpectedNodesSyntax? = nil,
     expression: some RawExprSyntaxNodeProtocol,
     _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .throwStmt, uninitializedCount: 5, arena: arena) { layout in
@@ -303,7 +301,7 @@ public struct RawThrowsClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedBetweenTypeAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax?,
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .throwsClause, uninitializedCount: 9, arena: arena) { layout in
@@ -395,7 +393,7 @@ public struct RawTryExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedBetweenQuestionOrExclamationMarkAndExpression: RawUnexpectedNodesSyntax? = nil,
     expression: some RawExprSyntaxNodeProtocol,
     _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .tryExpr, uninitializedCount: 7, arena: arena) { layout in
@@ -477,7 +475,7 @@ public struct RawTupleExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .tupleExpr, uninitializedCount: 7, arena: arena) { layout in
@@ -551,7 +549,7 @@ public struct RawTuplePatternElementListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: other.raw)
   }
 
-  public init(elements: [RawTuplePatternElementSyntax], arena: __shared SyntaxArena) {
+  public init(elements: [RawTuplePatternElementSyntax], arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .tuplePatternElementList, uninitializedCount: elements.count, arena: arena) { layout in
         guard var ptr = layout.baseAddress else {
@@ -611,7 +609,7 @@ public struct RawTuplePatternElementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedBetweenPatternAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .tuplePatternElement, uninitializedCount: 9, arena: arena) { layout in
@@ -703,7 +701,7 @@ public struct RawTuplePatternSyntax: RawPatternSyntaxNodeProtocol {
     _ unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .tuplePattern, uninitializedCount: 7, arena: arena) { layout in
@@ -777,7 +775,7 @@ public struct RawTupleTypeElementListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: other.raw)
   }
 
-  public init(elements: [RawTupleTypeElementSyntax], arena: __shared SyntaxArena) {
+  public init(elements: [RawTupleTypeElementSyntax], arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .tupleTypeElementList, uninitializedCount: elements.count, arena: arena) { layout in
         guard var ptr = layout.baseAddress else {
@@ -843,7 +841,7 @@ public struct RawTupleTypeElementSyntax: RawSyntaxNodeProtocol {
     _ unexpectedBetweenEllipsisAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .tupleTypeElement, uninitializedCount: 15, arena: arena) { layout in
@@ -965,7 +963,7 @@ public struct RawTupleTypeSyntax: RawTypeSyntaxNodeProtocol {
     _ unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .tupleType, uninitializedCount: 7, arena: arena) { layout in
@@ -1055,7 +1053,7 @@ public struct RawTypeAliasDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedBetweenInitializerAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
     _ unexpectedAfterGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .typeAliasDecl, uninitializedCount: 15, arena: arena) { layout in
@@ -1175,7 +1173,7 @@ public struct RawTypeAnnotationSyntax: RawSyntaxNodeProtocol {
     _ unexpectedBetweenColonAndType: RawUnexpectedNodesSyntax? = nil,
     type: some RawTypeSyntaxNodeProtocol,
     _ unexpectedAfterType: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .typeAnnotation, uninitializedCount: 5, arena: arena) { layout in
@@ -1245,7 +1243,7 @@ public struct RawTypeEffectSpecifiersSyntax: RawSyntaxNodeProtocol {
     _ unexpectedBetweenAsyncSpecifierAndThrowsClause: RawUnexpectedNodesSyntax? = nil,
     throwsClause: RawThrowsClauseSyntax?,
     _ unexpectedAfterThrowsClause: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .typeEffectSpecifiers, uninitializedCount: 5, arena: arena) { layout in
@@ -1313,7 +1311,7 @@ public struct RawTypeExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedBeforeType: RawUnexpectedNodesSyntax? = nil,
     type: some RawTypeSyntaxNodeProtocol,
     _ unexpectedAfterType: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .typeExpr, uninitializedCount: 3, arena: arena) { layout in
@@ -1373,7 +1371,7 @@ public struct RawTypeInitializerClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedBetweenEqualAndValue: RawUnexpectedNodesSyntax? = nil,
     value: some RawTypeSyntaxNodeProtocol,
     _ unexpectedAfterValue: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .typeInitializerClause, uninitializedCount: 5, arena: arena) { layout in
@@ -1415,9 +1413,7 @@ public struct RawTypeSpecifierListSyntax: RawSyntaxNodeProtocol {
     case simpleTypeSpecifier(RawSimpleTypeSpecifierSyntax)
     /// A specifier that specifies function parameter on whose lifetime a type depends
     /// - Note: Requires experimental feature `nonescapableTypes`.
-    #if compiler(>=5.8)
     @_spi(ExperimentalLanguageFeatures)
-    #endif
     case lifetimeTypeSpecifier(RawLifetimeTypeSpecifierSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -1471,7 +1467,7 @@ public struct RawTypeSpecifierListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: other.raw)
   }
 
-  public init(elements: [Element], arena: __shared SyntaxArena) {
+  public init(elements: [Element], arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .typeSpecifierList, uninitializedCount: elements.count, arena: arena) { layout in
         guard var ptr = layout.baseAddress else {
@@ -1568,7 +1564,7 @@ public struct RawUnavailableFromAsyncAttributeArgumentsSyntax: RawSyntaxNodeProt
     _ unexpectedBetweenColonAndMessage: RawUnexpectedNodesSyntax? = nil,
     message: RawStringLiteralExprSyntax,
     _ unexpectedAfterMessage: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .unavailableFromAsyncAttributeArguments, uninitializedCount: 7, arena: arena) { layout in
@@ -1650,7 +1646,7 @@ public struct RawUnderscorePrivateAttributeArgumentsSyntax: RawSyntaxNodeProtoco
     _ unexpectedBetweenColonAndFilename: RawUnexpectedNodesSyntax? = nil,
     filename: RawStringLiteralExprSyntax,
     _ unexpectedAfterFilename: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .underscorePrivateAttributeArguments, uninitializedCount: 7, arena: arena) { layout in
@@ -1724,7 +1720,7 @@ public struct RawUnexpectedNodesSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: other.raw)
   }
 
-  public init(elements: [RawSyntax], arena: __shared SyntaxArena) {
+  public init(elements: [RawSyntax], arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .unexpectedNodes, uninitializedCount: elements.count, arena: arena) { layout in
         guard var ptr = layout.baseAddress else {
@@ -1780,7 +1776,7 @@ public struct RawUnresolvedAsExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedBetweenAsKeywordAndQuestionOrExclamationMark: RawUnexpectedNodesSyntax? = nil,
     questionOrExclamationMark: RawTokenSyntax?,
     _ unexpectedAfterQuestionOrExclamationMark: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .unresolvedAsExpr, uninitializedCount: 5, arena: arena) { layout in
@@ -1848,7 +1844,7 @@ public struct RawUnresolvedIsExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedBeforeIsKeyword: RawUnexpectedNodesSyntax? = nil,
     isKeyword: RawTokenSyntax,
     _ unexpectedAfterIsKeyword: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .unresolvedIsExpr, uninitializedCount: 3, arena: arena) { layout in
@@ -1910,7 +1906,7 @@ public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedBetweenThenExpressionAndColon: RawUnexpectedNodesSyntax? = nil,
     colon: RawTokenSyntax,
     _ unexpectedAfterColon: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .unresolvedTernaryExpr, uninitializedCount: 7, arena: arena) { layout in
@@ -1955,9 +1951,7 @@ public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol {
   }
 }
 
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 @_spi(RawSyntax)
 public struct RawUnsafeExprSyntax: RawExprSyntaxNodeProtocol {
   @_spi(RawSyntax)
@@ -1993,7 +1987,7 @@ public struct RawUnsafeExprSyntax: RawExprSyntaxNodeProtocol {
     _ unexpectedBetweenUnsafeKeywordAndExpression: RawUnexpectedNodesSyntax? = nil,
     expression: some RawExprSyntaxNodeProtocol,
     _ unexpectedAfterExpression: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .unsafeExpr, uninitializedCount: 5, arena: arena) { layout in
@@ -2063,7 +2057,7 @@ public struct RawValueBindingPatternSyntax: RawPatternSyntaxNodeProtocol {
     _ unexpectedBetweenBindingSpecifierAndPattern: RawUnexpectedNodesSyntax? = nil,
     pattern: some RawPatternSyntaxNodeProtocol,
     _ unexpectedAfterPattern: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .valueBindingPattern, uninitializedCount: 5, arena: arena) { layout in
@@ -2137,7 +2131,7 @@ public struct RawVariableDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedBetweenBindingSpecifierAndBindings: RawUnexpectedNodesSyntax? = nil,
     bindings: RawPatternBindingListSyntax,
     _ unexpectedAfterBindings: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .variableDecl, uninitializedCount: 9, arena: arena) { layout in
@@ -2221,7 +2215,7 @@ public struct RawVersionComponentListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: other.raw)
   }
 
-  public init(elements: [RawVersionComponentSyntax], arena: __shared SyntaxArena) {
+  public init(elements: [RawVersionComponentSyntax], arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .versionComponentList, uninitializedCount: elements.count, arena: arena) { layout in
         guard var ptr = layout.baseAddress else {
@@ -2277,7 +2271,7 @@ public struct RawVersionComponentSyntax: RawSyntaxNodeProtocol {
     _ unexpectedBetweenPeriodAndNumber: RawUnexpectedNodesSyntax? = nil,
     number: RawTokenSyntax,
     _ unexpectedAfterNumber: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .versionComponent, uninitializedCount: 5, arena: arena) { layout in
@@ -2347,7 +2341,7 @@ public struct RawVersionTupleSyntax: RawSyntaxNodeProtocol {
     _ unexpectedBetweenMajorAndComponents: RawUnexpectedNodesSyntax? = nil,
     components: RawVersionComponentListSyntax,
     _ unexpectedAfterComponents: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .versionTuple, uninitializedCount: 5, arena: arena) { layout in
@@ -2417,7 +2411,7 @@ public struct RawWhereClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedBetweenWhereKeywordAndCondition: RawUnexpectedNodesSyntax? = nil,
     condition: some RawExprSyntaxNodeProtocol,
     _ unexpectedAfterCondition: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .whereClause, uninitializedCount: 5, arena: arena) { layout in
@@ -2489,7 +2483,7 @@ public struct RawWhileStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedBetweenConditionsAndBody: RawUnexpectedNodesSyntax? = nil,
     body: RawCodeBlockSyntax,
     _ unexpectedAfterBody: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .whileStmt, uninitializedCount: 7, arena: arena) { layout in
@@ -2567,7 +2561,7 @@ public struct RawWildcardPatternSyntax: RawPatternSyntaxNodeProtocol {
     _ unexpectedBeforeWildcard: RawUnexpectedNodesSyntax? = nil,
     wildcard: RawTokenSyntax,
     _ unexpectedAfterWildcard: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .wildcardPattern, uninitializedCount: 3, arena: arena) { layout in
@@ -2659,7 +2653,7 @@ public struct RawYieldStmtSyntax: RawStmtSyntaxNodeProtocol {
     _ unexpectedBetweenYieldKeywordAndYieldedExpressions: RawUnexpectedNodesSyntax? = nil,
     yieldedExpressions: YieldedExpressions,
     _ unexpectedAfterYieldedExpressions: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .yieldStmt, uninitializedCount: 5, arena: arena) { layout in
@@ -2723,7 +2717,7 @@ public struct RawYieldedExpressionListSyntax: RawSyntaxNodeProtocol {
     self.init(unchecked: other.raw)
   }
 
-  public init(elements: [RawYieldedExpressionSyntax], arena: __shared SyntaxArena) {
+  public init(elements: [RawYieldedExpressionSyntax], arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
       kind: .yieldedExpressionList, uninitializedCount: elements.count, arena: arena) { layout in
         guard var ptr = layout.baseAddress else {
@@ -2779,7 +2773,7 @@ public struct RawYieldedExpressionSyntax: RawSyntaxNodeProtocol {
     _ unexpectedBetweenExpressionAndComma: RawUnexpectedNodesSyntax? = nil,
     comma: RawTokenSyntax?,
     _ unexpectedAfterComma: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .yieldedExpression, uninitializedCount: 5, arena: arena) { layout in
@@ -2851,7 +2845,7 @@ public struct RawYieldedExpressionsClauseSyntax: RawSyntaxNodeProtocol {
     _ unexpectedBetweenElementsAndRightParen: RawUnexpectedNodesSyntax? = nil,
     rightParen: RawTokenSyntax,
     _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared SyntaxArena
+    arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
       kind: .yieldedExpressionsClause, uninitializedCount: 7, arena: arena) { layout in

@@ -26,9 +26,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _Class
   case _compilerInitialized
   case _const
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case _consuming
   case _documentation
   case _dynamicReplacement
@@ -40,9 +38,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _local
   case _modify
   case _move
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case _mutating
   case _NativeClass
   case _NativeRefCountedObject
@@ -71,9 +67,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _underlyingVersion
   case _UnknownLayout
   case _version
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case abi
   case accesses
   case actor
@@ -112,9 +106,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case `default`
   case `defer`
   case `deinit`
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case dependsOn
   case deprecated
   case derivative
@@ -166,9 +158,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case macro
   case message
   case metadata
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case modify
   case module
   case mutableAddressWithNativeOwner
@@ -197,9 +187,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case `Protocol`
   case `protocol`
   case `public`
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case read
   case reasync
   case renamed
@@ -211,9 +199,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case reverse
   case right
   case safe
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case scoped
   case `self`
   case sending

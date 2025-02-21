@@ -37,18 +37,14 @@ open class SyntaxVisitor {
   /// Visiting `ABIAttributeArgumentsSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: ABIAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting `ABIAttributeArgumentsSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visitPost(_ node: ABIAttributeArgumentsSyntax) {
   }
 
@@ -302,6 +298,20 @@ open class SyntaxVisitor {
   /// The function called after visiting ``AvailabilityLabeledArgumentSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: AvailabilityLabeledArgumentSyntax) {
+  }
+
+  /// Visiting ``AvailabilityMacroDefinitionSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(Compiler)
+  open func visit(_ node: AvailabilityMacroDefinitionSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``AvailabilityMacroDefinitionSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(Compiler)
+  open func visitPost(_ node: AvailabilityMacroDefinitionSyntax) {
   }
 
   /// Visiting ``AwaitExprSyntax`` specifically.
@@ -1063,18 +1073,14 @@ open class SyntaxVisitor {
   /// Visiting `DoExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: DoExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting `DoExprSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visitPost(_ node: DoExprSyntax) {
   }
 
@@ -1981,54 +1987,42 @@ open class SyntaxVisitor {
   /// Visiting `LifetimeSpecifierArgumentListSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: LifetimeSpecifierArgumentListSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting `LifetimeSpecifierArgumentListSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visitPost(_ node: LifetimeSpecifierArgumentListSyntax) {
   }
 
   /// Visiting `LifetimeSpecifierArgumentSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: LifetimeSpecifierArgumentSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting `LifetimeSpecifierArgumentSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visitPost(_ node: LifetimeSpecifierArgumentSyntax) {
   }
 
   /// Visiting `LifetimeTypeSpecifierSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: LifetimeTypeSpecifierSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting `LifetimeTypeSpecifierSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visitPost(_ node: LifetimeTypeSpecifierSyntax) {
   }
 
@@ -3055,18 +3049,14 @@ open class SyntaxVisitor {
   /// Visiting `ThenStmtSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: ThenStmtSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting `ThenStmtSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visitPost(_ node: ThenStmtSyntax) {
   }
 
@@ -3337,18 +3327,14 @@ open class SyntaxVisitor {
   /// Visiting `UnsafeExprSyntax` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visit(_ node: UnsafeExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting `UnsafeExprSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   open func visitPost(_ node: UnsafeExprSyntax) {
   }
 
@@ -3689,6 +3675,14 @@ open class SyntaxVisitor {
       visitChildren(node)
     }
     visitPost(AvailabilityLabeledArgumentSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitAvailabilityMacroDefinitionSyntaxImpl(_ node: Syntax) {
+    if visit(AvailabilityMacroDefinitionSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(AvailabilityMacroDefinitionSyntax(unsafeCasting: node))
   }
 
   @inline(never)
@@ -5867,6 +5861,8 @@ open class SyntaxVisitor {
       return self.visitAvailabilityConditionSyntaxImpl(_:)
     case .availabilityLabeledArgument:
       return self.visitAvailabilityLabeledArgumentSyntaxImpl(_:)
+    case .availabilityMacroDefinition:
+      return self.visitAvailabilityMacroDefinitionSyntaxImpl(_:)
     case .awaitExpr:
       return self.visitAwaitExprSyntaxImpl(_:)
     case .backDeployedAttributeArguments:
@@ -6447,6 +6443,8 @@ open class SyntaxVisitor {
       self.visitAvailabilityConditionSyntaxImpl(node)
     case .availabilityLabeledArgument:
       self.visitAvailabilityLabeledArgumentSyntaxImpl(node)
+    case .availabilityMacroDefinition:
+      self.visitAvailabilityMacroDefinitionSyntaxImpl(node)
     case .awaitExpr:
       self.visitAwaitExprSyntaxImpl(node)
     case .backDeployedAttributeArguments:

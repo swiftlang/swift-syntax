@@ -27,15 +27,7 @@ func tokenCaseMatch(
 }
 
 let parserTokenSpecSetFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax(
-    """
-    #if compiler(>=6)
-    @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) public import SwiftSyntax
-    #else
-    @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
-    #endif
-    """
-  )
+  importSwiftSyntax(accessLevel: .public)
 
   for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode) {
     for child in layoutNode.children {

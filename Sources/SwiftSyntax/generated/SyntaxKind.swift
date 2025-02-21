@@ -15,9 +15,7 @@
 /// Enumerates the known kinds of Syntax represented in the Syntax tree.
 public enum SyntaxKind: Sendable {
   case token
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case abiAttributeArguments
   case accessorBlock
   case accessorDeclList
@@ -40,6 +38,8 @@ public enum SyntaxKind: Sendable {
   case availabilityArgument
   case availabilityCondition
   case availabilityLabeledArgument
+  @_spi(Compiler)
+  case availabilityMacroDefinition
   case awaitExpr
   case backDeployedAttributeArguments
   case binaryOperatorExpr
@@ -103,9 +103,7 @@ public enum SyntaxKind: Sendable {
   case differentiableAttributeArguments
   case discardAssignmentExpr
   case discardStmt
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case doExpr
   case doStmt
   case documentationAttributeArgumentList
@@ -182,17 +180,11 @@ public enum SyntaxKind: Sendable {
   case labeledSpecializeArgument
   case labeledStmt
   case layoutRequirement
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case lifetimeSpecifierArgumentList
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case lifetimeSpecifierArgument
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case lifetimeTypeSpecifier
   case macroDecl
   case macroExpansionDecl
@@ -279,9 +271,7 @@ public enum SyntaxKind: Sendable {
   case switchDefaultLabel
   case switchExpr
   case ternaryExpr
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case thenStmt
   case throwStmt
   case throwsClause
@@ -305,9 +295,7 @@ public enum SyntaxKind: Sendable {
   case unresolvedAsExpr
   case unresolvedIsExpr
   case unresolvedTernaryExpr
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   case unsafeExpr
   case valueBindingPattern
   case variableDecl
@@ -498,6 +486,8 @@ public enum SyntaxKind: Sendable {
       return AvailabilityConditionSyntax.self
     case .availabilityLabeledArgument:
       return AvailabilityLabeledArgumentSyntax.self
+    case .availabilityMacroDefinition:
+      return AvailabilityMacroDefinitionSyntax.self
     case .awaitExpr:
       return AwaitExprSyntax.self
     case .backDeployedAttributeArguments:

@@ -16,15 +16,7 @@ import SyntaxSupport
 import Utils
 
 let tokenNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax(
-    """
-    #if compiler(>=6)
-    @_spi(RawSyntax) internal import SwiftSyntax
-    #else
-    @_spi(RawSyntax) import SwiftSyntax
-    #endif
-    """
-  )
+  importSwiftSyntax()
 
   try! ExtensionDeclSyntax("extension TokenKind") {
     try! VariableDeclSyntax("var nameForDiagnostics: String") {

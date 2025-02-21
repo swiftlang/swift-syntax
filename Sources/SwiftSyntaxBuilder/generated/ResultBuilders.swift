@@ -13,9 +13,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-@_spi(ExperimentalLanguageFeatures) public import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) public import SwiftSyntax
 #else
-@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) import SwiftSyntax
 #endif
 
 // MARK: - AccessorDeclListBuilder
@@ -431,9 +431,7 @@ extension LabeledExprListSyntax {
 
 // MARK: - LifetimeSpecifierArgumentListBuilder
 
-#if compiler(>=5.8)
 @_spi(ExperimentalLanguageFeatures)
-#endif
 @resultBuilder
 public struct LifetimeSpecifierArgumentListBuilder: ListBuilder {
   public typealias FinalResult = LifetimeSpecifierArgumentListSyntax
@@ -694,9 +692,7 @@ public struct TypeSpecifierListBuilder: ListBuilder {
     buildExpression(.init(expression))
   }
 
-  #if compiler(>=5.8)
   @_spi(ExperimentalLanguageFeatures)
-  #endif
   public static func buildExpression(_ expression: LifetimeTypeSpecifierSyntax) -> Component {
     buildExpression(.init(expression))
   }

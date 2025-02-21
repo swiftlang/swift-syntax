@@ -91,7 +91,7 @@
 /// tokens as needed to disambiguate a parse. However, because lookahead
 /// operates on a copy of the lexical stream, no input tokens are lost..
 public struct Parser {
-  var arena: ParsingSyntaxArena
+  var arena: ParsingRawSyntaxArena
 
   /// A view of the sequence of lexemes in the input.
   var lexemes: Lexer.LexemeSequence
@@ -222,7 +222,7 @@ public struct Parser {
     buffer input: UnsafeBufferPointer<UInt8>,
     maximumNestingLevel: Int?,
     parseTransition: IncrementalParseTransition?,
-    arena: ParsingSyntaxArena?,
+    arena: ParsingRawSyntaxArena?,
     swiftVersion: SwiftVersion?,
     experimentalFeatures: ExperimentalFeatures
   ) {
@@ -231,7 +231,7 @@ public struct Parser {
       self.arena = arena
       precondition(arena.contains(text: SyntaxText(baseAddress: input.baseAddress, count: input.count)))
     } else {
-      self.arena = ParsingSyntaxArena(parseTriviaFunction: TriviaParser.parseTrivia)
+      self.arena = ParsingRawSyntaxArena(parseTriviaFunction: TriviaParser.parseTrivia)
       input = self.arena.internSourceBuffer(input)
     }
 
@@ -347,7 +347,7 @@ public struct Parser {
     _ input: UnsafeBufferPointer<UInt8>,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition? = nil,
-    arena: ParsingSyntaxArena? = nil,
+    arena: ParsingRawSyntaxArena? = nil,
     swiftVersion: SwiftVersion? = nil,
     experimentalFeatures: ExperimentalFeatures
   ) {
@@ -831,7 +831,7 @@ extension Parser {
 
   /// Creates a replicate of `syntax` with all tokens marked as missing.
   func withAllTokensMarkedMissing<T: RawSyntaxNodeProtocol>(syntax: T) -> T {
-    let tokenMissingMaker = TokenMissingMaker(arena: self.arena)
+    let tokenMissingMaker = TokenMissingMaker(rawAllocationArena: self.arena)
     let allMissing = tokenMissingMaker.rewrite(
       Syntax(raw: RawSyntax(syntax), rawNodeArena: self.arena)
     ).raw

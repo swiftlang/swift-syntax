@@ -21,7 +21,7 @@
 fileprivate class StringLiteralExpressionIndentationChecker {
   // MARK: Entry
 
-  init(expectedIndentation: SyntaxText, arena: SyntaxArena) {
+  init(expectedIndentation: SyntaxText, arena: RawSyntaxArena) {
     self.expectedIndentation = expectedIndentation
     self.arena = arena
   }
@@ -37,7 +37,7 @@ fileprivate class StringLiteralExpressionIndentationChecker {
   // MARK: Implementation
 
   private let expectedIndentation: SyntaxText
-  private let arena: SyntaxArena
+  private let arena: RawSyntaxArena
 
   private func visit(node: RawSyntax) -> RawSyntax? {
     if node.isToken {

@@ -55,7 +55,7 @@ struct LocalPrPrecheckExecutor {
 
   func run() throws {
     try formatExecutor.run()
-    try generateSourceCodeExecutor.run(sourceDir: Paths.sourcesDir)
+    try generateSourceCodeExecutor.run(destinationDir: Paths.generatedSourcesDir)
     try buildExecutor.run()
     try testExecutor.run()
   }

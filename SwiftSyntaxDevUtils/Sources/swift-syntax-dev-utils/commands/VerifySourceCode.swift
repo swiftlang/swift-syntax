@@ -14,13 +14,6 @@ import ArgumentParser
 import Foundation
 import RegexBuilder
 
-fileprivate let modules: [String] = [
-  "SwiftParser",
-  "SwiftParserDiagnostics",
-  "SwiftSyntax",
-  "SwiftSyntaxBuilder",
-]
-
 struct VerifySourceCode: ParsableCommand {
   static let configuration = CommandConfiguration(
     abstract: "Verify that the generated sources match the ones checked into the repository."
@@ -66,40 +59,37 @@ struct VerifySourceCodeExecutor {
   }
 
   private func verifyCodeGeneratedFiles(tempDir: URL) throws {
-    try generateSourceCodeExecutor.run(sourceDir: tempDir)
+    try generateSourceCodeExecutor.run(destinationDir: tempDir)
 
     logSection("Verifing code generated files")
 
-    for module in modules {
-      let selfGeneratedDir = tempDir.appendingPathComponent(module).appendingPathComponent("generated")
-      let userGeneratedDir = Paths.sourcesDir.appendingPathComponent(module).appendingPathComponent("generated")
+    let selfGeneratedDir = tempDir
+    let userGeneratedDir = Paths.generatedSourcesDir
 
-      let process = ProcessRunner(
-        executableURL: try Paths.diffExec,
-        arguments: [
-          "--recursive",
-          "--exclude",
-          ".*",  // Exclude dot files like .DS_Store
-          "--context=0",
-          selfGeneratedDir.path,
-          userGeneratedDir.path,
-        ]
+    let process = ProcessRunner(
+      executableURL: try Paths.diffExec,
+      arguments: [
+        "--recursive",
+        "--exclude",
+        ".*",  // Exclude dot files like .DS_Store
+        "--context=0",
+        selfGeneratedDir.path,
+        userGeneratedDir.path,
+      ]
+    )
+
+    let result = try process.run(verbose: verbose)
+
+    if !result.stderr.isEmpty {
+      throw ScriptExectutionError(
+        message: """
+          FAIL: code-generated files committed to repository do
+          not match generated ones. Please re-generate the
+          code-generated-files using the following command, open a PR to the
+          SwiftSyntax project and merge it alongside the main PR.
+          $ swift run swift-syntax-dev-utils generate-source-code
+          """
       )
-
-      let result = try process.run(verbose: verbose)
-
-      if !result.stderr.isEmpty {
-        throw ScriptExectutionError(
-          message: """
-            FAIL: code-generated files committed to repository do
-            not match generated ones. Please re-generate the
-            code-generated-files using the following command, open a PR to the
-            SwiftSyntax project and merge it alongside the main PR.
-            $ swift run swift-syntax-dev-utils generate-source-code
-            /path/to/toolchain.xctoolchain/usr
-            """
-        )
-      }
     }
   }
 }

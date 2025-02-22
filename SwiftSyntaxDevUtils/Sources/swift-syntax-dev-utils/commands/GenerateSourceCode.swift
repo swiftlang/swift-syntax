@@ -26,7 +26,7 @@ struct GenerateSourceCode: ParsableCommand {
       toolchain: try arguments.toolchain,
       verbose: arguments.verbose
     )
-    try executor.run(sourceDir: Paths.sourcesDir)
+    try executor.run(destinationDir: Paths.generatedSourcesDir)
   }
 }
 
@@ -46,13 +46,13 @@ struct GenerateSourceCodeExecutor {
     self.verbose = verbose
   }
 
-  func run(sourceDir: URL) throws {
+  func run(destinationDir: URL) throws {
     logSection("Running code generation")
 
     var args = [
       "run",
       "--package-path", Paths.codeGenerationDir.relativePath,
-      "generate-swift-syntax", sourceDir.relativePath,
+      "generate-swift-syntax", destinationDir.relativePath,
     ]
 
     if verbose {

@@ -120,6 +120,10 @@ extension AvailabilityArgumentSyntax {
   public typealias Entry = Argument
 }
 
+@_spi(Compiler)
+@available(*, deprecated, renamed: "AvailabilityMacroDefinitionFileSyntax")
+public typealias AvailabilityMacroDefinitionSyntax = AvailabilityMacroDefinitionFileSyntax
+
 extension ClosureSignatureSyntax {
   @available(*, deprecated, renamed: "ParameterClause")
   public typealias Input = ParameterClause

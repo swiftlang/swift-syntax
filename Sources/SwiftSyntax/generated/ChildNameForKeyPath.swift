@@ -23,6 +23,24 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "provider"
   case \ABIAttributeArgumentsSyntax.unexpectedAfterProvider:
     return "unexpectedAfterProvider"
+  case \AccessorBlockFileSyntax.unexpectedBeforeLeftBrace:
+    return "unexpectedBeforeLeftBrace"
+  case \AccessorBlockFileSyntax.leftBrace:
+    return "leftBrace"
+  case \AccessorBlockFileSyntax.unexpectedBetweenLeftBraceAndAccessors:
+    return "unexpectedBetweenLeftBraceAndAccessors"
+  case \AccessorBlockFileSyntax.accessors:
+    return "accessors"
+  case \AccessorBlockFileSyntax.unexpectedBetweenAccessorsAndRightBrace:
+    return "unexpectedBetweenAccessorsAndRightBrace"
+  case \AccessorBlockFileSyntax.rightBrace:
+    return "rightBrace"
+  case \AccessorBlockFileSyntax.unexpectedBetweenRightBraceAndEndOfFileToken:
+    return "unexpectedBetweenRightBraceAndEndOfFileToken"
+  case \AccessorBlockFileSyntax.endOfFileToken:
+    return "endOfFileToken"
+  case \AccessorBlockFileSyntax.unexpectedAfterEndOfFileToken:
+    return "unexpectedAfterEndOfFileToken"
   case \AccessorBlockSyntax.unexpectedBeforeLeftBrace:
     return "unexpectedBeforeLeftBrace"
   case \AccessorBlockSyntax.leftBrace:
@@ -223,6 +241,20 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "genericWhereClause"
   case \AssociatedTypeDeclSyntax.unexpectedAfterGenericWhereClause:
     return "unexpectedAfterGenericWhereClause"
+  case \AttributeClauseFileSyntax.unexpectedBeforeAttributes:
+    return "unexpectedBeforeAttributes"
+  case \AttributeClauseFileSyntax.attributes:
+    return "attributes"
+  case \AttributeClauseFileSyntax.unexpectedBetweenAttributesAndModifiers:
+    return "unexpectedBetweenAttributesAndModifiers"
+  case \AttributeClauseFileSyntax.modifiers:
+    return "modifiers"
+  case \AttributeClauseFileSyntax.unexpectedBetweenModifiersAndEndOfFileToken:
+    return "unexpectedBetweenModifiersAndEndOfFileToken"
+  case \AttributeClauseFileSyntax.endOfFileToken:
+    return "endOfFileToken"
+  case \AttributeClauseFileSyntax.unexpectedAfterEndOfFileToken:
+    return "unexpectedAfterEndOfFileToken"
   case \AttributeSyntax.unexpectedBeforeAtSign:
     return "unexpectedBeforeAtSign"
   case \AttributeSyntax.atSign:
@@ -301,20 +333,24 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "value"
   case \AvailabilityLabeledArgumentSyntax.unexpectedAfterValue:
     return "unexpectedAfterValue"
-  case \AvailabilityMacroDefinitionSyntax.unexpectedBeforePlatformVersion:
+  case \AvailabilityMacroDefinitionFileSyntax.unexpectedBeforePlatformVersion:
     return "unexpectedBeforePlatformVersion"
-  case \AvailabilityMacroDefinitionSyntax.platformVersion:
+  case \AvailabilityMacroDefinitionFileSyntax.platformVersion:
     return "platformVersion"
-  case \AvailabilityMacroDefinitionSyntax.unexpectedBetweenPlatformVersionAndColon:
+  case \AvailabilityMacroDefinitionFileSyntax.unexpectedBetweenPlatformVersionAndColon:
     return "unexpectedBetweenPlatformVersionAndColon"
-  case \AvailabilityMacroDefinitionSyntax.colon:
+  case \AvailabilityMacroDefinitionFileSyntax.colon:
     return "colon"
-  case \AvailabilityMacroDefinitionSyntax.unexpectedBetweenColonAndSpecs:
+  case \AvailabilityMacroDefinitionFileSyntax.unexpectedBetweenColonAndSpecs:
     return "unexpectedBetweenColonAndSpecs"
-  case \AvailabilityMacroDefinitionSyntax.specs:
+  case \AvailabilityMacroDefinitionFileSyntax.specs:
     return "specs"
-  case \AvailabilityMacroDefinitionSyntax.unexpectedAfterSpecs:
-    return "unexpectedAfterSpecs"
+  case \AvailabilityMacroDefinitionFileSyntax.unexpectedBetweenSpecsAndEndOfFileToken:
+    return "unexpectedBetweenSpecsAndEndOfFileToken"
+  case \AvailabilityMacroDefinitionFileSyntax.endOfFileToken:
+    return "endOfFileToken"
+  case \AvailabilityMacroDefinitionFileSyntax.unexpectedAfterEndOfFileToken:
+    return "unexpectedAfterEndOfFileToken"
   case \AwaitExprSyntax.unexpectedBeforeAwaitKeyword:
     return "unexpectedBeforeAwaitKeyword"
   case \AwaitExprSyntax.awaitKeyword:
@@ -631,6 +667,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "inKeyword"
   case \ClosureSignatureSyntax.unexpectedAfterInKeyword:
     return "unexpectedAfterInKeyword"
+  case \CodeBlockFileSyntax.unexpectedBeforeBody:
+    return "unexpectedBeforeBody"
+  case \CodeBlockFileSyntax.body:
+    return "body"
+  case \CodeBlockFileSyntax.unexpectedBetweenBodyAndEndOfFileToken:
+    return "unexpectedBetweenBodyAndEndOfFileToken"
+  case \CodeBlockFileSyntax.endOfFileToken:
+    return "endOfFileToken"
+  case \CodeBlockFileSyntax.unexpectedAfterEndOfFileToken:
+    return "unexpectedAfterEndOfFileToken"
   case \CodeBlockItemSyntax.unexpectedBeforeItem:
     return "unexpectedBeforeItem"
   case \CodeBlockItemSyntax.item:
@@ -2189,6 +2235,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "declName"
   case \MemberAccessExprSyntax.unexpectedAfterDeclName:
     return "unexpectedAfterDeclName"
+  case \MemberBlockItemListFileSyntax.unexpectedBeforeMembers:
+    return "unexpectedBeforeMembers"
+  case \MemberBlockItemListFileSyntax.members:
+    return "members"
+  case \MemberBlockItemListFileSyntax.unexpectedBetweenMembersAndEndOfFileToken:
+    return "unexpectedBetweenMembersAndEndOfFileToken"
+  case \MemberBlockItemListFileSyntax.endOfFileToken:
+    return "endOfFileToken"
+  case \MemberBlockItemListFileSyntax.unexpectedAfterEndOfFileToken:
+    return "unexpectedAfterEndOfFileToken"
   case \MemberBlockItemSyntax.unexpectedBeforeDecl:
     return "unexpectedBeforeDecl"
   case \MemberBlockItemSyntax.decl:

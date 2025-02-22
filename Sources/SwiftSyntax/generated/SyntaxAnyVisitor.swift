@@ -66,6 +66,16 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  @_spi(Compiler)
+  override open func visit(_ node: AccessorBlockFileSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  @_spi(Compiler)
+  override open func visitPost(_ node: AccessorBlockFileSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: AccessorBlockSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -178,6 +188,16 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  @_spi(Compiler)
+  override open func visit(_ node: AttributeClauseFileSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  @_spi(Compiler)
+  override open func visitPost(_ node: AttributeClauseFileSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: AttributeListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -235,12 +255,12 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   @_spi(Compiler)
-  override open func visit(_ node: AvailabilityMacroDefinitionSyntax) -> SyntaxVisitorContinueKind {
+  override open func visit(_ node: AvailabilityMacroDefinitionFileSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
   @_spi(Compiler)
-  override open func visitPost(_ node: AvailabilityMacroDefinitionSyntax) {
+  override open func visitPost(_ node: AvailabilityMacroDefinitionFileSyntax) {
     visitAnyPost(node._syntaxNode)
   }
 
@@ -441,6 +461,16 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: ClosureSignatureSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
+  @_spi(Compiler)
+  override open func visit(_ node: CodeBlockFileSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  @_spi(Compiler)
+  override open func visitPost(_ node: CodeBlockFileSyntax) {
     visitAnyPost(node._syntaxNode)
   }
 
@@ -1425,6 +1455,16 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: MemberAccessExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
+  @_spi(Compiler)
+  override open func visit(_ node: MemberBlockItemListFileSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  @_spi(Compiler)
+  override open func visitPost(_ node: MemberBlockItemListFileSyntax) {
     visitAnyPost(node._syntaxNode)
   }
 

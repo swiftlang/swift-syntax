@@ -213,6 +213,18 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       verify(layout[1], as: RawSyntax.self)])
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
   }
+  func validateAccessorBlockFileSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 9)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.leftBrace)]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawAccessorDeclListSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.rightBrace)]))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.endOfFile)]))
+    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
+  }
   func validateAccessorBlockSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -376,6 +388,16 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
   }
+  func validateAttributeClauseFileSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 7)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawDeclModifierListSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.endOfFile)]))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+  }
   func validateAttributeListSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     for (index, element) in layout.enumerated() {
       assertAnyHasNoError(kind, index, [
@@ -451,8 +473,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       verify(layout[5], as: RawSyntax.self)])
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
   }
-  func validateAvailabilityMacroDefinitionSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
-    assert(layout.count == 7)
+  func validateAvailabilityMacroDefinitionFileSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 9)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawPlatformVersionSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
@@ -460,6 +482,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawAvailabilityArgumentListSyntax.self))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.endOfFile)]))
+    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
   }
   func validateAwaitExprSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     assert(layout.count == 5)
@@ -704,6 +728,14 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 11, verify(layout[11], as: RawTokenSyntax.self, tokenChoices: [.keyword("in")]))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
+  }
+  func validateCodeBlockFileSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawCodeBlockSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.endOfFile)]))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   }
   func validateCodeBlockItemListSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     for (index, element) in layout.enumerated() {
@@ -2001,6 +2033,14 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 5, verify(layout[5], as: RawDeclReferenceExprSyntax.self))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
   }
+  func validateMemberBlockItemListFileSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawMemberBlockItemListSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.endOfFile)]))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+  }
   func validateMemberBlockItemListSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     for (index, element) in layout.enumerated() {
       assertNoError(kind, index, verify(element, as: RawMemberBlockItemSyntax.self))
@@ -3108,6 +3148,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertionFailure("validateLayout for .token kind is not supported")
   case .abiAttributeArguments:
     validateABIAttributeArgumentsSyntax(kind: kind, layout: layout)
+  case .accessorBlockFile:
+    validateAccessorBlockFileSyntax(kind: kind, layout: layout)
   case .accessorBlock:
     validateAccessorBlockSyntax(kind: kind, layout: layout)
   case .accessorDeclList:
@@ -3136,6 +3178,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     validateAssignmentExprSyntax(kind: kind, layout: layout)
   case .associatedTypeDecl:
     validateAssociatedTypeDeclSyntax(kind: kind, layout: layout)
+  case .attributeClauseFile:
+    validateAttributeClauseFileSyntax(kind: kind, layout: layout)
   case .attributeList:
     validateAttributeListSyntax(kind: kind, layout: layout)
   case .attribute:
@@ -3150,8 +3194,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     validateAvailabilityConditionSyntax(kind: kind, layout: layout)
   case .availabilityLabeledArgument:
     validateAvailabilityLabeledArgumentSyntax(kind: kind, layout: layout)
-  case .availabilityMacroDefinition:
-    validateAvailabilityMacroDefinitionSyntax(kind: kind, layout: layout)
+  case .availabilityMacroDefinitionFile:
+    validateAvailabilityMacroDefinitionFileSyntax(kind: kind, layout: layout)
   case .awaitExpr:
     validateAwaitExprSyntax(kind: kind, layout: layout)
   case .backDeployedAttributeArguments:
@@ -3202,6 +3246,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     validateClosureShorthandParameterSyntax(kind: kind, layout: layout)
   case .closureSignature:
     validateClosureSignatureSyntax(kind: kind, layout: layout)
+  case .codeBlockFile:
+    validateCodeBlockFileSyntax(kind: kind, layout: layout)
   case .codeBlockItemList:
     validateCodeBlockItemListSyntax(kind: kind, layout: layout)
   case .codeBlockItem:
@@ -3446,6 +3492,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     validateMatchingPatternConditionSyntax(kind: kind, layout: layout)
   case .memberAccessExpr:
     validateMemberAccessExprSyntax(kind: kind, layout: layout)
+  case .memberBlockItemListFile:
+    validateMemberBlockItemListFileSyntax(kind: kind, layout: layout)
   case .memberBlockItemList:
     validateMemberBlockItemListSyntax(kind: kind, layout: layout)
   case .memberBlockItem:

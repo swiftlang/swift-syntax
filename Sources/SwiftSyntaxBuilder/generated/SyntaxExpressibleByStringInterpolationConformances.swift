@@ -18,6 +18,12 @@
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) import SwiftSyntax
 #endif
 
+extension AccessorBlockFileSyntax: SyntaxExpressibleByStringInterpolation {}
+
+#if compiler(>=6)
+extension AccessorBlockFileSyntax: Swift.ExpressibleByStringInterpolation {}
+#endif
+
 extension AccessorBlockSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
@@ -30,16 +36,22 @@ extension AccessorDeclSyntax: SyntaxExpressibleByStringInterpolation {}
 extension AccessorDeclSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
+extension AttributeClauseFileSyntax: SyntaxExpressibleByStringInterpolation {}
+
+#if compiler(>=6)
+extension AttributeClauseFileSyntax: Swift.ExpressibleByStringInterpolation {}
+#endif
+
 extension AttributeSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension AttributeSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
-extension AvailabilityMacroDefinitionSyntax: SyntaxExpressibleByStringInterpolation {}
+extension AvailabilityMacroDefinitionFileSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
-extension AvailabilityMacroDefinitionSyntax: Swift.ExpressibleByStringInterpolation {}
+extension AvailabilityMacroDefinitionFileSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension CatchClauseSyntax: SyntaxExpressibleByStringInterpolation {}
@@ -52,6 +64,12 @@ extension ClosureParameterSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension ClosureParameterSyntax: Swift.ExpressibleByStringInterpolation {}
+#endif
+
+extension CodeBlockFileSyntax: SyntaxExpressibleByStringInterpolation {}
+
+#if compiler(>=6)
+extension CodeBlockFileSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension CodeBlockItemSyntax: SyntaxExpressibleByStringInterpolation {}
@@ -94,6 +112,12 @@ extension GenericParameterClauseSyntax: SyntaxExpressibleByStringInterpolation {
 
 #if compiler(>=6)
 extension GenericParameterClauseSyntax: Swift.ExpressibleByStringInterpolation {}
+#endif
+
+extension MemberBlockItemListFileSyntax: SyntaxExpressibleByStringInterpolation {}
+
+#if compiler(>=6)
+extension MemberBlockItemListFileSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
 extension MemberBlockSyntax: SyntaxExpressibleByStringInterpolation {}

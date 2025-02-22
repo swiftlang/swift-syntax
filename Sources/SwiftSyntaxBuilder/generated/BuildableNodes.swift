@@ -265,6 +265,29 @@ extension ClosureExprSyntax {
   }
 }
 
+extension CodeBlockFileSyntax {
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+    leadingTrivia: Trivia? = nil,
+    unexpectedBeforeBody: UnexpectedNodesSyntax? = nil,
+    unexpectedBetweenBodyAndEndOfFileToken: UnexpectedNodesSyntax? = nil,
+    endOfFileToken: TokenSyntax = .endOfFileToken(),
+    unexpectedAfterEndOfFileToken: UnexpectedNodesSyntax? = nil,
+    @CodeBlockItemListBuilder bodyBuilder: () throws -> CodeBlockItemListSyntax,
+    trailingTrivia: Trivia? = nil
+  ) rethrows {
+    try self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeBody,
+      body: CodeBlockSyntax(statements: bodyBuilder()),
+      unexpectedBetweenBodyAndEndOfFileToken,
+      endOfFileToken: endOfFileToken,
+      unexpectedAfterEndOfFileToken,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
 extension CodeBlockSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -1079,6 +1102,29 @@ extension MacroExpansionExprSyntax {
       unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
       additionalTrailingClosures: additionalTrailingClosures,
       unexpectedAfterAdditionalTrailingClosures,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension MemberBlockItemListFileSyntax {
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+    leadingTrivia: Trivia? = nil,
+    unexpectedBeforeMembers: UnexpectedNodesSyntax? = nil,
+    unexpectedBetweenMembersAndEndOfFileToken: UnexpectedNodesSyntax? = nil,
+    endOfFileToken: TokenSyntax = .endOfFileToken(),
+    unexpectedAfterEndOfFileToken: UnexpectedNodesSyntax? = nil,
+    @MemberBlockItemListBuilder membersBuilder: () throws -> MemberBlockItemListSyntax,
+    trailingTrivia: Trivia? = nil
+  ) rethrows {
+    try self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeMembers,
+      members: membersBuilder(),
+      unexpectedBetweenMembersAndEndOfFileToken,
+      endOfFileToken: endOfFileToken,
+      unexpectedAfterEndOfFileToken,
       trailingTrivia: trailingTrivia
     )
   }

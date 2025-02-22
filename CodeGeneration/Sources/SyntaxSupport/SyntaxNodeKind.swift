@@ -24,6 +24,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case _canImportVersionInfo
   case abiAttributeArguments
   case accessorBlock
+  case accessorBlockFile
   case accessorDecl
   case accessorDeclList
   case accessorEffectSpecifiers
@@ -39,12 +40,13 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case associatedTypeDecl
   case attribute
   case attributedType
+  case attributeClauseFile
   case attributeList
   case availabilityArgument
   case availabilityArgumentList
   case availabilityCondition
   case availabilityLabeledArgument
-  case availabilityMacroDefinition
+  case availabilityMacroDefinitionFile
   case awaitExpr
   case backDeployedAttributeArguments
   case binaryOperatorExpr
@@ -69,6 +71,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case closureShorthandParameterList
   case closureSignature
   case codeBlock
+  case codeBlockFile
   case codeBlockItem
   case codeBlockItemList
   case compositionType
@@ -195,6 +198,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case memberBlock
   case memberBlockItem
   case memberBlockItemList
+  case memberBlockItemListFile
   case memberType
   case metatypeType
   case missing

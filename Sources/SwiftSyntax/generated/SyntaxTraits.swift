@@ -685,6 +685,8 @@ extension ArrayElementSyntax: WithTrailingCommaSyntax {}
 
 extension AssociatedTypeDeclSyntax: NamedDeclSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
+extension AttributeClauseFileSyntax: WithAttributesSyntax, WithModifiersSyntax {}
+
 extension AttributedTypeSyntax: WithAttributesSyntax {}
 
 extension AvailabilityArgumentSyntax: WithTrailingCommaSyntax {}

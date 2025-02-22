@@ -20,6 +20,7 @@ private let unsortedSyntaxNodes: [Node] =
   + TYPE_NODES
   + PATTERN_NODES
   + AVAILABILITY_NODES
+  + COMPILER_NODES
 
 public let SYNTAX_NODES: [Node] =
   unsortedSyntaxNodes

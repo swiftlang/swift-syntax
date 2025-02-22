@@ -17,6 +17,8 @@ public enum SyntaxKind: Sendable {
   case token
   @_spi(ExperimentalLanguageFeatures)
   case abiAttributeArguments
+  @_spi(Compiler)
+  case accessorBlockFile
   case accessorBlock
   case accessorDeclList
   case accessorDecl
@@ -31,6 +33,8 @@ public enum SyntaxKind: Sendable {
   case asExpr
   case assignmentExpr
   case associatedTypeDecl
+  @_spi(Compiler)
+  case attributeClauseFile
   case attributeList
   case attribute
   case attributedType
@@ -39,7 +43,7 @@ public enum SyntaxKind: Sendable {
   case availabilityCondition
   case availabilityLabeledArgument
   @_spi(Compiler)
-  case availabilityMacroDefinition
+  case availabilityMacroDefinitionFile
   case awaitExpr
   case backDeployedAttributeArguments
   case binaryOperatorExpr
@@ -65,6 +69,8 @@ public enum SyntaxKind: Sendable {
   case closureShorthandParameterList
   case closureShorthandParameter
   case closureSignature
+  @_spi(Compiler)
+  case codeBlockFile
   case codeBlockItemList
   case codeBlockItem
   case codeBlock
@@ -191,6 +197,8 @@ public enum SyntaxKind: Sendable {
   case macroExpansionExpr
   case matchingPatternCondition
   case memberAccessExpr
+  @_spi(Compiler)
+  case memberBlockItemListFile
   case memberBlockItemList
   case memberBlockItem
   case memberBlock
@@ -444,6 +452,8 @@ public enum SyntaxKind: Sendable {
       return TokenSyntax.self
     case .abiAttributeArguments:
       return ABIAttributeArgumentsSyntax.self
+    case .accessorBlockFile:
+      return AccessorBlockFileSyntax.self
     case .accessorBlock:
       return AccessorBlockSyntax.self
     case .accessorDeclList:
@@ -472,6 +482,8 @@ public enum SyntaxKind: Sendable {
       return AssignmentExprSyntax.self
     case .associatedTypeDecl:
       return AssociatedTypeDeclSyntax.self
+    case .attributeClauseFile:
+      return AttributeClauseFileSyntax.self
     case .attributeList:
       return AttributeListSyntax.self
     case .attribute:
@@ -486,8 +498,8 @@ public enum SyntaxKind: Sendable {
       return AvailabilityConditionSyntax.self
     case .availabilityLabeledArgument:
       return AvailabilityLabeledArgumentSyntax.self
-    case .availabilityMacroDefinition:
-      return AvailabilityMacroDefinitionSyntax.self
+    case .availabilityMacroDefinitionFile:
+      return AvailabilityMacroDefinitionFileSyntax.self
     case .awaitExpr:
       return AwaitExprSyntax.self
     case .backDeployedAttributeArguments:
@@ -538,6 +550,8 @@ public enum SyntaxKind: Sendable {
       return ClosureShorthandParameterSyntax.self
     case .closureSignature:
       return ClosureSignatureSyntax.self
+    case .codeBlockFile:
+      return CodeBlockFileSyntax.self
     case .codeBlockItemList:
       return CodeBlockItemListSyntax.self
     case .codeBlockItem:
@@ -782,6 +796,8 @@ public enum SyntaxKind: Sendable {
       return MatchingPatternConditionSyntax.self
     case .memberAccessExpr:
       return MemberAccessExprSyntax.self
+    case .memberBlockItemListFile:
+      return MemberBlockItemListFileSyntax.self
     case .memberBlockItemList:
       return MemberBlockItemListSyntax.self
     case .memberBlockItem:

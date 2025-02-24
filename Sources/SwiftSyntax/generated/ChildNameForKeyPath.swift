@@ -1373,8 +1373,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenTryKeywordAndAwaitKeyword"
   case \ForStmtSyntax.awaitKeyword:
     return "awaitKeyword"
-  case \ForStmtSyntax.unexpectedBetweenAwaitKeywordAndCaseKeyword:
-    return "unexpectedBetweenAwaitKeywordAndCaseKeyword"
+  case \ForStmtSyntax.unexpectedBetweenAwaitKeywordAndUnsafeKeyword:
+    return "unexpectedBetweenAwaitKeywordAndUnsafeKeyword"
+  case \ForStmtSyntax.unsafeKeyword:
+    return "unsafeKeyword"
+  case \ForStmtSyntax.unexpectedBetweenUnsafeKeywordAndCaseKeyword:
+    return "unexpectedBetweenUnsafeKeywordAndCaseKeyword"
   case \ForStmtSyntax.caseKeyword:
     return "caseKeyword"
   case \ForStmtSyntax.unexpectedBetweenCaseKeywordAndPattern:

@@ -22,8 +22,11 @@ public protocol SyntaxParseable: SyntaxProtocol {
   static func parse(from parser: inout Parser) -> Self
 }
 
-extension AccessorBlockFileSyntax: SyntaxParseable {
-  public static func parse(from parser: inout Parser) -> Self {
+extension SyntaxParseable {
+  fileprivate static func parse(
+    from parser: inout Parser,
+    parse: (_ parser: inout Parser) -> some RawSyntaxNodeProtocol
+  ) -> Self {
     // Keep the parser alive so that the arena in which `raw` is allocated
     // doesn’t get deallocated before we have a chance to create a syntax node
     // from it. We can’t use `parser.arena` as the parameter to
@@ -34,423 +37,201 @@ extension AccessorBlockFileSyntax: SyntaxParseable {
       withExtendedLifetime(parser) {
       }
     }
-    let node = parser.parseAccessorBlockFile()
+    let node = parse(&parser)
     let raw = RawSyntax(parser.parseRemainder(into: node))
     return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
+  }
+}
+
+extension AccessorBlockFileSyntax: SyntaxParseable {
+  public static func parse(from parser: inout Parser) -> Self {
+    parse(from: &parser) {
+      $0.parseAccessorBlockFile()
+    }
   }
 }
 
 extension AccessorBlockSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseAccessorBlock()
     }
-    let node = parser.parseAccessorBlock()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension AccessorDeclSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseAccessorDecl()
     }
-    let node = parser.parseAccessorDecl()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension AttributeClauseFileSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseAttributeClauseFile()
     }
-    let node = parser.parseAttributeClauseFile()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension AttributeSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseAttribute()
     }
-    let node = parser.parseAttribute()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension AvailabilityMacroDefinitionFileSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseAvailabilityMacroDefinitionFile()
     }
-    let node = parser.parseAvailabilityMacroDefinitionFile()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension CatchClauseSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseCatchClause()
     }
-    let node = parser.parseCatchClause()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension ClosureParameterSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseClosureParameter()
     }
-    let node = parser.parseClosureParameter()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension CodeBlockFileSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseCodeBlockFile()
     }
-    let node = parser.parseCodeBlockFile()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension CodeBlockItemSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseNonOptionalCodeBlockItem()
     }
-    let node = parser.parseNonOptionalCodeBlockItem()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension CodeBlockSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseCodeBlock()
     }
-    let node = parser.parseCodeBlock()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension DeclSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseDeclaration()
     }
-    let node = parser.parseDeclaration()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension EnumCaseParameterSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseEnumCaseParameter()
     }
-    let node = parser.parseEnumCaseParameter()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension ExprSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseExpression()
     }
-    let node = parser.parseExpression()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension FunctionParameterSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseFunctionParameter()
     }
-    let node = parser.parseFunctionParameter()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension GenericParameterClauseSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseGenericParameters()
     }
-    let node = parser.parseGenericParameters()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension MemberBlockItemListFileSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseMemberBlockItemListFile()
     }
-    let node = parser.parseMemberBlockItemListFile()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension MemberBlockSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseMemberBlock()
     }
-    let node = parser.parseMemberBlock()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension PatternSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parsePattern()
     }
-    let node = parser.parsePattern()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension SourceFileSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseSourceFile()
     }
-    let node = parser.parseSourceFile()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension StmtSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseStatement()
     }
-    let node = parser.parseStatement()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension SwitchCaseSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseSwitchCase()
     }
-    let node = parser.parseSwitchCase()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension TypeSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseType()
     }
-    let node = parser.parseType()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 
 extension VersionTupleSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
-    // Keep the parser alive so that the arena in which `raw` is allocated
-    // doesn’t get deallocated before we have a chance to create a syntax node
-    // from it. We can’t use `parser.arena` as the parameter to
-    // `Syntax(raw:arena:)` because the node might have been re-used during an
-    // incremental parse and would then live in a different arena than
-    // `parser.arena`.
-    defer {
-      withExtendedLifetime(parser) {
-      }
+    parse(from: &parser) {
+      $0.parseVersionTuple()
     }
-    let node = parser.parseVersionTuple()
-    let raw = RawSyntax(parser.parseRemainder(into: node))
-    return Syntax(raw: raw, rawNodeArena: raw.arena).cast(Self.self)
   }
 }
 

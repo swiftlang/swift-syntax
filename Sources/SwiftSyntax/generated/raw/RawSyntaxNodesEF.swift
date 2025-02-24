@@ -1522,7 +1522,9 @@ public struct RawForStmtSyntax: RawStmtSyntaxNodeProtocol {
     tryKeyword: RawTokenSyntax?,
     _ unexpectedBetweenTryKeywordAndAwaitKeyword: RawUnexpectedNodesSyntax? = nil,
     awaitKeyword: RawTokenSyntax?,
-    _ unexpectedBetweenAwaitKeywordAndCaseKeyword: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenAwaitKeywordAndUnsafeKeyword: RawUnexpectedNodesSyntax? = nil,
+    unsafeKeyword: RawTokenSyntax?,
+    _ unexpectedBetweenUnsafeKeywordAndCaseKeyword: RawUnexpectedNodesSyntax? = nil,
     caseKeyword: RawTokenSyntax?,
     _ unexpectedBetweenCaseKeywordAndPattern: RawUnexpectedNodesSyntax? = nil,
     pattern: some RawPatternSyntaxNodeProtocol,
@@ -1540,7 +1542,7 @@ public struct RawForStmtSyntax: RawStmtSyntaxNodeProtocol {
     arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .forStmt, uninitializedCount: 21, arena: arena) { layout in
+      kind: .forStmt, uninitializedCount: 23, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeForKeyword?.raw
       layout[1] = forKeyword.raw
@@ -1548,21 +1550,23 @@ public struct RawForStmtSyntax: RawStmtSyntaxNodeProtocol {
       layout[3] = tryKeyword?.raw
       layout[4] = unexpectedBetweenTryKeywordAndAwaitKeyword?.raw
       layout[5] = awaitKeyword?.raw
-      layout[6] = unexpectedBetweenAwaitKeywordAndCaseKeyword?.raw
-      layout[7] = caseKeyword?.raw
-      layout[8] = unexpectedBetweenCaseKeywordAndPattern?.raw
-      layout[9] = pattern.raw
-      layout[10] = unexpectedBetweenPatternAndTypeAnnotation?.raw
-      layout[11] = typeAnnotation?.raw
-      layout[12] = unexpectedBetweenTypeAnnotationAndInKeyword?.raw
-      layout[13] = inKeyword.raw
-      layout[14] = unexpectedBetweenInKeywordAndSequence?.raw
-      layout[15] = sequence.raw
-      layout[16] = unexpectedBetweenSequenceAndWhereClause?.raw
-      layout[17] = whereClause?.raw
-      layout[18] = unexpectedBetweenWhereClauseAndBody?.raw
-      layout[19] = body.raw
-      layout[20] = unexpectedAfterBody?.raw
+      layout[6] = unexpectedBetweenAwaitKeywordAndUnsafeKeyword?.raw
+      layout[7] = unsafeKeyword?.raw
+      layout[8] = unexpectedBetweenUnsafeKeywordAndCaseKeyword?.raw
+      layout[9] = caseKeyword?.raw
+      layout[10] = unexpectedBetweenCaseKeywordAndPattern?.raw
+      layout[11] = pattern.raw
+      layout[12] = unexpectedBetweenPatternAndTypeAnnotation?.raw
+      layout[13] = typeAnnotation?.raw
+      layout[14] = unexpectedBetweenTypeAnnotationAndInKeyword?.raw
+      layout[15] = inKeyword.raw
+      layout[16] = unexpectedBetweenInKeywordAndSequence?.raw
+      layout[17] = sequence.raw
+      layout[18] = unexpectedBetweenSequenceAndWhereClause?.raw
+      layout[19] = whereClause?.raw
+      layout[20] = unexpectedBetweenWhereClauseAndBody?.raw
+      layout[21] = body.raw
+      layout[22] = unexpectedAfterBody?.raw
     }
     self.init(unchecked: raw)
   }
@@ -1591,64 +1595,72 @@ public struct RawForStmtSyntax: RawStmtSyntaxNodeProtocol {
     layoutView.children[5].map(RawTokenSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenAwaitKeywordAndCaseKeyword: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenAwaitKeywordAndUnsafeKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var caseKeyword: RawTokenSyntax? {
+  public var unsafeKeyword: RawTokenSyntax? {
     layoutView.children[7].map(RawTokenSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenCaseKeywordAndPattern: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenUnsafeKeywordAndCaseKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var pattern: RawPatternSyntax {
-    layoutView.children[9].map(RawPatternSyntax.init(raw:))!
+  public var caseKeyword: RawTokenSyntax? {
+    layoutView.children[9].map(RawTokenSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenCaseKeywordAndPattern: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var typeAnnotation: RawTypeAnnotationSyntax? {
-    layoutView.children[11].map(RawTypeAnnotationSyntax.init(raw:))
+  public var pattern: RawPatternSyntax {
+    layoutView.children[11].map(RawPatternSyntax.init(raw:))!
   }
 
-  public var unexpectedBetweenTypeAnnotationAndInKeyword: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenPatternAndTypeAnnotation: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var inKeyword: RawTokenSyntax {
-    layoutView.children[13].map(RawTokenSyntax.init(raw:))!
+  public var typeAnnotation: RawTypeAnnotationSyntax? {
+    layoutView.children[13].map(RawTypeAnnotationSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenInKeywordAndSequence: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenTypeAnnotationAndInKeyword: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var sequence: RawExprSyntax {
-    layoutView.children[15].map(RawExprSyntax.init(raw:))!
+  public var inKeyword: RawTokenSyntax {
+    layoutView.children[15].map(RawTokenSyntax.init(raw:))!
   }
 
-  public var unexpectedBetweenSequenceAndWhereClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenInKeywordAndSequence: RawUnexpectedNodesSyntax? {
     layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var whereClause: RawWhereClauseSyntax? {
-    layoutView.children[17].map(RawWhereClauseSyntax.init(raw:))
+  public var sequence: RawExprSyntax {
+    layoutView.children[17].map(RawExprSyntax.init(raw:))!
   }
 
-  public var unexpectedBetweenWhereClauseAndBody: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenSequenceAndWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[18].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
+  public var whereClause: RawWhereClauseSyntax? {
+    layoutView.children[19].map(RawWhereClauseSyntax.init(raw:))
+  }
+
+  public var unexpectedBetweenWhereClauseAndBody: RawUnexpectedNodesSyntax? {
+    layoutView.children[20].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
   public var body: RawCodeBlockSyntax {
-    layoutView.children[19].map(RawCodeBlockSyntax.init(raw:))!
+    layoutView.children[21].map(RawCodeBlockSyntax.init(raw:))!
   }
 
   public var unexpectedAfterBody: RawUnexpectedNodesSyntax? {
-    layoutView.children[20].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[22].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

@@ -2818,7 +2818,7 @@ extension ForStmtSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:forKeyword:_:tryKeyword:_:awaitKeyword:_:caseKeyword:_:pattern:_:typeAnnotation:_:inKeyword:_:sequence:_:whereClause:_:body:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:forKeyword:_:tryKeyword:_:awaitKeyword:_:unsafeKeyword:_:caseKeyword:_:pattern:_:typeAnnotation:_:inKeyword:_:sequence:_:whereClause:_:body:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -2828,7 +2828,9 @@ extension ForStmtSyntax {
     tryKeyword: TokenSyntax? = nil,
     _ unexpectedBetweenTryKeywordAndAwaitKeyword: UnexpectedNodesSyntax? = nil,
     awaitKeyword: TokenSyntax? = nil,
-    _ unexpectedBetweenAwaitKeywordAndCaseKeyword: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenAwaitKeywordAndUnsafeKeyword: UnexpectedNodesSyntax? = nil,
+    unsafeKeyword: TokenSyntax? = nil,
+    _ unexpectedBetweenUnsafeKeywordAndCaseKeyword: UnexpectedNodesSyntax? = nil,
     caseKeyword: TokenSyntax? = nil,
     _ unexpectedBetweenCaseKeywordAndPattern: UnexpectedNodesSyntax? = nil,
     pattern: some PatternSyntaxProtocol,
@@ -2853,7 +2855,9 @@ extension ForStmtSyntax {
       tryKeyword: tryKeyword,
       unexpectedBetweenTryKeywordAndAwaitKeyword,
       awaitKeyword: awaitKeyword,
-      unexpectedBetweenAwaitKeywordAndCaseKeyword,
+      unexpectedBetweenAwaitKeywordAndUnsafeKeyword,
+      unsafeKeyword: unsafeKeyword,
+      unexpectedBetweenUnsafeKeywordAndCaseKeyword,
       caseKeyword: caseKeyword,
       unexpectedBetweenCaseKeywordAndPattern,
       pattern: pattern,

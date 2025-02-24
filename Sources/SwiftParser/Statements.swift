@@ -575,7 +575,7 @@ extension Parser {
       lexeme: self.currentToken,
       experimentalFeatures: self.experimentalFeatures
     ), modifierKeyword == .unsafe, !self.peek(isAt: .keyword(.in)) {
-      unsafeKeyword = self.consumeAnyToken()
+      unsafeKeyword = self.consumeAnyToken(remapping: .keyword)
     } else {
       unsafeKeyword = nil
     }

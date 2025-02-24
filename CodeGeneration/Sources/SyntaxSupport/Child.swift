@@ -43,12 +43,7 @@ public enum ChildKind {
   case nodeChoices(choices: [Child], childHistory: Child.History = [])
   // FIXME: We don't appear to have ever generated compatibility layers for children of node choices!
   /// The child is a collection of `kind`.
-  case collection(
-    kind: SyntaxNodeKind,
-    collectionElementName: String? = nil,
-    defaultsToEmpty: Bool = false,
-    deprecatedCollectionElementName: String? = nil
-  )
+  case collection(kind: SyntaxNodeKind, defaultsToEmpty: Bool = false)
   /// The child is a token that matches one of the given `choices`.
   /// If `requiresLeadingSpace` or `requiresTrailingSpace` is not `nil`, it
   /// overrides the default leading/trailing space behavior of the token.
@@ -132,7 +127,7 @@ public class Child: NodeChoiceConvertible {
       return kind
     case .nodeChoices:
       return .syntax
-    case .collection(kind: let kind, _, _, _):
+    case .collection(kind: let kind, _):
       return kind
     case .token:
       return .token
@@ -268,7 +263,7 @@ public class Child: NodeChoiceConvertible {
   /// Whether this child has syntax kind `UnexpectedNodes`.
   public var isUnexpectedNodes: Bool {
     switch kind {
-    case .collection(kind: .unexpectedNodes, _, _, _):
+    case .collection(kind: .unexpectedNodes, _):
       return true
     default:
       return false
@@ -283,7 +278,7 @@ public class Child: NodeChoiceConvertible {
       return choices.isEmpty
     case .node(let kind):
       return kind.isBase
-    case .collection(kind: let kind, _, _, _):
+    case .collection(kind: let kind, _):
       return kind.isBase
     case .token:
       return false

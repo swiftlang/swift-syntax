@@ -41,7 +41,7 @@ struct GrammarGenerator {
     case .nodeChoices(let choices, _):
       let choicesDescriptions = choices.map { grammar(for: $0) }
       return "(\(choicesDescriptions.joined(separator: " | ")))\(optionality)"
-    case .collection(kind: let kind, _, _, _):
+    case .collection(kind: let kind, _):
       return "\(kind.doccLink)\(optionality)"
     case .token(let choices, _, _):
       if choices.count == 1 {

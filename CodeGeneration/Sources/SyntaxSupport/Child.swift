@@ -354,7 +354,7 @@ public class Child: NodeChoiceConvertible {
 
     self.init(
       name: name,
-      kind: .collection(kind: .unexpectedNodes, collectionElementName: name.withFirstCharacterUppercased),
+      kind: .collection(kind: .unexpectedNodes),
       experimentalFeature: earlier?.experimentalFeature ?? later?.experimentalFeature,
       nameForDiagnostics: nil,
       documentation: nil,

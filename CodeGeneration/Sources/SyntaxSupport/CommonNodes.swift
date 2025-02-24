@@ -69,7 +69,7 @@ public let COMMON_NODES: [Node] = [
       ),
       Child(
         name: "statements",
-        kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement"),
+        kind: .collection(kind: .codeBlockItemList),
         nameForDiagnostics: "statements"
       ),
       Child(
@@ -201,13 +201,13 @@ public let COMMON_NODES: [Node] = [
     children: [
       Child(
         name: "attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        kind: .collection(kind: .attributeList, defaultsToEmpty: true),
         documentation:
           "If there were standalone attributes without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these."
       ),
       Child(
         name: "modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        kind: .collection(kind: .declModifierList, defaultsToEmpty: true),
         documentation:
           "If there were standalone modifiers without a declaration to attach them to, the ``MissingDeclSyntax`` will contain these."
       ),

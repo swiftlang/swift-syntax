@@ -87,10 +87,7 @@ public let COMPILER_NODES: [Node] = [
     children: [
       Child(
         name: "attributes",
-        kind: .collection(
-          kind: .attributeList,
-          collectionElementName: "Attribute"
-        )
+        kind: .collection(kind: .attributeList)
       ),
       Child(
         name: "modifiers",

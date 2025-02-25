@@ -626,33 +626,6 @@ public struct OperatorPrecedenceAndTypesSyntax: SyntaxProtocol, SyntaxHashable, 
     }
   }
 
-  /// Adds the provided `element` to the node's `designatedTypes`
-  /// collection.
-  ///
-  /// - param element: The new `DesignatedTypeElement` to add to the node's
-  ///                  `designatedTypes` collection.
-  /// - returns: A copy of the receiver with the provided `DesignatedTypeElement`
-  ///            appended to its `designatedTypes` collection.
-  @available(*, deprecated, message: "Use node.designatedTypes.append(newElement) instead")
-  public func addDesignatedTypeElement(_ element: DesignatedTypeSyntax) -> OperatorPrecedenceAndTypesSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[5] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.designatedTypeList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 5,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(OperatorPrecedenceAndTypesSyntax.self)
-  }
-
   public var unexpectedAfterDesignatedTypes: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -1272,33 +1245,6 @@ public struct OriginallyDefinedInAttributeArgumentsSyntax: SyntaxProtocol, Synta
     set(value) {
       self = Syntax(self).replacingChild(at: 9, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(OriginallyDefinedInAttributeArgumentsSyntax.self)
     }
-  }
-
-  /// Adds the provided `element` to the node's `platforms`
-  /// collection.
-  ///
-  /// - param element: The new `Platform` to add to the node's
-  ///                  `platforms` collection.
-  /// - returns: A copy of the receiver with the provided `Platform`
-  ///            appended to its `platforms` collection.
-  @available(*, deprecated, message: "Use node.platforms.append(newElement) instead")
-  public func addPlatform(_ element: PlatformVersionItemSyntax) -> OriginallyDefinedInAttributeArgumentsSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[9] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.platformVersionItemList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 9,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(OriginallyDefinedInAttributeArgumentsSyntax.self)
   }
 
   public var unexpectedAfterPlatforms: UnexpectedNodesSyntax? {
@@ -3479,33 +3425,6 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Le
     }
   }
 
-  /// Adds the provided `element` to the node's `attributes`
-  /// collection.
-  ///
-  /// - param element: The new `Attribute` to add to the node's
-  ///                  `attributes` collection.
-  /// - returns: A copy of the receiver with the provided `Attribute`
-  ///            appended to its `attributes` collection.
-  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
-  public func addAttribute(_ element: Syntax) -> PrecedenceGroupDeclSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 1,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(PrecedenceGroupDeclSyntax.self)
-  }
-
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -3523,33 +3442,6 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Le
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(PrecedenceGroupDeclSyntax.self)
     }
-  }
-
-  /// Adds the provided `element` to the node's `modifiers`
-  /// collection.
-  ///
-  /// - param element: The new `Modifier` to add to the node's
-  ///                  `modifiers` collection.
-  /// - returns: A copy of the receiver with the provided `Modifier`
-  ///            appended to its `modifiers` collection.
-  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
-  public func addModifier(_ element: DeclModifierSyntax) -> PrecedenceGroupDeclSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 3,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(PrecedenceGroupDeclSyntax.self)
   }
 
   public var unexpectedBetweenModifiersAndPrecedencegroupKeyword: UnexpectedNodesSyntax? {
@@ -3634,33 +3526,6 @@ public struct PrecedenceGroupDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Le
     set(value) {
       self = Syntax(self).replacingChild(at: 11, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(PrecedenceGroupDeclSyntax.self)
     }
-  }
-
-  /// Adds the provided `element` to the node's `groupAttributes`
-  /// collection.
-  ///
-  /// - param element: The new `GroupAttribute` to add to the node's
-  ///                  `groupAttributes` collection.
-  /// - returns: A copy of the receiver with the provided `GroupAttribute`
-  ///            appended to its `groupAttributes` collection.
-  @available(*, deprecated, message: "Use node.groupAttributes.append(newElement) instead")
-  public func addGroupAttribute(_ element: Syntax) -> PrecedenceGroupDeclSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[11] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupAttributeList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 11,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(PrecedenceGroupDeclSyntax.self)
   }
 
   public var unexpectedBetweenGroupAttributesAndRightBrace: UnexpectedNodesSyntax? {
@@ -3976,33 +3841,6 @@ public struct PrecedenceGroupRelationSyntax: SyntaxProtocol, SyntaxHashable, _Le
     }
   }
 
-  /// Adds the provided `element` to the node's `precedenceGroups`
-  /// collection.
-  ///
-  /// - param element: The new `OtherName` to add to the node's
-  ///                  `precedenceGroups` collection.
-  /// - returns: A copy of the receiver with the provided `OtherName`
-  ///            appended to its `precedenceGroups` collection.
-  @available(*, deprecated, message: "Use node.precedenceGroups.append(newElement) instead")
-  public func addOtherName(_ element: PrecedenceGroupNameSyntax) -> PrecedenceGroupRelationSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[5] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.precedenceGroupNameList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 5,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(PrecedenceGroupRelationSyntax.self)
-  }
-
   public var unexpectedAfterPrecedenceGroups: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -4260,33 +4098,6 @@ public struct PrimaryAssociatedTypeClauseSyntax: SyntaxProtocol, SyntaxHashable,
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(PrimaryAssociatedTypeClauseSyntax.self)
     }
-  }
-
-  /// Adds the provided `element` to the node's `primaryAssociatedTypes`
-  /// collection.
-  ///
-  /// - param element: The new `PrimaryAssociatedType` to add to the node's
-  ///                  `primaryAssociatedTypes` collection.
-  /// - returns: A copy of the receiver with the provided `PrimaryAssociatedType`
-  ///            appended to its `primaryAssociatedTypes` collection.
-  @available(*, deprecated, message: "Use node.primaryAssociatedTypes.append(newElement) instead")
-  public func addPrimaryAssociatedType(_ element: PrimaryAssociatedTypeSyntax) -> PrimaryAssociatedTypeClauseSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.primaryAssociatedTypeList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 3,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(PrimaryAssociatedTypeClauseSyntax.self)
   }
 
   public var unexpectedBetweenPrimaryAssociatedTypesAndRightAngle: UnexpectedNodesSyntax? {
@@ -4593,33 +4404,6 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     }
   }
 
-  /// Adds the provided `element` to the node's `attributes`
-  /// collection.
-  ///
-  /// - param element: The new `Attribute` to add to the node's
-  ///                  `attributes` collection.
-  /// - returns: A copy of the receiver with the provided `Attribute`
-  ///            appended to its `attributes` collection.
-  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
-  public func addAttribute(_ element: Syntax) -> ProtocolDeclSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 1,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(ProtocolDeclSyntax.self)
-  }
-
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -4637,33 +4421,6 @@ public struct ProtocolDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ProtocolDeclSyntax.self)
     }
-  }
-
-  /// Adds the provided `element` to the node's `modifiers`
-  /// collection.
-  ///
-  /// - param element: The new `Modifier` to add to the node's
-  ///                  `modifiers` collection.
-  /// - returns: A copy of the receiver with the provided `Modifier`
-  ///            appended to its `modifiers` collection.
-  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
-  public func addModifier(_ element: DeclModifierSyntax) -> ProtocolDeclSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 3,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(ProtocolDeclSyntax.self)
   }
 
   public var unexpectedBetweenModifiersAndProtocolKeyword: UnexpectedNodesSyntax? {

@@ -512,33 +512,6 @@ public struct CatchClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
     }
   }
 
-  /// Adds the provided `element` to the node's `catchItems`
-  /// collection.
-  ///
-  /// - param element: The new `CatchItem` to add to the node's
-  ///                  `catchItems` collection.
-  /// - returns: A copy of the receiver with the provided `CatchItem`
-  ///            appended to its `catchItems` collection.
-  @available(*, deprecated, message: "Use node.catchItems.append(newElement) instead")
-  public func addCatchItem(_ element: CatchItemSyntax) -> CatchClauseSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.catchItemList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 3,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(CatchClauseSyntax.self)
-  }
-
   public var unexpectedBetweenCatchItemsAndBody: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -878,33 +851,6 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     }
   }
 
-  /// Adds the provided `element` to the node's `attributes`
-  /// collection.
-  ///
-  /// - param element: The new `Attribute` to add to the node's
-  ///                  `attributes` collection.
-  /// - returns: A copy of the receiver with the provided `Attribute`
-  ///            appended to its `attributes` collection.
-  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
-  public func addAttribute(_ element: Syntax) -> ClassDeclSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 1,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(ClassDeclSyntax.self)
-  }
-
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -922,33 +868,6 @@ public struct ClassDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ClassDeclSyntax.self)
     }
-  }
-
-  /// Adds the provided `element` to the node's `modifiers`
-  /// collection.
-  ///
-  /// - param element: The new `Modifier` to add to the node's
-  ///                  `modifiers` collection.
-  /// - returns: A copy of the receiver with the provided `Modifier`
-  ///            appended to its `modifiers` collection.
-  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
-  public func addModifier(_ element: DeclModifierSyntax) -> ClassDeclSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 3,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(ClassDeclSyntax.self)
   }
 
   public var unexpectedBetweenModifiersAndClassKeyword: UnexpectedNodesSyntax? {
@@ -1289,33 +1208,6 @@ public struct ClosureCaptureClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafS
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ClosureCaptureClauseSyntax.self)
     }
-  }
-
-  /// Adds the provided `element` to the node's `items`
-  /// collection.
-  ///
-  /// - param element: The new `Item` to add to the node's
-  ///                  `items` collection.
-  /// - returns: A copy of the receiver with the provided `Item`
-  ///            appended to its `items` collection.
-  @available(*, deprecated, message: "Use node.items.append(newElement) instead")
-  public func addItem(_ element: ClosureCaptureSyntax) -> ClosureCaptureClauseSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.closureCaptureList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 3,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(ClosureCaptureClauseSyntax.self)
   }
 
   public var unexpectedBetweenItemsAndRightSquare: UnexpectedNodesSyntax? {
@@ -1866,33 +1758,6 @@ public struct ClosureExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
     }
   }
 
-  /// Adds the provided `element` to the node's `statements`
-  /// collection.
-  ///
-  /// - param element: The new `Statement` to add to the node's
-  ///                  `statements` collection.
-  /// - returns: A copy of the receiver with the provided `Statement`
-  ///            appended to its `statements` collection.
-  @available(*, deprecated, message: "Use node.statements.append(newElement) instead")
-  public func addStatement(_ element: CodeBlockItemSyntax) -> ClosureExprSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[5] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 5,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(ClosureExprSyntax.self)
-  }
-
   public var unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -2050,33 +1915,6 @@ public struct ClosureParameterClauseSyntax: SyntaxProtocol, SyntaxHashable, _Lea
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ClosureParameterClauseSyntax.self)
     }
-  }
-
-  /// Adds the provided `element` to the node's `parameters`
-  /// collection.
-  ///
-  /// - param element: The new `Parameter` to add to the node's
-  ///                  `parameters` collection.
-  /// - returns: A copy of the receiver with the provided `Parameter`
-  ///            appended to its `parameters` collection.
-  @available(*, deprecated, message: "Use node.parameters.append(newElement) instead")
-  public func addParameter(_ element: ClosureParameterSyntax) -> ClosureParameterClauseSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.closureParameterList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 3,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(ClosureParameterClauseSyntax.self)
   }
 
   public var unexpectedBetweenParametersAndRightParen: UnexpectedNodesSyntax? {
@@ -2252,33 +2090,6 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
   }
 
-  /// Adds the provided `element` to the node's `attributes`
-  /// collection.
-  ///
-  /// - param element: The new `Attribute` to add to the node's
-  ///                  `attributes` collection.
-  /// - returns: A copy of the receiver with the provided `Attribute`
-  ///            appended to its `attributes` collection.
-  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
-  public func addAttribute(_ element: Syntax) -> ClosureParameterSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 1,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(ClosureParameterSyntax.self)
-  }
-
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -2295,33 +2106,6 @@ public struct ClosureParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ClosureParameterSyntax.self)
     }
-  }
-
-  /// Adds the provided `element` to the node's `modifiers`
-  /// collection.
-  ///
-  /// - param element: The new `Modifier` to add to the node's
-  ///                  `modifiers` collection.
-  /// - returns: A copy of the receiver with the provided `Modifier`
-  ///            appended to its `modifiers` collection.
-  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
-  public func addModifier(_ element: DeclModifierSyntax) -> ClosureParameterSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 3,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(ClosureParameterSyntax.self)
   }
 
   public var unexpectedBetweenModifiersAndFirstName: UnexpectedNodesSyntax? {
@@ -2806,33 +2590,6 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     set(value) {
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ClosureSignatureSyntax.self)
     }
-  }
-
-  /// Adds the provided `element` to the node's `attributes`
-  /// collection.
-  ///
-  /// - param element: The new `Attribute` to add to the node's
-  ///                  `attributes` collection.
-  /// - returns: A copy of the receiver with the provided `Attribute`
-  ///            appended to its `attributes` collection.
-  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
-  public func addAttribute(_ element: Syntax) -> ClosureSignatureSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 1,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(ClosureSignatureSyntax.self)
   }
 
   public var unexpectedBetweenAttributesAndCapture: UnexpectedNodesSyntax? {
@@ -3439,33 +3196,6 @@ public struct CodeBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     }
   }
 
-  /// Adds the provided `element` to the node's `statements`
-  /// collection.
-  ///
-  /// - param element: The new `Statement` to add to the node's
-  ///                  `statements` collection.
-  /// - returns: A copy of the receiver with the provided `Statement`
-  ///            appended to its `statements` collection.
-  @available(*, deprecated, message: "Use node.statements.append(newElement) instead")
-  public func addStatement(_ element: CodeBlockItemSyntax) -> CodeBlockSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.codeBlockItemList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 3,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(CodeBlockSyntax.self)
-  }
-
   public var unexpectedBetweenStatementsAndRightBrace: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -3688,33 +3418,6 @@ public struct CompositionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTy
     set(value) {
       self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(CompositionTypeSyntax.self)
     }
-  }
-
-  /// Adds the provided `element` to the node's `elements`
-  /// collection.
-  ///
-  /// - param element: The new `Element` to add to the node's
-  ///                  `elements` collection.
-  /// - returns: A copy of the receiver with the provided `Element`
-  ///            appended to its `elements` collection.
-  @available(*, deprecated, message: "Use node.elements.append(newElement) instead")
-  public func addElement(_ element: CompositionTypeElementSyntax) -> CompositionTypeSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.compositionTypeElementList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 1,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(CompositionTypeSyntax.self)
   }
 
   public var unexpectedAfterElements: UnexpectedNodesSyntax? {

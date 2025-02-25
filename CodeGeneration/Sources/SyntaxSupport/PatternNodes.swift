@@ -167,7 +167,7 @@ public let PATTERN_NODES: [Node] = [
       ),
       Child(
         name: "elements",
-        kind: .collection(kind: .tuplePatternElementList, collectionElementName: "Element")
+        kind: .collection(kind: .tuplePatternElementList)
       ),
       Child(
         name: "rightParen",

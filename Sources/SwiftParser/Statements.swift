@@ -574,8 +574,8 @@ extension Parser {
     if let modifierKeyword = ExpressionModifierKeyword(
       lexeme: self.currentToken,
       experimentalFeatures: self.experimentalFeatures
-    ), modifierKeyword == .unsafe, !self.peek(isAt: .keyword(.in)) {
-      unsafeKeyword = self.consumeAnyToken(remapping: .keyword)
+    ), modifierKeyword == .unsafe, !self.peek(isAt: .keyword(.in), .colon) {
+      unsafeKeyword = self.expectWithoutRecovery(.keyword(.unsafe))
     } else {
       unsafeKeyword = nil
     }

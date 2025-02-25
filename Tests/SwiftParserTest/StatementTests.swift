@@ -968,5 +968,15 @@ final class StatementTests: ParserTestCase {
       "for try await unsafe in e { }",
       experimentalFeatures: [.unsafeExpression]
     )
+
+    assertParse(
+      "for unsafe in e { }",
+      experimentalFeatures: [.unsafeExpression]
+    )
+
+    assertParse(
+      "for unsafe: Int in e { }",
+      experimentalFeatures: [.unsafeExpression]
+    )
   }
 }

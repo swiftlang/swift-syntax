@@ -19,7 +19,7 @@
 /// ### Children
 /// 
 ///  - `period`: `.`?
-///  - `component`: (``KeyPathPropertyComponentSyntax`` | ``KeyPathSubscriptComponentSyntax`` | ``KeyPathOptionalComponentSyntax``)
+///  - `component`: (``KeyPathPropertyComponentSyntax`` | `KeyPathMethodComponentSyntax` | ``KeyPathSubscriptComponentSyntax`` | ``KeyPathOptionalComponentSyntax``)
 ///
 /// ### Contained in
 /// 
@@ -27,12 +27,17 @@
 public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Component: SyntaxChildChoices, SyntaxHashable {
     case property(KeyPathPropertyComponentSyntax)
+    /// - Note: Requires experimental feature `keypathWithMethodMembers`.
+    @_spi(ExperimentalLanguageFeatures)
+    case method(KeyPathMethodComponentSyntax)
     case `subscript`(KeyPathSubscriptComponentSyntax)
     case optional(KeyPathOptionalComponentSyntax)
 
     public var _syntaxNode: Syntax {
       switch self {
       case .property(let node):
+        return node._syntaxNode
+      case .method(let node):
         return node._syntaxNode
       case .subscript(let node):
         return node._syntaxNode
@@ -43,6 +48,12 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
 
     public init(_ node: KeyPathPropertyComponentSyntax) {
       self = .property(node)
+    }
+
+    /// - Note: Requires experimental feature `keypathWithMethodMembers`.
+    @_spi(ExperimentalLanguageFeatures)
+    public init(_ node: KeyPathMethodComponentSyntax) {
+      self = .method(node)
     }
 
     public init(_ node: KeyPathSubscriptComponentSyntax) {
@@ -56,6 +67,8 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(KeyPathPropertyComponentSyntax.self) {
         self = .property(node)
+      } else if let node = node.as(KeyPathMethodComponentSyntax.self) {
+        self = .method(node)
       } else if let node = node.as(KeyPathSubscriptComponentSyntax.self) {
         self = .subscript(node)
       } else if let node = node.as(KeyPathOptionalComponentSyntax.self) {
@@ -66,7 +79,12 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
 
     public static var structure: SyntaxNodeStructure {
-      return .choices([.node(KeyPathPropertyComponentSyntax.self), .node(KeyPathSubscriptComponentSyntax.self), .node(KeyPathOptionalComponentSyntax.self)])
+      return .choices([
+        .node(KeyPathPropertyComponentSyntax.self),
+        .node(KeyPathMethodComponentSyntax.self),
+        .node(KeyPathSubscriptComponentSyntax.self),
+        .node(KeyPathOptionalComponentSyntax.self)
+      ])
     }
 
     /// Checks if the current syntax node can be cast to ``KeyPathPropertyComponentSyntax``.
@@ -89,6 +107,34 @@ public struct KeyPathComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
     public func cast(_ syntaxType: KeyPathPropertyComponentSyntax.Type) -> KeyPathPropertyComponentSyntax {
       return self.as(KeyPathPropertyComponentSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to `KeyPathMethodComponentSyntax`.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    /// - Note: Requires experimental feature `keypathWithMethodMembers`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func `is`(_ syntaxType: KeyPathMethodComponentSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to `KeyPathMethodComponentSyntax`.
+    ///
+    /// - Returns: An instance of `KeyPathMethodComponentSyntax`, or `nil` if the cast fails.
+    /// - Note: Requires experimental feature `keypathWithMethodMembers`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func `as`(_ syntaxType: KeyPathMethodComponentSyntax.Type) -> KeyPathMethodComponentSyntax? {
+      return KeyPathMethodComponentSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to `KeyPathMethodComponentSyntax`.
+    ///
+    /// - Returns: An instance of `KeyPathMethodComponentSyntax`.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    /// - Note: Requires experimental feature `keypathWithMethodMembers`.
+    @_spi(ExperimentalLanguageFeatures)
+    public func cast(_ syntaxType: KeyPathMethodComponentSyntax.Type) -> KeyPathMethodComponentSyntax {
+      return self.as(KeyPathMethodComponentSyntax.self)!
     }
 
     /// Checks if the current syntax node can be cast to ``KeyPathSubscriptComponentSyntax``.
@@ -422,6 +468,216 @@ public struct KeyPathExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSy
     \Self.unexpectedBetweenRootAndComponents,
     \Self.components,
     \Self.unexpectedAfterComponents
+  ])
+}
+
+// MARK: - KeyPathMethodComponentSyntax
+
+/// A key path component like `.method()`, `.method(10)`, or `.method(val: 10)`.
+///
+/// - Note: Requires experimental feature `keypathWithMethodMembers`.
+///
+/// ### Children
+/// 
+///  - `declName`: ``DeclReferenceExprSyntax``
+///  - `leftParen`: `(`
+///  - `arguments`: ``LabeledExprListSyntax``
+///  - `rightParen`: `)`
+///
+/// ### Contained in
+/// 
+///  - ``KeyPathComponentSyntax``.``KeyPathComponentSyntax/component``
+@_spi(ExperimentalLanguageFeatures)
+public struct KeyPathMethodComponentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+  public let _syntaxNode: Syntax
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard node.raw.kind == .keyPathMethodComponent else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeDeclName: UnexpectedNodesSyntax? = nil,
+    declName: DeclReferenceExprSyntax,
+    _ unexpectedBetweenDeclNameAndLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax = .leftParenToken(),
+    _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+    arguments: LabeledExprListSyntax,
+    _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax = .rightParenToken(),
+    _ unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((RawSyntaxArena(), (
+      unexpectedBeforeDeclName,
+      declName,
+      unexpectedBetweenDeclNameAndLeftParen,
+      leftParen,
+      unexpectedBetweenLeftParenAndArguments,
+      arguments,
+      unexpectedBetweenArgumentsAndRightParen,
+      rightParen,
+      unexpectedAfterRightParen
+    ))) { (arena, _) in
+      let layout: [RawSyntax?] = [
+        unexpectedBeforeDeclName?.raw,
+        declName.raw,
+        unexpectedBetweenDeclNameAndLeftParen?.raw,
+        leftParen.raw,
+        unexpectedBetweenLeftParenAndArguments?.raw,
+        arguments.raw,
+        unexpectedBetweenArgumentsAndRightParen?.raw,
+        rightParen.raw,
+        unexpectedAfterRightParen?.raw
+      ]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.keyPathMethodComponent,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeDeclName: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(KeyPathMethodComponentSyntax.self)
+    }
+  }
+
+  public var declName: DeclReferenceExprSyntax {
+    get {
+      return Syntax(self).child(at: 1)!.cast(DeclReferenceExprSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(KeyPathMethodComponentSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenDeclNameAndLeftParen: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(KeyPathMethodComponentSyntax.self)
+    }
+  }
+
+  /// ### Tokens
+  /// 
+  /// For syntax trees generated by the parser, this is guaranteed to be `(`.
+  public var leftParen: TokenSyntax {
+    get {
+      return Syntax(self).child(at: 3)!.cast(TokenSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(KeyPathMethodComponentSyntax.self)
+    }
+  }
+
+  public var unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 4, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(KeyPathMethodComponentSyntax.self)
+    }
+  }
+
+  public var arguments: LabeledExprListSyntax {
+    get {
+      return Syntax(self).child(at: 5)!.cast(LabeledExprListSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(KeyPathMethodComponentSyntax.self)
+    }
+  }
+
+  /// Adds the provided `element` to the node's `arguments`
+  /// collection.
+  ///
+  /// - param element: The new `Argument` to add to the node's
+  ///                  `arguments` collection.
+  /// - returns: A copy of the receiver with the provided `Argument`
+  ///            appended to its `arguments` collection.
+  @available(*, deprecated, message: "Use node.arguments.append(newElement) instead")
+  public func addArgument(_ element: LabeledExprSyntax) -> KeyPathMethodComponentSyntax {
+    var collection: RawSyntax
+    let arena = RawSyntaxArena()
+    if let col = raw.layoutView!.children[5] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.labeledExprList,
+                                        from: [element.raw], arena: arena)
+    }
+    return Syntax(self)
+      .replacingChild(
+        at: 5,
+        with: collection,
+        rawNodeArena: arena,
+        rawAllocationArena: arena
+      )
+      .cast(KeyPathMethodComponentSyntax.self)
+  }
+
+  public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(KeyPathMethodComponentSyntax.self)
+    }
+  }
+
+  /// ### Tokens
+  /// 
+  /// For syntax trees generated by the parser, this is guaranteed to be `)`.
+  public var rightParen: TokenSyntax {
+    get {
+      return Syntax(self).child(at: 7)!.cast(TokenSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(KeyPathMethodComponentSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterRightParen: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(KeyPathMethodComponentSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([
+    \Self.unexpectedBeforeDeclName,
+    \Self.declName,
+    \Self.unexpectedBetweenDeclNameAndLeftParen,
+    \Self.leftParen,
+    \Self.unexpectedBetweenLeftParenAndArguments,
+    \Self.arguments,
+    \Self.unexpectedBetweenArgumentsAndRightParen,
+    \Self.rightParen,
+    \Self.unexpectedAfterRightParen
   ])
 }
 

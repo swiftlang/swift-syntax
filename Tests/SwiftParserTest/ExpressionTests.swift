@@ -2194,8 +2194,7 @@ final class StatementExpressionTests: ParserTestCase {
       func f() {
         let x = unsafe y
       }
-      """,
-      experimentalFeatures: .unsafeExpression
+      """
     )
 
     assertParse(

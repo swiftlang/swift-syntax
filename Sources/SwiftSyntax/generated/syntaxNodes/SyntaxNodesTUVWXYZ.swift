@@ -3272,13 +3272,10 @@ public struct UnresolvedTernaryExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _
 
 // MARK: - UnsafeExprSyntax
 
-/// - Note: Requires experimental feature `unsafeExpression`.
-///
 /// ### Children
 /// 
 ///  - `unsafeKeyword`: `unsafe`
 ///  - `expression`: ``ExprSyntax``
-@_spi(ExperimentalLanguageFeatures)
 public struct UnsafeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 

@@ -3380,17 +3380,15 @@ open class SyntaxVisitor {
   open func visitPost(_ node: UnresolvedTernaryExprSyntax) {
   }
 
-  /// Visiting `UnsafeExprSyntax` specifically.
+  /// Visiting ``UnsafeExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: UnsafeExprSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting `UnsafeExprSyntax` and its descendants.
+  /// The function called after visiting ``UnsafeExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  @_spi(ExperimentalLanguageFeatures)
   open func visitPost(_ node: UnsafeExprSyntax) {
   }
 

@@ -1951,7 +1951,6 @@ public struct RawUnresolvedTernaryExprSyntax: RawExprSyntaxNodeProtocol {
   }
 }
 
-@_spi(ExperimentalLanguageFeatures)
 @_spi(RawSyntax)
 public struct RawUnsafeExprSyntax: RawExprSyntaxNodeProtocol {
   @_spi(RawSyntax)

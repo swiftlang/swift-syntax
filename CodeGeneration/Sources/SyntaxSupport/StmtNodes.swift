@@ -287,7 +287,6 @@ public let STMT_NODES: [Node] = [
       Child(
         name: "unsafeKeyword",
         kind: .token(choices: [.keyword(.unsafe)]),
-        experimentalFeature: .unsafeExpression,
         isOptional: true
       ),
       Child(

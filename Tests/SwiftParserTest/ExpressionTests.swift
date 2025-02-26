@@ -2194,31 +2194,17 @@ final class StatementExpressionTests: ParserTestCase {
       func f() {
         let x = unsafe y
       }
-      """,
-      experimentalFeatures: .unsafeExpression
+      """
     )
 
     assertParse(
       """
       func f() {
-        let x = unsafe1️⃣ y
+        let x = unsafe
+        y
       }
       """,
-      diagnostics: [
-        DiagnosticSpec(
-          message: "consecutive statements on a line must be separated by newline or ';'",
-          fixIts: [
-            "insert newline",
-            "insert ';'",
-          ]
-        )
-      ],
-      fixedSource: """
-        func f() {
-          let x = unsafe
-          y
-        }
-        """
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("unsafe"))
     )
   }
 

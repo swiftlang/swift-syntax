@@ -445,6 +445,10 @@ extension Parser {
         )
       )
     case (.unsafe, let handle)?:
+      if self.peek().isAtStartOfLine || self.peek(isAt: .rightParen) {
+        break EXPR_PREFIX
+      }
+
       let unsafeTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor: flavor,

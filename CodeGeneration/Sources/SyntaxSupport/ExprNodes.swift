@@ -183,7 +183,6 @@ public let EXPR_NODES: [Node] = [
   Node(
     kind: .unsafeExpr,
     base: .expr,
-    experimentalFeature: .unsafeExpression,
     nameForDiagnostics: "'unsafe' expression",
     children: [
       Child(

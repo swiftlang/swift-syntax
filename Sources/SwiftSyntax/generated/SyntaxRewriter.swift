@@ -2048,10 +2048,9 @@ open class SyntaxRewriter {
     return ExprSyntax(UnresolvedTernaryExprSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
-  /// Visit a `UnsafeExprSyntax`.
+  /// Visit a ``UnsafeExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: UnsafeExprSyntax) -> ExprSyntax {
     return ExprSyntax(UnsafeExprSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }

@@ -2294,12 +2294,10 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   override open func visit(_ node: UnsafeExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   override open func visitPost(_ node: UnsafeExprSyntax) {
     visitAnyPost(node._syntaxNode)
   }

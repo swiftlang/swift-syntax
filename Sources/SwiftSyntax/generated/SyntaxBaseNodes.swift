@@ -506,6 +506,7 @@ extension Syntax {
 /// - ``UnresolvedAsExprSyntax``
 /// - ``UnresolvedIsExprSyntax``
 /// - ``UnresolvedTernaryExprSyntax``
+/// - ``UnsafeExprSyntax``
 public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
 

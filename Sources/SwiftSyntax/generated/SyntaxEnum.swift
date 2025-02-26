@@ -303,7 +303,6 @@ public enum SyntaxEnum: Sendable {
   case unresolvedAsExpr(UnresolvedAsExprSyntax)
   case unresolvedIsExpr(UnresolvedIsExprSyntax)
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
-  @_spi(ExperimentalLanguageFeatures)
   case unsafeExpr(UnsafeExprSyntax)
   case valueBindingPattern(ValueBindingPatternSyntax)
   case variableDecl(VariableDeclSyntax)
@@ -1051,7 +1050,6 @@ public enum ExprSyntaxEnum {
   case unresolvedAsExpr(UnresolvedAsExprSyntax)
   case unresolvedIsExpr(UnresolvedIsExprSyntax)
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
-  @_spi(ExperimentalLanguageFeatures)
   case unsafeExpr(UnsafeExprSyntax)
 }
 

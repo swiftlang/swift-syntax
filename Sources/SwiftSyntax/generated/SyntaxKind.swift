@@ -303,7 +303,6 @@ public enum SyntaxKind: Sendable {
   case unresolvedAsExpr
   case unresolvedIsExpr
   case unresolvedTernaryExpr
-  @_spi(ExperimentalLanguageFeatures)
   case unsafeExpr
   case valueBindingPattern
   case variableDecl

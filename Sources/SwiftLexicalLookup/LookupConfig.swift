@@ -12,7 +12,7 @@
 
 import SwiftIfConfig
 
-@_spi(Experimental) public struct LookupConfig {
+public struct LookupConfig {
   /// Specifies whether lookup should finish in the closest sequential scope.
   ///
   /// ### Example
@@ -32,14 +32,14 @@ import SwiftIfConfig
   /// function parameter and the `a` declaration from `class X` member block.
   /// If `finishInSequentialScope` would be set to `false`, the only name
   /// returned by lookup would be the `a` declaration from inside function body.
-  @_spi(Experimental) public var finishInSequentialScope: Bool
-  @_spi(Experimental) public var configuredRegions: ConfiguredRegions?
+  public var finishInSequentialScope: Bool
+  public var configuredRegions: ConfiguredRegions?
 
   /// Creates a new lookup configuration.
   ///
   /// - `finishInSequentialScope` - specifies whether lookup should finish
   ///   in the closest sequential scope. `false` by default.
-  @_spi(Experimental) public init(
+  public init(
     finishInSequentialScope: Bool = false,
     configuredRegions: ConfiguredRegions? = nil
   ) {

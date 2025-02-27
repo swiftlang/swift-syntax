@@ -90,42 +90,25 @@ extension TokenConsumer {
     return spec ~= self.currentToken
   }
 
-  /// Returns whether the current token matches one of the two specs.
+  /// Returns whether the current token matches one of the specs.
   @inline(__always)
   mutating func at(
-    _ spec1: TokenSpec,
-    _ spec2: TokenSpec
+    _ specs: [TokenSpec]
   ) -> Bool {
     #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
     if shouldRecordAlternativeTokenChoices {
-      recordAlternativeTokenChoice(for: self.currentToken, choices: [spec1, spec2])
+      recordAlternativeTokenChoice(for: self.currentToken, choices: specs)
     }
     #endif
-    switch self.currentToken {
-    case spec1: return true
-    case spec2: return true
-    default: return false
-    }
+    return specs.contains(where: { $0 ~= self.currentToken })
   }
 
-  /// Returns whether the current token matches one of the three specs.
+  /// Returns whether the current token matches one of the specs.
   @inline(__always)
   mutating func at(
-    _ spec1: TokenSpec,
-    _ spec2: TokenSpec,
-    _ spec3: TokenSpec
+    _ specs: TokenSpec...
   ) -> Bool {
-    #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
-    if shouldRecordAlternativeTokenChoices {
-      recordAlternativeTokenChoice(for: self.currentToken, choices: [spec1, spec2, spec3])
-    }
-    #endif
-    switch self.currentToken {
-    case spec1: return true
-    case spec2: return true
-    case spec3: return true
-    default: return false
-    }
+    return at(specs)
   }
 
   /// Returns whether the current token is an operator with the given `name`.
@@ -263,35 +246,24 @@ extension TokenConsumer {
   /// Otherwise return `nil`.
   @inline(__always)
   mutating func consume(
-    if spec1: TokenSpec,
-    _ spec2: TokenSpec
+    if specs: [TokenSpec]
   ) -> Token? {
-    if let token = consume(if: spec1) {
-      return token
-    } else if let token = consume(if: spec2) {
-      return token
-    } else {
-      return nil
+    for spec in specs {
+      if let token = consume(if: spec) {
+        return token
+      }
     }
+    return nil
   }
+
 
   /// If the current token matches one of the specs, consume the token and return it.
   /// Otherwise return `nil`.
   @inline(__always)
   mutating func consume(
-    if spec1: TokenSpec,
-    _ spec2: TokenSpec,
-    _ spec3: TokenSpec
+    if specs: TokenSpec...
   ) -> Token? {
-    if let token = consume(if: spec1) {
-      return token
-    } else if let token = consume(if: spec2) {
-      return token
-    } else if let token = consume(if: spec3) {
-      return token
-    } else {
-      return nil
-    }
+    return self.consume(if: specs)
   }
 
   /// Consumes and returns the current token is an operator with the given `name`.

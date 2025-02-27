@@ -51,6 +51,9 @@ extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of 'unsafe' expression.
   public static let unsafeExpression = Self (rawValue: 1 << 8)
 
+  /// Whether to enable the parsing of keypaths with method members.
+  public static let keypathWithMethodMembers = Self (rawValue: 1 << 9)
+
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
   public init?(name: String) {
@@ -73,6 +76,8 @@ extension Parser.ExperimentalFeatures {
       self = .abiAttribute
     case "WarnUnsafe":
       self = .unsafeExpression
+    case "KeypathWithMethodMembers":
+      self = .keypathWithMethodMembers
     default:
       return nil
     }

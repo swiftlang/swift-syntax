@@ -445,7 +445,15 @@ extension Parser {
         )
       )
     case (.unsafe, let handle)?:
-      if self.peek().isAtStartOfLine || self.peek(isAt: .rightParen) {
+      if self.peek().isAtStartOfLine
+        // Closing paired syntax
+        || self.peek(isAt: .rightParen, .rightSquare, .rightBrace)
+        // Assignment
+        || self.peek(isAt: .equal)
+        // `unsafe.something` with no trivia
+        || (self.peek(isAt: .period) && self.peek().leadingTriviaByteLength == 0
+          && self.currentToken.trailingTriviaByteLength == 0)
+      {
         break EXPR_PREFIX
       }
 

@@ -2206,6 +2206,58 @@ final class StatementExpressionTests: ParserTestCase {
       """,
       substructure: DeclReferenceExprSyntax(baseName: .identifier("unsafe"))
     )
+
+    assertParse(
+      """
+      func f() {
+        1️⃣unsafe.lock()
+      }
+      """,
+      substructure: MemberAccessExprSyntax(
+        base: DeclReferenceExprSyntax(baseName: .identifier("unsafe")),
+        period: .periodToken(),
+        declName: DeclReferenceExprSyntax(baseName: .identifier("lock"))
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
+
+    assertParse(
+      """
+      func f() {
+        unsafe .lock
+      }
+      """,
+      substructure: UnsafeExprSyntax(
+        expression: MemberAccessExprSyntax(name: .identifier("lock"))
+      )
+    )
+
+    assertParse(
+      """
+      func f() {
+        _ = [unsafe]
+      }
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("unsafe"))
+    )
+
+    assertParse(
+      """
+      func f() {
+        _ = [unsafe]
+      }
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("unsafe"))
+    )
+
+    assertParse(
+      """
+      func f() {
+        unsafe = 17
+      }
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("unsafe"))
+    )
   }
 
   func testUnterminatedInterpolationAtEndOfMultilineStringLiteral() {

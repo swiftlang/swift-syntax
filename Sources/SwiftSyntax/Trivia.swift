@@ -42,6 +42,112 @@ public struct Trivia: Sendable {
     pieces.isEmpty
   }
 
+  /// The string contents of all the comment pieces with any comments tokens trimmed.
+  public var commentValue: String {
+    var comments = [String]()
+
+    // Determine if all line comments have a single space
+    lazy var allLineCommentsHaveSpace: Bool = {
+      return pieces.allSatisfy { piece in
+        switch piece {
+        case .lineComment(let text):
+          return text.hasPrefix("// ")
+        case .docLineComment(let text):
+          return text.hasPrefix("/// ")
+        default:
+          return true
+        }
+      }
+    }()
+
+    // Helper function to trim leading and trailing whitespace
+    func trimWhitespace(_ text: String) -> String {
+      let trimmed = text.drop(while: { $0 == " " })
+        .reversed()
+        .drop(while: { $0 == " " })
+        .reversed()
+      return String(trimmed)
+    }
+
+    // Helper function to trim leading and trailing newlines
+    func trimNewlines(_ text: String) -> String {
+      let trimmed = text.drop(while: { $0 == "\n" })
+        .reversed()
+        .drop(while: { $0 == "\n" })
+        .reversed()
+      return String(trimmed)
+    }
+
+    // Helper function to process block comments
+    func processBlockComment(_ text: String, prefix: String, suffix: String) -> String {
+      var text = text
+      text.removeFirst(prefix.count)
+      text.removeLast(suffix.count)
+      text = trimWhitespace(text)
+      text = trimNewlines(text)
+      return text
+    }
+
+    // Helper function to process multiline block comments
+    func processMultilineBlockComment(_ text: String) -> String {
+      var lines = text.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
+
+      lines.removeFirst()
+
+      let minIndentation =
+        lines
+        .filter { !$0.isEmpty }
+        .map { $0.prefix { $0 == " " }.count }
+        .min() ?? 0
+
+      if let lastLine = lines.last {
+        if trimWhitespace(lastLine) == "*/" {
+          lines.removeLast()
+        } else {
+          lines[lines.count - 1].removeLast(2)
+          lines[lines.count - 1] = trimWhitespace(lines[lines.count - 1])
+        }
+      }
+
+      let unindentedLines = lines.map { line in
+        guard line.count >= minIndentation else { return line }
+        return String(line.dropFirst(minIndentation))
+      }
+
+      return unindentedLines.joined(separator: "\n")
+    }
+
+    for piece in pieces {
+      switch piece {
+      case .blockComment(let text):
+        let processedText =
+          text.hasPrefix("/*\n")
+          ? processMultilineBlockComment(text)
+          : processBlockComment(text, prefix: "/*", suffix: "*/")
+        comments.append(processedText)
+
+      case .docBlockComment(let text):
+        let processedText =
+          text.hasPrefix("/**\n")
+          ? processMultilineBlockComment(text)
+          : processBlockComment(text, prefix: "/**", suffix: "*/")
+        comments.append(processedText)
+
+      case .lineComment(let text):
+        let prefix = allLineCommentsHaveSpace ? "// " : "//"
+        comments.append(String(text.dropFirst(prefix.count)))
+
+      case .docLineComment(let text):
+        let prefix = allLineCommentsHaveSpace ? "/// " : "///"
+        comments.append(String(text.dropFirst(prefix.count)))
+
+      default:
+        break
+      }
+    }
+    return comments.joined(separator: "\n")
+  }
+
   /// The length of all the pieces in this ``Trivia``.
   public var sourceLength: SourceLength {
     return pieces.map({ $0.sourceLength }).reduce(.zero, +)

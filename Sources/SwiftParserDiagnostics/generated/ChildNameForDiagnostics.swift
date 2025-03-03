@@ -206,6 +206,8 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "generic where clause"
   case \KeyPathExprSyntax.root:
     return "root"
+  case \KeyPathMethodComponentSyntax.arguments:
+    return "arguments"
   case \KeyPathSubscriptComponentSyntax.arguments:
     return "arguments"
   case \LabeledExprSyntax.label:

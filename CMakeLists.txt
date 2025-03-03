@@ -8,6 +8,13 @@
 
 cmake_minimum_required(VERSION 3.19.6)
 
+# Enable Swift_COMPILATION_MODE property.
+set(CMP0157_IS_NEW FALSE)
+if(POLICY CMP0157)
+  cmake_policy(SET CMP0157 NEW)
+  set(CMP0157_IS_NEW TRUE)
+endif()
+
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 project(SwiftSyntax LANGUAGES C Swift)

@@ -450,6 +450,11 @@ extension Parser {
         || self.peek(isAt: .rightParen, .rightSquare, .rightBrace)
         // Assignment
         || self.peek(isAt: .equal)
+        // As an argument label or in a list context.
+        || self.peek(isAt: .colon, .comma)
+        // Start of a closure in a context where it should be interpreted as
+        // being part of a statement.
+        || (flavor == .stmtCondition && self.peek(isAt: .leftBrace))
         // `unsafe.something` with no trivia
         || (self.peek(isAt: .period) && self.peek().leadingTriviaByteLength == 0
           && self.currentToken.trailingTriviaByteLength == 0)

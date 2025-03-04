@@ -38,7 +38,7 @@ final class BasicDiagnosticDecoratorTests: XCTestCase {
     let decoratedMessageWithCategory = decorator.decorateMessage(
       message,
       basedOnSeverity: .error,
-      category: DiagnosticCategory(name: "Filesystem", documentationPath: "http://www.swift.org")
+      category: DiagnosticCategory(name: "Filesystem", documentationURL: "http://www.swift.org")
     )
     assertStringsEqualWithDiff(decoratedMessageWithCategory, "error: File not found [#Filesystem]")
   }

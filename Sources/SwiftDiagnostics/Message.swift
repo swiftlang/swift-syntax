@@ -39,12 +39,12 @@ public struct DiagnosticCategory: Sendable, Hashable {
   /// Name that identifies the category, e.g., StrictMemorySafety.
   public let name: String
 
-  /// Path to a file providing documentation documentation for this category.
-  public let documentationPath: String?
+  /// URL providing documentation documentation for this category.
+  public let documentationURL: String?
 
-  public init(name: String, documentationPath: String?) {
+  public init(name: String, documentationURL: String?) {
     self.name = name
-    self.documentationPath = documentationPath
+    self.documentationURL = documentationURL
   }
 }
 

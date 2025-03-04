@@ -84,8 +84,8 @@ extension DiagnosticDecorator where Self == ANSIDiagnosticDecorator {
       // Make the category name a link to the documentation, if there is
       // documentation.
       let categoryName: String
-      if let documentationPath = category.documentationPath {
-        categoryName = ANSIAnnotation.hyperlink(category.name, to: documentationPath)
+      if let documentationURL = category.documentationURL {
+        categoryName = ANSIAnnotation.hyperlink(category.name, to: "\(documentationURL)")
       } else {
         categoryName = category.name
       }
@@ -240,6 +240,9 @@ private struct ANSIAnnotation {
   }
 
   /// Forms a hyperlink to the given URL with the given text.
+  ///
+  /// This follows the OSC 8 standard for hyperlinks that is supported by
+  /// a number of different terminals.
   static func hyperlink(_ text: String, to url: String) -> String {
     "\u{001B}]8;;\(url)\u{001B}\\\(text)\u{001B}]8;;\u{001B}\\"
   }

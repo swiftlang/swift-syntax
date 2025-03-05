@@ -33,6 +33,21 @@ public enum DiagnosticSeverity: Sendable, Hashable {
   case remark
 }
 
+/// Describes a category of diagnostics, which covers a set of related
+/// diagnostics that can share documentation.
+public struct DiagnosticCategory: Sendable, Hashable {
+  /// Name that identifies the category, e.g., StrictMemorySafety.
+  public let name: String
+
+  /// URL providing documentation documentation for this category.
+  public let documentationURL: String?
+
+  public init(name: String, documentationURL: String?) {
+    self.name = name
+    self.documentationURL = documentationURL
+  }
+}
+
 /// Types conforming to this protocol represent diagnostic messages that can be
 /// shown to the client.
 public protocol DiagnosticMessage: Sendable {
@@ -43,4 +58,12 @@ public protocol DiagnosticMessage: Sendable {
   var diagnosticID: MessageID { get }
 
   var severity: DiagnosticSeverity { get }
+
+  /// The category that this diagnostic belongs in.
+  var category: DiagnosticCategory? { get }
+}
+
+extension DiagnosticMessage {
+  /// Diagnostic messages default to having no category.
+  public var category: DiagnosticCategory? { nil }
 }

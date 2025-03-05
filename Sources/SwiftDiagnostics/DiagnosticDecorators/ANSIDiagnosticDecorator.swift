@@ -48,7 +48,8 @@ extension DiagnosticDecorator where Self == ANSIDiagnosticDecorator {
   /// ```
   @_spi(Testing) public func decorateMessage(
     _ message: String,
-    basedOnSeverity severity: DiagnosticSeverity
+    basedOnSeverity severity: DiagnosticSeverity,
+    category: DiagnosticCategory? = nil
   ) -> String {
     let severityText: String
     let severityAnnotation: ANSIAnnotation
@@ -77,7 +78,24 @@ extension DiagnosticDecorator where Self == ANSIDiagnosticDecorator {
       resetAfterApplication: false
     )
 
-    return prefix + colorizeIfNotEmpty(message, usingAnnotation: .diagnosticText)
+    // Append the [#CategoryName] suffix when there is a category.
+    let categorySuffix: String
+    if let category {
+      // Make the category name a link to the documentation, if there is
+      // documentation.
+      let categoryName: String
+      if let documentationURL = category.documentationURL {
+        categoryName = ANSIAnnotation.hyperlink(category.name, to: "\(documentationURL)")
+      } else {
+        categoryName = category.name
+      }
+
+      categorySuffix = " [#\(categoryName)]"
+    } else {
+      categorySuffix = ""
+    }
+
+    return prefix + colorizeIfNotEmpty(message, usingAnnotation: .diagnosticText) + categorySuffix
   }
 
   /// Decorates a source code buffer outline using ANSI cyan color codes.
@@ -219,5 +237,13 @@ private struct ANSIAnnotation {
   /// Annotation used for remarks or less critical text.
   static var remarkText: Self {
     Self(color: .blue, trait: .bold)
+  }
+
+  /// Forms a hyperlink to the given URL with the given text.
+  ///
+  /// This follows the OSC 8 standard for hyperlinks that is supported by
+  /// a number of different terminals.
+  static func hyperlink(_ text: String, to url: String) -> String {
+    "\u{001B}]8;;\(url)\u{001B}\\\(text)\u{001B}]8;;\u{001B}\\"
   }
 }

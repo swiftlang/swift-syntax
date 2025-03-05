@@ -17,17 +17,17 @@
 
 #include <stdio.h>
 
-SWIFT_NAME_S("getter:_stdout()")
+SWIFT_NAME_S("getter:swift_syntax_stdout()")
 static inline FILE *swiftsyntax_stdout(void) {
   return stdout;
 }
 
-SWIFT_NAME_S("getter:_stdin()")
+SWIFT_NAME_S("getter:swift_syntax_stdin()")
 static inline FILE *swiftsyntax_stdin(void) {
   return stdin;
 }
 
-SWIFT_NAME_S("getter:_stderr()")
+SWIFT_NAME_S("getter:swift_syntax_stderr()")
 static inline FILE *swiftsyntax_stderr(void) {
   return stderr;
 }

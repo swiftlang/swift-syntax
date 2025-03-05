@@ -121,7 +121,7 @@ public class CompilerPluginMessageListener<Connection: MessageConnection, Handle
     } catch {
       // Emit a diagnostic and indicate failure to the plugin host,
       // and exit with an error code.
-      fputs("Internal Error: \(error)\n", _stderr)
+      fputs("Internal Error: \(error)\n", swift_syntax_stderr)
       exit(1)
     }
   }

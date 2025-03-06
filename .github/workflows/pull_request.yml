@@ -13,8 +13,7 @@ jobs:
     uses: swiftlang/github-workflows/.github/workflows/soundness.yml@main
     with:
       api_breakage_check_allowlist_path: "Release Notes/api-breakages.txt"
-      # https://github.com/swiftlang/swift-syntax/issues/2987
-      docs_check_enabled: false
+      docs_check_additional_arguments: "--disable-parameters-and-returns-validation"
   verify_source_code:
     name: Validate generated code
     runs-on: ubuntu-latest

@@ -15,15 +15,12 @@ jobs:
     name: Soundness
     uses: swiftlang/github-workflows/.github/workflows/soundness.yml@main
     with:
-      license_header_check_project_name: "Swift.org"
       # https://github.com/swiftlang/swift-syntax/issues/2986
       api_breakage_check_enabled: false
       # https://github.com/swiftlang/swift-syntax/issues/2987
       docs_check_enabled: false
       # https://github.com/swiftlang/swift-syntax/issues/2988
       format_check_enabled: false
-      # https://github.com/swiftlang/swift-syntax/issues/2989
-      license_header_check_enabled: false
       # https://github.com/swiftlang/swift-syntax/issues/2990
       unacceptable_language_check_enabled: false
       # https://github.com/swiftlang/swift-syntax/issues/2991

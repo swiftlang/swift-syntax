@@ -583,7 +583,7 @@ extension Parser {
   ) -> RawExprSyntax {
     // Try parse a single value statement as an expression (e.g do/if/switch).
     // Note we do this here in parseUnaryExpression as we don't allow postfix
-    // syntax to hang off such expressions to avoid ambiguities such as postfix
+    // syntax to be attached to such expressions to avoid ambiguities such as postfix
     // '.member', which can currently be parsed as a static dot member for a
     // result builder.
     switch self.at(anyIn: SingleValueStatementExpression.self) {

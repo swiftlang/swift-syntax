@@ -26,7 +26,7 @@ public protocol DeclSyntaxProtocol: SyntaxProtocol {}
 /// These methods enable casting between syntax node types within the same
 /// base node protocol hierarchy (e.g., ``DeclSyntaxProtocol``).
 ///
-/// While ``SyntaxProtocol`` offers general casting methods (``SyntaxProtocol.as(_:)``, 
+/// While ``SyntaxProtocol`` offers general casting methods (``SyntaxProtocol.as(_:)``,
 /// ``SyntaxProtocol.is(_:)``, and ``SyntaxProtocol.cast(_:)``), these often aren't
 /// appropriate for use on types conforming to a specific base node protocol
 /// like ``DeclSyntaxProtocol``. That's because at this level,
@@ -35,7 +35,7 @@ public protocol DeclSyntaxProtocol: SyntaxProtocol {}
 ///
 /// To guide developers toward correct usage, this extension provides overloads
 /// of these casting methods that are restricted to the same base node type.
-/// Furthermore, it marks the inherited casting methods from ``SyntaxProtocol`` as 
+/// Furthermore, it marks the inherited casting methods from ``SyntaxProtocol`` as
 /// deprecated, indicating that they will always fail when used in this context.
 extension DeclSyntaxProtocol {
   /// Checks if the current syntax node can be cast to a given specialized syntax type.
@@ -184,9 +184,8 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   /// Create a ``DeclSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some DeclSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through init(_: SyntaxData)
-    // to do a sanity check and verify the kind matches in debug builds and get
-    // maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
+    // verify the kind matches in debug builds and get maximum performance in release builds.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -199,9 +198,8 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   }
 
   public init(fromProtocol syntax: __shared DeclSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through init(_: SyntaxData)
-    // to do a sanity check and verify the kind matches in debug builds and get
-    // maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
+    // verify the kind matches in debug builds and get maximum performance in release builds.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -327,7 +325,7 @@ public protocol ExprSyntaxProtocol: SyntaxProtocol {}
 /// These methods enable casting between syntax node types within the same
 /// base node protocol hierarchy (e.g., ``DeclSyntaxProtocol``).
 ///
-/// While ``SyntaxProtocol`` offers general casting methods (``SyntaxProtocol.as(_:)``, 
+/// While ``SyntaxProtocol`` offers general casting methods (``SyntaxProtocol.as(_:)``,
 /// ``SyntaxProtocol.is(_:)``, and ``SyntaxProtocol.cast(_:)``), these often aren't
 /// appropriate for use on types conforming to a specific base node protocol
 /// like ``ExprSyntaxProtocol``. That's because at this level,
@@ -336,7 +334,7 @@ public protocol ExprSyntaxProtocol: SyntaxProtocol {}
 ///
 /// To guide developers toward correct usage, this extension provides overloads
 /// of these casting methods that are restricted to the same base node type.
-/// Furthermore, it marks the inherited casting methods from ``SyntaxProtocol`` as 
+/// Furthermore, it marks the inherited casting methods from ``SyntaxProtocol`` as
 /// deprecated, indicating that they will always fail when used in this context.
 extension ExprSyntaxProtocol {
   /// Checks if the current syntax node can be cast to a given specialized syntax type.
@@ -512,9 +510,8 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
 
   /// Create a ``ExprSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some ExprSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through init(_: SyntaxData)
-    // to do a sanity check and verify the kind matches in debug builds and get
-    // maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
+    // verify the kind matches in debug builds and get maximum performance in release builds.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -527,9 +524,8 @@ public struct ExprSyntax: ExprSyntaxProtocol, SyntaxHashable {
   }
 
   public init(fromProtocol syntax: __shared ExprSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through init(_: SyntaxData)
-    // to do a sanity check and verify the kind matches in debug builds and get
-    // maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
+    // verify the kind matches in debug builds and get maximum performance in release builds.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -685,7 +681,7 @@ public protocol PatternSyntaxProtocol: SyntaxProtocol {}
 /// These methods enable casting between syntax node types within the same
 /// base node protocol hierarchy (e.g., ``DeclSyntaxProtocol``).
 ///
-/// While ``SyntaxProtocol`` offers general casting methods (``SyntaxProtocol.as(_:)``, 
+/// While ``SyntaxProtocol`` offers general casting methods (``SyntaxProtocol.as(_:)``,
 /// ``SyntaxProtocol.is(_:)``, and ``SyntaxProtocol.cast(_:)``), these often aren't
 /// appropriate for use on types conforming to a specific base node protocol
 /// like ``PatternSyntaxProtocol``. That's because at this level,
@@ -694,7 +690,7 @@ public protocol PatternSyntaxProtocol: SyntaxProtocol {}
 ///
 /// To guide developers toward correct usage, this extension provides overloads
 /// of these casting methods that are restricted to the same base node type.
-/// Furthermore, it marks the inherited casting methods from ``SyntaxProtocol`` as 
+/// Furthermore, it marks the inherited casting methods from ``SyntaxProtocol`` as
 /// deprecated, indicating that they will always fail when used in this context.
 extension PatternSyntaxProtocol {
   /// Checks if the current syntax node can be cast to a given specialized syntax type.
@@ -826,9 +822,8 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
 
   /// Create a ``PatternSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some PatternSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through init(_: SyntaxData)
-    // to do a sanity check and verify the kind matches in debug builds and get
-    // maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
+    // verify the kind matches in debug builds and get maximum performance in release builds.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -841,9 +836,8 @@ public struct PatternSyntax: PatternSyntaxProtocol, SyntaxHashable {
   }
 
   public init(fromProtocol syntax: __shared PatternSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through init(_: SyntaxData)
-    // to do a sanity check and verify the kind matches in debug builds and get
-    // maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
+    // verify the kind matches in debug builds and get maximum performance in release builds.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -952,7 +946,7 @@ public protocol StmtSyntaxProtocol: SyntaxProtocol {}
 /// These methods enable casting between syntax node types within the same
 /// base node protocol hierarchy (e.g., ``DeclSyntaxProtocol``).
 ///
-/// While ``SyntaxProtocol`` offers general casting methods (``SyntaxProtocol.as(_:)``, 
+/// While ``SyntaxProtocol`` offers general casting methods (``SyntaxProtocol.as(_:)``,
 /// ``SyntaxProtocol.is(_:)``, and ``SyntaxProtocol.cast(_:)``), these often aren't
 /// appropriate for use on types conforming to a specific base node protocol
 /// like ``StmtSyntaxProtocol``. That's because at this level,
@@ -961,7 +955,7 @@ public protocol StmtSyntaxProtocol: SyntaxProtocol {}
 ///
 /// To guide developers toward correct usage, this extension provides overloads
 /// of these casting methods that are restricted to the same base node type.
-/// Furthermore, it marks the inherited casting methods from ``SyntaxProtocol`` as 
+/// Furthermore, it marks the inherited casting methods from ``SyntaxProtocol`` as
 /// deprecated, indicating that they will always fail when used in this context.
 extension StmtSyntaxProtocol {
   /// Checks if the current syntax node can be cast to a given specialized syntax type.
@@ -1102,9 +1096,8 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
 
   /// Create a ``StmtSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some StmtSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through init(_: SyntaxData)
-    // to do a sanity check and verify the kind matches in debug builds and get
-    // maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
+    // verify the kind matches in debug builds and get maximum performance in release builds.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -1117,9 +1110,8 @@ public struct StmtSyntax: StmtSyntaxProtocol, SyntaxHashable {
   }
 
   public init(fromProtocol syntax: __shared StmtSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through init(_: SyntaxData)
-    // to do a sanity check and verify the kind matches in debug builds and get
-    // maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
+    // verify the kind matches in debug builds and get maximum performance in release builds.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -1238,7 +1230,7 @@ public protocol TypeSyntaxProtocol: SyntaxProtocol {}
 /// These methods enable casting between syntax node types within the same
 /// base node protocol hierarchy (e.g., ``DeclSyntaxProtocol``).
 ///
-/// While ``SyntaxProtocol`` offers general casting methods (``SyntaxProtocol.as(_:)``, 
+/// While ``SyntaxProtocol`` offers general casting methods (``SyntaxProtocol.as(_:)``,
 /// ``SyntaxProtocol.is(_:)``, and ``SyntaxProtocol.cast(_:)``), these often aren't
 /// appropriate for use on types conforming to a specific base node protocol
 /// like ``TypeSyntaxProtocol``. That's because at this level,
@@ -1247,7 +1239,7 @@ public protocol TypeSyntaxProtocol: SyntaxProtocol {}
 ///
 /// To guide developers toward correct usage, this extension provides overloads
 /// of these casting methods that are restricted to the same base node type.
-/// Furthermore, it marks the inherited casting methods from ``SyntaxProtocol`` as 
+/// Furthermore, it marks the inherited casting methods from ``SyntaxProtocol`` as
 /// deprecated, indicating that they will always fail when used in this context.
 extension TypeSyntaxProtocol {
   /// Checks if the current syntax node can be cast to a given specialized syntax type.
@@ -1390,9 +1382,8 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   /// Create a ``TypeSyntax`` node from a specialized syntax node.
   public init(_ syntax: __shared some TypeSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through init(_: SyntaxData)
-    // to do a sanity check and verify the kind matches in debug builds and get
-    // maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
+    // verify the kind matches in debug builds and get maximum performance in release builds.
     self = Syntax(syntax).cast(Self.self)
   }
 
@@ -1405,9 +1396,8 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
   }
 
   public init(fromProtocol syntax: __shared TypeSyntaxProtocol) {
-    // We know this cast is going to succeed. Go through init(_: SyntaxData)
-    // to do a sanity check and verify the kind matches in debug builds and get
-    // maximum performance in release builds.
+    // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
+    // verify the kind matches in debug builds and get maximum performance in release builds.
     self = Syntax(syntax).cast(Self.self)
   }
 

@@ -20,5 +20,3 @@ jobs:
       docs_check_enabled: false
       # https://github.com/swiftlang/swift-syntax/issues/2988
       format_check_enabled: false
-      # https://github.com/swiftlang/swift-syntax/issues/2991
-      yamllint_check_enabled: false

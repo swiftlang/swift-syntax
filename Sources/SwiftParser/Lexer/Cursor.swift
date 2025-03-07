@@ -1594,7 +1594,7 @@ extension Lexer.Cursor {
 // MARK: Lexing a character in a string literal
 
 extension Lexer.Cursor {
-  enum CharacterLex {
+  enum CharacterLex: Equatable {
     /// A normal character as it occurs in the source file
     case success(Unicode.Scalar)
 

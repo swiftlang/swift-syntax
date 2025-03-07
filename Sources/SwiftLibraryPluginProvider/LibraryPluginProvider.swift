@@ -14,6 +14,7 @@
 public import SwiftSyntaxMacros
 @_spi(PluginMessage) public import SwiftCompilerPluginMessageHandling
 private import _SwiftLibraryPluginProviderCShims
+
 // NOTE: Do not use '_SwiftSyntaxCShims' for 'dlopen' and 'LoadLibraryW' (Windows)
 // because we don't want other modules depend on 'WinSDK'.
 #if canImport(Darwin)
@@ -24,10 +25,15 @@ private import Glibc
 private import Musl
 #elseif canImport(Android)
 private import Android
-#endif
-#else
+#endif  // canImport
+
+#else  // compiler(>=6)
+
 import SwiftSyntaxMacros
 @_spi(PluginMessage) import SwiftCompilerPluginMessageHandling
+
+#if RESILIENT_LIBRARIES
+
 @_implementationOnly import _SwiftLibraryPluginProviderCShims
 #if canImport(Darwin)
 @_implementationOnly import Darwin
@@ -35,8 +41,22 @@ import SwiftSyntaxMacros
 @_implementationOnly import Glibc
 #elseif canImport(Musl)
 @_implementationOnly import Musl
-#endif
-#endif
+#endif  // canImport
+
+#else  // RESILIENT_LIBRARIES
+
+import _SwiftLibraryPluginProviderCShims
+#if canImport(Darwin)
+import Darwin
+#elseif canImport(Glibc)
+import Glibc
+#elseif canImport(Musl)
+import Musl
+#endif  // canImport
+
+#endif  // RESILIENT_LIBRARIES
+
+#endif  // compiler(>=6)
 
 /// Singleton 'PluginProvider' that can serve shared library plugins.
 @_spi(PluginMessage)

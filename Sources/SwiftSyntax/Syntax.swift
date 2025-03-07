@@ -10,10 +10,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
+#if compiler(>=6) && RESILIENT_LIBRARIES
 @_implementationOnly private import _SwiftSyntaxCShims
-#else
+#elseif compiler(>=6) && !RESILIENT_LIBRARIES
+private import _SwiftSyntaxCShims
+#elseif !compiler(>=6) && RESILIENT_LIBRARIES
 @_implementationOnly import _SwiftSyntaxCShims
+#elseif !compiler(>=6) && !RESILIENT_LIBRARIES
+import _SwiftSyntaxCShims
 #endif
 
 // `Syntax` is a user facing tree wrapping `RawSyntax` tree. A value is a pair

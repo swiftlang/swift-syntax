@@ -2,38 +2,38 @@ name: BasicFormat Bug
 description: A bug in the BasicFormat module
 labels: [bug, BasicFormat]
 body:
- - type: markdown
-   attributes:
-     value: Thanks for taking the time to fill out this bug report! We would really appreciate if you could take the time to reduce the issue as described in [Filing BasicFormat Bug Reports](https://swiftpackageindex.com/swiftlang/swift-syntax/main/documentation/swiftbasicformat/filingbugreports).
- - type: textarea
-   id: source
-   attributes:
-     label: Source Code
-     description: The source code that, when formatted, produces incorrectly formatted code.
-     value: |
-       ```swift
-       ```
- - type: textarea
-   id: source
-   attributes:
-     label: Actual Formatted Code
-     description: The way that `BasicFormat` formats the above code
-     value: |
-       ```swift
-       ```
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to fill out this bug report! We would really appreciate if you could take the time to reduce the issue as described in [Filing BasicFormat Bug Reports](https://swiftpackageindex.com/swiftlang/swift-syntax/main/documentation/swiftbasicformat/filingbugreports).
   - type: textarea
-   id: source
-   attributes:
-     label: Expected Formatted Code
-     description: The way that you think `BasicFormat` should format the code
-     value: |
-       ```swift
-       ```
- - type: textarea
-   id: description
-   attributes:
-     label: Description
-     description: |
-       Any additional information you can provide for this issue, like
-        - Has this issue started occurring recently?
-        - Is the issue only happening under certain circumstances?
+    id: source
+    attributes:
+      label: Source Code
+      description: The source code that, when formatted, produces incorrectly formatted code.
+      value: |
+        ```swift
+        ```
+  - type: textarea
+    id: source
+    attributes:
+      label: Actual Formatted Code
+      description: The way that `BasicFormat` formats the above code
+      value: |
+        ```swift
+        ```
+  - type: textarea
+    id: source
+    attributes:
+      label: Expected Formatted Code
+      description: The way that you think `BasicFormat` should format the code
+      value: |
+        ```swift
+        ```
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: |
+        Any additional information you can provide for this issue, like
+         - Has this issue started occurring recently?
+         - Is the issue only happening under certain circumstances?

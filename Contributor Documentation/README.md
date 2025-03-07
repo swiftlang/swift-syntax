@@ -2,6 +2,7 @@
 
 The following documentation documents are primarily intended for developers of swift-syntax.
 
+- [API Breakage Checks](API%20Breakage%20Checks.md)
 - [Changing Swift Syntax](Changing%20Swift%20Syntax.md)
 - [Filing Parser Bug Reports](Filing%20Parser%20Bug%20Reports.md)
 - [Fixing Bugs](Fixing%20Bugs.md)

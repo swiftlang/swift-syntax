@@ -15,13 +15,8 @@ jobs:
     name: Soundness
     uses: swiftlang/github-workflows/.github/workflows/soundness.yml@main
     with:
-      # https://github.com/swiftlang/swift-syntax/issues/2986
-      api_breakage_check_enabled: false
+      api_breakage_check_allowlist_path: "Release Notes/api-breakages.txt"
       # https://github.com/swiftlang/swift-syntax/issues/2987
       docs_check_enabled: false
       # https://github.com/swiftlang/swift-syntax/issues/2988
       format_check_enabled: false
-      # https://github.com/swiftlang/swift-syntax/issues/2990
-      unacceptable_language_check_enabled: false
-      # https://github.com/swiftlang/swift-syntax/issues/2991
-      yamllint_check_enabled: false

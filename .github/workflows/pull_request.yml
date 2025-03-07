@@ -15,3 +15,15 @@ jobs:
       api_breakage_check_allowlist_path: "Release Notes/api-breakages.txt"
       # https://github.com/swiftlang/swift-syntax/issues/2987
       docs_check_enabled: false
+  verify_source_code:
+    name: Validate generated code
+    runs-on: ubuntu-latest
+    container:
+      image: swift:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate generated code
+        run: "./swift-syntax-dev-utils verify-source-code --toolchain /usr"

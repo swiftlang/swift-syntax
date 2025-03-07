@@ -1,0 +1,84 @@
+name: Publish Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      prerelease:
+        type: boolean
+        description: "Prerelease"
+        # Whether to create a prerelease or proper release
+        default: true
+        required: true
+      swift_syntax_version:
+        type: string
+        default: 601.0.0
+        description: "swift-syntax version"
+        # The version of swift-syntax to tag. If this is a prerelease, `-prerelease-<date>` is added to this version.
+        required: true
+
+jobs:
+  check_triggering_actor:
+    name: Check user is allowed to create release
+    # Only a single user should be allowed to create releases to avoid two people triggering the creation of a release
+    # at the same time. If the release manager changes between users, update this condition.
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          if [[ "${{ github.triggering_actor }}" != "ahoppen" ]]; then
+            echo "${{ github.triggering_actor }} is not allowed to create a release"
+            exit 1
+          fi
+  test:
+    name: Test in ${{ matrix.release && 'Release' || 'Debug' }} configuration
+    uses: swiftlang/github-workflows/.github/workflows/swift_package_test.yml@main
+    strategy:
+      fail-fast: false
+      matrix:
+        release: [true, false]
+    with:
+      # We require that releases of swift-syntax build without warnings
+      linux_build_command: swift test -Xswiftc -warnings-as-errors ${{ matrix.release && '-c release' || '' }}
+      windows_build_command: swift test -Xswiftc -warnings-as-errors ${{ matrix.release && '-c release' || '' }}
+  create_tag:
+    name: Create Tag
+    runs-on: ubuntu-latest
+    needs: [check_triggering_actor, test]
+    permissions:
+      contents: write
+    outputs:
+      swift_syntax_version: ${{ steps.swift_syntax_version.outputs.swift_syntax_version }}
+    steps:
+      - name: Determine tag name
+        id: swift_syntax_version
+        run: |
+          if [[ "${{ github.event.inputs.prerelease }}" == "false" ]]; then
+            SWIFT_SYNTAX_VERSION="${{ github.event.inputs.swift_syntax_version }}"
+          else
+            SWIFT_SYNTAX_VERSION="${{ github.event.inputs.swift_syntax_version }}-prerelease-$(date +'%Y-%m-%d')"
+          fi
+          echo "Using swift-syntax version: $SWIFT_SYNTAX_VERSION"
+          echo "swift_syntax_version=$SWIFT_SYNTAX_VERSION" >> "$GITHUB_OUTPUT"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Tag release
+        run: |
+          git tag "${{ steps.swift_syntax_version.outputs.swift_syntax_version }}"
+          git push origin "${{ steps.swift_syntax_version.outputs.swift_syntax_version }}"
+  create_release:
+    name: Create prerelease on GitHub
+    runs-on: ubuntu-latest
+    needs: [create_tag]
+    # Only create a release automatically for prereleases. For real releases, release notes should be crafted by hand.
+    if: ${{ github.event.inputs.prerelease }}
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ needs.create_tag.outputs.swift_syntax_version }}" \
+            --title "${{ needs.create_tag.outputs.swift_syntax_version }}" \
+            --prerelease

@@ -242,6 +242,11 @@ let package = Package(
       path: "Sources/VersionMarkerModules/SwiftSyntax601"
     ),
 
+    .target(
+      name: "SwiftSyntax602",
+      path: "Sources/VersionMarkerModules/SwiftSyntax602"
+    ),
+
     // MARK: SwiftSyntaxBuilder
 
     .target(

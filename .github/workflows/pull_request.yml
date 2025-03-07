@@ -15,5 +15,3 @@ jobs:
       api_breakage_check_allowlist_path: "Release Notes/api-breakages.txt"
       # https://github.com/swiftlang/swift-syntax/issues/2987
       docs_check_enabled: false
-      # https://github.com/swiftlang/swift-syntax/issues/2988
-      format_check_enabled: false

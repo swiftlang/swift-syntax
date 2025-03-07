@@ -33,7 +33,7 @@ struct LocalPrPrecheck: ParsableCommand {
 }
 
 struct LocalPrPrecheckExecutor {
-  private let formatExecutor: FormatExecutor
+  private let verbose: Bool
   private let generateSourceCodeExecutor: GenerateSourceCodeExecutor
   private let buildExecutor: BuildExecutor
   private let testExecutor: TestExecutor
@@ -43,7 +43,7 @@ struct LocalPrPrecheckExecutor {
   ///   - toolchain: The path to the toolchain that shall be used to build SwiftSyntax.
   ///   - verbose: Enable verbose logging.
   init(toolchain: URL, verbose: Bool = false) {
-    self.formatExecutor = FormatExecutor(update: false, verbose: verbose)
+    self.verbose = verbose
     self.generateSourceCodeExecutor = GenerateSourceCodeExecutor(toolchain: toolchain, verbose: verbose)
     self.buildExecutor = BuildExecutor(
       swiftPMBuilder: SwiftPMBuilder(toolchain: toolchain, useLocalDeps: false, verbose: verbose)
@@ -53,8 +53,16 @@ struct LocalPrPrecheckExecutor {
     )
   }
 
+  private func checkFormatting() throws {
+    try ProcessRunner(
+      executableURL: Paths.swiftExec,
+      arguments: ["format", "lint", "--strict", "--parallel", "--recursive", Paths.sourcesDir.path]
+    )
+    .run(captureStdout: false, captureStderr: false, verbose: verbose)
+  }
+
   func run() throws {
-    try formatExecutor.run()
+    try checkFormatting()
     try generateSourceCodeExecutor.run(sourceDir: Paths.sourcesDir)
     try buildExecutor.run()
     try testExecutor.run()

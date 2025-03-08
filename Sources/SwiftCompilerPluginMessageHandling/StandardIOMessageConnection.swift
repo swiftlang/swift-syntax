@@ -45,8 +45,8 @@ public struct StandardIOMessageConnection: MessageConnection {
   /// directly to `stdin` and `stdout` as WASI doesn't support
   /// `dup{,2}`.
   public init() throws {
-    let inputFD = fileno(_stdin)
-    let outputFD = fileno(_stdout)
+    let inputFD = fileno(swift_syntax_stdin)
+    let outputFD = fileno(swift_syntax_stdout)
     self.init(inputFileDescriptor: inputFD, outputFileDescriptor: outputFD)
   }
   #else
@@ -60,29 +60,29 @@ public struct StandardIOMessageConnection: MessageConnection {
   public init() throws {
     // Duplicate the `stdin` file descriptor, which we will then use for
     // receiving messages from the plugin host.
-    let inputFD = dup(fileno(_stdin))
+    let inputFD = dup(fileno(swift_syntax_stdin))
     guard inputFD >= 0 else {
-      throw IOError.systemError(function: "dup(fileno(stdin))", errno: _errno)
+      throw IOError.systemError(function: "dup(fileno(stdin))", errno: swift_syntax_errno)
     }
 
     // Having duplicated the original standard-input descriptor, we close
     // `stdin` so that attempts by the plugin to read console input (which
     // are usually a mistake) return errors instead of blocking.
-    guard close(fileno(_stdin)) >= 0 else {
-      throw IOError.systemError(function: "close(fileno(stdin))", errno: _errno)
+    guard close(fileno(swift_syntax_stdin)) >= 0 else {
+      throw IOError.systemError(function: "close(fileno(stdin))", errno: swift_syntax_errno)
     }
 
     // Duplicate the `stdout` file descriptor, which we will then use for
     // sending messages to the plugin host.
-    let outputFD = dup(fileno(_stdout))
+    let outputFD = dup(fileno(swift_syntax_stdout))
     guard outputFD >= 0 else {
-      throw IOError.systemError(function: "dup(fileno(stdout))", errno: _errno)
+      throw IOError.systemError(function: "dup(fileno(stdout))", errno: swift_syntax_errno)
     }
 
     // Having duplicated the original standard-output descriptor, redirect
     // `stdout` to `stderr` so that all free-form text output goes there.
-    guard dup2(fileno(_stderr), fileno(_stdout)) >= 0 else {
-      throw IOError.systemError(function: "dup2(fileno(stderr), fileno(stdout))", errno: _errno)
+    guard dup2(fileno(swift_syntax_stderr), fileno(swift_syntax_stdout)) >= 0 else {
+      throw IOError.systemError(function: "dup2(fileno(stderr), fileno(stdout))", errno: swift_syntax_errno)
     }
 
     #if canImport(ucrt)
@@ -101,7 +101,7 @@ public struct StandardIOMessageConnection: MessageConnection {
     let endPtr = ptr.advanced(by: buffer.count)
     while ptr != endPtr {
       switch write(outputFileDescriptor, ptr, numericCast(endPtr - ptr)) {
-      case -1: throw IOError.systemError(function: "write(_:_:_:)", errno: _errno)
+      case -1: throw IOError.systemError(function: "write(_:_:_:)", errno: swift_syntax_errno)
       case 0: throw IOError.systemError(function: "write", errno: 0) /* unreachable */
       case let n: ptr += Int(n)
       }
@@ -116,7 +116,7 @@ public struct StandardIOMessageConnection: MessageConnection {
     let endPtr = ptr.advanced(by: buffer.count)
     while ptr != endPtr {
       switch read(inputFileDescriptor, ptr, numericCast(endPtr - ptr)) {
-      case -1: throw IOError.systemError(function: "read(_:_:_:)", errno: _errno)
+      case -1: throw IOError.systemError(function: "read(_:_:_:)", errno: swift_syntax_errno)
       case 0: throw IOError.readReachedEndOfInput
       case let n: ptr += Int(n)
       }

@@ -10,10 +10,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
+#if compiler(>=6) && RESILIENT_LIBRARIES
 @_implementationOnly private import _SwiftSyntaxCShims
-#else
+#elseif compiler(>=6) && !RESILIENT_LIBRARIES
+private import _SwiftSyntaxCShims
+#elseif !compiler(>=6) && RESILIENT_LIBRARIES
 @_implementationOnly import _SwiftSyntaxCShims
+#elseif !compiler(>=6) && !RESILIENT_LIBRARIES
+import _SwiftSyntaxCShims
 #endif
 
 #if canImport(ucrt)
@@ -173,6 +177,17 @@ private enum IOError: Error, CustomStringConvertible {
 
 // Private function to construct an error message from an `errno` code.
 private func describe(errno: CInt) -> String {
-  if let cStr = strerror(errno) { return String(cString: cStr) }
-  return String(describing: errno)
+  // We can't tell how long the error message will be but 1024 characters should be enough to hold most, if not all,
+  // error messages.
+  return withUnsafeTemporaryAllocation(of: CChar.self, capacity: 1024) { buffer in
+    guard let baseAddress = buffer.baseAddress else {
+      return ""
+    }
+    #if os(Windows)
+    strerror_s(baseAddress, buffer.count, errno)
+    #else
+    strerror_r(errno, baseAddress, buffer.count)
+    #endif
+    return String(cString: baseAddress)
+  }
 }

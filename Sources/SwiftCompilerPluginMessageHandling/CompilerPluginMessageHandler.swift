@@ -10,11 +10,19 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
+#if compiler(>=6) && RESILIENT_LIBRARIES
 @_implementationOnly private import _SwiftSyntaxCShims
+#elseif compiler(>=6) && !RESILIENT_LIBRARIES
+private import _SwiftSyntaxCShims
+#elseif !compiler(>=6) && RESILIENT_LIBRARIES
+@_implementationOnly import _SwiftSyntaxCShims
+#elseif !compiler(>=6) && !RESILIENT_LIBRARIES
+import _SwiftSyntaxCShims
+#endif
+
+#if compiler(>=6)
 public import SwiftSyntaxMacros
 #else
-@_implementationOnly import _SwiftSyntaxCShims
 import SwiftSyntaxMacros
 #endif
 

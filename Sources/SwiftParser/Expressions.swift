@@ -463,6 +463,8 @@ extension Parser {
         //   - Subscript vs. array or dictionary expression
         || (self.peek(isAt: .period, .leftParen, .leftSquare) && self.peek().leadingTriviaByteLength == 0
           && self.currentToken.trailingTriviaByteLength == 0)
+        // End of file
+        || self.peek(isAt: .endOfFile)
       {
         break EXPR_PREFIX
       }

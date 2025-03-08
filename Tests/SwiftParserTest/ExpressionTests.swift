@@ -2335,6 +2335,23 @@ final class StatementExpressionTests: ParserTestCase {
         expression: ArrayExprSyntax(expressions: [])
       )
     )
+
+    assertParse(
+      #"""
+      func f() {
+        "\(unsafe)"
+      }
+      """#,
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("unsafe"))
+    )
+
+    assertParse(
+      """
+      a = 1️⃣unsafe
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("unsafe")),
+      substructureAfterMarker: "1️⃣"
+    )
   }
 
   func testUnterminatedInterpolationAtEndOfMultilineStringLiteral() {

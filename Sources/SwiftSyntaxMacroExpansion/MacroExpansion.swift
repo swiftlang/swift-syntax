@@ -215,7 +215,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
   definition: Macro.Type,
   macroRole: MacroRole,
   attributeNode: AttributeSyntax,
-  declarationNode: DeclSyntax,
+  declarationNode: some SyntaxProtocol,
   parentDeclNode: DeclSyntax?,
   extendedType: TypeSyntax?,
   conformanceList: InheritedTypeListSyntax?,
@@ -225,6 +225,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
   do {
     switch (definition, macroRole) {
     case (let attachedMacro as AccessorMacro.Type, .accessor):
+      let declarationNode = declarationNode.cast(DeclSyntax.self)
       let accessors = try attachedMacro.expansion(
         of: attributeNode,
         providingAccessorsOf: declarationNode,
@@ -235,6 +236,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
       }
 
     case (let attachedMacro as MemberAttributeMacro.Type, .memberAttribute):
+      let declarationNode = declarationNode.cast(DeclSyntax.self)
       guard
         let parentDeclGroup = parentDeclNode?.asProtocol(DeclGroupSyntax.self)
       else {
@@ -274,6 +276,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
       }
 
     case (let attachedMacro as PeerMacro.Type, .peer):
+      let declarationNode = declarationNode.cast(DeclSyntax.self)
       let peers = try attachedMacro.expansion(
         of: attributeNode,
         providingPeersOf: declarationNode,
@@ -335,19 +338,26 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
       }
 
     case (let attachedMacro as BodyMacro.Type, .body):
-      guard
-        let declToPass = Syntax(declarationNode).asProtocol(SyntaxProtocol.self)
-          as? (DeclSyntaxProtocol & WithOptionalCodeBlockSyntax)
-      else {
+      let body: [CodeBlockItemSyntax]
+      if let closureSyntax = declarationNode.as(ClosureExprSyntax.self) {
+        body = try attachedMacro.expansion(
+          of: attributeNode,
+          providingBodyFor: closureSyntax,
+          in: context
+        )
+      } else if let declToPass = Syntax(declarationNode).asProtocol(SyntaxProtocol.self)
+        as? (DeclSyntaxProtocol & WithOptionalCodeBlockSyntax)
+      {
+        body = try attachedMacro.expansion(
+          of: attributeNode,
+          providingBodyFor: declToPass,
+          in: context
+        )
+      } else {
         // Compiler error: declaration must have a body.
         throw MacroExpansionError.declarationHasNoBody
       }
 
-      let body = try attachedMacro.expansion(
-        of: attributeNode,
-        providingBodyFor: declToPass,
-        in: context
-      )
       return body.map {
         $0.formattedExpansion(definition.formatMode, indentationWidth: indentationWidth)
       }
@@ -380,7 +390,7 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
   definition: Macro.Type,
   macroRole: MacroRole,
   attributeNode: AttributeSyntax,
-  declarationNode: DeclSyntax,
+  declarationNode: some SyntaxProtocol,
   parentDeclNode: DeclSyntax?,
   extendedType: TypeSyntax?,
   conformanceList: InheritedTypeListSyntax?,

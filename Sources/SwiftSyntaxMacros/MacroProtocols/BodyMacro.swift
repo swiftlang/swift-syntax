@@ -29,4 +29,31 @@ public protocol BodyMacro: AttachedMacro {
     providingBodyFor declaration: some DeclSyntaxProtocol & WithOptionalCodeBlockSyntax,
     in context: some MacroExpansionContext
   ) throws -> [CodeBlockItemSyntax]
+
+  /// Expand a macro described by the given custom attribute and
+  /// attached to the given closure and evaluated within a
+  /// particular expansion context.
+  ///
+  /// The macro expansion can replace the body of the given closure.
+  static func expansion(
+    of node: AttributeSyntax,
+    providingBodyFor closure: ClosureExprSyntax,
+    in context: some MacroExpansionContext
+  ) throws -> [CodeBlockItemSyntax]
+}
+
+private struct ClosureNotSupported: Error, CustomStringConvertible {
+  var description: String {
+    "Function body macro cannot be applied to closure"
+  }
+}
+
+extension BodyMacro {
+  public static func expansion(
+    of node: AttributeSyntax,
+    providingBodyFor closure: ClosureExprSyntax,
+    in context: some MacroExpansionContext
+  ) throws -> [CodeBlockItemSyntax] {
+    throw ClosureNotSupported()
+  }
 }

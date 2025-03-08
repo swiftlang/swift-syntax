@@ -455,8 +455,13 @@ extension Parser {
         // Start of a closure in a context where it should be interpreted as
         // being part of a statement.
         || (flavor == .stmtCondition && self.peek(isAt: .leftBrace))
-        // `unsafe.something` with no trivia
-        || (self.peek(isAt: .period) && self.peek().leadingTriviaByteLength == 0
+        // Avoid treating as an "unsafe" expression when there is no trivia
+        // following the "unsafe" and the following token could either be a
+        // postfix expression or a subexpression:
+        //   - Member access vs. leading .
+        //   - Call vs. tuple expression.
+        //   - Subscript vs. array or dictionary expression
+        || (self.peek(isAt: .period, .leftParen, .leftSquare) && self.peek().leadingTriviaByteLength == 0
           && self.currentToken.trailingTriviaByteLength == 0)
       {
         break EXPR_PREFIX

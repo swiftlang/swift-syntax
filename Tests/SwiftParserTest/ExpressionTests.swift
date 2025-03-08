@@ -2295,6 +2295,46 @@ final class StatementExpressionTests: ParserTestCase {
       """,
       substructure: DeclReferenceExprSyntax(baseName: .identifier("unsafe"))
     )
+
+    assertParse(
+      """
+      func f() {
+        unsafe()
+      }
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("unsafe"))
+    )
+
+    assertParse(
+      """
+      func f() {
+        unsafe ()
+      }
+      """,
+      substructure: UnsafeExprSyntax(
+        expression: TupleExprSyntax(elements: LabeledExprListSyntax())
+      )
+    )
+
+    assertParse(
+      """
+      func f() {
+        unsafe[]
+      }
+      """,
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("unsafe"))
+    )
+
+    assertParse(
+      """
+      func f() {
+        unsafe []
+      }
+      """,
+      substructure: UnsafeExprSyntax(
+        expression: ArrayExprSyntax(expressions: [])
+      )
+    )
   }
 
   func testUnterminatedInterpolationAtEndOfMultilineStringLiteral() {

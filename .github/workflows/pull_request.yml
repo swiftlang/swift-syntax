@@ -27,3 +27,41 @@ jobs:
           persist-credentials: false
       - name: Validate generated code
         run: "./swift-syntax-dev-utils verify-source-code --toolchain /usr"
+  test_using_swift_syntax_dev_utils_linux:
+    name: Run tests using swift-syntax-dev-utils (Linux)
+    runs-on: ubuntu-latest
+    container:
+      image: swift:latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test
+        run: "./swift-syntax-dev-utils test --enable-rawsyntax-validation --enable-test-fuzzing --toolchain /usr"
+  test_using_swift_syntax_dev_utils_windows:
+    name: Run tests using swift-syntax-dev-utils (Windows)
+    runs-on: windows-2022
+    steps:
+      - name: Pull Docker image
+        id: pull_docker_image
+        run: |
+          $Image = "swift:windowsservercore-ltsc2022"
+          docker pull $Image
+          echo "image=$Image" >> "$env:GITHUB_OUTPUT"
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Test
+        run: |
+          mkdir $env:TEMP\test-script
+          echo @'
+          Set-PSDebug -Trace 1
+          $SwiftPath = where.exe swift
+          swift.exe run --package-path "C:\Source\SwiftSyntaxDevUtils" swift-syntax-dev-utils test --enable-rawsyntax-validation --enable-test-fuzzing --toolchain "$SwiftPath\..\.."
+          if ($LastExitCode -ne 0) {
+            exit $LastExitCode
+          }
+          '@ >> $env:TEMP\test-script\run.ps1
+          docker run -v ${{ github.workspace }}:C:\source -v $env:TEMP\test-script:C:\test-script ${{ steps.pull_docker_image.outputs.image }} powershell.exe -NoLogo -File C:\test-script\run.ps1

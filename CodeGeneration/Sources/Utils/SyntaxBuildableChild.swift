@@ -33,7 +33,7 @@ extension Child {
       buildableKind = .node(kind: kind)
     case .nodeChoices:
       buildableKind = .node(kind: .syntax)
-    case .collection(kind: let kind, _, _, _):
+    case .collection(kind: let kind, _):
       buildableKind = .node(kind: kind)
     case .token:
       buildableKind = .token(self.tokenKind!)
@@ -65,7 +65,7 @@ extension Child {
         return ExprSyntax("nil")
       }
     }
-    if case .collection(_, _, defaultsToEmpty: true, _) = kind {
+    if case .collection(_, defaultsToEmpty: true) = kind {
       return ExprSyntax("[]")
     }
     guard let token = token, isToken else {

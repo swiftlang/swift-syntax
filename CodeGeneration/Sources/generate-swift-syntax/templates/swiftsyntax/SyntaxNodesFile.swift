@@ -168,44 +168,6 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
               """
             )
           }
-
-          // ===============
-          // Adding children
-          // ===============
-          // We don't currently support adding elements to a specific unexpected collection.
-          // If needed, this could be added in the future, but for now withUnexpected should be sufficient.
-          if let childNode = SYNTAX_NODE_MAP[child.syntaxNodeKind]?.collectionNode,
-            !child.isUnexpectedNodes,
-            case .collection(_, collectionElementName: let childElt?, _, _) = child.kind
-          {
-            let childEltType = childNode.collectionElementType.syntaxBaseName
-
-            DeclSyntax(
-              """
-              /// Adds the provided `element` to the node's `\(child.identifier)`
-              /// collection.
-              ///
-              /// - param element: The new `\(raw: childElt)` to add to the node's
-              ///                  `\(child.identifier)` collection.
-              /// - returns: A copy of the receiver with the provided `\(raw: childElt)`
-              ///            appended to its `\(child.identifier)` collection.
-              @available(*, deprecated, message: "Use node.\(child.identifier).append(newElement) instead")
-              public func add\(raw: childElt)(_ element: \(childEltType)) -> \(node.kind.syntaxType) {
-                var collection: RawSyntax
-                let arena = RawSyntaxArena()
-                if let col = raw.layoutView!.children[\(raw: index)] {
-                  collection = col.layoutView!.appending(element.raw, arena: arena)
-                } else {
-                  collection = RawSyntax.makeLayout(kind: SyntaxKind.\(childNode.memberCallName),
-                                                    from: [element.raw], arena: arena)
-                }
-                return Syntax(self)
-                  .replacingChild(at: \(raw: index), with: collection, rawNodeArena: arena, rawAllocationArena: arena)
-                  .cast(\(node.kind.syntaxType).self)
-              }
-              """
-            )
-          }
         }
 
         let layout = ArrayExprSyntax {

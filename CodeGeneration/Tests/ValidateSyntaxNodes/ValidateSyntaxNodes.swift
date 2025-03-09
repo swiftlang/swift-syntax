@@ -570,6 +570,10 @@ class ValidateSyntaxNodes: XCTestCase {
         ),
         ValidationFailure(node: .lifetimeTypeSpecifier, message: "could conform to trait 'Parenthesized' but does not"),
         ValidationFailure(node: .codeBlockFile, message: "could conform to trait 'WithCodeBlock' but does not"),
+        ValidationFailure(
+          node: .keyPathMethodComponent,
+          message: "could conform to trait 'Parenthesized' but does not"
+        ),
       ]
     )
   }

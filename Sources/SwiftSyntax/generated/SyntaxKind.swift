@@ -179,6 +179,8 @@ public enum SyntaxKind: Sendable {
   case keyPathComponentList
   case keyPathComponent
   case keyPathExpr
+  @_spi(ExperimentalLanguageFeatures)
+  case keyPathMethodComponent
   case keyPathOptionalComponent
   case keyPathPropertyComponent
   case keyPathSubscriptComponent
@@ -764,6 +766,8 @@ public enum SyntaxKind: Sendable {
       return KeyPathComponentSyntax.self
     case .keyPathExpr:
       return KeyPathExprSyntax.self
+    case .keyPathMethodComponent:
+      return KeyPathMethodComponentSyntax.self
     case .keyPathOptionalComponent:
       return KeyPathOptionalComponentSyntax.self
     case .keyPathPropertyComponent:

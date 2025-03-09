@@ -983,6 +983,37 @@ extension InitializerDeclSyntax {
   }
 }
 
+extension KeyPathMethodComponentSyntax {
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+    leadingTrivia: Trivia? = nil,
+    unexpectedBeforeDeclName: UnexpectedNodesSyntax? = nil,
+    declName: DeclReferenceExprSyntax,
+    unexpectedBetweenDeclNameAndLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax = .leftParenToken(),
+    unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+    unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax = .rightParenToken(),
+    unexpectedAfterRightParen: UnexpectedNodesSyntax? = nil,
+    @LabeledExprListBuilder argumentsBuilder: () throws -> LabeledExprListSyntax,
+    trailingTrivia: Trivia? = nil
+  ) rethrows {
+    try self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeDeclName,
+      declName: declName,
+      unexpectedBetweenDeclNameAndLeftParen,
+      leftParen: leftParen,
+      unexpectedBetweenLeftParenAndArguments,
+      arguments: argumentsBuilder(),
+      unexpectedBetweenArgumentsAndRightParen,
+      rightParen: rightParen,
+      unexpectedAfterRightParen,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
 extension KeyPathSubscriptComponentSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(

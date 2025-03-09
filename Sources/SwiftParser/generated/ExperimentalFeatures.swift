@@ -49,6 +49,9 @@ extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of @abi attribute.
   public static let abiAttribute = Self (rawValue: 1 << 7)
 
+  /// Whether to enable the parsing of keypaths with method members.
+  public static let keypathWithMethodMembers = Self (rawValue: 1 << 8)
+
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
   public init?(name: String) {
@@ -69,6 +72,8 @@ extension Parser.ExperimentalFeatures {
       self = .valueGenerics
     case "ABIAttribute":
       self = .abiAttribute
+    case "KeypathWithMethodMembers":
+      self = .keypathWithMethodMembers
     default:
       return nil
     }

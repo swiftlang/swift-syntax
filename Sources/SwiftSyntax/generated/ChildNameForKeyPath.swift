@@ -1952,6 +1952,24 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "components"
   case \KeyPathExprSyntax.unexpectedAfterComponents:
     return "unexpectedAfterComponents"
+  case \KeyPathMethodComponentSyntax.unexpectedBeforeDeclName:
+    return "unexpectedBeforeDeclName"
+  case \KeyPathMethodComponentSyntax.declName:
+    return "declName"
+  case \KeyPathMethodComponentSyntax.unexpectedBetweenDeclNameAndLeftParen:
+    return "unexpectedBetweenDeclNameAndLeftParen"
+  case \KeyPathMethodComponentSyntax.leftParen:
+    return "leftParen"
+  case \KeyPathMethodComponentSyntax.unexpectedBetweenLeftParenAndArguments:
+    return "unexpectedBetweenLeftParenAndArguments"
+  case \KeyPathMethodComponentSyntax.arguments:
+    return "arguments"
+  case \KeyPathMethodComponentSyntax.unexpectedBetweenArgumentsAndRightParen:
+    return "unexpectedBetweenArgumentsAndRightParen"
+  case \KeyPathMethodComponentSyntax.rightParen:
+    return "rightParen"
+  case \KeyPathMethodComponentSyntax.unexpectedAfterRightParen:
+    return "unexpectedAfterRightParen"
   case \KeyPathOptionalComponentSyntax.unexpectedBeforeQuestionOrExclamationMark:
     return "unexpectedBeforeQuestionOrExclamationMark"
   case \KeyPathOptionalComponentSyntax.questionOrExclamationMark:

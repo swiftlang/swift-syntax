@@ -59,24 +59,7 @@ struct RecoveryConsumptionHandle {
 }
 
 extension Parser.Lookahead {
-  /// See `canRecoverTo` that takes 3 specs.
-  mutating func canRecoverTo(
-    _ spec: TokenSpec,
-    recursionDepth: Int = 1
-  ) -> RecoveryConsumptionHandle? {
-    return canRecoverTo(spec, spec, spec, recursionDepth: recursionDepth)
-  }
-
-  /// See `canRecoverTo` that takes 3 specs.
-  mutating func canRecoverTo(
-    _ spec1: TokenSpec,
-    _ spec2: TokenSpec,
-    recursionDepth: Int = 1
-  ) -> RecoveryConsumptionHandle? {
-    return canRecoverTo(spec1, spec2, spec1, recursionDepth: recursionDepth)
-  }
-
-  /// Tries eating tokens until it finds a token that matches `spec1`, `spec2` or `spec3`
+  /// Tries eating tokens until it finds a token that matches one of `specs`
   /// without skipping tokens that have a precedence that's higher than the
   /// lowest precedence in the expected kinds. If it found a token in this way,
   /// returns `true`, otherwise `false`.
@@ -84,9 +67,7 @@ extension Parser.Lookahead {
   /// tokens this lookahead skipped over to find `kind` by consuming
   /// `lookahead.tokensConsumed` as unexpected.
   mutating func canRecoverTo(
-    _ spec1: TokenSpec,
-    _ spec2: TokenSpec,
-    _ spec3: TokenSpec,
+    _ specs: [TokenSpec],
     recursionDepth: Int = 1
   ) -> RecoveryConsumptionHandle? {
     if recursionDepth > 10 {
@@ -100,30 +81,20 @@ extension Parser.Lookahead {
     }
     #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
     if shouldRecordAlternativeTokenChoices {
-      recordAlternativeTokenChoice(for: self.currentToken, choices: [spec1, spec2, spec3])
+      recordAlternativeTokenChoice(for: self.currentToken, choices: specs)
     }
     #endif
     let initialTokensConsumed = self.tokensConsumed
 
-    let recoveryPrecedence = min(spec1.recoveryPrecedence, spec2.recoveryPrecedence, spec3.recoveryPrecedence)
-    let shouldSkipOverNewlines =
-      recoveryPrecedence.shouldSkipOverNewlines && spec1.allowAtStartOfLine && spec2.allowAtStartOfLine
-      && spec3.allowAtStartOfLine
+    let recoveryPrecedence = specs.map(\.recoveryPrecedence).min()!
+    let shouldSkipOverNewlines = recoveryPrecedence.shouldSkipOverNewlines && specs.allSatisfy(\.allowAtStartOfLine)
 
     while !self.at(.endOfFile) {
       if !shouldSkipOverNewlines, self.atStartOfLine {
         break
       }
-      let matchedSpec: TokenSpec?
-      switch self.currentToken {
-      case spec1:
-        matchedSpec = spec1
-      case spec2:
-        matchedSpec = spec2
-      case spec3:
-        matchedSpec = spec3
-      default:
-        matchedSpec = nil
+      let matchedSpec = specs.first { spec in
+        spec ~= self.currentToken
       }
       if let matchedSpec {
         return RecoveryConsumptionHandle(
@@ -135,13 +106,13 @@ extension Parser.Lookahead {
       if currentTokenPrecedence >= recoveryPrecedence {
         break
       }
-      if let closingDelimiter = currentTokenPrecedence.closingTokenKind {
-        let closingDelimiterSpec = TokenSpec(closingDelimiter)
+      if !currentTokenPrecedence.closingTokenKinds.isEmpty {
+        let closingDelimiterSpecs = currentTokenPrecedence.closingTokenKinds.map { TokenSpec($0) }
         let canCloseAtSameLine: Int? = self.withLookahead { lookahead in
           var tokensToSkip = 0
           while !lookahead.at(.endOfFile), !lookahead.currentToken.isAtStartOfLine {
             tokensToSkip += 1
-            if lookahead.at(closingDelimiterSpec) {
+            if lookahead.at(closingDelimiterSpecs) {
               return tokensToSkip
             } else {
               lookahead.consumeAnyToken()
@@ -156,16 +127,30 @@ extension Parser.Lookahead {
           continue
         }
         self.consumeAnyToken()
-        guard self.canRecoverTo(closingDelimiterSpec, recursionDepth: recursionDepth + 1) != nil else {
+        guard self.canRecoverTo(closingDelimiterSpecs, recursionDepth: recursionDepth + 1) != nil else {
           continue
         }
-        self.eat(closingDelimiterSpec)
+        self.eat(closingDelimiterSpecs)
       } else {
         self.consumeAnyToken()
       }
     }
 
     return nil
+  }
+
+  /// Tries eating tokens until it finds a token that matches one of `specs`
+  /// without skipping tokens that have a precedence that's higher than the
+  /// lowest precedence in the expected kinds. If it found a token in this way,
+  /// returns `true`, otherwise `false`.
+  /// If this method returns `true`, the parser probably wants to consume the
+  /// tokens this lookahead skipped over to find `kind` by consuming
+  /// `lookahead.tokensConsumed` as unexpected.
+  mutating func canRecoverTo(
+    _ specs: TokenSpec...,
+    recursionDepth: Int = 1
+  ) -> RecoveryConsumptionHandle? {
+    return self.canRecoverTo(specs, recursionDepth: recursionDepth)
   }
 
   /// Checks if we can reach a token in `subset` by skipping tokens that have
@@ -211,12 +196,12 @@ extension Parser.Lookahead {
         break
       }
       self.consumeAnyToken()
-      if let closingDelimiter = currentTokenPrecedence.closingTokenKind {
-        let closingDelimiterSpec = TokenSpec(closingDelimiter)
-        guard self.canRecoverTo(closingDelimiterSpec) != nil else {
+      if !currentTokenPrecedence.closingTokenKinds.isEmpty {
+        let closingDelimiterSpecs = currentTokenPrecedence.closingTokenKinds.map { TokenSpec($0) }
+        guard self.canRecoverTo(closingDelimiterSpecs) != nil else {
           break
         }
-        self.eat(closingDelimiterSpec)
+        self.eat(closingDelimiterSpecs)
       }
     }
 

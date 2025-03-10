@@ -824,7 +824,7 @@ extension Parser {
   }
 
   mutating func atWhereClauseListTerminator() -> Bool {
-    return self.at(.leftBrace)
+    return self.at(anyIn: CodeBlockSyntax.LeftBraceOptions.self) != nil
   }
 }
 
@@ -908,7 +908,7 @@ extension Parser {
   /// If the left brace is missing, its indentation will be used to judge whether a following `}` was
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
   mutating func parseMemberBlock(introducer: RawTokenSyntax? = nil) -> RawMemberBlockSyntax {
-    let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
+    let (unexpectedBeforeLBrace, lbrace) = self.expect(anyIn: MemberBlockSyntax.LeftBraceOptions.self, default: .leftBrace)
     let members = parseMemberDeclList()
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
 
@@ -1337,7 +1337,7 @@ extension Parser {
 
     // Parse getter and setter.
     let accessor: RawAccessorBlockSyntax?
-    if self.at(.leftBrace) || self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil {
+    if self.at(anyIn: AccessorBlockSyntax.LeftBraceOptions.self) != nil || self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil {
       accessor = self.parseAccessorBlock()
     } else {
       accessor = nil
@@ -1449,7 +1449,7 @@ extension Parser {
             value: initExpr,
             arena: self.arena
           )
-        } else if self.atStartOfExpression(), !self.at(.leftBrace), !self.atStartOfLine {
+        } else if self.atStartOfExpression(), self.at(anyIn: AccessorBlockSyntax.LeftBraceOptions.self) == nil, !self.atStartOfLine {
           let missingEqual = RawTokenSyntax(missing: .equal, arena: self.arena)
           let expr = self.parseExpression(flavor: .basic, pattern: .none)
           initializer = RawInitializerClauseSyntax(
@@ -1462,7 +1462,7 @@ extension Parser {
         }
 
         let accessors: RawAccessorBlockSyntax?
-        if (self.at(.leftBrace)
+        if (self.at(anyIn: AccessorBlockSyntax.LeftBraceOptions.self) != nil
           && (initializer == nil || !self.currentToken.isAtStartOfLine
             || self.withLookahead({ $0.atStartOfGetSetAccessor() })))
           || (context.requiresDecl && self.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) != nil
@@ -1620,17 +1620,18 @@ extension Parser {
       unexpectedBeforeLBrace = nil
       lbrace = missingToken(.leftBrace)
     } else {
-      (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
+      (unexpectedBeforeLBrace, lbrace) = self.expect(anyIn: AccessorBlockSyntax.LeftBraceOptions.self, default: .leftBrace)
     }
+    let expectedRBrace = rightBrace(for: lbrace)
 
     let accessorList = parseAccessorList()
 
     // There can only be an implicit getter if no other accessors were
     // seen before this one.
     guard let accessorList else {
-      let body = parseCodeBlockItemList(until: { $0.at(.rightBrace) })
+      let body = parseCodeBlockItemList(until: { $0.at(expectedRBrace) })
 
-      let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
+      let (unexpectedBeforeRBrace, rbrace) = self.expect(expectedRBrace)
       return RawAccessorBlockSyntax(
         unexpectedBeforeLBrace,
         leftBrace: lbrace,
@@ -1641,7 +1642,7 @@ extension Parser {
       )
     }
 
-    let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
+    let (unexpectedBeforeRBrace, rbrace) = self.expect(expectedRBrace)
     return RawAccessorBlockSyntax(
       unexpectedBeforeLBrace,
       leftBrace: lbrace,
@@ -1813,7 +1814,7 @@ extension Parser {
     var loopProgress = LoopProgressCondition()
     while (identifiersAfterOperatorName.last ?? name).trailingTriviaByteLength == 0,
       self.currentToken.leadingTriviaByteLength == 0,
-      !self.at(.colon, .leftBrace, .endOfFile),
+      !self.at(.colon, .leftBrace, .leadingBoxCorner, .leadingBoxJunction, .endOfFile),
       self.hasProgressed(&loopProgress)
     {
       identifiersAfterOperatorName.append(consumeAnyToken())
@@ -1855,9 +1856,9 @@ extension Parser {
       precedenceAndTypes = nil
     }
     let unexpectedAtEnd: RawUnexpectedNodesSyntax?
-    if let leftBrace = self.consume(if: .leftBrace) {
+    if let leftBrace = self.consume(if: .leftBrace, .leadingBoxCorner, .leadingBoxJunction) {
       let attributeList = self.parsePrecedenceGroupAttributeListSyntax()
-      let rightBrace = self.consume(if: .rightBrace)
+      let rightBrace = self.consume(if: .rightBrace, .trailingBoxCorner, .trailingBoxJunction)
       unexpectedAtEnd = RawUnexpectedNodesSyntax(
         elements: [
           RawSyntax(leftBrace),
@@ -1890,11 +1891,11 @@ extension Parser {
   ) -> RawPrecedenceGroupDeclSyntax {
     let (unexpectedBeforeGroup, group) = self.eat(handle)
     let (unexpectedBeforeName, name) = self.expectIdentifier(allowSelfOrCapitalSelfAsIdentifier: true)
-    let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
+    let (unexpectedBeforeLBrace, lbrace) = self.expect(anyIn: PrecedenceGroupDeclSyntax.LeftBraceOptions.self, default: .leftBrace)
 
     let groupAttributes = self.parsePrecedenceGroupAttributeListSyntax()
 
-    let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
+    let (unexpectedBeforeRBrace, rbrace) = self.expect(rightBrace(for: lbrace))
     return RawPrecedenceGroupDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
@@ -2149,7 +2150,7 @@ extension Parser {
     // Parse the optional trailing closures.
     let trailingClosure: RawClosureExprSyntax?
     let additionalTrailingClosures: RawMultipleTrailingClosureElementListSyntax
-    if self.at(.leftBrace),
+    if self.at(anyIn: ClosureExprSyntax.LeftBraceOptions.self) != nil,
       self.withLookahead({ $0.atValidTrailingClosure(flavor: .basic) })
     {
       (trailingClosure, additionalTrailingClosures) =

@@ -57,7 +57,11 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "leftBrace",
-        kind: .token(choices: [.token(.leftBrace)]),
+        kind: .token(choices: [
+          .token(.leftBrace),
+          .token(.leadingBoxCorner),
+          .token(.leadingBoxJunction),
+        ], defaultAt: 0),
         documentation: "The brace introducing the accessor block."
       ),
       Child(
@@ -75,7 +79,11 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "rightBrace",
-        kind: .token(choices: [.token(.rightBrace)]),
+        kind: .token(choices: [
+          .token(.rightBrace),
+          .token(.trailingBoxCorner),
+          .token(.trailingBoxJunction),
+        ], defaultAt: 0),
         documentation: "The brace closing the accessor block."
       ),
     ]
@@ -1579,7 +1587,11 @@ public let DECL_NODES: [Node] = [
     children: [
       Child(
         name: "leftBrace",
-        kind: .token(choices: [.token(.leftBrace)])
+        kind: .token(choices: [
+          .token(.leftBrace),
+          .token(.leadingBoxCorner),
+          .token(.leadingBoxJunction),
+        ], defaultAt: 0)
       ),
       Child(
         name: "members",
@@ -1587,7 +1599,11 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "rightBrace",
-        kind: .token(choices: [.token(.rightBrace)])
+        kind: .token(choices: [
+          .token(.rightBrace),
+          .token(.trailingBoxCorner),
+          .token(.trailingBoxJunction),
+        ], defaultAt: 0)
       ),
     ]
   ),
@@ -1972,7 +1988,11 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "leftBrace",
-        kind: .token(choices: [.token(.leftBrace)])
+        kind: .token(choices: [
+          .token(.leftBrace),
+          .token(.leadingBoxCorner),
+          .token(.leadingBoxJunction),
+        ], defaultAt: 0)
       ),
       Child(
         name: "groupAttributes",
@@ -1981,7 +2001,11 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "rightBrace",
-        kind: .token(choices: [.token(.rightBrace)])
+        kind: .token(choices: [
+          .token(.rightBrace),
+          .token(.trailingBoxCorner),
+          .token(.trailingBoxJunction),
+        ], defaultAt: 0)
       ),
     ],
     childHistory: [

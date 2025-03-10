@@ -241,6 +241,32 @@ extension TokenSyntax {
     )
   }
 
+  public static func leadingBoxCornerToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return TokenSyntax(
+      .leadingBoxCorner,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
+  public static func leadingBoxJunctionToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return TokenSyntax(
+      .leadingBoxJunction,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
   public static func leftAngleToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],
@@ -645,6 +671,32 @@ extension TokenSyntax {
   ) -> TokenSyntax {
     return TokenSyntax(
       .stringSegment(text),
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
+  public static func trailingBoxCornerToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return TokenSyntax(
+      .trailingBoxCorner,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
+  public static func trailingBoxJunctionToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return TokenSyntax(
+      .trailingBoxJunction,
       leadingTrivia: leadingTrivia,
       trailingTrivia: trailingTrivia,
       presence: presence

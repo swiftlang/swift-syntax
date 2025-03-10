@@ -136,6 +136,10 @@ extension RawTokenKind {
       return .integerLiteral
     case .keyword:
       return .keyword
+    case .leadingBoxCorner:
+      return .none
+    case .leadingBoxJunction:
+      return .none
     case .leftAngle:
       return .none
     case .leftBrace:
@@ -198,6 +202,10 @@ extension RawTokenKind {
       return .stringLiteral
     case .stringSegment:
       return .stringLiteral
+    case .trailingBoxCorner:
+      return .none
+    case .trailingBoxJunction:
+      return .none
     case .unknown:
       return .none
     case .wildcard:

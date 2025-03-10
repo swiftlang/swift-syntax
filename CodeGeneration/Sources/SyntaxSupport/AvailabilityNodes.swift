@@ -175,7 +175,7 @@ public let AVAILABILITY_NODES: [Node] = [
       ),
       Child(
         name: "components",
-        kind: .collection(kind: .versionComponentList, collectionElementName: "VersionComponent"),
+        kind: .collection(kind: .versionComponentList),
         documentation:
           "Any version components that are not the major version . For example, for `1.2.0`, this will contain `.2.0`."
       ),

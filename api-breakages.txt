@@ -1,2 +1,3 @@
 6.2
 ---
+API breakage: func DiagnosticsFormatter.categoryFootnotes(_:leadingText:) has parameter 0 type change from [SwiftDiagnostics.DiagnosticCategory] to some Swift.Sequence<SwiftDiagnostics.DiagnosticCategory>

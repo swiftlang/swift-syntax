@@ -367,7 +367,7 @@ public struct DiagnosticsFormatter {
   ///   - leadingText: text that is prefixed to the list of categories when
   ///     there is at least one category to print.
   public func categoryFootnotes(
-    _ categories: [DiagnosticCategory],
+    _ categories: some Sequence<DiagnosticCategory>,
     leadingText: String = "\n"
   ) -> String {
     let categoriesInOrder = categories.compactMap { category in

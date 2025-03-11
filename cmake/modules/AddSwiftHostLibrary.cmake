@@ -136,6 +136,7 @@ function(add_swift_syntax_library name)
     $<$<COMPILE_LANGUAGE:Swift>:
       "SHELL:-module-name ${name}"
       "SHELL:-Xfrontend -module-abi-name -Xfrontend ${SWIFT_MODULE_ABI_NAME_PREFIX}${name}"
+      "-no-emit-module-separately-wmo"
     >)
 
   if(CMAKE_VERSION VERSION_LESS 3.26.0 AND SWIFT_SYNTAX_ENABLE_WMO_PRE_3_26)

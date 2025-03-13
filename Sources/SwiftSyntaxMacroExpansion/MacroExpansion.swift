@@ -211,11 +211,52 @@ public func expandFreestandingMacro(
 /// - Returns: A list of expanded source text. Upon failure (i.e.
 ///   `definition.expansion()` throws) returns `nil`, and the diagnostics
 ///   representing the `Error` are guaranteed to be added to context.
+@available(*, deprecated, message: "Change the 'declarationNode' argument label to 'node'")
 public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>(
   definition: Macro.Type,
   macroRole: MacroRole,
   attributeNode: AttributeSyntax,
-  declarationNode: some SyntaxProtocol,
+  declarationNode: DeclSyntax,
+  parentDeclNode: DeclSyntax?,
+  extendedType: TypeSyntax?,
+  conformanceList: InheritedTypeListSyntax?,
+  in context: Context,
+  indentationWidth: Trivia? = nil
+) -> [String]? {
+  expandAttachedMacroWithoutCollapsing(
+    definition: definition,
+    macroRole: macroRole,
+    attributeNode: attributeNode,
+    node: declarationNode,
+    parentDeclNode: parentDeclNode,
+    extendedType: extendedType,
+    conformanceList: conformanceList,
+    in: context,
+    indentationWidth: indentationWidth
+  )
+}
+
+/// Expand `@attached(XXX)` macros.
+///
+/// - Parameters:
+///   - definition: a type that conforms to one or more attached `Macro` protocols.
+///   - macroRole: indicates which `Macro` protocol expansion should be performed
+///   - attributeNode: attribute syntax node (e.g. `@macroName(argument)`).
+///   - node: target syntax node to apply the expansion. This is either a declaration
+///     or a closure syntax node.
+///   - parentDeclNode: Only used for `MacroRole.memberAttribute`. The parent
+///     context node of `declarationNode`.
+///   - context: context of the expansion.
+///   - indentationWidth: The indentation that should be added for each additional
+///     nesting level
+/// - Returns: A list of expanded source text. Upon failure (i.e.
+///   `definition.expansion()` throws) returns `nil`, and the diagnostics
+///   representing the `Error` are guaranteed to be added to context.
+public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>(
+  definition: Macro.Type,
+  macroRole: MacroRole,
+  attributeNode: AttributeSyntax,
+  node: some SyntaxProtocol,
   parentDeclNode: DeclSyntax?,
   extendedType: TypeSyntax?,
   conformanceList: InheritedTypeListSyntax?,
@@ -225,7 +266,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
   do {
     switch (definition, macroRole) {
     case (let attachedMacro as AccessorMacro.Type, .accessor):
-      let declarationNode = declarationNode.cast(DeclSyntax.self)
+      let declarationNode = node.cast(DeclSyntax.self)
       let accessors = try attachedMacro.expansion(
         of: attributeNode,
         providingAccessorsOf: declarationNode,
@@ -236,7 +277,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
       }
 
     case (let attachedMacro as MemberAttributeMacro.Type, .memberAttribute):
-      let declarationNode = declarationNode.cast(DeclSyntax.self)
+      let declarationNode = node.cast(DeclSyntax.self)
       guard
         let parentDeclGroup = parentDeclNode?.asProtocol(DeclGroupSyntax.self)
       else {
@@ -257,7 +298,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
       }
 
     case (let attachedMacro as MemberMacro.Type, .member):
-      guard let declGroup = declarationNode.asProtocol(DeclGroupSyntax.self)
+      guard let declGroup = node.asProtocol(DeclGroupSyntax.self)
       else {
         // Compiler error: declNode for member macro must be DeclGroupSyntax.
         throw MacroExpansionError.declarationNotDeclGroup
@@ -276,7 +317,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
       }
 
     case (let attachedMacro as PeerMacro.Type, .peer):
-      let declarationNode = declarationNode.cast(DeclSyntax.self)
+      let declarationNode = node.cast(DeclSyntax.self)
       let peers = try attachedMacro.expansion(
         of: attributeNode,
         providingPeersOf: declarationNode,
@@ -289,7 +330,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
       }
 
     case (let attachedMacro as ExtensionMacro.Type, .extension):
-      guard let declGroup = declarationNode.asProtocol(DeclGroupSyntax.self) else {
+      guard let declGroup = node.asProtocol(DeclGroupSyntax.self) else {
         // Compiler error: type mismatch.
         throw MacroExpansionError.declarationNotDeclGroup
       }
@@ -297,7 +338,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
       let extensionOf: TypeSyntax
       if let extendedType {
         extensionOf = extendedType
-      } else if let identified = declarationNode.asProtocol(NamedDeclSyntax.self) {
+      } else if let identified = node.asProtocol(NamedDeclSyntax.self) {
         // Fallback for old compilers with a new plugin, where
         extensionOf = TypeSyntax(IdentifierTypeSyntax(name: identified.name))
       } else {
@@ -321,7 +362,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
 
     case (let attachedMacro as PreambleMacro.Type, .preamble):
       guard
-        let declToPass = Syntax(declarationNode).asProtocol(SyntaxProtocol.self)
+        let declToPass = Syntax(node).asProtocol(SyntaxProtocol.self)
           as? (DeclSyntaxProtocol & WithOptionalCodeBlockSyntax)
       else {
         // Compiler error: declaration must have a body.
@@ -339,13 +380,13 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
 
     case (let attachedMacro as BodyMacro.Type, .body):
       let body: [CodeBlockItemSyntax]
-      if let closureSyntax = declarationNode.as(ClosureExprSyntax.self) {
+      if let closureSyntax = node.as(ClosureExprSyntax.self) {
         body = try attachedMacro.expansion(
           of: attributeNode,
           providingBodyFor: closureSyntax,
           in: context
         )
-      } else if let declToPass = Syntax(declarationNode).asProtocol(SyntaxProtocol.self)
+      } else if let declToPass = Syntax(node).asProtocol(SyntaxProtocol.self)
         as? (DeclSyntaxProtocol & WithOptionalCodeBlockSyntax)
       {
         body = try attachedMacro.expansion(
@@ -386,11 +427,52 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
 /// - Returns: expanded source text. Upon failure (i.e. `defintion.expansion()`
 ///   throws) returns `nil`, and the diagnostics representing the `Error` are
 ///   guaranteed to be added to context.
+@available(*, deprecated, message: "Change the 'declarationNode' argument label to 'node'")
 public func expandAttachedMacro<Context: MacroExpansionContext>(
   definition: Macro.Type,
   macroRole: MacroRole,
   attributeNode: AttributeSyntax,
-  declarationNode: some SyntaxProtocol,
+  declarationNode: DeclSyntax,
+  parentDeclNode: DeclSyntax?,
+  extendedType: TypeSyntax?,
+  conformanceList: InheritedTypeListSyntax?,
+  in context: Context,
+  indentationWidth: Trivia? = nil
+) -> String? {
+  expandAttachedMacro(
+    definition: definition,
+    macroRole: macroRole,
+    attributeNode: attributeNode,
+    node: declarationNode,
+    parentDeclNode: parentDeclNode,
+    extendedType: extendedType,
+    conformanceList: conformanceList,
+    in: context,
+    indentationWidth: indentationWidth
+  )
+}
+
+/// Expand `@attached(XXX)` macros.
+///
+/// - Parameters:
+///   - definition: a type that conforms to one or more attached `Macro` protocols.
+///   - macroRole: indicates which `Macro` protocol expansion should be performed
+///   - attributeNode: attribute syntax node (e.g. `@macroName(argument)`).
+///   - node: target declaration syntax node to apply the expansion. This is either
+///     a declaration or a closure syntax node.
+///   - parentDeclNode: Only used for `MacroRole.memberAttribute`. The parent
+///     context node of `declarationNode`.
+///   - context: context of the expansion.
+///   - indentationWidth: The indentation that should be added for each additional
+///     nesting level
+/// - Returns: expanded source text. Upon failure (i.e. `defintion.expansion()`
+///   throws) returns `nil`, and the diagnostics representing the `Error` are
+///   guaranteed to be added to context.
+public func expandAttachedMacro<Context: MacroExpansionContext>(
+  definition: Macro.Type,
+  macroRole: MacroRole,
+  attributeNode: AttributeSyntax,
+  node: some SyntaxProtocol,
   parentDeclNode: DeclSyntax?,
   extendedType: TypeSyntax?,
   conformanceList: InheritedTypeListSyntax?,
@@ -401,7 +483,7 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
     definition: definition,
     macroRole: macroRole,
     attributeNode: attributeNode,
-    declarationNode: declarationNode,
+    node: node,
     parentDeclNode: parentDeclNode,
     extendedType: extendedType,
     conformanceList: conformanceList,
@@ -421,7 +503,7 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
     return collapse(
       expansions: expandedSources,
       for: macroRole,
-      attachedTo: declarationNode,
+      attachedTo: node,
       indentationWidth: collapseIndentationWidth
     )
   }

@@ -156,7 +156,7 @@ extension PluginProviderMessageHandler {
         definition: macroDefinition,
         macroRole: role,
         attributeNode: attributeNode,
-        declarationNode: declarationNode,
+        node: declarationNode,
         parentDeclNode: parentDeclNode,
         extendedType: extendedType,
         conformanceList: conformanceList,

@@ -2591,6 +2591,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       .keyword("__shared"),
       .keyword("__owned"),
       .keyword("isolated"),
+      .keyword("nonisolated"),
       .keyword("_const"),
       .keyword("borrowing"),
       .keyword("consuming"),

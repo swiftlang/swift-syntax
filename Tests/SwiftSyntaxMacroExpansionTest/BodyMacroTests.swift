@@ -63,6 +63,37 @@ struct RemoteBodyMacro: BodyMacro {
   }
 }
 
+struct StartTaskMacro: BodyMacro {
+  static func expansion(
+    of node: AttributeSyntax,
+    providingBodyFor declaration: some DeclSyntaxProtocol & WithOptionalCodeBlockSyntax,
+    in context: some MacroExpansionContext
+  ) throws -> [CodeBlockItemSyntax] {
+    guard let taskBody = declaration.body else {
+      return []
+    }
+    return [
+      """
+      Task \(taskBody.trimmed)
+      """
+    ]
+  }
+
+  static func expansion(
+    of node: AttributeSyntax,
+    providingBodyFor closure: ClosureExprSyntax,
+    in context: some MacroExpansionContext
+  ) throws -> [CodeBlockItemSyntax] {
+    return [
+      """
+      Task {
+      \(closure.statements.trimmed)
+      }
+      """
+    ]
+  }
+}
+
 final class BodyMacroTests: XCTestCase {
   private let indentationWidth: Trivia = .spaces(2)
 
@@ -197,6 +228,25 @@ final class BodyMacroTests: XCTestCase {
         }
         """,
       macros: ["SourceLocationMacro": SourceLocationMacro.self]
+    )
+  }
+
+  func testClosureBodyExpansion() {
+    assertMacroExpansion(
+      """
+      { @StartTask in
+        a + b
+      }
+      """,
+      expandedSource: """
+        { in
+          Task {
+            a + b
+          }
+        }
+        """,
+      macros: ["StartTask": StartTaskMacro.self],
+      indentationWidth: indentationWidth
     )
   }
 }

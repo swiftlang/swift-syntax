@@ -765,6 +765,21 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testParseIsolatedConformances() {
+    assertParse(
+      """
+      extension Int: nonisolated Q {}
+      """
+    )
+
+    assertParse(
+      """
+      extension Int: @MainActor P {}
+      """
+    )
+
+  }
+
   func testParseDynamicReplacement() {
     assertParse(
       """

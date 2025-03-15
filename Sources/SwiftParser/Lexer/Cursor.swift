@@ -1005,6 +1005,15 @@ extension Lexer.Cursor {
     case nil:
       return Lexer.Result(.endOfFile)
     default:
+      // Syntax that requires Unicode.
+      switch self.peekScalar() {
+      case "╗": _ = self.advanceValidatingUTF8Character(); return Lexer.Result(.leadingBoxCorner)
+      case "╣": _ = self.advanceValidatingUTF8Character(); return Lexer.Result(.leadingBoxJunction)
+      case "╚": _ = self.advanceValidatingUTF8Character(); return Lexer.Result(.trailingBoxCorner)
+      case "╠": _ = self.advanceValidatingUTF8Character(); return Lexer.Result(.trailingBoxJunction)
+      default: break
+      }
+
       var tmp = self
       if tmp.advance(if: { $0.isValidIdentifierStartCodePoint }) {
         return self.lexIdentifier()
@@ -1171,6 +1180,23 @@ extension Lexer.Cursor {
 
     while true {
       let start = self
+
+      // Check for first UTF-8 byte of box drawing characters
+      if self.peek() == 0xE2 {
+        // Eat all inert box-drawing characters
+        self.advance(while: { char in
+          switch char {
+          case "╔", "╝", "║", "═":
+            return true;
+          default:
+            return false
+          }
+        })
+
+        if self.hasProgressed(comparedTo: start) {
+          continue
+        }
+      }
 
       switch self.advance() {
       // 'continue' - the character is a part of the trivia.

@@ -19,6 +19,128 @@
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) @_spi(Compiler) import SwiftSyntax
 #endif
 
+extension AccessorBlockSyntax {
+  @_spi(Diagnostics)
+  public enum LeftBraceOptions: TokenSpecSet {
+    case leftBrace
+    case leadingBoxCorner
+    case leadingBoxJunction
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.leftBrace):
+        self = .leftBrace
+      case TokenSpec(.leadingBoxCorner):
+        self = .leadingBoxCorner
+      case TokenSpec(.leadingBoxJunction):
+        self = .leadingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.leftBrace):
+        self = .leftBrace
+      case TokenSpec(.leadingBoxCorner):
+        self = .leadingBoxCorner
+      case TokenSpec(.leadingBoxJunction):
+        self = .leadingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .leftBrace:
+        return .leftBrace
+      case .leadingBoxCorner:
+        return .leadingBoxCorner
+      case .leadingBoxJunction:
+        return .leadingBoxJunction
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .leftBrace:
+        return .leftBraceToken()
+      case .leadingBoxCorner:
+        return .leadingBoxCornerToken()
+      case .leadingBoxJunction:
+        return .leadingBoxJunctionToken()
+      }
+    }
+  }
+}
+
+extension AccessorBlockSyntax {
+  @_spi(Diagnostics)
+  public enum RightBraceOptions: TokenSpecSet {
+    case rightBrace
+    case trailingBoxCorner
+    case trailingBoxJunction
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.rightBrace):
+        self = .rightBrace
+      case TokenSpec(.trailingBoxCorner):
+        self = .trailingBoxCorner
+      case TokenSpec(.trailingBoxJunction):
+        self = .trailingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.rightBrace):
+        self = .rightBrace
+      case TokenSpec(.trailingBoxCorner):
+        self = .trailingBoxCorner
+      case TokenSpec(.trailingBoxJunction):
+        self = .trailingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .rightBrace:
+        return .rightBrace
+      case .trailingBoxCorner:
+        return .trailingBoxCorner
+      case .trailingBoxJunction:
+        return .trailingBoxJunction
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .rightBrace:
+        return .rightBraceToken()
+      case .trailingBoxCorner:
+        return .trailingBoxCornerToken()
+      case .trailingBoxJunction:
+        return .trailingBoxJunctionToken()
+      }
+    }
+  }
+}
+
 extension AccessorDeclSyntax {
   @_spi(Diagnostics)
   public enum AccessorSpecifierOptions: TokenSpecSet {
@@ -685,6 +807,128 @@ extension ClosureCaptureSyntax {
   }
 }
 
+extension ClosureExprSyntax {
+  @_spi(Diagnostics)
+  public enum LeftBraceOptions: TokenSpecSet {
+    case leftBrace
+    case leadingBoxCorner
+    case leadingBoxJunction
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.leftBrace):
+        self = .leftBrace
+      case TokenSpec(.leadingBoxCorner):
+        self = .leadingBoxCorner
+      case TokenSpec(.leadingBoxJunction):
+        self = .leadingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.leftBrace):
+        self = .leftBrace
+      case TokenSpec(.leadingBoxCorner):
+        self = .leadingBoxCorner
+      case TokenSpec(.leadingBoxJunction):
+        self = .leadingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .leftBrace:
+        return .leftBrace
+      case .leadingBoxCorner:
+        return .leadingBoxCorner
+      case .leadingBoxJunction:
+        return .leadingBoxJunction
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .leftBrace:
+        return .leftBraceToken()
+      case .leadingBoxCorner:
+        return .leadingBoxCornerToken()
+      case .leadingBoxJunction:
+        return .leadingBoxJunctionToken()
+      }
+    }
+  }
+}
+
+extension ClosureExprSyntax {
+  @_spi(Diagnostics)
+  public enum RightBraceOptions: TokenSpecSet {
+    case rightBrace
+    case trailingBoxCorner
+    case trailingBoxJunction
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.rightBrace):
+        self = .rightBrace
+      case TokenSpec(.trailingBoxCorner):
+        self = .trailingBoxCorner
+      case TokenSpec(.trailingBoxJunction):
+        self = .trailingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.rightBrace):
+        self = .rightBrace
+      case TokenSpec(.trailingBoxCorner):
+        self = .trailingBoxCorner
+      case TokenSpec(.trailingBoxJunction):
+        self = .trailingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .rightBrace:
+        return .rightBrace
+      case .trailingBoxCorner:
+        return .trailingBoxCorner
+      case .trailingBoxJunction:
+        return .trailingBoxJunction
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .rightBrace:
+        return .rightBraceToken()
+      case .trailingBoxCorner:
+        return .trailingBoxCornerToken()
+      case .trailingBoxJunction:
+        return .trailingBoxJunctionToken()
+      }
+    }
+  }
+}
+
 extension ClosureParameterSyntax {
   @_spi(Diagnostics)
   public enum FirstNameOptions: TokenSpecSet {
@@ -836,6 +1080,128 @@ extension ClosureShorthandParameterSyntax {
         return .identifier("")
       case .wildcard:
         return .wildcardToken()
+      }
+    }
+  }
+}
+
+extension CodeBlockSyntax {
+  @_spi(Diagnostics)
+  public enum LeftBraceOptions: TokenSpecSet {
+    case leftBrace
+    case leadingBoxCorner
+    case leadingBoxJunction
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.leftBrace):
+        self = .leftBrace
+      case TokenSpec(.leadingBoxCorner):
+        self = .leadingBoxCorner
+      case TokenSpec(.leadingBoxJunction):
+        self = .leadingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.leftBrace):
+        self = .leftBrace
+      case TokenSpec(.leadingBoxCorner):
+        self = .leadingBoxCorner
+      case TokenSpec(.leadingBoxJunction):
+        self = .leadingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .leftBrace:
+        return .leftBrace
+      case .leadingBoxCorner:
+        return .leadingBoxCorner
+      case .leadingBoxJunction:
+        return .leadingBoxJunction
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .leftBrace:
+        return .leftBraceToken()
+      case .leadingBoxCorner:
+        return .leadingBoxCornerToken()
+      case .leadingBoxJunction:
+        return .leadingBoxJunctionToken()
+      }
+    }
+  }
+}
+
+extension CodeBlockSyntax {
+  @_spi(Diagnostics)
+  public enum RightBraceOptions: TokenSpecSet {
+    case rightBrace
+    case trailingBoxCorner
+    case trailingBoxJunction
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.rightBrace):
+        self = .rightBrace
+      case TokenSpec(.trailingBoxCorner):
+        self = .trailingBoxCorner
+      case TokenSpec(.trailingBoxJunction):
+        self = .trailingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.rightBrace):
+        self = .rightBrace
+      case TokenSpec(.trailingBoxCorner):
+        self = .trailingBoxCorner
+      case TokenSpec(.trailingBoxJunction):
+        self = .trailingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .rightBrace:
+        return .rightBrace
+      case .trailingBoxCorner:
+        return .trailingBoxCorner
+      case .trailingBoxJunction:
+        return .trailingBoxJunction
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .rightBrace:
+        return .rightBraceToken()
+      case .trailingBoxCorner:
+        return .trailingBoxCornerToken()
+      case .trailingBoxJunction:
+        return .trailingBoxJunctionToken()
       }
     }
   }
@@ -2798,6 +3164,128 @@ extension LifetimeSpecifierArgumentSyntax {
   }
 }
 
+extension MemberBlockSyntax {
+  @_spi(Diagnostics)
+  public enum LeftBraceOptions: TokenSpecSet {
+    case leftBrace
+    case leadingBoxCorner
+    case leadingBoxJunction
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.leftBrace):
+        self = .leftBrace
+      case TokenSpec(.leadingBoxCorner):
+        self = .leadingBoxCorner
+      case TokenSpec(.leadingBoxJunction):
+        self = .leadingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.leftBrace):
+        self = .leftBrace
+      case TokenSpec(.leadingBoxCorner):
+        self = .leadingBoxCorner
+      case TokenSpec(.leadingBoxJunction):
+        self = .leadingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .leftBrace:
+        return .leftBrace
+      case .leadingBoxCorner:
+        return .leadingBoxCorner
+      case .leadingBoxJunction:
+        return .leadingBoxJunction
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .leftBrace:
+        return .leftBraceToken()
+      case .leadingBoxCorner:
+        return .leadingBoxCornerToken()
+      case .leadingBoxJunction:
+        return .leadingBoxJunctionToken()
+      }
+    }
+  }
+}
+
+extension MemberBlockSyntax {
+  @_spi(Diagnostics)
+  public enum RightBraceOptions: TokenSpecSet {
+    case rightBrace
+    case trailingBoxCorner
+    case trailingBoxJunction
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.rightBrace):
+        self = .rightBrace
+      case TokenSpec(.trailingBoxCorner):
+        self = .trailingBoxCorner
+      case TokenSpec(.trailingBoxJunction):
+        self = .trailingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.rightBrace):
+        self = .rightBrace
+      case TokenSpec(.trailingBoxCorner):
+        self = .trailingBoxCorner
+      case TokenSpec(.trailingBoxJunction):
+        self = .trailingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .rightBrace:
+        return .rightBrace
+      case .trailingBoxCorner:
+        return .trailingBoxCorner
+      case .trailingBoxJunction:
+        return .trailingBoxJunction
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .rightBrace:
+        return .rightBraceToken()
+      case .trailingBoxCorner:
+        return .trailingBoxCornerToken()
+      case .trailingBoxJunction:
+        return .trailingBoxJunctionToken()
+      }
+    }
+  }
+}
+
 extension MemberTypeSyntax {
   @_spi(Diagnostics)
   public enum NameOptions: TokenSpecSet {
@@ -3274,6 +3762,128 @@ extension PrecedenceGroupAssociativitySyntax {
         return .keyword(.right)
       case .none:
         return .keyword(.none)
+      }
+    }
+  }
+}
+
+extension PrecedenceGroupDeclSyntax {
+  @_spi(Diagnostics)
+  public enum LeftBraceOptions: TokenSpecSet {
+    case leftBrace
+    case leadingBoxCorner
+    case leadingBoxJunction
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.leftBrace):
+        self = .leftBrace
+      case TokenSpec(.leadingBoxCorner):
+        self = .leadingBoxCorner
+      case TokenSpec(.leadingBoxJunction):
+        self = .leadingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.leftBrace):
+        self = .leftBrace
+      case TokenSpec(.leadingBoxCorner):
+        self = .leadingBoxCorner
+      case TokenSpec(.leadingBoxJunction):
+        self = .leadingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .leftBrace:
+        return .leftBrace
+      case .leadingBoxCorner:
+        return .leadingBoxCorner
+      case .leadingBoxJunction:
+        return .leadingBoxJunction
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .leftBrace:
+        return .leftBraceToken()
+      case .leadingBoxCorner:
+        return .leadingBoxCornerToken()
+      case .leadingBoxJunction:
+        return .leadingBoxJunctionToken()
+      }
+    }
+  }
+}
+
+extension PrecedenceGroupDeclSyntax {
+  @_spi(Diagnostics)
+  public enum RightBraceOptions: TokenSpecSet {
+    case rightBrace
+    case trailingBoxCorner
+    case trailingBoxJunction
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.rightBrace):
+        self = .rightBrace
+      case TokenSpec(.trailingBoxCorner):
+        self = .trailingBoxCorner
+      case TokenSpec(.trailingBoxJunction):
+        self = .trailingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.rightBrace):
+        self = .rightBrace
+      case TokenSpec(.trailingBoxCorner):
+        self = .trailingBoxCorner
+      case TokenSpec(.trailingBoxJunction):
+        self = .trailingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .rightBrace:
+        return .rightBrace
+      case .trailingBoxCorner:
+        return .trailingBoxCorner
+      case .trailingBoxJunction:
+        return .trailingBoxJunction
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .rightBrace:
+        return .rightBraceToken()
+      case .trailingBoxCorner:
+        return .trailingBoxCornerToken()
+      case .trailingBoxJunction:
+        return .trailingBoxJunctionToken()
       }
     }
   }
@@ -3780,6 +4390,128 @@ extension StringLiteralExprSyntax {
         return .multilineStringQuoteToken()
       case .singleQuote:
         return .singleQuoteToken()
+      }
+    }
+  }
+}
+
+extension SwitchExprSyntax {
+  @_spi(Diagnostics)
+  public enum LeftBraceOptions: TokenSpecSet {
+    case leftBrace
+    case leadingBoxCorner
+    case leadingBoxJunction
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.leftBrace):
+        self = .leftBrace
+      case TokenSpec(.leadingBoxCorner):
+        self = .leadingBoxCorner
+      case TokenSpec(.leadingBoxJunction):
+        self = .leadingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.leftBrace):
+        self = .leftBrace
+      case TokenSpec(.leadingBoxCorner):
+        self = .leadingBoxCorner
+      case TokenSpec(.leadingBoxJunction):
+        self = .leadingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .leftBrace:
+        return .leftBrace
+      case .leadingBoxCorner:
+        return .leadingBoxCorner
+      case .leadingBoxJunction:
+        return .leadingBoxJunction
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .leftBrace:
+        return .leftBraceToken()
+      case .leadingBoxCorner:
+        return .leadingBoxCornerToken()
+      case .leadingBoxJunction:
+        return .leadingBoxJunctionToken()
+      }
+    }
+  }
+}
+
+extension SwitchExprSyntax {
+  @_spi(Diagnostics)
+  public enum RightBraceOptions: TokenSpecSet {
+    case rightBrace
+    case trailingBoxCorner
+    case trailingBoxJunction
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.rightBrace):
+        self = .rightBrace
+      case TokenSpec(.trailingBoxCorner):
+        self = .trailingBoxCorner
+      case TokenSpec(.trailingBoxJunction):
+        self = .trailingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.rightBrace):
+        self = .rightBrace
+      case TokenSpec(.trailingBoxCorner):
+        self = .trailingBoxCorner
+      case TokenSpec(.trailingBoxJunction):
+        self = .trailingBoxJunction
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .rightBrace:
+        return .rightBrace
+      case .trailingBoxCorner:
+        return .trailingBoxCorner
+      case .trailingBoxJunction:
+        return .trailingBoxJunction
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .rightBrace:
+        return .rightBraceToken()
+      case .trailingBoxCorner:
+        return .trailingBoxCornerToken()
+      case .trailingBoxJunction:
+        return .trailingBoxJunctionToken()
       }
     }
   }

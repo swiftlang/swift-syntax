@@ -137,6 +137,8 @@ public enum Token: CaseIterable {
   case infixQuestionMark
   case integerLiteral
   case keyword
+  case leadingBoxCorner
+  case leadingBoxJunction
   case leftAngle
   case leftBrace
   case leftParen
@@ -168,6 +170,8 @@ public enum Token: CaseIterable {
   case singleQuote
   case stringQuote
   case stringSegment
+  case trailingBoxCorner
+  case trailingBoxJunction
   case unknown
   case wildcard
 
@@ -207,6 +211,10 @@ public enum Token: CaseIterable {
       return .other(name: "integerLiteral", nameForDiagnostics: "integer literal")
     case .keyword:
       return TokenSpec(name: "keyword", nameForDiagnostics: "keyword", text: nil, kind: .keyword)
+    case .leadingBoxCorner:
+      return .punctuator(name: "leadingBoxCorner", text: "╗")
+    case .leadingBoxJunction:
+      return .punctuator(name: "leadingBoxJunction", text: "╣")
     case .leftAngle:
       return .punctuator(name: "leftAngle", text: "<")
     case .leftBrace:
@@ -269,6 +277,10 @@ public enum Token: CaseIterable {
       return .punctuator(name: "stringQuote", text: "\"")
     case .stringSegment:
       return .other(name: "stringSegment", nameForDiagnostics: "string segment")
+    case .trailingBoxCorner:
+      return .punctuator(name: "trailingBoxCorner", text: "╚")
+    case .trailingBoxJunction:
+      return .punctuator(name: "trailingBoxJunction", text: "╠")
     case .unknown:
       return .other(name: "unknown", nameForDiagnostics: "token")
     case .wildcard:

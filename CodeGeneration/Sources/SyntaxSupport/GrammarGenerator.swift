@@ -43,7 +43,7 @@ struct GrammarGenerator {
       return "(\(choicesDescriptions.joined(separator: " | ")))\(optionality)"
     case .collection(kind: let kind, _, _, _):
       return "\(kind.doccLink)\(optionality)"
-    case .token(let choices, _, _):
+    case .token(let choices, _, _, _):
       if choices.count == 1 {
         return "\(grammar(for: choices.first!))\(optionality)"
       } else {

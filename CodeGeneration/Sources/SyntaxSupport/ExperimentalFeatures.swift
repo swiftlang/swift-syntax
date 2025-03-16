@@ -22,6 +22,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case valueGenerics
   case abiAttribute
   case keypathWithMethodMembers
+  case oldOwnershipOperatorSpellings
 
   /// The name of the feature as it is written in the compiler's `Features.def` file.
   public var featureName: String {
@@ -44,6 +45,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "ABIAttribute"
     case .keypathWithMethodMembers:
       return "KeypathWithMethodMembers"
+    case .oldOwnershipOperatorSpellings:
+      return "OldOwnershipOperatorSpellings"
     }
   }
 
@@ -68,6 +71,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "@abi attribute"
     case .keypathWithMethodMembers:
       return "keypaths with method members"
+    case .oldOwnershipOperatorSpellings:
+      return "`_move` and `_borrow` as ownership operators"
     }
   }
 

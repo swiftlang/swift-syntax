@@ -12,6 +12,8 @@
 
 // This test file has been translated from swift/test/Parse/move_expr.swift
 
+@_spi(ExperimentalLanguageFeatures) import SwiftParser
+import SwiftSyntax
 import XCTest
 
 final class MoveExprTests: ParserTestCase {
@@ -22,7 +24,8 @@ final class MoveExprTests: ParserTestCase {
       func testGlobal() {
           let _ = _move global
       }
-      """
+      """,
+      experimentalFeatures: [.oldOwnershipOperatorSpellings]
     )
   }
 
@@ -33,7 +36,9 @@ final class MoveExprTests: ParserTestCase {
           let t = String()
           let _ = _move t
       }
-      """
+      """,
+      experimentalFeatures: [.oldOwnershipOperatorSpellings]
+
     )
   }
 
@@ -45,7 +50,58 @@ final class MoveExprTests: ParserTestCase {
           t = String()
           let _ = _move t
       }
+      """,
+      experimentalFeatures: [.oldOwnershipOperatorSpellings]
+    )
+  }
+
+  func testMoveExpr4() {
+    assertParse(
       """
+      _move(t)
+      """,
+      substructure: FunctionCallExprSyntax(
+        calledExpression: DeclReferenceExprSyntax(baseName: .identifier("_move")),
+        leftParen: .leftParenToken(),
+        arguments: [.init(expression: DeclReferenceExprSyntax(baseName: .identifier("t")))],
+        rightParen: .rightParenToken()
+      ),
+      experimentalFeatures: [.oldOwnershipOperatorSpellings]
+    )
+  }
+
+  func testMoveExpr5() {
+    assertParse(
+      """
+      _move(t)
+      """,
+      substructure: FunctionCallExprSyntax(
+        calledExpression: DeclReferenceExprSyntax(baseName: .identifier("_move")),
+        leftParen: .leftParenToken(),
+        arguments: [.init(expression: DeclReferenceExprSyntax(baseName: .identifier("t")))],
+        rightParen: .rightParenToken()
+      ),
+      experimentalFeatures: []
+    )
+  }
+
+  func testMoveExpr6() {
+    assertParse(
+      """
+      _move1️⃣ t 
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        )
+      ],
+      fixedSource:
+        """
+        _move
+        t
+        """,
+      experimentalFeatures: []
     )
   }
 

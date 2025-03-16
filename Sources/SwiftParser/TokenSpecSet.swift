@@ -705,8 +705,8 @@ enum ExpressionModifierKeyword: TokenSpecSet {
   init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.await): self = .await
-    case TokenSpec(._move): self = ._move
-    case TokenSpec(._borrow): self = ._borrow
+    case TokenSpec(._move) where experimentalFeatures.contains(.oldOwnershipOperatorSpellings): self = ._move
+    case TokenSpec(._borrow) where experimentalFeatures.contains(.oldOwnershipOperatorSpellings): self = ._borrow
     case TokenSpec(.try): self = .try
     case TokenSpec(.borrow): self = .borrow
     case TokenSpec(.consume): self = .consume

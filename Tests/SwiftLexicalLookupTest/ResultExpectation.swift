@@ -17,17 +17,17 @@ import XCTest
 /// Used to define lookup result assertion.
 enum ResultExpectation {
   case fromScope(ScopeSyntax.Type, expectedNames: [ExpectedName])
-  case lookInMembers(LookInMembersScopeSyntax.Type)
-  case lookInGenericParametersOfExtendedType
-  case mightIntroduceDollarIdentifiers
+  case lookForMembers(LookInMembersScopeSyntax.Type)
+  case lookForGenericParameters
+  case lookForImplicitClosureParameters
 
   var expectedNames: [ExpectedName] {
     switch self {
     case .fromScope(_, let expectedNames):
       return expectedNames
-    case .lookInMembers,
-      .lookInGenericParametersOfExtendedType,
-      .mightIntroduceDollarIdentifiers:
+    case .lookForMembers,
+      .lookForGenericParameters,
+      .lookForImplicitClosureParameters:
       return []
     }
   }
@@ -36,12 +36,12 @@ enum ResultExpectation {
     switch self {
     case .fromScope:
       return "fromScope"
-    case .lookInMembers:
-      return "lookInMembers"
-    case .lookInGenericParametersOfExtendedType:
-      return "lookInGenericParametersOfExtendedType"
-    case .mightIntroduceDollarIdentifiers:
-      return "mightIntroduceDollarIdentifiers"
+    case .lookForMembers:
+      return "lookForMembers"
+    case .lookForGenericParameters:
+      return "lookForGenericParameters"
+    case .lookForImplicitClosureParameters:
+      return "lookForImplicitClosureParameters"
     }
   }
 
@@ -63,14 +63,14 @@ enum ResultExpectation {
         )
 
         NameExpectation.assertNames(marker: marker, acutalNames: actualNames, expectedNames: expectedNames)
-      case (.lookInMembers(let scope), .lookInMembers(let expectedType)):
+      case (.lookForMembers(let scope), .lookForMembers(let expectedType)):
         XCTAssert(
           scope.syntaxNodeType == expectedType,
           "For marker \(marker), scope result type of \(scope.syntaxNodeType) doesn't match expected \(expectedType)"
         )
-      case (.lookInGenericParametersOfExtendedType, .lookInGenericParametersOfExtendedType):
+      case (.lookForGenericParameters, .lookForGenericParameters):
         break
-      case (.mightIntroduceDollarIdentifiers, .mightIntroduceDollarIdentifiers):
+      case (.lookForImplicitClosureParameters, .lookForImplicitClosureParameters):
         break
       default:
         XCTFail(

@@ -63,7 +63,11 @@ public class RawSyntaxArena {
   ///
   /// - Important: This is only intended to be used for assertions to catch
   ///   retain cycles in syntax arenas.
-  fileprivate let hasParent: UnsafeMutablePointer<AtomicBool>
+  /// - Note: `UnsafeMutableRawPointer` + casting accessor is a workaround to silence the warning 'cannot bypass resilience'.
+  private let _hasParent: UnsafeMutableRawPointer
+  fileprivate func hasParent() -> UnsafeMutablePointer<AtomicBool> {
+    _hasParent.assumingMemoryBound(to: AtomicBool.self)
+  }
   #endif
 
   /// Construct a new ``RawSyntaxArena`` in which syntax nodes can be allocated.
@@ -75,7 +79,7 @@ public class RawSyntaxArena {
     self.allocator = BumpPtrAllocator(initialSlabSize: slabSize)
     self.childRefs = []
     #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
-    self.hasParent = swiftsyntax_atomic_bool_create(false)
+    self._hasParent = UnsafeMutableRawPointer(swiftsyntax_atomic_bool_create(false))
     #endif
   }
 
@@ -84,7 +88,7 @@ public class RawSyntaxArena {
       child.release()
     }
     #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
-    swiftsyntax_atomic_bool_destroy(self.hasParent)
+    swiftsyntax_atomic_bool_destroy(self.hasParent())
     #endif
   }
 
@@ -153,7 +157,7 @@ public class RawSyntaxArena {
 
     #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
     precondition(
-      !swiftsyntax_atomic_bool_get(self.hasParent),
+      !swiftsyntax_atomic_bool_get(self.hasParent()),
       "an arena can't have a new child once it's owned by other arenas"
     )
     #endif
@@ -299,12 +303,12 @@ struct RawSyntaxArenaRef: Hashable, @unchecked Sendable {
   #if DEBUG || SWIFTSYNTAX_ENABLE_ASSERTIONS
   /// Accessor for the underlying's `RawSyntaxArena.hasParent`
   var hasParent: Bool {
-    swiftsyntax_atomic_bool_get(value.hasParent)
+    swiftsyntax_atomic_bool_get(value.hasParent())
   }
 
   /// Sets the `RawSyntaxArena.hasParent` on the referenced arena.
   func setHasParent(_ newValue: Bool) {
-    swiftsyntax_atomic_bool_set(value.hasParent, newValue)
+    swiftsyntax_atomic_bool_set(value.hasParent(), newValue)
   }
   #endif
 

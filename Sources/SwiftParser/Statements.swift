@@ -570,6 +570,16 @@ extension Parser {
     let tryKeyword = self.consume(if: .keyword(.try))
     let awaitKeyword = self.consume(if: .keyword(.await))
 
+    let unsafeKeyword: RawTokenSyntax?
+    if let modifierKeyword = ExpressionModifierKeyword(
+      lexeme: self.currentToken,
+      experimentalFeatures: self.experimentalFeatures
+    ), modifierKeyword == .unsafe, !self.peek(isAt: .keyword(.in), .colon) {
+      unsafeKeyword = self.expectWithoutRecovery(.keyword(.unsafe))
+    } else {
+      unsafeKeyword = nil
+    }
+
     // Parse the pattern.  This is either 'case <refutable pattern>' or just a
     // normal pattern.
     let caseKeyword = self.consume(if: .keyword(.case))
@@ -624,6 +634,7 @@ extension Parser {
       forKeyword: forKeyword,
       tryKeyword: tryKeyword,
       awaitKeyword: awaitKeyword,
+      unsafeKeyword: unsafeKeyword,
       caseKeyword: caseKeyword,
       pattern: pattern,
       typeAnnotation: type,

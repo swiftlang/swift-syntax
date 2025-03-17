@@ -1,4 +1,4 @@
-// swift-tools-version:5.8
+// swift-tools-version: 5.9
 
 import Foundation
 import PackageDescription
@@ -184,7 +184,8 @@ let package = Package(
 
     .target(
       name: "SwiftLexicalLookup",
-      dependencies: ["SwiftSyntax", "SwiftIfConfig"]
+      dependencies: ["SwiftSyntax", "SwiftIfConfig"],
+      exclude: ["CMakeLists.txt"]
     ),
 
     .testTarget(
@@ -240,6 +241,11 @@ let package = Package(
     .target(
       name: "SwiftSyntax601",
       path: "Sources/VersionMarkerModules/SwiftSyntax601"
+    ),
+
+    .target(
+      name: "SwiftSyntax602",
+      path: "Sources/VersionMarkerModules/SwiftSyntax602"
     ),
 
     // MARK: SwiftSyntaxBuilder

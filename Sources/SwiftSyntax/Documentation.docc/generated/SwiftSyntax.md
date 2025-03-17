@@ -135,6 +135,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/UnresolvedAsExprSyntax>
 - <doc:SwiftSyntax/UnresolvedIsExprSyntax>
 - <doc:SwiftSyntax/UnresolvedTernaryExprSyntax>
+- <doc:SwiftSyntax/UnsafeExprSyntax>
 
 ### Patterns
 

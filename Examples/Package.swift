@@ -13,7 +13,7 @@ let package = Package(
     .executable(name: "CodeGenerationUsingSwiftSyntaxBuilder", targets: ["CodeGenerationUsingSwiftSyntaxBuilder"]),
   ],
   dependencies: [
-    .package(path: "../")
+    .package(name: "swift-syntax", path: "../")
   ],
   targets: [
     .executableTarget(
@@ -39,15 +39,6 @@ let package = Package(
       ],
       path: "Sources/MacroExamples/Implementation"
     ),
-    .testTarget(
-      name: "MacroExamplesImplementationTests",
-      dependencies: [
-        "MacroExamplesImplementation",
-        .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
-        .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
-      ],
-      path: "Tests/MacroExamples/Implementation"
-    ),
     .target(
       name: "MacroExamplesInterface",
       dependencies: [
@@ -64,6 +55,25 @@ let package = Package(
     ),
   ]
 )
+
+#if !os(Windows)
+// We can't write a test target for macros on Windows because that results in duplicate definitoions of `main`: Once
+// from the macro (which is effectively an executable), and once from the test bundle.
+package.targets.append(
+  .testTarget(
+    name: "MacroExamplesImplementationTests",
+    dependencies: [
+      "MacroExamplesImplementation",
+      .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
+      .product(name: "SwiftSyntaxMacrosTestSupport", package: "swift-syntax"),
+    ],
+    path: "Tests/MacroExamples/Implementation"
+  )
+)
+#else
+// Add a dummy test target on Windows so that `swift test` invocations from `swift-syntax-dev-utils` don't fail.
+package.targets.append(.testTarget(name: "Dummy", dependencies: []))
+#endif
 
 // This is a fake target that depends on all targets in the package.
 // We need to define it manually because the `Examples-Package` target doesn't exist for `swift build`.

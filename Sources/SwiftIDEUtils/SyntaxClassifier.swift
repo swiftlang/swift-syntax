@@ -126,7 +126,7 @@ private struct ClassificationVisitor {
     self.targetRange = range
     self.classifications = []
 
-    // `withExtendedLifetime` to make sure ``SyntaxArena`` for the node alive
+    // `withExtendedLifetime` to make sure ``RawSyntaxArena`` for the node alive
     // during the visit.
     withExtendedLifetime(node) {
       _ = self.visit(

@@ -16,15 +16,7 @@ import SyntaxSupport
 import Utils
 
 let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  DeclSyntax(
-    """
-    #if compiler(>=6)
-    internal import SwiftSyntax
-    #else
-    import SwiftSyntax
-    #endif
-    """
-  )
+  importSwiftSyntax()
 
   let typesExpressibleByStringInterpolation =
     SYNTAX_NODES

@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-@_spi(RawSyntax) internal import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
 #else
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 #endif
 
 extension TokenConsumer {
@@ -445,6 +445,30 @@ extension Parser {
         )
       )
     case (.unsafe, let handle)?:
+      if self.peek().isAtStartOfLine
+        // Closing paired syntax
+        || self.peek(isAt: .rightParen, .rightSquare, .rightBrace)
+        // Assignment
+        || self.peek(isAt: .equal)
+        // As an argument label or in a list context.
+        || self.peek(isAt: .colon, .comma)
+        // Start of a closure in a context where it should be interpreted as
+        // being part of a statement.
+        || (flavor == .stmtCondition && self.peek(isAt: .leftBrace))
+        // Avoid treating as an "unsafe" expression when there is no trivia
+        // following the "unsafe" and the following token could either be a
+        // postfix expression or a subexpression:
+        //   - Member access vs. leading .
+        //   - Call vs. tuple expression.
+        //   - Subscript vs. array or dictionary expression
+        || (self.peek(isAt: .period, .leftParen, .leftSquare) && self.peek().leadingTriviaByteLength == 0
+          && self.currentToken.trailingTriviaByteLength == 0)
+        // End of file
+        || self.peek(isAt: .endOfFile)
+      {
+        break EXPR_PREFIX
+      }
+
       let unsafeTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor: flavor,
@@ -566,7 +590,7 @@ extension Parser {
   ) -> RawExprSyntax {
     // Try parse a single value statement as an expression (e.g do/if/switch).
     // Note we do this here in parseUnaryExpression as we don't allow postfix
-    // syntax to hang off such expressions to avoid ambiguities such as postfix
+    // syntax to be attached to such expressions to avoid ambiguities such as postfix
     // '.member', which can currently be parsed as a static dot member for a
     // result builder.
     switch self.at(anyIn: SingleValueStatementExpression.self) {
@@ -1103,11 +1127,54 @@ extension Parser {
         continue
       }
 
-      // Check for a .name or .1 suffix.
+      // Check for a .name, .1, .name(), .name("Kiwi"), .name(fruit:),
+      // .name(_:), .name(fruit: "Kiwi) suffix.
       if self.at(.period) {
         let (unexpectedPeriod, period, declName, generics) = parseDottedExpressionSuffix(
           previousNode: components.last?.raw ?? rootType?.raw ?? backslash.raw
         )
+
+        // If fully applied method component, parse as a keypath method.
+        if self.experimentalFeatures.contains(.keypathWithMethodMembers)
+          && self.at(.leftParen)
+        {
+          var (unexpectedBeforeLParen, leftParen) = self.expect(.leftParen)
+          if let generics = generics {
+            unexpectedBeforeLParen = RawUnexpectedNodesSyntax(
+              (unexpectedBeforeLParen?.elements ?? []) + [RawSyntax(generics)],
+              arena: self.arena
+            )
+          }
+          let args = self.parseArgumentListElements(
+            pattern: pattern,
+            allowTrailingComma: true
+          )
+          let (unexpectedBeforeRParen, rightParen) = self.expect(.rightParen)
+
+          components.append(
+            RawKeyPathComponentSyntax(
+              unexpectedPeriod,
+              period: period,
+              component: .method(
+                RawKeyPathMethodComponentSyntax(
+                  declName: declName,
+                  unexpectedBeforeLParen,
+                  leftParen: leftParen,
+                  arguments: RawLabeledExprListSyntax(
+                    elements: args,
+                    arena: self.arena
+                  ),
+                  unexpectedBeforeRParen,
+                  rightParen: rightParen,
+                  arena: self.arena
+                )
+              ),
+              arena: self.arena
+            )
+          )
+          continue
+        }
+        // Else, parse as a property.
         components.append(
           RawKeyPathComponentSyntax(
             unexpectedPeriod,
@@ -1128,7 +1195,6 @@ extension Parser {
       // No more postfix expressions.
       break
     }
-
     return RawKeyPathExprSyntax(
       unexpectedBeforeBackslash,
       backslash: backslash,

@@ -103,7 +103,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             calledExpression: ExprSyntax("withExtendedLifetime"),
             leftParen: .leftParenToken(),
             arguments: LabeledExprListSyntax {
-              LabeledExprSyntax(expression: ExprSyntax("(SyntaxArena(), (\(parameters)))"))
+              LabeledExprSyntax(expression: ExprSyntax("(RawSyntaxArena(), (\(parameters)))"))
             },
             rightParen: .rightParenToken(),
             trailingClosure: ClosureExprSyntax(signature: closureSignature) {
@@ -163,7 +163,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
             AccessorDeclSyntax(
               """
               set(value) {
-                self = Syntax(self).replacingChild(at: \(raw: index), with: Syntax(value), arena: SyntaxArena()).cast(\(node.kind.syntaxType).self)
+                self = Syntax(self).replacingChild(at: \(raw: index), with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(\(node.kind.syntaxType).self)
               }
               """
             )
@@ -176,7 +176,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           // If needed, this could be added in the future, but for now withUnexpected should be sufficient.
           if let childNode = SYNTAX_NODE_MAP[child.syntaxNodeKind]?.collectionNode,
             !child.isUnexpectedNodes,
-            case .collection(_, collectionElementName: let childElt, _, _) = child.kind
+            case .collection(_, collectionElementName: let childElt?, _, _) = child.kind
           {
             let childEltType = childNode.collectionElementType.syntaxBaseName
 
@@ -192,7 +192,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
               @available(*, deprecated, message: "Use node.\(child.identifier).append(newElement) instead")
               public func add\(raw: childElt)(_ element: \(childEltType)) -> \(node.kind.syntaxType) {
                 var collection: RawSyntax
-                let arena = SyntaxArena()
+                let arena = RawSyntaxArena()
                 if let col = raw.layoutView!.children[\(raw: index)] {
                   collection = col.layoutView!.appending(element.raw, arena: arena)
                 } else {
@@ -200,7 +200,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
                                                     from: [element.raw], arena: arena)
                 }
                 return Syntax(self)
-                  .replacingChild(at: \(raw: index), with: collection, rawNodeArena: arena, allocationArena: arena)
+                  .replacingChild(at: \(raw: index), with: collection, rawNodeArena: arena, rawAllocationArena: arena)
                   .cast(\(node.kind.syntaxType).self)
               }
               """

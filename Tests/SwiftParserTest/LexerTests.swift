@@ -49,15 +49,15 @@ fileprivate func assertRawBytesLexeme(
 ) {
   XCTAssertEqual(lexeme.rawTokenKind, kind, file: file, line: line)
   leadingTrivia.withUnsafeBufferPointer { leadingTrivia in
-    let leadingTriviaText = SyntaxText(buffer: SyntaxArenaAllocatedBufferPointer(leadingTrivia))
+    let leadingTriviaText = SyntaxText(buffer: ArenaAllocatedBufferPointer(leadingTrivia))
     XCTAssertEqual(lexeme.leadingTriviaText, leadingTriviaText, file: file, line: line)
   }
   text.withUnsafeBufferPointer { textBuffer in
-    let text = SyntaxText(buffer: SyntaxArenaAllocatedBufferPointer(textBuffer))
+    let text = SyntaxText(buffer: ArenaAllocatedBufferPointer(textBuffer))
     XCTAssertEqual(lexeme.tokenText, text, file: file, line: line)
   }
   trailingTrivia.withUnsafeBufferPointer { trailingTrivia in
-    let trailingTriviaText = SyntaxText(buffer: SyntaxArenaAllocatedBufferPointer(trailingTrivia))
+    let trailingTriviaText = SyntaxText(buffer: ArenaAllocatedBufferPointer(trailingTrivia))
     XCTAssertEqual(lexeme.trailingTriviaText, trailingTriviaText, file: file, line: line)
   }
   XCTAssertEqual(lexeme.diagnostic, error, file: file, line: line)
@@ -76,11 +76,14 @@ class LexerTests: ParserTestCase {
 
   func testEscapedIdentifiers() {
     assertLexemes(
-      "`Hello` `World` `$`",
+      "`Hello` `World` `$` `with a space` `/not-an*operator+` `123`",
       lexemes: [
         LexemeSpec(.identifier, text: "`Hello`", trailing: " "),
         LexemeSpec(.identifier, text: "`World`", trailing: " "),
-        LexemeSpec(.identifier, text: "`$`"),
+        LexemeSpec(.identifier, text: "`$`", trailing: " "),
+        LexemeSpec(.identifier, text: "`with a space`", trailing: " "),
+        LexemeSpec(.identifier, text: "`/not-an*operator+`", trailing: " "),
+        LexemeSpec(.identifier, text: "`123`"),
       ]
     )
   }
@@ -1169,6 +1172,23 @@ class LexerTests: ParserTestCase {
         leadingTrivia: [0xfd],
         text: [0x41],
         error: TokenDiagnostic(.invalidUtf8, byteOffset: 0)
+      )
+    }
+  }
+
+  func testInvalidUtf8_4() {
+    let sourceBytes: [UInt8] = [0x60, 0x41, 0xfd, 0x60]  // 0x41 == "A", 0x60 == "`"
+
+    lex(sourceBytes) { lexemes in
+      guard lexemes.count == 2 else {
+        return XCTFail("Expected 2 lexemes, got \(lexemes.count)")
+      }
+      assertRawBytesLexeme(
+        lexemes[0],
+        kind: .identifier,
+        leadingTrivia: [],
+        text: [0x60, 0x41, 0xfd, 0x60],
+        error: TokenDiagnostic(.invalidUtf8, byteOffset: 2)
       )
     }
   }

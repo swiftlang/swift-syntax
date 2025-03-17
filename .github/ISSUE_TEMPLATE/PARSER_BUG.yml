@@ -2,36 +2,36 @@ name: SwiftParser Bug
 description: A bug in the new Swift parser
 labels: [bug, SwiftParser]
 body:
- - type: markdown
-   attributes:
-     value: Thanks for taking the time to fill out this bug report! We would really appreciate if you could take the time to reduce the issue as described in [Filing Parser Bug Reports](https://swiftpackageindex.com/swiftlang/swift-syntax/main/documentation/swiftparser/filingbugreports).
- - type: dropdown
-   id: issue-type
-   attributes:
-     label: Issue Kind
-     description: What kind of issue is this? See [Filing Parser Bug Reports](https://swiftpackageindex.com/swiftlang/swift-syntax/main/documentation/swiftparser/filingbugreports) for more details.
-     options:
-       - Round-Trip Failure
-       - Parser Crash
-       - Parse of Valid Source Failed
-       - Parse of Valid Source Produced Invalid Syntax Tree
-       - Bad Diagnostic Produced
-       - Other
-       - I Don’t Know
- - type: textarea
-   id: source
-   attributes:
-     label: Source Code
-     description: The source code that, when fed into the parser, produces the bug.
-     value: |
-       ```swift
-       ```
- - type: textarea
-   id: description
-   attributes:
-     label: Description
-     description: |
-       Any additional information you can provide for this issue, like
-        - What did you expect to happen?
-        - Has this issue started occurring recently?
-        - If it’s a crash, the stack trace.
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to fill out this bug report! We would really appreciate if you could take the time to reduce the issue as described in [Filing Parser Bug Reports](https://swiftpackageindex.com/swiftlang/swift-syntax/main/documentation/swiftparser/filingbugreports).
+  - type: dropdown
+    id: issue-type
+    attributes:
+      label: Issue Kind
+      description: What kind of issue is this? See [Filing Parser Bug Reports](https://swiftpackageindex.com/swiftlang/swift-syntax/main/documentation/swiftparser/filingbugreports) for more details.
+      options:
+        - Round-Trip Failure
+        - Parser Crash
+        - Parse of Valid Source Failed
+        - Parse of Valid Source Produced Invalid Syntax Tree
+        - Bad Diagnostic Produced
+        - Other
+        - I Don’t Know
+  - type: textarea
+    id: source
+    attributes:
+      label: Source Code
+      description: The source code that, when fed into the parser, produces the bug.
+      value: |
+        ```swift
+        ```
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: |
+        Any additional information you can provide for this issue, like
+         - What did you expect to happen?
+         - Has this issue started occurring recently?
+         - If it’s a crash, the stack trace.

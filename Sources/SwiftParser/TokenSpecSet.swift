@@ -714,7 +714,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
     case TokenSpec(.repeat): self = .repeat
     case TokenSpec(.each): self = .each
     case TokenSpec(.any): self = .any
-    case TokenSpec(.unsafe) where experimentalFeatures.contains(.unsafeExpression): self = .unsafe
+    case TokenSpec(.unsafe): self = .unsafe
     default: return nil
     }
   }

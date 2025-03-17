@@ -351,4 +351,40 @@ public struct DiagnosticsFormatter {
       suffixTexts: [:]
     )
   }
+
+  /// Produce a string containing "footnotes" for each of the diagnostic
+  /// category provided that has associated documentation. Each category
+  /// is printed in Markdown link format, e.g.,
+  ///
+  /// ```
+  /// [#categoryName]: <categoryDocumentationURL>
+  /// ```
+  ///
+  /// This function also deduplicates entries and alphabetizes the results.
+  ///
+  /// - Parameters:
+  ///   - categories: the categories to print
+  ///   - leadingText: text that is prefixed to the list of categories when
+  ///     there is at least one category to print.
+  public func categoryFootnotes(
+    _ categories: some Sequence<DiagnosticCategory>,
+    leadingText: String = "\n"
+  ) -> String {
+    let categoriesInOrder = categories.compactMap { category in
+      if let documentationURL = category.documentationURL {
+        return (category.name, documentationURL)
+      } else {
+        return nil
+      }
+    }.sorted { $0.0.lowercased() < $1.0.lowercased() }
+
+    if categoriesInOrder.isEmpty {
+      return ""
+    }
+
+    return leadingText
+      + categoriesInOrder.map { name, url in
+        "[#\(name)]: <\(url)>"
+      }.joined(separator: "\n")
+  }
 }

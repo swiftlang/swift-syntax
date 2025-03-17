@@ -46,14 +46,21 @@ extension Parser {
   mutating func parseSourceFile() -> RawSourceFileSyntax {
     let shebang = self.consume(if: .shebang)
     let items = self.parseTopLevelCodeBlockItems()
-    let unexpectedBeforeEndOfFileToken = consumeRemainingTokens()
-    let endOfFile = self.consume(if: .endOfFile)!
+    let (unexpectedBeforeEndOfFileToken, endOfFile) = self.expectEndOfFile()
     return .init(
       shebang: shebang,
       statements: items,
-      RawUnexpectedNodesSyntax(unexpectedBeforeEndOfFileToken, arena: self.arena),
+      unexpectedBeforeEndOfFileToken,
       endOfFileToken: endOfFile,
       arena: self.arena
+    )
+  }
+
+  /// Faster `.expect(.endOfFile)`.
+  mutating func expectEndOfFile() -> (unexpected: RawUnexpectedNodesSyntax?, endOfFileToken: RawTokenSyntax) {
+    return (
+      unexpected: RawUnexpectedNodesSyntax(self.consumeRemainingTokens(), arena: self.arena),
+      endOfFileToken: self.consume(if: .endOfFile)!
     )
   }
 }

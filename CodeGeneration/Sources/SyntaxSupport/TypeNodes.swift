@@ -648,6 +648,7 @@ public let TYPE_NODES: [Node] = [
           .keyword(.__shared),
           .keyword(.__owned),
           .keyword(.isolated),
+          .keyword(.nonisolated),
           .keyword(._const),
           .keyword(.borrowing),
           .keyword(.consuming),

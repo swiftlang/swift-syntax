@@ -22,9 +22,9 @@ func f() {
 }
 ```
 
-The syntax tree and its parser do not reason about the build configuration. Rather, the syntax tree produced by parsing this code will include `IfConfigDeclSyntax` nodes wherever there is a `#if`, and each such node contains the a list of clauses, each with a condition to check (e.g., `os(Linux)`) and a list of syntax nodes that are conditionally part of the program. Therefore, the syntax tree captures all the information needed to process the source file for any build configuration.
+The syntax tree and its parser do not reason about the build configuration. Rather, the syntax tree produced by parsing this code will include `IfConfigDeclSyntax` nodes wherever there is a `#if`, and each such node contains a list of clauses, each with a condition to check (e.g., `os(Linux)`) and a list of syntax nodes that are conditionally part of the program. Therefore, the syntax tree captures all the information needed to process the source file for any build configuration.
 
-The `SwiftIfConfig` library provides utilities to determine which syntax nodes are part of a particular build configuration. Each utility requires that one provide a specific build configuration (i.e., an instance of a type that conforms to the <doc:BuildConfiguration> protocol), and provides a different view on essentially the same information:
+The `SwiftIfConfig` library provides utilities to determine which syntax nodes are part of a particular build configuration. Each utility requires that one provides a specific build configuration (i.e., an instance of a type that conforms to the <doc:BuildConfiguration> protocol), and provides a different view on essentially the same information:
 
 * <doc:ActiveSyntaxVisitor> and <doc:ActiveSyntaxAnyVisitor> are visitor types that only visit the syntax nodes that are included ("active") for a given build configuration, implicitly skipping any nodes within inactive `#if` clauses.
 * `SyntaxProtocol.removingInactive(in:)` produces a syntax node that removes all inactive regions (and their corresponding `IfConfigDeclSyntax` nodes) from the given syntax tree, returning a new tree that is free of `#if` conditions.

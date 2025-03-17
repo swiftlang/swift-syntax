@@ -21,7 +21,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case coroutineAccessors
   case valueGenerics
   case abiAttribute
-  case unsafeExpression
+  case keypathWithMethodMembers
 
   /// The name of the feature as it is written in the compiler's `Features.def` file.
   public var featureName: String {
@@ -42,8 +42,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "ValueGenerics"
     case .abiAttribute:
       return "ABIAttribute"
-    case .unsafeExpression:
-      return "WarnUnsafe"
+    case .keypathWithMethodMembers:
+      return "KeypathWithMethodMembers"
     }
   }
 
@@ -66,8 +66,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "value generics"
     case .abiAttribute:
       return "@abi attribute"
-    case .unsafeExpression:
-      return "'unsafe' expression"
+    case .keypathWithMethodMembers:
+      return "keypaths with method members"
     }
   }
 

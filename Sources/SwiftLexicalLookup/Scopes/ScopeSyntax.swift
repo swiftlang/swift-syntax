@@ -15,6 +15,11 @@ import SwiftSyntax
 extension SyntaxProtocol {
   /// Returns all names that `identifier` refers to at this syntax node.
   /// Optional configuration can be passed as `config` to customize the lookup behavior.
+  /// Optional cache can be passed as `cache` to significantly speed up large
+  /// amounts of subsequent lookups.
+  ///
+  /// - Note: Even though cache can significantly speed up large amounts of subsequent lookups,
+  /// it shouldn't be used for one-off lookups as the initial cost of building up cache could be higher that the total time saved.
   ///
   /// - Returns: An array of `LookupResult` for `identifier`  at this syntax node,
   /// ordered by visibility. If `identifier` is set to `nil`, returns all available names ordered by visibility.
@@ -42,9 +47,10 @@ extension SyntaxProtocol {
   /// due to the ordering rules within the function body.
   public func lookup(
     _ identifier: Identifier?,
-    with config: LookupConfig = LookupConfig()
+    with config: LookupConfig = LookupConfig(),
+    cache: LookupCache? = nil
   ) -> [LookupResult] {
-    scope?.lookup(identifier, at: self.position, with: config) ?? []
+    scope?.lookup(identifier, at: self.position, with: config, cache: cache) ?? []
   }
 }
 
@@ -62,7 +68,8 @@ extension SyntaxProtocol {
   func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult]
 }
 
@@ -77,9 +84,10 @@ extension SyntaxProtocol {
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
-    defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
+    defaultLookupImplementation(identifier, at: lookUpPosition, with: config, cache: cache)
   }
 
   /// Returns `LookupResult` of all names introduced in this scope that `identifier`
@@ -90,6 +98,7 @@ extension SyntaxProtocol {
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig,
+    cache: LookupCache?,
     propagateToParent: Bool = true
   ) -> [LookupResult] {
     let filteredNames =
@@ -99,16 +108,31 @@ extension SyntaxProtocol {
       }
 
     return LookupResult.getResultArray(for: self, withNames: filteredNames)
-      + (propagateToParent ? lookupInParent(identifier, at: lookUpPosition, with: config) : [])
+      + (propagateToParent ? lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache) : [])
   }
 
   /// Looks up in parent scope.
   func lookupInParent(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
-    parentScope?.lookup(identifier, at: lookUpPosition, with: config) ?? []
+    guard !config.finishInSequentialScope else {
+      return parentScope?.lookup(identifier, at: lookUpPosition, with: config, cache: cache) ?? []
+    }
+
+    if let cachedAncestorResults = cache?.getCachedAncestorResults(id: id) {
+      return cachedAncestorResults
+    }
+
+    let ancestorResults = parentScope?.lookup(identifier, at: lookUpPosition, with: config, cache: cache) ?? []
+
+    if let cache {
+      cache.setCachedAncestorResults(id: id, results: ancestorResults)
+    }
+
+    return ancestorResults
   }
 
   func checkIdentifier(

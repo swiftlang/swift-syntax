@@ -43,6 +43,7 @@ extension SequentialScopeSyntax {
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig,
+    cache: LookupCache?,
     ignoreNamedDecl: Bool = false,
     propagateToParent: Bool = true
   ) -> [LookupResult] {
@@ -62,69 +63,95 @@ extension SequentialScopeSyntax {
     // name matching on these and appends as a separate result to the results.
     var collectedNamedDecls: [NamedDeclSyntax] = []
 
-    for codeBlockItem in codeBlockItems.reversed() {
-      if let namedDecl = codeBlockItem.item.asProtocol(NamedDeclSyntax.self) {
-        guard !ignoreNamedDecl else { continue }
+    if let cachedResults = cache?.getCachedSequentialResults(id: id) {
+      results = cachedResults
+    } else {
+      for codeBlockItem in codeBlockItems.reversed() {
+        if let namedDecl = codeBlockItem.item.asProtocol(NamedDeclSyntax.self) {
+          guard !ignoreNamedDecl else { continue }
 
-        collectedNamedDecls.append(namedDecl)
-        continue
-      } else if let ifConfigDecl = codeBlockItem.item.as(IfConfigDeclSyntax.self),
-        !ignoreNamedDecl
-      {
-        collectedNamedDecls += ifConfigDecl.getNamedDecls(for: config)
-      }
-
-      if let introducingToParentScope = Syntax(codeBlockItem.item).asProtocol(SyntaxProtocol.self)
-        as? IntroducingToSequentialParentScopeSyntax
-      {
-        // Get results from encountered scope.
-        let introducedResults = introducingToParentScope.lookupFromSequentialParent(
-          identifier,
-          at: lookUpPosition,
-          with: config
-        )
-
-        // Skip, if no results were found.
-        guard !introducedResults.isEmpty else { continue }
-
-        // If there are some names collected, create a new result for this scope.
-        if !currentChunk.isEmpty {
-          results.append(.fromScope(Syntax(self), withNames: currentChunk))
-          currentChunk = []
+          collectedNamedDecls.append(namedDecl)
+          continue
+        } else if let ifConfigDecl = codeBlockItem.item.as(IfConfigDeclSyntax.self),
+          !ignoreNamedDecl
+        {
+          collectedNamedDecls += ifConfigDecl.getNamedDecls(for: config)
         }
 
-        results += introducedResults
-      } else {
-        // Extract new names from encountered node.
+        if let introducingToParentScope = Syntax(codeBlockItem.item).asProtocol(SyntaxProtocol.self)
+          as? IntroducingToSequentialParentScopeSyntax
+        {
+          // Get results from encountered scope.
+          let introducedResults = introducingToParentScope.lookupFromSequentialParent(
+            cache == nil ? identifier : nil,
+            at: cache == nil ? lookUpPosition : endPosition,
+            with: config,
+            cache: cache
+          )
+
+          // Skip, if no results were found.
+          guard !introducedResults.isEmpty else { continue }
+
+          // If there are some names collected, create a new result for this scope.
+          if !currentChunk.isEmpty {
+            results.append(.fromScope(Syntax(self), withNames: currentChunk))
+            currentChunk = []
+          }
+
+          results += introducedResults
+        } else {
+          // Extract new names from encountered node.
+          currentChunk += LookupName.getNames(
+            from: codeBlockItem.item,
+            accessibleAfter: codeBlockItem.item.endPosition
+          )
+        }
+      }
+
+      // If there are some names collected, create a new result for this scope.
+      if !currentChunk.isEmpty {
+        results.append(.fromScope(Syntax(self), withNames: currentChunk))
+        currentChunk = []
+      }
+
+      // Filter named decls to be appended to the results.
+      for namedDecl in collectedNamedDecls.reversed() {
         currentChunk += LookupName.getNames(
-          from: codeBlockItem.item,
-          accessibleAfter: codeBlockItem.item.endPosition
-        ).filter { introducedName in
-          checkIdentifier(identifier, refersTo: introducedName, at: lookUpPosition)
+          from: namedDecl,
+          accessibleAfter: namedDecl.endPosition
+        )
+      }
+
+      results += LookupResult.getResultArray(for: self, withNames: currentChunk)
+
+      cache?.setCachedSequentialResults(id: id, results: results)
+    }
+
+    results =
+      results
+      .compactMap { result in
+        if case .fromScope(let scope, let cachedNames) = result {
+          if let guardStmt = scope.as(GuardStmtSyntax.self), guardStmt.body.range.contains(lookUpPosition) {
+            return nil  // If lookup position is from guard body, ignore this result.
+          }
+
+          let filteredNames = cachedNames.filter {
+            checkIdentifier(identifier, refersTo: $0, at: lookUpPosition)
+          }
+
+          guard !filteredNames.isEmpty else { return nil }
+
+          return .fromScope(
+            scope,
+            withNames: filteredNames
+          )
+        } else {
+          return result
         }
       }
-    }
-
-    // If there are some names collected, create a new result for this scope.
-    if !currentChunk.isEmpty {
-      results.append(.fromScope(Syntax(self), withNames: currentChunk))
-      currentChunk = []
-    }
-
-    // Filter named decls to be appended to the results.
-    for namedDecl in collectedNamedDecls.reversed() {
-      currentChunk += LookupName.getNames(
-        from: namedDecl,
-        accessibleAfter: namedDecl.endPosition
-      ).filter { introducedName in
-        checkIdentifier(identifier, refersTo: introducedName, at: lookUpPosition)
-      }
-    }
-
-    results += LookupResult.getResultArray(for: self, withNames: currentChunk)
 
     return results
       + (config.finishInSequentialScope || !propagateToParent
-        ? [] : lookupInParent(identifier, at: lookUpPosition, with: config))
+        ? [] : lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache))
   }
 }

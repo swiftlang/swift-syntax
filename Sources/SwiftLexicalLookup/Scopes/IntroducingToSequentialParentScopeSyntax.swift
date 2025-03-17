@@ -21,6 +21,7 @@ protocol IntroducingToSequentialParentScopeSyntax: ScopeSyntax {
   func lookupFromSequentialParent(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult]
 }

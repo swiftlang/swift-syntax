@@ -126,9 +126,9 @@ extension Parser {
       return label(self.parseDeferStatement(deferHandle: handle), with: optLabel)
     case (.yield, let handle)?:
       return label(self.parseYieldStatement(yieldHandle: handle), with: optLabel)
-    case (.then, let handle)? where experimentalFeatures.contains(.thenStatements):
+    case (.then, let handle)?:
       return label(self.parseThenStatement(handle: handle), with: optLabel)
-    case nil, (.then, _)?:
+    case nil:
       return label(RawMissingStmtSyntax(arena: self.arena), with: optLabel)
     }
   }
@@ -986,10 +986,10 @@ extension Parser.Lookahead {
         return false
       }
 
-    case .then where experimentalFeatures.contains(.thenStatements):
+    case .then:
       return atStartOfThenStatement(preferExpr: preferExpr)
 
-    case nil, .then:
+    case nil:
       return false
     }
   }

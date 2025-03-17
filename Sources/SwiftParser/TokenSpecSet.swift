@@ -121,7 +121,7 @@ enum CanBeStatementStart: TokenSpecSet {
     case TokenSpec(.repeat): self = .repeat
     case TokenSpec(.return): self = .return
     case TokenSpec(.switch): self = .switch
-    case TokenSpec(.then): self = .then
+    case TokenSpec(.then) where experimentalFeatures.contains(.thenStatements): self = .then
     case TokenSpec(.throw): self = .throw
     case TokenSpec(.while): self = .while
     case TokenSpec(.yield): self = .yield

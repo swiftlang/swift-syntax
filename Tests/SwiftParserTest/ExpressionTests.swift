@@ -1557,18 +1557,18 @@ final class ExpressionTests: ParserTestCase {
     )
   }
 
-  func testMoveExpression() {
-    assertParse("_move msg")
-    assertParse("use(_move msg)")
-    assertParse("_move msg")
-    assertParse("let b = (_move self).buffer")
+  func testConsumeExpression() {
+    assertParse("consume msg")
+    assertParse("use(consume msg)")
+    assertParse("consume msg")
+    assertParse("let b = (consume self).buffer")
   }
 
   func testBorrowExpression() {
-    assertParse("_borrow msg")
-    assertParse("use(_borrow msg)")
-    assertParse("_borrow msg")
-    assertParse("let b = (_borrow self).buffer")
+    assertParse("borrow msg")
+    assertParse("use(borrow msg)")
+    assertParse("borrow msg")
+    assertParse("let b = (borrow self).buffer")
     assertParse("borrow msg")
     assertParse("use(borrow msg)")
     assertParse("borrow(msg)")

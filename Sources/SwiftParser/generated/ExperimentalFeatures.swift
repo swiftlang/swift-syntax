@@ -52,6 +52,9 @@ extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of keypaths with method members.
   public static let keypathWithMethodMembers = Self (rawValue: 1 << 8)
 
+  /// Whether to enable the parsing of `_move` and `_borrow` as ownership operators.
+  public static let oldOwnershipOperatorSpellings = Self (rawValue: 1 << 9)
+
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
   public init?(name: String) {
@@ -74,6 +77,8 @@ extension Parser.ExperimentalFeatures {
       self = .abiAttribute
     case "KeypathWithMethodMembers":
       self = .keypathWithMethodMembers
+    case "OldOwnershipOperatorSpellings":
+      self = .oldOwnershipOperatorSpellings
     default:
       return nil
     }

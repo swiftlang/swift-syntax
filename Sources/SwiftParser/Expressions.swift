@@ -481,20 +481,9 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (._move, let handle)?:
-      let moveKeyword = self.eat(handle)
-      let sub = self.parseSequenceExpressionElement(
-        flavor: flavor,
-        pattern: pattern
-      )
-      return RawExprSyntax(
-        RawConsumeExprSyntax(
-          consumeKeyword: moveKeyword,
-          expression: sub,
-          arena: self.arena
-        )
-      )
+
     case (._borrow, let handle)?:
+      assert(self.experimentalFeatures.contains(.oldOwnershipOperatorSpellings))
       fallthrough
     case (.borrow, let handle)?:
       if !atContextualExpressionModifier() {
@@ -531,6 +520,9 @@ extension Parser {
         )
       )
 
+    case (._move, let handle)?:
+      assert(self.experimentalFeatures.contains(.oldOwnershipOperatorSpellings))
+      fallthrough
     case (.consume, let handle)?:
       if !atContextualExpressionModifier() {
         break EXPR_PREFIX

@@ -4,8 +4,6 @@ A library for performing lexical queries on Swift syntax trees.
 
 ## Overview
 
-> Important: `SwiftLexicalLookup` is currently in it's experimental phase. Use `@_spi(Experimental) import SwiftLexicalLookup` to work with the library. Clients should not rely on the current implementation.
-
 `SwiftLexicalLookup` provides APIs that traverse and extract information from the Swift syntax tree. Queries on the syntax tree can include responses to questions like: "Where is an error thrown here handled?" or "What is the source and destination of this `fallthrough` keyword?".
 
 ```swift

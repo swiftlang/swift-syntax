@@ -189,16 +189,9 @@ import SwiftSyntax
         checkIdentifier(identifier, refersTo: name, at: lookUpPosition)
       }
 
-      if let identifier, identifier.isDollarIdentifier {
-        signatureResults = LookupResult.getResultArray(
-          for: self,
-          withNames: filteredCaptureNames + [LookupName.dollarIdentifier(self, strRepresentation: identifier.name)]
-        )
-      } else {
-        signatureResults =
-          LookupResult.getResultArray(for: self, withNames: filteredCaptureNames)
-          + [.mightIntroduceDollarIdentifiers(self)]
-      }
+      signatureResults =
+        LookupResult.getResultArray(for: self, withNames: filteredCaptureNames)
+        + [.lookForImplicitClosureParameters(self)]
     } else {
       signatureResults = LookupResult.getResultArray(
         for: self,
@@ -390,7 +383,7 @@ import SwiftSyntax
     "EnumDeclScope"
   }
 }
-@_spi(Experimental) extension ExtensionDeclSyntax: LookInMembersScopeSyntax {
+@_spi(Experimental) extension ExtensionDeclSyntax: ScopeSyntax, LookInMembersScopeSyntax {
   @_spi(Experimental) public var lookupMembersPosition: AbsolutePosition {
     if let memberType = extendedType.as(MemberTypeSyntax.self) {
       return memberType.name.positionAfterSkippingLeadingTrivia
@@ -415,27 +408,27 @@ import SwiftSyntax
     with config: LookupConfig
   ) -> [LookupResult] {
     if memberBlock.range.contains(lookUpPosition) {
-      let implicitSelf: [LookupName] = [.implicit(.Self(self))]
+      let implicitSelf: [LookupName] = [.implicit(.Self(DeclSyntax(self)))]
         .filter { name in
           checkIdentifier(identifier, refersTo: name, at: lookUpPosition)
         }
 
       return LookupResult.getResultArray(for: self, withNames: implicitSelf)
-        + [.lookInGenericParametersOfExtendedType(self)]
+        + [.lookForGenericParameters(of: self)]
         + defaultLookupImplementation(identifier, at: lookUpPosition, with: config, propagateToParent: false)
-        + [.lookInMembers(self)]
+        + [.lookForMembers(in: Syntax(self))]
         + lookupInParent(identifier, at: lookUpPosition, with: config)
     } else if !extendedType.range.contains(lookUpPosition), let genericWhereClause {
       if genericWhereClause.range.contains(lookUpPosition) {
-        return [.lookInGenericParametersOfExtendedType(self)] + [.lookInMembers(self)]
+        return [.lookForGenericParameters(of: self)] + [.lookForMembers(in: Syntax(self))]
           + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
       }
 
-      return [.lookInGenericParametersOfExtendedType(self)]
+      return [.lookForGenericParameters(of: self)]
         + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
     }
 
-    return [.lookInGenericParametersOfExtendedType(self)]
+    return [.lookForGenericParameters(of: self)]
       + lookupInParent(identifier, at: lookUpPosition, with: config)
   }
 }
@@ -477,7 +470,7 @@ import SwiftSyntax
       return defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
     }
 
-    let implicitSelf: [LookupName] = [.implicit(.self(self))]
+    let implicitSelf: [LookupName] = [.implicit(.self(DeclSyntax(self)))]
       .filter { name in
         checkIdentifier(identifier, refersTo: name, at: lookUpPosition) && !attributes.range.contains(lookUpPosition)
       }
@@ -492,7 +485,7 @@ import SwiftSyntax
         identifier,
         at: lookUpPosition,
         with: config,
-        resultsToInterleave: implicitSelf.isEmpty ? [] : [.fromScope(self, withNames: implicitSelf)]
+        resultsToInterleave: implicitSelf.isEmpty ? [] : [.fromScope(Syntax(self), withNames: implicitSelf)]
       )
   }
 }
@@ -592,13 +585,11 @@ import SwiftSyntax
     var partitioned: [Identifier: [LookupName]] = [:]
 
     for extractedName in extractedNames {
-      guard let identifier = extractedName.identifier else { continue }
-
-      if !partitioned.keys.contains(identifier) {
-        orderedKeys.append(identifier)
+      if !partitioned.keys.contains(extractedName.identifier) {
+        orderedKeys.append(extractedName.identifier)
       }
 
-      partitioned[identifier, default: []].append(extractedName)
+      partitioned[extractedName.identifier, default: []].append(extractedName)
     }
 
     return
@@ -675,7 +666,7 @@ import SwiftSyntax
 @_spi(Experimental) extension ProtocolDeclSyntax: ScopeSyntax, LookInMembersScopeSyntax {
   /// Protocol declarations don't introduce names by themselves.
   @_spi(Experimental) public var defaultIntroducedNames: [LookupName] {
-    [.implicit(.Self(self))]
+    [.implicit(.Self(DeclSyntax(self)))]
   }
 
   @_spi(Experimental) public var lookupMembersPosition: AbsolutePosition {
@@ -724,7 +715,7 @@ import SwiftSyntax
     let lookInMembers: [LookupResult]
 
     if !(inheritanceClause?.range.contains(lookUpPosition) ?? false) {
-      lookInMembers = [.lookInMembers(self)]
+      lookInMembers = [.lookForMembers(in: Syntax(self))]
     } else {
       lookInMembers = []
     }
@@ -785,7 +776,7 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
     }
 
     if let accessorBlock, case .getter = accessorBlock.accessors {
-      return parameters + [.implicit(.self(self))]
+      return parameters + [.implicit(.self(DeclSyntax(self)))]
     } else {
       return parameters
     }
@@ -948,7 +939,7 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
       || shouldIntroduceSelfIfLazy(lookUpPosition: lookUpPosition)
     {
       return defaultLookupImplementation(
-        in: (isMember ? [.implicit(.self(self))] : LookupName.getNames(from: self)),
+        in: (isMember ? [.implicit(.self(DeclSyntax(self)))] : LookupName.getNames(from: self)),
         identifier,
         at: lookUpPosition,
         with: config
@@ -986,7 +977,7 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
 
 @_spi(Experimental) extension DeinitializerDeclSyntax: ScopeSyntax {
   @_spi(Experimental) public var defaultIntroducedNames: [LookupName] {
-    [.implicit(.self(self))]
+    [.implicit(.self(DeclSyntax(self)))]
   }
 
   @_spi(Experimental) public var scopeDebugName: String {

@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
-@_spi(Experimental) import SwiftLexicalLookup
+import SwiftLexicalLookup
 import SwiftSyntax
 import XCTest
 
@@ -148,17 +148,17 @@ final class testNameLookup: XCTestCase {
         """,
       references: [
         "2️⃣": [
-          .mightIntroduceDollarIdentifiers,
+          .lookForImplicitClosureParameters,
           .fromScope(CodeBlockSyntax.self, expectedNames: ["0️⃣"]),
         ],
         "3️⃣": [
-          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.dollarIdentifier("5️⃣", "$0")])
+          .lookForImplicitClosureParameters
         ],
         "4️⃣": [
-          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.dollarIdentifier("5️⃣", "$123")])
+          .lookForImplicitClosureParameters
         ],
         "6️⃣": [
-          .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.dollarIdentifier("5️⃣", "$1")])
+          .lookForImplicitClosureParameters
         ],
       ]
     )
@@ -180,20 +180,20 @@ final class testNameLookup: XCTestCase {
       references: [
         "5️⃣": [
           .fromScope(ClosureExprSyntax.self, expectedNames: [NameExpectation.identifier("2️⃣")]),
-          .mightIntroduceDollarIdentifiers,
+          .lookForImplicitClosureParameters,
           .fromScope(FunctionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("9️⃣"))]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "6️⃣": [
           .fromScope(ClosureExprSyntax.self, expectedNames: ["3️⃣"]),
-          .mightIntroduceDollarIdentifiers,
+          .lookForImplicitClosureParameters,
           .fromScope(CodeBlockSyntax.self, expectedNames: ["1️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "8️⃣": [
           .fromScope(ClosureExprSyntax.self, expectedNames: ["4️⃣"]),
-          .mightIntroduceDollarIdentifiers,
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForImplicitClosureParameters,
+          .lookForMembers(ClassDeclSyntax.self),
         ],
       ],
       expectedResultTypes: .all(
@@ -343,22 +343,22 @@ final class testNameLookup: XCTestCase {
         """,
       references: [
         "2️⃣": [
-          .lookInMembers(ClassDeclSyntax.self)
+          .lookForMembers(ClassDeclSyntax.self)
         ],
         "0️⃣": [
-          .lookInMembers(ClassDeclSyntax.self)
+          .lookForMembers(ClassDeclSyntax.self)
         ],
         "4️⃣": [
-          .lookInMembers(ClassDeclSyntax.self)
+          .lookForMembers(ClassDeclSyntax.self)
         ],
         "6️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "8️⃣": [
           .fromScope(IfExprSyntax.self, expectedNames: ["5️⃣"]),
           .fromScope(CodeBlockSyntax.self, expectedNames: ["3️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
       ],
       expectedResultTypes: .all(
@@ -418,7 +418,7 @@ final class testNameLookup: XCTestCase {
             FunctionDeclSyntax.self,
             expectedNames: [NameExpectation.implicit(.self("3️⃣"))]
           ),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "0️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: ["8️⃣", "9️⃣"]),
@@ -428,7 +428,7 @@ final class testNameLookup: XCTestCase {
             FunctionDeclSyntax.self,
             expectedNames: [NameExpectation.implicit(.self("3️⃣"))]
           ),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
       ],
       expectedResultTypes: .all(
@@ -553,26 +553,26 @@ final class testNameLookup: XCTestCase {
         """,
       references: [
         "3️⃣": [
-          .lookInMembers(StructDeclSyntax.self),
+          .lookForMembers(StructDeclSyntax.self),
           .fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.Self("7️⃣"))]),
-          .lookInGenericParametersOfExtendedType,
-          .lookInMembers(ExtensionDeclSyntax.self),
+          .lookForGenericParameters,
+          .lookForMembers(ExtensionDeclSyntax.self),
         ],
         "4️⃣": [
           .fromScope(FunctionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("2️⃣"))]),
-          .lookInMembers(StructDeclSyntax.self),
-          .lookInGenericParametersOfExtendedType,
-          .lookInMembers(ExtensionDeclSyntax.self),
+          .lookForMembers(StructDeclSyntax.self),
+          .lookForGenericParameters,
+          .lookForMembers(ExtensionDeclSyntax.self),
         ],
         "5️⃣": [
           .fromScope(ExtensionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.Self("7️⃣"))]),
-          .lookInGenericParametersOfExtendedType,
-          .lookInMembers(ExtensionDeclSyntax.self),
+          .lookForGenericParameters,
+          .lookForMembers(ExtensionDeclSyntax.self),
         ],
         "6️⃣": [
           .fromScope(FunctionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))]),
-          .lookInGenericParametersOfExtendedType,
-          .lookInMembers(ExtensionDeclSyntax.self),
+          .lookForGenericParameters,
+          .lookForMembers(ExtensionDeclSyntax.self),
         ],
       ]
     )
@@ -643,21 +643,21 @@ final class testNameLookup: XCTestCase {
         "3️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("2️⃣")]),
           .fromScope(FunctionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))]),
-          .lookInMembers(StructDeclSyntax.self),
+          .lookForMembers(StructDeclSyntax.self),
         ],
         "4️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("2️⃣")]),
           .fromScope(FunctionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))]),
-          .lookInMembers(StructDeclSyntax.self),
+          .lookForMembers(StructDeclSyntax.self),
         ],
         "6️⃣": [
           .fromScope(FunctionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("5️⃣"))]),
-          .lookInMembers(StructDeclSyntax.self),
+          .lookForMembers(StructDeclSyntax.self),
         ],
         "8️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("7️⃣")]),
           .fromScope(FunctionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("5️⃣"))]),
-          .lookInMembers(StructDeclSyntax.self),
+          .lookForMembers(StructDeclSyntax.self),
         ],
       ]
     )
@@ -679,12 +679,12 @@ final class testNameLookup: XCTestCase {
       references: [
         "3️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("2️⃣")]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "5️⃣": [
           .fromScope(CodeBlockSyntax.self, expectedNames: [NameExpectation.identifier("4️⃣")]),
           .fromScope(FunctionDeclSyntax.self, expectedNames: [NameExpectation.implicit(.self("1️⃣"))]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
       ]
     )
@@ -863,21 +863,21 @@ final class testNameLookup: XCTestCase {
       references: [
         "3️⃣": [
           .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["1️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "4️⃣": [
           .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["2️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "6️⃣": [
           .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["5️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
           .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["1️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "8️⃣": [
-          .lookInMembers(ClassDeclSyntax.self),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
       ],
       expectedResultTypes: .all(GenericParameterSyntax.self)
@@ -923,11 +923,11 @@ final class testNameLookup: XCTestCase {
       references: [
         "1️⃣": [
           .fromScope(MemberBlockSyntax.self, expectedNames: ["3️⃣"]),
-          .lookInMembers(ProtocolDeclSyntax.self),
+          .lookForMembers(ProtocolDeclSyntax.self),
         ],
         "2️⃣": [
           .fromScope(MemberBlockSyntax.self, expectedNames: ["4️⃣"]),
-          .lookInMembers(ProtocolDeclSyntax.self),
+          .lookForMembers(ProtocolDeclSyntax.self),
         ],
       ],
       expectedResultTypes: .all(
@@ -954,23 +954,23 @@ final class testNameLookup: XCTestCase {
         "6️⃣": [
           .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["3️⃣"]),
           .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["1️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "8️⃣": [
           .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["4️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "9️⃣": [
           .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["4️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "0️⃣": [
           .fromScope(FunctionDeclSyntax.self, expectedNames: ["5️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "🔟": [
           .fromScope(FunctionDeclSyntax.self, expectedNames: ["7️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
       ],
       expectedResultTypes: .all(
@@ -997,26 +997,26 @@ final class testNameLookup: XCTestCase {
       references: [
         "4️⃣": [
           .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["1️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "6️⃣": [
           .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["2️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "7️⃣": [
           .fromScope(GenericParameterClauseSyntax.self, expectedNames: ["2️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "8️⃣": [
           .fromScope(SubscriptDeclSyntax.self, expectedNames: ["3️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "9️⃣": [
           .fromScope(SubscriptDeclSyntax.self, expectedNames: ["5️⃣"]),
-          .lookInMembers(ClassDeclSyntax.self),
+          .lookForMembers(ClassDeclSyntax.self),
         ],
         "🔟": [
-          .lookInMembers(ClassDeclSyntax.self)
+          .lookForMembers(ClassDeclSyntax.self)
         ],
       ],
       expectedResultTypes: .all(

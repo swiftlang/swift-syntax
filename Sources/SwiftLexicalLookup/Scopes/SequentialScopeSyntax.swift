@@ -89,7 +89,7 @@ extension SequentialScopeSyntax {
 
         // If there are some names collected, create a new result for this scope.
         if !currentChunk.isEmpty {
-          results.append(LookupResult.getResult(for: self, withNames: currentChunk))
+          results.append(.fromScope(Syntax(self), withNames: currentChunk))
           currentChunk = []
         }
 
@@ -107,7 +107,7 @@ extension SequentialScopeSyntax {
 
     // If there are some names collected, create a new result for this scope.
     if !currentChunk.isEmpty {
-      results.append(LookupResult.getResult(for: self, withNames: currentChunk))
+      results.append(.fromScope(Syntax(self), withNames: currentChunk))
       currentChunk = []
     }
 

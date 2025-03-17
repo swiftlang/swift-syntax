@@ -125,7 +125,7 @@ extension PluginProviderMessageHandler {
       attributeSyntax,
       foldingWith: .standardOperators
     ).cast(AttributeSyntax.self)
-    let declarationNode = sourceManager.add(declSyntax).cast(DeclSyntax.self)
+    let declarationNode = sourceManager.add(declSyntax)
     let parentDeclNode = parentDeclSyntax.map { sourceManager.add($0).cast(DeclSyntax.self) }
     let extendedType = extendedTypeSyntax.map {
       sourceManager.add($0).cast(TypeSyntax.self)
@@ -156,7 +156,7 @@ extension PluginProviderMessageHandler {
         definition: macroDefinition,
         macroRole: role,
         attributeNode: attributeNode,
-        declarationNode: declarationNode,
+        node: declarationNode,
         parentDeclNode: parentDeclNode,
         extendedType: extendedType,
         conformanceList: conformanceList,

@@ -209,8 +209,6 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
 public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Argument: SyntaxChildChoices, SyntaxHashable {
     case type(TypeSyntax)
-    /// - Note: Requires experimental feature `valueGenerics`.
-    @_spi(ExperimentalLanguageFeatures)
     case expr(ExprSyntax)
 
     public var _syntaxNode: Syntax {
@@ -226,8 +224,6 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
       self = .type(TypeSyntax(node))
     }
 
-    /// - Note: Requires experimental feature `valueGenerics`.
-    @_spi(ExperimentalLanguageFeatures)
     public init(_ node: some ExprSyntaxProtocol) {
       self = .expr(ExprSyntax(node))
     }
@@ -271,8 +267,6 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
     /// Checks if the current syntax node can be cast to the type conforming to the ``ExprSyntaxProtocol`` protocol.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
-    /// - Note: Requires experimental feature `valueGenerics`.
-    @_spi(ExperimentalLanguageFeatures)
     public func `is`(_ syntaxType: (some ExprSyntaxProtocol).Type) -> Bool {
       return self.as(syntaxType) != nil
     }
@@ -280,8 +274,6 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
     /// Attempts to cast the current syntax node to the type conforming to the ``ExprSyntaxProtocol`` protocol.
     ///
     /// - Returns: An instance of the specialized type, or `nil` if the cast fails.
-    /// - Note: Requires experimental feature `valueGenerics`.
-    @_spi(ExperimentalLanguageFeatures)
     public func `as`<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S? {
       return S.init(self)
     }
@@ -290,8 +282,6 @@ public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
     ///
     /// - Returns: An instance of the specialized type.
     /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
-    /// - Note: Requires experimental feature `valueGenerics`.
-    @_spi(ExperimentalLanguageFeatures)
     public func cast<S: ExprSyntaxProtocol>(_ syntaxType: S.Type) -> S {
       return self.as(S.self)!
     }

@@ -205,6 +205,10 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "function signature"
   case \InitializerDeclSyntax.genericWhereClause:
     return "generic where clause"
+  case \InlineArrayTypeSyntax.count:
+    return "count"
+  case \InlineArrayTypeSyntax.element:
+    return "element type"
   case \KeyPathExprSyntax.root:
     return "root"
   case \KeyPathMethodComponentSyntax.arguments:

@@ -1859,6 +1859,20 @@ open class SyntaxVisitor {
   open func visitPost(_ node: InitializerDeclSyntax) {
   }
 
+  /// Visiting `InlineArrayTypeSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: InlineArrayTypeSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `InlineArrayTypeSyntax` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visitPost(_ node: InlineArrayTypeSyntax) {
+  }
+
   /// Visiting ``IntegerLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4779,6 +4793,14 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitInlineArrayTypeSyntaxImpl(_ node: Syntax) {
+    if visit(InlineArrayTypeSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(InlineArrayTypeSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitIntegerLiteralExprSyntaxImpl(_ node: Syntax) {
     if visit(IntegerLiteralExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -6228,6 +6250,8 @@ open class SyntaxVisitor {
       return self.visitInitializerClauseSyntaxImpl(_:)
     case .initializerDecl:
       return self.visitInitializerDeclSyntaxImpl(_:)
+    case .inlineArrayType:
+      return self.visitInlineArrayTypeSyntaxImpl(_:)
     case .integerLiteralExpr:
       return self.visitIntegerLiteralExprSyntaxImpl(_:)
     case .isExpr:
@@ -6820,6 +6844,8 @@ open class SyntaxVisitor {
       self.visitInitializerClauseSyntaxImpl(node)
     case .initializerDecl:
       self.visitInitializerDeclSyntaxImpl(node)
+    case .inlineArrayType:
+      self.visitInlineArrayTypeSyntaxImpl(node)
     case .integerLiteralExpr:
       self.visitIntegerLiteralExprSyntaxImpl(node)
     case .isExpr:

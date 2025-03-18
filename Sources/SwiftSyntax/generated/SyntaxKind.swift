@@ -173,6 +173,8 @@ public enum SyntaxKind: Sendable {
   case inheritedType
   case initializerClause
   case initializerDecl
+  @_spi(ExperimentalLanguageFeatures)
+  case inlineArrayType
   case integerLiteralExpr
   case isExpr
   case isTypePattern
@@ -754,6 +756,8 @@ public enum SyntaxKind: Sendable {
       return InitializerClauseSyntax.self
     case .initializerDecl:
       return InitializerDeclSyntax.self
+    case .inlineArrayType:
+      return InlineArrayTypeSyntax.self
     case .integerLiteralExpr:
       return IntegerLiteralExprSyntax.self
     case .isExpr:

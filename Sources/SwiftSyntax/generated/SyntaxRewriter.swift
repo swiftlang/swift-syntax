@@ -1162,6 +1162,14 @@ open class SyntaxRewriter {
     return DeclSyntax(InitializerDeclSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
+  /// Visit a `InlineArrayTypeSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: InlineArrayTypeSyntax) -> TypeSyntax {
+    return TypeSyntax(InlineArrayTypeSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
+  }
+
   /// Visit a ``IntegerLiteralExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2944,6 +2952,11 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitInlineArrayTypeSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(InlineArrayTypeSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitIntegerLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(IntegerLiteralExprSyntax(unsafeCasting: node)))
   }
@@ -3973,6 +3986,8 @@ open class SyntaxRewriter {
       return self.visitInitializerClauseSyntaxImpl(_:)
     case .initializerDecl:
       return self.visitInitializerDeclSyntaxImpl(_:)
+    case .inlineArrayType:
+      return self.visitInlineArrayTypeSyntaxImpl(_:)
     case .integerLiteralExpr:
       return self.visitIntegerLiteralExprSyntaxImpl(_:)
     case .isExpr:
@@ -4565,6 +4580,8 @@ open class SyntaxRewriter {
       return visitInitializerClauseSyntaxImpl(node)
     case .initializerDecl:
       return visitInitializerDeclSyntaxImpl(node)
+    case .inlineArrayType:
+      return visitInlineArrayTypeSyntaxImpl(node)
     case .integerLiteralExpr:
       return visitIntegerLiteralExprSyntaxImpl(node)
     case .isExpr:

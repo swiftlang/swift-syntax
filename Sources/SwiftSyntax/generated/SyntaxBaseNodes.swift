@@ -1412,7 +1412,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
 
   public init?(_ node: __shared some SyntaxProtocol) {
     switch node.raw.kind {
-    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
+    case .arrayType, .attributedType, .classRestrictionType, .compositionType, .dictionaryType, .functionType, .identifierType, .implicitlyUnwrappedOptionalType, .inlineArrayType, .memberType, .metatypeType, .missingType, .namedOpaqueReturnType, .optionalType, .packElementType, .packExpansionType, .someOrAnyType, .suppressedType, .tupleType:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -1445,6 +1445,7 @@ public struct TypeSyntax: TypeSyntaxProtocol, SyntaxHashable {
       .node(FunctionTypeSyntax.self),
       .node(IdentifierTypeSyntax.self),
       .node(ImplicitlyUnwrappedOptionalTypeSyntax.self),
+      .node(InlineArrayTypeSyntax.self),
       .node(MemberTypeSyntax.self),
       .node(MetatypeTypeSyntax.self),
       .node(MissingTypeSyntax.self),
@@ -1661,6 +1662,7 @@ extension Syntax {
       .node(InheritedTypeSyntax.self),
       .node(InitializerClauseSyntax.self),
       .node(InitializerDeclSyntax.self),
+      .node(InlineArrayTypeSyntax.self),
       .node(IntegerLiteralExprSyntax.self),
       .node(IsExprSyntax.self),
       .node(IsTypePatternSyntax.self),

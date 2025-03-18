@@ -19,7 +19,6 @@ public enum ExperimentalFeature: String, CaseIterable {
   case nonescapableTypes
   case trailingComma
   case coroutineAccessors
-  case valueGenerics
   case abiAttribute
   case keypathWithMethodMembers
   case oldOwnershipOperatorSpellings
@@ -39,8 +38,6 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "TrailingComma"
     case .coroutineAccessors:
       return "CoroutineAccessors"
-    case .valueGenerics:
-      return "ValueGenerics"
     case .abiAttribute:
       return "ABIAttribute"
     case .keypathWithMethodMembers:
@@ -65,8 +62,6 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "trailing commas"
     case .coroutineAccessors:
       return "coroutine accessors"
-    case .valueGenerics:
-      return "value generics"
     case .abiAttribute:
       return "@abi attribute"
     case .keypathWithMethodMembers:

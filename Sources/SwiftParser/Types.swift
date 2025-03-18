@@ -1225,12 +1225,6 @@ extension Parser {
 
 extension Parser {
   mutating func parseValueType() -> RawExprSyntax? {
-    // If the 'ValueGenerics' experimental feature hasn't been added, then don't
-    // attempt to parse values as types.
-    guard self.experimentalFeatures.contains(.valueGenerics) else {
-      return nil
-    }
-
     // Eat any '-' preceding integer literals.
     var minusSign: RawTokenSyntax? = nil
     if self.atContextualPunctuator("-"),

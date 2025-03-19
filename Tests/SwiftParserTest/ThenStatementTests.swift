@@ -297,13 +297,7 @@ final class ThenStatementTests: ParserTestCase {
       """
       then1️⃣
       """,
-      diagnostics: [
-        DiagnosticSpec(
-          message: "expected expression in 'then' statement",
-          fixIts: ["insert expression"]
-        )
-      ],
-      fixedSource: "then <#expression#>"
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("then"))
     )
   }
 
@@ -312,13 +306,7 @@ final class ThenStatementTests: ParserTestCase {
       """
       then1️⃣;
       """,
-      diagnostics: [
-        DiagnosticSpec(
-          message: "expected expression in 'then' statement",
-          fixIts: ["insert expression"]
-        )
-      ],
-      fixedSource: "then <#expression#>;"
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("then"))
     )
   }
 
@@ -342,7 +330,7 @@ final class ThenStatementTests: ParserTestCase {
       then
       0
       """,
-      substructure: ThenStmtSyntax(expression: IntegerLiteralExprSyntax(0))
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("then"))
     )
   }
 
@@ -685,7 +673,10 @@ final class ThenStatementTests: ParserTestCase {
       then
         .foo
       """,
-      substructure: ThenStmtSyntax(expression: MemberAccessExprSyntax(name: .identifier("foo")))
+      substructure: MemberAccessExprSyntax(
+        base: DeclReferenceExprSyntax(baseName: .identifier("then")),
+        name: .identifier("foo")
+      )
     )
   }
 

@@ -172,6 +172,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case inheritedTypeList
   case initializerClause
   case initializerDecl
+  case inlineArrayType
   case inOutExpr
   case integerLiteralExpr
   case isExpr

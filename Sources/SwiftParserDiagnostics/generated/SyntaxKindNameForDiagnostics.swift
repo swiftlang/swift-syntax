@@ -240,6 +240,8 @@ extension SyntaxKind {
       return "inherited type"
     case .initializerDecl:
       return "initializer"
+    case .inlineArrayType:
+      return "inline array type"
     case .integerLiteralExpr:
       return "integer literal"
     case .isExpr:

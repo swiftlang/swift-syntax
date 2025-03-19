@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+@_spi(ExperimentalLanguageFeatures) import SwiftParser
 import SwiftSyntax
 import XCTest
 
@@ -104,5 +105,42 @@ final class ExpressionTypeTests: ParserTestCase {
       substructure: IdentifierTypeSyntax(name: .keyword(.Self)),
       substructureAfterMarker: "1️⃣"
     )
+  }
+
+  func testCanParseTypeInlineArray() {
+    // Make sure we can handle cases where the type is spelled first in
+    // an InlineArray sugar type.
+    let cases: [UInt: String] = [
+      #line: "[3 x Int]",
+      #line: "[[3 x Int]]",
+      #line: "[[Int x 3]]",
+      #line: "[_ x Int]",
+      #line: "[Int x Int]",
+      #line: "[@escaping () -> Int x Int]",
+      #line: "[Int.Type x Int]",
+      #line: "[sending P & Q x Int]",
+      #line: "[(some P & Q) -> Int x Int]",
+      #line: "[~P x Int]",
+      #line: "[(Int, String) x Int]",
+      #line: "[G<T> x Int]",
+      #line: "[[3 x Int] x Int]",
+      #line: "[[Int] x Int]",
+      #line: "[_ x Int]",
+      #line: "[_? x Int]",
+      #line: "[_?x Int]",
+      #line: "[_! x Int]",
+      #line: "[_!x Int]",
+      #line: "[Int?x Int]",
+    ]
+    for (line, type) in cases {
+      assertParse(
+        "S<\(type), 1️⃣X>.self",
+        { ExprSyntax.parse(from: &$0) },
+        substructure: IdentifierTypeSyntax(name: .identifier("X")),
+        substructureAfterMarker: "1️⃣",
+        experimentalFeatures: [.inlineArrayTypeSugar, .valueGenerics],
+        line: line
+      )
+    }
   }
 }

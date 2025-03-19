@@ -301,6 +301,48 @@ public let TYPE_NODES: [Node] = [
   ),
 
   Node(
+    kind: .inlineArrayType,
+    base: .type,
+    experimentalFeature: .inlineArrayTypeSugar,
+    nameForDiagnostics: "inline array type",
+    documentation: "An inline array type `[3 x Int]`, sugar for `InlineArray<3, Int>`.",
+    children: [
+      Child(
+        name: "leftSquare",
+        kind: .token(choices: [.token(.leftSquare)])
+      ),
+      Child(
+        name: "count",
+        kind: .node(kind: .genericArgument),
+        nameForDiagnostics: "count",
+        documentation: """
+          The `count` argument for the inline array type.
+
+          - Note: In semantically valid Swift code, this is always an integer or a wildcard type, e.g `_` in `[_ x Int]`.
+          """
+      ),
+      Child(
+        name: "separator",
+        kind: .token(choices: [.keyword(.x)])
+      ),
+      Child(
+        name: "element",
+        kind: .node(kind: .genericArgument),
+        nameForDiagnostics: "element type",
+        documentation: """
+          The `element` argument for the inline array type.
+
+          - Note: In semantically valid Swift code, this is always a type.
+          """
+      ),
+      Child(
+        name: "rightSquare",
+        kind: .token(choices: [.token(.rightSquare)])
+      ),
+    ]
+  ),
+
+  Node(
     kind: .memberType,
     base: .type,
     nameForDiagnostics: "member type",

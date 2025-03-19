@@ -173,6 +173,8 @@ public enum SyntaxEnum: Sendable {
   case inheritedType(InheritedTypeSyntax)
   case initializerClause(InitializerClauseSyntax)
   case initializerDecl(InitializerDeclSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case inlineArrayType(InlineArrayTypeSyntax)
   case integerLiteralExpr(IntegerLiteralExprSyntax)
   case isExpr(IsExprSyntax)
   case isTypePattern(IsTypePatternSyntax)
@@ -629,6 +631,8 @@ extension Syntax {
       return .initializerClause(InitializerClauseSyntax(self)!)
     case .initializerDecl:
       return .initializerDecl(InitializerDeclSyntax(self)!)
+    case .inlineArrayType:
+      return .inlineArrayType(InlineArrayTypeSyntax(self)!)
     case .integerLiteralExpr:
       return .integerLiteralExpr(IntegerLiteralExprSyntax(self)!)
     case .isExpr:
@@ -1287,6 +1291,8 @@ public enum TypeSyntaxEnum {
   case functionType(FunctionTypeSyntax)
   case identifierType(IdentifierTypeSyntax)
   case implicitlyUnwrappedOptionalType(ImplicitlyUnwrappedOptionalTypeSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case inlineArrayType(InlineArrayTypeSyntax)
   case memberType(MemberTypeSyntax)
   case metatypeType(MetatypeTypeSyntax)
   case missingType(MissingTypeSyntax)
@@ -1319,6 +1325,8 @@ extension TypeSyntax {
       return .identifierType(IdentifierTypeSyntax(self)!)
     case .implicitlyUnwrappedOptionalType:
       return .implicitlyUnwrappedOptionalType(ImplicitlyUnwrappedOptionalTypeSyntax(self)!)
+    case .inlineArrayType:
+      return .inlineArrayType(InlineArrayTypeSyntax(self)!)
     case .memberType:
       return .memberType(MemberTypeSyntax(self)!)
     case .metatypeType:

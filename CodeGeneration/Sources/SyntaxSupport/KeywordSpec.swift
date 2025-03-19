@@ -293,6 +293,7 @@ public enum Keyword: CaseIterable {
   case willSet
   case witness_method
   case wrt
+  case x
   case yield
 
   public var spec: KeywordSpec {
@@ -735,6 +736,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("witness_method")
     case .wrt:
       return KeywordSpec("wrt")
+    case .x:
+      return KeywordSpec("x", experimentalFeature: .inlineArrayTypeSugar)
     case .yield:
       return KeywordSpec("yield")
     }

@@ -55,6 +55,9 @@ extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of `_move` and `_borrow` as ownership operators.
   public static let oldOwnershipOperatorSpellings = Self (rawValue: 1 << 9)
 
+  /// Whether to enable the parsing of sugar type for InlineArray.
+  public static let inlineArrayTypeSugar = Self (rawValue: 1 << 10)
+
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
   public init?(name: String) {
@@ -79,6 +82,8 @@ extension Parser.ExperimentalFeatures {
       self = .keypathWithMethodMembers
     case "OldOwnershipOperatorSpellings":
       self = .oldOwnershipOperatorSpellings
+    case "InlineArrayTypeSugar":
+      self = .inlineArrayTypeSugar
     default:
       return nil
     }

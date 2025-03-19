@@ -380,6 +380,11 @@ class ValidateSyntaxNodes: XCTestCase {
           message:
             "child 'defaultKeyword' has a single keyword as its only token choice and is followed by a colon. It should thus be named 'defaultLabel'"
         ),
+        // 'separator' is more descriptive than 'xKeyword'
+        ValidationFailure(
+          node: .inlineArrayType,
+          message: "child 'separator' has a single keyword as its only token choice and should thus be named 'xKeyword'"
+        ),
       ]
     )
   }
@@ -522,6 +527,12 @@ class ValidateSyntaxNodes: XCTestCase {
           node: .multipleTrailingClosureElement,
           message:
             "child 'closure' is named inconsistently with 'FunctionCallExprSyntax.trailingClosure', which has the same type ('ClosureExprSyntax')"
+        ),
+        // Giving these fields distinct names is more helpful.
+        ValidationFailure(
+          node: .inlineArrayType,
+          message:
+            "child 'element' is named inconsistently with 'InlineArrayTypeSyntax.count', which has the same type ('GenericArgumentSyntax')"
         ),
       ]
     )

@@ -295,7 +295,7 @@ final class ThenStatementTests: ParserTestCase {
   func testThenStmt22() {
     assertParse(
       """
-      then1️⃣
+      then
       """,
       substructure: DeclReferenceExprSyntax(baseName: .identifier("then"))
     )
@@ -304,7 +304,7 @@ final class ThenStatementTests: ParserTestCase {
   func testThenStmt23() {
     assertParse(
       """
-      then1️⃣;
+      then;
       """,
       substructure: DeclReferenceExprSyntax(baseName: .identifier("then"))
     )

@@ -938,14 +938,19 @@ extension TokenConsumer {
       return true
 
     case .keyword:
+      // Some lexer-classified keywords can start expressions.
       switch Keyword(next.tokenText) {
-      case .as, .is, .in:
-        // E.g. <word> is <expr>
-        return false
-      default:
-        // Other lexer-classified keywords are identifier-like.
-        // E.g. <word> self
+      case .Any, .Self, .self, .super, .`init`, .true, .false, .nil:
         return true
+      case .repeat, .try:
+        return true
+      case .if, .switch:
+        return true
+      case .do where self.experimentalFeatures.contains(.doExpressions):
+        return true
+
+      default:
+        return false
       }
 
     case .binaryOperator, .equal, .arrow, .infixQuestionMark:

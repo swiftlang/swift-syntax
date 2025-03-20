@@ -180,4 +180,9 @@ public let TRIVIAS: [Trivia] = [
     characters: "\u{000B}",
     traits: [.whitespace]
   ),
+
+  Trivia(
+    name: "BoxDrawing",
+    comment: #"Box-drawing characters which have no syntactic significance."#
+  ),
 ]

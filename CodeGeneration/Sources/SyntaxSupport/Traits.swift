@@ -45,8 +45,16 @@ public let TRAITS: [Trait] = [
   Trait(
     traitName: "Braced",
     children: [
-      Child(name: "leftBrace", kind: .token(choices: [.token(.leftBrace)])),
-      Child(name: "rightBrace", kind: .token(choices: [.token(.rightBrace)])),
+      Child(name: "leftBrace", kind: .token(choices: [
+        .token(.leftBrace),
+        .token(.leadingBoxCorner),
+        .token(.leadingBoxJunction),
+      ], defaultAt: 0)),
+      Child(name: "rightBrace", kind: .token(choices: [
+        .token(.rightBrace),
+        .token(.trailingBoxCorner),
+        .token(.trailingBoxJunction),
+      ], defaultAt: 0)),
     ]
   ),
   Trait(

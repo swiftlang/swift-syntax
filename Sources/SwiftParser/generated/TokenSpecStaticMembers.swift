@@ -84,6 +84,14 @@ extension TokenSpec {
     return TokenSpec(.integerLiteral)
   }
 
+  static var leadingBoxCorner: TokenSpec {
+    return TokenSpec(.leadingBoxCorner)
+  }
+
+  static var leadingBoxJunction: TokenSpec {
+    return TokenSpec(.leadingBoxJunction)
+  }
+
   static var leftAngle: TokenSpec {
     return TokenSpec(.leftAngle)
   }
@@ -206,6 +214,14 @@ extension TokenSpec {
 
   static var stringSegment: TokenSpec {
     return TokenSpec(.stringSegment)
+  }
+
+  static var trailingBoxCorner: TokenSpec {
+    return TokenSpec(.trailingBoxCorner)
+  }
+
+  static var trailingBoxJunction: TokenSpec {
+    return TokenSpec(.trailingBoxJunction)
   }
 
   static var unknown: TokenSpec {

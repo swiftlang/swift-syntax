@@ -20,7 +20,6 @@ public enum ExperimentalFeature: String, CaseIterable {
   case trailingComma
   case coroutineAccessors
   case valueGenerics
-  case abiAttribute
   case keypathWithMethodMembers
   case oldOwnershipOperatorSpellings
 
@@ -41,8 +40,6 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "CoroutineAccessors"
     case .valueGenerics:
       return "ValueGenerics"
-    case .abiAttribute:
-      return "ABIAttribute"
     case .keypathWithMethodMembers:
       return "KeypathWithMethodMembers"
     case .oldOwnershipOperatorSpellings:
@@ -67,8 +64,6 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "coroutine accessors"
     case .valueGenerics:
       return "value generics"
-    case .abiAttribute:
-      return "@abi attribute"
     case .keypathWithMethodMembers:
       return "keypaths with method members"
     case .oldOwnershipOperatorSpellings:

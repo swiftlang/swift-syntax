@@ -360,8 +360,6 @@ public struct RawReturnStmtSyntax: RawStmtSyntaxNodeProtocol {
 public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
   public enum LeftType: RawSyntaxNodeProtocol {
     case type(RawTypeSyntax)
-    /// - Note: Requires experimental feature `valueGenerics`.
-    @_spi(ExperimentalLanguageFeatures)
     case expr(RawExprSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -391,8 +389,6 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
       self = .type(RawTypeSyntax(type))
     }
 
-    /// - Note: Requires experimental feature `valueGenerics`.
-    @_spi(ExperimentalLanguageFeatures)
     public init(expr: some RawExprSyntaxNodeProtocol) {
       self = .expr(RawExprSyntax(expr))
     }
@@ -400,8 +396,6 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
 
   public enum RightType: RawSyntaxNodeProtocol {
     case type(RawTypeSyntax)
-    /// - Note: Requires experimental feature `valueGenerics`.
-    @_spi(ExperimentalLanguageFeatures)
     case expr(RawExprSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -431,8 +425,6 @@ public struct RawSameTypeRequirementSyntax: RawSyntaxNodeProtocol {
       self = .type(RawTypeSyntax(type))
     }
 
-    /// - Note: Requires experimental feature `valueGenerics`.
-    @_spi(ExperimentalLanguageFeatures)
     public init(expr: some RawExprSyntaxNodeProtocol) {
       self = .expr(RawExprSyntax(expr))
     }

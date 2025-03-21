@@ -909,15 +909,17 @@ extension TokenConsumer {
   ///   - acceptClosure: When the next token is '{' and it looks like a closure, use this value as the result.
   ///   - preferPostfixExpr: When the next token is '.', '(', or '[' and there is a space between the word,
   ///     use `!preferPostfixExpr` as the result.
+  ///   - allowNextLineOperand: Whether the keyword-prefixed syntax accepts the operand on the next line.
   mutating func atContextualKeywordPrefixedSyntax(
     exprFlavor: Parser.ExprFlavor,
     acceptClosure: Bool = false,
-    preferPostfixExpr: Bool = true
+    preferPostfixExpr: Bool = true,
+    allowNextLineOperand: Bool = false
   ) -> Bool {
     let next = peek()
 
     // The next token must be at the same line.
-    if next.isAtStartOfLine {
+    if next.isAtStartOfLine && !allowNextLineOperand {
       return false
     }
 
@@ -990,12 +992,13 @@ extension TokenConsumer {
       //   - Call vs. tuple expression
       //   - Subscript vs. collection literal
       //
-      let hasSpace = (next.leadingTriviaByteLength + currentToken.trailingTriviaByteLength) != 0
-      if !hasSpace {
-        // No space, the word is an decl-ref expression
+      if preferPostfixExpr {
         return false
       }
-      return !preferPostfixExpr
+
+      // If there's no space between the tokens, consider it's an expression.
+      // Otherwise, it looks like a keyword followed by an expression.
+      return (next.leadingTriviaByteLength + currentToken.trailingTriviaByteLength) != 0
 
     case .leftBrace:
       // E.g. <word> { ... }
@@ -1003,13 +1006,14 @@ extension TokenConsumer {
       //
       //   - Trailing closure vs. immediately-invoked closure
       //
-      // Checking whitespace between the word cannot help this because people
-      // usually put a space before trailing closures. Even though that is source
-      // breaking, we prefer parsing it as a keyword if the syntax accepts
-      // immediately-invoked closure patterns. E.g. 'unsafe { ... }()'
       if !acceptClosure {
         return false
       }
+
+      // Checking whitespace between the word cannot help this because people
+      // usually put a space before trailing closures. Even though that is source
+      // breaking, we prefer parsing it as a keyword if the syntax accepts
+      // expressions starting with a closure. E.g. 'unsafe { ... }()'
       return self.withLookahead {
         $0.consumeAnyToken()
         return $0.atValidTrailingClosure(flavor: exprFlavor)
@@ -1068,9 +1072,16 @@ extension Parser.Lookahead {
       // with a closure pattern.
       return self.peek().rawTokenKind == .leftBrace
     case .yield?, .discard?:
-      return atContextualKeywordPrefixedSyntax(exprFlavor: .basic, preferPostfixExpr: true)
+      return atContextualKeywordPrefixedSyntax(
+        exprFlavor: .basic,
+        preferPostfixExpr: true
+      )
     case .then?:
-      return atContextualKeywordPrefixedSyntax(exprFlavor: .basic, preferPostfixExpr: false)
+      return atContextualKeywordPrefixedSyntax(
+        exprFlavor: .basic,
+        preferPostfixExpr: false,
+        allowNextLineOperand: !preferExpr
+      )
 
     case nil:
       return false

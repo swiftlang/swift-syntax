@@ -330,7 +330,7 @@ final class ThenStatementTests: ParserTestCase {
       then
       0
       """,
-      substructure: DeclReferenceExprSyntax(baseName: .identifier("then"))
+      substructure: ThenStmtSyntax(expression: IntegerLiteralExprSyntax(0))
     )
   }
 
@@ -673,10 +673,7 @@ final class ThenStatementTests: ParserTestCase {
       then
         .foo
       """,
-      substructure: MemberAccessExprSyntax(
-        base: DeclReferenceExprSyntax(baseName: .identifier("then")),
-        name: .identifier("foo")
-      )
+      substructure: ThenStmtSyntax(expression: MemberAccessExprSyntax(name: .identifier("foo")))
     )
   }
 

@@ -609,21 +609,22 @@ final class StatementTests: ParserTestCase {
 
     assertParse(
       """
-      discard 1️⃣case
+      discard1️⃣ 2️⃣case
       """,
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected expression in 'discard' statement",
-          fixIts: ["insert expression"]
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
         ),
         DiagnosticSpec(
-          locationMarker: "1️⃣",
+          locationMarker: "2️⃣",
           message: "'case' can only appear inside a 'switch' statement or 'enum' declaration"
         ),
       ],
       fixedSource: """
-        discard <#expression#>case
+        discard
+        case
         """
     )
 

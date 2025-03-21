@@ -900,6 +900,128 @@ extension Parser {
   }
 }
 
+extension TokenConsumer {
+  /// Disambiguate the word at the cursor looks like a keyword-prefixed syntax.
+  ///
+  /// - Parameters:
+  ///   - exprFlavor: The expression context. When using this function for a statement, e.g. 'yield',
+  ///     use `.basic`.
+  ///   - acceptClosure: When the next token is '{' and it looks like a closure, use this value as the result.
+  ///   - preferPostfixExpr: When the next token is '.', '(', or '[' and there is a space between the word,
+  ///     use `!preferPostfixExpr` as the result.
+  ///   - allowNextLineOperand: Whether the keyword-prefixed syntax accepts the operand on the next line.
+  mutating func atContextualKeywordPrefixedSyntax(
+    exprFlavor: Parser.ExprFlavor,
+    acceptClosure: Bool = false,
+    preferPostfixExpr: Bool = true,
+    allowNextLineOperand: Bool = false
+  ) -> Bool {
+    let next = peek()
+
+    // The next token must be at the same line.
+    if next.isAtStartOfLine && !allowNextLineOperand {
+      return false
+    }
+
+    switch next.rawTokenKind {
+
+    case .identifier, .dollarIdentifier, .wildcard:
+      // E.g. <word> foo
+      return true
+
+    case .integerLiteral, .floatLiteral,
+      .stringQuote, .multilineStringQuote, .singleQuote, .rawStringPoundDelimiter,
+      .regexSlash, .regexPoundDelimiter:
+      // E.g. <word> 1
+      return true
+
+    case .prefixAmpersand, .prefixOperator, .atSign, .backslash, .pound:
+      // E.g. <word> !<expr>
+      return true
+
+    case .keyword:
+      // Some lexer-classified keywords can start expressions.
+      switch Keyword(next.tokenText) {
+      case .Any, .Self, .self, .super, .`init`, .true, .false, .nil:
+        return true
+      case .repeat, .try:
+        return true
+      case .if, .switch:
+        return true
+      case .do where self.experimentalFeatures.contains(.doExpressions):
+        return true
+
+      default:
+        return false
+      }
+
+    case .binaryOperator, .equal, .arrow, .infixQuestionMark:
+      // E.g. <word> != <expr>
+      return false
+    case .postfixOperator, .postfixQuestionMark, .exclamationMark, .ellipsis:
+      // E.g. <word>++
+      return false
+    case .rightBrace, .rightParen, .rightSquare:
+      // E.g. <word>]
+      return false
+    case .colon, .comma:
+      // E.g. <word>,
+      return false
+    case .semicolon, .endOfFile, .poundElse, .poundElseif, .poundEndif:
+      return false
+
+    case .leftAngle, .rightAngle:
+      // Lexer never produce these token kinds.
+      return false
+
+    case .stringSegment, .regexLiteralPattern:
+      // Calling this function inside a string/regex literal?
+      return false
+
+    case .backtick, .poundAvailable, .poundUnavailable,
+      .poundSourceLocation, .poundIf, .shebang, .unknown:
+      // These are invalid for both cases
+      // E.g. <word> #available
+      return false
+
+    case .period, .leftParen, .leftSquare:
+      // These are truly ambiguous. They can be both start of postfix expression
+      // suffix or start of primary expression:
+      //
+      //   - Member access vs. implicit member expression
+      //   - Call vs. tuple expression
+      //   - Subscript vs. collection literal
+      //
+      if preferPostfixExpr {
+        return false
+      }
+
+      // If there's no space between the tokens, consider it's an expression.
+      // Otherwise, it looks like a keyword followed by an expression.
+      return (next.leadingTriviaByteLength + currentToken.trailingTriviaByteLength) != 0
+
+    case .leftBrace:
+      // E.g. <word> { ... }
+      // Trailing closure is also ambiguous:
+      //
+      //   - Trailing closure vs. immediately-invoked closure
+      //
+      if !acceptClosure {
+        return false
+      }
+
+      // Checking whitespace between the word cannot help this because people
+      // usually put a space before trailing closures. Even though that is source
+      // breaking, we prefer parsing it as a keyword if the syntax accepts
+      // expressions starting with a closure. E.g. 'unsafe { ... }()'
+      return self.withLookahead {
+        $0.consumeAnyToken()
+        return $0.atValidTrailingClosure(flavor: exprFlavor)
+      }
+    }
+  }
+}
+
 // MARK: Lookahead
 
 extension Parser.Lookahead {
@@ -949,89 +1071,21 @@ extension Parser.Lookahead {
       // FIXME: 'repeat' followed by '{' could be a pack expansion
       // with a closure pattern.
       return self.peek().rawTokenKind == .leftBrace
-    case .yield?:
-      switch self.peek().rawTokenKind {
-      case .prefixAmpersand:
-        // "yield &" always denotes a yield statement.
-        return true
-      case .leftParen:
-        // "yield (", by contrast, must be disambiguated with additional
-        // context. We always consider it an apply expression of a function
-        // called `yield` for the purposes of the parse.
-        return false
-      case .binaryOperator:
-        // 'yield &= x' treats yield as an identifier.
-        return false
-      default:
-        // "yield" followed immediately by any other token is likely a
-        // yield statement of some singular expression.
-        return !self.peek().isAtStartOfLine
-      }
-    case .discard?:
-      let next = peek()
-      // The thing to be discarded must be on the same line as `discard`.
-      if next.isAtStartOfLine {
-        return false
-      }
-      switch next.rawTokenKind {
-      case .identifier, .keyword:
-        // Since some identifiers like "self" are classified as keywords,
-        // we want to recognize those too, to handle "discard self". We also
-        // accept any identifier since we want to emit a nice error message
-        // later on during type checking.
-        return true
-      default:
-        // any other token following "discard" means it's not the statement.
-        // For example, could be the function call "discard()".
-        return false
-      }
-
-    case .then:
-      return atStartOfThenStatement(preferExpr: preferExpr)
+    case .yield?, .discard?:
+      return atContextualKeywordPrefixedSyntax(
+        exprFlavor: .basic,
+        preferPostfixExpr: true
+      )
+    case .then?:
+      return atContextualKeywordPrefixedSyntax(
+        exprFlavor: .basic,
+        preferPostfixExpr: false,
+        allowNextLineOperand: !preferExpr
+      )
 
     case nil:
       return false
     }
-  }
-
-  /// Whether we're currently at a `then` token that should be parsed as a
-  /// `then` statement.
-  mutating func atStartOfThenStatement(preferExpr: Bool) -> Bool {
-    guard self.at(.keyword(.then)) else {
-      return false
-    }
-
-    // If we prefer an expr and aren't at the start of a newline, then don't
-    // parse a ThenStmt.
-    if preferExpr && !self.atStartOfLine {
-      return false
-    }
-
-    // If 'then' is followed by a binary or postfix operator, prefer to parse as
-    // an expr.
-    if peek(isAtAnyIn: BinaryOperatorLike.self) != nil || peek(isAtAnyIn: PostfixOperatorLike.self) != nil {
-      return false
-    }
-
-    switch PrepareForKeywordMatch(peek()) {
-    case TokenSpec(.is), TokenSpec(.as):
-      // Treat 'is' and 'as' like the binary operator case, and parse as an
-      // expr.
-      return false
-
-    case .leftBrace:
-      // This is a trailing closure.
-      return false
-
-    case .leftParen, .leftSquare, .period:
-      // These are handled based on whether there is trivia between the 'then'
-      // and the token. If so, it's a 'then' statement. Otherwise it should
-      // be treated as an expression, e.g `then(...)`, `then[...]`, `then.foo`.
-      return !self.currentToken.trailingTriviaText.isEmpty || !peek().leadingTriviaText.isEmpty
-    default:
-      break
-    }
-    return true
   }
 
   /// Returns whether the parser's current position is the start of a switch case,

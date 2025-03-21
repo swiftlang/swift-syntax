@@ -381,20 +381,6 @@ extension Parser {
     }
   }
 
-  /// Whether the current token is a valid contextual exprssion modifier like
-  /// `copy`, `consume`.
-  ///
-  /// `copy` etc. are only contextually a keyword if they are followed by an
-  /// identifier or keyword on the same line. We do this to ensure that we do
-  /// not break any copy functions defined by users.
-  private mutating func atContextualExpressionModifier() -> Bool {
-    return self.peek(
-      isAt: TokenSpec(.identifier, allowAtStartOfLine: false),
-      TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
-      TokenSpec(.self, allowAtStartOfLine: false)
-    )
-  }
-
   /// Parse an expression sequence element.
   mutating func parseSequenceExpressionElement(
     flavor: ExprFlavor,
@@ -445,27 +431,7 @@ extension Parser {
         )
       )
     case (.unsafe, let handle)?:
-      if self.peek().isAtStartOfLine
-        // Closing paired syntax
-        || self.peek(isAt: .rightParen, .rightSquare, .rightBrace)
-        // Assignment
-        || self.peek(isAt: .equal)
-        // As an argument label or in a list context.
-        || self.peek(isAt: .colon, .comma)
-        // Start of a closure in a context where it should be interpreted as
-        // being part of a statement.
-        || (flavor == .stmtCondition && self.peek(isAt: .leftBrace))
-        // Avoid treating as an "unsafe" expression when there is no trivia
-        // following the "unsafe" and the following token could either be a
-        // postfix expression or a subexpression:
-        //   - Member access vs. leading .
-        //   - Call vs. tuple expression.
-        //   - Subscript vs. array or dictionary expression
-        || (self.peek(isAt: .period, .leftParen, .leftSquare) && self.peek().leadingTriviaByteLength == 0
-          && self.currentToken.trailingTriviaByteLength == 0)
-        // End of file
-        || self.peek(isAt: .endOfFile)
-      {
+      if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor, acceptClosure: true, preferPostfixExpr: false) {
         break EXPR_PREFIX
       }
 
@@ -486,7 +452,7 @@ extension Parser {
       assert(self.experimentalFeatures.contains(.oldOwnershipOperatorSpellings))
       fallthrough
     case (.borrow, let handle)?:
-      if !atContextualExpressionModifier() {
+      if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) {
         break EXPR_PREFIX
       }
       let borrowTok = self.eat(handle)
@@ -503,7 +469,7 @@ extension Parser {
       )
 
     case (.copy, let handle)?:
-      if !atContextualExpressionModifier() {
+      if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) {
         break EXPR_PREFIX
       }
 
@@ -524,7 +490,7 @@ extension Parser {
       assert(self.experimentalFeatures.contains(.oldOwnershipOperatorSpellings))
       fallthrough
     case (.consume, let handle)?:
-      if !atContextualExpressionModifier() {
+      if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) {
         break EXPR_PREFIX
       }
 
@@ -546,7 +512,7 @@ extension Parser {
       return RawExprSyntax(parsePackExpansionExpr(repeatHandle: handle, flavor: flavor, pattern: pattern))
 
     case (.each, let handle)?:
-      if !atContextualExpressionModifier() {
+      if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) {
         break EXPR_PREFIX
       }
 
@@ -561,7 +527,7 @@ extension Parser {
       )
 
     case (.any, _)?:
-      if !atContextualExpressionModifier() && !self.peek().isContextualPunctuator("~") {
+      if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) && !self.peek().isContextualPunctuator("~") {
         break EXPR_PREFIX
       }
 

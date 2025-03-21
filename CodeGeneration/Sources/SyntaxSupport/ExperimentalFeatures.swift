@@ -81,6 +81,17 @@ public enum ExperimentalFeature: String, CaseIterable {
     }
   }
 
+  public var isAlwaysEnabledInParser: Bool {
+    switch self {
+    case .abiAttribute:
+      // `@abi` attributes should be always parsed because not parsing its interior
+      // breaks the tree catastrophically.
+      return true
+    default:
+      return false
+    }
+  }
+
   /// The token that represents the experimental feature case name.
   public var token: TokenSyntax {
     .identifier(rawValue)

@@ -58,6 +58,11 @@ extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of sugar type for InlineArray.
   public static let inlineArrayTypeSugar = Self (rawValue: 1 << 10)
 
+  /// Set of features always enabled.
+  static var alwaysEnabledFeatures: Self {
+    [.abiAttribute]
+  }
+
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
   public init?(name: String) {

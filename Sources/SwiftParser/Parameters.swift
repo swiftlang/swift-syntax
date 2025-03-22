@@ -156,7 +156,22 @@ extension Parser {
       defaultValue = nil
     }
 
-    let trailingComma = self.consume(if: .comma)
+    var trailingComma: Token?
+    if self.at(.comma) {
+      trailingComma = self.consume(if: .comma)
+    } else if !self.at(.rightParen) {
+      let canParseIdentifier: Bool = withLookahead {
+        $0.canParseTypeIdentifier(allowKeyword: false)
+      }
+
+      let canParseAttribute: Bool = withLookahead {
+        ($0.consume(if: .atSign) != nil && $0.canParseCustomAttribute())
+      }
+
+      if canParseIdentifier || canParseAttribute {
+        trailingComma = Token(missing: .comma, arena: self.arena)
+      }
+    }
 
     return RawFunctionParameterSyntax(
       attributes: attrs,

@@ -214,6 +214,21 @@ public protocol BuildConfiguration {
   /// pointer authentication scheme.
   func isActiveTargetPointerAuthentication(name: String) throws -> Bool
 
+  /// Determine whether the given name is the active target object file format (e.g., ELF).
+  ///
+  /// The target object file format can only be queried by an experimental 
+  /// syntax `_objectFileFormat(<name>)`, e.g.,
+  ///
+  /// ```swift
+  /// #if _objectFileFormat(ELF)
+  /// // Special logic for ELF object file formats
+  /// #endif
+  /// ```
+  /// - Parameters:
+  ///   - name: The name of the object file format.
+  /// - Returns: Whether the target object file format matches the given name.
+  func isActiveTargetObjectFileFormat(name: String) throws -> Bool
+
   /// The bit width of a data pointer for the target architecture.
   ///
   /// The target's pointer bit width (which also corresponds to the number of

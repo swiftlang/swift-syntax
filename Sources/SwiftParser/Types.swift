@@ -577,6 +577,11 @@ extension Parser {
 }
 
 extension Parser {
+  /// Whether the parser is at the start of an InlineArray type sugar body.
+  func isAtStartOfInlineArrayTypeBody() -> Bool {
+    withLookahead { $0.canParseStartOfInlineArrayTypeBody() }
+  }
+
   /// Parse an array or dictionary type..
   mutating func parseCollectionType() -> RawTypeSyntax {
     if let remaingingTokens = remainingTokensIfMaximumNestingLevelReached() {
@@ -592,6 +597,15 @@ extension Parser {
     }
 
     let (unexpectedBeforeLSquare, leftsquare) = self.expect(.leftSquare)
+
+    // Check to see if we're at the start of an InlineArray type.
+    if self.isAtStartOfInlineArrayTypeBody() {
+      return self.parseInlineArrayType(
+        unexpectedBeforeLSquare: unexpectedBeforeLSquare,
+        leftSquare: leftsquare
+      )
+    }
+
     let firstType = self.parseType()
     if let colon = self.consume(if: .colon) {
       let secondType = self.parseType()
@@ -622,10 +636,46 @@ extension Parser {
       )
     }
   }
+
+  mutating func parseInlineArrayType(
+    unexpectedBeforeLSquare: RawUnexpectedNodesSyntax?,
+    leftSquare: RawTokenSyntax
+  ) -> RawTypeSyntax {
+    precondition(self.experimentalFeatures.contains(.inlineArrayTypeSugar))
+
+    // We allow both values and types here and for the element type for
+    // better recovery in cases where the user writes e.g '[Int x 3]'.
+    let count = self.parseGenericArgumentType()
+
+    let (unexpectedBeforeSeparator, separator) = self.expect(
+      TokenSpec(.x, allowAtStartOfLine: false)
+    )
+
+    let element = self.parseGenericArgumentType()
+
+    let (unexpectedBeforeRightSquare, rightSquare) = self.expect(.rightSquare)
+
+    return RawTypeSyntax(
+      RawInlineArrayTypeSyntax(
+        unexpectedBeforeLSquare,
+        leftSquare: leftSquare,
+        count: .init(argument: count, trailingComma: nil, arena: self.arena),
+        unexpectedBeforeSeparator,
+        separator: separator,
+        element: .init(argument: element, trailingComma: nil, arena: self.arena),
+        unexpectedBeforeRightSquare,
+        rightSquare: rightSquare,
+        arena: self.arena
+      )
+    )
+  }
 }
 
 extension Parser.Lookahead {
   mutating func canParseType() -> Bool {
+    // 'repeat' starts a pack expansion type
+    self.consume(if: .keyword(.repeat))
+
     guard self.canParseTypeScalar() else {
       return false
     }
@@ -656,9 +706,6 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseTypeScalar() -> Bool {
-    // 'repeat' starts a pack expansion type
-    self.consume(if: .keyword(.repeat))
-
     self.skipTypeAttributeList()
 
     guard self.canParseSimpleOrCompositionType() else {
@@ -714,15 +761,7 @@ extension Parser.Lookahead {
       }
     case TokenSpec(.leftSquare):
       self.consumeAnyToken()
-      guard self.canParseType() else {
-        return false
-      }
-      if self.consume(if: .colon) != nil {
-        guard self.canParseType() else {
-          return false
-        }
-      }
-      guard self.consume(if: .rightSquare) != nil else {
+      guard self.canParseCollectionTypeBody() else {
         return false
       }
     case TokenSpec(.wildcard):
@@ -760,6 +799,59 @@ extension Parser.Lookahead {
     }
 
     return true
+  }
+
+  /// Checks whether we can parse the start of an InlineArray type. This does
+  /// not include the element type.
+  mutating func canParseStartOfInlineArrayTypeBody() -> Bool {
+    guard self.experimentalFeatures.contains(.inlineArrayTypeSugar) else {
+      return false
+    }
+
+    // We must have at least '[<type-or-integer> x', which cannot be any other
+    // kind of expression or type. We specifically look for both types and
+    // integers for better recovery in e.g cases where the user writes e.g
+    // '[Int x 2]'. We only do type-scalar since variadics would be ambiguous
+    // e.g 'Int...x'.
+    guard self.canParseTypeScalar() || self.canParseIntegerLiteral() else {
+      return false
+    }
+
+    // We don't currently allow multi-line since that would require
+    // disambiguation with array literals.
+    return self.consume(if: TokenSpec(.x, allowAtStartOfLine: false)) != nil
+  }
+
+  mutating func canParseInlineArrayTypeBody() -> Bool {
+    guard self.canParseStartOfInlineArrayTypeBody() else {
+      return false
+    }
+    // Note we look for both types and integers for better recovery in e.g cases
+    // where the user writes e.g '[Int x 2]'.
+    guard self.canParseGenericArgument() else {
+      return false
+    }
+    return self.consume(if: .rightSquare) != nil
+  }
+
+  mutating func canParseCollectionTypeBody() -> Bool {
+    // Check to see if we have an InlineArray sugar type.
+    if self.experimentalFeatures.contains(.inlineArrayTypeSugar) {
+      var lookahead = self.lookahead()
+      if lookahead.canParseInlineArrayTypeBody() {
+        self = lookahead
+        return true
+      }
+    }
+    guard self.canParseType() else {
+      return false
+    }
+    if self.consume(if: .colon) != nil {
+      guard self.canParseType() else {
+        return false
+      }
+    }
+    return self.consume(if: .rightSquare) != nil
   }
 
   mutating func canParseTupleBodyType() -> Bool {
@@ -863,6 +955,24 @@ extension Parser.Lookahead {
     return lookahead.currentToken.isGenericTypeDisambiguatingToken
   }
 
+  mutating func canParseIntegerLiteral() -> Bool {
+    if self.currentToken.tokenText == "-", self.peek(isAt: .integerLiteral) {
+      self.consumeAnyToken()
+      self.consumeAnyToken()
+      return true
+    }
+    if self.consume(if: .integerLiteral) != nil {
+      return true
+    }
+    return false
+  }
+
+  mutating func canParseGenericArgument() -> Bool {
+    // A generic argument can either be a type or an integer literal (who is
+    // optionally negative).
+    self.canParseType() || self.canParseIntegerLiteral()
+  }
+
   mutating func consumeGenericArguments() -> Bool {
     // Parse the opening '<'.
     guard self.consume(ifPrefix: "<", as: .leftAngle) != nil else {
@@ -872,21 +982,9 @@ extension Parser.Lookahead {
     if !self.at(prefix: ">") {
       var loopProgress = LoopProgressCondition()
       repeat {
-        // A generic argument can either be a type or an integer literal (who is
-        // optionally negative).
-        if self.canParseType() {
-          continue
-        } else if self.currentToken.tokenText == "-",
-          self.peek(isAt: .integerLiteral)
-        {
-          self.consumeAnyToken()
-          self.consumeAnyToken()
-          continue
-        } else if self.consume(if: .integerLiteral) != nil {
-          continue
+        guard self.canParseGenericArgument() else {
+          return false
         }
-
-        return false
         // Parse the comma, if the list continues.
       } while self.consume(if: .comma) != nil && self.hasProgressed(&loopProgress)
     }

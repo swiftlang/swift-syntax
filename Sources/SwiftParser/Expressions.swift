@@ -1557,6 +1557,15 @@ extension Parser {
 
     let (unexpectedBeforeLSquare, lsquare) = self.expect(.leftSquare)
 
+    // Check to see if we have an InlineArray type in expression position.
+    if self.isAtStartOfInlineArrayTypeBody() {
+      let type = self.parseInlineArrayType(
+        unexpectedBeforeLSquare: unexpectedBeforeLSquare,
+        leftSquare: lsquare
+      )
+      return RawExprSyntax(RawTypeExprSyntax(type: type, arena: self.arena))
+    }
+
     if let rsquare = self.consume(if: .rightSquare) {
       return RawExprSyntax(
         RawArrayExprSyntax(

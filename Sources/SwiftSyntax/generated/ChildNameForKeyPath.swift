@@ -1898,6 +1898,28 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "body"
   case \InitializerDeclSyntax.unexpectedAfterBody:
     return "unexpectedAfterBody"
+  case \InlineArrayTypeSyntax.unexpectedBeforeLeftSquare:
+    return "unexpectedBeforeLeftSquare"
+  case \InlineArrayTypeSyntax.leftSquare:
+    return "leftSquare"
+  case \InlineArrayTypeSyntax.unexpectedBetweenLeftSquareAndCount:
+    return "unexpectedBetweenLeftSquareAndCount"
+  case \InlineArrayTypeSyntax.count:
+    return "count"
+  case \InlineArrayTypeSyntax.unexpectedBetweenCountAndSeparator:
+    return "unexpectedBetweenCountAndSeparator"
+  case \InlineArrayTypeSyntax.separator:
+    return "separator"
+  case \InlineArrayTypeSyntax.unexpectedBetweenSeparatorAndElement:
+    return "unexpectedBetweenSeparatorAndElement"
+  case \InlineArrayTypeSyntax.element:
+    return "element"
+  case \InlineArrayTypeSyntax.unexpectedBetweenElementAndRightSquare:
+    return "unexpectedBetweenElementAndRightSquare"
+  case \InlineArrayTypeSyntax.rightSquare:
+    return "rightSquare"
+  case \InlineArrayTypeSyntax.unexpectedAfterRightSquare:
+    return "unexpectedAfterRightSquare"
   case \IntegerLiteralExprSyntax.unexpectedBeforeLiteral:
     return "unexpectedBeforeLiteral"
   case \IntegerLiteralExprSyntax.literal:

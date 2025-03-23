@@ -23,6 +23,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case abiAttribute
   case keypathWithMethodMembers
   case oldOwnershipOperatorSpellings
+  case inlineArrayTypeSugar
 
   /// The name of the feature as it is written in the compiler's `Features.def` file.
   public var featureName: String {
@@ -47,6 +48,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "KeypathWithMethodMembers"
     case .oldOwnershipOperatorSpellings:
       return "OldOwnershipOperatorSpellings"
+    case .inlineArrayTypeSugar:
+      return "InlineArrayTypeSugar"
     }
   }
 
@@ -73,6 +76,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "keypaths with method members"
     case .oldOwnershipOperatorSpellings:
       return "`_move` and `_borrow` as ownership operators"
+    case .inlineArrayTypeSugar:
+      return "sugar type for InlineArray"
     }
   }
 

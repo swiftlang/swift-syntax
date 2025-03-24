@@ -1604,8 +1604,6 @@ public struct RawAttributeListSyntax: RawSyntaxNodeProtocol {
 public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
   public enum Arguments: RawSyntaxNodeProtocol {
     case argumentList(RawLabeledExprListSyntax)
-    case token(RawTokenSyntax)
-    case string(RawStringLiteralExprSyntax)
     case availability(RawAvailabilityArgumentListSyntax)
     case specializeArguments(RawSpecializeAttributeArgumentListSyntax)
     case objCName(RawObjCSelectorPieceListSyntax)
@@ -1613,14 +1611,8 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     case differentiableArguments(RawDifferentiableAttributeArgumentsSyntax)
     case derivativeRegistrationArguments(RawDerivativeAttributeArgumentsSyntax)
     case backDeployedArguments(RawBackDeployedAttributeArgumentsSyntax)
-    case conventionArguments(RawConventionAttributeArgumentsSyntax)
-    case conventionWitnessMethodArguments(RawConventionWitnessMethodAttributeArgumentsSyntax)
-    case opaqueReturnTypeOfAttributeArguments(RawOpaqueReturnTypeOfAttributeArgumentsSyntax)
-    case exposeAttributeArguments(RawExposeAttributeArgumentsSyntax)
     case originallyDefinedInArguments(RawOriginallyDefinedInAttributeArgumentsSyntax)
-    case underscorePrivateAttributeArguments(RawUnderscorePrivateAttributeArgumentsSyntax)
     case dynamicReplacementArguments(RawDynamicReplacementAttributeArgumentsSyntax)
-    case unavailableFromAsyncArguments(RawUnavailableFromAsyncAttributeArgumentsSyntax)
     case effectsArguments(RawEffectsAttributeArgumentListSyntax)
     case documentationArguments(RawDocumentationAttributeArgumentListSyntax)
     /// - Note: Requires experimental feature `abiAttribute`.
@@ -1628,16 +1620,12 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     case abiArguments(RawABIAttributeArgumentsSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      RawLabeledExprListSyntax.isKindOf(raw) || RawTokenSyntax.isKindOf(raw) || RawStringLiteralExprSyntax.isKindOf(raw) || RawAvailabilityArgumentListSyntax.isKindOf(raw) || RawSpecializeAttributeArgumentListSyntax.isKindOf(raw) || RawObjCSelectorPieceListSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeAttributeArgumentsSyntax.isKindOf(raw) || RawBackDeployedAttributeArgumentsSyntax.isKindOf(raw) || RawConventionAttributeArgumentsSyntax.isKindOf(raw) || RawConventionWitnessMethodAttributeArgumentsSyntax.isKindOf(raw) || RawOpaqueReturnTypeOfAttributeArgumentsSyntax.isKindOf(raw) || RawExposeAttributeArgumentsSyntax.isKindOf(raw) || RawOriginallyDefinedInAttributeArgumentsSyntax.isKindOf(raw) || RawUnderscorePrivateAttributeArgumentsSyntax.isKindOf(raw) || RawDynamicReplacementAttributeArgumentsSyntax.isKindOf(raw) || RawUnavailableFromAsyncAttributeArgumentsSyntax.isKindOf(raw) || RawEffectsAttributeArgumentListSyntax.isKindOf(raw) || RawDocumentationAttributeArgumentListSyntax.isKindOf(raw) || RawABIAttributeArgumentsSyntax.isKindOf(raw)
+      RawLabeledExprListSyntax.isKindOf(raw) || RawAvailabilityArgumentListSyntax.isKindOf(raw) || RawSpecializeAttributeArgumentListSyntax.isKindOf(raw) || RawObjCSelectorPieceListSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeAttributeArgumentsSyntax.isKindOf(raw) || RawBackDeployedAttributeArgumentsSyntax.isKindOf(raw) || RawOriginallyDefinedInAttributeArgumentsSyntax.isKindOf(raw) || RawDynamicReplacementAttributeArgumentsSyntax.isKindOf(raw) || RawEffectsAttributeArgumentListSyntax.isKindOf(raw) || RawDocumentationAttributeArgumentListSyntax.isKindOf(raw) || RawABIAttributeArgumentsSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
       switch self {
       case .argumentList(let node):
-        return node.raw
-      case .token(let node):
-        return node.raw
-      case .string(let node):
         return node.raw
       case .availability(let node):
         return node.raw
@@ -1653,21 +1641,9 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
         return node.raw
       case .backDeployedArguments(let node):
         return node.raw
-      case .conventionArguments(let node):
-        return node.raw
-      case .conventionWitnessMethodArguments(let node):
-        return node.raw
-      case .opaqueReturnTypeOfAttributeArguments(let node):
-        return node.raw
-      case .exposeAttributeArguments(let node):
-        return node.raw
       case .originallyDefinedInArguments(let node):
         return node.raw
-      case .underscorePrivateAttributeArguments(let node):
-        return node.raw
       case .dynamicReplacementArguments(let node):
-        return node.raw
-      case .unavailableFromAsyncArguments(let node):
         return node.raw
       case .effectsArguments(let node):
         return node.raw
@@ -1681,10 +1657,6 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     public init?(_ node: __shared some RawSyntaxNodeProtocol) {
       if let node = node.as(RawLabeledExprListSyntax.self) {
         self = .argumentList(node)
-      } else if let node = node.as(RawTokenSyntax.self) {
-        self = .token(node)
-      } else if let node = node.as(RawStringLiteralExprSyntax.self) {
-        self = .string(node)
       } else if let node = node.as(RawAvailabilityArgumentListSyntax.self) {
         self = .availability(node)
       } else if let node = node.as(RawSpecializeAttributeArgumentListSyntax.self) {
@@ -1699,22 +1671,10 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
         self = .derivativeRegistrationArguments(node)
       } else if let node = node.as(RawBackDeployedAttributeArgumentsSyntax.self) {
         self = .backDeployedArguments(node)
-      } else if let node = node.as(RawConventionAttributeArgumentsSyntax.self) {
-        self = .conventionArguments(node)
-      } else if let node = node.as(RawConventionWitnessMethodAttributeArgumentsSyntax.self) {
-        self = .conventionWitnessMethodArguments(node)
-      } else if let node = node.as(RawOpaqueReturnTypeOfAttributeArgumentsSyntax.self) {
-        self = .opaqueReturnTypeOfAttributeArguments(node)
-      } else if let node = node.as(RawExposeAttributeArgumentsSyntax.self) {
-        self = .exposeAttributeArguments(node)
       } else if let node = node.as(RawOriginallyDefinedInAttributeArgumentsSyntax.self) {
         self = .originallyDefinedInArguments(node)
-      } else if let node = node.as(RawUnderscorePrivateAttributeArgumentsSyntax.self) {
-        self = .underscorePrivateAttributeArguments(node)
       } else if let node = node.as(RawDynamicReplacementAttributeArgumentsSyntax.self) {
         self = .dynamicReplacementArguments(node)
-      } else if let node = node.as(RawUnavailableFromAsyncAttributeArgumentsSyntax.self) {
-        self = .unavailableFromAsyncArguments(node)
       } else if let node = node.as(RawEffectsAttributeArgumentListSyntax.self) {
         self = .effectsArguments(node)
       } else if let node = node.as(RawDocumentationAttributeArgumentListSyntax.self) {

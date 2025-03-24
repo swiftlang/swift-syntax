@@ -563,22 +563,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  override open func visit(_ node: ConventionAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: ConventionAttributeArgumentsSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-
-  override open func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-
   override open func visit(_ node: CopyExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -898,14 +882,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: EnumDeclSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-
-  override open func visit(_ node: ExposeAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: ExposeAttributeArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
 
@@ -1625,14 +1601,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  override open func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-
   override open func visit(_ node: OperatorDeclSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -2264,22 +2232,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: TypeSpecifierListSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-
-  override open func visit(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-
-  override open func visit(_ node: UnderscorePrivateAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: UnderscorePrivateAttributeArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
 

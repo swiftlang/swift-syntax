@@ -82,8 +82,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case conformanceRequirement
   case consumeExpr
   case continueStmt
-  case conventionAttributeArguments
-  case conventionWitnessMethodAttributeArguments
   case copyExpr
   case decl
   case declModifier
@@ -125,7 +123,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case enumCaseParameterClause
   case enumCaseParameterList
   case enumDecl
-  case exposeAttributeArguments
   case expr
   case expressionPattern
   case expressionSegment
@@ -215,7 +212,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case nilLiteralExpr
   case objCSelectorPiece
   case objCSelectorPieceList
-  case opaqueReturnTypeOfAttributeArguments
   case operatorDecl
   case operatorPrecedenceAndTypes
   case optionalBindingCondition
@@ -300,8 +296,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case typeSpecifier
   case lifetimeSpecifierArguments
   case typeSpecifierList
-  case unavailableFromAsyncAttributeArguments
-  case underscorePrivateAttributeArguments
   case unexpectedNodes
   case unresolvedAsExpr
   case unresolvedIsExpr
@@ -465,7 +459,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
     case .switchCaseItem: return "caseItem"
     case .switchCaseItemList: return "caseItemList"
     case .typeAliasDecl: return "typealiasDecl"
-    case .unavailableFromAsyncAttributeArguments: return "unavailableFromAsyncArguments"
     case .yieldedExpression: return "yieldExprListElement"
     case .yieldedExpressionList: return "yieldExprList"
     case .yieldedExpressionsClause: return "yieldList"

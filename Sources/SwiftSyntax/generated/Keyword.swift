@@ -18,12 +18,10 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case __owned
   case __setter_access
   case __shared
-  case _alignment
   case _backDeploy
   case _borrow
   case _borrowing
   case _BridgeObject
-  case _cdecl
   case _Class
   case _compilerInitialized
   case _const
@@ -32,7 +30,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _documentation
   case _dynamicReplacement
   case _effects
-  case _expose
   case _forward
   case _implements
   case _linear
@@ -44,27 +41,16 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _NativeClass
   case _NativeRefCountedObject
   case _noMetadata
-  case _nonSendable
-  case _objcImplementation
-  case _objcRuntimeName
   case _opaqueReturnTypeOf
-  case _optimize
   case _originallyDefinedIn
   case _PackageDescription
-  case _private
-  case _projectedValueProperty
   case _read
   case _RefCountedObject
-  case _semantics
   case _specialize
-  case _spi
   case _spi_available
-  case _swift_native_objc_runtime_base
   case _Trivial
   case _TrivialAtMost
   case _TrivialStride
-  case _typeEraser
-  case _unavailableFromAsync
   case _underlyingVersion
   case _UnknownLayout
   case _version
@@ -103,7 +89,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case `continue`
   case convenience
   case convention
-  case cType
   case `default`
   case `defer`
   case `deinit`
@@ -120,7 +105,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case `else`
   case `enum`
   case escaping
-  case exclusivity
   case exported
   case `extension`
   case `fallthrough`
@@ -143,7 +127,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case infix
   case `init`
   case initializes
-  case inline
   case `inout`
   case `internal`
   case introduced
@@ -208,7 +191,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case Sendable
   case set
   case some
-  case sourceFile
   case spi
   case spiModule
   case `static`
@@ -238,7 +220,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case `where`
   case `while`
   case willSet
-  case witness_method
   case wrt
   @_spi(ExperimentalLanguageFeatures)
   case x
@@ -301,8 +282,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
       }
     case 4:
       switch text {
-      case "_spi":
-        self = ._spi
       case "case":
         self = .case
       case "copy":
@@ -374,8 +353,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .catch
       case "class":
         self = .class
-      case "cType":
-        self = .cType
       case "defer":
         self = .defer
       case "false":
@@ -409,8 +386,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
       }
     case 6:
       switch text {
-      case "_cdecl":
-        self = ._cdecl
       case "_Class":
         self = ._Class
       case "_const":
@@ -427,8 +402,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .didSet
       case "import":
         self = .import
-      case "inline":
-        self = .inline
       case "linear":
         self = .linear
       case "modify":
@@ -466,8 +439,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .__owned
       case "_borrow":
         self = ._borrow
-      case "_expose":
-        self = ._expose
       case "_linear":
         self = ._linear
       case "_modify":
@@ -515,8 +486,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = ._effects
       case "_forward":
         self = ._forward
-      case "_private":
-        self = ._private
       case "_Trivial":
         self = ._Trivial
       case "_version":
@@ -568,8 +537,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
       switch text {
       case "_mutating":
         self = ._mutating
-      case "_optimize":
-        self = ._optimize
       case "available":
         self = .available
       case "borrowing":
@@ -601,14 +568,10 @@ public enum Keyword: UInt8, Hashable, Sendable {
       }
     case 10:
       switch text {
-      case "_alignment":
-        self = ._alignment
       case "_borrowing":
         self = ._borrowing
       case "_consuming":
         self = ._consuming
-      case "_semantics":
-        self = ._semantics
       case "assignment":
         self = .assignment
       case "convention":
@@ -621,8 +584,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .higherThan
       case "introduced":
         self = .introduced
-      case "sourceFile":
-        self = .sourceFile
       case "visibility":
         self = .visibility
       default:
@@ -640,16 +601,12 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = ._noMetadata
       case "_specialize":
         self = ._specialize
-      case "_typeEraser":
-        self = ._typeEraser
       case "autoclosure":
         self = .autoclosure
       case "convenience":
         self = .convenience
       case "distributed":
         self = .distributed
-      case "exclusivity":
-        self = .exclusivity
       case "fallthrough":
         self = .fallthrough
       case "fileprivate":
@@ -671,8 +628,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
       switch text {
       case "_NativeClass":
         self = ._NativeClass
-      case "_nonSendable":
-        self = ._nonSendable
       case "availability":
         self = .availability
       case "backDeployed":
@@ -713,8 +668,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .differentiable
       case "preconcurrency":
         self = .preconcurrency
-      case "witness_method":
-        self = .witness_method
       default:
         return nil
       }
@@ -729,8 +682,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
       }
     case 16:
       switch text {
-      case "_objcRuntimeName":
-        self = ._objcRuntimeName
       case "addressWithOwner":
         self = .addressWithOwner
       default:
@@ -754,8 +705,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
       switch text {
       case "_dynamicReplacement":
         self = ._dynamicReplacement
-      case "_objcImplementation":
-        self = ._objcImplementation
       case "_opaqueReturnTypeOf":
         self = ._opaqueReturnTypeOf
       case "_PackageDescription":
@@ -774,13 +723,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
       default:
         return nil
       }
-    case 21:
-      switch text {
-      case "_unavailableFromAsync":
-        self = ._unavailableFromAsync
-      default:
-        return nil
-      }
     case 22:
       switch text {
       case "addressWithNativeOwner":
@@ -792,8 +734,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
       switch text {
       case "_NativeRefCountedObject":
         self = ._NativeRefCountedObject
-      case "_projectedValueProperty":
-        self = ._projectedValueProperty
       case "mutableAddressWithOwner":
         self = .mutableAddressWithOwner
       default:
@@ -803,13 +743,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
       switch text {
       case "mutableAddressWithNativeOwner":
         self = .mutableAddressWithNativeOwner
-      default:
-        return nil
-      }
-    case 31:
-      switch text {
-      case "_swift_native_objc_runtime_base":
-        self = ._swift_native_objc_runtime_base
       default:
         return nil
       }
@@ -828,12 +761,10 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "__owned",
     "__setter_access",
     "__shared",
-    "_alignment",
     "_backDeploy",
     "_borrow",
     "_borrowing",
     "_BridgeObject",
-    "_cdecl",
     "_Class",
     "_compilerInitialized",
     "_const",
@@ -841,7 +772,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "_documentation",
     "_dynamicReplacement",
     "_effects",
-    "_expose",
     "_forward",
     "_implements",
     "_linear",
@@ -852,27 +782,16 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "_NativeClass",
     "_NativeRefCountedObject",
     "_noMetadata",
-    "_nonSendable",
-    "_objcImplementation",
-    "_objcRuntimeName",
     "_opaqueReturnTypeOf",
-    "_optimize",
     "_originallyDefinedIn",
     "_PackageDescription",
-    "_private",
-    "_projectedValueProperty",
     "_read",
     "_RefCountedObject",
-    "_semantics",
     "_specialize",
-    "_spi",
     "_spi_available",
-    "_swift_native_objc_runtime_base",
     "_Trivial",
     "_TrivialAtMost",
     "_TrivialStride",
-    "_typeEraser",
-    "_unavailableFromAsync",
     "_underlyingVersion",
     "_UnknownLayout",
     "_version",
@@ -910,7 +829,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "continue",
     "convenience",
     "convention",
-    "cType",
     "default",
     "defer",
     "deinit",
@@ -926,7 +844,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "else",
     "enum",
     "escaping",
-    "exclusivity",
     "exported",
     "extension",
     "fallthrough",
@@ -949,7 +866,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "infix",
     "init",
     "initializes",
-    "inline",
     "inout",
     "internal",
     "introduced",
@@ -1011,7 +927,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "Sendable",
     "set",
     "some",
-    "sourceFile",
     "spi",
     "spiModule",
     "static",
@@ -1041,7 +956,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "where",
     "while",
     "willSet",
-    "witness_method",
     "wrt",
     "x",
     "yield",

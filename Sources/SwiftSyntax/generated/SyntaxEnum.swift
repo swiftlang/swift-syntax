@@ -83,8 +83,6 @@ public enum SyntaxEnum: Sendable {
   case conformanceRequirement(ConformanceRequirementSyntax)
   case consumeExpr(ConsumeExprSyntax)
   case continueStmt(ContinueStmtSyntax)
-  case conventionAttributeArguments(ConventionAttributeArgumentsSyntax)
-  case conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax)
   case copyExpr(CopyExprSyntax)
   case declModifierDetail(DeclModifierDetailSyntax)
   case declModifierList(DeclModifierListSyntax)
@@ -126,7 +124,6 @@ public enum SyntaxEnum: Sendable {
   case enumCaseParameterList(EnumCaseParameterListSyntax)
   case enumCaseParameter(EnumCaseParameterSyntax)
   case enumDecl(EnumDeclSyntax)
-  case exposeAttributeArguments(ExposeAttributeArgumentsSyntax)
   case exprList(ExprListSyntax)
   case expressionPattern(ExpressionPatternSyntax)
   case expressionSegment(ExpressionSegmentSyntax)
@@ -221,7 +218,6 @@ public enum SyntaxEnum: Sendable {
   case nilLiteralExpr(NilLiteralExprSyntax)
   case objCSelectorPieceList(ObjCSelectorPieceListSyntax)
   case objCSelectorPiece(ObjCSelectorPieceSyntax)
-  case opaqueReturnTypeOfAttributeArguments(OpaqueReturnTypeOfAttributeArgumentsSyntax)
   case operatorDecl(OperatorDeclSyntax)
   case operatorPrecedenceAndTypes(OperatorPrecedenceAndTypesSyntax)
   case optionalBindingCondition(OptionalBindingConditionSyntax)
@@ -302,8 +298,6 @@ public enum SyntaxEnum: Sendable {
   case typeExpr(TypeExprSyntax)
   case typeInitializerClause(TypeInitializerClauseSyntax)
   case typeSpecifierList(TypeSpecifierListSyntax)
-  case unavailableFromAsyncAttributeArguments(UnavailableFromAsyncAttributeArgumentsSyntax)
-  case underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax)
   case unexpectedNodes(UnexpectedNodesSyntax)
   case unresolvedAsExpr(UnresolvedAsExprSyntax)
   case unresolvedIsExpr(UnresolvedIsExprSyntax)
@@ -453,10 +447,6 @@ extension Syntax {
       return .consumeExpr(ConsumeExprSyntax(self)!)
     case .continueStmt:
       return .continueStmt(ContinueStmtSyntax(self)!)
-    case .conventionAttributeArguments:
-      return .conventionAttributeArguments(ConventionAttributeArgumentsSyntax(self)!)
-    case .conventionWitnessMethodAttributeArguments:
-      return .conventionWitnessMethodAttributeArguments(ConventionWitnessMethodAttributeArgumentsSyntax(self)!)
     case .copyExpr:
       return .copyExpr(CopyExprSyntax(self)!)
     case .declModifierDetail:
@@ -537,8 +527,6 @@ extension Syntax {
       return .enumCaseParameter(EnumCaseParameterSyntax(self)!)
     case .enumDecl:
       return .enumDecl(EnumDeclSyntax(self)!)
-    case .exposeAttributeArguments:
-      return .exposeAttributeArguments(ExposeAttributeArgumentsSyntax(self)!)
     case .exprList:
       return .exprList(ExprListSyntax(self)!)
     case .expressionPattern:
@@ -715,8 +703,6 @@ extension Syntax {
       return .objCSelectorPieceList(ObjCSelectorPieceListSyntax(self)!)
     case .objCSelectorPiece:
       return .objCSelectorPiece(ObjCSelectorPieceSyntax(self)!)
-    case .opaqueReturnTypeOfAttributeArguments:
-      return .opaqueReturnTypeOfAttributeArguments(OpaqueReturnTypeOfAttributeArgumentsSyntax(self)!)
     case .operatorDecl:
       return .operatorDecl(OperatorDeclSyntax(self)!)
     case .operatorPrecedenceAndTypes:
@@ -875,10 +861,6 @@ extension Syntax {
       return .typeInitializerClause(TypeInitializerClauseSyntax(self)!)
     case .typeSpecifierList:
       return .typeSpecifierList(TypeSpecifierListSyntax(self)!)
-    case .unavailableFromAsyncAttributeArguments:
-      return .unavailableFromAsyncAttributeArguments(UnavailableFromAsyncAttributeArgumentsSyntax(self)!)
-    case .underscorePrivateAttributeArguments:
-      return .underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax(self)!)
     case .unexpectedNodes:
       return .unexpectedNodes(UnexpectedNodesSyntax(self)!)
     case .unresolvedAsExpr:

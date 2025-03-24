@@ -3097,7 +3097,7 @@ public struct AttributeClauseFileSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 ///  - `atSign`: `@`
 ///  - `attributeName`: ``TypeSyntax``
 ///  - `leftParen`: `(`?
-///  - `arguments`: (``LabeledExprListSyntax`` | ``TokenSyntax`` | ``StringLiteralExprSyntax`` | ``AvailabilityArgumentListSyntax`` | ``SpecializeAttributeArgumentListSyntax`` | ``ObjCSelectorPieceListSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeAttributeArgumentsSyntax`` | ``BackDeployedAttributeArgumentsSyntax`` | ``ConventionAttributeArgumentsSyntax`` | ``ConventionWitnessMethodAttributeArgumentsSyntax`` | ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` | ``ExposeAttributeArgumentsSyntax`` | ``OriginallyDefinedInAttributeArgumentsSyntax`` | ``UnderscorePrivateAttributeArgumentsSyntax`` | ``DynamicReplacementAttributeArgumentsSyntax`` | ``UnavailableFromAsyncAttributeArgumentsSyntax`` | ``EffectsAttributeArgumentListSyntax`` | ``DocumentationAttributeArgumentListSyntax`` | `ABIAttributeArgumentsSyntax`)?
+///  - `arguments`: (``LabeledExprListSyntax`` | ``AvailabilityArgumentListSyntax`` | ``SpecializeAttributeArgumentListSyntax`` | ``ObjCSelectorPieceListSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeAttributeArgumentsSyntax`` | ``BackDeployedAttributeArgumentsSyntax`` | ``OriginallyDefinedInAttributeArgumentsSyntax`` | ``DynamicReplacementAttributeArgumentsSyntax`` | ``EffectsAttributeArgumentListSyntax`` | ``DocumentationAttributeArgumentListSyntax`` | `ABIAttributeArgumentsSyntax`)?
 ///  - `rightParen`: `)`?
 ///
 /// ### Contained in
@@ -3107,8 +3107,6 @@ public struct AttributeClauseFileSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Arguments: SyntaxChildChoices, SyntaxHashable {
     case argumentList(LabeledExprListSyntax)
-    case token(TokenSyntax)
-    case string(StringLiteralExprSyntax)
     case availability(AvailabilityArgumentListSyntax)
     case specializeArguments(SpecializeAttributeArgumentListSyntax)
     case objCName(ObjCSelectorPieceListSyntax)
@@ -3116,14 +3114,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     case differentiableArguments(DifferentiableAttributeArgumentsSyntax)
     case derivativeRegistrationArguments(DerivativeAttributeArgumentsSyntax)
     case backDeployedArguments(BackDeployedAttributeArgumentsSyntax)
-    case conventionArguments(ConventionAttributeArgumentsSyntax)
-    case conventionWitnessMethodArguments(ConventionWitnessMethodAttributeArgumentsSyntax)
-    case opaqueReturnTypeOfAttributeArguments(OpaqueReturnTypeOfAttributeArgumentsSyntax)
-    case exposeAttributeArguments(ExposeAttributeArgumentsSyntax)
     case originallyDefinedInArguments(OriginallyDefinedInAttributeArgumentsSyntax)
-    case underscorePrivateAttributeArguments(UnderscorePrivateAttributeArgumentsSyntax)
     case dynamicReplacementArguments(DynamicReplacementAttributeArgumentsSyntax)
-    case unavailableFromAsyncArguments(UnavailableFromAsyncAttributeArgumentsSyntax)
     case effectsArguments(EffectsAttributeArgumentListSyntax)
     case documentationArguments(DocumentationAttributeArgumentListSyntax)
     /// - Note: Requires experimental feature `abiAttribute`.
@@ -3133,10 +3125,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     public var _syntaxNode: Syntax {
       switch self {
       case .argumentList(let node):
-        return node._syntaxNode
-      case .token(let node):
-        return node._syntaxNode
-      case .string(let node):
         return node._syntaxNode
       case .availability(let node):
         return node._syntaxNode
@@ -3152,21 +3140,9 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
         return node._syntaxNode
       case .backDeployedArguments(let node):
         return node._syntaxNode
-      case .conventionArguments(let node):
-        return node._syntaxNode
-      case .conventionWitnessMethodArguments(let node):
-        return node._syntaxNode
-      case .opaqueReturnTypeOfAttributeArguments(let node):
-        return node._syntaxNode
-      case .exposeAttributeArguments(let node):
-        return node._syntaxNode
       case .originallyDefinedInArguments(let node):
         return node._syntaxNode
-      case .underscorePrivateAttributeArguments(let node):
-        return node._syntaxNode
       case .dynamicReplacementArguments(let node):
-        return node._syntaxNode
-      case .unavailableFromAsyncArguments(let node):
         return node._syntaxNode
       case .effectsArguments(let node):
         return node._syntaxNode
@@ -3179,14 +3155,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
 
     public init(_ node: LabeledExprListSyntax) {
       self = .argumentList(node)
-    }
-
-    public init(_ node: TokenSyntax) {
-      self = .token(node)
-    }
-
-    public init(_ node: StringLiteralExprSyntax) {
-      self = .string(node)
     }
 
     public init(_ node: AvailabilityArgumentListSyntax) {
@@ -3217,36 +3185,12 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = .backDeployedArguments(node)
     }
 
-    public init(_ node: ConventionAttributeArgumentsSyntax) {
-      self = .conventionArguments(node)
-    }
-
-    public init(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) {
-      self = .conventionWitnessMethodArguments(node)
-    }
-
-    public init(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) {
-      self = .opaqueReturnTypeOfAttributeArguments(node)
-    }
-
-    public init(_ node: ExposeAttributeArgumentsSyntax) {
-      self = .exposeAttributeArguments(node)
-    }
-
     public init(_ node: OriginallyDefinedInAttributeArgumentsSyntax) {
       self = .originallyDefinedInArguments(node)
     }
 
-    public init(_ node: UnderscorePrivateAttributeArgumentsSyntax) {
-      self = .underscorePrivateAttributeArguments(node)
-    }
-
     public init(_ node: DynamicReplacementAttributeArgumentsSyntax) {
       self = .dynamicReplacementArguments(node)
-    }
-
-    public init(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) {
-      self = .unavailableFromAsyncArguments(node)
     }
 
     public init(_ node: EffectsAttributeArgumentListSyntax) {
@@ -3266,10 +3210,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(LabeledExprListSyntax.self) {
         self = .argumentList(node)
-      } else if let node = node.as(TokenSyntax.self) {
-        self = .token(node)
-      } else if let node = node.as(StringLiteralExprSyntax.self) {
-        self = .string(node)
       } else if let node = node.as(AvailabilityArgumentListSyntax.self) {
         self = .availability(node)
       } else if let node = node.as(SpecializeAttributeArgumentListSyntax.self) {
@@ -3284,22 +3224,10 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
         self = .derivativeRegistrationArguments(node)
       } else if let node = node.as(BackDeployedAttributeArgumentsSyntax.self) {
         self = .backDeployedArguments(node)
-      } else if let node = node.as(ConventionAttributeArgumentsSyntax.self) {
-        self = .conventionArguments(node)
-      } else if let node = node.as(ConventionWitnessMethodAttributeArgumentsSyntax.self) {
-        self = .conventionWitnessMethodArguments(node)
-      } else if let node = node.as(OpaqueReturnTypeOfAttributeArgumentsSyntax.self) {
-        self = .opaqueReturnTypeOfAttributeArguments(node)
-      } else if let node = node.as(ExposeAttributeArgumentsSyntax.self) {
-        self = .exposeAttributeArguments(node)
       } else if let node = node.as(OriginallyDefinedInAttributeArgumentsSyntax.self) {
         self = .originallyDefinedInArguments(node)
-      } else if let node = node.as(UnderscorePrivateAttributeArgumentsSyntax.self) {
-        self = .underscorePrivateAttributeArguments(node)
       } else if let node = node.as(DynamicReplacementAttributeArgumentsSyntax.self) {
         self = .dynamicReplacementArguments(node)
-      } else if let node = node.as(UnavailableFromAsyncAttributeArgumentsSyntax.self) {
-        self = .unavailableFromAsyncArguments(node)
       } else if let node = node.as(EffectsAttributeArgumentListSyntax.self) {
         self = .effectsArguments(node)
       } else if let node = node.as(DocumentationAttributeArgumentListSyntax.self) {
@@ -3314,8 +3242,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     public static var structure: SyntaxNodeStructure {
       return .choices([
         .node(LabeledExprListSyntax.self),
-        .node(TokenSyntax.self),
-        .node(StringLiteralExprSyntax.self),
         .node(AvailabilityArgumentListSyntax.self),
         .node(SpecializeAttributeArgumentListSyntax.self),
         .node(ObjCSelectorPieceListSyntax.self),
@@ -3323,14 +3249,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
         .node(DifferentiableAttributeArgumentsSyntax.self),
         .node(DerivativeAttributeArgumentsSyntax.self),
         .node(BackDeployedAttributeArgumentsSyntax.self),
-        .node(ConventionAttributeArgumentsSyntax.self),
-        .node(ConventionWitnessMethodAttributeArgumentsSyntax.self),
-        .node(OpaqueReturnTypeOfAttributeArgumentsSyntax.self),
-        .node(ExposeAttributeArgumentsSyntax.self),
         .node(OriginallyDefinedInAttributeArgumentsSyntax.self),
-        .node(UnderscorePrivateAttributeArgumentsSyntax.self),
         .node(DynamicReplacementAttributeArgumentsSyntax.self),
-        .node(UnavailableFromAsyncAttributeArgumentsSyntax.self),
         .node(EffectsAttributeArgumentListSyntax.self),
         .node(DocumentationAttributeArgumentListSyntax.self),
         .node(ABIAttributeArgumentsSyntax.self)
@@ -3357,50 +3277,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
     public func cast(_ syntaxType: LabeledExprListSyntax.Type) -> LabeledExprListSyntax {
       return self.as(LabeledExprListSyntax.self)!
-    }
-
-    /// Checks if the current syntax node can be cast to ``TokenSyntax``.
-    ///
-    /// - Returns: `true` if the node can be cast, `false` otherwise.
-    public func `is`(_ syntaxType: TokenSyntax.Type) -> Bool {
-      return self.as(syntaxType) != nil
-    }
-
-    /// Attempts to cast the current syntax node to ``TokenSyntax``.
-    ///
-    /// - Returns: An instance of ``TokenSyntax``, or `nil` if the cast fails.
-    public func `as`(_ syntaxType: TokenSyntax.Type) -> TokenSyntax? {
-      return TokenSyntax.init(self)
-    }
-
-    /// Force-casts the current syntax node to ``TokenSyntax``.
-    ///
-    /// - Returns: An instance of ``TokenSyntax``.
-    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
-    public func cast(_ syntaxType: TokenSyntax.Type) -> TokenSyntax {
-      return self.as(TokenSyntax.self)!
-    }
-
-    /// Checks if the current syntax node can be cast to ``StringLiteralExprSyntax``.
-    ///
-    /// - Returns: `true` if the node can be cast, `false` otherwise.
-    public func `is`(_ syntaxType: StringLiteralExprSyntax.Type) -> Bool {
-      return self.as(syntaxType) != nil
-    }
-
-    /// Attempts to cast the current syntax node to ``StringLiteralExprSyntax``.
-    ///
-    /// - Returns: An instance of ``StringLiteralExprSyntax``, or `nil` if the cast fails.
-    public func `as`(_ syntaxType: StringLiteralExprSyntax.Type) -> StringLiteralExprSyntax? {
-      return StringLiteralExprSyntax.init(self)
-    }
-
-    /// Force-casts the current syntax node to ``StringLiteralExprSyntax``.
-    ///
-    /// - Returns: An instance of ``StringLiteralExprSyntax``.
-    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
-    public func cast(_ syntaxType: StringLiteralExprSyntax.Type) -> StringLiteralExprSyntax {
-      return self.as(StringLiteralExprSyntax.self)!
     }
 
     /// Checks if the current syntax node can be cast to ``AvailabilityArgumentListSyntax``.
@@ -3557,94 +3433,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       return self.as(BackDeployedAttributeArgumentsSyntax.self)!
     }
 
-    /// Checks if the current syntax node can be cast to ``ConventionAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: `true` if the node can be cast, `false` otherwise.
-    public func `is`(_ syntaxType: ConventionAttributeArgumentsSyntax.Type) -> Bool {
-      return self.as(syntaxType) != nil
-    }
-
-    /// Attempts to cast the current syntax node to ``ConventionAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: An instance of ``ConventionAttributeArgumentsSyntax``, or `nil` if the cast fails.
-    public func `as`(_ syntaxType: ConventionAttributeArgumentsSyntax.Type) -> ConventionAttributeArgumentsSyntax? {
-      return ConventionAttributeArgumentsSyntax.init(self)
-    }
-
-    /// Force-casts the current syntax node to ``ConventionAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: An instance of ``ConventionAttributeArgumentsSyntax``.
-    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
-    public func cast(_ syntaxType: ConventionAttributeArgumentsSyntax.Type) -> ConventionAttributeArgumentsSyntax {
-      return self.as(ConventionAttributeArgumentsSyntax.self)!
-    }
-
-    /// Checks if the current syntax node can be cast to ``ConventionWitnessMethodAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: `true` if the node can be cast, `false` otherwise.
-    public func `is`(_ syntaxType: ConventionWitnessMethodAttributeArgumentsSyntax.Type) -> Bool {
-      return self.as(syntaxType) != nil
-    }
-
-    /// Attempts to cast the current syntax node to ``ConventionWitnessMethodAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: An instance of ``ConventionWitnessMethodAttributeArgumentsSyntax``, or `nil` if the cast fails.
-    public func `as`(_ syntaxType: ConventionWitnessMethodAttributeArgumentsSyntax.Type) -> ConventionWitnessMethodAttributeArgumentsSyntax? {
-      return ConventionWitnessMethodAttributeArgumentsSyntax.init(self)
-    }
-
-    /// Force-casts the current syntax node to ``ConventionWitnessMethodAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: An instance of ``ConventionWitnessMethodAttributeArgumentsSyntax``.
-    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
-    public func cast(_ syntaxType: ConventionWitnessMethodAttributeArgumentsSyntax.Type) -> ConventionWitnessMethodAttributeArgumentsSyntax {
-      return self.as(ConventionWitnessMethodAttributeArgumentsSyntax.self)!
-    }
-
-    /// Checks if the current syntax node can be cast to ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: `true` if the node can be cast, `false` otherwise.
-    public func `is`(_ syntaxType: OpaqueReturnTypeOfAttributeArgumentsSyntax.Type) -> Bool {
-      return self.as(syntaxType) != nil
-    }
-
-    /// Attempts to cast the current syntax node to ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: An instance of ``OpaqueReturnTypeOfAttributeArgumentsSyntax``, or `nil` if the cast fails.
-    public func `as`(_ syntaxType: OpaqueReturnTypeOfAttributeArgumentsSyntax.Type) -> OpaqueReturnTypeOfAttributeArgumentsSyntax? {
-      return OpaqueReturnTypeOfAttributeArgumentsSyntax.init(self)
-    }
-
-    /// Force-casts the current syntax node to ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: An instance of ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.
-    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
-    public func cast(_ syntaxType: OpaqueReturnTypeOfAttributeArgumentsSyntax.Type) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
-      return self.as(OpaqueReturnTypeOfAttributeArgumentsSyntax.self)!
-    }
-
-    /// Checks if the current syntax node can be cast to ``ExposeAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: `true` if the node can be cast, `false` otherwise.
-    public func `is`(_ syntaxType: ExposeAttributeArgumentsSyntax.Type) -> Bool {
-      return self.as(syntaxType) != nil
-    }
-
-    /// Attempts to cast the current syntax node to ``ExposeAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: An instance of ``ExposeAttributeArgumentsSyntax``, or `nil` if the cast fails.
-    public func `as`(_ syntaxType: ExposeAttributeArgumentsSyntax.Type) -> ExposeAttributeArgumentsSyntax? {
-      return ExposeAttributeArgumentsSyntax.init(self)
-    }
-
-    /// Force-casts the current syntax node to ``ExposeAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: An instance of ``ExposeAttributeArgumentsSyntax``.
-    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
-    public func cast(_ syntaxType: ExposeAttributeArgumentsSyntax.Type) -> ExposeAttributeArgumentsSyntax {
-      return self.as(ExposeAttributeArgumentsSyntax.self)!
-    }
-
     /// Checks if the current syntax node can be cast to ``OriginallyDefinedInAttributeArgumentsSyntax``.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
@@ -3667,28 +3455,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       return self.as(OriginallyDefinedInAttributeArgumentsSyntax.self)!
     }
 
-    /// Checks if the current syntax node can be cast to ``UnderscorePrivateAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: `true` if the node can be cast, `false` otherwise.
-    public func `is`(_ syntaxType: UnderscorePrivateAttributeArgumentsSyntax.Type) -> Bool {
-      return self.as(syntaxType) != nil
-    }
-
-    /// Attempts to cast the current syntax node to ``UnderscorePrivateAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: An instance of ``UnderscorePrivateAttributeArgumentsSyntax``, or `nil` if the cast fails.
-    public func `as`(_ syntaxType: UnderscorePrivateAttributeArgumentsSyntax.Type) -> UnderscorePrivateAttributeArgumentsSyntax? {
-      return UnderscorePrivateAttributeArgumentsSyntax.init(self)
-    }
-
-    /// Force-casts the current syntax node to ``UnderscorePrivateAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: An instance of ``UnderscorePrivateAttributeArgumentsSyntax``.
-    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
-    public func cast(_ syntaxType: UnderscorePrivateAttributeArgumentsSyntax.Type) -> UnderscorePrivateAttributeArgumentsSyntax {
-      return self.as(UnderscorePrivateAttributeArgumentsSyntax.self)!
-    }
-
     /// Checks if the current syntax node can be cast to ``DynamicReplacementAttributeArgumentsSyntax``.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
@@ -3709,28 +3475,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
     public func cast(_ syntaxType: DynamicReplacementAttributeArgumentsSyntax.Type) -> DynamicReplacementAttributeArgumentsSyntax {
       return self.as(DynamicReplacementAttributeArgumentsSyntax.self)!
-    }
-
-    /// Checks if the current syntax node can be cast to ``UnavailableFromAsyncAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: `true` if the node can be cast, `false` otherwise.
-    public func `is`(_ syntaxType: UnavailableFromAsyncAttributeArgumentsSyntax.Type) -> Bool {
-      return self.as(syntaxType) != nil
-    }
-
-    /// Attempts to cast the current syntax node to ``UnavailableFromAsyncAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: An instance of ``UnavailableFromAsyncAttributeArgumentsSyntax``, or `nil` if the cast fails.
-    public func `as`(_ syntaxType: UnavailableFromAsyncAttributeArgumentsSyntax.Type) -> UnavailableFromAsyncAttributeArgumentsSyntax? {
-      return UnavailableFromAsyncAttributeArgumentsSyntax.init(self)
-    }
-
-    /// Force-casts the current syntax node to ``UnavailableFromAsyncAttributeArgumentsSyntax``.
-    ///
-    /// - Returns: An instance of ``UnavailableFromAsyncAttributeArgumentsSyntax``.
-    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
-    public func cast(_ syntaxType: UnavailableFromAsyncAttributeArgumentsSyntax.Type) -> UnavailableFromAsyncAttributeArgumentsSyntax {
-      return self.as(UnavailableFromAsyncAttributeArgumentsSyntax.self)!
     }
 
     /// Checks if the current syntax node can be cast to ``EffectsAttributeArgumentListSyntax``.

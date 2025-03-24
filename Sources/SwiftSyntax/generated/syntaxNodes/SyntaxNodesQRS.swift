@@ -2103,14 +2103,8 @@ public struct SpecializeTargetFunctionArgumentSyntax: SyntaxProtocol, SyntaxHash
 ///
 /// ### Contained in
 /// 
-///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
-///  - ``ConventionAttributeArgumentsSyntax``.``ConventionAttributeArgumentsSyntax/cTypeString``
 ///  - ``DocumentationAttributeArgumentSyntax``.``DocumentationAttributeArgumentSyntax/value``
-///  - ``ExposeAttributeArgumentsSyntax``.``ExposeAttributeArgumentsSyntax/cxxName``
-///  - ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.``OpaqueReturnTypeOfAttributeArgumentsSyntax/mangledName``
 ///  - ``OriginallyDefinedInAttributeArgumentsSyntax``.``OriginallyDefinedInAttributeArgumentsSyntax/moduleName``
-///  - ``UnavailableFromAsyncAttributeArgumentsSyntax``.``UnavailableFromAsyncAttributeArgumentsSyntax/message``
-///  - ``UnderscorePrivateAttributeArgumentsSyntax``.``UnderscorePrivateAttributeArgumentsSyntax/filename``
 public struct StringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 

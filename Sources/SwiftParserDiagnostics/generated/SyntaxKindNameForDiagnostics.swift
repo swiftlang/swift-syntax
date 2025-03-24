@@ -112,10 +112,6 @@ extension SyntaxKind {
       return "'consume' expression"
     case .continueStmt:
       return "'continue' statement"
-    case .conventionAttributeArguments:
-      return "@convention(...) arguments"
-    case .conventionWitnessMethodAttributeArguments:
-      return "@convention(...) arguments for witness methods"
     case .copyExpr:
       return "'copy' expression"
     case .declModifier:
@@ -172,8 +168,6 @@ extension SyntaxKind {
       return "parameter"
     case .enumDecl:
       return "enum"
-    case .exposeAttributeArguments:
-      return "@_expose arguments"
     case .expressionPattern:
       return "pattern"
     case .expressionStmt:
@@ -304,8 +298,6 @@ extension SyntaxKind {
       return "Objective-C selector"
     case .objCSelectorPiece:
       return "Objective-C selector piece"
-    case .opaqueReturnTypeOfAttributeArguments:
-      return "opaque return type arguments"
     case .operatorDecl:
       return "operator declaration"
     case .optionalBindingCondition:
@@ -404,10 +396,6 @@ extension SyntaxKind {
       return "type annotation"
     case .typeEffectSpecifiers:
       return "effect specifiers"
-    case .unavailableFromAsyncAttributeArguments:
-      return "@_unavailableFromAsync argument"
-    case .underscorePrivateAttributeArguments:
-      return "@_private argument"
     case .unresolvedAsExpr:
       return "'as'"
     case .unresolvedIsExpr:

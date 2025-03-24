@@ -336,14 +336,6 @@ class ValidateSyntaxNodes: XCTestCase {
             "child 'pounds' has a token as its only token choice and should thus be named 'rawStringPoundDelimiter'"
         ),
 
-        // MARK: Tokens that contain underscores
-        ValidationFailure(
-          node: .conventionWitnessMethodAttributeArguments,
-          message:
-            "child 'witnessMethodLabel' has a single keyword as its only token choice and is followed by a colon. It should thus be named 'witness_methodLabel'"
-            // Witness_method has an underscore and thus WitnessMethod is the correct spelling
-        ),
-
         // MARK: Repeat node type name
         // If the node is named the same as the token, we don't need to repeat the entire token name
         ValidationFailure(

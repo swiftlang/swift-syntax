@@ -1943,61 +1943,6 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
-  public override func visit(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    if shouldSkip(node) {
-      return .skipChildren
-    }
-
-    if let equalToken = node.unexpectedBetweenColonAndMessage?.onlyPresentToken(where: { $0.tokenKind == .equal }) {
-      addDiagnostic(
-        equalToken,
-        MissingNodesError(missingNodes: [Syntax(node.colon)]),
-        fixIts: [
-          FixIt(
-            message: ReplaceTokensFixIt(
-              replaceTokens: [equalToken],
-              replacements: [node.colon]
-            ),
-            changes: [
-              .makeMissing(equalToken, transferTrivia: false),
-              .makePresent(
-                node.colon,
-                leadingTrivia: equalToken.leadingTrivia,
-                trailingTrivia: equalToken.trailingTrivia
-              ),
-            ]
-          )
-        ],
-        handledNodes: [equalToken.id, node.colon.id]
-      )
-    }
-
-    if let token = node.unexpectedBetweenMessageLabelAndColon?.onlyPresentToken(where: { $0.tokenKind.isIdentifier }),
-      token.isPresent,
-      node.messageLabel.isMissing
-    {
-      addDiagnostic(
-        node,
-        MissingNodesError(missingNodes: [Syntax(node.messageLabel)]),
-        fixIts: [
-          FixIt(
-            message: ReplaceTokensFixIt(
-              replaceTokens: [token],
-              replacements: [node.messageLabel]
-            ),
-            changes: [
-              FixIt.MultiNodeChange.makeMissing(token),
-              FixIt.MultiNodeChange.makePresent(node.messageLabel),
-            ]
-          )
-        ],
-        handledNodes: [node.messageLabel.id, token.id]
-      )
-    }
-
-    return .visitChildren
-  }
-
   public override func visit(_ node: UnresolvedTernaryExprSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

@@ -205,9 +205,6 @@ public typealias TypeSpecifierSyntax = SimpleTypeSpecifierSyntax
 @available(*, deprecated, renamed: "TypeAliasDeclSyntax")
 public typealias TypealiasDeclSyntax = TypeAliasDeclSyntax
 
-@available(*, deprecated, renamed: "UnavailableFromAsyncAttributeArgumentsSyntax")
-public typealias UnavailableFromAsyncArgumentsSyntax = UnavailableFromAsyncAttributeArgumentsSyntax
-
 @available(*, deprecated, renamed: "PatternExprSyntax")
 public typealias UnresolvedPatternExprSyntax = PatternExprSyntax
 
@@ -539,11 +536,6 @@ extension SyntaxKind {
   @available(*, deprecated, renamed: "TypeAliasDeclSyntax")
   public static var typealiasDecl: Self {
     return .typeAliasDecl
-  }
-
-  @available(*, deprecated, renamed: "UnavailableFromAsyncAttributeArgumentsSyntax")
-  public static var unavailableFromAsyncArguments: Self {
-    return .unavailableFromAsyncAttributeArguments
   }
 
   @available(*, deprecated, renamed: "PatternExprSyntax")

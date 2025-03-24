@@ -216,7 +216,7 @@ public protocol BuildConfiguration {
 
   /// Determine whether the given name is the active target object file format (e.g., ELF).
   ///
-  /// The target object file format can only be queried by an experimental 
+  /// The target object file format can only be queried by an experimental
   /// syntax `_objectFileFormat(<name>)`, e.g.,
   ///
   /// ```swift

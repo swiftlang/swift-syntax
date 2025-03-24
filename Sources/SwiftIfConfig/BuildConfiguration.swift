@@ -291,3 +291,11 @@ public protocol BuildConfiguration {
   /// #endif
   var compilerVersion: VersionTuple { get }
 }
+
+/// Default implementation of BuildConfiguration, to avoid a revlock with the
+/// swift repo.
+extension BuildConfiguration {
+  func isActiveTargetObjectFileFormat(name: String) throws -> Bool {
+    return false
+  }
+}

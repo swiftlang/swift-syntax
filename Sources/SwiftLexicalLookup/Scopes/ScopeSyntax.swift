@@ -13,7 +13,7 @@
 import SwiftSyntax
 
 extension SyntaxProtocol {
-  /// Returns all names that `for` refers to at this syntax node.
+  /// Returns all names that `identifier` refers to at this syntax node.
   /// Optional configuration can be passed as `config` to customize the lookup behavior.
   ///
   /// - Returns: An array of `LookupResult` for `identifier`  at this syntax node,
@@ -28,22 +28,19 @@ extension SyntaxProtocol {
   ///   var a = 42
   ///
   ///   func a(a: Int) {
+  ///     let a = a
   ///     a // <--- lookup here
   ///
   ///     let a = 0
   ///   }
-  ///
-  ///   func a() {
-  ///     // ...
-  ///   }
   /// }
   /// ```
   /// When calling this function on the declaration reference `a` within its name,
-  /// the function returns the parameter first, then the identifier of the variable
-  /// declaration, followed by the first function name, and then the second function name,
-  /// in this exact order. The constant declaration within the function body is omitted
-  /// due to the ordering rules that prioritize visibility within the function body.
-  @_spi(Experimental) public func lookup(
+  /// the function returns the variable declaration `let a = a` first, then the function parameter,
+  /// and lastly `LookupResult.lookInMembers` in this exact order.
+  /// The second declaration within the function body is omitted
+  /// due to the ordering rules within the function body.
+  public func lookup(
     _ identifier: Identifier?,
     with config: LookupConfig = LookupConfig()
   ) -> [LookupResult] {

@@ -10,7 +10,7 @@ swift build --package-path SwiftParserCLI
 ```
 or openning `SwiftParserCLI` package and building the `swift-parser-cli` target in Xcode.
 
-1. After you have built `swift-parse-cli`, you can format a single source file using BasicFormat by running the following command. If you are only experiencing the issue while formatting a single node, e.g. while creating an `AccessorDeclSyntax` inside a macro, you can additionally pass the type of the node as `--node-type AccessorDeclSyntax` 
+1. After you have built `swift-parser-cli`, you can format a single source file using BasicFormat by running the following command. If you are only experiencing the issue while formatting a single node, e.g. while creating an `AccessorDeclSyntax` inside a macro, you can additionally pass the type of the node as `--node-type AccessorDeclSyntax` 
 ```
 swift-parser-cli basic-format /path/to/file/that/formats/incorrectly.swift
 ```

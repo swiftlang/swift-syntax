@@ -541,7 +541,7 @@ final class TypeTests: ParserTestCase {
 
 final class InlineArrayTypeTests: ParserTestCase {
   override var experimentalFeatures: Parser.ExperimentalFeatures {
-    [.inlineArrayTypeSugar, .valueGenerics]
+    [.inlineArrayTypeSugar]
   }
 
   func testBasic() {

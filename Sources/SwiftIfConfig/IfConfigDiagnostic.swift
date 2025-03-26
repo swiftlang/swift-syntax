@@ -36,7 +36,6 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
   case likelySimulatorPlatform(syntax: ExprSyntax)
   case likelyTargetOS(syntax: ExprSyntax, replacement: ExprSyntax?)
   case endiannessDoesNotMatch(syntax: ExprSyntax, argument: String)
-  case objectFileFormatDoesNotMatch(syntax: ExprSyntax, argument: String)
   case macabiIsMacCatalyst(syntax: ExprSyntax)
   case expectedModuleName(syntax: ExprSyntax)
   case badInfixOperator(syntax: ExprSyntax)
@@ -103,9 +102,6 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
     case .endiannessDoesNotMatch:
       return "unknown endianness for build configuration '_endian' (must be 'big' or 'little')"
 
-    case .objectFileFormatDoesNotMatch:
-      return "unknown object file format for build configuration '_objectFileFormat'"
-
     case .expectedModuleName:
       return "expected module name"
 
@@ -140,7 +136,6 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
       .likelySimulatorPlatform(syntax: let syntax),
       .likelyTargetOS(syntax: let syntax, replacement: _),
       .endiannessDoesNotMatch(syntax: let syntax, argument: _),
-      .objectFileFormatDoesNotMatch(syntax: let syntax, argument: _),
       .macabiIsMacCatalyst(syntax: let syntax),
       .expectedModuleName(syntax: let syntax),
       .badInfixOperator(syntax: let syntax),
@@ -164,7 +159,7 @@ extension IfConfigDiagnostic: DiagnosticMessage {
   var severity: SwiftDiagnostics.DiagnosticSeverity {
     switch self {
     case .compilerVersionSecondComponentNotWildcard, .ignoredTrailingComponents,
-      .likelySimulatorPlatform, .likelyTargetOS, .endiannessDoesNotMatch, .objectFileFormatDoesNotMatch,
+      .likelySimulatorPlatform, .likelyTargetOS, .endiannessDoesNotMatch,
       .macabiIsMacCatalyst:
       return .warning
     default: return .error

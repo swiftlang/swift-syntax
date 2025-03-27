@@ -37,6 +37,17 @@ public enum CanImportVersion {
   case underlyingVersion(VersionTuple)
 }
 
+enum BuildConfigurationError: Error, CustomStringConvertible {
+  case experimentalFeature(name: String)
+
+  var description: String {
+    switch self {
+    case .experimentalFeature(let name):
+      return "'name' is an experimental feature"
+    }
+  }
+}
+
 /// Captures information about the build configuration that can be
 /// queried in a `#if` expression, including OS, compiler version,
 /// enabled language features, and available modules.
@@ -214,6 +225,22 @@ public protocol BuildConfiguration {
   /// pointer authentication scheme.
   func isActiveTargetPointerAuthentication(name: String) throws -> Bool
 
+  /// Determine whether the given name is the active target object file format (e.g., ELF).
+  ///
+  /// The target object file format can only be queried by an experimental
+  /// syntax `_objectFileFormat(<name>)`, e.g.,
+  ///
+  /// ```swift
+  /// #if _objectFileFormat(ELF)
+  /// // Special logic for ELF object file formats
+  /// #endif
+  /// ```
+  /// - Parameters:
+  ///   - name: The name of the object file format.
+  /// - Returns: Whether the target object file format matches the given name.
+  @_spi(ExperimentalLanguageFeatures)
+  func isActiveTargetObjectFileFormat(name: String) throws -> Bool
+
   /// The bit width of a data pointer for the target architecture.
   ///
   /// The target's pointer bit width (which also corresponds to the number of
@@ -275,4 +302,14 @@ public protocol BuildConfiguration {
   /// // Hoorway, we can implicitly open existentials!
   /// #endif
   var compilerVersion: VersionTuple { get }
+}
+
+/// Default implementation of BuildConfiguration, to avoid a revlock with the
+/// swift repo, and breaking clients with the new addition to the protocol.
+extension BuildConfiguration {
+  /// FIXME: This should be @_spi(ExperimentalLanguageFeatures) but cannot due
+  /// to rdar://147943518, https://github.com/swiftlang/swift/issues/80313
+  public func isActiveTargetObjectFileFormat(name: String) throws -> Bool {
+    throw BuildConfigurationError.experimentalFeature(name: "_objectFileFormat")
+  }
 }

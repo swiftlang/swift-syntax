@@ -55,7 +55,11 @@ final class FixItTests: XCTestCase {
     let change = FixIt(
       message: SimpleFixItMessage(message: "fix it please"),
       changes: [
-        .textualReplacement(replacementRange: five..<fifteen, sourceFile: "func myFunction() { }", newText: "yours")
+        .replaceText(
+          range: five..<fifteen,
+          with: "yours",
+          in: Syntax("func myFunction() { }" as SourceFileSyntax)
+        )
       ]
     )
     XCTAssertEqual(change.edits.count, 1)

@@ -150,6 +150,9 @@ extension PluginMessage.Diagnostic {
           case .replaceChild(let replaceChildData):
             range = sourceManager.range(replaceChildData.replacementRange, in: replaceChildData.parent)
             text = replaceChildData.newChild.description
+          case .textualReplacement(replacementRange: let replacementRange, sourceFile: let sourceFile, newText: let newText):
+            range = sourceManager.range(replacementRange, in: sourceFile)
+            text = newText
           #if RESILIENT_LIBRARIES
           @unknown default:
             fatalError()

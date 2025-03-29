@@ -149,8 +149,6 @@ public struct RawGenericArgumentListSyntax: RawSyntaxNodeProtocol {
 public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol {
   public enum Argument: RawSyntaxNodeProtocol {
     case type(RawTypeSyntax)
-    /// - Note: Requires experimental feature `valueGenerics`.
-    @_spi(ExperimentalLanguageFeatures)
     case expr(RawExprSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
@@ -180,8 +178,6 @@ public struct RawGenericArgumentSyntax: RawSyntaxNodeProtocol {
       self = .type(RawTypeSyntax(type))
     }
 
-    /// - Note: Requires experimental feature `valueGenerics`.
-    @_spi(ExperimentalLanguageFeatures)
     public init(expr: some RawExprSyntaxNodeProtocol) {
       self = .expr(RawExprSyntax(expr))
     }

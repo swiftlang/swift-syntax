@@ -264,8 +264,7 @@ public let TYPE_NODES: [Node] = [
           ),
           Child(
             name: "expr",
-            kind: .node(kind: .expr),
-            experimentalFeature: .valueGenerics
+            kind: .node(kind: .expr)
           ),
         ]),
         documentation:

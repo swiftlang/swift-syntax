@@ -341,8 +341,7 @@ public let GENERIC_NODES: [Node] = [
           ),
           Child(
             name: "expr",
-            kind: .node(kind: .expr),
-            experimentalFeature: .valueGenerics
+            kind: .node(kind: .expr)
           ),
         ]),
         nameForDiagnostics: "left-hand type",
@@ -362,8 +361,7 @@ public let GENERIC_NODES: [Node] = [
           ),
           Child(
             name: "expr",
-            kind: .node(kind: .expr),
-            experimentalFeature: .valueGenerics
+            kind: .node(kind: .expr)
           ),
         ]),
         nameForDiagnostics: "right-hand type",

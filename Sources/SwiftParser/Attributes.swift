@@ -35,28 +35,14 @@ extension Parser {
 extension Parser {
   /// Compiler-known attributes that take arguments.
   enum DeclarationAttributeWithSpecialSyntax: TokenSpecSet {
-    case _alignment
     case _backDeploy
-    case _cdecl
     case _documentation
     case _dynamicReplacement
     case _effects
-    case _expose
     case _implements
-    case _nonSendable
-    case _objcImplementation
-    case _objcRuntimeName
-    case _optimize
     case _originallyDefinedIn
-    case _private
-    case _projectedValueProperty
-    case _semantics
     case _specialize
-    case _spi
     case _spi_available
-    case _swift_native_objc_runtime_base
-    case _typeEraser
-    case _unavailableFromAsync
     case `rethrows`
     case abi
     case attached
@@ -64,37 +50,21 @@ extension Parser {
     case backDeployed
     case derivative
     case differentiable
-    case exclusivity
     case freestanding
-    case inline
     case objc
     case Sendable
     case transpose
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(._alignment): self = ._alignment
       case TokenSpec(._backDeploy): self = ._backDeploy
-      case TokenSpec(._cdecl): self = ._cdecl
       case TokenSpec(._documentation): self = ._documentation
       case TokenSpec(._dynamicReplacement): self = ._dynamicReplacement
       case TokenSpec(._effects): self = ._effects
-      case TokenSpec(._expose): self = ._expose
       case TokenSpec(._implements): self = ._implements
-      case TokenSpec(._nonSendable): self = ._nonSendable
-      case TokenSpec(._objcImplementation): self = ._objcImplementation
-      case TokenSpec(._objcRuntimeName): self = ._objcRuntimeName
-      case TokenSpec(._optimize): self = ._optimize
       case TokenSpec(._originallyDefinedIn): self = ._originallyDefinedIn
-      case TokenSpec(._private): self = ._private
-      case TokenSpec(._projectedValueProperty): self = ._projectedValueProperty
-      case TokenSpec(._semantics): self = ._semantics
       case TokenSpec(._specialize): self = ._specialize
-      case TokenSpec(._spi): self = ._spi
       case TokenSpec(._spi_available): self = ._spi_available
-      case TokenSpec(._swift_native_objc_runtime_base): self = ._swift_native_objc_runtime_base
-      case TokenSpec(._typeEraser): self = ._typeEraser
-      case TokenSpec(._unavailableFromAsync): self = ._unavailableFromAsync
       case TokenSpec(.`rethrows`): self = .rethrows
       case TokenSpec(.abi) where experimentalFeatures.contains(.abiAttribute): self = .abi
       case TokenSpec(.attached): self = .attached
@@ -102,9 +72,7 @@ extension Parser {
       case TokenSpec(.backDeployed): self = .backDeployed
       case TokenSpec(.derivative): self = .derivative
       case TokenSpec(.differentiable): self = .differentiable
-      case TokenSpec(.exclusivity): self = .exclusivity
       case TokenSpec(.freestanding): self = .freestanding
-      case TokenSpec(.inline): self = .inline
       case TokenSpec(.objc): self = .objc
       case TokenSpec(.Sendable): self = .Sendable
       case TokenSpec(.transpose): self = .transpose
@@ -115,28 +83,14 @@ extension Parser {
 
     var spec: TokenSpec {
       switch self {
-      case ._alignment: return .keyword(._alignment)
       case ._backDeploy: return .keyword(._backDeploy)
-      case ._cdecl: return .keyword(._cdecl)
       case ._documentation: return .keyword(._documentation)
       case ._dynamicReplacement: return .keyword(._dynamicReplacement)
       case ._effects: return .keyword(._effects)
-      case ._expose: return .keyword(._expose)
       case ._implements: return .keyword(._implements)
-      case ._nonSendable: return .keyword(._nonSendable)
-      case ._objcImplementation: return .keyword(._objcImplementation)
-      case ._objcRuntimeName: return .keyword(._objcRuntimeName)
-      case ._optimize: return .keyword(._optimize)
       case ._originallyDefinedIn: return .keyword(._originallyDefinedIn)
-      case ._private: return .keyword(._private)
-      case ._projectedValueProperty: return .keyword(._projectedValueProperty)
-      case ._semantics: return .keyword(._semantics)
       case ._specialize: return .keyword(._specialize)
-      case ._spi: return .keyword(._spi)
       case ._spi_available: return .keyword(._spi_available)
-      case ._swift_native_objc_runtime_base: return .keyword(._swift_native_objc_runtime_base)
-      case ._typeEraser: return .keyword(._typeEraser)
-      case ._unavailableFromAsync: return .keyword(._unavailableFromAsync)
       case .`rethrows`: return .keyword(.rethrows)
       case .abi: return .keyword(.abi)
       case .attached: return .keyword(.attached)
@@ -144,9 +98,7 @@ extension Parser {
       case .backDeployed: return .keyword(.backDeployed)
       case .derivative: return .keyword(.derivative)
       case .differentiable: return .keyword(.differentiable)
-      case .exclusivity: return .keyword(.exclusivity)
       case .freestanding: return .keyword(.freestanding)
-      case .inline: return .keyword(.inline)
       case .objc: return .keyword(.objc)
       case .Sendable: return .keyword(.Sendable)
       case .transpose: return .keyword(.transpose)
@@ -300,10 +252,6 @@ extension Parser {
       return parseAttribute(argumentMode: .required) { parser in
         return .specializeArguments(parser.parseSpecializeAttributeArgumentList())
       }
-    case ._private:
-      return parseAttribute(argumentMode: .required) { parser in
-        return .underscorePrivateAttributeArguments(parser.parseUnderscorePrivateAttributeArguments())
-      }
     case ._dynamicReplacement:
       return parseAttribute(argumentMode: .required) { parser in
         return .dynamicReplacementArguments(parser.parseDynamicReplacementAttributeArguments())
@@ -311,29 +259,6 @@ extension Parser {
     case ._documentation:
       return parseAttribute(argumentMode: .required) { parser in
         return .documentationArguments(parser.parseDocumentationAttributeArguments())
-      }
-    case ._spi, ._objcRuntimeName, ._projectedValueProperty, ._swift_native_objc_runtime_base, ._typeEraser, ._optimize,
-      .exclusivity, .inline, ._alignment:
-      // Attributes that take a single token as argument. Some examples of these include:
-      //  - Arbitrary identifiers (e.g. `@_spi(RawSyntax)`)
-      //  - An integer literal (e.g. `@_alignment(4)`)
-      //
-      //  Because there seem to be very little restrictions on these parameters (they could be keywords instead of identifiers), we just allow any token.
-      return parseAttribute(argumentMode: .required) { parser in
-        if !parser.at(.rightParen) {
-          return .token(parser.consumeAnyToken())
-        } else {
-          return .token(parser.missingToken(.identifier))
-        }
-      }
-    case ._objcImplementation, ._nonSendable:
-      // Similar to the above but the argument is optional
-      return parseAttribute(argumentMode: .optional) { parser in
-        if !parser.at(.rightParen) {
-          return .token(parser.consumeAnyToken())
-        } else {
-          return .token(parser.missingToken(.identifier))
-        }
       }
     case ._effects:
       return parseAttribute(argumentMode: .required) { parser in
@@ -345,29 +270,13 @@ extension Parser {
         }
         return .effectsArguments(RawEffectsAttributeArgumentListSyntax(elements: tokens, arena: parser.arena))
       }
-    case ._cdecl:
-      return parseAttribute(argumentMode: .required) { parser in
-        return .string(parser.parseStringLiteral())
-      }
     case ._implements:
       return parseAttribute(argumentMode: .required) { parser in
         return .implementsArguments(parser.parseImplementsAttributeArguments())
       }
-    case ._semantics:
-      return parseAttribute(argumentMode: .required) { parser in
-        return .string(parser.parseStringLiteral())
-      }
-    case ._expose:
-      return parseAttribute(argumentMode: .required) { parser in
-        return .exposeAttributeArguments(parser.parseExposeArguments())
-      }
     case ._originallyDefinedIn:
       return parseAttribute(argumentMode: .required) { parser in
         return .originallyDefinedInArguments(parser.parseOriginallyDefinedInAttributeArguments())
-      }
-    case ._unavailableFromAsync:
-      return parseAttribute(argumentMode: .optional) { parser in
-        return .unavailableFromAsyncArguments(parser.parseUnavailableFromAsyncAttributeArguments())
       }
     case .attached, .freestanding:
       return parseAttribute(argumentMode: .customAttribute) { parser in
@@ -857,77 +766,6 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseOpaqueReturnTypeOfAttributeArguments() -> RawOpaqueReturnTypeOfAttributeArgumentsSyntax {
-    let mangledName = self.parseStringLiteral()
-    let (unexpectedBeforeComma, comma) = self.expect(.comma)
-    let (unexpectedBeforeOrdinal, ordinal) = self.expect(.integerLiteral)
-    return RawOpaqueReturnTypeOfAttributeArgumentsSyntax(
-      mangledName: mangledName,
-      unexpectedBeforeComma,
-      comma: comma,
-      unexpectedBeforeOrdinal,
-      ordinal: ordinal,
-      arena: self.arena
-    )
-  }
-}
-
-extension Parser {
-  mutating func parseConventionArguments() -> RawAttributeSyntax.Arguments {
-    if let witnessMethod = self.consume(if: .keyword(.witness_method)) {
-      let (unexpectedBeforeColon, colon) = self.expect(.colon)
-      let name = self.parseAnyIdentifier()
-      return .conventionWitnessMethodArguments(
-        RawConventionWitnessMethodAttributeArgumentsSyntax(
-          witnessMethodLabel: witnessMethod,
-          unexpectedBeforeColon,
-          colon: colon,
-          protocolName: name,
-          arena: self.arena
-        )
-      )
-    } else {
-      let (unexpectedBeforeLabel, label) = self.expect(.identifier)
-      let unexpectedBeforeComma: RawUnexpectedNodesSyntax?
-      let comma: RawTokenSyntax?
-      let unexpectedBeforeCTypeLabel: RawUnexpectedNodesSyntax?
-      let cTypeLabel: RawTokenSyntax?
-      let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
-      let colon: RawTokenSyntax?
-      let cTypeString: RawStringLiteralExprSyntax?
-      if self.at(.comma) {
-        (unexpectedBeforeComma, comma) = self.expect(.comma)
-        (unexpectedBeforeCTypeLabel, cTypeLabel) = self.expect(.keyword(.cType))
-        (unexpectedBeforeColon, colon) = self.expect(.colon)
-        cTypeString = self.parseStringLiteral()
-      } else {
-        unexpectedBeforeComma = nil
-        comma = nil
-        unexpectedBeforeCTypeLabel = nil
-        cTypeLabel = nil
-        unexpectedBeforeColon = nil
-        colon = nil
-        cTypeString = nil
-      }
-      return .conventionArguments(
-        RawConventionAttributeArgumentsSyntax(
-          unexpectedBeforeLabel,
-          conventionLabel: label,
-          unexpectedBeforeComma,
-          comma: comma,
-          unexpectedBeforeCTypeLabel,
-          cTypeLabel: cTypeLabel,
-          unexpectedBeforeColon,
-          colon: colon,
-          cTypeString: cTypeString,
-          arena: self.arena
-        )
-      )
-    }
-  }
-}
-
-extension Parser {
   mutating func parseIsolatedAttributeArguments() -> RawLabeledExprListSyntax {
     let (unexpectedBeforeIsolationKind, isolationKind) =
       self.expectIdentifier(allowKeywordsAsIdentifier: true)
@@ -1019,35 +857,6 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseExposeArguments() -> RawExposeAttributeArgumentsSyntax {
-    let language: RawTokenSyntax
-    if !self.at(.rightParen, .comma) {
-      language = self.consumeAnyToken()
-    } else {
-      language = missingToken(.identifier)
-    }
-    let unexpectedBeforeComma: RawUnexpectedNodesSyntax?
-    let comma: RawTokenSyntax?
-    let cxxName: RawStringLiteralExprSyntax?
-    if self.at(.comma) {
-      (unexpectedBeforeComma, comma) = self.expect(.comma)
-      cxxName = self.parseStringLiteral()
-    } else {
-      unexpectedBeforeComma = nil
-      comma = nil
-      cxxName = nil
-    }
-    return RawExposeAttributeArgumentsSyntax(
-      language: language,
-      unexpectedBeforeComma,
-      comma: comma,
-      cxxName: cxxName,
-      arena: self.arena
-    )
-  }
-}
-
-extension Parser {
   mutating func parseOriginallyDefinedInAttributeArguments() -> RawOriginallyDefinedInAttributeArgumentsSyntax {
     let (unexpectedBeforeModuleLabel, moduleLabel) = self.expect(.keyword(.module))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
@@ -1083,22 +892,6 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseUnderscorePrivateAttributeArguments() -> RawUnderscorePrivateAttributeArgumentsSyntax {
-    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.sourceFile))
-    let (unexpectedBeforeColon, colon) = self.expect(.colon)
-    let filename = self.parseStringLiteral()
-    return RawUnderscorePrivateAttributeArgumentsSyntax(
-      unexpectedBeforeLabel,
-      sourceFileLabel: label,
-      unexpectedBeforeColon,
-      colon: colon,
-      filename: filename,
-      arena: self.arena
-    )
-  }
-}
-
-extension Parser {
   mutating func parseDynamicReplacementAttributeArguments() -> RawDynamicReplacementAttributeArgumentsSyntax {
     let (unexpectedBeforeLabel, label) = self.expect(.keyword(.for))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
@@ -1120,31 +913,6 @@ extension Parser {
       unexpectedBeforeColon,
       colon: colon,
       declName: declName,
-      arena: self.arena
-    )
-  }
-}
-
-extension Parser {
-  mutating func parseUnavailableFromAsyncAttributeArguments() -> RawUnavailableFromAsyncAttributeArgumentsSyntax {
-    let (unexpectedBeforeLabel, label) = self.expect(.keyword(.message))
-    let (unexpectedBeforeColon, colon) = self.expect(.colon)
-
-    let unexpectedBetweenColonAndMessage: RawUnexpectedNodesSyntax?
-    if let equalToken = self.consume(if: .equal) {
-      unexpectedBetweenColonAndMessage = RawUnexpectedNodesSyntax([equalToken], arena: self.arena)
-    } else {
-      unexpectedBetweenColonAndMessage = nil
-    }
-
-    let message = self.parseStringLiteral()
-    return RawUnavailableFromAsyncAttributeArgumentsSyntax(
-      unexpectedBeforeLabel,
-      messageLabel: label,
-      unexpectedBeforeColon,
-      colon: colon,
-      unexpectedBetweenColonAndMessage,
-      message: message,
       arena: self.arena
     )
   }

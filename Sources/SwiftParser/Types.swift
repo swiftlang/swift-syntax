@@ -1134,19 +1134,11 @@ extension Parser {
     case .differentiable:
       return .attribute(self.parseDifferentiableAttribute())
 
-    case .convention:
-      return parseAttribute(argumentMode: .required) { parser in
-        return parser.parseConventionArguments()
-      }
-    case ._opaqueReturnTypeOf:
-      return parseAttribute(argumentMode: .required) { parser in
-        return .opaqueReturnTypeOfAttributeArguments(parser.parseOpaqueReturnTypeOfAttributeArguments())
-      }
     case .isolated:
       return parseAttribute(argumentMode: .required) { parser in
         return .argumentList(parser.parseIsolatedAttributeArguments())
       }
-    case nil:  // Custom attribute
+    case .convention, ._opaqueReturnTypeOf, nil:  // Custom attribute
       return parseAttribute(argumentMode: .customAttribute) { parser in
         let arguments = parser.parseArgumentListElements(
           pattern: .none,

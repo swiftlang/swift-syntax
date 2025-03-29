@@ -789,30 +789,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ContinueStmtSyntax) {
   }
 
-  /// Visiting ``ConventionAttributeArgumentsSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ConventionAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting ``ConventionAttributeArgumentsSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ConventionAttributeArgumentsSyntax) {
-  }
-
-  /// Visiting ``ConventionWitnessMethodAttributeArgumentsSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting ``ConventionWitnessMethodAttributeArgumentsSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) {
-  }
-
   /// Visiting ``CopyExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -1293,18 +1269,6 @@ open class SyntaxVisitor {
   /// The function called after visiting ``EnumDeclSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: EnumDeclSyntax) {
-  }
-
-  /// Visiting ``ExposeAttributeArgumentsSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: ExposeAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting ``ExposeAttributeArgumentsSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: ExposeAttributeArgumentsSyntax) {
   }
 
   /// Visiting ``ExprListSyntax`` specifically.
@@ -2375,18 +2339,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: ObjCSelectorPieceSyntax) {
   }
 
-  /// Visiting ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting ``OpaqueReturnTypeOfAttributeArgumentsSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) {
-  }
-
   /// Visiting ``OperatorDeclSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3337,30 +3289,6 @@ open class SyntaxVisitor {
   open func visitPost(_ node: TypeSpecifierListSyntax) {
   }
 
-  /// Visiting ``UnavailableFromAsyncAttributeArgumentsSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting ``UnavailableFromAsyncAttributeArgumentsSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) {
-  }
-
-  /// Visiting ``UnderscorePrivateAttributeArgumentsSyntax`` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  open func visit(_ node: UnderscorePrivateAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting ``UnderscorePrivateAttributeArgumentsSyntax`` and its descendants.
-  ///   - node: the node we just finished visiting.
-  open func visitPost(_ node: UnderscorePrivateAttributeArgumentsSyntax) {
-  }
-
   /// Visiting ``UnexpectedNodesSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -4081,22 +4009,6 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitConventionAttributeArgumentsSyntaxImpl(_ node: Syntax) {
-    if visit(ConventionAttributeArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
-      visitChildren(node)
-    }
-    visitPost(ConventionAttributeArgumentsSyntax(unsafeCasting: node))
-  }
-
-  @inline(never)
-  private func visitConventionWitnessMethodAttributeArgumentsSyntaxImpl(_ node: Syntax) {
-    if visit(ConventionWitnessMethodAttributeArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
-      visitChildren(node)
-    }
-    visitPost(ConventionWitnessMethodAttributeArgumentsSyntax(unsafeCasting: node))
-  }
-
-  @inline(never)
   private func visitCopyExprSyntaxImpl(_ node: Syntax) {
     if visit(CopyExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -4414,14 +4326,6 @@ open class SyntaxVisitor {
       visitChildren(node)
     }
     visitPost(EnumDeclSyntax(unsafeCasting: node))
-  }
-
-  @inline(never)
-  private func visitExposeAttributeArgumentsSyntaxImpl(_ node: Syntax) {
-    if visit(ExposeAttributeArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
-      visitChildren(node)
-    }
-    visitPost(ExposeAttributeArgumentsSyntax(unsafeCasting: node))
   }
 
   @inline(never)
@@ -5129,14 +5033,6 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitOpaqueReturnTypeOfAttributeArgumentsSyntaxImpl(_ node: Syntax) {
-    if visit(OpaqueReturnTypeOfAttributeArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
-      visitChildren(node)
-    }
-    visitPost(OpaqueReturnTypeOfAttributeArgumentsSyntax(unsafeCasting: node))
-  }
-
-  @inline(never)
   private func visitOperatorDeclSyntaxImpl(_ node: Syntax) {
     if visit(OperatorDeclSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -5769,22 +5665,6 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
-  private func visitUnavailableFromAsyncAttributeArgumentsSyntaxImpl(_ node: Syntax) {
-    if visit(UnavailableFromAsyncAttributeArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
-      visitChildren(node)
-    }
-    visitPost(UnavailableFromAsyncAttributeArgumentsSyntax(unsafeCasting: node))
-  }
-
-  @inline(never)
-  private func visitUnderscorePrivateAttributeArgumentsSyntaxImpl(_ node: Syntax) {
-    if visit(UnderscorePrivateAttributeArgumentsSyntax(unsafeCasting: node)) == .visitChildren {
-      visitChildren(node)
-    }
-    visitPost(UnderscorePrivateAttributeArgumentsSyntax(unsafeCasting: node))
-  }
-
-  @inline(never)
   private func visitUnexpectedNodesSyntaxImpl(_ node: Syntax) {
     if visit(UnexpectedNodesSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -6072,10 +5952,6 @@ open class SyntaxVisitor {
       return self.visitConsumeExprSyntaxImpl(_:)
     case .continueStmt:
       return self.visitContinueStmtSyntaxImpl(_:)
-    case .conventionAttributeArguments:
-      return self.visitConventionAttributeArgumentsSyntaxImpl(_:)
-    case .conventionWitnessMethodAttributeArguments:
-      return self.visitConventionWitnessMethodAttributeArgumentsSyntaxImpl(_:)
     case .copyExpr:
       return self.visitCopyExprSyntaxImpl(_:)
     case .declModifierDetail:
@@ -6156,8 +6032,6 @@ open class SyntaxVisitor {
       return self.visitEnumCaseParameterSyntaxImpl(_:)
     case .enumDecl:
       return self.visitEnumDeclSyntaxImpl(_:)
-    case .exposeAttributeArguments:
-      return self.visitExposeAttributeArgumentsSyntaxImpl(_:)
     case .exprList:
       return self.visitExprListSyntaxImpl(_:)
     case .expressionPattern:
@@ -6334,8 +6208,6 @@ open class SyntaxVisitor {
       return self.visitObjCSelectorPieceListSyntaxImpl(_:)
     case .objCSelectorPiece:
       return self.visitObjCSelectorPieceSyntaxImpl(_:)
-    case .opaqueReturnTypeOfAttributeArguments:
-      return self.visitOpaqueReturnTypeOfAttributeArgumentsSyntaxImpl(_:)
     case .operatorDecl:
       return self.visitOperatorDeclSyntaxImpl(_:)
     case .operatorPrecedenceAndTypes:
@@ -6494,10 +6366,6 @@ open class SyntaxVisitor {
       return self.visitTypeInitializerClauseSyntaxImpl(_:)
     case .typeSpecifierList:
       return self.visitTypeSpecifierListSyntaxImpl(_:)
-    case .unavailableFromAsyncAttributeArguments:
-      return self.visitUnavailableFromAsyncAttributeArgumentsSyntaxImpl(_:)
-    case .underscorePrivateAttributeArguments:
-      return self.visitUnderscorePrivateAttributeArgumentsSyntaxImpl(_:)
     case .unexpectedNodes:
       return self.visitUnexpectedNodesSyntaxImpl(_:)
     case .unresolvedAsExpr:
@@ -6666,10 +6534,6 @@ open class SyntaxVisitor {
       self.visitConsumeExprSyntaxImpl(node)
     case .continueStmt:
       self.visitContinueStmtSyntaxImpl(node)
-    case .conventionAttributeArguments:
-      self.visitConventionAttributeArgumentsSyntaxImpl(node)
-    case .conventionWitnessMethodAttributeArguments:
-      self.visitConventionWitnessMethodAttributeArgumentsSyntaxImpl(node)
     case .copyExpr:
       self.visitCopyExprSyntaxImpl(node)
     case .declModifierDetail:
@@ -6750,8 +6614,6 @@ open class SyntaxVisitor {
       self.visitEnumCaseParameterSyntaxImpl(node)
     case .enumDecl:
       self.visitEnumDeclSyntaxImpl(node)
-    case .exposeAttributeArguments:
-      self.visitExposeAttributeArgumentsSyntaxImpl(node)
     case .exprList:
       self.visitExprListSyntaxImpl(node)
     case .expressionPattern:
@@ -6928,8 +6790,6 @@ open class SyntaxVisitor {
       self.visitObjCSelectorPieceListSyntaxImpl(node)
     case .objCSelectorPiece:
       self.visitObjCSelectorPieceSyntaxImpl(node)
-    case .opaqueReturnTypeOfAttributeArguments:
-      self.visitOpaqueReturnTypeOfAttributeArgumentsSyntaxImpl(node)
     case .operatorDecl:
       self.visitOperatorDeclSyntaxImpl(node)
     case .operatorPrecedenceAndTypes:
@@ -7088,10 +6948,6 @@ open class SyntaxVisitor {
       self.visitTypeInitializerClauseSyntaxImpl(node)
     case .typeSpecifierList:
       self.visitTypeSpecifierListSyntaxImpl(node)
-    case .unavailableFromAsyncAttributeArguments:
-      self.visitUnavailableFromAsyncAttributeArgumentsSyntaxImpl(node)
-    case .underscorePrivateAttributeArguments:
-      self.visitUnderscorePrivateAttributeArgumentsSyntaxImpl(node)
     case .unexpectedNodes:
       self.visitUnexpectedNodesSyntaxImpl(node)
     case .unresolvedAsExpr:

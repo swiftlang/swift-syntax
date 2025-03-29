@@ -762,42 +762,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "label"
   case \ContinueStmtSyntax.unexpectedAfterLabel:
     return "unexpectedAfterLabel"
-  case \ConventionAttributeArgumentsSyntax.unexpectedBeforeConventionLabel:
-    return "unexpectedBeforeConventionLabel"
-  case \ConventionAttributeArgumentsSyntax.conventionLabel:
-    return "conventionLabel"
-  case \ConventionAttributeArgumentsSyntax.unexpectedBetweenConventionLabelAndComma:
-    return "unexpectedBetweenConventionLabelAndComma"
-  case \ConventionAttributeArgumentsSyntax.comma:
-    return "comma"
-  case \ConventionAttributeArgumentsSyntax.unexpectedBetweenCommaAndCTypeLabel:
-    return "unexpectedBetweenCommaAndCTypeLabel"
-  case \ConventionAttributeArgumentsSyntax.cTypeLabel:
-    return "cTypeLabel"
-  case \ConventionAttributeArgumentsSyntax.unexpectedBetweenCTypeLabelAndColon:
-    return "unexpectedBetweenCTypeLabelAndColon"
-  case \ConventionAttributeArgumentsSyntax.colon:
-    return "colon"
-  case \ConventionAttributeArgumentsSyntax.unexpectedBetweenColonAndCTypeString:
-    return "unexpectedBetweenColonAndCTypeString"
-  case \ConventionAttributeArgumentsSyntax.cTypeString:
-    return "cTypeString"
-  case \ConventionAttributeArgumentsSyntax.unexpectedAfterCTypeString:
-    return "unexpectedAfterCTypeString"
-  case \ConventionWitnessMethodAttributeArgumentsSyntax.unexpectedBeforeWitnessMethodLabel:
-    return "unexpectedBeforeWitnessMethodLabel"
-  case \ConventionWitnessMethodAttributeArgumentsSyntax.witnessMethodLabel:
-    return "witnessMethodLabel"
-  case \ConventionWitnessMethodAttributeArgumentsSyntax.unexpectedBetweenWitnessMethodLabelAndColon:
-    return "unexpectedBetweenWitnessMethodLabelAndColon"
-  case \ConventionWitnessMethodAttributeArgumentsSyntax.colon:
-    return "colon"
-  case \ConventionWitnessMethodAttributeArgumentsSyntax.unexpectedBetweenColonAndProtocolName:
-    return "unexpectedBetweenColonAndProtocolName"
-  case \ConventionWitnessMethodAttributeArgumentsSyntax.protocolName:
-    return "protocolName"
-  case \ConventionWitnessMethodAttributeArgumentsSyntax.unexpectedAfterProtocolName:
-    return "unexpectedAfterProtocolName"
   case \CopyExprSyntax.unexpectedBeforeCopyKeyword:
     return "unexpectedBeforeCopyKeyword"
   case \CopyExprSyntax.copyKeyword:
@@ -1272,20 +1236,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "memberBlock"
   case \EnumDeclSyntax.unexpectedAfterMemberBlock:
     return "unexpectedAfterMemberBlock"
-  case \ExposeAttributeArgumentsSyntax.unexpectedBeforeLanguage:
-    return "unexpectedBeforeLanguage"
-  case \ExposeAttributeArgumentsSyntax.language:
-    return "language"
-  case \ExposeAttributeArgumentsSyntax.unexpectedBetweenLanguageAndComma:
-    return "unexpectedBetweenLanguageAndComma"
-  case \ExposeAttributeArgumentsSyntax.comma:
-    return "comma"
-  case \ExposeAttributeArgumentsSyntax.unexpectedBetweenCommaAndCxxName:
-    return "unexpectedBetweenCommaAndCxxName"
-  case \ExposeAttributeArgumentsSyntax.cxxName:
-    return "cxxName"
-  case \ExposeAttributeArgumentsSyntax.unexpectedAfterCxxName:
-    return "unexpectedAfterCxxName"
   case \ExpressionPatternSyntax.unexpectedBeforeExpression:
     return "unexpectedBeforeExpression"
   case \ExpressionPatternSyntax.expression:
@@ -2430,20 +2380,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "colon"
   case \ObjCSelectorPieceSyntax.unexpectedAfterColon:
     return "unexpectedAfterColon"
-  case \OpaqueReturnTypeOfAttributeArgumentsSyntax.unexpectedBeforeMangledName:
-    return "unexpectedBeforeMangledName"
-  case \OpaqueReturnTypeOfAttributeArgumentsSyntax.mangledName:
-    return "mangledName"
-  case \OpaqueReturnTypeOfAttributeArgumentsSyntax.unexpectedBetweenMangledNameAndComma:
-    return "unexpectedBetweenMangledNameAndComma"
-  case \OpaqueReturnTypeOfAttributeArgumentsSyntax.comma:
-    return "comma"
-  case \OpaqueReturnTypeOfAttributeArgumentsSyntax.unexpectedBetweenCommaAndOrdinal:
-    return "unexpectedBetweenCommaAndOrdinal"
-  case \OpaqueReturnTypeOfAttributeArgumentsSyntax.ordinal:
-    return "ordinal"
-  case \OpaqueReturnTypeOfAttributeArgumentsSyntax.unexpectedAfterOrdinal:
-    return "unexpectedAfterOrdinal"
   case \OperatorDeclSyntax.unexpectedBeforeFixitySpecifier:
     return "unexpectedBeforeFixitySpecifier"
   case \OperatorDeclSyntax.fixitySpecifier:
@@ -3444,34 +3380,6 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "value"
   case \TypeInitializerClauseSyntax.unexpectedAfterValue:
     return "unexpectedAfterValue"
-  case \UnavailableFromAsyncAttributeArgumentsSyntax.unexpectedBeforeMessageLabel:
-    return "unexpectedBeforeMessageLabel"
-  case \UnavailableFromAsyncAttributeArgumentsSyntax.messageLabel:
-    return "messageLabel"
-  case \UnavailableFromAsyncAttributeArgumentsSyntax.unexpectedBetweenMessageLabelAndColon:
-    return "unexpectedBetweenMessageLabelAndColon"
-  case \UnavailableFromAsyncAttributeArgumentsSyntax.colon:
-    return "colon"
-  case \UnavailableFromAsyncAttributeArgumentsSyntax.unexpectedBetweenColonAndMessage:
-    return "unexpectedBetweenColonAndMessage"
-  case \UnavailableFromAsyncAttributeArgumentsSyntax.message:
-    return "message"
-  case \UnavailableFromAsyncAttributeArgumentsSyntax.unexpectedAfterMessage:
-    return "unexpectedAfterMessage"
-  case \UnderscorePrivateAttributeArgumentsSyntax.unexpectedBeforeSourceFileLabel:
-    return "unexpectedBeforeSourceFileLabel"
-  case \UnderscorePrivateAttributeArgumentsSyntax.sourceFileLabel:
-    return "sourceFileLabel"
-  case \UnderscorePrivateAttributeArgumentsSyntax.unexpectedBetweenSourceFileLabelAndColon:
-    return "unexpectedBetweenSourceFileLabelAndColon"
-  case \UnderscorePrivateAttributeArgumentsSyntax.colon:
-    return "colon"
-  case \UnderscorePrivateAttributeArgumentsSyntax.unexpectedBetweenColonAndFilename:
-    return "unexpectedBetweenColonAndFilename"
-  case \UnderscorePrivateAttributeArgumentsSyntax.filename:
-    return "filename"
-  case \UnderscorePrivateAttributeArgumentsSyntax.unexpectedAfterFilename:
-    return "unexpectedAfterFilename"
   case \UnresolvedAsExprSyntax.unexpectedBeforeAsKeyword:
     return "unexpectedBeforeAsKeyword"
   case \UnresolvedAsExprSyntax.asKeyword:

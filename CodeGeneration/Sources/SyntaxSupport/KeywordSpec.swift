@@ -78,12 +78,10 @@ public enum Keyword: CaseIterable {
   case __owned
   case __setter_access
   case __shared
-  case _alignment
   case _backDeploy
   case _borrow
   case _borrowing
   case _BridgeObject
-  case _cdecl
   case _Class
   case _compilerInitialized
   case _const
@@ -91,7 +89,6 @@ public enum Keyword: CaseIterable {
   case _documentation
   case _dynamicReplacement
   case _effects
-  case _expose
   case _forward
   case _implements
   case _linear
@@ -102,27 +99,16 @@ public enum Keyword: CaseIterable {
   case _NativeClass
   case _NativeRefCountedObject
   case _noMetadata
-  case _nonSendable
-  case _objcImplementation
-  case _objcRuntimeName
   case _opaqueReturnTypeOf
-  case _optimize
   case _originallyDefinedIn
   case _PackageDescription
-  case _private
-  case _projectedValueProperty
   case _read
   case _RefCountedObject
-  case _semantics
   case _specialize
-  case _spi
   case _spi_available
-  case _swift_native_objc_runtime_base
   case _Trivial
   case _TrivialAtMost
   case _TrivialStride
-  case _typeEraser
-  case _unavailableFromAsync
   case _underlyingVersion
   case _UnknownLayout
   case _version
@@ -160,7 +146,6 @@ public enum Keyword: CaseIterable {
   case `continue`
   case convenience
   case convention
-  case cType
   case `default`
   case `defer`
   case `deinit`
@@ -176,7 +161,6 @@ public enum Keyword: CaseIterable {
   case `else`
   case `enum`
   case escaping
-  case exclusivity
   case exported
   case `extension`
   case `fallthrough`
@@ -199,7 +183,6 @@ public enum Keyword: CaseIterable {
   case infix
   case `init`
   case initializes
-  case inline
   case `inout`
   case `internal`
   case introduced
@@ -261,7 +244,6 @@ public enum Keyword: CaseIterable {
   case Sendable
   case set
   case some
-  case sourceFile
   case spi
   case spiModule
   case `static`
@@ -291,7 +273,6 @@ public enum Keyword: CaseIterable {
   case `where`
   case `while`
   case willSet
-  case witness_method
   case wrt
   case x
   case yield
@@ -306,8 +287,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("__setter_access")
     case .__shared:
       return KeywordSpec("__shared")
-    case ._alignment:
-      return KeywordSpec("_alignment")
     case ._backDeploy:
       return KeywordSpec("_backDeploy")
     case ._borrow:
@@ -316,8 +295,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("_borrowing")
     case ._BridgeObject:
       return KeywordSpec("_BridgeObject")
-    case ._cdecl:
-      return KeywordSpec("_cdecl")
     case ._Class:
       return KeywordSpec("_Class")
     case ._compilerInitialized:
@@ -332,8 +309,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("_dynamicReplacement")
     case ._effects:
       return KeywordSpec("_effects")
-    case ._expose:
-      return KeywordSpec("_expose")
     case ._forward:
       return KeywordSpec("_forward")
     case ._implements:
@@ -354,48 +329,26 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("_NativeRefCountedObject")
     case ._noMetadata:
       return KeywordSpec("_noMetadata")
-    case ._nonSendable:
-      return KeywordSpec("_nonSendable")
-    case ._objcImplementation:
-      return KeywordSpec("_objcImplementation")
-    case ._objcRuntimeName:
-      return KeywordSpec("_objcRuntimeName")
     case ._opaqueReturnTypeOf:
       return KeywordSpec("_opaqueReturnTypeOf")
-    case ._optimize:
-      return KeywordSpec("_optimize")
     case ._originallyDefinedIn:
       return KeywordSpec("_originallyDefinedIn")
     case ._PackageDescription:
       return KeywordSpec("_PackageDescription")
-    case ._private:
-      return KeywordSpec("_private")
-    case ._projectedValueProperty:
-      return KeywordSpec("_projectedValueProperty")
     case ._read:
       return KeywordSpec("_read")
     case ._RefCountedObject:
       return KeywordSpec("_RefCountedObject")
-    case ._semantics:
-      return KeywordSpec("_semantics")
     case ._specialize:
       return KeywordSpec("_specialize")
-    case ._spi:
-      return KeywordSpec("_spi")
     case ._spi_available:
       return KeywordSpec("_spi_available")
-    case ._swift_native_objc_runtime_base:
-      return KeywordSpec("_swift_native_objc_runtime_base")
     case ._Trivial:
       return KeywordSpec("_Trivial")
     case ._TrivialAtMost:
       return KeywordSpec("_TrivialAtMost")
     case ._TrivialStride:
       return KeywordSpec("_TrivialStride")
-    case ._typeEraser:
-      return KeywordSpec("_typeEraser")
-    case ._unavailableFromAsync:
-      return KeywordSpec("_unavailableFromAsync")
     case ._underlyingVersion:
       return KeywordSpec("_underlyingVersion")
     case ._UnknownLayout:
@@ -470,8 +423,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("convenience")
     case .convention:
       return KeywordSpec("convention")
-    case .cType:
-      return KeywordSpec("cType")
     case .default:
       return KeywordSpec("default", isLexerClassified: true)
     case .defer:
@@ -502,8 +453,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("enum", isLexerClassified: true)
     case .escaping:
       return KeywordSpec("escaping")
-    case .exclusivity:
-      return KeywordSpec("exclusivity")
     case .exported:
       return KeywordSpec("exported")
     case .extension:
@@ -548,8 +497,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("init", isLexerClassified: true)
     case .initializes:
       return KeywordSpec("initializes")
-    case .inline:
-      return KeywordSpec("inline")
     case .inout:
       return KeywordSpec("inout", isLexerClassified: true)
     case .internal:
@@ -668,8 +615,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("set")
     case .some:
       return KeywordSpec("some")
-    case .sourceFile:
-      return KeywordSpec("sourceFile")
     case .spi:
       return KeywordSpec("spi")
     case .spiModule:
@@ -732,8 +677,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("while", isLexerClassified: true)
     case .willSet:
       return KeywordSpec("willSet")
-    case .witness_method:
-      return KeywordSpec("witness_method")
     case .wrt:
       return KeywordSpec("wrt")
     case .x:

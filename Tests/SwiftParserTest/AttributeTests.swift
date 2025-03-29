@@ -18,13 +18,13 @@ final class AttributeTests: ParserTestCase {
   func testMissingArgumentToAttribute() {
     assertParse(
       """
-      @_dynamicReplacementℹ️(1️⃣
-      func 2️⃣test_dynamic_replacement_for2() {
+      @_specializeℹ️(1️⃣
+      func 2️⃣foo() {
       }
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "expected argument for '@_dynamicReplacement' attribute",
+          message: "expected argument for '@_specialize' attribute",
           fixIts: ["insert attribute argument"]
         ),
         DiagnosticSpec(
@@ -34,8 +34,8 @@ final class AttributeTests: ParserTestCase {
         ),
       ],
       fixedSource: """
-        @_dynamicReplacement(for: <#identifier#>)
-        func test_dynamic_replacement_for2() {
+        @_specialize()
+        func foo() {
         }
         """
     )
@@ -422,11 +422,7 @@ final class AttributeTests: ParserTestCase {
 
   func testSpiAttributeWithoutParameter() {
     assertParse(
-      "@_spi(1️⃣) class Foo {}",
-      diagnostics: [
-        DiagnosticSpec(message: "expected argument for '@_spi' attribute", fixIts: ["insert attribute argument"])
-      ],
-      fixedSource: "@_spi(<#identifier#>) class Foo {}"
+      "@_spi() class Foo {}"
     )
   }
 
@@ -531,22 +527,6 @@ final class AttributeTests: ParserTestCase {
       @_expose(Cxx, "baz") func foo() {}
       """
     )
-
-    assertParse(
-      """
-      @_expose(Cxx, 1️⃣baz) func foo() {}
-      """,
-      diagnostics: [
-        DiagnosticSpec(
-          locationMarker: "1️⃣",
-          message: #"expected code 'baz' to be surrounded by '"'"#,
-          fixIts: [#"insert '"' and '"'"#]
-        )
-      ],
-      fixedSource: """
-        @_expose(Cxx, "baz") func foo() {}
-        """
-    )
   }
 
   func testOriginallyDefinedIn() {
@@ -589,19 +569,9 @@ final class AttributeTests: ParserTestCase {
 
     assertParse(
       """
-      @_unavailableFromAsync(1️⃣nope: "abc")
+      @_unavailableFromAsync(nope: "abc")
       func foo() {}
-      """,
-      diagnostics: [
-        DiagnosticSpec(
-          message: "expected 'message' in @_unavailableFromAsync argument",
-          fixIts: ["replace 'nope' with 'message'"]
-        )
-      ],
-      fixedSource: """
-        @_unavailableFromAsync(message: "abc")
-        func foo() {}
-        """
+      """
     )
 
     assertParse(
@@ -610,30 +580,19 @@ final class AttributeTests: ParserTestCase {
       func foo() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected ':' in @_unavailableFromAsync argument", fixIts: ["replace '=' with ':'"])
+        DiagnosticSpec(message: "'=' must have consistent whitespace on both sides", fixIts: ["insert whitespace"])
       ],
       fixedSource: """
-        @_unavailableFromAsync(message: "abc")
+        @_unavailableFromAsync(message = "abc")
         func foo() {}
         """
     )
 
     assertParse(
       """
-      @_unavailableFromAsync(message: 1️⃣abc)
+      @_unavailableFromAsync(message: abc)
       func foo() {}
-      """,
-      diagnostics: [
-        DiagnosticSpec(
-          locationMarker: "1️⃣",
-          message: #"expected code 'abc' to be surrounded by '"'"#,
-          fixIts: [#"insert '"' and '"'"#]
-        )
-      ],
-      fixedSource: """
-        @_unavailableFromAsync(message: "abc")
-        func foo() {}
-        """
+      """
     )
   }
 
@@ -910,19 +869,13 @@ final class AttributeTests: ParserTestCase {
       """
       _ = [@convention(c, cType: "int (*)(int)") (Int32) -> Int32]()
       """,
-      substructure: ConventionAttributeArgumentsSyntax(
-        conventionLabel: .identifier("c"),
-        comma: .commaToken(),
-        cTypeLabel: .keyword(.cType),
-        colon: .colonToken(),
-        cTypeString: StringLiteralExprSyntax(
-          openingQuote: .stringQuoteToken(),
-          segments: StringLiteralSegmentListSyntax([
-            StringLiteralSegmentListSyntax.Element(StringSegmentSyntax(content: .stringSegment("int (*)(int)")))
-          ]),
-          closingQuote: .stringQuoteToken()
-        )
-      )
+      substructure: LabeledExprListSyntax([
+        LabeledExprSyntax(
+          expression: DeclReferenceExprSyntax(baseName: .identifier("c")),
+          trailingComma: .commaToken()
+        ),
+        LabeledExprSyntax(label: "cType", expression: StringLiteralExprSyntax(content: "int (*)(int)")),
+      ])
     )
   }
 

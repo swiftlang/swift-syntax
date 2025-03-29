@@ -538,20 +538,6 @@ open class SyntaxRewriter {
     return StmtSyntax(ContinueStmtSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
-  /// Visit a ``ConventionAttributeArgumentsSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: ConventionAttributeArgumentsSyntax) -> ConventionAttributeArgumentsSyntax {
-    return ConventionAttributeArgumentsSyntax(unsafeCasting: visitChildren(node._syntaxNode))
-  }
-
-  /// Visit a ``ConventionWitnessMethodAttributeArgumentsSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: ConventionWitnessMethodAttributeArgumentsSyntax) -> ConventionWitnessMethodAttributeArgumentsSyntax {
-    return ConventionWitnessMethodAttributeArgumentsSyntax(unsafeCasting: visitChildren(node._syntaxNode))
-  }
-
   /// Visit a ``CopyExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -831,13 +817,6 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: EnumDeclSyntax) -> DeclSyntax {
     return DeclSyntax(EnumDeclSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
-  }
-
-  /// Visit a ``ExposeAttributeArgumentsSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: ExposeAttributeArgumentsSyntax) -> ExposeAttributeArgumentsSyntax {
-    return ExposeAttributeArgumentsSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
   /// Visit a ``ExprListSyntax``.
@@ -1462,13 +1441,6 @@ open class SyntaxRewriter {
     return ObjCSelectorPieceSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
-  /// Visit a ``OpaqueReturnTypeOfAttributeArgumentsSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> OpaqueReturnTypeOfAttributeArgumentsSyntax {
-    return OpaqueReturnTypeOfAttributeArgumentsSyntax(unsafeCasting: visitChildren(node._syntaxNode))
-  }
-
   /// Visit a ``OperatorDeclSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2023,20 +1995,6 @@ open class SyntaxRewriter {
     return TypeSpecifierListSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
-  /// Visit a ``UnavailableFromAsyncAttributeArgumentsSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: UnavailableFromAsyncAttributeArgumentsSyntax) -> UnavailableFromAsyncAttributeArgumentsSyntax {
-    return UnavailableFromAsyncAttributeArgumentsSyntax(unsafeCasting: visitChildren(node._syntaxNode))
-  }
-
-  /// Visit a ``UnderscorePrivateAttributeArgumentsSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: UnderscorePrivateAttributeArgumentsSyntax) -> UnderscorePrivateAttributeArgumentsSyntax {
-    return UnderscorePrivateAttributeArgumentsSyntax(unsafeCasting: visitChildren(node._syntaxNode))
-  }
-
   /// Visit a ``UnexpectedNodesSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2507,16 +2465,6 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
-  private func visitConventionAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
-    Syntax(visit(ConventionAttributeArgumentsSyntax(unsafeCasting: node)))
-  }
-
-  @inline(never)
-  private func visitConventionWitnessMethodAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
-    Syntax(visit(ConventionWitnessMethodAttributeArgumentsSyntax(unsafeCasting: node)))
-  }
-
-  @inline(never)
   private func visitCopyExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(CopyExprSyntax(unsafeCasting: node)))
   }
@@ -2714,11 +2662,6 @@ open class SyntaxRewriter {
   @inline(never)
   private func visitEnumDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(EnumDeclSyntax(unsafeCasting: node)))
-  }
-
-  @inline(never)
-  private func visitExposeAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
-    Syntax(visit(ExposeAttributeArgumentsSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
@@ -3162,11 +3105,6 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
-  private func visitOpaqueReturnTypeOfAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
-    Syntax(visit(OpaqueReturnTypeOfAttributeArgumentsSyntax(unsafeCasting: node)))
-  }
-
-  @inline(never)
   private func visitOperatorDeclSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(OperatorDeclSyntax(unsafeCasting: node)))
   }
@@ -3562,16 +3500,6 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
-  private func visitUnavailableFromAsyncAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
-    Syntax(visit(UnavailableFromAsyncAttributeArgumentsSyntax(unsafeCasting: node)))
-  }
-
-  @inline(never)
-  private func visitUnderscorePrivateAttributeArgumentsSyntaxImpl(_ node: Syntax) -> Syntax {
-    Syntax(visit(UnderscorePrivateAttributeArgumentsSyntax(unsafeCasting: node)))
-  }
-
-  @inline(never)
   private func visitUnexpectedNodesSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(UnexpectedNodesSyntax(unsafeCasting: node)))
   }
@@ -3808,10 +3736,6 @@ open class SyntaxRewriter {
       return self.visitConsumeExprSyntaxImpl(_:)
     case .continueStmt:
       return self.visitContinueStmtSyntaxImpl(_:)
-    case .conventionAttributeArguments:
-      return self.visitConventionAttributeArgumentsSyntaxImpl(_:)
-    case .conventionWitnessMethodAttributeArguments:
-      return self.visitConventionWitnessMethodAttributeArgumentsSyntaxImpl(_:)
     case .copyExpr:
       return self.visitCopyExprSyntaxImpl(_:)
     case .declModifierDetail:
@@ -3892,8 +3816,6 @@ open class SyntaxRewriter {
       return self.visitEnumCaseParameterSyntaxImpl(_:)
     case .enumDecl:
       return self.visitEnumDeclSyntaxImpl(_:)
-    case .exposeAttributeArguments:
-      return self.visitExposeAttributeArgumentsSyntaxImpl(_:)
     case .exprList:
       return self.visitExprListSyntaxImpl(_:)
     case .expressionPattern:
@@ -4070,8 +3992,6 @@ open class SyntaxRewriter {
       return self.visitObjCSelectorPieceListSyntaxImpl(_:)
     case .objCSelectorPiece:
       return self.visitObjCSelectorPieceSyntaxImpl(_:)
-    case .opaqueReturnTypeOfAttributeArguments:
-      return self.visitOpaqueReturnTypeOfAttributeArgumentsSyntaxImpl(_:)
     case .operatorDecl:
       return self.visitOperatorDeclSyntaxImpl(_:)
     case .operatorPrecedenceAndTypes:
@@ -4230,10 +4150,6 @@ open class SyntaxRewriter {
       return self.visitTypeInitializerClauseSyntaxImpl(_:)
     case .typeSpecifierList:
       return self.visitTypeSpecifierListSyntaxImpl(_:)
-    case .unavailableFromAsyncAttributeArguments:
-      return self.visitUnavailableFromAsyncAttributeArgumentsSyntaxImpl(_:)
-    case .underscorePrivateAttributeArguments:
-      return self.visitUnderscorePrivateAttributeArgumentsSyntaxImpl(_:)
     case .unexpectedNodes:
       return self.visitUnexpectedNodesSyntaxImpl(_:)
     case .unresolvedAsExpr:
@@ -4402,10 +4318,6 @@ open class SyntaxRewriter {
       return visitConsumeExprSyntaxImpl(node)
     case .continueStmt:
       return visitContinueStmtSyntaxImpl(node)
-    case .conventionAttributeArguments:
-      return visitConventionAttributeArgumentsSyntaxImpl(node)
-    case .conventionWitnessMethodAttributeArguments:
-      return visitConventionWitnessMethodAttributeArgumentsSyntaxImpl(node)
     case .copyExpr:
       return visitCopyExprSyntaxImpl(node)
     case .declModifierDetail:
@@ -4486,8 +4398,6 @@ open class SyntaxRewriter {
       return visitEnumCaseParameterSyntaxImpl(node)
     case .enumDecl:
       return visitEnumDeclSyntaxImpl(node)
-    case .exposeAttributeArguments:
-      return visitExposeAttributeArgumentsSyntaxImpl(node)
     case .exprList:
       return visitExprListSyntaxImpl(node)
     case .expressionPattern:
@@ -4664,8 +4574,6 @@ open class SyntaxRewriter {
       return visitObjCSelectorPieceListSyntaxImpl(node)
     case .objCSelectorPiece:
       return visitObjCSelectorPieceSyntaxImpl(node)
-    case .opaqueReturnTypeOfAttributeArguments:
-      return visitOpaqueReturnTypeOfAttributeArgumentsSyntaxImpl(node)
     case .operatorDecl:
       return visitOperatorDeclSyntaxImpl(node)
     case .operatorPrecedenceAndTypes:
@@ -4824,10 +4732,6 @@ open class SyntaxRewriter {
       return visitTypeInitializerClauseSyntaxImpl(node)
     case .typeSpecifierList:
       return visitTypeSpecifierListSyntaxImpl(node)
-    case .unavailableFromAsyncAttributeArguments:
-      return visitUnavailableFromAsyncAttributeArgumentsSyntaxImpl(node)
-    case .underscorePrivateAttributeArguments:
-      return visitUnderscorePrivateAttributeArgumentsSyntaxImpl(node)
     case .unexpectedNodes:
       return visitUnexpectedNodesSyntaxImpl(node)
     case .unresolvedAsExpr:

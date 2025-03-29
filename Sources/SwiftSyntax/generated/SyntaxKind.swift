@@ -83,8 +83,6 @@ public enum SyntaxKind: Sendable {
   case conformanceRequirement
   case consumeExpr
   case continueStmt
-  case conventionAttributeArguments
-  case conventionWitnessMethodAttributeArguments
   case copyExpr
   case declModifierDetail
   case declModifierList
@@ -126,7 +124,6 @@ public enum SyntaxKind: Sendable {
   case enumCaseParameterList
   case enumCaseParameter
   case enumDecl
-  case exposeAttributeArguments
   case exprList
   case expressionPattern
   case expressionSegment
@@ -221,7 +218,6 @@ public enum SyntaxKind: Sendable {
   case nilLiteralExpr
   case objCSelectorPieceList
   case objCSelectorPiece
-  case opaqueReturnTypeOfAttributeArguments
   case operatorDecl
   case operatorPrecedenceAndTypes
   case optionalBindingCondition
@@ -302,8 +298,6 @@ public enum SyntaxKind: Sendable {
   case typeExpr
   case typeInitializerClause
   case typeSpecifierList
-  case unavailableFromAsyncAttributeArguments
-  case underscorePrivateAttributeArguments
   case unexpectedNodes
   case unresolvedAsExpr
   case unresolvedIsExpr
@@ -578,10 +572,6 @@ public enum SyntaxKind: Sendable {
       return ConsumeExprSyntax.self
     case .continueStmt:
       return ContinueStmtSyntax.self
-    case .conventionAttributeArguments:
-      return ConventionAttributeArgumentsSyntax.self
-    case .conventionWitnessMethodAttributeArguments:
-      return ConventionWitnessMethodAttributeArgumentsSyntax.self
     case .copyExpr:
       return CopyExprSyntax.self
     case .declModifierDetail:
@@ -662,8 +652,6 @@ public enum SyntaxKind: Sendable {
       return EnumCaseParameterSyntax.self
     case .enumDecl:
       return EnumDeclSyntax.self
-    case .exposeAttributeArguments:
-      return ExposeAttributeArgumentsSyntax.self
     case .exprList:
       return ExprListSyntax.self
     case .expressionPattern:
@@ -840,8 +828,6 @@ public enum SyntaxKind: Sendable {
       return ObjCSelectorPieceListSyntax.self
     case .objCSelectorPiece:
       return ObjCSelectorPieceSyntax.self
-    case .opaqueReturnTypeOfAttributeArguments:
-      return OpaqueReturnTypeOfAttributeArgumentsSyntax.self
     case .operatorDecl:
       return OperatorDeclSyntax.self
     case .operatorPrecedenceAndTypes:
@@ -1000,10 +986,6 @@ public enum SyntaxKind: Sendable {
       return TypeInitializerClauseSyntax.self
     case .typeSpecifierList:
       return TypeSpecifierListSyntax.self
-    case .unavailableFromAsyncAttributeArguments:
-      return UnavailableFromAsyncAttributeArgumentsSyntax.self
-    case .underscorePrivateAttributeArguments:
-      return UnderscorePrivateAttributeArgumentsSyntax.self
     case .unexpectedNodes:
       return UnexpectedNodesSyntax.self
     case .unresolvedAsExpr:

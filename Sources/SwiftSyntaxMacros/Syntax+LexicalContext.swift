@@ -106,6 +106,39 @@ extension SyntaxProtocol {
       if let parentContext = parentNode.asMacroLexicalContext() {
         parentContexts.append(parentContext)
       }
+      if let sequence = parentNode.as(SequenceExprSyntax.self) {
+        var sequenceExprContexts: [Syntax] = []
+        for elt in sequence.elements {
+          if elt.range.contains(self.position) {
+            // `sequenceExprContexts` is built from the top-down, but we
+            // build the rest of the contexts bottom-up. Reverse for
+            // consistency.
+            parentContexts += sequenceExprContexts.reversed()
+            break
+          }
+          var elt = elt
+          while true {
+            if let tryElt = elt.as(TryExprSyntax.self) {
+              sequenceExprContexts.append(tryElt.asMacroLexicalContext()!)
+              elt = tryElt.expression
+              continue
+            }
+            if let awaitElt = elt.as(AwaitExprSyntax.self) {
+              sequenceExprContexts.append(awaitElt.asMacroLexicalContext()!)
+              elt = awaitElt.expression
+              continue
+            }
+            if let unsafeElt = elt.as(UnsafeExprSyntax.self) {
+              // No scope for this currently, but we need to look through it
+              // since it's similar to 'try' in that it's hoisted above a
+              // binary operator when appearing on the LHS.
+              elt = unsafeElt.expression
+              continue
+            }
+            break
+          }
+        }
+      }
 
       currentNode = parentNode
     }

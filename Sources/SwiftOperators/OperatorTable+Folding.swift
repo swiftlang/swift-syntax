@@ -155,6 +155,8 @@ extension OperatorTable {
         )
       )
     }
+    // NOTE: If you add a new try/await/unsafe-like hoisting case here, make
+    // sure to also update `allMacroLexicalContexts` to handle it.
 
     // The form of the binary operation depends on the operator itself,
     // which will be one of the unresolved infix operators.

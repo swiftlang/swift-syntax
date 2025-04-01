@@ -567,4 +567,165 @@ final class LexicalContextTests: XCTestCase {
       macros: ["lexicalContextDescription": LexicalContextDescriptionMacro.self]
     )
   }
+
+  func testTryAwaitInSequenceLexicalContext() {
+    // Valid cases.
+    assertMacroExpansion(
+      "try await #lexicalContextDescription + #lexicalContextDescription",
+      expandedSource: #"""
+        try await """
+        await _
+        try _
+        """ + """
+        await _
+        try _
+        """
+        """#,
+      macros: ["lexicalContextDescription": LexicalContextDescriptionMacro.self]
+    )
+    assertMacroExpansion(
+      "try await 0 + 1 + foo(#lexicalContextDescription) + 2",
+      expandedSource: #"""
+        try await 0 + 1 + foo("""
+        await _
+        try _
+        """) + 2
+        """#,
+      macros: ["lexicalContextDescription": LexicalContextDescriptionMacro.self]
+    )
+    assertMacroExpansion(
+      "x = try await 0 + 1 + foo(#lexicalContextDescription) + 2",
+      expandedSource: #"""
+        x = try await 0 + 1 + foo("""
+        await _
+        try _
+        """) + 2
+        """#,
+      macros: ["lexicalContextDescription": LexicalContextDescriptionMacro.self]
+    )
+    // `try await` in the 'then' branch doesn't cover condition or else.
+    assertMacroExpansion(
+      "#lexicalContextDescription ? try await #lexicalContextDescription : #lexicalContextDescription",
+      expandedSource: #"""
+        """
+        """ ? try await """
+        await _
+        try _
+        """ : """
+        """
+        """#,
+      macros: ["lexicalContextDescription": LexicalContextDescriptionMacro.self]
+    )
+    // Same for else.
+    assertMacroExpansion(
+      "#lexicalContextDescription ? #lexicalContextDescription : try await #lexicalContextDescription",
+      expandedSource: #"""
+        """
+        """ ? """
+        """ : try await """
+        await _
+        try _
+        """
+        """#,
+      macros: ["lexicalContextDescription": LexicalContextDescriptionMacro.self]
+    )
+    // 'try await' in the condition here covers the entire expression
+    assertMacroExpansion(
+      "try await #lexicalContextDescription ? #lexicalContextDescription : #lexicalContextDescription ~~ #lexicalContextDescription",
+      expandedSource: #"""
+        try await """
+        await _
+        try _
+        """ ? """
+        await _
+        try _
+        """ : """
+        await _
+        try _
+        """ ~~ """
+        await _
+        try _
+        """
+        """#,
+      macros: ["lexicalContextDescription": LexicalContextDescriptionMacro.self]
+    )
+    assertMacroExpansion(
+      "x = unsafe try try! await 0 + #lexicalContextDescription",
+      expandedSource: #"""
+        x = unsafe try try! await 0 + """
+        await _
+        try! _
+        try _
+        """
+        """#,
+      macros: ["lexicalContextDescription": LexicalContextDescriptionMacro.self]
+    )
+
+    // Invalid cases
+    assertMacroExpansion(
+      "0 + try await #lexicalContextDescription",
+      expandedSource: #"""
+        0 + try await """
+        await _
+        try _
+        """
+        """#,
+      macros: ["lexicalContextDescription": LexicalContextDescriptionMacro.self]
+    )
+    // The 'try await' may not actually cover 'lexicalContextDescription' here,
+    // but this will be rejected by the compiler.
+    assertMacroExpansion(
+      "0 + try await 1 ^ #lexicalContextDescription",
+      expandedSource: #"""
+        0 + try await 1 ^ """
+        await _
+        try _
+        """
+        """#,
+      macros: ["lexicalContextDescription": LexicalContextDescriptionMacro.self]
+    )
+    // Invalid if '^' has a lower precedence than '='.
+    assertMacroExpansion(
+      "x = try await 0 ^ #lexicalContextDescription",
+      expandedSource: #"""
+        x = try await 0 ^ """
+        await _
+        try _
+        """
+        """#,
+      macros: ["lexicalContextDescription": LexicalContextDescriptionMacro.self]
+    )
+    // Unassignable
+    assertMacroExpansion(
+      "#lexicalContextDescription = try await 0 + 1",
+      expandedSource: #"""
+        """
+        """ = try await 0 + 1
+        """#,
+      macros: ["lexicalContextDescription": LexicalContextDescriptionMacro.self]
+    )
+    assertMacroExpansion(
+      "try await #lexicalContextDescription = 0 + #lexicalContextDescription",
+      expandedSource: #"""
+        try await """
+        await _
+        try _
+        """ = 0 + """
+        await _
+        try _
+        """
+        """#,
+      macros: ["lexicalContextDescription": LexicalContextDescriptionMacro.self]
+    )
+    assertMacroExpansion(
+      "try await foo() ? 0 : 1 = #lexicalContextDescription",
+      expandedSource: #"""
+        try await foo() ? 0 : 1 = """
+        await _
+        try _
+        """
+        """#,
+      macros: ["lexicalContextDescription": LexicalContextDescriptionMacro.self]
+    )
+  }
 }

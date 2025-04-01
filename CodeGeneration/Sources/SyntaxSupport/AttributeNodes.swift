@@ -168,11 +168,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "availabilityArguments",
-        kind: .collection(
-          kind: .availabilityArgumentList,
-          collectionElementName: "AvailabilityArgument",
-          deprecatedCollectionElementName: "Availability"
-        )
+        kind: .collection(kind: .availabilityArgumentList)
       ),
       Child(
         name: "semicolon",
@@ -238,11 +234,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "platforms",
-        kind: .collection(
-          kind: .platformVersionItemList,
-          collectionElementName: "Platform",
-          deprecatedCollectionElementName: "Availability"
-        ),
+        kind: .collection(kind: .platformVersionItemList),
         documentation: "The list of OS versions in which the declaration became ABI stable."
       ),
     ],
@@ -422,7 +414,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "arguments",
-        kind: .collection(kind: .differentiabilityArgumentList, collectionElementName: "Argument"),
+        kind: .collection(kind: .differentiabilityArgumentList),
         documentation: "The parameters for differentiation."
       ),
       Child(
@@ -703,7 +695,7 @@ public let ATTRIBUTE_NODES: [Node] = [
       ),
       Child(
         name: "platforms",
-        kind: .collection(kind: .platformVersionItemList, collectionElementName: "Platform")
+        kind: .collection(kind: .platformVersionItemList)
       ),
     ]
   ),

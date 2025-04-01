@@ -171,6 +171,7 @@ swift_syntax_library(
         ":SwiftSyntax509",
         ":SwiftSyntax510",
         ":SwiftSyntax600",
+        ":SwiftSyntax601",
         ":_SwiftSyntaxCShims",
     ],
 )

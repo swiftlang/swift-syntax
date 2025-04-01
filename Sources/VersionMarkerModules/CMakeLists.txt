@@ -14,3 +14,5 @@ add_library(${SWIFTSYNTAX_TARGET_NAMESPACE}SwiftSyntax510 STATIC
   SwiftSyntax509/Empty.swift)
 add_library(${SWIFTSYNTAX_TARGET_NAMESPACE}SwiftSyntax600 STATIC
   SwiftSyntax509/Empty.swift)
+add_library(${SWIFTSYNTAX_TARGET_NAMESPACE}SwiftSyntax601 STATIC
+  SwiftSyntax509/Empty.swift)

@@ -21,11 +21,11 @@ public struct Diagnostic: CustomDebugStringConvertible, Sendable {
   public let diagMessage: DiagnosticMessage
 
   /// The node at whose start location the message should be displayed.
-  public let node: Syntax
+  public let node: Syntax?
 
   /// The position at which the location should be anchored.
   /// By default, this is the start location of `node`.
-  public let position: AbsolutePosition
+  public let position: AbsolutePosition?
 
   /// Nodes that should be highlighted in the source code.
   public let highlights: [Syntax]
@@ -40,17 +40,17 @@ public struct Diagnostic: CustomDebugStringConvertible, Sendable {
   /// If `highlights` is `nil` then `node` will be highlighted. This is a
   /// reasonable default for almost all diagnostics.
   public init(
-    node: some SyntaxProtocol,
+    node: (some SyntaxProtocol)?,
     position: AbsolutePosition? = nil,
     message: DiagnosticMessage,
     highlights: [Syntax]? = nil,
     notes: [Note] = [],
     fixIts: [FixIt] = []
   ) {
-    self.node = Syntax(node)
-    self.position = position ?? node.positionAfterSkippingLeadingTrivia
+    self.node = node.map { Syntax($0) }
+    self.position = position ?? node?.positionAfterSkippingLeadingTrivia
     self.diagMessage = message
-    self.highlights = highlights ?? [Syntax(node)]
+    self.highlights = highlights ?? node.map { [Syntax($0)] } ?? []
     self.notes = notes
     self.fixIts = fixIts
   }
@@ -67,13 +67,24 @@ public struct Diagnostic: CustomDebugStringConvertible, Sendable {
   }
 
   /// The location at which the diagnostic should be displayed.
-  public func location(converter: SourceLocationConverter) -> SourceLocation {
+  public func location(converter: SourceLocationConverter) -> SourceLocation? {
+    guard let position else {
+      return nil
+    }
+
     return converter.location(for: position)
   }
 
   public var debugDescription: String {
+    guard let node else {
+      return "\(DiagnosticsFormatter.unknownFileName):0:0: \(message)"
+    }
+
     let locationConverter = SourceLocationConverter(fileName: "", tree: node.root)
-    let location = location(converter: locationConverter)
+    guard let location = location(converter: locationConverter) else {
+      return "\(DiagnosticsFormatter.unknownFileName):0:0: \(message)"
+    }
+
     return "\(location.line):\(location.column): \(message)"
   }
 }

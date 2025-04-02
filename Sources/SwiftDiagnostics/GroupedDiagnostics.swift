@@ -57,6 +57,10 @@ public struct GroupedDiagnostics {
   /// source file IDs.
   var rootIndexes: [Syntax: SourceFileID] = [:]
 
+  /// Diagnostics that aren't associated with any source file because they have
+  /// no location information.
+  var floatingDiagnostics: [Diagnostic] = []
+
   public init() {}
 
   /// Add a new source file to the set of grouped diagnostics.
@@ -122,8 +126,16 @@ public struct GroupedDiagnostics {
     _ diagnostic: Diagnostic,
     in knownSourceFileID: SourceFileID? = nil
   ) {
-    guard let sourceFileID = knownSourceFileID ?? findSourceFileContaining(diagnostic.node) else {
-      // Drop the diagnostic on the floor.
+    guard let node = diagnostic.node else {
+      // There is no node anchoring the diagnostic in a source file, so treat
+      // it as floating.
+      floatingDiagnostics.append(diagnostic)
+      return
+    }
+
+    guard let sourceFileID = knownSourceFileID ?? findSourceFileContaining(node) else {
+      // This diagnostic is in source file, but we aren't producing diagnostics
+      // for that file. Drop the diagnostic on the floor.
       return
     }
 
@@ -205,7 +217,9 @@ extension GroupedDiagnostics {
       // If there's a primary diagnostic, print it first.
       if let (primaryDiagSourceFile, primaryDiag) = findPrimaryDiagnostic(in: sourceFile) {
         let primaryDiagSLC = primaryDiagSourceFile.sourceLocationConverter
-        let location = primaryDiag.location(converter: primaryDiagSLC)
+        let location =
+          primaryDiag.location(converter: primaryDiagSLC)
+          ?? SourceLocation(line: 0, column: 0, offset: 0, file: DiagnosticsFormatter.unknownFileName)
 
         // Display file/line/column and diagnostic text for the primary diagnostic.
         prefixString =
@@ -233,9 +247,13 @@ extension GroupedDiagnostics {
             prefixString += "`- \(bufferLoc.file):\(bufferLoc.line):\(bufferLoc.column): \(decoratedMessage)\n"
           }
         }
+      } else if let firstDiag = sourceFile.diagnostics.first,
+        let firstDiagLoc = firstDiag.location(converter: slc)
+      {
+        prefixString = "\(sourceFile.displayName): \(firstDiagLoc.line):"
       } else {
-        let firstLine = sourceFile.diagnostics.first.map { $0.location(converter: slc).line } ?? 0
-        prefixString = "\(sourceFile.displayName): \(firstLine):"
+        // There are no diagnostics to print from this file.
+        return ""
       }
 
       suffixString = ""
@@ -275,9 +293,25 @@ extension GroupedDiagnostics {
 extension DiagnosticsFormatter {
   /// Annotate all of the source files in the given set of grouped diagnostics.
   public func annotateSources(in group: GroupedDiagnostics) -> String {
-    return group.rootSourceFiles.map { rootSourceFileID in
-      group.annotateSource(rootSourceFileID, formatter: self, indentString: "")
-    }.joined(separator: "\n")
+    // Render all grouped diagnostics.
+    var renderedDiags = group.rootSourceFiles.compactMap { rootSourceFileID in
+      let annotated = group.annotateSource(
+        rootSourceFileID,
+        formatter: self,
+        indentString: ""
+      )
+      return annotated.isEmpty ? nil : annotated
+    }
+
+    // Render any floating diagnostics, which have no anchor.
+    renderedDiags.append(
+      contentsOf: group.floatingDiagnostics.map { diag in
+        let renderedMessage = diagnosticDecorator.decorateDiagnosticMessage(diag.diagMessage)
+        return "\(DiagnosticsFormatter.unknownFileName):0:0: \(renderedMessage)"
+      }
+    )
+
+    return renderedDiags.joined(separator: "\n")
   }
 
   public static func annotateSources(

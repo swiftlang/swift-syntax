@@ -68,10 +68,12 @@ extension PluginMessage.Diagnostic.Severity {
 
 extension PluginMessage.Diagnostic {
   init(from syntaxDiag: SwiftDiagnostics.Diagnostic, in sourceManager: SourceManager) {
-    if let position = sourceManager.position(
-      of: syntaxDiag.node,
-      at: .afterLeadingTrivia
-    ) {
+    if let node = syntaxDiag.node,
+      let position = sourceManager.position(
+        of: node,
+        at: .afterLeadingTrivia
+      )
+    {
       self.position = .init(fileName: position.fileName, offset: position.utf8Offset)
     } else {
       self.position = .invalid
@@ -92,7 +94,7 @@ extension PluginMessage.Diagnostic {
     }
 
     self.notes = syntaxDiag.notes.compactMap {
-      guard let pos = sourceManager.position(of: $0.node, at: .afterLeadingTrivia) else {
+      guard let node = $0.node, let pos = sourceManager.position(of: node, at: .afterLeadingTrivia) else {
         return nil
       }
       let position = PluginMessage.Diagnostic.Position(

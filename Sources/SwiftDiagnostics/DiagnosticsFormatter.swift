@@ -293,10 +293,13 @@ public struct DiagnosticsFormatter {
         )
       )
 
-      // If the line did not end with \n (e.g. the last line), append it manually
-      if annotatedSource.last != "\n" {
-        annotatedSource.append("\n")
+      // Remove any trailing newline and replace it; this may seem
+      // counterintuitive, but if we're running within CMake and we let a
+      // '\r\n' through, CMake will turn that into *two* newlines.
+      if let last = annotatedSource.last, last.isNewline {
+        annotatedSource.removeLast()
       }
+      annotatedSource.append("\n")
 
       let columnsWithDiagnostics = Set(
         annotatedLine.diagnostics.map {
@@ -331,8 +334,13 @@ public struct DiagnosticsFormatter {
       }
 
       // Add suffix text.
-      annotatedSource.append(annotatedLine.suffixText)
-      if annotatedSource.last != "\n" {
+      if !annotatedLine.suffixText.isEmpty {
+        annotatedSource.append(annotatedLine.suffixText)
+
+        // See above for an explanation of why we do this
+        if let last = annotatedSource.last, last.isNewline {
+          annotatedSource.removeLast()
+        }
         annotatedSource.append("\n")
       }
     }

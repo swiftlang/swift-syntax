@@ -67,11 +67,11 @@ extension SyntaxProtocol {
     case let freestandingMacro as FreestandingMacroExpansionSyntax:
       return Syntax(freestandingMacro.detached) as Syntax
 
-    // Try and await are preserved: A freestanding expression macro preceded
-    // by try or await may need to know whether those keywords are present so it
-    // can propagate them to any expressions in its expansion which were passed
-    // as arguments to the macro. The expression of the try or await is replaced
-    // with a trivial placeholder, though.
+    // `try`, `await`, and `unsafe` are preserved: A freestanding expression
+    // macro may need to know whether those keywords are present so it can
+    // propagate them to any expressions in its expansion which were passed as
+    // arguments to the macro. The sub-expression is replaced with a trivial
+    // placeholder, though.
     case var tryExpr as TryExprSyntax:
       tryExpr = tryExpr.detached
       tryExpr.expression = ExprSyntax(TypeExprSyntax(type: IdentifierTypeSyntax(name: .wildcardToken())))
@@ -80,6 +80,10 @@ extension SyntaxProtocol {
       awaitExpr = awaitExpr.detached
       awaitExpr.expression = ExprSyntax(TypeExprSyntax(type: IdentifierTypeSyntax(name: .wildcardToken())))
       return Syntax(awaitExpr)
+    case var unsafeExpr as UnsafeExprSyntax:
+      unsafeExpr = unsafeExpr.detached
+      unsafeExpr.expression = ExprSyntax(TypeExprSyntax(type: IdentifierTypeSyntax(name: .wildcardToken())))
+      return Syntax(unsafeExpr)
 
     default:
       return nil
@@ -106,6 +110,12 @@ extension SyntaxProtocol {
       if let parentContext = parentNode.asMacroLexicalContext() {
         parentContexts.append(parentContext)
       }
+      // Unfolded sequence expressions require special handling - effect marker
+      // nodes like `try`, `await`, and `unsafe` are treated as lexical contexts
+      // for all the nodes on their right. Cases where they don't end up
+      // covering nodes to their right in the folded tree are invalid and will
+      // be diagnosed by the compiler. This matches the compiler's ASTScope
+      // handling logic.
       if let sequence = parentNode.as(SequenceExprSyntax.self) {
         var sequenceExprContexts: [Syntax] = []
         for elt in sequence.elements {
@@ -129,9 +139,7 @@ extension SyntaxProtocol {
               continue
             }
             if let unsafeElt = elt.as(UnsafeExprSyntax.self) {
-              // No scope for this currently, but we need to look through it
-              // since it's similar to 'try' in that it's hoisted above a
-              // binary operator when appearing on the LHS.
+              sequenceExprContexts.append(unsafeElt.asMacroLexicalContext()!)
               elt = unsafeElt.expression
               continue
             }

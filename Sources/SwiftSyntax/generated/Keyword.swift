@@ -155,6 +155,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case none
   case nonisolated
   case nonmutating
+  case nonsending
   case objc
   case obsoleted
   case of
@@ -584,6 +585,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .higherThan
       case "introduced":
         self = .introduced
+      case "nonsending":
+        self = .nonsending
       case "visibility":
         self = .visibility
       default:
@@ -893,6 +896,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "none",
     "nonisolated",
     "nonmutating",
+    "nonsending",
     "objc",
     "obsoleted",
     "of",

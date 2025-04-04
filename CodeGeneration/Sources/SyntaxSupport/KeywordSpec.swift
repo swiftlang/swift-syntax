@@ -210,6 +210,7 @@ public enum Keyword: CaseIterable {
   case none
   case nonisolated
   case nonmutating
+  case nonsending
   case objc
   case obsoleted
   case of
@@ -551,6 +552,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("nonisolated")
     case .nonmutating:
       return KeywordSpec("nonmutating")
+    case .nonsending:
+      return KeywordSpec("nonsending")
     case .objc:
       return KeywordSpec("objc")
     case .obsoleted:

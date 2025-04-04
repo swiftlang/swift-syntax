@@ -261,8 +261,8 @@ final class DeclarationTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "expected 'unsafe' in modifier",
-          fixIts: ["replace 'safe' with 'unsafe'"]
+          message: "expected identifier in modifier",
+          fixIts: ["replace 'safe' with identifier"]
         )
       ],
       fixedSource: """
@@ -271,7 +271,36 @@ final class DeclarationTests: ParserTestCase {
         struct A {
           nonisolated(unsafe) let b = 0
           nonisolated(unsafe) var c: Int { 0 }
-          nonisolated(unsafe) let d = 0
+          nonisolated(<#identifier#>) let d = 0
+        }
+        """
+    )
+  }
+
+  func testNonisolatedNonSendingParsing() {
+    assertParse(
+      """
+      nonisolated(nonsending) let a = 0
+
+      struct A {
+        nonisolated(nonsending) let b = 0
+        nonisolated(nonsending) var c: Int { 0 }
+        nonisolated(1️⃣sending) let d = 0
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected identifier in modifier",
+          fixIts: ["replace 'sending' with identifier"]
+        )
+      ],
+      fixedSource: """
+        nonisolated(nonsending) let a = 0
+
+        struct A {
+          nonisolated(nonsending) let b = 0
+          nonisolated(nonsending) var c: Int { 0 }
+          nonisolated(<#identifier#>) let d = 0
         }
         """
     )

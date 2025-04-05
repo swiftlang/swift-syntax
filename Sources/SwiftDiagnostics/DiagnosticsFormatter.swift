@@ -54,6 +54,9 @@ extension Sequence where Element == Range<Int> {
 }
 
 public struct DiagnosticsFormatter {
+  /// The string used to identify an unknown file name.
+  @_spi(Testing)
+  public static let unknownFileName = "<unknown>"
 
   /// A wrapper struct for a source line, its diagnostics, and any
   /// non-diagnostic text that follows the line.
@@ -215,14 +218,19 @@ public struct DiagnosticsFormatter {
     suffixTexts: [AbsolutePosition: String],
     sourceLocationConverter: SourceLocationConverter? = nil
   ) -> String {
-    let slc = sourceLocationConverter ?? SourceLocationConverter(fileName: "<unknown>", tree: tree)
+    let slc =
+      sourceLocationConverter ?? SourceLocationConverter(fileName: DiagnosticsFormatter.unknownFileName, tree: tree)
 
     // First, we need to put each line and its diagnostics together
     var annotatedSourceLines = [AnnotatedSourceLine]()
 
     for (sourceLineIndex, sourceLine) in slc.sourceLines.enumerated() {
       let diagsForLine = diags.filter { diag in
-        return diag.location(converter: slc).line == (sourceLineIndex + 1)
+        guard let location = diag.location(converter: slc) else {
+          return false
+        }
+
+        return location.line == (sourceLineIndex + 1)
       }
       let suffixText = suffixTexts.compactMap { (position, text) in
         if slc.location(for: position).line == (sourceLineIndex + 1) {
@@ -299,12 +307,14 @@ public struct DiagnosticsFormatter {
       }
 
       let columnsWithDiagnostics = Set(
-        annotatedLine.diagnostics.map {
-          annotatedLine.characterColumn(ofUtf8Column: $0.location(converter: slc).column)
+        annotatedLine.diagnostics.compactMap {
+          $0.location(converter: slc).map {
+            annotatedLine.characterColumn(ofUtf8Column: $0.column)
+          }
         }
       )
       let diagsPerColumn = Dictionary(grouping: annotatedLine.diagnostics) { diag in
-        annotatedLine.characterColumn(ofUtf8Column: diag.location(converter: slc).column)
+        annotatedLine.characterColumn(ofUtf8Column: diag.location(converter: slc)!.column)
       }.sorted { lhs, rhs in
         lhs.key > rhs.key
       }

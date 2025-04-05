@@ -85,6 +85,43 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     )
   }
 
+  func testFloatingDiagnostics() {
+    var group = GroupedDiagnostics()
+    _ = group.addTestFile(
+      """
+      func f() { }
+      """,
+      displayName: "main.swift",
+      diagnosticDescriptors: []
+    )
+
+    group.addDiagnostic(
+      Diagnostic(
+        node: nil as Syntax?,
+        message: SimpleDiagnosticMessage(
+          message: "this is bad",
+          diagnosticID: MessageID(
+            domain: "swift-syntax",
+            id: "diagnostic test"
+          ),
+          severity: .error,
+          category: DiagnosticCategory(
+            name: "Badness",
+            documentationURL: nil
+          )
+        )
+      )
+    )
+
+    let annotated = DiagnosticsFormatter.annotateSources(in: group)
+    assertStringsEqualWithDiff(
+      annotated,
+      """
+      <unknown>:0:0: error: this is bad [#Badness]
+      """
+    )
+  }
+
   func testGroupingForMacroExpansion() {
     var group = GroupedDiagnostics()
 
@@ -259,4 +296,5 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       """
     )
   }
+
 }

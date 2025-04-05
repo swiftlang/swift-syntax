@@ -157,7 +157,18 @@ func assertNote(
     location: spec.failureLocation.underlying,
     failureHandler: { failureHandler(TestFailureSpec(underlying: $0)) }
   )
-  let location = expansionContext.location(for: note.position, anchoredAt: note.node, fileName: "")
+  guard let position = note.position, let node = note.node else {
+    failureHandler(
+      TestFailureSpec(
+        message: "note has no position",
+        location: spec.failureLocation
+      )
+    )
+
+    return
+  }
+
+  let location = expansionContext.location(for: position, anchoredAt: node, fileName: "")
   if location.line != spec.line {
     failureHandler(
       TestFailureSpec(
@@ -387,7 +398,19 @@ public func assertDiagnostic(
     location: spec.failureLocation.underlying,
     failureHandler: { failureHandler(TestFailureSpec(underlying: $0)) }
   )
-  let location = expansionContext.location(for: diag.position, anchoredAt: diag.node, fileName: "")
+  guard let position = diag.position,
+    let node = diag.node
+  else {
+    failureHandler(
+      TestFailureSpec(
+        message: "diagnostic missing location info",
+        location: spec.failureLocation
+      )
+    )
+    return
+  }
+
+  let location = expansionContext.location(for: position, anchoredAt: node, fileName: "")
   if location.line != spec.line {
     failureHandler(
       TestFailureSpec(

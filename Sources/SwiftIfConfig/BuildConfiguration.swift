@@ -43,7 +43,7 @@ enum BuildConfigurationError: Error, CustomStringConvertible {
   var description: String {
     switch self {
     case .experimentalFeature(let name):
-      return "'name' is an experimental feature"
+      return "'\(name)' is an experimental feature"
     }
   }
 }

@@ -870,11 +870,6 @@ extension BackDeployedAttributeArgumentsSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "addPlatform")
-  public func addAvailability(_ element: PlatformVersionItemSyntax) -> Self {
-    return addPlatform(element)
-  }
-
   @available(*, deprecated, renamed: "unexpectedAfterPlatforms")
   public var unexpectedAfterVersionList: UnexpectedNodesSyntax? {
     get {
@@ -3275,11 +3270,6 @@ extension FunctionTypeSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "addParameter")
-  public func addArgument(_ element: TupleTypeElementSyntax) -> Self {
-    return addParameter(element)
-  }
-
   @available(*, deprecated, renamed: "unexpectedBetweenParametersAndRightParen")
   public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
     get {
@@ -3536,11 +3526,6 @@ extension GenericParameterClauseSyntax {
     set {
       parameters = newValue
     }
-  }
-
-  @available(*, deprecated, renamed: "addParameter")
-  public func addGenericParameter(_ element: GenericParameterSyntax) -> Self {
-    return addParameter(element)
   }
 
   @available(*, deprecated, renamed: "unexpectedBetweenParametersAndGenericWhereClause")
@@ -6867,11 +6852,6 @@ extension SpecializeAvailabilityArgumentSyntax {
     set {
       availabilityArguments = newValue
     }
-  }
-
-  @available(*, deprecated, renamed: "addAvailabilityArgument")
-  public func addAvailability(_ element: AvailabilityArgumentSyntax) -> Self {
-    return addAvailabilityArgument(element)
   }
 
   @available(*, deprecated, renamed: "unexpectedBetweenAvailabilityArgumentsAndSemicolon")

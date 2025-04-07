@@ -547,9 +547,22 @@ final class TypeTests: ParserTestCase {
     assertParse("func foo(test: nonisolated(nonsending) @escaping () async -> Void) {}")
 
     assertParse(
+      "func foo(test: nonisolated1️⃣ () async -> Void)",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '(nonsending)' in 'nonisolated' specifier",
+          fixIts: ["insert '(nonsending)'"]
+        )
+      ],
+      fixedSource: "func foo(test: nonisolated(nonsending) () async -> Void)"
+    )
+
+    assertParse(
       "func foo(test: nonisolated(1️⃣) () async -> Void)",
       diagnostics: [
         DiagnosticSpec(
+          locationMarker: "1️⃣",
           message: "expected 'nonsending' in 'nonisolated' specifier",
           fixIts: ["insert 'nonsending'"]
         )
@@ -561,6 +574,7 @@ final class TypeTests: ParserTestCase {
       "func foo(test: nonisolated(1️⃣hello) () async -> Void)",
       diagnostics: [
         DiagnosticSpec(
+          locationMarker: "1️⃣",
           message: "expected 'nonsending' in 'nonisolated' specifier",
           fixIts: ["insert 'nonsending'"]
         ),

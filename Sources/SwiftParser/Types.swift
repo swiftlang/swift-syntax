@@ -1059,6 +1059,27 @@ extension Parser {
   private mutating func parseNonisolatedTypeSpecifier() -> RawTypeSpecifierListSyntax.Element {
     let (unexpectedBeforeNonisolatedKeyword, nonisolatedKeyword) = self.expect(.keyword(.nonisolated))
 
+    // Avoid being to greedy about `(` since this modifier should be associated with
+    // function types, it's possible that the argument is omitted and what follows
+    // is a function type i.e. `nonisolated () async -> Void`.
+    if self.at(.leftParen) && !withLookahead({ $0.atAttributeOrSpecifierArgument() }) {
+      let argument = RawNonisolatedSpecifierArgumentSyntax(
+        leftParen: missingToken(.leftParen),
+        nonsendingKeyword: missingToken(.keyword(.nonsending)),
+        rightParen: missingToken(.rightParen),
+        arena: self.arena
+      )
+
+      let nonisolatedSpecifier = RawNonisolatedTypeSpecifierSyntax(
+        unexpectedBeforeNonisolatedKeyword,
+        nonisolatedKeyword: nonisolatedKeyword,
+        argument: argument,
+        arena: self.arena
+      )
+      return .nonisolatedTypeSpecifier(nonisolatedSpecifier)
+    }
+
+    // nonisolated without an argument is valid in some positions i.e. inheritance clause.
     guard let leftParen = self.consume(if: .leftParen) else {
       let nonisolatedSpecifier = RawNonisolatedTypeSpecifierSyntax(
         unexpectedBeforeNonisolatedKeyword,

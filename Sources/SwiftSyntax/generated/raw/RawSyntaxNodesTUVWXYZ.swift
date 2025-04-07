@@ -1416,9 +1416,10 @@ public struct RawTypeSpecifierListSyntax: RawSyntaxNodeProtocol {
     /// - Note: Requires experimental feature `nonescapableTypes`.
     @_spi(ExperimentalLanguageFeatures)
     case lifetimeTypeSpecifier(RawLifetimeTypeSpecifierSyntax)
+    case nonisolatedTypeSpecifier(RawNonisolatedTypeSpecifierSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      RawSimpleTypeSpecifierSyntax.isKindOf(raw) || RawLifetimeTypeSpecifierSyntax.isKindOf(raw)
+      RawSimpleTypeSpecifierSyntax.isKindOf(raw) || RawLifetimeTypeSpecifierSyntax.isKindOf(raw) || RawNonisolatedTypeSpecifierSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
@@ -1426,6 +1427,8 @@ public struct RawTypeSpecifierListSyntax: RawSyntaxNodeProtocol {
       case .simpleTypeSpecifier(let node):
         return node.raw
       case .lifetimeTypeSpecifier(let node):
+        return node.raw
+      case .nonisolatedTypeSpecifier(let node):
         return node.raw
       }
     }
@@ -1435,6 +1438,8 @@ public struct RawTypeSpecifierListSyntax: RawSyntaxNodeProtocol {
         self = .simpleTypeSpecifier(node)
       } else if let node = node.as(RawLifetimeTypeSpecifierSyntax.self) {
         self = .lifetimeTypeSpecifier(node)
+      } else if let node = node.as(RawNonisolatedTypeSpecifierSyntax.self) {
+        self = .nonisolatedTypeSpecifier(node)
       } else {
         return nil
       }

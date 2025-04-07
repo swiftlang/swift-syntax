@@ -1056,6 +1056,40 @@ extension Parser {
     return .lifetimeTypeSpecifier(lifetimeSpecifier)
   }
 
+  private mutating func parseNonisolatedTypeSpecifier() -> RawTypeSpecifierListSyntax.Element {
+    let (unexpectedBeforeNonisolatedKeyword, nonisolatedKeyword) = self.expect(.keyword(.nonisolated))
+
+    guard let leftParen = self.consume(if: .leftParen) else {
+      let nonisolatedSpecifier = RawNonisolatedTypeSpecifierSyntax(
+        unexpectedBeforeNonisolatedKeyword,
+        nonisolatedKeyword: nonisolatedKeyword,
+        argument: nil,
+        arena: self.arena
+      )
+      return .nonisolatedTypeSpecifier(nonisolatedSpecifier)
+    }
+
+    let (unexpectedBeforeModifier, modifier) = self.expect(.keyword(.nonsending))
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+
+    let argument = RawNonisolatedSpecifierArgumentSyntax(
+      leftParen: leftParen,
+      unexpectedBeforeModifier,
+      nonsendingKeyword: modifier,
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      arena: self.arena
+    )
+
+    let nonisolatedSpecifier = RawNonisolatedTypeSpecifierSyntax(
+      unexpectedBeforeNonisolatedKeyword,
+      nonisolatedKeyword: nonisolatedKeyword,
+      argument: argument,
+      arena: self.arena
+    )
+    return .nonisolatedTypeSpecifier(nonisolatedSpecifier)
+  }
+
   private mutating func parseSimpleTypeSpecifier(
     specifierHandle: TokenConsumptionHandle
   ) -> RawTypeSpecifierListSyntax.Element {
@@ -1079,6 +1113,8 @@ extension Parser {
         } else {
           break SPECIFIER_PARSING
         }
+      } else if self.at(.keyword(.nonisolated)) {
+        specifiers.append(parseNonisolatedTypeSpecifier())
       } else {
         break SPECIFIER_PARSING
       }

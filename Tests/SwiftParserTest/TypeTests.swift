@@ -537,6 +537,38 @@ final class TypeTests: ParserTestCase {
       experimentalFeatures: [.nonescapableTypes]
     )
   }
+
+  func testNonisolatedSpecifier() {
+    assertParse("let _: nonisolated(nonsending) () async -> Void = {}")
+    assertParse("let _: [nonisolated(nonsending) () async -> Void]")
+    assertParse("let _ = [String: (nonisolated(nonsending) () async -> Void)?].self")
+    assertParse("let _ = Array<nonisolated(nonsending) () async -> Void>()")
+    assertParse("func foo(test: nonisolated(nonsending) () async -> Void)")
+    assertParse("func foo(test: nonisolated(nonsending) @escaping () async -> Void) {}")
+
+    assertParse(
+      "func foo(test: nonisolated(1️⃣) () async -> Void)",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected 'nonsending' in 'nonisolated' specifier",
+          fixIts: ["insert 'nonsending'"]
+        )
+      ],
+      fixedSource: "func foo(test: nonisolated(nonsending) () async -> Void)"
+    )
+
+    assertParse(
+      "func foo(test: nonisolated(1️⃣hello) () async -> Void)",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected 'nonsending' in 'nonisolated' specifier",
+          fixIts: ["insert 'nonsending'"]
+        ),
+        DiagnosticSpec(message: "unexpected code 'hello' in 'nonisolated' specifier"),
+      ],
+      fixedSource: "func foo(test: nonisolated(nonsendinghello) () async -> Void)"
+    )
+  }
 }
 
 final class InlineArrayTypeTests: ParserTestCase {

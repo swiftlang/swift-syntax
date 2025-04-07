@@ -184,7 +184,8 @@ let package = Package(
 
     .target(
       name: "SwiftLexicalLookup",
-      dependencies: ["SwiftSyntax", "SwiftIfConfig"]
+      dependencies: ["SwiftSyntax", "SwiftIfConfig"],
+      exclude: ["CMakeLists.txt"]
     ),
 
     .testTarget(

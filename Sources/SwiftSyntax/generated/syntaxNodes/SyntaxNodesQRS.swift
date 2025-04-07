@@ -1267,7 +1267,7 @@ public struct SimpleStringLiteralExprSyntax: ExprSyntaxProtocol, SyntaxHashable,
 ///
 /// ### Children
 /// 
-///  - `specifier`: (`inout` | `__shared` | `__owned` | `isolated` | `nonisolated` | `_const` | `borrowing` | `consuming` | `sending`)
+///  - `specifier`: (`inout` | `__shared` | `__owned` | `isolated` | `_const` | `borrowing` | `consuming` | `sending`)
 ///
 /// ### Contained in
 /// 
@@ -1331,7 +1331,6 @@ public struct SimpleTypeSpecifierSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
   ///  - `__shared`
   ///  - `__owned`
   ///  - `isolated`
-  ///  - `nonisolated`
   ///  - `_const`
   ///  - `borrowing`
   ///  - `consuming`

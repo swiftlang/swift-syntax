@@ -1427,6 +1427,20 @@ open class SyntaxRewriter {
     return ExprSyntax(NilLiteralExprSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
+  /// Visit a ``NonisolatedSpecifierArgumentSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: NonisolatedSpecifierArgumentSyntax) -> NonisolatedSpecifierArgumentSyntax {
+    return NonisolatedSpecifierArgumentSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
+  /// Visit a ``NonisolatedTypeSpecifierSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: NonisolatedTypeSpecifierSyntax) -> NonisolatedTypeSpecifierSyntax {
+    return NonisolatedTypeSpecifierSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
   /// Visit a ``ObjCSelectorPieceListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3095,6 +3109,16 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitNonisolatedSpecifierArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(NonisolatedSpecifierArgumentSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
+  private func visitNonisolatedTypeSpecifierSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(NonisolatedTypeSpecifierSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitObjCSelectorPieceListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ObjCSelectorPieceListSyntax(unsafeCasting: node)))
   }
@@ -3988,6 +4012,10 @@ open class SyntaxRewriter {
       return self.visitNamedOpaqueReturnTypeSyntaxImpl(_:)
     case .nilLiteralExpr:
       return self.visitNilLiteralExprSyntaxImpl(_:)
+    case .nonisolatedSpecifierArgument:
+      return self.visitNonisolatedSpecifierArgumentSyntaxImpl(_:)
+    case .nonisolatedTypeSpecifier:
+      return self.visitNonisolatedTypeSpecifierSyntaxImpl(_:)
     case .objCSelectorPieceList:
       return self.visitObjCSelectorPieceListSyntaxImpl(_:)
     case .objCSelectorPiece:
@@ -4570,6 +4598,10 @@ open class SyntaxRewriter {
       return visitNamedOpaqueReturnTypeSyntaxImpl(node)
     case .nilLiteralExpr:
       return visitNilLiteralExprSyntaxImpl(node)
+    case .nonisolatedSpecifierArgument:
+      return visitNonisolatedSpecifierArgumentSyntaxImpl(node)
+    case .nonisolatedTypeSpecifier:
+      return visitNonisolatedTypeSpecifierSyntaxImpl(node)
     case .objCSelectorPieceList:
       return visitObjCSelectorPieceListSyntaxImpl(node)
     case .objCSelectorPiece:

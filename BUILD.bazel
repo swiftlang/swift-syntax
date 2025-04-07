@@ -385,6 +385,7 @@ cc_library(
 
 cc_library(
     name = "_SwiftSyntaxCShims",
+    srcs = glob(["Sources/_SwiftSyntaxCShims/*.c"]),
     hdrs = glob(["Sources/_SwiftSyntaxCShims/include/*.h"]),
     includes = ["Sources/_SwiftSyntaxCShims/include"],
     tags = ["swift_module=_SwiftSyntaxCShims"],

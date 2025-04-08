@@ -486,6 +486,20 @@ final class TypeTests: ParserTestCase {
     )
 
     assertParse(
+      "func foo() -> dependsOn1️⃣ @Sendable (Int, isolated (any Actor)?) async throws -> Void",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '(', parameter reference, and ')' in lifetime specifier",
+          fixIts: ["insert '(', parameter reference, and ')'"]
+        )
+      ],
+      fixedSource:
+        "func foo() -> dependsOn(<#identifier#>) @Sendable (Int, isolated (any Actor)?) async throws -> Void",
+      experimentalFeatures: [.nonescapableTypes]
+    )
+
+    assertParse(
       "func foo() -> dependsOn(1️⃣*) X",
       diagnostics: [
         DiagnosticSpec(
@@ -545,6 +559,23 @@ final class TypeTests: ParserTestCase {
     assertParse("let _ = Array<nonisolated(nonsending) () async -> Void>()")
     assertParse("func foo(test: nonisolated(nonsending) () async -> Void)")
     assertParse("func foo(test: nonisolated(nonsending) @escaping () async -> Void) {}")
+    assertParse("test(S<nonisolated(nonsending) () async -> Void>(), type(of: concurrentTest))")
+    assertParse("S<nonisolated(nonsending) @Sendable (Int) async -> Void>()")
+    assertParse("let _ = S<nonisolated(nonsending) consuming @Sendable (Int) async -> Void>()")
+    assertParse("struct S : nonisolated P {}")
+    assertParse("let _ = [nonisolated()]")
+
+    assertParse(
+      "Foo<Int, nonisolated1️⃣ @Sendable (Int, inout (any Actor)?) async throws -> Void>()",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '(nonsending)' in 'nonisolated' specifier",
+          fixIts: ["insert '(nonsending)'"]
+        )
+      ],
+      fixedSource: "Foo<Int, nonisolated(nonsending) @Sendable (Int, inout (any Actor)?) async throws -> Void>()"
+    )
 
     assertParse(
       "func foo(test: nonisolated1️⃣ () async -> Void)",

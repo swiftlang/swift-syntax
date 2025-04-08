@@ -691,11 +691,27 @@ extension Parser.Lookahead {
     var specifierProgress = LoopProgressCondition()
     // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
     while canHaveParameterSpecifier,
-      self.at(anyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) != nil || self.at(.keyword(.isolated))
-        || self.at(.keyword(._const)),
+      self.at(anyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) != nil
+        || self.at(.keyword(.nonisolated), .keyword(.dependsOn)),
       self.hasProgressed(&specifierProgress)
     {
-      self.consumeAnyToken()
+      switch self.currentToken {
+      case .keyword(.nonisolated), .keyword(.dependsOn):
+        self.consumeAnyToken()
+
+        // The argument is missing but it still could be a valid modifier,
+        // i.e. `nonisolated` in an inheritance clause.
+        guard self.at(.leftParen) else {
+          continue
+        }
+
+        if self.withLookahead({ $0.atAttributeOrSpecifierArgument() }) {
+          skipSingle()
+        }
+
+      default:
+        self.consumeAnyToken()
+      }
     }
 
     var attributeProgress = LoopProgressCondition()
@@ -1059,6 +1075,41 @@ extension Parser {
   private mutating func parseNonisolatedTypeSpecifier() -> RawTypeSpecifierListSyntax.Element {
     let (unexpectedBeforeNonisolatedKeyword, nonisolatedKeyword) = self.expect(.keyword(.nonisolated))
 
+    // If the next token is not '(' this could mean two things:
+    //  - What follows is a type and we should allow it because
+    //    using `nonsisolated` without an argument is allowed in
+    //    an inheritance clause.
+    //  - The '(nonsending)' was omitted.
+    if !self.at(.leftParen) {
+      // `nonisolated P<...>` is allowed in an inheritance clause.
+      if withLookahead({ $0.canParseTypeIdentifier() }) {
+        let nonisolatedSpecifier = RawNonisolatedTypeSpecifierSyntax(
+          unexpectedBeforeNonisolatedKeyword,
+          nonisolatedKeyword: nonisolatedKeyword,
+          argument: nil,
+          arena: self.arena
+        )
+        return .nonisolatedTypeSpecifier(nonisolatedSpecifier)
+      }
+
+      // Otherwise require '(nonsending)'
+      let argument = RawNonisolatedSpecifierArgumentSyntax(
+        leftParen: missingToken(.leftParen),
+        nonsendingKeyword: missingToken(.keyword(.nonsending)),
+        rightParen: missingToken(.rightParen),
+        arena: self.arena
+      )
+
+      let nonisolatedSpecifier = RawNonisolatedTypeSpecifierSyntax(
+        unexpectedBeforeNonisolatedKeyword,
+        nonisolatedKeyword: nonisolatedKeyword,
+        argument: argument,
+        arena: self.arena
+      )
+
+      return .nonisolatedTypeSpecifier(nonisolatedSpecifier)
+    }
+
     // Avoid being to greedy about `(` since this modifier should be associated with
     // function types, it's possible that the argument is omitted and what follows
     // is a function type i.e. `nonisolated () async -> Void`.
@@ -1076,24 +1127,16 @@ extension Parser {
         argument: argument,
         arena: self.arena
       )
+
       return .nonisolatedTypeSpecifier(nonisolatedSpecifier)
     }
 
-    // nonisolated without an argument is valid in some positions i.e. inheritance clause.
-    guard let leftParen = self.consume(if: .leftParen) else {
-      let nonisolatedSpecifier = RawNonisolatedTypeSpecifierSyntax(
-        unexpectedBeforeNonisolatedKeyword,
-        nonisolatedKeyword: nonisolatedKeyword,
-        argument: nil,
-        arena: self.arena
-      )
-      return .nonisolatedTypeSpecifier(nonisolatedSpecifier)
-    }
-
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
     let (unexpectedBeforeModifier, modifier) = self.expect(.keyword(.nonsending))
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
 
     let argument = RawNonisolatedSpecifierArgumentSyntax(
+      unexpectedBeforeLeftParen,
       leftParen: leftParen,
       unexpectedBeforeModifier,
       nonsendingKeyword: modifier,

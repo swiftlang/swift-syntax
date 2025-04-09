@@ -566,6 +566,28 @@ final class TypeTests: ParserTestCase {
     assertParse("let _ = [nonisolated()]")
 
     assertParse(
+      """
+      let x: nonisolated
+      (hello)
+      """
+    )
+
+    assertParse(
+      """
+      struct S: nonisolated
+                  P {
+      }
+      """
+    )
+
+    assertParse(
+      """
+      let x: nonisolated
+          (Int) async -> Void  = {}
+      """
+    )
+
+    assertParse(
       "Foo<Int, nonisolated1️⃣ @Sendable (Int, inout (any Actor)?) async throws -> Void>()",
       diagnostics: [
         DiagnosticSpec(

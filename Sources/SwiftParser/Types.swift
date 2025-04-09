@@ -689,7 +689,6 @@ extension Parser.Lookahead {
 
   mutating func skipTypeAttributeList() {
     var specifierProgress = LoopProgressCondition()
-    // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
     while canHaveParameterSpecifier,
       self.at(anyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) != nil
         || self.at(.keyword(.nonisolated), .keyword(.dependsOn)),
@@ -701,7 +700,7 @@ extension Parser.Lookahead {
 
         // The argument is missing but it still could be a valid modifier,
         // i.e. `nonisolated` in an inheritance clause.
-        guard self.at(.leftParen) else {
+        guard self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) else {
           continue
         }
 
@@ -1178,6 +1177,11 @@ extension Parser {
           break SPECIFIER_PARSING
         }
       } else if self.at(.keyword(.nonisolated)) {
+        // If '(' is located on the new line 'nonisolated' cannot be parsed
+        // as a specifier.
+        if self.peek(isAt: .leftParen) && self.peek().isAtStartOfLine {
+          break SPECIFIER_PARSING
+        }
         specifiers.append(parseNonisolatedTypeSpecifier())
       } else {
         break SPECIFIER_PARSING

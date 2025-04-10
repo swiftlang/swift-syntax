@@ -11,12 +11,10 @@
 add_library(${SWIFTSYNTAX_TARGET_NAMESPACE}SwiftSyntax509 STATIC
   SwiftSyntax509/Empty.swift)
 add_library(${SWIFTSYNTAX_TARGET_NAMESPACE}SwiftSyntax510 STATIC
-  SwiftSyntax510/Empty.swift)
+  SwiftSyntax509/Empty.swift)
 add_library(${SWIFTSYNTAX_TARGET_NAMESPACE}SwiftSyntax600 STATIC
-  SwiftSyntax600/Empty.swift)
+  SwiftSyntax509/Empty.swift)
 add_library(${SWIFTSYNTAX_TARGET_NAMESPACE}SwiftSyntax601 STATIC
-  SwiftSyntax601/Empty.swift)
+  SwiftSyntax509/Empty.swift)
 add_library(${SWIFTSYNTAX_TARGET_NAMESPACE}SwiftSyntax602 STATIC
-  SwiftSyntax602/Empty.swift)
-add_library(${SWIFTSYNTAX_TARGET_NAMESPACE}SwiftSyntax603 STATIC
-  SwiftSyntax603/Empty.swift)
+  SwiftSyntax509/Empty.swift)

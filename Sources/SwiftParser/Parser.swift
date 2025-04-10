@@ -237,7 +237,7 @@ public struct Parser {
 
     self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
     self.swiftVersion = swiftVersion ?? Self.defaultSwiftVersion
-    self.experimentalFeatures = experimentalFeatures
+    self.experimentalFeatures = experimentalFeatures.union(.alwaysEnabledFeatures)
     self.lookaheadTrackerOwner = LookaheadTrackerOwner()
 
     self.lexemes = Lexer.tokenize(input, lookaheadTracker: lookaheadTrackerOwner.lookaheadTracker)

@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftDiagnostics
+@_spi(Testing) import SwiftDiagnostics
 @_spi(FixItApplier) import SwiftIDEUtils
 @_spi(Testing) @_spi(RawSyntax) @_spi(AlternateTokenIntrospection) @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(RawSyntax) import SwiftParserDiagnostics
@@ -324,7 +324,7 @@ func assertNote(
   XCTAssertEqual(note.message, spec.message, file: spec.file, line: spec.line)
   let locationConverter = SourceLocationConverter(fileName: "", tree: tree)
   assertLocation(
-    note.location(converter: locationConverter),
+    note.location(converter: locationConverter)!,
     in: tree,
     markerLocations: markerLocations,
     expectedLocationMarker: spec.locationMarker,
@@ -343,7 +343,7 @@ func assertDiagnostic(
 ) {
   let locationConverter = SourceLocationConverter(fileName: "", tree: tree)
   assertLocation(
-    diag.location(converter: locationConverter),
+    diag.location(converter: locationConverter)!,
     in: tree,
     markerLocations: markerLocations,
     expectedLocationMarker: spec.locationMarker,
@@ -368,7 +368,7 @@ func assertDiagnostic(
     )
   }
 
-  let highlight = spec.highlight ?? diag.node.description
+  let highlight = spec.highlight ?? diag.node?.description ?? DiagnosticsFormatter.unknownFileName
   assertStringsEqualWithDiff(
     diag.highlights.map(\.description).joined().trimmingTrailingWhitespace(),
     highlight.trimmingTrailingWhitespace(),

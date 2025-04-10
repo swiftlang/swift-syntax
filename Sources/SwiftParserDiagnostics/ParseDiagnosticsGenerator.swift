@@ -107,19 +107,27 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     let diagProducer = ParseDiagnosticsGenerator()
     diagProducer.walk(tree)
     diagProducer.diagnostics.sort {
-      if $0.position != $1.position {
-        return $0.position < $1.position
+      guard let lhsPosition = $0.position, let rhsPosition = $1.position else {
+        return $0.position == nil
+      }
+
+      if lhsPosition != rhsPosition {
+        return lhsPosition < rhsPosition
+      }
+
+      guard let lhsNode = $0.node, let rhsNode = $1.node else {
+        return $0.node == nil
       }
 
       // Emit children diagnostics before parent diagnostics.
       // This makes sure that for missing declarations with attributes, we emit diagnostics on the attribute before we complain about the missing declaration.
-      if $0.node.hasParent($1.node) {
+      if lhsNode.hasParent(rhsNode) {
         return true
-      } else if $1.node.hasParent($0.node) {
+      } else if rhsNode.hasParent(lhsNode) {
         return false
       } else {
         // If multiple tokens are missing at the same location, emit diagnostics about nodes that occur earlier in the tree first.
-        return $0.node.id < $1.node.id
+        return lhsNode.id < rhsNode.id
       }
     }
     return diagProducer.diagnostics
@@ -157,7 +165,16 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if suppressRemainingDiagnostics {
       return
     }
-    diagnostics.removeAll(where: { handledNodes.contains($0.node.id) })
+
+    diagnostics.removeAll(
+      where: {
+        if let nodeId = $0.node?.id {
+          return handledNodes.contains(nodeId)
+        }
+
+        return false
+      }
+    )
     diagnostics.append(diagnostic)
     self.handledNodes.append(contentsOf: handledNodes)
   }

@@ -37,22 +37,22 @@ extension NoteMessage {
 /// A note that points to another node that's relevant for a Diagnostic.
 public struct Note: CustomDebugStringConvertible, Sendable {
   /// The node whose location the node is pointing.
-  public let node: Syntax
+  public let node: Syntax?
 
   /// The position at which the location should be anchored.
   /// By default, this is the start location of `node`.
-  public let position: AbsolutePosition
+  public let position: AbsolutePosition?
 
   /// A description of what this note is pointing at.
   public let noteMessage: NoteMessage
 
   public init(
-    node: Syntax,
+    node: Syntax?,
     position: AbsolutePosition? = nil,
     message: NoteMessage
   ) {
     self.node = node
-    self.position = position ?? node.positionAfterSkippingLeadingTrivia
+    self.position = position ?? node?.positionAfterSkippingLeadingTrivia
     self.noteMessage = message
   }
 
@@ -62,17 +62,22 @@ public struct Note: CustomDebugStringConvertible, Sendable {
   }
 
   /// The location at which the note should be displayed.
-  public func location(converter: SourceLocationConverter) -> SourceLocation {
+  public func location(converter: SourceLocationConverter) -> SourceLocation? {
+    guard let position else {
+      return nil
+    }
+
     return converter.location(for: position)
   }
 
   public var debugDescription: String {
-    if let root = node.root.as(SourceFileSyntax.self) {
+    if let root = node?.root.as(SourceFileSyntax.self) {
       let locationConverter = SourceLocationConverter(fileName: "", tree: root)
-      let location = location(converter: locationConverter)
-      return "\(location): \(message)"
-    } else {
-      return "<unknown>: \(message)"
+      if let location = location(converter: locationConverter) {
+        return "\(location): \(message)"
+      }
     }
+
+    return "\(DiagnosticsFormatter.unknownFileName):0:0: \(message)"
   }
 }

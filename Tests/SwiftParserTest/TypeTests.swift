@@ -553,23 +553,117 @@ final class TypeTests: ParserTestCase {
   }
 
   func testNonisolatedSpecifier() {
-    assertParse("let _: nonisolated(nonsending) () async -> Void = {}")
-    assertParse("let _: [nonisolated(nonsending) () async -> Void]")
-    assertParse("let _ = [String: (nonisolated(nonsending) () async -> Void)?].self")
-    assertParse("let _ = Array<nonisolated(nonsending) () async -> Void>()")
-    assertParse("func foo(test: nonisolated(nonsending) () async -> Void)")
-    assertParse("func foo(test: nonisolated(nonsending) @escaping () async -> Void) {}")
-    assertParse("test(S<nonisolated(nonsending) () async -> Void>(), type(of: concurrentTest))")
-    assertParse("S<nonisolated(nonsending) @Sendable (Int) async -> Void>()")
-    assertParse("let _ = S<nonisolated(nonsending) consuming @Sendable (Int) async -> Void>()")
-    assertParse("struct S : nonisolated P {}")
-    assertParse("let _ = [nonisolated()]")
+    assertParse(
+      """
+      let x = nonisolated
+      print("hello")
+      """,
+      substructure: DeclReferenceExprSyntax(
+        baseName: .identifier("nonisolated")
+      )
+    )
+
+    assertParse(
+      "let _: nonisolated(nonsending) () async -> Void = {}",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+    assertParse(
+      "let _: [nonisolated(nonsending) () async -> Void]",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+
+    assertParse(
+      "let _ = [String: (nonisolated(nonsending) () async -> Void)?].self",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+
+    assertParse(
+      "let _ = Array<nonisolated(nonsending) () async -> Void>()",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+    assertParse(
+      "func foo(test: nonisolated(nonsending) () async -> Void)",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+    assertParse(
+      "func foo(test: nonisolated(nonsending) @escaping () async -> Void) {}",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+    assertParse(
+      "test(S<nonisolated(nonsending) () async -> Void>(), type(of: concurrentTest))",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+    assertParse(
+      "S<nonisolated(nonsending) @Sendable (Int) async -> Void>()",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+    assertParse(
+      "let _ = S<nonisolated(nonsending) consuming @Sendable (Int) async -> Void>()",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+
+    assertParse(
+      "struct S : nonisolated P {}",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated)
+      )
+    )
+
+    assertParse(
+      "let _ = [nonisolated()]",
+      substructure: DeclReferenceExprSyntax(
+        baseName: .identifier("nonisolated")
+      )
+    )
+
+    assertParse(
+      "let _ = [nonisolated(nonsending) () async -> Void]()",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+
+    assertParse(
+      "_ = S<nonisolated>()",
+      substructure: GenericArgumentSyntax.Argument(
+        IdentifierTypeSyntax(name: .identifier("nonisolated"))
+      )
+    )
 
     assertParse(
       """
       let x: nonisolated
       (hello)
-      """
+      """,
+      substructure: IdentifierTypeSyntax(name: .identifier("nonisolated"))
     )
 
     assertParse(
@@ -577,14 +671,18 @@ final class TypeTests: ParserTestCase {
       struct S: nonisolated
                   P {
       }
-      """
+      """,
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated)
+      )
     )
 
     assertParse(
       """
       let x: nonisolated
           (Int) async -> Void  = {}
-      """
+      """,
+      substructure: IdentifierTypeSyntax(name: .identifier("nonisolated"))
     )
 
     assertParse(

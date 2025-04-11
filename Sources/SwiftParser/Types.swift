@@ -687,7 +687,7 @@ extension Parser.Lookahead {
     return true
   }
 
-  mutating func skipTypeAttributeList() {
+  mutating func canParseTypeAttributeList() -> Bool {
     var specifierProgress = LoopProgressCondition()
     while canHaveParameterSpecifier,
       self.at(anyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) != nil
@@ -695,18 +695,65 @@ extension Parser.Lookahead {
       self.hasProgressed(&specifierProgress)
     {
       switch self.currentToken {
-      case .keyword(.nonisolated), .keyword(.dependsOn):
+      case .keyword(.nonisolated):
+        let canParseNonisolated = self.withLookahead({
+          // Consume 'nonisolated'
+          $0.consumeAnyToken()
+
+          // The argument is missing but it still could be a valid modifier,
+          // i.e. `nonisolated` in an inheritance clause.
+          guard $0.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) else {
+            return true
+          }
+
+          // Consume '('
+          $0.consumeAnyToken()
+
+          // nonisolated accepts a single modifier at the moment: 'nonsending'
+          // we need to check for that explicitly to avoid misinterpreting this
+          // keyword to be a modifier when it isn't i.e. `[nonisolated(42)]`
+          guard $0.consume(if: TokenSpec(.nonsending, allowAtStartOfLine: false)) != nil else {
+            return false
+          }
+
+          return $0.consume(if: TokenSpec(.rightParen, allowAtStartOfLine: false)) != nil
+        })
+
+        guard canParseNonisolated else {
+          return false
+        }
+
         self.consumeAnyToken()
 
-        // The argument is missing but it still could be a valid modifier,
-        // i.e. `nonisolated` in an inheritance clause.
         guard self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) else {
           continue
         }
 
-        if self.withLookahead({ $0.atAttributeOrSpecifierArgument() }) {
-          skipSingle()
+        self.skipSingle()
+
+      case .keyword(.dependsOn):
+        let canParseDependsOn = self.withLookahead({
+          // Consume 'dependsOn'
+          $0.consumeAnyToken()
+
+          if $0.currentToken.isAtStartOfLine {
+            return false
+          }
+
+          // `dependsOn` requires an argument list.
+          guard $0.atAttributeOrSpecifierArgument() else {
+            return false
+          }
+
+          return true
+        })
+
+        guard canParseDependsOn else {
+          return false
         }
+
+        self.consumeAnyToken()
+        self.skipSingle()
 
       default:
         self.consumeAnyToken()
@@ -718,10 +765,14 @@ extension Parser.Lookahead {
       self.consumeAnyToken()
       self.skipTypeAttribute()
     }
+
+    return true
   }
 
   mutating func canParseTypeScalar() -> Bool {
-    self.skipTypeAttributeList()
+    guard self.canParseTypeAttributeList() else {
+      return false
+    }
 
     guard self.canParseSimpleOrCompositionType() else {
       return false

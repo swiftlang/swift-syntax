@@ -301,6 +301,26 @@ class ValidateSyntaxNodes: XCTestCase {
           message: "child 'endOfFileToken' has a token as its only token choice and should thus be named 'endOfFile'"
         ),
         ValidationFailure(
+          node: .availabilityMacroDefinitionFile,
+          message: "child 'endOfFileToken' has a token as its only token choice and should thus be named 'endOfFile'"
+        ),
+        ValidationFailure(
+          node: .accessorBlockFile,
+          message: "child 'endOfFileToken' has a token as its only token choice and should thus be named 'endOfFile'"
+        ),
+        ValidationFailure(
+          node: .attributeClauseFile,
+          message: "child 'endOfFileToken' has a token as its only token choice and should thus be named 'endOfFile'"
+        ),
+        ValidationFailure(
+          node: .codeBlockFile,
+          message: "child 'endOfFileToken' has a token as its only token choice and should thus be named 'endOfFile'"
+        ),
+        ValidationFailure(
+          node: .memberBlockItemListFile,
+          message: "child 'endOfFileToken' has a token as its only token choice and should thus be named 'endOfFile'"
+        ),
+        ValidationFailure(
           node: .stringLiteralExpr,
           message:
             "child 'openingPounds' has a token as its only token choice and should thus be named 'rawStringPoundDelimiter'"
@@ -314,14 +334,6 @@ class ValidateSyntaxNodes: XCTestCase {
           node: .expressionSegment,
           message:
             "child 'pounds' has a token as its only token choice and should thus be named 'rawStringPoundDelimiter'"
-        ),
-
-        // MARK: Tokens that contain underscores
-        ValidationFailure(
-          node: .conventionWitnessMethodAttributeArguments,
-          message:
-            "child 'witnessMethodLabel' has a single keyword as its only token choice and is followed by a colon. It should thus be named 'witness_methodLabel'"
-            // Witness_method has an underscore and thus WitnessMethod is the correct spelling
         ),
 
         // MARK: Repeat node type name
@@ -359,6 +371,11 @@ class ValidateSyntaxNodes: XCTestCase {
           node: .switchDefaultLabel,
           message:
             "child 'defaultKeyword' has a single keyword as its only token choice and is followed by a colon. It should thus be named 'defaultLabel'"
+        ),
+        // 'separator' is more descriptive than 'xKeyword'
+        ValidationFailure(
+          node: .inlineArrayType,
+          message: "child 'separator' has a single keyword as its only token choice and should thus be named 'xKeyword'"
         ),
       ]
     )
@@ -503,6 +520,12 @@ class ValidateSyntaxNodes: XCTestCase {
           message:
             "child 'closure' is named inconsistently with 'FunctionCallExprSyntax.trailingClosure', which has the same type ('ClosureExprSyntax')"
         ),
+        // Giving these fields distinct names is more helpful.
+        ValidationFailure(
+          node: .inlineArrayType,
+          message:
+            "child 'element' is named inconsistently with 'InlineArrayTypeSyntax.count', which has the same type ('GenericArgumentSyntax')"
+        ),
       ]
     )
   }
@@ -549,6 +572,11 @@ class ValidateSyntaxNodes: XCTestCase {
           message: "could conform to trait 'Parenthesized' but does not"
         ),
         ValidationFailure(node: .lifetimeTypeSpecifier, message: "could conform to trait 'Parenthesized' but does not"),
+        ValidationFailure(node: .codeBlockFile, message: "could conform to trait 'WithCodeBlock' but does not"),
+        ValidationFailure(
+          node: .keyPathMethodComponent,
+          message: "could conform to trait 'Parenthesized' but does not"
+        ),
       ]
     )
   }
@@ -573,7 +601,27 @@ class ValidateSyntaxNodes: XCTestCase {
       failures,
       expectedFailures: [
         // it's not obvious that the end of file is represented by a token, thus its good to highlight it in the name
-        ValidationFailure(node: .sourceFile, message: "child 'endOfFileToken' should not end with 'Token'")
+        ValidationFailure(node: .sourceFile, message: "child 'endOfFileToken' should not end with 'Token'"),
+        ValidationFailure(
+          node: .availabilityMacroDefinitionFile,
+          message: "child 'endOfFileToken' should not end with 'Token'"
+        ),
+        ValidationFailure(
+          node: .accessorBlockFile,
+          message: "child 'endOfFileToken' should not end with 'Token'"
+        ),
+        ValidationFailure(
+          node: .attributeClauseFile,
+          message: "child 'endOfFileToken' should not end with 'Token'"
+        ),
+        ValidationFailure(
+          node: .codeBlockFile,
+          message: "child 'endOfFileToken' should not end with 'Token'"
+        ),
+        ValidationFailure(
+          node: .memberBlockItemListFile,
+          message: "child 'endOfFileToken' should not end with 'Token'"
+        ),
       ]
     )
   }
@@ -758,14 +806,21 @@ class ValidateSyntaxNodes: XCTestCase {
         failures.append(
           ValidationFailure(
             node: node.kind,
-            message:
-              "non-collection node should not contain 'List'"
+            message: "non-collection node should not contain 'List'"
           )
         )
       }
     }
 
-    assertFailuresMatchXFails(failures, expectedFailures: [])
+    assertFailuresMatchXFails(
+      failures,
+      expectedFailures: [
+        ValidationFailure(
+          node: .memberBlockItemListFile,
+          message: "non-collection node should not contain 'List'"
+        )
+      ]
+    )
   }
 
   /// Children should always have a plural as their name instead of ending with 'List'.

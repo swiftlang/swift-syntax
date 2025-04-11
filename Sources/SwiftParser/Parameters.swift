@@ -96,10 +96,32 @@ extension Parser {
     let modifiers = parseParameterModifiers(isClosure: false)
     let misplacedSpecifiers = parseMisplacedSpecifiers()
 
-    var names = self.parseParameterNames()
-    let (unexpectedBeforeColon, colon) = self.expect(.colon)
+    var names: ParameterNames
 
+    let unexpectedBeforeColon: RawUnexpectedNodesSyntax?
+    let colon: RawTokenSyntax
     let type: RawTypeSyntax
+
+    // try to parse the type regardless of the presence of the preceding colon
+    // to tackle any unnamed parameter or missing colon
+    // e.g. [X], (:[X]) or (x [X])
+    let canParseType = withLookahead {
+      $0.currentToken.tokenText.isStartingWithUppercase && $0.canParseType() && $0.at(.comma, .rightParen)
+    }
+
+    if canParseType {
+      names = ParameterNames(
+        unexpectedBeforeFirstName: nil,
+        firstName: nil,
+        unexpectedBeforeSecondName: nil,
+        secondName: nil
+      )
+      unexpectedBeforeColon = nil
+      colon = missingToken(.colon)
+    } else {
+      names = self.parseParameterNames()
+      (unexpectedBeforeColon, colon) = self.expect(.colon)
+    }
 
     if colon.presence == .missing,
       let secondName = names.secondName,
@@ -134,7 +156,22 @@ extension Parser {
       defaultValue = nil
     }
 
-    let trailingComma = self.consume(if: .comma)
+    var trailingComma: Token?
+    if self.at(.comma) {
+      trailingComma = self.consume(if: .comma)
+    } else if !self.at(.rightParen) {
+      let canParseIdentifier: Bool = withLookahead {
+        $0.canParseTypeIdentifier(allowKeyword: false)
+      }
+
+      let canParseAttribute: Bool = withLookahead {
+        $0.consume(if: .atSign) != nil && $0.canParseCustomAttribute()
+      }
+
+      if canParseIdentifier || canParseAttribute {
+        trailingComma = Token(missing: .comma, arena: self.arena)
+      }
+    }
 
     return RawFunctionParameterSyntax(
       attributes: attrs,

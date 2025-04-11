@@ -10,10 +10,14 @@
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
+#if compiler(>=6) && RESILIENT_LIBRARIES
 @_implementationOnly private import _SwiftSyntaxCShims
-#else
+#elseif compiler(>=6) && !RESILIENT_LIBRARIES
+private import _SwiftSyntaxCShims
+#elseif !compiler(>=6) && RESILIENT_LIBRARIES
 @_implementationOnly import _SwiftSyntaxCShims
+#elseif !compiler(>=6) && !RESILIENT_LIBRARIES
+import _SwiftSyntaxCShims
 #endif
 
 // `Syntax` is a user facing tree wrapping `RawSyntax` tree. A value is a pair
@@ -378,7 +382,10 @@ struct SyntaxData: Sendable {
 /// `SyntaxDataArena` manages the entire data of a `Syntax` tree.
 final class SyntaxDataArena: @unchecked Sendable {
   /// Mutex for locking the data when populating layout buffers.
-  private let mutex: PlatformMutex
+  ///
+  /// - Note: `UnsafeMutableRawPointer` + casting accessor is a workaround to silence the warning 'cannot bypass resilience'.
+  private let _mutex: UnsafeMutableRawPointer?
+  private func mutex() -> PlatformMutex { PlatformMutex(opaque: self._mutex) }
 
   /// Allocator.
   private let allocator: BumpPtrAllocator
@@ -392,7 +399,7 @@ final class SyntaxDataArena: @unchecked Sendable {
   init(raw: RawSyntax, rawNodeArena: RetainedRawSyntaxArena) {
     precondition(rawNodeArena == raw.arenaReference)
 
-    self.mutex = PlatformMutex.create()
+    self._mutex = PlatformMutex.create().opaque
     self.allocator = BumpPtrAllocator(initialSlabSize: Self.slabSize(for: raw))
     self.rawArena = rawNodeArena
     self.root = Self.createDataImpl(allocator: allocator, raw: raw, parent: nil, absoluteInfo: .forRoot(raw))
@@ -401,7 +408,7 @@ final class SyntaxDataArena: @unchecked Sendable {
   deinit {
     // Debug print for re-evaluating `slabSize(for:)`
     // print("nodeCount: \(root.pointee.raw.totalNodes), slabSize: \(Self.slabSize(for: root.pointee.raw)), allocated: \(allocator.totalByteSizeAllocated), overflowed: \(Self.slabSize(for: root.pointee.raw) < allocator.totalByteSizeAllocated)")
-    self.mutex.destroy()
+    self.mutex().destroy()
   }
 
   /// Return the childen data of the given node.
@@ -427,8 +434,8 @@ final class SyntaxDataArena: @unchecked Sendable {
       return SyntaxDataReferenceBuffer(UnsafeBufferPointer(start: baseAddress, count: childCount))
     }
 
-    mutex.lock()
-    defer { mutex.unlock() }
+    mutex().lock()
+    defer { mutex().unlock() }
 
     // Recheck, maybe some other thread has populated the buffer during acquiring the lock.
     if let baseAddress = swiftsyntax_atomic_pointer_get(baseAddressRef)?.assumingMemoryBound(

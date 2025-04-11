@@ -77,6 +77,14 @@ public struct FixIt: Sendable {
     case replaceTrailingTrivia(token: TokenSyntax, newTrivia: Trivia)
     /// Replace the child node of the given parent node at the given replacement range with the given new child node
     case replaceChild(data: any ReplacingChildData)
+    /// Replace the text within the given range in a syntax node with new text.
+    ///
+    /// Generally, one should use other cases to replace specific syntax nodes
+    /// or trivia, because it more easily leads to a correct result. However,
+    /// this case provides a fallback for textual replacement that ignores
+    /// syntactic structure. After applying a textual replacement, there is no
+    /// way to get back to a syntax tree without reparsing.
+    case replaceText(range: Range<AbsolutePosition>, with: String, in: Syntax)
   }
 
   /// A description of what this Fix-It performs.
@@ -157,6 +165,9 @@ private extension FixIt.Change {
         range: replacingChildData.replacementRange,
         replacement: replacingChildData.newChild.description
       )
+
+    case .replaceText(range: let replacementRange, with: let newText, in: _):
+      return SourceEdit(range: replacementRange, replacement: newText)
     }
   }
 }

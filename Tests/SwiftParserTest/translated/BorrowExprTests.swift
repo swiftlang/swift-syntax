@@ -12,6 +12,8 @@
 
 // This test file has been translated from swift/test/Parse/borrow_expr.swift
 
+@_spi(ExperimentalLanguageFeatures) import SwiftParser
+import SwiftSyntax
 import XCTest
 
 final class BorrowExprTests: ParserTestCase {
@@ -23,7 +25,8 @@ final class BorrowExprTests: ParserTestCase {
       func testGlobal() {
         useString(_borrow global)
       }
-      """
+      """,
+      experimentalFeatures: [.oldOwnershipOperatorSpellings]
     )
   }
 
@@ -36,7 +39,8 @@ final class BorrowExprTests: ParserTestCase {
           t = String()
           useString(_borrow t)
       }
-      """
+      """,
+      experimentalFeatures: [.oldOwnershipOperatorSpellings]
     )
   }
 

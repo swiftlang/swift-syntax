@@ -83,11 +83,10 @@ func makeCompatibilityAddMethod(for child: Child) -> DeclSyntax? {
     !child.isUnexpectedNodes,
     case .collection(
       kind: _,
-      collectionElementName: let collectionElementName,
+      collectionElementName: let collectionElementName?,
       defaultsToEmpty: _,
-      deprecatedCollectionElementName: let deprecatedCollectionElementName
-    ) = child.kind,
-    let deprecatedCollectionElementName
+      deprecatedCollectionElementName: let deprecatedCollectionElementName?
+    ) = child.kind
   {
     let childEltType = childNode.collectionElementType.syntaxBaseName
 

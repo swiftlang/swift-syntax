@@ -34,6 +34,13 @@ final class BasicDiagnosticDecoratorTests: XCTestCase {
 
     let decoratedMessageForRemark = decorator.decorateMessage(message, basedOnSeverity: .remark)
     assertStringsEqualWithDiff(decoratedMessageForRemark, "remark: File not found")
+
+    let decoratedMessageWithCategory = decorator.decorateMessage(
+      message,
+      basedOnSeverity: .error,
+      category: DiagnosticCategory(name: "Filesystem", documentationURL: "http://www.swift.org")
+    )
+    assertStringsEqualWithDiff(decoratedMessageWithCategory, "error: File not found [#Filesystem]")
   }
 
   // MARK: - Decorate Buffer Outline Tests

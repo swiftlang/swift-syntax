@@ -227,7 +227,8 @@ extension GroupedDiagnostics {
             let bufferLoc = slc.location(for: rootPosition)
             let decoratedMessage = diagnosticDecorator.decorateMessage(
               "expanded code originates here",
-              basedOnSeverity: .note
+              basedOnSeverity: .note,
+              category: nil
             )
             prefixString += "`- \(bufferLoc.file):\(bufferLoc.line):\(bufferLoc.column): \(decoratedMessage)\n"
           }

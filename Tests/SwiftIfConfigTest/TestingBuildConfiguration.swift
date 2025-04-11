@@ -99,6 +99,10 @@ struct TestingBuildConfiguration: BuildConfiguration {
     name == "arm64e"
   }
 
+  func isActiveTargetObjectFileFormat(name: String) throws -> Bool {
+    name == "ELF"
+  }
+
   var targetPointerBitWidth: Int { 64 }
 
   var targetAtomicBitWidths: [Int] { [32, 64] }

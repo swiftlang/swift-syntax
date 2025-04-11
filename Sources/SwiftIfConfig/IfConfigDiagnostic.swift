@@ -159,7 +159,8 @@ extension IfConfigDiagnostic: DiagnosticMessage {
   var severity: SwiftDiagnostics.DiagnosticSeverity {
     switch self {
     case .compilerVersionSecondComponentNotWildcard, .ignoredTrailingComponents,
-      .likelySimulatorPlatform, .likelyTargetOS, .endiannessDoesNotMatch, .macabiIsMacCatalyst:
+      .likelySimulatorPlatform, .likelyTargetOS, .endiannessDoesNotMatch,
+      .macabiIsMacCatalyst:
       return .warning
     default: return .error
     }

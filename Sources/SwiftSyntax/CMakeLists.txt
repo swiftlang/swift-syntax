@@ -83,5 +83,12 @@ add_swift_syntax_library(SwiftSyntax
   generated/syntaxNodes/SyntaxNodesTUVWXYZ.swift
 )
 
-target_link_swift_syntax_libraries(SwiftSyntax PRIVATE
-  _SwiftSyntaxCShims)
+if (SWIFTSYNTAX_EMIT_MODULE)
+  target_link_swift_syntax_libraries(SwiftSyntax PRIVATE
+    _SwiftSyntaxCShims)
+else()
+  # We can't use @_implementationOnly if we don't enable library evolution, so we need
+  # to link _SwiftSyntaxCShims publicly.
+  target_link_swift_syntax_libraries(SwiftSyntax PUBLIC
+    _SwiftSyntaxCShims)
+endif()

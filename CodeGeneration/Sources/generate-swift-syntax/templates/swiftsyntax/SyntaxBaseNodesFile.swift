@@ -42,7 +42,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       /// These methods enable casting between syntax node types within the same
       /// base node protocol hierarchy (e.g., ``DeclSyntaxProtocol``).
       ///
-      /// While ``SyntaxProtocol`` offers general casting methods (``SyntaxProtocol.as(_:)``, 
+      /// While ``SyntaxProtocol`` offers general casting methods (``SyntaxProtocol.as(_:)``,
       /// ``SyntaxProtocol.is(_:)``, and ``SyntaxProtocol.cast(_:)``), these often aren't
       /// appropriate for use on types conforming to a specific base node protocol
       /// like ``\#(node.kind.protocolType)``. That's because at this level,
@@ -51,7 +51,7 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       ///
       /// To guide developers toward correct usage, this extension provides overloads
       /// of these casting methods that are restricted to the same base node type.
-      /// Furthermore, it marks the inherited casting methods from ``SyntaxProtocol`` as 
+      /// Furthermore, it marks the inherited casting methods from ``SyntaxProtocol`` as
       /// deprecated, indicating that they will always fail when used in this context.
       extension \#(node.kind.protocolType) {
         /// Checks if the current syntax node can be cast to a given specialized syntax type.
@@ -184,9 +184,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         """
         /// Create a \(raw: node.kind.doccLink) node from a specialized syntax node.
         public init(_ syntax: __shared some \(node.kind.protocolType)) {
-          // We know this cast is going to succeed. Go through init(_: SyntaxData)
-          // to do a sanity check and verify the kind matches in debug builds and get
-          // maximum performance in release builds.
+          // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
+          // verify the kind matches in debug builds and get maximum performance in release builds.
           self = Syntax(syntax).cast(Self.self)
         }
         """
@@ -205,9 +204,8 @@ let syntaxBaseNodesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         public init(fromProtocol syntax: __shared \(node.kind.protocolType)) {
-          // We know this cast is going to succeed. Go through init(_: SyntaxData)
-          // to do a sanity check and verify the kind matches in debug builds and get
-          // maximum performance in release builds.
+          // We know this cast is going to succeed. Go through `init(_: SyntaxData)` just to double-check and
+          // verify the kind matches in debug builds and get maximum performance in release builds.
           self = Syntax(syntax).cast(Self.self)
         }
         """

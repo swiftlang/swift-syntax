@@ -141,7 +141,6 @@ extension OperatorTable {
     if let unsafeExpr = lhs.as(UnsafeExprSyntax.self) {
       return ExprSyntax(
         UnsafeExprSyntax(
-          leadingTrivia: unsafeExpr.leadingTrivia,
           unsafeExpr.unexpectedBeforeUnsafeKeyword,
           unsafeKeyword: unsafeExpr.unsafeKeyword,
           unsafeExpr.unexpectedBetweenUnsafeKeywordAndExpression,
@@ -150,11 +149,12 @@ extension OperatorTable {
             op: op,
             rhs: rhs
           ),
-          unsafeExpr.unexpectedAfterExpression,
-          trailingTrivia: unsafeExpr.trailingTrivia
+          unsafeExpr.unexpectedAfterExpression
         )
       )
     }
+    // NOTE: If you add a new try/await/unsafe-like hoisting case here, make
+    // sure to also update `allMacroLexicalContexts` to handle it.
 
     // The form of the binary operation depends on the operator itself,
     // which will be one of the unresolved infix operators.

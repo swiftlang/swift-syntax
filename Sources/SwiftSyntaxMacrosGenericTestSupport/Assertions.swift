@@ -632,6 +632,11 @@ fileprivate extension FixIt.Change {
         range: start..<end,
         replacement: replacingChildData.newChild.description
       )
+
+    case .replaceText(range: let range, with: let newText, in: let syntax):
+      let start = expansionContext.position(of: range.lowerBound, anchoredAt: syntax)
+      let end = expansionContext.position(of: range.upperBound, anchoredAt: syntax)
+      return SourceEdit(range: start..<end, replacement: newText)
     }
   }
 }

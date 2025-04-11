@@ -121,64 +121,55 @@ final class ValueGenericsTests: ParserTestCase {
       ],
       fixedSource: """
         let x: <#type#> = 123
-        """,
-      experimentalFeatures: .valueGenerics
+        """
     )
 
     assertParse(
       """
       let x: Generic<123>
-      """,
-      experimentalFeatures: .valueGenerics
+      """
     )
 
     assertParse(
       """
       let x: Generic<-123>
-      """,
-      experimentalFeatures: .valueGenerics
+      """
     )
 
     assertParse(
       """
       let x = Generic<123>.self
-      """,
-      experimentalFeatures: .valueGenerics
+      """
     )
 
     assertParse(
       """
       let x = Generic<-123>.self
-      """,
-      experimentalFeatures: .valueGenerics
+      """
     )
 
     assertParse(
       """
       let x = Generic<123, Int>.self
-      """,
-      experimentalFeatures: .valueGenerics
+      """
     )
 
     assertParse(
       """
       let x = Generic<-123, Int>.self
-      """,
-      experimentalFeatures: .valueGenerics
+      """
     )
 
     assertParse(
       """
       let x = Generic<Int, 123>.self
-      """,
-      experimentalFeatures: .valueGenerics
+      """
     )
 
     assertParse(
       """
       let x: Generic<Int, -123>.self
-      """,
-      experimentalFeatures: .valueGenerics
+      """
     )
 
     assertParse(
@@ -193,36 +184,31 @@ final class ValueGenericsTests: ParserTestCase {
       ],
       fixedSource: """
         typealias One = <#type#>1
-        """,
-      experimentalFeatures: .valueGenerics
+        """
     )
 
     assertParse(
       """
       extension Vector where N == 123 {}
-      """,
-      experimentalFeatures: .valueGenerics
+      """
     )
 
     assertParse(
       """
       extension Vector where 123 == N {}
-      """,
-      experimentalFeatures: .valueGenerics
+      """
     )
 
     assertParse(
       """
       extension Vector where N == -123 {}
-      """,
-      experimentalFeatures: .valueGenerics
+      """
     )
 
     assertParse(
       """
       extension Vector where -123 == N {}
-      """,
-      experimentalFeatures: .valueGenerics
+      """
     )
 
     assertParse(
@@ -240,8 +226,7 @@ final class ValueGenericsTests: ParserTestCase {
       ],
       fixedSource: """
         extension Vector where N: <#type#> 123 {}
-        """,
-      experimentalFeatures: .valueGenerics
+        """
     )
 
     assertParse(
@@ -259,8 +244,7 @@ final class ValueGenericsTests: ParserTestCase {
       ],
       fixedSource: """
         extension Vector where N: <#type#> -123 {}
-        """,
-      experimentalFeatures: .valueGenerics
+        """
     )
 
     assertParse(
@@ -274,8 +258,7 @@ final class ValueGenericsTests: ParserTestCase {
         DiagnosticSpec(
           message: "unexpected code ': N' in extension"
         ),
-      ],
-      experimentalFeatures: .valueGenerics
+      ]
     )
 
     assertParse(
@@ -289,8 +272,7 @@ final class ValueGenericsTests: ParserTestCase {
         DiagnosticSpec(
           message: "unexpected code ': N' in extension"
         ),
-      ],
-      experimentalFeatures: .valueGenerics
+      ]
     )
 
     assertParse(
@@ -302,8 +284,7 @@ final class ValueGenericsTests: ParserTestCase {
         ),
         DiagnosticSpec(message: "unexpected code '-1' in tuple type"),
       ],
-      fixedSource: "func foo() -> (<#type#>-1) X",
-      experimentalFeatures: [.valueGenerics]
+      fixedSource: "func foo() -> (<#type#>-1) X"
     )
   }
 }

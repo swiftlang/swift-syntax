@@ -1,20 +1,28 @@
 //===----------------------------------------------------------------------===//
 //
-// This source file is part of the Swift open source project
+// This source file is part of the Swift.org open source project
 //
 // Copyright (c) 2023 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
-// See http://swift.org/LICENSE.txt for license information
-// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
 
-#if compiler(>=6)
+#if compiler(>=6) && RESILIENT_LIBRARIES
 @_implementationOnly private import _SwiftSyntaxCShims
+#elseif compiler(>=6) && !RESILIENT_LIBRARIES
+private import _SwiftSyntaxCShims
+#elseif !compiler(>=6) && RESILIENT_LIBRARIES
+@_implementationOnly import _SwiftSyntaxCShims
+#elseif !compiler(>=6) && !RESILIENT_LIBRARIES
+import _SwiftSyntaxCShims
+#endif
+
+#if compiler(>=6)
 public import SwiftSyntaxMacros
 #else
-@_implementationOnly import _SwiftSyntaxCShims
 import SwiftSyntaxMacros
 #endif
 
@@ -121,7 +129,7 @@ public class CompilerPluginMessageListener<Connection: MessageConnection, Handle
     } catch {
       // Emit a diagnostic and indicate failure to the plugin host,
       // and exit with an error code.
-      fputs("Internal Error: \(error)\n", _stderr)
+      fputs("Internal Error: \(error)\n", swift_syntax_stderr)
       exit(1)
     }
   }

@@ -62,6 +62,9 @@ struct DiagnosticDescriptor {
   /// The severity level of the diagnostic message.
   let severity: DiagnosticSeverity
 
+  /// The diagnostic category.
+  let category: DiagnosticCategory?
+
   /// The syntax elements to be highlighted for this diagnostic message.
   let highlight: [Syntax]  // TODO: How to create an abstract model for this?
 
@@ -86,6 +89,7 @@ struct DiagnosticDescriptor {
     id: MessageID = MessageID(domain: "test", id: "conjured"),
     message: String,
     severity: DiagnosticSeverity = .error,
+    category: DiagnosticCategory? = nil,
     highlight: [Syntax] = [],
     noteDescriptors: [NoteDescriptor] = [],
     fixIts: [FixIt] = []
@@ -94,6 +98,7 @@ struct DiagnosticDescriptor {
     self.id = id
     self.message = message
     self.severity = severity
+    self.category = category
     self.highlight = highlight
     self.noteDescriptors = noteDescriptors
     self.fixIts = fixIts
@@ -139,7 +144,8 @@ struct DiagnosticDescriptor {
       message: SimpleDiagnosticMessage(
         message: self.message,
         diagnosticID: self.id,
-        severity: self.severity
+        severity: self.severity,
+        category: category
       ),
       highlights: self.highlight,
       notes: notes,
@@ -181,6 +187,16 @@ struct SimpleDiagnosticMessage: DiagnosticMessage {
 
   /// The severity level of the diagnostic message.
   let severity: DiagnosticSeverity
+
+  /// The category for this diagnostic.
+  let category: DiagnosticCategory?
+
+  init(message: String, diagnosticID: MessageID, severity: DiagnosticSeverity, category: DiagnosticCategory? = nil) {
+    self.message = message
+    self.diagnosticID = diagnosticID
+    self.severity = severity
+    self.category = category
+  }
 }
 
 /// Asserts that the annotated source generated from diagnostics matches an expected annotated source.

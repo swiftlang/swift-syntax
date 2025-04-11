@@ -34,6 +34,16 @@ final class ANSIDiagnosticDecoratorTests: XCTestCase {
 
     let decoratedMessageForRemark = decorator.decorateMessage(message, basedOnSeverity: .remark)
     assertStringsEqualWithDiff(decoratedMessageForRemark, "\u{1B}[1;34mremark: \u{1B}[1;39mFile not found\u{1B}[0;0m")
+
+    let decoratedMessageWithCategory = decorator.decorateMessage(
+      message,
+      basedOnSeverity: .error,
+      category: DiagnosticCategory(name: "Filesystem", documentationURL: "http://www.swift.org")
+    )
+    assertStringsEqualWithDiff(
+      decoratedMessageWithCategory,
+      "\u{1B}[1;31merror: \u{1B}[1;39mFile not found\u{1B}[0;0m [#\u{001B}]8;;http://www.swift.org\u{001B}\\Filesystem\u{001B}]8;;\u{001B}\\]"
+    )
   }
 
   func testDecorateMessageWithEmptyMessage() {

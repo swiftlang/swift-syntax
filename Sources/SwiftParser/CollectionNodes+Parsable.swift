@@ -16,8 +16,8 @@
 @_spi(RawSyntax) import SwiftSyntax
 #endif
 
-fileprivate extension SyntaxCollection {
-  static func parse(
+extension SyntaxCollection where Self: SyntaxParseable {
+  fileprivate static func parse(
     from parser: inout Parser,
     parse: (_ parser: inout Parser) -> some RawSyntaxNodeProtocol,
     makeMissing: (_ remainingTokens: [RawSyntax], _ arena: RawSyntaxArena) -> some RawSyntaxNodeProtocol

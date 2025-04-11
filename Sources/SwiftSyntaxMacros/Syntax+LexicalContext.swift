@@ -67,6 +67,24 @@ extension SyntaxProtocol {
     case let freestandingMacro as FreestandingMacroExpansionSyntax:
       return Syntax(freestandingMacro.detached) as Syntax
 
+    // `try`, `await`, and `unsafe` are preserved: A freestanding expression
+    // macro may need to know whether those keywords are present so it can
+    // propagate them to any expressions in its expansion which were passed as
+    // arguments to the macro. The sub-expression is replaced with a trivial
+    // placeholder, though.
+    case var tryExpr as TryExprSyntax:
+      tryExpr = tryExpr.detached
+      tryExpr.expression = ExprSyntax(TypeExprSyntax(type: IdentifierTypeSyntax(name: .wildcardToken())))
+      return Syntax(tryExpr)
+    case var awaitExpr as AwaitExprSyntax:
+      awaitExpr = awaitExpr.detached
+      awaitExpr.expression = ExprSyntax(TypeExprSyntax(type: IdentifierTypeSyntax(name: .wildcardToken())))
+      return Syntax(awaitExpr)
+    case var unsafeExpr as UnsafeExprSyntax:
+      unsafeExpr = unsafeExpr.detached
+      unsafeExpr.expression = ExprSyntax(TypeExprSyntax(type: IdentifierTypeSyntax(name: .wildcardToken())))
+      return Syntax(unsafeExpr)
+
     default:
       return nil
     }
@@ -91,6 +109,43 @@ extension SyntaxProtocol {
     while let parentNode = currentNode.parent ?? enclosingSyntax(currentNode) {
       if let parentContext = parentNode.asMacroLexicalContext() {
         parentContexts.append(parentContext)
+      }
+      // Unfolded sequence expressions require special handling - effect marker
+      // nodes like `try`, `await`, and `unsafe` are treated as lexical contexts
+      // for all the nodes on their right. Cases where they don't end up
+      // covering nodes to their right in the folded tree are invalid and will
+      // be diagnosed by the compiler. This matches the compiler's ASTScope
+      // handling logic.
+      if let sequence = parentNode.as(SequenceExprSyntax.self) {
+        var sequenceExprContexts: [Syntax] = []
+        for elt in sequence.elements {
+          if elt.range.contains(self.position) {
+            // `sequenceExprContexts` is built from the top-down, but we
+            // build the rest of the contexts bottom-up. Reverse for
+            // consistency.
+            parentContexts += sequenceExprContexts.reversed()
+            break
+          }
+          var elt = elt
+          while true {
+            if let tryElt = elt.as(TryExprSyntax.self) {
+              sequenceExprContexts.append(tryElt.asMacroLexicalContext()!)
+              elt = tryElt.expression
+              continue
+            }
+            if let awaitElt = elt.as(AwaitExprSyntax.self) {
+              sequenceExprContexts.append(awaitElt.asMacroLexicalContext()!)
+              elt = awaitElt.expression
+              continue
+            }
+            if let unsafeElt = elt.as(UnsafeExprSyntax.self) {
+              sequenceExprContexts.append(unsafeElt.asMacroLexicalContext()!)
+              elt = unsafeElt.expression
+              continue
+            }
+            break
+          }
+        }
       }
 
       currentNode = parentNode

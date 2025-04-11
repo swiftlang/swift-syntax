@@ -233,4 +233,30 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
       """
     )
   }
+
+  func testCategoryFootnotes() {
+    let categories = [
+      DiagnosticCategory(
+        name: "StrictMemorySafety",
+        documentationURL: "http://example.com/memory-safety"
+      ),
+      DiagnosticCategory(
+        name: "deprecated",
+        documentationURL: "http://example.com/deprecated"
+      ),
+      DiagnosticCategory(name: "nothing", documentationURL: nil),
+    ]
+
+    assertStringsEqualWithDiff(
+      DiagnosticsFormatter().categoryFootnotes(
+        categories,
+        leadingText: "Footnotes:\n"
+      ),
+      """
+      Footnotes:
+      [#deprecated]: <http://example.com/deprecated>
+      [#StrictMemorySafety]: <http://example.com/memory-safety>
+      """
+    )
+  }
 }

@@ -17,7 +17,7 @@
 
 #include <errno.h>
 
-SWIFT_NAME_S("getter:_errno()")
+SWIFT_NAME_S("getter:swift_syntax_errno()")
 static inline int swiftsyntax_errno(void) {
   return errno;
 }

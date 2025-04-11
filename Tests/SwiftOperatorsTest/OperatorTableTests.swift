@@ -435,4 +435,10 @@ class OperatorPrecedenceTests: XCTestCase {
     }
 
   }
+
+  func testTriviaAroundUnsafeExpr() throws {
+    let original = ExprSyntax("/*leading*/ unsafe a /*trailing*/ + b")
+    let folded = try OperatorTable.standardOperators.foldAll(original)
+    XCTAssertEqual(original.description, folded.description)
+  }
 }

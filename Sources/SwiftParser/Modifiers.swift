@@ -236,7 +236,11 @@ extension Parser {
     let detail: RawDeclModifierDetailSyntax?
     if self.at(.leftParen) {
       let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
-      let (unexpectedBeforeDetailToken, detailToken) = self.expect(TokenSpec(.unsafe, remapping: .identifier))
+      let (unexpectedBeforeDetailToken, detailToken) = self.expect(
+        TokenSpec(.unsafe, remapping: .identifier),
+        TokenSpec(.nonsending, remapping: .identifier),
+        default: TokenSpec(.identifier)
+      )
       let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
       detail = RawDeclModifierDetailSyntax(
         unexpectedBeforeLeftParen,

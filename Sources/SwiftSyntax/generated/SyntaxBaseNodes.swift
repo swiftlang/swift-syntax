@@ -1699,6 +1699,8 @@ extension Syntax {
       .node(MultipleTrailingClosureElementSyntax.self),
       .node(NamedOpaqueReturnTypeSyntax.self),
       .node(NilLiteralExprSyntax.self),
+      .node(NonisolatedSpecifierArgumentSyntax.self),
+      .node(NonisolatedTypeSpecifierSyntax.self),
       .node(ObjCSelectorPieceListSyntax.self),
       .node(ObjCSelectorPieceSyntax.self),
       .node(OperatorDeclSyntax.self),

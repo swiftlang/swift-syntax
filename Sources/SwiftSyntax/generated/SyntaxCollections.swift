@@ -1913,7 +1913,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 
 /// ### Children
 /// 
-/// (``SimpleTypeSpecifierSyntax`` | `LifetimeTypeSpecifierSyntax`) `*`
+/// (``SimpleTypeSpecifierSyntax`` | `LifetimeTypeSpecifierSyntax` | ``NonisolatedTypeSpecifierSyntax``) `*`
 ///
 /// ### Contained in
 /// 
@@ -1926,12 +1926,15 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
     /// - Note: Requires experimental feature `nonescapableTypes`.
     @_spi(ExperimentalLanguageFeatures)
     case lifetimeTypeSpecifier(LifetimeTypeSpecifierSyntax)
+    case nonisolatedTypeSpecifier(NonisolatedTypeSpecifierSyntax)
 
     public var _syntaxNode: Syntax {
       switch self {
       case .simpleTypeSpecifier(let node):
         return node._syntaxNode
       case .lifetimeTypeSpecifier(let node):
+        return node._syntaxNode
+      case .nonisolatedTypeSpecifier(let node):
         return node._syntaxNode
       }
     }
@@ -1946,18 +1949,24 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
       self = .lifetimeTypeSpecifier(node)
     }
 
+    public init(_ node: NonisolatedTypeSpecifierSyntax) {
+      self = .nonisolatedTypeSpecifier(node)
+    }
+
     public init?(_ node: __shared some SyntaxProtocol) {
       if let node = node.as(SimpleTypeSpecifierSyntax.self) {
         self = .simpleTypeSpecifier(node)
       } else if let node = node.as(LifetimeTypeSpecifierSyntax.self) {
         self = .lifetimeTypeSpecifier(node)
+      } else if let node = node.as(NonisolatedTypeSpecifierSyntax.self) {
+        self = .nonisolatedTypeSpecifier(node)
       } else {
         return nil
       }
     }
 
     public static var structure: SyntaxNodeStructure {
-      return .choices([.node(SimpleTypeSpecifierSyntax.self), .node(LifetimeTypeSpecifierSyntax.self)])
+      return .choices([.node(SimpleTypeSpecifierSyntax.self), .node(LifetimeTypeSpecifierSyntax.self), .node(NonisolatedTypeSpecifierSyntax.self)])
     }
 
     /// Checks if the current syntax node can be cast to ``SimpleTypeSpecifierSyntax``.
@@ -2008,6 +2017,28 @@ public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
     @_spi(ExperimentalLanguageFeatures)
     public func cast(_ syntaxType: LifetimeTypeSpecifierSyntax.Type) -> LifetimeTypeSpecifierSyntax {
       return self.as(LifetimeTypeSpecifierSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to ``NonisolatedTypeSpecifierSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: NonisolatedTypeSpecifierSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to ``NonisolatedTypeSpecifierSyntax``.
+    ///
+    /// - Returns: An instance of ``NonisolatedTypeSpecifierSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: NonisolatedTypeSpecifierSyntax.Type) -> NonisolatedTypeSpecifierSyntax? {
+      return NonisolatedTypeSpecifierSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to ``NonisolatedTypeSpecifierSyntax``.
+    ///
+    /// - Returns: An instance of ``NonisolatedTypeSpecifierSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: NonisolatedTypeSpecifierSyntax.Type) -> NonisolatedTypeSpecifierSyntax {
+      return self.as(NonisolatedTypeSpecifierSyntax.self)!
     }
   }
 

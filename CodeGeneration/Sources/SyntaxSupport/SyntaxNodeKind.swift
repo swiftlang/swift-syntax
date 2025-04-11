@@ -210,6 +210,9 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case multipleTrailingClosureElementList
   case namedOpaqueReturnType
   case nilLiteralExpr
+  case nonisolatedSpecifierArgument
+  case nonisolatedSpecifierArgumentList
+  case nonisolatedTypeSpecifier
   case objCSelectorPiece
   case objCSelectorPieceList
   case operatorDecl

@@ -3503,7 +3503,6 @@ extension SimpleTypeSpecifierSyntax {
     case __shared
     case __owned
     case isolated
-    case nonisolated
     case _const
     case borrowing
     case consuming
@@ -3519,8 +3518,6 @@ extension SimpleTypeSpecifierSyntax {
         self = .__owned
       case TokenSpec(.isolated):
         self = .isolated
-      case TokenSpec(.nonisolated):
-        self = .nonisolated
       case TokenSpec(._const):
         self = ._const
       case TokenSpec(.borrowing):
@@ -3544,8 +3541,6 @@ extension SimpleTypeSpecifierSyntax {
         self = .__owned
       case TokenSpec(.isolated):
         self = .isolated
-      case TokenSpec(.nonisolated):
-        self = .nonisolated
       case TokenSpec(._const):
         self = ._const
       case TokenSpec(.borrowing):
@@ -3569,8 +3564,6 @@ extension SimpleTypeSpecifierSyntax {
         return .keyword(.__owned)
       case .isolated:
         return .keyword(.isolated)
-      case .nonisolated:
-        return .keyword(.nonisolated)
       case ._const:
         return .keyword(._const)
       case .borrowing:
@@ -3596,8 +3589,6 @@ extension SimpleTypeSpecifierSyntax {
         return .keyword(.__owned)
       case .isolated:
         return .keyword(.isolated)
-      case .nonisolated:
-        return .keyword(.nonisolated)
       case ._const:
         return .keyword(._const)
       case .borrowing:

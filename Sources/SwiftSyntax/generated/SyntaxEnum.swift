@@ -216,6 +216,8 @@ public enum SyntaxEnum: Sendable {
   case multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax)
   case namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax)
   case nilLiteralExpr(NilLiteralExprSyntax)
+  case nonisolatedSpecifierArgument(NonisolatedSpecifierArgumentSyntax)
+  case nonisolatedTypeSpecifier(NonisolatedTypeSpecifierSyntax)
   case objCSelectorPieceList(ObjCSelectorPieceListSyntax)
   case objCSelectorPiece(ObjCSelectorPieceSyntax)
   case operatorDecl(OperatorDeclSyntax)
@@ -699,6 +701,10 @@ extension Syntax {
       return .namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax(self)!)
     case .nilLiteralExpr:
       return .nilLiteralExpr(NilLiteralExprSyntax(self)!)
+    case .nonisolatedSpecifierArgument:
+      return .nonisolatedSpecifierArgument(NonisolatedSpecifierArgumentSyntax(self)!)
+    case .nonisolatedTypeSpecifier:
+      return .nonisolatedTypeSpecifier(NonisolatedTypeSpecifierSyntax(self)!)
     case .objCSelectorPieceList:
       return .objCSelectorPieceList(ObjCSelectorPieceListSyntax(self)!)
     case .objCSelectorPiece:

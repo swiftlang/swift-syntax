@@ -2370,6 +2370,30 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "nilKeyword"
   case \NilLiteralExprSyntax.unexpectedAfterNilKeyword:
     return "unexpectedAfterNilKeyword"
+  case \NonisolatedSpecifierArgumentSyntax.unexpectedBeforeLeftParen:
+    return "unexpectedBeforeLeftParen"
+  case \NonisolatedSpecifierArgumentSyntax.leftParen:
+    return "leftParen"
+  case \NonisolatedSpecifierArgumentSyntax.unexpectedBetweenLeftParenAndNonsendingKeyword:
+    return "unexpectedBetweenLeftParenAndNonsendingKeyword"
+  case \NonisolatedSpecifierArgumentSyntax.nonsendingKeyword:
+    return "nonsendingKeyword"
+  case \NonisolatedSpecifierArgumentSyntax.unexpectedBetweenNonsendingKeywordAndRightParen:
+    return "unexpectedBetweenNonsendingKeywordAndRightParen"
+  case \NonisolatedSpecifierArgumentSyntax.rightParen:
+    return "rightParen"
+  case \NonisolatedSpecifierArgumentSyntax.unexpectedAfterRightParen:
+    return "unexpectedAfterRightParen"
+  case \NonisolatedTypeSpecifierSyntax.unexpectedBeforeNonisolatedKeyword:
+    return "unexpectedBeforeNonisolatedKeyword"
+  case \NonisolatedTypeSpecifierSyntax.nonisolatedKeyword:
+    return "nonisolatedKeyword"
+  case \NonisolatedTypeSpecifierSyntax.unexpectedBetweenNonisolatedKeywordAndArgument:
+    return "unexpectedBetweenNonisolatedKeywordAndArgument"
+  case \NonisolatedTypeSpecifierSyntax.argument:
+    return "argument"
+  case \NonisolatedTypeSpecifierSyntax.unexpectedAfterArgument:
+    return "unexpectedAfterArgument"
   case \ObjCSelectorPieceSyntax.unexpectedBeforeName:
     return "unexpectedBeforeName"
   case \ObjCSelectorPieceSyntax.name:

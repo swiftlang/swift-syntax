@@ -326,6 +326,7 @@ enum TokenPrecedence: Comparable {
       .module,
       .noasync,
       .none,
+      .nonsending,
       .obsoleted,
       .of,
       .Protocol,

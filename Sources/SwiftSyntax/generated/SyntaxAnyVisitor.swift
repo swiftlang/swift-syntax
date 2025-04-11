@@ -1585,6 +1585,22 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  override open func visit(_ node: NonisolatedSpecifierArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: NonisolatedSpecifierArgumentSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
+  override open func visit(_ node: NonisolatedTypeSpecifierSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: NonisolatedTypeSpecifierSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: ObjCSelectorPieceListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

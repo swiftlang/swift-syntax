@@ -212,6 +212,7 @@ extension TypeSpecifierListSyntax {
       switch specifier {
       case .simpleTypeSpecifier(let specifier): return specifier.specifier
       case .lifetimeTypeSpecifier: return nil
+      case .nonisolatedTypeSpecifier: return nil
       #if RESILIENT_LIBRARIES
       @unknown default:
         fatalError()

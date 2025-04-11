@@ -216,6 +216,8 @@ public enum SyntaxKind: Sendable {
   case multipleTrailingClosureElement
   case namedOpaqueReturnType
   case nilLiteralExpr
+  case nonisolatedSpecifierArgument
+  case nonisolatedTypeSpecifier
   case objCSelectorPieceList
   case objCSelectorPiece
   case operatorDecl
@@ -824,6 +826,10 @@ public enum SyntaxKind: Sendable {
       return NamedOpaqueReturnTypeSyntax.self
     case .nilLiteralExpr:
       return NilLiteralExprSyntax.self
+    case .nonisolatedSpecifierArgument:
+      return NonisolatedSpecifierArgumentSyntax.self
+    case .nonisolatedTypeSpecifier:
+      return NonisolatedTypeSpecifierSyntax.self
     case .objCSelectorPieceList:
       return ObjCSelectorPieceListSyntax.self
     case .objCSelectorPiece:

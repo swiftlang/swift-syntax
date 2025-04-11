@@ -2150,6 +2150,24 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("nil")]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
   }
+  func validateNonisolatedSpecifierArgumentSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 7)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftParen)]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.keyword("nonsending")]))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightParen)]))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+  }
+  func validateNonisolatedTypeSpecifierSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("nonisolated")]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawNonisolatedSpecifierArgumentSyntax?.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+  }
   func validateObjCSelectorPieceListSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     for (index, element) in layout.enumerated() {
       assertNoError(kind, index, verify(element, as: RawObjCSelectorPieceSyntax.self))
@@ -2561,7 +2579,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       .keyword("__shared"),
       .keyword("__owned"),
       .keyword("isolated"),
-      .keyword("nonisolated"),
       .keyword("_const"),
       .keyword("borrowing"),
       .keyword("consuming"),
@@ -2957,7 +2974,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     for (index, element) in layout.enumerated() {
       assertAnyHasNoError(kind, index, [
         verify(element, as: RawSimpleTypeSpecifierSyntax.self),
-        verify(element, as: RawLifetimeTypeSpecifierSyntax.self)])
+        verify(element, as: RawLifetimeTypeSpecifierSyntax.self),
+        verify(element, as: RawNonisolatedTypeSpecifierSyntax.self)])
     }
   }
   func validateUnexpectedNodesSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
@@ -3488,6 +3506,10 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     validateNamedOpaqueReturnTypeSyntax(kind: kind, layout: layout)
   case .nilLiteralExpr:
     validateNilLiteralExprSyntax(kind: kind, layout: layout)
+  case .nonisolatedSpecifierArgument:
+    validateNonisolatedSpecifierArgumentSyntax(kind: kind, layout: layout)
+  case .nonisolatedTypeSpecifier:
+    validateNonisolatedTypeSpecifierSyntax(kind: kind, layout: layout)
   case .objCSelectorPieceList:
     validateObjCSelectorPieceListSyntax(kind: kind, layout: layout)
   case .objCSelectorPiece:

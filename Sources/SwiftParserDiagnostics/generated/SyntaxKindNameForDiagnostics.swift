@@ -294,6 +294,8 @@ extension SyntaxKind {
       return "trailing closure"
     case .namedOpaqueReturnType:
       return "named opaque return type"
+    case .nonisolatedTypeSpecifier:
+      return "'nonisolated' specifier"
     case .objCSelectorPieceList:
       return "Objective-C selector"
     case .objCSelectorPiece:

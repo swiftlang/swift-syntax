@@ -697,6 +697,10 @@ public struct TypeSpecifierListBuilder: ListBuilder {
   public static func buildExpression(_ expression: LifetimeTypeSpecifierSyntax) -> Component {
     buildExpression(.init(expression))
   }
+
+  public static func buildExpression(_ expression: NonisolatedTypeSpecifierSyntax) -> Component {
+    buildExpression(.init(expression))
+  }
 }
 
 extension TypeSpecifierListSyntax {

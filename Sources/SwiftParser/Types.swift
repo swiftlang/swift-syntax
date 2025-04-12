@@ -687,15 +687,77 @@ extension Parser.Lookahead {
     return true
   }
 
-  mutating func skipTypeAttributeList() {
+  mutating func canParseTypeAttributeList() -> Bool {
     var specifierProgress = LoopProgressCondition()
-    // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
     while canHaveParameterSpecifier,
-      self.at(anyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) != nil || self.at(.keyword(.isolated))
-        || self.at(.keyword(._const)),
+      self.at(anyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) != nil
+        || self.at(.keyword(.nonisolated), .keyword(.dependsOn)),
       self.hasProgressed(&specifierProgress)
     {
-      self.consumeAnyToken()
+      switch self.currentToken {
+      case .keyword(.nonisolated):
+        let canParseNonisolated = self.withLookahead({
+          // Consume 'nonisolated'
+          $0.consumeAnyToken()
+
+          // The argument is missing but it still could be a valid modifier,
+          // i.e. `nonisolated` in an inheritance clause.
+          guard $0.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) else {
+            return true
+          }
+
+          // Consume '('
+          $0.consumeAnyToken()
+
+          // nonisolated accepts a single modifier at the moment: 'nonsending'
+          // we need to check for that explicitly to avoid misinterpreting this
+          // keyword to be a modifier when it isn't i.e. `[nonisolated(42)]`
+          guard $0.consume(if: TokenSpec(.nonsending, allowAtStartOfLine: false)) != nil else {
+            return false
+          }
+
+          return $0.consume(if: TokenSpec(.rightParen, allowAtStartOfLine: false)) != nil
+        })
+
+        guard canParseNonisolated else {
+          return false
+        }
+
+        self.consumeAnyToken()
+
+        guard self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) else {
+          continue
+        }
+
+        self.skipSingle()
+
+      case .keyword(.dependsOn):
+        let canParseDependsOn = self.withLookahead({
+          // Consume 'dependsOn'
+          $0.consumeAnyToken()
+
+          if $0.currentToken.isAtStartOfLine {
+            return false
+          }
+
+          // `dependsOn` requires an argument list.
+          guard $0.atAttributeOrSpecifierArgument() else {
+            return false
+          }
+
+          return true
+        })
+
+        guard canParseDependsOn else {
+          return false
+        }
+
+        self.consumeAnyToken()
+        self.skipSingle()
+
+      default:
+        self.consumeAnyToken()
+      }
     }
 
     var attributeProgress = LoopProgressCondition()
@@ -703,10 +765,14 @@ extension Parser.Lookahead {
       self.consumeAnyToken()
       self.skipTypeAttribute()
     }
+
+    return true
   }
 
   mutating func canParseTypeScalar() -> Bool {
-    self.skipTypeAttributeList()
+    guard self.canParseTypeAttributeList() else {
+      return false
+    }
 
     guard self.canParseSimpleOrCompositionType() else {
       return false
@@ -1056,6 +1122,88 @@ extension Parser {
     return .lifetimeTypeSpecifier(lifetimeSpecifier)
   }
 
+  private mutating func parseNonisolatedTypeSpecifier() -> RawTypeSpecifierListSyntax.Element {
+    let (unexpectedBeforeNonisolatedKeyword, nonisolatedKeyword) = self.expect(.keyword(.nonisolated))
+
+    // If the next token is not '(' this could mean two things:
+    //  - What follows is a type and we should allow it because
+    //    using `nonsisolated` without an argument is allowed in
+    //    an inheritance clause.
+    //  - The '(nonsending)' was omitted.
+    if !self.at(.leftParen) {
+      // `nonisolated P<...>` is allowed in an inheritance clause.
+      if withLookahead({ $0.canParseTypeIdentifier() }) {
+        let nonisolatedSpecifier = RawNonisolatedTypeSpecifierSyntax(
+          unexpectedBeforeNonisolatedKeyword,
+          nonisolatedKeyword: nonisolatedKeyword,
+          argument: nil,
+          arena: self.arena
+        )
+        return .nonisolatedTypeSpecifier(nonisolatedSpecifier)
+      }
+
+      // Otherwise require '(nonsending)'
+      let argument = RawNonisolatedSpecifierArgumentSyntax(
+        leftParen: missingToken(.leftParen),
+        nonsendingKeyword: missingToken(.keyword(.nonsending)),
+        rightParen: missingToken(.rightParen),
+        arena: self.arena
+      )
+
+      let nonisolatedSpecifier = RawNonisolatedTypeSpecifierSyntax(
+        unexpectedBeforeNonisolatedKeyword,
+        nonisolatedKeyword: nonisolatedKeyword,
+        argument: argument,
+        arena: self.arena
+      )
+
+      return .nonisolatedTypeSpecifier(nonisolatedSpecifier)
+    }
+
+    // Avoid being to greedy about `(` since this modifier should be associated with
+    // function types, it's possible that the argument is omitted and what follows
+    // is a function type i.e. `nonisolated () async -> Void`.
+    if self.at(.leftParen) && !withLookahead({ $0.atAttributeOrSpecifierArgument() }) {
+      let argument = RawNonisolatedSpecifierArgumentSyntax(
+        leftParen: missingToken(.leftParen),
+        nonsendingKeyword: missingToken(.keyword(.nonsending)),
+        rightParen: missingToken(.rightParen),
+        arena: self.arena
+      )
+
+      let nonisolatedSpecifier = RawNonisolatedTypeSpecifierSyntax(
+        unexpectedBeforeNonisolatedKeyword,
+        nonisolatedKeyword: nonisolatedKeyword,
+        argument: argument,
+        arena: self.arena
+      )
+
+      return .nonisolatedTypeSpecifier(nonisolatedSpecifier)
+    }
+
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+    let (unexpectedBeforeModifier, modifier) = self.expect(.keyword(.nonsending))
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+
+    let argument = RawNonisolatedSpecifierArgumentSyntax(
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      unexpectedBeforeModifier,
+      nonsendingKeyword: modifier,
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      arena: self.arena
+    )
+
+    let nonisolatedSpecifier = RawNonisolatedTypeSpecifierSyntax(
+      unexpectedBeforeNonisolatedKeyword,
+      nonisolatedKeyword: nonisolatedKeyword,
+      argument: argument,
+      arena: self.arena
+    )
+    return .nonisolatedTypeSpecifier(nonisolatedSpecifier)
+  }
+
   private mutating func parseSimpleTypeSpecifier(
     specifierHandle: TokenConsumptionHandle
   ) -> RawTypeSpecifierListSyntax.Element {
@@ -1079,6 +1227,13 @@ extension Parser {
         } else {
           break SPECIFIER_PARSING
         }
+      } else if self.at(.keyword(.nonisolated)) {
+        // If '(' is located on the new line 'nonisolated' cannot be parsed
+        // as a specifier.
+        if self.peek(isAt: .leftParen) && self.peek().isAtStartOfLine {
+          break SPECIFIER_PARSING
+        }
+        specifiers.append(parseNonisolatedTypeSpecifier())
       } else {
         break SPECIFIER_PARSING
       }

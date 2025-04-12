@@ -677,6 +677,52 @@ public let TYPE_NODES: [Node] = [
   ),
 
   Node(
+    kind: .nonisolatedSpecifierArgument,
+    base: .syntax,
+    nameForDiagnostics: nil,
+    documentation: """
+      A single argument that can be added to a nonisolated specifier: 'nonsending'.
+
+      ### Example
+      `data` in `func foo(data: nonisolated(nonsending) () async -> Void) -> X`
+      """,
+    traits: [
+      "Parenthesized"
+    ],
+    children: [
+      Child(
+        name: "leftParen",
+        kind: .token(choices: [.token(.leftParen)])
+      ),
+      Child(
+        name: "nonsendingKeyword",
+        kind: .token(choices: [.keyword(.nonsending)])
+      ),
+      Child(
+        name: "rightParen",
+        kind: .token(choices: [.token(.rightParen)])
+      ),
+    ]
+  ),
+
+  Node(
+    kind: .nonisolatedTypeSpecifier,
+    base: .syntax,
+    nameForDiagnostics: "'nonisolated' specifier",
+    children: [
+      Child(
+        name: "nonisolatedKeyword",
+        kind: .token(choices: [.keyword(.nonisolated)])
+      ),
+      Child(
+        name: "argument",
+        kind: .node(kind: .nonisolatedSpecifierArgument),
+        isOptional: true
+      ),
+    ]
+  ),
+
+  Node(
     kind: .simpleTypeSpecifier,
     base: .syntax,
     nameForDiagnostics: "type specifier",
@@ -689,7 +735,6 @@ public let TYPE_NODES: [Node] = [
           .keyword(.__shared),
           .keyword(.__owned),
           .keyword(.isolated),
-          .keyword(.nonisolated),
           .keyword(._const),
           .keyword(.borrowing),
           .keyword(.consuming),
@@ -704,6 +749,6 @@ public let TYPE_NODES: [Node] = [
     kind: .typeSpecifierList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
-    elementChoices: [.simpleTypeSpecifier, .lifetimeTypeSpecifier]
+    elementChoices: [.simpleTypeSpecifier, .lifetimeTypeSpecifier, .nonisolatedTypeSpecifier]
   ),
 ]

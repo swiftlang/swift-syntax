@@ -44,7 +44,7 @@ public struct Trivia: Sendable {
 
   /// The string contents of all the comment pieces with any comments tokens trimmed.
   public var commentValue: String {
-    var comments = [String]()
+    var comments = [Substring]()
 
     // Determine if all line comments have a single space
     lazy var allLineCommentsHaveSpace: Bool = {
@@ -60,58 +60,57 @@ public struct Trivia: Sendable {
       }
     }()
 
-    // Helper function to trim leading and trailing whitespace
-    func trimWhitespace(_ text: String) -> String {
-      let trimmed = text.drop(while: { $0 == " " })
-        .reversed()
-        .drop(while: { $0 == " " })
-        .reversed()
-      return String(trimmed)
+    // Returns a substring with leading and trailing spaces removed.
+    func trimWhitespace(_ text: Substring) -> Substring {
+        let trimmed = text.drop(while: { $0 == " " })
+        let reversed = trimmed.reversed()
+        let trimmedEnd = reversed.drop(while: { $0 == " " })
+        let final = trimmedEnd.reversed()
+        return Substring(final)
     }
 
-    // Helper function to trim leading and trailing newlines
-    func trimNewlines(_ text: String) -> String {
-      let trimmed = text.drop(while: { $0 == "\n" })
-        .reversed()
-        .drop(while: { $0 == "\n" })
-        .reversed()
-      return String(trimmed)
-    }
-
-    // Helper function to process block comments
-    func processBlockComment(_ text: String, prefix: String, suffix: String) -> String {
-      var text = text
-      text.removeFirst(prefix.count)
-      text.removeLast(suffix.count)
-      text = trimWhitespace(text)
-      text = trimNewlines(text)
-      return text
-    }
-
-    // Helper function to process multiline block comments
-    func processMultilineBlockComment(_ text: String) -> String {
-      var lines = text.split(separator: "\n", omittingEmptySubsequences: false).map(String.init)
-
-      lines.removeFirst()
+    // Strips /* */ markers and aligns content by removing common indentation.
+    func processBlockComment(_ text: Substring) -> String {
+      var lines = text.split(separator: "\n", omittingEmptySubsequences: false)
 
       let minIndentation =
         lines
+        .dropFirst()
         .filter { !$0.isEmpty }
         .map { $0.prefix { $0 == " " }.count }
         .min() ?? 0
 
+      var firstLineRemoved = false;
+      var firstLine = lines[0]
+      if trimWhitespace(firstLine) == "/*" || trimWhitespace(firstLine) == "/**" {
+          lines.removeFirst()
+          firstLineRemoved = true;
+      } else {
+          firstLine = firstLine.hasPrefix("/**") ? firstLine.dropFirst(3) : firstLine.dropFirst(2)
+          while firstLine.first?.isWhitespace == true {
+              firstLine = firstLine.dropFirst()
+          }
+          lines[0] = firstLine
+      }
+      
       if let lastLine = lines.last {
-        if trimWhitespace(lastLine) == "*/" {
-          lines.removeLast()
-        } else {
-          lines[lines.count - 1].removeLast(2)
-          lines[lines.count - 1] = trimWhitespace(lines[lines.count - 1])
-        }
+          if trimWhitespace(lastLine) == "*/" {
+              lines.removeLast()
+          } else {
+              var lastLine = lines[lines.count - 1]
+              lastLine = lastLine.hasSuffix("*/") ? lastLine.dropLast(2) : lastLine
+              while lastLine.last?.isWhitespace == true {
+                  lastLine = lastLine.dropLast()
+              }
+              lines[lines.count - 1] = lastLine
+          }
       }
 
-      let unindentedLines = lines.map { line in
-        guard line.count >= minIndentation else { return line }
-        return String(line.dropFirst(minIndentation))
+      let unindentedLines = lines.enumerated().map { index, line -> Substring in
+        if index == 0 && firstLineRemoved == false {
+            return line
+        }
+        return line.count >= minIndentation ? line.dropFirst(minIndentation) : line
       }
 
       return unindentedLines.joined(separator: "\n")
@@ -119,27 +118,17 @@ public struct Trivia: Sendable {
 
     for piece in pieces {
       switch piece {
-      case .blockComment(let text):
-        let processedText =
-          text.hasPrefix("/*\n")
-          ? processMultilineBlockComment(text)
-          : processBlockComment(text, prefix: "/*", suffix: "*/")
-        comments.append(processedText)
-
-      case .docBlockComment(let text):
-        let processedText =
-          text.hasPrefix("/**\n")
-          ? processMultilineBlockComment(text)
-          : processBlockComment(text, prefix: "/**", suffix: "*/")
-        comments.append(processedText)
+      case .blockComment(let text), .docBlockComment(let text):
+        let processedText = processBlockComment(text[...])
+        comments.append(processedText[...])
 
       case .lineComment(let text):
         let prefix = allLineCommentsHaveSpace ? "// " : "//"
-        comments.append(String(text.dropFirst(prefix.count)))
+        comments.append(text.dropFirst(prefix.count))
 
       case .docLineComment(let text):
         let prefix = allLineCommentsHaveSpace ? "/// " : "///"
-        comments.append(String(text.dropFirst(prefix.count)))
+        comments.append(text.dropFirst(prefix.count))
 
       default:
         break

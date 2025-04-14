@@ -260,6 +260,14 @@ class TriviaTests: XCTestCase {
       commentValue: "unindented line"
     )
 
+    assertCommentValue(
+      """
+      /*
+       Comment
+        Comment */
+      """,
+      commentValue: "Comment\n Comment")
+
     // MARK: Doc block comment
 
     assertCommentValue(

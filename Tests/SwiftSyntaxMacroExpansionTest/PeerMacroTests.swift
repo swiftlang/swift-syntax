@@ -276,4 +276,54 @@ final class PeerMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+  
+  func testCanDetectAdjacentAttributesInContext() {
+    enum FoundObjCAttribute: String, Error, CustomDebugStringConvertible {
+      case noMethod
+      case noAttribute
+      case notFound
+      case found
+      var debugDescription: String { rawValue }
+    }
+
+    struct FindObjCAttribute: PeerMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        providingPeersOf declaration: some DeclSyntaxProtocol,
+        in context: some MacroExpansionContext
+      ) throws -> [DeclSyntax] {
+        guard let methodDecl = declaration.as(FunctionDeclSyntax.self) else {
+          throw FoundObjCAttribute.noMethod
+        }
+        
+        guard let attribute = methodDecl.attributes.first(where: {
+          $0.as(AttributeSyntax.self)?.attributeName == "objc"
+        }) else {
+          throw FoundObjCAttribute.noAttribute
+        }
+        
+        guard context.location(of: attribute) != nil else {
+          throw FoundObjCAttribute.notFound
+        }
+
+        return []
+      }
+    }
+    assertMacroExpansion(
+      """
+      @objc class Foo {
+        @objc @findObjCAttribute
+        func memberFunction() {}
+      }
+      """,
+      expandedSource: """
+      @objc class Foo {
+        @objc
+        func memberFunction() {}
+      }
+      """,
+      diagnostics: [],
+      macros: ["findObjCAttribute": FindObjCAttribute.self],
+      )
+  }
 }

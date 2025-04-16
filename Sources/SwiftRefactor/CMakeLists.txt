@@ -21,6 +21,26 @@ add_swift_syntax_library(SwiftRefactor
   RefactoringProvider.swift
   RemoveSeparatorsFromIntegerLiteral.swift
   SyntaxUtils.swift
+
+  PackageManifest/AbsolutePath.swift
+  PackageManifest/AddPackageDependency.swift
+  PackageManifest/AddPackageTarget.swift
+  PackageManifest/AddPluginUsage.swift
+  PackageManifest/AddProduct.swift
+  PackageManifest/AddTargetDependency.swift
+  PackageManifest/ManifestEditError.swift
+  PackageManifest/ManifestEditRefactoringProvider.swift
+  PackageManifest/ManifestSyntaxRepresentable.swift
+  PackageManifest/PackageDependency.swift
+  PackageManifest/PackageEdit.swift
+  PackageManifest/PackageIdentity.swift
+  PackageManifest/ProductDescription.swift
+  PackageManifest/RelativePath.swift
+  PackageManifest/SemanticVersion.swift
+  PackageManifest/SourceControlURL.swift
+  PackageManifest/StringUtils.swift
+  PackageManifest/SyntaxEditUtils.swift
+  PackageManifest/Target.swift
 )
 
 target_link_swift_syntax_libraries(SwiftRefactor PUBLIC

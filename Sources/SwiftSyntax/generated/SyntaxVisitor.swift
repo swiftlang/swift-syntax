@@ -2315,6 +2315,30 @@ open class SyntaxVisitor {
   open func visitPost(_ node: NilLiteralExprSyntax) {
   }
 
+  /// Visiting ``NonisolatedSpecifierArgumentSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: NonisolatedSpecifierArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``NonisolatedSpecifierArgumentSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: NonisolatedSpecifierArgumentSyntax) {
+  }
+
+  /// Visiting ``NonisolatedTypeSpecifierSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: NonisolatedTypeSpecifierSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``NonisolatedTypeSpecifierSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: NonisolatedTypeSpecifierSyntax) {
+  }
+
   /// Visiting ``ObjCSelectorPieceListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5017,6 +5041,22 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitNonisolatedSpecifierArgumentSyntaxImpl(_ node: Syntax) {
+    if visit(NonisolatedSpecifierArgumentSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(NonisolatedSpecifierArgumentSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitNonisolatedTypeSpecifierSyntaxImpl(_ node: Syntax) {
+    if visit(NonisolatedTypeSpecifierSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(NonisolatedTypeSpecifierSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitObjCSelectorPieceListSyntaxImpl(_ node: Syntax) {
     if visit(ObjCSelectorPieceListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -6204,6 +6244,10 @@ open class SyntaxVisitor {
       return self.visitNamedOpaqueReturnTypeSyntaxImpl(_:)
     case .nilLiteralExpr:
       return self.visitNilLiteralExprSyntaxImpl(_:)
+    case .nonisolatedSpecifierArgument:
+      return self.visitNonisolatedSpecifierArgumentSyntaxImpl(_:)
+    case .nonisolatedTypeSpecifier:
+      return self.visitNonisolatedTypeSpecifierSyntaxImpl(_:)
     case .objCSelectorPieceList:
       return self.visitObjCSelectorPieceListSyntaxImpl(_:)
     case .objCSelectorPiece:
@@ -6786,6 +6830,10 @@ open class SyntaxVisitor {
       self.visitNamedOpaqueReturnTypeSyntaxImpl(node)
     case .nilLiteralExpr:
       self.visitNilLiteralExprSyntaxImpl(node)
+    case .nonisolatedSpecifierArgument:
+      self.visitNonisolatedSpecifierArgumentSyntaxImpl(node)
+    case .nonisolatedTypeSpecifier:
+      self.visitNonisolatedTypeSpecifierSyntaxImpl(node)
     case .objCSelectorPieceList:
       self.visitObjCSelectorPieceListSyntaxImpl(node)
     case .objCSelectorPiece:

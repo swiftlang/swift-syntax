@@ -2957,3 +2957,155 @@ public struct RawNilLiteralExprSyntax: RawExprSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
+
+@_spi(RawSyntax)
+public struct RawNonisolatedSpecifierArgumentSyntax: RawSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .nonisolatedSpecifierArgument
+  }
+
+  public var raw: RawSyntax
+
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? = nil,
+    leftParen: RawTokenSyntax,
+    _ unexpectedBetweenLeftParenAndNonsendingKeyword: RawUnexpectedNodesSyntax? = nil,
+    nonsendingKeyword: RawTokenSyntax,
+    _ unexpectedBetweenNonsendingKeywordAndRightParen: RawUnexpectedNodesSyntax? = nil,
+    rightParen: RawTokenSyntax,
+    _ unexpectedAfterRightParen: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared RawSyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .nonisolatedSpecifierArgument, uninitializedCount: 7, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeLeftParen?.raw
+      layout[1] = leftParen.raw
+      layout[2] = unexpectedBetweenLeftParenAndNonsendingKeyword?.raw
+      layout[3] = nonsendingKeyword.raw
+      layout[4] = unexpectedBetweenNonsendingKeywordAndRightParen?.raw
+      layout[5] = rightParen.raw
+      layout[6] = unexpectedAfterRightParen?.raw
+    }
+    self.init(unchecked: raw)
+  }
+
+  public var unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var leftParen: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenLeftParenAndNonsendingKeyword: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var nonsendingKeyword: RawTokenSyntax {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenNonsendingKeywordAndRightParen: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var rightParen: RawTokenSyntax {
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
+  }
+
+  public var unexpectedAfterRightParen: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}
+
+@_spi(RawSyntax)
+public struct RawNonisolatedTypeSpecifierSyntax: RawSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .nonisolatedTypeSpecifier
+  }
+
+  public var raw: RawSyntax
+
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+
+  public init(
+    _ unexpectedBeforeNonisolatedKeyword: RawUnexpectedNodesSyntax? = nil,
+    nonisolatedKeyword: RawTokenSyntax,
+    _ unexpectedBetweenNonisolatedKeywordAndArgument: RawUnexpectedNodesSyntax? = nil,
+    argument: RawNonisolatedSpecifierArgumentSyntax?,
+    _ unexpectedAfterArgument: RawUnexpectedNodesSyntax? = nil,
+    arena: __shared RawSyntaxArena
+  ) {
+    let raw = RawSyntax.makeLayout(
+      kind: .nonisolatedTypeSpecifier, uninitializedCount: 5, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedBeforeNonisolatedKeyword?.raw
+      layout[1] = nonisolatedKeyword.raw
+      layout[2] = unexpectedBetweenNonisolatedKeywordAndArgument?.raw
+      layout[3] = argument?.raw
+      layout[4] = unexpectedAfterArgument?.raw
+    }
+    self.init(unchecked: raw)
+  }
+
+  public var unexpectedBeforeNonisolatedKeyword: RawUnexpectedNodesSyntax? {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var nonisolatedKeyword: RawTokenSyntax {
+    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenNonisolatedKeywordAndArgument: RawUnexpectedNodesSyntax? {
+    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
+  public var argument: RawNonisolatedSpecifierArgumentSyntax? {
+    layoutView.children[3].map(RawNonisolatedSpecifierArgumentSyntax.init(raw:))
+  }
+
+  public var unexpectedAfterArgument: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+}

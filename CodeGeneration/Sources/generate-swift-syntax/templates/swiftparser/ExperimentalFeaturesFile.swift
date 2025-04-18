@@ -40,6 +40,19 @@ let experimentalFeaturesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) 
       )
     }
 
+    try! VariableDeclSyntax(
+      """
+      /// Set of features always enabled.
+      static var alwaysEnabledFeatures: Self
+      """
+    ) {
+      ArrayExprSyntax {
+        for feature in ExperimentalFeature.allCases where feature.isAlwaysEnabledInParser {
+          ArrayElementSyntax(expression: ExprSyntax(".\(feature.token)"))
+        }
+      }
+    }
+
     try! InitializerDeclSyntax(
       """
       /// Creates a new value representing the experimental feature with the

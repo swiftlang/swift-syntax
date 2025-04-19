@@ -152,14 +152,14 @@ class TriviaTests: XCTestCase {
 
     // MARK: Block comment
 
-    assertCommentValue("/* Some block comment */", commentValue: "Some block comment")
+    assertCommentValue("/* Some block comment */", commentValue: " Some block comment ")
 
     assertCommentValue(
       """
       /* Some block comment
       * spread on many lines */
       """,
-      commentValue: "Some block comment\n* spread on many lines"
+      commentValue: " Some block comment\n* spread on many lines "
     )
 
     assertCommentValue(
@@ -168,7 +168,7 @@ class TriviaTests: XCTestCase {
       * spread on many lines
       */
       """,
-      commentValue: "Some block comment\n* spread on many lines"
+      commentValue: " Some block comment\n* spread on many lines"
     )
 
     assertCommentValue(
@@ -177,26 +177,7 @@ class TriviaTests: XCTestCase {
       Some block comment
       spread on many lines */
       """,
-      commentValue: "Some block comment\nspread on many lines"
-    )
-
-    assertCommentValue(
-      """
-      /* Some block comment
-      * spread on many lines */
-      /* Another block comment */
-      """,
-      commentValue: "Some block comment\n* spread on many lines\nAnother block comment"
-    )
-
-    assertCommentValue(
-      """
-      /* Some block comment
-      * spread on many lines */
-
-      /* Another block comment */
-      """,
-      commentValue: "Some block comment\n* spread on many lines\nAnother block comment"
+      commentValue: "Some block comment\nspread on many lines "
     )
 
     assertCommentValue(
@@ -229,7 +210,7 @@ class TriviaTests: XCTestCase {
       commentValue: "/abc"
     )
 
-    assertCommentValue("/* ///// abc */", commentValue: "///// abc")
+    assertCommentValue("/* ///// abc */", commentValue: " ///// abc ")
 
     assertCommentValue(
       """
@@ -266,7 +247,26 @@ class TriviaTests: XCTestCase {
        Comment
         Comment */
       """,
-      commentValue: "Comment\n Comment")
+      commentValue: "Comment\n Comment "
+    )
+
+    assertCommentValue(
+      """
+      /* 
+      \t\tComment
+      \t\t\tComment */
+      """,
+      commentValue: "Comment\n\tComment "
+    )
+
+    assertCommentValue(
+      """
+      /* 
+       \t\tComment
+      \t\t\tComment */
+      """,
+      commentValue: "\tComment\n\tComment "
+    )
 
     // MARK: Doc block comment
 
@@ -274,7 +274,7 @@ class TriviaTests: XCTestCase {
       """
       /** Some doc block comment */
       """,
-      commentValue: "Some doc block comment"
+      commentValue: " Some doc block comment "
     )
 
     assertCommentValue(
@@ -282,7 +282,7 @@ class TriviaTests: XCTestCase {
       /** Some doc block comment
       * spread on many lines */
       """,
-      commentValue: "Some doc block comment\n* spread on many lines"
+      commentValue: " Some doc block comment\n* spread on many lines "
     )
 
     assertCommentValue(
@@ -291,26 +291,7 @@ class TriviaTests: XCTestCase {
       * spread on many lines
       */
       """,
-      commentValue: "Some doc block comment\n* spread on many lines"
-    )
-
-    assertCommentValue(
-      """
-      /** Some doc block comment
-      * spread on many lines */
-      /** Another doc block comment */
-      """,
-      commentValue: "Some doc block comment\n* spread on many lines\nAnother doc block comment"
-    )
-
-    assertCommentValue(
-      """
-      /** Some doc block comment
-      * spread on many lines */
-
-      /** Another doc block comment */
-      """,
-      commentValue: "Some doc block comment\n* spread on many lines\nAnother doc block comment"
+      commentValue: " Some doc block comment\n* spread on many lines"
     )
 
     assertCommentValue(
@@ -343,7 +324,7 @@ class TriviaTests: XCTestCase {
       commentValue: "*  Some doc block comment\n*  with a line comment"
     )
 
-    assertCommentValue("/** ///// abc */", commentValue: "///// abc")
+    assertCommentValue("/** ///// abc */", commentValue: " ///// abc ")
 
     assertCommentValue(
       """
@@ -396,20 +377,8 @@ class TriviaTests: XCTestCase {
 
       /// Some doc line comment
       // Some line comment
-
-      /* Some block comment
-      * spread on many lines */
-      /** Another doc block comment */
       """,
-      commentValue: """
-        Some doc block comment
-        * spread on many lines
-        Some doc line comment
-        Some line comment
-        Some block comment
-        * spread on many lines
-        Another doc block comment
-        """
+      commentValue: nil
     )
 
     assertCommentValue(
@@ -418,26 +387,17 @@ class TriviaTests: XCTestCase {
       * // A line comment in a block
       * spread on many lines */
       /** Some doc block comment
-      * /// A doc line comment in a block
       * spread on
       * many lines */
       """,
-      commentValue: """
-        Some block comment
-        * // A line comment in a block
-        * spread on many lines
-        Some doc block comment
-        * /// A doc line comment in a block
-        * spread on
-        * many lines
-        """
+      commentValue: nil
     )
   }
 }
 
 func assertCommentValue(
   _ input: String,
-  commentValue expected: String,
+  commentValue expected: String?,
   file: StaticString = #filePath,
   line: UInt = #line
 ) {

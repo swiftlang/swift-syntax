@@ -43,8 +43,10 @@ public struct Trivia: Sendable {
   }
 
   /// The string contents of all the comment pieces with any comments tokens trimmed.
-  public var commentValue: String {
+  public var commentValue: String? {
     var comments = [Substring]()
+    var hasBlockComment = false
+    var hasLineComment = false
 
     // Determine if all line comments have a single space
     lazy var allLineCommentsHaveSpace: Bool = {
@@ -62,55 +64,68 @@ public struct Trivia: Sendable {
 
     // Returns a substring with leading and trailing spaces removed.
     func trimWhitespace(_ text: Substring) -> Substring {
-        let trimmed = text.drop(while: { $0 == " " })
-        let reversed = trimmed.reversed()
-        let trimmedEnd = reversed.drop(while: { $0 == " " })
-        let final = trimmedEnd.reversed()
-        return Substring(final)
+      let trimmed = text.drop(while: { $0 == " " })
+      let reversed = trimmed.reversed()
+      let trimmedEnd = reversed.drop(while: { $0 == " " })
+      let final = trimmedEnd.reversed()
+      return Substring(final)
     }
 
     // Strips /* */ markers and aligns content by removing common indentation.
     func processBlockComment(_ text: Substring) -> String {
       var lines = text.split(separator: "\n", omittingEmptySubsequences: false)
 
-      let minIndentation =
+      let (minSpaceIndentation, minTabIndentation) =
         lines
         .dropFirst()
         .filter { !$0.isEmpty }
-        .map { $0.prefix { $0 == " " }.count }
-        .min() ?? 0
+        .reduce((Int.max, Int.max)) { (currentMin, line) in
+          var spaceCount = 0, tabCount = 0
+          var inLeadingWhitespace = true
 
-      var firstLineRemoved = false;
-      var firstLine = lines[0]
-      if trimWhitespace(firstLine) == "/*" || trimWhitespace(firstLine) == "/**" {
-          lines.removeFirst()
-          firstLineRemoved = true;
-      } else {
-          firstLine = firstLine.hasPrefix("/**") ? firstLine.dropFirst(3) : firstLine.dropFirst(2)
-          while firstLine.first?.isWhitespace == true {
-              firstLine = firstLine.dropFirst()
+          for char in line {
+            guard inLeadingWhitespace else { break }
+
+            switch char {
+            case " ":
+              spaceCount += 1
+            case "\t":
+              tabCount += 1
+            default:
+              inLeadingWhitespace = false
+            }
           }
-          lines[0] = firstLine
-      }
-      
-      if let lastLine = lines.last {
-          if trimWhitespace(lastLine) == "*/" {
-              lines.removeLast()
-          } else {
-              var lastLine = lines[lines.count - 1]
-              lastLine = lastLine.hasSuffix("*/") ? lastLine.dropLast(2) : lastLine
-              while lastLine.last?.isWhitespace == true {
-                  lastLine = lastLine.dropLast()
-              }
-              lines[lines.count - 1] = lastLine
-          }
+
+          return (Swift.min(currentMin.0, spaceCount), Swift.min(currentMin.1, tabCount))
+        }
+
+      var minIndentation = minSpaceIndentation == Int.max ? 0 : minSpaceIndentation
+      minIndentation += minTabIndentation == Int.max ? 0 : minTabIndentation
+
+      if let first = lines.first {
+        let prefixToDrop = first.hasPrefix("/**") ? 3 : 2
+        lines[0] = first.dropFirst(prefixToDrop)
       }
 
-      let unindentedLines = lines.enumerated().map { index, line -> Substring in
+      var firstLineRemoved = false
+      if trimWhitespace(lines[0]).isEmpty {
+        lines.removeFirst()
+        firstLineRemoved = true
+      }
+
+      var unindentedLines = lines.enumerated().map { index, line -> Substring in
         if index == 0 && firstLineRemoved == false {
-            return line
+          return line
         }
         return line.count >= minIndentation ? line.dropFirst(minIndentation) : line
+      }
+
+      if let last = unindentedLines.last, last.hasSuffix("*/") {
+        unindentedLines[unindentedLines.count - 1] = last.dropLast(2)
+      }
+
+      if trimWhitespace(unindentedLines[unindentedLines.count - 1]).isEmpty {
+        unindentedLines.removeLast()
       }
 
       return unindentedLines.joined(separator: "\n")
@@ -119,14 +134,26 @@ public struct Trivia: Sendable {
     for piece in pieces {
       switch piece {
       case .blockComment(let text), .docBlockComment(let text):
+        if hasBlockComment || hasLineComment {
+          return nil
+        }
+        hasBlockComment = true
         let processedText = processBlockComment(text[...])
         comments.append(processedText[...])
 
       case .lineComment(let text):
+        if hasBlockComment {
+          return nil
+        }
+        hasLineComment = true
         let prefix = allLineCommentsHaveSpace ? "// " : "//"
         comments.append(text.dropFirst(prefix.count))
 
       case .docLineComment(let text):
+        if hasBlockComment {
+          return nil
+        }
+        hasLineComment = true
         let prefix = allLineCommentsHaveSpace ? "/// " : "///"
         comments.append(text.dropFirst(prefix.count))
 
@@ -134,7 +161,16 @@ public struct Trivia: Sendable {
         break
       }
     }
-    return comments.joined(separator: "\n")
+
+    guard !comments.isEmpty else { return nil }
+
+    // If we have multiple line comments, they can be joined with newlines
+    if hasLineComment {
+      return comments.joined(separator: "\n")
+    }
+
+    // In case of block comments, we should only have one
+    return comments.first.map(String.init)
   }
 
   /// The length of all the pieces in this ``Trivia``.

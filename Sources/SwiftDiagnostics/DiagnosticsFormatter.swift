@@ -360,6 +360,12 @@ public struct DiagnosticsFormatter {
     )
   }
 
+  /// Produce a string that formats the given diagnostic message with any
+  /// source-location information.
+  public func formattedMessage(_ message: some DiagnosticMessage) -> String {
+    diagnosticDecorator.decorateDiagnosticMessage(message)
+  }
+
   /// Produce a string containing "footnotes" for each of the diagnostic
   /// category provided that has associated documentation. Each category
   /// is printed in Markdown link format, e.g.,

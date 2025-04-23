@@ -1291,7 +1291,7 @@ extension Parser {
 
     case .isolated:
       return parseAttribute(argumentMode: .required) { parser in
-        return .argumentList(parser.parseIsolatedAttributeArguments())
+        return (nil, .argumentList(parser.parseIsolatedAttributeArguments()))
       }
     case .convention, ._opaqueReturnTypeOf, nil:  // Custom attribute
       return parseAttribute(argumentMode: .customAttribute) { parser in
@@ -1299,7 +1299,7 @@ extension Parser {
           pattern: .none,
           allowTrailingComma: true
         )
-        return .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
+        return (nil, .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena)))
       }
 
     }

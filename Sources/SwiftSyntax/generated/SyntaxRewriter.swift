@@ -99,10 +99,9 @@ open class SyntaxRewriter {
     return token
   }
 
-  /// Visit a `ABIAttributeArgumentsSyntax`.
+  /// Visit a ``ABIAttributeArgumentsSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: ABIAttributeArgumentsSyntax) -> ABIAttributeArgumentsSyntax {
     return ABIAttributeArgumentsSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }

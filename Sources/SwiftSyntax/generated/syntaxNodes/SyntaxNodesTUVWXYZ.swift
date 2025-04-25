@@ -1851,6 +1851,10 @@ public struct TupleTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSynt
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `initializer`: ``TypeInitializerClauseSyntax``
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``ABIAttributeArgumentsSyntax``.``ABIAttributeArgumentsSyntax/provider``
 public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
@@ -3219,6 +3223,10 @@ public struct ValueBindingPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, 
 ///  - `modifiers`: ``DeclModifierListSyntax``
 ///  - `bindingSpecifier`: (`let` | `var` | `inout` | `_mutating` | `_borrowing` | `_consuming`)
 ///  - `bindings`: ``PatternBindingListSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``ABIAttributeArgumentsSyntax``.``ABIAttributeArgumentsSyntax/provider``
 public struct VariableDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 

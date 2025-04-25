@@ -16,7 +16,6 @@
 /// Enumerates the known kinds of Syntax represented in the Syntax tree.
 public enum SyntaxKind: Sendable {
   case token
-  @_spi(ExperimentalLanguageFeatures)
   case abiAttributeArguments
   @_spi(Compiler)
   case accessorBlockFile

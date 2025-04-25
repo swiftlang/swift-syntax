@@ -230,9 +230,9 @@ extension Parser {
     switch peek(isAtAnyIn: DeclarationAttributeWithSpecialSyntax.self) {
     case .abi:
       return parseAttribute(argumentMode: .required) { parser in
-        return parser.parseABIAttributeArguments()
+        return (nil, .abiArguments(parser.parseABIAttributeArguments()))
       } parseMissingArguments: { parser in
-        return parser.parseABIAttributeArguments(missingLParen: true)
+        return (nil, .abiArguments(parser.parseABIAttributeArguments(missingLParen: true)))
       }
     case .available, ._spi_available:
       return parseAttribute(argumentMode: .required) { parser in
@@ -794,9 +794,9 @@ extension Parser {
   /// - Parameter missingLParen: `true` if the opening paren for the argument list was missing.
   mutating func parseABIAttributeArguments(
     missingLParen: Bool = false
-  ) -> (RawUnexpectedNodesSyntax?, RawAttributeSyntax.Arguments) {
-    func makeMissingProviderArguments(unexpectedBefore: [RawSyntax]) -> RawAttributeSyntax.Arguments {
-      let args = RawABIAttributeArgumentsSyntax(
+  ) -> RawABIAttributeArgumentsSyntax {
+    func makeMissingProviderArguments(unexpectedBefore: [RawSyntax]) -> RawABIAttributeArgumentsSyntax {
+      return RawABIAttributeArgumentsSyntax(
         provider: .missing(
           RawMissingDeclSyntax(
             unexpectedBefore.isEmpty ? nil : RawUnexpectedNodesSyntax(elements: unexpectedBefore, arena: self.arena),
@@ -808,7 +808,6 @@ extension Parser {
         ),
         arena: self.arena
       )
-      return .abiArguments(args)
     }
 
     // Consider the three kinds of mistakes we might see here:
@@ -824,23 +823,16 @@ extension Parser {
     // In lieu of that, we judge that recovering gracefully from #3 is more important than #2 and therefore do not even
     // attempt to parse the argument unless we've seen a left paren.
     guard !missingLParen && !self.at(.rightParen) else {
-      return (nil, makeMissingProviderArguments(unexpectedBefore: []))
+      return makeMissingProviderArguments(unexpectedBefore: [])
     }
 
     let decl = parseDeclaration(in: .argumentList)
 
-    guard experimentalFeatures.contains(.abiAttribute) else {
-      return (
-        RawUnexpectedNodesSyntax([decl], arena: self.arena),
-        .argumentList(RawLabeledExprListSyntax(elements: [], arena: self.arena))
-      )
-    }
-
     guard let provider = RawABIAttributeArgumentsSyntax.Provider(decl) else {
-      return (nil, makeMissingProviderArguments(unexpectedBefore: [decl.raw]))
+      return makeMissingProviderArguments(unexpectedBefore: [decl.raw])
     }
 
-    return (nil, .abiArguments(RawABIAttributeArgumentsSyntax(provider: provider, arena: self.arena)))
+    return RawABIAttributeArgumentsSyntax(provider: provider, arena: self.arena)
   }
 }
 

@@ -54,7 +54,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _underlyingVersion
   case _UnknownLayout
   case _version
-  @_spi(ExperimentalLanguageFeatures)
   case abi
   case accesses
   case actor

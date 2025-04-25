@@ -960,23 +960,20 @@ final class AttributeTests: ParserTestCase {
           parameterClause: FunctionParameterClauseSyntax {},
           returnClause: ReturnClauseSyntax(type: TypeSyntax("Int"))
         )
-      ) {},
-      experimentalFeatures: [.abiAttribute]
+      ) {}
     )
 
     assertParse(
       """
       @abi(associatedtype AssocTy)
       associatedtype AssocTy
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
       @abi(deinit)
       deinit {}
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
@@ -984,50 +981,43 @@ final class AttributeTests: ParserTestCase {
         @abi(case someCase)
         case someCase
       }
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
       @abi(func fn())
       func fn()
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
       @abi(init())
       init() {}
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
       @abi(subscript(i: Int) -> Element)
       subscript(i: Int) -> Element {}
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
       @abi(typealias Typealias = @escaping () -> Void)
       typealias Typealias = () -> Void
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
       @abi(let c1, c2)
       let c1, c2
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
       @abi(var v1, v2)
       var v1, v2
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
 
     assertParse(
@@ -1042,8 +1032,7 @@ final class AttributeTests: ParserTestCase {
       ),
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "editor placeholder in source file")
-      ],
-      experimentalFeatures: [.abiAttribute]
+      ]
     )
 
     assertParse(
@@ -1067,8 +1056,7 @@ final class AttributeTests: ParserTestCase {
       ),
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "import is not permitted as ABI-providing declaration")
-      ],
-      experimentalFeatures: [.abiAttribute]
+      ]
     )
 
     //
@@ -1079,15 +1067,13 @@ final class AttributeTests: ParserTestCase {
       """
       @abi(associatedtype AssocTy = T)
       associatedtype AssocTy
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
       @abi(deinit {})
       deinit {}
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
@@ -1095,50 +1081,43 @@ final class AttributeTests: ParserTestCase {
         @abi(case someCase = 42)
         case someCase
       }
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
       @abi(func fn() {})
       func fn()
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
       @abi(init() {})
       init() {}
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
       @abi(subscript(i: Int) -> Element { get {} set {} })
       subscript(i: Int) -> Element {}
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
       @abi(let c1 = 1, c2 = 2)
       let c1, c2
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
       @abi(var v1 = 1, v2 = 2)
       var v1, v2
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
     assertParse(
       """
       @abi(var v3 { get {} set {} })
       var v3
-      """,
-      experimentalFeatures: [.abiAttribute]
+      """
     )
 
     //
@@ -1160,8 +1139,7 @@ final class AttributeTests: ParserTestCase {
       fixedSource: """
         @abi(var <#pattern#>)
         var v1
-        """,
-      experimentalFeatures: [.abiAttribute]
+        """
     )
     assertParse(
       """
@@ -1184,8 +1162,7 @@ final class AttributeTests: ParserTestCase {
       fixedSource: """
         @abi(var v2)
         var v2
-        """,
-      experimentalFeatures: [.abiAttribute]
+        """
     )
     assertParse(
       """
@@ -1203,8 +1180,7 @@ final class AttributeTests: ParserTestCase {
       fixedSource: """
         @abi(<#declaration#>)
         func fn2() {}
-        """,
-      experimentalFeatures: [.abiAttribute]
+        """
     )
     assertParse(
       """
@@ -1221,8 +1197,7 @@ final class AttributeTests: ParserTestCase {
       fixedSource: """
         @abi(<#declaration#>)
         func fn3() {}
-        """,
-      experimentalFeatures: [.abiAttribute]
+        """
     )
     assertParse(
       """
@@ -1244,8 +1219,7 @@ final class AttributeTests: ParserTestCase {
       fixedSource: """
         @abi(<#declaration#>) func fn4_abi())
         func fn4() {}
-        """,
-      experimentalFeatures: [.abiAttribute]
+        """
     )
 
     // `#if` is banned inside an `@abi` attribute.
@@ -1278,51 +1252,7 @@ final class AttributeTests: ParserTestCase {
           func _fn<E: Error>() throws(E)
         )
         func fn<E: Error>() throws(E) {}
-        """,
-      experimentalFeatures: [.abiAttribute]
-    )
-  }
-
-  func testABIAttributeWithoutFeature() throws {
-    assertParse(
-      """
-      @abi(1️⃣func fn() -> Int2️⃣)
-      func fn1() -> Int { }
-      """,
-      substructure: FunctionDeclSyntax(
-        attributes: [
-          .attribute(
-            AttributeSyntax(
-              attributeName: TypeSyntax("abi"),
-              leftParen: .leftParenToken(),
-              [Syntax(try FunctionDeclSyntax("func fn() -> Int"))],
-              arguments: .argumentList([]),
-              rightParen: .rightParenToken()
-            )
-          )
-        ],
-        name: "fn1",
-        signature: FunctionSignatureSyntax(
-          parameterClause: FunctionParameterClauseSyntax {},
-          returnClause: ReturnClauseSyntax(type: TypeSyntax("Int"))
-        )
-      ) {},
-      diagnostics: [
-        DiagnosticSpec(
-          locationMarker: "1️⃣",
-          message: "unexpected code 'func fn() -> Int' in attribute"
-        ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "expected argument for '@abi' attribute",
-          fixIts: ["insert attribute argument"]
-        ),
-      ],
-      fixedSource: """
-        @abi(func fn() -> Int)
-        func fn1() -> Int { }
-        """,
-      experimentalFeatures: []
+        """
     )
   }
 

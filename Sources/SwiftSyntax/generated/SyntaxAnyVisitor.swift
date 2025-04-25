@@ -57,12 +57,10 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   override open func visit(_ node: ABIAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   override open func visitPost(_ node: ABIAttributeArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }

@@ -1283,6 +1283,49 @@ final class AttributeTests: ParserTestCase {
     )
   }
 
+  func testABIAttributeWithoutFeature() throws {
+    assertParse(
+      """
+      @abi(1️⃣func fn() -> Int2️⃣)
+      func fn1() -> Int { }
+      """,
+      substructure: FunctionDeclSyntax(
+        attributes: [
+          .attribute(
+            AttributeSyntax(
+              attributeName: TypeSyntax("abi"),
+              leftParen: .leftParenToken(),
+              [Syntax(try FunctionDeclSyntax("func fn() -> Int"))],
+              arguments: .argumentList([]),
+              rightParen: .rightParenToken()
+            )
+          )
+        ],
+        name: "fn1",
+        signature: FunctionSignatureSyntax(
+          parameterClause: FunctionParameterClauseSyntax {},
+          returnClause: ReturnClauseSyntax(type: TypeSyntax("Int"))
+        )
+      ) {},
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "unexpected code 'func fn() -> Int' in attribute"
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected argument for '@abi' attribute",
+          fixIts: ["insert attribute argument"]
+        ),
+      ],
+      fixedSource: """
+        @abi(func fn() -> Int)
+        func fn1() -> Int { }
+        """,
+      experimentalFeatures: []
+    )
+  }
+
   func testSpaceBetweenAtAndAttribute() {
     assertParse(
       "@1️⃣ custom func foo() {}",

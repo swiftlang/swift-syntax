@@ -44,7 +44,8 @@ extension NominalTypeDeclSyntax {
     } else if name.range.contains(lookUpPosition) || genericWhereClause?.range.contains(lookUpPosition) ?? false {
       return lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
     } else {
-      return [.lookForMembers(in: Syntax(self))] + lookupInParent(identifier, at: lookUpPosition, with: config)
+      return [.lookForMembers(in: Syntax(self))]
+        + lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
     }
   }
 }

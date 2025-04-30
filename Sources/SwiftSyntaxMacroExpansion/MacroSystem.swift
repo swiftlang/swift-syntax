@@ -194,7 +194,7 @@ private func expandMemberMacro(
       definition: definition,
       macroRole: .member,
       attributeNode: attributeNode.detach(in: context, foldingWith: .standardOperators),
-      declarationNode: attachedTo.detach(in: context),
+      node: attachedTo.detach(in: context),
       parentDeclNode: nil,
       extendedType: nil,
       conformanceList: conformanceList,
@@ -223,7 +223,7 @@ private func expandMemberAttributeMacro(
       definition: definition,
       macroRole: .memberAttribute,
       attributeNode: attributeNode.detach(in: context, foldingWith: .standardOperators),
-      declarationNode: member.detach(in: context),
+      node: member.detach(in: context),
       parentDeclNode: declaration.detach(in: context),
       extendedType: nil,
       conformanceList: nil,
@@ -255,7 +255,7 @@ private func expandPeerMacroMember(
       definition: definition,
       macroRole: .peer,
       attributeNode: attributeNode.detach(in: context, foldingWith: .standardOperators),
-      declarationNode: attachedTo.detach(in: context),
+      node: attachedTo.detach(in: context),
       parentDeclNode: nil,
       extendedType: nil,
       conformanceList: nil,
@@ -287,7 +287,7 @@ private func expandPeerMacroCodeItem(
       definition: definition,
       macroRole: .peer,
       attributeNode: attributeNode.detach(in: context, foldingWith: .standardOperators),
-      declarationNode: attachedTo.detach(in: context),
+      node: attachedTo.detach(in: context),
       parentDeclNode: nil,
       extendedType: nil,
       conformanceList: nil,
@@ -319,7 +319,7 @@ private func expandAccessorMacroWithoutExistingAccessors(
       definition: definition,
       macroRole: .accessor,
       attributeNode: attributeNode.detach(in: context, foldingWith: .standardOperators),
-      declarationNode: attachedTo.detach(in: context),
+      node: attachedTo.detach(in: context),
       parentDeclNode: nil,
       extendedType: nil,
       conformanceList: nil,
@@ -354,7 +354,7 @@ private func expandAccessorMacroWithExistingAccessors(
       definition: definition,
       macroRole: .accessor,
       attributeNode: attributeNode.detach(in: context, foldingWith: .standardOperators),
-      declarationNode: attachedTo.detach(in: context),
+      node: attachedTo.detach(in: context),
       parentDeclNode: nil,
       extendedType: nil,
       conformanceList: nil,
@@ -391,7 +391,7 @@ private func expandExtensionMacro(
       definition: definition,
       macroRole: .extension,
       attributeNode: attributeNode.detach(in: context, foldingWith: .standardOperators),
-      declarationNode: attachedTo.detach(in: context),
+      node: attachedTo.detach(in: context),
       parentDeclNode: nil,
       extendedType: extendedType.detach(in: context),
       conformanceList: conformanceList,
@@ -423,7 +423,7 @@ private func expandPreambleMacro(
         in: context,
         foldingWith: .standardOperators
       ),
-      declarationNode: DeclSyntax(decl.detach(in: context)),
+      node: DeclSyntax(decl.detach(in: context)),
       parentDeclNode: nil,
       extendedType: nil,
       conformanceList: nil,
@@ -444,7 +444,7 @@ private func expandPreambleMacro(
 private func expandBodyMacro(
   definition: BodyMacro.Type,
   attributeNode: AttributeSyntax,
-  attachedTo decl: some DeclSyntaxProtocol & WithOptionalCodeBlockSyntax,
+  attachedTo node: some SyntaxProtocol,
   in context: some MacroExpansionContext,
   indentationWidth: Trivia
 ) -> CodeBlockSyntax? {
@@ -456,7 +456,7 @@ private func expandBodyMacro(
         in: context,
         foldingWith: .standardOperators
       ),
-      declarationNode: DeclSyntax(decl.detach(in: context)),
+      node: Syntax(node.detach(in: context)),
       parentDeclNode: nil,
       extendedType: nil,
       conformanceList: nil,
@@ -473,9 +473,16 @@ private func expandBodyMacro(
   // Remove any indentation from the first line using `drop(while:)` and then
   // prepend a space when it's being introduced on a declaration that has no
   // body yet.
-  let leadingWhitespace = decl.body == nil ? " " : ""
+  let leadingWhitespace: String
+  if let decl = node as? (DeclSyntaxProtocol & WithOptionalCodeBlockSyntax),
+    decl.body == nil
+  {
+    leadingWhitespace = " "
+  } else {
+    leadingWhitespace = ""
+  }
   let indentedSource =
-    leadingWhitespace + expanded.indented(by: decl.indentationOfFirstLine).drop(while: { $0.isWhitespace })
+    leadingWhitespace + expanded.indented(by: node.indentationOfFirstLine).drop(while: { $0.isWhitespace })
   return "\(raw: indentedSource)"
 }
 
@@ -733,6 +740,19 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       return AttributeRemover(removingWhere: { attributesToRemove.contains($0) }).rewrite(visitedNode)
     }
 
+    if var closureSyntax = node.as(ClosureExprSyntax.self) {
+      closureSyntax = visitClosureBodyMacros(closureSyntax)
+
+      // Visit the node, disabling the `visitAny` handling.
+      skipVisitAnyHandling.insert(Syntax(closureSyntax))
+      let visitedNode = self.visit(closureSyntax).cast(ClosureExprSyntax.self)
+      skipVisitAnyHandling.remove(Syntax(closureSyntax))
+
+      let attributesToRemove = self.macroAttributes(attachedTo: visitedNode).map(\.attributeNode)
+
+      return AttributeRemover(removingWhere: { attributesToRemove.contains($0) }).rewrite(visitedNode)
+    }
+
     return nil
   }
 
@@ -800,6 +820,41 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
     }
 
     return node.with(\.body, body.with(\.statements, preamble + body.statements))
+  }
+
+  func visitClosureBodyMacros(
+    _ node: ClosureExprSyntax
+  ) -> ClosureExprSyntax {
+    // Expand body macro.
+    let expandedBodies = expandMacros(
+      attachedTo: node,
+      ofType: BodyMacro.Type.self
+    ) { attributeNode, definition, _ in
+      expandBodyMacro(
+        definition: definition,
+        attributeNode: attributeNode,
+        attachedTo: node,
+        in: contextGenerator(Syntax(node)),
+        indentationWidth: indentationWidth
+      ).map { [$0] }
+    }
+
+    // Dig out the body.
+    let body: CodeBlockSyntax
+    switch expandedBodies.count {
+    case 0:
+      // Nothing changes
+      return node
+
+    case 1:
+      body = expandedBodies[0]
+
+    default:
+      contextGenerator(Syntax(node)).addDiagnostics(from: MacroExpansionError.moreThanOneBodyMacro, node: node)
+      body = expandedBodies[0]
+    }
+
+    return node.with(\.statements, body.statements)
   }
 
   override func visit(_ node: CodeBlockItemListSyntax) -> CodeBlockItemListSyntax {
@@ -1006,9 +1061,16 @@ extension MacroApplication {
   ///
   /// The macros must be registered in `macroSystem`.
   private func macroAttributes(
-    attachedTo decl: DeclSyntax
+    attachedTo decl: some SyntaxProtocol
   ) -> [(attributeNode: AttributeSyntax, spec: MacroSpec)] {
-    guard let attributedNode = decl.asProtocol(WithAttributesSyntax.self) else {
+    let attributedNode: (any WithAttributesSyntax)?
+    if let closure = decl.as(ClosureExprSyntax.self) {
+      attributedNode = closure.signature?.asProtocol(WithAttributesSyntax.self)
+    } else {
+      attributedNode = decl.asProtocol(WithAttributesSyntax.self)
+    }
+
+    guard let attributedNode else {
       return []
     }
 
@@ -1029,7 +1091,7 @@ extension MacroApplication {
   ///
   /// The macros must be registered in `macroSystem`.
   private func macroAttributes<MacroType>(
-    attachedTo decl: DeclSyntax,
+    attachedTo decl: some SyntaxProtocol,
     ofType: MacroType.Type
   ) -> [(attributeNode: AttributeSyntax, definition: MacroType, conformanceList: InheritedTypeListSyntax)] {
     return macroAttributes(attachedTo: decl)
@@ -1049,7 +1111,7 @@ extension MacroApplication {
     ExpandedNodeCollection: Sequence<ExpandedNode>,
     MacroType
   >(
-    attachedTo decl: DeclSyntax,
+    attachedTo decl: some SyntaxProtocol,
     ofType: MacroType.Type,
     expandMacro:
       (

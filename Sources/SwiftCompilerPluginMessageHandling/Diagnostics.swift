@@ -1,12 +1,12 @@
 //===----------------------------------------------------------------------===//
 //
-// This source file is part of the Swift open source project
+// This source file is part of the Swift.org open source project
 //
 // Copyright (c) 2023 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
-// See http://swift.org/LICENSE.txt for license information
-// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
 
@@ -150,6 +150,13 @@ extension PluginMessage.Diagnostic {
           case .replaceChild(let replaceChildData):
             range = sourceManager.range(replaceChildData.replacementRange, in: replaceChildData.parent)
             text = replaceChildData.newChild.description
+          case .replaceText(
+            range: let replacementRange,
+            with: let newText,
+            in: let syntax
+          ):
+            range = sourceManager.range(replacementRange, in: syntax)
+            text = newText
           #if RESILIENT_LIBRARIES
           @unknown default:
             fatalError()

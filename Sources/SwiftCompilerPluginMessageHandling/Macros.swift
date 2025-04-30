@@ -1,12 +1,12 @@
 //===----------------------------------------------------------------------===//
 //
-// This source file is part of the Swift open source project
+// This source file is part of the Swift.org open source project
 //
 // Copyright (c) 2023 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
-// See http://swift.org/LICENSE.txt for license information
-// See http://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
+// See https://swift.org/LICENSE.txt for license information
+// See https://swift.org/CONTRIBUTORS.txt for the list of Swift project authors
 //
 //===----------------------------------------------------------------------===//
 
@@ -125,7 +125,7 @@ extension PluginProviderMessageHandler {
       attributeSyntax,
       foldingWith: .standardOperators
     ).cast(AttributeSyntax.self)
-    let declarationNode = sourceManager.add(declSyntax).cast(DeclSyntax.self)
+    let declarationNode = sourceManager.add(declSyntax)
     let parentDeclNode = parentDeclSyntax.map { sourceManager.add($0).cast(DeclSyntax.self) }
     let extendedType = extendedTypeSyntax.map {
       sourceManager.add($0).cast(TypeSyntax.self)
@@ -156,7 +156,7 @@ extension PluginProviderMessageHandler {
         definition: macroDefinition,
         macroRole: role,
         attributeNode: attributeNode,
-        declarationNode: declarationNode,
+        node: declarationNode,
         parentDeclNode: parentDeclNode,
         extendedType: extendedType,
         conformanceList: conformanceList,

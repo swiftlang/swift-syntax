@@ -97,7 +97,7 @@ struct Reduce: ParsableCommand {
         #if os(Windows)
         _ = TerminateProcess(process.processHandle, 0)
         #else
-        kill(pid_t(process.processIdentifier), SIGKILL)
+        kill(pid_t(process.processIdentifier), SIGKILL)  // ignore-unacceptable-language
         #endif
         return .timeout
       }

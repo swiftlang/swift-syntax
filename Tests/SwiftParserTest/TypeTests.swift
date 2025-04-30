@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 import XCTest
 
 final class TypeTests: ParserTestCase {
@@ -486,6 +486,20 @@ final class TypeTests: ParserTestCase {
     )
 
     assertParse(
+      "func foo() -> dependsOn1️⃣ @Sendable (Int, isolated (any Actor)?) async throws -> Void",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '(', parameter reference, and ')' in lifetime specifier",
+          fixIts: ["insert '(', parameter reference, and ')'"]
+        )
+      ],
+      fixedSource:
+        "func foo() -> dependsOn(<#identifier#>) @Sendable (Int, isolated (any Actor)?) async throws -> Void",
+      experimentalFeatures: [.nonescapableTypes]
+    )
+
+    assertParse(
       "func foo() -> dependsOn(1️⃣*) X",
       diagnostics: [
         DiagnosticSpec(
@@ -536,5 +550,292 @@ final class TypeTests: ParserTestCase {
       fixedSource: "func foo() -> dependsOn(<#identifier#>-1) X",
       experimentalFeatures: [.nonescapableTypes]
     )
+  }
+
+  func testNonisolatedSpecifier() {
+    assertParse(
+      """
+      let x = nonisolated
+      print("hello")
+      """,
+      substructure: DeclReferenceExprSyntax(
+        baseName: .identifier("nonisolated")
+      )
+    )
+
+    assertParse(
+      "let _: nonisolated(nonsending) () async -> Void = {}",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+    assertParse(
+      "let _: [nonisolated(nonsending) () async -> Void]",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+
+    assertParse(
+      "let _ = [String: (nonisolated(nonsending) () async -> Void)?].self",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+
+    assertParse(
+      "let _ = Array<nonisolated(nonsending) () async -> Void>()",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+    assertParse(
+      "func foo(test: nonisolated(nonsending) () async -> Void)",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+    assertParse(
+      "func foo(test: nonisolated(nonsending) @escaping () async -> Void) {}",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+    assertParse(
+      "test(S<nonisolated(nonsending) () async -> Void>(), type(of: concurrentTest))",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+    assertParse(
+      "S<nonisolated(nonsending) @Sendable (Int) async -> Void>()",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+    assertParse(
+      "let _ = S<nonisolated(nonsending) consuming @Sendable (Int) async -> Void>()",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+
+    assertParse(
+      "struct S : nonisolated P {}",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated)
+      )
+    )
+
+    assertParse(
+      "let _ = [nonisolated()]",
+      substructure: DeclReferenceExprSyntax(
+        baseName: .identifier("nonisolated")
+      )
+    )
+
+    assertParse(
+      "let _ = [nonisolated(nonsending) () async -> Void]()",
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated),
+        argument: NonisolatedSpecifierArgumentSyntax(nonsendingKeyword: .keyword(.nonsending))
+      )
+    )
+
+    assertParse(
+      "_ = S<nonisolated>()",
+      substructure: GenericArgumentSyntax.Argument(
+        IdentifierTypeSyntax(name: .identifier("nonisolated"))
+      )
+    )
+
+    assertParse(
+      """
+      let x: nonisolated
+      (hello)
+      """,
+      substructure: IdentifierTypeSyntax(name: .identifier("nonisolated"))
+    )
+
+    assertParse(
+      """
+      struct S: nonisolated
+                  P {
+      }
+      """,
+      substructure: NonisolatedTypeSpecifierSyntax(
+        nonisolatedKeyword: .keyword(.nonisolated)
+      )
+    )
+
+    assertParse(
+      """
+      let x: nonisolated
+          (Int) async -> Void  = {}
+      """,
+      substructure: IdentifierTypeSyntax(name: .identifier("nonisolated"))
+    )
+
+    assertParse(
+      "Foo<Int, nonisolated1️⃣ @Sendable (Int, inout (any Actor)?) async throws -> Void>()",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '(nonsending)' in 'nonisolated' specifier",
+          fixIts: ["insert '(nonsending)'"]
+        )
+      ],
+      fixedSource: "Foo<Int, nonisolated(nonsending) @Sendable (Int, inout (any Actor)?) async throws -> Void>()"
+    )
+
+    assertParse(
+      "func foo(test: nonisolated1️⃣ () async -> Void)",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '(nonsending)' in 'nonisolated' specifier",
+          fixIts: ["insert '(nonsending)'"]
+        )
+      ],
+      fixedSource: "func foo(test: nonisolated(nonsending) () async -> Void)"
+    )
+
+    assertParse(
+      "func foo(test: nonisolated(1️⃣) () async -> Void)",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected 'nonsending' in 'nonisolated' specifier",
+          fixIts: ["insert 'nonsending'"]
+        )
+      ],
+      fixedSource: "func foo(test: nonisolated(nonsending) () async -> Void)"
+    )
+
+    assertParse(
+      "func foo(test: nonisolated(1️⃣hello) () async -> Void)",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected 'nonsending' in 'nonisolated' specifier",
+          fixIts: ["insert 'nonsending'"]
+        ),
+        DiagnosticSpec(message: "unexpected code 'hello' in 'nonisolated' specifier"),
+      ],
+      fixedSource: "func foo(test: nonisolated(nonsendinghello) () async -> Void)"
+    )
+  }
+}
+
+final class InlineArrayTypeTests: ParserTestCase {
+  override var experimentalFeatures: Parser.ExperimentalFeatures {
+    [.inlineArrayTypeSugar]
+  }
+
+  func testBasic() {
+    assertParse(
+      "[3 x Int]",
+      substructure: InlineArrayTypeSyntax(
+        count: .init(argument: .expr("3")),
+        separator: .keyword(.x),
+        element: .init(argument: .type(TypeSyntax("Int")))
+      )
+    )
+    assertParse(
+      "[Int x _]",
+      substructure: InlineArrayTypeSyntax(
+        count: .init(argument: .type(TypeSyntax("Int"))),
+        separator: .keyword(.x),
+        element: .init(argument: .type(TypeSyntax("_")))
+      )
+    )
+  }
+
+  func testMultiline() {
+    // We don't currently allow multi-line.
+    assertParse(
+      """
+      S<[
+          3
+          1️⃣x
+          Int
+      ]>()
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code in array")
+      ]
+    )
+    assertParse(
+      """
+      S<[3
+         1️⃣x
+         Int
+      ]>()
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code in array")
+      ]
+    )
+    assertParse(
+      """
+      S<[3
+         1️⃣x Int]>()
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'x Int' in array")
+      ]
+    )
+    // These are okay.
+    assertParse(
+      """
+      S<[3 x
+             Int]>()
+      """
+    )
+    assertParse(
+      """
+      S<[
+        3 x Int
+      ]>()
+      """
+    )
+  }
+
+  func testDiagnostics() {
+    assertParse(
+      "2️⃣[3 x1️⃣",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected element type and ']' to end inline array type",
+          fixIts: ["insert element type and ']'"]
+        )
+      ],
+      fixedSource: "[3 x <#type#>]"
+    )
+    assertParse(
+      "ℹ️[3 x Int1️⃣",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ']' to end inline array type",
+          notes: [NoteSpec(message: "to match this opening '['")],
+          fixIts: ["insert ']'"]
+        )
+      ],
+      fixedSource: "[3 x Int]"
+    )
+  }
+
+  func testEllipsis() {
+    // Make sure this isn't parsed as '<variadic-type> x <missing type>'
+    assertParse("[x...x]")
   }
 }

@@ -112,6 +112,48 @@ extension AttributeSyntax {
   public typealias Argument = Arguments
 }
 
+extension AttributeSyntax.Arguments {
+  @available(*, unavailable, message: "use 'argumentList(LabeledExprListSyntax)' instead")
+  public static func token(_: TokenSyntax) -> Self {
+    fatalError("unavailable")
+  }
+
+  @available(*, unavailable, message: "use 'argumentList(LabeledExprListSyntax)' instead")
+  public static func string(_: StringLiteralExprSyntax) -> Self {
+    fatalError("unavailable")
+  }
+
+  @available(*, unavailable, message: "use 'argumentList(LabeledExprListSyntax)' instead")
+  public static func conventionArguments(_: ConventionAttributeArgumentsSyntax) -> Self {
+    fatalError("unavailable")
+  }
+
+  @available(*, unavailable, message: "use 'argumentList(LabeledExprListSyntax)' instead")
+  public static func conventionWitnessMethodArguments(_: ConventionWitnessMethodAttributeArgumentsSyntax) -> Self {
+    fatalError("unavailable")
+  }
+
+  @available(*, unavailable, message: "use 'argumentList(LabeledExprListSyntax)' instead")
+  public static func opaqueReturnTypeOfAttributeArguments(_: OpaqueReturnTypeOfAttributeArgumentsSyntax) -> Self {
+    fatalError("unavailable")
+  }
+
+  @available(*, unavailable, message: "use 'argumentList(LabeledExprListSyntax)' instead")
+  public static func exposeAttributeArguments(_: ExposeAttributeArgumentsSyntax) -> Self {
+    fatalError("unavailable")
+  }
+
+  @available(*, unavailable, message: "use '.rgumentList(_: LabeledExprListSyntax)' instead")
+  public static func underscorePrivateAttributeArguments(_: UnderscorePrivateAttributeArgumentsSyntax) -> Self {
+    fatalError("unavailable")
+  }
+
+  @available(*, unavailable, message: "use 'argumentList(LabeledExprListSyntax)' instead")
+  public static func unavailableFromAsyncArguments(_: UnavailableFromAsyncAttributeArgumentsSyntax) -> Self {
+    fatalError("unavailable")
+  }
+}
+
 @available(*, deprecated, renamed: "WithAttributesSyntax")
 public typealias AttributedSyntax = WithAttributesSyntax
 
@@ -119,6 +161,10 @@ extension AvailabilityArgumentSyntax {
   @available(*, deprecated, renamed: "Argument")
   public typealias Entry = Argument
 }
+
+@_spi(Compiler)
+@available(*, deprecated, renamed: "AvailabilityMacroDefinitionFileSyntax")
+public typealias AvailabilityMacroDefinitionSyntax = AvailabilityMacroDefinitionFileSyntax
 
 extension ClosureSignatureSyntax {
   @available(*, deprecated, renamed: "ParameterClause")
@@ -294,6 +340,12 @@ extension ClosureCaptureSyntax {
   }
 }
 
+@available(*, unavailable, message: "Use 'LabeledExprListSyntax' instead")
+public struct ConventionAttributeArgumentsSyntax {}
+
+@available(*, unavailable, message: "Use 'LabeledExprListSyntax' instead")
+public struct ConventionWitnessMethodAttributeArgumentsSyntax {}
+
 extension EffectSpecifiersSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenAsyncSpecifierAndThrowsClause")
   public var unexpectedBetweenAsyncSpecifierAndThrowsSpecifier: UnexpectedNodesSyntax? {
@@ -325,6 +377,9 @@ extension EffectSpecifiersSyntax {
     set { unexpectedAfterThrowsClause = newValue }
   }
 }
+
+@available(*, unavailable, message: "Use 'LabeledExprListSyntax' instead")
+public struct ExposeAttributeArgumentsSyntax {}
 
 extension GenericArgumentSyntax {
   @_disfavoredOverload
@@ -717,6 +772,9 @@ extension MemberAccessExprSyntax {
   }
 }
 
+@available(*, unavailable, message: "Use 'LabeledExprListSyntax' instead")
+public struct OpaqueReturnTypeOfAttributeArgumentsSyntax {}
+
 extension SyntaxProtocol {
   @available(*, deprecated, message: "Use detached computed property instead.")
   public func detach() -> Self {
@@ -988,6 +1046,12 @@ extension TypeEffectSpecifiersSyntax {
     )
   }
 }
+
+@available(*, unavailable, message: "Use 'LabeledExprListSyntax' instead")
+public struct UnderscorePrivateAttributeArgumentsSyntax {}
+
+@available(*, unavailable, message: "Use 'LabeledExprListSyntax' instead")
+public struct UnavailableFromAsyncAttributeArgumentsSyntax {}
 
 extension WildcardPatternSyntax {
   @available(*, deprecated, message: "remove 'typeAnnotation'")

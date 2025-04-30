@@ -24,6 +24,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case _canImportVersionInfo
   case abiAttributeArguments
   case accessorBlock
+  case accessorBlockFile
   case accessorDecl
   case accessorDeclList
   case accessorEffectSpecifiers
@@ -39,12 +40,13 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case associatedTypeDecl
   case attribute
   case attributedType
+  case attributeClauseFile
   case attributeList
   case availabilityArgument
   case availabilityArgumentList
   case availabilityCondition
   case availabilityLabeledArgument
-  case availabilityMacroDefinition
+  case availabilityMacroDefinitionFile
   case awaitExpr
   case backDeployedAttributeArguments
   case binaryOperatorExpr
@@ -69,6 +71,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case closureShorthandParameterList
   case closureSignature
   case codeBlock
+  case codeBlockFile
   case codeBlockItem
   case codeBlockItemList
   case compositionType
@@ -79,8 +82,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case conformanceRequirement
   case consumeExpr
   case continueStmt
-  case conventionAttributeArguments
-  case conventionWitnessMethodAttributeArguments
   case copyExpr
   case decl
   case declModifier
@@ -122,7 +123,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case enumCaseParameterClause
   case enumCaseParameterList
   case enumDecl
-  case exposeAttributeArguments
   case expr
   case expressionPattern
   case expressionSegment
@@ -169,6 +169,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case inheritedTypeList
   case initializerClause
   case initializerDecl
+  case inlineArrayType
   case inOutExpr
   case integerLiteralExpr
   case isExpr
@@ -179,6 +180,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case keyPathOptionalComponent
   case keyPathPropertyComponent
   case keyPathSubscriptComponent
+  case keyPathMethodComponent
   case labeledExpr
   case labeledExprList
   case labeledSpecializeArgument
@@ -195,6 +197,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case memberBlock
   case memberBlockItem
   case memberBlockItemList
+  case memberBlockItemListFile
   case memberType
   case metatypeType
   case missing
@@ -207,9 +210,11 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case multipleTrailingClosureElementList
   case namedOpaqueReturnType
   case nilLiteralExpr
+  case nonisolatedSpecifierArgument
+  case nonisolatedSpecifierArgumentList
+  case nonisolatedTypeSpecifier
   case objCSelectorPiece
   case objCSelectorPieceList
-  case opaqueReturnTypeOfAttributeArguments
   case operatorDecl
   case operatorPrecedenceAndTypes
   case optionalBindingCondition
@@ -294,8 +299,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case typeSpecifier
   case lifetimeSpecifierArguments
   case typeSpecifierList
-  case unavailableFromAsyncAttributeArguments
-  case underscorePrivateAttributeArguments
   case unexpectedNodes
   case unresolvedAsExpr
   case unresolvedIsExpr
@@ -459,7 +462,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
     case .switchCaseItem: return "caseItem"
     case .switchCaseItemList: return "caseItemList"
     case .typeAliasDecl: return "typealiasDecl"
-    case .unavailableFromAsyncAttributeArguments: return "unavailableFromAsyncArguments"
     case .yieldedExpression: return "yieldExprListElement"
     case .yieldedExpressionList: return "yieldExprList"
     case .yieldedExpressionsClause: return "yieldList"

@@ -61,86 +61,67 @@ public let ATTRIBUTE_NODES: [Node] = [
         kind: .nodeChoices(choices: [
           Child(
             name: "argumentList",
+            // Regular function-like attribute arguments.
             kind: .node(kind: .labeledExprList)
           ),
           Child(
-            name: "token",
-            kind: .node(kind: .token)
-          ),
-          Child(
-            name: "string",
-            kind: .node(kind: .stringLiteralExpr)
-          ),
-          Child(
             name: "availability",
+            // Special arguments for platform versions.
             kind: .node(kind: .availabilityArgumentList)
           ),
           Child(
             name: "specializeArguments",
+            // Special arguments for keyword decl name e.g. 'subscript(_:)', and availability arguments.
             kind: .node(kind: .specializeAttributeArgumentList)
           ),
           Child(
             name: "objCName",
+            // Special arguments for Objective-C names. e.g. 'methodNameWithArg1:Arg2:'
             kind: .node(kind: .objCSelectorPieceList)
           ),
           Child(
             name: "implementsArguments",
+            // Special arguments for keyword decl name e.g. 'subscript(_:)'.
             kind: .node(kind: .implementsAttributeArguments)
           ),
           Child(
             name: "differentiableArguments",
+            // Special arguments for 'where' clause.
             kind: .node(kind: .differentiableAttributeArguments)
           ),
           Child(
             name: "derivativeRegistrationArguments",
+            // Special arguments for 'where' clause.
             kind: .node(kind: .derivativeAttributeArguments)
           ),
           Child(
             name: "backDeployedArguments",
+            // Special arguments for platform versions.
             kind: .node(kind: .backDeployedAttributeArguments)
           ),
           Child(
-            name: "conventionArguments",
-            kind: .node(kind: .conventionAttributeArguments)
-          ),
-          Child(
-            name: "conventionWitnessMethodArguments",
-            kind: .node(kind: .conventionWitnessMethodAttributeArguments)
-          ),
-          Child(
-            name: "opaqueReturnTypeOfAttributeArguments",
-            kind: .node(kind: .opaqueReturnTypeOfAttributeArguments)
-          ),
-          Child(
-            name: "exposeAttributeArguments",
-            kind: .node(kind: .exposeAttributeArguments)
-          ),
-          Child(
             name: "originallyDefinedInArguments",
+            // Special arguments for platform versions.
             kind: .node(kind: .originallyDefinedInAttributeArguments)
           ),
           Child(
-            name: "underscorePrivateAttributeArguments",
-            kind: .node(kind: .underscorePrivateAttributeArguments)
-          ),
-          Child(
             name: "dynamicReplacementArguments",
+            // Special arguments for keyword decl name e.g. 'subscript(_:)'.
             kind: .node(kind: .dynamicReplacementAttributeArguments)
           ),
           Child(
-            name: "unavailableFromAsyncArguments",
-            kind: .node(kind: .unavailableFromAsyncAttributeArguments)
-          ),
-          Child(
             name: "effectsArguments",
+            // Special arguments for arbitrary token list, processed in SIL.
             kind: .node(kind: .effectsAttributeArgumentList)
           ),
           Child(
             name: "documentationArguments",
+            // Special arguments for access-level keywords. E.g. 'private'.
             kind: .node(kind: .documentationAttributeArgumentList)
           ),
           Child(
             name: "abiArguments",
+            // Special arguments for declaration syntax. e.g. @abi(func abiName() -> Int)
             kind: .node(kind: .abiAttributeArguments),
             experimentalFeature: .abiAttribute
           ),
@@ -293,65 +274,6 @@ public let ATTRIBUTE_NODES: [Node] = [
           Child(name: "variable", kind: .node(kind: .variableDecl)),
         ])
       )
-    ]
-  ),
-
-  Node(
-    kind: .conventionAttributeArguments,
-    base: .syntax,
-    nameForDiagnostics: "@convention(...) arguments",
-    documentation: "The arguments for the '@convention(...)'.",
-    children: [
-      Child(
-        name: "conventionLabel",
-        kind: .token(choices: [.token(.identifier)]),
-        documentation: "The convention label."
-      ),
-      Child(
-        name: "comma",
-        kind: .token(choices: [.token(.comma)]),
-        isOptional: true
-      ),
-      Child(
-        name: "cTypeLabel",
-        kind: .token(choices: [.keyword(.cType)]),
-        isOptional: true
-      ),
-      Child(
-        name: "colon",
-        kind: .token(choices: [.token(.colon)]),
-        isOptional: true
-      ),
-      Child(
-        name: "cTypeString",
-        kind: .node(kind: .stringLiteralExpr),
-        isOptional: true
-      ),
-    ]
-  ),
-
-  Node(
-    kind: .conventionWitnessMethodAttributeArguments,
-    base: .syntax,
-    nameForDiagnostics: "@convention(...) arguments for witness methods",
-    documentation: "The arguments for the '@convention(witness_method: ...)'.",
-    children: [
-      Child(
-        name: "witnessMethodLabel",
-        kind: .token(choices: [.keyword(.witness_method)]),
-        documentation: #"The `witnessMethod` label."#
-      ),
-      Child(
-        name: "colon",
-        kind: .token(choices: [.token(.colon)]),
-        documentation: #"The colon separating the `witnessMethod` label and the original protocol name."#
-
-      ),
-      Child(
-        name: "protocolName",
-        kind: .token(choices: [.token(.identifier)]),
-        documentation: "The original protocol name."
-      ),
     ]
   ),
 
@@ -654,29 +576,6 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .exposeAttributeArguments,
-    base: .syntax,
-    nameForDiagnostics: "@_expose arguments",
-    documentation: "The arguments for the '@_expose' attribute",
-    children: [
-      Child(
-        name: "language",
-        kind: .node(kind: .token)
-      ),
-      Child(
-        name: "comma",
-        kind: .token(choices: [.token(.comma)]),
-        isOptional: true
-      ),
-      Child(
-        name: "cxxName",
-        kind: .node(kind: .stringLiteralExpr),
-        isOptional: true
-      ),
-    ]
-  ),
-
-  Node(
     kind: .implementsAttributeArguments,
     base: .syntax,
     nameForDiagnostics: "@_implements arguemnts",
@@ -781,29 +680,6 @@ public let ATTRIBUTE_NODES: [Node] = [
   ),
 
   Node(
-    kind: .opaqueReturnTypeOfAttributeArguments,
-    base: .syntax,
-    nameForDiagnostics: "opaque return type arguments",
-    documentation: "The arguments for the '@_opaqueReturnTypeOf()'.",
-    children: [
-      Child(
-        name: "mangledName",
-        kind: .node(kind: .stringLiteralExpr),
-        documentation: "The mangled name of a declaration."
-      ),
-      Child(
-        name: "comma",
-        kind: .token(choices: [.token(.comma)])
-      ),
-      Child(
-        name: "ordinal",
-        kind: .token(choices: [.token(.integerLiteral)]),
-        documentation: "The ordinal corresponding to the 'some' keyword that introduced this opaque type."
-      ),
-    ]
-  ),
-
-  Node(
     kind: .originallyDefinedInAttributeArguments,
     base: .syntax,
     nameForDiagnostics: "@_originallyDefinedIn arguments",
@@ -884,47 +760,4 @@ public let ATTRIBUTE_NODES: [Node] = [
       ]
     ]
   ),
-
-  Node(
-    kind: .unavailableFromAsyncAttributeArguments,
-    base: .syntax,
-    nameForDiagnostics: "@_unavailableFromAsync argument",
-    documentation: "The arguments for the '@_unavailableFromAsync' attribute",
-    children: [
-      Child(
-        name: "messageLabel",
-        kind: .token(choices: [.keyword(.message)])
-      ),
-      Child(
-        name: "colon",
-        kind: .token(choices: [.token(.colon)])
-      ),
-      Child(
-        name: "message",
-        kind: .node(kind: .stringLiteralExpr)
-      ),
-    ]
-  ),
-
-  Node(
-    kind: .underscorePrivateAttributeArguments,
-    base: .syntax,
-    nameForDiagnostics: "@_private argument",
-    documentation: "The arguments for the '@_private' attribute",
-    children: [
-      Child(
-        name: "sourceFileLabel",
-        kind: .token(choices: [.keyword(.sourceFile)])
-      ),
-      Child(
-        name: "colon",
-        kind: .token(choices: [.token(.colon)])
-      ),
-      Child(
-        name: "filename",
-        kind: .node(kind: .stringLiteralExpr)
-      ),
-    ]
-  ),
-
 ]

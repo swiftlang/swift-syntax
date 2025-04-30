@@ -121,7 +121,7 @@ enum CanBeStatementStart: TokenSpecSet {
     case TokenSpec(.repeat): self = .repeat
     case TokenSpec(.return): self = .return
     case TokenSpec(.switch): self = .switch
-    case TokenSpec(.then): self = .then
+    case TokenSpec(.then) where experimentalFeatures.contains(.thenStatements): self = .then
     case TokenSpec(.throw): self = .throw
     case TokenSpec(.while): self = .while
     case TokenSpec(.yield): self = .yield
@@ -705,8 +705,8 @@ enum ExpressionModifierKeyword: TokenSpecSet {
   init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
     case TokenSpec(.await): self = .await
-    case TokenSpec(._move): self = ._move
-    case TokenSpec(._borrow): self = ._borrow
+    case TokenSpec(._move) where experimentalFeatures.contains(.oldOwnershipOperatorSpellings): self = ._move
+    case TokenSpec(._borrow) where experimentalFeatures.contains(.oldOwnershipOperatorSpellings): self = ._borrow
     case TokenSpec(.try): self = .try
     case TokenSpec(.borrow): self = .borrow
     case TokenSpec(.consume): self = .consume
@@ -714,7 +714,7 @@ enum ExpressionModifierKeyword: TokenSpecSet {
     case TokenSpec(.repeat): self = .repeat
     case TokenSpec(.each): self = .each
     case TokenSpec(.any): self = .any
-    case TokenSpec(.unsafe) where experimentalFeatures.contains(.unsafeExpression): self = .unsafe
+    case TokenSpec(.unsafe): self = .unsafe
     default: return nil
     }
   }

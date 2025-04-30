@@ -10,11 +10,20 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftDiagnostics
 import SwiftParser
 import SwiftParserDiagnostics
 import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
+
+struct SimpleFixItMessage: FixItMessage {
+  let message: String
+
+  var fixItID: MessageID {
+    MessageID(domain: "here", id: "this")
+  }
+}
 
 final class FixItTests: XCTestCase {
   func testEditsForFixIt() throws {
@@ -38,5 +47,23 @@ final class FixItTests: XCTestCase {
     let edits = fixIt.edits
     XCTAssertNotEqual(changes.count, edits.count)
     XCTAssertEqual(expectedEdits, edits)
+  }
+
+  func testTextualReplacement() throws {
+    let five = AbsolutePosition(utf8Offset: 5)
+    let fifteen = AbsolutePosition(utf8Offset: 15)
+    let change = FixIt(
+      message: SimpleFixItMessage(message: "fix it please"),
+      changes: [
+        .replaceText(
+          range: five..<fifteen,
+          with: "yours",
+          in: Syntax("func myFunction() { }" as SourceFileSyntax)
+        )
+      ]
+    )
+    XCTAssertEqual(change.edits.count, 1)
+    XCTAssertEqual(change.edits[0].range, five..<fifteen)
+    XCTAssertEqual(change.edits[0].replacement, "yours")
   }
 }

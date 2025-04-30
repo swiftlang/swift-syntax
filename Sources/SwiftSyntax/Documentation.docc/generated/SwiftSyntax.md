@@ -135,6 +135,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/UnresolvedAsExprSyntax>
 - <doc:SwiftSyntax/UnresolvedIsExprSyntax>
 - <doc:SwiftSyntax/UnresolvedTernaryExprSyntax>
+- <doc:SwiftSyntax/UnsafeExprSyntax>
 
 ### Patterns
 
@@ -293,6 +294,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/TupleTypeElementSyntax>
 - <doc:SwiftSyntax/TypeSpecifierListSyntax>
 - <doc:SwiftSyntax/SimpleTypeSpecifierSyntax>
+- <doc:SwiftSyntax/NonisolatedTypeSpecifierSyntax>
 - <doc:SwiftSyntax/UnexpectedNodesSyntax>
 - <doc:SwiftSyntax/VersionComponentListSyntax>
 - <doc:SwiftSyntax/VersionComponentSyntax>
@@ -304,8 +306,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/AttributeListSyntax>
 - <doc:SwiftSyntax/AttributeSyntax>
 - <doc:SwiftSyntax/BackDeployedAttributeArgumentsSyntax>
-- <doc:SwiftSyntax/ConventionAttributeArgumentsSyntax>
-- <doc:SwiftSyntax/ConventionWitnessMethodAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/DerivativeAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/DifferentiabilityArgumentListSyntax>
 - <doc:SwiftSyntax/DifferentiabilityArgumentSyntax>
@@ -316,20 +316,16 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/DocumentationAttributeArgumentSyntax>
 - <doc:SwiftSyntax/DynamicReplacementAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/EffectsAttributeArgumentListSyntax>
-- <doc:SwiftSyntax/ExposeAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/ImplementsAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/LabeledSpecializeArgumentSyntax>
 - <doc:SwiftSyntax/ObjCSelectorPieceListSyntax>
 - <doc:SwiftSyntax/ObjCSelectorPieceSyntax>
-- <doc:SwiftSyntax/OpaqueReturnTypeOfAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/OriginallyDefinedInAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/PlatformVersionItemListSyntax>
 - <doc:SwiftSyntax/PlatformVersionItemSyntax>
 - <doc:SwiftSyntax/SpecializeAttributeArgumentListSyntax>
 - <doc:SwiftSyntax/SpecializeAvailabilityArgumentSyntax>
 - <doc:SwiftSyntax/SpecializeTargetFunctionArgumentSyntax>
-- <doc:SwiftSyntax/UnavailableFromAsyncAttributeArgumentsSyntax>
-- <doc:SwiftSyntax/UnderscorePrivateAttributeArgumentsSyntax>
 
 ### Miscellaneous Syntax
 
@@ -362,6 +358,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/MatchingPatternConditionSyntax>
 - <doc:SwiftSyntax/MemberBlockSyntax>
 - <doc:SwiftSyntax/MissingSyntax>
+- <doc:SwiftSyntax/NonisolatedSpecifierArgumentSyntax>
 - <doc:SwiftSyntax/OperatorPrecedenceAndTypesSyntax>
 - <doc:SwiftSyntax/OptionalBindingConditionSyntax>
 - <doc:SwiftSyntax/PlatformVersionSyntax>

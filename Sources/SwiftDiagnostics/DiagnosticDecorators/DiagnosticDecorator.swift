@@ -39,7 +39,11 @@ protocol DiagnosticDecorator {
   ///
   /// - Returns: A decorated version of the diagnostic message, enhanced by visual cues like color, text styles, or other markers,
   ///            as well as a severity-specific prefix, based on its severity level.
-  func decorateMessage(_ message: String, basedOnSeverity severity: DiagnosticSeverity) -> String
+  func decorateMessage(
+    _ message: String,
+    basedOnSeverity severity: DiagnosticSeverity,
+    category: DiagnosticCategory?
+  ) -> String
 
   /// Decorates the outline of a source code buffer to visually enhance its structure.
   ///
@@ -69,6 +73,10 @@ extension DiagnosticDecorator {
   ///
   /// - Returns: A decorated version of the diagnostic message, determined by its severity level.
   func decorateDiagnosticMessage(_ diagnosticMessage: DiagnosticMessage) -> String {
-    decorateMessage(diagnosticMessage.message, basedOnSeverity: diagnosticMessage.severity)
+    decorateMessage(
+      diagnosticMessage.message,
+      basedOnSeverity: diagnosticMessage.severity,
+      category: diagnosticMessage.category
+    )
   }
 }

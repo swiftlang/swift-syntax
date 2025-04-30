@@ -261,8 +261,8 @@ final class DeclarationTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "expected 'unsafe' in modifier",
-          fixIts: ["replace 'safe' with 'unsafe'"]
+          message: "expected identifier in modifier",
+          fixIts: ["replace 'safe' with identifier"]
         )
       ],
       fixedSource: """
@@ -271,7 +271,36 @@ final class DeclarationTests: ParserTestCase {
         struct A {
           nonisolated(unsafe) let b = 0
           nonisolated(unsafe) var c: Int { 0 }
-          nonisolated(unsafe) let d = 0
+          nonisolated(<#identifier#>) let d = 0
+        }
+        """
+    )
+  }
+
+  func testNonisolatedNonSendingParsing() {
+    assertParse(
+      """
+      nonisolated(nonsending) let a = 0
+
+      struct A {
+        nonisolated(nonsending) let b = 0
+        nonisolated(nonsending) var c: Int { 0 }
+        nonisolated(1️⃣sending) let d = 0
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected identifier in modifier",
+          fixIts: ["replace 'sending' with identifier"]
+        )
+      ],
+      fixedSource: """
+        nonisolated(nonsending) let a = 0
+
+        struct A {
+          nonisolated(nonsending) let b = 0
+          nonisolated(nonsending) var c: Int { 0 }
+          nonisolated(<#identifier#>) let d = 0
         }
         """
     )
@@ -763,6 +792,21 @@ final class DeclarationTests: ParserTestCase {
       extension MyValue: @preconcurrency P {}
       """
     )
+  }
+
+  func testParseIsolatedConformances() {
+    assertParse(
+      """
+      extension Int: nonisolated Q {}
+      """
+    )
+
+    assertParse(
+      """
+      extension Int: @MainActor P {}
+      """
+    )
+
   }
 
   func testParseDynamicReplacement() {
@@ -1516,7 +1560,8 @@ final class DeclarationTests: ParserTestCase {
           leftSquare: .leftSquareToken(),
           element: IdentifierTypeSyntax(name: .identifier("third")),
           rightSquare: .rightSquareToken(presence: .missing)
-        )
+        ),
+        trailingComma: .commaToken(presence: .missing)
       ),
       diagnostics: [
         DiagnosticSpec(
@@ -1532,11 +1577,12 @@ final class DeclarationTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "4️⃣",
-          message: "unexpected code 'fourth: Int' in parameter clause"
+          message: "expected ',' in parameter",
+          fixIts: ["insert ','"]
         ),
       ],
       fixedSource: """
-        func foo(first second: [third]fourth: Int) {}
+        func foo(first second: [third], fourth: Int) {}
         """
     )
   }
@@ -3398,6 +3444,87 @@ final class DeclarationTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           message: "unexpected code in variable"
+        )
+      ]
+    )
+  }
+
+  func testMissingCommaInParameters() {
+    assertParse(
+      "func a(foo: Bar1️⃣ foo2: Bar2) {}",
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected ',' in parameter",
+          fixIts: ["insert ','"]
+        )
+      ],
+      fixedSource: "func a(foo: Bar, foo2: Bar2) {}"
+    )
+  }
+
+  func testMissingMultipleCommasInParameters() {
+    assertParse(
+      "func a(foo: Bar1️⃣ foo2: Bar2, foo3: Bar32️⃣ foo4: Bar4) {}",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected ',' in parameter",
+          fixIts: ["insert ','"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected ',' in parameter",
+          fixIts: ["insert ','"]
+        ),
+      ],
+      fixedSource: "func a(foo: Bar, foo2: Bar2, foo3: Bar3, foo4: Bar4) {}"
+    )
+  }
+
+  func testMissingCommaInParametersAndAttributes() {
+    assertParse(
+      "func a(foo: Bar1️⃣ @escaping foo1: () -> Void) {}",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected ',' in parameter",
+          fixIts: ["insert ','"]
+        )
+      ],
+      fixedSource: "func a(foo: Bar, @escaping foo1: () -> Void) {}"
+    )
+  }
+
+  func testMissingCommaInParametersWithNewline() {
+    assertParse(
+      """
+      func foo(a: Int1️⃣
+      x: Int = 2
+      ) {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected ',' in parameter",
+          fixIts: ["insert ','"]
+        )
+      ],
+      fixedSource:
+        """
+        func foo(a: Int,
+        x: Int = 2
+        ) {}
+        """
+    )
+  }
+
+  func testMissingCommaWithgarbageCode() {
+    assertParse(
+      "func foo(x: Int 1️⃣Int<@abc)",
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "unexpected code 'Int<@abc' in parameter clause"
         )
       ]
     )

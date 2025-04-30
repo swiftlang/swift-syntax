@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-@_spi(RawSyntax) internal import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) internal import SwiftSyntax
 #else
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 #endif
 
 extension TokenConsumer {
@@ -381,18 +381,28 @@ extension Parser {
     }
   }
 
-  /// Whether the current token is a valid contextual exprssion modifier like
-  /// `copy`, `consume`.
-  ///
-  /// `copy` etc. are only contextually a keyword if they are followed by an
-  /// identifier or keyword on the same line. We do this to ensure that we do
-  /// not break any copy functions defined by users.
-  private mutating func atContextualExpressionModifier() -> Bool {
-    return self.peek(
-      isAt: TokenSpec(.identifier, allowAtStartOfLine: false),
-      TokenSpec(.dollarIdentifier, allowAtStartOfLine: false),
-      TokenSpec(.self, allowAtStartOfLine: false)
-    )
+  /// Make sure that we only accept `nonisolated(nonsending)` as a valid type specifier
+  /// in expression context to minimize source compatibility impact.
+  func canParseNonisolatedAsSpecifierInExpressionContext() -> Bool {
+    return withLookahead {
+      guard $0.consume(if: .keyword(.nonisolated)) != nil else {
+        return false
+      }
+
+      if $0.currentToken.isAtStartOfLine {
+        return false
+      }
+
+      guard $0.consume(if: .leftParen) != nil else {
+        return false
+      }
+
+      guard $0.consume(if: TokenSpec(.nonsending, allowAtStartOfLine: false)) != nil else {
+        return false
+      }
+
+      return $0.at(TokenSpec(.rightParen, allowAtStartOfLine: false))
+    }
   }
 
   /// Parse an expression sequence element.
@@ -400,8 +410,10 @@ extension Parser {
     flavor: ExprFlavor,
     pattern: PatternContext = .none
   ) -> RawExprSyntax {
-    // Try to parse '@' sign or 'inout' as an attributed typerepr.
-    if self.at(.atSign, .keyword(.inout)) {
+    // Try to parse '@' sign, 'inout', or 'nonisolated' as an attributed typerepr.
+    if self.at(.atSign, .keyword(.inout))
+      || self.canParseNonisolatedAsSpecifierInExpressionContext()
+    {
       var lookahead = self.lookahead()
       if lookahead.canParseType() {
         let type = self.parseType()
@@ -445,6 +457,10 @@ extension Parser {
         )
       )
     case (.unsafe, let handle)?:
+      if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor, acceptClosure: true, preferPostfixExpr: false) {
+        break EXPR_PREFIX
+      }
+
       let unsafeTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
         flavor: flavor,
@@ -457,23 +473,12 @@ extension Parser {
           arena: self.arena
         )
       )
-    case (._move, let handle)?:
-      let moveKeyword = self.eat(handle)
-      let sub = self.parseSequenceExpressionElement(
-        flavor: flavor,
-        pattern: pattern
-      )
-      return RawExprSyntax(
-        RawConsumeExprSyntax(
-          consumeKeyword: moveKeyword,
-          expression: sub,
-          arena: self.arena
-        )
-      )
+
     case (._borrow, let handle)?:
+      assert(self.experimentalFeatures.contains(.oldOwnershipOperatorSpellings))
       fallthrough
     case (.borrow, let handle)?:
-      if !atContextualExpressionModifier() {
+      if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) {
         break EXPR_PREFIX
       }
       let borrowTok = self.eat(handle)
@@ -490,7 +495,7 @@ extension Parser {
       )
 
     case (.copy, let handle)?:
-      if !atContextualExpressionModifier() {
+      if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) {
         break EXPR_PREFIX
       }
 
@@ -507,8 +512,11 @@ extension Parser {
         )
       )
 
+    case (._move, let handle)?:
+      assert(self.experimentalFeatures.contains(.oldOwnershipOperatorSpellings))
+      fallthrough
     case (.consume, let handle)?:
-      if !atContextualExpressionModifier() {
+      if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) {
         break EXPR_PREFIX
       }
 
@@ -530,7 +538,7 @@ extension Parser {
       return RawExprSyntax(parsePackExpansionExpr(repeatHandle: handle, flavor: flavor, pattern: pattern))
 
     case (.each, let handle)?:
-      if !atContextualExpressionModifier() {
+      if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) {
         break EXPR_PREFIX
       }
 
@@ -545,7 +553,7 @@ extension Parser {
       )
 
     case (.any, _)?:
-      if !atContextualExpressionModifier() && !self.peek().isContextualPunctuator("~") {
+      if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) && !self.peek().isContextualPunctuator("~") {
         break EXPR_PREFIX
       }
 
@@ -566,7 +574,7 @@ extension Parser {
   ) -> RawExprSyntax {
     // Try parse a single value statement as an expression (e.g do/if/switch).
     // Note we do this here in parseUnaryExpression as we don't allow postfix
-    // syntax to hang off such expressions to avoid ambiguities such as postfix
+    // syntax to be attached to such expressions to avoid ambiguities such as postfix
     // '.member', which can currently be parsed as a static dot member for a
     // result builder.
     switch self.at(anyIn: SingleValueStatementExpression.self) {
@@ -1103,11 +1111,54 @@ extension Parser {
         continue
       }
 
-      // Check for a .name or .1 suffix.
+      // Check for a .name, .1, .name(), .name("Kiwi"), .name(fruit:),
+      // .name(_:), .name(fruit: "Kiwi) suffix.
       if self.at(.period) {
         let (unexpectedPeriod, period, declName, generics) = parseDottedExpressionSuffix(
           previousNode: components.last?.raw ?? rootType?.raw ?? backslash.raw
         )
+
+        // If fully applied method component, parse as a keypath method.
+        if self.experimentalFeatures.contains(.keypathWithMethodMembers)
+          && self.at(.leftParen)
+        {
+          var (unexpectedBeforeLParen, leftParen) = self.expect(.leftParen)
+          if let generics = generics {
+            unexpectedBeforeLParen = RawUnexpectedNodesSyntax(
+              (unexpectedBeforeLParen?.elements ?? []) + [RawSyntax(generics)],
+              arena: self.arena
+            )
+          }
+          let args = self.parseArgumentListElements(
+            pattern: pattern,
+            allowTrailingComma: true
+          )
+          let (unexpectedBeforeRParen, rightParen) = self.expect(.rightParen)
+
+          components.append(
+            RawKeyPathComponentSyntax(
+              unexpectedPeriod,
+              period: period,
+              component: .method(
+                RawKeyPathMethodComponentSyntax(
+                  declName: declName,
+                  unexpectedBeforeLParen,
+                  leftParen: leftParen,
+                  arguments: RawLabeledExprListSyntax(
+                    elements: args,
+                    arena: self.arena
+                  ),
+                  unexpectedBeforeRParen,
+                  rightParen: rightParen,
+                  arena: self.arena
+                )
+              ),
+              arena: self.arena
+            )
+          )
+          continue
+        }
+        // Else, parse as a property.
         components.append(
           RawKeyPathComponentSyntax(
             unexpectedPeriod,
@@ -1128,7 +1179,6 @@ extension Parser {
       // No more postfix expressions.
       break
     }
-
     return RawKeyPathExprSyntax(
       unexpectedBeforeBackslash,
       backslash: backslash,
@@ -1532,6 +1582,15 @@ extension Parser {
     }
 
     let (unexpectedBeforeLSquare, lsquare) = self.expect(.leftSquare)
+
+    // Check to see if we have an InlineArray type in expression position.
+    if self.isAtStartOfInlineArrayTypeBody() {
+      let type = self.parseInlineArrayType(
+        unexpectedBeforeLSquare: unexpectedBeforeLSquare,
+        leftSquare: lsquare
+      )
+      return RawExprSyntax(RawTypeExprSyntax(type: type, arena: self.arena))
+    }
 
     if let rsquare = self.consume(if: .rightSquare) {
       return RawExprSyntax(

@@ -304,20 +304,3 @@ extension Parser {
     }
   }
 }
-
-extension Parser {
-  /// Parse an argument for '-define-availability' compiler option.
-  mutating func parseAvailabilityMacroDefinition() -> RawAvailabilityMacroDefinitionSyntax {
-    let namedAndVersion = self.parsePlatformVersion(allowStarAsVersionNumber: false)
-    let (unexpectedBetweenPlatformVersionAndColon, colon) = self.expect(.colon)
-    let specs = self.parseAvailabilitySpecList()
-
-    return RawAvailabilityMacroDefinitionSyntax(
-      platformVersion: namedAndVersion,
-      unexpectedBetweenPlatformVersionAndColon,
-      colon: colon,
-      specs: specs,
-      arena: self.arena
-    )
-  }
-}

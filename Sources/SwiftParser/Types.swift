@@ -577,6 +577,11 @@ extension Parser {
 }
 
 extension Parser {
+  /// Whether the parser is at the start of an InlineArray type sugar body.
+  func isAtStartOfInlineArrayTypeBody() -> Bool {
+    withLookahead { $0.canParseStartOfInlineArrayTypeBody() }
+  }
+
   /// Parse an array or dictionary type..
   mutating func parseCollectionType() -> RawTypeSyntax {
     if let remaingingTokens = remainingTokensIfMaximumNestingLevelReached() {
@@ -592,6 +597,15 @@ extension Parser {
     }
 
     let (unexpectedBeforeLSquare, leftsquare) = self.expect(.leftSquare)
+
+    // Check to see if we're at the start of an InlineArray type.
+    if self.isAtStartOfInlineArrayTypeBody() {
+      return self.parseInlineArrayType(
+        unexpectedBeforeLSquare: unexpectedBeforeLSquare,
+        leftSquare: leftsquare
+      )
+    }
+
     let firstType = self.parseType()
     if let colon = self.consume(if: .colon) {
       let secondType = self.parseType()
@@ -622,10 +636,46 @@ extension Parser {
       )
     }
   }
+
+  mutating func parseInlineArrayType(
+    unexpectedBeforeLSquare: RawUnexpectedNodesSyntax?,
+    leftSquare: RawTokenSyntax
+  ) -> RawTypeSyntax {
+    precondition(self.experimentalFeatures.contains(.inlineArrayTypeSugar))
+
+    // We allow both values and types here and for the element type for
+    // better recovery in cases where the user writes e.g '[Int x 3]'.
+    let count = self.parseGenericArgumentType()
+
+    let (unexpectedBeforeSeparator, separator) = self.expect(
+      TokenSpec(.x, allowAtStartOfLine: false)
+    )
+
+    let element = self.parseGenericArgumentType()
+
+    let (unexpectedBeforeRightSquare, rightSquare) = self.expect(.rightSquare)
+
+    return RawTypeSyntax(
+      RawInlineArrayTypeSyntax(
+        unexpectedBeforeLSquare,
+        leftSquare: leftSquare,
+        count: .init(argument: count, trailingComma: nil, arena: self.arena),
+        unexpectedBeforeSeparator,
+        separator: separator,
+        element: .init(argument: element, trailingComma: nil, arena: self.arena),
+        unexpectedBeforeRightSquare,
+        rightSquare: rightSquare,
+        arena: self.arena
+      )
+    )
+  }
 }
 
 extension Parser.Lookahead {
   mutating func canParseType() -> Bool {
+    // 'repeat' starts a pack expansion type
+    self.consume(if: .keyword(.repeat))
+
     guard self.canParseTypeScalar() else {
       return false
     }
@@ -637,15 +687,77 @@ extension Parser.Lookahead {
     return true
   }
 
-  mutating func skipTypeAttributeList() {
+  mutating func canParseTypeAttributeList() -> Bool {
     var specifierProgress = LoopProgressCondition()
-    // TODO: Can we model isolated/_const so that they're specified in both canParse* and parse*?
     while canHaveParameterSpecifier,
-      self.at(anyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) != nil || self.at(.keyword(.isolated))
-        || self.at(.keyword(._const)),
+      self.at(anyIn: SimpleTypeSpecifierSyntax.SpecifierOptions.self) != nil
+        || self.at(.keyword(.nonisolated), .keyword(.dependsOn)),
       self.hasProgressed(&specifierProgress)
     {
-      self.consumeAnyToken()
+      switch self.currentToken {
+      case .keyword(.nonisolated):
+        let canParseNonisolated = self.withLookahead({
+          // Consume 'nonisolated'
+          $0.consumeAnyToken()
+
+          // The argument is missing but it still could be a valid modifier,
+          // i.e. `nonisolated` in an inheritance clause.
+          guard $0.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) else {
+            return true
+          }
+
+          // Consume '('
+          $0.consumeAnyToken()
+
+          // nonisolated accepts a single modifier at the moment: 'nonsending'
+          // we need to check for that explicitly to avoid misinterpreting this
+          // keyword to be a modifier when it isn't i.e. `[nonisolated(42)]`
+          guard $0.consume(if: TokenSpec(.nonsending, allowAtStartOfLine: false)) != nil else {
+            return false
+          }
+
+          return $0.consume(if: TokenSpec(.rightParen, allowAtStartOfLine: false)) != nil
+        })
+
+        guard canParseNonisolated else {
+          return false
+        }
+
+        self.consumeAnyToken()
+
+        guard self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) else {
+          continue
+        }
+
+        self.skipSingle()
+
+      case .keyword(.dependsOn):
+        let canParseDependsOn = self.withLookahead({
+          // Consume 'dependsOn'
+          $0.consumeAnyToken()
+
+          if $0.currentToken.isAtStartOfLine {
+            return false
+          }
+
+          // `dependsOn` requires an argument list.
+          guard $0.atAttributeOrSpecifierArgument() else {
+            return false
+          }
+
+          return true
+        })
+
+        guard canParseDependsOn else {
+          return false
+        }
+
+        self.consumeAnyToken()
+        self.skipSingle()
+
+      default:
+        self.consumeAnyToken()
+      }
     }
 
     var attributeProgress = LoopProgressCondition()
@@ -653,13 +765,14 @@ extension Parser.Lookahead {
       self.consumeAnyToken()
       self.skipTypeAttribute()
     }
+
+    return true
   }
 
   mutating func canParseTypeScalar() -> Bool {
-    // 'repeat' starts a pack expansion type
-    self.consume(if: .keyword(.repeat))
-
-    self.skipTypeAttributeList()
+    guard self.canParseTypeAttributeList() else {
+      return false
+    }
 
     guard self.canParseSimpleOrCompositionType() else {
       return false
@@ -714,15 +827,7 @@ extension Parser.Lookahead {
       }
     case TokenSpec(.leftSquare):
       self.consumeAnyToken()
-      guard self.canParseType() else {
-        return false
-      }
-      if self.consume(if: .colon) != nil {
-        guard self.canParseType() else {
-          return false
-        }
-      }
-      guard self.consume(if: .rightSquare) != nil else {
+      guard self.canParseCollectionTypeBody() else {
         return false
       }
     case TokenSpec(.wildcard):
@@ -760,6 +865,59 @@ extension Parser.Lookahead {
     }
 
     return true
+  }
+
+  /// Checks whether we can parse the start of an InlineArray type. This does
+  /// not include the element type.
+  mutating func canParseStartOfInlineArrayTypeBody() -> Bool {
+    guard self.experimentalFeatures.contains(.inlineArrayTypeSugar) else {
+      return false
+    }
+
+    // We must have at least '[<type-or-integer> x', which cannot be any other
+    // kind of expression or type. We specifically look for both types and
+    // integers for better recovery in e.g cases where the user writes e.g
+    // '[Int x 2]'. We only do type-scalar since variadics would be ambiguous
+    // e.g 'Int...x'.
+    guard self.canParseTypeScalar() || self.canParseIntegerLiteral() else {
+      return false
+    }
+
+    // We don't currently allow multi-line since that would require
+    // disambiguation with array literals.
+    return self.consume(if: TokenSpec(.x, allowAtStartOfLine: false)) != nil
+  }
+
+  mutating func canParseInlineArrayTypeBody() -> Bool {
+    guard self.canParseStartOfInlineArrayTypeBody() else {
+      return false
+    }
+    // Note we look for both types and integers for better recovery in e.g cases
+    // where the user writes e.g '[Int x 2]'.
+    guard self.canParseGenericArgument() else {
+      return false
+    }
+    return self.consume(if: .rightSquare) != nil
+  }
+
+  mutating func canParseCollectionTypeBody() -> Bool {
+    // Check to see if we have an InlineArray sugar type.
+    if self.experimentalFeatures.contains(.inlineArrayTypeSugar) {
+      var lookahead = self.lookahead()
+      if lookahead.canParseInlineArrayTypeBody() {
+        self = lookahead
+        return true
+      }
+    }
+    guard self.canParseType() else {
+      return false
+    }
+    if self.consume(if: .colon) != nil {
+      guard self.canParseType() else {
+        return false
+      }
+    }
+    return self.consume(if: .rightSquare) != nil
   }
 
   mutating func canParseTupleBodyType() -> Bool {
@@ -863,6 +1021,24 @@ extension Parser.Lookahead {
     return lookahead.currentToken.isGenericTypeDisambiguatingToken
   }
 
+  mutating func canParseIntegerLiteral() -> Bool {
+    if self.currentToken.tokenText == "-", self.peek(isAt: .integerLiteral) {
+      self.consumeAnyToken()
+      self.consumeAnyToken()
+      return true
+    }
+    if self.consume(if: .integerLiteral) != nil {
+      return true
+    }
+    return false
+  }
+
+  mutating func canParseGenericArgument() -> Bool {
+    // A generic argument can either be a type or an integer literal (who is
+    // optionally negative).
+    self.canParseType() || self.canParseIntegerLiteral()
+  }
+
   mutating func consumeGenericArguments() -> Bool {
     // Parse the opening '<'.
     guard self.consume(ifPrefix: "<", as: .leftAngle) != nil else {
@@ -872,21 +1048,9 @@ extension Parser.Lookahead {
     if !self.at(prefix: ">") {
       var loopProgress = LoopProgressCondition()
       repeat {
-        // A generic argument can either be a type or an integer literal (who is
-        // optionally negative).
-        if self.canParseType() {
-          continue
-        } else if self.currentToken.tokenText == "-",
-          self.peek(isAt: .integerLiteral)
-        {
-          self.consumeAnyToken()
-          self.consumeAnyToken()
-          continue
-        } else if self.consume(if: .integerLiteral) != nil {
-          continue
+        guard self.canParseGenericArgument() else {
+          return false
         }
-
-        return false
         // Parse the comma, if the list continues.
       } while self.consume(if: .comma) != nil && self.hasProgressed(&loopProgress)
     }
@@ -958,6 +1122,88 @@ extension Parser {
     return .lifetimeTypeSpecifier(lifetimeSpecifier)
   }
 
+  private mutating func parseNonisolatedTypeSpecifier() -> RawTypeSpecifierListSyntax.Element {
+    let (unexpectedBeforeNonisolatedKeyword, nonisolatedKeyword) = self.expect(.keyword(.nonisolated))
+
+    // If the next token is not '(' this could mean two things:
+    //  - What follows is a type and we should allow it because
+    //    using `nonsisolated` without an argument is allowed in
+    //    an inheritance clause.
+    //  - The '(nonsending)' was omitted.
+    if !self.at(.leftParen) {
+      // `nonisolated P<...>` is allowed in an inheritance clause.
+      if withLookahead({ $0.canParseTypeIdentifier() }) {
+        let nonisolatedSpecifier = RawNonisolatedTypeSpecifierSyntax(
+          unexpectedBeforeNonisolatedKeyword,
+          nonisolatedKeyword: nonisolatedKeyword,
+          argument: nil,
+          arena: self.arena
+        )
+        return .nonisolatedTypeSpecifier(nonisolatedSpecifier)
+      }
+
+      // Otherwise require '(nonsending)'
+      let argument = RawNonisolatedSpecifierArgumentSyntax(
+        leftParen: missingToken(.leftParen),
+        nonsendingKeyword: missingToken(.keyword(.nonsending)),
+        rightParen: missingToken(.rightParen),
+        arena: self.arena
+      )
+
+      let nonisolatedSpecifier = RawNonisolatedTypeSpecifierSyntax(
+        unexpectedBeforeNonisolatedKeyword,
+        nonisolatedKeyword: nonisolatedKeyword,
+        argument: argument,
+        arena: self.arena
+      )
+
+      return .nonisolatedTypeSpecifier(nonisolatedSpecifier)
+    }
+
+    // Avoid being to greedy about `(` since this modifier should be associated with
+    // function types, it's possible that the argument is omitted and what follows
+    // is a function type i.e. `nonisolated () async -> Void`.
+    if self.at(.leftParen) && !withLookahead({ $0.atAttributeOrSpecifierArgument() }) {
+      let argument = RawNonisolatedSpecifierArgumentSyntax(
+        leftParen: missingToken(.leftParen),
+        nonsendingKeyword: missingToken(.keyword(.nonsending)),
+        rightParen: missingToken(.rightParen),
+        arena: self.arena
+      )
+
+      let nonisolatedSpecifier = RawNonisolatedTypeSpecifierSyntax(
+        unexpectedBeforeNonisolatedKeyword,
+        nonisolatedKeyword: nonisolatedKeyword,
+        argument: argument,
+        arena: self.arena
+      )
+
+      return .nonisolatedTypeSpecifier(nonisolatedSpecifier)
+    }
+
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+    let (unexpectedBeforeModifier, modifier) = self.expect(.keyword(.nonsending))
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+
+    let argument = RawNonisolatedSpecifierArgumentSyntax(
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      unexpectedBeforeModifier,
+      nonsendingKeyword: modifier,
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      arena: self.arena
+    )
+
+    let nonisolatedSpecifier = RawNonisolatedTypeSpecifierSyntax(
+      unexpectedBeforeNonisolatedKeyword,
+      nonisolatedKeyword: nonisolatedKeyword,
+      argument: argument,
+      arena: self.arena
+    )
+    return .nonisolatedTypeSpecifier(nonisolatedSpecifier)
+  }
+
   private mutating func parseSimpleTypeSpecifier(
     specifierHandle: TokenConsumptionHandle
   ) -> RawTypeSpecifierListSyntax.Element {
@@ -981,6 +1227,13 @@ extension Parser {
         } else {
           break SPECIFIER_PARSING
         }
+      } else if self.at(.keyword(.nonisolated)) {
+        // If '(' is located on the new line 'nonisolated' cannot be parsed
+        // as a specifier.
+        if self.peek(isAt: .leftParen) && self.peek().isAtStartOfLine {
+          break SPECIFIER_PARSING
+        }
+        specifiers.append(parseNonisolatedTypeSpecifier())
       } else {
         break SPECIFIER_PARSING
       }
@@ -1036,25 +1289,17 @@ extension Parser {
     case .differentiable:
       return .attribute(self.parseDifferentiableAttribute())
 
-    case .convention:
-      return parseAttribute(argumentMode: .required) { parser in
-        return parser.parseConventionArguments()
-      }
-    case ._opaqueReturnTypeOf:
-      return parseAttribute(argumentMode: .required) { parser in
-        return .opaqueReturnTypeOfAttributeArguments(parser.parseOpaqueReturnTypeOfAttributeArguments())
-      }
     case .isolated:
       return parseAttribute(argumentMode: .required) { parser in
-        return .argumentList(parser.parseIsolatedAttributeArguments())
+        return (nil, .argumentList(parser.parseIsolatedAttributeArguments()))
       }
-    case nil:  // Custom attribute
+    case .convention, ._opaqueReturnTypeOf, nil:  // Custom attribute
       return parseAttribute(argumentMode: .customAttribute) { parser in
         let arguments = parser.parseArgumentListElements(
           pattern: .none,
           allowTrailingComma: true
         )
-        return .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
+        return (nil, .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena)))
       }
 
     }
@@ -1135,12 +1380,6 @@ extension Parser {
 
 extension Parser {
   mutating func parseValueType() -> RawExprSyntax? {
-    // If the 'ValueGenerics' experimental feature hasn't been added, then don't
-    // attempt to parse values as types.
-    guard self.experimentalFeatures.contains(.valueGenerics) else {
-      return nil
-    }
-
     // Eat any '-' preceding integer literals.
     var minusSign: RawTokenSyntax? = nil
     if self.atContextualPunctuator("-"),

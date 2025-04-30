@@ -176,7 +176,7 @@ func syntaxNode(nodesStartingWith: [Character]) -> SourceFileSyntax {
           // If needed, this could be added in the future, but for now withUnexpected should be sufficient.
           if let childNode = SYNTAX_NODE_MAP[child.syntaxNodeKind]?.collectionNode,
             !child.isUnexpectedNodes,
-            case .collection(_, collectionElementName: let childElt, _, _) = child.kind
+            case .collection(_, collectionElementName: let childElt?, _, _) = child.kind
           {
             let childEltType = childNode.collectionElementType.syntaxBaseName
 

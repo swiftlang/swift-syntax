@@ -295,30 +295,18 @@ final class ThenStatementTests: ParserTestCase {
   func testThenStmt22() {
     assertParse(
       """
-      then1️⃣
+      then
       """,
-      diagnostics: [
-        DiagnosticSpec(
-          message: "expected expression in 'then' statement",
-          fixIts: ["insert expression"]
-        )
-      ],
-      fixedSource: "then <#expression#>"
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("then"))
     )
   }
 
   func testThenStmt23() {
     assertParse(
       """
-      then1️⃣;
+      then;
       """,
-      diagnostics: [
-        DiagnosticSpec(
-          message: "expected expression in 'then' statement",
-          fixIts: ["insert expression"]
-        )
-      ],
-      fixedSource: "then <#expression#>;"
+      substructure: DeclReferenceExprSyntax(baseName: .identifier("then"))
     )
   }
 

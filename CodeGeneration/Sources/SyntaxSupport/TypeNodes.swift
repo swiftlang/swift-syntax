@@ -264,8 +264,7 @@ public let TYPE_NODES: [Node] = [
           ),
           Child(
             name: "expr",
-            kind: .node(kind: .expr),
-            experimentalFeature: .valueGenerics
+            kind: .node(kind: .expr)
           ),
         ]),
         documentation:
@@ -296,6 +295,48 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "exclamationMark",
         kind: .token(choices: [.token(.exclamationMark)])
+      ),
+    ]
+  ),
+
+  Node(
+    kind: .inlineArrayType,
+    base: .type,
+    experimentalFeature: .inlineArrayTypeSugar,
+    nameForDiagnostics: "inline array type",
+    documentation: "An inline array type `[3 x Int]`, sugar for `InlineArray<3, Int>`.",
+    children: [
+      Child(
+        name: "leftSquare",
+        kind: .token(choices: [.token(.leftSquare)])
+      ),
+      Child(
+        name: "count",
+        kind: .node(kind: .genericArgument),
+        nameForDiagnostics: "count",
+        documentation: """
+          The `count` argument for the inline array type.
+
+          - Note: In semantically valid Swift code, this is always an integer or a wildcard type, e.g `_` in `[_ x Int]`.
+          """
+      ),
+      Child(
+        name: "separator",
+        kind: .token(choices: [.keyword(.x)])
+      ),
+      Child(
+        name: "element",
+        kind: .node(kind: .genericArgument),
+        nameForDiagnostics: "element type",
+        documentation: """
+          The `element` argument for the inline array type.
+
+          - Note: In semantically valid Swift code, this is always a type.
+          """
+      ),
+      Child(
+        name: "rightSquare",
+        kind: .token(choices: [.token(.rightSquare)])
       ),
     ]
   ),
@@ -636,6 +677,52 @@ public let TYPE_NODES: [Node] = [
   ),
 
   Node(
+    kind: .nonisolatedSpecifierArgument,
+    base: .syntax,
+    nameForDiagnostics: nil,
+    documentation: """
+      A single argument that can be added to a nonisolated specifier: 'nonsending'.
+
+      ### Example
+      `data` in `func foo(data: nonisolated(nonsending) () async -> Void) -> X`
+      """,
+    traits: [
+      "Parenthesized"
+    ],
+    children: [
+      Child(
+        name: "leftParen",
+        kind: .token(choices: [.token(.leftParen)])
+      ),
+      Child(
+        name: "nonsendingKeyword",
+        kind: .token(choices: [.keyword(.nonsending)])
+      ),
+      Child(
+        name: "rightParen",
+        kind: .token(choices: [.token(.rightParen)])
+      ),
+    ]
+  ),
+
+  Node(
+    kind: .nonisolatedTypeSpecifier,
+    base: .syntax,
+    nameForDiagnostics: "'nonisolated' specifier",
+    children: [
+      Child(
+        name: "nonisolatedKeyword",
+        kind: .token(choices: [.keyword(.nonisolated)])
+      ),
+      Child(
+        name: "argument",
+        kind: .node(kind: .nonisolatedSpecifierArgument),
+        isOptional: true
+      ),
+    ]
+  ),
+
+  Node(
     kind: .simpleTypeSpecifier,
     base: .syntax,
     nameForDiagnostics: "type specifier",
@@ -662,6 +749,6 @@ public let TYPE_NODES: [Node] = [
     kind: .typeSpecifierList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
-    elementChoices: [.simpleTypeSpecifier, .lifetimeTypeSpecifier]
+    elementChoices: [.simpleTypeSpecifier, .lifetimeTypeSpecifier, .nonisolatedTypeSpecifier]
   ),
 ]

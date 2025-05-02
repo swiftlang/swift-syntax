@@ -156,7 +156,7 @@ public func expandFreestandingMacro(
       (.codeItem, _), (.preamble, _), (.body, _):
       throw MacroExpansionError.unmatchedMacroRole(definition, macroRole)
     }
-    return expandedSyntax.formattedExpansion(definition.formatMode, indentationWidth: indentationWidth)
+    return expandedSyntax.adjustedMacroExpansion(for: definition, indentationWidth: indentationWidth)
   } catch {
     context.addDiagnostics(from: error, node: node)
     return nil
@@ -273,7 +273,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         in: context
       )
       return accessors.map {
-        $0.formattedExpansion(definition.formatMode, indentationWidth: indentationWidth)
+        $0.adjustedMacroExpansion(for: definition, indentationWidth: indentationWidth)
       }
 
     case (let attachedMacro as MemberAttributeMacro.Type, .memberAttribute):
@@ -294,7 +294,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
 
       // Form a buffer containing an attribute list to return to the caller.
       return attributes.map {
-        $0.formattedExpansion(definition.formatMode, indentationWidth: indentationWidth)
+        $0.adjustedMacroExpansion(for: definition, indentationWidth: indentationWidth)
       }
 
     case (let attachedMacro as MemberMacro.Type, .member):
@@ -313,7 +313,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
 
       // Form a buffer of member declarations to return to the caller.
       return members.map {
-        $0.formattedExpansion(definition.formatMode, indentationWidth: indentationWidth)
+        $0.adjustedMacroExpansion(for: definition, indentationWidth: indentationWidth)
       }
 
     case (let attachedMacro as PeerMacro.Type, .peer):
@@ -326,7 +326,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
 
       // Form a buffer of peer declarations to return to the caller.
       return peers.map {
-        $0.formattedExpansion(definition.formatMode, indentationWidth: indentationWidth)
+        $0.adjustedMacroExpansion(for: definition, indentationWidth: indentationWidth)
       }
 
     case (let attachedMacro as ExtensionMacro.Type, .extension):
@@ -357,7 +357,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
 
       // Form a buffer of peer declarations to return to the caller.
       return extensions.map {
-        $0.formattedExpansion(definition.formatMode, indentationWidth: indentationWidth)
+        $0.adjustedMacroExpansion(for: definition, indentationWidth: indentationWidth)
       }
 
     case (let attachedMacro as PreambleMacro.Type, .preamble):
@@ -375,7 +375,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         in: context
       )
       return preamble.map {
-        $0.formattedExpansion(definition.formatMode, indentationWidth: indentationWidth)
+        $0.adjustedMacroExpansion(for: definition, indentationWidth: indentationWidth)
       }
 
     case (let attachedMacro as BodyMacro.Type, .body):
@@ -400,7 +400,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
       }
 
       return body.map {
-        $0.formattedExpansion(definition.formatMode, indentationWidth: indentationWidth)
+        $0.adjustedMacroExpansion(for: definition, indentationWidth: indentationWidth)
       }
 
     default:
@@ -511,15 +511,24 @@ public func expandAttachedMacro<Context: MacroExpansionContext>(
 }
 
 fileprivate extension SyntaxProtocol {
-  /// Perform a format if required and then trim any leading/trailing
-  /// whitespace.
-  func formattedExpansion(_ mode: FormatMode, indentationWidth: Trivia?) -> String {
-    switch mode {
+  /// Perform post-expansion adjustments to the result of a macro expansion.
+  ///
+  /// This applies adjustments to the result of a macro expansion to normalize
+  /// it for use in later tools. Each of the adjustments here should have a
+  /// corresponding configuration option in the `Macro` protocol.
+  func adjustedMacroExpansion(
+    for macro: Macro.Type,
+    indentationWidth: Trivia?
+  ) -> String {
+    let syntax = Syntax(self)
+
+    // Formatting.
+    switch macro.formatMode {
     case .auto:
-      return self.formatted(using: BasicFormat(indentationWidth: indentationWidth))
+      return syntax.formatted(using: BasicFormat(indentationWidth: indentationWidth))
         .trimmedDescription(matching: \.isWhitespace)
     case .disabled:
-      return Syntax(self).description
+      return syntax.description
     #if RESILIENT_LIBRARIES
     @unknown default:
       fatalError()

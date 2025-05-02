@@ -15,4 +15,29 @@ public protocol Macro {
   /// How the resulting expansion should be formatted, `.auto` by default.
   /// Use `.disabled` for the expansion to be used as is.
   static var formatMode: FormatMode { get }
+
+  /// Whether to infer "nonisolated" on protocol conformances introduced in
+  /// the macro expansion when there are some nonisolated members in the
+  /// corresponding declaration group. When true, macro expansion will adjust
+  /// expanded code such as
+  ///
+  ///     extension C: P {
+  ///       nonisolated func f() { }
+  ///     }
+  ///
+  /// to
+  ///
+  ///     extension C: nonisolated P {
+  ///       nonisolated func f() { }
+  ///     }
+  ///
+  /// This operation defaults to `true`. Macros can implement it to return
+  /// `false` to prevent this adjustment to the macro-expanded code.
+  static var inferNonisolatedConformances: Bool { get }
+}
+
+extension Macro {
+  /// Default implementation of the Macro protocol's
+  /// `inferNonisolatedConformances` that returns `true`.
+  public static var inferNonisolatedConformances: Bool { true }
 }

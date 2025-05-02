@@ -520,7 +520,12 @@ fileprivate extension SyntaxProtocol {
     for macro: Macro.Type,
     indentationWidth: Trivia?
   ) -> String {
-    let syntax = Syntax(self)
+    var syntax = Syntax(self)
+
+    // Infer nonisolated conformances.
+    if macro.inferNonisolatedConformances {
+      syntax = syntax.inferNonisolatedConformances()
+    }
 
     // Formatting.
     switch macro.formatMode {

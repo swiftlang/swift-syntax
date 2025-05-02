@@ -84,7 +84,7 @@ public class LibraryPluginProvider: PluginProvider {
   public static let shared: LibraryPluginProvider = LibraryPluginProvider()
 
   public var features: [PluginFeature] {
-    [.loadPluginLibrary]
+    [.loadPluginLibrary, .inferNonisolatedConformances]
   }
 
   public func loadPluginLibrary(libraryPath: String, moduleName: String) throws {

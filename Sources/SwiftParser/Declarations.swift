@@ -1215,8 +1215,11 @@ extension Parser {
     let unexpectedAfterIdentifier: RawUnexpectedNodesSyntax?
     let identifier: RawTokenSyntax
     if self.at(anyIn: Operator.self) != nil || self.at(.exclamationMark, .prefixAmpersand) {
+      // If the name is an operator token that ends in '<' followed by an identifier or 'let',
+      // leave the '<' so it's parsed as a generic parameter clause. This allows things like
+      // 'func ==<T>(x:T, y:T) {}'.
       var name = self.currentToken.tokenText
-      if !currentToken.isEditorPlaceholder && name.hasSuffix("<") && self.peek(isAt: .identifier) {
+      if !currentToken.isEditorPlaceholder && name.hasSuffix("<") && self.peek(isAt: .identifier, .keyword(.let)) {
         name = SyntaxText(rebasing: name.dropLast())
       }
       unexpectedBeforeIdentifier = nil

@@ -51,11 +51,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "parameters",
-        kind: .collection(
-          kind: .genericParameterList,
-          collectionElementName: "Parameter",
-          deprecatedCollectionElementName: "GenericParameter"
-        ),
+        kind: .collection(kind: .genericParameterList),
         documentation: "The list of generic parameters in the clause."
       ),
       Child(
@@ -98,7 +94,7 @@ public let GENERIC_NODES: [Node] = [
     children: [
       Child(
         name: "attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true)
+        kind: .collection(kind: .attributeList, defaultsToEmpty: true)
       ),
       Child(
         name: "specifier",
@@ -197,7 +193,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "requirements",
-        kind: .collection(kind: .genericRequirementList, collectionElementName: "Requirement"),
+        kind: .collection(kind: .genericRequirementList),
         documentation: "The list of requirements in the clause."
       ),
     ],
@@ -283,7 +279,7 @@ public let GENERIC_NODES: [Node] = [
       ),
       Child(
         name: "primaryAssociatedTypes",
-        kind: .collection(kind: .primaryAssociatedTypeList, collectionElementName: "PrimaryAssociatedType")
+        kind: .collection(kind: .primaryAssociatedTypeList)
       ),
       Child(
         name: "rightAngle",

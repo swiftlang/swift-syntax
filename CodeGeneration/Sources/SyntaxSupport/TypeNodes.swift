@@ -48,13 +48,13 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "specifiers",
-        kind: .collection(kind: .typeSpecifierList, collectionElementName: "Specifier", defaultsToEmpty: true),
+        kind: .collection(kind: .typeSpecifierList, defaultsToEmpty: true),
         documentation:
           "A list of specifiers that can be attached to the type, such as `inout`, `isolated`, or `consuming`."
       ),
       Child(
         name: "attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        kind: .collection(kind: .attributeList, defaultsToEmpty: true),
         documentation: "A list of attributes that can be attached to the type, such as `@escaping`."
       ),
       Child(
@@ -108,7 +108,7 @@ public let TYPE_NODES: [Node] = [
     children: [
       Child(
         name: "elements",
-        kind: .collection(kind: .compositionTypeElementList, collectionElementName: "Element")
+        kind: .collection(kind: .compositionTypeElementList)
       )
     ]
   ),
@@ -186,11 +186,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "parameters",
-        kind: .collection(
-          kind: .tupleTypeElementList,
-          collectionElementName: "Parameter",
-          deprecatedCollectionElementName: "Argument"
-        )
+        kind: .collection(kind: .tupleTypeElementList)
       ),
       Child(
         name: "rightParen",
@@ -225,7 +221,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "arguments",
-        kind: .collection(kind: .genericArgumentList, collectionElementName: "Argument")
+        kind: .collection(kind: .genericArgumentList)
       ),
       Child(
         name: "rightAngle",
@@ -592,7 +588,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "elements",
-        kind: .collection(kind: .tupleTypeElementList, collectionElementName: "Element")
+        kind: .collection(kind: .tupleTypeElementList)
       ),
       Child(
         name: "rightParen",
@@ -667,7 +663,7 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "arguments",
-        kind: .collection(kind: .lifetimeSpecifierArgumentList, collectionElementName: "Arguments")
+        kind: .collection(kind: .lifetimeSpecifierArgumentList)
       ),
       Child(
         name: "rightParen",

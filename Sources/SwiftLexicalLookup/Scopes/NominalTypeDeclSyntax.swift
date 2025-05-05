@@ -34,16 +34,18 @@ extension NominalTypeDeclSyntax {
   @_spi(Experimental) public func returningLookupFromGenericParameterScope(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     if let inheritanceClause, inheritanceClause.range.contains(lookUpPosition) {
-      return lookupInParent(identifier, at: lookUpPosition, with: config)
+      return lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
     } else if let genericParameterClause, genericParameterClause.range.contains(lookUpPosition) {
-      return lookupInParent(identifier, at: lookUpPosition, with: config)
+      return lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
     } else if name.range.contains(lookUpPosition) || genericWhereClause?.range.contains(lookUpPosition) ?? false {
-      return lookupInParent(identifier, at: lookUpPosition, with: config)
+      return lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
     } else {
-      return [.lookForMembers(in: Syntax(self))] + lookupInParent(identifier, at: lookUpPosition, with: config)
+      return [.lookForMembers(in: Syntax(self))]
+        + lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
     }
   }
 }

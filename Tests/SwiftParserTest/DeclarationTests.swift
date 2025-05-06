@@ -1004,18 +1004,18 @@ final class DeclarationTests: ParserTestCase {
           fixIts: ["move 'throws(any Error)' in front of '->'"]
         )
       ],
-      fixedSource: "func test() throws(any Error) ->  Int"
+      fixedSource: "func test() throws(any Error) -> Int"
     )
 
     assertParse(
-      "func test() -> 1️⃣throws(any Error Int",
+      "func test() -> 1️⃣throws(any Error/* */ Int",
       diagnostics: [
         DiagnosticSpec(
           message: "'throws(any Error' must precede '->'",
           fixIts: ["move 'throws(any Error' in front of '->'"]
         )
       ],
-      fixedSource: "func test() throws(any Error -> Int"
+      fixedSource: "func test() throws(any Error -> /* */ Int"
     )
 
     assertParse(
@@ -1030,14 +1030,14 @@ final class DeclarationTests: ParserTestCase {
     )
 
     assertParse(
-      "func test() -> 1️⃣throws (any Error) Int",
+      "func test() -> 1️⃣throws/**/ (any Error) Int",
       diagnostics: [
         DiagnosticSpec(
           message: "'throws' must precede '->'",
           fixIts: ["move 'throws' in front of '->'"]
         )
       ],
-      fixedSource: "func test() throws -> (any Error) Int"
+      fixedSource: "func test() throws -> /**/ (any Error) Int"
     )
   }
 

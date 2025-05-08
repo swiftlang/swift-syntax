@@ -13,7 +13,6 @@
 // Do not edit directly!
 // swift-format-ignore-file
 
-@_spi(ExperimentalLanguageFeatures)
 @_spi(RawSyntax)
 public struct RawABIAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   public enum Provider: RawSyntaxNodeProtocol {
@@ -1615,8 +1614,6 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     case dynamicReplacementArguments(RawDynamicReplacementAttributeArgumentsSyntax)
     case effectsArguments(RawEffectsAttributeArgumentListSyntax)
     case documentationArguments(RawDocumentationAttributeArgumentListSyntax)
-    /// - Note: Requires experimental feature `abiAttribute`.
-    @_spi(ExperimentalLanguageFeatures)
     case abiArguments(RawABIAttributeArgumentsSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {

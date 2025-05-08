@@ -43,17 +43,14 @@ extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of coroutine accessors.
   public static let coroutineAccessors = Self (rawValue: 1 << 5)
 
-  /// Whether to enable the parsing of @abi attribute.
-  public static let abiAttribute = Self (rawValue: 1 << 6)
-
   /// Whether to enable the parsing of keypaths with method members.
-  public static let keypathWithMethodMembers = Self (rawValue: 1 << 7)
+  public static let keypathWithMethodMembers = Self (rawValue: 1 << 6)
 
   /// Whether to enable the parsing of `_move` and `_borrow` as ownership operators.
-  public static let oldOwnershipOperatorSpellings = Self (rawValue: 1 << 8)
+  public static let oldOwnershipOperatorSpellings = Self (rawValue: 1 << 7)
 
   /// Whether to enable the parsing of sugar type for InlineArray.
-  public static let inlineArrayTypeSugar = Self (rawValue: 1 << 9)
+  public static let inlineArrayTypeSugar = Self (rawValue: 1 << 8)
 
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
@@ -71,8 +68,6 @@ extension Parser.ExperimentalFeatures {
       self = .trailingComma
     case "CoroutineAccessors":
       self = .coroutineAccessors
-    case "ABIAttribute":
-      self = .abiAttribute
     case "KeypathWithMethodMembers":
       self = .keypathWithMethodMembers
     case "OldOwnershipOperatorSpellings":

@@ -35,17 +35,15 @@ open class SyntaxVisitor {
     dispatchVisit(Syntax(node))
   }
 
-  /// Visiting `ABIAttributeArgumentsSyntax` specifically.
+  /// Visiting ``ABIAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: ABIAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting `ABIAttributeArgumentsSyntax` and its descendants.
+  /// The function called after visiting ``ABIAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  @_spi(ExperimentalLanguageFeatures)
   open func visitPost(_ node: ABIAttributeArgumentsSyntax) {
   }
 

@@ -16,7 +16,6 @@
 /// Enum to exhaustively switch over all different syntax nodes.
 public enum SyntaxEnum: Sendable {
   case token(TokenSyntax)
-  @_spi(ExperimentalLanguageFeatures)
   case abiAttributeArguments(ABIAttributeArgumentsSyntax)
   @_spi(Compiler)
   case accessorBlockFile(AccessorBlockFileSyntax)

@@ -357,7 +357,7 @@ public enum Keyword: CaseIterable {
     case ._version:
       return KeywordSpec("_version")
     case .abi:
-      return KeywordSpec("abi", experimentalFeature: .abiAttribute)
+      return KeywordSpec("abi")
     case .accesses:
       return KeywordSpec("accesses")
     case .actor:

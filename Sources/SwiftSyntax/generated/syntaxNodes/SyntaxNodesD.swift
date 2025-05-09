@@ -893,6 +893,10 @@ public struct DeferStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 ///  - `deinitKeyword`: `deinit`
 ///  - `effectSpecifiers`: ``DeinitializerEffectSpecifiersSyntax``?
 ///  - `body`: ``CodeBlockSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``ABIAttributeArgumentsSyntax``.``ABIAttributeArgumentsSyntax/provider``
 public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 

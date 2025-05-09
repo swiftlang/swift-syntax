@@ -303,6 +303,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 
 ### Attributes
 
+- <doc:SwiftSyntax/ABIAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/AttributeListSyntax>
 - <doc:SwiftSyntax/AttributeSyntax>
 - <doc:SwiftSyntax/BackDeployedAttributeArgumentsSyntax>

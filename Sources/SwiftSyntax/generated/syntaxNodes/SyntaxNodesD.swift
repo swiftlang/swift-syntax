@@ -556,33 +556,6 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
   }
 
-  /// Adds the provided `element` to the node's `arguments`
-  /// collection.
-  ///
-  /// - param element: The new `Argument` to add to the node's
-  ///                  `arguments` collection.
-  /// - returns: A copy of the receiver with the provided `Argument`
-  ///            appended to its `arguments` collection.
-  @available(*, deprecated, message: "Use node.arguments.append(newElement) instead")
-  public func addArgument(_ element: DeclNameArgumentSyntax) -> DeclNameArgumentsSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.declNameArgumentList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 3,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(DeclNameArgumentsSyntax.self)
-  }
-
   public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -992,33 +965,6 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
 
-  /// Adds the provided `element` to the node's `attributes`
-  /// collection.
-  ///
-  /// - param element: The new `Attribute` to add to the node's
-  ///                  `attributes` collection.
-  /// - returns: A copy of the receiver with the provided `Attribute`
-  ///            appended to its `attributes` collection.
-  @available(*, deprecated, message: "Use node.attributes.append(newElement) instead")
-  public func addAttribute(_ element: Syntax) -> DeinitializerDeclSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[1] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.attributeList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 1,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(DeinitializerDeclSyntax.self)
-  }
-
   public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -1036,33 +982,6 @@ public struct DeinitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Leaf
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(DeinitializerDeclSyntax.self)
     }
-  }
-
-  /// Adds the provided `element` to the node's `modifiers`
-  /// collection.
-  ///
-  /// - param element: The new `Modifier` to add to the node's
-  ///                  `modifiers` collection.
-  /// - returns: A copy of the receiver with the provided `Modifier`
-  ///            appended to its `modifiers` collection.
-  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
-  public func addModifier(_ element: DeclModifierSyntax) -> DeinitializerDeclSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 3,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(DeinitializerDeclSyntax.self)
   }
 
   public var unexpectedBetweenModifiersAndDeinitKeyword: UnexpectedNodesSyntax? {
@@ -2502,33 +2421,6 @@ public struct DifferentiabilityArgumentsSyntax: SyntaxProtocol, SyntaxHashable, 
     }
   }
 
-  /// Adds the provided `element` to the node's `arguments`
-  /// collection.
-  ///
-  /// - param element: The new `Argument` to add to the node's
-  ///                  `arguments` collection.
-  /// - returns: A copy of the receiver with the provided `Argument`
-  ///            appended to its `arguments` collection.
-  @available(*, deprecated, message: "Use node.arguments.append(newElement) instead")
-  public func addArgument(_ element: DifferentiabilityArgumentSyntax) -> DifferentiabilityArgumentsSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[3] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.differentiabilityArgumentList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 3,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(DifferentiabilityArgumentsSyntax.self)
-  }
-
   public var unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -3393,33 +3285,6 @@ public struct DoExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxN
     }
   }
 
-  /// Adds the provided `element` to the node's `catchClauses`
-  /// collection.
-  ///
-  /// - param element: The new `CatchClause` to add to the node's
-  ///                  `catchClauses` collection.
-  /// - returns: A copy of the receiver with the provided `CatchClause`
-  ///            appended to its `catchClauses` collection.
-  @available(*, deprecated, message: "Use node.catchClauses.append(newElement) instead")
-  public func addCatchClause(_ element: CatchClauseSyntax) -> DoExprSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[5] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 5,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(DoExprSyntax.self)
-  }
-
   public var unexpectedAfterCatchClauses: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -3589,33 +3454,6 @@ public struct DoStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyntaxN
     set(value) {
       self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(DoStmtSyntax.self)
     }
-  }
-
-  /// Adds the provided `element` to the node's `catchClauses`
-  /// collection.
-  ///
-  /// - param element: The new `CatchClause` to add to the node's
-  ///                  `catchClauses` collection.
-  /// - returns: A copy of the receiver with the provided `CatchClause`
-  ///            appended to its `catchClauses` collection.
-  @available(*, deprecated, message: "Use node.catchClauses.append(newElement) instead")
-  public func addCatchClause(_ element: CatchClauseSyntax) -> DoStmtSyntax {
-    var collection: RawSyntax
-    let arena = RawSyntaxArena()
-    if let col = raw.layoutView!.children[7] {
-      collection = col.layoutView!.appending(element.raw, arena: arena)
-    } else {
-      collection = RawSyntax.makeLayout(kind: SyntaxKind.catchClauseList,
-                                        from: [element.raw], arena: arena)
-    }
-    return Syntax(self)
-      .replacingChild(
-        at: 7,
-        with: collection,
-        rawNodeArena: arena,
-        rawAllocationArena: arena
-      )
-      .cast(DoStmtSyntax.self)
   }
 
   public var unexpectedAfterCatchClauses: UnexpectedNodesSyntax? {

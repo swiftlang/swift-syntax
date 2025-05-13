@@ -45,14 +45,16 @@ import SwiftSyntax
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     return statements.flatMap { codeBlockItem in
       if let guardStmt = codeBlockItem.item.as(GuardStmtSyntax.self) {
         return guardStmt.lookupFromSequentialParent(
           identifier,
           at: lookUpPosition,
-          with: config
+          with: config,
+          cache: cache
         )
       } else {
         return []
@@ -77,13 +79,15 @@ import SwiftSyntax
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     sequentialLookup(
       in: statements,
       identifier,
       at: lookUpPosition,
-      with: config
+      with: config,
+      cache: cache
     )
   }
 }
@@ -104,12 +108,13 @@ import SwiftSyntax
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     if pattern.range.contains(lookUpPosition) || sequence.range.contains(lookUpPosition) {
-      return lookupInParent(identifier, at: lookUpPosition, with: config)
+      return lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
     } else {
-      return defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
+      return defaultLookupImplementation(identifier, at: lookUpPosition, with: config, cache: cache)
     }
   }
 }
@@ -168,13 +173,15 @@ import SwiftSyntax
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     let sequentialResults = sequentialLookup(
       in: statements,
       identifier,
       at: lookUpPosition,
       with: config,
+      cache: cache,
       propagateToParent: false
     )
 
@@ -201,7 +208,8 @@ import SwiftSyntax
       )
     }
 
-    return sequentialResults + signatureResults + lookupInParent(identifier, at: lookUpPosition, with: config)
+    return sequentialResults + signatureResults
+      + lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
   }
 }
 
@@ -281,12 +289,13 @@ import SwiftSyntax
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     if let elseBody, elseBody.range.contains(lookUpPosition) {
-      return lookupInParent(identifier, at: lookUpPosition, with: config)
+      return lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
     } else {
-      return defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
+      return defaultLookupImplementation(identifier, at: lookUpPosition, with: config, cache: cache)
     }
   }
 }
@@ -306,7 +315,8 @@ import SwiftSyntax
   func lookupAssociatedTypeDeclarations(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     let filteredNames = members.flatMap { member in
       guard member.decl.kind == .associatedTypeDecl else { return [LookupName]() }
@@ -351,7 +361,8 @@ import SwiftSyntax
   func lookupFromSequentialParent(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     guard !body.range.contains(lookUpPosition) else { return [] }
 
@@ -360,6 +371,16 @@ import SwiftSyntax
     }
 
     return LookupResult.getResultArray(for: self, withNames: filteredNames)
+  }
+
+  @_spi(Experimental) public func lookup(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig,
+    cache: LookupCache?
+  ) -> [LookupResult] {
+    // We're not using `lookupParent` to not cache the results here.
+    parentScope?.lookup(identifier, at: lookUpPosition, with: config, cache: cache) ?? []
   }
 }
 
@@ -405,7 +426,8 @@ import SwiftSyntax
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     if memberBlock.range.contains(lookUpPosition) {
       let implicitSelf: [LookupName] = [.implicit(.Self(DeclSyntax(self)))]
@@ -415,21 +437,26 @@ import SwiftSyntax
 
       return LookupResult.getResultArray(for: self, withNames: implicitSelf)
         + [.lookForGenericParameters(of: self)]
-        + defaultLookupImplementation(identifier, at: lookUpPosition, with: config, propagateToParent: false)
-        + [.lookForMembers(in: Syntax(self))]
-        + lookupInParent(identifier, at: lookUpPosition, with: config)
+        + defaultLookupImplementation(
+          identifier,
+          at: lookUpPosition,
+          with: config,
+          cache: cache,
+          propagateToParent: false
+        ) + [.lookForMembers(in: Syntax(self))]
+        + lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
     } else if !extendedType.range.contains(lookUpPosition), let genericWhereClause {
       if genericWhereClause.range.contains(lookUpPosition) {
         return [.lookForGenericParameters(of: self)] + [.lookForMembers(in: Syntax(self))]
-          + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
+          + defaultLookupImplementation(identifier, at: lookUpPosition, with: config, cache: cache)
       }
 
       return [.lookForGenericParameters(of: self)]
-        + defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
+        + defaultLookupImplementation(identifier, at: lookUpPosition, with: config, cache: cache)
     }
 
     return [.lookForGenericParameters(of: self)]
-      + lookupInParent(identifier, at: lookUpPosition, with: config)
+      + lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
   }
 }
 
@@ -461,13 +488,14 @@ import SwiftSyntax
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     guard let parentScope,
       let canInterleaveLaterScope = Syntax(parentScope).asProtocol(SyntaxProtocol.self)
         as? CanInterleaveResultsLaterScopeSyntax
     else {
-      return defaultLookupImplementation(identifier, at: lookUpPosition, with: config)
+      return defaultLookupImplementation(identifier, at: lookUpPosition, with: config, cache: cache)
     }
 
     let implicitSelf: [LookupName] = [.implicit(.self(DeclSyntax(self)))]
@@ -479,12 +507,14 @@ import SwiftSyntax
       identifier,
       at: lookUpPosition,
       with: config,
+      cache: cache,
       propagateToParent: false
     )
       + canInterleaveLaterScope.lookupWithInterleavedResults(
         identifier,
         at: lookUpPosition,
         with: config,
+        cache: cache,
         resultsToInterleave: implicitSelf.isEmpty ? [] : [.fromScope(Syntax(self), withNames: implicitSelf)]
       )
   }
@@ -536,19 +566,22 @@ import SwiftSyntax
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     if body.range.contains(lookUpPosition) || isLookupFromWhereClause(lookUpPosition) {
       return defaultLookupImplementation(
         identifier,
         at: lookUpPosition,
-        with: config
+        with: config,
+        cache: cache
       )
     } else {
       return lookupInParent(
         identifier,
         at: lookUpPosition,
-        with: config
+        with: config,
+        cache: cache
       )
     }
   }
@@ -619,20 +652,23 @@ import SwiftSyntax
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     let filteredNamesFromLabel = namesFromLabel.filter { name in
       checkIdentifier(identifier, refersTo: name, at: lookUpPosition)
     }
 
     if label.range.contains(lookUpPosition) && !isInWhereClause(lookUpPosition: lookUpPosition) {
-      return config.finishInSequentialScope ? [] : lookupInParent(identifier, at: lookUpPosition, with: config)
+      return config.finishInSequentialScope
+        ? [] : lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
     } else if config.finishInSequentialScope {
       return sequentialLookup(
         in: statements,
         identifier,
         at: lookUpPosition,
         with: config,
+        cache: cache,
         propagateToParent: false
       )
     } else {
@@ -641,10 +677,11 @@ import SwiftSyntax
         identifier,
         at: lookUpPosition,
         with: config,
+        cache: cache,
         propagateToParent: false
       )
         + LookupResult.getResultArray(for: self, withNames: filteredNamesFromLabel)
-        + lookupInParent(identifier, at: lookUpPosition, with: config)
+        + lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
     }
   }
 
@@ -698,7 +735,8 @@ import SwiftSyntax
   public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     var results: [LookupResult] = []
 
@@ -708,7 +746,8 @@ import SwiftSyntax
       results = memberBlock.lookupAssociatedTypeDeclarations(
         identifier,
         at: lookUpPosition,
-        with: config
+        with: config,
+        cache: cache
       )
     }
 
@@ -725,8 +764,9 @@ import SwiftSyntax
         identifier,
         at: lookUpPosition,
         with: config,
+        cache: cache,
         propagateToParent: false
-      ) + lookInMembers + lookupInParent(identifier, at: lookUpPosition, with: config)
+      ) + lookInMembers + lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
   }
 }
 
@@ -791,12 +831,14 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     lookupWithInterleavedResults(
       identifier,
       at: lookUpPosition,
       with: config,
+      cache: cache,
       resultsToInterleave: []
     )
   }
@@ -824,6 +866,7 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig,
+    cache: LookupCache?,
     resultsToInterleave: [LookupResult]
   ) -> [LookupResult] {
     var thisScopeResults: [LookupResult] = []
@@ -833,6 +876,7 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
         identifier,
         at: position,
         with: config,
+        cache: cache,
         propagateToParent: false
       )
     }
@@ -841,7 +885,8 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
       + lookupThroughGenericParameterScope(
         identifier,
         at: lookUpPosition,
-        with: config
+        with: config,
+        cache: cache
       )
   }
 }
@@ -870,13 +915,14 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     switch accessors {
     case .getter(let codeBlockItems):
-      return sequentialLookup(in: codeBlockItems, identifier, at: lookUpPosition, with: config)
+      return sequentialLookup(in: codeBlockItems, identifier, at: lookUpPosition, with: config, cache: cache)
     case .accessors:
-      return lookupInParent(identifier, at: lookUpPosition, with: config)
+      return lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
     }
   }
 
@@ -886,19 +932,21 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig,
+    cache: LookupCache?,
     resultsToInterleave: [LookupResult]
   ) -> [LookupResult] {
     guard let parentScope,
       let canInterleaveLaterScope = Syntax(parentScope).asProtocol(SyntaxProtocol.self)
         as? CanInterleaveResultsLaterScopeSyntax
     else {
-      return lookupInParent(identifier, at: lookUpPosition, with: config)
+      return lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
     }
 
     return canInterleaveLaterScope.lookupWithInterleavedResults(
       identifier,
       at: lookUpPosition,
       with: config,
+      cache: cache,
       resultsToInterleave: resultsToInterleave
     )
   }
@@ -933,7 +981,8 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     if (bindings.first?.accessorBlock?.range.contains(lookUpPosition) ?? false)
       || shouldIntroduceSelfIfLazy(lookUpPosition: lookUpPosition)
@@ -942,10 +991,12 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
         in: (isMember ? [.implicit(.self(DeclSyntax(self)))] : LookupName.getNames(from: self)),
         identifier,
         at: lookUpPosition,
-        with: config
+        with: config,
+        cache: cache
       )
     } else {
-      return lookupInParent(identifier, at: lookUpPosition, with: config)
+      // We're not using `lookupParent` to not cache the results here.
+      return parentScope?.lookup(identifier, at: lookUpPosition, with: config, cache: cache) ?? []
     }
   }
 
@@ -955,13 +1006,14 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig,
+    cache: LookupCache?,
     resultsToInterleave: [LookupResult]
   ) -> [LookupResult] {
     guard isMember else {
-      return lookup(identifier, at: lookUpPosition, with: config)
+      return lookup(identifier, at: lookUpPosition, with: config, cache: cache)
     }
 
-    return resultsToInterleave + lookupInParent(identifier, at: lookUpPosition, with: config)
+    return resultsToInterleave + lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
   }
 
   /// Returns `true`, if `lookUpPosition` is in initializer of
@@ -1001,7 +1053,8 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
   func lookupFromSequentialParent(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     let clause: IfConfigClauseSyntax?
 
@@ -1020,6 +1073,7 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
       identifier,
       at: lookUpPosition,
       with: config,
+      cache: cache,
       ignoreNamedDecl: true,
       propagateToParent: false
     )
@@ -1061,5 +1115,15 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
 
   @_spi(Experimental) public var scopeDebugName: String {
     "IfConfigScope"
+  }
+
+  @_spi(Experimental) public func lookup(
+    _ identifier: Identifier?,
+    at lookUpPosition: AbsolutePosition,
+    with config: LookupConfig,
+    cache: LookupCache?
+  ) -> [LookupResult] {
+    // We're not using `lookupParent` to not cache the results here.
+    parentScope?.lookup(identifier, at: lookUpPosition, with: config, cache: cache) ?? []
   }
 }

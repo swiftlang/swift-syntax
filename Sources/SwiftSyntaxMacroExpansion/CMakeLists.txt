@@ -8,6 +8,7 @@ add_swift_syntax_library(SwiftSyntaxMacroExpansion
   MacroReplacement.swift
   MacroSpec.swift
   MacroSystem.swift
+  SyntaxProtocol+NonisolatedConformances.swift
 )
 
 target_link_swift_syntax_libraries(SwiftSyntaxMacroExpansion PUBLIC

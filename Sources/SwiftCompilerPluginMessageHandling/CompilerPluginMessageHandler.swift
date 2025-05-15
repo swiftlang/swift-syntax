@@ -30,6 +30,9 @@ import SwiftSyntaxMacros
 @_spi(PluginMessage)
 public enum PluginFeature: String {
   case loadPluginLibrary = "load-plugin-library"
+
+  /// Whether the plugin knows how to infer nonisolated conformances.
+  case inferNonisolatedConformances = "infer-nonisolated-conformances"
 }
 
 /// A type that provides the actual plugin functions.

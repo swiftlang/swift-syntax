@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftParser
 import SwiftSyntax
 import XCTest
 

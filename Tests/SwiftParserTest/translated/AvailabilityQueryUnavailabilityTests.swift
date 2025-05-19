@@ -381,19 +381,9 @@ final class AvailabilityQueryUnavailabilityTests: ParserTestCase {
   func testAvailabilityQueryUnavailability23() {
     assertParse(
       """
-      if #unavailable(OSX 10.51,1️⃣) {
+      if #unavailable(OSX 10.51,) {
       }
-      """,
-      diagnostics: [
-        DiagnosticSpec(
-          message: "expected version restriction in availability argument",
-          fixIts: ["insert version restriction"]
-        )
-      ],
-      fixedSource: """
-        if #unavailable(OSX 10.51, <#identifier#>) {
-        }
-        """
+      """
     )
   }
 
@@ -609,6 +599,20 @@ final class AvailabilityQueryUnavailabilityTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '==' in 'if' statement")
       ]
+    )
+  }
+
+  func testTrailingComma() {
+    assertParse(
+      """
+      func fooDeprecated() {
+        if #available(
+          iOS 18.0,
+          macOS 14.0,
+          *,
+        ) {}
+      }
+      """
     )
   }
 }

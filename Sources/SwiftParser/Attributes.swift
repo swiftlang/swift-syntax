@@ -362,7 +362,7 @@ extension Parser {
     let additionalArgs = self.parseArgumentListElements(
       pattern: .none,
       flavor: .attributeArguments,
-      allowTrailingComma: false
+      allowTrailingComma: true
     )
     return [roleElement] + additionalArgs
   }
@@ -852,6 +852,11 @@ extension Parser {
           arena: self.arena
         )
       )
+
+      // If this was a trailing closure then there are no more elements
+      if self.at(.rightParen) {
+        break
+      }
     } while keepGoing != nil
     return RawBackDeployedAttributeArgumentsSyntax(
       unexpectedBeforeLabel,
@@ -883,6 +888,11 @@ extension Parser {
           arena: self.arena
         )
       )
+
+      // If this was a trailing closure then there are no more elements
+      if self.at(.rightParen) {
+        break
+      }
     } while keepGoing != nil
 
     return RawOriginallyDefinedInAttributeArgumentsSyntax(
@@ -1001,6 +1011,11 @@ extension Parser {
           arena: self.arena
         )
       )
+
+      // If this was a trailing closure then there are no more elements
+      if self.at(.rightParen) {
+        break
+      }
     } while keepGoing != nil
 
     return RawDocumentationAttributeArgumentListSyntax(elements: arguments, arena: self.arena)

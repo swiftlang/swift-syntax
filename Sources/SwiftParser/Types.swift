@@ -430,6 +430,11 @@ extension Parser {
             arena: self.arena
           )
         )
+
+        // If this was a trailing comma, we're done parsing the list
+        if self.at(prefix: ">") {
+          break
+        }
       } while keepGoing != nil && self.hasProgressed(&loopProgress)
     }
 

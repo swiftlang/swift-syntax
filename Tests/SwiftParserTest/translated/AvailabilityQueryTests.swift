@@ -400,7 +400,17 @@ final class AvailabilityQueryTests: ParserTestCase {
       """
       if #available(OSX 10.51,1️⃣) {
       }
-      """
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected version restriction in availability argument",
+          fixIts: ["insert version restriction"]
+        )
+      ],
+      fixedSource: """
+        if #available(OSX 10.51, <#identifier#>) {
+        }
+        """
     )
   }
 

@@ -472,25 +472,7 @@ final class AttributeTests: ParserTestCase {
 
     assertParse(
       """
-      @backDeployed(
-        before: macOS 12.0,
-      )
-      struct Foo {}
-      """
-    )
-
-    assertParse(
-      """
       @backDeployed(before: macos 12.0, iOS 15.0)
-      struct Foo {}
-      """
-    )
-
-    assertParse(
-      """
-      @backDeployed(
-        before: macos 12.0, 
-        iOS 15.0,)
       struct Foo {}
       """
     )
@@ -551,16 +533,6 @@ final class AttributeTests: ParserTestCase {
     assertParse(
       """
       @_originallyDefinedIn(module: "ToasterKit", macOS 10.15)
-      struct Vehicle {}
-      """
-    )
-
-    assertParse(
-      """
-      @_originallyDefinedIn(
-        module: "ToasterKit",
-        macOS 10.15,
-      )
       struct Vehicle {}
       """
     )
@@ -873,26 +845,6 @@ final class AttributeTests: ParserTestCase {
         macro m()
         }
         """
-    )
-
-    assertParse(
-      """
-      @attached(
-        member,
-        names: named(deinit),
-      )
-      macro m()
-      """
-    )
-
-    assertParse(
-      """
-      @attached(
-        extension,
-        conformances: P1, P2,
-      )
-      macro AddAllConformances()
-      """
     )
   }
 

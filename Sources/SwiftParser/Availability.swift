@@ -47,11 +47,6 @@ extension Parser {
             arena: self.arena
           )
         )
-
-        // If this was a trailing closure, there are no more elements
-        if self.at(.rightParen) {
-          break
-        }
       } while keepGoing != nil
         && self.hasProgressed(&availabilityArgumentProgress)
     }

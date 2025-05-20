@@ -178,6 +178,9 @@ public typealias SpecializeAttributeSpecListSyntax = SpecializeAttributeArgument
 @available(*, deprecated, renamed: "GenericSpecializationExprSyntax")
 public typealias SpecializeExprSyntax = GenericSpecializationExprSyntax
 
+@available(*, deprecated, renamed: "SpecializedAttributeArgumentSyntax")
+public typealias SpecializedAttributeSyntax = SpecializedAttributeArgumentSyntax
+
 @available(*, deprecated, renamed: "StringLiteralSegmentListSyntax")
 public typealias StringLiteralSegmentsSyntax = StringLiteralSegmentListSyntax
 
@@ -491,6 +494,11 @@ extension SyntaxKind {
   @available(*, deprecated, renamed: "GenericSpecializationExprSyntax")
   public static var specializeExpr: Self {
     return .genericSpecializationExpr
+  }
+
+  @available(*, deprecated, renamed: "SpecializedAttributeArgumentSyntax")
+  public static var specializedAttribute: Self {
+    return .specializedAttributeArgument
   }
 
   @available(*, deprecated, renamed: "StringLiteralSegmentListSyntax")

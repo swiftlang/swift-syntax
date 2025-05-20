@@ -46,6 +46,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _PackageDescription
   case _read
   case _RefCountedObject
+  case specialized
   case _specialize
   case _spi_available
   case _Trivial
@@ -601,6 +602,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = ._implements
       case "_noMetadata":
         self = ._noMetadata
+      case "specialized":
+        self = .specialized
       case "_specialize":
         self = ._specialize
       case "autoclosure":
@@ -789,6 +792,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "_PackageDescription",
     "_read",
     "_RefCountedObject",
+    "specialized",
     "_specialize",
     "_spi_available",
     "_Trivial",

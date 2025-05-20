@@ -265,6 +265,7 @@ public enum SyntaxKind: Sendable {
   case specializeAttributeArgumentList
   case specializeAvailabilityArgument
   case specializeTargetFunctionArgument
+  case specializedAttributeArgument
   case stringLiteralExpr
   case stringLiteralSegmentList
   case stringSegment
@@ -925,6 +926,8 @@ public enum SyntaxKind: Sendable {
       return SpecializeAvailabilityArgumentSyntax.self
     case .specializeTargetFunctionArgument:
       return SpecializeTargetFunctionArgumentSyntax.self
+    case .specializedAttributeArgument:
+      return SpecializedAttributeArgumentSyntax.self
     case .stringLiteralExpr:
       return StringLiteralExprSyntax.self
     case .stringLiteralSegmentList:

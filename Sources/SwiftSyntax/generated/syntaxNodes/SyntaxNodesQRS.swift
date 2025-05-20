@@ -2062,6 +2062,87 @@ public struct SpecializeTargetFunctionArgumentSyntax: SyntaxProtocol, SyntaxHash
   ])
 }
 
+// MARK: - SpecializedAttributeArgumentSyntax
+
+/// The generic where clause for the `@specialized` attribute
+///
+/// ### Children
+/// 
+///  - `genericWhereClause`: ``GenericWhereClauseSyntax``
+///
+/// ### Contained in
+/// 
+///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
+public struct SpecializedAttributeArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
+  public let _syntaxNode: Syntax
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard node.raw.kind == .specializedAttributeArgument else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    genericWhereClause: GenericWhereClauseSyntax,
+    _ unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((RawSyntaxArena(), (unexpectedBeforeGenericWhereClause, genericWhereClause, unexpectedAfterGenericWhereClause))) { (arena, _) in
+      let layout: [RawSyntax?] = [unexpectedBeforeGenericWhereClause?.raw, genericWhereClause.raw, unexpectedAfterGenericWhereClause?.raw]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.specializedAttributeArgument,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedBeforeGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SpecializedAttributeArgumentSyntax.self)
+    }
+  }
+
+  public var genericWhereClause: GenericWhereClauseSyntax {
+    get {
+      return Syntax(self).child(at: 1)!.cast(GenericWhereClauseSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SpecializedAttributeArgumentSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterGenericWhereClause: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SpecializedAttributeArgumentSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedBeforeGenericWhereClause, \Self.genericWhereClause, \Self.unexpectedAfterGenericWhereClause])
+}
+
 // MARK: - StringLiteralExprSyntax
 
 /// A string literal.

@@ -259,6 +259,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case simpleStringLiteralSegmentList
   case someOrAnyType
   case sourceFile
+  case specializedAttributeArgument
   case specializeAttributeArgumentList
   case specializeAvailabilityArgument
   case specializeTargetFunctionArgument
@@ -454,6 +455,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
     case .someOrAnyType: return "constrainedSugarType"
     case .simpleTypeSpecifier: return "typeSpecifier"
     case .specializeAttributeArgumentList: return "specializeAttributeSpecList"
+    case .specializedAttributeArgument: return "specializedAttribute"
     case .specializeAvailabilityArgument: return "availabilityEntry"
     case .specializeTargetFunctionArgument: return "targetFunctionEntry"
     case .stringLiteralSegmentList: return "stringLiteralSegments"

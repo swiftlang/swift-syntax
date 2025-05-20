@@ -267,6 +267,7 @@ enum TokenPrecedence: Comparable {
       ._effects,
       ._implements,
       ._originallyDefinedIn,
+      .specialized,
       ._specialize,
       ._spi_available,
       .abi,

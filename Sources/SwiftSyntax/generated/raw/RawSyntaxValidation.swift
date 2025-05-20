@@ -2638,6 +2638,12 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
   }
+  func validateSpecializedAttributeArgumentSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 3)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawGenericWhereClauseSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+  }
   func validateStringLiteralExprSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     assert(layout.count == 11)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -3606,6 +3612,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     validateSpecializeAvailabilityArgumentSyntax(kind: kind, layout: layout)
   case .specializeTargetFunctionArgument:
     validateSpecializeTargetFunctionArgumentSyntax(kind: kind, layout: layout)
+  case .specializedAttributeArgument:
+    validateSpecializedAttributeArgumentSyntax(kind: kind, layout: layout)
   case .stringLiteralExpr:
     validateStringLiteralExprSyntax(kind: kind, layout: layout)
   case .stringLiteralSegmentList:

@@ -2125,6 +2125,26 @@ final class ExpressionTests: ParserTestCase {
         """
     )
   }
+
+  func testTrailingCommasInTypeExpressions() {
+    assertParse(
+      """
+      let _ = Foo2<Int, Bool, String,>.self
+      """
+    )
+
+    assertParse(
+      """
+      let _ = Foo2<Int, Bool, String,>()
+      """
+    )
+
+    assertParse(
+      """
+      let _ = ((Int, Bool, String,) -> Void).self
+      """
+    )
+  }
 }
 
 final class MemberExprTests: ParserTestCase {

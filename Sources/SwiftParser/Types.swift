@@ -1057,7 +1057,8 @@ extension Parser.Lookahead {
           return false
         }
         // Parse the comma, if the list continues.
-      } while self.consume(if: .comma) != nil && self.hasProgressed(&loopProgress)
+        // This could be the trailing comma.
+      } while self.consume(if: .comma) != nil && !self.at(prefix: ">") && self.hasProgressed(&loopProgress)
     }
 
     guard self.consume(ifPrefix: ">", as: .rightAngle) != nil else {

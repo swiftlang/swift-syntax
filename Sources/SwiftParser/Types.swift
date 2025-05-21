@@ -430,6 +430,11 @@ extension Parser {
             arena: self.arena
           )
         )
+
+        // If this was a trailing comma, we're done parsing the list
+        if self.at(prefix: ">") {
+          break
+        }
       } while keepGoing != nil && self.hasProgressed(&loopProgress)
     }
 
@@ -1052,7 +1057,8 @@ extension Parser.Lookahead {
           return false
         }
         // Parse the comma, if the list continues.
-      } while self.consume(if: .comma) != nil && self.hasProgressed(&loopProgress)
+        // This could be the trailing comma.
+      } while self.consume(if: .comma) != nil && !self.at(prefix: ">") && self.hasProgressed(&loopProgress)
     }
 
     guard self.consume(ifPrefix: ">", as: .rightAngle) != nil else {

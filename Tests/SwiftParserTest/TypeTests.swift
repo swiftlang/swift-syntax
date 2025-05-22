@@ -734,6 +734,44 @@ final class TypeTests: ParserTestCase {
       fixedSource: "func foo(test: nonisolated(nonsendinghello) () async -> Void)"
     )
   }
+
+  func testTrailingCommas() {
+    assertParse(
+      """
+      let foo: (
+        bar: String,
+        quux: String,
+      )
+      """
+    )
+
+    assertParse(
+      """
+      let closure: (
+        String,
+        String,
+      ) -> (
+        bar: String,
+        quux: String,
+      )
+      """
+    )
+
+    assertParse(
+      """
+      struct Foo<T1, T2, T3,> {}
+
+      typealias Bar<
+        T1,
+        T2,
+      > = Foo<
+        T1,
+        T2,
+        Bool,
+      >
+      """
+    )
+  }
 }
 
 final class InlineArrayTypeTests: ParserTestCase {

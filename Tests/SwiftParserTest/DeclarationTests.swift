@@ -3529,4 +3529,31 @@ final class DeclarationTests: ParserTestCase {
       ]
     )
   }
+
+  func testTrailingCommas() {
+    assertParse(
+      """
+      protocol Baaz<
+        Foo,
+        Bar,
+      > {
+        associatedtype Foo
+        associatedtype Bar
+      }
+      """
+    )
+
+    assertParse(
+      """
+      struct Foo<
+        T1,
+        T2,
+        T3,
+      >: Baaz<
+        T1,
+        T2,
+      > {}
+      """
+    )
+  }
 }

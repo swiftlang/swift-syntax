@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - run: |
-          if [[ "${{ github.triggering_actor }}" != "ahoppen" ]]; then
+          if [[ "${{ github.triggering_actor }}" != "bnbarham" ]]; then
             echo "${{ github.triggering_actor }} is not allowed to create a release"
             exit 1
           fi

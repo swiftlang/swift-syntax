@@ -362,6 +362,8 @@ extension SyntaxKind {
       return "availability entry"
     case .specializeTargetFunctionArgument:
       return "attribute argument"
+    case .specializedAttributeArgument:
+      return "argument to '@specialized"
     case .stringLiteralExpr:
       return "string literal"
     case .structDecl:

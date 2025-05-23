@@ -39,6 +39,30 @@ final class AttributeTests: ParserTestCase {
         }
         """
     )
+
+    assertParse(
+      """
+      @specializedℹ️(1️⃣
+      func 2️⃣foo() {
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected argument for '@specialized' attribute",
+          fixIts: ["insert attribute argument"]
+        ),
+        DiagnosticSpec(
+          message: "expected ')' to end attribute",
+          notes: [NoteSpec(message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+      ],
+      fixedSource: """
+        @specialized(where <#type#> == <#type#>)
+        func foo() {
+        }
+        """
+    )
   }
 
   func testMissingGenericTypeToAttribute() {
@@ -84,6 +108,12 @@ final class AttributeTests: ParserTestCase {
     assertParse(
       """
       @_specialize(where @_noMetdata T : _TrivialStride(64))
+      func foo(_ t: T) {}
+      """
+    )
+    assertParse(
+      """
+      @specialized(where T : Int)
       func foo(_ t: T) {}
       """
     )

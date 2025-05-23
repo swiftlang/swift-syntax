@@ -1261,6 +1261,7 @@ public struct GenericSpecializationExprSyntax: ExprSyntaxProtocol, SyntaxHashabl
 ///  - ``MacroDeclSyntax``.``MacroDeclSyntax/genericWhereClause``
 ///  - ``ProtocolDeclSyntax``.``ProtocolDeclSyntax/genericWhereClause``
 ///  - ``SpecializeAttributeArgumentListSyntax``
+///  - ``SpecializedAttributeArgumentSyntax``.``SpecializedAttributeArgumentSyntax/genericWhereClause``
 ///  - ``StructDeclSyntax``.``StructDeclSyntax/genericWhereClause``
 ///  - ``SubscriptDeclSyntax``.``SubscriptDeclSyntax/genericWhereClause``
 ///  - ``TypeAliasDeclSyntax``.``TypeAliasDeclSyntax/genericWhereClause``

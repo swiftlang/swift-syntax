@@ -104,6 +104,7 @@ public enum Keyword: CaseIterable {
   case _PackageDescription
   case _read
   case _RefCountedObject
+  case specialized
   case _specialize
   case _spi_available
   case _Trivial
@@ -340,6 +341,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("_read")
     case ._RefCountedObject:
       return KeywordSpec("_RefCountedObject")
+    case .specialized:
+      return KeywordSpec("specialized")
     case ._specialize:
       return KeywordSpec("_specialize")
     case ._spi_available:

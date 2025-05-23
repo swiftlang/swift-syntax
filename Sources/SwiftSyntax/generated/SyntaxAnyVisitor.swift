@@ -1983,6 +1983,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  override open func visit(_ node: SpecializedAttributeArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: SpecializedAttributeArgumentSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

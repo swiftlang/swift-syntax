@@ -2913,6 +2913,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: SpecializeTargetFunctionArgumentSyntax) {
   }
 
+  /// Visiting ``SpecializedAttributeArgumentSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SpecializedAttributeArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``SpecializedAttributeArgumentSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SpecializedAttributeArgumentSyntax) {
+  }
+
   /// Visiting ``StringLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5439,6 +5451,14 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitSpecializedAttributeArgumentSyntaxImpl(_ node: Syntax) {
+    if visit(SpecializedAttributeArgumentSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(SpecializedAttributeArgumentSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitStringLiteralExprSyntaxImpl(_ node: Syntax) {
     if visit(StringLiteralExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -6342,6 +6362,8 @@ open class SyntaxVisitor {
       return self.visitSpecializeAvailabilityArgumentSyntaxImpl(_:)
     case .specializeTargetFunctionArgument:
       return self.visitSpecializeTargetFunctionArgumentSyntaxImpl(_:)
+    case .specializedAttributeArgument:
+      return self.visitSpecializedAttributeArgumentSyntaxImpl(_:)
     case .stringLiteralExpr:
       return self.visitStringLiteralExprSyntaxImpl(_:)
     case .stringLiteralSegmentList:
@@ -6928,6 +6950,8 @@ open class SyntaxVisitor {
       self.visitSpecializeAvailabilityArgumentSyntaxImpl(node)
     case .specializeTargetFunctionArgument:
       self.visitSpecializeTargetFunctionArgumentSyntaxImpl(node)
+    case .specializedAttributeArgument:
+      self.visitSpecializedAttributeArgumentSyntaxImpl(node)
     case .stringLiteralExpr:
       self.visitStringLiteralExprSyntaxImpl(node)
     case .stringLiteralSegmentList:

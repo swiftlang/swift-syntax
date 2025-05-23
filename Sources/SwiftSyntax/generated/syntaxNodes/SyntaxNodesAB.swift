@@ -3098,7 +3098,7 @@ public struct AttributeClauseFileSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 ///  - `atSign`: `@`
 ///  - `attributeName`: ``TypeSyntax``
 ///  - `leftParen`: `(`?
-///  - `arguments`: (``LabeledExprListSyntax`` | ``AvailabilityArgumentListSyntax`` | ``SpecializeAttributeArgumentListSyntax`` | ``ObjCSelectorPieceListSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeAttributeArgumentsSyntax`` | ``BackDeployedAttributeArgumentsSyntax`` | ``OriginallyDefinedInAttributeArgumentsSyntax`` | ``DynamicReplacementAttributeArgumentsSyntax`` | ``EffectsAttributeArgumentListSyntax`` | ``DocumentationAttributeArgumentListSyntax`` | ``ABIAttributeArgumentsSyntax``)?
+///  - `arguments`: (``LabeledExprListSyntax`` | ``AvailabilityArgumentListSyntax`` | ``SpecializeAttributeArgumentListSyntax`` | ``SpecializedAttributeArgumentSyntax`` | ``ObjCSelectorPieceListSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeAttributeArgumentsSyntax`` | ``BackDeployedAttributeArgumentsSyntax`` | ``OriginallyDefinedInAttributeArgumentsSyntax`` | ``DynamicReplacementAttributeArgumentsSyntax`` | ``EffectsAttributeArgumentListSyntax`` | ``DocumentationAttributeArgumentListSyntax`` | ``ABIAttributeArgumentsSyntax``)?
 ///  - `rightParen`: `)`?
 ///
 /// ### Contained in
@@ -3110,6 +3110,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     case argumentList(LabeledExprListSyntax)
     case availability(AvailabilityArgumentListSyntax)
     case specializeArguments(SpecializeAttributeArgumentListSyntax)
+    case specializedArguments(SpecializedAttributeArgumentSyntax)
     case objCName(ObjCSelectorPieceListSyntax)
     case implementsArguments(ImplementsAttributeArgumentsSyntax)
     case differentiableArguments(DifferentiableAttributeArgumentsSyntax)
@@ -3128,6 +3129,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       case .availability(let node):
         return node._syntaxNode
       case .specializeArguments(let node):
+        return node._syntaxNode
+      case .specializedArguments(let node):
         return node._syntaxNode
       case .objCName(let node):
         return node._syntaxNode
@@ -3162,6 +3165,10 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
 
     public init(_ node: SpecializeAttributeArgumentListSyntax) {
       self = .specializeArguments(node)
+    }
+
+    public init(_ node: SpecializedAttributeArgumentSyntax) {
+      self = .specializedArguments(node)
     }
 
     public init(_ node: ObjCSelectorPieceListSyntax) {
@@ -3211,6 +3218,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
         self = .availability(node)
       } else if let node = node.as(SpecializeAttributeArgumentListSyntax.self) {
         self = .specializeArguments(node)
+      } else if let node = node.as(SpecializedAttributeArgumentSyntax.self) {
+        self = .specializedArguments(node)
       } else if let node = node.as(ObjCSelectorPieceListSyntax.self) {
         self = .objCName(node)
       } else if let node = node.as(ImplementsAttributeArgumentsSyntax.self) {
@@ -3241,6 +3250,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
         .node(LabeledExprListSyntax.self),
         .node(AvailabilityArgumentListSyntax.self),
         .node(SpecializeAttributeArgumentListSyntax.self),
+        .node(SpecializedAttributeArgumentSyntax.self),
         .node(ObjCSelectorPieceListSyntax.self),
         .node(ImplementsAttributeArgumentsSyntax.self),
         .node(DifferentiableAttributeArgumentsSyntax.self),
@@ -3318,6 +3328,28 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
     public func cast(_ syntaxType: SpecializeAttributeArgumentListSyntax.Type) -> SpecializeAttributeArgumentListSyntax {
       return self.as(SpecializeAttributeArgumentListSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to ``SpecializedAttributeArgumentSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: SpecializedAttributeArgumentSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to ``SpecializedAttributeArgumentSyntax``.
+    ///
+    /// - Returns: An instance of ``SpecializedAttributeArgumentSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: SpecializedAttributeArgumentSyntax.Type) -> SpecializedAttributeArgumentSyntax? {
+      return SpecializedAttributeArgumentSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to ``SpecializedAttributeArgumentSyntax``.
+    ///
+    /// - Returns: An instance of ``SpecializedAttributeArgumentSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: SpecializedAttributeArgumentSyntax.Type) -> SpecializedAttributeArgumentSyntax {
+      return self.as(SpecializedAttributeArgumentSyntax.self)!
     }
 
     /// Checks if the current syntax node can be cast to ``ObjCSelectorPieceListSyntax``.

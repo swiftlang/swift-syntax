@@ -2962,6 +2962,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "trailingComma"
   case \SpecializeTargetFunctionArgumentSyntax.unexpectedAfterTrailingComma:
     return "unexpectedAfterTrailingComma"
+  case \SpecializedAttributeArgumentSyntax.unexpectedBeforeGenericWhereClause:
+    return "unexpectedBeforeGenericWhereClause"
+  case \SpecializedAttributeArgumentSyntax.genericWhereClause:
+    return "genericWhereClause"
+  case \SpecializedAttributeArgumentSyntax.unexpectedAfterGenericWhereClause:
+    return "unexpectedAfterGenericWhereClause"
   case \StringLiteralExprSyntax.unexpectedBeforeOpeningPounds:
     return "unexpectedBeforeOpeningPounds"
   case \StringLiteralExprSyntax.openingPounds:

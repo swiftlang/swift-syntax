@@ -41,6 +41,7 @@ extension Parser {
     case _effects
     case _implements
     case _originallyDefinedIn
+    case specialized
     case _specialize
     case _spi_available
     case `rethrows`
@@ -63,6 +64,7 @@ extension Parser {
       case TokenSpec(._effects): self = ._effects
       case TokenSpec(._implements): self = ._implements
       case TokenSpec(._originallyDefinedIn): self = ._originallyDefinedIn
+      case TokenSpec(.specialized): self = .specialized
       case TokenSpec(._specialize): self = ._specialize
       case TokenSpec(._spi_available): self = ._spi_available
       case TokenSpec(.`rethrows`): self = .rethrows
@@ -89,6 +91,7 @@ extension Parser {
       case ._effects: return .keyword(._effects)
       case ._implements: return .keyword(._implements)
       case ._originallyDefinedIn: return .keyword(._originallyDefinedIn)
+      case .specialized: return .keyword(.specialized)
       case ._specialize: return .keyword(._specialize)
       case ._spi_available: return .keyword(._spi_available)
       case .`rethrows`: return .keyword(.rethrows)
@@ -253,6 +256,10 @@ extension Parser {
     case .objc:
       return parseAttribute(argumentMode: .optional) { parser in
         return (nil, .objCName(parser.parseObjectiveCSelector()))
+      }
+    case .specialized:
+      return parseAttribute(argumentMode: .required) { parser in
+        return (nil, .specializedArguments(parser.parseSpecializedAttributeArgument()))
       }
     case ._specialize:
       return parseAttribute(argumentMode: .required) { parser in
@@ -645,6 +652,11 @@ extension Parser {
 }
 
 extension Parser {
+  mutating func parseSpecializedAttributeArgument() -> RawSpecializedAttributeArgumentSyntax {
+    let whereClause = self.parseGenericWhereClause()
+    return RawSpecializedAttributeArgumentSyntax(genericWhereClause: whereClause, arena: self.arena)
+  }
+
   mutating func parseSpecializeAttributeArgumentList() -> RawSpecializeAttributeArgumentListSyntax {
     var elements = [RawSpecializeAttributeArgumentListSyntax.Element]()
     // Parse optional "exported" and "kind" labeled parameters.

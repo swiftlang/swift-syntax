@@ -126,6 +126,7 @@ public enum Token: CaseIterable {
   case backtick
   case binaryOperator
   case colon
+  case colonColon
   case comma
   case dollarIdentifier
   case ellipsis
@@ -185,6 +186,8 @@ public enum Token: CaseIterable {
       return .other(name: "binaryOperator", nameForDiagnostics: "binary operator")
     case .colon:
       return .punctuator(name: "colon", text: ":")
+    case .colonColon:
+      return .punctuator(name: "colonColon", text: "::")
     case .comma:
       return .punctuator(name: "comma", text: ",")
     case .dollarIdentifier:

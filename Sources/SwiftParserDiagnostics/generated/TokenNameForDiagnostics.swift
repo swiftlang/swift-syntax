@@ -34,6 +34,8 @@ extension TokenKind {
       return "binary operator"
     case .colon:
       return ":"
+    case .colonColon:
+      return "::"
     case .comma:
       return ","
     case .dollarIdentifier:

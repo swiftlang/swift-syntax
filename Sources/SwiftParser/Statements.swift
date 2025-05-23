@@ -969,6 +969,9 @@ extension TokenConsumer {
       return false
     case .semicolon, .endOfFile, .poundElse, .poundElseif, .poundEndif:
       return false
+    case .colonColon:
+      // E.g. <word> :: <word>
+      return false
 
     case .leftAngle, .rightAngle:
       // Lexer never produce these token kinds.

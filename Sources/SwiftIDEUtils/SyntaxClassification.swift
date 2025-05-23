@@ -114,6 +114,8 @@ extension RawTokenKind {
       return .operator
     case .colon:
       return .none
+    case .colonColon:
+      return .operator
     case .comma:
       return .none
     case .dollarIdentifier:

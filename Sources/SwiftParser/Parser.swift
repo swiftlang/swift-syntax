@@ -240,7 +240,11 @@ public struct Parser {
     self.experimentalFeatures = experimentalFeatures
     self.lookaheadTrackerOwner = LookaheadTrackerOwner()
 
-    self.lexemes = Lexer.tokenize(input, lookaheadTracker: lookaheadTrackerOwner.lookaheadTracker)
+    self.lexemes = Lexer.tokenize(
+      input,
+      lookaheadTracker: lookaheadTrackerOwner.lookaheadTracker,
+      experimentalFeatures: experimentalFeatures
+    )
     self.currentToken = self.lexemes.advance()
     if let parseTransition {
       self.parseLookup = IncrementalParseLookup(transition: parseTransition)

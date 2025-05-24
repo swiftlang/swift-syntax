@@ -11,8 +11,12 @@
 //===----------------------------------------------------------------------===//
 
 /// Describes a macro.
-public protocol Macro {
+public protocol Macro: SendableMetatype {
   /// How the resulting expansion should be formatted, `.auto` by default.
   /// Use `.disabled` for the expansion to be used as is.
   static var formatMode: FormatMode { get }
 }
+
+#if compiler(<6.2)
+public typealias SendableMetatype = Any
+#endif

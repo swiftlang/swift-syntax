@@ -187,3 +187,9 @@ extension MemberBlockItemListSyntax: SyntaxExpressibleByStringInterpolation {}
 extension MemberBlockItemListSyntax: Swift.ExpressibleByStringInterpolation {}
 #endif
 
+extension FunctionParameterClauseSyntax: SyntaxExpressibleByStringInterpolation {}
+
+#if compiler(>=6)
+extension FunctionParameterClauseSyntax: Swift.ExpressibleByStringInterpolation {}
+#endif
+

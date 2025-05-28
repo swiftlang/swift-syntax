@@ -265,6 +265,7 @@ public enum SyntaxEnum: Sendable {
   case specializeAttributeArgumentList(SpecializeAttributeArgumentListSyntax)
   case specializeAvailabilityArgument(SpecializeAvailabilityArgumentSyntax)
   case specializeTargetFunctionArgument(SpecializeTargetFunctionArgumentSyntax)
+  case specializedAttributeArgument(SpecializedAttributeArgumentSyntax)
   case stringLiteralExpr(StringLiteralExprSyntax)
   case stringLiteralSegmentList(StringLiteralSegmentListSyntax)
   case stringSegment(StringSegmentSyntax)
@@ -800,6 +801,8 @@ extension Syntax {
       return .specializeAvailabilityArgument(SpecializeAvailabilityArgumentSyntax(self)!)
     case .specializeTargetFunctionArgument:
       return .specializeTargetFunctionArgument(SpecializeTargetFunctionArgumentSyntax(self)!)
+    case .specializedAttributeArgument:
+      return .specializedAttributeArgument(SpecializedAttributeArgumentSyntax(self)!)
     case .stringLiteralExpr:
       return .stringLiteralExpr(StringLiteralExprSyntax(self)!)
     case .stringLiteralSegmentList:

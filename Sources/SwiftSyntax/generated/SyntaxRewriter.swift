@@ -1776,6 +1776,13 @@ open class SyntaxRewriter {
     return SpecializeTargetFunctionArgumentSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
+  /// Visit a ``SpecializedAttributeArgumentSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: SpecializedAttributeArgumentSyntax) -> SpecializedAttributeArgumentSyntax {
+    return SpecializedAttributeArgumentSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
   /// Visit a ``StringLiteralExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3358,6 +3365,11 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitSpecializedAttributeArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(SpecializedAttributeArgumentSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitStringLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(StringLiteralExprSyntax(unsafeCasting: node)))
   }
@@ -4111,6 +4123,8 @@ open class SyntaxRewriter {
       return self.visitSpecializeAvailabilityArgumentSyntaxImpl(_:)
     case .specializeTargetFunctionArgument:
       return self.visitSpecializeTargetFunctionArgumentSyntaxImpl(_:)
+    case .specializedAttributeArgument:
+      return self.visitSpecializedAttributeArgumentSyntaxImpl(_:)
     case .stringLiteralExpr:
       return self.visitStringLiteralExprSyntaxImpl(_:)
     case .stringLiteralSegmentList:
@@ -4697,6 +4711,8 @@ open class SyntaxRewriter {
       return visitSpecializeAvailabilityArgumentSyntaxImpl(node)
     case .specializeTargetFunctionArgument:
       return visitSpecializeTargetFunctionArgumentSyntaxImpl(node)
+    case .specializedAttributeArgument:
+      return visitSpecializedAttributeArgumentSyntaxImpl(node)
     case .stringLiteralExpr:
       return visitStringLiteralExprSyntaxImpl(node)
     case .stringLiteralSegmentList:

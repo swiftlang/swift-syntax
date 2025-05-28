@@ -1749,6 +1749,7 @@ extension Syntax {
       .node(SpecializeAttributeArgumentListSyntax.self),
       .node(SpecializeAvailabilityArgumentSyntax.self),
       .node(SpecializeTargetFunctionArgumentSyntax.self),
+      .node(SpecializedAttributeArgumentSyntax.self),
       .node(StringLiteralExprSyntax.self),
       .node(StringLiteralSegmentListSyntax.self),
       .node(StringSegmentSyntax.self),

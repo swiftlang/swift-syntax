@@ -770,6 +770,15 @@ final class DeclarationTests: ParserTestCase {
       }
       """
     )
+    assertParse(
+      """
+      @specialized(where Array<T> == Int)
+      @specialized(where T.Element == Int)
+      public func funcWithComplexSpecializeRequirements<T: ProtocolWithDep>(t: T) -> Int {
+        return 55555
+      }
+      """
+    )
   }
 
   func testParseRetroactiveExtension() {

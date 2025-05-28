@@ -20,6 +20,7 @@ protocol CanInterleaveResultsLaterScopeSyntax: ScopeSyntax {
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig,
+    cache: LookupCache?,
     resultsToInterleave: [LookupResult]
   ) -> [LookupResult]
 }

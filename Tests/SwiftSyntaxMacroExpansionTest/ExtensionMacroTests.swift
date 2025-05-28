@@ -251,6 +251,41 @@ final class ExtensionMacroTests: XCTestCase {
       indentationWidth: indentationWidth
     )
   }
+
+  func testNonisolatedConformances() {
+    struct NonisolatedConformanceMacro: ExtensionMacro {
+      static func expansion(
+        of node: AttributeSyntax,
+        attachedTo declaration: some DeclGroupSyntax,
+        providingExtensionsOf type: some TypeSyntaxProtocol,
+        conformingTo protocols: [TypeSyntax],
+        in context: some MacroExpansionContext
+      ) throws -> [ExtensionDeclSyntax] {
+        return [
+          ("""
+          extension \(type): P {
+            nonisolated func f() { }
+          }
+          """ as DeclSyntax).cast(ExtensionDeclSyntax.self)
+        ]
+      }
+    }
+
+    assertMacroExpansion(
+      "@NonisolatedConformance struct Foo {}",
+      expandedSource: """
+        struct Foo {}
+
+        extension Foo: nonisolated P {
+          nonisolated func f() {
+          }
+        }
+        """,
+      macros: [
+        "NonisolatedConformance": NonisolatedConformanceMacro.self
+      ]
+    )
+  }
 }
 
 fileprivate struct SendableExtensionMacro: ExtensionMacro {

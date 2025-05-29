@@ -272,7 +272,10 @@ extension Parser.Lookahead {
     // than likely need to be made contextual as well before finalizing their
     // grammar.
     case ._borrowing, .borrowing:
-      return peek(isAt: TokenSpec(.identifier, allowAtStartOfLine: false))
+      return peek(
+        isAt: TokenSpec(.identifier, allowAtStartOfLine: false),
+        TokenSpec(.wildcard, allowAtStartOfLine: false)
+      )
     default:
       // Other keywords can be parsed unconditionally.
       return true

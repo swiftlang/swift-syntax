@@ -140,6 +140,8 @@ extension TokenConsumer {
 
       // Otherwise, parse it as an expression.
       return false
+    case .rhs(let introducer):
+      return subparser.shouldParsePatternBinding(introducer: introducer)
     case .some(_):
       // All other decl start keywords unconditionally start a decl.
       return true

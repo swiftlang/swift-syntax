@@ -195,6 +195,26 @@ extension Parser {
     allowMemberTypes: Bool = true,
     forAttributeName: Bool = false
   ) -> RawTypeSyntax {
+    let tilde = self.consumeIfContextualPunctuator("~", remapping: .prefixOperator)
+
+    let baseType = self.parseUnsuppressedSimpleType(
+      allowMemberTypes: allowMemberTypes,
+      forAttributeName: forAttributeName
+    )
+
+    guard let tilde else {
+      return baseType
+    }
+
+    return RawTypeSyntax(
+      RawSuppressedTypeSyntax(withoutTilde: tilde, type: baseType, arena: self.arena)
+    )
+  }
+
+  mutating func parseUnsuppressedSimpleType(
+    allowMemberTypes: Bool = true,
+    forAttributeName: Bool = false
+  ) -> RawTypeSyntax {
     enum TypeBaseStart: TokenSpecSet {
       case `Self`
       case `Any`
@@ -227,23 +247,6 @@ extension Parser {
       }
     }
 
-    // Eat any '~' preceding the type.
-    let maybeTilde = self.consumeIfContextualPunctuator("~", remapping: .prefixOperator)
-
-    // Wrap as a suppressed type if needed.
-    func wrapInTilde(_ node: RawTypeSyntax) -> RawTypeSyntax {
-      if let tilde = maybeTilde {
-        return RawTypeSyntax(
-          RawSuppressedTypeSyntax(
-            withoutTilde: tilde,
-            type: node,
-            arena: self.arena
-          )
-        )
-      }
-      return node
-    }
-
     var base: RawTypeSyntax
     switch self.at(anyIn: TypeBaseStart.self)?.spec {
     case .Self, .Any, .identifier:
@@ -255,7 +258,7 @@ extension Parser {
     case .wildcard:
       base = RawTypeSyntax(self.parsePlaceholderType())
     case nil:
-      return wrapInTilde(RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)))
+      return RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
     }
 
     var loopProgress = LoopProgressCondition()
@@ -331,8 +334,6 @@ extension Parser {
 
       break
     }
-
-    base = wrapInTilde(base)
 
     return base
   }

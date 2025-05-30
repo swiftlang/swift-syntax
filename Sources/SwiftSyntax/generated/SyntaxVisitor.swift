@@ -3400,6 +3400,20 @@ open class ThrowingSyntaxVisitor<E: Error> {
   open func visitPost(_ node: UsingDeclSyntax) throws (E) {
   }
 
+  /// Visiting `UsingDeclSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: UsingDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `UsingDeclSyntax` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visitPost(_ node: UsingDeclSyntax) {
+  }
+
   /// Visiting ``ValueBindingPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.

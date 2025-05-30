@@ -140,6 +140,29 @@ extension TokenConsumer {
 
       // Otherwise, parse it as an expression.
       return false
+    case .lhs(.using):
+      // This declaration doesn't support attributes or modifiers
+      if hasAttribute || hasModifier {
+        return false
+      }
+
+      var lookahead = subparser.lookahead()
+
+      // Consume 'using'
+      lookahead.consumeAnyToken()
+
+      // Allow parsing 'using' as declaration only if
+      // it's immediately followed by either `@` or
+      // an identifier.
+      if lookahead.atStartOfLine {
+        return false
+      }
+
+      guard lookahead.at(.atSign) || lookahead.at(.identifier) else {
+        return false
+      }
+
+      return true
     case .some(_):
       // All other decl start keywords unconditionally start a decl.
       return true
@@ -338,6 +361,8 @@ extension Parser {
       return RawDeclSyntax(self.parseMacroDeclaration(attrs: attrs, introducerHandle: handle))
     case (.lhs(.pound), let handle)?:
       return RawDeclSyntax(self.parseMacroExpansionDeclaration(attrs, handle))
+    case (.lhs(.using), let handle)?:
+      return RawDeclSyntax(self.parseUsingDeclaration(attrs: attrs, introducerHandle: handle))
     case (.rhs, let handle)?:
       return RawDeclSyntax(self.parseBindingDeclaration(attrs, handle, in: context))
     case nil:
@@ -436,6 +461,36 @@ extension Parser {
       )
     } while keepGoing != nil && self.hasProgressed(&loopProgress)
     return RawImportPathComponentListSyntax(elements: elements, arena: self.arena)
+  }
+}
+
+extension Parser {
+  mutating func parseUsingDeclaration(
+    attrs: DeclAttributes,
+    introducerHandle handle: RecoveryConsumptionHandle
+  ) -> RawUsingDeclSyntax {
+    precondition(attrs.attributes.isEmpty)
+    precondition(attrs.modifiers.isEmpty)
+
+    let (unexpectedBeforeUsingKeyword, usingKeyword) = self.eat(handle)
+
+    if self.at(.atSign), case .attribute(let attribute) = self.parseAttribute() {
+      return RawUsingDeclSyntax(
+        unexpectedBeforeUsingKeyword,
+        usingKeyword: usingKeyword,
+        specifier: .attribute(attribute),
+        arena: self.arena
+      )
+    }
+
+    let modifier = self.expectWithoutRecovery(.identifier)
+
+    return RawUsingDeclSyntax(
+      unexpectedBeforeUsingKeyword,
+      usingKeyword: usingKeyword,
+      specifier: .modifier(modifier),
+      arena: self.arena
+    )
   }
 }
 

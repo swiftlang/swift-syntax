@@ -305,6 +305,8 @@ public enum SyntaxEnum: Sendable {
   case unresolvedIsExpr(UnresolvedIsExprSyntax)
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
   case unsafeExpr(UnsafeExprSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case usingDecl(UsingDeclSyntax)
   case valueBindingPattern(ValueBindingPatternSyntax)
   case variableDecl(VariableDeclSyntax)
   case versionComponentList(VersionComponentListSyntax)
@@ -879,6 +881,8 @@ extension Syntax {
       return .unresolvedTernaryExpr(UnresolvedTernaryExprSyntax(self)!)
     case .unsafeExpr:
       return .unsafeExpr(UnsafeExprSyntax(self)!)
+    case .usingDecl:
+      return .usingDecl(UsingDeclSyntax(self)!)
     case .valueBindingPattern:
       return .valueBindingPattern(ValueBindingPatternSyntax(self)!)
     case .variableDecl:
@@ -932,6 +936,8 @@ public enum DeclSyntaxEnum {
   case structDecl(StructDeclSyntax)
   case subscriptDecl(SubscriptDeclSyntax)
   case typeAliasDecl(TypeAliasDeclSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case usingDecl(UsingDeclSyntax)
   case variableDecl(VariableDeclSyntax)
 }
 
@@ -985,6 +991,8 @@ extension DeclSyntax {
       return .subscriptDecl(SubscriptDeclSyntax(self)!)
     case .typeAliasDecl:
       return .typeAliasDecl(TypeAliasDeclSyntax(self)!)
+    case .usingDecl:
+      return .usingDecl(UsingDeclSyntax(self)!)
     case .variableDecl:
       return .variableDecl(VariableDeclSyntax(self)!)
     default:

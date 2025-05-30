@@ -2297,6 +2297,16 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visit(_ node: UsingDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visitPost(_ node: UsingDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: ValueBindingPatternSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

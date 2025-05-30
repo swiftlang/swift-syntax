@@ -214,6 +214,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case unsafe
   case unsafeAddress
   case unsafeMutableAddress
+  case using
   case `var`
   case visibility
   case weak
@@ -366,6 +367,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .swift
       case "throw":
         self = .throw
+      case "using":
+        self = .using
       case "where":
         self = .where
       case "while":
@@ -944,6 +947,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "unsafe",
     "unsafeAddress",
     "unsafeMutableAddress",
+    "using",
     "var",
     "visibility",
     "weak",

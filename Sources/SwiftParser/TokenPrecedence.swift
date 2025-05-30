@@ -241,7 +241,7 @@ enum TokenPrecedence: Comparable {
       .get, .set, .didSet, .willSet, .unsafeAddress, .addressWithOwner, .addressWithNativeOwner, .unsafeMutableAddress,
       .mutableAddressWithOwner, .mutableAddressWithNativeOwner, ._read, .read, ._modify, .modify,
       // Misc
-      .import:
+      .import, .using:
       self = .declKeyword
 
     case  // `TypeAttribute`

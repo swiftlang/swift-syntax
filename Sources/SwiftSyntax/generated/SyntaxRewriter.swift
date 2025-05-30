@@ -2043,6 +2043,14 @@ open class SyntaxRewriter {
     return ExprSyntax(UnsafeExprSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
+  /// Visit a `UsingDeclSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: UsingDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(UsingDeclSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
+  }
+
   /// Visit a ``ValueBindingPatternSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3548,6 +3556,11 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitUsingDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(UsingDeclSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitValueBindingPatternSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ValueBindingPatternSyntax(unsafeCasting: node)))
   }
@@ -4187,6 +4200,8 @@ open class SyntaxRewriter {
       return self.visitUnresolvedTernaryExprSyntaxImpl(_:)
     case .unsafeExpr:
       return self.visitUnsafeExprSyntaxImpl(_:)
+    case .usingDecl:
+      return self.visitUsingDeclSyntaxImpl(_:)
     case .valueBindingPattern:
       return self.visitValueBindingPatternSyntaxImpl(_:)
     case .variableDecl:
@@ -4773,6 +4788,8 @@ open class SyntaxRewriter {
       return visitUnresolvedTernaryExprSyntaxImpl(node)
     case .unsafeExpr:
       return visitUnsafeExprSyntaxImpl(node)
+    case .usingDecl:
+      return visitUsingDeclSyntaxImpl(node)
     case .valueBindingPattern:
       return visitValueBindingPatternSyntaxImpl(node)
     case .variableDecl:

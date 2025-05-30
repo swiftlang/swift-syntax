@@ -1398,6 +1398,13 @@ open class SyntaxRewriter {
     return TypeSyntax(MissingTypeSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
+  /// Visit a ``ModuleSelectorSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: ModuleSelectorSyntax) -> ModuleSelectorSyntax {
+    return ModuleSelectorSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
   /// Visit a ``MultipleTrailingClosureElementListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3088,6 +3095,11 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitModuleSelectorSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(ModuleSelectorSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitMultipleTrailingClosureElementListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(MultipleTrailingClosureElementListSyntax(unsafeCasting: node)))
   }
@@ -4003,6 +4015,8 @@ open class SyntaxRewriter {
       return self.visitMissingSyntaxImpl(_:)
     case .missingType:
       return self.visitMissingTypeSyntaxImpl(_:)
+    case .moduleSelector:
+      return self.visitModuleSelectorSyntaxImpl(_:)
     case .multipleTrailingClosureElementList:
       return self.visitMultipleTrailingClosureElementListSyntaxImpl(_:)
     case .multipleTrailingClosureElement:
@@ -4589,6 +4603,8 @@ open class SyntaxRewriter {
       return visitMissingSyntaxImpl(node)
     case .missingType:
       return visitMissingTypeSyntaxImpl(node)
+    case .moduleSelector:
+      return visitModuleSelectorSyntaxImpl(node)
     case .multipleTrailingClosureElementList:
       return visitMultipleTrailingClosureElementListSyntaxImpl(node)
     case .multipleTrailingClosureElement:

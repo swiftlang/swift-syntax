@@ -1551,6 +1551,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  override open func visit(_ node: ModuleSelectorSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: ModuleSelectorSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: MultipleTrailingClosureElementListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

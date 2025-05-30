@@ -190,6 +190,18 @@ extension DeclGroupSyntax {
   }
 }
 
+extension DeclReferenceExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenModuleSelectorAndBaseName")
+  public var unexpectedBeforeBaseName: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenModuleSelectorAndBaseName
+    }
+    set(value) {
+      unexpectedBetweenModuleSelectorAndBaseName = value
+    }
+  }
+}
+
 extension ClosureCaptureSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenNameAndInitializer")
   public var unexpectedBetweenNameAndAssignToken: UnexpectedNodesSyntax? {
@@ -683,6 +695,18 @@ extension GenericRequirementSyntax {
 @available(*, deprecated, renamed: "NamedDeclSyntax")
 public typealias IdentifiedDeclSyntax = NamedDeclSyntax
 
+extension IdentifierTypeSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenModuleSelectorAndName")
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenModuleSelectorAndName
+    }
+    set(value) {
+      unexpectedBetweenModuleSelectorAndName = value
+    }
+  }
+}
+
 extension KeyPathPropertyComponentSyntax {
   @available(*, deprecated, renamed: "declName.baseName")
   public var identifier: TokenSyntax {
@@ -701,6 +725,30 @@ extension KeyPathPropertyComponentSyntax {
     }
     set {
       declName.argumentNames = newValue
+    }
+  }
+}
+
+extension MacroExpansionExprSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenModuleSelectorAndMacroName")
+  public var unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenModuleSelectorAndMacroName
+    }
+    set(value) {
+      unexpectedBetweenModuleSelectorAndMacroName = value
+    }
+  }
+}
+
+extension MemberTypeSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenModuleSelectorAndName")
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenModuleSelectorAndName
+    }
+    set(value) {
+      unexpectedBetweenModuleSelectorAndName = value
     }
   }
 }

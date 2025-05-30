@@ -1695,6 +1695,7 @@ extension Syntax {
       .node(MissingStmtSyntax.self),
       .node(MissingSyntax.self),
       .node(MissingTypeSyntax.self),
+      .node(ModuleSelectorSyntax.self),
       .node(MultipleTrailingClosureElementListSyntax.self),
       .node(MultipleTrailingClosureElementSyntax.self),
       .node(NamedOpaqueReturnTypeSyntax.self),

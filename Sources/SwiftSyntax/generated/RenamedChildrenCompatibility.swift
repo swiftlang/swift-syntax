@@ -1473,13 +1473,13 @@ extension ConsumeExprSyntax {
 }
 
 extension DeclReferenceExprSyntax {
-  @available(*, deprecated, renamed: "unexpectedBeforeBaseName")
-  public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenModuleSelectorAndBaseName")
+  public var unexpectedBetweenModuleSelectorAndIdentifier: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBeforeBaseName
+      return unexpectedBetweenModuleSelectorAndBaseName
     }
     set {
-      unexpectedBeforeBaseName = newValue
+      unexpectedBetweenModuleSelectorAndBaseName = newValue
     }
   }
 
@@ -1523,11 +1523,13 @@ extension DeclReferenceExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:baseName:_:argumentNames:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:moduleSelector:_:baseName:_:argumentNames:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeIdentifier: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeModuleSelector: UnexpectedNodesSyntax? = nil,
+    moduleSelector: ModuleSelectorSyntax? = nil,
+    _ unexpectedBetweenModuleSelectorAndIdentifier: UnexpectedNodesSyntax? = nil,
     identifier: TokenSyntax,
     _ unexpectedBetweenIdentifierAndDeclNameArguments: UnexpectedNodesSyntax? = nil,
     declNameArguments: DeclNameArgumentsSyntax? = nil,
@@ -1536,7 +1538,9 @@ extension DeclReferenceExprSyntax {
   ) {
     self.init(
       leadingTrivia: leadingTrivia,
-      unexpectedBeforeIdentifier,
+      unexpectedBeforeModuleSelector,
+      moduleSelector: moduleSelector,
+      unexpectedBetweenModuleSelectorAndIdentifier,
       baseName: identifier,
       unexpectedBetweenIdentifierAndDeclNameArguments,
       argumentNames: declNameArguments,
@@ -4823,13 +4827,23 @@ extension MacroExpansionExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "unexpectedBetweenPoundAndMacroName")
-  public var unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenPoundAndModuleSelector")
+  public var unexpectedBetweenPoundTokenAndModuleSelector: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenPoundAndMacroName
+      return unexpectedBetweenPoundAndModuleSelector
     }
     set {
-      unexpectedBetweenPoundAndMacroName = newValue
+      unexpectedBetweenPoundAndModuleSelector = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenModuleSelectorAndMacroName")
+  public var unexpectedBetweenModuleSelectorAndMacro: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenModuleSelectorAndMacroName
+    }
+    set {
+      unexpectedBetweenModuleSelectorAndMacroName = newValue
     }
   }
 
@@ -4903,13 +4917,15 @@ extension MacroExpansionExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:pound:_:macroName:_:genericArgumentClause:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:pound:_:moduleSelector:_:macroName:_:genericArgumentClause:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforePoundToken: UnexpectedNodesSyntax? = nil,
     poundToken: TokenSyntax = .poundToken(),
-    _ unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenPoundTokenAndModuleSelector: UnexpectedNodesSyntax? = nil,
+    moduleSelector: ModuleSelectorSyntax? = nil,
+    _ unexpectedBetweenModuleSelectorAndMacro: UnexpectedNodesSyntax? = nil,
     macro: TokenSyntax,
     _ unexpectedBetweenMacroAndGenericArguments: UnexpectedNodesSyntax? = nil,
     genericArguments: GenericArgumentClauseSyntax? = nil,
@@ -4930,7 +4946,9 @@ extension MacroExpansionExprSyntax {
       leadingTrivia: leadingTrivia,
       unexpectedBeforePoundToken,
       pound: poundToken,
-      unexpectedBetweenPoundTokenAndMacro,
+      unexpectedBetweenPoundTokenAndModuleSelector,
+      moduleSelector: moduleSelector,
+      unexpectedBetweenModuleSelectorAndMacro,
       macroName: macro,
       unexpectedBetweenMacroAndGenericArguments,
       genericArgumentClause: genericArguments,

@@ -533,6 +533,7 @@ extension Parser {
             unexpectedBeforeInherited = RawUnexpectedNodesSyntax([classKeyword], arena: self.arena)
             inherited = RawTypeSyntax(
               RawIdentifierTypeSyntax(
+                moduleSelector: nil,
                 name: missingToken(.identifier, text: "AnyObject"),
                 genericArgumentClause: nil,
                 arena: self.arena

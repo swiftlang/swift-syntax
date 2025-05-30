@@ -1003,6 +1003,12 @@ public let EXPR_NODES: [Node] = [
     nameForDiagnostics: nil,
     children: [
       Child(
+        name: "moduleSelector",
+        kind: .node(kind: .moduleSelector),
+        experimentalFeature: .moduleSelector,
+        isOptional: true
+      ),
+      Child(
         name: "baseName",
         kind: .token(choices: [
           .token(.identifier),
@@ -1357,6 +1363,12 @@ public let EXPR_NODES: [Node] = [
         name: "pound",
         kind: .token(choices: [.token(.pound)]),
         documentation: "The `#` sign."
+      ),
+      Child(
+        name: "moduleSelector",
+        kind: .node(kind: .moduleSelector),
+        experimentalFeature: .moduleSelector,
+        isOptional: true
       ),
       Child(
         name: "macroName",

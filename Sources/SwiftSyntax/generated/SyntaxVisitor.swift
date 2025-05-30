@@ -2265,6 +2265,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: MissingTypeSyntax) {
   }
 
+  /// Visiting ``ModuleSelectorSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: ModuleSelectorSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``ModuleSelectorSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: ModuleSelectorSyntax) {
+  }
+
   /// Visiting ``MultipleTrailingClosureElementListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5007,6 +5019,14 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitModuleSelectorSyntaxImpl(_ node: Syntax) {
+    if visit(ModuleSelectorSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(ModuleSelectorSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitMultipleTrailingClosureElementListSyntaxImpl(_ node: Syntax) {
     if visit(MultipleTrailingClosureElementListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -6234,6 +6254,8 @@ open class SyntaxVisitor {
       return self.visitMissingSyntaxImpl(_:)
     case .missingType:
       return self.visitMissingTypeSyntaxImpl(_:)
+    case .moduleSelector:
+      return self.visitModuleSelectorSyntaxImpl(_:)
     case .multipleTrailingClosureElementList:
       return self.visitMultipleTrailingClosureElementListSyntaxImpl(_:)
     case .multipleTrailingClosureElement:
@@ -6820,6 +6842,8 @@ open class SyntaxVisitor {
       self.visitMissingSyntaxImpl(node)
     case .missingType:
       self.visitMissingTypeSyntaxImpl(node)
+    case .moduleSelector:
+      self.visitModuleSelectorSyntaxImpl(node)
     case .multipleTrailingClosureElementList:
       self.visitMultipleTrailingClosureElementListSyntaxImpl(node)
     case .multipleTrailingClosureElement:

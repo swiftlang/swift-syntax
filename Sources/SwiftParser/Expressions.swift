@@ -652,6 +652,7 @@ extension Parser {
     if skipMemberName {
       let missingIdentifier = missingToken(.identifier)
       let declName = RawDeclReferenceExprSyntax(
+        moduleSelector: nil,
         baseName: missingIdentifier,
         argumentNames: nil,
         arena: self.arena
@@ -664,6 +665,7 @@ extension Parser {
     if let indexOrSelf = self.consume(if: .integerLiteral, .keyword(.self)) {
       // Handle "x.42" - a tuple index.
       declName = RawDeclReferenceExprSyntax(
+        moduleSelector: nil,
         baseName: indexOrSelf,
         argumentNames: nil,
         arena: self.arena
@@ -1276,6 +1278,7 @@ extension Parser {
       let poundAvailable = self.parsePoundAvailableConditionElement()
       return RawExprSyntax(
         RawDeclReferenceExprSyntax(
+          moduleSelector: nil,
           RawUnexpectedNodesSyntax([poundAvailable], arena: self.arena),
           baseName: missingToken(.identifier),
           argumentNames: nil,
@@ -1429,6 +1432,7 @@ extension Parser {
     return RawMacroExpansionExprSyntax(
       unexpectedBeforePound,
       pound: pound,
+      moduleSelector: nil,
       unexpectedBeforeMacroName,
       macroName: macroName,
       genericArgumentClause: generics,
@@ -1743,6 +1747,7 @@ extension Parser {
   mutating func parseAnonymousClosureArgument() -> RawDeclReferenceExprSyntax {
     let (unexpectedBeforeBaseName, baseName) = self.expect(.dollarIdentifier)
     return RawDeclReferenceExprSyntax(
+      moduleSelector: nil,
       unexpectedBeforeBaseName,
       baseName: baseName,
       argumentNames: nil,
@@ -2396,7 +2401,12 @@ extension Parser {
       unknownAttr = RawAttributeSyntax(
         atSign: at,
         unexpectedBeforeIdent,
-        attributeName: RawIdentifierTypeSyntax(name: ident, genericArgumentClause: nil, arena: self.arena),
+        attributeName: RawIdentifierTypeSyntax(
+          moduleSelector: nil,
+          name: ident,
+          genericArgumentClause: nil,
+          arena: self.arena
+        ),
         leftParen: nil,
         arguments: nil,
         rightParen: nil,

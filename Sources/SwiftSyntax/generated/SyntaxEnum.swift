@@ -211,6 +211,7 @@ public enum SyntaxEnum: Sendable {
   case missingStmt(MissingStmtSyntax)
   case missing(MissingSyntax)
   case missingType(MissingTypeSyntax)
+  case moduleSelector(ModuleSelectorSyntax)
   case multipleTrailingClosureElementList(MultipleTrailingClosureElementListSyntax)
   case multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax)
   case namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax)
@@ -692,6 +693,8 @@ extension Syntax {
       return .missing(MissingSyntax(self)!)
     case .missingType:
       return .missingType(MissingTypeSyntax(self)!)
+    case .moduleSelector:
+      return .moduleSelector(ModuleSelectorSyntax(self)!)
     case .multipleTrailingClosureElementList:
       return .multipleTrailingClosureElementList(MultipleTrailingClosureElementListSyntax(self)!)
     case .multipleTrailingClosureElement:

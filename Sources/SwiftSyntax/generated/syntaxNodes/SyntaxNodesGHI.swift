@@ -1706,6 +1706,7 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _L
 
 /// ### Children
 /// 
+///  - `moduleSelector`: ``ModuleSelectorSyntax``?
 ///  - `name`: (`<identifier>` | `Self` | `Any` | `_`)
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
@@ -1728,7 +1729,9 @@ public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
     leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeModuleSelector: UnexpectedNodesSyntax? = nil,
+    moduleSelector: ModuleSelectorSyntax? = nil,
+    _ unexpectedBetweenModuleSelectorAndName: UnexpectedNodesSyntax? = nil,
     name: TokenSyntax,
     _ unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
     genericArgumentClause: GenericArgumentClauseSyntax? = nil,
@@ -1738,14 +1741,18 @@ public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((RawSyntaxArena(), (
-      unexpectedBeforeName,
+      unexpectedBeforeModuleSelector,
+      moduleSelector,
+      unexpectedBetweenModuleSelectorAndName,
       name,
       unexpectedBetweenNameAndGenericArgumentClause,
       genericArgumentClause,
       unexpectedAfterGenericArgumentClause
     ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-        unexpectedBeforeName?.raw,
+        unexpectedBeforeModuleSelector?.raw,
+        moduleSelector?.raw,
+        unexpectedBetweenModuleSelectorAndName?.raw,
         name.raw,
         unexpectedBetweenNameAndGenericArgumentClause?.raw,
         genericArgumentClause?.raw,
@@ -1762,12 +1769,33 @@ public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     }
   }
 
-  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
+  @_spi(ExperimentalLanguageFeatures)
+  public var unexpectedBeforeModuleSelector: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(IdentifierTypeSyntax.self)
+    }
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  public var moduleSelector: ModuleSelectorSyntax? {
+    get {
+      return Syntax(self).child(at: 1)?.cast(ModuleSelectorSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(IdentifierTypeSyntax.self)
+    }
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  public var unexpectedBetweenModuleSelectorAndName: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(IdentifierTypeSyntax.self)
     }
   }
 
@@ -1780,32 +1808,14 @@ public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
   ///  - `_`
   public var name: TokenSyntax {
     get {
-      return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(IdentifierTypeSyntax.self)
-    }
-  }
-
-  public var unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(IdentifierTypeSyntax.self)
-    }
-  }
-
-  public var genericArgumentClause: GenericArgumentClauseSyntax? {
-    get {
-      return Syntax(self).child(at: 3)?.cast(GenericArgumentClauseSyntax.self)
+      return Syntax(self).child(at: 3)!.cast(TokenSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(IdentifierTypeSyntax.self)
     }
   }
 
-  public var unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -1814,8 +1824,28 @@ public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     }
   }
 
+  public var genericArgumentClause: GenericArgumentClauseSyntax? {
+    get {
+      return Syntax(self).child(at: 5)?.cast(GenericArgumentClauseSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(IdentifierTypeSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(IdentifierTypeSyntax.self)
+    }
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
-    \Self.unexpectedBeforeName,
+    \Self.unexpectedBeforeModuleSelector,
+    \Self.moduleSelector,
+    \Self.unexpectedBetweenModuleSelectorAndName,
     \Self.name,
     \Self.unexpectedBetweenNameAndGenericArgumentClause,
     \Self.genericArgumentClause,

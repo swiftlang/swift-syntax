@@ -408,6 +408,8 @@ extension SyntaxKind {
       return "ternary operator"
     case .unsafeExpr:
       return "'unsafe' expression"
+    case .usingDecl:
+      return "using"
     case .valueBindingPattern:
       return "value binding pattern"
     case .variableDecl:

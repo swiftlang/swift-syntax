@@ -649,11 +649,11 @@ extension Parser {
     precondition(self.experimentalFeatures.contains(.inlineArrayTypeSugar))
 
     // We allow both values and types here and for the element type for
-    // better recovery in cases where the user writes e.g '[Int x 3]'.
+    // better recovery in cases where the user writes e.g '[Int of 3]'.
     let count = self.parseGenericArgumentType()
 
     let (unexpectedBeforeSeparator, separator) = self.expect(
-      TokenSpec(.x, allowAtStartOfLine: false)
+      TokenSpec(.of, allowAtStartOfLine: false)
     )
 
     let element = self.parseGenericArgumentType()
@@ -879,18 +879,18 @@ extension Parser.Lookahead {
       return false
     }
 
-    // We must have at least '[<type-or-integer> x', which cannot be any other
+    // We must have at least '[<type-or-integer> of', which cannot be any other
     // kind of expression or type. We specifically look for both types and
     // integers for better recovery in e.g cases where the user writes e.g
-    // '[Int x 2]'. We only do type-scalar since variadics would be ambiguous
-    // e.g 'Int...x'.
+    // '[Int of 2]'. We only do type-scalar since variadics would be ambiguous
+    // e.g 'Int...of'.
     guard self.canParseTypeScalar() || self.canParseIntegerLiteral() else {
       return false
     }
 
     // We don't currently allow multi-line since that would require
     // disambiguation with array literals.
-    return self.consume(if: TokenSpec(.x, allowAtStartOfLine: false)) != nil
+    return self.consume(if: TokenSpec(.of, allowAtStartOfLine: false)) != nil
   }
 
   mutating func canParseInlineArrayTypeBody() -> Bool {
@@ -898,7 +898,7 @@ extension Parser.Lookahead {
       return false
     }
     // Note we look for both types and integers for better recovery in e.g cases
-    // where the user writes e.g '[Int x 2]'.
+    // where the user writes e.g '[Int of 2]'.
     guard self.canParseGenericArgument() else {
       return false
     }

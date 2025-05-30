@@ -628,6 +628,7 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 
 /// ### Children
 /// 
+///  - `moduleSelector`: `ModuleSelectorSyntax`?
 ///  - `baseName`: (`<identifier>` | `self` | `Self` | `init` | `deinit` | `subscript` | `<dollarIdentifier>` | `<binaryOperator>` | `<integerLiteral>`)
 ///  - `argumentNames`: ``DeclNameArgumentsSyntax``?
 ///
@@ -656,9 +657,11 @@ public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  public init(
+  @_spi(ExperimentalLanguageFeatures) public init(
     leadingTrivia: Trivia? = nil,
-    _ unexpectedBeforeBaseName: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeModuleSelector: UnexpectedNodesSyntax? = nil,
+    moduleSelector: ModuleSelectorSyntax? = nil,
+    _ unexpectedBetweenModuleSelectorAndBaseName: UnexpectedNodesSyntax? = nil,
     baseName: TokenSyntax,
     _ unexpectedBetweenBaseNameAndArgumentNames: UnexpectedNodesSyntax? = nil,
     argumentNames: DeclNameArgumentsSyntax? = nil,
@@ -668,14 +671,18 @@ public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     // Extend the lifetime of all parameters so their arenas don't get destroyed
     // before they can be added as children of the new arena.
     self = withExtendedLifetime((RawSyntaxArena(), (
-      unexpectedBeforeBaseName,
+      unexpectedBeforeModuleSelector,
+      moduleSelector,
+      unexpectedBetweenModuleSelectorAndBaseName,
       baseName,
       unexpectedBetweenBaseNameAndArgumentNames,
       argumentNames,
       unexpectedAfterArgumentNames
     ))) { (arena, _) in
       let layout: [RawSyntax?] = [
-        unexpectedBeforeBaseName?.raw,
+        unexpectedBeforeModuleSelector?.raw,
+        moduleSelector?.raw,
+        unexpectedBetweenModuleSelectorAndBaseName?.raw,
         baseName.raw,
         unexpectedBetweenBaseNameAndArgumentNames?.raw,
         argumentNames?.raw,
@@ -692,12 +699,33 @@ public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
 
-  public var unexpectedBeforeBaseName: UnexpectedNodesSyntax? {
+  @_spi(ExperimentalLanguageFeatures)
+  public var unexpectedBeforeModuleSelector: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(DeclReferenceExprSyntax.self)
+    }
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  public var moduleSelector: ModuleSelectorSyntax? {
+    get {
+      return Syntax(self).child(at: 1)?.cast(ModuleSelectorSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(DeclReferenceExprSyntax.self)
+    }
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  public var unexpectedBetweenModuleSelectorAndBaseName: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(DeclReferenceExprSyntax.self)
     }
   }
 
@@ -715,32 +743,14 @@ public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
   ///  - `<integerLiteral>`
   public var baseName: TokenSyntax {
     get {
-      return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 1, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(DeclReferenceExprSyntax.self)
-    }
-  }
-
-  public var unexpectedBetweenBaseNameAndArgumentNames: UnexpectedNodesSyntax? {
-    get {
-      return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
-    }
-    set(value) {
-      self = Syntax(self).replacingChild(at: 2, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(DeclReferenceExprSyntax.self)
-    }
-  }
-
-  public var argumentNames: DeclNameArgumentsSyntax? {
-    get {
-      return Syntax(self).child(at: 3)?.cast(DeclNameArgumentsSyntax.self)
+      return Syntax(self).child(at: 3)!.cast(TokenSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(DeclReferenceExprSyntax.self)
     }
   }
 
-  public var unexpectedAfterArgumentNames: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenBaseNameAndArgumentNames: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -749,8 +759,28 @@ public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
 
+  public var argumentNames: DeclNameArgumentsSyntax? {
+    get {
+      return Syntax(self).child(at: 5)?.cast(DeclNameArgumentsSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(DeclReferenceExprSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterArgumentNames: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 6, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(DeclReferenceExprSyntax.self)
+    }
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
-    \Self.unexpectedBeforeBaseName,
+    \Self.unexpectedBeforeModuleSelector,
+    \Self.moduleSelector,
+    \Self.unexpectedBetweenModuleSelectorAndBaseName,
     \Self.baseName,
     \Self.unexpectedBetweenBaseNameAndArgumentNames,
     \Self.argumentNames,

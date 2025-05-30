@@ -272,6 +272,7 @@ extension Parser {
               baseType: base,
               unexpectedPeriod,
               period: period,
+              moduleSelector: nil,
               name: missingIdentifier,
               genericArgumentClause: nil,
               arena: self.arena
@@ -309,6 +310,7 @@ extension Parser {
               baseType: base,
               unexpectedPeriod,
               period: period,
+              moduleSelector: nil,
               name: name,
               genericArgumentClause: generics,
               arena: self.arena
@@ -378,6 +380,7 @@ extension Parser {
 
     return RawTypeSyntax(
       RawIdentifierTypeSyntax(
+        moduleSelector: nil,
         unexpectedBeforeName,
         name: name,
         genericArgumentClause: generics,
@@ -390,6 +393,7 @@ extension Parser {
   mutating func parseAnyType() -> RawIdentifierTypeSyntax {
     let (unexpectedBeforeName, name) = self.expect(.keyword(.Any))
     return RawIdentifierTypeSyntax(
+      moduleSelector: nil,
       unexpectedBeforeName,
       name: name,
       genericArgumentClause: nil,
@@ -401,6 +405,7 @@ extension Parser {
   mutating func parsePlaceholderType() -> RawIdentifierTypeSyntax {
     let (unexpectedBeforeName, name) = self.expect(.wildcard)
     return RawIdentifierTypeSyntax(
+      moduleSelector: nil,
       unexpectedBeforeName,
       name: name,
       genericArgumentClause: nil,
@@ -536,7 +541,12 @@ extension Parser {
               secondName: nil,
               RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, unexpectedBeforeColon, arena: self.arena),
               colon: nil,
-              type: RawIdentifierTypeSyntax(name: first, genericArgumentClause: nil, arena: self.arena),
+              type: RawIdentifierTypeSyntax(
+                moduleSelector: nil,
+                name: first,
+                genericArgumentClause: nil,
+                arena: self.arena
+              ),
               ellipsis: nil,
               trailingComma: self.missingToken(.comma),
               arena: self.arena

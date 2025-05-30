@@ -988,7 +988,9 @@ public struct RawIdentifierTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 
   public init(
-    _ unexpectedBeforeName: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeModuleSelector: RawUnexpectedNodesSyntax? = nil,
+    moduleSelector: RawModuleSelectorSyntax?,
+    _ unexpectedBetweenModuleSelectorAndName: RawUnexpectedNodesSyntax? = nil,
     name: RawTokenSyntax,
     _ unexpectedBetweenNameAndGenericArgumentClause: RawUnexpectedNodesSyntax? = nil,
     genericArgumentClause: RawGenericArgumentClauseSyntax?,
@@ -996,35 +998,45 @@ public struct RawIdentifierTypeSyntax: RawTypeSyntaxNodeProtocol {
     arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .identifierType, uninitializedCount: 5, arena: arena) { layout in
+      kind: .identifierType, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeName?.raw
-      layout[1] = name.raw
-      layout[2] = unexpectedBetweenNameAndGenericArgumentClause?.raw
-      layout[3] = genericArgumentClause?.raw
-      layout[4] = unexpectedAfterGenericArgumentClause?.raw
+      layout[0] = unexpectedBeforeModuleSelector?.raw
+      layout[1] = moduleSelector?.raw
+      layout[2] = unexpectedBetweenModuleSelectorAndName?.raw
+      layout[3] = name.raw
+      layout[4] = unexpectedBetweenNameAndGenericArgumentClause?.raw
+      layout[5] = genericArgumentClause?.raw
+      layout[6] = unexpectedAfterGenericArgumentClause?.raw
     }
     self.init(unchecked: raw)
   }
 
-  public var unexpectedBeforeName: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeModuleSelector: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var name: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  public var moduleSelector: RawModuleSelectorSyntax? {
+    layoutView.children[1].map(RawModuleSelectorSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenNameAndGenericArgumentClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenModuleSelectorAndName: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
+  public var name: RawTokenSyntax {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenNameAndGenericArgumentClause: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
   public var genericArgumentClause: RawGenericArgumentClauseSyntax? {
-    layoutView.children[3].map(RawGenericArgumentClauseSyntax.init(raw:))
+    layoutView.children[5].map(RawGenericArgumentClauseSyntax.init(raw:))
   }
 
   public var unexpectedAfterGenericArgumentClause: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

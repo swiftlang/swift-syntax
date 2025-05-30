@@ -325,7 +325,12 @@ extension Parser {
         unexpectedBeforeAtSign,
         atSign: atSign,
         unexpectedBeforeAttributeName,
-        attributeName: RawIdentifierTypeSyntax(name: attributeName, genericArgumentClause: nil, arena: self.arena),
+        attributeName: RawIdentifierTypeSyntax(
+          moduleSelector: nil,
+          name: attributeName,
+          genericArgumentClause: nil,
+          arena: self.arena
+        ),
         leftParen: nil,
         arguments: nil,
         rightParen: nil,
@@ -349,7 +354,9 @@ extension Parser {
 
 extension RawLabeledExprSyntax {
   fileprivate init(
-    _ unexpectedBeforeIdentifier: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeModuleSelector: RawUnexpectedNodesSyntax? = nil,
+    moduleSelector: RawModuleSelectorSyntax?,
+    _ unexpectedBetweenModuleSelectorAndIdentifier: RawUnexpectedNodesSyntax? = nil,
     identifier: RawTokenSyntax,
     _ unexpectedBetweenIdentifierAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax? = nil,
@@ -359,7 +366,9 @@ extension RawLabeledExprSyntax {
       label: nil,
       colon: nil,
       expression: RawDeclReferenceExprSyntax(
-        unexpectedBeforeIdentifier,
+        unexpectedBeforeModuleSelector,
+        moduleSelector: moduleSelector,
+        unexpectedBetweenModuleSelectorAndIdentifier,
         baseName: identifier,
         argumentNames: nil,
         arena: arena
@@ -381,6 +390,7 @@ extension Parser {
     let roleTrailingComma = self.consume(if: .comma)
 
     let roleElement = RawLabeledExprSyntax(
+      moduleSelector: nil,
       unexpectedBeforeRole,
       identifier: role,
       trailingComma: roleTrailingComma,
@@ -410,7 +420,12 @@ extension Parser {
       unexpectedBeforeAtSign,
       atSign: atSign,
       unexpectedBeforeDifferentiable,
-      attributeName: RawIdentifierTypeSyntax(name: differentiable, genericArgumentClause: nil, arena: self.arena),
+      attributeName: RawIdentifierTypeSyntax(
+        moduleSelector: nil,
+        name: differentiable,
+        genericArgumentClause: nil,
+        arena: self.arena
+      ),
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
       arguments: .differentiableArguments(argument),
@@ -551,8 +566,13 @@ extension Parser {
     return RawAttributeSyntax(
       unexpectedBeforeAtSign,
       atSign: atSign,
-      unexpectedBeforeDerivative,
-      attributeName: RawIdentifierTypeSyntax(name: derivative, genericArgumentClause: nil, arena: self.arena),
+      attributeName: RawIdentifierTypeSyntax(
+        moduleSelector: nil,
+        unexpectedBeforeDerivative,
+        name: derivative,
+        genericArgumentClause: nil,
+        arena: self.arena
+      ),
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
       arguments: .derivativeRegistrationArguments(argument),
@@ -574,7 +594,12 @@ extension Parser {
       unexpectedBeforeAtSign,
       atSign: atSign,
       unexpectedBeforeTranspose,
-      attributeName: RawIdentifierTypeSyntax(name: transpose, genericArgumentClause: nil, arena: self.arena),
+      attributeName: RawIdentifierTypeSyntax(
+        moduleSelector: nil,
+        name: transpose,
+        genericArgumentClause: nil,
+        arena: self.arena
+      ),
       unexpectedBeforeLeftParen,
       leftParen: leftParen,
       arguments: .derivativeRegistrationArguments(argument),
@@ -809,6 +834,7 @@ extension Parser {
     let (unexpectedBeforeIsolationKind, isolationKind) =
       self.expectIdentifier(allowKeywordsAsIdentifier: true)
     let isolationKindElement = RawLabeledExprSyntax(
+      moduleSelector: nil,
       unexpectedBeforeIsolationKind,
       identifier: isolationKind,
       arena: self.arena
@@ -939,6 +965,7 @@ extension Parser {
     let declName: RawDeclReferenceExprSyntax
     if label.isMissing && colon.isMissing && self.atStartOfLine {
       declName = RawDeclReferenceExprSyntax(
+        moduleSelector: nil,
         baseName: RawTokenSyntax(missing: .identifier, arena: self.arena),
         argumentNames: nil,
         arena: self.arena

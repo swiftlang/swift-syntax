@@ -1473,13 +1473,22 @@ extension ConsumeExprSyntax {
 }
 
 extension DeclReferenceExprSyntax {
-  @available(*, deprecated, renamed: "unexpectedBeforeBaseName")
-  public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
+  public var unexpectedBeforeBaseName: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBeforeBaseName
+      return unexpectedBeforeModuleSelector
     }
     set {
-      unexpectedBeforeBaseName = newValue
+      unexpectedBeforeModuleSelector = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBeforeModuleSelector")
+  public var unexpectedBeforeIdentifier: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeModuleSelector
+    }
+    set {
+      unexpectedBeforeModuleSelector = newValue
     }
   }
 
@@ -1523,7 +1532,29 @@ extension DeclReferenceExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:baseName:_:argumentNames:_:trailingTrivia:)")
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeBaseName: UnexpectedNodesSyntax? = nil,
+    baseName: TokenSyntax,
+    _ unexpectedBetweenBaseNameAndArgumentNames: UnexpectedNodesSyntax? = nil,
+    argumentNames: DeclNameArgumentsSyntax? = nil,
+    _ unexpectedAfterArgumentNames: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeBaseName,
+      moduleSelector: nil,
+      nil,
+      baseName: baseName,
+      unexpectedBetweenBaseNameAndArgumentNames,
+      argumentNames: argumentNames,
+      unexpectedAfterArgumentNames,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:moduleSelector:_:baseName:_:argumentNames:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1537,6 +1568,8 @@ extension DeclReferenceExprSyntax {
     self.init(
       leadingTrivia: leadingTrivia,
       unexpectedBeforeIdentifier,
+      moduleSelector: nil,
+      nil,
       baseName: identifier,
       unexpectedBetweenIdentifierAndDeclNameArguments,
       argumentNames: declNameArguments,
@@ -3792,6 +3825,39 @@ extension GenericWhereClauseSyntax {
   }
 }
 
+extension IdentifierTypeSyntax {
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBeforeModuleSelector
+    }
+    set {
+      unexpectedBeforeModuleSelector = newValue
+    }
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    _ unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+    genericArgumentClause: GenericArgumentClauseSyntax? = nil,
+    _ unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeName,
+      moduleSelector: nil,
+      nil,
+      name: name,
+      unexpectedBetweenNameAndGenericArgumentClause,
+      genericArgumentClause: genericArgumentClause,
+      unexpectedAfterGenericArgumentClause,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
 extension ImplementsAttributeArgumentsSyntax {
   @available(*, deprecated, renamed: "unexpectedBetweenCommaAndDeclName")
   public var unexpectedBetweenCommaAndDeclname: UnexpectedNodesSyntax? {
@@ -4647,6 +4713,15 @@ extension MacroDeclSyntax {
 }
 
 extension MacroExpansionDeclSyntax {
+  public var unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenPoundAndModuleSelector
+    }
+    set {
+      unexpectedBetweenPoundAndModuleSelector = newValue
+    }
+  }
+
   @available(*, deprecated, renamed: "unexpectedBetweenModifiersAndPound")
   public var unexpectedBetweenModifiersAndPoundToken: UnexpectedNodesSyntax? {
     get {
@@ -4667,13 +4742,13 @@ extension MacroExpansionDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "unexpectedBetweenPoundAndMacroName")
+  @available(*, deprecated, renamed: "unexpectedBetweenPoundAndModuleSelector")
   public var unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenPoundAndMacroName
+      return unexpectedBetweenPoundAndModuleSelector
     }
     set {
-      unexpectedBetweenPoundAndMacroName = newValue
+      unexpectedBetweenPoundAndModuleSelector = newValue
     }
   }
 
@@ -4747,7 +4822,61 @@ extension MacroExpansionDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:pound:_:macroName:_:genericArgumentClause:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    _ unexpectedBetweenModifiersAndPound: UnexpectedNodesSyntax? = nil,
+    pound: TokenSyntax = .poundToken(),
+    _ unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? = nil,
+    macroName: TokenSyntax,
+    _ unexpectedBetweenMacroNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+    genericArgumentClause: GenericArgumentClauseSyntax? = nil,
+    _ unexpectedBetweenGenericArgumentClauseAndLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+    arguments: LabeledExprListSyntax,
+    _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax? = nil,
+    _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
+    trailingClosure: ClosureExprSyntax? = nil,
+    _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
+    _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      attributes: attributes,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers: modifiers,
+      unexpectedBetweenModifiersAndPound,
+      pound: pound,
+      unexpectedBetweenPoundAndMacroName,
+      moduleSelector: nil,
+      nil,
+      macroName: macroName,
+      unexpectedBetweenMacroNameAndGenericArgumentClause,
+      genericArgumentClause: genericArgumentClause,
+      unexpectedBetweenGenericArgumentClauseAndLeftParen,
+      leftParen: leftParen,
+      unexpectedBetweenLeftParenAndArguments,
+      arguments: arguments,
+      unexpectedBetweenArgumentsAndRightParen,
+      rightParen: rightParen,
+      unexpectedBetweenRightParenAndTrailingClosure,
+      trailingClosure: trailingClosure,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
+      additionalTrailingClosures: additionalTrailingClosures,
+      unexpectedAfterAdditionalTrailingClosures,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:pound:_:moduleSelector:_:macroName:_:genericArgumentClause:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -4783,6 +4912,8 @@ extension MacroExpansionDeclSyntax {
       unexpectedBetweenModifiersAndPoundToken,
       pound: poundToken,
       unexpectedBetweenPoundTokenAndMacro,
+      moduleSelector: nil,
+      nil,
       macroName: macro,
       unexpectedBetweenMacroAndGenericArguments,
       genericArgumentClause: genericArguments,
@@ -4803,6 +4934,15 @@ extension MacroExpansionDeclSyntax {
 }
 
 extension MacroExpansionExprSyntax {
+  public var unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenPoundAndModuleSelector
+    }
+    set {
+      unexpectedBetweenPoundAndModuleSelector = newValue
+    }
+  }
+
   @available(*, deprecated, renamed: "unexpectedBeforePound")
   public var unexpectedBeforePoundToken: UnexpectedNodesSyntax? {
     get {
@@ -4823,13 +4963,13 @@ extension MacroExpansionExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "unexpectedBetweenPoundAndMacroName")
+  @available(*, deprecated, renamed: "unexpectedBetweenPoundAndModuleSelector")
   public var unexpectedBetweenPoundTokenAndMacro: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenPoundAndMacroName
+      return unexpectedBetweenPoundAndModuleSelector
     }
     set {
-      unexpectedBetweenPoundAndMacroName = newValue
+      unexpectedBetweenPoundAndModuleSelector = newValue
     }
   }
 
@@ -4903,7 +5043,53 @@ extension MacroExpansionExprSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:pound:_:macroName:_:genericArgumentClause:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforePound: UnexpectedNodesSyntax? = nil,
+    pound: TokenSyntax = .poundToken(),
+    _ unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? = nil,
+    macroName: TokenSyntax,
+    _ unexpectedBetweenMacroNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+    genericArgumentClause: GenericArgumentClauseSyntax? = nil,
+    _ unexpectedBetweenGenericArgumentClauseAndLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax? = nil,
+    _ unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+    arguments: LabeledExprListSyntax,
+    _ unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax? = nil,
+    _ unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
+    trailingClosure: ClosureExprSyntax? = nil,
+    _ unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
+    _ unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforePound,
+      pound: pound,
+      unexpectedBetweenPoundAndMacroName,
+      moduleSelector: nil,
+      nil,
+      macroName: macroName,
+      unexpectedBetweenMacroNameAndGenericArgumentClause,
+      genericArgumentClause: genericArgumentClause,
+      unexpectedBetweenGenericArgumentClauseAndLeftParen,
+      leftParen: leftParen,
+      unexpectedBetweenLeftParenAndArguments,
+      arguments: arguments,
+      unexpectedBetweenArgumentsAndRightParen,
+      rightParen: rightParen,
+      unexpectedBetweenRightParenAndTrailingClosure,
+      trailingClosure: trailingClosure,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
+      additionalTrailingClosures: additionalTrailingClosures,
+      unexpectedAfterAdditionalTrailingClosures,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:pound:_:moduleSelector:_:macroName:_:genericArgumentClause:_:leftParen:_:arguments:_:rightParen:_:trailingClosure:_:additionalTrailingClosures:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -4931,6 +5117,8 @@ extension MacroExpansionExprSyntax {
       unexpectedBeforePoundToken,
       pound: poundToken,
       unexpectedBetweenPoundTokenAndMacro,
+      moduleSelector: nil,
+      nil,
       macroName: macro,
       unexpectedBetweenMacroAndGenericArguments,
       genericArgumentClause: genericArguments,
@@ -5003,6 +5191,47 @@ extension MemberAccessExprSyntax {
       unexpectedBetweenDotAndDeclName,
       declName: declName,
       unexpectedAfterDeclName,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension MemberTypeSyntax {
+  public var unexpectedBetweenPeriodAndName: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenPeriodAndModuleSelector
+    }
+    set {
+      unexpectedBetweenPeriodAndModuleSelector = newValue
+    }
+  }
+
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil,
+    baseType: some TypeSyntaxProtocol,
+    _ unexpectedBetweenBaseTypeAndPeriod: UnexpectedNodesSyntax? = nil,
+    period: TokenSyntax = .periodToken(),
+    _ unexpectedBetweenPeriodAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    _ unexpectedBetweenNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+    genericArgumentClause: GenericArgumentClauseSyntax? = nil,
+    _ unexpectedAfterGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeBaseType,
+      baseType: baseType,
+      unexpectedBetweenBaseTypeAndPeriod,
+      period: period,
+      unexpectedBetweenPeriodAndName,
+      moduleSelector: nil,
+      nil,
+      name: name,
+      unexpectedBetweenNameAndGenericArgumentClause,
+      genericArgumentClause: genericArgumentClause,
+      unexpectedAfterGenericArgumentClause,
       trailingTrivia: trailingTrivia
     )
   }

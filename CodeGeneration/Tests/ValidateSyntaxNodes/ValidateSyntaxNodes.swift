@@ -372,10 +372,11 @@ class ValidateSyntaxNodes: XCTestCase {
           message:
             "child 'defaultKeyword' has a single keyword as its only token choice and is followed by a colon. It should thus be named 'defaultLabel'"
         ),
-        // 'separator' is more descriptive than 'xKeyword'
+        // 'separator' is more descriptive than 'ofKeyword'
         ValidationFailure(
           node: .inlineArrayType,
-          message: "child 'separator' has a single keyword as its only token choice and should thus be named 'xKeyword'"
+          message:
+            "child 'separator' has a single keyword as its only token choice and should thus be named 'ofKeyword'"
         ),
       ]
     )

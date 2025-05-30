@@ -275,7 +275,6 @@ public enum Keyword: CaseIterable {
   case `while`
   case willSet
   case wrt
-  case x
   case yield
 
   public var spec: KeywordSpec {
@@ -682,8 +681,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("willSet")
     case .wrt:
       return KeywordSpec("wrt")
-    case .x:
-      return KeywordSpec("x", experimentalFeature: .inlineArrayTypeSugar)
     case .yield:
       return KeywordSpec("yield")
     }

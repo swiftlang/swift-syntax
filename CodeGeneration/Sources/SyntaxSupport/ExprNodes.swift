@@ -52,7 +52,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "elements",
-        kind: .collection(kind: .arrayElementList, collectionElementName: "Element")
+        kind: .collection(kind: .arrayElementList)
       ),
       Child(
         name: "rightSquare",
@@ -411,7 +411,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "items",
-        kind: .collection(kind: .closureCaptureList, collectionElementName: "Item")
+        kind: .collection(kind: .closureCaptureList)
       ),
       Child(
         name: "rightSquare",
@@ -429,12 +429,12 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        kind: .collection(kind: .attributeList, defaultsToEmpty: true),
         nameForDiagnostics: "attributes"
       ),
       Child(
         name: "modifiers",
-        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
+        kind: .collection(kind: .declModifierList, defaultsToEmpty: true),
         nameForDiagnostics: "modifiers"
       ),
       Child(
@@ -499,7 +499,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "parameters",
-        kind: .collection(kind: .closureParameterList, collectionElementName: "Parameter"),
+        kind: .collection(kind: .closureParameterList),
         nameForDiagnostics: "parameters",
         documentation: "The actual parameters."
       ),
@@ -536,7 +536,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "statements",
-        kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement")
+        kind: .collection(kind: .codeBlockItemList)
       ),
       Child(
         name: "rightBrace",
@@ -597,7 +597,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "attributes",
-        kind: .collection(kind: .attributeList, collectionElementName: "Attribute", defaultsToEmpty: true),
+        kind: .collection(kind: .attributeList, defaultsToEmpty: true),
         nameForDiagnostics: "attributes"
       ),
       Child(
@@ -687,7 +687,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "arguments",
-        kind: .collection(kind: .declNameArgumentList, collectionElementName: "Argument")
+        kind: .collection(kind: .declNameArgumentList)
       ),
       Child(
         name: "rightParen",
@@ -839,7 +839,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "catchClauses",
-        kind: .collection(kind: .catchClauseList, collectionElementName: "CatchClause", defaultsToEmpty: true)
+        kind: .collection(kind: .catchClauseList, defaultsToEmpty: true)
       ),
     ]
   ),
@@ -900,7 +900,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "expressions",
-        kind: .collection(kind: .labeledExprList, collectionElementName: "Expression")
+        kind: .collection(kind: .labeledExprList)
       ),
       Child(
         name: "rightParen",
@@ -965,7 +965,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "arguments",
-        kind: .collection(kind: .labeledExprList, collectionElementName: "Argument"),
+        kind: .collection(kind: .labeledExprList),
         nameForDiagnostics: "arguments"
       ),
       Child(
@@ -982,11 +982,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "additionalTrailingClosures",
-        kind: .collection(
-          kind: .multipleTrailingClosureElementList,
-          collectionElementName: "AdditionalTrailingClosure",
-          defaultsToEmpty: true
-        ),
+        kind: .collection(kind: .multipleTrailingClosureElementList, defaultsToEmpty: true),
         nameForDiagnostics: "trailing closures"
       ),
     ],
@@ -1044,7 +1040,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "conditions",
-        kind: .collection(kind: .conditionElementList, collectionElementName: "Condition")
+        kind: .collection(kind: .conditionElementList)
       ),
       Child(
         name: "body",
@@ -1252,7 +1248,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "components",
-        kind: .collection(kind: .keyPathComponentList, collectionElementName: "KeyPathComponent")
+        kind: .collection(kind: .keyPathComponentList)
       ),
     ]
   ),
@@ -1300,7 +1296,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "arguments",
-        kind: .collection(kind: .labeledExprList, collectionElementName: "Argument"),
+        kind: .collection(kind: .labeledExprList),
         nameForDiagnostics: "arguments"
       ),
       Child(
@@ -1374,7 +1370,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "arguments",
-        kind: .collection(kind: .labeledExprList, collectionElementName: "Argument")
+        kind: .collection(kind: .labeledExprList)
       ),
       Child(
         name: "rightParen",
@@ -1388,11 +1384,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "additionalTrailingClosures",
-        kind: .collection(
-          kind: .multipleTrailingClosureElementList,
-          collectionElementName: "AdditionalTrailingClosure",
-          defaultsToEmpty: true
-        )
+        kind: .collection(kind: .multipleTrailingClosureElementList, defaultsToEmpty: true)
       ),
     ],
     childHistory: [
@@ -1699,7 +1691,7 @@ public let EXPR_NODES: [Node] = [
     children: [
       Child(
         name: "elements",
-        kind: .collection(kind: .exprList, collectionElementName: "Element")
+        kind: .collection(kind: .exprList)
       )
     ]
   ),
@@ -1745,7 +1737,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "segments",
-        kind: .collection(kind: .stringLiteralSegmentList, collectionElementName: "Segment")
+        kind: .collection(kind: .stringLiteralSegmentList)
       ),
       Child(
         name: "closingQuote",
@@ -1787,7 +1779,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "segments",
-        kind: .collection(kind: .simpleStringLiteralSegmentList, collectionElementName: "Segment"),
+        kind: .collection(kind: .simpleStringLiteralSegmentList),
         documentation: "String content"
       ),
       Child(
@@ -1839,7 +1831,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "arguments",
-        kind: .collection(kind: .labeledExprList, collectionElementName: "Argument"),
+        kind: .collection(kind: .labeledExprList),
         nameForDiagnostics: "arguments"
       ),
       Child(
@@ -1854,11 +1846,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "additionalTrailingClosures",
-        kind: .collection(
-          kind: .multipleTrailingClosureElementList,
-          collectionElementName: "AdditionalTrailingClosure",
-          defaultsToEmpty: true
-        ),
+        kind: .collection(kind: .multipleTrailingClosureElementList, defaultsToEmpty: true),
         nameForDiagnostics: "trailing closures"
       ),
     ],
@@ -1894,7 +1882,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "caseItems",
-        kind: .collection(kind: .switchCaseItemList, collectionElementName: "CaseItem")
+        kind: .collection(kind: .switchCaseItemList)
       ),
       Child(
         name: "colon",
@@ -1939,7 +1927,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "statements",
-        kind: .collection(kind: .codeBlockItemList, collectionElementName: "Statement")
+        kind: .collection(kind: .codeBlockItemList)
       ),
     ],
     childHistory: [
@@ -2004,7 +1992,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "cases",
-        kind: .collection(kind: .switchCaseList, collectionElementName: "Case"),
+        kind: .collection(kind: .switchCaseList),
         documentation: "The switch's body that contains all possible cases."
       ),
       Child(
@@ -2169,7 +2157,7 @@ public let EXPR_NODES: [Node] = [
       ),
       Child(
         name: "elements",
-        kind: .collection(kind: .labeledExprList, collectionElementName: "Element")
+        kind: .collection(kind: .labeledExprList)
       ),
       Child(
         name: "rightParen",

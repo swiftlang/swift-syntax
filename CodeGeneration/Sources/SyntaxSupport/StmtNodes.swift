@@ -26,7 +26,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "availabilityArguments",
-        kind: .collection(kind: .availabilityArgumentList, collectionElementName: "AvailabilityArgument")
+        kind: .collection(kind: .availabilityArgumentList)
       ),
       Child(
         name: "rightParen",
@@ -85,7 +85,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "catchItems",
-        kind: .collection(kind: .catchItemList, collectionElementName: "CatchItem", defaultsToEmpty: true)
+        kind: .collection(kind: .catchItemList, defaultsToEmpty: true)
       ),
       Child(
         name: "body",
@@ -233,7 +233,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "catchClauses",
-        kind: .collection(kind: .catchClauseList, collectionElementName: "CatchClause", defaultsToEmpty: true)
+        kind: .collection(kind: .catchClauseList, defaultsToEmpty: true)
       ),
     ]
   ),
@@ -359,7 +359,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "conditions",
-        kind: .collection(kind: .conditionElementList, collectionElementName: "Condition"),
+        kind: .collection(kind: .conditionElementList),
         nameForDiagnostics: "condition"
       ),
       Child(
@@ -557,7 +557,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "conditions",
-        kind: .collection(kind: .conditionElementList, collectionElementName: "Condition")
+        kind: .collection(kind: .conditionElementList)
       ),
       Child(
         name: "body",
@@ -577,7 +577,7 @@ public let STMT_NODES: [Node] = [
       ),
       Child(
         name: "elements",
-        kind: .collection(kind: .yieldedExpressionList, collectionElementName: "Element")
+        kind: .collection(kind: .yieldedExpressionList)
       ),
       Child(
         name: "rightParen",

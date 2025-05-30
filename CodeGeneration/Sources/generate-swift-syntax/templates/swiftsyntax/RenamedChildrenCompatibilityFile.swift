@@ -22,9 +22,6 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
     try ExtensionDeclSyntax("extension \(layoutNode.type.syntaxBaseName)") {
       for child in deprecatedMembers.vars {
         makeCompatibilityVar(for: child)
-        if let addMethod = makeCompatibilityAddMethod(for: child) {
-          addMethod
-        }
       }
 
       let renamedName = InitSignature(layoutNode).compoundName
@@ -40,9 +37,6 @@ let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copy
     try ExtensionDeclSyntax("extension \(trait.protocolName)") {
       for child in deprecatedMembers.vars {
         makeCompatibilityVar(for: child)
-        if let addMethod = makeCompatibilityAddMethod(for: child) {
-          addMethod
-        }
       }
 
       // Not currently generating compatibility inits for traits.
@@ -76,31 +70,6 @@ func makeCompatibilityVar(for child: Child) -> DeclSyntax {
     }
     """
   )
-}
-
-func makeCompatibilityAddMethod(for child: Child) -> DeclSyntax? {
-  if let childNode = SYNTAX_NODE_MAP[child.syntaxNodeKind]?.collectionNode,
-    !child.isUnexpectedNodes,
-    case .collection(
-      kind: _,
-      collectionElementName: let collectionElementName?,
-      defaultsToEmpty: _,
-      deprecatedCollectionElementName: let deprecatedCollectionElementName?
-    ) = child.kind
-  {
-    let childEltType = childNode.collectionElementType.syntaxBaseName
-
-    return DeclSyntax(
-      """
-      @available(*, deprecated, renamed: "add\(raw: collectionElementName)")
-      public func add\(raw: deprecatedCollectionElementName)(_ element: \(childEltType)) -> Self {
-        return add\(raw: collectionElementName)(element)
-      }
-      """
-    )
-  }
-
-  return nil
 }
 
 func makeCompatibilityInit(for signature: InitSignature, renamedName: String) -> InitializerDeclSyntax {

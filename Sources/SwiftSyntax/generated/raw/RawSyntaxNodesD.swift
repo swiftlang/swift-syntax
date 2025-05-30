@@ -450,7 +450,9 @@ public struct RawDeclReferenceExprSyntax: RawExprSyntaxNodeProtocol {
   }
 
   public init(
-    _ unexpectedBeforeBaseName: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBeforeModuleSelector: RawUnexpectedNodesSyntax? = nil,
+    moduleSelector: RawModuleSelectorSyntax?,
+    _ unexpectedBetweenModuleSelectorAndBaseName: RawUnexpectedNodesSyntax? = nil,
     baseName: RawTokenSyntax,
     _ unexpectedBetweenBaseNameAndArgumentNames: RawUnexpectedNodesSyntax? = nil,
     argumentNames: RawDeclNameArgumentsSyntax?,
@@ -458,35 +460,45 @@ public struct RawDeclReferenceExprSyntax: RawExprSyntaxNodeProtocol {
     arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .declReferenceExpr, uninitializedCount: 5, arena: arena) { layout in
+      kind: .declReferenceExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeBaseName?.raw
-      layout[1] = baseName.raw
-      layout[2] = unexpectedBetweenBaseNameAndArgumentNames?.raw
-      layout[3] = argumentNames?.raw
-      layout[4] = unexpectedAfterArgumentNames?.raw
+      layout[0] = unexpectedBeforeModuleSelector?.raw
+      layout[1] = moduleSelector?.raw
+      layout[2] = unexpectedBetweenModuleSelectorAndBaseName?.raw
+      layout[3] = baseName.raw
+      layout[4] = unexpectedBetweenBaseNameAndArgumentNames?.raw
+      layout[5] = argumentNames?.raw
+      layout[6] = unexpectedAfterArgumentNames?.raw
     }
     self.init(unchecked: raw)
   }
 
-  public var unexpectedBeforeBaseName: RawUnexpectedNodesSyntax? {
+  public var unexpectedBeforeModuleSelector: RawUnexpectedNodesSyntax? {
     layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var baseName: RawTokenSyntax {
-    layoutView.children[1].map(RawTokenSyntax.init(raw:))!
+  public var moduleSelector: RawModuleSelectorSyntax? {
+    layoutView.children[1].map(RawModuleSelectorSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenBaseNameAndArgumentNames: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenModuleSelectorAndBaseName: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
+  public var baseName: RawTokenSyntax {
+    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenBaseNameAndArgumentNames: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
   public var argumentNames: RawDeclNameArgumentsSyntax? {
-    layoutView.children[3].map(RawDeclNameArgumentsSyntax.init(raw:))
+    layoutView.children[5].map(RawDeclNameArgumentsSyntax.init(raw:))
   }
 
   public var unexpectedAfterArgumentNames: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

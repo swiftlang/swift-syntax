@@ -1555,6 +1555,12 @@ public let DECL_NODES: [Node] = [
         documentation: "The `#` sign."
       ),
       Child(
+        name: "moduleSelector",
+        kind: .node(kind: .moduleSelector),
+        experimentalFeature: .moduleSelector,
+        isOptional: true
+      ),
+      Child(
         name: "macroName",
         kind: .token(choices: [.token(.identifier)])
       ),

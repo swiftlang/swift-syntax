@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-@_spi(RawSyntax) internal import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) internal import SwiftSyntax
 #else
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftSyntax
 #endif
 
 extension Parser {
@@ -89,6 +89,7 @@ extension Parser {
     // Parse an argument list, if the flags allow it and it's present.
     let args = self.parseArgLabelList(flags)
     return RawDeclReferenceExprSyntax(
+      moduleSelector: nil,
       baseName: base,
       argumentNames: args,
       arena: self.arena
@@ -201,6 +202,7 @@ extension Parser {
 
     var result = RawTypeSyntax(
       RawIdentifierTypeSyntax(
+        moduleSelector: nil,
         unexpectedBeforeName,
         name: name,
         genericArgumentClause: generics,
@@ -238,6 +240,7 @@ extension Parser {
         RawMemberTypeSyntax(
           baseType: result,
           period: keepGoing!,
+          moduleSelector: nil,
           unexpectedBeforeName,
           name: name,
           genericArgumentClause: generics,

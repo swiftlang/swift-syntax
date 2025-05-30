@@ -599,7 +599,62 @@ extension KeyPathSubscriptComponentSyntax {
 }
 
 extension MacroExpansionDeclSyntax {
-  @available(*, deprecated, message: "Use an initializer with pound, macroName, genericArgumentClause, arguments argument(s).")
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+    leadingTrivia: Trivia? = nil,
+    unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    unexpectedBetweenModifiersAndPound: UnexpectedNodesSyntax? = nil,
+    pound: TokenSyntax = .poundToken(),
+    unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? = nil,
+    macroName: TokenSyntax,
+    unexpectedBetweenMacroNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+    genericArgumentClause: GenericArgumentClauseSyntax? = nil,
+    unexpectedBetweenGenericArgumentClauseAndLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax? = nil,
+    unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+    unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax? = nil,
+    unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
+    trailingClosure: ClosureExprSyntax? = nil,
+    unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
+    unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    @LabeledExprListBuilder argumentsBuilder: () throws -> LabeledExprListSyntax,
+    trailingTrivia: Trivia? = nil
+  ) rethrows {
+    try self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      attributes: attributes,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers: modifiers,
+      unexpectedBetweenModifiersAndPound,
+      pound: pound,
+      unexpectedBetweenPoundAndMacroName,
+      macroName: macroName,
+      unexpectedBetweenMacroNameAndGenericArgumentClause,
+      genericArgumentClause: genericArgumentClause,
+      unexpectedBetweenGenericArgumentClauseAndLeftParen,
+      leftParen: leftParen,
+      unexpectedBetweenLeftParenAndArguments,
+      arguments: argumentsBuilder(),
+      unexpectedBetweenArgumentsAndRightParen,
+      rightParen: rightParen,
+      unexpectedBetweenRightParenAndTrailingClosure,
+      trailingClosure: trailingClosure,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
+      additionalTrailingClosures: additionalTrailingClosures,
+      unexpectedAfterAdditionalTrailingClosures,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension MacroExpansionDeclSyntax {
+  @available(*, deprecated, message: "Use an initializer with pound, moduleSelector, macroName, genericArgumentClause, arguments argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(
@@ -656,7 +711,54 @@ extension MacroExpansionDeclSyntax {
 }
 
 extension MacroExpansionExprSyntax {
-  @available(*, deprecated, message: "Use an initializer with pound, macroName, genericArgumentClause, arguments argument(s).")
+  /// A convenience initializer that allows initializing syntax collections using result builders
+  public init(
+    leadingTrivia: Trivia? = nil,
+    unexpectedBeforePound: UnexpectedNodesSyntax? = nil,
+    pound: TokenSyntax = .poundToken(),
+    unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? = nil,
+    macroName: TokenSyntax,
+    unexpectedBetweenMacroNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
+    genericArgumentClause: GenericArgumentClauseSyntax? = nil,
+    unexpectedBetweenGenericArgumentClauseAndLeftParen: UnexpectedNodesSyntax? = nil,
+    leftParen: TokenSyntax? = nil,
+    unexpectedBetweenLeftParenAndArguments: UnexpectedNodesSyntax? = nil,
+    unexpectedBetweenArgumentsAndRightParen: UnexpectedNodesSyntax? = nil,
+    rightParen: TokenSyntax? = nil,
+    unexpectedBetweenRightParenAndTrailingClosure: UnexpectedNodesSyntax? = nil,
+    trailingClosure: ClosureExprSyntax? = nil,
+    unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    additionalTrailingClosures: MultipleTrailingClosureElementListSyntax = [],
+    unexpectedAfterAdditionalTrailingClosures: UnexpectedNodesSyntax? = nil,
+    @LabeledExprListBuilder argumentsBuilder: () throws -> LabeledExprListSyntax,
+    trailingTrivia: Trivia? = nil
+  ) rethrows {
+    try self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforePound,
+      pound: pound,
+      unexpectedBetweenPoundAndMacroName,
+      macroName: macroName,
+      unexpectedBetweenMacroNameAndGenericArgumentClause,
+      genericArgumentClause: genericArgumentClause,
+      unexpectedBetweenGenericArgumentClauseAndLeftParen,
+      leftParen: leftParen,
+      unexpectedBetweenLeftParenAndArguments,
+      arguments: argumentsBuilder(),
+      unexpectedBetweenArgumentsAndRightParen,
+      rightParen: rightParen,
+      unexpectedBetweenRightParenAndTrailingClosure,
+      trailingClosure: trailingClosure,
+      unexpectedBetweenTrailingClosureAndAdditionalTrailingClosures,
+      additionalTrailingClosures: additionalTrailingClosures,
+      unexpectedAfterAdditionalTrailingClosures,
+      trailingTrivia: trailingTrivia
+    )
+  }
+}
+
+extension MacroExpansionExprSyntax {
+  @available(*, deprecated, message: "Use an initializer with pound, moduleSelector, macroName, genericArgumentClause, arguments argument(s).")
   @_disfavoredOverload
   /// A convenience initializer that allows initializing syntax collections using result builders
   public init(

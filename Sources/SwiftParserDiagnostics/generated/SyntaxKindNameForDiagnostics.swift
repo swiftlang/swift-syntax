@@ -290,6 +290,8 @@ extension SyntaxKind {
       return "statement"
     case .missingType:
       return "type"
+    case .moduleSelector:
+      return "module selector"
     case .multipleTrailingClosureElement:
       return "trailing closure"
     case .namedOpaqueReturnType:

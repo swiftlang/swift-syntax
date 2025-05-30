@@ -53,7 +53,7 @@ extension Parser.ExperimentalFeatures {
   public static let inlineArrayTypeSugar = Self(rawValue: 1 << 8)
 
   /// Whether to enable the parsing of set default actor isolation for a file.
-  public static let defaultIsolationPerFile = Self (rawValue: 1 << 9)
+  public static let defaultIsolationPerFile = Self(rawValue: 1 << 9)
 
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.

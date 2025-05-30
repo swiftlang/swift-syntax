@@ -3390,14 +3390,14 @@ open class ThrowingSyntaxVisitor<E: Error> {
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
   @_spi(ExperimentalLanguageFeatures)
-  open func visit(_ node: UsingDeclSyntax) -> SyntaxVisitorContinueKind {
+  open func visit(_ node: UsingDeclSyntax) throws (E) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
   /// The function called after visiting `UsingDeclSyntax` and its descendants.
   ///   - node: the node we just finished visiting.
   @_spi(ExperimentalLanguageFeatures)
-  open func visitPost(_ node: UsingDeclSyntax) {
+  open func visitPost(_ node: UsingDeclSyntax) throws (E) {
   }
 
   /// Visiting ``ValueBindingPatternSyntax`` specifically.
@@ -5780,23 +5780,17 @@ open class ThrowingSyntaxVisitor<E: Error> {
   }
 
   @inline(never)
-<<<<<<< HEAD
-  private func visitUsingDeclSyntaxImpl(_ node: Syntax) {
-    if visit(UsingDeclSyntax(unsafeCasting: node)) == .visitChildren {
-      visitChildren(node)
+  private func visitUsingDeclSyntaxImpl(_ node: Syntax) throws (E) {
+    if try visit(UsingDeclSyntax(unsafeCasting: node)) == .visitChildren {
+      try visitChildren(node)
     }
-    visitPost(UsingDeclSyntax(unsafeCasting: node))
+    try visitPost(UsingDeclSyntax(unsafeCasting: node))
   }
 
   @inline(never)
-  private func visitValueBindingPatternSyntaxImpl(_ node: Syntax) {
-    if visit(ValueBindingPatternSyntax(unsafeCasting: node)) == .visitChildren {
-      visitChildren(node)
-=======
   private func visitValueBindingPatternSyntaxImpl(_ node: Syntax) throws (E) {
     if try visit(ValueBindingPatternSyntax(unsafeCasting: node)) == .visitChildren {
       try visitChildren(node)
->>>>>>> 268a142d (Modify SyntaxVisitor to supprt throwing during travresal.)
     }
     try visitPost(ValueBindingPatternSyntax(unsafeCasting: node))
   }
@@ -7060,13 +7054,9 @@ open class ThrowingSyntaxVisitor<E: Error> {
     case .unresolvedTernaryExpr:
       try self.visitUnresolvedTernaryExprSyntaxImpl(node)
     case .unsafeExpr:
-<<<<<<< HEAD
-      self.visitUnsafeExprSyntaxImpl(node)
-    case .usingDecl:
-      self.visitUsingDeclSyntaxImpl(node)
-=======
       try self.visitUnsafeExprSyntaxImpl(node)
->>>>>>> 268a142d (Modify SyntaxVisitor to supprt throwing during travresal.)
+    case .usingDecl:
+      try self.visitUsingDeclSyntaxImpl(node)
     case .valueBindingPattern:
       try self.visitValueBindingPatternSyntaxImpl(node)
     case .variableDecl:

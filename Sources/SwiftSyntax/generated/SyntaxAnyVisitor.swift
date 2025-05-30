@@ -2300,23 +2300,18 @@ open class ThrowingSyntaxAnyVisitor<E: Error>: ThrowingSyntaxVisitor<E> {
     try visitAnyPost(node._syntaxNode)
   }
 
-<<<<<<< HEAD
   @_spi(ExperimentalLanguageFeatures)
-  override open func visit(_ node: UsingDeclSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
+  override open func visit(_ node: UsingDeclSyntax) throws(E) -> SyntaxVisitorContinueKind {
+    return try visitAny(node._syntaxNode)
   }
 
   @_spi(ExperimentalLanguageFeatures)
-  override open func visitPost(_ node: UsingDeclSyntax) {
-    visitAnyPost(node._syntaxNode)
+  override open func visitPost(_ node: UsingDeclSyntax) throws(E) {
+    try visitAnyPost(node._syntaxNode)
   }
 
-  override open func visit(_ node: ValueBindingPatternSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-=======
   override open func visit(_ node: ValueBindingPatternSyntax) throws(E) -> SyntaxVisitorContinueKind {
     return try visitAny(node._syntaxNode)
->>>>>>> 268a142d (Modify SyntaxVisitor to supprt throwing during travresal.)
   }
 
   override open func visitPost(_ node: ValueBindingPatternSyntax) throws(E) {

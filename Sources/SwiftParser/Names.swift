@@ -188,36 +188,24 @@ extension Parser {
   }
 
   mutating func parseQualifiedTypeIdentifier() -> RawTypeSyntax {
-    if self.at(.keyword(.Any)) {
-      return RawTypeSyntax(self.parseAnyType())
+
+    let identifierType = self.parseTypeIdentifier()
+    var result = RawTypeSyntax(identifierType)
+
+    // There are no nested types inside `Any`.
+    if case TokenSpec.keyword(.Any) = identifierType.name {
+      return result
     }
 
-    let (unexpectedBeforeName, name) = self.expect(anyIn: IdentifierTypeSyntax.NameOptions.self, default: .identifier)
-    let generics: RawGenericArgumentClauseSyntax?
-    if self.at(prefix: "<") {
-      generics = self.parseGenericArguments()
-    } else {
-      generics = nil
+    func hasAnotherMember() -> Bool {
+      // If qualified name base type cannot be parsed from the current
+      // point (i.e. the next type identifier is not followed by a '.'),
+      // then the next identifier is the final declaration name component.
+      var lookahead = self.lookahead()
+      return lookahead.consume(ifPrefix: ".", as: .period) != nil && lookahead.canParseBaseTypeForQualifiedDeclName()
     }
 
-    var result = RawTypeSyntax(
-      RawIdentifierTypeSyntax(
-        moduleSelector: nil,
-        unexpectedBeforeName,
-        name: name,
-        genericArgumentClause: generics,
-        arena: self.arena
-      )
-    )
-
-    // If qualified name base type cannot be parsed from the current
-    // point (i.e. the next type identifier is not followed by a '.'),
-    // then the next identifier is the final declaration name component.
-    var lookahead = self.lookahead()
-    guard
-      lookahead.consume(ifPrefix: ".", as: .period) != nil,
-      lookahead.canParseBaseTypeForQualifiedDeclName()
-    else {
+    guard hasAnotherMember() else {
       return result
     }
 
@@ -248,14 +236,7 @@ extension Parser {
         )
       )
 
-      // If qualified name base type cannot be parsed from the current
-      // point (i.e. the next type identifier is not followed by a '.'),
-      // then the next identifier is the final declaration name component.
-      var lookahead = self.lookahead()
-      guard
-        lookahead.consume(ifPrefix: ".", as: .period) != nil,
-        lookahead.canParseBaseTypeForQualifiedDeclName()
-      else {
+      guard hasAnotherMember() else {
         break
       }
 

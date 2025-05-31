@@ -304,7 +304,7 @@ public let TYPE_NODES: [Node] = [
     base: .type,
     experimentalFeature: .inlineArrayTypeSugar,
     nameForDiagnostics: "inline array type",
-    documentation: "An inline array type `[3 x Int]`, sugar for `InlineArray<3, Int>`.",
+    documentation: "An inline array type `[3 of Int]`, sugar for `InlineArray<3, Int>`.",
     children: [
       Child(
         name: "leftSquare",
@@ -317,12 +317,12 @@ public let TYPE_NODES: [Node] = [
         documentation: """
           The `count` argument for the inline array type.
 
-          - Note: In semantically valid Swift code, this is always an integer or a wildcard type, e.g `_` in `[_ x Int]`.
+          - Note: In semantically valid Swift code, this is always an integer or a wildcard type, e.g `_` in `[_ of Int]`.
           """
       ),
       Child(
         name: "separator",
-        kind: .token(choices: [.keyword(.x)])
+        kind: .token(choices: [.keyword(.of)])
       ),
       Child(
         name: "element",

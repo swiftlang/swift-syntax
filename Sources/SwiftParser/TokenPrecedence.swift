@@ -344,7 +344,6 @@ enum TokenPrecedence: Comparable {
       .visibility,
       .weak,
       .wrt,
-      .x,
       .unsafe:
       self = .exprKeyword
     #if RESILIENT_LIBRARIES

@@ -221,19 +221,10 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case `while`
   case willSet
   case wrt
-  @_spi(ExperimentalLanguageFeatures)
-  case x
   case yield
 
   @_spi(RawSyntax) public init?(_ text: SyntaxText) {
     switch text.count {
-    case 1:
-      switch text {
-      case "x":
-        self = .x
-      default:
-        return nil
-      }
     case 2:
       switch text {
       case "as":
@@ -960,7 +951,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "while",
     "willSet",
     "wrt",
-    "x",
     "yield",
   ]
 

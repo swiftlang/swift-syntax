@@ -781,18 +781,18 @@ final class InlineArrayTypeTests: ParserTestCase {
 
   func testBasic() {
     assertParse(
-      "[3 x Int]",
+      "[3 of Int]",
       substructure: InlineArrayTypeSyntax(
         count: .init(argument: .expr("3")),
-        separator: .keyword(.x),
+        separator: .keyword(.of),
         element: .init(argument: .type(TypeSyntax("Int")))
       )
     )
     assertParse(
-      "[Int x _]",
+      "[Int of _]",
       substructure: InlineArrayTypeSyntax(
         count: .init(argument: .type(TypeSyntax("Int"))),
-        separator: .keyword(.x),
+        separator: .keyword(.of),
         element: .init(argument: .type(TypeSyntax("_")))
       )
     )
@@ -804,7 +804,7 @@ final class InlineArrayTypeTests: ParserTestCase {
       """
       S<[
           3
-          1️⃣x
+          1️⃣of
           Int
       ]>()
       """,
@@ -815,7 +815,7 @@ final class InlineArrayTypeTests: ParserTestCase {
     assertParse(
       """
       S<[3
-         1️⃣x
+         1️⃣of
          Int
       ]>()
       """,
@@ -826,23 +826,23 @@ final class InlineArrayTypeTests: ParserTestCase {
     assertParse(
       """
       S<[3
-         1️⃣x Int]>()
+         1️⃣of Int]>()
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code 'x Int' in array")
+        DiagnosticSpec(message: "unexpected code 'of Int' in array")
       ]
     )
     // These are okay.
     assertParse(
       """
-      S<[3 x
+      S<[3 of
              Int]>()
       """
     )
     assertParse(
       """
       S<[
-        3 x Int
+        3 of Int
       ]>()
       """
     )
@@ -850,17 +850,17 @@ final class InlineArrayTypeTests: ParserTestCase {
 
   func testDiagnostics() {
     assertParse(
-      "2️⃣[3 x1️⃣",
+      "2️⃣[3 of1️⃣",
       diagnostics: [
         DiagnosticSpec(
           message: "expected element type and ']' to end inline array type",
           fixIts: ["insert element type and ']'"]
         )
       ],
-      fixedSource: "[3 x <#type#>]"
+      fixedSource: "[3 of <#type#>]"
     )
     assertParse(
-      "ℹ️[3 x Int1️⃣",
+      "ℹ️[3 of Int1️⃣",
       diagnostics: [
         DiagnosticSpec(
           message: "expected ']' to end inline array type",
@@ -868,12 +868,12 @@ final class InlineArrayTypeTests: ParserTestCase {
           fixIts: ["insert ']'"]
         )
       ],
-      fixedSource: "[3 x Int]"
+      fixedSource: "[3 of Int]"
     )
   }
 
   func testEllipsis() {
-    // Make sure this isn't parsed as '<variadic-type> x <missing type>'
-    assertParse("[x...x]")
+    // Make sure this isn't parsed as '<variadic-type> of <missing type>'
+    assertParse("[x...of]")
   }
 }

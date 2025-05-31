@@ -250,7 +250,7 @@ extension Parser {
     var base: RawTypeSyntax
     switch self.at(anyIn: TypeBaseStart.self)?.spec {
     case .Self, .Any, .identifier:
-      base = self.parseTypeIdentifier()
+      base = RawTypeSyntax(self.parseTypeIdentifier())
     case .leftParen:
       base = RawTypeSyntax(self.parseTupleTypeBody())
     case .leftSquare:
@@ -365,9 +365,9 @@ extension Parser {
   }
 
   /// Parse a type identifier.
-  mutating func parseTypeIdentifier() -> RawTypeSyntax {
+  mutating func parseTypeIdentifier() -> RawIdentifierTypeSyntax {
     if self.at(.keyword(.Any)) {
-      return RawTypeSyntax(self.parseAnyType())
+      return self.parseAnyType()
     }
 
     let (unexpectedBeforeName, name) = self.expect(anyIn: IdentifierTypeSyntax.NameOptions.self, default: .identifier)
@@ -378,14 +378,12 @@ extension Parser {
       generics = nil
     }
 
-    return RawTypeSyntax(
-      RawIdentifierTypeSyntax(
-        moduleSelector: nil,
-        unexpectedBeforeName,
-        name: name,
-        genericArgumentClause: generics,
-        arena: self.arena
-      )
+    return RawIdentifierTypeSyntax(
+      moduleSelector: nil,
+      unexpectedBeforeName,
+      name: name,
+      genericArgumentClause: generics,
+      arena: self.arena
     )
   }
 
@@ -1341,9 +1339,7 @@ extension Parser {
 
 extension Parser {
   mutating func parseResultType() -> RawTypeSyntax {
-    if self.currentToken.isEditorPlaceholder {
-      return self.parseTypeIdentifier()
-    } else if self.at(prefix: "<") {
+    if self.at(prefix: "<") && !self.currentToken.isEditorPlaceholder {
       let generics = self.parseGenericParameters()
       let baseType = self.parseType()
       return RawTypeSyntax(
@@ -1359,6 +1355,9 @@ extension Parser {
       guard !result.hasError else {
         return result
       }
+
+      // The rest of this tries to recover from a missing left square bracket like ` -> [Int]]? {`. We can do this for
+      // result types because we know there isn't an enclosing expression context.
 
       // If the right square bracket is at a new line, we should just return the result
       if let rightSquare = self.consume(if: TokenSpec(.rightSquare, allowAtStartOfLine: false)) {

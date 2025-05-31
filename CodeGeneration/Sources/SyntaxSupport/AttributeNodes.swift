@@ -581,7 +581,7 @@ public let ATTRIBUTE_NODES: [Node] = [
   Node(
     kind: .implementsAttributeArguments,
     base: .syntax,
-    nameForDiagnostics: "@_implements arguemnts",
+    nameForDiagnostics: "@_implements arguments",
     documentation:
       "The arguments for the `@_implements` attribute of the form `Type, methodName(arg1Label:arg2Label:)`",
     children: [

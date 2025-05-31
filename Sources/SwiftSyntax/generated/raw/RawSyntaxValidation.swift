@@ -3021,6 +3021,15 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 3, verify(layout[3], as: RawExprSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   }
+  func validateUsingDeclSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("using")]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertAnyHasNoError(kind, 3, [
+      verify(layout[3], as: RawSyntax.self)])
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+  }
   func validateValueBindingPatternSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     assert(layout.count == 5)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
@@ -3690,6 +3699,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     validateUnresolvedTernaryExprSyntax(kind: kind, layout: layout)
   case .unsafeExpr:
     validateUnsafeExprSyntax(kind: kind, layout: layout)
+  case .usingDecl:
+    validateUsingDeclSyntax(kind: kind, layout: layout)
   case .valueBindingPattern:
     validateValueBindingPatternSyntax(kind: kind, layout: layout)
   case .variableDecl:

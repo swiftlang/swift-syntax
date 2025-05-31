@@ -290,6 +290,7 @@ enum PureDeclarationKeyword: TokenSpecSet {
   case `subscript`
   case `typealias`
   case pound
+  case using
 
   init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
@@ -311,6 +312,7 @@ enum PureDeclarationKeyword: TokenSpecSet {
     case TokenSpec(.subscript): self = .subscript
     case TokenSpec(.typealias): self = .typealias
     case TokenSpec(.pound): self = .pound
+    case TokenSpec(.using) where experimentalFeatures.contains(.defaultIsolationPerFile): self = .using
     default: return nil
     }
   }
@@ -335,6 +337,7 @@ enum PureDeclarationKeyword: TokenSpecSet {
     case .subscript: return .keyword(.subscript)
     case .typealias: return .keyword(.typealias)
     case .pound: return TokenSpec(.pound, recoveryPrecedence: .openingPoundIf)
+    case .using: return TokenSpec(.using)
     }
   }
 }

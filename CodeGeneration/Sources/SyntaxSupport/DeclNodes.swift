@@ -1308,6 +1308,37 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
+    kind: .usingDecl,
+    base: .decl,
+    experimentalFeature: .defaultIsolationPerFile,
+    nameForDiagnostics: "using",
+    documentation: """
+      A `using` declaration, currently used to control actor isolation within the current file.
+
+      An example of a `using` declaration is
+
+      ```swift
+      using @MainActor
+      ```
+      """,
+    children: [
+      Child(
+        name: "usingKeyword",
+        kind: .token(choices: [.keyword(.using)]),
+        documentation: "The `using` keyword for this declaration."
+      ),
+      Child(
+        name: "specifier",
+        kind: .nodeChoices(choices: [
+          Child(name: "attribute", kind: .node(kind: .attribute)),
+          Child(name: "modifier", kind: .token(choices: [.token(.identifier)])),
+        ]),
+        documentation: "The specifier that could be either an attribute or a modifier."
+      ),
+    ]
+  ),
+
+  Node(
     kind: .inheritedTypeList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,

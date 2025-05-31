@@ -221,7 +221,7 @@ extension SyntaxKind {
     case .ifExpr:
       return "'if' statement"
     case .implementsAttributeArguments:
-      return "@_implements arguemnts"
+      return "@_implements arguments"
     case .implicitlyUnwrappedOptionalType:
       return "implicitly unwrapped optional type"
     case .importDecl:

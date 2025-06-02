@@ -3450,6 +3450,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "expression"
   case \UnsafeExprSyntax.unexpectedAfterExpression:
     return "unexpectedAfterExpression"
+  case \UsingDeclSyntax.unexpectedBeforeUsingKeyword:
+    return "unexpectedBeforeUsingKeyword"
+  case \UsingDeclSyntax.usingKeyword:
+    return "usingKeyword"
+  case \UsingDeclSyntax.unexpectedBetweenUsingKeywordAndSpecifier:
+    return "unexpectedBetweenUsingKeywordAndSpecifier"
+  case \UsingDeclSyntax.specifier:
+    return "specifier"
+  case \UsingDeclSyntax.unexpectedAfterSpecifier:
+    return "unexpectedAfterSpecifier"
   case \ValueBindingPatternSyntax.unexpectedBeforeBindingSpecifier:
     return "unexpectedBeforeBindingSpecifier"
   case \ValueBindingPatternSyntax.bindingSpecifier:

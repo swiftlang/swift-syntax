@@ -12,7 +12,7 @@
 
 import SwiftBasicFormat
 @_spi(Testing) @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 import SwiftSyntaxBuilder
 import XCTest
 
@@ -3562,6 +3562,137 @@ final class DeclarationTests: ParserTestCase {
         T1,
         T2,
       > {}
+      """
+    )
+  }
+}
+
+final class UsingDeclarationTests: ParserTestCase {
+  override var experimentalFeatures: Parser.ExperimentalFeatures {
+    [.defaultIsolationPerFile]
+  }
+
+  func testUsing() {
+    assertParse(
+      "using @MainActor",
+      substructure: UsingDeclSyntax(
+        usingKeyword: .keyword(.using),
+        specifier: .attribute(
+          AttributeSyntax(
+            attributeName: IdentifierTypeSyntax(
+              name: .identifier("MainActor")
+            )
+          )
+        )
+      )
+    )
+    assertParse(
+      "using nonisolated",
+      substructure: UsingDeclSyntax(
+        usingKeyword: .keyword(.using),
+        specifier: .modifier(.identifier("nonisolated"))
+      )
+    )
+
+    assertParse(
+      "using @Test",
+      substructure: UsingDeclSyntax(
+        usingKeyword: .keyword(.using),
+        specifier: .attribute(
+          AttributeSyntax(
+            attributeName: IdentifierTypeSyntax(
+              name: .identifier("Test")
+            )
+          )
+        )
+      )
+    )
+
+    assertParse(
+      "using test",
+      substructure: UsingDeclSyntax(
+        usingKeyword: .keyword(.using),
+        specifier: .modifier(.identifier("test"))
+      )
+    )
+
+    assertParse(
+      """
+      nonisolated
+      using
+      """,
+      substructure: CodeBlockSyntax(
+        DeclReferenceExprSyntax(baseName: .identifier("using"))
+      )
+    )
+
+    assertParse(
+      """
+      @MainActor
+      using
+      """,
+      substructure: CodeBlockSyntax(
+        DeclReferenceExprSyntax(baseName: .identifier("using"))
+      )
+    )
+
+    assertParse(
+      """
+      using
+      @MainActor 1️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected declaration after attribute",
+          fixIts: ["insert declaration"]
+        )
+      ],
+      fixedSource:
+        """
+        using
+        @MainActor <#declaration#>
+        """
+    )
+
+    assertParse(
+      """
+      using
+      nonisolated
+      """,
+      substructure: CodeBlockSyntax(
+        DeclReferenceExprSyntax(baseName: .identifier("using"))
+      )
+    )
+
+    assertParse(
+      """
+      func
+      using (x: Int) {}
+      """
+    )
+
+    assertParse(
+      """
+      func
+      using
+      (x: Int) {}
+      """
+    )
+
+    assertParse(
+      """
+      let
+        using = 42
+      """
+    )
+
+    assertParse("let (x: Int, using: String) = (x: 42, using: \"\")")
+
+    assertParse(
+      """
+      do {
+        using @MainActor
+      }
       """
     )
   }

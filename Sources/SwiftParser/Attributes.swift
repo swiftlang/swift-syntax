@@ -741,7 +741,7 @@ extension Parser {
       case (.kind, let handle)?:
         let label = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
-        let valueLabel = self.parseAnyIdentifier()
+        let (unexpectedBeforeValue, value) = self.parseAnyIdentifier()
         let comma = self.consume(if: .comma)
         elements.append(
           .labeledSpecializeArgument(
@@ -749,7 +749,8 @@ extension Parser {
               label: label,
               unexpectedBeforeColon,
               colon: colon,
-              value: valueLabel,
+              unexpectedBeforeValue,
+              value: value,
               trailingComma: comma,
               arena: self.arena
             )
@@ -759,7 +760,7 @@ extension Parser {
         (.spi, let handle)?:
         let label = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
-        let valueLabel = self.consumeAnyToken()
+        let (unexpectedBeforeValue, value) = self.expectIdentifier()
         let comma = self.consume(if: .comma)
         elements.append(
           .labeledSpecializeArgument(
@@ -767,7 +768,8 @@ extension Parser {
               label: label,
               unexpectedBeforeColon,
               colon: colon,
-              value: valueLabel,
+              unexpectedBeforeValue,
+              value: value,
               trailingComma: comma,
               arena: self.arena
             )

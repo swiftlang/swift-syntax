@@ -19,6 +19,10 @@
 extension Parser {
   /// Parse a pattern.
   mutating func parsePattern() -> RawPatternSyntax {
+    if let moduleSelector = self.parseModuleSelector() {
+      return attach(moduleSelector, to: self.parsePattern())
+    }
+
     enum PatternOnlyExpectedTokens: TokenSpecSet {
       case leftParen
       case wildcard
@@ -283,6 +287,8 @@ extension Parser.Lookahead {
   }
 
   mutating func canParsePattern() -> Bool {
+    _ = self.consumeModuleSelectorTokens()
+
     enum PurePatternStartTokens: TokenSpecSet {
       case identifier
       case wildcard
@@ -362,7 +368,9 @@ extension Parser.Lookahead {
     }
 
     // If the next token is ':', this is a name.
-    let nextTok = self.peek()
+    var lookahead = self.lookahead()
+    _ = lookahead.consumeModuleSelectorTokens()
+    let nextTok = lookahead.peek()
     if nextTok.rawTokenKind == .colon {
       return true
     }
@@ -370,17 +378,17 @@ extension Parser.Lookahead {
     // If the next token can be an argument label, we might have a name.
     if nextTok.isArgumentLabel(allowDollarIdentifier: true) {
       // If the first name wasn't a contextual keyword, we're done.
-      if !self.at(.keyword(.isolated))
-        && !self.at(.keyword(.some))
-        && !self.at(.keyword(.any))
-        && !self.at(.keyword(.each))
-        && !self.at(.keyword(.repeat))
-        && !self.at(.keyword(.__shared))
-        && !self.at(.keyword(.__owned))
-        && !self.at(.keyword(._const))
-        && !self.at(.keyword(.borrowing))
-        && !self.at(.keyword(.consuming))
-        && !self.at(.keyword(.sending))
+      if !lookahead.at(.keyword(.isolated))
+        && !lookahead.at(.keyword(.some))
+        && !lookahead.at(.keyword(.any))
+        && !lookahead.at(.keyword(.each))
+        && !lookahead.at(.keyword(.repeat))
+        && !lookahead.at(.keyword(.__shared))
+        && !lookahead.at(.keyword(.__owned))
+        && !lookahead.at(.keyword(._const))
+        && !lookahead.at(.keyword(.borrowing))
+        && !lookahead.at(.keyword(.consuming))
+        && !lookahead.at(.keyword(.sending))
       {
         return true
       }
@@ -389,11 +397,11 @@ extension Parser.Lookahead {
       // so look ahead one more token (two total) see if we have a ':' that would
       // indicate that this is an argument label.
       do {
-        if self.at(.colon) {
+        if lookahead.at(.colon) {
           return true  // isolated :
         }
         self.consumeAnyToken()
-        return self.atArgumentLabel(allowDollarIdentifier: true) && self.peek().rawTokenKind == .colon
+        return self.atArgumentLabel(allowDollarIdentifier: true, followedByColon: true)
       }
     }
 

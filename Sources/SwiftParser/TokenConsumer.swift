@@ -387,7 +387,12 @@ extension TokenConsumer {
   }
 
   /// Whether the current token can be a function argument label.
-  func atArgumentLabel(allowDollarIdentifier: Bool = false) -> Bool {
-    return self.currentToken.isArgumentLabel(allowDollarIdentifier: allowDollarIdentifier)
+  mutating func atArgumentLabel(allowDollarIdentifier: Bool = false, followedByColon: Bool = false) -> Bool {
+    var lookahead = self.lookahead()
+    _ = lookahead.consumeModuleSelectorTokens()
+    guard lookahead.currentToken.isArgumentLabel(allowDollarIdentifier: allowDollarIdentifier) else {
+      return false
+    }
+    return !followedByColon || lookahead.peek(isAt: .colon)
   }
 }

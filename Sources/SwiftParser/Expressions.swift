@@ -1899,14 +1899,7 @@ extension Parser {
           // Parse identifier (',' identifier)*
           var keepGoing: RawTokenSyntax? = nil
           repeat {
-            let unexpected: RawUnexpectedNodesSyntax?
-            let name: RawTokenSyntax
-            if let identifier = self.consume(if: .identifier) {
-              unexpected = nil
-              name = identifier
-            } else {
-              (unexpected, name) = self.expect(.wildcard)
-            }
+            let (unexpected, name) = self.expect(.identifier, .wildcard, default: .identifier)
             keepGoing = consume(if: .comma)
             params.append(
               RawClosureShorthandParameterSyntax(
@@ -2031,7 +2024,7 @@ extension Parser {
       let unexpectedBeforeLabel: RawUnexpectedNodesSyntax?
       let label: RawTokenSyntax?
       let colon: RawTokenSyntax?
-      if self.atArgumentLabel(allowDollarIdentifier: true) && self.peek(isAt: .colon) {
+      if self.atArgumentLabel(allowDollarIdentifier: true, followedByColon: true) {
         (unexpectedBeforeLabel, label) = parseArgumentLabel()
         colon = consumeAnyToken()
       } else if let _colon = self.consume(if: .colon) {
@@ -2114,9 +2107,8 @@ extension Parser.Lookahead {
     // Fast path: the next two tokens must be a label and a colon.
     // But 'default:' is ambiguous with switch cases and we disallow it
     // (unless escaped) even outside of switches.
-    if !self.atArgumentLabel()
+    if !self.atArgumentLabel(followedByColon: true)
       || self.at(.keyword(.default))
-      || self.peek().rawTokenKind != .colon
     {
       return false
     }
@@ -2616,6 +2608,7 @@ extension Parser.Lookahead {
       }
     } else if lookahead.at(.identifier) || lookahead.at(.wildcard) {
       // Parse identifier (',' identifier)*
+      _ = lookahead.consumeModuleSelectorTokens()
       lookahead.consumeAnyToken()
 
       /// If the next token is a colon, interpret is as a type annotation and consume a type after it.
@@ -2632,6 +2625,7 @@ extension Parser.Lookahead {
       while consumeOptionalTypeAnnotation() && lookahead.consume(if: .comma) != nil
         && lookahead.hasProgressed(&parametersProgress)
       {
+        _ = lookahead.consumeModuleSelectorTokens()
         if lookahead.at(.identifier) || lookahead.at(.wildcard) {
           lookahead.consumeAnyToken()
           continue

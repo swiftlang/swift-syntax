@@ -19,6 +19,10 @@
 extension Parser {
   /// Parse a type.
   mutating func parseType(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
+    if let moduleSelector = self.parseModuleSelector() {
+      return attach(moduleSelector, to: self.parseType(misplacedSpecifiers: misplacedSpecifiers))
+    }
+
     // Parse pack expansion 'repeat T'.
     if let repeatKeyword = self.consume(if: .keyword(.repeat)) {
       let repetitionPattern = self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers)
@@ -35,6 +39,10 @@ extension Parser {
   }
 
   mutating func parseTypeScalar(misplacedSpecifiers: [RawTokenSyntax] = []) -> RawTypeSyntax {
+    if let moduleSelector = self.parseModuleSelector() {
+      return attach(moduleSelector, to: self.parseTypeScalar(misplacedSpecifiers: misplacedSpecifiers))
+    }
+
     let specifiersAndAttributes = self.parseTypeAttributeList(misplacedSpecifiers: misplacedSpecifiers)
     var base = self.parseSimpleOrCompositionType()
     if self.withLookahead({ $0.canParseFunctionTypeArrow() }) {
@@ -111,6 +119,10 @@ extension Parser {
 
   /// Parse a protocol composition involving at least one element.
   mutating func parseSimpleOrCompositionType() -> RawTypeSyntax {
+    if let moduleSelector = self.parseModuleSelector() {
+      return attach(moduleSelector, to: self.parseSimpleOrCompositionType())
+    }
+
     // 'each' is a contextual keyword for a pack reference.
     if let each = consume(if: .keyword(.each)) {
       let packType = parseSimpleType()
@@ -511,7 +523,7 @@ extension Parser {
             second = nil
             unexpectedBeforeColon = nil
             colon = parsedColon
-          } else if self.atArgumentLabel(allowDollarIdentifier: true) && self.peek(isAt: .colon) {
+          } else if self.atArgumentLabel(allowDollarIdentifier: true, followedByColon: true) {
             (unexpectedBeforeSecond, second) = self.parseArgumentLabel()
             (unexpectedBeforeColon, colon) = self.expect(.colon)
           } else {

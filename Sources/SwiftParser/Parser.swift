@@ -560,19 +560,21 @@ extension Parser {
   /// Implements the paradigm shared across all `expect` methods.
   @inline(__always)
   private mutating func expectImpl(
+    skipUnexpectedModuleSelector: Bool = true,
     consume: (inout Parser) -> RawTokenSyntax?,
     canRecoverTo: (inout Lookahead) -> RecoveryConsumptionHandle?,
     makeMissing: (inout Parser) -> RawTokenSyntax
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
+    let unexpectedSelector = skipUnexpectedModuleSelector ? unexpected(self.parseModuleSelector()) : nil
     if let tok = consume(&self) {
-      return (nil, tok)
+      return (unexpectedSelector, tok)
     }
     var lookahead = self.lookahead()
     if let handle = canRecoverTo(&lookahead) {
       let (unexpectedTokens, token) = self.eat(handle)
-      return (unexpectedTokens, token)
+      return (RawUnexpectedNodesSyntax(combining: unexpectedSelector, unexpectedTokens, arena: self.arena), token)
     }
-    return (nil, makeMissing(&self))
+    return (unexpectedSelector, makeMissing(&self))
   }
 
   /// Attempts to consume a token that matches the given `spec`.
@@ -581,6 +583,8 @@ extension Parser {
   ///     specified by `spec` and see if the token occurs after that unexpected.
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
   ///     a missing token of the requested kind.
+  /// - Note: If you expect a module selector, parse it before calling this method; it will consume module selectors
+  ///   as unexpected syntax.
   @inline(__always)
   mutating func expect(
     _ spec: TokenSpec
@@ -599,6 +603,8 @@ extension Parser {
   ///     kinds occurs after the unexpected.
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
   ///     a missing token of `defaultKind`.
+  /// - Note: If you expect a module selector, parse it before calling this method; it will consume module selectors
+  ///   as unexpected syntax.
   @inline(__always)
   mutating func expect(
     _ spec1: TokenSpec,
@@ -619,6 +625,8 @@ extension Parser {
   ///     kinds occurs after the unexpected.
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
   ///     a missing token of `defaultKind`.
+  /// - Note: If you expect a module selector, parse it before calling this method; it will consume module selectors
+  ///   as unexpected syntax.
   @inline(__always)
   mutating func expect(
     _ spec1: TokenSpec,
@@ -633,6 +641,15 @@ extension Parser {
     )
   }
 
+  /// Attempts to consume a token that matches the given `specSet`.
+  /// If it cannot be found, the parser tries
+  ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than the
+  ///     lowest precedence of the spec and see if a token of the requested
+  ///     kinds occurs after the unexpected.
+  ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
+  ///     a missing token of `defaultKind`.
+  /// - Note: If you expect a module selector, parse it before calling this method; it will consume module selectors
+  ///   as unexpected syntax.
   @inline(__always)
   mutating func expect<SpecSet: TokenSpecSet>(
     anyIn specSet: SpecSet.Type,
@@ -652,12 +669,16 @@ extension Parser {
   ///     specified by `TokenSpec(tokenKind)` and see if the token occurs after that unexpected.
   ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
   ///     a missing token of the requested kind.
+  /// - Note: If you expect a module selector, parse it before calling this method; it will consume module selectors
+  ///   as unexpected syntax (except when used to split a colon).
   @inline(__always)
   mutating func expect(
     prefix: SyntaxText, as tokenKind: RawTokenKind
   ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
     let spec = TokenSpec(tokenKind)
     return expectImpl(
+      // Don't consume a .colonColon if we're trying to split it
+      skipUnexpectedModuleSelector: !prefix.hasPrefix(":"),
       consume: { $0.consume(ifPrefix: prefix, as: tokenKind) },
       canRecoverTo: { $0.canRecoverTo(spec) },
       makeMissing: { $0.missingToken(spec) }
@@ -691,16 +712,20 @@ extension Parser {
   ///     to and identifier.
   /// - Returns: The consumed token and any unexpected tokens that were skipped.
   ///   The token is always guaranteed to be of `TokenKind.identifier`
+  /// - Note: If you expect a module selector, parse it before calling this method; it will consume module selectors
+  ///   as unexpected syntax.
   mutating func expectIdentifier(
     keywordRecovery: Bool = false,
     allowSelfOrCapitalSelfAsIdentifier: Bool = false,
     allowKeywordsAsIdentifier: Bool = false
   ) -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
+    let unexpectedSelector = unexpected(self.parseModuleSelector())
+
     if let identifier = self.consume(if: .identifier) {
-      return (nil, identifier)
+      return (unexpectedSelector, identifier)
     }
     if allowKeywordsAsIdentifier, self.currentToken.isLexerClassifiedKeyword {
-      return (nil, self.consumeAnyToken(remapping: .identifier))
+      return (unexpectedSelector, self.consumeAnyToken(remapping: .identifier))
     }
     if allowSelfOrCapitalSelfAsIdentifier,
       let selfOrCapitalSelf = self.consume(
@@ -708,17 +733,17 @@ extension Parser {
         TokenSpec(.Self, remapping: .identifier)
       )
     {
-      return (nil, selfOrCapitalSelf)
+      return (unexpectedSelector, selfOrCapitalSelf)
     }
     if let unknown = self.consume(if: .unknown) {
       return (
-        RawUnexpectedNodesSyntax([unknown], arena: self.arena),
+        RawUnexpectedNodesSyntax(combining: unexpectedSelector, unknown, arena: self.arena),
         self.missingToken(.identifier)
       )
     }
     if let number = self.consume(if: .integerLiteral, .floatLiteral, .dollarIdentifier) {
       return (
-        RawUnexpectedNodesSyntax([number], arena: self.arena),
+        RawUnexpectedNodesSyntax(combining: unexpectedSelector, number, arena: self.arena),
         self.missingToken(.identifier)
       )
     } else if keywordRecovery,
@@ -727,12 +752,12 @@ extension Parser {
     {
       let keyword = self.consumeAnyToken()
       return (
-        RawUnexpectedNodesSyntax([keyword], arena: self.arena),
+        RawUnexpectedNodesSyntax(combining: unexpectedSelector, keyword, arena: self.arena),
         self.missingToken(.identifier)
       )
     }
     return (
-      nil,
+      unexpectedSelector,
       self.missingToken(.identifier)
     )
   }

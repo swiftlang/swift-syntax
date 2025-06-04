@@ -355,11 +355,12 @@ extension Parser {
       }
 
       if self.currentToken.isEditorPlaceholder {
-        let placeholder = self.parseAnyIdentifier()
+        let (unexpectedBeforePlaceholder, placeholder) = self.parseAnyIdentifier()
         return RawDeclSyntax(
           RawMissingDeclSyntax(
             attributes: attrs.attributes,
             modifiers: attrs.modifiers,
+            unexpectedBeforePlaceholder,
             placeholder: placeholder,
             arena: self.arena
           )
@@ -427,10 +428,11 @@ extension Parser {
     var keepGoing: RawTokenSyntax? = nil
     var loopProgress = LoopProgressCondition()
     repeat {
-      let name = self.parseAnyIdentifier()
+      let (unexpectedBeforeName, name) = self.parseAnyIdentifier()
       keepGoing = self.consume(if: .period)
       elements.append(
         RawImportPathComponentSyntax(
+          unexpectedBeforeName,
           name: name,
           trailingPeriod: keepGoing,
           arena: self.arena
@@ -1232,7 +1234,7 @@ extension Parser {
       (unexpectedBeforeIdentifier, identifier) = self.expectIdentifier(keywordRecovery: true)
 
       if currentToken.isEditorPlaceholder {
-        let editorPlaceholder = self.parseAnyIdentifier()
+        let (_, editorPlaceholder) = self.parseAnyIdentifier()
         unexpectedAfterIdentifier = RawUnexpectedNodesSyntax([editorPlaceholder], arena: self.arena)
       } else {
         unexpectedAfterIdentifier = nil

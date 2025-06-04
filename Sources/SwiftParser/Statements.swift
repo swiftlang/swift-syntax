@@ -209,6 +209,11 @@ extension Parser {
   ///
   /// `lastBindingKind` will be used to get a correct fall back, when there is missing `var` or `let` in a `if` statement etc.
   mutating func parseConditionElement(lastBindingKind: RawTokenSyntax?) -> RawConditionElementSyntax.Condition {
+    // Module selectors aren't allowed here except on expressions, but we recover better if we parse them early.
+    if let moduleSelector = self.parseModuleSelector() {
+      return attach(moduleSelector, to: self.parseConditionElement(lastBindingKind: lastBindingKind))
+    }
+
     // Parse a leading #available/#unavailable condition if present.
     if self.at(.poundAvailable, .poundUnavailable) {
       return self.parsePoundAvailableConditionElement()

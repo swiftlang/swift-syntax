@@ -298,16 +298,31 @@ extension Parser {
 // MARK: - Parameter Modifiers
 
 extension Parser {
+  mutating func canParseParameterModifier() -> Bool {
+    var lookahead = self.lookahead()
+    _ = lookahead.consumeModuleSelectorTokens()
+    return lookahead.at(anyIn: ParameterModifier.self) != nil
+  }
+
   mutating func parseParameterModifiers(isClosure: Bool) -> RawDeclModifierListSyntax {
     var elements = [RawDeclModifierSyntax]()
     var loopProgress = LoopProgressCondition()
     while self.hasProgressed(&loopProgress) {
-      guard let match = self.at(anyIn: ParameterModifier.self),
+
+      guard self.canParseParameterModifier(),
         !withLookahead({ $0.startsParameterName(isClosure: isClosure, allowMisplacedSpecifierRecovery: false) })
       else {
         break
       }
-      elements.append(RawDeclModifierSyntax(name: self.eat(match.handle), detail: nil, arena: self.arena))
+      let moduleSelector = self.parseModuleSelector()
+      elements.append(
+        RawDeclModifierSyntax(
+          unexpected(moduleSelector),
+          name: self.eat(self.at(anyIn: ParameterModifier.self)!.handle),
+          detail: nil,
+          arena: self.arena
+        )
+      )
     }
     if elements.isEmpty {
       return self.emptyCollection(RawDeclModifierListSyntax.self)

@@ -17,30 +17,36 @@
 #endif
 
 extension Parser {
-  mutating func parseAnyIdentifier() -> RawTokenSyntax {
+  /// Parse an identifier or operator.
+  ///
+  /// - Note: If you expect a module selector, parse it before calling this method; it will consume module selectors
+  ///   as unexpected syntax.
+  mutating func parseAnyIdentifier() -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
+    let moduleSelector = unexpected(self.parseModuleSelector())
     if let token = self.consume(if: .identifier) {
-      return token
+      return (moduleSelector, token)
     } else if let (_, handle) = self.at(anyIn: Operator.self) {
-      return self.eat(handle)
+      return (moduleSelector, self.eat(handle))
     } else {
-      return RawTokenSyntax(missing: .identifier, arena: arena)
+      return (moduleSelector, RawTokenSyntax(missing: .identifier, arena: arena))
     }
   }
 
   mutating func parseArgumentLabel() -> (RawUnexpectedNodesSyntax?, RawTokenSyntax) {
+    let unexpectedSelector = unexpected(self.parseModuleSelector())
     guard self.atArgumentLabel(allowDollarIdentifier: true) else {
-      return (nil, missingToken(.identifier))
+      return (unexpectedSelector, missingToken(.identifier))
     }
     if let dollarIdent = self.consume(if: .dollarIdentifier) {
       return (
-        RawUnexpectedNodesSyntax([dollarIdent], arena: self.arena),
+        RawUnexpectedNodesSyntax(combining: unexpectedSelector, dollarIdent, arena: self.arena),
         self.missingToken(.identifier)
       )
     } else {
       if let wildcardToken = self.consume(if: .wildcard) {
-        return (nil, wildcardToken)
+        return (unexpectedSelector, wildcardToken)
       }
-      return (nil, self.consumeAnyToken(remapping: .identifier))
+      return (unexpectedSelector, self.consumeAnyToken(remapping: .identifier))
     }
   }
 }
@@ -405,7 +411,7 @@ extension Parser {
       var loopProgress = LoopProgressCondition()
       while !self.at(.endOfFile, .rightParen) && self.hasProgressed(&loopProgress) {
         // Check to see if there is an argument label.
-        precondition(self.atArgumentLabel() && self.peek(isAt: .colon))
+        precondition(self.atArgumentLabel(followedByColon: true))
         let name = self.consumeAnyToken()
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
         elements.append(
@@ -526,6 +532,7 @@ extension Parser {
 extension Parser.Lookahead {
   func canParseBaseTypeForQualifiedDeclName() -> Bool {
     var lookahead = self.lookahead()
+    _ = lookahead.consumeModuleSelectorTokens()
     guard lookahead.canParseTypeIdentifier() else {
       return false
     }
@@ -543,7 +550,7 @@ extension Parser.Lookahead {
     var loopProgress = LoopProgressCondition()
     while !lookahead.at(.endOfFile, .rightParen) && lookahead.hasProgressed(&loopProgress) {
       // Check to see if there is an argument label.
-      guard lookahead.atArgumentLabel() && lookahead.peek().rawTokenKind == .colon else {
+      guard lookahead.atArgumentLabel(followedByColon: true) else {
         return false
       }
 

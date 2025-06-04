@@ -161,8 +161,6 @@ final class ModuleSelectorTests: ParserTestCase {
   }
 
   func testModuleSelectorIncorrectFuncSignature() {
-    XCTExpectFailure("incorrect uses not yet implemented")
-
     assertParse(
       """
       func 1️⃣main::decl1() {}
@@ -277,8 +275,6 @@ final class ModuleSelectorTests: ParserTestCase {
   }
 
   func testModuleSelectorIncorrectBindingDecls() {
-    XCTExpectFailure("incorrect uses not yet implemented")
-
     assertParse(
       """
       let 1️⃣main::decl1a = "a"
@@ -421,8 +417,6 @@ final class ModuleSelectorTests: ParserTestCase {
   }
 
   func testModuleSelectorIncorrectClosureDecls() {
-    XCTExpectFailure("incorrect uses not yet implemented")
-
     assertParse(
       """
       "lll".forEach { [2️⃣Swift::magnitude]
@@ -483,8 +477,6 @@ final class ModuleSelectorTests: ParserTestCase {
   }
 
   func testModuleSelectorIncorrectTypeDecls() {
-    XCTExpectFailure("incorrect uses not yet implemented")
-
     assertParse(
       """
       enum 1️⃣main::decl2 {
@@ -566,8 +558,6 @@ final class ModuleSelectorTests: ParserTestCase {
   }
 
   func testModuleSelectorIncorrectGlobalVarDecls() {
-    XCTExpectFailure("incorrect uses not yet implemented")
-
     assertParse(
       """
       let 1️⃣main::decl7 = 7
@@ -610,8 +600,6 @@ final class ModuleSelectorTests: ParserTestCase {
   }
 
   func testModuleSelectorIncorrectNestedDecls() {
-    XCTExpectFailure("incorrect uses not yet implemented")
-
     assertParse(
       """
       struct Parent {
@@ -695,8 +683,6 @@ final class ModuleSelectorTests: ParserTestCase {
   }
 
   func testModuleSelectorOperatorDecls() {
-    XCTExpectFailure("incorrect uses not yet implemented")
-
     assertParse(
       """
       infix operator <<<<< : 1️⃣Swift::AdditionPrecedence
@@ -1296,8 +1282,6 @@ final class ModuleSelectorTests: ParserTestCase {
   }
 
   func testModuleSelectorAttrs() {
-    XCTExpectFailure("incorrect uses not yet implemented")
-
     assertParse(
       """
       @_spi(main::Private)
@@ -1577,8 +1561,6 @@ final class ModuleSelectorTests: ParserTestCase {
   }
 
   func testModuleSelectorStmt() {
-    XCTExpectFailure("incorrect uses not yet implemented")
-
     assertParse(
       "if 1️⃣Swift::#available(macOS 15, *) {}",
       diagnostics: [

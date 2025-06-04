@@ -18,6 +18,12 @@
 
 extension TokenConsumer {
   mutating func atStartOfExpression() -> Bool {
+    if self.isAtModuleSelector() {
+      var lookahead = self.lookahead()
+      _ = lookahead.consumeModuleSelectorTokens()
+      return lookahead.atStartOfExpression()
+    }
+    
     switch self.at(anyIn: ExpressionStart.self) {
     case (.awaitTryMove, let handle)?:
       var lookahead = self.lookahead()
@@ -572,6 +578,11 @@ extension Parser {
     flavor: ExprFlavor,
     pattern: PatternContext = .none
   ) -> RawExprSyntax {
+    if let moduleSelector = self.parseModuleSelector() {
+      let qualifiedExpr = self.parseUnaryExpression(flavor: flavor, pattern: pattern)
+      return attach(moduleSelector, to: qualifiedExpr)
+    }
+
     // Try parse a single value statement as an expression (e.g do/if/switch).
     // Note we do this here in parseUnaryExpression as we don't allow postfix
     // syntax to be attached to such expressions to avoid ambiguities such as postfix
@@ -660,11 +671,14 @@ extension Parser {
       return (unexpectedPeriod, period, declName, nil)
     }
 
+    let moduleSelector = parseModuleSelector()
+
     // Parse the name portion.
     let declName: RawDeclReferenceExprSyntax
     if let indexOrSelf = self.consume(if: .integerLiteral, .keyword(.self)) {
       // Handle "x.42" - a tuple index.
       declName = RawDeclReferenceExprSyntax(
+        unexpected(moduleSelector),
         moduleSelector: nil,
         baseName: indexOrSelf,
         argumentNames: nil,
@@ -672,7 +686,7 @@ extension Parser {
       )
     } else {
       // Handle an arbitrary declaration name.
-      declName = self.parseDeclReferenceExpr([.keywords, .compoundNames])
+      declName = self.parseDeclReferenceExpr(moduleSelector: moduleSelector, [.keywords, .compoundNames])
     }
 
     // Parse the generic arguments, if any.
@@ -1248,11 +1262,11 @@ extension Parser {
       // is the start of an enum or expr pattern.
       if pattern.admitsBinding && self.lookahead().isInBindingPatternPosition() {
         let identifier = self.eat(handle)
-        let pattern = RawIdentifierPatternSyntax(
+        let patternNode = RawIdentifierPatternSyntax(
           identifier: identifier,
           arena: self.arena
         )
-        return RawExprSyntax(RawPatternExprSyntax(pattern: pattern, arena: self.arena))
+        return RawExprSyntax(RawPatternExprSyntax(pattern: patternNode, arena: self.arena))
       }
 
       return self.parseIdentifierExpression(flavor: flavor)
@@ -1316,7 +1330,10 @@ extension Parser {
         )
       }
 
-      let declName = self.parseDeclReferenceExpr([.keywords, .compoundNames])
+      // If there's a module selector after the period, parse and use it.
+      let moduleSelector = self.parseModuleSelector()
+      let declName = self.parseDeclReferenceExpr(moduleSelector: moduleSelector, [.keywords, .compoundNames])
+
       return RawExprSyntax(
         RawMemberAccessExprSyntax(
           base: nil,
@@ -1354,7 +1371,8 @@ extension Parser {
     case .attributeArguments: options.insert(.keywordsUsingSpecialNames)
     }
 
-    let declName = self.parseDeclReferenceExpr(options)
+    // If something up the call stack has parsed a module selector, it will be attached using `attach(_:to:)`.
+    let declName = self.parseDeclReferenceExpr(moduleSelector: nil, options)
     guard self.withLookahead({ $0.canParseAsGenericArgumentList() }) else {
       return RawExprSyntax(declName)
     }
@@ -1385,6 +1403,7 @@ extension Parser {
       )
       pound = pound.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
     }
+    let moduleSelector = parseModuleSelector()
     let unexpectedBeforeMacroName: RawUnexpectedNodesSyntax?
     let macroName: RawTokenSyntax
     if !self.atStartOfLine {
@@ -1432,7 +1451,7 @@ extension Parser {
     return RawMacroExpansionExprSyntax(
       unexpectedBeforePound,
       pound: pound,
-      moduleSelector: nil,
+      moduleSelector: moduleSelector,
       unexpectedBeforeMacroName,
       macroName: macroName,
       genericArgumentClause: generics,
@@ -1746,6 +1765,7 @@ extension Parser {
 extension Parser {
   mutating func parseAnonymousClosureArgument() -> RawDeclReferenceExprSyntax {
     let (unexpectedBeforeBaseName, baseName) = self.expect(.dollarIdentifier)
+    // If something up the call stack has parsed a module selector, it will be attached using `attach(_:to:)`.
     return RawDeclReferenceExprSyntax(
       moduleSelector: nil,
       unexpectedBeforeBaseName,
@@ -1969,6 +1989,14 @@ extension Parser {
   }
 }
 
+extension TokenConsumer {
+  mutating func atBinaryOperatorArgument() -> Bool {
+    var lookahead = self.lookahead()
+    _ = lookahead.consumeModuleSelectorTokens()
+    return lookahead.at(.binaryOperator) && lookahead.peek(isAt: .comma, .rightParen, .rightSquare)
+  }
+}
+
 extension Parser {
   /// Parse the elements of an argument list.
   ///
@@ -2020,8 +2048,9 @@ extension Parser {
       // this case lexes as a binary operator because it neither leads nor
       // follows a proper subexpression.
       let expr: RawExprSyntax
-      if self.at(.binaryOperator) && self.peek(isAt: .comma, .rightParen, .rightSquare) {
-        expr = RawExprSyntax(self.parseDeclReferenceExpr(.operators))
+      if self.atBinaryOperatorArgument() {
+        let moduleSelector = self.parseModuleSelector()
+        expr = RawExprSyntax(self.parseDeclReferenceExpr(moduleSelector: moduleSelector, .operators))
       } else {
         expr = self.parseExpression(flavor: flavor, pattern: pattern)
       }
@@ -2400,9 +2429,9 @@ extension Parser {
 
       unknownAttr = RawAttributeSyntax(
         atSign: at,
-        unexpectedBeforeIdent,
         attributeName: RawIdentifierTypeSyntax(
           moduleSelector: nil,
+          unexpectedBeforeIdent,
           name: ident,
           genericArgumentClause: nil,
           arena: self.arena

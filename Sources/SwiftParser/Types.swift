@@ -213,6 +213,13 @@ extension Parser {
     allowMemberTypes: Bool = true,
     forAttributeName: Bool = false
   ) -> RawTypeSyntax {
+    if let moduleSelector = self.parseModuleSelector() {
+      let qualifiedType = parseUnsuppressedSimpleType(
+        allowMemberTypes: allowMemberTypes, forAttributeName: forAttributeName
+      )
+      return attach(moduleSelector, to: qualifiedType)
+    }
+
     enum TypeBaseStart: TokenSpecSet {
       case `Self`
       case `Any`
@@ -277,13 +284,17 @@ extension Parser {
             )
           )
           break
-        } else if self.at(.keyword(.Type)) || self.at(.keyword(.Protocol)) {
+        }
+
+        let memberModuleSelector = self.parseModuleSelector()
+        if self.at(.keyword(.Type)) || self.at(.keyword(.Protocol)) {
           let metatypeSpecifier = self.consume(if: .keyword(.Type)) ?? self.consume(if: .keyword(.Protocol))!
           base = RawTypeSyntax(
             RawMetatypeTypeSyntax(
               baseType: base,
               unexpectedPeriod,
               period: period,
+              unexpected(memberModuleSelector),
               metatypeSpecifier: metatypeSpecifier,
               arena: self.arena
             )
@@ -308,7 +319,7 @@ extension Parser {
               baseType: base,
               unexpectedPeriod,
               period: period,
-              moduleSelector: nil,
+              moduleSelector: memberModuleSelector,
               name: name,
               genericArgumentClause: generics,
               arena: self.arena
@@ -377,6 +388,7 @@ extension Parser {
     }
 
     return RawIdentifierTypeSyntax(
+      // Will be attached by caller if present.
       moduleSelector: nil,
       unexpectedBeforeName,
       name: name,
@@ -1289,7 +1301,11 @@ extension Parser {
   }
 
   mutating func parseTypeAttribute() -> RawAttributeListSyntax.Element {
-    switch peek(isAtAnyIn: TypeAttribute.self) {
+    // An attribute qualified by a module selector is *always* a custom attribute, even if it has the same name (or
+    // module name) as a builtin attribute.
+    let builtinAttr = self.unlessPeekModuleSelector { $0.peek(isAtAnyIn: TypeAttribute.self) }
+
+    switch builtinAttr {
     case ._local, ._noMetadata, .async, .escaping, .noDerivative, .noescape,
       .preconcurrency, .retroactive, .Sendable, .unchecked, .autoclosure:
       // Known type attribute that doesn't take any arguments

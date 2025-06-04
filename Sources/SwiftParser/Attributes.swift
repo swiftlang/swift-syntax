@@ -227,7 +227,11 @@ extension Parser {
       )
     }
 
-    switch peek(isAtAnyIn: DeclarationAttributeWithSpecialSyntax.self) {
+    // An attribute qualified by a module selector is *always* a custom attribute, even if it has the same name (or
+    // module name) as a builtin attribute.
+    let builtinAttr = self.unlessPeekModuleSelector { $0.peek(isAtAnyIn: DeclarationAttributeWithSpecialSyntax.self) }
+
+    switch builtinAttr {
     case .abi:
       return parseAttribute(argumentMode: .required) { parser in
         return (nil, .abiArguments(parser.parseABIAttributeArguments()))
@@ -680,7 +684,11 @@ extension Parser {
       case (.target, let handle)?:
         let label = self.eat(handle)
         let (unexpectedBeforeColon, colon) = self.expect(.colon)
-        let declName = self.parseDeclReferenceExpr([.zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators])
+        let moduleSelector = self.parseModuleSelector()
+        let declName = self.parseDeclReferenceExpr(
+          moduleSelector: moduleSelector,
+          [.zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators]
+        )
         let comma = self.consume(if: .comma)
         elements.append(
           .specializeTargetFunctionArgument(
@@ -783,14 +791,17 @@ extension Parser {
   mutating func parseImplementsAttributeArguments() -> RawImplementsAttributeArgumentsSyntax {
     let type = self.parseType()
     let (unexpectedBeforeComma, comma) = self.expect(.comma)
-    let declName = self.parseDeclReferenceExpr([
-      .zeroArgCompoundNames,
-      .operators,
-    ])
+
+    // You can't put a module selector on the member name--it's meaningless because the member has to come from the
+    // same module as the protocol.
+    let moduleSelector = self.parseModuleSelector()
+    let declName = self.parseDeclReferenceExpr(moduleSelector: nil, [.zeroArgCompoundNames, .operators])
+
     return RawImplementsAttributeArgumentsSyntax(
       type: type,
       unexpectedBeforeComma,
       comma: comma,
+      unexpected(moduleSelector),
       declName: declName,
       arena: self.arena
     )
@@ -930,6 +941,7 @@ extension Parser {
   mutating func parseDynamicReplacementAttributeArguments() -> RawDynamicReplacementAttributeArgumentsSyntax {
     let (unexpectedBeforeLabel, label) = self.expect(.keyword(.for))
     let (unexpectedBeforeColon, colon) = self.expect(.colon)
+
     let declName: RawDeclReferenceExprSyntax
     if label.isMissing && colon.isMissing && self.atStartOfLine {
       declName = RawDeclReferenceExprSyntax(
@@ -939,9 +951,11 @@ extension Parser {
         arena: self.arena
       )
     } else {
-      declName = self.parseDeclReferenceExpr([
-        .zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators,
-      ])
+      let moduleSelector = self.parseModuleSelector()
+      declName = self.parseDeclReferenceExpr(
+        moduleSelector: moduleSelector,
+        [.zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators]
+      )
     }
     return RawDynamicReplacementAttributeArgumentsSyntax(
       unexpectedBeforeLabel,
@@ -1006,7 +1020,7 @@ extension Parser {
         unexpectedBeforeValue = unexpected
         value = .token(token)
       case "metadata":
-        unexpectedBeforeValue = nil
+        unexpectedBeforeValue = unexpected(self.parseModuleSelector())
         if let identifier = self.consume(if: .identifier) {
           value = .token(identifier)
         } else {

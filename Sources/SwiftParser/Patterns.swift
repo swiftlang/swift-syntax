@@ -277,8 +277,8 @@ extension Parser.Lookahead {
         TokenSpec(.wildcard, allowAtStartOfLine: false)
       )
     default:
-      // Other keywords can be parsed unconditionally.
-      return true
+      // Other keywords can be parsed *almost* unconditionally.
+      return !isAtModuleSelector()
     }
   }
 

@@ -45,6 +45,281 @@ extension Parser {
   }
 }
 
+private enum StructuralTokens: TokenSpecSet {
+  case comma
+  case colon
+  case leftParen
+  case leftBrace
+  case leftSquare
+  case leftAngle
+  case rightParen
+  case rightBrace
+  case rightSquare
+  case rightAngle
+
+  init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+    switch lexeme.rawTokenKind {
+    case .comma: self = .comma
+    case .colon: self = .colon
+    case .leftParen: self = .leftParen
+    case .leftBrace: self = .leftBrace
+    case .leftSquare: self = .leftSquare
+    case .leftAngle : self = .leftAngle
+    case .rightParen: self = .rightParen
+    case .rightBrace: self = .rightBrace
+    case .rightSquare: self = .rightSquare
+    case .rightAngle: self = .rightAngle
+    default: return nil
+    }
+  }
+
+  var spec: TokenSpec {
+    switch self {
+    case .comma: return .comma
+    case .colon: return .colon
+    case .leftParen: return .leftParen
+    case .leftBrace: return .leftBrace
+    case .leftSquare: return .leftSquare
+    case .leftAngle: return .leftAngle
+    case .rightParen: return .rightParen
+    case .rightBrace: return .rightBrace
+    case .rightSquare: return .rightSquare
+    case .rightAngle: return .rightAngle
+    }
+  }
+}
+
+extension TokenConsumer {
+  /// Do the subsequent tokens have the form of a module selector? Encompasses some invalid syntax which nonetheless
+  /// can be handled by `consumeModuleSelectorTokens()`.
+  ///
+  /// - Postcondition: If `true`, either the current token or the next token is `.colonColon`.
+  mutating func isAtModuleSelector() -> Bool {
+    // If this is a module selector, the next token should be `::`.
+    guard self.peek(isAt: .colonColon) else {
+      // ...however, we will also allow the *current* token to be `::`. `consumeModuleSelectorTokens()` will create a
+      // missing identifier.
+      return self.at(.colonColon)
+    }
+
+    // Technically the current token *should* be an identifier, but we also want to diagnose other tokens that might be
+    // used by accident (particularly keywords and `_`). However, we don't want to consume tokens which would make the
+    // surrounding structure mis-parse.
+    return self.at(anyIn: StructuralTokens.self) == nil
+  }
+
+  mutating func unlessPeekModuleSelector<T>(_ operation: (inout Self) -> T?) -> T? {
+    var lookahead = self.lookahead()
+    lookahead.skipSingle()
+    if lookahead.isAtModuleSelector() {
+      return nil
+    }
+    return operation(&self)
+  }
+
+  /// If the subsequent tokens have the form of a module selector, valid or otherwise, consume and return them;
+  /// otherwise consume nothing and return `nil`. Additionally consumes invalid chained module selectors.
+  ///
+  /// Returns a tuple comprised of:
+  ///
+  ///  - `moduleNameOrUnexpected`: The module name if present; in a valid module selector, this will be a present
+  ///     identifier, but either of those can be untrue in invalid code.
+  ///  - `colonColonToken`: The `::` indicating this module selector. Always `.colonColon`, always present.
+  ///  - `extra`: Tokens for additional trailing module selectors. There is no situation in which two module selectors
+  ///    can be validly chained.
+  mutating func consumeModuleSelectorTokens() -> (moduleNameOrUnexpected: Token, colonColonToken: Token, extra: [Token])? {
+    guard self.isAtModuleSelector() else {
+      return nil
+    }
+
+    let moduleName: Token
+    let colonColonToken: Token
+
+    // Did we forget the module name?
+    if let earlyColonColon = self.consume(if: .colonColon) {
+      moduleName = self.missingToken(.identifier)
+      colonColonToken = earlyColonColon
+    } else {
+      // Consume whatever comes before the `::`, plus the `::` itself. (Whether or not the "name" is an identifier is
+      // checked elsewhere.)
+      moduleName = self.consumeAnyToken()
+      colonColonToken = self.eat(.colonColon)
+    }
+
+    var extra: [Token] = []
+    while self.isAtModuleSelector() {
+      if !self.at(.colonColon) {
+        extra.append(self.consumeAnyToken())
+      }
+      extra.append(self.eat(.colonColon))
+    }
+    return (moduleName, colonColonToken, extra)
+  }
+}
+
+extension Parser {
+  /// Parses one or more module selectors, if present.
+  mutating func parseModuleSelector() -> RawModuleSelectorSyntax? {
+    guard let (moduleNameOrUnexpected, colonColon, extra) = consumeModuleSelectorTokens() else {
+      return nil
+    }
+
+    let leadingUnexpected: [RawSyntax]
+    let moduleName: RawTokenSyntax
+    let trailingUnexpected: [RawSyntax]
+
+    if moduleNameOrUnexpected.tokenKind == .identifier {
+      leadingUnexpected = []
+      moduleName = moduleNameOrUnexpected
+    } else {
+      leadingUnexpected = [RawSyntax(moduleNameOrUnexpected)]
+      moduleName = RawTokenSyntax.init(missing: .identifier, arena: arena)
+    }
+
+    trailingUnexpected = extra.map { RawSyntax($0) }
+
+    return RawModuleSelectorSyntax(
+      RawUnexpectedNodesSyntax(elements: leadingUnexpected, arena: arena),
+      moduleName: moduleName,
+      colonColon: colonColon,
+      RawUnexpectedNodesSyntax(elements: trailingUnexpected, arena: arena),
+      arena: arena
+    )
+  }
+
+  /// Convert a raw syntax node to `RawUnexpectedNodesSyntax` by extracting its tokens.
+  func unexpected(_ node: (some RawSyntaxNodeProtocol)?) -> RawUnexpectedNodesSyntax? {
+    var tokens: [RawTokenSyntax] = []
+
+    func collect(from child: (some RawSyntaxNodeProtocol)?) {
+      guard let child else { return }
+
+      guard let token = child.as(RawTokenSyntax.self) else {
+        for child in child.raw.layoutView!.children {
+          collect(from: child)
+        }
+        return
+      }
+
+      if !token.isMissing {
+        tokens.append(token)
+      }
+    }
+
+    collect(from: node)
+
+    guard !tokens.isEmpty else {
+      return nil
+    }
+    return RawUnexpectedNodesSyntax(tokens, arena: self.arena)
+  }
+
+  /// Inject `moduleSelector` into `node`, its first child, its first child's first child, etc. If necessary,
+  /// `moduleSelector`'s tokens will be inserted into an unexpected syntax node rather than the selector itself being
+  /// inserted. This should only be called when `node` comes *immediately* after `moduleSelector`.
+  ///
+  /// Use this method to "prepend" a module selector to a tree of syntax nodes. Doing so can avoid threading the module
+  /// selector through a lot of code, which can consume a lot of stack space and be fairly error-prone.
+  ///
+  /// - Precondition: `node` must, at minimum, have a descendant with an unexpected nodes child; it therefore cannot be
+  ///   a token or an empty collection.
+  func attach<Node: RawSyntaxNodeProtocol>(_ moduleSelector: RawModuleSelectorSyntax?, to node: Node) -> Node {
+    guard let moduleSelector else {
+      return node
+    }
+
+    /// Recursively walk `node` and its descendants, looking for a place to attach `moduleSelector`.
+    ///
+    /// - Returns: `nil` if no suitable attachment point was found inside `node`; otherwise, a copy of `node` with
+    ///   `moduleSelector` or its tokens injected somewhere.
+    func rewrite<ChildNode: RawSyntaxNodeProtocol>(attachingTo node: ChildNode) -> ChildNode? {
+      // If we hit a token, we won't be able to insert here. The parent will have to take care of it.
+      guard let layout = node.raw.layoutView else {
+        return nil
+      }
+
+      /// Returns a copy of `node` with the child at `index` replaced by `newChild`.
+      func makeNode(withChildAt index: Int, replacedBy newChild: (some RawSyntaxNodeProtocol)?) -> ChildNode {
+        return layout.replacingChild(
+          at: index, with: newChild?.raw, arena: self.arena
+        ).cast(ChildNode.self)
+      }
+
+      // Try to incorporate `self` into `node` or one of its children in a node-specific way.
+      switch node.raw.kind {
+      case .token:
+        fatalError("should have early returned")
+
+      case .moduleSelector:
+        // Don't try to insert within a module selector.
+        return nil
+
+      case .unexpectedNodes:
+        // We can just insert `self` here.
+        return RawUnexpectedNodesSyntax(
+          combining: unexpected(moduleSelector), node.cast(RawUnexpectedNodesSyntax.self),
+          arena: self.arena
+        )?.cast(ChildNode.self)
+
+      case .declReferenceExpr, .identifierType:
+        // This node has an expected module selector at child 1.
+        let nodeUnexpectedBeforeModuleSelector = layout.children[0]
+        let nodeModuleSelector = layout.children[1]
+
+        // If `node` doesn't already have a module selector or some unexpected syntax before one, attach
+        // `moduleSelector` there.
+        //
+        // Note: The `nodeModuleSelector` check here is defensive. It's probably impossible for only
+        // `nodeModuleSelector` to be non-nil because the `parseModuleSelector()` call that created `moduleSelector`
+        // should have consumed the tokens that would have gone into `nodeModuleSelector`. However, if it *does* turn
+        // out to be possible, we may want to insert `nodeModuleSelector` into
+        // `moduleSelector.unexpectedAfterColonColon` to get slightly nicer diagnostics.
+        if nodeUnexpectedBeforeModuleSelector == nil && nodeModuleSelector == nil {
+          return makeNode(withChildAt: 1, replacedBy: moduleSelector)
+        }
+
+      default:
+        // Try to attach `moduleSelector` to the first suitable child.
+        func isInsertionPoint(_ child: RawSyntax?) -> Bool {
+          guard let child else {
+            return false
+          }
+          // Skip empty collections, but don't skip nodes with missing tokens (which are also `isEmpty`).
+          return !child.isEmpty || !child.kind.isSyntaxCollection
+        }
+
+        if let childIndex = layout.children.firstIndex(where: isInsertionPoint(_:)),
+          let replacementChild = rewrite(attachingTo: layout.children[childIndex]!) {
+          return makeNode(withChildAt: childIndex, replacedBy: replacementChild)
+        }
+      }
+
+      // Last chance: If this is *not* a collection, child 0 is unexpected nodes; we can put `moduleSelector` there.
+      if !node.raw.kind.isSyntaxCollection {
+        assert(layout.children[0] == nil)
+        return makeNode(withChildAt: 0, replacedBy: unexpected(moduleSelector))
+      }
+
+      // Out of options.
+      return nil
+    }
+
+    guard let rewrittenNode = rewrite(attachingTo: node) else {
+      // We should *never* parse a module selector and then have nothing to attach it to; if there's a situation where
+      // we do, we should not have parsed it in the first place.
+      preconditionFailure(
+        """
+        No way to attach module selector to node!
+        Module selector: \(String(reflecting: moduleSelector))
+        Attachment point: \(String(reflecting: node))
+        """
+      )
+    }
+
+    return rewrittenNode
+  }
+}
+
 extension Parser {
   struct DeclNameOptions: OptionSet {
     var rawValue: UInt8
@@ -67,7 +342,7 @@ extension Parser {
     static let zeroArgCompoundNames: Self = [.compoundNames, Self(rawValue: 1 << 5)]
   }
 
-  mutating func parseDeclReferenceExpr(_ flags: DeclNameOptions = []) -> RawDeclReferenceExprSyntax {
+  mutating func parseDeclReferenceExpr(moduleSelector: RawModuleSelectorSyntax?, _ flags: DeclNameOptions = []) -> RawDeclReferenceExprSyntax {
     // Consume the base name.
     let base: RawTokenSyntax
     if let identOrSelf = self.consume(if: .identifier, .keyword(.self), .keyword(.Self))
@@ -89,7 +364,7 @@ extension Parser {
     // Parse an argument list, if the flags allow it and it's present.
     let args = self.parseArgLabelList(flags)
     return RawDeclReferenceExprSyntax(
-      moduleSelector: nil,
+      moduleSelector: moduleSelector,
       baseName: base,
       argumentNames: args,
       arena: self.arena
@@ -168,11 +443,11 @@ extension Parser {
       period = nil
     }
 
-    let declName = self.parseDeclReferenceExpr([
-      .zeroArgCompoundNames,
-      .keywordsUsingSpecialNames,
-      .operators,
-    ])
+    let moduleSelector = self.parseModuleSelector()
+    let declName = self.parseDeclReferenceExpr(
+      moduleSelector: moduleSelector,
+      [.zeroArgCompoundNames, .keywordsUsingSpecialNames, .operators]
+    )
     if let period = period {
       return RawExprSyntax(
         RawMemberAccessExprSyntax(
@@ -188,8 +463,8 @@ extension Parser {
   }
 
   mutating func parseQualifiedTypeIdentifier() -> RawTypeSyntax {
-
-    let identifierType = self.parseTypeIdentifier()
+    let moduleSelector = self.parseModuleSelector()
+    let identifierType = attach(moduleSelector, to: self.parseTypeIdentifier())
     var result = RawTypeSyntax(identifierType)
 
     // There are no nested types inside `Any`.
@@ -212,6 +487,7 @@ extension Parser {
     var keepGoing = self.consume(if: .period)
     var loopProgress = LoopProgressCondition()
     while keepGoing != nil && self.hasProgressed(&loopProgress) {
+      let memberModuleSelector = self.parseModuleSelector()
       let (unexpectedBeforeName, name) = self.expect(
         .identifier,
         .keyword(.self),
@@ -228,7 +504,7 @@ extension Parser {
         RawMemberTypeSyntax(
           baseType: result,
           period: keepGoing!,
-          moduleSelector: nil,
+          moduleSelector: memberModuleSelector,
           unexpectedBeforeName,
           name: name,
           genericArgumentClause: generics,

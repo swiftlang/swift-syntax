@@ -304,6 +304,8 @@ public enum SyntaxKind: Sendable {
   case unresolvedIsExpr
   case unresolvedTernaryExpr
   case unsafeExpr
+  @_spi(ExperimentalLanguageFeatures)
+  case usingDecl
   case valueBindingPattern
   case variableDecl
   case versionComponentList
@@ -1001,6 +1003,8 @@ public enum SyntaxKind: Sendable {
       return UnresolvedTernaryExprSyntax.self
     case .unsafeExpr:
       return UnsafeExprSyntax.self
+    case .usingDecl:
+      return UsingDeclSyntax.self
     case .valueBindingPattern:
       return ValueBindingPatternSyntax.self
     case .variableDecl:

@@ -50,19 +50,41 @@ public struct CallToTrailingClosures: SyntaxRefactoringProvider {
     }
   }
 
+  public typealias Input = Syntax
+  public typealias Output = Syntax
+
+  /// Apply the refactoring to a given syntax node. If either a
+  /// non-function-like syntax node is passed, or the refactoring fails,
+  /// `nil` is returned.
   // TODO: Rather than returning nil, we should consider throwing errors with
   // appropriate messages instead.
+  public static func refactor(
+    syntax: Syntax,
+    in context: Context = Context()
+  ) -> Syntax? {
+    guard let call = syntax.asProtocol(CallLikeSyntax.self) else { return nil }
+    return Syntax(fromProtocol: _refactor(syntax: call, in: context))
+  }
+
+  @available(*, deprecated, message: "Pass a Syntax argument instead of FunctionCallExprSyntax")
   public static func refactor(
     syntax call: FunctionCallExprSyntax,
     in context: Context = Context()
   ) -> FunctionCallExprSyntax? {
+    _refactor(syntax: call, in: context)
+  }
+
+  internal static func _refactor<C: CallLikeSyntax>(
+    syntax call: C,
+    in context: Context = Context()
+  ) -> C? {
     let converted = call.convertToTrailingClosures(from: context.startAtArgument)
-    return converted?.formatted().as(FunctionCallExprSyntax.self)
+    return converted?.formatted().as(C.self)
   }
 }
 
-extension FunctionCallExprSyntax {
-  fileprivate func convertToTrailingClosures(from startAtArgument: Int) -> FunctionCallExprSyntax? {
+extension CallLikeSyntax {
+  fileprivate func convertToTrailingClosures(from startAtArgument: Int) -> Self? {
     guard trailingClosure == nil, additionalTrailingClosures.isEmpty, leftParen != nil, rightParen != nil else {
       // Already have trailing closures
       return nil

@@ -30,7 +30,8 @@ extension FunctionScopeSyntax {
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     var thisScopeResults: [LookupResult] = []
 
@@ -39,6 +40,7 @@ extension FunctionScopeSyntax {
         identifier,
         at: position,
         with: config,
+        cache: cache,
         propagateToParent: false
       )
     }
@@ -47,7 +49,8 @@ extension FunctionScopeSyntax {
       + lookupThroughGenericParameterScope(
         identifier,
         at: lookUpPosition,
-        with: config
+        with: config,
+        cache: cache
       )
   }
 }

@@ -451,6 +451,58 @@ final class ExpandEditorPlaceholderTests: XCTestCase {
       format: .testCustom()
     )
   }
+
+  func testMacroTrailingClosureExpansion1() throws {
+    try assertRefactorPlaceholderToken(
+      "#foo(\(closurePlaceholder), \(intPlaceholder))",
+      expected: """
+        {
+            \(voidPlaceholder)
+        }
+        """
+    )
+  }
+
+  func testMacroTrailingClosureExpansion2() throws {
+    let call = "#foo(fn: \(closureWithArgPlaceholder))"
+    let expanded = """
+      #foo { someInt in
+          \(stringPlaceholder)
+      }
+      """
+
+    try assertRefactorPlaceholderCall(call, expected: expanded)
+    try assertExpandEditorPlaceholdersToClosures(call, expected: expanded)
+  }
+
+  func testMacroTrailingClosureExpansion3() throws {
+    let call = "#foo(fn1: \(closurePlaceholder), fn2: \(closureWithArgPlaceholder))"
+    let expanded = """
+      #foo {
+          \(voidPlaceholder)
+      } fn2: { someInt in
+          \(stringPlaceholder)
+      }
+      """
+
+    try assertRefactorPlaceholderCall(call, expected: expanded)
+    try assertExpandEditorPlaceholdersToClosures(call, expected: expanded)
+  }
+
+  func testMacroTrailingClosureExpansion4() throws {
+    try assertExpandEditorPlaceholdersToClosures(
+      decl: """
+        #foo(fn1: \(closurePlaceholder), fn2: \(closurePlaceholder))
+        """,
+      expected: """
+        #foo {
+            \(voidPlaceholder)
+        } fn2: {
+            \(voidPlaceholder)
+        }
+        """
+    )
+  }
 }
 
 fileprivate func assertRefactorPlaceholder(
@@ -489,7 +541,7 @@ fileprivate func assertRefactorPlaceholderCall(
   line: UInt = #line
 ) throws {
   var parser = Parser(expr)
-  let call = try XCTUnwrap(ExprSyntax.parse(from: &parser).as(FunctionCallExprSyntax.self), file: file, line: line)
+  let call = try XCTUnwrap(ExprSyntax.parse(from: &parser).asProtocol(CallLikeSyntax.self), file: file, line: line)
   let arg = call.arguments[call.arguments.index(at: placeholder)]
   let token: TokenSyntax = try XCTUnwrap(arg.expression.as(DeclReferenceExprSyntax.self), file: file, line: line)
     .baseName
@@ -513,7 +565,7 @@ fileprivate func assertRefactorPlaceholderToken(
   line: UInt = #line
 ) throws {
   var parser = Parser(expr)
-  let call = try XCTUnwrap(ExprSyntax.parse(from: &parser).as(FunctionCallExprSyntax.self), file: file, line: line)
+  let call = try XCTUnwrap(ExprSyntax.parse(from: &parser).asProtocol(CallLikeSyntax.self), file: file, line: line)
   let arg = call.arguments[call.arguments.index(at: placeholder)]
   let token: TokenSyntax = try XCTUnwrap(arg.expression.as(DeclReferenceExprSyntax.self), file: file, line: line)
     .baseName
@@ -529,6 +581,23 @@ fileprivate func assertRefactorPlaceholderToken(
 }
 
 fileprivate func assertExpandEditorPlaceholdersToClosures(
+  _ call: some CallLikeSyntax,
+  expected: String,
+  format: ExpandEditorPlaceholdersToLiteralClosures.Context.Format = .trailing(indentationWidth: nil),
+  file: StaticString = #filePath,
+  line: UInt = #line
+) throws {
+  try assertRefactor(
+    call,
+    context: ExpandEditorPlaceholdersToLiteralClosures.Context(format: format),
+    provider: ExpandEditorPlaceholdersToLiteralClosures.self,
+    expected: [SourceEdit.replace(call, with: expected)],
+    file: file,
+    line: line
+  )
+}
+
+fileprivate func assertExpandEditorPlaceholdersToClosures(
   _ expr: String,
   expected: String,
   format: ExpandEditorPlaceholdersToLiteralClosures.Context.Format = .trailing(indentationWidth: nil),
@@ -536,13 +605,29 @@ fileprivate func assertExpandEditorPlaceholdersToClosures(
   line: UInt = #line
 ) throws {
   var parser = Parser(expr)
-  let call = try XCTUnwrap(ExprSyntax.parse(from: &parser).as(FunctionCallExprSyntax.self), file: file, line: line)
-
-  try assertRefactor(
+  let call = try XCTUnwrap(ExprSyntax.parse(from: &parser).asProtocol(CallLikeSyntax.self), file: file, line: line)
+  try assertExpandEditorPlaceholdersToClosures(
     call,
-    context: ExpandEditorPlaceholdersToLiteralClosures.Context(format: format),
-    provider: ExpandEditorPlaceholdersToLiteralClosures.self,
-    expected: [SourceEdit.replace(call, with: expected)],
+    expected: expected,
+    format: format,
+    file: file,
+    line: line
+  )
+}
+
+fileprivate func assertExpandEditorPlaceholdersToClosures(
+  decl: String,
+  expected: String,
+  format: ExpandEditorPlaceholdersToLiteralClosures.Context.Format = .trailing(indentationWidth: nil),
+  file: StaticString = #filePath,
+  line: UInt = #line
+) throws {
+  var parser = Parser(decl)
+  let call = try XCTUnwrap(DeclSyntax.parse(from: &parser).asProtocol(CallLikeSyntax.self), file: file, line: line)
+  try assertExpandEditorPlaceholdersToClosures(
+    call,
+    expected: expected,
+    format: format,
     file: file,
     line: line
   )

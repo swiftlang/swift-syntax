@@ -104,6 +104,7 @@ public enum Keyword: CaseIterable {
   case _PackageDescription
   case _read
   case _RefCountedObject
+  case specialized
   case _specialize
   case _spi_available
   case _Trivial
@@ -210,6 +211,7 @@ public enum Keyword: CaseIterable {
   case none
   case nonisolated
   case nonmutating
+  case nonsending
   case objc
   case obsoleted
   case of
@@ -267,6 +269,7 @@ public enum Keyword: CaseIterable {
   case unsafe
   case unsafeAddress
   case unsafeMutableAddress
+  case using
   case `var`
   case visibility
   case weak
@@ -274,7 +277,6 @@ public enum Keyword: CaseIterable {
   case `while`
   case willSet
   case wrt
-  case x
   case yield
 
   public var spec: KeywordSpec {
@@ -339,6 +341,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("_read")
     case ._RefCountedObject:
       return KeywordSpec("_RefCountedObject")
+    case .specialized:
+      return KeywordSpec("specialized")
     case ._specialize:
       return KeywordSpec("_specialize")
     case ._spi_available:
@@ -356,7 +360,7 @@ public enum Keyword: CaseIterable {
     case ._version:
       return KeywordSpec("_version")
     case .abi:
-      return KeywordSpec("abi", experimentalFeature: .abiAttribute)
+      return KeywordSpec("abi")
     case .accesses:
       return KeywordSpec("accesses")
     case .actor:
@@ -551,6 +555,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("nonisolated")
     case .nonmutating:
       return KeywordSpec("nonmutating")
+    case .nonsending:
+      return KeywordSpec("nonsending")
     case .objc:
       return KeywordSpec("objc")
     case .obsoleted:
@@ -665,6 +671,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("unsafeAddress")
     case .unsafeMutableAddress:
       return KeywordSpec("unsafeMutableAddress")
+    case .using:
+      return KeywordSpec("using")
     case .var:
       return KeywordSpec("var", isLexerClassified: true)
     case .visibility:
@@ -679,8 +687,6 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("willSet")
     case .wrt:
       return KeywordSpec("wrt")
-    case .x:
-      return KeywordSpec("x", experimentalFeature: .inlineArrayTypeSugar)
     case .yield:
       return KeywordSpec("yield")
     }

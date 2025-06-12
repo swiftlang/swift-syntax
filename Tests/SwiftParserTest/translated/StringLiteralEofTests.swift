@@ -243,4 +243,37 @@ final class StringLiteralEofTests: ParserTestCase {
         """##
     )
   }
+
+  func testSimpleMultilineStringLiteralWith() {
+    assertParse(
+      #"""
+      #sourceLocation1️⃣(file: 2️⃣"""3️⃣\(4️⃣"5️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "3️⃣", message: "argument cannot be an interpolated string literal"),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: #"expected '"""' to end simple string literal"#,
+          notes: [NoteSpec(locationMarker: "2️⃣", message: #"to match this opening '"""'"#)],
+          fixIts: [#"insert '"""'"#]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected ', line:' and line number in '#sourceLocation' arguments",
+          fixIts: ["insert ', line:' and line number"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected ')' in '#sourceLocation' directive",
+          notes: [NoteSpec(locationMarker: "1️⃣", message: "to match this opening '('")],
+          fixIts: ["insert ')'"]
+        ),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "extra tokens following the #sourceLocation directive"),
+      ],
+      fixedSource: #"""
+        #sourceLocation(file: """\(
+        """, line: <#integer literal#>)"
+        """#
+    )
+  }
 }

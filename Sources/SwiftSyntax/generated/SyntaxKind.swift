@@ -16,7 +16,6 @@
 /// Enumerates the known kinds of Syntax represented in the Syntax tree.
 public enum SyntaxKind: Sendable {
   case token
-  @_spi(ExperimentalLanguageFeatures)
   case abiAttributeArguments
   @_spi(Compiler)
   case accessorBlockFile
@@ -216,6 +215,8 @@ public enum SyntaxKind: Sendable {
   case multipleTrailingClosureElement
   case namedOpaqueReturnType
   case nilLiteralExpr
+  case nonisolatedSpecifierArgument
+  case nonisolatedTypeSpecifier
   case objCSelectorPieceList
   case objCSelectorPiece
   case operatorDecl
@@ -264,6 +265,7 @@ public enum SyntaxKind: Sendable {
   case specializeAttributeArgumentList
   case specializeAvailabilityArgument
   case specializeTargetFunctionArgument
+  case specializedAttributeArgument
   case stringLiteralExpr
   case stringLiteralSegmentList
   case stringSegment
@@ -303,6 +305,8 @@ public enum SyntaxKind: Sendable {
   case unresolvedIsExpr
   case unresolvedTernaryExpr
   case unsafeExpr
+  @_spi(ExperimentalLanguageFeatures)
+  case usingDecl
   case valueBindingPattern
   case variableDecl
   case versionComponentList
@@ -824,6 +828,10 @@ public enum SyntaxKind: Sendable {
       return NamedOpaqueReturnTypeSyntax.self
     case .nilLiteralExpr:
       return NilLiteralExprSyntax.self
+    case .nonisolatedSpecifierArgument:
+      return NonisolatedSpecifierArgumentSyntax.self
+    case .nonisolatedTypeSpecifier:
+      return NonisolatedTypeSpecifierSyntax.self
     case .objCSelectorPieceList:
       return ObjCSelectorPieceListSyntax.self
     case .objCSelectorPiece:
@@ -920,6 +928,8 @@ public enum SyntaxKind: Sendable {
       return SpecializeAvailabilityArgumentSyntax.self
     case .specializeTargetFunctionArgument:
       return SpecializeTargetFunctionArgumentSyntax.self
+    case .specializedAttributeArgument:
+      return SpecializedAttributeArgumentSyntax.self
     case .stringLiteralExpr:
       return StringLiteralExprSyntax.self
     case .stringLiteralSegmentList:
@@ -996,6 +1006,8 @@ public enum SyntaxKind: Sendable {
       return UnresolvedTernaryExprSyntax.self
     case .unsafeExpr:
       return UnsafeExprSyntax.self
+    case .usingDecl:
+      return UsingDeclSyntax.self
     case .valueBindingPattern:
       return ValueBindingPatternSyntax.self
     case .variableDecl:

@@ -381,13 +381,39 @@ extension Parser {
     }
   }
 
+  /// Make sure that we only accept `nonisolated(nonsending)` as a valid type specifier
+  /// in expression context to minimize source compatibility impact.
+  func canParseNonisolatedAsSpecifierInExpressionContext() -> Bool {
+    return withLookahead {
+      guard $0.consume(if: .keyword(.nonisolated)) != nil else {
+        return false
+      }
+
+      if $0.currentToken.isAtStartOfLine {
+        return false
+      }
+
+      guard $0.consume(if: .leftParen) != nil else {
+        return false
+      }
+
+      guard $0.consume(if: TokenSpec(.nonsending, allowAtStartOfLine: false)) != nil else {
+        return false
+      }
+
+      return $0.at(TokenSpec(.rightParen, allowAtStartOfLine: false))
+    }
+  }
+
   /// Parse an expression sequence element.
   mutating func parseSequenceExpressionElement(
     flavor: ExprFlavor,
     pattern: PatternContext = .none
   ) -> RawExprSyntax {
-    // Try to parse '@' sign or 'inout' as an attributed typerepr.
-    if self.at(.atSign, .keyword(.inout)) {
+    // Try to parse '@' sign, 'inout', or 'nonisolated' as an attributed typerepr.
+    if self.at(.atSign, .keyword(.inout))
+      || self.canParseNonisolatedAsSpecifierInExpressionContext()
+    {
       var lookahead = self.lookahead()
       if lookahead.canParseType() {
         let type = self.parseType()

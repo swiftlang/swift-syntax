@@ -41,6 +41,7 @@ extension Parser {
     case _effects
     case _implements
     case _originallyDefinedIn
+    case specialized
     case _specialize
     case _spi_available
     case `rethrows`
@@ -63,10 +64,11 @@ extension Parser {
       case TokenSpec(._effects): self = ._effects
       case TokenSpec(._implements): self = ._implements
       case TokenSpec(._originallyDefinedIn): self = ._originallyDefinedIn
+      case TokenSpec(.specialized): self = .specialized
       case TokenSpec(._specialize): self = ._specialize
       case TokenSpec(._spi_available): self = ._spi_available
       case TokenSpec(.`rethrows`): self = .rethrows
-      case TokenSpec(.abi) where experimentalFeatures.contains(.abiAttribute): self = .abi
+      case TokenSpec(.abi): self = .abi
       case TokenSpec(.attached): self = .attached
       case TokenSpec(.available): self = .available
       case TokenSpec(.backDeployed): self = .backDeployed
@@ -89,6 +91,7 @@ extension Parser {
       case ._effects: return .keyword(._effects)
       case ._implements: return .keyword(._implements)
       case ._originallyDefinedIn: return .keyword(._originallyDefinedIn)
+      case .specialized: return .keyword(.specialized)
       case ._specialize: return .keyword(._specialize)
       case ._spi_available: return .keyword(._spi_available)
       case .`rethrows`: return .keyword(.rethrows)
@@ -139,8 +142,12 @@ extension Parser {
   ///   - parseMissingArguments: If provided, called instead of `parseArgument` when an argument list was required but no opening parenthesis was present.
   mutating func parseAttribute(
     argumentMode: AttributeArgumentMode,
-    parseArguments: (inout Parser) -> RawAttributeSyntax.Arguments,
-    parseMissingArguments: ((inout Parser) -> RawAttributeSyntax.Arguments)? = nil
+    parseArguments: (inout Parser) -> (
+      unexpectedBefore: RawUnexpectedNodesSyntax?, arguments: RawAttributeSyntax.Arguments
+    ),
+    parseMissingArguments: (
+      (inout Parser) -> (unexpectedBefore: RawUnexpectedNodesSyntax?, arguments: RawAttributeSyntax.Arguments)
+    )? = nil
   ) -> RawAttributeListSyntax.Element {
     var (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     if atSign.trailingTriviaByteLength > 0 || self.currentToken.leadingTriviaByteLength > 0 {
@@ -157,7 +164,7 @@ extension Parser {
       shouldParseArgument = true
     case .customAttribute:
       shouldParseArgument =
-        self.withLookahead { $0.atCustomAttributeArgument() }
+        self.withLookahead { $0.atAttributeOrSpecifierArgument() }
         && self.at(TokenSpec(.leftParen, allowAtStartOfLine: false))
     case .optional:
       shouldParseArgument = self.at(.leftParen)
@@ -175,11 +182,12 @@ extension Parser {
         )
         leftParen = leftParen.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
       }
+      let unexpectedBeforeArguments: RawUnexpectedNodesSyntax?
       let argument: RawAttributeSyntax.Arguments
       if let parseMissingArguments, leftParen.presence == .missing {
-        argument = parseMissingArguments(&self)
+        (unexpectedBeforeArguments, argument) = parseMissingArguments(&self)
       } else {
-        argument = parseArguments(&self)
+        (unexpectedBeforeArguments, argument) = parseArguments(&self)
       }
       let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
       return .attribute(
@@ -189,6 +197,7 @@ extension Parser {
           attributeName: attributeName,
           unexpectedBeforeLeftParen,
           leftParen: leftParen,
+          unexpectedBeforeArguments,
           arguments: argument,
           unexpectedBeforeRightParen,
           rightParen: rightParen,
@@ -224,41 +233,45 @@ extension Parser {
     switch peek(isAtAnyIn: DeclarationAttributeWithSpecialSyntax.self) {
     case .abi:
       return parseAttribute(argumentMode: .required) { parser in
-        return .abiArguments(parser.parseABIAttributeArguments())
+        return (nil, .abiArguments(parser.parseABIAttributeArguments()))
       } parseMissingArguments: { parser in
-        return .abiArguments(parser.parseABIAttributeArguments(missingLParen: true))
+        return (nil, .abiArguments(parser.parseABIAttributeArguments(missingLParen: true)))
       }
     case .available, ._spi_available:
       return parseAttribute(argumentMode: .required) { parser in
-        return .availability(parser.parseAvailabilityArgumentSpecList())
+        return (nil, .availability(parser.parseAvailabilityArgumentSpecList()))
       }
     case .backDeployed, ._backDeploy:
       return parseAttribute(argumentMode: .required) { parser in
-        return .backDeployedArguments(parser.parseBackDeployedAttributeArguments())
+        return (nil, .backDeployedArguments(parser.parseBackDeployedAttributeArguments()))
       }
     case .differentiable:
       return parseAttribute(argumentMode: .required) { parser in
-        return .differentiableArguments(parser.parseDifferentiableAttributeArguments())
+        return (nil, .differentiableArguments(parser.parseDifferentiableAttributeArguments()))
       }
     case .derivative, .transpose:
       return parseAttribute(argumentMode: .required) { parser in
-        return .derivativeRegistrationArguments(parser.parseDerivativeAttributeArguments())
+        return (nil, .derivativeRegistrationArguments(parser.parseDerivativeAttributeArguments()))
       }
     case .objc:
       return parseAttribute(argumentMode: .optional) { parser in
-        return .objCName(parser.parseObjectiveCSelector())
+        return (nil, .objCName(parser.parseObjectiveCSelector()))
+      }
+    case .specialized:
+      return parseAttribute(argumentMode: .required) { parser in
+        return (nil, .specializedArguments(parser.parseSpecializedAttributeArgument()))
       }
     case ._specialize:
       return parseAttribute(argumentMode: .required) { parser in
-        return .specializeArguments(parser.parseSpecializeAttributeArgumentList())
+        return (nil, .specializeArguments(parser.parseSpecializeAttributeArgumentList()))
       }
     case ._dynamicReplacement:
       return parseAttribute(argumentMode: .required) { parser in
-        return .dynamicReplacementArguments(parser.parseDynamicReplacementAttributeArguments())
+        return (nil, .dynamicReplacementArguments(parser.parseDynamicReplacementAttributeArguments()))
       }
     case ._documentation:
       return parseAttribute(argumentMode: .required) { parser in
-        return .documentationArguments(parser.parseDocumentationAttributeArguments())
+        return (nil, .documentationArguments(parser.parseDocumentationAttributeArguments()))
       }
     case ._effects:
       return parseAttribute(argumentMode: .required) { parser in
@@ -268,20 +281,20 @@ extension Parser {
         while !parser.at(.rightParen, .endOfFile) {
           tokens.append(parser.consumeAnyToken())
         }
-        return .effectsArguments(RawEffectsAttributeArgumentListSyntax(elements: tokens, arena: parser.arena))
+        return (nil, .effectsArguments(RawEffectsAttributeArgumentListSyntax(elements: tokens, arena: parser.arena)))
       }
     case ._implements:
       return parseAttribute(argumentMode: .required) { parser in
-        return .implementsArguments(parser.parseImplementsAttributeArguments())
+        return (nil, .implementsArguments(parser.parseImplementsAttributeArguments()))
       }
     case ._originallyDefinedIn:
       return parseAttribute(argumentMode: .required) { parser in
-        return .originallyDefinedInArguments(parser.parseOriginallyDefinedInAttributeArguments())
+        return (nil, .originallyDefinedInArguments(parser.parseOriginallyDefinedInAttributeArguments()))
       }
     case .attached, .freestanding:
       return parseAttribute(argumentMode: .customAttribute) { parser in
         let arguments = parser.parseMacroRoleArguments()
-        return .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
+        return (nil, .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena)))
       }
     case .rethrows:
       let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
@@ -308,7 +321,7 @@ extension Parser {
           pattern: .none,
           allowTrailingComma: true
         )
-        return .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena))
+        return (nil, .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena)))
       }
     }
   }
@@ -639,6 +652,11 @@ extension Parser {
 }
 
 extension Parser {
+  mutating func parseSpecializedAttributeArgument() -> RawSpecializedAttributeArgumentSyntax {
+    let whereClause = self.parseGenericWhereClause()
+    return RawSpecializedAttributeArgumentSyntax(genericWhereClause: whereClause, arena: self.arena)
+  }
+
   mutating func parseSpecializeAttributeArgumentList() -> RawSpecializeAttributeArgumentListSyntax {
     var elements = [RawSpecializeAttributeArgumentListSyntax.Element]()
     // Parse optional "exported" and "kind" labeled parameters.
@@ -786,7 +804,9 @@ extension Parser {
   /// Parse the arguments inside an `@abi(...)` attribute.
   ///
   /// - Parameter missingLParen: `true` if the opening paren for the argument list was missing.
-  mutating func parseABIAttributeArguments(missingLParen: Bool = false) -> RawABIAttributeArgumentsSyntax {
+  mutating func parseABIAttributeArguments(
+    missingLParen: Bool = false
+  ) -> RawABIAttributeArgumentsSyntax {
     func makeMissingProviderArguments(unexpectedBefore: [RawSyntax]) -> RawABIAttributeArgumentsSyntax {
       return RawABIAttributeArgumentsSyntax(
         provider: .missing(
@@ -1002,7 +1022,7 @@ extension Parser {
 // MARK: Lookahead
 
 extension Parser.Lookahead {
-  mutating func atCustomAttributeArgument() -> Bool {
+  mutating func atAttributeOrSpecifierArgument() -> Bool {
     var lookahead = self.lookahead()
     lookahead.skipSingle()
 
@@ -1036,7 +1056,7 @@ extension Parser.Lookahead {
     }
 
     if self.at(TokenSpec(.leftParen, allowAtStartOfLine: false))
-      && self.withLookahead({ $0.atCustomAttributeArgument() })
+      && self.withLookahead({ $0.atAttributeOrSpecifierArgument() })
     {
       self.skipSingle()
     }

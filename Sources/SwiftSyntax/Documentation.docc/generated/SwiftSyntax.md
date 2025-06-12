@@ -294,6 +294,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/TupleTypeElementSyntax>
 - <doc:SwiftSyntax/TypeSpecifierListSyntax>
 - <doc:SwiftSyntax/SimpleTypeSpecifierSyntax>
+- <doc:SwiftSyntax/NonisolatedTypeSpecifierSyntax>
 - <doc:SwiftSyntax/UnexpectedNodesSyntax>
 - <doc:SwiftSyntax/VersionComponentListSyntax>
 - <doc:SwiftSyntax/VersionComponentSyntax>
@@ -302,6 +303,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 
 ### Attributes
 
+- <doc:SwiftSyntax/ABIAttributeArgumentsSyntax>
 - <doc:SwiftSyntax/AttributeListSyntax>
 - <doc:SwiftSyntax/AttributeSyntax>
 - <doc:SwiftSyntax/BackDeployedAttributeArgumentsSyntax>
@@ -325,6 +327,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/SpecializeAttributeArgumentListSyntax>
 - <doc:SwiftSyntax/SpecializeAvailabilityArgumentSyntax>
 - <doc:SwiftSyntax/SpecializeTargetFunctionArgumentSyntax>
+- <doc:SwiftSyntax/SpecializedAttributeArgumentSyntax>
 
 ### Miscellaneous Syntax
 
@@ -357,6 +360,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/MatchingPatternConditionSyntax>
 - <doc:SwiftSyntax/MemberBlockSyntax>
 - <doc:SwiftSyntax/MissingSyntax>
+- <doc:SwiftSyntax/NonisolatedSpecifierArgumentSyntax>
 - <doc:SwiftSyntax/OperatorPrecedenceAndTypesSyntax>
 - <doc:SwiftSyntax/OptionalBindingConditionSyntax>
 - <doc:SwiftSyntax/PlatformVersionSyntax>

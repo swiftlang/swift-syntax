@@ -46,6 +46,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _PackageDescription
   case _read
   case _RefCountedObject
+  case specialized
   case _specialize
   case _spi_available
   case _Trivial
@@ -54,7 +55,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case _underlyingVersion
   case _UnknownLayout
   case _version
-  @_spi(ExperimentalLanguageFeatures)
   case abi
   case accesses
   case actor
@@ -155,6 +155,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case none
   case nonisolated
   case nonmutating
+  case nonsending
   case objc
   case obsoleted
   case of
@@ -214,6 +215,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case unsafe
   case unsafeAddress
   case unsafeMutableAddress
+  case using
   case `var`
   case visibility
   case weak
@@ -221,19 +223,10 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case `while`
   case willSet
   case wrt
-  @_spi(ExperimentalLanguageFeatures)
-  case x
   case yield
 
   @_spi(RawSyntax) public init?(_ text: SyntaxText) {
     switch text.count {
-    case 1:
-      switch text {
-      case "x":
-        self = .x
-      default:
-        return nil
-      }
     case 2:
       switch text {
       case "as":
@@ -375,6 +368,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .swift
       case "throw":
         self = .throw
+      case "using":
+        self = .using
       case "where":
         self = .where
       case "while":
@@ -584,6 +579,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .higherThan
       case "introduced":
         self = .introduced
+      case "nonsending":
+        self = .nonsending
       case "visibility":
         self = .visibility
       default:
@@ -599,6 +596,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = ._implements
       case "_noMetadata":
         self = ._noMetadata
+      case "specialized":
+        self = .specialized
       case "_specialize":
         self = ._specialize
       case "autoclosure":
@@ -787,6 +786,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "_PackageDescription",
     "_read",
     "_RefCountedObject",
+    "specialized",
     "_specialize",
     "_spi_available",
     "_Trivial",
@@ -893,6 +893,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "none",
     "nonisolated",
     "nonmutating",
+    "nonsending",
     "objc",
     "obsoleted",
     "of",
@@ -950,6 +951,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "unsafe",
     "unsafeAddress",
     "unsafeMutableAddress",
+    "using",
     "var",
     "visibility",
     "weak",
@@ -957,7 +959,6 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "while",
     "willSet",
     "wrt",
-    "x",
     "yield",
   ]
 

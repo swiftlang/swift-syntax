@@ -17,8 +17,6 @@
 
 /// The arguments of the '@abi' attribute
 ///
-/// - Note: Requires experimental feature `abiAttribute`.
-///
 /// ### Children
 /// 
 ///  - `provider`: (``AssociatedTypeDeclSyntax`` | ``DeinitializerDeclSyntax`` | ``EnumCaseDeclSyntax`` | ``FunctionDeclSyntax`` | ``InitializerDeclSyntax`` | ``MissingDeclSyntax`` | ``SubscriptDeclSyntax`` | ``TypeAliasDeclSyntax`` | ``VariableDeclSyntax``)
@@ -26,7 +24,6 @@
 /// ### Contained in
 /// 
 ///  - ``AttributeSyntax``.``AttributeSyntax/arguments``
-@_spi(ExperimentalLanguageFeatures)
 public struct ABIAttributeArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Provider: SyntaxChildChoices, SyntaxHashable {
     case associatedType(AssociatedTypeDeclSyntax)
@@ -2600,6 +2597,10 @@ public struct AssignmentExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExp
 ///  - `inheritanceClause`: ``InheritanceClauseSyntax``?
 ///  - `initializer`: ``TypeInitializerClauseSyntax``?
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
+///
+/// ### Contained in
+/// 
+///  - ``ABIAttributeArgumentsSyntax``.``ABIAttributeArgumentsSyntax/provider``
 public struct AssociatedTypeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 
@@ -3097,7 +3098,7 @@ public struct AttributeClauseFileSyntax: SyntaxProtocol, SyntaxHashable, _LeafSy
 ///  - `atSign`: `@`
 ///  - `attributeName`: ``TypeSyntax``
 ///  - `leftParen`: `(`?
-///  - `arguments`: (``LabeledExprListSyntax`` | ``AvailabilityArgumentListSyntax`` | ``SpecializeAttributeArgumentListSyntax`` | ``ObjCSelectorPieceListSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeAttributeArgumentsSyntax`` | ``BackDeployedAttributeArgumentsSyntax`` | ``OriginallyDefinedInAttributeArgumentsSyntax`` | ``DynamicReplacementAttributeArgumentsSyntax`` | ``EffectsAttributeArgumentListSyntax`` | ``DocumentationAttributeArgumentListSyntax`` | `ABIAttributeArgumentsSyntax`)?
+///  - `arguments`: (``LabeledExprListSyntax`` | ``AvailabilityArgumentListSyntax`` | ``SpecializeAttributeArgumentListSyntax`` | ``SpecializedAttributeArgumentSyntax`` | ``ObjCSelectorPieceListSyntax`` | ``ImplementsAttributeArgumentsSyntax`` | ``DifferentiableAttributeArgumentsSyntax`` | ``DerivativeAttributeArgumentsSyntax`` | ``BackDeployedAttributeArgumentsSyntax`` | ``OriginallyDefinedInAttributeArgumentsSyntax`` | ``DynamicReplacementAttributeArgumentsSyntax`` | ``EffectsAttributeArgumentListSyntax`` | ``DocumentationAttributeArgumentListSyntax`` | ``ABIAttributeArgumentsSyntax``)?
 ///  - `rightParen`: `)`?
 ///
 /// ### Contained in
@@ -3109,6 +3110,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     case argumentList(LabeledExprListSyntax)
     case availability(AvailabilityArgumentListSyntax)
     case specializeArguments(SpecializeAttributeArgumentListSyntax)
+    case specializedArguments(SpecializedAttributeArgumentSyntax)
     case objCName(ObjCSelectorPieceListSyntax)
     case implementsArguments(ImplementsAttributeArgumentsSyntax)
     case differentiableArguments(DifferentiableAttributeArgumentsSyntax)
@@ -3118,8 +3120,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     case dynamicReplacementArguments(DynamicReplacementAttributeArgumentsSyntax)
     case effectsArguments(EffectsAttributeArgumentListSyntax)
     case documentationArguments(DocumentationAttributeArgumentListSyntax)
-    /// - Note: Requires experimental feature `abiAttribute`.
-    @_spi(ExperimentalLanguageFeatures)
     case abiArguments(ABIAttributeArgumentsSyntax)
 
     public var _syntaxNode: Syntax {
@@ -3129,6 +3129,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       case .availability(let node):
         return node._syntaxNode
       case .specializeArguments(let node):
+        return node._syntaxNode
+      case .specializedArguments(let node):
         return node._syntaxNode
       case .objCName(let node):
         return node._syntaxNode
@@ -3163,6 +3165,10 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
 
     public init(_ node: SpecializeAttributeArgumentListSyntax) {
       self = .specializeArguments(node)
+    }
+
+    public init(_ node: SpecializedAttributeArgumentSyntax) {
+      self = .specializedArguments(node)
     }
 
     public init(_ node: ObjCSelectorPieceListSyntax) {
@@ -3201,8 +3207,6 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       self = .documentationArguments(node)
     }
 
-    /// - Note: Requires experimental feature `abiAttribute`.
-    @_spi(ExperimentalLanguageFeatures)
     public init(_ node: ABIAttributeArgumentsSyntax) {
       self = .abiArguments(node)
     }
@@ -3214,6 +3218,8 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
         self = .availability(node)
       } else if let node = node.as(SpecializeAttributeArgumentListSyntax.self) {
         self = .specializeArguments(node)
+      } else if let node = node.as(SpecializedAttributeArgumentSyntax.self) {
+        self = .specializedArguments(node)
       } else if let node = node.as(ObjCSelectorPieceListSyntax.self) {
         self = .objCName(node)
       } else if let node = node.as(ImplementsAttributeArgumentsSyntax.self) {
@@ -3244,6 +3250,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
         .node(LabeledExprListSyntax.self),
         .node(AvailabilityArgumentListSyntax.self),
         .node(SpecializeAttributeArgumentListSyntax.self),
+        .node(SpecializedAttributeArgumentSyntax.self),
         .node(ObjCSelectorPieceListSyntax.self),
         .node(ImplementsAttributeArgumentsSyntax.self),
         .node(DifferentiableAttributeArgumentsSyntax.self),
@@ -3321,6 +3328,28 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
     /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
     public func cast(_ syntaxType: SpecializeAttributeArgumentListSyntax.Type) -> SpecializeAttributeArgumentListSyntax {
       return self.as(SpecializeAttributeArgumentListSyntax.self)!
+    }
+
+    /// Checks if the current syntax node can be cast to ``SpecializedAttributeArgumentSyntax``.
+    ///
+    /// - Returns: `true` if the node can be cast, `false` otherwise.
+    public func `is`(_ syntaxType: SpecializedAttributeArgumentSyntax.Type) -> Bool {
+      return self.as(syntaxType) != nil
+    }
+
+    /// Attempts to cast the current syntax node to ``SpecializedAttributeArgumentSyntax``.
+    ///
+    /// - Returns: An instance of ``SpecializedAttributeArgumentSyntax``, or `nil` if the cast fails.
+    public func `as`(_ syntaxType: SpecializedAttributeArgumentSyntax.Type) -> SpecializedAttributeArgumentSyntax? {
+      return SpecializedAttributeArgumentSyntax.init(self)
+    }
+
+    /// Force-casts the current syntax node to ``SpecializedAttributeArgumentSyntax``.
+    ///
+    /// - Returns: An instance of ``SpecializedAttributeArgumentSyntax``.
+    /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
+    public func cast(_ syntaxType: SpecializedAttributeArgumentSyntax.Type) -> SpecializedAttributeArgumentSyntax {
+      return self.as(SpecializedAttributeArgumentSyntax.self)!
     }
 
     /// Checks if the current syntax node can be cast to ``ObjCSelectorPieceListSyntax``.
@@ -3521,30 +3550,24 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
       return self.as(DocumentationAttributeArgumentListSyntax.self)!
     }
 
-    /// Checks if the current syntax node can be cast to `ABIAttributeArgumentsSyntax`.
+    /// Checks if the current syntax node can be cast to ``ABIAttributeArgumentsSyntax``.
     ///
     /// - Returns: `true` if the node can be cast, `false` otherwise.
-    /// - Note: Requires experimental feature `abiAttribute`.
-    @_spi(ExperimentalLanguageFeatures)
     public func `is`(_ syntaxType: ABIAttributeArgumentsSyntax.Type) -> Bool {
       return self.as(syntaxType) != nil
     }
 
-    /// Attempts to cast the current syntax node to `ABIAttributeArgumentsSyntax`.
+    /// Attempts to cast the current syntax node to ``ABIAttributeArgumentsSyntax``.
     ///
-    /// - Returns: An instance of `ABIAttributeArgumentsSyntax`, or `nil` if the cast fails.
-    /// - Note: Requires experimental feature `abiAttribute`.
-    @_spi(ExperimentalLanguageFeatures)
+    /// - Returns: An instance of ``ABIAttributeArgumentsSyntax``, or `nil` if the cast fails.
     public func `as`(_ syntaxType: ABIAttributeArgumentsSyntax.Type) -> ABIAttributeArgumentsSyntax? {
       return ABIAttributeArgumentsSyntax.init(self)
     }
 
-    /// Force-casts the current syntax node to `ABIAttributeArgumentsSyntax`.
+    /// Force-casts the current syntax node to ``ABIAttributeArgumentsSyntax``.
     ///
-    /// - Returns: An instance of `ABIAttributeArgumentsSyntax`.
+    /// - Returns: An instance of ``ABIAttributeArgumentsSyntax``.
     /// - Warning: This function will crash if the cast is not possible. Use `as` to safely attempt a cast.
-    /// - Note: Requires experimental feature `abiAttribute`.
-    @_spi(ExperimentalLanguageFeatures)
     public func cast(_ syntaxType: ABIAttributeArgumentsSyntax.Type) -> ABIAttributeArgumentsSyntax {
       return self.as(ABIAttributeArgumentsSyntax.self)!
     }

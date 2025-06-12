@@ -2370,6 +2370,30 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "nilKeyword"
   case \NilLiteralExprSyntax.unexpectedAfterNilKeyword:
     return "unexpectedAfterNilKeyword"
+  case \NonisolatedSpecifierArgumentSyntax.unexpectedBeforeLeftParen:
+    return "unexpectedBeforeLeftParen"
+  case \NonisolatedSpecifierArgumentSyntax.leftParen:
+    return "leftParen"
+  case \NonisolatedSpecifierArgumentSyntax.unexpectedBetweenLeftParenAndNonsendingKeyword:
+    return "unexpectedBetweenLeftParenAndNonsendingKeyword"
+  case \NonisolatedSpecifierArgumentSyntax.nonsendingKeyword:
+    return "nonsendingKeyword"
+  case \NonisolatedSpecifierArgumentSyntax.unexpectedBetweenNonsendingKeywordAndRightParen:
+    return "unexpectedBetweenNonsendingKeywordAndRightParen"
+  case \NonisolatedSpecifierArgumentSyntax.rightParen:
+    return "rightParen"
+  case \NonisolatedSpecifierArgumentSyntax.unexpectedAfterRightParen:
+    return "unexpectedAfterRightParen"
+  case \NonisolatedTypeSpecifierSyntax.unexpectedBeforeNonisolatedKeyword:
+    return "unexpectedBeforeNonisolatedKeyword"
+  case \NonisolatedTypeSpecifierSyntax.nonisolatedKeyword:
+    return "nonisolatedKeyword"
+  case \NonisolatedTypeSpecifierSyntax.unexpectedBetweenNonisolatedKeywordAndArgument:
+    return "unexpectedBetweenNonisolatedKeywordAndArgument"
+  case \NonisolatedTypeSpecifierSyntax.argument:
+    return "argument"
+  case \NonisolatedTypeSpecifierSyntax.unexpectedAfterArgument:
+    return "unexpectedAfterArgument"
   case \ObjCSelectorPieceSyntax.unexpectedBeforeName:
     return "unexpectedBeforeName"
   case \ObjCSelectorPieceSyntax.name:
@@ -2938,6 +2962,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "trailingComma"
   case \SpecializeTargetFunctionArgumentSyntax.unexpectedAfterTrailingComma:
     return "unexpectedAfterTrailingComma"
+  case \SpecializedAttributeArgumentSyntax.unexpectedBeforeGenericWhereClause:
+    return "unexpectedBeforeGenericWhereClause"
+  case \SpecializedAttributeArgumentSyntax.genericWhereClause:
+    return "genericWhereClause"
+  case \SpecializedAttributeArgumentSyntax.unexpectedAfterGenericWhereClause:
+    return "unexpectedAfterGenericWhereClause"
   case \StringLiteralExprSyntax.unexpectedBeforeOpeningPounds:
     return "unexpectedBeforeOpeningPounds"
   case \StringLiteralExprSyntax.openingPounds:
@@ -3420,6 +3450,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "expression"
   case \UnsafeExprSyntax.unexpectedAfterExpression:
     return "unexpectedAfterExpression"
+  case \UsingDeclSyntax.unexpectedBeforeUsingKeyword:
+    return "unexpectedBeforeUsingKeyword"
+  case \UsingDeclSyntax.usingKeyword:
+    return "usingKeyword"
+  case \UsingDeclSyntax.unexpectedBetweenUsingKeywordAndSpecifier:
+    return "unexpectedBetweenUsingKeywordAndSpecifier"
+  case \UsingDeclSyntax.specifier:
+    return "specifier"
+  case \UsingDeclSyntax.unexpectedAfterSpecifier:
+    return "unexpectedAfterSpecifier"
   case \ValueBindingPatternSyntax.unexpectedBeforeBindingSpecifier:
     return "unexpectedBeforeBindingSpecifier"
   case \ValueBindingPatternSyntax.bindingSpecifier:

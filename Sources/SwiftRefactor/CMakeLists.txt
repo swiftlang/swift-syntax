@@ -8,6 +8,7 @@
 
 add_swift_syntax_library(SwiftRefactor
   AddSeparatorsToIntegerLiteral.swift
+  CallLikeSyntax.swift
   CallToTrailingClosures.swift
   ConvertComputedPropertyToStored.swift
   ConvertComputedPropertyToZeroParameterFunction.swift

@@ -361,6 +361,11 @@ extension Parser {
             arena: self.arena
           )
         )
+
+        // If this was a trailing comma, there are no more elements
+        if at(prefix: ">") {
+          break
+        }
       } while keepGoing != nil && self.hasProgressed(&loopProgress)
     }
     let rangle = self.expectWithoutRecovery(prefix: ">", as: .rightAngle)

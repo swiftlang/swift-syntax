@@ -287,4 +287,12 @@ final class ValueGenericsTests: ParserTestCase {
       fixedSource: "func foo() -> (<#type#>-1) X"
     )
   }
+
+  func testOperatorFunc() {
+    assertParse(
+      """
+      func *<let X: Int, let Y: Int>(l: A<X>, r: A<Y>) -> Int { l.int * r.int }
+      """
+    )
+  }
 }

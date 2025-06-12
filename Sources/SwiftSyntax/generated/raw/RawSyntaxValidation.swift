@@ -1748,7 +1748,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawGenericArgumentSyntax.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("x")]))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.keyword("of")]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawGenericArgumentSyntax.self))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
@@ -2149,6 +2149,24 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("nil")]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+  }
+  func validateNonisolatedSpecifierArgumentSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 7)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftParen)]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.keyword("nonsending")]))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightParen)]))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+  }
+  func validateNonisolatedTypeSpecifierSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("nonisolated")]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawNonisolatedSpecifierArgumentSyntax?.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   }
   func validateObjCSelectorPieceListSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     for (index, element) in layout.enumerated() {
@@ -2561,7 +2579,6 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       .keyword("__shared"),
       .keyword("__owned"),
       .keyword("isolated"),
-      .keyword("nonisolated"),
       .keyword("_const"),
       .keyword("borrowing"),
       .keyword("consuming"),
@@ -2620,6 +2637,12 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.comma)]))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
+  }
+  func validateSpecializedAttributeArgumentSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 3)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawGenericWhereClauseSyntax.self))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
   }
   func validateStringLiteralExprSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     assert(layout.count == 11)
@@ -2957,7 +2980,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     for (index, element) in layout.enumerated() {
       assertAnyHasNoError(kind, index, [
         verify(element, as: RawSimpleTypeSpecifierSyntax.self),
-        verify(element, as: RawLifetimeTypeSpecifierSyntax.self)])
+        verify(element, as: RawLifetimeTypeSpecifierSyntax.self),
+        verify(element, as: RawNonisolatedTypeSpecifierSyntax.self)])
     }
   }
   func validateUnexpectedNodesSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
@@ -2995,6 +3019,15 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("unsafe")]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawExprSyntax.self))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+  }
+  func validateUsingDeclSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 5)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.keyword("using")]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertAnyHasNoError(kind, 3, [
+      verify(layout[3], as: RawSyntax.self)])
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   }
   func validateValueBindingPatternSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
@@ -3488,6 +3521,10 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     validateNamedOpaqueReturnTypeSyntax(kind: kind, layout: layout)
   case .nilLiteralExpr:
     validateNilLiteralExprSyntax(kind: kind, layout: layout)
+  case .nonisolatedSpecifierArgument:
+    validateNonisolatedSpecifierArgumentSyntax(kind: kind, layout: layout)
+  case .nonisolatedTypeSpecifier:
+    validateNonisolatedTypeSpecifierSyntax(kind: kind, layout: layout)
   case .objCSelectorPieceList:
     validateObjCSelectorPieceListSyntax(kind: kind, layout: layout)
   case .objCSelectorPiece:
@@ -3584,6 +3621,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     validateSpecializeAvailabilityArgumentSyntax(kind: kind, layout: layout)
   case .specializeTargetFunctionArgument:
     validateSpecializeTargetFunctionArgumentSyntax(kind: kind, layout: layout)
+  case .specializedAttributeArgument:
+    validateSpecializedAttributeArgumentSyntax(kind: kind, layout: layout)
   case .stringLiteralExpr:
     validateStringLiteralExprSyntax(kind: kind, layout: layout)
   case .stringLiteralSegmentList:
@@ -3660,6 +3699,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     validateUnresolvedTernaryExprSyntax(kind: kind, layout: layout)
   case .unsafeExpr:
     validateUnsafeExprSyntax(kind: kind, layout: layout)
+  case .usingDecl:
+    validateUsingDeclSyntax(kind: kind, layout: layout)
   case .valueBindingPattern:
     validateValueBindingPatternSyntax(kind: kind, layout: layout)
   case .variableDecl:

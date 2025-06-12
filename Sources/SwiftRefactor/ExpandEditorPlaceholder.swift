@@ -180,7 +180,7 @@ public struct ExpandEditorPlaceholder: EditRefactoringProvider {
       placeholder.baseName.isEditorPlaceholder,
       let arg = placeholder.parent?.as(LabeledExprSyntax.self),
       let argList = arg.parent?.as(LabeledExprListSyntax.self),
-      let call = argList.parent?.as(FunctionCallExprSyntax.self),
+      let call = argList.parent?.asProtocol(CallLikeSyntax.self),
       let expandedClosures = ExpandEditorPlaceholdersToLiteralClosures.expandClosurePlaceholders(
         in: call,
         ifIncluded: arg,
@@ -266,6 +266,26 @@ public struct ExpandEditorPlaceholdersToLiteralClosures: SyntaxRefactoringProvid
     }
   }
 
+  public typealias Input = Syntax
+  public typealias Output = Syntax
+
+  /// Apply the refactoring to a given syntax node. If either a
+  /// non-function-like syntax node is passed, or the refactoring fails,
+  /// `nil` is returned.
+  public static func refactor(
+    syntax: Syntax,
+    in context: Context = Context()
+  ) -> Syntax? {
+    guard let call = syntax.asProtocol(CallLikeSyntax.self) else { return nil }
+    let expanded = Self.expandClosurePlaceholders(
+      in: call,
+      ifIncluded: nil,
+      context: context
+    )
+    return Syntax(fromProtocol: expanded)
+  }
+
+  @available(*, deprecated, message: "Pass a Syntax argument instead of FunctionCallExprSyntax")
   public static func refactor(
     syntax call: FunctionCallExprSyntax,
     in context: Context = Context()
@@ -282,11 +302,11 @@ public struct ExpandEditorPlaceholdersToLiteralClosures: SyntaxRefactoringProvid
   /// closure, then return a replacement of this call with one that uses
   /// closures based on the function types provided by each editor placeholder.
   /// Otherwise return nil.
-  fileprivate static func expandClosurePlaceholders(
-    in call: FunctionCallExprSyntax,
+  fileprivate static func expandClosurePlaceholders<C: CallLikeSyntax>(
+    in call: C,
     ifIncluded arg: LabeledExprSyntax?,
     context: Context
-  ) -> FunctionCallExprSyntax? {
+  ) -> C? {
     switch context.format {
     case let .custom(formatter, allowNestedPlaceholders: allowNesting):
       let expanded = call.expandClosurePlaceholders(
@@ -305,11 +325,7 @@ public struct ExpandEditorPlaceholdersToLiteralClosures: SyntaxRefactoringProvid
       let callToTrailingContext = CallToTrailingClosures.Context(
         startAtArgument: call.arguments.count - expanded.numClosures
       )
-      guard let trailing = CallToTrailingClosures.refactor(syntax: expanded.expr, in: callToTrailingContext) else {
-        return nil
-      }
-
-      return trailing
+      return CallToTrailingClosures._refactor(syntax: expanded.expr, in: callToTrailingContext)
     }
   }
 }
@@ -382,7 +398,7 @@ extension TupleTypeElementSyntax {
   }
 }
 
-extension FunctionCallExprSyntax {
+extension CallLikeSyntax {
   /// If the given argument is `nil` or one of the last arguments that are all
   /// function-typed placeholders and this call doesn't have a trailing
   /// closure, then return a replacement of this call with one that uses
@@ -393,7 +409,7 @@ extension FunctionCallExprSyntax {
     indentationWidth: Trivia? = nil,
     customFormat: BasicFormat? = nil,
     allowNestedPlaceholders: Bool = false
-  ) -> (expr: FunctionCallExprSyntax, numClosures: Int)? {
+  ) -> (expr: Self, numClosures: Int)? {
     var includedArg = false
     var argsToExpand = 0
     for arg in arguments.reversed() {

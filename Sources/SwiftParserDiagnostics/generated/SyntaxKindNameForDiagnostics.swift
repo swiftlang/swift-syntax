@@ -294,6 +294,8 @@ extension SyntaxKind {
       return "trailing closure"
     case .namedOpaqueReturnType:
       return "named opaque return type"
+    case .nonisolatedTypeSpecifier:
+      return "'nonisolated' specifier"
     case .objCSelectorPieceList:
       return "Objective-C selector"
     case .objCSelectorPiece:
@@ -360,6 +362,8 @@ extension SyntaxKind {
       return "availability entry"
     case .specializeTargetFunctionArgument:
       return "attribute argument"
+    case .specializedAttributeArgument:
+      return "argument to '@specialized"
     case .stringLiteralExpr:
       return "string literal"
     case .structDecl:
@@ -404,6 +408,8 @@ extension SyntaxKind {
       return "ternary operator"
     case .unsafeExpr:
       return "'unsafe' expression"
+    case .usingDecl:
+      return "using"
     case .valueBindingPattern:
       return "value binding pattern"
     case .variableDecl:

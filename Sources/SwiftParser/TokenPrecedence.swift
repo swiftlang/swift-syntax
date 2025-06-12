@@ -241,7 +241,7 @@ enum TokenPrecedence: Comparable {
       .get, .set, .didSet, .willSet, .unsafeAddress, .addressWithOwner, .addressWithNativeOwner, .unsafeMutableAddress,
       .mutableAddressWithOwner, .mutableAddressWithNativeOwner, ._read, .read, ._modify, .modify,
       // Misc
-      .import:
+      .import, .using:
       self = .declKeyword
 
     case  // `TypeAttribute`
@@ -267,6 +267,7 @@ enum TokenPrecedence: Comparable {
       ._effects,
       ._implements,
       ._originallyDefinedIn,
+      .specialized,
       ._specialize,
       ._spi_available,
       .abi,
@@ -326,6 +327,7 @@ enum TokenPrecedence: Comparable {
       .module,
       .noasync,
       .none,
+      .nonsending,
       .obsoleted,
       .of,
       .Protocol,
@@ -343,7 +345,6 @@ enum TokenPrecedence: Comparable {
       .visibility,
       .weak,
       .wrt,
-      .x,
       .unsafe:
       self = .exprKeyword
     #if RESILIENT_LIBRARIES

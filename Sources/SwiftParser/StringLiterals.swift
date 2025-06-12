@@ -341,22 +341,6 @@ extension Parser {
     closingQuote: RawTokenSyntax
   ) {
     // -------------------------------------------------------------------------
-    // Precondition
-
-    precondition(
-      allSegments.allSatisfy {
-        if case .stringSegment(let segment) = $0 {
-          return segment.unexpectedBeforeContent == nil
-            && segment.unexpectedAfterContent == nil
-            && segment.content.leadingTriviaByteLength == 0
-        } else {
-          return true
-        }
-      },
-      "String segment produced by the lexer should not have unexpected text or trivia because we would drop it during post-processing"
-    )
-
-    // -------------------------------------------------------------------------
     // Variables
 
     var middleSegments = allSegments
@@ -395,6 +379,9 @@ extension Parser {
     // Parse indentation of the closing quote
 
     if let lastSegment,
+      lastSegment.unexpectedBeforeContent == nil,
+      lastSegment.unexpectedAfterContent == nil,
+      lastSegment.content.leadingTriviaByteLength == 0,
       let parsedTrivia = parseIndentationTrivia(text: lastSegment.content.tokenText)
     {
       indentationTrivia = parsedTrivia
@@ -409,10 +396,9 @@ extension Parser {
         arena: self.arena
       )
     } else {
-      if let lastSegment = lastSegment {
-        indentationTrivia = TriviaParser.parseTrivia(lastSegment.content.tokenText, position: .leading).prefix(while: {
-          $0.isIndentationWhitespace
-        })
+      if let lastSegment {
+        indentationTrivia = TriviaParser.parseTrivia(lastSegment.content.tokenText, position: .leading)
+          .prefix(while: \.isIndentationWhitespace)
         let indentationByteLength = indentationTrivia.reduce(0, { $0 + $1.byteLength })
         indentation = SyntaxText(rebasing: lastSegment.content.tokenText[0..<indentationByteLength])
         middleSegments.append(.stringSegment(lastSegment))
@@ -703,10 +689,7 @@ extension Parser {
       }
     }
 
-    let (unexpectedBetweenSegmentAndCloseQuote, closeQuote) = self.expect(
-      anyIn: SimpleStringLiteralExprSyntax.ClosingQuoteOptions.self,
-      default: openQuote.closeTokenKind
-    )
+    let (unexpectedBetweenSegmentAndCloseQuote, closeQuote) = self.expect(openQuote.closeTokenKind.spec)
     let closeDelimiter = self.consume(if: .rawStringPoundDelimiter)
 
     if openQuote.tokenKind == .multilineStringQuote, !openQuote.isMissing, !closeQuote.isMissing {

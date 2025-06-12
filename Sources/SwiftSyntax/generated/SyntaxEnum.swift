@@ -16,7 +16,6 @@
 /// Enum to exhaustively switch over all different syntax nodes.
 public enum SyntaxEnum: Sendable {
   case token(TokenSyntax)
-  @_spi(ExperimentalLanguageFeatures)
   case abiAttributeArguments(ABIAttributeArgumentsSyntax)
   @_spi(Compiler)
   case accessorBlockFile(AccessorBlockFileSyntax)
@@ -216,6 +215,8 @@ public enum SyntaxEnum: Sendable {
   case multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax)
   case namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax)
   case nilLiteralExpr(NilLiteralExprSyntax)
+  case nonisolatedSpecifierArgument(NonisolatedSpecifierArgumentSyntax)
+  case nonisolatedTypeSpecifier(NonisolatedTypeSpecifierSyntax)
   case objCSelectorPieceList(ObjCSelectorPieceListSyntax)
   case objCSelectorPiece(ObjCSelectorPieceSyntax)
   case operatorDecl(OperatorDeclSyntax)
@@ -264,6 +265,7 @@ public enum SyntaxEnum: Sendable {
   case specializeAttributeArgumentList(SpecializeAttributeArgumentListSyntax)
   case specializeAvailabilityArgument(SpecializeAvailabilityArgumentSyntax)
   case specializeTargetFunctionArgument(SpecializeTargetFunctionArgumentSyntax)
+  case specializedAttributeArgument(SpecializedAttributeArgumentSyntax)
   case stringLiteralExpr(StringLiteralExprSyntax)
   case stringLiteralSegmentList(StringLiteralSegmentListSyntax)
   case stringSegment(StringSegmentSyntax)
@@ -303,6 +305,8 @@ public enum SyntaxEnum: Sendable {
   case unresolvedIsExpr(UnresolvedIsExprSyntax)
   case unresolvedTernaryExpr(UnresolvedTernaryExprSyntax)
   case unsafeExpr(UnsafeExprSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case usingDecl(UsingDeclSyntax)
   case valueBindingPattern(ValueBindingPatternSyntax)
   case variableDecl(VariableDeclSyntax)
   case versionComponentList(VersionComponentListSyntax)
@@ -699,6 +703,10 @@ extension Syntax {
       return .namedOpaqueReturnType(NamedOpaqueReturnTypeSyntax(self)!)
     case .nilLiteralExpr:
       return .nilLiteralExpr(NilLiteralExprSyntax(self)!)
+    case .nonisolatedSpecifierArgument:
+      return .nonisolatedSpecifierArgument(NonisolatedSpecifierArgumentSyntax(self)!)
+    case .nonisolatedTypeSpecifier:
+      return .nonisolatedTypeSpecifier(NonisolatedTypeSpecifierSyntax(self)!)
     case .objCSelectorPieceList:
       return .objCSelectorPieceList(ObjCSelectorPieceListSyntax(self)!)
     case .objCSelectorPiece:
@@ -795,6 +803,8 @@ extension Syntax {
       return .specializeAvailabilityArgument(SpecializeAvailabilityArgumentSyntax(self)!)
     case .specializeTargetFunctionArgument:
       return .specializeTargetFunctionArgument(SpecializeTargetFunctionArgumentSyntax(self)!)
+    case .specializedAttributeArgument:
+      return .specializedAttributeArgument(SpecializedAttributeArgumentSyntax(self)!)
     case .stringLiteralExpr:
       return .stringLiteralExpr(StringLiteralExprSyntax(self)!)
     case .stringLiteralSegmentList:
@@ -871,6 +881,8 @@ extension Syntax {
       return .unresolvedTernaryExpr(UnresolvedTernaryExprSyntax(self)!)
     case .unsafeExpr:
       return .unsafeExpr(UnsafeExprSyntax(self)!)
+    case .usingDecl:
+      return .usingDecl(UsingDeclSyntax(self)!)
     case .valueBindingPattern:
       return .valueBindingPattern(ValueBindingPatternSyntax(self)!)
     case .variableDecl:
@@ -924,6 +936,8 @@ public enum DeclSyntaxEnum {
   case structDecl(StructDeclSyntax)
   case subscriptDecl(SubscriptDeclSyntax)
   case typeAliasDecl(TypeAliasDeclSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  case usingDecl(UsingDeclSyntax)
   case variableDecl(VariableDeclSyntax)
 }
 
@@ -977,6 +991,8 @@ extension DeclSyntax {
       return .subscriptDecl(SubscriptDeclSyntax(self)!)
     case .typeAliasDecl:
       return .typeAliasDecl(TypeAliasDeclSyntax(self)!)
+    case .usingDecl:
+      return .usingDecl(UsingDeclSyntax(self)!)
     case .variableDecl:
       return .variableDecl(VariableDeclSyntax(self)!)
     default:

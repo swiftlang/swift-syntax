@@ -35,17 +35,15 @@ open class SyntaxVisitor {
     dispatchVisit(Syntax(node))
   }
 
-  /// Visiting `ABIAttributeArgumentsSyntax` specifically.
+  /// Visiting ``ABIAttributeArgumentsSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: ABIAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting `ABIAttributeArgumentsSyntax` and its descendants.
+  /// The function called after visiting ``ABIAttributeArgumentsSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  @_spi(ExperimentalLanguageFeatures)
   open func visitPost(_ node: ABIAttributeArgumentsSyntax) {
   }
 
@@ -2315,6 +2313,30 @@ open class SyntaxVisitor {
   open func visitPost(_ node: NilLiteralExprSyntax) {
   }
 
+  /// Visiting ``NonisolatedSpecifierArgumentSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: NonisolatedSpecifierArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``NonisolatedSpecifierArgumentSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: NonisolatedSpecifierArgumentSyntax) {
+  }
+
+  /// Visiting ``NonisolatedTypeSpecifierSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: NonisolatedTypeSpecifierSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``NonisolatedTypeSpecifierSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: NonisolatedTypeSpecifierSyntax) {
+  }
+
   /// Visiting ``ObjCSelectorPieceListSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -2891,6 +2913,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: SpecializeTargetFunctionArgumentSyntax) {
   }
 
+  /// Visiting ``SpecializedAttributeArgumentSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: SpecializedAttributeArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``SpecializedAttributeArgumentSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: SpecializedAttributeArgumentSyntax) {
+  }
+
   /// Visiting ``StringLiteralExprSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -3347,6 +3381,20 @@ open class SyntaxVisitor {
   /// The function called after visiting ``UnsafeExprSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
   open func visitPost(_ node: UnsafeExprSyntax) {
+  }
+
+  /// Visiting `UsingDeclSyntax` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: UsingDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting `UsingDeclSyntax` and its descendants.
+  ///   - node: the node we just finished visiting.
+  @_spi(ExperimentalLanguageFeatures)
+  open func visitPost(_ node: UsingDeclSyntax) {
   }
 
   /// Visiting ``ValueBindingPatternSyntax`` specifically.
@@ -5017,6 +5065,22 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitNonisolatedSpecifierArgumentSyntaxImpl(_ node: Syntax) {
+    if visit(NonisolatedSpecifierArgumentSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(NonisolatedSpecifierArgumentSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitNonisolatedTypeSpecifierSyntaxImpl(_ node: Syntax) {
+    if visit(NonisolatedTypeSpecifierSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(NonisolatedTypeSpecifierSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitObjCSelectorPieceListSyntaxImpl(_ node: Syntax) {
     if visit(ObjCSelectorPieceListSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -5401,6 +5465,14 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitSpecializedAttributeArgumentSyntaxImpl(_ node: Syntax) {
+    if visit(SpecializedAttributeArgumentSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(SpecializedAttributeArgumentSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitStringLiteralExprSyntaxImpl(_ node: Syntax) {
     if visit(StringLiteralExprSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -5702,6 +5774,14 @@ open class SyntaxVisitor {
       visitChildren(node)
     }
     visitPost(UnsafeExprSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitUsingDeclSyntaxImpl(_ node: Syntax) {
+    if visit(UsingDeclSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(UsingDeclSyntax(unsafeCasting: node))
   }
 
   @inline(never)
@@ -6204,6 +6284,10 @@ open class SyntaxVisitor {
       return self.visitNamedOpaqueReturnTypeSyntaxImpl(_:)
     case .nilLiteralExpr:
       return self.visitNilLiteralExprSyntaxImpl(_:)
+    case .nonisolatedSpecifierArgument:
+      return self.visitNonisolatedSpecifierArgumentSyntaxImpl(_:)
+    case .nonisolatedTypeSpecifier:
+      return self.visitNonisolatedTypeSpecifierSyntaxImpl(_:)
     case .objCSelectorPieceList:
       return self.visitObjCSelectorPieceListSyntaxImpl(_:)
     case .objCSelectorPiece:
@@ -6300,6 +6384,8 @@ open class SyntaxVisitor {
       return self.visitSpecializeAvailabilityArgumentSyntaxImpl(_:)
     case .specializeTargetFunctionArgument:
       return self.visitSpecializeTargetFunctionArgumentSyntaxImpl(_:)
+    case .specializedAttributeArgument:
+      return self.visitSpecializedAttributeArgumentSyntaxImpl(_:)
     case .stringLiteralExpr:
       return self.visitStringLiteralExprSyntaxImpl(_:)
     case .stringLiteralSegmentList:
@@ -6376,6 +6462,8 @@ open class SyntaxVisitor {
       return self.visitUnresolvedTernaryExprSyntaxImpl(_:)
     case .unsafeExpr:
       return self.visitUnsafeExprSyntaxImpl(_:)
+    case .usingDecl:
+      return self.visitUsingDeclSyntaxImpl(_:)
     case .valueBindingPattern:
       return self.visitValueBindingPatternSyntaxImpl(_:)
     case .variableDecl:
@@ -6786,6 +6874,10 @@ open class SyntaxVisitor {
       self.visitNamedOpaqueReturnTypeSyntaxImpl(node)
     case .nilLiteralExpr:
       self.visitNilLiteralExprSyntaxImpl(node)
+    case .nonisolatedSpecifierArgument:
+      self.visitNonisolatedSpecifierArgumentSyntaxImpl(node)
+    case .nonisolatedTypeSpecifier:
+      self.visitNonisolatedTypeSpecifierSyntaxImpl(node)
     case .objCSelectorPieceList:
       self.visitObjCSelectorPieceListSyntaxImpl(node)
     case .objCSelectorPiece:
@@ -6882,6 +6974,8 @@ open class SyntaxVisitor {
       self.visitSpecializeAvailabilityArgumentSyntaxImpl(node)
     case .specializeTargetFunctionArgument:
       self.visitSpecializeTargetFunctionArgumentSyntaxImpl(node)
+    case .specializedAttributeArgument:
+      self.visitSpecializedAttributeArgumentSyntaxImpl(node)
     case .stringLiteralExpr:
       self.visitStringLiteralExprSyntaxImpl(node)
     case .stringLiteralSegmentList:
@@ -6958,6 +7052,8 @@ open class SyntaxVisitor {
       self.visitUnresolvedTernaryExprSyntaxImpl(node)
     case .unsafeExpr:
       self.visitUnsafeExprSyntaxImpl(node)
+    case .usingDecl:
+      self.visitUsingDeclSyntaxImpl(node)
     case .valueBindingPattern:
       self.visitValueBindingPatternSyntaxImpl(node)
     case .variableDecl:

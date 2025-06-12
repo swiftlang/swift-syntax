@@ -99,10 +99,9 @@ open class SyntaxRewriter {
     return token
   }
 
-  /// Visit a `ABIAttributeArgumentsSyntax`.
+  /// Visit a ``ABIAttributeArgumentsSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: ABIAttributeArgumentsSyntax) -> ABIAttributeArgumentsSyntax {
     return ABIAttributeArgumentsSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
@@ -1427,6 +1426,20 @@ open class SyntaxRewriter {
     return ExprSyntax(NilLiteralExprSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
+  /// Visit a ``NonisolatedSpecifierArgumentSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: NonisolatedSpecifierArgumentSyntax) -> NonisolatedSpecifierArgumentSyntax {
+    return NonisolatedSpecifierArgumentSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
+  /// Visit a ``NonisolatedTypeSpecifierSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: NonisolatedTypeSpecifierSyntax) -> NonisolatedTypeSpecifierSyntax {
+    return NonisolatedTypeSpecifierSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
   /// Visit a ``ObjCSelectorPieceListSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -1763,6 +1776,13 @@ open class SyntaxRewriter {
     return SpecializeTargetFunctionArgumentSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
+  /// Visit a ``SpecializedAttributeArgumentSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: SpecializedAttributeArgumentSyntax) -> SpecializedAttributeArgumentSyntax {
+    return SpecializedAttributeArgumentSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
   /// Visit a ``StringLiteralExprSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2028,6 +2048,14 @@ open class SyntaxRewriter {
   ///   - Returns: the rewritten node
   open func visit(_ node: UnsafeExprSyntax) -> ExprSyntax {
     return ExprSyntax(UnsafeExprSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
+  }
+
+  /// Visit a `UsingDeclSyntax`.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  @_spi(ExperimentalLanguageFeatures)
+  open func visit(_ node: UsingDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(UsingDeclSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
   /// Visit a ``ValueBindingPatternSyntax``.
@@ -3095,6 +3123,16 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitNonisolatedSpecifierArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(NonisolatedSpecifierArgumentSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
+  private func visitNonisolatedTypeSpecifierSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(NonisolatedTypeSpecifierSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitObjCSelectorPieceListSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(ObjCSelectorPieceListSyntax(unsafeCasting: node)))
   }
@@ -3335,6 +3373,11 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitSpecializedAttributeArgumentSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(SpecializedAttributeArgumentSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitStringLiteralExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(StringLiteralExprSyntax(unsafeCasting: node)))
   }
@@ -3522,6 +3565,11 @@ open class SyntaxRewriter {
   @inline(never)
   private func visitUnsafeExprSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(UnsafeExprSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
+  private func visitUsingDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(UsingDeclSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
@@ -3988,6 +4036,10 @@ open class SyntaxRewriter {
       return self.visitNamedOpaqueReturnTypeSyntaxImpl(_:)
     case .nilLiteralExpr:
       return self.visitNilLiteralExprSyntaxImpl(_:)
+    case .nonisolatedSpecifierArgument:
+      return self.visitNonisolatedSpecifierArgumentSyntaxImpl(_:)
+    case .nonisolatedTypeSpecifier:
+      return self.visitNonisolatedTypeSpecifierSyntaxImpl(_:)
     case .objCSelectorPieceList:
       return self.visitObjCSelectorPieceListSyntaxImpl(_:)
     case .objCSelectorPiece:
@@ -4084,6 +4136,8 @@ open class SyntaxRewriter {
       return self.visitSpecializeAvailabilityArgumentSyntaxImpl(_:)
     case .specializeTargetFunctionArgument:
       return self.visitSpecializeTargetFunctionArgumentSyntaxImpl(_:)
+    case .specializedAttributeArgument:
+      return self.visitSpecializedAttributeArgumentSyntaxImpl(_:)
     case .stringLiteralExpr:
       return self.visitStringLiteralExprSyntaxImpl(_:)
     case .stringLiteralSegmentList:
@@ -4160,6 +4214,8 @@ open class SyntaxRewriter {
       return self.visitUnresolvedTernaryExprSyntaxImpl(_:)
     case .unsafeExpr:
       return self.visitUnsafeExprSyntaxImpl(_:)
+    case .usingDecl:
+      return self.visitUsingDeclSyntaxImpl(_:)
     case .valueBindingPattern:
       return self.visitValueBindingPatternSyntaxImpl(_:)
     case .variableDecl:
@@ -4570,6 +4626,10 @@ open class SyntaxRewriter {
       return visitNamedOpaqueReturnTypeSyntaxImpl(node)
     case .nilLiteralExpr:
       return visitNilLiteralExprSyntaxImpl(node)
+    case .nonisolatedSpecifierArgument:
+      return visitNonisolatedSpecifierArgumentSyntaxImpl(node)
+    case .nonisolatedTypeSpecifier:
+      return visitNonisolatedTypeSpecifierSyntaxImpl(node)
     case .objCSelectorPieceList:
       return visitObjCSelectorPieceListSyntaxImpl(node)
     case .objCSelectorPiece:
@@ -4666,6 +4726,8 @@ open class SyntaxRewriter {
       return visitSpecializeAvailabilityArgumentSyntaxImpl(node)
     case .specializeTargetFunctionArgument:
       return visitSpecializeTargetFunctionArgumentSyntaxImpl(node)
+    case .specializedAttributeArgument:
+      return visitSpecializedAttributeArgumentSyntaxImpl(node)
     case .stringLiteralExpr:
       return visitStringLiteralExprSyntaxImpl(node)
     case .stringLiteralSegmentList:
@@ -4742,6 +4804,8 @@ open class SyntaxRewriter {
       return visitUnresolvedTernaryExprSyntaxImpl(node)
     case .unsafeExpr:
       return visitUnsafeExprSyntaxImpl(node)
+    case .usingDecl:
+      return visitUsingDeclSyntaxImpl(node)
     case .valueBindingPattern:
       return visitValueBindingPatternSyntaxImpl(node)
     case .variableDecl:

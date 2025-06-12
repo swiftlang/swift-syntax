@@ -57,12 +57,10 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   override open func visit(_ node: ABIAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   override open func visitPost(_ node: ABIAttributeArgumentsSyntax) {
     visitAnyPost(node._syntaxNode)
   }
@@ -1585,6 +1583,22 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  override open func visit(_ node: NonisolatedSpecifierArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: NonisolatedSpecifierArgumentSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
+  override open func visit(_ node: NonisolatedTypeSpecifierSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: NonisolatedTypeSpecifierSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: ObjCSelectorPieceListSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -1969,6 +1983,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  override open func visit(_ node: SpecializedAttributeArgumentSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: SpecializedAttributeArgumentSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: StringLiteralExprSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -2272,6 +2294,16 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: UnsafeExprSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visit(_ node: UsingDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  override open func visitPost(_ node: UsingDeclSyntax) {
     visitAnyPost(node._syntaxNode)
   }
 

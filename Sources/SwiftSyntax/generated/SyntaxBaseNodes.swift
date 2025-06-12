@@ -214,7 +214,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public init?(_ node: __shared some SyntaxProtocol) {
     switch node.raw.kind {
-    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .variableDecl:
+    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .usingDecl, .variableDecl:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -262,6 +262,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       .node(StructDeclSyntax.self),
       .node(SubscriptDeclSyntax.self),
       .node(TypeAliasDeclSyntax.self),
+      .node(UsingDeclSyntax.self),
       .node(VariableDeclSyntax.self)
     ])
   }
@@ -1699,6 +1700,8 @@ extension Syntax {
       .node(MultipleTrailingClosureElementSyntax.self),
       .node(NamedOpaqueReturnTypeSyntax.self),
       .node(NilLiteralExprSyntax.self),
+      .node(NonisolatedSpecifierArgumentSyntax.self),
+      .node(NonisolatedTypeSpecifierSyntax.self),
       .node(ObjCSelectorPieceListSyntax.self),
       .node(ObjCSelectorPieceSyntax.self),
       .node(OperatorDeclSyntax.self),
@@ -1747,6 +1750,7 @@ extension Syntax {
       .node(SpecializeAttributeArgumentListSyntax.self),
       .node(SpecializeAvailabilityArgumentSyntax.self),
       .node(SpecializeTargetFunctionArgumentSyntax.self),
+      .node(SpecializedAttributeArgumentSyntax.self),
       .node(StringLiteralExprSyntax.self),
       .node(StringLiteralSegmentListSyntax.self),
       .node(StringSegmentSyntax.self),
@@ -1785,6 +1789,7 @@ extension Syntax {
       .node(UnresolvedIsExprSyntax.self),
       .node(UnresolvedTernaryExprSyntax.self),
       .node(UnsafeExprSyntax.self),
+      .node(UsingDeclSyntax.self),
       .node(ValueBindingPatternSyntax.self),
       .node(VariableDeclSyntax.self),
       .node(VersionComponentListSyntax.self),

@@ -802,6 +802,8 @@ extension MissingSyntax: MissingNodeSyntax {}
 
 extension MissingTypeSyntax: MissingNodeSyntax {}
 
+extension NonisolatedSpecifierArgumentSyntax: ParenthesizedSyntax {}
+
 extension OperatorDeclSyntax: NamedDeclSyntax {}
 
 extension PatternBindingSyntax: WithTrailingCommaSyntax {}

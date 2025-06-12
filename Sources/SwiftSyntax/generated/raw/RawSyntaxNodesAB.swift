@@ -13,7 +13,6 @@
 // Do not edit directly!
 // swift-format-ignore-file
 
-@_spi(ExperimentalLanguageFeatures)
 @_spi(RawSyntax)
 public struct RawABIAttributeArgumentsSyntax: RawSyntaxNodeProtocol {
   public enum Provider: RawSyntaxNodeProtocol {
@@ -1606,6 +1605,7 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     case argumentList(RawLabeledExprListSyntax)
     case availability(RawAvailabilityArgumentListSyntax)
     case specializeArguments(RawSpecializeAttributeArgumentListSyntax)
+    case specializedArguments(RawSpecializedAttributeArgumentSyntax)
     case objCName(RawObjCSelectorPieceListSyntax)
     case implementsArguments(RawImplementsAttributeArgumentsSyntax)
     case differentiableArguments(RawDifferentiableAttributeArgumentsSyntax)
@@ -1615,12 +1615,10 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
     case dynamicReplacementArguments(RawDynamicReplacementAttributeArgumentsSyntax)
     case effectsArguments(RawEffectsAttributeArgumentListSyntax)
     case documentationArguments(RawDocumentationAttributeArgumentListSyntax)
-    /// - Note: Requires experimental feature `abiAttribute`.
-    @_spi(ExperimentalLanguageFeatures)
     case abiArguments(RawABIAttributeArgumentsSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      RawLabeledExprListSyntax.isKindOf(raw) || RawAvailabilityArgumentListSyntax.isKindOf(raw) || RawSpecializeAttributeArgumentListSyntax.isKindOf(raw) || RawObjCSelectorPieceListSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeAttributeArgumentsSyntax.isKindOf(raw) || RawBackDeployedAttributeArgumentsSyntax.isKindOf(raw) || RawOriginallyDefinedInAttributeArgumentsSyntax.isKindOf(raw) || RawDynamicReplacementAttributeArgumentsSyntax.isKindOf(raw) || RawEffectsAttributeArgumentListSyntax.isKindOf(raw) || RawDocumentationAttributeArgumentListSyntax.isKindOf(raw) || RawABIAttributeArgumentsSyntax.isKindOf(raw)
+      RawLabeledExprListSyntax.isKindOf(raw) || RawAvailabilityArgumentListSyntax.isKindOf(raw) || RawSpecializeAttributeArgumentListSyntax.isKindOf(raw) || RawSpecializedAttributeArgumentSyntax.isKindOf(raw) || RawObjCSelectorPieceListSyntax.isKindOf(raw) || RawImplementsAttributeArgumentsSyntax.isKindOf(raw) || RawDifferentiableAttributeArgumentsSyntax.isKindOf(raw) || RawDerivativeAttributeArgumentsSyntax.isKindOf(raw) || RawBackDeployedAttributeArgumentsSyntax.isKindOf(raw) || RawOriginallyDefinedInAttributeArgumentsSyntax.isKindOf(raw) || RawDynamicReplacementAttributeArgumentsSyntax.isKindOf(raw) || RawEffectsAttributeArgumentListSyntax.isKindOf(raw) || RawDocumentationAttributeArgumentListSyntax.isKindOf(raw) || RawABIAttributeArgumentsSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
@@ -1630,6 +1628,8 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
       case .availability(let node):
         return node.raw
       case .specializeArguments(let node):
+        return node.raw
+      case .specializedArguments(let node):
         return node.raw
       case .objCName(let node):
         return node.raw
@@ -1661,6 +1661,8 @@ public struct RawAttributeSyntax: RawSyntaxNodeProtocol {
         self = .availability(node)
       } else if let node = node.as(RawSpecializeAttributeArgumentListSyntax.self) {
         self = .specializeArguments(node)
+      } else if let node = node.as(RawSpecializedAttributeArgumentSyntax.self) {
+        self = .specializedArguments(node)
       } else if let node = node.as(RawObjCSelectorPieceListSyntax.self) {
         self = .objCName(node)
       } else if let node = node.as(RawImplementsAttributeArgumentsSyntax.self) {

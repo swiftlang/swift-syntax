@@ -75,6 +75,11 @@ public let ATTRIBUTE_NODES: [Node] = [
             kind: .node(kind: .specializeAttributeArgumentList)
           ),
           Child(
+            name: "specializedArguments",
+            // Special arguments for generic where clause.
+            kind: .node(kind: .specializedAttributeArgument)
+          ),
+          Child(
             name: "objCName",
             // Special arguments for Objective-C names. e.g. 'methodNameWithArg1:Arg2:'
             kind: .node(kind: .objCSelectorPieceList)
@@ -122,8 +127,7 @@ public let ATTRIBUTE_NODES: [Node] = [
           Child(
             name: "abiArguments",
             // Special arguments for declaration syntax. e.g. @abi(func abiName() -> Int)
-            kind: .node(kind: .abiAttributeArguments),
-            experimentalFeature: .abiAttribute
+            kind: .node(kind: .abiAttributeArguments)
           ),
         ]),
         documentation: """
@@ -256,7 +260,6 @@ public let ATTRIBUTE_NODES: [Node] = [
   Node(
     kind: .abiAttributeArguments,
     base: .syntax,
-    experimentalFeature: .abiAttribute,
     nameForDiagnostics: "ABI-providing declaration",
     documentation: "The arguments of the '@abi' attribute",
     children: [
@@ -716,6 +719,19 @@ public let ATTRIBUTE_NODES: [Node] = [
     elementChoices: [
       .labeledSpecializeArgument, .specializeAvailabilityArgument, .specializeTargetFunctionArgument,
       .genericWhereClause,
+    ]
+  ),
+
+  Node(
+    kind: .specializedAttributeArgument,
+    base: .syntax,
+    nameForDiagnostics: "argument to '@specialized",
+    documentation: "The generic where clause for the `@specialized` attribute",
+    children: [
+      Child(
+        name: "genericWhereClause",
+        kind: .node(kind: .genericWhereClause)
+      )
     ]
   ),
 

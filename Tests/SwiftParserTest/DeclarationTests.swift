@@ -12,7 +12,7 @@
 
 import SwiftBasicFormat
 @_spi(Testing) @_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 import SwiftSyntaxBuilder
 import XCTest
 
@@ -261,8 +261,8 @@ final class DeclarationTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "expected 'unsafe' in modifier",
-          fixIts: ["replace 'safe' with 'unsafe'"]
+          message: "expected identifier in modifier",
+          fixIts: ["replace 'safe' with identifier"]
         )
       ],
       fixedSource: """
@@ -271,7 +271,36 @@ final class DeclarationTests: ParserTestCase {
         struct A {
           nonisolated(unsafe) let b = 0
           nonisolated(unsafe) var c: Int { 0 }
-          nonisolated(unsafe) let d = 0
+          nonisolated(<#identifier#>) let d = 0
+        }
+        """
+    )
+  }
+
+  func testNonisolatedNonSendingParsing() {
+    assertParse(
+      """
+      nonisolated(nonsending) let a = 0
+
+      struct A {
+        nonisolated(nonsending) let b = 0
+        nonisolated(nonsending) var c: Int { 0 }
+        nonisolated(1️⃣sending) let d = 0
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected identifier in modifier",
+          fixIts: ["replace 'sending' with identifier"]
+        )
+      ],
+      fixedSource: """
+        nonisolated(nonsending) let a = 0
+
+        struct A {
+          nonisolated(nonsending) let b = 0
+          nonisolated(nonsending) var c: Int { 0 }
+          nonisolated(<#identifier#>) let d = 0
         }
         """
     )
@@ -736,6 +765,15 @@ final class DeclarationTests: ParserTestCase {
       @_specialize(where T: _RefCountedObject, T: _NativeRefCountedObject)
       @_specialize(where Array<T> == Int)
       @_specialize(where T.Element == Int)
+      public func funcWithComplexSpecializeRequirements<T: ProtocolWithDep>(t: T) -> Int {
+        return 55555
+      }
+      """
+    )
+    assertParse(
+      """
+      @specialized(where Array<T> == Int)
+      @specialized(where T.Element == Int)
       public func funcWithComplexSpecializeRequirements<T: ProtocolWithDep>(t: T) -> Int {
         return 55555
       }
@@ -3498,6 +3536,164 @@ final class DeclarationTests: ParserTestCase {
           message: "unexpected code 'Int<@abc' in parameter clause"
         )
       ]
+    )
+  }
+
+  func testTrailingCommas() {
+    assertParse(
+      """
+      protocol Baaz<
+        Foo,
+        Bar,
+      > {
+        associatedtype Foo
+        associatedtype Bar
+      }
+      """
+    )
+
+    assertParse(
+      """
+      struct Foo<
+        T1,
+        T2,
+        T3,
+      >: Baaz<
+        T1,
+        T2,
+      > {}
+      """
+    )
+  }
+}
+
+final class UsingDeclarationTests: ParserTestCase {
+  override var experimentalFeatures: Parser.ExperimentalFeatures {
+    [.defaultIsolationPerFile]
+  }
+
+  func testUsing() {
+    assertParse(
+      "using @MainActor",
+      substructure: UsingDeclSyntax(
+        usingKeyword: .keyword(.using),
+        specifier: .attribute(
+          AttributeSyntax(
+            attributeName: IdentifierTypeSyntax(
+              name: .identifier("MainActor")
+            )
+          )
+        )
+      )
+    )
+    assertParse(
+      "using nonisolated",
+      substructure: UsingDeclSyntax(
+        usingKeyword: .keyword(.using),
+        specifier: .modifier(.identifier("nonisolated"))
+      )
+    )
+
+    assertParse(
+      "using @Test",
+      substructure: UsingDeclSyntax(
+        usingKeyword: .keyword(.using),
+        specifier: .attribute(
+          AttributeSyntax(
+            attributeName: IdentifierTypeSyntax(
+              name: .identifier("Test")
+            )
+          )
+        )
+      )
+    )
+
+    assertParse(
+      "using test",
+      substructure: UsingDeclSyntax(
+        usingKeyword: .keyword(.using),
+        specifier: .modifier(.identifier("test"))
+      )
+    )
+
+    assertParse(
+      """
+      nonisolated
+      using
+      """,
+      substructure: CodeBlockSyntax(
+        DeclReferenceExprSyntax(baseName: .identifier("using"))
+      )
+    )
+
+    assertParse(
+      """
+      @MainActor
+      using
+      """,
+      substructure: CodeBlockSyntax(
+        DeclReferenceExprSyntax(baseName: .identifier("using"))
+      )
+    )
+
+    assertParse(
+      """
+      using
+      @MainActor 1️⃣
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected declaration after attribute",
+          fixIts: ["insert declaration"]
+        )
+      ],
+      fixedSource:
+        """
+        using
+        @MainActor <#declaration#>
+        """
+    )
+
+    assertParse(
+      """
+      using
+      nonisolated
+      """,
+      substructure: CodeBlockSyntax(
+        DeclReferenceExprSyntax(baseName: .identifier("using"))
+      )
+    )
+
+    assertParse(
+      """
+      func
+      using (x: Int) {}
+      """
+    )
+
+    assertParse(
+      """
+      func
+      using
+      (x: Int) {}
+      """
+    )
+
+    assertParse(
+      """
+      let
+        using = 42
+      """
+    )
+
+    assertParse("let (x: Int, using: String) = (x: 42, using: \"\")")
+
+    assertParse(
+      """
+      do {
+        using @MainActor
+      }
+      """
     )
   }
 }

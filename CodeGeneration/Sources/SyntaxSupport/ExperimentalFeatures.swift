@@ -19,10 +19,10 @@ public enum ExperimentalFeature: String, CaseIterable {
   case nonescapableTypes
   case trailingComma
   case coroutineAccessors
-  case abiAttribute
   case keypathWithMethodMembers
   case oldOwnershipOperatorSpellings
   case inlineArrayTypeSugar
+  case defaultIsolationPerFile
 
   /// The name of the feature as it is written in the compiler's `Features.def` file.
   public var featureName: String {
@@ -39,14 +39,14 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "TrailingComma"
     case .coroutineAccessors:
       return "CoroutineAccessors"
-    case .abiAttribute:
-      return "ABIAttribute"
     case .keypathWithMethodMembers:
       return "KeypathWithMethodMembers"
     case .oldOwnershipOperatorSpellings:
       return "OldOwnershipOperatorSpellings"
     case .inlineArrayTypeSugar:
       return "InlineArrayTypeSugar"
+    case .defaultIsolationPerFile:
+      return "DefaultIsolationPerFile"
     }
   }
 
@@ -65,14 +65,14 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "trailing commas"
     case .coroutineAccessors:
       return "coroutine accessors"
-    case .abiAttribute:
-      return "@abi attribute"
     case .keypathWithMethodMembers:
       return "keypaths with method members"
     case .oldOwnershipOperatorSpellings:
       return "`_move` and `_borrow` as ownership operators"
     case .inlineArrayTypeSugar:
       return "sugar type for InlineArray"
+    case .defaultIsolationPerFile:
+      return "set default actor isolation for a file"
     }
   }
 

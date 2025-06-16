@@ -368,7 +368,7 @@ public enum TokenKind: Hashable, Sendable {
 }
 
 extension TokenKind: Equatable {
-  public static func == (lhs: TokenKind, rhs: TokenKind) -> Bool {
+  public static func ==(lhs: TokenKind, rhs: TokenKind) -> Bool {
     switch (lhs, rhs) {
     case (.arrow, .arrow):
       return true

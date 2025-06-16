@@ -37,7 +37,7 @@ let tokenNameForDiagnosticFile = SourceFileSyntax(leadingTrivia: copyrightHeader
               elements: .switchCases(
                 SwitchCaseListSyntax {
                   SwitchCaseSyntax("@unknown default:") {
-                    StmtSyntax("fatalError()")
+                    StmtSyntax("return fatalError()")
                   }
                 }
               )

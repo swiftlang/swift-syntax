@@ -3400,20 +3400,6 @@ open class ThrowingSyntaxVisitor<E: Error> {
   open func visitPost(_ node: UsingDeclSyntax) throws (E) {
   }
 
-  /// Visiting `UsingDeclSyntax` specifically.
-  ///   - Parameter node: the node we are visiting.
-  ///   - Returns: how should we continue visiting.
-  @_spi(ExperimentalLanguageFeatures)
-  open func visit(_ node: UsingDeclSyntax) -> SyntaxVisitorContinueKind {
-    return .visitChildren
-  }
-
-  /// The function called after visiting `UsingDeclSyntax` and its descendants.
-  ///   - node: the node we just finished visiting.
-  @_spi(ExperimentalLanguageFeatures)
-  open func visitPost(_ node: UsingDeclSyntax) {
-  }
-
   /// Visiting ``ValueBindingPatternSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5794,6 +5780,7 @@ open class ThrowingSyntaxVisitor<E: Error> {
   }
 
   @inline(never)
+<<<<<<< HEAD
   private func visitUsingDeclSyntaxImpl(_ node: Syntax) throws (E) {
     if try visit(UsingDeclSyntax(unsafeCasting: node)) == .visitChildren {
       try visitChildren(node)
@@ -5894,6 +5881,100 @@ open class ThrowingSyntaxVisitor<E: Error> {
     if try visit(YieldedExpressionsClauseSyntax(unsafeCasting: node)) == .visitChildren {
       try visitChildren(node)
     }
+=======
+  private func visitValueBindingPatternSyntaxImpl(_ node: Syntax) throws (E) {
+    if try visit(ValueBindingPatternSyntax(unsafeCasting: node)) == .visitChildren {
+      try visitChildren(node)
+    }
+    try visitPost(ValueBindingPatternSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitVariableDeclSyntaxImpl(_ node: Syntax) throws (E) {
+    if try visit(VariableDeclSyntax(unsafeCasting: node)) == .visitChildren {
+      try visitChildren(node)
+    }
+    try visitPost(VariableDeclSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitVersionComponentListSyntaxImpl(_ node: Syntax) throws (E) {
+    if try visit(VersionComponentListSyntax(unsafeCasting: node)) == .visitChildren {
+      try visitChildren(node)
+    }
+    try visitPost(VersionComponentListSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitVersionComponentSyntaxImpl(_ node: Syntax) throws (E) {
+    if try visit(VersionComponentSyntax(unsafeCasting: node)) == .visitChildren {
+      try visitChildren(node)
+    }
+    try visitPost(VersionComponentSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitVersionTupleSyntaxImpl(_ node: Syntax) throws (E) {
+    if try visit(VersionTupleSyntax(unsafeCasting: node)) == .visitChildren {
+      try visitChildren(node)
+    }
+    try visitPost(VersionTupleSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitWhereClauseSyntaxImpl(_ node: Syntax) throws (E) {
+    if try visit(WhereClauseSyntax(unsafeCasting: node)) == .visitChildren {
+      try visitChildren(node)
+    }
+    try visitPost(WhereClauseSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitWhileStmtSyntaxImpl(_ node: Syntax) throws (E) {
+    if try visit(WhileStmtSyntax(unsafeCasting: node)) == .visitChildren {
+      try visitChildren(node)
+    }
+    try visitPost(WhileStmtSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitWildcardPatternSyntaxImpl(_ node: Syntax) throws (E) {
+    if try visit(WildcardPatternSyntax(unsafeCasting: node)) == .visitChildren {
+      try visitChildren(node)
+    }
+    try visitPost(WildcardPatternSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitYieldStmtSyntaxImpl(_ node: Syntax) throws (E) {
+    if try visit(YieldStmtSyntax(unsafeCasting: node)) == .visitChildren {
+      try visitChildren(node)
+    }
+    try visitPost(YieldStmtSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitYieldedExpressionListSyntaxImpl(_ node: Syntax) throws (E) {
+    if try visit(YieldedExpressionListSyntax(unsafeCasting: node)) == .visitChildren {
+      try visitChildren(node)
+    }
+    try visitPost(YieldedExpressionListSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitYieldedExpressionSyntaxImpl(_ node: Syntax) throws (E) {
+    if try visit(YieldedExpressionSyntax(unsafeCasting: node)) == .visitChildren {
+      try visitChildren(node)
+    }
+    try visitPost(YieldedExpressionSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
+  private func visitYieldedExpressionsClauseSyntaxImpl(_ node: Syntax) throws (E) {
+    if try visit(YieldedExpressionsClauseSyntax(unsafeCasting: node)) == .visitChildren {
+      try visitChildren(node)
+    }
+>>>>>>> 7ee5dc63 (Modify SyntaxVisitor to supprt throwing during travresal.)
     try visitPost(YieldedExpressionsClauseSyntax(unsafeCasting: node))
   }
 

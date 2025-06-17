@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftSyntax
 @_spi(Testing) import SwiftCompilerPluginMessageHandling
 import XCTest
 

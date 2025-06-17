@@ -17,10 +17,10 @@ import SwiftSyntax
 public class LookupCache {
   /// Cached results of `ScopeSyntax.lookupParent` calls.
   /// Identified by `SyntaxIdentifier`.
-  private var ancestorResultsCache: [SyntaxIdentifier: [LookupResult]] = [:]
+  private let ancestorResultsCache: LRUCache<SyntaxIdentifier, [LookupResult]>
   /// Cached results of `SequentialScopeSyntax.sequentialLookup` calls.
   /// Identified by `SyntaxIdentifier`.
-  private var sequentialResultsCache: [SyntaxIdentifier: [LookupResult]] = [:]
+  private let sequentialResultsCache: LRUCache<SyntaxIdentifier, [LookupResult]>
   /// Looked-up scope identifiers during cache accesses.
   private var hits: Set<SyntaxIdentifier> = []
 
@@ -28,8 +28,10 @@ public class LookupCache {
   private var evictionCount = 0
 
   /// Creates a new unqualified lookup cache.
+  /// `capacity` describes the maximum amount of entries in the cache.
+  /// The cache size is maintained according to the LRU (Least Recently Used) policy.
   /// `drop` parameter specifies how many eviction calls will be
-  /// ignored before evicting not-hit members of the cache.
+  /// ignored before evicting not-hit members from subsequent lookups.
   ///
   /// Example cache eviction sequences (s - skip, e - evict):
   /// - `drop = 0` - `e -> e -> e -> e -> e -> ...`
@@ -44,7 +46,9 @@ public class LookupCache {
   /// memory accesses could take longer, slowing down the eviction process. That's why the `drop` value
   /// could be fine-tuned to maximize the performance given file size,
   /// number of lookups, and amount of available memory.
-  public init(drop: Int = 0) {
+  public init(capacity: Int, drop: Int = 0) {
+    self.ancestorResultsCache = LRUCache(capacity: (capacity + 1) / 2)
+    self.sequentialResultsCache = LRUCache(capacity: capacity / 2)
     self.dropMod = drop + 1
   }
 
@@ -91,9 +95,9 @@ public class LookupCache {
       guard evictionCount != 0 else { return }
     }
 
-    for key in Set(ancestorResultsCache.keys).union(sequentialResultsCache.keys).subtracting(hits) {
-      ancestorResultsCache.removeValue(forKey: key)
-      sequentialResultsCache.removeValue(forKey: key)
+    for key in ancestorResultsCache.keysInCache.union(sequentialResultsCache.keysInCache).subtracting(hits) {
+      ancestorResultsCache[key] = nil
+      sequentialResultsCache[key] = nil
     }
 
     hits = []

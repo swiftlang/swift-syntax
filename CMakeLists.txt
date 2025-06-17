@@ -57,6 +57,10 @@ if(NOT DEFINED SWIFTSYNTAX_PACKAGE_NAME)
   set(SWIFTSYNTAX_PACKAGE_NAME "${SWIFT_MODULE_ABI_NAME_PREFIX}${PROJECT_NAME}")
 endif()
 
+add_compile_options(
+  "$<$<COMPILE_LANGUAGE:Swift>:SHELL:-Xfrontend -package-name -Xfrontend ${SWIFTSYNTAX_PACKAGE_NAME}>"
+)
+
 # Determine the module triple.
 if("${SWIFT_HOST_MODULE_TRIPLE}" STREQUAL "")
   set(module_triple_command "${CMAKE_Swift_COMPILER}" -print-target-info)

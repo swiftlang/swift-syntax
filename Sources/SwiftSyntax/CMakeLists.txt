@@ -17,6 +17,7 @@ add_swift_syntax_library(SwiftSyntax
   CustomTraits.swift
   EditorPlaceholder.swift
   Identifier.swift
+  LRUCache.swift
   MemoryLayout.swift
   MissingNodeInitializers.swift
   SourceEdit.swift

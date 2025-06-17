@@ -116,7 +116,7 @@ func assertLexicalNameLookup(
   )
 
   // Perform test with cache
-  let cache = LookupCache()
+  let cache = LookupCache(capacity: 10)
   assertLexicalScopeQuery(
     source: source,
     methodUnderTest: { marker, tokenAtMarker in

@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
 @_spi(Testing) import SwiftCompilerPluginMessageHandling
+import SwiftSyntax
 import XCTest
 
 final class LRUCacheTests: XCTestCase {

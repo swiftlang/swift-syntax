@@ -944,13 +944,13 @@ extension Parser.Lookahead {
       // by a type annotation.
       if self.startsParameterName(isClosure: false, allowMisplacedSpecifierRecovery: false) {
         self.consumeAnyToken()
+        // If we have a secondary argument label, consume it.
         if self.atArgumentLabel() {
           self.consumeAnyToken()
-          guard self.at(.colon) else {
-            return false
-          }
         }
-        self.eat(.colon)
+        guard self.consume(if: .colon) != nil else {
+          return false
+        }
 
         // Parse a type.
         guard self.canParseType() else {

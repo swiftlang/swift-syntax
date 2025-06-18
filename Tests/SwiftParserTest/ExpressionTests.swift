@@ -2145,6 +2145,26 @@ final class ExpressionTests: ParserTestCase {
       """
     )
   }
+
+  func testSecondaryArgumentLabelDollarIdentifierInClosure() {
+    assertParse(
+      """
+      ℹ️{ a1️⃣: (a $
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected '}' to end closure",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(message: "extraneous code ': (a $' at top level"),
+      ],
+      fixedSource: """
+        { a
+        }: (a $
+        """
+    )
+  }
 }
 
 final class MemberExprTests: ParserTestCase {

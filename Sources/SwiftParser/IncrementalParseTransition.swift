@@ -47,7 +47,7 @@ extension Parser {
 ///
 /// This is also used for testing purposes to ensure incremental reparsing
 /// worked as expected.
-public typealias ReusedNodeCallback = (_ node: Syntax) -> ()
+public typealias ReusedNodeCallback = (_ node: Syntax) -> Void
 
 /// Keeps track of a previously parsed syntax tree and the source edits that
 /// occurred since it was created.

@@ -59,8 +59,12 @@ public let TYPE_NODES: [Node] = [
       ),
       Child(
         name: "lateSpecifiers",
-        kind: .collection(kind: .typeSpecifierList, collectionElementName: "Specifier", defaultsToEmpty: true,
-                          generateDeprecatedAddFunction: false),
+        kind: .collection(
+          kind: .typeSpecifierList,
+          collectionElementName: "Specifier",
+          defaultsToEmpty: true,
+          generateDeprecatedAddFunction: false
+        ),
         documentation:
           "A list of specifiers that can be attached to the type after the attributes, such as 'nonisolated'."
       ),

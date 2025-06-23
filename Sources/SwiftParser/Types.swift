@@ -1264,7 +1264,9 @@ extension Parser {
 
     // Only handle `nonisolated` as a late specifier.
     var lateSpecifiers: [RawTypeSpecifierListSyntax.Element] = []
-    if self.at(.keyword(.nonisolated)) && !(self.peek(isAt: .leftParen) && self.peek().isAtStartOfLine) {
+    if self.at(.keyword(.nonisolated)) && !(self.peek(isAt: .leftParen) && self.peek().isAtStartOfLine)
+      && canHaveParameterSpecifier
+    {
       lateSpecifiers.append(parseNonisolatedTypeSpecifier())
     }
 

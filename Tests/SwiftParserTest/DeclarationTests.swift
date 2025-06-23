@@ -816,6 +816,17 @@ final class DeclarationTests: ParserTestCase {
       """
     )
 
+    assertParse(
+      """
+      extension Int: @preconcurrency nonisolated Q {}
+      """
+    )
+
+    assertParse(
+      """
+      extension Int: @unsafe nonisolated Q {}
+      """
+    )
   }
 
   func testParseDynamicReplacement() {

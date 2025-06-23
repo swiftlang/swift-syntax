@@ -47,7 +47,8 @@ public enum ChildKind {
     kind: SyntaxNodeKind,
     collectionElementName: String? = nil,
     defaultsToEmpty: Bool = false,
-    deprecatedCollectionElementName: String? = nil
+    deprecatedCollectionElementName: String? = nil,
+    generateDeprecatedAddFunction: Bool = true
   )
   /// The child is a token that matches one of the given `choices`.
   /// If `requiresLeadingSpace` or `requiresTrailingSpace` is not `nil`, it
@@ -132,7 +133,7 @@ public class Child: NodeChoiceConvertible {
       return kind
     case .nodeChoices:
       return .syntax
-    case .collection(kind: let kind, _, _, _):
+    case .collection(kind: let kind, _, _, _, _):
       return kind
     case .token:
       return .token
@@ -268,7 +269,7 @@ public class Child: NodeChoiceConvertible {
   /// Whether this child has syntax kind `UnexpectedNodes`.
   public var isUnexpectedNodes: Bool {
     switch kind {
-    case .collection(kind: .unexpectedNodes, _, _, _):
+    case .collection(kind: .unexpectedNodes, _, _, _, _):
       return true
     default:
       return false
@@ -283,7 +284,7 @@ public class Child: NodeChoiceConvertible {
       return choices.isEmpty
     case .node(let kind):
       return kind.isBase
-    case .collection(kind: let kind, _, _, _):
+    case .collection(kind: let kind, _, _, _, _):
       return kind.isBase
     case .token:
       return false

@@ -3789,6 +3789,7 @@ public struct AttributeSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodePr
 /// 
 ///  - `specifiers`: ``TypeSpecifierListSyntax``
 ///  - `attributes`: ``AttributeListSyntax``
+///  - `lateSpecifiers`: ``TypeSpecifierListSyntax``
 ///  - `baseType`: ``TypeSyntax``
 public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
@@ -3809,6 +3810,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - specifiers: A list of specifiers that can be attached to the type, such as `inout`, `isolated`, or `consuming`.
   ///   - attributes: A list of attributes that can be attached to the type, such as `@escaping`.
+  ///   - lateSpecifiers: A list of specifiers that can be attached to the type after the attributes, such as 'nonisolated'.
   ///   - baseType: The type to with the specifiers and attributes are applied.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
@@ -3817,7 +3819,9 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     specifiers: TypeSpecifierListSyntax = [],
     _ unexpectedBetweenSpecifiersAndAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax = [],
-    _ unexpectedBetweenAttributesAndBaseType: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndLateSpecifiers: UnexpectedNodesSyntax? = nil,
+    lateSpecifiers: TypeSpecifierListSyntax = [],
+    _ unexpectedBetweenLateSpecifiersAndBaseType: UnexpectedNodesSyntax? = nil,
     baseType: some TypeSyntaxProtocol,
     _ unexpectedAfterBaseType: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
@@ -3829,7 +3833,9 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
       specifiers,
       unexpectedBetweenSpecifiersAndAttributes,
       attributes,
-      unexpectedBetweenAttributesAndBaseType,
+      unexpectedBetweenAttributesAndLateSpecifiers,
+      lateSpecifiers,
+      unexpectedBetweenLateSpecifiersAndBaseType,
       baseType,
       unexpectedAfterBaseType
     ))) { (arena, _) in
@@ -3838,7 +3844,9 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
         specifiers.raw,
         unexpectedBetweenSpecifiersAndAttributes?.raw,
         attributes.raw,
-        unexpectedBetweenAttributesAndBaseType?.raw,
+        unexpectedBetweenAttributesAndLateSpecifiers?.raw,
+        lateSpecifiers.raw,
+        unexpectedBetweenLateSpecifiersAndBaseType?.raw,
         baseType.raw,
         unexpectedAfterBaseType?.raw
       ]
@@ -3945,7 +3953,7 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
       .cast(AttributedTypeSyntax.self)
   }
 
-  public var unexpectedBetweenAttributesAndBaseType: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenAttributesAndLateSpecifiers: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -3954,17 +3962,17 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     }
   }
 
-  /// The type to with the specifiers and attributes are applied.
-  public var baseType: TypeSyntax {
+  /// A list of specifiers that can be attached to the type after the attributes, such as 'nonisolated'.
+  public var lateSpecifiers: TypeSpecifierListSyntax {
     get {
-      return Syntax(self).child(at: 5)!.cast(TypeSyntax.self)
+      return Syntax(self).child(at: 5)!.cast(TypeSpecifierListSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(AttributedTypeSyntax.self)
     }
   }
 
-  public var unexpectedAfterBaseType: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenLateSpecifiersAndBaseType: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -3973,12 +3981,33 @@ public struct AttributedTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     }
   }
 
+  /// The type to with the specifiers and attributes are applied.
+  public var baseType: TypeSyntax {
+    get {
+      return Syntax(self).child(at: 7)!.cast(TypeSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(AttributedTypeSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterBaseType: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(AttributedTypeSyntax.self)
+    }
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeSpecifiers,
     \Self.specifiers,
     \Self.unexpectedBetweenSpecifiersAndAttributes,
     \Self.attributes,
-    \Self.unexpectedBetweenAttributesAndBaseType,
+    \Self.unexpectedBetweenAttributesAndLateSpecifiers,
+    \Self.lateSpecifiers,
+    \Self.unexpectedBetweenLateSpecifiersAndBaseType,
     \Self.baseType,
     \Self.unexpectedAfterBaseType
   ])

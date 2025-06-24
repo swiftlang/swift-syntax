@@ -100,6 +100,7 @@ extension Parser {
         RawAttributedTypeSyntax(
           specifiers: specifiersAndAttributes.specifiers,
           attributes: specifiersAndAttributes.attributes,
+          lateSpecifiers: specifiersAndAttributes.lateSpecifiers,
           baseType: base,
           arena: self.arena
         )
@@ -1221,7 +1222,8 @@ extension Parser {
     misplacedSpecifiers: [RawTokenSyntax] = []
   ) -> (
     specifiers: RawTypeSpecifierListSyntax,
-    attributes: RawAttributeListSyntax
+    attributes: RawAttributeListSyntax,
+    lateSpecifiers: RawTypeSpecifierListSyntax
   )? {
     var specifiers: [RawTypeSpecifierListSyntax.Element] = []
     SPECIFIER_PARSING: while canHaveParameterSpecifier {
@@ -1260,7 +1262,15 @@ extension Parser {
       attributes = nil
     }
 
-    guard !specifiers.isEmpty || attributes != nil else {
+    // Only handle `nonisolated` as a late specifier.
+    var lateSpecifiers: [RawTypeSpecifierListSyntax.Element] = []
+    if self.at(.keyword(.nonisolated)) && !(self.peek(isAt: .leftParen) && self.peek().isAtStartOfLine)
+      && canHaveParameterSpecifier
+    {
+      lateSpecifiers.append(parseNonisolatedTypeSpecifier())
+    }
+
+    guard !specifiers.isEmpty || attributes != nil || !lateSpecifiers.isEmpty else {
       // No specifiers or attributes on this type
       return nil
     }
@@ -1271,9 +1281,17 @@ extension Parser {
       specifierList = RawTypeSpecifierListSyntax(elements: specifiers, arena: arena)
     }
 
+    let lateSpecifierList: RawTypeSpecifierListSyntax
+    if lateSpecifiers.isEmpty {
+      lateSpecifierList = self.emptyCollection(RawTypeSpecifierListSyntax.self)
+    } else {
+      lateSpecifierList = RawTypeSpecifierListSyntax(elements: lateSpecifiers, arena: arena)
+    }
+
     return (
       specifierList,
-      attributes ?? self.emptyCollection(RawAttributeListSyntax.self)
+      attributes ?? self.emptyCollection(RawAttributeListSyntax.self),
+      lateSpecifierList
     )
   }
 

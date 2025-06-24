@@ -286,8 +286,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenSpecifiersAndAttributes"
   case \AttributedTypeSyntax.attributes:
     return "attributes"
-  case \AttributedTypeSyntax.unexpectedBetweenAttributesAndBaseType:
-    return "unexpectedBetweenAttributesAndBaseType"
+  case \AttributedTypeSyntax.unexpectedBetweenAttributesAndLateSpecifiers:
+    return "unexpectedBetweenAttributesAndLateSpecifiers"
+  case \AttributedTypeSyntax.lateSpecifiers:
+    return "lateSpecifiers"
+  case \AttributedTypeSyntax.unexpectedBetweenLateSpecifiersAndBaseType:
+    return "unexpectedBetweenLateSpecifiersAndBaseType"
   case \AttributedTypeSyntax.baseType:
     return "baseType"
   case \AttributedTypeSyntax.unexpectedAfterBaseType:

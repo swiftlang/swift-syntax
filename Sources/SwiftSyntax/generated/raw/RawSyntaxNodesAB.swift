@@ -1827,21 +1827,25 @@ public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol {
     specifiers: RawTypeSpecifierListSyntax,
     _ unexpectedBetweenSpecifiersAndAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax,
-    _ unexpectedBetweenAttributesAndBaseType: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndLateSpecifiers: RawUnexpectedNodesSyntax? = nil,
+    lateSpecifiers: RawTypeSpecifierListSyntax,
+    _ unexpectedBetweenLateSpecifiersAndBaseType: RawUnexpectedNodesSyntax? = nil,
     baseType: some RawTypeSyntaxNodeProtocol,
     _ unexpectedAfterBaseType: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .attributedType, uninitializedCount: 7, arena: arena) { layout in
+      kind: .attributedType, uninitializedCount: 9, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeSpecifiers?.raw
       layout[1] = specifiers.raw
       layout[2] = unexpectedBetweenSpecifiersAndAttributes?.raw
       layout[3] = attributes.raw
-      layout[4] = unexpectedBetweenAttributesAndBaseType?.raw
-      layout[5] = baseType.raw
-      layout[6] = unexpectedAfterBaseType?.raw
+      layout[4] = unexpectedBetweenAttributesAndLateSpecifiers?.raw
+      layout[5] = lateSpecifiers.raw
+      layout[6] = unexpectedBetweenLateSpecifiersAndBaseType?.raw
+      layout[7] = baseType.raw
+      layout[8] = unexpectedAfterBaseType?.raw
     }
     self.init(unchecked: raw)
   }
@@ -1862,16 +1866,24 @@ public struct RawAttributedTypeSyntax: RawTypeSyntaxNodeProtocol {
     layoutView.children[3].map(RawAttributeListSyntax.init(raw:))!
   }
 
-  public var unexpectedBetweenAttributesAndBaseType: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenAttributesAndLateSpecifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
+  public var lateSpecifiers: RawTypeSpecifierListSyntax {
+    layoutView.children[5].map(RawTypeSpecifierListSyntax.init(raw:))!
+  }
+
+  public var unexpectedBetweenLateSpecifiersAndBaseType: RawUnexpectedNodesSyntax? {
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
   public var baseType: RawTypeSyntax {
-    layoutView.children[5].map(RawTypeSyntax.init(raw:))!
+    layoutView.children[7].map(RawTypeSyntax.init(raw:))!
   }
 
   public var unexpectedAfterBaseType: RawUnexpectedNodesSyntax? {
-    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

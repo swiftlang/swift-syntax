@@ -42,7 +42,9 @@ public struct AddAsyncMacro: PeerMacro {
     }
 
     // This only makes sense void functions
-    if funcDecl.signature.returnClause?.type.as(IdentifierTypeSyntax.self)?.name.text != "Void" {
+    if let returnClause = funcDecl.signature.returnClause,
+      returnClause.type.as(IdentifierTypeSyntax.self)?.name.text != "Void"
+    {
       throw CustomError.message(
         "@addAsync requires an function that returns void"
       )

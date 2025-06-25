@@ -79,6 +79,32 @@ final class AddAsyncMacroTests: XCTestCase {
     )
   }
 
+  func testImplicitVoidResult() {
+    assertMacroExpansion(
+      """
+      @AddAsync
+      func d(a: Int, completionBlock: @escaping (Bool) -> Void) {
+      }
+      """,
+      expandedSource: """
+        func d(a: Int, completionBlock: @escaping (Bool) -> Void) {
+        }
+
+        func d(a: Int) async -> Bool {
+          await withCheckedContinuation { continuation in
+            d(a: a) { returnValue in
+
+              continuation.resume(returning: returnValue)
+            }
+          }
+
+        }
+        """,
+      macros: macros,
+      indentationWidth: .spaces(2)
+    )
+  }
+
   func testExpansionOnStoredPropertyEmitsError() {
     assertMacroExpansion(
       """
@@ -105,18 +131,18 @@ final class AddAsyncMacroTests: XCTestCase {
     )
   }
 
-  func testExpansionOnAsyncFunctionEmitsError() {
+  func testNonVoidResult() {
     assertMacroExpansion(
       """
       struct Test {
         @AddAsync
-        async func sayHello() {
+        func sayHello() -> Int {
         }
       }
       """,
       expandedSource: """
         struct Test {
-          async func sayHello() {
+          func sayHello() -> Int {
           }
         }
         """,
@@ -125,6 +151,52 @@ final class AddAsyncMacroTests: XCTestCase {
           message: "@addAsync requires an function that returns void",
           line: 2,
           column: 3,
+          severity: .error
+        )
+      ],
+      macros: macros,
+      indentationWidth: .spaces(2)
+    )
+  }
+
+  func testAlreadyAsync() {
+    assertMacroExpansion(
+      """
+      @AddAsync
+      func d(a: Int, completionBlock: @escaping (Bool) -> Void) async {
+      }
+      """,
+      expandedSource: """
+        func d(a: Int, completionBlock: @escaping (Bool) -> Void) async {
+        }
+        """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "@addAsync requires an non async function",
+          line: 1,
+          column: 1,
+          severity: .error
+        )
+      ],
+      macros: macros,
+      indentationWidth: .spaces(2)
+    )
+  }
+
+  func testNoCompletionHandler() {
+    assertMacroExpansion(
+      """
+      @AddAsync
+      func sayHello(x: Int) {}
+      """,
+      expandedSource: """
+        func sayHello(x: Int) {}
+        """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "@addAsync requires an function that has a completion handler as last parameter",
+          line: 1,
+          column: 1,
           severity: .error
         )
       ],

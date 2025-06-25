@@ -701,7 +701,7 @@ fileprivate extension SyntaxText {
   /// - Returns: The position at the end of the walk.
   func forEachEndOfLine(
     position: AbsolutePosition,
-    body: (AbsolutePosition) -> ()
+    body: (AbsolutePosition) -> Void
   ) -> AbsolutePosition {
     guard let startPtr = buffer.baseAddress else {
       return position
@@ -745,7 +745,7 @@ fileprivate extension RawTriviaPiece {
   /// - Returns: The position at the end of the walk.
   func forEachEndOfLine(
     position: AbsolutePosition,
-    body: (AbsolutePosition) -> ()
+    body: (AbsolutePosition) -> Void
   ) -> AbsolutePosition {
     var position = position
     switch self {
@@ -788,7 +788,7 @@ fileprivate extension RawTriviaPieceBuffer {
   /// - Returns: The position at the end of the walk.
   func forEachEndOfLine(
     position: AbsolutePosition,
-    body: (AbsolutePosition) -> ()
+    body: (AbsolutePosition) -> Void
   ) -> AbsolutePosition {
     var position = position
     for piece in self {
@@ -810,8 +810,8 @@ fileprivate extension RawSyntax {
   /// - Returns: The position at the end of the walk.
   func forEachEndOfLine(
     position: AbsolutePosition,
-    body: (AbsolutePosition) -> (),
-    handleSourceLocationDirective: (_ position: AbsolutePosition, _ rawSyntax: RawSyntax) -> ()
+    body: (AbsolutePosition) -> Void,
+    handleSourceLocationDirective: (_ position: AbsolutePosition, _ rawSyntax: RawSyntax) -> Void
   ) -> AbsolutePosition {
     var position = position
     switch self.rawData.payload {

@@ -29,7 +29,14 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     """
   )
 
-  try! ClassDeclSyntax("open class SyntaxVisitor") {
+  DeclSyntax(
+    """
+    /// An instance of `ThrowingSyntaxVisitor` that never throws.
+    public typealias SyntaxVisitor = ThrowingSyntaxVisitor<Never>
+    """
+  )
+
+  try! ClassDeclSyntax("open class ThrowingSyntaxVisitor<E: Error>") {
     DeclSyntax("public let viewMode: SyntaxTreeViewMode")
 
     DeclSyntax(
@@ -44,8 +51,8 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
       /// Walk all nodes of the given syntax tree, calling the corresponding `visit`
       /// function for every node that is being visited.
-      public func walk(_ node: some SyntaxProtocol) {
-        dispatchVisit(Syntax(node))
+      public func walk(_ node: some SyntaxProtocol) throws (E) {
+        try dispatchVisit(Syntax(node))
       }
       """
     )
@@ -57,7 +64,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         ///   - Parameter node: the node we are visiting.
         ///   - Returns: how should we continue visiting.
         \(node.apiAttributes())\
-        open func visit(_ node: \(node.kind.syntaxType)) -> SyntaxVisitorContinueKind {
+        open func visit(_ node: \(node.kind.syntaxType)) throws (E) -> SyntaxVisitorContinueKind {
           return .visitChildren
         }
         """
@@ -68,7 +75,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
         /// The function called after visiting \(raw: node.kind.doccLink) and its descendants.
         ///   - node: the node we just finished visiting.
         \(node.apiAttributes())\
-        open func visitPost(_ node: \(node.kind.syntaxType)) {}
+        open func visitPost(_ node: \(node.kind.syntaxType)) throws (E) {}
         """
       )
     }
@@ -78,7 +85,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       /// Visiting ``TokenSyntax`` specifically.
       ///   - Parameter token: the token we are visiting.
       ///   - Returns: how should we continue visiting.
-      open func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+      open func visit(_ token: TokenSyntax) throws (E) -> SyntaxVisitorContinueKind {
         return .visitChildren
       }
       """
@@ -88,7 +95,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
       /// The function called after visiting the node and its descendants.
       ///   - node: the node we just finished visiting.
-      open func visitPost(_ node: TokenSyntax) {}
+      open func visitPost(_ node: TokenSyntax) throws (E) {}
       """
     )
 
@@ -98,10 +105,10 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     DeclSyntax(
       """
       @inline(never)
-      private func visitTokenSyntaxImpl(_ node: Syntax) {
-        _ = visit(TokenSyntax(unsafeCasting: node))
+      private func visitTokenSyntaxImpl(_ node: Syntax) throws (E) {
+        _ = try visit(TokenSyntax(unsafeCasting: node))
         // No children to visit.
-        visitPost(TokenSyntax(unsafeCasting: node))
+        try visitPost(TokenSyntax(unsafeCasting: node))
       }
       """
     )
@@ -110,11 +117,11 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         @inline(never)
-        private func visit\(node.kind.syntaxType)Impl(_ node: Syntax) {
-          if visit(\(node.kind.syntaxType)(unsafeCasting: node)) == .visitChildren {
-            visitChildren(node)
+        private func visit\(node.kind.syntaxType)Impl(_ node: Syntax) throws (E) {
+          if try visit(\(node.kind.syntaxType)(unsafeCasting: node)) == .visitChildren {
+            try visitChildren(node)
           }
-          visitPost(\(node.kind.syntaxType)(unsafeCasting: node))
+          try visitPost(\(node.kind.syntaxType)(unsafeCasting: node))
         }
         """
       )
@@ -136,7 +143,7 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
           condition: ExprSyntax("DEBUG"),
           elements: .statements(
             try CodeBlockItemListSyntax {
-              try FunctionDeclSyntax(
+                try FunctionDeclSyntax(
                 """
                 /// Implementation detail of visit(_:). Do not call directly.
                 ///
@@ -156,28 +163,28 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
                 /// that determines the correct visitation function will be popped of the
                 /// stack before the function is being called, making the switch's stack
                 /// space transient instead of having it linger in the call stack.
-                private func visitationFunc(for node: Syntax) -> (Syntax) -> Void
+                private func visitationFunc(for node: Syntax) -> (Syntax) throws (E) -> Void
                 """
-              ) {
-                try SwitchExprSyntax("switch node.raw.kind") {
-                  SwitchCaseSyntax("case .token:") {
-                    StmtSyntax("return self.visitTokenSyntaxImpl(_:)")
-                  }
+                ) {
+                  try SwitchExprSyntax("switch node.raw.kind") {
+                    SwitchCaseSyntax("case .token:") {
+                      StmtSyntax("return self.visitTokenSyntaxImpl(_:)")
+                    }
 
-                  for node in NON_BASE_SYNTAX_NODES {
-                    SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
-                      StmtSyntax(
-                        "return self.visit\(node.kind.syntaxType)Impl(_:)"
-                      )
+                    for node in NON_BASE_SYNTAX_NODES {
+                      SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
+                        StmtSyntax(
+                          "return self.visit\(node.kind.syntaxType)Impl(_:)"
+                        )
+                      }
                     }
                   }
                 }
-              }
 
               DeclSyntax(
                 """
-                private func dispatchVisit(_ node: Syntax) {
-                  return visitationFunc(for: node)(node)
+                private func dispatchVisit(_ node: Syntax) throws (E) {
+                  return try visitationFunc(for: node)(node)
                 }
                 """
               )
@@ -190,17 +197,17 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
             CodeBlockItemListSyntax {
               try! FunctionDeclSyntax(
                 """
-                private func dispatchVisit(_ node: Syntax)
+                private func dispatchVisit(_ node: Syntax) throws (E)
                 """
               ) {
                 try SwitchExprSyntax("switch node.raw.kind") {
                   SwitchCaseSyntax("case .token:") {
-                    ExprSyntax("self.visitTokenSyntaxImpl(node)")
+                    ExprSyntax("try self.visitTokenSyntaxImpl(node)")
                   }
 
                   for node in NON_BASE_SYNTAX_NODES {
                     SwitchCaseSyntax("case .\(node.enumCaseCallName):") {
-                      ExprSyntax("self.visit\(node.kind.syntaxType)Impl(node)")
+                      ExprSyntax("try self.visit\(node.kind.syntaxType)Impl(node)")
                     }
                   }
                 }
@@ -213,9 +220,9 @@ let syntaxVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
 
     DeclSyntax(
       """
-      private func visitChildren(_ node: Syntax) {
+      private func visitChildren(_ node: Syntax) throws (E) {
         for case let childDataRef? in node.layoutBuffer where viewMode.shouldTraverse(node: childDataRef.pointee.raw) {
-          dispatchVisit(Syntax(arena: node.arena, dataRef: childDataRef))
+          try dispatchVisit(Syntax(arena: node.arena, dataRef: childDataRef))
         }
       }
       """

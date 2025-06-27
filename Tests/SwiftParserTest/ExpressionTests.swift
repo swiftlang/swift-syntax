@@ -1882,6 +1882,62 @@ final class ExpressionTests: ParserTestCase {
     )
   }
 
+  func testInvalidMultiLineClosingDelimiter() {
+    assertParse(
+      #"""
+      "a"1️⃣""2️⃣ a3️⃣ a4️⃣ℹ️"""5️⃣
+      """#,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: [
+            "insert newline", "insert ';'",
+          ]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: [
+            "insert newline", "insert ';'",
+          ]
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: [
+            "insert newline", "insert ';'",
+          ]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: [
+            "insert newline", "insert ';'",
+          ]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: #"expected '"""' to end string literal"#,
+          notes: [
+            NoteSpec(message: #"to match this opening '"""'"#)
+          ],
+          fixIts: [
+            #"insert '"""'"#
+          ]
+        ),
+      ],
+      fixedSource: #"""
+        "a"
+        ""
+        a
+        a
+        """
+        """
+        """#
+    )
+  }
+
   func testEmptyLineInMultilineStringLiteral() {
     assertParse(
       #"""

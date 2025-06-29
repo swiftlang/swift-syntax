@@ -15,7 +15,7 @@ import SwiftSyntaxBuilder
 import XCTest
 import _SwiftSyntaxTestSupport
 
-fileprivate func assertPresumedSourceLocation(
+private func assertPresumedSourceLocation(
   _ source: SourceFileSyntax,
   inspectionItemFilter: (CodeBlockItemSyntax.Item) -> (some SyntaxProtocol)? = { $0.as(VariableDeclSyntax.self) },
   presumedFile: String,

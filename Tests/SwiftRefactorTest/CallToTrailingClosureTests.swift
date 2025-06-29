@@ -249,7 +249,7 @@ final class CallToTrailingClosuresTest: XCTestCase {
   }
 }
 
-fileprivate func assertRefactorCall(
+private func assertRefactorCall(
   _ callExpr: ExprSyntax,
   startAtArgument: Int = 0,
   expected: ExprSyntax?,

@@ -13,7 +13,7 @@
 @_spi(RawSyntax) import SwiftSyntax
 import XCTest
 
-fileprivate func cannedStructDecl(arena: ParsingRawSyntaxArena) -> RawStructDeclSyntax {
+private func cannedStructDecl(arena: ParsingRawSyntaxArena) -> RawStructDeclSyntax {
   let structKW = RawTokenSyntax(
     kind: .keyword,
     text: arena.intern("struct"),

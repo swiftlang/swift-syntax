@@ -124,7 +124,7 @@ private class IndentationInferrer: SyntaxVisitor {
   }
 }
 
-fileprivate extension Array<Int> {
+fileprivate extension [Int] {
   var sum: Int {
     return self.reduce(0) { return $0 + $1 }
   }

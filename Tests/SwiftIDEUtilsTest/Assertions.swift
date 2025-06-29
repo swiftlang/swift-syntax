@@ -32,7 +32,7 @@ func assertClassification(
 ) {
   let tree = Parser.parse(source: source)
 
-  var classifications: Array<SyntaxClassifiedRange>
+  var classifications: [SyntaxClassifiedRange]
   if let range {
     classifications = Array(tree.classifications(in: range))
   } else {

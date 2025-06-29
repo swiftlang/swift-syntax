@@ -79,7 +79,7 @@ func evaluateIfConfig(
 
   // Integer literals aren't allowed, but we recognize them.
   if let intLiteral = condition.as(IntegerLiteralExprSyntax.self),
-    (intLiteral.literal.text == "0" || intLiteral.literal.text == "1")
+    intLiteral.literal.text == "0" || intLiteral.literal.text == "1"
   {
     let result = intLiteral.literal.text == "1"
 

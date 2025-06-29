@@ -24,7 +24,7 @@ import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
-fileprivate struct StringifyMacro: ExpressionMacro {
+private struct StringifyMacro: ExpressionMacro {
   static func expansion(
     of macro: some FreestandingMacroExpansionSyntax,
     in context: some MacroExpansionContext

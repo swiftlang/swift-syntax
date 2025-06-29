@@ -25,7 +25,7 @@ import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
-fileprivate struct DeclsFromStringsMacro: DeclarationMacro {
+private struct DeclsFromStringsMacro: DeclarationMacro {
   static func expansion(
     of node: some FreestandingMacroExpansionSyntax,
     in context: some MacroExpansionContext

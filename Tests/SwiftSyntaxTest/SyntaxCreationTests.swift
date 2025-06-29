@@ -13,7 +13,7 @@
 import SwiftSyntax
 import XCTest
 
-fileprivate func cannedStructDecl() -> StructDeclSyntax {
+private func cannedStructDecl() -> StructDeclSyntax {
   let structKW = TokenSyntax.keyword(.struct, trailingTrivia: .space)
   let fooID = TokenSyntax.identifier("Foo", trailingTrivia: .space)
   let rBrace = TokenSyntax.rightBraceToken(leadingTrivia: .newline)

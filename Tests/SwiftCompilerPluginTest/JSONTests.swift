@@ -254,29 +254,29 @@ final class JSONTests: XCTestCase {
 
 // MARK: - Test Types
 
-fileprivate struct EmptyStruct: Codable, Equatable {
+private struct EmptyStruct: Codable, Equatable {
   static func == (_ lhs: EmptyStruct, _ rhs: EmptyStruct) -> Bool {
     return true
   }
 }
 
-fileprivate class EmptyClass: Codable, Equatable {
+private class EmptyClass: Codable, Equatable {
   static func == (_ lhs: EmptyClass, _ rhs: EmptyClass) -> Bool {
     return true
   }
 }
 
-fileprivate enum Direction: Codable {
+private enum Direction: Codable {
   case right
   case left
 }
 
-fileprivate enum Animal: String, Codable {
+private enum Animal: String, Codable {
   case dog
   case cat
 }
 
-fileprivate enum Switch: Codable {
+private enum Switch: Codable {
   case off
   case on
 
@@ -297,14 +297,14 @@ fileprivate enum Switch: Codable {
   }
 }
 
-fileprivate enum Tree: Codable, Equatable {
-  indirect case int(Int)
-  indirect case string(String)
-  indirect case array([Self])
-  indirect case dictionary([String: Self])
+private indirect enum Tree: Codable, Equatable {
+  case int(Int)
+  case string(String)
+  case array([Self])
+  case dictionary([String: Self])
 }
 
-fileprivate struct ComplexStruct: Codable, Equatable {
+private struct ComplexStruct: Codable, Equatable {
   struct Diagnostic: Codable, Equatable {
     var message: String
     var animal: Animal

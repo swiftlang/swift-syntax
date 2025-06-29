@@ -55,9 +55,9 @@ enum TokenPrecedence: Comparable {
   /// If the precedence is `weakBracketed` or `strongBracketed`, the closing delimiter of the bracketed group.
   var closingTokenKind: RawTokenKind? {
     switch self {
-    case .weakBracketed(closingDelimiter: let closingDelimiter):
+    case .weakBracketed(let closingDelimiter):
       return closingDelimiter
-    case .openingBrace(closingDelimiter: let closingDelimiter):
+    case .openingBrace(let closingDelimiter):
       return closingDelimiter
     case .openingPoundIf:
       return .poundEndif

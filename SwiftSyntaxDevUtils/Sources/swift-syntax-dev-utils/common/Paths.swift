@@ -114,7 +114,7 @@ enum Paths {
 
     var description: String {
       switch self {
-      case .notFound(executableName: let executableName):
+      case .notFound(let executableName):
         return "Executable \(executableName) not found in PATH"
       }
     }

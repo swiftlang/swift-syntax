@@ -209,7 +209,7 @@ let rawSyntaxValidationFile = try! SourceFileSyntax(leadingTrivia: copyrightHead
                         }
 
                         ExprSyntax("assertAnyHasNoError(kind, \(raw: index), \(verifiedChoices))")
-                      case .token(choices: let choices, requiresLeadingSpace: _, requiresTrailingSpace: _):
+                      case .token(let choices, requiresLeadingSpace: _, requiresTrailingSpace: _):
                         let choices = ArrayExprSyntax {
                           for choice in choices {
                             switch choice {

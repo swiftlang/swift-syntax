@@ -592,7 +592,7 @@ public class EvaluateTests: XCTestCase {
 
 /// Assert the results of evaluating the condition within an `#if` against the
 /// given build configuration.
-fileprivate func assertIfConfig(
+private func assertIfConfig(
   _ condition: ExprSyntax,
   _ expectedState: IfConfigRegionState,
   configuration: some BuildConfiguration = TestingBuildConfiguration(),

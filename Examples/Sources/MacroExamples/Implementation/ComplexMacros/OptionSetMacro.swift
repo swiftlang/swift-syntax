@@ -195,7 +195,7 @@ extension OptionSetMacro: MemberMacro {
     // Find all of the case elements.
     let caseElements: [EnumCaseElementSyntax] = optionsEnum.memberBlock.members.flatMap { member in
       guard let caseDecl = member.decl.as(EnumCaseDeclSyntax.self) else {
-        return Array<EnumCaseElementSyntax>()
+        return [EnumCaseElementSyntax]()
       }
 
       return Array(caseDecl.elements)

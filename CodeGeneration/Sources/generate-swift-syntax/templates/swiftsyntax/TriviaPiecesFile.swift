@@ -268,7 +268,7 @@ let triviaPiecesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
   try! generateIsHelpers(for: "RawTriviaPiece")
 }
 
-fileprivate func generateIsHelpers(for pieceName: TokenSyntax) throws -> ExtensionDeclSyntax {
+private func generateIsHelpers(for pieceName: TokenSyntax) throws -> ExtensionDeclSyntax {
   func generateHelper(_ header: SyntaxNodeString, trait: TriviaTraits) throws -> VariableDeclSyntax {
     try VariableDeclSyntax(header) {
       try SwitchExprSyntax("switch self") {

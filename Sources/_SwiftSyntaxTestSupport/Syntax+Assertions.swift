@@ -170,7 +170,7 @@ public enum SubtreeError: Error, CustomStringConvertible {
   }
 }
 
-fileprivate class SyntaxTypeFinder: SyntaxAnyVisitor {
+private class SyntaxTypeFinder: SyntaxAnyVisitor {
   private let offset: Int
   private let type: SyntaxProtocol.Type
   private var found: Syntax?

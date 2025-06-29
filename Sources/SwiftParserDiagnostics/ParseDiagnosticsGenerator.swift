@@ -20,7 +20,7 @@ import SwiftDiagnostics
 @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 #endif
 
-fileprivate func getTokens(between first: TokenSyntax, and second: TokenSyntax) -> [TokenSyntax] {
+private func getTokens(between first: TokenSyntax, and second: TokenSyntax) -> [TokenSyntax] {
   var first = first
   if first.presence == .missing {
     let nextPresentToken = first.nextToken(viewMode: .sourceAccurate)

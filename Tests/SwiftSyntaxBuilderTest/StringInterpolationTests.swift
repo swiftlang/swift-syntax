@@ -214,8 +214,8 @@ final class StringInterpolationTests: XCTestCase {
   }
 
   func testInterpolationLiteralOptional() {
-    let some: Optional<Int> = 42
-    let none: Optional<Int> = nil
+    let some: Int? = 42
+    let none: Int? = nil
 
     let a: ExprSyntax = "print(\(literal: some))"
     assertStringsEqualWithDiff(a.description, #"print(42)"#)

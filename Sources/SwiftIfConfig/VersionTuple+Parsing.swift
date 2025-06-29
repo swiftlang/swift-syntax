@@ -56,7 +56,7 @@ extension VersionTuple {
 
     /// Record a component after checking its value.
     func recordComponent(_ value: Int) throws {
-      let limit = components.isEmpty ? 9223371 : 999
+      let limit = components.isEmpty ? 9_223_371 : 999
       if value < 0 || value > limit {
         throw IfConfigDiagnostic.compilerVersionOutOfRange(value: value, upperLimit: limit, syntax: versionSyntax)
       }

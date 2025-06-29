@@ -227,7 +227,7 @@ public struct RawSyntax: Sendable {
   }
 
   internal var payload: RawSyntaxData.Payload {
-    get { rawData.payload }
+    rawData.payload
   }
 }
 

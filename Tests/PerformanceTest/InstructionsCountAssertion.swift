@@ -13,7 +13,7 @@
 import XCTest
 import _InstructionCounter
 
-fileprivate var baselineURL: URL {
+private var baselineURL: URL {
   if let baselineFile = ProcessInfo.processInfo.environment["BASELINE_FILE"] {
     return URL(fileURLWithPath: baselineFile)
   } else {

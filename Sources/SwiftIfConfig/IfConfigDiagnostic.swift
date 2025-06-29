@@ -47,22 +47,22 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
     case .unknownExpression:
       return "invalid conditional compilation expression"
 
-    case .unhandledFunction(name: let name, syntax: _):
+    case .unhandledFunction(let name, syntax: _):
       return "build configuration cannot handle '\(name)'"
 
-    case .requiresUnlabeledArgument(name: let name, role: let role, syntax: _):
+    case .requiresUnlabeledArgument(let name, let role, syntax: _):
       return "'\(name)' requires a single unlabeled argument for the \(role)"
 
-    case .unsupportedVersionOperator(name: let name, operator: let op):
+    case .unsupportedVersionOperator(let name, operator: let op):
       return "'\(name)' version check does not support operator '\(op.trimmedDescription)'"
 
-    case .invalidVersionOperand(name: let name, syntax: let version):
+    case .invalidVersionOperand(let name, syntax: let version):
       return "'\(name)' version check has invalid version '\(version.trimmedDescription)'"
 
     case .emptyVersionComponent(syntax: _):
       return "found empty version component"
 
-    case .compilerVersionOutOfRange(value: let value, upperLimit: let upperLimit, syntax: _):
+    case .compilerVersionOutOfRange(let value, let upperLimit, syntax: _):
       return "compiler version component '\(value)' is not in the allowed range 0...\(upperLimit)"
 
     case .compilerVersionSecondComponentNotWildcard(syntax: _):
@@ -80,10 +80,10 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
     case .canImportTwoParameters(syntax: _):
       return "'canImport' can take only two parameters"
 
-    case .ignoredTrailingComponents(version: let version, syntax: _):
+    case .ignoredTrailingComponents(let version, syntax: _):
       return "trailing components of version '\(version.description)' are ignored"
 
-    case .integerLiteralCondition(syntax: let syntax, replacement: let replacement):
+    case .integerLiteralCondition(let syntax, let replacement):
       return "'\(syntax.trimmedDescription)' is not a valid conditional compilation expression, use '\(replacement)'"
 
     case .likelySimulatorPlatform:
@@ -121,26 +121,26 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
   var syntax: Syntax {
     switch self {
     case .unknownExpression(let syntax),
-      .unhandledFunction(name: _, syntax: let syntax),
-      .requiresUnlabeledArgument(name: _, role: _, syntax: let syntax),
-      .invalidVersionOperand(name: _, syntax: let syntax),
-      .emptyVersionComponent(syntax: let syntax),
-      .compilerVersionOutOfRange(value: _, upperLimit: _, syntax: let syntax),
-      .compilerVersionTooManyComponents(syntax: let syntax),
-      .compilerVersionSecondComponentNotWildcard(syntax: let syntax),
-      .canImportMissingModule(syntax: let syntax),
-      .canImportLabel(syntax: let syntax),
-      .canImportTwoParameters(syntax: let syntax),
-      .ignoredTrailingComponents(version: _, syntax: let syntax),
-      .integerLiteralCondition(syntax: let syntax, replacement: _),
-      .likelySimulatorPlatform(syntax: let syntax),
-      .likelyTargetOS(syntax: let syntax, replacement: _),
-      .endiannessDoesNotMatch(syntax: let syntax, argument: _),
-      .macabiIsMacCatalyst(syntax: let syntax),
-      .expectedModuleName(syntax: let syntax),
-      .badInfixOperator(syntax: let syntax),
-      .badPrefixOperator(syntax: let syntax),
-      .unexpectedDefined(syntax: let syntax, argument: _):
+      .unhandledFunction(name: _, let syntax),
+      .requiresUnlabeledArgument(name: _, role: _, let syntax),
+      .invalidVersionOperand(name: _, let syntax),
+      .emptyVersionComponent(let syntax),
+      .compilerVersionOutOfRange(value: _, upperLimit: _, let syntax),
+      .compilerVersionTooManyComponents(let syntax),
+      .compilerVersionSecondComponentNotWildcard(let syntax),
+      .canImportMissingModule(let syntax),
+      .canImportLabel(let syntax),
+      .canImportTwoParameters(let syntax),
+      .ignoredTrailingComponents(version: _, let syntax),
+      .integerLiteralCondition(let syntax, replacement: _),
+      .likelySimulatorPlatform(let syntax),
+      .likelyTargetOS(let syntax, replacement: _),
+      .endiannessDoesNotMatch(let syntax, argument: _),
+      .macabiIsMacCatalyst(let syntax),
+      .expectedModuleName(let syntax),
+      .badInfixOperator(let syntax),
+      .badPrefixOperator(let syntax),
+      .unexpectedDefined(let syntax, argument: _):
       return Syntax(syntax)
 
     case .unsupportedVersionOperator(name: _, operator: let op):

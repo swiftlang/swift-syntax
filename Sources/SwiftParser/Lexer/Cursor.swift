@@ -176,7 +176,7 @@ extension Lexer.Cursor {
 
     mutating func perform(stateTransition: Lexer.StateTransition, stateAllocator: BumpPtrAllocator) {
       switch stateTransition {
-      case .push(newState: let newState):
+      case .push(let newState):
         if let topState {
           if let stateStack = stateStack {
             let newStateStack = stateAllocator.allocate(State.self, count: stateStack.count + 1)
@@ -197,7 +197,7 @@ extension Lexer.Cursor {
           ),
           stateAllocator: stateAllocator
         )
-      case .replace(newState: let newState):
+      case .replace(let newState):
         topState = newState
       case .pop:
         if let stateStack {
@@ -449,17 +449,17 @@ extension Lexer.Cursor {
       // In this state we lex a single token with the flag set, and then pop the state.
       result = lexNormal(sourceBufferStart: sourceBufferStart, preferRegexOverBinaryOperator: true)
       self.stateStack.perform(stateTransition: .pop, stateAllocator: stateAllocator)
-    case .afterRawStringDelimiter(delimiterLength: let delimiterLength):
+    case .afterRawStringDelimiter(let delimiterLength):
       result = lexAfterRawStringDelimiter(delimiterLength: delimiterLength)
-    case .inStringLiteral(kind: let stringLiteralKind, delimiterLength: let delimiterLength):
+    case .inStringLiteral(kind: let stringLiteralKind, let delimiterLength):
       result = lexInStringLiteral(stringLiteralKind: stringLiteralKind, delimiterLength: delimiterLength)
     case .afterStringLiteral(kind: let stringLiteralKind, isRawString: _):
       result = lexAfterStringLiteral(stringLiteralKind: stringLiteralKind)
     case .afterClosingStringQuote:
       result = lexAfterClosingStringQuote()
-    case .inStringInterpolationStart(stringLiteralKind: let stringLiteralKind):
+    case .inStringInterpolationStart(let stringLiteralKind):
       result = lexInStringInterpolationStart(stringLiteralKind: stringLiteralKind)
-    case .inStringInterpolation(stringLiteralKind: let stringLiteralKind, parenCount: let parenCount):
+    case .inStringInterpolation(let stringLiteralKind, let parenCount):
       result = lexInStringInterpolation(
         stringLiteralKind: stringLiteralKind,
         parenCount: parenCount,
@@ -903,7 +903,7 @@ extension Lexer.Cursor {
 
     case "/":
       // A following comment counts as whitespace, so this token is not right bound.
-      if (self.is(offset: 1, at: "/", "*")) {
+      if self.is(offset: 1, at: "/", "*") {
         return false
       } else {
         return true
@@ -1800,7 +1800,7 @@ extension Lexer.Cursor {
       return .replace(newState: .afterClosingStringQuote)
     case .afterStringLiteral(kind: _, isRawString: false):
       return .pop
-    case .afterRawStringDelimiter(delimiterLength: let delimiterLength):
+    case .afterRawStringDelimiter(let delimiterLength):
       return .replace(newState: .inStringLiteral(kind: kind, delimiterLength: delimiterLength))
     case .normal, .preferRegexOverBinaryOperator, .inStringInterpolation:
       return .push(newState: .inStringLiteral(kind: kind, delimiterLength: 0))
@@ -2173,14 +2173,14 @@ extension Lexer.Cursor {
       case ".":
         return (.period, error: nil)
       case "?":
-        if (leftBound) {
+        if leftBound {
           return (.postfixQuestionMark, error: nil)
         }
         return (.infixQuestionMark, error: nil)
       default:
         break
       }
-    } else if (operEnd.input.baseAddress! - operStart.input.baseAddress! == 2) {
+    } else if operEnd.input.baseAddress! - operStart.input.baseAddress! == 2 {
       switch (operStart.peek(), operStart.peek(at: 1)) {
       case ("-", ">"):  // ->
         return (.arrow, error: nil)

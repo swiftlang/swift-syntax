@@ -13,7 +13,7 @@
 import SwiftSyntax
 import XCTest
 
-fileprivate func cannedVarDecl() -> VariableDeclSyntax {
+private func cannedVarDecl() -> VariableDeclSyntax {
   let identifierPattern = IdentifierPatternSyntax(
     identifier: .identifier("a")
   )

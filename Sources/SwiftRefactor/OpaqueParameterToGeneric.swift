@@ -18,7 +18,7 @@ import SwiftSyntax
 
 /// Describes a "some" parameter that has been rewritten into a generic
 /// parameter.
-fileprivate struct RewrittenSome {
+private struct RewrittenSome {
   let original: SomeOrAnyTypeSyntax
   let genericParam: GenericParameterSyntax
   let genericParamRef: IdentifierTypeSyntax
@@ -37,7 +37,7 @@ fileprivate struct RewrittenSome {
 /// ```swift
 /// func someFunction<T1: Value>(_ input: T1) {}
 /// ```
-fileprivate class SomeParameterRewriter: SyntaxRewriter {
+private class SomeParameterRewriter: SyntaxRewriter {
   var rewrittenSomeParameters: [RewrittenSome] = []
 
   override func visit(_ node: SomeOrAnyTypeSyntax) -> TypeSyntax {

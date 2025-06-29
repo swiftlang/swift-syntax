@@ -16,7 +16,7 @@ public import SwiftDiagnostics
 import SwiftDiagnostics
 #endif
 
-fileprivate let diagnosticDomain: String = "SwiftSyntaxMacros"
+private let diagnosticDomain: String = "SwiftSyntaxMacros"
 
 /// An error during macro expansion that is described by its message.
 ///

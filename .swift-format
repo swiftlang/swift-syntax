@@ -1,20 +1,20 @@
 {
-    "version": 1,
-    "lineLength": 120,
+    "indentConditionalCompilationBlocks": false,
     "indentation": {
         "spaces": 2
     },
     "lineBreakBeforeEachArgument": true,
-    "indentConditionalCompilationBlocks": false,
+    "lineLength": 120,
     "prioritizeKeepingFunctionOutputTogether": true,
     "rules": {
         "AlwaysUseLowerCamelCase": false,
         "AmbiguousTrailingClosureOverload": false,
         "NoBlockComments": false,
+        "NoVoidReturnOnFunctionSignature": true,
         "OrderedImports": true,
+        "ReturnVoidInsteadOfEmptyTuple": true,
         "UseLetInEveryBoundCaseVariable": false,
         "UseSynthesizedInitializer": false,
-        "ReturnVoidInsteadOfEmptyTuple": true,
-        "NoVoidReturnOnFunctionSignature": true,
-    }
+    },
+    "version": 1,
 }

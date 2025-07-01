@@ -8,6 +8,7 @@
 
 add_swift_syntax_library(SwiftLexicalLookup
   IdentifiableSyntax.swift
+  LookupCache.swift
   LookupName.swift
   LookupResult.swift
   SimpleLookupQueries.swift

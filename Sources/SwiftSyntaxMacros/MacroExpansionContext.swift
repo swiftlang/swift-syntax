@@ -33,6 +33,18 @@ public protocol MacroExpansionContext: AnyObject {
   ///   conflict with any other name in a well-formed program.
   func makeUniqueName(_ name: String) -> TokenSyntax
 
+  /// Generate a unique name for use in the macro, incorporating source location information.
+  ///
+  /// - Parameters:
+  ///   - name: The name to use as a basis for the uniquely-generated name,
+  ///     which will appear in the unique name that's produced here.
+  ///   - sourceLocation: Optional source location information to incorporate
+  ///     into the unique name generation for better uniqueness.
+  ///
+  /// - Returns: an identifier token containing a unique name that will not
+  ///   conflict with any other name in a well-formed program.
+  func makeUniqueName(_ name: String, sourceLocation: AbstractSourceLocation?) -> TokenSyntax
+
   /// Produce a diagnostic while expanding the macro.
   func diagnose(_ diagnostic: Diagnostic)
 
@@ -86,6 +98,12 @@ extension MacroExpansionContext {
     of node: some SyntaxProtocol
   ) -> AbstractSourceLocation? {
     return location(of: node, at: .afterLeadingTrivia, filePathMode: .fileID)
+  }
+
+  /// Default implementation of makeUniqueName with source location that
+  /// falls back to the original method for backward compatibility.
+  public func makeUniqueName(_ name: String, sourceLocation: AbstractSourceLocation?) -> TokenSyntax {
+    return makeUniqueName(name)
   }
 
   #if compiler(>=6.0)

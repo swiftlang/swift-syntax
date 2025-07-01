@@ -146,6 +146,11 @@ extension String {
 extension BasicMacroExpansionContext: MacroExpansionContext {
   /// Generate a unique name for use in the macro.
   public func makeUniqueName(_ providedName: String) -> TokenSyntax {
+    return makeUniqueName(providedName, sourceLocation: nil)
+  }
+
+  /// Generate a unique name for use in the macro, incorporating source location information.
+  public func makeUniqueName(_ providedName: String, sourceLocation: AbstractSourceLocation?) -> TokenSyntax {
     // If provided with an empty name, substitute in something.
     let name = providedName.isEmpty ? "__local" : providedName
 
@@ -161,6 +166,14 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
 
     // Mangle the operator for unique macro names.
     resultString += "fMu"
+
+    // If we have source location information, incorporate it into the unique name
+    if let sourceLocation = sourceLocation {
+      // Create a hash from the source location to make it more unique
+      let locationString = "\(sourceLocation.file)_\(sourceLocation.line)_\(sourceLocation.column)"
+      let locationHash = locationString.hashValue
+      resultString += "_\(abs(locationHash) % 10000)"
+    }
 
     // Mangle the index.
     if uniqueIndex > 0 {

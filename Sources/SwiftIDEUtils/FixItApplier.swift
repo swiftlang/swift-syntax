@@ -46,12 +46,12 @@ public enum FixItApplier {
     return self.apply(edits: edits, to: tree)
   }
 
-  /// Apply the given edits to the syntax tree.
+  /// Applies the given edits to the given syntax tree.
   ///
   /// - Parameters:
-  ///   - edits: The edits to apply to the syntax tree
-  ///   - tree: he syntax tree to which the edits should be applied.
-  /// - Returns: A `String` representation of the modified syntax tree after applying the edits.
+  ///   - edits: The edits to apply.
+  ///   - tree: The syntax tree to which the edits should be applied.
+  /// - Returns: A `String` representation of the modified syntax tree.
   public static func apply(
     edits: [SourceEdit],
     to tree: some SyntaxProtocol
@@ -62,17 +62,27 @@ public enum FixItApplier {
     while let edit = edits.first {
       edits = Array(edits.dropFirst())
 
+      // Empty edits do nothing.
+      guard !edit.isEmpty else {
+        continue
+      }
+
       let startIndex = source.utf8.index(source.utf8.startIndex, offsetBy: edit.startUtf8Offset)
       let endIndex = source.utf8.index(source.utf8.startIndex, offsetBy: edit.endUtf8Offset)
 
       source.replaceSubrange(startIndex..<endIndex, with: edit.replacement)
 
-      edits = edits.compactMap { remainingEdit -> SourceEdit? in
-        if remainingEdit.range.overlaps(edit.range) {
+      // Drop any subsequent edits that conflict with one we just applied, and
+      // adjust the range of the rest.
+      for i in edits.indices {
+        let remainingEdit = edits[i]
+
+        guard !remainingEdit.range.overlaps(edit.range) else {
           // The edit overlaps with the previous edit. We can't apply both
-          // without conflicts. Apply the one that's listed first and drop the
-          // later edit.
-          return nil
+          // without conflicts. Drop this one by swapping it for a no-op
+          // edit.
+          edits[i] = SourceEdit()
+          continue
         }
 
         // If the remaining edit starts after or at the end of the edit that we just applied,
@@ -82,10 +92,8 @@ public enum FixItApplier {
           let startPosition = AbsolutePosition(utf8Offset: remainingEdit.startUtf8Offset + shift)
           let endPosition = AbsolutePosition(utf8Offset: remainingEdit.endUtf8Offset + shift)
 
-          return SourceEdit(range: startPosition..<endPosition, replacement: remainingEdit.replacement)
+          edits[i] = SourceEdit(range: startPosition..<endPosition, replacement: remainingEdit.replacement)
         }
-
-        return remainingEdit
       }
     }
 
@@ -100,5 +108,17 @@ private extension SourceEdit {
 
   var endUtf8Offset: Int {
     return range.upperBound.utf8Offset
+  }
+
+  var isEmpty: Bool {
+    self.range.isEmpty && self.replacement.isEmpty
+  }
+
+  init() {
+    self = SourceEdit(
+      range: AbsolutePosition(utf8Offset: 0)..<AbsolutePosition(utf8Offset: 0),
+      replacement: []
+    )
+    precondition(self.isEmpty)
   }
 }

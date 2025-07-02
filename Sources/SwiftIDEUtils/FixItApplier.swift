@@ -59,29 +59,37 @@ public enum FixItApplier {
     var edits = edits
     var source = tree.description
 
-    while let edit = edits.first {
-      edits = Array(edits.dropFirst())
+    for var editIndex in edits.indices {
+      let edit = edits[editIndex]
 
       // Empty edits do nothing.
       guard !edit.isEmpty else {
         continue
       }
 
-      let startIndex = source.utf8.index(source.utf8.startIndex, offsetBy: edit.startUtf8Offset)
-      let endIndex = source.utf8.index(source.utf8.startIndex, offsetBy: edit.endUtf8Offset)
+      do {
+        let utf8 = source.utf8
+        let startIndex = utf8.index(utf8.startIndex, offsetBy: edit.startUtf8Offset)
+        let endIndex = utf8.index(utf8.startIndex, offsetBy: edit.endUtf8Offset)
 
-      source.replaceSubrange(startIndex..<endIndex, with: edit.replacement)
+        source.replaceSubrange(startIndex..<endIndex, with: edit.replacement)
+      }
 
       // Drop any subsequent edits that conflict with one we just applied, and
       // adjust the range of the rest.
-      for i in edits.indices {
-        let remainingEdit = edits[i]
+      while edits.formIndex(after: &editIndex) != edits.endIndex {
+        let remainingEdit = edits[editIndex]
+
+        // Empty edits do nothing.
+        guard !remainingEdit.isEmpty else {
+          continue
+        }
 
         guard !remainingEdit.range.overlaps(edit.range) else {
           // The edit overlaps with the previous edit. We can't apply both
           // without conflicts. Drop this one by swapping it for a no-op
           // edit.
-          edits[i] = SourceEdit()
+          edits[editIndex] = SourceEdit()
           continue
         }
 
@@ -92,12 +100,19 @@ public enum FixItApplier {
           let startPosition = AbsolutePosition(utf8Offset: remainingEdit.startUtf8Offset + shift)
           let endPosition = AbsolutePosition(utf8Offset: remainingEdit.endUtf8Offset + shift)
 
-          edits[i] = SourceEdit(range: startPosition..<endPosition, replacement: remainingEdit.replacement)
+          edits[editIndex] = SourceEdit(range: startPosition..<endPosition, replacement: remainingEdit.replacement)
         }
       }
     }
 
     return source
+  }
+}
+
+private extension Collection {
+  func formIndex(after index: inout Index) -> Index {
+    self.formIndex(after: &index) as Void
+    return index
   }
 }
 

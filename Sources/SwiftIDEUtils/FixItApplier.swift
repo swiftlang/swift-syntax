@@ -103,7 +103,15 @@ public enum FixItApplier {
             return edit == remainingEdit
           }
 
-          return remainingEdit.range.overlaps(edit.range)
+          // Edits conflict in the following cases:
+          //
+          // - Their ranges have a common element.
+          // - One's range is empty and its lower bound is strictly within the
+          //   other's range. So 0..<2 also conflicts with 1..<1, but not with
+          //   0..<0 or 2..<2.
+          //
+          return edit.endUtf8Offset > remainingEdit.startUtf8Offset
+            && edit.startUtf8Offset < remainingEdit.endUtf8Offset
         }
 
         guard !shouldDropRemainingEdit() else {

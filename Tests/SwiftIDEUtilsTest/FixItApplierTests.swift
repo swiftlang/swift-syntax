@@ -232,9 +232,8 @@ class FixItApplierApplyEditsTests: XCTestCase {
         .init(range: 0..<5, replacement: "_"),  // Replacement
         .init(range: 2..<2, replacement: "a"),  // Insertion
       ],
-      // FIXME: This behavior where these edits are not considered overlapping doesn't feel desirable
       outputs: [
-        .init(oneOf: "_x = 1", "_ a= 1")
+        .init(oneOf: "_ = 1", "vaar x = 1")
       ]
     )
   }

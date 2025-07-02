@@ -27,12 +27,15 @@ public enum FixItApplier {
   ///   - filterByMessages: An optional array of message strings to filter which Fix-Its to apply.
   ///     If `nil`, the first Fix-It from each diagnostic is applied.
   ///   - tree: The syntax tree to which the Fix-Its will be applied.
+  ///   - allowDuplicateInsertions: Whether to apply duplicate insertions.
+  ///     Defaults to `true`.
   ///
   /// - Returns: A `String` representation of the modified syntax tree after applying the Fix-Its.
   public static func applyFixes(
     from diagnostics: [Diagnostic],
     filterByMessages messages: [String]?,
-    to tree: some SyntaxProtocol
+    to tree: some SyntaxProtocol,
+    allowDuplicateInsertions: Bool = true
   ) -> String {
     let messages = messages ?? diagnostics.compactMap { $0.fixIts.first?.message.message }
 
@@ -43,7 +46,7 @@ public enum FixItApplier {
       .filter { messages.contains($0.message.message) }
       .flatMap(\.edits)
 
-    return self.apply(edits: edits, to: tree)
+    return self.apply(edits: edits, to: tree, allowDuplicateInsertions: allowDuplicateInsertions)
   }
 
   /// Applies the given edits to the given syntax tree.
@@ -51,10 +54,14 @@ public enum FixItApplier {
   /// - Parameters:
   ///   - edits: The edits to apply.
   ///   - tree: The syntax tree to which the edits should be applied.
+  ///   - allowDuplicateInsertions: Whether to apply duplicate insertions.
+  ///     Defaults to `true`.
+  ///
   /// - Returns: A `String` representation of the modified syntax tree.
   public static func apply(
     edits: [SourceEdit],
-    to tree: some SyntaxProtocol
+    to tree: some SyntaxProtocol,
+    allowDuplicateInsertions: Bool = true
   ) -> String {
     var edits = edits
     var source = tree.description
@@ -85,10 +92,22 @@ public enum FixItApplier {
           continue
         }
 
-        guard !remainingEdit.range.overlaps(edit.range) else {
-          // The edit overlaps with the previous edit. We can't apply both
-          // without conflicts. Drop this one by swapping it for a no-op
-          // edit.
+        func shouldDropRemainingEdit() -> Bool {
+          // Insertions never conflict between themselves, unless we were asked
+          // to drop duplicate insertions.
+          if edit.range.isEmpty && remainingEdit.range.isEmpty {
+            if allowDuplicateInsertions {
+              return false
+            }
+
+            return edit == remainingEdit
+          }
+
+          return remainingEdit.range.overlaps(edit.range)
+        }
+
+        guard !shouldDropRemainingEdit() else {
+          // Drop the edit by swapping it for an empty one.
           edits[editIndex] = SourceEdit()
           continue
         }

@@ -166,7 +166,9 @@ class FixItApplierApplyEditsTests: XCTestCase {
         .init(range: 3..<7, replacement: "cd"),
       ],
       // The second edit is skipped.
-      possibleOutputs: ["aboo = 1", "varcd = 1"]
+      outputs: [
+        .init(oneOf: "aboo = 1", "varcd = 1")
+      ]
     )
   }
 
@@ -180,7 +182,9 @@ class FixItApplierApplyEditsTests: XCTestCase {
         .init(range: 0..<5, replacement: "_"),
         .init(range: 0..<3, replacement: "let"),
       ],
-      possibleOutputs: ["_ = 11", "let x = 11"]
+      outputs: [
+        .init(oneOf: "_ = 11", "let x = 11")
+      ]
     )
   }
 
@@ -188,11 +192,26 @@ class FixItApplierApplyEditsTests: XCTestCase {
     assertAppliedEdits(
       to: "x = 1",
       edits: [
+        .init(range: 1..<1, replacement: "y"),
+        .init(range: 1..<1, replacement: "z"),
+      ],
+      outputs: [
+        .init(oneOf: "xyz = 1", "xzy = 1")
+      ]
+    )
+
+    assertAppliedEdits(
+      to: "x = 1",
+      edits: [
         .init(range: 0..<0, replacement: "var "),
         .init(range: 0..<0, replacement: "var "),
+        .init(range: 4..<5, replacement: "2"),
         .init(range: 0..<0, replacement: "var "),
       ],
-      output: "var var var x = 1"
+      outputs: [
+        .init(deterministic: "var var var x = 2", allowDuplicateInsertions: true),
+        .init(deterministic: "var x = 2", allowDuplicateInsertions: false),
+      ]
     )
   }
 
@@ -214,47 +233,105 @@ class FixItApplierApplyEditsTests: XCTestCase {
         .init(range: 2..<2, replacement: "a"),  // Insertion
       ],
       // FIXME: This behavior where these edits are not considered overlapping doesn't feel desirable
-      possibleOutputs: ["_x = 1", "_ a= 1"]
+      outputs: [
+        .init(oneOf: "_x = 1", "_ a= 1")
+      ]
     )
   }
 }
 
-/// Asserts that at least one element in `possibleOutputs` matches the result
-/// of applying an array of edits to `input`, for all permutations of `edits`.
+/// Represents an output expectation.
+private struct OutputExpectation {
+  var possibleOutputs: [String]
+  var allowDuplicateInsertions: Bool?
+  var line: UInt
+
+  /// Create a deterministic output expectation for the given value of
+  /// `allowDuplicateInsertions`. If `allowDuplicateInsertions` is `nil`,
+  /// the expectation holds for both `true` and `false`.
+  init(
+    deterministic output: String,
+    allowDuplicateInsertions: Bool? = nil,
+    line: UInt = #line
+  ) {
+    self.possibleOutputs = [output]
+    self.allowDuplicateInsertions = allowDuplicateInsertions
+    self.line = line
+  }
+
+  /// Create a "one of the given possible outputs" expectation for the given
+  /// value of `allowDuplicateInsertions`. If `allowDuplicateInsertions` is
+  /// `nil`, the expectation holds for both `true` and `false`.
+  init(
+    oneOf possibleOutputs: String...,
+    allowDuplicateInsertions: Bool? = nil,
+    line: UInt = #line
+  ) {
+    self.possibleOutputs = possibleOutputs
+    self.allowDuplicateInsertions = allowDuplicateInsertions
+    self.line = line
+  }
+}
+
+/// Asserts that the given outputs match the result of applying an array of
+/// edits to `input`, for all permutations of `edits`.
 private func assertAppliedEdits(
   to tree: SourceFileSyntax,
   edits: [SourceEdit],
-  possibleOutputs: [String],
-  line: UInt = #line
+  outputs: [OutputExpectation]
 ) {
-  precondition(!possibleOutputs.isEmpty)
+  precondition(!outputs.isEmpty)
 
-  var indices = Array(edits.indices)
-  while true {
-    let editsPermutation = indices.map { edits[$0] }
+  NEXT_OUTPUT: for output in outputs {
+    let allowDuplicateInsertionsValues =
+      if let value = output.allowDuplicateInsertions {
+        [value]
+      } else {
+        [true, false]
+      }
 
-    let actualOutput = FixItApplier.apply(edits: editsPermutation, to: tree)
-    guard possibleOutputs.contains(actualOutput) else {
-      XCTFail(
-        """
-        Actual output \"\(actualOutput)\" does not match one of \(possibleOutputs)
-        Edits:
-          \(editsPermutation)
-        """,
-        line: line
-      )
-      return
-    }
+    let possibleOutputs = output.possibleOutputs
 
-    let keepGoing = indices.nextPermutation()
-    guard keepGoing else {
-      break
+    // Check this output against all permutations of edits.
+    var indices = Array(edits.indices)
+    while true {
+      let editsPermutation = indices.map { edits[$0] }
+
+      for allowDuplicateInsertionsValue in allowDuplicateInsertionsValues {
+        let actualOutput = FixItApplier.apply(
+          edits: editsPermutation,
+          to: tree,
+          allowDuplicateInsertions: allowDuplicateInsertionsValue
+        )
+
+        guard possibleOutputs.contains(actualOutput) else {
+          XCTFail(
+            """
+            Actual output \"\(actualOutput)\" does not match one of \(possibleOutputs)
+            Edits:
+              \(editsPermutation)
+            allowDuplicateInsertions:
+              \(allowDuplicateInsertionsValue)
+            """,
+            line: output.line
+          )
+
+          // Fail once for all permutations to avoid excessive logging.
+          continue NEXT_OUTPUT
+        }
+      }
+
+      let keepGoing = indices.nextPermutation()
+      guard keepGoing else {
+        break
+      }
     }
   }
 }
 
 /// Asserts that `output` matches the result of applying an array of edits to
-/// `input`, for all permutations of `edits`.
+/// `input`, for all permutations of `edits` and for `allowDuplicateInsertions`
+/// both `true` and `false`.
 private func assertAppliedEdits(
   to tree: SourceFileSyntax,
   edits: [SourceEdit],
@@ -264,8 +341,9 @@ private func assertAppliedEdits(
   assertAppliedEdits(
     to: tree,
     edits: edits,
-    possibleOutputs: [output],
-    line: line
+    outputs: [
+      .init(deterministic: output, allowDuplicateInsertions: nil, line: line)
+    ]
   )
 }
 

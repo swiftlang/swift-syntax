@@ -32,7 +32,7 @@ public enum FixItApplier {
   public static func applyFixes(
     from diagnostics: [Diagnostic],
     filterByMessages messages: [String]?,
-    to tree: any SyntaxProtocol
+    to tree: some SyntaxProtocol
   ) -> String {
     let messages = messages ?? diagnostics.compactMap { $0.fixIts.first?.message.message }
 
@@ -54,7 +54,7 @@ public enum FixItApplier {
   /// - Returns: A `String` representation of the modified syntax tree after applying the edits.
   public static func apply(
     edits: [SourceEdit],
-    to tree: any SyntaxProtocol
+    to tree: some SyntaxProtocol
   ) -> String {
     var edits = edits
     var source = tree.description

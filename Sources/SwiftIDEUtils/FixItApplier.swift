@@ -68,7 +68,7 @@ public enum FixItApplier {
       source.replaceSubrange(startIndex..<endIndex, with: edit.replacement)
 
       edits = edits.compactMap { remainingEdit -> SourceEdit? in
-        if remainingEdit.replacementRange.overlaps(edit.replacementRange) {
+        if remainingEdit.range.overlaps(edit.range) {
           // The edit overlaps with the previous edit. We can't apply both
           // without conflicts. Apply the one that's listed first and drop the
           // later edit.
@@ -78,12 +78,10 @@ public enum FixItApplier {
         // If the remaining edit starts after or at the end of the edit that we just applied,
         // shift it by the current edit's difference in length.
         if edit.endUtf8Offset <= remainingEdit.startUtf8Offset {
-          let startPosition = AbsolutePosition(
-            utf8Offset: remainingEdit.startUtf8Offset - edit.replacementRange.count + edit.replacementLength.utf8Length
-          )
-          let endPosition = AbsolutePosition(
-            utf8Offset: remainingEdit.endUtf8Offset - edit.replacementRange.count + edit.replacementLength.utf8Length
-          )
+          let shift = edit.replacementLength.utf8Length - edit.range.count
+          let startPosition = AbsolutePosition(utf8Offset: remainingEdit.startUtf8Offset + shift)
+          let endPosition = AbsolutePosition(utf8Offset: remainingEdit.endUtf8Offset + shift)
+
           return SourceEdit(range: startPosition..<endPosition, replacement: remainingEdit.replacement)
         }
 
@@ -102,9 +100,5 @@ private extension SourceEdit {
 
   var endUtf8Offset: Int {
     return range.upperBound.utf8Offset
-  }
-
-  var replacementRange: Range<Int> {
-    return startUtf8Offset..<endUtf8Offset
   }
 }

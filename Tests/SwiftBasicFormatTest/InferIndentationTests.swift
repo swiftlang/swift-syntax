@@ -15,7 +15,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 import XCTest
 
-fileprivate func assertIndentation(
+private func assertIndentation(
   of sourceFile: SourceFileSyntax,
   _ expected: Trivia?,
   file: StaticString = #filePath,

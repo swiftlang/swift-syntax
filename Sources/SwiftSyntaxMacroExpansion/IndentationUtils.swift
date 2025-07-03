@@ -61,7 +61,7 @@ extension String {
 
 // MARK: SyntaxProtocol.stripp
 
-fileprivate class IndentationStripper: SyntaxRewriter {
+private class IndentationStripper: SyntaxRewriter {
   override func visit(_ token: TokenSyntax) -> TokenSyntax {
     if token.leadingTrivia.contains(where: \.isNewline) || token.trailingTrivia.contains(where: \.isNewline) {
       return

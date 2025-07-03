@@ -18,7 +18,7 @@
 
 // MARK: - Check multiline string literal indentation
 
-fileprivate class StringLiteralExpressionIndentationChecker {
+private class StringLiteralExpressionIndentationChecker {
   // MARK: Entry
 
   init(expectedIndentation: SyntaxText, arena: RawSyntaxArena) {

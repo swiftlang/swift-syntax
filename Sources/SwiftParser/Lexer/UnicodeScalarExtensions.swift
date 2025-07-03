@@ -74,7 +74,7 @@ extension Unicode.Scalar {
   }
 
   var isValidIdentifierStartCodePoint: Bool {
-    if (self.isASCII) {
+    if self.isASCII {
       return self.isAsciiIdentifierStart
     }
     guard self.isValidIdentifierContinuationCodePoint else {
@@ -84,8 +84,8 @@ extension Unicode.Scalar {
     // N1518: Recommendations for extended identifier characters for C and C++
     // Proposed Annex X.2: Ranges of characters disallowed initially
     let c = self.value
-    if ((c >= 0x0300 && c <= 0x036F) || (c >= 0x1DC0 && c <= 0x1DFF) || (c >= 0x20D0 && c <= 0x20FF)
-      || (c >= 0xFE20 && c <= 0xFE2F))
+    if (c >= 0x0300 && c <= 0x036F) || (c >= 0x1DC0 && c <= 0x1DFF) || (c >= 0x20D0 && c <= 0x20FF)
+      || (c >= 0xFE20 && c <= 0xFE2F)
     {
       return false
     }
@@ -183,7 +183,7 @@ extension Unicode.Scalar {
       return nil
     }
 
-    if (curByte < 0x80) {
+    if curByte < 0x80 {
       return Unicode.Scalar(curByte)
     }
 
@@ -216,7 +216,7 @@ extension Unicode.Scalar {
       }
       // If the high bit isn't set or the second bit isn't clear, then this is not
       // a continuation byte!
-      if (curByte < 0x80 || curByte >= 0xC0) {
+      if curByte < 0x80 || curByte >= 0xC0 {
         return nil
       }
 

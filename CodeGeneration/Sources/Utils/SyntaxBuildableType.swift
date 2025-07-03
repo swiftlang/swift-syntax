@@ -122,7 +122,7 @@ public struct SyntaxBuildableType: Hashable {
   /// without any question marks attached.
   public var syntaxBaseName: TypeSyntax {
     switch kind {
-    case .node(kind: let kind):
+    case .node(let kind):
       return kind.syntaxType
     case .token:
       return "TokenSyntax"
@@ -150,7 +150,7 @@ public struct SyntaxBuildableType: Hashable {
   /// that can be used to build the collection.
   public var resultBuilderType: TypeSyntax {
     switch kind {
-    case .node(kind: let kind):
+    case .node(let kind):
       return TypeSyntax("\(raw: kind.uppercasedFirstWordRawValue)Builder")
     case .token:
       preconditionFailure("Tokens cannot be constructed using result builders")

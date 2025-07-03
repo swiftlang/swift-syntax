@@ -129,11 +129,11 @@ public class Child: NodeChoiceConvertible {
 
   public var syntaxNodeKind: SyntaxNodeKind {
     switch kind {
-    case .node(kind: let kind):
+    case .node(let kind):
       return kind
     case .nodeChoices:
       return .syntax
-    case .collection(kind: let kind, _, _, _, _):
+    case .collection(let kind, _, _, _, _):
       return kind
     case .token:
       return .token
@@ -284,7 +284,7 @@ public class Child: NodeChoiceConvertible {
       return choices.isEmpty
     case .node(let kind):
       return kind.isBase
-    case .collection(kind: let kind, _, _, _, _):
+    case .collection(let kind, _, _, _, _):
       return kind.isBase
     case .token:
       return false

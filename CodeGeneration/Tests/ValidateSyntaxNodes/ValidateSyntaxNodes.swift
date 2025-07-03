@@ -13,7 +13,7 @@
 import SyntaxSupport
 import XCTest
 
-fileprivate func assertNoFailures(
+private func assertNoFailures(
   _ failures: [ValidationFailure],
   message: String,
   file: StaticString = #filePath,
@@ -34,7 +34,7 @@ fileprivate func assertNoFailures(
   XCTFail(message, file: file, line: line)
 }
 
-fileprivate func assertFailuresMatchXFails(
+private func assertFailuresMatchXFails(
   _ failures: [ValidationFailure],
   expectedFailures: [ValidationFailure],
   file: StaticString = #filePath,

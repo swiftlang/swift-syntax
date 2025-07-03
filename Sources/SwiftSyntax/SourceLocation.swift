@@ -103,7 +103,7 @@ public struct SourceRange: Hashable, Codable, Sendable {
   }
 }
 
-fileprivate struct SourceLocationDirectiveArguments {
+private struct SourceLocationDirectiveArguments {
   enum Error: Swift.Error, CustomStringConvertible {
     case nonDecimalLineNumber(TokenSyntax)
     case stringInterpolationInFileName(SimpleStringLiteralExprSyntax)
@@ -685,7 +685,7 @@ private func computeLines(tree: Syntax) -> SourceLineTable {
 }
 
 /// Compute ``SourceLineTable`` from a ``SyntaxText``.
-fileprivate func computeLines(text: SyntaxText) -> SourceLineTable {
+private func computeLines(text: SyntaxText) -> SourceLineTable {
   var lineEnds: [AbsolutePosition] = []
   let endPos = text.forEachEndOfLine(position: .startOfFile) { pos in
     lineEnds.append(pos)

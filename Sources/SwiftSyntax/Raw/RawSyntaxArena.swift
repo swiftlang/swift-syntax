@@ -271,7 +271,7 @@ struct RawSyntaxArenaRef: Hashable, @unchecked Sendable {
 
   /// Returns the ``RawSyntaxArena``
   private var value: RawSyntaxArena {
-    get { self._value.takeUnretainedValue() }
+    self._value.takeUnretainedValue()
   }
 
   /// Assuming that this references a `ParsingRawSyntaxArena`,

@@ -29,11 +29,11 @@ extension Child {
   public var buildableType: SyntaxBuildableType {
     let buildableKind: SyntaxOrTokenNodeKind
     switch kind {
-    case .node(kind: let kind):
+    case .node(let kind):
       buildableKind = .node(kind: kind)
     case .nodeChoices:
       buildableKind = .node(kind: .syntax)
-    case .collection(kind: let kind, _, _, _, _):
+    case .collection(let kind, _, _, _, _):
       buildableKind = .node(kind: kind)
     case .token:
       buildableKind = .token(self.tokenKind!)

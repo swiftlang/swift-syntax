@@ -53,7 +53,7 @@ extension TokenConsumer {
     }
 
     // 'repeat' is the start of a pack expansion expression.
-    if (self.at(.keyword(.repeat))) {
+    if self.at(.keyword(.repeat)) {
       // FIXME: 'repeat' followed by '{' could still be a pack
       // expansion, but we need to do more lookahead to figure out
       // whether the '{' is the start of a closure expression or a
@@ -2551,7 +2551,7 @@ extension Parser.Lookahead {
     // Consume attributes.
     var lookahead = self.lookahead()
     var attributesProgress = LoopProgressCondition()
-    while let _ = lookahead.consume(if: .atSign), lookahead.hasProgressed(&attributesProgress) {
+    while lookahead.consume(if: .atSign) != nil, lookahead.hasProgressed(&attributesProgress) {
       guard lookahead.at(.identifier) else {
         break
       }

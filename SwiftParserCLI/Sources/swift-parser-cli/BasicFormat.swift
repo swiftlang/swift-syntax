@@ -23,7 +23,7 @@ struct BasicFormat: ParsableCommand, ParseCommand {
 
     var description: String {
       switch self {
-      case .unknownSyntaxNodeType(nodeType: let nodeType, parsableTypes: let parsableTypes):
+      case .unknownSyntaxNodeType(let nodeType, let parsableTypes):
         return """
           '\(nodeType)' is not a SwiftSyntax node type that conforms to SyntaxParsable. Possible options are:
           \(parsableTypes.map {" - \($0)" }.joined(separator: "\n"))

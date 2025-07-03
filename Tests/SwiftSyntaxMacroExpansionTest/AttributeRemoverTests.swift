@@ -16,7 +16,7 @@ import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 
-fileprivate func assertSyntaxRemovingTestAttributes(
+private func assertSyntaxRemovingTestAttributes(
   _ originalSource: String,
   reduction expectedReducedSource: String,
   file: StaticString = #filePath,

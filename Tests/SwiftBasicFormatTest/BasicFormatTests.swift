@@ -17,7 +17,7 @@ import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 
-fileprivate func assertFormatted<T: SyntaxProtocol>(
+private func assertFormatted<T: SyntaxProtocol>(
   tree: T,
   expected: String,
   using format: BasicFormat = BasicFormat(indentationWidth: .spaces(4)),
@@ -27,7 +27,7 @@ fileprivate func assertFormatted<T: SyntaxProtocol>(
   assertStringsEqualWithDiff(tree.formatted(using: format).description, expected, file: file, line: line)
 }
 
-fileprivate func assertFormatted(
+private func assertFormatted(
   source: String,
   expected: String,
   using format: BasicFormat = BasicFormat(indentationWidth: .spaces(4)),
@@ -43,7 +43,7 @@ fileprivate func assertFormatted(
   )
 }
 
-fileprivate func assertFormattingRoundTrips(
+private func assertFormattingRoundTrips(
   _ source: String,
   using format: BasicFormat = BasicFormat(indentationWidth: .spaces(4)),
   file: StaticString = #filePath,

@@ -14,7 +14,7 @@ import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 
-fileprivate func intElement(_ int: Int) -> ArrayElementSyntax {
+private func intElement(_ int: Int) -> ArrayElementSyntax {
   let literal = TokenSyntax.integerLiteral("\(int)")
   return ArrayElementSyntax(
     expression: IntegerLiteralExprSyntax(literal: literal),
@@ -22,7 +22,7 @@ fileprivate func intElement(_ int: Int) -> ArrayElementSyntax {
   )
 }
 
-fileprivate func assertSyntaxCollectionManipulation(
+private func assertSyntaxCollectionManipulation(
   initialElements: [Int],
   transformation: (_ array: inout ArrayExprSyntax) -> Void,
   expectedElements: [Int],

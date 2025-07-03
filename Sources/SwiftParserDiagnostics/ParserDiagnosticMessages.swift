@@ -233,6 +233,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var subscriptsCannotHaveNames: Self {
     .init("subscripts cannot have a name")
   }
+  public static var submoduleCannotBeImportedUsingModuleSelector: Self {
+    .init("submodule cannot be imported using module selector")
+  }
   public static var tooManyClosingPoundDelimiters: Self {
     .init("too many '#' characters in closing delimiter")
   }

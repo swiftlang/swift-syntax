@@ -1264,6 +1264,40 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return .visitChildren
   }
 
+  public override func visit(_ node: ImportPathComponentSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if let colonColon = node.unexpectedAfterTrailingPeriod?.first?.as(TokenSyntax.self),
+      colonColon.tokenKind == .colonColon,
+      colonColon.isPresent,
+      let trailingPeriod = node.trailingPeriod,
+      trailingPeriod.tokenKind == .period,
+      trailingPeriod.isMissing
+    {
+      addDiagnostic(
+        colonColon,
+        .submoduleCannotBeImportedUsingModuleSelector,
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [colonColon], replacements: [trailingPeriod]),
+            changes: [
+              .makeMissing(colonColon),
+              .makePresent(trailingPeriod),
+            ]
+          )
+        ],
+        handledNodes: [
+          colonColon.id,
+          trailingPeriod.id,
+        ]
+      )
+    }
+
+    return .visitChildren
+  }
+
   public override func visit(_ node: InitializerClauseSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

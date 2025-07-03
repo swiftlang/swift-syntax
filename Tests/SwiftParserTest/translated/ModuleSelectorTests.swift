@@ -22,13 +22,70 @@ final class ModuleSelectorTests: ParserTestCase {
   }
 
   func testModuleSelectorImports() {
-    XCTExpectFailure("imports not yet implemented")
+    assertParse(
+      """
+      import struct ModuleSelectorTestingKit::A
+      """,
+      substructure: ImportDeclSyntax(
+        importKindSpecifier: .keyword(.struct),
+        path: [
+          ImportPathComponentSyntax(
+            name: .identifier("ModuleSelectorTestingKit"),
+            trailingPeriod: .colonColonToken()
+          ),
+          ImportPathComponentSyntax(
+            name: .identifier("A")
+          ),
+        ]
+      )
+    )
 
     assertParse(
       """
-      import ctypes::bits   // FIXME: ban using :: with submodules?
-      import struct ModuleSelectorTestingKit::A
+      import struct 1️⃣_::A
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'_' cannot be used as an identifier here")
+      ]
+    )
+
+    assertParse(
       """
+      import struct ModuleSelectorTestingKit::1️⃣Submodule::A
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'Submodule::' in import")
+      ]
+    )
+
+    assertParse(
+      """
+      import struct ModuleSelectorTestingKit.Submodule1️⃣::A
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "submodule cannot be imported using module selector",
+          fixIts: ["replace '::' with '.'"]
+        )
+      ],
+      fixedSource: """
+        import struct ModuleSelectorTestingKit.Submodule.A
+        """
+    )
+
+    assertParse(
+      """
+      import ctypes1️⃣::bits
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "submodule cannot be imported using module selector",
+          fixIts: ["replace '::' with '.'"]
+        )
+      ],
+      fixedSource: """
+        import ctypes.bits
+        """
     )
   }
 

@@ -28,7 +28,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "trailingPeriod",
-        kind: .token(choices: [.token(.period)]),
+        kind: .token(choices: [.token(.period), .token(.colonColon)]),
         isOptional: true
       ),
     ],

@@ -2378,6 +2378,58 @@ extension ImportPathComponentSyntax {
   }
 }
 
+extension ImportPathComponentSyntax {
+  @_spi(Diagnostics)
+  public enum TrailingPeriodOptions: TokenSpecSet {
+    case period
+    case colonColon
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.period):
+        self = .period
+      case TokenSpec(.colonColon):
+        self = .colonColon
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.period):
+        self = .period
+      case TokenSpec(.colonColon):
+        self = .colonColon
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .period:
+        return .period
+      case .colonColon:
+        return .colonColon
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .period:
+        return .periodToken()
+      case .colonColon:
+        return .colonColonToken()
+      }
+    }
+  }
+}
+
 extension InitializerDeclSyntax {
   @_spi(Diagnostics)
   public enum OptionalMarkOptions: TokenSpecSet {

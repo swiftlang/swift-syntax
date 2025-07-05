@@ -16,13 +16,20 @@ import SyntaxSupport
 import Utils
 
 let syntaxAnyVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
+  DeclSyntax(
+    """
+    /// An instance of `ThrowingSyntaxAnyVisitor` that nevers throws.
+    public typealias SyntaxAnyVisitor = ThrowingSyntaxAnyVisitor<Never>
+    """
+  )
+
   try! ClassDeclSyntax(
     """
-    /// A `SyntaxVisitor` that can visit the nodes as generic ``Syntax`` values.
+    /// A `ThrowingSyntaxVisitor` that can visit the nodes as generic ``Syntax`` values.
     ///
-    /// This subclass of `SyntaxVisitor` is slower than the type-specific visitation
-    /// of `SyntaxVisitor`. Use `SyntaxAnyVisitor` if the `visitAny(_)` function
-    /// would be useful to have, otherwise inherit from `SyntaxVisitor`.
+    /// This subclass of `ThrowingSyntaxVisitor` is slower than the type-specific visitation
+    /// of `ThrowingSyntaxVisitor`. Use `ThrowingSyntaxAnyVisitor` if the `visitAny(_)` function
+    /// would be useful to have, otherwise inherit from `ThrowingSyntaxVisitor`.
     ///
     /// This works by overriding the type-specific visit function that delegate to
     /// `visitAny(_)`. A subclass that provides a custom type-specific visit
@@ -42,12 +49,12 @@ let syntaxAnyVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     ///   }
     /// }
     /// ```
-    open class SyntaxAnyVisitor: SyntaxVisitor
+    open class ThrowingSyntaxAnyVisitor<E: Error>: ThrowingSyntaxVisitor<E>
     """
   ) {
     DeclSyntax(
       """
-      open func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
+      open func visitAny(_ node: Syntax) throws(E) -> SyntaxVisitorContinueKind {
         return .visitChildren
       }
       """
@@ -57,7 +64,7 @@ let syntaxAnyVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
       /// The function called after visiting the node and its descendants.
       ///   - node: the node we just finished visiting.
-      open func visitAnyPost(_ node: Syntax) {}
+      open func visitAnyPost(_ node: Syntax) throws(E) {}
       """
     )
 
@@ -65,16 +72,16 @@ let syntaxAnyVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       """
       // MARK: Override type specific visit methods
 
-      override open func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
-        return visitAny(token._syntaxNode)
+      override open func visit(_ token: TokenSyntax) throws(E) -> SyntaxVisitorContinueKind {
+        return try visitAny(token._syntaxNode)
       }
       """
     )
 
     DeclSyntax(
       """
-      override open func visitPost(_ node: TokenSyntax) {
-        visitAnyPost(node._syntaxNode)
+      override open func visitPost(_ node: TokenSyntax) throws(E) {
+        try visitAnyPost(node._syntaxNode)
       }
       """
     )
@@ -83,8 +90,8 @@ let syntaxAnyVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         \(node.apiAttributes())\
-        override open func visit(_ node: \(node.kind.syntaxType)) -> SyntaxVisitorContinueKind {
-          return visitAny(node._syntaxNode)
+        override open func visit(_ node: \(node.kind.syntaxType)) throws(E) -> SyntaxVisitorContinueKind {
+          return try visitAny(node._syntaxNode)
         }
         """
       )
@@ -92,8 +99,8 @@ let syntaxAnyVisitorFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       DeclSyntax(
         """
         \(node.apiAttributes())\
-        override open func visitPost(_ node: \(node.kind.syntaxType)) {
-          visitAnyPost(node._syntaxNode)
+        override open func visitPost(_ node: \(node.kind.syntaxType)) throws(E) {
+          try visitAnyPost(node._syntaxNode)
         }
         """
       )

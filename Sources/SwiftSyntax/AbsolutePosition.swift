@@ -21,11 +21,17 @@ public struct AbsolutePosition: Comparable, Hashable, Sendable {
     self.utf8Offset = utf8Offset
   }
 
-  public func advanced(by offset: Int) -> AbsolutePosition {
-    return AbsolutePosition(utf8Offset: self.utf8Offset + offset)
-  }
-
   public static func < (lhs: AbsolutePosition, rhs: AbsolutePosition) -> Bool {
     return lhs.utf8Offset < rhs.utf8Offset
+  }
+}
+
+extension AbsolutePosition: Strideable {
+  public func advanced(by offset: Int) -> AbsolutePosition {
+    AbsolutePosition(utf8Offset: self.utf8Offset + offset)
+  }
+
+  public func distance(to other: AbsolutePosition) -> Int {
+    self.utf8Offset.distance(to: other.utf8Offset)
   }
 }

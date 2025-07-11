@@ -1821,17 +1821,15 @@ open class SyntaxVisitor {
   open func visitPost(_ node: InitializerDeclSyntax) {
   }
 
-  /// Visiting `InlineArrayTypeSyntax` specifically.
+  /// Visiting ``InlineArrayTypeSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: InlineArrayTypeSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting `InlineArrayTypeSyntax` and its descendants.
+  /// The function called after visiting ``InlineArrayTypeSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  @_spi(ExperimentalLanguageFeatures)
   open func visitPost(_ node: InlineArrayTypeSyntax) {
   }
 

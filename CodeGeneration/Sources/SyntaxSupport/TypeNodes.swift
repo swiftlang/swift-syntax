@@ -313,7 +313,6 @@ public let TYPE_NODES: [Node] = [
   Node(
     kind: .inlineArrayType,
     base: .type,
-    experimentalFeature: .inlineArrayTypeSugar,
     nameForDiagnostics: "inline array type",
     documentation: "An inline array type `[3 of Int]`, sugar for `InlineArray<3, Int>`.",
     children: [

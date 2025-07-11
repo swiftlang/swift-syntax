@@ -1140,10 +1140,9 @@ open class SyntaxRewriter {
     return DeclSyntax(InitializerDeclSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
-  /// Visit a `InlineArrayTypeSyntax`.
+  /// Visit a ``InlineArrayTypeSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: InlineArrayTypeSyntax) -> TypeSyntax {
     return TypeSyntax(InlineArrayTypeSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }

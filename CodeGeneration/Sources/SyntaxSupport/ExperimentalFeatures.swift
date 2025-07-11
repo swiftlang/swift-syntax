@@ -21,7 +21,6 @@ public enum ExperimentalFeature: String, CaseIterable {
   case coroutineAccessors
   case keypathWithMethodMembers
   case oldOwnershipOperatorSpellings
-  case inlineArrayTypeSugar
   case defaultIsolationPerFile
 
   /// The name of the feature as it is written in the compiler's `Features.def` file.
@@ -43,8 +42,6 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "KeypathWithMethodMembers"
     case .oldOwnershipOperatorSpellings:
       return "OldOwnershipOperatorSpellings"
-    case .inlineArrayTypeSugar:
-      return "InlineArrayTypeSugar"
     case .defaultIsolationPerFile:
       return "DefaultIsolationPerFile"
     }
@@ -69,8 +66,6 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "keypaths with method members"
     case .oldOwnershipOperatorSpellings:
       return "`_move` and `_borrow` as ownership operators"
-    case .inlineArrayTypeSugar:
-      return "sugar type for InlineArray"
     case .defaultIsolationPerFile:
       return "set default actor isolation for a file"
     }

@@ -183,6 +183,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/FunctionTypeSyntax>
 - <doc:SwiftSyntax/IdentifierTypeSyntax>
 - <doc:SwiftSyntax/ImplicitlyUnwrappedOptionalTypeSyntax>
+- <doc:SwiftSyntax/InlineArrayTypeSyntax>
 - <doc:SwiftSyntax/MemberTypeSyntax>
 - <doc:SwiftSyntax/MetatypeTypeSyntax>
 - <doc:SwiftSyntax/NamedOpaqueReturnTypeSyntax>

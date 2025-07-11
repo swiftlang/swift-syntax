@@ -775,10 +775,6 @@ final class TypeTests: ParserTestCase {
 }
 
 final class InlineArrayTypeTests: ParserTestCase {
-  override var experimentalFeatures: Parser.ExperimentalFeatures {
-    [.inlineArrayTypeSugar]
-  }
-
   func testBasic() {
     assertParse(
       "[3 of Int]",

@@ -717,7 +717,7 @@ final class testNameLookup: XCTestCase {
     )
   }
 
-  func testTypeDeclAvaialabilityInSequentialScope() {
+  func testTypeDeclAvailabilityInSequentialScope() {
     let declExpectation: [ResultExpectation] = [
       .fromScope(
         CodeBlockSyntax.self,

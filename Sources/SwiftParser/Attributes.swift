@@ -252,7 +252,11 @@ extension Parser {
   }
 
   mutating func parseAttribute() -> RawAttributeSyntax {
-    switch peek(isAtAnyIn: DeclarationAttributeWithSpecialSyntax.self) {
+    // An attribute qualified by a module selector is *always* a custom attribute, even if it has the same name (or
+    // module name) as a builtin attribute.
+    let builtinAttr = self.unlessPeekModuleSelector { $0.peek(isAtAnyIn: DeclarationAttributeWithSpecialSyntax.self) }
+
+    switch builtinAttr {
     case .abi:
       return parseAttribute(argumentMode: .required) { parser in
         return (nil, .abiArguments(parser.parseABIAttributeArguments()))

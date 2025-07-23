@@ -248,7 +248,7 @@ extension Parser {
     }
 
     var base: RawTypeSyntax
-    switch self.at(anyIn: TypeBaseStart.self)?.spec {
+    switch self.isAtModuleSelector() ? .identifier : self.at(anyIn: TypeBaseStart.self)?.spec {
     case .Self, .Any, .identifier:
       base = RawTypeSyntax(self.parseTypeIdentifier())
     case .leftParen:
@@ -279,7 +279,9 @@ extension Parser {
             )
           )
           break
-        } else if self.at(.keyword(.Type)) || self.at(.keyword(.Protocol)) {
+        }
+
+        if !self.isAtModuleSelector() && (self.at(.keyword(.Type)) || self.at(.keyword(.Protocol))) {
           let metatypeSpecifier = self.consume(if: .keyword(.Type)) ?? self.consume(if: .keyword(.Protocol))!
           base = RawTypeSyntax(
             RawMetatypeTypeSyntax(
@@ -291,14 +293,8 @@ extension Parser {
             )
           )
         } else {
-          let name: RawTokenSyntax
-          if let handle = self.at(anyIn: MemberTypeSyntax.NameOptions.self)?.handle {
-            name = self.eat(handle)
-          } else if self.currentToken.isLexerClassifiedKeyword {
-            name = self.consumeAnyToken(remapping: .identifier)
-          } else {
-            name = missingToken(.identifier)
-          }
+          let memberModuleSelector = self.parseModuleSelectorIfPresent()
+          let name: RawTokenSyntax = self.parseMemberTypeName()
           let generics: RawGenericArgumentClauseSyntax?
           if self.at(prefix: "<") {
             generics = self.parseGenericArguments()
@@ -310,7 +306,7 @@ extension Parser {
               baseType: base,
               unexpectedPeriod,
               period: period,
-              moduleSelector: nil,
+              moduleSelector: memberModuleSelector,
               name: name,
               genericArgumentClause: generics,
               arena: self.arena
@@ -340,6 +336,18 @@ extension Parser {
     return base
   }
 
+  /// Parse the name of a member type, which may be a keyword that's
+  /// interpreted as an identifier (per SE-0071).
+  mutating func parseMemberTypeName() -> RawTokenSyntax {
+    if let handle = self.at(anyIn: MemberTypeSyntax.NameOptions.self)?.handle {
+      return self.eat(handle)
+    } else if self.currentToken.isLexerClassifiedKeyword {
+      return self.consumeAnyToken(remapping: .identifier)
+    } else {
+      return missingToken(.identifier)
+    }
+  }
+
   /// Parse an optional type.
   mutating func parseOptionalType(_ base: RawTypeSyntax) -> RawOptionalTypeSyntax {
     let (unexpectedBeforeMark, mark) = self.expect(.postfixQuestionMark)
@@ -366,11 +374,21 @@ extension Parser {
 
   /// Parse a type identifier.
   mutating func parseTypeIdentifier() -> RawIdentifierTypeSyntax {
-    if self.at(.keyword(.Any)) {
+    let moduleSelector = self.parseModuleSelectorIfPresent()
+
+    if moduleSelector == nil && self.at(.keyword(.Any)) {
       return self.parseAnyType()
     }
 
-    let (unexpectedBeforeName, name) = self.expect(anyIn: IdentifierTypeSyntax.NameOptions.self, default: .identifier)
+    let unexpectedBeforeName: RawUnexpectedNodesSyntax?
+    let name: RawTokenSyntax
+    if moduleSelector == nil {
+      (unexpectedBeforeName, name) = self.expect(anyIn: IdentifierTypeSyntax.NameOptions.self, default: .identifier)
+    } else {
+      // A name after a module selector gets parsed like a member
+      unexpectedBeforeName = nil
+      name = self.parseMemberTypeName()
+    }
     let generics: RawGenericArgumentClauseSyntax?
     if self.at(prefix: "<") {
       generics = self.parseGenericArguments()
@@ -379,7 +397,7 @@ extension Parser {
     }
 
     return RawIdentifierTypeSyntax(
-      moduleSelector: nil,
+      moduleSelector: moduleSelector,
       unexpectedBeforeName,
       name: name,
       genericArgumentClause: generics,
@@ -997,6 +1015,8 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseTypeIdentifier(allowKeyword: Bool = false) -> Bool {
+    _ = self.consumeModuleSelectorTokensIfPresent()
+
     if self.at(.keyword(.Any)) {
       self.consumeAnyToken()
       return true
@@ -1308,7 +1328,11 @@ extension Parser {
   }
 
   mutating func parseTypeAttribute() -> RawAttributeListSyntax.Element {
-    switch peek(isAtAnyIn: TypeAttribute.self) {
+    // An attribute qualified by a module selector is *always* a custom attribute, even if it has the same name (or
+    // module name) as a builtin attribute.
+    let builtinAttr = self.unlessPeekModuleSelector { $0.peek(isAtAnyIn: TypeAttribute.self) }
+
+    switch builtinAttr {
     case ._local, ._noMetadata, .async, .escaping, .noDerivative, .noescape,
       .preconcurrency, .retroactive, .Sendable, .unchecked, .autoclosure:
       // Known type attribute that doesn't take any arguments

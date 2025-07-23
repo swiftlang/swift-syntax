@@ -127,6 +127,14 @@ extension SyntaxProtocol {
       memberDeclItem.firstToken(viewMode: .all) == self.firstToken(viewMode: .all)
     {
       return true
+    } else if let selfToken = self.as(TokenSyntax.self),
+      selfToken.isMissing,
+      selfToken.tokenKind.isIdentifier,
+      let nextToken = self.nextToken(viewMode: .sourceAccurate),
+      nextToken.isPresent,
+      nextToken.tokenKind == .colonColon
+    {
+      return true
     } else {
       return false
     }

@@ -2189,11 +2189,15 @@ extension Parser {
       )
       pound = pound.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
     }
+
+    let moduleSelector: RawModuleSelectorSyntax?
     let unexpectedBeforeMacro: RawUnexpectedNodesSyntax?
     let macro: RawTokenSyntax
     if !self.atStartOfLine {
+      moduleSelector = self.parseModuleSelectorIfPresent()
       (unexpectedBeforeMacro, macro) = self.expectIdentifier(allowKeywordsAsIdentifier: true)
     } else {
+      moduleSelector = nil
       unexpectedBeforeMacro = nil
       macro = self.missingToken(.identifier)
     }
@@ -2241,7 +2245,7 @@ extension Parser {
       modifiers: attrs.modifiers,
       unexpectedBeforePound,
       pound: pound,
-      moduleSelector: nil,
+      moduleSelector: moduleSelector,
       unexpectedBeforeMacro,
       macroName: macro,
       genericArgumentClause: generics,

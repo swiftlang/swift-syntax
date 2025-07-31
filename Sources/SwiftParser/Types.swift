@@ -293,8 +293,8 @@ extension Parser {
             )
           )
         } else {
-          let memberModuleSelector = self.parseModuleSelectorIfPresent()
-          let name: RawTokenSyntax = self.parseMemberTypeName()
+          let (memberModuleSelector, skipQualifiedName) = self.parseModuleSelectorIfPresent()
+          let name = self.parseMemberTypeName(moduleSelector: memberModuleSelector, skipName: skipQualifiedName)
           let generics: RawGenericArgumentClauseSyntax?
           if self.at(prefix: "<") {
             generics = self.parseGenericArguments()
@@ -312,6 +312,9 @@ extension Parser {
               arena: self.arena
             )
           )
+          if skipQualifiedName {
+            break
+          }
         }
         continue
       }
@@ -336,16 +339,39 @@ extension Parser {
     return base
   }
 
+  /// Parse a type name that has been qualiified by a module selector. This very aggressively interprets keywords as
+  /// identifiers.
+  ///
+  /// - Parameter skipQualifiedName: If `true`, the next token should not be parsed because it includes forbidden whitespace.
+  mutating func parseTypeNameAfterModuleSelector(skipQualifiedName: Bool) -> RawTokenSyntax {
+    if !skipQualifiedName {
+      if let identifier = self.consume(if: .identifier) {
+        return identifier
+      } else if self.currentToken.isLexerClassifiedKeyword {
+        return self.consumeAnyToken(remapping: .identifier)
+      }
+    }
+    return missingToken(.identifier)
+  }
+
   /// Parse the name of a member type, which may be a keyword that's
   /// interpreted as an identifier (per SE-0071).
-  mutating func parseMemberTypeName() -> RawTokenSyntax {
-    if let handle = self.at(anyIn: MemberTypeSyntax.NameOptions.self)?.handle {
-      return self.eat(handle)
-    } else if self.currentToken.isLexerClassifiedKeyword {
-      return self.consumeAnyToken(remapping: .identifier)
-    } else {
-      return missingToken(.identifier)
+  ///
+  /// - Parameter moduleSelector: The module selector that will be attached to this name, if any.
+  /// - Parameter skipName: If `true`, the next token should not be parsed because it includes forbidden whitespace.
+  mutating func parseMemberTypeName(moduleSelector: RawModuleSelectorSyntax?, skipName: Bool) -> RawTokenSyntax {
+    if moduleSelector != nil {
+      return self.parseTypeNameAfterModuleSelector(skipQualifiedName: skipName)
     }
+
+    if !skipName {
+      if let handle = self.at(anyIn: MemberTypeSyntax.NameOptions.self)?.handle {
+        return self.eat(handle)
+      } else if self.currentToken.isLexerClassifiedKeyword {
+        return self.consumeAnyToken(remapping: .identifier)
+      }
+    }
+    return missingToken(.identifier)
   }
 
   /// Parse an optional type.
@@ -374,7 +400,7 @@ extension Parser {
 
   /// Parse a type identifier.
   mutating func parseTypeIdentifier() -> RawIdentifierTypeSyntax {
-    let moduleSelector = self.parseModuleSelectorIfPresent()
+    let (moduleSelector, skipQualifiedName) = self.parseModuleSelectorIfPresent()
 
     if moduleSelector == nil && self.at(.keyword(.Any)) {
       return self.parseAnyType()
@@ -385,10 +411,10 @@ extension Parser {
     if moduleSelector == nil {
       (unexpectedBeforeName, name) = self.expect(anyIn: IdentifierTypeSyntax.NameOptions.self, default: .identifier)
     } else {
-      // A name after a module selector gets parsed like a member
       unexpectedBeforeName = nil
-      name = self.parseMemberTypeName()
+      name = self.parseTypeNameAfterModuleSelector(skipQualifiedName: skipQualifiedName)
     }
+
     let generics: RawGenericArgumentClauseSyntax?
     if self.at(prefix: "<") {
       generics = self.parseGenericArguments()

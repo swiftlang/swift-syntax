@@ -457,7 +457,8 @@ extension Parser {
     // Special case: scoped import with module selector-style syntax. This always has exactly two path components
     // separated by '::'.
     if hasImportKind,
-      let (moduleNameOrUnexpected, colonColon, unexpectedAfterColonColon) = self.consumeModuleSelectorTokensIfPresent()
+      let (moduleNameOrUnexpected, colonColon, unexpectedAfterColonColon, skipQualifiedName) =
+        self.consumeModuleSelectorTokensIfPresent()
     {
       // Is the token in module name position really a module name?
       let unexpectedBeforeModuleName: RawUnexpectedNodesSyntax?
@@ -470,7 +471,7 @@ extension Parser {
         moduleName = self.missingToken(.identifier)
       }
 
-      let declName = self.parseAnyIdentifier()
+      let declName = skipQualifiedName ? self.missingToken(.identifier) : self.parseAnyIdentifier()
 
       elements = [
         RawImportPathComponentSyntax(
@@ -2243,13 +2244,17 @@ extension Parser {
     }
 
     let moduleSelector: RawModuleSelectorSyntax?
+    if !self.atStartOfLine {
+      (moduleSelector, _) = self.parseModuleSelectorIfPresent()
+    } else {
+      moduleSelector = nil
+    }
+
     let unexpectedBeforeMacro: RawUnexpectedNodesSyntax?
     let macro: RawTokenSyntax
     if !self.atStartOfLine {
-      moduleSelector = self.parseModuleSelectorIfPresent()
       (unexpectedBeforeMacro, macro) = self.expectIdentifier(allowKeywordsAsIdentifier: true)
     } else {
-      moduleSelector = nil
       unexpectedBeforeMacro = nil
       macro = self.missingToken(.identifier)
     }

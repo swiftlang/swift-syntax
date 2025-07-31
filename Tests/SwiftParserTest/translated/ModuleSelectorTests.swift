@@ -454,10 +454,16 @@ final class ModuleSelectorTests: ParserTestCase {
     )
     assertParse(
       """
-      _ = Swift::
+      _ = Swift::1️⃣
       print
       """,
-      substructure: makeDeclRef(moduleSelector: "Swift", baseName: "print")
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier", fixIts: ["insert identifier"])
+      ],
+      fixedSource: """
+        _ = Swift::<#identifier#>
+        print
+        """
     )
     assertParse(
       """
@@ -468,10 +474,16 @@ final class ModuleSelectorTests: ParserTestCase {
     )
     assertParse(
       """
-      _ = Swift ::
+      _ = Swift ::1️⃣
       print
       """,
-      substructure: makeDeclRef(moduleSelector: "Swift", baseName: "print")
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier", fixIts: ["insert identifier"])
+      ],
+      fixedSource: """
+        _ = Swift ::<#identifier#>
+        print
+        """
     )
     assertParse(
       """
@@ -483,10 +495,17 @@ final class ModuleSelectorTests: ParserTestCase {
     assertParse(
       """
       _ = Swift
-      ::
+      ::1️⃣
       print
       """,
-      substructure: makeDeclRef(moduleSelector: "Swift", baseName: "print")
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier", fixIts: ["insert identifier"])
+      ],
+      fixedSource: """
+        _ = Swift
+        ::<#identifier#>
+        print
+        """
     )
   }
 
@@ -1782,6 +1801,20 @@ final class ModuleSelectorTests: ParserTestCase {
       experimentalFeatures: [.moduleSelector, .doExpressions]
     )
     assertParse(
+      """
+      let x = Swift::1️⃣
+      do { 1 }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier in variable", fixIts: ["insert identifier"])
+      ],
+      fixedSource: """
+        let x = Swift::<#identifier#>
+        do { 1 }
+        """,
+      experimentalFeatures: [.moduleSelector, .doExpressions]
+    )
+    assertParse(
       "let x = Swift::if1️⃣ y { 1 } 2️⃣else { 0 }",
       diagnostics: [
         DiagnosticSpec(
@@ -1796,6 +1829,19 @@ final class ModuleSelectorTests: ParserTestCase {
       fixedSource: """
         let x = Swift::if
         y { 1 } else { 0 }
+        """
+    )
+    assertParse(
+      """
+      let x = Swift::1️⃣
+      if y { 1 } else { 0 }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier in variable", fixIts: ["insert identifier"])
+      ],
+      fixedSource: """
+        let x = Swift::<#identifier#>
+        if y { 1 } else { 0 }
         """
     )
     assertParse(
@@ -1828,6 +1874,25 @@ final class ModuleSelectorTests: ParserTestCase {
         let x = Swift::switch
         y
         {
+        case true: 1
+        case false: 0
+        }
+        """
+    )
+    assertParse(
+      """
+      let x = Swift::1️⃣
+      switch y {
+      case true: 1
+      case false: 0
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected identifier in variable", fixIts: ["insert identifier"])
+      ],
+      fixedSource: """
+        let x = Swift::<#identifier#>
+        switch y {
         case true: 1
         case false: 0
         }
@@ -1924,7 +1989,7 @@ final class ModuleSelectorTests: ParserTestCase {
     )
     assertParse(
       "_ = Swift::self",
-      substructure: makeDeclRef(moduleSelector: "Swift", baseName: .keyword(.self))
+      substructure: makeDeclRef(moduleSelector: "Swift", baseName: "self")
     )
     assertParse(
       "_ = Swift::init",
@@ -1942,10 +2007,10 @@ final class ModuleSelectorTests: ParserTestCase {
     )
     assertParse(
       "_ = Swift::Self",
-      substructure: makeDeclRef(moduleSelector: "Swift", baseName: .keyword(.`Self`))
+      substructure: makeDeclRef(moduleSelector: "Swift", baseName: "Self")
     )
     assertParse(
-      "_ = Swift::1️⃣Any",
+      "_ = Swift::Any",
       substructure: makeDeclRef(moduleSelector: "Swift", baseName: "Any")
     )
     assertParse(
@@ -2016,7 +2081,7 @@ final class ModuleSelectorTests: ParserTestCase {
       )
     )
     assertParse(
-      "_ = Swift::1️⃣super.foo()",
+      "_ = Swift::super.foo()",
       substructure: makeDeclRef(moduleSelector: "Swift", baseName: "super")
     )
     assertParse(
@@ -2055,31 +2120,28 @@ final class ModuleSelectorTests: ParserTestCase {
       ],
       fixedSource: "_ = x.Swift::<#identifier#>1"
     )
-    // Diagnose in ASTGen?
     assertParse(
-      "_ = x.Swift::1️⃣self",
+      "_ = x.Swift::self",
       substructure: MemberAccessExprSyntax(
         base: makeDeclRef(baseName: "x"),
         declName: makeDeclRef(
           moduleSelector: "Swift",
-          baseName: .keyword(.`self`)
+          baseName: "self"
         )
       )
     )
     assertParse(
       "_ = x.Swift::Self.self",
-      // FIXME: inconsistent with type syntax
       substructure: MemberAccessExprSyntax(
         base: MemberAccessExprSyntax(
           base: makeDeclRef(baseName: "x"),
-          declName: makeDeclRef(moduleSelector: "Swift", baseName: .keyword(.`Self`))
+          declName: makeDeclRef(moduleSelector: "Swift", baseName: "Self")
         ),
         declName: makeDeclRef(baseName: .keyword(.`self`))
       )
     )
     assertParse(
       "_ = x.Swift::Type.self",
-      // FIXME: inconsistent with type syntax
       substructure: MemberAccessExprSyntax(
         base: MemberAccessExprSyntax(
           base: makeDeclRef(baseName: "x"),
@@ -2090,7 +2152,6 @@ final class ModuleSelectorTests: ParserTestCase {
     )
     assertParse(
       "_ = x.Swift::Protocol.self",
-      // FIXME: inconsistent with type syntax
       substructure: MemberAccessExprSyntax(
         base: MemberAccessExprSyntax(
           base: makeDeclRef(baseName: "x"),
@@ -2192,7 +2253,7 @@ final class ModuleSelectorTests: ParserTestCase {
       substructure: makeMember(
         of: makeType(name: "Foo"),
         moduleSelector: "Swift",
-        name: .keyword(.`self`)
+        name: "self"
       )
     )
   }

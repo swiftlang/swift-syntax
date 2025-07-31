@@ -1398,7 +1398,14 @@ extension Parser {
       )
       pound = pound.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
     }
-    let moduleSelector = parseModuleSelectorIfPresent()
+
+    let moduleSelector: RawModuleSelectorSyntax?
+    if !self.atStartOfLine {
+      (moduleSelector, _) = self.parseModuleSelectorIfPresent()
+    } else {
+      moduleSelector = nil
+    }
+
     let unexpectedBeforeMacroName: RawUnexpectedNodesSyntax?
     let macroName: RawTokenSyntax
     if !self.atStartOfLine {

@@ -254,7 +254,9 @@ extension Parser.Lookahead {
           didSeeAnyAttributes = true
           _ = self.consumeAttributeList()
         case .poundIf:
-          _ = self.consumeIfConfigOfAttributes()
+          if self.consumeIfConfigOfAttributes() {
+            didSeeAnyAttributes = true
+          }
         default:
           break ATTRIBUTE_LOOP
         }

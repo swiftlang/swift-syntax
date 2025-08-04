@@ -123,7 +123,8 @@ extension TokenKind {
     case .keyword(let keyword):
       return String(syntaxText: keyword.defaultText)
     #if RESILIENT_LIBRARIES
-    @unknown default:fatalError()
+    @unknown default:
+      return fatalError()
     #endif
     }
   }

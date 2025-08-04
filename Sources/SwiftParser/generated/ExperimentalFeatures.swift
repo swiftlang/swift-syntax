@@ -26,34 +26,34 @@ extension Parser {
 
 extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of reference bindings.
-  public static let referenceBindings = Self (rawValue: 1 << 0)
+  public static let referenceBindings = Self(rawValue: 1 << 0)
 
   /// Whether to enable the parsing of 'then' statements.
-  public static let thenStatements = Self (rawValue: 1 << 1)
+  public static let thenStatements = Self(rawValue: 1 << 1)
 
   /// Whether to enable the parsing of 'do' expressions.
-  public static let doExpressions = Self (rawValue: 1 << 2)
+  public static let doExpressions = Self(rawValue: 1 << 2)
 
   /// Whether to enable the parsing of non-escapable types.
-  public static let nonescapableTypes = Self (rawValue: 1 << 3)
+  public static let nonescapableTypes = Self(rawValue: 1 << 3)
 
   /// Whether to enable the parsing of trailing commas.
-  public static let trailingComma = Self (rawValue: 1 << 4)
+  public static let trailingComma = Self(rawValue: 1 << 4)
 
   /// Whether to enable the parsing of coroutine accessors.
-  public static let coroutineAccessors = Self (rawValue: 1 << 5)
+  public static let coroutineAccessors = Self(rawValue: 1 << 5)
 
   /// Whether to enable the parsing of keypaths with method members.
-  public static let keypathWithMethodMembers = Self (rawValue: 1 << 6)
+  public static let keypathWithMethodMembers = Self(rawValue: 1 << 6)
 
   /// Whether to enable the parsing of `_move` and `_borrow` as ownership operators.
-  public static let oldOwnershipOperatorSpellings = Self (rawValue: 1 << 7)
+  public static let oldOwnershipOperatorSpellings = Self(rawValue: 1 << 7)
 
   /// Whether to enable the parsing of sugar type for InlineArray.
-  public static let inlineArrayTypeSugar = Self (rawValue: 1 << 8)
+  public static let inlineArrayTypeSugar = Self(rawValue: 1 << 8)
 
   /// Whether to enable the parsing of set default actor isolation for a file.
-  public static let defaultIsolationPerFile = Self (rawValue: 1 << 9)
+  public static let defaultIsolationPerFile = Self(rawValue: 1 << 9)
 
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.

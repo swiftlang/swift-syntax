@@ -157,6 +157,42 @@ final class DirectiveTests: ParserTestCase {
     )
   }
 
+  func testPoundIfNestedStructure() {
+    assertParse(
+      """
+      #if true
+      #if true
+      @frozen
+      #endif
+      #endif
+      public struct S {}
+      """,
+      substructure: AttributeListSyntax([
+        .ifConfigDecl(
+          IfConfigDeclSyntax(clauses: [
+            IfConfigClauseSyntax(
+              poundKeyword: .poundIfToken(),
+              condition: ExprSyntax("true"),
+              elements: .attributes([
+                .ifConfigDecl(
+                  IfConfigDeclSyntax(clauses: [
+                    IfConfigClauseSyntax(
+                      poundKeyword: .poundIfToken(),
+                      condition: ExprSyntax("true"),
+                      elements: .attributes([
+                        .attribute("@frozen")
+                      ])
+                    )
+                  ])
+                )
+              ])
+            )
+          ])
+        )
+      ])
+    )
+  }
+
   func testHasAttribute() {
     assertParse(
       """

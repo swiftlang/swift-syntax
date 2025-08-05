@@ -92,6 +92,12 @@ public let TRAITS: [Trait] = [
     traitName: "FreestandingMacroExpansion",
     children: [
       Child(name: "pound", kind: .token(choices: [.token(.pound)])),
+      Child(
+        name: "moduleSelector",
+        kind: .node(kind: .moduleSelector),
+        experimentalFeature: .moduleSelector,
+        isOptional: true
+      ),
       Child(name: "macroName", kind: .token(choices: [.token(.identifier)])),
       Child(name: "genericArgumentClause", kind: .node(kind: .genericArgumentClause), isOptional: true),
       Child(name: "leftParen", kind: .token(choices: [.token(.leftParen)]), isOptional: true),

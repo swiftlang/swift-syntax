@@ -405,6 +405,21 @@ extension GenericArgumentSyntax {
   }
 }
 
+extension FreestandingMacroExpansionSyntax {
+  // SPI protocol requirements require a default implementation, but this should never be used because there should be
+  // no conforming types outside of SwiftSyntax.
+  @_spi(ExperimentalLanguageFeatures)
+  @available(*, deprecated, message: "concrete type should implement its own moduleSelector property")
+  public var moduleSelector: ModuleSelectorSyntax? {
+    get {
+      return nil
+    }
+    set {
+      fatalError("\(Self.self) should implement its own moduleSelector property")
+    }
+  }
+}
+
 extension FunctionCallExprSyntax {
   @_disfavoredOverload
   @available(
@@ -701,6 +716,18 @@ extension KeyPathPropertyComponentSyntax {
     }
     set {
       declName.argumentNames = newValue
+    }
+  }
+}
+
+extension MemberTypeSyntax {
+  @available(*, deprecated, renamed: "unexpectedBetweenModuleSelectorAndName")
+  public var unexpectedBeforeName: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenModuleSelectorAndName
+    }
+    set(value) {
+      unexpectedBetweenModuleSelectorAndName = value
     }
   }
 }

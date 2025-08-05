@@ -357,10 +357,6 @@ class ValidateSyntaxNodes: XCTestCase {
             "child 'leadingComma' has a comma keyword as its only token choice and should thus be named 'comma' or 'trailingComma'"
         ),
         // This is similar to `TrailingComma`
-        ValidationFailure(
-          node: .importPathComponent,
-          message: "child 'trailingPeriod' has a token as its only token choice and should thus be named 'period'"
-        ),
         // `~` is the only operator that’s allowed here
         ValidationFailure(
           node: .suppressedType,

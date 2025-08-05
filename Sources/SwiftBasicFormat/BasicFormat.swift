@@ -308,10 +308,12 @@ open class BasicFormat: SyntaxRewriter {
     case (.atSign, _),
       (.backslash, _),
       (.backtick, _),
+      (.colonColon, .identifier),
       (.dollarIdentifier, .period),  // a.b
       (.endOfFile, _),
       (.exclamationMark, .period),  // myOptionalBar!.foo()
       (.regexPoundDelimiter, .regexSlash),  // opening extended regex delimiter should never be separate by a space
+      (.identifier, .colonColon),
       (.identifier, .leftAngle),  // MyType<Int>
       (.identifier, .leftSquare),  // myArray[1]
       (.identifier, .period),  // a.b

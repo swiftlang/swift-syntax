@@ -824,8 +824,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "rightParen"
   case \DeclNameArgumentsSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
-  case \DeclReferenceExprSyntax.unexpectedBeforeBaseName:
-    return "unexpectedBeforeBaseName"
+  case \DeclReferenceExprSyntax.unexpectedBeforeModuleSelector:
+    return "unexpectedBeforeModuleSelector"
+  case \DeclReferenceExprSyntax.moduleSelector:
+    return "moduleSelector"
+  case \DeclReferenceExprSyntax.unexpectedBetweenModuleSelectorAndBaseName:
+    return "unexpectedBetweenModuleSelectorAndBaseName"
   case \DeclReferenceExprSyntax.baseName:
     return "baseName"
   case \DeclReferenceExprSyntax.unexpectedBetweenBaseNameAndArgumentNames:
@@ -1652,8 +1656,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "identifier"
   case \IdentifierPatternSyntax.unexpectedAfterIdentifier:
     return "unexpectedAfterIdentifier"
-  case \IdentifierTypeSyntax.unexpectedBeforeName:
-    return "unexpectedBeforeName"
+  case \IdentifierTypeSyntax.unexpectedBeforeModuleSelector:
+    return "unexpectedBeforeModuleSelector"
+  case \IdentifierTypeSyntax.moduleSelector:
+    return "moduleSelector"
+  case \IdentifierTypeSyntax.unexpectedBetweenModuleSelectorAndName:
+    return "unexpectedBetweenModuleSelectorAndName"
   case \IdentifierTypeSyntax.name:
     return "name"
   case \IdentifierTypeSyntax.unexpectedBetweenNameAndGenericArgumentClause:
@@ -2138,8 +2146,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenModifiersAndPound"
   case \MacroExpansionDeclSyntax.pound:
     return "pound"
-  case \MacroExpansionDeclSyntax.unexpectedBetweenPoundAndMacroName:
-    return "unexpectedBetweenPoundAndMacroName"
+  case \MacroExpansionDeclSyntax.unexpectedBetweenPoundAndModuleSelector:
+    return "unexpectedBetweenPoundAndModuleSelector"
+  case \MacroExpansionDeclSyntax.moduleSelector:
+    return "moduleSelector"
+  case \MacroExpansionDeclSyntax.unexpectedBetweenModuleSelectorAndMacroName:
+    return "unexpectedBetweenModuleSelectorAndMacroName"
   case \MacroExpansionDeclSyntax.macroName:
     return "macroName"
   case \MacroExpansionDeclSyntax.unexpectedBetweenMacroNameAndGenericArgumentClause:
@@ -2172,8 +2184,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforePound"
   case \MacroExpansionExprSyntax.pound:
     return "pound"
-  case \MacroExpansionExprSyntax.unexpectedBetweenPoundAndMacroName:
-    return "unexpectedBetweenPoundAndMacroName"
+  case \MacroExpansionExprSyntax.unexpectedBetweenPoundAndModuleSelector:
+    return "unexpectedBetweenPoundAndModuleSelector"
+  case \MacroExpansionExprSyntax.moduleSelector:
+    return "moduleSelector"
+  case \MacroExpansionExprSyntax.unexpectedBetweenModuleSelectorAndMacroName:
+    return "unexpectedBetweenModuleSelectorAndMacroName"
   case \MacroExpansionExprSyntax.macroName:
     return "macroName"
   case \MacroExpansionExprSyntax.unexpectedBetweenMacroNameAndGenericArgumentClause:
@@ -2276,8 +2292,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenBaseTypeAndPeriod"
   case \MemberTypeSyntax.period:
     return "period"
-  case \MemberTypeSyntax.unexpectedBetweenPeriodAndName:
-    return "unexpectedBetweenPeriodAndName"
+  case \MemberTypeSyntax.unexpectedBetweenPeriodAndModuleSelector:
+    return "unexpectedBetweenPeriodAndModuleSelector"
+  case \MemberTypeSyntax.moduleSelector:
+    return "moduleSelector"
+  case \MemberTypeSyntax.unexpectedBetweenModuleSelectorAndName:
+    return "unexpectedBetweenModuleSelectorAndName"
   case \MemberTypeSyntax.name:
     return "name"
   case \MemberTypeSyntax.unexpectedBetweenNameAndGenericArgumentClause:
@@ -2344,6 +2364,16 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "placeholder"
   case \MissingTypeSyntax.unexpectedAfterPlaceholder:
     return "unexpectedAfterPlaceholder"
+  case \ModuleSelectorSyntax.unexpectedBeforeModuleName:
+    return "unexpectedBeforeModuleName"
+  case \ModuleSelectorSyntax.moduleName:
+    return "moduleName"
+  case \ModuleSelectorSyntax.unexpectedBetweenModuleNameAndColonColon:
+    return "unexpectedBetweenModuleNameAndColonColon"
+  case \ModuleSelectorSyntax.colonColon:
+    return "colonColon"
+  case \ModuleSelectorSyntax.unexpectedAfterColonColon:
+    return "unexpectedAfterColonColon"
   case \MultipleTrailingClosureElementSyntax.unexpectedBeforeLabel:
     return "unexpectedBeforeLabel"
   case \MultipleTrailingClosureElementSyntax.label:

@@ -179,6 +179,8 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "condition"
   case \GuardStmtSyntax.body:
     return "body"
+  case \IdentifierTypeSyntax.moduleSelector:
+    return "module selector"
   case \IfConfigClauseSyntax.condition:
     return "condition"
   case \IfExprSyntax.body:
@@ -255,10 +257,16 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "name"
   case \MemberTypeSyntax.baseType:
     return "base type"
+  case \MemberTypeSyntax.moduleSelector:
+    return "module selector"
   case \MemberTypeSyntax.name:
     return "name"
   case \MetatypeTypeSyntax.baseType:
     return "base type"
+  case \ModuleSelectorSyntax.moduleName:
+    return "module name"
+  case \ModuleSelectorSyntax.colonColon:
+    return "'::' operator"
   case \MultipleTrailingClosureElementSyntax.label:
     return "label"
   case \ObjCSelectorPieceSyntax.name:

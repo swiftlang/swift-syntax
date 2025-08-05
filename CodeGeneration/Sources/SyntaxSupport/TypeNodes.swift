@@ -366,6 +366,13 @@ public let TYPE_NODES: [Node] = [
         kind: .token(choices: [.token(.period)])
       ),
       Child(
+        name: "moduleSelector",
+        kind: .node(kind: .moduleSelector),
+        experimentalFeature: .moduleSelector,
+        nameForDiagnostics: "module selector",
+        isOptional: true
+      ),
+      Child(
         name: "name",
         kind: .token(choices: [.token(.identifier), .keyword(.self)]),
         nameForDiagnostics: "name"
@@ -511,6 +518,13 @@ public let TYPE_NODES: [Node] = [
     base: .type,
     nameForDiagnostics: "type",
     children: [
+      Child(
+        name: "moduleSelector",
+        kind: .node(kind: .moduleSelector),
+        experimentalFeature: .moduleSelector,
+        nameForDiagnostics: "module selector",
+        isOptional: true
+      ),
       Child(
         name: "name",
         kind: .token(choices: [

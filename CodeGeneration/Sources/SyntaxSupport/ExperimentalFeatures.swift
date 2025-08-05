@@ -22,6 +22,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case keypathWithMethodMembers
   case oldOwnershipOperatorSpellings
   case defaultIsolationPerFile
+  case moduleSelector
 
   /// The name of the feature as it is written in the compiler's `Features.def` file.
   public var featureName: String {
@@ -44,6 +45,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "OldOwnershipOperatorSpellings"
     case .defaultIsolationPerFile:
       return "DefaultIsolationPerFile"
+    case .moduleSelector:
+      return "ModuleSelector"
     }
   }
 
@@ -68,6 +71,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "`_move` and `_borrow` as ownership operators"
     case .defaultIsolationPerFile:
       return "set default actor isolation for a file"
+    case .moduleSelector:
+      return "Module selector syntax (`ModName::identifier`)"
     }
   }
 

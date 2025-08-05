@@ -643,6 +643,10 @@ extension Lexer.Cursor {
     case .identifier, .dollarIdentifier, .wildcard:
       return false
 
+    // Module selectors are allowed before an operator, but not a regex.
+    case .colonColon:
+      return false
+
     // Literals are themselves expressions and therefore don't sequence expressions.
     case .floatLiteral, .integerLiteral:
       return false
@@ -737,7 +741,7 @@ extension Lexer.Cursor {
       // an unapplied operator is legal, and we should prefer to lex as that
       // instead.
       switch previousTokenKind {
-      case .leftParen, .leftSquare, .comma, .colon:
+      case .leftParen, .leftSquare, .comma, .colon, .colonColon:
         break
       default:
         mustBeRegex = true

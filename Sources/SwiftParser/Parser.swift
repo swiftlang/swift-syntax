@@ -645,6 +645,25 @@ extension Parser {
     )
   }
 
+  /// Attempts to consume a token starting with the given `prefix` and forming it into `tokenKind`.
+  /// If it cannot be found, the parser tries
+  ///  1. To eat unexpected tokens that have lower ``TokenPrecedence`` than
+  ///     specified by `TokenSpec(tokenKind)` and see if the token occurs after that unexpected.
+  ///  2. If the token couldn't be found after skipping unexpected, it synthesizes
+  ///     a missing token of the requested kind.
+  @inline(__always)
+  mutating func expect(
+    prefix: SyntaxText,
+    as tokenKind: RawTokenKind
+  ) -> (unexpected: RawUnexpectedNodesSyntax?, token: RawTokenSyntax) {
+    let spec = TokenSpec(tokenKind)
+    return expectImpl(
+      consume: { $0.consume(ifPrefix: prefix, as: tokenKind) },
+      canRecoverTo: { $0.canRecoverTo(spec) },
+      makeMissing: { $0.missingToken(spec) }
+    )
+  }
+
   /// If the current token starts with the given prefix, consume the prefis as the given token kind.
   ///
   /// Otherwise, synthesize a missing token of the given kind.

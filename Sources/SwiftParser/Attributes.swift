@@ -629,8 +629,8 @@ extension Parser {
     var elements = [RawObjCSelectorPieceSyntax]()
     var loopProgress = LoopProgressCondition()
     while self.hasProgressed(&loopProgress) {
-      // Empty selector piece.
-      if let colon = self.consume(if: .colon) {
+      // Empty selector piece, splitting `::` into two colons.
+      if let colon = self.consume(ifPrefix: ":", as: .colon) {
         elements.append(
           RawObjCSelectorPieceSyntax(
             name: nil,
@@ -654,7 +654,8 @@ extension Parser {
           break
         }
 
-        let (unexpectedBeforeColon, colon) = self.expect(.colon)
+        // Match ending colon, spliting `::` into two colons.
+        let (unexpectedBeforeColon, colon) = self.expect(prefix: ":", as: .colon)
         elements.append(
           RawObjCSelectorPieceSyntax(
             name: name,

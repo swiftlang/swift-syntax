@@ -83,7 +83,7 @@ public struct AddTargetDependency: ManifestEditRefactoringProvider {
   ) throws -> FunctionCallExprSyntax {
     try targetCall.appendingToArrayArgument(
       label: "dependencies",
-      trailingLabels: Self.argumentLabelsAfterDependencies,
+      labelsAfter: Self.argumentLabelsAfterDependencies,
       newElement: dependency.asSyntax()
     )
   }

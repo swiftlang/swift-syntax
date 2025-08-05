@@ -97,12 +97,12 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
       target.dependencies.append(contentsOf: macroTargetDependencies)
 
     default:
-      break;
+      break
     }
 
     var newPackageCall = try packageCall.appendingToArrayArgument(
       label: "targets",
-      trailingLabels: Self.argumentLabelsAfterTargets,
+      labelsAfter: Self.argumentLabelsAfterTargets,
       newElement: target.asSyntax()
     )
 
@@ -172,7 +172,7 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
         }
       }
 
-    default: break;
+    default: break
     }
 
     return PackageEdit(

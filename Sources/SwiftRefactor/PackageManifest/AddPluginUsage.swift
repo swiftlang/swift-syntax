@@ -52,7 +52,7 @@ public struct AddPluginUsage: ManifestEditRefactoringProvider {
 
     let newTargetCall = try targetCall.appendingToArrayArgument(
       label: "plugins",
-      trailingLabels: Self.argumentLabelsAfterPluginUsages,
+      labelsAfter: Self.argumentLabelsAfterPluginUsages,
       newElement: pluginUsage.asSyntax()
     )
 

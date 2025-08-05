@@ -26,7 +26,7 @@ extension Trivia {
 
   /// Produce trivia from the last newline to the end, dropping anything
   /// prior to that.
-  func onlyLastLine() -> Trivia {
+  var onlyLastLine: Trivia {
     guard let lastNewline = pieces.lastIndex(where: { $0.isNewline }) else {
       return self
     }
@@ -122,14 +122,12 @@ extension LabeledExprListSyntax {
   /// context.
   func insertingArgument(
     at position: SyntaxChildrenIndex,
-    generator: (Trivia, TokenSyntax?) -> LabeledExprSyntax
+    generator: (_ leadingTrivia: Trivia, _ trailingComma: TokenSyntax?) -> LabeledExprSyntax
   ) -> LabeledExprListSyntax {
     // Turn the arguments into an array so we can manipulate them.
     var arguments = Array(self)
 
     let positionIdx = distance(from: startIndex, to: position)
-
-    let commaToken = TokenSyntax.commaToken()
 
     // Figure out leading trivia and adjust the prior argument (if there is
     // one) by adding a comma, if necessary.
@@ -143,7 +141,7 @@ extension LabeledExprListSyntax {
 
       // If the prior argument is missing a trailing comma, add one.
       if priorArgument.trailingComma == nil {
-        arguments[positionIdx - 1].trailingComma = commaToken
+        arguments[positionIdx - 1].trailingComma = .commaToken()
       }
     } else if positionIdx + 1 < count {
       leadingTrivia = arguments[positionIdx + 1].leadingTrivia
@@ -154,7 +152,7 @@ extension LabeledExprListSyntax {
     // Determine whether we need a trailing comma on this argument.
     let trailingComma: TokenSyntax?
     if position < endIndex {
-      trailingComma = commaToken
+      trailingComma = .commaToken()
     } else {
       trailingComma = nil
     }
@@ -194,9 +192,7 @@ extension FunctionCallExprSyntax {
         return false
       }
 
-      guard let stringLiteral = nameArgument.expression.as(StringLiteralExprSyntax.self),
-        let literalValue = stringLiteral.representedLiteralValue
-      else {
+      guard let literalValue = nameArgument.expression.as(StringLiteralExprSyntax.self)?.representedLiteralValue else {
         return false
       }
 
@@ -220,8 +216,6 @@ extension ArrayExprSyntax {
   ) -> ArrayExprSyntax {
     var elements = self.elements
 
-    let commaToken = TokenSyntax.commaToken()
-
     // If there are already elements, tack it on.
     let leadingTrivia: Trivia
     let trailingTrivia: Trivia
@@ -229,15 +223,14 @@ extension ArrayExprSyntax {
     if let last = elements.last {
       // The leading trivia of the new element should match that of the
       // last element.
-      leadingTrivia = last.leadingTrivia.onlyLastLine()
+      leadingTrivia = last.leadingTrivia.onlyLastLine
 
       // Add a trailing comma to the last element if it isn't already
       // there.
       if last.trailingComma == nil {
         var newElements = Array(elements)
-        newElements[newElements.count - 1].trailingComma = commaToken
-        newElements[newElements.count - 1].expression.trailingTrivia =
-          Trivia()
+        newElements[newElements.count - 1].trailingComma = .commaToken()
+        newElements[newElements.count - 1].expression.trailingTrivia = Trivia()
         newElements[newElements.count - 1].trailingTrivia = last.trailingTrivia
         elements = ArrayElementListSyntax(newElements)
       }
@@ -257,7 +250,7 @@ extension ArrayExprSyntax {
     elements.append(
       ArrayElementSyntax(
         expression: element.with(\.leadingTrivia, leadingTrivia),
-        trailingComma: commaToken.with(\.trailingTrivia, trailingTrivia)
+        trailingComma: .commaToken().with(\.trailingTrivia, trailingTrivia)
       )
     )
 
@@ -351,17 +344,16 @@ extension Array<LabeledExprSyntax> {
   /// Append a potentially labeled argument with a string literal, but only
   /// when the string literal is not nil.
   mutating func appendIf(label: String?, stringLiteral: String?) {
-    if let stringLiteral {
-      append(label: label, stringLiteral: stringLiteral)
-    }
+    guard let stringLiteral else { return }
+    append(label: label, stringLiteral: stringLiteral)
   }
 
   /// Append an array literal containing elements that can be rendered
   /// into expression syntax nodes.
-  mutating func append<T>(
+  mutating func append<T: ManifestSyntaxRepresentable>(
     label: String?,
     arrayLiteral: [T]
-  ) where T: ManifestSyntaxRepresentable, T.PreferredSyntax == ExprSyntax {
+  ) where T.PreferredSyntax == ExprSyntax {
     var elements: [ArrayElementSyntax] = []
     for element in arrayLiteral {
       elements.append(expression: element.asSyntax())
@@ -402,20 +394,20 @@ extension Array<LabeledExprSyntax> {
 
   /// Append an array literal containing elements that can be rendered
   /// into expression syntax nodes.
-  mutating func appendIf<T>(
+  mutating func appendIf<T: ManifestSyntaxRepresentable>(
     label: String?,
     arrayLiteral: [T]?
-  ) where T: ManifestSyntaxRepresentable, T.PreferredSyntax == ExprSyntax {
+  ) where T.PreferredSyntax == ExprSyntax {
     guard let arrayLiteral else { return }
     append(label: label, arrayLiteral: arrayLiteral)
   }
 
   /// Append an array literal containing elements that can be rendered
   /// into expression syntax nodes, but only if it's not empty.
-  mutating func appendIfNonEmpty<T>(
+  mutating func appendIfNonEmpty<T: ManifestSyntaxRepresentable>(
     label: String?,
     arrayLiteral: [T]
-  ) where T: ManifestSyntaxRepresentable, T.PreferredSyntax == ExprSyntax {
+  ) where T.PreferredSyntax == ExprSyntax {
     if arrayLiteral.isEmpty { return }
 
     append(label: label, arrayLiteral: arrayLiteral)
@@ -453,7 +445,7 @@ fileprivate extension SyntaxProtocol {
 }
 
 extension FunctionCallExprSyntax {
-  /// Produce source edits that will add the given new element to the
+  /// Perform source edits that will add the given new element to the
   /// array for an argument with the given label (if there is one), or
   /// introduce a new argument with an array literal containing only the
   /// new element.
@@ -461,14 +453,14 @@ extension FunctionCallExprSyntax {
   /// - Parameters:
   ///   - label: The argument label for the argument whose array will be
   ///     added or modified.
-  ///   - trailingLabels: The argument labels that could follow the label,
+  ///   - labelsAfter: The argument labels that could follow the label,
   ///     which helps determine where the argument should be inserted if
   ///     it doesn't exist yet.
   ///   - newElement: The new element.
   /// - Returns: the function call after making this change.
   func appendingToArrayArgument(
     label: String,
-    trailingLabels: Set<String>,
+    labelsAfter: Set<String>,
     newElement: ExprSyntax
   ) throws -> FunctionCallExprSyntax {
     // If there is already an argument with this name, append to the array
@@ -483,7 +475,7 @@ extension FunctionCallExprSyntax {
 
       // Format the element appropriately for the context.
       let indentation = Trivia(
-        pieces: arg.leadingTrivia.filter { $0.isSpaceOrTab }
+        pieces: arg.leadingTrivia.filter(\.isSpaceOrTab)
       )
       let format = BasicFormat(
         indentationWidth: [defaultIndent],
@@ -504,13 +496,13 @@ extension FunctionCallExprSyntax {
 
     // Insert the new argument at the appropriate place in the call.
     let insertionPos = arguments.findArgumentInsertionPosition(
-      labelsAfter: trailingLabels
+      labelsAfter: labelsAfter
     )
     let newArguments = arguments.insertingArgument(
       at: insertionPos
     ) { (leadingTrivia, trailingComma) in
       // Format the element appropriately for the context.
-      let indentation = Trivia(pieces: leadingTrivia.filter { $0.isSpaceOrTab })
+      let indentation = Trivia(pieces: leadingTrivia.filter(\.isSpaceOrTab))
       let format = BasicFormat(
         indentationWidth: [defaultIndent],
         initialIndentation: indentation.appending(defaultIndent)
@@ -521,9 +513,7 @@ extension FunctionCallExprSyntax {
       // Form the array.
       let newArgument = ArrayExprSyntax(
         leadingTrivia: .space,
-        leftSquare: .leftSquareToken(
-          trailingTrivia: .newline
-        ),
+        leftSquare: .leftSquareToken(trailingTrivia: .newline),
         elements: ArrayElementListSyntax(
           [
             ArrayElementSyntax(
@@ -532,9 +522,7 @@ extension FunctionCallExprSyntax {
             )
           ]
         ),
-        rightSquare: .rightSquareToken(
-          leadingTrivia: leadingTrivia
-        )
+        rightSquare: .rightSquareToken(leadingTrivia: leadingTrivia)
       )
 
       // Create the labeled argument for the array.

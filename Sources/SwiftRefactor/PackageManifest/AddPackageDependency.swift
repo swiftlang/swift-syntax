@@ -66,7 +66,7 @@ public struct AddPackageDependency: ManifestEditRefactoringProvider {
   ) throws -> FunctionCallExprSyntax {
     try packageCall.appendingToArrayArgument(
       label: "dependencies",
-      trailingLabels: Self.argumentLabelsAfterDependencies,
+      labelsAfter: Self.argumentLabelsAfterDependencies,
       newElement: dependency.asSyntax()
     )
   }

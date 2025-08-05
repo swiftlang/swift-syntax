@@ -50,7 +50,7 @@ public struct AddProduct: ManifestEditRefactoringProvider {
 
     let newPackageCall = try packageCall.appendingToArrayArgument(
       label: "products",
-      trailingLabels: argumentLabelsAfterProducts,
+      labelsAfter: argumentLabelsAfterProducts,
       newElement: product.asSyntax()
     )
 

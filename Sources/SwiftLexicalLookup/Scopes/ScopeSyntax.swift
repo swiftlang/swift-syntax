@@ -53,7 +53,7 @@ extension SyntaxProtocol {
     guard let cache, let identifier else {
       return scope?.lookup(identifier, at: self.position, with: config, cache: cache) ?? []
     }
-    
+
     let filteredResult: [LookupResult] = (scope?.lookup(nil, at: self.position, with: config, cache: cache) ?? [])
       .compactMap { result in
         switch result {

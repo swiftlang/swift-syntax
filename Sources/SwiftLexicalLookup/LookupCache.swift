@@ -29,7 +29,7 @@ public class LookupCache {
       }
     }
   }
-  
+
   private let capacity: Int
   private var evictionCount = 0
 

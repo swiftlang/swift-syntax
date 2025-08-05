@@ -43,7 +43,7 @@ package class LRUCache<Key: Hashable, Value> {
   package var count: Int {
     return table.count
   }
-  
+
   package var keys: some Collection<Key> {
     table.keys
   }

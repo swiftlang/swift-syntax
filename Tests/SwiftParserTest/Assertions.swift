@@ -207,7 +207,12 @@ func assertLexemes(
   lookaheadTracker.initialize(to: LookaheadTracker())
   source.withUTF8 { buf in
     var lexemes = [Lexer.Lexeme]()
-    for token in Lexer.tokenize(buf, from: 0, lookaheadTracker: lookaheadTracker, experimentalFeatures: experimentalFeatures) {
+    for token in Lexer.tokenize(
+      buf,
+      from: 0,
+      lookaheadTracker: lookaheadTracker,
+      experimentalFeatures: experimentalFeatures
+    ) {
       lexemes.append(token)
 
       if token.rawTokenKind == .endOfFile {

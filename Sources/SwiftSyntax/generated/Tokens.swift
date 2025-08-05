@@ -93,6 +93,19 @@ extension TokenSyntax {
     )
   }
 
+  public static func colonColonToken(
+    leadingTrivia: Trivia = [],
+    trailingTrivia: Trivia = [],
+    presence: SourcePresence = .present
+  ) -> TokenSyntax {
+    return TokenSyntax(
+      .colonColon,
+      leadingTrivia: leadingTrivia,
+      trailingTrivia: trailingTrivia,
+      presence: presence
+    )
+  }
+
   public static func commaToken(
     leadingTrivia: Trivia = [],
     trailingTrivia: Trivia = [],

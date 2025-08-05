@@ -128,7 +128,7 @@ enum TokenPrecedence: Comparable {
       // Pound literals
       .poundAvailable, .poundSourceLocation, .poundUnavailable,
       // Identifiers
-      .dollarIdentifier, .identifier,
+      .dollarIdentifier, .identifier, .colonColon,
       // '_' can occur in types to replace a type identifier
       .wildcard,
       // String segment, string interpolation anchor, pound, shebang and regex pattern don't really fit anywhere else

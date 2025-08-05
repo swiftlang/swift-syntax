@@ -943,8 +943,16 @@ extension Lexer.Cursor {
 
     case ",": _ = self.advance(); return Lexer.Result(.comma)
     case ";": _ = self.advance(); return Lexer.Result(.semicolon)
-    case ":": _ = self.advance(); return Lexer.Result(.colon)
     case "\\": _ = self.advance(); return Lexer.Result(.backslash)
+
+    case ":":
+      _ = self.advance()
+      guard self.experimentalFeatures.contains(.moduleSelector) && self.peek() == ":" else {
+        return Lexer.Result(.colon)
+      }
+
+      _ = self.advance()
+      return Lexer.Result(.colonColon)
 
     case "#":
       // Try lex shebang.

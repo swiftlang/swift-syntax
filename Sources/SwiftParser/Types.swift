@@ -646,8 +646,6 @@ extension Parser {
     unexpectedBeforeLSquare: RawUnexpectedNodesSyntax?,
     leftSquare: RawTokenSyntax
   ) -> RawTypeSyntax {
-    precondition(self.experimentalFeatures.contains(.inlineArrayTypeSugar))
-
     // We allow both values and types here and for the element type for
     // better recovery in cases where the user writes e.g '[Int of 3]'.
     let count = self.parseGenericArgumentType()
@@ -875,10 +873,6 @@ extension Parser.Lookahead {
   /// Checks whether we can parse the start of an InlineArray type. This does
   /// not include the element type.
   mutating func canParseStartOfInlineArrayTypeBody() -> Bool {
-    guard self.experimentalFeatures.contains(.inlineArrayTypeSugar) else {
-      return false
-    }
-
     // We must have at least '[<type-or-integer> of', which cannot be any other
     // kind of expression or type. We specifically look for both types and
     // integers for better recovery in e.g cases where the user writes e.g
@@ -907,7 +901,7 @@ extension Parser.Lookahead {
 
   mutating func canParseCollectionTypeBody() -> Bool {
     // Check to see if we have an InlineArray sugar type.
-    if self.experimentalFeatures.contains(.inlineArrayTypeSugar) {
+    do {
       var lookahead = self.lookahead()
       if lookahead.canParseInlineArrayTypeBody() {
         self = lookahead

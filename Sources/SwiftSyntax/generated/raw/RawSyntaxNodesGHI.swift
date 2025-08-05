@@ -2343,7 +2343,6 @@ public struct RawInitializerDeclSyntax: RawDeclSyntaxNodeProtocol {
   }
 }
 
-@_spi(ExperimentalLanguageFeatures)
 @_spi(RawSyntax)
 public struct RawInlineArrayTypeSyntax: RawTypeSyntaxNodeProtocol {
   @_spi(RawSyntax)

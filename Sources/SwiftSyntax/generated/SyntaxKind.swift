@@ -169,7 +169,6 @@ public enum SyntaxKind: Sendable {
   case inheritedType
   case initializerClause
   case initializerDecl
-  @_spi(ExperimentalLanguageFeatures)
   case inlineArrayType
   case integerLiteralExpr
   case isExpr

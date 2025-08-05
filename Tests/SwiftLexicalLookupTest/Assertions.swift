@@ -147,6 +147,7 @@ private func testFunction(
   let lookupIdentifier = Identifier(tokenAtMarker)
 
   let result = tokenAtMarker.lookup(useNilAsTheParameter ? nil : lookupIdentifier, with: config, cache: cache)
+  cache?.evictEntriesWithoutHit(drop: 3)
 
   guard let expectedValues = references[marker] else {
     XCTFail("For marker \(marker), couldn't find result expectation")

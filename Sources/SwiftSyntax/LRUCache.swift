@@ -31,22 +31,24 @@ package class LRUCache<Key: Hashable, Value> {
   private unowned var head: _Node?
   private unowned var tail: _Node?
 
-  public let capacity: Int
-  public private(set) var keysInCache: Set<Key>
+  package let capacity: Int
 
-  public init(capacity: Int) {
+  package init(capacity: Int) {
     self.table = [:]
     self.head = nil
     self.tail = nil
     self.capacity = capacity
-    self.keysInCache = []
   }
 
-  public var count: Int {
+  package var count: Int {
     return table.count
   }
+  
+  package var keys: some Collection<Key> {
+    table.keys
+  }
 
-  public subscript(key: Key) -> Value? {
+  package subscript(key: Key) -> Value? {
     get {
       guard let node = table[key] else {
         return nil
@@ -61,7 +63,6 @@ package class LRUCache<Key: Hashable, Value> {
         self.ensureCapacityForNewValue()
         let node = _Node(key: key, value: newValue)
         addToHead(node: node)
-        keysInCache.insert(key)
         table[key] = node
 
       case let (node?, newValue?):  // update.
@@ -70,7 +71,6 @@ package class LRUCache<Key: Hashable, Value> {
 
       case let (node?, nil):  // delete.
         remove(node: node)
-        keysInCache.remove(key)
         table[key] = nil
 
       case (nil, nil):  // no-op.

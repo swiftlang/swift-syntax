@@ -50,57 +50,57 @@ extension SyntaxProtocol {
     with config: LookupConfig = LookupConfig(),
     cache: LookupCache? = nil
   ) -> [LookupResult] {
-    if let cache, let identifier {
-      let filteredResult: [LookupResult] = (scope?.lookup(nil, at: self.position, with: config, cache: cache) ?? [])
-        .compactMap { result in
-          switch result {
-          case .fromScope(let syntax, let withNames):
-            let filteredNames =
-              withNames
-              .filter { name in
-                name.identifier == identifier
-              }
-
-            guard filteredNames.count != 0 else { return nil }
-            return .fromScope(syntax, withNames: filteredNames)
-          default:
-            return result
-          }
-        }
-
-      var resultWithMergedSequentialResults: [LookupResult] = []
-      var i = 0
-
-      while i < filteredResult.count {
-        let thisResult = filteredResult[i]
-
-        if i < filteredResult.count - 1,
-          case .fromScope(let thisScope, let thisNames) = thisResult,
-          thisScope.asProtocol(SyntaxProtocol.self) is SequentialScopeSyntax
-        {
-          var accumulator = thisNames
-
-          while i < filteredResult.count - 1,
-            case .fromScope(let otherScope, let otherNames) = filteredResult[i + 1],
-            otherScope.asProtocol(SyntaxProtocol.self) is SequentialScopeSyntax,
-            thisScope.id == otherScope.id
-          {
-            accumulator += otherNames
-            i += 1
-          }
-
-          resultWithMergedSequentialResults.append(.fromScope(thisScope, withNames: accumulator))
-        } else {
-          resultWithMergedSequentialResults.append(thisResult)
-        }
-
-        i += 1
-      }
-
-      return resultWithMergedSequentialResults
-    } else {
+    guard let cache, let identifier else {
       return scope?.lookup(identifier, at: self.position, with: config, cache: cache) ?? []
     }
+    
+    let filteredResult: [LookupResult] = (scope?.lookup(nil, at: self.position, with: config, cache: cache) ?? [])
+      .compactMap { result in
+        switch result {
+        case .fromScope(let syntax, let withNames):
+          let filteredNames =
+            withNames
+            .filter { name in
+              name.identifier == identifier
+            }
+
+          guard filteredNames.count != 0 else { return nil }
+          return .fromScope(syntax, withNames: filteredNames)
+        default:
+          return result
+        }
+      }
+
+    var resultWithMergedSequentialResults: [LookupResult] = []
+    var i = 0
+
+    while i < filteredResult.count {
+      let thisResult = filteredResult[i]
+
+      if i < filteredResult.count - 1,
+        case .fromScope(let thisScope, let thisNames) = thisResult,
+        thisScope.asProtocol(SyntaxProtocol.self) is SequentialScopeSyntax
+      {
+        var accumulator = thisNames
+
+        while i < filteredResult.count - 1,
+          case .fromScope(let otherScope, let otherNames) = filteredResult[i + 1],
+          otherScope.asProtocol(SyntaxProtocol.self) is SequentialScopeSyntax,
+          thisScope.id == otherScope.id
+        {
+          accumulator += otherNames
+          i += 1
+        }
+
+        resultWithMergedSequentialResults.append(.fromScope(thisScope, withNames: accumulator))
+      } else {
+        resultWithMergedSequentialResults.append(thisResult)
+      }
+
+      i += 1
+    }
+
+    return resultWithMergedSequentialResults
   }
 }
 

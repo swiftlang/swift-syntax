@@ -22,34 +22,24 @@ public class LookupCache {
   /// Identified by `SyntaxIdentifier`.
   private let sequentialResultsCache: LRUCache<SyntaxIdentifier, [LookupResult]>
   /// Looked-up scope identifiers during cache accesses.
-  private var hits: Set<SyntaxIdentifier> = []
-
-  private let dropMod: Int
+  private var hits: Set<SyntaxIdentifier> = [] {
+    didSet {
+      if hits.count > capacity * 2 {
+        hits.removeAll()
+      }
+    }
+  }
+  
+  private let capacity: Int
   private var evictionCount = 0
 
   /// Creates a new unqualified lookup cache.
   /// `capacity` describes the maximum amount of entries in the cache.
   /// The cache size is maintained according to the LRU (Least Recently Used) policy.
-  /// `drop` parameter specifies how many eviction calls will be
-  /// ignored before evicting not-hit members from subsequent lookups.
-  ///
-  /// Example cache eviction sequences (s - skip, e - evict):
-  /// - `drop = 0` - `e -> e -> e -> e -> e -> ...`
-  /// - `drop = 1` - `s -> e -> s -> s -> e -> ...`
-  /// - `drop = 3` - `s -> s -> s -> e -> s -> ...`
-  ///
-  /// - Note: `drop = 0` effectively maintains exactly one path of cached results to
-  /// the root in the cache (assuming we evict cache members after each lookup in a sequence of lookups).
-  /// Higher the `drop` value, more such paths can potentially be stored in the cache at any given moment.
-  /// Because of that, a higher `drop` value also translates to a higher number of cache-hits,
-  /// but it might not directly translate to better performance. Because of a larger memory footprint,
-  /// memory accesses could take longer, slowing down the eviction process. That's why the `drop` value
-  /// could be fine-tuned to maximize the performance given file size,
-  /// number of lookups, and amount of available memory.
-  public init(capacity: Int, drop: Int = 0) {
+  public init(capacity: Int) {
+    self.capacity = capacity
     self.ancestorResultsCache = LRUCache(capacity: (capacity + 1) / 2)
     self.sequentialResultsCache = LRUCache(capacity: capacity / 2)
-    self.dropMod = drop + 1
   }
 
   /// Get cached ancestor results for the given `id`.
@@ -86,17 +76,31 @@ public class LookupCache {
   }
 
   /// Removes all cached entries without a hit, unless it's prohibited
-  /// by the internal drop counter (as specified by `drop` in the initializer).
-  /// The dropping behavior can be disabled for this call with the `bypassDropCounter`
-  /// parameter, resulting in immediate eviction of entries without a hit.
-  public func evictEntriesWithoutHit(bypassDropCounter: Bool = false) {
-    if !bypassDropCounter {
-      evictionCount = (evictionCount + 1) % dropMod
-      guard evictionCount != 0 else { return }
-    }
+  /// by the internal `drop` counter.
+  /// `drop` parameter specifies how many eviction calls will be
+  /// ignored before evicting not-hit members from subsequent lookups.
+  ///
+  /// Example cache eviction sequences (s - skip, e - evict):
+  /// - `drop = 0` - `e -> e -> e -> e -> e -> ...`
+  /// - `drop = 1` - `s -> e -> s -> s -> e -> ...`
+  /// - `drop = 3` - `s -> s -> s -> e -> s -> ...`
+  ///
+  /// - Note: `drop = 0` effectively maintains exactly one path of cached results to
+  /// the root in the cache (assuming we evict cache members after each lookup in a sequence of lookups).
+  /// Higher the `drop` value, more such paths can potentially be stored in the cache at any given moment.
+  /// Because of that, a higher `drop` value also translates to a higher number of cache-hits,
+  /// but it might not directly translate to better performance. Because of a larger memory footprint,
+  /// memory accesses could take longer, slowing down the eviction process. That's why the `drop` value
+  /// could be fine-tuned to maximize the performance given file size,
+  /// number of lookups, and amount of available memory.
+  public func evictEntriesWithoutHit(drop: Int = 0) {
+    evictionCount = (evictionCount + 1) % (drop + 1)
+    guard evictionCount != 0 else { return }
 
-    for key in ancestorResultsCache.keysInCache.union(sequentialResultsCache.keysInCache).subtracting(hits) {
+    for key in ancestorResultsCache.keys where !hits.contains(key) {
       ancestorResultsCache[key] = nil
+    }
+    for key in sequentialResultsCache.keys where !hits.contains(key) {
       sequentialResultsCache[key] = nil
     }
 

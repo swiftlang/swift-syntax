@@ -379,7 +379,9 @@ import SwiftSyntax
     with config: LookupConfig,
     cache: LookupCache?
   ) -> [LookupResult] {
-    // We're not using `lookupParent` to not cache the results here.
+    // We're not using `lookupParent` to not cache sequential parent results here.
+    // Sequential scope might filter out specific names based on the location within this guard stmt
+    // in subsequent lookups. We're relying on cache of the parent sequential scope instead.
     parentScope?.lookup(identifier, at: lookUpPosition, with: config, cache: cache) ?? []
   }
 }
@@ -732,7 +734,7 @@ import SwiftSyntax
   /// the function returns exactly two results. First associated with the member
   /// block that consists of the `associatedtype A` declaration and
   /// the latter one from the file scope and `class A` exactly in this order.
-  public func lookup(
+  @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
     with config: LookupConfig,
@@ -995,7 +997,9 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
         cache: cache
       )
     } else {
-      // We're not using `lookupParent` to not cache the results here.
+      // We're not using `lookupParent` to not cache sequential parent results here.
+      // Sequential scope might filter out specific names based on the location within this variable decl
+      // in subsequent lookups. We're relying on cache of the parent sequential scope instead.
       return parentScope?.lookup(identifier, at: lookUpPosition, with: config, cache: cache) ?? []
     }
   }
@@ -1123,7 +1127,9 @@ extension SubscriptDeclSyntax: WithGenericParametersScopeSyntax, CanInterleaveRe
     with config: LookupConfig,
     cache: LookupCache?
   ) -> [LookupResult] {
-    // We're not using `lookupParent` to not cache the results here.
+    // We're not using `lookupParent` to not cache sequential parent results here.
+    // Sequential scope might filter out specific names based on the location within this if config
+    // in subsequent lookups. We're relying on cache of the parent sequential scope instead.
     parentScope?.lookup(identifier, at: lookUpPosition, with: config, cache: cache) ?? []
   }
 }

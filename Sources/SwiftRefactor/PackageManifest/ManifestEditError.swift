@@ -14,11 +14,11 @@ import SwiftSyntax
 
 /// An error describing problems that can occur when attempting to edit a
 /// package manifest programattically.
-public enum ManifestEditError: Error {
+public enum ManifestEditError: Error, Equatable {
   case cannotFindPackage
   case cannotFindTargets
   case cannotFindTarget(targetName: String)
-  case cannotFindArrayLiteralArgument(argumentName: String, node: Syntax)
+  case cannotFindArrayLiteralArgument(argumentName: String)
 }
 
 extension ManifestEditError: CustomStringConvertible {
@@ -30,7 +30,7 @@ extension ManifestEditError: CustomStringConvertible {
       return "unable to find package targets in manifest"
     case .cannotFindTarget(targetName: let name):
       return "unable to find target named '\(name)' in package"
-    case .cannotFindArrayLiteralArgument(argumentName: let name, node: _):
+    case .cannotFindArrayLiteralArgument(argumentName: let name):
       return "unable to find array literal for '\(name)' argument"
     }
   }

@@ -244,7 +244,7 @@ final class ManifestEditTests: XCTestCase {
   }
 
   func testAddPackageDependencyErrors() {
-    XCTAssertThrows(
+    XCTAssertThrowsError(
       try AddPackageDependency.manifestRefactor(
         syntax: """
           // swift-tools-version: 5.5
@@ -254,15 +254,14 @@ final class ManifestEditTests: XCTestCase {
           """,
         in: .init(dependency: Self.swiftSystemPackageDependency)
       )
-    ) { (error: ManifestEditError) in
-      if case .cannotFindPackage = error {
-        return true
-      } else {
-        return false
-      }
+    ) { error in
+      XCTAssertEqual(
+        error as? ManifestEditError,
+        .cannotFindPackage
+      )
     }
 
-    XCTAssertThrows(
+    XCTAssertThrowsError(
       try AddPackageDependency.manifestRefactor(
         syntax: """
           // swift-tools-version: 5.5
@@ -273,12 +272,11 @@ final class ManifestEditTests: XCTestCase {
           """,
         in: .init(dependency: Self.swiftSystemPackageDependency)
       )
-    ) { (error: ManifestEditError) in
-      if case .cannotFindArrayLiteralArgument(argumentName: "dependencies", node: _) = error {
-        return true
-      } else {
-        return false
-      }
+    ) { (error: any Error) in
+      XCTAssertEqual(
+        error as? ManifestEditError,
+        .cannotFindArrayLiteralArgument(argumentName: "dependencies")
+      )
     }
   }
 
@@ -709,20 +707,4 @@ func assertManifestRefactor(
     expectedAuxiliarySources.count,
     "didn't get all of the auxiliary files we expected"
   )
-}
-
-func XCTAssertThrows<T: Swift.Error, Ignore>(
-  _ expression: @autoclosure () throws -> Ignore,
-  file: StaticString = #filePath,
-  line: UInt = #line,
-  _ errorHandler: (T) -> Bool
-) {
-  do {
-    let result = try expression()
-    XCTFail("body completed successfully: \(result)", file: file, line: line)
-  } catch let error as T {
-    XCTAssertTrue(errorHandler(error), "Error handler returned false", file: file, line: line)
-  } catch {
-    XCTFail("unexpected error thrown: \(error)", file: file, line: line)
-  }
 }

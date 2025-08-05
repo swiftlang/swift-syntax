@@ -468,8 +468,7 @@ extension FunctionCallExprSyntax {
     if let arg = findArgument(labeled: label) {
       guard let argArray = arg.expression.findArrayArgument() else {
         throw ManifestEditError.cannotFindArrayLiteralArgument(
-          argumentName: label,
-          node: Syntax(arg.expression)
+          argumentName: label
         )
       }
 

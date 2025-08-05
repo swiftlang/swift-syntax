@@ -1369,6 +1369,7 @@ extension Syntax {
 /// - ``FunctionTypeSyntax``
 /// - ``IdentifierTypeSyntax``
 /// - ``ImplicitlyUnwrappedOptionalTypeSyntax``
+/// - ``InlineArrayTypeSyntax``
 /// - ``MemberTypeSyntax``
 /// - ``MetatypeTypeSyntax``
 /// - ``MissingTypeSyntax``

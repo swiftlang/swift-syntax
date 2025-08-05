@@ -138,7 +138,6 @@ final class ExpressionTypeTests: ParserTestCase {
         { ExprSyntax.parse(from: &$0) },
         substructure: IdentifierTypeSyntax(name: .identifier("X")),
         substructureAfterMarker: "1️⃣",
-        experimentalFeatures: [.inlineArrayTypeSugar],
         line: line
       )
     }

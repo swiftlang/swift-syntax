@@ -1251,12 +1251,10 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   override open func visit(_ node: InlineArrayTypeSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   override open func visitPost(_ node: InlineArrayTypeSyntax) {
     visitAnyPost(node._syntaxNode)
   }

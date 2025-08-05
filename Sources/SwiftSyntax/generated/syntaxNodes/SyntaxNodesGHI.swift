@@ -206,6 +206,8 @@ public struct GenericArgumentClauseSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
 /// ### Contained in
 /// 
 ///  - ``GenericArgumentListSyntax``
+///  - ``InlineArrayTypeSyntax``.``InlineArrayTypeSyntax/count``
+///  - ``InlineArrayTypeSyntax``.``InlineArrayTypeSyntax/element``
 public struct GenericArgumentSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public enum Argument: SyntaxChildChoices, SyntaxHashable {
     case type(TypeSyntax)
@@ -4375,8 +4377,6 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDe
 
 /// An inline array type `[3 of Int]`, sugar for `InlineArray<3, Int>`.
 ///
-/// - Note: Requires experimental feature `inlineArrayTypeSugar`.
-///
 /// ### Children
 /// 
 ///  - `leftSquare`: `[`
@@ -4384,7 +4384,6 @@ public struct InitializerDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDe
 ///  - `separator`: `of`
 ///  - `element`: ``GenericArgumentSyntax``
 ///  - `rightSquare`: `]`
-@_spi(ExperimentalLanguageFeatures)
 public struct InlineArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 

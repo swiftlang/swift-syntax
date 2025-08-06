@@ -163,6 +163,30 @@ final class ManifestEditTests: XCTestCase {
     )
   }
 
+  func testAddPackageDependencyDuplicates() throws {
+    XCTAssertThrowsError(
+      try AddPackageDependency.manifestRefactor(
+        syntax: """
+          // swift-tools-version: 5.5
+          let package = Package(
+              name: "packages",
+              dependencies: [
+                .package(url: "https://github.com/apple/swift-system.git", from: "510.0.1")
+              ]
+          )
+          """,
+        in: .init(dependency: Self.swiftSystemPackageDependency)
+      )
+    ) { (error: any Error) in
+      guard let error = error as? ManifestEditError,
+        case .existingDependency("swift-system") = error
+      else {
+        XCTFail("unexpected error thrown: \(error)")
+        return
+      }
+    }
+  }
+
   func testAddPackageDependencyExistingAppended() throws {
     try assertManifestRefactor(
       """

@@ -19,6 +19,8 @@ public enum ManifestEditError: Error, Equatable {
   case cannotFindTargets
   case cannotFindTarget(targetName: String)
   case cannotFindArrayLiteralArgument(argumentName: String)
+  case existingDependency(dependencyName: String)
+  case malformedManifest(error: String)
 }
 
 extension ManifestEditError: CustomStringConvertible {
@@ -32,6 +34,10 @@ extension ManifestEditError: CustomStringConvertible {
       return "unable to find target named '\(name)' in package"
     case .cannotFindArrayLiteralArgument(argumentName: let name):
       return "unable to find array literal for '\(name)' argument"
+    case .existingDependency(let name):
+      return "unable to add dependency '\(name)' because it already exists in the list of dependencies"
+    case .malformedManifest(let error):
+      return "invalid manifest: \(error)"
     }
   }
 }

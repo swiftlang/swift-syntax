@@ -47,6 +47,15 @@ public struct AddPackageDependency: ManifestEditRefactoringProvider {
       throw ManifestEditError.cannotFindPackage
     }
 
+    guard
+      try !dependencyAlreadyAdded(
+        dependency,
+        in: packageCall
+      )
+    else {
+      return PackageEdit(manifestEdits: [])
+    }
+
     let newPackageCall = try addPackageDependencyLocal(
       dependency,
       to: packageCall
@@ -59,6 +68,52 @@ public struct AddPackageDependency: ManifestEditRefactoringProvider {
     )
   }
 
+  /// Return `true` if the dependency already exists in the manifest, otherwise return `false`.
+  /// Throws an error if a dependency already exists with the same id or url, but different arguments.
+  private static func dependencyAlreadyAdded(
+    _ dependency: PackageDependency,
+    in packageCall: FunctionCallExprSyntax
+  ) throws -> Bool {
+    let dependencySyntax = dependency.asSyntax()
+    guard let dependencyFnSyntax = dependencySyntax.as(FunctionCallExprSyntax.self) else {
+      throw ManifestEditError.cannotFindPackage
+    }
+
+    guard
+      let id = dependencyFnSyntax.arguments.first(where: {
+        $0.label?.text == "url" || $0.label?.text == "id" || $0.label?.text == "path"
+      })
+    else {
+      throw ManifestEditError.malformedManifest(error: "missing id or url argument in dependency syntax")
+    }
+
+    if let existingDependencies = packageCall.findArgument(labeled: "dependencies") {
+      // If we have an existing dependencies array, we need to check if
+      if let expr = existingDependencies.expression.as(ArrayExprSyntax.self) {
+        // Iterate through existing dependencies and look for an argument that matches
+        // either the `id` or `url` argument of the new dependency.
+        let existingArgument = expr.elements.first { elem in
+          if let funcExpr = elem.expression.as(FunctionCallExprSyntax.self) {
+            return funcExpr.arguments.contains {
+              $0.trimmedDescription == id.trimmedDescription
+            }
+          }
+          return true
+        }
+
+        if let existingArgument {
+          let normalizedExistingArgument = existingArgument.detached.with(\.trailingComma, nil)
+          // This exact dependency already exists, return false to indicate we should do nothing.
+          if normalizedExistingArgument.trimmedDescription == dependencySyntax.trimmedDescription {
+            return true
+          }
+          throw ManifestEditError.existingDependency(dependencyName: dependency.identifier)
+        }
+      }
+    }
+    return false
+  }
+
   /// Implementation of adding a package dependency to an existing call.
   static func addPackageDependencyLocal(
     _ dependency: PackageDependency,
@@ -69,5 +124,18 @@ public struct AddPackageDependency: ManifestEditRefactoringProvider {
       labelsAfter: Self.argumentLabelsAfterDependencies,
       newElement: dependency.asSyntax()
     )
+  }
+}
+
+fileprivate extension PackageDependency {
+  var identifier: String {
+    switch self {
+    case .sourceControl(let info):
+      return info.identity
+    case .fileSystem(let info):
+      return info.identity
+    case .registry(let info):
+      return info.identity
+    }
   }
 }

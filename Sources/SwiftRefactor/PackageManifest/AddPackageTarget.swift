@@ -121,7 +121,7 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
       )
     }
 
-    let outerPath = RelativePath(outerDirectory)
+    let outerPath = outerDirectory
 
     /// The set of auxiliary files this refactoring will create.
     var auxiliaryFiles: AuxiliaryFiles = []
@@ -186,14 +186,12 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
   /// Add the primary source file for a target to the list of auxiliary
   /// source files.
   fileprivate static func addPrimarySourceFile(
-    outerPath: RelativePath,
+    outerPath: String,
     target: PackageTarget,
     configuration: Configuration,
     to auxiliaryFiles: inout AuxiliaryFiles
   ) {
-    let sourceFilePath = outerPath.appending(
-      components: [target.name, "\(target.name).swift"]
-    )
+    let sourceFilePath = "\(outerPath)/\(target.name)/\(target.name).swift"
 
     // Introduce imports for each of the dependencies that were specified.
     var importModuleNames = target.dependencies.map {
@@ -299,14 +297,12 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
   /// Add a file that introduces the main entrypoint and provided macros
   /// for a macro target.
   fileprivate static func addProvidedMacrosSourceFile(
-    outerPath: RelativePath,
+    outerPath: String,
     target: PackageTarget,
     to auxiliaryFiles: inout AuxiliaryFiles
   ) {
     auxiliaryFiles.addSourceFile(
-      path: outerPath.appending(
-        components: [target.name, "ProvidedMacros.swift"]
-      ),
+      path: "\(outerPath)/\(target.name)/ProvidedMacros.swift",
       sourceCode: """
         import SwiftCompilerPlugin
 
@@ -335,12 +331,12 @@ fileprivate extension PackageTarget.Dependency {
 
 /// The array of auxiliary files that can be added by a package editing
 /// operation.
-fileprivate typealias AuxiliaryFiles = [(RelativePath, SourceFileSyntax)]
+fileprivate typealias AuxiliaryFiles = [(String, SourceFileSyntax)]
 
 fileprivate extension AuxiliaryFiles {
   /// Add a source file to the list of auxiliary files.
   mutating func addSourceFile(
-    path: RelativePath,
+    path: String,
     sourceCode: SourceFileSyntax
   ) {
     self.append((path, sourceCode))
@@ -357,8 +353,8 @@ fileprivate let macroTargetDependencies: [PackageTarget.Dependency] = [
 /// The package dependency for swift-syntax, for use in macros.
 fileprivate extension PackageDependency {
   /// Source control URL for the swift-syntax package.
-  static var swiftSyntaxURL: SourceControlURL {
-    .init("https://github.com/swiftlang/swift-syntax.git")
+  static var swiftSyntaxURL: String {
+    "https://github.com/swiftlang/swift-syntax.git"
   }
 
   /// Package dependency on the swift-syntax package.
@@ -367,7 +363,7 @@ fileprivate extension PackageDependency {
   ) -> PackageDependency {
     return .sourceControl(
       .init(
-        identity: PackageIdentity("swift-syntax"),
+        identity: "swift-syntax",
         location: .remote(swiftSyntaxURL),
         requirement: .rangeFrom(version)
       )

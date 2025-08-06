@@ -22,17 +22,17 @@ public enum PackageDependency: Sendable {
   case registry(Registry)
 
   public struct FileSystem: Sendable {
-    public let identity: PackageIdentity
+    public let identity: String
     public let nameForTargetDependencyResolutionOnly: String?
-    public let path: AbsolutePath
+    public let path: String
   }
 
   public struct SourceControl: Sendable {
-    public let identity: PackageIdentity
+    public let identity: String
     public let location: Location
     public let requirement: Requirement
 
-    public init(identity: PackageIdentity, location: Location, requirement: Requirement) {
+    public init(identity: String, location: Location, requirement: Requirement) {
       self.identity = identity
       self.location = location
       self.requirement = requirement
@@ -47,13 +47,13 @@ public enum PackageDependency: Sendable {
     }
 
     public enum Location: Sendable {
-      case local(AbsolutePath)
-      case remote(SourceControlURL)
+      case local(String)
+      case remote(String)
     }
   }
 
   public struct Registry: Sendable {
-    public let identity: PackageIdentity
+    public let identity: String
     public let requirement: Requirement
 
     /// The dependency requirement.

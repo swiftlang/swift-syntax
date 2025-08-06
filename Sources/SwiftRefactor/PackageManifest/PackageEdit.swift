@@ -19,5 +19,5 @@ public struct PackageEdit {
   public var manifestEdits: [SourceEdit] = []
 
   /// Auxiliary files to write.
-  public var auxiliaryFiles: [(RelativePath, SourceFileSyntax)] = []
+  public var auxiliaryFiles: [(String, SourceFileSyntax)] = []
 }

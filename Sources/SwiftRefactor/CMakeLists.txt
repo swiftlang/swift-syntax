@@ -23,7 +23,6 @@ add_swift_syntax_library(SwiftRefactor
   RemoveSeparatorsFromIntegerLiteral.swift
   SyntaxUtils.swift
 
-  PackageManifest/AbsolutePath.swift
   PackageManifest/AddPackageDependency.swift
   PackageManifest/AddPackageTarget.swift
   PackageManifest/AddPluginUsage.swift
@@ -34,12 +33,9 @@ add_swift_syntax_library(SwiftRefactor
   PackageManifest/ManifestSyntaxRepresentable.swift
   PackageManifest/PackageDependency.swift
   PackageManifest/PackageEdit.swift
-  PackageManifest/PackageIdentity.swift
   PackageManifest/PackageTarget.swift
   PackageManifest/ProductDescription.swift
-  PackageManifest/RelativePath.swift
   PackageManifest/SemanticVersion.swift
-  PackageManifest/SourceControlURL.swift
   PackageManifest/StringUtils.swift
   PackageManifest/SyntaxEditUtils.swift
 )

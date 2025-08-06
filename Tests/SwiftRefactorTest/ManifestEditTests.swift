@@ -19,13 +19,11 @@ import XCTest
 import _SwiftSyntaxTestSupport
 
 final class ManifestEditTests: XCTestCase {
-  static let swiftSystemURL: SourceControlURL = SourceControlURL(
-    "https://github.com/apple/swift-system.git"
-  )
+  static let swiftSystemURL: String = "https://github.com/apple/swift-system.git"
 
   static let swiftSystemPackageDependency: PackageDependency = .sourceControl(
     .init(
-      identity: PackageIdentity("swift-system"),
+      identity: "swift-system",
       location: .remote(swiftSystemURL),
       requirement: .branch("main")
     )
@@ -56,7 +54,7 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: PackageIdentity("swift-system"),
+            identity: "swift-system",
             location: .remote(Self.swiftSystemURL),
             requirement: .branch("main")
           )
@@ -90,7 +88,7 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: PackageIdentity("swift-system"),
+            identity: "swift-system",
             location: .remote(Self.swiftSystemURL),
             requirement: .exact(SemanticVersion("510.0.0"))
           )
@@ -122,7 +120,7 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: PackageIdentity("swift-system"),
+            identity: "swift-system",
             location: .remote(Self.swiftSystemURL),
             requirement: .exact(SemanticVersion("510.0.0"))
           )
@@ -156,7 +154,7 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: PackageIdentity("swift-system"),
+            identity: "swift-system",
             location: .remote(Self.swiftSystemURL),
             requirement: .exact(SemanticVersion("510.0.0"))
           )
@@ -190,7 +188,7 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: PackageIdentity("swift-system"),
+            identity: "swift-system",
             location: .remote(Self.swiftSystemURL),
             requirement: .rangeFrom(SemanticVersion("510.0.0"))
           )
@@ -219,7 +217,7 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: PackageIdentity("swift-system"),
+            identity: "swift-system",
             location: .remote(Self.swiftSystemURL),
             requirement: .rangeFrom(SemanticVersion("510.0.0"))
           )
@@ -246,7 +244,7 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: PackageIdentity("swift-system"),
+            identity: "swift-system",
             location: .remote(Self.swiftSystemURL),
             requirement: .rangeFrom(SemanticVersion("510.0.0"))
           )
@@ -277,7 +275,7 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: PackageIdentity("swift-system"),
+            identity: "swift-system",
             location: .remote(Self.swiftSystemURL),
             requirement: .range(lowerBound: SemanticVersion("508.0.0"), upperBound: SemanticVersion("510.0.0"))
           )
@@ -430,7 +428,7 @@ final class ManifestEditTests: XCTestCase {
         )
         """,
       expectedAuxiliarySources: [
-        RelativePath("Sources/MyLib/MyLib.swift"): """
+        "Sources/MyLib/MyLib.swift": """
 
         """
       ],
@@ -466,7 +464,7 @@ final class ManifestEditTests: XCTestCase {
         )
         """,
       expectedAuxiliarySources: [
-        RelativePath("Sources/MyLib/MyLib.swift"): """
+        "Sources/MyLib/MyLib.swift": """
         import OtherLib
         import SwiftSyntax
         import TargetLib
@@ -518,7 +516,7 @@ final class ManifestEditTests: XCTestCase {
         )
         """,
       expectedAuxiliarySources: [
-        RelativePath("Sources/MyProgram target-name/MyProgram target-name.swift"): """
+        "Sources/MyProgram target-name/MyProgram target-name.swift": """
         import MyLib
         import SwiftSyntax
         import TargetLib
@@ -578,7 +576,7 @@ final class ManifestEditTests: XCTestCase {
         )
         """,
       expectedAuxiliarySources: [
-        RelativePath("Sources/MyMacro target-name/MyMacro target-name.swift"): """
+        "Sources/MyMacro target-name/MyMacro target-name.swift": """
         import SwiftCompilerPlugin
         import SwiftSyntaxMacros
 
@@ -591,7 +589,7 @@ final class ManifestEditTests: XCTestCase {
             ///     @attached(member) macro         --> MemberMacro
         }
         """,
-        RelativePath("Sources/MyMacro target-name/ProvidedMacros.swift"): """
+        "Sources/MyMacro target-name/ProvidedMacros.swift": """
         import SwiftCompilerPlugin
 
         @main
@@ -630,7 +628,7 @@ final class ManifestEditTests: XCTestCase {
         )
         """,
       expectedAuxiliarySources: [
-        RelativePath("Tests/MyTest target-name/MyTest target-name.swift"): """
+        "Tests/MyTest target-name/MyTest target-name.swift": """
         import Testing
 
         @Suite
@@ -738,7 +736,7 @@ final class ManifestEditTests: XCTestCase {
 func assertManifestRefactor<Provider: ManifestEditRefactoringProvider>(
   _ originalManifest: SourceFileSyntax,
   expectedManifest: SourceFileSyntax,
-  expectedAuxiliarySources: [RelativePath: SourceFileSyntax] = [:],
+  expectedAuxiliarySources: [String: SourceFileSyntax] = [:],
   provider: Provider.Type,
   context: Provider.Context,
   file: StaticString = #filePath,
@@ -761,7 +759,7 @@ func assertManifestRefactor<Provider: ManifestEditRefactoringProvider>(
 func assertManifestRefactor(
   _ originalManifest: SourceFileSyntax,
   expectedManifest: SourceFileSyntax,
-  expectedAuxiliarySources: [RelativePath: SourceFileSyntax] = [:],
+  expectedAuxiliarySources: [String: SourceFileSyntax] = [:],
   file: StaticString = #filePath,
   line: UInt = #line,
   operation: (SourceFileSyntax) throws -> PackageEdit

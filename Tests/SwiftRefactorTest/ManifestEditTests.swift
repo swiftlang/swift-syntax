@@ -783,7 +783,7 @@ func assertManifestRefactor(
   // Check all of the auxiliary sources.
   for (auxSourcePath, auxSourceSyntax) in edits.auxiliaryFiles {
     guard let expectedSyntax = expectedAuxiliarySources[auxSourcePath] else {
-      XCTFail("unexpected auxiliary source file \(auxSourcePath)")
+      XCTFail("unexpected auxiliary source file '\(auxSourcePath)' in \(expectedAuxiliarySources)")
       return
     }
 

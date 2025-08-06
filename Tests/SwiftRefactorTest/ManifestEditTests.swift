@@ -97,6 +97,72 @@ final class ManifestEditTests: XCTestCase {
         )
       )
     )
+
+    try assertManifestRefactor(
+      """
+      // swift-tools-version: 5.5
+      let package = Package(
+          name: "packages",
+          dependencies: [
+            /* test */ .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "510.0.1")
+          ]
+      )
+      """,
+      expectedManifest: """
+        // swift-tools-version: 5.5
+        let package = Package(
+            name: "packages",
+            dependencies: [
+              /* test */ .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "510.0.1"),
+              .package(url: "https://github.com/apple/swift-system.git", exact: "510.0.0"),
+            ]
+        )
+        """,
+      provider: AddPackageDependency.self,
+      context: .init(
+        dependency: .sourceControl(
+          .init(
+            identity: PackageIdentity("swift-system"),
+            location: .remote(Self.swiftSystemURL),
+            requirement: .exact(SemanticVersion("510.0.0"))
+          )
+        )
+      )
+    )
+
+    try assertManifestRefactor(
+      """
+      // swift-tools-version: 5.5
+      let package = Package(
+          name: "packages",
+          dependencies: [
+            /* test */
+            .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "510.0.1")
+          ]
+      )
+      """,
+      expectedManifest: """
+        // swift-tools-version: 5.5
+        let package = Package(
+            name: "packages",
+            dependencies: [
+              /* test */
+              .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "510.0.1"),
+              .package(url: "https://github.com/apple/swift-system.git", exact: "510.0.0"),
+            ]
+        )
+        """,
+      provider: AddPackageDependency.self,
+      context: .init(
+        dependency: .sourceControl(
+          .init(
+            identity: PackageIdentity("swift-system"),
+            location: .remote(Self.swiftSystemURL),
+            requirement: .exact(SemanticVersion("510.0.0"))
+          )
+        )
+      )
+    )
   }
 
   func testAddPackageDependencyExistingAppended() throws {
@@ -147,6 +213,33 @@ final class ManifestEditTests: XCTestCase {
         let package = Package(
             name: "packages",
             dependencies: [ .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "510.0.1"), .package(url: "https://github.com/apple/swift-system.git", from: "510.0.0"),]
+        )
+        """,
+      provider: AddPackageDependency.self,
+      context: .init(
+        dependency: .sourceControl(
+          .init(
+            identity: PackageIdentity("swift-system"),
+            location: .remote(Self.swiftSystemURL),
+            requirement: .rangeFrom(SemanticVersion("510.0.0"))
+          )
+        )
+      )
+    )
+
+    try assertManifestRefactor(
+      """
+      // swift-tools-version: 5.5
+      let package = Package(
+          name: "packages",
+          dependencies: [ /*test*/ .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "510.0.1") ]
+      )
+      """,
+      expectedManifest: """
+        // swift-tools-version: 5.5
+        let package = Package(
+            name: "packages",
+            dependencies: [ /*test*/ .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "510.0.1"), .package(url: "https://github.com/apple/swift-system.git", from: "510.0.0"),]
         )
         """,
       provider: AddPackageDependency.self,
@@ -448,7 +541,7 @@ final class ManifestEditTests: XCTestCase {
             .target(name: "TargetLib"),
             .byName(name: "MyLib"),
           ]
-        ),
+        )
       )
     )
   }

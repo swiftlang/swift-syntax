@@ -135,9 +135,12 @@ extension LabeledExprListSyntax {
     if position > startIndex {
       let priorArgument = arguments[positionIdx - 1]
 
-      // Our leading trivia will be based on the prior argument's leading
-      // trivia.
-      leadingTrivia = priorArgument.leadingTrivia
+      // Our indentation will be based on the prior argument's.
+      if priorArgument.leadingTrivia.hasNewlines {
+        leadingTrivia = .newline + (priorArgument.firstToken(viewMode: .sourceAccurate)?.indentationOfLine ?? Trivia())
+      } else {
+        leadingTrivia = priorArgument.leadingTrivia.indentation(isOnNewline: false) ?? Trivia()
+      }
 
       // If the prior argument is missing a trailing comma, add one.
       if priorArgument.trailingComma == nil {
@@ -221,9 +224,13 @@ extension ArrayExprSyntax {
     let trailingTrivia: Trivia
     let leftSquareTrailingTrivia: Trivia
     if let last = elements.last {
-      // The leading trivia of the new element should match that of the
+      // The leading indentation of the new element should match that of the
       // last element.
-      leadingTrivia = last.leadingTrivia.onlyLastLine
+      if last.leadingTrivia.hasNewlines {
+        leadingTrivia = .newline + (last.firstToken(viewMode: .sourceAccurate)?.indentationOfLine ?? Trivia())
+      } else {
+        leadingTrivia = last.leadingTrivia.indentation(isOnNewline: false) ?? Trivia()
+      }
 
       // Add a trailing comma to the last element if it isn't already
       // there.

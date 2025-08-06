@@ -39,9 +39,9 @@ public enum PackageDependency: Sendable {
     }
 
     public enum Requirement: Sendable {
-      case exact(SemanticVersion)
-      case rangeFrom(SemanticVersion)
-      case range(lowerBound: SemanticVersion, upperBound: SemanticVersion)
+      case exact(String)
+      case rangeFrom(String)
+      case range(lowerBound: String, upperBound: String)
       case revision(String)
       case branch(String)
     }
@@ -58,9 +58,9 @@ public enum PackageDependency: Sendable {
 
     /// The dependency requirement.
     public enum Requirement: Sendable {
-      case exact(SemanticVersion)
-      case rangeFrom(SemanticVersion)
-      case range(lowerBound: SemanticVersion, upperBound: SemanticVersion)
+      case exact(String)
+      case rangeFrom(String)
+      case range(lowerBound: String, upperBound: String)
     }
   }
 }

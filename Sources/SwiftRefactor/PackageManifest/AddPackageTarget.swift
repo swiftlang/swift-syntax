@@ -50,7 +50,7 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
     case swiftTesting = "swift-testing"
 
     /// The default testing library to use.
-    public static let `default`: TestHarness = .xctest
+    public static let `default`: TestHarness = .swiftTesting
   }
 
   /// Additional configuration information to guide the package editing
@@ -59,17 +59,10 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
     /// The test harness to use.
     public var testHarness: TestHarness
 
-    public let swiftSyntaxVersion: SemanticVersion
-    public let swiftTestingVersion: SemanticVersion
-
     public init(
-      testHarness: TestHarness = .default,
-      swiftSyntaxVersion: SemanticVersion = SemanticVersion("600.0.0-latest"),
-      swiftTestingVersion: SemanticVersion = SemanticVersion("0.8.0")
+      testHarness: TestHarness = .default
     ) {
       self.testHarness = testHarness
-      self.swiftSyntaxVersion = swiftSyntaxVersion
-      self.swiftTestingVersion = swiftTestingVersion
     }
   }
 
@@ -148,9 +141,7 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
         newPackageCall =
           try AddPackageDependency
           .addPackageDependencyLocal(
-            .swiftSyntax(
-              version: configuration.swiftSyntaxVersion
-            ),
+            .swiftSyntax(from: "<#version#>"),
             to: newPackageCall
           )
 
@@ -357,10 +348,8 @@ fileprivate extension PackageDependency {
     "https://github.com/swiftlang/swift-syntax.git"
   }
 
-  /// Package dependency on the swift-syntax package.
-  static func swiftSyntax(
-    version: SemanticVersion
-  ) -> PackageDependency {
+  /// Package dependency on the swift-syntax package starting from a partial version.
+  static func swiftSyntax(from version: String) -> PackageDependency {
     return .sourceControl(
       .init(
         identity: "swift-syntax",

@@ -35,7 +35,6 @@ add_swift_syntax_library(SwiftRefactor
   PackageManifest/PackageEdit.swift
   PackageManifest/PackageTarget.swift
   PackageManifest/ProductDescription.swift
-  PackageManifest/SemanticVersion.swift
   PackageManifest/StringUtils.swift
   PackageManifest/SyntaxEditUtils.swift
 )

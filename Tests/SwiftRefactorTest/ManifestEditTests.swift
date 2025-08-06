@@ -90,7 +90,7 @@ final class ManifestEditTests: XCTestCase {
           .init(
             identity: "swift-system",
             location: .remote(Self.swiftSystemURL),
-            requirement: .exact(SemanticVersion("510.0.0"))
+            requirement: .exact("510.0.0")
           )
         )
       )
@@ -122,7 +122,7 @@ final class ManifestEditTests: XCTestCase {
           .init(
             identity: "swift-system",
             location: .remote(Self.swiftSystemURL),
-            requirement: .exact(SemanticVersion("510.0.0"))
+            requirement: .exact("510.0.0")
           )
         )
       )
@@ -156,7 +156,7 @@ final class ManifestEditTests: XCTestCase {
           .init(
             identity: "swift-system",
             location: .remote(Self.swiftSystemURL),
-            requirement: .exact(SemanticVersion("510.0.0"))
+            requirement: .exact("510.0.0")
           )
         )
       )
@@ -190,7 +190,7 @@ final class ManifestEditTests: XCTestCase {
           .init(
             identity: "swift-system",
             location: .remote(Self.swiftSystemURL),
-            requirement: .rangeFrom(SemanticVersion("510.0.0"))
+            requirement: .rangeFrom("510.0.0")
           )
         )
       )
@@ -219,7 +219,7 @@ final class ManifestEditTests: XCTestCase {
           .init(
             identity: "swift-system",
             location: .remote(Self.swiftSystemURL),
-            requirement: .rangeFrom(SemanticVersion("510.0.0"))
+            requirement: .rangeFrom("510.0.0")
           )
         )
       )
@@ -246,7 +246,7 @@ final class ManifestEditTests: XCTestCase {
           .init(
             identity: "swift-system",
             location: .remote(Self.swiftSystemURL),
-            requirement: .rangeFrom(SemanticVersion("510.0.0"))
+            requirement: .rangeFrom("510.0.0")
           )
         )
       )
@@ -277,7 +277,7 @@ final class ManifestEditTests: XCTestCase {
           .init(
             identity: "swift-system",
             location: .remote(Self.swiftSystemURL),
-            requirement: .range(lowerBound: SemanticVersion("508.0.0"), upperBound: SemanticVersion("510.0.0"))
+            requirement: .range(lowerBound: "508.0.0", upperBound: "510.0.0")
           )
         )
       )
@@ -562,7 +562,7 @@ final class ManifestEditTests: XCTestCase {
         let package = Package(
             name: "packages",
             dependencies: [
-                .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "600.0.0-latest"),
+                .package(url: "https://github.com/swiftlang/swift-syntax.git", from: "<#version#>"),
             ],
             targets: [
                 .macro(

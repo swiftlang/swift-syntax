@@ -14,7 +14,7 @@ import SwiftSyntax
 
 /// Syntactic wrapper type that describes a target for refactoring
 /// purposes but does not interpret its contents.
-public struct Target {
+public struct PackageTarget {
   public let name: String
 
   /// The type of target.
@@ -71,7 +71,7 @@ public struct Target {
   }
 }
 
-extension Target: ManifestSyntaxRepresentable {
+extension PackageTarget: ManifestSyntaxRepresentable {
   /// The function name in the package manifest.
   private var functionName: String {
     switch type {
@@ -111,7 +111,7 @@ extension Target: ManifestSyntaxRepresentable {
   }
 }
 
-extension Target.Dependency: ManifestSyntaxRepresentable {
+extension PackageTarget.Dependency: ManifestSyntaxRepresentable {
   func asSyntax() -> ExprSyntax {
     switch self {
     case .byName(name: let name):
@@ -129,7 +129,7 @@ extension Target.Dependency: ManifestSyntaxRepresentable {
   }
 }
 
-extension Target.PluginUsage: ManifestSyntaxRepresentable {
+extension PackageTarget.PluginUsage: ManifestSyntaxRepresentable {
   func asSyntax() -> ExprSyntax {
     switch self {
     case .plugin(name: let name, package: nil):

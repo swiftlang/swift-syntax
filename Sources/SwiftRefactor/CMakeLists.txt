@@ -35,13 +35,13 @@ add_swift_syntax_library(SwiftRefactor
   PackageManifest/PackageDependency.swift
   PackageManifest/PackageEdit.swift
   PackageManifest/PackageIdentity.swift
+  PackageManifest/PackageTarget.swift
   PackageManifest/ProductDescription.swift
   PackageManifest/RelativePath.swift
   PackageManifest/SemanticVersion.swift
   PackageManifest/SourceControlURL.swift
   PackageManifest/StringUtils.swift
   PackageManifest/SyntaxEditUtils.swift
-  PackageManifest/Target.swift
 )
 
 target_link_swift_syntax_libraries(SwiftRefactor PUBLIC

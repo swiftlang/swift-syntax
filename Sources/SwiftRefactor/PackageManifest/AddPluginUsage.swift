@@ -19,9 +19,9 @@ import SwiftSyntaxBuilder
 public struct AddPluginUsage: ManifestEditRefactoringProvider {
   public struct Context {
     public let targetName: String
-    public let pluginUsage: Target.PluginUsage
+    public let pluginUsage: PackageTarget.PluginUsage
 
-    public init(targetName: String, pluginUsage: Target.PluginUsage) {
+    public init(targetName: String, pluginUsage: PackageTarget.PluginUsage) {
       self.targetName = targetName
       self.pluginUsage = pluginUsage
     }

@@ -482,21 +482,36 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       otherNode.lastToken(viewMode: .sourceAccurate)?.tokenKind == .poundEndif
     {
       let diagnoseOn = parent.parent ?? parent
-      addDiagnostic(
-        diagnoseOn,
-        IfConfigDeclNotAllowedInContext(context: diagnoseOn),
-        highlights: [Syntax(node), Syntax(otherNode)],
-        fixIts: [
-          FixIt(
-            message: RemoveNodesFixIt([Syntax(node), Syntax(otherNode)]),
-            changes: [
-              .makeMissing([Syntax(node)], transferTrivia: false),
-              .makeMissing([Syntax(otherNode)], transferTrivia: false),
-            ]
-          )
-        ],
-        handledNodes: [node.id, otherNode.id]
-      )
+      if node == otherNode {
+        addDiagnostic(
+          diagnoseOn,
+          IfConfigDeclNotAllowedInContext(context: diagnoseOn),
+          highlights: [Syntax(node)],
+          fixIts: [
+            FixIt(
+              message: RemoveNodesFixIt([Syntax(node)]),
+              changes: .makeMissing([Syntax(node)], transferTrivia: false)
+            )
+          ],
+          handledNodes: [node.id]
+        )
+      } else {
+        addDiagnostic(
+          diagnoseOn,
+          IfConfigDeclNotAllowedInContext(context: diagnoseOn),
+          highlights: [Syntax(node), Syntax(otherNode)],
+          fixIts: [
+            FixIt(
+              message: RemoveNodesFixIt([Syntax(node), Syntax(otherNode)]),
+              changes: [
+                .makeMissing([Syntax(node)], transferTrivia: false),
+                .makeMissing([Syntax(otherNode)], transferTrivia: false),
+              ]
+            )
+          ],
+          handledNodes: [node.id, otherNode.id]
+        )
+      }
     } else {
       addDiagnostic(node, UnexpectedNodesError(unexpectedNodes: node), highlights: [Syntax(node)])
     }

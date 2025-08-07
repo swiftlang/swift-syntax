@@ -1402,15 +1402,40 @@ final class AttributeTests: ParserTestCase {
   }
 
   func testAttributeParsable() {
-    let source = """
-      #if true
+    assertParse(
+      """
+      1️⃣#if true
       @discardableResult
       #endif
-      """
-    var parser = Parser(source)
-    let attr = AttributeSyntax.parse(from: &parser)
-
-    XCTAssertTrue(attr.description == source)
-    XCTAssertTrue(attr.tokens(viewMode: .fixedUp).allSatisfy({ $0.presence == .missing }))
+      """,
+      { AttributeSyntax.parse(from: &$0) },
+      substructure: AttributeSyntax(
+        atSign: .atSignToken(presence: .missing),
+        attributeName: TypeSyntax(MissingTypeSyntax(placeholder: .identifier("<#type#>", presence: .missing))),
+        UnexpectedNodesSyntax([
+          TokenSyntax.poundIfToken(),
+          TokenSyntax.keyword(.true),
+          TokenSyntax.atSignToken(),
+          TokenSyntax.identifier("discardableResult"),
+          TokenSyntax.poundEndifToken(),
+        ])
+      ),
+      diagnostics: [
+        DiagnosticSpec(message: "expected '@' and name in attribute", fixIts: ["insert '@' and name"]),
+        DiagnosticSpec(
+          message: "conditional compilation not permitted in attribute",
+          fixIts: [
+            """
+            remove '#if true
+            @discardableResult
+            #endif'
+            """
+          ]
+        ),
+      ],
+      fixedSource: """
+        @<#type#>
+        """
+    )
   }
 }

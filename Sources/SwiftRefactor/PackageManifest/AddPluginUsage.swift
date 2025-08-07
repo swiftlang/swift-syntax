@@ -29,9 +29,6 @@ public struct AddPluginUsage: ManifestEditRefactoringProvider {
 
   /// The set of argument labels that can occur after the "plugins"
   /// argument in the Target initializers. (There aren't any right now)
-  ///
-  /// TODO: Could we generate this from the the PackageDescription module, so
-  /// we don't have keep it up-to-date manually?
   private static let argumentLabelsAfterPluginUsages: Set<String> = []
 
   /// Produce the set of source edits needed to add the given package

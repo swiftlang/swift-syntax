@@ -28,9 +28,6 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
 
   /// The set of argument labels that can occur after the "targets"
   /// argument in the Package initializers.
-  ///
-  /// TODO: Could we generate this from the the PackageDescription module, so
-  /// we don't have keep it up-to-date manually?
   private static let argumentLabelsAfterTargets: Set<String> = [
     "swiftLanguageVersions",
     "cLanguageStandard",

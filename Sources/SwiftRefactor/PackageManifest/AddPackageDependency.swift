@@ -26,9 +26,6 @@ public struct AddPackageDependency: ManifestEditRefactoringProvider {
 
   /// The set of argument labels that can occur after the "dependencies"
   /// argument in the Package initializers.
-  ///
-  /// TODO: Could we generate this from the the PackageDescription module, so
-  /// we don't have keep it up-to-date manually?
   private static let argumentLabelsAfterDependencies: Set<String> = [
     "targets",
     "swiftLanguageVersions",

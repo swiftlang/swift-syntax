@@ -24,7 +24,7 @@ final class ManifestEditTests: XCTestCase {
   static let swiftSystemPackageDependency: PackageDependency = .sourceControl(
     .init(
       identity: "swift-system",
-      location: .remote(swiftSystemURL),
+      location: swiftSystemURL,
       requirement: .branch("main")
     )
   )
@@ -55,7 +55,7 @@ final class ManifestEditTests: XCTestCase {
         dependency: .sourceControl(
           .init(
             identity: "swift-system",
-            location: .remote(Self.swiftSystemURL),
+            location: Self.swiftSystemURL,
             requirement: .branch("main")
           )
         )
@@ -89,7 +89,7 @@ final class ManifestEditTests: XCTestCase {
         dependency: .sourceControl(
           .init(
             identity: "swift-system",
-            location: .remote(Self.swiftSystemURL),
+            location: Self.swiftSystemURL,
             requirement: .exact("510.0.0")
           )
         )
@@ -121,7 +121,7 @@ final class ManifestEditTests: XCTestCase {
         dependency: .sourceControl(
           .init(
             identity: "swift-system",
-            location: .remote(Self.swiftSystemURL),
+            location: Self.swiftSystemURL,
             requirement: .exact("510.0.0")
           )
         )
@@ -155,7 +155,7 @@ final class ManifestEditTests: XCTestCase {
         dependency: .sourceControl(
           .init(
             identity: "swift-system",
-            location: .remote(Self.swiftSystemURL),
+            location: Self.swiftSystemURL,
             requirement: .exact("510.0.0")
           )
         )
@@ -213,7 +213,7 @@ final class ManifestEditTests: XCTestCase {
         dependency: .sourceControl(
           .init(
             identity: "swift-system",
-            location: .remote(Self.swiftSystemURL),
+            location: Self.swiftSystemURL,
             requirement: .rangeFrom("510.0.0")
           )
         )
@@ -242,7 +242,7 @@ final class ManifestEditTests: XCTestCase {
         dependency: .sourceControl(
           .init(
             identity: "swift-system",
-            location: .remote(Self.swiftSystemURL),
+            location: Self.swiftSystemURL,
             requirement: .rangeFrom("510.0.0")
           )
         )
@@ -269,7 +269,7 @@ final class ManifestEditTests: XCTestCase {
         dependency: .sourceControl(
           .init(
             identity: "swift-system",
-            location: .remote(Self.swiftSystemURL),
+            location: Self.swiftSystemURL,
             requirement: .rangeFrom("510.0.0")
           )
         )
@@ -300,7 +300,7 @@ final class ManifestEditTests: XCTestCase {
         dependency: .sourceControl(
           .init(
             identity: "swift-system",
-            location: .remote(Self.swiftSystemURL),
+            location: Self.swiftSystemURL,
             requirement: .range(lowerBound: "508.0.0", upperBound: "510.0.0")
           )
         )

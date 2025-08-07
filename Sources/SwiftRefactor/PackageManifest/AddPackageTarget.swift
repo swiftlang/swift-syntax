@@ -350,7 +350,7 @@ fileprivate extension PackageDependency {
     return .sourceControl(
       .init(
         identity: "swift-syntax",
-        location: .remote(swiftSyntaxURL),
+        location: swiftSyntaxURL,
         requirement: .rangeFrom(version)
       )
     )

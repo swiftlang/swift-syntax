@@ -29,10 +29,10 @@ public enum PackageDependency: Sendable {
 
   public struct SourceControl: Sendable {
     public let identity: String
-    public let location: Location
+    public let location: String
     public let requirement: Requirement
 
-    public init(identity: String, location: Location, requirement: Requirement) {
+    public init(identity: String, location: String, requirement: Requirement) {
       self.identity = identity
       self.location = location
       self.requirement = requirement
@@ -44,11 +44,6 @@ public enum PackageDependency: Sendable {
       case range(lowerBound: String, upperBound: String)
       case revision(String)
       case branch(String)
-    }
-
-    public enum Location: Sendable {
-      case local(String)
-      case remote(String)
     }
   }
 
@@ -85,12 +80,7 @@ extension PackageDependency.SourceControl: ManifestSyntaxRepresentable {
   func asSyntax() -> ExprSyntax {
     // TODO: Not handling identity, nameForTargetDependencyResolutionOnly,
     // or productFilter yet.
-    switch location {
-    case .local:
-      fatalError()
-    case .remote(let url):
-      return ".package(url: \(literal: url.description), \(requirement.asSyntax()))"
-    }
+    ".package(url: \(literal: location.description), \(requirement.asSyntax()))"
   }
 }
 

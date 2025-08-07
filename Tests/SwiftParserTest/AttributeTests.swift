@@ -1400,4 +1400,17 @@ final class AttributeTests: ParserTestCase {
       """
     )
   }
+
+  func testAttributeParsable() {
+    let source = """
+      #if true
+      @discardableResult
+      #endif
+      """
+    var parser = Parser(source)
+    let attr = AttributeSyntax.parse(from: &parser)
+
+    XCTAssertTrue(attr.description == source)
+    XCTAssertTrue(attr.tokens(viewMode: .fixedUp).allSatisfy({ $0.presence == .missing }))
+  }
 }

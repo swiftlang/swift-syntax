@@ -1308,17 +1308,21 @@ extension Parser {
       return .attribute(self.parseDifferentiableAttribute())
 
     case .isolated:
-      return parseAttribute(argumentMode: .required) { parser in
-        return (nil, .argumentList(parser.parseIsolatedAttributeArguments()))
-      }
+      return .attribute(
+        parseAttribute(argumentMode: .required) { parser in
+          return (nil, .argumentList(parser.parseIsolatedAttributeArguments()))
+        }
+      )
     case .convention, ._opaqueReturnTypeOf, nil:  // Custom attribute
-      return parseAttribute(argumentMode: .customAttribute) { parser in
-        let arguments = parser.parseArgumentListElements(
-          pattern: .none,
-          allowTrailingComma: true
-        )
-        return (nil, .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena)))
-      }
+      return .attribute(
+        parseAttribute(argumentMode: .customAttribute) { parser in
+          let arguments = parser.parseArgumentListElements(
+            pattern: .none,
+            allowTrailingComma: true
+          )
+          return (nil, .argumentList(RawLabeledExprListSyntax(elements: arguments, arena: parser.arena)))
+        }
+      )
 
     }
   }

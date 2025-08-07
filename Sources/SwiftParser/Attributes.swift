@@ -17,18 +17,56 @@
 #endif
 
 extension Parser {
+  private mutating func parseAttributeListElement() -> RawAttributeListSyntax.Element {
+    if self.at(.poundIf) {
+      // 'consumeIfConfigOfAttributes()' check in 'parseAttributeList()' already guarantees
+      // that this '#if' only contains attribute list elements. We don't check
+      // `consumeIfConfigOfAttributes()` here again because it's not only redundant, but it
+      // does *not* work for cases like:
+      //
+      //    #if COND1
+      //       @attr
+      //       #if COND2
+      //       #endif
+      //    #endif
+      //    func fn() {}
+      //
+      // In such cases, the second `#if` is not `consumeIfConfigOfAttributes()`.
+      return .ifConfigDecl(
+        self.parsePoundIfDirective { (parser, _) -> RawAttributeListSyntax.Element in
+          return parser.parseAttributeListElement()
+        } syntax: { parser, attributes in
+          return .attributes(RawAttributeListSyntax(elements: attributes, arena: parser.arena))
+        }
+      )
+    } else {
+      return .attribute(self.parseAttribute())
+    }
+  }
+
   mutating func parseAttributeList() -> RawAttributeListSyntax {
-    guard self.at(.atSign, .poundIf) else {
-      return self.emptyCollection(RawAttributeListSyntax.self)
+    var elements = [RawAttributeListSyntax.Element]()
+
+    func shouldContinue() -> Bool {
+      if self.at(.atSign) {
+        return true
+      }
+      if self.at(.poundIf) && self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
+        return true
+      }
+      return false
     }
 
-    var elements = [RawAttributeListSyntax.Element]()
     var loopProgress = LoopProgressCondition()
-    repeat {
-      let attribute = self.parseAttribute()
+    while self.hasProgressed(&loopProgress) && shouldContinue() {
+      let attribute = self.parseAttributeListElement()
       elements.append(attribute)
-    } while self.at(.atSign, .poundIf) && self.hasProgressed(&loopProgress)
-    return RawAttributeListSyntax(elements: elements, arena: self.arena)
+    }
+    if elements.isEmpty {
+      return self.emptyCollection(RawAttributeListSyntax.self)
+    } else {
+      return RawAttributeListSyntax(elements: elements, arena: self.arena)
+    }
   }
 }
 
@@ -148,7 +186,7 @@ extension Parser {
     parseMissingArguments: (
       (inout Parser) -> (unexpectedBefore: RawUnexpectedNodesSyntax?, arguments: RawAttributeSyntax.Arguments)
     )? = nil
-  ) -> RawAttributeListSyntax.Element {
+  ) -> RawAttributeSyntax {
     var (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
     if atSign.trailingTriviaByteLength > 0 || self.currentToken.leadingTriviaByteLength > 0 {
       let diagnostic = TokenDiagnostic(
@@ -163,9 +201,7 @@ extension Parser {
     case .required:
       shouldParseArgument = true
     case .customAttribute:
-      shouldParseArgument =
-        self.withLookahead { $0.atAttributeOrSpecifierArgument() }
-        && self.at(TokenSpec(.leftParen, allowAtStartOfLine: false))
+      shouldParseArgument = self.withLookahead { $0.atAttributeOrSpecifierArgument() }
     case .optional:
       shouldParseArgument = self.at(.leftParen)
     case .noArgument:
@@ -190,46 +226,32 @@ extension Parser {
         (unexpectedBeforeArguments, argument) = parseArguments(&self)
       }
       let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
-      return .attribute(
-        RawAttributeSyntax(
-          unexpectedBeforeAtSign,
-          atSign: atSign,
-          attributeName: attributeName,
-          unexpectedBeforeLeftParen,
-          leftParen: leftParen,
-          unexpectedBeforeArguments,
-          arguments: argument,
-          unexpectedBeforeRightParen,
-          rightParen: rightParen,
-          arena: self.arena
-        )
+      return RawAttributeSyntax(
+        unexpectedBeforeAtSign,
+        atSign: atSign,
+        attributeName: attributeName,
+        unexpectedBeforeLeftParen,
+        leftParen: leftParen,
+        unexpectedBeforeArguments,
+        arguments: argument,
+        unexpectedBeforeRightParen,
+        rightParen: rightParen,
+        arena: self.arena
       )
     } else {
-      return .attribute(
-        RawAttributeSyntax(
-          unexpectedBeforeAtSign,
-          atSign: atSign,
-          attributeName: attributeName,
-          leftParen: nil,
-          arguments: nil,
-          rightParen: nil,
-          arena: self.arena
-        )
+      return RawAttributeSyntax(
+        unexpectedBeforeAtSign,
+        atSign: atSign,
+        attributeName: attributeName,
+        leftParen: nil,
+        arguments: nil,
+        rightParen: nil,
+        arena: self.arena
       )
     }
   }
 
-  mutating func parseAttribute() -> RawAttributeListSyntax.Element {
-    if self.at(.poundIf) {
-      return .ifConfigDecl(
-        self.parsePoundIfDirective { (parser, _) -> RawAttributeListSyntax.Element in
-          return parser.parseAttribute()
-        } syntax: { parser, attributes in
-          return .attributes(RawAttributeListSyntax(elements: attributes, arena: parser.arena))
-        }
-      )
-    }
-
+  mutating func parseAttribute() -> RawAttributeSyntax {
     switch peek(isAtAnyIn: DeclarationAttributeWithSpecialSyntax.self) {
     case .abi:
       return parseAttribute(argumentMode: .required) { parser in
@@ -299,17 +321,15 @@ extension Parser {
     case .rethrows:
       let (unexpectedBeforeAtSign, atSign) = self.expect(.atSign)
       let (unexpectedBeforeAttributeName, attributeName) = self.expect(TokenSpec(.rethrows, remapping: .identifier))
-      return .attribute(
-        RawAttributeSyntax(
-          unexpectedBeforeAtSign,
-          atSign: atSign,
-          unexpectedBeforeAttributeName,
-          attributeName: RawIdentifierTypeSyntax(name: attributeName, genericArgumentClause: nil, arena: self.arena),
-          leftParen: nil,
-          arguments: nil,
-          rightParen: nil,
-          arena: self.arena
-        )
+      return RawAttributeSyntax(
+        unexpectedBeforeAtSign,
+        atSign: atSign,
+        unexpectedBeforeAttributeName,
+        attributeName: RawIdentifierTypeSyntax(name: attributeName, genericArgumentClause: nil, arena: self.arena),
+        leftParen: nil,
+        arguments: nil,
+        rightParen: nil,
+        arena: self.arena
       )
     case .Sendable:
       return parseAttribute(argumentMode: .noArgument) { parser in
@@ -1023,6 +1043,10 @@ extension Parser {
 
 extension Parser.Lookahead {
   mutating func atAttributeOrSpecifierArgument() -> Bool {
+    if !self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
+      return false
+    }
+
     var lookahead = self.lookahead()
     lookahead.skipSingle()
 
@@ -1055,9 +1079,7 @@ extension Parser.Lookahead {
       return false
     }
 
-    if self.at(TokenSpec(.leftParen, allowAtStartOfLine: false))
-      && self.withLookahead({ $0.atAttributeOrSpecifierArgument() })
-    {
+    if self.withLookahead({ $0.atAttributeOrSpecifierArgument() }) {
       self.skipSingle()
     }
 

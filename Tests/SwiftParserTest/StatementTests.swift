@@ -703,7 +703,7 @@ final class StatementTests: ParserTestCase {
   func testRecoveryInFrontOfAccessorIntroducer() {
     assertParse(
       """
-      subscript1️⃣(2️⃣{3️⃣@self _modify
+      subscript1️⃣(2️⃣{@attr _modify3️⃣
       """,
       diagnostics: [
         DiagnosticSpec(
@@ -723,14 +723,10 @@ final class StatementTests: ParserTestCase {
           notes: [NoteSpec(locationMarker: "2️⃣", message: "to match this opening '{'")],
           fixIts: ["insert '}'"]
         ),
-        DiagnosticSpec(
-          locationMarker: "3️⃣",
-          message: "extraneous code '@self _modify' at top level"
-        ),
       ],
       fixedSource: """
-        subscript() -> <#type#> {
-        }@self _modify
+        subscript() -> <#type#> {@attr _modify
+        }
         """
     )
   }

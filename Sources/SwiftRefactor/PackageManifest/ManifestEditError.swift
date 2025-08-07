@@ -19,6 +19,7 @@ public enum ManifestEditError: Error, Equatable {
   case cannotFindTargets
   case cannotFindTarget(targetName: String)
   case cannotFindArrayLiteralArgument(argumentName: String)
+  case cannotAddSettingsToPluginTarget
   case existingDependency(dependencyName: String)
   case malformedManifest(error: String)
 }
@@ -34,6 +35,8 @@ extension ManifestEditError: CustomStringConvertible {
       return "unable to find target named '\(name)' in package"
     case .cannotFindArrayLiteralArgument(argumentName: let name):
       return "unable to find array literal for '\(name)' argument"
+    case .cannotAddSettingsToPluginTarget:
+      return "plugin targets do not support settings"
     case .existingDependency(let name):
       return "unable to add dependency '\(name)' because it already exists in the list of dependencies"
     case .malformedManifest(let error):

@@ -86,6 +86,7 @@ public struct AddPackageDependency: ManifestEditRefactoringProvider {
 
     if let existingDependencies = packageCall.findArgument(labeled: "dependencies") {
       // If we have an existing dependencies array, we need to check if
+      // it's already added.
       if let expr = existingDependencies.expression.as(ArrayExprSyntax.self) {
         // Iterate through existing dependencies and look for an argument that matches
         // either the `id` or `url` argument of the new dependency.

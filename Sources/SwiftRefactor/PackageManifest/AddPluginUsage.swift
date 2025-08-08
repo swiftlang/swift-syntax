@@ -27,10 +27,6 @@ public struct AddPluginUsage: ManifestEditRefactoringProvider {
     }
   }
 
-  /// The set of argument labels that can occur after the "plugins"
-  /// argument in the Target initializers. (There aren't any right now)
-  private static let argumentLabelsAfterPluginUsages: Set<String> = []
-
   /// Produce the set of source edits needed to add the given package
   /// dependency to the given manifest file.
   public static func manifestRefactor(
@@ -49,7 +45,7 @@ public struct AddPluginUsage: ManifestEditRefactoringProvider {
 
     let newTargetCall = try targetCall.appendingToArrayArgument(
       label: "plugins",
-      labelsAfter: Self.argumentLabelsAfterPluginUsages,
+      labelsAfter: [],
       newElement: pluginUsage.asSyntax()
     )
 

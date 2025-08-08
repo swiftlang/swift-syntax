@@ -15,6 +15,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 /// Add a package dependency to a package manifest's source code.
+@_spi(PackageRefactor)
 public struct AddPackageDependency: ManifestEditRefactoringProvider {
   public struct Context {
     public var dependency: PackageDependency

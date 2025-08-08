@@ -18,6 +18,7 @@ import SwiftSyntax
 /// to get it right.
 let defaultIndent = TriviaPiece.spaces(4)
 
+@_spi(PackageRefactor)
 extension Trivia {
   /// Determine whether this trivia has newlines or not.
   var hasNewlines: Bool {
@@ -50,6 +51,7 @@ private class FirstNodeFinder<Node: SyntaxProtocol>: SyntaxAnyVisitor {
   }
 }
 
+@_spi(PackageRefactor)
 extension SyntaxProtocol {
   /// Find the first node of the Self type that matches the given predicate.
   static func findFirst(
@@ -64,6 +66,7 @@ extension SyntaxProtocol {
   }
 }
 
+@_spi(PackageRefactor)
 extension FunctionCallExprSyntax {
   /// Check whether this call expression has a callee that is a reference
   /// to a declaration with the given name.
@@ -86,6 +89,7 @@ extension FunctionCallExprSyntax {
   }
 }
 
+@_spi(PackageRefactor)
 extension LabeledExprListSyntax {
   /// Find the index at which the one would insert a new argument given
   /// the set of argument labels that could come after the argument we
@@ -158,6 +162,7 @@ extension LabeledExprListSyntax {
   }
 }
 
+@_spi(PackageRefactor)
 extension SyntaxProtocol {
   /// Look for a call expression to a callee with the given name.
   func findCall(calleeName: String) -> FunctionCallExprSyntax? {
@@ -167,6 +172,7 @@ extension SyntaxProtocol {
   }
 }
 
+@_spi(PackageRefactor)
 extension FunctionCallExprSyntax {
   /// Find the call that forms a target with the given name in this
   /// package manifest.
@@ -200,6 +206,7 @@ extension FunctionCallExprSyntax {
   }
 }
 
+@_spi(PackageRefactor)
 extension ArrayExprSyntax {
   /// Produce a new array literal expression that appends the given
   /// element, while trying to maintain similar indentation.
@@ -259,6 +266,7 @@ extension ArrayExprSyntax {
   }
 }
 
+@_spi(PackageRefactor)
 extension ExprSyntax {
   /// Find an array argument either at the top level or within a sequence
   /// expression.
@@ -278,6 +286,7 @@ extension ExprSyntax {
 }
 
 // MARK: Utilities to oeprate on arrays of array literal elements.
+@_spi(PackageRefactor)
 extension [ArrayElementSyntax] {
   /// Append a new argument expression.
   mutating func append(expression: ExprSyntax) {
@@ -306,6 +315,7 @@ extension [ArrayElementSyntax] {
 
 // MARK: Utilities to operate on arrays of call arguments.
 
+@_spi(PackageRefactor)
 extension [LabeledExprSyntax] {
   /// Append a potentially labeled argument with the argument expression.
   mutating func append(label: String?, expression: ExprSyntax) {
@@ -430,6 +440,7 @@ private class ReplacingRewriter: SyntaxRewriter {
   }
 }
 
+@_spi(PackageRefactor)
 fileprivate extension SyntaxProtocol {
   /// Replace the given child with a new child node.
   func replacingChild(_ childNode: Syntax, with newChildNode: Syntax) -> Self {
@@ -440,6 +451,7 @@ fileprivate extension SyntaxProtocol {
   }
 }
 
+@_spi(PackageRefactor)
 extension FunctionCallExprSyntax {
   /// Perform source edits that will add the given new element to the
   /// array for an argument with the given label (if there is one), or

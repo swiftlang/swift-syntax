@@ -16,6 +16,7 @@ import SwiftSyntaxBuilder
 
 /// Add a plugin usage to a particular target in the manifest's source
 /// code.
+@_spi(PackageRefactor)
 public struct AddPluginUsage: ManifestEditRefactoringProvider {
   public struct Context {
     public let targetName: String

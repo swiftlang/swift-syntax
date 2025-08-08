@@ -16,6 +16,7 @@ import SwiftSyntaxBuilder
 
 /// Describes a package dependency for refactoring purposes. This is a syntactic
 /// subset of the full package manifest's description of a package dependency.
+@_spi(PackageRefactor)
 public enum PackageDependency: Sendable {
   case fileSystem(FileSystem)
   case sourceControl(SourceControl)

@@ -14,6 +14,7 @@ import SwiftSyntax
 
 /// An error describing problems that can occur when attempting to edit a
 /// package manifest programattically.
+@_spi(PackageRefactor)
 public enum ManifestEditError: Error, Equatable {
   case cannotFindPackage
   case cannotFindTargets

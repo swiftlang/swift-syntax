@@ -15,6 +15,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 /// Add a swift setting to a manifest's source code.
+@_spi(PackageRefactor)
 public struct AddSwiftSetting: ManifestEditRefactoringProvider {
   public struct Context {
     let target: String

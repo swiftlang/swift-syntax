@@ -14,6 +14,7 @@ import SwiftSyntax
 
 /// Syntactic wrapper type that describes a product for refactoring
 /// purposes but does not interpret its contents.
+@_spi(PackageRefactor)
 public struct ProductDescription {
   /// The name of the product.
   public let name: String

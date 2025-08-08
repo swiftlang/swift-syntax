@@ -12,6 +12,7 @@
 
 import SwiftSyntax
 
+@_spi(PackageRefactor)
 public protocol ManifestEditRefactoringProvider: EditRefactoringProvider
 where Self.Input == SourceFileSyntax {
 

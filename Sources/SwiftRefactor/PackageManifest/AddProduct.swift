@@ -15,6 +15,7 @@ import SwiftSyntax
 import SwiftSyntaxBuilder
 
 /// Add a product to the manifest's source code.
+@_spi(PackageRefactor)
 public struct AddProduct: ManifestEditRefactoringProvider {
   public struct Context {
     public let product: ProductDescription

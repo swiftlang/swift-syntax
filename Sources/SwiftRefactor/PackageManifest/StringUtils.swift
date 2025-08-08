@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+@_spi(PackageRefactor)
 extension String {
   /// Returns a form of the string that is valid C99 Extended Identifier (by
   /// replacing any invalid characters in an unspecified but consistent way).

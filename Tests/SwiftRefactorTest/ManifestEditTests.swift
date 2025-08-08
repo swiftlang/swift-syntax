@@ -12,7 +12,7 @@
 
 @_spi(FixItApplier) import SwiftIDEUtils
 import SwiftParser
-import SwiftRefactor
+@_spi(PackageRefactor) import SwiftRefactor
 import SwiftSyntax
 import SwiftSyntaxBuilder
 import XCTest

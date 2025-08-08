@@ -114,16 +114,16 @@ extension PackageTarget: ManifestSyntaxRepresentable {
 extension PackageTarget.Dependency: ManifestSyntaxRepresentable {
   func asSyntax() -> ExprSyntax {
     switch self {
-    case .byName(name: let name):
+    case .byName(let name):
       return "\(literal: name)"
 
-    case .target(name: let name):
+    case .target(let name):
       return ".target(name: \(literal: name))"
 
-    case .product(name: let name, package: nil):
+    case .product(let name, package: nil):
       return ".product(name: \(literal: name))"
 
-    case .product(name: let name, package: let package):
+    case .product(let name, let package):
       return ".product(name: \(literal: name), package: \(literal: package))"
     }
   }
@@ -132,10 +132,10 @@ extension PackageTarget.Dependency: ManifestSyntaxRepresentable {
 extension PackageTarget.PluginUsage: ManifestSyntaxRepresentable {
   func asSyntax() -> ExprSyntax {
     switch self {
-    case .plugin(name: let name, package: nil):
+    case .plugin(let name, package: nil):
       return ".plugin(name: \(literal: name))"
 
-    case .plugin(name: let name, package: let package):
+    case .plugin(let name, let package):
       return ".plugin(name: \(literal: name), package: \(literal: package))"
     }
   }

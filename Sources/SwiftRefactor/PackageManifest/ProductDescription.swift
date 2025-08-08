@@ -76,7 +76,7 @@ extension ProductDescription: ManifestSyntaxRepresentable {
   private var functionName: String {
     switch type {
     case .executable: return "executable"
-    case .library(_): return "library"
+    case .library: return "library"
     case .macro: return "macro"
     case .plugin: return "plugin"
     case .snippet: return "snippet"

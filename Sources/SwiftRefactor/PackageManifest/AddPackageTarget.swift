@@ -190,7 +190,7 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
     }
 
     let importDecls = importModuleNames.lazy.sorted().map { name in
-      DeclSyntax("import \(raw: name)").with(\.trailingTrivia, .newline)
+      DeclSyntax("import \(raw: name)\n")
     }
 
     let imports = CodeBlockItemListSyntax {
@@ -298,9 +298,9 @@ fileprivate extension PackageTarget.Dependency {
   /// Retrieve the name of the dependency
   var name: String {
     switch self {
-    case .target(name: let name),
-      .byName(name: let name),
-      .product(name: let name, package: _):
+    case .target(let name),
+      .byName(let name),
+      .product(let name, package: _):
       return name
     }
   }
@@ -308,7 +308,7 @@ fileprivate extension PackageTarget.Dependency {
 
 /// The array of auxiliary files that can be added by a package editing
 /// operation.
-fileprivate typealias AuxiliaryFiles = [(String, SourceFileSyntax)]
+private typealias AuxiliaryFiles = [(String, SourceFileSyntax)]
 
 fileprivate extension AuxiliaryFiles {
   /// Add a source file to the list of auxiliary files.
@@ -322,7 +322,7 @@ fileprivate extension AuxiliaryFiles {
 
 /// The set of dependencies we need to introduce to a newly-created macro
 /// target.
-fileprivate let macroTargetDependencies: [PackageTarget.Dependency] = [
+private let macroTargetDependencies: [PackageTarget.Dependency] = [
   .product(name: "SwiftCompilerPlugin", package: "swift-syntax"),
   .product(name: "SwiftSyntaxMacros", package: "swift-syntax"),
 ]

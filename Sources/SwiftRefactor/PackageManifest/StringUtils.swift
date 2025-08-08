@@ -18,7 +18,7 @@ extension String {
   func mangledToC99ExtendedIdentifier() -> String {
     // Map invalid C99-invalid Unicode scalars to a replacement character.
     let replacementUnichar: UnicodeScalar = "_"
-    var mangledUnichars: [UnicodeScalar] = self.unicodeScalars.map({
+    var mangledUnichars: [UnicodeScalar] = self.unicodeScalars.map {
       switch $0.value {
       case  // A-Z
       0x0041...0x005A,
@@ -194,10 +194,10 @@ extension String {
       default:
         return replacementUnichar
       }
-    })
+    }
 
     // Apply further restrictions to the prefix.
-    loop: for (idx, c) in mangledUnichars.enumerated() {
+    LOOP: for (idx, c) in mangledUnichars.enumerated() {
       switch c.value {
       case  // 0-9
       0x0030...0x0039,
@@ -208,9 +208,9 @@ extension String {
         0x0CE6...0x0CEF, 0x0D66...0x0D6F, 0x0E50...0x0E59,
         0x0ED0...0x0ED9, 0x0F20...0x0F33:
         mangledUnichars[idx] = replacementUnichar
-        break loop
+        break LOOP
       default:
-        break loop
+        break LOOP
       }
     }
 
@@ -218,6 +218,6 @@ extension String {
     // FIXME: We should only construct a new string if anything changed.
     // FIXME: There doesn't seem to be a way to create a string from an
     //        array of Unicode scalars; but there must be a better way.
-    return mangledUnichars.reduce("") { $0 + String($1) }
+    return String(decoding: mangledUnichars.flatMap { $0.utf8 }, as: UTF8.self)
   }
 }

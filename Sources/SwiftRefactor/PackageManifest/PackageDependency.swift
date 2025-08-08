@@ -22,7 +22,6 @@ public enum PackageDependency: Sendable {
   case registry(Registry)
 
   public struct FileSystem: Sendable {
-    public let nameForTargetDependencyResolutionOnly: String?
     public let path: String
   }
 
@@ -75,8 +74,6 @@ extension PackageDependency.FileSystem: ManifestSyntaxRepresentable {
 
 extension PackageDependency.SourceControl: ManifestSyntaxRepresentable {
   func asSyntax() -> ExprSyntax {
-    // TODO: Not handling identity, nameForTargetDependencyResolutionOnly,
-    // or productFilter yet.
     ".package(url: \(literal: location.description), \(requirement.asSyntax()))"
   }
 }
@@ -104,7 +101,7 @@ extension PackageDependency.SourceControl.Requirement: ManifestSyntaxRepresentab
 
     case .range(let lowerBound, let upperBound):
       return LabeledExprSyntax(
-        expression: "\(lowerBound.asSyntax())..<\(upperBound.asSyntax())" as ExprSyntax
+        expression: "\(literal: lowerBound)..<\(literal: upperBound)" as ExprSyntax
       )
 
     case .revision(let revision):

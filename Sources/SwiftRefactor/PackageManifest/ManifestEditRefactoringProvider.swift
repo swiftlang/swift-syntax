@@ -18,7 +18,7 @@ where Self.Input == SourceFileSyntax {
   static func manifestRefactor(syntax: SourceFileSyntax, in context: Context) throws -> PackageEdit
 }
 
-extension EditRefactoringProvider where Self: ManifestEditRefactoringProvider {
+extension ManifestEditRefactoringProvider {
   public static func textRefactor(syntax: Input, in context: Context) -> [SourceEdit] {
     return (try? manifestRefactor(syntax: syntax, in: context).manifestEdits) ?? []
   }

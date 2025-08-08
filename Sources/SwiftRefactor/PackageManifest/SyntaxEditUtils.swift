@@ -23,22 +23,12 @@ extension Trivia {
   var hasNewlines: Bool {
     contains(where: \.isNewline)
   }
-
-  /// Produce trivia from the last newline to the end, dropping anything
-  /// prior to that.
-  var onlyLastLine: Trivia {
-    guard let lastNewline = pieces.lastIndex(where: { $0.isNewline }) else {
-      return self
-    }
-
-    return Trivia(pieces: pieces[lastNewline...])
-  }
 }
 
 /// Syntax walker to find the first occurrence of a given node kind that
 /// matches a specific predicate.
 private class FirstNodeFinder<Node: SyntaxProtocol>: SyntaxAnyVisitor {
-  var predicate: (Node) -> Bool
+  let predicate: (Node) -> Bool
   var found: Node? = nil
 
   init(predicate: @escaping (Node) -> Bool) {
@@ -100,7 +90,7 @@ extension LabeledExprListSyntax {
   /// Find the index at which the one would insert a new argument given
   /// the set of argument labels that could come after the argument we
   /// want to insert.
-  func findArgumentInsertionPosition(
+  fileprivate func findArgumentInsertionPosition(
     labelsAfter: Set<String>
   ) -> SyntaxChildrenIndex {
     firstIndex {
@@ -120,7 +110,7 @@ extension LabeledExprListSyntax {
   /// created by the `generator` function, which is provided with leading
   /// trivia and trailing comma it should use to match the surrounding
   /// context.
-  func insertingArgument(
+  fileprivate func insertingArgument(
     at position: SyntaxChildrenIndex,
     generator: (_ leadingTrivia: Trivia, _ trailingComma: TokenSyntax?) -> LabeledExprSyntax
   ) -> LabeledExprListSyntax {
@@ -236,9 +226,8 @@ extension ArrayExprSyntax {
       // there.
       if last.trailingComma == nil {
         var newElements = Array(elements)
-        newElements[newElements.count - 1].trailingComma = .commaToken()
+        newElements[newElements.count - 1].trailingComma = .commaToken(trailingTrivia: last.expression.trailingTrivia)
         newElements[newElements.count - 1].expression.trailingTrivia = Trivia()
-        newElements[newElements.count - 1].trailingTrivia = last.trailingTrivia
         elements = ArrayElementListSyntax(newElements)
       }
 
@@ -289,12 +278,12 @@ extension ExprSyntax {
 }
 
 // MARK: Utilities to oeprate on arrays of array literal elements.
-extension Array<ArrayElementSyntax> {
+extension [ArrayElementSyntax] {
   /// Append a new argument expression.
   mutating func append(expression: ExprSyntax) {
     // Add a comma on the prior expression, if there is one.
     let leadingTrivia: Trivia?
-    if count > 0 {
+    if !isEmpty {
       self[count - 1].trailingComma = TokenSyntax.commaToken()
       leadingTrivia = .newline
 
@@ -317,7 +306,7 @@ extension Array<ArrayElementSyntax> {
 
 // MARK: Utilities to operate on arrays of call arguments.
 
-extension Array<LabeledExprSyntax> {
+extension [LabeledExprSyntax] {
   /// Append a potentially labeled argument with the argument expression.
   mutating func append(label: String?, expression: ExprSyntax) {
     // Add a comma on the prior expression, if there is one.
@@ -422,7 +411,7 @@ extension Array<LabeledExprSyntax> {
 }
 
 // MARK: Utilities for adding arguments into calls.
-fileprivate class ReplacingRewriter: SyntaxRewriter {
+private class ReplacingRewriter: SyntaxRewriter {
   let childNode: Syntax
   let newChildNode: Syntax
 

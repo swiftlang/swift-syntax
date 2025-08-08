@@ -18,11 +18,14 @@ import SwiftSyntaxBuilder
 public struct AddPackageTarget: ManifestEditRefactoringProvider {
   public struct Context {
     public let target: PackageTarget
-    public let configuration: Configuration
+    public var testHarness: TestHarness
 
-    public init(target: PackageTarget, configuration: Configuration = .init()) {
+    public init(
+      target: PackageTarget,
+      testHarness: TestHarness = .default
+    ) {
       self.target = target
-      self.configuration = configuration
+      self.testHarness = testHarness
     }
   }
 
@@ -50,19 +53,6 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
     public static let `default`: TestHarness = .swiftTesting
   }
 
-  /// Additional configuration information to guide the package editing
-  /// process.
-  public struct Configuration {
-    /// The test harness to use.
-    public var testHarness: TestHarness
-
-    public init(
-      testHarness: TestHarness = .default
-    ) {
-      self.testHarness = testHarness
-    }
-  }
-
   /// Add the given target to the manifest, producing a set of edit results
   /// that updates the manifest and adds some source files to stub out the
   /// new target.
@@ -70,7 +60,6 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
     syntax manifest: SourceFileSyntax,
     in context: Context
   ) throws -> PackageEdit {
-    let configuration = context.configuration
     guard let packageCall = manifest.findCall(calleeName: "Package") else {
       throw ManifestEditError.cannotFindPackage
     }
@@ -120,7 +109,7 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
     addPrimarySourceFile(
       outerPath: outerPath,
       target: target,
-      configuration: configuration,
+      in: context,
       to: &auxiliaryFiles
     )
 
@@ -176,7 +165,7 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
   fileprivate static func addPrimarySourceFile(
     outerPath: String,
     target: PackageTarget,
-    configuration: Configuration,
+    in context: Context,
     to auxiliaryFiles: inout AuxiliaryFiles
   ) {
     let sourceFilePath = "\(outerPath)/\(target.name)/\(target.name).swift"
@@ -188,7 +177,7 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
 
     // Add appropriate test module dependencies.
     if target.type == .test {
-      switch configuration.testHarness {
+      switch context.testHarness {
       case .none:
         break
 
@@ -229,7 +218,7 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
         """
 
     case .test:
-      switch configuration.testHarness {
+      switch context.testHarness {
       case .none:
         sourceFileText = """
           \(imports)

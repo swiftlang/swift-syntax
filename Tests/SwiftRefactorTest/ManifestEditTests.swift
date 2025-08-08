@@ -661,9 +661,7 @@ final class ManifestEditTests: XCTestCase {
           name: "MyTest target-name",
           type: .test
         ),
-        configuration: .init(
-          testHarness: .swiftTesting
-        )
+        testHarness: .swiftTesting
       )
     )
   }

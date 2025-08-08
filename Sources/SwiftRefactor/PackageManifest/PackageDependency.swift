@@ -22,18 +22,15 @@ public enum PackageDependency: Sendable {
   case registry(Registry)
 
   public struct FileSystem: Sendable {
-    public let identity: String
     public let nameForTargetDependencyResolutionOnly: String?
     public let path: String
   }
 
   public struct SourceControl: Sendable {
-    public let identity: String
     public let location: String
     public let requirement: Requirement
 
-    public init(identity: String, location: String, requirement: Requirement) {
-      self.identity = identity
+    public init(location: String, requirement: Requirement) {
       self.location = location
       self.requirement = requirement
     }

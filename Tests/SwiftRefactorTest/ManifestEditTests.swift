@@ -23,7 +23,6 @@ final class ManifestEditTests: XCTestCase {
 
   static let swiftSystemPackageDependency: PackageDependency = .sourceControl(
     .init(
-      identity: "swift-system",
       location: swiftSystemURL,
       requirement: .branch("main")
     )
@@ -54,7 +53,6 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: "swift-system",
             location: Self.swiftSystemURL,
             requirement: .branch("main")
           )
@@ -88,7 +86,6 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: "swift-system",
             location: Self.swiftSystemURL,
             requirement: .exact("510.0.0")
           )
@@ -120,7 +117,6 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: "swift-system",
             location: Self.swiftSystemURL,
             requirement: .exact("510.0.0")
           )
@@ -154,7 +150,6 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: "swift-system",
             location: Self.swiftSystemURL,
             requirement: .exact("510.0.0")
           )
@@ -179,7 +174,7 @@ final class ManifestEditTests: XCTestCase {
       )
     ) { (error: any Error) in
       guard let error = error as? ManifestEditError,
-        case .existingDependency("swift-system") = error
+        case .existingDependency("https://github.com/apple/swift-system.git") = error
       else {
         XCTFail("unexpected error thrown: \(error)")
         return
@@ -212,7 +207,6 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: "swift-system",
             location: Self.swiftSystemURL,
             requirement: .rangeFrom("510.0.0")
           )
@@ -241,7 +235,6 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: "swift-system",
             location: Self.swiftSystemURL,
             requirement: .rangeFrom("510.0.0")
           )
@@ -268,7 +261,6 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: "swift-system",
             location: Self.swiftSystemURL,
             requirement: .rangeFrom("510.0.0")
           )
@@ -299,7 +291,6 @@ final class ManifestEditTests: XCTestCase {
       context: .init(
         dependency: .sourceControl(
           .init(
-            identity: "swift-system",
             location: Self.swiftSystemURL,
             requirement: .range(lowerBound: "508.0.0", upperBound: "510.0.0")
           )

@@ -349,7 +349,6 @@ fileprivate extension PackageDependency {
   static func swiftSyntax(from version: String) -> PackageDependency {
     return .sourceControl(
       .init(
-        identity: "swift-syntax",
         location: swiftSyntaxURL,
         requirement: .rangeFrom(version)
       )

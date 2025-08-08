@@ -128,9 +128,9 @@ fileprivate extension PackageDependency {
   var identifier: String {
     switch self {
     case .sourceControl(let info):
-      return info.identity
+      return info.location
     case .fileSystem(let info):
-      return info.identity
+      return info.path
     case .registry(let info):
       return info.identity
     }

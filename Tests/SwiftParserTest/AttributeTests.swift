@@ -201,6 +201,21 @@ final class AttributeTests: ParserTestCase {
     )
   }
 
+  func testObjCAttributeNewlineParen() {
+    assertParse(
+      """
+      @objc
+      1️⃣(foo) func foo()
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "unexpected code '(foo)' in function"
+        )
+      ]
+    )
+  }
+
   func testRethrowsAttribute() {
     assertParse(
       """

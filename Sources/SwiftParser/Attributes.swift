@@ -167,12 +167,12 @@ extension Parser {
         self.withLookahead { $0.atAttributeOrSpecifierArgument() }
         && self.at(TokenSpec(.leftParen, allowAtStartOfLine: false))
     case .optional:
-      shouldParseArgument = self.at(.leftParen)
+      shouldParseArgument = self.at(TokenSpec(.leftParen, allowAtStartOfLine: false))
     case .noArgument:
       shouldParseArgument = false
     }
     if shouldParseArgument {
-      var (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+      var (unexpectedBeforeLeftParen, leftParen) = self.expect(TokenSpec(.leftParen, allowAtStartOfLine: false))
       if unexpectedBeforeLeftParen == nil
         && (attributeName.raw.trailingTriviaByteLength > 0 || leftParen.leadingTriviaByteLength > 0)
       {

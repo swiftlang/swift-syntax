@@ -226,7 +226,7 @@ struct GenerateSwiftSyntax: AsyncParsableCommand {
 
 }
 
-fileprivate func generateFile(
+private func generateFile(
   contents: @autoclosure () -> String,
   destination: URL,
   verbose: Bool

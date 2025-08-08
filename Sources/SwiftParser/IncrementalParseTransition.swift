@@ -208,7 +208,7 @@ struct IncrementalParseLookup {
 
 /// Functions as an iterator that walks the tree looking for nodes with a
 /// certain position.
-fileprivate struct SyntaxCursor {
+private struct SyntaxCursor {
   var node: Syntax
   var finished: Bool
   let viewMode = SyntaxTreeViewMode.sourceAccurate

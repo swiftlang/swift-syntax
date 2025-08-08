@@ -95,7 +95,7 @@ extension EnumDeclSyntax {
   var caseElements: [EnumCaseElementSyntax] {
     memberBlock.members.flatMap { member in
       guard let caseDecl = member.decl.as(EnumCaseDeclSyntax.self) else {
-        return Array<EnumCaseElementSyntax>()
+        return [EnumCaseElementSyntax]()
       }
 
       return Array(caseDecl.elements)

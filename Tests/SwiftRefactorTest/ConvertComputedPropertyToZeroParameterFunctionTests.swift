@@ -301,7 +301,7 @@ final class ConvertComputedPropertyToZeroParameterFunctionTests: XCTestCase {
   }
 }
 
-fileprivate func assertRefactorConvert(
+private func assertRefactorConvert(
   _ callDecl: DeclSyntax,
   expected: DeclSyntax?,
   file: StaticString = #filePath,

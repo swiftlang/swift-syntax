@@ -174,7 +174,7 @@ extension SyntaxProtocol {
 }
 
 /// Helper class that walks a syntax tree looking for configured regions.
-fileprivate class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: SyntaxVisitor {
+private class ConfiguredRegionVisitor<Configuration: BuildConfiguration>: SyntaxVisitor {
   let configuration: Configuration
 
   /// The regions we've found so far.

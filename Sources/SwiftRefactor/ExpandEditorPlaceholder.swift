@@ -496,5 +496,5 @@ public func wrapInTypePlaceholder(_ str: String, type: String) -> String {
   return wrapInPlaceholder("T##" + str + "##" + type)
 }
 
-fileprivate let placeholderStart: String = "<#"
-fileprivate let placeholderEnd: String = "#>"
+private let placeholderStart: String = "<#"
+private let placeholderEnd: String = "#>"

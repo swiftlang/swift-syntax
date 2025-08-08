@@ -17,7 +17,7 @@ import SwiftSyntax
 import XCTest
 import _SwiftSyntaxTestSupport
 
-fileprivate func assertIndented(
+private func assertIndented(
   by indentation: Trivia = .tab,
   indentFirstLine: Bool = true,
   source: String,

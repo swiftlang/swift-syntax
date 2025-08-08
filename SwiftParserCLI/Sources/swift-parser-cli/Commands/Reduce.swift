@@ -17,7 +17,7 @@ import Foundation
 import WinSDK
 #endif
 
-fileprivate func withTemporaryFile<T>(contents: [UInt8], body: (URL) throws -> T) throws -> T {
+private func withTemporaryFile<T>(contents: [UInt8], body: (URL) throws -> T) throws -> T {
   var tempFileURL = FileManager.default.temporaryDirectory
   tempFileURL.appendPathComponent("swift-parser-cli-\(UUID().uuidString).swift")
   try Data(contents).write(to: tempFileURL)

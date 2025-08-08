@@ -13,7 +13,7 @@
 import SwiftSyntax
 import XCTest
 
-fileprivate func cannedStructDecl() -> StructDeclSyntax {
+private func cannedStructDecl() -> StructDeclSyntax {
   let structKW = TokenSyntax.keyword(.struct, trailingTrivia: .space)
   let fooID = TokenSyntax.identifier("Foo", trailingTrivia: .space)
   let rBrace = TokenSyntax.rightBraceToken(leadingTrivia: .newline)
@@ -210,7 +210,7 @@ class SyntaxCreationTests: XCTestCase {
       literal: .integerLiteral("1")
     )
     let operatorNames = ["==", "!=", "+", "-", "*", "/", "<", ">", "<=", ">="]
-    operatorNames.forEach { operatorName in
+    for operatorName in operatorNames {
       let operatorToken = TokenSyntax.binaryOperator(operatorName, leadingTrivia: .space, trailingTrivia: .space)
       let operatorExpr = BinaryOperatorExprSyntax(operator: operatorToken)
       let exprList = ExprListSyntax([

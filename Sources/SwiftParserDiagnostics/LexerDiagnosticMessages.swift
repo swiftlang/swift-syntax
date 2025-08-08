@@ -20,7 +20,7 @@ import SwiftDiagnostics
 @_spi(RawSyntax) import SwiftSyntax
 #endif
 
-fileprivate let diagnosticDomain: String = "SwiftLexer"
+private let diagnosticDomain: String = "SwiftLexer"
 
 /// An error diagnostic whose ID is determined by the diagnostic's type.
 public protocol TokenError: DiagnosticMessage {

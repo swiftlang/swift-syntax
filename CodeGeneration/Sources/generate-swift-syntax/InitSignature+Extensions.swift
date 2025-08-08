@@ -191,7 +191,7 @@ extension InitSignature {
   }
 }
 
-fileprivate func convertFromSyntaxProtocolToSyntaxType(
+private func convertFromSyntaxProtocolToSyntaxType(
   child: Child
 ) -> ExprSyntax {
   let childName = child.identifier
@@ -350,7 +350,7 @@ extension InitParameterMapping {
   func makeArgumentExpr() -> LabeledExprSyntax {
     let argValue =
       switch argument {
-      case .decl(olderChild: let olderChild):
+      case .decl(let olderChild):
         ExprSyntax(DeclReferenceExprSyntax(baseName: olderChild.baseCallName))
 
       case .nestedInit(let initArgs):

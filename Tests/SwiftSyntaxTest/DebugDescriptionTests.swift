@@ -157,8 +157,7 @@ class DebugDescriptionTests: XCTestCase {
       }(),
     ]
 
-    testCases.forEach { keyAndValue in
-      let (key:line, value:testCase) = keyAndValue
+    for (line, testCase) in testCases {
       var actualDumped = ""
       dump(testCase.syntax, to: &actualDumped)
       assertStringsEqualWithDiff(

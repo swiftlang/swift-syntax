@@ -25,7 +25,7 @@ import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
-fileprivate struct WrapAllProperties: MemberAttributeMacro {
+private struct WrapAllProperties: MemberAttributeMacro {
   static func expansion(
     of node: AttributeSyntax,
     attachedTo decl: some DeclGroupSyntax,

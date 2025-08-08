@@ -284,7 +284,7 @@ public struct LayoutNode {
   /// This includes unexpected children
   public var children: [Child] {
     switch node.data {
-    case .layout(children: let children, childHistory: _, traits: _):
+    case .layout(let children, childHistory: _, traits: _):
       return children
     case .collection:
       preconditionFailure("NodeLayoutView must wrap a Node with data `.layout`")
@@ -299,7 +299,7 @@ public struct LayoutNode {
   /// The history of the layout node's children.
   public var childHistory: Child.History {
     switch node.data {
-    case .layout(children: _, childHistory: let childHistory, traits: _):
+    case .layout(children: _, let childHistory, traits: _):
       return childHistory
     case .collection:
       preconditionFailure("NodeLayoutView must wrap a Node with data `.layout`")
@@ -309,7 +309,7 @@ public struct LayoutNode {
   /// Traits that the node conforms to.
   public var traits: [String] {
     switch node.data {
-    case .layout(children: _, childHistory: _, traits: let traits):
+    case .layout(children: _, childHistory: _, let traits):
       return traits
     case .collection:
       preconditionFailure("NodeLayoutView must wrap a Node with data `.layout`")
@@ -361,7 +361,7 @@ public struct CollectionNode {
     switch node.data {
     case .layout:
       preconditionFailure("NodeLayoutView must wrap a Node with data `.collection`")
-    case .collection(choices: let choices):
+    case .collection(let choices):
       return choices
     }
   }
@@ -391,7 +391,7 @@ fileprivate extension Child {
       return [kind]
     case .nodeChoices(let choices, _):
       return choices.flatMap(\.kinds)
-    case .collection(kind: let kind, _, _, _, _):
+    case .collection(let kind, _, _, _, _):
       return [kind]
     case .token:
       return [.token]
@@ -399,7 +399,7 @@ fileprivate extension Child {
   }
 }
 
-fileprivate func interleaveUnexpectedChildren(_ children: [Child]) -> [Child] {
+private func interleaveUnexpectedChildren(_ children: [Child]) -> [Child] {
   let liftedChildren = children.lazy.map(Optional.some)
   let pairedChildren = zip([nil] + liftedChildren, liftedChildren + [nil])
 

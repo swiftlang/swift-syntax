@@ -17,7 +17,7 @@
 #endif
 
 /// A separate lexer specifically for regex literals.
-fileprivate struct RegexLiteralLexer {
+private struct RegexLiteralLexer {
   enum LexResult {
     /// Continue the lex, this is returned from `lexPatternCharacter` when
     /// it successfully lexed a character.

@@ -14,7 +14,7 @@ import ArgumentParser
 import Foundation
 import RegexBuilder
 
-fileprivate let modules: [String] = [
+private let modules: [String] = [
   "SwiftParser",
   "SwiftParserDiagnostics",
   "SwiftSyntax",

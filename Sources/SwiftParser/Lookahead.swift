@@ -212,7 +212,7 @@ extension Parser.Lookahead {
       return false
     }
 
-    while let _ = self.consume(if: .atSign) {
+    while self.consume(if: .atSign) != nil {
       // Consume qualified names that may or may not involve generic arguments.
       repeat {
         self.consume(if: .identifier, .keyword(.rethrows))
@@ -404,7 +404,7 @@ extension Parser.Lookahead {
         case nil:
           self.consumeAnyToken()
         }
-      case .skipSinglePost(start: let start):
+      case .skipSinglePost(let start):
         switch start {
         case .leftParen:
           self.consume(if: .rightParen)

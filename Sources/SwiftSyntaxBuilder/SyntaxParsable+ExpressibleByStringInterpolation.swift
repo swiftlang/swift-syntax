@@ -37,9 +37,9 @@ import os
 /// Only set from `withStringInterpolationParsingErrorsSuppressed`, which is only intended for testing purposes that are
 /// single-threaded.
 #if swift(>=6)
-fileprivate nonisolated(unsafe) var suppressStringInterpolationParsingErrors = false
+private nonisolated(unsafe) var suppressStringInterpolationParsingErrors = false
 #else
-fileprivate var suppressStringInterpolationParsingErrors = false
+private var suppressStringInterpolationParsingErrors = false
 #endif
 
 /// Run the body, disabling any runtime warnings about syntax error in string

@@ -15,7 +15,7 @@ import SwiftLexicalLookup
 import SwiftSyntax
 import XCTest
 
-final class testNameLookup: XCTestCase {
+final class TestNameLookup: XCTestCase {
   func testCodeBlockSimpleCase() {
     assertLexicalNameLookup(
       source: """

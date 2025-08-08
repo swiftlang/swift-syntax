@@ -699,7 +699,7 @@ extension Parser {
         self.missingToken(.identifier)
       )
     } else if keywordRecovery,
-      (self.currentToken.isLexerClassifiedKeyword || self.at(.wildcard)),
+      self.currentToken.isLexerClassifiedKeyword || self.at(.wildcard),
       !self.atStartOfLine
     {
       let keyword = self.consumeAnyToken()

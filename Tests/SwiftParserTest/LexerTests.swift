@@ -14,7 +14,7 @@
 @_spi(RawSyntax) import SwiftSyntax
 import XCTest
 
-fileprivate func lex(_ sourceBytes: [UInt8], body: ([Lexer.Lexeme]) throws -> Void) rethrows {
+private func lex(_ sourceBytes: [UInt8], body: ([Lexer.Lexeme]) throws -> Void) rethrows {
   let lookaheadTracker = UnsafeMutablePointer<LookaheadTracker>.allocate(capacity: 1)
   defer {
     lookaheadTracker.deallocate()
@@ -37,7 +37,7 @@ fileprivate func lex(_ sourceBytes: [UInt8], body: ([Lexer.Lexeme]) throws -> Vo
 /// values for trivia and text. While this is good for most cases, string
 /// literals can't contain invalid UTF-8. Thus, we need a different assert
 /// function working on byte arrays to test source code containing invalid UTF-8.
-fileprivate func assertRawBytesLexeme(
+private func assertRawBytesLexeme(
   _ lexeme: Lexer.Lexeme,
   kind: RawTokenKind,
   leadingTrivia: [UInt8] = [],

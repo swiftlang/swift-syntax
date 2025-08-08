@@ -399,7 +399,7 @@ extension VisitorTests {
 
 /// Assert that removing any inactive code according to the given build
 /// configuration returns the expected source and diagnostics.
-fileprivate func assertRemoveInactive(
+private func assertRemoveInactive(
   _ source: String,
   configuration: some BuildConfiguration,
   retainFeatureCheckIfConfigs: Bool = false,

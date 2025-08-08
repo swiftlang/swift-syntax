@@ -18,16 +18,16 @@ import SwiftSyntaxBuilder
 import XCTest
 import _SwiftSyntaxTestSupport
 
-fileprivate let closurePlaceholder = wrapInPlaceholder("T##closure##() -> Void")
-fileprivate let closureWithArgPlaceholder = wrapInPlaceholder(
+private let closurePlaceholder = wrapInPlaceholder("T##closure##() -> Void")
+private let closureWithArgPlaceholder = wrapInPlaceholder(
   "T##(Int) -> String##(Int) -> String##(_ someInt: Int) -> String"
 )
-fileprivate let closureCombinedTypeDisplayPlaceholder = wrapInPlaceholder(
+private let closureCombinedTypeDisplayPlaceholder = wrapInPlaceholder(
   "T##(Int) -> String"
 )
-fileprivate let voidPlaceholder = wrapInPlaceholder("T##code##Void")
-fileprivate let intPlaceholder = wrapInPlaceholder("T##Int##Int")
-fileprivate let stringPlaceholder = wrapInPlaceholder("T##String##String")
+private let voidPlaceholder = wrapInPlaceholder("T##code##Void")
+private let intPlaceholder = wrapInPlaceholder("T##Int##Int")
+private let stringPlaceholder = wrapInPlaceholder("T##String##String")
 
 final class ExpandEditorPlaceholderTests: XCTestCase {
   func testSimple() throws {
@@ -505,7 +505,7 @@ final class ExpandEditorPlaceholderTests: XCTestCase {
   }
 }
 
-fileprivate func assertRefactorPlaceholder(
+private func assertRefactorPlaceholder(
   _ placeholder: String,
   wrap: Bool = true,
   expected: String,
@@ -532,7 +532,7 @@ fileprivate func assertRefactorPlaceholder(
   )
 }
 
-fileprivate func assertRefactorPlaceholderCall(
+private func assertRefactorPlaceholderCall(
   _ expr: String,
   placeholder: Int = 0,
   expected: String,
@@ -556,7 +556,7 @@ fileprivate func assertRefactorPlaceholderCall(
   )
 }
 
-fileprivate func assertRefactorPlaceholderToken(
+private func assertRefactorPlaceholderToken(
   _ expr: String,
   placeholder: Int = 0,
   expected: String,
@@ -580,7 +580,7 @@ fileprivate func assertRefactorPlaceholderToken(
   )
 }
 
-fileprivate func assertExpandEditorPlaceholdersToClosures(
+private func assertExpandEditorPlaceholdersToClosures(
   _ call: some CallLikeSyntax,
   expected: String,
   format: ExpandEditorPlaceholdersToLiteralClosures.Context.Format = .trailing(indentationWidth: nil),
@@ -597,7 +597,7 @@ fileprivate func assertExpandEditorPlaceholdersToClosures(
   )
 }
 
-fileprivate func assertExpandEditorPlaceholdersToClosures(
+private func assertExpandEditorPlaceholdersToClosures(
   _ expr: String,
   expected: String,
   format: ExpandEditorPlaceholdersToLiteralClosures.Context.Format = .trailing(indentationWidth: nil),
@@ -615,7 +615,7 @@ fileprivate func assertExpandEditorPlaceholdersToClosures(
   )
 }
 
-fileprivate func assertExpandEditorPlaceholdersToClosures(
+private func assertExpandEditorPlaceholdersToClosures(
   decl: String,
   expected: String,
   format: ExpandEditorPlaceholdersToLiteralClosures.Context.Format = .trailing(indentationWidth: nil),
@@ -639,7 +639,7 @@ fileprivate extension ExpandEditorPlaceholdersToLiteralClosures.Context.Format {
   }
 }
 
-fileprivate class CustomClosureFormat: BasicFormat {
+private class CustomClosureFormat: BasicFormat {
   override func requiresNewline(between _: TokenSyntax?, and _: TokenSyntax?) -> Bool {
     return false
   }

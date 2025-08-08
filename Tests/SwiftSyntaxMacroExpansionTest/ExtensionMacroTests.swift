@@ -253,7 +253,7 @@ final class ExtensionMacroTests: XCTestCase {
   }
 }
 
-fileprivate struct SendableExtensionMacro: ExtensionMacro {
+private struct SendableExtensionMacro: ExtensionMacro {
   static func expansion(
     of node: AttributeSyntax,
     attachedTo: some DeclGroupSyntax,

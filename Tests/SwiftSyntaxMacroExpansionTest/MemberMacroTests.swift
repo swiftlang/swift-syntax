@@ -25,7 +25,7 @@ import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
-fileprivate struct NoOpMemberMacro: MemberMacro {
+private struct NoOpMemberMacro: MemberMacro {
   static func expansion(
     of node: AttributeSyntax,
     providingMembersOf declaration: some DeclGroupSyntax,

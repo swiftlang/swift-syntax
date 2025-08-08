@@ -188,7 +188,7 @@ class ActiveSyntaxRewriter: SyntaxRewriter {
 
       // Find #ifs within the list.
       if let ifConfigDecl = elementAsIfConfig(element),
-        (!retainFeatureCheckIfConfigs || !ifConfigDecl.containsFeatureCheck)
+        !retainFeatureCheckIfConfigs || !ifConfigDecl.containsFeatureCheck
       {
         // Retrieve the active `#if` clause
         let activeClause = activeClauses.activeClause(for: ifConfigDecl, diagnostics: &diagnostics)
@@ -392,7 +392,7 @@ class ActiveSyntaxRewriter: SyntaxRewriter {
 }
 
 /// Helper class to find a feature or compiler check.
-fileprivate class FindFeatureCheckVisitor: SyntaxVisitor {
+private class FindFeatureCheckVisitor: SyntaxVisitor {
   var foundFeatureCheck = false
 
   override func visit(_ node: DeclReferenceExprSyntax) -> SyntaxVisitorContinueKind {
@@ -411,7 +411,7 @@ fileprivate class FindFeatureCheckVisitor: SyntaxVisitor {
   override func visit(_ node: FunctionCallExprSyntax) -> SyntaxVisitorContinueKind {
     if let calleeDeclRef = node.calledExpression.as(DeclReferenceExprSyntax.self),
       let calleeName = calleeDeclRef.simpleIdentifier?.name,
-      (calleeName == "compiler" || calleeName == "_compiler_version")
+      calleeName == "compiler" || calleeName == "_compiler_version"
     {
       foundFeatureCheck = true
     }

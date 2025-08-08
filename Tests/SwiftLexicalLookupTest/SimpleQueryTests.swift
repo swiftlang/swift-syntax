@@ -15,7 +15,7 @@ import Foundation
 import SwiftSyntax
 import XCTest
 
-final class testSimpleQueries: XCTestCase {
+final class TestSimpleQueries: XCTestCase {
   func testLabeledStmtLookupThreeNested() {
     assertLexicalScopeQuery(
       source: """

@@ -65,9 +65,16 @@ extension TokenConsumer {
 
     var hasAttribute = false
     var attributeProgress = LoopProgressCondition()
-    while subparser.hasProgressed(&attributeProgress) && subparser.at(.atSign) {
-      hasAttribute = true
-      _ = subparser.consumeAttributeList()
+    while subparser.hasProgressed(&attributeProgress) {
+      if subparser.at(.atSign) {
+        _ = subparser.consumeAttributeList()
+        hasAttribute = true
+      } else if subparser.at(.poundIf) && subparser.consumeIfConfigOfAttributes() {
+        subparser.skipSingle()
+        hasAttribute = true
+      } else {
+        break
+      }
     }
 
     var hasModifier = false
@@ -92,11 +99,6 @@ extension TokenConsumer {
       if subparser.at(.rightBrace) || subparser.at(.endOfFile) || subparser.at(.poundEndif) {
         return true
       }
-    }
-
-    if subparser.at(.poundIf) {
-      var attrLookahead = subparser.lookahead()
-      return attrLookahead.consumeIfConfigOfAttributes()
     }
 
     let declStartKeyword: DeclarationKeyword?
@@ -174,6 +176,10 @@ extension TokenConsumer {
           allowInitDecl: allowInitDecl,
           allowRecovery: allowRecovery
         )
+      }
+      if allowRecovery && (hasAttribute || hasModifier) {
+        // If we found any attributes or modifiers, consider it's a missing decl.
+        return true
       }
       return false
     }
@@ -492,11 +498,11 @@ extension Parser {
       arena: self.arena
     )
 
-    if self.at(.atSign), case .attribute(let attribute) = self.parseAttribute() {
+    if self.at(.atSign) {
       return RawUsingDeclSyntax(
         unexpectedBeforeUsingKeyword,
         usingKeyword: usingKeyword,
-        specifier: .attribute(attribute),
+        specifier: .attribute(self.parseAttribute()),
         arena: self.arena
       )
     }

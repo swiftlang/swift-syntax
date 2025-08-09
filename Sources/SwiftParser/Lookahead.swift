@@ -221,11 +221,8 @@ extension Parser.Lookahead {
         _ = self.consumeGenericArguments()
       } while self.consume(if: .period) != nil
 
-      if self.consume(if: .leftParen) != nil {
-        while !self.at(.endOfFile, .rightParen, .poundEndif) {
-          self.skipSingle()
-        }
-        self.consume(if: .rightParen)
+      if self.atAttributeOrSpecifierArgument() {
+        self.skipSingle()
       }
     }
     return true

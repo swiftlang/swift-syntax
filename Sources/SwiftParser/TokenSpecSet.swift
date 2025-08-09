@@ -267,9 +267,9 @@ enum ContextualDeclKeyword: TokenSpecSet {
   }
 }
 
-/// A `DeclarationKeyword` that is not a `ValueBindingPatternSyntax.BindingSpecifierOptions`.
+/// A `DeclarationKeyword` that is not a `VariableDeclSyntax.BindingSpecifierOptions`.
 ///
-/// `ValueBindingPatternSyntax.BindingSpecifierOptions` are injected into
+/// `VariableDeclSyntax.BindingSpecifierOptions` are injected into
 /// `DeclarationKeyword` via an `EitherTokenSpecSet`.
 enum PureDeclarationKeyword: TokenSpecSet {
   case actor
@@ -344,7 +344,7 @@ enum PureDeclarationKeyword: TokenSpecSet {
 
 typealias DeclarationKeyword = EitherTokenSpecSet<
   PureDeclarationKeyword,
-  ValueBindingPatternSyntax.BindingSpecifierOptions
+  VariableDeclSyntax.BindingSpecifierOptions
 >
 
 enum DeclarationModifier: TokenSpecSet {

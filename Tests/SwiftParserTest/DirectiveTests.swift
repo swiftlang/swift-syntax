@@ -357,4 +357,83 @@ final class DirectiveTests: ParserTestCase {
       ]
     )
   }
+
+  func testIfConfigRRR() {
+    assertParse(
+      """
+      @frozen1️⃣
+
+      #if true
+      func foo() {}
+      #endif
+      """,
+      substructure: CodeBlockItemListSyntax([
+        CodeBlockItemSyntax(
+          item: .init(
+            MissingDeclSyntax(
+              attributes: [
+                .attribute(
+                  AttributeSyntax(
+                    atSign: .atSignToken(),
+                    attributeName: TypeSyntax(IdentifierTypeSyntax(name: .identifier("frozen")))
+                  )
+                )
+              ],
+              modifiers: [],
+              placeholder: .identifier("<#declaration#>", presence: .missing)
+            )
+          )
+        ),
+        CodeBlockItemSyntax(
+          item: .init(
+            IfConfigDeclSyntax(
+              clauses: IfConfigClauseListSyntax([
+                IfConfigClauseSyntax(
+                  poundKeyword: .poundIfToken(),
+                  condition: ExprSyntax(BooleanLiteralExprSyntax(literal: .keyword(.true))),
+                  elements: .statements(
+                    CodeBlockItemListSyntax([
+                      CodeBlockItemSyntax(
+                        item: CodeBlockItemSyntax.Item(
+                          FunctionDeclSyntax(
+                            attributes: [],
+                            modifiers: [],
+                            funcKeyword: .keyword(.func),
+                            name: .identifier("foo"),
+                            signature: FunctionSignatureSyntax(
+                              parameterClause: FunctionParameterClauseSyntax(
+                                leftParen: .leftParenToken(),
+                                parameters: FunctionParameterListSyntax([]),
+                                rightParen: .rightParenToken()
+                              )
+                            ),
+                            body: CodeBlockSyntax(
+                              leftBrace: .leftBraceToken(),
+                              statements: CodeBlockItemListSyntax([]),
+                              rightBrace: .rightBraceToken()
+                            )
+                          )
+                        )
+                      )
+                    ])
+                  )
+                )
+              ]),
+              poundEndif: .poundEndifToken()
+            )
+          )
+        ),
+      ]),
+      diagnostics: [
+        DiagnosticSpec(message: "expected declaration after attribute", fixIts: ["insert declaration"])
+      ],
+      fixedSource: """
+        @frozen <#declaration#>
+
+        #if true
+        func foo() {}
+        #endif
+        """
+    )
+  }
 }

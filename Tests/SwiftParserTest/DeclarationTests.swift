@@ -567,11 +567,15 @@ final class DeclarationTests: ParserTestCase {
 
     assertParse(
       """
-      1️⃣private(
+      private(1️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code 'private(' at top level")
-      ]
+        DiagnosticSpec(message: "expected 'set)' to end modifier", fixIts: ["insert 'set)'"]),
+        DiagnosticSpec(message: "expected declaration after 'private' modifier", fixIts: ["insert declaration"]),
+      ],
+      fixedSource: """
+        private(set) <#declaration#>
+        """
     )
 
     assertParse(

@@ -24,6 +24,10 @@ public enum PackageDependency: Sendable {
 
   public struct FileSystem: Sendable {
     public let path: String
+
+    public init(path: String) {
+      self.path = path
+    }
   }
 
   public struct SourceControl: Sendable {
@@ -47,6 +51,11 @@ public enum PackageDependency: Sendable {
   public struct Registry: Sendable {
     public let identity: String
     public let requirement: Requirement
+
+    public init(identity: String, requirement: Requirement) {
+      self.identity = identity
+      self.requirement = requirement
+    }
 
     /// The dependency requirement.
     public enum Requirement: Sendable {

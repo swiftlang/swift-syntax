@@ -1918,6 +1918,7 @@ public struct TupleTypeElementListSyntax: SyntaxCollection, SyntaxHashable {
 /// ### Contained in
 /// 
 ///  - ``AttributedTypeSyntax``.``AttributedTypeSyntax/specifiers``
+///  - ``AttributedTypeSyntax``.``AttributedTypeSyntax/lateSpecifiers``
 public struct TypeSpecifierListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices, SyntaxHashable {
     /// A specifier that can be attached to a type to eg. mark a parameter as `inout` or `consuming`

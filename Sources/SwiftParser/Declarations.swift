@@ -99,6 +99,10 @@ extension TokenConsumer {
       if subparser.at(.rightBrace) || subparser.at(.endOfFile) || subparser.at(.poundEndif) {
         return true
       }
+      if subparser.at(.stringQuote) {
+        // `@"abc"` is an invalid Objective-C-style string literal, not a declaration.
+        return false
+      }
     }
 
     let declStartKeyword: DeclarationKeyword?

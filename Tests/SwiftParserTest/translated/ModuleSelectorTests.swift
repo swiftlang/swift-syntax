@@ -1957,9 +1957,9 @@ final class ModuleSelectorTests: ParserTestCase {
       #"_ = Swift::1️⃣@"fnord""#,
       diagnostics: [
         DiagnosticSpec(message: "expected identifier", fixIts: ["insert identifier"]),
-        DiagnosticSpec(message: #"extraneous code '@"fnord"' at top level"#),
+        DiagnosticSpec(message: "string literals in Swift are not preceded by an '@' sign", fixIts: ["remove '@'"]),
       ],
-      fixedSource: #"_ = Swift::<#identifier#>@"fnord""#
+      fixedSource: #"_ = Swift::<#identifier#>"fnord""#
     )
     assertParse(
       #"_ = Swift::1️⃣"fnord""#,

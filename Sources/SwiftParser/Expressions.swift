@@ -57,6 +57,10 @@ extension TokenConsumer {
         return true
       }
     }
+    if self.at(.atSign) && self.peek(isAt: .stringQuote) {
+      // Invalid Objective-C-style string literal
+      return true
+    }
 
     // 'repeat' is the start of a pack expansion expression.
     if self.at(.keyword(.repeat)) {

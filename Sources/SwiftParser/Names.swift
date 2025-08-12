@@ -106,7 +106,7 @@ extension TokenConsumer {
     }
 
     var extra: [Token] = []
-    while self.isAtModuleSelector() {
+    while !self.currentToken.isAtStartOfLine && self.isAtModuleSelector() {
       if !self.at(.colonColon) {
         extra.append(self.consumeAnyToken())
       }

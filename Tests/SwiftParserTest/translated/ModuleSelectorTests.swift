@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-// This test file has been translated from swift/test/NameLookup/module_selector.swift
+// This test file has been translated from swift/test/Parse/module_selector.swift
 
 @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
@@ -2255,6 +2255,41 @@ final class ModuleSelectorTests: ParserTestCase {
         moduleSelector: "Swift",
         name: "self"
       )
+    )
+  }
+
+  func testModuleSelectorSubmodule() {
+    assertParse(
+      "_ = Foundation::1️⃣NSData::NSData()",
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'NSData::' in module selector")
+      ]
+    )
+
+    assertParse(
+      "_ = Foundation::1️⃣NSData::Fnord::NSData()",
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'NSData::Fnord::' in module selector")
+      ]
+    )
+
+    assertParse(
+      """
+      _ = Foundation::1️⃣NSData::2️⃣
+      Fnord::NSData()
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'NSData::' in module selector"),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected identifier",
+          fixIts: ["insert identifier"]
+        ),
+      ],
+      fixedSource: """
+        _ = Foundation::NSData::<#identifier#>
+        Fnord::NSData()
+        """
     )
   }
 }

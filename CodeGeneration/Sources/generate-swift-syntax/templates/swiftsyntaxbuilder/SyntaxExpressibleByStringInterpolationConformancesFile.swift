@@ -40,4 +40,15 @@ let syntaxExpressibleByStringInterpolationConformancesFile = SourceFileSyntax(le
       """
     )
   }
+
+  // Due to we cannot parse the `FunctionParameterClauseSyntax` from string interpolation in the normal way
+  // we need to hand-write the conformance.
+  DeclSyntax("extension FunctionParameterClauseSyntax: SyntaxExpressibleByStringInterpolation {}")
+  DeclSyntax(
+    """
+    #if compiler(>=6)
+    extension FunctionParameterClauseSyntax: Swift.ExpressibleByStringInterpolation {}
+    #endif
+    """
+  )
 }

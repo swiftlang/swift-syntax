@@ -84,6 +84,7 @@ extension TokenConsumer {
   ///  - `extra`: Tokens for additional trailing module selectors. There is no situation in which two module selectors
   ///    can be validly chained.
   ///  - `skipQualifiedName`: True if the next token should be interpreted as a different statement.
+  @_optimize(size)  // Work around SIL optimizer bug (rdar://158171994)
   mutating func consumeModuleSelectorTokensIfPresent() -> (
     moduleNameOrUnexpected: Token, colonColonToken: Token, extra: [Token], skipQualifiedName: Bool
   )? {

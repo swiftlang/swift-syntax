@@ -295,18 +295,6 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
   }
 }
 
-fileprivate extension PackageTarget.Dependency {
-  /// Retrieve the name of the dependency
-  var name: String {
-    switch self {
-    case .target(let name),
-      .byName(let name),
-      .product(let name, package: _):
-      return name
-    }
-  }
-}
-
 /// The array of auxiliary files that can be added by a package editing
 /// operation.
 private typealias AuxiliaryFiles = [(String, SourceFileSyntax)]
@@ -344,18 +332,6 @@ fileprivate extension PackageDependency {
       )
     )
   }
-}
-
-fileprivate extension PackageTarget {
-  var sanitizedName: String {
-    name
-      .mangledToC99ExtendedIdentifier()
-      .localizedFirstWordCapitalized()
-  }
-}
-
-fileprivate extension String {
-  func localizedFirstWordCapitalized() -> String { prefix(1).uppercased() + dropFirst() }
 }
 
 extension SourceFileSyntax {

@@ -312,6 +312,7 @@ public struct DeprecatedMemberInfo {
       }
     }
 
+    @_optimize(none)  // Workaround for SIL optimizer crash (rdar://158353230)
     private func firstIndexOfChild(named targetName: String) -> Int {
       guard let i = children.firstIndex(where: { $0.name == targetName }) else {
         fatalError(

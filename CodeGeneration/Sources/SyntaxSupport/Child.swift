@@ -140,6 +140,19 @@ public class Child: NodeChoiceConvertible {
     }
   }
 
+  /// Should this child be hidden?
+  ///
+  /// A hidden child is one that is not accessible in any way at a specific point in the history, but still needs to be
+  /// (default) initialized. As always, its `newestChildPath` indicates the current way to access it.
+  ///
+  /// Hidden children are used for `Refactoring.introduced` and for the implicit changeset that creates
+  /// non-experimental APIs that ignore experimental children.
+  public let isHidden: Bool
+
+  /// True if this child was created by a `childHistory` change set. Such children
+  /// are part of the compatibility layer and are therefore deprecated.
+  public var isHistorical: Bool
+
   /// A name of this child as an identifier.
   public var identifier: TokenSyntax {
     return .identifier(lowercaseFirstWord(name: name))
@@ -161,8 +174,8 @@ public class Child: NodeChoiceConvertible {
     return "\(raw: newestName.withFirstCharacterUppercased)Options"
   }
 
-  /// If this child is deprecated, describes the sequence of accesses necessary
-  /// to reach the equivalent value using non-deprecated children; if the child
+  /// If this child is part of a compatibility layer, describes the sequence of accesses necessary
+  /// to reach the equivalent value using non-compatibility-layer children; if the child
   /// is not deprecated, this array is empty.
   ///
   /// Think of the elements of this array like components in a key path:
@@ -199,12 +212,6 @@ public class Child: NodeChoiceConvertible {
   ///         of the child. That information is not directly available anywhere.
   public let newestChildPath: [Child]
 
-  /// True if this child was created by a `Child.Refactoring`. Such children
-  /// are part of the compatibility layer and are therefore deprecated.
-  public var isHistorical: Bool {
-    !newestChildPath.isEmpty
-  }
-
   /// Replaces the nodes in `newerChildPath` with their own `newerChildPath`s,
   /// if any, to form a child path enitrely of non-historical nodes.
   static private func makeNewestChildPath(from newerChildPath: [Child]) -> [Child] {
@@ -214,7 +221,7 @@ public class Child: NodeChoiceConvertible {
     var workStack = Array(newerChildPath.reversed())
 
     while let elem = workStack.popLast() {
-      if elem.isHistorical {
+      if !elem.newestChildPath.isEmpty {
         // There's an even newer version. Start working on that.
         workStack.append(contentsOf: elem.newestChildPath.reversed())
       } else {
@@ -308,7 +315,8 @@ public class Child: NodeChoiceConvertible {
     documentation: String? = nil,
     isOptional: Bool = false,
     providesDefaultInitialization: Bool = true,
-    newerChildPath: [Child] = []
+    newerChildPath: [Child] = [],
+    isHistorical: Bool = false
   ) {
     precondition(name.first?.isLowercase ?? true, "The first letter of a child’s name should be lowercase")
     self.name = name
@@ -320,11 +328,18 @@ public class Child: NodeChoiceConvertible {
     self.documentationAbstract = String(documentation?.split(whereSeparator: \.isNewline).first ?? "")
     self.isOptional = isOptional
     self.providesDefaultInitialization = providesDefaultInitialization
+    self.isHidden = false
+    self.isHistorical = isHistorical
   }
 
   /// Create a node that is a copy of the last node in `newerChildPath`, but
   /// with modifications.
-  init(renamingTo replacementName: String? = nil, newerChildPath: [Child]) {
+  init(
+    renamingTo replacementName: String? = nil,
+    makingHistorical: Bool = false,
+    makingHidden: Bool = false,
+    newerChildPath: [Child]
+  ) {
     let other = newerChildPath.last!
 
     self.name = replacementName ?? other.name
@@ -336,6 +351,8 @@ public class Child: NodeChoiceConvertible {
     self.documentationAbstract = other.documentationAbstract
     self.isOptional = other.isOptional
     self.providesDefaultInitialization = other.providesDefaultInitialization
+    self.isHidden = makingHidden || other.isHidden
+    self.isHistorical = makingHistorical || other.isHistorical
   }
 
   /// Create a child for the unexpected nodes between two children (either or
@@ -361,7 +378,8 @@ public class Child: NodeChoiceConvertible {
       documentation: nil,
       isOptional: true,
       providesDefaultInitialization: true,
-      newerChildPath: newerChildPath
+      newerChildPath: newerChildPath,
+      isHistorical: (earlier?.isHistorical ?? false) || (later?.isHistorical ?? false)
     )
   }
 }
@@ -417,5 +435,8 @@ extension Child {
     /// point in the past, so deprecated aliases that flatten the other node's
     /// children into this node should be provided.
     case extracted
+
+    /// A new child was added (and it's important to preserve the names around it).
+    case introduced
   }
 }

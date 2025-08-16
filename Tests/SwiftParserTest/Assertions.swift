@@ -190,6 +190,7 @@ private func assertTokens(
 func assertLexemes(
   _ markedSource: String,
   lexemes expectedLexemes: [LexemeSpec],
+  experimentalFeatures: Parser.ExperimentalFeatures = [],
   file: StaticString = #filePath,
   line: UInt = #line
 ) {
@@ -206,7 +207,12 @@ func assertLexemes(
   lookaheadTracker.initialize(to: LookaheadTracker())
   source.withUTF8 { buf in
     var lexemes = [Lexer.Lexeme]()
-    for token in Lexer.tokenize(buf, from: 0, lookaheadTracker: lookaheadTracker) {
+    for token in Lexer.tokenize(
+      buf,
+      from: 0,
+      lookaheadTracker: lookaheadTracker,
+      experimentalFeatures: experimentalFeatures
+    ) {
       lexemes.append(token)
 
       if token.rawTokenKind == .endOfFile {

@@ -1214,6 +1214,31 @@ final class ExpressionTests: ParserTestCase {
         DiagnosticSpec(message: "invalid escape sequence in literal")
       ]
     )
+
+    // <rdar://problem/19833424> QoI: Bad error message when using Objective-C literals (@"Hello")
+    assertParse(
+      """
+      _ = 1️⃣@"a"
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "string literals in Swift are not preceded by an '@' sign", fixIts: ["remove '@'"])
+      ],
+      fixedSource: """
+        _ = "a"
+        """
+    )
+
+    assertParse(
+      """
+      1️⃣@"a"
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "string literals in Swift are not preceded by an '@' sign", fixIts: ["remove '@'"])
+      ],
+      fixedSource: """
+        "a"
+        """
+    )
   }
 
   func testAdjacentRawStringLiterals() {

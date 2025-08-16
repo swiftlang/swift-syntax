@@ -12,8 +12,25 @@
 
 /// Represents an initializer that should be generated.
 public struct InitSignature {
-  /// The list of children which shoudl be given parameters and initialized by the initializer.
+  /// The list of children which should be initialized by the initializer.
+  /// Includes hidden children.
   public var children: [Child]
+
+  /// The list of children which should be given parameters. Excludes hidden
+  /// children.
+  public var visibleChildren: LazyFilterSequence<[Child]> {
+    return children.lazy.filter { !$0.isHidden }
+  }
+
+  /// Does this initializer cover any experimental features?
+  public var isExperimental: Bool {
+    return visibleChildren.contains { $0.isExperimental && !$0.isUnexpectedNodes }
+  }
+
+  /// Does this initializer cover any historical children (vs. just omitting experimental features)?
+  public var isHistorical: Bool {
+    return visibleChildren.contains { $0.isHistorical && !$0.isUnexpectedNodes }
+  }
 
   /// Create an initializer with an arbitrary array of children.
   public init(children: [Child]) {

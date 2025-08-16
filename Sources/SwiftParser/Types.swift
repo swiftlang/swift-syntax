@@ -195,6 +195,26 @@ extension Parser {
     allowMemberTypes: Bool = true,
     forAttributeName: Bool = false
   ) -> RawTypeSyntax {
+    let tilde = self.consumeIfContextualPunctuator("~", remapping: .prefixOperator)
+
+    let baseType = self.parseUnsuppressedSimpleType(
+      allowMemberTypes: allowMemberTypes,
+      forAttributeName: forAttributeName
+    )
+
+    guard let tilde else {
+      return baseType
+    }
+
+    return RawTypeSyntax(
+      RawSuppressedTypeSyntax(withoutTilde: tilde, type: baseType, arena: self.arena)
+    )
+  }
+
+  mutating func parseUnsuppressedSimpleType(
+    allowMemberTypes: Bool = true,
+    forAttributeName: Bool = false
+  ) -> RawTypeSyntax {
     enum TypeBaseStart: TokenSpecSet {
       case `Self`
       case `Any`
@@ -227,27 +247,10 @@ extension Parser {
       }
     }
 
-    // Eat any '~' preceding the type.
-    let maybeTilde = self.consumeIfContextualPunctuator("~", remapping: .prefixOperator)
-
-    // Wrap as a suppressed type if needed.
-    func wrapInTilde(_ node: RawTypeSyntax) -> RawTypeSyntax {
-      if let tilde = maybeTilde {
-        return RawTypeSyntax(
-          RawSuppressedTypeSyntax(
-            withoutTilde: tilde,
-            type: node,
-            arena: self.arena
-          )
-        )
-      }
-      return node
-    }
-
     var base: RawTypeSyntax
-    switch self.at(anyIn: TypeBaseStart.self)?.spec {
+    switch self.isAtModuleSelector() ? .identifier : self.at(anyIn: TypeBaseStart.self)?.spec {
     case .Self, .Any, .identifier:
-      base = self.parseTypeIdentifier()
+      base = RawTypeSyntax(self.parseTypeIdentifier())
     case .leftParen:
       base = RawTypeSyntax(self.parseTupleTypeBody())
     case .leftSquare:
@@ -255,7 +258,7 @@ extension Parser {
     case .wildcard:
       base = RawTypeSyntax(self.parsePlaceholderType())
     case nil:
-      return wrapInTilde(RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena)))
+      return RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
     }
 
     var loopProgress = LoopProgressCondition()
@@ -269,13 +272,16 @@ extension Parser {
               baseType: base,
               unexpectedPeriod,
               period: period,
+              moduleSelector: nil,
               name: missingIdentifier,
               genericArgumentClause: nil,
               arena: self.arena
             )
           )
           break
-        } else if self.at(.keyword(.Type)) || self.at(.keyword(.Protocol)) {
+        }
+
+        if !self.isAtModuleSelector() && (self.at(.keyword(.Type)) || self.at(.keyword(.Protocol))) {
           let metatypeSpecifier = self.consume(if: .keyword(.Type)) ?? self.consume(if: .keyword(.Protocol))!
           base = RawTypeSyntax(
             RawMetatypeTypeSyntax(
@@ -287,14 +293,8 @@ extension Parser {
             )
           )
         } else {
-          let name: RawTokenSyntax
-          if let handle = self.at(anyIn: MemberTypeSyntax.NameOptions.self)?.handle {
-            name = self.eat(handle)
-          } else if self.currentToken.isLexerClassifiedKeyword {
-            name = self.consumeAnyToken(remapping: .identifier)
-          } else {
-            name = missingToken(.identifier)
-          }
+          let (memberModuleSelector, skipQualifiedName) = self.parseModuleSelectorIfPresent()
+          let name = self.parseMemberTypeName(moduleSelector: memberModuleSelector, skipName: skipQualifiedName)
           let generics: RawGenericArgumentClauseSyntax?
           if self.at(prefix: "<") {
             generics = self.parseGenericArguments()
@@ -306,11 +306,15 @@ extension Parser {
               baseType: base,
               unexpectedPeriod,
               period: period,
+              moduleSelector: memberModuleSelector,
               name: name,
               genericArgumentClause: generics,
               arena: self.arena
             )
           )
+          if skipQualifiedName {
+            break
+          }
         }
         continue
       }
@@ -332,9 +336,42 @@ extension Parser {
       break
     }
 
-    base = wrapInTilde(base)
-
     return base
+  }
+
+  /// Parse a type name that has been qualiified by a module selector. This very aggressively interprets keywords as
+  /// identifiers.
+  ///
+  /// - Parameter skipQualifiedName: If `true`, the next token should not be parsed because it includes forbidden whitespace.
+  mutating func parseTypeNameAfterModuleSelector(skipQualifiedName: Bool) -> RawTokenSyntax {
+    if !skipQualifiedName {
+      if let identifier = self.consume(if: .identifier) {
+        return identifier
+      } else if self.currentToken.isLexerClassifiedKeyword {
+        return self.consumeAnyToken(remapping: .identifier)
+      }
+    }
+    return missingToken(.identifier)
+  }
+
+  /// Parse the name of a member type, which may be a keyword that's
+  /// interpreted as an identifier (per SE-0071).
+  ///
+  /// - Parameter moduleSelector: The module selector that will be attached to this name, if any.
+  /// - Parameter skipName: If `true`, the next token should not be parsed because it includes forbidden whitespace.
+  mutating func parseMemberTypeName(moduleSelector: RawModuleSelectorSyntax?, skipName: Bool) -> RawTokenSyntax {
+    if moduleSelector != nil {
+      return self.parseTypeNameAfterModuleSelector(skipQualifiedName: skipName)
+    }
+
+    if !skipName {
+      if let handle = self.at(anyIn: MemberTypeSyntax.NameOptions.self)?.handle {
+        return self.eat(handle)
+      } else if self.currentToken.isLexerClassifiedKeyword {
+        return self.consumeAnyToken(remapping: .identifier)
+      }
+    }
+    return missingToken(.identifier)
   }
 
   /// Parse an optional type.
@@ -362,12 +399,22 @@ extension Parser {
   }
 
   /// Parse a type identifier.
-  mutating func parseTypeIdentifier() -> RawTypeSyntax {
-    if self.at(.keyword(.Any)) {
-      return RawTypeSyntax(self.parseAnyType())
+  mutating func parseTypeIdentifier() -> RawIdentifierTypeSyntax {
+    let (moduleSelector, skipQualifiedName) = self.parseModuleSelectorIfPresent()
+
+    if moduleSelector == nil && self.at(.keyword(.Any)) {
+      return self.parseAnyType()
     }
 
-    let (unexpectedBeforeName, name) = self.expect(anyIn: IdentifierTypeSyntax.NameOptions.self, default: .identifier)
+    let unexpectedBeforeName: RawUnexpectedNodesSyntax?
+    let name: RawTokenSyntax
+    if moduleSelector == nil {
+      (unexpectedBeforeName, name) = self.expect(anyIn: IdentifierTypeSyntax.NameOptions.self, default: .identifier)
+    } else {
+      unexpectedBeforeName = nil
+      name = self.parseTypeNameAfterModuleSelector(skipQualifiedName: skipQualifiedName)
+    }
+
     let generics: RawGenericArgumentClauseSyntax?
     if self.at(prefix: "<") {
       generics = self.parseGenericArguments()
@@ -375,13 +422,12 @@ extension Parser {
       generics = nil
     }
 
-    return RawTypeSyntax(
-      RawIdentifierTypeSyntax(
-        unexpectedBeforeName,
-        name: name,
-        genericArgumentClause: generics,
-        arena: self.arena
-      )
+    return RawIdentifierTypeSyntax(
+      moduleSelector: moduleSelector,
+      unexpectedBeforeName,
+      name: name,
+      genericArgumentClause: generics,
+      arena: self.arena
     )
   }
 
@@ -389,6 +435,7 @@ extension Parser {
   mutating func parseAnyType() -> RawIdentifierTypeSyntax {
     let (unexpectedBeforeName, name) = self.expect(.keyword(.Any))
     return RawIdentifierTypeSyntax(
+      moduleSelector: nil,
       unexpectedBeforeName,
       name: name,
       genericArgumentClause: nil,
@@ -400,6 +447,7 @@ extension Parser {
   mutating func parsePlaceholderType() -> RawIdentifierTypeSyntax {
     let (unexpectedBeforeName, name) = self.expect(.wildcard)
     return RawIdentifierTypeSyntax(
+      moduleSelector: nil,
       unexpectedBeforeName,
       name: name,
       genericArgumentClause: nil,
@@ -535,7 +583,12 @@ extension Parser {
               secondName: nil,
               RawUnexpectedNodesSyntax(combining: misplacedSpecifiers, unexpectedBeforeColon, arena: self.arena),
               colon: nil,
-              type: RawIdentifierTypeSyntax(name: first, genericArgumentClause: nil, arena: self.arena),
+              type: RawIdentifierTypeSyntax(
+                moduleSelector: nil,
+                name: first,
+                genericArgumentClause: nil,
+                arena: self.arena
+              ),
               ellipsis: nil,
               trailingComma: self.missingToken(.comma),
               arena: self.arena
@@ -988,6 +1041,8 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseTypeIdentifier(allowKeyword: Bool = false) -> Bool {
+    _ = self.consumeModuleSelectorTokensIfPresent()
+
     if self.at(.keyword(.Any)) {
       self.consumeAnyToken()
       return true
@@ -1299,7 +1354,11 @@ extension Parser {
   }
 
   mutating func parseTypeAttribute() -> RawAttributeListSyntax.Element {
-    switch peek(isAtAnyIn: TypeAttribute.self) {
+    // An attribute qualified by a module selector is *always* a custom attribute, even if it has the same name (or
+    // module name) as a builtin attribute.
+    let builtinAttr = self.unlessPeekModuleSelector { $0.peek(isAtAnyIn: TypeAttribute.self) }
+
+    switch builtinAttr {
     case ._local, ._noMetadata, .async, .escaping, .noDerivative, .noescape,
       .preconcurrency, .retroactive, .Sendable, .unchecked, .autoclosure:
       // Known type attribute that doesn't take any arguments
@@ -1330,9 +1389,7 @@ extension Parser {
 
 extension Parser {
   mutating func parseResultType() -> RawTypeSyntax {
-    if self.currentToken.isEditorPlaceholder {
-      return self.parseTypeIdentifier()
-    } else if self.at(prefix: "<") {
+    if self.at(prefix: "<") && !self.currentToken.isEditorPlaceholder {
       let generics = self.parseGenericParameters()
       let baseType = self.parseType()
       return RawTypeSyntax(
@@ -1348,6 +1405,9 @@ extension Parser {
       guard !result.hasError else {
         return result
       }
+
+      // The rest of this tries to recover from a missing left square bracket like ` -> [Int]]? {`. We can do this for
+      // result types because we know there isn't an enclosing expression context.
 
       // If the right square bracket is at a new line, we should just return the result
       if let rightSquare = self.consume(if: TokenSpec(.rightSquare, allowAtStartOfLine: false)) {

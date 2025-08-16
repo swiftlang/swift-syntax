@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-@_spi(RawSyntax) @_spi(Testing) import SwiftParser
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(RawSyntax) @_spi(Testing) @_spi(ExperimentalLanguageFeatures) import SwiftParser
+@_spi(RawSyntax) @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 import XCTest
 
 private func lex(_ sourceBytes: [UInt8], body: ([Lexer.Lexeme]) throws -> Void) rethrows {
@@ -22,7 +22,7 @@ private func lex(_ sourceBytes: [UInt8], body: ([Lexer.Lexeme]) throws -> Void) 
   lookaheadTracker.initialize(to: LookaheadTracker())
   try sourceBytes.withUnsafeBufferPointer { (buf) in
     var lexemes = [Lexer.Lexeme]()
-    for token in Lexer.tokenize(buf, from: 0, lookaheadTracker: lookaheadTracker) {
+    for token in Lexer.tokenize(buf, from: 0, lookaheadTracker: lookaheadTracker, experimentalFeatures: []) {
       lexemes.append(token)
 
       if token.rawTokenKind == .endOfFile {
@@ -579,6 +579,17 @@ class LexerTests: ParserTestCase {
         LexemeSpec(.binaryOperator, text: "^", trailing: "/*/", diagnostic: "unterminated '/*' comment")
       ]
     )
+    assertLexemes(
+      "(Foo::/)",
+      lexemes: [
+        LexemeSpec(.leftParen, text: "("),
+        LexemeSpec(.identifier, text: "Foo"),
+        LexemeSpec(.colonColon, text: "::"),
+        LexemeSpec(.binaryOperator, text: "/"),
+        LexemeSpec(.rightParen, text: ")"),
+      ],
+      experimentalFeatures: [.moduleSelector]
+    )
   }
 
   func testUnexpectedLexing() {
@@ -830,6 +841,70 @@ class LexerTests: ParserTestCase {
         LexemeSpec(.stringQuote, text: #"""#),
         LexemeSpec(.stringSegment, text: ""),
         LexemeSpec(.stringQuote, text: #"""#),
+      ]
+    )
+  }
+
+  func testTwoColons() {
+    assertLexemes(
+      "Foo::bar",
+      lexemes: [
+        LexemeSpec(.identifier, text: "Foo"),
+        LexemeSpec(.colonColon, text: "::"),
+        LexemeSpec(.identifier, text: "bar"),
+      ],
+      experimentalFeatures: [.moduleSelector]
+    )
+
+    assertLexemes(
+      "Foo ::bar",
+      lexemes: [
+        LexemeSpec(.identifier, text: "Foo", trailing: " "),
+        LexemeSpec(.colonColon, text: "::"),
+        LexemeSpec(.identifier, text: "bar"),
+      ],
+      experimentalFeatures: [.moduleSelector]
+    )
+
+    assertLexemes(
+      "Foo:: bar",
+      lexemes: [
+        LexemeSpec(.identifier, text: "Foo"),
+        LexemeSpec(.colonColon, text: "::", trailing: " "),
+        LexemeSpec(.identifier, text: "bar"),
+      ],
+      experimentalFeatures: [.moduleSelector]
+    )
+
+    assertLexemes(
+      "Foo :: bar",
+      lexemes: [
+        LexemeSpec(.identifier, text: "Foo", trailing: " "),
+        LexemeSpec(.colonColon, text: "::", trailing: " "),
+        LexemeSpec(.identifier, text: "bar"),
+      ],
+      experimentalFeatures: [.moduleSelector]
+    )
+
+    assertLexemes(
+      "Foo: :bar",
+      lexemes: [
+        LexemeSpec(.identifier, text: "Foo"),
+        LexemeSpec(.colon, text: ":", trailing: " "),
+        LexemeSpec(.colon, text: ":"),
+        LexemeSpec(.identifier, text: "bar"),
+      ],
+      experimentalFeatures: [.moduleSelector]
+    )
+
+    // Only produce the new token when the experimental feature is enabled.
+    assertLexemes(
+      "Foo::bar",
+      lexemes: [
+        LexemeSpec(.identifier, text: "Foo"),
+        LexemeSpec(.colon, text: ":"),
+        LexemeSpec(.colon, text: ":"),
+        LexemeSpec(.identifier, text: "bar"),
       ]
     )
   }

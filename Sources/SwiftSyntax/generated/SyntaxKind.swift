@@ -210,6 +210,8 @@ public enum SyntaxKind: Sendable {
   case missingStmt
   case missing
   case missingType
+  @_spi(ExperimentalLanguageFeatures)
+  case moduleSelector
   case multipleTrailingClosureElementList
   case multipleTrailingClosureElement
   case namedOpaqueReturnType
@@ -819,6 +821,8 @@ public enum SyntaxKind: Sendable {
       return MissingSyntax.self
     case .missingType:
       return MissingTypeSyntax.self
+    case .moduleSelector:
+      return ModuleSelectorSyntax.self
     case .multipleTrailingClosureElementList:
       return MultipleTrailingClosureElementListSyntax.self
     case .multipleTrailingClosureElement:

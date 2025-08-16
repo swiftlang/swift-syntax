@@ -12,7 +12,7 @@
 
 import SwiftBasicFormat
 import SwiftParser
-import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 @_spi(Testing) import SwiftSyntaxBuilder
 import XCTest
 import _SwiftSyntaxTestSupport
@@ -693,6 +693,19 @@ final class BasicFormatTest: XCTestCase {
     assertFormatted(
       source: "let x:(Int)->Void",
       expected: "let x: (Int) -> Void"
+    )
+  }
+
+  func testColonColon() {
+    assertFormatted(
+      tree: DeclReferenceExprSyntax(
+        moduleSelector: ModuleSelectorSyntax(
+          moduleName: .identifier("Swift"),
+          colonColon: .colonColonToken()
+        ),
+        baseName: TokenSyntax.identifier("print")
+      ),
+      expected: "Swift::print"
     )
   }
 }

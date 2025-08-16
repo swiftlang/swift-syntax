@@ -331,6 +331,25 @@ public let COMMON_NODES: [Node] = [
   ),
 
   Node(
+    kind: .moduleSelector,
+    base: .syntax,
+    experimentalFeature: .moduleSelector,
+    nameForDiagnostics: "module selector",
+    children: [
+      Child(
+        name: "moduleName",
+        kind: .token(choices: [.token(.identifier)]),
+        nameForDiagnostics: "module name"
+      ),
+      Child(
+        name: "colonColon",
+        kind: .token(choices: [.token(.colonColon)]),
+        nameForDiagnostics: "'::' operator"
+      ),
+    ]
+  ),
+
+  Node(
     kind: .pattern,
     base: .syntax,
     nameForDiagnostics: "pattern",

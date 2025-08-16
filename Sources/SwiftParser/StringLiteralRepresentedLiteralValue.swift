@@ -90,7 +90,7 @@ extension StringSegmentSyntax {
     }
 
     rawText.withBuffer { buffer in
-      var cursor = Lexer.Cursor(input: buffer, previous: 0)
+      var cursor = Lexer.Cursor(input: buffer, previous: 0, experimentalFeatures: [])
 
       // Put the cursor in the string literal lexing state. This is just
       // defensive as it's currently not used by `lexCharacterInStringLiteral`.

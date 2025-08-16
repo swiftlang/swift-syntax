@@ -17,7 +17,7 @@ import Utils
 
 extension InitSignature {
   var compoundName: String {
-    let renamedArguments = children.map { child in
+    let renamedArguments = visibleChildren.map { child in
       if child.isUnexpectedNodes {
         return "_:"
       } else {
@@ -28,8 +28,16 @@ extension InitSignature {
     return "init(leadingTrivia:\(renamedArguments)trailingTrivia:)"
   }
 
+  func generateInitializerAttributes() -> AttributeListSyntax {
+    return AttributeListSyntax {
+      if self.isExperimental {
+        AttributeSyntax("@_spi(ExperimentalLanguageFeatures)").with(\.trailingTrivia, .space)
+      }
+    }
+  }
+
   func generateInitializerDeclHeader() -> SyntaxNodeString {
-    if children.isEmpty {
+    if visibleChildren.isEmpty {
       return "public init()"
     }
 
@@ -66,7 +74,7 @@ extension InitSignature {
     let params = FunctionParameterListSyntax {
       FunctionParameterSyntax("leadingTrivia: Trivia? = nil")
 
-      for child in children {
+      for child in visibleChildren {
         createFunctionParameterSyntax(for: child)
       }
 
@@ -74,8 +82,10 @@ extension InitSignature {
         .with(\.leadingTrivia, .newline)
     }
 
+    let attributes = generateInitializerAttributes()
+
     return """
-      public init(
+      \(attributes)public init(
       \(params)
       )
       """
@@ -93,7 +103,7 @@ extension InitSignature {
       - Parameters:
         - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. \
       If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-      \(children.compactMap(generateParamDocComment).joined(separator: "\n"))
+      \(visibleChildren.compactMap(generateParamDocComment).joined(separator: "\n"))
         - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. \
       If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
       """.removingEmptyLines
@@ -114,7 +124,7 @@ extension InitSignature {
     var builderParameters: [FunctionParameterSyntax] = []
     var delegatedInitArgs: [LabeledExprSyntax] = []
 
-    for child in children {
+    for child in visibleChildren {
       /// The expression that is used to call the default initializer defined above.
       let produceExpr: ExprSyntax
       let childName = child.identifier
@@ -174,10 +184,12 @@ extension InitSignature {
       FunctionParameterSyntax("trailingTrivia: Trivia? = nil")
     }
 
+    let attributes = generateInitializerAttributes()
+
     return try InitializerDeclSyntax(
       """
       /// A convenience initializer that allows initializing syntax collections using result builders
-      public init\(params) rethrows
+      \(attributes)public init\(params) rethrows
       """
     ) {
       FunctionCallExprSyntax(callee: ExprSyntax("try self.init")) {
@@ -209,6 +221,7 @@ extension InitSignature {
   func makeArgumentsToInitializeNewestChildren() -> [LabeledExprSyntax] {
     var root: [InitParameterMapping] = []
 
+    // This should also map hidden children.
     for child in children {
       InitParameterMapping.addChild(child, to: &root)
     }
@@ -351,7 +364,11 @@ extension InitParameterMapping {
     let argValue =
       switch argument {
       case .decl(let olderChild):
-        ExprSyntax(DeclReferenceExprSyntax(baseName: olderChild.baseCallName))
+        if olderChild.isHidden {
+          olderChild.defaultValue!
+        } else {
+          ExprSyntax(DeclReferenceExprSyntax(baseName: olderChild.baseCallName))
+        }
 
       case .nestedInit(let initArgs):
         ExprSyntax(

@@ -18,6 +18,12 @@ import SwiftSyntax
 public struct PackageTarget {
   public let name: String
 
+  public var sanitizedName: String {
+    name
+      .mangledToC99ExtendedIdentifier()
+      .localizedFirstWordCapitalized()
+  }
+
   /// The type of target.
   public let type: TargetKind
 
@@ -51,6 +57,16 @@ public struct PackageTarget {
     case byName(name: String)
     case target(name: String)
     case product(name: String, package: String?)
+
+    /// Retrieve the name of the dependency
+    public var name: String {
+      switch self {
+      case .byName(let name),
+        .target(let name),
+        .product(let name, package: _):
+        return name
+      }
+    }
   }
 
   public init(
@@ -140,4 +156,8 @@ extension PackageTarget.PluginUsage: ManifestSyntaxRepresentable {
       return ".plugin(name: \(literal: name), package: \(literal: package))"
     }
   }
+}
+
+fileprivate extension String {
+  func localizedFirstWordCapitalized() -> String { prefix(1).uppercased() + dropFirst() }
 }

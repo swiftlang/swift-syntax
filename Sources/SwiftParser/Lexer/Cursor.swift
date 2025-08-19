@@ -255,6 +255,8 @@ extension Lexer {
     }
     var position: Position
 
+    var experimentalFeatures: Parser.ExperimentalFeatures
+
     /// If we have already lexed a token, the kind of the previously lexed token
     var previousTokenKind: RawTokenKind?
 
@@ -267,8 +269,9 @@ extension Lexer {
 
     private var stateStack: StateStack = StateStack()
 
-    init(input: UnsafeBufferPointer<UInt8>, previous: UInt8) {
+    init(input: UnsafeBufferPointer<UInt8>, previous: UInt8, experimentalFeatures: Parser.ExperimentalFeatures) {
       self.position = Position(input: input, previous: previous)
+      self.experimentalFeatures = experimentalFeatures
     }
 
     /// Returns `true` if this cursor is sufficiently different to `other` in a way that indicates that the lexer has
@@ -940,8 +943,16 @@ extension Lexer.Cursor {
 
     case ",": _ = self.advance(); return Lexer.Result(.comma)
     case ";": _ = self.advance(); return Lexer.Result(.semicolon)
-    case ":": _ = self.advance(); return Lexer.Result(.colon)
     case "\\": _ = self.advance(); return Lexer.Result(.backslash)
+
+    case ":":
+      _ = self.advance()
+      guard self.experimentalFeatures.contains(.moduleSelector) && self.peek() == ":" else {
+        return Lexer.Result(.colon)
+      }
+
+      _ = self.advance()
+      return Lexer.Result(.colonColon)
 
     case "#":
       // Try lex shebang.
@@ -2472,7 +2483,7 @@ extension Lexer.Cursor {
       return false
     }
 
-    guard let end = Self.findConflictEnd(start, markerKind: kind) else {
+    guard let end = Self.findConflictEnd(start, markerKind: kind, experimentalFeatures: experimentalFeatures) else {
       // No end of conflict marker found.
       return false
     }
@@ -2488,13 +2499,18 @@ extension Lexer.Cursor {
   }
 
   /// Find the end of a version control conflict marker.
-  static func findConflictEnd(_ curPtr: Lexer.Cursor, markerKind: ConflictMarker) -> Lexer.Cursor? {
+  static func findConflictEnd(
+    _ curPtr: Lexer.Cursor,
+    markerKind: ConflictMarker,
+    experimentalFeatures: Parser.ExperimentalFeatures
+  ) -> Lexer.Cursor? {
     // Get a reference to the rest of the buffer minus the length of the start
     // of the conflict marker.
     let advanced = curPtr.input.baseAddress?.advanced(by: markerKind.introducer.count)
     var restOfBuffer = Lexer.Cursor(
       input: .init(start: advanced, count: curPtr.input.count - markerKind.introducer.count),
-      previous: curPtr.input[markerKind.introducer.count - 1]
+      previous: curPtr.input[markerKind.introducer.count - 1],
+      experimentalFeatures: experimentalFeatures
     )
     let terminator = markerKind.terminator
     let terminatorStart = terminator.first!
@@ -2515,7 +2531,8 @@ extension Lexer.Cursor {
       let advanced = restOfBuffer.input.baseAddress?.advanced(by: terminator.count)
       return Lexer.Cursor(
         input: .init(start: advanced, count: restOfBuffer.input.count - terminator.count),
-        previous: restOfBuffer.input[terminator.count - 1]
+        previous: restOfBuffer.input[terminator.count - 1],
+        experimentalFeatures: experimentalFeatures
       )
     }
     return nil

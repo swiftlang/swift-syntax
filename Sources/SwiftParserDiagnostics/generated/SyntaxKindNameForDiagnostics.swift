@@ -221,7 +221,7 @@ extension SyntaxKind {
     case .ifExpr:
       return "'if' statement"
     case .implementsAttributeArguments:
-      return "@_implements arguemnts"
+      return "@_implements arguments"
     case .implicitlyUnwrappedOptionalType:
       return "implicitly unwrapped optional type"
     case .importDecl:
@@ -290,6 +290,8 @@ extension SyntaxKind {
       return "statement"
     case .missingType:
       return "type"
+    case .moduleSelector:
+      return "module selector"
     case .multipleTrailingClosureElement:
       return "trailing closure"
     case .namedOpaqueReturnType:

@@ -52,6 +52,9 @@ extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of set default actor isolation for a file.
   public static let defaultIsolationPerFile = Self (rawValue: 1 << 8)
 
+  /// Whether to enable the parsing of Module selector syntax (`ModName::identifier`).
+  public static let moduleSelector = Self (rawValue: 1 << 9)
+
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
   public init?(name: String) {
@@ -74,6 +77,8 @@ extension Parser.ExperimentalFeatures {
       self = .oldOwnershipOperatorSpellings
     case "DefaultIsolationPerFile":
       self = .defaultIsolationPerFile
+    case "ModuleSelector":
+      self = .moduleSelector
     default:
       return nil
     }

@@ -44,6 +44,10 @@ extension TokenSpec {
     return TokenSpec(.colon)
   }
 
+  static var colonColon: TokenSpec {
+    return TokenSpec(.colonColon)
+  }
+
   static var comma: TokenSpec {
     return TokenSpec(.comma)
   }

@@ -131,6 +131,7 @@ extension Parser {
       // Synthesize the secondName parameter as a type node.
       type = RawTypeSyntax(
         RawIdentifierTypeSyntax(
+          moduleSelector: nil,
           name: secondName,
           genericArgumentClause: nil,
           arena: self.arena

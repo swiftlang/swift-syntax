@@ -99,6 +99,10 @@ extension TokenConsumer {
       if subparser.at(.rightBrace) || subparser.at(.endOfFile) || subparser.at(.poundEndif) {
         return true
       }
+      if subparser.at(.stringQuote) {
+        // `@"abc"` is an invalid Objective-C-style string literal, not a declaration.
+        return false
+      }
     }
 
     let declStartKeyword: DeclarationKeyword?
@@ -435,7 +439,7 @@ extension Parser {
   ) -> RawImportDeclSyntax {
     let (unexpectedBeforeImportKeyword, importKeyword) = self.eat(handle)
     let kind = self.parseImportKind()
-    let path = self.parseImportPath()
+    let path = self.parseImportPath(hasImportKind: kind != nil)
     return RawImportDeclSyntax(
       attributes: attrs.attributes,
       modifiers: attrs.modifiers,
@@ -451,21 +455,68 @@ extension Parser {
     return self.consume(ifAnyIn: ImportDeclSyntax.ImportKindSpecifierOptions.self)
   }
 
-  mutating func parseImportPath() -> RawImportPathComponentListSyntax {
+  mutating func parseImportPath(hasImportKind: Bool) -> RawImportPathComponentListSyntax {
     var elements = [RawImportPathComponentSyntax]()
-    var keepGoing: RawTokenSyntax? = nil
-    var loopProgress = LoopProgressCondition()
-    repeat {
-      let name = self.parseAnyIdentifier()
-      keepGoing = self.consume(if: .period)
-      elements.append(
+
+    // Special case: scoped import with module selector-style syntax. This always has exactly two path components
+    // separated by '::'.
+    if hasImportKind,
+      let (moduleNameOrUnexpected, colonColon, unexpectedAfterColonColon, skipQualifiedName) =
+        self.consumeModuleSelectorTokensIfPresent()
+    {
+      // Is the token in module name position really a module name?
+      let unexpectedBeforeModuleName: RawUnexpectedNodesSyntax?
+      let moduleName: RawTokenSyntax
+      if moduleNameOrUnexpected.tokenKind == .identifier {
+        unexpectedBeforeModuleName = nil
+        moduleName = moduleNameOrUnexpected
+      } else {
+        unexpectedBeforeModuleName = RawUnexpectedNodesSyntax([moduleNameOrUnexpected], arena: self.arena)
+        moduleName = self.missingToken(.identifier)
+      }
+
+      let declName = skipQualifiedName ? self.missingToken(.identifier) : self.parseAnyIdentifier()
+
+      elements = [
         RawImportPathComponentSyntax(
-          name: name,
-          trailingPeriod: keepGoing,
+          unexpectedBeforeModuleName,
+          name: moduleName,
+          trailingPeriod: colonColon,
+          RawUnexpectedNodesSyntax(unexpectedAfterColonColon, arena: self.arena),
           arena: self.arena
+        ),
+        RawImportPathComponentSyntax(
+          name: declName,
+          trailingPeriod: nil,
+          arena: self.arena
+        ),
+      ]
+    } else {
+      var keepGoing: RawTokenSyntax? = nil
+      var loopProgress = LoopProgressCondition()
+      repeat {
+        let name = self.parseAnyIdentifier()
+        keepGoing = self.consume(if: .period)
+
+        // '::' is not valid if we got here, but someone might try to use it anyway.
+        let unexpectedAfterTrailingPeriod: RawUnexpectedNodesSyntax?
+        if keepGoing == nil, let colonColon = self.consume(if: .colonColon) {
+          unexpectedAfterTrailingPeriod = RawUnexpectedNodesSyntax([colonColon], arena: self.arena)
+          keepGoing = self.missingToken(.period)
+        } else {
+          unexpectedAfterTrailingPeriod = nil
+        }
+
+        elements.append(
+          RawImportPathComponentSyntax(
+            name: name,
+            trailingPeriod: keepGoing,
+            unexpectedAfterTrailingPeriod,
+            arena: self.arena
+          )
         )
-      )
-    } while keepGoing != nil && self.hasProgressed(&loopProgress)
+      } while keepGoing != nil && self.hasProgressed(&loopProgress)
+    }
     return RawImportPathComponentListSyntax(elements: elements, arena: self.arena)
   }
 }
@@ -610,6 +661,7 @@ extension Parser {
             unexpectedBeforeInherited = RawUnexpectedNodesSyntax([classKeyword], arena: self.arena)
             inherited = RawTypeSyntax(
               RawIdentifierTypeSyntax(
+                moduleSelector: nil,
                 name: missingToken(.identifier, text: "AnyObject"),
                 genericArgumentClause: nil,
                 arena: self.arena
@@ -2194,6 +2246,14 @@ extension Parser {
       )
       pound = pound.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
     }
+
+    let moduleSelector: RawModuleSelectorSyntax?
+    if !self.atStartOfLine {
+      (moduleSelector, _) = self.parseModuleSelectorIfPresent()
+    } else {
+      moduleSelector = nil
+    }
+
     let unexpectedBeforeMacro: RawUnexpectedNodesSyntax?
     let macro: RawTokenSyntax
     if !self.atStartOfLine {
@@ -2246,6 +2306,7 @@ extension Parser {
       modifiers: attrs.modifiers,
       unexpectedBeforePound,
       pound: pound,
+      moduleSelector: moduleSelector,
       unexpectedBeforeMacro,
       macroName: macro,
       genericArgumentClause: generics,

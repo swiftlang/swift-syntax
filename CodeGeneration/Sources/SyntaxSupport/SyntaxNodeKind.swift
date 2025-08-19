@@ -206,6 +206,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case missingPattern
   case missingStmt
   case missingType
+  case moduleSelector
   case multipleTrailingClosureElement
   case multipleTrailingClosureElementList
   case namedOpaqueReturnType

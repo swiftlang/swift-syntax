@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-@_spi(RawSyntax) internal import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) internal import SwiftSyntax
 #else
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftSyntax
 #endif
 
 extension Parser {
@@ -45,6 +45,118 @@ extension Parser {
   }
 }
 
+extension TokenConsumer {
+  /// Do the subsequent tokens have the form of a module selector? Encompasses some invalid syntax which nonetheless
+  /// can be handled by `consumeModuleSelectorTokensIfPresent()`.
+  ///
+  /// - Postcondition: If `true`, either the current token or the next token is `.colonColon`.
+  mutating func isAtModuleSelector() -> Bool {
+    // If this is a module selector, the next token should be `::`.
+    guard self.peek(isAt: .colonColon) else {
+      // ...however, we will also allow the *current* token to be `::`. `consumeModuleSelectorTokensIfPresent()` will
+      // create a missing identifier.
+      return self.at(.colonColon)
+    }
+
+    // Technically the current token *should* be an identifier, but we also want to diagnose other tokens that might be
+    // used by accident or given special meanings later ('_', certain keywords).
+    return self.at(.identifier, .wildcard, .keyword(.Any))
+      || self.at(.keyword(.self), .keyword(.Self), .keyword(.super))
+  }
+
+  mutating func unlessPeekModuleSelector<T>(_ operation: (inout Self) -> T?) -> T? {
+    var lookahead = self.lookahead()
+    lookahead.skipSingle()
+    if lookahead.isAtModuleSelector() {
+      return nil
+    }
+    return operation(&self)
+  }
+
+  /// If the subsequent tokens have the form of a module selector, valid or otherwise, consume and return them;
+  /// otherwise consume nothing and return `nil`. Additionally consumes invalid chained module selectors.
+  ///
+  /// Returns a tuple comprised of:
+  ///
+  ///  - `moduleNameOrUnexpected`: The module name if present; in a valid module selector, this will be a present
+  ///     identifier, but either of those can be untrue in invalid code.
+  ///  - `colonColonToken`: The `::` indicating this module selector. Always `.colonColon`, always present.
+  ///  - `extra`: Tokens for additional trailing module selectors. There is no situation in which two module selectors
+  ///    can be validly chained.
+  ///  - `skipQualifiedName`: True if the next token should be interpreted as a different statement.
+  @_optimize(size)  // Work around SIL optimizer bug (rdar://158171994)
+  mutating func consumeModuleSelectorTokensIfPresent() -> (
+    moduleNameOrUnexpected: Token, colonColonToken: Token, extra: [Token], skipQualifiedName: Bool
+  )? {
+    guard self.isAtModuleSelector() else {
+      return nil
+    }
+
+    let moduleName: Token
+    let colonColonToken: Token
+
+    // Did we forget the module name?
+    if let earlyColonColon = self.consume(if: .colonColon) {
+      moduleName = self.missingToken(.identifier)
+      colonColonToken = earlyColonColon
+    } else {
+      // Consume whatever comes before the `::`, plus the `::` itself. (Whether or not the "name" is an identifier is
+      // checked elsewhere.)
+      moduleName = self.consumeAnyToken()
+      colonColonToken = self.eat(.colonColon)
+    }
+
+    var extra: [Token] = []
+    while !self.currentToken.isAtStartOfLine && self.isAtModuleSelector() {
+      if !self.at(.colonColon) {
+        extra.append(self.consumeAnyToken())
+      }
+      extra.append(self.eat(.colonColon))
+    }
+
+    let afterContainsAnyNewline = self.atStartOfLine
+
+    return (moduleName, colonColonToken, extra, afterContainsAnyNewline)
+  }
+}
+
+extension Parser {
+  /// Parses one or more module selectors, if present.
+  mutating func parseModuleSelectorIfPresent() -> (moduleSelector: RawModuleSelectorSyntax?, skipQualifiedName: Bool) {
+    guard
+      let (moduleNameOrUnexpected, colonColon, extra, skipQualifiedName) =
+        consumeModuleSelectorTokensIfPresent()
+    else {
+      return (nil, false)
+    }
+
+    let leadingUnexpected: [RawSyntax]
+    let moduleName: RawTokenSyntax
+    let trailingUnexpected: [RawSyntax]
+
+    if moduleNameOrUnexpected.tokenKind == .identifier {
+      leadingUnexpected = []
+      moduleName = moduleNameOrUnexpected
+    } else {
+      leadingUnexpected = [RawSyntax(moduleNameOrUnexpected)]
+      moduleName = RawTokenSyntax(missing: .identifier, arena: arena)
+    }
+
+    trailingUnexpected = extra.map { RawSyntax($0) }
+
+    return (
+      moduleSelector: RawModuleSelectorSyntax(
+        RawUnexpectedNodesSyntax(leadingUnexpected, arena: arena),
+        moduleName: moduleName,
+        colonColon: colonColon,
+        RawUnexpectedNodesSyntax(trailingUnexpected, arena: arena),
+        arena: arena
+      ),
+      skipQualifiedName: skipQualifiedName
+    )
+  }
+}
+
 extension Parser {
   struct DeclNameOptions: OptionSet {
     var rawValue: UInt8
@@ -68,31 +180,46 @@ extension Parser {
   }
 
   mutating func parseDeclReferenceExpr(_ flags: DeclNameOptions = []) -> RawDeclReferenceExprSyntax {
-    // Consume the base name.
-    let base: RawTokenSyntax
-    if let identOrSelf = self.consume(if: .identifier, .keyword(.self), .keyword(.Self))
-      ?? self.consume(if: .keyword(.`init`))
-    {
-      base = identOrSelf
-    } else if flags.contains(.operators), let (_, _) = self.at(anyIn: Operator.self) {
-      base = self.consumeAnyToken(remapping: .binaryOperator)
-    } else if flags.contains(.keywordsUsingSpecialNames),
-      let special = self.consume(if: .keyword(.`deinit`), .keyword(.`subscript`))
-    {
-      base = special
-    } else if flags.contains(.keywords) && self.currentToken.isLexerClassifiedKeyword {
-      base = self.consumeAnyToken(remapping: .identifier)
-    } else {
-      base = missingToken(.identifier)
-    }
+    // Consume the module selector, if present, and base name.
+    let (moduleSelector, base) = self.parseDeclReferenceBase(flags)
 
     // Parse an argument list, if the flags allow it and it's present.
     let args = self.parseArgLabelList(flags)
     return RawDeclReferenceExprSyntax(
+      moduleSelector: moduleSelector,
       baseName: base,
       argumentNames: args,
       arena: self.arena
     )
+  }
+
+  private mutating func parseDeclReferenceBase(
+    _ flags: DeclNameOptions
+  ) -> (moduleSelector: RawModuleSelectorSyntax?, base: RawTokenSyntax) {
+    // Consume a module selector if present.
+    let (moduleSelector, skipQualifiedName) = self.parseModuleSelectorIfPresent()
+
+    // Consume the base name.
+    if !skipQualifiedName {
+      if let identOrInit = self.consume(if: .identifier, .keyword(.`init`)) {
+        return (moduleSelector, identOrInit)
+      }
+      if moduleSelector == nil, let selfOrSelf = self.consume(if: .keyword(.`self`), .keyword(.`Self`)) {
+        return (moduleSelector, selfOrSelf)
+      }
+      if flags.contains(.operators), let (_, _) = self.at(anyIn: Operator.self) {
+        return (moduleSelector, self.consumeAnyToken(remapping: .binaryOperator))
+      }
+      if flags.contains(.keywordsUsingSpecialNames),
+        let special = self.consume(if: .keyword(.`deinit`), .keyword(.`subscript`))
+      {
+        return (moduleSelector, special)
+      }
+      if (flags.contains(.keywords) || moduleSelector != nil) && self.currentToken.isLexerClassifiedKeyword {
+        return (moduleSelector, self.consumeAnyToken(remapping: .identifier))
+      }
+    }
+    return (moduleSelector, missingToken(.identifier))
   }
 
   mutating func parseArgLabelList(_ flags: DeclNameOptions) -> RawDeclNameArgumentsSyntax? {
@@ -187,47 +314,32 @@ extension Parser {
   }
 
   mutating func parseQualifiedTypeIdentifier() -> RawTypeSyntax {
-    if self.at(.keyword(.Any)) {
-      return RawTypeSyntax(self.parseAnyType())
+
+    let identifierType = self.parseTypeIdentifier()
+    var result = RawTypeSyntax(identifierType)
+
+    // There are no nested types inside `Any`.
+    if case TokenSpec.keyword(.Any) = identifierType.name {
+      return result
     }
 
-    let (unexpectedBeforeName, name) = self.expect(anyIn: IdentifierTypeSyntax.NameOptions.self, default: .identifier)
-    let generics: RawGenericArgumentClauseSyntax?
-    if self.at(prefix: "<") {
-      generics = self.parseGenericArguments()
-    } else {
-      generics = nil
+    func hasAnotherMember() -> Bool {
+      // If qualified name base type cannot be parsed from the current
+      // point (i.e. the next type identifier is not followed by a '.'),
+      // then the next identifier is the final declaration name component.
+      var lookahead = self.lookahead()
+      return lookahead.consume(ifPrefix: ".", as: .period) != nil && lookahead.canParseBaseTypeForQualifiedDeclName()
     }
 
-    var result = RawTypeSyntax(
-      RawIdentifierTypeSyntax(
-        unexpectedBeforeName,
-        name: name,
-        genericArgumentClause: generics,
-        arena: self.arena
-      )
-    )
-
-    // If qualified name base type cannot be parsed from the current
-    // point (i.e. the next type identifier is not followed by a '.'),
-    // then the next identifier is the final declaration name component.
-    var lookahead = self.lookahead()
-    guard
-      lookahead.consume(ifPrefix: ".", as: .period) != nil,
-      lookahead.canParseBaseTypeForQualifiedDeclName()
-    else {
+    guard hasAnotherMember() else {
       return result
     }
 
     var keepGoing = self.consume(if: .period)
     var loopProgress = LoopProgressCondition()
     while keepGoing != nil && self.hasProgressed(&loopProgress) {
-      let (unexpectedBeforeName, name) = self.expect(
-        .identifier,
-        .keyword(.self),
-        TokenSpec(.Self, remapping: .identifier),
-        default: .identifier
-      )
+      let (memberModuleSelector, skipQualifiedName) = self.parseModuleSelectorIfPresent()
+      let name = self.parseMemberTypeName(moduleSelector: memberModuleSelector, skipName: skipQualifiedName)
       let generics: RawGenericArgumentClauseSyntax?
       if self.at(prefix: "<") {
         generics = self.parseGenericArguments()
@@ -238,21 +350,14 @@ extension Parser {
         RawMemberTypeSyntax(
           baseType: result,
           period: keepGoing!,
-          unexpectedBeforeName,
+          moduleSelector: memberModuleSelector,
           name: name,
           genericArgumentClause: generics,
           arena: self.arena
         )
       )
 
-      // If qualified name base type cannot be parsed from the current
-      // point (i.e. the next type identifier is not followed by a '.'),
-      // then the next identifier is the final declaration name component.
-      var lookahead = self.lookahead()
-      guard
-        lookahead.consume(ifPrefix: ".", as: .period) != nil,
-        lookahead.canParseBaseTypeForQualifiedDeclName()
-      else {
+      guard !skipQualifiedName && hasAnotherMember() else {
         break
       }
 

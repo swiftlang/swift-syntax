@@ -1100,53 +1100,65 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     if shouldSkip(node) {
       return .skipChildren
     }
-    if node.baseName.isMissing, let unexpected = node.unexpectedBeforeBaseName {
-      if unexpected.first?.as(TokenSyntax.self)?.tokenKind == .pound {
-        addDiagnostic(
-          unexpected,
-          UnknownDirectiveError(unexpected: unexpected),
-          handledNodes: [unexpected.id, node.baseName.id]
-        )
-      } else if let availability = unexpected.first?.as(AvailabilityConditionSyntax.self) {
-        if let prefixOperatorExpr = node.parent?.as(PrefixOperatorExprSyntax.self),
-          prefixOperatorExpr.operator.text == "!",
-          let conditionElement = prefixOperatorExpr.parent?.as(ConditionElementSyntax.self)
-        {
-          // Diagnose !#available(...) and !#unavailable(...)
 
-          let negatedAvailabilityKeyword = availability.availabilityKeyword.negatedAvailabilityKeyword
-          let negatedConditionElement = ConditionElementSyntax(
-            condition: .availability(availability.with(\.availabilityKeyword, negatedAvailabilityKeyword)),
-            trailingComma: conditionElement.trailingComma
-          )
+    if node.baseName.isMissing {
+      func considerUnexpectedBeforeBaseName(_ unexpected: UnexpectedNodesSyntax) {
+        if unexpected.first?.as(TokenSyntax.self)?.tokenKind == .pound {
           addDiagnostic(
             unexpected,
-            NegatedAvailabilityCondition(
-              availabilityCondition: availability,
-              negatedAvailabilityKeyword: negatedAvailabilityKeyword
-            ),
-            fixIts: [
-              FixIt(
-                message: ReplaceTokensFixIt(
-                  replaceTokens: [prefixOperatorExpr.operator, availability.availabilityKeyword],
-                  replacements: [negatedAvailabilityKeyword]
-                ),
-                changes: [
-                  .replace(oldNode: Syntax(conditionElement), newNode: Syntax(negatedConditionElement))
-                ]
-              )
-            ],
+            UnknownDirectiveError(unexpected: unexpected),
             handledNodes: [unexpected.id, node.baseName.id]
           )
-        } else {
-          addDiagnostic(
-            unexpected,
-            AvailabilityConditionInExpression(availabilityCondition: availability),
-            handledNodes: [unexpected.id, node.baseName.id]
-          )
+        } else if let availability = unexpected.first?.as(AvailabilityConditionSyntax.self) {
+          if let prefixOperatorExpr = node.parent?.as(PrefixOperatorExprSyntax.self),
+            prefixOperatorExpr.operator.text == "!",
+            let conditionElement = prefixOperatorExpr.parent?.as(ConditionElementSyntax.self)
+          {
+            // Diagnose !#available(...) and !#unavailable(...)
+
+            let negatedAvailabilityKeyword = availability.availabilityKeyword.negatedAvailabilityKeyword
+            let negatedConditionElement = ConditionElementSyntax(
+              condition: .availability(availability.with(\.availabilityKeyword, negatedAvailabilityKeyword)),
+              trailingComma: conditionElement.trailingComma
+            )
+            addDiagnostic(
+              unexpected,
+              NegatedAvailabilityCondition(
+                availabilityCondition: availability,
+                negatedAvailabilityKeyword: negatedAvailabilityKeyword
+              ),
+              fixIts: [
+                FixIt(
+                  message: ReplaceTokensFixIt(
+                    replaceTokens: [prefixOperatorExpr.operator, availability.availabilityKeyword],
+                    replacements: [negatedAvailabilityKeyword]
+                  ),
+                  changes: [
+                    .replace(oldNode: Syntax(conditionElement), newNode: Syntax(negatedConditionElement))
+                  ]
+                )
+              ],
+              handledNodes: [unexpected.id, node.baseName.id]
+            )
+          } else {
+            addDiagnostic(
+              unexpected,
+              AvailabilityConditionInExpression(availabilityCondition: availability),
+              handledNodes: [unexpected.id, node.baseName.id]
+            )
+          }
         }
       }
+
+      // We care more about the first token in the unexpected node before the base name, so favor the module selector's
+      // unexpected nodes.
+      if node.moduleSelector == nil, let unexpected = node.unexpectedBeforeModuleSelector {
+        considerUnexpectedBeforeBaseName(unexpected)
+      } else if let unexpected = node.unexpectedBetweenModuleSelectorAndBaseName {
+        considerUnexpectedBeforeBaseName(unexpected)
+      }
     }
+
     return .visitChildren
   }
 
@@ -1247,6 +1259,40 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
 
     if let leftBrace = node.elseBody?.as(CodeBlockSyntax.self)?.leftBrace, leftBrace.isMissing {
       addDiagnostic(leftBrace, .expectedLeftBraceOrIfAfterElse, handledNodes: [leftBrace.id])
+    }
+
+    return .visitChildren
+  }
+
+  public override func visit(_ node: ImportPathComponentSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+
+    if let colonColon = node.unexpectedAfterTrailingPeriod?.first?.as(TokenSyntax.self),
+      colonColon.tokenKind == .colonColon,
+      colonColon.isPresent,
+      let trailingPeriod = node.trailingPeriod,
+      trailingPeriod.tokenKind == .period,
+      trailingPeriod.isMissing
+    {
+      addDiagnostic(
+        colonColon,
+        .submoduleCannotBeImportedUsingModuleSelector,
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [colonColon], replacements: [trailingPeriod]),
+            changes: [
+              .makeMissing(colonColon),
+              .makePresent(trailingPeriod),
+            ]
+          )
+        ],
+        handledNodes: [
+          colonColon.id,
+          trailingPeriod.id,
+        ]
+      )
     }
 
     return .visitChildren

@@ -16,36 +16,40 @@ import SyntaxSupport
 import Utils
 
 let renamedChildrenCompatibilityFile = try! SourceFileSyntax(leadingTrivia: copyrightHeader) {
-  for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode).filter({ !$0.childHistory.isEmpty }) {
+  for layoutNode in SYNTAX_NODES.compactMap(\.layoutNode) {
     var deprecatedMembers = SYNTAX_COMPATIBILITY_LAYER.deprecatedMembers(for: layoutNode)
 
-    try ExtensionDeclSyntax("extension \(layoutNode.type.syntaxBaseName)") {
-      for child in deprecatedMembers.vars {
-        makeCompatibilityVar(for: child)
-        if let addMethod = makeCompatibilityAddMethod(for: child) {
-          addMethod
+    if !deprecatedMembers.isEmpty {
+      try ExtensionDeclSyntax("extension \(layoutNode.type.syntaxBaseName)") {
+        for child in deprecatedMembers.vars {
+          makeCompatibilityVar(for: child)
+          if let addMethod = makeCompatibilityAddMethod(for: child) {
+            addMethod
+          }
         }
-      }
 
-      let renamedName = InitSignature(layoutNode).compoundName
-      for signature in deprecatedMembers.inits {
-        makeCompatibilityInit(for: signature, renamedName: renamedName)
+        let renamedName = InitSignature(layoutNode).compoundName
+        for signature in deprecatedMembers.inits {
+          makeCompatibilityInit(for: signature, renamedName: renamedName)
+        }
       }
     }
   }
 
-  for trait in TRAITS.filter({ !$0.childHistory.isEmpty }) {
+  for trait in TRAITS {
     var deprecatedMembers = SYNTAX_COMPATIBILITY_LAYER.deprecatedMembers(for: trait)
 
-    try ExtensionDeclSyntax("extension \(trait.protocolName)") {
-      for child in deprecatedMembers.vars {
-        makeCompatibilityVar(for: child)
-        if let addMethod = makeCompatibilityAddMethod(for: child) {
-          addMethod
+    if !deprecatedMembers.isEmpty {
+      try ExtensionDeclSyntax("extension \(trait.protocolName)") {
+        for child in deprecatedMembers.vars {
+          makeCompatibilityVar(for: child)
+          if let addMethod = makeCompatibilityAddMethod(for: child) {
+            addMethod
+          }
         }
-      }
 
-      // Not currently generating compatibility inits for traits.
+        // Not currently generating compatibility inits for traits.
+      }
     }
   }
 }
@@ -63,10 +67,16 @@ func makeCompatibilityVar(for child: Child) -> DeclSyntax {
     ExprSyntax(MemberAccessExprSyntax(base: base, name: child.baseCallName))
   }
 
+  let attributes = AttributeListSyntax {
+    if child.isHistorical {
+      AttributeSyntax("@available(*, deprecated, renamed: \(literal: childPathString))")
+        .with(\.trailingTrivia, .newlines(1))
+    }
+  }
+
   return DeclSyntax(
     """
-    @available(*, deprecated, renamed: \(literal: childPathString))
-    public var \(child.identifier): \(type) {
+    \(attributes)public var \(child.identifier): \(type) {
       get {
         return \(childAccess)
       }
@@ -105,11 +115,20 @@ func makeCompatibilityAddMethod(for child: Child) -> DeclSyntax? {
 }
 
 func makeCompatibilityInit(for signature: InitSignature, renamedName: String) -> InitializerDeclSyntax {
-  try! InitializerDeclSyntax(
+  let prefix: SyntaxNodeString
+  if signature.isHistorical {
+    prefix = """
+      @available(*, deprecated, renamed: \(literal: renamedName))
+      @_disfavoredOverload
+
+      """
+  } else {
+    prefix = ""
+  }
+
+  return try! InitializerDeclSyntax(
     """
-    @available(*, deprecated, renamed: \(literal: renamedName))
-    @_disfavoredOverload
-    \(signature.generateInitializerDeclHeader())
+    \(prefix)\(signature.generateInitializerDeclHeader())
     """
   ) {
     FunctionCallExprSyntax(callee: ExprSyntax("self.init")) {

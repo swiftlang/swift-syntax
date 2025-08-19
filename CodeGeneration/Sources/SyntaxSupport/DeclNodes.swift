@@ -28,7 +28,7 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "trailingPeriod",
-        kind: .token(choices: [.token(.period)]),
+        kind: .token(choices: [.token(.period), .token(.colonColon)]),
         isOptional: true
       ),
     ],
@@ -1553,6 +1553,12 @@ public let DECL_NODES: [Node] = [
         name: "pound",
         kind: .token(choices: [.token(.pound)]),
         documentation: "The `#` sign."
+      ),
+      Child(
+        name: "moduleSelector",
+        kind: .node(kind: .moduleSelector),
+        experimentalFeature: .moduleSelector,
+        isOptional: true
       ),
       Child(
         name: "macroName",

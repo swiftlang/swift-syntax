@@ -1043,7 +1043,7 @@ extension KeyPathSubscriptComponentSyntax {
 
 extension MacroExpansionDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(
+  @_spi(ExperimentalLanguageFeatures) public init(
     leadingTrivia: Trivia? = nil,
     unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax = [],
@@ -1051,7 +1051,9 @@ extension MacroExpansionDeclSyntax {
     modifiers: DeclModifierListSyntax = [],
     unexpectedBetweenModifiersAndPound: UnexpectedNodesSyntax? = nil,
     pound: TokenSyntax = .poundToken(),
-    unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? = nil,
+    unexpectedBetweenPoundAndModuleSelector: UnexpectedNodesSyntax? = nil,
+    moduleSelector: ModuleSelectorSyntax? = nil,
+    unexpectedBetweenModuleSelectorAndMacroName: UnexpectedNodesSyntax? = nil,
     macroName: TokenSyntax,
     unexpectedBetweenMacroNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
     genericArgumentClause: GenericArgumentClauseSyntax? = nil,
@@ -1076,7 +1078,9 @@ extension MacroExpansionDeclSyntax {
       modifiers: modifiers,
       unexpectedBetweenModifiersAndPound,
       pound: pound,
-      unexpectedBetweenPoundAndMacroName,
+      unexpectedBetweenPoundAndModuleSelector,
+      moduleSelector: moduleSelector,
+      unexpectedBetweenModuleSelectorAndMacroName,
       macroName: macroName,
       unexpectedBetweenMacroNameAndGenericArgumentClause,
       genericArgumentClause: genericArgumentClause,
@@ -1098,11 +1102,13 @@ extension MacroExpansionDeclSyntax {
 
 extension MacroExpansionExprSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  public init(
+  @_spi(ExperimentalLanguageFeatures) public init(
     leadingTrivia: Trivia? = nil,
     unexpectedBeforePound: UnexpectedNodesSyntax? = nil,
     pound: TokenSyntax = .poundToken(),
-    unexpectedBetweenPoundAndMacroName: UnexpectedNodesSyntax? = nil,
+    unexpectedBetweenPoundAndModuleSelector: UnexpectedNodesSyntax? = nil,
+    moduleSelector: ModuleSelectorSyntax? = nil,
+    unexpectedBetweenModuleSelectorAndMacroName: UnexpectedNodesSyntax? = nil,
     macroName: TokenSyntax,
     unexpectedBetweenMacroNameAndGenericArgumentClause: UnexpectedNodesSyntax? = nil,
     genericArgumentClause: GenericArgumentClauseSyntax? = nil,
@@ -1123,7 +1129,9 @@ extension MacroExpansionExprSyntax {
       leadingTrivia: leadingTrivia,
       unexpectedBeforePound,
       pound: pound,
-      unexpectedBetweenPoundAndMacroName,
+      unexpectedBetweenPoundAndModuleSelector,
+      moduleSelector: moduleSelector,
+      unexpectedBetweenModuleSelectorAndMacroName,
       macroName: macroName,
       unexpectedBetweenMacroNameAndGenericArgumentClause,
       genericArgumentClause: genericArgumentClause,

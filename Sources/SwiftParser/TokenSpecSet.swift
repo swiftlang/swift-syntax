@@ -835,6 +835,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
   case `Any`
   case atSign  // For recovery
   case `Self`
+  case colonColon
   case `deinit`
   case dollarIdentifier
   case `false`
@@ -867,6 +868,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case TokenSpec(.Any): self = .Any
     case TokenSpec(.atSign): self = .atSign
     case TokenSpec(.Self): self = .Self
+    case TokenSpec(.colonColon): self = .colonColon
     case TokenSpec(.deinit): self = .`deinit`
     case TokenSpec(.dollarIdentifier): self = .dollarIdentifier
     case TokenSpec(.false): self = .false
@@ -902,6 +904,7 @@ enum PrimaryExpressionStart: TokenSpecSet {
     case .Any: return .keyword(.Any)
     case .atSign: return .atSign
     case .Self: return .keyword(.Self)
+    case .colonColon: return .colonColon
     case .`deinit`: return .keyword(.`deinit`)
     case .dollarIdentifier: return .dollarIdentifier
     case .false: return .keyword(.false)

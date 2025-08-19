@@ -21,6 +21,7 @@ public enum TokenKind: Hashable, Sendable {
   case backtick
   case binaryOperator(String)
   case colon
+  case colonColon
   case comma
   case dollarIdentifier(String)
   case ellipsis
@@ -82,6 +83,8 @@ public enum TokenKind: Hashable, Sendable {
       return text
     case .colon:
       return ":"
+    case .colonColon:
+      return "::"
     case .comma:
       return ","
     case .dollarIdentifier(let text):
@@ -187,6 +190,8 @@ public enum TokenKind: Hashable, Sendable {
       return "`"
     case .colon:
       return ":"
+    case .colonColon:
+      return "::"
     case .comma:
       return ","
     case .ellipsis:
@@ -274,6 +279,8 @@ public enum TokenKind: Hashable, Sendable {
     case .binaryOperator:
       return false
     case .colon:
+      return true
+    case .colonColon:
       return true
     case .comma:
       return true
@@ -382,6 +389,8 @@ extension TokenKind: Equatable {
       return lhsText == rhsText
     case (.colon, .colon):
       return true
+    case (.colonColon, .colonColon):
+      return true
     case (.comma, .comma):
       return true
     case (.dollarIdentifier(let lhsText), .dollarIdentifier(let rhsText)):
@@ -489,6 +498,7 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
   case backtick
   case binaryOperator
   case colon
+  case colonColon
   case comma
   case dollarIdentifier
   case ellipsis
@@ -547,6 +557,8 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
       return "`"
     case .colon:
       return ":"
+    case .colonColon:
+      return "::"
     case .comma:
       return ","
     case .ellipsis:
@@ -632,6 +644,8 @@ public enum RawTokenKind: UInt8, Equatable, Hashable {
     case .binaryOperator:
       return false
     case .colon:
+      return true
+    case .colonColon:
       return true
     case .comma:
       return true
@@ -747,6 +761,9 @@ extension TokenKind {
     case .colon:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .colon
+    case .colonColon:
+      precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
+      return .colonColon
     case .comma:
       precondition(text.isEmpty || rawKind.defaultText.map(String.init) == text)
       return .comma
@@ -889,6 +906,8 @@ extension TokenKind {
       return (.binaryOperator, str)
     case .colon:
       return (.colon, nil)
+    case .colonColon:
+      return (.colonColon, nil)
     case .comma:
       return (.comma, nil)
     case .dollarIdentifier(let str):

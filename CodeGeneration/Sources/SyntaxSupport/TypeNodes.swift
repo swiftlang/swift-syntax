@@ -58,6 +58,17 @@ public let TYPE_NODES: [Node] = [
         documentation: "A list of attributes that can be attached to the type, such as `@escaping`."
       ),
       Child(
+        name: "lateSpecifiers",
+        kind: .collection(
+          kind: .typeSpecifierList,
+          collectionElementName: "Specifier",
+          defaultsToEmpty: true,
+          generateDeprecatedAddFunction: false
+        ),
+        documentation:
+          "A list of specifiers that can be attached to the type after the attributes, such as 'nonisolated'."
+      ),
+      Child(
         name: "baseType",
         kind: .node(kind: .type),
         documentation: "The type to with the specifiers and attributes are applied."

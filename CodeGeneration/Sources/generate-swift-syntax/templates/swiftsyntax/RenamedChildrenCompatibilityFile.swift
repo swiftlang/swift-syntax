@@ -85,7 +85,8 @@ func makeCompatibilityAddMethod(for child: Child) -> DeclSyntax? {
       kind: _,
       collectionElementName: let collectionElementName?,
       defaultsToEmpty: _,
-      deprecatedCollectionElementName: let deprecatedCollectionElementName?
+      deprecatedCollectionElementName: let deprecatedCollectionElementName?,
+      generateDeprecatedAddFunction: _
     ) = child.kind
   {
     let childEltType = childNode.collectionElementType.syntaxBaseName

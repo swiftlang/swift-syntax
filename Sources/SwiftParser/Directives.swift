@@ -213,7 +213,7 @@ extension Parser {
   /// Parse a line control directive.
   mutating func parsePoundSourceLocationDirective() -> RawPoundSourceLocationSyntax {
     let line = self.consumeAnyToken()
-    let (unexpectedBeforeLParen, lparen) = self.expect(.leftParen)
+    let (unexpectedBeforeLParen, lparen) = self.expect(TokenSpec(.leftParen, allowAtStartOfLine: false))
     let arguments: RawPoundSourceLocationArgumentsSyntax?
     if !self.at(.rightParen) {
       let (unexpectedBeforeFile, file) = self.expect(.keyword(.file))

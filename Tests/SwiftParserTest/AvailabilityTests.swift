@@ -204,4 +204,33 @@ final class AvailabilityTests: ParserTestCase {
       ]
     )
   }
+
+  func testAvailableNewlineParen() {
+    assertParse(
+      """
+      @available1️⃣
+      2️⃣(*, unavailable) func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '()' in attribute",
+          fixIts: ["insert '()'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected argument for '@available' attribute",
+          fixIts: ["insert attribute argument"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "unexpected code '(*, unavailable)' in function"
+        ),
+      ],
+      fixedSource: """
+        @available()
+        (*, unavailable) func foo() {}
+        """
+    )
+  }
 }

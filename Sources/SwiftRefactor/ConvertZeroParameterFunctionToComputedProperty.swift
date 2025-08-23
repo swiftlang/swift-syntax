@@ -17,10 +17,10 @@ import SwiftSyntax
 #endif
 
 public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringProvider {
-  public static func refactor(syntax: FunctionDeclSyntax, in context: ()) -> VariableDeclSyntax? {
+  public static func refactor(syntax: FunctionDeclSyntax, in context: ()) throws -> VariableDeclSyntax {
     guard syntax.signature.parameterClause.parameters.isEmpty,
       let body = syntax.body
-    else { return nil }
+    else { throw RefactoringNotApplicableError("not a zero parameter function") }
 
     let variableName = PatternSyntax(
       IdentifierPatternSyntax(

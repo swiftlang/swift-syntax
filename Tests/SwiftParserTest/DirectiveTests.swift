@@ -358,7 +358,7 @@ final class DirectiveTests: ParserTestCase {
     )
   }
 
-  func testIfConfigRRR() {
+  func testIfConfigAfterAttribute() {
     assertParse(
       """
       @frozen1️⃣
@@ -433,6 +433,28 @@ final class DirectiveTests: ParserTestCase {
         #if true
         func foo() {}
         #endif
+        """
+    )
+  }
+
+  func testSourcelocationDirectiveNewlineParen() {
+    assertParse(
+      """
+      #sourceLocation1️⃣
+      (file: "other.swift", line: 1)
+      var someName: Int
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '(', arguments, and ')' in '#sourceLocation' directive",
+          fixIts: ["insert '(', arguments, and ')'"]
+        )
+      ],
+      fixedSource: """
+        #sourceLocation(file: "", line: <#integer literal#>)
+        (file: "other.swift", line: 1)
+        var someName: Int
         """
     )
   }

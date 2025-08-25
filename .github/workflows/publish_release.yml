@@ -38,7 +38,7 @@ jobs:
     with:
       # We require that releases of swift-syntax build without warnings
       linux_build_command: swift test -Xswiftc -warnings-as-errors ${{ matrix.release && '-c release' || '' }}
-      windows_build_command: swift test -Xswiftc -warnings-as-errors ${{ matrix.release && '-c release' || '' }}
+      windows_build_command: Invoke-Program swift test -Xswiftc -warnings-as-errors ${{ matrix.release && '-c release' || '' }}
   create_tag:
     name: Create Tag
     runs-on: ubuntu-latest

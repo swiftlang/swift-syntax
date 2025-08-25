@@ -40,7 +40,7 @@ final class SourceEditorCommand: NSObject, XCSourceEditorCommand {
       }
 
       override func visitAny(_ node: Syntax) -> Syntax? {
-        func withOpenedRefactoringProvider<T: SyntaxRefactoringProvider>(_ providerType: T.Type) -> Syntax? {
+        func withOpenedRefactoringProvider<T: SyntaxRefactoringProvider>(_ providerType: T.Type) throws -> Syntax? {
           guard
             let input = node.as(providerType.Input.self),
             providerType.Context.self == Void.self
@@ -48,10 +48,10 @@ final class SourceEditorCommand: NSObject, XCSourceEditorCommand {
             return nil
           }
           let context = unsafeBitCast(Void(), to: providerType.Context.self)
-          return providerType.refactor(syntax: input, in: context).map { Syntax($0) }
+          return try Syntax(providerType.refactor(syntax: input, in: context))
         }
 
-        return _openExistential(self.provider, do: withOpenedRefactoringProvider)
+        return try? _openExistential(self.provider, do: withOpenedRefactoringProvider)
       }
     }
 

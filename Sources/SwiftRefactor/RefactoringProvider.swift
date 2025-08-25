@@ -16,6 +16,18 @@ public import SwiftSyntax
 import SwiftSyntax
 #endif
 
+/// Error that refactoring actions can throw when the refactoring fails.
+///
+/// The reason should start with a single lowercase character and
+/// should be formatted similarly to compiler error messages.
+public struct RefactoringNotApplicableError: Error, CustomStringConvertible {
+  public var description: String
+
+  public init(_ reason: String) {
+    self.description = reason
+  }
+}
+
 /// A refactoring expressed as textual edits on the original syntax tree. In
 /// general clients should prefer `SyntaxRefactoringProvider` where possible.
 public protocol EditRefactoringProvider {
@@ -29,10 +41,10 @@ public protocol EditRefactoringProvider {
   /// - Parameters:
   ///   - syntax: The syntax to transform.
   ///   - context: Contextual information used by the refactoring action.
+  /// - Throws: Throws an error if the refactoring action fails or is not applicable.
   /// - Returns: Textual edits that describe how to apply the result of the
-  ///            refactoring action on locations within the original tree. An
-  ///            empty array if the refactoring could not be performed.
-  static func textRefactor(syntax: Input, in context: Context) -> [SourceEdit]
+  ///            refactoring action on locations within the original tree.
+  static func textRefactor(syntax: Input, in context: Context) throws -> [SourceEdit]
 }
 
 extension EditRefactoringProvider where Context == Void {
@@ -41,9 +53,10 @@ extension EditRefactoringProvider where Context == Void {
   ///
   /// - Parameters:
   ///   - syntax: The syntax to transform.
+  /// - Throws: Throws an error if the refactoring action fails or is not applicable.
   /// - Returns: Textual edits describing the refactoring to perform.
-  public static func textRefactor(syntax: Input) -> [SourceEdit] {
-    return self.textRefactor(syntax: syntax, in: ())
+  public static func textRefactor(syntax: Input) throws -> [SourceEdit] {
+    return try self.textRefactor(syntax: syntax, in: ())
   }
 }
 
@@ -84,9 +97,9 @@ public protocol SyntaxRefactoringProvider: EditRefactoringProvider {
   /// - Parameters:
   ///   - syntax: The syntax to transform.
   ///   - context: Contextual information used by the refactoring action.
-  /// - Returns: The result of applying the refactoring action, or `nil` if the
-  ///            action could not be performed.
-  static func refactor(syntax: Input, in context: Context) -> Output?
+  /// - Throws: Throws an error if the refactoring action fails or is not applicable.
+  /// - Returns: The result of applying the refactoring action.
+  static func refactor(syntax: Input, in context: Context) throws -> Output
 }
 
 extension SyntaxRefactoringProvider where Context == Void {
@@ -95,10 +108,10 @@ extension SyntaxRefactoringProvider where Context == Void {
   ///
   /// - Parameters:
   ///   - syntax: The syntax to transform.
-  /// - Returns: The result of applying the refactoring action, or `nil` if the
-  ///            action could not be performed.
-  public static func refactor(syntax: Input) -> Output? {
-    return self.refactor(syntax: syntax, in: ())
+  /// - Throws: Throws an error if the refactoring action fails or is not applicable.
+  /// - Returns: The result of applying the refactoring action.
+  public static func refactor(syntax: Input) throws -> Output {
+    return try self.refactor(syntax: syntax, in: ())
   }
 }
 
@@ -106,10 +119,8 @@ extension SyntaxRefactoringProvider {
   /// Provides a default implementation for
   /// `EditRefactoringProvider.textRefactor(syntax:in:)` that produces an edit
   /// to replace the input of `refactor(syntax:in:)` with its returned output.
-  public static func textRefactor(syntax: Input, in context: Context) -> [SourceEdit] {
-    guard let output = refactor(syntax: syntax, in: context) else {
-      return []
-    }
+  public static func textRefactor(syntax: Input, in context: Context) throws -> [SourceEdit] {
+    let output = try refactor(syntax: syntax, in: context)
     return [SourceEdit.replace(syntax, with: output.description)]
   }
 }

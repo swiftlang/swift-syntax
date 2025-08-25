@@ -39,7 +39,7 @@ import SwiftSyntax
 ///   // ...
 /// }
 public struct MigrateToNewIfLetSyntax: SyntaxRefactoringProvider {
-  public static func refactor(syntax node: IfExprSyntax, in context: ()) -> IfExprSyntax? {
+  public static func refactor(syntax node: IfExprSyntax, in context: ()) -> IfExprSyntax {
     // Visit all conditions in the node.
     let newConditions = node.conditions.enumerated().map { (index, condition) -> ConditionElementListSyntax.Element in
       var conditionCopy = condition

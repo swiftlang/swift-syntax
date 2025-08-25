@@ -275,13 +275,19 @@ public struct ExpandEditorPlaceholdersToLiteralClosures: SyntaxRefactoringProvid
   public static func refactor(
     syntax: Syntax,
     in context: Context = Context()
-  ) -> Syntax? {
-    guard let call = syntax.asProtocol(CallLikeSyntax.self) else { return nil }
-    let expanded = Self.expandClosurePlaceholders(
-      in: call,
-      ifIncluded: nil,
-      context: context
-    )
+  ) throws -> Syntax {
+    guard let call = syntax.asProtocol(CallLikeSyntax.self) else {
+      throw RefactoringNotApplicableError("not a call")
+    }
+    guard
+      let expanded = Self.expandClosurePlaceholders(
+        in: call,
+        ifIncluded: nil,
+        context: context
+      )
+    else {
+      throw RefactoringNotApplicableError("could not expand closure placeholders")
+    }
     return Syntax(fromProtocol: expanded)
   }
 
@@ -325,7 +331,7 @@ public struct ExpandEditorPlaceholdersToLiteralClosures: SyntaxRefactoringProvid
       let callToTrailingContext = CallToTrailingClosures.Context(
         startAtArgument: call.arguments.count - expanded.numClosures
       )
-      return CallToTrailingClosures._refactor(syntax: expanded.expr, in: callToTrailingContext)
+      return try? CallToTrailingClosures._refactor(syntax: expanded.expr, in: callToTrailingContext)
     }
   }
 }

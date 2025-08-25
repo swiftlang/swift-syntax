@@ -17,17 +17,17 @@ import SwiftSyntax
 #endif
 
 public struct ConvertComputedPropertyToZeroParameterFunction: SyntaxRefactoringProvider {
-  public static func refactor(syntax: VariableDeclSyntax, in context: Void) -> FunctionDeclSyntax? {
+  public static func refactor(syntax: VariableDeclSyntax, in context: Void) throws -> FunctionDeclSyntax {
     guard syntax.bindings.count == 1,
       let binding = syntax.bindings.first,
       let identifierPattern = binding.pattern.as(IdentifierPatternSyntax.self)
-    else { return nil }
+    else { throw RefactoringNotApplicableError("unsupported variable declaration") }
 
     var statements: CodeBlockItemListSyntax
 
     guard let typeAnnotation = binding.typeAnnotation,
       var accessorBlock = binding.accessorBlock
-    else { return nil }
+    else { throw RefactoringNotApplicableError("no type annotation or stored") }
 
     var effectSpecifiers: AccessorEffectSpecifiersSyntax?
 
@@ -35,7 +35,7 @@ public struct ConvertComputedPropertyToZeroParameterFunction: SyntaxRefactoringP
     case .accessors(let accessors):
       guard accessors.count == 1, let accessor = accessors.first,
         accessor.accessorSpecifier.tokenKind == .keyword(.get), let codeBlock = accessor.body
-      else { return nil }
+      else { throw RefactoringNotApplicableError("not a getter-only declaration") }
       effectSpecifiers = accessor.effectSpecifiers
       statements = codeBlock.statements
       let accessorSpecifier = accessor.accessorSpecifier

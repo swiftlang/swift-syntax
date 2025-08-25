@@ -17,11 +17,15 @@ import SwiftSyntax
 #endif
 
 public struct ConvertComputedPropertyToStored: SyntaxRefactoringProvider {
-  public static func refactor(syntax: VariableDeclSyntax, in context: ()) -> VariableDeclSyntax? {
-    guard syntax.bindings.count == 1, let binding = syntax.bindings.first,
-      let accessorBlock = binding.accessorBlock, case let .getter(body) = accessorBlock.accessors, !body.isEmpty
+  public static func refactor(syntax: VariableDeclSyntax, in context: ()) throws -> VariableDeclSyntax {
+    guard syntax.bindings.count == 1, let binding = syntax.bindings.first else {
+      throw RefactoringNotApplicableError("unsupported variable declaration")
+    }
+
+    guard let accessorBlock = binding.accessorBlock,
+      case let .getter(body) = accessorBlock.accessors, !body.isEmpty
     else {
-      return nil
+      throw RefactoringNotApplicableError("getter is missing or empty")
     }
 
     let refactored = { (initializer: InitializerClauseSyntax) -> VariableDeclSyntax in
@@ -55,7 +59,7 @@ public struct ConvertComputedPropertyToStored: SyntaxRefactoringProvider {
     }
 
     guard body.count == 1, let item = body.first?.item else {
-      return nil
+      throw RefactoringNotApplicableError("getter body is not a single expression")
     }
 
     if let item = item.as(ReturnStmtSyntax.self), let expression = item.expression {
@@ -79,6 +83,6 @@ public struct ConvertComputedPropertyToStored: SyntaxRefactoringProvider {
       )
     }
 
-    return nil
+    throw RefactoringNotApplicableError("could not extract initial value of stored property")
   }
 }

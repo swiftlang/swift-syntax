@@ -179,7 +179,7 @@ public struct OpaqueParameterToGeneric: SyntaxRefactoringProvider {
   public static func refactor(
     syntax decl: DeclSyntax,
     in context: Void
-  ) -> DeclSyntax? {
+  ) throws -> DeclSyntax {
     // Function declaration.
     if let funcSyntax = decl.as(FunctionDeclSyntax.self) {
       guard
@@ -188,7 +188,7 @@ public struct OpaqueParameterToGeneric: SyntaxRefactoringProvider {
           augmenting: funcSyntax.genericParameterClause
         )
       else {
-        return nil
+        throw RefactoringNotApplicableError("found no parameters to rewrite")
       }
 
       return DeclSyntax(
@@ -206,7 +206,7 @@ public struct OpaqueParameterToGeneric: SyntaxRefactoringProvider {
           augmenting: initSyntax.genericParameterClause
         )
       else {
-        return nil
+        throw RefactoringNotApplicableError("found no parameters to rewrite")
       }
 
       return DeclSyntax(
@@ -224,7 +224,7 @@ public struct OpaqueParameterToGeneric: SyntaxRefactoringProvider {
           augmenting: subscriptSyntax.genericParameterClause
         )
       else {
-        return nil
+        throw RefactoringNotApplicableError("found no parameters to rewrite")
       }
 
       return DeclSyntax(
@@ -234,6 +234,6 @@ public struct OpaqueParameterToGeneric: SyntaxRefactoringProvider {
       )
     }
 
-    return nil
+    throw RefactoringNotApplicableError("unsupported declaration")
   }
 }

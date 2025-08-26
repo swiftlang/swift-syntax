@@ -16,7 +16,7 @@ import SwiftSyntaxBuilder
 
 /// Add a target to a manifest's source code.
 @_spi(PackageRefactor)
-public struct AddPackageTarget: ManifestEditRefactoringProvider {
+public struct AddPackageTarget: EditRefactoringProvider {
   public struct Context {
     public let target: PackageTarget
     public var testHarness: TestHarness
@@ -57,7 +57,7 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
   /// Add the given target to the manifest, producing a set of edit results
   /// that updates the manifest and adds some source files to stub out the
   /// new target.
-  public static func manifestRefactor(
+  public static func textRefactor(
     syntax manifest: SourceFileSyntax,
     in context: Context
   ) throws -> [SourceEdit] {

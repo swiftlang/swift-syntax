@@ -30,7 +30,6 @@ add_swift_syntax_library(SwiftRefactor
   PackageManifest/AddSwiftSetting.swift
   PackageManifest/AddTargetDependency.swift
   PackageManifest/ManifestEditError.swift
-  PackageManifest/ManifestEditRefactoringProvider.swift
   PackageManifest/ManifestSyntaxRepresentable.swift
   PackageManifest/PackageDependency.swift
   PackageManifest/PackageTarget.swift

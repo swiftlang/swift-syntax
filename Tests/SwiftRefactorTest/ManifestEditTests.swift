@@ -160,7 +160,7 @@ final class ManifestEditTests: XCTestCase {
 
   func testAddPackageDependencyDuplicates() throws {
     XCTAssertThrowsError(
-      try AddPackageDependency.manifestRefactor(
+      try AddPackageDependency.textRefactor(
         syntax: """
           // swift-tools-version: 5.5
           let package = Package(
@@ -351,7 +351,7 @@ final class ManifestEditTests: XCTestCase {
 
   func testAddPackageDependencyErrors() {
     XCTAssertThrowsError(
-      try AddPackageDependency.manifestRefactor(
+      try AddPackageDependency.textRefactor(
         syntax: """
           // swift-tools-version: 5.5
           let package: Package = .init(
@@ -368,7 +368,7 @@ final class ManifestEditTests: XCTestCase {
     }
 
     XCTAssertThrowsError(
-      try AddPackageDependency.manifestRefactor(
+      try AddPackageDependency.textRefactor(
         syntax: """
           // swift-tools-version: 5.5
           let package = Package(
@@ -969,21 +969,21 @@ final class ManifestEditTests: XCTestCase {
 
 /// Assert that applying the given edit/refactor operation to the manifest
 /// produces the expected manifest source file.
-func assertManifestRefactor<Provider: ManifestEditRefactoringProvider>(
-  _ originalManifest: SourceFileSyntax,
-  expectedManifest: SourceFileSyntax,
+func assertManifestRefactor<Provider: EditRefactoringProvider>(
+  _ originalManifest: Provider.Input,
+  expectedManifest: Provider.Input,
   provider: Provider.Type,
   context: Provider.Context,
   file: StaticString = #filePath,
   line: UInt = #line
-) throws {
+) throws where Provider.Input == SourceFileSyntax {
   return try assertManifestRefactor(
     originalManifest,
     expectedManifest: expectedManifest,
     file: file,
     line: line
   ) { (manifest) in
-    try provider.manifestRefactor(syntax: manifest, in: context)
+    try provider.textRefactor(syntax: manifest, in: context)
   }
 }
 

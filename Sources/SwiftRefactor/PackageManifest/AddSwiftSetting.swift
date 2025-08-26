@@ -16,7 +16,7 @@ import SwiftSyntaxBuilder
 
 /// Add a swift setting to a manifest's source code.
 @_spi(PackageRefactor)
-public struct AddSwiftSetting: ManifestEditRefactoringProvider {
+public struct AddSwiftSetting: EditRefactoringProvider {
   public struct Context {
     let target: String
     let setting: String
@@ -35,7 +35,7 @@ public struct AddSwiftSetting: ManifestEditRefactoringProvider {
     name: String,
     manifest: SourceFileSyntax
   ) throws -> [SourceEdit] {
-    try manifestRefactor(
+    try textRefactor(
       syntax: manifest,
       in: .init(
         target: target,
@@ -50,7 +50,7 @@ public struct AddSwiftSetting: ManifestEditRefactoringProvider {
     name: String,
     manifest: SourceFileSyntax
   ) throws -> [SourceEdit] {
-    try manifestRefactor(
+    try textRefactor(
       syntax: manifest,
       in: .init(
         target: target,
@@ -75,7 +75,7 @@ public struct AddSwiftSetting: ManifestEditRefactoringProvider {
       mode = ".version(\"\(rawMode)\")"
     }
 
-    return try manifestRefactor(
+    return try textRefactor(
       syntax: manifest,
       in: .init(
         target: target,
@@ -89,7 +89,7 @@ public struct AddSwiftSetting: ManifestEditRefactoringProvider {
     to target: String,
     manifest: SourceFileSyntax
   ) throws -> [SourceEdit] {
-    try manifestRefactor(
+    try textRefactor(
       syntax: manifest,
       in: .init(
         target: target,
@@ -99,7 +99,7 @@ public struct AddSwiftSetting: ManifestEditRefactoringProvider {
     )
   }
 
-  public static func manifestRefactor(
+  public static func textRefactor(
     syntax manifest: SourceFileSyntax,
     in context: Context
   ) throws -> [SourceEdit] {

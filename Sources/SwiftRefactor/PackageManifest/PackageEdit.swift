@@ -18,7 +18,4 @@ import SwiftSyntax
 public struct PackageEdit {
   /// Edits to perform to the package manifest.
   public var manifestEdits: [SourceEdit] = []
-
-  /// Auxiliary files to write.
-  public var auxiliaryFiles: [(relativePath: String, contents: SourceFileSyntax)] = []
 }

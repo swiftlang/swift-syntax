@@ -16,11 +16,11 @@ import SwiftSyntax
 public protocol ManifestEditRefactoringProvider: EditRefactoringProvider
 where Self.Input == SourceFileSyntax {
 
-  static func manifestRefactor(syntax: SourceFileSyntax, in context: Context) throws -> PackageEdit
+  static func manifestRefactor(syntax: SourceFileSyntax, in context: Context) throws -> [SourceEdit]
 }
 
 extension ManifestEditRefactoringProvider {
   public static func textRefactor(syntax: Input, in context: Context) -> [SourceEdit] {
-    return (try? manifestRefactor(syntax: syntax, in: context).manifestEdits) ?? []
+    return (try? manifestRefactor(syntax: syntax, in: context)) ?? []
   }
 }

@@ -51,7 +51,7 @@ public struct AddTargetDependency: ManifestEditRefactoringProvider {
   public static func manifestRefactor(
     syntax manifest: SourceFileSyntax,
     in context: Context
-  ) throws -> PackageEdit {
+  ) throws -> [SourceEdit] {
     let dependency = context.dependency
     let targetName = context.targetName
 
@@ -67,11 +67,9 @@ public struct AddTargetDependency: ManifestEditRefactoringProvider {
       to: targetCall
     )
 
-    return PackageEdit(
-      manifestEdits: [
-        .replace(targetCall, with: newTargetCall.description)
-      ]
-    )
+    return [
+      .replace(targetCall, with: newTargetCall.description)
+    ]
   }
 
   /// Implementation of adding a target dependency to an existing call.

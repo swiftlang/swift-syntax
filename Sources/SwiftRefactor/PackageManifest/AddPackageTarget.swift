@@ -60,7 +60,7 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
   public static func manifestRefactor(
     syntax manifest: SourceFileSyntax,
     in context: Context
-  ) throws -> PackageEdit {
+  ) throws -> [SourceEdit] {
     guard let packageCall = manifest.findCall(calleeName: "Package") else {
       throw ManifestEditError.cannotFindPackage
     }
@@ -119,11 +119,9 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
     default: break
     }
 
-    return PackageEdit(
-      manifestEdits: [
-        .replace(packageCall, with: newPackageCall.description)
-      ] + extraManifestEdits
-    )
+    return [
+      .replace(packageCall, with: newPackageCall.description)
+    ] + extraManifestEdits
   }
 }
 

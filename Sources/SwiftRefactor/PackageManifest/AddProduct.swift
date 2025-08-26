@@ -39,7 +39,7 @@ public struct AddProduct: ManifestEditRefactoringProvider {
   public static func manifestRefactor(
     syntax manifest: SourceFileSyntax,
     in context: Context
-  ) throws -> PackageEdit {
+  ) throws -> [SourceEdit] {
     let product = context.product
 
     guard let packageCall = manifest.findCall(calleeName: "Package") else {
@@ -52,10 +52,8 @@ public struct AddProduct: ManifestEditRefactoringProvider {
       newElement: product.asSyntax()
     )
 
-    return PackageEdit(
-      manifestEdits: [
-        .replace(packageCall, with: newPackageCall.description)
-      ]
-    )
+    return [
+      .replace(packageCall, with: newPackageCall.description)
+    ]
   }
 }

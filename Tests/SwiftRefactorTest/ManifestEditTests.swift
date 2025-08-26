@@ -994,11 +994,11 @@ func assertManifestRefactor(
   expectedManifest: SourceFileSyntax,
   file: StaticString = #filePath,
   line: UInt = #line,
-  operation: (SourceFileSyntax) throws -> PackageEdit
+  operation: (SourceFileSyntax) throws -> [SourceEdit]
 ) rethrows {
   let edits = try operation(originalManifest)
   let editedManifestSource = FixItApplier.apply(
-    edits: edits.manifestEdits,
+    edits: edits,
     to: originalManifest
   )
 

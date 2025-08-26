@@ -34,7 +34,7 @@ public struct AddSwiftSetting: ManifestEditRefactoringProvider {
     to target: String,
     name: String,
     manifest: SourceFileSyntax
-  ) throws -> PackageEdit {
+  ) throws -> [SourceEdit] {
     try manifestRefactor(
       syntax: manifest,
       in: .init(
@@ -49,7 +49,7 @@ public struct AddSwiftSetting: ManifestEditRefactoringProvider {
     to target: String,
     name: String,
     manifest: SourceFileSyntax
-  ) throws -> PackageEdit {
+  ) throws -> [SourceEdit] {
     try manifestRefactor(
       syntax: manifest,
       in: .init(
@@ -64,7 +64,7 @@ public struct AddSwiftSetting: ManifestEditRefactoringProvider {
     to target: String,
     mode rawMode: String,
     manifest: SourceFileSyntax
-  ) throws -> PackageEdit {
+  ) throws -> [SourceEdit] {
     let mode: String
     switch rawMode {
     case "3", "4", "5", "6":
@@ -88,7 +88,7 @@ public struct AddSwiftSetting: ManifestEditRefactoringProvider {
   public static func strictMemorySafety(
     to target: String,
     manifest: SourceFileSyntax
-  ) throws -> PackageEdit {
+  ) throws -> [SourceEdit] {
     try manifestRefactor(
       syntax: manifest,
       in: .init(
@@ -102,7 +102,7 @@ public struct AddSwiftSetting: ManifestEditRefactoringProvider {
   public static func manifestRefactor(
     syntax manifest: SourceFileSyntax,
     in context: Context
-  ) throws -> PackageEdit {
+  ) throws -> [SourceEdit] {
     guard let packageCall = manifest.findCall(calleeName: "Package") else {
       throw ManifestEditError.cannotFindPackage
     }
@@ -154,10 +154,8 @@ public struct AddSwiftSetting: ManifestEditRefactoringProvider {
         )
       }
 
-    return PackageEdit(
-      manifestEdits: [
-        .replace(targetCall, with: newTargetCall.description)
-      ]
-    )
+    return [
+      .replace(targetCall, with: newTargetCall.description)
+    ]
   }
 }

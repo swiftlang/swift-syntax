@@ -39,7 +39,7 @@ public struct AddPackageDependency: ManifestEditRefactoringProvider {
   public static func manifestRefactor(
     syntax manifest: SourceFileSyntax,
     in context: Context
-  ) throws -> PackageEdit {
+  ) throws -> [SourceEdit] {
     let dependency = context.dependency
     guard let packageCall = manifest.findCall(calleeName: "Package") else {
       throw ManifestEditError.cannotFindPackage
@@ -51,7 +51,7 @@ public struct AddPackageDependency: ManifestEditRefactoringProvider {
         in: packageCall
       )
     else {
-      return PackageEdit(manifestEdits: [])
+      return []
     }
 
     let newPackageCall = try addPackageDependencyLocal(
@@ -59,11 +59,9 @@ public struct AddPackageDependency: ManifestEditRefactoringProvider {
       to: packageCall
     )
 
-    return PackageEdit(
-      manifestEdits: [
-        .replace(packageCall, with: newPackageCall.description)
-      ]
-    )
+    return [
+      .replace(packageCall, with: newPackageCall.description)
+    ]
   }
 
   /// Return `true` if the dependency already exists in the manifest, otherwise return `false`.

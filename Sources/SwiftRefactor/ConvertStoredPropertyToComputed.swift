@@ -17,9 +17,9 @@ import SwiftSyntax
 #endif
 
 public struct ConvertStoredPropertyToComputed: SyntaxRefactoringProvider {
-  public static func refactor(syntax: VariableDeclSyntax, in context: ()) -> VariableDeclSyntax? {
+  public static func refactor(syntax: VariableDeclSyntax, in context: ()) throws -> VariableDeclSyntax {
     guard syntax.bindings.count == 1, let binding = syntax.bindings.first, let initializer = binding.initializer else {
-      return nil
+      throw RefactoringNotApplicableError("unsupported variable declaration")
     }
 
     var codeBlockSyntax: CodeBlockItemListSyntax
@@ -27,7 +27,11 @@ public struct ConvertStoredPropertyToComputed: SyntaxRefactoringProvider {
     if let functionExpression = initializer.value.as(FunctionCallExprSyntax.self),
       let closureExpression = functionExpression.calledExpression.as(ClosureExprSyntax.self)
     {
-      guard functionExpression.arguments.isEmpty else { return nil }
+      guard functionExpression.arguments.isEmpty else {
+        throw RefactoringNotApplicableError(
+          "initializer is a closure that takes arguments"
+        )
+      }
 
       codeBlockSyntax = closureExpression.statements
       codeBlockSyntax.leadingTrivia =

@@ -25,7 +25,7 @@ func assertRefactor<R: EditRefactoringProvider>(
   file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
-  let edits = R.textRefactor(syntax: input, in: context)
+  let edits = try R.textRefactor(syntax: input, in: context)
   guard !edits.isEmpty else {
     if !expected.isEmpty {
       XCTFail(
@@ -83,12 +83,12 @@ func assertRefactor<R: SyntaxRefactoringProvider>(
   file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
-  let refactored = R.refactor(syntax: input, in: context)
+  let refactored = try? R.refactor(syntax: input, in: context)
   guard let refactored = refactored else {
     if expected != nil {
       XCTFail(
         """
-        Refactoring produced nil result, expected:
+        Refactoring failed, expected:
         \(expected?.description ?? "")
         """,
         file: file,

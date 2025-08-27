@@ -16,7 +16,7 @@ import SwiftSyntaxBuilder
 
 /// Add a package dependency to a package manifest's source code.
 @_spi(PackageRefactor)
-public struct AddPackageDependency: ManifestEditRefactoringProvider {
+public struct AddPackageDependency: EditRefactoringProvider {
   public struct Context {
     public var dependency: PackageDependency
 
@@ -36,10 +36,10 @@ public struct AddPackageDependency: ManifestEditRefactoringProvider {
 
   /// Produce the set of source edits needed to add the given package
   /// dependency to the given manifest file.
-  public static func manifestRefactor(
+  public static func textRefactor(
     syntax manifest: SourceFileSyntax,
     in context: Context
-  ) throws -> PackageEdit {
+  ) throws -> [SourceEdit] {
     let dependency = context.dependency
     guard let packageCall = manifest.findCall(calleeName: "Package") else {
       throw ManifestEditError.cannotFindPackage
@@ -51,7 +51,7 @@ public struct AddPackageDependency: ManifestEditRefactoringProvider {
         in: packageCall
       )
     else {
-      return PackageEdit(manifestEdits: [])
+      return []
     }
 
     let newPackageCall = try addPackageDependencyLocal(
@@ -59,11 +59,9 @@ public struct AddPackageDependency: ManifestEditRefactoringProvider {
       to: packageCall
     )
 
-    return PackageEdit(
-      manifestEdits: [
-        .replace(packageCall, with: newPackageCall.description)
-      ]
-    )
+    return [
+      .replace(packageCall, with: newPackageCall.description)
+    ]
   }
 
   /// Return `true` if the dependency already exists in the manifest, otherwise return `false`.

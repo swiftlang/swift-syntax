@@ -16,7 +16,7 @@ import SwiftSyntaxBuilder
 
 /// Add a target dependency to a manifest's source code.
 @_spi(PackageRefactor)
-public struct AddTargetDependency: ManifestEditRefactoringProvider {
+public struct AddTargetDependency: EditRefactoringProvider {
   public struct Context {
     /// The dependency to add.
     public var dependency: PackageTarget.Dependency
@@ -48,10 +48,10 @@ public struct AddTargetDependency: ManifestEditRefactoringProvider {
 
   /// Produce the set of source edits needed to add the given target
   /// dependency to the given manifest file.
-  public static func manifestRefactor(
+  public static func textRefactor(
     syntax manifest: SourceFileSyntax,
     in context: Context
-  ) throws -> PackageEdit {
+  ) throws -> [SourceEdit] {
     let dependency = context.dependency
     let targetName = context.targetName
 
@@ -67,11 +67,9 @@ public struct AddTargetDependency: ManifestEditRefactoringProvider {
       to: targetCall
     )
 
-    return PackageEdit(
-      manifestEdits: [
-        .replace(targetCall, with: newTargetCall.description)
-      ]
-    )
+    return [
+      .replace(targetCall, with: newTargetCall.description)
+    ]
   }
 
   /// Implementation of adding a target dependency to an existing call.

@@ -17,7 +17,7 @@ import SwiftSyntaxBuilder
 /// Add a plugin usage to a particular target in the manifest's source
 /// code.
 @_spi(PackageRefactor)
-public struct AddPluginUsage: ManifestEditRefactoringProvider {
+public struct AddPluginUsage: EditRefactoringProvider {
   public struct Context {
     public let targetName: String
     public let pluginUsage: PackageTarget.PluginUsage
@@ -30,10 +30,10 @@ public struct AddPluginUsage: ManifestEditRefactoringProvider {
 
   /// Produce the set of source edits needed to add the given package
   /// dependency to the given manifest file.
-  public static func manifestRefactor(
+  public static func textRefactor(
     syntax manifest: SourceFileSyntax,
     in context: Context
-  ) throws -> PackageEdit {
+  ) throws -> [SourceEdit] {
     let targetName = context.targetName
     let pluginUsage = context.pluginUsage
 
@@ -50,10 +50,8 @@ public struct AddPluginUsage: ManifestEditRefactoringProvider {
       newElement: pluginUsage.asSyntax()
     )
 
-    return PackageEdit(
-      manifestEdits: [
-        .replace(targetCall, with: newTargetCall.description)
-      ]
-    )
+    return [
+      .replace(targetCall, with: newTargetCall.description)
+    ]
   }
 }

@@ -16,7 +16,7 @@ import SwiftSyntaxBuilder
 
 /// Add a target to a manifest's source code.
 @_spi(PackageRefactor)
-public struct AddPackageTarget: ManifestEditRefactoringProvider {
+public struct AddPackageTarget: EditRefactoringProvider {
   public struct Context {
     public let target: PackageTarget
     public var testHarness: TestHarness
@@ -57,10 +57,10 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
   /// Add the given target to the manifest, producing a set of edit results
   /// that updates the manifest and adds some source files to stub out the
   /// new target.
-  public static func manifestRefactor(
+  public static func textRefactor(
     syntax manifest: SourceFileSyntax,
     in context: Context
-  ) throws -> PackageEdit {
+  ) throws -> [SourceEdit] {
     guard let packageCall = manifest.findCall(calleeName: "Package") else {
       throw ManifestEditError.cannotFindPackage
     }
@@ -86,44 +86,10 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
       newElement: target.asSyntax()
     )
 
-    let outerDirectory: String?
-    switch target.type {
-    case .binary, .plugin, .system: outerDirectory = nil
-    case .executable, .library, .macro: outerDirectory = "Sources"
-    case .test: outerDirectory = "Tests"
-    }
-
-    guard let outerDirectory else {
-      return PackageEdit(
-        manifestEdits: [
-          .replace(packageCall, with: newPackageCall.description)
-        ]
-      )
-    }
-
-    let outerPath = outerDirectory
-
-    /// The set of auxiliary files this refactoring will create.
-    var auxiliaryFiles: AuxiliaryFiles = []
-
-    // Add the primary source file. Every target type has this.
-    addPrimarySourceFile(
-      outerPath: outerPath,
-      target: target,
-      in: context,
-      to: &auxiliaryFiles
-    )
-
     // Perform any other actions that are needed for this target type.
     var extraManifestEdits: [SourceEdit] = []
     switch target.type {
     case .macro:
-      addProvidedMacrosSourceFile(
-        outerPath: outerPath,
-        target: target,
-        to: &auxiliaryFiles
-      )
-
       if !manifest.containsStringLiteral("swift-syntax") {
         newPackageCall =
           try AddPackageDependency
@@ -153,159 +119,9 @@ public struct AddPackageTarget: ManifestEditRefactoringProvider {
     default: break
     }
 
-    return PackageEdit(
-      manifestEdits: [
-        .replace(packageCall, with: newPackageCall.description)
-      ] + extraManifestEdits,
-      auxiliaryFiles: auxiliaryFiles
-    )
-  }
-
-  /// Add the primary source file for a target to the list of auxiliary
-  /// source files.
-  fileprivate static func addPrimarySourceFile(
-    outerPath: String,
-    target: PackageTarget,
-    in context: Context,
-    to auxiliaryFiles: inout AuxiliaryFiles
-  ) {
-    let sourceFilePath = "\(outerPath)/\(target.name)/\(target.name).swift"
-
-    // Introduce imports for each of the dependencies that were specified.
-    var importModuleNames = target.dependencies.map {
-      $0.name
-    }
-
-    // Add appropriate test module dependencies.
-    if target.type == .test {
-      switch context.testHarness {
-      case .none:
-        break
-
-      case .xctest:
-        importModuleNames.append("XCTest")
-
-      case .swiftTesting:
-        importModuleNames.append("Testing")
-      }
-    }
-
-    let importDecls = importModuleNames.lazy.sorted().map { name in
-      DeclSyntax("import \(raw: name)\n")
-    }
-
-    let imports = CodeBlockItemListSyntax {
-      for importDecl in importDecls {
-        importDecl
-      }
-    }
-
-    let sourceFileText: SourceFileSyntax
-    switch target.type {
-    case .binary, .plugin, .system:
-      fatalError("should have exited above")
-
-    case .macro:
-      sourceFileText = """
-        \(imports)
-        struct \(raw: target.sanitizedName): Macro {
-            /// TODO: Implement one or more of the protocols that inherit
-            /// from Macro. The appropriate macro protocol is determined
-            /// by the "macro" declaration that \(raw: target.sanitizedName) implements.
-            /// Examples include:
-            ///     @freestanding(expression) macro --> ExpressionMacro
-            ///     @attached(member) macro         --> MemberMacro
-        }
-        """
-
-    case .test:
-      switch context.testHarness {
-      case .none:
-        sourceFileText = """
-          \(imports)
-          // Test code here
-          """
-
-      case .xctest:
-        sourceFileText = """
-          \(imports)
-          class \(raw: target.sanitizedName)Tests: XCTestCase {
-              func test\(raw: target.sanitizedName)() {
-                  XCTAssertEqual(42, 17 + 25)
-              }
-          }
-          """
-
-      case .swiftTesting:
-        sourceFileText = """
-          \(imports)
-          @Suite
-          struct \(raw: target.sanitizedName)Tests {
-              @Test("\(raw: target.sanitizedName) tests")
-              func example() {
-                  #expect(42 == 17 + 25)
-              }
-          }
-          """
-      }
-
-    case .library:
-      sourceFileText = """
-        \(imports)
-        """
-
-    case .executable:
-      sourceFileText = """
-        \(imports)
-        @main
-        struct \(raw: target.sanitizedName)Main {
-            static func main() {
-                print("Hello, world")
-            }
-        }
-        """
-    }
-
-    auxiliaryFiles.addSourceFile(
-      path: sourceFilePath,
-      sourceCode: sourceFileText
-    )
-  }
-
-  /// Add a file that introduces the main entrypoint and provided macros
-  /// for a macro target.
-  fileprivate static func addProvidedMacrosSourceFile(
-    outerPath: String,
-    target: PackageTarget,
-    to auxiliaryFiles: inout AuxiliaryFiles
-  ) {
-    auxiliaryFiles.addSourceFile(
-      path: "\(outerPath)/\(target.name)/ProvidedMacros.swift",
-      sourceCode: """
-        import SwiftCompilerPlugin
-
-        @main
-        struct \(raw: target.sanitizedName)Macros: CompilerPlugin {
-            let providingMacros: [Macro.Type] = [
-                \(raw: target.sanitizedName).self,
-            ]
-        }
-        """
-    )
-  }
-}
-
-/// The array of auxiliary files that can be added by a package editing
-/// operation.
-private typealias AuxiliaryFiles = [(String, SourceFileSyntax)]
-
-fileprivate extension AuxiliaryFiles {
-  /// Add a source file to the list of auxiliary files.
-  mutating func addSourceFile(
-    path: String,
-    sourceCode: SourceFileSyntax
-  ) {
-    self.append((path, sourceCode))
+    return [
+      .replace(packageCall, with: newPackageCall.description)
+    ] + extraManifestEdits
   }
 }
 

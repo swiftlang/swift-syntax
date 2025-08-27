@@ -160,7 +160,7 @@ final class ManifestEditTests: XCTestCase {
 
   func testAddPackageDependencyDuplicates() throws {
     XCTAssertThrowsError(
-      try AddPackageDependency.manifestRefactor(
+      try AddPackageDependency.textRefactor(
         syntax: """
           // swift-tools-version: 5.5
           let package = Package(
@@ -351,7 +351,7 @@ final class ManifestEditTests: XCTestCase {
 
   func testAddPackageDependencyErrors() {
     XCTAssertThrowsError(
-      try AddPackageDependency.manifestRefactor(
+      try AddPackageDependency.textRefactor(
         syntax: """
           // swift-tools-version: 5.5
           let package: Package = .init(
@@ -368,7 +368,7 @@ final class ManifestEditTests: XCTestCase {
     }
 
     XCTAssertThrowsError(
-      try AddPackageDependency.manifestRefactor(
+      try AddPackageDependency.textRefactor(
         syntax: """
           // swift-tools-version: 5.5
           let package = Package(
@@ -442,11 +442,6 @@ final class ManifestEditTests: XCTestCase {
             ]
         )
         """,
-      expectedAuxiliarySources: [
-        "Sources/MyLib/MyLib.swift": """
-
-        """
-      ],
       provider: AddPackageTarget.self,
       context: .init(
         target: PackageTarget(name: "MyLib")
@@ -478,14 +473,6 @@ final class ManifestEditTests: XCTestCase {
             ]
         )
         """,
-      expectedAuxiliarySources: [
-        "Sources/MyLib/MyLib.swift": """
-        import OtherLib
-        import SwiftSyntax
-        import TargetLib
-
-        """
-      ],
       provider: AddPackageTarget.self,
       context: .init(
         target: PackageTarget(
@@ -530,20 +517,6 @@ final class ManifestEditTests: XCTestCase {
             ]
         )
         """,
-      expectedAuxiliarySources: [
-        "Sources/MyProgram target-name/MyProgram target-name.swift": """
-        import MyLib
-        import SwiftSyntax
-        import TargetLib
-
-        @main
-        struct MyProgram_target_nameMain {
-            static func main() {
-                print("Hello, world")
-            }
-        }
-        """
-      ],
       provider: AddPackageTarget.self,
       context: .init(
         target: PackageTarget(
@@ -590,31 +563,6 @@ final class ManifestEditTests: XCTestCase {
             ]
         )
         """,
-      expectedAuxiliarySources: [
-        "Sources/MyMacro target-name/MyMacro target-name.swift": """
-        import SwiftCompilerPlugin
-        import SwiftSyntaxMacros
-
-        struct MyMacro_target_name: Macro {
-            /// TODO: Implement one or more of the protocols that inherit
-            /// from Macro. The appropriate macro protocol is determined
-            /// by the "macro" declaration that MyMacro_target_name implements.
-            /// Examples include:
-            ///     @freestanding(expression) macro --> ExpressionMacro
-            ///     @attached(member) macro         --> MemberMacro
-        }
-        """,
-        "Sources/MyMacro target-name/ProvidedMacros.swift": """
-        import SwiftCompilerPlugin
-
-        @main
-        struct MyMacro_target_nameMacros: CompilerPlugin {
-            let providingMacros: [Macro.Type] = [
-                MyMacro_target_name.self,
-            ]
-        }
-        """,
-      ],
       provider: AddPackageTarget.self,
       context: .init(
         target: PackageTarget(
@@ -642,19 +590,6 @@ final class ManifestEditTests: XCTestCase {
             ]
         )
         """,
-      expectedAuxiliarySources: [
-        "Tests/MyTest target-name/MyTest target-name.swift": """
-        import Testing
-
-        @Suite
-        struct MyTest_target_nameTests {
-            @Test("MyTest_target_name tests")
-            func example() {
-                #expect(42 == 17 + 25)
-            }
-        }
-        """
-      ],
       provider: AddPackageTarget.self,
       context: .init(
         target: PackageTarget(
@@ -1033,42 +968,37 @@ final class ManifestEditTests: XCTestCase {
 }
 
 /// Assert that applying the given edit/refactor operation to the manifest
-/// produces the expected manifest source file and the expected auxiliary
-/// files.
-func assertManifestRefactor<Provider: ManifestEditRefactoringProvider>(
-  _ originalManifest: SourceFileSyntax,
-  expectedManifest: SourceFileSyntax,
-  expectedAuxiliarySources: [String: SourceFileSyntax] = [:],
+/// produces the expected manifest source file.
+func assertManifestRefactor<Provider: EditRefactoringProvider>(
+  _ originalManifest: Provider.Input,
+  expectedManifest: Provider.Input,
   provider: Provider.Type,
   context: Provider.Context,
   file: StaticString = #filePath,
   line: UInt = #line
-) throws {
+) throws where Provider.Input == SourceFileSyntax {
   return try assertManifestRefactor(
     originalManifest,
     expectedManifest: expectedManifest,
-    expectedAuxiliarySources: expectedAuxiliarySources,
     file: file,
     line: line
   ) { (manifest) in
-    try provider.manifestRefactor(syntax: manifest, in: context)
+    try provider.textRefactor(syntax: manifest, in: context)
   }
 }
 
 /// Assert that applying the given edit/refactor operation to the manifest
-/// produces the expected manifest source file and the expected auxiliary
-/// files.
+/// produces the expected manifest source file.
 func assertManifestRefactor(
   _ originalManifest: SourceFileSyntax,
   expectedManifest: SourceFileSyntax,
-  expectedAuxiliarySources: [String: SourceFileSyntax] = [:],
   file: StaticString = #filePath,
   line: UInt = #line,
-  operation: (SourceFileSyntax) throws -> PackageEdit
+  operation: (SourceFileSyntax) throws -> [SourceEdit]
 ) rethrows {
   let edits = try operation(originalManifest)
   let editedManifestSource = FixItApplier.apply(
-    edits: edits.manifestEdits,
+    edits: edits,
     to: originalManifest
   )
 
@@ -1078,26 +1008,5 @@ func assertManifestRefactor(
     expectedManifest.description,
     file: file,
     line: line
-  )
-
-  // Check all of the auxiliary sources.
-  for (auxSourcePath, auxSourceSyntax) in edits.auxiliaryFiles {
-    guard let expectedSyntax = expectedAuxiliarySources[auxSourcePath] else {
-      XCTFail("unexpected auxiliary source file '\(auxSourcePath)' in \(expectedAuxiliarySources)")
-      return
-    }
-
-    assertStringsEqualWithDiff(
-      auxSourceSyntax.description,
-      expectedSyntax.description,
-      file: file,
-      line: line
-    )
-  }
-
-  XCTAssertEqual(
-    edits.auxiliaryFiles.count,
-    expectedAuxiliarySources.count,
-    "didn't get all of the auxiliary files we expected"
   )
 }

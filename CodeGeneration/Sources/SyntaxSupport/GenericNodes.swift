@@ -126,6 +126,17 @@ public let GENERIC_NODES: [Node] = [
         isOptional: true
       ),
       Child(
+        name: "equal",
+        kind: .token(choices: [.token(.equal)]),
+        isOptional: true
+      ),
+      Child(
+        name: "defaultType",
+        kind: .node(kind: .type),
+        nameForDiagnostics: "default type",
+        isOptional: true
+      ),
+      Child(
         name: "trailingComma",
         kind: .token(choices: [.token(.comma)]),
         isOptional: true

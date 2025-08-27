@@ -175,6 +175,8 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "name"
   case \GenericParameterSyntax.inheritedType:
     return "inherited type"
+  case \GenericParameterSyntax.defaultType:
+    return "default type"
   case \GuardStmtSyntax.conditions:
     return "condition"
   case \GuardStmtSyntax.body:

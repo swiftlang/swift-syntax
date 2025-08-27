@@ -675,6 +675,34 @@ extension Parser {
           unexpectedBeforeInherited = nil
           inherited = nil
         }
+
+        // Parse the '=' followed by a type.
+        let equal = self.consume(if: .equal)
+        let unexpectedBeforeDefault: RawUnexpectedNodesSyntax?
+        let defaultType: RawTypeSyntax?
+        if equal != nil {
+          if self.at(.identifier, .keyword(.protocol), .keyword(.Any)) || self.atContextualPunctuator("~") {
+            unexpectedBeforeDefault = nil
+            defaultType = self.parseType()
+          } else if let classKeyword = self.consume(if: .keyword(.class)) {
+            unexpectedBeforeDefault = RawUnexpectedNodesSyntax([classKeyword], arena: self.arena)
+            defaultType = RawTypeSyntax(
+              RawIdentifierTypeSyntax(
+                moduleSelector: nil,
+                name: missingToken(.identifier, text: "AnyObject"),
+                genericArgumentClause: nil,
+                arena: self.arena
+              )
+            )
+          } else {
+            unexpectedBeforeDefault = nil
+            defaultType = RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
+          }
+        } else {
+          unexpectedBeforeDefault = nil
+          defaultType = nil
+        }
+
         keepGoing = self.consume(if: .comma)
         elements.append(
           RawGenericParameterSyntax(
@@ -686,6 +714,9 @@ extension Parser {
             colon: colon,
             unexpectedBeforeInherited,
             inheritedType: inherited,
+            equal: equal,
+            unexpectedBeforeDefault,
+            defaultType: defaultType,
             trailingComma: keepGoing,
             arena: self.arena
           )

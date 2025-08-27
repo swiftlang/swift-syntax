@@ -3678,7 +3678,7 @@ extension GenericParameterSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:specifier:_:name:_:colon:_:inheritedType:_:trailingComma:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:specifier:_:name:_:colon:_:inheritedType:_:equal:_:defaultType:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3692,7 +3692,11 @@ extension GenericParameterSyntax {
     colon: TokenSyntax? = nil,
     _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil,
     inheritedType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
-    _ unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenInheritedTypeAndEqual: UnexpectedNodesSyntax? = nil,
+    equal: TokenSyntax? = nil,
+    _ unexpectedBetweenEqualAndDefaultType: UnexpectedNodesSyntax? = nil,
+    defaultType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
+    _ unexpectedBetweenDefaultTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax? = nil,
     _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
@@ -3709,7 +3713,11 @@ extension GenericParameterSyntax {
       colon: colon,
       unexpectedBetweenColonAndInheritedType,
       inheritedType: inheritedType,
-      unexpectedBetweenInheritedTypeAndTrailingComma,
+      unexpectedBetweenInheritedTypeAndEqual,
+      equal: equal,
+      unexpectedBetweenEqualAndDefaultType,
+      defaultType: defaultType,
+      unexpectedBetweenDefaultTypeAndTrailingComma,
       trailingComma: trailingComma,
       unexpectedAfterTrailingComma,
       trailingTrivia: trailingTrivia

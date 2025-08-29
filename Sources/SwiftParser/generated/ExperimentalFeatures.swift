@@ -55,6 +55,9 @@ extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of Module selector syntax (`ModName::identifier`).
   public static let moduleSelector = Self (rawValue: 1 << 9)
 
+  /// Whether to enable the parsing of borrow and mutate accessors.
+  public static let borrowAndMutateAccessors = Self (rawValue: 1 << 10)
+
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
   public init?(name: String) {
@@ -79,6 +82,8 @@ extension Parser.ExperimentalFeatures {
       self = .defaultIsolationPerFile
     case "ModuleSelector":
       self = .moduleSelector
+    case "BorrowAndMutateAccessors":
+      self = .borrowAndMutateAccessors
     default:
       return nil
     }

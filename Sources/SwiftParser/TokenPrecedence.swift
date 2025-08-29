@@ -239,7 +239,7 @@ enum TokenPrecedence: Comparable {
       .dependsOn, .scoped, .sending,
       // Accessors
       .get, .set, .didSet, .willSet, .unsafeAddress, .addressWithOwner, .addressWithNativeOwner, .unsafeMutableAddress,
-      .mutableAddressWithOwner, .mutableAddressWithNativeOwner, ._read, .read, ._modify, .modify,
+      .mutableAddressWithOwner, .mutableAddressWithNativeOwner, ._read, .read, ._modify, .modify, .mutate,
       // Misc
       .import, .using:
       self = .declKeyword

@@ -120,6 +120,8 @@ public let DECL_NODES: [Node] = [
           .keyword(._modify),
           .keyword(.modify),
           .keyword(.`init`),
+          .keyword(.borrow),
+          .keyword(.mutate),
         ])
       ),
       Child(

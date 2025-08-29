@@ -264,7 +264,9 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
       .keyword("read"),
       .keyword("_modify"),
       .keyword("modify"),
-      .keyword("init")
+      .keyword("init"),
+      .keyword("borrow"),
+      .keyword("mutate")
     ]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawAccessorParametersSyntax?.self))

@@ -3473,6 +3473,28 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testBorrowAndMutateAccessors() {
+    assertParse(
+      """
+      public class Klass {}
+
+      public struct Wrapper {
+        var _otherK: Klass
+
+        var k1: Klass {
+          borrow {
+            return _otherK
+          }
+          mutate {
+            return &_otherK
+          }
+        }
+      }
+      """,
+      experimentalFeatures: .borrowAndMutateAccessors
+    )
+  }
+
   func testMissingCommaInParameters() {
     assertParse(
       "func a(foo: Bar1️⃣ foo2: Bar2) {}",

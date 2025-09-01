@@ -581,6 +581,12 @@ final class AttributeTests: ParserTestCase {
 
     assertParse(
       """
+      @_expose(!Cxx) func foo() {}
+      """
+    )
+
+    assertParse(
+      """
       @_expose(Cxx, "baz") func foo() {}
       """
     )

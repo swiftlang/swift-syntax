@@ -163,19 +163,21 @@ extension Parser.Lookahead {
 // MARK: Skipping Tokens
 
 extension Parser.Lookahead {
-  mutating func skipTypeAttribute() {
-    // These are keywords that we accept as attribute names.
-    guard self.at(.identifier) || self.at(.keyword(.in), .keyword(.inout)) else {
-      return
-    }
+  /// Skip *any* single attribute. I.e. a type attribute, a decl attribute, or
+  /// a custom attribute.
+  mutating func consumeAnyAttribute() {
+    self.eat(.atSign)
+
+    let nameHadSpace = self.currentToken.trailingTriviaByteLength > 0
 
     // Determine which attribute it is.
     if let (attr, handle) = self.at(anyIn: TypeAttribute.self) {
-      // Ok, it is a valid attribute, eat it, and then process it.
       self.eat(handle)
       switch attr {
-      case .convention, .isolated:
-        self.skipSingle()
+      case .convention, .isolated, .differentiable:
+        if self.atAttributeOrSpecifierArgument(lastTokenHadSpace: nameHadSpace) {
+          self.skipSingle()
+        }
       default:
         break
       }
@@ -183,20 +185,9 @@ extension Parser.Lookahead {
     }
 
     if let (_, handle) = self.at(anyIn: Parser.DeclarationAttributeWithSpecialSyntax.self) {
-      // This is a valid decl attribute so they should have put it on the decl
-      // instead of the type.
-      //
-      // Recover by eating @foo(...)
       self.eat(handle)
-      if self.at(.leftParen) {
-        var lookahead = self.lookahead()
-        lookahead.skipSingle()
-        // If we found '->', or 'throws' after paren, it's likely a parameter
-        // of function type.
-        guard lookahead.at(.arrow) || lookahead.at(.keyword(.throws), .keyword(.rethrows), .keyword(.throw)) else {
-          self.skipSingle()
-          return
-        }
+      if self.atAttributeOrSpecifierArgument(lastTokenHadSpace: nameHadSpace) {
+        self.skipSingle()
       }
       return
     }
@@ -212,18 +203,9 @@ extension Parser.Lookahead {
       return false
     }
 
-    while self.consume(if: .atSign) != nil {
-      // Consume qualified names that may or may not involve generic arguments.
-      repeat {
-        self.consume(if: .identifier, .keyword(.rethrows))
-        // We don't care whether this succeeds or fails to eat generic
-        // parameters.
-        _ = self.consumeGenericArguments()
-      } while self.consume(if: .period) != nil
-
-      if self.atAttributeOrSpecifierArgument() {
-        self.skipSingle()
-      }
+    var attributeProgress = LoopProgressCondition()
+    while self.at(.atSign), self.hasProgressed(&attributeProgress) {
+      self.consumeAnyAttribute()
     }
     return true
   }

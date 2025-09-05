@@ -51,12 +51,6 @@ extension TokenConsumer {
     case nil:
       break
     }
-    if self.at(.atSign) || self.at(.keyword(.inout)) {
-      var lookahead = self.lookahead()
-      if lookahead.canParseType() {
-        return true
-      }
-    }
     if self.at(.atSign) && self.peek(isAt: .stringQuote) {
       // Invalid Objective-C-style string literal
       return true

@@ -1471,4 +1471,73 @@ final class AttributeTests: ParserTestCase {
         """
     )
   }
+
+  func testAttributeWithSpace() {
+    assertParse(
+      """
+      @1️⃣ FooBar2️⃣ (arg) func foo() {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "extraneous whitespace after '@' is not permitted",
+          fixIts: ["remove whitespace"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "extraneous whitespace before '(' is not permitted",
+          fixIts: ["remove whitespace"]
+        ),
+      ],
+      fixedSource: """
+        @FooBar(arg) func foo() {}
+        """
+    )
+  }
+
+  func testAttributeMainActorClosure() {
+    assertParse(
+      """
+      { @MainActor (arg) in }
+      """,
+      substructure: ClosureExprSyntax(
+        leftBrace: .leftBraceToken(),
+        signature: ClosureSignatureSyntax(
+          attributes: AttributeListSyntax([
+            .attribute(
+              AttributeSyntax(
+                atSign: .atSignToken(),
+                attributeName: TypeSyntax(IdentifierTypeSyntax(name: .identifier("MainActor")))
+              )
+            )
+          ]),
+          parameterClause: ClosureSignatureSyntax.ParameterClause(
+            ClosureParameterClauseSyntax(
+              leftParen: .leftParenToken(),
+              parameters: ClosureParameterListSyntax([
+                ClosureParameterSyntax(
+                  attributes: [],
+                  modifiers: [],
+                  firstName: .identifier("arg")
+                )
+              ]),
+              rightParen: .rightParenToken()
+            )
+          ),
+          inKeyword: .keyword(.in)
+        ),
+        statements: [],
+        rightBrace: .rightBraceToken()
+      )
+    )
+  }
+
+  func testTypeAttributeInExprContext() {
+    assertParse(
+      """
+      var _ = [@Sendable () -> Void]()
+      """,
+      swiftVersion: .v5
+    )
+  }
 }

@@ -790,6 +790,7 @@ extension Parser.Lookahead {
 
       case .keyword(.dependsOn):
         let canParseDependsOn = self.withLookahead({
+          let nameHadSpace = $0.currentToken.trailingTriviaByteLength > 0
           // Consume 'dependsOn'
           $0.consumeAnyToken()
 
@@ -798,7 +799,7 @@ extension Parser.Lookahead {
           }
 
           // `dependsOn` requires an argument list.
-          guard $0.atAttributeOrSpecifierArgument() else {
+          guard $0.atAttributeOrSpecifierArgument(lastTokenHadSpace: nameHadSpace) else {
             return false
           }
 
@@ -817,11 +818,7 @@ extension Parser.Lookahead {
       }
     }
 
-    var attributeProgress = LoopProgressCondition()
-    while self.at(.atSign), self.hasProgressed(&attributeProgress) {
-      self.consumeAnyToken()
-      self.skipTypeAttribute()
-    }
+    _ = self.consumeAttributeList()
 
     return true
   }

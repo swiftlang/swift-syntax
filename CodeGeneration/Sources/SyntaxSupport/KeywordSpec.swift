@@ -201,6 +201,7 @@ public enum Keyword: CaseIterable {
   case metadata
   case modify
   case module
+  case mutate
   case mutableAddressWithNativeOwner
   case mutableAddressWithOwner
   case mutating
@@ -535,6 +536,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("modify", experimentalFeature: .coroutineAccessors)
     case .module:
       return KeywordSpec("module")
+    case .mutate:
+      return KeywordSpec("mutate", experimentalFeature: .borrowAndMutateAccessors)
     case .mutableAddressWithNativeOwner:
       return KeywordSpec("mutableAddressWithNativeOwner")
     case .mutableAddressWithOwner:

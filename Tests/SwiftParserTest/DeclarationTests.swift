@@ -3643,12 +3643,33 @@ final class UsingDeclarationTests: ParserTestCase {
 
     assertParse(
       """
-      @MainActor
-      using
+      1️⃣@MainActor
+      using2️⃣
       """,
-      substructure: CodeBlockSyntax(
-        DeclReferenceExprSyntax(baseName: .identifier("using"))
-      )
+      substructure: CodeBlockItemSyntax(
+        item: CodeBlockItemSyntax.Item(
+          UsingDeclSyntax(
+            UnexpectedNodesSyntax([
+              Syntax(
+                AttributeSyntax(
+                  atSign: .atSignToken(),
+                  attributeName: TypeSyntax(IdentifierTypeSyntax(name: .identifier("MainActor")))
+                )
+              )
+            ]),
+            usingKeyword: .keyword(.using),
+            specifier: UsingDeclSyntax.Specifier(.identifier("", presence: .missing))
+          )
+        )
+      ),
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '@MainActor' before using"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected identifier in using", fixIts: ["insert identifier"]),
+      ],
+      fixedSource: """
+        @MainActor
+        using <#identifier#>
+        """
     )
 
     assertParse(

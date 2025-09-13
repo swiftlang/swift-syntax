@@ -255,6 +255,10 @@ extension Parser {
       return self.parseStatementItem()
     } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl, allowRecovery: true) {
       return .decl(self.parseDeclaration())
+    } else if self.at(.atSign), peek(isAt: .identifier) {
+      // Force parsing '@<identifier>' as a declaration, as there's no valid
+      // expression or statement starting with an attribute.
+      return .decl(self.parseDeclaration())
     } else {
       return .init(expr: RawMissingExprSyntax(arena: self.arena))
     }

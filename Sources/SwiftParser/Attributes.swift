@@ -196,28 +196,35 @@ extension Parser {
       atSign = atSign.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
     }
     let attributeName = self.parseAttributeName()
+    let attributeNameHasTrailingSpace = attributeName.raw.trailingTriviaByteLength > 0
+
     let shouldParseArgument: Bool
     switch argumentMode {
     case .required:
       shouldParseArgument = true
     case .customAttribute:
-      shouldParseArgument = self.withLookahead { $0.atAttributeOrSpecifierArgument() }
+      shouldParseArgument = self.withLookahead {
+        $0.atAttributeOrSpecifierArgument(lastTokenHadSpace: attributeNameHasTrailingSpace, forCustomAttribute: true)
+      }
     case .optional:
-      shouldParseArgument = self.at(TokenSpec(.leftParen, allowAtStartOfLine: false))
+      shouldParseArgument = self.withLookahead {
+        $0.atAttributeOrSpecifierArgument(lastTokenHadSpace: attributeNameHasTrailingSpace, forCustomAttribute: false)
+      }
     case .noArgument:
       shouldParseArgument = false
     }
     if shouldParseArgument {
       var (unexpectedBeforeLeftParen, leftParen) = self.expect(TokenSpec(.leftParen, allowAtStartOfLine: false))
-      if unexpectedBeforeLeftParen == nil
-        && (attributeName.raw.trailingTriviaByteLength > 0 || leftParen.leadingTriviaByteLength > 0)
-      {
+
+      // Diagnose spaces between the name and the '('.
+      if unexpectedBeforeLeftParen == nil && (attributeNameHasTrailingSpace || leftParen.leadingTriviaByteLength > 0) {
         let diagnostic = TokenDiagnostic(
           self.swiftVersion < .v6 ? .extraneousLeadingWhitespaceWarning : .extraneousLeadingWhitespaceError,
           byteOffset: 0
         )
         leftParen = leftParen.tokenView.withTokenDiagnostic(tokenDiagnostic: diagnostic, arena: self.arena)
       }
+
       let unexpectedBeforeArguments: RawUnexpectedNodesSyntax?
       let argument: RawAttributeSyntax.Arguments
       if let parseMissingArguments, leftParen.presence == .missing {
@@ -1074,44 +1081,70 @@ extension Parser {
 // MARK: Lookahead
 
 extension Parser.Lookahead {
-  mutating func atAttributeOrSpecifierArgument() -> Bool {
+  mutating func atAttributeOrSpecifierArgument(
+    lastTokenHadSpace: Bool,
+    forCustomAttribute: Bool = false
+  ) -> Bool {
     if !self.at(TokenSpec(.leftParen, allowAtStartOfLine: false)) {
       return false
     }
 
-    var lookahead = self.lookahead()
-    lookahead.skipSingle()
+    if self.swiftVersion >= .v6 {
+      if !lastTokenHadSpace && currentToken.leadingTriviaByteLength == 0 {
+        return true
+      }
 
-    // If we have any keyword, identifier, or token that follows a function
-    // type's parameter list, this is a parameter list and not an attribute.
-    // Alternatively, we might have a token that illustrates we're not going to
-    // get anything following the attribute, which means the parentheses describe
-    // what follows the attribute.
-    switch lookahead.currentToken {
-    case TokenSpec(.arrow),
-      TokenSpec(.throw),
-      TokenSpec(.throws),
-      TokenSpec(.rethrows),
-      TokenSpec(.rightParen),
-      TokenSpec(.rightBrace),
-      TokenSpec(.rightSquare),
-      TokenSpec(.rightAngle):
-      return false
-    case _ where lookahead.at(.keyword(.async)):
-      return false
-    case _ where lookahead.at(.keyword(.reasync)):
-      return false
-    default:
-      return true
+      return withLookahead({
+        $0.skipSingle()
+        return $0.at(.atSign) || $0.atStartOfDeclaration()
+      })
+    } else {
+      if !forCustomAttribute {
+        return true
+      }
+      var lookahead = self.lookahead()
+      lookahead.skipSingle()
+
+      // If we have any keyword, identifier, or token that follows a function
+      // type's parameter list, this is a parameter list and not an attribute.
+      // Alternatively, we might have a token that illustrates we're not going to
+      // get anything following the attribute, which means the parentheses describe
+      // what follows the attribute.
+      switch lookahead.currentToken {
+      case TokenSpec(.arrow),
+        TokenSpec(.throw),
+        TokenSpec(.throws),
+        TokenSpec(.rethrows),
+        TokenSpec(.rightParen),
+        TokenSpec(.rightBrace),
+        TokenSpec(.rightSquare),
+        TokenSpec(.rightAngle):
+        return false
+      case _ where lookahead.at(.keyword(.async)):
+        return false
+      case _ where lookahead.at(.keyword(.reasync)):
+        return false
+      default:
+        return true
+      }
     }
   }
 
   mutating func canParseCustomAttribute() -> Bool {
-    guard self.canParseType() else {
+    guard
+      let numTypeTokens = self.withLookahead({ $0.canParseSimpleType() ? $0.tokensConsumed : nil }),
+      numTypeTokens >= 1
+    else {
       return false
     }
+    // Check if the last token had trailing white spaces.
+    for _ in 0..<numTypeTokens - 1 {
+      self.consumeAnyToken()
+    }
+    let hasSpace = self.currentToken.trailingTriviaByteLength > 0
+    self.consumeAnyToken()
 
-    if self.withLookahead({ $0.atAttributeOrSpecifierArgument() }) {
+    if self.atAttributeOrSpecifierArgument(lastTokenHadSpace: hasSpace, forCustomAttribute: true) {
       self.skipSingle()
     }
 

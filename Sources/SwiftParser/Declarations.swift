@@ -680,8 +680,9 @@ extension Parser {
         // type parameters, not parameter packs or value generics yet.
         let defaultType: RawTypeInitializerClauseSyntax?
         if self.experimentalFeatures.contains(.defaultGenerics),
-           specifier == nil,
-           let equal = self.consume(if: .equal) {
+          specifier == nil,
+          let equal = self.consume(if: .equal)
+        {
           let type = self.parseType()
           defaultType = RawTypeInitializerClauseSyntax(
             equal: equal,

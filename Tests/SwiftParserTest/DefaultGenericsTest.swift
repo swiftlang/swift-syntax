@@ -76,7 +76,7 @@ final class DefaultGenericsTest: ParserTestCase {
         ),
         DiagnosticSpec(
           message: "unexpected code '= Int>' in struct"
-        )
+        ),
       ],
       fixedSource: """
         struct A<each T> = Int> {}
@@ -98,7 +98,7 @@ final class DefaultGenericsTest: ParserTestCase {
         ),
         DiagnosticSpec(
           message: "unexpected code '= Int>' in struct"
-        )
+        ),
       ],
       fixedSource: """
         struct A<let n: Int> = Int> {}

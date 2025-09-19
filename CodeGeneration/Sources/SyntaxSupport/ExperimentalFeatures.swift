@@ -23,6 +23,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case oldOwnershipOperatorSpellings
   case defaultIsolationPerFile
   case moduleSelector
+  case defaultGenerics
 
   /// The name of the feature as it is written in the compiler's `Features.def` file.
   public var featureName: String {
@@ -47,6 +48,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "DefaultIsolationPerFile"
     case .moduleSelector:
       return "ModuleSelector"
+    case .defaultGenerics:
+      return "DefaultGenerics"
     }
   }
 
@@ -73,6 +76,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "set default actor isolation for a file"
     case .moduleSelector:
       return "Module selector syntax (`ModName::identifier`)"
+    case .defaultGenerics:
+      return "default generics"
     }
   }
 

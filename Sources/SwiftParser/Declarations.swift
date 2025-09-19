@@ -676,30 +676,19 @@ extension Parser {
           inherited = nil
         }
 
-        // Parse the '=' followed by a type.
-        let equal = self.consume(if: .equal)
-        let unexpectedBeforeDefault: RawUnexpectedNodesSyntax?
-        let defaultType: RawTypeSyntax?
-        if equal != nil {
-          if self.at(.identifier, .keyword(.protocol), .keyword(.Any)) || self.atContextualPunctuator("~") {
-            unexpectedBeforeDefault = nil
-            defaultType = self.parseType()
-          } else if let classKeyword = self.consume(if: .keyword(.class)) {
-            unexpectedBeforeDefault = RawUnexpectedNodesSyntax([classKeyword], arena: self.arena)
-            defaultType = RawTypeSyntax(
-              RawIdentifierTypeSyntax(
-                moduleSelector: nil,
-                name: missingToken(.identifier, text: "AnyObject"),
-                genericArgumentClause: nil,
-                arena: self.arena
-              )
-            )
-          } else {
-            unexpectedBeforeDefault = nil
-            defaultType = RawTypeSyntax(RawMissingTypeSyntax(arena: self.arena))
-          }
+        // Parse the default type, if any. We only have defaults of regular
+        // type parameters, not parameter packs or value generics yet.
+        let defaultType: RawTypeInitializerClauseSyntax?
+        if self.experimentalFeatures.contains(.defaultGenerics),
+           specifier == nil,
+           let equal = self.consume(if: .equal) {
+          let type = self.parseType()
+          defaultType = RawTypeInitializerClauseSyntax(
+            equal: equal,
+            value: type,
+            arena: self.arena
+          )
         } else {
-          unexpectedBeforeDefault = nil
           defaultType = nil
         }
 
@@ -714,9 +703,7 @@ extension Parser {
             colon: colon,
             unexpectedBeforeInherited,
             inheritedType: inherited,
-            equal: equal,
-            unexpectedBeforeDefault,
-            defaultType: defaultType,
+            initializer: defaultType,
             trailingComma: keepGoing,
             arena: self.arena
           )

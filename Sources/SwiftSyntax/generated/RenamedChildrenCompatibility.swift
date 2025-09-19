@@ -3648,6 +3648,15 @@ extension GenericParameterClauseSyntax {
 }
 
 extension GenericParameterSyntax {
+  public var unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenInheritedTypeAndInitializer
+    }
+    set {
+      unexpectedBetweenInheritedTypeAndInitializer = newValue
+    }
+  }
+
   @available(*, deprecated, renamed: "unexpectedBetweenAttributesAndSpecifier")
   public var unexpectedBetweenAttributesAndEachKeyword: UnexpectedNodesSyntax? {
     get {
@@ -3678,7 +3687,45 @@ extension GenericParameterSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:specifier:_:name:_:colon:_:inheritedType:_:equal:_:defaultType:_:trailingComma:_:trailingTrivia:)")
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndSpecifier: UnexpectedNodesSyntax? = nil,
+    specifier: TokenSyntax? = nil,
+    _ unexpectedBetweenSpecifierAndName: UnexpectedNodesSyntax? = nil,
+    name: TokenSyntax,
+    _ unexpectedBetweenNameAndColon: UnexpectedNodesSyntax? = nil,
+    colon: TokenSyntax? = nil,
+    _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil,
+    inheritedType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
+    _ unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingComma: TokenSyntax? = nil,
+    _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      attributes: attributes,
+      unexpectedBetweenAttributesAndSpecifier,
+      specifier: specifier,
+      unexpectedBetweenSpecifierAndName,
+      name: name,
+      unexpectedBetweenNameAndColon,
+      colon: colon,
+      unexpectedBetweenColonAndInheritedType,
+      inheritedType: inheritedType,
+      unexpectedBetweenInheritedTypeAndTrailingComma,
+      initializer: nil,
+      nil,
+      trailingComma: trailingComma,
+      unexpectedAfterTrailingComma,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:specifier:_:name:_:colon:_:inheritedType:_:initializer:_:trailingComma:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3692,11 +3739,7 @@ extension GenericParameterSyntax {
     colon: TokenSyntax? = nil,
     _ unexpectedBetweenColonAndInheritedType: UnexpectedNodesSyntax? = nil,
     inheritedType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
-    _ unexpectedBetweenInheritedTypeAndEqual: UnexpectedNodesSyntax? = nil,
-    equal: TokenSyntax? = nil,
-    _ unexpectedBetweenEqualAndDefaultType: UnexpectedNodesSyntax? = nil,
-    defaultType: (some TypeSyntaxProtocol)? = TypeSyntax?.none,
-    _ unexpectedBetweenDefaultTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenInheritedTypeAndTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingComma: TokenSyntax? = nil,
     _ unexpectedAfterTrailingComma: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
@@ -3713,11 +3756,9 @@ extension GenericParameterSyntax {
       colon: colon,
       unexpectedBetweenColonAndInheritedType,
       inheritedType: inheritedType,
-      unexpectedBetweenInheritedTypeAndEqual,
-      equal: equal,
-      unexpectedBetweenEqualAndDefaultType,
-      defaultType: defaultType,
-      unexpectedBetweenDefaultTypeAndTrailingComma,
+      unexpectedBetweenInheritedTypeAndTrailingComma,
+      initializer: nil,
+      nil,
       trailingComma: trailingComma,
       unexpectedAfterTrailingComma,
       trailingTrivia: trailingTrivia

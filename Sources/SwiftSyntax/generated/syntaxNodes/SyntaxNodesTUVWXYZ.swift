@@ -2494,6 +2494,7 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
 /// ### Contained in
 /// 
 ///  - ``AssociatedTypeDeclSyntax``.``AssociatedTypeDeclSyntax/initializer``
+///  - ``GenericParameterSyntax``.``GenericParameterSyntax/initializer``
 ///  - ``TypeAliasDeclSyntax``.``TypeAliasDeclSyntax/initializer``
 public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax

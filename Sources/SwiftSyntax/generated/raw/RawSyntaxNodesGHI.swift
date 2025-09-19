@@ -435,17 +435,15 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol {
     colon: RawTokenSyntax?,
     _ unexpectedBetweenColonAndInheritedType: RawUnexpectedNodesSyntax? = nil,
     inheritedType: RawTypeSyntax?,
-    _ unexpectedBetweenInheritedTypeAndEqual: RawUnexpectedNodesSyntax? = nil,
-    equal: RawTokenSyntax?,
-    _ unexpectedBetweenEqualAndDefaultType: RawUnexpectedNodesSyntax? = nil,
-    defaultType: RawTypeSyntax?,
-    _ unexpectedBetweenDefaultTypeAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenInheritedTypeAndInitializer: RawUnexpectedNodesSyntax? = nil,
+    initializer: RawTypeInitializerClauseSyntax?,
+    _ unexpectedBetweenInitializerAndTrailingComma: RawUnexpectedNodesSyntax? = nil,
     trailingComma: RawTokenSyntax?,
     _ unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .genericParameter, uninitializedCount: 17, arena: arena) { layout in
+      kind: .genericParameter, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes.raw
@@ -457,13 +455,11 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol {
       layout[7] = colon?.raw
       layout[8] = unexpectedBetweenColonAndInheritedType?.raw
       layout[9] = inheritedType?.raw
-      layout[10] = unexpectedBetweenInheritedTypeAndEqual?.raw
-      layout[11] = equal?.raw
-      layout[12] = unexpectedBetweenEqualAndDefaultType?.raw
-      layout[13] = defaultType?.raw
-      layout[14] = unexpectedBetweenDefaultTypeAndTrailingComma?.raw
-      layout[15] = trailingComma?.raw
-      layout[16] = unexpectedAfterTrailingComma?.raw
+      layout[10] = unexpectedBetweenInheritedTypeAndInitializer?.raw
+      layout[11] = initializer?.raw
+      layout[12] = unexpectedBetweenInitializerAndTrailingComma?.raw
+      layout[13] = trailingComma?.raw
+      layout[14] = unexpectedAfterTrailingComma?.raw
     }
     self.init(unchecked: raw)
   }
@@ -508,32 +504,24 @@ public struct RawGenericParameterSyntax: RawSyntaxNodeProtocol {
     layoutView.children[9].map(RawTypeSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenInheritedTypeAndEqual: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenInheritedTypeAndInitializer: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var equal: RawTokenSyntax? {
-    layoutView.children[11].map(RawTokenSyntax.init(raw:))
+  public var initializer: RawTypeInitializerClauseSyntax? {
+    layoutView.children[11].map(RawTypeInitializerClauseSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenEqualAndDefaultType: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenInitializerAndTrailingComma: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var defaultType: RawTypeSyntax? {
-    layoutView.children[13].map(RawTypeSyntax.init(raw:))
-  }
-
-  public var unexpectedBetweenDefaultTypeAndTrailingComma: RawUnexpectedNodesSyntax? {
-    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-
   public var trailingComma: RawTokenSyntax? {
-    layoutView.children[15].map(RawTokenSyntax.init(raw:))
+    layoutView.children[13].map(RawTokenSyntax.init(raw:))
   }
 
   public var unexpectedAfterTrailingComma: RawUnexpectedNodesSyntax? {
-    layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

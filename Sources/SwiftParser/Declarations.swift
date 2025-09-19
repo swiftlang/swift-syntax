@@ -675,6 +675,24 @@ extension Parser {
           unexpectedBeforeInherited = nil
           inherited = nil
         }
+
+        // Parse the default type, if any. We only have defaults of regular
+        // type parameters, not parameter packs or value generics yet.
+        let defaultType: RawTypeInitializerClauseSyntax?
+        if self.experimentalFeatures.contains(.defaultGenerics),
+          specifier == nil,
+          let equal = self.consume(if: .equal)
+        {
+          let type = self.parseType()
+          defaultType = RawTypeInitializerClauseSyntax(
+            equal: equal,
+            value: type,
+            arena: self.arena
+          )
+        } else {
+          defaultType = nil
+        }
+
         keepGoing = self.consume(if: .comma)
         elements.append(
           RawGenericParameterSyntax(
@@ -686,6 +704,7 @@ extension Parser {
             colon: colon,
             unexpectedBeforeInherited,
             inheritedType: inherited,
+            initializer: defaultType,
             trailingComma: keepGoing,
             arena: self.arena
           )

@@ -1596,8 +1596,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenColonAndInheritedType"
   case \GenericParameterSyntax.inheritedType:
     return "inheritedType"
-  case \GenericParameterSyntax.unexpectedBetweenInheritedTypeAndTrailingComma:
-    return "unexpectedBetweenInheritedTypeAndTrailingComma"
+  case \GenericParameterSyntax.unexpectedBetweenInheritedTypeAndInitializer:
+    return "unexpectedBetweenInheritedTypeAndInitializer"
+  case \GenericParameterSyntax.initializer:
+    return "initializer"
+  case \GenericParameterSyntax.unexpectedBetweenInitializerAndTrailingComma:
+    return "unexpectedBetweenInitializerAndTrailingComma"
   case \GenericParameterSyntax.trailingComma:
     return "trailingComma"
   case \GenericParameterSyntax.unexpectedAfterTrailingComma:

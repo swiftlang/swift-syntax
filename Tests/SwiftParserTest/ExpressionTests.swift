@@ -2225,6 +2225,53 @@ final class ExpressionTests: ParserTestCase {
       let _ = ((Int, Bool, String,) -> Void).self
       """
     )
+
+    assertParse(
+      """
+      let _ = Array<(
+        bar: String,
+        baaz: String,
+      )>()
+      """,
+      substructure: FunctionCallExprSyntax(
+        calledExpression: GenericSpecializationExprSyntax(
+          expression: DeclReferenceExprSyntax(baseName: .identifier("Array")),
+          genericArgumentClause: GenericArgumentClauseSyntax(
+            leftAngle: .leftAngleToken(),
+            arguments: GenericArgumentListSyntax([
+              GenericArgumentSyntax(
+                argument: .type(
+                  TypeSyntax(
+                    TupleTypeSyntax(
+                      leftParen: .leftParenToken(),
+                      elements: TupleTypeElementListSyntax([
+                        TupleTypeElementSyntax(
+                          firstName: .identifier("bar"),
+                          colon: .colonToken(),
+                          type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("String"))),
+                          trailingComma: .commaToken()
+                        ),
+                        TupleTypeElementSyntax(
+                          firstName: .identifier("baaz"),
+                          colon: .colonToken(),
+                          type: TypeSyntax(IdentifierTypeSyntax(name: .identifier("String"))),
+                          trailingComma: .commaToken()
+                        ),
+                      ]),
+                      rightParen: .rightParenToken()
+                    )
+                  )
+                )
+              )
+            ]),
+            rightAngle: .rightAngleToken()
+          )
+        ),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([]),
+        rightParen: .rightParenToken()
+      )
+    )
   }
 
   func testSecondaryArgumentLabelDollarIdentifierInClosure() {

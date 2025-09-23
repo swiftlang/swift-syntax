@@ -1025,7 +1025,8 @@ extension Parser.Lookahead {
       }
 
       self.consumeIfContextualPunctuator("...")
-    } while self.consume(if: .comma) != nil && self.hasProgressed(&loopProgress)
+
+    } while self.consume(if: .comma) != nil && !self.at(.rightParen) && self.hasProgressed(&loopProgress)
     return self.consume(if: .rightParen) != nil
   }
 

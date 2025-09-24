@@ -168,7 +168,7 @@ final class TypealiasTests: ParserTestCase {
           message: "expected '=' in typealias declaration",
           fixIts: ["replace ':' with '='"]
         ),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code ', Float' at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ', Float' in source file"),
       ],
       fixedSource: """
         typealias Recovery5 = Int, Float
@@ -183,7 +183,7 @@ final class TypealiasTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected type in typealias declaration", fixIts: ["insert type"]),
-        DiagnosticSpec(message: "extraneous code '=' at top level"),
+        DiagnosticSpec(message: "unexpected code '=' in source file"),
       ],
       fixedSource: """
         typealias Recovery6 = <#type#>=

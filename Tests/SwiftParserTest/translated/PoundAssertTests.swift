@@ -41,7 +41,7 @@ final class PoundAssertTests: ParserTestCase {
           message: "consecutive statements on a line must be separated by newline or ';'",
           fixIts: ["insert newline", "insert ';'"]
         ),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ', "error message")' at top level"#),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code ', "error message")' in source file"#),
       ],
       applyFixIts: ["insert newline"],
       fixedSource: #"""
@@ -61,7 +61,7 @@ final class PoundAssertTests: ParserTestCase {
           message: "consecutive statements on a line must be separated by newline or ';'",
           fixIts: ["insert newline", "insert ';'"]
         ),
-        DiagnosticSpec(locationMarker: "2️⃣", message: #"extraneous code ', "error message")' at top level"#),
+        DiagnosticSpec(locationMarker: "2️⃣", message: #"unexpected code ', "error message")' in source file"#),
       ],
       applyFixIts: ["insert ';'"],
       fixedSource: #"""

@@ -205,14 +205,18 @@ final class EscapedIdentifiersTests: ParserTestCase {
     assertParse(
       """
       1️⃣`multiline is
-      not allowed` = 5
+      not2️⃣ allowed3️⃣` = 5
       """,
       diagnostics: [
-        DiagnosticSpec(
-          locationMarker: "1️⃣",
-          message: "extraneous code at top level"
-        )
-      ]
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '`multiline is' in source file"),
+        .consecutiveStatementsOnALineDiagnosticSpec(locationMarker: "2️⃣"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '` = 5' in source file"),
+      ],
+      fixedSource: """
+        `multiline is
+        not
+        allowed` = 5        
+        """
     )
   }
 

@@ -301,6 +301,7 @@ public enum SyntaxKind: Sendable {
   case typeExpr
   case typeInitializerClause
   case typeSpecifierList
+  case unexpectedCodeDecl
   case unexpectedNodes
   case unresolvedAsExpr
   case unresolvedIsExpr
@@ -999,6 +1000,8 @@ public enum SyntaxKind: Sendable {
       return TypeInitializerClauseSyntax.self
     case .typeSpecifierList:
       return TypeSpecifierListSyntax.self
+    case .unexpectedCodeDecl:
+      return UnexpectedCodeDeclSyntax.self
     case .unexpectedNodes:
       return UnexpectedNodesSyntax.self
     case .unresolvedAsExpr:

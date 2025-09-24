@@ -141,7 +141,9 @@ extension Parser {
   mutating func parseGuardStatement(guardHandle: RecoveryConsumptionHandle) -> RawGuardStmtSyntax {
     let (unexpectedBeforeGuardKeyword, guardKeyword) = self.eat(guardHandle)
     let conditions = self.parseConditionList(isGuardStatement: true)
-    let (unexpectedBeforeElseKeyword, elseKeyword) = self.expect(.keyword(.else))
+    let (unexpectedBeforeElseKeyword, elseKeyword) = self.expect(
+      TokenSpec(.else, recoveryPrecedence: .openingBrace(closingDelimiter: .rightBrace))
+    )
     let body = self.parseCodeBlock(introducer: guardKeyword)
     return RawGuardStmtSyntax(
       unexpectedBeforeGuardKeyword,
@@ -1087,6 +1089,13 @@ extension Parser.Lookahead {
       )
 
     case nil:
+      // Special recovery 'try return' etc..
+      if !preferExpr,
+        consume(if: .keyword(.try)) != nil,
+        self.at(anyIn: SingleValueStatementExpression.self) == nil
+      {
+        return atStartOfStatement(allowRecovery: allowRecovery, preferExpr: preferExpr)
+      }
       return false
     }
   }

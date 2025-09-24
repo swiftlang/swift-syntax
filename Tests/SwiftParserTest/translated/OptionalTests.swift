@@ -33,7 +33,7 @@ final class OptionalTests: ParserTestCase {
       var b : A 1️⃣?
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code '?' at top level")
+        DiagnosticSpec(message: "unexpected code '?' in source file")
       ]
     )
   }

@@ -292,6 +292,16 @@ struct DiagnosticSpec {
     self.file = file
     self.line = line
   }
+
+  static func consecutiveStatementsOnALineDiagnosticSpec(
+    locationMarker: String = "1️⃣"
+  ) -> Self {
+    DiagnosticSpec(
+      locationMarker: locationMarker,
+      message: "consecutive statements on a line must be separated by newline or ';'",
+      fixIts: ["insert newline", "insert ';'"]
+    )
+  }
 }
 
 /// Assert that `location` is the same as that of `locationMarker` in `tree`.

@@ -279,7 +279,7 @@ final class ErrorsTests: ParserTestCase {
     assertParse(
       """
       func incompleteThrowType() {
-        let _: () 1️⃣throws
+        let _: ()1️⃣ 2️⃣throws
       }
       """,
       substructure: CodeBlockSyntax(
@@ -300,12 +300,18 @@ final class ErrorsTests: ParserTestCase {
                 )
               )
             )
-          )
-        ]),
-        UnexpectedNodesSyntax([TokenSyntax.keyword(.throws)])
+          ),
+          CodeBlockItemSyntax(
+            item: .decl(
+              DeclSyntax(
+                UnexpectedCodeDeclSyntax(unexpectedCode: UnexpectedNodesSyntax([TokenSyntax.keyword(.throws)]))
+              )
+            )
+          ),
+        ])
       ),
       diagnostics: [
-        DiagnosticSpec(message: "unexpected 'throws' keyword in function")
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected 'throws' keyword in function")
       ]
     )
   }

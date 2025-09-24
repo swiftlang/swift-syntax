@@ -151,8 +151,8 @@ final class DirectiveTests: ParserTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected brace in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected brace in conditional compilation clause"),
       ]
     )
   }

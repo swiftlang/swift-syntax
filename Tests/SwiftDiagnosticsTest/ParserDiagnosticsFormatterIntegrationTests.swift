@@ -161,7 +161,7 @@ final class ParserDiagnosticsFormatterIntegrationTests: XCTestCase {
     let expectedOutput = """
       1 | func o() {
       2 | }👨‍👩‍👧‍👦}
-        |  |`- error: extraneous braces at top level
+        |  |`- error: unexpected braces in source file
         |  `- error: consecutive statements on a line must be separated by newline or ';'
       3 | }
 

@@ -2414,8 +2414,23 @@ extension Parser {
 
   mutating func parseSwitchCaseBody() -> RawCodeBlockItemListSyntax {
     parseCodeBlockItemList(until: {
-      $0.at(.rightBrace) || $0.at(.poundEndif, .poundElseif, .poundElse)
-        || $0.withLookahead({ $0.atStartOfConditionalSwitchCases() })
+      if $0.at(.rightBrace) || $0.at(.poundEndif, .poundElseif, .poundElse) {
+        return true
+      }
+      if $0.at(.keyword(.case), .keyword(.default)) {
+        return true
+      }
+      if $0.at(.atSign)
+        && $0.withLookahead({
+          $0.consumeAnyAttribute(); return $0.at(.keyword(.case), .keyword(.default))
+        })
+      {
+        return true
+      }
+      if $0.withLookahead({ $0.atStartOfConditionalSwitchCases() }) {
+        return true
+      }
+      return false
     })
   }
 

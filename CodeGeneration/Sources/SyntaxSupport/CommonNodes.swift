@@ -401,4 +401,16 @@ public let COMMON_NODES: [Node] = [
     elementChoices: [.syntax]
   ),
 
+  Node(
+    kind: .unexpectedCodeDecl,
+    base: .decl,
+    nameForDiagnostics: nil,
+    documentation: "Unexpected code at declaration position",
+    children: [
+      Child(
+        name: "unexpectedCode",
+        kind: .node(kind: .unexpectedNodes)
+      )
+    ]
+  ),
 ]

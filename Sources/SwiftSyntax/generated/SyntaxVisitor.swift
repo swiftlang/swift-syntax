@@ -3335,6 +3335,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: TypeSpecifierListSyntax) {
   }
 
+  /// Visiting ``UnexpectedCodeDeclSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: UnexpectedCodeDeclSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``UnexpectedCodeDeclSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: UnexpectedCodeDeclSyntax) {
+  }
+
   /// Visiting ``UnexpectedNodesSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5757,6 +5769,14 @@ open class SyntaxVisitor {
   }
 
   @inline(never)
+  private func visitUnexpectedCodeDeclSyntaxImpl(_ node: Syntax) {
+    if visit(UnexpectedCodeDeclSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(UnexpectedCodeDeclSyntax(unsafeCasting: node))
+  }
+
+  @inline(never)
   private func visitUnexpectedNodesSyntaxImpl(_ node: Syntax) {
     if visit(UnexpectedNodesSyntax(unsafeCasting: node)) == .visitChildren {
       visitChildren(node)
@@ -6474,6 +6494,8 @@ open class SyntaxVisitor {
       return self.visitTypeInitializerClauseSyntaxImpl(_:)
     case .typeSpecifierList:
       return self.visitTypeSpecifierListSyntaxImpl(_:)
+    case .unexpectedCodeDecl:
+      return self.visitUnexpectedCodeDeclSyntaxImpl(_:)
     case .unexpectedNodes:
       return self.visitUnexpectedNodesSyntaxImpl(_:)
     case .unresolvedAsExpr:
@@ -7066,6 +7088,8 @@ open class SyntaxVisitor {
       self.visitTypeInitializerClauseSyntaxImpl(node)
     case .typeSpecifierList:
       self.visitTypeSpecifierListSyntaxImpl(node)
+    case .unexpectedCodeDecl:
+      self.visitUnexpectedCodeDeclSyntaxImpl(node)
     case .unexpectedNodes:
       self.visitUnexpectedNodesSyntaxImpl(node)
     case .unresolvedAsExpr:

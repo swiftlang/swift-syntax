@@ -84,15 +84,13 @@ enum TokenPrecedence: Comparable {
         return 5
       case .weakBracketClose:
         return 6
-      case .stmtKeyword:
-        return 7
       case .strongPunctuator:
         return 8
       case .openingBrace:
         return 9
-      case .closingBrace:
+      case .declKeyword, .stmtKeyword:
         return 10
-      case .declKeyword:
+      case .closingBrace:
         return 11
       case .openingPoundIf:
         return 12

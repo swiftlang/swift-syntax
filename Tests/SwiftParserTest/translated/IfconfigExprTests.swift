@@ -105,7 +105,7 @@ final class IfconfigExprTests: ParserTestCase {
       }
       """#,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '+ otherExpr' in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '+ otherExpr' in conditional compilation clause"),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: #"unexpected code 'print("debug")' in conditional compilation block"#

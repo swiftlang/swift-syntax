@@ -179,6 +179,7 @@ extension Syntax {
 /// - ``StructDeclSyntax``
 /// - ``SubscriptDeclSyntax``
 /// - ``TypeAliasDeclSyntax``
+/// - ``UnexpectedCodeDeclSyntax``
 /// - ``VariableDeclSyntax``
 public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
   public let _syntaxNode: Syntax
@@ -214,7 +215,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
 
   public init?(_ node: __shared some SyntaxProtocol) {
     switch node.raw.kind {
-    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .usingDecl, .variableDecl:
+    case .accessorDecl, .actorDecl, .associatedTypeDecl, .classDecl, .deinitializerDecl, .editorPlaceholderDecl, .enumCaseDecl, .enumDecl, .extensionDecl, .functionDecl, .ifConfigDecl, .importDecl, .initializerDecl, .macroDecl, .macroExpansionDecl, .missingDecl, .operatorDecl, .poundSourceLocation, .precedenceGroupDecl, .protocolDecl, .structDecl, .subscriptDecl, .typeAliasDecl, .unexpectedCodeDecl, .usingDecl, .variableDecl:
       self._syntaxNode = node._syntaxNode
     default:
       return nil
@@ -262,6 +263,7 @@ public struct DeclSyntax: DeclSyntaxProtocol, SyntaxHashable {
       .node(StructDeclSyntax.self),
       .node(SubscriptDeclSyntax.self),
       .node(TypeAliasDeclSyntax.self),
+      .node(UnexpectedCodeDeclSyntax.self),
       .node(UsingDeclSyntax.self),
       .node(VariableDeclSyntax.self)
     ])
@@ -1786,6 +1788,7 @@ extension Syntax {
       .node(TypeExprSyntax.self),
       .node(TypeInitializerClauseSyntax.self),
       .node(TypeSpecifierListSyntax.self),
+      .node(UnexpectedCodeDeclSyntax.self),
       .node(UnexpectedNodesSyntax.self),
       .node(UnresolvedAsExprSyntax.self),
       .node(UnresolvedIsExprSyntax.self),

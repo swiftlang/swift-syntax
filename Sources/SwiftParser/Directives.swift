@@ -59,7 +59,12 @@ extension Parser {
   mutating func parsePoundIfDirective<Element: RawSyntaxNodeProtocol>(
     _ parseElement: (_ parser: inout Parser, _ isFirstElement: Bool) -> Element?,
     addSemicolonIfNeeded:
-      (_ lastElement: Element, _ newItemAtStartOfLine: Bool, _ parser: inout Parser) -> Element? = { _, _, _ in nil },
+      (_ lastElement: Element, _ newItemAtStartOfLine: Bool, _ newItem: Element, _ parser: inout Parser) -> Element? = {
+        _,
+        _,
+        _,
+        _ in nil
+      },
     syntax: (inout Parser, [Element]) -> RawIfConfigClauseSyntax.Elements?
   ) -> RawIfConfigDeclSyntax {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
@@ -185,7 +190,9 @@ extension Parser {
 
   private mutating func parseIfConfigClauseElements<Element: RawSyntaxNodeProtocol>(
     _ parseElement: (_ parser: inout Parser, _ isFirstElement: Bool) -> Element?,
-    addSemicolonIfNeeded: (_ lastElement: Element, _ newItemAtStartOfLine: Bool, _ parser: inout Parser) -> Element?
+    addSemicolonIfNeeded: (
+      _ lastElement: Element, _ newItemAtStartOfLine: Bool, _ newItem: Element, _ parser: inout Parser
+    ) -> Element?
   ) -> [Element] {
     var elements = [Element]()
     var elementsProgress = LoopProgressCondition()
@@ -199,7 +206,7 @@ extension Parser {
         break
       }
       if let lastElement = elements.last,
-        let fixedUpLastItem = addSemicolonIfNeeded(lastElement, newItemAtStartOfLine, &self)
+        let fixedUpLastItem = addSemicolonIfNeeded(lastElement, newItemAtStartOfLine, element, &self)
       {
         elements[elements.count - 1] = fixedUpLastItem
       }

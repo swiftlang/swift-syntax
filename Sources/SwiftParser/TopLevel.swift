@@ -78,7 +78,9 @@ extension Parser {
       guard let newElement = self.parseCodeBlockItem(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl) else {
         break
       }
-      if let lastItem = elements.last, lastItem.semicolon == nil && !newItemAtStartOfLine {
+      if let lastItem = elements.last,
+        lastItem.semicolon == nil && !newItemAtStartOfLine && !newElement.item.is(RawUnexpectedCodeDeclSyntax.self)
+      {
         elements[elements.count - 1] = RawCodeBlockItemSyntax(
           lastItem.unexpectedBeforeItem,
           item: .init(lastItem.item)!,
@@ -226,8 +228,8 @@ extension Parser {
       // doesn't constitute its own code block item.
       let directive = self.parsePoundIfDirective { (parser, _) in
         parser.parseCodeBlockItem(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl)
-      } addSemicolonIfNeeded: { lastElement, newItemAtStartOfLine, parser in
-        if lastElement.semicolon == nil && !newItemAtStartOfLine {
+      } addSemicolonIfNeeded: { lastElement, newItemAtStartOfLine, newItem, parser in
+        if lastElement.semicolon == nil && !newItemAtStartOfLine && !newItem.item.is(RawUnexpectedCodeDeclSyntax.self) {
           return RawCodeBlockItemSyntax(
             lastElement.unexpectedBeforeItem,
             item: .init(lastElement.item)!,
@@ -251,16 +253,25 @@ extension Parser {
       return self.parseStatementItem()
     } else if self.atStartOfExpression() {
       return .expr(self.parseExpression(flavor: .basic, pattern: .none))
-    } else if self.atStartOfStatement(allowRecovery: true, preferExpr: false) {
-      return self.parseStatementItem()
-    } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl, allowRecovery: true) {
-      return .decl(self.parseDeclaration())
-    } else if self.at(.atSign), peek(isAt: .identifier) {
+      //    } else if self.atStartOfStatement(allowRecovery: true, preferExpr: false) {
+      //      return self.parseStatementItem()
+      //    } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl, allowRecovery: true) {
+      //      return .decl(self.parseDeclaration())
+    } else if (self.at(.atSign) && peek(isAt: .identifier)) || self.at(anyIn: DeclarationModifier.self) != nil {
       // Force parsing '@<identifier>' as a declaration, as there's no valid
       // expression or statement starting with an attribute.
       return .decl(self.parseDeclaration())
     } else {
-      return .init(expr: RawMissingExprSyntax(arena: self.arena))
+      return .decl(
+        RawDeclSyntax(
+          self.parseUnexpectedCodeDeclaration(
+            isAtTopLevel: isAtTopLevel,
+            allowInitDecl: allowInitDecl,
+            requiresDecl: false,
+            skipToDeclOnly: false
+          )
+        )
+      )
     }
   }
 }

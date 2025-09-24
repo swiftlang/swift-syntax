@@ -71,7 +71,7 @@ final class ValueGenericsTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "extraneous code '>() {}' at top level"
+          message: "unexpected code '>() {}' in source file"
         ),
       ],
       fixedSource: """

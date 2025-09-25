@@ -50,12 +50,18 @@ endfunction()
 
 # Add a new host library with the given name.
 function(add_swift_syntax_library name)
-  set(ASHL_SOURCES ${ARGN})
+  cmake_parse_arguments(ARGS "EXCLUDE_FROM_ALL" "" "" ${ARGN})
+
+  set(ASHL_SOURCES ${ARGS_UNPARSED_ARGUMENTS})
 
   set(target ${SWIFTSYNTAX_TARGET_NAMESPACE}${name})
 
   # Create the library target.
-  add_library(${target} ${ASHL_SOURCES})
+  if(ARGS_EXCLUDE_FROM_ALL)
+    add_library(${target} EXCLUDE_FROM_ALL ${ASHL_SOURCES})
+  else()
+    add_library(${target} ${ASHL_SOURCES})
+  endif()
 
   if(SWIFTSYNTAX_EMIT_MODULE)
     # Determine where Swift modules will be built and installed.
@@ -180,7 +186,7 @@ function(add_swift_syntax_library name)
     endif()
   endif()
 
-  if(PROJECT_IS_TOP_LEVEL OR SWIFT_SYNTAX_INSTALL_TARGETS)
+  if(NOT ARGS_EXCLUDE_FROM_ALL AND (PROJECT_IS_TOP_LEVEL OR SWIFT_SYNTAX_INSTALL_TARGETS))
     # Install this target
     install(TARGETS ${target}
       EXPORT SwiftSyntaxTargets

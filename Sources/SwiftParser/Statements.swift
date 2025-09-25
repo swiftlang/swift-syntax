@@ -28,14 +28,9 @@ extension TokenConsumer {
   ///
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
-  func atStartOfStatement(allowRecovery: Bool = false, preferExpr: Bool) -> Bool {
+  func atStartOfStatement(preferExpr: Bool) -> Bool {
     var lookahead = self.lookahead()
-    if allowRecovery {
-      // Attributes are not allowed on statements. But for recovery, skip over
-      // misplaced attributes.
-      _ = lookahead.consumeAttributeList()
-    }
-    return lookahead.atStartOfStatement(allowRecovery: allowRecovery, preferExpr: preferExpr)
+    return lookahead.atStartOfStatement(preferExpr: preferExpr)
   }
 }
 
@@ -1041,7 +1036,7 @@ extension Parser.Lookahead {
   ///
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
-  mutating func atStartOfStatement(allowRecovery: Bool = false, preferExpr: Bool) -> Bool {
+  mutating func atStartOfStatement(preferExpr: Bool) -> Bool {
     if (self.at(anyIn: SwitchCaseStart.self) != nil || self.at(.atSign))
       && withLookahead({ $0.atStartOfSwitchCaseItem() })
     {
@@ -1050,13 +1045,7 @@ extension Parser.Lookahead {
     }
 
     _ = self.consume(if: .identifier, followedBy: .colon)
-    let switchSubject: CanBeStatementStart?
-    if allowRecovery {
-      switchSubject = self.canRecoverTo(anyIn: CanBeStatementStart.self)?.0
-    } else {
-      switchSubject = self.at(anyIn: CanBeStatementStart.self)?.0
-    }
-    switch switchSubject {
+    switch self.at(anyIn: CanBeStatementStart.self)?.0 {
     case .return?,
       .throw?,
       .defer?,
@@ -1094,7 +1083,7 @@ extension Parser.Lookahead {
         consume(if: .keyword(.try)) != nil,
         self.at(anyIn: SingleValueStatementExpression.self) == nil
       {
-        return atStartOfStatement(allowRecovery: allowRecovery, preferExpr: preferExpr)
+        return atStartOfStatement(preferExpr: preferExpr)
       }
       return false
     }

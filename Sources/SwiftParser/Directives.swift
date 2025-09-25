@@ -17,6 +17,10 @@
 #endif
 
 extension Parser {
+  mutating func atEndOfIfConfigClauseBody() -> Bool {
+    return self.at(.poundElseif, .poundElse, .poundEndif) || self.atElifTypo()
+  }
+
   private enum IfConfigContinuationClauseStartKeyword: TokenSpecSet {
     case poundElseif
     case poundElse
@@ -56,16 +60,8 @@ extension Parser {
   ///                   previous element.
   ///   - syntax: A function that aggregates the parsed conditional elements
   ///             into a syntax collection.
-  mutating func parsePoundIfDirective<Element: RawSyntaxNodeProtocol>(
-    _ parseElement: (_ parser: inout Parser, _ isFirstElement: Bool) -> Element?,
-    addSemicolonIfNeeded:
-      (_ lastElement: Element, _ newItemAtStartOfLine: Bool, _ newItem: Element, _ parser: inout Parser) -> Element? = {
-        _,
-        _,
-        _,
-        _ in nil
-      },
-    syntax: (inout Parser, [Element]) -> RawIfConfigClauseSyntax.Elements?
+  mutating func parsePoundIfDirective(
+    _ parseBody: (_ parser: inout Parser) -> RawIfConfigClauseSyntax.Elements?
   ) -> RawIfConfigDeclSyntax {
     if let remainingTokens = remainingTokensIfMaximumNestingLevelReached() {
       return RawIfConfigDeclSyntax(
@@ -89,7 +85,7 @@ extension Parser {
         poundKeyword: poundIf,
         condition: condition,
         unexpectedBetweenConditionAndElements,
-        elements: syntax(&self, parseIfConfigClauseElements(parseElement, addSemicolonIfNeeded: addSemicolonIfNeeded)),
+        elements: parseBody(&self),
         arena: self.arena
       )
     )
@@ -150,10 +146,7 @@ extension Parser {
           poundKeyword: pound,
           condition: condition,
           unexpectedBetweenConditionAndElements,
-          elements: syntax(
-            &self,
-            parseIfConfigClauseElements(parseElement, addSemicolonIfNeeded: addSemicolonIfNeeded)
-          ),
+          elements: parseBody(&self),
           arena: self.arena
         )
       )

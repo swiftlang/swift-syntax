@@ -458,4 +458,38 @@ final class DirectiveTests: ParserTestCase {
         """
     )
   }
+
+  func testOrphanEndifInMember() {
+    assertParse(
+      """
+      struct S {
+        1️⃣#endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code '#endif' in struct")
+      ]
+    )
+  }
+
+  func testRightBraceInIfConfig() {
+    assertParse(
+      """
+      struct S {
+        #if true
+        1️⃣}
+        #endif
+      }
+      func foo() {
+        #if true
+        2️⃣}
+        #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected brace in conditional compilation clause"),
+      ]
+    )
+  }
 }

@@ -33,10 +33,8 @@ extension Parser {
       //
       // In such cases, the second `#if` is not `consumeIfConfigOfAttributes()`.
       return .ifConfigDecl(
-        self.parsePoundIfDirective { (parser, _) -> RawAttributeListSyntax.Element in
-          return parser.parseAttributeListElement()
-        } syntax: { parser, attributes in
-          return .attributes(RawAttributeListSyntax(elements: attributes, arena: parser.arena))
+        self.parsePoundIfDirective { parser in
+          return .attributes(parser.parseAttributeList())
         }
       )
     } else {
@@ -896,7 +894,26 @@ extension Parser {
       return makeMissingProviderArguments(unexpectedBefore: [])
     }
 
-    let decl = parseDeclaration(in: .argumentList)
+    let decl: RawDeclSyntax
+    if self.at(.poundIf) {
+      let ifConfig = self.parsePoundIfDirective({ parser in
+        let decl = parser.parseDeclaration(in: .argumentList)
+        let member = RawMemberBlockItemSyntax(decl: decl, semicolon: nil, arena: parser.arena)
+        return .decls(RawMemberBlockItemListSyntax(elements: [member], arena: parser.arena))
+      })
+      decl = ifConfig.makeUnexpectedKeepingFirstNode(
+        of: RawDeclSyntax.self, arena: self.arena,
+        where: { !$0.is(RawIfConfigDeclSyntax.self) },
+        makeMissing: {
+          RawDeclSyntax(RawMissingDeclSyntax(
+            attributes: self.emptyCollection(RawAttributeListSyntax.self),
+            modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
+            arena: self.arena)
+          )
+        })
+    } else {
+      decl = self.parseDeclaration(in: .argumentList)
+    }
 
     guard let provider = RawABIAttributeArgumentsSyntax.Provider(decl) else {
       return makeMissingProviderArguments(unexpectedBefore: [decl.raw])

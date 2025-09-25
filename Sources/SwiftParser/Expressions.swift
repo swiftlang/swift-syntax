@@ -720,10 +720,7 @@ extension Parser {
   ) -> RawExprSyntax {
     precondition(self.at(.poundIf))
 
-    let config = self.parsePoundIfDirective { (parser, isFirstElement) -> RawExprSyntax? in
-      if !isFirstElement {
-        return nil
-      }
+    let config = self.parsePoundIfDirective { parser in
       let head: RawExprSyntax
       if parser.at(.period) {
         head = parser.parseDottedExpressionSuffix(nil)
@@ -738,15 +735,7 @@ extension Parser {
         flavor: flavor,
         pattern: .none
       )
-
-      // TODO: diagnose and skip the remaining token in the current clause.
-      return result
-    } syntax: { (parser, elements) -> RawIfConfigClauseSyntax.Elements? in
-      switch elements.count {
-      case 0: return nil
-      case 1: return .postfixExpression(elements.first!)
-      default: fatalError("Postfix #if should only have one element")
-      }
+      return .postfixExpression(result)
     }
 
     return RawExprSyntax(
@@ -2352,16 +2341,9 @@ extension Parser {
         // clauses.
         elements.append(
           .ifConfigDecl(
-            self.parsePoundIfDirective(
-              { (parser, _) in parser.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery) },
-              syntax: { parser, cases in
-                guard cases.count == 1, let firstCase = cases.first else {
-                  precondition(cases.isEmpty)
-                  return .switchCases(RawSwitchCaseListSyntax(elements: [], arena: parser.arena))
-                }
-                return .switchCases(firstCase)
-              }
-            )
+            self.parsePoundIfDirective({ parser in
+              .switchCases(parser.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery))
+            })
           )
         )
       } else if allowStandaloneStmtRecovery

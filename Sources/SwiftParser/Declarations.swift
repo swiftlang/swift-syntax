@@ -966,13 +966,9 @@ extension Parser {
       decl = self.parseDeclaration(in: .memberDeclList)
       attachSemi = true
     } else {
+      // Otherwise, eat the unexpected tokens into an "decl".
       decl = RawDeclSyntax(
-        self.parseUnexpectedCodeDeclaration(
-          allowInitDecl: true,
-          requiresDecl: true,
-          skipToDeclOnly: true,
-          until: stopCondition
-        )
+        self.parseUnexpectedCodeDeclaration(allowInitDecl: true, requiresDecl: true, until: stopCondition)
       )
       attachSemi = true
     }
@@ -1009,7 +1005,7 @@ extension Parser {
   }
 
   mutating func parseMemberDeclList(
-    until stopCondition: (inout Parser) -> Bool = { $0.at(.rightBrace) }
+    until stopCondition: (inout Parser) -> Bool = { $0.at(.rightBrace) || $0.atEndOfIfConfigClauseBody() }
   ) -> RawMemberBlockItemListSyntax {
     var elements = [RawMemberBlockItemSyntax]()
     do {
@@ -1765,7 +1761,7 @@ extension Parser {
     // There can only be an implicit getter if no other accessors were
     // seen before this one.
     guard let accessorList else {
-      let body = parseCodeBlockItemList(until: { $0.at(.rightBrace) })
+      let body = parseCodeBlockItemList()
 
       let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
       return RawAccessorBlockSyntax(
@@ -2326,20 +2322,20 @@ extension Parser {
     )
   }
 
-  /// Eat tokens until a start of decl, or if `skipToDeclOnly` is not set until
-  /// a start of statement or expression.
+  /// Eats tokens until a start of decl, statement, or expression.
   /// Returns consumed tokens as a `RawUnexpectedCodeDeclSyntax` declaration.
   mutating func parseUnexpectedCodeDeclaration(
     allowInitDecl: Bool,
     requiresDecl: Bool,
-    skipToDeclOnly: Bool,
     until stopCondition: (inout Parser) -> Bool
   ) -> RawUnexpectedCodeDeclSyntax {
     var unexpectedTokens = [RawSyntax]()
-    while !self.at(.endOfFile, .semicolon) && !stopCondition(&self) {
-      let numTokensToSkip = self.withLookahead({
-        $0.skipSingle(); return $0.tokensConsumed
-      })
+    var loopProgress = LoopProgressCondition()
+    while !self.at(.endOfFile, .semicolon), !stopCondition(&self), self.hasProgressed(&loopProgress) {
+      let numTokensToSkip = self.withLookahead {
+        $0.skipSingle()
+        return $0.tokensConsumed
+      }
       for _ in 0..<numTokensToSkip {
         unexpectedTokens.append(RawSyntax(self.consumeAnyTokenWithoutAdjustingNestingLevel()))
       }
@@ -2354,13 +2350,14 @@ extension Parser {
         break
       }
 
-      if skipToDeclOnly {
+      // If a declaration is expected, ignore statements and expressions.
+      if requiresDecl {
         continue
       }
       if self.atStartOfStatement(preferExpr: false) {
         break
       }
-      // Recover to an expression only if it's on the next line.
+      // Recover to an expression only if it's on a new line.
       if self.currentToken.isAtStartOfLine && self.atStartOfExpression() {
         break
       }

@@ -1773,7 +1773,7 @@ extension Parser {
     let signature = self.parseClosureSignatureIfPresent()
 
     // Parse the body.
-    let elements = parseCodeBlockItemList(until: { $0.at(.rightBrace) })
+    let elements = parseCodeBlockItemList()
 
     // Parse the closing '}'.
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
@@ -2331,9 +2331,7 @@ extension Parser {
   mutating func parseSwitchCases(allowStandaloneStmtRecovery: Bool) -> RawSwitchCaseListSyntax {
     var elements = [RawSwitchCaseListSyntax.Element]()
     var elementsProgress = LoopProgressCondition()
-    while !self.at(.endOfFile, .rightBrace) && !self.at(.poundEndif, .poundElseif, .poundElse)
-      && self.hasProgressed(&elementsProgress)
-    {
+    while !self.at(.endOfFile, .rightBrace), !self.atEndOfIfConfigClauseBody(), self.hasProgressed(&elementsProgress) {
       if self.withLookahead({ $0.atStartOfSwitchCase(allowRecovery: false) }) {
         elements.append(.switchCase(self.parseSwitchCase()))
       } else if self.canRecoverTo(.poundIf) != nil {
@@ -2346,10 +2344,7 @@ extension Parser {
             })
           )
         )
-      } else if allowStandaloneStmtRecovery
-        && (self.atStartOfExpression() || self.atStartOfStatement(preferExpr: false)
-          || self.atStartOfDeclaration())
-      {
+      } else if allowStandaloneStmtRecovery {
         // Synthesize a label for the statement or declaration that isn't covered by a case right now.
         let statements = parseSwitchCaseBody()
         if statements.isEmpty {
@@ -2385,8 +2380,6 @@ extension Parser {
             )
           )
         )
-      } else if self.withLookahead({ $0.atStartOfSwitchCase(allowRecovery: true) }) {
-        elements.append(.switchCase(self.parseSwitchCase()))
       } else {
         break
       }
@@ -2396,14 +2389,11 @@ extension Parser {
 
   mutating func parseSwitchCaseBody() -> RawCodeBlockItemListSyntax {
     parseCodeBlockItemList(until: {
-      if $0.at(.rightBrace) || $0.at(.poundEndif, .poundElseif, .poundElse) {
+      if $0.at(.rightBrace, .keyword(.case), .keyword(.default)) || $0.atEndOfIfConfigClauseBody() {
         return true
       }
-      if $0.at(.keyword(.case), .keyword(.default)) {
-        return true
-      }
-      if $0.at(.atSign)
-        && $0.withLookahead({
+      if $0.at(.atSign),
+        $0.withLookahead({
           $0.consumeAnyAttribute(); return $0.at(.keyword(.case), .keyword(.default))
         })
       {

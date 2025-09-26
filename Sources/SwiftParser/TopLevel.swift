@@ -68,11 +68,11 @@ extension Parser {
 extension Parser {
   mutating func parseCodeBlockItemList(
     allowInitDecl: Bool = true,
-    until stopCondition: (inout Parser) -> Bool
+    until stopCondition: (inout Parser) -> Bool = { $0.at(.rightBrace) || $0.atEndOfIfConfigClauseBody() }
   ) -> RawCodeBlockItemListSyntax {
     var elements = [RawCodeBlockItemSyntax]()
     var loopProgress = LoopProgressCondition()
-    while !stopCondition(&self), self.hasProgressed(&loopProgress) {
+    while !stopCondition(&self), !self.at(.endOfFile), self.hasProgressed(&loopProgress) {
       let newItemAtStartOfLine = self.atStartOfLine
       guard let newElement = self.parseCodeBlockItem(allowInitDecl: allowInitDecl, until: stopCondition) else {
         break
@@ -118,7 +118,7 @@ extension Parser {
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
   mutating func parseCodeBlock(introducer: RawTokenSyntax? = nil, allowInitDecl: Bool = true) -> RawCodeBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
-    let itemList = parseCodeBlockItemList(allowInitDecl: allowInitDecl, until: { $0.at(.rightBrace) })
+    let itemList = parseCodeBlockItemList(allowInitDecl: allowInitDecl)
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
 
     return .init(
@@ -223,14 +223,10 @@ extension Parser {
       attachSemi = true
 
     } else {
+      // Otherwise, eat the unexpected tokens into an "decl".
       item = .decl(
         RawDeclSyntax(
-          self.parseUnexpectedCodeDeclaration(
-            allowInitDecl: allowInitDecl,
-            requiresDecl: false,
-            skipToDeclOnly: false,
-            until: stopCondition
-          )
+          self.parseUnexpectedCodeDeclaration(allowInitDecl: allowInitDecl, requiresDecl: false, until: stopCondition)
         )
       )
       attachSemi = true

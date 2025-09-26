@@ -1095,18 +1095,8 @@ extension Parser.Lookahead {
     // Check for and consume attributes. The only valid attribute is `@unknown`
     // but that's a semantic restriction.
     var lookahead = self.lookahead()
-    var loopProgress = LoopProgressCondition()
-    var hasAttribute = false
-    while lookahead.at(.atSign) && lookahead.hasProgressed(&loopProgress) {
-      guard lookahead.peek().rawTokenKind == .identifier else {
-        return false
-      }
-
-      lookahead.eat(.atSign)
-      lookahead.eat(.identifier)
-      hasAttribute = true
-    }
-
+    
+    let hasAttribute = lookahead.consumeAttributeList()
     if hasAttribute && lookahead.at(.rightBrace) {
       // If we are at an attribute that's the last token in the SwitchCase, parse
       // that as an attribute to a missing 'case'. That way, if the developer writes

@@ -116,7 +116,7 @@ extension CodeBlockItemListSyntax: SyntaxParseable {
 extension MemberBlockItemListSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     return parse(from: &parser) { parser in
-      return parser.parseMemberDeclList()
+      return parser.parseMemberDeclList(until: { _ in false })
     } makeMissing: { remainingTokens, arena in
       let missingDecl = RawMissingDeclSyntax(
         attributes: RawAttributeListSyntax(elements: [], arena: arena),

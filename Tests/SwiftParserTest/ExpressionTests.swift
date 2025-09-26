@@ -2709,10 +2709,26 @@ final class StatementExpressionTests: ParserTestCase {
     assertParse(
       """
       switch x {
-        1️⃣@case
+        @1️⃣case2️⃣
       }
       """,
-      diagnostics: [DiagnosticSpec(message: "unexpected code '@case' in 'switch' statement")]
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          // FIXME: "expected attribute name after '@'".
+          message: "expected type in attribute", fixIts: ["insert type"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          // FIXME: "expected pattern and ':' in switch case"
+          message: "expected expression and ':' in switch case", fixIts: ["insert expression and ':'"]
+        ),
+      ],
+      fixedSource: """
+        switch x {
+          @<#identifier#> case <#expression#>:
+        }
+        """
     )
   }
 

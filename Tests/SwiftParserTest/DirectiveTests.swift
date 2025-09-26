@@ -462,13 +462,104 @@ final class DirectiveTests: ParserTestCase {
   func testOrphanEndifInMember() {
     assertParse(
       """
-      struct S {
-        1️⃣#endif
+      struct S ℹ️{1️⃣
+        2️⃣#endif
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code '#endif' in struct")
-      ]
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '}' to end struct",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"],
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in source file"),
+      ],
+      fixedSource: """
+        struct S {
+        }
+          #endif
+        }
+        """
+    )
+  }
+
+  func testOrphanEndifInCodeBlock() {
+    assertParse(
+      """
+      func foo() ℹ️{1️⃣
+        2️⃣#endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '}' to end function",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"],
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in source file"),
+      ],
+      fixedSource: """
+        func foo() {
+        }
+          #endif
+        }
+        """
+    )
+  }
+
+  func testOrphanEndifInSwitch() {
+    assertParse(
+      """
+      switch subject ℹ️{1️⃣
+        2️⃣#endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '}' to end 'switch' statement",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"],
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in source file"),
+      ],
+      fixedSource: """
+        switch subject {
+        }
+          #endif
+        }
+        """
+    )
+  }
+
+  func testOrphanEndifInSwitchCase() {
+    assertParse(
+      """
+      switch subject ℹ️{
+      case foo:
+        print()1️⃣
+        2️⃣#endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '}' to end 'switch' statement",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"],
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in source file"),
+      ],
+      fixedSource: """
+        switch subject {
+        case foo:
+          print()
+        }
+          #endif
+        }
+        """
     )
   }
 
@@ -492,4 +583,32 @@ final class DirectiveTests: ParserTestCase {
       ]
     )
   }
+
+  func testMismatchedPoundIfAndCodeBlock() {
+    assertParse(
+      """
+      #if FOO
+      func foo() ℹ️{1️⃣
+      #endif
+      2️⃣}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '}' to end function",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"],
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected brace in source file"),
+      ],
+      fixedSource: """
+        #if FOO
+        func foo() {
+        }
+        #endif
+        }
+        """
+    )
+  }
+
 }

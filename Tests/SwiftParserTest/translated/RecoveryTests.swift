@@ -3429,8 +3429,8 @@ final class RecoveryTests: ParserTestCase {
   func testTTT() {
     assertParse(
       """
-      struct S {
-       :
+      switch s {
+      @
       }
       """
     )

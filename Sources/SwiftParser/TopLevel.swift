@@ -78,7 +78,7 @@ extension Parser {
         break
       }
       if let lastItem = elements.last,
-         lastItem.semicolon == nil && !newItemAtStartOfLine && !newElement.item.is(RawUnexpectedCodeDeclSyntax.self)
+        lastItem.semicolon == nil && !newItemAtStartOfLine && !newElement.item.is(RawUnexpectedCodeDeclSyntax.self)
       {
         elements[elements.count - 1] = RawCodeBlockItemSyntax(
           lastItem.unexpectedBeforeItem,
@@ -159,7 +159,10 @@ extension Parser {
   /// closing braces while trying to recover to the next item.
   /// If we are not at the top level, such a closing brace should close the
   /// wrapping declaration instead of being consumed by lookahead.
-  mutating func parseCodeBlockItem(allowInitDecl: Bool, until stopCondition: (inout Parser) -> Bool) -> RawCodeBlockItemSyntax? {
+  mutating func parseCodeBlockItem(
+    allowInitDecl: Bool,
+    until stopCondition: (inout Parser) -> Bool
+  ) -> RawCodeBlockItemSyntax? {
     let startToken = self.currentToken
     if let syntax = self.loadCurrentSyntaxNodeFromCache(for: .codeBlockItem) {
       self.registerNodeForIncrementalParse(node: syntax.raw, startToken: startToken)
@@ -174,7 +177,7 @@ extension Parser {
         arena: self.arena
       )
     }
-    
+
     if self.at(.keyword(.case), .keyword(.default)) {
       // 'case' and 'default' are invalid in code block items.
       // Parse them and put them in their own CodeBlockItem but as an unexpected node.
@@ -193,7 +196,10 @@ extension Parser {
       // If config of attributes is parsed as part of declaration parsing as it
       // doesn't constitute its own code block item.
       let directive = self.parsePoundIfDirective { parser in
-        let items = parser.parseCodeBlockItemList(allowInitDecl: allowInitDecl, until: { $0.atEndOfIfConfigClauseBody() })
+        let items = parser.parseCodeBlockItemList(
+          allowInitDecl: allowInitDecl,
+          until: { $0.atEndOfIfConfigClauseBody() }
+        )
         return .statements(items)
       }
       item = .init(decl: directive)
@@ -215,7 +221,7 @@ extension Parser {
       // expression or statement starting with an attribute.
       item = .decl(self.parseDeclaration())
       attachSemi = true
-      
+
     } else {
       item = .decl(
         RawDeclSyntax(
@@ -265,7 +271,7 @@ extension Parser {
     // or 'switch' as an expression when in statement position, but that
     // could result in less useful recovery behavior.
     if at(.keyword(.as)),
-       let expr = stmt.as(RawExpressionStmtSyntax.self)?.expression
+      let expr = stmt.as(RawExpressionStmtSyntax.self)?.expression
     {
       if expr.is(RawDoExprSyntax.self) || expr.is(RawIfExprSyntax.self) || expr.is(RawSwitchExprSyntax.self) {
         let (op, rhs) = parseUnresolvedAsExpr(

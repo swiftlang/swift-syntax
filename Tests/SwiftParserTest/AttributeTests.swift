@@ -885,18 +885,28 @@ final class AttributeTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "expected identifier and member block in class",
-          fixIts: ["insert identifier and member block"]
+          message: "expected identifier in class",
+          fixIts: ["insert identifier"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "unexpected code '))' in source file"
+          message: "expected '{' in class",
+          fixIts: ["insert '{'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "unexpected code '))' in class"
+        ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected '}' to end class",
+          fixIts: ["insert '}'"]
         ),
       ],
       fixedSource: """
-        @attached(member, names: named(<#expression#>)) class <#identifier#> {
-        }))
+        @attached(member, names: named(<#expression#>)) class <#identifier#> {))
         macro m()
+        }
         """
     )
   }

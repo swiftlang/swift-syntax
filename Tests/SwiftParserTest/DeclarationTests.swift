@@ -1651,8 +1651,8 @@ final class DeclarationTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected member block in struct",
-          fixIts: ["insert member block"]
+          message: "expected '{' in struct",
+          fixIts: ["insert '{'"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -1670,13 +1670,19 @@ final class DeclarationTests: ParserTestCase {
           message: "expected '#endif' in conditional compilation block",
           fixIts: ["insert '#endif'"]
         ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected '}' to end struct",
+          fixIts: ["insert '}'"]
+        ),
+
       ],
       fixedSource: """
         struct n {
-        }
         #if <#expression#>
         @<#type#> <#declaration#>
         #endif
+        }
         """
     )
   }

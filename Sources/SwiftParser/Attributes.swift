@@ -902,15 +902,19 @@ extension Parser {
         return .decls(RawMemberBlockItemListSyntax(elements: [member], arena: parser.arena))
       })
       decl = ifConfig.makeUnexpectedKeepingFirstNode(
-        of: RawDeclSyntax.self, arena: self.arena,
+        of: RawDeclSyntax.self,
+        arena: self.arena,
         where: { !$0.is(RawIfConfigDeclSyntax.self) },
         makeMissing: {
-          RawDeclSyntax(RawMissingDeclSyntax(
-            attributes: self.emptyCollection(RawAttributeListSyntax.self),
-            modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
-            arena: self.arena)
+          RawDeclSyntax(
+            RawMissingDeclSyntax(
+              attributes: self.emptyCollection(RawAttributeListSyntax.self),
+              modifiers: self.emptyCollection(RawDeclModifierListSyntax.self),
+              arena: self.arena
+            )
           )
-        })
+        }
+      )
     } else {
       decl = self.parseDeclaration(in: .argumentList)
     }

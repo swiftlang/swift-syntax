@@ -956,9 +956,11 @@ extension Parser {
       decl = RawDeclSyntax(self.parsePoundSourceLocationDirective())
       attachSemi = false
     } else if self.at(.poundIf) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
-      decl = RawDeclSyntax(self.parsePoundIfDirective { parser in
-        return .decls(parser.parseMemberDeclList(until: {$0.atEndOfIfConfigClauseBody()}))
-      })
+      decl = RawDeclSyntax(
+        self.parsePoundIfDirective { parser in
+          return .decls(parser.parseMemberDeclList(until: { $0.atEndOfIfConfigClauseBody() }))
+        }
+      )
       attachSemi = false
     } else if self.atStartOfDeclaration(allowInitDecl: true, requiresDecl: true) {
       decl = self.parseDeclaration(in: .memberDeclList)
@@ -1006,7 +1008,9 @@ extension Parser {
     return result
   }
 
-  mutating func parseMemberDeclList(until stopCondition: (inout Parser) -> Bool = { $0.at(.rightBrace) }) -> RawMemberBlockItemListSyntax {
+  mutating func parseMemberDeclList(
+    until stopCondition: (inout Parser) -> Bool = { $0.at(.rightBrace) }
+  ) -> RawMemberBlockItemListSyntax {
     var elements = [RawMemberBlockItemSyntax]()
     do {
       var loopProgress = LoopProgressCondition()
@@ -1038,15 +1042,7 @@ extension Parser {
   /// If the left brace is missing, its indentation will be used to judge whether a following `}` was
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
   mutating func parseMemberBlock(introducer: RawTokenSyntax? = nil) -> RawMemberBlockSyntax {
-    guard let lBraceHandle = canRecoverTo(.leftBrace) else {
-      return RawMemberBlockSyntax(
-        leftBrace: self.missingToken(.leftBrace),
-        members: RawMemberBlockItemListSyntax(elements: [], arena: self.arena),
-        rightBrace: consume(if: TokenSpec(.rightBrace, allowAtStartOfLine: false)) ?? self.missingToken(.rightBrace),
-        arena: arena
-      )
-    }
-    let (unexpectedBeforeLBrace, lbrace) = self.eat(lBraceHandle)
+    let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
     let members = parseMemberDeclList()
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
 
@@ -2341,7 +2337,9 @@ extension Parser {
   ) -> RawUnexpectedCodeDeclSyntax {
     var unexpectedTokens = [RawSyntax]()
     while !self.at(.endOfFile, .semicolon) && !stopCondition(&self) {
-      let numTokensToSkip = self.withLookahead({ $0.skipSingle(); return $0.tokensConsumed })
+      let numTokensToSkip = self.withLookahead({
+        $0.skipSingle(); return $0.tokensConsumed
+      })
       for _ in 0..<numTokensToSkip {
         unexpectedTokens.append(RawSyntax(self.consumeAnyTokenWithoutAdjustingNestingLevel()))
       }

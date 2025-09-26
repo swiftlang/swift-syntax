@@ -145,6 +145,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
   @_spi(ExperimentalLanguageFeatures)
   case modify
   case module
+  @_spi(ExperimentalLanguageFeatures)
+  case mutate
   case mutableAddressWithNativeOwner
   case mutableAddressWithOwner
   case mutating
@@ -403,6 +405,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
         self = .modify
       case "module":
         self = .module
+      case "mutate":
+        self = .mutate
       case "prefix":
         self = .prefix
       case "public":
@@ -883,6 +887,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "metadata",
     "modify",
     "module",
+    "mutate",
     "mutableAddressWithNativeOwner",
     "mutableAddressWithOwner",
     "mutating",

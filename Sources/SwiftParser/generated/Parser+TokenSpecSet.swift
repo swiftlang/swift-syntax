@@ -39,6 +39,9 @@ extension AccessorDeclSyntax {
     @_spi(ExperimentalLanguageFeatures)
     case modify
     case `init`
+    case borrow
+    @_spi(ExperimentalLanguageFeatures)
+    case mutate
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -72,6 +75,10 @@ extension AccessorDeclSyntax {
         self = .modify
       case TokenSpec(.`init`):
         self = .`init`
+      case TokenSpec(.borrow):
+        self = .borrow
+      case TokenSpec(.mutate) where experimentalFeatures.contains(.borrowAndMutateAccessors):
+        self = .mutate
       default:
         return nil
       }
@@ -109,6 +116,10 @@ extension AccessorDeclSyntax {
         self = .modify
       case TokenSpec(.`init`):
         self = .`init`
+      case TokenSpec(.borrow):
+        self = .borrow
+      case TokenSpec(.mutate):
+        self = .mutate
       default:
         return nil
       }
@@ -146,6 +157,10 @@ extension AccessorDeclSyntax {
         return .keyword(.modify)
       case .`init`:
         return .keyword(.`init`)
+      case .borrow:
+        return .keyword(.borrow)
+      case .mutate:
+        return .keyword(.mutate)
       }
     }
 
@@ -185,6 +200,10 @@ extension AccessorDeclSyntax {
         return .keyword(.modify)
       case .`init`:
         return .keyword(.`init`)
+      case .borrow:
+        return .keyword(.borrow)
+      case .mutate:
+        return .keyword(.mutate)
       }
     }
   }

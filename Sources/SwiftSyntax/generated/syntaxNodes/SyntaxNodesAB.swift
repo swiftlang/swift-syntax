@@ -825,7 +825,7 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifier`: ``DeclModifierSyntax``?
-///  - `accessorSpecifier`: (`get` | `set` | `didSet` | `willSet` | `unsafeAddress` | `addressWithOwner` | `addressWithNativeOwner` | `unsafeMutableAddress` | `mutableAddressWithOwner` | `mutableAddressWithNativeOwner` | `_read` | `read` | `_modify` | `modify` | `init`)
+///  - `accessorSpecifier`: (`get` | `set` | `didSet` | `willSet` | `unsafeAddress` | `addressWithOwner` | `addressWithNativeOwner` | `unsafeMutableAddress` | `mutableAddressWithOwner` | `mutableAddressWithNativeOwner` | `_read` | `read` | `_modify` | `modify` | `init` | `borrow` | `mutate`)
 ///  - `parameters`: ``AccessorParametersSyntax``?
 ///  - `effectSpecifiers`: ``AccessorEffectSpecifiersSyntax``?
 ///  - `body`: ``CodeBlockSyntax``?
@@ -1001,6 +1001,8 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
   ///  - `_modify`
   ///  - `modify`
   ///  - `init`
+  ///  - `borrow`
+  ///  - `mutate`
   public var accessorSpecifier: TokenSyntax {
     get {
       return Syntax(self).child(at: 5)!.cast(TokenSyntax.self)

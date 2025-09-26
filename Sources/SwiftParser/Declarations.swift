@@ -2368,3 +2368,17 @@ extension Parser {
     )
   }
 }
+
+extension Parser {
+  mutating func parseDeclarationOrIfConfig() -> RawDeclSyntax {
+    if self.at(.poundIf) {
+      return RawDeclSyntax(
+        self.parsePoundIfDirective({
+          .decls($0.parseMemberDeclList(until: { $0.atEndOfIfConfigClauseBody() }))
+        })
+      )
+    } else {
+      return parseDeclaration(in: .memberDeclList)
+    }
+  }
+}

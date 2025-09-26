@@ -1030,11 +1030,6 @@ extension Parser.Lookahead {
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
   mutating func atStartOfStatement(preferExpr: Bool) -> Bool {
-//    if self.atStartOfSwitchCase() {
-//      // We consider 'case' statements so we don't parse the start of a new case item as trailing parts of an expression.
-//      return true
-//    }
-
     _ = self.consume(if: .identifier, followedBy: .colon)
     switch self.at(anyIn: CanBeStatementStart.self)?.0 {
     case .return?,

@@ -177,7 +177,7 @@ public let COMMON_NODES: [Node] = [
     kind: .decl,
     base: .syntax,
     nameForDiagnostics: "declaration",
-    parserFunction: "parseDeclaration"
+    parserFunction: "parseDeclarationOrIfConfig"
   ),
 
   Node(

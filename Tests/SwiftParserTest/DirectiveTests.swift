@@ -471,7 +471,7 @@ final class DirectiveTests: ParserTestCase {
           locationMarker: "1️⃣",
           message: "expected '}' to end struct",
           notes: [NoteSpec(message: "to match this opening '{'")],
-          fixIts: ["insert '}'"],
+          fixIts: ["insert '}'"]
         ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in source file"),
       ],
@@ -496,7 +496,7 @@ final class DirectiveTests: ParserTestCase {
           locationMarker: "1️⃣",
           message: "expected '}' to end function",
           notes: [NoteSpec(message: "to match this opening '{'")],
-          fixIts: ["insert '}'"],
+          fixIts: ["insert '}'"]
         ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in source file"),
       ],
@@ -521,7 +521,7 @@ final class DirectiveTests: ParserTestCase {
           locationMarker: "1️⃣",
           message: "expected '}' to end 'switch' statement",
           notes: [NoteSpec(message: "to match this opening '{'")],
-          fixIts: ["insert '}'"],
+          fixIts: ["insert '}'"]
         ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in source file"),
       ],
@@ -548,7 +548,7 @@ final class DirectiveTests: ParserTestCase {
           locationMarker: "1️⃣",
           message: "expected '}' to end 'switch' statement",
           notes: [NoteSpec(message: "to match this opening '{'")],
-          fixIts: ["insert '}'"],
+          fixIts: ["insert '}'"]
         ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in source file"),
       ],
@@ -597,7 +597,7 @@ final class DirectiveTests: ParserTestCase {
           locationMarker: "1️⃣",
           message: "expected '}' to end function",
           notes: [NoteSpec(message: "to match this opening '{'")],
-          fixIts: ["insert '}'"],
+          fixIts: ["insert '}'"]
         ),
         DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected brace in source file"),
       ],

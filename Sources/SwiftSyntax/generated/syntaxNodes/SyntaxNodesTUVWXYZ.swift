@@ -2608,6 +2608,8 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
 
 // MARK: - UnexpectedCodeDeclSyntax
 
+/// Unexpected code at declaration position
+///
 /// ### Children
 /// 
 ///  - `unexpectedCode`: ``UnexpectedNodesSyntax``

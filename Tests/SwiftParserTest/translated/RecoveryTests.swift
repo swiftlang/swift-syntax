@@ -3425,14 +3425,4 @@ final class RecoveryTests: ParserTestCase {
         """
     )
   }
-
-  func testTTT() {
-    assertParse(
-      """
-      switch s {
-      @
-      }
-      """
-    )
-  }
 }

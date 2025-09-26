@@ -74,11 +74,13 @@ extension Parser {
     var loopProgress = LoopProgressCondition()
     while !stopCondition(&self), !self.at(.endOfFile), self.hasProgressed(&loopProgress) {
       let newItemAtStartOfLine = self.atStartOfLine
-      guard let newElement = self.parseCodeBlockItem(allowInitDecl: allowInitDecl, until: stopCondition) else {
+      guard let newItem = self.parseCodeBlockItem(allowInitDecl: allowInitDecl, until: stopCondition) else {
         break
       }
       if let lastItem = elements.last,
-        lastItem.semicolon == nil && !newItemAtStartOfLine && !newElement.item.is(RawUnexpectedCodeDeclSyntax.self)
+        lastItem.semicolon == nil,
+        !newItemAtStartOfLine,
+        !newItem.item.is(RawUnexpectedCodeDeclSyntax.self)
       {
         elements[elements.count - 1] = RawCodeBlockItemSyntax(
           lastItem.unexpectedBeforeItem,
@@ -89,7 +91,7 @@ extension Parser {
           arena: self.arena
         )
       }
-      elements.append(newElement)
+      elements.append(newItem)
     }
     return .init(elements: elements, arena: self.arena)
   }
@@ -178,18 +180,6 @@ extension Parser {
       )
     }
 
-    if self.at(.keyword(.case), .keyword(.default)) {
-      // 'case' and 'default' are invalid in code block items.
-      // Parse them and put them in their own CodeBlockItem but as an unexpected node.
-      let switchCase = self.parseSwitchCase()
-      return RawCodeBlockItemSyntax(
-        RawUnexpectedNodesSyntax([switchCase], arena: self.arena),
-        item: .init(expr: RawMissingExprSyntax(arena: self.arena)),
-        semicolon: nil,
-        arena: self.arena
-      )
-    }
-
     let item: RawCodeBlockItemSyntax.Item
     let attachSemi: Bool
     if self.at(.poundIf) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
@@ -221,7 +211,16 @@ extension Parser {
       // expression or statement starting with an attribute.
       item = .decl(self.parseDeclaration())
       attachSemi = true
-
+    } else if self.withLookahead({ $0.atStartOfSwitchCase() }) {
+      // 'case' and 'default' are invalid in code block items.
+      // Parse them and put them in their own CodeBlockItem but as an unexpected node.
+      let switchCase = self.parseSwitchCase()
+      return RawCodeBlockItemSyntax(
+        RawUnexpectedNodesSyntax([switchCase], arena: self.arena),
+        item: .init(expr: RawMissingExprSyntax(arena: self.arena)),
+        semicolon: nil,
+        arena: self.arena
+      )
     } else {
       // Otherwise, eat the unexpected tokens into an "decl".
       item = .decl(

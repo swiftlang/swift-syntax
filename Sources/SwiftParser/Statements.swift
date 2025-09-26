@@ -34,16 +34,6 @@ extension TokenConsumer {
   }
 }
 
-extension Parser.Lookahead {
-  mutating func atStartOfSwitchCaseItem() -> Bool {
-    while self.consume(if: .atSign) != nil {
-      self.consume(if: .identifier)
-    }
-
-    return self.at(anyIn: SwitchCaseStart.self) != nil
-  }
-}
-
 extension Parser {
   /// Parse a statement.
   ///
@@ -700,6 +690,9 @@ extension Parser {
     if self.atStartOfStatement(preferExpr: true) || self.atStartOfDeclaration() {
       return false
     }
+    if self.atStartOfLine && self.withLookahead({ $0.atStartOfSwitchCase() }) {
+      return false
+    }
     return true
   }
 
@@ -1037,12 +1030,10 @@ extension Parser.Lookahead {
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
   mutating func atStartOfStatement(preferExpr: Bool) -> Bool {
-    if (self.at(anyIn: SwitchCaseStart.self) != nil || self.at(.atSign))
-      && withLookahead({ $0.atStartOfSwitchCaseItem() })
-    {
-      // We consider SwitchCaseItems statements so we don't parse the start of a new case item as trailing parts of an expression.
-      return true
-    }
+//    if self.atStartOfSwitchCase() {
+//      // We consider 'case' statements so we don't parse the start of a new case item as trailing parts of an expression.
+//      return true
+//    }
 
     _ = self.consume(if: .identifier, followedBy: .colon)
     switch self.at(anyIn: CanBeStatementStart.self)?.0 {
@@ -1095,7 +1086,7 @@ extension Parser.Lookahead {
     // Check for and consume attributes. The only valid attribute is `@unknown`
     // but that's a semantic restriction.
     var lookahead = self.lookahead()
-    
+
     let hasAttribute = lookahead.consumeAttributeList()
     if hasAttribute && lookahead.at(.rightBrace) {
       // If we are at an attribute that's the last token in the SwitchCase, parse

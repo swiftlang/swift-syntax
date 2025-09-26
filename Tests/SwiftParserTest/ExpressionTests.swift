@@ -2716,12 +2716,14 @@ final class StatementExpressionTests: ParserTestCase {
         DiagnosticSpec(
           locationMarker: "1️⃣",
           // FIXME: "expected attribute name after '@'".
-          message: "expected type in attribute", fixIts: ["insert type"]
+          message: "expected type in attribute",
+          fixIts: ["insert type"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           // FIXME: "expected pattern and ':' in switch case"
-          message: "expected expression and ':' in switch case", fixIts: ["insert expression and ':'"]
+          message: "expected expression and ':' in switch case",
+          fixIts: ["insert expression and ':'"]
         ),
       ],
       fixedSource: """

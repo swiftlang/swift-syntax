@@ -23,7 +23,9 @@ public class ActiveRegionTests: XCTestCase {
   let linuxBuildConfig = StaticBuildConfiguration(
     customConditions: ["DEBUG", "ASSERTS"],
     features: ["ParameterPacks"],
-    attributes: ["available"]
+    attributes: ["available"],
+    languageVersion: VersionTuple(6),
+    compilerVersion: VersionTuple(6, 2)
   )
   func testActiveRegions() throws {
     try assertActiveCode(

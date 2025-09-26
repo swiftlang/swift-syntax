@@ -30,8 +30,8 @@ public struct StaticBuildConfiguration: Codable {
     targetPointerBitWidth: Int = 64,
     targetAtomicBitWidths: [Int] = [],
     endianness: Endianness = .little,
-    languageVersion: VersionTuple = VersionTuple(6),
-    compilerVersion: VersionTuple = VersionTuple(6, 2)
+    languageVersion: VersionTuple,
+    compilerVersion: VersionTuple
   ) {
     self.customConditions = customConditions
     self.features = features
@@ -159,7 +159,7 @@ public struct StaticBuildConfiguration: Codable {
   /// #if swift(>=5.5)
   /// // Hooray, we can use tasks!
   /// ```
-  public var languageVersion: VersionTuple = VersionTuple(6)
+  public var languageVersion: VersionTuple
 
   /// The version of the compiler (e.g., 5.9).
   ///
@@ -171,7 +171,7 @@ public struct StaticBuildConfiguration: Codable {
   /// #if compiler(>=5.7)
   /// // Hoorway, we can implicitly open existentials!
   /// #endif
-  public var compilerVersion: VersionTuple = VersionTuple(6, 2)
+  public var compilerVersion: VersionTuple
 }
 
 extension StaticBuildConfiguration: BuildConfiguration {

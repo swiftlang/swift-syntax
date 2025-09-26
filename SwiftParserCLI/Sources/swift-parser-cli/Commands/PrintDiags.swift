@@ -28,13 +28,7 @@ struct PrintDiags: ParsableCommand, ParseCommand {
   var colorize: Bool = false
 
   func run() throws {
-    try sourceFileContents.withUnsafeBufferPointer { sourceBuffer in
-      let tree = Parser.parse(source: sourceBuffer)
-      var diags = ParseDiagnosticsGenerator.diagnostics(for: tree)
-      if foldSequences {
-        diags += foldAllSequences(tree).1
-      }
-
+    try withParsedSourceFile { (tree, diags) in
       var group = GroupedDiagnostics()
       group.addSourceFile(tree: tree, displayName: sourceFileName, diagnostics: diags)
       let annotatedSource = DiagnosticsFormatter.annotateSources(

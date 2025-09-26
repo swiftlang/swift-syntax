@@ -14,10 +14,10 @@ import ArgumentParser
 import SwiftParser
 import SwiftSyntax
 
-struct PrintTree: ParsableCommand, ParseCommand {
+struct Print: ParsableCommand, ParseCommand {
   static var configuration = CommandConfiguration(
-    commandName: "print-tree",
-    abstract: "Print the syntax tree produced by parsing a source file"
+    commandName: "print",
+    abstract: "Print the parsed source file after applying any other arguments"
   )
 
   @OptionGroup
@@ -28,7 +28,7 @@ struct PrintTree: ParsableCommand, ParseCommand {
 
   func run() throws {
     try withParsedSourceFile(wantDiagnostics: false) { (tree, _) in
-      print(tree.debugDescription(includeTrivia: includeTrivia))
+      print(tree.description)
     }
   }
 }

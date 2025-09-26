@@ -14,7 +14,7 @@ import SwiftSyntax
 
 /// Describes the ordering of a sequence of bytes that make up a word of
 /// storage for a particular architecture.
-public enum Endianness: String {
+public enum Endianness: String, Codable {
   /// Little endian, meaning that the least significant byte of a word is
   /// stored at the lowest address.
   case little

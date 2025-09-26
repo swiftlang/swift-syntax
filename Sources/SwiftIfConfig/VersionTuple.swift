@@ -11,7 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Describes a version such as `5.9`.
-public struct VersionTuple: Sendable {
+public struct VersionTuple: Sendable, Codable {
   /// The components of the version tuple, start with the major version.
   public var components: [Int]
 

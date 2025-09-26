@@ -45,8 +45,8 @@ class AllActiveVisitor: ActiveSyntaxAnyVisitor {
   }
 }
 
-class NameCheckingVisitor: ActiveSyntaxAnyVisitor {
-  let configuration: TestingBuildConfiguration
+class NameCheckingVisitor<Configuration: BuildConfiguration>: ActiveSyntaxAnyVisitor {
+  let configuration: Configuration
 
   /// The set of names we are expected to visit. Any syntax nodes with
   /// names that aren't here will be rejected, and each of the names listed
@@ -54,7 +54,7 @@ class NameCheckingVisitor: ActiveSyntaxAnyVisitor {
   var expectedNames: Set<String>
 
   init(
-    configuration: TestingBuildConfiguration,
+    configuration: Configuration,
     expectedNames: Set<String>,
     configuredRegions: ConfiguredRegions? = nil
   ) {

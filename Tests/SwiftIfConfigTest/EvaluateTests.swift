@@ -21,7 +21,7 @@ import _SwiftSyntaxTestSupport
 
 public class EvaluateTests: XCTestCase {
   func testLiterals() throws {
-    let buildConfig = TestingBuildConfiguration(customConditions: ["DEBUG", "ASSERTS"])
+    let buildConfig = StaticBuildConfiguration(customConditions: ["DEBUG", "ASSERTS"])
 
     assertIfConfig("true", .active, configuration: buildConfig)
     assertIfConfig("false", .inactive, configuration: buildConfig)
@@ -71,7 +71,7 @@ public class EvaluateTests: XCTestCase {
   }
 
   func testCustomConfigs() throws {
-    let buildConfig = TestingBuildConfiguration(customConditions: ["DEBUG", "ASSERTS", "try"])
+    let buildConfig = StaticBuildConfiguration(customConditions: ["DEBUG", "ASSERTS", "try"])
 
     assertIfConfig("DEBUG", .active, configuration: buildConfig)
     assertIfConfig("NODEBUG", .inactive, configuration: buildConfig)
@@ -136,7 +136,7 @@ public class EvaluateTests: XCTestCase {
   }
 
   func testBadExpressions() throws {
-    let buildConfig = TestingBuildConfiguration(customConditions: ["DEBUG", "ASSERTS"])
+    let buildConfig = StaticBuildConfiguration(customConditions: ["DEBUG", "ASSERTS"])
 
     assertIfConfig(
       "3.14159",
@@ -178,14 +178,14 @@ public class EvaluateTests: XCTestCase {
   }
 
   func testFeatures() throws {
-    let buildConfig = TestingBuildConfiguration(features: ["ParameterPacks"])
+    let buildConfig = StaticBuildConfiguration(features: ["ParameterPacks"])
 
     assertIfConfig("hasFeature(ParameterPacks)", .active, configuration: buildConfig)
     assertIfConfig("hasFeature(HigherKindedGenerics)", .inactive, configuration: buildConfig)
   }
 
   func testAttributes() throws {
-    let buildConfig = TestingBuildConfiguration(attributes: ["available"])
+    let buildConfig = StaticBuildConfiguration(attributes: ["available"])
 
     assertIfConfig("hasAttribute(available)", .active, configuration: buildConfig)
     assertIfConfig("hasAttribute(unsafeUnavailable)", .inactive, configuration: buildConfig)
@@ -533,7 +533,7 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig(
       "defined(FOO)",
       .active,
-      configuration: TestingBuildConfiguration(customConditions: ["FOO"]),
+      configuration: StaticBuildConfiguration(customConditions: ["FOO"]),
       diagnostics: [
         DiagnosticSpec(
           message: message,

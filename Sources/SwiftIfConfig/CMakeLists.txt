@@ -17,6 +17,7 @@ add_swift_syntax_library(SwiftIfConfig
   IfConfigDiagnostic.swift
   IfConfigEvaluation.swift
   IfConfigFunctions.swift
+  StaticBuildConfiguration.swift
   SyntaxLiteralUtils.swift
   SyntaxProtocol+IfConfig.swift
   VersionTuple+Parsing.swift

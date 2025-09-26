@@ -12,12 +12,14 @@
 
 #if compiler(>=6)
 internal import SwiftDiagnostics
+internal import SwiftIfConfig
 internal import SwiftOperators
 internal import SwiftParser
 internal import SwiftSyntax
 internal import SwiftSyntaxMacros
 #else
 import SwiftDiagnostics
+import SwiftIfConfig
 import SwiftOperators
 import SwiftParser
 import SwiftSyntax
@@ -262,6 +264,10 @@ class PluginMacroExpansionContext {
   /// to produce unique names.
   private var expansionDiscriminator: String
 
+  /// The static build configuration, if any, that will be used for the
+  /// macro-expanded code.
+  private var staticBuildConfiguration: StaticBuildConfiguration?
+
   /// Counter for each of the uniqued names.
   ///
   /// Used in conjunction with `expansionDiscriminator`.
@@ -271,10 +277,16 @@ class PluginMacroExpansionContext {
   /// macro.
   internal private(set) var diagnostics: [Diagnostic] = []
 
-  init(sourceManager: SourceManager, lexicalContext: [Syntax], expansionDiscriminator: String = "") {
+  init(
+    sourceManager: SourceManager,
+    lexicalContext: [Syntax],
+    expansionDiscriminator: String = "",
+    staticBuildConfiguration: StaticBuildConfiguration?
+  ) {
     self.sourceManager = sourceManager
     self.lexicalContext = lexicalContext
     self.expansionDiscriminator = expansionDiscriminator
+    self.staticBuildConfiguration = staticBuildConfiguration
   }
 }
 
@@ -320,5 +332,9 @@ extension PluginMacroExpansionContext: MacroExpansionContext {
       return nil
     }
     return AbstractSourceLocation(location)
+  }
+
+  public var buildConfiguration: (any BuildConfiguration)? {
+    staticBuildConfiguration
   }
 }

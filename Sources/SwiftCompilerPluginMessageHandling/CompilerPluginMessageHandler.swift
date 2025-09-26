@@ -21,8 +21,10 @@ import _SwiftSyntaxCShims
 #endif
 
 #if compiler(>=6)
+internal import SwiftIfConfig
 public import SwiftSyntaxMacros
 #else
+import SwiftIfConfig
 import SwiftSyntaxMacros
 #endif
 
@@ -189,12 +191,25 @@ public class PluginProviderMessageHandler<Provider: PluginProvider>: PluginMessa
       let macroRole,
       let discriminator,
       let expandingSyntax,
-      let lexicalContext
+      let lexicalContext,
+      let staticBuildConfigurationString
     ):
+      // Decode the static build configuration.
+      let staticBuildConfiguration: StaticBuildConfiguration?
+      if let staticBuildConfigurationString {
+        var mutableConfigurationString = staticBuildConfigurationString
+        staticBuildConfiguration = mutableConfigurationString.withUTF8 {
+          try? JSON.decode(StaticBuildConfiguration.self, from: $0)
+        }
+      } else {
+        staticBuildConfiguration = nil
+      }
+
       return expandFreestandingMacro(
         macro: macro,
         macroRole: macroRole,
         discriminator: discriminator,
+        staticBuildConfiguration: staticBuildConfiguration,
         expandingSyntax: expandingSyntax,
         lexicalContext: lexicalContext
       )
@@ -208,12 +223,25 @@ public class PluginProviderMessageHandler<Provider: PluginProvider>: PluginMessa
       let parentDeclSyntax,
       let extendedTypeSyntax,
       let conformanceListSyntax,
-      let lexicalContext
+      let lexicalContext,
+      let staticBuildConfigurationString
     ):
+      // Decode the static build configuration.
+      let staticBuildConfiguration: StaticBuildConfiguration?
+      if let staticBuildConfigurationString {
+        var mutableConfigurationString = staticBuildConfigurationString
+        staticBuildConfiguration = mutableConfigurationString.withUTF8 {
+          try? JSON.decode(StaticBuildConfiguration.self, from: $0)
+        }
+      } else {
+        staticBuildConfiguration = nil
+      }
+
       return expandAttachedMacro(
         macro: macro,
         macroRole: macroRole,
         discriminator: discriminator,
+        staticBuildConfiguration: staticBuildConfiguration,
         attributeSyntax: attributeSyntax,
         declSyntax: declSyntax,
         parentDeclSyntax: parentDeclSyntax,

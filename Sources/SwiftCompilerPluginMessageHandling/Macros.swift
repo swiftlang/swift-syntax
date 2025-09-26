@@ -13,6 +13,7 @@
 #if compiler(>=6)
 internal import SwiftBasicFormat
 internal import SwiftDiagnostics
+internal import SwiftIfConfig
 internal import SwiftOperators
 internal import SwiftSyntax
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) internal import SwiftSyntaxMacroExpansion
@@ -20,6 +21,7 @@ internal import SwiftSyntax
 #else
 import SwiftBasicFormat
 import SwiftDiagnostics
+import SwiftIfConfig
 import SwiftOperators
 import SwiftSyntax
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacroExpansion
@@ -53,6 +55,7 @@ extension PluginProviderMessageHandler {
     macro: PluginMessage.MacroReference,
     macroRole pluginMacroRole: PluginMessage.MacroRole?,
     discriminator: String,
+    staticBuildConfiguration: StaticBuildConfiguration?,
     expandingSyntax: PluginMessage.Syntax,
     lexicalContext: [PluginMessage.Syntax]?
   ) -> PluginToHostMessage {
@@ -67,7 +70,8 @@ extension PluginProviderMessageHandler {
         operatorTable: .standardOperators,
         fallbackSyntax: syntax
       ),
-      expansionDiscriminator: discriminator
+      expansionDiscriminator: discriminator,
+      staticBuildConfiguration: staticBuildConfiguration
     )
 
     let expandedSource: String?
@@ -113,6 +117,7 @@ extension PluginProviderMessageHandler {
     macro: PluginMessage.MacroReference,
     macroRole: PluginMessage.MacroRole,
     discriminator: String,
+    staticBuildConfiguration: StaticBuildConfiguration?,
     attributeSyntax: PluginMessage.Syntax,
     declSyntax: PluginMessage.Syntax,
     parentDeclSyntax: PluginMessage.Syntax?,
@@ -143,7 +148,8 @@ extension PluginProviderMessageHandler {
         operatorTable: .standardOperators,
         fallbackSyntax: declarationNode
       ),
-      expansionDiscriminator: discriminator
+      expansionDiscriminator: discriminator,
+      staticBuildConfiguration: staticBuildConfiguration
     )
 
     // TODO: Make this a 'String?' and remove non-'hasExpandMacroResult' branches.

@@ -275,7 +275,13 @@ let package = Package(
 
     .target(
       name: "SwiftSyntaxMacros",
-      dependencies: ["SwiftDiagnostics", "SwiftParser", "SwiftSyntax", "SwiftSyntaxBuilder"],
+      dependencies: [
+        "SwiftDiagnostics",
+        "SwiftIfConfig",
+        "SwiftParser",
+        "SwiftSyntax",
+        "SwiftSyntaxBuilder",
+      ],
       exclude: ["CMakeLists.txt"]
     ),
 

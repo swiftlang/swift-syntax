@@ -612,6 +612,15 @@ public class EvaluateTests: XCTestCase {
       ]
     )
   }
+
+  func testStaticBuildConfigCanImport() throws {
+    let config = StaticBuildConfiguration(
+      languageVersion: VersionTuple(6),
+      compilerVersion: VersionTuple(6)
+    )
+
+    XCTAssertThrowsError(try config.canImport(importPath: [], version: .unversioned))
+  }
 }
 
 /// Assert the results of evaluating the condition within an `#if` against the

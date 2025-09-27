@@ -15,12 +15,14 @@ import SwiftSyntax
 /// A statically-determined build configuration that can be used with any
 /// API that requires a build configuration. Static build configurations can
 /// be (de-)serialized via Codable.
+///
+/// Static build configurations can not be used for canImport checks, because
+/// such checks require deeper integration with the compiler itself.
 public struct StaticBuildConfiguration: Codable {
   public init(
     customConditions: Set<String> = [],
     features: Set<String> = [],
     attributes: Set<String> = [],
-    importedModules: [String: [VersionedImportModule]] = [:],
     targetOSNames: Set<String> = [],
     targetArchitectures: Set<String> = [],
     targetEnvironments: Set<String> = [],
@@ -36,7 +38,6 @@ public struct StaticBuildConfiguration: Codable {
     self.customConditions = customConditions
     self.features = features
     self.attributes = attributes
-    self.importedModules = importedModules
     self.targetOSNames = targetOSNames
     self.targetArchitectures = targetArchitectures
     self.targetEnvironments = targetEnvironments
@@ -87,11 +88,6 @@ public struct StaticBuildConfiguration: Codable {
   /// #endif
   /// ```
   public var attributes: Set<String> = []
-
-  /// The set of modules that can be imported, and their version and underlying
-  /// versions (if known). These are organized by top-level module name,
-  /// with paths (to submodules) handled internally.
-  public var importedModules: [String: [VersionedImportModule]] = [:]
 
   /// The active target OS names, e.g., "Windows", "iOS".
   public var targetOSNames: Set<String> = []
@@ -240,59 +236,10 @@ extension StaticBuildConfiguration: BuildConfiguration {
   /// Determine whether a module with the given import path can be imported,
   /// with additional version information.
   ///
-  /// The availability of a module for import can be checked with `canImport`,
-  /// e.g.,
-  ///
-  /// ```swift
-  /// #if canImport(UIKit)
-  /// // ...
-  /// #endif
-  /// ```
-  ///
-  /// There is an experimental syntax for providing required module version
-  /// information, which will translate into the `version` argument.
-  ///
-  /// - Parameters:
-  ///   - importPath: A nonempty sequence of (token, identifier) pairs
-  ///     describing the imported module, which was written in source as a
-  ///     dotted sequence, e.g., `UIKit.UIViewController` will be passed in as
-  ///     the import path array `[(token, "UIKit"), (token, "UIViewController")]`.
-  ///   - version: The version restriction on the imported module. For the
-  ///     normal `canImport(<import-path>)` syntax, this will always be
-  ///     `CanImportVersion.unversioned`.
-  /// - Returns: Whether the module can be imported.
-  public func canImport(importPath: [(TokenSyntax, String)], version: CanImportVersion) -> Bool {
-    // If we don't have any record of the top-level module, we cannot import it.
-    guard let topLevelModuleName = importPath.first?.1,
-      let versionedImports = importedModules[topLevelModuleName]
-    else {
-      return false
-    }
-
-    // Match on submodule path.
-    let submodulePath = Array(importPath.lazy.map(\.1).dropFirst())
-    guard let matchingImport = versionedImports.first(where: { $0.submodulePath == submodulePath }) else {
-      return false
-    }
-
-    switch version {
-    case .unversioned:
-      return true
-
-    case .version(let expectedVersion):
-      guard let actualVersion = matchingImport.version else {
-        return false
-      }
-
-      return actualVersion >= expectedVersion
-
-    case .underlyingVersion(let expectedVersion):
-      guard let actualVersion = matchingImport.underlyingVersion else {
-        return false
-      }
-
-      return actualVersion >= expectedVersion
-    }
+  /// This implementation always throws an error, because static build
+  /// configurations cannot evaluate canImport checks.
+  public func canImport(importPath: [(TokenSyntax, String)], version: CanImportVersion) throws -> Bool {
+    throw StaticBuildConfiguration.Error.canImportUnavailable
   }
 
   /// Determine whether the given name is the active target OS (e.g., Linux, iOS).
@@ -412,20 +359,10 @@ extension StaticBuildConfiguration: BuildConfiguration {
   }
 }
 
-/// Information about a potentially-versioned import of a given module.
-///
-/// Each instance of this struct is associated with a top-level module of some
-/// form. When the submodule path is empty, it refers to the top-level module
-/// itself.
-public struct VersionedImportModule: Codable {
-  /// The submodule path (which may be empty) from the top-level module to
-  /// this specific import.
-  public var submodulePath: [String] = []
-
-  /// The version that was imported, if known.
-  public var version: VersionTuple? = nil
-
-  /// The version of the underlying Clang module, if there is one and it is
-  /// known.
-  public var underlyingVersion: VersionTuple? = nil
+extension StaticBuildConfiguration {
+  enum Error: Swift.Error {
+    /// Indicates when the static build configuration was asked to evaluate
+    /// canImport, which it cannot do correctly.
+    case canImportUnavailable
+  }
 }

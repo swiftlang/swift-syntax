@@ -46,20 +46,8 @@ extension Parser {
 
   /// Parse a conditional compilation block.
   ///
-  /// This function should be used to parse conditional compilation statements,
-  /// declarations, and expressions. It is generic over the particular kind of
-  /// parse that must occur for these elements, and allows a context-specific
-  /// syntax kind to be emitted to collect the results. For example, declaration
-  /// parsing parses items and collects the items into a ``MemberDeclListSyntax``
-  /// node.
-  ///
   /// - Parameters:
-  ///   - parseElement: Parse an element of the conditional compilation block.
-  ///   - addSemicolonIfNeeded: If elements need to be separated by a newline, this
-  ///                   allows the insertion of missing semicolons to the
-  ///                   previous element.
-  ///   - syntax: A function that aggregates the parsed conditional elements
-  ///             into a syntax collection.
+  ///   - parseBody: Parse a body of single conditional compilation clause.
   mutating func parsePoundIfDirective(
     _ parseBody: (_ parser: inout Parser) -> RawIfConfigClauseSyntax.Elements?
   ) -> RawIfConfigDeclSyntax {

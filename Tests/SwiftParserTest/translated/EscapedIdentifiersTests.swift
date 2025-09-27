@@ -209,7 +209,11 @@ final class EscapedIdentifiersTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '`multiline is' in source file"),
-        .consecutiveStatementsOnALineDiagnosticSpec(locationMarker: "2️⃣"),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
+        ),
         DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '` = 5' in source file"),
       ],
       fixedSource: """

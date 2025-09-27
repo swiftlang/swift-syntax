@@ -33,9 +33,7 @@ extension Parser {
       //
       // In such cases, the second `#if` is not `consumeIfConfigOfAttributes()`.
       return .ifConfigDecl(
-        self.parsePoundIfDirective { parser in
-          return .attributes(parser.parseAttributeList())
-        }
+        self.parsePoundIfDirective({ .attributes($0.parseAttributeList()) })
       )
     } else {
       return .attribute(self.parseAttribute())
@@ -896,6 +894,8 @@ extension Parser {
 
     let decl: RawDeclSyntax
     if self.at(.poundIf) {
+      // '#if' is not accepted in '@abi' attribute, but for recovery, parse it
+      // parse it and wrap the first decl init with unexpected nodes.
       let ifConfig = self.parsePoundIfDirective({ parser in
         let decl = parser.parseDeclaration(in: .argumentList)
         let member = RawMemberBlockItemSyntax(decl: decl, semicolon: nil, arena: parser.arena)

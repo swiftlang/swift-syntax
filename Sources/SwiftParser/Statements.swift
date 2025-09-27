@@ -1077,7 +1077,7 @@ extension Parser.Lookahead {
 
   /// Returns whether the parser's current position is the start of a switch case,
   /// given that we're in the middle of a switch already.
-  mutating func atStartOfSwitchCase(allowRecovery: Bool = false) -> Bool {
+  mutating func atStartOfSwitchCase() -> Bool {
     // Check for and consume attributes. The only valid attribute is `@unknown`
     // but that's a semantic restriction.
     var lookahead = self.lookahead()
@@ -1092,11 +1092,7 @@ extension Parser.Lookahead {
       return true
     }
 
-    if allowRecovery {
-      return lookahead.canRecoverTo(anyIn: SwitchCaseStart.self) != nil
-    } else {
-      return lookahead.at(anyIn: SwitchCaseStart.self) != nil
-    }
+    return lookahead.at(anyIn: SwitchCaseStart.self) != nil
   }
 
   mutating func atStartOfConditionalSwitchCases() -> Bool {

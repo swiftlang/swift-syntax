@@ -238,7 +238,7 @@ extension VersionTupleSyntax: SyntaxParseable {
 
 fileprivate extension Parser {
   mutating func parseNonOptionalCodeBlockItem() -> RawCodeBlockItemSyntax {
-    guard let node = self.self.parseCodeBlockItem(allowInitDecl: true, until: { _ in
+    guard let node = self.parseCodeBlockItem(allowInitDecl: true, until: { _ in
       false
     }) else {
       // The missing item is not necessary to be a declaration,

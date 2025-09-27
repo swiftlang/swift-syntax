@@ -2332,7 +2332,7 @@ extension Parser {
     var elements = [RawSwitchCaseListSyntax.Element]()
     var elementsProgress = LoopProgressCondition()
     while !self.at(.endOfFile, .rightBrace), !self.atEndOfIfConfigClauseBody(), self.hasProgressed(&elementsProgress) {
-      if self.withLookahead({ $0.atStartOfSwitchCase(allowRecovery: false) }) {
+      if self.withLookahead({ $0.atStartOfSwitchCase() }) {
         elements.append(.switchCase(self.parseSwitchCase()))
       } else if self.canRecoverTo(.poundIf) != nil {
         // '#if' in 'case' position can enclose zero or more 'case' or 'default'
@@ -2390,13 +2390,6 @@ extension Parser {
   mutating func parseSwitchCaseBody() -> RawCodeBlockItemListSyntax {
     parseCodeBlockItemList(until: {
       if $0.at(.rightBrace, .keyword(.case), .keyword(.default)) || $0.atEndOfIfConfigClauseBody() {
-        return true
-      }
-      if $0.at(.atSign),
-        $0.withLookahead({
-          $0.consumeAnyAttribute(); return $0.at(.keyword(.case), .keyword(.default))
-        })
-      {
         return true
       }
       if $0.withLookahead({ $0.atStartOfConditionalSwitchCases() }) {

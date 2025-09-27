@@ -180,33 +180,6 @@ extension Parser {
     // `#elif` or `#elif(…)` could be macro invocations.
     return lookahead.at(TokenSpec(.identifier, allowAtStartOfLine: false))
   }
-
-  private mutating func parseIfConfigClauseElements<Element: RawSyntaxNodeProtocol>(
-    _ parseElement: (_ parser: inout Parser, _ isFirstElement: Bool) -> Element?,
-    addSemicolonIfNeeded: (
-      _ lastElement: Element, _ newItemAtStartOfLine: Bool, _ newItem: Element, _ parser: inout Parser
-    ) -> Element?
-  ) -> [Element] {
-    var elements = [Element]()
-    var elementsProgress = LoopProgressCondition()
-    while !self.at(.endOfFile)
-      && !self.at(.poundElse, .poundElseif, .poundEndif)
-      && !self.atElifTypo()
-      && self.hasProgressed(&elementsProgress)
-    {
-      let newItemAtStartOfLine = self.atStartOfLine
-      guard let element = parseElement(&self, elements.isEmpty), !element.isEmpty else {
-        break
-      }
-      if let lastElement = elements.last,
-        let fixedUpLastItem = addSemicolonIfNeeded(lastElement, newItemAtStartOfLine, element, &self)
-      {
-        elements[elements.count - 1] = fixedUpLastItem
-      }
-      elements.append(element)
-    }
-    return elements
-  }
 }
 
 extension Parser {

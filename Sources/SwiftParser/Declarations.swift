@@ -52,6 +52,16 @@ extension TokenConsumer {
     }
   }
 
+  /// Check if the current token is at a start of any declaration.
+  ///
+  ///
+  /// - Parameters
+  ///   - allowInitDecl: whether to consider 'init' a declaration in the context.
+  ///     Only initializer bodies should use `false` for this.
+  ///   - requiresDecl: Whether only declarations are expected in the context.
+  ///     For example, in member blocks.
+  ///
+  /// - Note: this returns `false` for `#if` unless it's an attribute list.
   mutating func atStartOfDeclaration(
     allowInitDecl: Bool = true,
     requiresDecl: Bool = false
@@ -111,7 +121,7 @@ extension TokenConsumer {
       var lookahead = subparser.lookahead()
       repeat {
         lookahead.consumeAnyToken()
-      } while lookahead.atStartOfDeclaration(allowInitDecl: allowInitDecl)
+      } while lookahead.atStartOfDeclaration(allowInitDecl: allowInitDecl, requiresDecl: requiresDecl)
       return lookahead.at(.identifier)
     case .lhs(.case):
       // When 'case' appears inside a function, it's probably a switch
@@ -179,7 +189,7 @@ extension TokenConsumer {
           return true
         }
       }
-      // Special recovery 'try let/var'.
+      // Special recovery for 'try let/var'.
       if subparser.at(.keyword(.try)),
         subparser.peek(isAtAnyIn: VariableDeclSyntax.BindingSpecifierOptions.self) != nil
       {
@@ -198,10 +208,6 @@ extension Parser {
     init(attributes: RawAttributeListSyntax, modifiers: RawDeclModifierListSyntax) {
       self.attributes = attributes
       self.modifiers = modifiers
-    }
-
-    var isEmpty: Bool {
-      attributes.isEmpty && modifiers.isEmpty
     }
   }
 
@@ -1010,7 +1016,7 @@ extension Parser {
     var elements = [RawMemberBlockItemSyntax]()
     do {
       var loopProgress = LoopProgressCondition()
-      while !self.at(.endOfFile) && !stopCondition(&self) && self.hasProgressed(&loopProgress) {
+      while !stopCondition(&self), !self.at(.endOfFile), self.hasProgressed(&loopProgress) {
         let newItemAtStartOfLine = self.atStartOfLine
         guard let newElement = self.parseMemberBlockItem(until: stopCondition) else {
           break

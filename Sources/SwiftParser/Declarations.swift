@@ -52,8 +52,8 @@ extension TokenConsumer {
     }
   }
 
-  /// Check if the current token is at a start of any declaration.
-  ///
+  /// Returns `true` if the current token represents the start of a declaration
+  /// item.
   ///
   /// - Parameters
   ///   - allowInitDecl: whether to consider 'init' a declaration in the context.

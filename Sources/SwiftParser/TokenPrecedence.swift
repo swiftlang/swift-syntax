@@ -38,8 +38,6 @@ enum TokenPrecedence: Comparable {
   case mediumPunctuator
   /// The closing delimiter of `weakBracketed`
   case weakBracketClose
-  /// Keywords that start a new statement.
-  case stmtKeyword
   /// The '{' token because it typically marks the body of a declaration.
   /// `closingDelimiter` must have type `strongPunctuator`
   case openingBrace(closingDelimiter: RawTokenKind)
@@ -47,7 +45,9 @@ enum TokenPrecedence: Comparable {
   case strongPunctuator
   /// The closing delimiter of `strongBracketed`
   case closingBrace
-  /// Tokens that start a new declaration
+  /// Keywords that start a new statement.
+  case stmtKeyword
+  /// Keywords that start a new declaration
   case declKeyword
   case openingPoundIf
   case closingPoundIf
@@ -85,17 +85,17 @@ enum TokenPrecedence: Comparable {
       case .weakBracketClose:
         return 6
       case .strongPunctuator:
-        return 8
+        return 7
       case .openingBrace:
-        return 9
+        return 8
       case .declKeyword, .stmtKeyword:
-        return 10
+        return 9
       case .closingBrace:
-        return 11
+        return 10
       case .openingPoundIf:
-        return 12
+        return 11
       case .closingPoundIf:
-        return 13
+        return 12
       }
     }
 

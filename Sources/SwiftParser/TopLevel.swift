@@ -133,24 +133,6 @@ extension Parser {
     )
   }
 
-  mutating func fixWithSemi(codeBlockItem item: RawCodeBlockItemSyntax.Item) -> RawCodeBlockItemSyntax? {
-    let semi = self.consume(if: .semicolon)
-    var trailingSemis: [RawTokenSyntax] = []
-    while let trailingSemi = self.consume(if: .semicolon) {
-      trailingSemis.append(trailingSemi)
-    }
-
-    if item.raw.isEmpty && semi == nil && trailingSemis.isEmpty {
-      return nil
-    }
-    return RawCodeBlockItemSyntax(
-      item: item,
-      semicolon: semi,
-      RawUnexpectedNodesSyntax(trailingSemis, arena: self.arena),
-      arena: self.arena
-    )
-  }
-
   /// Parse an individual item - either in a code block or at the top level.
   ///
   /// Returns `nil` if the parser did not consume any tokens while trying to

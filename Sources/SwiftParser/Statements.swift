@@ -21,7 +21,6 @@ extension TokenConsumer {
   /// item.
   ///
   /// - Parameters:
-  ///   - allowRecovery: Whether to attempt to perform recovery.
   ///   - preferExpr: If either an expression or statement could be
   ///     parsed and this parameter is `true`, the function returns `false`
   ///     such that an expression can be parsed.
@@ -1022,7 +1021,6 @@ extension Parser.Lookahead {
   /// item.
   ///
   /// - Parameters:
-  ///   - allowRecovery: Whether to attempt to perform recovery.
   ///   - preferExpr: If either an expression or statement could be
   ///     parsed and this parameter is `true`, the function returns `false`
   ///     such that an expression can be parsed.

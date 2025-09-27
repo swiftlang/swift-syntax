@@ -13,16 +13,18 @@
 #if compiler(>=6)
 internal import SwiftBasicFormat
 internal import SwiftDiagnostics
-internal import SwiftIfConfig
+@_spi(ExperimentalLanguageFeatures) internal import SwiftIfConfig
 internal import SwiftOperators
+@_spi(ExperimentalLanguageFeatures) internal import SwiftParser
 internal import SwiftSyntax
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) internal import SwiftSyntaxMacroExpansion
 @_spi(ExperimentalLanguageFeature) internal import SwiftSyntaxMacros
 #else
 import SwiftBasicFormat
 import SwiftDiagnostics
-import SwiftIfConfig
+@_spi(ExperimentalLanguageFeatures) import SwiftIfConfig
 import SwiftOperators
+@_spi(ExperimentalLanguageFeatures) import SwiftParser
 import SwiftSyntax
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacroExpansion
 @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
@@ -38,6 +40,8 @@ extension PluginProviderMessageHandler {
   private static func resolveLexicalContext(
     _ lexicalContext: [PluginMessage.Syntax]?,
     sourceManager: SourceManager,
+    swiftVersion: Parser.SwiftVersion?,
+    experimentalFeatures: Parser.ExperimentalFeatures?,
     operatorTable: OperatorTable,
     fallbackSyntax: some SyntaxProtocol
   ) -> [Syntax] {
@@ -47,7 +51,14 @@ extension PluginProviderMessageHandler {
       return fallbackSyntax.allMacroLexicalContexts()
     }
 
-    return lexicalContext.map { sourceManager.add($0, foldingWith: operatorTable) }
+    return lexicalContext.map {
+      sourceManager.add(
+        $0,
+        swiftVersion: swiftVersion,
+        experimentalFeatures: experimentalFeatures,
+        foldingWith: operatorTable
+      )
+    }
   }
 
   /// Expand `@freestainding(XXX)` macros.
@@ -60,13 +71,22 @@ extension PluginProviderMessageHandler {
     lexicalContext: [PluginMessage.Syntax]?
   ) -> PluginToHostMessage {
     let sourceManager = SourceManager(syntaxRegistry: syntaxRegistry)
-    let syntax = sourceManager.add(expandingSyntax, foldingWith: .standardOperators)
+    let swiftVersion = staticBuildConfiguration?.parserSwiftVersion
+    let experimentalFeatures = staticBuildConfiguration?.experimentalFeatures
+    let syntax = sourceManager.add(
+      expandingSyntax,
+      swiftVersion: swiftVersion,
+      experimentalFeatures: experimentalFeatures,
+      foldingWith: .standardOperators
+    )
 
     let context = PluginMacroExpansionContext(
       sourceManager: sourceManager,
       lexicalContext: Self.resolveLexicalContext(
         lexicalContext,
         sourceManager: sourceManager,
+        swiftVersion: swiftVersion,
+        experimentalFeatures: experimentalFeatures,
         operatorTable: .standardOperators,
         fallbackSyntax: syntax
       ),
@@ -126,17 +146,27 @@ extension PluginProviderMessageHandler {
     lexicalContext: [PluginMessage.Syntax]?
   ) -> PluginToHostMessage {
     let sourceManager = SourceManager(syntaxRegistry: syntaxRegistry)
-    let attributeNode = sourceManager.add(
-      attributeSyntax,
-      foldingWith: .standardOperators
-    ).cast(AttributeSyntax.self)
-    let declarationNode = sourceManager.add(declSyntax)
-    let parentDeclNode = parentDeclSyntax.map { sourceManager.add($0).cast(DeclSyntax.self) }
+    let swiftVersion = staticBuildConfiguration?.parserSwiftVersion
+    let experimentalFeatures = staticBuildConfiguration?.experimentalFeatures
+
+    func addToSourceManager(_ syntax: PluginMessage.Syntax) -> Syntax {
+      sourceManager.add(
+        attributeSyntax,
+        swiftVersion: swiftVersion,
+        experimentalFeatures: experimentalFeatures,
+        foldingWith: .standardOperators
+      )
+    }
+
+    let attributeNode = addToSourceManager(attributeSyntax)
+      .cast(AttributeSyntax.self)
+    let declarationNode = addToSourceManager(declSyntax)
+    let parentDeclNode = parentDeclSyntax.map { addToSourceManager($0).cast(DeclSyntax.self) }
     let extendedType = extendedTypeSyntax.map {
-      sourceManager.add($0).cast(TypeSyntax.self)
+      addToSourceManager($0).cast(TypeSyntax.self)
     }
     let conformanceList = conformanceListSyntax.map {
-      let placeholderStruct = sourceManager.add($0).cast(StructDeclSyntax.self)
+      let placeholderStruct = addToSourceManager($0).cast(StructDeclSyntax.self)
       return placeholderStruct.inheritanceClause!.inheritedTypes
     }
 
@@ -145,6 +175,8 @@ extension PluginProviderMessageHandler {
       lexicalContext: Self.resolveLexicalContext(
         lexicalContext,
         sourceManager: sourceManager,
+        swiftVersion: swiftVersion,
+        experimentalFeatures: experimentalFeatures,
         operatorTable: .standardOperators,
         fallbackSyntax: declarationNode
       ),

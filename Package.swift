@@ -166,7 +166,7 @@ let package = Package(
 
     .target(
       name: "SwiftIfConfig",
-      dependencies: ["SwiftSyntax", "SwiftSyntaxBuilder", "SwiftDiagnostics", "SwiftOperators"],
+      dependencies: ["SwiftSyntax", "SwiftSyntaxBuilder", "SwiftDiagnostics", "SwiftOperators", "SwiftParser"],
       exclude: ["CMakeLists.txt"]
     ),
 

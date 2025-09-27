@@ -10,7 +10,13 @@
 //
 //===----------------------------------------------------------------------===//
 
+#if compiler(>=6)
+@_spi(ExperimentalLanguageFeatures) public import SwiftParser
+public import SwiftSyntax
+#else
+@_spi(ExperimentalLanguageFeatures) import SwiftParser
 import SwiftSyntax
+#endif
 
 /// A statically-determined build configuration that can be used with any
 /// API that requires a build configuration. Static build configurations can
@@ -364,5 +370,33 @@ extension StaticBuildConfiguration {
     /// Indicates when the static build configuration was asked to evaluate
     /// canImport, which it cannot do correctly.
     case canImportUnavailable
+  }
+}
+
+extension StaticBuildConfiguration {
+  /// The Swift version that can be set for the parser.
+  public var parserSwiftVersion: Parser.SwiftVersion {
+    if languageVersion < VersionTuple(5) {
+      return .v4
+    } else if languageVersion < VersionTuple(6) {
+      return .v5
+    } else if languageVersion < VersionTuple(7) {
+      return .v6
+    } else {
+      return Parser.defaultSwiftVersion
+    }
+  }
+
+  /// Determine the set of experimental features that are enabled by this
+  /// static build configuration.
+  @_spi(ExperimentalLanguageFeatures)
+  public var experimentalFeatures: Parser.ExperimentalFeatures {
+    var result: Parser.ExperimentalFeatures = []
+    for feature in features {
+      if let experimentalFeature = Parser.ExperimentalFeatures(name: feature) {
+        result.insert(experimentalFeature)
+      }
+    }
+    return result
   }
 }

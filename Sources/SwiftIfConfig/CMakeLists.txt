@@ -28,4 +28,5 @@ target_link_swift_syntax_libraries(SwiftIfConfig PUBLIC
   SwiftSyntax
   SwiftSyntaxBuilder
   SwiftDiagnostics
-  SwiftOperators)
+  SwiftOperators
+  SwiftParser)

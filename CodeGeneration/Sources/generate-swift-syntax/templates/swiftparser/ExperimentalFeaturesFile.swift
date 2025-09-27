@@ -20,7 +20,7 @@ let experimentalFeaturesFile = SourceFileSyntax(leadingTrivia: copyrightHeader) 
     """
     extension Parser {
       @_spi(ExperimentalLanguageFeatures)
-      public struct ExperimentalFeatures: OptionSet, Sendable {
+      public struct ExperimentalFeatures: OptionSet, Hashable, Sendable {
         public let rawValue: UInt
         public init(rawValue: UInt) {
           self.rawValue = rawValue

@@ -70,6 +70,36 @@ class EntryTests: ParserTestCase {
     )
   }
 
+  func testDeclSyntaxParseIfConfigAttr() throws {
+    assertParse(
+      """
+      #if FLAG
+      @attr
+      #endif
+      func test() {}
+      """,
+      { DeclSyntax.parse(from: &$0) },
+      substructure: FunctionDeclSyntax(
+        attributes: [
+          .ifConfigDecl(IfConfigDeclSyntax(clauses: [
+            IfConfigClauseSyntax(
+              poundKeyword: .poundIfToken(),
+              condition: DeclReferenceExprSyntax(baseName: .identifier("FLAG")),
+              elements: .attributes([
+                .attribute(AttributeSyntax(TypeSyntax(IdentifierTypeSyntax(name: .identifier("attr")))))
+              ]))
+          ]))
+        ],
+        funcKeyword: .keyword(.func),
+        name: .identifier("test"),
+        signature: FunctionSignatureSyntax(
+          parameterClause: FunctionParameterClauseSyntax(parameters: [])
+        ),
+        body: CodeBlockSyntax(statements: [])
+      )
+    )
+  }
+
   func testRemainderUnexpected() throws {
     assertParse(
       "func test() {} 1️⃣other tokens",

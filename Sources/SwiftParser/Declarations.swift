@@ -2377,7 +2377,7 @@ extension Parser {
 
 extension Parser {
   mutating func parseDeclarationOrIfConfig() -> RawDeclSyntax {
-    if self.at(.poundIf) {
+    if self.at(.poundIf) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
       return RawDeclSyntax(
         self.parsePoundIfDirective({
           .decls($0.parseMemberDeclList(until: { $0.atEndOfIfConfigClauseBody() }))

@@ -81,14 +81,17 @@ class EntryTests: ParserTestCase {
       { DeclSyntax.parse(from: &$0) },
       substructure: FunctionDeclSyntax(
         attributes: [
-          .ifConfigDecl(IfConfigDeclSyntax(clauses: [
-            IfConfigClauseSyntax(
-              poundKeyword: .poundIfToken(),
-              condition: DeclReferenceExprSyntax(baseName: .identifier("FLAG")),
-              elements: .attributes([
-                .attribute(AttributeSyntax(TypeSyntax(IdentifierTypeSyntax(name: .identifier("attr")))))
-              ]))
-          ]))
+          .ifConfigDecl(
+            IfConfigDeclSyntax(clauses: [
+              IfConfigClauseSyntax(
+                poundKeyword: .poundIfToken(),
+                condition: DeclReferenceExprSyntax(baseName: .identifier("FLAG")),
+                elements: .attributes([
+                  .attribute(AttributeSyntax(TypeSyntax(IdentifierTypeSyntax(name: .identifier("attr")))))
+                ])
+              )
+            ])
+          )
         ],
         funcKeyword: .keyword(.func),
         name: .identifier("test"),

@@ -257,6 +257,20 @@ final class StatementTests: ParserTestCase {
     )
   }
 
+  func testUnknownDefaultAtStatement() {
+    assertParse(
+      """
+      func test() {
+        1️⃣@unknown default:
+          return
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
+    )
+  }
+
   func testMissingIfClauseIntroducer() {
     assertParse("if _ = 42 {}")
   }

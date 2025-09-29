@@ -188,11 +188,6 @@ extension Parser {
     } else if self.atStartOfExpression() {
       item = .expr(self.parseExpression(flavor: .basic, pattern: .none))
       attachSemi = true
-    } else if (self.at(.atSign) && peek(isAt: .identifier)) || self.at(anyIn: DeclarationModifier.self) != nil {
-      // Force parsing '@<identifier>' as a declaration, as there's no valid
-      // expression or statement starting with an attribute.
-      item = .decl(self.parseDeclaration())
-      attachSemi = true
     } else if self.withLookahead({ $0.atStartOfSwitchCase() }) {
       // 'case' and 'default' are invalid in code block items.
       // Parse them and put them in their own CodeBlockItem but as an unexpected node.
@@ -203,6 +198,11 @@ extension Parser {
         semicolon: nil,
         arena: self.arena
       )
+    } else if (self.at(.atSign) && peek(isAt: .identifier)) || self.at(anyIn: DeclarationModifier.self) != nil {
+      // Force parsing '@<identifier>' as a declaration, as there's no valid
+      // expression or statement starting with an attribute.
+      item = .decl(self.parseDeclaration())
+      attachSemi = true
     } else {
       // Otherwise, eat the unexpected tokens into an "decl".
       item = .decl(

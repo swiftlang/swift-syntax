@@ -11,12 +11,14 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
+public import SwiftIfConfig
 public import SwiftSyntax
 public import SwiftSyntaxMacroExpansion
 public import SwiftSyntaxMacros
 @_spi(XCTestFailureLocation) public import SwiftSyntaxMacrosGenericTestSupport
 private import XCTest
 #else
+import SwiftIfConfig
 import SwiftSyntax
 import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
@@ -57,6 +59,7 @@ public func assertMacroExpansion(
   testModuleName: String = "TestModule",
   testFileName: String = "test.swift",
   indentationWidth: Trivia = .spaces(4),
+  buildConfiguration: (any BuildConfiguration)? = nil,
   file: StaticString = #filePath,
   line: UInt = #line
 ) {
@@ -71,6 +74,7 @@ public func assertMacroExpansion(
     testModuleName: testModuleName,
     testFileName: testFileName,
     indentationWidth: indentationWidth,
+    buildConfiguration: buildConfiguration,
     file: file,
     line: line
   )
@@ -104,6 +108,7 @@ public func assertMacroExpansion(
   testModuleName: String = "TestModule",
   testFileName: String = "test.swift",
   indentationWidth: Trivia = .spaces(4),
+  buildConfiguration: (any BuildConfiguration)? = nil,
   file: StaticString = #filePath,
   line: UInt = #line
 ) {
@@ -117,6 +122,7 @@ public func assertMacroExpansion(
     testModuleName: testModuleName,
     testFileName: testFileName,
     indentationWidth: indentationWidth,
+    buildConfiguration: buildConfiguration,
     failureHandler: {
       XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
     },

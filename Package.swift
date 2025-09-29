@@ -328,6 +328,7 @@ let package = Package(
         "_SwiftSyntaxGenericTestSupport",
         "SwiftDiagnostics",
         "SwiftIDEUtils",
+        "SwiftIfConfig",
         "SwiftParser",
         "SwiftSyntaxMacros",
         "SwiftSyntaxMacroExpansion",

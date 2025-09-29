@@ -895,7 +895,7 @@ extension Parser {
     let decl: RawDeclSyntax
     if self.at(.poundIf) {
       // '#if' is not accepted in '@abi' attribute, but for recovery, parse it
-      // parse it and wrap the first decl init with unexpected nodes.
+      // and wrap the first decl in it with unexpected nodes.
       let ifConfig = self.parsePoundIfDirective({ parser in
         let decl = parser.parseDeclaration(in: .argumentList)
         let member = RawMemberBlockItemSyntax(decl: decl, semicolon: nil, arena: parser.arena)

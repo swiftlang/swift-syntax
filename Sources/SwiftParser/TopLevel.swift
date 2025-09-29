@@ -137,12 +137,6 @@ extension Parser {
   ///
   /// Returns `nil` if the parser did not consume any tokens while trying to
   /// parse the code block item.
-  ///
-  /// `isAtTopLevel` determines whether this is trying to parse an item that's at
-  /// the top level of the source file. If this is the case, we allow skipping
-  /// closing braces while trying to recover to the next item.
-  /// If we are not at the top level, such a closing brace should close the
-  /// wrapping declaration instead of being consumed by lookahead.
   mutating func parseCodeBlockItem(
     allowInitDecl: Bool,
     until stopCondition: (inout Parser) -> Bool

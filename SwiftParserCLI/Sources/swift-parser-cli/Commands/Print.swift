@@ -23,12 +23,8 @@ struct Print: ParsableCommand, ParseCommand {
   @OptionGroup
   var arguments: ParseArguments
 
-  @Flag(name: .long, help: "Include trivia in the output")
-  var includeTrivia: Bool = false
-
   func run() throws {
-    try withParsedSourceFile(wantDiagnostics: false) { (tree, _) in
-      print(tree.description)
-    }
+    let (tree, _) = try parsedSourceFile(wantDiagnostics: false)
+    print(tree.description)
   }
 }

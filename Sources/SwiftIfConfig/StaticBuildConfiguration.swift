@@ -29,7 +29,7 @@ public struct StaticBuildConfiguration: Codable {
     customConditions: Set<String> = [],
     features: Set<String> = [],
     attributes: Set<String> = [],
-    targetOSNames: Set<String> = [],
+    targetOSs: Set<String> = [],
     targetArchitectures: Set<String> = [],
     targetEnvironments: Set<String> = [],
     targetRuntimes: Set<String> = [],
@@ -44,7 +44,7 @@ public struct StaticBuildConfiguration: Codable {
     self.customConditions = customConditions
     self.features = features
     self.attributes = attributes
-    self.targetOSNames = targetOSNames
+    self.targetOSs = targetOSs
     self.targetArchitectures = targetArchitectures
     self.targetEnvironments = targetEnvironments
     self.targetRuntimes = targetRuntimes
@@ -53,7 +53,7 @@ public struct StaticBuildConfiguration: Codable {
     self.targetPointerBitWidth = targetPointerBitWidth
     self.targetAtomicBitWidths = targetAtomicBitWidths
     self.endianness = endianness
-    self.languageVersion = languageVersion
+    self.languageMode = languageVersion
     self.compilerVersion = compilerVersion
   }
 
@@ -95,22 +95,76 @@ public struct StaticBuildConfiguration: Codable {
   /// ```
   public var attributes: Set<String> = []
 
-  /// The active target OS names, e.g., "Windows", "iOS".
-  public var targetOSNames: Set<String> = []
+  /// The active target OS, e.g., "Windows", "iOS".
+  ///
+  /// The target operating system can be queried with `os(<name>)`, e.g.,
+  ///
+  /// ```swift
+  /// #if os(Linux)
+  /// // Linux-specific implementation
+  /// #endif
+  /// ```
+  public var targetOSs: Set<String> = []
 
   /// The active target architectures, e.g., "x64_64".
+  ///
+  /// The target processor architecture can be queried with `arch(<name>)`, e.g.,
+  ///
+  /// ```swift
+  /// #if arch(x86_64)
+  /// // 64-bit x86 Intel-specific code
+  /// #endif
+  /// ```
   public var targetArchitectures: Set<String> = []
 
   /// The active target environments, e.g., "simulator".
+  ///
+  /// The target environment can be queried with `targetEnvironment(<name>)`,
+  /// e.g.,
+  ///
+  /// ```swift
+  /// #if targetEnvironment(simulator)
+  /// // Simulator-specific code
+  /// #endif
+  /// ```
   public var targetEnvironments: Set<String> = []
 
   /// The active target runtimes, e.g., _ObjC.
+  ///
+  /// The target runtime can only be queried by an experimental syntax
+  /// `_runtime(<name>)`, e.g.,
+  ///
+  /// ```swift
+  /// #if _runtime(_ObjC)
+  /// // Code that depends on Swift being built for use with the Objective-C
+  /// // runtime, e.g., on Apple platforms.
+  /// #endif
+  /// ```
   public var targetRuntimes: Set<String> = []
 
   /// The active target's pointer authentication schemes, e.g., "arm64e".
+  ///
+  /// The target pointer authentication scheme describes how pointers are
+  /// signed, as a security mitigation. This scheme can only be queried by
+  /// an experimental syntax `_ptrath(<name>)`, e.g.,
+  ///
+  /// ```swift
+  /// #if _ptrauth(arm64e)
+  /// // Special logic for arm64e pointer signing
+  /// #endif
+  /// ```
   public var targetPointerAuthenticationSchemes: Set<String> = []
 
   /// The active target's object file formats, e.g., "COFF"
+  ///
+  /// The target object file format can only be queried by an experimental
+  /// syntax `_objectFileFormat(<name>)`, e.g.,
+  ///
+  /// ```swift
+  /// #if _objectFileFormat(ELF)
+  /// // Special logic for ELF object file formats
+  /// #endif
+  /// ```
   public var targetObjectFileFormats: Set<String> = []
 
   /// The bit width of a data pointer for the target architecture.
@@ -151,17 +205,17 @@ public struct StaticBuildConfiguration: Codable {
   /// ```
   public var endianness: Endianness = .little
 
-  /// The effective language version, which can be set by the user (e.g., 5.0).
+  /// The effective language mode, which can be set by the user (e.g., 5.0).
   ///
   /// The language version can be queried with the `swift` directive that checks
   /// how the supported language version compares, as described by
   /// [SE-0212](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0212-compiler-version-directive.md). For example:
   ///
   /// ```swift
-  /// #if swift(>=5.5)
+  /// #if swift(>=6.0)
   /// // Hooray, we can use tasks!
   /// ```
-  public var languageVersion: VersionTuple
+  public var languageMode: VersionTuple
 
   /// The version of the compiler (e.g., 5.9).
   ///
@@ -264,7 +318,7 @@ extension StaticBuildConfiguration: BuildConfiguration {
   /// - Returns: Whether the given operating system name is the target operating
   ///   system, i.e., the operating system for which code is being generated.
   public func isActiveTargetOS(name: String) -> Bool {
-    targetOSNames.contains(name)
+    targetOSs.contains(name)
   }
 
   /// Determine whether the given name is the active target architecture
@@ -363,6 +417,12 @@ extension StaticBuildConfiguration: BuildConfiguration {
   public func isActiveTargetObjectFileFormat(name: String) -> Bool {
     targetObjectFileFormats.contains(name)
   }
+
+  /// Equivalent to `languageMode`, but required for conformance to the
+  /// `BuildConfiguration` protocol.
+  public var languageVersion: VersionTuple {
+    languageMode
+  }
 }
 
 extension StaticBuildConfiguration {
@@ -376,11 +436,11 @@ extension StaticBuildConfiguration {
 extension StaticBuildConfiguration {
   /// The Swift version that can be set for the parser.
   public var parserSwiftVersion: Parser.SwiftVersion {
-    if languageVersion < VersionTuple(5) {
+    if languageMode < VersionTuple(5) {
       return .v4
-    } else if languageVersion < VersionTuple(6) {
+    } else if languageMode < VersionTuple(6) {
       return .v5
-    } else if languageVersion < VersionTuple(7) {
+    } else if languageMode < VersionTuple(7) {
       return .v6
     } else {
       return Parser.defaultSwiftVersion

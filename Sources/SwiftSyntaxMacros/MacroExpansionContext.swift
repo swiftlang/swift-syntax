@@ -77,7 +77,9 @@ public protocol MacroExpansionContext: AnyObject {
   /// source code. Macro implementations can use this information to determine
   /// the context into which they are generating code.
   ///
-  /// When the build configuration is not known, this returns nil.
+  /// When the build configuration is not known, for example because the
+  /// compiler has not provided this information to the macro implementation,
+  /// this returns nil.
   var buildConfiguration: (any BuildConfiguration)? { get }
 }
 

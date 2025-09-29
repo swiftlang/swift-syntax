@@ -27,8 +27,7 @@ struct PrintTree: ParsableCommand, ParseCommand {
   var includeTrivia: Bool = false
 
   func run() throws {
-    try withParsedSourceFile(wantDiagnostics: false) { (tree, _) in
-      print(tree.debugDescription(includeTrivia: includeTrivia))
-    }
+    let (tree, _) = try parsedSourceFile(wantDiagnostics: false)
+    print(tree.debugDescription(includeTrivia: includeTrivia))
   }
 }

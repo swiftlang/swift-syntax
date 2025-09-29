@@ -61,11 +61,10 @@ extension ParseCommand {
   var foldSequences: Bool { arguments.foldSequences }
 
   /// Parse the source file, applying any additional configuration options
-  /// such as sequence folding, and provide it to the given closure.
-  func withParsedSourceFile<R>(
-    wantDiagnostics: Bool = true,
-    body: (SourceFileSyntax, [Diagnostic]) throws -> R
-  ) throws -> R {
+  /// such as sequence folding, and return it with diagnostics.
+  func parsedSourceFile(
+    wantDiagnostics: Bool = true
+  ) throws -> (SourceFileSyntax, [Diagnostic]) {
     return try sourceFileContents.withUnsafeBufferPointer { sourceBuffer in
       // Parse the sources
       var tree = Parser.parse(source: sourceBuffer)
@@ -104,7 +103,7 @@ extension ParseCommand {
         }
       }
 
-      return try body(tree, diags)
+      return (tree, diags)
     }
   }
 }

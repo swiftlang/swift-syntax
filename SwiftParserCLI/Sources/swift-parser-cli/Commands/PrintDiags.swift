@@ -28,19 +28,18 @@ struct PrintDiags: ParsableCommand, ParseCommand {
   var colorize: Bool = false
 
   func run() throws {
-    try withParsedSourceFile { (tree, diags) in
-      var group = GroupedDiagnostics()
-      group.addSourceFile(tree: tree, displayName: sourceFileName, diagnostics: diags)
-      let annotatedSource = DiagnosticsFormatter.annotateSources(
-        in: group,
-        colorize: colorize || TerminalHelper.isConnectedToTerminal
-      )
+    let (tree, diags) = try parsedSourceFile()
+    var group = GroupedDiagnostics()
+    group.addSourceFile(tree: tree, displayName: sourceFileName, diagnostics: diags)
+    let annotatedSource = DiagnosticsFormatter.annotateSources(
+      in: group,
+      colorize: colorize || TerminalHelper.isConnectedToTerminal
+    )
 
-      print(annotatedSource)
+    print(annotatedSource)
 
-      if diags.isEmpty {
-        print("No diagnostics produced")
-      }
+    if diags.isEmpty {
+      print("No diagnostics produced")
     }
   }
 }

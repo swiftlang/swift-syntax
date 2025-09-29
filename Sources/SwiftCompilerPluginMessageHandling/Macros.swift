@@ -151,7 +151,7 @@ extension PluginProviderMessageHandler {
 
     func addToSourceManager(_ syntax: PluginMessage.Syntax) -> Syntax {
       sourceManager.add(
-        attributeSyntax,
+        syntax,
         swiftVersion: swiftVersion,
         experimentalFeatures: experimentalFeatures,
         foldingWith: .standardOperators

@@ -15,6 +15,10 @@
 
 #include "_bridging.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct PlatformMutex {
   void *opaque;
 } PlatformMutex;
@@ -30,5 +34,9 @@ void swiftsyntax_platform_mutex_unlock(PlatformMutex m);
 
 SWIFT_NAME_S("PlatformMutex.destroy(self:)")
 void swiftsyntax_platform_mutex_destroy(PlatformMutex m);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // SWIFTSYNTAX_PLATFORMMUTEX_H

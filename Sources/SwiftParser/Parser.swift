@@ -137,7 +137,7 @@ public struct Parser {
   #endif
 
   /// The Swift version as which source files should be parsed if no Swift version is explicitly specified in the parser.
-  static let defaultSwiftVersion: SwiftVersion = .v6
+  public static let defaultSwiftVersion: SwiftVersion = .v6
 
   var _emptyRawMultipleTrailingClosureElementListSyntax: RawMultipleTrailingClosureElementListSyntax?
 

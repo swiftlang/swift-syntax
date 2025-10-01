@@ -11,12 +11,14 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
+public import SwiftIfConfig
 public import SwiftSyntax
 public import SwiftSyntaxMacroExpansion
 public import SwiftSyntaxMacros
 @_spi(XCTestFailureLocation) public import SwiftSyntaxMacrosGenericTestSupport
 private import XCTest
 #else
+import SwiftIfConfig
 import SwiftSyntax
 import SwiftSyntaxMacroExpansion
 import SwiftSyntaxMacros
@@ -44,8 +46,9 @@ public typealias DiagnosticSpec = SwiftSyntaxMacrosGenericTestSupport.Diagnostic
 ///   - testModuleName: The name of the test module to use.
 ///   - testFileName: The name of the test file name to use.
 ///   - indentationWidth: The indentation width used in the expansion.
-///
-/// - SeeAlso: ``assertMacroExpansion(_:expandedSource:diagnostics:macroSpecs:applyFixIts:fixedSource:testModuleName:testFileName:indentationWidth:file:line:)``
+///   - buildConfiguration: a build configuration that will be made available
+///     to the macro implementation
+/// - SeeAlso: ``assertMacroExpansion(_:expandedSource:diagnostics:macroSpecs:applyFixIts:fixedSource:testModuleName:testFileName:indentationWidth:buildConfiguration:file:line:)``
 ///   to also specify the list of conformances passed to the macro expansion.
 public func assertMacroExpansion(
   _ originalSource: String,
@@ -57,6 +60,7 @@ public func assertMacroExpansion(
   testModuleName: String = "TestModule",
   testFileName: String = "test.swift",
   indentationWidth: Trivia = .spaces(4),
+  buildConfiguration: (any BuildConfiguration)? = nil,
   file: StaticString = #filePath,
   line: UInt = #line
 ) {
@@ -71,6 +75,7 @@ public func assertMacroExpansion(
     testModuleName: testModuleName,
     testFileName: testFileName,
     indentationWidth: indentationWidth,
+    buildConfiguration: buildConfiguration,
     file: file,
     line: line
   )
@@ -104,6 +109,7 @@ public func assertMacroExpansion(
   testModuleName: String = "TestModule",
   testFileName: String = "test.swift",
   indentationWidth: Trivia = .spaces(4),
+  buildConfiguration: (any BuildConfiguration)? = nil,
   file: StaticString = #filePath,
   line: UInt = #line
 ) {
@@ -117,6 +123,7 @@ public func assertMacroExpansion(
     testModuleName: testModuleName,
     testFileName: testFileName,
     indentationWidth: indentationWidth,
+    buildConfiguration: buildConfiguration,
     failureHandler: {
       XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
     },

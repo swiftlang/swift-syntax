@@ -12,14 +12,16 @@
 
 #if compiler(>=6)
 internal import SwiftDiagnostics
+internal import SwiftIfConfig
 internal import SwiftOperators
-internal import SwiftParser
+@_spi(ExperimentalLanguageFeatures) internal import SwiftParser
 internal import SwiftSyntax
 internal import SwiftSyntaxMacros
 #else
 import SwiftDiagnostics
+import SwiftIfConfig
 import SwiftOperators
-import SwiftParser
+@_spi(ExperimentalLanguageFeatures) import SwiftParser
 import SwiftSyntax
 import SwiftSyntaxMacros
 #endif
@@ -29,6 +31,8 @@ class ParsedSyntaxRegistry {
   struct Key: Hashable {
     let source: String
     let kind: PluginMessage.Syntax.Kind
+    let swiftVersion: Parser.SwiftVersion
+    let experimentalFeatures: Parser.ExperimentalFeatures
   }
 
   private var storage: LRUCache<Key, Syntax>
@@ -37,8 +41,17 @@ class ParsedSyntaxRegistry {
     self.storage = LRUCache(capacity: cacheCapacity)
   }
 
-  private func parse(source: String, kind: PluginMessage.Syntax.Kind) -> Syntax {
-    var parser = Parser(source)
+  private func parse(
+    source: String,
+    kind: PluginMessage.Syntax.Kind,
+    swiftVersion: Parser.SwiftVersion,
+    experimentalFeatures: Parser.ExperimentalFeatures
+  ) -> Syntax {
+    var parser = Parser(
+      source,
+      swiftVersion: swiftVersion,
+      experimentalFeatures: experimentalFeatures
+    )
     switch kind {
     case .declaration:
       return Syntax(DeclSyntax.parse(from: &parser))
@@ -55,13 +68,30 @@ class ParsedSyntaxRegistry {
     }
   }
 
-  func get(source: String, kind: PluginMessage.Syntax.Kind) -> Syntax {
-    let key = Key(source: source, kind: kind)
+  func get(
+    source: String,
+    kind: PluginMessage.Syntax.Kind,
+    swiftVersion: Parser.SwiftVersion?,
+    experimentalFeatures: Parser.ExperimentalFeatures?
+  ) -> Syntax {
+    let swiftVersion = swiftVersion ?? Parser.defaultSwiftVersion
+    let experimentalFeatures = experimentalFeatures ?? Parser.ExperimentalFeatures()
+    let key = Key(
+      source: source,
+      kind: kind,
+      swiftVersion: swiftVersion,
+      experimentalFeatures: experimentalFeatures
+    )
     if let cached = storage[key] {
       return cached
     }
 
-    let node = parse(source: source, kind: kind)
+    let node = parse(
+      source: source,
+      kind: kind,
+      swiftVersion: swiftVersion,
+      experimentalFeatures: experimentalFeatures
+    )
     storage[key] = node
     return node
   }
@@ -124,10 +154,16 @@ class SourceManager {
   /// are cached in the source manager to provide `location(of:)` et al.
   func add(
     _ syntaxInfo: PluginMessage.Syntax,
-    foldingWith operatorTable: OperatorTable? = nil
+    swiftVersion: Parser.SwiftVersion?,
+    experimentalFeatures: Parser.ExperimentalFeatures?,
+    foldingWith operatorTable: OperatorTable?
   ) -> Syntax {
-
-    var node = syntaxRegistry.get(source: syntaxInfo.source, kind: syntaxInfo.kind)
+    var node = syntaxRegistry.get(
+      source: syntaxInfo.source,
+      kind: syntaxInfo.kind,
+      swiftVersion: swiftVersion,
+      experimentalFeatures: experimentalFeatures
+    )
     if let operatorTable {
       node = operatorTable.foldAll(node, errorHandler: { _ in /*ignore*/ })
     }
@@ -262,6 +298,10 @@ class PluginMacroExpansionContext {
   /// to produce unique names.
   private var expansionDiscriminator: String
 
+  /// The static build configuration, if any, that will be used for the
+  /// macro-expanded code.
+  private var staticBuildConfiguration: StaticBuildConfiguration?
+
   /// Counter for each of the uniqued names.
   ///
   /// Used in conjunction with `expansionDiscriminator`.
@@ -271,10 +311,16 @@ class PluginMacroExpansionContext {
   /// macro.
   internal private(set) var diagnostics: [Diagnostic] = []
 
-  init(sourceManager: SourceManager, lexicalContext: [Syntax], expansionDiscriminator: String = "") {
+  init(
+    sourceManager: SourceManager,
+    lexicalContext: [Syntax],
+    expansionDiscriminator: String = "",
+    staticBuildConfiguration: StaticBuildConfiguration?
+  ) {
     self.sourceManager = sourceManager
     self.lexicalContext = lexicalContext
     self.expansionDiscriminator = expansionDiscriminator
+    self.staticBuildConfiguration = staticBuildConfiguration
   }
 }
 
@@ -320,5 +366,9 @@ extension PluginMacroExpansionContext: MacroExpansionContext {
       return nil
     }
     return AbstractSourceLocation(location)
+  }
+
+  public var buildConfiguration: (any BuildConfiguration)? {
+    staticBuildConfiguration
   }
 }

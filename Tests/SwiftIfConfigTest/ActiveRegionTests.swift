@@ -20,12 +20,13 @@ import _SwiftSyntaxGenericTestSupport
 import _SwiftSyntaxTestSupport
 
 public class ActiveRegionTests: XCTestCase {
-  let linuxBuildConfig = TestingBuildConfiguration(
+  let linuxBuildConfig = StaticBuildConfiguration(
     customConditions: ["DEBUG", "ASSERTS"],
     features: ["ParameterPacks"],
-    attributes: ["available"]
+    attributes: ["available"],
+    languageVersion: VersionTuple(6),
+    compilerVersion: VersionTuple(6, 2)
   )
-
   func testActiveRegions() throws {
     try assertActiveCode(
       """

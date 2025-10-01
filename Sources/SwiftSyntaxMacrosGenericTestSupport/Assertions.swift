@@ -13,6 +13,7 @@
 #if compiler(>=6)
 import SwiftBasicFormat
 public import SwiftDiagnostics
+public import SwiftIfConfig
 @_spi(FixItApplier) import SwiftIDEUtils
 import SwiftParser
 import SwiftParserDiagnostics
@@ -24,6 +25,7 @@ private import _SwiftSyntaxGenericTestSupport
 import SwiftBasicFormat
 import SwiftDiagnostics
 @_spi(FixItApplier) import SwiftIDEUtils
+import SwiftIfConfig
 import SwiftParser
 import SwiftParserDiagnostics
 import SwiftSyntax
@@ -497,6 +499,7 @@ public func assertMacroExpansion(
   testModuleName: String = "TestModule",
   testFileName: String = "test.swift",
   indentationWidth: Trivia = .spaces(4),
+  buildConfiguration: (any BuildConfiguration)? = nil,
   failureHandler: (TestFailureSpec) -> Void,
   fileID: StaticString = #fileID,
   filePath: StaticString = #filePath,
@@ -509,7 +512,8 @@ public func assertMacroExpansion(
 
   // Expand all macros in the source.
   let context = BasicMacroExpansionContext(
-    sourceFiles: [origSourceFile: .init(moduleName: testModuleName, fullFilePath: testFileName)]
+    sourceFiles: [origSourceFile: .init(moduleName: testModuleName, fullFilePath: testFileName)],
+    buildConfiguration: buildConfiguration
   )
 
   func contextGenerator(_ syntax: Syntax) -> BasicMacroExpansionContext {

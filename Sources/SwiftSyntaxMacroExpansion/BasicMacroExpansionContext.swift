@@ -12,11 +12,13 @@
 
 #if compiler(>=6)
 public import SwiftDiagnostics
+public import SwiftIfConfig
 internal import SwiftOperators
 public import SwiftSyntax
 public import SwiftSyntaxMacros
 #else
 import SwiftDiagnostics
+import SwiftIfConfig
 import SwiftOperators
 import SwiftSyntax
 import SwiftSyntaxMacros
@@ -62,6 +64,9 @@ public class BasicMacroExpansionContext {
     ///
     /// Used in conjunction with `expansionDiscriminator`.
     var uniqueNames: [String: Int] = [:]
+
+    /// The build configuration that will be applied to the expanded code.
+    var buildConfiguration: (any BuildConfiguration)? = nil
   }
 
   /// State shared by different instances of the macro expansion context,
@@ -82,12 +87,14 @@ public class BasicMacroExpansionContext {
   public init(
     lexicalContext: [Syntax] = [],
     expansionDiscriminator: String = "__macro_local_",
-    sourceFiles: [SourceFileSyntax: KnownSourceFile] = [:]
+    sourceFiles: [SourceFileSyntax: KnownSourceFile] = [:],
+    buildConfiguration: (any BuildConfiguration)? = nil
   ) {
     self.sharedState = SharedState()
     self.lexicalContext = lexicalContext
     self.expansionDiscriminator = expansionDiscriminator
     self.sharedState.sourceFiles = sourceFiles
+    self.sharedState.buildConfiguration = buildConfiguration
   }
 
   /// Create a new macro evaluation context that shares most of its global

@@ -29,5 +29,6 @@ add_swift_syntax_library(SwiftSyntaxMacros
 )
 
 target_link_swift_syntax_libraries(SwiftSyntaxMacros PUBLIC
+  SwiftIfConfig
   SwiftSyntaxBuilder
   )

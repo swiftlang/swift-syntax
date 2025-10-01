@@ -21,7 +21,11 @@ import _SwiftSyntaxTestSupport
 
 public class EvaluateTests: XCTestCase {
   func testLiterals() throws {
-    let buildConfig = TestingBuildConfiguration(customConditions: ["DEBUG", "ASSERTS"])
+    let buildConfig = StaticBuildConfiguration(
+      customConditions: ["DEBUG", "ASSERTS"],
+      languageVersion: VersionTuple(6),
+      compilerVersion: VersionTuple(6, 2)
+    )
 
     assertIfConfig("true", .active, configuration: buildConfig)
     assertIfConfig("false", .inactive, configuration: buildConfig)
@@ -71,7 +75,11 @@ public class EvaluateTests: XCTestCase {
   }
 
   func testCustomConfigs() throws {
-    let buildConfig = TestingBuildConfiguration(customConditions: ["DEBUG", "ASSERTS", "try"])
+    let buildConfig = StaticBuildConfiguration(
+      customConditions: ["DEBUG", "ASSERTS", "try"],
+      languageVersion: VersionTuple(6),
+      compilerVersion: VersionTuple(6, 2)
+    )
 
     assertIfConfig("DEBUG", .active, configuration: buildConfig)
     assertIfConfig("NODEBUG", .inactive, configuration: buildConfig)
@@ -136,7 +144,11 @@ public class EvaluateTests: XCTestCase {
   }
 
   func testBadExpressions() throws {
-    let buildConfig = TestingBuildConfiguration(customConditions: ["DEBUG", "ASSERTS"])
+    let buildConfig = StaticBuildConfiguration(
+      customConditions: ["DEBUG", "ASSERTS"],
+      languageVersion: VersionTuple(6),
+      compilerVersion: VersionTuple(6, 2)
+    )
 
     assertIfConfig(
       "3.14159",
@@ -178,14 +190,22 @@ public class EvaluateTests: XCTestCase {
   }
 
   func testFeatures() throws {
-    let buildConfig = TestingBuildConfiguration(features: ["ParameterPacks"])
+    let buildConfig = StaticBuildConfiguration(
+      features: ["ParameterPacks"],
+      languageVersion: VersionTuple(6),
+      compilerVersion: VersionTuple(6, 2)
+    )
 
     assertIfConfig("hasFeature(ParameterPacks)", .active, configuration: buildConfig)
     assertIfConfig("hasFeature(HigherKindedGenerics)", .inactive, configuration: buildConfig)
   }
 
   func testAttributes() throws {
-    let buildConfig = TestingBuildConfiguration(attributes: ["available"])
+    let buildConfig = StaticBuildConfiguration(
+      attributes: ["available"],
+      languageVersion: VersionTuple(6),
+      compilerVersion: VersionTuple(6, 2)
+    )
 
     assertIfConfig("hasAttribute(available)", .active, configuration: buildConfig)
     assertIfConfig("hasAttribute(unsafeUnavailable)", .inactive, configuration: buildConfig)
@@ -533,7 +553,11 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig(
       "defined(FOO)",
       .active,
-      configuration: TestingBuildConfiguration(customConditions: ["FOO"]),
+      configuration: StaticBuildConfiguration(
+        customConditions: ["FOO"],
+        languageVersion: VersionTuple(6),
+        compilerVersion: VersionTuple(6, 2)
+      ),
       diagnostics: [
         DiagnosticSpec(
           message: message,
@@ -587,6 +611,15 @@ public class EvaluateTests: XCTestCase {
         ),
       ]
     )
+  }
+
+  func testStaticBuildConfigCanImport() throws {
+    let config = StaticBuildConfiguration(
+      languageVersion: VersionTuple(6),
+      compilerVersion: VersionTuple(6)
+    )
+
+    XCTAssertThrowsError(try config.canImport(importPath: [], version: .unversioned))
   }
 }
 

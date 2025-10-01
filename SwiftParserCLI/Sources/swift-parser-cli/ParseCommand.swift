@@ -11,6 +11,12 @@
 //===----------------------------------------------------------------------===//
 
 import ArgumentParser
+import Foundation
+import SwiftDiagnostics
+import SwiftIfConfig
+import SwiftParser
+import SwiftParserDiagnostics
+import SwiftSyntax
 
 struct ParseArguments: ParsableArguments {
   @Argument(help: "The source file that should be parsed; if omitted, use stdin")
@@ -21,6 +27,9 @@ struct ParseArguments: ParsableArguments {
 
   @Flag(name: .long, help: "Perform sequence folding with the standard operators")
   var foldSequences: Bool = false
+
+  @Option(help: "Apply the given static build configuration to the source text before further processing")
+  var buildConfiguration: String?
 }
 
 /// A command  that has arguments to parse source code
@@ -50,4 +59,51 @@ extension ParseCommand {
 
   /// Whether sequence folding using standard operators should be performed
   var foldSequences: Bool { arguments.foldSequences }
+
+  /// Parse the source file, applying any additional configuration options
+  /// such as sequence folding, and return it with diagnostics.
+  func parsedSourceFile(
+    wantDiagnostics: Bool = true
+  ) throws -> (SourceFileSyntax, [Diagnostic]) {
+    return try sourceFileContents.withUnsafeBufferPointer { sourceBuffer in
+      // Parse the sources
+      var tree = Parser.parse(source: sourceBuffer)
+
+      // If we want diagnostics, gather them from the parser.
+      var diags: [Diagnostic] = []
+      if wantDiagnostics {
+        diags += ParseDiagnosticsGenerator.diagnostics(for: tree)
+      }
+
+      // If we are supposed to fold sequences, do it now.
+      if foldSequences {
+        let (folded, foldDiags) = foldAllSequences(tree)
+
+        tree = folded.cast(SourceFileSyntax.self)
+        if wantDiagnostics {
+          diags += foldDiags
+        }
+      }
+
+      // If we are supposed to apply a build configuration, do it now.
+      if let buildConfiguration = arguments.buildConfiguration {
+        // Load the build configuration.
+        let buildConfigurationText = try Data(contentsOf: URL(fileURLWithPath: buildConfiguration))
+        let staticBuildConfiguration = try JSONDecoder().decode(
+          StaticBuildConfiguration.self,
+          from: buildConfigurationText
+        )
+
+        // Apply the build configuration.
+        let (configured, configuredDiags) = tree.removingInactive(in: staticBuildConfiguration)
+
+        tree = configured.cast(SourceFileSyntax.self)
+        if wantDiagnostics {
+          diags += configuredDiags
+        }
+      }
+
+      return (tree, diags)
+    }
+  }
 }

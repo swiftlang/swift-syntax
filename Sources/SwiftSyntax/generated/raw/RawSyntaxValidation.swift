@@ -3007,10 +3007,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     }
   }
   func validateUnexpectedCodeDeclSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
-    assert(layout.count == 3)
-    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 1, verify(layout[1], as: RawUnexpectedNodesSyntax.self))
-    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assert(layout.count == 1)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax.self))
   }
   func validateUnexpectedNodesSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     for (index, element) in layout.enumerated() {

@@ -412,6 +412,7 @@ public let COMMON_NODES: [Node] = [
         // NOTE: This is not .collection() on purpose. We don't need collection related functions for this.
         kind: .node(kind: .unexpectedNodes)
       )
-    ]
+    ],
+    noInterleaveUnexpected: true
   ),
 ]

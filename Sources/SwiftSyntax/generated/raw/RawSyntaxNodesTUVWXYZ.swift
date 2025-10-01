@@ -1562,32 +1562,17 @@ public struct RawUnexpectedCodeDeclSyntax: RawDeclSyntaxNodeProtocol {
     self.init(unchecked: other.raw)
   }
 
-  public init(
-    _ unexpectedBeforeUnexpectedCode: RawUnexpectedNodesSyntax? = nil,
-    unexpectedCode: RawUnexpectedNodesSyntax,
-    _ unexpectedAfterUnexpectedCode: RawUnexpectedNodesSyntax? = nil,
-    arena: __shared RawSyntaxArena
-  ) {
+  public init(unexpectedCode: RawUnexpectedNodesSyntax, arena: __shared RawSyntaxArena) {
     let raw = RawSyntax.makeLayout(
-      kind: .unexpectedCodeDecl, uninitializedCount: 3, arena: arena) { layout in
+      kind: .unexpectedCodeDecl, uninitializedCount: 1, arena: arena) { layout in
       layout.initialize(repeating: nil)
-      layout[0] = unexpectedBeforeUnexpectedCode?.raw
-      layout[1] = unexpectedCode.raw
-      layout[2] = unexpectedAfterUnexpectedCode?.raw
+      layout[0] = unexpectedCode.raw
     }
     self.init(unchecked: raw)
   }
 
-  public var unexpectedBeforeUnexpectedCode: RawUnexpectedNodesSyntax? {
-    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))
-  }
-
   public var unexpectedCode: RawUnexpectedNodesSyntax {
-    layoutView.children[1].map(RawUnexpectedNodesSyntax.init(raw:))!
-  }
-
-  public var unexpectedAfterUnexpectedCode: RawUnexpectedNodesSyntax? {
-    layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))!
   }
 }
 

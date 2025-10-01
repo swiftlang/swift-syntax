@@ -16,6 +16,10 @@
 #include <stdbool.h>
 #include <stdlib.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 typedef struct {
   _Atomic(bool) value;
 } AtomicBool;
@@ -49,5 +53,9 @@ static inline const void *_Nullable swiftsyntax_atomic_pointer_get(const AtomicP
 static inline void swiftsyntax_atomic_pointer_set(AtomicPointer *_Nonnull atomic, const void *_Nullable newValue) {
   atomic->value = newValue;
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // SWIFTSYNTAX_ATOMICBOOL_H

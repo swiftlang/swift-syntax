@@ -17,6 +17,10 @@
 
 #include <stdio.h>
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 SWIFT_NAME_S("getter:swift_syntax_stdout()")
 static inline FILE *swiftsyntax_stdout(void) {
   return stdout;
@@ -31,5 +35,9 @@ SWIFT_NAME_S("getter:swift_syntax_stderr()")
 static inline FILE *swiftsyntax_stderr(void) {
   return stderr;
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif // SWIFTSYNTAX_STDIO_H

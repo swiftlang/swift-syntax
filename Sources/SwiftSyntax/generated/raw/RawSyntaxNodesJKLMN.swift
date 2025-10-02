@@ -2734,7 +2734,6 @@ public struct RawMissingTypeSyntax: RawTypeSyntaxNodeProtocol {
   }
 }
 
-@_spi(ExperimentalLanguageFeatures)
 @_spi(RawSyntax)
 public struct RawModuleSelectorSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)

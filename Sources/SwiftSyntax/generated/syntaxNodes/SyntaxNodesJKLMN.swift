@@ -2653,7 +2653,7 @@ public struct MacroDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSynt
 ///  - `attributes`: ``AttributeListSyntax``
 ///  - `modifiers`: ``DeclModifierListSyntax``
 ///  - `pound`: `#`
-///  - `moduleSelector`: `ModuleSelectorSyntax`?
+///  - `moduleSelector`: ``ModuleSelectorSyntax``?
 ///  - `macroName`: `<identifier>`
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 ///  - `leftParen`: `(`?
@@ -2680,7 +2680,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - pound: The `#` sign.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  @_spi(ExperimentalLanguageFeatures) public init(
+  public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax = [],
@@ -2883,7 +2883,6 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
     }
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenPoundAndModuleSelector: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -2893,7 +2892,6 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
     }
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   public var moduleSelector: ModuleSelectorSyntax? {
     get {
       return Syntax(self).child(at: 7)?.cast(ModuleSelectorSyntax.self)
@@ -2903,7 +2901,6 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
     }
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenModuleSelectorAndMacroName: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
@@ -3136,7 +3133,7 @@ public struct MacroExpansionDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _Lea
 /// ### Children
 /// 
 ///  - `pound`: `#`
-///  - `moduleSelector`: `ModuleSelectorSyntax`?
+///  - `moduleSelector`: ``ModuleSelectorSyntax``?
 ///  - `macroName`: `<identifier>`
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 ///  - `leftParen`: `(`?
@@ -3163,7 +3160,7 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Lea
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - pound: The `#` sign.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  @_spi(ExperimentalLanguageFeatures) public init(
+  public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforePound: UnexpectedNodesSyntax? = nil,
     pound: TokenSyntax = .poundToken(),
@@ -3264,7 +3261,6 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Lea
     }
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenPoundAndModuleSelector: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
@@ -3274,7 +3270,6 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Lea
     }
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   public var moduleSelector: ModuleSelectorSyntax? {
     get {
       return Syntax(self).child(at: 3)?.cast(ModuleSelectorSyntax.self)
@@ -3284,7 +3279,6 @@ public struct MacroExpansionExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Lea
     }
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenModuleSelectorAndMacroName: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -4268,7 +4262,7 @@ public struct MemberBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNode
 /// 
 ///  - `baseType`: ``TypeSyntax``
 ///  - `period`: `.`
-///  - `moduleSelector`: `ModuleSelectorSyntax`?
+///  - `moduleSelector`: ``ModuleSelectorSyntax``?
 ///  - `name`: (`<identifier>` | `self`)
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
@@ -4289,7 +4283,7 @@ public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyn
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  @_spi(ExperimentalLanguageFeatures) public init(
+  public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeBaseType: UnexpectedNodesSyntax? = nil,
     baseType: some TypeSyntaxProtocol,
@@ -4382,7 +4376,6 @@ public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyn
     }
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenPeriodAndModuleSelector: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
@@ -4392,7 +4385,6 @@ public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyn
     }
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   public var moduleSelector: ModuleSelectorSyntax? {
     get {
       return Syntax(self).child(at: 5)?.cast(ModuleSelectorSyntax.self)
@@ -4402,7 +4394,6 @@ public struct MemberTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyn
     }
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenModuleSelectorAndName: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
@@ -5257,8 +5248,6 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSy
 
 // MARK: - ModuleSelectorSyntax
 
-/// - Note: Requires experimental feature `moduleSelector`.
-///
 /// ### Children
 /// 
 ///  - `moduleName`: `<identifier>`
@@ -5271,7 +5260,6 @@ public struct MissingTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSy
 ///  - ``MacroExpansionDeclSyntax``.``MacroExpansionDeclSyntax/moduleSelector``
 ///  - ``MacroExpansionExprSyntax``.``MacroExpansionExprSyntax/moduleSelector``
 ///  - ``MemberTypeSyntax``.``MemberTypeSyntax/moduleSelector``
-@_spi(ExperimentalLanguageFeatures)
 public struct ModuleSelectorSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
 

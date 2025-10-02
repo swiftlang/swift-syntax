@@ -210,7 +210,6 @@ public enum SyntaxEnum: Sendable {
   case missingStmt(MissingStmtSyntax)
   case missing(MissingSyntax)
   case missingType(MissingTypeSyntax)
-  @_spi(ExperimentalLanguageFeatures)
   case moduleSelector(ModuleSelectorSyntax)
   case multipleTrailingClosureElementList(MultipleTrailingClosureElementListSyntax)
   case multipleTrailingClosureElement(MultipleTrailingClosureElementSyntax)

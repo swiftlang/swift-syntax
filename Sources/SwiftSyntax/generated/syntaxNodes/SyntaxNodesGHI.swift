@@ -1709,7 +1709,7 @@ public struct IdentifierPatternSyntax: PatternSyntaxProtocol, SyntaxHashable, _L
 
 /// ### Children
 /// 
-///  - `moduleSelector`: `ModuleSelectorSyntax`?
+///  - `moduleSelector`: ``ModuleSelectorSyntax``?
 ///  - `name`: (`<identifier>` | `Self` | `Any` | `_`)
 ///  - `genericArgumentClause`: ``GenericArgumentClauseSyntax``?
 public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
@@ -1730,7 +1730,7 @@ public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  @_spi(ExperimentalLanguageFeatures) public init(
+  public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeModuleSelector: UnexpectedNodesSyntax? = nil,
     moduleSelector: ModuleSelectorSyntax? = nil,
@@ -1772,7 +1772,6 @@ public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     }
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBeforeModuleSelector: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -1782,7 +1781,6 @@ public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     }
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   public var moduleSelector: ModuleSelectorSyntax? {
     get {
       return Syntax(self).child(at: 1)?.cast(ModuleSelectorSyntax.self)
@@ -1792,7 +1790,6 @@ public struct IdentifierTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTyp
     }
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenModuleSelectorAndName: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)

@@ -333,7 +333,6 @@ public let COMMON_NODES: [Node] = [
   Node(
     kind: .moduleSelector,
     base: .syntax,
-    experimentalFeature: .moduleSelector,
     nameForDiagnostics: "module selector",
     children: [
       Child(

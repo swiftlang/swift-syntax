@@ -205,7 +205,6 @@ public protocol FreestandingMacroExpansionSyntax: SyntaxProtocol {
     set
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   var moduleSelector: ModuleSelectorSyntax? {
     get
     set

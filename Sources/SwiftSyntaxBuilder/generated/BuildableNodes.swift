@@ -1043,7 +1043,7 @@ extension KeyPathSubscriptComponentSyntax {
 
 extension MacroExpansionDeclSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  @_spi(ExperimentalLanguageFeatures) public init(
+  public init(
     leadingTrivia: Trivia? = nil,
     unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax = [],
@@ -1102,7 +1102,7 @@ extension MacroExpansionDeclSyntax {
 
 extension MacroExpansionExprSyntax {
   /// A convenience initializer that allows initializing syntax collections using result builders
-  @_spi(ExperimentalLanguageFeatures) public init(
+  public init(
     leadingTrivia: Trivia? = nil,
     unexpectedBeforePound: UnexpectedNodesSyntax? = nil,
     pound: TokenSyntax = .poundToken(),

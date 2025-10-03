@@ -40,17 +40,24 @@ let keywordFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
       try! SwitchExprSyntax("switch text.count") {
         for (length, keywords) in keywordsByLength() {
           SwitchCaseSyntax("case \(raw: length):") {
-            try! SwitchExprSyntax("switch text") {
-              for keyword in keywords {
-                SwitchCaseSyntax("case \(literal: keyword.name):") {
-                  ExprSyntax("self = .\(keyword.enumCaseCallName)")
-                }
-              }
-              SwitchCaseSyntax("default: return nil")
-            }
+            ExprSyntax("self.init(_length\(raw: length): text)")
           }
         }
         SwitchCaseSyntax("default: return nil")
+      }
+    }
+
+    // Split into individual initializers by length to reduce stack use
+    for (length, keywords) in keywordsByLength() {
+      try! InitializerDeclSyntax("private init?(_length\(raw: length) text: SyntaxText)") {
+        try! SwitchExprSyntax("switch text") {
+          for keyword in keywords {
+            SwitchCaseSyntax("case \(literal: keyword.name):") {
+              ExprSyntax("self = .\(keyword.enumCaseCallName)")
+            }
+          }
+          SwitchCaseSyntax("default: return nil")
+        }
       }
     }
 

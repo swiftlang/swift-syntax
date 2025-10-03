@@ -230,525 +230,613 @@ public enum Keyword: UInt8, Hashable, Sendable {
   @_spi(RawSyntax) public init?(_ text: SyntaxText) {
     switch text.count {
     case 2:
-      switch text {
-      case "as":
-        self = .as
-      case "do":
-        self = .do
-      case "if":
-        self = .if
-      case "in":
-        self = .in
-      case "is":
-        self = .is
-      case "of":
-        self = .of
-      default:
-        return nil
-      }
+      self.init(_length2: text)
     case 3:
-      switch text {
-      case "abi":
-        self = .abi
-      case "any":
-        self = .any
-      case "Any":
-        self = .Any
-      case "for":
-        self = .for
-      case "get":
-        self = .get
-      case "let":
-        self = .let
-      case "nil":
-        self = .nil
-      case "set":
-        self = .set
-      case "spi":
-        self = .spi
-      case "try":
-        self = .try
-      case "var":
-        self = .var
-      case "wrt":
-        self = .wrt
-      default:
-        return nil
-      }
+      self.init(_length3: text)
     case 4:
-      switch text {
-      case "case":
-        self = .case
-      case "copy":
-        self = .copy
-      case "each":
-        self = .each
-      case "else":
-        self = .else
-      case "enum":
-        self = .enum
-      case "file":
-        self = .file
-      case "func":
-        self = .func
-      case "init":
-        self = .`init`
-      case "kind":
-        self = .kind
-      case "lazy":
-        self = .lazy
-      case "left":
-        self = .left
-      case "line":
-        self = .line
-      case "none":
-        self = .none
-      case "objc":
-        self = .objc
-      case "open":
-        self = .open
-      case "read":
-        self = .read
-      case "safe":
-        self = .safe
-      case "self":
-        self = .self
-      case "Self":
-        self = .Self
-      case "some":
-        self = .some
-      case "then":
-        self = .then
-      case "true":
-        self = .true
-      case "Type":
-        self = .Type
-      case "weak":
-        self = .weak
-      default:
-        return nil
-      }
+      self.init(_length4: text)
     case 5:
-      switch text {
-      case "_move":
-        self = ._move
-      case "_read":
-        self = ._read
-      case "actor":
-        self = .actor
-      case "async":
-        self = .async
-      case "await":
-        self = .await
-      case "block":
-        self = .block
-      case "break":
-        self = .break
-      case "catch":
-        self = .catch
-      case "class":
-        self = .class
-      case "defer":
-        self = .defer
-      case "false":
-        self = .false
-      case "final":
-        self = .final
-      case "guard":
-        self = .guard
-      case "infix":
-        self = .infix
-      case "inout":
-        self = .inout
-      case "macro":
-        self = .macro
-      case "right":
-        self = .right
-      case "super":
-        self = .super
-      case "swift":
-        self = .swift
-      case "throw":
-        self = .throw
-      case "using":
-        self = .using
-      case "where":
-        self = .where
-      case "while":
-        self = .while
-      case "yield":
-        self = .yield
-      default:
-        return nil
-      }
+      self.init(_length5: text)
     case 6:
-      switch text {
-      case "_Class":
-        self = ._Class
-      case "_const":
-        self = ._const
-      case "_local":
-        self = ._local
-      case "before":
-        self = .before
-      case "borrow":
-        self = .borrow
-      case "deinit":
-        self = .deinit
-      case "didSet":
-        self = .didSet
-      case "import":
-        self = .import
-      case "linear":
-        self = .linear
-      case "modify":
-        self = .modify
-      case "module":
-        self = .module
-      case "mutate":
-        self = .mutate
-      case "prefix":
-        self = .prefix
-      case "public":
-        self = .public
-      case "repeat":
-        self = .repeat
-      case "return":
-        self = .return
-      case "scoped":
-        self = .scoped
-      case "static":
-        self = .static
-      case "struct":
-        self = .struct
-      case "switch":
-        self = .switch
-      case "target":
-        self = .target
-      case "throws":
-        self = .throws
-      case "unsafe":
-        self = .unsafe
-      default:
-        return nil
-      }
+      self.init(_length6: text)
     case 7:
-      switch text {
-      case "__owned":
-        self = .__owned
-      case "_borrow":
-        self = ._borrow
-      case "_linear":
-        self = ._linear
-      case "_modify":
-        self = ._modify
-      case "consume":
-        self = .consume
-      case "default":
-        self = .default
-      case "dynamic":
-        self = .dynamic
-      case "discard":
-        self = .discard
-      case "forward":
-        self = .forward
-      case "message":
-        self = .message
-      case "noasync":
-        self = .noasync
-      case "package":
-        self = .package
-      case "postfix":
-        self = .postfix
-      case "private":
-        self = .private
-      case "reasync":
-        self = .reasync
-      case "renamed":
-        self = .renamed
-      case "reverse":
-        self = .reverse
-      case "sending":
-        self = .sending
-      case "unowned":
-        self = .unowned
-      case "willSet":
-        self = .willSet
-      default:
-        return nil
-      }
+      self.init(_length7: text)
     case 8:
-      switch text {
-      case "__shared":
-        self = .__shared
-      case "_effects":
-        self = ._effects
-      case "_forward":
-        self = ._forward
-      case "_Trivial":
-        self = ._Trivial
-      case "_version":
-        self = ._version
-      case "accesses":
-        self = .accesses
-      case "attached":
-        self = .attached
-      case "compiler":
-        self = .compiler
-      case "continue":
-        self = .continue
-      case "escaping":
-        self = .escaping
-      case "exported":
-        self = .exported
-      case "indirect":
-        self = .indirect
-      case "internal":
-        self = .internal
-      case "isolated":
-        self = .isolated
-      case "metadata":
-        self = .metadata
-      case "mutating":
-        self = .mutating
-      case "noescape":
-        self = .noescape
-      case "operator":
-        self = .operator
-      case "optional":
-        self = .optional
-      case "override":
-        self = .override
-      case "Protocol":
-        self = .Protocol
-      case "protocol":
-        self = .protocol
-      case "required":
-        self = .required
-      case "rethrows":
-        self = .rethrows
-      case "Sendable":
-        self = .Sendable
-      default:
-        return nil
-      }
+      self.init(_length8: text)
     case 9:
-      switch text {
-      case "_mutating":
-        self = ._mutating
-      case "available":
-        self = .available
-      case "borrowing":
-        self = .borrowing
-      case "canImport":
-        self = .canImport
-      case "consuming":
-        self = .consuming
-      case "dependsOn":
-        self = .dependsOn
-      case "extension":
-        self = .extension
-      case "lowerThan":
-        self = .lowerThan
-      case "obsoleted":
-        self = .obsoleted
-      case "spiModule":
-        self = .spiModule
-      case "subscript":
-        self = .subscript
-      case "transpose":
-        self = .transpose
-      case "typealias":
-        self = .typealias
-      case "unchecked":
-        self = .unchecked
-      default:
-        return nil
-      }
+      self.init(_length9: text)
     case 10:
-      switch text {
-      case "_borrowing":
-        self = ._borrowing
-      case "_consuming":
-        self = ._consuming
-      case "assignment":
-        self = .assignment
-      case "convention":
-        self = .convention
-      case "deprecated":
-        self = .deprecated
-      case "derivative":
-        self = .derivative
-      case "higherThan":
-        self = .higherThan
-      case "introduced":
-        self = .introduced
-      case "nonsending":
-        self = .nonsending
-      case "visibility":
-        self = .visibility
-      default:
-        return nil
-      }
+      self.init(_length10: text)
     case 11:
-      switch text {
-      case "__consuming":
-        self = .__consuming
-      case "_backDeploy":
-        self = ._backDeploy
-      case "_implements":
-        self = ._implements
-      case "_noMetadata":
-        self = ._noMetadata
-      case "specialized":
-        self = .specialized
-      case "_specialize":
-        self = ._specialize
-      case "autoclosure":
-        self = .autoclosure
-      case "convenience":
-        self = .convenience
-      case "distributed":
-        self = .distributed
-      case "fallthrough":
-        self = .fallthrough
-      case "fileprivate":
-        self = .fileprivate
-      case "initializes":
-        self = .initializes
-      case "nonisolated":
-        self = .nonisolated
-      case "nonmutating":
-        self = .nonmutating
-      case "retroactive":
-        self = .retroactive
-      case "unavailable":
-        self = .unavailable
-      default:
-        return nil
-      }
+      self.init(_length11: text)
     case 12:
-      switch text {
-      case "_NativeClass":
-        self = ._NativeClass
-      case "availability":
-        self = .availability
-      case "backDeployed":
-        self = .backDeployed
-      case "freestanding":
-        self = .freestanding
-      case "noDerivative":
-        self = .noDerivative
-      default:
-        return nil
-      }
+      self.init(_length12: text)
     case 13:
-      switch text {
-      case "_BridgeObject":
-        self = ._BridgeObject
-      case "associativity":
-        self = .associativity
-      case "unsafeAddress":
-        self = .unsafeAddress
-      default:
-        return nil
-      }
+      self.init(_length13: text)
     case 14:
-      switch text {
-      case "_documentation":
-        self = ._documentation
-      case "_spi_available":
-        self = ._spi_available
-      case "_TrivialAtMost":
-        self = ._TrivialAtMost
-      case "_TrivialStride":
-        self = ._TrivialStride
-      case "_UnknownLayout":
-        self = ._UnknownLayout
-      case "associatedtype":
-        self = .associatedtype
-      case "differentiable":
-        self = .differentiable
-      case "preconcurrency":
-        self = .preconcurrency
-      default:
-        return nil
-      }
+      self.init(_length14: text)
     case 15:
-      switch text {
-      case "__setter_access":
-        self = .__setter_access
-      case "precedencegroup":
-        self = .precedencegroup
-      default:
-        return nil
-      }
+      self.init(_length15: text)
     case 16:
-      switch text {
-      case "addressWithOwner":
-        self = .addressWithOwner
-      default:
-        return nil
-      }
+      self.init(_length16: text)
     case 17:
-      switch text {
-      case "_RefCountedObject":
-        self = ._RefCountedObject
-      default:
-        return nil
-      }
+      self.init(_length17: text)
     case 18:
-      switch text {
-      case "_underlyingVersion":
-        self = ._underlyingVersion
-      default:
-        return nil
-      }
+      self.init(_length18: text)
     case 19:
-      switch text {
-      case "_dynamicReplacement":
-        self = ._dynamicReplacement
-      case "_opaqueReturnTypeOf":
-        self = ._opaqueReturnTypeOf
-      case "_PackageDescription":
-        self = ._PackageDescription
-      default:
-        return nil
-      }
+      self.init(_length19: text)
     case 20:
-      switch text {
-      case "_compilerInitialized":
-        self = ._compilerInitialized
-      case "_originallyDefinedIn":
-        self = ._originallyDefinedIn
-      case "unsafeMutableAddress":
-        self = .unsafeMutableAddress
-      default:
-        return nil
-      }
+      self.init(_length20: text)
     case 22:
-      switch text {
-      case "addressWithNativeOwner":
-        self = .addressWithNativeOwner
-      default:
-        return nil
-      }
+      self.init(_length22: text)
     case 23:
-      switch text {
-      case "_NativeRefCountedObject":
-        self = ._NativeRefCountedObject
-      case "mutableAddressWithOwner":
-        self = .mutableAddressWithOwner
-      default:
-        return nil
-      }
+      self.init(_length23: text)
     case 29:
-      switch text {
-      case "mutableAddressWithNativeOwner":
-        self = .mutableAddressWithNativeOwner
-      default:
-        return nil
-      }
+      self.init(_length29: text)
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length2 text: SyntaxText) {
+    switch text {
+    case "as":
+      self = .as
+    case "do":
+      self = .do
+    case "if":
+      self = .if
+    case "in":
+      self = .in
+    case "is":
+      self = .is
+    case "of":
+      self = .of
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length3 text: SyntaxText) {
+    switch text {
+    case "abi":
+      self = .abi
+    case "any":
+      self = .any
+    case "Any":
+      self = .Any
+    case "for":
+      self = .for
+    case "get":
+      self = .get
+    case "let":
+      self = .let
+    case "nil":
+      self = .nil
+    case "set":
+      self = .set
+    case "spi":
+      self = .spi
+    case "try":
+      self = .try
+    case "var":
+      self = .var
+    case "wrt":
+      self = .wrt
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length4 text: SyntaxText) {
+    switch text {
+    case "case":
+      self = .case
+    case "copy":
+      self = .copy
+    case "each":
+      self = .each
+    case "else":
+      self = .else
+    case "enum":
+      self = .enum
+    case "file":
+      self = .file
+    case "func":
+      self = .func
+    case "init":
+      self = .`init`
+    case "kind":
+      self = .kind
+    case "lazy":
+      self = .lazy
+    case "left":
+      self = .left
+    case "line":
+      self = .line
+    case "none":
+      self = .none
+    case "objc":
+      self = .objc
+    case "open":
+      self = .open
+    case "read":
+      self = .read
+    case "safe":
+      self = .safe
+    case "self":
+      self = .self
+    case "Self":
+      self = .Self
+    case "some":
+      self = .some
+    case "then":
+      self = .then
+    case "true":
+      self = .true
+    case "Type":
+      self = .Type
+    case "weak":
+      self = .weak
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length5 text: SyntaxText) {
+    switch text {
+    case "_move":
+      self = ._move
+    case "_read":
+      self = ._read
+    case "actor":
+      self = .actor
+    case "async":
+      self = .async
+    case "await":
+      self = .await
+    case "block":
+      self = .block
+    case "break":
+      self = .break
+    case "catch":
+      self = .catch
+    case "class":
+      self = .class
+    case "defer":
+      self = .defer
+    case "false":
+      self = .false
+    case "final":
+      self = .final
+    case "guard":
+      self = .guard
+    case "infix":
+      self = .infix
+    case "inout":
+      self = .inout
+    case "macro":
+      self = .macro
+    case "right":
+      self = .right
+    case "super":
+      self = .super
+    case "swift":
+      self = .swift
+    case "throw":
+      self = .throw
+    case "using":
+      self = .using
+    case "where":
+      self = .where
+    case "while":
+      self = .while
+    case "yield":
+      self = .yield
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length6 text: SyntaxText) {
+    switch text {
+    case "_Class":
+      self = ._Class
+    case "_const":
+      self = ._const
+    case "_local":
+      self = ._local
+    case "before":
+      self = .before
+    case "borrow":
+      self = .borrow
+    case "deinit":
+      self = .deinit
+    case "didSet":
+      self = .didSet
+    case "import":
+      self = .import
+    case "linear":
+      self = .linear
+    case "modify":
+      self = .modify
+    case "module":
+      self = .module
+    case "mutate":
+      self = .mutate
+    case "prefix":
+      self = .prefix
+    case "public":
+      self = .public
+    case "repeat":
+      self = .repeat
+    case "return":
+      self = .return
+    case "scoped":
+      self = .scoped
+    case "static":
+      self = .static
+    case "struct":
+      self = .struct
+    case "switch":
+      self = .switch
+    case "target":
+      self = .target
+    case "throws":
+      self = .throws
+    case "unsafe":
+      self = .unsafe
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length7 text: SyntaxText) {
+    switch text {
+    case "__owned":
+      self = .__owned
+    case "_borrow":
+      self = ._borrow
+    case "_linear":
+      self = ._linear
+    case "_modify":
+      self = ._modify
+    case "consume":
+      self = .consume
+    case "default":
+      self = .default
+    case "dynamic":
+      self = .dynamic
+    case "discard":
+      self = .discard
+    case "forward":
+      self = .forward
+    case "message":
+      self = .message
+    case "noasync":
+      self = .noasync
+    case "package":
+      self = .package
+    case "postfix":
+      self = .postfix
+    case "private":
+      self = .private
+    case "reasync":
+      self = .reasync
+    case "renamed":
+      self = .renamed
+    case "reverse":
+      self = .reverse
+    case "sending":
+      self = .sending
+    case "unowned":
+      self = .unowned
+    case "willSet":
+      self = .willSet
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length8 text: SyntaxText) {
+    switch text {
+    case "__shared":
+      self = .__shared
+    case "_effects":
+      self = ._effects
+    case "_forward":
+      self = ._forward
+    case "_Trivial":
+      self = ._Trivial
+    case "_version":
+      self = ._version
+    case "accesses":
+      self = .accesses
+    case "attached":
+      self = .attached
+    case "compiler":
+      self = .compiler
+    case "continue":
+      self = .continue
+    case "escaping":
+      self = .escaping
+    case "exported":
+      self = .exported
+    case "indirect":
+      self = .indirect
+    case "internal":
+      self = .internal
+    case "isolated":
+      self = .isolated
+    case "metadata":
+      self = .metadata
+    case "mutating":
+      self = .mutating
+    case "noescape":
+      self = .noescape
+    case "operator":
+      self = .operator
+    case "optional":
+      self = .optional
+    case "override":
+      self = .override
+    case "Protocol":
+      self = .Protocol
+    case "protocol":
+      self = .protocol
+    case "required":
+      self = .required
+    case "rethrows":
+      self = .rethrows
+    case "Sendable":
+      self = .Sendable
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length9 text: SyntaxText) {
+    switch text {
+    case "_mutating":
+      self = ._mutating
+    case "available":
+      self = .available
+    case "borrowing":
+      self = .borrowing
+    case "canImport":
+      self = .canImport
+    case "consuming":
+      self = .consuming
+    case "dependsOn":
+      self = .dependsOn
+    case "extension":
+      self = .extension
+    case "lowerThan":
+      self = .lowerThan
+    case "obsoleted":
+      self = .obsoleted
+    case "spiModule":
+      self = .spiModule
+    case "subscript":
+      self = .subscript
+    case "transpose":
+      self = .transpose
+    case "typealias":
+      self = .typealias
+    case "unchecked":
+      self = .unchecked
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length10 text: SyntaxText) {
+    switch text {
+    case "_borrowing":
+      self = ._borrowing
+    case "_consuming":
+      self = ._consuming
+    case "assignment":
+      self = .assignment
+    case "convention":
+      self = .convention
+    case "deprecated":
+      self = .deprecated
+    case "derivative":
+      self = .derivative
+    case "higherThan":
+      self = .higherThan
+    case "introduced":
+      self = .introduced
+    case "nonsending":
+      self = .nonsending
+    case "visibility":
+      self = .visibility
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length11 text: SyntaxText) {
+    switch text {
+    case "__consuming":
+      self = .__consuming
+    case "_backDeploy":
+      self = ._backDeploy
+    case "_implements":
+      self = ._implements
+    case "_noMetadata":
+      self = ._noMetadata
+    case "specialized":
+      self = .specialized
+    case "_specialize":
+      self = ._specialize
+    case "autoclosure":
+      self = .autoclosure
+    case "convenience":
+      self = .convenience
+    case "distributed":
+      self = .distributed
+    case "fallthrough":
+      self = .fallthrough
+    case "fileprivate":
+      self = .fileprivate
+    case "initializes":
+      self = .initializes
+    case "nonisolated":
+      self = .nonisolated
+    case "nonmutating":
+      self = .nonmutating
+    case "retroactive":
+      self = .retroactive
+    case "unavailable":
+      self = .unavailable
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length12 text: SyntaxText) {
+    switch text {
+    case "_NativeClass":
+      self = ._NativeClass
+    case "availability":
+      self = .availability
+    case "backDeployed":
+      self = .backDeployed
+    case "freestanding":
+      self = .freestanding
+    case "noDerivative":
+      self = .noDerivative
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length13 text: SyntaxText) {
+    switch text {
+    case "_BridgeObject":
+      self = ._BridgeObject
+    case "associativity":
+      self = .associativity
+    case "unsafeAddress":
+      self = .unsafeAddress
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length14 text: SyntaxText) {
+    switch text {
+    case "_documentation":
+      self = ._documentation
+    case "_spi_available":
+      self = ._spi_available
+    case "_TrivialAtMost":
+      self = ._TrivialAtMost
+    case "_TrivialStride":
+      self = ._TrivialStride
+    case "_UnknownLayout":
+      self = ._UnknownLayout
+    case "associatedtype":
+      self = .associatedtype
+    case "differentiable":
+      self = .differentiable
+    case "preconcurrency":
+      self = .preconcurrency
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length15 text: SyntaxText) {
+    switch text {
+    case "__setter_access":
+      self = .__setter_access
+    case "precedencegroup":
+      self = .precedencegroup
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length16 text: SyntaxText) {
+    switch text {
+    case "addressWithOwner":
+      self = .addressWithOwner
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length17 text: SyntaxText) {
+    switch text {
+    case "_RefCountedObject":
+      self = ._RefCountedObject
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length18 text: SyntaxText) {
+    switch text {
+    case "_underlyingVersion":
+      self = ._underlyingVersion
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length19 text: SyntaxText) {
+    switch text {
+    case "_dynamicReplacement":
+      self = ._dynamicReplacement
+    case "_opaqueReturnTypeOf":
+      self = ._opaqueReturnTypeOf
+    case "_PackageDescription":
+      self = ._PackageDescription
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length20 text: SyntaxText) {
+    switch text {
+    case "_compilerInitialized":
+      self = ._compilerInitialized
+    case "_originallyDefinedIn":
+      self = ._originallyDefinedIn
+    case "unsafeMutableAddress":
+      self = .unsafeMutableAddress
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length22 text: SyntaxText) {
+    switch text {
+    case "addressWithNativeOwner":
+      self = .addressWithNativeOwner
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length23 text: SyntaxText) {
+    switch text {
+    case "_NativeRefCountedObject":
+      self = ._NativeRefCountedObject
+    case "mutableAddressWithOwner":
+      self = .mutableAddressWithOwner
+    default:
+      return nil
+    }
+  }
+
+  private init?(_length29 text: SyntaxText) {
+    switch text {
+    case "mutableAddressWithNativeOwner":
+      self = .mutableAddressWithNativeOwner
     default:
       return nil
     }

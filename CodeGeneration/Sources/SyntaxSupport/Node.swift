@@ -141,7 +141,8 @@ public class Node: NodeChoiceConvertible {
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction
 
-    let childrenWithUnexpected = (kind.isBase || noInterleaveUnexpected) ? children : interleaveUnexpectedChildren(children)
+    let childrenWithUnexpected =
+      (kind.isBase || noInterleaveUnexpected) ? children : interleaveUnexpectedChildren(children)
 
     self.data = .layout(children: childrenWithUnexpected, childHistory: childHistory, traits: traits)
   }

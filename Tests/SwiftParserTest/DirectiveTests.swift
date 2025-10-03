@@ -610,5 +610,4 @@ final class DirectiveTests: ParserTestCase {
         """
     )
   }
-
 }

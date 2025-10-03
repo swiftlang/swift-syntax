@@ -1393,7 +1393,7 @@ final class EnumTests: ParserTestCase {
     assertParse(
       """
       enum E_53662_PatternMatching {
-        case 1️⃣let 2️⃣.foo(x, y):
+        case 1️⃣let 2️⃣.3️⃣foo(x4️⃣, y5️⃣)6️⃣:
       }
       """,
       diagnostics: [
@@ -1404,12 +1404,32 @@ final class EnumTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "unexpected code '.foo(x, y):' in enum"
+          message: "unexpected code '.' in enum"
         ),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected 'func' in function",
+          fixIts: ["insert 'func'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
+          message: "expected ':' and type in parameter",
+          fixIts: ["insert ':' and type"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "5️⃣",
+          message: "expected ':' and type in parameter",
+          fixIts: ["insert ':' and type"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "6️⃣",
+          message: "unexpected code ':' in enum"
+        ),
+
       ],
       fixedSource: """
         enum E_53662_PatternMatching {
-          case `let` .foo(x, y):
+          case `let` .func foo(x: <#type#>, y: <#type#>):
         }
         """
     )

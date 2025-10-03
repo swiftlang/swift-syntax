@@ -301,6 +301,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case typeSpecifier
   case lifetimeSpecifierArguments
   case typeSpecifierList
+  case unexpectedCodeDecl
   case unexpectedNodes
   case unresolvedAsExpr
   case unresolvedIsExpr

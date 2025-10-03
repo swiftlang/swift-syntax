@@ -79,6 +79,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/StructDeclSyntax>
 - <doc:SwiftSyntax/SubscriptDeclSyntax>
 - <doc:SwiftSyntax/TypeAliasDeclSyntax>
+- <doc:SwiftSyntax/UnexpectedCodeDeclSyntax>
 - <doc:SwiftSyntax/VariableDeclSyntax>
 
 ### Expressions

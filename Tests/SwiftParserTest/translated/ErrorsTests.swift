@@ -300,9 +300,15 @@ final class ErrorsTests: ParserTestCase {
                 )
               )
             )
-          )
-        ]),
-        UnexpectedNodesSyntax([TokenSyntax.keyword(.throws)])
+          ),
+          CodeBlockItemSyntax(
+            item: .decl(
+              DeclSyntax(
+                UnexpectedCodeDeclSyntax(unexpectedCode: UnexpectedNodesSyntax([TokenSyntax.keyword(.throws)]))
+              )
+            )
+          ),
+        ])
       ),
       diagnostics: [
         DiagnosticSpec(message: "unexpected 'throws' keyword in function")

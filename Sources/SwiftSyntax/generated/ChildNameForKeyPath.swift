@@ -3444,6 +3444,8 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "value"
   case \TypeInitializerClauseSyntax.unexpectedAfterValue:
     return "unexpectedAfterValue"
+  case \UnexpectedCodeDeclSyntax.unexpectedCode:
+    return "unexpectedCode"
   case \UnresolvedAsExprSyntax.unexpectedBeforeAsKeyword:
     return "unexpectedBeforeAsKeyword"
   case \UnresolvedAsExprSyntax.asKeyword:

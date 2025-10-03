@@ -895,7 +895,7 @@ final class AttributeTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "unexpected code '))' before macro"
+          message: "unexpected code '))' in class"
         ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
@@ -1276,7 +1276,7 @@ final class AttributeTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "7️⃣",
-          message: "unexpected code ')' before function"
+          message: "unexpected code ')' in source file"
         ),
       ],
       fixedSource: """

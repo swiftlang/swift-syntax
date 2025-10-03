@@ -3006,6 +3006,10 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
         verify(element, as: RawNonisolatedTypeSpecifierSyntax.self)])
     }
   }
+  func validateUnexpectedCodeDeclSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 1)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax.self))
+  }
   func validateUnexpectedNodesSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     for (index, element) in layout.enumerated() {
       assertNoError(kind, index, verify(element, as: RawSyntax.self))
@@ -3713,6 +3717,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     validateTypeInitializerClauseSyntax(kind: kind, layout: layout)
   case .typeSpecifierList:
     validateTypeSpecifierListSyntax(kind: kind, layout: layout)
+  case .unexpectedCodeDecl:
+    validateUnexpectedCodeDeclSyntax(kind: kind, layout: layout)
   case .unexpectedNodes:
     validateUnexpectedNodesSyntax(kind: kind, layout: layout)
   case .unresolvedAsExpr:

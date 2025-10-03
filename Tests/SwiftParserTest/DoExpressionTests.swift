@@ -332,7 +332,7 @@ final class DoExpressionTests: ParserTestCase {
           }
         ),
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code 'as Int' at top level")
+        DiagnosticSpec(message: "unexpected code 'as Int' in source file")
       ],
       experimentalFeatures: []
     )

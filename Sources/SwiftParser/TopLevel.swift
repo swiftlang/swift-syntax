@@ -67,18 +67,21 @@ extension Parser {
 
 extension Parser {
   mutating func parseCodeBlockItemList(
-    isAtTopLevel: Bool = false,
     allowInitDecl: Bool = true,
-    until stopCondition: (inout Parser) -> Bool
+    until stopCondition: (inout Parser) -> Bool = { $0.at(.rightBrace) || $0.atEndOfIfConfigClauseBody() }
   ) -> RawCodeBlockItemListSyntax {
     var elements = [RawCodeBlockItemSyntax]()
     var loopProgress = LoopProgressCondition()
-    while !stopCondition(&self), self.hasProgressed(&loopProgress) {
+    while !stopCondition(&self), !self.at(.endOfFile), self.hasProgressed(&loopProgress) {
       let newItemAtStartOfLine = self.atStartOfLine
-      guard let newElement = self.parseCodeBlockItem(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl) else {
+      guard let newItem = self.parseCodeBlockItem(allowInitDecl: allowInitDecl, until: stopCondition) else {
         break
       }
-      if let lastItem = elements.last, lastItem.semicolon == nil && !newItemAtStartOfLine {
+      if let lastItem = elements.last,
+        lastItem.semicolon == nil,
+        !newItemAtStartOfLine,
+        !newItem.item.is(RawUnexpectedCodeDeclSyntax.self)
+      {
         elements[elements.count - 1] = RawCodeBlockItemSyntax(
           lastItem.unexpectedBeforeItem,
           item: .init(lastItem.item)!,
@@ -88,14 +91,14 @@ extension Parser {
           arena: self.arena
         )
       }
-      elements.append(newElement)
+      elements.append(newItem)
     }
     return .init(elements: elements, arena: self.arena)
   }
 
   /// Parse the top level items in a source file.
   mutating func parseTopLevelCodeBlockItems() -> RawCodeBlockItemListSyntax {
-    return parseCodeBlockItemList(isAtTopLevel: true, until: { _ in false })
+    return parseCodeBlockItemList(until: { _ in false })
   }
 
   /// The optional form of `parseCodeBlock` that checks to see if the parser has
@@ -117,7 +120,7 @@ extension Parser {
   /// indented to close this code block or a surrounding context. See `expectRightBrace`.
   mutating func parseCodeBlock(introducer: RawTokenSyntax? = nil, allowInitDecl: Bool = true) -> RawCodeBlockSyntax {
     let (unexpectedBeforeLBrace, lbrace) = self.expect(.leftBrace)
-    let itemList = parseCodeBlockItemList(allowInitDecl: allowInitDecl, until: { $0.at(.rightBrace) })
+    let itemList = parseCodeBlockItemList(allowInitDecl: allowInitDecl)
     let (unexpectedBeforeRBrace, rbrace) = self.expectRightBrace(leftBrace: lbrace, introducer: introducer)
 
     return .init(
@@ -134,7 +137,10 @@ extension Parser {
   ///
   /// Returns `nil` if the parser did not consume any tokens while trying to
   /// parse the code block item.
-  mutating func parseCodeBlockItem(isAtTopLevel: Bool, allowInitDecl: Bool) -> RawCodeBlockItemSyntax? {
+  mutating func parseCodeBlockItem(
+    allowInitDecl: Bool,
+    until stopCondition: (inout Parser) -> Bool
+  ) -> RawCodeBlockItemSyntax? {
     let startToken = self.currentToken
     if let syntax = self.loadCurrentSyntaxNodeFromCache(for: .codeBlockItem) {
       self.registerNodeForIncrementalParse(node: syntax.raw, startToken: startToken)
@@ -149,7 +155,34 @@ extension Parser {
         arena: self.arena
       )
     }
-    if self.at(.keyword(.case), .keyword(.default)) {
+
+    let item: RawCodeBlockItemSyntax.Item
+    let attachSemi: Bool
+    if self.at(.poundIf) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
+      // If config of attributes is parsed as part of declaration parsing as it
+      // doesn't constitute its own code block item.
+      let directive = self.parsePoundIfDirective { parser in
+        let items = parser.parseCodeBlockItemList(
+          allowInitDecl: allowInitDecl,
+          until: { $0.atEndOfIfConfigClauseBody() }
+        )
+        return .statements(items)
+      }
+      item = .init(decl: directive)
+      attachSemi = false
+    } else if self.at(.poundSourceLocation) {
+      item = .init(decl: self.parsePoundSourceLocationDirective())
+      attachSemi = false
+    } else if self.atStartOfDeclaration(allowInitDecl: allowInitDecl) {
+      item = .decl(self.parseDeclaration())
+      attachSemi = true
+    } else if self.atStartOfStatement(preferExpr: false) {
+      item = self.parseStatementItem()
+      attachSemi = true
+    } else if self.atStartOfExpression() {
+      item = .expr(self.parseExpression(flavor: .basic, pattern: .none))
+      attachSemi = true
+    } else if self.withLookahead({ $0.atStartOfSwitchCase() }) {
       // 'case' and 'default' are invalid in code block items.
       // Parse them and put them in their own CodeBlockItem but as an unexpected node.
       let switchCase = self.parseSwitchCase()
@@ -159,16 +192,33 @@ extension Parser {
         semicolon: nil,
         arena: self.arena
       )
+    } else if (self.at(.atSign) && peek(isAt: .identifier)) || self.at(anyIn: DeclarationModifier.self) != nil {
+      // Force parsing '@<identifier>' as a declaration, as there's no valid
+      // expression or statement starting with an attribute.
+      item = .decl(self.parseDeclaration())
+      attachSemi = true
+    } else {
+      // Otherwise, eat the unexpected tokens into an "decl".
+      item = .decl(
+        RawDeclSyntax(
+          self.parseUnexpectedCodeDeclaration(allowInitDecl: allowInitDecl, requiresDecl: false, until: stopCondition)
+        )
+      )
+      attachSemi = true
     }
 
-    let item = self.parseItem(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl)
-    let semi = self.consume(if: .semicolon)
+    let semi: RawTokenSyntax?
     var trailingSemis: [RawTokenSyntax] = []
-    while let trailingSemi = self.consume(if: .semicolon) {
-      trailingSemis.append(trailingSemi)
+    if attachSemi {
+      semi = self.consume(if: .semicolon)
+      while let trailingSemi = self.consume(if: .semicolon) {
+        trailingSemis.append(trailingSemi)
+      }
+    } else {
+      semi = nil
     }
 
-    if item.raw.isEmpty && semi == nil && trailingSemis.isEmpty {
+    if item.isEmpty && semi == nil && trailingSemis.isEmpty {
       return nil
     }
 
@@ -180,7 +230,6 @@ extension Parser {
     )
 
     self.registerNodeForIncrementalParse(node: result.raw, startToken: startToken)
-
     return result
   }
 
@@ -210,57 +259,5 @@ extension Parser {
       }
     }
     return .stmt(stmt)
-  }
-
-  /// `isAtTopLevel` determines whether this is trying to parse an item that's at
-  /// the top level of the source file. If this is the case, we allow skipping
-  /// closing braces while trying to recover to the next item.
-  /// If we are not at the top level, such a closing brace should close the
-  /// wrapping declaration instead of being consumed by lookahead.
-  private mutating func parseItem(
-    isAtTopLevel: Bool = false,
-    allowInitDecl: Bool = true
-  ) -> RawCodeBlockItemSyntax.Item {
-    if self.at(.poundIf) && !self.withLookahead({ $0.consumeIfConfigOfAttributes() }) {
-      // If config of attributes is parsed as part of declaration parsing as it
-      // doesn't constitute its own code block item.
-      let directive = self.parsePoundIfDirective { (parser, _) in
-        parser.parseCodeBlockItem(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl)
-      } addSemicolonIfNeeded: { lastElement, newItemAtStartOfLine, parser in
-        if lastElement.semicolon == nil && !newItemAtStartOfLine {
-          return RawCodeBlockItemSyntax(
-            lastElement.unexpectedBeforeItem,
-            item: .init(lastElement.item)!,
-            lastElement.unexpectedBetweenItemAndSemicolon,
-            semicolon: parser.missingToken(.semicolon),
-            lastElement.unexpectedAfterSemicolon,
-            arena: parser.arena
-          )
-        } else {
-          return nil
-        }
-      } syntax: { parser, items in
-        return .statements(RawCodeBlockItemListSyntax(elements: items, arena: parser.arena))
-      }
-      return .init(decl: directive)
-    } else if self.at(.poundSourceLocation) {
-      return .init(decl: self.parsePoundSourceLocationDirective())
-    } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl) {
-      return .decl(self.parseDeclaration())
-    } else if self.atStartOfStatement(preferExpr: false) {
-      return self.parseStatementItem()
-    } else if self.atStartOfExpression() {
-      return .expr(self.parseExpression(flavor: .basic, pattern: .none))
-    } else if self.atStartOfStatement(allowRecovery: true, preferExpr: false) {
-      return self.parseStatementItem()
-    } else if self.atStartOfDeclaration(isAtTopLevel: isAtTopLevel, allowInitDecl: allowInitDecl, allowRecovery: true) {
-      return .decl(self.parseDeclaration())
-    } else if self.at(.atSign), peek(isAt: .identifier) {
-      // Force parsing '@<identifier>' as a declaration, as there's no valid
-      // expression or statement starting with an attribute.
-      return .decl(self.parseDeclaration())
-    } else {
-      return .init(expr: RawMissingExprSyntax(arena: self.arena))
-    }
   }
 }

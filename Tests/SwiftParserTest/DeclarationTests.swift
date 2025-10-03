@@ -163,7 +163,7 @@ final class DeclarationTests: ParserTestCase {
       func foo() {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected brace before function")
+        DiagnosticSpec(message: "unexpected brace in source file")
       ]
     )
   }
@@ -243,7 +243,7 @@ final class DeclarationTests: ParserTestCase {
       actor Foo {}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected brace before actor")
+        DiagnosticSpec(message: "unexpected brace in source file")
       ]
     )
   }
@@ -327,7 +327,7 @@ final class DeclarationTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "unexpected code '{}' before enum case"
+          message: "unexpected code '{}' in protocol"
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -611,10 +611,10 @@ final class DeclarationTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected 'set)' to end modifier", fixIts: ["insert 'set)'"]),
-        DiagnosticSpec(message: "unexpected code 'get, didSet' in variable"),
+        DiagnosticSpec(message: "expected 'var' in variable", fixIts: ["insert 'var'"]),
       ],
       fixedSource: """
-        private(set) get, didSet var a = 0
+        private(set) var get, didSet var a = 0
         """
     )
   }
@@ -1245,7 +1245,7 @@ final class DeclarationTests: ParserTestCase {
       1️⃣}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous brace at top level")
+        DiagnosticSpec(message: "unexpected brace in source file")
       ]
     )
   }
@@ -1432,7 +1432,7 @@ final class DeclarationTests: ParserTestCase {
           message: "consecutive statements on a line must be separated by newline or ';'",
           fixIts: ["insert newline", "insert ';'"]
         ),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "extraneous code ', consectetur adipiscing elit' at top level"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "unexpected code ', consectetur adipiscing elit' in source file"),
       ],
       applyFixIts: ["insert newline"],
       fixedSource: """
@@ -1471,7 +1471,7 @@ final class DeclarationTests: ParserTestCase {
           message: "consecutive statements on a line must be separated by newline or ';'",
           fixIts: ["insert newline", "insert ';'"]
         ),
-        DiagnosticSpec(locationMarker: "5️⃣", message: "extraneous code ', consectetur adipiscing elit' at top level"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "unexpected code ', consectetur adipiscing elit' in source file"),
       ],
       applyFixIts: ["insert ';'"],
       fixedSource: """
@@ -1649,7 +1649,11 @@ final class DeclarationTests: ParserTestCase {
       @3️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in struct", fixIts: ["insert '{'"]),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '{' in struct",
+          fixIts: ["insert '{'"]
+        ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "expected condition in conditional compilation clause",
@@ -1666,7 +1670,12 @@ final class DeclarationTests: ParserTestCase {
           message: "expected '#endif' in conditional compilation block",
           fixIts: ["insert '#endif'"]
         ),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
+        DiagnosticSpec(
+          locationMarker: "3️⃣",
+          message: "expected '}' to end struct",
+          fixIts: ["insert '}'"]
+        ),
+
       ],
       fixedSource: """
         struct n {
@@ -1738,7 +1747,7 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "1️⃣}class C2️⃣",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before class"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in source file"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in class", fixIts: ["insert member block"]),
       ],
       fixedSource: """
@@ -1749,7 +1758,7 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "1️⃣}enum C2️⃣",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before enum"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in source file"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in enum", fixIts: ["insert member block"]),
       ],
       fixedSource: """
@@ -1760,7 +1769,7 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "1️⃣}protocol C2️⃣",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before protocol"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in source file"),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "expected member block in protocol",
@@ -1775,7 +1784,7 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "1️⃣}actor C2️⃣",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before actor"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in source file"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected member block in actor", fixIts: ["insert member block"]),
       ],
       fixedSource: """
@@ -1786,7 +1795,7 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "1️⃣}struct C2️⃣",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before struct"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in source file"),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "expected member block in struct",
@@ -1801,7 +1810,7 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "1️⃣}func C2️⃣",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before function"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in source file"),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "expected parameter clause in function signature",
@@ -1815,7 +1824,7 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "1️⃣}init2️⃣",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before initializer"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in source file"),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "expected parameter clause in function signature",
@@ -1829,7 +1838,7 @@ final class DeclarationTests: ParserTestCase {
     assertParse(
       "1️⃣}subscript2️⃣",
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before subscript"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in source file"),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "expected parameter clause in subscript",
@@ -2411,8 +2420,13 @@ final class DeclarationTests: ParserTestCase {
               name: .identifier("A"),
               memberBlock: MemberBlockSyntax(
                 leftBrace: .leftBraceToken(),
-                members: MemberBlockItemListSyntax(),
-                UnexpectedNodesSyntax([TokenSyntax.binaryOperator("^")]),
+                members: MemberBlockItemListSyntax([
+                  MemberBlockItemSyntax(
+                    decl: DeclSyntax(
+                      UnexpectedCodeDeclSyntax(unexpectedCode: UnexpectedNodesSyntax([TokenSyntax.binaryOperator("^")]))
+                    )
+                  )
+                ]),
                 rightBrace: .rightBraceToken()
               )
             )
@@ -2467,13 +2481,13 @@ final class DeclarationTests: ParserTestCase {
           message: "expected parameter clause in function signature",
           fixIts: ["insert parameter clause"]
         ),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code ': Int = A.M1' before macro"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code ': Int = A.M1' in source file"),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "expected parameter clause in function signature",
           fixIts: ["insert parameter clause"]
         ),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ': T = A.M4 where T.Assoc: P' before macro"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ': T = A.M4 where T.Assoc: P' in source file"),
       ],
       fixedSource: """
         macro m1(): Int = A.M1
@@ -2904,15 +2918,15 @@ final class DeclarationTests: ParserTestCase {
       class A ℹ️{
         1️⃣^
       }
-      unowned 2️⃣B {
+      unowned2️⃣ B {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code before modifier"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '^' in class"),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "expected declaration and '}' after 'unowned' modifier",
-          fixIts: ["insert declaration and '}'"]
+          message: "consecutive statements on a line must be separated by newline or ';'",
+          fixIts: ["insert newline", "insert ';'"]
         ),
       ],
       fixedSource:
@@ -2920,8 +2934,8 @@ final class DeclarationTests: ParserTestCase {
         class A {
           ^
         }
-        unowned <#declaration#>
-        }B {
+        unowned
+        B {
         }
         """
     )

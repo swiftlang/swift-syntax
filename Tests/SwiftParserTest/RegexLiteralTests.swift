@@ -1388,7 +1388,7 @@ final class RegexLiteralTests: ParserTestCase {
       """,
       substructure: BinaryOperatorExprSyntax(operator: .binaryOperator("/")),
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code ':/def/' at top level")
+        DiagnosticSpec(message: "unexpected code ':/def/' in source file")
       ]
     )
   }

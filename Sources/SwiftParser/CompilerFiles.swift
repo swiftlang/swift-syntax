@@ -89,7 +89,7 @@ extension Parser {
 
   /// Parse a declaration macro expansions in type contexts.
   mutating func parseMemberBlockItemListFile() -> RawMemberBlockItemListFileSyntax {
-    let members = self.parseMemberDeclList()
+    let members = self.parseMemberDeclList(until: { _ in false })
     let (unexpectedBeforeEndOfFileToken, endOfFile) = self.expectEndOfFile()
 
     return RawMemberBlockItemListFileSyntax(

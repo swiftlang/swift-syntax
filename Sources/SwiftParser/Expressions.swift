@@ -720,10 +720,7 @@ extension Parser {
   ) -> RawExprSyntax {
     precondition(self.at(.poundIf))
 
-    let config = self.parsePoundIfDirective { (parser, isFirstElement) -> RawExprSyntax? in
-      if !isFirstElement {
-        return nil
-      }
+    let config = self.parsePoundIfDirective { parser in
       let head: RawExprSyntax
       if parser.at(.period) {
         head = parser.parseDottedExpressionSuffix(nil)
@@ -738,15 +735,7 @@ extension Parser {
         flavor: flavor,
         pattern: .none
       )
-
-      // TODO: diagnose and skip the remaining token in the current clause.
-      return result
-    } syntax: { (parser, elements) -> RawIfConfigClauseSyntax.Elements? in
-      switch elements.count {
-      case 0: return nil
-      case 1: return .postfixExpression(elements.first!)
-      default: fatalError("Postfix #if should only have one element")
-      }
+      return .postfixExpression(result)
     }
 
     return RawExprSyntax(
@@ -1784,7 +1773,7 @@ extension Parser {
     let signature = self.parseClosureSignatureIfPresent()
 
     // Parse the body.
-    let elements = parseCodeBlockItemList(until: { $0.at(.rightBrace) })
+    let elements = parseCodeBlockItemList()
 
     // Parse the closing '}'.
     let (unexpectedBeforeRBrace, rbrace) = self.expect(.rightBrace)
@@ -2342,32 +2331,20 @@ extension Parser {
   mutating func parseSwitchCases(allowStandaloneStmtRecovery: Bool) -> RawSwitchCaseListSyntax {
     var elements = [RawSwitchCaseListSyntax.Element]()
     var elementsProgress = LoopProgressCondition()
-    while !self.at(.endOfFile, .rightBrace) && !self.at(.poundEndif, .poundElseif, .poundElse)
-      && self.hasProgressed(&elementsProgress)
-    {
-      if self.withLookahead({ $0.atStartOfSwitchCase(allowRecovery: false) }) {
+    while !self.at(.endOfFile, .rightBrace), !self.atEndOfIfConfigClauseBody(), self.hasProgressed(&elementsProgress) {
+      if self.withLookahead({ $0.atStartOfSwitchCase() }) {
         elements.append(.switchCase(self.parseSwitchCase()))
       } else if self.canRecoverTo(.poundIf) != nil {
         // '#if' in 'case' position can enclose zero or more 'case' or 'default'
         // clauses.
         elements.append(
           .ifConfigDecl(
-            self.parsePoundIfDirective(
-              { (parser, _) in parser.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery) },
-              syntax: { parser, cases in
-                guard cases.count == 1, let firstCase = cases.first else {
-                  precondition(cases.isEmpty)
-                  return .switchCases(RawSwitchCaseListSyntax(elements: [], arena: parser.arena))
-                }
-                return .switchCases(firstCase)
-              }
-            )
+            self.parsePoundIfDirective({ parser in
+              .switchCases(parser.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery))
+            })
           )
         )
-      } else if allowStandaloneStmtRecovery
-        && (self.atStartOfExpression() || self.atStartOfStatement(preferExpr: false)
-          || self.atStartOfDeclaration())
-      {
+      } else if allowStandaloneStmtRecovery {
         // Synthesize a label for the statement or declaration that isn't covered by a case right now.
         let statements = parseSwitchCaseBody()
         if statements.isEmpty {
@@ -2403,8 +2380,6 @@ extension Parser {
             )
           )
         )
-      } else if self.withLookahead({ $0.atStartOfSwitchCase(allowRecovery: true) }) {
-        elements.append(.switchCase(self.parseSwitchCase()))
       } else {
         break
       }
@@ -2414,8 +2389,13 @@ extension Parser {
 
   mutating func parseSwitchCaseBody() -> RawCodeBlockItemListSyntax {
     parseCodeBlockItemList(until: {
-      $0.at(.rightBrace) || $0.at(.poundEndif, .poundElseif, .poundElse)
-        || $0.withLookahead({ $0.atStartOfConditionalSwitchCases() })
+      if $0.at(.rightBrace, .keyword(.case), .keyword(.default)) || $0.atEndOfIfConfigClauseBody() {
+        return true
+      }
+      if $0.withLookahead({ $0.atStartOfConditionalSwitchCases() }) {
+        return true
+      }
+      return false
     })
   }
 

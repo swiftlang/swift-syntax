@@ -156,7 +156,7 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
       1️⃣}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous brace at top level")
+        DiagnosticSpec(message: "unexpected brace in source file")
       ]
     )
   }
@@ -322,7 +322,7 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
-          message: "extraneous brace at top level"
+          message: "unexpected brace in source file"
         ),
       ],
       applyFixIts: ["insert '/'"],
@@ -365,11 +365,12 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
           0
           /x}}1️⃣} /
           2
-        } 
+        2️⃣} 
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code at top level")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '} /' in source file"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected braces in source file"),
       ]
     )
   }
@@ -381,10 +382,11 @@ final class ForwardSlashRegexSkippingInvalidTests: ParserTestCase {
         _ = 2
         /x} 1️⃣/
         .bitWidth
-      }
+      2️⃣}
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code at top level")
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '/' in source file"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected brace in source file"),
       ]
     )
   }

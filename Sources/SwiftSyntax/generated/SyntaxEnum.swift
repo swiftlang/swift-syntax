@@ -301,6 +301,7 @@ public enum SyntaxEnum: Sendable {
   case typeExpr(TypeExprSyntax)
   case typeInitializerClause(TypeInitializerClauseSyntax)
   case typeSpecifierList(TypeSpecifierListSyntax)
+  case unexpectedCodeDecl(UnexpectedCodeDeclSyntax)
   case unexpectedNodes(UnexpectedNodesSyntax)
   case unresolvedAsExpr(UnresolvedAsExprSyntax)
   case unresolvedIsExpr(UnresolvedIsExprSyntax)
@@ -874,6 +875,8 @@ extension Syntax {
       return .typeInitializerClause(TypeInitializerClauseSyntax(self)!)
     case .typeSpecifierList:
       return .typeSpecifierList(TypeSpecifierListSyntax(self)!)
+    case .unexpectedCodeDecl:
+      return .unexpectedCodeDecl(UnexpectedCodeDeclSyntax(self)!)
     case .unexpectedNodes:
       return .unexpectedNodes(UnexpectedNodesSyntax(self)!)
     case .unresolvedAsExpr:
@@ -939,6 +942,7 @@ public enum DeclSyntaxEnum {
   case structDecl(StructDeclSyntax)
   case subscriptDecl(SubscriptDeclSyntax)
   case typeAliasDecl(TypeAliasDeclSyntax)
+  case unexpectedCodeDecl(UnexpectedCodeDeclSyntax)
   @_spi(ExperimentalLanguageFeatures)
   case usingDecl(UsingDeclSyntax)
   case variableDecl(VariableDeclSyntax)
@@ -994,6 +998,8 @@ extension DeclSyntax {
       return .subscriptDecl(SubscriptDeclSyntax(self)!)
     case .typeAliasDecl:
       return .typeAliasDecl(TypeAliasDeclSyntax(self)!)
+    case .unexpectedCodeDecl:
+      return .unexpectedCodeDecl(UnexpectedCodeDeclSyntax(self)!)
     case .usingDecl:
       return .usingDecl(UsingDeclSyntax(self)!)
     case .variableDecl:

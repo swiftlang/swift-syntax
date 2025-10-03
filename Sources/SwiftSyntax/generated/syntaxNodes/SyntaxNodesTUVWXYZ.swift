@@ -2606,6 +2606,63 @@ public struct TypeInitializerClauseSyntax: SyntaxProtocol, SyntaxHashable, _Leaf
   ])
 }
 
+// MARK: - UnexpectedCodeDeclSyntax
+
+/// Unexpected code at declaration position
+///
+/// ### Children
+/// 
+///  - `unexpectedCode`: ``UnexpectedNodesSyntax``
+public struct UnexpectedCodeDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclSyntaxNodeProtocol {
+  public let _syntaxNode: Syntax
+
+  public init?(_ node: __shared some SyntaxProtocol) {
+    guard node.raw.kind == .unexpectedCodeDecl else {
+      return nil
+    }
+    self._syntaxNode = node._syntaxNode
+  }
+
+  @_transparent
+  init(unsafeCasting node: Syntax) {
+    self._syntaxNode = node
+  }
+
+  /// - Parameters:
+  ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  public init(
+    leadingTrivia: Trivia? = nil,
+    unexpectedCode: UnexpectedNodesSyntax,
+    trailingTrivia: Trivia? = nil
+  ) {
+    // Extend the lifetime of all parameters so their arenas don't get destroyed
+    // before they can be added as children of the new arena.
+    self = withExtendedLifetime((RawSyntaxArena(), (unexpectedCode))) { (arena, _) in
+      let layout: [RawSyntax?] = [unexpectedCode.raw]
+      let raw = RawSyntax.makeLayout(
+        kind: SyntaxKind.unexpectedCodeDecl,
+        from: layout,
+        arena: arena,
+        leadingTrivia: leadingTrivia,
+        trailingTrivia: trailingTrivia
+      )
+      return Syntax.forRoot(raw, rawNodeArena: arena).cast(Self.self)
+    }
+  }
+
+  public var unexpectedCode: UnexpectedNodesSyntax {
+    get {
+      return Syntax(self).child(at: 0)!.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 0, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(UnexpectedCodeDeclSyntax.self)
+    }
+  }
+
+  public static let structure: SyntaxNodeStructure = .layout([\Self.unexpectedCode])
+}
+
 // MARK: - UnresolvedAsExprSyntax
 
 /// The `as` keyword without any operands.

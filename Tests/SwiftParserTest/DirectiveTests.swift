@@ -151,8 +151,8 @@ final class DirectiveTests: ParserTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace before conditional compilation clause"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected brace in conditional compilation block"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected brace in conditional compilation clause"),
       ]
     )
   }
@@ -455,6 +455,158 @@ final class DirectiveTests: ParserTestCase {
         #sourceLocation(file: "", line: <#integer literal#>)
         (file: "other.swift", line: 1)
         var someName: Int
+        """
+    )
+  }
+
+  func testOrphanEndifInMember() {
+    assertParse(
+      """
+      struct S ℹ️{1️⃣
+        2️⃣#endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '}' to end struct",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in source file"),
+      ],
+      fixedSource: """
+        struct S {
+        }
+          #endif
+        }
+        """
+    )
+  }
+
+  func testOrphanEndifInCodeBlock() {
+    assertParse(
+      """
+      func foo() ℹ️{1️⃣
+        2️⃣#endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '}' to end function",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in source file"),
+      ],
+      fixedSource: """
+        func foo() {
+        }
+          #endif
+        }
+        """
+    )
+  }
+
+  func testOrphanEndifInSwitch() {
+    assertParse(
+      """
+      switch subject ℹ️{1️⃣
+        2️⃣#endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '}' to end 'switch' statement",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in source file"),
+      ],
+      fixedSource: """
+        switch subject {
+        }
+          #endif
+        }
+        """
+    )
+  }
+
+  func testOrphanEndifInSwitchCase() {
+    assertParse(
+      """
+      switch subject ℹ️{
+      case foo:
+        print()1️⃣
+        2️⃣#endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '}' to end 'switch' statement",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in source file"),
+      ],
+      fixedSource: """
+        switch subject {
+        case foo:
+          print()
+        }
+          #endif
+        }
+        """
+    )
+  }
+
+  func testRightBraceInIfConfig() {
+    assertParse(
+      """
+      struct S {
+        #if true
+        1️⃣}
+        #endif
+      }
+      func foo() {
+        #if true
+        2️⃣}
+        #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected brace in conditional compilation clause"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected brace in conditional compilation clause"),
+      ]
+    )
+  }
+
+  func testMismatchedPoundIfAndCodeBlock() {
+    assertParse(
+      """
+      #if FOO
+      func foo() ℹ️{1️⃣
+      #endif
+      2️⃣}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '}' to end function",
+          notes: [NoteSpec(message: "to match this opening '{'")],
+          fixIts: ["insert '}'"]
+        ),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected brace in source file"),
+      ],
+      fixedSource: """
+        #if FOO
+        func foo() {
+        }
+        #endif
+        }
         """
     )
   }

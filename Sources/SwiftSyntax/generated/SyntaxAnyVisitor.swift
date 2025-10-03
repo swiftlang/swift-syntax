@@ -2265,6 +2265,14 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  override open func visit(_ node: UnexpectedCodeDeclSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: UnexpectedCodeDeclSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: UnexpectedNodesSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }

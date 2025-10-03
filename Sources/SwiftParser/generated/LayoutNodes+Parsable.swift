@@ -135,7 +135,7 @@ extension CodeBlockSyntax: SyntaxParseable {
 extension DeclSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
     parse(from: &parser) {
-      $0.parseDeclaration()
+      $0.parseDeclarationOrIfConfig()
     }
   }
 }
@@ -238,7 +238,9 @@ extension VersionTupleSyntax: SyntaxParseable {
 
 fileprivate extension Parser {
   mutating func parseNonOptionalCodeBlockItem() -> RawCodeBlockItemSyntax {
-    guard let node = self.parseCodeBlockItem(isAtTopLevel: false, allowInitDecl: true) else {
+    guard let node = self.parseCodeBlockItem(allowInitDecl: true, until: { _ in
+      false
+    }) else {
       // The missing item is not necessary to be a declaration,
       // which is just a placeholder here
       return RawCodeBlockItemSyntax(

@@ -28,7 +28,7 @@ final class RecoveryTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           message:
-            "unexpected code ') this line is invalid, but we will stop at the keyword below...' before 'return' statement"
+            "unexpected code ') this line is invalid, but we will stop at the keyword below...' in function"
         )
       ]
     )
@@ -45,7 +45,7 @@ final class RecoveryTests: ParserTestCase {
       """#,
       diagnostics: [
         DiagnosticSpec(
-          message: "unexpected code ') this line is invalid, but we will stop at the declaration...' before function"
+          message: "unexpected code ') this line is invalid, but we will stop at the declaration...' in function"
         )
       ]
     )
@@ -93,7 +93,7 @@ final class RecoveryTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "4️⃣",
-          message: "unexpected code in function"
+          message: "unexpected code ', b : Int' in function"
         ),
       ],
       applyFixIts: ["insert '>'", "insert expression"],
@@ -140,7 +140,7 @@ final class RecoveryTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "unexpected brace before function"
+          message: "unexpected brace in source file"
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -174,7 +174,7 @@ final class RecoveryTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "unexpected brace before function"
+          message: "unexpected brace in source file"
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -975,14 +975,16 @@ final class RecoveryTests: ParserTestCase {
   func testRecovery54() {
     assertParse(
       """
-      struct NoBracesStruct11️⃣()
+      struct NoBracesStruct11️⃣()2️⃣
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected member block in struct", fixIts: ["insert member block"])
+        DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in struct", fixIts: ["insert '{'"]),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '()' in struct"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "expected '}' to end struct", fixIts: ["insert '}'"]),
       ],
       fixedSource: """
-        struct NoBracesStruct1 {
-        }()
+        struct NoBracesStruct1 {()
+        }
         """
     )
   }
@@ -993,33 +995,31 @@ final class RecoveryTests: ParserTestCase {
       enum NoBracesUnion11️⃣()
       class NoBracesClass12️⃣()
       protocol NoBracesProtocol13️⃣()
-      extension NoBracesStruct14️⃣()
+      extension NoBracesStruct14️⃣()5️⃣
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected '{' in enum", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '()' before class"),
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '()' in enum"),
         DiagnosticSpec(locationMarker: "2️⃣", message: "expected '{' in class", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '()' before protocol"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '()' in class"),
         DiagnosticSpec(locationMarker: "3️⃣", message: "expected '{' in protocol", fixIts: ["insert '{'"]),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '()' before extension"),
-        DiagnosticSpec(
-          locationMarker: "4️⃣",
-          message: "expected member block in extension",
-          fixIts: ["insert member block"]
-        ),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '}' to end protocol", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '}' to end class", fixIts: ["insert '}'"]),
-        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '}' to end enum", fixIts: ["insert '}'"]),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code '()' in protocol"),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "expected '{' in extension", fixIts: ["insert '{'"]),
+        DiagnosticSpec(locationMarker: "4️⃣", message: "unexpected code '()' in extension"),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end extension", fixIts: ["insert '}'"]),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end protocol", fixIts: ["insert '}'"]),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end class", fixIts: ["insert '}'"]),
+        DiagnosticSpec(locationMarker: "5️⃣", message: "expected '}' to end enum", fixIts: ["insert '}'"]),
       ],
       fixedSource: """
         enum NoBracesUnion1 {()
         class NoBracesClass1 {()
         protocol NoBracesProtocol1 {()
-        extension NoBracesStruct1 {
+        extension NoBracesStruct1 {()
         }
         }
         }
-        }()
+        }
         """
     )
   }
@@ -1112,7 +1112,7 @@ final class RecoveryTests: ParserTestCase {
     assertParse(
       """
       enum EE 1️⃣EE<T> where T : Multi {
-        case a2️⃣ 3️⃣a
+        case a 2️⃣a
         case b
       }
       """,
@@ -1122,18 +1122,12 @@ final class RecoveryTests: ParserTestCase {
           message: "found an unexpected second identifier in enum; is there an accidental break?",
           fixIts: ["join the identifiers together"]
         ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "consecutive declarations on a line must be separated by newline or ';'",
-          fixIts: ["insert newline", "insert ';'"]
-        ),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'a' before enum case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'a' in enum"),
       ],
       applyFixIts: ["join the identifiers together", "insert newline"],
       fixedSource: """
         enum EEEE<T> where T : Multi {
-          case a
-          a
+          case a a
           case b
         }
         """
@@ -1144,7 +1138,7 @@ final class RecoveryTests: ParserTestCase {
     assertParse(
       """
       enum EE 1️⃣EE<T> where T : Multi {
-        case a2️⃣ 3️⃣a
+        case a 2️⃣a
         case b
       }
       """,
@@ -1154,17 +1148,11 @@ final class RecoveryTests: ParserTestCase {
           message: "found an unexpected second identifier in enum; is there an accidental break?",
           fixIts: ["join the identifiers together"]
         ),
-        DiagnosticSpec(
-          locationMarker: "2️⃣",
-          message: "consecutive declarations on a line must be separated by newline or ';'",
-          fixIts: ["insert newline", "insert ';'"]
-        ),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'a' before enum case"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'a' in enum"),
       ],
-      applyFixIts: ["join the identifiers together", "insert ';'"],
       fixedSource: """
         enum EEEE<T> where T : Multi {
-          case a;a
+          case a a
           case b
         }
         """
@@ -1733,7 +1721,7 @@ final class RecoveryTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "extraneous code ']' at top level"
+          message: "unexpected code ']' in source file"
         )
       ]
     )
@@ -1750,7 +1738,7 @@ final class RecoveryTests: ParserTestCase {
           notes: [NoteSpec(message: "to match this opening '<'")],
           fixIts: ["insert '>'"]
         ),
-        DiagnosticSpec(message: "extraneous code ']>' at top level"),
+        DiagnosticSpec(message: "unexpected code ']>' in source file"),
       ],
       fixedSource: """
         let a2: Set<Int>]>
@@ -1772,12 +1760,7 @@ final class RecoveryTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "consecutive declarations on a line must be separated by newline or ';'",
-          fixIts: ["insert newline", "insert ';'"]
-        ),
-        DiagnosticSpec(
-          locationMarker: "1️⃣",
-          message: "unexpected code ':' before variable"
+          message: "unexpected code ':' in struct"
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -1812,8 +1795,7 @@ final class RecoveryTests: ParserTestCase {
       ],
       fixedSource: """
         struct ErrorTypeInVarDeclDictionaryType {
-          let a1: String
-          :
+          let a1: String:
           let a2: [String: Int]
           let a3: [String: [Int]]
           let a4: [String: Int]
@@ -1829,7 +1811,7 @@ final class RecoveryTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "extraneous code ']' at top level"
+          message: "unexpected code ']' in source file"
         )
       ]
     )
@@ -2076,7 +2058,7 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected code before typealias declaration")
+        DiagnosticSpec(message: "unexpected code in struct")
       ]
     )
   }
@@ -2430,7 +2412,7 @@ final class RecoveryTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "unexpected code '> {}' in 'switch' statement"
+          message: "unexpected code '> {}' in switch case"
         ),
       ],
       fixedSource: """
@@ -2502,7 +2484,7 @@ final class RecoveryTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "4️⃣",
-          message: "unexpected code ')}' before struct"
+          message: "unexpected code ')}' in source file"
         ),
         DiagnosticSpec(
           locationMarker: "5️⃣",
@@ -2597,7 +2579,7 @@ final class RecoveryTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code at top level")
+        DiagnosticSpec(message: "unexpected code in source file")
       ]
     )
   }
@@ -2932,7 +2914,7 @@ final class RecoveryTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "4️⃣",
-          message: "extraneous brace at top level"
+          message: "unexpected brace in source file"
         ),
       ],
       applyFixIts: ["remove operator body", "insert newline"],
@@ -2969,7 +2951,7 @@ final class RecoveryTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "4️⃣",
-          message: "extraneous brace at top level"
+          message: "unexpected brace in source file"
         ),
       ],
       applyFixIts: ["remove operator body", "insert ';'"],
@@ -3251,8 +3233,196 @@ final class RecoveryTests: ParserTestCase {
     assertParse(
       "func foo() -> Int1️⃣:",
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code ':' at top level")
+        DiagnosticSpec(message: "unexpected code ':' in source file")
       ]
+    )
+  }
+
+  func testStatementAfterAttribute() {
+    assertParse(
+      """
+      @attr1️⃣
+      guard foo else {}
+      struct S {}
+      """,
+      substructure: CodeBlockItemListSyntax([
+        CodeBlockItemSyntax(
+          item: .decl(
+            DeclSyntax(
+              MissingDeclSyntax(
+                attributes: [
+                  .attribute(
+                    AttributeSyntax(
+                      atSign: .atSignToken(),
+                      attributeName: IdentifierTypeSyntax(name: .identifier("attr"))
+                    )
+                  )
+                ],
+                modifiers: [],
+                placeholder: .identifier("<#declaration#>", presence: .missing)
+              )
+            )
+          )
+        ),
+        CodeBlockItemSyntax(
+          item: .init(
+            GuardStmtSyntax(
+              guardKeyword: .keyword(.guard),
+              conditions: ConditionElementListSyntax([
+                ConditionElementSyntax(
+                  condition: ConditionElementSyntax.Condition(DeclReferenceExprSyntax(baseName: .identifier("foo")))
+                )
+              ]),
+              elseKeyword: .keyword(.else),
+              body: CodeBlockSyntax(
+                leftBrace: .leftBraceToken(),
+                statements: CodeBlockItemListSyntax([]),
+                rightBrace: .rightBraceToken()
+              )
+            )
+          )
+        ),
+        CodeBlockItemSyntax(
+          item: .init(
+            StructDeclSyntax(
+              attributes: AttributeListSyntax([]),
+              modifiers: DeclModifierListSyntax([]),
+              structKeyword: .keyword(.struct),
+              name: .identifier("S"),
+              memberBlock: MemberBlockSyntax(
+                leftBrace: .leftBraceToken(),
+                members: MemberBlockItemListSyntax([]),
+                rightBrace: .rightBraceToken()
+              )
+            )
+          )
+        ),
+      ]),
+      diagnostics: [
+        DiagnosticSpec(message: "expected declaration after attribute", fixIts: ["insert declaration"])
+      ],
+      fixedSource: """
+        @attr <#declaration#>
+        guard foo else {}
+        struct S {}
+        """
+    )
+  }
+
+  func testUnexpectedBeforeAttributeInMemberBlock() {
+    assertParse(
+      """
+      struct S {
+        1️⃣do {}
+        @attr func foo()
+      }      
+      """,
+      substructure: StructDeclSyntax(
+        name: .identifier("S"),
+        memberBlock: MemberBlockSyntax(
+          members: [
+            MemberBlockItemSyntax(
+              decl: UnexpectedCodeDeclSyntax(
+                unexpectedCode: UnexpectedNodesSyntax([
+                  TokenSyntax.keyword(.do),
+                  TokenSyntax.leftBraceToken(),
+                  TokenSyntax.rightBraceToken(),
+                ])
+              )
+            ),
+            MemberBlockItemSyntax(
+              decl: FunctionDeclSyntax(
+                attributes: [
+                  .attribute(AttributeSyntax(attributeName: IdentifierTypeSyntax(name: .identifier("attr"))))
+                ],
+                name: .identifier("foo"),
+                signature: FunctionSignatureSyntax(
+                  parameterClause: FunctionParameterClauseSyntax(
+                    leftParen: .leftParenToken(),
+                    parameters: [],
+                    rightParen: .rightParenToken()
+                  )
+                )
+              )
+            ),
+          ]
+        )
+      ),
+      diagnostics: [
+        DiagnosticSpec(message: "unexpected code 'do {}' in struct")
+      ]
+    )
+  }
+
+  func testAttrInCodeBlock() {
+    assertParse(
+      """
+      func foo() {
+        @attr1️⃣
+      }
+      struct S {}
+      """,
+      substructure: CodeBlockItemListSyntax([
+        CodeBlockItemSyntax(
+          item: .init(
+            FunctionDeclSyntax(
+              funcKeyword: .keyword(.func),
+              name: .identifier("foo"),
+              signature: FunctionSignatureSyntax(
+                parameterClause: FunctionParameterClauseSyntax(
+                  leftParen: .leftParenToken(),
+                  parameters: FunctionParameterListSyntax([]),
+                  rightParen: .rightParenToken()
+                )
+              ),
+              body: CodeBlockSyntax(
+                leftBrace: .leftBraceToken(),
+                statements: CodeBlockItemListSyntax([
+                  CodeBlockItemSyntax(
+                    item: .init(
+                      MissingDeclSyntax(
+                        attributes: AttributeListSyntax([
+                          .attribute(
+                            AttributeSyntax(
+                              atSign: .atSignToken(),
+                              attributeName: TypeSyntax(IdentifierTypeSyntax(name: .identifier("attr")))
+                            )
+                          )
+                        ]),
+                        placeholder: .identifier("<#declaration#>", presence: .missing)
+                      )
+                    )
+                  )
+                ]),
+                rightBrace: .rightBraceToken()
+              )
+            )
+          )
+        ),
+        CodeBlockItemSyntax(
+          item: CodeBlockItemSyntax.Item(
+            StructDeclSyntax(
+              structKeyword: .keyword(.struct),
+              name: .identifier("S"),
+              memberBlock: MemberBlockSyntax(
+                leftBrace: .leftBraceToken(),
+                members: MemberBlockItemListSyntax([]),
+                rightBrace: .rightBraceToken()
+              )
+            )
+          )
+        ),
+      ]),
+      diagnostics: [
+        // FIXME: expected *declaration* after attribute
+        DiagnosticSpec(message: "expected statements after attribute", fixIts: ["insert statements"])
+      ],
+      fixedSource: """
+        func foo() {
+          @attr <#declaration#>
+        }
+        struct S {}
+        """
     )
   }
 }

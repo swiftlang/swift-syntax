@@ -257,6 +257,20 @@ final class StatementTests: ParserTestCase {
     )
   }
 
+  func testUnknownDefaultAtStatement() {
+    assertParse(
+      """
+      func test() {
+        1️⃣@unknown default:
+          return
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'default' label can only appear inside a 'switch' statement")
+      ]
+    )
+  }
+
   func testMissingIfClauseIntroducer() {
     assertParse("if _ = 42 {}")
   }
@@ -265,16 +279,32 @@ final class StatementTests: ParserTestCase {
     assertParse(
       """
       func test1() {
-        1️⃣@s return
+        @s 1️⃣return
       }
       func test2() {
-        2️⃣@unknown return
+        @unknown 2️⃣return
       }
       """,
       diagnostics: [
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code '@s' before 'return' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code '@unknown' before 'return' statement"),
-      ]
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected declaration and ';' after attribute",
+          fixIts: ["insert declaration and ';'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected declaration and ';' after attribute",
+          fixIts: ["insert declaration and ';'"]
+        ),
+      ],
+      fixedSource: """
+        func test1() {
+          @s <#declaration#>; return
+        }
+        func test2() {
+          @unknown <#declaration#>; return
+        }
+        """
     )
   }
 
@@ -335,7 +365,7 @@ final class StatementTests: ParserTestCase {
     assertParse(
       "LABEL1️⃣:",
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code ':' at top level")
+        DiagnosticSpec(message: "unexpected code ':' in source file")
       ]
     )
   }
@@ -826,7 +856,7 @@ final class StatementTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "missing condition in 'if' statement"),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in 'if' statement"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected 'in' keyword in 'if' statement"),
       ]
     )
   }
@@ -863,7 +893,7 @@ final class StatementTests: ParserTestCase {
       "guard test 1️⃣{ $0 } 2️⃣else {}",
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'else' in 'guard' statement", fixIts: ["insert 'else'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code 'else {}' at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'else {}' in source file"),
       ],
       fixedSource: "guard test else { $0 } else {}"
     )
@@ -876,7 +906,7 @@ final class StatementTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'else' in 'guard' statement", fixIts: ["insert 'else'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code 'else {}' at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'else {}' in source file"),
       ],
       fixedSource:
         """
@@ -893,7 +923,7 @@ final class StatementTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'else' in 'guard' statement", fixIts: ["insert 'else'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "extraneous code 'else {}' at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code 'else {}' in source file"),
       ],
       fixedSource: """
         guard test else { $0
@@ -909,8 +939,8 @@ final class StatementTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(locationMarker: "1️⃣", message: "expected 'else' in 'guard' statement", fixIts: ["insert 'else'"]),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code in 'guard' statement"),
-        DiagnosticSpec(locationMarker: "3️⃣", message: "extraneous code 'else {}' at top level"),
+        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected 'in' keyword in 'guard' statement"),
+        DiagnosticSpec(locationMarker: "3️⃣", message: "unexpected code 'else {}' in source file"),
       ],
       fixedSource: """
         guard test else { x in

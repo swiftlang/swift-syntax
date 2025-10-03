@@ -1116,7 +1116,7 @@ final class ModuleSelectorTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(message: "expected type in type annotation", fixIts: ["insert type"]),
-        DiagnosticSpec(message: "extraneous code '*::Int' at top level"),
+        DiagnosticSpec(message: "unexpected code '*::Int' in source file"),
       ],
       fixedSource: """
         var c: <#type#>*::Int
@@ -1303,7 +1303,7 @@ final class ModuleSelectorTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
-          message: "extraneous code ']' at top level"
+          message: "unexpected code ']' in source file"
         ),
       ],
       fixedSource: """
@@ -1344,7 +1344,7 @@ final class ModuleSelectorTests: ParserTestCase {
       var cIndex: String1️⃣.*::Index
       """,
       diagnostics: [
-        DiagnosticSpec(message: "extraneous code '.*::Index' at top level")
+        DiagnosticSpec(message: "unexpected code '.*::Index' in source file")
       ]
     )
     assertParse(
@@ -1823,7 +1823,7 @@ final class ModuleSelectorTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: "extraneous code 'else { 0 }' at top level"
+          message: "unexpected code 'else { 0 }' in source file"
         ),
       ],
       fixedSource: """

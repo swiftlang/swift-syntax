@@ -233,7 +233,7 @@ final class ExpressionTests: ParserTestCase {
       #"""
       \String?.!.count1️⃣.?
       """#,
-      diagnostics: [DiagnosticSpec(message: "extraneous code '.?' at top level")]
+      diagnostics: [DiagnosticSpec(message: "unexpected code '.?' in source file")]
     )
 
     assertParse(
@@ -246,7 +246,7 @@ final class ExpressionTests: ParserTestCase {
       #"""
       \Optional.?!?!?!?1️⃣.??!
       """#,
-      diagnostics: [DiagnosticSpec(message: "extraneous code '.??!' at top level")]
+      diagnostics: [DiagnosticSpec(message: "unexpected code '.??!' in source file")]
     )
 
     assertParse(
@@ -678,14 +678,14 @@ final class ExpressionTests: ParserTestCase {
   func testChainedOptionalUnwrapsWithDot() {
     assertParse(
       #"\T.?1️⃣.!"#,
-      diagnostics: [DiagnosticSpec(message: "extraneous code '.!' at top level")]
+      diagnostics: [DiagnosticSpec(message: "unexpected code '.!' in source file")]
     )
   }
 
   func testChainedOptionalUnwrapsAfterSubscript() {
     assertParse(
       #"\T.abc[2]1️⃣.?"#,
-      diagnostics: [DiagnosticSpec(message: "extraneous code '.?' at top level")]
+      diagnostics: [DiagnosticSpec(message: "unexpected code '.?' in source file")]
     )
   }
 
@@ -1764,7 +1764,7 @@ final class ExpressionTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "4️⃣",
-          message: #"extraneous code ')"' at top level"#
+          message: #"unexpected code ')"' in source file"#
         ),
       ],
       fixedSource: #"""
@@ -2277,19 +2277,20 @@ final class ExpressionTests: ParserTestCase {
   func testSecondaryArgumentLabelDollarIdentifierInClosure() {
     assertParse(
       """
-      ℹ️{ a1️⃣: (a $
+      ℹ️{ a1️⃣: (a $2️⃣
       """,
       diagnostics: [
+        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code ': (a $' in closure"),
         DiagnosticSpec(
+          locationMarker: "2️⃣",
           message: "expected '}' to end closure",
           notes: [NoteSpec(message: "to match this opening '{'")],
           fixIts: ["insert '}'"]
         ),
-        DiagnosticSpec(message: "extraneous code ': (a $' at top level"),
       ],
       fixedSource: """
-        { a
-        }: (a $
+        { a: (a $
+        }
         """
     )
   }
@@ -2699,7 +2700,7 @@ final class StatementExpressionTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected 'is' keyword in 'switch' statement")
+        DiagnosticSpec(message: "unexpected 'is' keyword in switch case")
       ]
     )
   }
@@ -2708,10 +2709,28 @@ final class StatementExpressionTests: ParserTestCase {
     assertParse(
       """
       switch x {
-        1️⃣@case
+        @1️⃣case2️⃣
       }
       """,
-      diagnostics: [DiagnosticSpec(message: "unexpected code '@case' in 'switch' statement")]
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          // FIXME: "expected attribute name after '@'". https://github.com/swiftlang/swift-syntax/issues/3159
+          message: "expected type in attribute",
+          fixIts: ["insert type"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          // FIXME: "expected pattern and ':' in switch case". https://github.com/swiftlang/swift-syntax/issues/3158
+          message: "expected expression and ':' in switch case",
+          fixIts: ["insert expression and ':'"]
+        ),
+      ],
+      fixedSource: """
+        switch x {
+          @<#identifier#> case <#expression#>:
+        }
+        """
     )
   }
 
@@ -3049,7 +3068,7 @@ final class StatementExpressionTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "4️⃣",
-          message: #"extraneous code ')"' at top level"#
+          message: #"unexpected code ')"' in source file"#
         ),
       ],
       fixedSource: #"""
@@ -3079,7 +3098,7 @@ final class StatementExpressionTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "3️⃣",
-          message: #"extraneous code ')"' at top level"#
+          message: #"unexpected code ')"' in source file"#
         ),
       ],
       fixedSource: #"""
@@ -3573,7 +3592,7 @@ final class StatementExpressionTests: ParserTestCase {
       #endif
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected brace before class")
+        DiagnosticSpec(message: "unexpected brace in conditional compilation clause")
       ]
     )
   }

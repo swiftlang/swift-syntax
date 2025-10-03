@@ -641,7 +641,12 @@ class ValidateSyntaxNodes: XCTestCase {
 
     assertFailuresMatchXFails(
       failures,
-      expectedFailures: []
+      expectedFailures: [
+        ValidationFailure(
+          node: .unexpectedCodeDecl,
+          message: "child 'unexpectedCode' is a SyntaxCollection but child is not marked as a collection"
+        )
+      ]
     )
   }
 

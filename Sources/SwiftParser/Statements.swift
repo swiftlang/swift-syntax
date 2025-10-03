@@ -21,31 +21,15 @@ extension TokenConsumer {
   /// item.
   ///
   /// - Parameters:
-  ///   - allowRecovery: Whether to attempt to perform recovery.
   ///   - preferExpr: If either an expression or statement could be
   ///     parsed and this parameter is `true`, the function returns `false`
   ///     such that an expression can be parsed.
   ///
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
-  func atStartOfStatement(allowRecovery: Bool = false, preferExpr: Bool) -> Bool {
+  func atStartOfStatement(preferExpr: Bool) -> Bool {
     var lookahead = self.lookahead()
-    if allowRecovery {
-      // Attributes are not allowed on statements. But for recovery, skip over
-      // misplaced attributes.
-      _ = lookahead.consumeAttributeList()
-    }
-    return lookahead.atStartOfStatement(allowRecovery: allowRecovery, preferExpr: preferExpr)
-  }
-}
-
-extension Parser.Lookahead {
-  mutating func atStartOfSwitchCaseItem() -> Bool {
-    while self.consume(if: .atSign) != nil {
-      self.consume(if: .identifier)
-    }
-
-    return self.at(anyIn: SwitchCaseStart.self) != nil
+    return lookahead.atStartOfStatement(preferExpr: preferExpr)
   }
 }
 
@@ -141,7 +125,9 @@ extension Parser {
   mutating func parseGuardStatement(guardHandle: RecoveryConsumptionHandle) -> RawGuardStmtSyntax {
     let (unexpectedBeforeGuardKeyword, guardKeyword) = self.eat(guardHandle)
     let conditions = self.parseConditionList(isGuardStatement: true)
-    let (unexpectedBeforeElseKeyword, elseKeyword) = self.expect(.keyword(.else))
+    let (unexpectedBeforeElseKeyword, elseKeyword) = self.expect(
+      TokenSpec(.else, recoveryPrecedence: .openingBrace(closingDelimiter: .rightBrace))
+    )
     let body = self.parseCodeBlock(introducer: guardKeyword)
     return RawGuardStmtSyntax(
       unexpectedBeforeGuardKeyword,
@@ -703,6 +689,9 @@ extension Parser {
     if self.atStartOfStatement(preferExpr: true) || self.atStartOfDeclaration() {
       return false
     }
+    if self.atStartOfLine && self.withLookahead({ $0.atStartOfSwitchCase() }) {
+      return false
+    }
     return true
   }
 
@@ -1032,29 +1021,15 @@ extension Parser.Lookahead {
   /// item.
   ///
   /// - Parameters:
-  ///   - allowRecovery: Whether to attempt to perform recovery.
   ///   - preferExpr: If either an expression or statement could be
   ///     parsed and this parameter is `true`, the function returns `false`
   ///     such that an expression can be parsed.
   ///
   /// - Note: This function must be kept in sync with `parseStatement()`.
   /// - Seealso: ``Parser/parseStatement()``
-  mutating func atStartOfStatement(allowRecovery: Bool = false, preferExpr: Bool) -> Bool {
-    if (self.at(anyIn: SwitchCaseStart.self) != nil || self.at(.atSign))
-      && withLookahead({ $0.atStartOfSwitchCaseItem() })
-    {
-      // We consider SwitchCaseItems statements so we don't parse the start of a new case item as trailing parts of an expression.
-      return true
-    }
-
+  mutating func atStartOfStatement(preferExpr: Bool) -> Bool {
     _ = self.consume(if: .identifier, followedBy: .colon)
-    let switchSubject: CanBeStatementStart?
-    if allowRecovery {
-      switchSubject = self.canRecoverTo(anyIn: CanBeStatementStart.self)?.0
-    } else {
-      switchSubject = self.at(anyIn: CanBeStatementStart.self)?.0
-    }
-    switch switchSubject {
+    switch self.at(anyIn: CanBeStatementStart.self)?.0 {
     case .return?,
       .throw?,
       .defer?,
@@ -1087,28 +1062,25 @@ extension Parser.Lookahead {
       )
 
     case nil:
+      // Special recovery 'try return' etc..
+      if !preferExpr,
+        consume(if: .keyword(.try)) != nil,
+        self.at(anyIn: SingleValueStatementExpression.self) == nil
+      {
+        return atStartOfStatement(preferExpr: preferExpr)
+      }
       return false
     }
   }
 
   /// Returns whether the parser's current position is the start of a switch case,
   /// given that we're in the middle of a switch already.
-  mutating func atStartOfSwitchCase(allowRecovery: Bool = false) -> Bool {
+  mutating func atStartOfSwitchCase() -> Bool {
     // Check for and consume attributes. The only valid attribute is `@unknown`
     // but that's a semantic restriction.
     var lookahead = self.lookahead()
-    var loopProgress = LoopProgressCondition()
-    var hasAttribute = false
-    while lookahead.at(.atSign) && lookahead.hasProgressed(&loopProgress) {
-      guard lookahead.peek().rawTokenKind == .identifier else {
-        return false
-      }
 
-      lookahead.eat(.atSign)
-      lookahead.eat(.identifier)
-      hasAttribute = true
-    }
-
+    let hasAttribute = lookahead.consumeAttributeList()
     if hasAttribute && lookahead.at(.rightBrace) {
       // If we are at an attribute that's the last token in the SwitchCase, parse
       // that as an attribute to a missing 'case'. That way, if the developer writes
@@ -1118,11 +1090,7 @@ extension Parser.Lookahead {
       return true
     }
 
-    if allowRecovery {
-      return lookahead.canRecoverTo(anyIn: SwitchCaseStart.self) != nil
-    } else {
-      return lookahead.at(anyIn: SwitchCaseStart.self) != nil
-    }
+    return lookahead.at(anyIn: SwitchCaseStart.self) != nil
   }
 
   mutating func atStartOfConditionalSwitchCases() -> Bool {

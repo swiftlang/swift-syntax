@@ -2022,6 +2022,13 @@ open class SyntaxRewriter {
     return TypeSpecifierListSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
+  /// Visit a ``UnexpectedCodeDeclSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: UnexpectedCodeDeclSyntax) -> DeclSyntax {
+    return DeclSyntax(UnexpectedCodeDeclSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
+  }
+
   /// Visit a ``UnexpectedNodesSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3555,6 +3562,11 @@ open class SyntaxRewriter {
   }
 
   @inline(never)
+  private func visitUnexpectedCodeDeclSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(UnexpectedCodeDeclSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
   private func visitUnexpectedNodesSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(UnexpectedNodesSyntax(unsafeCasting: node)))
   }
@@ -4218,6 +4230,8 @@ open class SyntaxRewriter {
       return self.visitTypeInitializerClauseSyntaxImpl(_:)
     case .typeSpecifierList:
       return self.visitTypeSpecifierListSyntaxImpl(_:)
+    case .unexpectedCodeDecl:
+      return self.visitUnexpectedCodeDeclSyntaxImpl(_:)
     case .unexpectedNodes:
       return self.visitUnexpectedNodesSyntaxImpl(_:)
     case .unresolvedAsExpr:
@@ -4810,6 +4824,8 @@ open class SyntaxRewriter {
       return visitTypeInitializerClauseSyntaxImpl(node)
     case .typeSpecifierList:
       return visitTypeSpecifierListSyntaxImpl(node)
+    case .unexpectedCodeDecl:
+      return visitUnexpectedCodeDeclSyntaxImpl(node)
     case .unexpectedNodes:
       return visitUnexpectedNodesSyntaxImpl(node)
     case .unresolvedAsExpr:

@@ -563,7 +563,7 @@ final class MultilineErrorsTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "4️⃣",
-          message: #"extraneous code ')!"' at top level"#
+          message: #"unexpected code ')!"' in source file"#
         ),
       ],
       fixedSource: ##"""
@@ -597,7 +597,7 @@ final class MultilineErrorsTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          message: #"extraneous code ')!"' at top level"#
+          message: #"unexpected code ')!"' in source file"#
         ),
       ],
       fixedSource: ##"""

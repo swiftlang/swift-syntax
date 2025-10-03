@@ -1534,6 +1534,49 @@ public struct RawTypeSyntax: RawTypeSyntaxNodeProtocol {
 }
 
 @_spi(RawSyntax)
+public struct RawUnexpectedCodeDeclSyntax: RawDeclSyntaxNodeProtocol {
+  @_spi(RawSyntax)
+  public var layoutView: RawSyntaxLayoutView {
+    return raw.layoutView!
+  }
+
+  public static func isKindOf(_ raw: RawSyntax) -> Bool {
+    return raw.kind == .unexpectedCodeDecl
+  }
+
+  public var raw: RawSyntax
+
+  init(raw: RawSyntax) {
+    precondition(Self.isKindOf(raw))
+    self.raw = raw
+  }
+
+  private init(unchecked raw: RawSyntax) {
+    self.raw = raw
+  }
+
+  public init?(_ other: some RawSyntaxNodeProtocol) {
+    guard Self.isKindOf(other.raw) else {
+      return nil
+    }
+    self.init(unchecked: other.raw)
+  }
+
+  public init(unexpectedCode: RawUnexpectedNodesSyntax, arena: __shared RawSyntaxArena) {
+    let raw = RawSyntax.makeLayout(
+      kind: .unexpectedCodeDecl, uninitializedCount: 1, arena: arena) { layout in
+      layout.initialize(repeating: nil)
+      layout[0] = unexpectedCode.raw
+    }
+    self.init(unchecked: raw)
+  }
+
+  public var unexpectedCode: RawUnexpectedNodesSyntax {
+    layoutView.children[0].map(RawUnexpectedNodesSyntax.init(raw:))!
+  }
+}
+
+@_spi(RawSyntax)
 public struct RawUnexpectedNodesSyntax: RawSyntaxNodeProtocol {
   @_spi(RawSyntax)
   public var layoutView: RawSyntaxLayoutView {

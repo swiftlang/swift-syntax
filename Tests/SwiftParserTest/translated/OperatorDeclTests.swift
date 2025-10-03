@@ -214,7 +214,7 @@ final class OperatorDeclTests: ParserTestCase {
       prefix operator %%+
       """,
       diagnostics: [
-        DiagnosticSpec(message: "unexpected ';' separator", fixIts: ["remove ';'"])
+        DiagnosticSpec(message: "standalone ';' statements are not allowed", fixIts: ["remove ';'"])
       ],
       fixedSource:
         """

@@ -127,7 +127,8 @@ public class Node: NodeChoiceConvertible {
     parserFunction: TokenSyntax? = nil,
     traits: [String] = [],
     children: [Child] = [],
-    childHistory: Child.History = []
+    childHistory: Child.History = [],
+    noInterleaveUnexpected: Bool = false
   ) {
     precondition(base != .syntaxCollection)
     precondition(base.isBase, "unknown base kind '\(base)' for node '\(kind)'")
@@ -140,7 +141,8 @@ public class Node: NodeChoiceConvertible {
     self.documentation = SwiftSyntax.Trivia.docCommentTrivia(from: documentation)
     self.parserFunction = parserFunction
 
-    let childrenWithUnexpected = kind.isBase ? children : interleaveUnexpectedChildren(children)
+    let childrenWithUnexpected =
+      (kind.isBase || noInterleaveUnexpected) ? children : interleaveUnexpectedChildren(children)
 
     self.data = .layout(children: childrenWithUnexpected, childHistory: childHistory, traits: traits)
   }

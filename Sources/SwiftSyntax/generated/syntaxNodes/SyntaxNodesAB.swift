@@ -2295,7 +2295,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
 
 // MARK: - AsExprSyntax
 
-/// The cast of an expressison to a different type.
+/// The cast of an expression to a different type.
 /// 
 /// ### Examples
 /// 

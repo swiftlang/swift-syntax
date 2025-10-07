@@ -381,7 +381,7 @@ extension SyntaxKind {
     case .switchExpr:
       return "'switch' statement"
     case .ternaryExpr:
-      return "ternay expression"
+      return "ternary expression"
     case .thenStmt:
       return "'then' statement"
     case .throwStmt:

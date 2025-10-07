@@ -105,7 +105,7 @@ public let EXPR_NODES: [Node] = [
     base: .expr,
     nameForDiagnostics: "'as'",
     documentation: """
-      The cast of an expressison to a different type.
+      The cast of an expression to a different type.
 
       ### Examples
 
@@ -1993,7 +1993,7 @@ public let EXPR_NODES: [Node] = [
       }
       ```
 
-      A switch ecpression may be declared without any cases.
+      A switch expression may be declared without any cases.
       """,
     traits: [
       "Braced"
@@ -2035,7 +2035,7 @@ public let EXPR_NODES: [Node] = [
   Node(
     kind: .ternaryExpr,
     base: .expr,
-    nameForDiagnostics: "ternay expression",
+    nameForDiagnostics: "ternary expression",
     documentation: """
       The ternary operator with operator precedences resolved.
 

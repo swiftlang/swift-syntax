@@ -4430,7 +4430,7 @@ public struct SwitchDefaultLabelSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
 /// }
 /// ```
 /// 
-/// A switch ecpression may be declared without any cases.
+/// A switch expression may be declared without any cases.
 ///
 /// ### Children
 /// 

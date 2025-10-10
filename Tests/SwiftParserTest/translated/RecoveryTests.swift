@@ -2447,13 +2447,18 @@ final class RecoveryTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "4️⃣",
+          message: "expected 'in' in closure signature",
+          fixIts: ["insert 'in'"]
+        ),
+        DiagnosticSpec(
+          locationMarker: "4️⃣",
           message: "unexpected code ') -> Int {}' in closure"
         ),
       ],
       fixedSource: """
         #if true
         struct Foo19605164 {
-        func a(s: S) [{{g) -> Int {}
+        func a(s: S) [{{g in) -> Int {}
         }}}
         #endif
         """

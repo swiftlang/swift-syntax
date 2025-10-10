@@ -2567,6 +2567,7 @@ extension Parser.Lookahead {
   mutating func canParseClosureSignature() -> Bool {
     // Consume attributes.
     var lookahead = self.lookahead()
+    var sawTopLevelArrowInLookahead = false
     var attributesProgress = LoopProgressCondition()
     while lookahead.consume(if: .atSign) != nil, lookahead.hasProgressed(&attributesProgress) {
       guard lookahead.at(.identifier) else {
@@ -2630,15 +2631,21 @@ extension Parser.Lookahead {
         return false
       }
 
+      sawTopLevelArrowInLookahead = true
+
       lookahead.consumeEffectsSpecifiers()
     }
 
     // Parse the 'in' at the end.
-    guard lookahead.at(.keyword(.in)) else {
-      return false
+    if lookahead.at(.keyword(.in)) {
+      // Okay, we have a closure signature.
+      return true
     }
-    // Okay, we have a closure signature.
-    return true
+
+    // Even if 'in' is missing, the presence of a top-level '->' makes this look like a
+    // closure signature. There's no other valid syntax that could legally
+    // contain '->' at this position.
+    return sawTopLevelArrowInLookahead
   }
 }
 

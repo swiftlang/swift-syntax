@@ -945,52 +945,17 @@ extension Lexer.Cursor {
     case ";": _ = self.advance(); return Lexer.Result(.semicolon)
     case "\\": _ = self.advance(); return Lexer.Result(.backslash)
 
-    case ":":
-      _ = self.advance()
-      guard self.experimentalFeatures.contains(.moduleSelector) && self.peek() == ":" else {
-        return Lexer.Result(.colon)
-      }
-
-      _ = self.advance()
-      return Lexer.Result(.colonColon)
-
-    case "#":
-      // Try lex shebang.
-      if self.isAtStartOfFile, self.peek(at: 1) == "!" {
-        self.advanceToEndOfLine()
-        return Lexer.Result(.shebang)
-      }
-      // Try lex a raw string literal.
-      if let delimiterLength = self.advanceIfOpeningRawStringDelimiter() {
-        return Lexer.Result(
-          .rawStringPoundDelimiter,
-          stateTransition: .push(newState: .afterRawStringDelimiter(delimiterLength: delimiterLength))
-        )
-      }
-
-      // Try lex a regex literal.
-      if let result = self.lexRegexLiteral() {
-        return result
-      }
-      // Otherwise try lex a magic pound literal.
-      return self.lexMagicPoundLiteral()
+    case ":": return self.lexNormalColon()
+    case "#": return self.lexNormalPound()
 
     case "!", "?":
-      if let result = lexPostfixOptionalChain(sourceBufferStart: sourceBufferStart) {
-        return result
-      }
-      return self.lexOperatorIdentifier(
+      return self.lexNormalQuestionOrExclamation(
         sourceBufferStart: sourceBufferStart,
         preferRegexOverBinaryOperator: preferRegexOverBinaryOperator
       )
 
     case "<":
-      if self.is(offset: 1, at: "#"),
-        let result = self.tryLexEditorPlaceholder(sourceBufferStart: sourceBufferStart)
-      {
-        return result
-      }
-      return self.lexOperatorIdentifier(
+      return self.lexNormalLeftAngle(
         sourceBufferStart: sourceBufferStart,
         preferRegexOverBinaryOperator: preferRegexOverBinaryOperator
       )
@@ -1016,24 +981,94 @@ extension Lexer.Cursor {
     case nil:
       return Lexer.Result(.endOfFile)
     default:
-      var tmp = self
-      if tmp.advance(if: { $0.isValidIdentifierStartCodePoint }) {
-        return self.lexIdentifier()
-      }
+      return lexNormalMiscellaneous(
+        sourceBufferStart: sourceBufferStart,
+        preferRegexOverBinaryOperator: preferRegexOverBinaryOperator
+      )
+    }
+  }
 
-      if tmp.advance(if: { $0.isOperatorStartCodePoint }) {
-        return self.lexOperatorIdentifier(
-          sourceBufferStart: sourceBufferStart,
-          preferRegexOverBinaryOperator: preferRegexOverBinaryOperator
-        )
-      }
+  private mutating func lexNormalColon() -> Lexer.Result {
+    _ = self.advance()
+    guard self.experimentalFeatures.contains(.moduleSelector) && self.peek() == ":" else {
+      return Lexer.Result(.colon)
+    }
 
-      switch self.lexUnknown() {
-      case .lexemeContents(let result):
-        return result
-      case .trivia:
-        preconditionFailure("Invalid UTF-8 sequence should be eaten by lexTrivia as LeadingTrivia")
-      }
+    _ = self.advance()
+    return Lexer.Result(.colonColon)
+  }
+
+  private mutating func lexNormalPound() -> Lexer.Result {
+    // Try lex shebang.
+    if self.isAtStartOfFile, self.peek(at: 1) == "!" {
+      self.advanceToEndOfLine()
+      return Lexer.Result(.shebang)
+    }
+    // Try lex a raw string literal.
+    if let delimiterLength = self.advanceIfOpeningRawStringDelimiter() {
+      return Lexer.Result(
+        .rawStringPoundDelimiter,
+        stateTransition: .push(newState: .afterRawStringDelimiter(delimiterLength: delimiterLength))
+      )
+    }
+
+    // Try lex a regex literal.
+    if let result = self.lexRegexLiteral() {
+      return result
+    }
+    // Otherwise try lex a magic pound literal.
+    return self.lexMagicPoundLiteral()
+  }
+
+  private mutating func lexNormalQuestionOrExclamation(
+    sourceBufferStart: Lexer.Cursor,
+    preferRegexOverBinaryOperator: Bool
+  ) -> Lexer.Result {
+    if let result = lexPostfixOptionalChain(sourceBufferStart: sourceBufferStart) {
+      return result
+    }
+    return self.lexOperatorIdentifier(
+      sourceBufferStart: sourceBufferStart,
+      preferRegexOverBinaryOperator: preferRegexOverBinaryOperator
+    )
+  }
+
+  private mutating func lexNormalLeftAngle(
+    sourceBufferStart: Lexer.Cursor,
+    preferRegexOverBinaryOperator: Bool
+  ) -> Lexer.Result {
+    if self.is(offset: 1, at: "#"),
+      let result = self.tryLexEditorPlaceholder(sourceBufferStart: sourceBufferStart)
+    {
+      return result
+    }
+    return self.lexOperatorIdentifier(
+      sourceBufferStart: sourceBufferStart,
+      preferRegexOverBinaryOperator: preferRegexOverBinaryOperator
+    )
+  }
+
+  private mutating func lexNormalMiscellaneous(
+    sourceBufferStart: Lexer.Cursor,
+    preferRegexOverBinaryOperator: Bool
+  ) -> Lexer.Result {
+    var tmp = self
+    if tmp.advance(if: { $0.isValidIdentifierStartCodePoint }) {
+      return self.lexIdentifier()
+    }
+
+    if tmp.advance(if: { $0.isOperatorStartCodePoint }) {
+      return self.lexOperatorIdentifier(
+        sourceBufferStart: sourceBufferStart,
+        preferRegexOverBinaryOperator: preferRegexOverBinaryOperator
+      )
+    }
+
+    switch self.lexUnknown() {
+    case .lexemeContents(let result):
+      return result
+    case .trivia:
+      preconditionFailure("Invalid UTF-8 sequence should be eaten by lexTrivia as LeadingTrivia")
     }
   }
 

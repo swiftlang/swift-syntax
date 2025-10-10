@@ -1,5 +1,8 @@
 name: Pull request
 
+permissions:
+  contents: read
+
 # PRs created by GitHub Actions don't kick off further actions (https://github.com/peter-evans/create-pull-request/blob/d57e551ebc1a16dee0b8c9ea6d24dba7627a6e35/docs/concepts-guidelines.md#triggering-further-workflow-runs).
 # As a workaround, we mark automerge PRs that are created by GitHub actions as draft and trigger the GitHub actions by marking the PR as ready for review. We'd prefer not re-triggering testing on a normal user's PR in this case, but skipping them causes the checks to reset.
 on:

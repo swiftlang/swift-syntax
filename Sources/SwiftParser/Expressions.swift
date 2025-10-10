@@ -449,7 +449,7 @@ extension Parser {
     flavor: ExprFlavor,
     pattern: PatternContext
   ) -> RawExprSyntax? {
-    EXPR_PREFIX: switch self.at(anyIn: ExpressionModifierKeyword.self) {
+    switch self.at(anyIn: ExpressionModifierKeyword.self) {
     case (.await, let handle)?:
       let awaitTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
@@ -482,7 +482,7 @@ extension Parser {
       )
     case (.unsafe, let handle)?:
       if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor, acceptClosure: true, preferPostfixExpr: false) {
-        break EXPR_PREFIX
+        break
       }
 
       let unsafeTok = self.eat(handle)
@@ -503,7 +503,7 @@ extension Parser {
       fallthrough
     case (.borrow, let handle)?:
       if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) {
-        break EXPR_PREFIX
+        break
       }
       let borrowTok = self.eat(handle)
       let sub = self.parseSequenceExpressionElement(
@@ -520,7 +520,7 @@ extension Parser {
 
     case (.copy, let handle)?:
       if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) {
-        break EXPR_PREFIX
+        break
       }
 
       let copyTok = self.eat(handle)
@@ -541,7 +541,7 @@ extension Parser {
       fallthrough
     case (.consume, let handle)?:
       if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) {
-        break EXPR_PREFIX
+        break
       }
 
       let consumeKeyword = self.eat(handle)
@@ -563,7 +563,7 @@ extension Parser {
 
     case (.each, let handle)?:
       if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) {
-        break EXPR_PREFIX
+        break
       }
 
       let each = self.eat(handle)
@@ -578,7 +578,7 @@ extension Parser {
 
     case (.any, _)?:
       if !atContextualKeywordPrefixedSyntax(exprFlavor: flavor) && !self.peek().isContextualPunctuator("~") {
-        break EXPR_PREFIX
+        break
       }
 
       // 'any' is parsed as a part of 'type'.
@@ -1762,7 +1762,7 @@ extension Parser {
     do {
       var collectionProgress = LoopProgressCondition()
       var keepGoing: RawTokenSyntax?
-      COLLECTION_LOOP: repeat {
+      repeat {
         elementKind = self.parseCollectionElement(elementKind)
 
         /// Whether expression of an array element or the value of a dictionary
@@ -1790,7 +1790,7 @@ extension Parser {
 
         let element = elementKind!.makeElement(trailingComma: keepGoing, arena: self.arena)
         if element.isEmpty {
-          break COLLECTION_LOOP
+          break
         } else {
           elements.append(RawSyntax(element))
         }

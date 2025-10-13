@@ -152,6 +152,10 @@ public struct StandardIOMessageConnection: MessageConnection {
 
     // Read the JSON payload.
     let count = Int(UInt64(littleEndian: header))
+    // Empty message is a termination signal.
+    if count == 0 {
+      return nil
+    }
     let data = UnsafeMutableRawBufferPointer.allocate(byteCount: count, alignment: 1)
     defer { data.deallocate() }
     try _read(into: data)

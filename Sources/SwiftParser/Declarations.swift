@@ -68,36 +68,7 @@ extension TokenConsumer {
   ) -> Bool {
     var subparser = self.lookahead()
 
-    var hasAttribute = false
-    var attributeProgress = LoopProgressCondition()
-    while subparser.hasProgressed(&attributeProgress) {
-      if subparser.at(.atSign) {
-        _ = subparser.consumeAttributeList()
-        hasAttribute = true
-      } else if subparser.at(.poundIf) && subparser.consumeIfConfigOfAttributes() {
-        hasAttribute = true
-      } else {
-        break
-      }
-    }
-
-    var hasModifier = false
-    if subparser.currentToken.isLexerClassifiedKeyword || subparser.currentToken.rawTokenKind == .identifier {
-      var modifierProgress = LoopProgressCondition()
-      while let (modifierKind, handle) = subparser.at(anyIn: DeclarationModifier.self),
-        modifierKind != .class,
-        subparser.hasProgressed(&modifierProgress)
-      {
-        hasModifier = true
-        subparser.eat(handle)
-        if modifierKind != .open && subparser.at(.leftParen) && modifierKind.canHaveParenthesizedArgument {
-          // When determining whether we are at a declaration, don't consume anything in parentheses after 'open'
-          // so we don't consider a function call to open as a decl modifier. This matches the C++ parser.
-          subparser.consumeAnyToken()
-          subparser.consume(to: .rightParen)
-        }
-      }
-    }
+    let (hasAttribute, hasModifier) = subparser.skipAttributesAndModifiers()
 
     if hasAttribute {
       if subparser.at(.rightBrace) || subparser.at(.endOfFile) || subparser.at(.poundEndif) {
@@ -112,17 +83,7 @@ extension TokenConsumer {
     switch subparser.at(anyIn: DeclarationKeyword.self)?.0 {
     case .lhs(.actor):
       // actor Foo {}
-      if subparser.peek().rawTokenKind == .identifier {
-        return true
-      }
-      // actor may be somewhere in the modifier list. Eat the tokens until we get
-      // to something that isn't the start of a decl. If that is an identifier,
-      // it's an actor declaration, otherwise, it isn't.
-      var lookahead = subparser.lookahead()
-      repeat {
-        lookahead.consumeAnyToken()
-      } while lookahead.atStartOfDeclaration(allowInitDecl: allowInitDecl, requiresDecl: requiresDecl)
-      return lookahead.at(.identifier)
+      return subparser.atStartOfActor(allowInitDecl: allowInitDecl, requiresDecl: requiresDecl)
     case .lhs(.case):
       // When 'case' appears inside a function, it's probably a switch
       // case, not an enum case declaration.
@@ -146,23 +107,7 @@ extension TokenConsumer {
         return false
       }
 
-      var lookahead = subparser.lookahead()
-
-      // Consume 'using'
-      lookahead.consumeAnyToken()
-
-      // Allow parsing 'using' as declaration only if
-      // it's immediately followed by either `@` or
-      // an identifier.
-      if lookahead.atStartOfLine {
-        return false
-      }
-
-      guard lookahead.at(.atSign) || lookahead.at(.identifier) else {
-        return false
-      }
-
-      return true
+      return subparser.atStartOfUsing()
     case .some(_):
       // All other decl start keywords unconditionally start a decl.
       return true
@@ -197,6 +142,80 @@ extension TokenConsumer {
       }
       return false
     }
+  }
+}
+
+extension Parser.Lookahead {
+  fileprivate mutating func skipAttributesAndModifiers() -> (hasAttribute: Bool, hasModifier: Bool) {
+    var hasAttribute = false
+    var attributeProgress = LoopProgressCondition()
+    while self.hasProgressed(&attributeProgress) {
+      if self.at(.atSign) {
+        _ = self.consumeAttributeList()
+        hasAttribute = true
+      } else if self.at(.poundIf) && self.consumeIfConfigOfAttributes() {
+        hasAttribute = true
+      } else {
+        break
+      }
+    }
+
+    var hasModifier = false
+    if self.currentToken.isLexerClassifiedKeyword || self.currentToken.rawTokenKind == .identifier {
+      var modifierProgress = LoopProgressCondition()
+      while let (modifierKind, handle) = self.at(anyIn: DeclarationModifier.self),
+        modifierKind != .class,
+        self.hasProgressed(&modifierProgress)
+      {
+        hasModifier = true
+        self.eat(handle)
+        if modifierKind != .open && self.at(.leftParen) && modifierKind.canHaveParenthesizedArgument {
+          // When determining whether we are at a declaration, don't consume anything in parentheses after 'open'
+          // so we don't consider a function call to open as a decl modifier. This matches the C++ parser.
+          self.consumeAnyToken()
+          self.consume(to: .rightParen)
+        }
+      }
+    }
+
+    return (hasAttribute, hasModifier)
+  }
+
+  fileprivate mutating func atStartOfActor(
+    allowInitDecl: Bool,
+    requiresDecl: Bool
+  ) -> Bool {
+    if self.peek().rawTokenKind == .identifier {
+      return true
+    }
+    // actor may be somewhere in the modifier list. Eat the tokens until we get
+    // to something that isn't the start of a decl. If that is an identifier,
+    // it's an actor declaration, otherwise, it isn't.
+    var lookahead = self.lookahead()
+    repeat {
+      lookahead.consumeAnyToken()
+    } while lookahead.atStartOfDeclaration(allowInitDecl: allowInitDecl, requiresDecl: requiresDecl)
+    return lookahead.at(.identifier)
+  }
+
+  fileprivate mutating func atStartOfUsing() -> Bool {
+    var lookahead = self.lookahead()
+
+    // Consume 'using'
+    lookahead.consumeAnyToken()
+
+    // Allow parsing 'using' as declaration only if
+    // it's immediately followed by either `@` or
+    // an identifier.
+    if lookahead.atStartOfLine {
+      return false
+    }
+
+    guard lookahead.at(.atSign) || lookahead.at(.identifier) else {
+      return false
+    }
+
+    return true
   }
 }
 

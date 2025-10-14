@@ -149,24 +149,26 @@ extension PluginProviderMessageHandler {
     let swiftVersion = staticBuildConfiguration?.parserSwiftVersion
     let experimentalFeatures = staticBuildConfiguration?.experimentalFeatures
 
-    func addToSourceManager(_ syntax: PluginMessage.Syntax) -> Syntax {
+    func addToSourceManager(_ syntax: PluginMessage.Syntax, foldOperators: Bool) -> Syntax {
       sourceManager.add(
         syntax,
         swiftVersion: swiftVersion,
         experimentalFeatures: experimentalFeatures,
-        foldingWith: .standardOperators
+        foldingWith: foldOperators ? .standardOperators : nil
       )
     }
 
-    let attributeNode = addToSourceManager(attributeSyntax)
+    let attributeNode = addToSourceManager(attributeSyntax, foldOperators: true)
       .cast(AttributeSyntax.self)
-    let declarationNode = addToSourceManager(declSyntax)
-    let parentDeclNode = parentDeclSyntax.map { addToSourceManager($0).cast(DeclSyntax.self) }
+    let declarationNode = addToSourceManager(declSyntax, foldOperators: false)
+    let parentDeclNode = parentDeclSyntax.map {
+      addToSourceManager($0, foldOperators: false).cast(DeclSyntax.self)
+    }
     let extendedType = extendedTypeSyntax.map {
-      addToSourceManager($0).cast(TypeSyntax.self)
+      addToSourceManager($0, foldOperators: false).cast(TypeSyntax.self)
     }
     let conformanceList = conformanceListSyntax.map {
-      let placeholderStruct = addToSourceManager($0).cast(StructDeclSyntax.self)
+      let placeholderStruct = addToSourceManager($0, foldOperators: false).cast(StructDeclSyntax.self)
       return placeholderStruct.inheritanceClause!.inheritedTypes
     }
 

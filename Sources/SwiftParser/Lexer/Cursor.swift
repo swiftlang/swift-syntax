@@ -990,7 +990,7 @@ extension Lexer.Cursor {
 
   private mutating func lexNormalColon() -> Lexer.Result {
     _ = self.advance()
-    guard self.experimentalFeatures.contains(.moduleSelector) && self.peek() == ":" else {
+    guard self.peek() == ":" else {
       return Lexer.Result(.colon)
     }
 

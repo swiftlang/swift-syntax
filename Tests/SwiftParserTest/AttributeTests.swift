@@ -193,18 +193,6 @@ final class AttributeTests: ParserTestCase {
       """
     )
 
-    // Same as above, but with module selectors, which introduce a token for adjacent colons.
-    assertParse(
-      """
-      @objc(zeroArg)
-      class A { }
-
-      @objc(:::x::)
-      func f(_: Int, _: Int, _: Int, _: Int, _: Int) { }
-      """,
-      experimentalFeatures: [.moduleSelector]
-    )
-
     assertParse(
       """
       @objc(_:)

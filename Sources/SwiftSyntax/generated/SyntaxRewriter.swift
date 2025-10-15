@@ -1397,10 +1397,9 @@ open class SyntaxRewriter {
     return TypeSyntax(MissingTypeSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
-  /// Visit a `ModuleSelectorSyntax`.
+  /// Visit a ``ModuleSelectorSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
-  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: ModuleSelectorSyntax) -> ModuleSelectorSyntax {
     return ModuleSelectorSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }

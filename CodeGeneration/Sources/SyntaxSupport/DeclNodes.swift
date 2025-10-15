@@ -1559,7 +1559,6 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "moduleSelector",
         kind: .node(kind: .moduleSelector),
-        experimentalFeature: .moduleSelector,
         isOptional: true
       ),
       Child(
@@ -1601,11 +1600,14 @@ public let DECL_NODES: [Node] = [
     ],
     childHistory: [
       [
+        "moduleSelector": .introduced
+      ],
+      [
         "pound": .renamed(from: "poundToken"),
         "macroName": .renamed(from: "macro"),
         "genericArgumentClause": .renamed(from: "genericArguments"),
         "arguments": .renamed(from: "argumentList"),
-      ]
+      ],
     ]
   ),
 

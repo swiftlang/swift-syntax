@@ -628,7 +628,7 @@ public struct DeclNameArgumentsSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 
 /// ### Children
 /// 
-///  - `moduleSelector`: `ModuleSelectorSyntax`?
+///  - `moduleSelector`: ``ModuleSelectorSyntax``?
 ///  - `baseName`: (`<identifier>` | `self` | `Self` | `init` | `deinit` | `subscript` | `<dollarIdentifier>` | `<binaryOperator>` | `<integerLiteral>`)
 ///  - `argumentNames`: ``DeclNameArgumentsSyntax``?
 ///
@@ -657,7 +657,7 @@ public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
-  @_spi(ExperimentalLanguageFeatures) public init(
+  public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeModuleSelector: UnexpectedNodesSyntax? = nil,
     moduleSelector: ModuleSelectorSyntax? = nil,
@@ -699,7 +699,6 @@ public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBeforeModuleSelector: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 0)?.cast(UnexpectedNodesSyntax.self)
@@ -709,7 +708,6 @@ public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   public var moduleSelector: ModuleSelectorSyntax? {
     get {
       return Syntax(self).child(at: 1)?.cast(ModuleSelectorSyntax.self)
@@ -719,7 +717,6 @@ public struct DeclReferenceExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
     }
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   public var unexpectedBetweenModuleSelectorAndBaseName: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)

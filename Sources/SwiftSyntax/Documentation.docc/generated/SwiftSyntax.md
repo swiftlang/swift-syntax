@@ -362,6 +362,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/MatchingPatternConditionSyntax>
 - <doc:SwiftSyntax/MemberBlockSyntax>
 - <doc:SwiftSyntax/MissingSyntax>
+- <doc:SwiftSyntax/ModuleSelectorSyntax>
 - <doc:SwiftSyntax/NonisolatedSpecifierArgumentSyntax>
 - <doc:SwiftSyntax/OperatorPrecedenceAndTypesSyntax>
 - <doc:SwiftSyntax/OptionalBindingConditionSyntax>

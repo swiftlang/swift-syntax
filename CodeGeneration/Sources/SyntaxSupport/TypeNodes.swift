@@ -368,7 +368,6 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "moduleSelector",
         kind: .node(kind: .moduleSelector),
-        experimentalFeature: .moduleSelector,
         nameForDiagnostics: "module selector",
         isOptional: true
       ),
@@ -382,6 +381,11 @@ public let TYPE_NODES: [Node] = [
         kind: .node(kind: .genericArgumentClause),
         isOptional: true
       ),
+    ],
+    childHistory: [
+      [
+        "moduleSelector": .introduced
+      ]
     ]
   ),
 
@@ -521,7 +525,6 @@ public let TYPE_NODES: [Node] = [
       Child(
         name: "moduleSelector",
         kind: .node(kind: .moduleSelector),
-        experimentalFeature: .moduleSelector,
         nameForDiagnostics: "module selector",
         isOptional: true
       ),
@@ -539,6 +542,11 @@ public let TYPE_NODES: [Node] = [
         kind: .node(kind: .genericArgumentClause),
         isOptional: true
       ),
+    ],
+    childHistory: [
+      [
+        "moduleSelector": .introduced
+      ]
     ]
   ),
 

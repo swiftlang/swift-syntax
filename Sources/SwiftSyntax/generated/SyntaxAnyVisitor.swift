@@ -1549,12 +1549,10 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   override open func visit(_ node: ModuleSelectorSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
 
-  @_spi(ExperimentalLanguageFeatures)
   override open func visitPost(_ node: ModuleSelectorSyntax) {
     visitAnyPost(node._syntaxNode)
   }

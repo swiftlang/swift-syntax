@@ -95,7 +95,6 @@ public let TRAITS: [Trait] = [
       Child(
         name: "moduleSelector",
         kind: .node(kind: .moduleSelector),
-        experimentalFeature: .moduleSelector,
         isOptional: true
       ),
       Child(name: "macroName", kind: .token(choices: [.token(.identifier)])),
@@ -108,11 +107,14 @@ public let TRAITS: [Trait] = [
     ],
     childHistory: [
       [
+        "moduleSelector": .introduced
+      ],
+      [
         "pound": .renamed(from: "poundToken"),
         "macroName": .renamed(from: "macro"),
         "arguments": .renamed(from: "argumentList"),
         "genericArgumentClause": .renamed(from: "genericArguments"),
-      ]
+      ],
     ]
   ),
   Trait(

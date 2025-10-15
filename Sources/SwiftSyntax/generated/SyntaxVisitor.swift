@@ -2263,17 +2263,15 @@ open class SyntaxVisitor {
   open func visitPost(_ node: MissingTypeSyntax) {
   }
 
-  /// Visiting `ModuleSelectorSyntax` specifically.
+  /// Visiting ``ModuleSelectorSyntax`` specifically.
   ///   - Parameter node: the node we are visiting.
   ///   - Returns: how should we continue visiting.
-  @_spi(ExperimentalLanguageFeatures)
   open func visit(_ node: ModuleSelectorSyntax) -> SyntaxVisitorContinueKind {
     return .visitChildren
   }
 
-  /// The function called after visiting `ModuleSelectorSyntax` and its descendants.
+  /// The function called after visiting ``ModuleSelectorSyntax`` and its descendants.
   ///   - node: the node we just finished visiting.
-  @_spi(ExperimentalLanguageFeatures)
   open func visitPost(_ node: ModuleSelectorSyntax) {
   }
 

@@ -56,6 +56,9 @@ function(add_swift_syntax_library name)
 
   # Create the library target.
   add_library(${target} ${ASHL_SOURCES})
+  if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+    target_link_libraries(${target} PUBLIC swiftSwiftOnoneSupport)
+  endif()
 
   if(SWIFTSYNTAX_EMIT_MODULE)
     # Determine where Swift modules will be built and installed.

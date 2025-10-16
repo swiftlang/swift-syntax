@@ -307,8 +307,8 @@ func evaluateIfConfig(
     case .targetEnvironment:
       return doSingleIdentifierArgumentCheck(configuration.isActiveTargetEnvironment, role: "environment")
 
-    case ._objectFileFormat:
-      return doSingleIdentifierArgumentCheck(configuration.isActiveTargetObjectFileFormat, role: "object file format")
+    case .objectFormat:
+      return doSingleIdentifierArgumentCheck(configuration.isActiveTargetObjectFormat, role: "object file format")
 
     case ._runtime:
       return doSingleIdentifierArgumentCheck(configuration.isActiveTargetRuntime, role: "runtime")
@@ -821,8 +821,8 @@ private struct CanImportSuppressingBuildConfiguration<Other: BuildConfiguration>
     return try other.isActiveTargetPointerAuthentication(name: name)
   }
 
-  func isActiveTargetObjectFileFormat(name: String) throws -> Bool {
-    return try other.isActiveTargetObjectFileFormat(name: name)
+  func isActiveTargetObjectFormat(name: String) throws -> Bool {
+    return try other.isActiveTargetObjectFormat(name: name)
   }
 
   var targetPointerBitWidth: Int { return other.targetPointerBitWidth }

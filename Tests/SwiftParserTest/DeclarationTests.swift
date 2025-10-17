@@ -3831,4 +3831,16 @@ final class UsingDeclarationTests: ParserTestCase {
       )
     )
   }
+
+  func testAccessorBlockAfterPatternBindingDeclWithAttribute() {
+    assertParse(
+      """
+      var x: Int = foo()
+      {
+        @available(*, deprecated)
+        didSet {}
+      }
+      """
+    )
+  }
 }

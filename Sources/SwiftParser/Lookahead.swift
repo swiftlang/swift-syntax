@@ -266,7 +266,7 @@ extension Parser.Lookahead {
     }
 
     // If we don't have attributes, then it cannot be an accessor block.
-    if nextToken.rawTokenKind != .atSign {
+    guard self.peek(isAt: .atSign) else {
       return false
     }
 

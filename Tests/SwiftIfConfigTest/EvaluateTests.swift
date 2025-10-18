@@ -228,8 +228,8 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("_pointerBitWidth(_32)", .inactive)
     assertIfConfig("_hasAtomicBitWidth(_64)", .active)
     assertIfConfig("_hasAtomicBitWidth(_128)", .inactive)
-    assertIfConfig("_objectFileFormat(ELF)", .active)
-    assertIfConfig("_objectFileFormat(MachO)", .inactive)
+    assertIfConfig("objectFormat(ELF)", .active)
+    assertIfConfig("objectFormat(MachO)", .inactive)
 
     assertIfConfig(
       "_endian(mid)",

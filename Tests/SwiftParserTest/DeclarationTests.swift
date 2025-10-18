@@ -3768,4 +3768,41 @@ final class UsingDeclarationTests: ParserTestCase {
       """
     )
   }
+
+  func testAccessorBlockDisambiguationMarker() {
+    assertParse(
+      """
+      var value = initialValue { @_accessorBlock
+        get
+      }
+      """,
+      substructure: VariableDeclSyntax(
+        bindingSpecifier: .keyword(.var),
+        bindings: [
+          PatternBindingSyntax(
+            pattern: IdentifierPatternSyntax(identifier: .identifier("value")),
+            initializer: InitializerClauseSyntax(
+              value: DeclReferenceExprSyntax(baseName: .identifier("initialValue"))
+            ),
+            accessorBlock: AccessorBlockSyntax(
+              leftBrace: .leftBraceToken(),
+              accessors: .accessors([
+                AccessorDeclSyntax(
+                  attributes: [
+                    .attribute(
+                      AttributeSyntax(
+                        atSign: .atSignToken(),
+                        attributeName: IdentifierTypeSyntax(name: .identifier("_accessorBlock"))
+                      )
+                    )
+                  ],
+                  accessorSpecifier: .keyword(.get)
+                )
+              ])
+            )
+          )
+        ]
+      )
+    )
+  }
 }

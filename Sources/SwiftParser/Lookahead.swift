@@ -274,6 +274,13 @@ extension Parser.Lookahead {
     var lookahead = self.lookahead()
     lookahead.eat(.leftBrace)
 
+    // '@_accessorBlock' is a builtin disambiguation marker.
+    if lookahead.peek(isAt: .identifier),
+      lookahead.peek().tokenText == "_accessorBlock"
+    {
+      return true
+    }
+
     // Eat attributes, if present.
     while lookahead.consume(if: .atSign) != nil {
       guard lookahead.consume(if: .identifier) != nil else {

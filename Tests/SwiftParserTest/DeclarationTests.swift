@@ -617,6 +617,23 @@ final class DeclarationTests: ParserTestCase {
         private(set) var get, didSet var a = 0
         """
     )
+
+    assertParse(
+      """
+      public 1️⃣{ {} }
+      open
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "expected declaration and ';' after 'public' modifier",
+          fixIts: ["insert declaration and ';'"]
+        )
+      ],
+      fixedSource: """
+        public <#declaration#>; { {} }
+        open
+        """
+    )
   }
 
   func testTypealias() {
@@ -1314,6 +1331,15 @@ final class DeclarationTests: ParserTestCase {
           get async { 0 }
         }
         """
+    )
+
+    assertParse(
+      """
+      public var foo: Swift.Int {
+        get
+        @inlinable set {}
+      }
+      """
     )
   }
 

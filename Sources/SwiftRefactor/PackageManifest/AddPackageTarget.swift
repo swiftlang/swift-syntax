@@ -34,6 +34,7 @@ public struct AddPackageTarget: EditRefactoringProvider {
   /// argument in the Package initializers.
   private static let argumentLabelsAfterTargets: Set<String> = [
     "swiftLanguageVersions",
+    "swiftLanguageModes",
     "cLanguageStandard",
     "cxxLanguageStandard",
   ]

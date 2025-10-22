@@ -309,8 +309,7 @@ public protocol BuildConfiguration {
 /// Default implementation of BuildConfiguration, to avoid a revlock with the
 /// swift repo, and breaking clients with the new addition to the protocol.
 extension BuildConfiguration {
-  /// FIXME: This should be @_spi(ExperimentalLanguageFeatures) but cannot due
-  /// to rdar://147943518, https://github.com/swiftlang/swift/issues/80313
+  @available(*, deprecated, message: "`BuildConfiguration` conformance must implement `isActiveTargetObjectFormat`")
   public func isActiveTargetObjectFormat(name: String) throws -> Bool {
     throw BuildConfigurationError.notImplemented(name: "isActiveTargetObjectFormat")
   }

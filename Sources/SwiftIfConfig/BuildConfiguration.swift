@@ -39,11 +39,14 @@ public enum CanImportVersion {
 
 enum BuildConfigurationError: Error, CustomStringConvertible {
   case experimentalFeature(name: String)
+  case notImplemented(name: String)
 
   var description: String {
     switch self {
     case .experimentalFeature(let name):
       return "'\(name)' is an experimental feature"
+    case .notImplemented(let name):
+      return "'\(name)' not implemented"
     }
   }
 }
@@ -228,18 +231,17 @@ public protocol BuildConfiguration {
   /// Determine whether the given name is the active target object file format (e.g., ELF).
   ///
   /// The target object file format can only be queried by an experimental
-  /// syntax `_objectFileFormat(<name>)`, e.g.,
+  /// syntax `objectFormat(<name>)`, e.g.,
   ///
   /// ```swift
-  /// #if _objectFileFormat(ELF)
+  /// #if objectFormat(ELF)
   /// // Special logic for ELF object file formats
   /// #endif
   /// ```
   /// - Parameters:
   ///   - name: The name of the object file format.
   /// - Returns: Whether the target object file format matches the given name.
-  @_spi(ExperimentalLanguageFeatures)
-  func isActiveTargetObjectFileFormat(name: String) throws -> Bool
+  func isActiveTargetObjectFormat(name: String) throws -> Bool
 
   /// The bit width of a data pointer for the target architecture.
   ///
@@ -307,9 +309,8 @@ public protocol BuildConfiguration {
 /// Default implementation of BuildConfiguration, to avoid a revlock with the
 /// swift repo, and breaking clients with the new addition to the protocol.
 extension BuildConfiguration {
-  /// FIXME: This should be @_spi(ExperimentalLanguageFeatures) but cannot due
-  /// to rdar://147943518, https://github.com/swiftlang/swift/issues/80313
-  public func isActiveTargetObjectFileFormat(name: String) throws -> Bool {
-    throw BuildConfigurationError.experimentalFeature(name: "_objectFileFormat")
+  @available(*, deprecated, message: "`BuildConfiguration` conformance must implement `isActiveTargetObjectFormat`")
+  public func isActiveTargetObjectFormat(name: String) throws -> Bool {
+    throw BuildConfigurationError.notImplemented(name: "isActiveTargetObjectFormat")
   }
 }

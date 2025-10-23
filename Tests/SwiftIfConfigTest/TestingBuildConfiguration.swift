@@ -99,7 +99,7 @@ struct TestingBuildConfiguration: BuildConfiguration {
     name == "arm64e"
   }
 
-  func isActiveTargetObjectFileFormat(name: String) throws -> Bool {
+  func isActiveTargetObjectFormat(name: String) throws -> Bool {
     name == "ELF"
   }
 

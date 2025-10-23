@@ -50,7 +50,7 @@ enum IfConfigFunctions: String {
   case _pointerBitWidth
 
   /// A check for the target object file format (e.g., ELF)
-  case _objectFileFormat
+  case objectFormat
 
   /// A check for the target runtime paired with the Swift runtime (e.g., _ObjC)
   /// via `_runtime(<name>)`.
@@ -72,7 +72,7 @@ enum IfConfigFunctions: String {
       return true
 
     case .hasAttribute, .hasFeature, .canImport, .os, .arch, .targetEnvironment,
-      ._hasAtomicBitWidth, ._endian, ._pointerBitWidth, ._objectFileFormat, ._runtime, ._ptrauth, .defined:
+      ._hasAtomicBitWidth, ._endian, ._pointerBitWidth, .objectFormat, ._runtime, ._ptrauth, .defined:
       return false
     }
   }

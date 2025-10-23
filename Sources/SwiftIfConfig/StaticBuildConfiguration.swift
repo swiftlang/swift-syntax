@@ -413,8 +413,7 @@ extension StaticBuildConfiguration: BuildConfiguration {
   /// - Parameters:
   ///   - name: The name of the object file format.
   /// - Returns: Whether the target object file format matches the given name.
-  @_spi(ExperimentalLanguageFeatures)
-  public func isActiveTargetObjectFileFormat(name: String) -> Bool {
+  public func isActiveTargetObjectFormat(name: String) -> Bool {
     targetObjectFileFormats.contains(name)
   }
 

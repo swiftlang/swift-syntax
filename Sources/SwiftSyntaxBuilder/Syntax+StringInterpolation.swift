@@ -467,6 +467,10 @@ extension TokenSyntax: SyntaxExpressibleByStringInterpolation {
 // Silence warning that TokenSyntax has a retroactive conformance to `ExpressibleByStringInterpolation` through
 // `SyntaxExpressibleByStringInterpolation`.
 extension TokenSyntax: Swift.ExpressibleByStringInterpolation {}
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension TokenSyntax: Swift.ExpressibleByStringLiteral {}
+extension TokenSyntax: Swift.ExpressibleByExtendedGraphemeClusterLiteral {}
+extension TokenSyntax: Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 // MARK: - Trivia expressible as string
@@ -515,7 +519,13 @@ extension Trivia {
 }
 
 #if compiler(>=6)
+// Silence warning that Trivia has a retroactive conformance to `ExpressibleByStringInterpolation` through
+// `SyntaxExpressibleByStringInterpolation`.
 extension Trivia: Swift.ExpressibleByStringInterpolation {}
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension Trivia: Swift.ExpressibleByStringLiteral {}
+extension Trivia: Swift.ExpressibleByExtendedGraphemeClusterLiteral {}
+extension Trivia: Swift.ExpressibleByUnicodeScalarLiteral {}
 #else
 extension Trivia: ExpressibleByStringInterpolation {}
 #endif

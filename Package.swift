@@ -29,6 +29,7 @@ if buildDynamicLibrary {
     .library(name: "SwiftDiagnostics", targets: ["SwiftDiagnostics"]),
     .library(name: "SwiftIDEUtils", targets: ["SwiftIDEUtils"]),
     .library(name: "SwiftIfConfig", targets: ["SwiftIfConfig"]),
+    .library(name: "SwiftWarningControl", targets: ["SwiftWarningControl"]),
     .library(name: "SwiftLexicalLookup", targets: ["SwiftLexicalLookup"]),
     .library(name: "SwiftOperators", targets: ["SwiftOperators"]),
     .library(name: "SwiftParser", targets: ["SwiftParser"]),
@@ -175,6 +176,24 @@ let package = Package(
       dependencies: [
         "_SwiftSyntaxTestSupport",
         "SwiftIfConfig",
+        "SwiftParser",
+        "SwiftSyntaxMacrosGenericTestSupport",
+      ]
+    ),
+
+    // MARK: SwiftWarningControl
+
+    .target(
+      name: "SwiftWarningControl",
+      dependencies: ["SwiftSyntax", "SwiftParser"],
+      exclude: ["CMakeLists.txt"]
+    ),
+
+    .testTarget(
+      name: "SwiftWarningControlTest",
+      dependencies: [
+        "_SwiftSyntaxTestSupport",
+        "SwiftWarningControl",
         "SwiftParser",
         "SwiftSyntaxMacrosGenericTestSupport",
       ]

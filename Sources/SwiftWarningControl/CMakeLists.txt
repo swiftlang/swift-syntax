@@ -1,0 +1,19 @@
+# This source file is part of the Swift.org open source project
+#
+# Copyright (c) 2014 - 2025 Apple Inc. and the Swift project authors
+# Licensed under Apache License v2.0 with Runtime Library Exception
+#
+# See http://swift.org/LICENSE.txt for license information
+# See http://swift.org/CONTRIBUTORS.txt for Swift project authors
+
+add_swift_syntax_library(SwiftWarningControl
+  WarningGroupBehavior.swift
+  WarningControlDeclSyntax.swift
+  WarningControlRegionBuilder.swift
+  WarningControlRegions.swift
+  SyntaxProtocol+WarningControl.swift
+)
+
+target_link_swift_syntax_libraries(SwiftWarningControl PUBLIC
+  SwiftSyntax
+  SwiftParser)

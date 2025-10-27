@@ -18,6 +18,7 @@ builder:
         - SwiftParser
         - SwiftParserDiagnostics
         - SwiftRefactor
+        - SwiftWarningControl
         - SwiftSyntaxBuilder
         - SwiftSyntaxMacros
         - SwiftSyntaxMacroExpansion

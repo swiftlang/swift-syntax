@@ -23,167 +23,251 @@ extension AccessorBlockFileSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension AccessorBlockFileSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension AccessorBlockFileSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension AccessorBlockSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension AccessorBlockSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension AccessorBlockSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension AccessorDeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension AccessorDeclSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension AccessorDeclSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension AttributeClauseFileSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension AttributeClauseFileSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension AttributeClauseFileSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension AttributeSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension AttributeSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension AttributeSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension AvailabilityMacroDefinitionFileSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension AvailabilityMacroDefinitionFileSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension AvailabilityMacroDefinitionFileSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension CatchClauseSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension CatchClauseSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension CatchClauseSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension ClosureParameterSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension ClosureParameterSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension ClosureParameterSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension CodeBlockFileSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension CodeBlockFileSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension CodeBlockFileSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension CodeBlockItemSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension CodeBlockItemSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension CodeBlockItemSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension CodeBlockSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension CodeBlockSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension CodeBlockSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension DeclSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension DeclSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension DeclSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension EnumCaseParameterSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension EnumCaseParameterSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension EnumCaseParameterSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension ExprSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension ExprSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension ExprSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension FunctionParameterSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension FunctionParameterSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension FunctionParameterSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension GenericParameterClauseSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension GenericParameterClauseSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension GenericParameterClauseSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension MemberBlockItemListFileSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension MemberBlockItemListFileSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension MemberBlockItemListFileSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension MemberBlockSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension MemberBlockSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension MemberBlockSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension PatternSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension PatternSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension PatternSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension SourceFileSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension SourceFileSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension SourceFileSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension StmtSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension StmtSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension StmtSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension SwitchCaseSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension SwitchCaseSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension SwitchCaseSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension TypeSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension TypeSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension TypeSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension VersionTupleSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension VersionTupleSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension VersionTupleSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension AccessorDeclListSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension AccessorDeclListSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension AccessorDeclListSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension AttributeListSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension AttributeListSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension AttributeListSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension CodeBlockItemListSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension CodeBlockItemListSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension CodeBlockItemListSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 
 extension MemberBlockItemListSyntax: SyntaxExpressibleByStringInterpolation {}
 
 #if compiler(>=6)
 extension MemberBlockItemListSyntax: Swift.ExpressibleByStringInterpolation {}
+
+// Work around https://github.com/swiftlang/swift/issues/85153 by restating the implicit conformances.
+extension MemberBlockItemListSyntax: Swift.ExpressibleByStringLiteral, Swift.ExpressibleByExtendedGraphemeClusterLiteral, Swift.ExpressibleByUnicodeScalarLiteral {}
 #endif
 

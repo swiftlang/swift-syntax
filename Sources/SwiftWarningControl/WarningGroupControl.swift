@@ -14,7 +14,7 @@ import SwiftSyntax
 
 // Describes the emission behavior state of a particular warning diagnostic group.
 @_spi(ExperimentalLanguageFeatures)
-public enum WarningGroupBehavior: String {
+public enum WarningGroupControl: String {
   /// Emitted as a fatal error, halting compilation
   case error
   /// Emitted as a warning

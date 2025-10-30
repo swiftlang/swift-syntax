@@ -228,14 +228,66 @@ public class WarningGroupControlTests: XCTestCase {
       ]
     )
   }
+
+  func testEnclosingGlobalControlOverride() throws {
+    // Global control does not override syntactic control
+    try assertWarningGroupControl(
+      """
+      @warn(GroupID, as: error)
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      globalControls: ["GroupID": .warning],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .error
+      ]
+    )
+
+    try assertWarningGroupControl(
+      """
+      func foo() {
+        1️⃣let x = 1
+        @warn(GroupID, as: ignored)
+        func bar() {
+          2️⃣let x = 1
+        }
+      }
+      """,
+      globalControls: ["GroupID": .error],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .error,
+        "2️⃣": .ignored,
+      ]
+    )
+  }
+
+  func testEnclosingGlobalControlOnly() throws {
+    // Global control used in absense of a syntactic control
+    try assertWarningGroupControl(
+      """
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      globalControls: ["GroupID": .warning],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .warning
+      ]
+    )
+  }
 }
 
 /// Assert that the various marked positions in the source code have the
 /// expected warning behavior controls.
 private func assertWarningGroupControl(
   _ markedSource: String,
+  globalControls: [DiagnosticGroupIdentifier: WarningGroupControl] = [:],
   diagnosticGroupID: DiagnosticGroupIdentifier,
-  states: [String: WarningGroupBehavior?],
+  states: [String: WarningGroupControl?],
   file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
@@ -244,9 +296,6 @@ private func assertWarningGroupControl(
 
   var parser = Parser(source)
   let tree = SourceFileSyntax.parse(from: &parser)
-
-  let warningControlRegions = tree.warningGroupControlRegionTree()
-
   for (marker, location) in markerLocations {
     guard let expectedState = states[marker] else {
       XCTFail("Missing marker \(marker) in expected states", file: file, line: line)
@@ -259,13 +308,17 @@ private func assertWarningGroupControl(
       continue
     }
 
-    let groupBehavior = token.warningGroupBehavior(for: diagnosticGroupID)
-    XCTAssertEqual(groupBehavior, expectedState)
+    let warningControlRegions = tree.warningGroupControlRegionTree(globalControls: globalControls)
+    let groupControl = token.warningGroupControl(
+      for: diagnosticGroupID,
+      globalControls: globalControls
+    )
+    XCTAssertEqual(groupControl, expectedState)
 
-    let groupBehaviorViaRegions = warningControlRegions.warningGroupBehavior(
+    let groupControlViaRegions = warningControlRegions.warningGroupControl(
       at: absolutePosition,
       for: diagnosticGroupID
     )
-    XCTAssertEqual(groupBehaviorViaRegions, expectedState)
+    XCTAssertEqual(groupControlViaRegions, expectedState)
   }
 }

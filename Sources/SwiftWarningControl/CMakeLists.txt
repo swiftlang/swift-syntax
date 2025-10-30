@@ -7,7 +7,7 @@
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
 add_swift_syntax_library(SwiftWarningControl
-  WarningGroupBehavior.swift
+  WarningGroupControl.swift
   WarningControlDeclSyntax.swift
   WarningControlRegionBuilder.swift
   WarningControlRegions.swift

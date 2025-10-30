@@ -15,16 +15,22 @@ import SwiftSyntax
 /// Compute the full set of warning control regions in this syntax node
 extension SyntaxProtocol {
   @_spi(ExperimentalLanguageFeatures)
-  public func warningGroupControlRegionTree() -> WarningControlRegionTree {
-    return warningGroupControlRegionTreeImpl()
+  public func warningGroupControlRegionTree(
+    globalControls: [DiagnosticGroupIdentifier: WarningGroupControl] = [:]
+  ) -> WarningControlRegionTree {
+    return warningGroupControlRegionTreeImpl(globalControls: globalControls)
   }
 
   /// Implementation of constructing a region tree with an optional parameter
   /// to specify that the constructed tree must only contain nodes which contain
   /// a specific absolute position - meant to speed up tree generation for individual
   /// queries.
-  func warningGroupControlRegionTreeImpl(containing position: AbsolutePosition? = nil) -> WarningControlRegionTree {
+  func warningGroupControlRegionTreeImpl(
+    globalControls: [DiagnosticGroupIdentifier: WarningGroupControl],
+    containing position: AbsolutePosition? = nil
+  ) -> WarningControlRegionTree {
     let visitor = WarningControlRegionVisitor(self.range, containing: position)
+    visitor.tree.addWarningGroupControls(range: self.range, controls: globalControls)
     visitor.walk(self)
     return visitor.tree
   }

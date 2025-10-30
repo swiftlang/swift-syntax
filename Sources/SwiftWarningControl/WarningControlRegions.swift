@@ -106,6 +106,11 @@ public struct WarningControlRegionTree {
   /// Root region representing top-level (file) scope
   private var rootRegionNode: WarningControlRegionNode
 
+  /// All of the diagnostic identifiers contained in this tree
+  /// which have at least one occurence with a non-`ignored` behavior
+  /// specifier
+  private var enabledIdentifiers: Set<DiagnosticGroupIdentifier> = []
+
   init(range: Range<AbsolutePosition>) {
     rootRegionNode = WarningControlRegionNode(range: range)
   }
@@ -118,6 +123,9 @@ public struct WarningControlRegionTree {
     let newNode = WarningControlRegionNode(range: range)
     for (diagnosticGroupIdentifier, behavior) in controls {
       newNode.addWarningGroupControl(for: diagnosticGroupIdentifier, behavior: behavior)
+      if behavior != .ignored {
+        enabledIdentifiers.insert(diagnosticGroupIdentifier)
+      }
     }
     insertIntoSubtree(newNode, parent: rootRegionNode)
   }
@@ -180,6 +188,15 @@ extension WarningControlRegionTree {
     for diagnosticGroupIdentifier: DiagnosticGroupIdentifier
   ) -> WarningGroupBehavior? {
     return rootRegionNode.innermostContainingRegion(at: position, for: diagnosticGroupIdentifier)?.behavior
+  }
+}
+
+extension WarningControlRegionTree {
+  /// Produce an array of diagnostic group identifiers contained in
+  /// this tree which have a behavior specifier other than `ignored`.
+  @_spi(ExperimentalLanguageFeatures)
+  public func getEnabledDiagnosticGroups() -> Set<DiagnosticGroupIdentifier> {
+    return enabledIdentifiers
   }
 }
 

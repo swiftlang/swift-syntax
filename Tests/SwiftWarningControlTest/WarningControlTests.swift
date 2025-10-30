@@ -75,6 +75,40 @@ public class WarningGroupControlTests: XCTestCase {
     )
   }
 
+  func testEnabledGroupIdentifiers() throws {
+    let source =
+      """
+      @warn(Group1, as: warning)
+      @warn(Group2, as: error)
+      @warn(Group3, as: ignored)
+      func foo() {
+        @warn(Group4, as: warning)
+        func bar() {
+          @warn(Group5, as: ignored)
+          @warn(Group6, as: ignored)
+          func baz() {}
+          @warn(Group7, as: error)
+          func qux() {
+            @warn(Group8, as: warning)
+            func corge() {}
+          }
+        }
+      }
+      """
+    var parser = Parser(source)
+    let parseTree = SourceFileSyntax.parse(from: &parser)
+    let warningControlTree = parseTree.warningGroupControlRegionTree()
+    let enabledDiagnosticGroups = warningControlTree.enabledGroups
+    XCTAssertTrue(enabledDiagnosticGroups.contains("Group1"))
+    XCTAssertTrue(enabledDiagnosticGroups.contains("Group2"))
+    XCTAssertFalse(enabledDiagnosticGroups.contains("Group3"))
+    XCTAssertTrue(enabledDiagnosticGroups.contains("Group4"))
+    XCTAssertFalse(enabledDiagnosticGroups.contains("Group5"))
+    XCTAssertFalse(enabledDiagnosticGroups.contains("Group6"))
+    XCTAssertTrue(enabledDiagnosticGroups.contains("Group7"))
+    XCTAssertTrue(enabledDiagnosticGroups.contains("Group8"))
+  }
+
   func testNominalDeclWarningGroupControl() throws {
     try assertWarningGroupControl(
       """

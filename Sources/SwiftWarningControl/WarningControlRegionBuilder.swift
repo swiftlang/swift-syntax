@@ -16,9 +16,13 @@ import SwiftSyntax
 extension SyntaxProtocol {
   @_spi(ExperimentalLanguageFeatures)
   public func warningGroupControlRegionTree(
-    globalControls: [DiagnosticGroupIdentifier: WarningGroupControl] = [:]
+    globalControls: [DiagnosticGroupIdentifier: WarningGroupControl] = [:],
+    groupInheritanceTree: DiagnosticGroupInheritanceTree? = nil
   ) -> WarningControlRegionTree {
-    return warningGroupControlRegionTreeImpl(globalControls: globalControls)
+    return warningGroupControlRegionTreeImpl(
+      globalControls: globalControls,
+      groupInheritanceTree: groupInheritanceTree
+    )
   }
 
   /// Implementation of constructing a region tree with an optional parameter
@@ -27,9 +31,14 @@ extension SyntaxProtocol {
   /// queries.
   func warningGroupControlRegionTreeImpl(
     globalControls: [DiagnosticGroupIdentifier: WarningGroupControl],
+    groupInheritanceTree: DiagnosticGroupInheritanceTree?,
     containing position: AbsolutePosition? = nil
   ) -> WarningControlRegionTree {
-    let visitor = WarningControlRegionVisitor(self.range, containing: position)
+    let visitor = WarningControlRegionVisitor(
+      self.range,
+      containing: position,
+      groupInheritanceTree: groupInheritanceTree
+    )
     visitor.tree.addWarningGroupControls(range: self.range, controls: globalControls)
     visitor.walk(self)
     return visitor.tree
@@ -53,8 +62,12 @@ private class WarningControlRegionVisitor: SyntaxAnyVisitor {
   var tree: WarningControlRegionTree
   let containingPosition: AbsolutePosition?
 
-  init(_ topLevelRange: Range<AbsolutePosition>, containing position: AbsolutePosition? = nil) {
-    self.tree = WarningControlRegionTree(range: topLevelRange)
+  init(
+    _ topLevelRange: Range<AbsolutePosition>,
+    containing position: AbsolutePosition?,
+    groupInheritanceTree: DiagnosticGroupInheritanceTree?
+  ) {
+    self.tree = WarningControlRegionTree(range: topLevelRange, groupInheritanceTree: groupInheritanceTree)
     containingPosition = position
     super.init(viewMode: .fixedUp)
   }

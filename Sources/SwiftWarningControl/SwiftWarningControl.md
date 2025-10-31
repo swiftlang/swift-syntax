@@ -25,6 +25,6 @@ func foo() {
 
 The `SwiftWarningControl` library provides a utility to determine, for a given source location and diagnostic group identifier, whether or not its behavior is affected by an `@warn` attribute of any of its parent declaration scope. 
 
-* `SyntaxProtocol.getWarningGroupControl(for diagnosticGroupIdentifier:)` produces the behavior specifier (`WarningGroupBehavior`: `error`, `warning`, `ignored`) which applies at this node.
+* `SyntaxProtocol.getWarningGroupControl(for diagnosticGroupIdentifier:)` produces the behavior control specifier (`WarningGroupControl`: `error`, `warning`, `ignored`) which applies at this node.
 
-* `SyntaxProtocol.warningGroupControlRegionTree` holds a computed `WarningControlRegionTree` data structure value that can be used to efficiently test for the specified `WarningGroupBehavior` at a given source location and a given diagnostic group.
+* `SyntaxProtocol.warningGroupControlRegionTree` holds a computed `WarningControlRegionTree` data structure value that can be used to efficiently test for the specified `WarningGroupControl` at a given source location and a given diagnostic group.

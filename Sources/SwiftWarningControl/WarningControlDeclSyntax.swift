@@ -13,10 +13,10 @@
 import SwiftSyntax
 
 extension WithAttributesSyntax {
-  /// Compute a dictionary of all `@warn` diagnostic group behaviors
+  /// Compute a dictionary of all `@warn` diagnostic group behavior controls
   /// specified on this warning control declaration scope.
-  var allWarningGroupControls: [DiagnosticGroupIdentifier: WarningGroupBehavior] {
-    attributes.reduce(into: [DiagnosticGroupIdentifier: WarningGroupBehavior]()) { result, attr in
+  var allWarningGroupControls: [DiagnosticGroupIdentifier: WarningGroupControl] {
+    attributes.reduce(into: [DiagnosticGroupIdentifier: WarningGroupControl]()) { result, attr in
       // `@warn` attributes
       guard case .attribute(let attributeSyntax) = attr,
         attributeSyntax.attributeName.as(IdentifierTypeSyntax.self)?.name.text == "warn"
@@ -33,7 +33,7 @@ extension WithAttributesSyntax {
         return
       }
 
-      // Second argument is the `as: ` behavior specifier
+      // Second argument is the `as: ` behavior control specifier
       guard
         let asParamExprSyntax = attributeSyntax
           .arguments?.as(LabeledExprListSyntax.self)?
@@ -43,14 +43,14 @@ extension WithAttributesSyntax {
       }
       guard
         asParamExprSyntax.label?.text == "as",
-        let behaviorText = asParamExprSyntax
+        let controlText = asParamExprSyntax
           .expression.as(DeclReferenceExprSyntax.self)?
           .baseName.text,
-        let behavior = WarningGroupBehavior(rawValue: behaviorText)
+        let control = WarningGroupControl(rawValue: controlText)
       else {
         return
       }
-      result[DiagnosticGroupIdentifier(diagnosticGroupID)] = behavior
+      result[DiagnosticGroupIdentifier(diagnosticGroupID)] = control
     }
   }
 }

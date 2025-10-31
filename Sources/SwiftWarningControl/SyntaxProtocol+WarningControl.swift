@@ -14,13 +14,25 @@ import SwiftDiagnostics
 import SwiftSyntax
 
 extension SyntaxProtocol {
-  /// Get the warning emission behavior for the specified diagnostic group
+  /// Get the warning emission behavior control for the specified diagnostic group
   /// by determining its containing `WarningControlRegion`, if one is present.
+  /// Returns the syntactic control for the given diagnostic group, or `nil` if
+  /// there is not one.
+  /// - Parameters:
+  ///   - for diagnosticGroupIdentifier: The identifier of the diagnostic group.
+  ///   - globalControls: The global controls to consider, specified by the client (compiler)
+  ///     representing module-wide diagnostic group emission configuration, for example
+  ///     with `-Wwarning` and `-Werror` flags. These controls can be overriden at
+  ///     finer-grained scopes with the `@warn` attribute.
   @_spi(ExperimentalLanguageFeatures)
-  public func warningGroupBehavior(
-    for diagnosticGroupIdentifier: DiagnosticGroupIdentifier
-  ) -> WarningGroupBehavior? {
-    let warningControlRegions = root.warningGroupControlRegionTreeImpl(containing: self.position)
-    return warningControlRegions.warningGroupBehavior(at: self.position, for: diagnosticGroupIdentifier)
+  public func warningGroupControl(
+    for diagnosticGroupIdentifier: DiagnosticGroupIdentifier,
+    globalControls: [DiagnosticGroupIdentifier: WarningGroupControl] = [:]
+  ) -> WarningGroupControl? {
+    let warningControlRegions = root.warningGroupControlRegionTreeImpl(
+      globalControls: globalControls,
+      containing: self.position
+    )
+    return warningControlRegions.warningGroupControl(at: self.position, for: diagnosticGroupIdentifier)
   }
 }

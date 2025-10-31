@@ -25,6 +25,21 @@ jobs:
     with:
       api_breakage_check_enabled: false  # https://github.com/swiftlang/swift-syntax/issues/3010
       docs_check_additional_arguments: "--disable-parameters-and-returns-validation"
+  bazel_build:
+    name: Bazel Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Update environment
+        run: |
+          echo "/usr/share/swift/usr/bin" >> $GITHUB_PATH
+          echo "CC=clang" >> $GITHUB_ENV
+      - name: Build with Bazel
+        run: bazel build //...
+
   verify_source_code:
     name: Validate generated code
     runs-on: ubuntu-latest

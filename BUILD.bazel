@@ -208,6 +208,7 @@ swift_syntax_library(
 swift_syntax_test(
     name = "SwiftRefactorTest",
     deps = [
+        ":SwiftIDEUtils",
         ":SwiftRefactor",
         ":_SwiftSyntaxTestSupport",
     ],
@@ -317,6 +318,7 @@ swift_syntax_library(
     name = "SwiftSyntaxMacros",
     deps = [
         ":SwiftDiagnostics",
+        ":SwiftIfConfig",
         ":SwiftParser",
         ":SwiftSyntax",
         ":SwiftSyntaxBuilder",

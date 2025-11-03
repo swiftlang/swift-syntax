@@ -13,21 +13,21 @@
 import SwiftSyntax
 
 /// A single warning control region, consisting of a start and end positions,
-/// a diagnostic group identifier, and an emission behavior specifier.
+/// a diagnostic group identifier, and an emission behavior control specifier.
 @_spi(ExperimentalLanguageFeatures)
 public struct WarningControlRegion {
   public let range: Range<AbsolutePosition>
   public let diagnosticGroupIdentifier: DiagnosticGroupIdentifier
-  public let behavior: WarningGroupBehavior
+  public let control: WarningGroupControl
 
   init(
     range: Range<AbsolutePosition>,
     diagnosticGroupIdentifier: DiagnosticGroupIdentifier,
-    behavior: WarningGroupBehavior
+    control: WarningGroupControl
   ) {
     self.range = range
     self.diagnosticGroupIdentifier = diagnosticGroupIdentifier
-    self.behavior = behavior
+    self.control = control
   }
 }
 
@@ -98,9 +98,6 @@ public struct DiagnosticGroupIdentifier: Hashable, Sendable, ExpressibleByString
 /// traversal until we find the first containing region which specifies warning
 /// behavior control for the given diagnostic group id.
 ///
-/// TODO: Capture global configuration from command-line arguments
-///       to represent global rules, such as `-Werror`, `-Wwarning`,
-///       and `-suppress-warnings` as *the* root region node.
 @_spi(ExperimentalLanguageFeatures)
 public struct WarningControlRegionTree {
   /// Root region representing top-level (file) scope
@@ -113,11 +110,12 @@ public struct WarningControlRegionTree {
   /// Add a warning control region to the tree
   mutating func addWarningGroupControls(
     range: Range<AbsolutePosition>,
-    controls: [DiagnosticGroupIdentifier: WarningGroupBehavior]
+    controls: [DiagnosticGroupIdentifier: WarningGroupControl]
   ) {
+    guard !controls.isEmpty else { return }
     let newNode = WarningControlRegionNode(range: range)
-    for (diagnosticGroupIdentifier, behavior) in controls {
-      newNode.addWarningGroupControl(for: diagnosticGroupIdentifier, behavior: behavior)
+    for (diagnosticGroupIdentifier, control) in controls {
+      newNode.addWarningGroupControl(for: diagnosticGroupIdentifier, control: control)
     }
     insertIntoSubtree(newNode, parent: rootRegionNode)
   }
@@ -134,7 +132,7 @@ public struct WarningControlRegionTree {
     // Check if the new region has the same boundaries as the parent
     if parent.range == node.range {
       for (diagnosticGroupIdentifier, control) in node.warningGroupControls {
-        parent.addWarningGroupControl(for: diagnosticGroupIdentifier, behavior: control)
+        parent.addWarningGroupControl(for: diagnosticGroupIdentifier, control: control)
       }
       return
     }
@@ -157,7 +155,8 @@ extension WarningControlRegionTree: CustomDebugStringConvertible {
       let spacing = String(repeating: "  ", count: indent)
       result += "\(spacing)[\(node.range.lowerBound), \(node.range.upperBound)]"
       if !node.warningGroupControls.isEmpty {
-        result += " id(s): \(node.warningGroupControls.keys.map { $0.identifier }.joined(separator: ", "))\n"
+        result +=
+          " control(s): \(node.warningGroupControls.map { $0.key.identifier + ": " + $0.value.rawValue }.joined(separator: ", "))\n"
       } else {
         result += "\n"
       }
@@ -172,14 +171,14 @@ extension WarningControlRegionTree: CustomDebugStringConvertible {
 }
 
 extension WarningControlRegionTree {
-  /// Determine the warning group behavior at a specified position
-  /// for a given diagnostic group
+  /// Determine the warning group behavior control at a specified position
+  /// for a given diagnostic group.
   @_spi(ExperimentalLanguageFeatures)
-  public func warningGroupBehavior(
+  public func warningGroupControl(
     at position: AbsolutePosition,
     for diagnosticGroupIdentifier: DiagnosticGroupIdentifier
-  ) -> WarningGroupBehavior? {
-    return rootRegionNode.innermostContainingRegion(at: position, for: diagnosticGroupIdentifier)?.behavior
+  ) -> WarningGroupControl? {
+    return rootRegionNode.innermostContainingRegion(at: position, for: diagnosticGroupIdentifier)?.control
   }
 }
 
@@ -187,16 +186,16 @@ extension WarningControlRegionTree {
 /// group controls and references to its nested child regions.
 private class WarningControlRegionNode {
   let range: Range<AbsolutePosition>
-  var warningGroupControls: [DiagnosticGroupIdentifier: WarningGroupBehavior] = [:]
+  var warningGroupControls: [DiagnosticGroupIdentifier: WarningGroupControl] = [:]
   var children: [WarningControlRegionNode] = []
 
   init(
     range: Range<AbsolutePosition>,
     for diagnosticGroupIdentifier: DiagnosticGroupIdentifier,
-    behavior: WarningGroupBehavior
+    control: WarningGroupControl
   ) {
     self.range = range
-    self.warningGroupControls = [diagnosticGroupIdentifier: behavior]
+    self.warningGroupControls = [diagnosticGroupIdentifier: control]
   }
 
   init(range: Range<AbsolutePosition>) {
@@ -207,20 +206,20 @@ private class WarningControlRegionNode {
   /// Add a region with the same bounds as this node
   func addWarningGroupControl(
     for diagnosticGroupIdentifier: DiagnosticGroupIdentifier,
-    behavior: WarningGroupBehavior
+    control: WarningGroupControl
   ) {
-    warningGroupControls[diagnosticGroupIdentifier] = behavior
+    warningGroupControls[diagnosticGroupIdentifier] = control
   }
 
   /// Get region with specific identifier if it exists
   func getWarningGroupControl(for diagnosticGroupIdentifier: DiagnosticGroupIdentifier) -> WarningControlRegion? {
-    guard let behaviorControl = warningGroupControls[diagnosticGroupIdentifier] else {
+    guard let groupControl = warningGroupControls[diagnosticGroupIdentifier] else {
       return nil
     }
     return WarningControlRegion(
       range: range,
       diagnosticGroupIdentifier: diagnosticGroupIdentifier,
-      behavior: behaviorControl
+      control: groupControl
     )
   }
 

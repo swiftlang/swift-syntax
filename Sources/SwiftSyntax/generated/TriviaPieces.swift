@@ -24,31 +24,31 @@
 public enum TriviaPiece: Sendable {
   /// A backslash that is at the end of a line in a multi-line string literal to escape the newline.
   case backslashes(Int)
-  /// A developer block comment, starting with '/*' and ending with '*/'.
+  /// A developer block comment, starting with `/*` and ending with `*/`.
   case blockComment(String)
-  /// A newline '\r' character.
+  /// A newline `\r` character.
   case carriageReturns(Int)
-  /// A newline consists of contiguous '\r' and '\n' characters.
+  /// A newline consists of contiguous `\r` and `\n` characters.
   case carriageReturnLineFeeds(Int)
-  /// A documentation block comment, starting with '/**' and ending with '*/'.
+  /// A documentation block comment, starting with `/**` and ending with `*/`.
   case docBlockComment(String)
-  /// A documentation line comment, starting with '///' and excluding the trailing newline.
+  /// A documentation line comment, starting with `///` and excluding the trailing newline.
   case docLineComment(String)
-  /// A form-feed 'f' character.
+  /// A form-feed `f` character.
   case formfeeds(Int)
-  /// A developer line comment, starting with '//' and excluding the trailing newline.
+  /// A developer line comment, starting with `//` and excluding the trailing newline.
   case lineComment(String)
-  /// A newline '\n' character.
+  /// A newline `\n` character.
   case newlines(Int)
-  /// A '#' that is at the end of a line in a multi-line string literal to escape the newline.
+  /// A `#` that is at the end of a line in a multi-line string literal to escape the newline.
   case pounds(Int)
-  /// A space ' ' character.
+  /// A space ` ` character.
   case spaces(Int)
-  /// A tab '\t' character.
+  /// A tab `\t` character.
   case tabs(Int)
   /// Any skipped unexpected text.
   case unexpectedText(String)
-  /// A vertical tab '\v' character.
+  /// A vertical tab `\v` character.
   case verticalTabs(Int)
 }
 

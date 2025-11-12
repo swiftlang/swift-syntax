@@ -103,8 +103,14 @@ public struct WarningControlRegionTree {
   /// Root region representing top-level (file) scope
   private var rootRegionNode: WarningControlRegionNode
 
+  /// All of the diagnostic group identifiers contained in this tree
+  /// which have at least one occurence with a non-`ignored` behavior
+  /// specifier
+  @_spi(ExperimentalLanguageFeatures)
+  public private(set) var enabledGroups: Set<DiagnosticGroupIdentifier> = []
+
   /// Inheritance tree among diagnostic group identifiers
-  let groupInheritanceTree: DiagnosticGroupInheritanceTree
+  private let groupInheritanceTree: DiagnosticGroupInheritanceTree
 
   init(
     range: Range<AbsolutePosition>,
@@ -130,6 +136,10 @@ public struct WarningControlRegionTree {
         let groupIdentifier = groups.removeFirst()
         processedGroups.insert(groupIdentifier)
         newNode.addWarningGroupControl(for: groupIdentifier, control: control)
+        if control != .ignored {
+          enabledGroups.insert(diagnosticGroupIdentifier)
+        }
+
         let newSubGroups = groupInheritanceTree.subgroups(of: groupIdentifier).filter { !processedGroups.contains($0) }
         // Ensure we add a corresponding control to each direct and
         // transitive sub-group of the one specified on this control.

@@ -386,8 +386,6 @@ private func assertWarningGroupControl(
       groupInheritanceTree: groupInheritanceTree
     )
 
-    print(warningControlRegions.debugDescription)
-
     let groupControl = token.warningGroupControl(
       for: diagnosticGroupID,
       globalControls: globalControls,

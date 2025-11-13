@@ -254,7 +254,7 @@ private class WarningControlRegionNode {
 
   /// Add a child region that is directly nested within this region
   func addChild(_ node: WarningControlRegionNode) {
-    precondition(range.contains(node.range))
+    precondition(range.lowerBound <= node.range.lowerBound && node.range.upperBound <= range.upperBound)
     children.append(node)
     children.sort()
   }

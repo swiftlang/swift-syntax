@@ -1671,7 +1671,12 @@ extension Parser {
     var look = self.lookahead()
     let _ = look.consumeAttributeList()
     let hasModifier = look.consume(ifAnyIn: AccessorModifier.self) != nil
+    let yielding = look.consume(if: TokenSpec(.yielding)) != nil
     guard let (kind, _) = look.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) ?? forcedKind else {
+      return nil
+    }
+    guard !yielding || [AccessorDeclSyntax.AccessorSpecifierOptions.borrow, .mutate].contains(kind) else {
+      // `yielding` can only be followed by `borrow` or `mutate`
       return nil
     }
 
@@ -1692,11 +1697,28 @@ extension Parser {
       modifier = nil
     }
 
+    if yielding {
+      _ = self.expect(TokenSpec(.yielding))
+    }
+
     let (unexpectedBeforeIntroducer, introducer) = self.expect(kind.spec)
+
+    // Map `yielding borrow` => `read`, etc.
+    let resolvedKind : AccessorDeclSyntax.AccessorSpecifierOptions
+    if yielding {
+      switch kind {
+      case .borrow: resolvedKind = .read // `yielding borrow` == `read`
+      case .mutate: resolvedKind = .modify // `yielding mutate` == `modify`
+      default: resolvedKind = kind
+      }
+    } else {
+      resolvedKind = kind
+    }
+
     return AccessorIntroducer(
       attributes: attrs,
       modifier: modifier,
-      kind: kind,
+      kind: resolvedKind,
       unexpectedBeforeToken: unexpectedBeforeIntroducer,
       token: introducer
     )

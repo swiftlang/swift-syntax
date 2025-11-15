@@ -3467,10 +3467,16 @@ final class DeclarationTests: ParserTestCase {
         read {
           yield _i
         }
+        yielding borrow {
+          yield _i
+        }
         _modify {
           yield &_i
         }
         modify {
+          yield &_i
+        }
+        yielding mutate {
           yield &_i
         }
       }

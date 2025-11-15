@@ -226,6 +226,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case willSet
   case wrt
   case yield
+  case yielding
 
   @_spi(RawSyntax) public init?(_ text: SyntaxText) {
     switch text.count {
@@ -590,6 +591,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
       self = .rethrows
     case "Sendable":
       self = .Sendable
+    case "yielding":
+      self = .yielding
     default:
       return nil
     }
@@ -1053,6 +1056,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "willSet",
     "wrt",
     "yield",
+    "yielding",
   ]
 
   @_spi(RawSyntax)

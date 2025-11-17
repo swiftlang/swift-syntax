@@ -1704,11 +1704,11 @@ extension Parser {
     let (unexpectedBeforeIntroducer, introducer) = self.expect(kind.spec)
 
     // Map `yielding borrow` => `read`, etc.
-    let resolvedKind : AccessorDeclSyntax.AccessorSpecifierOptions
+    let resolvedKind: AccessorDeclSyntax.AccessorSpecifierOptions
     if yielding {
       switch kind {
-      case .borrow: resolvedKind = .read // `yielding borrow` == `read`
-      case .mutate: resolvedKind = .modify // `yielding mutate` == `modify`
+      case .borrow: resolvedKind = .read  // `yielding borrow` == `read`
+      case .mutate: resolvedKind = .modify  // `yielding mutate` == `modify`
       default: resolvedKind = kind
       }
     } else {

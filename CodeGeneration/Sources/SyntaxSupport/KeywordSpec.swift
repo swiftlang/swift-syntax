@@ -692,9 +692,9 @@ public enum Keyword: CaseIterable {
     case .wrt:
       return KeywordSpec("wrt")
     case .yield:
-        return KeywordSpec("yield")
+      return KeywordSpec("yield")
     case .yielding:
-        return KeywordSpec("yielding")
+      return KeywordSpec("yielding")
     }
   }
 }

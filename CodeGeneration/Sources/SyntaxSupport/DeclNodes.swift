@@ -97,8 +97,8 @@ public let DECL_NODES: [Node] = [
         nameForDiagnostics: "attributes"
       ),
       Child(
-        name: "modifier",
-        kind: .node(kind: .declModifier),
+        name: "modifiers",
+        kind: .node(kind: .declModifierList),
         nameForDiagnostics: "modifiers",
         isOptional: true
       ),

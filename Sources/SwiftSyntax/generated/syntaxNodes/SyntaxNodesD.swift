@@ -171,12 +171,11 @@ public struct DeclModifierDetailSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyn
 
 /// ### Children
 /// 
-///  - `name`: (`__consuming` | `__setter_access` | `_const` | `_local` | `actor` | `async` | `borrowing` | `class` | `consuming` | `convenience` | `distributed` | `dynamic` | `fileprivate` | `final` | `indirect` | `infix` | `internal` | `isolated` | `lazy` | `mutating` | `nonisolated` | `nonmutating` | `open` | `optional` | `override` | `package` | `postfix` | `prefix` | `private` | `public` | `reasync` | `required` | `static` | `unowned` | `weak` | `sending`)
+///  - `name`: (`__consuming` | `__setter_access` | `_const` | `_local` | `actor` | `async` | `borrowing` | `class` | `consuming` | `convenience` | `distributed` | `dynamic` | `fileprivate` | `final` | `indirect` | `infix` | `internal` | `isolated` | `lazy` | `mutating` | `nonisolated` | `nonmutating` | `open` | `optional` | `override` | `package` | `postfix` | `prefix` | `private` | `public` | `reasync` | `required` | `static` | `unowned` | `weak` | `sending` | `yielding`)
 ///  - `detail`: ``DeclModifierDetailSyntax``?
 ///
 /// ### Contained in
 /// 
-///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/modifier``
 ///  - ``DeclModifierListSyntax``
 public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
@@ -280,6 +279,7 @@ public struct DeclModifierSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
   ///  - `unowned`
   ///  - `weak`
   ///  - `sending`
+  ///  - `yielding`
   public var name: TokenSyntax {
     get {
       return Syntax(self).child(at: 1)!.cast(TokenSyntax.self)

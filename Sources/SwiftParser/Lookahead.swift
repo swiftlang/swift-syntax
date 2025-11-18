@@ -160,6 +160,15 @@ extension Parser.Lookahead {
   }
 }
 
+// MARK: Skipping a sequence of tokens
+
+extension Parser.Lookahead {
+    mutating func consume<SpecSet: TokenSpecSet>(anySequence: SpecSet.Type) {
+        while consume(ifAnyIn: SpecSet.self) != nil {
+        }
+    }
+}
+
 // MARK: Skipping Tokens
 
 extension Parser.Lookahead {

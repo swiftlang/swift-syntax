@@ -824,7 +824,7 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
 /// ### Children
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
-///  - `modifier`: ``DeclModifierSyntax``?
+///  - `modifiers`: ``DeclModifierListSyntax``?
 ///  - `accessorSpecifier`: (`get` | `set` | `didSet` | `willSet` | `unsafeAddress` | `addressWithOwner` | `addressWithNativeOwner` | `unsafeMutableAddress` | `mutableAddressWithOwner` | `mutableAddressWithNativeOwner` | `_read` | `read` | `_modify` | `modify` | `init` | `borrow` | `mutate`)
 ///  - `parameters`: ``AccessorParametersSyntax``?
 ///  - `effectSpecifiers`: ``AccessorEffectSpecifiersSyntax``?
@@ -855,9 +855,9 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax = [],
-    _ unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? = nil,
-    modifier: DeclModifierSyntax? = nil,
-    _ unexpectedBetweenModifierAndAccessorSpecifier: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax? = nil,
+    _ unexpectedBetweenModifiersAndAccessorSpecifier: UnexpectedNodesSyntax? = nil,
     accessorSpecifier: TokenSyntax,
     _ unexpectedBetweenAccessorSpecifierAndParameters: UnexpectedNodesSyntax? = nil,
     parameters: AccessorParametersSyntax? = nil,
@@ -873,9 +873,9 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     self = withExtendedLifetime((RawSyntaxArena(), (
       unexpectedBeforeAttributes,
       attributes,
-      unexpectedBetweenAttributesAndModifier,
-      modifier,
-      unexpectedBetweenModifierAndAccessorSpecifier,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers,
+      unexpectedBetweenModifiersAndAccessorSpecifier,
       accessorSpecifier,
       unexpectedBetweenAccessorSpecifierAndParameters,
       parameters,
@@ -888,9 +888,9 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       let layout: [RawSyntax?] = [
         unexpectedBeforeAttributes?.raw,
         attributes.raw,
-        unexpectedBetweenAttributesAndModifier?.raw,
-        modifier?.raw,
-        unexpectedBetweenModifierAndAccessorSpecifier?.raw,
+        unexpectedBetweenAttributesAndModifiers?.raw,
+        modifiers?.raw,
+        unexpectedBetweenModifiersAndAccessorSpecifier?.raw,
         accessorSpecifier.raw,
         unexpectedBetweenAccessorSpecifierAndParameters?.raw,
         parameters?.raw,
@@ -956,7 +956,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       .cast(AccessorDeclSyntax.self)
   }
 
-  public var unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -965,16 +965,16 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     }
   }
 
-  public var modifier: DeclModifierSyntax? {
+  public var modifiers: DeclModifierListSyntax? {
     get {
-      return Syntax(self).child(at: 3)?.cast(DeclModifierSyntax.self)
+      return Syntax(self).child(at: 3)?.cast(DeclModifierListSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(AccessorDeclSyntax.self)
     }
   }
 
-  public var unexpectedBetweenModifierAndAccessorSpecifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenModifiersAndAccessorSpecifier: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -1078,9 +1078,9 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeAttributes,
     \Self.attributes,
-    \Self.unexpectedBetweenAttributesAndModifier,
-    \Self.modifier,
-    \Self.unexpectedBetweenModifierAndAccessorSpecifier,
+    \Self.unexpectedBetweenAttributesAndModifiers,
+    \Self.modifiers,
+    \Self.unexpectedBetweenModifiersAndAccessorSpecifier,
     \Self.accessorSpecifier,
     \Self.unexpectedBetweenAccessorSpecifierAndParameters,
     \Self.parameters,

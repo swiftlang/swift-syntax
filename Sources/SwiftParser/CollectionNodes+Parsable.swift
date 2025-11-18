@@ -67,7 +67,7 @@ extension AccessorDeclListSyntax: SyntaxParseable {
     } makeMissing: { remainingTokens, arena in
       return RawAccessorDeclSyntax(
         attributes: RawAttributeListSyntax(elements: [], arena: arena),
-        modifier: nil,
+        modifiers: RawDeclModifierListSyntax(elements: [], arena: arena),
         accessorSpecifier: RawTokenSyntax(missing: .keyword, text: "get", arena: arena),
         parameters: nil,
         effectSpecifiers: nil,

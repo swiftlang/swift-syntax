@@ -1659,6 +1659,7 @@ extension Parser {
   struct AccessorIntroducer {
     var attributes: RawAttributeListSyntax
     var modifier: RawDeclModifierSyntax?
+    var yielding: RawAccessorYieldingModifierSyntax?
     var kind: AccessorDeclSyntax.AccessorSpecifierOptions
     var unexpectedBeforeToken: RawUnexpectedNodesSyntax?
     var token: RawTokenSyntax
@@ -1671,7 +1672,7 @@ extension Parser {
     var look = self.lookahead()
     let _ = look.consumeAttributeList()
     let hasModifier = look.consume(ifAnyIn: AccessorModifier.self) != nil
-    let yielding = look.consume(if: TokenSpec(.yielding)) != nil
+    let hasYielding = look.consume(if: TokenSpec(.yielding)) != nil
     guard let (kind, _) = look.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) ?? forcedKind else {
       return nil
     }
@@ -1697,27 +1698,24 @@ extension Parser {
       modifier = nil
     }
 
-    if yielding {
-      _ = self.expect(TokenSpec(.yielding))
+    let yielding: RawAccessorYieldingModifierSyntax?
+    if hasYielding {
+      let (unexpectedBeforeYieldingName, yieldingName) = self.expect(TokenSpec(.yielding))
+      yielding = RawAccessorYieldingModifierSyntax(
+        unexpectedBeforeYieldingName,
+        name: yieldingName,
+        arena: self.arena
+      )
+    } else {
+      yielding = nil
     }
 
     let (unexpectedBeforeIntroducer, introducer) = self.expect(kind.spec)
 
-    // Map `yielding borrow` => `read`, etc.
-    let resolvedKind: AccessorDeclSyntax.AccessorSpecifierOptions
-    if yielding {
-      switch kind {
-      case .borrow: resolvedKind = .read  // `yielding borrow` == `read`
-      case .mutate: resolvedKind = .modify  // `yielding mutate` == `modify`
-      default: resolvedKind = kind
-      }
-    } else {
-      resolvedKind = kind
-    }
-
     return AccessorIntroducer(
       attributes: attrs,
       modifier: modifier,
+      yielding: yielding,
       kind: resolvedKind,
       unexpectedBeforeToken: unexpectedBeforeIntroducer,
       token: introducer

@@ -1716,7 +1716,7 @@ extension Parser {
       attributes: attrs,
       modifier: modifier,
       yielding: yielding,
-      kind: resolvedKind,
+      kind: kind,
       unexpectedBeforeToken: unexpectedBeforeIntroducer,
       token: introducer
     )

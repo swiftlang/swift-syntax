@@ -66,6 +66,7 @@ enum AccessorModifier: TokenSpecSet {
   case borrowing
   case mutating
   case nonmutating
+  case yielding
 
   init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
     switch PrepareForKeywordMatch(lexeme) {
@@ -74,6 +75,7 @@ enum AccessorModifier: TokenSpecSet {
     case TokenSpec(.borrowing): self = .borrowing
     case TokenSpec(.mutating): self = .mutating
     case TokenSpec(.nonmutating): self = .nonmutating
+    case TokenSpec(.yielding): self = .yielding
     default: return nil
     }
   }
@@ -85,6 +87,7 @@ enum AccessorModifier: TokenSpecSet {
     case .borrowing: return .keyword(.borrowing)
     case .mutating: return .keyword(.mutating)
     case .nonmutating: return .keyword(.nonmutating)
+    case .yielding: return .keyword(.yielding)
     }
   }
 }

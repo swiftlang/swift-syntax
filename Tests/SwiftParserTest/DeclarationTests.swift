@@ -3481,7 +3481,7 @@ final class DeclarationTests: ParserTestCase {
         }
       }
       """,
-      experimentalFeatures: .coroutineAccessors
+      experimentalFeatures: [.coroutineAccessors, .borrowAndMutateAccessors]
     )
     assertParse(
       """

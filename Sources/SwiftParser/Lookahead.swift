@@ -163,9 +163,12 @@ extension Parser.Lookahead {
 // MARK: Skipping a sequence of tokens
 
 extension Parser.Lookahead {
-    mutating func consume<SpecSet: TokenSpecSet>(anySequence: SpecSet.Type) {
+    mutating func consume<SpecSet: TokenSpecSet>(anySequence: SpecSet.Type) -> Int {
+        var count = 0
         while consume(ifAnyIn: SpecSet.self) != nil {
+            count += 1
         }
+        return count
     }
 }
 

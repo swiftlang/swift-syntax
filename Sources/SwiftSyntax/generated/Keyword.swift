@@ -226,6 +226,7 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case willSet
   case wrt
   case yield
+  @_spi(ExperimentalLanguageFeatures)
   case yielding
 
   @_spi(RawSyntax) public init?(_ text: SyntaxText) {

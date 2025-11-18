@@ -1658,8 +1658,7 @@ extension Parser {
 
   struct AccessorIntroducer {
     var attributes: RawAttributeListSyntax
-    var modifier: RawDeclModifierSyntax?
-    var yielding: RawAccessorYieldingModifierSyntax?
+    var modifiers: RawDeclModifierListSyntax
     var kind: AccessorDeclSyntax.AccessorSpecifierOptions
     var unexpectedBeforeToken: RawUnexpectedNodesSyntax?
     var token: RawTokenSyntax
@@ -1668,54 +1667,22 @@ extension Parser {
   mutating func parseAccessorIntroducer(
     forcedKind: (AccessorDeclSyntax.AccessorSpecifierOptions, TokenConsumptionHandle)? = nil
   ) -> AccessorIntroducer? {
-    // Check there is an identifier before consuming
+    // Look ahead to verify attributes/modifiers/kind
     var look = self.lookahead()
     let _ = look.consumeAttributeList()
-    let hasModifier = look.consume(ifAnyIn: AccessorModifier.self) != nil
-    let hasYielding = look.consume(if: TokenSpec(.yielding)) != nil
+    let _ = look.consume(anySequence: AccessorModifier.self)
     guard let (kind, _) = look.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) ?? forcedKind else {
-      return nil
-    }
-    guard !yielding || [AccessorDeclSyntax.AccessorSpecifierOptions.borrow, .mutate].contains(kind) else {
-      // `yielding` can only be followed by `borrow` or `mutate`
       return nil
     }
 
     let attrs = self.parseAttributeList()
-
-    // Parse the contextual keywords for 'mutating' and 'nonmutating' before
-    // get and set.
-    let modifier: RawDeclModifierSyntax?
-    if hasModifier {
-      let (unexpectedBeforeName, name) = self.expect(anyIn: AccessorModifier.self, default: .mutating)
-      modifier = RawDeclModifierSyntax(
-        unexpectedBeforeName,
-        name: name,
-        detail: nil,
-        arena: self.arena
-      )
-    } else {
-      modifier = nil
-    }
-
-    let yielding: RawAccessorYieldingModifierSyntax?
-    if hasYielding {
-      let (unexpectedBeforeYieldingName, yieldingName) = self.expect(TokenSpec(.yielding))
-      yielding = RawAccessorYieldingModifierSyntax(
-        unexpectedBeforeYieldingName,
-        name: yieldingName,
-        arena: self.arena
-      )
-    } else {
-      yielding = nil
-    }
+    let modifiers = self.parseDeclModifierList()
 
     let (unexpectedBeforeIntroducer, introducer) = self.expect(kind.spec)
 
     return AccessorIntroducer(
       attributes: attrs,
-      modifier: modifier,
-      yielding: yielding,
+      modifiers: modifiers,
       kind: kind,
       unexpectedBeforeToken: unexpectedBeforeIntroducer,
       token: introducer
@@ -1758,7 +1725,7 @@ extension Parser {
     let body = self.parseOptionalCodeBlock()
     return RawAccessorDeclSyntax(
       attributes: introducer.attributes,
-      modifier: introducer.modifier,
+      modifiers: introducer.modifiers,
       introducer.unexpectedBeforeToken,
       accessorSpecifier: introducer.token,
       parameters: parameters,

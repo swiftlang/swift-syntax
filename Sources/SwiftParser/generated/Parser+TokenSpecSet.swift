@@ -951,6 +951,7 @@ extension DeclModifierSyntax {
     case unowned
     case weak
     case sending
+    case yielding
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -1026,6 +1027,8 @@ extension DeclModifierSyntax {
         self = .weak
       case TokenSpec(.sending):
         self = .sending
+      case TokenSpec(.yielding):
+        self = .yielding
       default:
         return nil
       }
@@ -1105,6 +1108,8 @@ extension DeclModifierSyntax {
         self = .weak
       case TokenSpec(.sending):
         self = .sending
+      case TokenSpec(.yielding):
+        self = .yielding
       default:
         return nil
       }
@@ -1184,6 +1189,8 @@ extension DeclModifierSyntax {
         return .keyword(.weak)
       case .sending:
         return .keyword(.sending)
+      case .yielding:
+        return .keyword(.yielding)
       }
     }
 
@@ -1265,6 +1272,8 @@ extension DeclModifierSyntax {
         return .keyword(.weak)
       case .sending:
         return .keyword(.sending)
+      case .yielding:
+        return .keyword(.yielding)
       }
     }
   }

@@ -694,7 +694,7 @@ public enum Keyword: CaseIterable {
     case .yield:
       return KeywordSpec("yield")
     case .yielding:
-      return KeywordSpec("yielding")
+      return KeywordSpec("yielding", experimentalFeature: .coroutineAccessors)
     }
   }
 }

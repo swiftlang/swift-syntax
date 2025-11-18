@@ -951,6 +951,7 @@ extension DeclModifierSyntax {
     case unowned
     case weak
     case sending
+    @_spi(ExperimentalLanguageFeatures)
     case yielding
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
@@ -1027,7 +1028,7 @@ extension DeclModifierSyntax {
         self = .weak
       case TokenSpec(.sending):
         self = .sending
-      case TokenSpec(.yielding):
+      case TokenSpec(.yielding) where experimentalFeatures.contains(.coroutineAccessors):
         self = .yielding
       default:
         return nil

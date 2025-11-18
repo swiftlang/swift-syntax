@@ -422,7 +422,7 @@ public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol {
     _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax,
     _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
-    modifiers: RawDeclModifierListSyntax?,
+    modifiers: RawDeclModifierListSyntax,
     _ unexpectedBetweenModifiersAndAccessorSpecifier: RawUnexpectedNodesSyntax? = nil,
     accessorSpecifier: RawTokenSyntax,
     _ unexpectedBetweenAccessorSpecifierAndParameters: RawUnexpectedNodesSyntax? = nil,
@@ -440,7 +440,7 @@ public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes.raw
       layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
-      layout[3] = modifiers?.raw
+      layout[3] = modifiers.raw
       layout[4] = unexpectedBetweenModifiersAndAccessorSpecifier?.raw
       layout[5] = accessorSpecifier.raw
       layout[6] = unexpectedBetweenAccessorSpecifierAndParameters?.raw
@@ -466,8 +466,8 @@ public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var modifiers: RawDeclModifierListSyntax? {
-    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
 
   public var unexpectedBetweenModifiersAndAccessorSpecifier: RawUnexpectedNodesSyntax? {

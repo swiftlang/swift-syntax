@@ -28,7 +28,7 @@ extension AccessorDeclSyntax {
     unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax = [],
     unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: DeclModifierListSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
     unexpectedBetweenModifiersAndAccessorKind: UnexpectedNodesSyntax? = nil,
     accessorKind: TokenSyntax,
     unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? = nil,

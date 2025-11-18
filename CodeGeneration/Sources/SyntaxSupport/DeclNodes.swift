@@ -181,6 +181,14 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
+    kind: .accessorYieldingModifier,
+    base: .syntax,
+    nameForDiagnostics: nil,
+    traits: [],
+    children: [ ??? ],
+  ),
+
+  Node(
     kind: .actorDecl,
     base: .decl,
     nameForDiagnostics: "actor",

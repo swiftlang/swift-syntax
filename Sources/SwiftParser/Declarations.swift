@@ -1665,25 +1665,25 @@ extension Parser {
   }
 
   mutating func parseAccessorModifierList(count: Int) -> RawDeclModifierListSyntax? {
-      if count == 0 { return nil }
+    if count == 0 { return nil }
 
-      var elements = [RawDeclModifierSyntax]()
+    var elements = [RawDeclModifierSyntax]()
 
-      for _ in 0..<count {
-          let (unexpectedBeforeName, name) = self.expect(anyIn: AccessorModifier.self, default: .mutating)
-          let modifier = RawDeclModifierSyntax(
-            unexpectedBeforeName,
-            name: name,
-            detail: nil,
-            arena: self.arena
-          )
-          elements.append(modifier)
-      }
-
-      return RawDeclModifierListSyntax(
-        elements: elements,
+    for _ in 0..<count {
+      let (unexpectedBeforeName, name) = self.expect(anyIn: AccessorModifier.self, default: .mutating)
+      let modifier = RawDeclModifierSyntax(
+        unexpectedBeforeName,
+        name: name,
+        detail: nil,
         arena: self.arena
       )
+      elements.append(modifier)
+    }
+
+    return RawDeclModifierListSyntax(
+      elements: elements,
+      arena: self.arena
+    )
   }
 
   mutating func parseAccessorIntroducer(

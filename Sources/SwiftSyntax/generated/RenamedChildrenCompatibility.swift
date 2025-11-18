@@ -71,7 +71,7 @@ extension AccessorDeclSyntax {
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax = [],
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: DeclModifierListSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
     _ unexpectedBetweenModifiersAndAccessorKind: UnexpectedNodesSyntax? = nil,
     accessorKind: TokenSyntax,
     _ unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? = nil,

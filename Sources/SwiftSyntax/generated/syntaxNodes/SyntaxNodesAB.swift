@@ -824,7 +824,7 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
 /// ### Children
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
-///  - `modifiers`: ``DeclModifierListSyntax``?
+///  - `modifiers`: ``DeclModifierListSyntax``
 ///  - `accessorSpecifier`: (`get` | `set` | `didSet` | `willSet` | `unsafeAddress` | `addressWithOwner` | `addressWithNativeOwner` | `unsafeMutableAddress` | `mutableAddressWithOwner` | `mutableAddressWithNativeOwner` | `_read` | `read` | `_modify` | `modify` | `init` | `borrow` | `mutate`)
 ///  - `parameters`: ``AccessorParametersSyntax``?
 ///  - `effectSpecifiers`: ``AccessorEffectSpecifiersSyntax``?
@@ -850,13 +850,14 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
 
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - modifiers: Modifiers like `mutating` or `yielding` that affect the accessor declaration.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax = [],
     _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
-    modifiers: DeclModifierListSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
     _ unexpectedBetweenModifiersAndAccessorSpecifier: UnexpectedNodesSyntax? = nil,
     accessorSpecifier: TokenSyntax,
     _ unexpectedBetweenAccessorSpecifierAndParameters: UnexpectedNodesSyntax? = nil,
@@ -889,7 +890,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
         unexpectedBeforeAttributes?.raw,
         attributes.raw,
         unexpectedBetweenAttributesAndModifiers?.raw,
-        modifiers?.raw,
+        modifiers.raw,
         unexpectedBetweenModifiersAndAccessorSpecifier?.raw,
         accessorSpecifier.raw,
         unexpectedBetweenAccessorSpecifierAndParameters?.raw,
@@ -965,13 +966,41 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     }
   }
 
-  public var modifiers: DeclModifierListSyntax? {
+  /// Modifiers like `mutating` or `yielding` that affect the accessor declaration.
+  public var modifiers: DeclModifierListSyntax {
     get {
-      return Syntax(self).child(at: 3)?.cast(DeclModifierListSyntax.self)
+      return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(AccessorDeclSyntax.self)
     }
+  }
+
+  /// Adds the provided `element` to the node's `modifiers`
+  /// collection.
+  ///
+  /// - param element: The new `Modifier` to add to the node's
+  ///                  `modifiers` collection.
+  /// - returns: A copy of the receiver with the provided `Modifier`
+  ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
+  public func addModifier(_ element: DeclModifierSyntax) -> AccessorDeclSyntax {
+    var collection: RawSyntax
+    let arena = RawSyntaxArena()
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
+                                        from: [element.raw], arena: arena)
+    }
+    return Syntax(self)
+      .replacingChild(
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        rawAllocationArena: arena
+      )
+      .cast(AccessorDeclSyntax.self)
   }
 
   public var unexpectedBetweenModifiersAndAccessorSpecifier: UnexpectedNodesSyntax? {

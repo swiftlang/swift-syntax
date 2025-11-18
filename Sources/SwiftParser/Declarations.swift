@@ -1658,15 +1658,13 @@ extension Parser {
 
   struct AccessorIntroducer {
     var attributes: RawAttributeListSyntax
-    var modifiers: RawDeclModifierListSyntax?
+    var modifiers: RawDeclModifierListSyntax
     var kind: AccessorDeclSyntax.AccessorSpecifierOptions
     var unexpectedBeforeToken: RawUnexpectedNodesSyntax?
     var token: RawTokenSyntax
   }
 
-  mutating func parseAccessorModifierList(count: Int) -> RawDeclModifierListSyntax? {
-    if count == 0 { return nil }
-
+  mutating func parseAccessorModifierList(count: Int) -> RawDeclModifierListSyntax {
     var elements = [RawDeclModifierSyntax]()
 
     for _ in 0..<count {

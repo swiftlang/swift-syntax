@@ -98,10 +98,9 @@ public let DECL_NODES: [Node] = [
       ),
       Child(
         name: "modifiers",
-        kind: .node(kind: .declModifierList),
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        isOptional: true
-      ),
+        documentation: "Modifiers like `mutating` or `yielding` that affect the accessor declaration."      ),
       Child(
         name: "accessorSpecifier",
         kind: .token(choices: [

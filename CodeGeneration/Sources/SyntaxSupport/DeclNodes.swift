@@ -181,12 +181,6 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
-    kind: .accessorYieldingModifier,
-    base: .syntax,
-    nameForDiagnostics: nil,
-  ),
-
-  Node(
     kind: .actorDecl,
     base: .decl,
     nameForDiagnostics: "actor",
@@ -501,6 +495,7 @@ public let DECL_NODES: [Node] = [
           .keyword(.unowned),
           .keyword(.weak),
           .keyword(.sending),
+          .keyword(.yielding),
         ])
       ),
       Child(

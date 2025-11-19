@@ -29,7 +29,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case accessorDeclList
   case accessorEffectSpecifiers
   case accessorParameters
-  case accessorYieldingModifier
   case actorDecl
   case arrayElement
   case arrayElementList

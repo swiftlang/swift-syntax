@@ -679,7 +679,7 @@ extension SyntaxProtocol {
 
 extension AccessorBlockSyntax: BracedSyntax {}
 
-extension AccessorDeclSyntax: WithOptionalCodeBlockSyntax, WithAttributesSyntax {}
+extension AccessorDeclSyntax: WithOptionalCodeBlockSyntax, WithAttributesSyntax, WithModifiersSyntax {}
 
 extension AccessorEffectSpecifiersSyntax: EffectSpecifiersSyntax {}
 

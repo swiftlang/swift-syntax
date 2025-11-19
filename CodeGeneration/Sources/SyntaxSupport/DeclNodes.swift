@@ -89,6 +89,7 @@ public let DECL_NODES: [Node] = [
     traits: [
       "WithOptionalCodeBlock",
       "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(

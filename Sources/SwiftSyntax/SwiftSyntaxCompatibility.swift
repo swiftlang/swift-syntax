@@ -18,7 +18,7 @@ extension AccessorDeclSyntax {
   public var modifier: DeclModifierSyntax? {
     get {
       // The legacy `modifier` API predates `yielding`
-      if let m = modifiers.first(where: {$0.name.text != "yielding"}) {
+      if let m = modifiers.first(where: { $0.name.text != "yielding" }) {
         return m
       }
       return nil
@@ -32,12 +32,12 @@ extension AccessorDeclSyntax {
     }
   }
   @available(*, deprecated, message: "use unexpectedBetweenAttributesAndModifers")
-  public var unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax?  {
+  public var unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? {
     get { unexpectedBetweenAttributesAndModifiers }
     set { unexpectedBetweenAttributesAndModifiers = newValue }
   }
   @available(*, deprecated, message: "use unexpectedBetweenModifiersAndAccessorSpecifier")
-  public var unexpectedBetweenModifierAndAccessorSpecifier: UnexpectedNodesSyntax?  {
+  public var unexpectedBetweenModifierAndAccessorSpecifier: UnexpectedNodesSyntax? {
     get { unexpectedBetweenModifiersAndAccessorSpecifier }
     set { unexpectedBetweenModifiersAndAccessorSpecifier = newValue }
   }

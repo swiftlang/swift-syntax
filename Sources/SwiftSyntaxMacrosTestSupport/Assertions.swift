@@ -136,7 +136,15 @@ public func assertMacroExpansion(
     failureHandler: {
       #if canImport(Testing)
       if Test.current != nil {
-        Issue.record(Comment(rawValue: $0.message), sourceLocation: .init(fileID: fileID.description, filePath: file.description, line: Int(line), column: Int(column)))
+        Issue.record(
+          Comment(rawValue: $0.message),
+          sourceLocation: .init(
+            fileID: fileID.description,
+            filePath: file.description,
+            line: Int(line),
+            column: Int(column)
+          )
+        )
       } else {
         XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
       }

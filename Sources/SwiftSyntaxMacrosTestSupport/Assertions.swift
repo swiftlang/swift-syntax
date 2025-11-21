@@ -64,8 +64,10 @@ public func assertMacroExpansion(
   testFileName: String = "test.swift",
   indentationWidth: Trivia = .spaces(4),
   buildConfiguration: (any BuildConfiguration)? = nil,
+  fileID: StaticString = #fileID,
   file: StaticString = #filePath,
-  line: UInt = #line
+  line: UInt = #line,
+  column: UInt = #column
 ) {
   let specs = macros.mapValues { MacroSpec(type: $0) }
   assertMacroExpansion(
@@ -79,8 +81,10 @@ public func assertMacroExpansion(
     testFileName: testFileName,
     indentationWidth: indentationWidth,
     buildConfiguration: buildConfiguration,
+    fileID: fileID,
     file: file,
-    line: line
+    line: line,
+    column: column
   )
 }
 

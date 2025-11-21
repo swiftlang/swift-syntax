@@ -51,7 +51,7 @@ public typealias DiagnosticSpec = SwiftSyntaxMacrosGenericTestSupport.Diagnostic
 ///   - indentationWidth: The indentation width used in the expansion.
 ///   - buildConfiguration: a build configuration that will be made available
 ///     to the macro implementation
-/// - SeeAlso: ``assertMacroExpansion(_:expandedSource:diagnostics:macroSpecs:applyFixIts:fixedSource:testModuleName:testFileName:indentationWidth:buildConfiguration:file:line:)``
+/// - SeeAlso: ``assertMacroExpansion(_:expandedSource:diagnostics:macroSpecs:applyFixIts:fixedSource:testModuleName:testFileName:indentationWidth:buildConfiguration:fileID:file:line:column:)``
 ///   to also specify the list of conformances passed to the macro expansion.
 public func assertMacroExpansion(
   _ originalSource: String,

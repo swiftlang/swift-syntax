@@ -13,6 +13,36 @@
 // This file provides compatibility aliases to keep dependents of SwiftSyntax building.
 // All users of the declarations in this file should transition away from them ASAP.
 
+extension AccessorDeclSyntax {
+  @available(*, deprecated, message: "use modifiers to see all modifiers on an accessor declaration")
+  public var modifier: DeclModifierSyntax? {
+    get {
+      // The legacy `modifier` API predates `yielding`
+      if let m = modifiers.first(where: {$0.name.text != "yielding"}) {
+        return m
+      }
+      return nil
+    }
+    set {
+      if let newValue {
+        modifiers = [newValue]
+      } else {
+        modifiers = []
+      }
+    }
+  }
+  @available(*, deprecated, message: "use unexpectedBetweenAttributesAndModifers")
+  public var unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax?  {
+    get { unexpectedBetweenAttributesAndModifiers }
+    set { unexpectedBetweenAttributesAndModifiers = newValue }
+  }
+  @available(*, deprecated, message: "use unexpectedBetweenModifiersAndAccessorSpecifier")
+  public var unexpectedBetweenModifierAndAccessorSpecifier: UnexpectedNodesSyntax?  {
+    get { unexpectedBetweenModifiersAndAccessorSpecifier }
+    set { unexpectedBetweenModifiersAndAccessorSpecifier = newValue }
+  }
+}
+
 extension AccessorEffectSpecifiersSyntax {
   @_disfavoredOverload
   @available(*, deprecated, message: "use throwsClause instead of throwsSpecifier")

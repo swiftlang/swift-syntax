@@ -18,7 +18,7 @@ public import SwiftSyntaxMacros
 @_spi(XCTestFailureLocation) public import SwiftSyntaxMacrosGenericTestSupport
 private import XCTest
 #if canImport(Testing)
-import Testing
+private import Testing
 #endif
 #else
 import SwiftIfConfig

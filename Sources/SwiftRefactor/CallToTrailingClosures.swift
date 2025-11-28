@@ -104,7 +104,7 @@ extension CallLikeSyntax {
       // Trailing comma won't exist any more, move its trivia to the end of
       // the closure instead
       if let comma = arg.trailingComma {
-        closure.trailingTrivia = closure.trailingTrivia.merging(triviaOf: comma)
+        closure.trailingTrivia = closure.trailingTrivia.mergingCommonSuffix(triviaOf: comma)
       }
       closures.append((arg, closure))
     }
@@ -114,12 +114,12 @@ extension CallLikeSyntax {
     }
 
     // First trailing closure won't have label/colon. Transfer their trivia.
-    var trailingClosure = closures.first!.closure
+    let (firstOriginal, firstClosure) = closures.first!
+    var trailingClosure = firstClosure
     trailingClosure.leadingTrivia =
-      Trivia()
-      .merging(triviaOf: closures.first!.original.label)
-      .merging(triviaOf: closures.first!.original.colon)
-      .merging(closures.first!.closure.leadingTrivia)
+      (firstOriginal.label?.triviaByMergingCommonSuffix ?? [])
+      .mergingCommonSuffix(triviaOf: firstOriginal.colon)
+      .mergingCommonSuffix(firstClosure.leadingTrivia)
       .droppingLeadingWhitespace
     let additionalTrailingClosures = closures.dropFirst().map {
       MultipleTrailingClosureElementSyntax(
@@ -144,21 +144,20 @@ extension CallLikeSyntax {
       // No left paren any more, right paren is handled below since it makes
       // sense to keep its trivia of the end of the call, regardless of whether
       // it was removed or not.
-      if let leftParen = leftParen {
-        trailingClosure.leadingTrivia = Trivia()
-          .merging(triviaOf: leftParen)
-          .merging(trailingClosure.leadingTrivia)
+      if let leftParen {
+        trailingClosure.leadingTrivia = leftParen.triviaByMergingCommonSuffix
+          .mergingCommonSuffix(trailingClosure.leadingTrivia)
       }
       // No right paren anymore. Attach its trivia to the end of the call.
-      if let rightParen = rightParen {
-        additionalTriviaAtEndOfCall = Trivia().merging(triviaOf: rightParen)
+      if let rightParen {
+        additionalTriviaAtEndOfCall = rightParen.triviaByMergingCommonSuffix
       }
     } else {
       let last = argList.last!
       // Move the trailing trivia of the closing parenthesis to the end of the call after the last trailing, instead of
       // keeping it in the middle of the call where the new closing parenthesis lives.
       // Also ensure that we don't drop trivia from any comma we remove.
-      converted.rightParen?.trailingTrivia = Trivia().merging(triviaOf: last.trailingComma)
+      converted.rightParen?.trailingTrivia = last.trailingComma?.triviaByMergingCommonSuffix ?? []
       additionalTriviaAtEndOfCall = rightParen?.trailingTrivia
       argList[argList.count - 1] = last.with(\.trailingComma, nil)
     }
@@ -171,7 +170,9 @@ extension CallLikeSyntax {
     }
 
     if let additionalTriviaAtEndOfCall {
-      converted.trailingTrivia = converted.trailingTrivia.merging(additionalTriviaAtEndOfCall.droppingLeadingWhitespace)
+      converted.trailingTrivia = converted.trailingTrivia.mergingCommonSuffix(
+        additionalTriviaAtEndOfCall.droppingLeadingWhitespace
+      )
     }
 
     return converted

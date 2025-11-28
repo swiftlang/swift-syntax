@@ -774,7 +774,8 @@ final class RecoveryTests: ParserTestCase {
         ),
       ],
       fixedSource: """
-        for   <#pattern#> in <#expression#> {
+        for 
+          <#pattern#> in <#expression#> {
         }
         """
     )

@@ -97,73 +97,73 @@ public let TRIVIAS: [Trivia] = [
 
   Trivia(
     name: "BlockComment",
-    comment: #"A developer block comment, starting with '/*' and ending with '*/'."#,
+    comment: #"A developer block comment, starting with `/*` and ending with `*/`."#,
     traits: [.comment]
   ),
 
   Trivia(
     name: "CarriageReturn",
-    comment: #"A newline '\r' character."#,
+    comment: #"A newline `\r` character."#,
     characters: "\r",
     traits: [.whitespace, .newline]
   ),
 
   Trivia(
     name: "CarriageReturnLineFeed",
-    comment: #"A newline consists of contiguous '\r' and '\n' characters."#,
+    comment: #"A newline consists of contiguous `\r` and `\n` characters."#,
     characters: "\r\n",
     traits: [.whitespace, .newline]
   ),
 
   Trivia(
     name: "DocBlockComment",
-    comment: #"A documentation block comment, starting with '/**' and ending with '*/'."#,
+    comment: #"A documentation block comment, starting with `/**` and ending with `*/`."#,
     traits: [.comment]
   ),
 
   Trivia(
     name: "DocLineComment",
-    comment: #"A documentation line comment, starting with '///' and excluding the trailing newline."#,
+    comment: #"A documentation line comment, starting with `///` and excluding the trailing newline."#,
     traits: [.comment]
   ),
 
-  // Swift don't support form feed '\f' so we use the raw unicode
+  // Swift doesn't support form feed `\f` so we use the raw unicode
   Trivia(
     name: "Formfeed",
-    comment: #"A form-feed 'f' character."#,
+    comment: #"A form-feed `f` character."#,
     characters: "\u{000C}",
     traits: [.whitespace]
   ),
 
   Trivia(
     name: "LineComment",
-    comment: #"A developer line comment, starting with '//' and excluding the trailing newline."#,
+    comment: #"A developer line comment, starting with `//` and excluding the trailing newline."#,
     traits: [.comment]
   ),
 
   Trivia(
     name: "Newline",
-    comment: #"A newline '\n' character."#,
+    comment: #"A newline `\n` character."#,
     characters: "\n",
     traits: [.whitespace, .newline]
   ),
 
   Trivia(
     name: "Pound",
-    comment: #"A '#' that is at the end of a line in a multi-line string literal to escape the newline."#,
+    comment: #"A `#` that is at the end of a line in a multi-line string literal to escape the newline."#,
     characters: "#"
   ),
 
   Trivia(
     name: "Space",
-    comment: #"A space ' ' character."#,
+    comment: #"A space ` ` character."#,
     characters: " ",
     traits: [.whitespace, .spaceOrTab]
   ),
 
   Trivia(
     name: "Tab",
-    comment: #"A tab '\t' character."#,
+    comment: #"A tab `\t` character."#,
     characters: "\t",
     traits: [.whitespace, .spaceOrTab]
   ),
@@ -173,10 +173,10 @@ public let TRIVIAS: [Trivia] = [
     comment: #"Any skipped unexpected text."#
   ),
 
-  // Swift don't support vertical tab '\v' so we use the raw unicode
+  // Swift doesn't support vertical tab `\v` so we use the raw unicode
   Trivia(
     name: "VerticalTab",
-    comment: #"A vertical tab '\v' character."#,
+    comment: #"A vertical tab `\v` character."#,
     characters: "\u{000B}",
     traits: [.whitespace]
   ),

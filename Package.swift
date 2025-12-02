@@ -185,7 +185,7 @@ let package = Package(
 
     .target(
       name: "SwiftWarningControl",
-      dependencies: ["SwiftSyntax", "SwiftParser"],
+      dependencies: ["SwiftSyntax", "SwiftParser", "SwiftDiagnostics"],
       exclude: ["CMakeLists.txt", "SwiftWarningControl.md"]
     ),
 

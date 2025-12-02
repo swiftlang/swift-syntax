@@ -15,8 +15,8 @@ import SwiftSyntax
 extension WithAttributesSyntax {
   /// Compute a dictionary of all `@warn` diagnostic group behavior controls
   /// specified on this warning control declaration scope.
-  var allWarningGroupControls: [DiagnosticGroupIdentifier: WarningGroupControl] {
-    attributes.reduce(into: [DiagnosticGroupIdentifier: WarningGroupControl]()) { result, attr in
+  var allWarningGroupControls: [(DiagnosticGroupIdentifier, WarningGroupControl)] {
+    attributes.reduce(into: [(DiagnosticGroupIdentifier, WarningGroupControl)]()) { result, attr in
       // `@warn` attributes
       guard case .attribute(let attributeSyntax) = attr,
         attributeSyntax.attributeName.as(IdentifierTypeSyntax.self)?.name.text == "warn"
@@ -50,7 +50,7 @@ extension WithAttributesSyntax {
       else {
         return
       }
-      result[DiagnosticGroupIdentifier(diagnosticGroupID)] = control
+      result.append((DiagnosticGroupIdentifier(diagnosticGroupID), control))
     }
   }
 }

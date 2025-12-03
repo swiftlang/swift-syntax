@@ -27,7 +27,7 @@ extension SyntaxProtocol {
   @_spi(ExperimentalLanguageFeatures)
   public func warningGroupControl(
     for diagnosticGroupIdentifier: DiagnosticGroupIdentifier,
-    globalControls: [DiagnosticGroupIdentifier: WarningGroupControl] = [:],
+    globalControls: [(DiagnosticGroupIdentifier, WarningGroupControl)] = [],
     groupInheritanceTree: DiagnosticGroupInheritanceTree? = nil
   ) -> WarningGroupControl? {
     let warningControlRegions = root.warningGroupControlRegionTreeImpl(

@@ -16,7 +16,7 @@ import SwiftSyntax
 extension SyntaxProtocol {
   @_spi(ExperimentalLanguageFeatures)
   public func warningGroupControlRegionTree(
-    globalControls: [DiagnosticGroupIdentifier: WarningGroupControl] = [:],
+    globalControls: [(DiagnosticGroupIdentifier, WarningGroupControl)] = [],
     groupInheritanceTree: DiagnosticGroupInheritanceTree? = nil
   ) -> WarningControlRegionTree {
     return warningGroupControlRegionTreeImpl(
@@ -30,7 +30,7 @@ extension SyntaxProtocol {
   /// a specific absolute position - meant to speed up tree generation for individual
   /// queries.
   func warningGroupControlRegionTreeImpl(
-    globalControls: [DiagnosticGroupIdentifier: WarningGroupControl],
+    globalControls: [(DiagnosticGroupIdentifier, WarningGroupControl)],
     groupInheritanceTree: DiagnosticGroupInheritanceTree?,
     containing position: AbsolutePosition? = nil
   ) -> WarningControlRegionTree {

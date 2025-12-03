@@ -123,7 +123,7 @@ public struct WarningControlRegionTree {
   /// Add a warning control region to the tree
   mutating func addWarningGroupControls(
     range: Range<AbsolutePosition>,
-    controls: [DiagnosticGroupIdentifier: WarningGroupControl]
+    controls: [(DiagnosticGroupIdentifier, WarningGroupControl)]
   ) {
     guard !controls.isEmpty else { return }
     let newNode = WarningControlRegionNode(range: range)

@@ -272,7 +272,7 @@ public class WarningGroupControlTests: XCTestCase {
         1️⃣let x = 1
       }
       """,
-      globalControls: ["GroupID": .warning],
+      globalControls: [("GroupID", .warning)],
       diagnosticGroupID: "GroupID",
       states: [
         "1️⃣": .error
@@ -289,7 +289,7 @@ public class WarningGroupControlTests: XCTestCase {
         }
       }
       """,
-      globalControls: ["GroupID": .error],
+      globalControls: [("GroupID", .error)],
       diagnosticGroupID: "GroupID",
       states: [
         "1️⃣": .error,
@@ -306,7 +306,7 @@ public class WarningGroupControlTests: XCTestCase {
         1️⃣let x = 1
       }
       """,
-      globalControls: ["GroupID": .warning],
+      globalControls: [("GroupID", .warning)],
       diagnosticGroupID: "GroupID",
       states: [
         "1️⃣": .warning
@@ -351,13 +351,49 @@ public class WarningGroupControlTests: XCTestCase {
       )
     }
   }
+
+  func testOrderedGlobalControls() throws {
+    // Parent group is ignored, followed by sub-group treated as warning
+    try assertWarningGroupControl(
+      """
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      globalControls: [("SuperGroupID", .ignored), ("GroupID", .warning)],
+      groupInheritanceTree: DiagnosticGroupInheritanceTree(subGroups: [
+        "SuperGroupID": ["GroupID"]
+      ]),
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .warning
+      ]
+    )
+
+    // Parent group is treated as warning, followed by ignored sub-group
+    try assertWarningGroupControl(
+      """
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      globalControls: [("SuperGroupID", .warning), ("GroupID", .ignored)],
+      groupInheritanceTree: DiagnosticGroupInheritanceTree(subGroups: [
+        "SuperGroupID": ["GroupID"]
+      ]),
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .ignored
+      ]
+    )
+  }
 }
 
 /// Assert that the various marked positions in the source code have the
 /// expected warning behavior controls.
 private func assertWarningGroupControl(
   _ markedSource: String,
-  globalControls: [DiagnosticGroupIdentifier: WarningGroupControl] = [:],
+  globalControls: [(DiagnosticGroupIdentifier, WarningGroupControl)] = [],
   groupInheritanceTree: DiagnosticGroupInheritanceTree? = nil,
   diagnosticGroupID: DiagnosticGroupIdentifier,
   states: [String: WarningGroupControl?],

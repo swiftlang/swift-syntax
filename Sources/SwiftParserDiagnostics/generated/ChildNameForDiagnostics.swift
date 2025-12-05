@@ -23,7 +23,7 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
   switch keyPath {
   case \AccessorDeclSyntax.attributes:
     return "attributes"
-  case \AccessorDeclSyntax.modifier:
+  case \AccessorDeclSyntax.modifiers:
     return "modifiers"
   case \AccessorDeclSyntax.parameters:
     return "parameter"

@@ -1658,44 +1658,51 @@ extension Parser {
 
   struct AccessorIntroducer {
     var attributes: RawAttributeListSyntax
-    var modifier: RawDeclModifierSyntax?
+    var modifiers: RawDeclModifierListSyntax
     var kind: AccessorDeclSyntax.AccessorSpecifierOptions
     var unexpectedBeforeToken: RawUnexpectedNodesSyntax?
     var token: RawTokenSyntax
   }
 
-  mutating func parseAccessorIntroducer(
-    forcedKind: (AccessorDeclSyntax.AccessorSpecifierOptions, TokenConsumptionHandle)? = nil
-  ) -> AccessorIntroducer? {
-    // Check there is an identifier before consuming
-    var look = self.lookahead()
-    let _ = look.consumeAttributeList()
-    let hasModifier = look.consume(ifAnyIn: AccessorModifier.self) != nil
-    guard let (kind, _) = look.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) ?? forcedKind else {
-      return nil
-    }
+  mutating func parseAccessorModifierList(count: Int) -> RawDeclModifierListSyntax {
+    var elements = [RawDeclModifierSyntax]()
 
-    let attrs = self.parseAttributeList()
-
-    // Parse the contextual keywords for 'mutating' and 'nonmutating' before
-    // get and set.
-    let modifier: RawDeclModifierSyntax?
-    if hasModifier {
+    for _ in 0..<count {
       let (unexpectedBeforeName, name) = self.expect(anyIn: AccessorModifier.self, default: .mutating)
-      modifier = RawDeclModifierSyntax(
+      let modifier = RawDeclModifierSyntax(
         unexpectedBeforeName,
         name: name,
         detail: nil,
         arena: self.arena
       )
-    } else {
-      modifier = nil
+      elements.append(modifier)
     }
 
+    return RawDeclModifierListSyntax(
+      elements: elements,
+      arena: self.arena
+    )
+  }
+
+  mutating func parseAccessorIntroducer(
+    forcedKind: (AccessorDeclSyntax.AccessorSpecifierOptions, TokenConsumptionHandle)? = nil
+  ) -> AccessorIntroducer? {
+    // Look ahead to verify attributes/modifiers/kind
+    var look = self.lookahead()
+    let _ = look.consumeAttributeList()
+    let modifierCount = look.consume(anySequence: AccessorModifier.self)
+    guard let (kind, _) = look.at(anyIn: AccessorDeclSyntax.AccessorSpecifierOptions.self) ?? forcedKind else {
+      return nil
+    }
+
+    let attrs = self.parseAttributeList()
+    let modifiers = self.parseAccessorModifierList(count: modifierCount)
+
     let (unexpectedBeforeIntroducer, introducer) = self.expect(kind.spec)
+
     return AccessorIntroducer(
       attributes: attrs,
-      modifier: modifier,
+      modifiers: modifiers,
       kind: kind,
       unexpectedBeforeToken: unexpectedBeforeIntroducer,
       token: introducer
@@ -1738,7 +1745,7 @@ extension Parser {
     let body = self.parseOptionalCodeBlock()
     return RawAccessorDeclSyntax(
       attributes: introducer.attributes,
-      modifier: introducer.modifier,
+      modifiers: introducer.modifiers,
       introducer.unexpectedBeforeToken,
       accessorSpecifier: introducer.token,
       parameters: parameters,

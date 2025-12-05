@@ -279,6 +279,7 @@ public enum Keyword: CaseIterable {
   case willSet
   case wrt
   case yield
+  case yielding
 
   public var spec: KeywordSpec {
     switch self {
@@ -537,7 +538,7 @@ public enum Keyword: CaseIterable {
     case .module:
       return KeywordSpec("module")
     case .mutate:
-      return KeywordSpec("mutate", experimentalFeature: .borrowAndMutateAccessors)
+      return KeywordSpec("mutate")
     case .mutableAddressWithNativeOwner:
       return KeywordSpec("mutableAddressWithNativeOwner")
     case .mutableAddressWithOwner:
@@ -692,6 +693,8 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("wrt")
     case .yield:
       return KeywordSpec("yield")
+    case .yielding:
+      return KeywordSpec("yielding")
     }
   }
 }

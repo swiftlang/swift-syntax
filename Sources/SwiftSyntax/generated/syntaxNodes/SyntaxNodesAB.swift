@@ -824,7 +824,7 @@ public struct AccessorBlockSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNo
 /// ### Children
 /// 
 ///  - `attributes`: ``AttributeListSyntax``
-///  - `modifier`: ``DeclModifierSyntax``?
+///  - `modifiers`: ``DeclModifierListSyntax``
 ///  - `accessorSpecifier`: (`get` | `set` | `didSet` | `willSet` | `unsafeAddress` | `addressWithOwner` | `addressWithNativeOwner` | `unsafeMutableAddress` | `mutableAddressWithOwner` | `mutableAddressWithNativeOwner` | `_read` | `read` | `_modify` | `modify` | `init` | `borrow` | `mutate`)
 ///  - `parameters`: ``AccessorParametersSyntax``?
 ///  - `effectSpecifiers`: ``AccessorEffectSpecifiersSyntax``?
@@ -850,14 +850,15 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
 
   /// - Parameters:
   ///   - leadingTrivia: Trivia to be prepended to the leading trivia of the node’s first token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
+  ///   - modifiers: Modifiers like `mutating` or `yielding` that affect the accessor declaration.
   ///   - trailingTrivia: Trivia to be appended to the trailing trivia of the node’s last token. If the node is empty, there is no token to attach the trivia to and the parameter is ignored.
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax = [],
-    _ unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? = nil,
-    modifier: DeclModifierSyntax? = nil,
-    _ unexpectedBetweenModifierAndAccessorSpecifier: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    _ unexpectedBetweenModifiersAndAccessorSpecifier: UnexpectedNodesSyntax? = nil,
     accessorSpecifier: TokenSyntax,
     _ unexpectedBetweenAccessorSpecifierAndParameters: UnexpectedNodesSyntax? = nil,
     parameters: AccessorParametersSyntax? = nil,
@@ -873,9 +874,9 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     self = withExtendedLifetime((RawSyntaxArena(), (
       unexpectedBeforeAttributes,
       attributes,
-      unexpectedBetweenAttributesAndModifier,
-      modifier,
-      unexpectedBetweenModifierAndAccessorSpecifier,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers,
+      unexpectedBetweenModifiersAndAccessorSpecifier,
       accessorSpecifier,
       unexpectedBetweenAccessorSpecifierAndParameters,
       parameters,
@@ -888,9 +889,9 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       let layout: [RawSyntax?] = [
         unexpectedBeforeAttributes?.raw,
         attributes.raw,
-        unexpectedBetweenAttributesAndModifier?.raw,
-        modifier?.raw,
-        unexpectedBetweenModifierAndAccessorSpecifier?.raw,
+        unexpectedBetweenAttributesAndModifiers?.raw,
+        modifiers.raw,
+        unexpectedBetweenModifiersAndAccessorSpecifier?.raw,
         accessorSpecifier.raw,
         unexpectedBetweenAccessorSpecifierAndParameters?.raw,
         parameters?.raw,
@@ -956,7 +957,7 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
       .cast(AccessorDeclSyntax.self)
   }
 
-  public var unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -965,16 +966,44 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
     }
   }
 
-  public var modifier: DeclModifierSyntax? {
+  /// Modifiers like `mutating` or `yielding` that affect the accessor declaration.
+  public var modifiers: DeclModifierListSyntax {
     get {
-      return Syntax(self).child(at: 3)?.cast(DeclModifierSyntax.self)
+      return Syntax(self).child(at: 3)!.cast(DeclModifierListSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(AccessorDeclSyntax.self)
     }
   }
 
-  public var unexpectedBetweenModifierAndAccessorSpecifier: UnexpectedNodesSyntax? {
+  /// Adds the provided `element` to the node's `modifiers`
+  /// collection.
+  ///
+  /// - param element: The new `Modifier` to add to the node's
+  ///                  `modifiers` collection.
+  /// - returns: A copy of the receiver with the provided `Modifier`
+  ///            appended to its `modifiers` collection.
+  @available(*, deprecated, message: "Use node.modifiers.append(newElement) instead")
+  public func addModifier(_ element: DeclModifierSyntax) -> AccessorDeclSyntax {
+    var collection: RawSyntax
+    let arena = RawSyntaxArena()
+    if let col = raw.layoutView!.children[3] {
+      collection = col.layoutView!.appending(element.raw, arena: arena)
+    } else {
+      collection = RawSyntax.makeLayout(kind: SyntaxKind.declModifierList,
+                                        from: [element.raw], arena: arena)
+    }
+    return Syntax(self)
+      .replacingChild(
+        at: 3,
+        with: collection,
+        rawNodeArena: arena,
+        rawAllocationArena: arena
+      )
+      .cast(AccessorDeclSyntax.self)
+  }
+
+  public var unexpectedBetweenModifiersAndAccessorSpecifier: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -1078,9 +1107,9 @@ public struct AccessorDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDeclS
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeAttributes,
     \Self.attributes,
-    \Self.unexpectedBetweenAttributesAndModifier,
-    \Self.modifier,
-    \Self.unexpectedBetweenModifierAndAccessorSpecifier,
+    \Self.unexpectedBetweenAttributesAndModifiers,
+    \Self.modifiers,
+    \Self.unexpectedBetweenModifiersAndAccessorSpecifier,
     \Self.accessorSpecifier,
     \Self.unexpectedBetweenAccessorSpecifierAndParameters,
     \Self.parameters,

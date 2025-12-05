@@ -40,7 +40,6 @@ extension AccessorDeclSyntax {
     case modify
     case `init`
     case borrow
-    @_spi(ExperimentalLanguageFeatures)
     case mutate
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
@@ -77,7 +76,7 @@ extension AccessorDeclSyntax {
         self = .`init`
       case TokenSpec(.borrow):
         self = .borrow
-      case TokenSpec(.mutate) where experimentalFeatures.contains(.borrowAndMutateAccessors):
+      case TokenSpec(.mutate):
         self = .mutate
       default:
         return nil
@@ -951,6 +950,7 @@ extension DeclModifierSyntax {
     case unowned
     case weak
     case sending
+    case yielding
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -1026,6 +1026,8 @@ extension DeclModifierSyntax {
         self = .weak
       case TokenSpec(.sending):
         self = .sending
+      case TokenSpec(.yielding):
+        self = .yielding
       default:
         return nil
       }
@@ -1105,6 +1107,8 @@ extension DeclModifierSyntax {
         self = .weak
       case TokenSpec(.sending):
         self = .sending
+      case TokenSpec(.yielding):
+        self = .yielding
       default:
         return nil
       }
@@ -1184,6 +1188,8 @@ extension DeclModifierSyntax {
         return .keyword(.weak)
       case .sending:
         return .keyword(.sending)
+      case .yielding:
+        return .keyword(.yielding)
       }
     }
 
@@ -1265,6 +1271,8 @@ extension DeclModifierSyntax {
         return .keyword(.weak)
       case .sending:
         return .keyword(.sending)
+      case .yielding:
+        return .keyword(.yielding)
       }
     }
   }

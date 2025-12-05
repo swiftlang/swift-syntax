@@ -68,4 +68,9 @@ def swift_syntax_test(name, deps):
         minimum_os_version = "13.0",
         tags = ["exclusive"],
         runner = "//:ios_test_runner",
+        target_compatible_with = select({
+            "@platforms//os:ios": [],
+            "@platforms//os:macos": [],
+            "//conditions:default": ["@platforms//:incompatible"],
+        }),
     )

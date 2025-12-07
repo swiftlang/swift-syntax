@@ -814,11 +814,19 @@ extension Lexer.Cursor {
     openingRawStringDelimiters: Int?
   ) -> Bool {
     precondition(self.previous == #"""#)
+
+    var delimEnd = self
+    guard delimEnd.advance(matching: #"""#),
+      case let delimLast = delimEnd,
+      delimEnd.advance(matching: #"""#)
+    else {
+      return false
+    }
+
     // Test for single-line string literals that resemble multiline delimiter.
-    var sameLineCloseCheck = self
-    _ = sameLineCloseCheck.advance()
     if let openingRawStringDelimiters, openingRawStringDelimiters != 0 {
       // Scan if the current line contains `"` followed by `openingRawStringDelimiters` `#` characters
+      var sameLineCloseCheck = delimLast
       while sameLineCloseCheck.is(notAt: "\r", "\n") {
         if sameLineCloseCheck.advance(matching: #"""#) {
           if sameLineCloseCheck.advanceIfStringDelimiter(delimiterLength: openingRawStringDelimiters) {
@@ -831,13 +839,8 @@ extension Lexer.Cursor {
       }
     }
 
-    var tmp = self
-    if tmp.advance(matching: #"""#) && tmp.advance(matching: #"""#) {
-      self = tmp
-      return true
-    }
-
-    return false
+    self = delimEnd
+    return true
   }
 
   /// Read a single UTF-8 scalar, which may span multiple bytes.

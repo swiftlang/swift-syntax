@@ -534,6 +534,9 @@ public enum Keyword: CaseIterable {
     case .metadata:
       return KeywordSpec("metadata")
     case .modify:
+      // "modify" was not in the final approved version of SE-0474,
+      // so will always require an experimental feature flag
+      // TODO: Remove this keyword entirely
       return KeywordSpec("modify", experimentalFeature: .coroutineAccessors)
     case .module:
       return KeywordSpec("module")
@@ -592,6 +595,9 @@ public enum Keyword: CaseIterable {
     case .public:
       return KeywordSpec("public", isLexerClassified: true)
     case .read:
+      // "read" was not in the final approved version of SE-0474,
+      // so will always require an experimental feature flag
+      // TODO: Remove support for this keyword entirely
       return KeywordSpec("read", experimentalFeature: .coroutineAccessors)
     case .reasync:
       return KeywordSpec("reasync")

@@ -17,6 +17,9 @@ public import SwiftSyntaxMacroExpansion
 public import SwiftSyntaxMacros
 @_spi(XCTestFailureLocation) public import SwiftSyntaxMacrosGenericTestSupport
 private import XCTest
+#if canImport(Testing)
+private import Testing
+#endif
 #else
 import SwiftIfConfig
 import SwiftSyntax
@@ -48,7 +51,7 @@ public typealias DiagnosticSpec = SwiftSyntaxMacrosGenericTestSupport.Diagnostic
 ///   - indentationWidth: The indentation width used in the expansion.
 ///   - buildConfiguration: a build configuration that will be made available
 ///     to the macro implementation
-/// - SeeAlso: ``assertMacroExpansion(_:expandedSource:diagnostics:macroSpecs:applyFixIts:fixedSource:testModuleName:testFileName:indentationWidth:buildConfiguration:file:line:)``
+/// - SeeAlso: ``assertMacroExpansion(_:expandedSource:diagnostics:macroSpecs:applyFixIts:fixedSource:testModuleName:testFileName:indentationWidth:buildConfiguration:fileID:file:line:column:)``
 ///   to also specify the list of conformances passed to the macro expansion.
 public func assertMacroExpansion(
   _ originalSource: String,
@@ -61,8 +64,10 @@ public func assertMacroExpansion(
   testFileName: String = "test.swift",
   indentationWidth: Trivia = .spaces(4),
   buildConfiguration: (any BuildConfiguration)? = nil,
+  fileID: StaticString = #fileID,
   file: StaticString = #filePath,
-  line: UInt = #line
+  line: UInt = #line,
+  column: UInt = #column
 ) {
   let specs = macros.mapValues { MacroSpec(type: $0) }
   assertMacroExpansion(
@@ -76,8 +81,10 @@ public func assertMacroExpansion(
     testFileName: testFileName,
     indentationWidth: indentationWidth,
     buildConfiguration: buildConfiguration,
+    fileID: fileID,
     file: file,
-    line: line
+    line: line,
+    column: column
   )
 }
 
@@ -110,8 +117,10 @@ public func assertMacroExpansion(
   testFileName: String = "test.swift",
   indentationWidth: Trivia = .spaces(4),
   buildConfiguration: (any BuildConfiguration)? = nil,
+  fileID: StaticString = #fileID,
   file: StaticString = #filePath,
-  line: UInt = #line
+  line: UInt = #line,
+  column: UInt = #column
 ) {
   SwiftSyntaxMacrosGenericTestSupport.assertMacroExpansion(
     originalSource,
@@ -125,7 +134,23 @@ public func assertMacroExpansion(
     indentationWidth: indentationWidth,
     buildConfiguration: buildConfiguration,
     failureHandler: {
+      #if canImport(Testing)
+      if Test.current != nil {
+        Issue.record(
+          Comment(rawValue: $0.message),
+          sourceLocation: .init(
+            fileID: fileID.description,
+            filePath: file.description,
+            line: Int(line),
+            column: Int(column)
+          )
+        )
+      } else {
+        XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
+      }
+      #else
       XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
+      #endif
     },
     fileID: "",  // Not used in the failure handler
     filePath: file,

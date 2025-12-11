@@ -483,6 +483,7 @@ public struct ConditionElementListSyntax: SyntaxCollection, SyntaxHashable {
 ///
 /// ### Contained in
 /// 
+///  - ``AccessorDeclSyntax``.``AccessorDeclSyntax/modifiers``
 ///  - ``ActorDeclSyntax``.``ActorDeclSyntax/modifiers``
 ///  - ``AssociatedTypeDeclSyntax``.``AssociatedTypeDeclSyntax/modifiers``
 ///  - ``ClassDeclSyntax``.``ClassDeclSyntax/modifiers``

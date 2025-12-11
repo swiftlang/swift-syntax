@@ -14,13 +14,13 @@
 // swift-format-ignore-file
 
 extension AccessorDeclSyntax {
-  @available(*, deprecated, renamed: "unexpectedBetweenModifierAndAccessorSpecifier")
-  public var unexpectedBetweenModifierAndAccessorKind: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenModifiersAndAccessorSpecifier")
+  public var unexpectedBetweenModifiersAndAccessorKind: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenModifierAndAccessorSpecifier
+      return unexpectedBetweenModifiersAndAccessorSpecifier
     }
     set {
-      unexpectedBetweenModifierAndAccessorSpecifier = newValue
+      unexpectedBetweenModifiersAndAccessorSpecifier = newValue
     }
   }
 
@@ -64,15 +64,15 @@ extension AccessorDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifier:_:accessorSpecifier:_:parameters:_:effectSpecifiers:_:body:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:accessorSpecifier:_:parameters:_:effectSpecifiers:_:body:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
     attributes: AttributeListSyntax = [],
-    _ unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? = nil,
-    modifier: DeclModifierSyntax? = nil,
-    _ unexpectedBetweenModifierAndAccessorKind: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: UnexpectedNodesSyntax? = nil,
+    modifiers: DeclModifierListSyntax = [],
+    _ unexpectedBetweenModifiersAndAccessorKind: UnexpectedNodesSyntax? = nil,
     accessorKind: TokenSyntax,
     _ unexpectedBetweenAccessorKindAndParameter: UnexpectedNodesSyntax? = nil,
     parameter: AccessorParametersSyntax? = nil,
@@ -87,9 +87,9 @@ extension AccessorDeclSyntax {
       leadingTrivia: leadingTrivia,
       unexpectedBeforeAttributes,
       attributes: attributes,
-      unexpectedBetweenAttributesAndModifier,
-      modifier: modifier,
-      unexpectedBetweenModifierAndAccessorKind,
+      unexpectedBetweenAttributesAndModifiers,
+      modifiers: modifiers,
+      unexpectedBetweenModifiersAndAccessorKind,
       accessorSpecifier: accessorKind,
       unexpectedBetweenAccessorKindAndParameter,
       parameters: parameter,

@@ -89,6 +89,7 @@ public let DECL_NODES: [Node] = [
     traits: [
       "WithOptionalCodeBlock",
       "WithAttributes",
+      "WithModifiers",
     ],
     children: [
       Child(
@@ -97,10 +98,10 @@ public let DECL_NODES: [Node] = [
         nameForDiagnostics: "attributes"
       ),
       Child(
-        name: "modifier",
-        kind: .node(kind: .declModifier),
+        name: "modifiers",
+        kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
-        isOptional: true
+        documentation: "Modifiers like `mutating` or `yielding` that affect the accessor declaration."
       ),
       Child(
         name: "accessorSpecifier",
@@ -495,6 +496,7 @@ public let DECL_NODES: [Node] = [
           .keyword(.unowned),
           .keyword(.weak),
           .keyword(.sending),
+          .keyword(.yielding),
         ])
       ),
       Child(

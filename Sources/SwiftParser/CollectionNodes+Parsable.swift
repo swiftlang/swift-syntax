@@ -62,12 +62,14 @@ extension SyntaxCollection where Self: SyntaxParseable {
 
 extension AccessorDeclListSyntax: SyntaxParseable {
   public static func parse(from parser: inout Parser) -> Self {
+    let emptyAttributes = parser.emptyCollection(RawAttributeListSyntax.self)
+    let emptyModifiers = parser.emptyCollection(RawDeclModifierListSyntax.self)
     return parse(from: &parser) { parser in
       return parser.parseAccessorList() ?? RawAccessorDeclListSyntax(elements: [], arena: parser.arena)
     } makeMissing: { remainingTokens, arena in
       return RawAccessorDeclSyntax(
-        attributes: RawAttributeListSyntax(elements: [], arena: arena),
-        modifier: nil,
+        attributes: emptyAttributes,
+        modifiers: emptyModifiers,
         accessorSpecifier: RawTokenSyntax(missing: .keyword, text: "get", arena: arena),
         parameters: nil,
         effectSpecifiers: nil,

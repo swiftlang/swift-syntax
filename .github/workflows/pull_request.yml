@@ -19,6 +19,8 @@ jobs:
     uses: swiftlang/github-workflows/.github/workflows/swift_package_test.yml@0.0.2
     with:
       enable_wasm_sdk_build: true
+      linux_build_command: "swift test --explicit-target-dependency-import-check error"
+      windows_build_command: "Invoke-Program swift test --explicit-target-dependency-import-check error"
   soundness:
     name: Soundness
     uses: swiftlang/github-workflows/.github/workflows/soundness.yml@0.0.2

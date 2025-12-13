@@ -236,6 +236,16 @@ extension VersionTupleSyntax: SyntaxParseable {
   }
 }
 
+extension FunctionParameterClauseSyntax: SyntaxParseable {
+  public static func parse(from parser: inout Parser) -> Self {
+    parse(from: &parser) {
+      $0.parseParameterClause(RawFunctionParameterClauseSyntax.self) { parser in
+        parser.parseFunctionParameter()
+      }
+    }
+  }
+}
+
 fileprivate extension Parser {
   mutating func parseNonOptionalCodeBlockItem() -> RawCodeBlockItemSyntax {
     guard let node = self.parseCodeBlockItem(allowInitDecl: true, until: { _ in

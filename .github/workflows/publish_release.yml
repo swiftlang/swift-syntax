@@ -14,7 +14,7 @@ on:
         required: true
       swift_syntax_version:
         type: string
-        default: 603.0.0
+        default: 604.0.0
         description: "swift-syntax version"
         # The version of swift-syntax to tag. If this is a prerelease, `-prerelease-<date>` is added to this version.
         required: true

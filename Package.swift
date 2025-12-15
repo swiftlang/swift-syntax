@@ -231,7 +231,7 @@ let package = Package(
       name: "SwiftSyntax",
       dependencies: [
         "_SwiftSyntaxCShims", "SwiftSyntax509", "SwiftSyntax510", "SwiftSyntax600", "SwiftSyntax601", "SwiftSyntax602",
-        "SwiftSyntax603",
+        "SwiftSyntax603", "SwiftSyntax604",
       ],
       exclude: ["CMakeLists.txt"],
       swiftSettings: swiftSyntaxSwiftSettings
@@ -273,6 +273,11 @@ let package = Package(
     .target(
       name: "SwiftSyntax603",
       path: "Sources/VersionMarkerModules/SwiftSyntax603"
+    ),
+
+    .target(
+      name: "SwiftSyntax604",
+      path: "Sources/VersionMarkerModules/SwiftSyntax604"
     ),
 
     // MARK: SwiftSyntaxBuilder

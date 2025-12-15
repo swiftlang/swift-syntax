@@ -149,6 +149,12 @@ public struct WarningControlRegionTree {
     insertIntoSubtree(newNode, parent: rootRegionNode)
   }
 
+  /// Add warning control regions to the tree root node.
+  /// For example, controls corresponding to a top-level `using @warn()` statement.
+  mutating func addRootWarningGroupControls(controls: [(DiagnosticGroupIdentifier, WarningGroupControl)]) {
+    addWarningGroupControls(range: rootRegionNode.range, controls: controls)
+  }
+
   /// Insert a region node into the appropriate position in a subtree.
   /// During top-down traversal of the syntax tree, nodes that are visited
   /// later should never contain any of the previously visited nodes,

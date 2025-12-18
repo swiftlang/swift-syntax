@@ -959,22 +959,22 @@ public let DECL_NODES: [Node] = [
     nameForDiagnostics: "function",
     documentation: """
         A Swift `func` declaration.
-        
+
         ### Example
-        
+
         A func declaration may be declared without any parameter.
-        
+
         ```swift
         func foo() {
-        
+
         }
         ```
-        
+
         A func declaration with multiple parameters.
-        
+
         ```swift
         func bar(_ arg1: Int, _ arg2: Int) {
-        
+
         }
         ```
       """,
@@ -1268,7 +1268,7 @@ public let DECL_NODES: [Node] = [
         kind: .collection(kind: .declModifierList, collectionElementName: "Modifier", defaultsToEmpty: true),
         nameForDiagnostics: "modifiers",
         documentation:
-          "Modifiers that are attached to the import declaration. Currently, no modifiers are supported by Swift."
+          "Modifiers that are attached to the import declaration."
       ),
       Child(
         name: "importKeyword",
@@ -1289,7 +1289,7 @@ public let DECL_NODES: [Node] = [
           .keyword(.inout),
         ]),
         documentation: """
-          The kind of declaration being imported. 
+          The kind of declaration being imported.
 
           A struct can be imported from a specific module.
           """,

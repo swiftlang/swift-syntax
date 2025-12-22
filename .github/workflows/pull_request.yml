@@ -23,7 +23,7 @@ jobs:
       windows_build_command: "Invoke-Program swift test --explicit-target-dependency-import-check error"
   soundness:
     name: Soundness
-    uses: swiftlang/github-workflows/.github/workflows/soundness.yml@0.0.2
+    uses: swiftlang/github-workflows/.github/workflows/soundness.yml@0.0.3
     with:
       api_breakage_check_enabled: false  # https://github.com/swiftlang/swift-syntax/issues/3010
       docs_check_additional_arguments: "--disable-parameters-and-returns-validation"

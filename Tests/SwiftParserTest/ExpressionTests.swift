@@ -87,6 +87,80 @@ final class ExpressionTests: ParserTestCase {
     assertParse("compactMap { (parserDiag) in }")
   }
 
+  func testCollectionTrailingClosureInits() {
+    assertParse(
+      "let value = 1️⃣[Foo] { bar }",
+      substructure: FunctionCallExprSyntax(
+        calledExpression: ArrayExprSyntax(
+          leftSquare: .leftSquareToken(),
+          elements: ArrayElementListSyntax([
+            ArrayElementSyntax(
+              expression: DeclReferenceExprSyntax(baseName: .identifier("Foo")),
+              trailingComma: nil
+            )
+          ]),
+          rightSquare: .rightSquareToken()
+        ),
+        leftParen: nil,
+        arguments: LabeledExprListSyntax([]),
+        rightParen: nil,
+        trailingClosure: ClosureExprSyntax(
+          leftBrace: .leftBraceToken(),
+          signature: nil,
+          statements: CodeBlockItemListSyntax([
+            CodeBlockItemSyntax(
+              item: .expr(
+                ExprSyntax(
+                  DeclReferenceExprSyntax(baseName: .identifier("bar"))
+                )
+              )
+            )
+          ]),
+          rightBrace: .rightBraceToken()
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
+
+    assertParse(
+      "let value = 1️⃣[String: Int] { value }",
+      substructure: FunctionCallExprSyntax(
+        calledExpression: DictionaryExprSyntax(
+          leftSquare: .leftSquareToken(),
+          content: .elements(
+            DictionaryElementListSyntax([
+              DictionaryElementSyntax(
+                key: DeclReferenceExprSyntax(baseName: .identifier("String")),
+                colon: .colonToken(),
+                value: DeclReferenceExprSyntax(baseName: .identifier("Int")),
+                trailingComma: nil
+              )
+            ])
+          ),
+          rightSquare: .rightSquareToken()
+        ),
+        leftParen: nil,
+        arguments: LabeledExprListSyntax([]),
+        rightParen: nil,
+        trailingClosure: ClosureExprSyntax(
+          leftBrace: .leftBraceToken(),
+          signature: nil,
+          statements: CodeBlockItemListSyntax([
+            CodeBlockItemSyntax(
+              item: .expr(
+                ExprSyntax(
+                  DeclReferenceExprSyntax(baseName: .identifier("value"))
+                )
+              )
+            )
+          ]),
+          rightBrace: .rightBraceToken()
+        )
+      ),
+      substructureAfterMarker: "1️⃣"
+    )
+  }
+
   func testSequenceExpressions() {
     assertParse("await a()")
     assertParse(
@@ -2180,22 +2254,8 @@ final class ExpressionTests: ParserTestCase {
         { return /foo/ }
         """
     )
-    assertParse(
-      "_ = [1]1️⃣ { return [1] }",
-      diagnostics: expectedDiagnostics,
-      fixedSource: """
-        _ = [1]
-        { return [1] }
-        """
-    )
-    assertParse(
-      "_ = [1: 1]1️⃣ { return [1: 1] }",
-      diagnostics: expectedDiagnostics,
-      fixedSource: """
-        _ = [1: 1]
-        { return [1: 1] }
-        """
-    )
+    assertParse("_ = [1] { return [1] }")
+    assertParse("_ = [1: 1] { return [1: 1] }")
 
     assertParse(
       "_ = 1 + 11️⃣ { return 1 }",

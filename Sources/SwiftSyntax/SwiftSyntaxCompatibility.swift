@@ -17,7 +17,11 @@ extension AccessorDeclSyntax {
   // Note: Does _not_ need @_disfavoredOverload because `modifier:`
   // does not have a default value.  This will _only_ get used when
   // someone explicitly provides a legacy `modifier:` argument.
-  @available(*, deprecated, message: "use `modifiers:` instead of `modifier:`")
+  @available(
+    *,
+    deprecated,
+    message: "use `modifiers:` instead of `modifier:`"
+  )
   public init(
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
@@ -54,7 +58,11 @@ extension AccessorDeclSyntax {
     )
   }
 
-  @available(*, deprecated, message: "use `modifiers` to see all modifiers on an accessor declaration; `modifier` only returns the first one")
+  @available(
+    *,
+    deprecated,
+    message: "use `modifiers` to see all modifiers on an accessor declaration; `modifier` only returns the first one"
+  )
   public var modifier: DeclModifierSyntax? {
     get {
       // The legacy `modifier` API predates `yielding`

@@ -3287,22 +3287,22 @@ public struct FunctionCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafE
 // MARK: - FunctionDeclSyntax
 
 ///   A Swift `func` declaration.
-///   
+/// 
 ///   ### Example
-///   
+/// 
 ///   A func declaration may be declared without any parameter.
-///   
+/// 
 ///   ```swift
 ///   func foo() {
-///   
+/// 
 ///   }
 ///   ```
-///   
+/// 
 ///   A func declaration with multiple parameters.
-///   
+/// 
 ///   ```swift
 ///   func bar(_ arg1: Int, _ arg2: Int) {
-///   
+/// 
 ///   }
 ///   ```
 ///

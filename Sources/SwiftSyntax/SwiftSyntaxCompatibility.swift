@@ -14,7 +14,47 @@
 // All users of the declarations in this file should transition away from them ASAP.
 
 extension AccessorDeclSyntax {
-  @available(*, deprecated, message: "use modifiers to see all modifiers on an accessor declaration")
+  // Note: Does _not_ need @_disfavoredOverload because `modifier:`
+  // does not have a default value.  This will _only_ get used when
+  // someone explicitly provides a legacy `modifier:` argument.
+  @available(*, deprecated, message: "use `modifiers:` instead of `modifier:`")
+  public init(
+    leadingTrivia: Trivia? = nil,
+    _ unexpectedBeforeAttributes: UnexpectedNodesSyntax? = nil,
+    attributes: AttributeListSyntax = [],
+    _ unexpectedBetweenAttributesAndModifier: UnexpectedNodesSyntax? = nil,
+    modifier: DeclModifierSyntax?,
+    _ unexpectedBetweenModifierAndAccessorSpecifier: UnexpectedNodesSyntax? = nil,
+    accessorSpecifier: TokenSyntax,
+    _ unexpectedBetweenAccessorSpecifierAndParameters: UnexpectedNodesSyntax? = nil,
+    parameters: AccessorParametersSyntax? = nil,
+    _ unexpectedBetweenParametersAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
+    effectSpecifiers: AccessorEffectSpecifiersSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndBody: UnexpectedNodesSyntax? = nil,
+    body: CodeBlockSyntax? = nil,
+    _ unexpectedAfterBody: UnexpectedNodesSyntax? = nil,
+    trailingTrivia: Trivia? = nil
+  ) {
+    self.init(
+      leadingTrivia: leadingTrivia,
+      unexpectedBeforeAttributes,
+      attributes: attributes,
+      unexpectedBetweenAttributesAndModifier,
+      modifiers: modifier == nil ? [] : [modifier!],
+      unexpectedBetweenModifierAndAccessorSpecifier,
+      accessorSpecifier: accessorSpecifier,
+      unexpectedBetweenAccessorSpecifierAndParameters,
+      parameters: parameters,
+      unexpectedBetweenParametersAndEffectSpecifiers,
+      effectSpecifiers: effectSpecifiers,
+      unexpectedBetweenEffectSpecifiersAndBody,
+      body: body,
+      unexpectedAfterBody,
+      trailingTrivia: trailingTrivia
+    )
+  }
+
+  @available(*, deprecated, message: "use `modifiers` to see all modifiers on an accessor declaration; `modifier` only returns the first one")
   public var modifier: DeclModifierSyntax? {
     get {
       // The legacy `modifier` API predates `yielding`

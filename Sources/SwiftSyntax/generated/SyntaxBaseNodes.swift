@@ -1806,7 +1806,8 @@ extension Syntax {
       .node(YieldStmtSyntax.self),
       .node(YieldedExpressionListSyntax.self),
       .node(YieldedExpressionSyntax.self),
-      .node(YieldedExpressionsClauseSyntax.self)
+      .node(YieldedExpressionsClauseSyntax.self),
+      .node(YieldsClauseSyntax.self)
     ])
   }
 }

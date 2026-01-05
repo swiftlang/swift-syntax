@@ -89,6 +89,11 @@ public let EXPR_NODES: [Node] = [
         isOptional: true
       ),
       Child(
+        name: "yieldsClause",
+        kind: .node(kind: .yieldsClause),
+        isOptional: true
+      ),
+      Child(
         name: "arrow",
         kind: .token(choices: [.token(.arrow)])
       ),
@@ -629,6 +634,11 @@ public let EXPR_NODES: [Node] = [
       Child(
         name: "effectSpecifiers",
         kind: .node(kind: .typeEffectSpecifiers),
+        isOptional: true
+      ),
+      Child(
+        name: "yieldsClause",
+        kind: .node(kind: .yieldsClause),
         isOptional: true
       ),
       Child(

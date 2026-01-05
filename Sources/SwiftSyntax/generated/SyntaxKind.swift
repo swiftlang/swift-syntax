@@ -320,6 +320,7 @@ public enum SyntaxKind: Sendable {
   case yieldedExpressionList
   case yieldedExpression
   case yieldedExpressionsClause
+  case yieldsClause
 
   public var isSyntaxCollection: Bool {
     switch self {
@@ -1037,6 +1038,8 @@ public enum SyntaxKind: Sendable {
       return YieldedExpressionSyntax.self
     case .yieldedExpressionsClause:
       return YieldedExpressionsClauseSyntax.self
+    case .yieldsClause:
+      return YieldsClauseSyntax.self
     }
   }
 }

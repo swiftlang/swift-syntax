@@ -1551,7 +1551,9 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
     parameterClause: ParameterClause?,
     _ unexpectedBetweenParameterClauseAndEffectSpecifiers: RawUnexpectedNodesSyntax? = nil,
     effectSpecifiers: RawTypeEffectSpecifiersSyntax?,
-    _ unexpectedBetweenEffectSpecifiersAndReturnClause: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndYieldsClause: RawUnexpectedNodesSyntax? = nil,
+    yieldsClause: RawYieldsClauseSyntax?,
+    _ unexpectedBetweenYieldsClauseAndReturnClause: RawUnexpectedNodesSyntax? = nil,
     returnClause: RawReturnClauseSyntax?,
     _ unexpectedBetweenReturnClauseAndInKeyword: RawUnexpectedNodesSyntax? = nil,
     inKeyword: RawTokenSyntax,
@@ -1559,7 +1561,7 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
     arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .closureSignature, uninitializedCount: 13, arena: arena) { layout in
+      kind: .closureSignature, uninitializedCount: 15, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes.raw
@@ -1569,11 +1571,13 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
       layout[5] = parameterClause?.raw
       layout[6] = unexpectedBetweenParameterClauseAndEffectSpecifiers?.raw
       layout[7] = effectSpecifiers?.raw
-      layout[8] = unexpectedBetweenEffectSpecifiersAndReturnClause?.raw
-      layout[9] = returnClause?.raw
-      layout[10] = unexpectedBetweenReturnClauseAndInKeyword?.raw
-      layout[11] = inKeyword.raw
-      layout[12] = unexpectedAfterInKeyword?.raw
+      layout[8] = unexpectedBetweenEffectSpecifiersAndYieldsClause?.raw
+      layout[9] = yieldsClause?.raw
+      layout[10] = unexpectedBetweenYieldsClauseAndReturnClause?.raw
+      layout[11] = returnClause?.raw
+      layout[12] = unexpectedBetweenReturnClauseAndInKeyword?.raw
+      layout[13] = inKeyword.raw
+      layout[14] = unexpectedAfterInKeyword?.raw
     }
     self.init(unchecked: raw)
   }
@@ -1610,24 +1614,32 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
     layoutView.children[7].map(RawTypeEffectSpecifiersSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenEffectSpecifiersAndReturnClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenEffectSpecifiersAndYieldsClause: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var returnClause: RawReturnClauseSyntax? {
-    layoutView.children[9].map(RawReturnClauseSyntax.init(raw:))
+  public var yieldsClause: RawYieldsClauseSyntax? {
+    layoutView.children[9].map(RawYieldsClauseSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenReturnClauseAndInKeyword: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenYieldsClauseAndReturnClause: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
+  public var returnClause: RawReturnClauseSyntax? {
+    layoutView.children[11].map(RawReturnClauseSyntax.init(raw:))
+  }
+
+  public var unexpectedBetweenReturnClauseAndInKeyword: RawUnexpectedNodesSyntax? {
+    layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
   public var inKeyword: RawTokenSyntax {
-    layoutView.children[11].map(RawTokenSyntax.init(raw:))!
+    layoutView.children[13].map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedAfterInKeyword: RawUnexpectedNodesSyntax? {
-    layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

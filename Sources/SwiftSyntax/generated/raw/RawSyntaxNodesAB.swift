@@ -1117,19 +1117,23 @@ public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol {
   public init(
     _ unexpectedBeforeEffectSpecifiers: RawUnexpectedNodesSyntax? = nil,
     effectSpecifiers: RawTypeEffectSpecifiersSyntax?,
-    _ unexpectedBetweenEffectSpecifiersAndArrow: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndYieldsClause: RawUnexpectedNodesSyntax? = nil,
+    yieldsClause: RawYieldsClauseSyntax?,
+    _ unexpectedBetweenYieldsClauseAndArrow: RawUnexpectedNodesSyntax? = nil,
     arrow: RawTokenSyntax,
     _ unexpectedAfterArrow: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .arrowExpr, uninitializedCount: 5, arena: arena) { layout in
+      kind: .arrowExpr, uninitializedCount: 7, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeEffectSpecifiers?.raw
       layout[1] = effectSpecifiers?.raw
-      layout[2] = unexpectedBetweenEffectSpecifiersAndArrow?.raw
-      layout[3] = arrow.raw
-      layout[4] = unexpectedAfterArrow?.raw
+      layout[2] = unexpectedBetweenEffectSpecifiersAndYieldsClause?.raw
+      layout[3] = yieldsClause?.raw
+      layout[4] = unexpectedBetweenYieldsClauseAndArrow?.raw
+      layout[5] = arrow.raw
+      layout[6] = unexpectedAfterArrow?.raw
     }
     self.init(unchecked: raw)
   }
@@ -1142,16 +1146,24 @@ public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol {
     layoutView.children[1].map(RawTypeEffectSpecifiersSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenEffectSpecifiersAndArrow: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenEffectSpecifiersAndYieldsClause: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
+  public var yieldsClause: RawYieldsClauseSyntax? {
+    layoutView.children[3].map(RawYieldsClauseSyntax.init(raw:))
+  }
+
+  public var unexpectedBetweenYieldsClauseAndArrow: RawUnexpectedNodesSyntax? {
+    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
   public var arrow: RawTokenSyntax {
-    layoutView.children[3].map(RawTokenSyntax.init(raw:))!
+    layoutView.children[5].map(RawTokenSyntax.init(raw:))!
   }
 
   public var unexpectedAfterArrow: RawUnexpectedNodesSyntax? {
-    layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[6].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

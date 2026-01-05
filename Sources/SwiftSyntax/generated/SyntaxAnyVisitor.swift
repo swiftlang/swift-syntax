@@ -2416,4 +2416,12 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   override open func visitPost(_ node: YieldedExpressionsClauseSyntax) {
     visitAnyPost(node._syntaxNode)
   }
+
+  override open func visit(_ node: YieldsClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: YieldsClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
 }

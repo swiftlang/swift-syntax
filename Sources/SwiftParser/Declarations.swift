@@ -1334,12 +1334,13 @@ extension Parser {
 }
 
 extension Parser {
-  /// If a `throws` keyword appears right in front of the `arrow`, it is returned as `misplacedThrowsKeyword` so it can be synthesized in front of the arrow.
+  /// If a `throws` keyword appears right behind of the `arrow`, it is returned as `misplacedThrowsKeyword` so it can be synthesized in front of the arrow.
   mutating func parseFunctionReturnClause(
     effectSpecifiers: inout (some RawMisplacedEffectSpecifiersTrait)?,
     allowNamedOpaqueResultType: Bool
   ) -> RawReturnClauseSyntax {
     let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
+
     let unexpectedBeforeReturnType = self.parseMisplacedEffectSpecifiers(&effectSpecifiers)
     let type: RawTypeSyntax
     if allowNamedOpaqueResultType {
@@ -1429,7 +1430,7 @@ extension Parser {
       parser.parseFunctionParameter()
     }
 
-    var effectSpecifiers = self.parseFunctionEffectSpecifiers()
+    var (effectSpecifiers, yields) = self.parseFunctionEffectSpecifiers()
 
     var returnClause: RawReturnClauseSyntax?
 
@@ -1443,10 +1444,10 @@ extension Parser {
     } else {
       returnClause = nil
     }
-
     return RawFunctionSignatureSyntax(
       parameterClause: parameterClause,
       effectSpecifiers: effectSpecifiers,
+      yieldsClause: yields,
       returnClause: returnClause,
       arena: self.arena
     )
@@ -1509,6 +1510,7 @@ extension Parser {
       RawUnexpectedNodesSyntax([unexpectedName], arena: self.arena),
       genericParameterClause: genericParameterClause,
       parameterClause: parameterClause,
+      yieldsClause: nil,
       returnClause: returnClause,
       genericWhereClause: genericWhereClause,
       accessorBlock: accessor,

@@ -428,6 +428,8 @@ extension SyntaxKind {
       return "'yield' statement"
     case .yieldedExpressionList:
       return "yield list"
+    case .yieldsClause:
+      return "yields clause"
     default:
       return nil
     }

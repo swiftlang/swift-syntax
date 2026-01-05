@@ -363,7 +363,7 @@ extension Parser {
         return nil
       }
     case (.arrow, _)?, (.throws, _)?:
-      var effectSpecifiers = self.parseTypeEffectSpecifiers()
+      var (effectSpecifiers, yields) = self.parseTypeEffectSpecifiers()
 
       let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
 
@@ -371,6 +371,7 @@ extension Parser {
 
       let op = RawArrowExprSyntax(
         effectSpecifiers: effectSpecifiers,
+        yieldsClause: yields,
         unexpectedBeforeArrow,
         arrow: arrow,
         unexpectedAfterArrow,
@@ -2003,6 +2004,7 @@ extension Parser {
 
     var parameterClause: RawClosureSignatureSyntax.ParameterClause?
     var effectSpecifiers: RawTypeEffectSpecifiersSyntax?
+    var yields: RawYieldsClauseSyntax? = nil
     var returnClause: RawReturnClauseSyntax? = nil
     if !self.at(.keyword(.in)) {
       // If the next token is ':', then it looks like the code contained a non-shorthand closure parameter with a type annotation.
@@ -2043,7 +2045,7 @@ extension Parser {
         parameterClause = .simpleInput(RawClosureShorthandParameterListSyntax(elements: params, arena: self.arena))
       }
 
-      effectSpecifiers = self.parseTypeEffectSpecifiers()
+      (effectSpecifiers, yields) = self.parseTypeEffectSpecifiers()
 
       if self.at(.arrow) {
         returnClause = self.parseFunctionReturnClause(
@@ -2060,6 +2062,7 @@ extension Parser {
       capture: captures,
       parameterClause: parameterClause,
       effectSpecifiers: effectSpecifiers,
+      yieldsClause: yields,
       returnClause: returnClause,
       unexpectedBeforeInKeyword,
       inKeyword: inKeyword,
@@ -2694,6 +2697,15 @@ extension Parser.Lookahead {
         _ = self.canParseSimpleOrCompositionType()
         self.consume(if: .rightParen)
       }
+    }
+  }
+
+  // Consume 'yields'
+  mutating func consumeYields() {
+    if self.consume(if: .keyword(.yields)) != nil, self.consume(if: .leftParen) != nil {
+      _ = self.canParseTypeAttributeList()
+      _ = self.canParseSimpleOrCompositionType()
+      self.consume(if: .rightParen)
     }
   }
 

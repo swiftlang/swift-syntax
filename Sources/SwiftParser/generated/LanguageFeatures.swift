@@ -80,6 +80,9 @@ extension Parser.LanguageFeatures {
   @_spi(ExperimentalLanguageFeatures)
   public static let _test_EverythingUnexpected = Self (rawValue: 1 << 12)
 
+  /// Whether to enable the parsing of functions as coroutines.
+  public static let coroutineFunctions = Self (rawValue: 1 << 11)
+
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
   @_spi(ExperimentalLanguageFeatures)
@@ -111,6 +114,8 @@ extension Parser.LanguageFeatures {
       self = .calledAttribute
     case "_test_EverythingUnexpected":
       self = ._test_EverythingUnexpected
+    case "CoroutineFunctions":
+      self = .coroutineFunctions
     default:
       return nil
     }

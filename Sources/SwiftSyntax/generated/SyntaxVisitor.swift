@@ -3575,6 +3575,18 @@ open class SyntaxVisitor {
   open func visitPost(_ node: YieldedExpressionsClauseSyntax) {
   }
 
+  /// Visiting ``YieldsClauseSyntax`` specifically.
+  ///   - Parameter node: the node we are visiting.
+  ///   - Returns: how should we continue visiting.
+  open func visit(_ node: YieldsClauseSyntax) -> SyntaxVisitorContinueKind {
+    return .visitChildren
+  }
+
+  /// The function called after visiting ``YieldsClauseSyntax`` and its descendants.
+  ///   - node: the node we just finished visiting.
+  open func visitPost(_ node: YieldsClauseSyntax) {
+  }
+
   /// Visiting ``TokenSyntax`` specifically.
   ///   - Parameter token: the token we are visiting.
   ///   - Returns: how should we continue visiting.
@@ -5938,6 +5950,14 @@ open class SyntaxVisitor {
     visitPost(YieldedExpressionsClauseSyntax(unsafeCasting: node))
   }
 
+  @inline(never)
+  private func visitYieldsClauseSyntaxImpl(_ node: Syntax) {
+    if visit(YieldsClauseSyntax(unsafeCasting: node)) == .visitChildren {
+      visitChildren(node)
+    }
+    visitPost(YieldsClauseSyntax(unsafeCasting: node))
+  }
+
   // SwiftSyntax requires a lot of stack space in debug builds for syntax tree
   // visitation. In scenarios with reduced stack space (in particular dispatch
   // queues), this easily results in a stack overflow. To work around this issue,
@@ -6552,6 +6572,8 @@ open class SyntaxVisitor {
       return self.visitYieldedExpressionSyntaxImpl(_:)
     case .yieldedExpressionsClause:
       return self.visitYieldedExpressionsClauseSyntaxImpl(_:)
+    case .yieldsClause:
+      return self.visitYieldsClauseSyntaxImpl(_:)
     }
   }
   private func dispatchVisit(_ node: Syntax) {
@@ -7148,6 +7170,8 @@ open class SyntaxVisitor {
       self.visitYieldedExpressionSyntaxImpl(node)
     case .yieldedExpressionsClause:
       self.visitYieldedExpressionsClauseSyntaxImpl(node)
+    case .yieldsClause:
+      self.visitYieldsClauseSyntaxImpl(node)
     }
   }
   #endif

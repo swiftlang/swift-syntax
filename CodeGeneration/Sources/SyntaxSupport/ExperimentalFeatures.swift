@@ -26,6 +26,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case literalExpressions
   case calledAttribute
   case _test_EverythingUnexpected
+  case coroutineFunctions
 
   /// The name of the feature as it is written in the compiler's `Features.def` file.
   public var featureName: String {
@@ -56,6 +57,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "CalledAttribute"
     case ._test_EverythingUnexpected:
       return "_test_EverythingUnexpected"
+    case .coroutineFunctions:
+      return "CoroutineFunctions"
     }
   }
 
@@ -88,6 +91,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "`@called(...)` attribute on function types"
     case ._test_EverythingUnexpected:
       return "a test feature that parses everything as unexpected"
+    case .coroutineFunctions:
+      return "functions as coroutines"
     }
   }
 

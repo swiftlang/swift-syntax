@@ -227,6 +227,10 @@ public enum Keyword: UInt8, Hashable, Sendable {
   case wrt
   case yield
   case yielding
+  @_spi(ExperimentalLanguageFeatures)
+  case yields
+  @_spi(ExperimentalLanguageFeatures)
+  case yield_once
 
   @_spi(RawSyntax) public init?(_ text: SyntaxText) {
     switch text.count {
@@ -487,6 +491,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
       self = .throws
     case "unsafe":
       self = .unsafe
+    case "yields":
+      self = .yields
     default:
       return nil
     }
@@ -657,6 +663,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
       self = .nonsending
     case "visibility":
       self = .visibility
+    case "yield_once":
+      self = .yield_once
     default:
       return nil
     }
@@ -1060,6 +1068,8 @@ public enum Keyword: UInt8, Hashable, Sendable {
     "wrt",
     "yield",
     "yielding",
+    "yields",
+    "yield_once",
   ]
 
   @_spi(RawSyntax)

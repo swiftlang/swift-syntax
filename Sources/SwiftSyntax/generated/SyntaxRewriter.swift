@@ -2162,6 +2162,13 @@ open class SyntaxRewriter {
     return YieldedExpressionsClauseSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
+  /// Visit a ``YieldsClauseSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: YieldsClauseSyntax) -> YieldsClauseSyntax {
+    return YieldsClauseSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
   /// Visit any DeclSyntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -3667,6 +3674,11 @@ open class SyntaxRewriter {
     Syntax(visit(YieldedExpressionsClauseSyntax(unsafeCasting: node)))
   }
 
+  @inline(never)
+  private func visitYieldsClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(YieldsClauseSyntax(unsafeCasting: node)))
+  }
+
   // SwiftSyntax requires a lot of stack space in debug builds for syntax tree
   // rewriting. In scenarios with reduced stack space (in particular dispatch
   // queues), this easily results in a stack overflow. To work around this issue,
@@ -4281,6 +4293,8 @@ open class SyntaxRewriter {
       return self.visitYieldedExpressionSyntaxImpl(_:)
     case .yieldedExpressionsClause:
       return self.visitYieldedExpressionsClauseSyntaxImpl(_:)
+    case .yieldsClause:
+      return self.visitYieldsClauseSyntaxImpl(_:)
     }
   }
   private func dispatchVisit(_ node: Syntax) -> Syntax {
@@ -4877,6 +4891,8 @@ open class SyntaxRewriter {
       return visitYieldedExpressionSyntaxImpl(node)
     case .yieldedExpressionsClause:
       return visitYieldedExpressionsClauseSyntaxImpl(node)
+    case .yieldsClause:
+      return visitYieldsClauseSyntaxImpl(node)
     }
   }
   #endif

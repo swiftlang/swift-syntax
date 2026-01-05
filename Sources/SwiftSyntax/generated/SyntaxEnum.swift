@@ -321,6 +321,7 @@ public enum SyntaxEnum: Sendable {
   case yieldedExpressionList(YieldedExpressionListSyntax)
   case yieldedExpression(YieldedExpressionSyntax)
   case yieldedExpressionsClause(YieldedExpressionsClauseSyntax)
+  case yieldsClause(YieldsClauseSyntax)
 }
 
 extension Syntax {
@@ -915,6 +916,8 @@ extension Syntax {
       return .yieldedExpression(YieldedExpressionSyntax(self)!)
     case .yieldedExpressionsClause:
       return .yieldedExpressionsClause(YieldedExpressionsClauseSyntax(self)!)
+    case .yieldsClause:
+      return .yieldsClause(YieldsClauseSyntax(self)!)
     }
   }
 }

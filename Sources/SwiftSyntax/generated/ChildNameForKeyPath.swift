@@ -182,8 +182,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeEffectSpecifiers"
   case \ArrowExprSyntax.effectSpecifiers:
     return "effectSpecifiers"
-  case \ArrowExprSyntax.unexpectedBetweenEffectSpecifiersAndArrow:
-    return "unexpectedBetweenEffectSpecifiersAndArrow"
+  case \ArrowExprSyntax.unexpectedBetweenEffectSpecifiersAndYieldsClause:
+    return "unexpectedBetweenEffectSpecifiersAndYieldsClause"
+  case \ArrowExprSyntax.yieldsClause:
+    return "yieldsClause"
+  case \ArrowExprSyntax.unexpectedBetweenYieldsClauseAndArrow:
+    return "unexpectedBetweenYieldsClauseAndArrow"
   case \ArrowExprSyntax.arrow:
     return "arrow"
   case \ArrowExprSyntax.unexpectedAfterArrow:
@@ -662,8 +666,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenParameterClauseAndEffectSpecifiers"
   case \ClosureSignatureSyntax.effectSpecifiers:
     return "effectSpecifiers"
-  case \ClosureSignatureSyntax.unexpectedBetweenEffectSpecifiersAndReturnClause:
-    return "unexpectedBetweenEffectSpecifiersAndReturnClause"
+  case \ClosureSignatureSyntax.unexpectedBetweenEffectSpecifiersAndYieldsClause:
+    return "unexpectedBetweenEffectSpecifiersAndYieldsClause"
+  case \ClosureSignatureSyntax.yieldsClause:
+    return "yieldsClause"
+  case \ClosureSignatureSyntax.unexpectedBetweenYieldsClauseAndReturnClause:
+    return "unexpectedBetweenYieldsClauseAndReturnClause"
   case \ClosureSignatureSyntax.returnClause:
     return "returnClause"
   case \ClosureSignatureSyntax.unexpectedBetweenReturnClauseAndInKeyword:
@@ -1506,8 +1514,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenParameterClauseAndEffectSpecifiers"
   case \FunctionSignatureSyntax.effectSpecifiers:
     return "effectSpecifiers"
-  case \FunctionSignatureSyntax.unexpectedBetweenEffectSpecifiersAndReturnClause:
-    return "unexpectedBetweenEffectSpecifiersAndReturnClause"
+  case \FunctionSignatureSyntax.unexpectedBetweenEffectSpecifiersAndYieldsClause:
+    return "unexpectedBetweenEffectSpecifiersAndYieldsClause"
+  case \FunctionSignatureSyntax.yieldsClause:
+    return "yieldsClause"
+  case \FunctionSignatureSyntax.unexpectedBetweenYieldsClauseAndReturnClause:
+    return "unexpectedBetweenYieldsClauseAndReturnClause"
   case \FunctionSignatureSyntax.returnClause:
     return "returnClause"
   case \FunctionSignatureSyntax.unexpectedAfterReturnClause:
@@ -1528,8 +1540,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenRightParenAndEffectSpecifiers"
   case \FunctionTypeSyntax.effectSpecifiers:
     return "effectSpecifiers"
-  case \FunctionTypeSyntax.unexpectedBetweenEffectSpecifiersAndReturnClause:
-    return "unexpectedBetweenEffectSpecifiersAndReturnClause"
+  case \FunctionTypeSyntax.unexpectedBetweenEffectSpecifiersAndYieldsClause:
+    return "unexpectedBetweenEffectSpecifiersAndYieldsClause"
+  case \FunctionTypeSyntax.yieldsClause:
+    return "yieldsClause"
+  case \FunctionTypeSyntax.unexpectedBetweenYieldsClauseAndReturnClause:
+    return "unexpectedBetweenYieldsClauseAndReturnClause"
   case \FunctionTypeSyntax.returnClause:
     return "returnClause"
   case \FunctionTypeSyntax.unexpectedAfterReturnClause:
@@ -3110,8 +3126,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBetweenGenericParameterClauseAndParameterClause"
   case \SubscriptDeclSyntax.parameterClause:
     return "parameterClause"
-  case \SubscriptDeclSyntax.unexpectedBetweenParameterClauseAndReturnClause:
-    return "unexpectedBetweenParameterClauseAndReturnClause"
+  case \SubscriptDeclSyntax.unexpectedBetweenParameterClauseAndYieldsClause:
+    return "unexpectedBetweenParameterClauseAndYieldsClause"
+  case \SubscriptDeclSyntax.yieldsClause:
+    return "yieldsClause"
+  case \SubscriptDeclSyntax.unexpectedBetweenYieldsClauseAndReturnClause:
+    return "unexpectedBetweenYieldsClauseAndReturnClause"
   case \SubscriptDeclSyntax.returnClause:
     return "returnClause"
   case \SubscriptDeclSyntax.unexpectedBetweenReturnClauseAndGenericWhereClause:
@@ -3607,6 +3627,24 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
   case \YieldedExpressionsClauseSyntax.rightParen:
     return "rightParen"
   case \YieldedExpressionsClauseSyntax.unexpectedAfterRightParen:
+    return "unexpectedAfterRightParen"
+  case \YieldsClauseSyntax.unexpectedBeforeYieldsKeyword:
+    return "unexpectedBeforeYieldsKeyword"
+  case \YieldsClauseSyntax.yieldsKeyword:
+    return "yieldsKeyword"
+  case \YieldsClauseSyntax.unexpectedBetweenYieldsKeywordAndLeftParen:
+    return "unexpectedBetweenYieldsKeywordAndLeftParen"
+  case \YieldsClauseSyntax.leftParen:
+    return "leftParen"
+  case \YieldsClauseSyntax.unexpectedBetweenLeftParenAndType:
+    return "unexpectedBetweenLeftParenAndType"
+  case \YieldsClauseSyntax.type:
+    return "type"
+  case \YieldsClauseSyntax.unexpectedBetweenTypeAndRightParen:
+    return "unexpectedBetweenTypeAndRightParen"
+  case \YieldsClauseSyntax.rightParen:
+    return "rightParen"
+  case \YieldsClauseSyntax.unexpectedAfterRightParen:
     return "unexpectedAfterRightParen"
   default:
     return nil

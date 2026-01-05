@@ -1241,13 +1241,13 @@ extension ClosureSignatureSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "unexpectedBetweenEffectSpecifiersAndReturnClause")
-  public var unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenYieldsClauseAndReturnClause")
+  public var unexpectedBetweenYieldsClauseAndOutput: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenEffectSpecifiersAndReturnClause
+      return unexpectedBetweenYieldsClauseAndReturnClause
     }
     set {
-      unexpectedBetweenEffectSpecifiersAndReturnClause = newValue
+      unexpectedBetweenYieldsClauseAndReturnClause = newValue
     }
   }
 
@@ -1291,7 +1291,7 @@ extension ClosureSignatureSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:capture:_:parameterClause:_:effectSpecifiers:_:returnClause:_:inKeyword:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:capture:_:parameterClause:_:effectSpecifiers:_:yieldsClause:_:returnClause:_:inKeyword:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -1303,7 +1303,9 @@ extension ClosureSignatureSyntax {
     input: ParameterClause? = nil,
     _ unexpectedBetweenInputAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
     effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
-    _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndYieldsClause: UnexpectedNodesSyntax? = nil,
+    yieldsClause: YieldsClauseSyntax? = nil,
+    _ unexpectedBetweenYieldsClauseAndOutput: UnexpectedNodesSyntax? = nil,
     output: ReturnClauseSyntax? = nil,
     _ unexpectedBetweenOutputAndInTok: UnexpectedNodesSyntax? = nil,
     inTok: TokenSyntax = .keyword(.in),
@@ -1320,7 +1322,9 @@ extension ClosureSignatureSyntax {
       parameterClause: input,
       unexpectedBetweenInputAndEffectSpecifiers,
       effectSpecifiers: effectSpecifiers,
-      unexpectedBetweenEffectSpecifiersAndOutput,
+      unexpectedBetweenEffectSpecifiersAndYieldsClause,
+      yieldsClause: yieldsClause,
+      unexpectedBetweenYieldsClauseAndOutput,
       returnClause: output,
       unexpectedBetweenOutputAndInTok,
       inKeyword: inTok,
@@ -3230,13 +3234,13 @@ extension FunctionSignatureSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "unexpectedBetweenEffectSpecifiersAndReturnClause")
-  public var unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenYieldsClauseAndReturnClause")
+  public var unexpectedBetweenYieldsClauseAndOutput: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenEffectSpecifiersAndReturnClause
+      return unexpectedBetweenYieldsClauseAndReturnClause
     }
     set {
-      unexpectedBetweenEffectSpecifiersAndReturnClause = newValue
+      unexpectedBetweenYieldsClauseAndReturnClause = newValue
     }
   }
 
@@ -3260,7 +3264,7 @@ extension FunctionSignatureSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:parameterClause:_:effectSpecifiers:_:returnClause:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:parameterClause:_:effectSpecifiers:_:yieldsClause:_:returnClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3268,7 +3272,9 @@ extension FunctionSignatureSyntax {
     input: FunctionParameterClauseSyntax,
     _ unexpectedBetweenInputAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
     effectSpecifiers: FunctionEffectSpecifiersSyntax? = nil,
-    _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndYieldsClause: UnexpectedNodesSyntax? = nil,
+    yieldsClause: YieldsClauseSyntax? = nil,
+    _ unexpectedBetweenYieldsClauseAndOutput: UnexpectedNodesSyntax? = nil,
     output: ReturnClauseSyntax? = nil,
     _ unexpectedAfterOutput: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
@@ -3279,7 +3285,9 @@ extension FunctionSignatureSyntax {
       parameterClause: input,
       unexpectedBetweenInputAndEffectSpecifiers,
       effectSpecifiers: effectSpecifiers,
-      unexpectedBetweenEffectSpecifiersAndOutput,
+      unexpectedBetweenEffectSpecifiersAndYieldsClause,
+      yieldsClause: yieldsClause,
+      unexpectedBetweenYieldsClauseAndOutput,
       returnClause: output,
       unexpectedAfterOutput,
       trailingTrivia: trailingTrivia
@@ -3323,13 +3331,13 @@ extension FunctionTypeSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "unexpectedBetweenEffectSpecifiersAndReturnClause")
-  public var unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenYieldsClauseAndReturnClause")
+  public var unexpectedBetweenYieldsClauseAndOutput: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenEffectSpecifiersAndReturnClause
+      return unexpectedBetweenYieldsClauseAndReturnClause
     }
     set {
-      unexpectedBetweenEffectSpecifiersAndReturnClause = newValue
+      unexpectedBetweenYieldsClauseAndReturnClause = newValue
     }
   }
 
@@ -3353,7 +3361,7 @@ extension FunctionTypeSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftParen:_:parameters:_:rightParen:_:effectSpecifiers:_:returnClause:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:leftParen:_:parameters:_:rightParen:_:effectSpecifiers:_:yieldsClause:_:returnClause:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -3365,7 +3373,9 @@ extension FunctionTypeSyntax {
     rightParen: TokenSyntax = .rightParenToken(),
     _ unexpectedBetweenRightParenAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
     effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
-    _ unexpectedBetweenEffectSpecifiersAndOutput: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndYieldsClause: UnexpectedNodesSyntax? = nil,
+    yieldsClause: YieldsClauseSyntax? = nil,
+    _ unexpectedBetweenYieldsClauseAndOutput: UnexpectedNodesSyntax? = nil,
     output: ReturnClauseSyntax,
     _ unexpectedAfterOutput: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
@@ -3380,7 +3390,9 @@ extension FunctionTypeSyntax {
       rightParen: rightParen,
       unexpectedBetweenRightParenAndEffectSpecifiers,
       effectSpecifiers: effectSpecifiers,
-      unexpectedBetweenEffectSpecifiersAndOutput,
+      unexpectedBetweenEffectSpecifiersAndYieldsClause,
+      yieldsClause: yieldsClause,
+      unexpectedBetweenYieldsClauseAndOutput,
       returnClause: output,
       unexpectedAfterOutput,
       trailingTrivia: trailingTrivia
@@ -7581,13 +7593,23 @@ extension SubscriptDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "unexpectedBetweenParameterClauseAndReturnClause")
-  public var unexpectedBetweenIndicesAndResult: UnexpectedNodesSyntax? {
+  @available(*, deprecated, renamed: "unexpectedBetweenParameterClauseAndYieldsClause")
+  public var unexpectedBetweenIndicesAndYieldsClause: UnexpectedNodesSyntax? {
     get {
-      return unexpectedBetweenParameterClauseAndReturnClause
+      return unexpectedBetweenParameterClauseAndYieldsClause
     }
     set {
-      unexpectedBetweenParameterClauseAndReturnClause = newValue
+      unexpectedBetweenParameterClauseAndYieldsClause = newValue
+    }
+  }
+
+  @available(*, deprecated, renamed: "unexpectedBetweenYieldsClauseAndReturnClause")
+  public var unexpectedBetweenYieldsClauseAndResult: UnexpectedNodesSyntax? {
+    get {
+      return unexpectedBetweenYieldsClauseAndReturnClause
+    }
+    set {
+      unexpectedBetweenYieldsClauseAndReturnClause = newValue
     }
   }
 
@@ -7641,7 +7663,7 @@ extension SubscriptDeclSyntax {
     }
   }
 
-  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:subscriptKeyword:_:genericParameterClause:_:parameterClause:_:returnClause:_:genericWhereClause:_:accessorBlock:_:trailingTrivia:)")
+  @available(*, deprecated, renamed: "init(leadingTrivia:_:attributes:_:modifiers:_:subscriptKeyword:_:genericParameterClause:_:parameterClause:_:yieldsClause:_:returnClause:_:genericWhereClause:_:accessorBlock:_:trailingTrivia:)")
   @_disfavoredOverload
   public init(
     leadingTrivia: Trivia? = nil,
@@ -7655,7 +7677,9 @@ extension SubscriptDeclSyntax {
     genericParameterClause: GenericParameterClauseSyntax? = nil,
     _ unexpectedBetweenGenericParameterClauseAndIndices: UnexpectedNodesSyntax? = nil,
     indices: FunctionParameterClauseSyntax,
-    _ unexpectedBetweenIndicesAndResult: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenIndicesAndYieldsClause: UnexpectedNodesSyntax? = nil,
+    yieldsClause: YieldsClauseSyntax? = nil,
+    _ unexpectedBetweenYieldsClauseAndResult: UnexpectedNodesSyntax? = nil,
     result: ReturnClauseSyntax,
     _ unexpectedBetweenResultAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax? = nil,
@@ -7676,7 +7700,9 @@ extension SubscriptDeclSyntax {
       genericParameterClause: genericParameterClause,
       unexpectedBetweenGenericParameterClauseAndIndices,
       parameterClause: indices,
-      unexpectedBetweenIndicesAndResult,
+      unexpectedBetweenIndicesAndYieldsClause,
+      yieldsClause: yieldsClause,
+      unexpectedBetweenYieldsClauseAndResult,
       returnClause: result,
       unexpectedBetweenResultAndGenericWhereClause,
       genericWhereClause: genericWhereClause,

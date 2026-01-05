@@ -632,6 +632,11 @@ public let EXPR_NODES: [Node] = [
         isOptional: true
       ),
       Child(
+        name: "yieldsClause",
+        kind: .node(kind: .yieldsClause),
+        isOptional: true
+      ),
+      Child(
         name: "returnClause",
         kind: .node(kind: .returnClause),
         isOptional: true

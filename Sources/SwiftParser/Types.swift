@@ -38,7 +38,7 @@ extension Parser {
     let specifiersAndAttributes = self.parseTypeAttributeList(misplacedSpecifiers: misplacedSpecifiers)
     var base = self.parseSimpleOrCompositionType()
     if self.withLookahead({ $0.canParseFunctionTypeArrow() }) {
-      var effectSpecifiers = self.parseTypeEffectSpecifiers()
+      var (effectSpecifiers, yieldType) = self.parseTypeEffectSpecifiers()
       let returnClause = self.parseFunctionReturnClause(
         effectSpecifiers: &effectSpecifiers,
         allowNamedOpaqueResultType: false
@@ -89,6 +89,7 @@ extension Parser {
           unexpectedBetweenElementsAndRightParen,
           rightParen: rightParen,
           effectSpecifiers: effectSpecifiers,
+          yieldsClause: yieldType,
           returnClause: returnClause,
           arena: self.arena
         )
@@ -1035,6 +1036,7 @@ extension Parser.Lookahead {
       return true
     }
     self.consumeEffectsSpecifiers()
+    self.consumeYields()
     return self.consume(if: .arrow) != nil
   }
 

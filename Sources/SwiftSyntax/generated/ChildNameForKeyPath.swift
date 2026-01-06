@@ -60,12 +60,12 @@ public func childName(_ keyPath: AnyKeyPath) -> String? {
     return "unexpectedBeforeAttributes"
   case \AccessorDeclSyntax.attributes:
     return "attributes"
-  case \AccessorDeclSyntax.unexpectedBetweenAttributesAndModifier:
-    return "unexpectedBetweenAttributesAndModifier"
-  case \AccessorDeclSyntax.modifier:
-    return "modifier"
-  case \AccessorDeclSyntax.unexpectedBetweenModifierAndAccessorSpecifier:
-    return "unexpectedBetweenModifierAndAccessorSpecifier"
+  case \AccessorDeclSyntax.unexpectedBetweenAttributesAndModifiers:
+    return "unexpectedBetweenAttributesAndModifiers"
+  case \AccessorDeclSyntax.modifiers:
+    return "modifiers"
+  case \AccessorDeclSyntax.unexpectedBetweenModifiersAndAccessorSpecifier:
+    return "unexpectedBetweenModifiersAndAccessorSpecifier"
   case \AccessorDeclSyntax.accessorSpecifier:
     return "accessorSpecifier"
   case \AccessorDeclSyntax.unexpectedBetweenAccessorSpecifierAndParameters:

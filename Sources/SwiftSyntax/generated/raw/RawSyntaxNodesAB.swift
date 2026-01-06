@@ -421,9 +421,9 @@ public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol {
   public init(
     _ unexpectedBeforeAttributes: RawUnexpectedNodesSyntax? = nil,
     attributes: RawAttributeListSyntax,
-    _ unexpectedBetweenAttributesAndModifier: RawUnexpectedNodesSyntax? = nil,
-    modifier: RawDeclModifierSyntax?,
-    _ unexpectedBetweenModifierAndAccessorSpecifier: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? = nil,
+    modifiers: RawDeclModifierListSyntax,
+    _ unexpectedBetweenModifiersAndAccessorSpecifier: RawUnexpectedNodesSyntax? = nil,
     accessorSpecifier: RawTokenSyntax,
     _ unexpectedBetweenAccessorSpecifierAndParameters: RawUnexpectedNodesSyntax? = nil,
     parameters: RawAccessorParametersSyntax?,
@@ -439,9 +439,9 @@ public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes.raw
-      layout[2] = unexpectedBetweenAttributesAndModifier?.raw
-      layout[3] = modifier?.raw
-      layout[4] = unexpectedBetweenModifierAndAccessorSpecifier?.raw
+      layout[2] = unexpectedBetweenAttributesAndModifiers?.raw
+      layout[3] = modifiers.raw
+      layout[4] = unexpectedBetweenModifiersAndAccessorSpecifier?.raw
       layout[5] = accessorSpecifier.raw
       layout[6] = unexpectedBetweenAccessorSpecifierAndParameters?.raw
       layout[7] = parameters?.raw
@@ -462,15 +462,15 @@ public struct RawAccessorDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[1].map(RawAttributeListSyntax.init(raw:))!
   }
 
-  public var unexpectedBetweenAttributesAndModifier: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenAttributesAndModifiers: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var modifier: RawDeclModifierSyntax? {
-    layoutView.children[3].map(RawDeclModifierSyntax.init(raw:))
+  public var modifiers: RawDeclModifierListSyntax {
+    layoutView.children[3].map(RawDeclModifierListSyntax.init(raw:))!
   }
 
-  public var unexpectedBetweenModifierAndAccessorSpecifier: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenModifiersAndAccessorSpecifier: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 

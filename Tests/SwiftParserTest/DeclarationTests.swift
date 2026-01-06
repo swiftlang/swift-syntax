@@ -3447,6 +3447,24 @@ final class DeclarationTests: ParserTestCase {
   func testCoroutineAccessors() {
     assertParse(
       """
+      var i: Int {
+        yielding borrow {
+          yield _i
+        }
+        yielding mutate {
+          yield &_i
+        }
+      }
+      """
+    )
+  }
+
+  func testCoroutineAccessorsLegacyFormat() {
+    // `read` and `modify` syntax require experimental feature
+    // flag and always will, since that wasn't the final accepted
+    // syntax for SE-0474
+    assertParse(
+      """
       var irm: Int {
         read {
           yield _i
@@ -3513,6 +3531,20 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testMultipleModifiers() {
+    assertParse(
+      """
+      public struct S {
+        var v: Int {
+          __consuming consuming borrowing mutating nonmutating yielding get {
+            0
+          }
+        }
+      }
+      """
+    )
+  }
+
   func testBorrowAndMutateAccessors() {
     assertParse(
       """
@@ -3530,8 +3562,7 @@ final class DeclarationTests: ParserTestCase {
           }
         }
       }
-      """,
-      experimentalFeatures: .borrowAndMutateAccessors
+      """
     )
   }
 

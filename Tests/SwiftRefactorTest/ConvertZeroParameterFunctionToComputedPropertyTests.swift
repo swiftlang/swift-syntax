@@ -153,7 +153,7 @@ final class ConvertZeroParameterFunctionToComputedPropertyTests: XCTestCase {
     try assertRefactorConvert(baseline, expected: expected)
   }
 
-  func testRefactoringFunctionToComputedPropertyPrservesDocComment() throws {
+  func testRefactoringFunctionToComputedPropertyPreservesDocComment() throws {
     let baseline: DeclSyntax = """
       /// Documentation comment
       public static func asJSON() -> String { "" }

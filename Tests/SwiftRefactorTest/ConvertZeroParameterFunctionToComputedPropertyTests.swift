@@ -138,6 +138,34 @@ final class ConvertZeroParameterFunctionToComputedPropertyTests: XCTestCase {
 
     try assertRefactorConvert(baseline, expected: expected)
   }
+
+  func testRefactoringFunctionToComputedPropertyPreservesBlockComment() throws {
+    let baseline: DeclSyntax = """
+      /* Block comment */
+      func asJSON() -> String { "" }
+      """
+
+    let expected: DeclSyntax = """
+      /* Block comment */
+      var asJSON: String { "" }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
+
+  func testRefactoringFunctionToComputedPropertyPrservesDocComment() throws {
+    let baseline: DeclSyntax = """
+      /// Documentation comment
+      public static func asJSON() -> String { "" }
+      """
+
+    let expected: DeclSyntax = """
+      /// Documentation comment
+      public static var asJSON: String { "" }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
 }
 
 private func assertRefactorConvert(

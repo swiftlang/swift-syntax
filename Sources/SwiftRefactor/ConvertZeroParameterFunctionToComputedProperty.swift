@@ -59,13 +59,19 @@ public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringP
       rightBrace: body.rightBrace
     )
 
-    return VariableDeclSyntax(
-      leadingTrivia: syntax.leadingTrivia,
+    var result = VariableDeclSyntax(
       modifiers: syntax.modifiers,
       .var,
       name: variableName,
       type: variableType,
       accessorBlock: accessorBlock
     )
+
+    // Transfer leading trivia from the func keyword to the var keyword.
+    if syntax.attributes.isEmpty && syntax.modifiers.isEmpty {
+      result.bindingSpecifier.leadingTrivia = syntax.funcKeyword.leadingTrivia
+    }
+
+    return result
   }
 }

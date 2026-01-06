@@ -269,4 +269,8 @@ extension BasicMacroExpansionContext: MacroExpansionContext {
     let converter = SourceLocationConverter(fileName: fileName, tree: rootSourceFile)
     return AbstractSourceLocation(converter.location(for: rawPosition + offsetAdjustment))
   }
+
+  public var buildConfiguration: (any BuildConfiguration)? {
+    sharedState.buildConfiguration
+  }
 }

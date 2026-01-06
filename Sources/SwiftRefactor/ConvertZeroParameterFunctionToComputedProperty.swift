@@ -60,6 +60,7 @@ public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringP
     )
 
     return VariableDeclSyntax(
+      leadingTrivia: syntax.leadingTrivia,
       modifiers: syntax.modifiers,
       .var,
       name: variableName,

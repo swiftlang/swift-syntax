@@ -185,7 +185,7 @@ final class ConvertStoredPropertyToComputedTest: XCTestCase {
 
   func testRefactoringStoredPropertyWithClosure() throws {
     let baseline: DeclSyntax = """
-      static let defaultColor: Color = { .red }
+      static let defaultColor: Color = { .red }()
       """
 
     let expected: DeclSyntax = """
@@ -200,7 +200,7 @@ final class ConvertStoredPropertyToComputedTest: XCTestCase {
       static let defaultColor: Color = { 
         let someColor = .red
         return someColor
-      }
+      }()
       """
 
     let expected: DeclSyntax = """

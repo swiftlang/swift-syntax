@@ -42,7 +42,7 @@ public struct ConvertStoredPropertyToComputed: SyntaxRefactoringProvider {
         + closureExpression.rightBrace.trailingTrivia + functionExpression.trailingTrivia
     } else {
 
-      var body = CodeBlockItemListSyntax([])
+      var body: CodeBlockItemListSyntax
 
       if let closure = initializer.value.as(ClosureExprSyntax.self) {
         body = closure.statements
@@ -62,9 +62,8 @@ public struct ConvertStoredPropertyToComputed: SyntaxRefactoringProvider {
 
     var modifiers = syntax.modifiers
 
-    if let lazyKeyword = modifiers.first(where: { decl in
-      decl.name.tokenKind == .keyword(.lazy)
-    }), let index = modifiers.index(of: lazyKeyword) {
+    if let lazyKeyword = modifiers.first(where: { $0.name.tokenKind == .keyword(.lazy) }),
+        let index = modifiers.index(of: lazyKeyword) {
       modifiers.remove(at: index)
     }
 

@@ -42,20 +42,13 @@ public struct ConvertStoredPropertyToComputed: SyntaxRefactoringProvider {
         + closureExpression.rightBrace.trailingTrivia + functionExpression.trailingTrivia
     } else {
 
-      var body: CodeBlockItemListSyntax
+      var body = CodeBlockItemListSyntax([
+        CodeBlockItemSyntax(
+          item: .expr(initializer.value)
+        )
+      ])
 
-      if let closure = initializer.value.as(ClosureExprSyntax.self) {
-        body = closure.statements
-        body.trailingTrivia += closure.rightBrace.leadingTrivia
-      } else {
-        body = CodeBlockItemListSyntax([
-          CodeBlockItemSyntax(
-            item: .expr(initializer.value)
-          )
-        ])
-        body.trailingTrivia += .space
-      }
-
+      body.trailingTrivia += .space
       body.leadingTrivia = initializer.equal.trailingTrivia + body.leadingTrivia
       codeBlockSyntax = body
     }

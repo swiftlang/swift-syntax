@@ -66,13 +66,11 @@ public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringP
       accessorBlock: accessorBlock
     )
 
-    let result = VariableDeclSyntax(
+    return VariableDeclSyntax(
       attributes: syntax.attributes,
       modifiers: syntax.modifiers,
       bindingSpecifier: bindingSpecifier,
       bindings: PatternBindingListSyntax([patternBinding])
     )
-
-    return result
   }
 }

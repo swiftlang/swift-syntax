@@ -10,8 +10,8 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftParser
-import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) import SwiftParser
+@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 @_spi(ExperimentalLanguageFeatures) import SwiftWarningControl
 import XCTest
 import _SwiftSyntaxGenericTestSupport
@@ -387,6 +387,60 @@ public class WarningGroupControlTests: XCTestCase {
       ]
     )
   }
+
+  func testFileScopeUsingWarningGroupControl() throws {
+    try assertWarningGroupControl(
+      """
+      0️⃣let x = 1
+      @warn(GroupID, as: warning)
+      struct Bar {
+        1️⃣let y = 1
+      }
+      struct Foo {
+        @warn(GroupID, as: ignored)
+        var property: Int {
+          2️⃣return 11
+        }
+      }
+      using @warn(GroupID, as: error)
+      3️⃣let k = 1
+      """,
+      experimentalFeatures: [.defaultIsolationPerFile],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "0️⃣": .error,
+        "1️⃣": .warning,
+        "2️⃣": .ignored,
+        "3️⃣": .error,
+      ]
+    )
+  }
+
+  func testDeclScopeUsingIgnored() throws {
+    try assertWarningGroupControl(
+      """
+      0️⃣let x = 1
+      @warn(GroupID, as: warning)
+      struct Bar {
+        1️⃣let y = 1
+      }
+      struct Foo {
+        using @warn(GroupID, as: error)
+        var property: Int {
+          2️⃣return 11
+        }
+      }
+
+      """,
+      experimentalFeatures: [.defaultIsolationPerFile],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "0️⃣": .none,
+        "1️⃣": .warning,
+        "2️⃣": .none,
+      ]
+    )
+  }
 }
 
 /// Assert that the various marked positions in the source code have the
@@ -395,6 +449,7 @@ private func assertWarningGroupControl(
   _ markedSource: String,
   globalControls: [(DiagnosticGroupIdentifier, WarningGroupControl)] = [],
   groupInheritanceTree: DiagnosticGroupInheritanceTree? = nil,
+  experimentalFeatures: Parser.ExperimentalFeatures? = nil,
   diagnosticGroupID: DiagnosticGroupIdentifier,
   states: [String: WarningGroupControl?],
   file: StaticString = #filePath,
@@ -402,8 +457,8 @@ private func assertWarningGroupControl(
 ) throws {
   // Pull out the markers that we'll use to dig out nodes to query.
   let (markerLocations, source) = extractMarkers(markedSource)
-
-  var parser = Parser(source)
+  let experimentalFeatures = experimentalFeatures ?? []
+  var parser = Parser(source, experimentalFeatures: experimentalFeatures)
   let tree = SourceFileSyntax.parse(from: &parser)
   for (marker, location) in markerLocations {
     guard let expectedState = states[marker] else {

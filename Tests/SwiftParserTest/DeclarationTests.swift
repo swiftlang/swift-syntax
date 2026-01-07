@@ -3725,6 +3725,39 @@ final class UsingDeclarationTests: ParserTestCase {
     )
 
     assertParse(
+      "using @warn(DiagGroupID, as: warning)",
+      substructure: UsingDeclSyntax(
+        usingKeyword: .keyword(.using),
+        specifier: .attribute(
+          AttributeSyntax(
+            attributeName: IdentifierTypeSyntax(
+              name: .identifier("warn")
+            ),
+            leftParen: .leftParenToken(),
+            arguments: .argumentList(
+              LabeledExprListSyntax([
+                LabeledExprSyntax(
+                  expression: DeclReferenceExprSyntax(
+                    baseName: .identifier("DiagGroupID")
+                  ),
+                  trailingComma: .commaToken()
+                ),
+                LabeledExprSyntax(
+                  label: .identifier("as"),
+                  colon: .colonToken(),
+                  expression: DeclReferenceExprSyntax(
+                    baseName: .identifier("warning")
+                  )
+                ),
+              ])
+            ),
+            rightParen: .rightParenToken()
+          )
+        )
+      )
+    )
+
+    assertParse(
       """
       nonisolated
       using

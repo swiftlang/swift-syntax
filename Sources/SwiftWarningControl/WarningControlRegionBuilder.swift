@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 
 /// Compute the full set of warning control regions in this syntax node
 extension SyntaxProtocol {
@@ -73,14 +73,41 @@ private class WarningControlRegionVisitor: SyntaxAnyVisitor {
   }
 
   override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {
+    if let withAttributesSyntax = node.asProtocol(WithAttributesSyntax.self) {
+      tree.addWarningControlRegions(for: withAttributesSyntax)
+    }
+    // Handle file-scoped `using` declarations before the `containingPosition`
+    // check since they may only appear in top-level code and may affect
+    // warning group control of all positions in this source file.
+    if let usingAttributedSyntax = node.as(UsingDeclSyntax.self),
+      node.isTopLevelCode(),
+      let usingWarningControl = usingAttributedSyntax.warningControl
+    {
+      tree.addRootWarningGroupControls(controls: [usingWarningControl])
+    }
+    // Skip all declarations which do not contain the specified
+    // `containingPosition`.
     if let containingPosition,
+      node.isProtocol(DeclSyntaxProtocol.self),
       !node.range.contains(containingPosition)
     {
       return .skipChildren
     }
-    if let withAttributesSyntax = node.asProtocol(WithAttributesSyntax.self) {
-      tree.addWarningControlRegions(for: withAttributesSyntax)
-    }
     return .visitChildren
+  }
+}
+
+extension SyntaxProtocol {
+  /// Determines if this syntax node is top-level code (not contained in any declaration
+  /// or other scoped source in top-level script code).
+  func isTopLevelCode() -> Bool {
+    let current = Syntax(self)
+    if current.parent?.is(CodeBlockItemSyntax.self) ?? false,
+      current.parent?.parent?.is(CodeBlockItemListSyntax.self) ?? false,
+      current.parent?.parent?.parent?.is(SourceFileSyntax.self) ?? false
+    {
+      return true
+    }
+    return false
   }
 }

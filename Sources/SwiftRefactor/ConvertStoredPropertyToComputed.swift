@@ -41,14 +41,31 @@ public struct ConvertStoredPropertyToComputed: SyntaxRefactoringProvider {
         closureExpression.trailingTrivia + closureExpression.rightBrace.leadingTrivia
         + closureExpression.rightBrace.trailingTrivia + functionExpression.trailingTrivia
     } else {
-      var body = CodeBlockItemListSyntax([
-        CodeBlockItemSyntax(
-          item: .expr(initializer.value)
-        )
-      ])
+
+      var body = CodeBlockItemListSyntax([])
+
+      if let closure = initializer.value.as(ClosureExprSyntax.self) {
+        body = closure.statements
+        body.trailingTrivia += closure.rightBrace.leadingTrivia
+      } else {
+        body = CodeBlockItemListSyntax([
+          CodeBlockItemSyntax(
+            item: .expr(initializer.value)
+          )
+        ])
+        body.trailingTrivia += .space
+      }
+
       body.leadingTrivia = initializer.equal.trailingTrivia + body.leadingTrivia
-      body.trailingTrivia += .space
       codeBlockSyntax = body
+    }
+
+    var modifiers = syntax.modifiers
+
+    if let lazyKeyword = modifiers.first(where: { decl in
+      decl.name.tokenKind == .keyword(.lazy)
+    }), let index = modifiers.index(of: lazyKeyword) {
+      modifiers.remove(at: index)
     }
 
     let newBinding =
@@ -67,6 +84,7 @@ public struct ConvertStoredPropertyToComputed: SyntaxRefactoringProvider {
 
     return
       syntax
+      .with(\.modifiers, modifiers)
       .with(\.bindingSpecifier, newBindingSpecifier)
       .with(\.bindings, PatternBindingListSyntax([newBinding]))
   }

@@ -170,6 +170,48 @@ final class ConvertStoredPropertyToComputedTest: XCTestCase {
 
     try assertRefactorConvert(baseline, expected: nil)
   }
+
+  func testRefactoringStoredPropertyWithLazyKeyword() throws {
+    let baseline: DeclSyntax = """
+      lazy var defaultColor: Color = .red
+      """
+
+    let expected: DeclSyntax = """
+      var defaultColor: Color { .red }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
+
+  func testRefactoringStoredPropertyWithClosure() throws {
+    let baseline: DeclSyntax = """
+      static let defaultColor: Color = { .red }
+      """
+
+    let expected: DeclSyntax = """
+      static var defaultColor: Color { .red }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
+
+  func testRefactoringStoredPropertyWithClosureStatements() throws {
+    let baseline: DeclSyntax = """
+      static let defaultColor: Color = { 
+        let someColor = .red
+        return someColor
+      }
+      """
+
+    let expected: DeclSyntax = """
+      static var defaultColor: Color { 
+        let someColor = .red
+        return someColor
+      }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
 }
 
 private func assertRefactorConvert(

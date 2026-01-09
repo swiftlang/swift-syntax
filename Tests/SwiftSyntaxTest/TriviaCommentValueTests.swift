@@ -237,7 +237,6 @@ class TriviaCommentValueTests: XCTestCase {
         Some line comment
         """
     )
-    // FIXED: Multiple adjacent doc block comments should return ONLY the last one
     assertCommentValue(
       """
       /** abc */
@@ -266,11 +265,9 @@ private func assertCommentValue(
 }
 
 private func parseTrivia(from input: String) -> Trivia {
-  // Wrap the input in valid Swift code so the parser can recognize it
   let wrappedSource = "let _ = 0\n\(input)\nlet _ = 1"
   let sourceFile = Parser.parse(source: wrappedSource)
 
-  // Find the token where the comment would appear (before `let _ = 1`)
   guard
     let commentToken = sourceFile.tokens(viewMode: .sourceAccurate).first(where: {
       $0.leadingTrivia.contains(where: { $0.isComment })

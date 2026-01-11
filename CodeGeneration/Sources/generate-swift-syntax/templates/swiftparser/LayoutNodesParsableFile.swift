@@ -64,6 +64,21 @@ let layoutNodesParsableFile = SourceFileSyntax(leadingTrivia: copyrightHeader) {
     }
   }
 
+  // Custom implementations for nodes with special handling.
+  DeclSyntax(
+    """
+    extension FunctionParameterClauseSyntax: SyntaxParseable {
+      public static func parse(from parser: inout Parser) -> Self {
+        parse(from: &parser) {
+          $0.parseParameterClause(RawFunctionParameterClauseSyntax.self) { parser in
+            parser.parseFunctionParameter()
+          }
+        }
+      }
+    }
+    """
+  )
+
   try! ExtensionDeclSyntax("fileprivate extension Parser") {
     DeclSyntax(
       """

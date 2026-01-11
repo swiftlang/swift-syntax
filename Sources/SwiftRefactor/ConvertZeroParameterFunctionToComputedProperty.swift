@@ -24,7 +24,6 @@ public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringP
 
     let variableName = PatternSyntax(
       IdentifierPatternSyntax(
-        leadingTrivia: syntax.funcKeyword.trailingTrivia,
         identifier: syntax.name
       )
     )
@@ -59,12 +58,19 @@ public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringP
       rightBrace: body.rightBrace
     )
 
-    return VariableDeclSyntax(
-      modifiers: syntax.modifiers,
-      .var,
-      name: variableName,
-      type: variableType,
+    let bindingSpecifier = syntax.funcKeyword.detached.with(\.tokenKind, .keyword(.var))
+
+    let patternBinding = PatternBindingSyntax(
+      pattern: variableName,
+      typeAnnotation: variableType,
       accessorBlock: accessorBlock
+    )
+
+    return VariableDeclSyntax(
+      attributes: syntax.attributes,
+      modifiers: syntax.modifiers,
+      bindingSpecifier: bindingSpecifier,
+      bindings: PatternBindingListSyntax([patternBinding])
     )
   }
 }

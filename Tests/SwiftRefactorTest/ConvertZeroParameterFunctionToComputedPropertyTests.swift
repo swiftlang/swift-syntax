@@ -138,6 +138,59 @@ final class ConvertZeroParameterFunctionToComputedPropertyTests: XCTestCase {
 
     try assertRefactorConvert(baseline, expected: expected)
   }
+
+  func testRefactoringFunctionToComputedPropertyPreservesBlockComment() throws {
+    let baseline: DeclSyntax = """
+      /* Block comment */
+      func asJSON() -> String { "" }
+      """
+
+    let expected: DeclSyntax = """
+      /* Block comment */
+      var asJSON: String { "" }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
+
+  func testRefactoringFunctionToComputedPropertyPreservesDocComment() throws {
+    let baseline: DeclSyntax = """
+      /// Documentation comment
+      public static func asJSON() -> String { "" }
+      """
+
+    let expected: DeclSyntax = """
+      /// Documentation comment
+      public static var asJSON: String { "" }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
+  func testRefactoringFunctionToComputedPropertyWithAttributes() throws {
+    let baseline: DeclSyntax = """
+      @available(*, deprecated, message: "Use the property instead")
+      func asJSON() -> String { "" }
+      """
+
+    let expected: DeclSyntax = """
+      @available(*, deprecated, message: "Use the property instead")
+      var asJSON: String { "" }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
+
+  func testRefactoringFunctionToComputedPropertyWithMidTrivia() throws {
+    let baseline: DeclSyntax = """
+      func /* comment */ asJSON() -> String { "" }
+      """
+
+    let expected: DeclSyntax = """
+      var /* comment */ asJSON: String { "" }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
 }
 
 private func assertRefactorConvert(

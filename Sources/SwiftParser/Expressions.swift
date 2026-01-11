@@ -932,10 +932,19 @@ extension Parser {
     leadingExpr: RawExprSyntax,
     flavor: ExprFlavor
   ) -> RawExprSyntax? {
-    guard
-      self.at(.leftBrace) && !leadingExpr.raw.kind.isLiteral
-        && self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) })
-    else {
+    guard self.at(.leftBrace) else {
+      return nil
+    }
+
+    if leadingExpr.raw.kind.isLiteral {
+      // Trailing closures are allowed after array and dictionary types,
+      // since this can mean `[Element].init { }` or `[Key: Value].init { }`.
+      guard leadingExpr.raw.kind == .arrayExpr || leadingExpr.raw.kind == .dictionaryExpr else {
+        return nil
+      }
+    }
+
+    guard self.withLookahead({ $0.atValidTrailingClosure(flavor: flavor) }) else {
       return nil
     }
 

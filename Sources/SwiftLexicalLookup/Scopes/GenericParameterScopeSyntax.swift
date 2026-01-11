@@ -16,7 +16,7 @@ import SwiftSyntax
 /// futher lookup to its `WithGenericParametersScopeSyntax`
 /// parent scope's parent scope (i.e. on return, bypasses names
 /// introduced by its parent).
-protocol GenericParameterScopeSyntax: ScopeSyntax {}
+@_spi(Experimental) public protocol GenericParameterScopeSyntax: ScopeSyntax {}
 
 @_spi(Experimental) extension GenericParameterScopeSyntax {
   /// Returns names matching lookup and bypasses

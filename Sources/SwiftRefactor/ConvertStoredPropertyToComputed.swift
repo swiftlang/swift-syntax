@@ -46,9 +46,19 @@ public struct ConvertStoredPropertyToComputed: SyntaxRefactoringProvider {
           item: .expr(initializer.value)
         )
       ])
-      body.leadingTrivia = initializer.equal.trailingTrivia + body.leadingTrivia
       body.trailingTrivia += .space
+      body.leadingTrivia = initializer.equal.trailingTrivia + body.leadingTrivia
       codeBlockSyntax = body
+    }
+
+    var modifiers = syntax.modifiers
+    var modifiersLeadingTrivia = Trivia()
+
+    if let lazyKeyword = modifiers.first(where: { $0.name.tokenKind == .keyword(.lazy) }),
+      let index = modifiers.index(of: lazyKeyword)
+    {
+      modifiers.remove(at: index)
+      modifiersLeadingTrivia = lazyKeyword.leadingTrivia
     }
 
     let newBinding =
@@ -61,12 +71,19 @@ public struct ConvertStoredPropertyToComputed: SyntaxRefactoringProvider {
         )
       )
 
-    let newBindingSpecifier =
+    var newBindingSpecifier =
       syntax.bindingSpecifier
       .with(\.tokenKind, .keyword(.var))
 
+    if modifiers.isEmpty {
+      newBindingSpecifier.leadingTrivia += modifiersLeadingTrivia
+    } else {
+      modifiers.leadingTrivia += modifiersLeadingTrivia
+    }
+
     return
       syntax
+      .with(\.modifiers, modifiers)
       .with(\.bindingSpecifier, newBindingSpecifier)
       .with(\.bindings, PatternBindingListSyntax([newBinding]))
   }

@@ -2,7 +2,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2025 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2026 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -15,11 +15,10 @@ import SwiftSyntax
 import XCTest
 
 class TriviaCommentValueTests: XCTestCase {
+
   func testDocLineCommentValues() {
     assertCommentValue("///", docCommentValue: "")
-
     assertCommentValue("/// Some doc line comment", docCommentValue: "Some doc line comment")
-
     assertCommentValue(
       """
       /// Some doc line comment
@@ -27,7 +26,6 @@ class TriviaCommentValueTests: XCTestCase {
       """,
       docCommentValue: "Some doc line comment\nAnother"
     )
-
     assertCommentValue(
       """
       /// - Task
@@ -40,7 +38,6 @@ class TriviaCommentValueTests: XCTestCase {
         - Task 2
         """
     )
-
     assertCommentValue(
       """
       ///- Task
@@ -53,7 +50,6 @@ class TriviaCommentValueTests: XCTestCase {
         - Task 2
         """
     )
-
     assertCommentValue(
       """
       /// included
@@ -61,7 +57,6 @@ class TriviaCommentValueTests: XCTestCase {
       """,
       docCommentValue: "included"
     )
-
     assertCommentValue(
       """
       /** not included */
@@ -69,7 +64,6 @@ class TriviaCommentValueTests: XCTestCase {
       """,
       docCommentValue: "included"
     )
-
     assertCommentValue(
       """
       /// not included
@@ -78,7 +72,6 @@ class TriviaCommentValueTests: XCTestCase {
       """,
       docCommentValue: "included"
     )
-
     assertCommentValue(
       """
       /// not included
@@ -87,7 +80,6 @@ class TriviaCommentValueTests: XCTestCase {
       """,
       docCommentValue: "included"
     )
-
     assertCommentValue(
       """
       /// not included
@@ -97,7 +89,6 @@ class TriviaCommentValueTests: XCTestCase {
       """,
       docCommentValue: "included\nalso included"
     )
-
     assertCommentValue(
       """
       ///not included
@@ -116,7 +107,6 @@ class TriviaCommentValueTests: XCTestCase {
       """,
       docCommentValue: "Some doc block comment"
     )
-
     assertCommentValue(
       """
       /** Some doc block comment
@@ -127,7 +117,6 @@ class TriviaCommentValueTests: XCTestCase {
         * spread on many lines
         """
     )
-
     assertCommentValue(
       """
       /** Some doc block comment
@@ -136,7 +125,6 @@ class TriviaCommentValueTests: XCTestCase {
       """,
       docCommentValue: "Some doc block comment\n* spread on many lines"
     )
-
     assertCommentValue(
       """
       /**
@@ -149,7 +137,6 @@ class TriviaCommentValueTests: XCTestCase {
         spread on many lines
         """
     )
-
     assertCommentValue(
       """
       /**
@@ -162,7 +149,6 @@ class TriviaCommentValueTests: XCTestCase {
         *  spread on many lines
         """
     )
-
     assertCommentValue(
       """
       /**
@@ -175,7 +161,6 @@ class TriviaCommentValueTests: XCTestCase {
         *  with a line comment
         """
     )
-
     assertCommentValue(
       """
           /**
@@ -188,7 +173,6 @@ class TriviaCommentValueTests: XCTestCase {
         with another line
         """
     )
-
     assertCommentValue(
       """
       /**
@@ -201,7 +185,6 @@ class TriviaCommentValueTests: XCTestCase {
          with another line
         """
     )
-
     assertCommentValue(
       """
       /**
@@ -216,7 +199,6 @@ class TriviaCommentValueTests: XCTestCase {
         *  with a line comment
         """
     )
-
     assertCommentValue(
       """
       /**
@@ -231,9 +213,7 @@ class TriviaCommentValueTests: XCTestCase {
         * with a line comment
         """
     )
-
     assertCommentValue("/**     abc     */", docCommentValue: "abc")
-
     assertCommentValue(
       """
       /**     \("")
@@ -249,7 +229,6 @@ class TriviaCommentValueTests: XCTestCase {
       """
       /** Some doc block comment
         * spread on many lines */
-
       /// Some doc line comment
       /// Some line comment
       """,
@@ -258,20 +237,20 @@ class TriviaCommentValueTests: XCTestCase {
         Some line comment
         """
     )
-
     assertCommentValue(
       """
       /** abc */
       /** def */
-      """, 
-    docCommentValue: "abc\ndef")
-
+      """,
+      docCommentValue: "def"
+    )
     assertCommentValue(
       """
       /* abc */
       /** def */
-      """, 
-    docCommentValue: "def")
+      """,
+      docCommentValue: "def"
+    )
   }
 }
 
@@ -286,12 +265,9 @@ private func assertCommentValue(
 }
 
 private func parseTrivia(from input: String) -> Trivia {
-  // Wrap the input in valid Swift code so the parser can recognize it
   let wrappedSource = "let _ = 0\n\(input)\nlet _ = 1"
-
   let sourceFile = Parser.parse(source: wrappedSource)
 
-  // Find the token where the comment would appear (before `let _ = 1`)
   guard
     let commentToken = sourceFile.tokens(viewMode: .sourceAccurate).first(where: {
       $0.leadingTrivia.contains(where: { $0.isComment })

@@ -60,20 +60,15 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
   }
 
   private static func preserveTrivia(from outer: TupleExprSyntax, to inner: ExprSyntax) -> ExprSyntax {
-    let newLeading = outer.leftParen.leadingTrivia + outer.leftParen.trailingTrivia + inner.leadingTrivia
-    let newTrailing = inner.trailingTrivia + outer.rightParen.leadingTrivia + outer.rightParen.trailingTrivia
-    return inner.with(\.leadingTrivia, newLeading).with(\.trailingTrivia, newTrailing)
+    return
+      inner
+      .with(\.leadingTrivia, outer.leftParen.leadingTrivia + outer.leftParen.trailingTrivia + inner.leadingTrivia)
+      .with(\.trailingTrivia, inner.trailingTrivia + outer.rightParen.leadingTrivia + outer.rightParen.trailingTrivia)
   }
 
   private static func canRemoveParentheses(around expr: ExprSyntax, in parent: Syntax?) -> Bool {
-    guard isSimpleExpression(expr) else {
-      return false
-    }
-    if expr.is(ClosureExprSyntax.self) && parent?.is(ConditionElementSyntax.self) == true {
-      return false
-    }
-
-    return true
+    return isSimpleExpression(expr)
+      && !(expr.is(ClosureExprSyntax.self) && parent?.is(ConditionElementSyntax.self) == true)
   }
 
   private static func isSimpleExpression(_ expr: ExprSyntax) -> Bool {

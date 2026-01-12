@@ -494,17 +494,17 @@ public let STMT_NODES: [Node] = [
     base: .stmt,
     nameForDiagnostics: "'return' statement",
     documentation: """
-       A statement that exits a function or closure and optionally returns a value.
+         A statement that exits a function or closure and optionally returns a value.
 
-       Written as:
-        ```swift
-          return
-        ```
+         Written as:
+          ```swift
+            return
+          ```
 
-        ```swift
-          return <expr>
-        ```
-    """,
+          ```swift
+            return <expr>
+          ```
+      """,
     children: [
       Child(
         name: "returnKeyword",
@@ -523,14 +523,14 @@ public let STMT_NODES: [Node] = [
     base: .stmt,
     nameForDiagnostics: "'throw' statement",
     documentation: """
-      A statement that throws an error.
-      
-      Written as:
-      
-      ```swift
-        throw <expr>
-      ```
-   """,
+         A statement that throws an error.
+         
+         Written as:
+         
+         ```swift
+           throw <expr>
+         ```
+      """,
     children: [
       Child(
         name: "throwKeyword",

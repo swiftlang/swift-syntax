@@ -1759,6 +1759,23 @@ public struct SwitchCaseItemListSyntax: SyntaxCollection, SyntaxHashable {
 ///  - ``SwitchExprSyntax``.``SwitchExprSyntax/cases``
 public struct SwitchCaseListSyntax: SyntaxCollection, SyntaxHashable {
   public enum Element: SyntaxChildChoices, SyntaxHashable {
+    /// A single case within a `switch` statement.
+    /// 
+    /// A switch case consists of a label (`case` or `default`),
+    /// an optional `@unknown` attribute, and the statements
+    /// that are executed when the case is matched.
+    /// 
+    /// ### Examples
+    /// 
+    /// ```swift
+    /// case 1:
+    ///   print("one")
+    /// ```
+    /// 
+    /// ```swift
+    /// default:
+    ///   print("other")
+    /// ```
     case switchCase(SwitchCaseSyntax)
     case ifConfigDecl(IfConfigDeclSyntax)
 

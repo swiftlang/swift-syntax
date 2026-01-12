@@ -399,6 +399,23 @@ public struct RepeatStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyn
 
 // MARK: - ReturnClauseSyntax
 
+///   A clause that specifies the return type of a function or closure.
+/// 
+///   Written as:
+///   ```swift
+///   -> <type>
+///   ```
+/// 
+///   ### Examples
+/// 
+///   ```swift
+///   func f() -> Int { }
+///   ```
+/// 
+///   ```swift
+///   let g: () -> String = { "hello" }
+///   ```
+///
 /// ### Children
 /// 
 ///  - `arrow`: `->`
@@ -528,6 +545,17 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
 
 // MARK: - ReturnStmtSyntax
 
+///    A statement that exits a function or closure and optionally returns a value.
+/// 
+///    Written as:
+///     ```swift
+///       return
+///     ```
+/// 
+///     ```swift
+///       return <expr>
+///     ```
+///
 /// ### Children
 /// 
 ///  - `returnKeyword`: `return`
@@ -3863,6 +3891,23 @@ public struct SwitchCaseItemSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxN
 
 // MARK: - SwitchCaseLabelSyntax
 
+/// A label that introduces one or more cases in a switch statement.
+/// 
+/// Written as:
+/// ```swift
+/// case <items>:
+/// ```
+/// 
+/// ### Examples
+/// 
+/// ```swift
+/// case 1:
+/// ```
+/// 
+/// ```swift
+/// case 1, 2, 3:
+/// ```
+///
 /// ### Children
 /// 
 ///  - `caseKeyword`: `case`
@@ -4041,6 +4086,24 @@ public struct SwitchCaseLabelSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntax
 
 // MARK: - SwitchCaseSyntax
 
+/// A single case within a `switch` statement.
+/// 
+/// A switch case consists of a label (`case` or `default`),
+/// an optional `@unknown` attribute, and the statements
+/// that are executed when the case is matched.
+/// 
+/// ### Examples
+/// 
+/// ```swift
+/// case 1:
+///   print("one")
+/// ```
+/// 
+/// ```swift
+/// default:
+///   print("other")
+/// ```
+///
 /// ### Children
 /// 
 ///  - `attribute`: ``AttributeSyntax``?
@@ -4295,6 +4358,14 @@ public struct SwitchCaseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNodeP
 
 // MARK: - SwitchDefaultLabelSyntax
 
+/// The default label is executed when none of the `case` patterns
+/// match the value being switched over.
+/// 
+/// Written as:
+/// ```swift
+/// default:
+/// ```
+///
 /// ### Children
 /// 
 ///  - `defaultKeyword`: `default`

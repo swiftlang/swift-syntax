@@ -355,6 +355,14 @@ public struct ThenStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynta
 
 // MARK: - ThrowStmtSyntax
 
+///    A statement that throws an error.
+///    
+///    Written as:
+///    
+///    ```swift
+///      throw <expr>
+///    ```
+///
 /// ### Children
 /// 
 ///  - `throwKeyword`: `throw`
@@ -2159,6 +2167,27 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
 
 // MARK: - TypeAnnotationSyntax
 
+/// A type annotation that explicitly specifies the type of a value or pattern.
+/// 
+/// Written as a colon followed by a type:
+/// ```swift
+/// <pattern>: <type>
+/// ```
+/// 
+/// ### Examples
+/// 
+/// ```swift
+/// let count: Int
+/// ```
+/// 
+/// ```swift
+/// func greet(name: String) {}
+/// ```
+/// 
+/// ```swift
+/// let point: (x: Int, y: Int)
+/// ```
+///
 /// ### Children
 /// 
 ///  - `colon`: `:`
@@ -2486,6 +2515,19 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
 
 // MARK: - TypeInitializerClauseSyntax
 
+/// A clause that specifies the underlying type of a type declaration.
+/// 
+/// Written as:
+/// ```swift
+/// = <type>
+/// ```
+/// 
+/// ### Examples
+/// 
+/// ```swift
+/// typealias MyInt = Int
+/// ```
+///
 /// ### Children
 /// 
 ///  - `equal`: `=`

@@ -182,27 +182,27 @@ public let PATTERN_NODES: [Node] = [
     base: .syntax,
     nameForDiagnostics: "type annotation",
     documentation: """
-    A type annotation that explicitly specifies the type of a value or pattern.
+      A type annotation that explicitly specifies the type of a value or pattern.
 
-    Written as a colon followed by a type:
-    ```swift
-    <pattern>: <type>
-    ```
+      Written as a colon followed by a type:
+      ```swift
+      <pattern>: <type>
+      ```
 
-    ### Examples
+      ### Examples
 
-    ```swift
-    let count: Int
-    ```
+      ```swift
+      let count: Int
+      ```
 
-    ```swift
-    func greet(name: String) {}
-    ```
+      ```swift
+      func greet(name: String) {}
+      ```
 
-    ```swift
-    let point: (x: Int, y: Int)
-    ```
-    """,
+      ```swift
+      let point: (x: Int, y: Int)
+      ```
+      """,
     children: [
       Child(
         name: "colon",

@@ -13,8 +13,8 @@
 extension Trivia {
   /// The contents of the last doc comment piece with any comment markers removed and indentation whitespace stripped.
   public var docCommentValue: String? {
-    var comments: [String] = []
-    var currentLineComments: [String] = []
+    var comments: [Substring] = []
+    var currentLineComments: [Substring] = []
     var isInsideDocLineCommentSection = false
     var consecutiveNewlines = 0
 
@@ -82,7 +82,7 @@ extension Trivia {
         unindentedLines.removeLast()
       }
 
-      return unindentedLines.joined(separator: "\n")
+      return Substring(unindentedLines.joined(separator: "\n"))
     }
 
     func processSectionBreak() {

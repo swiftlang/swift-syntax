@@ -18,39 +18,46 @@ import _SwiftSyntaxTestSupport
 
 final class RemoveRedundantParenthesesTest: XCTestCase {
   func testRemoveRedundantParentheses() throws {
-    let tests: [(ExprSyntax, ExprSyntax)] = [
-      ("((1))", "1"),
-      ("((x))", "x"),
-      ("((x + y))", "(x + y)"),
-      ("(x)", "x"),
-      ("(1)", "1"),
-      ("(\"s\")", "\"s\""),
-      ("(true)", "true"),
-      ("(x.y)", "x.y"),
-      ("(f(x))", "f(x)"),
-      ("(x[0])", "x[0]"),
-      ("([1, 2])", "[1, 2]"),
-      ("([:])", "[:]"),
-      ("({ x in x })", "{ x in x }"),
-      ("(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))", "#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)"),
-      ("(try f())", "try f()"),
-      ("(await f())", "await f()"),
-      ("(x?.y)", "x?.y"),
+    let tests: [(Int, input: ExprSyntax, expected: ExprSyntax)] = [
+      (#line, input: "((1))", expected: "1"),
+      (#line, input: "((x))", expected: "x"),
+      (#line, input: "((x + y))", expected: "(x + y)"),
+      (#line, input: "(x)", expected: "x"),
+      (#line, input: "(1)", expected: "1"),
+      (#line, input: "(\"s\")", expected: "\"s\""),
+      (#line, input: "(true)", expected: "true"),
+      (#line, input: "(x.y)", expected: "x.y"),
+      (#line, input: "(f(x))", expected: "f(x)"),
+      (#line, input: "(x[0])", expected: "x[0]"),
+      (#line, input: "([1, 2])", expected: "[1, 2]"),
+      (#line, input: "([:])", expected: "[:]"),
+      (#line, input: "({ x in x })", expected: "{ x in x }"),
+      (
+        #line, input: "(#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1))",
+        expected: "#colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)"
+      ),
+      (#line, input: "(try! f())", expected: "try! f()"),
+      (#line, input: "(try? f())", expected: "try? f()"),
+      (#line, input: "(await f())", expected: "await f()"),
+      (#line, input: "(x?.y)", expected: "x?.y"),
+      (#line, input: "(x!)", expected: "x!"),
+      (#line, input: "(nil)", expected: "nil"),
     ]
 
-    for (input, expected) in tests {
+    for (line, input, expected) in tests {
       try assertRefactor(
         input,
         context: (),
         provider: RemoveRedundantParentheses.self,
-        expected: expected
+        expected: expected,
+        line: UInt(line)
       )
     }
   }
 
   func testPreservesTrivia() throws {
     let input: ExprSyntax = "/* a */ (( /* b */ x /* c */ )) /* d */"
-    let expected: ExprSyntax = "/* a */  /* b */ x /* c */  /* d */"
+    let expected: ExprSyntax = "/* a */ /* b */ x /* c */  /* d */"
 
     try assertRefactor(
       input,
@@ -61,19 +68,24 @@ final class RemoveRedundantParenthesesTest: XCTestCase {
   }
 
   func testDoesNotRemoveNecessaryParentheses() throws {
-    let tests: [ExprSyntax] = [
-      "(1 + 2)",
-      "(x as T)",
-      "(x ? y : z)",
-      "({ true }())",
+    let tests: [(Int, input: ExprSyntax)] = [
+      (#line, input: "(1 + 2)"),
+      (#line, input: "(x as T)"),
+      (#line, input: "(x ? y : z)"),
+      (#line, input: "({ true }())"),
+      // try without ! or ? requires parentheses for precedence
+      (#line, input: "(try f())"),
+      // await with complex expression requires parentheses
+      (#line, input: "(await 1 + 2)"),
     ]
 
-    for input in tests {
+    for (line, input) in tests {
       try assertRefactor(
         input,
         context: (),
         provider: RemoveRedundantParentheses.self,
-        expected: input
+        expected: input,
+        line: UInt(line)
       )
     }
   }

@@ -28,11 +28,9 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
     in context: Void
   ) -> ExprSyntax {
     // Check if the tuple expression has exactly one element and no label.
-    guard let element = getSingleUnlabeledElement(from: syntax) else {
+    guard let innerExpr = syntax.elements.singleUnlabeledExpression else {
       return ExprSyntax(syntax)
     }
-
-    let innerExpr = element.expression
 
     // Case 1: Nested parentheses ((expression)) -> (expression)
     // Recursively strip inner parentheses to handle cases like (((x))) -> x
@@ -49,21 +47,17 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
     return ExprSyntax(syntax)
   }
 
-  private static func getSingleUnlabeledElement(from tuple: TupleExprSyntax) -> LabeledExprSyntax? {
-    guard tuple.elements.count == 1,
-      let element = tuple.elements.first,
-      element.label == nil
-    else {
-      return nil
-    }
-    return element
-  }
-
   private static func preserveTrivia(from outer: TupleExprSyntax, to inner: ExprSyntax) -> ExprSyntax {
+    let leadingTrivia = outer.leftParen.leadingTrivia
+      .merging(outer.leftParen.trailingTrivia)
+      .merging(inner.leadingTrivia)
+    let trailingTrivia = inner.trailingTrivia
+      .merging(outer.rightParen.leadingTrivia)
+      .merging(outer.rightParen.trailingTrivia)
     return
       inner
-      .with(\.leadingTrivia, outer.leftParen.leadingTrivia + outer.leftParen.trailingTrivia + inner.leadingTrivia)
-      .with(\.trailingTrivia, inner.trailingTrivia + outer.rightParen.leadingTrivia + outer.rightParen.trailingTrivia)
+      .with(\.leadingTrivia, leadingTrivia)
+      .with(\.trailingTrivia, trailingTrivia)
   }
 
   private static func canRemoveParentheses(around expr: ExprSyntax, in parent: Syntax?) -> Bool {
@@ -75,25 +69,40 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
     // Allow-list of simple expressions that typically don't depend on precedence
     // in a way that requires parentheses when used in most contexts,
     // or are self-contained.
-    switch expr.kind {
-    case .declReferenceExpr,
-      .integerLiteralExpr,
-      .floatLiteralExpr,
-      .stringLiteralExpr,
+    switch expr.as(ExprSyntaxEnum.self) {
+    case .arrayExpr,
       .booleanLiteralExpr,
-      .memberAccessExpr,
-      .dictionaryExpr,
-      .subscriptCallExpr,
-      .arrayExpr,
       .closureExpr,
+      .declReferenceExpr,
+      .dictionaryExpr,
+      .floatLiteralExpr,
+      .forceUnwrapExpr,
+      .integerLiteralExpr,
       .macroExpansionExpr,
-      .tryExpr,
-      .awaitExpr:
+      .memberAccessExpr,
+      .nilLiteralExpr,
+      .optionalChainingExpr,
+      .regexLiteralExpr,
+      .simpleStringLiteralExpr,
+      .stringLiteralExpr,
+      .subscriptCallExpr,
+      .superExpr,
+      .typeExpr:
       return true
-    case .functionCallExpr:
-      guard let functionCall = expr.as(FunctionCallExprSyntax.self) else {
+    case .awaitExpr(let awaitExpr):
+      // await is only simple if its expression is also simple
+      return isSimpleExpression(awaitExpr.expression)
+    case .unsafeExpr(let unsafeExpr):
+      // Similar to await, unsafe is only simple if its expression is simple
+      return isSimpleExpression(unsafeExpr.expression)
+    case .tryExpr(let tryExpr):
+      // Only try! and try? are simple; regular try is NOT simple
+      // because it affects precedence (e.g., try (try! foo()).bar() vs try try! foo().bar())
+      guard tryExpr.questionOrExclamationMark != nil else {
         return false
       }
+      return isSimpleExpression(tryExpr.expression)
+    case .functionCallExpr(let functionCall):
       // Closures called immediately (e.g. `{ ... }()`) behave differently and may require
       // parentheses for disambiguation.
       return !functionCall.calledExpression.is(ClosureExprSyntax.self)

@@ -25,14 +25,6 @@ extension TupleExprSyntax {
   }
 }
 
-extension LabeledExprListSyntax {
-  /// If this list is a single, unlabeled expression, return it.
-  var singleUnlabeledExpression: ExprSyntax? {
-    guard count == 1, let element = first, element.label == nil else { return nil }
-    return element.expression
-  }
-}
-
 extension ExprSyntax {
   /// Whether this is a simple identifier expression and, if so, what the identifier string is.
   var simpleIdentifierExpr: Identifier? {

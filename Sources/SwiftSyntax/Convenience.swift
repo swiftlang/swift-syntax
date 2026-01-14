@@ -125,6 +125,14 @@ extension IntegerLiteralExprSyntax {
   }
 }
 
+extension LabeledExprListSyntax {
+  /// If this list is a single, unlabeled expression, return it.
+  package var singleUnlabeledExpression: ExprSyntax? {
+    guard count == 1, let element = first, element.label == nil else { return nil }
+    return element.expression
+  }
+}
+
 extension MemberAccessExprSyntax {
   /// Creates a new ``MemberAccessExprSyntax`` where the accessed member is represented by
   /// an identifier without specifying argument labels.

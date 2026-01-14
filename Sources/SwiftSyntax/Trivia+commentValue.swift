@@ -14,7 +14,7 @@ extension Trivia {
   /// The contents of the last doc comment piece with any comment markers removed and indentation whitespace stripped.
   public var docCommentValue: String? {
     var comments: [Substring] = []
-    var currentLineComments: [Substring] = []
+    var currentLineComments: [String] = []  // Reset line comments when encountering a block comment
     var isInsideDocLineCommentSection = false
     var consecutiveNewlines = 0
 
@@ -28,22 +28,19 @@ extension Trivia {
         consecutiveNewlines = 0
       case .docLineComment(let text):
         if isInsideDocLineCommentSection {
-          currentLineComments.append(text[...])
+          currentLineComments.append(text)
         } else {
-          currentLineComments = [text[...]]
+          currentLineComments = [text]
           isInsideDocLineCommentSection = true
         }
         consecutiveNewlines = 0
 
       case .newlines(let n), .carriageReturns(let n), .carriageReturnLineFeeds(let n):
-        if n == 1 {
-          consecutiveNewlines += 1
-        } else {
-          consecutiveNewlines = 0
-        }
+        consecutiveNewlines += n
 
         if consecutiveNewlines != 1 {
           processSectionBreak()
+          consecutiveNewlines = 0
         }
       default:
         processSectionBreak()
@@ -56,6 +53,10 @@ extension Trivia {
       var lines = text.dropPrefix("/**").dropSuffix("*/")
         .split(omittingEmptySubsequences: false, whereSeparator: \.isNewline)
 
+      // If the comment content starts on the same line as the `/**` marker or ends on the same line as the `*/` marker,
+      // it is common to separate the marker and the actual comment using spaces. Strip those spaces if they exists.
+      // If there are non no-space characters on the first / last line, then the comment doesn't start / end on the line
+      // with the marker, so don't do the stripping.
       if let firstLine = lines.first, firstLine.contains(where: { $0 != " " }) {
         lines[0] = firstLine.drop { $0 == " " }
       }
@@ -63,6 +64,8 @@ extension Trivia {
         lines[lines.count - 1] = lastLine.dropLast { $0 == " " }
       }
 
+      // Find the lowest indentation that is common among all lines in the block comment. Do not consider the first line
+      // because it won't have any indentation since it starts with /**
       let indentation = lines.dropFirst()
         .map { $0.prefix(while: { $0 == " " || $0 == "\t" }) }
         .reduce(nil as Substring?) { (acc: Substring?, element: Substring.SubSequence) in
@@ -70,31 +73,40 @@ extension Trivia {
         }
 
       guard let firstLine = lines.first else {
+        // We did not have any lines. This should never happen in practice because `split` never returns an empty array
+        // but be safe and return `nil` here anyway.
         return nil
       }
 
       var unindentedLines = [firstLine] + lines.dropFirst().map { $0.dropPrefix(indentation ?? "") }
 
-      while unindentedLines.first?.allSatisfy({ $0 == " " }) == true {
+      // If the first line only contained the comment marker, don't include it. We don't want to start the comment value
+      // with a newline if `/**` is on its own line. Same for the end marker.
+      if unindentedLines.first?.allSatisfy({ $0 == " " }) ?? false {
         unindentedLines.removeFirst()
       }
-      while unindentedLines.last?.allSatisfy({ $0 == " " }) == true {
+      if unindentedLines.last?.allSatisfy({ $0 == " " }) ?? false {
         unindentedLines.removeLast()
       }
 
+      // We canonicalize the line endings to `\n` here. This matches how we concatenate the different line comment
+      // pieces using \n as well.
       return Substring(unindentedLines.joined(separator: "\n"))
     }
 
+    /// Processes a section break, which is defined as a sequence of newlines or other trivia pieces that are not comments.
     func processSectionBreak() {
+      // If we have a section break, we reset the current line comments.
       if !currentLineComments.isEmpty {
-        comments = currentLineComments
+        comments = currentLineComments.map { $0[...] }
         currentLineComments = []
       }
       isInsideDocLineCommentSection = false
     }
 
+    // If there are remaining line comments, use them as the last doc comment block.
     if !currentLineComments.isEmpty {
-      comments = currentLineComments
+      comments = currentLineComments.map { $0[...] }
     }
 
     if comments.isEmpty { return nil }
@@ -125,6 +137,6 @@ fileprivate extension StringProtocol where SubSequence == Substring {
   }
 }
 
-fileprivate func commonPrefix(_ lhs: Substring, _ rhs: Substring) -> Substring {
+private func commonPrefix(_ lhs: Substring, _ rhs: Substring) -> Substring {
   return lhs[..<lhs.index(lhs.startIndex, offsetBy: zip(lhs, rhs).prefix { $0 == $1 }.count)]
 }

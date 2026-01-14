@@ -24,7 +24,10 @@ class TriviaCommentValueTests: XCTestCase {
       /// Some doc line comment
       /// Another
       """,
-      docCommentValue: "Some doc line comment\nAnother"
+      docCommentValue: """
+        Some doc line comment
+        Another
+        """
     )
     assertCommentValue(
       """
@@ -87,7 +90,10 @@ class TriviaCommentValueTests: XCTestCase {
       /// included
       /// also included
       """,
-      docCommentValue: "included\nalso included"
+      docCommentValue: """
+        included
+        also included
+        """
     )
     assertCommentValue(
       """
@@ -96,7 +102,10 @@ class TriviaCommentValueTests: XCTestCase {
       /// included
       /// also included
       """,
-      docCommentValue: "included\nalso included"
+      docCommentValue: """
+        included
+        also included
+        """
     )
   }
 
@@ -123,7 +132,10 @@ class TriviaCommentValueTests: XCTestCase {
       * spread on many lines
       */
       """,
-      docCommentValue: "Some doc block comment\n* spread on many lines"
+      docCommentValue: """
+        Some doc block comment
+        * spread on many lines
+        """
     )
     assertCommentValue(
       """
@@ -222,6 +234,24 @@ class TriviaCommentValueTests: XCTestCase {
       """,
       docCommentValue: "abc"
     )
+    assertCommentValue(
+      """
+      /**
+
+      First paragraph.
+
+      Second paragraph.
+
+      */
+      """,
+      docCommentValue: """
+
+        First paragraph.
+
+        Second paragraph.
+
+        """
+    )
   }
 
   func testMixedStyleCommentValues() {
@@ -265,9 +295,11 @@ private func assertCommentValue(
 }
 
 private func parseTrivia(from input: String) -> Trivia {
+  // Wrap the input in valid Swift code so the parser can recognize it
   let wrappedSource = "let _ = 0\n\(input)\nlet _ = 1"
   let sourceFile = Parser.parse(source: wrappedSource)
 
+  // Find the token where the comment would appear (before `let _ = 1`)
   guard
     let commentToken = sourceFile.tokens(viewMode: .sourceAccurate).first(where: {
       $0.leadingTrivia.contains(where: { $0.isComment })

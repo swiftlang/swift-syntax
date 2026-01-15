@@ -76,6 +76,14 @@ final class RemoveRedundantParenthesesTest: XCTestCase {
     // `let x = (a + b)` removes parens because InitializerClauseSyntax context
     try assertParenRemoval("let x = (a + b)", expected: "let x = a + b")
     try assertParenRemoval("let x = ((1))", expected: "let x = 1")
+
+    // `if let` and `guard let` initializers also remove parentheses
+    try assertParenRemoval("if let x = (a + b) {}", expected: "if let x = a + b {}")
+    try assertParenRemoval("if var x = (a + b) {}", expected: "if var x = a + b {}")
+    try assertParenRemoval("guard let x = (a + b) else {}", expected: "guard let x = a + b else {}")
+
+    // `try f()` is not a "simple expression", but in an initializer clause the parentheses are still redundant.
+    try assertParenRemoval("let x = (try f())", expected: "let x = try f()")
   }
 
   func testPreservesParenthesesInConditions() throws {
@@ -91,6 +99,10 @@ final class RemoveRedundantParenthesesTest: XCTestCase {
     try assertParenRemoval("if (#macro { true }) == false {}", expected: "if (#macro { true }) == false {}")
     // Subscripts with trailing closures
     try assertParenRemoval("if (array[0] { true }) == false {}", expected: "if (array[0] { true }) == false {}")
+
+    // Complex trailing closures in conditions
+    try assertParenRemoval("if (call { true }) == false {}", expected: "if (call { true }) == false {}")
+    try assertParenRemoval("if let x: () -> Bool = ({ true }) {}", expected: "if let x: () -> Bool = ({ true }) {}")
   }
 
   func testPreservesParenthesesForMetatypes() throws {

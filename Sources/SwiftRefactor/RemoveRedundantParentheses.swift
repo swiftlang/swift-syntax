@@ -61,8 +61,13 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
   }
 
   private static func canRemoveParentheses(around expr: ExprSyntax, in parent: Syntax?) -> Bool {
-    // Parentheses in initializer clauses (e.g., `let x = (a + b)`) are always redundant.
+    // Parentheses in initializer clauses (e.g., `let x = (a + b)`) are redundant,
+    // unless they enclose a closure in a condition context (to avoid parsing ambiguity).
     if parent?.is(InitializerClauseSyntax.self) == true {
+      let isInCondition = parent?.ancestorOrSelf(mapping: { $0.as(ConditionElementSyntax.self) }) != nil
+      if isInCondition && (expr.is(ClosureExprSyntax.self) || hasTrailingClosure(expr)) {
+        return false
+      }
       return true
     }
 
@@ -75,7 +80,7 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
     // The parser may not always produce a TypeExprSyntax, so we conservatively check for these accesses.
     if let memberAccess = parent?.as(MemberAccessExprSyntax.self) {
       let memberName = memberAccess.declName.baseName.text
-      if memberName == "self" || memberName == "Type" {
+      if memberName == "self" || memberName == "Type" || memberName == "Protocol" {
         return false
       }
     }
@@ -87,10 +92,7 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
       parent?.ancestorOrSelf(mapping: { $0.as(ConditionElementSyntax.self) }) != nil
       || parent?.is(RepeatStmtSyntax.self) == true
     if isInCondition {
-      if expr.is(ClosureExprSyntax.self) {
-        return false
-      }
-      if hasTrailingClosure(expr) {
+      if expr.is(ClosureExprSyntax.self) || hasTrailingClosure(expr) {
         return false
       }
     }

@@ -103,6 +103,10 @@ final class RemoveRedundantParenthesesTest: XCTestCase {
     // Complex trailing closures in conditions
     try assertParenRemoval("if (call { true }) == false {}", expected: "if (call { true }) == false {}")
     try assertParenRemoval("if let x: () -> Bool = ({ true }) {}", expected: "if let x: () -> Bool = ({ true }) {}")
+
+    // Repeat-while conditions with nested or trailing closures
+    try assertParenRemoval("repeat {} while call(({ true }))", expected: "repeat {} while call(({ true }))")
+    try assertParenRemoval("repeat {} while (call { true })", expected: "repeat {} while (call { true })")
   }
 
   func testPreservesParenthesesForMetatypes() throws {

@@ -90,7 +90,7 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
     // This applies to if/while/guard (ConditionElementSyntax) and repeat-while (RepeatStmtSyntax).
     let isInCondition =
       parent?.ancestorOrSelf(mapping: { $0.as(ConditionElementSyntax.self) }) != nil
-      || parent?.is(RepeatStmtSyntax.self) == true
+      || parent?.ancestorOrSelf(mapping: { $0.as(RepeatStmtSyntax.self) }) != nil
     if isInCondition {
       if expr.is(ClosureExprSyntax.self) || hasTrailingClosure(expr) {
         return false

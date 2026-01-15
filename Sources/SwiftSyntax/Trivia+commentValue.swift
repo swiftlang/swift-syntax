@@ -68,8 +68,11 @@ extension Trivia {
       // because it won't have any indentation since it starts with /**
       let indentation = lines.dropFirst()
         .map { $0.prefix(while: { $0 == " " || $0 == "\t" }) }
-        .reduce(nil as Substring?) { (acc: Substring?, element: Substring.SubSequence) in
-          acc.map { commonPrefix($0, element) } ?? element
+        .reduce(nil as Substring?) { (acc: Substring?, element: Substring) in
+          guard let acc else {
+            return element
+          }
+          return commonPrefix(acc, element)
         }
 
       guard let firstLine = lines.first else {

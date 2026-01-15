@@ -61,8 +61,78 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
   }
 
   private static func canRemoveParentheses(around expr: ExprSyntax, in parent: Syntax?) -> Bool {
-    return isSimpleExpression(expr)
-      && !(expr.is(ClosureExprSyntax.self) && parent?.is(ConditionElementSyntax.self) == true)
+    // Parentheses in initializer clauses (e.g., `let x = (a + b)`) are always redundant.
+    if parent?.is(InitializerClauseSyntax.self) == true {
+      return true
+    }
+
+    guard isSimpleExpression(expr) else {
+      return false
+    }
+
+    // Type expressions inside member access to `.self` or `.Type` need parentheses.
+    // e.g., `(any Equatable).self` or `(any Equatable).Type` must not have parentheses removed.
+    // The parser may not always produce a TypeExprSyntax, so we conservatively check for these accesses.
+    if let memberAccess = parent?.as(MemberAccessExprSyntax.self) {
+      let memberName = memberAccess.declName.baseName.text
+      if memberName == "self" || memberName == "Type" {
+        return false
+      }
+    }
+
+    // Closures and trailing closures inside conditions need parentheses to avoid ambiguity.
+    // e.g. `if ({ true }) == ({ true }) {}` or `if (call { true }) == false {}`
+    // This applies to if/while/guard (ConditionElementSyntax) and repeat-while (RepeatStmtSyntax).
+    let isInCondition =
+      parent?.ancestorOrSelf(mapping: { $0.as(ConditionElementSyntax.self) }) != nil
+      || parent?.is(RepeatStmtSyntax.self) == true
+    if isInCondition {
+      if expr.is(ClosureExprSyntax.self) {
+        return false
+      }
+      if hasTrailingClosure(expr) {
+        return false
+      }
+    }
+    return true
+  }
+
+  private static func hasTrailingClosure(_ expr: ExprSyntax) -> Bool {
+    if let functionCall = expr.as(FunctionCallExprSyntax.self) {
+      return functionCall.trailingClosure != nil || !functionCall.additionalTrailingClosures.isEmpty
+    }
+    if let macroExpansion = expr.as(MacroExpansionExprSyntax.self) {
+      return macroExpansion.trailingClosure != nil || !macroExpansion.additionalTrailingClosures.isEmpty
+    }
+    if let subscriptCall = expr.as(SubscriptCallExprSyntax.self) {
+      return subscriptCall.trailingClosure != nil || !subscriptCall.additionalTrailingClosures.isEmpty
+    }
+    return false
+  }
+
+  /// Checks if a type is simple enough to not require parentheses.
+  /// Complex types like `any Equatable`, `some P`, or `A & B` need parentheses, e.g. `(any Equatable).self`.
+  private static func isSimpleType(_ type: TypeSyntax) -> Bool {
+    switch type.as(TypeSyntaxEnum.self) {
+    case .arrayType,
+      .attributedType,  // @escaping, @Sendable, etc.
+      .classRestrictionType,
+      .dictionaryType,
+      .identifierType,
+      .implicitlyUnwrappedOptionalType,
+      .memberType,
+      .metatypeType,
+      .optionalType,
+      .tupleType:
+      return true
+    case .compositionType,  // A & B
+      .someOrAnyType,  // some P, any P
+      .functionType,  // (A) -> B
+      .suppressedType:  // ~Copyable
+      return false
+    default:
+      return false
+    }
   }
 
   private static func isSimpleExpression(_ expr: ExprSyntax) -> Bool {
@@ -86,9 +156,11 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
       .simpleStringLiteralExpr,
       .stringLiteralExpr,
       .subscriptCallExpr,
-      .superExpr,
-      .typeExpr:
+      .superExpr:
       return true
+    case .typeExpr(let typeExpr):
+      // Types like `any Equatable` need parentheses, e.g. `(any Equatable).self`
+      return isSimpleType(typeExpr.type)
     case .awaitExpr(let awaitExpr):
       // await is only simple if its expression is also simple
       return isSimpleExpression(awaitExpr.expression)
@@ -103,8 +175,9 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
       }
       return isSimpleExpression(tryExpr.expression)
     case .functionCallExpr(let functionCall):
-      // Closures called immediately (e.g. `{ ... }()`) behave differently and may require
-      // parentheses for disambiguation.
+      // Immediately-invoked closures need parentheses for disambiguation.
+      // Without parentheses, `let x = { 1 }()` parses as `let x = { 1 }` followed by `()` as a separate
+      // statement, rather than calling the closure. With parentheses: `let x = ({ 1 }())` works correctly.
       return !functionCall.calledExpression.is(ClosureExprSyntax.self)
     default:
       return false

@@ -42,18 +42,24 @@ public let PATTERN_NODES: [Node] = [
     kind: .identifierPattern,
     base: .pattern,
     nameForDiagnostics: "pattern",
-    documentation: """
-      A pattern that contains a ``TokenSyntax``.
+   documentation: """
+      A type annotation that explicitly specifies the type of a value or pattern.
+
+      Written as a colon followed by a type:
+      ```swift
+      <pattern>: <type>
+      ```
 
       ### Examples
 
-      ``IdentifierPatternSyntax`` can be used in simplple variable declarations.
-      For example `a` in the exmaple:
-
       ```swift
-      let a = 1
+      let count: Int
+      ```
+      ```swift
+      let point: (x: Int, y: Int)
       ```
       """,
+
     children: [
       Child(
         name: "identifier",
@@ -194,11 +200,6 @@ public let PATTERN_NODES: [Node] = [
       ```swift
       let count: Int
       ```
-
-      ```swift
-      func greet(name: String) {}
-      ```
-
       ```swift
       let point: (x: Int, y: Int)
       ```

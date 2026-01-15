@@ -2172,22 +2172,22 @@ public let DECL_NODES: [Node] = [
     base: .syntax,
     nameForDiagnostics: nil,
     documentation: """
-        A clause that specifies the return type of a function or closure.
+      A clause that specifies the return type of a function or closure.
 
-        Written as:
-        ```swift
-        -> <type>
-        ```
+      Written as:
+      ```swift
+      -> <type>
+      ```
 
-        ### Examples
+      ### Examples
 
-        ```swift
-        func f() -> Int { }
-        ```
+      ```swift
+      func f() -> Int { }
+      ```
 
-        ```swift
-        let g: () -> String = { "hello" }
-        ```
+      ```swift
+      let g: () -> String = { "hello" }
+      ```
       """,
     children: [
       Child(
@@ -2456,7 +2456,7 @@ public let DECL_NODES: [Node] = [
     base: .syntax,
     nameForDiagnostics: nil,
     documentation: """
-      A clause that specifies the underlying type of a type declaration.
+      A clause that specifies the underlying type of `typealias` or `associatedtype` declaration.
 
       Written as:
       ```swift

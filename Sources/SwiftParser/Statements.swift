@@ -534,7 +534,13 @@ extension Parser {
     let (unexpectedBeforeRepeatKeyword, repeatKeyword) = self.eat(repeatHandle)
     let body = self.parseCodeBlock(introducer: repeatKeyword)
     let (unexpectedBeforeWhileKeyword, whileKeyword) = self.expect(.keyword(.while))
-    let condition = self.parseExpression(flavor: .basic, pattern: .none)
+    let condition : RawExprSyntax
+    if self.at(.leftBrace){
+      condition = RawExprSyntax(RawMissingExprSyntax(arena: self.arena))
+    }
+    else{
+      condition = self.parseExpression(flavor: .basic, pattern: .none)
+    }
     return RawRepeatStmtSyntax(
       unexpectedBeforeRepeatKeyword,
       repeatKeyword: repeatKeyword,

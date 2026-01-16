@@ -438,12 +438,24 @@ final class RecoveryTests: ParserTestCase {
     assertParse(
       """
       repeat {
-      } while { true }()
+      } while1️⃣{ true }2️⃣()
       """,
       diagnostics: [
         // TODO: Old parser expected error on line 2: missing condition in 'while' statement
         // TODO: Old parser expected error on line 2: consecutive statements on a line must be separated by ';', Fix-It replacements: 10 - 10 = ';'
         // TODO: Old parser expected warning on line 2: result of call to closure returning 'Bool' is unused
+        DiagnosticSpec(
+          locationMarker:"1️⃣" ,
+          message: "missing condition in 'while' statement"
+          ),
+        DiagnosticSpec(
+          locationMarker: "2️⃣", 
+          message: "consecutive statements on a line must be separated by ';'",
+          fixIts: ["seperate statements with ';"]
+          ),
+        DiagnosticSpec(
+          message: "result of call to closure returning 'Bool' is unused"
+        )
       ]
     )
   }

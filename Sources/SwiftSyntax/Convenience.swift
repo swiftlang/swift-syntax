@@ -127,7 +127,7 @@ extension IntegerLiteralExprSyntax {
 
 extension LabeledExprListSyntax {
   /// If this list is a single, unlabeled expression, return it.
-  public var singleUnlabeledExpression: ExprSyntax? {
+  package var singleUnlabeledExpression: ExprSyntax? {
     guard count == 1, let element = first, element.label == nil else { return nil }
     return element.expression
   }

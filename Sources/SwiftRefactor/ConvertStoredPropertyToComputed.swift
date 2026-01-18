@@ -22,6 +22,14 @@ public struct ConvertStoredPropertyToComputed: SyntaxRefactoringProvider {
       throw RefactoringNotApplicableError("unsupported variable declaration")
     }
 
+    var syntax = syntax
+
+    if let lazyKeyword = syntax.modifiers.first(where: { $0.name.tokenKind == .keyword(.lazy) }) {
+      syntax = DeclModifierRemover { $0.id == lazyKeyword.id }
+        .rewrite(syntax)
+        .cast(VariableDeclSyntax.self)
+    }
+
     var codeBlockSyntax: CodeBlockItemListSyntax
 
     if let functionExpression = initializer.value.as(FunctionCallExprSyntax.self),

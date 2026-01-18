@@ -52,9 +52,25 @@ public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringP
       )
     }
 
+    let accessorEffectSpecifiers: AccessorEffectSpecifiersSyntax?
+    if let fnEffectSpecifiers = syntax.signature.effectSpecifiers {
+      accessorEffectSpecifiers = AccessorEffectSpecifiersSyntax(
+        asyncSpecifier: fnEffectSpecifiers.asyncSpecifier,
+        throwsClause: fnEffectSpecifiers.throwsClause
+      )
+    } else {
+      accessorEffectSpecifiers = nil
+    }
+
+    let getAccessor = AccessorDeclSyntax(
+      accessorSpecifier: .keyword(.get, trailingTrivia: .space),
+      effectSpecifiers: accessorEffectSpecifiers,
+      body: body
+    )
+
     let accessorBlock = AccessorBlockSyntax(
       leftBrace: body.leftBrace,
-      accessors: .getter(body.statements),
+      accessors: .accessors(AccessorDeclListSyntax([getAccessor])),
       rightBrace: body.rightBrace
     )
 

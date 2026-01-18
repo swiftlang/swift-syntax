@@ -117,7 +117,6 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
   private static func isSimpleType(_ type: TypeSyntax) -> Bool {
     switch type.as(TypeSyntaxEnum.self) {
     case .arrayType,
-      .attributedType,  // @escaping, @Sendable, etc.
       .classRestrictionType,
       .dictionaryType,
       .identifierType,
@@ -127,7 +126,8 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
       .optionalType,
       .tupleType:
       return true
-    case .compositionType,  // A & B
+    case .attributedType,  // @escaping, @Sendable, etc.
+      .compositionType,  // A & B
       .someOrAnyType,  // some P, any P
       .functionType,  // (A) -> B
       .suppressedType:  // ~Copyable
@@ -179,7 +179,7 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
     case .functionCallExpr(let functionCall):
       // Immediately-invoked closures need parentheses for disambiguation.
       // Without parentheses, `let x = { 1 }()` parses as `let x = { 1 }` followed by `()` as a separate
-      // statement, rather than calling the closure. With parentheses: `let x = ({ 1 }())` works correctly.
+      // statement, rather than calling the closure. With parentheses: `let x = ({ 1 })())` works correctly.
       return !functionCall.calledExpression.is(ClosureExprSyntax.self)
     default:
       return false

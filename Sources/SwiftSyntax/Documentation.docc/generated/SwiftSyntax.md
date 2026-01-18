@@ -381,6 +381,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/VersionTupleSyntax>
 - <doc:SwiftSyntax/WhereClauseSyntax>
 - <doc:SwiftSyntax/YieldedExpressionsClauseSyntax>
+- <doc:SwiftSyntax/YieldsClauseSyntax>
 
 ### Traits
 

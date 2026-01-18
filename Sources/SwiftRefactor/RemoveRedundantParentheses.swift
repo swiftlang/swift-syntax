@@ -27,6 +27,16 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
     syntax: TupleExprSyntax,
     in context: Void
   ) -> ExprSyntax {
+    // If the tuple has any unexpected nodes, it's not a simple parenthetical expression
+    // we should be refactoring (e.g., parsing recovery might have put some parts in unexpected nodes).
+    guard syntax.unexpectedBeforeLeftParen == nil,
+      syntax.unexpectedBetweenLeftParenAndElements == nil,
+      syntax.unexpectedBetweenElementsAndRightParen == nil,
+      syntax.unexpectedAfterRightParen == nil
+    else {
+      return ExprSyntax(syntax)
+    }
+
     // Check if the tuple expression has exactly one element and no label.
     guard let innerExpr = syntax.elements.singleUnlabeledExpression else {
       return ExprSyntax(syntax)
@@ -63,7 +73,7 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
   private static func canRemoveParentheses(around expr: ExprSyntax, in parent: Syntax?) -> Bool {
     // Parentheses in initializer clauses (e.g., `let x = (a + b)`) are redundant,
     // unless they enclose a closure in a condition context (to avoid parsing ambiguity).
-    if parent?.is(InitializerClauseSyntax.self) == true {
+    if parent?.is(InitializerClauseSyntax.self) ?? false {
       let isInCondition = parent?.ancestorOrSelf(mapping: { $0.as(ConditionElementSyntax.self) }) != nil
       if isInCondition && (expr.is(ClosureExprSyntax.self) || hasTrailingClosure(expr)) {
         return false
@@ -73,16 +83,6 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
 
     guard isSimpleExpression(expr) else {
       return false
-    }
-
-    // Type expressions inside member access to `.self` or `.Type` need parentheses.
-    // e.g., `(any Equatable).self` or `(any Equatable).Type` must not have parentheses removed.
-    // The parser may not always produce a TypeExprSyntax, so we conservatively check for these accesses.
-    if let memberAccess = parent?.as(MemberAccessExprSyntax.self) {
-      let memberName = memberAccess.declName.baseName.text
-      if memberName == "self" || memberName == "Type" || memberName == "Protocol" {
-        return false
-      }
     }
 
     // Closures and trailing closures inside conditions need parentheses to avoid ambiguity.
@@ -100,16 +100,16 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
   }
 
   private static func hasTrailingClosure(_ expr: ExprSyntax) -> Bool {
-    if let functionCall = expr.as(FunctionCallExprSyntax.self) {
+    switch expr.as(ExprSyntaxEnum.self) {
+    case .functionCallExpr(let functionCall):
       return functionCall.trailingClosure != nil || !functionCall.additionalTrailingClosures.isEmpty
-    }
-    if let macroExpansion = expr.as(MacroExpansionExprSyntax.self) {
+    case .macroExpansionExpr(let macroExpansion):
       return macroExpansion.trailingClosure != nil || !macroExpansion.additionalTrailingClosures.isEmpty
-    }
-    if let subscriptCall = expr.as(SubscriptCallExprSyntax.self) {
+    case .subscriptCallExpr(let subscriptCall):
       return subscriptCall.trailingClosure != nil || !subscriptCall.additionalTrailingClosures.isEmpty
+    default:
+      return false
     }
-    return false
   }
 
   /// Checks if a type is simple enough to not require parentheses.

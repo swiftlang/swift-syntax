@@ -119,6 +119,7 @@ final class RemoveRedundantParenthesesTest: XCTestCase {
     try assertParenRemoval("(A & B).Type", expected: "(A & B).Type")
     try assertParenRemoval("(any Equatable).Protocol", expected: "(any Equatable).Protocol")
     try assertParenRemoval("(A & B).Protocol", expected: "(A & B).Protocol")
+    try assertParenRemoval("(@escaping () -> Int).self", expected: "(@escaping () -> Int).self")
 
     // Simple types allow removing parentheses
     try assertParenRemoval("(MyStruct).self", expected: "MyStruct.self")

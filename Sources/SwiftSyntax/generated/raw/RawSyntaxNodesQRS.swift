@@ -2282,6 +2282,23 @@ public struct RawSwitchCaseLabelSyntax: RawSyntaxNodeProtocol {
 @_spi(RawSyntax)
 public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
   public enum Element: RawSyntaxNodeProtocol {
+    /// A single case within a `switch` statement.
+    /// 
+    /// A switch case consists of a label (`case` or `default`),
+    /// an optional `@unknown` attribute, and the statements
+    /// that are executed when the case is matched.
+    /// 
+    /// ### Examples
+    /// 
+    /// ```swift
+    /// case 1:
+    ///   print("one")
+    /// ```
+    /// 
+    /// ```swift
+    /// default:
+    ///   print("other")
+    /// ```
     case switchCase(RawSwitchCaseSyntax)
     case ifConfigDecl(RawIfConfigDeclSyntax)
 

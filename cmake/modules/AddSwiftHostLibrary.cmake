@@ -91,14 +91,12 @@ function(add_swift_syntax_library name)
     if(Swift_COMPILER_PACKAGE_CMO_SUPPORT STREQUAL "IMPLEMENTED")
       target_compile_options("${target}" PRIVATE
         $<$<COMPILE_LANGUAGE:Swift>:
-          "SHELL:-package-name ${SWIFTSYNTAX_PACKAGE_NAME}"
           "SHELL:-Xfrontend -package-cmo"
           "SHELL:-Xfrontend -allow-non-resilient-access"
       >)
     elseif(Swift_COMPILER_PACKAGE_CMO_SUPPORT STREQUAL "EXPERIMENTAL")
       target_compile_options("${target}" PRIVATE
         $<$<COMPILE_LANGUAGE:Swift>:
-          "SHELL:-package-name ${SWIFTSYNTAX_PACKAGE_NAME}"
           "SHELL:-Xfrontend -experimental-package-cmo"
           "SHELL:-Xfrontend -experimental-allow-non-resilient-access"
           "SHELL:-Xfrontend -experimental-package-bypass-resilience"

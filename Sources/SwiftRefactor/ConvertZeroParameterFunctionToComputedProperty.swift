@@ -58,7 +58,7 @@ public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringP
       rightBrace: body.rightBrace
     )
 
-    let bindingSpecifier = syntax.funcKeyword.detached.with(\.tokenKind, .keyword(.var))
+    let bindingSpecifier = TokenSyntax.keyword(.var, leadingTrivia: syntax.funcKeyword.leadingTrivia)
 
     let patternBinding = PatternBindingSyntax(
       pattern: variableName,

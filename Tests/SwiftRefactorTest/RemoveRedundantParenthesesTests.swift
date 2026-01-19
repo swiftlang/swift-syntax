@@ -54,6 +54,15 @@ final class RemoveRedundantParenthesesTest: XCTestCase {
     try assertParenRemoval("(try f())", expected: "(try f())")
     // await with complex expression requires parentheses
     try assertParenRemoval("(await 1 + 2)", expected: "(await 1 + 2)")
+
+    // Complex called expressions in function calls need parentheses
+    try assertParenRemoval("(a + b)()", expected: "(a + b)()")
+    try assertParenRemoval("(a as! () -> Void)()", expected: "(a as! () -> Void)()")
+    // Outer parentheses should still be removable if the inner one is preserved
+    try assertParenRemoval("((a + b)())", expected: "(a + b)()")
+
+    // IIFE must keep parentheses around the closure
+    try assertParenRemoval("({ 1 })()", expected: "({ 1 })()")
   }
 
   func testTupleHandling() throws {
@@ -120,6 +129,8 @@ final class RemoveRedundantParenthesesTest: XCTestCase {
     try assertParenRemoval("(any Equatable).Protocol", expected: "(any Equatable).Protocol")
     try assertParenRemoval("(A & B).Protocol", expected: "(A & B).Protocol")
     try assertParenRemoval("(@escaping () -> Int).self", expected: "(@escaping () -> Int).self")
+    try assertParenRemoval("(some P).self", expected: "(some P).self")
+    try assertParenRemoval("(T...).self", expected: "(T...).self")
 
     // Simple types allow removing parentheses
     try assertParenRemoval("(MyStruct).self", expected: "MyStruct.self")

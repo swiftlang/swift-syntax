@@ -96,6 +96,15 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
         return false
       }
     }
+
+    // Immediately-invoked closures need parentheses for disambiguation.
+    if let functionCall = parent?.as(FunctionCallExprSyntax.self),
+      functionCall.calledExpression.as(TupleExprSyntax.self) != nil,
+      expr.is(ClosureExprSyntax.self)
+    {
+      return false
+    }
+
     return true
   }
 
@@ -121,18 +130,21 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
       .dictionaryType,
       .identifierType,
       .implicitlyUnwrappedOptionalType,
+      .inlineArrayType,
       .memberType,
       .metatypeType,
+      .missingType,
       .optionalType,
       .tupleType:
       return true
     case .attributedType,  // @escaping, @Sendable, etc.
       .compositionType,  // A & B
-      .someOrAnyType,  // some P, any P
       .functionType,  // (A) -> B
+      .namedOpaqueReturnType,
+      .packElementType,
+      .packExpansionType,
+      .someOrAnyType,  // some P, any P
       .suppressedType:  // ~Copyable
-      return false
-    default:
       return false
     }
   }
@@ -177,9 +189,10 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
       }
       return isSimpleExpression(tryExpr.expression)
     case .functionCallExpr(let functionCall):
+      // A function call is simple enough to remove parentheses around it.
       // Immediately-invoked closures need parentheses for disambiguation.
       // Without parentheses, `let x = { 1 }()` parses as `let x = { 1 }` followed by `()` as a separate
-      // statement, rather than calling the closure. With parentheses: `let x = ({ 1 })())` works correctly.
+      // statement, rather than calling the closure. With parentheses: `let x = ({ 1 })()` works correctly.
       return !functionCall.calledExpression.is(ClosureExprSyntax.self)
     default:
       return false

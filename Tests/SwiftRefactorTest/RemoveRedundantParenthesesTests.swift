@@ -151,6 +151,27 @@ final class RemoveRedundantParenthesesTest: XCTestCase {
     try assertParenRemoval("(consume x).property", expected: "(consume x).property")
     try assertParenRemoval("(copy x).property", expected: "(copy x).property")
   }
+
+  func testRedundantParenthesesInControlFlow() throws {
+    // Control flow conditions
+    try assertParenRemoval("if (x == y) {}", expected: "if x == y {}")
+    try assertParenRemoval("while (x > 10) {}", expected: "while x > 10 {}")
+    try assertParenRemoval("guard (x && y) else { return }", expected: "guard x && y else { return }")
+    try assertParenRemoval("repeat {} while (x || y)", expected: "repeat {} while x || y")
+
+    // Switch statement
+    try assertParenRemoval("switch (x) { default: break }", expected: "switch x { default: break }")
+
+    // Return and Throw
+    try assertParenRemoval("return (x + y)", expected: "return x + y")
+    try assertParenRemoval("throw (e)", expected: "throw e")
+
+    // Compound expressions in conditions
+    try assertParenRemoval("if (x + y > z) {}", expected: "if x + y > z {}")
+
+    // Multiple conditions
+    try assertParenRemoval("if (x), (y) {}", expected: "if x, y {}")
+  }
 }
 
 // MARK: - Test Helper

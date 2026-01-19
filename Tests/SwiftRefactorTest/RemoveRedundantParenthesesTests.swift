@@ -137,6 +137,20 @@ final class RemoveRedundantParenthesesTest: XCTestCase {
     try assertParenRemoval("(Int).Type", expected: "Int.Type")
     try assertParenRemoval("(Double).Protocol", expected: "Double.Protocol")
   }
+
+  func testPreservesParenthesesForPostfixExpressions() throws {
+    // `try?` binds looser than member access.
+    // `(try? f()).description` operates on `Optional<T>`, while `try? f().description` operates on `T`.
+    try assertParenRemoval("(try? f()).description", expected: "(try? f()).description")
+    try assertParenRemoval("(try! f()).description", expected: "(try! f()).description")
+
+    // `await` also binds looser than member access.
+    try assertParenRemoval("(await f()).description", expected: "(await f()).description")
+
+    // `consume` and `copy` also bind looser than member access.
+    try assertParenRemoval("(consume x).property", expected: "(consume x).property")
+    try assertParenRemoval("(copy x).property", expected: "(copy x).property")
+  }
 }
 
 // MARK: - Test Helper

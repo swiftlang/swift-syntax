@@ -17,22 +17,32 @@ import SwiftSyntax
 #endif
 
 public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringProvider {
-  public static func refactor(syntax: FunctionDeclSyntax, in context: ()) throws -> VariableDeclSyntax {
-    guard syntax.signature.parameterClause.parameters.isEmpty,
+  public static func refactor(
+    syntax: FunctionDeclSyntax,
+    in context: ()
+  ) throws -> VariableDeclSyntax {
+
+    guard
+      syntax.signature.parameterClause.parameters.isEmpty,
       let body = syntax.body
-    else { throw RefactoringNotApplicableError("not a zero parameter function") }
+    else {
+      throw RefactoringNotApplicableError("not a zero parameter function")
+    }
+
+    // MARK: - Pattern
 
     let variableName = PatternSyntax(
-      IdentifierPatternSyntax(
-        identifier: syntax.name
-      )
+      IdentifierPatternSyntax(identifier: syntax.name)
     )
 
+    // MARK: - Type annotation
+
     let triviaFromParameters =
-      (syntax.signature.parameterClause.leftParen.trivia + syntax.signature.parameterClause.rightParen.trivia)
+      (syntax.signature.parameterClause.leftParen.trivia +
+       syntax.signature.parameterClause.rightParen.trivia)
       .droppingTrailingWhitespace
 
-    var variableType: TypeAnnotationSyntax?
+    let variableType: TypeAnnotationSyntax
 
     if let returnClause = syntax.signature.returnClause {
       variableType = TypeAnnotationSyntax(
@@ -62,17 +72,36 @@ public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringP
       accessorEffectSpecifiers = nil
     }
 
-    let getAccessor = AccessorDeclSyntax(
-      accessorSpecifier: .keyword(.get, trailingTrivia: .space),
-      effectSpecifiers: accessorEffectSpecifiers,
-      body: body
-    )
+    let accessorBlock: AccessorBlockSyntax
 
-    let accessorBlock = AccessorBlockSyntax(
-      leftBrace: body.leftBrace,
-      accessors: .accessors(AccessorDeclListSyntax([getAccessor])),
-      rightBrace: body.rightBrace
-    )
+    if let accessorEffectSpecifiers {
+      let indentedStatements = body.statements.map { $0.with(\.leadingTrivia, .spaces(4)) }
+      let getterBody = CodeBlockSyntax(
+        leftBrace: .leftBraceToken(trailingTrivia: .newline),
+        statements: CodeBlockItemListSyntax(indentedStatements),
+        rightBrace: .rightBraceToken(leadingTrivia: .newline + .spaces(2))
+      )
+
+      let getAccessor = AccessorDeclSyntax(
+        accessorSpecifier: .keyword(.get, trailingTrivia: .space),
+        effectSpecifiers: accessorEffectSpecifiers,
+        body: getterBody
+      ).with(\.leadingTrivia, .spaces(2))
+
+      accessorBlock = AccessorBlockSyntax(
+        leftBrace: .leftBraceToken(trailingTrivia: .newline),
+        accessors: .accessors(
+          AccessorDeclListSyntax([getAccessor])
+        ),
+        rightBrace: .rightBraceToken(leadingTrivia: .newline)
+      )
+    } else {
+      accessorBlock = AccessorBlockSyntax(
+        leftBrace: body.leftBrace,
+        accessors: .getter(body.statements),
+        rightBrace: body.rightBrace
+      )
+    }
 
     let bindingSpecifier = syntax.funcKeyword.detached.with(\.tokenKind, .keyword(.var))
 

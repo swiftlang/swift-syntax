@@ -71,33 +71,24 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
   }
 
   private static func canRemoveParentheses(around expr: ExprSyntax, in parent: Syntax?) -> Bool {
-    // Parentheses in initializer clauses (e.g., `let x = (a + b)`) are redundant,
-    // unless they enclose a closure in a condition context (to avoid parsing ambiguity).
-    if parent?.is(InitializerClauseSyntax.self) ?? false {
-      let isInCondition = parent?.ancestorOrSelf(mapping: { $0.as(ConditionElementSyntax.self) }) != nil
-      if isInCondition && (expr.is(ClosureExprSyntax.self) || hasTrailingClosure(expr)) {
-        return false
-      }
-      return true
-    }
-
-    guard isSimpleExpression(expr) else {
-      return false
-    }
-
+    // Safety Check: Ambiguous Closures
     // Closures and trailing closures inside conditions need parentheses to avoid ambiguity.
     // e.g. `if ({ true }) == ({ true }) {}` or `if (call { true }) == false {}`
     // This applies to if/while/guard (ConditionElementSyntax) and repeat-while (RepeatStmtSyntax).
+    // It also applies to InitializerClauseSyntax if it is inside a condition (e.g. `if let x = ({...})`).
     let isInCondition =
-      parent?.ancestorOrSelf(mapping: { $0.as(ConditionElementSyntax.self) }) != nil
-      || parent?.ancestorOrSelf(mapping: { $0.as(RepeatStmtSyntax.self) }) != nil
-    if isInCondition {
-      if expr.is(ClosureExprSyntax.self) || hasTrailingClosure(expr) {
-        return false
-      }
+      parent?.ancestorOrSelf(mapping: {
+        if $0.is(ConditionElementSyntax.self) || $0.is(RepeatStmtSyntax.self) {
+          return $0
+        }
+        return nil
+      }) != nil
+
+    if isInCondition && (expr.is(ClosureExprSyntax.self) || hasTrailingClosure(expr)) {
+      return false
     }
 
-    // Immediately-invoked closures need parentheses for disambiguation.
+    // Safety Check: Immediately-invoked closures
     if let functionCall = parent?.as(FunctionCallExprSyntax.self),
       functionCall.calledExpression.as(TupleExprSyntax.self) != nil,
       expr.is(ClosureExprSyntax.self)
@@ -105,6 +96,24 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
       return false
     }
 
+    // Allowlist: Parents where parentheses are always redundant (unless blocked above)
+    if let parent = parent,
+      parent.is(InitializerClauseSyntax.self)
+        || parent.is(ConditionElementSyntax.self)
+        || parent.is(ReturnStmtSyntax.self)
+        || parent.is(ThrowStmtSyntax.self)
+        || parent.is(SwitchExprSyntax.self)
+        || parent.is(RepeatStmtSyntax.self)
+    {
+      return true
+    }
+
+    // Fallback: Allow if the expression itself is "simple"
+    guard isSimpleExpression(expr) else {
+      return false
+    }
+
+    // Safety Check: Postfix Precedence
     // Expressions like `try`, `await`, `consume`, and `copy` bind looser than postfix expressions.
     // e.g., `(try? f()).description` is different from `try? f().description`.
     // The former accesses `.description` on the Optional result, the latter on the unwrapped value.

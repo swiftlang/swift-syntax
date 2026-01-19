@@ -2172,7 +2172,7 @@ public let DECL_NODES: [Node] = [
     base: .syntax,
     nameForDiagnostics: nil,
     documentation: """
-      A clause that specifies the return type.
+      A clause that specifies the return type, typically of a function or subscript.
 
       For example, the `-> Int` part in  
       ```swift

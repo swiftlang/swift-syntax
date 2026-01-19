@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-public import SwiftSyntax
+@_spi(RawSyntax) public import SwiftSyntax
 #else
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 #endif
 
 /// Removes redundant parentheses from expressions.

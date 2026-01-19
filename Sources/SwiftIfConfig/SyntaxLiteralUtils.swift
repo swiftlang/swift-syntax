@@ -10,7 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 
 extension BooleanLiteralExprSyntax {
   var literalValue: Bool {
@@ -22,14 +22,6 @@ extension TupleExprSyntax {
   /// Whether this tuple is a parenthesized expression, e.g., (x).
   var isParentheses: Bool {
     return elements.singleUnlabeledExpression != nil
-  }
-}
-
-extension LabeledExprListSyntax {
-  /// If this list is a single, unlabeled expression, return it.
-  var singleUnlabeledExpression: ExprSyntax? {
-    guard count == 1, let element = first, element.label == nil else { return nil }
-    return element.expression
   }
 }
 

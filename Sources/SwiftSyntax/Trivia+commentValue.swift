@@ -11,7 +11,13 @@
 //===----------------------------------------------------------------------===//
 
 extension Trivia {
-  /// The contents of the last doc comment piece with any comment markers removed and indentation whitespace stripped.
+  /// The normalized contents of the documentation comment in this trivia.
+  ///
+  /// Returns the content of the last documentation comment block, which semantically represents
+  /// "the one and only" documentation comment associated with this trivia. Comment markers are
+  /// removed, common indentation is stripped, and line endings are normalized to `\n`.
+  ///
+  /// Returns `nil` if no documentation comment is present.
   public var docCommentValue: String? {
     var comments: [Substring] = []
     var currentLineComments: [String] = []  // Reset line comments when encountering a block comment

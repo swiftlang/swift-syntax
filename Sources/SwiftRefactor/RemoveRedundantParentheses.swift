@@ -105,7 +105,35 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
       return false
     }
 
+    // Expressions like `try`, `await`, `consume`, and `copy` bind looser than postfix expressions.
+    // e.g., `(try? f()).description` is different from `try? f().description`.
+    // The former accesses `.description` on the Optional result, the latter on the unwrapped value.
+    if isPostfixParent(parent) {
+      switch expr.as(ExprSyntaxEnum.self) {
+      case .tryExpr, .awaitExpr, .unsafeExpr, .consumeExpr, .copyExpr:
+        return false
+      default:
+        break
+      }
+    }
+
     return true
+  }
+
+  /// Returns true if parent is a postfix expression where the tuple is the base.
+  private static func isPostfixParent(_ parent: Syntax?) -> Bool {
+    switch parent?.as(SyntaxEnum.self) {
+    case .memberAccessExpr(let memberAccess):
+      return memberAccess.base != nil
+    case .subscriptCallExpr(let subscriptCall):
+      return subscriptCall.calledExpression.is(TupleExprSyntax.self)
+    case .functionCallExpr(let functionCall):
+      return functionCall.calledExpression.is(TupleExprSyntax.self)
+    case .postfixOperatorExpr:
+      return true
+    default:
+      return false
+    }
   }
 
   private static func hasTrailingClosure(_ expr: ExprSyntax) -> Bool {

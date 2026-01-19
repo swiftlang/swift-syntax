@@ -14,14 +14,14 @@
 internal import SwiftDiagnostics
 internal import SwiftOperators
 @_spi(MacroExpansion) internal import SwiftParser
-public import SwiftSyntax
+@_spi(RawSyntax) public import SwiftSyntax
 internal import SwiftSyntaxBuilder
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) public import SwiftSyntaxMacros
 #else
 import SwiftDiagnostics
 import SwiftOperators
 @_spi(MacroExpansion) import SwiftParser
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 import SwiftSyntaxBuilder
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeature) import SwiftSyntaxMacros
 #endif
@@ -533,6 +533,7 @@ public class AttributeRemover: SyntaxRewriter {
   ///   If this closure returns `true` for an attribute, that attribute will be removed.
   public init(removingWhere predicate: @escaping (AttributeSyntax) -> Bool) {
     self.predicate = predicate
+    super.init()
   }
 
   public override func visit(_ node: AttributeListSyntax) -> AttributeListSyntax {
@@ -611,31 +612,9 @@ public class AttributeRemover: SyntaxRewriter {
   /// - Parameter node: The syntax node receiving the accumulated trivia.
   /// - Returns: The modified syntax node with the prepended trivia.
   private func prependAndClearAccumulatedTrivia<T: SyntaxProtocol>(to syntaxNode: T) -> T {
+    guard !triviaToAttachToNextToken.isEmpty else { return syntaxNode }
     defer { triviaToAttachToNextToken = Trivia() }
     return syntaxNode.with(\.leadingTrivia, triviaToAttachToNextToken + syntaxNode.leadingTrivia)
-  }
-}
-
-private extension Trivia {
-  func trimmingPrefix(
-    while predicate: (TriviaPiece) -> Bool
-  ) -> Trivia {
-    Trivia(pieces: self.drop(while: predicate))
-  }
-
-  func trimmingSuffix(
-    while predicate: (TriviaPiece) -> Bool
-  ) -> Trivia {
-    Trivia(
-      pieces: self[...]
-        .reversed()
-        .drop(while: predicate)
-        .reversed()
-    )
-  }
-
-  var startsWithNewline: Bool {
-    self.first?.isNewline ?? false
   }
 }
 

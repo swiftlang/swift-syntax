@@ -28,7 +28,7 @@ public struct Identifier: Equatable, Hashable, Sendable {
 
   public init?(_ token: TokenSyntax) {
     switch token.tokenKind {
-    case .identifier, .keyword(.self), .keyword(.Self):
+    case .identifier, .keyword(.Any), .keyword(.self), .keyword(.Self), .keyword(.Sendable):
       self.raw = RawIdentifier(token.tokenView.rawText)
       self.arena = token.raw.arenaReference
     case .dollarIdentifier(let dollarIdentifierStr):

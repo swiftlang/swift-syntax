@@ -12,37 +12,29 @@
 
 #if compiler(>=6)
 public import SwiftSyntax
+public import SwiftBasicFormat
 #else
 import SwiftSyntax
+import SwiftBasicFormat
 #endif
 
 public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringProvider {
-  public static func refactor(
-    syntax: FunctionDeclSyntax,
-    in context: ()
-  ) throws -> VariableDeclSyntax {
-
-    guard
-      syntax.signature.parameterClause.parameters.isEmpty,
+  public static func refactor(syntax: FunctionDeclSyntax, in context: ()) throws -> VariableDeclSyntax {
+    guard syntax.signature.parameterClause.parameters.isEmpty,
       let body = syntax.body
-    else {
-      throw RefactoringNotApplicableError("not a zero parameter function")
-    }
-
-    // MARK: - Pattern
+    else { throw RefactoringNotApplicableError("not a zero parameter function") }
 
     let variableName = PatternSyntax(
-      IdentifierPatternSyntax(identifier: syntax.name)
+      IdentifierPatternSyntax(
+        identifier: syntax.name
+      )
     )
 
-    // MARK: - Type annotation
-
     let triviaFromParameters =
-      (syntax.signature.parameterClause.leftParen.trivia +
-       syntax.signature.parameterClause.rightParen.trivia)
+      (syntax.signature.parameterClause.leftParen.trivia + syntax.signature.parameterClause.rightParen.trivia)
       .droppingTrailingWhitespace
 
-    let variableType: TypeAnnotationSyntax
+    var variableType: TypeAnnotationSyntax?
 
     if let returnClause = syntax.signature.returnClause {
       variableType = TypeAnnotationSyntax(
@@ -72,21 +64,23 @@ public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringP
       accessorEffectSpecifiers = nil
     }
 
+    let indentation = BasicFormat.inferIndentation(of: syntax) ?? .spaces(2)
+
     let accessorBlock: AccessorBlockSyntax
 
     if let accessorEffectSpecifiers {
-      let indentedStatements = body.statements.map { $0.with(\.leadingTrivia, .spaces(4)) }
+      let indentedStatements = body.statements.map { $0.with(\.leadingTrivia, $0.leadingTrivia + indentation) }
       let getterBody = CodeBlockSyntax(
-        leftBrace: .leftBraceToken(trailingTrivia: .newline),
+        leftBrace: body.leftBrace,
         statements: CodeBlockItemListSyntax(indentedStatements),
-        rightBrace: .rightBraceToken(leadingTrivia: .newline + .spaces(2))
+        rightBrace: .rightBraceToken(leadingTrivia: .newline + indentation)
       )
 
       let getAccessor = AccessorDeclSyntax(
         accessorSpecifier: .keyword(.get, trailingTrivia: .space),
         effectSpecifiers: accessorEffectSpecifiers,
         body: getterBody
-      ).with(\.leadingTrivia, .spaces(2))
+      ).with(\.leadingTrivia, indentation)
 
       accessorBlock = AccessorBlockSyntax(
         leftBrace: .leftBraceToken(trailingTrivia: .newline),

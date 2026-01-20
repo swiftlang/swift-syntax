@@ -399,22 +399,12 @@ public struct RepeatStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSyn
 
 // MARK: - ReturnClauseSyntax
 
-///   A clause that specifies the return type of a function or closure.
+/// A clause that specifies the return type, typically of a function or subscript.
 /// 
-///   Written as:
-///   ```swift
-///   -> <type>
-///   ```
-/// 
-///   ### Examples
-/// 
-///   ```swift
-///   func f() -> Int { }
-///   ```
-/// 
-///   ```swift
-///   let g: () -> String = { "hello" }
-///   ```
+/// For example, the `-> Int` part in  
+/// ```swift
+/// func f() -> Int { }
+/// ```
 ///
 /// ### Children
 /// 
@@ -545,16 +535,16 @@ public struct ReturnClauseSyntax: SyntaxProtocol, SyntaxHashable, _LeafSyntaxNod
 
 // MARK: - ReturnStmtSyntax
 
-///    A statement that exits a function or closure and optionally returns a value.
+/// A statement that exits a function or closure and optionally returns a value.
 /// 
-///    Written as:
-///     ```swift
-///       return
-///     ```
+/// Written as:
+/// ```swift
+/// return
+/// ```
 /// 
-///     ```swift
-///       return <expr>
-///     ```
+/// ```swift
+/// return <expr>
+/// ```
 ///
 /// ### Children
 /// 

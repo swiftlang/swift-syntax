@@ -355,13 +355,13 @@ public struct ThenStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynta
 
 // MARK: - ThrowStmtSyntax
 
-///    A statement that throws an error.
-///    
-///    Written as:
-///    
-///    ```swift
-///      throw <expr>
-///    ```
+/// A statement that throws an error.
+/// 
+/// Written as:
+/// 
+/// ```swift
+/// throw <expr>
+/// ```
 ///
 /// ### Children
 /// 
@@ -2179,11 +2179,6 @@ public struct TypeAliasDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
 /// ```swift
 /// let count: Int
 /// ```
-/// 
-/// ```swift
-/// func greet(name: String) {}
-/// ```
-/// 
 /// ```swift
 /// let point: (x: Int, y: Int)
 /// ```
@@ -2515,15 +2510,9 @@ public struct TypeExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynta
 
 // MARK: - TypeInitializerClauseSyntax
 
-/// A clause that specifies the underlying type of a type declaration.
+/// A clause that specifies the underlying type of `typealias` or `associatedtype` declaration.
 /// 
-/// Written as:
-/// ```swift
-/// = <type>
-/// ```
-/// 
-/// ### Examples
-/// 
+/// For example, the `= Int` part in 
 /// ```swift
 /// typealias MyInt = Int
 /// ```

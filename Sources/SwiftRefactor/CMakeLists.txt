@@ -16,6 +16,7 @@ add_swift_syntax_library(SwiftRefactor
   ConvertZeroParameterFunctionToComputedProperty.swift
   DeclModifierRemover.swift
   ExpandEditorPlaceholder.swift
+  ExpandTernaryExpr.swift
   FormatRawStringLiteral.swift
   IntegerLiteralUtilities.swift
   MigrateToNewIfLetSyntax.swift

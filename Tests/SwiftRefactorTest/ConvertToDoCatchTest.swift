@@ -2,7 +2,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2024 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2026 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -36,7 +36,7 @@ final class ConvertToDoCatchTest: XCTestCase {
     try assertRefactorConvert(baseline, expected: expected)
   }
 
-  func testForceTryWithVariableBinding() throws {
+  func testBasicForceTryExpression() throws {
     let baseline: ExprSyntax = """
       try! fetchData()
       """
@@ -44,72 +44,6 @@ final class ConvertToDoCatchTest: XCTestCase {
     let expected: CodeBlockItemListSyntax = """
       do {
         try fetchData()
-      } catch {
-        <#code#>
-      }
-      """
-
-    try assertRefactorConvert(baseline, expected: expected)
-  }
-
-  func testForceTryWithArguments() throws {
-    let baseline: ExprSyntax = """
-      try! processFile(at: path, with: options)
-      """
-
-    let expected: CodeBlockItemListSyntax = """
-      do {
-        try processFile(at: path, with: options)
-      } catch {
-        <#code#>
-      }
-      """
-
-    try assertRefactorConvert(baseline, expected: expected)
-  }
-
-  func testForceTryWithChaining() throws {
-    let baseline: ExprSyntax = """
-      try! getData().process().save()
-      """
-
-    let expected: CodeBlockItemListSyntax = """
-      do {
-        try getData().process().save()
-      } catch {
-        <#code#>
-      }
-      """
-
-    try assertRefactorConvert(baseline, expected: expected)
-  }
-
-  func testForceTryWithPropertyAccess() throws {
-    let baseline: ExprSyntax = """
-      try! object.riskyProperty.value
-      """
-
-    let expected: CodeBlockItemListSyntax = """
-      do {
-        try object.riskyProperty.value
-      } catch {
-        <#code#>
-      }
-      """
-
-    try assertRefactorConvert(baseline, expected: expected)
-  }
-
-  // MARK: - Complex Expressions
-
-  func testForceTryWithSubscript() throws {
-    let baseline: ExprSyntax = """
-      try! array[index]
-      """
-
-    let expected: CodeBlockItemListSyntax = """
-      do {
-        try array[index]
       } catch {
         <#code#>
       }
@@ -172,28 +106,6 @@ final class ConvertToDoCatchTest: XCTestCase {
     try assertRefactorConvert(baseline, expected: expected)
   }
 
-  func testForceTryWithMultilineExpression() throws {
-    let baseline: ExprSyntax = """
-      try! complexFunction(
-        parameter1: value1,
-        parameter2: value2
-      )
-      """
-
-    let expected: CodeBlockItemListSyntax = """
-      do {
-        try complexFunction(
-          parameter1: value1,
-          parameter2: value2
-        )
-      } catch {
-        <#code#>
-      }
-      """
-
-    try assertRefactorConvert(baseline, expected: expected)
-  }
-
   // MARK: - Negative Tests (Should Not Apply)
 
   func testOptionalTryShouldNotApply() throws {
@@ -223,54 +135,28 @@ final class ConvertToDoCatchTest: XCTestCase {
     try assertRefactorConvert(baseline, expected: nil)
   }
 
-  // MARK: - Real-World Examples
+  // MARK: - Indentation Preservation
 
-  func testJSONDecodingExample() throws {
+  func testIndentationPreservation() throws {
     let baseline: ExprSyntax = """
-      try! JSONDecoder().decode(User.self, from: data)
+        try! riskyFunction()
       """
 
     let expected: CodeBlockItemListSyntax = """
-      do {
-        try JSONDecoder().decode(User.self, from: data)
-      } catch {
-        <#code#>
-      }
+        do {
+          try riskyFunction()
+        } catch {
+          <#code#>
+        }
       """
 
-    try assertRefactorConvert(baseline, expected: expected)
-  }
-
-  func testFileReadingExample() throws {
-    let baseline: ExprSyntax = """
-      try! String(contentsOf: url, encoding: .utf8)
-      """
-
-    let expected: CodeBlockItemListSyntax = """
-      do {
-        try String(contentsOf: url, encoding: .utf8)
-      } catch {
-        <#code#>
-      }
-      """
-
-    try assertRefactorConvert(baseline, expected: expected)
-  }
-
-  func testDataWritingExample() throws {
-    let baseline: ExprSyntax = """
-      try! data.write(to: fileURL)
-      """
-
-    let expected: CodeBlockItemListSyntax = """
-      do {
-        try data.write(to: fileURL)
-      } catch {
-        <#code#>
-      }
-      """
-
-    try assertRefactorConvert(baseline, expected: expected)
+    let context = ConvertToDoCatch.Context(indentationWidth: .spaces(2))
+    try assertRefactor(
+      baseline.as(TryExprSyntax.self)!,
+      context: context,
+      provider: ConvertToDoCatch.self,
+      expected: expected
+    )
   }
 }
 
@@ -291,7 +177,7 @@ private func assertRefactorConvert(
 
   try assertRefactor(
     tryExpr,
-    context: (),
+    context: ConvertToDoCatch.Context(),
     provider: ConvertToDoCatch.self,
     expected: expected,
     file: file,

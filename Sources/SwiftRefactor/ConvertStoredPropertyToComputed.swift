@@ -18,10 +18,10 @@ import SwiftSyntax
 
 public struct ConvertStoredPropertyToComputed: SyntaxRefactoringProvider {
   public struct Context {
-    public let type:TypeSyntax?
+    public let type: TypeSyntax?
 
-    public init(type: TypeSyntax? = nil){
-      self.type=type
+    public init(type: TypeSyntax? = nil) {
+      self.type = type
     }
   }
   public static func refactor(syntax: VariableDeclSyntax, in context: Context) throws -> VariableDeclSyntax {

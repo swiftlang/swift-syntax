@@ -304,7 +304,7 @@ private func assertRefactorConvert(
 ) throws {
   try assertRefactor(
     callDecl,
-    context: (),
+    context: ConvertStoredPropertyToComputed.Context(),
     provider: ConvertStoredPropertyToComputed.self,
     expected: expected,
     file: file,
@@ -321,7 +321,10 @@ private func assertRefactorStructConvert(
 
   let structCallDecl = try XCTUnwrap(callDecl.as(StructDeclSyntax.self))
   let variable = try XCTUnwrap(structCallDecl.memberBlock.members.first?.decl.as(VariableDeclSyntax.self))
-  let refactored = try ConvertStoredPropertyToComputed.refactor(syntax: variable, in: ())
+  let refactored = try ConvertStoredPropertyToComputed.refactor(
+    syntax: variable,
+    in: ConvertStoredPropertyToComputed.Context()
+  )
 
   let members = MemberBlockItemListSyntax {
     MemberBlockItemSyntax(decl: DeclSyntax(refactored))

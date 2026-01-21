@@ -15,6 +15,7 @@ add_swift_syntax_library(SwiftRefactor
   ConvertStoredPropertyToComputed.swift
   ConvertToDoCatch.swift
   ConvertZeroParameterFunctionToComputedProperty.swift
+  DeclModifierRemover.swift
   ExpandEditorPlaceholder.swift
   FormatRawStringLiteral.swift
   IntegerLiteralUtilities.swift

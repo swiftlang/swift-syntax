@@ -215,3 +215,27 @@ extension RawTriviaPiece: CustomDebugStringConvertible {
     TriviaPiece(raw: self).debugDescription
   }
 }
+
+@_spi(RawSyntax)
+public extension Trivia {
+  func trimmingPrefix(
+    while predicate: (TriviaPiece) -> Bool
+  ) -> Trivia {
+    Trivia(pieces: self.drop(while: predicate))
+  }
+
+  func trimmingSuffix(
+    while predicate: (TriviaPiece) -> Bool
+  ) -> Trivia {
+    Trivia(
+      pieces: self[...]
+        .reversed()
+        .drop(while: predicate)
+        .reversed()
+    )
+  }
+
+  var startsWithNewline: Bool {
+    self.first?.isNewline ?? false
+  }
+}

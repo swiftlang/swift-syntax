@@ -404,7 +404,7 @@ public class EvaluateTests: XCTestCase {
       .unparsed,
       diagnostics: [
         DiagnosticSpec(
-          message: "'swift' requires a single unlabeled argument for the version comparison (>= or <= a version)",
+          message: "'swift' requires a single unlabeled argument for the version comparison (>= or < a version)",
           line: 1,
           column: 1,
           severity: .error

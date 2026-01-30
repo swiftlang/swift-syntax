@@ -69,10 +69,10 @@ public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringP
     let accessorBlock: AccessorBlockSyntax
 
     if let accessorEffectSpecifiers {
-      let indentedStatements = body.statements.map { $0.with(\.leadingTrivia, $0.leadingTrivia + indentation) }
+      let indentedStatements = body.statements.indented(by: indentation)
       let getterBody = CodeBlockSyntax(
         leftBrace: body.leftBrace,
-        statements: CodeBlockItemListSyntax(indentedStatements),
+        statements: indentedStatements,
         rightBrace: .rightBraceToken(leadingTrivia: .newline + indentation)
       )
 
@@ -84,9 +84,7 @@ public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringP
 
       accessorBlock = AccessorBlockSyntax(
         leftBrace: .leftBraceToken(trailingTrivia: .newline),
-        accessors: .accessors(
-          AccessorDeclListSyntax([getAccessor])
-        ),
+        accessors: .accessors(AccessorDeclListSyntax([getAccessor])),
         rightBrace: .rightBraceToken(leadingTrivia: .newline)
       )
     } else {

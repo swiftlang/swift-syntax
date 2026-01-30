@@ -261,6 +261,50 @@ final class ConvertZeroParameterFunctionToComputedPropertyTests: XCTestCase {
     
     try assertRefactorConvert(baseline, expected: expected)
   }
+
+  func testAsyncFunctionWithMultiLineStatement() throws {
+    let baseline: DeclSyntax = """
+      func foo() async {
+        bar(
+          1
+        )
+      }
+      """
+    
+    let expected: DeclSyntax = """
+      var foo: Void {
+        get async {
+          bar(
+            1
+          )
+        }
+      }
+      """
+    
+    try assertRefactorConvert(baseline, expected: expected)
+  }
+
+  func testAsyncThrowsFunctionWithMultipleStatements() throws {
+    let baseline: DeclSyntax = """
+      func complex() async throws -> String {
+        let x = try await fetch()
+        let y = process(x)
+        return y
+      }
+      """
+    
+    let expected: DeclSyntax = """
+      var complex: String {
+        get async throws {
+          let x = try await fetch()
+          let y = process(x)
+          return y
+        }
+      }
+      """
+    
+    try assertRefactorConvert(baseline, expected: expected)
+  }
 }
 
 private func assertRefactorConvert(

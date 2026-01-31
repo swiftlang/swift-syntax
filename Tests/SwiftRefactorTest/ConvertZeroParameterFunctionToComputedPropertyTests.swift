@@ -198,7 +198,7 @@ final class ConvertZeroParameterFunctionToComputedPropertyTests: XCTestCase {
         try await someCall()
       }
       """
-    
+
     let expected: DeclSyntax = """
       var foo: Int {
         get async throws {
@@ -206,17 +206,17 @@ final class ConvertZeroParameterFunctionToComputedPropertyTests: XCTestCase {
         }
       }
       """
-    
+
     try assertRefactorConvert(baseline, expected: expected)
   }
-  
+
   func testAsyncOnlyFunction() throws {
     let baseline: DeclSyntax = """
       func bar() async -> String {
         await getValue()
       }
       """
-    
+
     let expected: DeclSyntax = """
       var bar: String {
         get async {
@@ -224,17 +224,17 @@ final class ConvertZeroParameterFunctionToComputedPropertyTests: XCTestCase {
         }
       }
       """
-    
+
     try assertRefactorConvert(baseline, expected: expected)
   }
-  
+
   func testThrowsOnlyFunction() throws {
     let baseline: DeclSyntax = """
       func baz() throws -> Bool {
         try riskyOperation()
       }
       """
-    
+
     let expected: DeclSyntax = """
       var baz: Bool {
         get throws {
@@ -242,23 +242,23 @@ final class ConvertZeroParameterFunctionToComputedPropertyTests: XCTestCase {
         }
       }
       """
-    
+
     try assertRefactorConvert(baseline, expected: expected)
   }
-  
+
   func testSynchronousFunction() throws {
     let baseline: DeclSyntax = """
       func qux() -> Int {
         return 42
       }
       """
-    
+
     let expected: DeclSyntax = """
       var qux: Int {
         return 42
       }
       """
-    
+
     try assertRefactorConvert(baseline, expected: expected)
   }
 
@@ -270,7 +270,7 @@ final class ConvertZeroParameterFunctionToComputedPropertyTests: XCTestCase {
         )
       }
       """
-    
+
     let expected: DeclSyntax = """
       var foo: Void {
         get async {
@@ -280,7 +280,7 @@ final class ConvertZeroParameterFunctionToComputedPropertyTests: XCTestCase {
         }
       }
       """
-    
+
     try assertRefactorConvert(baseline, expected: expected)
   }
 
@@ -292,7 +292,7 @@ final class ConvertZeroParameterFunctionToComputedPropertyTests: XCTestCase {
         return y
       }
       """
-    
+
     let expected: DeclSyntax = """
       var complex: String {
         get async throws {
@@ -302,7 +302,7 @@ final class ConvertZeroParameterFunctionToComputedPropertyTests: XCTestCase {
         }
       }
       """
-    
+
     try assertRefactorConvert(baseline, expected: expected)
   }
 }

@@ -294,17 +294,41 @@ final class ConvertStoredPropertyToComputedTest: XCTestCase {
 
     try assertRefactorStructConvert(baseline, expected: expected)
   }
+
+  func testRefactoringStoredPropertyMissingTypeAnnotation() throws {
+    let baseline: DeclSyntax = """
+        var foo = "abc"
+      """
+    let expected: DeclSyntax = """
+        var foo: <#Type#> {"abc"}
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
+
+  func testRefactoringStoredPropertyWithTypeAnnotation() throws {
+    let baseline: DeclSyntax = """
+        var foo = "abc"
+      """
+    let expected: DeclSyntax = """
+        var foo: String {"abc"}
+      """
+
+    let context = ConvertStoredPropertyToComputed.Context(type: TypeSyntax(stringLiteral: "String"))
+    try assertRefactorConvert(baseline, expected: expected, context: context)
+  }
 }
 
 private func assertRefactorConvert(
   _ callDecl: DeclSyntax,
   expected: DeclSyntax?,
+  context: ConvertStoredPropertyToComputed.Context = .init(),
   file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
   try assertRefactor(
     callDecl,
-    context: ConvertStoredPropertyToComputed.Context(),
+    context: context,
     provider: ConvertStoredPropertyToComputed.self,
     expected: expected,
     file: file,

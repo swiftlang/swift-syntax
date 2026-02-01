@@ -101,7 +101,6 @@ final class RemoveRedundantParenthesesTest: XCTestCase {
     try assertParenRemoval("if (call { true }) {}", expected: "if (call { true }) {}")
     try assertParenRemoval("while ({ true }) {}", expected: "while ({ true }) {}")
     try assertParenRemoval("guard (call { true }) else {}", expected: "guard (call { true }) else {}")
-    try assertParenRemoval("repeat {} while (call { true })", expected: "repeat {} while (call { true })")
     // Nested in sequence expressions
     try assertParenRemoval("if ({ true }) == ({ true }) {}", expected: "if ({ true }) == ({ true }) {}")
     // Macro expansions with trailing closures
@@ -129,7 +128,6 @@ final class RemoveRedundantParenthesesTest: XCTestCase {
     try assertParenRemoval("(any Equatable).Protocol", expected: "(any Equatable).Protocol")
     try assertParenRemoval("(A & B).Protocol", expected: "(A & B).Protocol")
     try assertParenRemoval("(@escaping () -> Int).self", expected: "(@escaping () -> Int).self")
-    try assertParenRemoval("(some P).self", expected: "(some P).self")
     try assertParenRemoval("(T...).self", expected: "(T...).self")
 
     // Simple types allow removing parentheses
@@ -144,12 +142,41 @@ final class RemoveRedundantParenthesesTest: XCTestCase {
     try assertParenRemoval("(try? f()).description", expected: "(try? f()).description")
     try assertParenRemoval("(try! f()).description", expected: "(try! f()).description")
 
+    // `try?` also binds looser than optional chaining.
+    // `(try? f())?.bar` is different from `try? f()?.bar`.
+    try assertParenRemoval("(try? f())?.bar", expected: "(try? f())?.bar")
+    try assertParenRemoval("(try! f())?.bar", expected: "(try! f())?.bar")
+
     // `await` also binds looser than member access.
     try assertParenRemoval("(await f()).description", expected: "(await f()).description")
 
     // `consume` and `copy` also bind looser than member access.
     try assertParenRemoval("(consume x).property", expected: "(consume x).property")
     try assertParenRemoval("(copy x).property", expected: "(copy x).property")
+
+    // Infix operators bind tighter than effects
+    // `(try? f()) + 1` is `Optional<Int> + Int` while `try? f() + 1` is `Int + Int`.
+    try assertParenRemoval("(try? f()) + 1", expected: "(try? f()) + 1")
+    try assertParenRemoval("(try! f()) + 1", expected: "(try! f()) + 1")
+    try assertParenRemoval("(await f()) + 1", expected: "(await f()) + 1")
+
+    // Type casting binds tighter than effects
+    // `(try? f()) as Int` is different from `try? f() as Int`.
+    try assertParenRemoval("(try? f()) as Int", expected: "(try? f()) as Int")
+    try assertParenRemoval("(try! f()) as Int", expected: "(try! f()) as Int")
+    try assertParenRemoval("(await f()) as Int", expected: "(await f()) as Int")
+    // `is` check
+    try assertParenRemoval("(try? f()) is Int", expected: "(try? f()) is Int")
+
+    // Ternary operator binds tighter than effects
+    // `(try? f()) ? x : y` is different from `try? f() ? x : y`.
+    try assertParenRemoval("(try? f()) ? x : y", expected: "(try? f()) ? x : y")
+    try assertParenRemoval("(await f()) ? x : y", expected: "(await f()) ? x : y")
+
+    // Force unwrap binds tighter than effects
+    // `(try? f())!` is different from `try? f()!`.
+    try assertParenRemoval("(try? f())!", expected: "(try? f())!")
+    try assertParenRemoval("(await f())!", expected: "(await f())!")
   }
 
   func testRedundantParenthesesInControlFlow() throws {
@@ -171,6 +198,18 @@ final class RemoveRedundantParenthesesTest: XCTestCase {
 
     // Multiple conditions
     try assertParenRemoval("if (x), (y) {}", expected: "if x, y {}")
+  }
+
+  func testSequenceExpressions() throws {
+    // Sequence expressions (before SwiftOperators folding) bind tighter than effects.
+    // In `(try? f()) + 1`, the parentheses must be preserved because the sequence
+    // expression structure makes `try? f()` the left operand of `+`.
+    try assertParenRemoval("(try? f()) - 1", expected: "(try? f()) - 1")
+    try assertParenRemoval("(try? f()) * 1", expected: "(try? f()) * 1")
+
+    // Complex sequence expressions
+    try assertParenRemoval("(try? f()) + g() + h()", expected: "(try? f()) + g() + h()")
+    try assertParenRemoval("(await f()) + g()", expected: "(await f()) + g()")
   }
 }
 

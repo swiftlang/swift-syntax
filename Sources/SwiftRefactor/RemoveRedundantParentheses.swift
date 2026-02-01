@@ -27,13 +27,8 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
     syntax: TupleExprSyntax,
     in context: Void
   ) -> ExprSyntax {
-    // If the tuple has any unexpected nodes, it's not a simple parenthetical expression
-    // we should be refactoring (e.g., parsing recovery might have put some parts in unexpected nodes).
-    guard syntax.unexpectedBeforeLeftParen == nil,
-      syntax.unexpectedBetweenLeftParenAndElements == nil,
-      syntax.unexpectedBetweenElementsAndRightParen == nil,
-      syntax.unexpectedAfterRightParen == nil
-    else {
+    // If the syntax tree has errors, we should not attempt to refactor it.
+    guard !syntax.hasError else {
       return ExprSyntax(syntax)
     }
 
@@ -49,7 +44,7 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
     }
 
     // Case 2: Parentheses around simple expressions
-    if canRemoveParentheses(around: innerExpr, in: syntax.parent) {
+    if canRemoveParentheses(tuple: syntax, around: innerExpr, in: syntax.parent) {
       return preserveTrivia(from: syntax, to: innerExpr)
     }
 
@@ -70,7 +65,8 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
       .with(\.trailingTrivia, trailingTrivia)
   }
 
-  private static func canRemoveParentheses(around expr: ExprSyntax, in parent: Syntax?) -> Bool {
+  private static func canRemoveParentheses(tuple: TupleExprSyntax, around expr: ExprSyntax, in parent: Syntax?) -> Bool
+  {
     // Safety Check: Ambiguous Closures
     // Closures and trailing closures inside conditions need parentheses to avoid ambiguity.
     // e.g. `if ({ true }) == ({ true }) {}` or `if (call { true }) == false {}`
@@ -96,16 +92,20 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
       return false
     }
 
-    // Allowlist: Parents where parentheses are always redundant (unless blocked above)
-    if let parent = parent,
-      parent.is(InitializerClauseSyntax.self)
-        || parent.is(ConditionElementSyntax.self)
-        || parent.is(ReturnStmtSyntax.self)
-        || parent.is(ThrowStmtSyntax.self)
-        || parent.is(SwitchExprSyntax.self)
-        || parent.is(RepeatStmtSyntax.self)
-    {
-      return true
+    // Allowlist: Check keyPathInParent to explicitly know that this expression
+    // occurs in a place where the parentheses are redundant.
+    if let keyPath = tuple.keyPathInParent {
+      switch keyPath {
+      case \InitializerClauseSyntax.value,
+        \ConditionElementSyntax.condition,
+        \ReturnStmtSyntax.expression,
+        \ThrowStmtSyntax.expression,
+        \SwitchExprSyntax.subject,
+        \RepeatStmtSyntax.condition:
+        return true
+      default:
+        break
+      }
     }
 
     // Fallback: Allow if the expression itself is "simple"
@@ -113,11 +113,12 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
       return false
     }
 
-    // Safety Check: Postfix Precedence
-    // Expressions like `try`, `await`, `consume`, and `copy` bind looser than postfix expressions.
+    // Safety Check: Postfix and Binary Precedence
+    // Expressions like `try`, `await`, `consume`, and `copy` bind looser than postfix and infix expressions.
     // e.g., `(try? f()).description` is different from `try? f().description`.
     // The former accesses `.description` on the Optional result, the latter on the unwrapped value.
-    if isPostfixParent(parent) {
+    // Similarly, `(try? f()) + 1` is different from `try? f() + 1` (Int? + Int vs Int + Int).
+    if parentHasTighterBindingThanEffect(parent) {
       switch expr.as(ExprSyntaxEnum.self) {
       case .tryExpr, .awaitExpr, .unsafeExpr, .consumeExpr, .copyExpr:
         return false
@@ -129,17 +130,32 @@ public struct RemoveRedundantParentheses: SyntaxRefactoringProvider {
     return true
   }
 
-  /// Returns true if parent is a postfix expression where the tuple is the base.
-  private static func isPostfixParent(_ parent: Syntax?) -> Bool {
+  /// Returns true if parent is an expression with higher precedence than effects (try/await/etc).
+  /// This includes postfix expressions (member access, subscript, call, force unwrap, optional chaining),
+  /// infix operators, type casting (as/is), and ternary expressions.
+  private static func parentHasTighterBindingThanEffect(_ parent: Syntax?) -> Bool {
     switch parent?.as(SyntaxEnum.self) {
-    case .memberAccessExpr(let memberAccess):
-      return memberAccess.base != nil
-    case .subscriptCallExpr(let subscriptCall):
-      return subscriptCall.calledExpression.is(TupleExprSyntax.self)
-    case .functionCallExpr(let functionCall):
-      return functionCall.calledExpression.is(TupleExprSyntax.self)
-    case .postfixOperatorExpr:
+    // Postfix expressions: member access, subscript, function call, force unwrap, and postfix operators
+    // These all bind tighter than effect expressions (try/await/etc).
+    // For member access, since we're a TupleExprSyntax, we are always the base.
+    case .memberAccessExpr, .subscriptCallExpr, .functionCallExpr, .forceUnwrapExpr, .postfixOperatorExpr:
       return true
+
+    case .optionalChainingExpr(let optionalChaining):
+      // Optional chaining (?.) binds tighter than effects
+      return optionalChaining.expression != nil
+
+    // Infix operators and sequence expressions bind tighter than effects.
+    // For sequence expressions (before SwiftOperators folding), the parent chain
+    // is: TupleExpr -> ExprList -> SequenceExpr, e.g., `(try? f()) + 1`.
+    case .infixOperatorExpr, .sequenceExpr, .exprList:
+      return true
+
+    // Type casting operators (as, is) bind tighter than effects.
+    // Ternary operator also binds tighter than effects.
+    case .asExpr, .isExpr, .ternaryExpr:
+      return true
+
     default:
       return false
     }

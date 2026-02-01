@@ -261,7 +261,7 @@ func evaluateIfConfig(
         return recordError(
           .requiresUnlabeledArgument(
             name: fnName,
-            role: "version comparison (>= or <= a version)",
+            role: "version comparison (>= or < a version)",
             syntax: ExprSyntax(call)
           )
         )

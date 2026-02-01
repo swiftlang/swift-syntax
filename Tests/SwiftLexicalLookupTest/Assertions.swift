@@ -90,37 +90,79 @@ func assertLexicalNameLookup(
   useNilAsTheParameter: Bool = false,
   config: LookupConfig = LookupConfig()
 ) {
+  let expectedResults = references.mapValues { expectations in
+    expectations.flatMap { expectation in
+      expectation.expectedNames.flatMap { expectedName in
+        expectedName.marker
+      }
+    }
+  }
+
+  // Perform test without cache
   assertLexicalScopeQuery(
     source: source,
     methodUnderTest: { marker, tokenAtMarker in
-      let lookupIdentifier = Identifier(tokenAtMarker)
-
-      let result = tokenAtMarker.lookup(useNilAsTheParameter ? nil : lookupIdentifier, with: config)
-
-      guard let expectedValues = references[marker] else {
-        XCTFail("For marker \(marker), couldn't find result expectation")
-        return []
-      }
-
-      ResultExpectation.assertResult(marker: marker, result: result, expectedValues: expectedValues)
-
-      return result.flatMap { lookUpResult in
-        lookUpResult.names.flatMap { lookupName in
-          if case .equivalentNames(let names) = lookupName {
-            return names.map(\.syntax)
-          } else {
-            return [lookupName.syntax]
-          }
-        }
-      }
+      testFunction(
+        marker: marker,
+        tokenAtMarker: tokenAtMarker,
+        references: references,
+        useNilAsTheParameter: useNilAsTheParameter,
+        config: config,
+        cache: nil
+      )
     },
-    expected: references.mapValues { expectations in
-      expectations.flatMap { expectation in
-        expectation.expectedNames.flatMap { expectedName in
-          expectedName.marker
-        }
-      }
-    },
+    expected: expectedResults,
     expectedResultTypes: expectedResultTypes
   )
+
+  // Perform test with cache
+  let cache = LookupCache(capacity: 10)
+  assertLexicalScopeQuery(
+    source: source,
+    methodUnderTest: { marker, tokenAtMarker in
+      testFunction(
+        marker: marker,
+        tokenAtMarker: tokenAtMarker,
+        references: references,
+        useNilAsTheParameter: useNilAsTheParameter,
+        config: config,
+        cache: cache
+      )
+    },
+    expected: expectedResults,
+    expectedResultTypes: expectedResultTypes
+  )
+}
+
+/// Asserts result of unqualified lookup for the given `marker` and `tokenAtMarker`.
+/// Returns flattened array of syntax nodes returned by the query.
+private func testFunction(
+  marker: String,
+  tokenAtMarker: TokenSyntax,
+  references: [String: [ResultExpectation]],
+  useNilAsTheParameter: Bool,
+  config: LookupConfig,
+  cache: LookupCache?
+) -> [SyntaxProtocol] {
+  let lookupIdentifier = Identifier(tokenAtMarker)
+
+  let result = tokenAtMarker.lookup(useNilAsTheParameter ? nil : lookupIdentifier, with: config, cache: cache)
+  cache?.evictEntriesWithoutHit(drop: 3)
+
+  guard let expectedValues = references[marker] else {
+    XCTFail("For marker \(marker), couldn't find result expectation")
+    return []
+  }
+
+  ResultExpectation.assertResult(marker: marker, result: result, expectedValues: expectedValues)
+
+  return result.flatMap { lookUpResult in
+    lookUpResult.names.flatMap { lookupName in
+      if case .equivalentNames(let names) = lookupName {
+        return names.map(\.syntax)
+      } else {
+        return [lookupName.syntax]
+      }
+    }
+  }
 }

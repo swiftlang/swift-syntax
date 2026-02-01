@@ -18,7 +18,8 @@ import SwiftSyntax
   func returningLookupFromGenericParameterScope(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult]
 }
 
@@ -42,18 +43,21 @@ import SwiftSyntax
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     return defaultLookupImplementation(
       identifier,
       at: position,
       with: config,
+      cache: cache,
       propagateToParent: false
     )
       + lookupThroughGenericParameterScope(
         identifier,
         at: lookUpPosition,
-        with: config
+        with: config,
+        cache: cache
       )
   }
 
@@ -76,20 +80,22 @@ import SwiftSyntax
   @_spi(Experimental) public func lookupThroughGenericParameterScope(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     if let genericParameterClause {
-      return genericParameterClause.lookup(identifier, at: lookUpPosition, with: config)
+      return genericParameterClause.lookup(identifier, at: lookUpPosition, with: config, cache: cache)
     } else {
-      return returningLookupFromGenericParameterScope(identifier, at: lookUpPosition, with: config)
+      return returningLookupFromGenericParameterScope(identifier, at: lookUpPosition, with: config, cache: cache)
     }
   }
 
   @_spi(Experimental) public func returningLookupFromGenericParameterScope(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
-    lookupInParent(identifier, at: lookUpPosition, with: config)
+    lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
   }
 }

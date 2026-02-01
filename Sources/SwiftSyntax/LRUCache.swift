@@ -11,8 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 /// Simple LRU cache.
-@_spi(Testing)
-public class LRUCache<Key: Hashable, Value> {
+package class LRUCache<Key: Hashable, Value> {
   private class _Node {
     unowned var prev: _Node? = nil
     unowned var next: _Node? = nil
@@ -32,20 +31,24 @@ public class LRUCache<Key: Hashable, Value> {
   private unowned var head: _Node?
   private unowned var tail: _Node?
 
-  public let capacity: Int
+  package let capacity: Int
 
-  public init(capacity: Int) {
+  package init(capacity: Int) {
     self.table = [:]
     self.head = nil
     self.tail = nil
     self.capacity = capacity
   }
 
-  public var count: Int {
+  package var count: Int {
     return table.count
   }
 
-  public subscript(key: Key) -> Value? {
+  package var keys: some Collection<Key> {
+    table.keys
+  }
+
+  package subscript(key: Key) -> Value? {
     get {
       guard let node = table[key] else {
         return nil

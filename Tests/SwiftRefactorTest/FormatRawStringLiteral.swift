@@ -31,6 +31,8 @@ final class FormatRawStringLiteralTest: XCTestCase {
         expectation: ########" #######"###### \####(hello) ##"####### "########
       ),
       (#line, literal: ########" #######"hello \(world) "####### "########, expectation: #" "hello \(world) " "#),
+      // Test for SourceKit-LSP #2465: Single-line multiline strings MUST have at least one hash.
+      (#line, literal: ##"#"""hello"""#"##, expectation: ##"#"""hello"""#"##),
     ]
 
     for (line, literal, expectation) in tests {

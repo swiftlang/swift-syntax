@@ -54,7 +54,35 @@ public struct FormatRawStringLiteral: SyntaxRefactoringProvider {
       }
     }
 
-    guard maximumHashes > 0 else {
+    var shouldRemoveHashes = maximumHashes == 0
+    let quote = lit.openingQuote.text
+
+    if shouldRemoveHashes {
+      if quote == "\"" {
+        // Check for the #"""..."""# case which parses as quote=""" and content wrapped in quotes.
+        // If we remove hashes, we get """...""", which is invalid single-line multiline syntax.
+        for segment in lit.segments {
+          if case .stringSegment(let s) = segment {
+            if s.content.text.hasPrefix("\"") && s.content.text.hasSuffix("\"") {
+              shouldRemoveHashes = false
+              break
+            }
+          }
+        }
+      } else if quote == "\"\"\"" {
+        // Check for single-line multiline strings.
+        let containsNewline =
+          lit.openingQuote.trailingTrivia.description.contains("\n")
+          || lit.segments.contains(where: { $0.description.contains("\n") })
+          || lit.closingQuote.leadingTrivia.description.contains("\n")
+
+        if !containsNewline {
+          shouldRemoveHashes = false
+        }
+      }
+    }
+
+    if shouldRemoveHashes {
       return
         lit
         .with(\.openingPounds, lit.openingPounds?.with(\.tokenKind, .rawStringPoundDelimiter("")))

@@ -145,6 +145,7 @@ public func assertMacroExpansion(
   )
 }
 
+#if canImport(Testing)
 /// Expect that expanding the given macros in the original source produces
 /// the given expanded source code.
 /// This function is the Swift Testing equivalent of ``assertMacroExpansion(_:expandedSource:diagnostics:macroSpecs:applyFixIts:fixedSource:testModuleName:testFileName:indentationWidth:buildConfiguration:file:line:)``
@@ -261,3 +262,4 @@ public func expectMacroExpansion(
     column: column
   )
 }
+#endif

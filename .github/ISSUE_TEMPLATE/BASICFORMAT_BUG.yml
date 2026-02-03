@@ -1,6 +1,7 @@
 name: BasicFormat Bug
 description: A bug in the BasicFormat module
-labels: [bug, BasicFormat]
+labels: [BasicFormat]
+type: Bug
 body:
   - type: markdown
     attributes:

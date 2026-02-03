@@ -12,8 +12,10 @@
 
 #if compiler(>=6)
 public import SwiftSyntax
+public import SwiftBasicFormat
 #else
 import SwiftSyntax
+import SwiftBasicFormat
 #endif
 
 public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringProvider {
@@ -52,11 +54,46 @@ public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringP
       )
     }
 
-    let accessorBlock = AccessorBlockSyntax(
-      leftBrace: body.leftBrace,
-      accessors: .getter(body.statements),
-      rightBrace: body.rightBrace
-    )
+    let accessorEffectSpecifiers: AccessorEffectSpecifiersSyntax?
+    if let fnEffectSpecifiers = syntax.signature.effectSpecifiers {
+      accessorEffectSpecifiers = AccessorEffectSpecifiersSyntax(
+        asyncSpecifier: fnEffectSpecifiers.asyncSpecifier,
+        throwsClause: fnEffectSpecifiers.throwsClause
+      )
+    } else {
+      accessorEffectSpecifiers = nil
+    }
+
+    let indentation = BasicFormat.inferIndentation(of: syntax) ?? .spaces(2)
+
+    let accessorBlock: AccessorBlockSyntax
+
+    if let accessorEffectSpecifiers {
+      let indentedStatements = body.statements.indented(by: indentation)
+      let getterBody = CodeBlockSyntax(
+        leftBrace: body.leftBrace,
+        statements: indentedStatements,
+        rightBrace: .rightBraceToken(leadingTrivia: .newline + indentation)
+      )
+
+      let getAccessor = AccessorDeclSyntax(
+        accessorSpecifier: .keyword(.get, trailingTrivia: .space),
+        effectSpecifiers: accessorEffectSpecifiers,
+        body: getterBody
+      ).with(\.leadingTrivia, indentation)
+
+      accessorBlock = AccessorBlockSyntax(
+        leftBrace: .leftBraceToken(trailingTrivia: .newline),
+        accessors: .accessors(AccessorDeclListSyntax([getAccessor])),
+        rightBrace: .rightBraceToken(leadingTrivia: .newline)
+      )
+    } else {
+      accessorBlock = AccessorBlockSyntax(
+        leftBrace: body.leftBrace,
+        accessors: .getter(body.statements),
+        rightBrace: body.rightBrace
+      )
+    }
 
     let bindingSpecifier = syntax.funcKeyword.detached.with(\.tokenKind, .keyword(.var))
 

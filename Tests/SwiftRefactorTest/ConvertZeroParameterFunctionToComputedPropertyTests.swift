@@ -191,6 +191,120 @@ final class ConvertZeroParameterFunctionToComputedPropertyTests: XCTestCase {
 
     try assertRefactorConvert(baseline, expected: expected)
   }
+
+  func testAsyncThrowsFunction() throws {
+    let baseline: DeclSyntax = """
+      func foo() async throws -> Int {
+        try await someCall()
+      }
+      """
+
+    let expected: DeclSyntax = """
+      var foo: Int {
+        get async throws {
+          try await someCall()
+        }
+      }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
+
+  func testAsyncOnlyFunction() throws {
+    let baseline: DeclSyntax = """
+      func bar() async -> String {
+        await getValue()
+      }
+      """
+
+    let expected: DeclSyntax = """
+      var bar: String {
+        get async {
+          await getValue()
+        }
+      }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
+
+  func testThrowsOnlyFunction() throws {
+    let baseline: DeclSyntax = """
+      func baz() throws -> Bool {
+        try riskyOperation()
+      }
+      """
+
+    let expected: DeclSyntax = """
+      var baz: Bool {
+        get throws {
+          try riskyOperation()
+        }
+      }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
+
+  func testSynchronousFunction() throws {
+    let baseline: DeclSyntax = """
+      func qux() -> Int {
+        return 42
+      }
+      """
+
+    let expected: DeclSyntax = """
+      var qux: Int {
+        return 42
+      }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
+
+  func testAsyncFunctionWithMultiLineStatement() throws {
+    let baseline: DeclSyntax = """
+      func foo() async {
+        bar(
+          1
+        )
+      }
+      """
+
+    let expected: DeclSyntax = """
+      var foo: Void {
+        get async {
+          bar(
+            1
+          )
+        }
+      }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
+
+  func testAsyncThrowsFunctionWithMultipleStatements() throws {
+    let baseline: DeclSyntax = """
+      func complex() async throws -> String {
+        let x = try await fetch()
+        let y = process(x)
+        return y
+      }
+      """
+
+    let expected: DeclSyntax = """
+      var complex: String {
+        get async throws {
+          let x = try await fetch()
+          let y = process(x)
+          return y
+        }
+      }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
 }
 
 private func assertRefactorConvert(

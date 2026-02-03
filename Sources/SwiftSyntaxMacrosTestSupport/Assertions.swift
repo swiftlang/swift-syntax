@@ -142,18 +142,30 @@ public func assertMacroExpansion(
     indentationWidth: indentationWidth,
     buildConfiguration: buildConfiguration,
     failureHandler: {
-      XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
       #if(canImport(Testing))
+      // Record a Swift Testing issue.
+      //
+      // (Note: If/when Swift Testing gains interoperability with XCTest, this
+      // will be translated into an XCTest failure if called while an XCTest is
+      // running.)
       Issue.record(
         Comment(rawValue: $0.message),
         sourceLocation: .init(
-          fileID: fileID.description,
-          filePath: file.description,
-          line: Int(line),
-          column: Int(column)
+          fileID: $0.location.fileID,
+          filePath: $0.location.filePath,
+          line: $0.location.line,
+          column: $0.location.column
         )
       )
       #endif
+      // Record an XCTest failure.
+      //
+      // FIXME: If/when Swift Testing gains interoperability with XCTest, this
+      // will become redundant with the above -- at least, when this library is
+      // compiled and run using a Swift version which supports interoperability.
+      // At that point, this should be adjusted so that it's only called when
+      // using older Swift versions.
+      XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
     },
     fileID: "",  // Not used in the failure handler
     filePath: file,

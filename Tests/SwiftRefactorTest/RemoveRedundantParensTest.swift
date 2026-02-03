@@ -96,3 +96,11 @@ class FindTupleVisitor: SyntaxVisitor {
     return .visitChildren
   }
 }
+
+// Private helper to avoid redeclaration conflicts
+private extension ExprSyntax {
+  static func parse(from source: String) -> ExprSyntax {
+    var parser = Parser(source)
+    return ExprSyntax.parse(from: &parser)
+  }
+}

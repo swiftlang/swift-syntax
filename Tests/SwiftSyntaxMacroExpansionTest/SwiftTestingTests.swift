@@ -18,7 +18,7 @@ import SwiftSyntaxMacrosTestSupport
 struct SwiftTestingMacroExpansionTests {
   @Test("Test Happy Path")
   func testHappyPathWorks() {
-    expectMacroExpansion(
+    assertMacroExpansion(
       """
       @constantOne
       var x: Int /*1*/ // hello
@@ -38,7 +38,7 @@ struct SwiftTestingMacroExpansionTests {
   @Test("Test Failure")
   func failureReportedCorrectly() {
     withKnownIssue {
-      expectMacroExpansion(
+      assertMacroExpansion(
         """
         @constantOne
         var x: Int /*1*/ // hello

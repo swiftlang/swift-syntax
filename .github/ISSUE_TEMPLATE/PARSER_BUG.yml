@@ -1,6 +1,7 @@
 name: SwiftParser Bug
 description: A bug in the new Swift parser
-labels: [bug, SwiftParser]
+labels: [SwiftParser]
+type: Bug
 body:
   - type: markdown
     attributes:

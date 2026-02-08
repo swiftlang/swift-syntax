@@ -21,8 +21,7 @@ final class FormatRawStringLiteralTest: XCTestCase {
   func testDelimiterPlacement() throws {
     let tests = [
       (#line, literal: #" "Hello World" "#, expectation: #" "Hello World" "#),
-      (#line, literal: ##" #"Hello World" "##, expectation: #" "Hello World" "#),
-      (#line, literal: ##" #"Hello World"# "##, expectation: #" "Hello World" "#),
+      (#line, literal: ##" #"Hello World"# "##, expectation: ##" #"Hello World"# "##),
       (#line, literal: #####" "####" "#####, expectation: #####" "####" "#####),
       (#line, literal: #####" #"####"# "#####, expectation: ######" #####"####"##### "######),
       (#line, literal: #####" #"\####(hello)"# "#####, expectation: ######" #####"\####(hello)"##### "######),
@@ -30,7 +29,11 @@ final class FormatRawStringLiteralTest: XCTestCase {
         #line, literal: #######" #"###### \####(hello) ##"# "#######,
         expectation: ########" #######"###### \####(hello) ##"####### "########
       ),
-      (#line, literal: ########" #######"hello \(world) "####### "########, expectation: #" "hello \(world) " "#),
+      (#line, literal: ########" #######"hello \(world) "####### "########, expectation: ##" #"hello \(world) "# "##),
+      (#line, literal: ###" ##"""## "###, expectation: ##" #"""# "##),
+      (#line, literal: ####" ###"C:\Users\swift"### "####, expectation: ##" #"C:\Users\swift"# "##),
+      (#line, literal: #####" ####"He said "Hi""#### "#####, expectation: ##" #"He said "Hi""# "##),
+      (#line, literal: #####" ###"Value: \###(count)"### "#####, expectation: ####" ###"Value: \###(count)"### "####),
     ]
 
     for (line, literal, expectation) in tests {

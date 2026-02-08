@@ -21,6 +21,7 @@ add_swift_syntax_library(SwiftRefactor
   MigrateToNewIfLetSyntax.swift
   OpaqueParameterToGeneric.swift
   RefactoringProvider.swift
+  RemoveRedundantParentheses.swift
   RemoveSeparatorsFromIntegerLiteral.swift
   SyntaxUtils.swift
 

@@ -348,12 +348,14 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
   }
   func validateArrowExprSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
-    assert(layout.count == 5)
+    assert(layout.count == 7)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTypeEffectSpecifiersSyntax?.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.arrow)]))
+    assertNoError(kind, 3, verify(layout[3], as: RawYieldsClauseSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.arrow)]))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
   }
   func validateAsExprSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     assert(layout.count == 9)
@@ -718,7 +720,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
   }
   func validateClosureSignatureSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
-    assert(layout.count == 13)
+    assert(layout.count == 15)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
@@ -729,10 +731,12 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawTypeEffectSpecifiersSyntax?.self))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 9, verify(layout[9], as: RawReturnClauseSyntax?.self))
+    assertNoError(kind, 9, verify(layout[9], as: RawYieldsClauseSyntax?.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 11, verify(layout[11], as: RawTokenSyntax.self, tokenChoices: [.keyword("in")]))
+    assertNoError(kind, 11, verify(layout[11], as: RawReturnClauseSyntax?.self))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 13, verify(layout[13], as: RawTokenSyntax.self, tokenChoices: [.keyword("in")]))
+    assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
   }
   func validateCodeBlockFileSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     assert(layout.count == 5)
@@ -1435,17 +1439,19 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 18, verify(layout[18], as: RawUnexpectedNodesSyntax?.self))
   }
   func validateFunctionSignatureSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
-    assert(layout.count == 7)
+    assert(layout.count == 9)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawFunctionParameterClauseSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 3, verify(layout[3], as: RawFunctionEffectSpecifiersSyntax?.self))
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 5, verify(layout[5], as: RawReturnClauseSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawYieldsClauseSyntax?.self))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 7, verify(layout[7], as: RawReturnClauseSyntax?.self))
+    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
   }
   func validateFunctionTypeSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
-    assert(layout.count == 11)
+    assert(layout.count == 13)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.leftParen)]))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
@@ -1455,8 +1461,10 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 7, verify(layout[7], as: RawTypeEffectSpecifiersSyntax?.self))
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 9, verify(layout[9], as: RawReturnClauseSyntax.self))
+    assertNoError(kind, 9, verify(layout[9], as: RawYieldsClauseSyntax?.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 11, verify(layout[11], as: RawReturnClauseSyntax.self))
+    assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
   }
   func validateGenericArgumentClauseSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     assert(layout.count == 7)
@@ -2731,7 +2739,7 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
   }
   func validateSubscriptDeclSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
-    assert(layout.count == 17)
+    assert(layout.count == 19)
     assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 1, verify(layout[1], as: RawAttributeListSyntax.self))
     assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
@@ -2743,12 +2751,14 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 9, verify(layout[9], as: RawFunctionParameterClauseSyntax.self))
     assertNoError(kind, 10, verify(layout[10], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 11, verify(layout[11], as: RawReturnClauseSyntax.self))
+    assertNoError(kind, 11, verify(layout[11], as: RawYieldsClauseSyntax?.self))
     assertNoError(kind, 12, verify(layout[12], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 13, verify(layout[13], as: RawGenericWhereClauseSyntax?.self))
+    assertNoError(kind, 13, verify(layout[13], as: RawReturnClauseSyntax.self))
     assertNoError(kind, 14, verify(layout[14], as: RawUnexpectedNodesSyntax?.self))
-    assertNoError(kind, 15, verify(layout[15], as: RawAccessorBlockSyntax?.self))
+    assertNoError(kind, 15, verify(layout[15], as: RawGenericWhereClauseSyntax?.self))
     assertNoError(kind, 16, verify(layout[16], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 17, verify(layout[17], as: RawAccessorBlockSyntax?.self))
+    assertNoError(kind, 18, verify(layout[18], as: RawUnexpectedNodesSyntax?.self))
   }
   func validateSuperExprSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
     assert(layout.count == 3)
@@ -3168,6 +3178,18 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
     assertNoError(kind, 5, verify(layout[5], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.rightParen)]))
     assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+  }
+  func validateYieldsClauseSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {
+    assert(layout.count == 9)
+    assertNoError(kind, 0, verify(layout[0], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 1, verify(layout[1], as: RawTokenSyntax.self, tokenChoices: [.tokenKind(.identifier), .keyword("yields")]))
+    assertNoError(kind, 2, verify(layout[2], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 3, verify(layout[3], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.leftParen)]))
+    assertNoError(kind, 4, verify(layout[4], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 5, verify(layout[5], as: RawTypeSyntax?.self))
+    assertNoError(kind, 6, verify(layout[6], as: RawUnexpectedNodesSyntax?.self))
+    assertNoError(kind, 7, verify(layout[7], as: RawTokenSyntax?.self, tokenChoices: [.tokenKind(.rightParen)]))
+    assertNoError(kind, 8, verify(layout[8], as: RawUnexpectedNodesSyntax?.self))
   }
   switch kind {
   case .token:
@@ -3756,6 +3778,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     validateYieldedExpressionSyntax(kind: kind, layout: layout)
   case .yieldedExpressionsClause:
     validateYieldedExpressionsClauseSyntax(kind: kind, layout: layout)
+  case .yieldsClause:
+    validateYieldsClauseSyntax(kind: kind, layout: layout)
   }
   #endif
 }

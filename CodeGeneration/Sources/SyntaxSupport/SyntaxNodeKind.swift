@@ -316,6 +316,7 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case whereClause
   case whileStmt
   case wildcardPattern
+  case yieldsClause
   case yieldedExpression
   case yieldedExpressionList
   case yieldedExpressionsClause

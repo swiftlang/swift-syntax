@@ -493,6 +493,18 @@ public let STMT_NODES: [Node] = [
     kind: .returnStmt,
     base: .stmt,
     nameForDiagnostics: "'return' statement",
+    documentation: """
+      A statement that exits a function or closure and optionally returns a value.
+
+      Written as:
+      ```swift
+      return
+      ```
+
+      ```swift
+      return <expr>
+      ```
+      """,
     children: [
       Child(
         name: "returnKeyword",
@@ -510,6 +522,15 @@ public let STMT_NODES: [Node] = [
     kind: .throwStmt,
     base: .stmt,
     nameForDiagnostics: "'throw' statement",
+    documentation: """
+      A statement that throws an error.
+
+      Written as:
+
+      ```swift
+      throw <expr>
+      ```
+      """,
     children: [
       Child(
         name: "throwKeyword",

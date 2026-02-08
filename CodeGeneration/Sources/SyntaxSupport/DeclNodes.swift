@@ -2171,6 +2171,14 @@ public let DECL_NODES: [Node] = [
     kind: .returnClause,
     base: .syntax,
     nameForDiagnostics: nil,
+    documentation: """
+      A clause that specifies the return type, typically of a function or subscript.
+
+      For example, the `-> Int` part in  
+      ```swift
+      func f() -> Int { }
+      ```
+      """,
     children: [
       Child(
         name: "arrow",
@@ -2437,6 +2445,14 @@ public let DECL_NODES: [Node] = [
     kind: .typeInitializerClause,
     base: .syntax,
     nameForDiagnostics: nil,
+    documentation: """
+      A clause that specifies the underlying type of `typealias` or `associatedtype` declaration.
+
+      For example, the `= Int` part in 
+      ```swift
+      typealias MyInt = Int
+      ```
+      """,
     children: [
       Child(
         name: "equal",

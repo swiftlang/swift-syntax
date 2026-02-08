@@ -1903,6 +1903,24 @@ public let EXPR_NODES: [Node] = [
     kind: .switchCaseLabel,
     base: .syntax,
     nameForDiagnostics: nil,
+    documentation: """
+      A label that introduces one or more cases in a switch statement.
+
+      Written as:
+      ```swift
+      case <items>:
+      ```
+
+      ### Examples
+
+      ```swift
+      case 1:
+      ```
+
+      ```swift
+      case 1, 2, 3:
+      ```
+      """,
     children: [
       Child(
         name: "caseKeyword",
@@ -1930,6 +1948,25 @@ public let EXPR_NODES: [Node] = [
     kind: .switchCase,
     base: .syntax,
     nameForDiagnostics: "switch case",
+    documentation: """
+      A single case within a `switch` statement.
+
+      A switch case consists of a label (`case` or `default`),
+      an optional `@unknown` attribute, and the statements
+      that are executed when the case is matched.
+
+      ### Examples
+
+      ```swift
+      case 1:
+        print("one")
+      ```
+
+      ```swift
+      default:
+        print("other")
+      ```
+      """,
     parserFunction: "parseSwitchCase",
     traits: ["WithStatements"],
     children: [
@@ -1969,6 +2006,15 @@ public let EXPR_NODES: [Node] = [
     kind: .switchDefaultLabel,
     base: .syntax,
     nameForDiagnostics: nil,
+    documentation: """
+      The default label is executed when none of the `case` patterns
+      match the value being switched over.
+
+      Written as:
+      ```swift
+      default:
+      ```
+      """,
     children: [
       Child(
         name: "defaultKeyword",

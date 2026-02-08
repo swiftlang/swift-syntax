@@ -17,7 +17,14 @@ import SwiftSyntax
 #endif
 
 public struct ConvertStoredPropertyToComputed: SyntaxRefactoringProvider {
-  public static func refactor(syntax: VariableDeclSyntax, in context: ()) throws -> VariableDeclSyntax {
+  public struct Context {
+    public let type: TypeSyntax?
+
+    public init(type: TypeSyntax? = nil) {
+      self.type = type
+    }
+  }
+  public static func refactor(syntax: VariableDeclSyntax, in context: Context) throws -> VariableDeclSyntax {
     guard syntax.bindings.count == 1, let binding = syntax.bindings.first, let initializer = binding.initializer else {
       throw RefactoringNotApplicableError("unsupported variable declaration")
     }
@@ -58,10 +65,21 @@ public struct ConvertStoredPropertyToComputed: SyntaxRefactoringProvider {
       body.trailingTrivia += .space
       codeBlockSyntax = body
     }
+    let typeAnnotation: TypeAnnotationSyntax?
+    if let existingType = binding.typeAnnotation {
+      typeAnnotation = existingType
+    } else if let providedType = context.type {
+      typeAnnotation = TypeAnnotationSyntax(type: providedType)
+    } else {
+      typeAnnotation = TypeAnnotationSyntax(
+        type: TypeSyntax(stringLiteral: "<#Type#>")
+      )
+    }
 
     let newBinding =
       binding
       .with(\.initializer, nil)
+      .with(\.typeAnnotation, typeAnnotation)
       .with(
         \.accessorBlock,
         AccessorBlockSyntax(

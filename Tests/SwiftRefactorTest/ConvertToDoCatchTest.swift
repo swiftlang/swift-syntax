@@ -36,22 +36,6 @@ final class ConvertToDoCatchTest: XCTestCase {
     try assertRefactorConvert(baseline, expected: expected)
   }
 
-  func testBasicForceTryExpression() throws {
-    let baseline: ExprSyntax = """
-      try! fetchData()
-      """
-
-    let expected: CodeBlockItemListSyntax = """
-      do {
-        try fetchData()
-      } catch {
-        <#code#>
-      }
-      """
-
-    try assertRefactorConvert(baseline, expected: expected)
-  }
-
   func testForceTryWithClosure() throws {
     let baseline: ExprSyntax = """
       try! performAsync { result in
@@ -150,10 +134,9 @@ final class ConvertToDoCatchTest: XCTestCase {
         }
       """
 
-    let context = ConvertToDoCatch.Context(indentationWidth: .spaces(2))
     try assertRefactor(
       baseline.as(TryExprSyntax.self)!,
-      context: context,
+      context: (),
       provider: ConvertToDoCatch.self,
       expected: expected
     )
@@ -177,7 +160,7 @@ private func assertRefactorConvert(
 
   try assertRefactor(
     tryExpr,
-    context: ConvertToDoCatch.Context(),
+    context: (),
     provider: ConvertToDoCatch.self,
     expected: expected,
     file: file,

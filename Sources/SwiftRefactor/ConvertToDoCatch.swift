@@ -40,18 +40,7 @@ import SwiftSyntaxBuilder
 /// }
 /// ```
 public struct ConvertToDoCatch: SyntaxRefactoringProvider {
-  public struct Context {
-    /// The indentation width to use for the generated do-catch block.
-    /// If `nil`, a default indentation of 2 spaces will be used.
-    public let indentationWidth: Trivia?
-
-    public init(indentationWidth: Trivia? = nil) {
-      self.indentationWidth = indentationWidth
-    }
-  }
-
-  public static func refactor(syntax: TryExprSyntax, in context: Context = Context()) throws -> CodeBlockItemListSyntax
-  {
+  public static func refactor(syntax: TryExprSyntax, in context: Void = ()) throws -> CodeBlockItemListSyntax {
     // Validate that this is a force-try (try!) expression
     guard syntax.questionOrExclamationMark?.tokenKind == .exclamationMark else {
       throw RefactoringNotApplicableError("not a force-try expression")
@@ -72,50 +61,45 @@ public struct ConvertToDoCatch: SyntaxRefactoringProvider {
       tryExpression = syntax.with(\.questionOrExclamationMark, nil)
     }
 
-    // Extract the base indentation from the source file
+    // Remove leading trivia from the try expression since we'll manage indentation
+    let trimmedTryExpression = tryExpression.with(\.leadingTrivia, [])
+
+    // Infer the indentation width from the source file
+    let indentationWidth = BasicFormat.inferIndentation(of: syntax) ?? .spaces(2)
+
+    // Extract the base indentation from the source file (where the try! expression is)
     let baseIndentation = syntax.firstToken(viewMode: .sourceAccurate)?.indentationOfLine ?? []
 
-    // Determine the indentation width (default to 2 spaces if not provided)
-    let indentWidth = context.indentationWidth ?? .spaces(2)
-
-    // Create the do-catch statement
+    // Create the do-catch statement with explicit structure
     let doStatement = DoStmtSyntax(
-      doKeyword: .keyword(.do),
+      doKeyword: .keyword(.do, trailingTrivia: .space),
       body: CodeBlockSyntax(
-        leftBrace: .leftBraceToken(),
+        leftBrace: .leftBraceToken(trailingTrivia: .newline),
         statements: CodeBlockItemListSyntax([
           CodeBlockItemSyntax(
-            item: .expr(ExprSyntax(tryExpression))
+            item: .expr(ExprSyntax(trimmedTryExpression))
           )
-        ]),
-        rightBrace: .rightBraceToken()
+        ]).indented(by: baseIndentation + indentationWidth, indentFirstLine: true),
+        rightBrace: .rightBraceToken(leadingTrivia: .newline + baseIndentation)
       ),
       catchClauses: CatchClauseListSyntax([
         CatchClauseSyntax(
-          catchKeyword: .keyword(.catch),
+          catchKeyword: .keyword(.catch, leadingTrivia: .space, trailingTrivia: .space),
           body: CodeBlockSyntax(
-            leftBrace: .leftBraceToken(),
+            leftBrace: .leftBraceToken(trailingTrivia: .newline),
             statements: CodeBlockItemListSyntax([
               CodeBlockItemSyntax(
                 item: .expr(ExprSyntax("<#code#>" as ExprSyntax))
               )
-            ]),
-            rightBrace: .rightBraceToken()
+            ]).indented(by: baseIndentation + indentationWidth, indentFirstLine: true),
+            rightBrace: .rightBraceToken(leadingTrivia: .newline + baseIndentation)
           )
         )
       ])
-    )
-
-    // Format the do-catch statement with the proper indentation
-    let format = BasicFormat(
-      indentationWidth: indentWidth,
-      initialIndentation: baseIndentation
-    )
-    
-    let formatted = doStatement.formatted(using: format).as(DoStmtSyntax.self)!
+    ).with(\.leadingTrivia, baseIndentation)
 
     return CodeBlockItemListSyntax([
-      CodeBlockItemSyntax(item: .stmt(StmtSyntax(formatted)))
+      CodeBlockItemSyntax(item: .stmt(StmtSyntax(doStatement)))
     ])
   }
 }

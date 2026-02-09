@@ -54,7 +54,8 @@ public struct ConvertToDoCatch: SyntaxRefactoringProvider {
         \.trailingTrivia,
         syntax.tryKeyword.trailingTrivia + exclamationMark.trailingTrivia
       )
-      tryExpression = syntax
+      tryExpression =
+        syntax
         .with(\.tryKeyword, newTryKeyword)
         .with(\.questionOrExclamationMark, nil)
     } else {

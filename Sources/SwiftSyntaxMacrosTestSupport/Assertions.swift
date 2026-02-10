@@ -37,10 +37,6 @@ public typealias DiagnosticSpec = SwiftSyntaxMacrosGenericTestSupport.Diagnostic
 /// Assert that expanding the given macros in the original source produces
 /// the given expanded source code.
 ///
-/// - Warning: If you call this function inside a Swift Testing test case,
-/// the test will report no assertion failures even if the test fails.
-/// Use ``expectMacroExpansion(_:expandedSource:diagnostics:macroSpecs:applyFixIts:fixedSource:testModuleName:testFileName:indentationWidth:buildConfiguration:fileID:file:line:column:)`` instead.
-///
 /// - Parameters:
 ///   - originalSource: The original source code, which is expected to contain
 ///     macros in various places (e.g., `#stringify(x + y)`).
@@ -94,10 +90,6 @@ public func assertMacroExpansion(
 
 /// Assert that expanding the given macros in the original source produces
 /// the given expanded source code.
-///
-/// - Warning: If you call this function inside a Swift Testing test case,
-/// the test will report no assertion failures even if the test fails.
-/// Use ``expectMacroExpansion(_:expandedSource:diagnostics:macroSpecs:applyFixIts:fixedSource:testModuleName:testFileName:indentationWidth:buildConfiguration:fileID:file:line:column:)`` instead.
 ///
 /// - Parameters:
 ///   - originalSource: The original source code, which is expected to contain

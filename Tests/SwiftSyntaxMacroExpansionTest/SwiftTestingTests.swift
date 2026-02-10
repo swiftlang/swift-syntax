@@ -51,10 +51,25 @@ struct SwiftTestingMacroExpansionTests {
           }
           """,
         macros: ["constantOne": ConstantOneGetter.self],
-        indentationWidth: .spaces(4)
+        indentationWidth: .spaces(4),
+        fileID: "ExampleModule/ExampleTest.swift",
+        file: "path/to/ExampleTest.swift",
+        line: 9999,
+        column: 8888
       )
     } matching: { issue in
-      issue.description.contains("Macro expansion did not produce the expected expanded source")
+      guard issue.description.contains("Macro expansion did not produce the expected expanded source") else {
+        return false
+      }
+
+      #expect(issue.sourceLocation == .init(
+        fileID: "ExampleModule/ExampleTest.swift",
+        filePath: "path/to/ExampleTest.swift",
+        line: 9999,
+        column: 8888
+      ))
+
+      return true
     }
   }
 }

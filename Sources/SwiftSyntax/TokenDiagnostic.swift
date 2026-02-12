@@ -23,6 +23,7 @@ public struct TokenDiagnostic: Hashable, Sendable {
   public enum Kind: Sendable {
     // Please order these alphabetically
 
+    case ambiguousOptionalAfterSomeOrAnyComposition
     case editorPlaceholder
     case equalMustHaveConsistentWhitespaceOnBothSides
     case expectedBinaryExponentInHexFloatLiteral
@@ -67,6 +68,7 @@ public struct TokenDiagnostic: Hashable, Sendable {
     /// The severity of the diagnostic, i.e. whether it’s a warning or error.
     var severity: Severity {
       switch self {
+      case .ambiguousOptionalAfterSomeOrAnyComposition: return .warning
       case .editorPlaceholder: return .error
       case .equalMustHaveConsistentWhitespaceOnBothSides: return .error
       case .expectedBinaryExponentInHexFloatLiteral: return .error

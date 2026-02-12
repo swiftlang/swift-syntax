@@ -126,23 +126,128 @@ extension Parser {
 
     let someOrAny = self.consume(if: .keyword(.some), .keyword(.any))
 
-    var base = self.parseSimpleType()
-    guard self.atContextualPunctuator("&") else {
-      if let someOrAny {
-        return RawTypeSyntax(
-          RawSomeOrAnyTypeSyntax(
-            someOrAnySpecifier: someOrAny,
-            constraint: base,
+    // Consumes all trailing optional sugar (`?` or `!`), wrapping the base type
+    // in the correct optional or IUO syntax node types.
+    func wrapWhileConsumingOptionalSugar(_ base: RawTypeSyntax) -> RawTypeSyntax {
+      var base = base
+      var loopProgress = LoopProgressCondition()
+
+      func tagWithDiagnosticIfAmbiguous(_ token: RawTokenSyntax) -> RawTokenSyntax {
+        guard base.as(RawSomeOrAnyTypeSyntax.self)?.constraint.is(RawCompositionTypeSyntax.self) == true else {
+          return token
+        }
+        return token.tokenView.withTokenDiagnostic(
+          tokenDiagnostic: TokenDiagnostic(.ambiguousOptionalAfterSomeOrAnyComposition, byteOffset: 0),
+          arena: self.arena
+        )
+      }
+
+      while self.hasProgressed(&loopProgress) {
+        if self.at(.postfixQuestionMark) {
+          var optional = self.parseOptionalType(base)
+          optional = RawOptionalTypeSyntax(
+            wrappedType: optional.wrappedType,
+            questionMark: tagWithDiagnosticIfAmbiguous(optional.questionMark),
+            arena: self.arena
+          )
+          base = RawTypeSyntax(optional)
+        } else if self.at(.exclamationMark) {
+          var iuo = self.parseImplicitlyUnwrappedOptionalType(base)
+          iuo = RawImplicitlyUnwrappedOptionalTypeSyntax(
+            wrappedType: iuo.wrappedType,
+            exclamationMark: tagWithDiagnosticIfAmbiguous(iuo.exclamationMark),
+            arena: self.arena
+          )
+          base = RawTypeSyntax(iuo)
+        } else {
+          break
+        }
+      }
+      return base
+    }
+
+    var base = self.parseSimpleType(allowTrailingOptional: someOrAny == nil)
+
+    // This is the happy path for compositions, such as `P & Q` or `some P & Q`.
+    // If we have a composition that is interrupted by trailing optional sugar
+    // (e.g., `some P? & Q`), this check fails and we fall through to the
+    // recovery path below.
+    if let firstAmpersand = self.consumeIfContextualPunctuator("&") {
+      var elements = [RawCompositionTypeElementSyntax]()
+      elements.append(
+        RawCompositionTypeElementSyntax(
+          type: base,
+          ampersand: firstAmpersand,
+          arena: self.arena
+        )
+      )
+
+      var keepGoing: RawTokenSyntax? = nil
+      var loopProgress = LoopProgressCondition()
+      repeat {
+        var elementType: RawTypeSyntax
+        if someOrAny == nil {
+          elementType = self.parseSimpleType()
+        } else {
+          // If trailing `?` or `!` is present, determine whether it should bind
+          // to the element type instead of the entire `some`/`any` type. This
+          // happens in two cases:
+          //
+          // 1.  The optional is the base of a member type construction, like
+          //     `some P?.Q`.
+          // 2.  The user wrote the invalid type construction `some P? & Q`,
+          //     which we still want to parse syntactically as a composition for
+          //     recovery purposes; the type checker will reject it.
+          elementType = self.parseSimpleType(allowTrailingOptional: false)
+          let shouldBindOptionalToElement = self.withLookahead {
+            var hasOptional = false
+            while $0.consume(if: .postfixQuestionMark, .exclamationMark) != nil {
+              hasOptional = true
+            }
+            return hasOptional && ($0.atContextualPunctuator("&") || $0.at(.period))
+          }
+          if shouldBindOptionalToElement {
+            elementType = wrapWhileConsumingOptionalSugar(elementType)
+          }
+        }
+
+        keepGoing = self.consumeIfContextualPunctuator("&")
+        elements.append(
+          RawCompositionTypeElementSyntax(
+            type: elementType,
+            ampersand: keepGoing,
             arena: self.arena
           )
         )
-      } else {
-        return base
-      }
+      } while keepGoing != nil && self.hasProgressed(&loopProgress)
+
+      base = RawTypeSyntax(
+        RawCompositionTypeSyntax(
+          elements: RawCompositionTypeElementListSyntax(elements: elements, arena: self.arena),
+          arena: self.arena
+        )
+      )
     }
 
-    var elements = [RawCompositionTypeElementSyntax]()
+    // If `some`/`any` was present, apply it to the base, and *then* apply any
+    // trailing optionals.
+    if let someOrAny {
+      base = RawTypeSyntax(
+        RawSomeOrAnyTypeSyntax(
+          someOrAnySpecifier: someOrAny,
+          constraint: base,
+          arena: self.arena
+        )
+      )
+      base = wrapWhileConsumingOptionalSugar(base)
+    }
+
+    // Recovery path for broken compositions, like `some P? & Q ...`: consume
+    // the rest of the composition with the `some` already applied to the first
+    // element (`(some P)? & Q ...`). This ensures we produce a reasonable AST,
+    // and the type checker will reject it.
     if let firstAmpersand = self.consumeIfContextualPunctuator("&") {
+      var elements = [RawCompositionTypeElementSyntax]()
       elements.append(
         RawCompositionTypeElementSyntax(
           type: base,
@@ -173,33 +278,23 @@ extension Parser {
       )
     }
 
-    if let someOrAny {
-      return RawTypeSyntax(
-        RawSomeOrAnyTypeSyntax(
-          someOrAnySpecifier: someOrAny,
-          constraint: base,
-          arena: self.arena
-        )
-      )
-    } else {
-      return base
-    }
+    return base
   }
 
   /// Parse the subset of types that we allow in attribute names.
   mutating func parseAttributeName() -> RawTypeSyntax {
-    return parseSimpleType(forAttributeName: true)
+    return parseSimpleType(allowTrailingOptional: false)
   }
 
   mutating func parseSimpleType(
     allowMemberTypes: Bool = true,
-    forAttributeName: Bool = false
+    allowTrailingOptional: Bool = true
   ) -> RawTypeSyntax {
     let tilde = self.consumeIfContextualPunctuator("~", remapping: .prefixOperator)
 
     let baseType = self.parseUnsuppressedSimpleType(
       allowMemberTypes: allowMemberTypes,
-      forAttributeName: forAttributeName
+      allowTrailingOptional: allowTrailingOptional
     )
 
     guard let tilde else {
@@ -213,7 +308,7 @@ extension Parser {
 
   mutating func parseUnsuppressedSimpleType(
     allowMemberTypes: Bool = true,
-    forAttributeName: Bool = false
+    allowTrailingOptional: Bool = true
   ) -> RawTypeSyntax {
     enum TypeBaseStart: TokenSpecSet {
       case `Self`
@@ -319,18 +414,25 @@ extension Parser {
         continue
       }
 
-      // Do not allow ? or ! suffixes when parsing attribute names.
-      if forAttributeName {
-        break
-      }
-
-      if self.at(TokenSpec(.postfixQuestionMark, allowAtStartOfLine: false)) {
-        base = RawTypeSyntax(self.parseOptionalType(base))
-        continue
-      }
-      if self.at(TokenSpec(.exclamationMark, allowAtStartOfLine: false)) {
-        base = RawTypeSyntax(self.parseImplicitlyUnwrappedOptionalType(base))
-        continue
+      if self.at(.postfixQuestionMark, .exclamationMark) {
+        // Even if we're not generally allowing trailing optional sugar (e.g.,
+        // at the end of a `some` type), we still need to consume them if they
+        // are followed by a member access (`.`), because we need to support
+        // valid types like `some P?.Q`.
+        let shouldConsume =
+          allowTrailingOptional
+          || self.withLookahead {
+            $0.consumeAnyToken()
+            return $0.at(.period)
+          }
+        if shouldConsume {
+          if self.at(.postfixQuestionMark) {
+            base = RawTypeSyntax(self.parseOptionalType(base))
+          } else {
+            base = RawTypeSyntax(self.parseImplicitlyUnwrappedOptionalType(base))
+          }
+          continue
+        }
       }
 
       break

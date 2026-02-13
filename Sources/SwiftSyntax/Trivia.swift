@@ -216,6 +216,28 @@ extension RawTriviaPiece: CustomDebugStringConvertible {
   }
 }
 
+extension TriviaPiece {
+  /// If this piece is a comment, returns the text of the comment (including delimiters).
+  /// Returns `nil` for non-comment pieces such as spaces, newlines, or unexpected text.
+  ///
+  /// The four comment kinds are:
+  /// - ``TriviaPiece/lineComment(_:)`` — developer line comments starting with `//`
+  /// - ``TriviaPiece/blockComment(_:)`` — developer block comments delimited by `/*` and `*/`
+  /// - ``TriviaPiece/docLineComment(_:)`` — documentation line comments starting with `///`
+  /// - ``TriviaPiece/docBlockComment(_:)`` — documentation block comments delimited by `/**` and `*/`
+  public var commentValue: String? {
+    switch self {
+    case .lineComment(let text),
+      .blockComment(let text),
+      .docLineComment(let text),
+      .docBlockComment(let text):
+      return text
+    default:
+      return nil
+    }
+  }
+}
+
 @_spi(RawSyntax)
 public extension Trivia {
   func trimmingPrefix(

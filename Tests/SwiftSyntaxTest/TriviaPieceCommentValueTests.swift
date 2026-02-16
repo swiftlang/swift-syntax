@@ -16,19 +16,27 @@ import XCTest
 class TriviaPieceCommentValueTests: XCTestCase {
 
   func testLineCommentValue() {
-    XCTAssertEqual(TriviaPiece.lineComment("// hello").commentValue, "// hello")
+    XCTAssertEqual(TriviaPiece.lineComment("// hello").commentValue, "hello")
+    XCTAssertEqual(TriviaPiece.lineComment("//hello").commentValue, "hello")
+    XCTAssertEqual(TriviaPiece.lineComment("//").commentValue, "")
   }
 
   func testBlockCommentValue() {
-    XCTAssertEqual(TriviaPiece.blockComment("/* world */").commentValue, "/* world */")
+    XCTAssertEqual(TriviaPiece.blockComment("/* world */").commentValue, "world")
+    XCTAssertEqual(TriviaPiece.blockComment("/*world*/").commentValue, "world")
+    XCTAssertEqual(TriviaPiece.blockComment("/* */").commentValue, "")
   }
 
   func testDocLineCommentValue() {
-    XCTAssertEqual(TriviaPiece.docLineComment("/// docs").commentValue, "/// docs")
+    XCTAssertEqual(TriviaPiece.docLineComment("/// docs").commentValue, "docs")
+    XCTAssertEqual(TriviaPiece.docLineComment("///docs").commentValue, "docs")
+    XCTAssertEqual(TriviaPiece.docLineComment("///").commentValue, "")
   }
 
   func testDocBlockCommentValue() {
-    XCTAssertEqual(TriviaPiece.docBlockComment("/** docs */").commentValue, "/** docs */")
+    XCTAssertEqual(TriviaPiece.docBlockComment("/** docs */").commentValue, "docs")
+    XCTAssertEqual(TriviaPiece.docBlockComment("/**docs*/").commentValue, "docs")
+    XCTAssertEqual(TriviaPiece.docBlockComment("/** */").commentValue, "")
   }
 
   func testNonCommentPiecesReturnNil() {

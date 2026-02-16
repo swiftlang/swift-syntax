@@ -217,7 +217,10 @@ extension RawTriviaPiece: CustomDebugStringConvertible {
 }
 
 extension TriviaPiece {
-  /// If this piece is a comment, returns the text of the comment (including delimiters).
+  /// If this piece is a comment, returns the content of the comment with introducers stripped.
+  ///
+  /// For line comments, the `//` or `///` prefix and a single leading space (if present) are removed.
+  /// For block comments, the `/* */` or `/** */` delimiters and a single leading/trailing space are removed.
   /// Returns `nil` for non-comment pieces such as spaces, newlines, or unexpected text.
   ///
   /// The four comment kinds are:
@@ -227,14 +230,36 @@ extension TriviaPiece {
   /// - ``TriviaPiece/docBlockComment(_:)`` — documentation block comments delimited by `/**` and `*/`
   public var commentValue: String? {
     switch self {
-    case .lineComment(let text),
-      .blockComment(let text),
-      .docLineComment(let text),
-      .docBlockComment(let text):
-      return text
+    case .lineComment(let text):
+      return String(text.dropFirst(2).drop(while: { $0 == " " }))
+    case .docLineComment(let text):
+      return String(text.dropFirst(3).drop(while: { $0 == " " }))
+    case .blockComment(let text):
+      return Self.stripBlockComment(text, docPrefix: "/*")
+    case .docBlockComment(let text):
+      return Self.stripBlockComment(text, docPrefix: "/**")
     default:
       return nil
     }
+  }
+
+  /// Strips block comment delimiters (`/* */` or `/** */`) and a single leading space if present.
+  private static func stripBlockComment(_ text: String, docPrefix: String) -> String {
+    var content = text[...]
+    if content.hasPrefix(docPrefix) {
+      content = content.dropFirst(docPrefix.count)
+    }
+    if content.hasSuffix("*/") {
+      content = content.dropLast(2)
+    }
+    // Strip a single leading/trailing space that commonly separates the marker from content.
+    if content.hasPrefix(" ") {
+      content = content.dropFirst()
+    }
+    if content.hasSuffix(" ") {
+      content = content.dropLast()
+    }
+    return String(content)
   }
 }
 

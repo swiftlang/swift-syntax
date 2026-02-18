@@ -23,6 +23,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case oldOwnershipOperatorSpellings
   case defaultIsolationPerFile
   case borrowAndMutateAccessors
+  case literalExpressions
 
   /// The name of the feature as it is written in the compiler's `Features.def` file.
   public var featureName: String {
@@ -47,6 +48,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "DefaultIsolationPerFile"
     case .borrowAndMutateAccessors:
       return "BorrowAndMutateAccessors"
+    case .literalExpressions:
+      return "LiteralExpressions"
     }
   }
 
@@ -73,6 +76,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "set default actor isolation for a file"
     case .borrowAndMutateAccessors:
       return "borrow and mutate accessors"
+    case .literalExpressions:
+      return "constant-foldable literal expressions"
     }
   }
 

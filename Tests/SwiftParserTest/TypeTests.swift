@@ -872,4 +872,72 @@ final class InlineArrayTypeTests: ParserTestCase {
     // Make sure this isn't parsed as '<variadic-type> of <missing type>'
     assertParse("[x...of]")
   }
+
+  func testExpressionCount() {
+    assertParse(
+      "InlineArray<1️⃣(1 + 3), Int>()",
+      { ExprSyntax.parse(from: &$0) },
+      substructure: GenericArgumentSyntax(
+        argument: .expr(
+          ExprSyntax(
+            TupleExprSyntax(
+              elements: .init([
+                .init(
+                  expression: SequenceExprSyntax(
+                    elements: .init([
+                      ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("1"))),
+                      ExprSyntax(BinaryOperatorExprSyntax(operator: .binaryOperator("+"))),
+                      ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("3"))),
+                    ])
+                  )
+                )
+              ])
+            )
+          )
+        ),
+        trailingComma: .commaToken()
+      ),
+      substructureAfterMarker: "1️⃣",
+      experimentalFeatures: .literalExpressions
+    )
+  }
+
+  func testSugaredExpressionCount() {
+    // Parenthesized expression as count in a sugared InlineArray syntax
+    assertParse(
+      "[(2 + 3) of Int]",
+      substructure: InlineArrayTypeSyntax(
+        count: .init(
+          argument: .expr(
+            ExprSyntax(
+              TupleExprSyntax(
+                elements: .init([
+                  .init(
+                    expression: SequenceExprSyntax(
+                      elements: .init([
+                        ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("2"))),
+                        ExprSyntax(BinaryOperatorExprSyntax(operator: .binaryOperator("+"))),
+                        ExprSyntax(IntegerLiteralExprSyntax(literal: .integerLiteral("3"))),
+                      ])
+                    )
+                  )
+                ])
+              )
+            )
+          )
+        ),
+        separator: .keyword(.of),
+        element: .init(argument: .type(TypeSyntax("Int")))
+      ),
+      experimentalFeatures: .literalExpressions
+    )
+  }
+
+  func testNestedExpressionCount() {
+    // Nested inline arrays with expression counts
+    assertParse(
+      "[(1 + 1) of [(2 + 1) of Int]]",
+      experimentalFeatures: .literalExpressions
+    )
+  }
 }

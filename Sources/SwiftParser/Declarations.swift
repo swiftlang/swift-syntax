@@ -717,16 +717,16 @@ extension Parser {
   }
 
   mutating func parseSameTypeLeftType() -> RawSameTypeRequirementSyntax.LeftType {
-    if let valueType = self.parseValueType() {
-      return .expr(valueType)
+    if self.withLookahead({ $0.canParseValueType() }) {
+      return .expr(self.parseValueType())
     } else {
       return .type(self.parseType())
     }
   }
 
   mutating func parseSameTypeRightType() -> RawSameTypeRequirementSyntax.RightType {
-    if let valueType = self.parseValueType() {
-      return .expr(valueType)
+    if self.withLookahead({ $0.canParseValueType() }) {
+      return .expr(self.parseValueType())
     } else {
       return .type(self.parseType())
     }

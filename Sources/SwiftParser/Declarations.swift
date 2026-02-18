@@ -1337,9 +1337,24 @@ extension Parser {
   /// If a `throws` keyword appears right in front of the `arrow`, it is returned as `misplacedThrowsKeyword` so it can be synthesized in front of the arrow.
   mutating func parseFunctionReturnClause(
     effectSpecifiers: inout (some RawMisplacedEffectSpecifiersTrait)?,
-    allowNamedOpaqueResultType: Bool
+    allowNamedOpaqueResultType: Bool,
+    unexpectedColon: RawTokenSyntax? = nil
   ) -> RawReturnClauseSyntax {
-    let (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
+    let unexpectedBeforeArrow: RawUnexpectedNodesSyntax?
+    let arrow: RawTokenSyntax
+    if let unexpectedColon {
+      let diagnostic = TokenDiagnostic(
+        .expectedArrowBeforeReturnType,
+        byteOffset: unexpectedColon.leadingTriviaByteLength
+      )
+      unexpectedBeforeArrow = nil
+      arrow = unexpectedColon.tokenView.withTokenDiagnostic(
+        tokenDiagnostic: diagnostic,
+        arena: arena
+      )
+    } else {
+      (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
+    }
     let unexpectedBeforeReturnType = self.parseMisplacedEffectSpecifiers(&effectSpecifiers)
     let type: RawTypeSyntax
     if allowNamedOpaqueResultType {
@@ -1439,6 +1454,12 @@ extension Parser {
       returnClause = self.parseFunctionReturnClause(
         effectSpecifiers: &effectSpecifiers,
         allowNamedOpaqueResultType: true
+      )
+    } else if let colon = self.consume(if: .colon) {
+      returnClause = self.parseFunctionReturnClause(
+        effectSpecifiers: &effectSpecifiers,
+        allowNamedOpaqueResultType: true,
+        unexpectedColon: colon
       )
     } else {
       returnClause = nil

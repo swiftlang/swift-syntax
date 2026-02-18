@@ -730,6 +730,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   public static var replaceCurlyQuoteByNormalQuote: Self {
     .init(#"replace curly quotes with '"'"#)
   }
+  public static var replaceColonWithArrow: Self {
+    .init("replace ':' with '->'")
+  }
   public static var replaceNonBreakingSpaceBySpace: Self {
     .init("replace non-breaking space with ' '")
   }

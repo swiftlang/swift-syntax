@@ -25,6 +25,7 @@ public struct TokenDiagnostic: Hashable, Sendable {
 
     case editorPlaceholder
     case equalMustHaveConsistentWhitespaceOnBothSides
+    case expectedArrowBeforeReturnType
     case expectedBinaryExponentInHexFloatLiteral
     case expectedClosingBraceInUnicodeEscape
     case expectedDigitInFloatLiteral
@@ -69,6 +70,7 @@ public struct TokenDiagnostic: Hashable, Sendable {
       switch self {
       case .editorPlaceholder: return .error
       case .equalMustHaveConsistentWhitespaceOnBothSides: return .error
+      case .expectedArrowBeforeReturnType: return .error
       case .expectedBinaryExponentInHexFloatLiteral: return .error
       case .expectedClosingBraceInUnicodeEscape: return .error
       case .expectedDigitInFloatLiteral: return .error

@@ -65,6 +65,7 @@ extension TokenWarning {
 /// Please order the cases in this enum alphabetically by case name.
 public enum StaticTokenError: String, DiagnosticMessage {
   case editorPlaceholder = "editor placeholder in source file"
+  case expectedArrowBeforeReturnType = "expected '->' before return type"
   case equalMustHaveConsistentWhitespaceOnBothSides = "'=' must have consistent whitespace on both sides"
   case expectedBinaryExponentInHexFloatLiteral = "hexadecimal floating point literal must end with an exponent"
   case expectedClosingBraceInUnicodeEscape = #"expected '}' in \u{...} escape sequence"#
@@ -198,6 +199,8 @@ extension SwiftSyntax.TokenDiagnostic {
 
     switch self.kind {
     case .editorPlaceholder: return StaticTokenError.editorPlaceholder
+    case .expectedArrowBeforeReturnType:
+      return StaticTokenError.expectedArrowBeforeReturnType
     case .equalMustHaveConsistentWhitespaceOnBothSides:
       return StaticTokenError.equalMustHaveConsistentWhitespaceOnBothSides
     case .expectedBinaryExponentInHexFloatLiteral: return StaticTokenError.expectedBinaryExponentInHexFloatLiteral
@@ -298,6 +301,20 @@ extension SwiftSyntax.TokenDiagnostic {
       return [
         FixIt(
           message: .replaceCurlyQuoteByNormalQuote,
+          changes: [.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))]
+        )
+      ]
+    case .expectedArrowBeforeReturnType:
+      var fixedToken = token.with(\.tokenKind, .arrow)
+      if let previous = fixedToken.previousToken(viewMode: .sourceAccurate),
+        previous.trailingTrivia.isEmpty,
+        fixedToken.leadingTrivia.isEmpty
+      {
+        fixedToken.leadingTrivia = .space
+      }
+      return [
+        FixIt(
+          message: .replaceColonWithArrow,
           changes: [.replace(oldNode: Syntax(token), newNode: Syntax(fixedToken))]
         )
       ]

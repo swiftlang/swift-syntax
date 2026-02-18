@@ -156,6 +156,58 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testFuncColonInsteadOfArrow() {
+    assertParse(
+      """
+      func foo()1️⃣: Slice<MinimalMutableCollection<T>> {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '->' before return type",
+          fixIts: ["replace ':' with '->'"]
+        )
+      ],
+      fixedSource: """
+        func foo() -> Slice<MinimalMutableCollection<T>> {}
+        """
+    )
+
+    assertParse(
+      """
+      func foo() 1️⃣: [String] {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '->' before return type",
+          fixIts: ["replace ':' with '->'"]
+        )
+      ],
+      fixedSource: """
+        func foo() -> [String] {}
+        """
+    )
+
+    assertParse(
+      """
+      func foo<T>() async throws
+        1️⃣: Int where T: Hashable {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '->' before return type",
+          fixIts: ["replace ':' with '->'"]
+        )
+      ],
+      fixedSource: """
+        func foo<T>() async throws
+          -> Int where T: Hashable {}
+        """
+    )
+  }
+
   func testFuncAfterUnbalancedClosingBrace() {
     assertParse(
       """

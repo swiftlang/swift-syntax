@@ -23,6 +23,7 @@ public enum ExperimentalFeature: String, CaseIterable {
   case oldOwnershipOperatorSpellings
   case defaultIsolationPerFile
   case borrowAndMutateAccessors
+  case literalExpressions
   case _test_EverythingUnexpected
 
   /// The name of the feature as it is written in the compiler's `Features.def` file.
@@ -48,6 +49,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "DefaultIsolationPerFile"
     case .borrowAndMutateAccessors:
       return "BorrowAndMutateAccessors"
+    case .literalExpressions:
+      return "LiteralExpressions"
     case ._test_EverythingUnexpected:
       return "_test_EverythingUnexpected"
     }
@@ -76,6 +79,8 @@ public enum ExperimentalFeature: String, CaseIterable {
       return "set default actor isolation for a file"
     case .borrowAndMutateAccessors:
       return "borrow and mutate accessors"
+    case .literalExpressions:
+      return "constant-foldable literal expressions"
     case ._test_EverythingUnexpected:
       return "a test feature that parses everything as unexpected"
     }

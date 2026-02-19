@@ -54,11 +54,24 @@ public struct FormatRawStringLiteral: SyntaxRefactoringProvider {
       }
     }
 
-    guard maximumHashes > 0 else {
+    // Even if there are no '#' characters in the content, we may still need
+    // delimiters if the content contains characters that would be
+    // misinterpreted in a non-raw string literal (e.g. `\` would start escape
+    // sequences, `"` would close the string prematurely).
+    guard maximumHashes > 0 || contentNeedsRawDelimiters(lit) else {
       return
         lit
         .with(\.openingPounds, lit.openingPounds?.with(\.tokenKind, .rawStringPoundDelimiter("")))
         .with(\.closingPounds, lit.closingPounds?.with(\.tokenKind, .rawStringPoundDelimiter("")))
+    }
+
+    if maximumHashes == 0 {
+      // Content needs delimiters but has no '#' characters, so a single '#'
+      // delimiter is sufficient.
+      return
+        lit
+        .with(\.openingPounds, lit.openingPounds?.with(\.tokenKind, .rawStringPoundDelimiter("#")))
+        .with(\.closingPounds, lit.closingPounds?.with(\.tokenKind, .rawStringPoundDelimiter("#")))
     }
 
     let delimiters = String(repeating: "#", count: maximumHashes + 1)
@@ -67,6 +80,48 @@ public struct FormatRawStringLiteral: SyntaxRefactoringProvider {
       .with(\.openingPounds, lit.openingPounds?.with(\.tokenKind, .rawStringPoundDelimiter(delimiters)))
       .with(\.closingPounds, lit.closingPounds?.with(\.tokenKind, .rawStringPoundDelimiter(delimiters)))
   }
+}
+
+/// Check whether the content of a string literal contains characters that
+/// require raw-string delimiters (i.e. backslashes or quote sequences that
+/// would be misinterpreted in a non-raw string).
+private func contentNeedsRawDelimiters(_ lit: StringLiteralExprSyntax) -> Bool {
+  // Don't flag content from error-recovered (malformed) literals —
+  // their segments may contain stray quote characters that are artifacts
+  // of parser recovery, not actual content.
+  guard lit.closingQuote.presence == .present, lit.closingPounds?.presence != .missing else {
+    return false
+  }
+
+  let isMultiline = lit.openingQuote.tokenKind == .multilineStringQuote
+
+  for segment in lit.segments {
+    switch segment {
+    case .stringSegment(let string):
+      let text = string.content.text
+      if isMultiline {
+        // In a multiline string literal, three or more consecutive quotes
+        // would terminate the literal prematurely.
+        if text.longestRun(of: "\"") >= 3 {
+          return true
+        }
+      } else {
+        // In a single-line string literal, any quote `"` would terminate
+        // the literal prematurely.
+        if text.unicodeScalars.contains(where: { $0 == "\"" }) {
+          return true
+        }
+      }
+    case .expressionSegment:
+      // Interpolation segments are handled by the '#' counting logic.
+      break
+    #if RESILIENT_LIBRARIES
+    @unknown default:
+      fatalError()
+    #endif
+    }
+  }
+  return false
 }
 
 extension String {

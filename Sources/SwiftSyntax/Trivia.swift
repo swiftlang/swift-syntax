@@ -216,6 +216,63 @@ extension RawTriviaPiece: CustomDebugStringConvertible {
   }
 }
 
+extension TriviaPiece {
+  /// If this piece is a comment, returns the text of the comment with comment markers removed.
+  ///
+  /// For line comments (``TriviaPiece/lineComment(_:)`` and ``TriviaPiece/docLineComment(_:)``),
+  /// the leading `//` or `///` is removed, along with a single space immediately following the
+  /// marker, if present. Additional whitespace beyond that first space is preserved to maintain
+  /// relative indentation.
+  ///
+  /// For block comments (``TriviaPiece/blockComment(_:)`` and ``TriviaPiece/docBlockComment(_:)``),
+  /// the `/*` or `/**` prefix and `*/` suffix are removed, along with a single leading space after
+  /// the opening marker and a single trailing space before the closing marker, if present. If the
+  /// block comment is unterminated (no `*/`), only the opening marker is stripped.
+  ///
+  /// Returns `nil` for non-comment pieces such as spaces, newlines, or unexpected text.
+  public var commentValue: String? {
+    switch self {
+    case .lineComment(let text):
+      return String(Self.stripLineCommentPrefix(text[...], prefixLength: 2))
+    case .docLineComment(let text):
+      return String(Self.stripLineCommentPrefix(text[...], prefixLength: 3))
+    case .blockComment(let text):
+      return String(Self.stripBlockCommentMarkers(text[...], prefixLength: 2))
+    case .docBlockComment(let text):
+      return String(Self.stripBlockCommentMarkers(text[...], prefixLength: 3))
+    default:
+      return nil
+    }
+  }
+
+  /// Strips the line comment prefix (`//` or `///`) and a single space if present.
+  private static func stripLineCommentPrefix(_ text: Substring, prefixLength: Int) -> Substring {
+    var content = text.dropFirst(prefixLength)
+    if content.first == " " {
+      content = content.dropFirst()
+    }
+    return content
+  }
+
+  /// Strips block comment delimiters (`/* */` or `/** */`) and a single leading/trailing space
+  /// adjacent to the delimiters, if present. Handles unterminated block comments gracefully.
+  private static func stripBlockCommentMarkers(_ text: Substring, prefixLength: Int) -> Substring {
+    var content = text.dropFirst(prefixLength)
+    if content.hasSuffix("*/") {
+      content = content.dropLast(2)
+    }
+    // Strip a single leading space that commonly separates the opening marker from content.
+    if content.first == " " {
+      content = content.dropFirst()
+    }
+    // Strip a single trailing space that commonly separates content from the closing marker.
+    if content.last == " " {
+      content = content.dropLast()
+    }
+    return content
+  }
+}
+
 @_spi(RawSyntax)
 public extension Trivia {
   func trimmingPrefix(

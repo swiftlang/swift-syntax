@@ -39,6 +39,26 @@ class TriviaPieceCommentValueTests: XCTestCase {
     XCTAssertEqual(TriviaPiece.docBlockComment("/** */").commentValue, "")
   }
 
+  func testMultilineBlockCommentValue() {
+    // Standard multi-line block comment with `*` decoration.
+    XCTAssertEqual(
+      TriviaPiece.blockComment("/*\n * Hello, folks!\n * // Apples and oranges\n * I am a banana!\n */").commentValue,
+      "Hello, folks!\n// Apples and oranges\nI am a banana!"
+    )
+
+    // Doc block comment with `*` decoration.
+    XCTAssertEqual(
+      TriviaPiece.docBlockComment("/**\n * A documented type.\n * - Parameter x: An integer.\n */").commentValue,
+      "A documented type.\n- Parameter x: An integer."
+    )
+
+    // Multi-line without `*` decoration — preserves lines as-is, stripping empty first/last.
+    XCTAssertEqual(
+      TriviaPiece.blockComment("/*\n  Hello\n  World\n*/").commentValue,
+      "  Hello\n  World"
+    )
+  }
+
   func testNonCommentPiecesReturnNil() {
     XCTAssertNil(TriviaPiece.spaces(4).commentValue)
     XCTAssertNil(TriviaPiece.newlines(1).commentValue)

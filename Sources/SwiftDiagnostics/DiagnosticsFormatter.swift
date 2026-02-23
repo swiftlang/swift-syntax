@@ -276,15 +276,16 @@ public struct DiagnosticsFormatter {
     }
 
     // Put each line and its diagnostics together.
-    let annotatedSourceLines: [AnnotatedSourceLine] = slc.sourceLines.enumerated().map { (sourceLineIndex, sourceLine) in
-      let lineNumber = sourceLineIndex + 1
+    let annotatedSourceLines: [AnnotatedSourceLine] = slc.sourceLines.enumerated()
+      .map { (sourceLineIndex, sourceLine) in
+        let lineNumber = sourceLineIndex + 1
 
-      return AnnotatedSourceLine(
-        annotations: annotationsPerLine[lineNumber] ?? [],
-        sourceString: sourceLine, 
-        suffixText: suffixTextPerLine[lineNumber] ?? ""
-      )
-    }
+        return AnnotatedSourceLine(
+          annotations: annotationsPerLine[lineNumber] ?? [],
+          sourceString: sourceLine, 
+          suffixText: suffixTextPerLine[lineNumber] ?? ""
+        )
+      }
 
     // === Calculate Lines to Print ===
     //

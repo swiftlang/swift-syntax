@@ -147,7 +147,8 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
         |5 | }
         +---------------------------------------------------------------------
       6 | print("hello"
-        |              `- error: expected ')' to end function call
+        |      |       `- error: expected ')' to end function call
+        |      `- note: to match this opening '('
 
       """
     )

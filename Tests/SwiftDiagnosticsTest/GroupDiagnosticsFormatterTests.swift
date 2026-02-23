@@ -234,6 +234,123 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     )
   }
 
+  func testNotesInGrouping() {
+    var group = GroupedDiagnostics()
+
+    // Main source file.
+    let (mainSourceID, mainSourceMarkers) = group.addTestFile(
+      """
+      1️⃣let pi = 3.14159
+      2️⃣#myAssert(pi == 3️⃣3)
+      print("hello")
+      """,
+      displayName: "main.swift",
+      diagnosticDescriptors: [
+        DiagnosticDescriptor(
+          locationMarker: "2️⃣",
+          message: "in expansion of macro 'myAssert' here", 
+          severity: .note,
+          noteDescriptors: [
+            NoteDescriptor(
+              locationMarker: "1️⃣", id: MessageID(domain: "test", id: "conjuredNote1"), 
+              message: "Inferred type 'Double' here"
+            ),
+            NoteDescriptor(
+              locationMarker: "3️⃣", id: MessageID(domain: "test", id: "conjuredNote2"), 
+              message: "Inferred type 'Int' here"
+            )
+          ]
+        )
+      ]
+    )
+    let inExpansionNotePos = mainSourceMarkers["2️⃣"]!
+
+    // Outer expansion source file
+    let (outerExpansionSourceID, outerExpansionSourceMarkers) = group.addTestFile(
+      """
+      let 1️⃣__a = pi
+      let 2️⃣__b = 3
+      if 3️⃣#invertedEqualityCheck(__a, __b) {
+        fatalError("assertion failed: pi != 3")
+      }
+      """,
+      displayName: "#myAssert",
+      parent: (mainSourceID, inExpansionNotePos),
+      diagnosticDescriptors: [
+        DiagnosticDescriptor(
+          locationMarker: "3️⃣",
+          message: "in expansion of macro 'invertedEqualityCheck' here",
+          severity: .note,
+          noteDescriptors: [
+            NoteDescriptor(
+              locationMarker: "3️⃣", 
+              id: MessageID(domain: "test", id: "conjuredNote3"), 
+              message: "#invertedEqualityCheck expects operands of the same type"
+            ),
+            NoteDescriptor(
+              locationMarker: "1️⃣", 
+              id: MessageID(domain: "test", id: "conjuredNote1"), 
+              message: "Inferred type 'Double' here"
+            ),
+            NoteDescriptor(
+              locationMarker: "2️⃣", 
+              id: MessageID(domain: "test", id: "conjuredNote2"), 
+              message: "Inferred type 'Int' here"
+            )
+          ]
+        )
+      ]
+    )
+    let inInnerExpansionNotePos = outerExpansionSourceMarkers["3️⃣"]!
+
+    // Expansion source file
+    _ = group.addTestFile(
+      """
+      !(__a 1️⃣== __b)
+      """,
+      displayName: "#invertedEqualityCheck",
+      parent: (outerExpansionSourceID, inInnerExpansionNotePos),
+      diagnosticDescriptors: [
+        DiagnosticDescriptor(
+          locationMarker: "1️⃣",
+          message: "no matching operator '==' for types 'Double' and 'Int'",
+          severity: .error
+        )
+      ]
+    )
+
+    let annotated = DiagnosticsFormatter.annotateSources(in: group)
+    assertStringsEqualWithDiff(
+      annotated,
+      """
+      #invertedEqualityCheck:1:7: error: no matching operator '==' for types 'Double' and 'Int'
+      `- main.swift:2:1: note: expanded code originates here
+      1 | let pi = 3.14159
+        | `- note: Inferred type 'Double' here
+      2 | #myAssert(pi == 3)
+        | |               `- note: Inferred type 'Int' here
+        | `- note: in expansion of macro 'myAssert' here
+        +--- #myAssert -------------------------------------------------------
+        |1 | let __a = pi
+        |  |     `- note: Inferred type 'Double' here
+        |2 | let __b = 3
+        |  |     `- note: Inferred type 'Int' here
+        |3 | if #invertedEqualityCheck(__a, __b) {
+        |  |    |- note: in expansion of macro 'invertedEqualityCheck' here
+        |  |    `- note: #invertedEqualityCheck expects operands of the same type
+        |  +--- #invertedEqualityCheck ---------------------------------------
+        |  |1 | !(__a == __b)
+        |  |  |       `- error: no matching operator '==' for types 'Double' and 'Int'
+        |  +------------------------------------------------------------------
+        |4 |   fatalError("assertion failed: pi != 3")
+        |5 | }
+        +---------------------------------------------------------------------
+      3 | print("hello")
+      
+      """
+    )
+  }
+
   func testCategoryFootnotes() {
     let categories = [
       DiagnosticCategory(

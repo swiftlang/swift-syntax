@@ -100,6 +100,7 @@ swift_syntax_library(
     deps = [
         ":SwiftDiagnostics",
         ":SwiftOperators",
+        ":SwiftParser",
         ":SwiftSyntax",
         ":SwiftSyntaxBuilder",
     ],
@@ -339,6 +340,7 @@ swift_syntax_library(
     deps = [
         ":SwiftDiagnostics",
         ":SwiftIDEUtils",
+        ":SwiftIfConfig",
         ":SwiftParser",
         ":SwiftSyntaxMacroExpansion",
         ":SwiftSyntaxMacros",
@@ -384,6 +386,25 @@ swift_syntax_test(
     ],
 )
 
+swift_syntax_library(
+    name = "SwiftWarningControl",
+    deps = [
+        ":SwiftDiagnostics",
+        ":SwiftParser",
+        ":SwiftSyntax",
+    ],
+)
+
+swift_syntax_test(
+    name = "SwiftWarningControlTest",
+    deps = [
+        ":SwiftParser",
+        ":SwiftSyntaxMacrosGenericTestSupport",
+        ":SwiftWarningControl",
+        ":_SwiftSyntaxTestSupport",
+    ],
+)
+
 cc_library(
     name = "_InstructionCounter",
     srcs = glob(["Sources/_InstructionCounter/src/*.c"]),
@@ -395,6 +416,7 @@ cc_library(
 
 cc_library(
     name = "_SwiftLibraryPluginProviderCShims",
+    srcs = glob(["Sources/_SwiftLibraryPluginProviderCShims/*.c"]),
     hdrs = glob(["Sources/_SwiftLibraryPluginProviderCShims/include/*.h"]),
     aspect_hints = ["@build_bazel_rules_swift//swift:auto_module"],
     includes = ["Sources/_SwiftLibraryPluginProviderCShims/include"],

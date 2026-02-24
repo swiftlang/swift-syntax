@@ -818,10 +818,9 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
       return .skipChildren
     }
     if let unexpected = node.unexpectedBeforeArrow,
+      node.arrow.isMissing,
       let colon = unexpected.presentTokens(satisfying: { $0.tokenKind == .colon }).first
     {
-      let noTriviaBeforeColon = colon.previousToken(viewMode: .sourceAccurate)?.trailingTrivia.isEmpty ?? true
-      let needSpace = noTriviaBeforeColon && colon.leadingTrivia.isEmpty
       addDiagnostic(
         node,
         .expectedArrowBeforeReturnType,
@@ -829,8 +828,12 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
           FixIt(
             message: ReplaceTokensFixIt(replaceTokens: [colon], replacements: [node.arrow]),
             changes: [
-              .makeMissing(colon, transferTrivia: true),
-              .makePresent(node.arrow, leadingTrivia: needSpace ? .space : []),
+              .makeMissing(colon, transferTrivia: false),
+              .makePresent(
+                node.arrow,
+                leadingTrivia: colon.leadingTrivia,
+                trailingTrivia: colon.trailingTrivia
+              ),
             ]
           )
         ],

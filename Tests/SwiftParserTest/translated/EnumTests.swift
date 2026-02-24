@@ -1393,7 +1393,7 @@ final class EnumTests: ParserTestCase {
     assertParse(
       """
       enum E_53662_PatternMatching {
-        case 1️⃣let 2️⃣.3️⃣foo(x4️⃣, y5️⃣)6️⃣:
+        case 1️⃣let 2️⃣.3️⃣foo(x4️⃣, y5️⃣)6️⃣:7️⃣
       }
       """,
       diagnostics: [
@@ -1423,13 +1423,19 @@ final class EnumTests: ParserTestCase {
         ),
         DiagnosticSpec(
           locationMarker: "6️⃣",
-          message: "unexpected code ':' in enum"
+          message: "expected '->' before return type",
+          fixIts: ["replace ':' with '->'"],
+        ),
+        DiagnosticSpec(
+          locationMarker: "7️⃣",
+          message: "expected return type in function signature",
+          fixIts: ["insert return type"],
         ),
 
       ],
       fixedSource: """
         enum E_53662_PatternMatching {
-          case `let` .func foo(x: <#type#>, y: <#type#>):
+          case `let` .func foo(x: <#type#>, y: <#type#>) -> <#type#>
         }
         """
     )

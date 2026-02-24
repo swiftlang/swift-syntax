@@ -2612,7 +2612,7 @@ final class DeclarationTests: ParserTestCase {
         DiagnosticSpec(
           locationMarker: "1️⃣",
           message: "expected '->' before return type",
-          fixIts: ["replace ':' with '->'"],
+          fixIts: ["replace ':' with '->'"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
@@ -2622,7 +2622,7 @@ final class DeclarationTests: ParserTestCase {
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "expected '->' before return type",
-          fixIts: ["replace ':' with '->'"],
+          fixIts: ["replace ':' with '->'"]
         ),
       ],
       fixedSource: """

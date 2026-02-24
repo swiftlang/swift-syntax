@@ -2049,7 +2049,7 @@ extension Parser {
         returnClause = self.parseFunctionReturnClause(
           effectSpecifiers: &effectSpecifiers,
           allowNamedOpaqueResultType: false,
-          acceptColon: true,
+          acceptColon: true
         )
       }
     }

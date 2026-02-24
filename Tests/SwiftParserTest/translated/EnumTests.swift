@@ -1424,12 +1424,12 @@ final class EnumTests: ParserTestCase {
         DiagnosticSpec(
           locationMarker: "6️⃣",
           message: "expected '->' before return type",
-          fixIts: ["replace ':' with '->'"],
+          fixIts: ["replace ':' with '->'"]
         ),
         DiagnosticSpec(
           locationMarker: "7️⃣",
           message: "expected return type in function signature",
-          fixIts: ["insert return type"],
+          fixIts: ["insert return type"]
         ),
 
       ],

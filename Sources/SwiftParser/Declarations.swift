@@ -1347,7 +1347,7 @@ extension Parser {
   mutating func parseFunctionReturnClause(
     effectSpecifiers: inout (some RawMisplacedEffectSpecifiersTrait)?,
     allowNamedOpaqueResultType: Bool,
-    acceptColon: Bool,
+    acceptColon: Bool
   ) -> RawReturnClauseSyntax {
     let (unexpectedBeforeArrow, arrow) =
       if acceptColon, let colon = self.consume(if: .colon) {
@@ -1454,7 +1454,7 @@ extension Parser {
       returnClause = self.parseFunctionReturnClause(
         effectSpecifiers: &effectSpecifiers,
         allowNamedOpaqueResultType: true,
-        acceptColon: true,
+        acceptColon: true
       )
     } else {
       returnClause = nil
@@ -1499,7 +1499,7 @@ extension Parser {
     let returnClause = self.parseFunctionReturnClause(
       effectSpecifiers: &misplacedEffectSpecifiers,
       allowNamedOpaqueResultType: true,
-      acceptColon: true,
+      acceptColon: true
     )
 
     // Parse a 'where' clause if present.

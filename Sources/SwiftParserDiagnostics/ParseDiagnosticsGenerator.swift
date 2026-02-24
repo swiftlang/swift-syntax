@@ -813,6 +813,33 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return handleEffectSpecifiers(node)
   }
 
+  public override func visit(_ node: ReturnClauseSyntax) -> SyntaxVisitorContinueKind {
+    if shouldSkip(node) {
+      return .skipChildren
+    }
+    if let unexpected = node.unexpectedBeforeArrow,
+      let colon = unexpected.presentTokens(satisfying: { $0.tokenKind == .colon }).first
+    {
+      let noTriviaBeforeColon = colon.previousToken(viewMode: .sourceAccurate)?.trailingTrivia.isEmpty ?? true
+      let needSpace = noTriviaBeforeColon && colon.leadingTrivia.isEmpty
+      addDiagnostic(
+        node,
+        .expectedArrowBeforeReturnType,
+        fixIts: [
+          FixIt(
+            message: ReplaceTokensFixIt(replaceTokens: [colon], replacements: [node.arrow]),
+            changes: [
+              .makeMissing(colon, transferTrivia: true),
+              .makePresent(node.arrow, leadingTrivia: needSpace ? .space : []),
+            ]
+          )
+        ],
+        handledNodes: [colon.id, node.arrow.id]
+      )
+    }
+    return .visitChildren
+  }
+
   public override func visit(_ node: GenericRequirementSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

@@ -208,6 +208,56 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testColonInsteadOfArrowSubscript() {
+    assertParse(
+      """
+      struct S {
+        subscript()1️⃣: Slice<MinimalMutableCollection<T>> {
+          Slice()
+        }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '->' before return type",
+          fixIts: ["replace ':' with '->'"]
+        )
+      ],
+      fixedSource: """
+        struct S {
+          subscript() -> Slice<MinimalMutableCollection<T>> {
+            Slice()
+          }
+        }
+        """
+    )
+
+    assertParse(
+      """
+      struct S {
+        subscript(offset: Int) 1️⃣: String {
+          "test"
+        }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '->' before return type",
+          fixIts: ["replace ':' with '->'"]
+        )
+      ],
+      fixedSource: """
+        struct S {
+          subscript(offset: Int) -> String {
+            "test"
+          }
+        }
+        """
+    )
+  }
+
   func testFuncAfterUnbalancedClosingBrace() {
     assertParse(
       """

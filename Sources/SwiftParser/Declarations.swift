@@ -1311,10 +1311,12 @@ extension Parser {
     }
 
     var unexpectedAfterAsync: [RawSyntax?] = []
-    /// Only allow recovery to the arrow with exprKeyword precedence so we only
-    /// skip over misplaced identifiers and don't e.g. recover to an arrow in a 'where' clause.
-    if self.canRecoverTo(TokenSpec(.arrow, recoveryPrecedence: .exprKeyword)) != nil {
-      let output = self.parseFunctionReturnClause(effectSpecifiers: &effectSpecifiers, allowNamedOpaqueResultType: true)
+    if self.atFunctionReturnClause() {
+      let output = self.parseFunctionReturnClause(
+        effectSpecifiers: &effectSpecifiers,
+        allowNamedOpaqueResultType: true,
+        acceptColon: true
+      )
       unexpectedAfterAsync.append(RawSyntax(output))
     }
 
@@ -1334,27 +1336,25 @@ extension Parser {
 }
 
 extension Parser {
+  mutating func atFunctionReturnClause() -> Bool {
+    /// Only allow recovery to the arrow with exprKeyword precedence so we only
+    /// skip over misplaced identifiers and don't e.g. recover to an arrow in a 'where' clause.
+    self.canRecoverTo(TokenSpec(.arrow, recoveryPrecedence: .exprKeyword)) != nil
+      || self.at(.colon)
+  }
+
   /// If a `throws` keyword appears right in front of the `arrow`, it is returned as `misplacedThrowsKeyword` so it can be synthesized in front of the arrow.
   mutating func parseFunctionReturnClause(
     effectSpecifiers: inout (some RawMisplacedEffectSpecifiersTrait)?,
     allowNamedOpaqueResultType: Bool,
-    unexpectedColon: RawTokenSyntax? = nil
+    acceptColon: Bool,
   ) -> RawReturnClauseSyntax {
-    let unexpectedBeforeArrow: RawUnexpectedNodesSyntax?
-    let arrow: RawTokenSyntax
-    if let unexpectedColon {
-      let diagnostic = TokenDiagnostic(
-        .expectedArrowBeforeReturnType,
-        byteOffset: unexpectedColon.leadingTriviaByteLength
-      )
-      unexpectedBeforeArrow = nil
-      arrow = unexpectedColon.tokenView.withTokenDiagnostic(
-        tokenDiagnostic: diagnostic,
-        arena: arena
-      )
-    } else {
-      (unexpectedBeforeArrow, arrow) = self.expect(.arrow)
-    }
+    let (unexpectedBeforeArrow, arrow) =
+      if acceptColon, let colon = self.consume(if: .colon) {
+        (RawUnexpectedNodesSyntax([colon], arena: self.arena), self.missingToken(.arrow))
+      } else {
+        self.expect(.arrow)
+      }
     let unexpectedBeforeReturnType = self.parseMisplacedEffectSpecifiers(&effectSpecifiers)
     let type: RawTypeSyntax
     if allowNamedOpaqueResultType {
@@ -1450,16 +1450,11 @@ extension Parser {
 
     /// Only allow recovery to the arrow with exprKeyword precedence so we only
     /// skip over misplaced identifiers and don't e.g. recover to an arrow in a 'where' clause.
-    if self.canRecoverTo(TokenSpec(.arrow, recoveryPrecedence: .exprKeyword)) != nil {
-      returnClause = self.parseFunctionReturnClause(
-        effectSpecifiers: &effectSpecifiers,
-        allowNamedOpaqueResultType: true
-      )
-    } else if let colon = self.consume(if: .colon) {
+    if self.atFunctionReturnClause() {
       returnClause = self.parseFunctionReturnClause(
         effectSpecifiers: &effectSpecifiers,
         allowNamedOpaqueResultType: true,
-        unexpectedColon: colon
+        acceptColon: true,
       )
     } else {
       returnClause = nil
@@ -1503,7 +1498,8 @@ extension Parser {
     var misplacedEffectSpecifiers: RawFunctionEffectSpecifiersSyntax?
     let returnClause = self.parseFunctionReturnClause(
       effectSpecifiers: &misplacedEffectSpecifiers,
-      allowNamedOpaqueResultType: true
+      allowNamedOpaqueResultType: true,
+      acceptColon: true,
     )
 
     // Parse a 'where' clause if present.

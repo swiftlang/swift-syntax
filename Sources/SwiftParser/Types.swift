@@ -41,7 +41,8 @@ extension Parser {
       var effectSpecifiers = self.parseTypeEffectSpecifiers()
       let returnClause = self.parseFunctionReturnClause(
         effectSpecifiers: &effectSpecifiers,
-        allowNamedOpaqueResultType: false
+        allowNamedOpaqueResultType: false,
+        acceptColon: false,
       )
 
       let unexpectedBeforeLeftParen: RawUnexpectedNodesSyntax?

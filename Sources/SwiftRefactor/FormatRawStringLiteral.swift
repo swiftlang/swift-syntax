@@ -65,15 +65,6 @@ public struct FormatRawStringLiteral: SyntaxRefactoringProvider {
         .with(\.closingPounds, lit.closingPounds?.with(\.tokenKind, .rawStringPoundDelimiter("")))
     }
 
-    if maximumHashes == 0 {
-      // Content needs delimiters but has no '#' characters, so a single '#'
-      // delimiter is sufficient.
-      return
-        lit
-        .with(\.openingPounds, lit.openingPounds?.with(\.tokenKind, .rawStringPoundDelimiter("#")))
-        .with(\.closingPounds, lit.closingPounds?.with(\.tokenKind, .rawStringPoundDelimiter("#")))
-    }
-
     let delimiters = String(repeating: "#", count: maximumHashes + 1)
     return
       lit
@@ -89,7 +80,7 @@ private func contentNeedsRawDelimiters(_ lit: StringLiteralExprSyntax) -> Bool {
   // Don't flag content from error-recovered (malformed) literals —
   // their segments may contain stray quote characters that are artifacts
   // of parser recovery, not actual content.
-  guard lit.closingQuote.presence == .present, lit.closingPounds?.presence != .missing else {
+  guard !lit.hasError else {
     return false
   }
 
@@ -99,16 +90,20 @@ private func contentNeedsRawDelimiters(_ lit: StringLiteralExprSyntax) -> Bool {
     switch segment {
     case .stringSegment(let string):
       let text = string.content.text
+      // A backslash would start an escape sequence in a non-raw string.
+      if text.unicodeScalars.contains(#"\"#) {
+        return true
+      }
       if isMultiline {
         // In a multiline string literal, three or more consecutive quotes
         // would terminate the literal prematurely.
-        if text.longestRun(of: "\"") >= 3 {
+        if text.contains(#"""""#) {
           return true
         }
       } else {
         // In a single-line string literal, any quote `"` would terminate
         // the literal prematurely.
-        if text.unicodeScalars.contains(where: { $0 == "\"" }) {
+        if text.unicodeScalars.contains(#"""#) {
           return true
         }
       }

@@ -115,7 +115,7 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
       """
 
     let expected: CodeBlockItemListSyntax = """
-      let coordinates = reset ? (x: 0, y: 0) : (x: 100, y: 200)
+      let coordinates: (x: Int, y: Int) = reset ? (x: 0, y: 0) : (x: 100, y: 200)
       """
 
     try assertRefactorConvert(baseline, expected: expected)

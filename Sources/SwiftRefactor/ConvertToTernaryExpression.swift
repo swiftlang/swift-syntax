@@ -87,40 +87,33 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
   }
 
   // MARK: - Finding Patterns
+  /// Finds a convertible if-else pattern by searching for if expressions first,
+  /// then optionally checking for a preceding variable declaration.
   private static func findConvertiblePattern(in codeBlock: CodeBlockItemListSyntax) throws -> ConvertibleIfElse? {
     let items = Array(codeBlock)
     guard !items.isEmpty else { return nil }
 
-    /// Variable declaration followed by if statement.
-    if items.count >= 2 {
-      for i in 0..<(items.count - 1) {
-        if let varDecl = items[i].item.as(VariableDeclSyntax.self),
-          let ifExpr = extractIfExpr(from: items[i + 1])
-        {
+    for (ifIndex, item) in items.enumerated() {
+      guard let ifExpr = extractIfExpr(from: item) else { continue }
 
-          if let convertible = try analyzePattern(
-            variableDecl: varDecl,
-            ifExpr: ifExpr,
-            varIndex: i,
-            ifIndex: i + 1
-          ) {
-            return convertible
-          }
-        }
+      var varDecl: VariableDeclSyntax? = nil
+      var varIndex: Int? = nil
+
+      if ifIndex > 0,
+        let previousVarDecl = items[ifIndex - 1].item.as(VariableDeclSyntax.self),
+        declarationMatchesIfAssignment(previousVarDecl, ifExpr: ifExpr)
+      {
+        varDecl = previousVarDecl
+        varIndex = ifIndex - 1
       }
-    }
 
-    /// Just if statement (variable exists elsewhere).
-    for (index, item) in items.enumerated() {
-      if let ifExpr = extractIfExpr(from: item) {
-        if let convertible = try analyzePattern(
-          variableDecl: nil,
-          ifExpr: ifExpr,
-          varIndex: nil,
-          ifIndex: index
-        ) {
-          return convertible
-        }
+      if let convertible = try analyzePattern(
+        variableDecl: varDecl,
+        ifExpr: ifExpr,
+        varIndex: varIndex,
+        ifIndex: ifIndex
+      ) {
+        return convertible
       }
     }
 
@@ -132,6 +125,30 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
       return exprStmt.expression.as(IfExprSyntax.self)
     }
     return item.item.as(IfExprSyntax.self)
+  }
+
+  /// Quick check to see if a variable declaration matches the assignment in an if expression
+  private static func declarationMatchesIfAssignment(
+    _ varDecl: VariableDeclSyntax,
+    ifExpr: IfExprSyntax
+  ) -> Bool {
+    guard validateVariableDecl(varDecl),
+      varDecl.bindings.count == 1,
+      let binding = varDecl.bindings.first,
+      let identifierPattern = binding.pattern.as(IdentifierPatternSyntax.self)
+    else {
+      return false
+    }
+
+    let varName = identifierPattern.identifier.text
+
+    guard let thenAssignment = try? extractSingleAssignment(from: ifExpr.body),
+      let assignedName = thenAssignment.targetName
+    else {
+      return false
+    }
+
+    return varName == assignedName
   }
 
   private static func analyzePattern(
@@ -148,7 +165,8 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
         return nil
       }
 
-      guard let binding = variableDecl.bindings.first,
+      guard variableDecl.bindings.count == 1,
+        let binding = variableDecl.bindings.first,
         let identifierPattern = binding.pattern.as(IdentifierPatternSyntax.self)
       else {
         return nil
@@ -156,15 +174,15 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
       expectedVariableName = identifierPattern.identifier.text
     }
 
-    guard validateIfExpr(ifExpr) else {
+    guard let firstCondition = ifExpr.conditions.only,
+      case .expression(let condition) = firstCondition.condition
+    else {
       return nil
     }
 
-    guard let condition = extractCondition(from: ifExpr) else {
-      return nil
-    }
-
-    guard let elseBlock = extractElseBlock(from: ifExpr) else {
+    guard let elseBody = ifExpr.elseBody,
+      case .codeBlock(let elseBlock) = elseBody
+    else {
       return nil
     }
 
@@ -214,6 +232,11 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
   }
 
   // MARK: - Validation Helpers
+  private static func isNamedTupleType(_ type: TypeSyntax) -> Bool {
+    guard let tupleType = type.as(TupleTypeSyntax.self) else { return false }
+    return tupleType.elements.contains { $0.firstName != nil }
+  }
+
   private static func validateVariableDecl(_ decl: VariableDeclSyntax) -> Bool {
     guard decl.bindings.count == 1,
       let binding = decl.bindings.first,
@@ -228,40 +251,8 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
     return keyword == .keyword(.let) || keyword == .keyword(.var)
   }
 
-  private static func validateIfExpr(_ ifExpr: IfExprSyntax) -> Bool {
-    return ifExpr.conditions.count == 1
-  }
-
-  private static func extractCondition(from ifExpr: IfExprSyntax) -> ExprSyntax? {
-    guard let firstCondition = ifExpr.conditions.first else {
-      return nil
-    }
-
-    guard case .expression(let condition) = firstCondition.condition else {
-      return nil
-    }
-
-    return condition
-  }
-
-  private static func extractElseBlock(from ifExpr: IfExprSyntax) -> CodeBlockSyntax? {
-    guard let elseBody = ifExpr.elseBody else {
-      return nil
-    }
-
-    switch elseBody {
-    case .codeBlock(let block):
-      return block
-    case .ifExpr:
-      return nil
-    }
-  }
-
   private static func normalized(_ expression: ExprSyntax) -> String {
-    expression
-      .with(\.leadingTrivia, [])
-      .with(\.trailingTrivia, .space)
-      .description
+    expression.trimmed.description
   }
 
   // MARK: - Extracting Assignments
@@ -270,9 +261,7 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
     from codeBlock: CodeBlockSyntax
   ) throws -> AssignmentInfo? {
 
-    guard codeBlock.statements.count == 1,
-      let statement = codeBlock.statements.first
-    else {
+    guard let statement = codeBlock.statements.only else {
       return nil
     }
 
@@ -299,11 +288,8 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
 
     let elements = Array(sequenceExpr.elements)
 
-    let expectedElementCount = 3
-    let assignmentOperatorIndex = 1
-
-    guard elements.count == expectedElementCount,
-      elements[assignmentOperatorIndex].as(AssignmentExprSyntax.self) != nil
+    guard elements.count == 3,
+      elements[1].as(AssignmentExprSyntax.self) != nil
     else {
       return nil
     }
@@ -336,8 +322,14 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
   }
 
   private static func isExpressionTooComplexForTernary(_ expr: ExprSyntax) -> Bool {
+    // Nested ternaries reduce readability: x = a ? b : (c ? d : e)
     if expr.as(TernaryExprSyntax.self) != nil { return true }
+
+    // Closures in ternaries are harder to read than if-else blocks.
+    // Example: action = condition ? { [weak self] in self?.log() } : { print("default") }
+    // is less clear than an if-else with proper formatting and line breaks.
     if expr.as(ClosureExprSyntax.self) != nil { return true }
+
     return false
   }
 
@@ -355,9 +347,7 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
           let assignmentExpr = createTernaryAssignment(from: convertible)
           let assignmentStmt = ExpressionStmtSyntax(expression: assignmentExpr)
           newItems.append(
-            withoutTrivia(
-              CodeBlockItemSyntax(item: .stmt(StmtSyntax(assignmentStmt)))
-            )
+            CodeBlockItemSyntax(item: .stmt(StmtSyntax(assignmentStmt))).trimmed
           )
         }
         continue
@@ -366,9 +356,7 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
       if let varDeclIndex = convertible.variableDeclIndex, index == varDeclIndex {
         let newDecl = createTernaryDeclaration(from: convertible)
         newItems.append(
-          withoutTrivia(
-            CodeBlockItemSyntax(item: .decl(DeclSyntax(newDecl)))
-          )
+          CodeBlockItemSyntax(item: .decl(DeclSyntax(newDecl))).trimmed
         )
         continue
       }
@@ -380,23 +368,13 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
   }
 
   // MARK: - Builders
-  private static func withoutTrivia<T: SyntaxProtocol>(_ node: T) -> T {
-    node.with(\.leadingTrivia, []).with(\.trailingTrivia, [])
-  }
-
   private static func makeTernaryExpr(from convertible: ConvertibleIfElse) -> TernaryExprSyntax {
     TernaryExprSyntax(
-      condition: convertible.condition
-        .with(\.leadingTrivia, [])
-        .with(\.trailingTrivia, .space),
+      condition: convertible.condition.trimmed.with(\.trailingTrivia, .space),
       questionMark: .infixQuestionMarkToken(trailingTrivia: .space),
-      thenExpression: convertible.trueExpr
-        .with(\.leadingTrivia, [])
-        .with(\.trailingTrivia, .space),
+      thenExpression: convertible.trueExpr.trimmed.with(\.trailingTrivia, .space),
       colon: .colonToken(trailingTrivia: .space),
-      elseExpression: convertible.falseExpr
-        .with(\.leadingTrivia, [])
-        .with(\.trailingTrivia, [])
+      elseExpression: convertible.falseExpr.trimmed
     )
   }
 
@@ -412,9 +390,12 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
 
     let ternaryExpr = makeTernaryExpr(from: convertible)
 
+    let preserveAnnotation = originalBinding.typeAnnotation.map { isNamedTupleType($0.type) } ?? false
+    let typeAnnotation: TypeAnnotationSyntax? = preserveAnnotation ? originalBinding.typeAnnotation?.trimmed : nil
+
     let newBinding =
       originalBinding
-      .with(\.typeAnnotation, nil)
+      .with(\.typeAnnotation, typeAnnotation)
       .with(
         \.initializer,
         InitializerClauseSyntax(
@@ -439,47 +420,5 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
     )
 
     return ExprSyntax(assignmentSeq)
-  }
-}
-
-// MARK: - Alternative API for single if statement refactoring
-extension ConvertToTernaryExpression {
-
-  public static func refactor(
-    ifExpr: IfExprSyntax,
-    variableDecl: VariableDeclSyntax? = nil
-  ) throws -> VariableDeclSyntax? {
-
-    guard
-      let convertible = try analyzePattern(
-        variableDecl: variableDecl,
-        ifExpr: ifExpr,
-        varIndex: variableDecl != nil ? 0 : nil,
-        ifIndex: variableDecl != nil ? 1 : 0
-      )
-    else {
-      throw RefactoringNotApplicableError(
-        "Cannot convert: if-else pattern is not suitable for ternary expression conversion"
-      )
-    }
-
-    if convertible.variableDecl != nil {
-      return createTernaryDeclaration(from: convertible)
-    }
-
-    return nil
-  }
-
-  public static func canRefactor(
-    ifExpr: IfExprSyntax,
-    variableDecl: VariableDeclSyntax? = nil
-  ) -> Bool {
-    return
-      (try? analyzePattern(
-        variableDecl: variableDecl,
-        ifExpr: ifExpr,
-        varIndex: variableDecl != nil ? 0 : nil,
-        ifIndex: variableDecl != nil ? 1 : 0
-      )) != nil
   }
 }

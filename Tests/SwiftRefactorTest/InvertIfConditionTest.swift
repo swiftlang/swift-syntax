@@ -72,13 +72,7 @@ final class InvertIfConditionTest: XCTestCase {
     ]
 
     for (input, expected) in tests {
-      let inputSyntax = try XCTUnwrap(
-        ExprSyntax.parse(from: input).as(IfExprSyntax.self),
-        "Failed validity check: \(input)"
-      )
-      let expectedSyntax = try XCTUnwrap(ExprSyntax.parse(from: expected), "Failed validity check: \(expected)")
-
-      try assertRefactor(inputSyntax, context: (), provider: InvertIfCondition.self, expected: expectedSyntax)
+      try assertInvertIfCondition(input, expected: expected)
     }
   }
 
@@ -125,12 +119,37 @@ final class InvertIfConditionTest: XCTestCase {
     ]
 
     for input in tests {
-      let inputSyntax = try XCTUnwrap(
-        ExprSyntax.parse(from: input).as(IfExprSyntax.self),
-        "Failed validity check: \(input)"
-      )
-      try assertRefactor(inputSyntax, context: (), provider: InvertIfCondition.self, expected: inputSyntax)
+      try assertInvertIfCondition(input, expected: input)
     }
+  }
+
+  private func assertInvertIfCondition(
+    _ input: String,
+    expected: String,
+    file: StaticString = #filePath,
+    line: UInt = #line
+  ) throws {
+    let inputSyntax = try XCTUnwrap(
+      ExprSyntax.parse(from: input).as(IfExprSyntax.self),
+      "Failed validity check: \(input)",
+      file: file,
+      line: line
+    )
+    let expectedSyntax = try XCTUnwrap(
+      ExprSyntax.parse(from: expected),
+      "Failed validity check: \(expected)",
+      file: file,
+      line: line
+    )
+
+    try assertRefactor(
+      inputSyntax,
+      context: (),
+      provider: InvertIfCondition.self,
+      expected: expectedSyntax,
+      file: file,
+      line: line
+    )
   }
 }
 

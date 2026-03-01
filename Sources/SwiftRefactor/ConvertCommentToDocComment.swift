@@ -62,11 +62,7 @@ public struct ConvertCommentToDocComment: SyntaxRefactoringProvider {
     return "/" + text
   }
 
-  /// Converts a block comment (`/* ... */`) to a doc block comment
-  /// (`/** ... */`).
   private static func convertBlockComment(_ text: String) -> String {
-    // text starts with "/*" and ends with "*/"
-    // Insert an extra "*" after "/*" to produce "/**"
     return "/**" + text.dropFirst(2)
   }
 }

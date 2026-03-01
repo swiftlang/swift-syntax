@@ -40,18 +40,21 @@ import SwiftSyntax
   @_spi(Experimental) public func lookup(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     return defaultLookupImplementation(
       identifier,
       at: lookUpPosition,
       with: config,
+      cache: cache,
       propagateToParent: false
     )
       + lookupBypassingParentResults(
         identifier,
         at: lookUpPosition,
-        with: config
+        with: config,
+        cache: cache
       )
   }
 
@@ -76,16 +79,22 @@ import SwiftSyntax
   private func lookupBypassingParentResults(
     _ identifier: Identifier?,
     at lookUpPosition: AbsolutePosition,
-    with config: LookupConfig
+    with config: LookupConfig,
+    cache: LookupCache?
   ) -> [LookupResult] {
     guard let parentScope else { return [] }
 
     if let parentScope = Syntax(parentScope).asProtocol(SyntaxProtocol.self)
       as? WithGenericParametersScopeSyntax
     {
-      return parentScope.returningLookupFromGenericParameterScope(identifier, at: lookUpPosition, with: config)
+      return parentScope.returningLookupFromGenericParameterScope(
+        identifier,
+        at: lookUpPosition,
+        with: config,
+        cache: cache
+      )
     } else {
-      return lookupInParent(identifier, at: lookUpPosition, with: config)
+      return lookupInParent(identifier, at: lookUpPosition, with: config, cache: cache)
     }
   }
 }

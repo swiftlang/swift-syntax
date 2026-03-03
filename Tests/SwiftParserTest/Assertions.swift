@@ -757,8 +757,8 @@ extension ParserTestCase {
     }
 
     if !longTestsDisabled {
-      @Sendable func diagnosticsAndAssert(index: Int) {
-        let flippedTokenTree = TokenPresenceFlipper(flipTokenAtIndex: index).rewrite(Syntax(tree))
+      performConcurrentIfPossible(iterations: Array(tree.tokens(viewMode: .all)).count) { tokenIndex in
+        let flippedTokenTree = TokenPresenceFlipper(flipTokenAtIndex: tokenIndex).rewrite(Syntax(tree))
         _ = ParseDiagnosticsGenerator.diagnostics(for: flippedTokenTree)
         Self.assertMutationRoundTrip(
           source: flippedTokenTree.syntaxTextBytes,
@@ -769,15 +769,6 @@ extension ParserTestCase {
           line: line
         )
       }
-      #if !os(WASI)
-      DispatchQueue.concurrentPerform(iterations: Array(tree.tokens(viewMode: .all)).count) { tokenIndex in
-        diagnosticsAndAssert(index: tokenIndex)
-      }
-      #else
-      for tokenIndex in Array(tree.tokens(viewMode: .all)).indices {
-        diagnosticsAndAssert(index: tokenIndex)
-      }
-      #endif
 
       #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
       let mutations: [(offset: Int, replacement: TokenSpec)] = parser.alternativeTokenChoices.flatMap {
@@ -785,7 +776,7 @@ extension ParserTestCase {
         replacements in
         return replacements.map { (offset, $0) }
       }
-      @Sendable func printAndAssert(index: Int) {
+      performConcurrentIfPossible(iterations: mutations.count) { index in
         let mutation = mutations[index]
         let alternateSource = MutatedTreePrinter.print(
           tree: Syntax(tree),
@@ -800,15 +791,6 @@ extension ParserTestCase {
           line: line
         )
       }
-      #if !os(WASI)
-      DispatchQueue.concurrentPerform(iterations: mutations.count) { index in
-        printAndAssert(index: index)
-      }
-      #else
-      for index in mutations.indices {
-        printAndAssert(index: index)
-      }
-      #endif
       #endif
     }
   }

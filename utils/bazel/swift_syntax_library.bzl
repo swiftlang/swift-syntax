@@ -27,6 +27,7 @@ def swift_syntax_library(name, deps, srcs = None, testonly = False):
         module_name = name,
         deps = deps,
         testonly = testonly,
+        package_name = "swift_syntax",
     )
 
     opt_wrapper(
@@ -59,6 +60,7 @@ def swift_syntax_test(name, deps):
         tags = ["manual"],
         deps = deps,
         testonly = True,
+        package_name = "swift_syntax",
     )
 
     ios_unit_test(

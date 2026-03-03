@@ -33,7 +33,7 @@ jobs:
           fi
   test:
     name: Test in ${{ matrix.release && 'Release' || 'Debug' }} configuration
-    uses: swiftlang/github-workflows/.github/workflows/swift_package_test.yml@0.0.6
+    uses: swiftlang/github-workflows/.github/workflows/swift_package_test.yml@0.0.7
     strategy:
       fail-fast: false
       matrix:

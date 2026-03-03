@@ -70,13 +70,16 @@ class ParserTests: ParserTestCase {
       }
 
     print("\(name) - processing \(fileURLs.count) source files")
-    try await withThrowingTaskGroup(of: Void.self) { group in
+    await withTaskGroup(of: Void.self) { group in
       for fileURL in fileURLs where !shouldExclude(fileURL) {
         group.addTask {
-          try Self.runParseTest(fileURL: fileURL, checkDiagnostics: checkDiagnostics)
+          do {
+            try Self.runParseTest(fileURL: fileURL, checkDiagnostics: checkDiagnostics)
+          } catch {
+            XCTFail("\(name): \(fileURL) failed due to \(error)")
+          }
         }
       }
-      try await group.waitForAll()
     }
   }
 

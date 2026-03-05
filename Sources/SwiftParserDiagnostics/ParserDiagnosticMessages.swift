@@ -269,6 +269,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var versionComparisonNotNeeded: Self {
     .init("version comparison not needed")
   }
+  public static var expectedArrowBeforeReturnType: Self {
+    .init("expected '->' before return type")
+  }
 }
 
 // MARK: - Diagnostics (please sort alphabetically)

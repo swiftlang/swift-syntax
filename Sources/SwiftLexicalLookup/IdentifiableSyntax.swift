@@ -49,6 +49,12 @@ extension AccessorParametersSyntax: IdentifiableSyntax {
   }
 }
 
+extension EnumCaseParameterSyntax: IdentifiableSyntax {
+  var identifier: TokenSyntax {
+    secondName ?? firstName ?? TokenSyntax(.wildcard, presence: .missing)
+  }
+}
+
 extension GenericParameterSyntax: IdentifiableSyntax {
   var identifier: TokenSyntax {
     name

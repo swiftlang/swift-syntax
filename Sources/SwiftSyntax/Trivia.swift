@@ -216,6 +216,84 @@ extension RawTriviaPiece: CustomDebugStringConvertible {
   }
 }
 
+extension TriviaPiece {
+  /// If this piece is a comment, returns the content of the comment with introducers stripped.
+  ///
+  /// For line comments, the `//` or `///` prefix and a single leading space (if present) are removed.
+  /// For block comments, the `/* */` or `/** */` delimiters and a single leading/trailing space are removed.
+  /// Returns `nil` for non-comment pieces such as spaces, newlines, or unexpected text.
+  ///
+  /// The four comment kinds are:
+  /// - ``TriviaPiece/lineComment(_:)`` — developer line comments starting with `//`
+  /// - ``TriviaPiece/blockComment(_:)`` — developer block comments delimited by `/*` and `*/`
+  /// - ``TriviaPiece/docLineComment(_:)`` — documentation line comments starting with `///`
+  /// - ``TriviaPiece/docBlockComment(_:)`` — documentation block comments delimited by `/**` and `*/`
+  public var commentValue: String? {
+    switch self {
+    case .lineComment(let text):
+      return String(text.dropFirst(2).drop(while: { $0 == " " }))
+    case .docLineComment(let text):
+      return String(text.dropFirst(3).drop(while: { $0 == " " }))
+    case .blockComment(let text):
+      return Self.stripBlockComment(text, docPrefix: "/*")
+    case .docBlockComment(let text):
+      return Self.stripBlockComment(text, docPrefix: "/**")
+    default:
+      return nil
+    }
+  }
+
+  /// Strips block comment delimiters (`/* */` or `/** */`) and leading `*` decoration from each line.
+  ///
+  /// For single-line block comments like `/* hello */`, returns the content with delimiters and
+  /// a single leading/trailing space stripped. For multi-line block comments, each line is examined:
+  /// if every non-empty interior line starts with optional whitespace followed by `*` (but not `*/`),
+  /// that prefix is stripped, producing clean content lines joined by newlines.
+  private static func stripBlockComment(_ text: String, docPrefix: String) -> String {
+    var content = text[...]
+    if content.hasPrefix(docPrefix) {
+      content = content.dropFirst(docPrefix.count)
+    }
+    if content.hasSuffix("*/") {
+      content = content.dropLast(2)
+    }
+
+    // Check if this is a multi-line comment.
+    let lines = content.split(separator: "\n", omittingEmptySubsequences: false)
+    if lines.count > 1 {
+      // For multi-line block comments, strip leading whitespace + `* ` pattern from each line.
+      // First line after `/*` is typically empty or whitespace-only; last line before `*/` likewise.
+      var resultLines: [Substring] = []
+      for (index, line) in lines.enumerated() {
+        let trimmed = line.drop(while: { $0 == " " || $0 == "\t" })
+        if trimmed.hasPrefix("*") && !trimmed.hasPrefix("*/") {
+          // Strip the `*` and an optional single trailing space.
+          var stripped = trimmed.dropFirst()
+          if stripped.hasPrefix(" ") {
+            stripped = stripped.dropFirst()
+          }
+          resultLines.append(stripped)
+        } else if trimmed.isEmpty && (index == 0 || index == lines.count - 1) {
+          // Skip empty first/last lines (common in formatted block comments).
+          continue
+        } else {
+          resultLines.append(line)
+        }
+      }
+      return resultLines.joined(separator: "\n")
+    }
+
+    // Single-line: strip a single leading/trailing space that commonly separates the marker from content.
+    if content.hasPrefix(" ") {
+      content = content.dropFirst()
+    }
+    if content.hasSuffix(" ") {
+      content = content.dropLast()
+    }
+    return String(content)
+  }
+}
+
 @_spi(RawSyntax)
 public extension Trivia {
   func trimmingPrefix(

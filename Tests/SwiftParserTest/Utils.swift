@@ -12,10 +12,24 @@
 
 @_spi(Testing) import SwiftParser
 
+#if !os(WASI)
+import Dispatch
+#endif
+
 func withParser<T>(source: String, _ body: (inout Parser) throws -> T) rethrows -> T {
   var source = source
   return try source.withUTF8 { buffer in
     var parser = Parser(buffer)
     return try body(&parser)
   }
+}
+
+func performConcurrentIfPossible(iterations: Int, execute work: @Sendable (Int) -> Void) {
+  #if os(WASI)
+  for i in 0..<iterations {
+    work(i)
+  }
+  #else
+  DispatchQueue.concurrentPerform(iterations: iterations, execute: work)
+  #endif
 }

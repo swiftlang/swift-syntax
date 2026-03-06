@@ -1450,6 +1450,43 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
+  public override func visit(_ node: OptionalTypeSyntax) -> SyntaxVisitorContinueKind {
+    if handledNodes.contains(node.id) {
+      return .skipChildren
+    }
+
+    if let someOrAny = node.wrappedType.as(SomeOrAnyTypeSyntax.self),
+      let composition = someOrAny.constraint.as(CompositionTypeSyntax.self)
+    {
+      let parenthesizedComposition = TupleTypeSyntax(
+        elements: TupleTypeElementListSyntax([
+          TupleTypeElementSyntax(type: composition)
+        ])
+      )
+
+      addDiagnostic(
+        node,
+        position: node.questionMark.positionAfterSkippingLeadingTrivia,
+        .ambiguousOptionalComposition,
+        fixIts: [
+          FixIt(
+            message: .parenthesizeComposition,
+            changes: [
+              .replace(
+                oldNode: Syntax(composition),
+                newNode: Syntax(parenthesizedComposition)
+              )
+            ]
+          )
+        ],
+        handledNodes: [node.id, node.questionMark.id]
+      )
+    } else {
+      handledNodes.append(node.id)
+    }
+    return .visitChildren
+  }
+
   override open func visit(_ node: OriginallyDefinedInAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

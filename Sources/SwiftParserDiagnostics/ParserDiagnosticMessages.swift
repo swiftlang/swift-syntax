@@ -101,6 +101,9 @@ extension DiagnosticMessage where Self == StaticParserError {
   public static var allStatementsInSwitchMustBeCoveredByCase: Self {
     .init("all statements inside a switch must be covered by a 'case' or 'default' label")
   }
+  public static var ambiguousOptionalComposition: Self {
+    .init("confusing use of optional after a 'some' or 'any' composition; use parentheses to clarify precedence")
+  }
   public static var associatedTypeCannotUsePack: Self {
     .init("associated types cannot be variadic")
   }
@@ -720,6 +723,9 @@ extension FixItMessage where Self == StaticParserFixIt {
   }
   public static var insertExtraClosingPounds: Self {
     .init("insert additional closing '#' delimiters")
+  }
+  public static var parenthesizeComposition: Self {
+    .init("parenthesize composition")
   }
   public static var removeExtraneousWhitespace: Self {
     .init("remove whitespace")

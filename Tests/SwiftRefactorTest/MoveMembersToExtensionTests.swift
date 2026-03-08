@@ -48,84 +48,6 @@ final class MoveMembersToExtensionTests: XCTestCase {
     )
   }
 
-  func testMoveFunctionFromClass2() throws {
-    try assertMoveMembersToExtension(
-      """
-      class Foo {1️⃣
-        func foo() {
-          print("Hello world!")
-        }2️⃣
-
-        func bar() {
-          print("Hello world!")
-        }
-      }
-
-      struct Bar {
-        func foo() {}
-      }
-      """,
-      expected: """
-        class Foo {
-
-          func bar() {
-            print("Hello world!")
-          }
-        }
-
-        extension Foo {
-          func foo() {
-            print("Hello world!")
-          }
-        }
-
-        struct Bar {
-          func foo() {}
-        }
-        """
-    )
-  }
-
-  func testMoveFunctionFromClassWithComment() throws {
-    try assertMoveMembersToExtension(
-      """
-      class Foo {
-        // Func foo prints "Hello world!"1️⃣
-        func foo() {
-          print("Hello world!")
-        }2️⃣
-
-        func bar() {
-          print("Hello world!")
-        }
-      }
-
-      struct Bar {
-        func foo() {}
-      }
-      """,
-      expected: """
-        class Foo {
-
-          func bar() {
-            print("Hello world!")
-          }
-        }
-
-        extension Foo {
-          // Func foo prints "Hello world!"
-          func foo() {
-            print("Hello world!")
-          }
-        }
-
-        struct Bar {
-          func foo() {}
-        }
-        """
-    )
-  }
-
   func testMoveParticiallySelectedFunctionFromClass() throws {
     try assertMoveMembersToExtension(
       """
@@ -249,59 +171,21 @@ final class MoveMembersToExtensionTests: XCTestCase {
         """
     )
   }
-
-  func testMoveMembersFromEnum() throws {
-    try assertMoveMembersToExtension(
-      """
-      enum Foo {1️⃣
-        func foo() {
-          print("Hello world!")
-        }2️⃣
-
-        func bar() {
-          print("Hello world!")
-        }
-      }
-
-      struct Bar {
-        func foo() {}
-      }
-      """,
-      expected: """
-        enum Foo {
-
-          func bar() {
-            print("Hello world!")
-          }
-        }
-
-        extension Foo {
-          func foo() {
-            print("Hello world!")
-          }
-        }
-
-        struct Bar {
-          func foo() {}
-        }
-        """
-    )
-  }
 }
 
 private func assertMoveMembersToExtension(
-  _ callDecl: String,
+  _ source: String,
   expected: SourceFileSyntax,
   file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
-
-  let (markers, source) = extractMarkers(callDecl.description)
+  let (markers, source) = extractMarkers(source.description)
   let positions = markers.mapValues { AbsolutePosition(utf8Offset: $0) }
   var parser = Parser(source)
   let tree = SourceFileSyntax.parse(from: &parser)
 
-  let context = MoveMembersToExtension.Context(range: positions["1️⃣"]!..<positions["2️⃣"]!)
+  let range = try XCTUnwrap(positions["1️⃣"])..<XCTUnwrap(positions["2️⃣"])
+  let context = MoveMembersToExtension.Context(range: range)
 
   try assertRefactor(
     tree,

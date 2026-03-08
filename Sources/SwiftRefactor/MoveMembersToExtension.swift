@@ -11,10 +11,47 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-public import SwiftSyntax
+@_spi(RawSyntax) public import SwiftSyntax
 #else
-import SwiftSyntax
+@_spi(RawSyntax) import SwiftSyntax
 #endif
+
+private enum ValidationResult: CustomStringConvertible {
+  case accessor
+  case deinitializer
+  case enumCase
+  case storedProperty
+
+  var description: String {
+    switch self {
+    case .accessor: return "accessor"
+    case .deinitializer: return "deinitializer"
+    case .enumCase: return "enum case"
+    case .storedProperty: return "stored property"
+    }
+  }
+
+  /// Validates that `member` can be moved to an extension. If it can, return `nil`, otherwise return the reason why
+  /// `member` cannot be moved to an extension.
+  init?(_ member: MemberBlockItemSyntax) {
+    switch member.decl.kind {
+    case .accessorDecl:
+      self = .accessor
+    case .deinitializerDecl:
+      self = .deinitializer
+    case .enumCaseDecl:
+      self = .enumCase
+    default:
+      if let varDecl = member.decl.as(VariableDeclSyntax.self),
+         varDecl.bindings.contains(where: { $0.accessorBlock == nil || $0.initializer != nil })
+      {
+        self = .storedProperty
+      }
+      
+      return nil
+    }
+  }
+}
 
 public struct MoveMembersToExtension: SyntaxRefactoringProvider {
   public struct Context {
@@ -35,31 +72,23 @@ public struct MoveMembersToExtension: SyntaxRefactoringProvider {
       throw RefactoringNotApplicableError("Type declaration not found")
     }
 
-    var selectedMembers = [MemberBlockItemSyntax]()
-    var selectedIdentifiers = [SyntaxIdentifier]()
+    let selectedMembers = Array(declGroup.memberBlock.members).filter { context.range.overlaps($0.trimmedRange) }
+        .map { (member: $0, validationResult: ValidationResult($0)) }
 
-    var notMovedMembers: [MemberBlockItemSyntax] = []
+    var membersToMove = selectedMembers.filter({ $0.validationResult == nil }).map(\.member)
 
-    declGroup.memberBlock.members.forEach {
-      if context.range.overlaps($0.trimmedRange) {
-        if validateMember($0) {
-          selectedMembers.append($0)
-          selectedIdentifiers.append($0.id)
-        } else {
-          notMovedMembers.append($0)
-        }
-      }
-    }
-
-    guard !selectedMembers.isEmpty else {
-      throw RefactoringNotApplicableError("No members to move")
+    guard !membersToMove.isEmpty else {
+      throw RefactoringNotApplicableError(
+        "Cannot move \(Set(selectedMembers.compactMap(\.validationResult)).map(\.description).sorted()) to extension"
+      )
     }
 
     var updatedDeclGroup = declGroup
-    updatedDeclGroup.memberBlock.members = declGroup.memberBlock.members.filter { !selectedIdentifiers.contains($0.id) }
-    let updatedItem = statement.with(\.item, .decl(DeclSyntax(updatedDeclGroup)))
+    let remainingMembers = Array(declGroup.memberBlock.members).filter { !membersToMove.contains($0) }
+    membersToMove[0].decl.leadingTrivia = membersToMove[0].decl.leadingTrivia.trimmingPrefix(while: \.isSpaceOrTab)
 
-    let extensionMemberBlockSyntax = declGroup.memberBlock.with(\.members, MemberBlockItemListSyntax(selectedMembers))
+    updatedDeclGroup.memberBlock.members = MemberBlockItemListSyntax(remainingMembers)
+    let extensionMemberBlockSyntax = declGroup.memberBlock.with(\.members, MemberBlockItemListSyntax(membersToMove))
 
     var declName = decl.name
     declName.trailingTrivia = declName.trailingTrivia.merging(.space)
@@ -74,28 +103,12 @@ public struct MoveMembersToExtension: SyntaxRefactoringProvider {
     )
 
     var syntax = syntax
-    syntax.statements[statementIndex] = updatedItem
+    let updatedStatement = statement.with(\.item, .decl(DeclSyntax(updatedDeclGroup)))
+    syntax.statements[statementIndex] = updatedStatement
     syntax.statements.insert(
       CodeBlockItemSyntax(item: .decl(DeclSyntax(extensionDecl))),
       at: syntax.statements.index(after: statementIndex)
     )
     return syntax
-  }
-
-  private static func validateMember(_ member: MemberBlockItemSyntax) -> Bool {
-
-    if member.decl.is(AccessorDeclSyntax.self) || member.decl.is(DeinitializerDeclSyntax.self)
-      || member.decl.is(EnumCaseDeclSyntax.self)
-    {
-      return false
-    }
-
-    if let varDecl = member.decl.as(VariableDeclSyntax.self),
-      varDecl.bindings.contains(where: { $0.accessorBlock == nil || $0.initializer != nil })
-    {
-      return false
-    }
-
-    return true
   }
 }

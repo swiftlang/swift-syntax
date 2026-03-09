@@ -90,6 +90,24 @@ final class ConvertToDoCatchTest: XCTestCase {
     try assertRefactorConvert(baseline, expected: expected)
   }
 
+  func testForceTryWithLeadingComment() throws {
+    let baseline: ExprSyntax = """
+      // Hope this doesn't explode
+      try! hopefullyNoBoom()
+      """
+
+    let expected: CodeBlockItemListSyntax = """
+      do {
+        // Hope this doesn't explode
+        try hopefullyNoBoom()
+      } catch {
+        <#code#>
+      }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
+
   // MARK: - Negative Tests (Should Not Apply)
 
   func testOptionalTryShouldNotApply() throws {

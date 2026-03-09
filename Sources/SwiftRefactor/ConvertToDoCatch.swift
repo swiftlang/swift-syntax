@@ -62,9 +62,6 @@ public struct ConvertToDoCatch: SyntaxRefactoringProvider {
       tryExpression = syntax.with(\.questionOrExclamationMark, nil)
     }
 
-    // Remove leading trivia from the try expression since we'll manage indentation
-    let trimmedTryExpression = tryExpression.with(\.leadingTrivia, [])
-
     // Infer the indentation width from the source file
     let indentationWidth = BasicFormat.inferIndentation(of: syntax) ?? .spaces(2)
 
@@ -78,9 +75,9 @@ public struct ConvertToDoCatch: SyntaxRefactoringProvider {
         leftBrace: .leftBraceToken(trailingTrivia: .newline),
         statements: CodeBlockItemListSyntax([
           CodeBlockItemSyntax(
-            item: .expr(ExprSyntax(trimmedTryExpression))
+            item: .expr(ExprSyntax(tryExpression))
           )
-        ]).indented(by: baseIndentation + indentationWidth, indentFirstLine: true),
+        ]).indented(by: indentationWidth, indentFirstLine: true),
         rightBrace: .rightBraceToken(leadingTrivia: .newline + baseIndentation)
       ),
       catchClauses: CatchClauseListSyntax([

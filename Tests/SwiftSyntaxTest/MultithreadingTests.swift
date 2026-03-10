@@ -23,19 +23,23 @@ extension SyntaxProtocol {
 // Marked as `@unchecked Sendable` to work around rdar://130094927, which complains about `MultithreadingTests` not conforming to
 // `Sendable`.
 class MultithreadingTests: XCTestCase, @unchecked Sendable {
-  public func testPathological() {
+  public func testPathological() async {
     let tuple = TupleTypeSyntax(
       leftParen: .leftParenToken(),
       elements: TupleTypeElementListSyntax([]),
       rightParen: .rightParenToken()
     )
 
-    DispatchQueue.concurrentPerform(iterations: 100) { _ in
-      XCTAssertEqual(tuple.leftParen, tuple.leftParen)
+    await withTaskGroup(of: Void.self) { group in
+      for _ in 0..<100 {
+        group.addTask {
+          XCTAssertEqual(tuple.leftParen, tuple.leftParen)
+        }
+      }
     }
   }
 
-  public func testConcurrentMutation() {
+  public func testConcurrentMutation() async {
     // 'base.member()'
     let methodCall = FunctionCallExprSyntax(
       calledExpression: MemberAccessExprSyntax(
@@ -50,15 +54,19 @@ class MultithreadingTests: XCTestCase, @unchecked Sendable {
       rightParen: .rightParenToken()
     )
 
-    DispatchQueue.concurrentPerform(iterations: 100) { i in
-      var copied = methodCall
-      copied
-        .calledExpression[as: MemberAccessExprSyntax.self]
-        .base![as: DeclReferenceExprSyntax.self]
-        .baseName = .identifier("ident\(i)")
-      copied = copied.with(\.leadingTrivia, [.newlines(1)])
+    await withTaskGroup(of: Void.self) { group in
+      for i in 0..<100 {
+        group.addTask {
+          var copied = methodCall
+          copied
+            .calledExpression[as: MemberAccessExprSyntax.self]
+            .base![as: DeclReferenceExprSyntax.self]
+            .baseName = .identifier("ident\(i)")
+          copied = copied.with(\.leadingTrivia, [.newlines(1)])
 
-      XCTAssertEqual(copied.description, "\nident\(i).member()")
+          XCTAssertEqual(copied.description, "\nident\(i).member()")
+        }
+      }
     }
   }
 

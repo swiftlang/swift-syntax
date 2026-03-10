@@ -30,7 +30,7 @@ final class FormatRawStringLiteralTest: XCTestCase {
         #line, literal: #######" #"###### \####(hello) ##"# "#######,
         expectation: ########" #######"###### \####(hello) ##"####### "########
       ),
-      (#line, literal: ########" #######"hello \(world) "####### "########, expectation: #" "hello \(world) " "#),
+      (#line, literal: ########" #######"hello \(world) "####### "########, expectation: ##" #"hello \(world) "# "##),
       // Content with `"` requires at least one `#` delimiter (single-line).
       (#line, literal: ##" #"""# "##, expectation: ##" #"""# "##),
       // Multiple quotes also need delimiters.
@@ -39,15 +39,15 @@ final class FormatRawStringLiteralTest: XCTestCase {
       (
         #line,
         literal: ##"""
-          #"""
-          hello """ world
-          """#
-          """##,
+        #"""
+        hello """ world
+        """#
+        """##,
         expectation: ##"""
-          #"""
-          hello """ world
-          """#
-          """##
+        #"""
+        hello """ world
+        """#
+        """##
       ),
       // `\` in a string literal needs at least one `#` delimiter.
       (#line, literal: ##" #"hello \ world"# "##, expectation: ##" #"hello \ world"# "##),

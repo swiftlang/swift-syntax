@@ -11,6 +11,7 @@
 ##===----------------------------------------------------------------------===##
 
 load("@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_runner.bzl", "ios_xctestrun_runner")
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
 load("//utils/bazel:swift_syntax_library.bzl", "swift_syntax_library", "swift_syntax_test")
 
 package(default_visibility = ["//visibility:public"])

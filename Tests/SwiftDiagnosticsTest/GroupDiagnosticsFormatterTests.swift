@@ -355,7 +355,6 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     )
 
     let annotated = DiagnosticsFormatter.annotateSources(in: group)
-    print("Annotated:", annotated)
     assertStringsEqualWithDiff(
       annotated,
       """

@@ -235,36 +235,36 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     )
   }
 
-  func testNotesInGrouping() {
+  func testGroupingForSameLineDiagnostics() {
     var group = GroupedDiagnostics()
 
     // Main source file.
     let (mainSourceID, mainSourceMarkers) = group.addTestFile(
       """
-      1️⃣let pi = 3.14159
-      2️⃣#myAssert(pi == 3️⃣3)
+      1️⃣let pi = 2️⃣"3.14159"
+      3️⃣#myAssert(pi == 4️⃣3)
       print("hello")
       """,
       displayName: "main.swift",
       diagnosticDescriptors: [
         DiagnosticDescriptor(
-          locationMarker: "2️⃣",
+          locationMarker: "3️⃣",
           message: "in expansion of macro 'myAssert' here", 
           severity: .note,
           noteDescriptors: [
             NoteDescriptor(
-              locationMarker: "1️⃣", id: MessageID(domain: "test", id: "conjuredNote1"), 
-              message: "Inferred type 'Double' here"
+              locationMarker: "1️⃣", id: MessageID(domain: "test", id: "conjured"), 
+              message: "Inferred type 'String' here"
             ),
             NoteDescriptor(
-              locationMarker: "3️⃣", id: MessageID(domain: "test", id: "conjuredNote2"), 
+              locationMarker: "4️⃣", id: MessageID(domain: "test", id: "conjured"), 
               message: "Inferred type 'Int' here"
             )
           ]
         )
       ]
     )
-    let inExpansionNotePos = mainSourceMarkers["2️⃣"]!
+    let inExpansionNotePos = mainSourceMarkers["3️⃣"]!
 
     // Outer expansion source file
     let (outerExpansionSourceID, outerExpansionSourceMarkers) = group.addTestFile(
@@ -285,17 +285,22 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
           noteDescriptors: [
             NoteDescriptor(
               locationMarker: "3️⃣", 
-              id: MessageID(domain: "test", id: "conjuredNote3"), 
+              id: MessageID(domain: "test", id: "conjured"), 
               message: "#invertedEqualityCheck expects operands of the same type"
             ),
             NoteDescriptor(
+              locationMarker: "3️⃣", 
+              id: MessageID(domain: "test", id: "conjured"), 
+              message: "#invertedEqualityCheck expects '__a' and '__b' to have the same type"
+            ),
+            NoteDescriptor(
               locationMarker: "1️⃣", 
-              id: MessageID(domain: "test", id: "conjuredNote1"), 
-              message: "Inferred type 'Double' here"
+              id: MessageID(domain: "test", id: "conjured"), 
+              message: "Inferred type 'String' here"
             ),
             NoteDescriptor(
               locationMarker: "2️⃣", 
-              id: MessageID(domain: "test", id: "conjuredNote2"), 
+              id: MessageID(domain: "test", id: "conjured"), 
               message: "Inferred type 'Int' here"
             )
           ]
@@ -307,41 +312,77 @@ final class GroupedDiagnosticsFormatterTests: XCTestCase {
     // Expansion source file
     _ = group.addTestFile(
       """
-      !(__a 1️⃣== __b)
+      1️⃣!(2️⃣__a 3️⃣== 4️⃣__b)
       """,
       displayName: "#invertedEqualityCheck",
       parent: (outerExpansionSourceID, inInnerExpansionNotePos),
       diagnosticDescriptors: [
         DiagnosticDescriptor(
-          locationMarker: "1️⃣",
-          message: "no matching operator '==' for types 'Double' and 'Int'",
+          locationMarker: "3️⃣",
+          message: "no matching operator '==' for types 'String' and 'Int'",
+          severity: .error,
+          noteDescriptors: [
+            NoteDescriptor(
+              locationMarker: "1️⃣", 
+              id: MessageID(domain: "test", id: "conjured"), 
+              message: "#invertedEqualityCheck expects operands of the same type"
+            ),
+            NoteDescriptor(
+              locationMarker: "2️⃣",
+              id: MessageID(domain: "test", id: "conjured"), 
+              message: "Inferred type 'String' here"
+            ),
+            NoteDescriptor(
+              locationMarker: "4️⃣", 
+              id: MessageID(domain: "test", id: "conjured"), 
+              message: "Inferred type 'Int' here"
+            ),
+          ]
+        ),
+        DiagnosticDescriptor(
+          locationMarker: "3️⃣",
+          id: MessageID(domain: "test", id: "conjuredError2"),
+          message: "operator `==` is unavailable: unavailable in embedded Swift",
+          severity: .error
+        ),
+        DiagnosticDescriptor(
+          locationMarker: "3️⃣",
+          id: MessageID(domain: "test", id: "conjuredError2"),
+          message: "#invertedEqualityCheck expects operands to be integer literals",
           severity: .error
         )
       ]
     )
 
     let annotated = DiagnosticsFormatter.annotateSources(in: group)
+    print("Annotated:", annotated)
     assertStringsEqualWithDiff(
       annotated,
       """
-      #invertedEqualityCheck:1:7: error: no matching operator '==' for types 'Double' and 'Int'
+      #invertedEqualityCheck:1:7: error: no matching operator '==' for types 'String' and 'Int'
       `- main.swift:2:1: note: expanded code originates here
-      1 | let pi = 3.14159
-        | `- note: Inferred type 'Double' here
+      1 | let pi = "3.14159"
+        | `- note: Inferred type 'String' here
       2 | #myAssert(pi == 3)
         | |               `- note: Inferred type 'Int' here
         | `- note: in expansion of macro 'myAssert' here
         +--- #myAssert -------------------------------------------------------
         |1 | let __a = pi
-        |  |     `- note: Inferred type 'Double' here
+        |  |     `- note: Inferred type 'String' here
         |2 | let __b = 3
         |  |     `- note: Inferred type 'Int' here
         |3 | if #invertedEqualityCheck(__a, __b) {
         |  |    |- note: in expansion of macro 'invertedEqualityCheck' here
-        |  |    `- note: #invertedEqualityCheck expects operands of the same type
+        |  |    |- note: #invertedEqualityCheck expects operands of the same type
+        |  |    `- note: #invertedEqualityCheck expects '__a' and '__b' to have the same type
         |  +--- #invertedEqualityCheck ---------------------------------------
         |  |1 | !(__a == __b)
-        |  |  |       `- error: no matching operator '==' for types 'Double' and 'Int'
+        |  |  | | |   |  `- note: Inferred type 'Int' here
+        |  |  | | |   |- error: no matching operator '==' for types 'String' and 'Int'
+        |  |  | | |   |- error: operator `==` is unavailable: unavailable in embedded Swift
+        |  |  | | |   `- error: #invertedEqualityCheck expects operands to be integer literals
+        |  |  | | `- note: Inferred type 'String' here
+        |  |  | `- note: #invertedEqualityCheck expects operands of the same type
         |  +------------------------------------------------------------------
         |4 |   fatalError("assertion failed: pi != 3")
         |5 | }

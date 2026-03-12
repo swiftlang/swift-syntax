@@ -504,8 +504,8 @@ extension Parser {
   }
 
   mutating func parseGenericArgumentType() -> RawGenericArgumentSyntax.Argument {
-    if let valueType = self.parseValueType() {
-      return .expr(valueType)
+    if self.withLookahead({ $0.canParseValueGenericArgument() }) {
+      return .expr(self.parseValueGenericArgument())
     } else {
       return .type(self.parseType())
     }
@@ -744,6 +744,24 @@ extension Parser.Lookahead {
     return true
   }
 
+  mutating func canParseValueGenericArgument() -> Bool {
+    if self.canParseIntegerLiteral() {
+      return true
+    }
+
+    // When LiteralExpressions is enabled, try parsing a parenthesized expression
+    if self.experimentalFeatures.contains(.literalExpressions) && self.at(.leftParen)
+      && self.withLookahead({
+        $0.skipSingle()
+        return $0.at(.comma, TokenSpec(.of, allowAtStartOfLine: false)) || $0.at(prefix: ">")
+      })
+    {
+      self.skipSingle()
+      return true
+    }
+    return false
+  }
+
   mutating func canParseTypeAttributeList() -> Bool {
     var specifierProgress = LoopProgressCondition()
     while canHaveParameterSpecifier,
@@ -924,12 +942,12 @@ extension Parser.Lookahead {
   /// Checks whether we can parse the start of an InlineArray type. This does
   /// not include the element type.
   mutating func canParseStartOfInlineArrayTypeBody() -> Bool {
-    // We must have at least '[<type-or-integer> of', which cannot be any other
-    // kind of expression or type. We specifically look for both types and
+    // We must have either '[<type-or-integer> of' or, if the `LiteralExpressions`
+    // feature is enabled, '[(<expression>) of'. We specifically look for both types and
     // integers for better recovery in e.g cases where the user writes e.g
     // '[Int of 2]'. We only do type-scalar since variadics would be ambiguous
     // e.g 'Int...of'.
-    guard self.canParseTypeScalar() || self.canParseIntegerLiteral() else {
+    guard self.canParseValueGenericArgument() || self.canParseTypeScalar() else {
       return false
     }
 
@@ -1087,9 +1105,7 @@ extension Parser.Lookahead {
   }
 
   mutating func canParseGenericArgument() -> Bool {
-    // A generic argument can either be a type or an integer literal (who is
-    // optionally negative).
-    self.canParseType() || self.canParseIntegerLiteral()
+    return self.canParseValueGenericArgument() || self.canParseType()
   }
 
   mutating func consumeGenericArguments() -> Bool {
@@ -1440,7 +1456,16 @@ extension Parser {
 }
 
 extension Parser {
-  mutating func parseValueType() -> RawExprSyntax? {
+  mutating func parseValueGenericArgument() -> RawExprSyntax {
+    precondition(self.withLookahead { $0.canParseValueGenericArgument() })
+    if self.withLookahead({ $0.canParseIntegerLiteral() }) {
+      return self.parseGenericValueLiteral()
+    }
+    return self.parsePrimaryExpression(pattern: .none, flavor: .basic)
+  }
+
+  mutating func parseGenericValueLiteral() -> RawExprSyntax {
+    precondition(self.withLookahead { $0.canParseIntegerLiteral() })
     // Eat any '-' preceding integer literals.
     var minusSign: RawTokenSyntax? = nil
     if self.atContextualPunctuator("-"),
@@ -1449,28 +1474,23 @@ extension Parser {
       minusSign = self.consumeIfContextualPunctuator("-", remapping: .prefixOperator)
     }
 
-    // Attempt to parse values first. Right now the only value that can be parsed
-    // as a type are integers.
-    if let integerLiteral = self.consume(if: .integerLiteral) {
-      let integerExpr = RawIntegerLiteralExprSyntax(
-        literal: integerLiteral,
-        arena: self.arena
-      )
+    let integerLiteral = self.consumeAnyToken()
+    let integerExpr = RawIntegerLiteralExprSyntax(
+      literal: integerLiteral,
+      arena: self.arena
+    )
 
-      guard let minusSign else {
-        return RawExprSyntax(integerExpr)
-      }
-
-      return RawExprSyntax(
-        RawPrefixOperatorExprSyntax(
-          operator: minusSign,
-          expression: integerExpr,
-          arena: self.arena
-        )
-      )
+    guard let minusSign else {
+      return RawExprSyntax(integerExpr)
     }
 
-    return nil
+    return RawExprSyntax(
+      RawPrefixOperatorExprSyntax(
+        operator: minusSign,
+        expression: integerExpr,
+        arena: self.arena
+      )
+    )
   }
 }
 

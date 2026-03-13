@@ -558,6 +558,9 @@ public enum ArgumentMatcher {
       }
 
       let param = params[paramIndex]
+      if param.ellipsis == nil && matchedParamIndices.contains(paramIndex) {
+        throw ArgumentMatchError.extraArguments(from: argIndex)
+      }
       matchedParamIndices.insert(paramIndex)
       matches.append(
         ArgumentMatch(
@@ -1384,6 +1387,9 @@ public enum ArgumentMatcher {
       }
 
       let param = params[paramIndex]
+      if param.ellipsis == nil && matchedParamIndices.contains(paramIndex) {
+        throw ArgumentMatchError.extraArguments(from: argIndex)
+      }
       matchedParamIndices.insert(paramIndex)
 
       matches.append(

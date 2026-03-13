@@ -206,6 +206,17 @@ final class ArgumentMatcherTests: XCTestCase {
       XCTAssertEqual(paramName, "x")
     }
   }
+
+  func testDuplicateLabeledArgumentThrowsError() throws {
+    let call = parseCall("foo(x: 1, x: 2)")
+    let params = parseParameters("func foo(x: Int) {}")
+
+    XCTAssertThrowsError(try ArgumentMatcher.match(call: call, parameters: params)) { error in
+      guard case ArgumentMatchError.extraArguments = error else {
+        return XCTFail("Expected extraArguments error, got \(error)")
+      }
+    }
+  }
 }
 
 // MARK: - matchWithDefaults Tests
@@ -716,6 +727,23 @@ final class ArgumentMatcherSubscriptTests: XCTestCase {
   }
 }
 
+// MARK: - Closure Call Matching Tests
+
+final class ArgumentMatcherClosureCallTests: XCTestCase {
+
+  func testClosureCallDuplicateLabeledArgumentThrowsError() throws {
+    let call = parseCall("closure(x: 1, x: 2)")
+    let params = parseClosureParameters("(x: Int) in")
+
+    XCTAssertThrowsError(try ArgumentMatcher.matchClosureCall(call: call, parameters: params)) {
+      error in
+      guard case ArgumentMatchError.extraArguments = error else {
+        return XCTFail("Expected extraArguments error, got \(error)")
+      }
+    }
+  }
+}
+
 // MARK: - Helpers
 
 private func parseCall(_ source: String) -> FunctionCallExprSyntax {
@@ -768,6 +796,20 @@ private func parseSubscriptArgs(_ source: String) -> LabeledExprListSyntax {
   let varDecl = sf.statements.first!.item.cast(VariableDeclSyntax.self)
   let subscriptExpr = varDecl.bindings.first!.initializer!.value.cast(SubscriptCallExprSyntax.self)
   return subscriptExpr.arguments
+}
+
+private func parseClosureParameters(_ closureSignature: String) -> ClosureParameterListSyntax {
+  let src = "let closure = { \(closureSignature) _ = 0 }"
+  let sf = Parser.parse(source: src)
+  let varDecl = sf.statements.first!.item.cast(VariableDeclSyntax.self)
+  let closureExpr = varDecl.bindings.first!.initializer!.value.cast(ClosureExprSyntax.self)
+  guard
+    let signature = closureExpr.signature,
+    let parameterClause = signature.parameterClause?.as(ClosureParameterClauseSyntax.self)
+  else {
+    fatalError("Could not parse closure parameters from: \(closureSignature)")
+  }
+  return parameterClause.parameters
 }
 
 extension SyntaxProtocol {

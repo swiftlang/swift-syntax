@@ -846,9 +846,11 @@ public enum ArgumentMatcher {
         throw ArgumentMatchError.extraArguments(from: inlineArgCount)
       }
 
-      // Prefer positional parameters; fall back to first unmatched.
+      // Prefer closure-accepting parameters first. If we cannot determine one
+      // syntactically (e.g. typealias), fall back to positional then first unmatched.
       let targetIndex =
-        unmatchedIndices.first(where: { params[$0].firstName.tokenKind == .wildcard })
+        unmatchedIndices.first(where: { acceptsTrailingClosure(params[$0]) })
+        ?? unmatchedIndices.first(where: { params[$0].firstName.tokenKind == .wildcard })
         ?? unmatchedIndices.first!
 
       let param = params[targetIndex]
@@ -1036,7 +1038,8 @@ public enum ArgumentMatcher {
       }
 
       let targetIndex =
-        unmatchedIndices.first(where: { params[$0].firstName.tokenKind == .wildcard })
+        unmatchedIndices.first(where: { acceptsTrailingClosure(params[$0]) })
+        ?? unmatchedIndices.first(where: { params[$0].firstName.tokenKind == .wildcard })
         ?? unmatchedIndices.first!
 
       let param = params[targetIndex]
@@ -1453,4 +1456,28 @@ private func closureParamToFunctionParam(_ param: ClosureParameterSyntax) -> Fun
     ellipsis: param.ellipsis,
     trailingComma: param.trailingComma
   )
+}
+
+/// Returns whether a function parameter can syntactically accept trailing closure syntax.
+///
+/// This is a best-effort check: closure aliases or generic constraints may not be
+/// resolvable from syntax alone, so unknown forms return `false`.
+private func acceptsTrailingClosure(_ parameter: FunctionParameterSyntax) -> Bool {
+  return isClosureTypeSyntax(parameter.type)
+}
+
+private func isClosureTypeSyntax(_ type: TypeSyntax) -> Bool {
+  if type.is(FunctionTypeSyntax.self) {
+    return true
+  }
+  if let attributed = type.as(AttributedTypeSyntax.self) {
+    return isClosureTypeSyntax(attributed.baseType)
+  }
+  if let optional = type.as(OptionalTypeSyntax.self) {
+    return isClosureTypeSyntax(optional.wrappedType)
+  }
+  if let iuOptional = type.as(ImplicitlyUnwrappedOptionalTypeSyntax.self) {
+    return isClosureTypeSyntax(iuOptional.wrappedType)
+  }
+  return false
 }

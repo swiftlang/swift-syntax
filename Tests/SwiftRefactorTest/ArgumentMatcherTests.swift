@@ -418,6 +418,20 @@ final class ArgumentMatcherWithTrailingClosuresTests: XCTestCase {
     XCTAssertTrue(matches[1].isTrailingClosure)
   }
 
+  func testTrailingClosurePrefersClosureTypedParameter() throws {
+    let call = parseCallWithTrailingClosure("foo()", trailingClosure: "{ print(1) }")
+    let params = parseParameters("func foo(_ value: Int = 0, completion: () -> Void) {}")
+
+    let matches = try ArgumentMatcher.matchWithTrailingClosures(call: call, parameters: params)
+
+    XCTAssertEqual(matches.count, 2)
+    XCTAssertEqual(matches[0].internalName.text, "value")
+    XCTAssertTrue(matches[0].isDefaulted)
+
+    XCTAssertEqual(matches[1].internalName.text, "completion")
+    XCTAssertTrue(matches[1].isTrailingClosure)
+  }
+
   // SE-0279 multiple trailing closures.
 
   func testMultipleTrailingClosures() throws {
@@ -614,6 +628,26 @@ final class ArgumentMatcherVariadicTests: XCTestCase {
     }
     XCTAssertTrue(defaultMatch.source.isDefaultValue)
     XCTAssertEqual(defaultMatch.argument?.trimmedDescription, "\",\"")
+  }
+
+  func testMatchFullTrailingClosurePrefersClosureTypedParameter() throws {
+    let call = parseCallWithTrailingClosure("foo()", trailingClosure: "{ print(1) }")
+    let params = parseParameters("func foo(_ value: Int = 0, completion: () -> Void) {}")
+
+    let matches = try ArgumentMatcher.matchFull(call: call, parameters: params)
+
+    XCTAssertEqual(matches.count, 2)
+
+    guard case .single(let valueMatch) = matches[0] else {
+      return XCTFail("Expected single match for value")
+    }
+    XCTAssertTrue(valueMatch.isDefaulted)
+
+    guard case .single(let completionMatch) = matches[1] else {
+      return XCTFail("Expected single match for completion")
+    }
+    XCTAssertTrue(completionMatch.isTrailingClosure)
+    XCTAssertEqual(completionMatch.internalName.text, "completion")
   }
 
   func testMatchFullDuplicateLabeledArgumentThrowsError() throws {

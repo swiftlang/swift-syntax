@@ -707,6 +707,30 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
         let declNodeWithBody = nodeWithBody as? any DeclSyntaxProtocol & WithOptionalCodeBlockSyntax
       {
         declSyntax = DeclSyntax(visitBodyAndPreambleMacros(declNodeWithBody))
+      } else if let varDecl = node.as(VariableDeclSyntax.self),
+        let bindingIndex = varDecl.bindings.indices.first,
+        let accessorBlock = varDecl.bindings[bindingIndex].accessorBlock,
+        case .getter(let stmts) = accessorBlock.accessors
+      {
+        // Create an implicit `AccessorDeclSyntax` to use for the macro expansion
+        // of this computed var decl
+        let syntheticGetter = AccessorDeclSyntax(
+          attributes: varDecl.attributes,
+          accessorSpecifier: .keyword(.get),
+          body: CodeBlockSyntax(
+            leftBrace: accessorBlock.leftBrace,
+            statements: stmts,
+            rightBrace: accessorBlock.rightBrace
+          )
+        )
+        let expandedGetter = visitBodyAndPreambleMacros(syntheticGetter)
+        if let newBody = expandedGetter.body {
+          let newAccessorBlock = accessorBlock.with(\.accessors, .getter(newBody.statements))
+          let newBinding = varDecl.bindings[bindingIndex].with(\.accessorBlock, newAccessorBlock)
+          var newBindings = varDecl.bindings
+          newBindings[bindingIndex] = newBinding
+          declSyntax = DeclSyntax(varDecl.with(\.bindings, newBindings))
+        }
       }
 
       // Visit the node, disabling the `visitAny` handling.

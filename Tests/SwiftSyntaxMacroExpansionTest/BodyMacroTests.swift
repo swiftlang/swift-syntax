@@ -231,6 +231,58 @@ final class BodyMacroTests: XCTestCase {
     )
   }
 
+  func testBodyExpansionOnComputedVar() {
+    assertMacroExpansion(
+      """
+      @StartTask
+      var x: Int {
+        a + b
+      }
+      """,
+      expandedSource: """
+
+        var x: Int {
+          Task {
+            a + b
+          }
+        }
+        """,
+      macros: ["StartTask": StartTaskMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testBodyExpansionOnAccessors() {
+    assertMacroExpansion(
+      """
+      var value: Double {
+        @StartTask get {
+          return length * width
+        }
+        @StartTask set {
+          self.value = newValue * 2
+        }
+      }
+      """,
+      expandedSource: """
+        var value: Double {
+          get {
+            Task {
+                return length * width
+              }
+          }
+          set {
+            Task {
+                self.value = newValue * 2
+              }
+          }
+        }
+        """,
+      macros: ["StartTask": StartTaskMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
   func testClosureBodyExpansion() {
     assertMacroExpansion(
       """

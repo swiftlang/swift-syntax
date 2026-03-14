@@ -26,9 +26,11 @@ jobs:
     # at the same time. If the release manager changes between users, update this condition.
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          if [[ "${{ github.triggering_actor }}" != "rintaro" && "${{ github.triggering_actor }}" != "hamishknight" ]]; then
-            echo "${{ github.triggering_actor }} is not allowed to create a release"
+      - env:
+          TRIGGERING_ACTOR: ${{ github.triggering_actor }}
+        run: |
+          if [[ "${TRIGGERING_ACTOR}" != "rintaro" && "${TRIGGERING_ACTOR}" != "hamishknight" ]]; then
+            echo "${TRIGGERING_ACTOR} is not allowed to create a release"
             exit 1
           fi
   test:
@@ -53,20 +55,25 @@ jobs:
     steps:
       - name: Determine tag name
         id: swift_syntax_version
+        env:
+          INPUT_PRERELEASE: ${{ github.event.inputs.prerelease }}
+          INPUT_SWIFT_SYNTAX_VERSION: ${{ github.event.inputs.swift_syntax_version }}
         run: |
-          if [[ "${{ github.event.inputs.prerelease }}" == "false" ]]; then
-            SWIFT_SYNTAX_VERSION="${{ github.event.inputs.swift_syntax_version }}"
+          if [[ "${INPUT_PRERELEASE}" == "false" ]]; then
+            SWIFT_SYNTAX_VERSION="${INPUT_SWIFT_SYNTAX_VERSION}"
           else
-            SWIFT_SYNTAX_VERSION="${{ github.event.inputs.swift_syntax_version }}-prerelease-$(date +'%Y-%m-%d')"
+            SWIFT_SYNTAX_VERSION="${INPUT_SWIFT_SYNTAX_VERSION}-prerelease-$(date +'%Y-%m-%d')"
           fi
           echo "Using swift-syntax version: $SWIFT_SYNTAX_VERSION"
           echo "swift_syntax_version=$SWIFT_SYNTAX_VERSION" >> "$GITHUB_OUTPUT"
       - name: Checkout repository
         uses: actions/checkout@v6
       - name: Tag release
+        env:
+          SWIFT_SYNTAX_VERSION: ${{ steps.swift_syntax_version.outputs.swift_syntax_version }}
         run: |
-          git tag "${{ steps.swift_syntax_version.outputs.swift_syntax_version }}"
-          git push origin "${{ steps.swift_syntax_version.outputs.swift_syntax_version }}"
+          git tag "${SWIFT_SYNTAX_VERSION}"
+          git push origin "${SWIFT_SYNTAX_VERSION}"
   create_release:
     name: Create prerelease on GitHub
     runs-on: ubuntu-latest
@@ -81,7 +88,8 @@ jobs:
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}
+          SWIFT_SYNTAX_VERSION: ${{ needs.create_tag.outputs.swift_syntax_version }}
         run: |
-          gh release create "${{ needs.create_tag.outputs.swift_syntax_version }}" \
-            --title "${{ needs.create_tag.outputs.swift_syntax_version }}" \
+          gh release create "${SWIFT_SYNTAX_VERSION}" \
+            --title "${SWIFT_SYNTAX_VERSION}" \
             --prerelease

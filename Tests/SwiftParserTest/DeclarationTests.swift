@@ -156,6 +156,108 @@ final class DeclarationTests: ParserTestCase {
     )
   }
 
+  func testFuncColonInsteadOfArrow() {
+    assertParse(
+      """
+      func foo()1️⃣: Slice<MinimalMutableCollection<T>> {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '->' before return type",
+          fixIts: ["replace ':' with '->'"]
+        )
+      ],
+      fixedSource: """
+        func foo() -> Slice<MinimalMutableCollection<T>> {}
+        """
+    )
+
+    assertParse(
+      """
+      func foo() 1️⃣: [String] {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '->' before return type",
+          fixIts: ["replace ':' with '->'"]
+        )
+      ],
+      fixedSource: """
+        func foo() -> [String] {}
+        """
+    )
+
+    assertParse(
+      """
+      func foo<T>() async throws
+        1️⃣: Int where T: Hashable {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '->' before return type",
+          fixIts: ["replace ':' with '->'"]
+        )
+      ],
+      fixedSource: """
+        func foo<T>() async throws
+          -> Int where T: Hashable {}
+        """
+    )
+  }
+
+  func testColonInsteadOfArrowSubscript() {
+    assertParse(
+      """
+      struct S {
+        subscript()1️⃣: Slice<MinimalMutableCollection<T>> {
+          Slice()
+        }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '->' before return type",
+          fixIts: ["replace ':' with '->'"]
+        )
+      ],
+      fixedSource: """
+        struct S {
+          subscript() -> Slice<MinimalMutableCollection<T>> {
+            Slice()
+          }
+        }
+        """
+    )
+
+    assertParse(
+      """
+      struct S {
+        subscript(offset: Int) 1️⃣: String {
+          "test"
+        }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '->' before return type",
+          fixIts: ["replace ':' with '->'"]
+        )
+      ],
+      fixedSource: """
+        struct S {
+          subscript(offset: Int) -> String {
+            "test"
+          }
+        }
+        """
+    )
+  }
+
   func testFuncAfterUnbalancedClosingBrace() {
     assertParse(
       """
@@ -2507,19 +2609,27 @@ final class DeclarationTests: ParserTestCase {
           message: "expected parameter clause in function signature",
           fixIts: ["insert parameter clause"]
         ),
-        DiagnosticSpec(locationMarker: "1️⃣", message: "unexpected code ': Int = A.M1' in source file"),
+        DiagnosticSpec(
+          locationMarker: "1️⃣",
+          message: "expected '->' before return type",
+          fixIts: ["replace ':' with '->'"]
+        ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
           message: "expected parameter clause in function signature",
           fixIts: ["insert parameter clause"]
         ),
-        DiagnosticSpec(locationMarker: "2️⃣", message: "unexpected code ': T = A.M4 where T.Assoc: P' in source file"),
+        DiagnosticSpec(
+          locationMarker: "2️⃣",
+          message: "expected '->' before return type",
+          fixIts: ["replace ':' with '->'"]
+        ),
       ],
       fixedSource: """
-        macro m1(): Int = A.M1
+        macro m1() -> Int = A.M1
         macro m2(_: Int) = A.M2
         macro m3(a b: Int) -> Int = A.M3
-        macro m4<T>(): T = A.M4 where T.Assoc: P
+        macro m4<T>() -> T = A.M4 where T.Assoc: P
         macro m5<T: P>(_: T)
         """
     )

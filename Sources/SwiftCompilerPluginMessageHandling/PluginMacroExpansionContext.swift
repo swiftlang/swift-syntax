@@ -65,6 +65,8 @@ class ParsedSyntaxRegistry {
       return Syntax(PatternSyntax.parse(from: &parser))
     case .attribute:
       return Syntax(AttributeSyntax.parse(from: &parser))
+    case .accessor:
+      return Syntax(AccessorDeclSyntax.parse(from: &parser))
     }
   }
 

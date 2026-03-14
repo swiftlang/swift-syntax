@@ -708,6 +708,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       {
         declSyntax = DeclSyntax(visitBodyAndPreambleMacros(declNodeWithBody))
       } else if let varDecl = node.as(VariableDeclSyntax.self),
+        varDecl.bindings.count == 1,
         let bindingIndex = varDecl.bindings.indices.first,
         let accessorBlock = varDecl.bindings[bindingIndex].accessorBlock,
         case .getter(let stmts) = accessorBlock.accessors

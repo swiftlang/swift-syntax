@@ -395,6 +395,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
           in: context
         )
       } else if let varDecl = node.as(VariableDeclSyntax.self),
+        varDecl.bindings.count == 1,
         let binding = varDecl.bindings.first,
         let accessorBlock = binding.accessorBlock,
         case .getter(let stmts) = accessorBlock.accessors

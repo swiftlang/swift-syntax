@@ -19,6 +19,7 @@ add_swift_syntax_library(SwiftRefactor
   FormatRawStringLiteral.swift
   IntegerLiteralUtilities.swift
   MigrateToNewIfLetSyntax.swift
+  MoveMembersToExtension.swift
   OpaqueParameterToGeneric.swift
   RefactoringProvider.swift
   RemoveRedundantParentheses.swift

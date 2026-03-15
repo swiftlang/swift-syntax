@@ -72,11 +72,32 @@ struct StartTaskMacro: BodyMacro {
     guard let taskBody = declaration.body else {
       return []
     }
-    return [
-      """
-      Task \(taskBody.trimmed)
-      """
-    ]
+
+    let taskName: String?
+    if let funcDecl = declaration.as(FunctionDeclSyntax.self) {
+      taskName = funcDecl.name.text
+    } else if declaration.is(AccessorDeclSyntax.self) {
+      taskName = context.lexicalContext
+        .compactMap { $0.as(PatternBindingSyntax.self) }
+        .first
+        .flatMap { $0.pattern.as(IdentifierPatternSyntax.self)?.identifier.text }
+    } else {
+      taskName = nil
+    }
+
+    if let taskName {
+      return [
+        """
+        Task(name: \(literal: taskName)) \(taskBody.trimmed)
+        """
+      ]
+    } else {
+      return [
+        """
+        Task \(taskBody.trimmed)
+        """
+      ]
+    }
   }
 
   static func expansion(
@@ -228,6 +249,79 @@ final class BodyMacroTests: XCTestCase {
         }
         """,
       macros: ["SourceLocationMacro": SourceLocationMacro.self]
+    )
+  }
+
+  func testBodyExpansionOnFunc() {
+    assertMacroExpansion(
+      """
+      @StartTask
+      func x() -> Int {
+        a + b
+      }
+      """,
+      expandedSource: """
+
+        func x() -> Int {
+          Task(name: "x") {
+            a + b
+          }
+        }
+        """,
+      macros: ["StartTask": StartTaskMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testBodyExpansionOnComputedVar() {
+    assertMacroExpansion(
+      """
+      @StartTask
+      var x: Int {
+        a + b
+      }
+      """,
+      expandedSource: """
+
+        var x: Int {
+          Task(name: "x") {
+            a + b
+          }
+        }
+        """,
+      macros: ["StartTask": StartTaskMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
+  func testBodyExpansionOnAccessors() {
+    assertMacroExpansion(
+      """
+      var value: Double {
+        @StartTask get {
+          return length * width
+        }
+        @StartTask set {
+          self.value = newValue * 2
+        }
+      }
+      """,
+      expandedSource: """
+        var value: Double {
+          get {
+            Task(name: "value") {
+                return length * width
+              }
+          }
+          set {
+            Task(name: "value") {
+                self.value = newValue * 2
+              }
+          }
+        }
+        """,
+      macros: ["StartTask": StartTaskMacro.self],
+      indentationWidth: indentationWidth
     )
   }
 

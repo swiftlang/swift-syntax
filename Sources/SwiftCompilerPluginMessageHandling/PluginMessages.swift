@@ -256,6 +256,7 @@ public enum PluginMessage {
       case type
       case pattern
       case attribute
+      case accessor
     }
     public var kind: Kind
     public var source: String

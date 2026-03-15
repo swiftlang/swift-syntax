@@ -72,11 +72,32 @@ struct StartTaskMacro: BodyMacro {
     guard let taskBody = declaration.body else {
       return []
     }
-    return [
-      """
-      Task \(taskBody.trimmed)
-      """
-    ]
+
+    let taskName: String?
+    if let funcDecl = declaration.as(FunctionDeclSyntax.self) {
+      taskName = funcDecl.name.text
+    } else if declaration.is(AccessorDeclSyntax.self) {
+      taskName = context.lexicalContext
+        .compactMap { $0.as(PatternBindingSyntax.self) }
+        .first
+        .flatMap { $0.pattern.as(IdentifierPatternSyntax.self)?.identifier.text }
+    } else {
+      taskName = nil
+    }
+
+    if let taskName {
+      return [
+        """
+        Task(name: \(literal: taskName)) \(taskBody.trimmed)
+        """
+      ]
+    } else {
+      return [
+        """
+        Task \(taskBody.trimmed)
+        """
+      ]
+    }
   }
 
   static func expansion(
@@ -231,6 +252,27 @@ final class BodyMacroTests: XCTestCase {
     )
   }
 
+  func testBodyExpansionOnFunc() {
+    assertMacroExpansion(
+      """
+      @StartTask
+      func x() -> Int {
+        a + b
+      }
+      """,
+      expandedSource: """
+
+        func x() -> Int {
+          Task(name: "x") {
+            a + b
+          }
+        }
+        """,
+      macros: ["StartTask": StartTaskMacro.self],
+      indentationWidth: indentationWidth
+    )
+  }
+
   func testBodyExpansionOnComputedVar() {
     assertMacroExpansion(
       """
@@ -242,7 +284,7 @@ final class BodyMacroTests: XCTestCase {
       expandedSource: """
 
         var x: Int {
-          Task {
+          Task(name: "x") {
             a + b
           }
         }
@@ -267,12 +309,12 @@ final class BodyMacroTests: XCTestCase {
       expandedSource: """
         var value: Double {
           get {
-            Task {
+            Task(name: "value") {
                 return length * width
               }
           }
           set {
-            Task {
+            Task(name: "value") {
                 self.value = newValue * 2
               }
           }

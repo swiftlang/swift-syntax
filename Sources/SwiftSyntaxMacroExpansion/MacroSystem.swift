@@ -711,21 +711,22 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
         varDecl.bindings.count == 1,
         let bindingIndex = varDecl.bindings.indices.first,
         let accessorBlock = varDecl.bindings[bindingIndex].accessorBlock,
-        case .getter(let stmts) = accessorBlock.accessors
+        case .getter = accessorBlock.accessors
       {
-        // Create an implicit `AccessorDeclSyntax` to use for the macro expansion
-        // of this computed var decl
-        let syntheticGetter = AccessorDeclSyntax(
-          attributes: varDecl.attributes,
-          accessorSpecifier: .keyword(.get),
-          body: CodeBlockSyntax(
-            leftBrace: accessorBlock.leftBrace,
-            statements: stmts,
-            rightBrace: accessorBlock.rightBrace
-          )
-        )
-        let expandedGetter = visitBodyAndPreambleMacros(syntheticGetter)
-        if let newBody = expandedGetter.body {
+        let expandedBodies = expandMacros(
+          attachedTo: DeclSyntax(varDecl),
+          ofType: BodyMacro.Type.self
+        ) { attributeNode, definition, _ in
+          expandBodyMacro(
+            definition: definition,
+            attributeNode: attributeNode,
+            attachedTo: node,
+            in: contextGenerator(Syntax(node)),
+            indentationWidth: indentationWidth
+          ).map { [$0] }
+        }
+
+        if let newBody = expandedBodies.first {
           let newAccessorBlock = accessorBlock.with(\.accessors, .getter(newBody.statements))
           let newBinding = varDecl.bindings[bindingIndex].with(\.accessorBlock, newAccessorBlock)
           var newBindings = varDecl.bindings

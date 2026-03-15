@@ -4386,6 +4386,7 @@ public struct FunctionParameterSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 /// 
 ///  - `parameterClause`: ``FunctionParameterClauseSyntax``
 ///  - `effectSpecifiers`: ``FunctionEffectSpecifiersSyntax``?
+///  - `yieldsClause`: ``YieldsClauseSyntax``?
 ///  - `returnClause`: ``ReturnClauseSyntax``?
 ///
 /// ### Contained in
@@ -4420,7 +4421,9 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     parameterClause: FunctionParameterClauseSyntax,
     _ unexpectedBetweenParameterClauseAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
     effectSpecifiers: FunctionEffectSpecifiersSyntax? = nil,
-    _ unexpectedBetweenEffectSpecifiersAndReturnClause: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndYieldsClause: UnexpectedNodesSyntax? = nil,
+    yieldsClause: YieldsClauseSyntax? = nil,
+    _ unexpectedBetweenYieldsClauseAndReturnClause: UnexpectedNodesSyntax? = nil,
     returnClause: ReturnClauseSyntax? = nil,
     _ unexpectedAfterReturnClause: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
@@ -4432,7 +4435,9 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
       parameterClause,
       unexpectedBetweenParameterClauseAndEffectSpecifiers,
       effectSpecifiers,
-      unexpectedBetweenEffectSpecifiersAndReturnClause,
+      unexpectedBetweenEffectSpecifiersAndYieldsClause,
+      yieldsClause,
+      unexpectedBetweenYieldsClauseAndReturnClause,
       returnClause,
       unexpectedAfterReturnClause
     ))) { (arena, _) in
@@ -4441,7 +4446,9 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
         parameterClause.raw,
         unexpectedBetweenParameterClauseAndEffectSpecifiers?.raw,
         effectSpecifiers?.raw,
-        unexpectedBetweenEffectSpecifiersAndReturnClause?.raw,
+        unexpectedBetweenEffectSpecifiersAndYieldsClause?.raw,
+        yieldsClause?.raw,
+        unexpectedBetweenYieldsClauseAndReturnClause?.raw,
         returnClause?.raw,
         unexpectedAfterReturnClause?.raw
       ]
@@ -4494,7 +4501,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
   }
 
-  public var unexpectedBetweenEffectSpecifiersAndReturnClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenEffectSpecifiersAndYieldsClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -4503,17 +4510,16 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
   }
 
-  /// The return type of the function.
-  public var returnClause: ReturnClauseSyntax? {
+  public var yieldsClause: YieldsClauseSyntax? {
     get {
-      return Syntax(self).child(at: 5)?.cast(ReturnClauseSyntax.self)
+      return Syntax(self).child(at: 5)?.cast(YieldsClauseSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 5, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
     }
   }
 
-  public var unexpectedAfterReturnClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenYieldsClauseAndReturnClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 6)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -4522,12 +4528,33 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
     }
   }
 
+  /// The return type of the function.
+  public var returnClause: ReturnClauseSyntax? {
+    get {
+      return Syntax(self).child(at: 7)?.cast(ReturnClauseSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 7, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterReturnClause: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 8, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionSignatureSyntax.self)
+    }
+  }
+
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeParameterClause,
     \Self.parameterClause,
     \Self.unexpectedBetweenParameterClauseAndEffectSpecifiers,
     \Self.effectSpecifiers,
-    \Self.unexpectedBetweenEffectSpecifiersAndReturnClause,
+    \Self.unexpectedBetweenEffectSpecifiersAndYieldsClause,
+    \Self.yieldsClause,
+    \Self.unexpectedBetweenYieldsClauseAndReturnClause,
     \Self.returnClause,
     \Self.unexpectedAfterReturnClause
   ])
@@ -4541,6 +4568,7 @@ public struct FunctionSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynt
 ///  - `parameters`: ``TupleTypeElementListSyntax``
 ///  - `rightParen`: `)`
 ///  - `effectSpecifiers`: ``TypeEffectSpecifiersSyntax``?
+///  - `yieldsClause`: ``YieldsClauseSyntax``?
 ///  - `returnClause`: ``ReturnClauseSyntax``
 public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
@@ -4570,7 +4598,9 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
     rightParen: TokenSyntax = .rightParenToken(),
     _ unexpectedBetweenRightParenAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
     effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
-    _ unexpectedBetweenEffectSpecifiersAndReturnClause: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndYieldsClause: UnexpectedNodesSyntax? = nil,
+    yieldsClause: YieldsClauseSyntax? = nil,
+    _ unexpectedBetweenYieldsClauseAndReturnClause: UnexpectedNodesSyntax? = nil,
     returnClause: ReturnClauseSyntax,
     _ unexpectedAfterReturnClause: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
@@ -4586,7 +4616,9 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
       rightParen,
       unexpectedBetweenRightParenAndEffectSpecifiers,
       effectSpecifiers,
-      unexpectedBetweenEffectSpecifiersAndReturnClause,
+      unexpectedBetweenEffectSpecifiersAndYieldsClause,
+      yieldsClause,
+      unexpectedBetweenYieldsClauseAndReturnClause,
       returnClause,
       unexpectedAfterReturnClause
     ))) { (arena, _) in
@@ -4599,7 +4631,9 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
         rightParen.raw,
         unexpectedBetweenRightParenAndEffectSpecifiers?.raw,
         effectSpecifiers?.raw,
-        unexpectedBetweenEffectSpecifiersAndReturnClause?.raw,
+        unexpectedBetweenEffectSpecifiersAndYieldsClause?.raw,
+        yieldsClause?.raw,
+        unexpectedBetweenYieldsClauseAndReturnClause?.raw,
         returnClause.raw,
         unexpectedAfterReturnClause?.raw
       ]
@@ -4719,7 +4753,7 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
     }
   }
 
-  public var unexpectedBetweenEffectSpecifiersAndReturnClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenEffectSpecifiersAndYieldsClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -4728,21 +4762,39 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
     }
   }
 
-  public var returnClause: ReturnClauseSyntax {
+  public var yieldsClause: YieldsClauseSyntax? {
     get {
-      return Syntax(self).child(at: 9)!.cast(ReturnClauseSyntax.self)
+      return Syntax(self).child(at: 9)?.cast(YieldsClauseSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 9, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
     }
   }
 
-  public var unexpectedAfterReturnClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenYieldsClauseAndReturnClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 10, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
+    }
+  }
+
+  public var returnClause: ReturnClauseSyntax {
+    get {
+      return Syntax(self).child(at: 11)!.cast(ReturnClauseSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 11, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
+    }
+  }
+
+  public var unexpectedAfterReturnClause: UnexpectedNodesSyntax? {
+    get {
+      return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
+    }
+    set(value) {
+      self = Syntax(self).replacingChild(at: 12, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(FunctionTypeSyntax.self)
     }
   }
 
@@ -4755,7 +4807,9 @@ public struct FunctionTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeS
     \Self.rightParen,
     \Self.unexpectedBetweenRightParenAndEffectSpecifiers,
     \Self.effectSpecifiers,
-    \Self.unexpectedBetweenEffectSpecifiersAndReturnClause,
+    \Self.unexpectedBetweenEffectSpecifiersAndYieldsClause,
+    \Self.yieldsClause,
+    \Self.unexpectedBetweenYieldsClauseAndReturnClause,
     \Self.returnClause,
     \Self.unexpectedAfterReturnClause
   ])

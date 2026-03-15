@@ -1835,7 +1835,9 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
     genericParameterClause: RawGenericParameterClauseSyntax?,
     _ unexpectedBetweenGenericParameterClauseAndParameterClause: RawUnexpectedNodesSyntax? = nil,
     parameterClause: RawFunctionParameterClauseSyntax,
-    _ unexpectedBetweenParameterClauseAndReturnClause: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenParameterClauseAndYieldsClause: RawUnexpectedNodesSyntax? = nil,
+    yieldsClause: RawYieldsClauseSyntax?,
+    _ unexpectedBetweenYieldsClauseAndReturnClause: RawUnexpectedNodesSyntax? = nil,
     returnClause: RawReturnClauseSyntax,
     _ unexpectedBetweenReturnClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? = nil,
     genericWhereClause: RawGenericWhereClauseSyntax?,
@@ -1845,7 +1847,7 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
     arena: __shared RawSyntaxArena
   ) {
     let raw = RawSyntax.makeLayout(
-      kind: .subscriptDecl, uninitializedCount: 17, arena: arena) { layout in
+      kind: .subscriptDecl, uninitializedCount: 19, arena: arena) { layout in
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeAttributes?.raw
       layout[1] = attributes.raw
@@ -1857,13 +1859,15 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
       layout[7] = genericParameterClause?.raw
       layout[8] = unexpectedBetweenGenericParameterClauseAndParameterClause?.raw
       layout[9] = parameterClause.raw
-      layout[10] = unexpectedBetweenParameterClauseAndReturnClause?.raw
-      layout[11] = returnClause.raw
-      layout[12] = unexpectedBetweenReturnClauseAndGenericWhereClause?.raw
-      layout[13] = genericWhereClause?.raw
-      layout[14] = unexpectedBetweenGenericWhereClauseAndAccessorBlock?.raw
-      layout[15] = accessorBlock?.raw
-      layout[16] = unexpectedAfterAccessorBlock?.raw
+      layout[10] = unexpectedBetweenParameterClauseAndYieldsClause?.raw
+      layout[11] = yieldsClause?.raw
+      layout[12] = unexpectedBetweenYieldsClauseAndReturnClause?.raw
+      layout[13] = returnClause.raw
+      layout[14] = unexpectedBetweenReturnClauseAndGenericWhereClause?.raw
+      layout[15] = genericWhereClause?.raw
+      layout[16] = unexpectedBetweenGenericWhereClauseAndAccessorBlock?.raw
+      layout[17] = accessorBlock?.raw
+      layout[18] = unexpectedAfterAccessorBlock?.raw
     }
     self.init(unchecked: raw)
   }
@@ -1908,32 +1912,40 @@ public struct RawSubscriptDeclSyntax: RawDeclSyntaxNodeProtocol {
     layoutView.children[9].map(RawFunctionParameterClauseSyntax.init(raw:))!
   }
 
-  public var unexpectedBetweenParameterClauseAndReturnClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenParameterClauseAndYieldsClause: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var returnClause: RawReturnClauseSyntax {
-    layoutView.children[11].map(RawReturnClauseSyntax.init(raw:))!
+  public var yieldsClause: RawYieldsClauseSyntax? {
+    layoutView.children[11].map(RawYieldsClauseSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenReturnClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenYieldsClauseAndReturnClause: RawUnexpectedNodesSyntax? {
     layoutView.children[12].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var genericWhereClause: RawGenericWhereClauseSyntax? {
-    layoutView.children[13].map(RawGenericWhereClauseSyntax.init(raw:))
+  public var returnClause: RawReturnClauseSyntax {
+    layoutView.children[13].map(RawReturnClauseSyntax.init(raw:))!
   }
 
-  public var unexpectedBetweenGenericWhereClauseAndAccessorBlock: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenReturnClauseAndGenericWhereClause: RawUnexpectedNodesSyntax? {
     layoutView.children[14].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
+  public var genericWhereClause: RawGenericWhereClauseSyntax? {
+    layoutView.children[15].map(RawGenericWhereClauseSyntax.init(raw:))
+  }
+
+  public var unexpectedBetweenGenericWhereClauseAndAccessorBlock: RawUnexpectedNodesSyntax? {
+    layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
+  }
+
   public var accessorBlock: RawAccessorBlockSyntax? {
-    layoutView.children[15].map(RawAccessorBlockSyntax.init(raw:))
+    layoutView.children[17].map(RawAccessorBlockSyntax.init(raw:))
   }
 
   public var unexpectedAfterAccessorBlock: RawUnexpectedNodesSyntax? {
-    layoutView.children[16].map(RawUnexpectedNodesSyntax.init(raw:))
+    layoutView.children[18].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 }
 

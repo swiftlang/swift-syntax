@@ -371,6 +371,45 @@ extension SwitchExprSyntax {
   }
 }
 
+// MARK: - SubscriptDeclSyntax
+// SubscriptDeclSyntax is a special scenario as it don't have body or members
+// So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`
+
+extension SubscriptDeclSyntax {
+  /// Construct a subscript with a single `get` accessor where `header` builds
+  /// the text before the opening `{` and `accessor` builds the accessor body.
+  ///
+  /// For example, to construct
+  ///
+  /// ```swift
+  /// subscript(_ index: Int) -> Element {
+  ///   return storage[index]
+  /// }
+  /// ```
+  ///
+  /// using this call
+  ///
+  /// ```swift
+  /// try SubscriptDeclSyntax("subscript(_ index: Int) -> Element") {
+  ///   StmtSyntax("return storage[index]")
+  /// }
+  /// ```
+  ///
+  /// Throws an error if `header` does not start a subscript declaration.
+  /// E.g. if calling `try SubscriptDeclSyntax("func foo") {}`
+  public init(
+    _ header: SyntaxNodeString,
+    @CodeBlockItemListBuilder accessor: () throws -> CodeBlockItemListSyntax
+  ) throws {
+    let decl = DeclSyntax("\(header) {}")
+    guard let castedDecl = decl.as(Self.self) else {
+      throw SyntaxStringInterpolationInvalidNodeTypeError(expectedType: Self.self, actualNode: decl)
+    }
+    self = castedDecl
+    self.accessorBlock = AccessorBlockSyntax(accessors: .getter(try accessor()))
+  }
+}
+
 // MARK: - VariableDeclSyntax
 // VariableDeclSyntax is a special scenario as it don't have body or members
 // So we cannot conform to `HasTrailingCodeBlock` or `HasTrailingMemberDeclBlock`

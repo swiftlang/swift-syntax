@@ -12,10 +12,14 @@
 
 #if compiler(>=6)
 import SwiftBasicFormat
+import SwiftDiagnostics
+import SwiftIfConfig
 public import SwiftSyntax
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeatures) public import SwiftSyntaxMacros
 #else
 import SwiftBasicFormat
+import SwiftDiagnostics
+import SwiftIfConfig
 import SwiftSyntax
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeatures) import SwiftSyntaxMacros
 #endif
@@ -410,6 +414,16 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
             rightBrace: accessorBlock.rightBrace
           )
         )
+
+        // Insert the accessor's parent `PatternBindingSyntax` into the lexical context
+        var context: MacroExpansionContext = context
+        if let bindingLexicalContext = binding.asMacroLexicalContext() {
+          context = PrependLexicalContextWrapperContext(
+            prependLexicalContext: [bindingLexicalContext],
+            wrapping: context
+          )
+        }
+
         body = try attachedMacro.expansion(
           of: attributeNode,
           providingBodyFor: getterDecl,
@@ -655,4 +669,40 @@ public func collapse<Node: SyntaxProtocol>(
   }
 
   return collapsed
+}
+
+/// Wrapper context that prepends additional `lexicalContext`
+/// to an existing `MacroExpansionContext`
+final class PrependLexicalContextWrapperContext: MacroExpansionContext {
+  init(prependLexicalContext: [Syntax], wrapping wrappedContext: MacroExpansionContext) {
+    self.prependLexicalContext = prependLexicalContext
+    self.wrappedContext = wrappedContext
+  }
+
+  let prependLexicalContext: [Syntax]
+  let wrappedContext: MacroExpansionContext
+
+  var lexicalContext: [Syntax] {
+    prependLexicalContext + wrappedContext.lexicalContext
+  }
+
+  func makeUniqueName(_ name: String) -> TokenSyntax {
+    wrappedContext.makeUniqueName(name)
+  }
+
+  func diagnose(_ diagnostic: Diagnostic) {
+    wrappedContext.diagnose(diagnostic)
+  }
+
+  func location(
+    of node: some SyntaxProtocol,
+    at position: PositionInSyntaxNode,
+    filePathMode: SourceLocationFilePathMode
+  ) -> AbstractSourceLocation? {
+    wrappedContext.location(of: node, at: position, filePathMode: filePathMode)
+  }
+
+  var buildConfiguration: (any BuildConfiguration)? {
+    wrappedContext.buildConfiguration
+  }
 }

@@ -407,7 +407,7 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
         // Create an implicit `AccessorDeclSyntax` to use for the macro expansion
         // of this computed var decl
         let getterDecl = AccessorDeclSyntax(
-          accessorSpecifier: .keyword(.get),
+          accessorSpecifier: .keyword(.get, presence: .missing),
           body: CodeBlockSyntax(
             leftBrace: accessorBlock.leftBrace,
             statements: stmts,

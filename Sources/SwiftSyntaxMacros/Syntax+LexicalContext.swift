@@ -67,7 +67,7 @@ extension SyntaxProtocol {
       varDecl = varDecl.detached
       varDecl.bindings = PatternBindingListSyntax(
         varDecl.bindings.map {
-          var binding = $0
+          var binding = $0.detached
           binding.accessorBlock = nil
           binding.initializer = nil
           return binding

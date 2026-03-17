@@ -547,6 +547,7 @@ final class LexicalContextTests: XCTestCase {
               try _
               unsafe _
               contextDescription: String
+              var contextDescription: String
               struct S {}
               { c in
               }

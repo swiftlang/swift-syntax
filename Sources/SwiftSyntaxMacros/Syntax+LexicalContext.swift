@@ -62,6 +62,19 @@ extension SyntaxProtocol {
       patternBinding.initializer = nil
       return Syntax(patternBinding)
 
+    // Variable declarations have their accessor blocks removed from bindings.
+    case var varDecl as VariableDeclSyntax:
+      varDecl = varDecl.detached
+      varDecl.bindings = PatternBindingListSyntax(
+        varDecl.bindings.map {
+          var binding = $0
+          binding.accessorBlock = nil
+          binding.initializer = nil
+          return binding
+        }
+      )
+      return Syntax(varDecl)
+
     // Freestanding macros are fine as-is because if any arguments change
     // the whole macro would have to be re-evaluated.
     case let freestandingMacro as FreestandingMacroExpansionSyntax:

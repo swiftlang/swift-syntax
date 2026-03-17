@@ -78,9 +78,9 @@ struct StartTaskMacro: BodyMacro {
       taskName = funcDecl.name.text
     } else if declaration.is(AccessorDeclSyntax.self) {
       taskName = context.lexicalContext
-        .compactMap { $0.as(PatternBindingSyntax.self) }
+        .compactMap { $0.as(VariableDeclSyntax.self) }
         .first
-        .flatMap { $0.pattern.as(IdentifierPatternSyntax.self)?.identifier.text }
+        .flatMap { $0.bindings.first?.pattern.as(IdentifierPatternSyntax.self)?.identifier.text }
     } else {
       taskName = nil
     }

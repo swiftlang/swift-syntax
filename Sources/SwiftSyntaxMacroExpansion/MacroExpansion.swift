@@ -415,11 +415,11 @@ public func expandAttachedMacroWithoutCollapsing<Context: MacroExpansionContext>
           )
         )
 
-        // Insert the accessor's parent `PatternBindingSyntax` into the lexical context
+        // Insert the enclosing `VariableDeclSyntax` into the lexical context
         var context: MacroExpansionContext = context
-        if let bindingLexicalContext = binding.asMacroLexicalContext() {
+        if let varDeclLexicalContext = varDecl.asMacroLexicalContext() {
           context = PrependLexicalContextWrapperContext(
-            prependLexicalContext: [bindingLexicalContext],
+            prependLexicalContext: [varDeclLexicalContext],
             wrapping: context
           )
         }

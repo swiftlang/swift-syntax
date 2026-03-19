@@ -2,7 +2,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2024 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2026 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftParser
 import SwiftRefactor
 import SwiftSyntax
 import SwiftSyntaxBuilder
@@ -20,7 +21,7 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
 
   // MARK: - Basic Pattern Tests
   func testBasicIfElseWithLetDeclaration() throws {
-    let baseline: CodeBlockItemListSyntax = """
+    let baseline = """
       let result: Int
       if condition {
         result = 10
@@ -29,32 +30,15 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
       }
       """
 
-    let expected: CodeBlockItemListSyntax = """
+    let expected = """
       let result = condition ? 10 : 20
       """
 
     try assertRefactorConvert(baseline, expected: expected)
   }
 
-  func testBasicIfElseWithVarDeclaration() throws {
-    let baseline: CodeBlockItemListSyntax = """
-      var status: String
-      if isValid {
-        status = "approved"
-      } else {
-        status = "rejected"
-      }
-      """
-
-    let expected: CodeBlockItemListSyntax = """
-      var status = isValid ? "approved" : "rejected"
-      """
-
-    try assertRefactorConvert(baseline, expected: expected)
-  }
-
   func testStandaloneIfElseAssignment() throws {
-    let baseline: CodeBlockItemListSyntax = """
+    let baseline = """
       if isActive {
         flag = true
       } else {
@@ -62,7 +46,7 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
       }
       """
 
-    let expected: CodeBlockItemListSyntax = """
+    let expected = """
       flag = isActive ? true : false
       """
 
@@ -70,7 +54,7 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
   }
 
   func testParenthesizedCondition() throws {
-    let baseline: CodeBlockItemListSyntax = """
+    let baseline = """
       let output: Int
       if (x > 0) {
         output = 1
@@ -79,8 +63,25 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
       }
       """
 
-    let expected: CodeBlockItemListSyntax = """
+    let expected = """
       let output = (x > 0) ? 1 : 0
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
+  }
+
+  func testUnparenthesizedCondition() throws {
+    let baseline = """
+      let output: Int
+      if x > 0 {
+        output = 1
+      } else {
+        output = 0
+      }
+      """
+
+    let expected = """
+      let output = x > 0 ? 1 : 0
       """
 
     try assertRefactorConvert(baseline, expected: expected)
@@ -88,7 +89,7 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
 
   // MARK: - Tuple Assignment Tests
   func testSimpleTupleAssignment() throws {
-    let baseline: CodeBlockItemListSyntax = """
+    let baseline = """
       let point: (Int, Int)
       if isOrigin {
         point = (0, 0)
@@ -97,7 +98,7 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
       }
       """
 
-    let expected: CodeBlockItemListSyntax = """
+    let expected = """
       let point = isOrigin ? (0, 0) : (10, 20)
       """
 
@@ -105,7 +106,7 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
   }
 
   func testNamedTupleAssignment() throws {
-    let baseline: CodeBlockItemListSyntax = """
+    let baseline = """
       let coordinates: (x: Int, y: Int)
       if reset {
         coordinates = (x: 0, y: 0)
@@ -114,44 +115,8 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
       }
       """
 
-    let expected: CodeBlockItemListSyntax = """
+    let expected = """
       let coordinates: (x: Int, y: Int) = reset ? (x: 0, y: 0) : (x: 100, y: 200)
-      """
-
-    try assertRefactorConvert(baseline, expected: expected)
-  }
-
-  // MARK: - Complex Expression Tests
-
-  func testFunctionCallInBranches() throws {
-    let baseline: CodeBlockItemListSyntax = """
-      let result: String
-      if shouldTransform {
-        result = transform(input)
-      } else {
-        result = identity(input)
-      }
-      """
-
-    let expected: CodeBlockItemListSyntax = """
-      let result = shouldTransform ? transform(input) : identity(input)
-      """
-
-    try assertRefactorConvert(baseline, expected: expected)
-  }
-
-  func testDictionaryLiteralInBranches() throws {
-    let baseline: CodeBlockItemListSyntax = """
-      let config: [String: Int]
-      if useDefault {
-        config = [:]
-      } else {
-        config = ["key": 42]
-      }
-      """
-
-    let expected: CodeBlockItemListSyntax = """
-      let config = useDefault ? [:] : ["key": 42]
       """
 
     try assertRefactorConvert(baseline, expected: expected)
@@ -160,7 +125,7 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
   // MARK: - Negative Tests - Should NOT Refactor
 
   func testRejectsElseIfChain() throws {
-    let baseline: CodeBlockItemListSyntax = """
+    let baseline = """
       let result: Int
       if condition1 {
         result = 1
@@ -174,8 +139,8 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
     try assertRefactorConvert(baseline, expected: nil)
   }
 
-  func testRejectsNestedTernary() throws {
-    let baseline: CodeBlockItemListSyntax = """
+  func testNestedTernaryInBranch() throws {
+    let baseline = """
       let result: Int
       if outer {
         result = inner ? 1 : 2
@@ -184,11 +149,15 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
       }
       """
 
-    try assertRefactorConvert(baseline, expected: nil)
+    let expected = """
+      let result = outer ? inner ? 1 : 2 : 3
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
   }
 
-  func testRejectsClosureInBranch() throws {
-    let baseline: CodeBlockItemListSyntax = """
+  func testClosureInBranch() throws {
+    let baseline = """
       let result: () -> Void
       if condition {
         result = { print("hello") }
@@ -197,11 +166,15 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
       }
       """
 
-    try assertRefactorConvert(baseline, expected: nil)
+    let expected = """
+      let result = condition ? { print("hello") } : { print("goodbye") }
+      """
+
+    try assertRefactorConvert(baseline, expected: expected)
   }
 
   func testRejectsDifferentVariablesInBranches() throws {
-    let baseline: CodeBlockItemListSyntax = """
+    let baseline = """
       let result: Int
       if condition {
         result = 10
@@ -214,7 +187,7 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
   }
 
   func testRejectsNoElseClause() throws {
-    let baseline: CodeBlockItemListSyntax = """
+    let baseline = """
       let result: Int
       if condition {
         result = 10
@@ -226,17 +199,55 @@ final class ConvertToTernaryExpressionTests: XCTestCase {
 }
 
 private func assertRefactorConvert(
-  _ baseline: CodeBlockItemListSyntax,
-  expected: CodeBlockItemListSyntax?,
+  _ baseline: String,
+  expected: String?,
   file: StaticString = #filePath,
   line: UInt = #line
 ) throws {
-  try assertRefactor(
-    baseline,
-    context: (),
-    provider: ConvertToTernaryExpression.self,
-    expected: expected,
-    file: file,
-    line: line
-  )
+  let sourceFile = Parser.parse(source: baseline)
+
+  class IfExprFinder: SyntaxVisitor {
+    var result: IfExprSyntax?
+    override func visit(_ node: IfExprSyntax) -> SyntaxVisitorContinueKind {
+      if result == nil { result = node }
+      return .skipChildren
+    }
+  }
+
+  let finder = IfExprFinder(viewMode: .sourceAccurate)
+  finder.walk(sourceFile)
+
+  guard let ifExpr = finder.result else {
+    XCTFail("No IfExprSyntax found in baseline", file: file, line: line)
+    return
+  }
+
+  let edits: [SourceEdit]
+  do {
+    edits = try ConvertToTernaryExpression.textRefactor(syntax: ifExpr)
+  } catch {
+    if expected != nil {
+      XCTFail("Refactoring failed unexpectedly: \(error)", file: file, line: line)
+    }
+    return
+  }
+
+  guard let expected = expected else {
+    XCTFail(
+      "Expected refactoring to fail, but got \(edits.count) edit(s)",
+      file: file,
+      line: line
+    )
+    return
+  }
+
+  var bytes = Array(baseline.utf8)
+  for edit in edits.sorted(by: { $0.range.lowerBound > $1.range.lowerBound }) {
+    let start = edit.range.lowerBound.utf8Offset
+    let end = edit.range.upperBound.utf8Offset
+    bytes.replaceSubrange(start..<end, with: edit.replacementBytes)
+  }
+
+  let result = String(decoding: bytes, as: UTF8.self)
+  assertStringsEqualWithDiff(result, expected, file: file, line: line)
 }

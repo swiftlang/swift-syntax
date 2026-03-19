@@ -45,222 +45,65 @@ import SwiftSyntax
 /// - Both branches contain a single assignment expression
 /// - Both assignments target the same variable / same tuple pattern
 /// - Optionally, the variable is declared immediately before the if statement
-public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
-
-  public static func refactor(syntax: CodeBlockItemListSyntax, in context: Void) throws -> CodeBlockItemListSyntax {
-    guard let convertible = try findConvertiblePattern(in: syntax) else {
+public struct ConvertToTernaryExpression: EditRefactoringProvider {
+  public static func textRefactor(syntax: IfExprSyntax, in context: Void) throws -> [SourceEdit] {
+    guard let convertible = try ConvertibleIfElse(ifExpr: syntax) else {
       throw RefactoringNotApplicableError(
         "Cannot convert: if-else branches must each contain a single assignment to the same variable"
       )
     }
 
-    return performRefactoring(syntax: syntax, convertible: convertible)
-  }
-
-  // MARK: - Models
-  /// ConvertibleIfElse
-  private struct ConvertibleIfElse {
-    let variableDecl: VariableDeclSyntax?
-    let ifExpr: IfExprSyntax
-
-    /// LHS of the assignment (`result` or `(x, y)`).
-    let assignmentTargetExpr: ExprSyntax
-
-    /// Only present when LHS is a simple identifier (e.g. `result`).
-    let assignmentTargetName: String?
-
-    let condition: ExprSyntax
-    let trueExpr: ExprSyntax
-    let falseExpr: ExprSyntax
-
-    let variableDeclIndex: Int?
-    let ifExprIndex: Int
-    let isTupleAssignment: Bool
-  }
-
-  /// AssignmentInfo
-  private struct AssignmentInfo {
-    let targetExpr: ExprSyntax
-    let targetName: String?
-    let valueExpr: ExprSyntax
-    let isTuple: Bool
-  }
-
-  // MARK: - Finding Patterns
-  /// Finds a convertible if-else pattern by searching for if expressions first,
-  /// then optionally checking for a preceding variable declaration.
-  private static func findConvertiblePattern(in codeBlock: CodeBlockItemListSyntax) throws -> ConvertibleIfElse? {
-    let items = Array(codeBlock)
-    guard !items.isEmpty else { return nil }
-
-    for (ifIndex, item) in items.enumerated() {
-      guard let ifExpr = extractIfExpr(from: item) else { continue }
-
-      var varDecl: VariableDeclSyntax? = nil
-      var varIndex: Int? = nil
-
-      if ifIndex > 0,
-        let previousVarDecl = items[ifIndex - 1].item.as(VariableDeclSyntax.self),
-        declarationMatchesIfAssignment(previousVarDecl, ifExpr: ifExpr)
-      {
-        varDecl = previousVarDecl
-        varIndex = ifIndex - 1
-      }
-
-      if let convertible = try analyzePattern(
-        variableDecl: varDecl,
-        ifExpr: ifExpr,
-        varIndex: varIndex,
-        ifIndex: ifIndex
-      ) {
-        return convertible
-      }
-    }
-
-    return nil
-  }
-
-  private static func extractIfExpr(from item: CodeBlockItemSyntax) -> IfExprSyntax? {
-    if let exprStmt = item.item.as(ExpressionStmtSyntax.self) {
-      return exprStmt.expression.as(IfExprSyntax.self)
-    }
-    return item.item.as(IfExprSyntax.self)
-  }
-
-  /// Quick check to see if a variable declaration matches the assignment in an if expression
-  private static func declarationMatchesIfAssignment(
-    _ varDecl: VariableDeclSyntax,
-    ifExpr: IfExprSyntax
-  ) -> Bool {
-    guard validateVariableDecl(varDecl),
-      varDecl.bindings.count == 1,
-      let binding = varDecl.bindings.first,
-      let identifierPattern = binding.pattern.as(IdentifierPatternSyntax.self)
-    else {
-      return false
-    }
-
-    let varName = identifierPattern.identifier.text
-
-    guard let thenAssignment = try? extractSingleAssignment(from: ifExpr.body),
-      let assignedName = thenAssignment.targetName
-    else {
-      return false
-    }
-
-    return varName == assignedName
-  }
-
-  private static func analyzePattern(
-    variableDecl: VariableDeclSyntax?,
-    ifExpr: IfExprSyntax,
-    varIndex: Int?,
-    ifIndex: Int
-  ) throws -> ConvertibleIfElse? {
-
-    var expectedVariableName: String?
-
-    if let variableDecl {
-      guard validateVariableDecl(variableDecl) else {
-        return nil
-      }
-
-      guard variableDecl.bindings.count == 1,
-        let binding = variableDecl.bindings.first,
-        let identifierPattern = binding.pattern.as(IdentifierPatternSyntax.self)
-      else {
-        return nil
-      }
-      expectedVariableName = identifierPattern.identifier.text
-    }
-
-    guard let firstCondition = ifExpr.conditions.only,
-      case .expression(let condition) = firstCondition.condition
-    else {
-      return nil
-    }
-
-    guard let elseBody = ifExpr.elseBody,
-      case .codeBlock(let elseBlock) = elseBody
-    else {
-      return nil
-    }
-
-    guard let thenAssignment = try extractSingleAssignment(from: ifExpr.body) else {
-      return nil
-    }
-
-    guard let elseAssignment = try extractSingleAssignment(from: elseBlock) else {
-      return nil
-    }
-
-    guard thenAssignment.isTuple == elseAssignment.isTuple else {
-      return nil
-    }
-
-    guard normalized(thenAssignment.targetExpr) == normalized(elseAssignment.targetExpr) else {
-      return nil
-    }
-
-    if let expectedName = expectedVariableName {
-      guard let thenName = thenAssignment.targetName, thenName == expectedName else {
-        return nil
-      }
-      guard elseAssignment.targetName == expectedName else {
-        return nil
-      }
-    }
-
-    if isExpressionTooComplexForTernary(thenAssignment.valueExpr)
-      || isExpressionTooComplexForTernary(elseAssignment.valueExpr)
+    // Walk up to find the CodeBlockItemSyntax containing this if expression
+    let ifItem: CodeBlockItemSyntax
+    if let exprStmt = syntax.parent?.as(ExpressionStmtSyntax.self),
+      let item = exprStmt.parent?.as(CodeBlockItemSyntax.self)
     {
-      return nil
+      ifItem = item
+    } else if let item = syntax.parent?.as(CodeBlockItemSyntax.self) {
+      ifItem = item
+    } else {
+      throw RefactoringNotApplicableError("if expression is not in a code block")
     }
 
-    return ConvertibleIfElse(
-      variableDecl: variableDecl,
-      ifExpr: ifExpr,
-      assignmentTargetExpr: thenAssignment.targetExpr,
-      assignmentTargetName: thenAssignment.targetName,
-      condition: condition,
-      trueExpr: thenAssignment.valueExpr,
-      falseExpr: elseAssignment.valueExpr,
-      variableDeclIndex: varIndex,
-      ifExprIndex: ifIndex,
-      isTupleAssignment: thenAssignment.isTuple
-    )
-  }
-
-  // MARK: - Validation Helpers
-  private static func isNamedTupleType(_ type: TypeSyntax) -> Bool {
-    guard let tupleType = type.as(TupleTypeSyntax.self) else { return false }
-    return tupleType.elements.contains { $0.firstName != nil }
-  }
-
-  private static func validateVariableDecl(_ decl: VariableDeclSyntax) -> Bool {
-    guard decl.bindings.count == 1,
-      let binding = decl.bindings.first,
-      binding.typeAnnotation?.type != nil,
-      binding.initializer == nil,
-      decl.attributes.isEmpty
-    else {
-      return false
+    guard let codeBlockList = ifItem.parent?.as(CodeBlockItemListSyntax.self) else {
+      throw RefactoringNotApplicableError("if expression is not in a code block list")
     }
 
-    let keyword = decl.bindingSpecifier.tokenKind
-    return keyword == .keyword(.let) || keyword == .keyword(.var)
-  }
+    // Check for a preceding compatible variable declaration
+    let items = Array(codeBlockList)
+    guard let ifIdx = items.firstIndex(where: { $0.id == ifItem.id }) else {
+      throw RefactoringNotApplicableError("cannot find if expression in code block")
+    }
 
-  private static func normalized(_ expression: ExprSyntax) -> String {
-    expression.trimmed.description
+    let precedingItem = ifIdx > 0 ? items[ifIdx - 1] : nil
+    if let precedingItem,
+      let varDecl = precedingItem.item.as(VariableDeclSyntax.self),
+      varDecl.isVariableDeclarationWithoutInitializer,
+      let binding = varDecl.bindings.only,
+      let identifierPattern = binding.pattern.as(IdentifierPatternSyntax.self),
+      identifierPattern.identifier.text == convertible.assignmentTargetName
+    {
+      // Case: merge preceding decl + if → single declaration with ternary initializer.
+      // Replace the range from the start of the declaration to the end of the if expression
+      // (excluding surrounding trivia), preserving whatever whitespace is on either side.
+      let newDecl = createTernaryDeclaration(from: convertible, variableDecl: varDecl)
+      let range = precedingItem.positionAfterSkippingLeadingTrivia..<ifItem.endPositionBeforeTrailingTrivia
+      return [SourceEdit(range: range, replacement: newDecl.trimmed.description)]
+    } else {
+      // Case: standalone if → assignment expression with ternary.
+      // Replace just the if expression's content, preserving surrounding trivia.
+      let assignment = createTernaryAssignment(from: convertible)
+      let assignmentStmt = ExpressionStmtSyntax(expression: assignment)
+      let range = ifItem.positionAfterSkippingLeadingTrivia..<ifItem.endPositionBeforeTrailingTrivia
+      return [SourceEdit(range: range, replacement: assignmentStmt.trimmed.description)]
+    }
   }
 
   // MARK: - Extracting Assignments
-  /// Extracts the assignment from a code block.
-  private static func extractSingleAssignment(
+
+  fileprivate static func extractSingleAssignment(
     from codeBlock: CodeBlockSyntax
   ) throws -> AssignmentInfo? {
-
     guard let statement = codeBlock.statements.only else {
       return nil
     }
@@ -281,93 +124,32 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
     return try extractFromSequenceAssignment(sequenceExpr)
   }
 
-  /// Extracts the target and value from a sequence expression containing assignment.
   private static func extractFromSequenceAssignment(
     _ sequenceExpr: SequenceExprSyntax
   ) throws -> AssignmentInfo? {
-
     let elements = Array(sequenceExpr.elements)
 
-    guard elements.count == 3,
-      elements[1].as(AssignmentExprSyntax.self) != nil
-    else {
+    guard elements.count >= 3, elements[1].as(AssignmentExprSyntax.self) != nil else {
       return nil
     }
 
     let lhs = ExprSyntax(elements[0])
-    let rhs = ExprSyntax(elements[2])
-
-    if let lhsIdentifier = lhs.as(DeclReferenceExprSyntax.self) {
-      return AssignmentInfo(
-        targetExpr: lhs,
-        targetName: lhsIdentifier.baseName.text,
-        valueExpr: rhs,
-        isTuple: false
-      )
+    let rhs: ExprSyntax
+    if elements.count == 3 {
+      rhs = ExprSyntax(elements[2])
+    } else {
+      rhs = ExprSyntax(SequenceExprSyntax(elements: ExprListSyntax(Array(elements[2...]))))
     }
 
-    if lhs.as(TupleExprSyntax.self) != nil {
-      guard rhs.as(TupleExprSyntax.self) != nil else {
-        return nil
-      }
-      return AssignmentInfo(
-        targetExpr: lhs,
-        targetName: nil,
-        valueExpr: rhs,
-        isTuple: true
-      )
-    }
-
-    return nil
-  }
-
-  private static func isExpressionTooComplexForTernary(_ expr: ExprSyntax) -> Bool {
-    // Nested ternaries reduce readability: x = a ? b : (c ? d : e)
-    if expr.as(TernaryExprSyntax.self) != nil { return true }
-
-    // Closures in ternaries are harder to read than if-else blocks.
-    // Example: action = condition ? { [weak self] in self?.log() } : { print("default") }
-    // is less clear than an if-else with proper formatting and line breaks.
-    if expr.as(ClosureExprSyntax.self) != nil { return true }
-
-    return false
-  }
-
-  // MARK: - Applying Refactoring
-  private static func performRefactoring(
-    syntax: CodeBlockItemListSyntax,
-    convertible: ConvertibleIfElse
-  ) -> CodeBlockItemListSyntax {
-
-    var newItems: [CodeBlockItemSyntax] = []
-
-    for (index, item) in syntax.enumerated() {
-      if index == convertible.ifExprIndex {
-        if convertible.variableDecl == nil {
-          let assignmentExpr = createTernaryAssignment(from: convertible)
-          let assignmentStmt = ExpressionStmtSyntax(expression: assignmentExpr)
-          newItems.append(
-            CodeBlockItemSyntax(item: .stmt(StmtSyntax(assignmentStmt))).trimmed
-          )
-        }
-        continue
-      }
-
-      if let varDeclIndex = convertible.variableDeclIndex, index == varDeclIndex {
-        let newDecl = createTernaryDeclaration(from: convertible)
-        newItems.append(
-          CodeBlockItemSyntax(item: .decl(DeclSyntax(newDecl))).trimmed
-        )
-        continue
-      }
-
-      newItems.append(item)
-    }
-
-    return CodeBlockItemListSyntax(newItems)
+    return AssignmentInfo(
+      targetExpr: lhs,
+      targetName: lhs.as(DeclReferenceExprSyntax.self)?.baseName.text,
+      valueExpr: rhs
+    )
   }
 
   // MARK: - Builders
+
   private static func makeTernaryExpr(from convertible: ConvertibleIfElse) -> TernaryExprSyntax {
     TernaryExprSyntax(
       condition: convertible.condition.trimmed.with(\.trailingTrivia, .space),
@@ -378,13 +160,13 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
     )
   }
 
-  /// Creates the new variable declaration with ternary initializer (when declaration exists).
-  /// Preserves the original pattern + type annotation.
-  private static func createTernaryDeclaration(from convertible: ConvertibleIfElse) -> VariableDeclSyntax {
-    guard let variableDecl = convertible.variableDecl else {
-      fatalError("createTernaryDeclaration called without variable declaration")
-    }
-    guard let originalBinding = variableDecl.bindings.first else {
+  /// Creates the new variable declaration with ternary initializer.
+  /// Preserves the original type annotation for named tuples only.
+  private static func createTernaryDeclaration(
+    from convertible: ConvertibleIfElse,
+    variableDecl: VariableDeclSyntax
+  ) -> VariableDeclSyntax {
+    guard let originalBinding = variableDecl.bindings.only else {
       fatalError("Invalid state: binding should exist")
     }
 
@@ -420,5 +202,105 @@ public struct ConvertToTernaryExpression: SyntaxRefactoringProvider {
     )
 
     return ExprSyntax(assignmentSeq)
+  }
+
+  // MARK: - Validation Helpers
+
+  private static func isNamedTupleType(_ type: TypeSyntax) -> Bool {
+    guard let tupleType = type.as(TupleTypeSyntax.self) else { return false }
+    return tupleType.elements.contains { $0.firstName != nil }
+  }
+}
+
+// MARK: - Models
+
+/// Holds the extracted components of a convertible if-else pattern.
+///
+/// Example: given
+/// ```swift
+/// if condition {
+///   result = trueValue
+/// } else {
+///   result = falseValue
+/// }
+/// ```
+/// - `assignmentTargetExpr` is `result`
+/// - `assignmentTargetName` is `"result"` (`nil` for tuple targets like `(x, y)`)
+/// - `condition` is `condition`
+/// - `trueExpr` is `trueValue` (from the then-branch)
+/// - `falseExpr` is `falseValue` (from the else-branch)
+private struct ConvertibleIfElse {
+  /// LHS of the assignment (`result` or `(x, y)`).
+  let assignmentTargetExpr: ExprSyntax
+
+  /// Only present when LHS is a simple identifier (e.g. `result`).
+  let assignmentTargetName: String?
+
+  let condition: ExprSyntax
+  let trueExpr: ExprSyntax
+  let falseExpr: ExprSyntax
+
+  init?(ifExpr: IfExprSyntax) throws {
+    guard let conditionElement = ifExpr.conditions.only,
+      case .expression(let condition) = conditionElement.condition
+    else {
+      return nil
+    }
+
+    guard let elseBody = ifExpr.elseBody, case .codeBlock(let elseBlock) = elseBody else {
+      return nil
+    }
+
+    guard let thenAssignment = try ConvertToTernaryExpression.extractSingleAssignment(from: ifExpr.body) else {
+      return nil
+    }
+
+    guard let elseAssignment = try ConvertToTernaryExpression.extractSingleAssignment(from: elseBlock) else {
+      return nil
+    }
+
+    guard thenAssignment.targetExpr.trimmed.description == elseAssignment.targetExpr.trimmed.description else {
+      return nil
+    }
+
+    self.assignmentTargetExpr = thenAssignment.targetExpr
+    self.assignmentTargetName = thenAssignment.targetName
+    self.condition = condition
+    self.trueExpr = thenAssignment.valueExpr
+    self.falseExpr = elseAssignment.valueExpr
+  }
+}
+
+/// Represents the extracted components of a single assignment expression.
+///
+/// Example: for `result = trueValue`:
+/// - `targetExpr` is `result`
+/// - `targetName` is `"result"` (nil for tuple targets like `(x, y)`)
+/// - `valueExpr` is `trueValue`
+///
+/// Example: for `(x, y) = (1, 2)`:
+/// - `targetExpr` is `(x, y)`
+/// - `targetName` is `nil`
+/// - `valueExpr` is `(1, 2)`
+private struct AssignmentInfo {
+  let targetExpr: ExprSyntax
+  let targetName: String?
+  let valueExpr: ExprSyntax
+}
+
+extension VariableDeclSyntax {
+  /// Returns `true` if this is a `let` or `var` declaration with a type annotation
+  /// but no initializer and no attributes.
+  ///
+  /// Example: `let result: Int` → `true`; `let result = 0` → `false`
+  fileprivate var isVariableDeclarationWithoutInitializer: Bool {
+    guard let binding = bindings.only,
+      binding.typeAnnotation?.type != nil,
+      binding.initializer == nil,
+      attributes.isEmpty
+    else {
+      return false
+    }
+    return true
   }
 }

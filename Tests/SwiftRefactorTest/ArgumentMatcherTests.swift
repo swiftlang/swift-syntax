@@ -432,6 +432,20 @@ final class ArgumentMatcherWithTrailingClosuresTests: XCTestCase {
     XCTAssertTrue(matches[1].isTrailingClosure)
   }
 
+  func testTrailingClosurePrefersNonVariadicClosureParameterOverVariadic() throws {
+    let call = parseCallWithTrailingClosure("foo()", trailingClosure: "{ print(1) }")
+    let params = parseParameters(
+      "func foo(_ handlers: (() -> Void)..., completion: () -> Void) {}"
+    )
+
+    let matches = try ArgumentMatcher.matchWithTrailingClosures(call: call, parameters: params)
+
+    // No variadic arguments were passed; trailing closure binds to `completion`.
+    XCTAssertEqual(matches.count, 1)
+    XCTAssertEqual(matches[0].internalName.text, "completion")
+    XCTAssertTrue(matches[0].isTrailingClosure)
+  }
+
   // SE-0279 multiple trailing closures.
 
   func testMultipleTrailingClosures() throws {
@@ -648,6 +662,28 @@ final class ArgumentMatcherVariadicTests: XCTestCase {
     }
     XCTAssertTrue(completionMatch.isTrailingClosure)
     XCTAssertEqual(completionMatch.internalName.text, "completion")
+  }
+
+  func testMatchFullTrailingClosurePrefersNonVariadicClosureParameterOverVariadic() throws {
+    let call = parseCallWithTrailingClosure("foo()", trailingClosure: "{ print(1) }")
+    let params = parseParameters(
+      "func foo(_ handlers: (() -> Void)..., completion: () -> Void) {}"
+    )
+
+    let matches = try ArgumentMatcher.matchFull(call: call, parameters: params)
+
+    XCTAssertEqual(matches.count, 2)
+
+    guard case .variadic(let handlersMatch) = matches[0] else {
+      return XCTFail("Expected variadic match for handlers")
+    }
+    XCTAssertTrue(handlersMatch.arguments.isEmpty)
+
+    guard case .single(let completionMatch) = matches[1] else {
+      return XCTFail("Expected single match for completion")
+    }
+    XCTAssertEqual(completionMatch.internalName.text, "completion")
+    XCTAssertTrue(completionMatch.isTrailingClosure)
   }
 
   func testMatchFullDuplicateLabeledArgumentThrowsError() throws {

@@ -846,12 +846,10 @@ public enum ArgumentMatcher {
         throw ArgumentMatchError.extraArguments(from: inlineArgCount)
       }
 
-      // Prefer closure-accepting parameters first. If we cannot determine one
-      // syntactically (e.g. typealias), fall back to positional then first unmatched.
-      let targetIndex =
-        unmatchedIndices.first(where: { acceptsTrailingClosure(params[$0]) })
-        ?? unmatchedIndices.first(where: { params[$0].firstName.tokenKind == .wildcard })
-        ?? unmatchedIndices.first!
+      let targetIndex = selectFirstTrailingClosureTarget(
+        in: unmatchedIndices,
+        params: params
+      )
 
       let param = params[targetIndex]
       if param.ellipsis == nil && matchesByParamIndex[targetIndex] != nil {
@@ -1037,10 +1035,10 @@ public enum ArgumentMatcher {
         throw ArgumentMatchError.extraArguments(from: call.arguments.count)
       }
 
-      let targetIndex =
-        unmatchedIndices.first(where: { acceptsTrailingClosure(params[$0]) })
-        ?? unmatchedIndices.first(where: { params[$0].firstName.tokenKind == .wildcard })
-        ?? unmatchedIndices.first!
+      let targetIndex = selectFirstTrailingClosureTarget(
+        in: unmatchedIndices,
+        params: params
+      )
 
       let param = params[targetIndex]
       if param.ellipsis == nil && sourcesByParamIndex[targetIndex] != nil {
@@ -1464,6 +1462,44 @@ private func closureParamToFunctionParam(_ param: ClosureParameterSyntax) -> Fun
 /// resolvable from syntax alone, so unknown forms return `false`.
 private func acceptsTrailingClosure(_ parameter: FunctionParameterSyntax) -> Bool {
   return isClosureTypeSyntax(parameter.type)
+}
+
+/// Selects the best parameter index for the first trailing closure.
+///
+/// Preference order mirrors Swift's call-site behavior:
+/// 1. Unmatched non-variadic closure-typed parameters.
+/// 2. Unmatched variadic closure-typed parameters.
+/// 3. Unmatched positional (`_`) parameters.
+/// 4. First unmatched parameter.
+///
+/// The key special case is when a variadic closure parameter precedes a
+/// non-variadic closure parameter. In that situation, the first trailing
+/// closure should prefer the later non-variadic closure parameter.
+private func selectFirstTrailingClosureTarget(
+  in unmatchedIndices: [Int],
+  params: [FunctionParameterSyntax]
+) -> Int {
+  if let nonVariadicClosure = unmatchedIndices.first(where: {
+    let param = params[$0]
+    return param.ellipsis == nil && acceptsTrailingClosure(param)
+  }) {
+    return nonVariadicClosure
+  }
+
+  if let variadicClosure = unmatchedIndices.first(where: {
+    let param = params[$0]
+    return param.ellipsis != nil && acceptsTrailingClosure(param)
+  }) {
+    return variadicClosure
+  }
+
+  if let positional = unmatchedIndices.first(where: {
+    params[$0].firstName.tokenKind == .wildcard
+  }) {
+    return positional
+  }
+
+  return unmatchedIndices.first!
 }
 
 private func isClosureTypeSyntax(_ type: TypeSyntax) -> Bool {

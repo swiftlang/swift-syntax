@@ -14,8 +14,9 @@
 
 extension AttributeSyntax {
   var warningGroupControl: (DiagnosticGroupIdentifier, WarningGroupControl)? {
-    // `@warn` attributes
-    guard attributeName.as(IdentifierTypeSyntax.self)?.name.text == "warn"
+    // `@diagnose` attributes (also accepts the old `@warn` spelling)
+    guard let attrName = attributeName.as(IdentifierTypeSyntax.self)?.name.text,
+      attrName == "diagnose" || attrName == "warn"
     else {
       return nil
     }
@@ -51,7 +52,7 @@ extension AttributeSyntax {
 }
 
 extension WithAttributesSyntax {
-  /// Compute a dictionary of all `@warn` diagnostic group behavior controls
+  /// Compute a dictionary of all `@diagnose` diagnostic group behavior controls
   /// specified on this warning control declaration scope.
   var allWarningGroupControls: [(DiagnosticGroupIdentifier, WarningGroupControl)] {
     attributes.reduce(into: [(DiagnosticGroupIdentifier, WarningGroupControl)]()) { result, attr in

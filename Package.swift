@@ -452,6 +452,14 @@ package.targets.append(
   )
 )
 
+// MARK: - Apply upcoming feature flags to all targets
+
+for target in package.targets {
+  var settings = target.swiftSettings ?? []
+  settings.append(.enableUpcomingFeature("MemberImportVisibility"))
+  target.swiftSettings = settings
+}
+
 // MARK: - Parse build arguments
 
 func hasEnvironmentVariable(_ name: String) -> Bool {

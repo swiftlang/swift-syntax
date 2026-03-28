@@ -318,6 +318,7 @@ open class BasicFormat: SyntaxRewriter {
       (.identifier, .leftSquare),  // myArray[1]
       (.identifier, .period),  // a.b
       (.integerLiteral, .period),  // macOS 11.2.1
+      (.floatLiteral, .period),  // canImport(A, _version: 8.0.4)
       (.keyword(.Any), .period),  // Any.Type
       (.keyword(.`init`), .leftAngle),  // init<T>()
       (.keyword(.self), .period),  // self.someProperty

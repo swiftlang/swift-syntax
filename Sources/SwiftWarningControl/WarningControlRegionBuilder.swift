@@ -45,7 +45,7 @@ extension SyntaxProtocol {
   }
 }
 
-/// Add this warning control decl syntax node warning group controls (as specified with `@warn`)
+/// Add this warning control decl syntax node warning group controls (as specified with `@diagnose`)
 /// to the tree.
 extension WarningControlRegionTree {
   mutating func addWarningControlRegions(for syntax: some WithAttributesSyntax) {

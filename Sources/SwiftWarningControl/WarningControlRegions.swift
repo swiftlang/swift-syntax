@@ -43,27 +43,27 @@ public struct DiagnosticGroupIdentifier: Hashable, Sendable, ExpressibleByString
   public let identifier: String
 }
 
-/// Describes all of the `@warn` diagnostic group behavior controls within the
+/// Describes all of the `@diagnose` diagnostic group behavior controls within the
 /// given syntax node, indicating each group's active behavior at a given position.
 ///
 /// For example, given code like the following:
 ///
 /// ```
-///  1 |  @warn(Deprecate, as: error)
+///  1 |  @diagnose(Deprecate, as: error)
 ///  2 |  func foo() {
 ///  3 |     let a = dep
-///  4 |     @warn(Deprecate, as: warning)
+///  4 |     @diagnose(Deprecate, as: warning)
 ///  5 |     func bar() {
 ///  6 |         let b = dep
-///  7 |         @warn(Deprecate, as: ignored)
+///  7 |         @diagnose(Deprecate, as: ignored)
 ///  8 |         func baz() {
 ///  9 |           let c = dep
 /// 10 |        }
-/// 11 |        @warn(Deprecate, as: error)
-/// 12 |        @warn(OtherGroup, as: error)
+/// 11 |        @diagnose(Deprecate, as: error)
+/// 12 |        @diagnose(OtherGroup, as: error)
 /// 13 |        func qux() {
 /// 14 |            let d = dep
-/// 15 |             @warn(SomeOtherGroup, as: warning)
+/// 15 |             @diagnose(SomeOtherGroup, as: warning)
 /// 16 |            func corge() {
 /// 17 |              let e = dep
 /// 18 |            }
@@ -150,7 +150,7 @@ public struct WarningControlRegionTree {
   }
 
   /// Add warning control regions to the tree root node.
-  /// For example, controls corresponding to a top-level `using @warn()` statement.
+  /// For example, controls corresponding to a top-level `using @diagnose()` statement.
   mutating func addRootWarningGroupControls(controls: [(DiagnosticGroupIdentifier, WarningGroupControl)]) {
     addWarningGroupControls(range: rootRegionNode.range, controls: controls)
   }

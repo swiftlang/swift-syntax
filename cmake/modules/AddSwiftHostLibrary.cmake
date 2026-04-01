@@ -50,12 +50,19 @@ endfunction()
 
 # Add a new host library with the given name.
 function(add_swift_syntax_library name)
-  set(ASHL_SOURCES ${ARGN})
+  cmake_parse_arguments(ASHL "EXCLUDE_FROM_ALL" "" "" ${ARGN})
+
+  if (ASHL_EXCLUDE_FROM_ALL)
+    set(ASHL_EXTRA_ARGS "EXCLUDE_FROM_ALL")
+  else()
+    set(ASHL_EXTRA_ARGS)
+  endif()
+  set(ASHL_SOURCES ${ASHL_UNPARSED_ARGUMENTS})
 
   set(target ${SWIFTSYNTAX_TARGET_NAMESPACE}${name})
 
   # Create the library target.
-  add_library(${target} ${ASHL_SOURCES})
+  add_library(${target} ${ASHL_EXTRA_ARGS} ${ASHL_SOURCES})
   if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     target_link_libraries(${target} PUBLIC swiftSwiftOnoneSupport)
   endif()
@@ -183,7 +190,14 @@ function(add_swift_syntax_library name)
     endif()
   endif()
 
+  set(ASHL_SHOULD_INSTALL FALSE)
   if(PROJECT_IS_TOP_LEVEL OR SWIFT_SYNTAX_INSTALL_TARGETS)
+    if(NOT ASHL_EXCLUDE_FROM_ALL)
+      set(ASHL_SHOULD_INSTALL TRUE)
+    endif()
+  endif()
+
+  if(ASHL_SHOULD_INSTALL)
     # Install this target
     install(TARGETS ${target}
       EXPORT SwiftSyntaxTargets

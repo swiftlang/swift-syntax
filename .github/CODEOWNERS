@@ -7,19 +7,14 @@
 # Each line is a file pattern followed by one or more owners.
 # Order is important. The last matching pattern has the most precedence.
 
-# Owner of anything in SwiftSyntax not owned by anyone else.
-* @ahoppen @hamishknight @rintaro @hborla
+# The main branch is now in convergence, which means major changes, such as
+# large refactoring or new features, should be avoided. This strategy is
+# intended to maintain the stability of the Swift 6.4 release leading up to
+# the May 4th branch. For any work that requires broad changes or introduces
+# new features, create a feature branch and open a draft pull request.
+# All updates to the swiftlang/swift repository’s main branch require
+# approval from the release managers. A pull request targeting swiftlang/swift
+# will automatically add release managers. You can also contact them
+# via @release-managers in the forum group.
 
-# Macros
-/Sources/SwiftSyntaxMacros @DougGregor
-/Tests/SwiftSyntaxMacrosTest @DougGregor
-
-# SwiftOperators
-/Sources/SwiftOperators @DougGregor
-/Tests/SwiftOperatorsTest @DougGregor
-
-/utils/bazel @keith
-*.bazel @keith
-WORKSPACE @keith
-.bazelrc @keith
-.bazelversion @keith
+* @swiftlang/swift-branch-managers

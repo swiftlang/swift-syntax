@@ -13,6 +13,7 @@ add_swift_syntax_library(SwiftRefactor
   ConvertComputedPropertyToStored.swift
   ConvertComputedPropertyToZeroParameterFunction.swift
   ConvertStoredPropertyToComputed.swift
+  ConvertToTernaryExpression.swift
   ConvertZeroParameterFunctionToComputedProperty.swift
   DeclModifierRemover.swift
   ExpandEditorPlaceholder.swift

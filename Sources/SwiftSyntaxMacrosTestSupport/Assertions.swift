@@ -136,10 +136,6 @@ public func assertMacroExpansion(
     failureHandler: {
       #if canImport(Testing)
       // Record a Swift Testing issue.
-      //
-      // (Note: If/when Swift Testing gains interoperability with XCTest, this
-      // will be translated into an XCTest failure if called while an XCTest is
-      // running.)
       Issue.record(
         Comment(rawValue: $0.message),
         sourceLocation: .init(
@@ -150,14 +146,16 @@ public func assertMacroExpansion(
         )
       )
       #endif
+
+#if compiler(<6.4)
       // Record an XCTest failure.
       //
-      // FIXME: If/when Swift Testing gains interoperability with XCTest, this
-      // will become redundant with the above -- at least, when this library is
-      // compiled and run using a Swift version which supports interoperability.
-      // At that point, this should be adjusted so that it's only called when
-      // using older Swift versions.
+      // Only do this in pre-6.4 toolchains. In 6.4 and later toolchains,
+      // ST-0021: Targeted Interoperability between Swift Testing and XCTest
+      // means that the call to `Issue.record()` above will be propagated to
+      // XCTest as well.
       XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
+#endif
     },
     fileID: fileID,
     filePath: file,

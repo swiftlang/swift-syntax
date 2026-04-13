@@ -51,7 +51,7 @@ public typealias DiagnosticSpec = SwiftSyntaxMacrosGenericTestSupport.Diagnostic
 ///   - indentationWidth: The indentation width used in the expansion.
 ///   - buildConfiguration: a build configuration that will be made available
 ///     to the macro implementation
-/// - SeeAlso: ``assertMacroExpansion(_:expandedSource:diagnostics:macroSpecs:applyFixIts:fixedSource:testModuleName:testFileName:indentationWidth:buildConfiguration:file:line:)``
+/// - SeeAlso: ``assertMacroExpansion(_:expandedSource:diagnostics:macroSpecs:applyFixIts:fixedSource:testModuleName:testFileName:indentationWidth:buildConfiguration:fileID:file:line:column:)``
 ///   to also specify the list of conformances passed to the macro expansion.
 public func assertMacroExpansion(
   _ originalSource: String,
@@ -134,7 +134,7 @@ public func assertMacroExpansion(
     indentationWidth: indentationWidth,
     buildConfiguration: buildConfiguration,
     failureHandler: {
-      #if(canImport(Testing))
+      #if canImport(Testing)
       // Record a Swift Testing issue.
       //
       // (Note: If/when Swift Testing gains interoperability with XCTest, this
@@ -159,9 +159,9 @@ public func assertMacroExpansion(
       // using older Swift versions.
       XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
     },
-    fileID: "",  // Not used in the failure handler
+    fileID: fileID,
     filePath: file,
     line: line,
-    column: 0  // Not used in the failure handler
+    column: column
   )
 }

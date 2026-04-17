@@ -2719,8 +2719,10 @@ extension Parser.Lookahead {
     }
 
     // Parse pattern-tuple func-signature-result? 'in'.
+    var isBracketed = false
     if lookahead.at(.leftParen) {  // Consume the '('.
       // While we don't have '->' or ')', eat balanced tokens.
+      isBracketed = true
       var skipProgress = LoopProgressCondition()
       while !lookahead.at(.endOfFile, .rightBrace, .keyword(.in)) && !lookahead.at(.arrow)
         && lookahead.hasProgressed(&skipProgress)
@@ -2755,7 +2757,10 @@ extension Parser.Lookahead {
     }
 
     // Consume the ')', if it's there.
-    lookahead.consume(if: .rightParen)
+    var hasRightParen = false
+    if isBracketed {
+      hasRightParen = lookahead.consume(if: .rightParen) != nil
+    }
 
     lookahead.consumeEffectsSpecifiers()
 
@@ -2776,9 +2781,14 @@ extension Parser.Lookahead {
       return true
     }
 
+    // If we started with '(', we MUST have found a ')' to trust the arrow.
+    if isBracketed && !hasRightParen {
+      return false
+    }
     // Even if 'in' is missing, the presence of a top-level '->' makes this look like a
     // closure signature. There's no other valid syntax that could legally
     // contain '->' at this position.
+
     return sawTopLevelArrowInLookahead
   }
 }

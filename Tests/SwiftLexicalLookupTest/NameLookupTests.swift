@@ -1124,4 +1124,68 @@ final class TestNameLookup: XCTestCase {
       useNilAsTheParameter: true
     )
   }
+  // MARK: - EnumCaseDeclSyntax scope tests
+
+  func testEnumCaseAssociatedValueParamLookupBasic() {
+    assertLexicalNameLookup(
+      source: """
+        enum E {
+          case foo(1️⃣x: Int, y: Int = 2️⃣x)
+        }
+        """,
+      references: [
+        "2️⃣": [
+          .fromScope(EnumCaseDeclSyntax.self, expectedNames: ["1️⃣"]),
+          .lookForMembers(EnumDeclSyntax.self),
+        ]
+      ],
+      expectedResultTypes: .all(EnumCaseParameterSyntax.self)
+    )
+  }
+
+  func testEnumCaseFirstParamHasNoPriorNames() {
+    assertLexicalNameLookup(
+      source: """
+        enum E {
+          case foo(x: Int = 1️⃣y, y: Int)
+        }
+        """,
+      references: [
+        // `y` referenced in the default of `x` — `y` is declared after `x`, so invisible
+        "1️⃣": [.lookForMembers(EnumDeclSyntax.self)]
+      ]
+    )
+  }
+
+  func testEnumCaseParamNotVisibleOutsideCaseDecl() {
+    assertLexicalNameLookup(
+      source: """
+        enum E {
+          case foo(x: Int)
+
+          func bar() {
+            let _ = 1️⃣x
+          }
+        }
+        """,
+      references: [
+        // case payload `x` is not on the lookup chain inside a member function
+        "1️⃣": [.lookForMembers(EnumDeclSyntax.self)]
+      ]
+    )
+  }
+
+  func testEnumCaseMultiElementParamsAreIsolated() {
+    assertLexicalNameLookup(
+      source: """
+        enum E {
+          case foo(x: Int), bar(y: Int = 1️⃣x)
+        }
+        """,
+      references: [
+        // params from `foo` element aren't visible in `bar`'s default
+        "1️⃣": [.lookForMembers(EnumDeclSyntax.self)]
+      ]
+    )
+  }
 }

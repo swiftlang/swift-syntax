@@ -197,6 +197,8 @@ extension SwiftSyntax.TokenDiagnostic {
     }
 
     switch self.kind {
+    case .ambiguousOptionalAfterSomeOrAnyComposition:
+      return StaticParserError.ambiguousOptionalComposition
     case .editorPlaceholder: return StaticTokenError.editorPlaceholder
     case .equalMustHaveConsistentWhitespaceOnBothSides:
       return StaticTokenError.equalMustHaveConsistentWhitespaceOnBothSides

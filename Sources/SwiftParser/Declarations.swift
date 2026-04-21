@@ -1447,7 +1447,7 @@ extension Parser {
     return RawFunctionSignatureSyntax(
       parameterClause: parameterClause,
       effectSpecifiers: effectSpecifiers,
-      yieldsClause: yields,
+      yieldClause: yields,
       returnClause: returnClause,
       arena: self.arena
     )
@@ -1510,7 +1510,7 @@ extension Parser {
       RawUnexpectedNodesSyntax([unexpectedName], arena: self.arena),
       genericParameterClause: genericParameterClause,
       parameterClause: parameterClause,
-      yieldsClause: nil,
+      yieldClause: nil,
       returnClause: returnClause,
       genericWhereClause: genericWhereClause,
       accessorBlock: accessor,

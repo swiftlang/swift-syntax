@@ -1117,9 +1117,9 @@ public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol {
   public init(
     _ unexpectedBeforeEffectSpecifiers: RawUnexpectedNodesSyntax? = nil,
     effectSpecifiers: RawTypeEffectSpecifiersSyntax?,
-    _ unexpectedBetweenEffectSpecifiersAndYieldsClause: RawUnexpectedNodesSyntax? = nil,
-    yieldsClause: RawYieldsClauseSyntax?,
-    _ unexpectedBetweenYieldsClauseAndArrow: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndYieldClause: RawUnexpectedNodesSyntax? = nil,
+    yieldClause: RawFunctionYieldClauseSyntax?,
+    _ unexpectedBetweenYieldClauseAndArrow: RawUnexpectedNodesSyntax? = nil,
     arrow: RawTokenSyntax,
     _ unexpectedAfterArrow: RawUnexpectedNodesSyntax? = nil,
     arena: __shared RawSyntaxArena
@@ -1129,9 +1129,9 @@ public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol {
       layout.initialize(repeating: nil)
       layout[0] = unexpectedBeforeEffectSpecifiers?.raw
       layout[1] = effectSpecifiers?.raw
-      layout[2] = unexpectedBetweenEffectSpecifiersAndYieldsClause?.raw
-      layout[3] = yieldsClause?.raw
-      layout[4] = unexpectedBetweenYieldsClauseAndArrow?.raw
+      layout[2] = unexpectedBetweenEffectSpecifiersAndYieldClause?.raw
+      layout[3] = yieldClause?.raw
+      layout[4] = unexpectedBetweenYieldClauseAndArrow?.raw
       layout[5] = arrow.raw
       layout[6] = unexpectedAfterArrow?.raw
     }
@@ -1146,15 +1146,15 @@ public struct RawArrowExprSyntax: RawExprSyntaxNodeProtocol {
     layoutView.children[1].map(RawTypeEffectSpecifiersSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenEffectSpecifiersAndYieldsClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenEffectSpecifiersAndYieldClause: RawUnexpectedNodesSyntax? {
     layoutView.children[2].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var yieldsClause: RawYieldsClauseSyntax? {
-    layoutView.children[3].map(RawYieldsClauseSyntax.init(raw:))
+  public var yieldClause: RawFunctionYieldClauseSyntax? {
+    layoutView.children[3].map(RawFunctionYieldClauseSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenYieldsClauseAndArrow: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenYieldClauseAndArrow: RawUnexpectedNodesSyntax? {
     layoutView.children[4].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 

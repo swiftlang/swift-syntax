@@ -169,6 +169,10 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "type"
   case \FunctionParameterSyntax.defaultValue:
     return "default value"
+  case \FunctionYieldClauseSyntax.yields:
+    return "yielded types"
+  case \FunctionYieldSyntax.type:
+    return "type"
   case \GenericParameterSyntax.specifier:
     return "specifier"
   case \GenericParameterSyntax.name:
@@ -377,8 +381,6 @@ private func childNameForDiagnostics(_ keyPath: AnyKeyPath) -> String? {
     return "attributes"
   case \VariableDeclSyntax.modifiers:
     return "modifiers"
-  case \YieldsClauseSyntax.type:
-    return "yield type"
   default:
     return nil
   }

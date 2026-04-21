@@ -198,6 +198,12 @@ extension SyntaxKind {
       return "function signature"
     case .functionType:
       return "function type"
+    case .functionYieldClause:
+      return "yields clause"
+    case .functionYieldList:
+      return "yield list"
+    case .functionYield:
+      return "yield"
     case .genericArgumentClause:
       return "generic argument clause"
     case .genericArgument:
@@ -428,8 +434,6 @@ extension SyntaxKind {
       return "'yield' statement"
     case .yieldedExpressionList:
       return "yield list"
-    case .yieldsClause:
-      return "yields clause"
     default:
       return nil
     }

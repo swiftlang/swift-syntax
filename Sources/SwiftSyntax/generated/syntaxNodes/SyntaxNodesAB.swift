@@ -2210,7 +2210,7 @@ public struct ArrayTypeSyntax: TypeSyntaxProtocol, SyntaxHashable, _LeafTypeSynt
 /// ### Children
 /// 
 ///  - `effectSpecifiers`: ``TypeEffectSpecifiersSyntax``?
-///  - `yieldsClause`: ``YieldsClauseSyntax``?
+///  - `yieldClause`: ``FunctionYieldClauseSyntax``?
 ///  - `arrow`: `->`
 public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSyntaxNodeProtocol {
   public let _syntaxNode: Syntax
@@ -2234,9 +2234,9 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
     leadingTrivia: Trivia? = nil,
     _ unexpectedBeforeEffectSpecifiers: UnexpectedNodesSyntax? = nil,
     effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
-    _ unexpectedBetweenEffectSpecifiersAndYieldsClause: UnexpectedNodesSyntax? = nil,
-    yieldsClause: YieldsClauseSyntax? = nil,
-    _ unexpectedBetweenYieldsClauseAndArrow: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndYieldClause: UnexpectedNodesSyntax? = nil,
+    yieldClause: FunctionYieldClauseSyntax? = nil,
+    _ unexpectedBetweenYieldClauseAndArrow: UnexpectedNodesSyntax? = nil,
     arrow: TokenSyntax = .arrowToken(),
     _ unexpectedAfterArrow: UnexpectedNodesSyntax? = nil,
     trailingTrivia: Trivia? = nil
@@ -2246,18 +2246,18 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
     self = withExtendedLifetime((RawSyntaxArena(), (
       unexpectedBeforeEffectSpecifiers,
       effectSpecifiers,
-      unexpectedBetweenEffectSpecifiersAndYieldsClause,
-      yieldsClause,
-      unexpectedBetweenYieldsClauseAndArrow,
+      unexpectedBetweenEffectSpecifiersAndYieldClause,
+      yieldClause,
+      unexpectedBetweenYieldClauseAndArrow,
       arrow,
       unexpectedAfterArrow
     ))) { (arena, _) in
       let layout: [RawSyntax?] = [
         unexpectedBeforeEffectSpecifiers?.raw,
         effectSpecifiers?.raw,
-        unexpectedBetweenEffectSpecifiersAndYieldsClause?.raw,
-        yieldsClause?.raw,
-        unexpectedBetweenYieldsClauseAndArrow?.raw,
+        unexpectedBetweenEffectSpecifiersAndYieldClause?.raw,
+        yieldClause?.raw,
+        unexpectedBetweenYieldClauseAndArrow?.raw,
         arrow.raw,
         unexpectedAfterArrow?.raw
       ]
@@ -2290,7 +2290,7 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
     }
   }
 
-  public var unexpectedBetweenEffectSpecifiersAndYieldsClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenEffectSpecifiersAndYieldClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 2)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -2299,16 +2299,16 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
     }
   }
 
-  public var yieldsClause: YieldsClauseSyntax? {
+  public var yieldClause: FunctionYieldClauseSyntax? {
     get {
-      return Syntax(self).child(at: 3)?.cast(YieldsClauseSyntax.self)
+      return Syntax(self).child(at: 3)?.cast(FunctionYieldClauseSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 3, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ArrowExprSyntax.self)
     }
   }
 
-  public var unexpectedBetweenYieldsClauseAndArrow: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenYieldClauseAndArrow: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 4)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -2341,9 +2341,9 @@ public struct ArrowExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _LeafExprSynt
   public static let structure: SyntaxNodeStructure = .layout([
     \Self.unexpectedBeforeEffectSpecifiers,
     \Self.effectSpecifiers,
-    \Self.unexpectedBetweenEffectSpecifiersAndYieldsClause,
-    \Self.yieldsClause,
-    \Self.unexpectedBetweenYieldsClauseAndArrow,
+    \Self.unexpectedBetweenEffectSpecifiersAndYieldClause,
+    \Self.yieldClause,
+    \Self.unexpectedBetweenYieldClauseAndArrow,
     \Self.arrow,
     \Self.unexpectedAfterArrow
   ])

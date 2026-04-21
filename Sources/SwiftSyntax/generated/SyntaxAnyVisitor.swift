@@ -1019,6 +1019,30 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
     visitAnyPost(node._syntaxNode)
   }
 
+  override open func visit(_ node: FunctionYieldClauseSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: FunctionYieldClauseSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
+  override open func visit(_ node: FunctionYieldListSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: FunctionYieldListSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
+  override open func visit(_ node: FunctionYieldSyntax) -> SyntaxVisitorContinueKind {
+    return visitAny(node._syntaxNode)
+  }
+
+  override open func visitPost(_ node: FunctionYieldSyntax) {
+    visitAnyPost(node._syntaxNode)
+  }
+
   override open func visit(_ node: GenericArgumentClauseSyntax) -> SyntaxVisitorContinueKind {
     return visitAny(node._syntaxNode)
   }
@@ -2414,14 +2438,6 @@ open class SyntaxAnyVisitor: SyntaxVisitor {
   }
 
   override open func visitPost(_ node: YieldedExpressionsClauseSyntax) {
-    visitAnyPost(node._syntaxNode)
-  }
-
-  override open func visit(_ node: YieldsClauseSyntax) -> SyntaxVisitorContinueKind {
-    return visitAny(node._syntaxNode)
-  }
-
-  override open func visitPost(_ node: YieldsClauseSyntax) {
     visitAnyPost(node._syntaxNode)
   }
 }

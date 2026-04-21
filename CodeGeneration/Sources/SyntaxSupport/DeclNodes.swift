@@ -1143,6 +1143,47 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
+    kind: .functionYieldList,
+    base: .syntaxCollection,
+    nameForDiagnostics: "yield list",
+    documentation: """
+      A list of function yield represented by `FunctionYieldListSyntax`.
+
+      ### Example
+
+      ```swift
+      func foo() yields (Int, inout Float) {
+
+      }
+      ```
+      """,
+    elementChoices: [.functionYield]
+  ),
+
+  Node(
+    kind: .functionYield,
+    base: .syntax,
+    nameForDiagnostics: "yield",
+    documentation: "A function yield type",
+    parserFunction: "parseFunctionYield",
+    traits: ["WithTrailingComma"],
+    children: [
+      Child(
+        name: "type",
+        kind: .node(kind: .type),
+        nameForDiagnostics: "type",
+        documentation: "The yield's type."
+      ),
+      Child(
+        name: "trailingComma",
+        kind: .token(choices: [.token(.comma)]),
+        documentation: "If the yield is followed by another yield, the comma separating them.",
+        isOptional: true
+      ),
+    ]
+  ),
+
+  Node(
     kind: .functionSignature,
     base: .syntax,
     nameForDiagnostics: "function signature",
@@ -1160,8 +1201,8 @@ public let DECL_NODES: [Node] = [
         isOptional: true
       ),
       Child(
-        name: "yieldsClause",
-        kind: .node(kind: .yieldsClause),
+        name: "yieldClause",
+        kind: .node(kind: .functionYieldClause),
         isOptional: true
       ),
       Child(
@@ -2173,9 +2214,12 @@ public let DECL_NODES: [Node] = [
   ),
 
   Node(
-    kind: .yieldsClause,
+    kind: .functionYieldClause,
     base: .syntax,
     nameForDiagnostics: "yields clause",
+    traits: [
+      "Parenthesized"
+    ],
     children: [
       Child(
         name: "yieldsKeyword",
@@ -2188,21 +2232,18 @@ public let DECL_NODES: [Node] = [
       Child(
         name: "leftParen",
         kind: .token(choices: [.token(.leftParen)]),
-        documentation: "The '(' to open the yield type specification.",
-        isOptional: true
+        documentation: "The '(' to open the yielded type list specification.",
       ),
       Child(
-        name: "type",
-        kind: .node(kind: .type),
-        nameForDiagnostics: "yield type",
-        documentation: "The yielded type.",
-        isOptional: true
+        name: "yields",
+        kind: .collection(kind: .functionYieldList, collectionElementName: "Yield"),
+        nameForDiagnostics: "yielded types",
+        documentation: "The yielded types.",
       ),
       Child(
         name: "rightParen",
         kind: .token(choices: [.token(.rightParen)]),
-        documentation: "The ')' to close the yield type specification.",
-        isOptional: true
+        documentation: "The ')' to close the yielded type list specification.",
       ),
     ],
   ),
@@ -2434,8 +2475,8 @@ public let DECL_NODES: [Node] = [
         kind: .node(kind: .functionParameterClause)
       ),
       Child(
-        name: "yieldsClause",
-        kind: .node(kind: .yieldsClause),
+        name: "yieldClause",
+        kind: .node(kind: .functionYieldClause),
         isOptional: true
       ),
       Child(

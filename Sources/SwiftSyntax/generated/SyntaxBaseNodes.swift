@@ -1634,6 +1634,9 @@ extension Syntax {
       .node(FunctionParameterSyntax.self),
       .node(FunctionSignatureSyntax.self),
       .node(FunctionTypeSyntax.self),
+      .node(FunctionYieldClauseSyntax.self),
+      .node(FunctionYieldListSyntax.self),
+      .node(FunctionYieldSyntax.self),
       .node(GenericArgumentClauseSyntax.self),
       .node(GenericArgumentListSyntax.self),
       .node(GenericArgumentSyntax.self),
@@ -1806,8 +1809,7 @@ extension Syntax {
       .node(YieldStmtSyntax.self),
       .node(YieldedExpressionListSyntax.self),
       .node(YieldedExpressionSyntax.self),
-      .node(YieldedExpressionsClauseSyntax.self),
-      .node(YieldsClauseSyntax.self)
+      .node(YieldedExpressionsClauseSyntax.self)
     ])
   }
 }

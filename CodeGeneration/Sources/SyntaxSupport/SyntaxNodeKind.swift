@@ -140,6 +140,9 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case functionParameterClause
   case functionParameterList
   case functionSignature
+  case functionYield
+  case functionYieldClause
+  case functionYieldList
   case functionType
   case genericArgument
   case genericArgumentClause
@@ -316,7 +319,6 @@ public enum SyntaxNodeKind: String, CaseIterable, IdentifierConvertible, TypeCon
   case whereClause
   case whileStmt
   case wildcardPattern
-  case yieldsClause
   case yieldedExpression
   case yieldedExpressionList
   case yieldedExpressionsClause

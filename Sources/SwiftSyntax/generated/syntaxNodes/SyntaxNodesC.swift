@@ -2627,7 +2627,7 @@ public struct ClosureShorthandParameterSyntax: SyntaxProtocol, SyntaxHashable, _
 ///  - `capture`: ``ClosureCaptureClauseSyntax``?
 ///  - `parameterClause`: (``ClosureShorthandParameterListSyntax`` | ``ClosureParameterClauseSyntax``)?
 ///  - `effectSpecifiers`: ``TypeEffectSpecifiersSyntax``?
-///  - `yieldsClause`: ``YieldsClauseSyntax``?
+///  - `yieldClause`: ``FunctionYieldClauseSyntax``?
 ///  - `returnClause`: ``ReturnClauseSyntax``?
 ///  - `inKeyword`: `in`
 ///
@@ -2742,9 +2742,9 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     parameterClause: ParameterClause? = nil,
     _ unexpectedBetweenParameterClauseAndEffectSpecifiers: UnexpectedNodesSyntax? = nil,
     effectSpecifiers: TypeEffectSpecifiersSyntax? = nil,
-    _ unexpectedBetweenEffectSpecifiersAndYieldsClause: UnexpectedNodesSyntax? = nil,
-    yieldsClause: YieldsClauseSyntax? = nil,
-    _ unexpectedBetweenYieldsClauseAndReturnClause: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndYieldClause: UnexpectedNodesSyntax? = nil,
+    yieldClause: FunctionYieldClauseSyntax? = nil,
+    _ unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? = nil,
     returnClause: ReturnClauseSyntax? = nil,
     _ unexpectedBetweenReturnClauseAndInKeyword: UnexpectedNodesSyntax? = nil,
     inKeyword: TokenSyntax = .keyword(.in),
@@ -2762,9 +2762,9 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
       parameterClause,
       unexpectedBetweenParameterClauseAndEffectSpecifiers,
       effectSpecifiers,
-      unexpectedBetweenEffectSpecifiersAndYieldsClause,
-      yieldsClause,
-      unexpectedBetweenYieldsClauseAndReturnClause,
+      unexpectedBetweenEffectSpecifiersAndYieldClause,
+      yieldClause,
+      unexpectedBetweenYieldClauseAndReturnClause,
       returnClause,
       unexpectedBetweenReturnClauseAndInKeyword,
       inKeyword,
@@ -2779,9 +2779,9 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
         parameterClause?.raw,
         unexpectedBetweenParameterClauseAndEffectSpecifiers?.raw,
         effectSpecifiers?.raw,
-        unexpectedBetweenEffectSpecifiersAndYieldsClause?.raw,
-        yieldsClause?.raw,
-        unexpectedBetweenYieldsClauseAndReturnClause?.raw,
+        unexpectedBetweenEffectSpecifiersAndYieldClause?.raw,
+        yieldClause?.raw,
+        unexpectedBetweenYieldClauseAndReturnClause?.raw,
         returnClause?.raw,
         unexpectedBetweenReturnClauseAndInKeyword?.raw,
         inKeyword.raw,
@@ -2897,7 +2897,7 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
   }
 
-  public var unexpectedBetweenEffectSpecifiersAndYieldsClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenEffectSpecifiersAndYieldClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 8)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -2906,16 +2906,16 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     }
   }
 
-  public var yieldsClause: YieldsClauseSyntax? {
+  public var yieldClause: FunctionYieldClauseSyntax? {
     get {
-      return Syntax(self).child(at: 9)?.cast(YieldsClauseSyntax.self)
+      return Syntax(self).child(at: 9)?.cast(FunctionYieldClauseSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 9, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(ClosureSignatureSyntax.self)
     }
   }
 
-  public var unexpectedBetweenYieldsClauseAndReturnClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -2972,9 +2972,9 @@ public struct ClosureSignatureSyntax: SyntaxProtocol, SyntaxHashable, _LeafSynta
     \Self.parameterClause,
     \Self.unexpectedBetweenParameterClauseAndEffectSpecifiers,
     \Self.effectSpecifiers,
-    \Self.unexpectedBetweenEffectSpecifiersAndYieldsClause,
-    \Self.yieldsClause,
-    \Self.unexpectedBetweenYieldsClauseAndReturnClause,
+    \Self.unexpectedBetweenEffectSpecifiersAndYieldClause,
+    \Self.yieldClause,
+    \Self.unexpectedBetweenYieldClauseAndReturnClause,
     \Self.returnClause,
     \Self.unexpectedBetweenReturnClauseAndInKeyword,
     \Self.inKeyword,

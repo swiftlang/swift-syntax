@@ -1958,6 +1958,59 @@ extension FunctionParameterSyntax {
   }
 }
 
+extension FunctionYieldClauseSyntax {
+  @_spi(Diagnostics)
+  public enum YieldsKeywordOptions: TokenSpecSet {
+    case identifier
+    @_spi(ExperimentalLanguageFeatures)
+    case yields
+
+    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
+      switch PrepareForKeywordMatch(lexeme) {
+      case TokenSpec(.identifier):
+        self = .identifier
+      case TokenSpec(.yields) where experimentalFeatures.contains(.coroutineFunctions):
+        self = .yields
+      default:
+        return nil
+      }
+    }
+
+    public init?(token: TokenSyntax) {
+      switch token {
+      case TokenSpec(.identifier):
+        self = .identifier
+      case TokenSpec(.yields):
+        self = .yields
+      default:
+        return nil
+      }
+    }
+
+    var spec: TokenSpec {
+      switch self {
+      case .identifier:
+        return .identifier
+      case .yields:
+        return .keyword(.yields)
+      }
+    }
+
+    /// Returns a token that satisfies the `TokenSpec` of this case.
+    ///
+    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
+    @_spi(Diagnostics)
+    public var tokenSyntax: TokenSyntax {
+      switch self {
+      case .identifier:
+        return .identifier("")
+      case .yields:
+        return .keyword(.yields)
+      }
+    }
+  }
+}
+
 extension GenericParameterSyntax {
   @_spi(Diagnostics)
   public enum SpecifierOptions: TokenSpecSet {
@@ -4299,59 +4352,6 @@ extension VariableDeclSyntax {
         return .keyword(._borrowing)
       case ._consuming:
         return .keyword(._consuming)
-      }
-    }
-  }
-}
-
-extension YieldsClauseSyntax {
-  @_spi(Diagnostics)
-  public enum YieldsKeywordOptions: TokenSpecSet {
-    case identifier
-    @_spi(ExperimentalLanguageFeatures)
-    case yields
-
-    init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
-      switch PrepareForKeywordMatch(lexeme) {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.yields) where experimentalFeatures.contains(.coroutineFunctions):
-        self = .yields
-      default:
-        return nil
-      }
-    }
-
-    public init?(token: TokenSyntax) {
-      switch token {
-      case TokenSpec(.identifier):
-        self = .identifier
-      case TokenSpec(.yields):
-        self = .yields
-      default:
-        return nil
-      }
-    }
-
-    var spec: TokenSpec {
-      switch self {
-      case .identifier:
-        return .identifier
-      case .yields:
-        return .keyword(.yields)
-      }
-    }
-
-    /// Returns a token that satisfies the `TokenSpec` of this case.
-    ///
-    /// If the token kind of this spec has variable text, e.g. for an identifier, this returns a token with empty text.
-    @_spi(Diagnostics)
-    public var tokenSyntax: TokenSyntax {
-      switch self {
-      case .identifier:
-        return .identifier("")
-      case .yields:
-        return .keyword(.yields)
       }
     }
   }

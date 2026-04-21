@@ -3204,7 +3204,7 @@ public struct SubscriptCallExprSyntax: ExprSyntaxProtocol, SyntaxHashable, _Leaf
 ///  - `subscriptKeyword`: `subscript`
 ///  - `genericParameterClause`: ``GenericParameterClauseSyntax``?
 ///  - `parameterClause`: ``FunctionParameterClauseSyntax``
-///  - `yieldsClause`: ``YieldsClauseSyntax``?
+///  - `yieldClause`: ``FunctionYieldClauseSyntax``?
 ///  - `returnClause`: ``ReturnClauseSyntax``
 ///  - `genericWhereClause`: ``GenericWhereClauseSyntax``?
 ///  - `accessorBlock`: ``AccessorBlockSyntax``?
@@ -3244,9 +3244,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     genericParameterClause: GenericParameterClauseSyntax? = nil,
     _ unexpectedBetweenGenericParameterClauseAndParameterClause: UnexpectedNodesSyntax? = nil,
     parameterClause: FunctionParameterClauseSyntax,
-    _ unexpectedBetweenParameterClauseAndYieldsClause: UnexpectedNodesSyntax? = nil,
-    yieldsClause: YieldsClauseSyntax? = nil,
-    _ unexpectedBetweenYieldsClauseAndReturnClause: UnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenParameterClauseAndYieldClause: UnexpectedNodesSyntax? = nil,
+    yieldClause: FunctionYieldClauseSyntax? = nil,
+    _ unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? = nil,
     returnClause: ReturnClauseSyntax,
     _ unexpectedBetweenReturnClauseAndGenericWhereClause: UnexpectedNodesSyntax? = nil,
     genericWhereClause: GenericWhereClauseSyntax? = nil,
@@ -3268,9 +3268,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
       genericParameterClause,
       unexpectedBetweenGenericParameterClauseAndParameterClause,
       parameterClause,
-      unexpectedBetweenParameterClauseAndYieldsClause,
-      yieldsClause,
-      unexpectedBetweenYieldsClauseAndReturnClause,
+      unexpectedBetweenParameterClauseAndYieldClause,
+      yieldClause,
+      unexpectedBetweenYieldClauseAndReturnClause,
       returnClause,
       unexpectedBetweenReturnClauseAndGenericWhereClause,
       genericWhereClause,
@@ -3289,9 +3289,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
         genericParameterClause?.raw,
         unexpectedBetweenGenericParameterClauseAndParameterClause?.raw,
         parameterClause.raw,
-        unexpectedBetweenParameterClauseAndYieldsClause?.raw,
-        yieldsClause?.raw,
-        unexpectedBetweenYieldsClauseAndReturnClause?.raw,
+        unexpectedBetweenParameterClauseAndYieldClause?.raw,
+        yieldClause?.raw,
+        unexpectedBetweenYieldClauseAndReturnClause?.raw,
         returnClause.raw,
         unexpectedBetweenReturnClauseAndGenericWhereClause?.raw,
         genericWhereClause?.raw,
@@ -3458,7 +3458,7 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
 
-  public var unexpectedBetweenParameterClauseAndYieldsClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenParameterClauseAndYieldClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 10)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -3467,16 +3467,16 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     }
   }
 
-  public var yieldsClause: YieldsClauseSyntax? {
+  public var yieldClause: FunctionYieldClauseSyntax? {
     get {
-      return Syntax(self).child(at: 11)?.cast(YieldsClauseSyntax.self)
+      return Syntax(self).child(at: 11)?.cast(FunctionYieldClauseSyntax.self)
     }
     set(value) {
       self = Syntax(self).replacingChild(at: 11, with: Syntax(value), rawAllocationArena: RawSyntaxArena()).cast(SubscriptDeclSyntax.self)
     }
   }
 
-  public var unexpectedBetweenYieldsClauseAndReturnClause: UnexpectedNodesSyntax? {
+  public var unexpectedBetweenYieldClauseAndReturnClause: UnexpectedNodesSyntax? {
     get {
       return Syntax(self).child(at: 12)?.cast(UnexpectedNodesSyntax.self)
     }
@@ -3551,9 +3551,9 @@ public struct SubscriptDeclSyntax: DeclSyntaxProtocol, SyntaxHashable, _LeafDecl
     \Self.genericParameterClause,
     \Self.unexpectedBetweenGenericParameterClauseAndParameterClause,
     \Self.parameterClause,
-    \Self.unexpectedBetweenParameterClauseAndYieldsClause,
-    \Self.yieldsClause,
-    \Self.unexpectedBetweenYieldsClauseAndReturnClause,
+    \Self.unexpectedBetweenParameterClauseAndYieldClause,
+    \Self.yieldClause,
+    \Self.unexpectedBetweenYieldClauseAndReturnClause,
     \Self.returnClause,
     \Self.unexpectedBetweenReturnClauseAndGenericWhereClause,
     \Self.genericWhereClause,

@@ -1551,9 +1551,9 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
     parameterClause: ParameterClause?,
     _ unexpectedBetweenParameterClauseAndEffectSpecifiers: RawUnexpectedNodesSyntax? = nil,
     effectSpecifiers: RawTypeEffectSpecifiersSyntax?,
-    _ unexpectedBetweenEffectSpecifiersAndYieldsClause: RawUnexpectedNodesSyntax? = nil,
-    yieldsClause: RawYieldsClauseSyntax?,
-    _ unexpectedBetweenYieldsClauseAndReturnClause: RawUnexpectedNodesSyntax? = nil,
+    _ unexpectedBetweenEffectSpecifiersAndYieldClause: RawUnexpectedNodesSyntax? = nil,
+    yieldClause: RawFunctionYieldClauseSyntax?,
+    _ unexpectedBetweenYieldClauseAndReturnClause: RawUnexpectedNodesSyntax? = nil,
     returnClause: RawReturnClauseSyntax?,
     _ unexpectedBetweenReturnClauseAndInKeyword: RawUnexpectedNodesSyntax? = nil,
     inKeyword: RawTokenSyntax,
@@ -1571,9 +1571,9 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
       layout[5] = parameterClause?.raw
       layout[6] = unexpectedBetweenParameterClauseAndEffectSpecifiers?.raw
       layout[7] = effectSpecifiers?.raw
-      layout[8] = unexpectedBetweenEffectSpecifiersAndYieldsClause?.raw
-      layout[9] = yieldsClause?.raw
-      layout[10] = unexpectedBetweenYieldsClauseAndReturnClause?.raw
+      layout[8] = unexpectedBetweenEffectSpecifiersAndYieldClause?.raw
+      layout[9] = yieldClause?.raw
+      layout[10] = unexpectedBetweenYieldClauseAndReturnClause?.raw
       layout[11] = returnClause?.raw
       layout[12] = unexpectedBetweenReturnClauseAndInKeyword?.raw
       layout[13] = inKeyword.raw
@@ -1614,15 +1614,15 @@ public struct RawClosureSignatureSyntax: RawSyntaxNodeProtocol {
     layoutView.children[7].map(RawTypeEffectSpecifiersSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenEffectSpecifiersAndYieldsClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenEffectSpecifiersAndYieldClause: RawUnexpectedNodesSyntax? {
     layoutView.children[8].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 
-  public var yieldsClause: RawYieldsClauseSyntax? {
-    layoutView.children[9].map(RawYieldsClauseSyntax.init(raw:))
+  public var yieldClause: RawFunctionYieldClauseSyntax? {
+    layoutView.children[9].map(RawFunctionYieldClauseSyntax.init(raw:))
   }
 
-  public var unexpectedBetweenYieldsClauseAndReturnClause: RawUnexpectedNodesSyntax? {
+  public var unexpectedBetweenYieldClauseAndReturnClause: RawUnexpectedNodesSyntax? {
     layoutView.children[10].map(RawUnexpectedNodesSyntax.init(raw:))
   }
 

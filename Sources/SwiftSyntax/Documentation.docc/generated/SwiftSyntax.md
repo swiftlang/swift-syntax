@@ -242,6 +242,8 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/ExprListSyntax>
 - <doc:SwiftSyntax/FunctionParameterListSyntax>
 - <doc:SwiftSyntax/FunctionParameterSyntax>
+- <doc:SwiftSyntax/FunctionYieldListSyntax>
+- <doc:SwiftSyntax/FunctionYieldSyntax>
 - <doc:SwiftSyntax/GenericArgumentListSyntax>
 - <doc:SwiftSyntax/GenericArgumentSyntax>
 - <doc:SwiftSyntax/GenericParameterListSyntax>
@@ -352,6 +354,7 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/FunctionEffectSpecifiersSyntax>
 - <doc:SwiftSyntax/FunctionParameterClauseSyntax>
 - <doc:SwiftSyntax/FunctionSignatureSyntax>
+- <doc:SwiftSyntax/FunctionYieldClauseSyntax>
 - <doc:SwiftSyntax/GenericArgumentClauseSyntax>
 - <doc:SwiftSyntax/GenericParameterClauseSyntax>
 - <doc:SwiftSyntax/InheritanceClauseSyntax>
@@ -382,7 +385,6 @@ allows Swift tools to parse, inspect, generate, and transform Swift source code.
 - <doc:SwiftSyntax/VersionTupleSyntax>
 - <doc:SwiftSyntax/WhereClauseSyntax>
 - <doc:SwiftSyntax/YieldedExpressionsClauseSyntax>
-- <doc:SwiftSyntax/YieldsClauseSyntax>
 
 ### Traits
 

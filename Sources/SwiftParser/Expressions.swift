@@ -377,7 +377,7 @@ extension Parser {
 
       let op = RawArrowExprSyntax(
         effectSpecifiers: effectSpecifiers,
-        yieldsClause: yields,
+        yieldClause: yields,
         unexpectedBeforeArrow,
         arrow: arrow,
         unexpectedAfterArrow,
@@ -2011,7 +2011,7 @@ extension Parser {
 
     var parameterClause: RawClosureSignatureSyntax.ParameterClause?
     var effectSpecifiers: RawTypeEffectSpecifiersSyntax?
-    var yields: RawYieldsClauseSyntax? = nil
+    var yields: RawFunctionYieldClauseSyntax? = nil
     var returnClause: RawReturnClauseSyntax? = nil
     if !self.at(.keyword(.in)) {
       // If the next token is ':', then it looks like the code contained a non-shorthand closure parameter with a type annotation.
@@ -2069,7 +2069,7 @@ extension Parser {
       capture: captures,
       parameterClause: parameterClause,
       effectSpecifiers: effectSpecifiers,
-      yieldsClause: yields,
+      yieldClause: yields,
       returnClause: returnClause,
       unexpectedBeforeInKeyword,
       inKeyword: inKeyword,

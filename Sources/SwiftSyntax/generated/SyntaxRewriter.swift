@@ -937,6 +937,27 @@ open class SyntaxRewriter {
     return TypeSyntax(FunctionTypeSyntax(unsafeCasting: visitChildren(node._syntaxNode)))
   }
 
+  /// Visit a ``FunctionYieldClauseSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: FunctionYieldClauseSyntax) -> FunctionYieldClauseSyntax {
+    return FunctionYieldClauseSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
+  /// Visit a ``FunctionYieldListSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: FunctionYieldListSyntax) -> FunctionYieldListSyntax {
+    return FunctionYieldListSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
+  /// Visit a ``FunctionYieldSyntax``.
+  ///   - Parameter node: the node that is being visited
+  ///   - Returns: the rewritten node
+  open func visit(_ node: FunctionYieldSyntax) -> FunctionYieldSyntax {
+    return FunctionYieldSyntax(unsafeCasting: visitChildren(node._syntaxNode))
+  }
+
   /// Visit a ``GenericArgumentClauseSyntax``.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2162,13 +2183,6 @@ open class SyntaxRewriter {
     return YieldedExpressionsClauseSyntax(unsafeCasting: visitChildren(node._syntaxNode))
   }
 
-  /// Visit a ``YieldsClauseSyntax``.
-  ///   - Parameter node: the node that is being visited
-  ///   - Returns: the rewritten node
-  open func visit(_ node: YieldsClauseSyntax) -> YieldsClauseSyntax {
-    return YieldsClauseSyntax(unsafeCasting: visitChildren(node._syntaxNode))
-  }
-
   /// Visit any DeclSyntax node.
   ///   - Parameter node: the node that is being visited
   ///   - Returns: the rewritten node
@@ -2802,6 +2816,21 @@ open class SyntaxRewriter {
   @inline(never)
   private func visitFunctionTypeSyntaxImpl(_ node: Syntax) -> Syntax {
     Syntax(visit(FunctionTypeSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
+  private func visitFunctionYieldClauseSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(FunctionYieldClauseSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
+  private func visitFunctionYieldListSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(FunctionYieldListSyntax(unsafeCasting: node)))
+  }
+
+  @inline(never)
+  private func visitFunctionYieldSyntaxImpl(_ node: Syntax) -> Syntax {
+    Syntax(visit(FunctionYieldSyntax(unsafeCasting: node)))
   }
 
   @inline(never)
@@ -3674,11 +3703,6 @@ open class SyntaxRewriter {
     Syntax(visit(YieldedExpressionsClauseSyntax(unsafeCasting: node)))
   }
 
-  @inline(never)
-  private func visitYieldsClauseSyntaxImpl(_ node: Syntax) -> Syntax {
-    Syntax(visit(YieldsClauseSyntax(unsafeCasting: node)))
-  }
-
   // SwiftSyntax requires a lot of stack space in debug builds for syntax tree
   // rewriting. In scenarios with reduced stack space (in particular dispatch
   // queues), this easily results in a stack overflow. To work around this issue,
@@ -3945,6 +3969,12 @@ open class SyntaxRewriter {
       return self.visitFunctionSignatureSyntaxImpl(_:)
     case .functionType:
       return self.visitFunctionTypeSyntaxImpl(_:)
+    case .functionYieldClause:
+      return self.visitFunctionYieldClauseSyntaxImpl(_:)
+    case .functionYieldList:
+      return self.visitFunctionYieldListSyntaxImpl(_:)
+    case .functionYield:
+      return self.visitFunctionYieldSyntaxImpl(_:)
     case .genericArgumentClause:
       return self.visitGenericArgumentClauseSyntaxImpl(_:)
     case .genericArgumentList:
@@ -4293,8 +4323,6 @@ open class SyntaxRewriter {
       return self.visitYieldedExpressionSyntaxImpl(_:)
     case .yieldedExpressionsClause:
       return self.visitYieldedExpressionsClauseSyntaxImpl(_:)
-    case .yieldsClause:
-      return self.visitYieldsClauseSyntaxImpl(_:)
     }
   }
   private func dispatchVisit(_ node: Syntax) -> Syntax {
@@ -4543,6 +4571,12 @@ open class SyntaxRewriter {
       return visitFunctionSignatureSyntaxImpl(node)
     case .functionType:
       return visitFunctionTypeSyntaxImpl(node)
+    case .functionYieldClause:
+      return visitFunctionYieldClauseSyntaxImpl(node)
+    case .functionYieldList:
+      return visitFunctionYieldListSyntaxImpl(node)
+    case .functionYield:
+      return visitFunctionYieldSyntaxImpl(node)
     case .genericArgumentClause:
       return visitGenericArgumentClauseSyntaxImpl(node)
     case .genericArgumentList:
@@ -4891,8 +4925,6 @@ open class SyntaxRewriter {
       return visitYieldedExpressionSyntaxImpl(node)
     case .yieldedExpressionsClause:
       return visitYieldedExpressionsClauseSyntaxImpl(node)
-    case .yieldsClause:
-      return visitYieldsClauseSyntaxImpl(node)
     }
   }
   #endif

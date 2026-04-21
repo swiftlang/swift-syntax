@@ -140,6 +140,9 @@ public enum SyntaxEnum: Sendable {
   case functionParameter(FunctionParameterSyntax)
   case functionSignature(FunctionSignatureSyntax)
   case functionType(FunctionTypeSyntax)
+  case functionYieldClause(FunctionYieldClauseSyntax)
+  case functionYieldList(FunctionYieldListSyntax)
+  case functionYield(FunctionYieldSyntax)
   case genericArgumentClause(GenericArgumentClauseSyntax)
   case genericArgumentList(GenericArgumentListSyntax)
   case genericArgument(GenericArgumentSyntax)
@@ -321,7 +324,6 @@ public enum SyntaxEnum: Sendable {
   case yieldedExpressionList(YieldedExpressionListSyntax)
   case yieldedExpression(YieldedExpressionSyntax)
   case yieldedExpressionsClause(YieldedExpressionsClauseSyntax)
-  case yieldsClause(YieldsClauseSyntax)
 }
 
 extension Syntax {
@@ -568,6 +570,12 @@ extension Syntax {
       return .functionSignature(FunctionSignatureSyntax(self)!)
     case .functionType:
       return .functionType(FunctionTypeSyntax(self)!)
+    case .functionYieldClause:
+      return .functionYieldClause(FunctionYieldClauseSyntax(self)!)
+    case .functionYieldList:
+      return .functionYieldList(FunctionYieldListSyntax(self)!)
+    case .functionYield:
+      return .functionYield(FunctionYieldSyntax(self)!)
     case .genericArgumentClause:
       return .genericArgumentClause(GenericArgumentClauseSyntax(self)!)
     case .genericArgumentList:
@@ -916,8 +924,6 @@ extension Syntax {
       return .yieldedExpression(YieldedExpressionSyntax(self)!)
     case .yieldedExpressionsClause:
       return .yieldedExpressionsClause(YieldedExpressionsClauseSyntax(self)!)
-    case .yieldsClause:
-      return .yieldsClause(YieldsClauseSyntax(self)!)
     }
   }
 }

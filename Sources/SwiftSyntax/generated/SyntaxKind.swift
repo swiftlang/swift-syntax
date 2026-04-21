@@ -140,6 +140,9 @@ public enum SyntaxKind: Sendable {
   case functionParameter
   case functionSignature
   case functionType
+  case functionYieldClause
+  case functionYieldList
+  case functionYield
   case genericArgumentClause
   case genericArgumentList
   case genericArgument
@@ -321,7 +324,6 @@ public enum SyntaxKind: Sendable {
   case yieldedExpressionList
   case yieldedExpression
   case yieldedExpressionsClause
-  case yieldsClause
 
   public var isSyntaxCollection: Bool {
     switch self {
@@ -370,6 +372,8 @@ public enum SyntaxKind: Sendable {
     case .exprList:
       return true
     case .functionParameterList:
+      return true
+    case .functionYieldList:
       return true
     case .genericArgumentList:
       return true
@@ -693,6 +697,12 @@ public enum SyntaxKind: Sendable {
       return FunctionSignatureSyntax.self
     case .functionType:
       return FunctionTypeSyntax.self
+    case .functionYieldClause:
+      return FunctionYieldClauseSyntax.self
+    case .functionYieldList:
+      return FunctionYieldListSyntax.self
+    case .functionYield:
+      return FunctionYieldSyntax.self
     case .genericArgumentClause:
       return GenericArgumentClauseSyntax.self
     case .genericArgumentList:
@@ -1041,8 +1051,6 @@ public enum SyntaxKind: Sendable {
       return YieldedExpressionSyntax.self
     case .yieldedExpressionsClause:
       return YieldedExpressionsClauseSyntax.self
-    case .yieldsClause:
-      return YieldsClauseSyntax.self
     }
   }
 }

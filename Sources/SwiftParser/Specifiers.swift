@@ -620,32 +620,40 @@ extension Parser {
     )
   }
 
-  mutating func parseYields() -> RawYieldsClauseSyntax? {
+  mutating func parseYields() -> RawFunctionYieldClauseSyntax? {
     let (unexpectedBeforeYields, yieldsKeyword) = self.expect(.keyword(.yields))
     // If there is no `yields` at all, then let result type parsing handle everything else
     if yieldsKeyword.isMissing {
       return nil
     }
 
-    guard let leftParen = self.consume(if: .leftParen) else {
-      return RawYieldsClauseSyntax(
-        unexpectedBeforeYields,
-        yieldsKeyword: yieldsKeyword,
-        leftParen: nil,
-        type: nil,
-        rightParen: nil,
-        arena: self.arena
-      )
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+    var elements = [RawFunctionYieldSyntax]()
+    if !leftParen.isMissing {
+      var keepGoing = true
+      var loopProgress = LoopProgressCondition()
+      while !self.at(.endOfFile, .rightParen)
+        && keepGoing
+        && self.hasProgressed(&loopProgress)
+      {
+        let yield = self.parseFunctionYield()
+        if yield.isEmpty {
+          keepGoing = false
+        } else {
+          keepGoing = yield.trailingComma != nil
+          elements.append(yield)
+        }
+      }
     }
-
-    let type = self.parseType()
+    let yields = RawFunctionYieldListSyntax(elements: elements, arena: self.arena)
     let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
 
-    return RawYieldsClauseSyntax(
+    return RawFunctionYieldClauseSyntax(
       unexpectedBeforeYields,
       yieldsKeyword: yieldsKeyword,
+      unexpectedBeforeLeftParen,
       leftParen: leftParen,
-      type: type,
+      yields: yields,
       unexpectedBeforeRightParen,
       rightParen: rightParen,
       arena: self.arena
@@ -655,7 +663,7 @@ extension Parser {
   private mutating func parseEffectSpecifiers<S: RawEffectSpecifiersTrait>(
     _: S.Type,
     skipYields: Bool = false
-  ) -> (S?, RawYieldsClauseSyntax?) {
+  ) -> (S?, RawFunctionYieldClauseSyntax?) {
     var unexpectedBeforeAsync: [RawSyntax] = []
     var asyncKeyword: RawTokenSyntax? = nil
     var unexpectedBeforeThrows: [RawSyntax] = []
@@ -725,7 +733,7 @@ extension Parser {
       }
     }
 
-    var yields: RawYieldsClauseSyntax? = nil
+    var yields: RawFunctionYieldClauseSyntax? = nil
     if !skipYields {
       yields = parseYields()
     }
@@ -750,11 +758,11 @@ extension Parser {
 
   mutating func parseTypeEffectSpecifiers(
     skipYields: Bool = false
-  ) -> (RawTypeEffectSpecifiersSyntax?, RawYieldsClauseSyntax?) {
+  ) -> (RawTypeEffectSpecifiersSyntax?, RawFunctionYieldClauseSyntax?) {
     return parseEffectSpecifiers(RawTypeEffectSpecifiersSyntax.self, skipYields: skipYields)
   }
 
-  mutating func parseFunctionEffectSpecifiers() -> (RawFunctionEffectSpecifiersSyntax?, RawYieldsClauseSyntax?) {
+  mutating func parseFunctionEffectSpecifiers() -> (RawFunctionEffectSpecifiersSyntax?, RawFunctionYieldClauseSyntax?) {
     return parseEffectSpecifiers(RawFunctionEffectSpecifiersSyntax.self)
   }
 

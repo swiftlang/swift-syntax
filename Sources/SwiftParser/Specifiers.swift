@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-@_spi(RawSyntax) public import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) public import SwiftSyntax
 #else
-@_spi(RawSyntax) import SwiftSyntax
+@_spi(ExperimentalLanguageFeatures) @_spi(RawSyntax) import SwiftSyntax
 #endif
 
 // MARK: - TokenSpecSet
@@ -620,7 +620,50 @@ extension Parser {
     )
   }
 
-  private mutating func parseEffectSpecifiers<S: RawEffectSpecifiersTrait>(_: S.Type) -> S? {
+  mutating func parseYields() -> RawFunctionYieldClauseSyntax? {
+    let (unexpectedBeforeYields, yieldsKeyword) = self.expect(.keyword(.yields))
+    // If there is no `yields` at all, then let result type parsing handle everything else
+    if yieldsKeyword.isMissing {
+      return nil
+    }
+
+    let (unexpectedBeforeLeftParen, leftParen) = self.expect(.leftParen)
+    var elements = [RawFunctionYieldSyntax]()
+    if !leftParen.isMissing {
+      var keepGoing = true
+      var loopProgress = LoopProgressCondition()
+      while !self.at(.endOfFile, .rightParen)
+        && keepGoing
+        && self.hasProgressed(&loopProgress)
+      {
+        let yield = self.parseFunctionYield()
+        if yield.isEmpty {
+          keepGoing = false
+        } else {
+          keepGoing = yield.trailingComma != nil
+          elements.append(yield)
+        }
+      }
+    }
+    let yields = RawFunctionYieldListSyntax(elements: elements, arena: self.arena)
+    let (unexpectedBeforeRightParen, rightParen) = self.expect(.rightParen)
+
+    return RawFunctionYieldClauseSyntax(
+      unexpectedBeforeYields,
+      yieldsKeyword: yieldsKeyword,
+      unexpectedBeforeLeftParen,
+      leftParen: leftParen,
+      yields: yields,
+      unexpectedBeforeRightParen,
+      rightParen: rightParen,
+      arena: self.arena
+    )
+  }
+
+  private mutating func parseEffectSpecifiers<S: RawEffectSpecifiersTrait>(
+    _: S.Type,
+    skipYields: Bool = false
+  ) -> (S?, RawFunctionYieldClauseSyntax?) {
     var unexpectedBeforeAsync: [RawSyntax] = []
     var asyncKeyword: RawTokenSyntax? = nil
     var unexpectedBeforeThrows: [RawSyntax] = []
@@ -690,32 +733,41 @@ extension Parser {
       }
     }
 
+    var yields: RawFunctionYieldClauseSyntax? = nil
+    if !skipYields {
+      yields = parseYields()
+    }
     if unexpectedBeforeAsync.isEmpty && asyncKeyword == nil && unexpectedBeforeThrows.isEmpty && throwsClause == nil
       && unexpectedAfterThrowsClause.isEmpty
     {
-      return nil
+      return (nil, yields)
     }
 
-    return S(
-      RawUnexpectedNodesSyntax(unexpectedBeforeAsync, arena: self.arena),
-      asyncSpecifier: asyncKeyword,
-      RawUnexpectedNodesSyntax(unexpectedBeforeThrows, arena: self.arena),
-      throwsClause: throwsClause,
-      RawUnexpectedNodesSyntax(unexpectedAfterThrowsClause, arena: self.arena),
-      arena: self.arena
+    return (
+      S(
+        RawUnexpectedNodesSyntax(unexpectedBeforeAsync, arena: self.arena),
+        asyncSpecifier: asyncKeyword,
+        RawUnexpectedNodesSyntax(unexpectedBeforeThrows, arena: self.arena),
+        throwsClause: throwsClause,
+        RawUnexpectedNodesSyntax(unexpectedAfterThrowsClause, arena: self.arena),
+        arena: self.arena
+      ),
+      yields
     )
   }
 
-  mutating func parseTypeEffectSpecifiers() -> RawTypeEffectSpecifiersSyntax? {
-    return parseEffectSpecifiers(RawTypeEffectSpecifiersSyntax.self)
+  mutating func parseTypeEffectSpecifiers(
+    skipYields: Bool = false
+  ) -> (RawTypeEffectSpecifiersSyntax?, RawFunctionYieldClauseSyntax?) {
+    return parseEffectSpecifiers(RawTypeEffectSpecifiersSyntax.self, skipYields: skipYields)
   }
 
-  mutating func parseFunctionEffectSpecifiers() -> RawFunctionEffectSpecifiersSyntax? {
+  mutating func parseFunctionEffectSpecifiers() -> (RawFunctionEffectSpecifiersSyntax?, RawFunctionYieldClauseSyntax?) {
     return parseEffectSpecifiers(RawFunctionEffectSpecifiersSyntax.self)
   }
 
   mutating func parseAccessorEffectSpecifiers() -> RawAccessorEffectSpecifiersSyntax? {
-    return parseEffectSpecifiers(RawAccessorEffectSpecifiersSyntax.self)
+    return parseEffectSpecifiers(RawAccessorEffectSpecifiersSyntax.self, skipYields: true).0
   }
 
   mutating func parseDeinitEffectSpecifiers() -> RawDeinitializerEffectSpecifiersSyntax? {

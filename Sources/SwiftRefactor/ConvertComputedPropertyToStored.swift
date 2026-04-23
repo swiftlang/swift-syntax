@@ -12,8 +12,10 @@
 
 #if compiler(>=6)
 public import SwiftSyntax
+public import SwiftSyntaxBuilder
 #else
 import SwiftSyntax
+import SwiftSyntaxBuilder
 #endif
 
 public struct ConvertComputedPropertyToStored: SyntaxRefactoringProvider {

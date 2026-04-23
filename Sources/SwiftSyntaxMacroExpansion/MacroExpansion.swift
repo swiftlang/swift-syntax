@@ -11,9 +11,9 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-import SwiftBasicFormat
-import SwiftDiagnostics
-import SwiftIfConfig
+internal import SwiftBasicFormat
+internal import SwiftDiagnostics
+internal import SwiftIfConfig
 public import SwiftSyntax
 @_spi(MacroExpansion) @_spi(ExperimentalLanguageFeatures) public import SwiftSyntaxMacros
 #else

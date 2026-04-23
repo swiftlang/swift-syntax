@@ -13,9 +13,11 @@
 #if compiler(>=6)
 internal import SwiftDiagnostics
 internal import SwiftSyntax
+internal import SwiftSyntaxMacros
 #else
 import SwiftDiagnostics
 import SwiftSyntax
+import SwiftSyntaxMacros
 #endif
 
 /// Errors in macro handing.

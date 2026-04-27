@@ -3758,6 +3758,39 @@ final class UsingDeclarationTests: ParserTestCase {
     )
 
     assertParse(
+      "using @diagnose(DiagGroupID, as: error)",
+      substructure: UsingDeclSyntax(
+        usingKeyword: .keyword(.using),
+        specifier: .attribute(
+          AttributeSyntax(
+            attributeName: IdentifierTypeSyntax(
+              name: .identifier("diagnose")
+            ),
+            leftParen: .leftParenToken(),
+            arguments: .argumentList(
+              LabeledExprListSyntax([
+                LabeledExprSyntax(
+                  expression: DeclReferenceExprSyntax(
+                    baseName: .identifier("DiagGroupID")
+                  ),
+                  trailingComma: .commaToken()
+                ),
+                LabeledExprSyntax(
+                  label: .identifier("as"),
+                  colon: .colonToken(),
+                  expression: DeclReferenceExprSyntax(
+                    baseName: .identifier("error")
+                  )
+                ),
+              ])
+            ),
+            rightParen: .rightParenToken()
+          )
+        )
+      )
+    )
+
+    assertParse(
       """
       nonisolated
       using

@@ -21,7 +21,7 @@ public class WarningGroupControlTests: XCTestCase {
   func testSimpleFunctionWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: error)
+      @diagnose(GroupID, as: error)
       func foo() {
         1️⃣let x = 1
       }
@@ -36,23 +36,23 @@ public class WarningGroupControlTests: XCTestCase {
   func testNestedFunctionWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(SomeOtherGroup, as: warning)
-      @warn(GroupID, as: error)
-      @warn(YetAnotherGroup, as: warning)
+      @diagnose(SomeOtherGroup, as: warning)
+      @diagnose(GroupID, as: error)
+      @diagnose(YetAnotherGroup, as: warning)
       func foo() {
         1️⃣let x = 1
-        @warn(GroupID, as: warning)
+        @diagnose(GroupID, as: warning)
         func bar() {
           2️⃣let x = 1
-          @warn(GroupID, as: ignored)
-          @warn(SomeOtherGroup, as: ignored)
+          @diagnose(GroupID, as: ignored)
+          @diagnose(SomeOtherGroup, as: ignored)
           func baz() {
             3️⃣let x = 1
           }
-          @warn(GroupID, as: error)
+          @diagnose(GroupID, as: error)
           func qux() {
             4️⃣let x = 1
-            @warn(SomeOtherGroup, as: warning)
+            @diagnose(SomeOtherGroup, as: warning)
             func corge() {
               5️⃣let x = 1
             }
@@ -78,18 +78,18 @@ public class WarningGroupControlTests: XCTestCase {
   func testEnabledGroupIdentifiers() throws {
     let source =
       """
-      @warn(Group1, as: warning)
-      @warn(Group2, as: error)
-      @warn(Group3, as: ignored)
+      @diagnose(Group1, as: warning)
+      @diagnose(Group2, as: error)
+      @diagnose(Group3, as: ignored)
       func foo() {
-        @warn(Group4, as: warning)
+        @diagnose(Group4, as: warning)
         func bar() {
-          @warn(Group5, as: ignored)
-          @warn(Group6, as: ignored)
+          @diagnose(Group5, as: ignored)
+          @diagnose(Group6, as: ignored)
           func baz() {}
-          @warn(Group7, as: error)
+          @diagnose(Group7, as: error)
           func qux() {
-            @warn(Group8, as: warning)
+            @diagnose(Group8, as: warning)
             func corge() {}
           }
         }
@@ -112,27 +112,27 @@ public class WarningGroupControlTests: XCTestCase {
   func testNominalDeclWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: error)
+      @diagnose(GroupID, as: error)
       class Foo {
         1️⃣let x = 1
       }
-      @warn(GroupID, as: ignored)
+      @diagnose(GroupID, as: ignored)
       struct Bar {
         2️⃣let x = 1
       }
-      @warn(GroupID, as: warning)
+      @diagnose(GroupID, as: warning)
       enum Baz {
         3️⃣let x = 1
       }
-      @warn(GroupID, as: error)      
+      @diagnose(GroupID, as: error)      
       actor Qux {
         4️⃣let x = 1
-        @warn(GroupID, as: ignored)
+        @diagnose(GroupID, as: ignored)
         struct Quux {
           5️⃣let x = 1
         }
       }
-      @warn(GroupID, as: warning)
+      @diagnose(GroupID, as: warning)
       protocol Proto {
         6️⃣let x = 1
       }      
@@ -152,14 +152,14 @@ public class WarningGroupControlTests: XCTestCase {
   func testInitializerWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: error)
+      @diagnose(GroupID, as: error)
       struct Foo {
         1️⃣let x = 1
-        @warn(GroupID, as: ignored)
+        @diagnose(GroupID, as: ignored)
         init {
           2️⃣let x = 1
         }
-        @warn(GroupID, as: warning)
+        @diagnose(GroupID, as: warning)
         deinit {
           3️⃣let x = 1
         }
@@ -177,7 +177,7 @@ public class WarningGroupControlTests: XCTestCase {
   func testExtensionWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: error)
+      @diagnose(GroupID, as: error)
       extension Foo {
         1️⃣let x = 1
       }
@@ -192,7 +192,7 @@ public class WarningGroupControlTests: XCTestCase {
   func testImportWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: ignored)
+      @diagnose(GroupID, as: ignored)
       import1️⃣ Foo
       """,
       diagnosticGroupID: "GroupID",
@@ -205,9 +205,9 @@ public class WarningGroupControlTests: XCTestCase {
   func testSubscriptWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: ignored)
+      @diagnose(GroupID, as: ignored)
       struct Foo {
-        @warn(GroupID, as: error)
+        @diagnose(GroupID, as: error)
         subscript(index: Int) -> Value {
           1️⃣let x = 1
         }
@@ -223,9 +223,9 @@ public class WarningGroupControlTests: XCTestCase {
   func testComputedPropertyWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: ignored)
+      @diagnose(GroupID, as: ignored)
       struct Foo {
-        @warn(GroupID, as: error)
+        @diagnose(GroupID, as: error)
         var property: Int {
           1️⃣return 11
         }
@@ -241,14 +241,14 @@ public class WarningGroupControlTests: XCTestCase {
   func testAccessorWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: ignored)
+      @diagnose(GroupID, as: ignored)
       struct Foo {
         var property: Int {
-          @warn(GroupID, as: error)
+          @diagnose(GroupID, as: error)
           get {
             1️⃣return 11
           }
-          @warn(GroupID, as: warning)
+          @diagnose(GroupID, as: warning)
           set {
             2️⃣let x = 1
           }
@@ -267,7 +267,7 @@ public class WarningGroupControlTests: XCTestCase {
     // Global control does not override syntactic control
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: error)
+      @diagnose(GroupID, as: error)
       func foo() {
         1️⃣let x = 1
       }
@@ -283,7 +283,7 @@ public class WarningGroupControlTests: XCTestCase {
       """
       func foo() {
         1️⃣let x = 1
-        @warn(GroupID, as: ignored)
+        @diagnose(GroupID, as: ignored)
         func bar() {
           2️⃣let x = 1
         }
@@ -317,11 +317,11 @@ public class WarningGroupControlTests: XCTestCase {
   func testSubGroupInheritance() throws {
     try assertWarningGroupControl(
       """
-      @warn(SuperGroupID, as: error)
+      @diagnose(SuperGroupID, as: error)
       func foo() {
         1️⃣let x = 1
       }
-      @warn(SuperSuperGroupID, as: ignored)
+      @diagnose(SuperSuperGroupID, as: ignored)
       func bar() {
         2️⃣let x = 1
       }
@@ -392,17 +392,17 @@ public class WarningGroupControlTests: XCTestCase {
     try assertWarningGroupControl(
       """
       0️⃣let x = 1
-      @warn(GroupID, as: warning)
+      @diagnose(GroupID, as: warning)
       struct Bar {
         1️⃣let y = 1
       }
       struct Foo {
-        @warn(GroupID, as: ignored)
+        @diagnose(GroupID, as: ignored)
         var property: Int {
           2️⃣return 11
         }
       }
-      using @warn(GroupID, as: error)
+      using @diagnose(GroupID, as: error)
       3️⃣let k = 1
       """,
       experimentalFeatures: [.defaultIsolationPerFile],
@@ -420,12 +420,12 @@ public class WarningGroupControlTests: XCTestCase {
     try assertWarningGroupControl(
       """
       0️⃣let x = 1
-      @warn(GroupID, as: warning)
+      @diagnose(GroupID, as: warning)
       struct Bar {
         1️⃣let y = 1
       }
       struct Foo {
-        using @warn(GroupID, as: error)
+        using @diagnose(GroupID, as: error)
         var property: Int {
           2️⃣return 11
         }
@@ -438,6 +438,27 @@ public class WarningGroupControlTests: XCTestCase {
         "0️⃣": .none,
         "1️⃣": .warning,
         "2️⃣": .none,
+      ]
+    )
+  }
+
+  func testWarnSpellingBackwardCompat() throws {
+    // The old @warn spelling should continue to work as an alias
+    try assertWarningGroupControl(
+      """
+      @warn(GroupID, as: error)
+      func foo() {
+        1️⃣let x = 1
+        @warn(GroupID, as: ignored)
+        func bar() {
+          2️⃣let x = 1
+        }
+      }
+      """,
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .error,
+        "2️⃣": .ignored,
       ]
     )
   }

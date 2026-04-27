@@ -23,7 +23,7 @@ extension SyntaxProtocol {
   ///   - globalControls: The global controls to consider, specified by the client (compiler)
   ///     representing module-wide diagnostic group emission configuration, for example
   ///     with `-Wwarning` and `-Werror` flags. These controls can be overriden at
-  ///     finer-grained scopes with the `@warn` attribute.
+  ///     finer-grained scopes with the `@diagnose` attribute.
   @_spi(ExperimentalLanguageFeatures)
   public func warningGroupControl(
     for diagnosticGroupIdentifier: DiagnosticGroupIdentifier,

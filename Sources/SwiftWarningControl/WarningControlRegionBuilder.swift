@@ -10,16 +10,56 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftIfConfig
 @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 
 /// Compute the full set of warning control regions in this syntax node
 extension SyntaxProtocol {
+  /// Compute the tree of warning control regions for this syntax node, representing
+  /// the effect of every `@diagnose` attribute reachable through the active
+  /// branches of `#if` directives.
+  ///
+  /// The returned tree can be queried with `warningGroupControl(at:for:)` to
+  /// determine the effective `WarningGroupControl` for a given diagnostic group
+  /// at any position within this node.
+  ///
+  /// - Parameters:
+  ///   - configuredRegions: The configured regions of the current syntax tree.
+  ///     Used to resolve `#if` directives so that only `@diagnose` attributes
+  ///     in active clauses contribute to the resulting tree.
+  ///   - globalControls: The global controls to consider, specified by the client,
+  ///     representing module-wide diagnostic group emission configuration, for example
+  ///     with `-Wwarning` and `-Werror` flags. These controls can be overriden at
+  ///     finer-grained scopes with the `@diagnose` attribute.
+  ///   - groupInheritanceTree: An optional inheritance tree describing parent/child
+  ///     relationships between diagnostic groups. When provided, a control applied
+  ///     to a parent group also applies to its descendants unless overridden.
+  @_spi(ExperimentalLanguageFeatures)
+  public func warningGroupControlRegionTree(
+    configuredRegions: ConfiguredRegions,
+    globalControls: [(DiagnosticGroupIdentifier, WarningGroupControl)] = [],
+    groupInheritanceTree: DiagnosticGroupInheritanceTree? = nil
+  ) -> WarningControlRegionTree {
+    return warningGroupControlRegionTreeImpl(
+      configuredRegions: configuredRegions,
+      globalControls: globalControls,
+      groupInheritanceTree: groupInheritanceTree
+    )
+  }
+
+  @available(
+    *,
+    deprecated,
+    message: "Use warningGroupControlRegionTree(configuredRegions:globalControls:groupInheritanceTree:) instead"
+  )
   @_spi(ExperimentalLanguageFeatures)
   public func warningGroupControlRegionTree(
     globalControls: [(DiagnosticGroupIdentifier, WarningGroupControl)] = [],
     groupInheritanceTree: DiagnosticGroupInheritanceTree? = nil
   ) -> WarningControlRegionTree {
+    let emptyRegions = ConfiguredRegions.empty
     return warningGroupControlRegionTreeImpl(
+      configuredRegions: emptyRegions,
       globalControls: globalControls,
       groupInheritanceTree: groupInheritanceTree
     )
@@ -30,6 +70,7 @@ extension SyntaxProtocol {
   /// a specific absolute position - meant to speed up tree generation for individual
   /// queries.
   func warningGroupControlRegionTreeImpl(
+    configuredRegions: ConfiguredRegions,
     globalControls: [(DiagnosticGroupIdentifier, WarningGroupControl)],
     groupInheritanceTree: DiagnosticGroupInheritanceTree?,
     containing position: AbsolutePosition? = nil
@@ -37,7 +78,8 @@ extension SyntaxProtocol {
     let visitor = WarningControlRegionVisitor(
       self.range,
       containing: position,
-      groupInheritanceTree: groupInheritanceTree
+      groupInheritanceTree: groupInheritanceTree,
+      configuredRegions: configuredRegions
     )
     visitor.tree.addWarningGroupControls(range: self.range, controls: globalControls)
     visitor.walk(self)
@@ -51,13 +93,13 @@ extension WarningControlRegionTree {
   mutating func addWarningControlRegions(for syntax: some WithAttributesSyntax) {
     addWarningGroupControls(
       range: syntax.range,
-      controls: syntax.allWarningGroupControls
+      controls: syntax.allWarningGroupControls(in: configuredRegions)
     )
   }
 }
 
 /// Helper class that walks a syntax tree looking for warning behavior control regions.
-private class WarningControlRegionVisitor: SyntaxAnyVisitor {
+private class WarningControlRegionVisitor: ActiveSyntaxAnyVisitor {
   /// The tree of warning control regions we have found so far
   var tree: WarningControlRegionTree
   let containingPosition: AbsolutePosition?
@@ -65,11 +107,16 @@ private class WarningControlRegionVisitor: SyntaxAnyVisitor {
   init(
     _ topLevelRange: Range<AbsolutePosition>,
     containing position: AbsolutePosition?,
-    groupInheritanceTree: DiagnosticGroupInheritanceTree?
+    groupInheritanceTree: DiagnosticGroupInheritanceTree?,
+    configuredRegions: ConfiguredRegions
   ) {
-    self.tree = WarningControlRegionTree(range: topLevelRange, groupInheritanceTree: groupInheritanceTree)
+    self.tree = WarningControlRegionTree(
+      range: topLevelRange,
+      configuredRegions: configuredRegions,
+      groupInheritanceTree: groupInheritanceTree
+    )
     containingPosition = position
-    super.init(viewMode: .fixedUp)
+    super.init(viewMode: .fixedUp, configuredRegions: configuredRegions)
   }
 
   override func visitAny(_ node: Syntax) -> SyntaxVisitorContinueKind {

@@ -393,12 +393,14 @@ swift_syntax_library(
         ":SwiftDiagnostics",
         ":SwiftParser",
         ":SwiftSyntax",
+        ":SwiftIfConfig",
     ],
 )
 
 swift_syntax_test(
     name = "SwiftWarningControlTest",
     deps = [
+        ":SwiftIfConfig",
         ":SwiftParser",
         ":SwiftSyntaxMacrosGenericTestSupport",
         ":SwiftWarningControl",

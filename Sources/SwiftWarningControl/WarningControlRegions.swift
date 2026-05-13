@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftIfConfig
 import SwiftSyntax
 
 /// A single warning control region, consisting of a start and end positions,
@@ -103,6 +104,9 @@ public struct WarningControlRegionTree {
   /// Root region representing top-level (file) scope
   private var rootRegionNode: WarningControlRegionNode
 
+  /// The configured regions for this tree
+  let configuredRegions: ConfiguredRegions
+
   /// All of the diagnostic group identifiers contained in this tree
   /// which have at least one occurence with a non-`ignored` behavior
   /// specifier
@@ -114,9 +118,11 @@ public struct WarningControlRegionTree {
 
   init(
     range: Range<AbsolutePosition>,
+    configuredRegions: ConfiguredRegions,
     groupInheritanceTree: DiagnosticGroupInheritanceTree?
   ) {
     self.rootRegionNode = WarningControlRegionNode(range: range)
+    self.configuredRegions = configuredRegions
     self.groupInheritanceTree = groupInheritanceTree ?? DiagnosticGroupInheritanceTree()
   }
 

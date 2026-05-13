@@ -34,7 +34,6 @@ extension SyntaxProtocol {
   ///   - groupInheritanceTree: An optional inheritance tree describing parent/child
   ///     relationships between diagnostic groups. When provided, a control applied
   ///     to a parent group also applies to its descendants unless overridden.
-  @_spi(ExperimentalLanguageFeatures)
   public func warningGroupControlRegionTree(
     configuredRegions: ConfiguredRegions,
     globalControls: [(DiagnosticGroupIdentifier, WarningGroupControl)] = [],

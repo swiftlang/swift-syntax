@@ -15,7 +15,6 @@ import SwiftSyntax
 
 /// A single warning control region, consisting of a start and end positions,
 /// a diagnostic group identifier, and an emission behavior control specifier.
-@_spi(ExperimentalLanguageFeatures)
 public struct WarningControlRegion {
   public let range: Range<AbsolutePosition>
   public let diagnosticGroupIdentifier: DiagnosticGroupIdentifier
@@ -33,7 +32,6 @@ public struct WarningControlRegion {
 }
 
 /// A struct representing a diagnostic group identifier string
-@_spi(ExperimentalLanguageFeatures)
 public struct DiagnosticGroupIdentifier: Hashable, Sendable, ExpressibleByStringLiteral {
   public init(stringLiteral value: String) {
     self.identifier = value
@@ -99,7 +97,6 @@ public struct DiagnosticGroupIdentifier: Hashable, Sendable, ExpressibleByString
 /// traversal until we find the first containing region which specifies warning
 /// behavior control for the given diagnostic group id.
 ///
-@_spi(ExperimentalLanguageFeatures)
 public struct WarningControlRegionTree {
   /// Root region representing top-level (file) scope
   private var rootRegionNode: WarningControlRegionNode
@@ -110,7 +107,6 @@ public struct WarningControlRegionTree {
   /// All of the diagnostic group identifiers contained in this tree
   /// which have at least one occurence with a non-`ignored` behavior
   /// specifier
-  @_spi(ExperimentalLanguageFeatures)
   public private(set) var enabledGroups: Set<DiagnosticGroupIdentifier> = []
 
   /// Inheritance tree among diagnostic group identifiers
@@ -214,7 +210,6 @@ extension WarningControlRegionTree: CustomDebugStringConvertible {
 extension WarningControlRegionTree {
   /// Determine the warning group behavior control at a specified position
   /// for a given diagnostic group.
-  @_spi(ExperimentalLanguageFeatures)
   public func warningGroupControl(
     at position: AbsolutePosition,
     for diagnosticGroupIdentifier: DiagnosticGroupIdentifier

@@ -25,7 +25,7 @@ import SwiftSyntaxMacros
 import SwiftSyntaxMacrosTestSupport
 import XCTest
 
-private struct ConstantOneGetter: AccessorMacro {
+struct ConstantOneGetter: AccessorMacro {
   static func expansion(
     of node: AttributeSyntax,
     providingAccessorsOf declaration: some DeclSyntaxProtocol,

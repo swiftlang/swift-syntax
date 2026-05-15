@@ -24,13 +24,24 @@ final class FormatRawStringLiteralTest: XCTestCase {
       (#line, literal: ##" #"Hello World" "##, expectation: #" "Hello World" "#),
       (#line, literal: ##" #"Hello World"# "##, expectation: #" "Hello World" "#),
       (#line, literal: #####" "####" "#####, expectation: #####" "####" "#####),
-      (#line, literal: #####" #"####"# "#####, expectation: ######" #####"####"##### "######),
+      (#line, literal: #####" #"####"# "#####, expectation: #####" "####" "#####),
       (#line, literal: #####" #"\####(hello)"# "#####, expectation: ######" #####"\####(hello)"##### "######),
       (
         #line, literal: #######" #"###### \####(hello) ##"# "#######,
         expectation: ########" #######"###### \####(hello) ##"####### "########
       ),
-      (#line, literal: ########" #######"hello \(world) "####### "########, expectation: #" "hello \(world) " "#),
+      (#line, literal: ########" #######"hello \(world) "####### "########, expectation: ##" #"hello \(world) "# "##),
+      // Content containing a `"` would terminate the literal early or fuse
+      // with the surrounding quote token if pounds were removed.
+      (#line, literal: ##" #"""# "##, expectation: ##" #"""# "##),
+      (#line, literal: ##" #"He says "Hi""# "##, expectation: ##" #"He says "Hi""# "##),
+      // `\` escape semantics differ between raw and non-raw literals; the
+      // stripped form would either be an invalid escape (`\U`) or change
+      // meaning silently (`\n`).
+      (#line, literal: ##" #"C:\Users"# "##, expectation: ##" #"C:\Users"# "##),
+      // `\#n` is a 1-hash raw escape for newline; in non-raw, `\#` is an
+      // invalid escape sequence, so the pound delimiter has to stay.
+      (#line, literal: ##" #"line1\#nline2"# "##, expectation: ##" #"line1\#nline2"# "##),
     ]
 
     for (line, literal, expectation) in tests {

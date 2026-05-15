@@ -11,8 +11,10 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
+import SwiftParser
 public import SwiftSyntax
 #else
+import SwiftParser
 import SwiftSyntax
 #endif
 
@@ -36,16 +38,19 @@ import SwiftSyntax
 /// ```
 public struct FormatRawStringLiteral: SyntaxRefactoringProvider {
   public static func refactor(syntax lit: StringLiteralExprSyntax, in context: Void) -> StringLiteralExprSyntax {
+    // The highest number of consecutive `#` characters that appears in any
+    // string-segment content or interpolation delimiter. Using one more than
+    // this many delimiters always produces a syntactically valid literal, so
+    // it serves both as an upper bound for the search below and as a safe
+    // count to fall back to when the input is malformed.
     var maximumHashes = 0
     for segment in lit.segments {
       switch segment {
       case .expressionSegment(let expr):
         if let rawStringDelimiter = expr.pounds {
-          // Pick up any delimiters in interpolation segments \#...#(...)
           maximumHashes = max(maximumHashes, rawStringDelimiter.text.longestRun(of: "#"))
         }
       case .stringSegment(let string):
-        // Find the longest run of # characters in the content of the literal.
         maximumHashes = max(maximumHashes, string.content.text.longestRun(of: "#"))
       #if RESILIENT_LIBRARIES
       @unknown default:
@@ -54,14 +59,40 @@ public struct FormatRawStringLiteral: SyntaxRefactoringProvider {
       }
     }
 
-    guard maximumHashes > 0 else {
-      return
-        lit
-        .with(\.openingPounds, lit.openingPounds?.with(\.tokenKind, .rawStringPoundDelimiter("")))
-        .with(\.closingPounds, lit.closingPounds?.with(\.tokenKind, .rawStringPoundDelimiter("")))
+    let upperBound = maximumHashes + 1
+
+    // For malformed input we can't verify candidates against
+    // `representedLiteralValue`, so fall back to the content-safe count.
+    if lit.hasError {
+      return adjustingDelimiterCount(lit, count: maximumHashes > 0 ? upperBound : 0)
     }
 
-    let delimiters = String(repeating: "#", count: maximumHashes + 1)
+    let originalValue = lit.representedLiteralValue
+
+    // Search for the smallest delimiter count that preserves the meaning of
+    // the literal. Removing pounds can flip `\#(...)` into an interpolation,
+    // change `\n` from literal to a newline, fuse content quotes with the
+    // surrounding quote token, or turn `"""` into a multi-line opener. Each
+    // candidate is rebuilt, re-parsed, and accepted only if it has no parse
+    // errors and the same `representedLiteralValue` as the original.
+    for count in 0...upperBound {
+      let candidate = adjustingDelimiterCount(lit, count: count)
+      var parser = Parser(candidate.description)
+      guard let parsedCandidate = ExprSyntax.parse(from: &parser).as(StringLiteralExprSyntax.self),
+        !parsedCandidate.hasError,
+        parsedCandidate.representedLiteralValue == originalValue
+      else {
+        continue
+      }
+      return candidate
+    }
+
+    // Conservative fallback if no candidate verified.
+    return adjustingDelimiterCount(lit, count: upperBound)
+  }
+
+  private static func adjustingDelimiterCount(_ lit: StringLiteralExprSyntax, count: Int) -> StringLiteralExprSyntax {
+    let delimiters = String(repeating: "#", count: count)
     return
       lit
       .with(\.openingPounds, lit.openingPounds?.with(\.tokenKind, .rawStringPoundDelimiter(delimiters)))

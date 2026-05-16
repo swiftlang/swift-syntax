@@ -209,6 +209,9 @@ open class BasicFormat: SyntaxRewriter {
     case \EnumCaseParameterClauseSyntax.parameters:
       return true
     case \FunctionCallExprSyntax.arguments:
+      if let arguments = Syntax(node).as(LabeledExprListSyntax.self) {
+        return argumentListIsMultiLine(arguments)
+      }
       return true
     case \FunctionTypeSyntax.parameters:
       return true
@@ -219,6 +222,9 @@ open class BasicFormat: SyntaxRewriter {
     case \SwitchCaseSyntax.statements:
       return true
     case \TupleExprSyntax.elements:
+      if let elements = Syntax(node).as(LabeledExprListSyntax.self) {
+        return argumentListIsMultiLine(elements)
+      }
       return true
     case \TupleTypeSyntax.elements:
       return true
@@ -250,6 +256,25 @@ open class BasicFormat: SyntaxRewriter {
         return nil
       }
     }) != nil
+  }
+
+  /// Returns `true` if the argument list (a `LabeledExprListSyntax` used by
+  /// `FunctionCallExprSyntax.arguments` or `TupleExprSyntax.elements`) is
+  /// laid out across multiple lines at the argument level (i.e. at least one
+  /// argument begins on its own line).
+  ///
+  /// When this is `false`, the argument list is single-line at the argument
+  /// level even if individual arguments contain multi-line expressions (such
+  /// as closures or collection literals). In that case, the argument-list
+  /// indentation scope shouldn't contribute, because any inner multi-line
+  /// expression brings its own indentation scope.
+  private func argumentListIsMultiLine(_ arguments: LabeledExprListSyntax) -> Bool {
+    for argument in arguments {
+      if argument.leadingTrivia.contains(where: \.isNewline) {
+        return true
+      }
+    }
+    return false
   }
 
   open func requiresNewline(between first: TokenSyntax?, and second: TokenSyntax?) -> Bool {

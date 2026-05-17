@@ -10,6 +10,7 @@ add_swift_syntax_library(SwiftRefactor
   AddSeparatorsToIntegerLiteral.swift
   CallLikeSyntax.swift
   CallToTrailingClosures.swift
+  ConvertToSwitchStmt.swift
   ConvertComputedPropertyToStored.swift
   ConvertComputedPropertyToZeroParameterFunction.swift
   ConvertStoredPropertyToComputed.swift

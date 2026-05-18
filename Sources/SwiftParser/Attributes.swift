@@ -89,6 +89,7 @@ extension Parser {
     case objc
     case Sendable
     case transpose
+    case `yield_once`
 
     init?(lexeme: Lexer.Lexeme, experimentalFeatures: Parser.ExperimentalFeatures) {
       switch PrepareForKeywordMatch(lexeme) {
@@ -112,6 +113,7 @@ extension Parser {
       case TokenSpec(.objc): self = .objc
       case TokenSpec(.Sendable): self = .Sendable
       case TokenSpec(.transpose): self = .transpose
+      case TokenSpec(.`yield_once`): self = .yield_once
       default:
         return nil
       }
@@ -139,6 +141,7 @@ extension Parser {
       case .objc: return .keyword(.objc)
       case .Sendable: return .keyword(.Sendable)
       case .transpose: return .keyword(.transpose)
+      case .`yield_once`: return .keyword(.yield_once)
       }
     }
   }
@@ -346,6 +349,10 @@ extension Parser {
     case .Sendable:
       return parseAttribute(argumentMode: .noArgument) { parser in
         preconditionFailure("Sendable has no argument")
+      }
+    case .yield_once:
+      return parseAttribute(argumentMode: .noArgument) { parser in
+        preconditionFailure("yield_once has no argument")
       }
     case nil:
       return parseAttribute(argumentMode: .customAttribute) { parser in
@@ -1139,7 +1146,8 @@ extension Parser.Lookahead {
         TokenSpec(.rightParen),
         TokenSpec(.rightBrace),
         TokenSpec(.rightSquare),
-        TokenSpec(.rightAngle):
+        TokenSpec(.rightAngle),
+        TokenSpec(.yields):
         return false
       case _ where lookahead.at(.keyword(.async)):
         return false

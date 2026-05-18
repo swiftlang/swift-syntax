@@ -16,6 +16,11 @@ public import SwiftSyntax
 import SwiftSyntax
 #endif
 
+/// A set of diagnostics spread across different source files
+/// but linked through source-code generation. For instance, an error
+/// occurs in a macro and additional errors/notes are emitted 
+/// in the macro expansion buffer. We render the main diagnostic at the top 
+/// of the message, and render the nested diagnostics in boxes underneath.
 public struct GroupedDiagnostics {
   /// A unique identifier for a source file.
   public struct SourceFileID: Equatable, Hashable {
@@ -267,6 +272,7 @@ extension GroupedDiagnostics {
         diags: sourceFile.diagnostics,
         indentString: diagnosticDecorator.decorateBufferOutline(indentString),
         suffixTexts: childSources,
+        includeNotes: true,
         sourceLocationConverter: slc
       ) + suffixString
   }

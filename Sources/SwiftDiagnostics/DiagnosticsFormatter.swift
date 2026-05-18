@@ -54,11 +54,27 @@ extension Sequence where Element == Range<Int> {
 }
 
 public struct DiagnosticsFormatter {
-
-  /// A wrapper struct for a source line, its diagnostics, and any
-  /// non-diagnostic text that follows the line.
+  /// A wrapper struct for a source line, its annotations (diagnostics
+  /// and notes), along with any non-diagnostic text that follows the line.
   private struct AnnotatedSourceLine {
-    var diagnostics: [Diagnostic]
+    // An abstraction for a diagnostic or note that is anchored to a source line.
+    enum Annotation {
+      case diagnostic(Diagnostic)
+      case note(Note, category: DiagnosticCategory?)
+
+      func location(converter: SourceLocationConverter) -> SourceLocation {
+        switch self {
+        case .diagnostic(let diag):
+          return diag.location(converter: converter)
+        case .note(let note, _):
+          return note.location(converter: converter)
+        }
+      }
+    }
+
+    /// Annotations (diagnostics or notes) anchored to this source line.
+    var annotations: [Annotation]
+    /// The source line itself.
     var sourceString: String
 
     /// Non-diagnostic text that is appended after this source line.
@@ -70,7 +86,7 @@ public struct DiagnosticsFormatter {
 
     /// Whether this line is free of annotations.
     var isFreeOfAnnotations: Bool {
-      return diagnostics.isEmpty && suffixText.isEmpty
+      return annotations.isEmpty && suffixText.isEmpty
     }
 
     /// Converts a UTF-8 column index into an index that considers each character as a single column, not each UTF-8
@@ -126,15 +142,22 @@ public struct DiagnosticsFormatter {
     tree: some SyntaxProtocol,
     sourceLocationConverter slc: SourceLocationConverter
   ) -> String {
-    if annotatedLine.diagnostics.isEmpty {
+    if annotatedLine.annotations.isEmpty {
       return annotatedLine.sourceString
     }
 
     // Compute the set of highlight ranges that land on this line. These
     // are column ranges, sorted in order of increasing starting column, and
     // with overlapping ranges merged.
-    let highlightRanges: [Range<Int>] = annotatedLine.diagnostics.map {
-      $0.highlights
+    let highlightRanges: [Range<Int>] = annotatedLine.annotations.map { annotation in 
+      // Only diagnostics have highlights; notes don't.
+      switch annotation {
+      case .diagnostic(let diag):
+        return diag.highlights
+      case .note:
+        // TODO: Should a note add a `note.node`
+        return []
+      }
     }.joined().compactMap { (highlight) -> Range<Int>? in
       if highlight.root != Syntax(tree) {
         return nil
@@ -206,37 +229,66 @@ public struct DiagnosticsFormatter {
   /// Print given diagnostics for a given syntax tree on the command line
   ///
   /// - Parameters:
-  ///   - suffixTexts: suffix text to be printed at the given absolute
-  ///                  locations within the source file.
+  ///   - tree: The syntax tree for which diagnostics should be printed
+  ///   - diags: The diagnostics to print
+  ///   - indentString: The string prefixed to each line of the annotated 
+  ///       source.
+  ///   - suffixTexts: Suffix text to be printed at the given absolute
+  ///       locations within the source file.
+  ///   - includeNotes: Whether notes should be included in the annotated source
+  ///   - sourceLocationConverter: The source location converter for computing
+  ///       line and column information for the diagnostics
   func annotatedSource(
     tree: some SyntaxProtocol,
     diags: [Diagnostic],
     indentString: String,
     suffixTexts: [AbsolutePosition: String],
+    includeNotes: Bool = false,
     sourceLocationConverter: SourceLocationConverter? = nil
   ) -> String {
     let slc = sourceLocationConverter ?? SourceLocationConverter(fileName: "<unknown>", tree: tree)
 
-    // First, we need to put each line and its diagnostics together
-    var annotatedSourceLines = [AnnotatedSourceLine]()
+    // === Group Annotations By Line ===
+    //
+    // Group annotations by the line they are anchored to.
+    var annotationsPerLine = [Int: [AnnotatedSourceLine.Annotation]]()
+    // Add annotations to the map.
+    for diagnostic in diags {
+      // Add diagnostic to the map.
+      let line = diagnostic.location(converter: slc).line
+      annotationsPerLine[line, default: []].append(.diagnostic(diagnostic))
 
-    for (sourceLineIndex, sourceLine) in slc.sourceLines.enumerated() {
-      let diagsForLine = diags.filter { diag in
-        return diag.location(converter: slc).line == (sourceLineIndex + 1)
-      }
-      let suffixText = suffixTexts.compactMap { (position, text) in
-        if slc.location(for: position).line == (sourceLineIndex + 1) {
-          return text
+      // Add notes to the map if includeNotes is true.
+      if includeNotes {
+        for note in diagnostic.notes {
+          let line = note.location(converter: slc).line
+          annotationsPerLine[line, default: []].append(.note(note, category: diagnostic.diagMessage.category))
         }
-
-        return nil
-      }.joined()
-
-      annotatedSourceLines.append(
-        AnnotatedSourceLine(diagnostics: diagsForLine, sourceString: sourceLine, suffixText: suffixText)
-      )
+      }
     }
 
+    // Group suffix texts by the line they are anchored to, and add them to the map.
+    var suffixTextPerLine = [Int: String]()
+    for (position, text) in suffixTexts {
+      let line = slc.location(for: position).line
+      // Concatenate suffix texts if there are multiple for the same line.
+      suffixTextPerLine[line, default: ""].append(text)
+    }
+
+    // Put each line and its diagnostics together.
+    let annotatedSourceLines: [AnnotatedSourceLine] = slc.sourceLines.enumerated()
+      .map { (sourceLineIndex, sourceLine) in
+        let lineNumber = sourceLineIndex + 1
+
+        return AnnotatedSourceLine(
+          annotations: annotationsPerLine[lineNumber] ?? [],
+          sourceString: sourceLine, 
+          suffixText: suffixTextPerLine[lineNumber] ?? ""
+        )
+      }
+
+    // === Calculate Lines to Print ===
+    //
     // Only lines with diagnostic messages should be printed, but including some context
     let rangesToPrint = annotatedSourceLines.enumerated().compactMap { (lineIndex, sourceLine) -> Range<Int>? in
       let lineNumber = lineIndex + 1
@@ -246,14 +298,17 @@ public struct DiagnosticsFormatter {
       return nil
     }
 
+    // === Render Annotated Source ===
+    //
     // Accumulate the fully annotated source files here.
     var annotatedSource = ""
-
     /// Keep track if a line missing char should be printed
     var hasLineBeenSkipped = false
-
+    // The maximum number of digits in the line numbers.
+    // Helps calculate padding for line numbers.
     let maxNumberOfDigits = String(annotatedSourceLines.count).count
 
+    // Render each line and its annotations.
     for (lineIndex, annotatedLine) in annotatedSourceLines.enumerated() {
       let lineNumber = lineIndex + 1
       guard
@@ -265,7 +320,7 @@ public struct DiagnosticsFormatter {
         continue
       }
 
-      // line numbers should be right aligned
+      // Line numbers should be right aligned
       let lineNumberString = String(lineNumber)
       let leadingSpaces = String(repeating: " ", count: maxNumberOfDigits - lineNumberString.count)
       let linePrefix = "\(leadingSpaces)\(diagnosticDecorator.decorateBufferOutline("\(lineNumberString) |")) "
@@ -279,10 +334,10 @@ public struct DiagnosticsFormatter {
       }
       hasLineBeenSkipped = false
 
-      // add indentation
+      // Add indentation
       annotatedSource.append(indentString)
 
-      // print the source line
+      // Print the source line
       annotatedSource.append(linePrefix)
       annotatedSource.append(
         colorizeSourceLine(
@@ -293,30 +348,47 @@ public struct DiagnosticsFormatter {
         )
       )
 
-      // Remove any trailing newline and replace it; this may seem
-      // counterintuitive, but if we're running within CMake and we let a
-      // '\r\n' through, CMake will turn that into *two* newlines.
+      // Remove any trailing newline and replace it.
+      //
+      // This may seem counterintuitive, but if we're running within CMake 
+      // and we let a '\r\n' through, CMake will turn that into *two* newlines.
       if let last = annotatedSource.last, last.isNewline {
         annotatedSource.removeLast()
       }
       annotatedSource.append("\n")
 
+      // Group annotations by column. 
+      // 
+      // Helps render multiple diagnostics in one line, e.g.
+      // 1 | foo.[].[].[]
+      //   |     |  |  `- error: expected name in member access
+      //   |     |  `- error: expected name in member access
+      //   |     `- error: expected name in member access
+      //
+      // First, identify the columns that have diagnostics. Helps
+      // place the "|" characters in the prefix string's previous lines.
       let columnsWithDiagnostics = Set(
-        annotatedLine.diagnostics.map {
-          annotatedLine.characterColumn(ofUtf8Column: $0.location(converter: slc).column)
+        annotatedLine.annotations.map { annotation in
+          annotatedLine.characterColumn(ofUtf8Column: annotation.location(converter: slc).column)
         }
       )
-      let diagsPerColumn = Dictionary(grouping: annotatedLine.diagnostics) { diag in
-        annotatedLine.characterColumn(ofUtf8Column: diag.location(converter: slc).column)
+      // Then, group annotations by column, and sort so that annotations for 
+      // later columns are printed first.
+      let annotationsPerColumn = Dictionary(grouping: annotatedLine.annotations) { annotation in
+        annotatedLine.characterColumn(ofUtf8Column: annotation.location(converter: slc).column)
       }.sorted { lhs, rhs in
         lhs.key > rhs.key
       }
 
-      for (column, diags) in diagsPerColumn {
-        // compute the string that is shown before each message
+      // Print annotations from higher column to lower column.
+      for (column, lineAnnotations) in annotationsPerColumn {
+        // Compute the string that is shown before each message
+        //
+        // Add indentation and space for line numbers.
         var preMessage =
           indentString + String(repeating: " ", count: maxNumberOfDigits) + " "
           + diagnosticDecorator.decorateBufferOutline("|")
+        // Add "|" characters for each column that has diagnostics, up to the current column.
         for c in 0..<column {
           if columnsWithDiagnostics.contains(c) {
             preMessage.append("|")
@@ -325,12 +397,23 @@ public struct DiagnosticsFormatter {
           }
         }
 
-        for diag in diags.dropLast(1) {
-          annotatedSource.append("\(preMessage)|- \(diagnosticDecorator.decorateDiagnosticMessage(diag.diagMessage))\n")
+        // Print annotations for this column.
+        for (index, annotation) in lineAnnotations.enumerated() {
+          // Decorate the diagnostic or note using the diagnostic decorator.
+          let decoratedMessage = switch annotation {
+          case .diagnostic(let diag):
+            diagnosticDecorator.decorateDiagnosticMessage(diag.diagMessage)
+          case .note(let note, let category):
+            diagnosticDecorator.decorateMessage(note.message, basedOnSeverity: .note, category: category)
+          }
+
+          // Compute annotation header
+          // We use "|-" for intermediate annotations, and "`-" for the last annotation.
+          let annotationHeader = (index == lineAnnotations.count - 1) ? "`-" : "|-"
+
+          // Add decorated message to the annotated source.
+          annotatedSource.append("\(preMessage)\(annotationHeader) \(decoratedMessage)\n")
         }
-        annotatedSource.append(
-          "\(preMessage)`- \(diagnosticDecorator.decorateDiagnosticMessage(diags.last!.diagMessage))\n"
-        )
       }
 
       // Add suffix text.

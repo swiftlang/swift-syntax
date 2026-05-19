@@ -2046,10 +2046,11 @@ extension Parser {
 
       effectSpecifiers = self.parseTypeEffectSpecifiers()
 
-      if self.at(.arrow) {
+      if self.at(.arrow) || self.at(.colon) {
         returnClause = self.parseFunctionReturnClause(
           effectSpecifiers: &effectSpecifiers,
-          allowNamedOpaqueResultType: false
+          allowNamedOpaqueResultType: false,
+          acceptColon: true
         )
       }
     }

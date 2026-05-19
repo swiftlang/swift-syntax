@@ -189,6 +189,11 @@ function(add_swift_syntax_library name)
       LIBRARY DESTINATION lib/${SWIFT_HOST_LIBRARIES_SUBDIRECTORY}
       RUNTIME DESTINATION bin
     )
+    if(MSVC)
+      install(FILES $<TARGET_FILE_DIR:${target}>/$<TARGET_FILE_BASE_NAME:${target}>.pdb
+        DESTINATION bin
+        OPTIONAL)
+    endif()
 
     # Install the module files.
     install(

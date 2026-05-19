@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftIfConfig
 @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 
 extension AttributeSyntax {
@@ -54,14 +55,31 @@ extension AttributeSyntax {
 extension WithAttributesSyntax {
   /// Compute a dictionary of all `@diagnose` diagnostic group behavior controls
   /// specified on this warning control declaration scope.
-  var allWarningGroupControls: [(DiagnosticGroupIdentifier, WarningGroupControl)] {
-    attributes.reduce(into: [(DiagnosticGroupIdentifier, WarningGroupControl)]()) { result, attr in
-      guard case .attribute(let attributeSyntax) = attr,
-        let warningGroupControl = attributeSyntax.warningGroupControl
-      else {
-        return
+  func allWarningGroupControls(
+    in configuredRegions: ConfiguredRegions
+  ) -> [(DiagnosticGroupIdentifier, WarningGroupControl)] {
+    attributes.warningGroupControls(in: configuredRegions)
+  }
+}
+
+extension AttributeListSyntax {
+  fileprivate func warningGroupControls(
+    in configuredRegions: ConfiguredRegions
+  ) -> [(DiagnosticGroupIdentifier, WarningGroupControl)] {
+    reduce(into: []) { result, element in
+      switch element {
+      case .attribute(let attr):
+        if let control = attr.warningGroupControl {
+          result.append(control)
+        }
+      case .ifConfigDecl(let ifConfig):
+        guard let activeClause = configuredRegions.activeClause(for: ifConfig),
+          case .attributes(let nested) = activeClause.elements
+        else {
+          return
+        }
+        result.append(contentsOf: nested.warningGroupControls(in: configuredRegions))
       }
-      result.append(warningGroupControl)
     }
   }
 }

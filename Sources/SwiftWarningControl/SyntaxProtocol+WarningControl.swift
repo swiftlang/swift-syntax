@@ -11,6 +11,7 @@
 //===----------------------------------------------------------------------===//
 
 import SwiftDiagnostics
+import SwiftIfConfig
 import SwiftSyntax
 
 extension SyntaxProtocol {
@@ -20,21 +21,42 @@ extension SyntaxProtocol {
   /// there is not one.
   /// - Parameters:
   ///   - for diagnosticGroupIdentifier: The identifier of the diagnostic group.
+  ///   - configuredRegions: configured regions of the current syntax tree.
   ///   - globalControls: The global controls to consider, specified by the client (compiler)
   ///     representing module-wide diagnostic group emission configuration, for example
   ///     with `-Wwarning` and `-Werror` flags. These controls can be overriden at
   ///     finer-grained scopes with the `@diagnose` attribute.
-  @_spi(ExperimentalLanguageFeatures)
   public func warningGroupControl(
     for diagnosticGroupIdentifier: DiagnosticGroupIdentifier,
+    configuredRegions: ConfiguredRegions,
     globalControls: [(DiagnosticGroupIdentifier, WarningGroupControl)] = [],
     groupInheritanceTree: DiagnosticGroupInheritanceTree? = nil
   ) -> WarningGroupControl? {
     let warningControlRegions = root.warningGroupControlRegionTreeImpl(
+      configuredRegions: configuredRegions,
       globalControls: globalControls,
       groupInheritanceTree: groupInheritanceTree,
       containing: self.position
     )
     return warningControlRegions.warningGroupControl(at: self.position, for: diagnosticGroupIdentifier)
+  }
+
+  @_spi(ExperimentalLanguageFeatures)
+  @available(
+    *,
+    deprecated,
+    message: "Use warningGroupControl(for:configuredRegions:globalControls:groupInheritanceTree:) instead"
+  )
+  public func warningGroupControl(
+    for diagnosticGroupIdentifier: DiagnosticGroupIdentifier,
+    globalControls: [(DiagnosticGroupIdentifier, WarningGroupControl)] = [],
+    groupInheritanceTree: DiagnosticGroupInheritanceTree? = nil
+  ) -> WarningGroupControl? {
+    return warningGroupControl(
+      for: diagnosticGroupIdentifier,
+      configuredRegions: ConfiguredRegions.empty,
+      globalControls: globalControls,
+      groupInheritanceTree: groupInheritanceTree
+    )
   }
 }

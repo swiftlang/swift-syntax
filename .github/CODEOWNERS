@@ -7,19 +7,22 @@
 # Each line is a file pattern followed by one or more owners.
 # Order is important. The last matching pattern has the most precedence.
 
+# NOTE: This repo requires code owner review before a PR can be merged. As such,
+# it's important to ensure that no component only has a single owner.
+
 # Owner of anything in SwiftSyntax not owned by anyone else.
 * @ahoppen @hamishknight @rintaro @hborla
 
 # Macros
-/Sources/SwiftSyntaxMacros @DougGregor
-/Tests/SwiftSyntaxMacrosTest @DougGregor
+/Sources/SwiftSyntaxMacros @DougGregor @ahoppen @hamishknight @rintaro @hborla
+/Tests/SwiftSyntaxMacrosTest @DougGregor @ahoppen @hamishknight @rintaro @hborla
 
 # SwiftOperators
-/Sources/SwiftOperators @DougGregor
-/Tests/SwiftOperatorsTest @DougGregor
+/Sources/SwiftOperators @DougGregor @ahoppen @hamishknight @rintaro @hborla
+/Tests/SwiftOperatorsTest @DougGregor @ahoppen @hamishknight @rintaro @hborla
 
-/utils/bazel @keith
-*.bazel @keith
-WORKSPACE @keith
-.bazelrc @keith
-.bazelversion @keith
+/utils/bazel @keith @ahoppen @hamishknight @rintaro @hborla
+*.bazel @keith @ahoppen @hamishknight @rintaro @hborla
+WORKSPACE @keith @ahoppen @hamishknight @rintaro @hborla
+.bazelrc @keith @ahoppen @hamishknight @rintaro @hborla
+.bazelversion @keith @ahoppen @hamishknight @rintaro @hborla

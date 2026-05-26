@@ -78,13 +78,13 @@ final class StatementTests: ParserTestCase {
       """,
       diagnostics: [
         DiagnosticSpec(
-          message: "expected expression, '=', and expression in pattern matching",
-          fixIts: ["insert expression, '=', and expression"]
+          message: "expected pattern, '=', and expression in pattern matching",
+          fixIts: ["insert pattern, '=', and expression"]
         ),
         DiagnosticSpec(message: "unexpected code '* ! = x' in 'if' statement"),
       ],
       fixedSource: """
-        if case <#expression#> = <#expression#> * ! = x {
+        if case <#pattern#> = <#expression#> * ! = x {
           bar()
         }
         """
@@ -94,6 +94,20 @@ final class StatementTests: ParserTestCase {
       """
       if includeSavedHints { a = a.flatMap{ $0 } ?? nil }
       """
+    )
+  }
+
+  func testIfCaseWithMissingPattern() {
+    assertParse(
+      """
+      if case 1️⃣= x {}
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected pattern in pattern matching", fixIts: ["insert pattern"])
+      ],
+      fixedSource: """
+        if case <#pattern#> = x {}
+        """
     )
   }
 

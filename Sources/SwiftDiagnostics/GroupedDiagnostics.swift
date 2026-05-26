@@ -233,7 +233,7 @@ extension GroupedDiagnostics {
             let decoratedMessage = diagnosticDecorator.decorateMessage(
               "expanded code originates here",
               basedOnSeverity: .note,
-              category: nil
+              categoryChain: []
             )
             prefixString += "`- \(bufferLoc.file):\(bufferLoc.line):\(bufferLoc.column): \(decoratedMessage)\n"
           }

@@ -142,4 +142,43 @@ final class ExpressionTypeTests: ParserTestCase {
       )
     }
   }
+
+  // Verify that parenthesized expressions in generic argument positions
+  // are correctly parsed when LiteralExpressions is enabled.
+  func testCanParseGenericArgumentExpressions() {
+    let cases: [UInt: String] = [
+      #line: "InlineArray<(1 + 2), Int>",
+      #line: "InlineArray<((2 + 3) * 2), Int>",
+      #line: "InlineArray<(1 << 3), Int>",
+      #line: "InlineArray<(1 + 1), InlineArray<(2 + 1), Int>>",
+    ]
+    for (line, source) in cases {
+      assertParse(
+        "\(source)()",
+        { ExprSyntax.parse(from: &$0) },
+        experimentalFeatures: .literalExpressions,
+        line: line
+      )
+    }
+  }
+
+  // Verify that parenthesized literal expressions work with [N of T] sugar syntax.
+  func testCanParseInlineArrayExpressionSugar() {
+    let cases: [UInt: String] = [
+      #line: "[(2 + 3) of Int]",
+      #line: "[(1 << 2) of String]",
+      #line: "[((2 * 3)) of Double]",
+      #line: "[(1 + 1) of [(2 + 1) of Int]]",
+    ]
+    for (line, type) in cases {
+      assertParse(
+        "S<\(type), 1️⃣X>.self",
+        { ExprSyntax.parse(from: &$0) },
+        substructure: IdentifierTypeSyntax(name: .identifier("X")),
+        substructureAfterMarker: "1️⃣",
+        experimentalFeatures: .literalExpressions,
+        line: line
+      )
+    }
+  }
 }

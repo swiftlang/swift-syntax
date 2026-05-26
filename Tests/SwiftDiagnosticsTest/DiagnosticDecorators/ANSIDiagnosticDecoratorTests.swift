@@ -38,11 +38,25 @@ final class ANSIDiagnosticDecoratorTests: XCTestCase {
     let decoratedMessageWithCategory = decorator.decorateMessage(
       message,
       basedOnSeverity: .error,
-      category: DiagnosticCategory(name: "Filesystem", documentationURL: "http://www.swift.org")
+      categoryChain: [DiagnosticCategory(name: "Filesystem", documentationURL: "http://www.swift.org")]
     )
     assertStringsEqualWithDiff(
       decoratedMessageWithCategory,
       "\u{1B}[1;31merror: \u{1B}[1;39mFile not found\u{1B}[0;0m [#\u{001B}]8;;http://www.swift.org\u{001B}\\Filesystem\u{001B}]8;;\u{001B}\\]"
+    )
+
+    let decoratedMessageWithCategoryChain = decorator.decorateMessage(
+      message,
+      basedOnSeverity: .error,
+      categoryChain: [
+        DiagnosticCategory(name: "VirtualFilesystem", documentationURL: "http://www.swift.org/VFS"),
+        DiagnosticCategory(name: "Filesystem", documentationURL: "http://www.swift.org/FS"),
+      ]
+    )
+    print(decoratedMessageWithCategoryChain.utf8)
+    assertStringsEqualWithDiff(
+      decoratedMessageWithCategoryChain,
+      "\u{1B}[1;31merror: \u{1B}[1;39mFile not found\u{1B}[0;0m [#\u{001B}]8;;http://www.swift.org/FS\u{001B}\\Filesystem\u{001B}]8;;\u{001B}\\::\u{001B}]8;;http://www.swift.org/VFS\u{001B}\\VirtualFilesystem\u{001B}]8;;\u{001B}\\]"
     )
   }
 

@@ -916,7 +916,6 @@ final class RegexLiteralTests: ParserTestCase {
   }
 
   func testBinOpDisambiguation28() {
-    // FIXME: The diagnostic should be one character back
     assertParse(
       #"""
       \1️⃣ /^ x/

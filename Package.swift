@@ -185,7 +185,7 @@ let package = Package(
 
     .target(
       name: "SwiftWarningControl",
-      dependencies: ["SwiftSyntax", "SwiftParser", "SwiftDiagnostics"],
+      dependencies: ["SwiftSyntax", "SwiftParser", "SwiftDiagnostics", "SwiftIfConfig"],
       exclude: ["CMakeLists.txt", "SwiftWarningControl.md"]
     ),
 
@@ -193,6 +193,7 @@ let package = Package(
       name: "SwiftWarningControlTest",
       dependencies: [
         "_SwiftSyntaxTestSupport",
+        "SwiftIfConfig",
         "SwiftWarningControl",
         "SwiftParser",
         "SwiftSyntaxMacrosGenericTestSupport",
@@ -231,7 +232,7 @@ let package = Package(
       name: "SwiftSyntax",
       dependencies: [
         "_SwiftSyntaxCShims", "SwiftSyntax509", "SwiftSyntax510", "SwiftSyntax600", "SwiftSyntax601", "SwiftSyntax602",
-        "SwiftSyntax603", "SwiftSyntax604",
+        "SwiftSyntax603", "SwiftSyntax604", "SwiftSyntax605",
       ],
       exclude: ["CMakeLists.txt"],
       swiftSettings: swiftSyntaxSwiftSettings
@@ -278,6 +279,11 @@ let package = Package(
     .target(
       name: "SwiftSyntax604",
       path: "Sources/VersionMarkerModules/SwiftSyntax604"
+    ),
+
+    .target(
+      name: "SwiftSyntax605",
+      path: "Sources/VersionMarkerModules/SwiftSyntax605"
     ),
 
     // MARK: SwiftSyntaxBuilder

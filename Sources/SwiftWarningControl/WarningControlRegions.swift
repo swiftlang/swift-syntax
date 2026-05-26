@@ -10,11 +10,11 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftIfConfig
 import SwiftSyntax
 
 /// A single warning control region, consisting of a start and end positions,
 /// a diagnostic group identifier, and an emission behavior control specifier.
-@_spi(ExperimentalLanguageFeatures)
 public struct WarningControlRegion {
   public let range: Range<AbsolutePosition>
   public let diagnosticGroupIdentifier: DiagnosticGroupIdentifier
@@ -32,7 +32,6 @@ public struct WarningControlRegion {
 }
 
 /// A struct representing a diagnostic group identifier string
-@_spi(ExperimentalLanguageFeatures)
 public struct DiagnosticGroupIdentifier: Hashable, Sendable, ExpressibleByStringLiteral {
   public init(stringLiteral value: String) {
     self.identifier = value
@@ -43,27 +42,27 @@ public struct DiagnosticGroupIdentifier: Hashable, Sendable, ExpressibleByString
   public let identifier: String
 }
 
-/// Describes all of the `@warn` diagnostic group behavior controls within the
+/// Describes all of the `@diagnose` diagnostic group behavior controls within the
 /// given syntax node, indicating each group's active behavior at a given position.
 ///
 /// For example, given code like the following:
 ///
 /// ```
-///  1 |  @warn(Deprecate, as: error)
+///  1 |  @diagnose(Deprecate, as: error)
 ///  2 |  func foo() {
 ///  3 |     let a = dep
-///  4 |     @warn(Deprecate, as: warning)
+///  4 |     @diagnose(Deprecate, as: warning)
 ///  5 |     func bar() {
 ///  6 |         let b = dep
-///  7 |         @warn(Deprecate, as: ignored)
+///  7 |         @diagnose(Deprecate, as: ignored)
 ///  8 |         func baz() {
 ///  9 |           let c = dep
 /// 10 |        }
-/// 11 |        @warn(Deprecate, as: error)
-/// 12 |        @warn(OtherGroup, as: error)
+/// 11 |        @diagnose(Deprecate, as: error)
+/// 12 |        @diagnose(OtherGroup, as: error)
 /// 13 |        func qux() {
 /// 14 |            let d = dep
-/// 15 |             @warn(SomeOtherGroup, as: warning)
+/// 15 |             @diagnose(SomeOtherGroup, as: warning)
 /// 16 |            func corge() {
 /// 17 |              let e = dep
 /// 18 |            }
@@ -98,15 +97,16 @@ public struct DiagnosticGroupIdentifier: Hashable, Sendable, ExpressibleByString
 /// traversal until we find the first containing region which specifies warning
 /// behavior control for the given diagnostic group id.
 ///
-@_spi(ExperimentalLanguageFeatures)
 public struct WarningControlRegionTree {
   /// Root region representing top-level (file) scope
   private var rootRegionNode: WarningControlRegionNode
 
+  /// The configured regions for this tree
+  let configuredRegions: ConfiguredRegions
+
   /// All of the diagnostic group identifiers contained in this tree
   /// which have at least one occurence with a non-`ignored` behavior
   /// specifier
-  @_spi(ExperimentalLanguageFeatures)
   public private(set) var enabledGroups: Set<DiagnosticGroupIdentifier> = []
 
   /// Inheritance tree among diagnostic group identifiers
@@ -114,9 +114,11 @@ public struct WarningControlRegionTree {
 
   init(
     range: Range<AbsolutePosition>,
+    configuredRegions: ConfiguredRegions,
     groupInheritanceTree: DiagnosticGroupInheritanceTree?
   ) {
     self.rootRegionNode = WarningControlRegionNode(range: range)
+    self.configuredRegions = configuredRegions
     self.groupInheritanceTree = groupInheritanceTree ?? DiagnosticGroupInheritanceTree()
   }
 
@@ -150,7 +152,7 @@ public struct WarningControlRegionTree {
   }
 
   /// Add warning control regions to the tree root node.
-  /// For example, controls corresponding to a top-level `using @warn()` statement.
+  /// For example, controls corresponding to a top-level `using @diagnose()` statement.
   mutating func addRootWarningGroupControls(controls: [(DiagnosticGroupIdentifier, WarningGroupControl)]) {
     addWarningGroupControls(range: rootRegionNode.range, controls: controls)
   }
@@ -208,7 +210,6 @@ extension WarningControlRegionTree: CustomDebugStringConvertible {
 extension WarningControlRegionTree {
   /// Determine the warning group behavior control at a specified position
   /// for a given diagnostic group.
-  @_spi(ExperimentalLanguageFeatures)
   public func warningGroupControl(
     at position: AbsolutePosition,
     for diagnosticGroupIdentifier: DiagnosticGroupIdentifier

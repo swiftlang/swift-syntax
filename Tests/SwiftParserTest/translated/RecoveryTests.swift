@@ -3134,8 +3134,8 @@ final class RecoveryTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          message: "expected expression, '=', and expression in pattern matching",
-          fixIts: ["insert expression, '=', and expression"]
+          message: "expected pattern, '=', and expression in pattern matching",
+          fixIts: ["insert pattern, '=', and expression"]
         ),
         DiagnosticSpec(
           locationMarker: "1️⃣",
@@ -3151,7 +3151,7 @@ final class RecoveryTests: ParserTestCase {
       ],
       fixedSource: """
         func testSkipToFindOpenBrace1() {
-          do { if case <#expression#> = <#expression#> {}
+          do { if case <#pattern#> = <#expression#> {}
         }
         }
         """

@@ -55,12 +55,24 @@ extension SyntaxProtocol {
     case is EnumCaseElementSyntax:
       return Syntax(self.detached)
 
-    // Pattern bindings have their accessors and initializer removed.
+    // Pattern bindings have their accessors and initializer removed, and wrapped in the parent variable decl.
     case var patternBinding as PatternBindingSyntax:
+      let varDecl = patternBinding.parent?.as(PatternBindingListSyntax.self)?.parent?.as(VariableDeclSyntax.self)?
+        .detached
       patternBinding = patternBinding.detached
       patternBinding.accessorBlock = nil
       patternBinding.initializer = nil
-      return Syntax(patternBinding)
+      if var varDecl {
+        varDecl.bindings = [patternBinding]
+        return Syntax(varDecl)
+      } else {
+        return Syntax(
+          VariableDeclSyntax(
+            bindingSpecifier: .keyword(.var),
+            bindings: [patternBinding]
+          )
+        )
+      }
 
     // Freestanding macros are fine as-is because if any arguments change
     // the whole macro would have to be re-evaluated.

@@ -216,8 +216,7 @@ extension RawTriviaPiece: CustomDebugStringConvertible {
   }
 }
 
-@_spi(RawSyntax)
-public extension Trivia {
+package extension Trivia {
   func trimmingPrefix(
     while predicate: (TriviaPiece) -> Bool
   ) -> Trivia {

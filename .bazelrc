@@ -10,20 +10,22 @@
 ##
 ##===----------------------------------------------------------------------===##
 
-common --enable_bzlmod
-common --incompatible_disallow_empty_glob
-common --incompatible_use_host_features
+common --check_direct_dependencies=off
 common --lockfile_mode=off
 
 build --features=swift.use_explicit_swift_module_map
 build --host_features=swift.use_explicit_swift_module_map
+
+common --flag_alias=swiftcopt=@build_bazel_rules_swift//swift:copt
+common --flag_alias=host_swiftcopt=@build_bazel_rules_swift//swift:exec_copt
 
 # Improved build performance
 build --host_swiftcopt=-whole-module-optimization
 build --swiftcopt=-whole-module-optimization
 
 # Keep in sync with Package.swift
-build --host_macos_minimum_os=10.15
-build --macos_minimum_os=10.15
+# TODO: https://github.com/bazelbuild/rules_swift/issues/1664
+build --host_macos_minimum_os=13.0
+build --macos_minimum_os=13.0
 
 test --test_output=errors

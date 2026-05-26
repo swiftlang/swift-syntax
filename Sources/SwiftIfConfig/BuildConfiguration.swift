@@ -215,7 +215,7 @@ public protocol BuildConfiguration {
   ///
   /// The target pointer authentication scheme describes how pointers are
   /// signed, as a security mitigation. This scheme can only be queried by
-  /// an experimental syntax `_ptrath(<name>)`, e.g.,
+  /// an experimental syntax `_ptrauth(<name>)`, e.g.,
   ///
   /// ```swift
   /// #if _ptrauth(arm64e)
@@ -271,7 +271,7 @@ public protocol BuildConfiguration {
 
   /// The endianness of the target architecture.
   ///
-  /// The target's endianness can onyl be queried with the experimental syntax
+  /// The target's endianness can only be queried with the experimental syntax
   /// `_endian(<name>)`, where `<name>` can be either "big" or "little", e.g.,
   ///
   /// ```swift
@@ -301,8 +301,9 @@ public protocol BuildConfiguration {
   ///
   /// ```swift
   /// #if compiler(>=5.7)
-  /// // Hoorway, we can implicitly open existentials!
+  /// // Hooray, we can implicitly open existentials!
   /// #endif
+  /// ```
   var compilerVersion: VersionTuple { get }
 }
 

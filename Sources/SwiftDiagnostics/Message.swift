@@ -39,7 +39,7 @@ public struct DiagnosticCategory: Sendable, Hashable {
   /// Name that identifies the category, e.g., StrictMemorySafety.
   public let name: String
 
-  /// URL providing documentation documentation for this category.
+  /// URL providing documentation for this category.
   public let documentationURL: String?
 
   public init(name: String, documentationURL: String?) {
@@ -61,9 +61,22 @@ public protocol DiagnosticMessage: Sendable {
 
   /// The category that this diagnostic belongs in.
   var category: DiagnosticCategory? { get }
+
+  /// Category chain ordered leaf-first. Index 0 is this diagnostic's
+  /// category, subsequent entries are parent groups toward the root.
+  /// Defaults to wrapping ``category`` in a single-element array.
+  ///
+  /// Conforming types typically implement either `category` or `categoryChain`,
+  /// depending on how specific the categorization needs to be.
+  var categoryChain: [DiagnosticCategory] { get }
 }
 
 extension DiagnosticMessage {
   /// Diagnostic messages default to having no category.
   public var category: DiagnosticCategory? { nil }
+
+  /// Default implementation: wrap the single category into an array.
+  public var categoryChain: [DiagnosticCategory] {
+    category.map { [$0] } ?? []
+  }
 }

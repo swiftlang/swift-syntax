@@ -106,7 +106,7 @@ public struct StaticBuildConfiguration: Codable {
   /// ```
   public var targetOSs: Set<String> = []
 
-  /// The active target architectures, e.g., "x64_64".
+  /// The active target architectures, e.g., "x86_64".
   ///
   /// The target processor architecture can be queried with `arch(<name>)`, e.g.,
   ///
@@ -146,7 +146,7 @@ public struct StaticBuildConfiguration: Codable {
   ///
   /// The target pointer authentication scheme describes how pointers are
   /// signed, as a security mitigation. This scheme can only be queried by
-  /// an experimental syntax `_ptrath(<name>)`, e.g.,
+  /// an experimental syntax `_ptrauth(<name>)`, e.g.,
   ///
   /// ```swift
   /// #if _ptrauth(arm64e)
@@ -191,11 +191,12 @@ public struct StaticBuildConfiguration: Codable {
   /// #if _hasAtomicBitWidth(_64)
   /// // 64-bit atomics are available
   /// #endif
+  /// ```
   public var targetAtomicBitWidths: [Int] = []
 
   /// The endianness of the target architecture.
   ///
-  /// The target's endianness can onyl be queried with the experimental syntax
+  /// The target's endianness can only be queried with the experimental syntax
   /// `_endian(<name>)`, where `<name>` can be either "big" or "little", e.g.,
   ///
   /// ```swift
@@ -225,7 +226,7 @@ public struct StaticBuildConfiguration: Codable {
   ///
   /// ```swift
   /// #if compiler(>=5.7)
-  /// // Hoorway, we can implicitly open existentials!
+  /// // Hooray, we can implicitly open existentials!
   /// #endif
   public var compilerVersion: VersionTuple
 }
@@ -385,7 +386,7 @@ extension StaticBuildConfiguration: BuildConfiguration {
   ///
   /// The target pointer authentication scheme describes how pointers are
   /// signed, as a security mitigation. This scheme can only be queried by
-  /// an experimental syntax `_ptrath(<name>)`, e.g.,
+  /// an experimental syntax `_ptrauth(<name>)`, e.g.,
   ///
   /// ```swift
   /// #if _ptrauth(arm64e)

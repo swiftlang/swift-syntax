@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftIfConfig
 @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 @_spi(ExperimentalLanguageFeatures) import SwiftWarningControl
@@ -21,7 +22,7 @@ public class WarningGroupControlTests: XCTestCase {
   func testSimpleFunctionWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: error)
+      @diagnose(GroupID, as: error)
       func foo() {
         1️⃣let x = 1
       }
@@ -36,23 +37,23 @@ public class WarningGroupControlTests: XCTestCase {
   func testNestedFunctionWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(SomeOtherGroup, as: warning)
-      @warn(GroupID, as: error)
-      @warn(YetAnotherGroup, as: warning)
+      @diagnose(SomeOtherGroup, as: warning)
+      @diagnose(GroupID, as: error)
+      @diagnose(YetAnotherGroup, as: warning)
       func foo() {
         1️⃣let x = 1
-        @warn(GroupID, as: warning)
+        @diagnose(GroupID, as: warning)
         func bar() {
           2️⃣let x = 1
-          @warn(GroupID, as: ignored)
-          @warn(SomeOtherGroup, as: ignored)
+          @diagnose(GroupID, as: ignored)
+          @diagnose(SomeOtherGroup, as: ignored)
           func baz() {
             3️⃣let x = 1
           }
-          @warn(GroupID, as: error)
+          @diagnose(GroupID, as: error)
           func qux() {
             4️⃣let x = 1
-            @warn(SomeOtherGroup, as: warning)
+            @diagnose(SomeOtherGroup, as: warning)
             func corge() {
               5️⃣let x = 1
             }
@@ -78,26 +79,33 @@ public class WarningGroupControlTests: XCTestCase {
   func testEnabledGroupIdentifiers() throws {
     let source =
       """
-      @warn(Group1, as: warning)
-      @warn(Group2, as: error)
-      @warn(Group3, as: ignored)
+      @diagnose(Group1, as: warning)
+      @diagnose(Group2, as: error)
+      @diagnose(Group3, as: ignored)
       func foo() {
-        @warn(Group4, as: warning)
+        @diagnose(Group4, as: warning)
         func bar() {
-          @warn(Group5, as: ignored)
-          @warn(Group6, as: ignored)
+          @diagnose(Group5, as: ignored)
+          @diagnose(Group6, as: ignored)
           func baz() {}
-          @warn(Group7, as: error)
+          @diagnose(Group7, as: error)
           func qux() {
-            @warn(Group8, as: warning)
+            @diagnose(Group8, as: warning)
             func corge() {}
           }
         }
       }
       """
+    let buildConfig = StaticBuildConfiguration(
+      customConditions: [],
+      languageVersion: VersionTuple(5, 5),
+      compilerVersion: VersionTuple(6, 0)
+    )
+
     var parser = Parser(source)
     let parseTree = SourceFileSyntax.parse(from: &parser)
-    let warningControlTree = parseTree.warningGroupControlRegionTree()
+    let configuredRegions = parseTree.configuredRegions(in: buildConfig)
+    let warningControlTree = parseTree.warningGroupControlRegionTree(configuredRegions: configuredRegions)
     let enabledDiagnosticGroups = warningControlTree.enabledGroups
     XCTAssertTrue(enabledDiagnosticGroups.contains("Group1"))
     XCTAssertTrue(enabledDiagnosticGroups.contains("Group2"))
@@ -112,27 +120,27 @@ public class WarningGroupControlTests: XCTestCase {
   func testNominalDeclWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: error)
+      @diagnose(GroupID, as: error)
       class Foo {
         1️⃣let x = 1
       }
-      @warn(GroupID, as: ignored)
+      @diagnose(GroupID, as: ignored)
       struct Bar {
         2️⃣let x = 1
       }
-      @warn(GroupID, as: warning)
+      @diagnose(GroupID, as: warning)
       enum Baz {
         3️⃣let x = 1
       }
-      @warn(GroupID, as: error)      
+      @diagnose(GroupID, as: error)      
       actor Qux {
         4️⃣let x = 1
-        @warn(GroupID, as: ignored)
+        @diagnose(GroupID, as: ignored)
         struct Quux {
           5️⃣let x = 1
         }
       }
-      @warn(GroupID, as: warning)
+      @diagnose(GroupID, as: warning)
       protocol Proto {
         6️⃣let x = 1
       }      
@@ -152,14 +160,14 @@ public class WarningGroupControlTests: XCTestCase {
   func testInitializerWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: error)
+      @diagnose(GroupID, as: error)
       struct Foo {
         1️⃣let x = 1
-        @warn(GroupID, as: ignored)
+        @diagnose(GroupID, as: ignored)
         init {
           2️⃣let x = 1
         }
-        @warn(GroupID, as: warning)
+        @diagnose(GroupID, as: warning)
         deinit {
           3️⃣let x = 1
         }
@@ -177,7 +185,7 @@ public class WarningGroupControlTests: XCTestCase {
   func testExtensionWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: error)
+      @diagnose(GroupID, as: error)
       extension Foo {
         1️⃣let x = 1
       }
@@ -192,7 +200,7 @@ public class WarningGroupControlTests: XCTestCase {
   func testImportWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: ignored)
+      @diagnose(GroupID, as: ignored)
       import1️⃣ Foo
       """,
       diagnosticGroupID: "GroupID",
@@ -205,9 +213,9 @@ public class WarningGroupControlTests: XCTestCase {
   func testSubscriptWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: ignored)
+      @diagnose(GroupID, as: ignored)
       struct Foo {
-        @warn(GroupID, as: error)
+        @diagnose(GroupID, as: error)
         subscript(index: Int) -> Value {
           1️⃣let x = 1
         }
@@ -223,9 +231,9 @@ public class WarningGroupControlTests: XCTestCase {
   func testComputedPropertyWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: ignored)
+      @diagnose(GroupID, as: ignored)
       struct Foo {
-        @warn(GroupID, as: error)
+        @diagnose(GroupID, as: error)
         var property: Int {
           1️⃣return 11
         }
@@ -241,14 +249,14 @@ public class WarningGroupControlTests: XCTestCase {
   func testAccessorWarningGroupControl() throws {
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: ignored)
+      @diagnose(GroupID, as: ignored)
       struct Foo {
         var property: Int {
-          @warn(GroupID, as: error)
+          @diagnose(GroupID, as: error)
           get {
             1️⃣return 11
           }
-          @warn(GroupID, as: warning)
+          @diagnose(GroupID, as: warning)
           set {
             2️⃣let x = 1
           }
@@ -267,7 +275,7 @@ public class WarningGroupControlTests: XCTestCase {
     // Global control does not override syntactic control
     try assertWarningGroupControl(
       """
-      @warn(GroupID, as: error)
+      @diagnose(GroupID, as: error)
       func foo() {
         1️⃣let x = 1
       }
@@ -283,7 +291,7 @@ public class WarningGroupControlTests: XCTestCase {
       """
       func foo() {
         1️⃣let x = 1
-        @warn(GroupID, as: ignored)
+        @diagnose(GroupID, as: ignored)
         func bar() {
           2️⃣let x = 1
         }
@@ -317,11 +325,11 @@ public class WarningGroupControlTests: XCTestCase {
   func testSubGroupInheritance() throws {
     try assertWarningGroupControl(
       """
-      @warn(SuperGroupID, as: error)
+      @diagnose(SuperGroupID, as: error)
       func foo() {
         1️⃣let x = 1
       }
-      @warn(SuperSuperGroupID, as: ignored)
+      @diagnose(SuperSuperGroupID, as: ignored)
       func bar() {
         2️⃣let x = 1
       }
@@ -392,17 +400,17 @@ public class WarningGroupControlTests: XCTestCase {
     try assertWarningGroupControl(
       """
       0️⃣let x = 1
-      @warn(GroupID, as: warning)
+      @diagnose(GroupID, as: warning)
       struct Bar {
         1️⃣let y = 1
       }
       struct Foo {
-        @warn(GroupID, as: ignored)
+        @diagnose(GroupID, as: ignored)
         var property: Int {
           2️⃣return 11
         }
       }
-      using @warn(GroupID, as: error)
+      using @diagnose(GroupID, as: error)
       3️⃣let k = 1
       """,
       experimentalFeatures: [.defaultIsolationPerFile],
@@ -420,12 +428,12 @@ public class WarningGroupControlTests: XCTestCase {
     try assertWarningGroupControl(
       """
       0️⃣let x = 1
-      @warn(GroupID, as: warning)
+      @diagnose(GroupID, as: warning)
       struct Bar {
         1️⃣let y = 1
       }
       struct Foo {
-        using @warn(GroupID, as: error)
+        using @diagnose(GroupID, as: error)
         var property: Int {
           2️⃣return 11
         }
@@ -441,12 +449,303 @@ public class WarningGroupControlTests: XCTestCase {
       ]
     )
   }
+
+  func testWarnSpellingBackwardCompat() throws {
+    // The old @warn spelling should continue to work as an alias
+    try assertWarningGroupControl(
+      """
+      @warn(GroupID, as: error)
+      func foo() {
+        1️⃣let x = 1
+        @warn(GroupID, as: ignored)
+        func bar() {
+          2️⃣let x = 1
+        }
+      }
+      """,
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .error,
+        "2️⃣": .ignored,
+      ]
+    )
+  }
+
+  /// `@diagnose` inside an active `#if` clause overrides the outer attribute.
+  func testIfConfigActiveAttributeOverridesOuter() throws {
+    try assertWarningGroupControl(
+      """
+      @diagnose(GroupID, as: warning)
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .error
+      ]
+    )
+  }
+
+  /// `@diagnose` inside an inactive `#if` clause does not contribute; the
+  /// outer attribute remains in effect.
+  func testIfConfigInactiveAttributeIgnored() throws {
+    try assertWarningGroupControl(
+      """
+      @diagnose(GroupID, as: warning)
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .warning
+      ]
+    )
+  }
+
+  /// `#if` with no outer `@diagnose`: when the condition is false, no control
+  /// applies; when true, the inner attribute applies.
+  func testIfConfigStandaloneInsideAttributes() throws {
+    try assertWarningGroupControl(
+      """
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": nil
+      ]
+    )
+
+    try assertWarningGroupControl(
+      """
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .error
+      ]
+    )
+  }
+
+  /// `#else` clause is honored when the `#if` condition is false.
+  func testIfConfigElseClause() throws {
+    let source =
+      """
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      #else
+      @diagnose(GroupID, as: ignored)
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """
+
+    try assertWarningGroupControl(
+      source,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": .error]
+    )
+
+    try assertWarningGroupControl(
+      source,
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": .ignored]
+    )
+  }
+
+  /// `#elseif` chains pick the first matching active clause.
+  func testIfConfigElseifChain() throws {
+    let source =
+      """
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      #elseif LENIENT
+      @diagnose(GroupID, as: ignored)
+      #else
+      @diagnose(GroupID, as: warning)
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """
+
+    // First clause active.
+    try assertWarningGroupControl(
+      source,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": .error]
+    )
+
+    // Second clause active.
+    try assertWarningGroupControl(
+      source,
+      customConditions: ["LENIENT"],
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": .ignored]
+    )
+
+    // Both conditions present: first clause still wins.
+    try assertWarningGroupControl(
+      source,
+      customConditions: ["STRICT", "LENIENT"],
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": .error]
+    )
+
+    // Neither: `#else` wins.
+    try assertWarningGroupControl(
+      source,
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": .warning]
+    )
+  }
+
+  /// Nested `#if` directives: only attributes whose enclosing chain is
+  /// fully active are visible.
+  func testIfConfigNested() throws {
+    try assertWarningGroupControl(
+      """
+      #if OUTER
+      #if INNER
+      @diagnose(GroupID, as: error)
+      #endif
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      customConditions: ["OUTER", "INNER"],
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": .error]
+    )
+
+    // INNER alone is not enough — the outer #if must also be active.
+    try assertWarningGroupControl(
+      """
+      #if OUTER
+      #if INNER
+      @diagnose(GroupID, as: error)
+      #endif
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      customConditions: ["INNER"],
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": nil]
+    )
+  }
+
+  /// Multiple `@diagnose` for distinct groups inside a single `#if`.
+  func testIfConfigMultipleGroups() throws {
+    let source =
+      """
+      #if STRICT
+      @diagnose(GroupA, as: error)
+      @diagnose(GroupB, as: ignored)
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """
+
+    try assertWarningGroupControl(
+      source,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupA",
+      states: ["1️⃣": .error]
+    )
+
+    try assertWarningGroupControl(
+      source,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupB",
+      states: ["1️⃣": .ignored]
+    )
+  }
+
+  /// Whole-decl `#if`: `ActiveSyntaxAnyVisitor` walks the active branch only,
+  /// so the `@diagnose` on the active clone of `foo()` is recorded.
+  func testIfConfigWholeDeclActive() throws {
+    try assertWarningGroupControl(
+      """
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      func foo() {
+        1️⃣let x = 1
+      }
+      #else
+      @diagnose(GroupID, as: ignored)
+      func foo() {
+        2️⃣let x = 1
+      }
+      #endif
+      """,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .error,
+        "2️⃣": nil,
+      ]
+    )
+  }
+
+  /// `#if` declares whole types; the visitor should descend into the active
+  /// clause and record per-member regions correctly.
+  func testIfConfigWholeTypeWithMemberAttributes() throws {
+    try assertWarningGroupControl(
+      """
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      class Foo {
+        @diagnose(GroupID, as: ignored)
+        func bar() {
+          1️⃣let x = 1
+        }
+        func baz() {
+          2️⃣let x = 1
+        }
+      }
+      #endif
+      """,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .ignored,
+        "2️⃣": .error,
+      ]
+    )
+  }
 }
 
 /// Assert that the various marked positions in the source code have the
 /// expected warning behavior controls.
 private func assertWarningGroupControl(
   _ markedSource: String,
+  customConditions: Set<String> = [],
   globalControls: [(DiagnosticGroupIdentifier, WarningGroupControl)] = [],
   groupInheritanceTree: DiagnosticGroupInheritanceTree? = nil,
   experimentalFeatures: Parser.ExperimentalFeatures? = nil,
@@ -460,6 +759,13 @@ private func assertWarningGroupControl(
   let experimentalFeatures = experimentalFeatures ?? []
   var parser = Parser(source, experimentalFeatures: experimentalFeatures)
   let tree = SourceFileSyntax.parse(from: &parser)
+  let buildConfig = StaticBuildConfiguration(
+    customConditions: customConditions,
+    languageVersion: VersionTuple(5, 5),
+    compilerVersion: VersionTuple(6, 0)
+  )
+  let configuredRegions = tree.configuredRegions(in: buildConfig)
+
   for (marker, location) in markerLocations {
     guard let expectedState = states[marker] else {
       XCTFail("Missing marker \(marker) in expected states", file: file, line: line)
@@ -473,21 +779,23 @@ private func assertWarningGroupControl(
     }
 
     let warningControlRegions = tree.warningGroupControlRegionTree(
+      configuredRegions: configuredRegions,
       globalControls: globalControls,
       groupInheritanceTree: groupInheritanceTree
     )
 
     let groupControl = token.warningGroupControl(
       for: diagnosticGroupID,
+      configuredRegions: configuredRegions,
       globalControls: globalControls,
       groupInheritanceTree: groupInheritanceTree
     )
-    XCTAssertEqual(groupControl, expectedState)
+    XCTAssertEqual(groupControl, expectedState, "marker \(marker)", file: file, line: line)
 
     let groupControlViaRegions = warningControlRegions.warningGroupControl(
       at: absolutePosition,
       for: diagnosticGroupID
     )
-    XCTAssertEqual(groupControlViaRegions, expectedState)
+    XCTAssertEqual(groupControlViaRegions, expectedState, "marker \(marker) (via regions)", file: file, line: line)
   }
 }

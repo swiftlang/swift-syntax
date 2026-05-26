@@ -757,7 +757,7 @@ extension ParserTestCase {
     }
 
     if !longTestsDisabled {
-      DispatchQueue.concurrentPerform(iterations: Array(tree.tokens(viewMode: .all)).count) { tokenIndex in
+      performConcurrentIfPossible(iterations: Array(tree.tokens(viewMode: .all)).count) { tokenIndex in
         let flippedTokenTree = TokenPresenceFlipper(flipTokenAtIndex: tokenIndex).rewrite(Syntax(tree))
         _ = ParseDiagnosticsGenerator.diagnostics(for: flippedTokenTree)
         Self.assertMutationRoundTrip(
@@ -776,7 +776,7 @@ extension ParserTestCase {
         replacements in
         return replacements.map { (offset, $0) }
       }
-      DispatchQueue.concurrentPerform(iterations: mutations.count) { index in
+      performConcurrentIfPossible(iterations: mutations.count) { index in
         let mutation = mutations[index]
         let alternateSource = MutatedTreePrinter.print(
           tree: Syntax(tree),

@@ -245,6 +245,16 @@ extension Parser {
       break
     }
 
+    // If the current token can start neither a pattern nor an expression, this
+    // is a pattern position with no recoverable content. Return a missing
+    // pattern directly so diagnostics describe the missing node as a pattern
+    // rather than an expression wrapped in an expression-pattern.
+    if !self.atStartOfExpression()
+      && !self.withLookahead({ $0.canParsePattern() })
+    {
+      return RawPatternSyntax(RawMissingPatternSyntax(arena: self.arena))
+    }
+
     // Fall back to expression parsing for ambiguous forms. Name lookup will
     // disambiguate.
     let patternSyntax = self.parseSequenceExpression(flavor: .stmtCondition, pattern: context)

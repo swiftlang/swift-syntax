@@ -82,12 +82,36 @@ final class SwitchTests: ParserTestCase {
       }
       """,
       diagnostics: [
-        DiagnosticSpec(message: "expected expression and ':' in switch case", fixIts: ["insert expression and ':'"])
+        DiagnosticSpec(message: "expected pattern and ':' in switch case", fixIts: ["insert pattern and ':'"])
       ],
       fixedSource: """
         func parseError3(x: Int) {
           switch x {
-            case <#expression#>:
+            case <#pattern#>:
+          }
+        }
+        """
+    )
+  }
+
+  func testSwitch4b() {
+    assertParse(
+      """
+      func parseError3b(x: Int) {
+        switch x {
+          case 1️⃣:
+            break
+        }
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "expected pattern in switch case", fixIts: ["insert pattern"])
+      ],
+      fixedSource: """
+        func parseError3b(x: Int) {
+          switch x {
+            case <#pattern#>:
+              break
           }
         }
         """

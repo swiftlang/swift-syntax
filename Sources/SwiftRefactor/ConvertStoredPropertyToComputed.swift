@@ -69,15 +69,20 @@ public struct ConvertStoredPropertyToComputed: SyntaxRefactoringProvider {
     if let existingType = binding.typeAnnotation {
       typeAnnotation = existingType
     } else if let providedType = context.type {
-      typeAnnotation = TypeAnnotationSyntax(type: providedType)
+      typeAnnotation = TypeAnnotationSyntax(
+        colon: .colonToken(trailingTrivia: .space),
+        type: providedType
+      )
     } else {
       typeAnnotation = TypeAnnotationSyntax(
+        colon: .colonToken(trailingTrivia: .space),
         type: TypeSyntax(stringLiteral: "<#Type#>")
       )
     }
 
     let newBinding =
       binding
+      .with(\.pattern, binding.pattern.with(\.trailingTrivia, []))
       .with(\.initializer, nil)
       .with(\.typeAnnotation, typeAnnotation)
       .with(

@@ -696,6 +696,23 @@ final class BasicFormatTest: XCTestCase {
     )
   }
 
+  func testFloatLiteralPeriod() {
+    // Version numbers should not get a space before the period
+    assertFormattingRoundTrips(
+      """
+      #if canImport(SomeKit, _underlyingVersion: 8.0.4)
+      import SomeKit
+      #endif
+
+      """
+    )
+  }
+
+  func testFloatLiteralMemberAccess() {
+    // Float literal member access should not get a space either
+    assertFormattingRoundTrips("1.0.description")
+  }
+
   func testColonColon() {
     assertFormatted(
       tree: DeclReferenceExprSyntax(

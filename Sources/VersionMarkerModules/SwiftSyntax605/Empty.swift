@@ -2,7 +2,7 @@
 //
 // This source file is part of the Swift.org open source project
 //
-// Copyright (c) 2014 - 2023 Apple Inc. and the Swift project authors
+// Copyright (c) 2014 - 2026 Apple Inc. and the Swift project authors
 // Licensed under Apache License v2.0 with Runtime Library Exception
 //
 // See https://swift.org/LICENSE.txt for license information
@@ -10,8 +10,6 @@
 //
 //===----------------------------------------------------------------------===//
 
-#include <stdint.h>
-
-/// On macOS returns the number of instructions the process has executed since
-/// it was launched, on all other platforms returns 0.
-uint64_t getInstructionsExecuted(void);
+// The SwiftSyntax605 module is intentionally empty.
+// It serves as an indicator which version of swift-syntax a package is building against.
+// See the 'Macro Versioning.md' document for more details.

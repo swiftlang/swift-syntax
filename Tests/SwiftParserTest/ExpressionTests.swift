@@ -2775,20 +2775,18 @@ final class StatementExpressionTests: ParserTestCase {
       diagnostics: [
         DiagnosticSpec(
           locationMarker: "1️⃣",
-          // FIXME: "expected attribute name after '@'". https://github.com/swiftlang/swift-syntax/issues/3159
-          message: "expected type in attribute",
-          fixIts: ["insert type"]
+          message: "expected name in attribute",
+          fixIts: ["insert name"]
         ),
         DiagnosticSpec(
           locationMarker: "2️⃣",
-          // FIXME: "expected pattern and ':' in switch case". https://github.com/swiftlang/swift-syntax/issues/3158
-          message: "expected expression and ':' in switch case",
-          fixIts: ["insert expression and ':'"]
+          message: "expected pattern and ':' in switch case",
+          fixIts: ["insert pattern and ':'"]
         ),
       ],
       fixedSource: """
         switch x {
-          @<#identifier#> case <#expression#>:
+          @<#identifier#> case <#pattern#>:
         }
         """
     )

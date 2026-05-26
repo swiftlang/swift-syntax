@@ -84,7 +84,7 @@ public enum PluginToHostMessage: Codable {
 
 @_spi(PluginMessage)
 public enum PluginMessage {
-  public static var PROTOCOL_VERSION_NUMBER: Int { 7 }  // Pass extension protocol list
+  public static var PROTOCOL_VERSION_NUMBER: Int { 8 }  // Syntax.Kind.accessor
 
   public struct HostCapability: Codable {
     var protocolVersion: Int
@@ -256,6 +256,7 @@ public enum PluginMessage {
       case type
       case pattern
       case attribute
+      case accessor
     }
     public var kind: Kind
     public var source: String

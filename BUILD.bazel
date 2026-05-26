@@ -11,6 +11,7 @@
 ##===----------------------------------------------------------------------===##
 
 load("@build_bazel_rules_apple//apple/testing/default_runner:ios_xctestrun_runner.bzl", "ios_xctestrun_runner")
+load("@rules_cc//cc:cc_library.bzl", "cc_library")
 load("//utils/bazel:swift_syntax_library.bzl", "swift_syntax_library", "swift_syntax_test")
 
 package(default_visibility = ["//visibility:public"])
@@ -100,6 +101,7 @@ swift_syntax_library(
     deps = [
         ":SwiftDiagnostics",
         ":SwiftOperators",
+        ":SwiftParser",
         ":SwiftSyntax",
         ":SwiftSyntaxBuilder",
     ],
@@ -224,6 +226,7 @@ swift_syntax_library(
         ":SwiftSyntax602",
         ":SwiftSyntax603",
         ":SwiftSyntax604",
+        ":SwiftSyntax605",
         ":_SwiftSyntaxCShims",
     ],
 )
@@ -273,6 +276,13 @@ swift_syntax_library(
 swift_syntax_library(
     name = "SwiftSyntax604",
     srcs = glob(["Sources/VersionMarkerModules/SwiftSyntax604/**/*.swift"]),
+    deps = [
+    ],
+)
+
+swift_syntax_library(
+    name = "SwiftSyntax605",
+    srcs = glob(["Sources/VersionMarkerModules/SwiftSyntax605/**/*.swift"]),
     deps = [
     ],
 )
@@ -339,6 +349,7 @@ swift_syntax_library(
     deps = [
         ":SwiftDiagnostics",
         ":SwiftIDEUtils",
+        ":SwiftIfConfig",
         ":SwiftParser",
         ":SwiftSyntaxMacroExpansion",
         ":SwiftSyntaxMacros",
@@ -384,6 +395,27 @@ swift_syntax_test(
     ],
 )
 
+swift_syntax_library(
+    name = "SwiftWarningControl",
+    deps = [
+        ":SwiftDiagnostics",
+        ":SwiftParser",
+        ":SwiftSyntax",
+        ":SwiftIfConfig",
+    ],
+)
+
+swift_syntax_test(
+    name = "SwiftWarningControlTest",
+    deps = [
+        ":SwiftIfConfig",
+        ":SwiftParser",
+        ":SwiftSyntaxMacrosGenericTestSupport",
+        ":SwiftWarningControl",
+        ":_SwiftSyntaxTestSupport",
+    ],
+)
+
 cc_library(
     name = "_InstructionCounter",
     srcs = glob(["Sources/_InstructionCounter/src/*.c"]),
@@ -395,6 +427,7 @@ cc_library(
 
 cc_library(
     name = "_SwiftLibraryPluginProviderCShims",
+    srcs = glob(["Sources/_SwiftLibraryPluginProviderCShims/*.c"]),
     hdrs = glob(["Sources/_SwiftLibraryPluginProviderCShims/include/*.h"]),
     aspect_hints = ["@build_bazel_rules_swift//swift:auto_module"],
     includes = ["Sources/_SwiftLibraryPluginProviderCShims/include"],

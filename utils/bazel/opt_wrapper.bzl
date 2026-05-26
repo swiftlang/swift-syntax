@@ -18,6 +18,7 @@ benefits of compiler optimizations.
 """
 
 load("@build_bazel_rules_swift//swift:swift.bzl", "SwiftInfo")
+load("@rules_cc//cc/common:cc_info.bzl", "CcInfo")
 
 def _force_opt_impl(settings, _attr):
     return {

@@ -152,8 +152,9 @@ func nodesDescriptionAndCommonParent(
     isOnlyTokenWithNonMissingText = false
   }
 
-  // If all tokens in the parent are missing, return the parent type name unless
-  // we are replacing by a single token that has explicit text, in which case we
+  // If all tokens in the common ancestor are missing, describe it by the name
+  // in the parent if available, otherwise by its type name. Unless we are
+  // replacing by a single token that has explicit text, in which case we
   // return that explicit text.
   if let commonAncestor = findCommonAncestor(missingSyntaxNodes),
     commonAncestor.isMissingAllTokens,
@@ -163,9 +164,9 @@ func nodesDescriptionAndCommonParent(
     missingSyntaxNodes.contains(Syntax(lastToken)),
     !isOnlyTokenWithNonMissingText
   {
-    if let nodeTypeName = commonAncestor.nodeTypeNameForDiagnostics(allowBlockNames: true) {
-      return (commonAncestor, nodeTypeName)
-    } else if let nodeTypeName = commonAncestor.childNameInParent {
+    if let childName = commonAncestor.childNameInParent {
+      return (commonAncestor, childName)
+    } else if let nodeTypeName = commonAncestor.nodeTypeNameForDiagnostics(allowBlockNames: true) {
       return (commonAncestor, nodeTypeName)
     }
   }

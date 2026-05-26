@@ -60,13 +60,13 @@ public struct DiagnosticsFormatter {
     // An abstraction for a diagnostic or note that is anchored to a source line.
     enum Annotation {
       case diagnostic(Diagnostic)
-      case note(Note, category: DiagnosticCategory?)
+      case note(Note)
 
       func location(converter: SourceLocationConverter) -> SourceLocation {
         switch self {
         case .diagnostic(let diag):
           return diag.location(converter: converter)
-        case .note(let note, _):
+        case .note(let note):
           return note.location(converter: converter)
         }
       }
@@ -149,7 +149,7 @@ public struct DiagnosticsFormatter {
     // Compute the set of highlight ranges that land on this line. These
     // are column ranges, sorted in order of increasing starting column, and
     // with overlapping ranges merged.
-    let highlightRanges: [Range<Int>] = annotatedLine.annotations.map { annotation in 
+    let highlightRanges: [Range<Int>] = annotatedLine.annotations.map { annotation in
       // Only diagnostics have highlights; notes don't.
       switch annotation {
       case .diagnostic(let diag):
@@ -231,7 +231,7 @@ public struct DiagnosticsFormatter {
   /// - Parameters:
   ///   - tree: The syntax tree for which diagnostics should be printed
   ///   - diags: The diagnostics to print
-  ///   - indentString: The string prefixed to each line of the annotated 
+  ///   - indentString: The string prefixed to each line of the annotated
   ///       source.
   ///   - suffixTexts: Suffix text to be printed at the given absolute
   ///       locations within the source file.
@@ -262,7 +262,7 @@ public struct DiagnosticsFormatter {
       if includeNotes {
         for note in diagnostic.notes {
           let line = note.location(converter: slc).line
-          annotationsPerLine[line, default: []].append(.note(note, category: diagnostic.diagMessage.category))
+          annotationsPerLine[line, default: []].append(.note(note))
         }
       }
     }
@@ -282,7 +282,7 @@ public struct DiagnosticsFormatter {
 
         return AnnotatedSourceLine(
           annotations: annotationsPerLine[lineNumber] ?? [],
-          sourceString: sourceLine, 
+          sourceString: sourceLine,
           suffixText: suffixTextPerLine[lineNumber] ?? ""
         )
       }
@@ -350,15 +350,15 @@ public struct DiagnosticsFormatter {
 
       // Remove any trailing newline and replace it.
       //
-      // This may seem counterintuitive, but if we're running within CMake 
+      // This may seem counterintuitive, but if we're running within CMake
       // and we let a '\r\n' through, CMake will turn that into *two* newlines.
       if let last = annotatedSource.last, last.isNewline {
         annotatedSource.removeLast()
       }
       annotatedSource.append("\n")
 
-      // Group annotations by column. 
-      // 
+      // Group annotations by column.
+      //
       // Helps render multiple diagnostics in one line, e.g.
       // 1 | foo.[].[].[]
       //   |     |  |  `- error: expected name in member access
@@ -372,7 +372,7 @@ public struct DiagnosticsFormatter {
           annotatedLine.characterColumn(ofUtf8Column: annotation.location(converter: slc).column)
         }
       )
-      // Then, group annotations by column, and sort so that annotations for 
+      // Then, group annotations by column, and sort so that annotations for
       // later columns are printed first.
       let annotationsPerColumn = Dictionary(grouping: annotatedLine.annotations) { annotation in
         annotatedLine.characterColumn(ofUtf8Column: annotation.location(converter: slc).column)
@@ -400,12 +400,14 @@ public struct DiagnosticsFormatter {
         // Print annotations for this column.
         for (index, annotation) in lineAnnotations.enumerated() {
           // Decorate the diagnostic or note using the diagnostic decorator.
-          let decoratedMessage = switch annotation {
-          case .diagnostic(let diag):
-            diagnosticDecorator.decorateDiagnosticMessage(diag.diagMessage)
-          case .note(let note, let category):
-            diagnosticDecorator.decorateMessage(note.message, basedOnSeverity: .note, category: category)
-          }
+          let decoratedMessage =
+            switch annotation {
+            case .diagnostic(let diag):
+              diagnosticDecorator.decorateDiagnosticMessage(diag.diagMessage)
+            case .note(let note):
+              // Attached notes don't inherit the category chain of the main diagnostic.
+              diagnosticDecorator.decorateMessage(note.message, basedOnSeverity: .note, categoryChain: [])
+            }
 
           // Compute annotation header
           // We use "|-" for intermediate annotations, and "`-" for the last annotation.

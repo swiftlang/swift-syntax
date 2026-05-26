@@ -243,7 +243,7 @@ public struct DiagnosticsFormatter {
     diags: [Diagnostic],
     indentString: String,
     suffixTexts: [AbsolutePosition: String],
-    includeNotes: Bool = false,
+    includeNotes: Bool = true,
     sourceLocationConverter: SourceLocationConverter? = nil
   ) -> String {
     let slc = sourceLocationConverter ?? SourceLocationConverter(fileName: "<unknown>", tree: tree)

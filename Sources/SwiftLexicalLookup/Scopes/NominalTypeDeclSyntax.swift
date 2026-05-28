@@ -15,8 +15,6 @@ import SwiftSyntax
 @_spi(Experimental)
 public protocol NominalTypeDeclSyntax: LookInMembersScopeSyntax, NamedDeclSyntax, WithGenericParametersScopeSyntax {
   var genericParameterClause: GenericParameterClauseSyntax? { get }
-  var genericWhereClause: GenericWhereClauseSyntax? { get }
-  var inheritanceClause: InheritanceClauseSyntax? { get }
 }
 
 extension NominalTypeDeclSyntax {
@@ -43,7 +41,7 @@ extension NominalTypeDeclSyntax {
     } else if name.range.contains(lookUpPosition) || genericWhereClause?.range.contains(lookUpPosition) ?? false {
       return lookupInParent(identifier, at: lookUpPosition, with: config)
     } else {
-      return [.lookForMembers(in: Syntax(self))] + lookupInParent(identifier, at: lookUpPosition, with: config)
+      return [.lookForMembers(in: self)] + lookupInParent(identifier, at: lookUpPosition, with: config)
     }
   }
 }

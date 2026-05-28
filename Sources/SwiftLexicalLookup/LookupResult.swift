@@ -17,7 +17,7 @@ public enum LookupResult {
   /// Scope and the names that matched lookup.
   case fromScope(Syntax, withNames: [LookupName])
   /// Indicates where to perform member lookup.
-  case lookForMembers(in: Syntax)
+  case lookForMembers(in: any DeclGroupSyntax)
   /// Indicates to lookup generic parameters of extended type.
   ///
   /// ### Example

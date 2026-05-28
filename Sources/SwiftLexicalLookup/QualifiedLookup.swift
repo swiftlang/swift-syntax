@@ -187,23 +187,29 @@ extension DeclGroupSyntax {
   /// - lookUpPosition: Indicates position where we should
   ///     start lookup. Will enable future expansion that filters
   ///     by access control.
-  func lookupMember(
+  public func lookupMember(
     _ identifier: Identifier?,
     // TODO: Consider changing this and unqualified lookup to "lookupPosition"
     // since "lookup" functions as a noun here.
     from lookUpPosition: AbsolutePosition?,
     with config: QualifiedLookupConfig = QualifiedLookupConfig()
   ) -> [QualifiedLookupResult] {
+    // FIXME: Implement
     []
   }
 
-  // Same as above but can look up supertypes in SymbolTable
-  func lookupMember(
+  /// Search for members matching given identifier in the given symbol table.
+  /// Parameters:
+  /// - lookUpPosition: Indicates position where we should
+  ///     start lookup. Will enable future expansion that filters
+  ///     by access control.
+  public func lookupMember(
     _ identifier: Identifier?,
     from lookUpPosition: AbsolutePosition?,
     using symbolTable: SymbolTable,
     with config: QualifiedTableLookupConfig = QualifiedTableLookupConfig()
   ) -> [QualifiedLookupResult] {
+    // FIXME: Implement
     []
   }
 }

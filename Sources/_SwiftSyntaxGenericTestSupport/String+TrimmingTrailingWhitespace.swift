@@ -15,7 +15,7 @@ extension String {
     return
       self
       .split(separator: "\n", omittingEmptySubsequences: false)
-      .map { $0.droppingLast(while: \.isWhitespace) }
+      .map { $0.droppingLast(while: { $0.isWhitespace }) }
       .joined(separator: "\n")
   }
 }

@@ -252,7 +252,12 @@ public class NameMatcher: SyntaxAnyVisitor {
     }
 
     if case .stringSegment = token.tokenKind {
-      while let baseNamePosition = positionsToResolve.first(where: { token.rangeWithoutTrivia.contains($0) }) {
+      // Iterate a snapshot: `addResolvedLocIfRequested` is the only path that
+      // removes a position from `positionsToResolve`, and it is skipped when
+      // `getFirstTokenLength` returns `nil`. A `while let .first(where:)` loop
+      // would re-pick any such position forever.
+      let positionsInToken = positionsToResolve.filter { token.rangeWithoutTrivia.contains($0) }
+      for baseNamePosition in positionsInToken {
         let positionOffsetInStringSegment = baseNamePosition.utf8Offset - token.position.utf8Offset
         guard let tokenLength = getFirstTokenLength(in: token.syntaxTextBytes[positionOffsetInStringSegment...]) else {
           continue

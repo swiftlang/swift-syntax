@@ -47,8 +47,8 @@ public let PATTERN_NODES: [Node] = [
 
       ### Examples
 
-      ``IdentifierPatternSyntax`` can be used in simplple variable declarations.
-      For example `a` in the exmaple:
+      ``IdentifierPatternSyntax`` can be used in simple variable declarations.
+      For example `a` in the example:
 
       ```swift
       let a = 1

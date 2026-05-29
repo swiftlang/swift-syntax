@@ -1617,8 +1617,8 @@ public struct GuardStmtSyntax: StmtSyntaxProtocol, SyntaxHashable, _LeafStmtSynt
 /// 
 /// ### Examples
 /// 
-/// ``IdentifierPatternSyntax`` can be used in simplple variable declarations.
-/// For example `a` in the exmaple:
+/// ``IdentifierPatternSyntax`` can be used in simple variable declarations.
+/// For example `a` in the example:
 /// 
 /// ```swift
 /// let a = 1

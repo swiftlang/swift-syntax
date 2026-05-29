@@ -27,7 +27,6 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
   case emptyVersionComponent(syntax: ExprSyntax)
   case compilerVersionOutOfRange(value: Int, upperLimit: Int, syntax: ExprSyntax)
   case compilerVersionSecondComponentNotWildcard(syntax: ExprSyntax)
-  case compilerVersionTooManyComponents(syntax: ExprSyntax)
   case canImportMissingModule(syntax: ExprSyntax)
   case canImportLabel(syntax: ExprSyntax)
   case canImportTwoParameters(syntax: ExprSyntax)
@@ -67,9 +66,6 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
 
     case .compilerVersionSecondComponentNotWildcard(syntax: _):
       return "the second version component is not used for comparison in legacy compiler versions"
-
-    case .compilerVersionTooManyComponents(syntax: _):
-      return "compiler version must not have more than five components"
 
     case .canImportMissingModule(syntax: _):
       return "'canImport' requires a module name"
@@ -126,7 +122,6 @@ enum IfConfigDiagnostic: Error, CustomStringConvertible {
       .invalidVersionOperand(name: _, let syntax),
       .emptyVersionComponent(let syntax),
       .compilerVersionOutOfRange(value: _, upperLimit: _, let syntax),
-      .compilerVersionTooManyComponents(let syntax),
       .compilerVersionSecondComponentNotWildcard(let syntax),
       .canImportMissingModule(let syntax),
       .canImportLabel(let syntax),
@@ -158,7 +153,8 @@ extension IfConfigDiagnostic: DiagnosticMessage {
 
   var severity: SwiftDiagnostics.DiagnosticSeverity {
     switch self {
-    case .compilerVersionSecondComponentNotWildcard, .ignoredTrailingComponents,
+    case .compilerVersionSecondComponentNotWildcard,
+      .ignoredTrailingComponents,
       .likelySimulatorPlatform, .likelyTargetOS, .endiannessDoesNotMatch,
       .macabiIsMacCatalyst:
       return .warning

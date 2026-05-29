@@ -345,6 +345,33 @@ public class EvaluateTests: XCTestCase {
     assertIfConfig("compiler(>=5.8)", .active)
     assertIfConfig("compiler(>=5.9)", .active)
     assertIfConfig("compiler(>=5.10)", .unparsed)
+    assertIfConfig("compiler(>=5.8.0.0.0)", .active)
+    assertIfConfig(
+      "compiler(>=5.8.0.0.0.0)",
+      .active,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "trailing components of version '5.8.0.0.0' are ignored",
+          line: 1,
+          column: 12,
+          severity: .warning,
+          highlights: [".", "0"]
+        )
+      ]
+    )
+    assertIfConfig(
+      "compiler(>=5.10.0.0.0.0)",
+      .unparsed,
+      diagnostics: [
+        DiagnosticSpec(
+          message: "trailing components of version '5.10.0.0.0' are ignored",
+          line: 1,
+          column: 12,
+          severity: .warning,
+          highlights: [".", "0"]
+        )
+      ]
+    )
     assertIfConfig(#"_compiler_version("5009.*.1")"#, .active)
     assertIfConfig(#"_compiler_version("5009.*.3.2.3")"#, .unparsed)
     assertIfConfig(#"_compiler_version("5010.*.0")"#, .unparsed)
@@ -440,10 +467,11 @@ public class EvaluateTests: XCTestCase {
       .inactive,
       diagnostics: [
         DiagnosticSpec(
-          message: "trailing components of version '5009.10.5.4' are ignored",
+          message: "trailing components of version '5009.10.5.4.2' are ignored",
           line: 1,
           column: 44,
-          severity: .warning
+          severity: .warning,
+          highlights: [".", "3", ".", "5"]
         )
       ]
     )

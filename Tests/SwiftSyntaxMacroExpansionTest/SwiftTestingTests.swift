@@ -62,12 +62,15 @@ struct SwiftTestingMacroExpansionTests {
         return false
       }
 
-      #expect(issue.sourceLocation == .init(
-        fileID: "ExampleModule/ExampleTest.swift",
-        filePath: "path/to/ExampleTest.swift",
-        line: 9999,
-        column: 8888
-      ))
+      #expect(
+        issue.sourceLocation
+          == .init(
+            fileID: "ExampleModule/ExampleTest.swift",
+            filePath: "path/to/ExampleTest.swift",
+            line: 9999,
+            column: 8888
+          )
+      )
 
       return true
     }

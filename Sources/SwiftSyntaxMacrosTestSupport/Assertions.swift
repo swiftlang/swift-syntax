@@ -147,7 +147,7 @@ public func assertMacroExpansion(
       )
       #endif
 
-#if compiler(<6.4)
+      #if compiler(<6.4)
       // Record an XCTest failure.
       //
       // Only do this in pre-6.4 toolchains. In 6.4 and later toolchains,
@@ -155,7 +155,7 @@ public func assertMacroExpansion(
       // means that the call to `Issue.record()` above will be propagated to
       // XCTest as well.
       XCTFail($0.message, file: $0.location.staticFilePath, line: $0.location.unsignedLine)
-#endif
+      #endif
     },
     fileID: fileID,
     filePath: file,

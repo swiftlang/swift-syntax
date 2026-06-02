@@ -32,18 +32,16 @@ import SwiftSyntax
 /// ```swift
 /// ##"The # of values is \(count)"##
 /// ##"Hello \#(world)"##
-/// "Hello World"
+/// #"Hello World"#
 /// ```
 public struct FormatRawStringLiteral: SyntaxRefactoringProvider {
   public static func refactor(syntax lit: StringLiteralExprSyntax, in context: Void) -> StringLiteralExprSyntax {
     var maximumHashes = 0
     for segment in lit.segments {
       switch segment {
-      case .expressionSegment(let expr):
-        if let rawStringDelimiter = expr.pounds {
-          // Pick up any delimiters in interpolation segments \#...#(...)
-          maximumHashes = max(maximumHashes, rawStringDelimiter.text.longestRun(of: "#"))
-        }
+      case .expressionSegment:
+        // Valid string interpolations require matching the delimiter count
+        return lit
       case .stringSegment(let string):
         // Find the longest run of # characters in the content of the literal.
         maximumHashes = max(maximumHashes, string.content.text.longestRun(of: "#"))
@@ -54,14 +52,8 @@ public struct FormatRawStringLiteral: SyntaxRefactoringProvider {
       }
     }
 
-    guard maximumHashes > 0 else {
-      return
-        lit
-        .with(\.openingPounds, lit.openingPounds?.with(\.tokenKind, .rawStringPoundDelimiter("")))
-        .with(\.closingPounds, lit.closingPounds?.with(\.tokenKind, .rawStringPoundDelimiter("")))
-    }
-
-    let delimiters = String(repeating: "#", count: maximumHashes + 1)
+    // Ensure at least one delimiter for raw string literals
+    let delimiters = String(repeating: "#", count: max(1, maximumHashes + 1))
     return
       lit
       .with(\.openingPounds, lit.openingPounds?.with(\.tokenKind, .rawStringPoundDelimiter(delimiters)))

@@ -269,8 +269,26 @@ func evaluateIfConfig(
 
       // Parse the version.
       let opToken = unaryArg.operator
-      guard let version = VersionTuple(parsing: unaryArg.expression.trimmedDescription) else {
+      guard var version = VersionTuple(parsing: unaryArg.expression.trimmedDescription) else {
         return recordError(.invalidVersionOperand(name: fnName, syntax: unaryArg.expression))
+      }
+
+      if version.components.count > 5 {
+        let trailingHighlights = trailingMemberAccessSyntaxes(
+          of: unaryArg.expression,
+          trailingCount: version.components.count - 5
+        )
+        version.components.removeSubrange(5...)
+        extraDiagnostics.append(
+          Diagnostic(
+            node: unaryArg.expression,
+            message: IfConfigDiagnostic.ignoredTrailingComponents(
+              version: version,
+              syntax: unaryArg.expression
+            ),
+            highlights: trailingHighlights
+          )
+        )
       }
 
       switch opToken.text {
@@ -479,16 +497,25 @@ func evaluateIfConfig(
         }
 
         // Remove excess components from the version,
-        if versionTuple.components.count > 4 {
+        if versionTuple.components.count > 5 {
+          let trailingHighlights = trailingMemberAccessSyntaxes(
+            of: secondArg.expression,
+            trailingCount: versionTuple.components.count - 5
+          )
+
           // Remove excess components.
-          versionTuple.components.removeSubrange(4...)
+          versionTuple.components.removeSubrange(5...)
 
           // Warn that we did this.
           extraDiagnostics.append(
-            IfConfigDiagnostic.ignoredTrailingComponents(
-              version: versionTuple,
-              syntax: secondArg.expression
-            ).asDiagnostic
+            Diagnostic(
+              node: secondArg.expression,
+              message: IfConfigDiagnostic.ignoredTrailingComponents(
+                version: versionTuple,
+                syntax: secondArg.expression
+              ),
+              highlights: trailingHighlights
+            )
           )
         }
 
@@ -675,6 +702,38 @@ private func diagnoseLikelyTargetOSTest(
   guard let replacement = targetOSNameMap[osName] else { return nil }
 
   return IfConfigDiagnostic.likelyTargetOS(syntax: ExprSyntax(reference), replacement: replacement).asDiagnostic
+}
+
+/// Returns the period and component-name tokens of the trailing
+/// `MemberAccessExprSyntax`es of a dotted version expression like
+/// `5.8.1.2.3.4`, suitable for use as ``Diagnostic`` highlights covering the
+/// trailing portion of the version. Returns an empty array when `expr` does
+/// not have at least `trailingCount` member accesses.
+private func trailingMemberAccessSyntaxes(
+  of expr: ExprSyntax,
+  trailingCount: Int
+) -> [Syntax] {
+  // Walk the chain of member accesses, outermost first. Each member access
+  // contributes one component to the version, with the outermost holding the
+  // last component.
+  var memberAccesses: [MemberAccessExprSyntax] = []
+  var current: ExprSyntax = expr
+  while let memberAccess = current.as(MemberAccessExprSyntax.self),
+    let base = memberAccess.base
+  {
+    memberAccesses.append(memberAccess)
+    current = base
+  }
+
+  guard trailingCount > 0, trailingCount <= memberAccesses.count else {
+    return []
+  }
+
+  // `memberAccesses` is outermost-first (last component first), so iterate in
+  // reverse to emit highlights in source order.
+  return memberAccesses.prefix(trailingCount).reversed().flatMap {
+    [Syntax($0.period), Syntax($0.declName)]
+  }
 }
 
 // TARGET_OS_* macros that don’t have a direct Swift equivalent

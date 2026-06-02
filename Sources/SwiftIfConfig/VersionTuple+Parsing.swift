@@ -92,7 +92,13 @@ extension VersionTuple {
 
     // Only allowed to specify up to 5 version components.
     if components.count > 5 {
-      throw IfConfigDiagnostic.compilerVersionTooManyComponents(syntax: versionSyntax)
+      components.removeSubrange(5...)
+      extraDiagnostics.append(
+        IfConfigDiagnostic.ignoredTrailingComponents(
+          version: VersionTuple(components: components),
+          syntax: versionSyntax
+        ).asDiagnostic
+      )
     }
 
     // In the beginning, '_compiler_version(string-literal)' was designed for a

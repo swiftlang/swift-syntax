@@ -110,6 +110,7 @@ final class StringInterpolationTests: XCTestCase {
     XCTAssertTrue(structNode.is(StructDeclSyntax.self))
   }
 
+  @inline(never)  // Workaround for https://github.com/swiftlang/swift/issues/88199
   func testSourceFile() {
     let _: SourceFileSyntax =
       """

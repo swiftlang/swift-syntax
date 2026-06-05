@@ -20,8 +20,8 @@ jobs:
     with:
       enable_wasm_sdk_build: true
       wasm_sdk_build_command: "swift test -c release --explicit-target-dependency-import-check error --toolset Toolsets/wasi-test-toolset.json"
-      linux_build_command: "swift test --explicit-target-dependency-import-check error"
-      windows_build_command: "Invoke-Program swift test --explicit-target-dependency-import-check error"
+      linux_build_command: "swift test --explicit-target-dependency-import-check error -c release"
+      windows_build_command: "Invoke-Program swift test --explicit-target-dependency-import-check error -c release"
   soundness:
     name: Soundness
     uses: swiftlang/github-workflows/.github/workflows/soundness.yml@0.0.9

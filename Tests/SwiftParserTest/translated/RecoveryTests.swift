@@ -3419,8 +3419,7 @@ final class RecoveryTests: ParserTestCase {
         ),
       ]),
       diagnostics: [
-        // FIXME: expected *declaration* after attribute
-        DiagnosticSpec(message: "expected statements after attribute", fixIts: ["insert statements"])
+        DiagnosticSpec(message: "expected declaration after attribute", fixIts: ["insert declaration"])
       ],
       fixedSource: """
         func foo() {

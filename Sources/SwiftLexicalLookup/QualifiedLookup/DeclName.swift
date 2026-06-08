@@ -31,8 +31,13 @@ import SwiftSyntax
   /// Both flags are off when the user failed to specify
   /// their macro's type.
   @_spi(_QualifiedLookup) public struct MacroType: Hashable {
-    let isFreestanding: Bool
-    let isAttached: Bool
+    public let isFreestanding: Bool
+    public let isAttached: Bool
+
+    public init(isFreestanding: Bool, isAttached: Bool) {
+      self.isFreestanding = isFreestanding
+      self.isAttached = isAttached
+    }
   }
 
   /// A declaration name formed by an identifier and, possibly, an argument list.

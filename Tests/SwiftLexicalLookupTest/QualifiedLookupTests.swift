@@ -11,12 +11,10 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+@_spi(_QualifiedLookup) @_spi(Experimental) import SwiftLexicalLookup
 import SwiftParser
 import SwiftSyntax
 import XCTest
-
-// TODO: Fully switch over to `@_spi(_QualifiedLookup)`
-@_spi(_QualifiedLookup) @_spi(Experimental) @testable import SwiftLexicalLookup
 
 /// Source code annotated with qualified-lookup expectations.
 ///
@@ -500,37 +498,4 @@ final class TestQualifiedLookup: XCTestCase {
       """
     )
   }
-  // func testEnumCase() {
-  //   assertTypeMemberLookup(
-  //     """
-  //     struct MyStruct {
-  //       // We assume the user meant static functions (diagnosed elsewhere)
-  //       case \(.named("case1").static())
-  //            case1,
-  //            \(.named("case2", args: ["a"]).static())
-  //            case2(a: Int)
-  //     }
-  //     """
-  //   )
-  // }
-
-  // TODO: Test lookup of an associated type and how it interacts with MyProto.Type, etc.
-
-  // TODO: Test multiple variables/patterns and finding those, e.g., var a, b, c: Int {}, etc.
-
-  // TODO: Test weird parameters: variadics (+packs) & trailing closures.
-
-  // TODO: Test nested and non-nested (invalid) macro lookup
-  // TODO: Test macro and non-`macro` attributes, e.g., actors, result builders, property wrappers
-
-  // TODO: Test property wrapper lookup? (idk if it's in scope)
-
-  // TODO: Test cycles, e.g. struct A { typealias Element = B.Element }; struct B { typealias Element = A }
-  // typealias A = B; typealias B = A. Or protocol A: B {}; protocol B: A {}
-
-  // TODO: Handle lookup in struct nested inside function, e.g. func hi() { struct Hello { var a }; Hello().a }
-
-  // TODO: Think about isolation use cases? (That seems more like type checking)
-
-  // TODO: Macro test, e.g. @freestanding macro noargsButCallable() = ...; #closure(args)
 }

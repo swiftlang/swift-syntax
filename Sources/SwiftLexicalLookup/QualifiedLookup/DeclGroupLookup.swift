@@ -14,8 +14,7 @@ import SwiftIfConfig
 import SwiftSyntax
 
 public struct DeclGroupSyntaxType: SyntaxProtocol {
-  // TODO: Consider using the underlying syntax node (like ``ValueDeclSyntax``)
-  public var _syntaxNode: Syntax
+  public internal(set) var _syntaxNode: Syntax
 
   public init?(_ node: borrowing some SyntaxProtocol) {
     switch node._syntaxNode.kind {
@@ -144,17 +143,6 @@ extension DeclGroupSyntax {
   ) -> [ValueDeclSyntax] {
     /// Filter the given declaration based on the given ``name`` and ``memberKind``
     func filterDecl(_ valueDecl: ValueDeclSyntax) -> ValueDeclSyntax? {
-      // Check name matches
-      // // TODO: Remove debuggins statement
-      // if let name {
-      //   print(
-      //     "[Lookup Debugging] Match between \(valueDecl.declName) and \(name) is:",
-      //     valueDecl.declName.tryMatch(reference: name.baseName),
-      //     "with kind match:",
-      //     valueDecl.isKind(memberKind)
-      //   )
-      // }
-
       // If given a name, check for a match
       if let expectedName = name,
         case .failure = valueDecl.declName.tryMatch(reference: expectedName.baseName)

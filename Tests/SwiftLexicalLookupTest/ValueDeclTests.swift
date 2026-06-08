@@ -11,11 +11,10 @@
 //===----------------------------------------------------------------------===//
 
 import Foundation
+@_spi(Experimental) @_spi(_QualifiedLookup) import SwiftLexicalLookup
 import SwiftParser
 import SwiftSyntax
 import XCTest
-
-@_spi(Experimental) @_spi(_QualifiedLookup) @testable import SwiftLexicalLookup
 
 /// Visitor class helper used in ``SyntaxProtocol/children``
 private class SyntaxAsTypeVisitor<T: SyntaxProtocol>: SyntaxAnyVisitor {

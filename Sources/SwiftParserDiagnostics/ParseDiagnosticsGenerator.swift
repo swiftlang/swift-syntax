@@ -1450,6 +1450,72 @@ public class ParseDiagnosticsGenerator: SyntaxAnyVisitor {
     return handleMissingSyntax(node, additionalHandledNodes: [node.placeholder.id])
   }
 
+  public override func visit(_ node: OptionalTypeSyntax) -> SyntaxVisitorContinueKind {
+    if handledNodes.contains(node.id) {
+      return .skipChildren
+    }
+
+    if let someOrAny = node.wrappedType.as(SomeOrAnyTypeSyntax.self),
+      let tupleType = someOrAny.constraint.as(TupleTypeSyntax.self),
+      tupleType.leftParen.isMissing,
+      tupleType.rightParen.isMissing,
+      let element = tupleType.elements.only,
+      element.type.is(CompositionTypeSyntax.self)
+    {
+      addDiagnostic(
+        node,
+        position: node.questionMark.positionAfterSkippingLeadingTrivia,
+        .ambiguousOptionalComposition,
+        fixIts: [
+          FixIt(
+            message: .parenthesizeComposition,
+            changes: [
+              .makePresent(tupleType.leftParen),
+              .makePresent(tupleType.rightParen),
+            ]
+          )
+        ],
+        handledNodes: [node.id, tupleType.id]
+      )
+    } else {
+      handledNodes.append(node.id)
+    }
+    return .visitChildren
+  }
+
+  public override func visit(_ node: ImplicitlyUnwrappedOptionalTypeSyntax) -> SyntaxVisitorContinueKind {
+    if handledNodes.contains(node.id) {
+      return .skipChildren
+    }
+
+    if let someOrAny = node.wrappedType.as(SomeOrAnyTypeSyntax.self),
+      let tupleType = someOrAny.constraint.as(TupleTypeSyntax.self),
+      tupleType.leftParen.isMissing,
+      tupleType.rightParen.isMissing,
+      let element = tupleType.elements.only,
+      element.type.is(CompositionTypeSyntax.self)
+    {
+      addDiagnostic(
+        node,
+        position: node.exclamationMark.positionAfterSkippingLeadingTrivia,
+        .ambiguousOptionalComposition,
+        fixIts: [
+          FixIt(
+            message: .parenthesizeComposition,
+            changes: [
+              .makePresent(tupleType.leftParen),
+              .makePresent(tupleType.rightParen),
+            ]
+          )
+        ],
+        handledNodes: [node.id, tupleType.id]
+      )
+    } else {
+      handledNodes.append(node.id)
+    }
+    return .visitChildren
+  }
+
   override open func visit(_ node: OriginallyDefinedInAttributeArgumentsSyntax) -> SyntaxVisitorContinueKind {
     if shouldSkip(node) {
       return .skipChildren

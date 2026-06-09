@@ -118,7 +118,8 @@ public struct DeclGroupSyntaxType: SyntaxProtocol {
     set { _setGroupProp(\.memberBlock, newValue: newValue) }
   }
 
-  var _asLookInMembersScope: LookInMembersScopeSyntax? {
+  // Useful for ASTGen validation
+  public var _asLookInMembersScope: LookInMembersScopeSyntax? {
     Syntax(self).asProtocol((any SyntaxProtocol).self) as? any LookInMembersScopeSyntax
   }
 }

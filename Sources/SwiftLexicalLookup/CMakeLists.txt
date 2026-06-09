@@ -12,7 +12,6 @@ add_swift_syntax_library(SwiftLexicalLookup
   LookupResult.swift
   SimpleLookupQueries.swift
   LookupConfig.swift
-  QualifiedLookup.swift
 
   Scopes/CanInterleaveResultsLaterScopeSyntax.swift
   Scopes/FunctionScopeSyntax.swift
@@ -24,6 +23,12 @@ add_swift_syntax_library(SwiftLexicalLookup
   Scopes/ScopeSyntax.swift
   Scopes/SequentialScopeSyntax.swift
   Scopes/WithGenericParametersScopeSyntax.swift
+
+  QualifiedLookup/DeclGroupLookup.swift
+  QualifiedLookup/DeclName.swift
+  QualifiedLookup/DeclScope.swift
+  QualifiedLookup/MemberKind.swift
+  QualifiedLookup/ValueDeclSyntax.swift
 )
 
 target_link_swift_syntax_libraries(SwiftLexicalLookup PUBLIC

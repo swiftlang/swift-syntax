@@ -81,6 +81,12 @@ final class TrailingCommaTests: ParserTestCase {
     assertParse("f(_: @foo(1, 2,) Int)")
   }
 
+  func testMacroRoleAttributes() {
+    assertParse("@attached(member, names: named(foo),) struct S {}")
+
+    assertParse("@freestanding(expression, names: named(foo),) macro stringify<T>(_ value: T)")
+  }
+
   func testMacroExpansionExpressionArguments() {
     assertParse(
       """

@@ -21,6 +21,10 @@
 /Sources/SwiftOperators @DougGregor @ahoppen @hamishknight @rintaro @hborla
 /Tests/SwiftOperatorsTest @DougGregor @ahoppen @hamishknight @rintaro @hborla
 
+# SwiftLexicalLookup
+/Sources/SwiftLexicalLookup @xedin @ahoppen @hamishknight @rintaro @hborla
+/Tests/SwiftLexicalLookupTest @xedin @ahoppen @hamishknight @rintaro @hborla
+
 /utils/bazel @keith @ahoppen @hamishknight @rintaro @hborla
 *.bazel @keith @ahoppen @hamishknight @rintaro @hborla
 WORKSPACE @keith @ahoppen @hamishknight @rintaro @hborla

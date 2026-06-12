@@ -8,9 +8,24 @@
 
 cmake_minimum_required(VERSION 3.19.6)
 
+if(POLICY CMP0157)
+  cmake_policy(SET CMP0157 NEW)
+endif()
+
 list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules)
 
 project(SwiftSyntax LANGUAGES C Swift)
+
+if(CMAKE_Swift_COMPILATION_MODE_DEFAULT)
+  # Modern way of doing split builds with CMake 3.29+. This allows us to get proper module
+  # dependencies and avoid the workaround in AddSwiftHostLibrary.cmake.
+  set(SWIFT_SYNTAX_USE_SPLIT_BUILD TRUE)
+else()
+  # Legacy way of doing split builds, which is to build the module in a separate target and then
+  # link to it. This is necessary for CMake versions before 3.29, which don't have proper support
+  # for Swift module dependencies.
+  set(SWIFT_SYNTAX_USE_SPLIT_BUILD FALSE)
+endif()
 
 set(SWIFT_VERSION 5)
 set(CMAKE_Swift_LANGUAGE_VERSION ${SWIFT_VERSION})
@@ -37,9 +52,11 @@ endif()
 
 set(CMAKE_MACOSX_RPATH YES)
 
-option(SWIFT_SYNTAX_ENABLE_WMO_PRE_3_26
-       "Enable Whole Module Optimization (WMO) - requires swift-driver"
-       $<IF:$<AND:$<NOT:$<CONFIG:Debug>>,$<PLATFORM_ID:Darwin>>,YES,NO>)
+if(NOT SWIFT_SYNTAX_USE_SPLIT_BUILD)
+  option(SWIFT_SYNTAX_ENABLE_WMO_PRE_3_26
+         "Enable Whole Module Optimization (WMO) - requires swift-driver"
+         $<IF:$<AND:$<NOT:$<CONFIG:Debug>>,$<PLATFORM_ID:Darwin>>,YES,NO>)
+endif()
 
 include(AddSwiftHostLibrary)
 include(SwiftCompilerCapability)

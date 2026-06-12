@@ -29,6 +29,55 @@ final class ConvertZeroParameterFunctionToComputedPropertyTests: XCTestCase {
     try assertRefactorConvert(baseline, expected: expected)
   }
 
+  func testRefactoringFunctionToComputedPropertyPreservesLeadingComment() throws {
+    try assertRefactorConvert(
+      """
+      /// Some comment
+      func asJSON() -> String { "" }
+      """,
+      expected: """
+        /// Some comment
+        var asJSON: String { "" }
+        """
+    )
+
+    // With a modifier (comment is leading trivia of the modifier).
+    try assertRefactorConvert(
+      """
+      /// Some comment
+      public func asJSON() -> String { "" }
+      """,
+      expected: """
+        /// Some comment
+        public var asJSON: String { "" }
+        """
+    )
+
+    // With an attribute (comment is leading trivia of the attribute).
+    try assertRefactorConvert(
+      """
+      /// Some comment
+      @inlinable func asJSON() -> String { "" }
+      """,
+      expected: """
+        /// Some comment
+        @inlinable var asJSON: String { "" }
+        """
+    )
+
+    // Block doc comment.
+    try assertRefactorConvert(
+      """
+      /** Some comment */
+      func asJSON() -> String { "" }
+      """,
+      expected: """
+        /** Some comment */
+        var asJSON: String { "" }
+        """
+    )
+  }
+
   func testRefactoringFunctionToComputedPropertyWithVoidType() throws {
     let baseline: DeclSyntax = """
       func asJSON() { () }

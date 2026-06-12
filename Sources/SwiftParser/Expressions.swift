@@ -2478,6 +2478,18 @@ extension Parser {
             })
           )
         )
+      } else if self.at(.pound), self.peek().tokenText == "warning" || self.peek().tokenText == "error" {
+        elements.append(
+          .macroExpansionDecl(
+            self.parseMacroExpansionDeclaration(
+              DeclAttributes(
+                attributes: self.emptyCollection(RawAttributeListSyntax.self),
+                modifiers: self.emptyCollection(RawDeclModifierListSyntax.self)
+              ),
+              .constant(.pound)
+            )
+          )
+        )
       } else if allowStandaloneStmtRecovery {
         // Synthesize a label for the statement or declaration that isn't covered by a case right now.
         let statements = parseSwitchCaseBody()

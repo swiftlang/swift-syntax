@@ -2301,9 +2301,11 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
     /// ```
     case switchCase(RawSwitchCaseSyntax)
     case ifConfigDecl(RawIfConfigDeclSyntax)
+    /// The expansion of a freestanding macro in a position that expects a declaration.
+    case macroExpansionDecl(RawMacroExpansionDeclSyntax)
 
     public static func isKindOf(_ raw: RawSyntax) -> Bool {
-      RawSwitchCaseSyntax.isKindOf(raw) || RawIfConfigDeclSyntax.isKindOf(raw)
+      RawSwitchCaseSyntax.isKindOf(raw) || RawIfConfigDeclSyntax.isKindOf(raw) || RawMacroExpansionDeclSyntax.isKindOf(raw)
     }
 
     public var raw: RawSyntax {
@@ -2311,6 +2313,8 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
       case .switchCase(let node):
         return node.raw
       case .ifConfigDecl(let node):
+        return node.raw
+      case .macroExpansionDecl(let node):
         return node.raw
       }
     }
@@ -2320,6 +2324,8 @@ public struct RawSwitchCaseListSyntax: RawSyntaxNodeProtocol {
         self = .switchCase(node)
       } else if let node = node.as(RawIfConfigDeclSyntax.self) {
         self = .ifConfigDecl(node)
+      } else if let node = node.as(RawMacroExpansionDeclSyntax.self) {
+        self = .macroExpansionDecl(node)
       } else {
         return nil
       }

@@ -231,6 +231,39 @@ final class StatementTests: ParserTestCase {
     )
   }
 
+  func testSwitchWithPoundDiagnostic() {
+    assertParse(
+      """
+      switch x {
+      #warning("Something")
+      case "a":
+        break
+      default:
+        break
+      }
+      """,
+      substructure: MacroExpansionDeclSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("warning"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Something"))
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+
+    assertParse(
+      """
+      switch x {
+      #error("Something")
+      default:
+        break
+      }
+      """
+    )
+  }
+
   func testCStyleForLoop() {
     assertParse(
       """

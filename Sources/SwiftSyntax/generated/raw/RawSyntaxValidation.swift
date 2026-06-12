@@ -2793,7 +2793,8 @@ func validateLayout(layout: RawSyntaxBuffer, as kind: SyntaxKind) {
     for (index, element) in layout.enumerated() {
       assertAnyHasNoError(kind, index, [
         verify(element, as: RawSwitchCaseSyntax.self),
-        verify(element, as: RawIfConfigDeclSyntax.self)])
+        verify(element, as: RawIfConfigDeclSyntax.self),
+        verify(element, as: RawMacroExpansionDeclSyntax.self)])
     }
   }
   func validateSwitchCaseSyntax(kind: SyntaxKind, layout: RawSyntaxBuffer) {

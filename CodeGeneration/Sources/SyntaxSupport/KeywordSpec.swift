@@ -280,6 +280,8 @@ public enum Keyword: CaseIterable {
   case wrt
   case yield
   case yielding
+  case `yields`
+  case `yield_once`
 
   public var spec: KeywordSpec {
     switch self {
@@ -701,6 +703,10 @@ public enum Keyword: CaseIterable {
       return KeywordSpec("yield")
     case .yielding:
       return KeywordSpec("yielding")
+    case .yield_once:
+      return KeywordSpec("yield_once", experimentalFeature: .coroutineFunctions)
+    case .yields:
+      return KeywordSpec("yields", experimentalFeature: .coroutineFunctions)
     }
   }
 }

@@ -623,6 +623,7 @@ let diagnosticDomain: String = "SwiftSyntaxMacroExpansion"
 private enum MacroApplicationError: DiagnosticMessage, Error {
   case accessorMacroOnVariableWithMultipleBindings
   case peerMacroOnVariableWithMultipleBindings
+  case memberMacroOnInvalidDecl(macroName: String)
   case malformedAccessor
 
   var diagnosticID: MessageID {
@@ -637,6 +638,8 @@ private enum MacroApplicationError: DiagnosticMessage, Error {
       return "accessor macro can only be applied to a single variable"
     case .peerMacroOnVariableWithMultipleBindings:
       return "peer macro can only be applied to a single variable"
+    case .memberMacroOnInvalidDecl(let macroName):
+      return "macro '\(macroName)' can only be applied to a struct, enum, class, extension, or actor"
     case .malformedAccessor:
       return """
         macro returned a malformed accessor. Accessors should start with an introducer like 'get' or 'set'.
@@ -702,6 +705,18 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       let attributedNode = node.asProtocol(WithAttributesSyntax.self),
       !attributedNode.attributes.isEmpty
     {
+      // Check if there are any member macros generated on a non-group decl.
+      if !(node.isProtocol(DeclGroupSyntax.self) || node.is(ExtensionDeclSyntax.self)) {
+        let memberMacros = self.macroAttributes(attachedTo: declSyntax, ofType: MemberMacro.Type.self)
+        for (attribute, _, _) in memberMacros {
+            let macroName = attribute.attributeName.trimmedDescription
+          contextGenerator(Syntax(node)).addDiagnostics(
+            from: MacroApplicationError.memberMacroOnInvalidDecl(macroName: macroName),
+            node: attribute
+          )
+        }
+      }
+
       // Apply body and preamble macros.
       if let nodeWithBody = node.asProtocol(WithOptionalCodeBlockSyntax.self),
         let declNodeWithBody = nodeWithBody as? any DeclSyntaxProtocol & WithOptionalCodeBlockSyntax

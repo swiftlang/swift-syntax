@@ -7,22 +7,10 @@
 # See http://swift.org/CONTRIBUTORS.txt for Swift project authors
 
 add_swift_syntax_library(SwiftRefactor
-  AddSeparatorsToIntegerLiteral.swift
   CallLikeSyntax.swift
   CallToTrailingClosures.swift
-  ConvertComputedPropertyToStored.swift
-  ConvertComputedPropertyToZeroParameterFunction.swift
-  ConvertStoredPropertyToComputed.swift
-  ConvertZeroParameterFunctionToComputedProperty.swift
-  DeclModifierRemover.swift
   ExpandEditorPlaceholder.swift
-  FormatRawStringLiteral.swift
-  IntegerLiteralUtilities.swift
-  MigrateToNewIfLetSyntax.swift
-  OpaqueParameterToGeneric.swift
   RefactoringProvider.swift
-  RemoveRedundantParentheses.swift
-  RemoveSeparatorsFromIntegerLiteral.swift
   SyntaxUtils.swift
 
   PackageManifest/AddPackageDependency.swift

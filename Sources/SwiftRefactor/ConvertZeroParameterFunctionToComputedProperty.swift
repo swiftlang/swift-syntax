@@ -13,9 +13,11 @@
 #if compiler(>=6)
 public import SwiftSyntax
 import SwiftBasicFormat
+import SwiftSyntaxBuilder
 #else
 import SwiftSyntax
 import SwiftBasicFormat
+import SwiftSyntaxBuilder
 #endif
 
 public struct ConvertZeroParameterFunctionToComputedProperty: SyntaxRefactoringProvider {

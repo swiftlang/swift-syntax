@@ -357,7 +357,7 @@ extension ValueDeclSyntax {
   ///    return a ``.scopeFailure``.
   public var isStatic: Result<Bool, StaticLookupFailure> {
     /// Check that this value declaration is in a declaration group.
-    func checkParentIsDeclGroup(_ parent: Syntax?) throws(StaticLookupFailure) {
+    func checkParentIsDeclGroup(_ parent: Syntax?) -> Result<Void, StaticLookupFailure> {
       // The hierarchy is as follows:
       //    DeclGroup->MemberBlock->MemberBlockItemList->MemberBlockItem-><value decl>
       // So traverse bottom-up
@@ -368,62 +368,73 @@ extension ValueDeclSyntax {
         // Check we get a decl group
         block.parent?.is(DeclGroupSyntaxType.self) == true
       else {
-        throw StaticLookupFailure.unsupportedAtTopLevel
+        return .failure(StaticLookupFailure.unsupportedAtTopLevel)
       }
+      return .success(())
     }
 
-    return Result(catching: { () throws(StaticLookupFailure) -> Bool in
-      switch _syntaxNode.as(SyntaxEnum.self) {
-      // Types are always static
-      case .structDecl, .enumDecl, .classDecl, .actorDecl, .protocolDecl, .typeAliasDecl, .associatedTypeDecl,
-        // Inits are static, e.g., MyStruct.init(...)
-        .initializerDecl:
-        try checkParentIsDeclGroup(self.parent)
-        return true
-      // Enum cases elements are static, e.g., MyEnum.myCase
-      case .enumCaseElement(let enumElement):
-        // Find the enum case declaration parent.
-        guard let enumCaseDecl = _findEnumCaseDeclSyntax(enumElement) else {
-          throw StaticLookupFailure.scopeFailure
-        }
-        // Check the var declaration's parent is a group declaration
-        //
-        // We don't care if the parent is specifically an enum to tolerate user
-        // error. For instance, the user might have converted an enum to a
-        // struct and have a leftover case declaration; we just interpret that
-        // as a static method and diagnose elsewhere.
-        try checkParentIsDeclGroup(enumCaseDecl.parent)
-        return true
-
-      // Deinits operate on instances, so not static.
-      case .deinitializerDecl:
-        try checkParentIsDeclGroup(self.parent)
-        return false
-
-      // Functions, variables and subscripts can be static or non-static
-      //
-      // This depends on whether they have the 'static'/'class' modifiers
-      case .functionDecl(let funcDecl):
-        try checkParentIsDeclGroup(self.parent)
-        return _modifiersIncludeStatic(funcDecl.modifiers)
-      case .subscriptDecl(let subscriptDecl):
-        try checkParentIsDeclGroup(self.parent)
-        return _modifiersIncludeStatic(subscriptDecl.modifiers)
-      case .identifierPattern(let identifierPattern):
-        // We need to find the parent variable declaration
-        guard let varDecl = _findVariableDeclSyntax(identifierPattern) else {
-          throw StaticLookupFailure.scopeFailure
-        }
-        // Check the var declaration's parent is a group declaration
-        try checkParentIsDeclGroup(varDecl.parent)
-        return _modifiersIncludeStatic(varDecl.modifiers)
-      // Macro
-      case .macroDecl:
-        throw StaticLookupFailure.macrosOnlyAtFileScope
-      default:
-        fatalError("[Internal Error] Invalid syntax kind for ValueDeclSyntax: \(_syntaxNode.kind)")
+    switch _syntaxNode.as(SyntaxEnum.self) {
+    // Types are always static
+    case .structDecl, .enumDecl, .classDecl, .actorDecl, .protocolDecl, .typeAliasDecl, .associatedTypeDecl,
+      // Inits are static, e.g., MyStruct.init(...)
+      .initializerDecl:
+      if case .failure(let failure) = checkParentIsDeclGroup(self.parent) {
+        return .failure(failure)
       }
-    })
+      return .success(true)
+    // Enum cases elements are static, e.g., MyEnum.myCase
+    case .enumCaseElement(let enumElement):
+      // Find the enum case declaration parent.
+      guard let enumCaseDecl = _findEnumCaseDeclSyntax(enumElement) else {
+        return .failure(StaticLookupFailure.scopeFailure)
+      }
+      // Check the var declaration's parent is a group declaration
+      //
+      // We don't care if the parent is specifically an enum to tolerate user
+      // error. For instance, the user might have converted an enum to a
+      // struct and have a leftover case declaration; we just interpret that
+      // as a static method and diagnose elsewhere.
+      if case .failure(let failure) = checkParentIsDeclGroup(enumCaseDecl.parent) {
+        return .failure(failure)
+      }
+      return .success(true)
+
+    // Deinits operate on instances, so not static.
+    case .deinitializerDecl:
+      if case .failure(let failure) = checkParentIsDeclGroup(self.parent) {
+        return .failure(failure)
+      }
+      return .success(false)
+
+    // Functions, variables and subscripts can be static or non-static
+    //
+    // This depends on whether they have the 'static'/'class' modifiers
+    case .functionDecl(let funcDecl):
+      if case .failure(let failure) = checkParentIsDeclGroup(self.parent) {
+        return .failure(failure)
+      }
+      return .success(_modifiersIncludeStatic(funcDecl.modifiers))
+    case .subscriptDecl(let subscriptDecl):
+      if case .failure(let failure) = checkParentIsDeclGroup(self.parent) {
+        return .failure(failure)
+      }
+      return .success(_modifiersIncludeStatic(subscriptDecl.modifiers))
+    case .identifierPattern(let identifierPattern):
+      // We need to find the parent variable declaration
+      guard let varDecl = _findVariableDeclSyntax(identifierPattern) else {
+        return .failure(StaticLookupFailure.scopeFailure)
+      }
+      // Check the var declaration's parent is a group declaration
+      if case .failure(let failure) = checkParentIsDeclGroup(varDecl.parent) {
+        return .failure(failure)
+      }
+      return .success(_modifiersIncludeStatic(varDecl.modifiers))
+    // Macro
+    case .macroDecl:
+      return .failure(StaticLookupFailure.macrosOnlyAtFileScope)
+    default:
+      fatalError("[Internal Error] Invalid syntax kind for ValueDeclSyntax: \(_syntaxNode.kind)")
+    }
   }
 
   /// Whether the declaration is a type declaration, meaning it introduces a

@@ -16,7 +16,7 @@ import SwiftSyntax
 @_spi(_QualifiedLookup) public struct DeclGroupSyntaxType: SyntaxProtocol {
   public internal(set) var _syntaxNode: Syntax
 
-  public init?(_ node: borrowing some SyntaxProtocol) {
+  public init?(_ node: __shared some SyntaxProtocol) {
     switch node._syntaxNode.kind {
     case .structDecl, .enumDecl, .classDecl, .actorDecl, .protocolDecl, .extensionDecl:
       self._syntaxNode = node._syntaxNode

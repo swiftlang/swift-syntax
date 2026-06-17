@@ -102,7 +102,7 @@ extension Identifier {
 
 extension ValueDeclSyntax {
   /// Helper that converts a function parameter clause to declaration-name arguments
-  func _parametersToArguments(_ parameterClause: FunctionParameterClauseSyntax) -> DeclNameArguments {
+  private func _parametersToArguments(_ parameterClause: FunctionParameterClauseSyntax) -> DeclNameArguments {
     // According to the docs, ``FunctionParameterSyntax/firstName`` is either an identifier
     // or "_". If it's "_", then `firstName.identifier` is `nil`.
     parameterClause.parameters.map({ Identifier(validating: $0.firstName) })
@@ -110,7 +110,7 @@ extension ValueDeclSyntax {
   /// Helper that converts a subscript parameter clause to declaration-name arguments
   ///
   /// This is because subscripts don't have argument labels by default.
-  func _subscriptParametersToArguments(_ parameterClause: FunctionParameterClauseSyntax) -> DeclNameArguments {
+  private func _subscriptParametersToArguments(_ parameterClause: FunctionParameterClauseSyntax) -> DeclNameArguments {
     // According to the docs, ``FunctionParameterSyntax/firstName`` is either an identifier
     // or "_". If it's "_", then `firstName.identifier` is `nil`.
     parameterClause.parameters.map({
@@ -123,7 +123,7 @@ extension ValueDeclSyntax {
   ///
   /// Note that since enum elements with parentheses but no associated values aren't allowed,
   /// e.g., `myCase()`, we treat them identifiers without arguments, i.e., `myCase`.
-  func _enumParametersToArguments(_ parameterClause: EnumCaseParameterClauseSyntax) -> DeclNameArguments? {
+  private func _enumParametersToArguments(_ parameterClause: EnumCaseParameterClauseSyntax) -> DeclNameArguments? {
     // According to the docs, ``EnumCaseParameterClauseSyntax/firstName`` is either an identifier,
     // "_" or nil. So if it's not convertible to an identifier, it must be `nil`.
     let args = parameterClause.parameters.map({ $0.firstName.flatMap(Identifier.init(validating:)) })
@@ -132,7 +132,7 @@ extension ValueDeclSyntax {
   }
 
   /// Returns true if the given macro is freestanding; false if attached.
-  func _macroType(_ macroDecl: MacroDeclSyntax) -> DeclName.MacroType {
+  private func _macroType(_ macroDecl: MacroDeclSyntax) -> DeclName.MacroType {
     // TODO: Implement in a way that handles if configs
     return DeclName.MacroType(isFreestanding: false, isAttached: false)
   }

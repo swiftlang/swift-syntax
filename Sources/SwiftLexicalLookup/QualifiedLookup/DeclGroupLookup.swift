@@ -13,7 +13,7 @@
 import SwiftIfConfig
 import SwiftSyntax
 
-public struct DeclGroupSyntaxType: SyntaxProtocol {
+@_spi(_QualifiedLookup) public struct DeclGroupSyntaxType: SyntaxProtocol {
   public internal(set) var _syntaxNode: Syntax
 
   public init?(_ node: borrowing some SyntaxProtocol) {

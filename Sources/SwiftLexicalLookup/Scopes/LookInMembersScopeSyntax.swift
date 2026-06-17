@@ -12,7 +12,7 @@
 
 import SwiftSyntax
 
-public protocol LookInMembersScopeSyntax: DeclGroupSyntax {
+public protocol LookInMembersScopeSyntax: SyntaxProtocol {
   /// Position used for member lookup.
   var lookupMembersPosition: AbsolutePosition { get }
 }

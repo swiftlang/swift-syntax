@@ -10,6 +10,7 @@
 //
 //===----------------------------------------------------------------------===//
 
+import SwiftIfConfig
 @_spi(ExperimentalLanguageFeatures) import SwiftParser
 @_spi(ExperimentalLanguageFeatures) import SwiftSyntax
 @_spi(ExperimentalLanguageFeatures) import SwiftWarningControl
@@ -95,9 +96,16 @@ public class WarningGroupControlTests: XCTestCase {
         }
       }
       """
+    let buildConfig = StaticBuildConfiguration(
+      customConditions: [],
+      languageVersion: VersionTuple(5, 5),
+      compilerVersion: VersionTuple(6, 0)
+    )
+
     var parser = Parser(source)
     let parseTree = SourceFileSyntax.parse(from: &parser)
-    let warningControlTree = parseTree.warningGroupControlRegionTree()
+    let configuredRegions = parseTree.configuredRegions(in: buildConfig)
+    let warningControlTree = parseTree.warningGroupControlRegionTree(configuredRegions: configuredRegions)
     let enabledDiagnosticGroups = warningControlTree.enabledGroups
     XCTAssertTrue(enabledDiagnosticGroups.contains("Group1"))
     XCTAssertTrue(enabledDiagnosticGroups.contains("Group2"))
@@ -462,12 +470,282 @@ public class WarningGroupControlTests: XCTestCase {
       ]
     )
   }
+
+  /// `@diagnose` inside an active `#if` clause overrides the outer attribute.
+  func testIfConfigActiveAttributeOverridesOuter() throws {
+    try assertWarningGroupControl(
+      """
+      @diagnose(GroupID, as: warning)
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .error
+      ]
+    )
+  }
+
+  /// `@diagnose` inside an inactive `#if` clause does not contribute; the
+  /// outer attribute remains in effect.
+  func testIfConfigInactiveAttributeIgnored() throws {
+    try assertWarningGroupControl(
+      """
+      @diagnose(GroupID, as: warning)
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .warning
+      ]
+    )
+  }
+
+  /// `#if` with no outer `@diagnose`: when the condition is false, no control
+  /// applies; when true, the inner attribute applies.
+  func testIfConfigStandaloneInsideAttributes() throws {
+    try assertWarningGroupControl(
+      """
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": nil
+      ]
+    )
+
+    try assertWarningGroupControl(
+      """
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .error
+      ]
+    )
+  }
+
+  /// `#else` clause is honored when the `#if` condition is false.
+  func testIfConfigElseClause() throws {
+    let source =
+      """
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      #else
+      @diagnose(GroupID, as: ignored)
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """
+
+    try assertWarningGroupControl(
+      source,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": .error]
+    )
+
+    try assertWarningGroupControl(
+      source,
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": .ignored]
+    )
+  }
+
+  /// `#elseif` chains pick the first matching active clause.
+  func testIfConfigElseifChain() throws {
+    let source =
+      """
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      #elseif LENIENT
+      @diagnose(GroupID, as: ignored)
+      #else
+      @diagnose(GroupID, as: warning)
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """
+
+    // First clause active.
+    try assertWarningGroupControl(
+      source,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": .error]
+    )
+
+    // Second clause active.
+    try assertWarningGroupControl(
+      source,
+      customConditions: ["LENIENT"],
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": .ignored]
+    )
+
+    // Both conditions present: first clause still wins.
+    try assertWarningGroupControl(
+      source,
+      customConditions: ["STRICT", "LENIENT"],
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": .error]
+    )
+
+    // Neither: `#else` wins.
+    try assertWarningGroupControl(
+      source,
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": .warning]
+    )
+  }
+
+  /// Nested `#if` directives: only attributes whose enclosing chain is
+  /// fully active are visible.
+  func testIfConfigNested() throws {
+    try assertWarningGroupControl(
+      """
+      #if OUTER
+      #if INNER
+      @diagnose(GroupID, as: error)
+      #endif
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      customConditions: ["OUTER", "INNER"],
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": .error]
+    )
+
+    // INNER alone is not enough — the outer #if must also be active.
+    try assertWarningGroupControl(
+      """
+      #if OUTER
+      #if INNER
+      @diagnose(GroupID, as: error)
+      #endif
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """,
+      customConditions: ["INNER"],
+      diagnosticGroupID: "GroupID",
+      states: ["1️⃣": nil]
+    )
+  }
+
+  /// Multiple `@diagnose` for distinct groups inside a single `#if`.
+  func testIfConfigMultipleGroups() throws {
+    let source =
+      """
+      #if STRICT
+      @diagnose(GroupA, as: error)
+      @diagnose(GroupB, as: ignored)
+      #endif
+      func foo() {
+        1️⃣let x = 1
+      }
+      """
+
+    try assertWarningGroupControl(
+      source,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupA",
+      states: ["1️⃣": .error]
+    )
+
+    try assertWarningGroupControl(
+      source,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupB",
+      states: ["1️⃣": .ignored]
+    )
+  }
+
+  /// Whole-decl `#if`: `ActiveSyntaxAnyVisitor` walks the active branch only,
+  /// so the `@diagnose` on the active clone of `foo()` is recorded.
+  func testIfConfigWholeDeclActive() throws {
+    try assertWarningGroupControl(
+      """
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      func foo() {
+        1️⃣let x = 1
+      }
+      #else
+      @diagnose(GroupID, as: ignored)
+      func foo() {
+        2️⃣let x = 1
+      }
+      #endif
+      """,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .error,
+        "2️⃣": nil,
+      ]
+    )
+  }
+
+  /// `#if` declares whole types; the visitor should descend into the active
+  /// clause and record per-member regions correctly.
+  func testIfConfigWholeTypeWithMemberAttributes() throws {
+    try assertWarningGroupControl(
+      """
+      #if STRICT
+      @diagnose(GroupID, as: error)
+      class Foo {
+        @diagnose(GroupID, as: ignored)
+        func bar() {
+          1️⃣let x = 1
+        }
+        func baz() {
+          2️⃣let x = 1
+        }
+      }
+      #endif
+      """,
+      customConditions: ["STRICT"],
+      diagnosticGroupID: "GroupID",
+      states: [
+        "1️⃣": .ignored,
+        "2️⃣": .error,
+      ]
+    )
+  }
 }
 
 /// Assert that the various marked positions in the source code have the
 /// expected warning behavior controls.
 private func assertWarningGroupControl(
   _ markedSource: String,
+  customConditions: Set<String> = [],
   globalControls: [(DiagnosticGroupIdentifier, WarningGroupControl)] = [],
   groupInheritanceTree: DiagnosticGroupInheritanceTree? = nil,
   experimentalFeatures: Parser.ExperimentalFeatures? = nil,
@@ -481,6 +759,13 @@ private func assertWarningGroupControl(
   let experimentalFeatures = experimentalFeatures ?? []
   var parser = Parser(source, experimentalFeatures: experimentalFeatures)
   let tree = SourceFileSyntax.parse(from: &parser)
+  let buildConfig = StaticBuildConfiguration(
+    customConditions: customConditions,
+    languageVersion: VersionTuple(5, 5),
+    compilerVersion: VersionTuple(6, 0)
+  )
+  let configuredRegions = tree.configuredRegions(in: buildConfig)
+
   for (marker, location) in markerLocations {
     guard let expectedState = states[marker] else {
       XCTFail("Missing marker \(marker) in expected states", file: file, line: line)
@@ -494,21 +779,23 @@ private func assertWarningGroupControl(
     }
 
     let warningControlRegions = tree.warningGroupControlRegionTree(
+      configuredRegions: configuredRegions,
       globalControls: globalControls,
       groupInheritanceTree: groupInheritanceTree
     )
 
     let groupControl = token.warningGroupControl(
       for: diagnosticGroupID,
+      configuredRegions: configuredRegions,
       globalControls: globalControls,
       groupInheritanceTree: groupInheritanceTree
     )
-    XCTAssertEqual(groupControl, expectedState)
+    XCTAssertEqual(groupControl, expectedState, "marker \(marker)", file: file, line: line)
 
     let groupControlViaRegions = warningControlRegions.warningGroupControl(
       at: absolutePosition,
       for: diagnosticGroupID
     )
-    XCTAssertEqual(groupControlViaRegions, expectedState)
+    XCTAssertEqual(groupControlViaRegions, expectedState, "marker \(marker) (via regions)", file: file, line: line)
   }
 }

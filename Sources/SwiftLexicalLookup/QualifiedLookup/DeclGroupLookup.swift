@@ -138,7 +138,7 @@ extension DeclGroupSyntax {
   /// Note that implicit members such as `self`, `Type`, or `Protocol` aren't
   /// value declarations (they're not actual members) and we don't return them here.
   @_spi(_QualifiedLookup) public func findDirectMembers(
-    name: DeclNameRef?,
+    name: DeclNameReference?,
     kind memberKind: MemberKind = .default,
     configuredRegions: ConfiguredRegions? = nil
   ) -> [ValueDeclSyntax] {

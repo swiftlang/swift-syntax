@@ -125,7 +125,7 @@ final class TestValueDeclSyntax: XCTestCase {
     // Nominal types + Protocols
     assertValueDecl(
       of: DeclSyntax("struct MyStruct {}"),
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "MyStruct"), args: nil),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "MyStruct"), arguments: nil),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: true,
       scopeKind: .structDecl
@@ -133,7 +133,7 @@ final class TestValueDeclSyntax: XCTestCase {
 
     assertValueDecl(
       of: DeclSyntax("enum _ {}"),
-      name: DeclName.invalid(nonIdentifier: .identifier(""), args: nil),
+      name: DeclName.invalid(nonIdentifier: .identifier(""), arguments: nil),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: true,
       scopeKind: .enumDecl
@@ -141,7 +141,7 @@ final class TestValueDeclSyntax: XCTestCase {
 
     assertValueDecl(
       of: DeclSyntax("class Self {}"),
-      name: DeclName.invalid(nonIdentifier: .identifier(""), args: nil),
+      name: DeclName.invalid(nonIdentifier: .identifier(""), arguments: nil),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: true,
       scopeKind: .classDecl
@@ -150,7 +150,7 @@ final class TestValueDeclSyntax: XCTestCase {
     assertValueDecl(
       of: DeclSyntax("extension { actor `My Actor` {} }")
         .children(ofType: ActorDeclSyntax.self)[0],
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "My Actor"), args: nil),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "My Actor"), arguments: nil),
       isStatic: .success(true),
       isTypeDecl: true,
       scopeKind: .actorDecl
@@ -158,7 +158,7 @@ final class TestValueDeclSyntax: XCTestCase {
 
     assertValueDecl(
       of: DeclSyntax("protocol $MyProto {}"),
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "$MyProto"), args: nil),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "$MyProto"), arguments: nil),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: true,
       scopeKind: .protocolDecl
@@ -168,7 +168,7 @@ final class TestValueDeclSyntax: XCTestCase {
     assertValueDecl(
       of: DeclSyntax("protocol { typealias Num = Int }")
         .children(ofType: TypeAliasDeclSyntax.self)[0],
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "Num"), args: nil),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "Num"), arguments: nil),
       isStatic: .success(true),
       isTypeDecl: true,
       // type aliases introduce a scope for potential generic parameters
@@ -178,7 +178,7 @@ final class TestValueDeclSyntax: XCTestCase {
     // Associated Types
     assertValueDecl(
       of: DeclSyntax("associatedtype Element"),
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "Element"), args: nil),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "Element"), arguments: nil),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: true,
       // associated types don't introduce their own scope
@@ -190,7 +190,7 @@ final class TestValueDeclSyntax: XCTestCase {
     // Functions, inits, deinits, subscripts, enum elements, macros, vars
     assertValueDecl(
       of: DeclSyntax("func myFunc() {}"),
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "myFunc"), args: []),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "myFunc"), arguments: []),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
       scopeKind: .functionDecl
@@ -198,7 +198,7 @@ final class TestValueDeclSyntax: XCTestCase {
     assertValueDecl(
       of: DeclSyntax("extension Type { init () }")
         .children(ofType: InitializerDeclSyntax.self)[0],
-      name: DeclName.`init`(args: []),
+      name: DeclName.`init`(arguments: []),
       isStatic: .success(true),
       isTypeDecl: false,
       scopeKind: .initializerDecl
@@ -216,7 +216,7 @@ final class TestValueDeclSyntax: XCTestCase {
       // E.g. In a protocol
       of: DeclSyntax("protocol { subscript() -> Int }")
         .children(ofType: SubscriptDeclSyntax.self)[0],
-      name: DeclName.subscript(args: []),
+      name: DeclName.subscript(arguments: []),
       isStatic: .success(false),
       isTypeDecl: false,
       scopeKind: .subscriptDecl
@@ -225,17 +225,17 @@ final class TestValueDeclSyntax: XCTestCase {
       of: DeclSyntax("enum A { case myCase }")
         .children(ofType: EnumCaseElementSyntax.self)[0],
       // An enum case without arguments has `nil` arguments, not `[]`.
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "myCase"), args: nil),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "myCase"), arguments: nil),
       isStatic: .success(true),
       isTypeDecl: false,
       scopeKind: .memberBlock  //Enum case decl isn't a scope
     )
     assertValueDecl(
       of: DeclSyntax("public macro fileID<T: ExpressibleByStringLiteral>() -> T = Builtin.FileIDMacro"),
-      name: DeclName.identifier(
-        macro: DeclName.MacroType(isFreestanding: false, isAttached: false),
+      name: DeclName.macro(
+        type: DeclName.MacroType(isFreestanding: false, isAttached: false),
         identifier: Identifier(canonicalName: "fileID"),
-        args: []
+        arguments: []
       ),
       isStatic: .failure(.macrosOnlyAtFileScope),
       isTypeDecl: false,
@@ -245,7 +245,7 @@ final class TestValueDeclSyntax: XCTestCase {
       // Extract the identifier pattern from the variable declaration
       of: DeclSyntax(stringLiteral: "var myVar")
         .children(ofType: IdentifierPatternSyntax.self)[0],
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "myVar"), args: nil),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "myVar"), arguments: nil),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
       scopeKind: .variableDecl
@@ -260,14 +260,14 @@ final class TestValueDeclSyntax: XCTestCase {
     assertValueDecl(
       of: DeclSyntax("struct { static func $myFunc() }")
         .children(ofType: FunctionDeclSyntax.self)[0],
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "$myFunc"), args: []),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "$myFunc"), arguments: []),
       isStatic: .success(true),
       isTypeDecl: false,
       scopeKind: .functionDecl
     )
     assertValueDecl(
       of: DeclSyntax("class subscript() {}"),
-      name: DeclName.subscript(args: []),
+      name: DeclName.subscript(arguments: []),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
       scopeKind: .subscriptDecl
@@ -287,7 +287,7 @@ final class TestValueDeclSyntax: XCTestCase {
     assertValueDecl(
       of: DeclSyntax("extension { let $myConst = 5 }")
         .children(ofType: IdentifierPatternSyntax.self)[0],
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "$myConst"), args: nil),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "$myConst"), arguments: nil),
       isStatic: .success(false),
       isTypeDecl: false,
       scopeKind: .variableDecl
@@ -296,7 +296,7 @@ final class TestValueDeclSyntax: XCTestCase {
     assertValueDecl(
       of: DeclSyntax("actor { static var myVar }")
         .children(ofType: IdentifierPatternSyntax.self)[0],
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "myVar"), args: nil),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "myVar"), arguments: nil),
       isStatic: .success(true),
       isTypeDecl: false,
       scopeKind: .variableDecl
@@ -307,14 +307,14 @@ final class TestValueDeclSyntax: XCTestCase {
     // Top-level
     assertValueDecl(
       of: DeclSyntax("static func $myFunc()"),
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "$myFunc"), args: []),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "$myFunc"), arguments: []),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
       scopeKind: .functionDecl
     )
     assertValueDecl(
       of: DeclSyntax("class subscript() {}"),
-      name: DeclName.subscript(args: []),
+      name: DeclName.subscript(arguments: []),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
       scopeKind: .subscriptDecl
@@ -322,7 +322,7 @@ final class TestValueDeclSyntax: XCTestCase {
     assertValueDecl(
       of: DeclSyntax("let a: Int")
         .children(ofType: IdentifierPatternSyntax.self)[0],
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "a"), args: nil),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "a"), arguments: nil),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
       scopeKind: .variableDecl
@@ -330,7 +330,7 @@ final class TestValueDeclSyntax: XCTestCase {
     assertValueDecl(
       of: DeclSyntax("case x")
         .children(ofType: EnumCaseElementSyntax.self)[0],
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "x"), args: nil),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "x"), arguments: nil),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
       scopeKind: nil
@@ -338,11 +338,11 @@ final class TestValueDeclSyntax: XCTestCase {
     // Macro failure
     assertValueDecl(
       of: DeclSyntax("macro myMacro"),
-      // Macros never have `nil` args. E.g. We can always write `@Observable`
-      name: DeclName.identifier(
-        macro: DeclName.MacroType(isFreestanding: false, isAttached: false),
+      // Macros never have `nil` arguments. E.g. We can always write `@Observable`
+      name: DeclName.macro(
+        type: DeclName.MacroType(isFreestanding: false, isAttached: false),
         identifier: Identifier(canonicalName: "myMacro"),
-        args: []
+        arguments: []
       ),
       isStatic: .failure(.macrosOnlyAtFileScope),
       isTypeDecl: false,
@@ -354,7 +354,7 @@ final class TestValueDeclSyntax: XCTestCase {
       of: DeclSyntax("let x")
         .children(ofType: IdentifierPatternSyntax.self)[0]
         .detached,
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "x"), args: nil),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "x"), arguments: nil),
       isStatic: .failure(.scopeFailure),
       isTypeDecl: false,
       scopeKind: nil
@@ -363,7 +363,7 @@ final class TestValueDeclSyntax: XCTestCase {
       // Attached but wrong scope (IfExprSyntax)
       of: ExprSyntax("if let myVar = optionalValue {}")
         .children(ofType: IdentifierPatternSyntax.self)[0],
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "myVar"), args: nil),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "myVar"), arguments: nil),
       isStatic: .failure(.scopeFailure),
       isTypeDecl: false,
       scopeKind: .ifExpr
@@ -371,7 +371,7 @@ final class TestValueDeclSyntax: XCTestCase {
     assertValueDecl(
       // Detached enum elements can't find their enum case parent
       of: EnumCaseElementSyntax(name: .identifier("x")),
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "x"), args: nil),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "x"), arguments: nil),
       isStatic: .failure(.scopeFailure),
       isTypeDecl: false,
       scopeKind: nil
@@ -383,7 +383,7 @@ final class TestValueDeclSyntax: XCTestCase {
     // Generic parameter's aren't part of the name (at least for now)
     assertValueDecl(
       of: DeclSyntax("protocol MyProto<T>"),
-      name: DeclName.identifier(identifier: Identifier(canonicalName: "MyProto"), args: nil),
+      name: DeclName.identifier(identifier: Identifier(canonicalName: "MyProto"), arguments: nil),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: true,
       scopeKind: .protocolDecl
@@ -396,7 +396,7 @@ final class TestValueDeclSyntax: XCTestCase {
     // (since this is a function).
     assertValueDecl(
       of: DeclSyntax("func 5 {}"),
-      name: DeclName.invalid(nonIdentifier: .identifier(""), args: []),
+      name: DeclName.invalid(nonIdentifier: .identifier(""), arguments: []),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
       scopeKind: .functionDecl
@@ -407,7 +407,7 @@ final class TestValueDeclSyntax: XCTestCase {
       of: DeclSyntax("func hi(_: Int, _ a: Int, x y: Int)"),
       name: DeclName.identifier(
         identifier: Identifier(canonicalName: "hi"),
-        args: [nil, nil, Identifier(canonicalName: "x")]
+        arguments: [nil, nil, Identifier(canonicalName: "x")]
       ),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
@@ -415,17 +415,17 @@ final class TestValueDeclSyntax: XCTestCase {
     )
     assertValueDecl(
       of: DeclSyntax("init?(_: Int, _ a: Int, x y: Int)"),
-      name: DeclName.`init`(args: [nil, nil, Identifier(canonicalName: "x")]),
+      name: DeclName.`init`(arguments: [nil, nil, Identifier(canonicalName: "x")]),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
       scopeKind: .initializerDecl
     )
     assertValueDecl(
       of: DeclSyntax("macro myMacro(_: Int, _ a: Int, x y: Int)"),
-      name: DeclName.identifier(
-        macro: DeclName.MacroType(isFreestanding: false, isAttached: false),
+      name: DeclName.macro(
+        type: DeclName.MacroType(isFreestanding: false, isAttached: false),
         identifier: Identifier(canonicalName: "myMacro"),
-        args: [nil, nil, Identifier(canonicalName: "x")]
+        arguments: [nil, nil, Identifier(canonicalName: "x")]
       ),
       isStatic: .failure(.macrosOnlyAtFileScope),
       isTypeDecl: false,
@@ -442,7 +442,7 @@ final class TestValueDeclSyntax: XCTestCase {
         .children(ofType: EnumCaseElementSyntax.self)[1],
       name: DeclName.identifier(
         identifier: Identifier(canonicalName: "withArgs"),
-        args: [nil, Identifier(canonicalName: "label1"), Identifier(canonicalName: "label2")]
+        arguments: [nil, Identifier(canonicalName: "label1"), Identifier(canonicalName: "label2")]
       ),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
@@ -456,7 +456,7 @@ final class TestValueDeclSyntax: XCTestCase {
         .children(ofType: EnumCaseElementSyntax.self)[0],
       name: DeclName.identifier(
         identifier: Identifier(canonicalName: "noAssociatedVals"),
-        args: nil  // Not []
+        arguments: nil  // Not []
       ),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
@@ -468,7 +468,7 @@ final class TestValueDeclSyntax: XCTestCase {
         .children(ofType: EnumCaseElementSyntax.self)[0],
       name: DeclName.identifier(
         identifier: Identifier(canonicalName: "caseWithoutTypes"),
-        args: [Identifier(canonicalName: "a"), Identifier(canonicalName: "b")]
+        arguments: [Identifier(canonicalName: "a"), Identifier(canonicalName: "b")]
       ),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
@@ -479,7 +479,7 @@ final class TestValueDeclSyntax: XCTestCase {
     assertValueDecl(
       of: DeclSyntax("subscript unexpectedName(_: Int, _ n: Int, x: Int, x y: Int) -> Int"),
       name: DeclName.subscript(
-        args: [nil, nil, nil, Identifier(canonicalName: "x")]
+        arguments: [nil, nil, nil, Identifier(canonicalName: "x")]
       ),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
@@ -491,7 +491,7 @@ final class TestValueDeclSyntax: XCTestCase {
       of: DeclSyntax("func myFunc(5y: Int)"),
       name: DeclName.identifier(
         identifier: Identifier(canonicalName: "myFunc"),
-        args: [nil]
+        arguments: [nil]
       ),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
@@ -503,7 +503,7 @@ final class TestValueDeclSyntax: XCTestCase {
     assertValueDecl(
       of: DeclSyntax("extension MyNominalType { func callAsFunction }")
         .children(ofType: FunctionDeclSyntax.self)[0],
-      name: DeclName.callAsFunction(args: []),
+      name: DeclName.callAsFunction(arguments: []),
       isStatic: .success(false),
       isTypeDecl: false,
       scopeKind: .functionDecl
@@ -511,7 +511,7 @@ final class TestValueDeclSyntax: XCTestCase {
     assertValueDecl(
       of: DeclSyntax("protocol MyProto { func callAsFunction (a: Int) }")
         .children(ofType: FunctionDeclSyntax.self)[0],
-      name: DeclName.callAsFunction(args: [Identifier(canonicalName: "a")]),
+      name: DeclName.callAsFunction(arguments: [Identifier(canonicalName: "a")]),
       isStatic: .success(false),
       isTypeDecl: false,
       scopeKind: .functionDecl
@@ -521,7 +521,7 @@ final class TestValueDeclSyntax: XCTestCase {
       of: DeclSyntax("func callAsFunction"),
       name: DeclName.identifier(
         identifier: Identifier(canonicalName: "callAsFunction"),
-        args: []
+        arguments: []
       ),
       isStatic: .failure(.unsupportedAtTopLevel),
       isTypeDecl: false,
@@ -534,7 +534,7 @@ final class TestValueDeclSyntax: XCTestCase {
         .children(ofType: FunctionDeclSyntax.self)[0],
       name: DeclName.identifier(
         identifier: Identifier(canonicalName: "callAsFunction"),
-        args: []
+        arguments: []
       ),
       isStatic: .success(true),
       isTypeDecl: false,
@@ -545,7 +545,7 @@ final class TestValueDeclSyntax: XCTestCase {
         .children(ofType: IdentifierPatternSyntax.self)[0],
       name: DeclName.identifier(
         identifier: Identifier(canonicalName: "callAsFunction"),
-        args: nil
+        arguments: nil
       ),
       isStatic: .success(false),
       isTypeDecl: false,
@@ -556,7 +556,7 @@ final class TestValueDeclSyntax: XCTestCase {
         .children(ofType: EnumCaseElementSyntax.self)[0],
       name: DeclName.identifier(
         identifier: Identifier(canonicalName: "callAsFunction"),
-        args: nil
+        arguments: nil
       ),
       isStatic: .success(true),
       isTypeDecl: false,
@@ -567,10 +567,10 @@ final class TestValueDeclSyntax: XCTestCase {
     // TODO: Implement
     assertValueDecl(
       of: DeclSyntax("macro myMacro(_: Int, _ n: Int, x: Int, x y: Int)"),
-      name: DeclName.identifier(
-        macro: DeclName.MacroType(isFreestanding: false, isAttached: false),
+      name: DeclName.macro(
+        type: DeclName.MacroType(isFreestanding: false, isAttached: false),
         identifier: Identifier(canonicalName: "myMacro"),
-        args: [nil, nil, Identifier(canonicalName: "x"), Identifier(canonicalName: "x")]
+        arguments: [nil, nil, Identifier(canonicalName: "x"), Identifier(canonicalName: "x")]
       ),
       isStatic: .failure(.macrosOnlyAtFileScope),
       isTypeDecl: false,

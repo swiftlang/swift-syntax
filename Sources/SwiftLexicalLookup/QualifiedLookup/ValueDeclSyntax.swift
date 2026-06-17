@@ -102,7 +102,7 @@ extension Identifier {
 
 extension ValueDeclSyntax {
   /// Helper that converts a function parameter clause to declaration-name arguments
-  func _paramsToArgs(_ parameterClause: FunctionParameterClauseSyntax) -> DeclNameArgs {
+  func _parametersToArguments(_ parameterClause: FunctionParameterClauseSyntax) -> DeclNameArguments {
     // According to the docs, ``FunctionParameterSyntax/firstName`` is either an identifier
     // or "_". If it's "_", then `firstName.identifier` is `nil`.
     parameterClause.parameters.map({ Identifier(validating: $0.firstName) })
@@ -110,7 +110,7 @@ extension ValueDeclSyntax {
   /// Helper that converts a subscript parameter clause to declaration-name arguments
   ///
   /// This is because subscripts don't have argument labels by default.
-  func _subscriptParamsToArgs(_ parameterClause: FunctionParameterClauseSyntax) -> DeclNameArgs {
+  func _subscriptParametersToArguments(_ parameterClause: FunctionParameterClauseSyntax) -> DeclNameArguments {
     // According to the docs, ``FunctionParameterSyntax/firstName`` is either an identifier
     // or "_". If it's "_", then `firstName.identifier` is `nil`.
     parameterClause.parameters.map({
@@ -123,7 +123,7 @@ extension ValueDeclSyntax {
   ///
   /// Note that since enum elements with parentheses but no associated values aren't allowed,
   /// e.g., `myCase()`, we treat them identifiers without arguments, i.e., `myCase`.
-  func _enumParamsToArgs(_ parameterClause: EnumCaseParameterClauseSyntax) -> DeclNameArgs? {
+  func _enumParametersToArguments(_ parameterClause: EnumCaseParameterClauseSyntax) -> DeclNameArguments? {
     // According to the docs, ``EnumCaseParameterClauseSyntax/firstName`` is either an identifier,
     // "_" or nil. So if it's not convertible to an identifier, it must be `nil`.
     let args = parameterClause.parameters.map({ $0.firstName.flatMap(Identifier.init(validating:)) })
@@ -144,55 +144,58 @@ extension ValueDeclSyntax {
     switch _syntaxNode.as(SyntaxEnum.self) {
     // Types and pattern identifiers have no args
     case .structDecl(let structDecl):
-      return DeclName.fromToken(structDecl.name, args: nil)
+      return DeclName.fromToken(structDecl.name, arguments: nil)
     case .enumDecl(let enumDecl):
-      return DeclName.fromToken(enumDecl.name, args: nil)
+      return DeclName.fromToken(enumDecl.name, arguments: nil)
     case .classDecl(let classDecl):
-      return DeclName.fromToken(classDecl.name, args: nil)
+      return DeclName.fromToken(classDecl.name, arguments: nil)
     case .actorDecl(let actorDecl):
-      return DeclName.fromToken(actorDecl.name, args: nil)
+      return DeclName.fromToken(actorDecl.name, arguments: nil)
     case .protocolDecl(let protocolDecl):
-      return DeclName.fromToken(protocolDecl.name, args: nil)
+      return DeclName.fromToken(protocolDecl.name, arguments: nil)
     case .typeAliasDecl(let typeAliasDecl):
-      return DeclName.fromToken(typeAliasDecl.name, args: nil)
+      return DeclName.fromToken(typeAliasDecl.name, arguments: nil)
     case .associatedTypeDecl(let associatedTypeDecl):
-      return DeclName.fromToken(associatedTypeDecl.name, args: nil)
+      return DeclName.fromToken(associatedTypeDecl.name, arguments: nil)
     case .identifierPattern(let identifierPattern):
-      return DeclName.fromToken(identifierPattern.identifier, args: nil)
+      return DeclName.fromToken(identifierPattern.identifier, arguments: nil)
     // Functions
     case .functionDecl(let funcDecl):
       guard let identifier = Identifier(validating: funcDecl.name) else {
         return DeclName.invalid(
           nonIdentifier: funcDecl.name.tokenKind,
-          args: _paramsToArgs(funcDecl.signature.parameterClause)
+          arguments: _parametersToArguments(funcDecl.signature.parameterClause)
         )
       }
       // Check for callAsFunction (instance method named `callAsFunction`).
       if identifier.name == "callAsFunction", self.isStatic == .success(false) {
-        return DeclName.callAsFunction(args: _paramsToArgs(funcDecl.signature.parameterClause))
+        return DeclName.callAsFunction(arguments: _parametersToArguments(funcDecl.signature.parameterClause))
       }
-      return DeclName.identifier(identifier: identifier, args: _paramsToArgs(funcDecl.signature.parameterClause))
+      return DeclName.identifier(
+        identifier: identifier,
+        arguments: _parametersToArguments(funcDecl.signature.parameterClause)
+      )
     case .initializerDecl(let initDecl):
-      return DeclName.`init`(args: _paramsToArgs(initDecl.signature.parameterClause))
+      return DeclName.`init`(arguments: _parametersToArguments(initDecl.signature.parameterClause))
     case .deinitializerDecl:
       // deinits don't have a name
       return DeclName.deinit
 
     // Subscripts
     case .subscriptDecl(let subscriptDecl):
-      return DeclName.subscript(args: _subscriptParamsToArgs(subscriptDecl.parameterClause))
+      return DeclName.subscript(arguments: _subscriptParametersToArguments(subscriptDecl.parameterClause))
     // Macro
     case .macroDecl(let macroDecl):
       return DeclName.fromToken(
         macroDecl.name,
         macro: _macroType(macroDecl),
-        args: _paramsToArgs(macroDecl.signature.parameterClause)
+        arguments: _parametersToArguments(macroDecl.signature.parameterClause)
       )
     // Enum element
     case .enumCaseElement(let enumElement):
       return DeclName.fromToken(
         enumElement.name,
-        args: enumElement.parameterClause.flatMap(_enumParamsToArgs(_:))
+        arguments: enumElement.parameterClause.flatMap(_enumParametersToArguments(_:))
       )
     default:
       fatalError("[Internal Error] Invalid syntax kind for ValueDeclSyntax: \(_syntaxNode.kind)")

@@ -18,7 +18,7 @@ import SwiftSyntax
 /// A `nil` identifier indicates a `_` or nonexistent label, e.g. `init(_ param: Int)`
 /// or `case myCase(Int)`.
 /// TODO: Think about how to handle variadic (parameters + param packs) and trailing closures
-@_spi(_QualifiedLookup) public typealias DeclNameArgs = [Identifier?]
+@_spi(_QualifiedLookup) public typealias DeclNameArguments = [Identifier?]
 
 /// The "canonical" name of a value declaration, accessible through
 /// ``ValueDeclSyntax/declName``.
@@ -40,11 +40,11 @@ import SwiftSyntax
     }
   }
 
+  /// A macro declaration name formed by an identifier and, possibly, an argument list.
+  case macro(type: MacroType, identifier: Identifier, arguments: DeclNameArguments?)
+
   /// A declaration name formed by an identifier and, possibly, an argument list.
-  ///
-  /// Regular declarations like functions have `macro == nil` and only macros
-  /// set `MacroType`.
-  case identifier(macro: MacroType? = nil, identifier: Identifier, args: DeclNameArgs?)
+  case identifier(identifier: Identifier, arguments: DeclNameArguments?)
 
   /// A declaration name formed by token syntax that isn't a valid identifier
   /// and, possibly, an argument list.
@@ -52,13 +52,13 @@ import SwiftSyntax
   /// Note that `nonIdentifier` is a ``TokenKind`` instead of `TokenSyntax`
   /// because the latter tracks things like leading and trailing trivia which
   /// makes comparisons harder.
-  case invalid(nonIdentifier: TokenKind, macro: MacroType? = nil, args: DeclNameArgs?)
+  case invalid(nonIdentifier: TokenKind, macro: MacroType? = nil, arguments: DeclNameArguments?)
 
   /// An instance method named `callAsFunction` can be applied called as
   /// `instance.callAsFunction(...)`, or equivalently `instance(...)`.
   /// See [proposal](https://github.com/swiftlang/swift-evolution/blob/main/proposals/0253-callable.md)
-  case callAsFunction(args: DeclNameArgs)
-  case `init`(args: DeclNameArgs)
+  case callAsFunction(arguments: DeclNameArguments)
+  case `init`(arguments: DeclNameArguments)
 
   // Special names, i.e. names the user can't directly look up.
 
@@ -67,30 +67,34 @@ import SwiftSyntax
   case `deinit`
   /// Similar to deinits, subscripts can't be referenced directly. Tooling
   /// may look them up by getting the name of a SubscriptCallExpr.
-  case `subscript`(args: DeclNameArgs)
+  case `subscript`(arguments: DeclNameArguments)
 
   /// Tries to construct a regular name by extracting an identifier from the given token
-  /// and attaching the given args. Returns invalid name otherwise.
+  /// and attaching the given arguments. Returns invalid name otherwise.
   static func fromToken(
     _ token: TokenSyntax,
     macro: MacroType? = nil,
-    args: DeclNameArgs?
+    arguments: DeclNameArguments?
   ) -> DeclName {
     guard let identifier = Identifier(validating: token) else {
-      return DeclName.invalid(nonIdentifier: token.tokenKind, macro: macro, args: args)
+      return DeclName.invalid(nonIdentifier: token.tokenKind, macro: macro, arguments: arguments)
     }
-    return DeclName.identifier(macro: macro, identifier: identifier, args: args)
+    if let macroType = macro {
+      return DeclName.macro(type: macroType, identifier: identifier, arguments: arguments)
+    } else {
+      return DeclName.identifier(identifier: identifier, arguments: arguments)
+    }
   }
 
   @_spi(_QualifiedLookup) public var debugDescription: String {
     /// Create a debug string for the given arguments. The argument list is
-    /// empty when `args == nil`. Enclose in parentheses if `withParens == true`.
-    func describeArgs(_ args: DeclNameArgs?, withParens: Bool = true) -> String {
-      guard let args else { return "" }
-      // Args have the form `(arg1:arg2:...)`. Args without labels
+    /// empty when `argyments == nil`. Enclose in parentheses if `withParens == true`.
+    func describeArguments(_ arguments: DeclNameArguments?, withParentheses: Bool = true) -> String {
+      guard let arguments else { return "" }
+      // Arguments have the form `(arg1:arg2:...)`. Arguments without labels
       // use an underscore.
-      let argList = args.map({ ($0?.name ?? "_") + ":" }).joined(separator: "")
-      return if withParens { "(\(argList))" } else { argList }
+      let argumentList = arguments.map({ ($0?.name ?? "_") + ":" }).joined(separator: "")
+      return if withParentheses { "(\(argumentList))" } else { argumentList }
     }
 
     /// If not `nil`, generate prefix for macro type.
@@ -107,48 +111,54 @@ import SwiftSyntax
 
     let baseName: String =
       switch self {
-      case .identifier(let macro, let identifier, let args):
-        "\(describeMacro(macro))\(identifier.name)\(describeArgs(args))"
-
-      case .invalid(let nonIdentifier, let macro, let args):
-        "\(describeMacro(macro))<?\(nonIdentifier)?>\(describeArgs(args))"
-      case .callAsFunction(let args): "*callAsFunction*\(describeArgs(args))"
-
-      case .subscript(let args): "[\(describeArgs(args, withParens: false))]"
-      case .`init`(let args): "*init*\(describeArgs(args))"
+      case .macro(let macroType, let identifier, let arguments):
+        "\(describeMacro(macroType))\(identifier.name)\(describeArguments(arguments))"
+      case .identifier(let identifier, let arguments):
+        "\(identifier.name)\(describeArguments(arguments))"
+      case .invalid(let nonIdentifier, let macro, let arguments):
+        "\(describeMacro(macro))<?\(nonIdentifier)?>\(describeArguments(arguments))"
+      case .callAsFunction(let arguments):
+        "*callAsFunction*\(describeArguments(arguments))"
+      case .subscript(let arguments):
+        "[\(describeArguments(arguments, withParentheses: false))]"
+      case .`init`(let arguments):
+        "*init*\(describeArguments(arguments))"
       // Trivial cases
-      case .deinit: "*deinit*"
+      case .deinit:
+        "*deinit*"
       }
 
     return "''\(baseName)''"
   }
 }
 
-// MARK: DeclNameRef
+// MARK: DeclNameReference
 
-/// Similar to `DeclNameRef` but allows referring to a declaration by writing
+/// Similar to `DeclNameReference` but allows referring to a declaration by writing
 /// non-compound name, e.g. we can refer to the init in `struct A { init(a: Int) {} }`
 /// both as `A.init(a:)` and `A.init`.
-@_spi(_QualifiedLookup) public indirect enum DeclNameRefBase: Hashable, CustomDebugStringConvertible {
+@_spi(_QualifiedLookup) public indirect enum DeclNameReferenceBase: Hashable, CustomDebugStringConvertible {
   /// A macro reference is either freestanding or attached
   public enum MacroReference: Hashable {
     case freestanding
     case attached
   }
 
+  case macro(reference: MacroReference, identifier: Identifier, arguments: DeclNameArguments? = nil)
+
   /// Like `DeclName/identifier` but with a specific macro reference.
   ///
   /// Unlike `DeclName`, this could include `callAsFunction`.
-  case identifier(macro: MacroReference? = nil, identifier: Identifier, args: DeclNameArgs? = nil)
+  case identifier(identifier: Identifier, arguments: DeclNameArguments? = nil)
 
   /// An explicit reference to init. E.g. `MyType.init`. Note that the user
   /// may not specify arguments when just referencing init.
-  case `init`(args: DeclNameArgs?)
+  case `init`(arguments: DeclNameArguments?)
 
   /// An unnamed call could refer to an init in a static context
   /// or a `callAsFunction` if it's an instance. It could also
   /// refer to `@dynamicallyCallable` or `@dynamicMemberLookup`.
-  case unnamedCall(args: DeclNameArgs)
+  case unnamedCall(arguments: DeclNameArguments)
 
   // Special names, i.e. names the user can't directly look up.
 
@@ -161,33 +171,34 @@ import SwiftSyntax
 
   /// Similar to deinits, subscripts can't be referenced directly. Tooling
   /// may look them up by getting the name of a SubscriptCallExpr.
-  case `subscript`(args: DeclNameArgs)
+  case `subscript`(arguments: DeclNameArguments)
 
   public var debugDescription: String {
     /// Create a debug string for the given arguments. The argument list is
-    /// empty when `args == nil`. Enclose in parentheses if `withParens == true`.
-    func describeArgs(_ args: DeclNameArgs?, withParens: Bool = true) -> String {
-      guard let args else { return "" }
-      // Args have the form `(arg1:arg2:...)`. Args without labels
+    /// empty when `argyments == nil`. Enclose in parentheses if `withParens == true`.
+    func describeArguments(_ arguments: DeclNameArguments?, withParentheses: Bool = true) -> String {
+      guard let arguments else { return "" }
+      // Argyments have the form `(arg1:arg2:...)`. Arguments without labels
       // use an underscore.
-      let argList = args.map({ ($0?.name ?? "_") + ":" }).joined(separator: "")
-      return if withParens { "(\(argList))" } else { argList }
+      let argumentList = arguments.map({ ($0?.name ?? "_") + ":" }).joined(separator: "")
+      return if withParentheses { "(\(argumentList))" } else { argumentList }
     }
 
     let baseName: String
     switch self {
-    case .identifier(let macroRef, let identifier, let args):
+    case .macro(let macroRef, let identifier, let args):
       let prefix =
         switch macroRef {
-        case nil: ""  // e.g. `Int`
         case .attached: "@"  // e.g. `@Observable`
         case .freestanding: "#"  // e.g. `#file`
         }
-      baseName = "\(prefix)\(identifier.name)\(describeArgs(args))"
+      baseName = "\(prefix)\(identifier.name)\(describeArguments(args))"
+    case .identifier(let identifier, let args):
+      baseName = "\(identifier.name)\(describeArguments(args))"
 
-    case .subscript(let args): baseName = "[\(describeArgs(args, withParens: false))]"
-    case .unnamedCall(let args): baseName = describeArgs(args)
-    case .`init`(let args): baseName = "*init*\(describeArgs(args))"
+    case .subscript(let args): baseName = "[\(describeArguments(args, withParentheses: false))]"
+    case .unnamedCall(let args): baseName = describeArguments(args)
+    case .`init`(let args): baseName = "*init*\(describeArguments(args))"
     // Trivial cases
     case .deinit: baseName = "*deinit*"
     case .self: baseName = "*self*"
@@ -203,15 +214,15 @@ import SwiftSyntax
 /// actual declaration name reference.
 ///
 /// This type is used in queries, such as qualified name lookup.
-@_spi(_QualifiedLookup) public struct DeclNameRef: Hashable, CustomDebugStringConvertible {
+@_spi(_QualifiedLookup) public struct DeclNameReference: Hashable, CustomDebugStringConvertible {
   /// A possible module identifier corresponding to a ``ModuleSelectorSyntax``.
   ///
   /// Examples include "Swift" in `Swift::String`
   public let moduleIdentifier: Identifier?
   /// The base name reference.
-  public let baseName: DeclNameRefBase
+  public let baseName: DeclNameReferenceBase
 
-  public init(moduleIdentifier: Identifier? = nil, baseName: DeclNameRefBase) {
+  public init(moduleIdentifier: Identifier? = nil, baseName: DeclNameReferenceBase) {
     self.moduleIdentifier = moduleIdentifier
     self.baseName = baseName
   }
@@ -233,11 +244,12 @@ extension DeclName {
     case wrongMacroType
     case argumentMismatch
     case macroMismatch
+    case missingMacroArguments
   }
   /// Try to match this declaration's name with the given reference.
   /// - Returns: `.success` for a positive match, or `.failure` with the reason
   ///            the match failed.
-  public func tryMatch(reference: DeclNameRefBase) -> Result<Void, MatchFailure> {
+  public func tryMatch(reference: DeclNameReferenceBase) -> Result<Void, MatchFailure> {
     let callAsFunctionId = Identifier(canonicalName: "callAsFunction")
 
     switch (self, reference) {
@@ -246,8 +258,8 @@ extension DeclName {
       return .success(())
 
     // Match init if reference doesn't provide arguments.
-    case (.`init`(_), .`init`(args: nil)),
-      (.callAsFunction(args: _), .identifier(macro: nil, identifier: callAsFunctionId, args: nil)):
+    case (.`init`(_), .`init`(arguments: nil)),
+      (.callAsFunction(arguments: _), .identifier(identifier: callAsFunctionId, arguments: nil)):
       return .success(())
     // For inits (named and unnamed), subscripts and `callAsFunction` (named and unnamed),
     // check that arguments match.
@@ -262,29 +274,43 @@ extension DeclName {
       (.callAsFunction(let argsA), .unnamedCall(let argsB)),
       (
         .callAsFunction(let argsA),
-        .identifier(nil, identifier: callAsFunctionId, let argsB?)
+        .identifier(identifier: callAsFunctionId, let argsB?)
       ):
       guard argsA == argsB else { return .failure(MatchFailure.argumentMismatch) }
       return .success(())
-    // Identifiers need to check macro type, identifiers and arguments
-    case let (.identifier(macroType, idA, optionalArgsA), .identifier(macroRef, idB, optionalArgsB)):
-      // Check if macro types match
+    // Macros need to have matching type, identifiers and arguments
+    case let (.macro(macroType, idA, declaredArgs), .macro(macroRef, idB, providedArgs)):
+      // Check macro type
       //
-      // E.g. If we're expecting `@Observable` we can match with neither
-      // `#Observable` nor `Observable`
+      // E.g. We can't match `@Observable` with `#Observable`.
       let macroMatches =
-        switch (macroType, macroRef) {
-        case (nil, nil): true
-        case (let macroType?, .freestanding): macroType.isFreestanding
-        case (let macroType?, .attached): macroType.isAttached
-        default: false
+        switch macroRef {
+        case .freestanding: macroType.isFreestanding
+        case .attached: macroType.isAttached
         }
       guard macroMatches else { return .failure(MatchFailure.wrongMacroType) }
 
+      // Check ids
+      guard idA == idB else { return .failure(MatchFailure.idMismatch) }
+
+      // Only check arguments if the declaration requires them
+      //
+      // Note that if the macro takes no arguments, we could still supply arguments
+      // to the result type if it's callable. For instance, imagine a macro
+      // `#myMacro() = ...` returning `(Int) -> Void`. We could write `#myMacro(5)`.
+      //
+      // Further, if the macro declaration has arguments, we do need the caller to
+      // pass those in to perform the expansion. This behavior differs from functions
+      // as we can have a function `f(a: Int)` and legally reference `f` of
+      // type `(Int) -> Void`.
+      if let declaredArgs = declaredArgs, declaredArgs != providedArgs {
+        return .failure(MatchFailure.missingMacroArguments)
+      }
+
+      return .success(())
+    // Identifiers need to check macro type, identifiers and arguments
+    case let (.identifier(idA, declaredArgs), .identifier(idB, providedArgs)):
       // Check ids match
-      print(
-        "[Lookup Debugging] Match between .identifier; id match between '\(idA.name)' and '\(idB.name)': \(idA == idB)"
-      )
       guard idA == idB else { return .failure(MatchFailure.idMismatch) }
 
       // Check args only if both the declaration and reference specify them.
@@ -301,7 +327,7 @@ extension DeclName {
       //      f(5) // Reference "f" has type Int
       //    Note that in this example there's one, unlabeled argument.
       // func f(x: Int) {}
-      if let argsA = optionalArgsA, let argsB = optionalArgsB, argsA != argsB {
+      if let argsA = declaredArgs, let argsB = providedArgs, argsA != argsB {
         return .failure(MatchFailure.argumentMismatch)
       }
 

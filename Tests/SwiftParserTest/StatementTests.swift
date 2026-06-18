@@ -264,6 +264,66 @@ final class StatementTests: ParserTestCase {
     )
   }
 
+  func testSwitchWithPoundDiagnosticInIfConfig() {
+    assertParse(
+      """
+      switch x {
+      #if DEBUG
+      #warning("Something")
+      #else
+      #error("Something else")
+      #endif
+      case "a":
+        break
+      default:
+        break
+      }
+      """,
+      substructure: IfConfigDeclSyntax(
+        clauses: IfConfigClauseListSyntax([
+          IfConfigClauseSyntax(
+            poundKeyword: .poundIfToken(),
+            condition: DeclReferenceExprSyntax(baseName: .identifier("DEBUG")),
+            elements: .switchCases(
+              SwitchCaseListSyntax([
+                .macroExpansionDecl(
+                  MacroExpansionDeclSyntax(
+                    pound: .poundToken(),
+                    macroName: .identifier("warning"),
+                    leftParen: .leftParenToken(),
+                    arguments: LabeledExprListSyntax([
+                      LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Something"))
+                    ]),
+                    rightParen: .rightParenToken()
+                  )
+                )
+              ])
+            )
+          ),
+          IfConfigClauseSyntax(
+            poundKeyword: .poundElseToken(),
+            elements: .switchCases(
+              SwitchCaseListSyntax([
+                .macroExpansionDecl(
+                  MacroExpansionDeclSyntax(
+                    pound: .poundToken(),
+                    macroName: .identifier("error"),
+                    leftParen: .leftParenToken(),
+                    arguments: LabeledExprListSyntax([
+                      LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Something else"))
+                    ]),
+                    rightParen: .rightParenToken()
+                  )
+                )
+              ])
+            )
+          ),
+        ]),
+        poundEndif: .poundEndifToken()
+      )
+    )
+  }
+
   func testCStyleForLoop() {
     assertParse(
       """

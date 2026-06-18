@@ -324,6 +324,123 @@ final class StatementTests: ParserTestCase {
     )
   }
 
+  func testSwitchWithPoundDiagnosticInCaseBody() {
+    // A `#warning`/`#error` after a statement in a case body is parsed as a
+    // statement of that body, not as a new case-list element.
+    assertParse(
+      """
+      switch x {
+      case 1:
+        print()
+      #warning("Something")
+      }
+      """
+    )
+
+    assertParse(
+      """
+      switch x {
+      case 1:
+        print()
+      #warning("Something")
+      case 2:
+        break
+      }
+      """
+    )
+  }
+
+  func testSwitchWithCaseInPoundIfWhenFirstClauseStartsWithCase() {
+    // When the first clause of the `#if` starts with a `case`, the whole
+    // directive is parsed at case-list level, so a `#warning` in another
+    // clause is fine.
+    assertParse(
+      """
+      switch x {
+      case 1:
+        print()
+      #if COND
+      case 2: break
+      #else
+      #warning("Something")
+      #endif
+      }
+      """
+    )
+  }
+
+  func testSwitchWithCaseInPoundIfClauseAfterPoundDiagnostic() {
+    // When the first clause of the `#if` starts with a `#warning`/`#error`, the
+    // directive is parsed at statement level (matching the compiler), so a
+    // `case` in a later clause is diagnosed.
+    assertParse(
+      """
+      switch x {
+      case 1:
+        print()
+      #if COND
+      #warning("Something")
+      #else
+      1️⃣case 2: break
+      #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'case' can only appear inside a 'switch' statement or 'enum' declaration")
+      ]
+    )
+
+    assertParse(
+      """
+      switch x {
+      case 1:
+        print()
+      #if COND
+      #if COND2
+      #warning("Something")
+      #endif
+      #else
+      #if COND2
+      1️⃣case 2: break
+      #endif
+      #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'case' can only appear inside a 'switch' statement or 'enum' declaration")
+      ]
+    )
+  }
+
+  func testSwitchWithPoundDiagnosticAfterIfConfig() {
+    // A `#warning`/`#error` following a case-list-level `#if`…`#endif` is parsed
+    // as a `MacroExpansionDecl` sibling of the `IfConfigDecl`, not folded into a
+    // malformed case.
+    assertParse(
+      """
+      switch x {
+      case 1: break
+      #if COND
+      case 2: break
+      #else
+      case 3: break
+      #endif
+      #warning("Something")
+      default: break
+      }
+      """,
+      substructure: MacroExpansionDeclSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("warning"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Something"))
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+  }
+
   func testCStyleForLoop() {
     assertParse(
       """

@@ -441,6 +441,32 @@ final class StatementTests: ParserTestCase {
     )
   }
 
+  func testSwitchWithPoundDiagnosticBeforeLaterIfConfig() {
+    // A '#warning'/'#error' at the start of a switch must be parsed as a
+    // case-list element and not be consumed as unexpected code before a '#if'
+    // that appears later in the source.
+    assertParse(
+      """
+      switch x {
+      #warning("Something")
+      case 1:
+        break
+      }
+      #if FOO
+      #endif
+      """,
+      substructure: MacroExpansionDeclSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("warning"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Something"))
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+  }
+
   func testCStyleForLoop() {
     assertParse(
       """

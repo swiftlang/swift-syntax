@@ -2468,17 +2468,10 @@ extension Parser {
     while !self.at(.endOfFile, .rightBrace), !self.atEndOfIfConfigClauseBody(), self.hasProgressed(&elementsProgress) {
       if self.withLookahead({ $0.atStartOfSwitchCase() }) {
         elements.append(.switchCase(self.parseSwitchCase()))
-      } else if self.canRecoverTo(.poundIf) != nil {
-        // '#if' in 'case' position can enclose zero or more 'case' or 'default'
-        // clauses.
-        elements.append(
-          .ifConfigDecl(
-            self.parsePoundIfDirective({ parser in
-              .switchCases(parser.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery))
-            })
-          )
-        )
       } else if self.at(.pound), self.peek().tokenText == "warning" || self.peek().tokenText == "error" {
+        // Check for '#warning'/'#error' before '#if' recovery, otherwise a
+        // later '#if' in the source would cause the directive to be consumed as
+        // unexpected code before that '#if'.
         elements.append(
           .macroExpansionDecl(
             self.parseMacroExpansionDeclaration(
@@ -2488,6 +2481,16 @@ extension Parser {
               ),
               .constant(.pound)
             )
+          )
+        )
+      } else if self.canRecoverTo(.poundIf) != nil {
+        // '#if' in 'case' position can enclose zero or more 'case' or 'default'
+        // clauses.
+        elements.append(
+          .ifConfigDecl(
+            self.parsePoundIfDirective({ parser in
+              .switchCases(parser.parseSwitchCases(allowStandaloneStmtRecovery: allowStandaloneStmtRecovery))
+            })
           )
         )
       } else if allowStandaloneStmtRecovery {

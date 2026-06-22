@@ -443,33 +443,29 @@ extension IfConfigDeclSyntax {
   }
 }
 
+/// Syntax visitor that writes out a syntax tree without comments or #sourceLocations.
+fileprivate class DescriptionWithoutCommentsAndSourceLocationsVisitor: SyntaxVisitor {
+  var result: String = ""
+  override func visit(_ token: TokenSyntax) -> SyntaxVisitorContinueKind {
+    token.leadingTrivia.writeWithoutComments(to: &result)
+    token.text.write(to: &result)
+    token.trailingTrivia.writeWithoutComments(to: &result)
+    return .skipChildren
+  }
+  override func visit(_ node: PoundSourceLocationSyntax) -> SyntaxVisitorContinueKind {
+    return .skipChildren
+  }
+}
+
 extension SyntaxProtocol {
   // Produce the source code for this syntax node with all of the comments
   // and #sourceLocations removed. Each comment will be replaced with either
   // a newline or a space, depending on whether the comment involved a newline.
   @_spi(Compiler)
   public var descriptionWithoutCommentsAndSourceLocations: String {
-    var result = ""
-    var skipUntilRParen = false
-    for token in tokens(viewMode: .sourceAccurate) {
-      // Skip #sourceLocation(...).
-      if token.tokenKind == .poundSourceLocation {
-        skipUntilRParen = true
-        continue
-      }
-
-      if skipUntilRParen {
-        if token.tokenKind == .rightParen {
-          skipUntilRParen = false
-        }
-        continue
-      }
-
-      token.leadingTrivia.writeWithoutComments(to: &result)
-      token.text.write(to: &result)
-      token.trailingTrivia.writeWithoutComments(to: &result)
-    }
-    return result
+    let visitor = DescriptionWithoutCommentsAndSourceLocationsVisitor(viewMode: .sourceAccurate)
+    visitor.walk(self)
+    return visitor.result
   }
 }
 

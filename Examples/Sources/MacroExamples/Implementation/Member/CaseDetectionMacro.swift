@@ -22,16 +22,14 @@ public enum CaseDetectionMacro: MemberMacro {
   ) throws -> [DeclSyntax] {
     declaration.memberBlock.members
       .compactMap { $0.decl.as(EnumCaseDeclSyntax.self) }
-      .map { $0.elements.first!.name }
-      .map { ($0, $0.initialUppercased) }
-      .map { original, uppercased in
+      .map { $0.elements }
+      .flatMap { $0 }
+      .map { $0.name }
+      .map { ($0, $0.pascalcased) }
+      .map { original, pascalcased in
         """
-        var is\(raw: uppercased): Bool {
-          if case .\(raw: original) = self {
-            return true
-          }
-
-          return false
+        var is\(raw: pascalcased): Bool {
+            self == .\(raw: original)
         }
         """
       }
@@ -39,12 +37,13 @@ public enum CaseDetectionMacro: MemberMacro {
 }
 
 extension TokenSyntax {
-  fileprivate var initialUppercased: String {
-    let name = self.text
-    guard let initial = name.first else {
-      return name
+    fileprivate var pascalcased: String {
+        self.text
+            .replacingOccurrences(of: "_", with: " ")
+            .replacingOccurrences(of: "(?<=.)([A-Z])", with: " $1", options: .regularExpression)
+            .lowercased()
+            .split(separator: " ")
+            .map { $0.capitalized }
+            .joined()
     }
-
-    return "\(initial.uppercased())\(name.dropFirst())"
-  }
 }

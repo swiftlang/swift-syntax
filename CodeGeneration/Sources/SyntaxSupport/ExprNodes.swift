@@ -1941,7 +1941,7 @@ public let EXPR_NODES: [Node] = [
     kind: .switchCaseList,
     base: .syntaxCollection,
     nameForDiagnostics: nil,
-    elementChoices: [.switchCase, .ifConfigDecl]
+    elementChoices: [.switchCase, .ifConfigDecl, .macroExpansionDecl]
   ),
 
   Node(

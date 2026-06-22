@@ -2468,6 +2468,21 @@ extension Parser {
     while !self.at(.endOfFile, .rightBrace), !self.atEndOfIfConfigClauseBody(), self.hasProgressed(&elementsProgress) {
       if self.withLookahead({ $0.atStartOfSwitchCase() }) {
         elements.append(.switchCase(self.parseSwitchCase()))
+      } else if self.at(.pound), self.peek().tokenText == "warning" || self.peek().tokenText == "error" {
+        // Check for '#warning'/'#error' before '#if' recovery, otherwise a
+        // later '#if' in the source would cause the directive to be consumed as
+        // unexpected code before that '#if'.
+        elements.append(
+          .macroExpansionDecl(
+            self.parseMacroExpansionDeclaration(
+              DeclAttributes(
+                attributes: self.emptyCollection(RawAttributeListSyntax.self),
+                modifiers: self.emptyCollection(RawDeclModifierListSyntax.self)
+              ),
+              .constant(.pound)
+            )
+          )
+        )
       } else if self.canRecoverTo(.poundIf) != nil {
         // '#if' in 'case' position can enclose zero or more 'case' or 'default'
         // clauses.

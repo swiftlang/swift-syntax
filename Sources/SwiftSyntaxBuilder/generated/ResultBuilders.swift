@@ -649,6 +649,10 @@ public struct SwitchCaseListBuilder: ListBuilder {
   public static func buildExpression(_ expression: IfConfigDeclSyntax) -> Component {
     buildExpression(.init(expression))
   }
+
+  public static func buildExpression(_ expression: MacroExpansionDeclSyntax) -> Component {
+    buildExpression(.init(expression))
+  }
 }
 
 extension SwitchCaseListSyntax {

@@ -231,6 +231,242 @@ final class StatementTests: ParserTestCase {
     )
   }
 
+  func testSwitchWithPoundDiagnostic() {
+    assertParse(
+      """
+      switch x {
+      #warning("Something")
+      case "a":
+        break
+      default:
+        break
+      }
+      """,
+      substructure: MacroExpansionDeclSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("warning"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Something"))
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+
+    assertParse(
+      """
+      switch x {
+      #error("Something")
+      default:
+        break
+      }
+      """
+    )
+  }
+
+  func testSwitchWithPoundDiagnosticInIfConfig() {
+    assertParse(
+      """
+      switch x {
+      #if DEBUG
+      #warning("Something")
+      #else
+      #error("Something else")
+      #endif
+      case "a":
+        break
+      default:
+        break
+      }
+      """,
+      substructure: IfConfigDeclSyntax(
+        clauses: IfConfigClauseListSyntax([
+          IfConfigClauseSyntax(
+            poundKeyword: .poundIfToken(),
+            condition: DeclReferenceExprSyntax(baseName: .identifier("DEBUG")),
+            elements: .switchCases(
+              SwitchCaseListSyntax([
+                .macroExpansionDecl(
+                  MacroExpansionDeclSyntax(
+                    pound: .poundToken(),
+                    macroName: .identifier("warning"),
+                    leftParen: .leftParenToken(),
+                    arguments: LabeledExprListSyntax([
+                      LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Something"))
+                    ]),
+                    rightParen: .rightParenToken()
+                  )
+                )
+              ])
+            )
+          ),
+          IfConfigClauseSyntax(
+            poundKeyword: .poundElseToken(),
+            elements: .switchCases(
+              SwitchCaseListSyntax([
+                .macroExpansionDecl(
+                  MacroExpansionDeclSyntax(
+                    pound: .poundToken(),
+                    macroName: .identifier("error"),
+                    leftParen: .leftParenToken(),
+                    arguments: LabeledExprListSyntax([
+                      LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Something else"))
+                    ]),
+                    rightParen: .rightParenToken()
+                  )
+                )
+              ])
+            )
+          ),
+        ]),
+        poundEndif: .poundEndifToken()
+      )
+    )
+  }
+
+  func testSwitchWithPoundDiagnosticInCaseBody() {
+    // A `#warning`/`#error` after a statement in a case body is parsed as a
+    // statement of that body, not as a new case-list element.
+    assertParse(
+      """
+      switch x {
+      case 1:
+        print()
+      #warning("Something")
+      }
+      """
+    )
+
+    assertParse(
+      """
+      switch x {
+      case 1:
+        print()
+      #warning("Something")
+      case 2:
+        break
+      }
+      """
+    )
+  }
+
+  func testSwitchWithCaseInPoundIfWhenFirstClauseStartsWithCase() {
+    // When the first clause of the `#if` starts with a `case`, the whole
+    // directive is parsed at case-list level, so a `#warning` in another
+    // clause is fine.
+    assertParse(
+      """
+      switch x {
+      case 1:
+        print()
+      #if COND
+      case 2: break
+      #else
+      #warning("Something")
+      #endif
+      }
+      """
+    )
+  }
+
+  func testSwitchWithCaseInPoundIfClauseAfterPoundDiagnostic() {
+    // When the first clause of the `#if` starts with a `#warning`/`#error`, the
+    // directive is parsed at statement level (matching the compiler), so a
+    // `case` in a later clause is diagnosed.
+    assertParse(
+      """
+      switch x {
+      case 1:
+        print()
+      #if COND
+      #warning("Something")
+      #else
+      1️⃣case 2: break
+      #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'case' can only appear inside a 'switch' statement or 'enum' declaration")
+      ]
+    )
+
+    assertParse(
+      """
+      switch x {
+      case 1:
+        print()
+      #if COND
+      #if COND2
+      #warning("Something")
+      #endif
+      #else
+      #if COND2
+      1️⃣case 2: break
+      #endif
+      #endif
+      }
+      """,
+      diagnostics: [
+        DiagnosticSpec(message: "'case' can only appear inside a 'switch' statement or 'enum' declaration")
+      ]
+    )
+  }
+
+  func testSwitchWithPoundDiagnosticAfterIfConfig() {
+    // A `#warning`/`#error` following a case-list-level `#if`…`#endif` is parsed
+    // as a `MacroExpansionDecl` sibling of the `IfConfigDecl`, not folded into a
+    // malformed case.
+    assertParse(
+      """
+      switch x {
+      case 1: break
+      #if COND
+      case 2: break
+      #else
+      case 3: break
+      #endif
+      #warning("Something")
+      default: break
+      }
+      """,
+      substructure: MacroExpansionDeclSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("warning"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Something"))
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+  }
+
+  func testSwitchWithPoundDiagnosticBeforeLaterIfConfig() {
+    // A '#warning'/'#error' at the start of a switch must be parsed as a
+    // case-list element and not be consumed as unexpected code before a '#if'
+    // that appears later in the source.
+    assertParse(
+      """
+      switch x {
+      #warning("Something")
+      case 1:
+        break
+      }
+      #if FOO
+      #endif
+      """,
+      substructure: MacroExpansionDeclSyntax(
+        pound: .poundToken(),
+        macroName: .identifier("warning"),
+        leftParen: .leftParenToken(),
+        arguments: LabeledExprListSyntax([
+          LabeledExprSyntax(expression: StringLiteralExprSyntax(content: "Something"))
+        ]),
+        rightParen: .rightParenToken()
+      )
+    )
+  }
+
   func testCStyleForLoop() {
     assertParse(
       """

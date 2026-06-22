@@ -67,7 +67,7 @@ jobs:
           echo "Using swift-syntax version: $SWIFT_SYNTAX_VERSION"
           echo "swift_syntax_version=$SWIFT_SYNTAX_VERSION" >> "$GITHUB_OUTPUT"
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Tag release
         env:
           SWIFT_SYNTAX_VERSION: ${{ steps.swift_syntax_version.outputs.swift_syntax_version }}
@@ -84,7 +84,7 @@ jobs:
       contents: write
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Create release
         env:
           GH_TOKEN: ${{ github.token }}

@@ -18,6 +18,7 @@ add_swift_syntax_library(SwiftRefactor
   ExpandEditorPlaceholder.swift
   FormatRawStringLiteral.swift
   IntegerLiteralUtilities.swift
+  InvertIfCondition.swift
   MigrateToNewIfLetSyntax.swift
   OpaqueParameterToGeneric.swift
   RefactoringProvider.swift

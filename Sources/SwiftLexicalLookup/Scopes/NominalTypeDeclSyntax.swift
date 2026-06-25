@@ -13,10 +13,10 @@
 import SwiftSyntax
 
 @_spi(Experimental)
-public protocol NominalTypeDeclSyntax: LookInMembersScopeSyntax, NamedDeclSyntax, WithGenericParametersScopeSyntax {
+public protocol NominalTypeDeclSyntax: LookInMembersScopeSyntax, DeclGroupSyntax, NamedDeclSyntax,
+  WithGenericParametersScopeSyntax
+{
   var genericParameterClause: GenericParameterClauseSyntax? { get }
-  var genericWhereClause: GenericWhereClauseSyntax? { get }
-  var inheritanceClause: InheritanceClauseSyntax? { get }
 }
 
 extension NominalTypeDeclSyntax {

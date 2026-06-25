@@ -15,7 +15,7 @@ import SwiftSyntax
 
 @_spi(Experimental) extension SyntaxProtocol {
   /// Parent scope of this syntax node, or scope introduced by this syntax node.
-  var scope: ScopeSyntax? {
+  @_spi(Experimental) public var scope: ScopeSyntax? {
     if let scopeSyntax = Syntax(self).asProtocol(SyntaxProtocol.self) as? ScopeSyntax {
       return scopeSyntax
     } else {

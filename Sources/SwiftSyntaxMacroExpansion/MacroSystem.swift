@@ -246,10 +246,6 @@ private func expandPeerMacroMember(
   in context: some MacroExpansionContext,
   indentationWidth: Trivia
 ) throws -> MemberBlockItemListSyntax? {
-  if let variable = attachedTo.as(VariableDeclSyntax.self), variable.bindings.count > 1 {
-    throw MacroApplicationError.peerMacroOnVariableWithMultipleBindings
-  }
-
   guard
     let expanded = expandAttachedMacro(
       definition: definition,
@@ -278,10 +274,6 @@ private func expandPeerMacroCodeItem(
   in context: some MacroExpansionContext,
   indentationWidth: Trivia
 ) throws -> CodeBlockItemListSyntax? {
-  if let variable = attachedTo.as(VariableDeclSyntax.self), variable.bindings.count > 1 {
-    throw MacroApplicationError.peerMacroOnVariableWithMultipleBindings
-  }
-
   guard
     let expanded = expandAttachedMacro(
       definition: definition,
@@ -622,7 +614,6 @@ let diagnosticDomain: String = "SwiftSyntaxMacroExpansion"
 
 private enum MacroApplicationError: DiagnosticMessage, Error {
   case accessorMacroOnVariableWithMultipleBindings
-  case peerMacroOnVariableWithMultipleBindings
   case malformedAccessor
 
   var diagnosticID: MessageID {
@@ -635,8 +626,6 @@ private enum MacroApplicationError: DiagnosticMessage, Error {
     switch self {
     case .accessorMacroOnVariableWithMultipleBindings:
       return "accessor macro can only be applied to a single variable"
-    case .peerMacroOnVariableWithMultipleBindings:
-      return "peer macro can only be applied to a single variable"
     case .malformedAccessor:
       return """
         macro returned a malformed accessor. Accessors should start with an introducer like 'get' or 'set'.

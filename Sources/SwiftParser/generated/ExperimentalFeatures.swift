@@ -61,6 +61,9 @@ extension Parser.ExperimentalFeatures {
   /// Whether to enable the parsing of a test feature that parses everything as unexpected.
   public static let _test_EverythingUnexpected = Self (rawValue: 1 << 11)
 
+  /// Whether to enable the parsing of functions as coroutines.
+  public static let coroutineFunctions = Self (rawValue: 1 << 12)
+
   /// Creates a new value representing the experimental feature with the
   /// given name, or returns nil if the name is not recognized.
   public init?(name: String) {
@@ -89,6 +92,8 @@ extension Parser.ExperimentalFeatures {
       self = .literalExpressions
     case "_test_EverythingUnexpected":
       self = ._test_EverythingUnexpected
+    case "CoroutineFunctions":
+      self = .coroutineFunctions
     default:
       return nil
     }

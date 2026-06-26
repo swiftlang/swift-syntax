@@ -772,6 +772,30 @@ final class TypeTests: ParserTestCase {
       """
     )
   }
+
+  func testYields() {
+    assertParse(
+      """
+      { () yields(Int) -> Void in }
+      """
+    )
+
+    assertParse(
+      "typealias T = () yields(Int) -> Void"
+    )
+
+    assertParse(
+      """
+      { () yields(inout Int) -> Void in }
+      """
+    )
+
+    assertParse(
+      """
+      { () yields(inout Int) -> Int in }
+      """
+    )
+  }
 }
 
 final class InlineArrayTypeTests: ParserTestCase {

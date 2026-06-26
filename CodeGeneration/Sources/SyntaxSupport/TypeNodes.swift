@@ -213,6 +213,11 @@ public let TYPE_NODES: [Node] = [
         isOptional: true
       ),
       Child(
+        name: "yieldClause",
+        kind: .node(kind: .functionYieldClause),
+        isOptional: true
+      ),
+      Child(
         name: "returnClause",
         kind: .node(kind: .returnClause)
       ),

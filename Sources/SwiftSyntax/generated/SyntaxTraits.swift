@@ -765,6 +765,10 @@ extension FunctionParameterSyntax: WithTrailingCommaSyntax, WithAttributesSyntax
 
 extension FunctionTypeSyntax: ParenthesizedSyntax {}
 
+extension FunctionYieldClauseSyntax: ParenthesizedSyntax {}
+
+extension FunctionYieldSyntax: WithTrailingCommaSyntax {}
+
 extension GenericArgumentSyntax: WithTrailingCommaSyntax {}
 
 extension GenericParameterSyntax: WithTrailingCommaSyntax, WithAttributesSyntax {}

@@ -36,6 +36,8 @@ protocol DiagnosticDecorator {
   /// - Parameters:
   ///   - message: The diagnostic message that needs to be decorated.
   ///   - severity: The severity level associated with the diagnostic message.
+  ///   - categoryChain: The category chain ordered leaf-first; see ``DiagnosticMessage/categoryChain-property``
+  ///                    for more.
   ///
   /// - Returns: A decorated version of the diagnostic message, enhanced by visual cues like color, text styles, or other markers,
   ///            as well as a severity-specific prefix, based on its severity level.

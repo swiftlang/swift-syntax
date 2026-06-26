@@ -451,7 +451,7 @@ final class BasicFormatTest: XCTestCase {
     )
   }
 
-  func testAccessor() {
+  func testAccessor1() {
     let source = """
       struct Point {
         var computed: Int {
@@ -472,6 +472,40 @@ final class BasicFormatTest: XCTestCase {
         }
         """,
       using: BasicFormat(indentationWidth: .spaces(2))
+    )
+  }
+
+  func testAccessor2() {
+    let source: AccessorDeclSyntax = """
+        get {
+          return 1
+        }
+      """
+
+    assertFormatted(
+      tree: source,
+      expected: """
+          get {
+            return 1
+          }
+        """
+    )
+  }
+
+  func testAccessor3() {
+    let source: AccessorDeclSyntax = """
+        get {
+            return 1
+        }
+      """
+
+    assertFormatted(
+      tree: source,
+      expected: """
+          get {
+              return 1
+          }
+        """
     )
   }
 

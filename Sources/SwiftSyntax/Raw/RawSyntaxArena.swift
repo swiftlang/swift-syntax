@@ -177,6 +177,19 @@ public class RawSyntaxArena {
   func contains(text: SyntaxText) -> Bool {
     return (text.isEmpty || allocator.contains(address: text.baseAddress!))
   }
+
+  /// Number of distinct arenas (this one plus retained child arenas) that the
+  /// tree rooted in this arena keeps alive.
+  public var retainedArenaCount: Int {
+    var seen: Set<RawSyntaxArenaRef> = [RawSyntaxArenaRef(self)]
+    var stack: [RawSyntaxArena] = [self]
+    while let arena = stack.popLast() {
+      for childRef in arena.childRefs where seen.insert(childRef).inserted {
+        stack.append(childRef.value)
+      }
+    }
+    return seen.count
+  }
 }
 
 /// RawSyntaxArena for parsing.
@@ -254,6 +267,11 @@ public struct RetainedRawSyntaxArena: @unchecked Sendable {
   fileprivate func arenaRef() -> RawSyntaxArenaRef {
     return RawSyntaxArenaRef(arena)
   }
+
+  /// Number of arenas (self + retained children) kept alive by this tree.
+  public var retainedArenaCount: Int {
+    arena.retainedArenaCount
+  }
 }
 
 /// Unsafely unowned reference to ``RawSyntaxArena``. The user is responsible to
@@ -270,7 +288,7 @@ struct RawSyntaxArenaRef: Hashable, @unchecked Sendable {
   }
 
   /// Returns the ``RawSyntaxArena``
-  private var value: RawSyntaxArena {
+  fileprivate var value: RawSyntaxArena {
     self._value.takeUnretainedValue()
   }
 

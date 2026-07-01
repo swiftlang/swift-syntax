@@ -52,9 +52,27 @@ public typealias ReusedNodeCallback = (_ node: Syntax) -> Void
 /// Keeps track of a previously parsed syntax tree and the source edits that
 /// occurred since it was created.
 public final class IncrementalParseTransition {
+  /// The default value for `compactArenaThreshold`.
+  ///
+  /// Bounds the retained arena count to roughly this many while keeping
+  /// compaction (a full reparse) infrequent enough not to disrupt editing
+  /// latency on large files.
+  public static let defaultCompactArenaThreshold = 64
+
   fileprivate let previousIncrementalParseResult: IncrementalParseResult
   fileprivate let edits: ConcurrentEdits
   fileprivate let reusedNodeCallback: ReusedNodeCallback?
+
+  /// When the previous tree retains at least this many arenas, the next
+  /// incremental parse is replaced by a full reparse that collapses the result
+  /// back into a single arena.
+  ///
+  /// Incremental parsing reuses subtrees from the previous tree by reference,
+  /// which keeps each reused subtree's origin arena alive. Over a long editing
+  /// session this accumulates arenas (and their memory) without bound. This
+  /// threshold caps the number of retained arenas, trading an occasional full
+  /// reparse for bounded memory. `nil` disables compaction.
+  fileprivate let compactArenaThreshold: Int?
 
   /// - Parameters:
   ///   - previousTree: The previous tree to do lookups on.
@@ -71,6 +89,7 @@ public final class IncrementalParseTransition {
     self.previousIncrementalParseResult = IncrementalParseResult(tree: previousTree, lookaheadRanges: lookaheadRanges)
     self.edits = edits
     self.reusedNodeCallback = reusedNodeCallback
+    self.compactArenaThreshold = Self.defaultCompactArenaThreshold
   }
 
   /// - Parameters:
@@ -78,14 +97,35 @@ public final class IncrementalParseTransition {
   ///   - edits: The edits that have occurred since the last parse that resulted
   ///            in the new source that is about to be parsed.
   ///   - reusedNodeCallback: Optional closure to accept information about the re-used node. For each node that gets re-used `reusedNodeCallback` is called.
+  ///   - compactArenaThreshold: If the previous tree retains at least this many
+  ///     arenas, the next incremental parse is replaced by a full reparse to
+  ///     bound memory. Defaults to ``defaultCompactArenaThreshold``; pass `nil`
+  ///     to disable compaction.
   public init(
     previousIncrementalParseResult: IncrementalParseResult,
     edits: ConcurrentEdits,
-    reusedNodeCallback: ReusedNodeCallback? = nil
+    reusedNodeCallback: ReusedNodeCallback? = nil,
+    compactArenaThreshold: Int? = IncrementalParseTransition.defaultCompactArenaThreshold
   ) {
     self.previousIncrementalParseResult = previousIncrementalParseResult
     self.edits = edits
     self.reusedNodeCallback = reusedNodeCallback
+    self.compactArenaThreshold = compactArenaThreshold
+  }
+
+  /// Whether the next incremental parse against this transition should instead
+  /// be a full reparse to collapse accumulated arenas.
+  ///
+  /// An incremental parse retains at most `previous + 1` arenas (its own new
+  /// arena plus a subset of the previous tree's arenas), so this can be decided
+  /// from the previous tree alone, before parsing.
+  var shouldCompact: Bool {
+    // When compaction is disabled, avoid computing `retainedArenaCount` at all;
+    // it walks the retained child-arena set (O(arenas)), which is exactly the
+    // unbounded quantity we would otherwise be paying every parse. When enabled,
+    // the count is bounded by the threshold, so the walk is O(threshold).
+    guard let compactArenaThreshold else { return false }
+    return previousIncrementalParseResult.tree.raw.arena.retainedArenaCount + 1 > compactArenaThreshold
   }
 }
 

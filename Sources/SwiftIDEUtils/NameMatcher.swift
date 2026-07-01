@@ -11,10 +11,10 @@
 //===----------------------------------------------------------------------===//
 
 #if compiler(>=6)
-import SwiftParser
+@_spi(RawSyntax) import SwiftParser
 public import SwiftSyntax
 #else
-import SwiftParser
+@_spi(RawSyntax) import SwiftParser
 import SwiftSyntax
 #endif
 
@@ -227,8 +227,9 @@ public class NameMatcher: SyntaxAnyVisitor {
       let triviaRangeEndOffsetInToken = triviaRange.upperBound.utf8Offset - token.position.utf8Offset
       let commentTree = token.syntaxTextBytes[positionOffsetInToken..<triviaRangeEndOffsetInToken]
         .withUnsafeBufferPointer { (buffer) -> ExprSyntax in
-          var parser = Parser(buffer)
-          return ExprSyntax.parse(from: &parser)
+          // The parse runs entirely within this scope, so lex directly over
+          // `buffer` without copying it.
+          Parser.withParser(source: buffer) { ExprSyntax.parse(from: &$0) }
         }
       // Run a new `NameMatcher`. Since the input of that name matcher is the text after the position to resolve, we
       // want to resolve the position at offset 0.

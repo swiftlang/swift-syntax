@@ -12,7 +12,7 @@
 
 #if compiler(>=6)
 internal import SwiftDiagnostics
-public import SwiftParser
+@_spi(RawSyntax) public import SwiftParser
 internal import SwiftParserDiagnostics
 internal import SwiftSyntax
 // Don't introduce a dependency on OSLog when building SwiftSyntax using CMake
@@ -23,7 +23,7 @@ private import os
 
 #else
 import SwiftDiagnostics
-import SwiftParser
+@_spi(RawSyntax) import SwiftParser
 import SwiftParserDiagnostics
 import SwiftSyntax
 
@@ -89,9 +89,7 @@ extension SyntaxParseable {
   ///              be logged using OSLog on Darwin platforms.
   public init(stringInterpolation: SyntaxStringInterpolation) {
     self = stringInterpolation.sourceText.withUnsafeBufferPointer { buffer in
-      var parser = Parser(buffer)
-      let result = Self.parse(from: &parser)
-      return result
+      Parser.withParser(source: buffer) { Self.parse(from: &$0) }
     }
     if self.hasError {
       self.logStringInterpolationParsingError()

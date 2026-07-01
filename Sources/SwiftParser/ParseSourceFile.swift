@@ -22,8 +22,13 @@ extension Parser {
   public static func parse(
     source: String
   ) -> SourceFileSyntax {
-    var parser = Parser(source)
-    return SourceFileSyntax.parse(from: &parser)
+    return withParser(
+      source: source,
+      maximumNestingLevel: nil,
+      parseTransition: nil,
+      swiftVersion: nil,
+      experimentalFeatures: []
+    ) { SourceFileSyntax.parse(from: &$0) }
   }
 
   /// A compiler interface that allows the enabling of experimental features.
@@ -33,8 +38,13 @@ extension Parser {
     swiftVersion: SwiftVersion? = nil,
     experimentalFeatures: ExperimentalFeatures
   ) -> SourceFileSyntax {
-    var parser = Parser(source, swiftVersion: swiftVersion, experimentalFeatures: experimentalFeatures)
-    return SourceFileSyntax.parse(from: &parser)
+    return withParser(
+      source: source,
+      maximumNestingLevel: nil,
+      parseTransition: nil,
+      swiftVersion: swiftVersion,
+      experimentalFeatures: experimentalFeatures
+    ) { SourceFileSyntax.parse(from: &$0) }
   }
 
   /// Parse the source code in the given buffer as Swift source file. See
@@ -44,8 +54,13 @@ extension Parser {
     maximumNestingLevel: Int? = nil,
     swiftVersion: SwiftVersion? = nil
   ) -> SourceFileSyntax {
-    var parser = Parser(source, maximumNestingLevel: maximumNestingLevel, swiftVersion: swiftVersion)
-    return SourceFileSyntax.parse(from: &parser)
+    return withParser(
+      source: source,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: nil,
+      swiftVersion: swiftVersion,
+      experimentalFeatures: []
+    ) { SourceFileSyntax.parse(from: &$0) }
   }
 
   /// Parse the source code in the given string as Swift source file with support
@@ -120,8 +135,13 @@ extension Parser {
     source: String,
     parseTransition: IncrementalParseTransition?
   ) -> IncrementalParseResult {
-    var parser = Parser(source, parseTransition: parseTransition)
-    return IncrementalParseResult(tree: SourceFileSyntax.parse(from: &parser), lookaheadRanges: parser.lookaheadRanges)
+    return withParser(
+      source: source,
+      maximumNestingLevel: nil,
+      parseTransition: parseTransition,
+      swiftVersion: nil,
+      experimentalFeatures: []
+    ) { IncrementalParseResult(tree: SourceFileSyntax.parse(from: &$0), lookaheadRanges: $0.lookaheadRanges) }
   }
 
   /// Parse the source code in the given buffer as Swift source file with support
@@ -133,8 +153,13 @@ extension Parser {
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition?
   ) -> IncrementalParseResult {
-    var parser = Parser(source, maximumNestingLevel: maximumNestingLevel, parseTransition: parseTransition)
-    return IncrementalParseResult(tree: SourceFileSyntax.parse(from: &parser), lookaheadRanges: parser.lookaheadRanges)
+    return withParser(
+      source: source,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: parseTransition,
+      swiftVersion: nil,
+      experimentalFeatures: []
+    ) { IncrementalParseResult(tree: SourceFileSyntax.parse(from: &$0), lookaheadRanges: $0.lookaheadRanges) }
   }
 }
 

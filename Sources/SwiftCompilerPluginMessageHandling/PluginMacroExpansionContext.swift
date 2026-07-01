@@ -47,26 +47,29 @@ class ParsedSyntaxRegistry {
     swiftVersion: Parser.SwiftVersion,
     experimentalFeatures: Parser.ExperimentalFeatures
   ) -> Syntax {
-    var parser = Parser(
-      source,
+    // The parse runs entirely within `withParser`, so lex directly over the
+    // source without copying it into a parser-owned buffer.
+    return Parser.withParser(
+      source: source,
       swiftVersion: swiftVersion,
       experimentalFeatures: experimentalFeatures
-    )
-    switch kind {
-    case .declaration:
-      return Syntax(DeclSyntax.parse(from: &parser))
-    case .statement:
-      return Syntax(StmtSyntax.parse(from: &parser))
-    case .expression:
-      return Syntax(ExprSyntax.parse(from: &parser))
-    case .type:
-      return Syntax(TypeSyntax.parse(from: &parser))
-    case .pattern:
-      return Syntax(PatternSyntax.parse(from: &parser))
-    case .attribute:
-      return Syntax(AttributeSyntax.parse(from: &parser))
-    case .accessor:
-      return Syntax(AccessorDeclSyntax.parse(from: &parser))
+    ) { parser in
+      switch kind {
+      case .declaration:
+        return Syntax(DeclSyntax.parse(from: &parser))
+      case .statement:
+        return Syntax(StmtSyntax.parse(from: &parser))
+      case .expression:
+        return Syntax(ExprSyntax.parse(from: &parser))
+      case .type:
+        return Syntax(TypeSyntax.parse(from: &parser))
+      case .pattern:
+        return Syntax(PatternSyntax.parse(from: &parser))
+      case .attribute:
+        return Syntax(AttributeSyntax.parse(from: &parser))
+      case .accessor:
+        return Syntax(AccessorDeclSyntax.parse(from: &parser))
+      }
     }
   }
 

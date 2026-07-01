@@ -184,53 +184,28 @@ public class RawSyntaxArena {
 public class ParsingRawSyntaxArena: RawSyntaxArena {
   public typealias ParseTriviaFunction = (_ source: SyntaxText, _ position: TriviaPosition) -> [RawTriviaPiece]
 
-  /// Source file buffer the Syntax tree represents.
-  private var sourceBuffer: UnsafeBufferPointer<UInt8>
-
   /// Function to parse trivia.
   ///
   /// - Important: Must never be changed to a mutable value. See `RawSyntaxArenaRef.parseTrivia`.
   private let parseTriviaFunction: ParseTriviaFunction
 
   public init(parseTriviaFunction: @escaping ParseTriviaFunction) {
-    self.sourceBuffer = .init(start: nil, count: 0)
     self.parseTriviaFunction = parseTriviaFunction
     super.init(slabSize: 4096)
   }
 
-  /// Copies a source buffer in to the memory this arena manages, and returns
-  /// the interned buffer.
+  /// Intern a parsed token's whole text into the arena's node allocator so the
+  /// resulting node does not depend on the source buffer.
   ///
-  /// The interned buffer is guaranteed to be null-terminated.
-  /// `contains(address _:)` is faster if the address is inside the memory
-  /// range this function returned.
-  public func internSourceBuffer(_ buffer: UnsafeBufferPointer<UInt8>) -> UnsafeBufferPointer<UInt8> {
-    let allocated = allocator.allocate(
-      UInt8.self,
-      count: buffer.count + /* for NULL */ 1
-    )
-    precondition(sourceBuffer.baseAddress == nil, "SourceBuffer should only be set once.")
-    _ = allocated.initialize(from: buffer)
-
-    // NULL terminate.
-    allocated.baseAddress!.advanced(by: buffer.count).initialize(to: 0)
-
-    sourceBuffer = UnsafeBufferPointer(start: allocated.baseAddress!, count: buffer.count)
-    return sourceBuffer
-  }
-
-  public override func contains(text: SyntaxText) -> Bool {
-    if let addr = text.baseAddress, self.sourceBufferContains(addr) {
-      return true
+  /// Unlike `intern(_:)`, this skips the `contains` check: lexer-produced text
+  /// is never already managed by the arena, so a copy is always needed.
+  func internParsedTokenText(_ text: SyntaxText) -> SyntaxText {
+    if text.isEmpty {
+      return text
     }
-    return super.contains(text: text)
-  }
-
-  /// Checks if the given memory address is inside the memory range returned
-  /// from `internSourceBuffer(_:)` method.
-  func sourceBufferContains(_ address: UnsafePointer<UInt8>) -> Bool {
-    guard let sourceStart = sourceBuffer.baseAddress else { return false }
-    return sourceStart <= address && address < sourceStart.advanced(by: sourceBuffer.count)
+    let allocated = allocateTextBuffer(count: text.count)
+    _ = allocated.initialize(from: text)
+    return SyntaxText(baseAddress: allocated.baseAddress, count: allocated.count)
   }
 
   /// Parse `source` into a list of ``RawTriviaPiece`` using `parseTriviaFunction`.

@@ -119,7 +119,13 @@ public struct Parser {
   public internal(set) var lookaheadRanges = LookaheadRanges()
 
   /// Parser should own a ``LookaheadTracker`` so that we can share one `furthestOffset` in a parse.
-  let lookaheadTrackerOwner: LookaheadTrackerOwner
+  private let lookaheadTrackerOwner: LookaheadTrackerOwner
+
+  /// Owns the source buffer for the lifetime of this parser when the parser
+  /// created its own arena. The source is not copied into the arena, so it is
+  /// freed when this `Parser` is destroyed. `nil` when the source lives
+  /// elsewhere (a caller-provided arena that already owns the buffer).
+  private let sourceBufferOwner: ParserSourceBufferOwner?
 
   /// The Swift version as which this source file should be parsed.
   let swiftVersion: SwiftVersion
@@ -199,10 +205,11 @@ public struct Parser {
   /// The delegated initializer for the parser.
   ///
   /// - Parameters
-  ///   - input: An input buffer containing Swift source text. If a non-`nil`
-  ///            arena is provided, the buffer must be present in it. Otherwise
-  ///            the buffer is copied into a new arena and can thus be freed
-  ///            after the initializer has been called.
+  ///   - input: An input buffer containing Swift source text. When
+  ///            `copySource` is `true` it is copied into a parser-owned buffer
+  ///            and can be freed after the initializer returns. When `false` the
+  ///            caller must keep `input` valid for the entire parse (see
+  ///            `withParser`).
   ///   - maximumNestingLevel: To avoid overflowing the stack, the parser will
   ///                          stop if a nesting level greater than this value
   ///                          is reached. The nesting level is increased
@@ -211,10 +218,12 @@ public struct Parser {
   ///                          if this is `nil`.
   ///   - parseTransition: The previously recorded state for an incremental
   ///                      parse, or `nil`.
-  ///   - arena: Arena the parsing syntax are made into. If it's `nil`, a new
-  ///            arena is created automatically, and `input` copied into the
-  ///            arena. If non-`nil`, `input` must be within its registered
-  ///            source buffer or allocator.
+  ///   - arena: Arena the parsed syntax is made into. If `nil`, a new arena is
+  ///            created automatically.
+  ///   - copySource: Whether to copy `input` into a parser-owned buffer. Pass
+  ///                 `false` only when the caller guarantees `input` remains
+  ///                 valid for the resulting `Parser`'s lifetime (the buffer is
+  ///                 only read while lexing, which happens during that lifetime).
   ///  - swiftVersion: The version of Swift using which the file should be parsed.
   ///                  Defaults to the latest version.
   ///  - experimentalFeatures: The experimental features enabled for the parser.
@@ -223,16 +232,28 @@ public struct Parser {
     maximumNestingLevel: Int?,
     parseTransition: IncrementalParseTransition?,
     arena: ParsingRawSyntaxArena?,
+    copySource: Bool,
     swiftVersion: SwiftVersion?,
     experimentalFeatures: ExperimentalFeatures
   ) {
+    self.arena = arena ?? ParsingRawSyntaxArena(parseTriviaFunction: TriviaParser.parseTrivia)
+
     var input = input
-    if let arena {
-      self.arena = arena
-      precondition(arena.contains(text: SyntaxText(baseAddress: input.baseAddress, count: input.count)))
+    if copySource {
+      // Copy the source into a parser-owned buffer so the caller may free their
+      // buffer once this initializer returns. The buffer is freed when this
+      // `Parser` is destroyed (i.e. when the parse call returns); each token's
+      // text is interned into the arena at node-creation time, so the resulting
+      // tree does not reference this buffer.
+      let owner = ParserSourceBufferOwner(copying: input)
+      self.sourceBufferOwner = owner
+      input = owner.buffer
     } else {
-      self.arena = ParsingRawSyntaxArena(parseTriviaFunction: TriviaParser.parseTrivia)
-      input = self.arena.internSourceBuffer(input)
+      // No-copy: lex directly over the caller-provided buffer. The caller
+      // guarantees it stays valid for the entire parse (see `withParser`). Each
+      // token's text is interned into the arena, so the tree is self-contained
+      // and does not reference the buffer after parsing.
+      self.sourceBufferOwner = nil
     }
 
     self.maximumNestingLevel = maximumNestingLevel ?? Self.defaultMaximumNestingLevel
@@ -269,6 +290,10 @@ public struct Parser {
         maximumNestingLevel: maximumNestingLevel,
         parseTransition: parseTransition,
         arena: nil,
+        // The String's UTF-8 storage is only valid inside `withUTF8`, but the
+        // parse happens after this initializer returns, so the source must be
+        // copied into a parser-owned buffer.
+        copySource: true,
         swiftVersion: swiftVersion,
         experimentalFeatures: experimentalFeatures
       )
@@ -295,10 +320,9 @@ public struct Parser {
   /// Initializes a ``Parser`` from the given input buffer.
   ///
   /// - Parameters
-  ///   - input: An input buffer containing Swift source text. If a non-`nil`
-  ///            arena is provided, the buffer must be present in it. Otherwise
-  ///            the buffer is copied into a new arena and can thus be freed
-  ///            after the initializer has been called.
+  ///   - input: An input buffer containing Swift source text. It is copied into
+  ///            a parser-owned buffer, so it can be freed after the initializer
+  ///            has been called.
   ///   - maximumNestingLevel: To avoid overflowing the stack, the parser will
   ///                          stop if a nesting level greater than this value
   ///                          is reached. The nesting level is increased
@@ -313,12 +337,14 @@ public struct Parser {
     parseTransition: IncrementalParseTransition? = nil,
     swiftVersion: SwiftVersion? = nil
   ) {
-    // Chain to the private buffer initializer.
+    // Chain to the private buffer initializer. Copy the source so the caller may
+    // free `input` after this initializer returns.
     self.init(
       buffer: input,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
       arena: nil,
+      copySource: true,
       swiftVersion: swiftVersion,
       experimentalFeatures: []
     )
@@ -355,15 +381,114 @@ public struct Parser {
     swiftVersion: SwiftVersion? = nil,
     experimentalFeatures: ExperimentalFeatures
   ) {
-    // Chain to the private buffer initializer.
+    // Chain to the private buffer initializer. Copy the source so the caller may
+    // free `input` after this initializer returns, and so the resulting tree
+    // does not depend on `input` (its tokens are interned into `arena`).
     self.init(
       buffer: input,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
       arena: arena,
+      copySource: true,
       swiftVersion: swiftVersion,
       experimentalFeatures: experimentalFeatures
     )
+  }
+
+  /// Runs `body` with a `Parser` that lexes directly over `input` without
+  /// copying it into a parser-owned buffer.
+  ///
+  /// This is the no-copy fast path used by the static `parse` entry points and
+  /// by string-interpolation literal construction: the entire parse runs inside
+  /// this scope, where `input` is guaranteed valid, and each token's text is
+  /// interned into the arena so the resulting tree is self-contained once `body`
+  /// returns.
+  ///
+  /// - Important: `input` must remain valid for the entire duration of `body`.
+  ///   It is *not* referenced after `body` returns.
+  /// - Important: The `Parser` passed to `body` must not escape the closure. It
+  ///   lexes directly over `input`, so it is only valid within this scope.
+  @_spi(RawSyntax)
+  public static func withParser<T>(
+    source input: UnsafeBufferPointer<UInt8>,
+    maximumNestingLevel: Int? = nil,
+    parseTransition: IncrementalParseTransition? = nil,
+    body: (inout Parser) -> T
+  ) -> T {
+    return withParser(
+      source: input,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: parseTransition,
+      swiftVersion: nil,
+      experimentalFeatures: [],
+      body: body
+    )
+  }
+
+  /// Runs `body` with a `Parser` that lexes directly over `input` without
+  /// copying it into a parser-owned buffer, with a given Swift version and set
+  /// of experimental language features.
+  ///
+  /// This is the no-copy fast path: the entire parse runs inside this scope,
+  /// where `input` is guaranteed valid, and each token's text is interned into
+  /// the arena so the resulting tree is self-contained once `body` returns.
+  ///
+  /// - Important: `input` must remain valid for the entire duration of `body`.
+  ///   It is *not* referenced after `body` returns.
+  /// - Important: The `Parser` passed to `body` must not escape the closure. It
+  ///   lexes directly over `input`, so it is only valid within this scope.
+  @_spi(RawSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  public static func withParser<T>(
+    source input: UnsafeBufferPointer<UInt8>,
+    maximumNestingLevel: Int? = nil,
+    parseTransition: IncrementalParseTransition? = nil,
+    swiftVersion: SwiftVersion?,
+    experimentalFeatures: ExperimentalFeatures,
+    body: (inout Parser) -> T
+  ) -> T {
+    var parser = Parser(
+      buffer: input,
+      maximumNestingLevel: maximumNestingLevel,
+      parseTransition: parseTransition,
+      arena: nil,
+      copySource: false,
+      swiftVersion: swiftVersion,
+      experimentalFeatures: experimentalFeatures
+    )
+    return body(&parser)
+  }
+
+  /// Runs `body` with a no-copy `Parser` over the UTF-8 of `input`, with a given
+  /// Swift version and set of experimental language features.
+  ///
+  /// The entire parse runs inside `String.withUTF8`, where the contiguous UTF-8
+  /// storage is valid, so no copy of the source is needed.
+  ///
+  /// - Important: The `Parser` passed to `body` must not escape the closure. It
+  ///   lexes directly over `input`, so it is only valid within this scope.
+  @_spi(RawSyntax)
+  @_spi(ExperimentalLanguageFeatures)
+  public static func withParser<T>(
+    source input: String,
+    maximumNestingLevel: Int? = nil,
+    parseTransition: IncrementalParseTransition? = nil,
+    swiftVersion: SwiftVersion?,
+    experimentalFeatures: ExperimentalFeatures,
+    body: (inout Parser) -> T
+  ) -> T {
+    var input = input
+    input.makeContiguousUTF8()
+    return input.withUTF8 { buffer in
+      withParser(
+        source: buffer,
+        maximumNestingLevel: maximumNestingLevel,
+        parseTransition: parseTransition,
+        swiftVersion: swiftVersion,
+        experimentalFeatures: experimentalFeatures,
+        body: body
+      )
+    }
   }
 
   mutating func missingToken(_ kind: RawTokenKind, text: SyntaxText? = nil) -> RawTokenSyntax {
@@ -920,7 +1045,7 @@ public struct LookaheadTracker {
 /// Owns a ``LookaheadTracker``.
 ///
 /// Once the `LookeaheadTrackerOwner` is deinitialized, the ``LookaheadTracker`` is also destroyed.
-class LookaheadTrackerOwner {
+private final class LookaheadTrackerOwner {
   var lookaheadTracker: UnsafeMutablePointer<LookaheadTracker>
 
   init() {
@@ -930,6 +1055,25 @@ class LookaheadTrackerOwner {
 
   deinit {
     self.lookaheadTracker.deallocate()
+  }
+}
+
+/// Owns a copy of the source buffer for the lifetime of a `Parser`.
+///
+/// The parser lexes over this buffer and interns each token's text into the
+/// arena at node-creation time, so once parsing finishes the resulting tree no
+/// longer references the source.
+private final class ParserSourceBufferOwner {
+  let buffer: UnsafeBufferPointer<UInt8>
+
+  init(copying input: UnsafeBufferPointer<UInt8>) {
+    let allocated = UnsafeMutableBufferPointer<UInt8>.allocate(capacity: input.count)
+    _ = allocated.initialize(from: input)
+    self.buffer = UnsafeBufferPointer(start: allocated.baseAddress, count: input.count)
+  }
+
+  deinit {
+    self.buffer.deallocate()
   }
 }
 

@@ -577,10 +577,10 @@ extension RawSyntax {
     tokenDiagnostic: TokenDiagnostic?,
     arena: __shared ParsingRawSyntaxArena
   ) -> RawSyntax {
-    assert(
-      arena.contains(text: wholeText),
-      "token text must be managed by the arena"
-    )
+    // Intern the token's whole text into the arena's node allocator so the tree
+    // does not depend on the source buffer outliving the parse. `textRange` is
+    // 0-based within `wholeText`, so it is unaffected by the copy.
+    let wholeText = arena.internParsedTokenText(wholeText)
     let payload = RawSyntaxData.ParsedToken(
       tokenKind: kind,
       wholeText: wholeText,
@@ -619,6 +619,14 @@ extension RawSyntax {
     tokenDiagnostic: TokenDiagnostic?,
     arena: __shared RawSyntaxArena
   ) -> RawSyntax {
+    // A materialized token's `text` must outlive the tree. Callers may pass text
+    // that is already arena-managed, a static default (`kind.defaultText`), or -
+    // during parsing - a slice of the `Parser`-owned source buffer, which does
+    // *not* outlive the parse. Intern dynamic text so the token is always
+    // self-contained. `intern` is a no-op for already-arena-managed (and empty)
+    // text, and we skip static defaults to avoid copying constants into every
+    // token.
+    let text = kind.defaultText?.baseAddress == text.baseAddress ? text : arena.intern(text)
     let payload = RawSyntaxData.MaterializedToken(
       tokenKind: kind,
       tokenText: text,

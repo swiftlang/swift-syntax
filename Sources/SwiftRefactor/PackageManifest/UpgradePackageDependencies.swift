@@ -22,45 +22,76 @@ import SwiftSyntaxBuilder
 /// easily go unnoticed using `swift package update`.
 @_spi(PackageRefactor)
 public struct UpgradePackageDependencies: EditRefactoringProvider {
+  @_spi(PackageRefactor)
+  public enum Dependency: Sendable, Hashable {
+    /// A source-control dependency declared with `.package(url:)`.
+    case sourceControl(url: String)
+
+    /// A registry dependency declared with `.package(id:)`.
+    case registry(identity: String)
+
+    fileprivate init?(_ syntax: VersionedDependencySyntaxNodes) {
+      switch syntax.kind {
+      case .sourceControl(let url):
+        guard let url = url.representedLiteralValue else {
+          return nil
+        }
+        self = .sourceControl(url: url)
+      case .registry(let identity):
+        guard let identity = identity.representedLiteralValue else {
+          return nil
+        }
+        self = .registry(identity: identity)
+      }
+    }
+  }
+
   public typealias Input = SourceFileSyntax
 
   public struct Context {
-    let latestVersions: [String: String]
+    let latestVersions: [Dependency: String]
 
     public init(
       resolvingLatestVersionIn manifest: SourceFileSyntax,
-      using resolveLatestPackageVersion: @Sendable @escaping (_ url: String, _ currentVersion: String) async -> String?
+      using resolveLatestPackageVersion:
+        @Sendable @escaping (_ dependency: Dependency, _ currentVersion: String) async -> String?
     ) async throws {
       let dependencies = try findDependencies(in: manifest)
-      self.latestVersions = await withTaskGroup(of: (url: String, latestVersion: String)?.self) { taskGroup in
-        for dependency in dependencies {
+      self.latestVersions = await withTaskGroup(
+        of: (dependency: Dependency, latestVersion: String)?.self
+      ) { taskGroup in
+        for dependencySyntax in dependencies {
           taskGroup.addTask {
-            guard let url = dependency.url.representedLiteralValue,
-              let currentVersion = dependency.currentVersion.representedLiteralValue
+            guard let dependency = Dependency(dependencySyntax),
+              let currentVersion = dependencySyntax.currentVersion.representedLiteralValue
             else {
               return nil
             }
-            guard let latestVersion = await resolveLatestPackageVersion(url, currentVersion) else {
+            guard let latestVersion = await resolveLatestPackageVersion(dependency, currentVersion) else {
               return nil
             }
-            return (url, latestVersion)
+            return (dependency, latestVersion)
           }
         }
-        var latestVersions: [String: String] = [:]
+        var latestVersions: [Dependency: String] = [:]
         for await case .some(let result) in taskGroup {
-          latestVersions[result.url] = result.latestVersion
+          latestVersions[result.dependency] = result.latestVersion
         }
         return latestVersions
       }
     }
   }
 
-  private struct VersionedDependency {
-    let url: StringLiteralExprSyntax
+  fileprivate struct VersionedDependencySyntaxNodes {
+    enum Kind {
+      case sourceControl(url: StringLiteralExprSyntax)
+      case registry(identity: StringLiteralExprSyntax)
+    }
+    let kind: Kind
     let currentVersion: StringLiteralExprSyntax
   }
 
-  private static func findDependencies(in manifest: SourceFileSyntax) throws -> [VersionedDependency] {
+  private static func findDependencies(in manifest: SourceFileSyntax) throws -> [VersionedDependencySyntaxNodes] {
     guard let packageCall = manifest.findCall(calleeName: "Package") else {
       throw ManifestEditError.cannotFindPackage
     }
@@ -68,20 +99,28 @@ public struct UpgradePackageDependencies: EditRefactoringProvider {
     else {
       throw ManifestEditError.cannotFindDependencies
     }
-    return dependencies.elements.compactMap { (dependency) -> VersionedDependency? in
+    return dependencies.elements.compactMap { (dependency) -> VersionedDependencySyntaxNodes? in
       guard let functionCall = dependency.expression.as(FunctionCallExprSyntax.self),
         functionCall.calledExpression.as(MemberAccessExprSyntax.self)?.declName.baseName.tokenKind
-          == .identifier("package"),
-        let url = functionCall.findArgument(labeled: "url")?.expression.as(StringLiteralExprSyntax.self)
+          == .identifier("package")
       else {
+        return nil
+      }
+
+      let kind: VersionedDependencySyntaxNodes.Kind
+      if let url = functionCall.findArgument(labeled: "url")?.expression.as(StringLiteralExprSyntax.self) {
+        kind = .sourceControl(url: url)
+      } else if let identity = functionCall.findArgument(labeled: "id")?.expression.as(StringLiteralExprSyntax.self) {
+        kind = .registry(identity: identity)
+      } else {
         return nil
       }
 
       // TODO: Support version initialized using `Version` initializer
       if let version = functionCall.findArgument(labeled: "from")?.expression.as(StringLiteralExprSyntax.self) {
-        return VersionedDependency(url: url, currentVersion: version)
+        return VersionedDependencySyntaxNodes(kind: kind, currentVersion: version)
       } else if let version = functionCall.findArgument(labeled: "exact")?.expression.as(StringLiteralExprSyntax.self) {
-        return VersionedDependency(url: url, currentVersion: version)
+        return VersionedDependencySyntaxNodes(kind: kind, currentVersion: version)
       } else {
         return nil
       }
@@ -89,16 +128,17 @@ public struct UpgradePackageDependencies: EditRefactoringProvider {
   }
 
   public static func textRefactor(syntax manifest: SourceFileSyntax, in context: Context) throws -> [SourceEdit] {
-    return try findDependencies(in: manifest).compactMap { dependency in
-      guard let urlValue = dependency.url.representedLiteralValue, let latestVersion = context.latestVersions[urlValue]
+    return try findDependencies(in: manifest).compactMap { dependencySyntax in
+      guard let dependency = Dependency(dependencySyntax),
+        let latestVersion = context.latestVersions[dependency]
       else {
         return nil
       }
-      guard dependency.currentVersion.representedLiteralValue != latestVersion else {
+      guard dependencySyntax.currentVersion.representedLiteralValue != latestVersion else {
         return nil
       }
       return SourceEdit(
-        range: dependency.currentVersion.trimmedRange,
+        range: dependencySyntax.currentVersion.trimmedRange,
         replacement: StringLiteralExprSyntax(content: latestVersion).description
       )
     }

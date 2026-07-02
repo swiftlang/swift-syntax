@@ -976,6 +976,9 @@ final class ManifestEditTests: XCTestCase {
           .package(url: "https://github.com/swiftlang/swift-syntax", from: "510.0.0"),
           .package(url: "https://github.com/swiftlang/swift-format", exact: "510.0.0"),
           .package(url: "https://github.com/unable-to-resolve", exact: "1.0.0"),
+          .package(id: "scope.upgradable", from: "1.0.0"),
+          .package(id: "scope.pinned", exact: "2.5.0"),
+          .package(id: "scope.unable-to-resolve", from: "1.0.0"),
           .package(path: "my-local-dependency"),
         ],
         targets: []
@@ -989,6 +992,9 @@ final class ManifestEditTests: XCTestCase {
             .package(url: "https://github.com/swiftlang/swift-syntax", from: "603.0.1"),
             .package(url: "https://github.com/swiftlang/swift-format", exact: "603.0.0"),
             .package(url: "https://github.com/unable-to-resolve", exact: "1.0.0"),
+            .package(id: "scope.upgradable", from: "2.0.0"),
+            .package(id: "scope.pinned", exact: "3.1.0"),
+            .package(id: "scope.unable-to-resolve", from: "1.0.0"),
             .package(path: "my-local-dependency"),
           ],
           targets: []
@@ -996,19 +1002,28 @@ final class ManifestEditTests: XCTestCase {
         """
     ) { manifest in
       let context = try await UpgradePackageDependencies.Context(resolvingLatestVersionIn: manifest) {
-        (url, currentVersion) in
-        switch url {
-        case "https://github.com/swiftlang/swift-syntax":
+        (dependency, currentVersion) in
+        switch dependency {
+        case .sourceControl(url: "https://github.com/swiftlang/swift-syntax"):
           XCTAssertEqual(currentVersion, "510.0.0")
           return "603.0.1"
-        case "https://github.com/swiftlang/swift-format":
+        case .sourceControl(url: "https://github.com/swiftlang/swift-format"):
           XCTAssertEqual(currentVersion, "510.0.0")
           return "603.0.0"
-        case "https://github.com/unable-to-resolve":
+        case .sourceControl(url: "https://github.com/unable-to-resolve"):
+          XCTAssertEqual(currentVersion, "1.0.0")
+          return nil
+        case .registry(identity: "scope.upgradable"):
+          XCTAssertEqual(currentVersion, "1.0.0")
+          return "2.0.0"
+        case .registry(identity: "scope.pinned"):
+          XCTAssertEqual(currentVersion, "2.5.0")
+          return "3.1.0"
+        case .registry(identity: "scope.unable-to-resolve"):
           XCTAssertEqual(currentVersion, "1.0.0")
           return nil
         default:
-          XCTFail("Resolving package version called with an unexpected url: \(url)")
+          XCTFail("Resolving package version called with an unexpected dependency: \(dependency)")
           return nil
         }
       }

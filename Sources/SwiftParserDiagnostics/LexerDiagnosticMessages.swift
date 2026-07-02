@@ -24,7 +24,6 @@ private let diagnosticDomain: String = "SwiftLexer"
 
 /// An error diagnostic whose ID is determined by the diagnostic's type.
 public protocol TokenError: DiagnosticMessage {
-  var diagnosticID: MessageID { get }
 }
 
 extension TokenError {
@@ -43,7 +42,6 @@ extension TokenError {
 
 /// A warning diagnostic whose ID is determined by the diagnostic's type.
 public protocol TokenWarning: DiagnosticMessage {
-  var diagnosticID: MessageID { get }
 }
 
 extension TokenWarning {

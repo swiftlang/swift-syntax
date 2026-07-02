@@ -24,7 +24,6 @@ private let diagnosticDomain: String = "SwiftParser"
 
 /// An error diagnostic whose ID is determined by the diagnostic's type.
 public protocol ParserError: DiagnosticMessage {
-  var diagnosticID: MessageID { get }
 }
 
 extension ParserError {
@@ -42,7 +41,6 @@ extension ParserError {
 }
 
 public protocol ParserNote: NoteMessage {
-  var noteID: MessageID { get }
 }
 
 extension ParserNote {
@@ -61,7 +59,6 @@ extension ParserNote {
 }
 
 public protocol ParserFixIt: FixItMessage {
-  var fixItID: MessageID { get }
 }
 
 extension ParserFixIt {

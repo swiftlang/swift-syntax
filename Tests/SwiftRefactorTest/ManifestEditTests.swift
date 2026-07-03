@@ -642,6 +642,57 @@ final class ManifestEditTests: XCTestCase {
     )
   }
 
+  func testAddTargetDependencyWhenTargetIsAlsoDependency() throws {
+    // Regression test: when a target's name appears inside another target's
+    // dependencies array, the refactoring must modify the actual target
+    // definition, not the nested dependency reference.
+    // See https://github.com/swiftlang/swift-package-manager/issues/10122
+    try assertManifestRefactor(
+      """
+      // swift-tools-version: 5.5
+      let package = Package(
+        name: "packages",
+        targets: [
+          .target(
+            name: "Library",
+            dependencies: [
+              .target(name: "Helper"),
+            ]
+          ),
+          .target(
+            name: "Helper"
+          ),
+        ]
+      )
+      """,
+      expectedManifest: """
+      // swift-tools-version: 5.5
+      let package = Package(
+        name: "packages",
+        targets: [
+          .target(
+            name: "Library",
+            dependencies: [
+              .target(name: "Helper"),
+            ]
+          ),
+          .target(
+            name: "Helper",
+            dependencies: [
+              .target(name: "Support"),
+            ]
+          ),
+        ]
+      )
+      """,
+      provider: AddTargetDependency.self,
+      context: .init(
+        dependency: .target(name: "Support"),
+        targetName: "Helper"
+      )
+    )
+  }
+
   func testAddJava2SwiftPlugin() throws {
     try assertManifestRefactor(
       """

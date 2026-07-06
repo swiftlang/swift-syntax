@@ -888,7 +888,7 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
         for peer in expandCodeBlockPeers(of: decl) {
           addResult(peer)
         }
-        extensions += expandExtensions(of: decl)
+        extensions += expandExtensions(of: decl, findingAttributesOn: decl)
       }
     }
 
@@ -911,13 +911,13 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       .as(DeclSyntax.self)
     var newItems: [MemberBlockItemSyntax] = []
 
-    func addResult(_ node: MemberBlockItemSyntax) {
+    func addResult(_ node: MemberBlockItemSyntax, originalDecl: DeclSyntax) {
       // Expand freestanding macro.
       switch expandMemberDecl(node: node) {
       case .success(let expansion):
         expansion.withExpandedNode { expandedNode in
           for item in expandedNode {
-            addResult(item)
+            addResult(item, originalDecl: item.decl)
           }
         }
         return
@@ -928,16 +928,17 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
         newItems.append(visit(node))
       }
 
-      // Expand any peer macro on this member.
-      for peer in expandMemberDeclPeers(of: node.decl) {
-        addResult(peer)
+      // Discover peer macros on the rewritten member and expand them from the original declaration.
+      for peer in expandMemberDeclPeers(of: originalDecl, findingAttributesOn: node.decl) {
+        addResult(peer, originalDecl: peer.decl)
       }
-      extensions += expandExtensions(of: node.decl)
+      extensions += expandExtensions(of: originalDecl, findingAttributesOn: node.decl)
     }
 
     for var item in node.members {
       // Expand member attribute members attached to the declaration context.
       // Note that MemberAttribute macros are _not_ applied to generated members
+      let originalDecl = item.decl
       if let parentDeclGroup, let decl = item.decl.asProtocol(WithAttributesSyntax.self) {
         var newAttributes = AttributeListSyntax(
           expandAttributesFromMemberAttributeMacros(
@@ -958,13 +959,13 @@ private class MacroApplication<Context: MacroExpansionContext>: SyntaxRewriter {
       }
 
       // Recurse on the child node.
-      addResult(item)
+      addResult(item, originalDecl: originalDecl)
     }
 
     // Expand any member macros of parent.
     if let parentDeclGroup {
       for member in expandMembers(of: parentDeclGroup) {
-        addResult(member)
+        addResult(member, originalDecl: member.decl)
       }
     }
 
@@ -1143,20 +1144,28 @@ extension MacroApplication {
     return result
   }
 
-  /// Expand all the 'peer' macros attached to `decl`.
+  /// Expand all peer macros whose attributes are discovered on
+  /// `nodeWithAttributes`, while passing `originalDecl` to the
+  /// peer macro implementation.
   ///
   /// - Note: This overload returns the list of peers as `MemberDeclListItemSyntax`
   ///   while `expandCodeBlockPeers` returns them as `CodeBlockItemSyntax`. The
   ///   overload is chosen based on the context in which the peers are expanded.
   ///
   /// - Returns: The macro-synthesized peers
-  private func expandMemberDeclPeers(of decl: DeclSyntax) -> [MemberBlockItemSyntax] {
-    return expandMacros(attachedTo: decl, ofType: PeerMacro.Type.self) { attributeNode, definition, conformanceList in
+  private func expandMemberDeclPeers(
+    of originalDecl: DeclSyntax,
+    findingAttributesOn nodeWithAttributes: DeclSyntax
+  ) -> [MemberBlockItemSyntax] {
+    return expandMacros(attachedTo: nodeWithAttributes, ofType: PeerMacro.Type.self) {
+      attributeNode,
+      definition,
+      conformanceList in
       return try expandPeerMacroMember(
         definition: definition,
         attributeNode: attributeNode,
-        attachedTo: decl,
-        in: contextGenerator(Syntax(decl)),
+        attachedTo: originalDecl,
+        in: contextGenerator(Syntax(originalDecl)),
         indentationWidth: indentationWidth
       )
     }
@@ -1182,20 +1191,25 @@ extension MacroApplication {
     }
   }
 
-  /// Expand all 'extension' macros attached to `decl`.
+  /// Expand all extension macros discovered on `nodeWithAttributes`,
+  /// using `originalDecl` as the declaration passed to the extension
+  /// macro expansion.
   ///
   /// - Returns: The macro-synthesized extensions
-  private func expandExtensions(of decl: DeclSyntax) -> [CodeBlockItemSyntax] {
+  private func expandExtensions(
+    of originalDecl: DeclSyntax,
+    findingAttributesOn nodeWithAttributes: DeclSyntax
+  ) -> [CodeBlockItemSyntax] {
     return expandMacros(
-      attachedTo: decl,
+      attachedTo: nodeWithAttributes,
       ofType: ExtensionMacro.Type.self
     ) { attributeNode, definition, conformanceList in
       return try expandExtensionMacro(
         definition: definition,
         attributeNode: attributeNode,
-        attachedTo: decl,
+        attachedTo: originalDecl,
         conformanceList: conformanceList,
-        in: contextGenerator(Syntax(decl)),
+        in: contextGenerator(Syntax(originalDecl)),
         indentationWidth: indentationWidth
       )
     }

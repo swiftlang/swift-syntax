@@ -17,13 +17,13 @@ import SwiftSyntax
 #endif
 
 /// Describes the relative precedence of two groups.
-enum Precedence: Sendable {
+public enum Precedence: Sendable {
   case unrelated
   case higherThan
   case lowerThan
 
   /// Flip the precedence order around.
-  var flipped: Precedence {
+  public var flipped: Precedence {
     switch self {
     case .unrelated:
       return .unrelated

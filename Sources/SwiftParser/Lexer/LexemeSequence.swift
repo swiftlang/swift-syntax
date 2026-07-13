@@ -151,16 +151,23 @@ extension Lexer {
   @_spi(Testing)
   public static func tokenize(
     _ input: UnsafeBufferPointer<UInt8>,
+    mode: Parser.Mode = .swift,
     from startIndex: Int = 0,
     lookaheadTracker: UnsafeMutablePointer<LookaheadTracker>,
     experimentalFeatures: Parser.ExperimentalFeatures
   ) -> LexemeSequence {
     precondition(input.isEmpty || startIndex < input.endIndex)
     let startChar = startIndex == input.startIndex ? UInt8(ascii: "\0") : input[startIndex - 1]
-    let start = Cursor(input: input, previous: UInt8(ascii: "\0"), experimentalFeatures: experimentalFeatures)
+    let start = Cursor(
+      input: input,
+      previous: UInt8(ascii: "\0"),
+      mode: mode,
+      experimentalFeatures: experimentalFeatures
+    )
     let cursor = Cursor(
       input: UnsafeBufferPointer(rebasing: input[startIndex...]),
       previous: startChar,
+      mode: mode,
       experimentalFeatures: experimentalFeatures
     )
     return LexemeSequence(

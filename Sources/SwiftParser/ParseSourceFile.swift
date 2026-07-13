@@ -20,10 +20,12 @@ extension Parser {
   /// Parse the source code in the given string as Swift source file. See
   /// `Parser.init` for more details.
   public static func parse(
-    source: String
+    source: String,
+    mode: Parser.Mode = .swift
   ) -> SourceFileSyntax {
     return withParser(
       source: source,
+      mode: mode,
       maximumNestingLevel: nil,
       parseTransition: nil,
       swiftVersion: nil,
@@ -35,11 +37,13 @@ extension Parser {
   @_spi(ExperimentalLanguageFeatures)
   public static func parse(
     source: UnsafeBufferPointer<UInt8>,
+    mode: Parser.Mode = .swift,
     swiftVersion: SwiftVersion? = nil,
     experimentalFeatures: ExperimentalFeatures
   ) -> SourceFileSyntax {
     return withParser(
       source: source,
+      mode: mode,
       maximumNestingLevel: nil,
       parseTransition: nil,
       swiftVersion: swiftVersion,
@@ -51,11 +55,13 @@ extension Parser {
   /// `Parser.init` for more details.
   public static func parse(
     source: UnsafeBufferPointer<UInt8>,
+    mode: Parser.Mode = .swift,
     maximumNestingLevel: Int? = nil,
     swiftVersion: SwiftVersion? = nil
   ) -> SourceFileSyntax {
     return withParser(
       source: source,
+      mode: mode,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: nil,
       swiftVersion: swiftVersion,
@@ -87,9 +93,10 @@ extension Parser {
   @_disfavoredOverload
   public static func parseIncrementally(
     source: String,
+    mode: Parser.Mode = .swift,
     parseTransition: IncrementalParseTransition?
   ) -> (tree: SourceFileSyntax, lookaheadRanges: LookaheadRanges) {
-    let parseResult = parseIncrementally(source: source, parseTransition: parseTransition)
+    let parseResult = parseIncrementally(source: source, mode: mode, parseTransition: parseTransition)
     return (parseResult.tree, parseResult.lookaheadRanges)
   }
 
@@ -101,11 +108,13 @@ extension Parser {
   @_disfavoredOverload
   public static func parseIncrementally(
     source: UnsafeBufferPointer<UInt8>,
+    mode: Parser.Mode = .swift,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition?
   ) -> (tree: SourceFileSyntax, lookaheadRanges: LookaheadRanges) {
     let parseResult = parseIncrementally(
       source: source,
+      mode: mode,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition
     )
@@ -133,6 +142,7 @@ extension Parser {
   ///            subsequent incremental parse
   public static func parseIncrementally(
     source: String,
+    mode: Parser.Mode = .swift,
     parseTransition: IncrementalParseTransition?
   ) -> IncrementalParseResult {
     // Drop the transition (forcing a full reparse) when the previous tree is
@@ -140,6 +150,7 @@ extension Parser {
     let parseTransition = (parseTransition?.shouldCompact ?? false) ? nil : parseTransition
     return withParser(
       source: source,
+      mode: mode,
       maximumNestingLevel: nil,
       parseTransition: parseTransition,
       swiftVersion: nil,
@@ -153,12 +164,14 @@ extension Parser {
   /// See doc comments in ``Parser/parseIncrementally(source:parseTransition:)-dj0z``
   public static func parseIncrementally(
     source: UnsafeBufferPointer<UInt8>,
+    mode: Parser.Mode = .swift,
     maximumNestingLevel: Int? = nil,
     parseTransition: IncrementalParseTransition?
   ) -> IncrementalParseResult {
     let parseTransition = (parseTransition?.shouldCompact ?? false) ? nil : parseTransition
     return withParser(
       source: source,
+      mode: mode,
       maximumNestingLevel: maximumNestingLevel,
       parseTransition: parseTransition,
       swiftVersion: nil,

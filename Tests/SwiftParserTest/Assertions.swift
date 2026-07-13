@@ -572,6 +572,7 @@ extension ParserTestCase {
   func assertParse(
     _ markedSource: String,
     _ parse: @Sendable (inout Parser) -> some SyntaxProtocol = { SourceFileSyntax.parse(from: &$0) },
+    mode: Parser.Mode = .swift,
     substructure expectedSubstructure: (some SyntaxProtocol)? = Optional<Syntax>.none,
     substructureAfterMarker: String = "START",
     diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
@@ -586,6 +587,7 @@ extension ParserTestCase {
     assertParse(
       markedSource,
       parse,
+      mode: mode,
       substructure: expectedSubstructure,
       substructureAfterMarker: substructureAfterMarker,
       diagnostics: expectedDiagnostics,
@@ -627,6 +629,8 @@ extension ParserTestCase {
   ///     to be used as locations in the following parameters.
   ///   - parse: The function with which the source code should be parsed.
   ///     Defaults to parsing as a source file.
+  ///   - mode: The lexer mode (`.swift`, `.markdown`, `.reStructuredText`,
+  ///     or `.laTeX`).
   ///   - expectedSubstructure: Asserts the parsed syntax tree contains this structure.
   ///   - substructureAfterMarker: Changes the position to start the structure
   ///     assertion from, ie. allows matching a particular substructure rather
@@ -643,6 +647,7 @@ extension ParserTestCase {
   func assertParse(
     _ markedSource: String,
     _ parse: @Sendable (inout Parser) -> some SyntaxProtocol = { SourceFileSyntax.parse(from: &$0) },
+    mode: Parser.Mode = .swift,
     substructure expectedSubstructure: (some SyntaxProtocol)? = Optional<Syntax>.none,
     substructureAfterMarker: String = "START",
     diagnostics expectedDiagnostics: [DiagnosticSpec] = [],
@@ -659,13 +664,44 @@ extension ParserTestCase {
     var (markerLocations, source) = extractMarkers(markedSource)
     markerLocations["START"] = 0
 
-    var parser = Parser(source, swiftVersion: swiftVersion, experimentalFeatures: experimentalFeatures)
+    var parser = Parser(source, mode: mode, swiftVersion: swiftVersion, experimentalFeatures: experimentalFeatures)
     #if SWIFTPARSER_ENABLE_ALTERNATE_TOKEN_INTROSPECTION
     if !longTestsDisabled {
       parser.enableAlternativeTokenChoices()
     }
     #endif
     let tree = parse(&parser)
+
+    let newSource = "\(tree)"
+    if newSource != source {
+      func hex(_ x: UInt8) -> String {
+        if x < 16 {
+          return "0\(String(x, radix: 16))"
+        } else {
+          return String(x, radix: 16)
+        }
+      }
+      func dumpHex(_ s: String) {
+        var tmp = s
+        tmp.withUTF8 { buffer in
+          for (ndx, byte) in buffer.enumerated() {
+            let terminator: String
+            if (ndx % 16) == 0 {
+              terminator = "\n"
+            } else {
+              terminator = " "
+            }
+            print(hex(byte), terminator: terminator)
+          }
+          print("")
+        }
+      }
+      print("Expected:")
+      dumpHex(source)
+
+      print("Actual:")
+      dumpHex(newSource)
+    }
 
     // Round-trip
     assertStringsEqualWithDiff(
@@ -748,6 +784,7 @@ extension ParserTestCase {
     if expectedDiagnostics.isEmpty && diags.isEmpty {
       assertBasicFormat(
         source: source,
+        mode: mode,
         parse: parse,
         swiftVersion: swiftVersion,
         experimentalFeatures: experimentalFeatures,
@@ -826,19 +863,21 @@ class TriviaRemover: SyntaxRewriter {
 
 func assertBasicFormat(
   source: String,
+  mode: Parser.Mode = .swift,
   parse: (inout Parser) -> some SyntaxProtocol,
   swiftVersion: Parser.SwiftVersion?,
   experimentalFeatures: Parser.ExperimentalFeatures,
   file: StaticString = #filePath,
   line: UInt = #line
 ) {
-  var parser = Parser(source, swiftVersion: swiftVersion, experimentalFeatures: experimentalFeatures)
+  var parser = Parser(source, mode: mode, swiftVersion: swiftVersion, experimentalFeatures: experimentalFeatures)
   let sourceTree = parse(&parser)
   let withoutTrivia = TriviaRemover(viewMode: .sourceAccurate).rewrite(sourceTree)
   let formatted = withoutTrivia.formatted()
 
   var formattedParser = Parser(
     formatted.description,
+    mode: .swift,
     swiftVersion: swiftVersion,
     experimentalFeatures: experimentalFeatures
   )

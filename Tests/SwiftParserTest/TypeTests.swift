@@ -898,7 +898,6 @@ final class InlineArrayTypeTests: ParserTestCase {
         trailingComma: .commaToken()
       ),
       substructureAfterMarker: "1️⃣",
-      experimentalFeatures: .literalExpressions
     )
   }
 
@@ -928,16 +927,14 @@ final class InlineArrayTypeTests: ParserTestCase {
         ),
         separator: .keyword(.of),
         element: .init(argument: .type(TypeSyntax("Int")))
-      ),
-      experimentalFeatures: .literalExpressions
+      )
     )
   }
 
   func testNestedExpressionCount() {
     // Nested inline arrays with expression counts
     assertParse(
-      "[(1 + 1) of [(2 + 1) of Int]]",
-      experimentalFeatures: .literalExpressions
+      "[(1 + 1) of [(2 + 1) of Int]]"
     )
   }
 }

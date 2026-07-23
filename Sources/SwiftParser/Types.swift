@@ -857,8 +857,8 @@ extension Parser.Lookahead {
       return true
     }
 
-    // When LiteralExpressions is enabled, try parsing a parenthesized expression
-    if self.experimentalFeatures.contains(.literalExpressions) && self.at(.leftParen)
+    // Try parsing a parenthesized expression
+    if self.at(.leftParen)
       && self.withLookahead({
         $0.skipSingle()
         return $0.at(.comma, TokenSpec(.of, allowAtStartOfLine: false)) || $0.at(prefix: ">")
@@ -1086,8 +1086,8 @@ extension Parser.Lookahead {
   /// Checks whether we can parse the start of an InlineArray type. This does
   /// not include the element type.
   mutating func canParseStartOfInlineArrayTypeBody() -> Bool {
-    // We must have either '[<type-or-integer> of' or, if the `LiteralExpressions`
-    // feature is enabled, '[(<expression>) of'. We specifically look for both types and
+    // We must have either '[<type-or-integer> of' or
+    // '[(<expression>) of'. We specifically look for both types and
     // integers for better recovery in e.g cases where the user writes e.g
     // '[Int of 2]'. We only do type-scalar since variadics would be ambiguous
     // e.g 'Int...of'.

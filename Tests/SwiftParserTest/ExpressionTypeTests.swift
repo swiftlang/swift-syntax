@@ -144,7 +144,7 @@ final class ExpressionTypeTests: ParserTestCase {
   }
 
   // Verify that parenthesized expressions in generic argument positions
-  // are correctly parsed when LiteralExpressions is enabled.
+  // are correctly parsed with literal expressions.
   func testCanParseGenericArgumentExpressions() {
     let cases: [UInt: String] = [
       #line: "InlineArray<(1 + 2), Int>",
@@ -156,7 +156,6 @@ final class ExpressionTypeTests: ParserTestCase {
       assertParse(
         "\(source)()",
         { ExprSyntax.parse(from: &$0) },
-        experimentalFeatures: .literalExpressions,
         line: line
       )
     }
@@ -176,7 +175,6 @@ final class ExpressionTypeTests: ParserTestCase {
         { ExprSyntax.parse(from: &$0) },
         substructure: IdentifierTypeSyntax(name: .identifier("X")),
         substructureAfterMarker: "1️⃣",
-        experimentalFeatures: .literalExpressions,
         line: line
       )
     }

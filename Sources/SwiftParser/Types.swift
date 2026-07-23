@@ -857,15 +857,51 @@ extension Parser.Lookahead {
       return true
     }
 
-    // When LiteralExpressions is enabled, try parsing a parenthesized expression
-    if self.experimentalFeatures.contains(.literalExpressions) && self.at(.leftParen)
+    // Try parsing a parenthesized expression
+    if self.at(.leftParen)
       && self.withLookahead({
         $0.skipSingle()
         return $0.at(.comma, TokenSpec(.of, allowAtStartOfLine: false)) || $0.at(prefix: ">")
       })
+      // A parenthesized group that contains type-only syntax such as an opaque
+      // 'some' type must be parsed as a type, not a value expression, so that
+      // the opaque type is recognized in the enclosing declaration. A value
+      // expression never contains 'some P'.
+      && !self.withLookahead({ $0.parenGenericArgumentContainsTypeOnlySyntax() })
     {
       self.skipSingle()
       return true
+    }
+    return false
+  }
+
+  /// Assuming the current token is the opening `(` of a parenthesized generic
+  /// argument, determine whether the group contains type-only syntax (an opaque
+  /// `some` type, or a top-level comma making it a tuple type) that requires it
+  /// to be parsed as a type.
+  mutating func parenGenericArgumentContainsTypeOnlySyntax() -> Bool {
+    var depth = 0
+    while !self.at(.endOfFile) {
+      // An opaque 'some' type can only appear as a type. 'canParseType' consumes
+      // the 'some' and requires a type to follow, so it matches 'some P',
+      // 'some Any', 'some (P & Q)', 'some ~C' but not a variable named 'some'.
+      if self.at(.keyword(.some)) && self.withLookahead({ $0.canParseType() }) {
+        return true
+      }
+      // A top-level comma makes this a tuple type; tuples are never valid
+      // generic value arguments, so parse it as a type.
+      if depth == 1 && self.at(.comma) {
+        return true
+      }
+      if self.at(.leftParen, .leftBrace, .leftSquare) {
+        depth += 1
+      } else if self.at(.rightParen, .rightBrace, .rightSquare) {
+        depth -= 1
+        if depth == 0 {
+          break
+        }
+      }
+      self.consumeAnyToken()
     }
     return false
   }
@@ -1050,8 +1086,8 @@ extension Parser.Lookahead {
   /// Checks whether we can parse the start of an InlineArray type. This does
   /// not include the element type.
   mutating func canParseStartOfInlineArrayTypeBody() -> Bool {
-    // We must have either '[<type-or-integer> of' or, if the `LiteralExpressions`
-    // feature is enabled, '[(<expression>) of'. We specifically look for both types and
+    // We must have either '[<type-or-integer> of' or
+    // '[(<expression>) of'. We specifically look for both types and
     // integers for better recovery in e.g cases where the user writes e.g
     // '[Int of 2]'. We only do type-scalar since variadics would be ambiguous
     // e.g 'Int...of'.

@@ -877,7 +877,8 @@ extension Parser.Lookahead {
 
   /// Assuming the current token is the opening `(` of a parenthesized generic
   /// argument, determine whether the group contains type-only syntax (an opaque
-  /// `some` type) that requires it to be parsed as a type.
+  /// `some` type, or a top-level comma making it a tuple type) that requires it
+  /// to be parsed as a type.
   mutating func parenGenericArgumentContainsTypeOnlySyntax() -> Bool {
     var depth = 0
     while !self.at(.endOfFile) {
@@ -885,6 +886,11 @@ extension Parser.Lookahead {
       // the 'some' and requires a type to follow, so it matches 'some P',
       // 'some Any', 'some (P & Q)', 'some ~C' but not a variable named 'some'.
       if self.at(.keyword(.some)) && self.withLookahead({ $0.canParseType() }) {
+        return true
+      }
+      // A top-level comma makes this a tuple type; tuples are never valid
+      // generic value arguments, so parse it as a type.
+      if depth == 1 && self.at(.comma) {
         return true
       }
       if self.at(.leftParen, .leftBrace, .leftSquare) {
